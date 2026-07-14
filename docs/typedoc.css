@@ -1,0 +1,122 @@
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/instrument-sans-latin-wght-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/instrument-sans-latin-wght-italic.woff2") format("woff2");
+}
+
+:root,
+:root[data-theme="light"],
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --light-color-background: #060709;
+  --light-color-background-secondary: #0d0f12;
+  --light-color-background-warning: #211b13;
+  --light-color-warning-text: #e0b080;
+  --light-color-text: #d9d9d6;
+  --light-color-text-aside: #a9aaa7;
+  --light-color-link: #ececea;
+  --dark-color-background: #060709;
+  --dark-color-background-secondary: #0d0f12;
+  --dark-color-background-warning: #211b13;
+  --dark-color-warning-text: #e0b080;
+  --dark-color-text: #d9d9d6;
+  --dark-color-text-aside: #a9aaa7;
+  --dark-color-link: #ececea;
+  --color-accent: #e0b080;
+  --code-background: #0d0f12;
+}
+
+html,
+body {
+  background: #060709;
+  color: #d9d9d6;
+  font-family: "Instrument Sans", system-ui, sans-serif;
+}
+
+.container-main,
+.site-menu,
+.page-menu,
+.tsd-page-toolbar {
+  background-color: #060709;
+}
+
+.tsd-page-title,
+.tsd-panel,
+.col-content {
+  border-color: rgb(217 217 214 / 14%);
+}
+
+a,
+.tsd-index-link {
+  text-underline-offset: 0.18em;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #e0b080;
+  outline-offset: 3px;
+}
+
+.engine-sign-rail {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(28px, 1fr));
+  gap: 0.5rem;
+  width: min(100%, 36rem);
+  margin: 2rem auto 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgb(217 217 214 / 16%);
+}
+
+.engine-sign-rail a {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 999px;
+  transition: background-color 140ms ease, transform 140ms ease;
+}
+
+.engine-sign-rail a:hover {
+  background: rgb(217 217 214 / 8%);
+  transform: translateY(-1px);
+}
+
+.engine-sign-rail img {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+.engine-docs-posture {
+  margin: 0 auto 1rem;
+  color: #a9aaa7;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .engine-sign-rail {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .engine-sign-rail a {
+    transition: none;
+  }
+
+  .engine-sign-rail a:hover {
+    transform: none;
+  }
+}

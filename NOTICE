@@ -1,0 +1,34 @@
+@zodiacs/engine notice
+========================
+
+Astronomy Engine
+----------------
+
+The core runtime depends on astronomy-engine 2.1.19, Copyright (c) 2019-2023
+Don Cross, distributed under the MIT License. Its distributed JavaScript source
+retains the full MIT permission and warranty notice. Source and license metadata:
+https://github.com/cosinekitty/astronomy
+
+GeoNames
+--------
+
+The optional @zodiacs/engine/geo client can read a compact index derived from
+GeoNames cities15000, admin1CodesASCII, and countryInfo. GeoNames data is
+licensed under Creative Commons Attribution 4.0 International (CC BY 4.0):
+
+  https://www.geonames.org/
+  https://creativecommons.org/licenses/by/4.0/
+
+The Zodiacs.org index rounds latitude and longitude to two decimal places,
+interns timezone, administrative-area, and country strings, sorts cities by
+population, and shards records by the first folded ASCII letter. No GeoNames
+records are bundled in this npm package. If you host, copy, or redistribute a
+compatible GeoNames-derived index, retain this notice and attribution.
+
+Timezone data
+-------------
+
+@zodiacs/engine/geo does not redistribute the IANA Time Zone Database. Local
+time conversion uses the host JavaScript runtime's Intl/ICU data. Historical
+coverage, including pre-standardization local mean time, therefore depends on
+the browser or Node.js build used by the consumer.
