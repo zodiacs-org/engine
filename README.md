@@ -6,19 +6,19 @@ synastry, Moon phase, and Saturn-return seasons. It is synchronous,
 side-effect-free, ESM-only, and performs no network request from its core entry
 point.
 
-**Release candidate: 0.1.1-rc.3.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.4.** Public npm lookups for this package returned
 404 on 2026-09-07. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.3.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.4.tgz
 ```
 
 From the candidate source checkout, run `corepack pnpm --filter @zodiacs/engine
 build`, then `npm pack --ignore-scripts` in `packages/engine`. Test the packed
 file in a clean consumer using `corepack pnpm --filter @zodiacs/engine
-consumer:smoke /absolute/path/to/zodiacs-engine-0.1.1-rc.3.tgz`. The smoke check
+consumer:smoke /absolute/path/to/zodiacs-engine-0.1.1-rc.4.tgz`. The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash, runtime and isolated consumer directory. A packed
 candidate is not a published release. This rc.3 follow-up adds an optional draft natal receipt codec; the site and public starter continue to use their
@@ -190,13 +190,34 @@ third-party code must use the documented root and `/geo` entry points.
 
 ## GeoNames request recovery
 
-The optional geo client shares in-flight requests and keeps successfully fetched
+The optional geo client shares in-flight requests and keeps validated
 index/shards. A rejected fetch, unsuccessful HTTP response or JSON parsing
 failure is returned to current callers with its original rejection reason. A
 later explicit preload/search call may retry the failed resource. There is no
 automatic retry loop, backoff or per-caller cancellation API. A custom fetch may
-bind its own abort signal; the client does not reset that signal. Structurally
-invalid but parseable JSON is not validated by this recovery behavior.
+bind its own abort signal; the client does not reset that signal.
+
+Parseable JSON must match the compact v1 asset format: index string tables and
+`0`/`a`–`z` shard keys, with eight-field city rows containing valid table indices,
+integer coordinates in hundredths of a degree (including ±90°/±180°), and
+nonnegative integer populations. An invalid index or shard rejects with
+`TypeError("Invalid GeoNames index data.")` or
+`TypeError("Invalid GeoNames shard data.")` and is evicted for a later explicit
+retry. The entire requested shard is checked before returning any results;
+other successful caches remain available. Empty region/country labels and
+Unicode names are retained. Timezone identifiers are checked as nonempty strings,
+without requiring support in the current host's timezone database. Validation
+does not authenticate place facts, check that the advertised count equals all
+shards, or refresh a previously valid index when a shard changes independently.
+In-range indices in a shard from another dataset generation can silently select
+the wrong cached country or timezone; this v1 format has no content or generation
+identity to detect that mismatch. Serve matching index/shards together.
+`preload()` returns metadata snapshots: its arrays do not expose mutable cache
+state.
+
+These checks apply to parsed JSON data. A custom fetch implementation is trusted
+code, not a sandbox: accessors or iterators it supplies in non-JSON objects may
+execute during validation.
 
 ## Draft natal receipts and local portability
 

@@ -1,5 +1,26 @@
 # Engine changelog
 
+## 0.1.1-rc.4 — unreleased candidate
+
+- Validate the optional GeoNames client's compact v1 index and requested shard
+  before caching fulfillment. Malformed HTTP-200 JSON now rejects with a fixed
+  schema error and can be retried by a later explicit call.
+- Reject unsafe table indices, coerced/out-of-range coordinates and malformed
+  rows before returning partial results. Preserve Unicode names, empty region
+  and country labels, geographical endpoints and host-independent timezone
+  strings. No automatic retries, eager shard requests or new network endpoint.
+- Return metadata array snapshots from `preload()` so caller mutation cannot
+  alter validated cache state. Keep valid/in-flight cache sharing and original
+  fetch/HTTP/JSON-parser failures.
+- These checks do not authenticate place facts or detect structurally valid
+  mixed-generation data. The v1 assets lack generation/content identities;
+  hosts must serve matching index and shards together.
+
+Site application rc.1 and the separately delivered standalone starter rc.3
+remain pinned to their existing artifacts. Numerical calculations are unchanged
+apart from the reported engine version. SDK #5's explicit review/publication
+hold remains; this entry is not npm publication or production release.
+
 ## 0.1.1-rc.3 — unreleased candidate
 
 - Add an optional draft natal receipt/envelope entry point for bounded local

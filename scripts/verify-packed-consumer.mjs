@@ -115,6 +115,38 @@ await places.preload();
 await places.searchCities("new");
 assert.equal(indexRequests, 2);
 assert.equal(shardRequests, 2);
+let schemaIndexRequests = 0;
+let schemaShardRequests = 0;
+const schemaPlaces = createGeoNamesClient({baseUrl: "https://example.test/cities", fetch: async (url) => {
+  if (url.endsWith("/index.json")) {
+    schemaIndexRequests += 1;
+    return Response.json(schemaIndexRequests === 1 ? {error: "Temporary HTTP-200 envelope"} :
+      {version: 1, source: "Synthetic", count: 1, tz: ["UTC"], admin1: [""], countries: ["Synthetic"], shards: ["n"]});
+  }
+  assert(url.endsWith("/n.json"));
+  schemaShardRequests += 1;
+  return Response.json([["New Test City", 0, schemaShardRequests === 1 ? "__proto__" : 0, 0, 1000, 2000, 0, 100]]);
+}});
+const schemaFailures = await Promise.allSettled([schemaPlaces.preload(), schemaPlaces.preload()]);
+for (const failure of schemaFailures) {
+  assert.equal(failure.status, "rejected");
+  assert(failure.reason instanceof TypeError);
+  assert.equal(failure.reason.message, "Invalid GeoNames index data.");
+}
+assert.equal(schemaFailures[0].reason, schemaFailures[1].reason);
+assert.equal(schemaIndexRequests, 1);
+await assert.rejects(schemaPlaces.searchCities("new"), {name: "TypeError", message: "Invalid GeoNames shard data."});
+const [schemaFirst, schemaConcurrent] = await Promise.all([schemaPlaces.searchCities("new"), schemaPlaces.searchCities("new t")]);
+assert.equal(schemaFirst[0].admin1, "");
+assert.equal(schemaFirst[0].timeZone, "UTC");
+assert.deepEqual(schemaFirst, schemaConcurrent);
+const mutableMetadata = await schemaPlaces.preload();
+mutableMetadata.timeZones[0] = "Synthetic/Mutation";
+mutableMetadata.shards.length = 0;
+assert.deepEqual((await schemaPlaces.preload()).timeZones, ["UTC"]);
+assert.deepEqual(await schemaPlaces.searchCities("new"), schemaFirst);
+assert.equal(schemaIndexRequests, 2);
+assert.equal(schemaShardRequests, 2);
 const envelope = createNatalEnvelope(chart, {extensions: {syntheticSecret: "PRIVATE_DIAGNOSTIC_SENTINEL"}});
 const encoded = serializeNatalEnvelope(envelope);
 const parsed = parseNatalEnvelope(encoded);
@@ -136,7 +168,7 @@ assert.equal(unknownEnvelope.receipt.instant, "2000-02-29T08:30:00.000Z");
 assert.equal(natalChart(natalReplayInput(unknownEnvelope)).houses, null);
 assert.equal(parseNatalEnvelope("{" ).ok, false);
 assert.equal(parseNatalEnvelope(" ".repeat(65537)).ok, false);
-console.log(JSON.stringify({version: ENGINE_VERSION, publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed"}));
+console.log(JSON.stringify({version: ENGINE_VERSION, publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

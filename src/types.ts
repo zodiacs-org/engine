@@ -186,4 +186,4 @@ export interface MoonPhase {
   waxing: boolean;
 }
 
-export const ENGINE_VERSION = "0.1.1-rc.3";
+export const ENGINE_VERSION = "0.1.1-rc.4";
