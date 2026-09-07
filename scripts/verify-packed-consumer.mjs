@@ -43,12 +43,14 @@ writeFileSync(
   join(directory, "consumer.ts"),
   `
 import { natalChart, transits, synastry, moonPhase, positions, type Chart } from "@zodiacs/engine";
-import { resolveBirth } from "@zodiacs/engine/geo";
+import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 const chart: Chart = natalChart(resolveBirth({date: "2000-02-29", time: "12:00", timeZone: "UTC", latitude: 0, longitude: 180}));
 transits(chart, "2026-09-07T12:00:00Z");
 synastry(chart, { utc: "2001-01-01", timeKnown: false });
 moonPhase("2024-04-08T18:21:00Z");
 positions(0);
+const places: ReturnType<typeof createGeoNamesClient> = createGeoNamesClient({baseUrl: "https://example.test/cities"});
+void places;
 `
 );
 run(process.execPath, [
@@ -66,7 +68,7 @@ writeFileSync(
   `
 import assert from "node:assert/strict";
 import { natalChart, positions, transits, synastry, moonPhase, ENGINE_VERSION } from "@zodiacs/engine";
-import { resolveBirth } from "@zodiacs/engine/geo";
+import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 globalThis.fetch = () => { throw new Error("Calculation attempted a network request"); };
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
@@ -87,7 +89,28 @@ assert.throws(() => natalChart({utc: "2000-01-01", houseSystem: "unsupported"}),
 for (const name of ["react", "@zodiacs/sdk"]) {
   assert.throws(() => import.meta.resolve(name), {code: "ERR_MODULE_NOT_FOUND"});
 }
-console.log(JSON.stringify({version: ENGINE_VERSION, publicExamples: "passed", errors: "passed", optionalIsolation: "passed"}));
+let indexRequests = 0;
+let shardRequests = 0;
+const places = createGeoNamesClient({baseUrl: "https://example.test/cities", fetch: async (url) => {
+  if (url.endsWith("/index.json")) {
+    indexRequests += 1;
+    return indexRequests === 1 ? new Response("Unavailable", {status: 503}) : Response.json({version: 1, source: "Synthetic", count: 1, tz: ["UTC"], admin1: ["Synthetic"], countries: ["Synthetic"], shards: ["n"]});
+  }
+  assert(url.endsWith("/n.json"));
+  shardRequests += 1;
+  return shardRequests === 1 ? new Response("{invalid") : Response.json([["New Test City", 0, 0, 0, 1000, 2000, 0, 100]]);
+}});
+await assert.rejects(places.preload(), {message: "GeoNames fetch failed: 503"});
+await assert.rejects(places.searchCities("new"), SyntaxError);
+const [first, concurrent] = await Promise.all([places.searchCities("new"), places.searchCities("new t")]);
+assert.equal(first[0].name, "New Test City");
+assert.equal(first[0].timeZone, "UTC");
+assert.deepEqual(first, concurrent);
+await places.preload();
+await places.searchCities("new");
+assert.equal(indexRequests, 2);
+assert.equal(shardRequests, 2);
+console.log(JSON.stringify({version: ENGINE_VERSION, publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

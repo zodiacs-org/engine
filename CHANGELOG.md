@@ -1,5 +1,18 @@
 # Engine changelog
 
+## 0.1.1-rc.2 — unreleased candidate
+
+- Permit a later explicit GeoNames preload/search call to retry after rejected
+  network requests, unsuccessful HTTP responses or JSON parsing failures.
+- Preserve shared in-flight requests, successful index/shard caches and original
+  rejection reasons. No automatic retry loop or per-caller cancellation API.
+- This does not validate structurally invalid but parseable JSON responses.
+  The site and public starter retain their immutable rc.1 candidate.
+
+This candidate changes the optional geo client only; existing numerical
+calculations are unchanged apart from the reported package version. The SDK
+PR #5 review/publication hold remains.
+
 ## 0.1.1-rc.1 — unreleased candidate
 
 - Correct the polar ascendant in the shared implementation before deriving

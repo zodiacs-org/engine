@@ -64,14 +64,28 @@ export function createGeoNamesClient(options: GeoNamesClientOptions): GeoNamesCl
   }
 
   function index(): Promise<CityIndex> {
-    indexPromise ??= fetchJson<CityIndex>(joinedUrl(options.baseUrl, "index.json"));
+    if (!indexPromise) {
+      const request: Promise<CityIndex> = fetchJson<CityIndex>(
+        joinedUrl(options.baseUrl, "index.json")
+      ).catch((error: unknown) => {
+        // Keep shared in-flight/successful work, but allow the next call to retry.
+        if (indexPromise === request) indexPromise = undefined;
+        throw error;
+      });
+      indexPromise = request;
+    }
     return indexPromise;
   }
 
   function shard(key: string): Promise<CityRow[]> {
     let request = shardCache.get(key);
     if (!request) {
-      request = fetchJson<CityRow[]>(joinedUrl(options.baseUrl, `${key}.json`));
+      request = fetchJson<CityRow[]>(joinedUrl(options.baseUrl, `${key}.json`)).catch(
+        (error: unknown) => {
+          if (shardCache.get(key) === request) shardCache.delete(key);
+          throw error;
+        }
+      );
       shardCache.set(key, request);
     }
     return request;
