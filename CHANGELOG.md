@@ -1,5 +1,28 @@
 # Engine changelog
 
+## 0.1.1-rc.5 — unreleased candidate
+
+- Preserve all five typed birth flags while checking derived echoes against the
+  actual result. Correct unknown-time/polar echoes now produce canonical flags
+  once and round-trip through the unchanged draft receipt schema.
+- Reject unknown, malformed and contradictory claims. Snapshot up to 64 raw
+  data entries without custom array iteration or scalar coercion; deduplicate
+  valid claims. Canonical input records semantics, not the submitted array.
+- Validate supplied Chart flag consistency against its input and house/angle
+  metadata. Keep canonical object identity; normalize compatible echoes with a
+  shallow metadata copy. This does not authenticate astronomical values.
+- Capture validated public/civil settings once. Reject invalid civil settings
+  and explicit null local time before Intl resolution. Ordinary Saturn inputs
+  remain date-only; an explicit raw polar assertion requires one natal
+  calculation before the return scan.
+
+Migration: do not use flags to override timeKnown or the requested house system.
+Fix contradictory/missing result claims in supplied Charts. Arrays over 64 raw
+entries reject. Historical time flags remain assertions; executable same-realm
+getters/proxies are not sandboxed. Internal computation, receipt wire format,
+site/starter pins and ownership APIs are unchanged. Required review and SDK #5's
+explicit merge/publication hold remain.
+
 ## 0.1.1-rc.4 — unreleased candidate
 
 - Validate the optional GeoNames client's compact v1 index and requested shard

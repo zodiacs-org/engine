@@ -59,6 +59,9 @@ export interface BirthInput {
   /** False means `utc` is a caller-supplied reference instant and suppresses angles/houses.
    * It does not establish a UTC-noon or local-noon convention by itself. */
   timeKnown?: boolean;
+  /** Up to 64 known flags. Duplicate claims normalize to one value. Time flags
+   * are caller assertions; no-time/polar-fallback echoes must match calculation.
+   * natalChart returns canonical semantic flags, not the raw submitted array. */
   flags?: readonly ChartFlag[];
 }
 
@@ -186,4 +189,4 @@ export interface MoonPhase {
   waxing: boolean;
 }
 
-export const ENGINE_VERSION = "0.1.1-rc.4";
+export const ENGINE_VERSION = "0.1.1-rc.5";

@@ -1,4 +1,5 @@
 import type { BirthInput, ChartFlag, HouseSystem } from "../types.js";
+import { validateBirthSettings } from "../birth-input.js";
 
 export interface LocalTimeResolution {
   utc: Date;
@@ -193,21 +194,24 @@ export function resolveBirth(input: LocalBirthInput): BirthInput {
   if (!input || typeof input !== "object" || Array.isArray(input)) {
     throw new RangeError("birth must be an object containing a local date and timezone.");
   }
-  const timeKnown = input.timeKnown ?? input.time !== undefined;
-  if (timeKnown && input.time === undefined) {
+  const settings = validateBirthSettings(input);
+  const time = input.time;
+  const timeKnown = settings.timeKnown ?? time !== undefined;
+  if (timeKnown && time === undefined) {
     throw new RangeError("time is required when timeKnown is true.");
   }
-  if ((input.latitude === undefined) !== (input.longitude === undefined)) {
-    throw new RangeError("latitude and longitude must be supplied together.");
-  }
-  const resolution = resolveLocalToUtc(input.date, input.time ?? "12:00", input.timeZone);
+  const resolution = resolveLocalToUtc(
+    input.date,
+    time === undefined ? "12:00" : time,
+    input.timeZone
+  );
   return {
     utc: resolution.utc,
     timeKnown,
-    houseSystem: input.houseSystem ?? "whole",
+    houseSystem: settings.houseSystem ?? "whole",
     flags: resolution.flags,
-    ...(input.latitude === undefined
+    ...(settings.latitude === undefined
       ? {}
-      : { latitude: input.latitude, longitude: input.longitude })
+      : { latitude: settings.latitude, longitude: settings.longitude })
   };
 }

@@ -6,19 +6,19 @@ synastry, Moon phase, and Saturn-return seasons. It is synchronous,
 side-effect-free, ESM-only, and performs no network request from its core entry
 point.
 
-**Release candidate: 0.1.1-rc.4.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.5.** Public npm lookups for this package returned
 404 on 2026-09-07. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.4.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.5.tgz
 ```
 
 From the candidate source checkout, run `corepack pnpm --filter @zodiacs/engine
 build`, then `npm pack --ignore-scripts` in `packages/engine`. Test the packed
 file in a clean consumer using `corepack pnpm --filter @zodiacs/engine
-consumer:smoke /absolute/path/to/zodiacs-engine-0.1.1-rc.4.tgz`. The smoke check
+consumer:smoke /absolute/path/to/zodiacs-engine-0.1.1-rc.5.tgz`. The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash, runtime and isolated consumer directory. A packed
 candidate is not a published release. This rc.3 follow-up adds an optional draft natal receipt codec; the site and public starter continue to use their
@@ -106,6 +106,44 @@ engine falls back to whole-sign houses and adds `polar-fallback` to the chart
 flags. When the birth time is unknown, pass a conventional UTC instant with
 `timeKnown: false`; angles and houses remain absent and the chart carries the
 `no-time` flag.
+
+### Input flag compatibility
+
+Public birth inputs retain all five `ChartFlag` values. Supply an array with at
+most 64 entries; entries must be known string values in ordinary data slots.
+Repeated values collapse in first-occurrence order. Unknown strings, sparse
+slots, accessor slots, non-array iterables and simultaneous `dst-gap`/`dst-fold`
+claims reject with a `RangeError` that does not include supplied flag values.
+
+`dst-gap`, `dst-fold` and `lmt` remain caller assertions: a UTC instant alone
+cannot verify a historical local-time resolution. `no-time` and
+`polar-fallback` may be echoed for compatibility, but must agree with the
+calculation. Set `timeKnown: false` for unknown time; a flag never overrides that
+setting. A fallback assertion requires the actual requested Placidus calculation
+to produce whole-sign houses, including fallback caused by nonconvergence.
+
+`natalChart` stores only distinct time-resolution assertions in `chart.input.flags`
+and derives result flags once. This is canonical semantic input, not a lossless
+record of the submitted flag array. Correct derived echoes therefore work with
+the existing draft receipt creator and replay; the receipt schema is unchanged.
+
+When `transits`, `synastry` or `saturnReturn` receive a precomputed `Chart`, they
+check flag consistency with its supplied time/settings and house/angle presence.
+Contradictory or missing result claims reject. They do not recompute or verify
+the supplied astronomical result. An already canonical Chart retains object
+identity; compatible duplicate/derived echoes produce a shallow metadata copy,
+preserving numerical arrays and engine version. These checks happen at call
+time and do not freeze caller-owned objects.
+
+Ordinary Saturn-return inputs require no extra natal calculation. A raw birth
+input that explicitly asserts `polar-fallback` requires one natal calculation to
+check that assertion before the return scan. A supplied Chart instead receives
+the consistency check above, without natal recomputation. Public birth and
+`resolveBirth` settings are validated once and the captured scalar values are
+used for calculation/resolution. Explicit null settings or local time are
+invalid. These boundaries do not sandbox same-realm getters, proxies or other
+caller-supplied executable code. The unsupported `/internal` computation API is
+unchanged.
 
 The shared engine selects the eastern horizon intersection before assembling
 houses, including in either polar hemisphere. At exact geographic poles no

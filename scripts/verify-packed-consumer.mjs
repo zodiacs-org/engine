@@ -42,7 +42,7 @@ for (const name of ["LICENSE", "LICENSING.md", "NOTICE"]) {
 writeFileSync(
   join(directory, "consumer.ts"),
   `
-import { natalChart, transits, synastry, moonPhase, positions, type Chart } from "@zodiacs/engine";
+import { natalChart, transits, synastry, moonPhase, positions, type Chart, type BirthInput, type ChartFlag, saturnReturn } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
 const chart: Chart = natalChart(resolveBirth({date: "2000-02-29", time: "12:00", timeZone: "UTC", latitude: 0, longitude: 180}));
@@ -52,6 +52,11 @@ moonPhase("2024-04-08T18:21:00Z");
 positions(0);
 const places: ReturnType<typeof createGeoNamesClient> = createGeoNamesClient({baseUrl: "https://example.test/cities"});
 void places;
+const typedFlags: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"];
+const echoed: BirthInput = {utc: "2000-02-29T08:30:00Z", timeKnown: false, flags: [typedFlags[3]]};
+const echoChart: Chart = natalChart(echoed);
+saturnReturn(echoed);
+synastry(echoChart, chart);
 const encoded = serializeNatalEnvelope(createNatalEnvelope(chart));
 const parsed = parseNatalEnvelope(encoded);
 if (parsed.ok) { natalChart(natalReplayInput(parsed.envelope)); redactNatalEnvelope(parsed.envelope); }
@@ -166,9 +171,55 @@ const unknownEnvelope = createNatalEnvelope(explicitReference);
 assert.equal(unknownEnvelope.receipt.reference, "supplied-instant");
 assert.equal(unknownEnvelope.receipt.instant, "2000-02-29T08:30:00.000Z");
 assert.equal(natalChart(natalReplayInput(unknownEnvelope)).houses, null);
+const echoedUnknown = natalChart({utc: "2000-02-29T08:30:00Z", timeKnown: false, flags: ["no-time", "lmt", "no-time", "lmt"]});
+assert.deepEqual(echoedUnknown.input.flags, ["lmt"]);
+assert.deepEqual(echoedUnknown.flags, ["lmt", "no-time"]);
+const echoedPolar = natalChart({...chart.input, flags: ["polar-fallback", "polar-fallback"]});
+assert.deepEqual(echoedPolar.input.flags, []);
+assert.deepEqual(echoedPolar.flags, ["polar-fallback"]);
+for (const value of [echoedUnknown, echoedPolar]) {
+  const parsedEcho = parseNatalEnvelope(serializeNatalEnvelope(createNatalEnvelope(value)));
+  assert.equal(parsedEcho.ok, true);
+  assert.deepEqual(natalChart(natalReplayInput(parsedEcho.envelope)), value);
+}
+assert.equal(createNatalEnvelope(echoedUnknown).receipt.instant, "2000-02-29T08:30:00.000Z");
+assert.equal(synastry(echoedPolar, echoedUnknown).a, echoedPolar);
+const legacy = {...echoedPolar, input: {...echoedPolar.input, flags: ["polar-fallback"]}, flags: ["polar-fallback", "polar-fallback"]};
+const normalized = synastry(legacy, echoedUnknown).a;
+assert.notEqual(normalized, legacy);
+assert.equal(normalized.bodies, legacy.bodies);
+assert.equal(normalized.angles, legacy.angles);
+assert.equal(normalized.houses, legacy.houses);
+assert.equal(normalized.aspects, legacy.aspects);
+assert.deepEqual(normalized.input.flags, []);
+assert.deepEqual(legacy.flags, ["polar-fallback", "polar-fallback"]);
+assert.throws(() => synastry({...echoedPolar, flags: []}, echoedUnknown), RangeError);
+let hooks = 0;
+const accessorFlags = ["lmt"];
+Object.defineProperty(accessorFlags, "0", {get() { hooks++; return "lmt"; }});
+for (const flags of [["PRIVATE_FLAG_SENTINEL"], ["dst-gap", "dst-fold"], ["no-time"], ["polar-fallback"], "lmt", new Set(["lmt"]), [null], Array(1), accessorFlags, Array(65).fill("lmt")]) {
+  assert.throws(() => natalChart({utc: "2000-01-01", flags}), (error) => error instanceof RangeError && !error.message.includes("PRIVATE_FLAG_SENTINEL"));
+}
+assert.equal(hooks, 0);
+const iterableFlags = ["lmt"];
+iterableFlags[Symbol.iterator] = () => { throw new Error("Custom iterator called"); };
+assert.deepEqual(natalChart({utc: "2000-01-01", flags: iterableFlags}).flags, ["lmt"]);
+let latitudeReads = 0;
+const captured = natalChart({utc: "2000-01-01", get latitude() { return ++latitudeReads === 1 ? 0 : 999; }, longitude: 0});
+assert.equal(latitudeReads, 1);
+assert.equal(captured.input.latitude, 0);
+const originalFormatter = Intl.DateTimeFormat;
+let intlCalls = 0;
+try {
+  Intl.DateTimeFormat = function() { intlCalls++; throw new Error("Invalid settings reached Intl"); };
+  for (const settings of [{latitude: 91, longitude: 0}, {houseSystem: null}, {timeKnown: null}, {time: null}]) {
+    assert.throws(() => resolveBirth({date: "2000-01-01", time: "12:00", timeZone: "UTC", ...settings}), RangeError);
+  }
+} finally { Intl.DateTimeFormat = originalFormatter; }
+assert.equal(intlCalls, 0);
 assert.equal(parseNatalEnvelope("{" ).ok, false);
 assert.equal(parseNatalEnvelope(" ".repeat(65537)).ok, false);
-console.log(JSON.stringify({version: ENGINE_VERSION, publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed"}));
+console.log(JSON.stringify({version: ENGINE_VERSION, publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

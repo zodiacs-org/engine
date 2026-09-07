@@ -390,7 +390,11 @@ describe("hostile or inconsistent natal envelopes", () => {
   it.each(["no-time", "polar-fallback", SECRET])(
     "rejects forged caller flag %s instead of publishing it as a derived fact",
     (flag) => {
-      const actual = chart({ latitude: 40, houseSystem: "whole", flags: [flag as ChartFlag] });
+      const actual = chart({ latitude: 40, houseSystem: "whole" });
+      // Mutate after public calculation: the codec must still reject forged
+      // Charts even though natalChart now validates caller flags itself.
+      actual.input.flags = [flag as ChartFlag];
+      actual.flags.push(flag as ChartFlag);
       expect(actual.flags).toContain(flag);
       errorFrom(() => createNatalEnvelope(actual));
     }
