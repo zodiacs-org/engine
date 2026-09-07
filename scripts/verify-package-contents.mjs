@@ -10,6 +10,7 @@ assert(report, "npm pack returned no report");
 
 const files = report.files.map((entry) => entry.path).sort();
 const required = [
+  "CHANGELOG.md",
   "LICENSE",
   "LICENSING.md",
   "NOTICE",

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
 const engine = await import("@zodiacs/engine");
 const geo = await import("@zodiacs/engine/geo");
@@ -24,7 +25,9 @@ for (const name of ["bodyLongitude", "longitudeSpeed", "computeBodies", "compute
 }
 assert.equal(typeof internalMath.computeAngles, "function");
 assert.equal(typeof internalMath.findAspects, "function");
-assert.equal(internalMath.ENGINE_VERSION, "0.1.0");
+const manifest = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+assert.equal(engine.ENGINE_VERSION, manifest.version);
+assert.equal(internalMath.ENGINE_VERSION, manifest.version);
 assert.equal("computeChart" in internalMath, false, "ephemeris leaked into internal math entry");
 
 console.log("@zodiacs/engine export smoke test passed");

@@ -48,9 +48,14 @@ export function computeAngles(input: AngleInput): Angles {
   const ra = ramc * DEG;
   const eps = input.obliquity * DEG;
   const phi = input.latitude * DEG;
-  const asc = normalizeLongitude(
+  let asc = normalizeLongitude(
     Math.atan2(Math.cos(ra), -(Math.sin(ra) * Math.cos(eps) + Math.tan(phi) * Math.sin(eps))) * RAD
   );
+  // atan2 chooses one horizon intersection; at polar latitudes it can be
+  // the setting one. Select the eastern half of the meridian before houses
+  // are assembled. For nondegenerate inputs this has positive local-east
+  // projection and hence increasing altitude under Earth's rotation.
+  if (normalizeLongitude(asc - mc) >= 180) asc = normalizeLongitude(asc + 180);
 
   return {
     asc,
@@ -77,20 +82,25 @@ export function placidusCusps(input: AngleInput, angles: Angles): number[] | nul
 
   function iterate(offset: number, multiplier: number): number | null {
     let ra = ramc + offset;
-    for (let index = 0; index < 24; index += 1) {
+    let converged = false;
+    for (let index = 0; index < 64; index += 1) {
       const lon = eclipticLongitudeOfRightAscension(normalizeLongitude(ra), input.obliquity);
       const declination = declinationOfLongitude(lon, input.obliquity);
       const argument = Math.tan(phi) * Math.tan(declination * DEG);
       if (Math.abs(argument) >= 1) return null;
       const ascensionalDifference = Math.asin(argument) * RAD;
       const next = ramc + offset + multiplier * ascensionalDifference;
-      if (Math.abs(normalizeLongitude(next - ra + 180) - 180) < 1e-7) {
+      // Bound the final longitude error as well as the RA iteration step.
+      if (Math.abs(normalizeLongitude(next - ra + 180) - 180) < 1e-9) {
         ra = next;
+        converged = true;
         break;
       }
       ra = next;
     }
-    return eclipticLongitudeOfRightAscension(normalizeLongitude(ra), input.obliquity);
+    return converged
+      ? eclipticLongitudeOfRightAscension(normalizeLongitude(ra), input.obliquity)
+      : null;
   }
 
   const cusp11 = iterate(30, 1 / 3);

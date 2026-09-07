@@ -21,11 +21,20 @@ export interface LocalBirthInput {
 const offsetFormatters = new Map<string, Intl.DateTimeFormat>();
 const wallFormatters = new Map<string, Intl.DateTimeFormat>();
 
+function validateTimeZone(timeZone: string): void {
+  if (typeof timeZone !== "string" || timeZone.trim().length === 0) {
+    throw new RangeError("timeZone must be an explicit nonempty timezone string.");
+  }
+}
+
 function offsetFormatter(timeZone: string): Intl.DateTimeFormat {
+  validateTimeZone(timeZone);
   let formatter = offsetFormatters.get(timeZone);
   if (!formatter) {
     formatter = new Intl.DateTimeFormat("en-US", {
       timeZone,
+      calendar: "gregory",
+      numberingSystem: "latn",
       timeZoneName: "longOffset"
     });
     offsetFormatters.set(timeZone, formatter);
@@ -34,10 +43,14 @@ function offsetFormatter(timeZone: string): Intl.DateTimeFormat {
 }
 
 function wallFormatter(timeZone: string): Intl.DateTimeFormat {
+  validateTimeZone(timeZone);
   let formatter = wallFormatters.get(timeZone);
   if (!formatter) {
-    formatter = new Intl.DateTimeFormat("en-CA", {
+    formatter = new Intl.DateTimeFormat("en-US", {
       timeZone,
+      calendar: "gregory",
+      numberingSystem: "latn",
+      era: "short",
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -52,6 +65,9 @@ function wallFormatter(timeZone: string): Intl.DateTimeFormat {
 
 /** UTC offset for an IANA timezone at a UTC instant. */
 export function offsetAt(timeZone: string, utcMilliseconds: number): number {
+  if (typeof utcMilliseconds !== "number" || !Number.isFinite(utcMilliseconds)) {
+    throw new RangeError("utcMilliseconds must be a finite epoch-millisecond timestamp.");
+  }
   const name = offsetFormatter(timeZone)
     .formatToParts(utcMilliseconds)
     .find((part) => part.type === "timeZoneName")?.value;
@@ -67,13 +83,27 @@ function wallStringAt(timeZone: string, utcMilliseconds: number): string {
   const parts = wallFormatter(timeZone).formatToParts(utcMilliseconds);
   const part = (type: Intl.DateTimeFormatPartTypes): string =>
     parts.find((candidate) => candidate.type === type)?.value ?? "";
-  return `${part("year")}-${part("month")}-${part("day")}T${part("hour")}:${part("minute")}`;
+  // Intl's Gregorian calendar numbers BCE years from 1, whereas ISO/Date use
+  // astronomical years (1 BCE = year 0000). Numeric year parts are not padded.
+  const era = part("era");
+  if (era !== "AD" && era !== "BC") {
+    throw new RangeError(`Could not read Gregorian era for timezone: ${timeZone}`);
+  }
+  const year = era === "BC" ? 1 - Number(part("year")) : Number(part("year"));
+  const isoYear =
+    year >= 0 && year <= 9999
+      ? String(year).padStart(4, "0")
+      : `${year < 0 ? "-" : "+"}${String(Math.abs(year)).padStart(6, "0")}`;
+  return `${isoYear}-${part("month").padStart(2, "0")}-${part("day").padStart(2, "0")}T${part("hour").padStart(2, "0")}:${part("minute").padStart(2, "0")}`;
 }
 
 function wallMilliseconds(date: string, time: string): number {
+  if (typeof date !== "string" || typeof time !== "string") {
+    throw new RangeError("Local date/time must use YYYY-MM-DD and HH:MM strings.");
+  }
   const dateMatch = date.match(/^(\d{4})-(\d{2})-(\d{2})$/u);
   const timeMatch = time.match(/^(\d{2}):(\d{2})$/u);
-  if (!dateMatch || !timeMatch) {
+  if (!dateMatch || dateMatch[0] !== date || !timeMatch || timeMatch[0] !== time) {
     throw new RangeError("Local date/time must use YYYY-MM-DD and HH:MM.");
   }
   const year = Number(dateMatch[1]);
@@ -84,8 +114,11 @@ function wallMilliseconds(date: string, time: string): number {
   if (month < 1 || month > 12 || hour > 23 || minute > 59) {
     throw new RangeError("Local date/time contains an out-of-range field.");
   }
-  const milliseconds = Date.UTC(year, month - 1, day, hour, minute);
-  const check = new Date(milliseconds);
+  // Date.UTC treats years 0–99 as 1900–1999; setUTCFullYear preserves the
+  // requested proleptic Gregorian year, including year 0000's leap day.
+  const check = new Date(0);
+  check.setUTCFullYear(year, month - 1, day);
+  check.setUTCHours(hour, minute, 0, 0);
   if (
     check.getUTCFullYear() !== year ||
     check.getUTCMonth() !== month - 1 ||
@@ -93,7 +126,7 @@ function wallMilliseconds(date: string, time: string): number {
   ) {
     throw new RangeError("Local date is not a calendar date.");
   }
-  return milliseconds;
+  return check.getTime();
 }
 
 /**
@@ -157,6 +190,9 @@ export function resolveLocalToUtc(
 
 /** Convert a local birth form into the explicit UTC input accepted by the core. */
 export function resolveBirth(input: LocalBirthInput): BirthInput {
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    throw new RangeError("birth must be an object containing a local date and timezone.");
+  }
   const timeKnown = input.timeKnown ?? input.time !== undefined;
   if (timeKnown && input.time === undefined) {
     throw new RangeError("time is required when timeKnown is true.");

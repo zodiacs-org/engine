@@ -2,6 +2,16 @@ import { bodyLongitude } from "./ephemeris.js";
 import type { BodyName } from "./types.js";
 
 const DAY = 86_400_000;
+// A default 66-year Saturn window needs 4,823 coarse samples; 10,000 also
+// accommodates its crossing refinements while bounding synchronous work.
+const MAX_CROSSING_SAMPLES = 10_000;
+
+function validMilliseconds(date: Date, label: string): number {
+  if (!(date instanceof Date)) throw new RangeError(`${label} must be a valid Date.`);
+  const milliseconds = Date.prototype.getTime.call(date);
+  if (!Number.isFinite(milliseconds)) throw new RangeError(`${label} must be a valid Date.`);
+  return milliseconds;
+}
 
 function signedDelta(from: number, to: number): number {
   const difference = (((to - from) % 360) + 360) % 360;
@@ -27,6 +37,14 @@ export interface SaturnReturnResult {
   seasons: ReturnSeason[];
 }
 
+/**
+ * Search a finite window with at most 10,000 ephemeris samples, including
+ * crossing refinements. A step must represent at least one millisecond.
+ * Throws RangeError when the requested work exceeds this synchronous budget.
+ * Exact boundary roots are included when an adjacent nonzero sample establishes
+ * direction. Interior exact roots require opposite signs on either side.
+ * Zero-length windows, sampled zero plateaus, and tangencies produce no event.
+ */
 export function findLongitudeCrossings(
   body: BodyName,
   targetLongitude: number,
@@ -34,27 +52,72 @@ export function findLongitudeCrossings(
   to: Date,
   stepDays = 5
 ): LongitudeCrossing[] {
-  if (!Number.isFinite(from.getTime()) || !Number.isFinite(to.getTime())) {
-    throw new RangeError("Crossing window dates must be valid.");
-  }
-  if (from.getTime() > to.getTime()) {
+  const fromTime = validMilliseconds(from, "Crossing window start");
+  const endTime = validMilliseconds(to, "Crossing window end");
+  if (fromTime > endTime) {
     throw new RangeError("Crossing window must have from <= to.");
+  }
+  if (!Number.isFinite(targetLongitude)) {
+    throw new RangeError("targetLongitude must be finite.");
   }
   if (!Number.isFinite(stepDays) || stepDays <= 0) {
     throw new RangeError("stepDays must be positive.");
   }
 
-  const crossings: LongitudeCrossing[] = [];
   const step = stepDays * DAY;
-  let previousTime = from.getTime();
-  let previousDelta = signedDelta(targetLongitude, bodyLongitude(body, from));
-  const endTime = to.getTime();
+  if (!Number.isFinite(step) || step < 1) {
+    throw new RangeError("stepDays must represent a finite step of at least one millisecond.");
+  }
+  const budgetError = () => new RangeError("Crossing search exceeds the 10,000-sample budget.");
+  if (Math.ceil((endTime - fromTime) / step) + 1 > MAX_CROSSING_SAMPLES) {
+    throw budgetError();
+  }
+  let samples = 0;
+  function sample(time: number): number {
+    if (samples >= MAX_CROSSING_SAMPLES) throw budgetError();
+    samples += 1;
+    const longitude = bodyLongitude(body, new Date(time));
+    if (!Number.isFinite(longitude)) {
+      throw new RangeError("Ephemeris returned a non-finite longitude.");
+    }
+    return signedDelta(targetLongitude, longitude);
+  }
+
+  const crossings: LongitudeCrossing[] = [];
+  let previousTime = fromTime;
+  let previousDelta = sample(fromTime);
+  let pendingExact: { time: number; before?: number } | undefined =
+    previousDelta === 0 ? { time: fromTime } : undefined;
 
   while (previousTime < endTime) {
     const time = Math.min(previousTime + step, endTime);
-    const currentDelta = signedDelta(targetLongitude, bodyLongitude(body, new Date(time)));
+    if (!(time > previousTime)) {
+      throw new RangeError("Crossing search step must advance time.");
+    }
+    const currentDelta = sample(time);
+
+    if (currentDelta === 0) {
+      // Defer an interior exact root until its next sample distinguishes a
+      // crossing from a touch. Consecutive zeros do not identify a unique root.
+      pendingExact =
+        previousDelta !== 0 && Math.abs(previousDelta) < 90
+          ? { time, before: previousDelta }
+          : undefined;
+    } else {
+      if (
+        pendingExact &&
+        Math.abs(currentDelta) < 90 &&
+        (pendingExact.before === undefined ||
+          Math.sign(pendingExact.before) !== Math.sign(currentDelta))
+      ) {
+        crossings.push({ at: new Date(pendingExact.time), retrograde: currentDelta < 0 });
+      }
+      pendingExact = undefined;
+    }
 
     if (
+      previousDelta !== 0 &&
+      currentDelta !== 0 &&
       Math.sign(currentDelta) !== Math.sign(previousDelta) &&
       Math.abs(currentDelta) < 90 &&
       Math.abs(previousDelta) < 90
@@ -64,7 +127,7 @@ export function findLongitudeCrossings(
       const increasing = currentDelta > previousDelta;
       for (let iteration = 0; iteration < 24; iteration += 1) {
         const middle = (lower + upper) / 2;
-        const middleDelta = signedDelta(targetLongitude, bodyLongitude(body, new Date(middle)));
+        const middleDelta = sample(middle);
         if (middleDelta > 0 === increasing) upper = middle;
         else lower = middle;
       }
@@ -73,6 +136,10 @@ export function findLongitudeCrossings(
 
     previousTime = time;
     previousDelta = currentDelta;
+  }
+  if (pendingExact?.before !== undefined) {
+    // The window ends on a root: use only the available left-sided direction.
+    crossings.push({ at: new Date(pendingExact.time), retrograde: pendingExact.before > 0 });
   }
   return crossings;
 }
@@ -103,18 +170,18 @@ export function groupIntoSeasons(
 }
 
 export function computeSaturnReturns(birthUtc: Date): SaturnReturnResult {
-  if (!Number.isFinite(birthUtc.getTime())) {
-    throw new RangeError("Birth date must be valid.");
-  }
+  const birthTime = validMilliseconds(birthUtc, "Birth date");
+  const before = new Date(birthTime - DAY);
+  const after = new Date(birthTime + DAY);
+  const from = new Date(birthTime + 26 * 365.25 * DAY);
+  const to = new Date(birthTime + 92 * 365.25 * DAY);
+  validMilliseconds(before, "Natal speed window start");
+  validMilliseconds(after, "Natal speed window end");
+  validMilliseconds(from, "Saturn return window start");
+  validMilliseconds(to, "Saturn return window end");
   const natalLon = bodyLongitude("Saturn", birthUtc);
-  const speed =
-    signedDelta(
-      bodyLongitude("Saturn", new Date(birthUtc.getTime() - DAY)),
-      bodyLongitude("Saturn", new Date(birthUtc.getTime() + DAY))
-    ) / 2;
+  const speed = signedDelta(bodyLongitude("Saturn", before), bodyLongitude("Saturn", after)) / 2;
 
-  const from = new Date(birthUtc.getTime() + 26 * 365.25 * DAY);
-  const to = new Date(birthUtc.getTime() + 92 * 365.25 * DAY);
   return {
     natalLon,
     natalRetrograde: speed < 0,

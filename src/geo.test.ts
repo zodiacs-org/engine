@@ -1,8 +1,66 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { createGeoNamesClient, resolveBirth, resolveLocalToUtc } from "./geo.js";
+import { createGeoNamesClient, offsetAt, resolveBirth, resolveLocalToUtc } from "./geo.js";
+import type { LocalBirthInput } from "./geo.js";
 
 describe("timezone resolution", () => {
+  it.each([undefined, null, "", "   ", false, 0, { toString: () => "UTC" }])(
+    "requires an explicit nonempty timezone string instead of using the host zone: %j",
+    (timeZone) => {
+      expect(() => offsetAt(timeZone as string, 0)).toThrow(RangeError);
+      expect(() => resolveLocalToUtc("2024-01-01", "12:00", timeZone as string)).toThrow(
+        RangeError
+      );
+    }
+  );
+
+  it.each([undefined, null, false, 0, [], { toString: () => "2024-01-01" }])(
+    "rejects a nonstring local date or time: %j",
+    (input) => {
+      expect(() => resolveLocalToUtc(input as string, "12:00", "UTC")).toThrow(RangeError);
+      expect(() => resolveLocalToUtc("2024-01-01", input as string, "UTC")).toThrow(RangeError);
+    }
+  );
+
+  it.each([undefined, null, false, "0", NaN, Infinity, {}])(
+    "rejects a non-finite or nonnumeric offsetAt timestamp: %j",
+    (timestamp) => {
+      expect(() => offsetAt("UTC", timestamp as number)).toThrow(RangeError);
+    }
+  );
+
+  it.each([undefined, null, false, []])("rejects a malformed birth form: %j", (input) => {
+    expect(() => resolveBirth(input as unknown as LocalBirthInput)).toThrow(RangeError);
+  });
+
+  it.each(["0000-02-29", "0001-01-01", "0099-12-31", "0100-01-01", "0999-12-31"])(
+    "preserves the Gregorian year and ordinary-time flags for %s in UTC",
+    (date) => {
+      const resolution = resolveLocalToUtc(date, "00:00", "UTC");
+      expect(resolution.utc.toISOString()).toBe(`${date}T00:00:00.000Z`);
+      expect(resolution.offsetMinutes).toBe(0);
+      expect(resolution.flags).toEqual([]);
+    }
+  );
+
+  it.each([
+    ["0000-01-01", "Etc/GMT-14", "-000001-12-31T10:00:00.000Z", 840],
+    ["0099-12-31", "Etc/GMT+12", "0099-12-31T12:00:00.000Z", -720],
+    ["0100-01-01", "Etc/GMT-14", "0099-12-31T10:00:00.000Z", 840]
+  ])("keeps year boundaries ordinary for %s in %s", (date, timeZone, expected, offset) => {
+    const resolution = resolveLocalToUtc(date, "00:00", timeZone);
+    expect(resolution.utc.toISOString()).toBe(expected);
+    expect(resolution.offsetMinutes).toBe(offset);
+    expect(resolution.flags).toEqual([]);
+  });
+
+  it.each(["0000-02-30", "0001-02-29", "0100-02-29", "2024-02-29\n"])(
+    "rejects invalid local calendar date %j",
+    (date) => {
+      expect(() => resolveLocalToUtc(date, "12:00", "UTC")).toThrow(RangeError);
+    }
+  );
+
   it("handles ordinary, gap, fold, and local-mean-time instants", () => {
     expect(resolveLocalToUtc("2024-01-15", "12:00", "America/New_York").utc.toISOString()).toBe(
       "2024-01-15T17:00:00.000Z"
@@ -17,7 +75,9 @@ describe("timezone resolution", () => {
     expect(fold.utc.toISOString()).toBe("2024-11-03T05:30:00.000Z");
 
     const historic = resolveLocalToUtc("1907-07-06", "08:30", "America/Mexico_City");
-    expect(historic.flags).toContain("lmt");
+    expect(historic.utc.toISOString()).toBe("1907-07-06T15:06:36.000Z");
+    expect(historic.offsetMinutes).toBeCloseTo(-396.6, 10);
+    expect(historic.flags).toEqual(["lmt"]);
   });
 
   it("turns a local form into a core BirthInput", () => {
@@ -36,6 +96,18 @@ describe("timezone resolution", () => {
       timeKnown: true,
       houseSystem: "placidus"
     });
+  });
+
+  it("retains local noon and unknown-time settings for an early-year birth", () => {
+    const birth = resolveBirth({
+      date: "0000-02-29",
+      timeZone: "UTC",
+      timeKnown: false
+    });
+    expect(birth.utc).toEqual(new Date("0000-02-29T12:00:00.000Z"));
+    expect(birth.timeKnown).toBe(false);
+    expect(birth.flags).toEqual([]);
+    expect(birth.houseSystem).toBe("whole");
   });
 });
 

@@ -2,6 +2,7 @@ import { computeBodies, computeChart, bodyLongitude } from "./ephemeris.js";
 import { computeSaturnReturns } from "./returns.js";
 import { normalizeLongitude } from "./signs.js";
 import { findInterAspects, summarizePair } from "./synastry.js";
+import { dateFrom } from "./date-input.js";
 import type {
   BirthInput,
   BodyPosition,
@@ -18,14 +19,6 @@ import type { SaturnReturnResult } from "./returns.js";
 export type NatalSource = Chart | BirthInput;
 export type SaturnReturnSource = NatalSource | DateInput;
 
-function dateFrom(input: DateInput, label: string): Date {
-  const date = input instanceof Date ? new Date(input.getTime()) : new Date(input);
-  if (!Number.isFinite(date.getTime())) {
-    throw new RangeError(`${label} must be a valid date or timestamp.`);
-  }
-  return date;
-}
-
 function isChart(value: unknown): value is Chart {
   if (!value || typeof value !== "object") return false;
   const candidate = value as Partial<Chart>;
@@ -41,10 +34,26 @@ function isBirth(value: unknown): value is BirthInput {
 }
 
 function resolvedChart(source: NatalSource): Chart {
-  return isChart(source) ? source : natalChart(source);
+  if (!isChart(source)) return natalChart(source);
+  validateBirth(source.input);
+  dateFrom(source.input.utc, "birth.utc");
+  return source;
 }
 
-function validateCoordinates(birth: BirthInput): void {
+function validateBirth(birth: BirthInput): void {
+  if (!birth || typeof birth !== "object" || Array.isArray(birth)) {
+    throw new RangeError("birth must be an object containing a resolved utc instant.");
+  }
+  if (
+    birth.houseSystem !== undefined &&
+    birth.houseSystem !== "whole" &&
+    birth.houseSystem !== "placidus"
+  ) {
+    throw new RangeError('houseSystem must be "whole" or "placidus".');
+  }
+  if (birth.timeKnown !== undefined && typeof birth.timeKnown !== "boolean") {
+    throw new RangeError("timeKnown must be a boolean.");
+  }
   const hasLatitude = birth.latitude !== undefined;
   const hasLongitude = birth.longitude !== undefined;
   if (hasLatitude !== hasLongitude) {
@@ -71,7 +80,7 @@ export function positions(date: DateInput): BodyPosition[] {
 
 /** Build a natal chart from an already resolved UTC instant. */
 export function natalChart(birth: BirthInput): Chart {
-  validateCoordinates(birth);
+  validateBirth(birth);
   const input: ChartInput = {
     utc: dateFrom(birth.utc, "birth.utc"),
     houseSystem: birth.houseSystem ?? "whole",
@@ -131,8 +140,12 @@ export function moonPhase(date: DateInput): MoonPhase {
 /** Natal Saturn and return seasons through approximately age 92. */
 export function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult {
   let utc: Date;
-  if (isChart(birth)) utc = birth.input.utc;
-  else if (isBirth(birth)) utc = dateFrom(birth.utc, "birth.utc");
-  else utc = dateFrom(birth, "birth");
+  if (isChart(birth)) {
+    validateBirth(birth.input);
+    utc = dateFrom(birth.input.utc, "birth.utc");
+  } else if (isBirth(birth)) {
+    validateBirth(birth);
+    utc = dateFrom(birth.utc, "birth.utc");
+  } else utc = dateFrom(birth, "birth");
   return computeSaturnReturns(utc);
 }
