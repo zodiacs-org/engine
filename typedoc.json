@@ -3,7 +3,7 @@
   "entryPoints": ["src/index.ts", "src/geo.ts"],
   "entryPointStrategy": "resolve",
   "out": "../../docs/engine-api",
-  "name": "@zodiacs/engine 0.1.1-rc.0",
+  "name": "@zodiacs/engine 0.1.1-rc.1",
   "readme": "README.md",
   "tsconfig": "tsconfig.json",
   "lang": "en",

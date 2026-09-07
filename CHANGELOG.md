@@ -1,6 +1,6 @@
 # Engine changelog
 
-## 0.1.1-rc.0 — unreleased candidate
+## 0.1.1-rc.1 — unreleased candidate
 
 - Correct the polar ascendant in the shared implementation before deriving
   houses. Public consumers and the site receive the same rising axis.

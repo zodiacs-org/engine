@@ -43,7 +43,9 @@ export interface SaturnReturnResult {
  * Throws RangeError when the requested work exceeds this synchronous budget.
  * Exact boundary roots are included when an adjacent nonzero sample establishes
  * direction. Interior exact roots require opposite signs on either side.
- * Zero-length windows, sampled zero plateaus, and tangencies produce no event.
+ * Zero-length windows, sampled zero plateaus, and interior tangencies produce no event.
+ * Endpoint direction is one-sided; a boundary touch cannot be distinguished
+ * from a crossing without extending the requested window.
  */
 export function findLongitudeCrossings(
   body: BodyName,
