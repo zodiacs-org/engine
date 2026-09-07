@@ -1,5 +1,19 @@
 # Engine changelog
 
+## 0.1.1-rc.3 — unreleased candidate
+
+- Add an optional draft natal receipt/envelope entry point for bounded local
+  export/import, requested-versus-actual house preservation and redacted
+  diagnostics. This does not change account sync v1 or establish an industry
+  standard. Preserve original ISO spelling when captured and replay the recorded
+  request without consulting today's timezone database. Imported provenance is
+  an unauthenticated claim; recalculation across versions may differ.
+- Reject duplicate decoded JSON keys, unknown versions/features, excessive
+  input, inconsistent flags/results and unsupported exact-pole angles. Keep
+  parser exceptions and arbitrary imported metadata out of diagnostics.
+- The site and starter retain rc.1. Package publication, production release and
+  required human/external review remain separate gates.
+
 ## 0.1.1-rc.2 — unreleased candidate
 
 - Permit a later explicit GeoNames preload/search call to retry after rejected

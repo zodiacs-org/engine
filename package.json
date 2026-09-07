@@ -1,6 +1,6 @@
 {
   "name": "@zodiacs/engine",
-  "version": "0.1.1-rc.2",
+  "version": "0.1.1-rc.3",
   "description": "Browser-first tropical astrology calculations used by Zodiacs.org.",
   "license": "MIT",
   "keywords": [
@@ -41,6 +41,10 @@
     "./internal/math": {
       "types": "./dist/internal-math.d.ts",
       "import": "./dist/internal-math.js"
+    },
+    "./receipt": {
+      "types": "./dist/receipt.d.ts",
+      "import": "./dist/receipt.js"
     }
   },
   "files": [
@@ -59,7 +63,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/geo.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json",
+    "build": "tsup src/index.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json",
     "docs": "typedoc --options typedoc.json",
     "exports:smoke": "node scripts/module-resolution-smoke.mjs",
     "consumer:smoke": "node scripts/verify-packed-consumer.mjs",

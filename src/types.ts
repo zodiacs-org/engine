@@ -56,7 +56,8 @@ export interface BirthInput {
   latitude?: number;
   longitude?: number;
   houseSystem?: HouseSystem;
-  /** Set false when `utc` is a conventional noon placeholder. */
+  /** False means `utc` is a caller-supplied reference instant and suppresses angles/houses.
+   * It does not establish a UTC-noon or local-noon convention by itself. */
   timeKnown?: boolean;
   flags?: readonly ChartFlag[];
 }
@@ -185,4 +186,4 @@ export interface MoonPhase {
   waxing: boolean;
 }
 
-export const ENGINE_VERSION = "0.1.1-rc.2";
+export const ENGINE_VERSION = "0.1.1-rc.3";

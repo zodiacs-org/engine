@@ -6,23 +6,22 @@ synastry, Moon phase, and Saturn-return seasons. It is synchronous,
 side-effect-free, ESM-only, and performs no network request from its core entry
 point.
 
-**Release candidate: 0.1.1-rc.2.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.3.** Public npm lookups for this package returned
 404 on 2026-09-07. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.2.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.3.tgz
 ```
 
 From the candidate source checkout, run `corepack pnpm --filter @zodiacs/engine
 build`, then `npm pack --ignore-scripts` in `packages/engine`. Test the packed
 file in a clean consumer using `corepack pnpm --filter @zodiacs/engine
-consumer:smoke /absolute/path/to/zodiacs-engine-0.1.1-rc.2.tgz`. The smoke check
+consumer:smoke /absolute/path/to/zodiacs-engine-0.1.1-rc.3.tgz`. The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash, runtime and isolated consumer directory. A packed
-candidate is not a published release. This rc.2 follow-up repairs rejected
-GeoNames request caching; the site and public starter continue to use their
+candidate is not a published release. This rc.3 follow-up adds an optional draft natal receipt codec; the site and public starter continue to use their
 immutable rc.1 artifact until a separate integration is reviewed.
 
 ## Natal chart in 10 lines
@@ -198,3 +197,65 @@ later explicit preload/search call may retry the failed resource. There is no
 automatic retry loop, backoff or per-caller cancellation API. A custom fetch may
 bind its own abort signal; the client does not reset that signal. Structurally
 invalid but parseable JSON is not validated by this recovery behavior.
+
+## Draft natal receipts and local portability
+
+The optional `@zodiacs/engine/receipt` entry point is a Zodiacs draft for one
+natal-chart envelope. It preserves full numerical precision and separates a
+requested house system from the actual computed system. It does not calculate
+an ephemeris, fetch an imported URL, execute extensions, save a profile or change
+account sync v1. A valid envelope is a structurally checked claim, not an
+attestation that its positions or provenance are authentic.
+
+```ts
+import { natalChart } from "@zodiacs/engine";
+import {
+  createNatalEnvelope,
+  serializeNatalEnvelope,
+  parseNatalEnvelope,
+  natalReplayInput,
+  redactNatalEnvelope
+} from "@zodiacs/engine/receipt";
+
+const chart = natalChart({
+  utc: "2001-12-21T09:00:00Z",
+  latitude: 78.2232,
+  longitude: 15.6267,
+  houseSystem: "placidus"
+});
+const encoded = serializeNatalEnvelope(createNatalEnvelope(chart));
+const decoded = parseNatalEnvelope(encoded);
+if (decoded.ok) {
+  // Replay still requests Placidus even though this result used whole-sign.
+  const replay = natalChart(natalReplayInput(decoded.envelope));
+  console.log(replay.houses?.system);
+  console.log(redactNatalEnvelope(decoded.envelope));
+}
+```
+
+Capture original time-resolution and package/runtime facts while they are
+available. Unknown birth time does not establish a noon convention: an explicit
+08:30 reference remains 08:30, while unavailable historical context remains
+unavailable. Imported package hashes and version strings are untrusted claims.
+Pass the original validated ISO string as `sourceInstant` when available;
+normalization alone cannot recover its original offset spelling. Captured local
+resolution is checked arithmetically, without consulting the current timezone
+database or authenticating the historical claim.
+
+`natalReplayInput` recovers the recorded request. It does not select or install
+the original engine. Recalculation with another engine, ephemeris dependency or
+runtime may differ; verify trusted artifact identity and runtime provenance
+before claiming reproducible results. A matching imported version label alone
+is insufficient. Displaying the stored result does not require recalculation.
+
+The redacted diagnostic uses fixed fields; it does not copy birth details,
+numerical positions, arbitrary metadata, extensions, raw parser errors or
+stable hashes. Redacted does not mean anonymous.
+
+Imports are limited to one chart and 64 KiB of UTF-8 JSON, with bounded depth,
+node count and data arrays. Unknown required features or schema versions are
+rejected explicitly. Optional data belongs in bounded extensions and is never
+executed or rendered by this codec. Keep encrypted account payloads and legacy
+positions-only links in their existing formats until an explicit adapter and
+safe downgrade policy are reviewed. Do not infer a legacy user's requested
+house system from a stored fallback result.

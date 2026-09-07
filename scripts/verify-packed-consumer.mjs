@@ -44,6 +44,7 @@ writeFileSync(
   `
 import { natalChart, transits, synastry, moonPhase, positions, type Chart } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
+import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
 const chart: Chart = natalChart(resolveBirth({date: "2000-02-29", time: "12:00", timeZone: "UTC", latitude: 0, longitude: 180}));
 transits(chart, "2026-09-07T12:00:00Z");
 synastry(chart, { utc: "2001-01-01", timeKnown: false });
@@ -51,6 +52,9 @@ moonPhase("2024-04-08T18:21:00Z");
 positions(0);
 const places: ReturnType<typeof createGeoNamesClient> = createGeoNamesClient({baseUrl: "https://example.test/cities"});
 void places;
+const encoded = serializeNatalEnvelope(createNatalEnvelope(chart));
+const parsed = parseNatalEnvelope(encoded);
+if (parsed.ok) { natalChart(natalReplayInput(parsed.envelope)); redactNatalEnvelope(parsed.envelope); }
 `
 );
 run(process.execPath, [
@@ -69,6 +73,7 @@ writeFileSync(
 import assert from "node:assert/strict";
 import { natalChart, positions, transits, synastry, moonPhase, ENGINE_VERSION } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
+import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
 globalThis.fetch = () => { throw new Error("Calculation attempted a network request"); };
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
@@ -110,7 +115,28 @@ await places.preload();
 await places.searchCities("new");
 assert.equal(indexRequests, 2);
 assert.equal(shardRequests, 2);
-console.log(JSON.stringify({version: ENGINE_VERSION, publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed"}));
+const envelope = createNatalEnvelope(chart, {extensions: {syntheticSecret: "PRIVATE_DIAGNOSTIC_SENTINEL"}});
+const encoded = serializeNatalEnvelope(envelope);
+const parsed = parseNatalEnvelope(encoded);
+assert.equal(parsed.ok, true);
+const replayInput = natalReplayInput(parsed.envelope);
+assert.equal(replayInput.houseSystem, "placidus");
+const replayed = natalChart(replayInput);
+assert.deepEqual(replayed.bodies, chart.bodies);
+assert.deepEqual(replayed.angles, chart.angles);
+assert.deepEqual(replayed.houses, chart.houses);
+assert.deepEqual(replayed.flags, chart.flags);
+assert.equal(parsed.envelope.extensions.syntheticSecret, "PRIVATE_DIAGNOSTIC_SENTINEL");
+const diagnostic = JSON.stringify(redactNatalEnvelope(parsed.envelope));
+for (const secret of ["PRIVATE_DIAGNOSTIC_SENTINEL", "2001-12-21", ENGINE_VERSION, "78.2232", "15.6267"]) assert(!diagnostic.includes(secret));
+const explicitReference = natalChart(resolveBirth({date: "2000-02-29", time: "08:30", timeZone: "UTC", timeKnown: false}));
+const unknownEnvelope = createNatalEnvelope(explicitReference);
+assert.equal(unknownEnvelope.receipt.reference, "supplied-instant");
+assert.equal(unknownEnvelope.receipt.instant, "2000-02-29T08:30:00.000Z");
+assert.equal(natalChart(natalReplayInput(unknownEnvelope)).houses, null);
+assert.equal(parseNatalEnvelope("{" ).ok, false);
+assert.equal(parseNatalEnvelope(" ".repeat(65537)).ok, false);
+console.log(JSON.stringify({version: ENGINE_VERSION, publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

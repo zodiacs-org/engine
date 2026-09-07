@@ -17,6 +17,8 @@ const required = [
   "README.md",
   "dist/geo.d.ts",
   "dist/geo.js",
+  "dist/receipt.d.ts",
+  "dist/receipt.js",
   "dist/index.d.ts",
   "dist/index.js",
   "dist/internal-math.d.ts",
