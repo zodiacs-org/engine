@@ -63,8 +63,15 @@ a,
 
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid #e0b080;
+  outline: 2px solid #c6ccda;
   outline-offset: 3px;
+}
+
+footer {
+  margin-top: 3rem;
+  padding: 2rem max(1.25rem, calc((100% - 72rem) / 2)) max(2.5rem, env(safe-area-inset-bottom));
+  border-top: 1px solid rgb(198 204 218 / 10%);
+  background: #0a0c11;
 }
 
 .engine-sign-rail {
@@ -72,9 +79,8 @@ button:focus-visible {
   grid-template-columns: repeat(12, minmax(28px, 1fr));
   gap: 0.5rem;
   width: min(100%, 36rem);
-  margin: 2rem auto 1rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgb(217 217 214 / 16%);
+  margin: 0 auto 1rem;
+  padding-top: 0;
 }
 
 .engine-sign-rail a {
@@ -98,8 +104,8 @@ button:focus-visible {
 }
 
 .engine-docs-posture {
-  margin: 0 auto 1rem;
-  color: #a9aaa7;
+  margin: 0 auto;
+  color: #8e96ab;
   font-size: 0.82rem;
   letter-spacing: 0.02em;
   text-align: center;
