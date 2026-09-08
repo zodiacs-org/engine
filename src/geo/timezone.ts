@@ -57,6 +57,8 @@ function wallFormatter(timeZone: string): Intl.DateTimeFormat {
       day: "2-digit",
       hour: "2-digit",
       minute: "2-digit",
+      second: "2-digit",
+      fractionalSecondDigits: 3,
       hourCycle: "h23"
     });
     wallFormatters.set(timeZone, formatter);
@@ -95,7 +97,7 @@ function wallStringAt(timeZone: string, utcMilliseconds: number): string {
     year >= 0 && year <= 9999
       ? String(year).padStart(4, "0")
       : `${year < 0 ? "-" : "+"}${String(Math.abs(year)).padStart(6, "0")}`;
-  return `${isoYear}-${part("month").padStart(2, "0")}-${part("day").padStart(2, "0")}T${part("hour").padStart(2, "0")}:${part("minute").padStart(2, "0")}`;
+  return `${isoYear}-${part("month").padStart(2, "0")}-${part("day").padStart(2, "0")}T${part("hour").padStart(2, "0")}:${part("minute").padStart(2, "0")}:${part("second").padStart(2, "0")}.${part("fractionalSecond").padStart(3, "0")}`;
 }
 
 function wallMilliseconds(date: string, time: string): number {
@@ -140,7 +142,9 @@ export function resolveLocalToUtc(
   timeZone: string
 ): LocalTimeResolution {
   const localMilliseconds = wallMilliseconds(date, time);
-  const wall = `${date}T${time}`;
+  // HH:MM denotes exactly zero seconds/milliseconds. Shortening a candidate
+  // to its minute hides historical gaps and creates false folds.
+  const wall = `${date}T${time}:00.000`;
   const sampledOffsets = [
     offsetAt(timeZone, localMilliseconds - 36 * 3_600_000),
     offsetAt(timeZone, localMilliseconds),
@@ -150,7 +154,9 @@ export function resolveLocalToUtc(
   const matches: { utcMilliseconds: number; offset: number }[] = [];
 
   for (const offset of candidates) {
-    const utcMilliseconds = localMilliseconds - offset * 60_000;
+    // IANA offsets have integral seconds. Remove floating-point conversion
+    // noise at millisecond precision without rounding away historical seconds.
+    const utcMilliseconds = localMilliseconds - Math.round(offset * 60_000);
     if (wallStringAt(timeZone, utcMilliseconds) === wall) {
       matches.push({
         utcMilliseconds,
@@ -173,7 +179,7 @@ export function resolveLocalToUtc(
     flags.push("dst-fold");
   } else {
     const before = offsetAt(timeZone, localMilliseconds - 36 * 3_600_000);
-    const utcMilliseconds = localMilliseconds - before * 60_000;
+    const utcMilliseconds = localMilliseconds - Math.round(before * 60_000);
     chosen = {
       utcMilliseconds,
       offset: offsetAt(timeZone, utcMilliseconds)

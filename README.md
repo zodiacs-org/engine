@@ -6,23 +6,22 @@ synastry, Moon phase, and Saturn-return seasons. It is synchronous,
 side-effect-free, ESM-only, and performs no network request from its core entry
 point.
 
-**Release candidate: 0.1.1-rc.5.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.6.** Public npm lookups for this package returned
 404 on 2026-09-07. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.5.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.6.tgz
 ```
 
 From the candidate source checkout, run `corepack pnpm --filter @zodiacs/engine
 build`, then `npm pack --ignore-scripts` in `packages/engine`. Test the packed
 file in a clean consumer using `corepack pnpm --filter @zodiacs/engine
-consumer:smoke /absolute/path/to/zodiacs-engine-0.1.1-rc.5.tgz`. The smoke check
+consumer:smoke /absolute/path/to/zodiacs-engine-0.1.1-rc.6.tgz`. The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash, runtime and isolated consumer directory. A packed
-candidate is not a published release. This rc.3 follow-up adds an optional draft natal receipt codec; the site and public starter continue to use their
-immutable rc.1 artifact until a separate integration is reviewed.
+candidate is not a published release. This candidate corrects historical seconds-sized gap and fold classification in local time resolution. The site platform draft retains its immutable rc.5 archive, and the standalone starter retains rc.3, until their separate integrations are reviewed.
 
 ## Natal chart in 10 lines
 

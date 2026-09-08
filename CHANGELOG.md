@@ -1,5 +1,23 @@
 # Engine changelog
 
+## 0.1.1-rc.6 — unreleased candidate
+
+- Compare the complete civil timestamp, including seconds and milliseconds, when
+  matching a local HH:MM input. Historical shifts smaller than one minute now
+  receive the correct gap/fold flags; neighboring ordinary times lose false
+  ambiguity flags. The selected instants in the retained finite controls agree.
+- Normalize only floating-point offset conversion to integer milliseconds.
+  Preserve historical offset seconds, actual fractional-minute offsets, earlier
+  fold selection and the existing forward-gap policy.
+- Retain strict date/time/zone guards and the existing three-point offset
+  sampling. This is a precision correction, not a proof of complete transition
+  discovery, historical source accuracy or broad astronomical coverage.
+
+Recorded receipts are immutable and are not rewritten. Recomputations can have
+corrected time flags under this new version. The receipt schema, core numerical
+formulas, ownership SDK, site/starter pins and account protocols are unchanged.
+SDK #5's explicit merge/publication hold and required review remain.
+
 ## 0.1.1-rc.5 — unreleased candidate
 
 - Preserve all five typed birth flags while checking derived echoes against the
