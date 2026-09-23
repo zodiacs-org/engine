@@ -21,11 +21,13 @@ export type { AspectDefinition, AspectMotion } from "./aspects.js";
 
 export {
   HOUSE_SYSTEMS,
+  PLACIDUS_POLAR_FALLBACK,
   computeAngles,
   computeHouses,
   houseOf,
   meanObliquity,
   placidusCusps,
+  porphyryCusps,
   ramcOf,
   wholeSignCusps
 } from "./houses.js";

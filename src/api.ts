@@ -1,4 +1,5 @@
 import { computeBodies, computeChart, bodyLongitude } from "./ephemeris.js";
+import { PLACIDUS_POLAR_FALLBACK } from "./houses.js";
 import { computeSaturnReturns } from "./returns.js";
 import { normalizeLongitude } from "./signs.js";
 import { findInterAspects, summarizePair } from "./synastry.js";
@@ -63,13 +64,14 @@ function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } {
         typeof houses !== "object" ||
         Array.isArray(houses)
       : angles !== null || houses !== null) ||
-    (houses !== null && actualHouseSystem !== "whole" && actualHouseSystem !== "placidus") ||
-    (input.houseSystem === "whole" && actualHouseSystem === "placidus")
+    (houses !== null &&
+      actualHouseSystem !== input.houseSystem &&
+      !(input.houseSystem === "placidus" && actualHouseSystem === PLACIDUS_POLAR_FALLBACK))
   ) {
     throw new RangeError("chart flags must agree with its input and supplied house result.");
   }
   if (!input.timeKnown) expected.push("no-time");
-  if (input.houseSystem === "placidus" && actualHouseSystem === "whole") {
+  if (input.houseSystem === "placidus" && actualHouseSystem === PLACIDUS_POLAR_FALLBACK) {
     expected.push("polar-fallback");
   }
   assertDerivedFlags(inputFlags?.values ?? [], expected);

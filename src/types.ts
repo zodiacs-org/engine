@@ -44,7 +44,7 @@ export type BodyName =
   | "North Node"
   | "South Node";
 
-export type HouseSystem = "whole" | "placidus";
+export type HouseSystem = "whole" | "placidus" | "porphyry";
 export type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback";
 
 /**

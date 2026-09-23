@@ -177,7 +177,7 @@ const BODIES = [
 ] as const;
 const FLAGS = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
-const HOUSE_SYSTEMS = ["whole", "placidus"] as const;
+const HOUSE_SYSTEMS = ["whole", "placidus", "porphyry"] as const;
 const HOSTILE_KEYS = new Set(["__proto__", "prototype", "constructor"]);
 type RecordValue = Record<string, unknown>;
 
@@ -417,6 +417,20 @@ function validateResult(value: unknown, instantaneousApplying: boolean): NatalEn
       cusps.slice(0, 6).some((cusp, index) => !angularClose(cusps[index + 6]!, cusp + 180))
     )
       fail("inconsistent_result");
+    else if (houses.system === "porphyry") {
+      // Porphyry is fixed by the angles: each quadrant in three equal parts,
+      // with the ascendant less than 180° past the midheaven.
+      const upper = wrap((angles.asc as number) - (angles.mc as number));
+      const lower = 180 - upper;
+      if (
+        upper >= 180 ||
+        !angularClose(cusps[10]!, (angles.mc as number) + upper / 3) ||
+        !angularClose(cusps[11]!, (angles.mc as number) + (2 * upper) / 3) ||
+        !angularClose(cusps[1]!, (angles.asc as number) + lower / 3) ||
+        !angularClose(cusps[2]!, (angles.asc as number) + (2 * lower) / 3)
+      )
+        fail("inconsistent_result");
+    }
   }
   if (!Array.isArray(result.aspects) || result.aspects.length > 45) fail("invalid_shape");
   const pairs = new Set<string>();
@@ -630,7 +644,16 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     house.actual !== (result.houses?.system ?? null)
   )
     fail("inconsistent_result");
-  if (requested === "whole" && result.houses?.system === "placidus") fail("inconsistent_result");
+  // Each system is computed as asked, except Placidus, which falls back to
+  // whole sign inside the polar circle. rc.3 to rc.6 never offered Porphyry.
+  const actual = result.houses?.system;
+  if (
+    (actual !== undefined &&
+      actual !== requested &&
+      !(requested === "placidus" && actual === "whole")) ||
+    (conventions === CONVENTIONS_RC3 && requested === "porphyry")
+  )
+    fail("inconsistent_result");
   const inputFlags = flagList(receipt.inputFlags, TIME_FLAGS);
   const resultFlags = flagList(receipt.resultFlags, FLAGS);
   const expected = [...inputFlags];

@@ -5,8 +5,13 @@ type BirthSettings = Pick<BirthInput, "latitude" | "longitude" | "houseSystem" |
 /** Shared public/civil settings validation; no astronomy or timezone dependency. */
 export function validateBirthSettings(birth: BirthSettings): BirthSettings {
   const { houseSystem, timeKnown, latitude, longitude } = birth;
-  if (houseSystem !== undefined && houseSystem !== "whole" && houseSystem !== "placidus") {
-    throw new RangeError('houseSystem must be "whole" or "placidus".');
+  if (
+    houseSystem !== undefined &&
+    houseSystem !== "whole" &&
+    houseSystem !== "placidus" &&
+    houseSystem !== "porphyry"
+  ) {
+    throw new RangeError('houseSystem must be "whole", "placidus" or "porphyry".');
   }
   if (timeKnown !== undefined && typeof timeKnown !== "boolean") {
     throw new RangeError("timeKnown must be a boolean.");
