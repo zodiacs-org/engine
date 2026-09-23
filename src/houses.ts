@@ -72,10 +72,11 @@ export function wholeSignCusps(ascendant: number): number[] {
 
 /**
  * Placidus intermediate cusps using iterative semi-arc trisection.
- * Returns `null` when the construction is undefined in polar regions.
+ * Returns `null` inside the polar circle, |latitude| ≥ 90° − ε, where part of
+ * the ecliptic never rises or sets and the semi-arcs are undefined.
  */
 export function placidusCusps(input: AngleInput, angles: Angles): number[] | null {
-  if (Math.abs(input.latitude) > 66) return null;
+  if (Math.abs(input.latitude) >= 90 - input.obliquity) return null;
 
   const ramc = ramcOf(input);
   const phi = input.latitude * DEG;

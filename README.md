@@ -100,11 +100,11 @@ Returned longitudes use degrees in `[0, 360)` and positions include sign and deg
 annotations. Charts use the tropical ecliptic of date. Planetary positions are
 apparent and geocentric; this package does not calculate topocentric parallax.
 
-Placidus is undefined in polar regions. Above 66 degrees absolute latitude the
-engine falls back to whole-sign houses and adds `polar-fallback` to the chart
-flags. When the birth time is unknown, pass a conventional UTC instant with
-`timeKnown: false`; angles and houses remain absent and the chart carries the
-`no-time` flag.
+Placidus is undefined in polar regions, where |latitude| ≥ 90° − ε, with ε the
+true obliquity of date (about 66.56° today). There the engine falls back to
+whole-sign houses and adds `polar-fallback` to the chart flags. When the birth
+time is unknown, pass a conventional UTC instant with `timeKnown: false`;
+angles and houses remain absent and the chart carries the `no-time` flag.
 
 ### Input flag compatibility
 
