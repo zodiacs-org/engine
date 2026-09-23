@@ -5,11 +5,13 @@ export {
   ASPECTS,
   ASPECT_BODIES,
   ASPECT_TYPES,
+  STATIONARY_RELATIVE_SPEED,
+  aspectMotion,
   findAspects,
   matchAspect,
   separation
 } from "./aspects.js";
-export type { AspectDefinition } from "./aspects.js";
+export type { AspectDefinition, AspectMotion } from "./aspects.js";
 
 export {
   HOUSE_SYSTEMS,

@@ -109,7 +109,12 @@ export interface Aspect {
   type: AspectType;
   /** Deviation from exact, in degrees. */
   orb: number;
-  /** True when the aspect is still tightening at the chart instant. */
+  /**
+   * True only when the orb is strictly decreasing at the chart instant, judged
+   * from the two longitude speeds. False when separating, when exact, and when
+   * the relative speed is below STATIONARY_RELATIVE_SPEED; aspectMotion tells
+   * the last case apart.
+   */
   applying: boolean;
 }
 
