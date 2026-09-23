@@ -45,6 +45,7 @@ describe("receipt conventions", () => {
     expect(envelope.receipt.conventions.speed).toBe(
       "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day"
     );
+    expect(envelope.receipt.conventions.angles).toBe("gast-and-true-obliquity");
     expect(conjunction(envelope).applying).toBe(true);
     const json = serializeNatalEnvelope(envelope);
     expect(parseNatalEnvelope(json).ok).toBe(true);
@@ -66,6 +67,13 @@ describe("receipt conventions", () => {
       e.receipt.conventions.speed = NATAL_RECEIPT_CONVENTION_SETS[0].speed;
     });
     expect(parseNatalEnvelope(hybrid)).toMatchObject({ ok: false, code: "unsupported_feature" });
+    const trueObliquity = edit(rc6, (e) => {
+      e.receipt.conventions.angles = NATAL_RECEIPT_CONVENTION_SETS[0].angles;
+    });
+    expect(parseNatalEnvelope(trueObliquity)).toMatchObject({
+      ok: false,
+      code: "unsupported_feature"
+    });
     const other = edit(rc6, (e) => {
       e.receipt.conventions.angles = "other-convention";
     });

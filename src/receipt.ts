@@ -102,6 +102,7 @@ const CONVENTIONS_RC3 = Object.freeze({
 /** The conventions this engine records. */
 const CONVENTIONS = Object.freeze({
   ...CONVENTIONS_RC3,
+  angles: "gast-and-true-obliquity",
   speed: "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day",
   aspects: "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate"
 } as const);

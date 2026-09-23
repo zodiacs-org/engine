@@ -7,11 +7,12 @@ import {
   RotateVector,
   Rotation_EQJ_ECT,
   SiderealTime,
-  Vector
+  Vector,
+  e_tilt
 } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
-import { computeAngles, computeHouses, meanObliquity } from "./houses.js";
+import { computeAngles, computeHouses } from "./houses.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "./signs.js";
 import type { BodyName, BodyPosition, Chart, ChartFlag, ChartInput } from "./types.js";
 import { ENGINE_VERSION } from "./types.js";
@@ -128,10 +129,6 @@ export function computeBodies(date: Date): BodyPosition[] {
   return bodies;
 }
 
-function centuriesSinceJ2000(date: Date): number {
-  return (date.getTime() - Date.UTC(2000, 0, 1, 12)) / (86_400_000 * 36_525);
-}
-
 export function computeChart(input: ChartInput): Chart {
   const flags = [...(input.flags ?? [])];
   const bodies = computeBodies(input.utc);
@@ -139,11 +136,15 @@ export function computeChart(input: ChartInput): Chart {
   let houses = null;
 
   if (input.timeKnown && input.latitude !== undefined && input.longitude !== undefined) {
+    // Apparent sidereal time already carries the nutation in longitude, so the
+    // ecliptic it is projected onto must be the true one of date: the mean
+    // obliquity plus the nutation in obliquity, from the same model and on TT.
+    const time = MakeTime(input.utc);
     const angleInput = {
-      gastHours: SiderealTime(MakeTime(input.utc)),
+      gastHours: SiderealTime(time),
       latitude: input.latitude,
       longitude: input.longitude,
-      obliquity: meanObliquity(centuriesSinceJ2000(input.utc))
+      obliquity: e_tilt(time).tobl
     };
     angles = computeAngles(angleInput);
     const result = computeHouses(input.houseSystem, angleInput, angles);

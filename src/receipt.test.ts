@@ -92,7 +92,10 @@ describe("Zodiacs draft natal receipt", () => {
       houses: original.houses,
       aspects: original.aspects
     });
-    expect(captured.result.angles?.asc).toBeCloseTo(23.871984112302016, 8);
+    // ERFA (gst06a, obl06 plus nut06a's Δε, on this engine's clock) puts this
+    // ascendant at 23.871950092381326°: 0.04″ away. The mean obliquity put it
+    // 0.12″ away, at 23.871984112302016°.
+    expect(captured.result.angles?.asc).toBeCloseTo(23.87193938505851, 8);
     const parsed = parseNatalEnvelope(serializeNatalEnvelope(captured));
     expect(parsed.ok).toBe(true);
     if (!parsed.ok) throw new Error("Expected valid synthetic receipt");
