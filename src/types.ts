@@ -80,7 +80,10 @@ export interface BodyPosition {
   lon: number;
   /** Ecliptic latitude, degrees (zero for the Moon nodes). */
   lat: number;
-  /** Longitude speed in degrees/day; negative means retrograde. */
+  /**
+   * Longitude speed in degrees/day, the derivative of `lon` over plus/minus
+   * 0.001 day (the nodes: plus/minus 0.25 day); negative means retrograde.
+   */
   speed: number;
   retrograde: boolean;
   sign: ZodiacSign;

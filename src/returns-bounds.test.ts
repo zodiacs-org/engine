@@ -2,7 +2,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { bodyLongitude } from "./ephemeris.js";
 import { computeSaturnReturns, findLongitudeCrossings } from "./returns.js";
 
-vi.mock("./ephemeris.js", () => ({ bodyLongitude: vi.fn() }));
+vi.mock("./ephemeris.js", () => ({
+  SPEED_STEP_DAYS: 0.001,
+  bodyLongitude: vi.fn(),
+  longitudeSpeed: vi.fn()
+}));
 
 const DAY = 86_400_000;
 const start = new Date("2024-01-01T00:00:00Z");

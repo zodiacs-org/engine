@@ -75,9 +75,18 @@ export function bodyLongitude(body: BodyName, date: Date): number {
   return longitudeAt(body, date);
 }
 
-/** Longitude speed by a central difference over plus/minus six hours. */
+/**
+ * Longitude speed in degrees per day: the derivative of the longitude this
+ * engine reports, by a central difference over plus/minus 0.001 day (86.4 s).
+ * The true node keeps plus/minus six hours, where its short-period noise
+ * would otherwise dominate.
+ */
+export const SPEED_STEP_DAYS = 0.001;
+export const NODE_SPEED_STEP_DAYS = 0.25;
+
 export function longitudeSpeed(body: BodyName, date: Date): number {
-  const stepDays = 0.25;
+  const stepDays =
+    body === "North Node" || body === "South Node" ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
   const before = longitudeAt(body, new Date(date.getTime() - stepDays * 86_400_000));
   const after = longitudeAt(body, new Date(date.getTime() + stepDays * 86_400_000));
   let difference = after - before;
