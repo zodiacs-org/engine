@@ -2,7 +2,7 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": ["src/index.ts", "src/geo.ts", "src/receipt.ts"],
   "entryPointStrategy": "resolve",
-  "out": "../../docs/engine-api",
+  "out": "docs/engine-api",
   "name": "@zodiacs/engine 0.1.1-rc.5",
   "readme": "README.md",
   "tsconfig": "tsconfig.json",

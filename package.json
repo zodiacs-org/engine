@@ -14,12 +14,11 @@
   ],
   "homepage": "https://zodiacs.org/sdk/engine/",
   "bugs": {
-    "url": "https://github.com/ZodiacsOfficial/sdk/issues"
+    "url": "https://github.com/zodiacs-org/engine/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ZodiacsOfficial/sdk.git",
-    "directory": "packages/engine"
+    "url": "git+https://github.com/zodiacs-org/engine.git"
   },
   "type": "module",
   "sideEffects": false,
@@ -77,7 +76,10 @@
     "astronomy-engine": "^2.1.19"
   },
   "devDependencies": {
-    "@types/node": "^22.10.1",
-    "typedoc": "^0.28.20"
+    "@types/node": "^22.19.19",
+    "tsup": "^8.5.1",
+    "typedoc": "^0.28.20",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
   }
 }

@@ -15,10 +15,10 @@ review, retaining its SHA-256 receipt:
 pnpm add ./zodiacs-engine-0.1.1-rc.6.tgz
 ```
 
-From the candidate source checkout, run `corepack pnpm --filter @zodiacs/engine
-build`, then `npm pack --ignore-scripts` in `packages/engine`. Test the packed
-file in a clean consumer using `corepack pnpm --filter @zodiacs/engine
-consumer:smoke /absolute/path/to/zodiacs-engine-0.1.1-rc.6.tgz`. The smoke check
+From a source checkout, run `npm ci` and `npm run build`, then
+`npm pack --ignore-scripts`. Test the packed file in a clean consumer using
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.6.tgz`.
+The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash, runtime and isolated consumer directory. A packed
 candidate is not a published release. This candidate corrects historical seconds-sized gap and fold classification in local time resolution. The site platform draft retains its immutable rc.5 archive, and the standalone starter retains rc.3, until their separate integrations are reviewed.
@@ -153,7 +153,7 @@ bounded iteration and falls back if it cannot converge; it never returns the
 last unconverged iterate as a successful construction.
 
 See [CHANGELOG.md](CHANGELOG.md) for candidate changes. Reference coverage and
-known limits are recorded in the site [platform evidence ledger](https://github.com/ZodiacsOfficial/site/blob/codex/platform-stage-a/docs/platform/EVIDENCE.md).
+known limits are recorded in the site [platform evidence ledger](https://github.com/zodiacs-org/site/blob/codex/platform-stage-a/docs/platform/EVIDENCE.md).
 The date parser's representable range is not a claim of astronomical accuracy
 across that range. Reference cases are finite; broader numerical scope review
 remains a release gate.
