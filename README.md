@@ -6,22 +6,22 @@ synastry, Moon phase, and Saturn-return seasons. It is synchronous,
 side-effect-free, ESM-only, and performs no network request from its core entry
 point.
 
-**Release candidate: 0.1.1-rc.6.** Public npm lookups for this package returned
-404 on 2026-09-07. The expansion release remains held for review and operator
+**Release candidate: 0.1.1-rc.7.** Public npm lookups for this package returned
+404 on 2026-09-24. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.6.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.7.tgz
 ```
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.6.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.7.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash, runtime and isolated consumer directory. A packed
-candidate is not a published release. This candidate corrects historical seconds-sized gap and fold classification in local time resolution. The site platform draft retains its immutable rc.5 archive, and the standalone starter retains rc.3, until their separate integrations are reviewed.
+candidate is not a published release. This candidate judges an aspect applying from its orb's rate, takes speeds as the derivative of the reported longitude, builds the angles on the true obliquity of date, puts the Placidus limit at the polar circle and adds Porphyry houses; CHANGELOG.md says what each change moves. The site platform draft retains its immutable rc.5 archive, and the standalone starter retains rc.3, until their separate integrations are reviewed.
 
 ## Natal chart in 10 lines
 
