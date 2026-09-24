@@ -37,6 +37,38 @@ export const ASPECT_BODIES = new Set([
   "Pluto"
 ]);
 
+/** Whether an aspect's orb is shrinking, growing, or neither, at an instant. */
+export type AspectMotion = "applying" | "separating" | "stationary";
+
+/**
+ * Below this relative speed, in degrees per day, two bodies are treated as
+ * not moving against each other, and the aspect as neither applying nor
+ * separating.
+ */
+export const STATIONARY_RELATIVE_SPEED = 1e-9;
+
+/**
+ * The motion of an aspect at the chart instant, from the two longitudes and
+ * their speeds (degrees per day). It is applying when the orb is strictly
+ * decreasing: the sign of the orb's rate of change, not a step forward in
+ * time, decides. An exact aspect (orb 0) can only separate.
+ */
+export function aspectMotion(
+  a: { lon: number; speed: number },
+  b: { lon: number; speed: number },
+  angle: number
+): AspectMotion {
+  const relative = a.speed - b.speed;
+  if (!(Math.abs(relative) >= STATIONARY_RELATIVE_SPEED)) return "stationary";
+  // Signed a − b in (−180, 180]; its magnitude is separation(a.lon, b.lon).
+  const wrapped = (((a.lon - b.lon) % 360) + 360) % 360;
+  const signed = wrapped > 180 ? wrapped - 360 : wrapped;
+  const deviation = Math.abs(signed) - angle;
+  if (deviation === 0) return "separating";
+  // d|signed|/dt = sign(signed) × relative; the orb |deviation| follows it.
+  return Math.sign(deviation) * Math.sign(signed) * relative < 0 ? "applying" : "separating";
+}
+
 /** Unsigned angular separation in [0, 180]. */
 export function separation(a: number, b: number): number {
   const difference = Math.abs((((a - b) % 360) + 360) % 360);
@@ -75,14 +107,12 @@ export function findAspects(bodies: readonly BodyPosition[]): Aspect[] {
       const match = matchAspect(a.body, a.lon, b.body, b.lon);
       if (!match) continue;
 
-      const stepDays = 0.02;
-      const nextSeparation = separation(a.lon + a.speed * stepDays, b.lon + b.speed * stepDays);
       aspects.push({
         a: a.body,
         b: b.body,
         type: match.definition.type,
         orb: match.orb,
-        applying: Math.abs(nextSeparation - match.definition.angle) < match.orb
+        applying: aspectMotion(a, b, match.definition.angle) === "applying"
       });
     }
   }

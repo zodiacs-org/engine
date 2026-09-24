@@ -11,19 +11,23 @@ export {
   ASPECTS,
   ASPECT_BODIES,
   ASPECT_TYPES,
+  STATIONARY_RELATIVE_SPEED,
+  aspectMotion,
   findAspects,
   matchAspect,
   separation
 } from "./aspects.js";
-export type { AspectDefinition } from "./aspects.js";
+export type { AspectDefinition, AspectMotion } from "./aspects.js";
 
 export {
   HOUSE_SYSTEMS,
+  PLACIDUS_POLAR_FALLBACK,
   computeAngles,
   computeHouses,
   houseOf,
   meanObliquity,
   placidusCusps,
+  porphyryCusps,
   ramcOf,
   wholeSignCusps
 } from "./houses.js";

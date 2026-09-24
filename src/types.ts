@@ -44,7 +44,7 @@ export type BodyName =
   | "North Node"
   | "South Node";
 
-export type HouseSystem = "whole" | "placidus";
+export type HouseSystem = "whole" | "placidus" | "porphyry";
 export type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback";
 
 /**
@@ -80,7 +80,10 @@ export interface BodyPosition {
   lon: number;
   /** Ecliptic latitude, degrees (zero for the Moon nodes). */
   lat: number;
-  /** Longitude speed in degrees/day; negative means retrograde. */
+  /**
+   * Longitude speed in degrees/day, the derivative of `lon` over plus/minus
+   * 0.001 day (the nodes: plus/minus 0.25 day); negative means retrograde.
+   */
   speed: number;
   retrograde: boolean;
   sign: ZodiacSign;
@@ -109,7 +112,12 @@ export interface Aspect {
   type: AspectType;
   /** Deviation from exact, in degrees. */
   orb: number;
-  /** True when the aspect is still tightening at the chart instant. */
+  /**
+   * True only when the orb is strictly decreasing at the chart instant, judged
+   * from the two longitude speeds. False when separating, when exact, and when
+   * the relative speed is below STATIONARY_RELATIVE_SPEED; aspectMotion tells
+   * the last case apart.
+   */
   applying: boolean;
 }
 

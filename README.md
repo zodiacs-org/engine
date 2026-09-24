@@ -88,7 +88,7 @@ for (const aspect of today.aspects) {
 
 - `positions(date)` returns the Sun, Moon, eight planets, and true Moon nodes.
 - `natalChart(birth)` adds natal aspects and, when coordinates are present,
-  angles and whole-sign or Placidus houses.
+  angles and whole-sign, Placidus or Porphyry houses.
 - `transits(natal, date)` returns a sky snapshot and moving-to-natal aspects.
 - `synastry(a, b)` returns inter-chart aspects and element/modality balances.
 - `moonPhase(date)` returns elongation, illuminated fraction, and phase name.
@@ -100,11 +100,15 @@ Returned longitudes use degrees in `[0, 360)` and positions include sign and deg
 annotations. Charts use the tropical ecliptic of date. Planetary positions are
 apparent and geocentric; this package does not calculate topocentric parallax.
 
-Placidus is undefined in polar regions. Above 66 degrees absolute latitude the
-engine falls back to whole-sign houses and adds `polar-fallback` to the chart
-flags. When the birth time is unknown, pass a conventional UTC instant with
-`timeKnown: false`; angles and houses remain absent and the chart carries the
-`no-time` flag.
+Placidus is undefined in polar regions, where |latitude| ≥ 90° − ε, with ε the
+true obliquity of date (about 66.56° today). There the engine falls back to
+whole-sign houses, exported as `PLACIDUS_POLAR_FALLBACK`, and adds
+`polar-fallback` to the chart flags. Swiss Ephemeris falls back to Porphyry
+instead. Porphyry divides each quadrant between the angles into three equal
+arcs of longitude, is defined at every latitude where the angles are, and can
+be requested directly with `houseSystem: "porphyry"`. When the birth time is
+unknown, pass a conventional UTC instant with `timeKnown: false`; angles and
+houses remain absent and the chart carries the `no-time` flag.
 
 ### Input flag compatibility
 
@@ -200,10 +204,10 @@ preserved. Resolve daylight-saving gaps/folds and historical local-time rules
 before calling these APIs. Accepted date syntax is not an accuracy guarantee
 outside the documented reference coverage.
 
-Birth settings accept only `houseSystem: "whole" | "placidus"` and a boolean
-`timeKnown`. Omitting them defaults to `"whole"` and `true`; explicit `null`
-and other unsupported values throw `RangeError`, including when coordinates
-are absent. Latitude and longitude must be supplied together as finite numbers
+Birth settings accept only `houseSystem: "whole" | "placidus" | "porphyry"` and
+a boolean `timeKnown`. Omitting them defaults to `"whole"` and `true`; explicit
+`null` and other unsupported values throw `RangeError`, including when
+coordinates are absent. Latitude and longitude must be supplied together as finite numbers
 within `[-90, 90]` and `[-180, 180]` respectively.
 
 ## Accuracy and licensing

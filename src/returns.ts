@@ -1,4 +1,4 @@
-import { bodyLongitude } from "./ephemeris.js";
+import { SPEED_STEP_DAYS, bodyLongitude, longitudeSpeed } from "./ephemeris.js";
 import type { BodyName } from "./types.js";
 
 const DAY = 86_400_000;
@@ -173,8 +173,9 @@ export function groupIntoSeasons(
 
 export function computeSaturnReturns(birthUtc: Date): SaturnReturnResult {
   const birthTime = validMilliseconds(birthUtc, "Birth date");
-  const before = new Date(birthTime - DAY);
-  const after = new Date(birthTime + DAY);
+  // The chart's own speed decides the natal direction, so the two agree at a station.
+  const before = new Date(birthTime - SPEED_STEP_DAYS * DAY);
+  const after = new Date(birthTime + SPEED_STEP_DAYS * DAY);
   const from = new Date(birthTime + 26 * 365.25 * DAY);
   const to = new Date(birthTime + 92 * 365.25 * DAY);
   validMilliseconds(before, "Natal speed window start");
@@ -182,7 +183,7 @@ export function computeSaturnReturns(birthUtc: Date): SaturnReturnResult {
   validMilliseconds(from, "Saturn return window start");
   validMilliseconds(to, "Saturn return window end");
   const natalLon = bodyLongitude("Saturn", birthUtc);
-  const speed = signedDelta(bodyLongitude("Saturn", before), bodyLongitude("Saturn", after)) / 2;
+  const speed = longitudeSpeed("Saturn", birthUtc);
 
   return {
     natalLon,

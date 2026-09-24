@@ -7,11 +7,12 @@ import {
   RotateVector,
   Rotation_EQJ_ECT,
   SiderealTime,
-  Vector
+  Vector,
+  e_tilt
 } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
-import { computeAngles, computeHouses, meanObliquity } from "./houses.js";
+import { computeAngles, computeHouses } from "./houses.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "./signs.js";
 import type { BodyName, BodyPosition, Chart, ChartFlag, ChartInput } from "./types.js";
 import { ENGINE_VERSION } from "./types.js";
@@ -75,9 +76,18 @@ export function bodyLongitude(body: BodyName, date: Date): number {
   return longitudeAt(body, date);
 }
 
-/** Longitude speed by a central difference over plus/minus six hours. */
+/**
+ * Longitude speed in degrees per day: the derivative of the longitude this
+ * engine reports, by a central difference over plus/minus 0.001 day (86.4 s).
+ * The true node keeps plus/minus six hours, where its short-period noise
+ * would otherwise dominate.
+ */
+export const SPEED_STEP_DAYS = 0.001;
+export const NODE_SPEED_STEP_DAYS = 0.25;
+
 export function longitudeSpeed(body: BodyName, date: Date): number {
-  const stepDays = 0.25;
+  const stepDays =
+    body === "North Node" || body === "South Node" ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
   const before = longitudeAt(body, new Date(date.getTime() - stepDays * 86_400_000));
   const after = longitudeAt(body, new Date(date.getTime() + stepDays * 86_400_000));
   let difference = after - before;
@@ -119,10 +129,6 @@ export function computeBodies(date: Date): BodyPosition[] {
   return bodies;
 }
 
-function centuriesSinceJ2000(date: Date): number {
-  return (date.getTime() - Date.UTC(2000, 0, 1, 12)) / (86_400_000 * 36_525);
-}
-
 export function computeChart(input: ChartInput): Chart {
   const flags = [...(input.flags ?? [])];
   const bodies = computeBodies(input.utc);
@@ -130,11 +136,15 @@ export function computeChart(input: ChartInput): Chart {
   let houses = null;
 
   if (input.timeKnown && input.latitude !== undefined && input.longitude !== undefined) {
+    // Apparent sidereal time already carries the nutation in longitude, so the
+    // ecliptic it is projected onto must be the true one of date: the mean
+    // obliquity plus the nutation in obliquity, from the same model and on TT.
+    const time = MakeTime(input.utc);
     const angleInput = {
-      gastHours: SiderealTime(MakeTime(input.utc)),
+      gastHours: SiderealTime(time),
       latitude: input.latitude,
       longitude: input.longitude,
-      obliquity: meanObliquity(centuriesSinceJ2000(input.utc))
+      obliquity: e_tilt(time).tobl
     };
     angles = computeAngles(angleInput);
     const result = computeHouses(input.houseSystem, angleInput, angles);

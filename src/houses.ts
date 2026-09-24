@@ -4,7 +4,14 @@ import { normalizeLongitude } from "./signs.js";
 const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
 
-export const HOUSE_SYSTEMS = ["whole", "placidus"] as const satisfies readonly HouseSystem[];
+export const HOUSE_SYSTEMS = ["whole", "placidus", "porphyry"] as const satisfies readonly HouseSystem[];
+
+/**
+ * The system Placidus falls back to where it is undefined, |latitude| ≥ 90° − ε.
+ * The chart then carries the `polar-fallback` flag. Swiss Ephemeris falls back to
+ * Porphyry there instead; ask for `"porphyry"` to get that system at any latitude.
+ */
+export const PLACIDUS_POLAR_FALLBACK = "whole" as const satisfies HouseSystem;
 
 /** Mean obliquity of the ecliptic (IAU 2006), in degrees. */
 export function meanObliquity(julianCenturies: number): number {
@@ -72,10 +79,11 @@ export function wholeSignCusps(ascendant: number): number[] {
 
 /**
  * Placidus intermediate cusps using iterative semi-arc trisection.
- * Returns `null` when the construction is undefined in polar regions.
+ * Returns `null` inside the polar circle, |latitude| ≥ 90° − ε, where part of
+ * the ecliptic never rises or sets and the semi-arcs are undefined.
  */
 export function placidusCusps(input: AngleInput, angles: Angles): number[] | null {
-  if (Math.abs(input.latitude) > 66) return null;
+  if (Math.abs(input.latitude) >= 90 - input.obliquity) return null;
 
   const ramc = ramcOf(input);
   const phi = input.latitude * DEG;
@@ -127,24 +135,62 @@ export function placidusCusps(input: AngleInput, angles: Angles): number[] | nul
   ];
 }
 
+/**
+ * Porphyry cusps: each quadrant between the angles, measured in ecliptic
+ * longitude, divided into three equal parts. Defined wherever the angles are.
+ */
+export function porphyryCusps(angles: Angles): number[] {
+  // computeAngles puts the ascendant in the eastern half, less than 180° past
+  // the midheaven, so the two quadrant arcs are positive and sum to 180°.
+  const upper = normalizeLongitude(angles.asc - angles.mc);
+  const lower = normalizeLongitude(angles.ic - angles.asc);
+  const cusp11 = normalizeLongitude(angles.mc + upper / 3);
+  const cusp12 = normalizeLongitude(angles.mc + (2 * upper) / 3);
+  const cusp2 = normalizeLongitude(angles.asc + lower / 3);
+  const cusp3 = normalizeLongitude(angles.asc + (2 * lower) / 3);
+  return [
+    angles.asc,
+    cusp2,
+    cusp3,
+    angles.ic,
+    normalizeLongitude(cusp11 + 180),
+    normalizeLongitude(cusp12 + 180),
+    angles.dsc,
+    normalizeLongitude(cusp2 + 180),
+    normalizeLongitude(cusp3 + 180),
+    angles.mc,
+    cusp11,
+    cusp12
+  ];
+}
+
 export function computeHouses(
   system: HouseSystem,
   input: AngleInput,
   angles: Angles
-): { houses: Houses; fellBack: boolean } {
+): { houses: Houses; fellBack: boolean; fallbackSystem: HouseSystem | null } {
+  if (system === "porphyry") {
+    return {
+      houses: { system: "porphyry", cusps: porphyryCusps(angles) },
+      fellBack: false,
+      fallbackSystem: null
+    };
+  }
   if (system === "placidus") {
     const cusps = placidusCusps(input, angles);
     if (cusps) {
-      return { houses: { system: "placidus", cusps }, fellBack: false };
+      return { houses: { system: "placidus", cusps }, fellBack: false, fallbackSystem: null };
     }
     return {
-      houses: { system: "whole", cusps: wholeSignCusps(angles.asc) },
-      fellBack: true
+      houses: { system: PLACIDUS_POLAR_FALLBACK, cusps: wholeSignCusps(angles.asc) },
+      fellBack: true,
+      fallbackSystem: PLACIDUS_POLAR_FALLBACK
     };
   }
   return {
     houses: { system: "whole", cusps: wholeSignCusps(angles.asc) },
-    fellBack: false
+    fellBack: false,
+    fallbackSystem: null
   };
 }
 

@@ -1,5 +1,5 @@
 import { dateFrom } from "./date-input.js";
-import { ASPECTS, ASPECT_TYPES, ASPECT_BODIES } from "./aspects.js";
+import { ASPECTS, ASPECT_TYPES, ASPECT_BODIES, aspectMotion } from "./aspects.js";
 import { SIGNS } from "./signs.js";
 import { parseReceiptJson } from "./receipt-json.js";
 import type { BirthInput, Chart, ChartFlag, HouseSystem } from "./types.js";
@@ -87,7 +87,8 @@ export interface NatalEnvelopeContext {
   extensions?: NatalJsonObject;
 }
 
-const CONVENTIONS = Object.freeze({
+/** The conventions engine versions 0.1.1-rc.3 to rc.6 recorded. Their receipts stay readable. */
+const CONVENTIONS_RC3 = Object.freeze({
   calendar: "proleptic-gregorian",
   zodiac: "tropical",
   planetPositions: "apparent-geocentric-ecliptic-of-date",
@@ -98,6 +99,16 @@ const CONVENTIONS = Object.freeze({
   speed: "degrees-per-day;central-difference-plus-minus-0.25-day",
   aspects: "major-aspects;sun-moon-eight-planets;no-nodes"
 } as const);
+/** The conventions this engine records. */
+const CONVENTIONS = Object.freeze({
+  ...CONVENTIONS_RC3,
+  angles: "gast-and-true-obliquity",
+  speed: "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day",
+  aspects: "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate"
+} as const);
+/** Every conventions set a receipt may carry, the current one first. */
+export const NATAL_RECEIPT_CONVENTION_SETS = Object.freeze([CONVENTIONS, CONVENTIONS_RC3] as const);
+const RC3_TO_RC6 = /^0\.1\.1-rc\.[3-6](?:\+[A-Za-z0-9.-]+)?$/;
 const COVERAGE = Object.freeze({
   assessment: "finite-reference-cases-only",
   broadDateRange: "not-certified",
@@ -124,7 +135,7 @@ export interface NatalReceipt {
   resultFlags: ChartFlag[];
   engine: { name: "@zodiacs/engine"; version: string };
   provenance: (NatalProvenanceClaims & { status: "claimed" }) | null;
-  conventions: typeof CONVENTIONS;
+  conventions: typeof CONVENTIONS | typeof CONVENTIONS_RC3;
   coverage: typeof COVERAGE;
 }
 
@@ -166,7 +177,7 @@ const BODIES = [
 ] as const;
 const FLAGS = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
-const HOUSE_SYSTEMS = ["whole", "placidus"] as const;
+const HOUSE_SYSTEMS = ["whole", "placidus", "porphyry"] as const;
 const HOSTILE_KEYS = new Set(["__proto__", "prototype", "constructor"]);
 type RecordValue = Record<string, unknown>;
 
@@ -331,6 +342,16 @@ function fixedFields(value: unknown, expected: Record<string, string>): void {
   if (Object.keys(expected).some((key) => actual[key] !== expected[key]))
     fail("unsupported_feature");
 }
+/** The conventions set a receipt carries, matched exactly; any other set is unsupported. */
+function conventionSet(value: unknown): typeof CONVENTIONS | typeof CONVENTIONS_RC3 {
+  const actual = record(value);
+  fields(actual, Object.keys(CONVENTIONS));
+  const match = NATAL_RECEIPT_CONVENTION_SETS.find((set) =>
+    Object.entries(set).every(([key, expected]) => actual[key] === expected)
+  );
+  if (!match) fail("unsupported_feature");
+  return match;
+}
 function longitude(value: unknown): number {
   return number(value, 0, 360, true);
 }
@@ -344,12 +365,13 @@ function angularClose(a: number, b: number): boolean {
   return Math.min(wrap(a - b), wrap(b - a)) <= 1e-8;
 }
 
-function validateResult(value: unknown): NatalEnvelope["result"] {
+function validateResult(value: unknown, instantaneousApplying: boolean): NatalEnvelope["result"] {
   const result = record(value);
   fields(result, ["bodies", "angles", "houses", "aspects"]);
   if (!Array.isArray(result.bodies) || result.bodies.length !== 12) fail("invalid_shape");
   const names = new Set<string>();
   const longitudes = new Map<string, number>();
+  const speeds = new Map<string, number>();
   for (const item of result.bodies) {
     const body = record(item);
     fields(body, ["body", "lon", "lat", "speed", "retrograde", "sign", "degree"]);
@@ -360,6 +382,7 @@ function validateResult(value: unknown): NatalEnvelope["result"] {
     longitudes.set(name, lon);
     number(body.lat, -90, 90);
     const speed = number(body.speed, -Number.MAX_VALUE, Number.MAX_VALUE);
+    speeds.set(name, speed);
     const degree = number(body.degree, 0, 30, true);
     if (
       bool(body.retrograde) !== speed < 0 ||
@@ -394,6 +417,20 @@ function validateResult(value: unknown): NatalEnvelope["result"] {
       cusps.slice(0, 6).some((cusp, index) => !angularClose(cusps[index + 6]!, cusp + 180))
     )
       fail("inconsistent_result");
+    else if (houses.system === "porphyry") {
+      // Porphyry is fixed by the angles: each quadrant in three equal parts,
+      // with the ascendant less than 180° past the midheaven.
+      const upper = wrap((angles.asc as number) - (angles.mc as number));
+      const lower = 180 - upper;
+      if (
+        upper >= 180 ||
+        !angularClose(cusps[10]!, (angles.mc as number) + upper / 3) ||
+        !angularClose(cusps[11]!, (angles.mc as number) + (2 * upper) / 3) ||
+        !angularClose(cusps[1]!, (angles.asc as number) + lower / 3) ||
+        !angularClose(cusps[2]!, (angles.asc as number) + (2 * lower) / 3)
+      )
+        fail("inconsistent_result");
+    }
   }
   if (!Array.isArray(result.aspects) || result.aspects.length > 45) fail("invalid_shape");
   const pairs = new Set<string>();
@@ -418,7 +455,19 @@ function validateResult(value: unknown): NatalEnvelope["result"] {
     const distance = Math.abs(longitudes.get(a)! - longitudes.get(b)!);
     if (!close(orb, Math.abs(Math.min(distance, 360 - distance) - definition.angle)))
       fail("inconsistent_result");
-    bool(aspect.applying);
+    const applying = bool(aspect.applying);
+    // Receipts from before the instantaneous rule are not judged by it.
+    if (
+      instantaneousApplying &&
+      applying !==
+        (aspectMotion(
+          { lon: longitudes.get(a)!, speed: speeds.get(a)! },
+          { lon: longitudes.get(b)!, speed: speeds.get(b)! },
+          definition.angle
+        ) ===
+          "applying")
+    )
+      fail("inconsistent_result");
   }
   return result as unknown as NatalEnvelope["result"];
 }
@@ -579,7 +628,8 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     number(coords.longitude, -180, 180);
     if (timeKnown && Math.abs(coords.latitude as number) === 90) fail("unsupported_feature");
   }
-  const result = validateResult(envelope.result);
+  const conventions = conventionSet(receipt.conventions);
+  const result = validateResult(envelope.result, conventions === CONVENTIONS);
   const house = record(receipt.houses);
   fields(house, ["requested", "actual", "absenceReason"]);
   const requested = choice(house.requested, HOUSE_SYSTEMS);
@@ -594,7 +644,16 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     house.actual !== (result.houses?.system ?? null)
   )
     fail("inconsistent_result");
-  if (requested === "whole" && result.houses?.system === "placidus") fail("inconsistent_result");
+  // Each system is computed as asked, except Placidus, which falls back to
+  // whole sign inside the polar circle. rc.3 to rc.6 never offered Porphyry.
+  const actual = result.houses?.system;
+  if (
+    (actual !== undefined &&
+      actual !== requested &&
+      !(requested === "placidus" && actual === "whole")) ||
+    (conventions === CONVENTIONS_RC3 && requested === "porphyry")
+  )
+    fail("inconsistent_result");
   const inputFlags = flagList(receipt.inputFlags, TIME_FLAGS);
   const resultFlags = flagList(receipt.resultFlags, FLAGS);
   const expected = [...inputFlags];
@@ -608,7 +667,8 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   const engineVersion = version(engine.version);
   validateProvenance(receipt.provenance, engineVersion);
   validateLocal(receipt.localResolution, receipt as unknown as NatalReceipt);
-  fixedFields(receipt.conventions, CONVENTIONS);
+  if (conventions === CONVENTIONS_RC3 && !RC3_TO_RC6.test(engineVersion))
+    fail("inconsistent_result");
   fixedFields(receipt.coverage, COVERAGE);
   if (envelope.extensions !== undefined) record(envelope.extensions);
   return envelope as unknown as NatalEnvelope;
