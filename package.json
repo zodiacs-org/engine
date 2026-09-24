@@ -1,0 +1,83 @@
+{
+  "name": "@zodiacs/engine",
+  "version": "0.1.1-rc.6",
+  "description": "Browser-first tropical astrology calculations used by Zodiacs.org.",
+  "license": "MIT",
+  "keywords": [
+    "astrology",
+    "ephemeris",
+    "natal-chart",
+    "synastry",
+    "transits",
+    "typescript",
+    "zodiac"
+  ],
+  "homepage": "https://zodiacs.org/sdk/engine/",
+  "bugs": {
+    "url": "https://github.com/ZodiacsOfficial/sdk/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZodiacsOfficial/sdk.git",
+    "directory": "packages/engine"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./geo": {
+      "types": "./dist/geo.d.ts",
+      "import": "./dist/geo.js"
+    },
+    "./internal": {
+      "types": "./dist/internal.d.ts",
+      "import": "./dist/internal.js"
+    },
+    "./internal/math": {
+      "types": "./dist/internal-math.d.ts",
+      "import": "./dist/internal-math.js"
+    },
+    "./receipt": {
+      "types": "./dist/receipt.d.ts",
+      "import": "./dist/receipt.js"
+    }
+  },
+  "files": [
+    "dist/*.d.ts",
+    "dist/*.js",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "LICENSING.md",
+    "NOTICE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json",
+    "docs": "typedoc --options typedoc.json",
+    "exports:smoke": "node scripts/module-resolution-smoke.mjs",
+    "consumer:smoke": "node scripts/verify-packed-consumer.mjs",
+    "package:contents": "node scripts/verify-package-contents.mjs",
+    "pack:dry-run": "npm pack --dry-run",
+    "prepack": "npm run build",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.typecheck.json --pretty false"
+  },
+  "dependencies": {
+    "astronomy-engine": "^2.1.19"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typedoc": "^0.28.20"
+  }
+}
