@@ -1,5 +1,36 @@
 # Engine changelog
 
+## 0.1.1-rc.7 — unreleased candidate
+
+- Judge an aspect applying from the sign of its orb's rate of change. The old
+  rule moved both bodies 0.02 day ahead, and so read every aspect as separating
+  for the last 14.4 minutes before exact. `aspectMotion`, `AspectMotion` and
+  `STATIONARY_RELATIVE_SPEED` are exported; `Aspect.applying` stays a boolean.
+- Take each speed as the derivative of the reported longitude over ±0.001 day.
+  The Moon's step error at perigee falls from 7.55″ a day to 0.0015″ a day. The
+  true node keeps ±0.25 day. The Saturn return scan takes natal Saturn's
+  direction from the same speed as the chart.
+- Build the ascendant and midheaven on the true obliquity of date, the one that
+  matches apparent sidereal time. Against ERFA on the 3,128-case grid, the
+  ascendant's largest error falls from 506.8″ to 6.36″, and within 45° of the
+  equator from 14.6″ to 0.36″. The midheaven's falls from 2.25″ to 0.20″.
+- Put the Placidus limit at 90° minus the true obliquity, 66.53° to 66.59° over
+  1800–2200, where it was 66°. Between the two, Placidus is now computed
+  instead of falling back to whole sign.
+- Offer `houseSystem: "porphyry"`. It is defined wherever the ascendant and
+  midheaven are, including inside the polar circle. Placidus keeps whole sign
+  as its polar fallback, now exported as `PLACIDUS_POLAR_FALLBACK` and returned
+  as `fallbackSystem`.
+- Receipts record the new speed, aspect and angle conventions. The set that
+  rc.3 to rc.6 recorded is kept as `CONVENTIONS_RC3`, and their receipts stay
+  readable and replay as before. `NATAL_RECEIPT_CONVENTION_SETS` lists both
+  sets. A receipt must match one set exactly, and the old set only with an rc.3
+  to rc.6 version. Porphyry is accepted only in the new set.
+
+Migration: planetary longitudes are unchanged. Speeds, the angles, Placidus
+cusps between 66° and the polar circle, and the applying flag of aspects close
+to exact can change. Recorded receipts are immutable and are not rewritten.
+
 ## 0.1.1-rc.6 — unreleased candidate
 
 - Compare the complete civil timestamp, including seconds and milliseconds, when
