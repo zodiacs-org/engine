@@ -3,3 +3,6 @@ dist/
 docs/engine-api/
 tsconfig.tsbuildinfo
 *.tgz
+
+# Packed release candidates carried for immutable download
+!artifacts/*.tgz
