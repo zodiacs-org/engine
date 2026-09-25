@@ -1,5 +1,30 @@
 # Engine changelog
 
+## Unreleased
+
+- One longitude-crossing solver, the one the site runs. It moves into the
+  package as `@zodiacs/engine/crossings`: `findLongitudeCrossingsWith` and
+  `searchLongitudeCrossingsWith` take the longitude function as their first
+  argument and import no ephemeris. `findLongitudeCrossings` and
+  `saturnReturn` run it on the engine's longitudes.
+- The window is (from, to]. A root exactly at `from` is no longer returned. A
+  sample exactly on the target is returned once, at that sample, including a
+  touch and the start of a plateau, which rc.7 dropped.
+- A station that falls between two samples just past the target now gives
+  both crossings. A natal Saturn 0.002° below its 2019 station gets three
+  first-return passes, where rc.7 gave one.
+- No sample budget and no `RangeError` for the size of a search. A quarter-day
+  Moon scan over 2,600 days returns its 95 crossings, and Saturn from 1900 to
+  2100 at 5 days its 13, where rc.7 threw at 10,000 samples.
+  `searchLongitudeCrossings` takes an optional `maxSamples` and returns a typed
+  `refused` result instead of throwing.
+
+Migration: planetary longitudes, charts and receipts are unchanged. A crossing
+exactly at `from` is left out; include it by starting the window earlier.
+Exact touches and grazing station pairs can add crossings to Saturn-return
+seasons. Code that relied on the `RangeError` to bound work should pass
+`maxSamples` to `searchLongitudeCrossings`.
+
 ## 0.1.1-rc.7 — unreleased candidate
 
 - Judge an aspect applying from the sign of its orb's rate of change. The old

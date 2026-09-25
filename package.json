@@ -29,6 +29,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./crossings": {
+      "types": "./dist/crossings.d.ts",
+      "import": "./dist/crossings.js"
+    },
     "./geo": {
       "types": "./dist/geo.d.ts",
       "import": "./dist/geo.js"
@@ -62,7 +66,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json",
+    "build": "tsup src/index.ts src/crossings.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json",
     "docs": "typedoc --options typedoc.json",
     "exports:smoke": "node scripts/module-resolution-smoke.mjs",
     "consumer:smoke": "node scripts/verify-packed-consumer.mjs",

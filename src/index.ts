@@ -29,8 +29,20 @@ export type { AngleInput } from "./houses.js";
 
 export { REFERENCE_SPAN, outsideReferenceSpan } from "./reference-span.js";
 
-export { findLongitudeCrossings, groupIntoSeasons } from "./returns.js";
-export type { LongitudeCrossing, ReturnSeason, SaturnReturnResult } from "./returns.js";
+export { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "./crossings.js";
+export type {
+  BodyLongitudeAt,
+  CrossingSearchOptions,
+  CrossingSearchResult,
+  LongitudeCrossing
+} from "./crossings.js";
+
+export {
+  findLongitudeCrossings,
+  groupIntoSeasons,
+  searchLongitudeCrossings
+} from "./returns.js";
+export type { ReturnSeason, SaturnReturnResult } from "./returns.js";
 
 export {
   ELEMENTS,

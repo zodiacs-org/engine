@@ -93,6 +93,10 @@ for (const aspect of today.aspects) {
 - `synastry(a, b)` returns inter-chart aspects and element/modality balances.
 - `moonPhase(date)` returns elongation, illuminated fraction, and phase name.
 - `saturnReturn(birth)` returns exact-pass seasons through roughly age 92.
+- `findLongitudeCrossings(body, longitude, from, to)` returns the instants a
+  body crosses a longitude, and `searchLongitudeCrossings` does the same under
+  a sample budget. `@zodiacs/engine/crossings` provides the same solver for a
+  longitude function of your own, without the ephemeris.
 - `@zodiacs/engine/geo` provides IANA local-time resolution and a client for a
   separately hosted, sharded GeoNames index.
 
@@ -168,19 +172,58 @@ The date parser's representable range is not a claim of astronomical accuracy
 across that range. Reference cases are finite; broader numerical scope review
 remains a release gate.
 
-`findLongitudeCrossings` requires a finite step of at least one millisecond
-and permits at most 10,000 ephemeris evaluations per call, including root
-refinements. Excessive scans throw `RangeError` instead of returning partial
-results. The default 66-year Saturn scan fits this budget. This bounds sample
-count, not execution time or accuracy outside reference coverage. Sampling can
-miss crossings between steps; it is not a completeness guarantee for arbitrary
-bodies and step sizes.
+### Longitude crossings
 
-Exact window-boundary roots are included when an adjacent nonzero sample
-establishes direction. Exact interior roots require opposite-side neighbors;
-zero-length windows, sampled zero plateaus and interior tangencies return no crossing.
-At an exact window boundary, direction is one-sided evidence: a touch cannot
-be distinguished from a crossing without extending the requested window.
+`findLongitudeCrossings(body, longitude, from, to, stepDays = 5)` returns every
+instant in the half-open window (from, to] when `body` is exactly at
+`longitude`, in time order, each marked `retrograde` when the body was moving
+backward through it. A root exactly at `from` belongs to the window that ends
+there and is not returned; a root exactly at `to` is. There is no sample
+budget, and the call does not throw for the size of a search: its work grows
+with (to − from) / step.
+
+`searchLongitudeCrossings(body, longitude, from, to, { stepDays, maxSamples })`
+makes the same search under a budget of ephemeris evaluations, root
+refinements included. It returns `{ status: "complete", crossings, samples }`,
+or `{ status: "refused", reason: "sample-budget", samples, maxSamples,
+crossings: [] }`. It refuses before any sampling when the coarse scan alone
+needs more than `maxSamples`, and otherwise when a refinement would pass the
+budget. It never returns part of a result and never throws for the budget.
+Without `maxSamples` there is no limit.
+
+Both run the one solver, exported by `@zodiacs/engine/crossings` as
+`findLongitudeCrossingsWith(longitudeAt, body, longitude, from, to, stepDays)`
+and `searchLongitudeCrossingsWith(longitudeAt, body, longitude, from, to,
+options)`. It takes the longitude function as its first argument and imports
+no ephemeris, so that entry point carries none; the root entry point exports
+the same two functions.
+
+The solver samples `from`, every `stepDays` after it and `to`, and bisects each
+sign change of the offset from the target 24 times, to the step divided by
+2^24: 25.7 ms at 5 days, 1.3 ms at a quarter day. A sample exactly on the
+target is returned once, at that sample, with the direction of the sample
+before it; a sampled plateau on the target is returned where it begins.
+Offsets of 90° or more on either side of a step are the far side of the circle,
+not a crossing.
+
+A fixed step alone loses both crossings when a station falls between two
+samples just past the target: at 5 days, a Saturn station within 0.0103° of
+it, or a Jupiter station within 0.0205°. Wherever the sampled motion turns
+without the offset changing sign, and the turning sample is within reach of the
+local curvature, the solver finds the extremum by golden-section search. It
+bisects both crossings when the extremum passes the target, and returns one,
+as direct, when it only touches. A turn in the first or last step is found by
+a probe one minute inside the window, and no sample falls outside [from, to].
+Crossings less than a second apart are returned once. The solver assumes
+smooth motion with at most one station in two steps. That holds for the Sun,
+the Moon and the planets at the steps the site scans with, from a quarter day
+for the Moon to 5 days for Saturn to Pluto, but not for the wobbling true
+node. It is tested on synthetic and real stations, not proven complete.
+
+Invalid input throws `RangeError` before any sampling: an invalid `Date`,
+`from` after `to`, a non-finite longitude, a step that is not positive or is
+shorter than a millisecond, or a `maxSamples` that is not a positive integer or
+`Infinity`. A non-finite longitude from the ephemeris throws `RangeError` too.
 
 ### Resolved instant inputs
 
