@@ -27,8 +27,25 @@ export {
 } from "./houses.js";
 export type { AngleInput } from "./houses.js";
 
-export { findLongitudeCrossings, groupIntoSeasons } from "./returns.js";
-export type { LongitudeCrossing, ReturnSeason, SaturnReturnResult } from "./returns.js";
+export { DELTA_T_MODEL, DELTA_T_TABLE, deltaT, deltaTAt } from "./deltat.js";
+export type { DeltaT, DeltaTSegment, DeltaTTable } from "./deltat.js";
+
+export { REFERENCE_SPAN, outsideReferenceSpan } from "./reference-span.js";
+
+export { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "./crossings.js";
+export type {
+  BodyLongitudeAt,
+  CrossingSearchOptions,
+  CrossingSearchResult,
+  LongitudeCrossing
+} from "./crossings.js";
+
+export {
+  findLongitudeCrossings,
+  groupIntoSeasons,
+  searchLongitudeCrossings
+} from "./returns.js";
+export type { ReturnSeason, SaturnReturnResult } from "./returns.js";
 
 export {
   ELEMENTS,
@@ -43,7 +60,7 @@ export {
 
 export { elementBalance, findInterAspects, modalityBalance, summarizePair } from "./synastry.js";
 
-export { ENGINE_VERSION } from "./types.js";
+export { ENGINE_VERSION, EPHEMERIS } from "./types.js";
 export type {
   Angles,
   Aspect,

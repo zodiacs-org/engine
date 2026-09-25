@@ -2,26 +2,27 @@
 
 Pure TypeScript astrology calculations for browsers and Node.js. The package
 computes tropical planetary positions, natal charts, transit snapshots,
-synastry, Moon phase, and Saturn-return seasons. It is synchronous,
-side-effect-free, ESM-only, and performs no network request from its core entry
-point.
+synastry, Moon phase, and Saturn-return seasons. It is synchronous and
+ESM-only, has no import-time side effects, and performs no network request from
+its core entry point. Its one runtime side effect is the ΔT it installs in
+astronomy-engine (see ΔT below).
 
-**Release candidate: 0.1.1-rc.7.** Public npm lookups for this package returned
-404 on 2026-09-24. The expansion release remains held for review and operator
+**Release candidate: 0.1.1-rc.8.** Public npm lookups for this package returned
+404 on 2026-09-25. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.7.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.8.tgz
 ```
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.7.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.8.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash, runtime and isolated consumer directory. A packed
-candidate is not a published release. This candidate judges an aspect applying from its orb's rate, takes speeds as the derivative of the reported longitude, builds the angles on the true obliquity of date, puts the Placidus limit at the polar circle and adds Porphyry houses; CHANGELOG.md says what each change moves. The site platform draft retains its immutable rc.5 archive, and the standalone starter retains rc.3, until their separate integrations are reviewed.
+candidate is not a published release. This candidate computes on observed ΔT with a band, names its ephemeris and ΔT in receipts, flags charts outside the reference span, and ships the site's longitude-crossing solver as `@zodiacs/engine/crossings`; rc.7 before it judged aspects applying from the orb's rate, took speeds as the derivative of the reported longitude, built the angles on the true obliquity, put the Placidus limit at the polar circle and added Porphyry houses. CHANGELOG.md says what each change moves. The site platform draft retains its immutable rc.5 archive, and the standalone starter retains rc.3, until their separate integrations are reviewed.
 
 ## Natal chart in 10 lines
 
@@ -93,12 +94,22 @@ for (const aspect of today.aspects) {
 - `synastry(a, b)` returns inter-chart aspects and element/modality balances.
 - `moonPhase(date)` returns elongation, illuminated fraction, and phase name.
 - `saturnReturn(birth)` returns exact-pass seasons through roughly age 92.
+- `findLongitudeCrossings(body, longitude, from, to)` returns the instants a
+  body crosses a longitude, and `searchLongitudeCrossings` does the same under
+  a sample budget. `@zodiacs/engine/crossings` provides the same solver for a
+  longitude function of your own, without the ephemeris.
 - `@zodiacs/engine/geo` provides IANA local-time resolution and a client for a
   separately hosted, sharded GeoNames index.
 
 Returned longitudes use degrees in `[0, 360)` and positions include sign and degree
 annotations. Charts use the tropical ecliptic of date. Planetary positions are
-apparent and geocentric; this package does not calculate topocentric parallax.
+geocentric and corrected for light time and aberration, but not for the Sun's
+gravitational deflection; the Moon's series carries neither correction. This
+package does not calculate topocentric parallax.
+
+Positions have been compared with an independent ephemeris from 1800-01-01T00:00Z
+up to 2200-01-01T00:00Z, exported as `REFERENCE_SPAN`. A chart outside that span
+is still computed, and carries the `outside-reference-span` flag.
 
 Placidus is undefined in polar regions, where |latitude| ≥ 90° − ε, with ε the
 true obliquity of date (about 66.56° today). There the engine falls back to
@@ -112,16 +123,16 @@ houses remain absent and the chart carries the `no-time` flag.
 
 ### Input flag compatibility
 
-Public birth inputs retain all five `ChartFlag` values. Supply an array with at
+Public birth inputs accept all six `ChartFlag` values. Supply an array with at
 most 64 entries; entries must be known string values in ordinary data slots.
 Repeated values collapse in first-occurrence order. Unknown strings, sparse
 slots, accessor slots, non-array iterables and simultaneous `dst-gap`/`dst-fold`
 claims reject with a `RangeError` that does not include supplied flag values.
 
 `dst-gap`, `dst-fold` and `lmt` remain caller assertions: a UTC instant alone
-cannot verify a historical local-time resolution. `no-time` and
-`polar-fallback` may be echoed for compatibility, but must agree with the
-calculation. Set `timeKnown: false` for unknown time; a flag never overrides that
+cannot verify a historical local-time resolution. `no-time`,
+`polar-fallback` and `outside-reference-span` may be echoed for compatibility,
+but must agree with the calculation. Set `timeKnown: false` for unknown time; a flag never overrides that
 setting. A fallback assertion requires the actual requested Placidus calculation
 to produce whole-sign houses, including fallback caused by nonconvergence.
 
@@ -162,19 +173,58 @@ The date parser's representable range is not a claim of astronomical accuracy
 across that range. Reference cases are finite; broader numerical scope review
 remains a release gate.
 
-`findLongitudeCrossings` requires a finite step of at least one millisecond
-and permits at most 10,000 ephemeris evaluations per call, including root
-refinements. Excessive scans throw `RangeError` instead of returning partial
-results. The default 66-year Saturn scan fits this budget. This bounds sample
-count, not execution time or accuracy outside reference coverage. Sampling can
-miss crossings between steps; it is not a completeness guarantee for arbitrary
-bodies and step sizes.
+### Longitude crossings
 
-Exact window-boundary roots are included when an adjacent nonzero sample
-establishes direction. Exact interior roots require opposite-side neighbors;
-zero-length windows, sampled zero plateaus and interior tangencies return no crossing.
-At an exact window boundary, direction is one-sided evidence: a touch cannot
-be distinguished from a crossing without extending the requested window.
+`findLongitudeCrossings(body, longitude, from, to, stepDays = 5)` returns every
+instant in the half-open window (from, to] when `body` is exactly at
+`longitude`, in time order, each marked `retrograde` when the body was moving
+backward through it. A root exactly at `from` belongs to the window that ends
+there and is not returned; a root exactly at `to` is. There is no sample
+budget, and the call does not throw for the size of a search: its work grows
+with (to − from) / step.
+
+`searchLongitudeCrossings(body, longitude, from, to, { stepDays, maxSamples })`
+makes the same search under a budget of ephemeris evaluations, root
+refinements included. It returns `{ status: "complete", crossings, samples }`,
+or `{ status: "refused", reason: "sample-budget", samples, maxSamples,
+crossings: [] }`. It refuses before any sampling when the coarse scan alone
+needs more than `maxSamples`, and otherwise when a refinement would pass the
+budget. It never returns part of a result and never throws for the budget.
+Without `maxSamples` there is no limit.
+
+Both run the one solver, exported by `@zodiacs/engine/crossings` as
+`findLongitudeCrossingsWith(longitudeAt, body, longitude, from, to, stepDays)`
+and `searchLongitudeCrossingsWith(longitudeAt, body, longitude, from, to,
+options)`. It takes the longitude function as its first argument and imports
+no ephemeris, so that entry point carries none; the root entry point exports
+the same two functions.
+
+The solver samples `from`, every `stepDays` after it and `to`, and bisects each
+sign change of the offset from the target 24 times, to the step divided by
+2^24: 25.7 ms at 5 days, 1.3 ms at a quarter day. A sample exactly on the
+target is returned once, at that sample, with the direction of the sample
+before it; a sampled plateau on the target is returned where it begins.
+Offsets of 90° or more on either side of a step are the far side of the circle,
+not a crossing.
+
+A fixed step alone loses both crossings when a station falls between two
+samples just past the target: at 5 days, a Saturn station within 0.0103° of
+it, or a Jupiter station within 0.0205°. Wherever the sampled motion turns
+without the offset changing sign, and the turning sample is within reach of the
+local curvature, the solver finds the extremum by golden-section search. It
+bisects both crossings when the extremum passes the target, and returns one,
+as direct, when it only touches. A turn in the first or last step is found by
+a probe one minute inside the window, and no sample falls outside [from, to].
+Crossings less than a second apart are returned once. The solver assumes
+smooth motion with at most one station in two steps. That holds for the Sun,
+the Moon and the planets at the steps the site scans with, from a quarter day
+for the Moon to 5 days for Saturn to Pluto, but not for the wobbling true
+node. It is tested on synthetic and real stations, not proven complete.
+
+Invalid input throws `RangeError` before any sampling: an invalid `Date`,
+`from` after `to`, a non-finite longitude, a step that is not positive or is
+shorter than a millisecond, or a `maxSamples` that is not a positive integer or
+`Infinity`. A non-finite longitude from the ephemeris throws `RangeError` too.
 
 ### Resolved instant inputs
 
@@ -209,6 +259,38 @@ a boolean `timeKnown`. Omitting them defaults to `"whole"` and `true`; explicit
 `null` and other unsupported values throw `RangeError`, including when
 coordinates are absent. Latitude and longitude must be supplied together as finite numbers
 within `[-90, 90]` and `[-180, 180]` respectively.
+
+## ΔT
+
+Positions are computed in Terrestrial Time, and a birth time is Universal
+Time, so every chart needs ΔT = TT − UT1. From 0.1.1-rc.8 the engine uses its
+own model, `zodiacs-deltat/1`, in place of astronomy-engine's 2004
+polynomial, which was 6.3 s off the observed value in 2026 and 110 s off
+Swiss Ephemeris's prediction for 2100:
+
+- up to 1941, the reconstruction of Stephenson, Morrison & Hohenkerk 2016
+  (their Table S15, CC BY 4.0);
+- from 1941, observed values from USNO and IERS, then Bulletin A's
+  predictions, then a damped extrapolation;
+- a 1-σ band: 0.03 s where observed, growing with the years since the last
+  observation (about 12 s by 2050 and 42 s by 2100), and an estimate rather
+  than a calibrated band before 1620.
+
+It is within 0.031 s of IERS on twelve dated values from 1962 to 2026 and
+within 0.084 s on every IERS day since 1962. Each chart reports the value it
+used as `chart.deltaT`: `{ seconds, sigma, model, table, tableDigest,
+segment }`. The table is part of the release (`DELTA_T_TABLE`, IERS data of
+2026-09-24) and changes only with a new release. `@zodiacs/engine/deltat`
+exports the model with no dependencies.
+
+The instant is read as UT1: UTC is taken as UT1, as Swiss Ephemeris's
+`calc_ut` does; UT1 − UTC stays under 0.9 s. To fix ΔT yourself, pass
+`deltaT` (seconds) in a birth input; the chart reports `model: "pinned"`.
+
+astronomy-engine keeps one ΔT for its whole module. Every engine call
+installs the engine's model first, so after any call astronomy-engine carries
+it. Code that calls astronomy-engine directly should install it too:
+`SetDeltaTFunction(deltaT)` with `deltaT` from `@zodiacs/engine/deltat`.
 
 ## Accuracy and licensing
 
@@ -303,6 +385,15 @@ Pass the original validated ISO string as `sourceInstant` when available;
 normalization alone cannot recover its original offset spelling. Captured local
 resolution is checked arithmetically, without consulting the current timezone
 database or authenticating the historical claim.
+
+Receipts from 0.1.1-rc.8 on name the ephemeris that computed them, as
+`receipt.engine.ephemeris` (`{ name: "astronomy-engine", version: "2.1.19" }`,
+exported as `EPHEMERIS`); the dependency is pinned to that exact version, and
+a current receipt without it is refused. Their conventions say what the
+positions are corrected for (`aberrated-geocentric-ecliptic-of-date;no-deflection`)
+and that the Moon has neither correction. Receipts from rc.3 to rc.7 are still
+read, each under the conventions its engine recorded, and a set is accepted
+only from the engine versions that wrote it.
 
 `natalReplayInput` recovers the recorded request. It does not select or install
 the original engine. Recalculation with another engine, ephemeris dependency or

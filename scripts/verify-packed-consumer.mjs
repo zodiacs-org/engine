@@ -45,6 +45,12 @@ writeFileSync(
 import { natalChart, transits, synastry, moonPhase, positions, type Chart, type BirthInput, type ChartFlag, saturnReturn } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
+import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith, type CrossingSearchResult, type LongitudeCrossing } from "@zodiacs/engine/crossings";
+const degreePerDay = (_body: string, date: Date) => (date.getTime() / 86_400_000) % 360;
+const passes: LongitudeCrossing[] = findLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), 1);
+const search: CrossingSearchResult = searchLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), {stepDays: 1, maxSamples: 2});
+if (search.status === "refused") { const none: [] = search.crossings; void none; }
+void passes;
 const chart: Chart = natalChart(resolveBirth({date: "2000-02-29", time: "12:00", timeZone: "UTC", latitude: 0, longitude: 180}));
 transits(chart, "2026-09-07T12:00:00Z");
 synastry(chart, { utc: "2001-01-01", timeKnown: false });
@@ -79,6 +85,8 @@ import assert from "node:assert/strict";
 import { natalChart, positions, transits, synastry, moonPhase, ENGINE_VERSION } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
+import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "@zodiacs/engine/crossings";
+import { searchLongitudeCrossings } from "@zodiacs/engine";
 globalThis.fetch = () => { throw new Error("Calculation attempted a network request"); };
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
@@ -219,7 +227,11 @@ try {
 assert.equal(intlCalls, 0);
 assert.equal(parseNatalEnvelope("{" ).ok, false);
 assert.equal(parseNatalEnvelope(" ".repeat(65537)).ok, false);
-console.log(JSON.stringify({version: ENGINE_VERSION, publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
+const degreePerDay = (_body, date) => (date.getTime() / 86_400_000) % 360;
+assert.deepEqual(findLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), 1).map((crossing) => crossing.retrograde), [false]);
+assert.deepEqual(searchLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), {stepDays: 1, maxSamples: 2}), {status: "refused", reason: "sample-budget", samples: 0, maxSamples: 2, crossings: []});
+assert.equal(searchLongitudeCrossings("Moon", 0, new Date("2000-01-01"), new Date("2007-02-13"), {stepDays: 0.25}).crossings.length, 95);
+console.log(JSON.stringify({version: ENGINE_VERSION, crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

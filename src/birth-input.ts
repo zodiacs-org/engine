@@ -37,7 +37,16 @@ export function validateBirthSettings(birth: BirthSettings): BirthSettings {
   };
 }
 
-const FLAGS: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"];
+const FLAGS: readonly ChartFlag[] = [
+  "dst-gap",
+  "dst-fold",
+  "lmt",
+  "no-time",
+  "polar-fallback",
+  "outside-reference-span"
+];
+/** Flags the engine derives from the calculation; a caller may only echo them. */
+const DERIVED_FLAGS = ["no-time", "polar-fallback", "outside-reference-span"] as const;
 
 export interface FlagSnapshot {
   values: ChartFlag[];
@@ -67,14 +76,14 @@ export function snapshotFlags(value: unknown): FlagSnapshot {
 }
 
 export function timeFlags(flags: readonly ChartFlag[]): ChartFlag[] {
-  return flags.filter((flag) => flag !== "no-time" && flag !== "polar-fallback");
+  return flags.filter((flag) => !(DERIVED_FLAGS as readonly ChartFlag[]).includes(flag));
 }
 
 export function assertDerivedFlags(
   supplied: readonly ChartFlag[],
   actual: readonly ChartFlag[]
 ): void {
-  for (const flag of ["no-time", "polar-fallback"] as const) {
+  for (const flag of DERIVED_FLAGS) {
     if (supplied.includes(flag) && !actual.includes(flag)) {
       throw new RangeError("flags contradict the birth time or house result.");
     }

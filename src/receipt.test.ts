@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { natalChart } from "./api.js";
 import { resolveBirth, resolveLocalToUtc } from "./geo.js";
-import { ENGINE_VERSION } from "./types.js";
+import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
 import type { BirthInput, Chart, ChartFlag } from "./types.js";
 import {
   createNatalEnvelope,
@@ -79,7 +79,11 @@ describe("Zodiacs draft natal receipt", () => {
     const original = chart();
     const captured = createNatalEnvelope(original);
     expect(captured.schema).toBe(NATAL_ENVELOPE_SCHEMA);
-    expect(captured.receipt.engine).toEqual({ name: "@zodiacs/engine", version: ENGINE_VERSION });
+    expect(captured.receipt.engine).toEqual({
+      name: "@zodiacs/engine",
+      version: ENGINE_VERSION,
+      ephemeris: EPHEMERIS
+    });
     expect(captured.receipt.houses).toEqual({
       requested: "placidus",
       actual: "whole",
@@ -90,7 +94,8 @@ describe("Zodiacs draft natal receipt", () => {
       bodies: original.bodies,
       angles: original.angles,
       houses: original.houses,
-      aspects: original.aspects
+      aspects: original.aspects,
+      deltaT: original.deltaT
     });
     // ERFA (gst06a, obl06 plus nut06a's Δε, on this engine's clock) puts this
     // ascendant at 23.871950092381326°: 0.04″ away. The mean obliquity put it

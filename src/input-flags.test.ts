@@ -424,6 +424,7 @@ describe("civil birth settings meet the public core boundary", () => {
     const noon = resolveBirth({ date: "0000-02-29", timeZone: "UTC" });
     expect(noon.utc).toEqual(new Date("0000-02-29T12:00:00Z"));
     expect(noon.timeKnown).toBe(false);
-    expect(natalChart(noon).flags).toEqual(["no-time"]);
+    // Year 0 lies outside the reference span, which the chart says.
+    expect(natalChart(noon).flags).toEqual(["no-time", "outside-reference-span"]);
   });
 });

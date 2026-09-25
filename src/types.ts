@@ -1,5 +1,8 @@
 /** Public, serializable vocabulary shared by the chart APIs. */
 
+import type { DeltaT } from "./deltat.js";
+export type { DeltaT, DeltaTSegment } from "./deltat.js";
+
 export type DateInput = Date | string | number;
 
 export type ZodiacSign =
@@ -45,7 +48,13 @@ export type BodyName =
   | "South Node";
 
 export type HouseSystem = "whole" | "placidus" | "porphyry";
-export type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback";
+export type ChartFlag =
+  | "dst-gap"
+  | "dst-fold"
+  | "lmt"
+  | "no-time"
+  | "polar-fallback"
+  | "outside-reference-span";
 
 /**
  * A resolved birth instant. Use `resolveBirth` from `@zodiacs/engine/geo`
@@ -63,10 +72,17 @@ export interface BirthInput {
    * are caller assertions; no-time/polar-fallback echoes must match calculation.
    * natalChart returns canonical semantic flags, not the raw submitted array. */
   flags?: readonly ChartFlag[];
+  /**
+   * Fix ΔT (TT − UT1) at this many seconds instead of the engine's model. The
+   * chart then reports `deltaT.model` "pinned". Finite, at most 1e10 in size.
+   */
+  deltaT?: number;
 }
 
 export interface ChartInput {
   utc: Date;
+  /** A caller's fixed ΔT in seconds; the engine's model when absent. */
+  deltaT?: number;
   latitude?: number;
   longitude?: number;
   houseSystem: HouseSystem;
@@ -129,6 +145,8 @@ export interface Chart {
   houses: Houses | null;
   aspects: Aspect[];
   flags: ChartFlag[];
+  /** The ΔT (TT − UT1) the chart was computed with, its band and its source. */
+  deltaT: DeltaT;
   engineVersion: string;
 }
 
@@ -197,4 +215,10 @@ export interface MoonPhase {
   waxing: boolean;
 }
 
-export const ENGINE_VERSION = "0.1.1-rc.7";
+export const ENGINE_VERSION = "0.1.1-rc.8";
+
+/**
+ * The ephemeris underneath every position. The dependency is pinned to this
+ * exact version, so receipts can name it without asking the caller.
+ */
+export const EPHEMERIS = Object.freeze({ name: "astronomy-engine", version: "2.1.19" } as const);

@@ -1,6 +1,6 @@
 {
   "name": "@zodiacs/engine",
-  "version": "0.1.1-rc.7",
+  "version": "0.1.1-rc.8",
   "description": "Browser-first tropical astrology calculations used by Zodiacs.org.",
   "license": "MIT",
   "keywords": [
@@ -28,6 +28,14 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./crossings": {
+      "types": "./dist/crossings.d.ts",
+      "import": "./dist/crossings.js"
+    },
+    "./deltat": {
+      "types": "./dist/deltat.d.ts",
+      "import": "./dist/deltat.js"
     },
     "./geo": {
       "types": "./dist/geo.d.ts",
@@ -62,7 +70,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json",
+    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json",
     "docs": "typedoc --options typedoc.json",
     "exports:smoke": "node scripts/module-resolution-smoke.mjs",
     "consumer:smoke": "node scripts/verify-packed-consumer.mjs",
@@ -73,7 +81,7 @@
     "typecheck": "tsc -p tsconfig.typecheck.json --pretty false"
   },
   "dependencies": {
-    "astronomy-engine": "^2.1.19"
+    "astronomy-engine": "2.1.19"
   },
   "devDependencies": {
     "@types/node": "^22.19.19",

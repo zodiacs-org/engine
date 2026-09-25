@@ -1,6 +1,7 @@
 import { computeBodies, computeChart, bodyLongitude } from "./ephemeris.js";
 import { PLACIDUS_POLAR_FALLBACK } from "./houses.js";
 import { computeSaturnReturns } from "./returns.js";
+import { outsideReferenceSpan } from "./reference-span.js";
 import { normalizeLongitude } from "./signs.js";
 import { findInterAspects, summarizePair } from "./synastry.js";
 import { dateFrom } from "./date-input.js";
@@ -74,6 +75,7 @@ function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } {
   if (input.houseSystem === "placidus" && actualHouseSystem === PLACIDUS_POLAR_FALLBACK) {
     expected.push("polar-fallback");
   }
+  if (outsideReferenceSpan(input.utc)) expected.push("outside-reference-span");
   assertDerivedFlags(inputFlags?.values ?? [], expected);
   if (
     resultFlags.values.length !== expected.length ||
@@ -113,20 +115,27 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   const settings = validateBirthSettings(birth);
   const supplied = birth.flags;
   const flags = supplied === undefined ? undefined : snapshotFlags(supplied);
+  const utc = dateFrom(birth.utc, "birth.utc");
+  const pin = birth.deltaT;
+  if (pin !== undefined && (typeof pin !== "number" || !Number.isFinite(pin) || Math.abs(pin) > 1e10)) {
+    throw new RangeError("deltaT must be a finite number of seconds, at most 1e10 in size.");
+  }
   const possible: ChartFlag[] = [];
   if (settings.timeKnown === false) possible.push("no-time");
   else if (settings.houseSystem === "placidus" && settings.latitude !== undefined) {
     possible.push("polar-fallback");
   }
+  if (outsideReferenceSpan(utc)) possible.push("outside-reference-span");
   assertDerivedFlags(flags?.values ?? [], possible);
   const input: ChartInput = {
-    utc: dateFrom(birth.utc, "birth.utc"),
+    utc,
     houseSystem: settings.houseSystem ?? "whole",
     timeKnown: settings.timeKnown ?? true,
     ...(settings.latitude === undefined
       ? {}
       : { latitude: settings.latitude, longitude: settings.longitude }),
-    ...(flags === undefined ? {} : { flags: timeFlags(flags.values) })
+    ...(flags === undefined ? {} : { flags: timeFlags(flags.values) }),
+    ...(pin === undefined ? {} : { deltaT: pin })
   };
   return { input, flags };
 }

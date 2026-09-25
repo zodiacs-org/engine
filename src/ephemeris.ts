@@ -6,18 +6,41 @@ import {
   MakeTime,
   RotateVector,
   Rotation_EQJ_ECT,
+  SetDeltaTFunction,
   SiderealTime,
   Vector,
   e_tilt
 } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
+import { deltaT, deltaTAt } from "./deltat.js";
+import type { DeltaT } from "./deltat.js";
 import { computeAngles, computeHouses } from "./houses.js";
+import { outsideReferenceSpan } from "./reference-span.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "./signs.js";
 import type { BodyName, BodyPosition, Chart, ChartFlag, ChartInput } from "./types.js";
 import { ENGINE_VERSION } from "./types.js";
 
 const RAD = 180 / Math.PI;
+const J2000_MS = Date.UTC(2000, 0, 1, 12);
+
+/**
+ * astronomy-engine keeps one ΔT function for the whole module, and every time
+ * it builds (in the light-time loop, for one) reads it. Each entry point below
+ * therefore installs this engine's model, or a caller's pinned value for the
+ * length of one computeChart call, before it computes anything. Code that
+ * calls astronomy-engine directly should install `deltaT` itself.
+ */
+function clock(pin?: number): void {
+  SetDeltaTFunction(pin === undefined ? deltaT : () => pin);
+}
+
+function deltaTFor(date: Date, pin: number | undefined): DeltaT {
+  if (pin !== undefined) {
+    return { seconds: pin, sigma: null, model: "pinned", table: null, tableDigest: null, segment: "pinned" };
+  }
+  return deltaTAt((date.getTime() - J2000_MS) / 86_400_000);
+}
 
 const PLANETS = [
   { name: "Sun", body: Body.Sun },
@@ -73,6 +96,7 @@ function longitudeAt(body: BodyName, date: Date): number {
 }
 
 export function bodyLongitude(body: BodyName, date: Date): number {
+  clock();
   return longitudeAt(body, date);
 }
 
@@ -86,6 +110,11 @@ export const SPEED_STEP_DAYS = 0.001;
 export const NODE_SPEED_STEP_DAYS = 0.25;
 
 export function longitudeSpeed(body: BodyName, date: Date): number {
+  clock();
+  return speedAt(body, date);
+}
+
+function speedAt(body: BodyName, date: Date): number {
   const stepDays =
     body === "North Node" || body === "South Node" ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
   const before = longitudeAt(body, new Date(date.getTime() - stepDays * 86_400_000));
@@ -109,19 +138,24 @@ function position(body: BodyName, lon: number, lat: number, speed: number): Body
 }
 
 export function computeBodies(date: Date): BodyPosition[] {
+  clock();
+  return bodiesAt(date);
+}
+
+function bodiesAt(date: Date): BodyPosition[] {
   const bodies: BodyPosition[] = [];
   for (const planet of PLANETS) {
     const coordinates = eclipticOfDate(planet.body, date);
     bodies.push(
-      position(planet.name, coordinates.lon, coordinates.lat, longitudeSpeed(planet.name, date))
+      position(planet.name, coordinates.lon, coordinates.lat, speedAt(planet.name, date))
     );
   }
 
   const moon = moonOfDate(date);
-  bodies.splice(1, 0, position("Moon", moon.lon, moon.lat, longitudeSpeed("Moon", date)));
+  bodies.splice(1, 0, position("Moon", moon.lon, moon.lat, speedAt("Moon", date)));
 
   const northNode = trueNodeLongitude(date);
-  const nodeSpeed = longitudeSpeed("North Node", date);
+  const nodeSpeed = speedAt("North Node", date);
   bodies.push(
     position("North Node", northNode, 0, nodeSpeed),
     position("South Node", normalizeLongitude(northNode + 180), 0, nodeSpeed)
@@ -130,8 +164,18 @@ export function computeBodies(date: Date): BodyPosition[] {
 }
 
 export function computeChart(input: ChartInput): Chart {
+  const pin = input.deltaT;
+  clock(pin);
+  try {
+    return chartAt(input, pin);
+  } finally {
+    if (pin !== undefined) clock();
+  }
+}
+
+function chartAt(input: ChartInput, pin: number | undefined): Chart {
   const flags = [...(input.flags ?? [])];
-  const bodies = computeBodies(input.utc);
+  const bodies = bodiesAt(input.utc);
   let angles = null;
   let houses = null;
 
@@ -153,6 +197,7 @@ export function computeChart(input: ChartInput): Chart {
   } else if (!input.timeKnown) {
     flags.push("no-time");
   }
+  if (outsideReferenceSpan(input.utc)) flags.push("outside-reference-span");
 
   return {
     input,
@@ -161,6 +206,7 @@ export function computeChart(input: ChartInput): Chart {
     houses,
     aspects: findAspects(bodies),
     flags,
+    deltaT: deltaTFor(input.utc, pin),
     engineVersion: ENGINE_VERSION
   };
 }

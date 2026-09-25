@@ -1,6 +1,50 @@
 # Engine changelog
 
-## 0.1.1-rc.7 — unreleased candidate
+## 0.1.1-rc.8
+
+- Observed ΔT with a band (Phase 1 step 1.4). The model `zodiacs-deltat/1`
+  replaces astronomy-engine's 2004 polynomial: Stephenson, Morrison &
+  Hohenkerk's 2016 reconstruction to 1941, USNO and IERS values from 1941,
+  Bulletin A's predictions, then a damped extrapolation. Today ΔT falls from
+  75.50 s to 69.20 s (IERS: 69.20 s): the Moon moves back 3.4″, and Moon
+  events come about 6 s later. At 2100 ΔT is 78.9 ± 42.4 s, where rc.7 gave
+  202.7 s. Every chart reports `deltaT`; birth inputs take a `deltaT` pin;
+  `@zodiacs/engine/deltat` exports the model with no dependencies.
+- Receipts record ΔT (`result.deltaT`, conventions `deltaT`) and name the
+  ephemeris (`receipt.engine.ephemeris`, astronomy-engine 2.1.19, now an
+  exact dependency pin). The conventions no longer call the planets
+  "apparent": they are aberrated but not deflected, and the Moon has
+  neither correction. rc.7's conventions are frozen; each set is read only
+  from the engine versions that wrote it, and receipts from rc.3 to rc.7
+  still parse and replay.
+- `REFERENCE_SPAN`: a chart before 1800-01-01T00:00Z or from
+  2200-01-01T00:00Z carries the new `outside-reference-span` flag.
+- One longitude-crossing solver, the one the site runs. It moves into the
+  package as `@zodiacs/engine/crossings`: `findLongitudeCrossingsWith` and
+  `searchLongitudeCrossingsWith` take the longitude function as their first
+  argument and import no ephemeris. `findLongitudeCrossings` and
+  `saturnReturn` run it on the engine's longitudes.
+- The window is (from, to]. A root exactly at `from` is no longer returned. A
+  sample exactly on the target is returned once, at that sample, including a
+  touch and the start of a plateau, which rc.7 dropped.
+- A station that falls between two samples just past the target now gives
+  both crossings. A natal Saturn 0.002° below its 2019 station gets three
+  first-return passes, where rc.7 gave one.
+- No sample budget and no `RangeError` for the size of a search. A quarter-day
+  Moon scan over 2,600 days returns its 95 crossings, and Saturn from 1900 to
+  2100 at 5 days its 13, where rc.7 threw at 10,000 samples.
+  `searchLongitudeCrossings` takes an optional `maxSamples` and returns a typed
+  `refused` result instead of throwing.
+
+Migration: positions move by ΔT's change (the Moon about 3.4″ today, far
+more in the far future), charts gain `deltaT` and may gain
+`outside-reference-span`, and receipts from rc.8 carry the new conventions.
+A crossing exactly at `from` is left out; include it by starting the window
+earlier. Exact touches and grazing station pairs can add crossings to
+Saturn-return seasons. Code that relied on the `RangeError` to bound work
+should pass `maxSamples` to `searchLongitudeCrossings`.
+
+## 0.1.1-rc.7
 
 - Judge an aspect applying from the sign of its orb's rate of change. The old
   rule moved both bodies 0.02 day ahead, and so read every aspect as separating
