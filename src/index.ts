@@ -27,6 +27,9 @@ export {
 } from "./houses.js";
 export type { AngleInput } from "./houses.js";
 
+export { DELTA_T_MODEL, DELTA_T_TABLE, deltaT, deltaTAt } from "./deltat.js";
+export type { DeltaT, DeltaTSegment, DeltaTTable } from "./deltat.js";
+
 export { REFERENCE_SPAN, outsideReferenceSpan } from "./reference-span.js";
 
 export { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "./crossings.js";

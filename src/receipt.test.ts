@@ -94,7 +94,8 @@ describe("Zodiacs draft natal receipt", () => {
       bodies: original.bodies,
       angles: original.angles,
       houses: original.houses,
-      aspects: original.aspects
+      aspects: original.aspects,
+      deltaT: original.deltaT
     });
     // ERFA (gst06a, obl06 plus nut06a's Δε, on this engine's clock) puts this
     // ascendant at 23.871950092381326°: 0.04″ away. The mean obliquity put it

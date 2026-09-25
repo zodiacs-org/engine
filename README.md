@@ -259,6 +259,38 @@ a boolean `timeKnown`. Omitting them defaults to `"whole"` and `true`; explicit
 coordinates are absent. Latitude and longitude must be supplied together as finite numbers
 within `[-90, 90]` and `[-180, 180]` respectively.
 
+## ΔT
+
+Positions are computed in Terrestrial Time, and a birth time is Universal
+Time, so every chart needs ΔT = TT − UT1. From 0.1.1-rc.8 the engine uses its
+own model, `zodiacs-deltat/1`, in place of astronomy-engine's 2004
+polynomial, which was 6.3 s off the observed value in 2026 and 110 s off
+Swiss Ephemeris's prediction for 2100:
+
+- up to 1941, the reconstruction of Stephenson, Morrison & Hohenkerk 2016
+  (their Table S15, CC BY 4.0);
+- from 1941, observed values from USNO and IERS, then Bulletin A's
+  predictions, then a damped extrapolation;
+- a 1-σ band: 0.03 s where observed, growing with the years since the last
+  observation (about 12 s by 2050 and 42 s by 2100), and an estimate rather
+  than a calibrated band before 1620.
+
+It is within 0.031 s of IERS on twelve dated values from 1962 to 2026 and
+within 0.084 s on every IERS day since 1962. Each chart reports the value it
+used as `chart.deltaT`: `{ seconds, sigma, model, table, tableDigest,
+segment }`. The table is part of the release (`DELTA_T_TABLE`, IERS data of
+2026-09-24) and changes only with a new release. `@zodiacs/engine/deltat`
+exports the model with no dependencies.
+
+The instant is read as UT1: UTC is taken as UT1, as Swiss Ephemeris's
+`calc_ut` does; UT1 − UTC stays under 0.9 s. To fix ΔT yourself, pass
+`deltaT` (seconds) in a birth input; the chart reports `model: "pinned"`.
+
+astronomy-engine keeps one ΔT for its whole module. Every engine call
+installs the engine's model first, so after any call astronomy-engine carries
+it. Code that calls astronomy-engine directly should install it too:
+`SetDeltaTFunction(deltaT)` with `deltaT` from `@zodiacs/engine/deltat`.
+
 ## Accuracy and licensing
 
 The ephemeris is powered by the MIT-licensed `astronomy-engine`. Tests compare

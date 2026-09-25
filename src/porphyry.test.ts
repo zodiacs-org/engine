@@ -148,6 +148,7 @@ describe("Porphyry receipts", () => {
     const old = edit((e) => {
       e.receipt.conventions = { ...NATAL_RECEIPT_CONVENTION_SETS[2] };
       e.receipt.engine = { name: "@zodiacs/engine", version: "0.1.1-rc.6" };
+      delete e.result.deltaT;
     });
     expect(parseNatalEnvelope(old)).toMatchObject({ ok: false, code: "inconsistent_result" });
   });

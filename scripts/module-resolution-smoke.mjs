@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 
 const engine = await import("@zodiacs/engine");
 const crossings = await import("@zodiacs/engine/crossings");
+const deltat = await import("@zodiacs/engine/deltat");
 const geo = await import("@zodiacs/engine/geo");
 const receipt = await import("@zodiacs/engine/receipt");
 const internal = await import("@zodiacs/engine/internal");
@@ -41,6 +42,13 @@ for (const name of ["findLongitudeCrossings", "searchLongitudeCrossings"]) {
   assert.equal(name in crossings, false, `ephemeris-bound solver in the crossings entry: ${name}`);
 }
 
+// The ΔT model is one module: the root re-exports the dependency-free entry.
+for (const name of ["deltaT", "deltaTAt", "DELTA_T_MODEL", "DELTA_T_TABLE"]) {
+  assert.ok(name in deltat, `missing deltat export: ${name}`);
+  assert.equal(engine[name], deltat[name], `root and deltat entry disagree: ${name}`);
+}
+assert.ok(Object.isFrozen(deltat.DELTA_T_TABLE), "the ΔT table must be frozen");
+
 assert.equal(typeof geo.resolveLocalToUtc, "function");
 assert.equal(typeof geo.createGeoNamesClient, "function");
 assert.equal("resolveLocalToUtc" in engine, false, "geo leaked into the core entry");
@@ -77,6 +85,7 @@ function checkSelfContained(entry) {
 }
 checkSelfContained("receipt");
 checkSelfContained("crossings");
+checkSelfContained("deltat");
 console.log(
-  "@zodiacs/engine export smoke test passed; receipt and crossings graphs have no external imports"
+  "@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports"
 );

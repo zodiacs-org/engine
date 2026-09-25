@@ -33,6 +33,10 @@
       "types": "./dist/crossings.d.ts",
       "import": "./dist/crossings.js"
     },
+    "./deltat": {
+      "types": "./dist/deltat.d.ts",
+      "import": "./dist/deltat.js"
+    },
     "./geo": {
       "types": "./dist/geo.d.ts",
       "import": "./dist/geo.js"
@@ -66,7 +70,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/crossings.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json",
+    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json",
     "docs": "typedoc --options typedoc.json",
     "exports:smoke": "node scripts/module-resolution-smoke.mjs",
     "consumer:smoke": "node scripts/verify-packed-consumer.mjs",

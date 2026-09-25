@@ -1,5 +1,8 @@
 /** Public, serializable vocabulary shared by the chart APIs. */
 
+import type { DeltaT } from "./deltat.js";
+export type { DeltaT, DeltaTSegment } from "./deltat.js";
+
 export type DateInput = Date | string | number;
 
 export type ZodiacSign =
@@ -69,10 +72,17 @@ export interface BirthInput {
    * are caller assertions; no-time/polar-fallback echoes must match calculation.
    * natalChart returns canonical semantic flags, not the raw submitted array. */
   flags?: readonly ChartFlag[];
+  /**
+   * Fix ΔT (TT − UT1) at this many seconds instead of the engine's model. The
+   * chart then reports `deltaT.model` "pinned". Finite, at most 1e10 in size.
+   */
+  deltaT?: number;
 }
 
 export interface ChartInput {
   utc: Date;
+  /** A caller's fixed ΔT in seconds; the engine's model when absent. */
+  deltaT?: number;
   latitude?: number;
   longitude?: number;
   houseSystem: HouseSystem;
@@ -135,6 +145,8 @@ export interface Chart {
   houses: Houses | null;
   aspects: Aspect[];
   flags: ChartFlag[];
+  /** The ΔT (TT − UT1) the chart was computed with, its band and its source. */
+  deltaT: DeltaT;
   engineVersion: string;
 }
 

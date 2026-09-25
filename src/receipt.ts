@@ -2,6 +2,7 @@ import { dateFrom } from "./date-input.js";
 import { ASPECTS, ASPECT_TYPES, ASPECT_BODIES, aspectMotion } from "./aspects.js";
 import { SIGNS } from "./signs.js";
 import { parseReceiptJson } from "./receipt-json.js";
+import { DELTA_T_MODEL, DELTA_T_TABLE, deltaTAt } from "./deltat.js";
 import { outsideReferenceSpan } from "./reference-span.js";
 import { EPHEMERIS } from "./types.js";
 import type { BirthInput, Chart, ChartFlag, HouseSystem } from "./types.js";
@@ -116,7 +117,8 @@ const CONVENTIONS_RC7 = Object.freeze({
 const CONVENTIONS = Object.freeze({
   ...CONVENTIONS_RC7,
   planetPositions: "aberrated-geocentric-ecliptic-of-date;no-deflection",
-  moonPosition: "astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration"
+  moonPosition: "astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration",
+  deltaT: "tt-minus-ut1;ut1-read-as-utc;value-in-result"
 } as const);
 type ConventionSet = typeof CONVENTIONS | typeof CONVENTIONS_RC7 | typeof CONVENTIONS_RC3;
 /** Every conventions set a receipt may carry, the current one first. */
@@ -170,7 +172,8 @@ export interface NatalEnvelope {
   /** This draft implements no optional required features; unknown ones fail closed. */
   requiredFeatures: string[];
   receipt: NatalReceipt;
-  result: Pick<Chart, "bodies" | "angles" | "houses" | "aspects">;
+  /** `deltaT` is present from the current conventions set on, and only there. */
+  result: Pick<Chart, "bodies" | "angles" | "houses" | "aspects"> & Partial<Pick<Chart, "deltaT">>;
   extensions?: NatalJsonObject;
 }
 
@@ -394,9 +397,61 @@ function angularClose(a: number, b: number): boolean {
   return Math.min(wrap(a - b), wrap(b - a)) <= 1e-8;
 }
 
-function validateResult(value: unknown, instantaneousApplying: boolean): NatalEnvelope["result"] {
+const DELTA_T_SEGMENTS = [
+  "long-term",
+  "reconstructed",
+  "observed",
+  "predicted",
+  "extrapolated"
+] as const;
+const J2000_MS = Date.UTC(2000, 0, 1, 12);
+
+/**
+ * The ΔT a current receipt records. A pin carries no band or table. A model
+ * value from this engine's own table must be the model's value at the
+ * receipt's instant; one from another release's table is a claim.
+ */
+function validateDeltaT(value: unknown, instant: string): void {
+  const deltaT = record(value);
+  fields(deltaT, ["seconds", "sigma", "model", "table", "tableDigest", "segment"]);
+  const seconds = number(deltaT.seconds, -1e10, 1e10);
+  if (deltaT.model === "pinned") {
+    if (
+      deltaT.sigma !== null ||
+      deltaT.table !== null ||
+      deltaT.tableDigest !== null ||
+      deltaT.segment !== "pinned"
+    )
+      fail("inconsistent_result");
+    return;
+  }
+  if (deltaT.model !== DELTA_T_MODEL) fail("unsupported_feature");
+  number(deltaT.sigma, 0, 1e10);
+  if (typeof deltaT.table !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(deltaT.table))
+    fail("invalid_value");
+  if (typeof deltaT.tableDigest !== "string" || !/^[a-f0-9]{16}$/.test(deltaT.tableDigest))
+    fail("invalid_value");
+  const segment = choice(deltaT.segment, DELTA_T_SEGMENTS);
+  if (deltaT.tableDigest === DELTA_T_TABLE.digest) {
+    const expected = deltaTAt((Date.parse(instant) - J2000_MS) / 86_400_000);
+    if (
+      deltaT.table !== expected.table ||
+      segment !== expected.segment ||
+      Math.abs(seconds - expected.seconds) > 1e-9 ||
+      Math.abs((deltaT.sigma as number) - (expected.sigma as number)) > 1e-9
+    )
+      fail("inconsistent_result");
+  }
+}
+
+function validateResult(
+  value: unknown,
+  instantaneousApplying: boolean,
+  instant: string | null
+): NatalEnvelope["result"] {
   const result = record(value);
-  fields(result, ["bodies", "angles", "houses", "aspects"]);
+  fields(result, ["bodies", "angles", "houses", "aspects", ...(instant === null ? [] : ["deltaT"])]);
+  if (instant !== null) validateDeltaT(result.deltaT, instant);
   if (!Array.isArray(result.bodies) || result.bodies.length !== 12) fail("invalid_shape");
   const names = new Set<string>();
   const longitudes = new Map<string, number>();
@@ -658,7 +713,11 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     if (timeKnown && Math.abs(coords.latitude as number) === 90) fail("unsupported_feature");
   }
   const conventions = conventionSet(receipt.conventions);
-  const result = validateResult(envelope.result, conventions !== CONVENTIONS_RC3);
+  const result = validateResult(
+    envelope.result,
+    conventions !== CONVENTIONS_RC3,
+    conventions === CONVENTIONS ? (receipt.instant as string) : null
+  );
   const house = record(receipt.houses);
   fields(house, ["requested", "actual", "absenceReason"]);
   const requested = choice(house.requested, HOUSE_SYSTEMS);
@@ -740,9 +799,22 @@ export function createNatalEnvelope(
 ): NatalEnvelope {
   return guarded(() => {
     const source = record(cloneData(chart, true));
-    fields(source, ["input", "bodies", "angles", "houses", "aspects", "flags", "engineVersion"]);
+    fields(source, [
+      "input",
+      "bodies",
+      "angles",
+      "houses",
+      "aspects",
+      "flags",
+      "deltaT",
+      "engineVersion"
+    ]);
     const input = record(source.input);
-    fields(input, ["utc", "houseSystem", "timeKnown"], ["latitude", "longitude", "flags"]);
+    fields(
+      input,
+      ["utc", "houseSystem", "timeKnown"],
+      ["latitude", "longitude", "flags", "deltaT"]
+    );
     if (!(input.utc instanceof Date)) fail("invalid_value");
     const supplied = record(cloneData(context));
     fields(
@@ -795,7 +867,8 @@ export function createNatalEnvelope(
         bodies: source.bodies,
         angles: source.angles,
         houses: source.houses,
-        aspects: source.aspects
+        aspects: source.aspects,
+        deltaT: source.deltaT
       },
       ...(supplied.extensions === undefined ? {} : { extensions: supplied.extensions })
     };
@@ -830,13 +903,15 @@ export function serializeNatalEnvelope(envelope: NatalEnvelope): string {
 /** Replay the recorded request/instant, never a fallback house system or today's tzdb. */
 export function natalReplayInput(envelope: NatalEnvelope): BirthInput {
   return guarded(() => {
-    const { receipt } = checked(envelope);
+    const { receipt, result } = checked(envelope);
+    // A pinned ΔT was part of the request, so the replay pins it again.
     return {
       utc: receipt.instant,
       houseSystem: receipt.houses.requested,
       timeKnown: receipt.timeKnown,
       flags: [...receipt.inputFlags],
-      ...(receipt.coordinates === null ? {} : { ...receipt.coordinates })
+      ...(receipt.coordinates === null ? {} : { ...receipt.coordinates }),
+      ...(result.deltaT?.model === "pinned" ? { deltaT: result.deltaT.seconds } : {})
     };
   });
 }

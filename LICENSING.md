@@ -45,6 +45,21 @@ port or translation of Swiss Ephemeris code. This licensing decision must be
 revisited before accepting any Swiss Ephemeris source, binary, table, or
 generated fixture into the package.
 
+## ΔT data
+
+`src/deltat.ts` ships 32 values of Table S15 of Stephenson, Morrison &
+Hohenkerk 2016 (Proc. R. Soc. A 472: 20160404), rounded to 0.01 s, and
+constants of its equations (4.1) and (5.1). The article and its electronic
+supplement are CC BY 4.0, which permits redistribution with attribution;
+`NOTICE` carries it. The 2020 addendum's revised table has no established
+licence and is not shipped. From 1941 the table holds values derived from
+USNO files (US Government works) and IERS Earth-orientation data, which IERS
+distributes free of charge and asks users to cite. The derivation, every
+source's digest and licence, and the measurements are in the Zodiacs site
+repository, `docs/platform/evidence/deltat-2026-09-25/`. No Swiss Ephemeris
+output was used to build the table; Swiss is used there only as a comparison
+instrument, and only statistics are committed.
+
 ## GeoNames and timezone data
 
 The `./geo` entry point is code-only and bundles no place records. Compatible

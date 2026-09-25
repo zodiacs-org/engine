@@ -1,0 +1,167 @@
+{
+ "rule": "Rule 1c, gate 1: |ΔT − IERS| ≤ 0.2 s at these 12 instants (0h UTC). ΔT = 32.184 + (TAI − UTC) − (UT1 − UTC).",
+ "sourceRule": "20 C04 through 1973-01-01 (MJD 41683); finals2000A rows flagged I from 1973-01-02.",
+ "sources": {
+  "eopc04.1962-now": {
+   "sha256": "7e39bb43bd1e1920517ed9316d3c5b14f898fe68afe9e0891bf18c4180b9d272",
+   "bytes": 5171976,
+   "lastModified": "Thu, 24 Sep 2026 13:21:06 GMT",
+   "url": "https://hpiers.obspm.fr/iers/eop/eopc04/eopc04.1962-now"
+  },
+  "finals2000A.all": {
+   "sha256": "cc80680ec05c91b65e7d02c6068fe0d44dd0998dc880551975092d2d14aa8e18",
+   "bytes": 3768836,
+   "lastModified": "Thu, 24 Sep 2026 17:37:44 GMT",
+   "url": "https://maia.usno.navy.mil/ser7/finals2000A.all"
+  },
+  "tai-utc.dat": {
+   "sha256": "3524e1ae34d67e858873a89e59983bbc5bd100221da898e796c1b36036a310c3",
+   "bytes": 3321,
+   "lastModified": "Thu, 18 Jun 2026 17:26:25 GMT",
+   "url": "https://maia.usno.navy.mil/ser7/tai-utc.dat"
+  }
+ },
+ "values": [
+  {
+   "date": "1962-03-15",
+   "mjd": 37738,
+   "source": "eopc04.1962-now",
+   "flag": "I",
+   "ut1MinusUtc": 0.0161857,
+   "ut1MinusUtcError": 0.002,
+   "taiMinusUtc": 1.9278516,
+   "ttMinusUt1": 34.0957,
+   "sourceRow": "1962   3  15   0  37738.00    0.002720    0.260920   0.0161857    0.000000    0.000000    0.000000    0.000000   0.0011940    0.030000    0.030000   0.0020000    0.004774    0.002000    0.000000    0.000000   0.0014000"
+  },
+  {
+   "date": "1969-09-15",
+   "mjd": 40479,
+   "source": "eopc04.1962-now",
+   "flag": "I",
+   "ut1MinusUtc": 0.0327089,
+   "ut1MinusUtcError": 0.0015,
+   "taiMinusUtc": 7.720146,
+   "ttMinusUt1": 39.8714,
+   "sourceRow": "1969   9  15   0  40479.00    0.093770    0.115670   0.0327089    0.000000    0.000000    0.000000    0.000000   0.0030780    0.020000    0.020000   0.0015000    0.003580    0.002000    0.000000    0.000000   0.0010000"
+  },
+  {
+   "date": "1977-03-15",
+   "mjd": 43217,
+   "source": "finals2000A.all",
+   "flag": "I",
+   "ut1MinusUtc": 0.4577033,
+   "ut1MinusUtcError": 1.94e-05,
+   "taiMinusUtc": 16.0,
+   "ttMinusUt1": 47.7263,
+   "c04TtMinusUt1": 47.7238,
+   "sourceRow": "77 315 43217.00 I -0.233405 0.013554  0.288438 0.006243  I 0.4577033 0.0000194  2.9377 0.1808  P    -0.182    0.199    -0.588    0.300  -.235000   .297000   .4597000   -11.668     2.525  "
+  },
+  {
+   "date": "1984-09-15",
+   "mjd": 45958,
+   "source": "finals2000A.all",
+   "flag": "I",
+   "ut1MinusUtc": 0.0193671,
+   "ut1MinusUtcError": 8e-05,
+   "taiMinusUtc": 22.0,
+   "ttMinusUt1": 54.1646,
+   "c04TtMinusUt1": 54.1646,
+   "sourceRow": "84 915 45958.00 I  0.309336 0.000660  0.308632 0.000581  I 0.0193671 0.0000800  1.4876 0.0462  I    -0.460    0.107     0.373    0.343   .317000   .307000   .0192000     2.627    -0.641  "
+  },
+  {
+   "date": "1992-03-15",
+   "mjd": 48696,
+   "source": "finals2000A.all",
+   "flag": "I",
+   "ut1MinusUtc": -0.3062863,
+   "ut1MinusUtcError": 2.6e-05,
+   "taiMinusUtc": 26.0,
+   "ttMinusUt1": 58.4903,
+   "c04TtMinusUt1": 58.4903,
+   "sourceRow": "92 315 48696.00 I -0.037708 0.000252  0.127724 0.000135  I-0.3062863 0.0000260  3.0595 0.0164  I     0.041    0.234    -0.024    0.100  -.038700   .127300  -.3064700     0.149     0.212  "
+  },
+  {
+   "date": "1999-09-15",
+   "mjd": 51436,
+   "source": "finals2000A.all",
+   "flag": "I",
+   "ut1MinusUtc": 0.4811804,
+   "ut1MinusUtcError": 1e-05,
+   "taiMinusUtc": 32.0,
+   "ttMinusUt1": 63.7028,
+   "c04TtMinusUt1": 63.7028,
+   "sourceRow": "99 915 51436.00 I  0.003125 0.000055  0.372601 0.000110  I 0.4811804 0.0000100  0.4365 0.0075  I     0.123    0.315    -0.354    0.298   .003040   .372620   .4811780    -0.236    -0.041  "
+  },
+  {
+   "date": "2007-03-15",
+   "mjd": 54174,
+   "source": "finals2000A.all",
+   "flag": "I",
+   "ut1MinusUtc": -0.0432801,
+   "ut1MinusUtcError": 2.8e-06,
+   "taiMinusUtc": 33.0,
+   "ttMinusUt1": 65.2273,
+   "c04TtMinusUt1": 65.2273,
+   "sourceRow": " 7 315 54174.00 I -0.004464 0.000023  0.460991 0.000035  I-0.0432801 0.0000028  0.7798 0.0023  I     0.224    0.137    -0.224    0.142  -.004390   .460680  -.0432790     0.294    -0.491  "
+  },
+  {
+   "date": "2014-09-15",
+   "mjd": 56915,
+   "source": "finals2000A.all",
+   "flag": "I",
+   "ut1MinusUtc": -0.3390958,
+   "ut1MinusUtcError": 2.9e-06,
+   "taiMinusUtc": 35.0,
+   "ttMinusUt1": 67.5231,
+   "c04TtMinusUt1": 67.5231,
+   "sourceRow": "14 915 56915.00 I  0.203048 0.000033  0.312278 0.000025  I-0.3390958 0.0000029  0.5890 0.0027  I    -0.323    0.071    -0.289    0.040  0.203062  0.312329 -0.3391027    -0.294    -0.265  "
+  },
+  {
+   "date": "2017-08-21",
+   "mjd": 57986,
+   "source": "finals2000A.all",
+   "flag": "I",
+   "ut1MinusUtc": 0.3399683,
+   "ut1MinusUtcError": 6.5e-06,
+   "taiMinusUtc": 37.0,
+   "ttMinusUt1": 68.844,
+   "c04TtMinusUt1": 68.844,
+   "sourceRow": "17 821 57986.00 I  0.229543 0.000011  0.377302 0.000025  I 0.3399683 0.0000065  0.4193 0.0052  I     0.148    0.134     0.189    0.208  0.229558  0.377439  0.3399294     0.181     0.208  "
+  },
+  {
+   "date": "2020-01-01",
+   "mjd": 58849,
+   "source": "finals2000A.all",
+   "flag": "I",
+   "ut1MinusUtc": -0.1771554,
+   "ut1MinusUtcError": 5.5e-06,
+   "taiMinusUtc": 37.0,
+   "ttMinusUt1": 69.3612,
+   "c04TtMinusUt1": 69.3612,
+   "sourceRow": "20 1 1 58849.00 I  0.076577 0.000032  0.282336 0.000027  I-0.1771554 0.0000055  0.4379 0.0061  I     0.489    0.403     0.146    0.117  0.076606  0.282327 -0.1771303     0.303     0.055  "
+  },
+  {
+   "date": "2024-04-08",
+   "mjd": 60408,
+   "source": "finals2000A.all",
+   "flag": "I",
+   "ut1MinusUtc": -0.0158724,
+   "ut1MinusUtcError": 8.1e-06,
+   "taiMinusUtc": 37.0,
+   "ttMinusUt1": 69.1999,
+   "c04TtMinusUt1": 69.1999,
+   "sourceRow": "24 4 8 60408.00 I -0.009114 0.000010  0.356398 0.000027  I-0.0158724 0.0000081  0.9631 0.0078  I     0.293    0.350    -0.044    0.099 -0.009090  0.356351 -0.0158648     0.310    -0.046  "
+  },
+  {
+   "date": "2026-09-22",
+   "mjd": 61305,
+   "source": "finals2000A.all",
+   "flag": "I",
+   "ut1MinusUtc": -0.0114083,
+   "ut1MinusUtcError": 2.24e-05,
+   "taiMinusUtc": 37.0,
+   "ttMinusUt1": 69.1954,
+   "sourceRow": "26 922 61305.00 I  0.183761 0.000090  0.328160 0.000091  I-0.0114083 0.0000224  0.8814 0.0162  P     0.137    0.128     0.194    0.160                                                     "
+  }
+ ]
+}

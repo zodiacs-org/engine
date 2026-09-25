@@ -116,6 +116,10 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   const supplied = birth.flags;
   const flags = supplied === undefined ? undefined : snapshotFlags(supplied);
   const utc = dateFrom(birth.utc, "birth.utc");
+  const pin = birth.deltaT;
+  if (pin !== undefined && (typeof pin !== "number" || !Number.isFinite(pin) || Math.abs(pin) > 1e10)) {
+    throw new RangeError("deltaT must be a finite number of seconds, at most 1e10 in size.");
+  }
   const possible: ChartFlag[] = [];
   if (settings.timeKnown === false) possible.push("no-time");
   else if (settings.houseSystem === "placidus" && settings.latitude !== undefined) {
@@ -130,7 +134,8 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
     ...(settings.latitude === undefined
       ? {}
       : { latitude: settings.latitude, longitude: settings.longitude }),
-    ...(flags === undefined ? {} : { flags: timeFlags(flags.values) })
+    ...(flags === undefined ? {} : { flags: timeFlags(flags.values) }),
+    ...(pin === undefined ? {} : { deltaT: pin })
   };
   return { input, flags };
 }
