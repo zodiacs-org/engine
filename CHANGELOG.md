@@ -1,6 +1,6 @@
 # Engine changelog
 
-## 0.1.1-rc.8 — unreleased candidate
+## 0.1.1-rc.8
 
 - Observed ΔT with a band (Phase 1 step 1.4). The model `zodiacs-deltat/1`
   replaces astronomy-engine's 2004 polynomial: Stephenson, Morrison &
