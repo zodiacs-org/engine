@@ -45,7 +45,13 @@ export type BodyName =
   | "South Node";
 
 export type HouseSystem = "whole" | "placidus" | "porphyry";
-export type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback";
+export type ChartFlag =
+  | "dst-gap"
+  | "dst-fold"
+  | "lmt"
+  | "no-time"
+  | "polar-fallback"
+  | "outside-reference-span";
 
 /**
  * A resolved birth instant. Use `resolveBirth` from `@zodiacs/engine/geo`
@@ -197,4 +203,10 @@ export interface MoonPhase {
   waxing: boolean;
 }
 
-export const ENGINE_VERSION = "0.1.1-rc.7";
+export const ENGINE_VERSION = "0.1.1-rc.8";
+
+/**
+ * The ephemeris underneath every position. The dependency is pinned to this
+ * exact version, so receipts can name it without asking the caller.
+ */
+export const EPHEMERIS = Object.freeze({ name: "astronomy-engine", version: "2.1.19" } as const);

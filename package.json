@@ -1,6 +1,6 @@
 {
   "name": "@zodiacs/engine",
-  "version": "0.1.1-rc.7",
+  "version": "0.1.1-rc.8",
   "description": "Browser-first tropical astrology calculations used by Zodiacs.org.",
   "license": "MIT",
   "keywords": [
@@ -73,7 +73,7 @@
     "typecheck": "tsc -p tsconfig.typecheck.json --pretty false"
   },
   "dependencies": {
-    "astronomy-engine": "^2.1.19"
+    "astronomy-engine": "2.1.19"
   },
   "devDependencies": {
     "@types/node": "^22.19.19",

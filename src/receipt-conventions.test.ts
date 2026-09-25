@@ -55,6 +55,48 @@ describe("receipt conventions", () => {
     expect(parseNatalEnvelope(flipped)).toMatchObject({ ok: false, code: "inconsistent_result" });
   });
 
+  it("still reads an rc.7 receipt, and keeps each set to the engines that wrote it", () => {
+    // Serialized by the published rc.7 package (sha256 49b2b03f…) at the same instant.
+    const rc7 = readFileSync(new URL("./fixtures/receipt-rc7.json", import.meta.url), "utf8").trim();
+    const parsed = parseNatalEnvelope(rc7);
+    expect(parsed.ok).toBe(true);
+    if (!parsed.ok) return;
+    expect(parsed.envelope.receipt.engine).toEqual({ name: "@zodiacs/engine", version: "0.1.1-rc.7" });
+    expect(parsed.envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[1]);
+    expect(parsed.envelope.receipt.conventions.planetPositions).toBe(
+      "apparent-geocentric-ecliptic-of-date"
+    );
+    expect(conjunction(parsed.envelope).applying).toBe(true);
+    expect(natalReplayInput(parsed.envelope).utc).toBe("2027-01-07T20:15:00.000Z");
+    const relabelled = edit(rc7, (e) => {
+      e.receipt.engine.version = "0.1.1-rc.8";
+    });
+    expect(parseNatalEnvelope(relabelled)).toMatchObject({ ok: false, code: "inconsistent_result" });
+    const named = edit(rc7, (e) => {
+      e.receipt.engine.ephemeris = { name: "astronomy-engine", version: "2.1.19" };
+    });
+    expect(parseNatalEnvelope(named)).toMatchObject({ ok: false, code: "invalid_shape" });
+    const current = serializeNatalEnvelope(
+      createNatalEnvelope(
+        natalChart({ utc: new Date("2027-01-07T20:15:00Z"), latitude: 51.5, longitude: -0.12, houseSystem: "placidus", timeKnown: true })
+      )
+    );
+    for (const older of ["0.1.1-rc.7", "0.1.1-rc.6", "0.1.0"]) {
+      const backdated = edit(current, (e) => {
+        e.receipt.engine.version = older;
+      });
+      expect(parseNatalEnvelope(backdated)).toMatchObject({ ok: false, code: "inconsistent_result" });
+    }
+  });
+
+  it("names what the positions are corrected for", () => {
+    const [current] = NATAL_RECEIPT_CONVENTION_SETS;
+    expect(current.planetPositions).toBe("aberrated-geocentric-ecliptic-of-date;no-deflection");
+    expect(current.moonPosition).toBe(
+      "astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration"
+    );
+  });
+
   it("does not judge an old receipt's flags by the new rule", () => {
     const flipped = edit(rc6, (e) => {
       conjunction(e).applying = true;

@@ -2,6 +2,8 @@ import { dateFrom } from "./date-input.js";
 import { ASPECTS, ASPECT_TYPES, ASPECT_BODIES, aspectMotion } from "./aspects.js";
 import { SIGNS } from "./signs.js";
 import { parseReceiptJson } from "./receipt-json.js";
+import { outsideReferenceSpan } from "./reference-span.js";
+import { EPHEMERIS } from "./types.js";
 import type { BirthInput, Chart, ChartFlag, HouseSystem } from "./types.js";
 
 /** Zodiacs-owned draft vocabulary; not an industry interoperability standard. */
@@ -99,16 +101,35 @@ const CONVENTIONS_RC3 = Object.freeze({
   speed: "degrees-per-day;central-difference-plus-minus-0.25-day",
   aspects: "major-aspects;sun-moon-eight-planets;no-nodes"
 } as const);
-/** The conventions this engine records. */
-const CONVENTIONS = Object.freeze({
+/** The conventions engine version 0.1.1-rc.7 recorded. Its receipts stay readable. */
+const CONVENTIONS_RC7 = Object.freeze({
   ...CONVENTIONS_RC3,
   angles: "gast-and-true-obliquity",
   speed: "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day",
   aspects: "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate"
 } as const);
+/**
+ * The conventions this engine records. The planets are corrected for light
+ * time and aberration but not for gravitational deflection; the Moon's
+ * series carries neither correction.
+ */
+const CONVENTIONS = Object.freeze({
+  ...CONVENTIONS_RC7,
+  planetPositions: "aberrated-geocentric-ecliptic-of-date;no-deflection",
+  moonPosition: "astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration"
+} as const);
+type ConventionSet = typeof CONVENTIONS | typeof CONVENTIONS_RC7 | typeof CONVENTIONS_RC3;
 /** Every conventions set a receipt may carry, the current one first. */
-export const NATAL_RECEIPT_CONVENTION_SETS = Object.freeze([CONVENTIONS, CONVENTIONS_RC3] as const);
+export const NATAL_RECEIPT_CONVENTION_SETS = Object.freeze([
+  CONVENTIONS,
+  CONVENTIONS_RC7,
+  CONVENTIONS_RC3
+] as const);
 const RC3_TO_RC6 = /^0\.1\.1-rc\.[3-6](?:\+[A-Za-z0-9.-]+)?$/;
+const RC7 = /^0\.1\.1-rc\.7(?:\+[A-Za-z0-9.-]+)?$/;
+/** Every engine version before 0.1.1-rc.8, which cannot have written the current set. */
+const BEFORE_RC8 =
+  /^0\.(?:0\.\d+(?:-[A-Za-z0-9.-]+)?|1\.0(?:-[A-Za-z0-9.-]+)?|1\.1-rc\.[0-7])(?:\+[A-Za-z0-9.-]+)?$/;
 const COVERAGE = Object.freeze({
   assessment: "finite-reference-cases-only",
   broadDateRange: "not-certified",
@@ -133,9 +154,14 @@ export interface NatalReceipt {
   /** Only time-resolution assertions may be supplied to this draft's creator. */
   inputFlags: ChartFlag[];
   resultFlags: ChartFlag[];
-  engine: { name: "@zodiacs/engine"; version: string };
+  /** From the current conventions set on, the engine also names its ephemeris. */
+  engine: {
+    name: "@zodiacs/engine";
+    version: string;
+    ephemeris?: { name: "astronomy-engine"; version: string };
+  };
   provenance: (NatalProvenanceClaims & { status: "claimed" }) | null;
-  conventions: typeof CONVENTIONS | typeof CONVENTIONS_RC3;
+  conventions: ConventionSet;
   coverage: typeof COVERAGE;
 }
 
@@ -175,7 +201,8 @@ const BODIES = [
   "North Node",
   "South Node"
 ] as const;
-const FLAGS = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as const;
+const FLAGS_RC7 = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as const;
+const FLAGS = [...FLAGS_RC7, "outside-reference-span"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
 const HOUSE_SYSTEMS = ["whole", "placidus", "porphyry"] as const;
 const HOSTILE_KEYS = new Set(["__proto__", "prototype", "constructor"]);
@@ -342,12 +369,14 @@ function fixedFields(value: unknown, expected: Record<string, string>): void {
   if (Object.keys(expected).some((key) => actual[key] !== expected[key]))
     fail("unsupported_feature");
 }
-/** The conventions set a receipt carries, matched exactly; any other set is unsupported. */
-function conventionSet(value: unknown): typeof CONVENTIONS | typeof CONVENTIONS_RC3 {
+/** The conventions set a receipt carries, matched exactly, keys and values; any other set is unsupported. */
+function conventionSet(value: unknown): ConventionSet {
   const actual = record(value);
-  fields(actual, Object.keys(CONVENTIONS));
-  const match = NATAL_RECEIPT_CONVENTION_SETS.find((set) =>
-    Object.entries(set).every(([key, expected]) => actual[key] === expected)
+  const keys = Object.keys(actual);
+  const match = NATAL_RECEIPT_CONVENTION_SETS.find(
+    (set) =>
+      keys.length === Object.keys(set).length &&
+      Object.entries(set).every(([key, expected]) => Object.hasOwn(actual, key) && actual[key] === expected)
   );
   if (!match) fail("unsupported_feature");
   return match;
@@ -629,7 +658,7 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     if (timeKnown && Math.abs(coords.latitude as number) === 90) fail("unsupported_feature");
   }
   const conventions = conventionSet(receipt.conventions);
-  const result = validateResult(envelope.result, conventions === CONVENTIONS);
+  const result = validateResult(envelope.result, conventions !== CONVENTIONS_RC3);
   const house = record(receipt.houses);
   fields(house, ["requested", "actual", "absenceReason"]);
   const requested = choice(house.requested, HOUSE_SYSTEMS);
@@ -655,19 +684,33 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   )
     fail("inconsistent_result");
   const inputFlags = flagList(receipt.inputFlags, TIME_FLAGS);
-  const resultFlags = flagList(receipt.resultFlags, FLAGS);
+  const current = conventions === CONVENTIONS;
+  const resultFlags = flagList(receipt.resultFlags, current ? FLAGS : FLAGS_RC7);
   const expected = [...inputFlags];
   if (!timeKnown) expected.push("no-time");
   if (requested === "placidus" && result.houses?.system === "whole")
     expected.push("polar-fallback");
+  if (current && outsideReferenceSpan(new Date(receipt.instant as string)))
+    expected.push("outside-reference-span");
   if (!sameFlags(expected, resultFlags)) fail("inconsistent_result");
   const engine = record(receipt.engine);
-  fields(engine, ["name", "version"]);
+  // Receipts in the current set must say which ephemeris computed them.
+  fields(engine, current ? ["name", "version", "ephemeris"] : ["name", "version"]);
   if (engine.name !== "@zodiacs/engine") fail("unsupported_feature");
   const engineVersion = version(engine.version);
+  if (current) {
+    const ephemeris = record(engine.ephemeris);
+    fields(ephemeris, ["name", "version"]);
+    if (ephemeris.name !== "astronomy-engine") fail("unsupported_feature");
+    version(ephemeris.version);
+  }
   validateProvenance(receipt.provenance, engineVersion);
   validateLocal(receipt.localResolution, receipt as unknown as NatalReceipt);
-  if (conventions === CONVENTIONS_RC3 && !RC3_TO_RC6.test(engineVersion))
+  if (
+    (conventions === CONVENTIONS_RC3 && !RC3_TO_RC6.test(engineVersion)) ||
+    (conventions === CONVENTIONS_RC7 && !RC7.test(engineVersion)) ||
+    (current && BEFORE_RC8.test(engineVersion))
+  )
     fail("inconsistent_result");
   fixedFields(receipt.coverage, COVERAGE);
   if (envelope.extensions !== undefined) record(envelope.extensions);
@@ -736,7 +779,11 @@ export function createNatalEnvelope(
         },
         inputFlags: input.flags ?? [],
         resultFlags: source.flags,
-        engine: { name: "@zodiacs/engine", version: source.engineVersion },
+        engine: {
+          name: "@zodiacs/engine",
+          version: source.engineVersion,
+          ephemeris: { ...EPHEMERIS }
+        },
         provenance:
           supplied.provenance === undefined
             ? null

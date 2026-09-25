@@ -27,6 +27,8 @@ export {
 } from "./houses.js";
 export type { AngleInput } from "./houses.js";
 
+export { REFERENCE_SPAN, outsideReferenceSpan } from "./reference-span.js";
+
 export { findLongitudeCrossings, groupIntoSeasons } from "./returns.js";
 export type { LongitudeCrossing, ReturnSeason, SaturnReturnResult } from "./returns.js";
 
@@ -43,7 +45,7 @@ export {
 
 export { elementBalance, findInterAspects, modalityBalance, summarizePair } from "./synastry.js";
 
-export { ENGINE_VERSION } from "./types.js";
+export { ENGINE_VERSION, EPHEMERIS } from "./types.js";
 export type {
   Angles,
   Aspect,

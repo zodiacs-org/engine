@@ -98,7 +98,13 @@ for (const aspect of today.aspects) {
 
 Returned longitudes use degrees in `[0, 360)` and positions include sign and degree
 annotations. Charts use the tropical ecliptic of date. Planetary positions are
-apparent and geocentric; this package does not calculate topocentric parallax.
+geocentric and corrected for light time and aberration, but not for the Sun's
+gravitational deflection; the Moon's series carries neither correction. This
+package does not calculate topocentric parallax.
+
+Positions have been compared with an independent ephemeris from 1800-01-01T00:00Z
+up to 2200-01-01T00:00Z, exported as `REFERENCE_SPAN`. A chart outside that span
+is still computed, and carries the `outside-reference-span` flag.
 
 Placidus is undefined in polar regions, where |latitude| ≥ 90° − ε, with ε the
 true obliquity of date (about 66.56° today). There the engine falls back to
@@ -112,16 +118,16 @@ houses remain absent and the chart carries the `no-time` flag.
 
 ### Input flag compatibility
 
-Public birth inputs retain all five `ChartFlag` values. Supply an array with at
+Public birth inputs accept all six `ChartFlag` values. Supply an array with at
 most 64 entries; entries must be known string values in ordinary data slots.
 Repeated values collapse in first-occurrence order. Unknown strings, sparse
 slots, accessor slots, non-array iterables and simultaneous `dst-gap`/`dst-fold`
 claims reject with a `RangeError` that does not include supplied flag values.
 
 `dst-gap`, `dst-fold` and `lmt` remain caller assertions: a UTC instant alone
-cannot verify a historical local-time resolution. `no-time` and
-`polar-fallback` may be echoed for compatibility, but must agree with the
-calculation. Set `timeKnown: false` for unknown time; a flag never overrides that
+cannot verify a historical local-time resolution. `no-time`,
+`polar-fallback` and `outside-reference-span` may be echoed for compatibility,
+but must agree with the calculation. Set `timeKnown: false` for unknown time; a flag never overrides that
 setting. A fallback assertion requires the actual requested Placidus calculation
 to produce whole-sign houses, including fallback caused by nonconvergence.
 
@@ -303,6 +309,15 @@ Pass the original validated ISO string as `sourceInstant` when available;
 normalization alone cannot recover its original offset spelling. Captured local
 resolution is checked arithmetically, without consulting the current timezone
 database or authenticating the historical claim.
+
+Receipts from 0.1.1-rc.8 on name the ephemeris that computed them, as
+`receipt.engine.ephemeris` (`{ name: "astronomy-engine", version: "2.1.19" }`,
+exported as `EPHEMERIS`); the dependency is pinned to that exact version, and
+a current receipt without it is refused. Their conventions say what the
+positions are corrected for (`aberrated-geocentric-ecliptic-of-date;no-deflection`)
+and that the Moon has neither correction. Receipts from rc.3 to rc.7 are still
+read, each under the conventions its engine recorded, and a set is accepted
+only from the engine versions that wrote it.
 
 `natalReplayInput` recovers the recorded request. It does not select or install
 the original engine. Recalculation with another engine, ephemeris dependency or

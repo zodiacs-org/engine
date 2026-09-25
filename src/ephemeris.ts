@@ -13,6 +13,7 @@ import {
 
 import { findAspects } from "./aspects.js";
 import { computeAngles, computeHouses } from "./houses.js";
+import { outsideReferenceSpan } from "./reference-span.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "./signs.js";
 import type { BodyName, BodyPosition, Chart, ChartFlag, ChartInput } from "./types.js";
 import { ENGINE_VERSION } from "./types.js";
@@ -153,6 +154,7 @@ export function computeChart(input: ChartInput): Chart {
   } else if (!input.timeKnown) {
     flags.push("no-time");
   }
+  if (outsideReferenceSpan(input.utc)) flags.push("outside-reference-span");
 
   return {
     input,

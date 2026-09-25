@@ -1,6 +1,7 @@
 import { computeBodies, computeChart, bodyLongitude } from "./ephemeris.js";
 import { PLACIDUS_POLAR_FALLBACK } from "./houses.js";
 import { computeSaturnReturns } from "./returns.js";
+import { outsideReferenceSpan } from "./reference-span.js";
 import { normalizeLongitude } from "./signs.js";
 import { findInterAspects, summarizePair } from "./synastry.js";
 import { dateFrom } from "./date-input.js";
@@ -74,6 +75,7 @@ function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } {
   if (input.houseSystem === "placidus" && actualHouseSystem === PLACIDUS_POLAR_FALLBACK) {
     expected.push("polar-fallback");
   }
+  if (outsideReferenceSpan(input.utc)) expected.push("outside-reference-span");
   assertDerivedFlags(inputFlags?.values ?? [], expected);
   if (
     resultFlags.values.length !== expected.length ||
@@ -113,14 +115,16 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   const settings = validateBirthSettings(birth);
   const supplied = birth.flags;
   const flags = supplied === undefined ? undefined : snapshotFlags(supplied);
+  const utc = dateFrom(birth.utc, "birth.utc");
   const possible: ChartFlag[] = [];
   if (settings.timeKnown === false) possible.push("no-time");
   else if (settings.houseSystem === "placidus" && settings.latitude !== undefined) {
     possible.push("polar-fallback");
   }
+  if (outsideReferenceSpan(utc)) possible.push("outside-reference-span");
   assertDerivedFlags(flags?.values ?? [], possible);
   const input: ChartInput = {
-    utc: dateFrom(birth.utc, "birth.utc"),
+    utc,
     houseSystem: settings.houseSystem ?? "whole",
     timeKnown: settings.timeKnown ?? true,
     ...(settings.latitude === undefined
