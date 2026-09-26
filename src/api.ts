@@ -1,5 +1,5 @@
 import { computeBodies, computeChart, bodyLongitude } from "./ephemeris.js";
-import { PLACIDUS_POLAR_FALLBACK } from "./houses.js";
+import { POLAR_FALLBACK, isPolarUndefinedHouseSystem } from "./houses.js";
 import { computeSaturnReturns } from "./returns.js";
 import { outsideReferenceSpan } from "./reference-span.js";
 import { normalizeLongitude } from "./signs.js";
@@ -67,12 +67,12 @@ function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } {
       : angles !== null || houses !== null) ||
     (houses !== null &&
       actualHouseSystem !== input.houseSystem &&
-      !(input.houseSystem === "placidus" && actualHouseSystem === PLACIDUS_POLAR_FALLBACK))
+      !(isPolarUndefinedHouseSystem(input.houseSystem) && actualHouseSystem === POLAR_FALLBACK))
   ) {
     throw new RangeError("chart flags must agree with its input and supplied house result.");
   }
   if (!input.timeKnown) expected.push("no-time");
-  if (input.houseSystem === "placidus" && actualHouseSystem === PLACIDUS_POLAR_FALLBACK) {
+  if (isPolarUndefinedHouseSystem(input.houseSystem) && actualHouseSystem === POLAR_FALLBACK) {
     expected.push("polar-fallback");
   }
   if (outsideReferenceSpan(input.utc)) expected.push("outside-reference-span");
@@ -122,7 +122,11 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   }
   const possible: ChartFlag[] = [];
   if (settings.timeKnown === false) possible.push("no-time");
-  else if (settings.houseSystem === "placidus" && settings.latitude !== undefined) {
+  else if (
+    settings.houseSystem !== undefined &&
+    isPolarUndefinedHouseSystem(settings.houseSystem) &&
+    settings.latitude !== undefined
+  ) {
     possible.push("polar-fallback");
   }
   if (outsideReferenceSpan(utc)) possible.push("outside-reference-span");

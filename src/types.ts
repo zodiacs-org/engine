@@ -47,7 +47,19 @@ export type BodyName =
   | "North Node"
   | "South Node";
 
-export type HouseSystem = "whole" | "placidus" | "porphyry";
+export type HouseSystem =
+  | "whole"
+  | "placidus"
+  | "porphyry"
+  | "equal"
+  | "vehlow"
+  | "koch"
+  | "regiomontanus"
+  | "campanus"
+  | "topocentric"
+  | "alcabitius"
+  | "morinus"
+  | "meridian";
 export type ChartFlag =
   | "dst-gap"
   | "dst-fold"
@@ -215,7 +227,7 @@ export interface MoonPhase {
   waxing: boolean;
 }
 
-export const ENGINE_VERSION = "0.1.1-rc.8";
+export const ENGINE_VERSION = "0.1.1-rc.9";
 
 /**
  * The ephemeris underneath every position. The dependency is pinned to this
