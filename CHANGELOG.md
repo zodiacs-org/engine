@@ -1,5 +1,36 @@
 # Engine changelog
 
+## 0.1.1-rc.10
+
+- A thirteenth house system, `"equal-mc"`: Equal houses from the midheaven,
+  30° each with the 10th cusp at the midheaven (Swiss Ephemeris's `D`). It
+  depends on neither the ascendant nor the latitude, so it is the same at every
+  latitude. `equalMcCusps` computes it. Receipts accept it and check that its
+  cusps count 30° from the midheaven; a receipt naming an engine before rc.10
+  cannot carry it.
+- `chartPoints(natal)` returns the chart's points and its sect.
+  - **Mean Node and Mean South Node**: the Moon's mean node from the IERS
+    Conventions' fundamental arguments (Simon et al. 1994), with the nutation in
+    longitude.
+  - **Black Moon Lilith**: the mean lunar apogee. It is the point of the mean
+    orbit 180° from the mean perigee, carried to the ecliptic, so it has a
+    latitude of up to 5.15°.
+  - Both are within 0.7″ of Swiss's `SE_MEAN_NODE` and `SE_MEAN_APOG` every
+    3.7 days from 1800 to 2199, and carry a speed.
+  - **Vertex and East Point**, from the instant and the place. Given the same
+    sidereal time, latitude and obliquity they agree with Swiss's to within
+    0.00001″. `vertexOf` and `eastPointOf` compute them.
+  - **The lots** of Fortune, Spirit, Eros, Necessity, Courage, Victory and
+    Nemesis, after Paulus Alexandrinus, from the chart's ascendant and bodies,
+    reversed by night. `sectOf` gives the sect they use.
+- `antiscion`, `contraAntiscion` and `midpoint` for any longitudes.
+- The osculating Lilith is left out. astronomy-engine's lunar series puts it
+  198″ from Swiss's at the median, and up to 683″.
+
+Migration: nothing changes for existing charts, systems or receipts.
+`validateBirthSettings` accepts `"equal-mc"`, and its error message lists all
+thirteen systems. The conventions set is rc.8's, unchanged.
+
 ## 0.1.1-rc.9
 
 - Nine more house systems, for twelve: Koch, Regiomontanus, Campanus,

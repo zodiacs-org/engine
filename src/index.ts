@@ -1,4 +1,12 @@
-export { moonPhase, natalChart, positions, saturnReturn, synastry, transits } from "./api.js";
+export {
+  chartPoints,
+  moonPhase,
+  natalChart,
+  positions,
+  saturnReturn,
+  synastry,
+  transits
+} from "./api.js";
 export type { NatalSource, SaturnReturnSource } from "./api.js";
 
 export {
@@ -22,7 +30,9 @@ export {
   campanusCusps,
   computeAngles,
   computeHouses,
+  eastPointOf,
   equalCusps,
+  equalMcCusps,
   houseOf,
   isPolarUndefinedHouseSystem,
   kochCusps,
@@ -35,9 +45,24 @@ export {
   regiomontanusCusps,
   topocentricCusps,
   vehlowCusps,
+  vertexOf,
   wholeSignCusps
 } from "./houses.js";
 export type { AngleInput } from "./houses.js";
+
+export {
+  LOTS,
+  MEAN_LUNAR_INCLINATION,
+  antiscion,
+  contraAntiscion,
+  hellenisticLots,
+  lunarMeanArguments,
+  meanApogee,
+  meanNodeLongitude,
+  midpoint,
+  sectOf
+} from "./points.js";
+export type { LotInputs } from "./points.js";
 
 export { DELTA_T_MODEL, DELTA_T_TABLE, deltaT, deltaTAt } from "./deltat.js";
 export type { DeltaT, DeltaTSegment, DeltaTTable } from "./deltat.js";
@@ -83,6 +108,7 @@ export type {
   Chart,
   ChartFlag,
   ChartInput,
+  ChartPoints,
   DateInput,
   Element,
   HouseNumber,
@@ -94,7 +120,10 @@ export type {
   MoonPhase,
   MoonPhaseName,
   PairSummary,
+  PointName,
+  PointPosition,
   Polarity,
+  Sect,
   SignDefinition,
   SynastryResult,
   TransitResult,

@@ -7,22 +7,22 @@ ESM-only, has no import-time side effects, and performs no network request from
 its core entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see ΔT below).
 
-**Release candidate: 0.1.1-rc.9.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.10.** Public npm lookups for this package returned
 404 on 2026-09-26. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.9.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.10.tgz
 ```
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.9.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.10.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash, runtime and isolated consumer directory. A packed
-candidate is not a published release. This candidate adds nine house systems, for twelve in all; rc.8 before it computed on observed ΔT with a band, named its ephemeris and ΔT in receipts, flagged charts outside the reference span, and shipped the site's longitude-crossing solver as `@zodiacs/engine/crossings`; rc.7 judged aspects applying from the orb's rate, took speeds as the derivative of the reported longitude, built the angles on the true obliquity, put the Placidus limit at the polar circle and added Porphyry houses. CHANGELOG.md says what each change moves. The site platform draft retains its immutable rc.5 archive, and the standalone starter retains rc.3, until their separate integrations are reviewed.
+candidate is not a published release. This candidate adds Equal houses from the midheaven, and `chartPoints`: the mean node, Black Moon Lilith, the Vertex, the East Point and the Hellenistic lots; rc.9 before it added nine house systems, for twelve; rc.8 computed on observed ΔT with a band, named its ephemeris and ΔT in receipts, flagged charts outside the reference span, and shipped the site's longitude-crossing solver as `@zodiacs/engine/crossings`; rc.7 judged aspects applying from the orb's rate, took speeds as the derivative of the reported longitude, built the angles on the true obliquity, put the Placidus limit at the polar circle and added Porphyry houses. CHANGELOG.md says what each change moves. The site platform draft retains its immutable rc.5 archive, and the standalone starter retains rc.3, until their separate integrations are reviewed.
 
 ## Natal chart in 10 lines
 
@@ -89,7 +89,10 @@ for (const aspect of today.aspects) {
 
 - `positions(date)` returns the Sun, Moon, eight planets, and true Moon nodes.
 - `natalChart(birth)` adds natal aspects and, when coordinates are present,
-  angles and houses in any of twelve systems (see *House systems*).
+  angles and houses in any of thirteen systems (see *House systems*).
+- `chartPoints(natal)` returns the mean node, Black Moon Lilith and, with a
+  birth time and place, the Vertex, the East Point, the chart's sect and seven
+  lots (see *Points*).
 - `transits(natal, date)` returns a sky snapshot and moving-to-natal aspects.
 - `synastry(a, b)` returns inter-chart aspects and element/modality balances.
 - `moonPhase(date)` returns elongation, illuminated fraction, and phase name.
@@ -113,7 +116,7 @@ is still computed, and carries the `outside-reference-span` flag.
 
 ### House systems
 
-`houseSystem` takes one of twelve systems. Each is the definition Swiss
+`houseSystem` takes one of thirteen systems. Each is the definition Swiss
 Ephemeris uses, and every one agrees with Swiss's `swe_houses_armc` to within
 0.0001″ given the same sidereal time, latitude and obliquity (Placidus, which
 iterates, to 0.01″).
@@ -129,6 +132,7 @@ iterates, to 0.01″).
 | `"topocentric"` | Topocentric (Polich–Page) | Regiomontanus's ascensions, with pole heights at a third and two thirds of the latitude's tangent. |
 | `"alcabitius"` | Alcabitius | The ascendant's semi-arcs in thirds on the equator, along hour circles. |
 | `"equal"` | Equal | 30° each from the ascendant. |
+| `"equal-mc"` | Equal from the midheaven | 30° each, the 10th from the midheaven; the same at every latitude. |
 | `"vehlow"` | Vehlow | 30° each, with the ascendant in the middle of the first. |
 | `"meridian"` | Meridian (axial rotation) | Right ascensions every 30° from the midheaven's; the 1st cusp is the equatorial ascendant. |
 | `"morinus"` | Morinus | The equator every 30° from the midheaven's right ascension, carried to the ecliptic through its poles. |
@@ -144,6 +148,44 @@ and Topocentric cusps turn with it, so their 10th cusp is then the lower
 meridian, as in Swiss Ephemeris. When the birth time is unknown, pass a
 conventional UTC instant with `timeKnown: false`; angles and houses remain
 absent and the chart carries the `no-time` flag.
+
+### Points
+
+`chartPoints(natal)` takes a birth or a chart and returns `{ sect, points }`.
+Each point has a longitude, a latitude, a sign and a degree, like a body.
+
+| Point | Definition |
+| --- | --- |
+| Mean Node, Mean South Node | The Moon's mean ascending node Ω, and its opposite. |
+| Black Moon Lilith | The mean lunar apogee: the point of the mean orbit 180° from the mean perigee, with the orbit's latitude. |
+| Vertex | Where the prime vertical meets the ecliptic in the west. |
+| East Point | The equatorial ascendant: the ecliptic point at right ascension RAMC + 90°. |
+| Lots of Fortune, Spirit, Eros, Necessity, Courage, Victory and Nemesis | Paulus Alexandrinus's seven lots, reversed by night. |
+
+The mean node and Black Moon Lilith come from the Moon's mean elements: the
+IERS Conventions' fundamental arguments (Simon et al. 1994), with a mean
+inclination of 5.1453964°. The nutation in longitude puts them on the true
+equinox of date, like every other longitude here. They are within 0.7″ of Swiss
+Ephemeris's `SE_MEAN_NODE` and `SE_MEAN_APOG` from 1800 to 2199. Both carry a
+speed in degrees per day.
+
+Every chart gets those three. The Vertex, the East Point, the sect and the
+lots need a birth time and place.
+
+- The Vertex and the East Point come from the instant and the place, not from a
+  supplied chart's angles. Given Swiss's sidereal time, latitude and obliquity,
+  they agree with its `swe_houses_armc` to within 0.00001″.
+- The sect is day when the Sun is between the descendant and the ascendant
+  through the midheaven.
+- The lots use the chart's own ascendant and bodies. Each is the ascendant plus
+  the arc between two points, taken as Paulus gives it by day and reversed by
+  night. Ptolemy's Fortune, which does not reverse, is `asc + moon − sun`.
+
+`antiscion`, `contraAntiscion` and `midpoint` work on any two longitudes.
+`meanNodeLongitude`, `meanApogee`, `lunarMeanArguments`, `hellenisticLots` and
+`sectOf` expose the calculations underneath. The osculating ("true") Lilith is
+not offered: from astronomy-engine's lunar series it would be several
+arcminutes from Swiss's.
 
 ### Input flag compatibility
 

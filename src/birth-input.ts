@@ -8,6 +8,7 @@ const HOUSE_SYSTEM_NAMES: readonly HouseSystem[] = [
   "placidus",
   "porphyry",
   "equal",
+  "equal-mc",
   "vehlow",
   "koch",
   "regiomontanus",

@@ -8,13 +8,16 @@ import {
   campanusCusps,
   computeAngles,
   computeHouses,
+  eastPointOf,
   equalCusps,
+  equalMcCusps,
   kochCusps,
   meridianCusps,
   morinusCusps,
   regiomontanusCusps,
   topocentricCusps,
-  vehlowCusps
+  vehlowCusps,
+  vertexOf
 } from "./houses.js";
 import type { AngleInput } from "./houses.js";
 import {
@@ -241,9 +244,61 @@ describe("house systems inside the polar circle", () => {
   });
 });
 
+describe("Equal houses from the midheaven, the Vertex and the East Point", () => {
+  const GRID = [-89, -66.9, -40, -1e-9, 0, 1e-9, 23.5, 51.5, 66.6, 78, 89].flatMap((latitude) =>
+    // No RAMC of 0° or 180°: on the equator the ecliptic then passes through
+    // the zenith, and the Vertex is on the meridian rather than west of it.
+    [7, 37, 90, 145, 200, 271, 333].map((ramc) => [ramc, latitude] as const)
+  );
+
+  it("counts Equal-MC cusps 30° apart from the midheaven on the 10th, at every latitude", () => {
+    for (const [ramc, latitude] of GRID) {
+      const angles = computeAngles(input(ramc, latitude));
+      const cusps = equalMcCusps(angles);
+      expect(arcsec(cusps[9]!, angles.mc)).toBeCloseTo(0, 6);
+      for (let index = 0; index < 12; index += 1) {
+        expect(arcsec(cusps[index]!, angles.mc + (index - 9) * 30)).toBeCloseTo(0, 6);
+      }
+      const { houses, fellBack } = computeHouses("equal-mc", input(ramc, latitude), angles);
+      expect(houses).toEqual({ system: "equal-mc", cusps });
+      expect(fellBack).toBe(false);
+    }
+  });
+
+  it("puts the East Point at right ascension RAMC + 90°, whatever the latitude", () => {
+    for (const [ramc, latitude] of GRID) {
+      const east = eastPointOf(input(ramc, latitude));
+      expect(arcsec(rightAscension(east), ramc + 90)).toBeCloseTo(0, 6);
+    }
+  });
+
+  it("puts the Vertex on the prime vertical, west of the meridian", () => {
+    for (const [ramc, latitude] of GRID) {
+      const angles = computeAngles(input(ramc, latitude));
+      const vertex = vertexOf(input(ramc, latitude), angles);
+      const { north, east } = horizon(ramc, latitude);
+      const point = eclipticPoint(vertex);
+      // The prime vertical is the vertical circle through the east and west
+      // points, the plane whose normal is the north point.
+      expect(Math.abs(dot(north, point))).toBeLessThan(1e-12);
+      expect(dot(east, point)).toBeLessThan(0);
+    }
+  });
+
+  it("takes the equinox west of the meridian as the Vertex on the equator", () => {
+    for (const ramc of [10, 100, 190, 280]) {
+      const angles = computeAngles(input(ramc, 0));
+      const vertex = vertexOf(input(ramc, 0), angles);
+      expect(Math.min(Math.abs(arcsec(vertex, 0)), Math.abs(arcsec(vertex, 180)))).toBeLessThan(1e-6);
+      expect(dot(horizon(ramc, 0).east, eclipticPoint(vertex))).toBeLessThan(0);
+    }
+  });
+});
+
 describe("house-system receipts", () => {
   const NEW: HouseSystem[] = [
     "equal",
+    "equal-mc",
     "vehlow",
     "koch",
     "regiomontanus",
@@ -291,6 +346,23 @@ describe("house-system receipts", () => {
       e.receipt.engine.version = "0.1.1-rc.8";
     });
     expect(parseNatalEnvelope(placidus).ok).toBe(true);
+  });
+
+  it("refuses Equal houses from the midheaven in a receipt that names an engine before rc.10", () => {
+    for (const version of ["0.1.1-rc.9", "0.1.1-rc.1", "0.1.0"]) {
+      const older = edit(envelope("equal-mc"), (e) => {
+        e.receipt.engine.version = version;
+      });
+      expect(parseNatalEnvelope(older)).toMatchObject({ ok: false, code: "inconsistent_result" });
+    }
+    const koch = edit(envelope("koch"), (e) => {
+      e.receipt.engine.version = "0.1.1-rc.9";
+    });
+    expect(parseNatalEnvelope(koch).ok).toBe(true);
+    const later = edit(envelope("equal-mc"), (e) => {
+      e.receipt.engine.version = "0.1.1-rc.11";
+    });
+    expect(parseNatalEnvelope(later).ok).toBe(true);
   });
 
   it("reads Koch's polar fallback and refuses a turned 10th cusp outside the polar circle", () => {

@@ -132,6 +132,9 @@ const RC7 = /^0\.1\.1-rc\.7(?:\+[A-Za-z0-9.-]+)?$/;
 /** Every engine version before 0.1.1-rc.9, which offered only three house systems. */
 const BEFORE_RC9 =
   /^0\.(?:0\.\d+(?:-[A-Za-z0-9.-]+)?|1\.0(?:-[A-Za-z0-9.-]+)?|1\.1-rc\.[0-8])(?:\+[A-Za-z0-9.-]+)?$/;
+/** Every engine version before 0.1.1-rc.10, which did not offer Equal houses from the midheaven. */
+const BEFORE_RC10 =
+  /^0\.(?:0\.\d+(?:-[A-Za-z0-9.-]+)?|1\.0(?:-[A-Za-z0-9.-]+)?|1\.1-rc\.[0-9])(?:\+[A-Za-z0-9.-]+)?$/;
 /** Every engine version before 0.1.1-rc.8, which cannot have written the current set. */
 const BEFORE_RC8 =
   /^0\.(?:0\.\d+(?:-[A-Za-z0-9.-]+)?|1\.0(?:-[A-Za-z0-9.-]+)?|1\.1-rc\.[0-7])(?:\+[A-Za-z0-9.-]+)?$/;
@@ -215,6 +218,7 @@ const HOUSE_SYSTEMS = [
   "placidus",
   "porphyry",
   "equal",
+  "equal-mc",
   "vehlow",
   "koch",
   "regiomontanus",
@@ -226,6 +230,10 @@ const HOUSE_SYSTEMS = [
 ] as const;
 /** The systems engine versions before 0.1.1-rc.9 offered. */
 const HOUSE_SYSTEMS_BEFORE_RC9: readonly string[] = ["whole", "placidus", "porphyry"];
+/** The systems engine versions before 0.1.1-rc.10 offered: all but Equal from the midheaven. */
+const HOUSE_SYSTEMS_BEFORE_RC10: readonly string[] = HOUSE_SYSTEMS.filter(
+  (system) => system !== "equal-mc"
+);
 /** The systems that fall back to whole sign inside the polar circle. */
 const POLAR_UNDEFINED: readonly string[] = ["placidus", "koch"];
 /** The systems whose cusps turn with the ascendant inside the polar circle. */
@@ -527,6 +535,10 @@ function validateResult(
         break;
       case "equal":
         consistent = thirtyFrom(asc);
+        break;
+      // The 10th cusp is the midheaven, so the 1st is 90° past it.
+      case "equal-mc":
+        consistent = thirtyFrom(mc + 90);
         break;
       case "vehlow":
         consistent = thirtyFrom(asc - 15);
@@ -830,7 +842,8 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     (conventions === CONVENTIONS_RC3 && !RC3_TO_RC6.test(engineVersion)) ||
     (conventions === CONVENTIONS_RC7 && !RC7.test(engineVersion)) ||
     (current && BEFORE_RC8.test(engineVersion)) ||
-    (!HOUSE_SYSTEMS_BEFORE_RC9.includes(requested) && BEFORE_RC9.test(engineVersion))
+    (!HOUSE_SYSTEMS_BEFORE_RC9.includes(requested) && BEFORE_RC9.test(engineVersion)) ||
+    (!HOUSE_SYSTEMS_BEFORE_RC10.includes(requested) && BEFORE_RC10.test(engineVersion))
   )
     fail("inconsistent_result");
   fixedFields(receipt.coverage, COVERAGE);

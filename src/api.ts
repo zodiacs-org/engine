@@ -1,4 +1,4 @@
-import { computeBodies, computeChart, bodyLongitude } from "./ephemeris.js";
+import { computeBodies, computeChart, computePoints, bodyLongitude } from "./ephemeris.js";
 import { POLAR_FALLBACK, isPolarUndefinedHouseSystem } from "./houses.js";
 import { computeSaturnReturns } from "./returns.js";
 import { outsideReferenceSpan } from "./reference-span.js";
@@ -17,6 +17,7 @@ import type {
   BodyPosition,
   Chart,
   ChartInput,
+  ChartPoints,
   ChartFlag,
   DateInput,
   MoonPhase,
@@ -158,6 +159,18 @@ export function positions(date: DateInput): BodyPosition[] {
 /** Build a natal chart from an already resolved UTC instant. */
 export function natalChart(birth: BirthInput): Chart {
   return computedBirth(validateBirth(birth));
+}
+
+/**
+ * The chart's points: the mean lunar node and its opposite, and Black Moon
+ * Lilith (the mean lunar apogee), for any chart; with a birth time and place,
+ * also the Vertex, the East Point, the chart's sect and the seven lots of
+ * Paulus Alexandrinus. A supplied Chart is checked as `transits` checks one;
+ * its lots are taken from its own ascendant and bodies.
+ */
+export function chartPoints(natal: NatalSource): ChartPoints {
+  const { chart } = resolvedChart(natal);
+  return computePoints(chart);
 }
 
 /** Snapshot of current positions and their major aspects to a natal chart. */

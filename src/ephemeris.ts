@@ -15,10 +15,20 @@ import {
 import { findAspects } from "./aspects.js";
 import { deltaT, deltaTAt } from "./deltat.js";
 import type { DeltaT } from "./deltat.js";
-import { computeAngles, computeHouses } from "./houses.js";
+import { computeAngles, computeHouses, eastPointOf, vertexOf } from "./houses.js";
+import { hellenisticLots, meanApogee, meanNodeLongitude, sectOf } from "./points.js";
 import { outsideReferenceSpan } from "./reference-span.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "./signs.js";
-import type { BodyName, BodyPosition, Chart, ChartFlag, ChartInput } from "./types.js";
+import type {
+  BodyName,
+  BodyPosition,
+  Chart,
+  ChartFlag,
+  ChartInput,
+  ChartPoints,
+  PointName,
+  PointPosition
+} from "./types.js";
 import { ENGINE_VERSION } from "./types.js";
 
 const RAD = 180 / Math.PI;
@@ -209,4 +219,97 @@ function chartAt(input: ChartInput, pin: number | undefined): Chart {
     deltaT: deltaTFor(input.utc, pin),
     engineVersion: ENGINE_VERSION
   };
+}
+
+/** The mean node and the mean apogee at an instant, on the engine's clock. */
+function meanLunarPoints(date: Date): { node: number; apogee: { lon: number; lat: number } } {
+  const time = MakeTime(date);
+  const centuries = time.tt / 36525;
+  const nutation = e_tilt(time).dpsi / 3600;
+  return { node: meanNodeLongitude(centuries, nutation), apogee: meanApogee(centuries, nutation) };
+}
+
+function centralSpeed(longitudeOf: (date: Date) => number, date: Date): number {
+  const before = longitudeOf(new Date(date.getTime() - SPEED_STEP_DAYS * 86_400_000));
+  const after = longitudeOf(new Date(date.getTime() + SPEED_STEP_DAYS * 86_400_000));
+  let difference = after - before;
+  if (difference > 180) difference -= 360;
+  if (difference < -180) difference += 360;
+  return difference / (2 * SPEED_STEP_DAYS);
+}
+
+function pointPosition(point: PointName, lon: number, lat: number, speed: number | null): PointPosition {
+  const longitude = normalizeLongitude(lon);
+  return {
+    point,
+    lon: longitude,
+    lat,
+    speed,
+    sign: signForLongitude(longitude).slug,
+    degree: degreeInSign(longitude)
+  };
+}
+
+/**
+ * The chart's points, computed on the same clock as the chart: the caller's
+ * pinned ΔT when the chart has one, the engine's model otherwise. The mean
+ * node and Black Moon Lilith depend on the instant alone; the Vertex and the
+ * East Point on the instant and the place; the lots on the chart's own
+ * ascendant and bodies.
+ */
+export function computePoints(chart: Chart): ChartPoints {
+  const pin = chart.input.deltaT;
+  clock(pin);
+  try {
+    return pointsAt(chart);
+  } finally {
+    if (pin !== undefined) clock();
+  }
+}
+
+function pointsAt(chart: Chart): ChartPoints {
+  const { utc, latitude, longitude } = chart.input;
+  const mean = meanLunarPoints(utc);
+  const nodeSpeed = centralSpeed((date) => meanLunarPoints(date).node, utc);
+  const apogeeSpeed = centralSpeed((date) => meanLunarPoints(date).apogee.lon, utc);
+  const points: PointPosition[] = [
+    pointPosition("Mean Node", mean.node, 0, nodeSpeed),
+    pointPosition("Mean South Node", mean.node + 180, 0, nodeSpeed),
+    pointPosition("Black Moon Lilith", mean.apogee.lon, mean.apogee.lat, apogeeSpeed)
+  ];
+  if (chart.angles === null || latitude === undefined || longitude === undefined) {
+    return { sect: null, points };
+  }
+  const time = MakeTime(utc);
+  const angleInput = {
+    gastHours: SiderealTime(time),
+    latitude,
+    longitude,
+    obliquity: e_tilt(time).tobl
+  };
+  points.push(
+    pointPosition("Vertex", vertexOf(angleInput, computeAngles(angleInput)), 0, null),
+    pointPosition("East Point", eastPointOf(angleInput), 0, null)
+  );
+  const lon = (body: BodyName): number => {
+    const found = chart.bodies.find((candidate) => candidate.body === body);
+    if (!found) throw new RangeError(`chart has no ${body}.`);
+    return found.lon;
+  };
+  const sect = sectOf(chart.angles.asc, lon("Sun"));
+  const lots = hellenisticLots(
+    {
+      ascendant: chart.angles.asc,
+      sun: lon("Sun"),
+      moon: lon("Moon"),
+      mercury: lon("Mercury"),
+      venus: lon("Venus"),
+      mars: lon("Mars"),
+      jupiter: lon("Jupiter"),
+      saturn: lon("Saturn")
+    },
+    sect
+  );
+  for (const lot of lots) points.push(pointPosition(lot.point, lot.lon, 0, null));
+  return { sect, points };
 }

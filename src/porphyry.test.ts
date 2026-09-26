@@ -81,7 +81,7 @@ describe("Porphyry houses (brief v1 rule 1h)", () => {
     expect(() =>
       natalChart({ utc: "2000-01-01T12:00:00Z", latitude: 51.5, longitude: 0, houseSystem: "gauquelin" as never })
     ).toThrow(
-      'houseSystem must be one of "whole", "placidus", "porphyry", "equal", "vehlow", "koch", ' +
+      'houseSystem must be one of "whole", "placidus", "porphyry", "equal", "equal-mc", "vehlow", "koch", ' +
         '"regiomontanus", "campanus", "topocentric", "alcabitius", "morinus", "meridian".'
     );
   });
