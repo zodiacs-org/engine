@@ -1,5 +1,41 @@
 # Engine changelog
 
+## 0.1.1-rc.9
+
+- Nine more house systems, for twelve: Koch, Regiomontanus, Campanus,
+  Topocentric (Polich–Page), Alcabitius, Equal, Vehlow, Meridian (axial
+  rotation) and Morinus, beside whole sign, Placidus and Porphyry. Each
+  follows the definition Swiss Ephemeris uses. Given the same sidereal time,
+  latitude and obliquity, every one agrees with Swiss's `swe_houses_armc` to
+  within 0.0001″ over 20,000 random cases at every latitude and on the
+  55°–66.6° ladder; Placidus, which iterates, to 0.0096″.
+- Koch, like Placidus, is undefined inside the polar circle and falls back to
+  whole sign with the `polar-fallback` flag, where Swiss refuses it. The new
+  `POLAR_FALLBACK` names that system, and `POLAR_UNDEFINED_HOUSE_SYSTEMS` the
+  two systems that use it; `PLACIDUS_POLAR_FALLBACK` stays. Every other
+  system is computed at every latitude where the angles are. Inside the polar
+  circle Regiomontanus, Campanus and Topocentric cusps turn with the eastern
+  ascendant, so their 10th cusp is the lower meridian there, as in Swiss.
+- Each system is exported as a function (`kochCusps`, `regiomontanusCusps`,
+  `campanusCusps`, `topocentricCusps`, `alcabitiusCusps`, `equalCusps`,
+  `vehlowCusps`, `meridianCusps`, `morinusCusps`) and through `computeHouses`.
+  `src/house-systems.test.ts` holds each to its own definition: Regiomontanus
+  and Campanus cusps lie on their circles through the horizon's north point,
+  Koch and Topocentric cusps are the ascendants they are defined as, and
+  Alcabitius, Meridian and Morinus cusps have the right ascensions they are
+  defined by.
+- Receipts accept the new systems and check each system's shape: Equal and
+  Vehlow count 30° from the ascendant, the quadrant systems put the ascendant
+  on the 1st cusp and the midheaven on the 10th (the lower meridian only for
+  the three turning systems, and only beyond 65° of latitude), Meridian keeps
+  the midheaven, and every system's cusps come in opposite pairs. A receipt
+  naming an engine before rc.9 cannot carry a new system. The conventions set
+  is rc.8's, unchanged.
+
+Migration: nothing changes for whole sign, Placidus or Porphyry.
+`validateBirthSettings` accepts the new names, and its error message lists
+all twelve.
+
 ## 0.1.1-rc.8
 
 - Observed ΔT with a band (Phase 1 step 1.4). The model `zodiacs-deltat/1`

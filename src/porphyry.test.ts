@@ -77,10 +77,13 @@ describe("Porphyry houses (brief v1 rule 1h)", () => {
     expect(placidus.flags).toContain("polar-fallback");
   });
 
-  it("names the three systems in the input error", () => {
+  it("names every system in the input error", () => {
     expect(() =>
-      natalChart({ utc: "2000-01-01T12:00:00Z", latitude: 51.5, longitude: 0, houseSystem: "koch" as never })
-    ).toThrow('houseSystem must be "whole", "placidus" or "porphyry".');
+      natalChart({ utc: "2000-01-01T12:00:00Z", latitude: 51.5, longitude: 0, houseSystem: "gauquelin" as never })
+    ).toThrow(
+      'houseSystem must be one of "whole", "placidus", "porphyry", "equal", "vehlow", "koch", ' +
+        '"regiomontanus", "campanus", "topocentric", "alcabitius", "morinus", "meridian".'
+    );
   });
 
   it("holds a supplied chart's houses to the system its input asked for", () => {

@@ -129,6 +129,9 @@ export const NATAL_RECEIPT_CONVENTION_SETS = Object.freeze([
 ] as const);
 const RC3_TO_RC6 = /^0\.1\.1-rc\.[3-6](?:\+[A-Za-z0-9.-]+)?$/;
 const RC7 = /^0\.1\.1-rc\.7(?:\+[A-Za-z0-9.-]+)?$/;
+/** Every engine version before 0.1.1-rc.9, which offered only three house systems. */
+const BEFORE_RC9 =
+  /^0\.(?:0\.\d+(?:-[A-Za-z0-9.-]+)?|1\.0(?:-[A-Za-z0-9.-]+)?|1\.1-rc\.[0-8])(?:\+[A-Za-z0-9.-]+)?$/;
 /** Every engine version before 0.1.1-rc.8, which cannot have written the current set. */
 const BEFORE_RC8 =
   /^0\.(?:0\.\d+(?:-[A-Za-z0-9.-]+)?|1\.0(?:-[A-Za-z0-9.-]+)?|1\.1-rc\.[0-7])(?:\+[A-Za-z0-9.-]+)?$/;
@@ -207,7 +210,26 @@ const BODIES = [
 const FLAGS_RC7 = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as const;
 const FLAGS = [...FLAGS_RC7, "outside-reference-span"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
-const HOUSE_SYSTEMS = ["whole", "placidus", "porphyry"] as const;
+const HOUSE_SYSTEMS = [
+  "whole",
+  "placidus",
+  "porphyry",
+  "equal",
+  "vehlow",
+  "koch",
+  "regiomontanus",
+  "campanus",
+  "topocentric",
+  "alcabitius",
+  "morinus",
+  "meridian"
+] as const;
+/** The systems engine versions before 0.1.1-rc.9 offered. */
+const HOUSE_SYSTEMS_BEFORE_RC9: readonly string[] = ["whole", "placidus", "porphyry"];
+/** The systems that fall back to whole sign inside the polar circle. */
+const POLAR_UNDEFINED: readonly string[] = ["placidus", "koch"];
+/** The systems whose cusps turn with the ascendant inside the polar circle. */
+const TURNING_WITH_ASCENDANT: readonly string[] = ["regiomontanus", "campanus", "topocentric"];
 const HOSTILE_KEYS = new Set(["__proto__", "prototype", "constructor"]);
 type RecordValue = Record<string, unknown>;
 
@@ -487,21 +509,48 @@ function validateResult(
       fail("inconsistent_result");
     const houses = record(result.houses);
     fields(houses, ["system", "cusps"]);
-    choice(houses.system, HOUSE_SYSTEMS);
+    const system = choice(houses.system, HOUSE_SYSTEMS);
     if (!Array.isArray(houses.cusps) || houses.cusps.length !== 12) fail("invalid_shape");
     const cusps = houses.cusps.map(longitude);
     if (new Set(cusps).size !== 12) fail("inconsistent_result");
-    if (houses.system === "whole") {
-      const first = Math.floor((angles.asc as number) / 30) * 30;
-      if (cusps.some((cusp, index) => !angularClose(cusp, first + index * 30)))
-        fail("inconsistent_result");
-    } else if (
-      !angularClose(cusps[0]!, angles.asc as number) ||
-      !angularClose(cusps[9]!, angles.mc as number) ||
-      cusps.slice(0, 6).some((cusp, index) => !angularClose(cusps[index + 6]!, cusp + 180))
-    )
-      fail("inconsistent_result");
-    else if (houses.system === "porphyry") {
+    const asc = angles.asc as number;
+    const mc = angles.mc as number;
+    const opposite = cusps
+      .slice(0, 6)
+      .every((cusp, index) => angularClose(cusps[index + 6]!, cusp + 180));
+    const thirtyFrom = (start: number) =>
+      cusps.every((cusp, index) => angularClose(cusp, start + index * 30));
+    let consistent: boolean;
+    switch (system) {
+      case "whole":
+        consistent = thirtyFrom(Math.floor(asc / 30) * 30);
+        break;
+      case "equal":
+        consistent = thirtyFrom(asc);
+        break;
+      case "vehlow":
+        consistent = thirtyFrom(asc - 15);
+        break;
+      // Neither angle is a Morinus cusp; the meridian system keeps the midheaven.
+      case "morinus":
+        consistent = opposite;
+        break;
+      case "meridian":
+        consistent = opposite && angularClose(cusps[9]!, mc);
+        break;
+      default:
+        // The quadrant systems start at the ascendant and put the midheaven on
+        // the 10th cusp. Inside the polar circle, Regiomontanus, Campanus and
+        // Topocentric cusps turn with the ascendant, and the 10th cusp is then
+        // the lower meridian.
+        consistent =
+          opposite &&
+          angularClose(cusps[0]!, asc) &&
+          (angularClose(cusps[9]!, mc) ||
+            (TURNING_WITH_ASCENDANT.includes(system) && angularClose(cusps[9]!, mc + 180)));
+    }
+    if (!consistent) fail("inconsistent_result");
+    if (system === "porphyry") {
       // Porphyry is fixed by the angles: each quadrant in three equal parts,
       // with the ascendant less than 180° past the midheaven.
       const upper = wrap((angles.asc as number) - (angles.mc as number));
@@ -732,14 +781,26 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     house.actual !== (result.houses?.system ?? null)
   )
     fail("inconsistent_result");
-  // Each system is computed as asked, except Placidus, which falls back to
-  // whole sign inside the polar circle. rc.3 to rc.6 never offered Porphyry.
+  // Each system is computed as asked, except Placidus and Koch, which fall
+  // back to whole sign inside the polar circle. rc.3 to rc.6 never offered
+  // Porphyry.
   const actual = result.houses?.system;
   if (
     (actual !== undefined &&
       actual !== requested &&
-      !(requested === "placidus" && actual === "whole")) ||
+      !(POLAR_UNDEFINED.includes(requested) && actual === "whole")) ||
     (conventions === CONVENTIONS_RC3 && requested === "porphyry")
+  )
+    fail("inconsistent_result");
+  // Cusps turn with the ascendant only where the ascendant can have been
+  // taken from the other side of the horizon: inside the polar circle, and
+  // the obliquity never reaches 25°.
+  if (
+    result.houses &&
+    result.angles &&
+    TURNING_WITH_ASCENDANT.includes(result.houses.system) &&
+    !angularClose(result.houses.cusps[9]!, result.angles.mc) &&
+    Math.abs((receipt.coordinates as { latitude: number }).latitude) < 65
   )
     fail("inconsistent_result");
   const inputFlags = flagList(receipt.inputFlags, TIME_FLAGS);
@@ -747,7 +808,7 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   const resultFlags = flagList(receipt.resultFlags, current ? FLAGS : FLAGS_RC7);
   const expected = [...inputFlags];
   if (!timeKnown) expected.push("no-time");
-  if (requested === "placidus" && result.houses?.system === "whole")
+  if (POLAR_UNDEFINED.includes(requested) && result.houses?.system === "whole")
     expected.push("polar-fallback");
   if (current && outsideReferenceSpan(new Date(receipt.instant as string)))
     expected.push("outside-reference-span");
@@ -768,7 +829,8 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   if (
     (conventions === CONVENTIONS_RC3 && !RC3_TO_RC6.test(engineVersion)) ||
     (conventions === CONVENTIONS_RC7 && !RC7.test(engineVersion)) ||
-    (current && BEFORE_RC8.test(engineVersion))
+    (current && BEFORE_RC8.test(engineVersion)) ||
+    (!HOUSE_SYSTEMS_BEFORE_RC9.includes(requested) && BEFORE_RC9.test(engineVersion))
   )
     fail("inconsistent_result");
   fixedFields(receipt.coverage, COVERAGE);

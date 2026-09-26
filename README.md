@@ -7,22 +7,22 @@ ESM-only, has no import-time side effects, and performs no network request from
 its core entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see ΔT below).
 
-**Release candidate: 0.1.1-rc.8.** Public npm lookups for this package returned
-404 on 2026-09-25. The expansion release remains held for review and operator
+**Release candidate: 0.1.1-rc.9.** Public npm lookups for this package returned
+404 on 2026-09-26. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.8.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.9.tgz
 ```
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.8.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.9.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash, runtime and isolated consumer directory. A packed
-candidate is not a published release. This candidate computes on observed ΔT with a band, names its ephemeris and ΔT in receipts, flags charts outside the reference span, and ships the site's longitude-crossing solver as `@zodiacs/engine/crossings`; rc.7 before it judged aspects applying from the orb's rate, took speeds as the derivative of the reported longitude, built the angles on the true obliquity, put the Placidus limit at the polar circle and added Porphyry houses. CHANGELOG.md says what each change moves. The site platform draft retains its immutable rc.5 archive, and the standalone starter retains rc.3, until their separate integrations are reviewed.
+candidate is not a published release. This candidate adds nine house systems, for twelve in all; rc.8 before it computed on observed ΔT with a band, named its ephemeris and ΔT in receipts, flagged charts outside the reference span, and shipped the site's longitude-crossing solver as `@zodiacs/engine/crossings`; rc.7 judged aspects applying from the orb's rate, took speeds as the derivative of the reported longitude, built the angles on the true obliquity, put the Placidus limit at the polar circle and added Porphyry houses. CHANGELOG.md says what each change moves. The site platform draft retains its immutable rc.5 archive, and the standalone starter retains rc.3, until their separate integrations are reviewed.
 
 ## Natal chart in 10 lines
 
@@ -89,7 +89,7 @@ for (const aspect of today.aspects) {
 
 - `positions(date)` returns the Sun, Moon, eight planets, and true Moon nodes.
 - `natalChart(birth)` adds natal aspects and, when coordinates are present,
-  angles and whole-sign, Placidus or Porphyry houses.
+  angles and houses in any of twelve systems (see *House systems*).
 - `transits(natal, date)` returns a sky snapshot and moving-to-natal aspects.
 - `synastry(a, b)` returns inter-chart aspects and element/modality balances.
 - `moonPhase(date)` returns elongation, illuminated fraction, and phase name.
@@ -111,15 +111,39 @@ Positions have been compared with an independent ephemeris from 1800-01-01T00:00
 up to 2200-01-01T00:00Z, exported as `REFERENCE_SPAN`. A chart outside that span
 is still computed, and carries the `outside-reference-span` flag.
 
-Placidus is undefined in polar regions, where |latitude| ≥ 90° − ε, with ε the
-true obliquity of date (about 66.56° today). There the engine falls back to
-whole-sign houses, exported as `PLACIDUS_POLAR_FALLBACK`, and adds
-`polar-fallback` to the chart flags. Swiss Ephemeris falls back to Porphyry
-instead. Porphyry divides each quadrant between the angles into three equal
-arcs of longitude, is defined at every latitude where the angles are, and can
-be requested directly with `houseSystem: "porphyry"`. When the birth time is
-unknown, pass a conventional UTC instant with `timeKnown: false`; angles and
-houses remain absent and the chart carries the `no-time` flag.
+### House systems
+
+`houseSystem` takes one of twelve systems. Each is the definition Swiss
+Ephemeris uses, and every one agrees with Swiss's `swe_houses_armc` to within
+0.0001″ given the same sidereal time, latitude and obliquity (Placidus, which
+iterates, to 0.01″).
+
+| `houseSystem` | System | Cusps |
+| --- | --- | --- |
+| `"whole"` | Whole sign | Each sign is a house, the first the ascendant's. The default. |
+| `"placidus"` | Placidus | Semi-arcs of each degree in thirds. |
+| `"koch"` | Koch | Ascendants at thirds of the midheaven degree's semi-arc. |
+| `"porphyry"` | Porphyry | Each quadrant between the angles in three equal arcs of longitude. |
+| `"regiomontanus"` | Regiomontanus | Circles through the horizon's north and south points, every 30° of the equator. |
+| `"campanus"` | Campanus | The same circles, every 30° of the prime vertical. |
+| `"topocentric"` | Topocentric (Polich–Page) | Regiomontanus's ascensions, with pole heights at a third and two thirds of the latitude's tangent. |
+| `"alcabitius"` | Alcabitius | The ascendant's semi-arcs in thirds on the equator, along hour circles. |
+| `"equal"` | Equal | 30° each from the ascendant. |
+| `"vehlow"` | Vehlow | 30° each, with the ascendant in the middle of the first. |
+| `"meridian"` | Meridian (axial rotation) | Right ascensions every 30° from the midheaven's; the 1st cusp is the equatorial ascendant. |
+| `"morinus"` | Morinus | The equator every 30° from the midheaven's right ascension, carried to the ecliptic through its poles. |
+
+Placidus and Koch are undefined in polar regions, where |latitude| ≥ 90° − ε,
+with ε the true obliquity of date (about 66.56° today). There the engine falls
+back to whole-sign houses, exported as `POLAR_FALLBACK` (and, as before,
+`PLACIDUS_POLAR_FALLBACK`), and adds `polar-fallback` to the chart flags. Swiss
+Ephemeris falls back to Porphyry instead. Every other system is defined at
+every latitude where the angles are. Inside the polar circle, where the
+ascendant is taken on the eastern half of the horizon, Regiomontanus, Campanus
+and Topocentric cusps turn with it, so their 10th cusp is then the lower
+meridian, as in Swiss Ephemeris. When the birth time is unknown, pass a
+conventional UTC instant with `timeKnown: false`; angles and houses remain
+absent and the chart carries the `no-time` flag.
 
 ### Input flag compatibility
 
@@ -254,7 +278,7 @@ preserved. Resolve daylight-saving gaps/folds and historical local-time rules
 before calling these APIs. Accepted date syntax is not an accuracy guarantee
 outside the documented reference coverage.
 
-Birth settings accept only `houseSystem: "whole" | "placidus" | "porphyry"` and
+Birth settings accept only a `houseSystem` from the twelve above and
 a boolean `timeKnown`. Omitting them defaults to `"whole"` and `true`; explicit
 `null` and other unsupported values throw `RangeError`, including when
 coordinates are absent. Latitude and longitude must be supplied together as finite numbers

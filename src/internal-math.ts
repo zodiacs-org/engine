@@ -22,13 +22,25 @@ export type { AspectDefinition, AspectMotion } from "./aspects.js";
 export {
   HOUSE_SYSTEMS,
   PLACIDUS_POLAR_FALLBACK,
+  POLAR_FALLBACK,
+  POLAR_UNDEFINED_HOUSE_SYSTEMS,
+  alcabitiusCusps,
+  campanusCusps,
   computeAngles,
   computeHouses,
+  equalCusps,
   houseOf,
+  isPolarUndefinedHouseSystem,
+  kochCusps,
   meanObliquity,
+  meridianCusps,
+  morinusCusps,
   placidusCusps,
   porphyryCusps,
   ramcOf,
+  regiomontanusCusps,
+  topocentricCusps,
+  vehlowCusps,
   wholeSignCusps
 } from "./houses.js";
 export type { AngleInput } from "./houses.js";

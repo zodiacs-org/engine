@@ -1,17 +1,30 @@
-import type { BirthInput, ChartFlag } from "./types.js";
+import type { BirthInput, ChartFlag, HouseSystem } from "./types.js";
 
 type BirthSettings = Pick<BirthInput, "latitude" | "longitude" | "houseSystem" | "timeKnown">;
+
+/** Every house system a birth may ask for; kept here so this module needs no astronomy. */
+const HOUSE_SYSTEM_NAMES: readonly HouseSystem[] = [
+  "whole",
+  "placidus",
+  "porphyry",
+  "equal",
+  "vehlow",
+  "koch",
+  "regiomontanus",
+  "campanus",
+  "topocentric",
+  "alcabitius",
+  "morinus",
+  "meridian"
+];
 
 /** Shared public/civil settings validation; no astronomy or timezone dependency. */
 export function validateBirthSettings(birth: BirthSettings): BirthSettings {
   const { houseSystem, timeKnown, latitude, longitude } = birth;
-  if (
-    houseSystem !== undefined &&
-    houseSystem !== "whole" &&
-    houseSystem !== "placidus" &&
-    houseSystem !== "porphyry"
-  ) {
-    throw new RangeError('houseSystem must be "whole", "placidus" or "porphyry".');
+  if (houseSystem !== undefined && !HOUSE_SYSTEM_NAMES.includes(houseSystem)) {
+    throw new RangeError(
+      `houseSystem must be one of ${HOUSE_SYSTEM_NAMES.map((name) => `"${name}"`).join(", ")}.`
+    );
   }
   if (timeKnown !== undefined && typeof timeKnown !== "boolean") {
     throw new RangeError("timeKnown must be a boolean.");
