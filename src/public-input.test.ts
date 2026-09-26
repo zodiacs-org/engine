@@ -91,7 +91,7 @@ describe("public resolved-instant inputs", () => {
 });
 
 describe("public birth settings", () => {
-  it.each(["equal-mc", "Placidus", "Koch", "", 0, false, null, {}])(
+  it.each(["gauquelin", "Placidus", "Koch", "", 0, false, null, {}])(
     "rejects unsupported house system %j even without coordinates",
     (houseSystem) => {
       expect(() => natalChart({ utc: "2024-02-29", houseSystem } as BirthInput)).toThrow(
@@ -127,7 +127,7 @@ describe("public birth settings", () => {
       saturnReturn({ utc: "2024-02-29", timeKnown: "false" } as unknown as BirthInput)
     ).toThrow(/timeKnown/);
     expect(() =>
-      saturnReturn({ utc: "2024-02-29", houseSystem: "equal-mc" } as unknown as BirthInput)
+      saturnReturn({ utc: "2024-02-29", houseSystem: "gauquelin" } as unknown as BirthInput)
     ).toThrow(/houseSystem/);
   });
 

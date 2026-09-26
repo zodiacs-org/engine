@@ -28,7 +28,9 @@ export {
   campanusCusps,
   computeAngles,
   computeHouses,
+  eastPointOf,
   equalCusps,
+  equalMcCusps,
   houseOf,
   isPolarUndefinedHouseSystem,
   kochCusps,
@@ -41,6 +43,7 @@ export {
   regiomontanusCusps,
   topocentricCusps,
   vehlowCusps,
+  vertexOf,
   wholeSignCusps
 } from "./houses.js";
 export type { AngleInput } from "./houses.js";

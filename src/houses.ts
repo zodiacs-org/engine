@@ -9,6 +9,7 @@ export const HOUSE_SYSTEMS = [
   "placidus",
   "porphyry",
   "equal",
+  "equal-mc",
   "vehlow",
   "koch",
   "regiomontanus",
@@ -237,6 +238,15 @@ export function equalCusps(angles: Angles): number[] {
   return Array.from({ length: 12 }, (_, index) => normalizeLongitude(angles.asc + index * 30));
 }
 
+/**
+ * Equal houses from the midheaven: thirty degrees each, the 10th beginning at
+ * the midheaven, so the 1st begins 90° past it. Neither the ascendant nor the
+ * latitude enters, so the system is the same at every latitude.
+ */
+export function equalMcCusps(angles: Angles): number[] {
+  return Array.from({ length: 12 }, (_, index) => normalizeLongitude(angles.mc + (index - 9) * 30));
+}
+
 /** Vehlow's equal houses: thirty degrees each, with the ascendant in the middle of the first. */
 export function vehlowCusps(angles: Angles): number[] {
   return Array.from({ length: 12 }, (_, index) => normalizeLongitude(angles.asc - 15 + index * 30));
@@ -383,6 +393,29 @@ export function morinusCusps(input: AngleInput): number[] {
   );
 }
 
+/**
+ * The East Point, or equatorial ascendant: the ecliptic point rising where the
+ * celestial equator meets the eastern horizon, with right ascension RAMC + 90°.
+ * It depends on the sidereal time and the obliquity, not on the latitude.
+ */
+export function eastPointOf(input: AngleInput): number {
+  return obliqueLongitude(ramcOf(input) + 90, 0, input.obliquity);
+}
+
+/**
+ * The Vertex: where the prime vertical, the great circle through the zenith
+ * and the east and west points, meets the ecliptic in the west. It is the
+ * descendant of the colatitude, taken on the western side of the meridian. At
+ * the equator the prime vertical is the celestial equator, and the Vertex is
+ * the equinox west of the meridian. Where the ecliptic passes through the
+ * zenith, the two circles meet on the meridian and neither point is west.
+ */
+export function vertexOf(input: AngleInput, angles: Angles): number {
+  const colatitude = input.latitude >= 0 ? 90 - input.latitude : -90 - input.latitude;
+  const vertex = obliqueLongitude(ramcOf(input) - 90, colatitude, input.obliquity);
+  return normalizeLongitude(vertex - angles.mc) >= 180 ? vertex : normalizeLongitude(vertex + 180);
+}
+
 export function computeHouses(
   system: HouseSystem,
   input: AngleInput,
@@ -410,6 +443,8 @@ export function computeHouses(
       return as(porphyryCusps(angles));
     case "equal":
       return as(equalCusps(angles));
+    case "equal-mc":
+      return as(equalMcCusps(angles));
     case "vehlow":
       return as(vehlowCusps(angles));
     case "regiomontanus":

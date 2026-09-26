@@ -52,6 +52,7 @@ export type HouseSystem =
   | "placidus"
   | "porphyry"
   | "equal"
+  | "equal-mc"
   | "vehlow"
   | "koch"
   | "regiomontanus"
@@ -117,6 +118,51 @@ export interface BodyPosition {
   sign: ZodiacSign;
   /** Longitude inside `sign`, degrees in [0, 30). */
   degree: number;
+}
+
+/** A chart point that is not a body; see `chartPoints`. */
+export type PointName =
+  | "Mean Node"
+  | "Mean South Node"
+  | "Black Moon Lilith"
+  | "Vertex"
+  | "East Point"
+  | "Lot of Fortune"
+  | "Lot of Spirit"
+  | "Lot of Eros"
+  | "Lot of Necessity"
+  | "Lot of Courage"
+  | "Lot of Victory"
+  | "Lot of Nemesis";
+
+/** Day when the Sun is above the horizon, night when it is below. */
+export type Sect = "day" | "night";
+
+export interface PointPosition {
+  point: PointName;
+  /** Tropical longitude of date, degrees in [0, 360). */
+  lon: number;
+  /** Ecliptic latitude, degrees; zero except for Black Moon Lilith. */
+  lat: number;
+  /**
+   * Longitude speed in degrees/day, the derivative of `lon` over plus/minus
+   * 0.001 day, for the mean node and Black Moon Lilith; null for the points the
+   * chart's angles fix.
+   */
+  speed: number | null;
+  sign: ZodiacSign;
+  /** Longitude inside `sign`, degrees in [0, 30). */
+  degree: number;
+}
+
+export interface ChartPoints {
+  /** The chart's sect; null when it has no angles. */
+  sect: Sect | null;
+  /**
+   * The mean node and its opposite point and Black Moon Lilith always; the
+   * Vertex, the East Point and the seven lots only when the chart has angles.
+   */
+  points: PointPosition[];
 }
 
 export interface Angles {
@@ -227,7 +273,7 @@ export interface MoonPhase {
   waxing: boolean;
 }
 
-export const ENGINE_VERSION = "0.1.1-rc.9";
+export const ENGINE_VERSION = "0.1.1-rc.10";
 
 /**
  * The ephemeris underneath every position. The dependency is pinned to this
