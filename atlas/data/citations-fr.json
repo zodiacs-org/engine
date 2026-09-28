@@ -1,7 +1,7 @@
 {
   "$schema": "../schema/atlas.schema.json",
   "kind": "atlas-citations",
-  "description": "France: the laws, decrees and notices on legal time, the 1891 Senate debate, a railway company's standing instruction on station clocks, and Paris newspapers reporting how the clock changes were made. The excerpts were transcribed from Gallica (Bibliothèque nationale de France) page images on the retrieval date, except where a citation's excerptBasis says otherwise, and checked again against the text Gallica's search service returns for the cited page (each citation's checks).",
+  "description": "France: the laws, decrees and notices on legal time, the 1891 Senate debate, a railway company's standing instruction on station clocks, and Paris newspapers reporting how the clock changes were made. The excerpts were transcribed from Gallica (Bibliothèque nationale de France) page images on the retrieval date and checked again against the text Gallica's search service returns for the cited page and, where that text could not confirm a word, against the page image (each citation's checks).",
   "citations": [
     {
       "id": "fr-jo-1870-11-06-promulgation",
@@ -239,16 +239,22 @@
       "locator": "p. 1, col. 5",
       "language": "fr",
       "excerpt": "celle de demain, 1er octobre, ne s'ouvrira qu'à une heure du matin. [...] On a fixé le changement d'heure à une heure du matin, au lieu de 23 heures 59, afin de ne pas créer de confusion",
-      "excerptBasis": "ocr",
+      "excerptBasis": "page-image",
       "checks": [
         {
           "method": "search-service",
           "date": "2026-09-28",
           "result": "matches",
-          "note": "The corrected excerpt was copied from the search service's text of the page and compared with it again."
+          "note": "The corrected excerpt was first copied from the search service's text of the page and compared with it again."
+        },
+        {
+          "method": "page-image",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "Read against the page image, the corrected excerpt matches it word for word; the excerpt is now based on the image."
         }
       ],
-      "note": "Corrected on 2026-09-28. The excerpt first ended \"au lieu de 23 heures\", leaving out the \"59\" that follows; it is now copied from the search service's text of the page, which reads \"au lieu de 23 heures 59, afin de ne pas créer de confusion\"."
+      "note": "Corrected on 2026-09-28. The excerpt first ended \"au lieu de 23 heures\", leaving out the \"59\" that follows. The corrected text, \"au lieu de 23 heures 59, afin de ne pas créer de confusion\", was taken from the search service's text of the page and then read on the page image, which it matches."
     },
     {
       "id": "fr-petitjournal-1916-09-30",
@@ -284,6 +290,12 @@
           "date": "2026-09-28",
           "result": "partial",
           "note": "The service's text is garbled here: \"par voie de décret\" reads \"par j[C;:r0 décret\", \"l'heure\" is missing and \"1911\" reads \"1 ut J\"; \"cessation\" and \"autorisé\" are broken up. The other words agree."
+        },
+        {
+          "method": "page-image",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "The words the service garbles (\"par voie de décret\", \"l'heure\", \"1911\") read as quoted on the page image."
         }
       ]
     },
@@ -367,6 +379,12 @@
           "date": "2026-09-28",
           "result": "partial",
           "note": "The service's text reads \"une minute après heures 59\", without the \"24\" read on the page image; the other words agree. It goes on \"c'est-à-dire mises «sur 0 heure\", which fits clocks set back from 01:00 to 00:00."
+        },
+        {
+          "method": "page-image",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "The page image has \"24 heures 59\"."
         }
       ]
     },
@@ -404,6 +422,12 @@
           "date": "2026-09-28",
           "result": "partial",
           "note": "The service's text reads \"avancées de minutes\", without the \"60\" read on the page image; the other words agree. The decree (fr-jo-1919-02-11-decree) gives the same advance of sixty minutes."
+        },
+        {
+          "method": "page-image",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "The page image has \"60 minutes\"."
         }
       ]
     },

@@ -269,42 +269,50 @@ particular:
 
 ## How the excerpts were checked
 
-Every excerpt but one was transcribed from the page image on the retrieval
-date; `fr-petitparisien-1916-09-30` was corrected later from the text
-Gallica's search service returns for the page (`excerptBasis`). After an
-independent review re-fetched every source, each excerpt was checked again
-on 2026-09-28, as its `checks` record:
+Every excerpt was transcribed from the page image on the retrieval date.
+After an independent review re-fetched every source, each excerpt was
+checked again on 2026-09-28, and its `checks` record how. Gallica's page and
+image servers at first refused automated requests, so the Gallica excerpts
+were checked against the text its search service (ContentSearch) returns for
+the cited page. A second review found that Gallica serves page images and
+its OCR text (ALTO) to a plain, descriptive User-Agent; every excerpt whose
+check had been partial was then read on the page image.
 
-| archive | excerpts | checked against | matches | partial |
-| --- | ---: | --- | ---: | ---: |
-| Gallica (BnF) | 37 | the text its search service (ContentSearch) returns for the cited page; its page and image servers refused automated requests | 30 | 7 |
-| Library of Congress | 22 | its OCR text of the page | 19 | 3 |
-| Internet Archive | 1 | the scan's OCR text | 1 | 0 |
+| archive | excerpts | checked against | checked | matches | partial |
+| --- | ---: | --- | ---: | ---: | ---: |
+| Gallica (BnF) | 37 | the text its search service returns for the cited page | 37 | 29 | 8 |
+| | | the page image | 11 | 11 | 0 |
+| Library of Congress | 22 | its OCR text of the page | 22 | 19 | 3 |
+| | | the page image | 3 | 3 | 0 |
+| Internet Archive | 1 | the scan's OCR text | 1 | 1 | 0 |
 
 A `partial` check is one where the method could not confirm some words,
-which its note names: the OCR garbles or drops them. In the seven Gallica
+which its note names: the OCR garbles or drops them. In the eight Gallica
 cases these are the "24" of "24 heures 59" (Le Petit Parisien, 1918), the
-"60" of "60 minutes" (Le Petit Parisien, 1919), a month name in two German
+"60" of "60 minutes" (Le Petit Parisien, 1919), the month in three German
 reports, two short stretches of the Bundesrat order as printed in 1916,
 "französische Zeit" in Strasbourg's notice of 1918, and several words of the
-law of 1917. The three Library of Congress excerpts whose OCR garbles a
-figure ("73 h meridian" for "75th meridian" in Baltimore, the seconds the
-New York City Hall clock stood still, the first "twelve seconds" in
-Washington) were read again on the page image, where they match.
+law of 1917. In the three Library of Congress cases it is a figure ("73 h
+meridian" for "75th meridian" in Baltimore, the seconds the New York City
+Hall clock stood still, the first "twelve seconds" in Washington). All
+eleven were read again on the page image, where they match; in Strasbourg's
+notice the scan is faded in the middle of "französische", which the notice's
+heading gives in full.
 
 Apart from such OCR errors the checks found the excerpts as transcribed,
-except two, corrected after the review:
+except one:
 
 - `fr-petitparisien-1916-09-30` ended "au lieu de 23 heures", cutting off
   the "59" that follows. It now reads "au lieu de 23 heures 59, afin de ne
-  pas créer de confusion", as the search service's text does, and the rules
-  citing it say "rather than at 23:59".
-- `mos-matin-1918-11-21-metz` went on "se déroulait à la préfecture la
-  cérémonie d'ordre civil", as read on the page image; the search service's
-  text has "se déroulait la prélation de M. Mirman" there, so the excerpt
-  now stops before those words.
+  pas créer de confusion", as the page does, and the rules citing it say
+  "rather than at 23:59".
 
-Ten excerpts longer than 40 words were shortened with `[...]`.
+`mos-matin-1918-11-21-metz` was shortened to stop before "se déroulait à la
+préfecture la cérémonie d'ordre civil" when those words could not be found
+in the search service's text, which drops a line there; the page image
+shows them as first transcribed, and the shorter excerpt is kept. The issue
+number of `de-snn-1917-09-14-ende` is corrected to Nr. 215, as the masthead
+reads. Ten excerpts longer than 40 words were shortened with `[...]`.
 
 ## Counts for version 0.1.0
 

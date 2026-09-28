@@ -1,7 +1,7 @@
 {
   "$schema": "../schema/atlas.schema.json",
   "kind": "atlas-citations",
-  "description": "Alsace and Moselle: the Reich law of 1893 (read on the Internet Archive scan of the Reichs-Gesetzblatt), and Strasbourg, Metz and Haguenau newspapers and a Paris daily read on Gallica. The excerpts were transcribed from page images on the retrieval date and checked again against the scan's OCR text (the Reichs-Gesetzblatt) or the text Gallica's search service returns for the cited page (each citation's checks).",
+  "description": "Alsace and Moselle: the Reich law of 1893 (read on the Internet Archive scan of the Reichs-Gesetzblatt), and Strasbourg, Metz and Haguenau newspapers and a Paris daily read on Gallica. The excerpts were transcribed from page images on the retrieval date and checked again against the scan's OCR text (the Reichs-Gesetzblatt) or the text Gallica's search service returns for the cited page and, where that text could not confirm a word, against the page image (each citation's checks).",
   "citations": [
     {
       "id": "als-snn-1892-03-31-mez",
@@ -32,7 +32,10 @@
       "language": "de",
       "excerpt": "Als wir heute Nacht die Münsterglocke die Mitternachtstunde und nach kaum einer Minute halb 1 Uhr schlagen hörten, da erfaßte den Hörer eine gewisse Aufregung",
       "excerptBasis": "page-image",
-      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
+      "checks": [
+        { "method": "search-service", "date": "2026-09-28", "result": "matches" },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ],
       "gloss": "In the night of 31 March to 1 April 1892 the cathedral clock struck midnight and, barely a minute later, half past twelve."
     },
     {
@@ -108,7 +111,8 @@
           "date": "2026-09-28",
           "result": "partial",
           "note": "The service's snippets begin after \"Der 1.\" (at \"Nai beginnt am 30\") and after the first \"zu diesem\", so those words are not confirmed; the other words agree, allowing for OCR errors."
-        }
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
       ],
       "gloss": "By order of the Bundesrat, every clock in the Reich went from 23:00 on 30 April 1916 to midnight, and back from 01:00 to midnight at the end of 30 September."
     },
@@ -133,7 +137,7 @@
       "title": "Das Ende der Sommerzeit",
       "date": "1917-09-14",
       "issuer": "Straßburger Neueste Nachrichten",
-      "publication": "Straßburger Neueste Nachrichten, Nr. 255, Zweites Blatt, Freitag, 14. September 1917",
+      "publication": "Straßburger Neueste Nachrichten, Nr. 215, Zweites Blatt, Freitag, 14. September 1917",
       "url": "https://gallica.bnf.fr/ark:/12148/bpt6k94456119/f5.item",
       "retrieved": "2026-09-28",
       "locator": "Zweites Blatt, first page (Gallica view 5), col. 1",
@@ -146,8 +150,10 @@
           "date": "2026-09-28",
           "result": "partial",
           "note": "\"September, um 3 Uhr\" reads \"Seb» & unt 31hr\" in the service's text, so the month is not confirmed; the other words agree, allowing for OCR errors."
-        }
-      ]
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ],
+      "note": "Corrected on 2026-09-28: the issue number was given as Nr. 255; the masthead reads \"Nr. 215. Zweites Blatt\"."
     },
     {
       "id": "de-snn-1918-03-08-sommerzeit",
@@ -168,7 +174,8 @@
           "date": "2026-09-28",
           "result": "partial",
           "note": "\"April vormittags\" reads \"Spru wrmittags\" in the service's text, so the month is not confirmed; the other words agree, allowing for OCR errors."
-        }
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
       ]
     },
     {
@@ -190,6 +197,12 @@
           "date": "2026-09-28",
           "result": "partial",
           "note": "\"auf französische Zeit gebracht\" reads \"auf fran ’^e Reit gebradt\" in the service's text; the other words agree, allowing for OCR errors."
+        },
+        {
+          "method": "page-image",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "The scan is faded in the middle of \"französische\": only \"fran\" and \"sche\" show. The heading of the notice, \"Einführung der französischen Zeit\", is clear."
         }
       ],
       "gloss": "At noon on 21 November 1918 the city's public clocks were to be put on French time by setting them back to 11:05.",
@@ -224,8 +237,11 @@
       "language": "fr",
       "excerpt": "vers 16 h. 30 — heure française, car depuis le matin l'horloge de la cathédrale ne marque plus l'heure d'Europe centrale",
       "excerptBasis": "page-image",
-      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
-      "note": "Shortened on 2026-09-28. The page image, read when the excerpt was taken, goes on \"se déroulait à la préfecture la cérémonie d'ordre civil\"; the search service's text has \"se déroulait la prélation de M. Mirman\" there, so those words could not be confirmed and the excerpt now stops before them."
+      "checks": [
+        { "method": "search-service", "date": "2026-09-28", "result": "matches" },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ],
+      "note": "Shortened on 2026-09-28, when only the search service's text of the page could be read: it drops a line, and the words that follow the excerpt, \"se déroulait à la préfecture la cérémonie d'ordre civil\", could not be confirmed. Read again on the page image the same day, they are there as first transcribed; the shorter excerpt is kept."
     },
     {
       "id": "als-jh-1919-02-28-railways",
@@ -240,7 +256,15 @@
       "language": "de",
       "excerpt": "In der Nacht vom 1. zum 2. März wird auf den Eisenbahnen in Elsaß und Lothringen und der Wilhelm-Luxemburg-Eisenbahn die Sommerzeit eingeführt [...] Infolgedessen werden am 1. März um 23 Uhr die Bahnhofsuhren um eine Stunde vorgerückt.",
       "excerptBasis": "page-image",
-      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "Both \"März\" are garbled in the service's text (\"Mrz\", \"Nr3\"), so the month is not confirmed there; the other words agree, allowing for OCR errors."
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ]
     }
   ]
 }

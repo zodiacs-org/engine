@@ -48,12 +48,11 @@ leaves `atlas/` out.
    OCR and corrected against the image. `checks` records each later
    comparison of the excerpt with the source: against the page image, the
    archive's OCR text of the page, or the text an archive's search service
-   returns for the page (Gallica's ContentSearch, used because Gallica's
-   page and image servers refused automated requests), with the result,
+   returns for the page (Gallica's ContentSearch, used while Gallica's page
+   and image servers were refusing the requests), with the result,
    `matches` or `partial`, and a note naming any words the method could not
-   confirm. A source that could
-   not be fetched and read is not cited; the rule's uncertainty says so
-   instead.
+   confirm. A source that could not be fetched and read is not cited; the
+   rule's uncertainty says so instead.
 3. **No proprietary atlas is consulted or copied.** tzdb (public domain) is
    the comparison base, not a source.
 4. **Each rule has a version, an uncertainty flag, and boundaries given as

@@ -20,17 +20,19 @@ Open an issue or a pull request in `zodiacs-org/engine` that gives:
 
 ## How it is reviewed
 
-1. A reviewer fetches the source at the URL given and reads the passage,
-   on the page image where the archive serves it. Where an archive's page
-   and image servers refuse the reviewer's requests, the passage may be
-   read through the services the archive offers for that purpose, without
-   getting around its access controls: its OCR text of the page, or its
-   metadata and search services (for Gallica, OAIRecord for the issue's
-   record and ContentSearch for the text of the page). The citation's
-   `checks` records which was used, with the date and the result; words the
-   method cannot confirm, such as a figure the OCR drops, make the check
-   `partial` and are named in its note. A source that cannot be fetched and
-   read at all is not accepted.
+1. A reviewer fetches the source at the URL given and reads the passage, on
+   the page image where the archive serves it. Where an archive's page and
+   image servers refuse the reviewer's requests, the passage may be read
+   through the services the archive offers for that purpose, without getting
+   around its access controls: its OCR text of the page, or its metadata and
+   search services (for Gallica, OAIRecord for the issue's record and
+   ContentSearch for the text of the page). Gallica serves its page images
+   (IIIF) and OCR text (ALTO) to a plain, descriptive User-Agent that names
+   the tool, and refuses some clients' default one; do not imitate a browser.
+   The citation's `checks` records which was used, with the date and the
+   result; words the method cannot confirm, such as a figure the OCR drops,
+   make the check `partial` and are named in its note. A source that cannot
+   be fetched and read at all is not accepted.
 2. If the source supports the change, the rule's `version` goes up by one,
    an entry is added to its `changes`, the citation is added with the
    reviewer's retrieval date and its check, and the uncertainty flag and
