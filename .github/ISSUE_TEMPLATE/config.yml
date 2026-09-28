@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: A conformance vector looks wrong
+    url: https://github.com/zodiacs-org/engine/issues/new?template=conformance-discrepancy.yml
+    about: Use the Conformance discrepancy form. The process and every past decision are in conformance/DISCREPANCIES.md.
+  - name: A security problem
+    url: https://github.com/zodiacs-org/engine/blob/main/SECURITY.md
+    about: Report it privately, as SECURITY.md describes, not in a public issue.

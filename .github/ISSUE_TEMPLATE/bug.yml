@@ -1,0 +1,43 @@
+name: Bug
+description: Any other problem, such as installing or importing the package, its types, the geo client, the receipt codec, the build, the conformance harness, or a statement in the documentation.
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Issues here are public. Leave out real birth details; invented ones are enough to show a problem.
+
+        A computed value that looks wrong has its own form, "Wrong result", and a conformance vector has "Conformance discrepancy". Security problems go through SECURITY.md, not an issue.
+  - type: textarea
+    id: happened
+    attributes:
+      label: What happened
+      description: What you did and what happened, with any error message in full.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: For a statement in the documentation, what you believe is correct and your source.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce it
+      description: The smallest code or command that shows the problem.
+  - type: input
+    id: version
+    attributes:
+      label: Engine version or commit
+      placeholder: "0.1.1-rc.12"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Node.js or browser version, package manager, bundler and operating system, where they matter.
+      placeholder: "Node.js 22.22.2, npm 10.9.7, Linux"

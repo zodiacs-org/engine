@@ -1,0 +1,59 @@
+name: Wrong result
+description: A value this engine computes that looks wrong, such as a position, angle, house cusp, aspect, time or date.
+title: "Wrong result: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Issues here are public. Please reproduce the problem with invented birth details (a made-up date, time and place) and report those. If it only happens with real details you would rather not publish, email admin@zodiacs.org instead.
+
+        A vector in the conformance suite that looks wrong has its own form, "Conformance discrepancy". Security problems go through SECURITY.md, not an issue.
+  - type: input
+    id: version
+    attributes:
+      label: Engine version
+      description: The version in the package's `package.json`, with the archive's SHA-256 if you installed a packed archive, or the commit if you built it yourself.
+      placeholder: "0.1.1-rc.12, archive SHA-256 c4cf150f…"
+    validations:
+      required: true
+  - type: textarea
+    id: call
+    attributes:
+      label: The call and its input
+      description: The function you called and its exact arguments, options included. If you started from a local time, give the UTC instant you passed, or the `resolveBirth` input.
+      placeholder: |
+        natalChart({ utc: "1990-06-15T12:30:00Z", latitude: 40.7128, longitude: -74.006, houseSystem: "placidus" })
+      render: typescript
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output or receipt
+      description: What the engine returned, at least the value that looks wrong. A natal receipt from `@zodiacs/engine/receipt` is the most useful form, because it records the input, the conventions and the engine version.
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected value and its independent source
+      description: The value you expected and where it comes from, such as JPL Horizons, an almanac, a published definition, or another program with its name, version and settings. Name the conventions the source uses (zodiac, frame, node, ΔT, house system); the README states the engine's.
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: Runtime
+      description: Node.js version, or browser and version. Local-time conversion in `@zodiacs/engine/geo` uses the runtime's time zone data.
+      placeholder: "Node.js 22.22.2 on Linux"
+  - type: dropdown
+    id: details
+    attributes:
+      label: Birth details in this report
+      options:
+        - Invented details that show the problem
+        - Real details, which I am content to make public
+        - No birth details included
+    validations:
+      required: true

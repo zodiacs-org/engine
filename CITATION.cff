@@ -1,0 +1,30 @@
+# version, date-released and doi are left out on purpose: no release of the
+# package has been published and no DOI has been minted. Add them with the
+# first published release. Until then, cite the release candidate or the
+# commit you used.
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below, with the version or commit you used."
+type: software
+title: "Zodiacs Engine (@zodiacs/engine)"
+abstract: >-
+  TypeScript astrology calculations for browsers and Node.js: tropical
+  planetary positions, natal charts with houses and aspects, transits,
+  synastry, secondary progressions, Moon phase and Saturn returns. The
+  repository also holds a conformance suite for astrology computation: test
+  vectors, each decided by an independent arbiter with a stated tolerance,
+  and a harness that runs any engine against them.
+authors:
+  - name: "Zodiacs.org"
+    website: "https://zodiacs.org"
+repository-code: "https://github.com/zodiacs-org/engine"
+url: "https://zodiacs.org/developers/engine/"
+license: MIT
+keywords:
+  - astrology
+  - ephemeris
+  - natal chart
+  - house systems
+  - synastry
+  - transits
+  - TypeScript
+  - conformance testing
