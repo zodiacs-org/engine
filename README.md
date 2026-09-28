@@ -2,31 +2,32 @@
 
 Pure TypeScript astrology calculations for browsers and Node.js. The package
 computes tropical planetary positions, natal charts, transit snapshots,
-synastry, Moon phase, and Saturn-return seasons. It is synchronous and
-ESM-only, has no import-time side effects, and performs no network request from
+synastry, secondary progressions, Moon phase, and Saturn-return seasons. It is
+synchronous and ESM-only, has no import-time side effects, and performs no network request from
 its core entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see ΔT below).
 
-**Release candidate: 0.1.1-rc.11.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.12.** Public npm lookups for this package returned
 404 on 2026-09-26. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.11.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.12.tgz
 ```
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.11.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.12.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash, runtime and isolated consumer directory. A packed
-candidate is not a published release. This candidate adds configurable
-longitude aspects and chart declinations as separate analyses. Existing
+candidate is not a published release. This candidate adds secondary progression
+instants and positions using the existing site convention. Configurable longitude aspects and chart declinations
+from rc.11 remain available as separate analyses. Existing
 natal, transit, synastry and receipt conventions remain unchanged. The
 ephemeris is still astronomy-engine 2.1.19. See CHANGELOG.md for the release
-history and `docs/evidence/rc11-20260928/` for this continuation's checks and
+history and `docs/evidence/rc12-20260928/` for this continuation's checks and
 remaining programme gates. Site adoption is reviewed separately.
 
 ## Natal chart in 10 lines
@@ -102,6 +103,9 @@ for (const aspect of today.aspects) {
   policy from `createAspectPolicy`, including minor and custom angles.
 - `chartDeclinations(natal)` derives right ascension, declination, parallel
   aspects and out-of-bounds flags on the chart's clock.
+- `progressedInstant(birthUtc, target)` maps elapsed tropical years to days.
+- `progressedBodies(birthUtc, target)` returns the twelve ordinary position
+  rows at that instant (see *Secondary progressions*).
 - `transits(natal, date)` returns a sky snapshot and moving-to-natal aspects.
 - `synastry(a, b)` returns inter-chart aspects and element/modality balances.
 - `moonPhase(date)` returns elongation, illuminated fraction, and phase name.
@@ -122,6 +126,52 @@ package does not calculate topocentric parallax.
 Positions have been compared with an independent ephemeris from 1800-01-01T00:00Z
 up to 2200-01-01T00:00Z, exported as `REFERENCE_SPAN`. A chart outside that span
 is still computed, and carries the `outside-reference-span` flag.
+
+### Secondary progressions
+
+```ts
+import {
+  progressedInstant, progressedBodies, PROGRESSION_DAYS_PER_YEAR
+} from "@zodiacs/engine";
+
+const birthUtc = "1990-06-15T12:30:00Z";
+const target = "2026-09-28T00:00:00Z";
+console.log(progressedInstant(birthUtc, target));
+console.log(progressedBodies(birthUtc, target));
+```
+
+The fixed convention is one **365.2422-day tropical year of elapsed life**
+for one **86,400,000-millisecond day** after birth. `PROGRESSION_DAYS_PER_YEAR`
+exports that constant. This uses elapsed instants, not calendar anniversaries,
+local-time days or daylight-saving adjustments. Both arguments accept a valid
+`Date`, finite epoch-millisecond timestamp, or ISO calendar date/date-time.
+Date-only strings mean UTC midnight; date-times require an explicit offset.
+Invalid dates and ambiguous local date-times throw `RangeError`. Resolve local
+birth times with the optional geo entry first.
+
+Targets before birth are accepted and map backwards with the same signed
+formula. Results preserve the site's existing floating-point operation order
+and JavaScript `Date` truncation to integer milliseconds. Neither argument is
+mutated, and the returned Date and position rows are newly allocated.
+
+`progressedBodies` returns precisely `positions(progressedInstant(...))`:
+Sun, Moon, eight planets and the true north/south lunar nodes. **Speed is
+instantaneous ephemeris longitude motion in degrees per day at the progressed
+instant**, not degrees per day of lived time. A comparison between two target
+ages must use the progression mapping; do not treat this speed as a lived-time
+rate. No progressed angles, houses, extra chart points, solar-arc direction,
+progressed aspect policy or natal-receipt extension is implied.
+
+Positions retain the existing ephemeris and its accuracy limits. Reference
+coverage applies to the **progressed instant**, not to the target age or date;
+call `outsideReferenceSpan(progressedInstant(...))` to check it. These APIs
+return an instant or rows, without chart coverage flags. Acceptance of a valid
+Date does not establish physical accuracy for that date. Validation includes a
+constructed mapping to the existing JPL longitude fixture and a rounded
+published date-mapping example; neither establishes predictive validity.
+The year convention and published mapping are cited to Juan Estadella,
+[*Predictive Astrology*, 3rd ed., pp. 84–85](https://juanestadella.com/Predictive_Astrology_Juan-Estadella_3rd_edition.pdf).
+See the candidate's evidence directory for the source-rounding distinction.
 
 ### Configurable aspects
 

@@ -1,0 +1,6029 @@
+{
+  "schema": "zodiacs.rc10-compatibility-report.v1",
+  "startedAt": "2026-09-28T10:48:08.401Z",
+  "completedAt": "2026-09-28T10:48:10.052Z",
+  "status": "pass",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "scope": "Finite exact legacy-behavior comparison of a packed candidate against a caller-supplied frozen rc.10 package, with identical copied pinned dependencies in separate processes.",
+  "limitations": [
+    "This is not an independent astronomical accuracy reference, exhaustive compatibility proof, Swiss equivalence claim, or test of the new optional APIs.",
+    "It does not test every date, place, host runtime, or transit/return search. Source ancestry and artifact authenticity are not inferred from package versions.",
+    "The exact geographic pole fixture checks observed chart acceptance and receipt refusal, not mathematical validity of its angles.",
+    "Only known engine version metadata fields are normalized; numerical fields, types, ordering, flags, DeltaT values and provenance, receipt conventions, and requested/effective houses are compared without tolerance."
+  ],
+  "metadata": {
+    "baseline": {
+      "sourcePath": "/workspace/scratch/c13b7841ac1f/engine-rc10-repair-baseline/package/dist/index.js",
+      "packageVersion": "0.1.1-rc.10",
+      "fileInventorySha256": "d3f6f5073b1d60bb09a231608a9e2e4d1cdd3b263b56cb8aa34c6a09d755ac4e",
+      "files": [
+        {
+          "path": "CHANGELOG.md",
+          "sha256": "894fda54c508a57bf3b6fd1e45f1dc1038b82345f50201adea818c64d0a8f85f"
+        },
+        {
+          "path": "dist/chunk-35EQGGYX.js",
+          "sha256": "21d1603de4a067c2cd0d9404de00a9a1753386a6b8d27eef805c55aada120f68"
+        },
+        {
+          "path": "dist/chunk-AECKV73C.js",
+          "sha256": "a812be9882c25f67c9fa8dfe19eb0d950a3867a7cdbede4c746c226ca760480c"
+        },
+        {
+          "path": "dist/chunk-CPALRSPC.js",
+          "sha256": "9db1a3814ec9bd00a40d4bc295e348debd6108f62a322ed91d18610c81b9fb08"
+        },
+        {
+          "path": "dist/chunk-FR5TX5ZG.js",
+          "sha256": "32992ee054cdb37c9e5548e5a4136f125dbf8da7857c5db8d3bbb530011bf9e1"
+        },
+        {
+          "path": "dist/chunk-IYNERVXW.js",
+          "sha256": "2d297d94afc12e305da43c865415bbf9c4bf0cd4292936c7c10089c8d41beb84"
+        },
+        {
+          "path": "dist/chunk-N4WHSUFK.js",
+          "sha256": "0404459e3bb1a10413c34397f7a269d11a2599227ee6aff18c60e3f091964740"
+        },
+        {
+          "path": "dist/chunk-ONBZ4HK7.js",
+          "sha256": "50f11205373c177c728ea8c7d50d41b19ff80cd9921eb51c6e907a8045f93308"
+        },
+        {
+          "path": "dist/chunk-PFGUCNOK.js",
+          "sha256": "6d9d38ab4606288700b0959e732a61dfa5b4cdc570be21d17b4ac9b9fe1c0eb4"
+        },
+        {
+          "path": "dist/crossings.d.ts",
+          "sha256": "1552b52b24d15828e0df70a76c80a076ffc6df5da899af16ffe05234d0e9619f"
+        },
+        {
+          "path": "dist/crossings.js",
+          "sha256": "bad1c9bcf76338a95d8c09d1019fb32a65f2d9622c611fd87f81a83392bd3f5f"
+        },
+        {
+          "path": "dist/deltat.d.ts",
+          "sha256": "cf6e092131aa2c6f5a4a8893078503a35fe5e5ca4bdcb52741f07650a93a1b86"
+        },
+        {
+          "path": "dist/deltat.js",
+          "sha256": "43b1503b6597e82ed6e920c18991703fe02be05856e6de0fc347e4abcf4c15e4"
+        },
+        {
+          "path": "dist/geo.d.ts",
+          "sha256": "7a42344e57d435528d859d815e42e36945bfb7c12d5bec0140c669cbc7547654"
+        },
+        {
+          "path": "dist/geo.js",
+          "sha256": "65b0af0d4c6823483ad321ab91a703889303a6e8051f171d2de8fc3df7e94d64"
+        },
+        {
+          "path": "dist/index.d.ts",
+          "sha256": "f9340f719309315b2242c3fd71536d57a667dbb382afbfc18a38db9441851db5"
+        },
+        {
+          "path": "dist/index.js",
+          "sha256": "d3a2ef95bdff80c70c2edeb95b89569894eb58e235ffbbbd73035f08b81602c3"
+        },
+        {
+          "path": "dist/internal-math-BO56moyy.d.ts",
+          "sha256": "f365f81430d7fad2bbd7abe82090174ba91614915830096abc7cbdff895d83c0"
+        },
+        {
+          "path": "dist/internal-math.d.ts",
+          "sha256": "37c2c9005e2acc172c4ae3454febb6e1dab212f072fd4c3edfe80b860b42d305"
+        },
+        {
+          "path": "dist/internal-math.js",
+          "sha256": "5b9f2247f099f6fa2de0ecbe0b5ed730c6db5a630cd6e841b046c54f182d8d91"
+        },
+        {
+          "path": "dist/internal.d.ts",
+          "sha256": "f040c4a44e1ec6d4d173d4614b02b7e3b19652070e8ab4fbd351497fc1060e8d"
+        },
+        {
+          "path": "dist/internal.js",
+          "sha256": "09941e5ed9937f02d313609cf080e1cff76225aaea9f97def14a8a6d70382ce6"
+        },
+        {
+          "path": "dist/receipt.d.ts",
+          "sha256": "c2c68b4ae5f19e6b628bb314f8c4700ed9a3836dd54a3e64f10c0925ba823fb3"
+        },
+        {
+          "path": "dist/receipt.js",
+          "sha256": "ff7a6b2a8ce0d4be22225cb2752f33601bc7ebf9dde8aeedbf67a4bbf885de03"
+        },
+        {
+          "path": "dist/types-BcilIdPk.d.ts",
+          "sha256": "339798ec71fd38bb4b2a24fc332c5d73e18b380c1f7b89e576022750f80cda4c"
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "LICENSING.md",
+          "sha256": "891ab1de8db82dea44f386f7815087ee07802400cbfb0039509626f74de5d3af"
+        },
+        {
+          "path": "node_modules/astronomy-engine/astronomy.browser.js",
+          "sha256": "a2cfab19cab1a15843e4c8cc7410b6cbaafd0907122a8698c25d63d00c2774e4"
+        },
+        {
+          "path": "node_modules/astronomy-engine/astronomy.browser.min.js",
+          "sha256": "f41139a87941ea017ab902b954c9389fa27ea72083d7fab4971756d7769d14e6"
+        },
+        {
+          "path": "node_modules/astronomy-engine/astronomy.d.ts",
+          "sha256": "fc5f1ede68dbebc32ce2f3f878cb3b261dc1bf8c16422451f0c4092c41fc871e"
+        },
+        {
+          "path": "node_modules/astronomy-engine/astronomy.js",
+          "sha256": "729c0ce37cc1a8096034a689039a5f04585ee8184177c638e8c74dec4fa3185a"
+        },
+        {
+          "path": "node_modules/astronomy-engine/astronomy.min.js",
+          "sha256": "6268029496ec7072e91a6ee3588dc645144dccc91ddbaa03b7f646fa0959da59"
+        },
+        {
+          "path": "node_modules/astronomy-engine/esm/astronomy.js",
+          "sha256": "068f1445ed0c636c94818fe6d20d7d125120e605e0bab9fc4675c3d531be5ad7"
+        },
+        {
+          "path": "node_modules/astronomy-engine/package.json",
+          "sha256": "d035702763839ae11f41600cf4b8210005672658dcb19cea4a09591078af4931"
+        },
+        {
+          "path": "node_modules/astronomy-engine/README.md",
+          "sha256": "73c2de22668374bafd2d238ef43bccd96017550d47ba05afaedd969a00490b1f"
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "265a138525b8d4ab3755a7a969d92dd9b875303b8eea277269713ffc3821dd19"
+        },
+        {
+          "path": "package.json",
+          "sha256": "e2ff18b132f2a01cfea37ed4b8c3f827a1d5c238d26654bb481d44168a9afc4e"
+        },
+        {
+          "path": "README.md",
+          "sha256": "2964129f33053debdb7d89b5346485e1e74a48470ffd3f9793b0bfdb92b228c5"
+        }
+      ]
+    },
+    "candidate": {
+      "artifactPath": "/workspace/scratch/c13b7841ac1f/engine-progressions/artifacts/zodiacs-engine-0.1.1-rc.12.tgz",
+      "artifactSha256": "c4cf150fe8fb0b37f5769993c2e63275b2e5ef47b97d8a118aff3be00ebaf7f0",
+      "packageVersion": "0.1.1-rc.12",
+      "fileInventorySha256": "0f3a701d4d77da096a15793eaf90f4365ed7785f0a8b325e684b515ce735c54f",
+      "files": [
+        {
+          "path": "CHANGELOG.md",
+          "sha256": "02ba90d93ce777925b5fd93441973c1abb735bc4d01ec9ca2c0b825ee77d3b41"
+        },
+        {
+          "path": "dist/chunk-AECKV73C.js",
+          "sha256": "a812be9882c25f67c9fa8dfe19eb0d950a3867a7cdbede4c746c226ca760480c"
+        },
+        {
+          "path": "dist/chunk-CPALRSPC.js",
+          "sha256": "9db1a3814ec9bd00a40d4bc295e348debd6108f62a322ed91d18610c81b9fb08"
+        },
+        {
+          "path": "dist/chunk-IA54QTPL.js",
+          "sha256": "0e362c890e3785a1d5fcc8586496a6091e184a24c10e28c51d61b8890d84259f"
+        },
+        {
+          "path": "dist/chunk-IYNERVXW.js",
+          "sha256": "2d297d94afc12e305da43c865415bbf9c4bf0cd4292936c7c10089c8d41beb84"
+        },
+        {
+          "path": "dist/chunk-M52XEBPK.js",
+          "sha256": "119fcdf389868f6d1639df0bfd125cabb46f0ad6ecc1d860c9b627dde64de889"
+        },
+        {
+          "path": "dist/chunk-ONBZ4HK7.js",
+          "sha256": "50f11205373c177c728ea8c7d50d41b19ff80cd9921eb51c6e907a8045f93308"
+        },
+        {
+          "path": "dist/chunk-PFGUCNOK.js",
+          "sha256": "6d9d38ab4606288700b0959e732a61dfa5b4cdc570be21d17b4ac9b9fe1c0eb4"
+        },
+        {
+          "path": "dist/chunk-WVB5S7ZI.js",
+          "sha256": "97aba1fea89246227cf2b72a055b2fb0b901cd96cb5e4d1f6475b2c7f3f769b0"
+        },
+        {
+          "path": "dist/crossings.d.ts",
+          "sha256": "64a538e69e952c9de64b4bde9a51f67cac367b101a5ff44809b28c7d901871f1"
+        },
+        {
+          "path": "dist/crossings.js",
+          "sha256": "bad1c9bcf76338a95d8c09d1019fb32a65f2d9622c611fd87f81a83392bd3f5f"
+        },
+        {
+          "path": "dist/deltat.d.ts",
+          "sha256": "cf6e092131aa2c6f5a4a8893078503a35fe5e5ca4bdcb52741f07650a93a1b86"
+        },
+        {
+          "path": "dist/deltat.js",
+          "sha256": "43b1503b6597e82ed6e920c18991703fe02be05856e6de0fc347e4abcf4c15e4"
+        },
+        {
+          "path": "dist/geo.d.ts",
+          "sha256": "9d57e4f468968f0dbc88f0d944e8ede59a199c66d28683f554034700b066dd51"
+        },
+        {
+          "path": "dist/geo.js",
+          "sha256": "65b0af0d4c6823483ad321ab91a703889303a6e8051f171d2de8fc3df7e94d64"
+        },
+        {
+          "path": "dist/index.d.ts",
+          "sha256": "9c55c567578067062c2a46d0b69d9d52a230e2c6f806893746ca8d084b73c89a"
+        },
+        {
+          "path": "dist/index.js",
+          "sha256": "fed4f85cbc72e198c420d3977fbc9a75b259a1a20d14316959db8e235d949b56"
+        },
+        {
+          "path": "dist/internal-math-1ntN4Tcl.d.ts",
+          "sha256": "ea8aba2fc91cdbe1a5720c8291757afcd4fcdc8f901ceaf8889ad8c1ff26b0de"
+        },
+        {
+          "path": "dist/internal-math.d.ts",
+          "sha256": "8a42d22740db8a1c584189bb7133e2abc119bb7650f2cd92f220734fb32b61b2"
+        },
+        {
+          "path": "dist/internal-math.js",
+          "sha256": "9ecb83027c575d0709219ec45b32c5fd315f5a2ef299643f217ae8e162ef0316"
+        },
+        {
+          "path": "dist/internal.d.ts",
+          "sha256": "41e239434e67aeec1e8848e9040cfe000f9f4b7d8d219567d348c25ed04812ff"
+        },
+        {
+          "path": "dist/internal.js",
+          "sha256": "7b5964cefa9be48723f45e74c08aeafa4ac9dcd31d56255ce42e61fb33ad1253"
+        },
+        {
+          "path": "dist/receipt.d.ts",
+          "sha256": "2ff77ec129bd42526b1129f666405110518f22b57bd84cf58831b2e7af9674bd"
+        },
+        {
+          "path": "dist/receipt.js",
+          "sha256": "26e8e32791b28cd18f357bf8e419c934031e26d454f608140bbd564af1b56e3f"
+        },
+        {
+          "path": "dist/types-BAxJaaO5.d.ts",
+          "sha256": "37026f490d6b87642098fa1d4b2d7a41d52e9c8a6af3b243ddeaa159096b7293"
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "LICENSING.md",
+          "sha256": "cdb9516f9c0be77c65764c217d0f6b775dcbcdc8208a92b169bc890ec0e4c03f"
+        },
+        {
+          "path": "node_modules/astronomy-engine/astronomy.browser.js",
+          "sha256": "a2cfab19cab1a15843e4c8cc7410b6cbaafd0907122a8698c25d63d00c2774e4"
+        },
+        {
+          "path": "node_modules/astronomy-engine/astronomy.browser.min.js",
+          "sha256": "f41139a87941ea017ab902b954c9389fa27ea72083d7fab4971756d7769d14e6"
+        },
+        {
+          "path": "node_modules/astronomy-engine/astronomy.d.ts",
+          "sha256": "fc5f1ede68dbebc32ce2f3f878cb3b261dc1bf8c16422451f0c4092c41fc871e"
+        },
+        {
+          "path": "node_modules/astronomy-engine/astronomy.js",
+          "sha256": "729c0ce37cc1a8096034a689039a5f04585ee8184177c638e8c74dec4fa3185a"
+        },
+        {
+          "path": "node_modules/astronomy-engine/astronomy.min.js",
+          "sha256": "6268029496ec7072e91a6ee3588dc645144dccc91ddbaa03b7f646fa0959da59"
+        },
+        {
+          "path": "node_modules/astronomy-engine/esm/astronomy.js",
+          "sha256": "068f1445ed0c636c94818fe6d20d7d125120e605e0bab9fc4675c3d531be5ad7"
+        },
+        {
+          "path": "node_modules/astronomy-engine/package.json",
+          "sha256": "d035702763839ae11f41600cf4b8210005672658dcb19cea4a09591078af4931"
+        },
+        {
+          "path": "node_modules/astronomy-engine/README.md",
+          "sha256": "73c2de22668374bafd2d238ef43bccd96017550d47ba05afaedd969a00490b1f"
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "265a138525b8d4ab3755a7a969d92dd9b875303b8eea277269713ffc3821dd19"
+        },
+        {
+          "path": "package.json",
+          "sha256": "e77cb1df0bb08f4ab344d01d65bbe1ea01556f5cff0acc95d43586812de2b4b2"
+        },
+        {
+          "path": "README.md",
+          "sha256": "d6c01173cc80ade01ccb1bbb476156346404b011b3481bef8bd99dd10a07f249"
+        }
+      ]
+    },
+    "dependencies": {
+      "declarations": {
+        "astronomy-engine": "2.1.19"
+      },
+      "identicalSeparateCopies": true,
+      "source": "supplied frozen baseline node_modules",
+      "inventorySha256": "b1004d1105f0e4997369922ac4309a4ec7e4121a4cbfddf800425c9714736b7c"
+    }
+  },
+  "fixtureSha256": "a06f14843bce15ca71ac6ffd0cc5d4e41adefb6060b0245c81165a7a14495b64",
+  "fixtures": {
+    "schema": "zodiacs.rc10-compatibility-fixtures.v1",
+    "charts": [
+      {
+        "id": "equator-whole",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "whole"
+        }
+      },
+      {
+        "id": "equator-placidus",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "equator-porphyry",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "porphyry"
+        }
+      },
+      {
+        "id": "equator-equal",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "equal"
+        }
+      },
+      {
+        "id": "equator-equal-mc",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "equal-mc"
+        }
+      },
+      {
+        "id": "equator-vehlow",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "vehlow"
+        }
+      },
+      {
+        "id": "equator-koch",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "koch"
+        }
+      },
+      {
+        "id": "equator-regiomontanus",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "regiomontanus"
+        }
+      },
+      {
+        "id": "equator-campanus",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "campanus"
+        }
+      },
+      {
+        "id": "equator-topocentric",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "topocentric"
+        }
+      },
+      {
+        "id": "equator-alcabitius",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "alcabitius"
+        }
+      },
+      {
+        "id": "equator-morinus",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "morinus"
+        }
+      },
+      {
+        "id": "equator-meridian",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 0,
+          "longitude": 0,
+          "houseSystem": "meridian"
+        }
+      },
+      {
+        "id": "north-temperate-whole",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "whole"
+        }
+      },
+      {
+        "id": "north-temperate-placidus",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "north-temperate-porphyry",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "porphyry"
+        }
+      },
+      {
+        "id": "north-temperate-equal",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "equal"
+        }
+      },
+      {
+        "id": "north-temperate-equal-mc",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "equal-mc"
+        }
+      },
+      {
+        "id": "north-temperate-vehlow",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "vehlow"
+        }
+      },
+      {
+        "id": "north-temperate-koch",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "koch"
+        }
+      },
+      {
+        "id": "north-temperate-regiomontanus",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "regiomontanus"
+        }
+      },
+      {
+        "id": "north-temperate-campanus",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "campanus"
+        }
+      },
+      {
+        "id": "north-temperate-topocentric",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "topocentric"
+        }
+      },
+      {
+        "id": "north-temperate-alcabitius",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "alcabitius"
+        }
+      },
+      {
+        "id": "north-temperate-morinus",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "morinus"
+        }
+      },
+      {
+        "id": "north-temperate-meridian",
+        "input": {
+          "utc": "1990-07-15T03:45:30Z",
+          "latitude": 51.5074,
+          "longitude": -0.1278,
+          "houseSystem": "meridian"
+        }
+      },
+      {
+        "id": "south-temperate-whole",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "whole"
+        }
+      },
+      {
+        "id": "south-temperate-placidus",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "south-temperate-porphyry",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "porphyry"
+        }
+      },
+      {
+        "id": "south-temperate-equal",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "equal"
+        }
+      },
+      {
+        "id": "south-temperate-equal-mc",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "equal-mc"
+        }
+      },
+      {
+        "id": "south-temperate-vehlow",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "vehlow"
+        }
+      },
+      {
+        "id": "south-temperate-koch",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "koch"
+        }
+      },
+      {
+        "id": "south-temperate-regiomontanus",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "regiomontanus"
+        }
+      },
+      {
+        "id": "south-temperate-campanus",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "campanus"
+        }
+      },
+      {
+        "id": "south-temperate-topocentric",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "topocentric"
+        }
+      },
+      {
+        "id": "south-temperate-alcabitius",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "alcabitius"
+        }
+      },
+      {
+        "id": "south-temperate-morinus",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "morinus"
+        }
+      },
+      {
+        "id": "south-temperate-meridian",
+        "input": {
+          "utc": "1985-11-20T18:10:00Z",
+          "latitude": -33.8688,
+          "longitude": 151.2093,
+          "houseSystem": "meridian"
+        }
+      },
+      {
+        "id": "north-polar-whole",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "whole"
+        }
+      },
+      {
+        "id": "north-polar-placidus",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "north-polar-porphyry",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "porphyry"
+        }
+      },
+      {
+        "id": "north-polar-equal",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "equal"
+        }
+      },
+      {
+        "id": "north-polar-equal-mc",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "equal-mc"
+        }
+      },
+      {
+        "id": "north-polar-vehlow",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "vehlow"
+        }
+      },
+      {
+        "id": "north-polar-koch",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "koch"
+        }
+      },
+      {
+        "id": "north-polar-regiomontanus",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "regiomontanus"
+        }
+      },
+      {
+        "id": "north-polar-campanus",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "campanus"
+        }
+      },
+      {
+        "id": "north-polar-topocentric",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "topocentric"
+        }
+      },
+      {
+        "id": "north-polar-alcabitius",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "alcabitius"
+        }
+      },
+      {
+        "id": "north-polar-morinus",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "morinus"
+        }
+      },
+      {
+        "id": "north-polar-meridian",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "meridian"
+        }
+      },
+      {
+        "id": "south-polar-whole",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "whole"
+        }
+      },
+      {
+        "id": "south-polar-placidus",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "south-polar-porphyry",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "porphyry"
+        }
+      },
+      {
+        "id": "south-polar-equal",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "equal"
+        }
+      },
+      {
+        "id": "south-polar-equal-mc",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "equal-mc"
+        }
+      },
+      {
+        "id": "south-polar-vehlow",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "vehlow"
+        }
+      },
+      {
+        "id": "south-polar-koch",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "koch"
+        }
+      },
+      {
+        "id": "south-polar-regiomontanus",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "regiomontanus"
+        }
+      },
+      {
+        "id": "south-polar-campanus",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "campanus"
+        }
+      },
+      {
+        "id": "south-polar-topocentric",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "topocentric"
+        }
+      },
+      {
+        "id": "south-polar-alcabitius",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "alcabitius"
+        }
+      },
+      {
+        "id": "south-polar-morinus",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "morinus"
+        }
+      },
+      {
+        "id": "south-polar-meridian",
+        "input": {
+          "utc": "2001-06-21T00:00:00Z",
+          "latitude": -77.8419,
+          "longitude": 166.6863,
+          "houseSystem": "meridian"
+        }
+      },
+      {
+        "id": "historical-1600",
+        "input": {
+          "utc": "1600-06-15T03:00:00Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "reference-before",
+        "input": {
+          "utc": "1799-12-31T23:59:59.999Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "reference-start",
+        "input": {
+          "utc": "1800-01-01T00:00:00.000Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "historical-1900",
+        "input": {
+          "utc": "1900-01-01T00:00:00Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "leap-date",
+        "input": {
+          "utc": "2000-02-29T12:34:56.789Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "modern-eclipse-date",
+        "input": {
+          "utc": "2024-04-08T18:21:00Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "reference-last",
+        "input": {
+          "utc": "2199-12-31T23:59:59.999Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "reference-end",
+        "input": {
+          "utc": "2200-01-01T00:00:00.000Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "future-2300",
+        "input": {
+          "utc": "2300-06-15T03:00:00Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "placidus"
+        }
+      },
+      {
+        "id": "unknown-with-coordinates",
+        "input": {
+          "utc": "2000-02-29T08:30:00Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "timeKnown": false,
+          "houseSystem": "koch"
+        }
+      },
+      {
+        "id": "unknown-no-location",
+        "input": {
+          "utc": "2000-02-29T08:30:00Z",
+          "timeKnown": false
+        }
+      },
+      {
+        "id": "known-no-location",
+        "input": {
+          "utc": "2000-02-29T08:30:00Z"
+        }
+      },
+      {
+        "id": "unknown-no-time-echo",
+        "input": {
+          "utc": "2000-02-29T08:30:00Z",
+          "timeKnown": false,
+          "flags": [
+            "no-time",
+            "lmt",
+            "no-time",
+            "lmt"
+          ]
+        }
+      },
+      {
+        "id": "polar-fallback-echo",
+        "input": {
+          "utc": "2001-12-21T09:00:00Z",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "houseSystem": "placidus",
+          "flags": [
+            "polar-fallback",
+            "polar-fallback"
+          ]
+        }
+      },
+      {
+        "id": "asserted-gap",
+        "input": {
+          "utc": "2024-03-10T07:30:00Z",
+          "latitude": 40.7128,
+          "longitude": -74.006,
+          "flags": [
+            "dst-gap",
+            "dst-gap"
+          ]
+        }
+      },
+      {
+        "id": "asserted-fold",
+        "input": {
+          "utc": "2024-11-03T05:30:00Z",
+          "latitude": 40.7128,
+          "longitude": -74.006,
+          "flags": [
+            "dst-fold"
+          ]
+        }
+      },
+      {
+        "id": "asserted-lmt",
+        "input": {
+          "utc": "1880-01-01T05:17:21Z",
+          "latitude": 40.7128,
+          "longitude": -74.006,
+          "flags": [
+            "lmt"
+          ]
+        }
+      },
+      {
+        "id": "offset-spelling",
+        "input": {
+          "utc": "2000-01-01T19:00:00+07:00",
+          "latitude": 13.7563,
+          "longitude": 100.5018
+        }
+      },
+      {
+        "id": "date-only",
+        "input": {
+          "utc": "2000-02-29",
+          "timeKnown": false
+        }
+      },
+      {
+        "id": "numeric-instant",
+        "input": {
+          "utc": 0,
+          "latitude": 0,
+          "longitude": 180
+        }
+      },
+      {
+        "id": "date-object",
+        "utcKind": "Date",
+        "input": {
+          "utc": "2000-02-29T12:00:00Z",
+          "latitude": 0,
+          "longitude": -180
+        }
+      },
+      {
+        "id": "pinned-zero",
+        "input": {
+          "utc": "2000-01-01T12:00:00Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "equal-mc",
+          "deltaT": 0
+        }
+      },
+      {
+        "id": "pinned-modern",
+        "input": {
+          "utc": "2024-04-08T18:21:00Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "equal-mc",
+          "deltaT": 64.7
+        }
+      },
+      {
+        "id": "pinned-historical",
+        "input": {
+          "utc": "1600-06-15T03:00:00Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "equal-mc",
+          "deltaT": 120
+        }
+      },
+      {
+        "id": "pinned-negative",
+        "input": {
+          "utc": "1900-01-01T00:00:00Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "equal-mc",
+          "deltaT": -2
+        }
+      },
+      {
+        "id": "pinned-unknown",
+        "input": {
+          "utc": "2000-02-29T08:30:00Z",
+          "latitude": 13.7563,
+          "longitude": 100.5018,
+          "houseSystem": "equal-mc",
+          "deltaT": 80,
+          "timeKnown": false
+        }
+      }
+    ],
+    "invalid": [
+      {
+        "id": "invalid-leap-day",
+        "input": {
+          "utc": "2023-02-29T12:00:00Z"
+        }
+      },
+      {
+        "id": "missing-offset",
+        "input": {
+          "utc": "2000-01-01T12:00:00"
+        }
+      },
+      {
+        "id": "unsupported-house",
+        "input": {
+          "utc": "2000-01-01",
+          "houseSystem": "unsupported"
+        }
+      },
+      {
+        "id": "null-house",
+        "input": {
+          "utc": "2000-01-01",
+          "houseSystem": null
+        }
+      },
+      {
+        "id": "null-time-known",
+        "input": {
+          "utc": "2000-01-01",
+          "timeKnown": null
+        }
+      },
+      {
+        "id": "latitude-out-of-range",
+        "input": {
+          "utc": "2000-01-01",
+          "latitude": 91,
+          "longitude": 0
+        }
+      },
+      {
+        "id": "partial-location",
+        "input": {
+          "utc": "2000-01-01",
+          "latitude": 0
+        }
+      },
+      {
+        "id": "contradictory-dst-flags",
+        "input": {
+          "utc": "2000-01-01",
+          "flags": [
+            "dst-gap",
+            "dst-fold"
+          ]
+        }
+      },
+      {
+        "id": "false-no-time-echo",
+        "input": {
+          "utc": "2000-01-01",
+          "flags": [
+            "no-time"
+          ]
+        }
+      },
+      {
+        "id": "false-polar-echo",
+        "input": {
+          "utc": "2000-01-01",
+          "latitude": 0,
+          "longitude": 0,
+          "flags": [
+            "polar-fallback"
+          ]
+        }
+      },
+      {
+        "id": "delta-t-too-large",
+        "input": {
+          "utc": "2000-01-01",
+          "deltaT": 100000000000
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "exact-geographic-pole",
+        "input": {
+          "utc": "2000-01-01",
+          "latitude": 90,
+          "longitude": 0
+        }
+      }
+    ]
+  },
+  "normalization": [
+    "chart.engineVersion",
+    "replayed.engineVersion",
+    "envelope.receipt.engine.version",
+    "decoded.envelope.receipt.engine.version",
+    "transits.natal.engineVersion",
+    "synastry.a.engineVersion",
+    "synastry.b.engineVersion",
+    "exact-geographic-pole.chart.engineVersion"
+  ],
+  "summary": {
+    "chartCases": 91,
+    "invalidInputCases": 11,
+    "legacyApiCases": 7,
+    "checks": 571,
+    "passed": 571,
+    "failed": 0,
+    "rc10ReceiptsReplayedByCandidate": 91,
+    "addedMainExports": [
+      "CONFIGURED_ASPECT_ANGLES",
+      "DECLINATION_ORB",
+      "DECLINATION_ORB_LUMINARY",
+      "DEFAULT_ASPECT_POLICY",
+      "DEFAULT_DECLINATION_ORB_POLICY",
+      "PROGRESSION_DAYS_PER_YEAR",
+      "RA_POLE_TOLERANCE",
+      "chartDeclinations",
+      "createAspectPolicy",
+      "declinationOf",
+      "declinationOrb",
+      "declinationsForBodies",
+      "eclipticToEquatorial",
+      "findConfiguredAspects",
+      "findDeclinationAspects",
+      "progressedBodies",
+      "progressedInstant"
+    ]
+  },
+  "baselineObservationSha256": "c5527b1cb9dbb8fae35e59c091768979d2105316249858d924f89d2b051b1dbb",
+  "candidateObservationSha256": "708eaedb7a4936fec94f8326d6356c2fd12fbae8c68ce474c61b66062c2f0a7d",
+  "operationTrace": {
+    "callsPerWorker": 1124,
+    "identical": true,
+    "baselineSha256": "ba7af3a170d8e53753dc79dfd6ac59276647f0de4fea25cb3befb0d6365af2d9",
+    "candidateSha256": "ba7af3a170d8e53753dc79dfd6ac59276647f0de4fea25cb3befb0d6365af2d9",
+    "calls": [
+      "equator-whole:natalChart",
+      "equator-whole:createNatalEnvelope",
+      "equator-whole:serializeNatalEnvelope",
+      "equator-whole:parseNatalEnvelope",
+      "equator-whole:natalReplayInput",
+      "equator-whole:natalChart-self-replay",
+      "equator-whole:chartPoints",
+      "equator-whole:redactNatalEnvelope",
+      "equator-whole:positions-after",
+      "equator-placidus:natalChart",
+      "equator-placidus:createNatalEnvelope",
+      "equator-placidus:serializeNatalEnvelope",
+      "equator-placidus:parseNatalEnvelope",
+      "equator-placidus:natalReplayInput",
+      "equator-placidus:natalChart-self-replay",
+      "equator-placidus:chartPoints",
+      "equator-placidus:redactNatalEnvelope",
+      "equator-placidus:positions-after",
+      "equator-porphyry:natalChart",
+      "equator-porphyry:createNatalEnvelope",
+      "equator-porphyry:serializeNatalEnvelope",
+      "equator-porphyry:parseNatalEnvelope",
+      "equator-porphyry:natalReplayInput",
+      "equator-porphyry:natalChart-self-replay",
+      "equator-porphyry:chartPoints",
+      "equator-porphyry:redactNatalEnvelope",
+      "equator-porphyry:positions-after",
+      "equator-equal:natalChart",
+      "equator-equal:createNatalEnvelope",
+      "equator-equal:serializeNatalEnvelope",
+      "equator-equal:parseNatalEnvelope",
+      "equator-equal:natalReplayInput",
+      "equator-equal:natalChart-self-replay",
+      "equator-equal:chartPoints",
+      "equator-equal:redactNatalEnvelope",
+      "equator-equal:positions-after",
+      "equator-equal-mc:natalChart",
+      "equator-equal-mc:createNatalEnvelope",
+      "equator-equal-mc:serializeNatalEnvelope",
+      "equator-equal-mc:parseNatalEnvelope",
+      "equator-equal-mc:natalReplayInput",
+      "equator-equal-mc:natalChart-self-replay",
+      "equator-equal-mc:chartPoints",
+      "equator-equal-mc:redactNatalEnvelope",
+      "equator-equal-mc:positions-after",
+      "equator-vehlow:natalChart",
+      "equator-vehlow:createNatalEnvelope",
+      "equator-vehlow:serializeNatalEnvelope",
+      "equator-vehlow:parseNatalEnvelope",
+      "equator-vehlow:natalReplayInput",
+      "equator-vehlow:natalChart-self-replay",
+      "equator-vehlow:chartPoints",
+      "equator-vehlow:redactNatalEnvelope",
+      "equator-vehlow:positions-after",
+      "equator-koch:natalChart",
+      "equator-koch:createNatalEnvelope",
+      "equator-koch:serializeNatalEnvelope",
+      "equator-koch:parseNatalEnvelope",
+      "equator-koch:natalReplayInput",
+      "equator-koch:natalChart-self-replay",
+      "equator-koch:chartPoints",
+      "equator-koch:redactNatalEnvelope",
+      "equator-koch:positions-after",
+      "equator-regiomontanus:natalChart",
+      "equator-regiomontanus:createNatalEnvelope",
+      "equator-regiomontanus:serializeNatalEnvelope",
+      "equator-regiomontanus:parseNatalEnvelope",
+      "equator-regiomontanus:natalReplayInput",
+      "equator-regiomontanus:natalChart-self-replay",
+      "equator-regiomontanus:chartPoints",
+      "equator-regiomontanus:redactNatalEnvelope",
+      "equator-regiomontanus:positions-after",
+      "equator-campanus:natalChart",
+      "equator-campanus:createNatalEnvelope",
+      "equator-campanus:serializeNatalEnvelope",
+      "equator-campanus:parseNatalEnvelope",
+      "equator-campanus:natalReplayInput",
+      "equator-campanus:natalChart-self-replay",
+      "equator-campanus:chartPoints",
+      "equator-campanus:redactNatalEnvelope",
+      "equator-campanus:positions-after",
+      "equator-topocentric:natalChart",
+      "equator-topocentric:createNatalEnvelope",
+      "equator-topocentric:serializeNatalEnvelope",
+      "equator-topocentric:parseNatalEnvelope",
+      "equator-topocentric:natalReplayInput",
+      "equator-topocentric:natalChart-self-replay",
+      "equator-topocentric:chartPoints",
+      "equator-topocentric:redactNatalEnvelope",
+      "equator-topocentric:positions-after",
+      "equator-alcabitius:natalChart",
+      "equator-alcabitius:createNatalEnvelope",
+      "equator-alcabitius:serializeNatalEnvelope",
+      "equator-alcabitius:parseNatalEnvelope",
+      "equator-alcabitius:natalReplayInput",
+      "equator-alcabitius:natalChart-self-replay",
+      "equator-alcabitius:chartPoints",
+      "equator-alcabitius:redactNatalEnvelope",
+      "equator-alcabitius:positions-after",
+      "equator-morinus:natalChart",
+      "equator-morinus:createNatalEnvelope",
+      "equator-morinus:serializeNatalEnvelope",
+      "equator-morinus:parseNatalEnvelope",
+      "equator-morinus:natalReplayInput",
+      "equator-morinus:natalChart-self-replay",
+      "equator-morinus:chartPoints",
+      "equator-morinus:redactNatalEnvelope",
+      "equator-morinus:positions-after",
+      "equator-meridian:natalChart",
+      "equator-meridian:createNatalEnvelope",
+      "equator-meridian:serializeNatalEnvelope",
+      "equator-meridian:parseNatalEnvelope",
+      "equator-meridian:natalReplayInput",
+      "equator-meridian:natalChart-self-replay",
+      "equator-meridian:chartPoints",
+      "equator-meridian:redactNatalEnvelope",
+      "equator-meridian:positions-after",
+      "north-temperate-whole:natalChart",
+      "north-temperate-whole:createNatalEnvelope",
+      "north-temperate-whole:serializeNatalEnvelope",
+      "north-temperate-whole:parseNatalEnvelope",
+      "north-temperate-whole:natalReplayInput",
+      "north-temperate-whole:natalChart-self-replay",
+      "north-temperate-whole:chartPoints",
+      "north-temperate-whole:redactNatalEnvelope",
+      "north-temperate-whole:positions-after",
+      "north-temperate-placidus:natalChart",
+      "north-temperate-placidus:createNatalEnvelope",
+      "north-temperate-placidus:serializeNatalEnvelope",
+      "north-temperate-placidus:parseNatalEnvelope",
+      "north-temperate-placidus:natalReplayInput",
+      "north-temperate-placidus:natalChart-self-replay",
+      "north-temperate-placidus:chartPoints",
+      "north-temperate-placidus:redactNatalEnvelope",
+      "north-temperate-placidus:positions-after",
+      "north-temperate-porphyry:natalChart",
+      "north-temperate-porphyry:createNatalEnvelope",
+      "north-temperate-porphyry:serializeNatalEnvelope",
+      "north-temperate-porphyry:parseNatalEnvelope",
+      "north-temperate-porphyry:natalReplayInput",
+      "north-temperate-porphyry:natalChart-self-replay",
+      "north-temperate-porphyry:chartPoints",
+      "north-temperate-porphyry:redactNatalEnvelope",
+      "north-temperate-porphyry:positions-after",
+      "north-temperate-equal:natalChart",
+      "north-temperate-equal:createNatalEnvelope",
+      "north-temperate-equal:serializeNatalEnvelope",
+      "north-temperate-equal:parseNatalEnvelope",
+      "north-temperate-equal:natalReplayInput",
+      "north-temperate-equal:natalChart-self-replay",
+      "north-temperate-equal:chartPoints",
+      "north-temperate-equal:redactNatalEnvelope",
+      "north-temperate-equal:positions-after",
+      "north-temperate-equal-mc:natalChart",
+      "north-temperate-equal-mc:createNatalEnvelope",
+      "north-temperate-equal-mc:serializeNatalEnvelope",
+      "north-temperate-equal-mc:parseNatalEnvelope",
+      "north-temperate-equal-mc:natalReplayInput",
+      "north-temperate-equal-mc:natalChart-self-replay",
+      "north-temperate-equal-mc:chartPoints",
+      "north-temperate-equal-mc:redactNatalEnvelope",
+      "north-temperate-equal-mc:positions-after",
+      "north-temperate-vehlow:natalChart",
+      "north-temperate-vehlow:createNatalEnvelope",
+      "north-temperate-vehlow:serializeNatalEnvelope",
+      "north-temperate-vehlow:parseNatalEnvelope",
+      "north-temperate-vehlow:natalReplayInput",
+      "north-temperate-vehlow:natalChart-self-replay",
+      "north-temperate-vehlow:chartPoints",
+      "north-temperate-vehlow:redactNatalEnvelope",
+      "north-temperate-vehlow:positions-after",
+      "north-temperate-koch:natalChart",
+      "north-temperate-koch:createNatalEnvelope",
+      "north-temperate-koch:serializeNatalEnvelope",
+      "north-temperate-koch:parseNatalEnvelope",
+      "north-temperate-koch:natalReplayInput",
+      "north-temperate-koch:natalChart-self-replay",
+      "north-temperate-koch:chartPoints",
+      "north-temperate-koch:redactNatalEnvelope",
+      "north-temperate-koch:positions-after",
+      "north-temperate-regiomontanus:natalChart",
+      "north-temperate-regiomontanus:createNatalEnvelope",
+      "north-temperate-regiomontanus:serializeNatalEnvelope",
+      "north-temperate-regiomontanus:parseNatalEnvelope",
+      "north-temperate-regiomontanus:natalReplayInput",
+      "north-temperate-regiomontanus:natalChart-self-replay",
+      "north-temperate-regiomontanus:chartPoints",
+      "north-temperate-regiomontanus:redactNatalEnvelope",
+      "north-temperate-regiomontanus:positions-after",
+      "north-temperate-campanus:natalChart",
+      "north-temperate-campanus:createNatalEnvelope",
+      "north-temperate-campanus:serializeNatalEnvelope",
+      "north-temperate-campanus:parseNatalEnvelope",
+      "north-temperate-campanus:natalReplayInput",
+      "north-temperate-campanus:natalChart-self-replay",
+      "north-temperate-campanus:chartPoints",
+      "north-temperate-campanus:redactNatalEnvelope",
+      "north-temperate-campanus:positions-after",
+      "north-temperate-topocentric:natalChart",
+      "north-temperate-topocentric:createNatalEnvelope",
+      "north-temperate-topocentric:serializeNatalEnvelope",
+      "north-temperate-topocentric:parseNatalEnvelope",
+      "north-temperate-topocentric:natalReplayInput",
+      "north-temperate-topocentric:natalChart-self-replay",
+      "north-temperate-topocentric:chartPoints",
+      "north-temperate-topocentric:redactNatalEnvelope",
+      "north-temperate-topocentric:positions-after",
+      "north-temperate-alcabitius:natalChart",
+      "north-temperate-alcabitius:createNatalEnvelope",
+      "north-temperate-alcabitius:serializeNatalEnvelope",
+      "north-temperate-alcabitius:parseNatalEnvelope",
+      "north-temperate-alcabitius:natalReplayInput",
+      "north-temperate-alcabitius:natalChart-self-replay",
+      "north-temperate-alcabitius:chartPoints",
+      "north-temperate-alcabitius:redactNatalEnvelope",
+      "north-temperate-alcabitius:positions-after",
+      "north-temperate-morinus:natalChart",
+      "north-temperate-morinus:createNatalEnvelope",
+      "north-temperate-morinus:serializeNatalEnvelope",
+      "north-temperate-morinus:parseNatalEnvelope",
+      "north-temperate-morinus:natalReplayInput",
+      "north-temperate-morinus:natalChart-self-replay",
+      "north-temperate-morinus:chartPoints",
+      "north-temperate-morinus:redactNatalEnvelope",
+      "north-temperate-morinus:positions-after",
+      "north-temperate-meridian:natalChart",
+      "north-temperate-meridian:createNatalEnvelope",
+      "north-temperate-meridian:serializeNatalEnvelope",
+      "north-temperate-meridian:parseNatalEnvelope",
+      "north-temperate-meridian:natalReplayInput",
+      "north-temperate-meridian:natalChart-self-replay",
+      "north-temperate-meridian:chartPoints",
+      "north-temperate-meridian:redactNatalEnvelope",
+      "north-temperate-meridian:positions-after",
+      "south-temperate-whole:natalChart",
+      "south-temperate-whole:createNatalEnvelope",
+      "south-temperate-whole:serializeNatalEnvelope",
+      "south-temperate-whole:parseNatalEnvelope",
+      "south-temperate-whole:natalReplayInput",
+      "south-temperate-whole:natalChart-self-replay",
+      "south-temperate-whole:chartPoints",
+      "south-temperate-whole:redactNatalEnvelope",
+      "south-temperate-whole:positions-after",
+      "south-temperate-placidus:natalChart",
+      "south-temperate-placidus:createNatalEnvelope",
+      "south-temperate-placidus:serializeNatalEnvelope",
+      "south-temperate-placidus:parseNatalEnvelope",
+      "south-temperate-placidus:natalReplayInput",
+      "south-temperate-placidus:natalChart-self-replay",
+      "south-temperate-placidus:chartPoints",
+      "south-temperate-placidus:redactNatalEnvelope",
+      "south-temperate-placidus:positions-after",
+      "south-temperate-porphyry:natalChart",
+      "south-temperate-porphyry:createNatalEnvelope",
+      "south-temperate-porphyry:serializeNatalEnvelope",
+      "south-temperate-porphyry:parseNatalEnvelope",
+      "south-temperate-porphyry:natalReplayInput",
+      "south-temperate-porphyry:natalChart-self-replay",
+      "south-temperate-porphyry:chartPoints",
+      "south-temperate-porphyry:redactNatalEnvelope",
+      "south-temperate-porphyry:positions-after",
+      "south-temperate-equal:natalChart",
+      "south-temperate-equal:createNatalEnvelope",
+      "south-temperate-equal:serializeNatalEnvelope",
+      "south-temperate-equal:parseNatalEnvelope",
+      "south-temperate-equal:natalReplayInput",
+      "south-temperate-equal:natalChart-self-replay",
+      "south-temperate-equal:chartPoints",
+      "south-temperate-equal:redactNatalEnvelope",
+      "south-temperate-equal:positions-after",
+      "south-temperate-equal-mc:natalChart",
+      "south-temperate-equal-mc:createNatalEnvelope",
+      "south-temperate-equal-mc:serializeNatalEnvelope",
+      "south-temperate-equal-mc:parseNatalEnvelope",
+      "south-temperate-equal-mc:natalReplayInput",
+      "south-temperate-equal-mc:natalChart-self-replay",
+      "south-temperate-equal-mc:chartPoints",
+      "south-temperate-equal-mc:redactNatalEnvelope",
+      "south-temperate-equal-mc:positions-after",
+      "south-temperate-vehlow:natalChart",
+      "south-temperate-vehlow:createNatalEnvelope",
+      "south-temperate-vehlow:serializeNatalEnvelope",
+      "south-temperate-vehlow:parseNatalEnvelope",
+      "south-temperate-vehlow:natalReplayInput",
+      "south-temperate-vehlow:natalChart-self-replay",
+      "south-temperate-vehlow:chartPoints",
+      "south-temperate-vehlow:redactNatalEnvelope",
+      "south-temperate-vehlow:positions-after",
+      "south-temperate-koch:natalChart",
+      "south-temperate-koch:createNatalEnvelope",
+      "south-temperate-koch:serializeNatalEnvelope",
+      "south-temperate-koch:parseNatalEnvelope",
+      "south-temperate-koch:natalReplayInput",
+      "south-temperate-koch:natalChart-self-replay",
+      "south-temperate-koch:chartPoints",
+      "south-temperate-koch:redactNatalEnvelope",
+      "south-temperate-koch:positions-after",
+      "south-temperate-regiomontanus:natalChart",
+      "south-temperate-regiomontanus:createNatalEnvelope",
+      "south-temperate-regiomontanus:serializeNatalEnvelope",
+      "south-temperate-regiomontanus:parseNatalEnvelope",
+      "south-temperate-regiomontanus:natalReplayInput",
+      "south-temperate-regiomontanus:natalChart-self-replay",
+      "south-temperate-regiomontanus:chartPoints",
+      "south-temperate-regiomontanus:redactNatalEnvelope",
+      "south-temperate-regiomontanus:positions-after",
+      "south-temperate-campanus:natalChart",
+      "south-temperate-campanus:createNatalEnvelope",
+      "south-temperate-campanus:serializeNatalEnvelope",
+      "south-temperate-campanus:parseNatalEnvelope",
+      "south-temperate-campanus:natalReplayInput",
+      "south-temperate-campanus:natalChart-self-replay",
+      "south-temperate-campanus:chartPoints",
+      "south-temperate-campanus:redactNatalEnvelope",
+      "south-temperate-campanus:positions-after",
+      "south-temperate-topocentric:natalChart",
+      "south-temperate-topocentric:createNatalEnvelope",
+      "south-temperate-topocentric:serializeNatalEnvelope",
+      "south-temperate-topocentric:parseNatalEnvelope",
+      "south-temperate-topocentric:natalReplayInput",
+      "south-temperate-topocentric:natalChart-self-replay",
+      "south-temperate-topocentric:chartPoints",
+      "south-temperate-topocentric:redactNatalEnvelope",
+      "south-temperate-topocentric:positions-after",
+      "south-temperate-alcabitius:natalChart",
+      "south-temperate-alcabitius:createNatalEnvelope",
+      "south-temperate-alcabitius:serializeNatalEnvelope",
+      "south-temperate-alcabitius:parseNatalEnvelope",
+      "south-temperate-alcabitius:natalReplayInput",
+      "south-temperate-alcabitius:natalChart-self-replay",
+      "south-temperate-alcabitius:chartPoints",
+      "south-temperate-alcabitius:redactNatalEnvelope",
+      "south-temperate-alcabitius:positions-after",
+      "south-temperate-morinus:natalChart",
+      "south-temperate-morinus:createNatalEnvelope",
+      "south-temperate-morinus:serializeNatalEnvelope",
+      "south-temperate-morinus:parseNatalEnvelope",
+      "south-temperate-morinus:natalReplayInput",
+      "south-temperate-morinus:natalChart-self-replay",
+      "south-temperate-morinus:chartPoints",
+      "south-temperate-morinus:redactNatalEnvelope",
+      "south-temperate-morinus:positions-after",
+      "south-temperate-meridian:natalChart",
+      "south-temperate-meridian:createNatalEnvelope",
+      "south-temperate-meridian:serializeNatalEnvelope",
+      "south-temperate-meridian:parseNatalEnvelope",
+      "south-temperate-meridian:natalReplayInput",
+      "south-temperate-meridian:natalChart-self-replay",
+      "south-temperate-meridian:chartPoints",
+      "south-temperate-meridian:redactNatalEnvelope",
+      "south-temperate-meridian:positions-after",
+      "north-polar-whole:natalChart",
+      "north-polar-whole:createNatalEnvelope",
+      "north-polar-whole:serializeNatalEnvelope",
+      "north-polar-whole:parseNatalEnvelope",
+      "north-polar-whole:natalReplayInput",
+      "north-polar-whole:natalChart-self-replay",
+      "north-polar-whole:chartPoints",
+      "north-polar-whole:redactNatalEnvelope",
+      "north-polar-whole:positions-after",
+      "north-polar-placidus:natalChart",
+      "north-polar-placidus:createNatalEnvelope",
+      "north-polar-placidus:serializeNatalEnvelope",
+      "north-polar-placidus:parseNatalEnvelope",
+      "north-polar-placidus:natalReplayInput",
+      "north-polar-placidus:natalChart-self-replay",
+      "north-polar-placidus:chartPoints",
+      "north-polar-placidus:redactNatalEnvelope",
+      "north-polar-placidus:positions-after",
+      "north-polar-porphyry:natalChart",
+      "north-polar-porphyry:createNatalEnvelope",
+      "north-polar-porphyry:serializeNatalEnvelope",
+      "north-polar-porphyry:parseNatalEnvelope",
+      "north-polar-porphyry:natalReplayInput",
+      "north-polar-porphyry:natalChart-self-replay",
+      "north-polar-porphyry:chartPoints",
+      "north-polar-porphyry:redactNatalEnvelope",
+      "north-polar-porphyry:positions-after",
+      "north-polar-equal:natalChart",
+      "north-polar-equal:createNatalEnvelope",
+      "north-polar-equal:serializeNatalEnvelope",
+      "north-polar-equal:parseNatalEnvelope",
+      "north-polar-equal:natalReplayInput",
+      "north-polar-equal:natalChart-self-replay",
+      "north-polar-equal:chartPoints",
+      "north-polar-equal:redactNatalEnvelope",
+      "north-polar-equal:positions-after",
+      "north-polar-equal-mc:natalChart",
+      "north-polar-equal-mc:createNatalEnvelope",
+      "north-polar-equal-mc:serializeNatalEnvelope",
+      "north-polar-equal-mc:parseNatalEnvelope",
+      "north-polar-equal-mc:natalReplayInput",
+      "north-polar-equal-mc:natalChart-self-replay",
+      "north-polar-equal-mc:chartPoints",
+      "north-polar-equal-mc:redactNatalEnvelope",
+      "north-polar-equal-mc:positions-after",
+      "north-polar-vehlow:natalChart",
+      "north-polar-vehlow:createNatalEnvelope",
+      "north-polar-vehlow:serializeNatalEnvelope",
+      "north-polar-vehlow:parseNatalEnvelope",
+      "north-polar-vehlow:natalReplayInput",
+      "north-polar-vehlow:natalChart-self-replay",
+      "north-polar-vehlow:chartPoints",
+      "north-polar-vehlow:redactNatalEnvelope",
+      "north-polar-vehlow:positions-after",
+      "north-polar-koch:natalChart",
+      "north-polar-koch:createNatalEnvelope",
+      "north-polar-koch:serializeNatalEnvelope",
+      "north-polar-koch:parseNatalEnvelope",
+      "north-polar-koch:natalReplayInput",
+      "north-polar-koch:natalChart-self-replay",
+      "north-polar-koch:chartPoints",
+      "north-polar-koch:redactNatalEnvelope",
+      "north-polar-koch:positions-after",
+      "north-polar-regiomontanus:natalChart",
+      "north-polar-regiomontanus:createNatalEnvelope",
+      "north-polar-regiomontanus:serializeNatalEnvelope",
+      "north-polar-regiomontanus:parseNatalEnvelope",
+      "north-polar-regiomontanus:natalReplayInput",
+      "north-polar-regiomontanus:natalChart-self-replay",
+      "north-polar-regiomontanus:chartPoints",
+      "north-polar-regiomontanus:redactNatalEnvelope",
+      "north-polar-regiomontanus:positions-after",
+      "north-polar-campanus:natalChart",
+      "north-polar-campanus:createNatalEnvelope",
+      "north-polar-campanus:serializeNatalEnvelope",
+      "north-polar-campanus:parseNatalEnvelope",
+      "north-polar-campanus:natalReplayInput",
+      "north-polar-campanus:natalChart-self-replay",
+      "north-polar-campanus:chartPoints",
+      "north-polar-campanus:redactNatalEnvelope",
+      "north-polar-campanus:positions-after",
+      "north-polar-topocentric:natalChart",
+      "north-polar-topocentric:createNatalEnvelope",
+      "north-polar-topocentric:serializeNatalEnvelope",
+      "north-polar-topocentric:parseNatalEnvelope",
+      "north-polar-topocentric:natalReplayInput",
+      "north-polar-topocentric:natalChart-self-replay",
+      "north-polar-topocentric:chartPoints",
+      "north-polar-topocentric:redactNatalEnvelope",
+      "north-polar-topocentric:positions-after",
+      "north-polar-alcabitius:natalChart",
+      "north-polar-alcabitius:createNatalEnvelope",
+      "north-polar-alcabitius:serializeNatalEnvelope",
+      "north-polar-alcabitius:parseNatalEnvelope",
+      "north-polar-alcabitius:natalReplayInput",
+      "north-polar-alcabitius:natalChart-self-replay",
+      "north-polar-alcabitius:chartPoints",
+      "north-polar-alcabitius:redactNatalEnvelope",
+      "north-polar-alcabitius:positions-after",
+      "north-polar-morinus:natalChart",
+      "north-polar-morinus:createNatalEnvelope",
+      "north-polar-morinus:serializeNatalEnvelope",
+      "north-polar-morinus:parseNatalEnvelope",
+      "north-polar-morinus:natalReplayInput",
+      "north-polar-morinus:natalChart-self-replay",
+      "north-polar-morinus:chartPoints",
+      "north-polar-morinus:redactNatalEnvelope",
+      "north-polar-morinus:positions-after",
+      "north-polar-meridian:natalChart",
+      "north-polar-meridian:createNatalEnvelope",
+      "north-polar-meridian:serializeNatalEnvelope",
+      "north-polar-meridian:parseNatalEnvelope",
+      "north-polar-meridian:natalReplayInput",
+      "north-polar-meridian:natalChart-self-replay",
+      "north-polar-meridian:chartPoints",
+      "north-polar-meridian:redactNatalEnvelope",
+      "north-polar-meridian:positions-after",
+      "south-polar-whole:natalChart",
+      "south-polar-whole:createNatalEnvelope",
+      "south-polar-whole:serializeNatalEnvelope",
+      "south-polar-whole:parseNatalEnvelope",
+      "south-polar-whole:natalReplayInput",
+      "south-polar-whole:natalChart-self-replay",
+      "south-polar-whole:chartPoints",
+      "south-polar-whole:redactNatalEnvelope",
+      "south-polar-whole:positions-after",
+      "south-polar-placidus:natalChart",
+      "south-polar-placidus:createNatalEnvelope",
+      "south-polar-placidus:serializeNatalEnvelope",
+      "south-polar-placidus:parseNatalEnvelope",
+      "south-polar-placidus:natalReplayInput",
+      "south-polar-placidus:natalChart-self-replay",
+      "south-polar-placidus:chartPoints",
+      "south-polar-placidus:redactNatalEnvelope",
+      "south-polar-placidus:positions-after",
+      "south-polar-porphyry:natalChart",
+      "south-polar-porphyry:createNatalEnvelope",
+      "south-polar-porphyry:serializeNatalEnvelope",
+      "south-polar-porphyry:parseNatalEnvelope",
+      "south-polar-porphyry:natalReplayInput",
+      "south-polar-porphyry:natalChart-self-replay",
+      "south-polar-porphyry:chartPoints",
+      "south-polar-porphyry:redactNatalEnvelope",
+      "south-polar-porphyry:positions-after",
+      "south-polar-equal:natalChart",
+      "south-polar-equal:createNatalEnvelope",
+      "south-polar-equal:serializeNatalEnvelope",
+      "south-polar-equal:parseNatalEnvelope",
+      "south-polar-equal:natalReplayInput",
+      "south-polar-equal:natalChart-self-replay",
+      "south-polar-equal:chartPoints",
+      "south-polar-equal:redactNatalEnvelope",
+      "south-polar-equal:positions-after",
+      "south-polar-equal-mc:natalChart",
+      "south-polar-equal-mc:createNatalEnvelope",
+      "south-polar-equal-mc:serializeNatalEnvelope",
+      "south-polar-equal-mc:parseNatalEnvelope",
+      "south-polar-equal-mc:natalReplayInput",
+      "south-polar-equal-mc:natalChart-self-replay",
+      "south-polar-equal-mc:chartPoints",
+      "south-polar-equal-mc:redactNatalEnvelope",
+      "south-polar-equal-mc:positions-after",
+      "south-polar-vehlow:natalChart",
+      "south-polar-vehlow:createNatalEnvelope",
+      "south-polar-vehlow:serializeNatalEnvelope",
+      "south-polar-vehlow:parseNatalEnvelope",
+      "south-polar-vehlow:natalReplayInput",
+      "south-polar-vehlow:natalChart-self-replay",
+      "south-polar-vehlow:chartPoints",
+      "south-polar-vehlow:redactNatalEnvelope",
+      "south-polar-vehlow:positions-after",
+      "south-polar-koch:natalChart",
+      "south-polar-koch:createNatalEnvelope",
+      "south-polar-koch:serializeNatalEnvelope",
+      "south-polar-koch:parseNatalEnvelope",
+      "south-polar-koch:natalReplayInput",
+      "south-polar-koch:natalChart-self-replay",
+      "south-polar-koch:chartPoints",
+      "south-polar-koch:redactNatalEnvelope",
+      "south-polar-koch:positions-after",
+      "south-polar-regiomontanus:natalChart",
+      "south-polar-regiomontanus:createNatalEnvelope",
+      "south-polar-regiomontanus:serializeNatalEnvelope",
+      "south-polar-regiomontanus:parseNatalEnvelope",
+      "south-polar-regiomontanus:natalReplayInput",
+      "south-polar-regiomontanus:natalChart-self-replay",
+      "south-polar-regiomontanus:chartPoints",
+      "south-polar-regiomontanus:redactNatalEnvelope",
+      "south-polar-regiomontanus:positions-after",
+      "south-polar-campanus:natalChart",
+      "south-polar-campanus:createNatalEnvelope",
+      "south-polar-campanus:serializeNatalEnvelope",
+      "south-polar-campanus:parseNatalEnvelope",
+      "south-polar-campanus:natalReplayInput",
+      "south-polar-campanus:natalChart-self-replay",
+      "south-polar-campanus:chartPoints",
+      "south-polar-campanus:redactNatalEnvelope",
+      "south-polar-campanus:positions-after",
+      "south-polar-topocentric:natalChart",
+      "south-polar-topocentric:createNatalEnvelope",
+      "south-polar-topocentric:serializeNatalEnvelope",
+      "south-polar-topocentric:parseNatalEnvelope",
+      "south-polar-topocentric:natalReplayInput",
+      "south-polar-topocentric:natalChart-self-replay",
+      "south-polar-topocentric:chartPoints",
+      "south-polar-topocentric:redactNatalEnvelope",
+      "south-polar-topocentric:positions-after",
+      "south-polar-alcabitius:natalChart",
+      "south-polar-alcabitius:createNatalEnvelope",
+      "south-polar-alcabitius:serializeNatalEnvelope",
+      "south-polar-alcabitius:parseNatalEnvelope",
+      "south-polar-alcabitius:natalReplayInput",
+      "south-polar-alcabitius:natalChart-self-replay",
+      "south-polar-alcabitius:chartPoints",
+      "south-polar-alcabitius:redactNatalEnvelope",
+      "south-polar-alcabitius:positions-after",
+      "south-polar-morinus:natalChart",
+      "south-polar-morinus:createNatalEnvelope",
+      "south-polar-morinus:serializeNatalEnvelope",
+      "south-polar-morinus:parseNatalEnvelope",
+      "south-polar-morinus:natalReplayInput",
+      "south-polar-morinus:natalChart-self-replay",
+      "south-polar-morinus:chartPoints",
+      "south-polar-morinus:redactNatalEnvelope",
+      "south-polar-morinus:positions-after",
+      "south-polar-meridian:natalChart",
+      "south-polar-meridian:createNatalEnvelope",
+      "south-polar-meridian:serializeNatalEnvelope",
+      "south-polar-meridian:parseNatalEnvelope",
+      "south-polar-meridian:natalReplayInput",
+      "south-polar-meridian:natalChart-self-replay",
+      "south-polar-meridian:chartPoints",
+      "south-polar-meridian:redactNatalEnvelope",
+      "south-polar-meridian:positions-after",
+      "historical-1600:natalChart",
+      "historical-1600:createNatalEnvelope",
+      "historical-1600:serializeNatalEnvelope",
+      "historical-1600:parseNatalEnvelope",
+      "historical-1600:natalReplayInput",
+      "historical-1600:natalChart-self-replay",
+      "historical-1600:chartPoints",
+      "historical-1600:redactNatalEnvelope",
+      "historical-1600:positions-after",
+      "reference-before:natalChart",
+      "reference-before:createNatalEnvelope",
+      "reference-before:serializeNatalEnvelope",
+      "reference-before:parseNatalEnvelope",
+      "reference-before:natalReplayInput",
+      "reference-before:natalChart-self-replay",
+      "reference-before:chartPoints",
+      "reference-before:redactNatalEnvelope",
+      "reference-before:positions-after",
+      "reference-start:natalChart",
+      "reference-start:createNatalEnvelope",
+      "reference-start:serializeNatalEnvelope",
+      "reference-start:parseNatalEnvelope",
+      "reference-start:natalReplayInput",
+      "reference-start:natalChart-self-replay",
+      "reference-start:chartPoints",
+      "reference-start:redactNatalEnvelope",
+      "reference-start:positions-after",
+      "historical-1900:natalChart",
+      "historical-1900:createNatalEnvelope",
+      "historical-1900:serializeNatalEnvelope",
+      "historical-1900:parseNatalEnvelope",
+      "historical-1900:natalReplayInput",
+      "historical-1900:natalChart-self-replay",
+      "historical-1900:chartPoints",
+      "historical-1900:redactNatalEnvelope",
+      "historical-1900:positions-after",
+      "leap-date:natalChart",
+      "leap-date:createNatalEnvelope",
+      "leap-date:serializeNatalEnvelope",
+      "leap-date:parseNatalEnvelope",
+      "leap-date:natalReplayInput",
+      "leap-date:natalChart-self-replay",
+      "leap-date:chartPoints",
+      "leap-date:redactNatalEnvelope",
+      "leap-date:positions-after",
+      "modern-eclipse-date:natalChart",
+      "modern-eclipse-date:createNatalEnvelope",
+      "modern-eclipse-date:serializeNatalEnvelope",
+      "modern-eclipse-date:parseNatalEnvelope",
+      "modern-eclipse-date:natalReplayInput",
+      "modern-eclipse-date:natalChart-self-replay",
+      "modern-eclipse-date:chartPoints",
+      "modern-eclipse-date:redactNatalEnvelope",
+      "modern-eclipse-date:positions-after",
+      "reference-last:natalChart",
+      "reference-last:createNatalEnvelope",
+      "reference-last:serializeNatalEnvelope",
+      "reference-last:parseNatalEnvelope",
+      "reference-last:natalReplayInput",
+      "reference-last:natalChart-self-replay",
+      "reference-last:chartPoints",
+      "reference-last:redactNatalEnvelope",
+      "reference-last:positions-after",
+      "reference-end:natalChart",
+      "reference-end:createNatalEnvelope",
+      "reference-end:serializeNatalEnvelope",
+      "reference-end:parseNatalEnvelope",
+      "reference-end:natalReplayInput",
+      "reference-end:natalChart-self-replay",
+      "reference-end:chartPoints",
+      "reference-end:redactNatalEnvelope",
+      "reference-end:positions-after",
+      "future-2300:natalChart",
+      "future-2300:createNatalEnvelope",
+      "future-2300:serializeNatalEnvelope",
+      "future-2300:parseNatalEnvelope",
+      "future-2300:natalReplayInput",
+      "future-2300:natalChart-self-replay",
+      "future-2300:chartPoints",
+      "future-2300:redactNatalEnvelope",
+      "future-2300:positions-after",
+      "unknown-with-coordinates:natalChart",
+      "unknown-with-coordinates:createNatalEnvelope",
+      "unknown-with-coordinates:serializeNatalEnvelope",
+      "unknown-with-coordinates:parseNatalEnvelope",
+      "unknown-with-coordinates:natalReplayInput",
+      "unknown-with-coordinates:natalChart-self-replay",
+      "unknown-with-coordinates:chartPoints",
+      "unknown-with-coordinates:redactNatalEnvelope",
+      "unknown-with-coordinates:positions-after",
+      "unknown-no-location:natalChart",
+      "unknown-no-location:createNatalEnvelope",
+      "unknown-no-location:serializeNatalEnvelope",
+      "unknown-no-location:parseNatalEnvelope",
+      "unknown-no-location:natalReplayInput",
+      "unknown-no-location:natalChart-self-replay",
+      "unknown-no-location:chartPoints",
+      "unknown-no-location:redactNatalEnvelope",
+      "unknown-no-location:positions-after",
+      "known-no-location:natalChart",
+      "known-no-location:createNatalEnvelope",
+      "known-no-location:serializeNatalEnvelope",
+      "known-no-location:parseNatalEnvelope",
+      "known-no-location:natalReplayInput",
+      "known-no-location:natalChart-self-replay",
+      "known-no-location:chartPoints",
+      "known-no-location:redactNatalEnvelope",
+      "known-no-location:positions-after",
+      "unknown-no-time-echo:natalChart",
+      "unknown-no-time-echo:createNatalEnvelope",
+      "unknown-no-time-echo:serializeNatalEnvelope",
+      "unknown-no-time-echo:parseNatalEnvelope",
+      "unknown-no-time-echo:natalReplayInput",
+      "unknown-no-time-echo:natalChart-self-replay",
+      "unknown-no-time-echo:chartPoints",
+      "unknown-no-time-echo:redactNatalEnvelope",
+      "unknown-no-time-echo:positions-after",
+      "polar-fallback-echo:natalChart",
+      "polar-fallback-echo:createNatalEnvelope",
+      "polar-fallback-echo:serializeNatalEnvelope",
+      "polar-fallback-echo:parseNatalEnvelope",
+      "polar-fallback-echo:natalReplayInput",
+      "polar-fallback-echo:natalChart-self-replay",
+      "polar-fallback-echo:chartPoints",
+      "polar-fallback-echo:redactNatalEnvelope",
+      "polar-fallback-echo:positions-after",
+      "asserted-gap:natalChart",
+      "asserted-gap:createNatalEnvelope",
+      "asserted-gap:serializeNatalEnvelope",
+      "asserted-gap:parseNatalEnvelope",
+      "asserted-gap:natalReplayInput",
+      "asserted-gap:natalChart-self-replay",
+      "asserted-gap:chartPoints",
+      "asserted-gap:redactNatalEnvelope",
+      "asserted-gap:positions-after",
+      "asserted-fold:natalChart",
+      "asserted-fold:createNatalEnvelope",
+      "asserted-fold:serializeNatalEnvelope",
+      "asserted-fold:parseNatalEnvelope",
+      "asserted-fold:natalReplayInput",
+      "asserted-fold:natalChart-self-replay",
+      "asserted-fold:chartPoints",
+      "asserted-fold:redactNatalEnvelope",
+      "asserted-fold:positions-after",
+      "asserted-lmt:natalChart",
+      "asserted-lmt:createNatalEnvelope",
+      "asserted-lmt:serializeNatalEnvelope",
+      "asserted-lmt:parseNatalEnvelope",
+      "asserted-lmt:natalReplayInput",
+      "asserted-lmt:natalChart-self-replay",
+      "asserted-lmt:chartPoints",
+      "asserted-lmt:redactNatalEnvelope",
+      "asserted-lmt:positions-after",
+      "offset-spelling:natalChart",
+      "offset-spelling:createNatalEnvelope",
+      "offset-spelling:serializeNatalEnvelope",
+      "offset-spelling:parseNatalEnvelope",
+      "offset-spelling:natalReplayInput",
+      "offset-spelling:natalChart-self-replay",
+      "offset-spelling:chartPoints",
+      "offset-spelling:redactNatalEnvelope",
+      "offset-spelling:positions-after",
+      "date-only:natalChart",
+      "date-only:createNatalEnvelope",
+      "date-only:serializeNatalEnvelope",
+      "date-only:parseNatalEnvelope",
+      "date-only:natalReplayInput",
+      "date-only:natalChart-self-replay",
+      "date-only:chartPoints",
+      "date-only:redactNatalEnvelope",
+      "date-only:positions-after",
+      "numeric-instant:natalChart",
+      "numeric-instant:createNatalEnvelope",
+      "numeric-instant:serializeNatalEnvelope",
+      "numeric-instant:parseNatalEnvelope",
+      "numeric-instant:natalReplayInput",
+      "numeric-instant:natalChart-self-replay",
+      "numeric-instant:chartPoints",
+      "numeric-instant:redactNatalEnvelope",
+      "numeric-instant:positions-after",
+      "date-object:natalChart",
+      "date-object:createNatalEnvelope",
+      "date-object:serializeNatalEnvelope",
+      "date-object:parseNatalEnvelope",
+      "date-object:natalReplayInput",
+      "date-object:natalChart-self-replay",
+      "date-object:chartPoints",
+      "date-object:redactNatalEnvelope",
+      "date-object:positions-after",
+      "pinned-zero:natalChart",
+      "pinned-zero:createNatalEnvelope",
+      "pinned-zero:serializeNatalEnvelope",
+      "pinned-zero:parseNatalEnvelope",
+      "pinned-zero:natalReplayInput",
+      "pinned-zero:natalChart-self-replay",
+      "pinned-zero:chartPoints",
+      "pinned-zero:redactNatalEnvelope",
+      "pinned-zero:positions-after",
+      "pinned-modern:natalChart",
+      "pinned-modern:createNatalEnvelope",
+      "pinned-modern:serializeNatalEnvelope",
+      "pinned-modern:parseNatalEnvelope",
+      "pinned-modern:natalReplayInput",
+      "pinned-modern:natalChart-self-replay",
+      "pinned-modern:chartPoints",
+      "pinned-modern:redactNatalEnvelope",
+      "pinned-modern:positions-after",
+      "pinned-historical:natalChart",
+      "pinned-historical:createNatalEnvelope",
+      "pinned-historical:serializeNatalEnvelope",
+      "pinned-historical:parseNatalEnvelope",
+      "pinned-historical:natalReplayInput",
+      "pinned-historical:natalChart-self-replay",
+      "pinned-historical:chartPoints",
+      "pinned-historical:redactNatalEnvelope",
+      "pinned-historical:positions-after",
+      "pinned-negative:natalChart",
+      "pinned-negative:createNatalEnvelope",
+      "pinned-negative:serializeNatalEnvelope",
+      "pinned-negative:parseNatalEnvelope",
+      "pinned-negative:natalReplayInput",
+      "pinned-negative:natalChart-self-replay",
+      "pinned-negative:chartPoints",
+      "pinned-negative:redactNatalEnvelope",
+      "pinned-negative:positions-after",
+      "pinned-unknown:natalChart",
+      "pinned-unknown:createNatalEnvelope",
+      "pinned-unknown:serializeNatalEnvelope",
+      "pinned-unknown:parseNatalEnvelope",
+      "pinned-unknown:natalReplayInput",
+      "pinned-unknown:natalChart-self-replay",
+      "pinned-unknown:chartPoints",
+      "pinned-unknown:redactNatalEnvelope",
+      "pinned-unknown:positions-after",
+      "invalid-leap-day:natalChart-invalid",
+      "missing-offset:natalChart-invalid",
+      "unsupported-house:natalChart-invalid",
+      "null-house:natalChart-invalid",
+      "null-time-known:natalChart-invalid",
+      "latitude-out-of-range:natalChart-invalid",
+      "partial-location:natalChart-invalid",
+      "contradictory-dst-flags:natalChart-invalid",
+      "false-no-time-echo:natalChart-invalid",
+      "false-polar-echo:natalChart-invalid",
+      "delta-t-too-large:natalChart-invalid",
+      "extras:1600-06-15T03:00:00Z:positions",
+      "extras:1600-06-15T03:00:00Z:moonPhase",
+      "extras:1600-06-15T03:00:00Z:outsideReferenceSpan",
+      "extras:2000-02-29T12:00:00Z:positions",
+      "extras:2000-02-29T12:00:00Z:moonPhase",
+      "extras:2000-02-29T12:00:00Z:outsideReferenceSpan",
+      "extras:2024-04-08T18:21:00Z:positions",
+      "extras:2024-04-08T18:21:00Z:moonPhase",
+      "extras:2024-04-08T18:21:00Z:outsideReferenceSpan",
+      "extras:2200-01-01T00:00:00Z:positions",
+      "extras:2200-01-01T00:00:00Z:moonPhase",
+      "extras:2200-01-01T00:00:00Z:outsideReferenceSpan",
+      "extras:first-chart",
+      "extras:second-chart",
+      "extras:transits",
+      "extras:synastry",
+      "exact-geographic-pole:natalChart-edge",
+      "exact-geographic-pole:createNatalEnvelope-edge",
+      "malformed-receipt:0",
+      "malformed-receipt:1",
+      "malformed-receipt:2",
+      "equator-whole:late-parse-rc10",
+      "equator-whole:late-replay-input-rc10",
+      "equator-whole:late-chart-rc10",
+      "equator-placidus:late-parse-rc10",
+      "equator-placidus:late-replay-input-rc10",
+      "equator-placidus:late-chart-rc10",
+      "equator-porphyry:late-parse-rc10",
+      "equator-porphyry:late-replay-input-rc10",
+      "equator-porphyry:late-chart-rc10",
+      "equator-equal:late-parse-rc10",
+      "equator-equal:late-replay-input-rc10",
+      "equator-equal:late-chart-rc10",
+      "equator-equal-mc:late-parse-rc10",
+      "equator-equal-mc:late-replay-input-rc10",
+      "equator-equal-mc:late-chart-rc10",
+      "equator-vehlow:late-parse-rc10",
+      "equator-vehlow:late-replay-input-rc10",
+      "equator-vehlow:late-chart-rc10",
+      "equator-koch:late-parse-rc10",
+      "equator-koch:late-replay-input-rc10",
+      "equator-koch:late-chart-rc10",
+      "equator-regiomontanus:late-parse-rc10",
+      "equator-regiomontanus:late-replay-input-rc10",
+      "equator-regiomontanus:late-chart-rc10",
+      "equator-campanus:late-parse-rc10",
+      "equator-campanus:late-replay-input-rc10",
+      "equator-campanus:late-chart-rc10",
+      "equator-topocentric:late-parse-rc10",
+      "equator-topocentric:late-replay-input-rc10",
+      "equator-topocentric:late-chart-rc10",
+      "equator-alcabitius:late-parse-rc10",
+      "equator-alcabitius:late-replay-input-rc10",
+      "equator-alcabitius:late-chart-rc10",
+      "equator-morinus:late-parse-rc10",
+      "equator-morinus:late-replay-input-rc10",
+      "equator-morinus:late-chart-rc10",
+      "equator-meridian:late-parse-rc10",
+      "equator-meridian:late-replay-input-rc10",
+      "equator-meridian:late-chart-rc10",
+      "north-temperate-whole:late-parse-rc10",
+      "north-temperate-whole:late-replay-input-rc10",
+      "north-temperate-whole:late-chart-rc10",
+      "north-temperate-placidus:late-parse-rc10",
+      "north-temperate-placidus:late-replay-input-rc10",
+      "north-temperate-placidus:late-chart-rc10",
+      "north-temperate-porphyry:late-parse-rc10",
+      "north-temperate-porphyry:late-replay-input-rc10",
+      "north-temperate-porphyry:late-chart-rc10",
+      "north-temperate-equal:late-parse-rc10",
+      "north-temperate-equal:late-replay-input-rc10",
+      "north-temperate-equal:late-chart-rc10",
+      "north-temperate-equal-mc:late-parse-rc10",
+      "north-temperate-equal-mc:late-replay-input-rc10",
+      "north-temperate-equal-mc:late-chart-rc10",
+      "north-temperate-vehlow:late-parse-rc10",
+      "north-temperate-vehlow:late-replay-input-rc10",
+      "north-temperate-vehlow:late-chart-rc10",
+      "north-temperate-koch:late-parse-rc10",
+      "north-temperate-koch:late-replay-input-rc10",
+      "north-temperate-koch:late-chart-rc10",
+      "north-temperate-regiomontanus:late-parse-rc10",
+      "north-temperate-regiomontanus:late-replay-input-rc10",
+      "north-temperate-regiomontanus:late-chart-rc10",
+      "north-temperate-campanus:late-parse-rc10",
+      "north-temperate-campanus:late-replay-input-rc10",
+      "north-temperate-campanus:late-chart-rc10",
+      "north-temperate-topocentric:late-parse-rc10",
+      "north-temperate-topocentric:late-replay-input-rc10",
+      "north-temperate-topocentric:late-chart-rc10",
+      "north-temperate-alcabitius:late-parse-rc10",
+      "north-temperate-alcabitius:late-replay-input-rc10",
+      "north-temperate-alcabitius:late-chart-rc10",
+      "north-temperate-morinus:late-parse-rc10",
+      "north-temperate-morinus:late-replay-input-rc10",
+      "north-temperate-morinus:late-chart-rc10",
+      "north-temperate-meridian:late-parse-rc10",
+      "north-temperate-meridian:late-replay-input-rc10",
+      "north-temperate-meridian:late-chart-rc10",
+      "south-temperate-whole:late-parse-rc10",
+      "south-temperate-whole:late-replay-input-rc10",
+      "south-temperate-whole:late-chart-rc10",
+      "south-temperate-placidus:late-parse-rc10",
+      "south-temperate-placidus:late-replay-input-rc10",
+      "south-temperate-placidus:late-chart-rc10",
+      "south-temperate-porphyry:late-parse-rc10",
+      "south-temperate-porphyry:late-replay-input-rc10",
+      "south-temperate-porphyry:late-chart-rc10",
+      "south-temperate-equal:late-parse-rc10",
+      "south-temperate-equal:late-replay-input-rc10",
+      "south-temperate-equal:late-chart-rc10",
+      "south-temperate-equal-mc:late-parse-rc10",
+      "south-temperate-equal-mc:late-replay-input-rc10",
+      "south-temperate-equal-mc:late-chart-rc10",
+      "south-temperate-vehlow:late-parse-rc10",
+      "south-temperate-vehlow:late-replay-input-rc10",
+      "south-temperate-vehlow:late-chart-rc10",
+      "south-temperate-koch:late-parse-rc10",
+      "south-temperate-koch:late-replay-input-rc10",
+      "south-temperate-koch:late-chart-rc10",
+      "south-temperate-regiomontanus:late-parse-rc10",
+      "south-temperate-regiomontanus:late-replay-input-rc10",
+      "south-temperate-regiomontanus:late-chart-rc10",
+      "south-temperate-campanus:late-parse-rc10",
+      "south-temperate-campanus:late-replay-input-rc10",
+      "south-temperate-campanus:late-chart-rc10",
+      "south-temperate-topocentric:late-parse-rc10",
+      "south-temperate-topocentric:late-replay-input-rc10",
+      "south-temperate-topocentric:late-chart-rc10",
+      "south-temperate-alcabitius:late-parse-rc10",
+      "south-temperate-alcabitius:late-replay-input-rc10",
+      "south-temperate-alcabitius:late-chart-rc10",
+      "south-temperate-morinus:late-parse-rc10",
+      "south-temperate-morinus:late-replay-input-rc10",
+      "south-temperate-morinus:late-chart-rc10",
+      "south-temperate-meridian:late-parse-rc10",
+      "south-temperate-meridian:late-replay-input-rc10",
+      "south-temperate-meridian:late-chart-rc10",
+      "north-polar-whole:late-parse-rc10",
+      "north-polar-whole:late-replay-input-rc10",
+      "north-polar-whole:late-chart-rc10",
+      "north-polar-placidus:late-parse-rc10",
+      "north-polar-placidus:late-replay-input-rc10",
+      "north-polar-placidus:late-chart-rc10",
+      "north-polar-porphyry:late-parse-rc10",
+      "north-polar-porphyry:late-replay-input-rc10",
+      "north-polar-porphyry:late-chart-rc10",
+      "north-polar-equal:late-parse-rc10",
+      "north-polar-equal:late-replay-input-rc10",
+      "north-polar-equal:late-chart-rc10",
+      "north-polar-equal-mc:late-parse-rc10",
+      "north-polar-equal-mc:late-replay-input-rc10",
+      "north-polar-equal-mc:late-chart-rc10",
+      "north-polar-vehlow:late-parse-rc10",
+      "north-polar-vehlow:late-replay-input-rc10",
+      "north-polar-vehlow:late-chart-rc10",
+      "north-polar-koch:late-parse-rc10",
+      "north-polar-koch:late-replay-input-rc10",
+      "north-polar-koch:late-chart-rc10",
+      "north-polar-regiomontanus:late-parse-rc10",
+      "north-polar-regiomontanus:late-replay-input-rc10",
+      "north-polar-regiomontanus:late-chart-rc10",
+      "north-polar-campanus:late-parse-rc10",
+      "north-polar-campanus:late-replay-input-rc10",
+      "north-polar-campanus:late-chart-rc10",
+      "north-polar-topocentric:late-parse-rc10",
+      "north-polar-topocentric:late-replay-input-rc10",
+      "north-polar-topocentric:late-chart-rc10",
+      "north-polar-alcabitius:late-parse-rc10",
+      "north-polar-alcabitius:late-replay-input-rc10",
+      "north-polar-alcabitius:late-chart-rc10",
+      "north-polar-morinus:late-parse-rc10",
+      "north-polar-morinus:late-replay-input-rc10",
+      "north-polar-morinus:late-chart-rc10",
+      "north-polar-meridian:late-parse-rc10",
+      "north-polar-meridian:late-replay-input-rc10",
+      "north-polar-meridian:late-chart-rc10",
+      "south-polar-whole:late-parse-rc10",
+      "south-polar-whole:late-replay-input-rc10",
+      "south-polar-whole:late-chart-rc10",
+      "south-polar-placidus:late-parse-rc10",
+      "south-polar-placidus:late-replay-input-rc10",
+      "south-polar-placidus:late-chart-rc10",
+      "south-polar-porphyry:late-parse-rc10",
+      "south-polar-porphyry:late-replay-input-rc10",
+      "south-polar-porphyry:late-chart-rc10",
+      "south-polar-equal:late-parse-rc10",
+      "south-polar-equal:late-replay-input-rc10",
+      "south-polar-equal:late-chart-rc10",
+      "south-polar-equal-mc:late-parse-rc10",
+      "south-polar-equal-mc:late-replay-input-rc10",
+      "south-polar-equal-mc:late-chart-rc10",
+      "south-polar-vehlow:late-parse-rc10",
+      "south-polar-vehlow:late-replay-input-rc10",
+      "south-polar-vehlow:late-chart-rc10",
+      "south-polar-koch:late-parse-rc10",
+      "south-polar-koch:late-replay-input-rc10",
+      "south-polar-koch:late-chart-rc10",
+      "south-polar-regiomontanus:late-parse-rc10",
+      "south-polar-regiomontanus:late-replay-input-rc10",
+      "south-polar-regiomontanus:late-chart-rc10",
+      "south-polar-campanus:late-parse-rc10",
+      "south-polar-campanus:late-replay-input-rc10",
+      "south-polar-campanus:late-chart-rc10",
+      "south-polar-topocentric:late-parse-rc10",
+      "south-polar-topocentric:late-replay-input-rc10",
+      "south-polar-topocentric:late-chart-rc10",
+      "south-polar-alcabitius:late-parse-rc10",
+      "south-polar-alcabitius:late-replay-input-rc10",
+      "south-polar-alcabitius:late-chart-rc10",
+      "south-polar-morinus:late-parse-rc10",
+      "south-polar-morinus:late-replay-input-rc10",
+      "south-polar-morinus:late-chart-rc10",
+      "south-polar-meridian:late-parse-rc10",
+      "south-polar-meridian:late-replay-input-rc10",
+      "south-polar-meridian:late-chart-rc10",
+      "historical-1600:late-parse-rc10",
+      "historical-1600:late-replay-input-rc10",
+      "historical-1600:late-chart-rc10",
+      "reference-before:late-parse-rc10",
+      "reference-before:late-replay-input-rc10",
+      "reference-before:late-chart-rc10",
+      "reference-start:late-parse-rc10",
+      "reference-start:late-replay-input-rc10",
+      "reference-start:late-chart-rc10",
+      "historical-1900:late-parse-rc10",
+      "historical-1900:late-replay-input-rc10",
+      "historical-1900:late-chart-rc10",
+      "leap-date:late-parse-rc10",
+      "leap-date:late-replay-input-rc10",
+      "leap-date:late-chart-rc10",
+      "modern-eclipse-date:late-parse-rc10",
+      "modern-eclipse-date:late-replay-input-rc10",
+      "modern-eclipse-date:late-chart-rc10",
+      "reference-last:late-parse-rc10",
+      "reference-last:late-replay-input-rc10",
+      "reference-last:late-chart-rc10",
+      "reference-end:late-parse-rc10",
+      "reference-end:late-replay-input-rc10",
+      "reference-end:late-chart-rc10",
+      "future-2300:late-parse-rc10",
+      "future-2300:late-replay-input-rc10",
+      "future-2300:late-chart-rc10",
+      "unknown-with-coordinates:late-parse-rc10",
+      "unknown-with-coordinates:late-replay-input-rc10",
+      "unknown-with-coordinates:late-chart-rc10",
+      "unknown-no-location:late-parse-rc10",
+      "unknown-no-location:late-replay-input-rc10",
+      "unknown-no-location:late-chart-rc10",
+      "known-no-location:late-parse-rc10",
+      "known-no-location:late-replay-input-rc10",
+      "known-no-location:late-chart-rc10",
+      "unknown-no-time-echo:late-parse-rc10",
+      "unknown-no-time-echo:late-replay-input-rc10",
+      "unknown-no-time-echo:late-chart-rc10",
+      "polar-fallback-echo:late-parse-rc10",
+      "polar-fallback-echo:late-replay-input-rc10",
+      "polar-fallback-echo:late-chart-rc10",
+      "asserted-gap:late-parse-rc10",
+      "asserted-gap:late-replay-input-rc10",
+      "asserted-gap:late-chart-rc10",
+      "asserted-fold:late-parse-rc10",
+      "asserted-fold:late-replay-input-rc10",
+      "asserted-fold:late-chart-rc10",
+      "asserted-lmt:late-parse-rc10",
+      "asserted-lmt:late-replay-input-rc10",
+      "asserted-lmt:late-chart-rc10",
+      "offset-spelling:late-parse-rc10",
+      "offset-spelling:late-replay-input-rc10",
+      "offset-spelling:late-chart-rc10",
+      "date-only:late-parse-rc10",
+      "date-only:late-replay-input-rc10",
+      "date-only:late-chart-rc10",
+      "numeric-instant:late-parse-rc10",
+      "numeric-instant:late-replay-input-rc10",
+      "numeric-instant:late-chart-rc10",
+      "date-object:late-parse-rc10",
+      "date-object:late-replay-input-rc10",
+      "date-object:late-chart-rc10",
+      "pinned-zero:late-parse-rc10",
+      "pinned-zero:late-replay-input-rc10",
+      "pinned-zero:late-chart-rc10",
+      "pinned-modern:late-parse-rc10",
+      "pinned-modern:late-replay-input-rc10",
+      "pinned-modern:late-chart-rc10",
+      "pinned-historical:late-parse-rc10",
+      "pinned-historical:late-replay-input-rc10",
+      "pinned-historical:late-chart-rc10",
+      "pinned-negative:late-parse-rc10",
+      "pinned-negative:late-replay-input-rc10",
+      "pinned-negative:late-chart-rc10",
+      "pinned-unknown:late-parse-rc10",
+      "pinned-unknown:late-replay-input-rc10",
+      "pinned-unknown:late-chart-rc10"
+    ]
+  },
+  "differentCallHistoryDiagnostics": {
+    "baseline": {
+      "meaning": "Same artifact and input, earlier versus later calls in this worker; different call history, not a cross-version comparison.",
+      "differingCases": 2,
+      "cases": [
+        {
+          "id": "reference-start",
+          "mismatchCount": 3,
+          "mismatches": [
+            {
+              "path": "$.bodies[0].degree",
+              "why": "value-or-type",
+              "baseline": 10.429444288083687,
+              "candidate": 10.4294442880838
+            },
+            {
+              "path": "$.bodies[0].lat",
+              "why": "value-or-type",
+              "baseline": -0.00030364093330900976,
+              "candidate": -0.00030364093330577504
+            },
+            {
+              "path": "$.bodies[0].lon",
+              "why": "value-or-type",
+              "baseline": 280.4294442880837,
+              "candidate": 280.4294442880838
+            }
+          ]
+        },
+        {
+          "id": "reference-end",
+          "mismatchCount": 5,
+          "mismatches": [
+            {
+              "path": "$.aspects[7].orb",
+              "why": "value-or-type",
+              "baseline": 3.8117302175016903,
+              "candidate": 3.8117302175012355
+            },
+            {
+              "path": "$.aspects[10].orb",
+              "why": "value-or-type",
+              "baseline": 7.0380223007287555,
+              "candidate": 7.038022300728301
+            },
+            {
+              "path": "$.bodies[0].degree",
+              "why": "value-or-type",
+              "baseline": 10.326882857879355,
+              "candidate": 10.3268828578789
+            },
+            {
+              "path": "$.bodies[0].lat",
+              "why": "value-or-type",
+              "baseline": 0.0004890080840760109,
+              "candidate": 0.0004890080840857133
+            },
+            {
+              "path": "$.bodies[0].lon",
+              "why": "value-or-type",
+              "baseline": 280.3268828578794,
+              "candidate": 280.32688285787896
+            }
+          ]
+        }
+      ]
+    },
+    "candidate": {
+      "meaning": "Same artifact and input, earlier versus later calls in this worker; different call history, not a cross-version comparison.",
+      "differingCases": 2,
+      "cases": [
+        {
+          "id": "reference-start",
+          "mismatchCount": 3,
+          "mismatches": [
+            {
+              "path": "$.bodies[0].degree",
+              "why": "value-or-type",
+              "baseline": 10.429444288083687,
+              "candidate": 10.4294442880838
+            },
+            {
+              "path": "$.bodies[0].lat",
+              "why": "value-or-type",
+              "baseline": -0.00030364093330900976,
+              "candidate": -0.00030364093330577504
+            },
+            {
+              "path": "$.bodies[0].lon",
+              "why": "value-or-type",
+              "baseline": 280.4294442880837,
+              "candidate": 280.4294442880838
+            }
+          ]
+        },
+        {
+          "id": "reference-end",
+          "mismatchCount": 5,
+          "mismatches": [
+            {
+              "path": "$.aspects[7].orb",
+              "why": "value-or-type",
+              "baseline": 3.8117302175016903,
+              "candidate": 3.8117302175012355
+            },
+            {
+              "path": "$.aspects[10].orb",
+              "why": "value-or-type",
+              "baseline": 7.0380223007287555,
+              "candidate": 7.038022300728301
+            },
+            {
+              "path": "$.bodies[0].degree",
+              "why": "value-or-type",
+              "baseline": 10.326882857879355,
+              "candidate": 10.3268828578789
+            },
+            {
+              "path": "$.bodies[0].lat",
+              "why": "value-or-type",
+              "baseline": 0.0004890080840760109,
+              "candidate": 0.0004890080840857133
+            },
+            {
+              "path": "$.bodies[0].lon",
+              "why": "value-or-type",
+              "baseline": 280.3268828578794,
+              "candidate": 280.32688285787896
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "negativeControl": {
+    "passed": true,
+    "injectedChange": "Clone of one observed Sun longitude increased by 0.000001 degrees; no artifact altered.",
+    "mismatchCount": 1,
+    "mismatches": [
+      {
+        "path": "$.chart.bodies[0].lon",
+        "why": "value-or-type",
+        "baseline": 280.36873843817517,
+        "candidate": 280.36873943817517
+      }
+    ]
+  },
+  "checks": [
+    {
+      "id": "all-13-house-systems",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-all-13-house-systems",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "ephemeris-identity",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "identical-public-operation-order",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "main-legacy-export-preservation",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "receipt-legacy-export-preservation",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:equator-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:equator-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:equator-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:equator-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:equator-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:north-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:north-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:north-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-whole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-placidus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-porphyry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-equal",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-equal-mc",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-vehlow",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-koch",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-regiomontanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-campanus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-topocentric",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-alcabitius",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-morinus",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:south-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:south-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:south-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-meridian",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:historical-1600",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:historical-1600",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:historical-1600",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:historical-1600",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:historical-1600",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:historical-1600",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:reference-before",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:reference-before",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:reference-before",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:reference-before",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:reference-before",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:reference-before",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:reference-start",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:reference-start",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:reference-start",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:reference-start",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:reference-start",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:reference-start",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:historical-1900",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:historical-1900",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:historical-1900",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:historical-1900",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:historical-1900",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:historical-1900",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:leap-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:leap-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:leap-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:leap-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:leap-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:leap-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:modern-eclipse-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:modern-eclipse-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:modern-eclipse-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:modern-eclipse-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:modern-eclipse-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:modern-eclipse-date",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:reference-last",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:reference-last",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:reference-last",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:reference-last",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:reference-last",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:reference-last",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:reference-end",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:reference-end",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:reference-end",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:reference-end",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:reference-end",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:reference-end",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:future-2300",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:future-2300",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:future-2300",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:future-2300",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:future-2300",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:future-2300",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:unknown-with-coordinates",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:unknown-with-coordinates",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:unknown-with-coordinates",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:unknown-with-coordinates",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:unknown-with-coordinates",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:unknown-with-coordinates",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:unknown-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:unknown-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:unknown-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:unknown-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:unknown-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:unknown-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:known-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:known-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:known-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:known-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:known-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:known-no-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:unknown-no-time-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:unknown-no-time-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:unknown-no-time-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:unknown-no-time-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:unknown-no-time-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:unknown-no-time-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:polar-fallback-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:polar-fallback-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:polar-fallback-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:polar-fallback-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:polar-fallback-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:polar-fallback-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:asserted-gap",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:asserted-gap",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:asserted-gap",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:asserted-gap",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:asserted-gap",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:asserted-gap",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:asserted-fold",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:asserted-fold",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:asserted-fold",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:asserted-fold",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:asserted-fold",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:asserted-fold",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:asserted-lmt",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:asserted-lmt",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:asserted-lmt",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:asserted-lmt",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:asserted-lmt",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:asserted-lmt",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:offset-spelling",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:offset-spelling",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:offset-spelling",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:offset-spelling",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:offset-spelling",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:offset-spelling",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:date-only",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:date-only",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:date-only",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:date-only",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:date-only",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:date-only",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:numeric-instant",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:numeric-instant",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:numeric-instant",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:numeric-instant",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:numeric-instant",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:numeric-instant",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:date-object",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:date-object",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:date-object",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:date-object",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:date-object",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:date-object",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:pinned-zero",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:pinned-zero",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:pinned-zero",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:pinned-zero",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:pinned-zero",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:pinned-zero",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:pinned-modern",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:pinned-modern",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:pinned-modern",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:pinned-modern",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:pinned-modern",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:pinned-modern",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:pinned-historical",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:pinned-historical",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:pinned-historical",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:pinned-historical",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:pinned-historical",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:pinned-historical",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:pinned-negative",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:pinned-negative",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:pinned-negative",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:pinned-negative",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:pinned-negative",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:pinned-negative",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "chart-and-receipt:pinned-unknown",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "baseline-self-replay:pinned-unknown",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-self-replay:pinned-unknown",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-parses-rc10:pinned-unknown",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-replays-rc10:pinned-unknown",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "candidate-rc10-replay-request:pinned-unknown",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "invalid-input:invalid-leap-day",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "invalid-input:missing-offset",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "invalid-input:unsupported-house",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "invalid-input:null-house",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "invalid-input:null-time-known",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "invalid-input:latitude-out-of-range",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "invalid-input:partial-location",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "invalid-input:contradictory-dst-flags",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "invalid-input:false-no-time-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "invalid-input:false-polar-echo",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "invalid-input:delta-t-too-large",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "legacy-api:positions-phase-1600-06-15T03:00:00Z",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "legacy-api:positions-phase-2000-02-29T12:00:00Z",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "legacy-api:positions-phase-2024-04-08T18:21:00Z",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "legacy-api:positions-phase-2200-01-01T00:00:00Z",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "legacy-api:transits",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "legacy-api:synastry",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "legacy-api:exact-geographic-pole",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    },
+    {
+      "id": "malformed-receipt-rejections",
+      "passed": true,
+      "mismatchCount": 0,
+      "mismatches": []
+    }
+  ]
+}

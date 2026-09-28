@@ -1,0 +1,44 @@
+--- a/src/lib/engine/progressions.ts
++++ b/src/lib/engine/progressions.ts
+@@ -1,28 +1,23 @@
+ /**
+- * Secondary progressions over the full planetary engine. Progressed ANGLES
+- * (ASC/MC) are deliberately not computed — they require a house-progression
+- * convention (Naibod, solar-arc MC, …) we have not adopted, and faking one
+- * would misstate what was computed.
++ * Site shape adapter for the packaged secondary-progression convention.
++ * Keep this module behind ChartLens's existing dynamic import.
+  */
+-import { computeBodies } from './full';
++import {
++  PROGRESSION_DAYS_PER_YEAR,
++  progressedInstant as engineProgressedInstant,
++  progressedBodies as engineProgressedBodies,
++} from '@zodiacs/engine';
++import { adaptBody } from './chart-adapter';
+ import type { BodyPosition } from './types';
+ 
+-/** Tropical year length used for the day-for-a-year mapping. */
+-export const PROGRESSION_DAYS_PER_YEAR = 365.2422;
++export { PROGRESSION_DAYS_PER_YEAR };
+ 
+-const DAY_MS = 86_400_000;
+-
+-/**
+- * Secondary-progression instant: one civil day after birth stands for one
+- * tropical year of life. Elapsed life is measured in tropical years so the
+- * mapping has no calendar drift.
+- */
++/** One fixed tropical year of elapsed life maps to one day after birth. */
+ export function progressedInstant(birthUtc: Date, target: Date): Date {
+-  const yearsLived = (target.getTime() - birthUtc.getTime()) / (PROGRESSION_DAYS_PER_YEAR * DAY_MS);
+-  return new Date(birthUtc.getTime() + yearsLived * DAY_MS);
++  return engineProgressedInstant(birthUtc, target);
+ }
+ 
+-/** Progressed planetary positions for `target`. Planets only — no angles. */
++/** Ten ordinary bodies and two true lunar nodes; no progressed angles. */
+ export function progressedBodies(birthUtc: Date, target: Date): BodyPosition[] {
+-  return computeBodies(progressedInstant(birthUtc, target));
++  return engineProgressedBodies(birthUtc, target).map(adaptBody);
+ }
