@@ -4,8 +4,12 @@ import { DEFAULT_ASPECT_POLICY, createAspectPolicy, findConfiguredAspects } from
 import { declinationOrb, declinationsForBodies, findDeclinationAspects } from "./declination.js";
 import type { DeclinationBody } from "./declination.js";
 
-const INVALID = [" Mars", "Mars ", "Mars\u0000", "Mars\u007f", "Ma\nrs", " Mars", "", " ", "x".repeat(81), "x".repeat(200), 5, null];
-const VALID = ["Mars", "North Node", "x".repeat(80), "Ẁest point", "__proto__", "sun"];
+const INVALID = [" Mars", "Mars ", "Mars\u0000", "Mars\u007f", "Ma\nrs", "\u00a0Mars", "Mars\ufeff", "Mars\u3000", "", " ",
+  "x".repeat(81), "x".repeat(200), "\u{1F600}".repeat(41), 5, null];
+// Lengths are UTF-16 code units: forty astral characters are 80. C1 controls,
+// U+0085 (which trim keeps), U+200B and lone surrogates are not rejected.
+const VALID = ["Mars", "North Node", "x".repeat(80), "\u1e80est point", "__proto__", "sun", "\u{1F600}".repeat(40),
+  "Mars\u0085", "M\u009fars", "Mars\u200b", "\ud800"];
 
 /** Every entry that takes a body label, configured-aspect and declination alike. */
 const entries: [string, (label: unknown) => unknown][] = [

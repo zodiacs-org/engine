@@ -1,0 +1,207 @@
+
+ RUN  v2.1.9 /tmp/claude-0/-home-user-site/25475091-052a-53d7-9cd4-cf04ce09dc68/scratchpad/rc14-work/prefix
+
+ ✓ src/body-label.test.ts (15 tests) 143ms
+ ❯ src/declination.test.ts (22 tests | 6 failed) 687ms
+   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at the June solstice 69ms
+     → expected value must be number or bigint, received "undefined"
+   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at the December solstice 85ms
+     → expected value must be number or bigint, received "undefined"
+   × the Sun and the out-of-bounds limit > exempts only a row labelled exactly Sun within 0.001° of the ecliptic 6ms
+     → expected undefined to be 0.001 // Object.is equality
+   × the Sun and the out-of-bounds limit > gives every row a signed margin that decides its flag, apart from the exempt Sun 16ms
+     → 2024-06-20T20:51:00Z Sun: expected undefined to be 0.18678734477219905 // Object.is equality
+   × longitude separation of declination aspects > reduces supplied longitudes exactly modulo 360 before rounding once 11ms
+     → expected 5.684341886080802e-14 to be 1e-20 // Object.is equality
+   × longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size 15ms
+     → -0.007032679672961714 -0.4611100531183183: expected false to be true // Object.is equality
+ ❯ src/ephemeris-span.test.ts (6 tests | 5 failed) 38134ms
+   × the ephemeris span > is astronomy-engine's own tabulated range, J2000 ± 730,000 days of TT 6ms
+     → Cannot read properties of undefined (reading 'timeScale')
+   ✓ the ephemeris span > evaluates instants just inside either end on the model ΔT clock 344ms
+   × the ephemeris span > refuses an instant, or any of its speed samples, outside the span 8ms
+     → expected [Function] to throw an error
+   × the ephemeris span > refuses far dates at once instead of integrating for minutes 37443ms
+     → expected function to throw an error, but it didn't
+   × the ephemeris span > applies to every calculation that evaluates the ephemeris 11ms
+     → natalChart: expected [Function] to throw an error
+   × the ephemeris span > checks Terrestrial Time on a pinned clock and restores the model afterwards 322ms
+     → expected [Function] to throw an error
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > does not flag the chart's Sun at the June solstice
+ FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > does not flag the chart's Sun at the December solstice
+TypeError: expected value must be number or bigint, received "undefined"
+ ❯ src/declination.test.ts:249:31
+    247|     const result = chartDeclinations({utc, latitude: 10, longitude: 20…
+    248|     const sun = result.rows.find(row => row.body === "Sun")!;
+    249|     expect(Math.abs(sun.lat)).toBeLessThanOrEqual(SUN_BOUND_LATITUDE);
+       |                               ^
+    250|     expect(sun.boundMarginArcsec).toBeGreaterThan(0);
+    251|     expect(sun.boundMarginArcsec).toBeLessThan(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > exempts only a row labelled exactly Sun within 0.001° of the ecliptic
+AssertionError: expected undefined to be 0.001 // Object.is equality
+
+- Expected: 
+0.001
+
++ Received: 
+undefined
+
+ ❯ src/declination.test.ts:256:32
+    254| 
+    255|   it("exempts only a row labelled exactly Sun within 0.001° of the ecl…
+    256|     expect(SUN_BOUND_LATITUDE).toBe(0.001);
+       |                                ^
+    257|     const row = (body: string, lon: number, lat: number) => declinatio…
+    258|     const justOff = 0.0010000000000000002; // the next double above 0.…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > gives every row a signed margin that decides its flag, apart from the exempt Sun
+AssertionError: 2024-06-20T20:51:00Z Sun: expected undefined to be 0.18678734477219905 // Object.is equality
+
+- Expected: 
+0.18678734477219905
+
++ Received: 
+undefined
+
+ ❯ src/declination.test.ts:280:61
+    278|       for (const row of chart.rows) {
+    279|         const exempt = row.body === "Sun" && Math.abs(row.lat) <= SUN_…
+    280|         expect(row.boundMarginArcsec, `${utc} ${row.body}`).toBe((Math…
+       |                                                             ^
+    281|         expect(row.outOfBounds, `${utc} ${row.body}`).toBe(!exempt && …
+    282|         if (row.outOfBounds) flagged.push(`${utc.slice(0, 10)} ${row.b…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  src/declination.test.ts > longitude separation of declination aspects > reduces supplied longitudes exactly modulo 360 before rounding once
+AssertionError: expected 5.684341886080802e-14 to be 1e-20 // Object.is equality
+
+- Expected
++ Received
+
+- 1e-20
++ 5.684341886080802e-14
+
+ ❯ src/declination.test.ts:311:35
+    309|   it("reduces supplied longitudes exactly modulo 360 before rounding o…
+    310|     // The review's cases: the old rows rounded −1e-20 to 359.99999999…
+    311|     expect(separation(-1e-20, 0)).toBe(1e-20);
+       |                                   ^
+    312|     expect(separation(-0.1, 0.2)).toBe(0.1 + 0.2);
+    313|     expect(separation(720.1, 0.2)).toBe(0.09999999999997727); // 720.1…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  src/declination.test.ts > longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size
+AssertionError: -0.007032679672961714 -0.4611100531183183: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/declination.test.ts:326:87
+    324|       const a = (random() - 0.5) * 2 * scale + (random() - 0.5) * 2 **…
+    325|       const b = (random() - 0.5) * 2 * scale;
+    326|       expect(isRoundedHalfEven(separation(a, b), exactSeparation(a, b)…
+       |                                                                                       ^
+    327|     }
+    328|     expect(rational(0.1 + 0.2)).toEqual(rational(0.30000000000000004));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  src/ephemeris-span.test.ts > the ephemeris span > is astronomy-engine's own tabulated range, J2000 ± 730,000 days of TT
+TypeError: Cannot read properties of undefined (reading 'timeScale')
+ ❯ src/ephemeris-span.test.ts:21:27
+     19| describe("the ephemeris span", () => {
+     20|   it("is astronomy-engine's own tabulated range, J2000 ± 730,000 days …
+     21|     expect(EPHEMERIS_SPAN.timeScale).toBe("TT");
+       |                           ^
+     22|     expect(EPHEMERIS_SPAN.daysFromJ2000).toEqual({ from: -730000, to: …
+     23|     expect(Date.parse(`${EPHEMERIS_SPAN.fromTT}Z`)).toBe(J2000_MS - 73…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  src/ephemeris-span.test.ts > the ephemeris span > refuses an instant, or any of its speed samples, outside the span
+AssertionError: expected [Function] to throw an error
+
+- Expected: 
+null
+
++ Received: 
+undefined
+
+ ❯ src/ephemeris-span.test.ts:38:53
+     36|   it("refuses an instant, or any of its speed samples, outside the spa…
+     37|     // TT = UT + ΔT (about 2.9 hours in year 1, 4.0 hours in 3998).
+     38|     expect(() => positions("0001-04-30T00:00:00Z")).toThrow(OUTSIDE);
+       |                                                     ^
+     39|     expect(() => positions("3998-09-03T12:00:00Z")).toThrow(OUTSIDE);
+     40|     // Inside by itself, but the nodes' samples six hours earlier are …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ FAIL  src/ephemeris-span.test.ts > the ephemeris span > refuses far dates at once instead of integrating for minutes
+AssertionError: expected function to throw an error, but it didn't
+ ❯ src/ephemeris-span.test.ts:47:36
+     45|     const started = performance.now();
+     46|     for (const utc of ["+030000-06-01T00:00:00Z", "-030000-06-01T00:00…
+     47|       expect(() => positions(utc)).toThrow(RangeError);
+       |                                    ^
+     48|       expect(() => positions(utc)).toThrow(OUTSIDE);
+     49|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+
+ FAIL  src/ephemeris-span.test.ts > the ephemeris span > applies to every calculation that evaluates the ephemeris
+AssertionError: natalChart: expected [Function] to throw an error
+
+- Expected: 
+null
+
++ Received: 
+undefined
+
+ ❯ src/ephemeris-span.test.ts:66:58
+     64|       ["saturnReturn", () => saturnReturn("3950-01-01")]
+     65|     ];
+     66|     for (const [name, call] of calls) expect(call, name).toThrow(OUTSI…
+       |                                                          ^
+     67|   });
+     68| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/11]⎯
+
+ FAIL  src/ephemeris-span.test.ts > the ephemeris span > checks Terrestrial Time on a pinned clock and restores the model afterwards
+AssertionError: expected [Function] to throw an error
+
+- Expected: 
+null
+
++ Received: 
+undefined
+
+ ❯ src/ephemeris-span.test.ts:72:78
+     70|     const expected = positions("2000-01-01T00:00:00Z");
+     71|     // −1e10 s is about 317 years: year 100 on this clock is TT year −…
+     72|     expect(() => natalChart({ utc: "0100-01-01T00:00:00Z", deltaT: -1e…
+       |                                                                              ^
+     73|     expect(natalChart({ utc: "2000-01-01T00:00:00Z", deltaT: 1e10 }).b…
+     74|     expect(positions("2000-01-01T00:00:00Z")).toEqual(expected);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/11]⎯
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  11 failed | 32 passed (43)
+   Start at  16:23:15
+   Duration  41.53s (transform 2.31s, setup 0ms, collect 5.04s, tests 38.96s, environment 1ms, prepare 1.30s)
+

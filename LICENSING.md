@@ -1,8 +1,15 @@
 # Licensing gate
 
-Status: **GO for an MIT package**, subject to the repository operator having
-authority to publish the Zodiacs.org-authored TypeScript under the package's
-MIT license.
+Status: **GO for a package licensed `MIT AND CC-BY-4.0`**, subject to the
+repository operator having authority to publish the Zodiacs.org-authored
+TypeScript under the MIT license.
+
+SPDX licence expression: `MIT AND CC-BY-4.0`. The code is MIT (`LICENSE`). The
+ΔT model in `dist/deltat.js` carries 32 values of Table S15 of Stephenson,
+Morrison & Hohenkerk 2016, which are CC BY 4.0 (see *ΔT data* below), with
+their attribution in `NOTICE`. Both apply to the package as distributed. From
+0.1.1-rc.8, which added those values, to rc.13, `package.json` declared `MIT`
+alone; rc.14 corrects it.
 
 ## Provenance chain
 

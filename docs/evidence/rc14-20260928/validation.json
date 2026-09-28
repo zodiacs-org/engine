@@ -1,0 +1,784 @@
+{
+  "schema": "zodiacs.rc14-review-fixes-validation.v1",
+  "date": "2026-09-28",
+  "baseCommit": "4eee7002c136e80372671af34b44083ef8069384",
+  "runtime": "v22.22.2",
+  "unitTests": {
+    "passed": 2669,
+    "files": 34,
+    "matrix": [
+      {
+        "node": "v20.19.0",
+        "exit": 0,
+        "files": 34,
+        "passed": 2669
+      },
+      {
+        "node": "v24.21.0",
+        "exit": 0,
+        "files": 34,
+        "passed": 2669
+      }
+    ]
+  },
+  "gates": {
+    "typecheck": "pass",
+    "build": "pass",
+    "exports": "pass",
+    "packageContents": "pass",
+    "packDeterminism": "pass",
+    "packedConsumer": "pass",
+    "nodeSupport": "pass",
+    "archiveBinding": "pass",
+    "archiveRebuildAll": "pass",
+    "reviewSyntheticCases": "pass",
+    "newTestsFailOnRc13": "pass",
+    "rc10Compatibility": "pass",
+    "exactOracle": "pass",
+    "independentTimeMapping": "pass",
+    "sunNeverFlaggedAtSolstices": "pass",
+    "farDatesRefused": "pass",
+    "siteAdapterParity": "passed"
+  },
+  "package": {
+    "path": "artifacts/zodiacs-engine-0.1.1-rc.14.tgz",
+    "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+    "bytes": 85104,
+    "unpackedBytes": 276516,
+    "files": 30,
+    "npmShasum": "b23c1de77bb24458f39535d6826140f27cc3163d",
+    "integrity": "sha512-jfXuH1BTcIEQRpNRNRJHk3Cvk0IGupKxtkLpxktL5ov6Pngw1/bYf+CLFYHRuqsUTUwnBT+L71LFtwzIQddQ6w=="
+  },
+  "packDeterminism": [
+    {
+      "run": "second",
+      "node": "v22.22.2",
+      "npm": "10.9.7",
+      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "identical": true
+    },
+    {
+      "run": "node20",
+      "node": "v20.19.0",
+      "npm": "10.8.2",
+      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "identical": true
+    },
+    {
+      "run": "node24",
+      "node": "v24.21.0",
+      "npm": "11.19.0",
+      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "identical": true
+    }
+  ],
+  "packedConsumer": [
+    {
+      "runtime": "v20.19.0",
+      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "version": "0.1.1-rc.14",
+      "types": "passed",
+      "directoryRemoved": true,
+      "checks": 25
+    },
+    {
+      "runtime": "v22.7.0",
+      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "version": "0.1.1-rc.14",
+      "types": "passed",
+      "directoryRemoved": true,
+      "checks": 25
+    },
+    {
+      "runtime": "v22.22.2",
+      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "version": "0.1.1-rc.14",
+      "types": "passed",
+      "directoryRemoved": true,
+      "checks": 25
+    },
+    {
+      "runtime": "v24.21.0",
+      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "version": "0.1.1-rc.14",
+      "types": "passed",
+      "directoryRemoved": true,
+      "checks": 25
+    }
+  ],
+  "nodeSupport": [
+    {
+      "node": "v18.20.8",
+      "exit": 1,
+      "result": "SyntaxError: Named export 'Body' not found. The requested module 'astronomy-engine' is a CommonJS module, which may not support all module.exports as named exports."
+    },
+    {
+      "node": "v20.18.3",
+      "exit": 1,
+      "result": "SyntaxError: Named export 'Body' not found. The requested module 'astronomy-engine' is a CommonJS module, which may not support all module.exports as named exports."
+    },
+    {
+      "node": "v21.7.3",
+      "exit": 1,
+      "result": "SyntaxError: Named export 'Body' not found. The requested module 'astronomy-engine' is a CommonJS module, which may not support all module.exports as named exports."
+    },
+    {
+      "node": "v22.6.0",
+      "exit": 1,
+      "result": "SyntaxError: Named export 'Body' not found. The requested module 'astronomy-engine' is a CommonJS module, which may not support all module.exports as named exports."
+    },
+    {
+      "node": "v20.19.0",
+      "exit": 0,
+      "result": "loaded 0.1.1-rc.14; natalChart returned 12 bodies"
+    },
+    {
+      "node": "v22.7.0",
+      "exit": 0,
+      "result": "loaded 0.1.1-rc.14; natalChart returned 12 bodies"
+    },
+    {
+      "node": "v22.22.2",
+      "exit": 0,
+      "result": "loaded 0.1.1-rc.14; natalChart returned 12 bodies"
+    },
+    {
+      "node": "v24.21.0",
+      "exit": 0,
+      "result": "loaded 0.1.1-rc.14; natalChart returned 12 bodies"
+    }
+  ],
+  "archiveBinding": [
+    {
+      "node": "v20.19.0",
+      "npm": "10.8.2",
+      "exit": 0,
+      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 41 commits",
+      "rc14Rebuild": "skipped: not yet carried"
+    },
+    {
+      "node": "v22.22.2",
+      "npm": "10.9.7",
+      "exit": 0,
+      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 41 commits",
+      "rc14Rebuild": "skipped: not yet carried"
+    },
+    {
+      "node": "v24.21.0",
+      "npm": "11.19.0",
+      "exit": 0,
+      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 41 commits",
+      "rc14Rebuild": "skipped: not yet carried"
+    }
+  ],
+  "archiveRebuildAll": [
+    {
+      "version": "0.1.1-rc.7",
+      "sha256": "49b2b03f50fea8a625d443d4fd0f6d03ffc22831e54009fd09c49d07c8698f90",
+      "bytes": 39252,
+      "sourceCommit": "6e14f3f7c5e3",
+      "node": "v22.22.2",
+      "identical": true
+    },
+    {
+      "version": "0.1.1-rc.8",
+      "sha256": "3b934376fa53983cbdd7eb1a6ecf0eb0d50fbc49df01bc610b20c63bd5d12be6",
+      "bytes": 51748,
+      "sourceCommit": "352ea49d9e1d",
+      "node": "v22.22.2",
+      "identical": true
+    },
+    {
+      "version": "0.1.1-rc.9",
+      "sha256": "bb5592302b1fa542cc745a9410b5a77faf49bbf4e205347ab771810efc300a20",
+      "bytes": 55576,
+      "sourceCommit": "82aad2fcc9b2",
+      "node": "v22.22.2",
+      "identical": true
+    },
+    {
+      "version": "0.1.1-rc.10",
+      "sha256": "a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c",
+      "bytes": 61318,
+      "sourceCommit": "9c4f3fd77b5d",
+      "node": "v22.22.2",
+      "identical": true
+    },
+    {
+      "version": "0.1.1-rc.11",
+      "sha256": "13d637db21e3e444c783fd85832e4f61dfdb4b7777b2c84038ec887b47029c4e",
+      "bytes": 70676,
+      "sourceCommit": "00bdae79a925",
+      "node": "v22.22.2",
+      "identical": true
+    },
+    {
+      "version": "0.1.1-rc.11",
+      "sha256": "d88e0ff8db91e1183789763ad32feb2dac61716e35ad7676a943f7a1ad377862",
+      "bytes": 70989,
+      "sourceCommit": "be3585b3ebfe",
+      "node": "v22.22.2",
+      "identical": true
+    },
+    {
+      "version": "0.1.1-rc.12",
+      "sha256": "c4cf150fe8fb0b37f5769993c2e63275b2e5ef47b97d8a118aff3be00ebaf7f0",
+      "bytes": 73398,
+      "sourceCommit": "a1d0f2c6cefb",
+      "node": "v22.22.2",
+      "identical": true
+    },
+    {
+      "version": "0.1.1-rc.13",
+      "sha256": "12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840",
+      "bytes": 79092,
+      "sourceCommit": "f05ea02b3254",
+      "node": "v22.22.2",
+      "identical": true
+    }
+  ],
+  "reviewSyntheticCases": "synthetic-binding rc.13 exit 0, rc.14 exit 1; synthetic-breach rc.13 exit 0, rc.14 exit 1",
+  "newTestsOnRc13Source": {
+    "failed": 11,
+    "passed": 32
+  },
+  "compatibility": {
+    "chartCases": 91,
+    "invalidInputCases": 11,
+    "legacyApiCases": 7,
+    "checks": 571,
+    "passed": 571,
+    "failed": 0,
+    "rc10ReceiptsReplayedByCandidate": 91,
+    "addedMainExports": [
+      "CONFIGURED_ASPECT_ANGLES",
+      "DECLINATION_ORB",
+      "DECLINATION_ORB_LUMINARY",
+      "DEFAULT_ASPECT_POLICY",
+      "DEFAULT_DECLINATION_ORB_POLICY",
+      "EPHEMERIS_SPAN",
+      "PROGRESSION_DAYS_PER_YEAR",
+      "RA_POLE_TOLERANCE",
+      "SUN_BOUND_LATITUDE",
+      "chartDeclinations",
+      "createAspectPolicy",
+      "declinationOf",
+      "declinationOrb",
+      "declinationsForBodies",
+      "eclipticToEquatorial",
+      "findConfiguredAspects",
+      "findDeclinationAspects",
+      "progressedBodies",
+      "progressedInstant"
+    ]
+  },
+  "exactOracle": {
+    "script": "docs/evidence/rc13-20260928/exact-oracle.py",
+    "cases": 53168,
+    "mismatches": 0
+  },
+  "independentTimeMapping": {
+    "cases": 204,
+    "maximumErrorMs": 1
+  },
+  "sunAtSolstices": {
+    "erfa": {
+      "solstices": 800,
+      "years": "1800-2199",
+      "beyond": 402,
+      "maxExcessArcsec": 1.0899,
+      "minExcessArcsec": -1.1561
+    },
+    "de440s": {
+      "solstices": 600,
+      "years": "1850-2149",
+      "beyond": 300,
+      "maxExcessArcsec": 1.0926,
+      "maxAbsDifferenceFromErfaArcsec": 0.0079
+    },
+    "engine": {
+      "solstices": 800,
+      "beyond": 400,
+      "flagged": 0,
+      "maxMarginArcsec": 1.3526,
+      "sunLatitudeArcsec": [
+        -1.761,
+        1.626
+      ],
+      "maxAbsSunLatitudeDegrees": 0.0004892747019684818,
+      "signDisagreementsWithErfa": 396,
+      "maxAbsMarginMinusErfaExcessArcsec": 2.5798,
+      "byCentury": [
+        {
+          "years": "1800-1899",
+          "engineLatitudeMeanArcsec": -1.121,
+          "erfaLatitudeMeanArcsec": 0
+        },
+        {
+          "years": "1900-1999",
+          "engineLatitudeMeanArcsec": -0.372,
+          "erfaLatitudeMeanArcsec": 0.006
+        },
+        {
+          "years": "2000-2099",
+          "engineLatitudeMeanArcsec": 0.375,
+          "erfaLatitudeMeanArcsec": 0.004
+        },
+        {
+          "years": "2100-2199",
+          "engineLatitudeMeanArcsec": 1.12,
+          "erfaLatitudeMeanArcsec": 0.001
+        }
+      ]
+    },
+    "examples": [
+      {
+        "solstice": "2024-06-20T20:52:09 TT",
+        "erfaExcessArcsec": -0.5944,
+        "engineMarginArcsec": 0.1868,
+        "engineFlag": false,
+        "de440sExcessArcsec": -0.594
+      },
+      {
+        "solstice": "1970-12-22T06:36:20 TT",
+        "erfaExcessArcsec": 0.0506,
+        "engineMarginArcsec": 0.2104,
+        "engineFlag": false,
+        "de440sExcessArcsec": 0.0509
+      }
+    ]
+  },
+  "declinationAgainstDE440s": {
+    "samples": 20000,
+    "span": "1850-01-01 to 2150-01-01 TT",
+    "largestErrorArcsec": {
+      "Sun": 2.727,
+      "Moon": 3.408,
+      "Mercury": 12.159,
+      "Venus": 14.728,
+      "Mars": 14.534,
+      "Jupiter": 16.101,
+      "Saturn": 21.583,
+      "Uranus": 19.274,
+      "Neptune": 15.435,
+      "Pluto": 4.551
+    },
+    "trueObliquity": {
+      "againstObl06PlusNut00bMilliarcsec": 85.6,
+      "againstObl06PlusNut06aMilliarcsec": 85.41
+    },
+    "reviewExamples": [
+      {
+        "utc": "2022-10-22T08:11:10.756Z",
+        "body": "Mars",
+        "engineMarginArcsec": -1.57,
+        "engineFlag": false,
+        "de440sMarginArcsec": 1.046,
+        "de440sOutOfBounds": true
+      },
+      {
+        "utc": "2029-10-09T13:02:38.126Z",
+        "body": "Venus",
+        "engineMarginArcsec": -1.864,
+        "engineFlag": false,
+        "de440sMarginArcsec": 1.243,
+        "de440sOutOfBounds": true
+      },
+      {
+        "utc": "2021-05-30T06:32:15.389Z",
+        "body": "Mercury",
+        "engineMarginArcsec": 2.094,
+        "engineFlag": true,
+        "de440sMarginArcsec": -1.397,
+        "de440sOutOfBounds": false
+      }
+    ]
+  },
+  "performance": {
+    "runtime": "v22.22.2",
+    "cpus": 4,
+    "rounds": 3,
+    "runsPerRound": 21,
+    "fastest": {
+      "rc12": {
+        "version": "0.1.1-rc.12",
+        "counts": {
+          "configuredWorst": 32045,
+          "declinationWorst": 32640
+        },
+        "configuredWorstMs": 191.462,
+        "declinationWorstMs": 72.959,
+        "configuredChartMs": 0.123,
+        "chartDeclinationsMs": 0.169
+      },
+      "rc13": {
+        "version": "0.1.1-rc.13",
+        "counts": {
+          "configuredWorst": 32045,
+          "declinationWorst": 32640
+        },
+        "configuredWorstMs": 1713.456,
+        "declinationWorstMs": 425.186,
+        "configuredChartMs": 0.283,
+        "chartDeclinationsMs": 0.279
+      },
+      "rc14": {
+        "version": "0.1.1-rc.14",
+        "counts": {
+          "configuredWorst": 32045,
+          "declinationWorst": 32640
+        },
+        "configuredWorstMs": 1669.027,
+        "declinationWorstMs": 445.121,
+        "configuredChartMs": 0.286,
+        "chartDeclinationsMs": 0.29
+      }
+    },
+    "relativeToRc12": {
+      "configuredWorstMs": {
+        "rc12": 1,
+        "rc13": 8.95,
+        "rc14": 8.72
+      },
+      "declinationWorstMs": {
+        "rc12": 1,
+        "rc13": 5.83,
+        "rc14": 6.1
+      }
+    },
+    "loadAverages": [
+      [
+        7.01,
+        8.96,
+        9.8
+      ],
+      [
+        6.97,
+        8.89,
+        9.7
+      ],
+      [
+        5.89,
+        7.86,
+        9.19
+      ]
+    ]
+  },
+  "orbDifferenceFromRc12": {
+    "example": {
+      "rows": [
+        {
+          "body": "Moon",
+          "lon": 331.026,
+          "speed": 13
+        },
+        {
+          "body": "Sun",
+          "lon": 103.38600000000001,
+          "speed": 1
+        }
+      ],
+      "angle": 132.36,
+      "before": 0,
+      "after": 1.4210854715202004e-14,
+      "differenceInUnitsOf2PowMinus46": 1
+    },
+    "random": {
+      "pairs": 200000,
+      "largestDifference": 2.842170943040401e-14,
+      "inUnitsOf2PowMinus45": 1
+    }
+  },
+  "farDates": {
+    "rc13": {
+      "version": "0.1.1-rc.13",
+      "rows": [
+        {
+          "utc": "-030000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -117004.934,
+          "ms": 25681.2
+        },
+        {
+          "utc": "-000500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -71.878,
+          "ms": 542.4
+        },
+        {
+          "utc": "0001-04-30T00:00:00Z",
+          "sunLatitudeArcsec": 2.671,
+          "ms": 4.5
+        },
+        {
+          "utc": "0001-05-01T00:00:00Z",
+          "sunLatitudeArcsec": 1.315,
+          "ms": 21.1
+        },
+        {
+          "utc": "0500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -21.565,
+          "ms": 21.4
+        },
+        {
+          "utc": "1000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -9.897,
+          "ms": 21.8
+        },
+        {
+          "utc": "1500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -3.794,
+          "ms": 21.7
+        },
+        {
+          "utc": "1800-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -1.447,
+          "ms": 23.4
+        },
+        {
+          "utc": "2000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 0.019,
+          "ms": 16
+        },
+        {
+          "utc": "2200-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 1.623,
+          "ms": 23.5
+        },
+        {
+          "utc": "2500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 4.697,
+          "ms": 23.1
+        },
+        {
+          "utc": "3000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 13.267,
+          "ms": 19.1
+        },
+        {
+          "utc": "3500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 28.548,
+          "ms": 22.3
+        },
+        {
+          "utc": "3998-09-02T00:00:00Z",
+          "sunLatitudeArcsec": -57.522,
+          "ms": 21.1
+        },
+        {
+          "utc": "3998-09-03T12:00:00Z",
+          "sunLatitudeArcsec": -58.557,
+          "ms": 3.7
+        },
+        {
+          "utc": "4500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 87.508,
+          "ms": 592.6
+        },
+        {
+          "utc": "+030000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -105345.902,
+          "ms": 24790.8
+        }
+      ]
+    },
+    "rc14": {
+      "version": "0.1.1-rc.14",
+      "rows": [
+        {
+          "utc": "-030000-06-01T00:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 1
+        },
+        {
+          "utc": "-000500-06-01T00:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 0.1
+        },
+        {
+          "utc": "0001-04-30T00:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 0
+        },
+        {
+          "utc": "0001-05-01T00:00:00Z",
+          "sunLatitudeArcsec": 1.315,
+          "ms": 76.4
+        },
+        {
+          "utc": "0500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -21.565,
+          "ms": 33.9
+        },
+        {
+          "utc": "1000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -9.897,
+          "ms": 19.1
+        },
+        {
+          "utc": "1500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -3.794,
+          "ms": 27
+        },
+        {
+          "utc": "1800-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -1.447,
+          "ms": 20.1
+        },
+        {
+          "utc": "2000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 0.019,
+          "ms": 14.5
+        },
+        {
+          "utc": "2200-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 1.623,
+          "ms": 13.6
+        },
+        {
+          "utc": "2500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 4.697,
+          "ms": 24.6
+        },
+        {
+          "utc": "3000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 13.267,
+          "ms": 15.6
+        },
+        {
+          "utc": "3500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 28.548,
+          "ms": 13.4
+        },
+        {
+          "utc": "3998-09-02T00:00:00Z",
+          "sunLatitudeArcsec": -57.522,
+          "ms": 14.4
+        },
+        {
+          "utc": "3998-09-03T12:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 0.1
+        },
+        {
+          "utc": "4500-06-01T00:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 0
+        },
+        {
+          "utc": "+030000-06-01T00:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 0
+        }
+      ]
+    }
+  },
+  "siteParity": {
+    "readCommit": "f2bd0dd45947ff392d0de1135695f584a71bfa08",
+    "bodyCases": 85,
+    "rowsPerCase": 12,
+    "comparedBodyRows": 1020,
+    "exactBodyRows": 1020,
+    "additionalMappingCases": 321,
+    "instantMismatches": 0,
+    "bodyMismatches": 0,
+    "mappingMismatches": 0,
+    "mismatchedCases": []
+  },
+  "sourceFiles": {
+    "README.md": "20bf222f578fec1f6bee474c015a587d2405bf58c190e6a76e43d6340f0f6058",
+    "CHANGELOG.md": "0e2a9fb06295250fe3cea758478d81a7b99bb6987e156f3b3e282b023574fcfb",
+    "LICENSE": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df",
+    "LICENSING.md": "5969100931045a9a6a4d8692122f5e79bd0f6217026d2998e9727a3ed24b4b7c",
+    "NOTICE": "265a138525b8d4ab3755a7a969d92dd9b875303b8eea277269713ffc3821dd19",
+    "package.json": "479a94bccd3467ae744bc3c4a2c4b7923b790a1f016ef35da8cc016c3f5095cb",
+    "package-lock.json": "21057a7caca1e9d7e3606e8ad314f8d505bc3fda19d98f96eff823d3dcc63380",
+    "tsconfig.json": "e6cba71820473872fac2d9e080fefaf4cd6a752dba494d6cece005be3d3b8611",
+    "tsconfig.base.json": "ed54172a253a2ff8a0f0712b5caa49b3b12370cc84cbde36f8db446ee1fccfb1",
+    "tsconfig.build.json": "a22d6f6c1c4389ff75785b8867b5f9fbc5f58c2ecf0aac84b88666fb69b54517",
+    "tsconfig.typecheck.json": "79191bb871130d3689ae45c952f8c20d1e2780669c227c22cb1f9a646f9e3ea1",
+    "typedoc.json": "eb307dbbe7f0ae3114f547d3249ff7cc8d4d71a2b6381e30966c8f8ed08d79cf",
+    ".github/workflows/ci.yml": "5851a7506158ba18ea90685f59ec07039c61074baa1ffd96868d52424e563729",
+    "artifacts/README.md": "09f80891455f3c6d49c409b0c0a01c3df76e95d589cdd880768de08f92864d38",
+    "artifacts/archives.json": "279ff583a69a71485207148fdecc772215ee08f324968760c3a6679438ac777f",
+    "src/angles-erfa.test.ts": "ce943febcb8fdddb3063ec6de75032a99fed98368ac1070239cc0eb51be9dfed",
+    "src/api.ts": "cf85a9ee7906dee50739e0a9efde01129b5501b53f045d4b596c322a7cbbd383",
+    "src/aspect-exactness.test.ts": "daa5d0da26e1c3f2f88b63f78ccfef5dd2faa9492b7832ff589142b5a9ec3aa4",
+    "src/aspects.test.ts": "5fb3f2736d67f4193b980291d13c8ac02ebd763b4480b27a9a35299c7856f52d",
+    "src/aspects.ts": "442c4b9ea760ce5ca32d9524581e68551f3508252acd23292d8d9a0ac9ad8341",
+    "src/birth-input.ts": "9303df6556f84faf72e4c799f04d00692015dfade4f3c4e26d8d797f01f35928",
+    "src/body-label.test.ts": "2193b73501ed999994547bc45cdda3db4402d57230a7940a4c0778be758498e9",
+    "src/body-label.ts": "bce12273949cd9810f4ab00c0f05c1aba14cf4ee46533ca3aba0588525006b1e",
+    "src/configured-aspects.test.ts": "d0f79b6d24a67e48027a698d312a47cc033c1fdc1a6a924f5d81372c360a9d6e",
+    "src/configured-aspects.ts": "14e4781817887a0041154f4b6bdd5c9e33c763681d666f4e7d70deb049ec2ce4",
+    "src/crossings-ephemeris.test.ts": "88bcfd37d018770faf7b60a5f4d8a1be3ee34229ce1799bdeaf53ce5dd782b0f",
+    "src/crossings.test.ts": "54323a1dcf38cd1de846b5e8e3b1ce2e56f7b482bca81c2f1c50551b30c54c5e",
+    "src/crossings.ts": "105d512921737886a254f71f5eb080ed11ee7b1a1175fe20ad2934291fdad9e4",
+    "src/date-input.ts": "f9db8865bf143d6334eb93d9618f50aa6a81ba32273b0a103d2a83e3c8014675",
+    "src/declination.test.ts": "4fc7673f83e0c1880f44325e38a446c71780b5882e3d793892db97020293f599",
+    "src/declination.ts": "37dac8656e8bd5836ba8c32110a643e9fef23737cb1eccf842230ca6c58ff428",
+    "src/deltat-chart.test.ts": "733e9eadc8c0a79a2090aec5240249f29cdab84b94466c3a60dbab54183874ea",
+    "src/deltat.test.ts": "8684248f7284453f2602ab3cfb030c97f25751d7d0e15df219f046d64f8df173",
+    "src/deltat.ts": "3dea107e9bc0f1f8acea5737d369e09d571c22b3d1f82efe9dc9184f2bfe99d6",
+    "src/engine.test.ts": "469fb50d17dff6c4eb5c34b97e2f2a09edf5858e81cf63bd2fa9a06bb09ce1de",
+    "src/ephemeris-errors.test.ts": "07e3cecf722465a1a52b10c083672773896fb252ebf54644a4498c99290f7780",
+    "src/ephemeris-span.test.ts": "6f6c2fd812f4487a5c88333e513085075f246b61721739f9c9d5ec0878857302",
+    "src/ephemeris.ts": "c7fbb6d43b3e21a16d7a9c2754aa6208868638ed727e6a8ef19cad287d7d922c",
+    "src/exact.test.ts": "984ff01e963c54f6e0c51aed48ef70fe0c041455235b86298cbcbd7c1376a10e",
+    "src/exact.ts": "f89a335657aa1139370511d315abcf8d6080ab857e0a37d249faf9de6a5eb25e",
+    "src/fixtures/horizons-2020.ts": "b9020517d31d5a08fd907a6990f221801cc650f0ec6075817738638133ca6980",
+    "src/fixtures/iers-12.json": "a243ebbe903a2d47a0dd4b9233a2fa6fafb3bfa76bf4353a326d05cbb178daee",
+    "src/fixtures/rational.ts": "d45b1de5a83d20c1ed626675a2cf2235cf11c23864a4c6b497d1dbd9f65be2ca",
+    "src/fixtures/receipt-rc6.json": "c387416634d49092262cdfe6ec42b5f6e799312ff40c47a2e61f285f666a8547",
+    "src/fixtures/receipt-rc7.json": "3df2dbbe589ca6b5315ce6b05025d4384f93d461c2277450e79115d5f9967eb4",
+    "src/fixtures/table-s15-2016.json": "44ebc2966b11f9162984c62aadc777ca69a43ffd96c43709b5047aee405fb970",
+    "src/geo.test.ts": "68f03a699351526509f9262a6976cc53cd5482447a1219e90eed052c77e8bbce",
+    "src/geo.ts": "bb8e3e0497b2180b6c20954807d56206fe90d208760d730125493eef22464687",
+    "src/geo/geonames-schema.test.ts": "9efcf6e241d2c727897d4617284343205a5a3ab8840cca85e6da3162f1a66863",
+    "src/geo/geonames.test.ts": "8c63377f18da3716c9e7d64c72eedc927e58176853a65790f4be273c683c6806",
+    "src/geo/geonames.ts": "fd4363799fb26f3682b8c54054afc07761d7c301cdb798e6afc40965df150437",
+    "src/geo/timezone-precision.test.ts": "a3bfd13af4483b13e5426ce062340d6f730ec3ee75c92937a9b559ba3f1c33a1",
+    "src/geo/timezone.ts": "11f7370996a00fff9e1315be4c2fcdbe4641b1b41482e760e3a436995ec04494",
+    "src/house-systems.test.ts": "3f51aa10c5ed01a4272a1dc2e865f70711b2e57b2b8c5627236d59a508294074",
+    "src/houses-regression.test.ts": "e2c0299060209e7a20dd98b7705490291c2086939bc0ad5ed87f6044b6a864b0",
+    "src/houses.ts": "28f5497fd08f99618c936b066228fdae4cfe5632951df70416c157b90698ef95",
+    "src/index.ts": "35747af5c73b8da7537305b3932512ab0bbc476648b08037d3a3a064dd599311",
+    "src/input-flags.test.ts": "e28755ad5903f782653c8080204891bf3e404bfee28aace4a42f213636febf93",
+    "src/internal-math.ts": "b7c8b02926bd29e270072bf55c9cd58c916ea04065ff4ddc10ebd30a06e2bcca",
+    "src/internal.ts": "e5102198da1a5218e5695fce997fddac45e70732511b5d904f815f8db7d3722e",
+    "src/placidus-limit.test.ts": "5c2e4753936f00bcaf96cdbaf3055cb7b9e642983168bc95eb06a33e27890158",
+    "src/points.test.ts": "1a3b74dc0dc34049b4e299416b0578c8844a5b9b3cb1ceaf778d2e7f0b0dab03",
+    "src/points.ts": "45ab8f4bc1e5087d68801e64312d8bab80d8415849b649c9655171c0c8eeddae",
+    "src/porphyry.test.ts": "df4d422ed4d3821439ec88e6abb31efb162366ba4bdb68137836a589b2cf1748",
+    "src/progressions.test.ts": "017d92b7b11cb1e1ca3b69c8141f56b33e9112b0a218c457cde653fa11eebe44",
+    "src/progressions.ts": "5d92c812e26d7a3fc3859260f20801a851b1b0ec01862ec47a953e956f36dcd0",
+    "src/public-input.test.ts": "6085c0193e6ea1dd7afe5be6f9dfedf9eda8ec827d8440f244f1957d12f99dae",
+    "src/receipt-conventions.test.ts": "104b06f2ce6b821f2d6a408dab9f95ea1c2fcdf800543639cf162076d55af3d4",
+    "src/receipt-json.test.ts": "9771c80a0e64e93612b1f345ec865ee238d34491f21031dc025761410740faf6",
+    "src/receipt-json.ts": "da5627224b593769eea8f1d434815ad34f422f44e1ef38a6687f86d8ccf8dd5c",
+    "src/receipt.test.ts": "a3b61055f65596345742c8a4aa69cb8f3ed9eea5e1f8d30a4632b4365b3f7776",
+    "src/receipt.ts": "bc7f83f7db15ffb66caae8f97ef6ac12b6c5889e599904207da84c3095e23679",
+    "src/reference-span.test.ts": "f6b0a648fcdcc62b51f9d9b95e4e8a41a7489e057091ec1d17ed80ac5a2414e7",
+    "src/reference-span.ts": "841df76f1bde8cc74f66a11ce97f891b94f7c31c0e676d579647a87c4f9cef1c",
+    "src/returns-bounds.test.ts": "4f1f2e88d70a7b9ac053fc443b53606a6d015b42c9af79b5568972f29748bd9e",
+    "src/returns-crossings.test.ts": "465d052dfeffba4a2ac1e1fcce4a582377d936a77965c196d8a08cfbabb5568d",
+    "src/returns.ts": "6b78526253104b723896b5f10f8103a1d39fb13df176646db96110fef204094d",
+    "src/signs.ts": "25b7cc9006624254995bd21f5dbaef92f4e61ef476b570589122a034896072dd",
+    "src/speed.test.ts": "072715732ffb1d2747e6e6b062fc0c8359bd5ed6095bb50622eda5c87e6bb2f8",
+    "src/synastry.ts": "482ad89ae8df0bc5f3e8813d39400e8d3f7ceff4cad8d79fa0b5cdf3627ac1f7",
+    "src/types.ts": "dd0c03ea5b817859ceb167d701b91df6732dd303d7e57f6359ab119667304234",
+    "scripts/module-resolution-smoke.mjs": "dff75fa56030a1d64acbf5d673811a764bfe048e8c1991e850c7809cf757ca97",
+    "scripts/typedoc-canonical.mjs": "b98f810257c4b05b525d8fbfc7b4954331aef8b22a4af6c04719046a4ce965ab",
+    "scripts/verify-archive-binding.mjs": "3a312326b00d3d4f97ec4120df9d4bb355201d904a64da332aa8546d8ddcec82",
+    "scripts/verify-archive-binding.test.mjs": "488812c58b561165dd852f58791eb4e1f9f7eee26f59104f855532728916d6eb",
+    "scripts/verify-package-contents.mjs": "f2838ec0ee1f99e1163c642915bb67f172d1b894b42e4024ad625d0cc1b25186",
+    "scripts/verify-packed-consumer.mjs": "d4ecb050b462a16e8ec745cfc5fe070d0c836577974f5ad14a505c85d0848b76",
+    "scripts/verify-rc10-compatibility.mjs": "7d0b0fa15408d70b03653dd5345977b141e0a28c2211345d9153624a3d4bb603"
+  },
+  "limits": [
+    "The declination errors against DE440s are maxima of 20,000 seeded samples from 1850 to 2150, not bounds; the flag's reliability outside that span is not measured.",
+    "The Sun's exemption is a convention: the engine cannot resolve whether the real Sun is beyond the bound at a solstice.",
+    "EPHEMERIS_SPAN is where astronomy-engine can evaluate at all, not where it is accurate; accuracy was compared only within REFERENCE_SPAN.",
+    "The physical 0.01 arcsecond declination target remains unmet.",
+    "The CI jobs added here (packed consumer on Node 20.19.0 and 22.7.0, --rebuild-all) have run locally with the same scripts, not yet on GitHub Actions.",
+    "No npm publication, merge, push or site adoption is represented by this record; review is AI-assisted, not human approval."
+  ]
+}

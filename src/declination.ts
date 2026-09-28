@@ -2,7 +2,7 @@
 
 import { checkedBodyLabel } from "./body-label.js";
 import type { DeltaT } from "./deltat.js";
-import { absolute, compareExact, exactSum, negated, roundedValue } from "./exact.js";
+import { absolute, compareExact, exactSum, negated, roundedValue, signOf } from "./exact.js";
 import type { ExactSum } from "./exact.js";
 
 const DEG = Math.PI / 180;
@@ -32,6 +32,11 @@ export const DEFAULT_DECLINATION_ORB_POLICY: Readonly<DeclinationOrbPolicy> = Ob
 export const RA_POLE_TOLERANCE = 32 * Number.EPSILON;
 /** Maximum supplied bodies per derived analysis, bounding the pair count. */
 export const MAX_DECLINATION_BODIES = 256;
+/**
+ * Degrees of ecliptic latitude within which a row labelled exactly "Sun" is
+ * never flagged out of bounds, by convention (0.001°, 3.6″). See outOfBounds.
+ */
+export const SUN_BOUND_LATITUDE = 0.001;
 
 export interface EquatorialCoordinates {
   /** Right ascension in degrees [0,360), or null at a numerical celestial pole. */
@@ -53,11 +58,21 @@ export interface DeclinationBody {
 export interface DeclinationRow extends DeclinationBody, EquatorialCoordinates {
   /**
    * Strictly |declination| > the supplied true obliquity, with no uncertainty
-   * allowance. A row labelled exactly "Sun" is never out of bounds: the Sun
-   * defines the bound, although its small ecliptic latitude can put its
-   * computed declination a fraction of an arcsecond beyond it at a solstice.
+   * allowance, except by convention for a row labelled exactly "Sun" whose
+   * ecliptic latitude is within SUN_BOUND_LATITUDE: that row is never out of
+   * bounds. The real Sun does pass the bound at about half of all solstices, by
+   * up to about 1.1″, but the ephemeris's solar declination is off by up to
+   * about 2.7″, more than the effect, so the flag could not say which.
    */
   outOfBounds: boolean;
+  /**
+   * |declination| − trueObliquity, in arcseconds: positive beyond the bound,
+   * negative inside it. For every row but the exempt Sun, outOfBounds is
+   * exactly boundMarginArcsec > 0. The flag describes the ephemeris's position;
+   * it agrees with the real sky only where |boundMarginArcsec| exceeds the
+   * ephemeris's declination error for that body (see the README).
+   */
+  boundMarginArcsec: number;
 }
 
 export type DeclinationAspectType = "parallel" | "contraparallel";
@@ -76,16 +91,20 @@ export interface DeclinationAspect {
   maximumOrb: number;
   decA: number;
   decB: number;
-  /** Ecliptic-longitude separation in degrees [0,180], not sky separation; rounded once. */
+  /**
+   * Ecliptic-longitude separation of the two supplied longitudes, reduced
+   * exactly modulo 360, in degrees [0,180]; not sky separation. Rounded once.
+   */
   separation: number;
 }
 
 export interface Declinations {
   /**
    * True obliquity of date in degrees: the bound for out-of-bounds flags. From
-   * chartDeclinations it is astronomy-engine's (IAU 2006 mean obliquity plus
-   * IAU 2000B nutation in obliquity) at the chart instant on its TT clock;
-   * elsewhere it is the value supplied.
+   * chartDeclinations it is astronomy-engine's, at the chart instant on its TT
+   * clock: the IAU 2006 mean obliquity plus astronomy-engine's five-term
+   * truncation of the IAU 2000B nutation in obliquity. Elsewhere it is the
+   * value supplied.
    */
   trueObliquity: number;
   rows: DeclinationRow[];
@@ -203,7 +222,13 @@ export function declinationOrb(
   return a === "Sun" || a === "Moon" || b === "Sun" || b === "Moon" ? checked.luminaryOrb : checked.orb;
 }
 
-function placeBodies(bodies: readonly DeclinationBody[], trueObliquity: number): DeclinationRow[] {
+interface PlacedBodies {
+  rows: DeclinationRow[];
+  /** The supplied longitudes, before rows normalize them into [0,360). */
+  longitudes: number[];
+}
+
+function placeBodies(bodies: readonly DeclinationBody[], trueObliquity: number): PlacedBodies {
   obliquity(trueObliquity);
   if (!Array.isArray(bodies) || Object.getPrototypeOf(bodies) !== Array.prototype) {
     throw new RangeError("declination bodies must be a standard array.");
@@ -215,6 +240,7 @@ function placeBodies(bodies: readonly DeclinationBody[], trueObliquity: number):
   }
   const seen = new Set<string>();
   const placed: DeclinationRow[] = [];
+  const longitudes: number[] = [];
   for (let index = 0; index < length; index += 1) {
     const field = fields[String(index)];
     if (!field || !Object.hasOwn(field, "value") || !field.enumerable) {
@@ -226,17 +252,27 @@ function placeBodies(bodies: readonly DeclinationBody[], trueObliquity: number):
     if (seen.has(body.body)) throw new RangeError("duplicate declination body identifier.");
     seen.add(body.body);
     const position = eclipticToEquatorial(body.lon, body.lat, trueObliquity);
-    // The obliquity is the Sun's own greatest declination on the ecliptic, so
-    // the Sun defines the bound and is never beyond it.
+    // A convention, not a physical claim: the ephemeris cannot resolve whether
+    // the Sun, on the ecliptic within SUN_BOUND_LATITUDE, is beyond the bound.
+    const exemptSun = body.body === "Sun" && Math.abs(body.lat) <= SUN_BOUND_LATITUDE;
     placed.push({ body: body.body, lon: normalize(body.lon), lat: body.lat, ...position,
-      outOfBounds: body.body !== "Sun" && Math.abs(position.dec) > trueObliquity });
+      outOfBounds: !exemptSun && Math.abs(position.dec) > trueObliquity,
+      boundMarginArcsec: (Math.abs(position.dec) - trueObliquity) * 3600 });
+    longitudes.push(body.lon);
   }
-  return placed;
+  return { rows: placed, longitudes };
 }
 
-/** Exact |a − b| of two longitudes in [0,360), taken the short way round and rounded once. */
+/**
+ * Exact circular distance in [0,180] between two finite longitudes of any size,
+ * rounded once. The remainder % is exact for doubles, so a − b is congruent
+ * modulo 360 to (a % 360) − (b % 360), which lies in (−720, 720); exact steps
+ * of 360 then bring it into [0,360).
+ */
 function longitudeSeparation(a: number, b: number): number {
-  const difference = absolute(exactSum(a, -b));
+  let difference = exactSum(a % 360, -(b % 360));
+  while (signOf(difference) < 0) difference = exactSum(difference, 360);
+  while (compareExact(difference, 360) >= 0) difference = exactSum(difference, -360);
   return roundedValue(compareExact(difference, 180) > 0 ? exactSum(360, negated(difference)) : difference);
 }
 
@@ -245,7 +281,10 @@ function longitudeSeparation(a: number, b: number): number {
  * distances, the choice between them, the inclusive orb test and the order
  * are decided on exact values; only the reported orb is rounded.
  */
-function aspectsFor(rows: readonly DeclinationRow[], policy: Readonly<DeclinationOrbPolicy>): DeclinationAspect[] {
+function aspectsFor(
+  { rows, longitudes }: PlacedBodies,
+  policy: Readonly<DeclinationOrbPolicy>
+): DeclinationAspect[] {
   const found: { aspect: DeclinationAspect; exactOrb: ExactSum }[] = [];
   for (let i = 0; i < rows.length; i += 1) {
     for (let j = i + 1; j < rows.length; j += 1) {
@@ -258,7 +297,8 @@ function aspectsFor(rows: readonly DeclinationRow[], policy: Readonly<Declinatio
       const maximumOrb = declinationOrb(a.body, b.body, policy);
       if (compareExact(exactOrb, maximumOrb) > 0) continue;
       found.push({exactOrb, aspect: {a: a.body, b: b.body, type: isParallel ? "parallel" : "contraparallel",
-        orb: roundedValue(exactOrb), maximumOrb, decA: a.dec, decB: b.dec, separation: longitudeSeparation(a.lon, b.lon)}});
+        orb: roundedValue(exactOrb), maximumOrb, decA: a.dec, decB: b.dec,
+        separation: longitudeSeparation(longitudes[i]!, longitudes[j]!)}});
     }
   }
   // Array sort is stable: equal exact orbs keep input pair order.
@@ -287,8 +327,8 @@ export function declinationsForBodies(
   policy: Readonly<DeclinationOrbPolicy> = DEFAULT_DECLINATION_ORB_POLICY
 ): Declinations {
   const checked = policyOf(policy);
-  const rows = placeBodies(bodies, trueObliquity);
-  return {trueObliquity, rows, aspects: aspectsFor(rows, checked), orbPolicy: checked,
+  const placed = placeBodies(bodies, trueObliquity);
+  return {trueObliquity, rows: placed.rows, aspects: aspectsFor(placed, checked), orbPolicy: checked,
     convention: "true-equator-and-equinox-of-date; full-ecliptic-longitude-and-latitude",
     receiptScope: "not-included-in-natal-receipt"};
 }

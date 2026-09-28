@@ -1,0 +1,162 @@
+{
+  "question": "How large is the engine's declination error, and so the margin within which its out-of-bounds flag can disagree with the sky?",
+  "instrument": {
+    "erfa": "2.0.1.5",
+    "numpy": "2.4.6",
+    "de440s": {
+      "file": "de440s.bsp",
+      "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
+    },
+    "engine": "0.1.1-rc.14",
+    "scripts": [
+      "apparent.py",
+      "declination-truth.py",
+      "engine-at-tt.mjs"
+    ],
+    "samples": 20000,
+    "seed": 20260928,
+    "span": "1850-01-01 to 2150-01-01 TT"
+  },
+  "bodies": {
+    "Sun": {
+      "declinationErrorArcsec": {
+        "median": 0.574,
+        "p99": 1.901,
+        "max": 2.727
+      },
+      "maxMarginErrorArcsec": 2.756,
+      "outOfBoundsShare": 0.001,
+      "signDisagreements": 24,
+      "maxAbsEngineMarginWhereSignDisagreesArcsec": 1.257
+    },
+    "Moon": {
+      "declinationErrorArcsec": {
+        "median": 0.478,
+        "p99": 2.059,
+        "max": 3.408
+      },
+      "maxMarginErrorArcsec": 3.439,
+      "outOfBoundsShare": 0.1542,
+      "signDisagreements": 0,
+      "maxAbsEngineMarginWhereSignDisagreesArcsec": null
+    },
+    "Mercury": {
+      "declinationErrorArcsec": {
+        "median": 1.289,
+        "p99": 6.783,
+        "max": 12.159
+      },
+      "maxMarginErrorArcsec": 12.143,
+      "outOfBoundsShare": 0.1233,
+      "signDisagreements": 3,
+      "maxAbsEngineMarginWhereSignDisagreesArcsec": 2.625
+    },
+    "Venus": {
+      "declinationErrorArcsec": {
+        "median": 0.917,
+        "p99": 7.87,
+        "max": 14.728
+      },
+      "maxMarginErrorArcsec": 14.693,
+      "outOfBoundsShare": 0.1211,
+      "signDisagreements": 0,
+      "maxAbsEngineMarginWhereSignDisagreesArcsec": null
+    },
+    "Mars": {
+      "declinationErrorArcsec": {
+        "median": 0.868,
+        "p99": 6.595,
+        "max": 14.534
+      },
+      "maxMarginErrorArcsec": 14.515,
+      "outOfBoundsShare": 0.1759,
+      "signDisagreements": 2,
+      "maxAbsEngineMarginWhereSignDisagreesArcsec": 4.364
+    },
+    "Jupiter": {
+      "declinationErrorArcsec": {
+        "median": 2.525,
+        "p99": 10.678,
+        "max": 16.101
+      },
+      "maxMarginErrorArcsec": 16.104,
+      "outOfBoundsShare": 0.0056,
+      "signDisagreements": 2,
+      "maxAbsEngineMarginWhereSignDisagreesArcsec": 6.775
+    },
+    "Saturn": {
+      "declinationErrorArcsec": {
+        "median": 7.519,
+        "p99": 19.509,
+        "max": 21.583
+      },
+      "maxMarginErrorArcsec": 21.586,
+      "outOfBoundsShare": 0.0,
+      "signDisagreements": 0,
+      "maxAbsEngineMarginWhereSignDisagreesArcsec": null
+    },
+    "Uranus": {
+      "declinationErrorArcsec": {
+        "median": 4.934,
+        "p99": 17.597,
+        "max": 19.274
+      },
+      "maxMarginErrorArcsec": 19.26,
+      "outOfBoundsShare": 0.0813,
+      "signDisagreements": 10,
+      "maxAbsEngineMarginWhereSignDisagreesArcsec": 16.021
+    },
+    "Neptune": {
+      "declinationErrorArcsec": {
+        "median": 3.091,
+        "p99": 14.792,
+        "max": 15.435
+      },
+      "maxMarginErrorArcsec": 15.453,
+      "outOfBoundsShare": 0.0,
+      "signDisagreements": 0,
+      "maxAbsEngineMarginWhereSignDisagreesArcsec": null
+    },
+    "Pluto": {
+      "declinationErrorArcsec": {
+        "median": 1.052,
+        "p99": 4.461,
+        "max": 4.551
+      },
+      "maxMarginErrorArcsec": 4.536,
+      "outOfBoundsShare": 0.0391,
+      "signDisagreements": 0,
+      "maxAbsEngineMarginWhereSignDisagreesArcsec": null
+    }
+  },
+  "trueObliquity": {
+    "againstObl06PlusNut00bMilliarcsec": 85.6,
+    "againstObl06PlusNut06aMilliarcsec": 85.41
+  },
+  "reviewExamples": [
+    {
+      "utc": "2022-10-22T08:11:10.756Z",
+      "body": "Mars",
+      "engineMarginArcsec": -1.57,
+      "engineFlag": false,
+      "de440sMarginArcsec": 1.046,
+      "de440sOutOfBounds": true
+    },
+    {
+      "utc": "2029-10-09T13:02:38.126Z",
+      "body": "Venus",
+      "engineMarginArcsec": -1.864,
+      "engineFlag": false,
+      "de440sMarginArcsec": 1.243,
+      "de440sOutOfBounds": true
+    },
+    {
+      "utc": "2021-05-30T06:32:15.389Z",
+      "body": "Mercury",
+      "engineMarginArcsec": 2.094,
+      "engineFlag": true,
+      "de440sMarginArcsec": -1.397,
+      "de440sOutOfBounds": false
+    }
+  ]
+}

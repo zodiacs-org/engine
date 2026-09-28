@@ -163,12 +163,14 @@ describe("secondary progressed positions", () => {
     } finally { SetDeltaTFunction(deltaT); }
   });
 
-  it("throws RangeError, not astronomy-engine's string, where speed samples leave the Date range", () => {
-    expect(() => progressedBodies(8.64e15, 8.64e15)).toThrow(RangeError);
-    expect(() => progressedBodies(-8.64e15, -8.64e15)).toThrow(RangeError);
-    expect(() => progressedBodies(8.64e15 - 1, 8.64e15 - 1)).toThrow(/outside JavaScript's Date range/);
-    expect(() => positions(8.64e15)).toThrow(RangeError);
-    expect(() => positions(-8.64e15)).toThrow(RangeError);
+  it("throws RangeError, not astronomy-engine's string, at the ends of the Date range", () => {
+    // At the ends a speed sample is an invalid Date; far inside them too, the
+    // ephemeris evaluates only EPHEMERIS_SPAN. Every case names the span.
+    for (const ms of [8.64e15, -8.64e15, 8.64e15 - 1]) {
+      expect(() => progressedBodies(ms, ms)).toThrow(RangeError);
+      expect(() => progressedBodies(ms, ms)).toThrow(/outside the ephemeris span/);
+      expect(() => positions(ms)).toThrow(/outside the ephemeris span/);
+    }
     // The mapping itself is arithmetic and remains defined at the Date limits.
     expect(progressedInstant(8.64e15, 8.64e15).getTime()).toBe(8.64e15);
   });

@@ -11,6 +11,7 @@ import {
   Vector,
   e_tilt
 } from "astronomy-engine";
+import type { AstroTime } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
 import { declinationsForBodies } from "./declination.js";
@@ -19,7 +20,7 @@ import { deltaT, deltaTAt } from "./deltat.js";
 import type { DeltaT } from "./deltat.js";
 import { computeAngles, computeHouses, eastPointOf, vertexOf } from "./houses.js";
 import { hellenisticLots, meanApogee, meanNodeLongitude, sectOf } from "./points.js";
-import { outsideReferenceSpan } from "./reference-span.js";
+import { EPHEMERIS_SPAN, outsideReferenceSpan } from "./reference-span.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "./signs.js";
 import type {
   BodyName,
@@ -61,18 +62,28 @@ function evaluated<T>(run: () => T): T {
   }
 }
 
-/** JavaScript's Date range: ±8.64e15 ms around 1970-01-01T00:00Z. */
-const DATE_LIMIT_MS = 8.64e15;
-
-/** A speed sample stepDays from date; it must itself be a valid Date. */
-function sampleDate(date: Date, stepDays: number): Date {
-  const ms = date.getTime() + stepDays * 86_400_000;
-  if (!(Math.abs(ms) <= DATE_LIMIT_MS)) {
+/**
+ * astronomy-engine's time for date on the installed ΔT clock, refused outside
+ * EPHEMERIS_SPAN. Every evaluation below takes its time from here, so the
+ * instant and each speed sample are checked, on a pinned clock as on the model.
+ */
+function timeOf(date: Date): AstroTime {
+  // A speed sample past the end of JavaScript's Date range is an invalid Date,
+  // and so outside the span too.
+  const time = Number.isFinite(date.getTime()) ? MakeTime(date) : null;
+  const { from, to } = EPHEMERIS_SPAN.daysFromJ2000;
+  if (!(time !== null && time.tt >= from && time.tt <= to)) {
     throw new RangeError(
-      `Speed samples ${Math.abs(stepDays)} day either side of this instant fall outside JavaScript's Date range (±8.64e15 ms).`
+      "The instant is outside the ephemeris span: its Terrestrial Time, and that of each speed sample, " +
+        "must lie between 0001-04-30T12:00 and 3998-09-03T12:00 TT, the years astronomy-engine tabulates (EPHEMERIS_SPAN)."
     );
   }
-  return new Date(ms);
+  return time;
+}
+
+/** A speed sample stepDays from date. */
+function sampleDate(date: Date, stepDays: number): Date {
+  return new Date(date.getTime() + stepDays * 86_400_000);
 }
 
 function deltaTFor(date: Date, pin: number | undefined): DeltaT {
@@ -95,7 +106,7 @@ const PLANETS = [
 ] as const satisfies readonly { name: BodyName; body: Body }[];
 
 function eclipticOfDate(body: Body, date: Date): { lon: number; lat: number } {
-  const time = MakeTime(date);
+  const time = timeOf(date);
   const equatorial = GeoVector(body, time, true);
   const ecliptic = RotateVector(Rotation_EQJ_ECT(time), equatorial);
   const lon = normalizeLongitude(Math.atan2(ecliptic.y, ecliptic.x) * RAD);
@@ -104,13 +115,13 @@ function eclipticOfDate(body: Body, date: Date): { lon: number; lat: number } {
 }
 
 function moonOfDate(date: Date): { lon: number; lat: number } {
-  const moon = EclipticGeoMoon(MakeTime(date));
+  const moon = EclipticGeoMoon(timeOf(date));
   return { lon: normalizeLongitude(moon.lon), lat: moon.lat };
 }
 
 /** Ascending node of the Moon's instantaneous geocentric orbit plane. */
 function trueNodeLongitude(date: Date): number {
-  const time = MakeTime(date);
+  const time = timeOf(date);
   const state = GeoMoonState(time);
   const angularMomentum = {
     x: state.y * state.vz - state.z * state.vy,
@@ -146,8 +157,8 @@ export function bodyLongitude(body: BodyName, date: Date): number {
  * Longitude speed in degrees per day: the derivative of the longitude this
  * engine reports, by a central difference over plus/minus 0.001 day (86.4 s).
  * The true node keeps plus/minus six hours, where its short-period noise
- * would otherwise dominate. Both samples must lie in JavaScript's Date range,
- * so positions need an instant at least six hours inside it.
+ * would otherwise dominate. Both samples must lie in EPHEMERIS_SPAN, so
+ * positions need an instant at least six hours inside it.
  */
 export const SPEED_STEP_DAYS = 0.001;
 export const NODE_SPEED_STEP_DAYS = 0.25;
@@ -232,7 +243,7 @@ function chartAt(input: ChartInput, pin: number | undefined): Chart {
     // Apparent sidereal time already carries the nutation in longitude, so the
     // ecliptic it is projected onto must be the true one of date: the mean
     // obliquity plus the nutation in obliquity, from the same model and on TT.
-    const time = MakeTime(input.utc);
+    const time = timeOf(input.utc);
     const angleInput = {
       gastHours: SiderealTime(time),
       latitude: input.latitude,
@@ -262,7 +273,7 @@ function chartAt(input: ChartInput, pin: number | undefined): Chart {
 
 /** The mean node and the mean apogee at an instant, on the engine's clock. */
 function meanLunarPoints(date: Date): { node: number; apogee: { lon: number; lat: number } } {
-  const time = MakeTime(date);
+  const time = timeOf(date);
   const centuries = time.tt / 36525;
   const nutation = e_tilt(time).dpsi / 3600;
   return { node: meanNodeLongitude(centuries, nutation), apogee: meanApogee(centuries, nutation) };
@@ -329,7 +340,7 @@ export function computeChartDeclinations(chart: Chart): ChartDeclinations {
   return evaluated(() => {
     clock(pin);
     try {
-      return { ...declinationsForBodies(bodies, e_tilt(MakeTime(date)).tobl),
+      return { ...declinationsForBodies(bodies, e_tilt(timeOf(date)).tobl),
         utc: date.toISOString(), deltaT: deltaTFor(date, pin) };
     } finally {
       if (pin !== undefined) clock();
@@ -350,7 +361,7 @@ function pointsAt(chart: Chart): ChartPoints {
   if (chart.angles === null || latitude === undefined || longitude === undefined) {
     return { sect: null, points };
   }
-  const time = MakeTime(utc);
+  const time = timeOf(utc);
   const angleInput = {
     gastHours: SiderealTime(time),
     latitude,

@@ -1,0 +1,106 @@
+
+> @zodiacs/engine@0.1.1-rc.14 test
+> vitest run
+
+
+ RUN  v2.1.9 /tmp/claude-0/-home-user-site/25475091-052a-53d7-9cd4-cf04ce09dc68/scratchpad/engine-rc13
+
+ ✓ src/configured-aspects.test.ts (52 tests) 3266ms
+   ✓ legacy compatibility > preserves default matches and motion on real charts, with exactly bounded configured orbs 798ms
+   ✓ legacy compatibility > preserves defaults across seeded geometry, retrogrades, wrap and equal speeds 2137ms
+ ✓ src/receipt.test.ts (36 tests) 5021ms
+   ✓ Zodiacs draft natal receipt > preserves a fresh full result and requested Placidus across a polar fallback replay 901ms
+   ✓ Zodiacs draft natal receipt > accepts full public results for synthetic latitude -40 without numeric rounding 409ms
+   ✓ Zodiacs draft natal receipt > accepts full public results for synthetic latitude 0 without numeric rounding 326ms
+   ✓ hostile or inconsistent natal envelopes > rejects invalid enum, geometry, precision and flag/result consistency 619ms
+ ✓ src/declination.test.ts (22 tests) 2266ms
+   ✓ chart-clock declination derivation > records observation/Delta-T and uses the provider's pinned true obliquity 311ms
+   ✓ longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size 1653ms
+ ✓ src/input-flags.test.ts (66 tests) 1900ms
+   ✓ public birth flag boundary > does not coerce flag members or invoke array member getters/iterators 308ms
+ ✓ src/crossings.test.ts (50 tests) 634ms
+ ✓ src/house-systems.test.ts (1903 tests) 8310ms
+   ✓ house systems inside the polar circle > falls back from Koch as from Placidus, and flags it 339ms
+   ✓ house systems inside the polar circle > turns Regiomontanus, Campanus and Topocentric cusps with the ascendant 425ms
+   ✓ house systems inside the polar circle > keeps the midheaven on Alcabitius's 10th cusp and computes every other system 1120ms
+   ✓ house-system receipts > records, reads and replays equal 345ms
+ ✓ src/geo/geonames-schema.test.ts (67 tests) 507ms
+ ✓ src/aspect-exactness.test.ts (8 tests) 23731ms
+   ✓ configured aspects under exact binary semantics > agree with the exact rational oracle on a decimal grid, wrapped and unwrapped, in both row orders 7638ms
+   ✓ configured aspects under exact binary semantics > agree with the oracle with several bodies, rules, caps and luminaries 3987ms
+   ✓ configured aspects under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 3635ms
+   ✓ configured aspects under exact binary semantics > uses a faithful rc.11 copy: away from boundaries its decisions match the oracle 3401ms
+   ✓ declination parallels under exact binary semantics > agree with the exact rational oracle on decimal and rotated declinations 2978ms
+   ✓ declination parallels under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 2008ms
+ ✓ src/progressions.test.ts (21 tests) 591ms
+ ✓ src/points.test.ts (14 tests) 524ms
+ ✓ src/engine.test.ts (24 tests) 1755ms
+   ✓ public composition APIs > finds the known 1990 Saturn return triple pass 1275ms
+ ✓ src/geo/geonames.test.ts (10 tests) 335ms
+ ✓ src/deltat.test.ts (12 tests) 1717ms
+   ✓ zodiacs-deltat/1 > represents Table S15 of Stephenson, Morrison & Hohenkerk (2016) within 0.02 s from −720 to 1941 418ms
+   ✓ zodiacs-deltat/1 > gives σ after the last observed day by the years since it, continuous and never decreasing 856ms
+   ✓ zodiacs-deltat/1 > is quick enough to run inside every ephemeris call 328ms
+ ✓ scripts/verify-archive-binding.test.mjs (8 tests) 25836ms
+   ✓ archive binding check > passes a clean history and skips the rebuild until the version's archive exists 2225ms
+   ✓ archive binding check > sees a rewrite on a side branch hidden by merge simplification 3149ms
+   ✓ archive binding check > sees an archive carried and removed on a merged side branch 3486ms
+   ✓ archive binding check > allows superseded bytes only in their recorded commit 6708ms
+   ✓ archive binding check > checks the receipt of every version, not only the current one 2434ms
+   ✓ archive binding check > binds each archive to its recorded source commit 1841ms
+   ✓ archive binding check > refuses an archive carried by a commit that does not follow its source commit 1938ms
+   ✓ archive binding check > refuses an archive without a manifest entry, and a shallow checkout 3633ms
+ ✓ src/deltat-chart.test.ts (10 tests) 680ms
+ ✓ src/porphyry.test.ts (14 tests) 333ms
+ ✓ src/public-input.test.ts (78 tests) 509ms
+ ✓ src/crossings-ephemeris.test.ts (11 tests) 35707ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2100 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 2966ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2400 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 3084ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2600 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 2227ms
+   ✓ the audit's s2 cases, with the site's answers > matches an hourly scan of the 2,600-day Moon window, crossing by crossing 8391ms
+   ✓ the audit's s2 cases, with the site's answers > returns Saturn's crossings of 0° from 1900 to 2100 at a 5-day step, and a daily scan agrees 16956ms
+   ✓ grazing crossing pairs on the ephemeris > keeps all three first-return passes for a natal Saturn 0.002° below the 2019 station 1478ms
+   ✓ grazing crossing pairs on the ephemeris > returns both Jupiter passes for targets up to 0.005° below the station, at every scan phase 393ms
+ ✓ src/returns-bounds.test.ts (19 tests) 358ms
+ ✓ src/receipt-conventions.test.ts (6 tests) 852ms
+   ✓ receipt conventions > records the current conventions, and judges applying by them 551ms
+ ✓ src/geo.test.ts (40 tests) 607ms
+ ✓ src/reference-span.test.ts (7 tests) 1336ms
+   ✓ reference span (rule 1e) > flags a chart in 2300 and one in 900, and none inside the span 812ms
+   ✓ reference span (rule 1e) > carries the flag through a receipt, which checks it against the instant 305ms
+ ✓ src/receipt-json.test.ts (88 tests) 285ms
+ ✓ src/houses-regression.test.ts (6 tests) 2408ms
+   ✓ shared rising intersection > satisfies the horizon and rising-direction geometry in both hemispheres 961ms
+   ✓ shared rising intersection > anchors public natal whole houses after correction 934ms
+   ✓ shared rising intersection > anchors public natal placidus houses after correction 507ms
+ ✓ src/returns-crossings.test.ts (16 tests) 36ms
+ ✓ src/geo/timezone-precision.test.ts (17 tests) 970ms
+   ✓ second-precise local minute matching > retains the actual 1914-01-01 gap in America/Manaus through the public receipt codec 538ms
+ ✓ src/exact.test.ts (5 tests) 22862ms
+   ✓ exact sums of binary64 terms > round once to the nearest double, ties to even, and give the exact sign 22328ms
+   ✓ exact sums of binary64 terms > decides signs of sums beyond the overflow-safe range with integers 527ms
+ ✓ src/ephemeris-span.test.ts (6 tests) 824ms
+   ✓ the ephemeris span > evaluates instants just inside either end on the model ΔT clock 394ms
+   ✓ the ephemeris span > applies to every calculation that evaluates the ephemeris 340ms
+ ✓ src/body-label.test.ts (15 tests) 691ms
+ ✓ src/placidus-limit.test.ts (1 test) 5327ms
+   ✓ the Placidus limit against the ERFA arbiter (brief v1 rule 1h) > computes Placidus exactly where the arbiter's limit allows it 5317ms
+ ✓ src/speed.test.ts (7 tests) 6059ms
+   ✓ longitude speeds > are the derivative of the reported longitude to 0.01″ a day 1455ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 2026-07-26T19:57:16.990Z 889ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 2026-07-26T19:57:29.612Z 1334ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 2026-07-26T19:57:49.612Z 1045ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 1990-02-01T12:00:00Z 1260ms
+ ✓ src/ephemeris-errors.test.ts (6 tests) 739ms
+   ✓ ephemeris failures surface as RangeError > positions wraps a thrown string in a RangeError that keeps it as the cause 427ms
+ ✓ src/angles-erfa.test.ts (12 tests) 1222ms
+   ✓ the angles against the ERFA arbiter (brief v1 rule 1b) > 1950-03-21T18:00:00Z at -66° 469ms
+ ✓ src/aspects.test.ts (12 tests) 65472ms
+   ✓ aspectMotion > agrees with linear motion on 400,000 seeded pairs 1193ms
+   ✓ findAspects applying flags against the engine's own motion > match the sign of the orb's rate, measured over ±1 s, every 30 minutes in the first quarter of 2024 64231ms
+
+ Test Files  34 passed (34)
+      Tests  2669 passed (2669)
+   Start at  16:17:32
+   Duration  126.16s (transform 6.68s, setup 0ms, collect 26.25s, tests 223.67s, environment 35ms, prepare 25.04s)
+

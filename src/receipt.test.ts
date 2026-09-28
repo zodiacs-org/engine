@@ -274,7 +274,8 @@ describe("Zodiacs draft natal receipt", () => {
   );
 
   it.each([
-    ["0000-01-01", "00:30", "Etc/GMT-1", "-000001-12-31T23:30:00.000Z"],
+    // Charts need EPHEMERIS_SPAN (years 1 to 3998), so the earliest boundary is 0002/0001.
+    ["0002-01-01", "00:30", "Etc/GMT-1", "0001-12-31T23:30:00.000Z"],
     ["0099-12-31", "23:30", "Etc/GMT+1", "0100-01-01T00:30:00.000Z"]
   ])(
     "preserves arithmetic year boundary %s without Date.UTC remapping",

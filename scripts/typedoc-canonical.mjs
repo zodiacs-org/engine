@@ -1,6 +1,6 @@
 import { PageEvent } from "typedoc";
 
-const DOCS_BASE = "https://zodiacs.org/sdk/engine/";
+const DOCS_BASE = "https://zodiacs.org/developers/engine/reference/";
 
 /** TypeDoc plugin: canonicalize every generated page without hand-editing output. */
 export function load(application) {

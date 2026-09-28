@@ -1,0 +1,37 @@
+{
+ "engineVersion": "0.1.1-rc.14",
+ "expectation": "none",
+ "passed": true,
+ "cases": 53168,
+ "mismatches": 0,
+ "families": {
+  "boundary-0.1-orbs": {
+   "cases": 20000,
+   "mismatches": 0
+  },
+  "decimal-boundary": {
+   "cases": 5520,
+   "mismatches": 0
+  },
+  "declination-boundary": {
+   "cases": 2640,
+   "mismatches": 0
+  },
+  "declination-rotated": {
+   "cases": 2000,
+   "mismatches": 0
+  },
+  "multi-body": {
+   "cases": 3000,
+   "mismatches": 0
+  },
+  "review-reproductions": {
+   "cases": 8,
+   "mismatches": 0
+  },
+  "zero-orb-0.01-grid": {
+   "cases": 20000,
+   "mismatches": 0
+  }
+ }
+}

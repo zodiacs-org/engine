@@ -56,6 +56,13 @@ for (const name of ["deltaT", "deltaTAt", "DELTA_T_MODEL", "DELTA_T_TABLE"]) {
 }
 assert.ok(Object.isFrozen(deltat.DELTA_T_TABLE), "the ΔT table must be frozen");
 
+// The spans: REFERENCE_SPAN is where positions were compared, EPHEMERIS_SPAN
+// where astronomy-engine can evaluate at all; outside it every calculation refuses.
+assert.ok(Object.isFrozen(engine.REFERENCE_SPAN) && Object.isFrozen(engine.EPHEMERIS_SPAN), "the spans must be frozen");
+assert.deepEqual(engine.EPHEMERIS_SPAN.daysFromJ2000, { from: -730000, to: 730000 });
+assert.throws(() => engine.positions("4000-01-01"), (error) => error instanceof RangeError && /outside the ephemeris span/u.test(error.message));
+assert.equal(engine.SUN_BOUND_LATITUDE, 0.001);
+
 assert.equal(engine.PROGRESSION_DAYS_PER_YEAR, 365.2422);
 assert.equal(engine.progressedInstant("2019-12-31", "2020-12-30T05:48:46.080Z").toISOString(), "2020-01-01T00:00:00.000Z");
 assert.deepEqual(engine.progressedBodies("2019-12-31", "2020-12-30T05:48:46.080Z"), engine.positions("2020-01-01"));

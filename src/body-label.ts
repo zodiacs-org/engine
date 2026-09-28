@@ -1,11 +1,15 @@
-/** Longest body label accepted by the configured-aspect and declination analyses. */
+/** Longest body label, in UTF-16 code units, the configured-aspect and declination analyses accept. */
 export const MAX_BODY_LABEL_LENGTH = 80;
 
 /**
  * One rule for caller-chosen body labels in the configured-aspect and
- * declination analyses: a nonempty string of at most 80 UTF-16 code units,
- * without leading or trailing whitespace and without C0 control characters or
- * DEL. Matching is exact and case-sensitive. The message never repeats the label.
+ * declination analyses: a nonempty string of at most 80 UTF-16 code units
+ * (an astral character such as an emoji counts two), that String.prototype.trim
+ * leaves unchanged (so no leading or trailing ECMAScript white space or line
+ * terminator, U+FEFF included), and that contains no C0 control character
+ * (U+0000–U+001F) and no DEL (U+007F). C1 controls (U+0080–U+009F), format
+ * characters such as U+200B and lone surrogates are not rejected. Matching is
+ * exact and case-sensitive. The message never repeats the label.
  */
 export function checkedBodyLabel(value: unknown): string {
   if (

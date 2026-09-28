@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { moonPhase, natalChart, positions, saturnReturn, synastry, transits } from "./index.js";
+import { moonPhase, natalChart, positions, progressedInstant, saturnReturn, synastry, transits } from "./index.js";
 import type { BirthInput, DateInput } from "./types.js";
 
 describe("public resolved-instant inputs", () => {
@@ -63,7 +63,12 @@ describe("public resolved-instant inputs", () => {
     ["0000-02-29T00:00:00Z", "0000-02-29T00:00:00.000Z"],
     ["-000001-01-01T00:00:00Z", "-000001-01-01T00:00:00.000Z"]
   ])("resolves %s without calendar or century coercion", (input, expected) => {
-    expect(moonPhase(input).at.toISOString()).toBe(expected);
+    // The mapping is arithmetic, so it shows the resolved instant at any date.
+    expect(progressedInstant(input, input).toISOString()).toBe(expected);
+    // The ephemeris evaluates only EPHEMERIS_SPAN (years 1 to 3998) and refuses the rest.
+    const year = Number(expected.slice(0, expected.indexOf("-", 1)));
+    if (year >= 2) expect(moonPhase(input).at.toISOString()).toBe(expected);
+    else expect(() => moonPhase(input)).toThrow(/outside the ephemeris span/);
   });
 
   it("keeps Date and epoch milliseconds equivalent without mutating the Date", () => {

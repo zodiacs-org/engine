@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
         with:
-          # Full history: the archive check reads every carried archive's past.
+          # Full history: the archive check reads every commit.
           fetch-depth: 0
 
       - name: Setup Node
@@ -53,9 +53,92 @@ jobs:
       - name: Pack dry run
         run: npm run pack:dry-run
 
-      # A version string names one byte sequence. No carried archive may change
-      # or disappear in history, and when package.json's version has a carried
-      # archive, a rebuild of this checkout must reproduce its bytes. Before
-      # that archive is committed, the rebuild comparison reports a skip.
+      # A version string names one byte sequence. artifacts/archives.json
+      # records each carried archive; every commit reachable from HEAD may hold
+      # only those bytes, each archive's packed metadata must match its source
+      # commit, and when package.json's version has a carried archive, a
+      # rebuild of this checkout must reproduce it (reported as a skip before
+      # that archive is committed).
       - name: Carried archives match history and source
         run: npm run archive:binding
+
+  archives:
+    name: Every carried archive rebuilds from its source commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Rebuild every recorded archive
+        run: node scripts/verify-archive-binding.mjs --rebuild-all
+
+  pack:
+    name: Pack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build and pack
+        run: |
+          npm run build
+          mkdir -p "$RUNNER_TEMP/pack"
+          npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP/pack"
+
+      - name: Keep the packed archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: packed-engine
+          path: ${{ runner.temp }}/pack/*.tgz
+          if-no-files-found: error
+
+  consumer:
+    # The same packed bytes, installed by a clean consumer on each supported
+    # runtime, including the two minimum versions: plain Node loads
+    # astronomy-engine's ESM only from 20.19.0 and 22.7.0.
+    name: Packed consumer (Node ${{ matrix.node }})
+    needs: pack
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20.19.0', '22.7.0', 22, 24]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Fetch the packed archive
+        uses: actions/download-artifact@v4
+        with:
+          name: packed-engine
+          path: ${{ runner.temp }}/pack
+
+      - name: Install and exercise it in a clean consumer
+        env:
+          TMPDIR: ${{ runner.temp }}
+        run: node scripts/verify-packed-consumer.mjs "$(ls "$RUNNER_TEMP"/pack/*.tgz)"
