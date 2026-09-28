@@ -109,6 +109,11 @@ test('readings near a boundary the sources do not fix exactly are flagged uncert
   // The railway rule's end is fixed to the day: readings within a day of it are uncertain.
   const railway = resolve(atlas, 'test-east', '1880-06-01T20:00:00', 'railway');
   assert.equal(railway.instants[0].uncertainty.flag, 'uncertain');
+  // A change of legal basis that leaves the offset as it was makes nothing
+  // uncertain, however loosely it is dated.
+  atlas.rules.get('test-railway').offset = { type: 'fixed', seconds: 3600 };
+  const same = resolve(atlas, 'test-east', '1880-06-01T20:00:00', 'railway');
+  assert.equal(same.instants[0].uncertainty.flag, 'documented');
 });
 
 test('UTC -> local -> UTC round trips at every millisecond near a change', () => {

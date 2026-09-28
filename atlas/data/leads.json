@@ -1,0 +1,14 @@
+{
+  "$schema": "../schema/atlas.schema.json",
+  "kind": "atlas-leads",
+  "description": "Secondary works and tzdb comments that pointed to sources. They are not citations: nothing in the atlas rests on them.",
+  "leads": [
+    {
+      "id": "lead-tzdb-europe-france",
+      "kind": "tzdb-comment",
+      "title": "tzdb 2025c, file europe: comments before the France rules and Zone Europe/Paris",
+      "url": "https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz",
+      "note": "Pointed to the law of 14 March 1891 in the Journal officiel of 15 March 1891, the law of 9 March 1911 in the Journal officiel of 10 March 1911, Le Petit Journal of 11 March 1911 on the pneumatic clocks and the railway change, and the five-minute lag of railway clocks. All were read at the source before being cited."
+    }
+  ]
+}

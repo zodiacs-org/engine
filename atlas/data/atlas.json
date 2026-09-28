@@ -11,7 +11,12 @@
     "countries": ["FR", "US"],
     "note": "Civil time from 1 January 1870 to the end of 1919, read on each place's own clock. See atlas/COVERAGE.md for the places and what is left out."
   },
-  "files": [],
+  "files": [
+    "places.json",
+    "leads.json",
+    "citations-fr.json",
+    "rules-fr.json"
+  ],
   "longitudeSource": {
     "dataset": "GeoNames cities15000 (cities15000.zip)",
     "url": "https://download.geonames.org/export/dump/cities15000.zip",
@@ -20,6 +25,6 @@
     "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
     "attribution": "Place names, coordinates and GeoNames ids from GeoNames (https://www.geonames.org/).",
-    "changes": "For each covered place the atlas keeps only the GeoNames id, name, first-level administrative division, latitude and longitude, copied unchanged (decimal degrees as published). Nothing else from the file is redistributed."
+    "changes": "For each covered place the atlas keeps only the GeoNames id, name, country code, latitude and longitude, copied unchanged (decimal degrees as published), and the name of its first-level administrative division from admin1CodesASCII.txt (https://download.geonames.org/export/dump/admin1CodesASCII.txt, retrieved 2026-09-28, SHA-256 1da92a6323a5fec3176f3f743bf4cf4040fd56a876da55e46fbca23c863aa60a). Nothing else from either file is redistributed."
   }
 }

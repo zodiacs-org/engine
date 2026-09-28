@@ -163,6 +163,9 @@ export function buildTimeline(atlas, place, clock = 'civil') {
   for (let index = 0; index + 1 < segments.length; index += 1) {
     const left = segments[index];
     const right = segments[index + 1];
+    // A change that leaves the reading as it was (a new legal basis for the
+    // same offset) cannot make a reading uncertain, however vague its date.
+    if (left.offsetMs === right.offsetMs) continue;
     for (const boundary of [left.rule.end, right.rule.start]) {
       if (boundary.kind !== 'event') continue;
       let span = null;

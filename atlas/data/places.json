@@ -1,0 +1,118 @@
+{
+  "$schema": "../schema/atlas.schema.json",
+  "kind": "atlas-places",
+  "description": "Covered places. Names, first-level administrative divisions (as GeoNames names them today), coordinates and ids are from GeoNames (https://www.geonames.org/, CC BY 4.0), copied unchanged; see longitudeSource in atlas.json.",
+  "places": [
+    {
+      "id": "fr-paris",
+      "name": "Paris",
+      "country": "FR",
+      "admin1": "Île-de-France",
+      "jurisdiction": "fr-paris",
+      "latitude": 48.85341,
+      "longitude": 2.3488,
+      "geonamesId": 2988507,
+      "tzdbZone": "Europe/Paris",
+      "note": "Legal time before 1891 is Paris mean time, the Observatory meridian, not the mean time of these coordinates."
+    },
+    {
+      "id": "fr-brest",
+      "name": "Brest",
+      "country": "FR",
+      "admin1": "Brittany",
+      "jurisdiction": "fr-brest",
+      "latitude": 48.39029,
+      "longitude": -4.48628,
+      "geonamesId": 3030300,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-nantes",
+      "name": "Nantes",
+      "country": "FR",
+      "admin1": "Pays de la Loire",
+      "jurisdiction": "fr-general",
+      "latitude": 47.21725,
+      "longitude": -1.55336,
+      "geonamesId": 2990969,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-bordeaux",
+      "name": "Bordeaux",
+      "country": "FR",
+      "admin1": "New Aquitaine",
+      "jurisdiction": "fr-general",
+      "latitude": 44.84124,
+      "longitude": -0.58046,
+      "geonamesId": 3031582,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-rouen",
+      "name": "Rouen",
+      "country": "FR",
+      "admin1": "Normandy",
+      "jurisdiction": "fr-general",
+      "latitude": 49.44313,
+      "longitude": 1.09932,
+      "geonamesId": 2982652,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-toulouse",
+      "name": "Toulouse",
+      "country": "FR",
+      "admin1": "Occitanie",
+      "jurisdiction": "fr-general",
+      "latitude": 43.60426,
+      "longitude": 1.44367,
+      "geonamesId": 2972315,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-lyon",
+      "name": "Lyon",
+      "country": "FR",
+      "admin1": "Auvergne-Rhône-Alpes",
+      "jurisdiction": "fr-general",
+      "latitude": 45.74906,
+      "longitude": 4.84789,
+      "geonamesId": 2996944,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-marseille",
+      "name": "Marseille",
+      "country": "FR",
+      "admin1": "Provence-Alpes-Côte d'Azur",
+      "jurisdiction": "fr-general",
+      "latitude": 43.29695,
+      "longitude": 5.38107,
+      "geonamesId": 2995469,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-nice",
+      "name": "Nice",
+      "country": "FR",
+      "admin1": "Provence-Alpes-Côte d'Azur",
+      "jurisdiction": "fr-general",
+      "latitude": 43.70313,
+      "longitude": 7.26608,
+      "geonamesId": 2990440,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-ajaccio",
+      "name": "Ajaccio",
+      "country": "FR",
+      "admin1": "Corsica",
+      "jurisdiction": "fr-general",
+      "latitude": 41.91886,
+      "longitude": 8.73812,
+      "geonamesId": 3038334,
+      "tzdbZone": "Europe/Paris"
+    }
+  ]
+}

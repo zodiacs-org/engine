@@ -91,8 +91,10 @@ earliest first), `nonexistent` (clocks were set forward over the reading; the
 one instant given is the reading on the clock in force before the change,
 which is the usual policy), or `out-of-coverage`. Each instant carries the
 offset, the rule and its version, the citations, and the uncertainty flag
-with its reasons. A reading close to a change the sources fix only to the
-day or worse is flagged `uncertain`. The library is `tools/lib.mjs`
+with its reasons. A reading close to a change of offset that the sources fix
+only within a window, or to the hour or worse, is flagged `uncertain`; a
+change of legal basis that left the clocks as they were never is. The
+library is `tools/lib.mjs`
 (`loadAtlas`, `buildTimeline`, `resolve`, `resolveWall`, `wallAt`).
 
 ## Checks
