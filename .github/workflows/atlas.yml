@@ -19,16 +19,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      # Pinned like the conformance workflow, to the Node the committed
+      # atlas files were checked with.
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 22.22.2
 
-      # Schema, citations, coverage and contiguity, round trips, and the
-      # tzdb comparison against the committed tzdb 2025c extract. No
-      # dependencies are installed: the tools use only Node's standard library.
-      - name: Atlas data checks
-        run: node atlas/tools/check.mjs
-
-      - name: Atlas tools self-test
-        run: node --test atlas/tools/selftest.mjs
+      # atlas/tools/check.mjs (schema, citations and how each was checked,
+      # coverage and contiguity, round trips, and the tzdb comparison against
+      # the committed tzdb 2025c extract, which must be present) and the
+      # tools' self-test. Nothing is installed: the tools use only Node's
+      # standard library.
+      - name: Atlas checks and self-test
+        run: npm run atlas:check

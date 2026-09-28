@@ -107,8 +107,11 @@ not part of the npm package: the package's `files` list leaves it out.
 
 - Every rule cites primary sources (laws, gazettes, municipal notices,
   newspapers, railway notices) by link and short excerpt; no scan or full
-  text of a source is committed. No proprietary atlas was consulted or
-  copied.
+  text of a source is committed. The source texts, printed between 1870 and
+  1919, are in the public domain; the scans and OCR text through which they
+  were read are the archives' (Gallica, the Library of Congress, the
+  Internet Archive), each under its own terms, and are not copied. No
+  proprietary atlas was consulted or copied.
 - Place names, coordinates and ids come from GeoNames `cities15000`, and
   region names from its `admin1CodesASCII.txt` (both CC BY 4.0);
   `atlas/data/atlas.json` records the files' digests and what was copied.

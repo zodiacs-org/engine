@@ -20,12 +20,23 @@ Open an issue or a pull request in `zodiacs-org/engine` that gives:
 
 ## How it is reviewed
 
-1. A reviewer fetches the source at the URL given and reads the passage. A
-   source that cannot be fetched and read is not accepted.
+1. A reviewer fetches the source at the URL given and reads the passage,
+   on the page image where the archive serves it. Where an archive's page
+   and image servers refuse the reviewer's requests, the passage may be
+   read through the services the archive offers for that purpose, without
+   getting around its access controls: its OCR text of the page, or its
+   metadata and search services (for Gallica, OAIRecord for the issue's
+   record and ContentSearch for the text of the page). The citation's
+   `checks` records which was used, with the date and the result; words the
+   method cannot confirm, such as a figure the OCR drops, make the check
+   `partial` and are named in its note. A source that cannot be fetched and
+   read at all is not accepted.
 2. If the source supports the change, the rule's `version` goes up by one,
    an entry is added to its `changes`, the citation is added with the
-   reviewer's retrieval date, and the uncertainty flag and reason are
-   revised. A rule is never edited in place without a new version.
+   reviewer's retrieval date and its check, and the uncertainty flag and
+   reason are revised. A rule is never edited in place without a new
+   version. A corrected excerpt is noted, with the date, in the citation's
+   `note`.
 3. `npm run atlas:check` must pass, and `node atlas/tools/compare-tzdb.mjs`
    is rerun so that `TZDB-DIFFERENCES.md` stays current.
 4. The correction is logged below.
@@ -36,6 +47,10 @@ report written at the time and place over one written later or elsewhere)
 and is flagged `uncertain` with the disagreement stated in its reason.
 
 ## Log
+
+Changes made before the first release, including those that followed the
+independent review of 2026-09-28, are recorded in each rule's `changes` and
+each corrected citation's `note`. The log starts with the first release.
 
 | date | rule | version | change | proposed by | citation |
 | --- | --- | --- | --- | --- | --- |
