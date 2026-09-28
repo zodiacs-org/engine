@@ -79,3 +79,58 @@ newspapers cited report; the decrees give only the date.
   are not a separate clock in the atlas: the `railway` clock is the time
   inside stations, by which trains ran.
 - Monaco, which is not French.
+
+## Alsace and Moselle
+
+Strasbourg and Metz were French until 1871, part of the German Reichsland
+Elsaß-Lothringen from 1871 to November 1918, and French again after. Each
+has its own jurisdiction, because the change back to French time was made
+city by city.
+
+### Places
+
+| place | jurisdiction | longitude | local mean time |
+| --- | --- | ---: | ---: |
+| Strasbourg (`fr-strasbourg`) | `als-strasbourg` | 7.74553 | +0:30:58.9 |
+| Metz (`fr-metz`) | `mos-metz` | 6.17269 | +0:24:41.4 |
+
+### What the clocks showed
+
+| from | Strasbourg | Metz |
+| --- | --- | --- |
+| 1870 | local mean time | local mean time |
+| 1 April 1892 (order of the Ministry for Alsace-Lorraine) | Mid-European time, +1:00, from midnight local time | Mid-European time, +1:00, in the early hours (window 23:25 to 06:00 local time) |
+| 1 April 1893 (Reich law of 12 March 1893) | +1:00, now as legal time; the clocks did not change | the same |
+| 30 April 1916, 23:00 | German summer time, +2:00 | the same |
+| 1 October 1916, 01:00 summer time | +1:00 | the same |
+| 16 April 1917, 02:00 | +2:00 | the same |
+| 17 September 1917, 03:00 summer time | +1:00 | the same |
+| 15 April 1918, 02:00 | +2:00 | the same |
+| 16 September 1918, 03:00 summer time | +1:00 | the same |
+| 19 November 1918, morning | | French time, taken as +0:00 |
+| 21 November 1918, noon | the city's clocks set back to 11:05, that is +0:05 | |
+| 1 March 1919, 23:00 | French summer time, +1:00 | the same |
+| 5 October 1919, 01:00 summer time | +0:00 | the same |
+
+Strasbourg's public clocks were set five minutes ahead of Greenwich in
+November 1918 and were still so in mid-December, when the station clock ran
+on French legal time five minutes behind them. When the public clocks were
+corrected is not known; the atlas keeps +0:05 until summer time began on
+1 March 1919 and flags the whole period `uncertain`. For Metz the report
+says only that the cathedral clock showed French time from the morning of
+19 November; +0:00 is assumed. French summer time in 1919 is documented for
+the railways of Alsace and Lorraine; that the two cities' public clocks
+followed, and went back on 5 October with the rest of France, is inferred.
+
+### Left out
+
+- The other communes of Alsace and Moselle. They followed the same rules
+  until November 1918, but each changed to French time on its own day, and
+  the reports found for Haguenau, Saint-Louis and Mulhouse were read only in
+  the archive's OCR, not on page images.
+- Railway time in Alsace-Lorraine before 1892. The Metz report of March 1892
+  has the station clocks going from local time to Mid-European time at
+  midnight Mid-European time, 23:25 local time; what railway clocks showed
+  in earlier years was not found. The station clock in Strasbourg in
+  December 1918 is noted in `als-strasbourg-french-1918` but not kept as a
+  separate clock.

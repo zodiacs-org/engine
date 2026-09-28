@@ -113,6 +113,32 @@
       "longitude": 8.73812,
       "geonamesId": 3038334,
       "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-strasbourg",
+      "name": "Strasbourg",
+      "country": "FR",
+      "admin1": "Grand Est",
+      "jurisdiction": "als-strasbourg",
+      "latitude": 48.58392,
+      "longitude": 7.74553,
+      "geonamesId": 2973783,
+      "tzdbZone": "Europe/Paris",
+      "compareZones": ["Europe/Berlin"],
+      "note": "German from 1871 to November 1918. tzdb has no zone for Alsace-Lorraine; Europe/Berlin is compared for information."
+    },
+    {
+      "id": "fr-metz",
+      "name": "Metz",
+      "country": "FR",
+      "admin1": "Grand Est",
+      "jurisdiction": "mos-metz",
+      "latitude": 49.11911,
+      "longitude": 6.17269,
+      "geonamesId": 2994160,
+      "tzdbZone": "Europe/Paris",
+      "compareZones": ["Europe/Berlin"],
+      "note": "German from 1871 to November 1918. tzdb has no zone for Alsace-Lorraine; Europe/Berlin is compared for information."
     }
   ]
 }
