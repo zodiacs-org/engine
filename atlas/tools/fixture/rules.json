@@ -9,6 +9,14 @@
       "timeline": {
         "civil": ["test-lmt", "test-standard-1", "test-summer", "test-standard-2"],
         "railway": ["test-railway", "test-standard-1", "test-summer", "test-standard-2"]
+      },
+      "readByLongitude": {
+        "areas": [
+          { "name": "the test mainland", "departments": ["01", "02"], "minLongitude": -5, "maxLongitude": 8 },
+          { "name": "the test island", "departments": ["2A"], "minLongitude": 8.5, "maxLongitude": 9.6 }
+        ],
+        "excluded": [{ "departments": ["03"], "reason": "an invented exclusion" }],
+        "note": "Invented."
       }
     }
   ],

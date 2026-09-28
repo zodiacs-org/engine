@@ -6,15 +6,17 @@
  *   node --test atlas/tools/selftest.mjs
  */
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { checkAtlas } from './check.mjs';
-import { buildTimeline, formatOffset, loadAtlas, offsetMs, parseLocal, resolve, resolveWall, wallAt } from './lib.mjs';
+import { buildTimeline, formatOffset, loadAtlas, offsetMs, parseLocal, parseUtc, resolve, resolveUtc, resolveWall, wallAt } from './lib.mjs';
 import { validate } from './schema.mjs';
 import { readJson, SCHEMA_PATH } from './lib.mjs';
 
-const FIXTURE = join(fileURLToPath(new URL('.', import.meta.url)), 'fixture');
+const TOOLS = fileURLToPath(new URL('.', import.meta.url));
+const FIXTURE = join(TOOLS, 'fixture');
 const load = () => loadAtlas(FIXTURE);
 const utc = (text) => Date.parse(text);
 
@@ -58,9 +60,80 @@ test('local mean time differs by place', () => {
   const atlas = load();
   assert.equal(resolve(atlas, 'test-east', '1875-01-01T12:00:00').instants[0].utc, '1875-01-01T11:30:00Z');
   assert.equal(resolve(atlas, 'test-west', '1875-01-01T12:00:00').instants[0].utc, '1875-01-01T12:18:00Z');
-  const adHoc = resolve(atlas, { jurisdiction: 'test-land', longitude: 15 }, '1875-01-01T12:00:00');
-  assert.equal(adHoc.instants[0].utc, '1875-01-01T11:00:00Z');
+  const adHoc = resolve(atlas, { jurisdiction: 'test-land', longitude: 7.5, department: '01' }, '1875-01-01T12:00:00');
+  assert.equal(adHoc.instants[0].utc, '1875-01-01T11:30:00Z');
   assert.equal(adHoc.instants[0].uncertainty.flag, 'inferred');
+});
+
+test('a place read by longitude must lie in a covered département and inside its area', () => {
+  const atlas = load();
+  const at = (longitude, department) => resolve(atlas, { jurisdiction: 'test-land', longitude, department }, '1875-01-01T12:00:00');
+  assert.equal(at(9, '2A').instants[0].utc, '1875-01-01T11:24:00Z');
+  assert.throws(() => at(7.5, undefined), /give the place's département/);
+  assert.throws(() => at(7.5, '03'), /not covered by test-land: an invented exclusion/);
+  assert.throws(() => at(7.5, '04'), /département 04 is not covered/);
+  assert.throws(() => at(-74, '01'), /outside the test mainland/);
+  assert.throws(() => at(8.2, '01'), /outside the test mainland/);
+  assert.throws(() => at(7.5, '2A'), /outside the test island/);
+  // A jurisdiction without readByLongitude covers only its listed places.
+  delete atlas.jurisdictions.get('test-land').readByLongitude;
+  assert.throws(() => at(7.5, '01'), /covers only its listed places \(test-east, test-west\)/);
+});
+
+test('--utc is always UTC, with or without Z, whatever the host time zone', () => {
+  const saved = process.env.TZ;
+  try {
+    process.env.TZ = 'America/New_York';
+    assert.equal(parseUtc('1883-11-18T17:00:00'), Date.UTC(1883, 10, 18, 17));
+    assert.equal(parseUtc('1883-11-18T17:00:00Z'), Date.UTC(1883, 10, 18, 17));
+    assert.equal(parseUtc('1883-11-18T17:00'), Date.UTC(1883, 10, 18, 17));
+    assert.throws(() => parseUtc('1883-11-18T17:00:00+01:00'), /not a UTC time/);
+    assert.throws(() => parseUtc('1883-11-31T17:00:00Z'), /no such date/);
+  } finally {
+    if (saved === undefined) delete process.env.TZ;
+    else process.env.TZ = saved;
+  }
+  const cli = (args, env = {}) => {
+    try {
+      return { code: 0, out: JSON.parse(execFileSync('node', [join(TOOLS, 'resolve.mjs'), '--data', FIXTURE, ...args], { encoding: 'utf8', env: { ...process.env, ...env } })) };
+    } catch (error) {
+      return { code: error.status, out: error.stdout ? JSON.parse(error.stdout) : null, err: error.stderr };
+    }
+  };
+  const inNewYork = cli(['--place', 'test-east', '--utc', '1885-01-01T11:00:00'], { TZ: 'America/New_York' });
+  const withZ = cli(['--place', 'test-east', '--utc', '1885-01-01T11:00:00Z'], { TZ: 'Asia/Tokyo' });
+  assert.equal(inNewYork.code, 0);
+  assert.equal(inNewYork.out.local, '1885-01-01T12:00:00');
+  assert.deepEqual(withZ.out, inNewYork.out);
+});
+
+test('--utc reports the same instant fields as --local, uncertainty included', () => {
+  const atlas = load();
+  // 26 October 1890, 10:00 UTC lies inside the window of the end of summer time.
+  const fromUtc = resolveUtc(atlas, 'test-east', '1890-10-26T10:00:00Z');
+  assert.equal(fromUtc.status, 'ok');
+  assert.equal(fromUtc.local, '1890-10-26T11:00:00');
+  const [instant] = fromUtc.instants;
+  assert.equal(instant.offset, '+1:00:00');
+  assert.equal(instant.rule, 'test-standard-2');
+  assert.equal(instant.ruleVersion, 1);
+  assert.deepEqual(instant.citations, ['fixture-source']);
+  assert.equal(instant.uncertainty.flag, 'uncertain');
+  const fromLocal = resolve(atlas, 'test-east', fromUtc.local);
+  assert.deepEqual(fromLocal.instants[0], instant);
+  // A reading that occurred twice is said to.
+  assert.equal(resolveUtc(atlas, 'test-east', '1890-10-26T00:30:00Z').localReading, 'occurred more than once');
+  assert.equal(resolveUtc(atlas, 'test-east', '1869-12-31T12:00:00Z').status, 'out-of-coverage');
+});
+
+test('a clock the jurisdiction does not keep is reported as such, not as out of coverage', () => {
+  const atlas = load();
+  delete atlas.jurisdictions.get('test-land').timeline.railway;
+  for (const result of [resolve(atlas, 'test-east', '1885-01-01T12:00:00', 'railway'), resolveUtc(atlas, 'test-east', '1885-01-01T12:00:00Z', 'railway')]) {
+    assert.equal(result.status, 'no-such-clock');
+    assert.match(result.reason, /keeps no railway clock \(it keeps: civil\)/);
+    assert.deepEqual(result.instants, []);
+  }
 });
 
 test('a skipped reading is nonexistent and taken on the earlier clock', () => {
@@ -116,6 +189,33 @@ test('readings near a boundary the sources do not fix exactly are flagged uncert
   assert.equal(same.instants[0].uncertainty.flag, 'documented');
 });
 
+test('a local reading inside the span of an imprecise change, read on either clock, is uncertain', () => {
+  const atlas = load();
+  // As in Chicago in 1883: the old time nine minutes ahead of the new, set
+  // back at noon, and whether noon by the old clock or the new is not known.
+  // The change is placed at noon on the new clock (11:00 UTC); the window runs
+  // from noon on the old clock (10:51 UTC).
+  const window = { earliest: '1880-06-01T11:51:00', latest: '1880-06-01T12:00:00' };
+  const old = atlas.rules.get('test-lmt');
+  old.offset = { type: 'fixed', seconds: 4140 };
+  old.end = { ...old.end, window, note: 'Invented note.' };
+  const next = atlas.rules.get('test-standard-1');
+  next.start = { ...next.start, window, note: 'Invented note.' };
+  // 11:55 falls on the old clock (10:46 UTC) if the change came at noon new
+  // time, and on the new clock (10:55 UTC) if it came at noon old time.
+  const inside = resolve(atlas, 'test-east', '1880-06-01T11:55:00');
+  assert.equal(inside.status, 'ok');
+  assert.equal(inside.instants[0].utc, '1880-06-01T10:46:00Z');
+  assert.equal(inside.instants[0].uncertainty.flag, 'uncertain');
+  // The change is described at the end of one rule and the start of the next
+  // in the same words; the reason is given once.
+  assert.equal(inside.instants[0].uncertainty.reasons.filter((text) => /uncertain limits/.test(text)).length, 1);
+  assert.equal(resolve(atlas, 'test-east', '1880-06-01T11:45:00').instants[0].uncertainty.flag, 'inferred');
+  // From UTC, 10:46 is before the earliest the change can have come: the old clock was in force.
+  assert.equal(resolveUtc(atlas, 'test-east', '1880-06-01T10:46:00Z').instants[0].uncertainty.flag, 'inferred');
+  assert.equal(resolveUtc(atlas, 'test-east', '1880-06-01T10:55:00Z').instants[0].uncertainty.flag, 'uncertain');
+});
+
 test('UTC -> local -> UTC round trips at every millisecond near a change', () => {
   const atlas = load();
   const timeline = buildTimeline(atlas, atlas.places.get('test-west'));
@@ -139,6 +239,13 @@ test('the checks catch a gap between rules', () => {
   atlas.rules.get('test-summer').start = { ...atlas.rules.get('test-summer').start, local: '1890-03-30T02:30:00' };
   const { problems } = checkAtlas(atlas, { today: '2026-09-28' });
   assert.ok(problems.some((text) => /gap of 1800 s between test-standard-1/.test(text)), problems.join('\n'));
+});
+
+test('the checks catch a département listed twice for reading by longitude', () => {
+  const atlas = load();
+  atlas.jurisdictions.get('test-land').readByLongitude.excluded[0].departments.push('01');
+  const { problems } = checkAtlas(atlas, { today: '2026-09-28' });
+  assert.ok(problems.some((text) => /département 01 is listed in area the test mainland and in exclusion 1/.test(text)), problems.join('\n'));
 });
 
 test('the checks catch a missing citation, excerpt or retrieval date', () => {

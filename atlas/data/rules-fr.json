@@ -73,7 +73,7 @@
       "id": "fr-general",
       "name": "Other communes of France",
       "country": "FR",
-      "description": "Every other commune of metropolitan France that was French from 1870 to 1919 and was not occupied by German forces in 1914-1918 (so not Alsace-Moselle, and not the occupied north and east): its own local mean time until the law of 1891, national legal time after it. The places listed with this jurisdiction are examples; any such commune can be read by its longitude.",
+      "description": "Every other commune of metropolitan France that was French from 1870 to 1919 and was not occupied by German forces in 1914-1918: its own local mean time until the law of 1891, national legal time after it. The places listed are examples. Another commune can be read by its longitude with its département, which is checked against the départements and longitudes this jurisdiction covers (readByLongitude).",
       "timeline": {
         "civil": [
           "fr-lmt-before-1891",
@@ -100,6 +100,35 @@
           "fr-summer-1919",
           "fr-wet-1919"
         ]
+      },
+      "readByLongitude": {
+        "areas": [
+          {
+            "name": "mainland France",
+            "departments": [
+              "01", "03", "04", "05", "06", "07", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+              "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37",
+              "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "52", "53", "56", "58",
+              "61", "63", "64", "65", "66", "69", "70", "71", "72", "73", "74", "76", "77", "78", "79", "81", "82",
+              "83", "84", "85", "86", "87", "89", "90", "91", "92", "93", "94", "95"
+            ],
+            "minLongitude": -5.2,
+            "maxLongitude": 7.6
+          },
+          { "name": "Corsica", "departments": ["2A", "2B"], "minLongitude": 8.5, "maxLongitude": 9.6 }
+        ],
+        "excluded": [
+          {
+            "departments": ["57", "67", "68"],
+            "reason": "Alsace and Moselle were German from 1871 to 1918; only Strasbourg (als-strasbourg) and Metz (mos-metz) are covered"
+          },
+          {
+            "departments": ["02", "08", "51", "54", "55", "59", "60", "62", "80", "88"],
+            "reason": "parts of this département were occupied by German forces in 1914-1918, which the atlas does not cover, and it does not record where the front ran, so the whole département is refused"
+          },
+          { "departments": ["75"], "reason": "Paris has its own jurisdiction, fr-paris (place fr-paris)" }
+        ],
+        "note": "The longitude limits are coarse: mainland France outside Alsace-Moselle lies between 5.2 degrees west (Ouessant) and 7.6 degrees east, Corsica between 8.5 and 9.6 degrees east. They catch a wrong département or a longitude from elsewhere, not every error: Tende and La Brigue (Alpes-Maritimes), Italian until 1947, fall inside the limits and are not covered."
       }
     }
   ],

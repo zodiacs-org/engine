@@ -8,7 +8,8 @@
  * 2. Every rule cites at least one citation, and every citation has a URL,
  *    a retrieval date, a locator and a short excerpt (at most 50 words);
  *    every id a rule, place, jurisdiction or explanation names exists, and
- *    nothing is defined and left unused.
+ *    nothing is defined and left unused. A jurisdiction that can be read by
+ *    longitude lists each département once, as covered or refused.
  * 3. Every place's timeline, for each clock it keeps, starts at the start of
  *    the coverage window, ends at its end, and has no gap or overlap: each
  *    rule ends at the instant the next one starts. (A railway timeline may
@@ -103,6 +104,25 @@ export function checkAtlas(atlas, { today = new Date().toISOString().slice(0, 10
     placed.add(jurisdiction.id);
   }
   for (const id of atlas.jurisdictions.keys()) if (!placed.has(id)) problem(`jurisdiction ${id} has no place`);
+  for (const jurisdiction of atlas.jurisdictions.values()) {
+    const rule = jurisdiction.readByLongitude;
+    if (!rule) continue;
+    const seen = new Map();
+    const note = (department, where) => {
+      if (seen.has(department)) problem(`jurisdiction ${jurisdiction.id}: département ${department} is listed in ${seen.get(department)} and in ${where}`);
+      seen.set(department, where);
+    };
+    for (const area of rule.areas) {
+      if (!(area.minLongitude < area.maxLongitude)) problem(`jurisdiction ${jurisdiction.id}: area ${area.name} has no longitude range`);
+      for (const department of area.departments) note(department, `area ${area.name}`);
+    }
+    for (const [index, entry] of rule.excluded.entries()) for (const department of entry.departments) note(department, `exclusion ${index + 1}`);
+    for (const place of atlas.places.values()) {
+      if (place.jurisdiction === jurisdiction.id && !rule.areas.some((area) => place.longitude >= area.minLongitude && place.longitude <= area.maxLongitude)) {
+        problem(`place ${place.id}: longitude ${place.longitude} is outside every area of ${jurisdiction.id}`);
+      }
+    }
+  }
   const explanationsFile = [...atlas.files.values()].find((data) => data.kind === 'atlas-tzdb-explanations');
   for (const explanation of explanationsFile?.explanations ?? []) {
     for (const id of explanation.citations) cite(id, `tzdb explanation ${explanation.id}`);

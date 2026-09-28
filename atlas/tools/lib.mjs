@@ -158,7 +158,9 @@ export function buildTimeline(atlas, place, clock = 'civil') {
   // Instants around changes that the sources do not fix exactly. A change
   // is described twice, as the end of one rule and the start of the next;
   // each description that is imprecise (a window, or a precision coarser
-  // than the minute) marks a span, and the span applies on both sides.
+  // than the minute) marks a span of instants, and the span applies on both
+  // sides. `offsets` are the clocks on either side, so that a wall reading
+  // can be tested against the span as read on either clock.
   for (const segment of segments) segment.uncertainSpans = [];
   for (let index = 0; index + 1 < segments.length; index += 1) {
     const left = segments[index];
@@ -166,6 +168,7 @@ export function buildTimeline(atlas, place, clock = 'civil') {
     // A change that leaves the reading as it was (a new legal basis for the
     // same offset) cannot make a reading uncertain, however vague its date.
     if (left.offsetMs === right.offsetMs) continue;
+    const offsets = [left.offsetMs, right.offsetMs];
     for (const boundary of [left.rule.end, right.rule.start]) {
       if (boundary.kind !== 'event') continue;
       let span = null;
@@ -174,10 +177,11 @@ export function buildTimeline(atlas, place, clock = 'civil') {
           from: boundaryUtc({ ...boundary, local: boundary.window.earliest }, left.offsetMs, right.offsetMs, 'window'),
           to: boundaryUtc({ ...boundary, local: boundary.window.latest }, left.offsetMs, right.offsetMs, 'window'),
           boundary,
+          offsets,
         };
       } else if (PRECISION_MS[boundary.precision] > 0) {
         const width = PRECISION_MS[boundary.precision];
-        span = { from: right.startMs - width, to: right.startMs + width, boundary };
+        span = { from: right.startMs - width, to: right.startMs + width, boundary, offsets };
       }
       if (span) {
         left.uncertainSpans.push(span);
@@ -202,15 +206,29 @@ function flagRank(flag) {
   return FLAGS.indexOf(flag);
 }
 
-function reading(segment, utcMs) {
+/**
+ * One instant of a reading, with its rule and uncertainty. `given` says what
+ * the caller knows. From a UTC instant ('utc'), only an instant inside a
+ * span is uncertain: outside it, the clock in force is known. From a wall
+ * reading ('local'), the reading is uncertain when the span, read on either
+ * clock, contains it: the change may have come before or after it, and the
+ * reading may belong to the other clock.
+ */
+function reading(segment, utcMs, given = 'local') {
   const rule = segment.rule;
   const reasons = [`${rule.id}: ${rule.uncertainty.reason}`];
   let flag = rule.uncertainty.flag;
+  const wallMs = utcMs + segment.offsetMs;
   for (const span of segment.uncertainSpans) {
-    if (utcMs >= span.from && utcMs <= span.to) {
-      flag = 'uncertain';
-      reasons.push(`within the uncertain limits of the change at ${span.boundary.local} (${span.boundary.reckoning} clock)${span.boundary.note ? `: ${span.boundary.note}` : ''}`);
-    }
+    const near = given === 'utc'
+      ? utcMs >= span.from && utcMs <= span.to
+      : span.offsets.some((offset) => wallMs >= span.from + offset && wallMs <= span.to + offset);
+    if (!near) continue;
+    flag = 'uncertain';
+    // The end of one rule and the start of the next often describe the same
+    // change in the same words; say it once.
+    const reason = `within the uncertain limits of the change at ${span.boundary.local} (${span.boundary.reckoning} clock)${span.boundary.note ? `: ${span.boundary.note}` : ''}`;
+    if (!reasons.includes(reason)) reasons.push(reason);
   }
   return {
     utc: formatUtc(utcMs),
@@ -269,19 +287,93 @@ export function resolveWall(timeline, wallMs) {
   throw new Error(`reading ${formatWall(wallMs)} fell between segments: the timeline is not contiguous`);
 }
 
-/** Resolves a place id, or an ad-hoc { jurisdiction, longitude }. */
+/**
+ * An unlisted place read by longitude: { jurisdiction, longitude, department }.
+ * Only a jurisdiction with `readByLongitude` can be read this way, and only
+ * for a département it lists, at a longitude inside that area's limits.
+ * Anything else is refused with the reason, so that a place the atlas does
+ * not cover is never given a covered place's rules.
+ */
+export function adHocPlace(atlas, { jurisdiction, longitude, department }) {
+  const found = atlas.jurisdictions.get(jurisdiction);
+  if (!found) throw new RangeError(`unknown jurisdiction ${jurisdiction}`);
+  const rule = found.readByLongitude;
+  if (!rule) {
+    const listed = [...atlas.places.values()].filter((place) => place.jurisdiction === jurisdiction).map((place) => place.id);
+    throw new RangeError(`jurisdiction ${jurisdiction} covers only its listed places (${listed.join(', ')}); read them with --place`);
+  }
+  if (typeof longitude !== 'number' || !Number.isFinite(longitude)) throw new RangeError('give the place\'s longitude in degrees east');
+  if (!department) {
+    throw new RangeError(`give the place's département (--department): ${jurisdiction} covers some départements and not others`);
+  }
+  const excluded = (rule.excluded ?? []).find((entry) => entry.departments.includes(department));
+  if (excluded) throw new RangeError(`département ${department} is not covered by ${jurisdiction}: ${excluded.reason}`);
+  const area = rule.areas.find((entry) => entry.departments.includes(department));
+  if (!area) throw new RangeError(`département ${department} is not covered by ${jurisdiction}`);
+  if (!(longitude >= area.minLongitude && longitude <= area.maxLongitude)) {
+    throw new RangeError(`longitude ${longitude} is outside ${area.name} (${area.minLongitude} to ${area.maxLongitude} degrees east), where ${jurisdiction} applies`);
+  }
+  return { jurisdiction, longitude, department };
+}
+
+/** Resolves a place id, or an ad-hoc { jurisdiction, longitude, department }. */
 export function placeFor(atlas, spec) {
   if (typeof spec === 'string') {
     const place = atlas.places.get(spec);
     if (!place) throw new RangeError(`unknown place ${spec}`);
     return place;
   }
-  return spec;
+  return adHocPlace(atlas, spec);
+}
+
+function noSuchClock(atlas, place, clock) {
+  const kept = Object.keys(atlas.jurisdictions.get(place.jurisdiction).timeline).join(', ');
+  return {
+    status: 'no-such-clock',
+    reason: `jurisdiction ${place.jurisdiction} keeps no ${clock} clock (it keeps: ${kept}); the atlas has a separate railway clock only where the sources describe railway time differing from civil time`,
+    instants: [],
+  };
 }
 
 export function resolve(atlas, spec, local, clock = 'civil') {
   const place = placeFor(atlas, spec);
+  const head = { place: place.id ?? null, jurisdiction: place.jurisdiction, clock, local };
   const timeline = buildTimeline(atlas, place, clock);
-  if (!timeline) return { status: 'no-such-clock', instants: [] };
-  return { place: place.id ?? null, jurisdiction: place.jurisdiction, clock, local, ...resolveWall(timeline, parseLocal(local)) };
+  if (!timeline) return { ...head, ...noSuchClock(atlas, place, clock) };
+  return { ...head, ...resolveWall(timeline, parseLocal(local)) };
+}
+
+const UTC = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?)Z?$/;
+
+/** A UTC time "YYYY-MM-DDTHH:MM[:SS[.sss]][Z]" in milliseconds; always UTC, whatever the host's zone. */
+export function parseUtc(text) {
+  const match = UTC.exec(text);
+  if (!match) throw new RangeError(`not a UTC time (YYYY-MM-DDTHH:MM[:SS][Z], no other offset): ${text}`);
+  const local = /T\d{2}:\d{2}$/.test(match[1]) ? `${match[1]}:00` : match[1];
+  return parseLocal(local);
+}
+
+/**
+ * What a place's clock read at a UTC instant. The instant is reported with
+ * the same fields as a reading resolved from local time (offset, rule and
+ * version, citations, uncertainty including the limits of imprecise
+ * changes), plus the local reading and whether that reading occurred once
+ * or twice on the clock.
+ */
+export function resolveUtc(atlas, spec, utc, clock = 'civil') {
+  const place = placeFor(atlas, spec);
+  const utcMs = parseUtc(utc);
+  const head = { place: place.id ?? null, jurisdiction: place.jurisdiction, clock, utc: formatUtc(utcMs) };
+  const timeline = buildTimeline(atlas, place, clock);
+  if (!timeline) return { ...head, ...noSuchClock(atlas, place, clock) };
+  const found = wallAt(timeline, utcMs);
+  if (!found) return { ...head, status: 'out-of-coverage', instants: [] };
+  const again = resolveWall(timeline, found.wallMs);
+  return {
+    ...head,
+    status: 'ok',
+    local: formatWall(found.wallMs),
+    localReading: again.status === 'ambiguous' ? 'occurred more than once' : 'occurred once',
+    instants: [reading(found.segment, utcMs, 'utc')],
+  };
 }
