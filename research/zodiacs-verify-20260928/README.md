@@ -8,6 +8,8 @@ The engine remains independently owned and developed. This directory adds no eng
 
 Requires Node >=20. No `npm install` is required for this package.
 
+The standalone Node.js suites use `*.node-test.mjs` names and an explicit test command so the engine's root Vitest discovery does not collect them. Run the commands below from this directory; no root test configuration is changed.
+
 ```sh
 npm test
 npm run demo

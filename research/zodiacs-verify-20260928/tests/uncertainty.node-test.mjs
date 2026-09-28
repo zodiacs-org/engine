@@ -6,7 +6,7 @@ import {digest,seal} from '../src/core.mjs';
 const BASE=Date.parse('2000-01-01T00:00:00.000Z'),utc=t=>new Date(BASE+t*1000).toISOString();
 const model={provider:'synthetic-analytic-oracle',version:'1'};
 const sign={id:'sun-sign',kind:'sign',body:'Sun'};
-function bound(body='Sun',rate=0,error=0){return {id:`analytic-${body}`,body,source:{title:'Synthetic analytic bound, not an astronomical reference',locator:'tests/uncertainty.test.mjs'},modelDigest:digest(model),domain:{from:utc(0),to:utc(100)},maxAbsRateDegPerDay:rate,absoluteErrorDeg:error};}
+function bound(body='Sun',rate=0,error=0){return {id:`analytic-${body}`,body,source:{title:'Synthetic analytic bound, not an astronomical reference',locator:'tests/uncertainty.node-test.mjs'},modelDigest:digest(model),domain:{from:utc(0),to:utc(100)},maxAbsRateDegPerDay:rate,absoluteErrorDeg:error};}
 function input(fn=()=>10,overrides={}){return {subjectId:'synthetic-local-subject',model,intervals:[{from:utc(0),to:utc(10)}],features:[sign],sample:async ms=>({longitudes:{Sun:fn((ms-BASE)/1000),Moon:100},warnings:[]}),maxSamples:100,resolutionMs:1000,...overrides};}
 function reseal(report,mutate){const copy=structuredClone(report);delete copy.id;mutate(copy);return seal(copy);}
 

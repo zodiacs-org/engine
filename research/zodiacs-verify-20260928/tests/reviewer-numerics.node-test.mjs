@@ -10,7 +10,7 @@ const BASE=Date.parse('2000-01-01T00:00:00.000Z');
 const utc=s=>new Date(BASE+s*1000).toISOString();
 const model={engine:'independent-review-synthetic',engineVersion:'1',artifact:{digest:'sha256:'+'0'.repeat(64),scope:'analytic test fixture'},conventions:{zodiac:'tropical',origin:'synthetic',frame:'synthetic',corrections:'none',timeScale:'test milliseconds',deltaT:'not applicable'}};
 const feature={id:'sign',kind:'sign',body:'Sun'};
-const bound=(body='Sun',rate=0,error=0)=>({id:`reviewer-bound-${body}`,body,source:{title:'Synthetic analytic review fixture',locator:'tests/reviewer-numerics.test.mjs'},modelDigest:digest(model),domain:{from:utc(0),to:utc(100)},maxAbsRateDegPerDay:rate,absoluteErrorDeg:error});
+const bound=(body='Sun',rate=0,error=0)=>({id:`reviewer-bound-${body}`,body,source:{title:'Synthetic analytic review fixture',locator:'tests/reviewer-numerics.node-test.mjs'},modelDigest:digest(model),domain:{from:utc(0),to:utc(100)},maxAbsRateDegPerDay:rate,absoluteErrorDeg:error});
 function request(fn=()=>10, overrides={}) {
   return {subjectId:'reviewer-subject',model,intervals:[{from:utc(0),to:utc(10)}],features:[feature],
     sample:async ms=>({longitudes:{Sun:fn((ms-BASE)/1000),Moon:0},warnings:[]}),

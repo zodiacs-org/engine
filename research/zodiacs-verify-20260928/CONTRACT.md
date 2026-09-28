@@ -10,15 +10,15 @@ Chart receipt payload: `{schema:'zodiacs.verify.chart.v1', subjectId, context:{u
 
 Exports createChartReceipt(payload) and validateChartReceipt(receipt) (throws, returns receipt). Request subject IDs are opaque local identifiers, not names or birth records. No persistence or network by default.
 
-## Adapter (engine_review owns src/engine-adapter.mjs and tests/engine-adapter.test.mjs)
+## Adapter (engine_review owns src/engine-adapter.mjs and tests/engine-adapter.node-test.mjs)
 
 Exports async loadZodiacsAdapter(enginePath) -> `{model, calculate(request), sample(ms,request)}`. calculate takes `{subjectId,utc,latitude?,longitude?,timeKnowledge:'exact'|'reference',houseSystem,deltaT?}` and returns sealed chart receipt. sample returns `{longitudes:{Sun:...,Moon:...,...,Ascendant?:...,Midheaven?:...},warnings:[]}` for the uncertainty module. Use public APIs only. Validate and fail on unsupported versions, settings, dropped/fallback houses. Do not assert source ancestry from a version. Hash installed engine JS plus resolved dependency files, record scope. Never infer absolute precision from hashes.
 
-## Uncertainty (uncertainty_spec owns src/uncertainty.mjs and tests/uncertainty.test.mjs)
+## Uncertainty (uncertainty_spec owns src/uncertainty.mjs and tests/uncertainty.node-test.mjs)
 
 Export async analyzeUncertainty({subjectId,model,intervals:[{from,to}],features:[{id,kind:'sign',body}|{id,kind:'aspect',a,b,angle,orb}],sample,bounds?,maxSamples?,resolutionMs?}). sample is async ms => `{longitudes:{[body]:number},warnings:[]}`. Intervals closed, resolved UTC, union preserved, max bounded span. bounds OPTIONAL: externally asserted Lipschitz rates per body in degrees/day, absolute position error bounds in degrees, with identifier/source and domain; observed engine speeds are NOT conservative derivative bounds. Production engine adapter supplies NO bounds. Report is sealed `{schema:'zodiacs.verify.uncertainty.v1',subjectId,model,intervals,features,results:[{featureId,status:'stable'|'variable'|'unresolved',values,coverage:'bounded'|'sampled',...}],complete:boolean,...}`. Stable requires certified-by-algorithm full interval coverage CONDITIONAL on caller's documented bounds. Sampled results alone cannot produce stable, even identical samples. Variable means witnesses differ; unresolved means insufficient assurance. Include call budget, witnesses, unresolved ranges and explicit limits; do not imply bounds independently verified. Validation exported validateUncertaintyReport(report) throws. Claims only accept bounded stable interval conclusions when caller explicitly trusts the bounds source.
 
-## Claims (historical_time owns src/claims.mjs and tests/claims.test.mjs)
+## Claims (historical_time owns src/claims.mjs and tests/claims.node-test.mjs)
 
 Export verifyClaims({receipts:[],uncertaintyReports:[],claims:[],rules:[],trustedReceiptIds:[],trustedReportIds:[],trustedBoundIds:[],trustedRuleIds:[]}) -> `{schema:'zodiacs.verify.claim-check.v1',allSupported,results:[{claimId,status:'supported'|'rejected'|'unresolved',reasons:[]}],limitations:[]}`.
 

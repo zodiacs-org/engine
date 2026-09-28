@@ -12,7 +12,7 @@ const engine=process.argv[2];
 if(!engine||!path.isAbsolute(engine))throw new Error('Provide absolute frozen engine dist/index.js path.');
 const tests=spawnSync(process.execPath,['--test','--test-reporter=tap',...[
   'core','compare','claims','cli','engine-adapter','uncertainty','reviewer-numerics','reviewer-trust','tools'
-].map(name=>'tests/'+name+'.test.mjs')],{cwd:root,env:{...process.env,ZODIACS_ENGINE_PATH:engine},encoding:'utf8',maxBuffer:32*1024*1024});
+].map(name=>'tests/'+name+'.node-test.mjs')],{cwd:root,env:{...process.env,ZODIACS_ENGINE_PATH:engine},encoding:'utf8',maxBuffer:32*1024*1024});
 await writeFile(path.join(root,'reports','validation.tap'),tests.stdout+(tests.stderr||''));
 if(tests.status!==0)throw new Error('Tests failed; inspect reports/validation.tap.');
 const match=label=>Number(new RegExp('^# '+label+' (\\d+)$','m').exec(tests.stdout)?.[1]??NaN);

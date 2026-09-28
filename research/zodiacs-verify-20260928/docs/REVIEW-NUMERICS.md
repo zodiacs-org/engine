@@ -5,10 +5,10 @@ This review covers the local Verify preview's core serialization, angle comparis
 ## Executed result
 
 ```sh
-node --test tests/reviewer-numerics.test.mjs
+node --test tests/reviewer-numerics.node-test.mjs
 ```
 
-**17 independent tests passed** after the owners fixed the issues below. The first run of the final uncertainty review found one failure in 17 tests; the corrected run passed all 17. Earlier read-only probes found two core defects before this independent suite was created. The reviewer changed only this document and `tests/reviewer-numerics.test.mjs`; module fixes were made by their owners.
+**17 independent tests passed** after the owners fixed the issues below. The first run of the final uncertainty review found one failure in 17 tests; the corrected run passed all 17. Earlier read-only probes found two core defects before this independent suite was created. The reviewer changed only this document and `tests/reviewer-numerics.node-test.mjs`; module fixes were made by their owners.
 
 ## Findings fixed during review
 

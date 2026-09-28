@@ -6,7 +6,7 @@ Reviewed 2026-09-28 by a separate AI reviewer agent. This is a scoped code revie
 
 ## What was examined
 
-The review covered `CONTRACT.md`, core receipt validation and sealing, comparison, the rc.10 engine adapter, uncertainty model binding, claims, the CLI, and the interpretation registry. The independent tests are in `tests/reviewer-trust.test.mjs`; they use synthetic facts for trust tests and the frozen engine installation only for byte qualification and integration checks.
+The review covered `CONTRACT.md`, core receipt validation and sealing, comparison, the rc.10 engine adapter, uncertainty model binding, claims, the CLI, and the interpretation registry. The independent tests are in `tests/reviewer-trust.node-test.mjs`; they use synthetic facts for trust tests and the frozen engine installation only for byte qualification and integration checks.
 
 The initial complete suite passed **96 tests, zero failures and zero skips** with the frozen rc.10 installation available. The final tool-session addition is reviewed below. The independent trust suite contributes **12 tests**, including:
 
@@ -39,8 +39,8 @@ Comparison options originally ignored unknown keys. A request for a zero-arcseco
 From the package directory, using Node 20 or later:
 
 ```sh
-ZODIACS_ENGINE_PATH=/absolute/qualified/package/dist/index.js node --test tests/reviewer-trust.test.mjs
-ZODIACS_ENGINE_PATH=/absolute/qualified/package/dist/index.js node --test tests/*.test.mjs
+ZODIACS_ENGINE_PATH=/absolute/qualified/package/dist/index.js node --test tests/reviewer-trust.node-test.mjs
+ZODIACS_ENGINE_PATH=/absolute/qualified/package/dist/index.js node --test tests/*.node-test.mjs
 ```
 
 For this review, the installed entry was `/workspace/scratch/c1943cbff40d/parallel-runtime/package/dist/index.js`. Temporary tamper fixtures were deleted after testing; the original engine and production code were not modified. A missing installation skips the real-engine controls, so zero skipped tests is required to reproduce the full result above.

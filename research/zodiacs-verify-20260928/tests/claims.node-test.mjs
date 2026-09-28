@@ -20,7 +20,7 @@ function receipt({subjectId = 'subject-a', timeKnowledge = 'exact', facts} = {})
 const factClaim = (r, overrides = {}) => ({id: 'fact-a', kind: 'fact', subjectId: r.subjectId,
   receiptId: r.id, factId: 'sun-sign', expected: 'Aries', scope: 'instant', ...overrides});
 const RULE = {id: 'editorial-rule-a', tradition: 'Explicitly synthetic editorial fixture',
-  source: {title: 'Synthetic test rule', locator: 'claims.test.mjs: RULE'},
+  source: {title: 'Synthetic test rule', locator: 'claims.node-test.mjs: RULE'},
   statement: 'Use this rule only to test provenance and dependency wiring.', epistemicStatus: 'editorial'};
 const interp = (overrides = {}) => ({id: 'interpretation-a', kind: 'interpretation', subjectId: 'subject-a',
   ruleId: RULE.id, basedOn: ['fact-a'], text: 'An arbitrary interpretation; semantic truth is not tested.', ...overrides});
@@ -37,7 +37,7 @@ async function report({bounded = true, variable = false, subjectId = 'subject-a'
     features: [{id: 'sun-stability', kind: 'sign', body: 'Sun'}],
     sample: async ms => ({longitudes: {Sun: variable ? 29 + 2 * (ms - Date.parse(from)) / 60000 : 15}, warnings: []}),
     ...(bounded ? {bounds: {assumptions: [{id: 'synthetic-bound-sun', body: 'Sun',
-      source: {title: 'Analytic synthetic function', locator: 'claims.test.mjs: constant 15 degrees'},
+      source: {title: 'Analytic synthetic function', locator: 'claims.node-test.mjs: constant 15 degrees'},
       modelDigest: digest(MODEL), domain: {from, to}, maxAbsRateDegPerDay: 0, absoluteErrorDeg: 0}]}} : {}),
     maxSamples: 64, resolutionMs: 1000});
 }
@@ -167,7 +167,7 @@ test('bounded interval needs independently explicit report trust AND every bound
 test('an aspect interval requires trust in both contributing body bounds', async () => {
   const from = '2026-01-01T00:00:00.000Z', to = '2026-01-01T00:01:00.000Z';
   const assumptions = ['Sun', 'Moon'].map(body => ({id: `analytic-${body}`, body,
-    source: {title: 'Constant synthetic position', locator: `claims.test.mjs: ${body}`},
+    source: {title: 'Constant synthetic position', locator: `claims.node-test.mjs: ${body}`},
     modelDigest: digest(MODEL), domain: {from, to}, maxAbsRateDegPerDay: 0, absoluteErrorDeg: 0}));
   const r = await analyzeUncertainty({subjectId: 'subject-a', model: MODEL,
     intervals: [{from, to}], features: [{id: 'square', kind: 'aspect', a: 'Sun', b: 'Moon', angle: 90, orb: 2}],
