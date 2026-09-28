@@ -43,6 +43,7 @@ writeFileSync(
   join(directory, "consumer.ts"),
   `
 import { natalChart, transits, synastry, moonPhase, positions, type Chart, type BirthInput, type ChartFlag, saturnReturn } from "@zodiacs/engine";
+import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, type ChartDeclinations, type ConfiguredAspectResult } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
 import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith, type CrossingSearchResult, type LongitudeCrossing } from "@zodiacs/engine/crossings";
@@ -52,6 +53,10 @@ const search: CrossingSearchResult = searchLongitudeCrossingsWith(degreePerDay, 
 if (search.status === "refused") { const none: [] = search.crossings; void none; }
 void passes;
 const chart: Chart = natalChart(resolveBirth({date: "2000-02-29", time: "12:00", timeZone: "UTC", latitude: 0, longitude: 180}));
+const declinations: ChartDeclinations = chartDeclinations(chart);
+const configured: ConfiguredAspectResult = findConfiguredAspects(chart.bodies, createAspectPolicy({aspects: [{type: "quincunx", orb: {applying: 2, separating: 1, stationary: 0.5}}], bodyOrbs: {Moon: 1}}));
+const rightAscension: number | null = eclipticToEquatorial(90, 5, 23.4).ra;
+void declinations; void configured; void rightAscension;
 transits(chart, "2026-09-07T12:00:00Z");
 synastry(chart, { utc: "2001-01-01", timeKnown: false });
 moonPhase("2024-04-08T18:21:00Z");
@@ -83,6 +88,7 @@ writeFileSync(
   `
 import assert from "node:assert/strict";
 import { natalChart, positions, transits, synastry, moonPhase, ENGINE_VERSION } from "@zodiacs/engine";
+import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, declinationsForBodies } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
 import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "@zodiacs/engine/crossings";
@@ -94,6 +100,22 @@ assert(chart.flags.includes("polar-fallback"));
 assert(((chart.angles.asc-chart.angles.mc+360)%360) < 180);
 assert.equal(chart.houses.cusps[0], Math.floor(chart.angles.asc/30)*30);
 assert.equal(positions("2000-02-29").length, 12);
+const configuredPolicy = createAspectPolicy({bodies: ["Mars", "Saturn"], aspects: [{type: "quincunx", orb: {applying: 2, separating: 0.5, stationary: 0}}], bodyOrbs: {Mars: 1}});
+const configured = findConfiguredAspects([{body: "Mars", lon: 0, speed: 0}, {body: "Saturn", lon: 149, speed: 1}], configuredPolicy);
+assert.equal(configured.aspects.length, 1);
+assert.equal(configured.aspects[0].motion, "applying");
+assert.equal(configured.aspects[0].maximumOrb, 1);
+assert(Object.isFrozen(configured.policy.aspects[0].orb));
+assert(Object.isFrozen(configured.aspects[0]));
+const declinations = chartDeclinations(chart);
+assert.equal(declinations.rows.length, chart.bodies.length);
+assert.equal(declinations.utc, chart.input.utc.toISOString());
+assert.deepEqual(declinations.deltaT, chart.deltaT);
+assert.equal(declinations.receiptScope, "not-included-in-natal-receipt");
+assert.equal(chartDeclinations({...chart.input, deltaT: 1000}).deltaT.seconds, 1000);
+assert.deepEqual(chartDeclinations(chart), declinations);
+assert(Math.abs(eclipticToEquatorial(90, 5, 23.4).dec - 28.4) < 1e-12);
+assert.equal(declinationsForBodies([{body: "Synthetic", lon: 90, lat: 5}], 23.4).rows[0].outOfBounds, true);
 assert.equal(transits(chart, "2026-09-07T12:00:00Z").positions.length, 12);
 assert(synastry(chart, {utc: "2000-01-01", timeKnown: false}).aspects.length > 0);
 assert(moonPhase("2024-04-08T18:21:00Z").illumination < 0.001);
@@ -231,7 +253,7 @@ const degreePerDay = (_body, date) => (date.getTime() / 86_400_000) % 360;
 assert.deepEqual(findLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), 1).map((crossing) => crossing.retrograde), [false]);
 assert.deepEqual(searchLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), {stepDays: 1, maxSamples: 2}), {status: "refused", reason: "sample-budget", samples: 0, maxSamples: 2, crossings: []});
 assert.equal(searchLongitudeCrossings("Moon", 0, new Date("2000-01-01"), new Date("2007-02-13"), {stepDays: 0.25}).crossings.length, 95);
-console.log(JSON.stringify({version: ENGINE_VERSION, crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
+console.log(JSON.stringify({version: ENGINE_VERSION, configuredAspects: "passed", chartDeclinations: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

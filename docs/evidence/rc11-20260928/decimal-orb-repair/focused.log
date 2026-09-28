@@ -1,0 +1,12 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+ RUN  v2.1.9 /workspace/scratch/c13b7841ac1f/engine-review
+
+ ✓ src/declination.test.ts (15 tests) 57ms
+ ✓ src/configured-aspects.test.ts (52 tests) 104ms
+
+ Test Files  2 passed (2)
+      Tests  67 passed (67)
+   Start at  18:08:46
+   Duration  563ms (transform 260ms, setup 0ms, collect 494ms, tests 161ms, environment 0ms, prepare 108ms)
+

@@ -1,5 +1,35 @@
 # Engine changelog
 
+## 0.1.1-rc.11
+
+- `createAspectPolicy` and `findConfiguredAspects` add explicit, immutable
+  longitude-aspect policies: major, minor and custom angles; per-aspect,
+  per-body and applying/separating/stationary orb limits; selected bodies;
+  and deterministic matching. The result includes its resolved policy.
+- The unpublished candidate's review repair uses direct bounded subtraction
+  in configured matching and motion, preserving exact custom-angle matches
+  at zero orb without widening tolerances. Configured boundary behavior can
+  differ at roundoff scale from the historical helper; existing natal,
+  transit, synastry and receipt calculations are unchanged. Current repair
+  evidence is in `docs/evidence/rc11-20260928/decimal-orb-repair/`.
+- `chartDeclinations(natal)` derives right ascension and declination from
+  full ecliptic longitude and latitude using true obliquity on the chart's
+  pinned or model ΔT clock. It includes parallel/contraparallel aspects,
+  explicit orb settings and out-of-bounds flags. Right ascension is in
+  degrees and is null at a numerical celestial pole.
+- `eclipticToEquatorial`, `declinationsForBodies`, `declinationOf`,
+  `declinationOrb` and `findDeclinationAspects` expose the underlying geometry
+  with an explicitly supplied obliquity.
+- Validation and finite comparison evidence is in
+  `docs/evidence/rc11-20260928/`. The ephemeris provider and its corrections
+  are unchanged; the programme's physical declination accuracy target is
+  not established by the new geometric checks.
+
+Migration: existing natal, synastry, transit and receipt conventions stay
+unchanged. New aspect policies do not alter `chart.aspects`. The additional
+analyses are not included in the natal receipt. This is a review candidate,
+not an npm publication or a completed Phase 2 milestone.
+
 ## 0.1.1-rc.10
 
 - A thirteenth house system, `"equal-mc"`: Equal houses from the midheaven,

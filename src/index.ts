@@ -1,4 +1,5 @@
 export {
+  chartDeclinations,
   chartPoints,
   moonPhase,
   natalChart,
@@ -20,6 +21,47 @@ export {
   separation
 } from "./aspects.js";
 export type { AspectDefinition, AspectMotion } from "./aspects.js";
+
+export {
+  CONFIGURED_ASPECT_ANGLES,
+  DEFAULT_ASPECT_POLICY,
+  createAspectPolicy,
+  findConfiguredAspects
+} from "./configured-aspects.js";
+export type {
+  AspectOrbInput,
+  AspectOrbLimits,
+  AspectPolicy,
+  AspectPolicyInput,
+  AspectPosition,
+  AspectRuleInput,
+  ConfiguredAspect,
+  ConfiguredAspectMotion,
+  ConfiguredAspectResult,
+  ResolvedAspectRule
+} from "./configured-aspects.js";
+
+export {
+  DECLINATION_ORB,
+  DECLINATION_ORB_LUMINARY,
+  DEFAULT_DECLINATION_ORB_POLICY,
+  RA_POLE_TOLERANCE,
+  declinationOf,
+  declinationOrb,
+  declinationsForBodies,
+  eclipticToEquatorial,
+  findDeclinationAspects
+} from "./declination.js";
+export type {
+  ChartDeclinations,
+  DeclinationAspect,
+  DeclinationAspectType,
+  DeclinationBody,
+  DeclinationOrbPolicy,
+  DeclinationRow,
+  Declinations,
+  EquatorialCoordinates
+} from "./declination.js";
 
 export {
   HOUSE_SYSTEMS,

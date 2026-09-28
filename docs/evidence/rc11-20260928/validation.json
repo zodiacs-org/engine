@@ -1,0 +1,81 @@
+{
+  "schema": "zodiacs.rc11-validation.v1",
+  "date": "2026-09-28",
+  "baseCommit": "f5f33892a95cd0d6cd4a11a80e66f802b11bccfa",
+  "runtime": "v24.19.0",
+  "baselineTests": {
+    "files": 25,
+    "passed": 2526
+  },
+  "candidateTests": {
+    "files": 27,
+    "passed": 2586
+  },
+  "gates": {
+    "typecheck": "pass",
+    "fullTests": "pass",
+    "build": "pass",
+    "exportSmoke": "pass",
+    "packageContents": "pass",
+    "packedConsumer": "pass",
+    "secondCleanBuildByteComparison": "pass",
+    "gitDiffCheck": "pass"
+  },
+  "package": {
+    "path": "artifacts/zodiacs-engine-0.1.1-rc.11.tgz",
+    "sha256": "13d637db21e3e444c783fd85832e4f61dfdb4b7777b2c84038ec887b47029c4e",
+    "bytes": 70676,
+    "unpackedBytes": 239037,
+    "files": 30
+  },
+  "baselineArchiveBinding": {
+    "path": "artifacts/zodiacs-engine-0.1.1-rc.10.tgz",
+    "sha256": "a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c",
+    "frozenDirectory": "/workspace/scratch/c1943cbff40d/parallel-runtime/package",
+    "packagedFilesCompared": 30,
+    "mismatches": 0
+  },
+  "sourceFiles": {
+    "CHANGELOG.md": "297885dd03c53f441b31f88c2e54984e1b3726db4b19b33b285e1b656b88543f",
+    "LICENSE": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df",
+    "LICENSING.md": "891ab1de8db82dea44f386f7815087ee07802400cbfb0039509626f74de5d3af",
+    "NOTICE": "265a138525b8d4ab3755a7a969d92dd9b875303b8eea277269713ffc3821dd19",
+    "README.md": "e85709c27df976cd6730b13d0a92675bb0af579b66165487b09d478faf661582",
+    "package-lock.json": "55b24716b7d086addb4c1d14d7723faa60a378225c09ab170ed5dee6d142504d",
+    "package.json": "7f2cb7a7d3ad07efc3a252f9c83c8a9474edd2318b075c54db0c578b96458551",
+    "src/api.ts": "a41b224a0c60008e2c2cbc5927c377a62bc9cdda2239d79d64f7276a21b656ae",
+    "src/aspects.ts": "442c4b9ea760ce5ca32d9524581e68551f3508252acd23292d8d9a0ac9ad8341",
+    "src/birth-input.ts": "9303df6556f84faf72e4c799f04d00692015dfade4f3c4e26d8d797f01f35928",
+    "src/configured-aspects.ts": "28ddf3969950fe3c4e46cd6f59022bf92a828527c49e07ebb949880800dcdba1",
+    "src/crossings.ts": "105d512921737886a254f71f5eb080ed11ee7b1a1175fe20ad2934291fdad9e4",
+    "src/date-input.ts": "f9db8865bf143d6334eb93d9618f50aa6a81ba32273b0a103d2a83e3c8014675",
+    "src/declination.ts": "eec63a96fdf4e852c23b8444f7553fdfb20f1f246139a6faafb81ea9c3a6bb29",
+    "src/deltat.ts": "3dea107e9bc0f1f8acea5737d369e09d571c22b3d1f82efe9dc9184f2bfe99d6",
+    "src/ephemeris.ts": "361e0b41fbf315573e4fbb905bcb537296409e3ccd030e2ca3574a418bfd1c9c",
+    "src/fixtures/iers-12.json": "a243ebbe903a2d47a0dd4b9233a2fa6fafb3bfa76bf4353a326d05cbb178daee",
+    "src/fixtures/receipt-rc6.json": "c387416634d49092262cdfe6ec42b5f6e799312ff40c47a2e61f285f666a8547",
+    "src/fixtures/receipt-rc7.json": "3df2dbbe589ca6b5315ce6b05025d4384f93d461c2277450e79115d5f9967eb4",
+    "src/fixtures/table-s15-2016.json": "44ebc2966b11f9162984c62aadc777ca69a43ffd96c43709b5047aee405fb970",
+    "src/geo/geonames.ts": "fd4363799fb26f3682b8c54054afc07761d7c301cdb798e6afc40965df150437",
+    "src/geo/timezone.ts": "11f7370996a00fff9e1315be4c2fcdbe4641b1b41482e760e3a436995ec04494",
+    "src/geo.ts": "bb8e3e0497b2180b6c20954807d56206fe90d208760d730125493eef22464687",
+    "src/houses.ts": "28f5497fd08f99618c936b066228fdae4cfe5632951df70416c157b90698ef95",
+    "src/index.ts": "ede14ddfbd3b513d5296ab899495a4e058d18013b45fee72451cfd247ce783a6",
+    "src/internal-math.ts": "b7c8b02926bd29e270072bf55c9cd58c916ea04065ff4ddc10ebd30a06e2bcca",
+    "src/internal.ts": "e5102198da1a5218e5695fce997fddac45e70732511b5d904f815f8db7d3722e",
+    "src/points.ts": "45ab8f4bc1e5087d68801e64312d8bab80d8415849b649c9655171c0c8eeddae",
+    "src/receipt-json.ts": "da5627224b593769eea8f1d434815ad34f422f44e1ef38a6687f86d8ccf8dd5c",
+    "src/receipt.ts": "bc7f83f7db15ffb66caae8f97ef6ac12b6c5889e599904207da84c3095e23679",
+    "src/reference-span.ts": "9f290584c09509960c27de25140d0700ee0d98ce7bc0fab44748c16f197d123b",
+    "src/returns.ts": "6b78526253104b723896b5f10f8103a1d39fb13df176646db96110fef204094d",
+    "src/signs.ts": "25b7cc9006624254995bd21f5dbaef92f4e61ef476b570589122a034896072dd",
+    "src/synastry.ts": "482ad89ae8df0bc5f3e8813d39400e8d3f7ceff4cad8d79fa0b5cdf3627ac1f7",
+    "src/types.ts": "a46135649a53f1d5a4bef0e7258c6387d793e2d1ad5506ac5df4220a2e11e95d",
+    "tsconfig.build.json": "a22d6f6c1c4389ff75785b8867b5f9fbc5f58c2ecf0aac84b88666fb69b54517",
+    "tsconfig.json": "e6cba71820473872fac2d9e080fefaf4cd6a752dba494d6cece005be3d3b8611"
+  },
+  "limits": [
+    "Finite candidate checks only; no new physical accuracy or completeness certification.",
+    "No npm publication, merge, deployment, or independent human review is represented by this record."
+  ]
+}

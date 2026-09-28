@@ -13,6 +13,8 @@ import {
 } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
+import { declinationsForBodies } from "./declination.js";
+import type { ChartDeclinations } from "./declination.js";
 import { deltaT, deltaTAt } from "./deltat.js";
 import type { DeltaT } from "./deltat.js";
 import { computeAngles, computeHouses, eastPointOf, vertexOf } from "./houses.js";
@@ -262,6 +264,33 @@ export function computePoints(chart: Chart): ChartPoints {
   clock(pin);
   try {
     return pointsAt(chart);
+  } finally {
+    if (pin !== undefined) clock();
+  }
+}
+
+/**
+ * Derive equatorial coordinates and declination aspects from the chart's full
+ * ecliptic positions, using the provider's true obliquity on the chart's clock.
+ * This preserves the caller's pinned Delta-T for the calculation, restores the
+ * engine model afterwards, and adds no claim to the current natal receipt.
+ */
+export function computeChartDeclinations(chart: Chart): ChartDeclinations {
+  const input = chart?.input;
+  const sourceDate = input?.utc;
+  const pin = input?.deltaT;
+  const bodies = chart?.bodies;
+  if (!(sourceDate instanceof Date) || !Number.isFinite(Date.prototype.getTime.call(sourceDate))) {
+    throw new RangeError("declination chart must contain a valid input utc Date.");
+  }
+  const date = new Date(Date.prototype.getTime.call(sourceDate));
+  if (pin !== undefined && (!Number.isFinite(pin) || typeof pin !== "number" || Math.abs(pin) > 1e10)) {
+    throw new RangeError("declination chart deltaT must be finite and at most 1e10 seconds in size.");
+  }
+  clock(pin);
+  try {
+    return { ...declinationsForBodies(bodies, e_tilt(MakeTime(date)).tobl),
+      utc: date.toISOString(), deltaT: deltaTFor(date, pin) };
   } finally {
     if (pin !== undefined) clock();
   }
