@@ -25,10 +25,26 @@
   nutation error over 1800 to 2200 (0.087″ in obliquity, 0.08″ a day in
   rates). calc names it (`nutation:iau2000b-five-terms`) and keeps it;
   nothing the engine computes has changed.
+- New entry point `@zodiacs/engine/window`. `birthWindow(input)` partitions a
+  birth-time window of up to 48 hours into cells within which each body's
+  sign and house, the signs of the ascendant and midheaven, the aspects in
+  orb and any Placidus or Koch fallback are constant. Each switch gives its
+  first millisecond and each change, from and to; each cell gives its share
+  under a uniform prior and, optionally, a rounding model.
+- `WINDOW_RATE_BOUNDS`, the per-body rate bounds the search relies on;
+  `MAX_WINDOW_MS`; `WINDOW_VERIFICATION`, the label every result carries:
+  "sampled at one-second resolution".
+- Evidence in `docs/evidence/birth-window/`: the scans behind the bounds and
+  the preregistered comparison with natalChart at every second of random
+  windows.
+- The root entry point does not grow; its JavaScript files are byte-identical
+  to rc.12's. The declaration rollup renames one shared chunk and re-letters
+  internal aliases; exported types are unchanged.
 
 Migration: none. With every default `calc` gives the position `positions()`
 gives, to the bit after the same earlier calls, and the root entry's build is
-byte for byte unchanged.
+byte for byte unchanged. `@zodiacs/engine/window` changes no existing
+calculation or receipt.
 
 ## 0.1.1-rc.15 — unreleased candidate
 

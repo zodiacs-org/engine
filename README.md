@@ -177,6 +177,9 @@ for (const aspect of today.aspects) {
   and solar arc directions (see `docs/timing-hellenistic.md`).
 - `@zodiacs/engine/vedic` provides the sidereal zodiac: ayanamsas, sidereal
   charts, nakshatras, vargas, KP sub-lords and dashas (see `docs/vedic.md`).
+- `@zodiacs/engine/window` partitions a birth-time window into cells within
+  which the chart's signs, houses and aspects are constant (see *Birth-time
+  windows*).
 
 ### Uniform calculation API
 
@@ -614,6 +617,103 @@ Invalid input throws `RangeError` before any sampling: an invalid `Date`,
 `from` after `to`, a non-finite longitude, a step that is not positive or is
 shorter than a millisecond, or a `maxSamples` that is not a positive integer or
 `Infinity`. A non-finite longitude from the ephemeris throws `RangeError` too.
+
+### Birth-time windows
+
+```ts
+import { birthWindow } from "@zodiacs/engine/window";
+
+const window = birthWindow({
+  start: "1990-06-15T12:20:00Z",
+  end: "1990-06-15T12:40:00Z",
+  latitude: 40.7128,
+  longitude: -74.006,
+  houseSystem: "placidus",
+  rounding: { recorded: "1990-06-15T12:30:00Z", minutes: 5 }
+});
+for (const cell of window.cells) console.log(cell.start, cell.share, cell.roundedShare, cell.features.ascendant);
+for (const change of window.switches) console.log(change.at, change.changes);
+```
+
+`birthWindow` divides a window of possible birth instants into cells within
+which every discrete feature of the chart is constant: each body's sign and
+house, the signs of the ascendant and the midheaven, the aspects in orb and,
+for Placidus and Koch, whether the houses fall back to whole signs. The
+features are natalChart's: houses are `houseOf` on the chart's cusps, and
+aspects are its five major aspects with their orbs, entering or leaving orb.
+Each switch gives the first millisecond of its new cell and every change at
+it, from and to. Each cell gives its share of the window under a uniform prior
+and, when `rounding` is given, under that rounding model.
+
+The window is `start` to `end`, excluding `end`, at most 48 hours; or `at`
+and `minutes`, for `minutes` either side of `at`; or only `rounding`, whose
+unit is then the window. `rounding: { recorded, minutes, mode }` says the
+recorded time was rounded to `minutes`, to the nearest (`"nearest"`, the
+default) or down (`"down"`); the true instant is taken as uniform over that
+unit, which must lie inside the window. Resolve local times first, for example
+with `resolveLocalToUtc` from `@zodiacs/engine/geo`.
+
+Every value is the engine's own at a millisecond. Each cell holds natalChart's
+features at every instant in it, and at each switch natalChart's value at the
+millisecond before `at` differs from its value at `at` exactly as listed, so
+the crossing lies in (at − 1 ms, at]. That is natalChart as a lone call
+computes it: astronomy-engine reuses its nutation for any instant within
+86.4 ms of the last, so two calls closer together than that can differ in the
+last digits.
+
+The search halves the window until each feature is settled. On an interval, a
+feature is dropped when an enclosure of every quantity it depends on keeps
+clear of every threshold and the feature agrees at both ends; single
+milliseconds are compared directly. The enclosures:
+
+- A body's longitude, from its values at both ends and `WINDOW_RATE_BOUNDS`:
+  twice the largest rate the engine's positions reach from 1800 to 2200, in
+  degrees per day (Moon 31, Mercury 4.5, Venus 2.6, Sun 2.1, Mars 1.6, Jupiter
+  0.49, Saturn 0.27, Uranus 0.13, Pluto 0.082, Neptune 0.077, nodes 0.53). The
+  separation of two bodies takes the sum of their bounds.
+- The true node, as the engine computes it, departs from its smooth motion by
+  up to 3.3e-5° from one millisecond to the next (1800 to 2200), because
+  astronomy-engine differences the Moon's position over 1.728 s for its
+  velocity. Its enclosure is widened by twice 5e-5·(1 + |T|)°, T in Julian
+  centuries from 2000: at least 3.9 times every value scanned from 1700 to
+  2300. Where the node is that close to a sign boundary or a cusp, its sign or
+  house can change back and forth, and every such change is reported: at the
+  node's ingresses of March 2028 and September 2029 its sign changes 311 times
+  in 1.1 s and 147 times in 0.6 s; at the slow one of July 2026, 1,579 times
+  in 8.2 s. A cusp passes the node within a fraction of a second. To present
+  results without the flicker, merge cells shorter than a second.
+- Angles and cusps follow the sidereal time, which increases, and the
+  obliquity, which changes by less than 5e-5° a day. The ascendant, the
+  midheaven and the Regiomontanus, Campanus, Topocentric, Koch, Alcabitius and
+  Meridian cusps are oblique longitudes, whose exact range over an interval of
+  ascensions comes from its ends and turning points. Outside the polar circle
+  Placidus cusps increase with the sidereal time (the iteration's slope is at
+  most 2/3); Morinus cusps always do; Porphyry and the equal systems follow
+  from the angles. Inside the polar circle the ascendant turns half a circle
+  where the horizon meets the ecliptic on the meridian, and an interval that
+  may contain such a turn is halved to the millisecond.
+- Thresholds carry a band of 1e-9° for rounding. Every enclosure is checked
+  against the engine's values at both ends of its interval; a failed check,
+  or a rate above its bound, adds the flag `bound-exceeded`, and completeness
+  is then not established for that result.
+
+Results carry `verification: "sampled at one-second resolution"`: the method
+is checked by comparing its switch instants with natalChart at every whole
+second of preregistered random windows (`docs/evidence/birth-window/`), not
+proven. A change and its reversal inside one second, such as the node's
+flicker, cannot be seen at that resolution; those are checked by natalChart at
+their own milliseconds. A window around a node ingress takes several seconds,
+because every millisecond near it is evaluated.
+
+Other flags are `polar-fallback`, when a cell uses whole-sign houses in place
+of Placidus or Koch, and `outside-reference-span`. Invalid input throws
+`RangeError`, including a latitude of exactly ±90°, where no ascendant is
+defined and the engine's value is 0° or 180° to rounding. So does a search
+that would evaluate more than two million instants, which needs a quantity to
+stay inside its rounding or jitter band of a boundary for minutes: the true
+node stationary on a sign boundary, or a place within about 1e-9° of a pole.
+The entry point carries the ephemeris, like the root entry point, and is
+separate from it so that the root does not grow.
 
 ### Resolved instant inputs
 

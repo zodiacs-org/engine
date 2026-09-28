@@ -94,6 +94,11 @@ const calcRequest: CalcRequest = {body: "Mars", time: {jd: 2451545, scale: "TT"}
 const calcResult: CalcPosition | CalcRefusal = calc(calcRequest);
 if (calcResult.status === "ok") { const replayed: CalcRequest = calcResult.receipt.request; void replayed; } else { const reason: string = calcResult.reason; void reason; }
 void houses; void events; void calcChart;
+import { birthWindow, WINDOW_VERIFICATION, type BirthWindow, type WindowChange } from "@zodiacs/engine/window";
+const windowed: BirthWindow = birthWindow({start: "2000-02-29T11:50:00Z", end: "2000-02-29T12:10:00Z", latitude: 0, longitude: 180, houseSystem: "placidus", rounding: {recorded: "2000-02-29T12:00:00Z", minutes: 5}});
+const firstChanges: WindowChange[] = windowed.switches[0]?.changes ?? [];
+const label: "sampled at one-second resolution" = WINDOW_VERIFICATION;
+void firstChanges; void label;
 const degreePerDay = (_body: string, date: Date) => (date.getTime() / 86_400_000) % 360;
 const passes: LongitudeCrossing[] = findLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), 1);
 const search: CrossingSearchResult = searchLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), {stepDays: 1, maxSamples: 2});
@@ -161,10 +166,11 @@ import { prepareLocalTime, resolveLocalToUtc, julianToGregorian, TZDB } from "@z
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
 import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "@zodiacs/engine/crossings";
 import { annualProfection, firdariaPeriods, releasingAt, solarArc } from "@zodiacs/engine/timing";
-import { searchLongitudeCrossings } from "@zodiacs/engine";
+import { searchLongitudeCrossings, houseOf } from "@zodiacs/engine";
 import * as vedic from "@zodiacs/engine/vedic";
 import * as root from "@zodiacs/engine";
 import { calc } from "@zodiacs/engine/calc";
+import { birthWindow, WINDOW_VERIFICATION } from "@zodiacs/engine/window";
 globalThis.fetch = () => { throw new Error("Calculation attempted a network request"); };
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
@@ -403,7 +409,23 @@ assert.equal(julianToGregorian("1917-10-25"), "1917-11-07");
 assert.equal(resolveLocalToUtc("1917-10-25", "12:00", "Etc/GMT-3", {calendar: "julian"}).utc.toISOString(), "1917-11-07T09:00:00.000Z");
 assert.throws(() => resolveLocalToUtc("2000-01-01", "12:00", "UTC", {calender: "julian"}), RangeError);
 assert.throws(() => resolveBirth({date: "2000-01-01", time: "12:00", timeZone: "UTC", calender: "julian"}), RangeError);
-console.log(JSON.stringify({version: ENGINE_VERSION, timeBasis: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
+const windowed = birthWindow({start: "2001-12-21T08:40:00Z", end: "2001-12-21T09:20:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
+assert.equal(windowed.verification, "sampled at one-second resolution");
+assert.equal(WINDOW_VERIFICATION, windowed.verification);
+assert(windowed.flags.includes("polar-fallback"));
+assert.equal(windowed.cells.reduce((total, cell) => total + cell.milliseconds, 0), 40 * 60_000);
+for (const cell of windowed.cells) {
+  // astronomy-engine reuses nutation within 86.4 ms; evaluate a day away first.
+  natalChart({utc: new Date(cell.start.getTime() + 86_400_000)});
+  const at = natalChart({utc: cell.start, latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
+  assert.equal(cell.features.houseSystem, at.houses.system);
+  for (const body of at.bodies) {
+    assert.equal(cell.features.signs[body.body], body.sign);
+    assert.equal(cell.features.houses[body.body], houseOf(body.lon, at.houses.cusps));
+  }
+}
+assert.throws(() => birthWindow({start: "2000-01-01T00:00:00Z", end: "2000-01-03T00:00:01Z", latitude: 0, longitude: 0}), RangeError);
+console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", timeBasis: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

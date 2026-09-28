@@ -36,6 +36,8 @@ const required = [
   "dist/internal-math.js",
   "dist/internal.d.ts",
   "dist/internal.js",
+  "dist/window.d.ts",
+  "dist/window.js",
   "package.json"
 ];
 for (const file of required) {

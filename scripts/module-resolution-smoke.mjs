@@ -11,6 +11,7 @@ const geo = await import("@zodiacs/engine/geo");
 const receipt = await import("@zodiacs/engine/receipt");
 const timing = await import("@zodiacs/engine/timing");
 const vedic = await import("@zodiacs/engine/vedic");
+const window = await import("@zodiacs/engine/window");
 const internal = await import("@zodiacs/engine/internal");
 const internalMath = await import("@zodiacs/engine/internal/math");
 
@@ -191,6 +192,14 @@ const sun = calc.calc({ body: "Sun", time: "2020-01-01" });
 assert.equal(sun.status, "ok");
 assert.equal(sun.lon, engine.positions("2020-01-01")[0].lon);
 assert.equal(calc.calc({ body: "Moon", time: "2020-01-01", zodiac: { sidereal: "lahiri" } }).reason, "not-in-this-version");
+
+// Birth-time windows are their own entry, so the root entry does not grow.
+assert.equal(typeof window.birthWindow, "function", "missing window export: birthWindow");
+assert.equal(window.WINDOW_VERIFICATION, "sampled at one-second resolution");
+assert.ok(Object.isFrozen(window.WINDOW_RATE_BOUNDS), "window rate bounds must be frozen");
+for (const name of ["birthWindow", "WINDOW_RATE_BOUNDS", "WINDOW_VERIFICATION", "MAX_WINDOW_MS"]) {
+  assert.equal(name in engine, false, `window leaked into the root entry: ${name}`);
+}
 
 for (const name of ["bodyLongitude", "longitudeSpeed", "computeBodies", "computeChart"]) {
   assert.equal(typeof internal[name], "function", `missing internal site export: ${name}`);
