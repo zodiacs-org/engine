@@ -7,87 +7,87 @@
         {
           "utc": "-030000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -117004.934,
-          "ms": 25681.2
+          "ms": 23760.9
         },
         {
           "utc": "-000500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -71.878,
-          "ms": 542.4
+          "ms": 527.5
         },
         {
           "utc": "0001-04-30T00:00:00Z",
           "sunLatitudeArcsec": 2.671,
-          "ms": 4.5
+          "ms": 4.4
         },
         {
           "utc": "0001-05-01T00:00:00Z",
           "sunLatitudeArcsec": 1.315,
-          "ms": 21.1
+          "ms": 15.9
         },
         {
           "utc": "0500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -21.565,
-          "ms": 21.4
+          "ms": 26.5
         },
         {
           "utc": "1000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -9.897,
-          "ms": 21.8
+          "ms": 17
         },
         {
           "utc": "1500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -3.794,
-          "ms": 21.7
+          "ms": 13.1
         },
         {
           "utc": "1800-06-01T00:00:00Z",
           "sunLatitudeArcsec": -1.447,
-          "ms": 23.4
+          "ms": 14.5
         },
         {
           "utc": "2000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 0.019,
-          "ms": 16
+          "ms": 14.5
         },
         {
           "utc": "2200-06-01T00:00:00Z",
           "sunLatitudeArcsec": 1.623,
-          "ms": 23.5
+          "ms": 14.2
         },
         {
           "utc": "2500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 4.697,
-          "ms": 23.1
+          "ms": 13.5
         },
         {
           "utc": "3000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 13.267,
-          "ms": 19.1
+          "ms": 15.9
         },
         {
           "utc": "3500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 28.548,
-          "ms": 22.3
+          "ms": 21.3
         },
         {
           "utc": "3998-09-02T00:00:00Z",
           "sunLatitudeArcsec": -57.522,
-          "ms": 21.1
+          "ms": 20.7
         },
         {
           "utc": "3998-09-03T12:00:00Z",
           "sunLatitudeArcsec": -58.557,
-          "ms": 3.7
+          "ms": 1.7
         },
         {
           "utc": "4500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 87.508,
-          "ms": 592.6
+          "ms": 530.2
         },
         {
           "utc": "+030000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -105345.902,
-          "ms": 24790.8
+          "ms": 22624.7
         }
       ]
     },
@@ -102,7 +102,7 @@
         {
           "utc": "-000500-06-01T00:00:00Z",
           "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
-          "ms": 0.1
+          "ms": 0
         },
         {
           "utc": "0001-04-30T00:00:00Z",
@@ -112,57 +112,57 @@
         {
           "utc": "0001-05-01T00:00:00Z",
           "sunLatitudeArcsec": 1.315,
-          "ms": 76.4
+          "ms": 85.7
         },
         {
           "utc": "0500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -21.565,
-          "ms": 33.9
+          "ms": 34.9
         },
         {
           "utc": "1000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -9.897,
-          "ms": 19.1
+          "ms": 20.1
         },
         {
           "utc": "1500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -3.794,
-          "ms": 27
+          "ms": 25.4
         },
         {
           "utc": "1800-06-01T00:00:00Z",
           "sunLatitudeArcsec": -1.447,
-          "ms": 20.1
+          "ms": 19
         },
         {
           "utc": "2000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 0.019,
-          "ms": 14.5
+          "ms": 17.7
         },
         {
           "utc": "2200-06-01T00:00:00Z",
           "sunLatitudeArcsec": 1.623,
-          "ms": 13.6
+          "ms": 16.6
         },
         {
           "utc": "2500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 4.697,
-          "ms": 24.6
+          "ms": 34.4
         },
         {
           "utc": "3000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 13.267,
-          "ms": 15.6
+          "ms": 17.9
         },
         {
           "utc": "3500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 28.548,
-          "ms": 13.4
+          "ms": 13.3
         },
         {
           "utc": "3998-09-02T00:00:00Z",
           "sunLatitudeArcsec": -57.522,
-          "ms": 14.4
+          "ms": 14.3
         },
         {
           "utc": "3998-09-03T12:00:00Z",

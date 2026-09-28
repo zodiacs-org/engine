@@ -33,8 +33,10 @@ export const RA_POLE_TOLERANCE = 32 * Number.EPSILON;
 /** Maximum supplied bodies per derived analysis, bounding the pair count. */
 export const MAX_DECLINATION_BODIES = 256;
 /**
- * Degrees of ecliptic latitude within which a row labelled exactly "Sun" is
- * never flagged out of bounds, by convention (0.001°, 3.6″). See outOfBounds.
+ * Degrees of ecliptic latitude within which a supplied row labelled exactly
+ * "Sun" is never flagged out of bounds by declinationsForBodies, by convention
+ * (0.001°, 3.6″). A chart's own Sun, in chartDeclinations, is exempt at any
+ * latitude. See outOfBounds.
  */
 export const SUN_BOUND_LATITUDE = 0.001;
 
@@ -58,11 +60,15 @@ export interface DeclinationBody {
 export interface DeclinationRow extends DeclinationBody, EquatorialCoordinates {
   /**
    * Strictly |declination| > the supplied true obliquity, with no uncertainty
-   * allowance, except by convention for a row labelled exactly "Sun" whose
-   * ecliptic latitude is within SUN_BOUND_LATITUDE: that row is never out of
-   * bounds. The real Sun does pass the bound at about half of all solstices, by
-   * up to about 1.1″, but the ephemeris's solar declination is off by up to
-   * about 2.7″, more than the effect, so the flag could not say which.
+   * allowance, except for the Sun, by convention. In chartDeclinations the
+   * chart's own Sun row is never out of bounds, at any latitude. In
+   * declinationsForBodies a row labelled exactly "Sun" is exempt while its
+   * ecliptic latitude is within SUN_BOUND_LATITUDE, and flagged by the strict
+   * rule beyond it. The real Sun does pass the bound at about half of all
+   * solstices, by up to about 1.1″, but the ephemeris's solar declination is
+   * off by up to about 2.7″ near the present and its solar latitude by tens of
+   * arcseconds far from it (−68″ in year 2, +26″ in 3902), more than the
+   * effect, so the flag could not say which.
    */
   outOfBounds: boolean;
   /**
@@ -228,7 +234,11 @@ interface PlacedBodies {
   longitudes: number[];
 }
 
-function placeBodies(bodies: readonly DeclinationBody[], trueObliquity: number): PlacedBodies {
+/**
+ * chartSun marks rows from a chart's own positions: their Sun is exempt at any
+ * latitude. Supplied rows' Sun is exempt only within SUN_BOUND_LATITUDE.
+ */
+function placeBodies(bodies: readonly DeclinationBody[], trueObliquity: number, chartSun = false): PlacedBodies {
   obliquity(trueObliquity);
   if (!Array.isArray(bodies) || Object.getPrototypeOf(bodies) !== Array.prototype) {
     throw new RangeError("declination bodies must be a standard array.");
@@ -253,8 +263,8 @@ function placeBodies(bodies: readonly DeclinationBody[], trueObliquity: number):
     seen.add(body.body);
     const position = eclipticToEquatorial(body.lon, body.lat, trueObliquity);
     // A convention, not a physical claim: the ephemeris cannot resolve whether
-    // the Sun, on the ecliptic within SUN_BOUND_LATITUDE, is beyond the bound.
-    const exemptSun = body.body === "Sun" && Math.abs(body.lat) <= SUN_BOUND_LATITUDE;
+    // the Sun is beyond the bound. A supplied "Sun" row must be on the ecliptic.
+    const exemptSun = body.body === "Sun" && (chartSun || Math.abs(body.lat) <= SUN_BOUND_LATITUDE);
     placed.push({ body: body.body, lon: normalize(body.lon), lat: body.lat, ...position,
       outOfBounds: !exemptSun && Math.abs(position.dec) > trueObliquity,
       boundMarginArcsec: (Math.abs(position.dec) - trueObliquity) * 3600 });
@@ -320,15 +330,33 @@ export function findDeclinationAspects(
   return aspectsFor(placeBodies(bodies, trueObliquity), checked);
 }
 
+function declinations(
+  bodies: readonly DeclinationBody[],
+  trueObliquity: number,
+  policy: Readonly<DeclinationOrbPolicy>,
+  chartSun: boolean
+): Declinations {
+  const checked = policyOf(policy);
+  const placed = placeBodies(bodies, trueObliquity, chartSun);
+  return {trueObliquity, rows: placed.rows, aspects: aspectsFor(placed, checked), orbPolicy: checked,
+    convention: "true-equator-and-equinox-of-date; full-ecliptic-longitude-and-latitude",
+    receiptScope: "not-included-in-natal-receipt"};
+}
+
 /** Pure derived output; the chart wrapper supplies a provider obliquity of date. */
 export function declinationsForBodies(
   bodies: readonly DeclinationBody[],
   trueObliquity: number,
   policy: Readonly<DeclinationOrbPolicy> = DEFAULT_DECLINATION_ORB_POLICY
 ): Declinations {
-  const checked = policyOf(policy);
-  const placed = placeBodies(bodies, trueObliquity);
-  return {trueObliquity, rows: placed.rows, aspects: aspectsFor(placed, checked), orbPolicy: checked,
-    convention: "true-equator-and-equinox-of-date; full-ecliptic-longitude-and-latitude",
-    receiptScope: "not-included-in-natal-receipt"};
+  return declinations(bodies, trueObliquity, policy, false);
+}
+
+/**
+ * declinationsForBodies for a chart's own positions, whose Sun is exempt from
+ * the out-of-bounds flag at any latitude. Used by chartDeclinations; not part
+ * of the public API.
+ */
+export function chartBodyDeclinations(bodies: readonly DeclinationBody[], trueObliquity: number): Declinations {
+  return declinations(bodies, trueObliquity, DEFAULT_DECLINATION_ORB_POLICY, true);
 }

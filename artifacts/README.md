@@ -9,22 +9,38 @@ removed.
 package contains needs a new version before it is packed. `archives.json` is
 the record: each archive's version, SHA-256, size, file count and the commit it
 was packed from. CI enforces the rule with `npm run archive:binding`
-(`scripts/verify-archive-binding.mjs`), on full history:
+(`scripts/verify-archive-binding.mjs`). The check reads git objects only, never
+the working tree, and every commit reachable from HEAD, merged side branches
+included, so it needs full history. It fails unless:
 
-- every `artifacts/*.tgz` at HEAD has a carried entry whose digest, size and
-  file count it matches, every carried version's `.sha256` receipt names its
-  recorded bytes, and this README lists every recorded digest;
-- every commit reachable from HEAD is read, merged side branches included, and
-  an archive or receipt may only ever hold its recorded bytes. The first rc.11
-  packing below is allowed only in commit `00bdae7`, where it was committed. No
-  archive or receipt, once committed, may be removed;
+- in every commit, `artifacts/`, where present, is a real directory holding
+  only regular files named `README.md`, `archives.json`,
+  `zodiacs-engine-<version>.tgz` or `zodiacs-engine-<version>.sha256`: no
+  symbolic link, subdirectory or other file;
+- `archives.json` is append-only: every version of it committed anywhere in
+  history is a prefix of HEAD's, entry for entry, and each commit's extends its
+  parents'. Its superseded entries are exactly the ones pinned in the script:
+  rc.11's first packing, allowed only in commit `00bdae7`, where it was
+  committed;
+- every archive in HEAD's tree has a carried entry whose digest, size and file
+  count it matches, every carried entry's archive and receipt are in HEAD's
+  tree with the receipt naming the recorded bytes, and this README lists every
+  recorded digest;
+- in every commit, each archive and receipt holds only its recorded bytes, and
+  nothing ever committed under `artifacts/` is missing from HEAD;
 - each archive's source commit is in the history of HEAD and names its
   version, the commit that introduces the archive is that source commit or a
   child of it, and the packed `package.json`, README, CHANGELOG, LICENSE,
   LICENSING.md and NOTICE are byte-identical to the source commit's;
-- once the current version's archive is carried, a rebuild of the checkout
-  must reproduce its bytes. With `--rebuild-all`, which a separate CI job runs,
-  every recorded archive is rebuilt from its source commit and must match.
+- once the current version's archive is carried, a clean worktree of HEAD,
+  built and packed, reproduces it byte for byte. With `--rebuild-all`, which a
+  second CI job runs, every recorded archive is also rebuilt from its source
+  commit and must match.
+
+The check cannot detect history rewritten before CI sees it, and it relies on
+merge commits. A squash or rebase merge rewrites the commits an archive's
+`sourceCommit` names, and the check then fails; merge branches that carry
+archives with a merge commit.
 
 | Version | SHA-256 | Bytes | Files | Source commit | Carried in | Status |
 | --- | --- | ---: | ---: | --- | --- | --- |
@@ -40,10 +56,18 @@ was packed from. CI enforces the rule with `npm run archive:binding`
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
 version. Only `d88e0ff8…` is rc.11; `13d637db…` must not be installed or cited
-as rc.11. From rc.13 on, CI refuses such a replacement, and from rc.14 on it
-reads every commit, so a replacement on a merged side branch is refused too.
+as rc.11. The check now allows those first bytes in `00bdae7` alone, and the
+manifest cannot add another exception.
 
-On 2026-09-28 every archive above, the superseded rc.11 packing included, was
-rebuilt from its source commit with `--rebuild-all` and the locked toolchain
-(Node 22.22.2, npm 10.9.7) and matched its recorded bytes. The record is in
+A first local build of rc.14, SHA-256
+`5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02` (85,104
+bytes, packed from `74a4471`), was never pushed or published and is not carried
+here. Its review found ways past this check, a chart Sun flagged far from
+J2000 and the ΔT attribution naming the wrong file, and it packed a
+LICENSING.md that the merge of main then changed under the same version. rc.14
+was rebuilt from the merged source with those fixes. See
 `docs/evidence/rc14-20260928/`.
+
+On 2026-09-28 every archive above was rebuilt from its source commit with
+`--rebuild-all` and the locked toolchain (Node 22.22.2, npm 10.9.7) and matched
+its recorded bytes. The record is in `docs/evidence/rc14-20260928/`.

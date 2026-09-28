@@ -62,6 +62,7 @@ assert.ok(Object.isFrozen(engine.REFERENCE_SPAN) && Object.isFrozen(engine.EPHEM
 assert.deepEqual(engine.EPHEMERIS_SPAN.daysFromJ2000, { from: -730000, to: 730000 });
 assert.throws(() => engine.positions("4000-01-01"), (error) => error instanceof RangeError && /outside the ephemeris span/u.test(error.message));
 assert.equal(engine.SUN_BOUND_LATITUDE, 0.001);
+assert.equal("chartBodyDeclinations" in engine, false, "the chart-only declination helper leaked into the root entry");
 
 assert.equal(engine.PROGRESSION_DAYS_PER_YEAR, 365.2422);
 assert.equal(engine.progressedInstant("2019-12-31", "2020-12-30T05:48:46.080Z").toISOString(), "2020-01-01T00:00:00.000Z");

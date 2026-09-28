@@ -1,0 +1,77 @@
+
+### baseline clean history
+exit 0
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  1 recorded archives (1 carried, 0 superseded) and their receipts hold only their recorded bytes across 3 commits, and each is bound to its source commit.
+
+### 1a. replaced archive + 4 superseded entries (same source commit)
+exit 1
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/archives.json::artifacts/archives.json drops or changes entries of its parent 7ece8de9af00's (the manifest is append-only), in 1 commit(s): 9a7d400e2b16.
+  ::error file=artifacts/archives.json::artifacts/archives.json is not a prefix of HEAD's (the manifest is append-only), in 4 commit(s): 7ece8de9af00, fee2d0f8de5b, ba41d57c0ed0, 807c2ad2f20d.
+  ::error file=artifacts/archives.json::0.0.1 (3e9fb4ff5cd0…) is a superseded entry that this script does not pin; superseded archives are pinned in scripts/verify-archive-binding.mjs, not added through the manifest.
+  ::error file=artifacts/archives.json::0.0.1 (3e9fb4ff5cd0…) is a superseded entry that this script does not pin; superseded archives are pinned in scripts/verify-archive-binding.mjs, not added through the manifest.
+  ::error file=artifacts/archives.json::0.0.1 (3e9fb4ff5cd0…) is a superseded entry that this script does not pin; superseded archives are pinned in scripts/verify-archive-binding.mjs, not added through the manifest.
+  ::error file=artifacts/archives.json::0.0.1 (3e9fb4ff5cd0…) is a superseded entry that this script does not pin; superseded archives are pinned in scripts/verify-archive-binding.mjs, not added through the manifest.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::0.0.1 (31238fe3563c…) was introduced by 9a7d400e2b16, which is neither its source commit nor a child of it.
+  7 archive binding failures.
+
+### 1b. replaced archive from new source commit + 4 superseded entries
+exit 1
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/archives.json::artifacts/archives.json drops or changes entries of its parent 89f903880854's (the manifest is append-only), in 1 commit(s): 10670c1bad8f.
+  ::error file=artifacts/archives.json::artifacts/archives.json is not a prefix of HEAD's (the manifest is append-only), in 4 commit(s): 89f903880854, 63314a160879, 9f3415eaa17e, 13588520c7de.
+  ::error file=artifacts/archives.json::0.0.1 (4623e2f28db3…) is a superseded entry that this script does not pin; superseded archives are pinned in scripts/verify-archive-binding.mjs, not added through the manifest.
+  ::error file=artifacts/archives.json::0.0.1 (4623e2f28db3…) is a superseded entry that this script does not pin; superseded archives are pinned in scripts/verify-archive-binding.mjs, not added through the manifest.
+  ::error file=artifacts/archives.json::0.0.1 (4623e2f28db3…) is a superseded entry that this script does not pin; superseded archives are pinned in scripts/verify-archive-binding.mjs, not added through the manifest.
+  ::error file=artifacts/archives.json::0.0.1 (4623e2f28db3…) is a superseded entry that this script does not pin; superseded archives are pinned in scripts/verify-archive-binding.mjs, not added through the manifest.
+  6 archive binding failures.
+
+(2) at e306a7e8962e artifacts/zodiacs-engine-0.0.1.tgz resolved to sha256 133984bba45b6009…, recorded 8ea4f9dfc926878a…
+
+### 2. symlinked artifacts directory in a middle commit
+exit 1
+  ::error file=artifacts::artifacts is not a directory (git mode 120000, blob) in 1 commit(s): e306a7e8962e.
+  1 archive binding failure.
+
+### 3. temporary removal and restore
+exit 1
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::0.0.1 (b1f490a2268d…) was introduced by 95688d112fa4, which is neither its source commit nor a child of it.
+  1 archive binding failure.
+
+### 4. dirty working tree (uncommitted different bytes)
+exit 0
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  1 recorded archives (1 carried, 0 superseded) and their receipts hold only their recorded bytes across 3 commits, and each is bound to its source commit.
+
+(5) HEAD holds: artifacts/README.md artifacts/archives.json artifacts/zodiacs-engine-0.0.1.sha256
+
+### 5. archive untracked at HEAD but present on disk
+exit 1
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::artifacts/zodiacs-engine-0.0.1.tgz is recorded as carried but HEAD does not hold it.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::artifacts/zodiacs-engine-0.0.1.tgz was committed and is missing from HEAD; nothing under artifacts/ is ever removed.
+  2 archive binding failures.
+
+### 6. same file name under artifacts/old/ with other bytes
+exit 1
+  ::error file=artifacts::artifacts/old is not an archive, a receipt, archives.json or README.md (git mode 040000, tree) in 1 commit(s): 5a6056adeb3d.
+  ::error file=artifacts::artifacts/old/zodiacs-engine-0.0.1.tgz is not an archive, a receipt, archives.json or README.md (git mode 100644, blob) in 1 commit(s): 5a6056adeb3d.
+  2 archive binding failures.
+
+(2b) at HEAD artifacts/zodiacs-engine-0.0.1.tgz resolves to sha256 ebfc43294c36865e..., recorded c5caddbd294586f0...
+
+### 2b. symlinked artifacts directory at HEAD
+exit 1
+  ::error file=artifacts::artifacts is not a directory (git mode 120000, blob) in 1 commit(s): 7b47cc224754.
+  ::error file=artifacts/archives.json::artifacts/archives.json is missing from HEAD or is not a zodiacs.engine-archives.v1 manifest.
+  2 archive binding failures.
+
+(2c) at c4d88b0bc6e7 (reachable from HEAD) artifacts/zodiacs-engine-0.0.1.tgz resolved to 546ea98b93ed4667..., recorded 2b862efdc056957f...
+
+### 2c. symlinked artifacts in a middle commit, restored by a merge
+exit 1
+  ::error file=artifacts::artifacts is not a directory (git mode 120000, blob) in 1 commit(s): c4d88b0bc6e7.
+  1 archive binding failure.
+  HEAD: 100644 blob 58a917fc28a3c75ec616e9a4089262de120fc181	artifacts/README.md | 100644 blob 3bff4215a28db2df7942cf7791ffe28a42f4f66e	artifacts/archives.json | 100644 blob 2a55cebd48b2aeb7bf5302449b4f33284b80b6d5	artifacts/zodiacs-engine-0.0.1.sha256 | 100644 blob 01bc6b2b2759e1718842edef1ba51270cfa6c7f0	artifacts/zodiacs-engine-0.0.1.tgz

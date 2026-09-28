@@ -1,4 +1,4 @@
-archive sha256 5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02
+archive sha256 d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4
 node v18.20.8: exit 1
   SyntaxError: Named export 'Body' not found. The requested module 'astronomy-engine' is a CommonJS module, which may not support all module.exports as named exports.
 node v20.18.3: exit 1
@@ -11,7 +11,7 @@ node v20.19.0: exit 0
   loaded 0.1.1-rc.14; natalChart returned 12 bodies
 node v22.7.0: exit 0
   loaded 0.1.1-rc.14; natalChart returned 12 bodies
-  (node:23050) [MODULE_TYPELESS_PACKAGE_JSON] Warning: file://<consumer>/node_modules/astronomy-engine/esm/astronomy.js parsed as an ES module because module syntax was detected; to avoid the performance penalty of syntax detection, add "type": "module" to <consumer>/node_modules/astronomy-engine/package.json
+  (node:28001) [MODULE_TYPELESS_PACKAGE_JSON] Warning: file://<consumer>/node_modules/astronomy-engine/esm/astronomy.js parsed as an ES module because module syntax was detected; to avoid the performance penalty of syntax detection, add "type": "module" to <consumer>/node_modules/astronomy-engine/package.json
 node v22.22.2: exit 0
   loaded 0.1.1-rc.14; natalChart returned 12 bodies
 node v24.21.0: exit 0

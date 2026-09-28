@@ -1,0 +1,117 @@
+{
+  "runtime": "v22.22.2",
+  "builds": {
+    "rc13": {
+      "version": "0.1.1-rc.13",
+      "solsticesScanned": 7994,
+      "chartSunFlaggedOutOfBounds": 0,
+      "firstFlagged": [],
+      "latitudeBeyond3_6Arcsec": 5402,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1407,
+      "yearsWithinTheLimitAtBothSolstices": {
+        "longestRun": {
+          "from": 1641,
+          "to": 2413,
+          "length": 773
+        }
+      },
+      "solarLatitudeArcsecByMillennium": {
+        "1-1000": [
+          -68.4,
+          34.3
+        ],
+        "1001-2000": [
+          -17,
+          1.5
+        ],
+        "2001-3000": [
+          0,
+          8.3
+        ],
+        "3001-4000": [
+          1.5,
+          29.3
+        ]
+      }
+    },
+    "rc14-first-build": {
+      "version": "0.1.1-rc.14",
+      "solsticesScanned": 7994,
+      "chartSunFlaggedOutOfBounds": 1407,
+      "firstFlagged": [
+        {
+          "utc": "2591-06-20T20:25:27.709Z",
+          "latArcsec": 3.605
+        },
+        {
+          "utc": "2592-06-20T02:20:30.470Z",
+          "latArcsec": 3.61
+        },
+        {
+          "utc": "2593-06-20T08:09:10.361Z",
+          "latArcsec": 3.616
+        }
+      ],
+      "latitudeBeyond3_6Arcsec": 5402,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1407,
+      "yearsWithinTheLimitAtBothSolstices": {
+        "longestRun": {
+          "from": 1641,
+          "to": 2413,
+          "length": 773
+        }
+      },
+      "solarLatitudeArcsecByMillennium": {
+        "1-1000": [
+          -68.4,
+          34.3
+        ],
+        "1001-2000": [
+          -17,
+          1.5
+        ],
+        "2001-3000": [
+          0,
+          8.3
+        ],
+        "3001-4000": [
+          1.5,
+          29.3
+        ]
+      }
+    },
+    "rc14": {
+      "version": "0.1.1-rc.14",
+      "solsticesScanned": 7994,
+      "chartSunFlaggedOutOfBounds": 0,
+      "firstFlagged": [],
+      "latitudeBeyond3_6Arcsec": 5402,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1407,
+      "yearsWithinTheLimitAtBothSolstices": {
+        "longestRun": {
+          "from": 1641,
+          "to": 2413,
+          "length": 773
+        }
+      },
+      "solarLatitudeArcsecByMillennium": {
+        "1-1000": [
+          -68.4,
+          34.3
+        ],
+        "1001-2000": [
+          -17,
+          1.5
+        ],
+        "2001-3000": [
+          0,
+          8.3
+        ],
+        "3001-4000": [
+          1.5,
+          29.3
+        ]
+      }
+    }
+  }
+}

@@ -14,7 +14,7 @@ import {
 import type { AstroTime } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
-import { declinationsForBodies } from "./declination.js";
+import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
 import { deltaT, deltaTAt } from "./deltat.js";
 import type { DeltaT } from "./deltat.js";
@@ -340,7 +340,7 @@ export function computeChartDeclinations(chart: Chart): ChartDeclinations {
   return evaluated(() => {
     clock(pin);
     try {
-      return { ...declinationsForBodies(bodies, e_tilt(timeOf(date)).tobl),
+      return { ...chartBodyDeclinations(bodies, e_tilt(timeOf(date)).tobl),
         utc: date.toISOString(), deltaT: deltaTFor(date, pin) };
     } finally {
       if (pin !== undefined) clock();

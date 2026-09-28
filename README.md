@@ -33,15 +33,30 @@ The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
 directory, which must have no `node_modules` above it (set `TMPDIR` if
-needed). A packed candidate is not a published release. `artifacts/archives.json`
-records every carried archive and the commit it was packed from, and CI refuses
-an archive whose bytes change in any commit, or that its source commit does not
-rebuild byte for byte. This candidate declares the Node versions that can load
-its dependency and the licence of its ΔT values, refuses instants outside the
-years astronomy-engine tabulates (`EPHEMERIS_SPAN`), reports each declination
-row's signed margin to the out-of-bounds limit, restates the Sun's exemption
-from that limit as a convention and limits it to a Sun within 0.001° of the
-ecliptic, and reduces declination-aspect longitude separations exactly.
+needed). A packed candidate is not a published release.
+
+`artifacts/archives.json` records every carried archive: its digest, size,
+file count and the commit it was packed from. On the history it is given, CI
+checks from git objects alone, never the working tree, that in every commit:
+`artifacts/`, where present, is a real directory holding only archives,
+receipts, the manifest and its README, as regular files; each archive and
+receipt holds only its
+recorded bytes, the one exception, pinned in the check, being rc.11's first
+packing in commit `00bdae7`; and the manifest only ever gains entries. It also
+checks that nothing committed under `artifacts/` has been removed; that each
+archive's packed `package.json`, README, CHANGELOG and licence files match its
+source commit's byte for byte, and that it was committed by that commit or a
+child of it; and, once the current version's archive is carried, that a clean
+checkout of HEAD rebuilds it byte for byte (`--rebuild-all` also rebuilds every
+archive from its source commit). It cannot detect history rewritten before CI
+sees it, and it needs merge commits: a squash or rebase merge drops the source
+commits it checks against, and the check then fails.
+
+This candidate declares the Node versions that can load its dependency and the
+licence of its ΔT values, refuses instants outside the years astronomy-engine
+tabulates (`EPHEMERIS_SPAN`), reports each declination row's signed margin to
+the out-of-bounds limit, restates the Sun's exemption from that limit as a
+convention, and reduces declination-aspect longitude separations exactly.
 Configured-aspect and declination-parallel decisions stay exact on binary64
 inputs (rc.13).
 Secondary progressions (rc.12) and configurable longitude aspects and chart
@@ -341,10 +356,15 @@ real Sun is beyond the bound at 402 of the 800 solstices from 1800 to 2199, by
 up to 1.09″. The engine's solar declination is off by more than that, up to
 2.7″ in the comparison above, and its solar latitude drifts from −1.1″ on
 average in the 1800s to +1.1″ in the 2100s, so its margin at a solstice has the
-real sign at only 404 of those 800. A row labelled exactly `Sun` whose
-ecliptic latitude is within `SUN_BOUND_LATITUDE` (0.001°, 3.6″) is therefore
-never out of bounds; its margin is still reported. A `Sun` row with a larger
-latitude, such as a synthetic input, and every other row keep the strict rule.
+real sign at only 404 of those 800. Far from J2000 the drift grows to tens of
+arcseconds, −68.3″ at the June solstice of year 2 and +25.8″ at that of 3902,
+while the real Sun's latitude stays within about 1.2″. So `chartDeclinations`
+never flags the chart's own Sun as out of bounds, at any latitude; its margin
+is still reported, and says nothing about the real Sun. (It is the Sun of the
+chart given, which is not recomputed.) `declinationsForBodies` exempts a
+supplied row labelled exactly `Sun` only while its ecliptic latitude is within
+`SUN_BOUND_LATITUDE` (0.001°, 3.6″); a `Sun` row with a larger latitude, such
+as a synthetic input, and every other row keep the strict rule.
 
 Every supplied body is eligible, including nodes; filter the input for a
 smaller set. Parallel/contraparallel matches choose the smaller of
@@ -641,7 +661,8 @@ full provenance audit and the explicit Swiss Ephemeris exclusion.
 
 The package's licence expression is `MIT AND CC-BY-4.0`: the code is MIT
 ([LICENSE](LICENSE)), and the 32 values of Stephenson, Morrison & Hohenkerk's
-Table S15 in the ΔT model (`dist/deltat.js`) are CC BY 4.0, attributed in
+Table S15 in the package's ΔT module (`@zodiacs/engine/deltat`, which the build
+places in a shared chunk under `dist/`) are CC BY 4.0, attributed in
 [NOTICE](NOTICE).
 
 The npm package contains no place or timezone database. GeoNames attribution

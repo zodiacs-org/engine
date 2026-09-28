@@ -1,26 +1,42 @@
 /**
  * A version string names one byte sequence. artifacts/archives.json records
  * each carried archive: its version, SHA-256, size, file count and source
- * commit. This check, on full history (actions/checkout with fetch-depth: 0):
+ * commit. This check reads git objects only, never the working tree, and
+ * needs full history (actions/checkout with fetch-depth: 0):
  *
- * 1. Manifest: every artifacts/*.tgz at HEAD has one carried entry whose digest,
- *    size and file count it matches, with a .sha256 receipt naming its bytes,
- *    and artifacts/README.md names every recorded digest.
- * 2. History: every commit reachable from HEAD is read, with no history
- *    simplification, so a rewrite on a merged side branch is seen. A carried
- *    archive or receipt may only ever hold its recorded bytes, except that a
- *    superseded entry's bytes may appear in exactly its onlyInCommit, and no
- *    archive or receipt ever committed may be missing at HEAD.
- * 3. Source: every entry's source commit is in history, names the version, and
- *    introduces the archive itself or is the parent of the commit that does. The
- *    packed package.json, README, CHANGELOG, LICENSE, LICENSING.md and NOTICE are
- *    byte-identical to that commit's.
- * 4. Rebuild: when an archive is carried for package.json's version, a rebuild
- *    of this checkout must reproduce its bytes; before it is committed, this
- *    step reports a skip. With --rebuild-all, every entry is rebuilt from its
- *    source commit in a temporary worktree and must reproduce its bytes.
+ * 1. Shape. In every commit reachable from HEAD, artifacts, where present, is
+ *    a real directory whose entries are all regular files named README.md,
+ *    archives.json, zodiacs-engine-<version>.tgz or
+ *    zodiacs-engine-<version>.sha256: no symbolic link, subdirectory or other
+ *    file.
+ * 2. Manifest. archives.json at HEAD is well formed, with one carried entry
+ *    per file. It is append-only: every version of it committed anywhere in
+ *    history is a prefix of HEAD's, entry for entry, and each commit's extends
+ *    each of its parents'. Its superseded entries are exactly the ones pinned
+ *    below.
+ * 3. HEAD. Every archive in HEAD's tree has a carried entry whose digest,
+ *    size and file count it matches; every carried entry's archive and receipt
+ *    are in HEAD's tree, the receipt naming the recorded bytes; and
+ *    artifacts/README.md names every recorded digest.
+ * 4. History. In every commit each archive and receipt holds only its
+ *    recorded bytes, a superseded entry's only in its pinned commit, and
+ *    nothing ever committed under artifacts/ is missing from HEAD.
+ * 5. Source. Each entry's source commit is in HEAD's history and names its
+ *    version, the commit that introduces the archive is that source commit or
+ *    a child of it, and the archive's packed package.json, README, CHANGELOG,
+ *    LICENSE, LICENSING.md and NOTICE are byte-identical to that commit's.
+ * 6. Rebuild. When HEAD's version has a carried archive, a clean worktree of
+ *    HEAD is built and packed and must reproduce it byte for byte, so no later
+ *    commit can change a packed file without a new version. With
+ *    --rebuild-all, every entry is also rebuilt from its source commit.
+ *
+ * Merge with merge commits: a squash or rebase merge rewrites the source
+ * commits, and this check then fails.
  *
  * Usage, after npm ci: node scripts/verify-archive-binding.mjs [--rebuild-all] [--root DIR]
+ * --pinned-superseded FILE replaces the pinned list with a JSON array; it
+ * exists for this script's tests on synthetic repositories, and CI never
+ * passes it.
  */
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -30,15 +46,35 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
 
+/**
+ * The only superseded archive: rc.11's first packing, replaced under the same
+ * version before merge. Its bytes may appear in commit 00bdae79 and nowhere else.
+ */
+const PINNED_SUPERSEDED = [{
+  version: "0.1.1-rc.11",
+  file: "zodiacs-engine-0.1.1-rc.11.tgz",
+  sha256: "13d637db21e3e444c783fd85832e4f61dfdb4b7777b2c84038ec887b47029c4e",
+  bytes: 70676,
+  files: 30,
+  sourceCommit: "00bdae79a9256c2bba4294ed07af79e323c6cd66",
+  onlyInCommit: "00bdae79a9256c2bba4294ed07af79e323c6cd66"
+}];
+
 const args = process.argv.slice(2);
-const rootIndex = args.indexOf("--root");
-const root = resolve(rootIndex >= 0 ? args[rootIndex + 1] : fileURLToPath(new URL("..", import.meta.url)));
+const valueOf = (flag) => { const index = args.indexOf(flag); return index >= 0 ? args[index + 1] : undefined; };
+const root = resolve(valueOf("--root") ?? fileURLToPath(new URL("..", import.meta.url)));
 const rebuildAll = args.includes("--rebuild-all");
+const pinnedSuperseded = valueOf("--pinned-superseded")
+  ? JSON.parse(readFileSync(resolve(valueOf("--pinned-superseded")), "utf8")) : PINNED_SUPERSEDED;
 const BIG = 256 * 1024 * 1024;
 const git = (...list) => execFileSync("git", list, { cwd: root, encoding: "utf8", maxBuffer: BIG, stdio: ["ignore", "pipe", "pipe"] });
 const gitBytes = (...list) => execFileSync("git", list, { cwd: root, maxBuffer: BIG, stdio: ["ignore", "pipe", "pipe"] });
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const METADATA = ["package.json", "README.md", "CHANGELOG.md", "LICENSE", "LICENSING.md", "NOTICE"];
+const MANIFEST = "artifacts/archives.json";
+const ALLOWED_PATH = /^artifacts\/(?:README\.md|archives\.json|zodiacs-engine-[0-9A-Za-z.+-]+\.(?:tgz|sha256))$/u;
+const short = (commit) => commit.slice(0, 12);
+const listed = (commits) => `${commits.slice(0, 8).map(short).join(", ")}${commits.length > 8 ? ", ..." : ""}`;
 
 let failures = 0;
 function fail(file, message, details = []) {
@@ -77,6 +113,9 @@ function unpack(archive) {
 function readable(archive) {
   try { return unpack(archive); } catch { return null; }
 }
+/** JSON with object keys sorted, so two entries compare by content alone. */
+const canonical = (value) => JSON.stringify(value, (_key, item) => (item && typeof item === "object" && !Array.isArray(item)
+  ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) : item));
 
 // 0. Full history.
 if (git("rev-parse", "--is-shallow-repository").trim() !== "false") {
@@ -84,115 +123,171 @@ if (git("rev-parse", "--is-shallow-repository").trim() !== "false") {
   done();
 }
 
-// 1. Manifest and HEAD.
-const manifestPath = join(root, "artifacts", "archives.json");
-if (!existsSync(manifestPath)) {
-  fail("artifacts/archives.json", "The archive manifest is missing.");
+// 1. Every commit reachable from HEAD, with no history simplification: the
+//    shape of artifacts/ and what each file under it holds.
+const commits = git("rev-list", "HEAD").split("\n").filter(Boolean);
+const parents = new Map(git("rev-list", "--parents", "HEAD").split("\n").filter(Boolean)
+  .map((line) => { const [commit, ...rest] = line.split(" "); return [commit, rest]; }));
+const objectCache = new Map(); // object id -> tgz digest, receipt text, or parsed manifest
+const trees = new Map(); // commit -> Map(path -> { object, content })
+const shapeProblems = new Map(); // problem -> commits
+for (const commit of commits) {
+  const here = new Map();
+  for (const record of git("ls-tree", "-r", "-t", "-z", commit, "--", "artifacts").split("\0").filter(Boolean)) {
+    const tab = record.indexOf("\t");
+    const [mode, type, object] = record.slice(0, tab).split(" ");
+    const path = record.slice(tab + 1);
+    let problem = null;
+    if (path === "artifacts") {
+      if (mode !== "040000" || type !== "tree") problem = `artifacts is not a directory (git mode ${mode}, ${type})`;
+    } else if (!ALLOWED_PATH.test(path)) {
+      problem = `${path} is not an archive, a receipt, archives.json or README.md (git mode ${mode}, ${type})`;
+    } else if (mode !== "100644" || type !== "blob") {
+      problem = `${path} is not a regular file (git mode ${mode}, ${type})`;
+    }
+    if (problem) {
+      shapeProblems.set(problem, [...(shapeProblems.get(problem) ?? []), commit]);
+      continue;
+    }
+    if (type !== "blob") continue;
+    if (!objectCache.has(object)) {
+      const bytes = gitBytes("cat-file", "blob", object);
+      let content;
+      if (path.endsWith(".tgz")) content = { digest: sha256(bytes), bytes };
+      else if (path === MANIFEST) {
+        try { content = { manifest: JSON.parse(bytes.toString("utf8")) }; } catch { content = { manifest: null }; }
+      } else content = { text: bytes.toString("utf8") };
+      objectCache.set(object, content);
+    }
+    here.set(path, { object, ...objectCache.get(object) });
+  }
+  trees.set(commit, here);
+}
+for (const [problem, where] of shapeProblems) {
+  fail("artifacts", `${problem} in ${where.length} commit(s): ${listed(where)}.`);
+}
+
+// 2. The manifest at HEAD, and its history.
+const head = commits[0];
+const headTree = trees.get(head);
+const headManifest = headTree.get(MANIFEST)?.manifest;
+if (!headManifest || !Array.isArray(headManifest.archives) || headManifest.schema !== "zodiacs.engine-archives.v1") {
+  fail(MANIFEST, `${MANIFEST} is missing from HEAD or is not a zodiacs.engine-archives.v1 manifest.`);
   done();
 }
-const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
-const entries = Array.isArray(manifest.archives) ? manifest.archives : [];
+const entries = headManifest.archives;
 const HEX40 = /^[0-9a-f]{40}$/u;
 for (const entry of entries) {
   const valid = typeof entry.version === "string" && entry.file === `zodiacs-engine-${entry.version}.tgz` &&
     /^[0-9a-f]{64}$/u.test(entry.sha256) && Number.isInteger(entry.bytes) && Number.isInteger(entry.files) &&
     HEX40.test(entry.sourceCommit) && ((entry.status === "carried" && entry.onlyInCommit === undefined) ||
       (entry.status === "superseded" && HEX40.test(entry.onlyInCommit)));
-  if (!valid) fail("artifacts/archives.json", `Malformed manifest entry: ${JSON.stringify(entry)}`);
+  if (!valid) fail(MANIFEST, `Malformed manifest entry: ${JSON.stringify(entry)}`);
 }
 if (failures > 0) done();
+const headEntries = entries.map(canonical);
+const isPrefix = (shorter, longer) => shorter.length <= longer.length && shorter.every((entry, index) => entry === longer[index]);
+const manifestProblems = new Map();
+for (const commit of commits) {
+  const manifest = trees.get(commit).get(MANIFEST)?.manifest;
+  if (manifest === undefined) continue;
+  const list = Array.isArray(manifest?.archives) ? manifest.archives.map(canonical) : null;
+  const problems = [];
+  if (list === null) problems.push(`${MANIFEST} is not a manifest`);
+  else if (!isPrefix(list, headEntries)) problems.push(`${MANIFEST} is not a prefix of HEAD's (the manifest is append-only)`);
+  for (const parent of parents.get(commit) ?? []) {
+    const before = trees.get(parent)?.get(MANIFEST)?.manifest;
+    if (before === undefined || list === null) continue;
+    if (!Array.isArray(before?.archives) || !isPrefix(before.archives.map(canonical), list)) {
+      problems.push(`${MANIFEST} drops or changes entries of its parent ${short(parent)}'s (the manifest is append-only)`);
+    }
+  }
+  for (const problem of problems) manifestProblems.set(problem, [...(manifestProblems.get(problem) ?? []), commit]);
+}
+for (const [problem, where] of manifestProblems) fail(MANIFEST, `${problem}, in ${where.length} commit(s): ${listed(where)}.`);
+const PINNED_FIELDS = ["version", "file", "sha256", "bytes", "files", "sourceCommit", "onlyInCommit"];
+const pinnedKey = (entry) => canonical(Object.fromEntries(PINNED_FIELDS.map((field) => [field, entry[field]])));
+const pinnedKeys = pinnedSuperseded.map(pinnedKey);
+const superseded = entries.filter((item) => item.status === "superseded");
+for (const entry of superseded) {
+  if (!pinnedKeys.includes(pinnedKey(entry))) {
+    fail(MANIFEST, `${entry.version} (${entry.sha256.slice(0, 12)}…) is a superseded entry that this script does not pin; ` +
+      "superseded archives are pinned in scripts/verify-archive-binding.mjs, not added through the manifest.");
+  }
+}
 const carried = new Map();
 for (const entry of entries.filter((item) => item.status === "carried")) {
-  if (carried.has(entry.file)) fail("artifacts/archives.json", `${entry.file} has more than one carried entry.`);
+  if (carried.has(entry.file)) fail(MANIFEST, `${entry.file} has more than one carried entry.`);
   carried.set(entry.file, entry);
 }
-const superseded = entries.filter((item) => item.status === "superseded");
 const receiptOf = (file) => file.replace(/\.tgz$/u, ".sha256");
 const receiptText = (digest, file) => `${digest}  ${file}\n`;
 
-const headFiles = git("ls-tree", "--name-only", "HEAD", "--", "artifacts/").split("\n").filter(Boolean);
-for (const path of headFiles.filter((item) => item.endsWith(".tgz"))) {
+// 3. HEAD's tree.
+for (const [path, content] of headTree) {
+  if (!path.endsWith(".tgz")) continue;
   const file = path.slice("artifacts/".length);
   const entry = carried.get(file);
   if (!entry) {
-    fail(path, `${path} is carried without a carried entry in artifacts/archives.json.`);
+    fail(path, `${path} is carried without a carried entry in ${MANIFEST}.`);
     continue;
   }
-  const bytes = readFileSync(join(root, path));
-  const unpacked = readable(bytes);
+  const unpacked = readable(content.bytes);
   if (unpacked === null) {
     fail(path, `${path} is not a gzip-compressed tar archive.`);
     continue;
   }
-  const count = unpacked.size;
-  if (sha256(bytes) !== entry.sha256 || bytes.length !== entry.bytes || count !== entry.files) {
+  if (content.digest !== entry.sha256 || content.bytes.length !== entry.bytes || unpacked.size !== entry.files) {
     fail(path, `${path} does not match its manifest entry.`, [
-      `carried:  sha256 ${sha256(bytes)}, ${bytes.length} bytes, ${count} files`,
+      `carried:  sha256 ${content.digest}, ${content.bytes.length} bytes, ${unpacked.size} files`,
       `recorded: sha256 ${entry.sha256}, ${entry.bytes} bytes, ${entry.files} files`
     ]);
   }
 }
 for (const entry of carried.values()) {
-  const archive = join(root, "artifacts", entry.file);
-  const receipt = join(root, "artifacts", receiptOf(entry.file));
-  if (!existsSync(archive)) fail(`artifacts/${entry.file}`, `artifacts/${entry.file} is recorded as carried but is missing.`);
-  const text = existsSync(receipt) ? readFileSync(receipt, "utf8") : null;
+  if (!headTree.has(`artifacts/${entry.file}`)) fail(`artifacts/${entry.file}`, `artifacts/${entry.file} is recorded as carried but HEAD does not hold it.`);
+  const text = headTree.get(`artifacts/${receiptOf(entry.file)}`)?.text ?? null;
   if (text !== receiptText(entry.sha256, entry.file)) {
-    fail(`artifacts/${receiptOf(entry.file)}`, `The receipt for ${entry.version} does not name its recorded bytes.`,
+    fail(`artifacts/${receiptOf(entry.file)}`, `The receipt for ${entry.version} at HEAD does not name its recorded bytes.`,
       [`expected: ${JSON.stringify(receiptText(entry.sha256, entry.file))}`, `found:    ${text === null ? "(missing)" : JSON.stringify(text)}`]);
   }
 }
-const readme = existsSync(join(root, "artifacts", "README.md")) ? readFileSync(join(root, "artifacts", "README.md"), "utf8") : "";
+const readme = headTree.get("artifacts/README.md")?.text ?? "";
 for (const entry of entries) {
-  if (!readme.includes(entry.sha256)) fail("artifacts/README.md", `artifacts/README.md does not list ${entry.version} (${entry.sha256}).`);
+  if (!readme.includes(entry.sha256)) fail("artifacts/README.md", `artifacts/README.md at HEAD does not list ${entry.version} (${entry.sha256}).`);
 }
 
-// 2. History, with no simplification: every reachable commit, every artifacts path.
-const commits = git("rev-list", "HEAD").split("\n").filter(Boolean);
-const parents = new Map(git("rev-list", "--parents", "HEAD").split("\n").filter(Boolean)
-  .map((line) => { const [commit, ...rest] = line.split(" "); return [commit, rest]; }));
-const blobDigest = new Map();
-const contentAt = new Map(); // commit -> Map(path -> digest or receipt text)
-for (const commit of commits) {
-  const here = new Map();
-  for (const line of git("ls-tree", "-r", commit, "--", "artifacts/").split("\n").filter(Boolean)) {
-    const [meta, path] = line.split("\t");
-    const blob = meta.split(" ")[2];
-    if (!/^artifacts\/[^/]+\.(?:tgz|sha256)$/u.test(path)) continue;
-    if (!blobDigest.has(blob)) {
-      const bytes = gitBytes("cat-file", "blob", blob);
-      blobDigest.set(blob, path.endsWith(".tgz") ? sha256(bytes) : bytes.toString("utf8"));
-    }
-    here.set(path, blobDigest.get(blob));
-  }
-  contentAt.set(commit, here);
-}
-const everCommitted = new Set(git("log", "--full-history", "--format=", "--name-only", "HEAD", "--", "artifacts")
-  .split("\n").filter((path) => /^artifacts\/[^/]+\.(?:tgz|sha256)$/u.test(path)));
-for (const here of contentAt.values()) for (const path of here.keys()) everCommitted.add(path);
+// 4. History: recorded bytes only, and nothing removed.
+const everCommitted = new Set();
+for (const here of trees.values()) for (const path of here.keys()) everCommitted.add(path);
 for (const path of [...everCommitted].sort()) {
-  if (!existsSync(join(root, path))) fail(path, `${path} was committed and has since been removed; carried archives and receipts are never removed.`);
+  if (!headTree.has(path)) fail(path, `${path} was committed and is missing from HEAD; nothing under artifacts/ is ever removed.`);
 }
 function allowed(commit, path, content) {
   const file = path.slice("artifacts/".length).replace(/\.sha256$/u, ".tgz");
-  const matches = (digest) => (path.endsWith(".tgz") ? content === digest : content === receiptText(digest, file));
+  const matches = (digest) => (path.endsWith(".tgz") ? content.digest === digest : content.text === receiptText(digest, file));
   const entry = carried.get(file);
   if (entry && matches(entry.sha256)) return true;
   return superseded.some((item) => item.file === file && item.onlyInCommit === commit && matches(item.sha256));
 }
 const reported = new Set();
 for (const commit of commits) {
-  for (const [path, content] of contentAt.get(commit)) {
-    if (allowed(commit, path, content) || reported.has(`${path} ${content}`)) continue;
-    reported.add(`${path} ${content}`);
-    const where = commits.filter((other) => contentAt.get(other).get(path) === content).map((other) => other.slice(0, 12));
+  for (const [path, content] of trees.get(commit)) {
+    if (!/\.(?:tgz|sha256)$/u.test(path)) continue;
+    const value = path.endsWith(".tgz") ? content.digest : content.text;
+    if (allowed(commit, path, content) || reported.has(`${path} ${value}`)) continue;
+    reported.add(`${path} ${value}`);
+    const where = commits.filter((other) => {
+      const there = trees.get(other).get(path);
+      return there && (path.endsWith(".tgz") ? there.digest : there.text) === value;
+    });
     fail(path, `${path} held bytes its manifest entry does not allow; a version string names one byte sequence.`, [
-      `${path.endsWith(".tgz") ? `sha256 ${content}` : `receipt ${JSON.stringify(content)}`} in ${where.length} commit(s): ${where.slice(0, 8).join(", ")}${where.length > 8 ? ", ..." : ""}`
+      `${path.endsWith(".tgz") ? `sha256 ${value}` : `receipt ${JSON.stringify(value)}`} in ${where.length} commit(s): ${listed(where)}`
     ]);
   }
 }
 
-// 3. Source binding.
+// 5. Source binding.
 const isAncestor = (commit) => {
   try { git("merge-base", "--is-ancestor", commit, "HEAD"); return true; } catch { return false; }
 };
@@ -208,18 +303,18 @@ for (const entry of entries) {
   if (sourceVersion !== entry.version) {
     fail(path, `The source commit of ${label} is version ${sourceVersion ?? "(no package.json)"}, not ${entry.version}.`);
   }
-  const holders = commits.filter((commit) => contentAt.get(commit).get(path) === entry.sha256);
-  const introducers = holders.filter((commit) => !(parents.get(commit) ?? []).some((parent) => contentAt.get(parent)?.get(path) === entry.sha256));
+  const holders = commits.filter((commit) => trees.get(commit).get(path)?.digest === entry.sha256);
+  const introducers = holders.filter((commit) => !(parents.get(commit) ?? []).some((parent) => trees.get(parent)?.get(path)?.digest === entry.sha256));
   for (const commit of introducers) {
     if (commit !== entry.sourceCommit && !(parents.get(commit) ?? []).includes(entry.sourceCommit)) {
-      fail(path, `${label} was introduced by ${commit.slice(0, 12)}, which is neither its source commit nor a child of it.`);
+      fail(path, `${label} was introduced by ${short(commit)}, which is neither its source commit nor a child of it.`);
     }
   }
   if (holders.length === 0) {
     fail(path, `${label} never appears in the history of HEAD.`);
     continue;
   }
-  const packed = readable(gitBytes("show", `${holders[0]}:${path}`));
+  const packed = readable(trees.get(holders[0]).get(path).bytes);
   if (packed === null) {
     fail(path, `${label} is not a gzip-compressed tar archive.`);
     continue;
@@ -234,21 +329,28 @@ for (const entry of entries) {
   }
 }
 
-// 4. Rebuilds.
+// 6. Rebuilds, each in a clean temporary worktree of a commit.
 const quiet = { stdio: ["ignore", "pipe", "pipe"], maxBuffer: BIG };
-const dependencyLock = (text) => {
-  const lock = JSON.parse(text);
+/** The locked dependency tree of a directory's package-lock.json, or null without one. */
+function dependencyLock(directory) {
+  const path = join(directory, "package-lock.json");
+  if (!existsSync(path)) return null;
+  const lock = JSON.parse(readFileSync(path, "utf8"));
   const packages = { ...lock.packages };
   delete packages[""];
   return JSON.stringify({ lockfileVersion: lock.lockfileVersion, packages });
-};
-/** The packed bytes of directory, or null after reporting why it could not be built. */
+}
+// Used only to decide whether the installed toolchain can be reused; what is
+// verified comes from git objects.
+const installedLock = dependencyLock(root);
+/** The packed bytes of a worktree, or null after reporting why it could not be built. */
 function rebuild(directory, version, path) {
   const scratch = mkdtempSync(join(tmpdir(), "zodiacs-engine-pack-"));
   try {
     execFileSync("npm", ["run", "build"], { cwd: directory, ...quiet });
-    execFileSync("npm", ["pack", "--ignore-scripts", "--pack-destination", scratch], { cwd: directory, ...quiet });
-    return readFileSync(join(scratch, `zodiacs-engine-${version}.tgz`));
+    const [report] = JSON.parse(execFileSync("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", scratch],
+      { cwd: directory, encoding: "utf8", ...quiet }));
+    return readFileSync(join(scratch, report.filename));
   } catch (error) {
     const detail = String(error?.stderr ?? error?.message ?? error).trim().split("\n").slice(-3);
     fail(path, `The ${version} source could not be rebuilt and packed.`, detail);
@@ -274,44 +376,47 @@ function compare(path, label, expected, rebuilt, where) {
     ...(differing.length > 0 ? differing : ["Every packed file matches; only the tar or gzip framing differs."])
   ]);
 }
-
-const { version } = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
-const current = carried.get(`zodiacs-engine-${version}.tgz`);
-if (!rebuildAll) {
-  if (current && existsSync(join(root, "artifacts", current.file))) {
-    const path = `artifacts/${current.file}`;
-    compare(path, path, readFileSync(join(root, path)), rebuild(root, version, path), "this checkout");
-  } else {
-    console.log(`No archive artifacts/zodiacs-engine-${version}.tgz is carried for ${version} yet; skipping the rebuild of this checkout.`);
+function rebuildAt(commit, version, path, label, expected, where) {
+  const parent = mkdtempSync(join(tmpdir(), "zodiacs-engine-rebuild-"));
+  const tree = join(parent, "tree");
+  try {
+    git("worktree", "add", "--detach", tree, commit);
+    try {
+      // The installed toolchain is reused only when the commit locks the same dependency tree.
+      const lock = dependencyLock(tree);
+      if (lock !== null && lock === installedLock && existsSync(join(root, "node_modules"))) {
+        symlinkSync(join(root, "node_modules"), join(tree, "node_modules"), "dir");
+      } else if (lock !== null) {
+        execFileSync("npm", ["ci", "--ignore-scripts", "--no-audit", "--no-fund"], { cwd: tree, ...quiet });
+      }
+      compare(path, label, expected, rebuild(tree, version, path), where);
+    } finally {
+      git("worktree", "remove", "--force", tree);
+    }
+  } finally {
+    rmSync(parent, { recursive: true, force: true });
   }
+}
+
+let headVersion = null;
+try { headVersion = JSON.parse(git("show", "HEAD:package.json")).version; } catch { /* no package at HEAD */ }
+const current = headVersion === null ? undefined : carried.get(`zodiacs-engine-${headVersion}.tgz`);
+if (current && headTree.get(`artifacts/${current.file}`)?.bytes) {
+  const path = `artifacts/${current.file}`;
+  rebuildAt(head, headVersion, path, path, headTree.get(path).bytes, `HEAD (${short(head)})`);
 } else {
-  const lockHere = dependencyLock(readFileSync(join(root, "package-lock.json"), "utf8"));
+  console.log(`No archive artifacts/zodiacs-engine-${headVersion}.tgz is carried for ${headVersion} yet; skipping the rebuild of HEAD.`);
+}
+if (rebuildAll) {
   for (const entry of entries) {
     const path = `artifacts/${entry.file}`;
     const label = `${entry.version} (${entry.sha256.slice(0, 12)}…)`;
-    const holder = commits.find((commit) => contentAt.get(commit).get(path) === entry.sha256);
+    const holder = commits.find((commit) => trees.get(commit).get(path)?.digest === entry.sha256);
     if (!holder || !isAncestor(entry.sourceCommit)) continue; // already reported
-    const parent = mkdtempSync(join(tmpdir(), "zodiacs-engine-rebuild-"));
-    const tree = join(parent, "tree");
-    try {
-      git("worktree", "add", "--detach", tree, entry.sourceCommit);
-      try {
-        // The locked toolchain is reused only when the source commit locks the same dependency tree.
-        if (dependencyLock(readFileSync(join(tree, "package-lock.json"), "utf8")) === lockHere) {
-          symlinkSync(join(root, "node_modules"), join(tree, "node_modules"), "dir");
-        } else {
-          execFileSync("npm", ["ci", "--ignore-scripts", "--no-audit", "--no-fund"], { cwd: tree, ...quiet });
-        }
-        compare(path, label, gitBytes("show", `${holder}:${path}`), rebuild(tree, entry.version, path), `source commit ${entry.sourceCommit.slice(0, 12)}`);
-      } finally {
-        git("worktree", "remove", "--force", tree);
-      }
-    } finally {
-      rmSync(parent, { recursive: true, force: true });
-    }
+    rebuildAt(entry.sourceCommit, entry.version, path, label, trees.get(holder).get(path).bytes, `source commit ${short(entry.sourceCommit)}`);
   }
-  git("worktree", "prune");
 }
+git("worktree", "prune");
 
 if (failures === 0) {
   console.log(`${entries.length} recorded archives (${carried.size} carried, ${superseded.length} superseded) and their receipts ` +

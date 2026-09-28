@@ -172,6 +172,10 @@ for (const row of solstice.rows.filter((item) => item.body !== "Sun")) {
   assert.equal(row.outOfBounds, row.boundMarginArcsec > 0);
 }
 assert.equal(declinationsForBodies([{body: "Sun", lon: 90, lat: 8}], 23.4).rows[0].outOfBounds, true);
+// Far from J2000 the ephemeris's own solar latitude passes 0.001°; the chart's Sun is still not flagged.
+const farSun = chartDeclinations({utc: "2600-06-21T00:50:56Z", timeKnown: false}).rows.find((row) => row.body === "Sun");
+assert(Math.abs(farSun.lat) > SUN_BOUND_LATITUDE && farSun.boundMarginArcsec > 0);
+assert.equal(farSun.outOfBounds, false);
 // Longitude separations are reduced exactly modulo 360 and rounded once.
 assert.equal(findDeclinationAspects([{body: "A", lon: -0.1, lat: 0}, {body: "B", lon: 0.2, lat: 0}], 23.4)[0].separation, 0.30000000000000004);
 assert.equal(findDeclinationAspects([{body: "A", lon: -1e-20, lat: 0}, {body: "B", lon: 0, lat: 0}], 23.4)[0].separation, 1e-20);

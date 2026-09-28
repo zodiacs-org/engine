@@ -1,81 +1,96 @@
 {
-  "schema": "zodiacs.rc14-review-fixes-validation.v1",
+  "schema": "zodiacs.rc14-review-fixes-validation.v2",
   "date": "2026-09-28",
-  "baseCommit": "4eee7002c136e80372671af34b44083ef8069384",
+  "baseCommit": "8c3d94f2d05d544b450d3113e6b1cf877802d80f",
   "runtime": "v22.22.2",
+  "supersededFirstBuild": {
+    "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+    "bytes": 85104,
+    "sourceCommit": "74a4471d5fdcb8e63d13097e61a9dc3ca1033322",
+    "droppedCarrierCommit": "cca9f44e8bd5a2fac47b631ca694fa8569bf1219",
+    "published": false
+  },
   "unitTests": {
-    "passed": 2669,
+    "passed": 2677,
     "files": 34,
     "matrix": [
       {
         "node": "v20.19.0",
+        "typecheck": "pass",
         "exit": 0,
         "files": 34,
-        "passed": 2669
+        "passed": 2677
       },
       {
         "node": "v24.21.0",
+        "typecheck": "pass",
         "exit": 0,
         "files": 34,
-        "passed": 2669
+        "passed": 2677
       }
     ]
   },
   "gates": {
     "typecheck": "pass",
+    "typecheckMatrix": "pass",
+    "testMatrix": "pass",
     "build": "pass",
     "exports": "pass",
     "packageContents": "pass",
+    "packDryRun": "pass",
     "packDeterminism": "pass",
     "packedConsumer": "pass",
     "nodeSupport": "pass",
     "archiveBinding": "pass",
     "archiveRebuildAll": "pass",
     "reviewSyntheticCases": "pass",
-    "newTestsFailOnRc13": "pass",
+    "reviewBindingAttacks": "pass",
+    "blockerReplayFailsBothModes": "pass",
+    "newTestsFailOnEarlierSources": "pass",
     "rc10Compatibility": "pass",
     "exactOracle": "pass",
     "independentTimeMapping": "pass",
-    "sunNeverFlaggedAtSolstices": "pass",
+    "chartSunNeverFlaggedInSpan": "pass",
     "farDatesRefused": "pass",
-    "siteAdapterParity": "passed"
+    "siteAdapterParity": "passed",
+    "conformance": "pass"
   },
   "package": {
     "path": "artifacts/zodiacs-engine-0.1.1-rc.14.tgz",
-    "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
-    "bytes": 85104,
-    "unpackedBytes": 276516,
+    "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
+    "bytes": 86867,
+    "unpackedBytes": 281370,
     "files": 30,
-    "npmShasum": "b23c1de77bb24458f39535d6826140f27cc3163d",
-    "integrity": "sha512-jfXuH1BTcIEQRpNRNRJHk3Cvk0IGupKxtkLpxktL5ov6Pngw1/bYf+CLFYHRuqsUTUwnBT+L71LFtwzIQddQ6w=="
+    "npmShasum": "386a03b3b69d40d11621f8a6d07b9e29cc8c12be",
+    "integrity": "sha512-1/aYEedBsJhjHfVDENmlpM7oxmDcngsVCHFlf+hldK7DEfYb1iqc43ht2H9hATGWsc5ma/eIFRx8R7zDq8BKsQ=="
   },
   "packDeterminism": [
     {
       "run": "second",
       "node": "v22.22.2",
       "npm": "10.9.7",
-      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
       "identical": true
     },
     {
       "run": "node20",
       "node": "v20.19.0",
       "npm": "10.8.2",
-      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
       "identical": true
     },
     {
       "run": "node24",
       "node": "v24.21.0",
       "npm": "11.19.0",
-      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
       "identical": true
     }
   ],
   "packedConsumer": [
     {
       "runtime": "v20.19.0",
-      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
       "version": "0.1.1-rc.14",
       "types": "passed",
       "directoryRemoved": true,
@@ -83,7 +98,7 @@
     },
     {
       "runtime": "v22.7.0",
-      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
       "version": "0.1.1-rc.14",
       "types": "passed",
       "directoryRemoved": true,
@@ -91,7 +106,7 @@
     },
     {
       "runtime": "v22.22.2",
-      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
       "version": "0.1.1-rc.14",
       "types": "passed",
       "directoryRemoved": true,
@@ -99,7 +114,7 @@
     },
     {
       "runtime": "v24.21.0",
-      "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
+      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
       "version": "0.1.1-rc.14",
       "types": "passed",
       "directoryRemoved": true,
@@ -153,21 +168,21 @@
       "node": "v20.19.0",
       "npm": "10.8.2",
       "exit": 0,
-      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 41 commits",
+      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 45 commits",
       "rc14Rebuild": "skipped: not yet carried"
     },
     {
       "node": "v22.22.2",
       "npm": "10.9.7",
       "exit": 0,
-      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 41 commits",
+      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 45 commits",
       "rc14Rebuild": "skipped: not yet carried"
     },
     {
       "node": "v24.21.0",
       "npm": "11.19.0",
       "exit": 0,
-      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 41 commits",
+      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 45 commits",
       "rc14Rebuild": "skipped: not yet carried"
     }
   ],
@@ -238,10 +253,67 @@
     }
   ],
   "reviewSyntheticCases": "synthetic-binding rc.13 exit 0, rc.14 exit 1; synthetic-breach rc.13 exit 0, rc.14 exit 1",
-  "newTestsOnRc13Source": {
-    "failed": 11,
-    "passed": 32
+  "reviewBindingAttacks": [
+    {
+      "case": "baseline clean history",
+      "exit": 0
+    },
+    {
+      "case": "1a. replaced archive + 4 superseded entries (same source commit)",
+      "exit": 1
+    },
+    {
+      "case": "1b. replaced archive from new source commit + 4 superseded entries",
+      "exit": 1
+    },
+    {
+      "case": "2. symlinked artifacts directory in a middle commit",
+      "exit": 1
+    },
+    {
+      "case": "3. temporary removal and restore",
+      "exit": 1
+    },
+    {
+      "case": "4. dirty working tree (uncommitted different bytes)",
+      "exit": 0
+    },
+    {
+      "case": "5. archive untracked at HEAD but present on disk",
+      "exit": 1
+    },
+    {
+      "case": "6. same file name under artifacts/old/ with other bytes",
+      "exit": 1
+    },
+    {
+      "case": "2b. symlinked artifacts directory at HEAD",
+      "exit": 1
+    },
+    {
+      "case": "2c. symlinked artifacts in a middle commit, restored by a merge",
+      "exit": 1
+    }
+  ],
+  "blockerReplay": {
+    "exits": [
+      1,
+      1
+    ],
+    "rebuiltDigest": "861e9000f9527164915e21b7cfbcd0799f7006b8c63a0fd3cf8cb7c4325872d1"
   },
+  "newTestsOnEarlierSources": [
+    {
+      "commit": "4eee700",
+      "failed": 27,
+      "passed": 32
+    },
+    {
+      "commit": "74a4471",
+      "failed": 11,
+      "passed": 27
+    }
+  ],
   "compatibility": {
     "chartCases": 91,
     "invalidInputCases": 11,
@@ -348,6 +420,29 @@
       }
     ]
   },
+  "chartSunAcrossTheSpan": {
+    "rc13": {
+      "version": "0.1.1-rc.13",
+      "solstices": 7994,
+      "flagged": 0,
+      "latitudeBeyond3_6Arcsec": 5402,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1407
+    },
+    "rc14-first-build": {
+      "version": "0.1.1-rc.14",
+      "solstices": 7994,
+      "flagged": 1407,
+      "latitudeBeyond3_6Arcsec": 5402,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1407
+    },
+    "rc14": {
+      "version": "0.1.1-rc.14",
+      "solstices": 7994,
+      "flagged": 0,
+      "latitudeBeyond3_6Arcsec": 5402,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1407
+    }
+  },
   "declinationAgainstDE440s": {
     "samples": 20000,
     "span": "1850-01-01 to 2150-01-01 TT",
@@ -406,10 +501,10 @@
           "configuredWorst": 32045,
           "declinationWorst": 32640
         },
-        "configuredWorstMs": 191.462,
-        "declinationWorstMs": 72.959,
-        "configuredChartMs": 0.123,
-        "chartDeclinationsMs": 0.169
+        "configuredWorstMs": 186.433,
+        "declinationWorstMs": 70.86,
+        "configuredChartMs": 0.094,
+        "chartDeclinationsMs": 0.168
       },
       "rc13": {
         "version": "0.1.1-rc.13",
@@ -417,10 +512,10 @@
           "configuredWorst": 32045,
           "declinationWorst": 32640
         },
-        "configuredWorstMs": 1713.456,
-        "declinationWorstMs": 425.186,
-        "configuredChartMs": 0.283,
-        "chartDeclinationsMs": 0.279
+        "configuredWorstMs": 1911.289,
+        "declinationWorstMs": 428.328,
+        "configuredChartMs": 0.303,
+        "chartDeclinationsMs": 0.289
       },
       "rc14": {
         "version": "0.1.1-rc.14",
@@ -428,39 +523,39 @@
           "configuredWorst": 32045,
           "declinationWorst": 32640
         },
-        "configuredWorstMs": 1669.027,
-        "declinationWorstMs": 445.121,
-        "configuredChartMs": 0.286,
-        "chartDeclinationsMs": 0.29
+        "configuredWorstMs": 1715.748,
+        "declinationWorstMs": 469.066,
+        "configuredChartMs": 0.28,
+        "chartDeclinationsMs": 0.278
       }
     },
     "relativeToRc12": {
       "configuredWorstMs": {
         "rc12": 1,
-        "rc13": 8.95,
-        "rc14": 8.72
+        "rc13": 10.25,
+        "rc14": 9.2
       },
       "declinationWorstMs": {
         "rc12": 1,
-        "rc13": 5.83,
-        "rc14": 6.1
+        "rc13": 6.04,
+        "rc14": 6.62
       }
     },
     "loadAverages": [
       [
-        7.01,
-        8.96,
-        9.8
+        7.76,
+        7.7,
+        6.27
       ],
       [
-        6.97,
-        8.89,
-        9.7
+        7.94,
+        7.93,
+        6.58
       ],
       [
-        5.89,
-        7.86,
-        9.19
+        8.95,
+        8.07,
+        6.81
       ]
     ]
   },
@@ -496,87 +591,87 @@
         {
           "utc": "-030000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -117004.934,
-          "ms": 25681.2
+          "ms": 23760.9
         },
         {
           "utc": "-000500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -71.878,
-          "ms": 542.4
+          "ms": 527.5
         },
         {
           "utc": "0001-04-30T00:00:00Z",
           "sunLatitudeArcsec": 2.671,
-          "ms": 4.5
+          "ms": 4.4
         },
         {
           "utc": "0001-05-01T00:00:00Z",
           "sunLatitudeArcsec": 1.315,
-          "ms": 21.1
+          "ms": 15.9
         },
         {
           "utc": "0500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -21.565,
-          "ms": 21.4
+          "ms": 26.5
         },
         {
           "utc": "1000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -9.897,
-          "ms": 21.8
+          "ms": 17
         },
         {
           "utc": "1500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -3.794,
-          "ms": 21.7
+          "ms": 13.1
         },
         {
           "utc": "1800-06-01T00:00:00Z",
           "sunLatitudeArcsec": -1.447,
-          "ms": 23.4
+          "ms": 14.5
         },
         {
           "utc": "2000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 0.019,
-          "ms": 16
+          "ms": 14.5
         },
         {
           "utc": "2200-06-01T00:00:00Z",
           "sunLatitudeArcsec": 1.623,
-          "ms": 23.5
+          "ms": 14.2
         },
         {
           "utc": "2500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 4.697,
-          "ms": 23.1
+          "ms": 13.5
         },
         {
           "utc": "3000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 13.267,
-          "ms": 19.1
+          "ms": 15.9
         },
         {
           "utc": "3500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 28.548,
-          "ms": 22.3
+          "ms": 21.3
         },
         {
           "utc": "3998-09-02T00:00:00Z",
           "sunLatitudeArcsec": -57.522,
-          "ms": 21.1
+          "ms": 20.7
         },
         {
           "utc": "3998-09-03T12:00:00Z",
           "sunLatitudeArcsec": -58.557,
-          "ms": 3.7
+          "ms": 1.7
         },
         {
           "utc": "4500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 87.508,
-          "ms": 592.6
+          "ms": 530.2
         },
         {
           "utc": "+030000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -105345.902,
-          "ms": 24790.8
+          "ms": 22624.7
         }
       ]
     },
@@ -591,7 +686,7 @@
         {
           "utc": "-000500-06-01T00:00:00Z",
           "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
-          "ms": 0.1
+          "ms": 0
         },
         {
           "utc": "0001-04-30T00:00:00Z",
@@ -601,57 +696,57 @@
         {
           "utc": "0001-05-01T00:00:00Z",
           "sunLatitudeArcsec": 1.315,
-          "ms": 76.4
+          "ms": 85.7
         },
         {
           "utc": "0500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -21.565,
-          "ms": 33.9
+          "ms": 34.9
         },
         {
           "utc": "1000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -9.897,
-          "ms": 19.1
+          "ms": 20.1
         },
         {
           "utc": "1500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -3.794,
-          "ms": 27
+          "ms": 25.4
         },
         {
           "utc": "1800-06-01T00:00:00Z",
           "sunLatitudeArcsec": -1.447,
-          "ms": 20.1
+          "ms": 19
         },
         {
           "utc": "2000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 0.019,
-          "ms": 14.5
+          "ms": 17.7
         },
         {
           "utc": "2200-06-01T00:00:00Z",
           "sunLatitudeArcsec": 1.623,
-          "ms": 13.6
+          "ms": 16.6
         },
         {
           "utc": "2500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 4.697,
-          "ms": 24.6
+          "ms": 34.4
         },
         {
           "utc": "3000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 13.267,
-          "ms": 15.6
+          "ms": 17.9
         },
         {
           "utc": "3500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 28.548,
-          "ms": 13.4
+          "ms": 13.3
         },
         {
           "utc": "3998-09-02T00:00:00Z",
           "sunLatitudeArcsec": -57.522,
-          "ms": 14.4
+          "ms": 14.3
         },
         {
           "utc": "3998-09-03T12:00:00Z",
@@ -683,12 +778,13 @@
     "mappingMismatches": 0,
     "mismatchedCases": []
   },
+  "conformance": "zodiacs-engine 0.1.1-rc.14: 232 pass, 222 fail, 46 unsupported, 0 error (of 500)",
   "sourceFiles": {
-    "README.md": "20bf222f578fec1f6bee474c015a587d2405bf58c190e6a76e43d6340f0f6058",
-    "CHANGELOG.md": "0e2a9fb06295250fe3cea758478d81a7b99bb6987e156f3b3e282b023574fcfb",
+    "README.md": "7ff5fb710c2d348bce9a38b06ebbc75c635de70c7c33d76447a17043ede53b21",
+    "CHANGELOG.md": "35f504d921914c3de3f5475544758b36db9eabe926c82419b97dd66cbd266362",
     "LICENSE": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df",
-    "LICENSING.md": "5969100931045a9a6a4d8692122f5e79bd0f6217026d2998e9727a3ed24b4b7c",
-    "NOTICE": "265a138525b8d4ab3755a7a969d92dd9b875303b8eea277269713ffc3821dd19",
+    "LICENSING.md": "52cc2f753135930f8f117a403b6c9a6213339a0b3e9e3010a0d574b905006c79",
+    "NOTICE": "4f6a9de3d38fefb588f21d5eba1912d7a6ddf321a17f868a3f7b653a6fd8c9e3",
     "package.json": "479a94bccd3467ae744bc3c4a2c4b7923b790a1f016ef35da8cc016c3f5095cb",
     "package-lock.json": "21057a7caca1e9d7e3606e8ad314f8d505bc3fda19d98f96eff823d3dcc63380",
     "tsconfig.json": "e6cba71820473872fac2d9e080fefaf4cd6a752dba494d6cece005be3d3b8611",
@@ -696,8 +792,9 @@
     "tsconfig.build.json": "a22d6f6c1c4389ff75785b8867b5f9fbc5f58c2ecf0aac84b88666fb69b54517",
     "tsconfig.typecheck.json": "79191bb871130d3689ae45c952f8c20d1e2780669c227c22cb1f9a646f9e3ea1",
     "typedoc.json": "eb307dbbe7f0ae3114f547d3249ff7cc8d4d71a2b6381e30966c8f8ed08d79cf",
-    ".github/workflows/ci.yml": "5851a7506158ba18ea90685f59ec07039c61074baa1ffd96868d52424e563729",
-    "artifacts/README.md": "09f80891455f3c6d49c409b0c0a01c3df76e95d589cdd880768de08f92864d38",
+    ".github/workflows/ci.yml": "e5fd25e5dade3c79deaf9d12dba164526130e5a1e5085905967e123ca0c6b0c6",
+    ".github/workflows/conformance.yml": "0cd50321bbc5592ac46cdcaedcce261bd09b1fb31312380ab0385d64d93a22b3",
+    "artifacts/README.md": "0cd8fbf52f3f50a4a39f1513e713216ef84d3de1bceb1c450f44249262f7f7cb",
     "artifacts/archives.json": "279ff583a69a71485207148fdecc772215ee08f324968760c3a6679438ac777f",
     "src/angles-erfa.test.ts": "ce943febcb8fdddb3063ec6de75032a99fed98368ac1070239cc0eb51be9dfed",
     "src/api.ts": "cf85a9ee7906dee50739e0a9efde01129b5501b53f045d4b596c322a7cbbd383",
@@ -713,15 +810,15 @@
     "src/crossings.test.ts": "54323a1dcf38cd1de846b5e8e3b1ce2e56f7b482bca81c2f1c50551b30c54c5e",
     "src/crossings.ts": "105d512921737886a254f71f5eb080ed11ee7b1a1175fe20ad2934291fdad9e4",
     "src/date-input.ts": "f9db8865bf143d6334eb93d9618f50aa6a81ba32273b0a103d2a83e3c8014675",
-    "src/declination.test.ts": "4fc7673f83e0c1880f44325e38a446c71780b5882e3d793892db97020293f599",
-    "src/declination.ts": "37dac8656e8bd5836ba8c32110a643e9fef23737cb1eccf842230ca6c58ff428",
+    "src/declination.test.ts": "cf93954dda7755b0e18e586de36de11c5d3a916ee38485444371090a45761f67",
+    "src/declination.ts": "b2d8582ccdbd13396664fd9cd606169de75d7d7b9b10a9f7d1553ef1cc6c6b85",
     "src/deltat-chart.test.ts": "733e9eadc8c0a79a2090aec5240249f29cdab84b94466c3a60dbab54183874ea",
     "src/deltat.test.ts": "8684248f7284453f2602ab3cfb030c97f25751d7d0e15df219f046d64f8df173",
     "src/deltat.ts": "3dea107e9bc0f1f8acea5737d369e09d571c22b3d1f82efe9dc9184f2bfe99d6",
     "src/engine.test.ts": "469fb50d17dff6c4eb5c34b97e2f2a09edf5858e81cf63bd2fa9a06bb09ce1de",
     "src/ephemeris-errors.test.ts": "07e3cecf722465a1a52b10c083672773896fb252ebf54644a4498c99290f7780",
     "src/ephemeris-span.test.ts": "6f6c2fd812f4487a5c88333e513085075f246b61721739f9c9d5ec0878857302",
-    "src/ephemeris.ts": "c7fbb6d43b3e21a16d7a9c2754aa6208868638ed727e6a8ef19cad287d7d922c",
+    "src/ephemeris.ts": "c810dba1d32c518101e667ba770345baa320db1a5229a9b17b9b393cc29dd853",
     "src/exact.test.ts": "984ff01e963c54f6e0c51aed48ef70fe0c041455235b86298cbcbd7c1376a10e",
     "src/exact.ts": "f89a335657aa1139370511d315abcf8d6080ab857e0a37d249faf9de6a5eb25e",
     "src/fixtures/horizons-2020.ts": "b9020517d31d5a08fd907a6990f221801cc650f0ec6075817738638133ca6980",
@@ -765,20 +862,21 @@
     "src/speed.test.ts": "072715732ffb1d2747e6e6b062fc0c8359bd5ed6095bb50622eda5c87e6bb2f8",
     "src/synastry.ts": "482ad89ae8df0bc5f3e8813d39400e8d3f7ceff4cad8d79fa0b5cdf3627ac1f7",
     "src/types.ts": "dd0c03ea5b817859ceb167d701b91df6732dd303d7e57f6359ab119667304234",
-    "scripts/module-resolution-smoke.mjs": "dff75fa56030a1d64acbf5d673811a764bfe048e8c1991e850c7809cf757ca97",
+    "scripts/module-resolution-smoke.mjs": "cee0c0720000eb827e2f3444e6e3f13d0d685fc3656919b6462d45ab2253f179",
     "scripts/typedoc-canonical.mjs": "b98f810257c4b05b525d8fbfc7b4954331aef8b22a4af6c04719046a4ce965ab",
-    "scripts/verify-archive-binding.mjs": "3a312326b00d3d4f97ec4120df9d4bb355201d904a64da332aa8546d8ddcec82",
-    "scripts/verify-archive-binding.test.mjs": "488812c58b561165dd852f58791eb4e1f9f7eee26f59104f855532728916d6eb",
-    "scripts/verify-package-contents.mjs": "f2838ec0ee1f99e1163c642915bb67f172d1b894b42e4024ad625d0cc1b25186",
-    "scripts/verify-packed-consumer.mjs": "d4ecb050b462a16e8ec745cfc5fe070d0c836577974f5ad14a505c85d0848b76",
+    "scripts/verify-archive-binding.mjs": "9061971fe34ec3e102fcd6b0eea5a09092a37d359033515c3fa341e9d500e3e7",
+    "scripts/verify-archive-binding.test.mjs": "4c5e729d6307ec8e3cae03120395ea0a718e4ea80e0ad84a7f7ab166209fd4e7",
+    "scripts/verify-package-contents.mjs": "63caeca3ed674be8df04634cfddf83ed0727a690251012a5463ea3db60f0f226",
+    "scripts/verify-packed-consumer.mjs": "951e2313aea2bc2d4386929c0d2c2c03e2001aa08f6b1bf4aba6210fc78ba9a0",
     "scripts/verify-rc10-compatibility.mjs": "7d0b0fa15408d70b03653dd5345977b141e0a28c2211345d9153624a3d4bb603"
   },
   "limits": [
     "The declination errors against DE440s are maxima of 20,000 seeded samples from 1850 to 2150, not bounds; the flag's reliability outside that span is not measured.",
     "The Sun's exemption is a convention: the engine cannot resolve whether the real Sun is beyond the bound at a solstice.",
     "EPHEMERIS_SPAN is where astronomy-engine can evaluate at all, not where it is accurate; accuracy was compared only within REFERENCE_SPAN.",
+    "The archive check cannot detect history rewritten before CI sees it, and needs merge commits.",
     "The physical 0.01 arcsecond declination target remains unmet.",
-    "The CI jobs added here (packed consumer on Node 20.19.0 and 22.7.0, --rebuild-all) have run locally with the same scripts, not yet on GitHub Actions.",
+    "The CI jobs added in rc.14 (the packed consumer on each runtime, --rebuild-all) have run locally with the same scripts, not yet on GitHub Actions.",
     "No npm publication, merge, push or site adoption is represented by this record; review is AI-assisted, not human approval."
   ]
 }

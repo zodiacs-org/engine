@@ -53,12 +53,12 @@ jobs:
       - name: Pack dry run
         run: npm run pack:dry-run
 
-      # A version string names one byte sequence. artifacts/archives.json
-      # records each carried archive; every commit reachable from HEAD may hold
-      # only those bytes, each archive's packed metadata must match its source
-      # commit, and when package.json's version has a carried archive, a
-      # rebuild of this checkout must reproduce it (reported as a skip before
-      # that archive is committed).
+      # A version string names one byte sequence. The check reads git objects
+      # only: artifacts/ must be a real directory in every commit, the manifest
+      # append-only, every archive and receipt its recorded bytes in every
+      # commit, each archive's packed metadata its source commit's, and when
+      # HEAD's version has a carried archive, a clean worktree of HEAD must
+      # rebuild it (reported as a skip before that archive is committed).
       - name: Carried archives match history and source
         run: npm run archive:binding
 
@@ -80,6 +80,8 @@ jobs:
       - name: Install
         run: npm ci
 
+      # Everything the default check does, including the rebuild of HEAD, and
+      # a rebuild of every recorded archive from its source commit.
       - name: Rebuild every recorded archive
         run: node scripts/verify-archive-binding.mjs --rebuild-all
 

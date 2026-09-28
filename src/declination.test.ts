@@ -252,6 +252,25 @@ describe("the Sun and the out-of-bounds limit", () => {
     expect(sun.outOfBounds).toBe(false);
   });
 
+  // Far from J2000 the ephemeris's own solar latitude exceeds SUN_BOUND_LATITUDE (the real
+  // Sun's stays within about 1.2″). The chart's Sun is exempt at any latitude, as in rc.13,
+  // while the same rows given to declinationsForBodies keep the supplied-row rule.
+  it.each([
+    ["2600-06-21T00:50:56Z", 3.658, 3.658],
+    ["0002-06-23T02:41:29.283Z", -68.300, -68.300], // the June solstice of year 2
+    ["3902-06-20T13:31:29.226Z", 25.824, 25.824] // the June solstice of 3902
+  ])("does not flag the chart's Sun at %s, whatever its latitude", (utc, latArcsec, marginArcsec) => {
+    const result = chartDeclinations({utc, timeKnown: false});
+    const sun = result.rows.find(row => row.body === "Sun")!;
+    expect(sun.lat * 3600).toBeCloseTo(latArcsec, 3);
+    expect(sun.boundMarginArcsec).toBeCloseTo(marginArcsec, 3);
+    expect(Math.abs(sun.lat)).toBeGreaterThan(SUN_BOUND_LATITUDE);
+    expect(sun.outOfBounds).toBe(false);
+    const supplied = declinationsForBodies(natalChart({utc, timeKnown: false}).bodies, result.trueObliquity).rows.find(row => row.body === "Sun")!;
+    expect(supplied.boundMarginArcsec).toBe(sun.boundMarginArcsec);
+    expect(supplied.outOfBounds).toBe(sun.boundMarginArcsec > 0);
+  });
+
   it("exempts only a row labelled exactly Sun within 0.001° of the ecliptic", () => {
     expect(SUN_BOUND_LATITUDE).toBe(0.001);
     const row = (body: string, lon: number, lat: number) => declinationsForBodies([{body, lon, lat}], 23.44).rows[0]!;

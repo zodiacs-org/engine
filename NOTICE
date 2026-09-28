@@ -12,8 +12,12 @@ https://github.com/cosinekitty/astronomy
 ΔT (TT − UT1)
 ------------
 
-The ΔT model in dist/deltat.js ("zodiacs-deltat/1") contains 32 values of
-Table S15, rounded to 0.01 s, and constants of equations (4.1) and (5.1) from:
+The package's ΔT module, the model "zodiacs-deltat/1" that the package
+exports as @zodiacs/engine/deltat, contains 32 values of Table S15, rounded
+to 0.01 s, and constants of equations (4.1) and (5.1) from the work below.
+The build places that module in a shared chunk under dist/, which
+dist/deltat.js re-exports, so the values are in that chunk rather than in
+dist/deltat.js itself.
 
   Stephenson, F. R., Morrison, L. V. & Hohenkerk, C. Y. 2016, Measurement of
   the Earth's rotation: 720 BC to AD 2015. Proc. R. Soc. A 472: 20160404.

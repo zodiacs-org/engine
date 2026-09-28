@@ -10,10 +10,12 @@
   installs the packed archive in a clean consumer on Node 20.19.0, 22.7.0, 22
   and 24, and the consumer check refuses an unsupported runtime by name.
 - The licence expression is `MIT AND CC-BY-4.0`. The 32 values of Stephenson,
-  Morrison & Hohenkerk's Table S15 in the ΔT model, shipped since rc.8, are
-  CC BY 4.0, as NOTICE says; `package.json` had declared `MIT` alone.
-  `npm run package:contents` checks that `package.json`, LICENSING.md, NOTICE
-  and the README agree.
+  Morrison & Hohenkerk's Table S15 in the package's ΔT module, shipped since
+  rc.8, are CC BY 4.0, as NOTICE says; `package.json` had declared `MIT` alone.
+  NOTICE, LICENSING.md and the README say where the values are: in a shared
+  chunk under `dist/`, which `dist/deltat.js` re-exports. `npm run
+  package:contents` checks that `package.json`, LICENSING.md, NOTICE and the
+  README agree, and that the build still puts the values there.
 - Instants outside `EPHEMERIS_SPAN`, the years astronomy-engine tabulates (TT
   0001-04-30T12:00 to 3998-09-03T12:00), throw `RangeError` at once from every
   calculation. rc.13 evaluated them, slowly and wrongly: a position at year
@@ -30,15 +32,19 @@
   planets; the README gives each. Within them a flag can be wrong either way:
   at 2022-10-22T08:11:10.756Z the engine puts Mars 1.57″ inside the bound, and
   DE440s 1.05″ beyond it.
-- The Sun's exemption is restated as a convention, and applies only to a row
-  labelled `Sun` whose ecliptic latitude is within `SUN_BOUND_LATITUDE`
-  (0.001°). rc.13's reason was wrong, and its entry is corrected below. The
-  real Sun does pass the bound: computed with ERFA, at 402 of the 800
-  solstices from 1800 to 2199, by up to 1.09″ (DE440s agrees within 0.008″
-  over 1850–2149). The engine cannot tell: its solar declination is off by up
-  to 2.7″, and its solar latitude drifts from −1.1″ on average in the 1800s to
-  +1.1″ in the 2100s, so at the solstices its margin has the real sign at only
-  404 of the 800. A `Sun` row with a larger latitude keeps the strict rule.
+- The Sun's exemption is restated as a convention. rc.13's reason was wrong,
+  and its entry is corrected below. The real Sun does pass the bound: computed
+  with ERFA, at 402 of the 800 solstices from 1800 to 2199, by up to 1.09″
+  (DE440s agrees within 0.008″ over 1850–2149). The engine cannot tell: its
+  solar declination is off by up to 2.7″ near the present, and its solar
+  latitude drifts from −1.1″ on average in the 1800s to +1.1″ in the 2100s, so
+  at those solstices its margin has the real sign at only 404 of the 800. Far
+  from J2000 the drift reaches tens of arcseconds: −68.3″ at the June solstice
+  of year 2, +25.8″ at that of 3902. So `chartDeclinations` never flags the
+  chart's own Sun, at any latitude, as rc.13 did not; it is unflagged at all
+  7,994 solstices in `EPHEMERIS_SPAN`. `declinationsForBodies` exempts a
+  supplied row labelled `Sun` only within `SUN_BOUND_LATITUDE` (0.001°) of the
+  ecliptic, and holds it to the strict rule beyond.
 - `trueObliquity` is the IAU 2006 mean obliquity plus astronomy-engine's
   five-term truncation of the IAU 2000B nutation in obliquity, not IAU 2000B
   itself, and the documentation now says so. It differed from ERFA's `obl06`
@@ -57,33 +63,52 @@
   functions "body identifier must be a nonempty string."; both now say "Body
   labels must be nonempty, trimmed strings of at most 80 characters, without
   control characters." Code that matched the old text must match the new.
-- The archive check reads every commit reachable from HEAD, with no history
-  simplification. The rc.13 check missed a rewrite on a merged side branch,
-  and accepted rc.11's first packing in any commit. `artifacts/archives.json`
-  records each archive's digest, size, file count and source commit; rc.11's
-  first packing is now allowed only in 00bdae7, where it was committed, and
-  every version's receipt is checked. Each archive's packed `package.json`,
-  README, CHANGELOG and licence files must be byte-identical to its source
-  commit's, and the commit that introduces it must be that source commit or a
-  child of it. `--rebuild-all` rebuilds every archive from its source commit,
-  and CI runs it.
-- TypeDoc canonical URLs point to https://zodiacs.org/developers/engine/reference/,
-  and the footer names both licences. Earlier entries no longer name the
-  separate earlier package.
+- The archive check reads git objects only, never the working tree, and every
+  commit reachable from HEAD, with no history simplification. The rc.13 check
+  missed a rewrite on a merged side branch and accepted rc.11's first packing
+  in any commit; review of an earlier rc.14 build found three more ways past
+  it. Now:
+  - `artifacts/archives.json` records each archive's digest, size, file count
+    and source commit. It is append-only: every committed version of it must
+    be a prefix of HEAD's, and each commit's must extend its parents'. Its
+    superseded entries are pinned in the script: rc.11's first packing, allowed
+    only in 00bdae7, where it was committed.
+  - In every commit, `artifacts/` must be a real directory holding only
+    archives, receipts, the manifest and its README, as regular files: no
+    symbolic link and no subdirectory.
+  - Every version's receipt is checked, and nothing ever committed under
+    `artifacts/` may be missing from HEAD.
+  - Each archive's packed `package.json`, README, CHANGELOG and licence files
+    must be byte-identical to its source commit's, and the commit that
+    introduces it must be that source commit or a child of it.
+  - A clean worktree of HEAD must rebuild the current version's archive byte
+    for byte, both by default and with `--rebuild-all`, which also rebuilds
+    every archive from its source commit; CI runs both. A change to a packed
+    file under a version already carried fails either way.
+  - Merge with merge commits: a squash or rebase merge rewrites the source
+    commit, and the check then fails.
+- rc.14 includes main's conformance suite (`conformance/`, not packed) and the
+  section of LICENSING.md about it, which is packed. Its archive is built from
+  that merged source.
+- TypeDoc canonical URLs point to
+  https://zodiacs.org/developers/engine/reference/, and the footer names both
+  licences. Earlier entries refer to the separate earlier package by its
+  repository, github.com/ZodiacsOfficial/sdk, instead of its npm name.
 - rc.13's exact decisions cost time. In the review's worst case, 256 bodies
-  under 64 custom rules (32,045 aspects), `findConfiguredAspects` takes about
-  2 s where rc.12 took about 0.2 s, and 256 declinations all within a 90° orb
-  take about 0.5 s where rc.12 took about 0.08 s (the fastest of repeated runs
-  on Node 22.22.2). An ordinary chart's configured aspects or declinations
-  still take under a millisecond.
+  under 64 custom rules (32,045 aspects), `findConfiguredAspects` took 1.7 s to
+  1.9 s in two independent measurements, where rc.12 took 0.19 s, and 256
+  declinations all within a 90° orb took 0.45 s to 0.48 s, where rc.12 took
+  0.07 s (each the fastest of repeated runs on Node 22.22.2). An ordinary
+  chart's configured aspects or declinations still take under a millisecond.
 
 Migration: plain Node consumers need Node 20.19.0 or a later 20.x, or 22.7.0
 or later. Calculations at instants outside `EPHEMERIS_SPAN` throw `RangeError`.
-Declination rows gain `boundMarginArcsec`. A `Sun` row more than 0.001° off
-the ecliptic can now be out of bounds. Declination separations of longitudes
-outside [0, 360) can change, by less than 1e-13°. Natal, transit, synastry,
-progression and receipt results are unchanged apart from the reported engine
-version.
+Declination rows gain `boundMarginArcsec`. A row labelled `Sun` given to
+`declinationsForBodies` more than 0.001° off the ecliptic can now be out of
+bounds; the chart's own Sun in `chartDeclinations` never is. Declination
+separations of longitudes outside [0, 360) can change, by less than 1e-13°.
+Natal, transit, synastry, progression and receipt results are unchanged apart
+from the reported engine version.
 
 ## 0.1.1-rc.13 — unreleased candidate
 
@@ -113,7 +138,8 @@ version.
   latitude and have the real sign at only 404 of the 800. The obliquity is the
   IAU 2006 mean obliquity plus a five-term truncation of the IAU 2000B nutation
   in obliquity, not IAU 2000B itself. rc.14 keeps the exemption as a
-  convention, for a Sun within 0.001° of the ecliptic.)
+  convention: for the chart's own Sun at any latitude, and for a supplied Sun
+  row within 0.001° of the ecliptic.)
 - One body-label rule for both analyses. The declination functions now reject,
   as configured aspects already did, labels that are empty, longer than 80
   characters, carry surrounding whitespace or contain control characters, with
@@ -363,9 +389,9 @@ to exact can change. Recorded receipts are immutable and are not rewritten.
 
 Recorded receipts are immutable and are not rewritten. Recomputations can have
 corrected time flags under this new version. The receipt schema, core numerical
-formulas, an earlier package in another repository, site/starter pins and
-account protocols are unchanged. The explicit merge/publication hold and
-required review on PR #5 of that repository remain.
+formulas, the earlier package in github.com/ZodiacsOfficial/sdk, site/starter
+pins and account protocols are unchanged. The explicit merge/publication hold
+and required review on pull request #5 of that repository remain.
 
 ## 0.1.1-rc.5 — unreleased candidate
 
@@ -387,9 +413,9 @@ Migration: do not use flags to override timeKnown or the requested house system.
 Fix contradictory/missing result claims in supplied Charts. Arrays over 64 raw
 entries reject. Historical time flags remain assertions; executable same-realm
 getters/proxies are not sandboxed. Internal computation, receipt wire format,
-site/starter pins and the APIs of an earlier package in another repository are
-unchanged. Required review and the explicit merge/publication hold on PR #5 of
-that repository remain.
+site/starter pins and the APIs of the earlier package in
+github.com/ZodiacsOfficial/sdk are unchanged. Required review and the explicit
+merge/publication hold on pull request #5 of that repository remain.
 
 ## 0.1.1-rc.4 — unreleased candidate
 
@@ -410,8 +436,8 @@ that repository remain.
 Site application rc.1 and the separately delivered standalone starter rc.3
 remain pinned to their existing artifacts. Numerical calculations are unchanged
 apart from the reported engine version. The explicit review/publication hold on
-PR #5 of another repository, which holds an earlier package, remains; this
-entry is not npm publication or production release.
+pull request #5 of github.com/ZodiacsOfficial/sdk, the repository of an earlier
+package, remains; this entry is not npm publication or production release.
 
 ## 0.1.1-rc.3 — unreleased candidate
 
@@ -438,8 +464,8 @@ entry is not npm publication or production release.
 
 This candidate changes the optional geo client only; existing numerical
 calculations are unchanged apart from the reported package version. The
-review/publication hold on PR #5 of another repository, which holds an earlier
-package, remains.
+review/publication hold on pull request #5 of github.com/ZodiacsOfficial/sdk,
+the repository of an earlier package, remains.
 
 ## 0.1.1-rc.1 — unreleased candidate
 
@@ -459,9 +485,9 @@ package, remains.
 Migration: valid resolved inputs retain their shape. Callers previously relying
 on `Date` rollover, implicit machine timezone, or silently ignored settings must
 resolve/correct those inputs. Do not compare cached chart receipts across
-versions without recalculation. The API of an earlier package in another
-repository is unchanged.
+versions without recalculation. The API of the earlier package in
+github.com/ZodiacsOfficial/sdk is unchanged.
 
-Release holds remain in PR #5 of that repository. This
-entry records implementation, not publication, deployment, full external
-review, or adoption.
+Release holds remain in pull request #5 of that repository. This entry records
+implementation, not publication, deployment, full external review, or
+adoption.
