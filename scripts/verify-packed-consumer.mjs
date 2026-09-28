@@ -88,6 +88,12 @@ const cause: TransitionCause | undefined = transition?.cause;
 const gregorian: string | null = julianToGregorian("1917-10-25");
 const tzdbVersion: string = TZDB.version;
 void cause; void gregorian; void tzdbVersion;
+
+import { calc, houses, events, chart as calcChart, type CalcRequest, type CalcPosition, type CalcRefusal } from "@zodiacs/engine/calc";
+const calcRequest: CalcRequest = {body: "Mars", time: {jd: 2451545, scale: "TT"}, frame: "equatorial-icrs", center: {topocentric: {latitude: 0, longitude: 0}}, flags: {correction: "astrometric", cartesian: true}};
+const calcResult: CalcPosition | CalcRefusal = calc(calcRequest);
+if (calcResult.status === "ok") { const replayed: CalcRequest = calcResult.receipt.request; void replayed; } else { const reason: string = calcResult.reason; void reason; }
+void houses; void events; void calcChart;
 const degreePerDay = (_body: string, date: Date) => (date.getTime() / 86_400_000) % 360;
 const passes: LongitudeCrossing[] = findLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), 1);
 const search: CrossingSearchResult = searchLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), {stepDays: 1, maxSamples: 2});
@@ -158,6 +164,7 @@ import { annualProfection, firdariaPeriods, releasingAt, solarArc } from "@zodia
 import { searchLongitudeCrossings } from "@zodiacs/engine";
 import * as vedic from "@zodiacs/engine/vedic";
 import * as root from "@zodiacs/engine";
+import { calc } from "@zodiacs/engine/calc";
 globalThis.fetch = () => { throw new Error("Calculation attempted a network request"); };
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
@@ -171,6 +178,8 @@ assert.equal(sidereal.cusps[0].lon, Math.floor(sidereal.ascendant.lon/30)*30);
 assert.equal(vedic.KP_SUBS.length, 249);
 assert.equal("ayanamsa" in root, false);
 assert.equal(positions("2000-02-29").length, 12);
+assert.equal(calc({body: "Moon", time: "2000-02-29"}).lon, positions("2000-02-29")[1].lon);
+assert.equal(calc({body: "Moon", time: "1700-01-01"}).reason, "out-of-range");
 assert.equal(PROGRESSION_DAYS_PER_YEAR, 365.2422);
 assert.equal(progressedInstant("2019-12-31", "2020-12-30T05:48:46.080Z").toISOString(), "2020-01-01T00:00:00.000Z");
 assert.deepEqual(progressedBodies("2019-12-31", "2020-12-30T05:48:46.080Z"), positions("2020-01-01"));

@@ -1,5 +1,22 @@
 # Engine changelog
 
+## Unreleased
+
+- `@zodiacs/engine/calc`, a new entry point. `calc({ body, time, frame,
+  center, zodiac, flags })` returns `{ lon, lat, dist, speeds, cartesian,
+  bounds, receipt }`; `houses()`, `events()` and `chart()` give the engine's
+  houses, longitude crossings and natal charts in the same vocabulary. Eight
+  frames, four centers and three corrections; speeds in every coordinate,
+  analytic for geometric positions on fixed axes and central differences
+  otherwise; bounds measured against JPL Horizons; receipts of convention ids;
+  and typed refusals: `not-in-this-version` (the sidereal zodiac, light
+  deflection), `unsupported-combination`, `out-of-range` (outside 1800 to
+  2200) and `sample-budget`. `docs/calc.md` maps every Swiss Ephemeris
+  `calc_ut` flag; `docs/evidence/calc-api/` holds the comparison.
+
+Migration: none. With every default `calc` gives the position `positions()`
+gives, to the bit, and the root entry's build is byte for byte unchanged.
+
 ## 0.1.1-rc.15 — unreleased candidate
 
 rc.15 brings four pieces of work onto rc.14: the time basis and local time

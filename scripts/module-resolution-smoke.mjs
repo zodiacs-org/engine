@@ -4,6 +4,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { checkRootIsolation, staticGraph } from "./root-isolation.mjs";
 
 const engine = await import("@zodiacs/engine");
+const calc = await import("@zodiacs/engine/calc");
 const crossings = await import("@zodiacs/engine/crossings");
 const deltat = await import("@zodiacs/engine/deltat");
 const geo = await import("@zodiacs/engine/geo");
@@ -179,6 +180,18 @@ assert.equal(
 );
 await geo.prepareLocalTime("1947-07-01", "Europe/Stockholm");
 assert.equal(geo.resolveLocalToUtc("1947-07-01", "12:00", "Europe/Stockholm").offsetMinutes, 60);
+
+// The uniform calculation API is its own entry point: the root neither
+// re-exports it nor loads its code (checked on the build graph below).
+for (const name of ["calc", "houses", "events", "chart"]) {
+  assert.equal(typeof calc[name], "function", `missing calc export: ${name}`);
+  assert.equal(name in engine, false, `calc leaked into root: ${name}`);
+}
+const sun = calc.calc({ body: "Sun", time: "2020-01-01" });
+assert.equal(sun.status, "ok");
+assert.equal(sun.lon, engine.positions("2020-01-01")[0].lon);
+assert.equal(calc.calc({ body: "Moon", time: "2020-01-01", zodiac: { sidereal: "lahiri" } }).reason, "not-in-this-version");
+
 for (const name of ["bodyLongitude", "longitudeSpeed", "computeBodies", "computeChart"]) {
   assert.equal(typeof internal[name], "function", `missing internal site export: ${name}`);
 }
@@ -239,6 +252,11 @@ for (const [entry, own] of [["timing", /^src\/timing\//u], ["vedic", /^src\/vedi
   }
 }
 
+// No module of the calc entry is in the root's static graph, read either way.
+for (const source of new Set([...root.sources, ...root.held, ...root.marked])) {
+  assert(!/^src\/calc(?:-[a-z]+)?\.ts$/u.test(source), `the root entry reaches ${source}`);
+}
+
 // The geo entry reaches the zone histories only through dynamic imports, one
 // per shard file.
 const geoCode = readFileSync(new URL("../dist/geo.js", import.meta.url), "utf8");
@@ -248,6 +266,6 @@ assert(lazy.every((specifier) => /^\.\/tzdb-2025c-\d{2}-[A-Za-z0-9]+\.js$/u.test
 console.log(
   "@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, " +
     `the core graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
-    `${root.outputs.length} files) reaches no timing, Vedic or geo module and no zone history, ` +
+    `${root.outputs.length} files) reaches no timing, Vedic, geo or calc module and no zone history, ` +
     "and the geo entry loads its 16 shards lazily"
 );

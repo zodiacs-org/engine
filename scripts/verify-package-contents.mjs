@@ -16,6 +16,8 @@ const required = [
   "LICENSING.md",
   "NOTICE",
   "README.md",
+  "dist/calc.d.ts",
+  "dist/calc.js",
   "dist/crossings.d.ts",
   "dist/crossings.js",
   "dist/deltat.d.ts",

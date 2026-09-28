@@ -178,6 +178,21 @@ for (const aspect of today.aspects) {
 - `@zodiacs/engine/vedic` provides the sidereal zodiac: ayanamsas, sidereal
   charts, nakshatras, vargas, KP sub-lords and dashas (see `docs/vedic.md`).
 
+### Uniform calculation API
+
+`@zodiacs/engine/calc` offers `calc`, `houses`, `events` and `chart` with one
+vocabulary: instants as ISO strings, Dates or `{ jd, scale: "UT" | "TT" }`;
+eight frames (the ecliptic or the equator; true or mean of date, J2000.0 or
+the ICRS); geocentric, heliocentric, barycentric and topocentric centers; and
+apparent, astrometric or geometric positions with distances and speeds.
+Results carry bounds, labelled measured or estimated, and a receipt of
+convention ids; what this version does not compute, such as the sidereal
+zodiac, comes back as a typed refusal. With every default,
+`calc({ body, time })` is the position `positions()` gives, to the bit. The
+root entry loads none of it. The reference, with the Swiss Ephemeris flag
+mapping and the measured accuracy, is
+[docs/calc.md](https://github.com/zodiacs-org/engine/blob/main/docs/calc.md).
+
 Returned longitudes use degrees in `[0, 360)` and positions include sign and degree
 annotations. Charts use the tropical ecliptic of date. Planetary positions are
 geocentric and corrected for light time and aberration, but not for the Sun's
