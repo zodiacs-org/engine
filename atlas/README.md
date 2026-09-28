@@ -105,7 +105,8 @@ node atlas/tools/resolve.mjs --place us-new-york --utc 1883-11-18T17:00:00Z
 takes a UTC time in the same form, with or without a trailing `Z`, always as
 UTC whatever the host's time zone (any other offset is refused), and prints
 what the place's clock read then, and whether that reading occurred once or
-more than once. `--clock` is `civil` (the default) or `railway`.
+more than once. Give one of the two, not both. `--clock` is `civil` (the
+default) or `railway`.
 
 A place not listed in `data/places.json` can be read by longitude only in a
 jurisdiction that allows it (`readByLongitude`; in this slice `fr-general`),

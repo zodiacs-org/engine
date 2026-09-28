@@ -40,11 +40,12 @@ function main() {
     spec = { jurisdiction, longitude: Number(longitudeText), department: argument('department') };
   }
   const utc = argument('utc');
+  let local = argument('local');
+  if (utc !== undefined && local !== undefined) throw new Error('give --local or --utc, not both');
   let result;
   if (utc !== undefined) {
     result = resolveUtc(atlas, spec, utc, clock);
   } else {
-    let local = argument('local');
     if (!local) throw new Error('give --local YYYY-MM-DDTHH:MM[:SS] or --utc YYYY-MM-DDTHH:MM[:SS][Z]');
     if (/T\d{2}:\d{2}$/.test(local)) local += ':00';
     result = resolve(atlas, spec, local, clock);

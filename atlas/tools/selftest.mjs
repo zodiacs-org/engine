@@ -96,7 +96,10 @@ test('--utc is always UTC, with or without Z, whatever the host time zone', () =
   }
   const cli = (args, env = {}) => {
     try {
-      return { code: 0, out: JSON.parse(execFileSync('node', [join(TOOLS, 'resolve.mjs'), '--data', FIXTURE, ...args], { encoding: 'utf8', env: { ...process.env, ...env } })) };
+      const stdout = execFileSync('node', [join(TOOLS, 'resolve.mjs'), '--data', FIXTURE, ...args], {
+        encoding: 'utf8', env: { ...process.env, ...env }, stdio: ['ignore', 'pipe', 'pipe'],
+      });
+      return { code: 0, out: JSON.parse(stdout) };
     } catch (error) {
       return { code: error.status, out: error.stdout ? JSON.parse(error.stdout) : null, err: error.stderr };
     }
@@ -106,6 +109,10 @@ test('--utc is always UTC, with or without Z, whatever the host time zone', () =
   assert.equal(inNewYork.code, 0);
   assert.equal(inNewYork.out.local, '1885-01-01T12:00:00');
   assert.deepEqual(withZ.out, inNewYork.out);
+  // One reading at a time: --local and --utc together are refused, not one silently preferred.
+  const both = cli(['--place', 'test-east', '--local', '1885-01-01T12:00', '--utc', '1885-01-01T11:00Z']);
+  assert.equal(both.code, 1);
+  assert.match(both.err, /give --local or --utc, not both/);
 });
 
 test('--utc reports the same instant fields as --local, uncertainty included', () => {
