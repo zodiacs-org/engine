@@ -1,0 +1,134 @@
+{
+  "$schema": "../schema/atlas.schema.json",
+  "kind": "atlas-tzdb-explanations",
+  "tzdb": "2025c",
+  "description": "Why the atlas differs from tzdb 2025c with backzone. Each difference found by atlas/tools/compare-tzdb.mjs is matched to the first entry whose places, zones and rules all include it; every entry must match at least one difference. The citations are the atlas's own; tzdb decides nothing.",
+  "explanations": [
+    {
+      "id": "fr-summer-time-end-hour",
+      "category": "transition-instant",
+      "match": {
+        "zones": ["Europe/Paris"],
+        "rules": ["fr-wet-1916", "fr-wet-1917", "fr-wet-1918", "fr-wet-1919", "als-mos-wet-1919"]
+      },
+      "explanation": "tzdb ends French summer time in 1916-1919 at 23:00 UTC on the October date each decree names (Rule France, Oct Sun>=1 23:00s). The decrees give only the date. The newspapers cited report the clocks set back at 01:00 summer time at the start of that date, 00:00 UTC, in 1916, 1918 and 1919, and in the hour after midnight in 1917. The atlas ends summer time 23 hours before tzdb does; the starts agree.",
+      "citations": [
+        "fr-petitparisien-1916-09-30",
+        "fr-petitjournal-1916-09-30",
+        "fr-petitjournal-1917-10-06",
+        "fr-petitparisien-1917-10-07",
+        "fr-petitparisien-1918-10-04",
+        "fr-petitjournal-1919-10-05"
+      ]
+    },
+    {
+      "id": "fr-own-mean-time-before-1891",
+      "category": "place-mean-time",
+      "match": {
+        "zones": ["Europe/Paris"],
+        "rules": ["fr-lmt-before-1891", "fr-brest-lmt-before-1891"]
+      },
+      "explanation": "Before the law of 14 March 1891 the legal time of each French commune was its own mean time. tzdb gives every place in Europe/Paris the mean time of Paris (+0:09:21) until then. The atlas uses each place's own mean time; for Brest the Senate debate of 1891 confirms that the town's clocks ran 27 minutes behind Paris. tzdb also dates the law's effect from 16 March 1891 and the atlas from 17 March (one clear day after the Journal officiel of 15 March, under the decree of 5 November 1870); Paris's offset did not change, so the date shows only as the end of these periods.",
+      "citations": [
+        "fr-senat-1891-02-17-restoration",
+        "fr-senat-1891-02-17-brest",
+        "fr-jo-1891-03-15-law",
+        "fr-jo-1870-11-06-promulgation"
+      ]
+    },
+    {
+      "id": "als-strasbourg-five-minutes",
+      "category": "local-adoption",
+      "match": {
+        "places": ["fr-strasbourg"],
+        "zones": ["Europe/Paris"],
+        "rules": ["als-strasbourg-french-1918", "als-mos-summer-1919"]
+      },
+      "explanation": "Strasbourg's public clocks were set to 11:05 at noon Mid-European time on 21 November 1918, five minutes ahead of Greenwich, and were still so in mid-December. tzdb has French legal time (+0:00) there. The atlas keeps the five minutes until the clocks went forward for summer time at 23:00 on 1 March 1919 by Strasbourg's clocks, five minutes before 23:00 UTC.",
+      "citations": [
+        "als-snn-1918-11-21-bekanntmachung",
+        "als-elsasser-1918-12-16-pariser-zeit"
+      ]
+    },
+    {
+      "id": "als-mos-german-rule",
+      "category": "annexed-territory",
+      "match": {
+        "places": ["fr-strasbourg", "fr-metz"],
+        "zones": ["Europe/Paris"]
+      },
+      "explanation": "tzdb has no zone for Alsace-Lorraine and gives Strasbourg and Metz the time of Paris throughout. Before 1871 their legal time was, as elsewhere in France, their own mean time. From 1871 to November 1918 they were German: local mean time until Mid-European time was made local time on 1 April 1892, legal time under the Reich law from 1 April 1893, German summer time 1916-1918. Metz changed to French time on 19 November 1918 and Strasbourg on 21 November.",
+      "citations": [
+        "fr-senat-1891-02-17-restoration",
+        "als-snn-1892-03-31-mez",
+        "de-rgbl-1893-03-12-law",
+        "de-snn-1916-04-08-wtb",
+        "mos-matin-1918-11-21-metz",
+        "als-snn-1918-11-21-bekanntmachung"
+      ]
+    },
+    {
+      "id": "als-mos-not-berlin",
+      "category": "annexed-territory",
+      "match": {
+        "places": ["fr-strasbourg", "fr-metz"],
+        "zones": ["Europe/Berlin"]
+      },
+      "explanation": "Europe/Berlin, compared for information, keeps Berlin's mean time (+0:53:28) until 1 April 1893. Strasbourg and Metz kept their own mean time until 1 April 1892 and Mid-European time from then; from 1 April 1893 to their change to French time in November 1918 the atlas and Europe/Berlin agree, German summer time included. After that the two cities were French.",
+      "citations": [
+        "als-snn-1892-03-31-mez",
+        "de-rgbl-1893-03-12-law",
+        "mos-matin-1918-11-21-metz",
+        "als-snn-1918-11-21-bekanntmachung"
+      ]
+    },
+    {
+      "id": "us-city-time-before-standard-time",
+      "category": "place-mean-time",
+      "match": {
+        "places": ["us-baltimore", "us-washington", "us-providence", "us-saint-paul", "us-minneapolis"],
+        "rules": [
+          "us-baltimore-city-time-before-1883",
+          "us-washington-city-time-before-1883",
+          "us-providence-city-time-before-1883",
+          "us-saint-paul-city-time-before-1883",
+          "us-minneapolis-city-time-before-1883"
+        ]
+      },
+      "explanation": "Before standard time each city kept its own time: Baltimore 6 min 28 s and Washington 8 min 12 s behind Eastern time by the reports cited, Providence, Saint Paul and Minneapolis on the mean time of their longitude. tzdb gives every place in America/New_York the mean time of New York, and every place in America/Chicago that of Chicago, until noon on 18 November 1883, and standard time from then. Providence changed two days later, on 20 November, and Saint Paul and Minneapolis a week later, on 25 November 1883.",
+      "citations": [
+        "us-star-1883-11-17-baltimore",
+        "us-star-1883-11-19-bells",
+        "us-narragansett-1883-11-03-providence",
+        "us-pawtucket-1883-11-23-providence",
+        "us-globe-1883-11-25-meantime",
+        "us-globe-1883-11-25-stpaul",
+        "us-globe-1883-11-25-minneapolis"
+      ]
+    },
+    {
+      "id": "us-washington-until-1884",
+      "category": "local-adoption",
+      "match": {
+        "places": ["us-washington"],
+        "rules": ["us-washington-two-times-1883"]
+      },
+      "explanation": "tzdb puts Washington on Eastern time from noon on 18 November 1883. The government departments and the fire bells kept Washington time after that date, and the District's legal time became the mean time of the 75th meridian only by the act of 13 March 1884. The atlas keeps Washington time until then and flags the period uncertain, since the railroads and many businesses used Eastern time from 18 November 1883.",
+      "citations": [
+        "us-star-1883-11-19-departments",
+        "us-star-1883-11-19-bells",
+        "us-stat-1884-dc"
+      ]
+    },
+    {
+      "id": "us-louisville-city-clock",
+      "category": "reference-offset",
+      "match": {
+        "places": ["us-louisville"],
+        "rules": ["us-louisville-city-time-before-1883"]
+      },
+      "explanation": "tzdb gives Louisville the mean time of its longitude, -5:43:02, until noon on 18 November 1883. The report cited has the city clock turned back 18 minutes to Central time at that noon, which puts Louisville city time at -5:42:00; the atlas follows the report. The change itself agrees.",
+      "citations": ["us-bourbon-1883-11-20-louisville"]
+    }
+  ]
+}

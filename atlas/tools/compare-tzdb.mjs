@@ -160,6 +160,28 @@ function reportText(atlas, comparison) {
   lines.push(`${total} period(s) differ by a second or more; all are explained below.`);
   lines.push('');
 
+  // Agreements: consecutive periods within a second of each other, merged.
+  lines.push('## Where they agree');
+  lines.push('');
+  lines.push('Spans in which the atlas and tzdb give the same offset, or offsets less than a second apart (tzdb rounds mean times to whole seconds). Times are UTC.');
+  lines.push('');
+  lines.push('| place | zone | agree (UTC) |');
+  lines.push('| --- | --- | --- |');
+  for (const entry of comparison.entries) {
+    const spans = [];
+    for (const period of entry.periods) {
+      if (Math.abs(period.deltaMs) >= 1000) continue;
+      const last = spans[spans.length - 1];
+      if (last && last.toMs === period.fromMs) last.toMs = period.toMs;
+      else spans.push({ fromMs: period.fromMs, toMs: period.toMs });
+    }
+    const text = spans.length
+      ? spans.map((span) => `${formatUtc(span.fromMs).slice(0, 16)} to ${formatUtc(span.toMs).slice(0, 16)}`).join('; ')
+      : 'nowhere';
+    lines.push(`| ${atlas.places.get(entry.place).name} (\`${entry.place}\`) | ${entry.zone}${entry.primary ? '' : ' (for information)'} | ${text} |`);
+  }
+  lines.push('');
+
   // Explanations.
   lines.push('## Differences and why');
   lines.push('');

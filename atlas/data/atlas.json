@@ -19,7 +19,8 @@
     "citations-als.json",
     "rules-als.json",
     "citations-us.json",
-    "rules-us.json"
+    "rules-us.json",
+    "tzdb-explanations.json"
   ],
   "longitudeSource": {
     "dataset": "GeoNames cities15000 (cities15000.zip)",
