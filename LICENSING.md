@@ -109,7 +109,8 @@ not part of the npm package: the package's `files` list leaves it out.
   newspapers, railway notices) by link and short excerpt; no scan or full
   text of a source is committed. No proprietary atlas was consulted or
   copied.
-- Place coordinates and ids come from GeoNames `cities15000` (CC BY 4.0);
-  `atlas/data/atlas.json` records the file's digest and what was copied.
+- Place names, coordinates and ids come from GeoNames `cities15000`, and
+  region names from its `admin1CodesASCII.txt` (both CC BY 4.0);
+  `atlas/data/atlas.json` records the files' digests and what was copied.
 - `atlas/tzdb/` holds an extract of tzdb 2025c with backzone (public domain),
   used only as the comparison base.

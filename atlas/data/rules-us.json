@@ -178,7 +178,7 @@
         "reason": "The Act of 19 March 1918 advances each zone's standard time one hour from 02:00 on the last Sunday in March to 02:00 on the last Sunday in October."
       },
       "citations": ["us-stat-1918-dst", "us-stat-1918-zones"],
-      "note": "Zone limits were set by an order of the Interstate Commerce Commission, not consulted here; the covered cities had kept this zone's time since 1883 or 1884 and lie well inside it."
+      "note": "Zone limits were set by an order of the Interstate Commerce Commission, which was not read; each covered city is taken to be in the zone whose time it had kept since 1883 or 1884."
     },
     {
       "id": "us-eastern-1918",
@@ -208,7 +208,7 @@
         "reason": "Standard time of the zone under the Act of 19 March 1918, between its first and second summers."
       },
       "citations": ["us-stat-1918-zones", "us-stat-1918-dst"],
-      "note": "Zone limits were set by an order of the Interstate Commerce Commission, not consulted here; the covered cities had kept this zone's time since 1883 or 1884 and lie well inside it."
+      "note": "Zone limits were set by an order of the Interstate Commerce Commission, which was not read; each covered city is taken to be in the zone whose time it had kept since 1883 or 1884."
     },
     {
       "id": "us-eastern-dst-1919",
@@ -238,7 +238,7 @@
         "reason": "The Act of 1918 again advanced the clocks on the last Sunday in March 1919; the repeal of August 1919 took effect after the last Sunday in October."
       },
       "citations": ["us-stat-1918-dst", "us-stat-1919-repeal"],
-      "note": "Zone limits were set by an order of the Interstate Commerce Commission, not consulted here; the covered cities had kept this zone's time since 1883 or 1884 and lie well inside it."
+      "note": "Zone limits were set by an order of the Interstate Commerce Commission, which was not read; each covered city is taken to be in the zone whose time it had kept since 1883 or 1884."
     },
     {
       "id": "us-eastern-1919",
@@ -262,7 +262,7 @@
         "reason": "The repeal returned each zone to the mean time of its meridian on the last Sunday in October 1919."
       },
       "citations": ["us-stat-1918-zones", "us-stat-1919-repeal"],
-      "note": "Zone limits were set by an order of the Interstate Commerce Commission, not consulted here; the covered cities had kept this zone's time since 1883 or 1884 and lie well inside it."
+      "note": "Zone limits were set by an order of the Interstate Commerce Commission, which was not read; each covered city is taken to be in the zone whose time it had kept since 1883 or 1884."
     },
     {
       "id": "us-central-dst-1918",
@@ -292,7 +292,7 @@
         "reason": "The Act of 19 March 1918 advances each zone's standard time one hour from 02:00 on the last Sunday in March to 02:00 on the last Sunday in October."
       },
       "citations": ["us-stat-1918-dst", "us-stat-1918-zones"],
-      "note": "Zone limits were set by an order of the Interstate Commerce Commission, not consulted here; the covered cities had kept this zone's time since 1883 or 1884 and lie well inside it."
+      "note": "Zone limits were set by an order of the Interstate Commerce Commission, which was not read; each covered city is taken to be in the zone whose time it had kept since 1883 or 1884."
     },
     {
       "id": "us-central-1918",
@@ -322,7 +322,7 @@
         "reason": "Standard time of the zone under the Act of 19 March 1918, between its first and second summers."
       },
       "citations": ["us-stat-1918-zones", "us-stat-1918-dst"],
-      "note": "Zone limits were set by an order of the Interstate Commerce Commission, not consulted here; the covered cities had kept this zone's time since 1883 or 1884 and lie well inside it."
+      "note": "Zone limits were set by an order of the Interstate Commerce Commission, which was not read; each covered city is taken to be in the zone whose time it had kept since 1883 or 1884."
     },
     {
       "id": "us-central-dst-1919",
@@ -352,7 +352,7 @@
         "reason": "The Act of 1918 again advanced the clocks on the last Sunday in March 1919; the repeal of August 1919 took effect after the last Sunday in October."
       },
       "citations": ["us-stat-1918-dst", "us-stat-1919-repeal"],
-      "note": "Zone limits were set by an order of the Interstate Commerce Commission, not consulted here; the covered cities had kept this zone's time since 1883 or 1884 and lie well inside it."
+      "note": "Zone limits were set by an order of the Interstate Commerce Commission, which was not read; each covered city is taken to be in the zone whose time it had kept since 1883 or 1884."
     },
     {
       "id": "us-central-1919",
@@ -376,7 +376,7 @@
         "reason": "The repeal returned each zone to the mean time of its meridian on the last Sunday in October 1919."
       },
       "citations": ["us-stat-1918-zones", "us-stat-1919-repeal"],
-      "note": "Zone limits were set by an order of the Interstate Commerce Commission, not consulted here; the covered cities had kept this zone's time since 1883 or 1884 and lie well inside it."
+      "note": "Zone limits were set by an order of the Interstate Commerce Commission, which was not read; each covered city is taken to be in the zone whose time it had kept since 1883 or 1884."
     },
     {
       "id": "us-nyc-city-time-before-1883",
@@ -542,7 +542,7 @@
       "abbreviation": "LMT",
       "uncertainty": {
         "flag": "uncertain",
-        "reason": "From 18 November 1883 the railroads and many businesses kept Eastern time while the government departments, and the fire bells at noon, kept Washington time until Congress acted; the atlas gives Washington time."
+        "reason": "From 18 November 1883 the railroads and the businesses dealing with them kept Eastern time, while other businesses, the government departments and the fire bells at noon kept Washington time until Congress acted; the atlas gives Washington time."
       },
       "citations": ["us-star-1883-11-19-departments", "us-star-1883-11-19-bells"]
     },
@@ -647,7 +647,7 @@
         "kind": "event",
         "precision": "hour",
         "window": { "earliest": "1883-11-18T12:00:00", "latest": "1883-11-18T18:00:00" },
-        "note": "Central time went into effect at noon on 18 November 1883 and the court-house clock was set back that afternoon; jewelers, schools and some courtrooms followed over the next days.",
+        "note": "Central time went into effect at noon on 18 November 1883 and the court-house clock was set back that afternoon; the jewelers were to change their regulators the next day.",
         "citations": ["us-indj-1883-11-19-noon", "us-indj-1883-11-19-courthouse"]
       },
       "offset": { "type": "local-mean-time" },
@@ -672,7 +672,7 @@
         "kind": "event",
         "precision": "hour",
         "window": { "earliest": "1883-11-18T12:00:00", "latest": "1883-11-18T18:00:00" },
-        "note": "Central time went into effect at noon on 18 November 1883 and the court-house clock was set back that afternoon; jewelers, schools and some courtrooms followed over the next days.",
+        "note": "Central time went into effect at noon on 18 November 1883 and the court-house clock was set back that afternoon; the jewelers were to change their regulators the next day.",
         "citations": ["us-indj-1883-11-19-noon", "us-indj-1883-11-19-courthouse"]
       },
       "end": {

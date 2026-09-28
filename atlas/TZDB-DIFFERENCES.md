@@ -281,7 +281,7 @@ Decided by:
 
 *Category:* local-adoption. *Periods:* 1.
 
-tzdb puts Washington on Eastern time from noon on 18 November 1883. The government departments and the fire bells kept Washington time after that date, and the District's legal time became the mean time of the 75th meridian only by the act of 13 March 1884. The atlas keeps Washington time until then and flags the period uncertain, since the railroads and many businesses used Eastern time from 18 November 1883.
+tzdb puts Washington on Eastern time from noon on 18 November 1883. The government departments and the fire bells kept Washington time after that date, and the District's legal time became the mean time of the 75th meridian only by the act of 13 March 1884. The atlas keeps Washington time until then and flags the period uncertain, since the railroads and the businesses dealing with them used Eastern time from 18 November 1883.
 
 Decided by:
 

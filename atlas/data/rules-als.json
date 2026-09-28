@@ -68,8 +68,8 @@
       "isDst": false,
       "abbreviation": "LMT",
       "uncertainty": {
-        "flag": "inferred",
-        "reason": "The size of the change in 1892 shows the city's clocks on Strasbourg mean time; that they had kept it since 1870, under French and then German rule, is assumed."
+        "flag": "documented",
+        "reason": "Mid-European time was introduced 'also as local time' in 1892, and the cathedral clock's jump from midnight to half past twelve fits Strasbourg mean time; the atlas assumes, as for every city, that this time was kept from 1870."
       },
       "citations": ["als-snn-1892-04-01-muenster", "als-snn-1892-03-31-mez", "fr-senat-1891-02-17-restoration"],
       "note": "Legal time in France was each place's local mean time (the Senate debate of 1891 dates this from the Restoration), and no change is reported under German rule before 1892."
@@ -94,8 +94,8 @@
       "isDst": false,
       "abbreviation": "LMT",
       "uncertainty": {
-        "flag": "inferred",
-        "reason": "The 35-minute advance in 1892 shows the city's clocks on Metz mean time; that they had kept it since 1870, under French and then German rule, is assumed."
+        "flag": "documented",
+        "reason": "The city's clocks were put forward 35 minutes to Mid-European time in 1892, which fits Metz mean time; the atlas assumes, as for every city, that this time was kept from 1870."
       },
       "citations": ["mos-lz-1892-03-29-city", "fr-senat-1891-02-17-restoration"],
       "note": "Mid-European time is 35 min 19 s ahead of Metz mean time."

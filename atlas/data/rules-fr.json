@@ -7,7 +7,7 @@
       "id": "fr-paris",
       "name": "Paris",
       "country": "FR",
-      "description": "The city of Paris. Its own mean time was Paris mean time, the time of the Paris Observatory meridian, which the law of 1891 made the legal time of all France.",
+      "description": "The city of Paris. Its own mean time was Paris mean time, which the law of 1891 made the legal time of all France.",
       "timeline": {
         "civil": [
           "fr-paris-mean-time-before-1891",
@@ -127,7 +127,7 @@
         "reason": "Legal time was each place's local mean time (Senate, 1891); Paris's own was Paris mean time, 9 min 21 s ahead of the time adopted in 1911."
       },
       "citations": ["fr-senat-1891-02-17-restoration", "fr-jo-1911-03-10-law"],
-      "note": "The offset is the 9 min 21 s by which the law of 9 March 1911 retarded Paris mean time to bring legal time into the universal system of time zones, whose zero is the Greenwich meridian. It is the mean time of the Paris Observatory meridian, not of the GeoNames point for Paris."
+      "note": "The offset is the 9 min 21 s by which the law of 9 March 1911 retarded Paris mean time to bring legal time into the universal system of time zones, whose zero is the Greenwich meridian. The mean time of the GeoNames point for Paris would be 2.7 s more."
     },
     {
       "id": "fr-brest-lmt-before-1891",
@@ -239,7 +239,7 @@
         "fr-petitjournal-1911-03-11-five-minutes",
         "fr-jo-1911-03-10-etat-railways"
       ],
-      "note": "Outside clocks of stations showed Paris mean time; the five minutes inside were a margin for passengers."
+      "note": "The clocks outside stations showed Paris mean time."
     },
     {
       "id": "fr-wet-1911",

@@ -13,7 +13,7 @@
       "longitude": 2.3488,
       "geonamesId": 2988507,
       "tzdbZone": "Europe/Paris",
-      "note": "Legal time before 1891 is Paris mean time, the Observatory meridian, not the mean time of these coordinates."
+      "note": "Legal time before 1891 is Paris mean time (+0:09:21), not the mean time of these coordinates."
     },
     {
       "id": "fr-brest",

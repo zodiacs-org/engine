@@ -13,13 +13,18 @@ other place that followed them can be read by longitude with
 `resolve.mjs --jurisdiction ID --longitude DEG`; the jurisdiction's
 description says which places qualify.
 
+The sources describe a place's old time at the moment it was given up (a
+debate of 1891, a clock set back in 1883). Each rule for the time before a
+place's first documented change assumes that the place had kept that time
+since 1 January 1870; no source found suggests otherwise.
+
 ## France
 
 ### Places
 
 | place | jurisdiction | longitude | local mean time |
 | --- | --- | ---: | ---: |
-| Paris (`fr-paris`) | `fr-paris` | 2.3488 | +0:09:21 (Paris mean time, the Observatory meridian) |
+| Paris (`fr-paris`) | `fr-paris` | 2.3488 | +0:09:21 (Paris mean time) |
 | Brest (`fr-brest`) | `fr-brest` | −4.48628 | −0:17:56.7 |
 | Nantes (`fr-nantes`) | `fr-general` | −1.55336 | −0:06:12.8 |
 | Bordeaux (`fr-bordeaux`) | `fr-general` | −0.58046 | −0:02:19.3 |
@@ -157,10 +162,10 @@ Washington, Louisville); otherwise it is the mean time of the city's
 longitude, and the rule says how the reports compare. Each city's old time
 is assumed to have held from 1870 to the change.
 
-Washington kept two times from 18 November 1883: the railroads and many
-businesses went to Eastern time, while the government departments and the
-noon fire bells kept Washington time until Congress fixed the District's
-legal time on 13 March 1884. The atlas gives Washington time for that
+Washington kept two times from 18 November 1883: the railroads and the
+businesses dealing with them went to Eastern time, while other businesses,
+the government departments and the noon fire bells kept Washington time
+until Congress fixed the District's legal time on 13 March 1884. The atlas gives Washington time for that
 period and flags it `uncertain`.
 
 From the Standard Time Act of 19 March 1918 every covered city is on its
@@ -169,8 +174,8 @@ saving time from 02:00 on the last Sunday in March to 02:00 on the last
 Sunday in October in 1918 and 1919 (31 March to 27 October 1918, 30 March
 to 26 October 1919). The act of 20 August 1919 repealed daylight saving
 time after the October change. Zone limits were fixed by an order of the
-Interstate Commerce Commission, which was not read; the covered cities had
-kept their zone's time since 1883 or 1884 and lie well inside it.
+Interstate Commerce Commission, which was not read; each covered city is
+taken to be in the zone whose time it had kept since 1883 or 1884.
 
 ### Left out, and why
 
@@ -199,3 +204,31 @@ particular:
   found, and none is included.
 - Railroad time before 1883 (each railroad kept its own standard, often the
   time of its headquarters city) is not kept as a separate clock.
+
+## Counts for version 0.1.0
+
+| | places | jurisdictions | rules | citations |
+| --- | ---: | ---: | ---: | ---: |
+| France | 10 | 3 | 14 | 25 |
+| Alsace and Moselle | 2 | 2 | 16 | 13 |
+| United States | 9 | 9 | 27 | 20 |
+| all | 21 | 14 | 57 | 58 |
+
+Rules by flag: 47 `documented`, 7 `inferred`, 3 `uncertain`.
+
+- `uncertain`: `fr-lmt-before-1891` (towns' clocks may already have shown
+  Paris time), `als-strasbourg-french-1918` (when Strasbourg's five minutes
+  were corrected), `us-washington-two-times-1883` (two times in use).
+- `inferred`: `fr-rail-interior-before-1911`, `mos-metz-french-1918`,
+  `als-mos-summer-1919`, `als-mos-wet-1919`,
+  `us-providence-city-time-before-1883`,
+  `us-indianapolis-city-time-before-1883`,
+  `us-minneapolis-city-time-before-1883`.
+
+Citations by type: 37 newspaper reports, 9 laws, 5 decrees, 3
+parliamentary debates, 2 railway notices, 1 ministerial decision, 1
+municipal notice. All 58 excerpts were transcribed from page images.
+
+`npm run atlas:check` checks 258 boundaries with 2,735 round trips and the
+comparison with tzdb (106 periods differ, all explained in
+`TZDB-DIFFERENCES.md`).
