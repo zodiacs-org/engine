@@ -178,5 +178,7 @@ Cite the rule ids and versions you relied on. Place coordinates come from
 GeoNames (https://www.geonames.org/, CC BY 4.0); keep that attribution when
 you redistribute `data/places.json` (see `longitudeSource` in
 `data/atlas.json` for what was copied). `LICENSING.md` covers the rest:
-the source texts, which are in the public domain, and the archives' scans
-and OCR, which the atlas links to and does not copy.
+the texts quoted: official texts, Senate speeches of 1891 whose speakers
+died in 1902 and 1918, unsigned items and pre-1931 United States
+publications, all in the public domain; and the archives' scans and OCR,
+which the atlas links to and does not copy.
