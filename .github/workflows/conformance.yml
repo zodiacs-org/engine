@@ -1,0 +1,76 @@
+name: Conformance
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  conformance:
+    name: Conformance suite
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # The zone vectors read the host's Intl time zone data, so the Node
+      # version (and with it ICU and tzdata) is pinned to the one the
+      # committed results were made with.
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22.22.2
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Harness self-test
+        run: node --test conformance/harness/selftest.mjs
+
+      - name: Vectors conform to SPEC.md
+        run: node conformance/harness/validate.mjs --expect-total 500
+
+      - name: This engine's verdicts match the committed results
+        run: node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" --check conformance/results/zodiacs-engine.json
+
+      - name: RESULTS.md and summary.json are current
+        run: node conformance/harness/report.mjs --check
+
+  generators:
+    name: Conformance vectors rebuild from their sources
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # The versions the committed vector files were generated with.
+      - name: Install the arbiters' libraries
+        run: python -m pip install pyerfa==2.0.1.5 numpy==2.4.6
+
+      - name: L1 positions
+        run: python conformance/arbiters/l1/build.py
+
+      - name: L2 houses and angles
+        run: python conformance/arbiters/l2/build.py
+
+      # Downloads tzdata and tzcode 2025c from IANA and checks their digests.
+      - name: L3 time and calendars
+        run: python conformance/arbiters/l3/build.py
+
+      - name: The rebuilt files are byte-identical to the committed ones
+        run: git diff --exit-code -- conformance/vectors

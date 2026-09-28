@@ -1,0 +1,6091 @@
+{
+  "suite": "zodiacs-conformance",
+  "suiteVersion": "0.1.0",
+  "level": "L1",
+  "title": "Positions",
+  "arbiters": {
+    "horizons-de441-iau2006": {
+      "name": "NASA JPL Horizons (DE441) apparent geocentric ecliptic positions, carried into the IAU 2006/2000A true ecliptic and equinox of date",
+      "source": "NASA JPL Horizons API 1.2 (https://ssd.jpl.nasa.gov/api/horizons.api), fetched 2026-09-22: ephemeris DE441 for every target, with Mars to Pluto as their system barycentres (NAIF 4 to 9); EOP file eop.260922.p261219 (data 1962-01-20 to 2026-09-22, predictions to 2026-12-18). One request per target: EPHEM_TYPE OBSERVER, CENTER 500@399 (the geocentre), QUANTITIES 31 (observer ecliptic longitude and latitude of date of the apparent position: light-time, gravitational deflection by the Sun, stellar aberration), APPARENT AIRLESS, TIME_TYPE TT, TLIST_TYPE JD with the 24 jd_tt values to 8 decimals, ANG_FORMAT DEG, EXTRA_PREC YES, CSV_FORMAT YES. The responses are kept verbatim in sources/horizons-24/, byte for byte as committed in the zodiacs.org site repository (ZodiacsOfficial/site, docs/platform/evidence/engine-beyond-swiss/corpora/horizons-24/, commit 3f31ba17), together with Horizons's body-centre files for Mars to Pluto (NAIF 499 to 999, from the satellite solutions mar099, jup365_merged, sat441l, ura184_merged, nep098_merged, plu060_merged), fetched the same way and used only for the body-centre measurement in the uncertainty. Plus the frame conversion: Horizons labels this frame IAU76/80 ecliptic-of-date, and the eopJpl model of it, with its per-instant celestial-pole offsets, is the horizons-frame study in the same repository (docs/platform/evidence/engine-beyond-swiss/horizons-frame/: decompose.py, results.json), the offsets copied into sources/horizons-24/frame-offsets.json.",
+      "inputs": [
+        {
+          "path": "sources/horizons-24/corpus-tt.json",
+          "sha256": "a31df4c952f778f398f5c8ea888c8d29300ac317bcb984de1e520078a09733a7"
+        },
+        {
+          "path": "sources/horizons-24/frame-offsets.json",
+          "sha256": "c35b92f36dffe055891f8b097f095a66133a33e96f6d101986e44e65515e287e"
+        },
+        {
+          "path": "sources/horizons-24/Sun.txt",
+          "sha256": "9396249e39c56cea6be986469b54f61955b8d302b343caeea0853eae0735a8bc"
+        },
+        {
+          "path": "sources/horizons-24/Moon.txt",
+          "sha256": "078502783f45570643fab9780b12eec41bc8a8ccbecb0f398dcc8a81fd674d8c"
+        },
+        {
+          "path": "sources/horizons-24/Mercury.txt",
+          "sha256": "366b52eb9d27ff836164c1f2f0efcf3147554366bafcaf2ea6056297138ebcf5"
+        },
+        {
+          "path": "sources/horizons-24/Venus.txt",
+          "sha256": "9286abd667436c6f57e1a713816c8283c2113e630e8184f97080fd9792ea7a72"
+        },
+        {
+          "path": "sources/horizons-24/MarsBary.txt",
+          "sha256": "a22aa46e939879c7bfb927b798a25055b0210ba77bff1bbaeb9465960d8f3157"
+        },
+        {
+          "path": "sources/horizons-24/JupiterBary.txt",
+          "sha256": "1eaec268c5f6cbb68fff2b06bfcb0b125ed7650a2ac37b328177103068caf25b"
+        },
+        {
+          "path": "sources/horizons-24/SaturnBary.txt",
+          "sha256": "db838e950198d1cd53da818cd880d7b29b119b6420cdad17de3d0ec25379aa76"
+        },
+        {
+          "path": "sources/horizons-24/UranusBary.txt",
+          "sha256": "af6c5ec16a53af784d618c361b88984ab09565c36fd57db607a0060c20686456"
+        },
+        {
+          "path": "sources/horizons-24/NeptuneBary.txt",
+          "sha256": "0e6939df35c1b623c51b1a4f2fd294bfb70679faac420f1bc94ce27035a05c02"
+        },
+        {
+          "path": "sources/horizons-24/PlutoBary.txt",
+          "sha256": "8f05e7e2f9ed78a7a67a932945d819f216babe1248a5f8469637305a3d303ce7"
+        },
+        {
+          "path": "sources/horizons-24/Mars.txt",
+          "sha256": "e44a9e5aa513e73b05d27315e767513a5fa63640b42edd1bf3d5a8a6ea798482"
+        },
+        {
+          "path": "sources/horizons-24/Jupiter.txt",
+          "sha256": "7f4044c6d3a0bf8a45d7e5383f77ef47022ea8f49b084c47adbb70684e4c8253"
+        },
+        {
+          "path": "sources/horizons-24/Saturn.txt",
+          "sha256": "c91fa3690d542d78f0132c052cb8e52031d08ccbab5872f48b210a1c0b59c40e"
+        },
+        {
+          "path": "sources/horizons-24/Uranus.txt",
+          "sha256": "87937649bca052a4182deb72d7e6efc4104eaf181a54a6de1ab710950b2c2a9e"
+        },
+        {
+          "path": "sources/horizons-24/Neptune.txt",
+          "sha256": "d6277d34e935763557841004f01208118f7ac2f605ad88dbbe5c519a1dc7c508"
+        },
+        {
+          "path": "sources/horizons-24/Pluto.txt",
+          "sha256": "0426b865e367ce6a864d33aa327366a2257da4c7b451a1093b4d9d3a4257859b"
+        }
+      ],
+      "method": "The instants are the 24 TT Julian dates of corpus-tt.json, from the engine audit's corpus preregistered on 2026-09-22 (instants stratified by epoch from 1851 to 2148, at non-round minutes). Those TT instants were originally chosen as UT plus Swiss Ephemeris's Delta T, which is why corpus-tt.json carries Swiss's Delta T (deltaTSeconds) as a label beside each instant. The vectors' input is the TT itself (jd_tt, exactly corpus-tt.json's jdTt), so no expected value depends on that Delta T. Every target is DE441's: the Sun, Moon, Mercury and Venus as bodies (NAIF 10, 301, 199, 299) and Mars to Pluto as system barycentres (NAIF 4 to 9). build.py checks every file's banner (target, geocentre, airless, EOP file, the 2026-09-22 fetch) and that every row's printed TT lies within 0.6 ms of the TLIST value sent for that instant. Each Horizons longitude and latitude is made a unit vector and carried out of the eopJpl model of Horizons's frame into ICRF by the transpose of R1(eps80 + deps80 + deps) N80(dpsi80 + dpsi, deps80 + deps) P76 (erfa.obl80, erfa.nut80, erfa.numat, erfa.pmat76; no frame bias; dpsi and deps the instant's offsets in frame-offsets.json), then into the IAU 2006/2000A true ecliptic and equinox of date by R1(obl06 + deps06a) pnm06a (erfa.obl06, erfa.nut06a, erfa.pnm06a), all at the vector's jd_tt, with the frame functions copied unchanged from the study's decompose.py. The longitude is reduced to [0, 360) and both angles are rounded to 1e-10 deg. Horizons's body-centre files for Mars to Pluto (NAIF 499 to 999) are converted the same way only to measure body centre minus barycentre for the uncertainty; no expected value comes from them. Self-check: over the same ten files the study used, the frame term (Horizons longitude minus converted longitude, averaged over the ten bodies) reproduces results.json's eopJpl.frameTermMeanArcsec, printed there to 4 decimals, at all 24 instants, the largest disagreement being 0.000048 arcsec; build.py stops at 0.0005 arcsec.",
+      "generator": "arbiters/l1/build.py",
+      "uncertainty": "Frame model: the eopJpl model of Horizons's frame was first identified in the horizons-frame study, which compared four candidate models (bare, bias, eopJpl, eopIers) against Swiss Ephemeris 2.10.03's IAU 2006/2000A positions for these same 240 Horizons directions; there eopJpl left at most 5.45 mas in longitude (median 1.40 mas) and 1.86 mas in latitude (results.json summary.eopJpl). In this suite the model's acceptance rests on validate.py's independent reduction from DE440s, not on Swiss: for the nine bodies other than the Moon it differs from the expected values by at most 2.82 mas in longitude and 0.22 mas in latitude, and at each instant their longitude differences agree to within 0.37 mas, so what the model leaves is a rotation common to all bodies. Print precision: Horizons prints 1e-7 deg (0.36 mas), so each angle it gives carries up to 0.18 mas of rounding; the 0.001 mas rounding of the recorded offsets is negligible. Barycentres: Mars to Pluto are the planets' system barycentres from DE441 (NAIF 4 to 9), as every other target is DE441's. A planet's body centre differs from its barycentre by what its satellites do to it. Measured here as Horizons's body-centre files minus its barycentre files, both converted as above, that is at most (longitude/latitude, arcsec) Mars 0.0000/0.0000, Jupiter 0.0583/0.0029, Saturn 0.0414/0.0230, Pluto 0.0752/0.0835 over these 24 instants, varying from instant to instant as the satellites move; for Uranus and Neptune the satellites' pull is at most about 45 km and 74 km, under 4 mas from the Earth. So an engine that returns body centres consistent with DE441 instead of barycentres differs from these vectors by no more than 0.0835 arcsec. Horizons's body-centre files for Uranus and Neptune, which come from the satellite solutions ura184_merged and nep098_merged, depart from DE441's barycentres by far more, up to 0.6714/0.0104 (Uranus) and 0.1087/0.0047 (Neptune); the departure drifts with time, from at most 0.0529 and 0.0094 arcsec between 1962 and 2026 to 0.6714 arcsec at 2148-12-30 and 0.1087 arcsec at 2125-02-11, and it is why the suite does not use them. DE440's barycentres agree with DE441's to within 3 mas (the check below). Independent check: an apparent-place reduction from DE440s (arbiters/l1/validate.py with jplephem and pyerfa: light-time iteration, deflection by the Sun, annual aberration, pnm06a and the true obliquity; kernel de440s.bsp, sha256 c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2), with Mars to Pluto as the system barycentres 4 to 9 as in the vectors, differs from the 240 expected values by a median of 1.27 mas in longitude and at most 0.95 mas in latitude. For the nine bodies other than the Moon the longitude differences agree at each instant to within 0.37 mas, so what is left is a rotation common to all of them, the frame model's remainder, at most 2.82 mas (1969-07-20); the Moon differs by up to 12.63 mas (1851-03-14). Evaluating at the TLIST value Horizons was sent (jd_tt to 8 decimals of a day) instead of at jd_tt moves no position by more than 0.28 mas. Per-body statistics are in arbiters/l1/validation.json. The Moon's larger difference comes from the ephemerides, not the arbiter: once the common rotation is taken out it follows, instant by instant, the horizons-frame study's frame-free comparison of geometric positions (horizons-frame/vectors/results.json), which puts DE440s's Moon 10.24 mas from DE441's at 1851-03-14 and 8.60 mas at 2148-12-30."
+    }
+  },
+  "vectors": [
+    {
+      "id": "L1-POS-0001",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2397195.6924745925
+      },
+      "expected": {
+        "lon": 353.0330254813,
+        "lat": -3.04792e-05
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant A1."
+    },
+    {
+      "id": "L1-POS-0002",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2397195.6924745925
+      },
+      "expected": {
+        "lon": 125.8831158847,
+        "lat": 0.120804265
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant A1."
+    },
+    {
+      "id": "L1-POS-0003",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2397195.6924745925
+      },
+      "expected": {
+        "lon": 336.6774566974,
+        "lat": -2.2347668808
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant A1."
+    },
+    {
+      "id": "L1-POS-0004",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2397195.6924745925
+      },
+      "expected": {
+        "lon": 307.0958303311,
+        "lat": 1.4960889727
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant A1."
+    },
+    {
+      "id": "L1-POS-0005",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2397195.6924745925
+      },
+      "expected": {
+        "lon": 326.7191067051,
+        "lat": -1.1467177254
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant A1."
+    },
+    {
+      "id": "L1-POS-0006",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2397195.6924745925
+      },
+      "expected": {
+        "lon": 201.1335373362,
+        "lat": 1.5577428355
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant A1."
+    },
+    {
+      "id": "L1-POS-0007",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2397195.6924745925
+      },
+      "expected": {
+        "lon": 20.1141376997,
+        "lat": -2.2802803674
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant A1."
+    },
+    {
+      "id": "L1-POS-0008",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2397195.6924745925
+      },
+      "expected": {
+        "lon": 28.2204245985,
+        "lat": -0.5101784118
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant A1."
+    },
+    {
+      "id": "L1-POS-0009",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2397195.6924745925
+      },
+      "expected": {
+        "lon": 337.3304712927,
+        "lat": -0.7765298878
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant A1."
+    },
+    {
+      "id": "L1-POS-0010",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2397195.6924745925
+      },
+      "expected": {
+        "lon": 28.5179373033,
+        "lat": -16.5857744434
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant A1."
+    },
+    {
+      "id": "L1-POS-0011",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2402908.300075087
+      },
+      "expected": {
+        "lon": 220.161171058,
+        "lat": -0.0001135382
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant A2."
+    },
+    {
+      "id": "L1-POS-0012",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2402908.300075087
+      },
+      "expected": {
+        "lon": 168.4301282419,
+        "lat": -1.254938788
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant A2."
+    },
+    {
+      "id": "L1-POS-0013",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2402908.300075087
+      },
+      "expected": {
+        "lon": 238.1272375601,
+        "lat": -2.0144625369
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant A2."
+    },
+    {
+      "id": "L1-POS-0014",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2402908.300075087
+      },
+      "expected": {
+        "lon": 261.2772874876,
+        "lat": -4.8439408745
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant A2."
+    },
+    {
+      "id": "L1-POS-0015",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2402908.300075087
+      },
+      "expected": {
+        "lon": 115.2723504379,
+        "lat": 1.4206036419
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant A2."
+    },
+    {
+      "id": "L1-POS-0016",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2402908.300075087
+      },
+      "expected": {
+        "lon": 295.5481572504,
+        "lat": -0.5837621457
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant A2."
+    },
+    {
+      "id": "L1-POS-0017",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2402908.300075087
+      },
+      "expected": {
+        "lon": 224.452516615,
+        "lat": 2.0948765174
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant A2."
+    },
+    {
+      "id": "L1-POS-0018",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2402908.300075087
+      },
+      "expected": {
+        "lon": 98.2259396339,
+        "lat": 0.3022651346
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant A2."
+    },
+    {
+      "id": "L1-POS-0019",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2402908.300075087
+      },
+      "expected": {
+        "lon": 10.6500081042,
+        "lat": -1.6098832553
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant A2."
+    },
+    {
+      "id": "L1-POS-0020",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2402908.300075087
+      },
+      "expected": {
+        "lon": 44.2466279098,
+        "lat": -15.8576476623
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant A2."
+    },
+    {
+      "id": "L1-POS-0021",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2408647.9082867857
+      },
+      "expected": {
+        "lon": 118.4745061726,
+        "lat": -0.0002050293
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant A3."
+    },
+    {
+      "id": "L1-POS-0022",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2408647.9082867857
+      },
+      "expected": {
+        "lon": 186.1610740544,
+        "lat": -3.9776185335
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant A3."
+    },
+    {
+      "id": "L1-POS-0023",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2408647.9082867857
+      },
+      "expected": {
+        "lon": 98.451849932,
+        "lat": -2.0327426448
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant A3."
+    },
+    {
+      "id": "L1-POS-0024",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2408647.9082867857
+      },
+      "expected": {
+        "lon": 155.8305033548,
+        "lat": 1.3648820285
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant A3."
+    },
+    {
+      "id": "L1-POS-0025",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2408647.9082867857
+      },
+      "expected": {
+        "lon": 162.4384843095,
+        "lat": 0.8943286805
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant A3."
+    },
+    {
+      "id": "L1-POS-0026",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2408647.9082867857
+      },
+      "expected": {
+        "lon": 80.4474127418,
+        "lat": -0.4981151188
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant A3."
+    },
+    {
+      "id": "L1-POS-0027",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2408647.9082867857
+      },
+      "expected": {
+        "lon": 54.1670105067,
+        "lat": -2.1499500782
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant A3."
+    },
+    {
+      "id": "L1-POS-0028",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2408647.9082867857
+      },
+      "expected": {
+        "lon": 165.9350362934,
+        "lat": 0.7424375281
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant A3."
+    },
+    {
+      "id": "L1-POS-0029",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2408647.9082867857
+      },
+      "expected": {
+        "lon": 48.5653902404,
+        "lat": -1.7504967328
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant A3."
+    },
+    {
+      "id": "L1-POS-0030",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2408647.9082867857
+      },
+      "expected": {
+        "lon": 59.9934511241,
+        "lat": -13.1133098323
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant A3."
+    },
+    {
+      "id": "L1-POS-0031",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2413934.4200875396
+      },
+      "expected": {
+        "lon": 289.9869225408,
+        "lat": 0.0001151681
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant A4."
+    },
+    {
+      "id": "L1-POS-0032",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2413934.4200875396
+      },
+      "expected": {
+        "lon": 9.2299077663,
+        "lat": 4.2253690971
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant A4."
+    },
+    {
+      "id": "L1-POS-0033",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2413934.4200875396
+      },
+      "expected": {
+        "lon": 308.5592149441,
+        "lat": -0.0945731272
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant A4."
+    },
+    {
+      "id": "L1-POS-0034",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2413934.4200875396
+      },
+      "expected": {
+        "lon": 333.4226413113,
+        "lat": -1.3795738148
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant A4."
+    },
+    {
+      "id": "L1-POS-0035",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2413934.4200875396
+      },
+      "expected": {
+        "lon": 71.8389853495,
+        "lat": 3.0349069302
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant A4."
+    },
+    {
+      "id": "L1-POS-0036",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2413934.4200875396
+      },
+      "expected": {
+        "lon": 159.8379536111,
+        "lat": 1.1895470583
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant A4."
+    },
+    {
+      "id": "L1-POS-0037",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2413934.4200875396
+      },
+      "expected": {
+        "lon": 237.9923557308,
+        "lat": 2.0235812353
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant A4."
+    },
+    {
+      "id": "L1-POS-0038",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2413934.4200875396
+      },
+      "expected": {
+        "lon": 237.8294825857,
+        "lat": 0.2326611667
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant A4."
+    },
+    {
+      "id": "L1-POS-0039",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2413934.4200875396
+      },
+      "expected": {
+        "lon": 78.0867419482,
+        "lat": -1.4345805121
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant A4."
+    },
+    {
+      "id": "L1-POS-0040",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2413934.4200875396
+      },
+      "expected": {
+        "lon": 72.0966675466,
+        "lat": -10.4734293283
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant A4."
+    },
+    {
+      "id": "L1-POS-0041",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2418092.141078796
+      },
+      "expected": {
+        "lon": 68.7770553365,
+        "lat": 4.46148e-05
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant B1."
+    },
+    {
+      "id": "L1-POS-0042",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2418092.141078796
+      },
+      "expected": {
+        "lon": 74.7394856165,
+        "lat": -1.8333690287
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant B1."
+    },
+    {
+      "id": "L1-POS-0043",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2418092.141078796
+      },
+      "expected": {
+        "lon": 90.6509641101,
+        "lat": 2.1690521292
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant B1."
+    },
+    {
+      "id": "L1-POS-0044",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2418092.141078796
+      },
+      "expected": {
+        "lon": 107.9411889185,
+        "lat": 2.7462609124
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant B1."
+    },
+    {
+      "id": "L1-POS-0045",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2418092.141078796
+      },
+      "expected": {
+        "lon": 95.2289294406,
+        "lat": 1.0803028716
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant B1."
+    },
+    {
+      "id": "L1-POS-0046",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2418092.141078796
+      },
+      "expected": {
+        "lon": 128.7889814636,
+        "lat": 0.7581200886
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant B1."
+    },
+    {
+      "id": "L1-POS-0047",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2418092.141078796
+      },
+      "expected": {
+        "lon": 7.9290242881,
+        "lat": -2.2297816464
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant B1."
+    },
+    {
+      "id": "L1-POS-0048",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2418092.141078796
+      },
+      "expected": {
+        "lon": 286.3045501162,
+        "lat": -0.4141262372
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant B1."
+    },
+    {
+      "id": "L1-POS-0049",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2418092.141078796
+      },
+      "expected": {
+        "lon": 103.2659403828,
+        "lat": -0.7697158288
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant B1."
+    },
+    {
+      "id": "L1-POS-0050",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2418092.141078796
+      },
+      "expected": {
+        "lon": 83.9111051517,
+        "lat": -7.223420648
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant B1."
+    },
+    {
+      "id": "L1-POS-0051",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2422296.612055316
+      },
+      "expected": {
+        "lon": 250.9004181525,
+        "lat": 0.0001257495
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant B2."
+    },
+    {
+      "id": "L1-POS-0052",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2422296.612055316
+      },
+      "expected": {
+        "lon": 24.5985542814,
+        "lat": 2.6634993502
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant B2."
+    },
+    {
+      "id": "L1-POS-0053",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2422296.612055316
+      },
+      "expected": {
+        "lon": 248.1812635152,
+        "lat": 1.5649981971
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant B2."
+    },
+    {
+      "id": "L1-POS-0054",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2422296.612055316
+      },
+      "expected": {
+        "lon": 204.5284771384,
+        "lat": 2.2671434648
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant B2."
+    },
+    {
+      "id": "L1-POS-0055",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2422296.612055316
+      },
+      "expected": {
+        "lon": 181.9839359852,
+        "lat": 1.7436619897
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant B2."
+    },
+    {
+      "id": "L1-POS-0056",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2422296.612055316
+      },
+      "expected": {
+        "lon": 138.1398280997,
+        "lat": 0.687184574
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant B2."
+    },
+    {
+      "id": "L1-POS-0057",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2422296.612055316
+      },
+      "expected": {
+        "lon": 161.3394919939,
+        "lat": 1.6819321775
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant B2."
+    },
+    {
+      "id": "L1-POS-0058",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2422296.612055316
+      },
+      "expected": {
+        "lon": 328.0648408292,
+        "lat": -0.74586162
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant B2."
+    },
+    {
+      "id": "L1-POS-0059",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2422296.612055316
+      },
+      "expected": {
+        "lon": 131.4418996509,
+        "lat": -0.0345950461
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant B2."
+    },
+    {
+      "id": "L1-POS-0060",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2422296.612055316
+      },
+      "expected": {
+        "lon": 97.2268193728,
+        "lat": -3.926074397
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant B2."
+    },
+    {
+      "id": "L1-POS-0061",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2427301.997503209
+      },
+      "expected": {
+        "lon": 144.101888723,
+        "lat": 0.0001834714
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant B3."
+    },
+    {
+      "id": "L1-POS-0062",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2427301.997503209
+      },
+      "expected": {
+        "lon": 101.6350562687,
+        "lat": 3.8628553627
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant B3."
+    },
+    {
+      "id": "L1-POS-0063",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2427301.997503209
+      },
+      "expected": {
+        "lon": 125.5269330003,
+        "lat": -1.0446171032
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant B3."
+    },
+    {
+      "id": "L1-POS-0064",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2427301.997503209
+      },
+      "expected": {
+        "lon": 175.1607586017,
+        "lat": 1.0222516895
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant B3."
+    },
+    {
+      "id": "L1-POS-0065",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2427301.997503209
+      },
+      "expected": {
+        "lon": 204.41116816,
+        "lat": -0.2978037852
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant B3."
+    },
+    {
+      "id": "L1-POS-0066",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2427301.997503209
+      },
+      "expected": {
+        "lon": 175.0892832184,
+        "lat": 1.118389702
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant B3."
+    },
+    {
+      "id": "L1-POS-0067",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2427301.997503209
+      },
+      "expected": {
+        "lon": 312.1780477671,
+        "lat": -0.9596225717
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant B3."
+    },
+    {
+      "id": "L1-POS-0068",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2427301.997503209
+      },
+      "expected": {
+        "lon": 27.3299674496,
+        "lat": -0.5971498968
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant B3."
+    },
+    {
+      "id": "L1-POS-0069",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2427301.997503209
+      },
+      "expected": {
+        "lon": 159.3226366351,
+        "lat": 0.8283875627
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant B3."
+    },
+    {
+      "id": "L1-POS-0070",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2427301.997503209
+      },
+      "expected": {
+        "lon": 113.8335901989,
+        "lat": 1.1153960972
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant B3."
+    },
+    {
+      "id": "L1-POS-0071",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2431875.3433746113
+      },
+      "expected": {
+        "lon": 334.619114099,
+        "lat": 7.23308e-05
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant B4."
+    },
+    {
+      "id": "L1-POS-0072",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2431875.3433746113
+      },
+      "expected": {
+        "lon": 241.7475803915,
+        "lat": 2.2035555516
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant B4."
+    },
+    {
+      "id": "L1-POS-0073",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2431875.3433746113
+      },
+      "expected": {
+        "lon": 345.2243484367,
+        "lat": -0.9224294397
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant B4."
+    },
+    {
+      "id": "L1-POS-0074",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2431875.3433746113
+      },
+      "expected": {
+        "lon": 340.0140348946,
+        "lat": -1.4460188813
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant B4."
+    },
+    {
+      "id": "L1-POS-0075",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2431875.3433746113
+      },
+      "expected": {
+        "lon": 104.1309092927,
+        "lat": 3.626963265
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant B4."
+    },
+    {
+      "id": "L1-POS-0076",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2431875.3433746113
+      },
+      "expected": {
+        "lon": 207.1213907067,
+        "lat": 1.4685955719
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant B4."
+    },
+    {
+      "id": "L1-POS-0077",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2431875.3433746113
+      },
+      "expected": {
+        "lon": 108.4980246994,
+        "lat": -0.0081698207
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant B4."
+    },
+    {
+      "id": "L1-POS-0078",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2431875.3433746113
+      },
+      "expected": {
+        "lon": 73.4144160937,
+        "lat": 0.0349877799
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant B4."
+    },
+    {
+      "id": "L1-POS-0079",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2431875.3433746113
+      },
+      "expected": {
+        "lon": 188.0936777933,
+        "lat": 1.5106972532
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant B4."
+    },
+    {
+      "id": "L1-POS-0080",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2431875.3433746113
+      },
+      "expected": {
+        "lon": 130.1013392429,
+        "lat": 6.5068932225
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant B4."
+    },
+    {
+      "id": "L1-POS-0081",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2436116.311482087
+      },
+      "expected": {
+        "lon": 191.2999803645,
+        "lat": 0.0001566178
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant C1."
+    },
+    {
+      "id": "L1-POS-0082",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2436116.311482087
+      },
+      "expected": {
+        "lon": 326.627406598,
+        "lat": 5.0146735761
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant C1."
+    },
+    {
+      "id": "L1-POS-0083",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2436116.311482087
+      },
+      "expected": {
+        "lon": 177.212824298,
+        "lat": 1.9141461411
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant C1."
+    },
+    {
+      "id": "L1-POS-0084",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2436116.311482087
+      },
+      "expected": {
+        "lon": 233.9773557251,
+        "lat": -1.7899128188
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant C1."
+    },
+    {
+      "id": "L1-POS-0085",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2436116.311482087
+      },
+      "expected": {
+        "lon": 186.8929824199,
+        "lat": 0.8154366709
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant C1."
+    },
+    {
+      "id": "L1-POS-0086",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2436116.311482087
+      },
+      "expected": {
+        "lon": 191.958153882,
+        "lat": 1.1036006883
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant C1."
+    },
+    {
+      "id": "L1-POS-0087",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2436116.311482087
+      },
+      "expected": {
+        "lon": 249.9182649996,
+        "lat": 1.4777395843
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant C1."
+    },
+    {
+      "id": "L1-POS-0088",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2436116.311482087
+      },
+      "expected": {
+        "lon": 130.8236346882,
+        "lat": 0.61225797
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant C1."
+    },
+    {
+      "id": "L1-POS-0089",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2436116.311482087
+      },
+      "expected": {
+        "lon": 211.5573642167,
+        "lat": 1.6990827867
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant C1."
+    },
+    {
+      "id": "L1-POS-0090",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2436116.311482087
+      },
+      "expected": {
+        "lon": 151.4497296797,
+        "lat": 11.1070680394
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant C1."
+    },
+    {
+      "id": "L1-POS-0091",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2440423.3455988024
+      },
+      "expected": {
+        "lon": 117.9107436421,
+        "lat": -8.84669e-05
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant C2."
+    },
+    {
+      "id": "L1-POS-0092",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2440423.3455988024
+      },
+      "expected": {
+        "lon": 187.8737619837,
+        "lat": -1.3631434289
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant C2."
+    },
+    {
+      "id": "L1-POS-0093",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2440423.3455988024
+      },
+      "expected": {
+        "lon": 115.8429117191,
+        "lat": 1.4588123082
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant C2."
+    },
+    {
+      "id": "L1-POS-0094",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2440423.3455988024
+      },
+      "expected": {
+        "lon": 75.0374223994,
+        "lat": -2.4542264279
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant C2."
+    },
+    {
+      "id": "L1-POS-0095",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2440423.3455988024
+      },
+      "expected": {
+        "lon": 242.7732962551,
+        "lat": -3.3930254129
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant C2."
+    },
+    {
+      "id": "L1-POS-0096",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2440423.3455988024
+      },
+      "expected": {
+        "lon": 180.7462424596,
+        "lat": 1.2191771838
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant C2."
+    },
+    {
+      "id": "L1-POS-0097",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2440423.3455988024
+      },
+      "expected": {
+        "lon": 38.0979993355,
+        "lat": -2.4284351973
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant C2."
+    },
+    {
+      "id": "L1-POS-0098",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2440423.3455988024
+      },
+      "expected": {
+        "lon": 180.6900241688,
+        "lat": 0.7107075939
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant C2."
+    },
+    {
+      "id": "L1-POS-0099",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2440423.3455988024
+      },
+      "expected": {
+        "lon": 236.0229234615,
+        "lat": 1.7299141948
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant C2."
+    },
+    {
+      "id": "L1-POS-0100",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2440423.3455988024
+      },
+      "expected": {
+        "lon": 173.0071929005,
+        "lat": 15.3060798074
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant C2."
+    },
+    {
+      "id": "L1-POS-0101",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2443210.752635514
+      },
+      "expected": {
+        "lon": 347.5553821031,
+        "lat": -4.63255e-05
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant C3."
+    },
+    {
+      "id": "L1-POS-0102",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2443210.752635514
+      },
+      "expected": {
+        "lon": 201.2425012394,
+        "lat": -0.3169783448
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant C3."
+    },
+    {
+      "id": "L1-POS-0103",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2443210.752635514
+      },
+      "expected": {
+        "lon": 340.4312496731,
+        "lat": -2.062788824
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant C3."
+    },
+    {
+      "id": "L1-POS-0104",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2443210.752635514
+      },
+      "expected": {
+        "lon": 23.3708540775,
+        "lat": 6.0480022734
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant C3."
+    },
+    {
+      "id": "L1-POS-0105",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2443210.752635514
+      },
+      "expected": {
+        "lon": 320.7583061822,
+        "lat": -1.1182011266
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant C3."
+    },
+    {
+      "id": "L1-POS-0106",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2443210.752635514
+      },
+      "expected": {
+        "lon": 55.3873121314,
+        "lat": -0.6960623773
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant C3."
+    },
+    {
+      "id": "L1-POS-0107",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2443210.752635514
+      },
+      "expected": {
+        "lon": 130.9603528399,
+        "lat": 0.9872721572
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant C3."
+    },
+    {
+      "id": "L1-POS-0108",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2443210.752635514
+      },
+      "expected": {
+        "lon": 221.5816344941,
+        "lat": 0.4560647404
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant C3."
+    },
+    {
+      "id": "L1-POS-0109",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2443210.752635514
+      },
+      "expected": {
+        "lon": 256.1175449152,
+        "lat": 1.4933371568
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant C3."
+    },
+    {
+      "id": "L1-POS-0110",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2443210.752635514
+      },
+      "expected": {
+        "lon": 193.5020500221,
+        "lat": 17.514561688
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant C3."
+    },
+    {
+      "id": "L1-POS-0111",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2446748.07494517
+      },
+      "expected": {
+        "lon": 230.8862080481,
+        "lat": 6.93978e-05
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant C4."
+    },
+    {
+      "id": "L1-POS-0112",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2446748.07494517
+      },
+      "expected": {
+        "lon": 17.7392275018,
+        "lat": -0.2735973686
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant C4."
+    },
+    {
+      "id": "L1-POS-0113",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2446748.07494517
+      },
+      "expected": {
+        "lon": 229.9615449989,
+        "lat": 0.2673637731
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant C4."
+    },
+    {
+      "id": "L1-POS-0114",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2446748.07494517
+      },
+      "expected": {
+        "lon": 218.0799888205,
+        "lat": -3.138926903
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant C4."
+    },
+    {
+      "id": "L1-POS-0115",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2446748.07494517
+      },
+      "expected": {
+        "lon": 321.6550214785,
+        "lat": -1.8014212712
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant C4."
+    },
+    {
+      "id": "L1-POS-0116",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2446748.07494517
+      },
+      "expected": {
+        "lon": 343.0143415352,
+        "lat": -1.377075621
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant C4."
+    },
+    {
+      "id": "L1-POS-0117",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2446748.07494517
+      },
+      "expected": {
+        "lon": 249.7335927859,
+        "lat": 1.5218297151
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant C4."
+    },
+    {
+      "id": "L1-POS-0118",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2446748.07494517
+      },
+      "expected": {
+        "lon": 260.7270410344,
+        "lat": -0.1058542584
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant C4."
+    },
+    {
+      "id": "L1-POS-0119",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2446748.07494517
+      },
+      "expected": {
+        "lon": 273.9774489407,
+        "lat": 1.0264359815
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant C4."
+    },
+    {
+      "id": "L1-POS-0120",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2446748.07494517
+      },
+      "expected": {
+        "lon": 217.8385946101,
+        "lat": 15.9020761452
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant C4."
+    },
+    {
+      "id": "L1-POS-0121",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2451401.9528206224
+      },
+      "expected": {
+        "lon": 138.3416784089,
+        "lat": 0.0001066686
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant C5."
+    },
+    {
+      "id": "L1-POS-0122",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2451401.9528206224
+      },
+      "expected": {
+        "lon": 138.1838095374,
+        "lat": 0.481254478
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant C5."
+    },
+    {
+      "id": "L1-POS-0123",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2451401.9528206224
+      },
+      "expected": {
+        "lon": 120.156063514,
+        "lat": -2.0135720076
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant C5."
+    },
+    {
+      "id": "L1-POS-0124",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2451401.9528206224
+      },
+      "expected": {
+        "lon": 152.1599739994,
+        "lat": -6.8398926623
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant C5."
+    },
+    {
+      "id": "L1-POS-0125",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2451401.9528206224
+      },
+      "expected": {
+        "lon": 226.8412859898,
+        "lat": -1.668303232
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant C5."
+    },
+    {
+      "id": "L1-POS-0126",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2451401.9528206224
+      },
+      "expected": {
+        "lon": 34.68062178,
+        "lat": -1.3658422458
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant C5."
+    },
+    {
+      "id": "L1-POS-0127",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2451401.9528206224
+      },
+      "expected": {
+        "lon": 46.8763009677,
+        "lat": -2.3988557613
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant C5."
+    },
+    {
+      "id": "L1-POS-0128",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2451401.9528206224
+      },
+      "expected": {
+        "lon": 314.6695031426,
+        "lat": -0.7109602652
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant C5."
+    },
+    {
+      "id": "L1-POS-0129",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2451401.9528206224
+      },
+      "expected": {
+        "lon": 302.5472039073,
+        "lat": 0.2770879115
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant C5."
+    },
+    {
+      "id": "L1-POS-0130",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2451401.9528206224
+      },
+      "expected": {
+        "lon": 247.7537438646,
+        "lat": 11.5076383642
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant C5."
+    },
+    {
+      "id": "L1-POS-0131",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2452878.911163686
+      },
+      "expected": {
+        "lon": 153.7272818111,
+        "lat": 0.000103943
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant D1."
+    },
+    {
+      "id": "L1-POS-0132",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2452878.911163686
+      },
+      "expected": {
+        "lon": 149.6587551865,
+        "lat": 4.9902516543
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant D1."
+    },
+    {
+      "id": "L1-POS-0133",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2452878.911163686
+      },
+      "expected": {
+        "lon": 176.2599821723,
+        "lat": -3.9188012372
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant D1."
+    },
+    {
+      "id": "L1-POS-0134",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2452878.911163686
+      },
+      "expected": {
+        "lon": 156.1043305709,
+        "lat": 1.4017809802
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant D1."
+    },
+    {
+      "id": "L1-POS-0135",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2452878.911163686
+      },
+      "expected": {
+        "lon": 335.378478458,
+        "lat": -6.6467315622
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant D1."
+    },
+    {
+      "id": "L1-POS-0136",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2452878.911163686
+      },
+      "expected": {
+        "lon": 150.0037635905,
+        "lat": 0.8257031214
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant D1."
+    },
+    {
+      "id": "L1-POS-0137",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2452878.911163686
+      },
+      "expected": {
+        "lon": 100.1940434637,
+        "lat": -0.7476743928
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant D1."
+    },
+    {
+      "id": "L1-POS-0138",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2452878.911163686
+      },
+      "expected": {
+        "lon": 330.7203434889,
+        "lat": -0.7920159518
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant D1."
+    },
+    {
+      "id": "L1-POS-0139",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2452878.911163686
+      },
+      "expected": {
+        "lon": 311.1862569112,
+        "lat": -0.0030828665
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant D1."
+    },
+    {
+      "id": "L1-POS-0140",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2452878.911163686
+      },
+      "expected": {
+        "lon": 257.2360106771,
+        "lat": 9.1662255037
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant D1."
+    },
+    {
+      "id": "L1-POS-0141",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2456068.523688819
+      },
+      "expected": {
+        "lon": 60.3726117287,
+        "lat": -3.88221e-05
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant D2."
+    },
+    {
+      "id": "L1-POS-0142",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2456068.523688819
+      },
+      "expected": {
+        "lon": 60.7192038602,
+        "lat": 0.4008520372
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant D2."
+    },
+    {
+      "id": "L1-POS-0143",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2456068.523688819
+      },
+      "expected": {
+        "lon": 52.6480884415,
+        "lat": -0.6175793915
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant D2."
+    },
+    {
+      "id": "L1-POS-0144",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2456068.523688819
+      },
+      "expected": {
+        "lon": 83.4079587224,
+        "lat": 3.373246183
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant D2."
+    },
+    {
+      "id": "L1-POS-0145",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2456068.523688819
+      },
+      "expected": {
+        "lon": 160.6578793046,
+        "lat": 1.4107393825
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant D2."
+    },
+    {
+      "id": "L1-POS-0146",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2456068.523688819
+      },
+      "expected": {
+        "lon": 54.9459158707,
+        "lat": -0.7905564752
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant D2."
+    },
+    {
+      "id": "L1-POS-0147",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2456068.523688819
+      },
+      "expected": {
+        "lon": 203.7526634571,
+        "lat": 2.7138637601
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant D2."
+    },
+    {
+      "id": "L1-POS-0148",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2456068.523688819
+      },
+      "expected": {
+        "lon": 7.4369014543,
+        "lat": -0.6999448331
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant D2."
+    },
+    {
+      "id": "L1-POS-0149",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2456068.523688819
+      },
+      "expected": {
+        "lon": 333.092043789,
+        "lat": -0.5821569474
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant D2."
+    },
+    {
+      "id": "L1-POS-0150",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2456068.523688819
+      },
+      "expected": {
+        "lon": 279.1704966161,
+        "lat": 3.8974888788
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant D2."
+    },
+    {
+      "id": "L1-POS-0151",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2459205.264691673
+      },
+      "expected": {
+        "lon": 270.3519816091,
+        "lat": -0.0002191408
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant D3."
+    },
+    {
+      "id": "L1-POS-0152",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2459205.264691673
+      },
+      "expected": {
+        "lon": 357.8752522596,
+        "lat": -5.2344765601
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant D3."
+    },
+    {
+      "id": "L1-POS-0153",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2459205.264691673
+      },
+      "expected": {
+        "lon": 271.2691022549,
+        "lat": -1.5782302317
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant D3."
+    },
+    {
+      "id": "L1-POS-0154",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2459205.264691673
+      },
+      "expected": {
+        "lon": 247.6018806755,
+        "lat": 1.0593826263
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant D3."
+    },
+    {
+      "id": "L1-POS-0155",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2459205.264691673
+      },
+      "expected": {
+        "lon": 23.2119978857,
+        "lat": 0.6412449051
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant D3."
+    },
+    {
+      "id": "L1-POS-0156",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2459205.264691673
+      },
+      "expected": {
+        "lon": 300.4860124076,
+        "lat": -0.4802910397
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant D3."
+    },
+    {
+      "id": "L1-POS-0157",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2459205.264691673
+      },
+      "expected": {
+        "lon": 300.4860606079,
+        "lat": -0.3785184397
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant D3."
+    },
+    {
+      "id": "L1-POS-0158",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2459205.264691673
+      },
+      "expected": {
+        "lon": 36.9592313973,
+        "lat": -0.4554078289
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant D3."
+    },
+    {
+      "id": "L1-POS-0159",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2459205.264691673
+      },
+      "expected": {
+        "lon": 348.3116438632,
+        "lat": -1.0857470169
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant D3."
+    },
+    {
+      "id": "L1-POS-0160",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2459205.264691673
+      },
+      "expected": {
+        "lon": 293.8617400788,
+        "lat": -1.1820574439
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant D3."
+    },
+    {
+      "id": "L1-POS-0161",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2461306.20912987
+      },
+      "expected": {
+        "lon": 179.7111727223,
+        "lat": -1.30478e-05
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant D4."
+    },
+    {
+      "id": "L1-POS-0162",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2461306.20912987
+      },
+      "expected": {
+        "lon": 312.0747019775,
+        "lat": -1.5755920887
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant D4."
+    },
+    {
+      "id": "L1-POS-0163",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2461306.20912987
+      },
+      "expected": {
+        "lon": 199.0400116872,
+        "lat": -0.7162971888
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant D4."
+    },
+    {
+      "id": "L1-POS-0164",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2461306.20912987
+      },
+      "expected": {
+        "lon": 216.4657124276,
+        "lat": -6.1801241358
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant D4."
+    },
+    {
+      "id": "L1-POS-0165",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2461306.20912987
+      },
+      "expected": {
+        "lon": 116.790100808,
+        "lat": 0.8757627333
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant D4."
+    },
+    {
+      "id": "L1-POS-0166",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2461306.20912987
+      },
+      "expected": {
+        "lon": 138.0610813538,
+        "lat": 0.5763262197
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant D4."
+    },
+    {
+      "id": "L1-POS-0167",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2461306.20912987
+      },
+      "expected": {
+        "lon": 12.2189080154,
+        "lat": -2.7034280777
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant D4."
+    },
+    {
+      "id": "L1-POS-0168",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2461306.20912987
+      },
+      "expected": {
+        "lon": 65.6368836469,
+        "lat": -0.1536903053
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant D4."
+    },
+    {
+      "id": "L1-POS-0169",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2461306.20912987
+      },
+      "expected": {
+        "lon": 3.0918782633,
+        "lat": -1.4193297878
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant D4."
+    },
+    {
+      "id": "L1-POS-0170",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2461306.20912987
+      },
+      "expected": {
+        "lon": 303.1953687452,
+        "lat": -4.2969729684
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant D4."
+    },
+    {
+      "id": "L1-POS-0171",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2465442.6356283394
+      },
+      "expected": {
+        "lon": 299.1274598066,
+        "lat": -6.02227e-05
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant D5."
+    },
+    {
+      "id": "L1-POS-0172",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2465442.6356283394
+      },
+      "expected": {
+        "lon": 93.3887853422,
+        "lat": -1.4846055963
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant D5."
+    },
+    {
+      "id": "L1-POS-0173",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2465442.6356283394
+      },
+      "expected": {
+        "lon": 283.9042013537,
+        "lat": -0.8939200972
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant D5."
+    },
+    {
+      "id": "L1-POS-0174",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2465442.6356283394
+      },
+      "expected": {
+        "lon": 276.7210658265,
+        "lat": 6.3606524084
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant D5."
+    },
+    {
+      "id": "L1-POS-0175",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2465442.6356283394
+      },
+      "expected": {
+        "lon": 54.2544234357,
+        "lat": 2.0991944476
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant D5."
+    },
+    {
+      "id": "L1-POS-0176",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2465442.6356283394
+      },
+      "expected": {
+        "lon": 114.1686545964,
+        "lat": 0.394647435
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant D5."
+    },
+    {
+      "id": "L1-POS-0177",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2465442.6356283394
+      },
+      "expected": {
+        "lon": 165.7378289677,
+        "lat": 1.9766833971
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant D5."
+    },
+    {
+      "id": "L1-POS-0178",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2465442.6356283394
+      },
+      "expected": {
+        "lon": 111.8495930897,
+        "lat": 0.5025621661
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant D5."
+    },
+    {
+      "id": "L1-POS-0179",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2465442.6356283394
+      },
+      "expected": {
+        "lon": 26.360800232,
+        "lat": -1.7126608683
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant D5."
+    },
+    {
+      "id": "L1-POS-0180",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2465442.6356283394
+      },
+      "expected": {
+        "lon": 321.6748879859,
+        "lat": -8.9277911955
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant D5."
+    },
+    {
+      "id": "L1-POS-0181",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2471790.000882015
+      },
+      "expected": {
+        "lon": 75.8001541016,
+        "lat": 0.0002531429
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant E1."
+    },
+    {
+      "id": "L1-POS-0182",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2471790.000882015
+      },
+      "expected": {
+        "lon": 216.4130517505,
+        "lat": 5.0680221836
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant E1."
+    },
+    {
+      "id": "L1-POS-0183",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2471790.000882015
+      },
+      "expected": {
+        "lon": 54.9989855915,
+        "lat": -3.9811016109
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant E1."
+    },
+    {
+      "id": "L1-POS-0184",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2471790.000882015
+      },
+      "expected": {
+        "lon": 120.6355376859,
+        "lat": 2.4709156169
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant E1."
+    },
+    {
+      "id": "L1-POS-0185",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2471790.000882015
+      },
+      "expected": {
+        "lon": 133.05342905,
+        "lat": 1.4230213445
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant E1."
+    },
+    {
+      "id": "L1-POS-0186",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2471790.000882015
+      },
+      "expected": {
+        "lon": 275.5568437234,
+        "lat": 0.2563176478
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant E1."
+    },
+    {
+      "id": "L1-POS-0187",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2471790.000882015
+      },
+      "expected": {
+        "lon": 7.997975081,
+        "lat": -2.2279240612
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant E1."
+    },
+    {
+      "id": "L1-POS-0188",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2471790.000882015
+      },
+      "expected": {
+        "lon": 190.6038045216,
+        "lat": 0.6914232132
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant E1."
+    },
+    {
+      "id": "L1-POS-0189",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2471790.000882015
+      },
+      "expected": {
+        "lon": 67.3816602401,
+        "lat": -1.5515230803
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant E1."
+    },
+    {
+      "id": "L1-POS-0190",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2471790.000882015
+      },
+      "expected": {
+        "lon": 346.9690679843,
+        "lat": -14.0901514631
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant E1."
+    },
+    {
+      "id": "L1-POS-0191",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2477779.403028457
+      },
+      "expected": {
+        "lon": 216.570836066,
+        "lat": 0.0002225911
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant E2."
+    },
+    {
+      "id": "L1-POS-0192",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2477779.403028457
+      },
+      "expected": {
+        "lon": 294.5911550935,
+        "lat": 4.6047529025
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant E2."
+    },
+    {
+      "id": "L1-POS-0193",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2477779.403028457
+      },
+      "expected": {
+        "lon": 240.2307732046,
+        "lat": -2.8183798714
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant E2."
+    },
+    {
+      "id": "L1-POS-0194",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2477779.403028457
+      },
+      "expected": {
+        "lon": 171.454672275,
+        "lat": 0.7967889098
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant E2."
+    },
+    {
+      "id": "L1-POS-0195",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2477779.403028457
+      },
+      "expected": {
+        "lon": 114.2226075308,
+        "lat": 1.2200106871
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant E2."
+    },
+    {
+      "id": "L1-POS-0196",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2477779.403028457
+      },
+      "expected": {
+        "lon": 64.0805766345,
+        "lat": -1.0691647101
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant E2."
+    },
+    {
+      "id": "L1-POS-0197",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2477779.403028457
+      },
+      "expected": {
+        "lon": 214.7929132735,
+        "lat": 2.2196486171
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant E2."
+    },
+    {
+      "id": "L1-POS-0198",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2477779.403028457
+      },
+      "expected": {
+        "lon": 265.2250837468,
+        "lat": -0.1696368848
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant E2."
+    },
+    {
+      "id": "L1-POS-0199",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2477779.403028457
+      },
+      "expected": {
+        "lon": 105.4100420146,
+        "lat": -0.8641244884
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant E2."
+    },
+    {
+      "id": "L1-POS-0200",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2477779.403028457
+      },
+      "expected": {
+        "lon": 3.9649487291,
+        "lat": -16.7636237449
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant E2."
+    },
+    {
+      "id": "L1-POS-0201",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2483778.7274076417
+      },
+      "expected": {
+        "lon": 13.4610427159,
+        "lat": -0.0002230188
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant E3."
+    },
+    {
+      "id": "L1-POS-0202",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2483778.7274076417
+      },
+      "expected": {
+        "lon": 147.6554685615,
+        "lat": -4.9024758586
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant E3."
+    },
+    {
+      "id": "L1-POS-0203",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2483778.7274076417
+      },
+      "expected": {
+        "lon": 17.1455037234,
+        "lat": -0.6247838912
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant E3."
+    },
+    {
+      "id": "L1-POS-0204",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2483778.7274076417
+      },
+      "expected": {
+        "lon": 1.7031334397,
+        "lat": -1.4721595093
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant E3."
+    },
+    {
+      "id": "L1-POS-0205",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2483778.7274076417
+      },
+      "expected": {
+        "lon": 345.8010739553,
+        "lat": -1.162815585
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant E3."
+    },
+    {
+      "id": "L1-POS-0206",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2483778.7274076417
+      },
+      "expected": {
+        "lon": 194.0796828846,
+        "lat": 1.5889381144
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant E3."
+    },
+    {
+      "id": "L1-POS-0207",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2483778.7274076417
+      },
+      "expected": {
+        "lon": 42.5817249928,
+        "lat": -2.1181328653
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant E3."
+    },
+    {
+      "id": "L1-POS-0208",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2483778.7274076417
+      },
+      "expected": {
+        "lon": 336.1083530859,
+        "lat": -0.7328002314
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant E3."
+    },
+    {
+      "id": "L1-POS-0209",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2483778.7274076417
+      },
+      "expected": {
+        "lon": 138.3257116258,
+        "lat": 0.2227173864
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant E3."
+    },
+    {
+      "id": "L1-POS-0210",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2483778.7274076417
+      },
+      "expected": {
+        "lon": 21.7345382553,
+        "lat": -16.7951583926
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant E3."
+    },
+    {
+      "id": "L1-POS-0211",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2489788.089993089
+      },
+      "expected": {
+        "lon": 172.8806109407,
+        "lat": -6.5848e-05
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant F1."
+    },
+    {
+      "id": "L1-POS-0212",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2489788.089993089
+      },
+      "expected": {
+        "lon": 130.4140288752,
+        "lat": -3.8595643581
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant F1."
+    },
+    {
+      "id": "L1-POS-0213",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2489788.089993089
+      },
+      "expected": {
+        "lon": 175.1901071386,
+        "lat": 1.4605934445
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant F1."
+    },
+    {
+      "id": "L1-POS-0214",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2489788.089993089
+      },
+      "expected": {
+        "lon": 205.7455158583,
+        "lat": 0.1010414035
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant F1."
+    },
+    {
+      "id": "L1-POS-0215",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2489788.089993089
+      },
+      "expected": {
+        "lon": 206.4304860525,
+        "lat": 0.0676413843
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant F1."
+    },
+    {
+      "id": "L1-POS-0216",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2489788.089993089
+      },
+      "expected": {
+        "lon": 323.7418479074,
+        "lat": -1.1708639476
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant F1."
+    },
+    {
+      "id": "L1-POS-0217",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2489788.089993089
+      },
+      "expected": {
+        "lon": 248.2343921743,
+        "lat": 1.5877168546
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant F1."
+    },
+    {
+      "id": "L1-POS-0218",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2489788.089993089
+      },
+      "expected": {
+        "lon": 41.5325761214,
+        "lat": -0.4610562331
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant F1."
+    },
+    {
+      "id": "L1-POS-0219",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2489788.089993089
+      },
+      "expected": {
+        "lon": 175.722783899,
+        "lat": 1.159436972
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant F1."
+    },
+    {
+      "id": "L1-POS-0220",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2489788.089993089
+      },
+      "expected": {
+        "lon": 38.9236207633,
+        "lat": -16.7173110905
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant F1."
+    },
+    {
+      "id": "L1-POS-0221",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2497242.4908116646
+      },
+      "expected": {
+        "lon": 323.2463678346,
+        "lat": 1.84234e-05
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant F2."
+    },
+    {
+      "id": "L1-POS-0222",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2497242.4908116646
+      },
+      "expected": {
+        "lon": 58.78717803,
+        "lat": -1.2365833224
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant F2."
+    },
+    {
+      "id": "L1-POS-0223",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2497242.4908116646
+      },
+      "expected": {
+        "lon": 340.9612222153,
+        "lat": 0.196924946
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant F2."
+    },
+    {
+      "id": "L1-POS-0224",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2497242.4908116646
+      },
+      "expected": {
+        "lon": 320.5795893875,
+        "lat": -1.2401379007
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant F2."
+    },
+    {
+      "id": "L1-POS-0225",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2497242.4908116646
+      },
+      "expected": {
+        "lon": 214.3665653212,
+        "lat": 2.2576956037
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant F2."
+    },
+    {
+      "id": "L1-POS-0226",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2497242.4908116646
+      },
+      "expected": {
+        "lon": 240.1818443936,
+        "lat": 1.0165904032
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant F2."
+    },
+    {
+      "id": "L1-POS-0227",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2497242.4908116646
+      },
+      "expected": {
+        "lon": 146.6761092221,
+        "lat": 1.4574805872
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant F2."
+    },
+    {
+      "id": "L1-POS-0228",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2497242.4908116646
+      },
+      "expected": {
+        "lon": 126.5508412354,
+        "lat": 0.6502509104
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant F2."
+    },
+    {
+      "id": "L1-POS-0229",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2497242.4908116646
+      },
+      "expected": {
+        "lon": 221.8580119359,
+        "lat": 1.7678403226
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant F2."
+    },
+    {
+      "id": "L1-POS-0230",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2497242.4908116646
+      },
+      "expected": {
+        "lon": 56.1246433575,
+        "lat": -14.1413771471
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant F2."
+    },
+    {
+      "id": "L1-POS-0231",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Sun",
+        "jd_tt": 2505964.8145946246
+      },
+      "expected": {
+        "lon": 278.9925573089,
+        "lat": 0.0001999052
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 10, corpus instant F3."
+    },
+    {
+      "id": "L1-POS-0232",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Moon",
+        "jd_tt": 2505964.8145946246
+      },
+      "expected": {
+        "lon": 160.1586702945,
+        "lat": 3.2310972085
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 301, corpus instant F3."
+    },
+    {
+      "id": "L1-POS-0233",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mercury",
+        "jd_tt": 2505964.8145946246
+      },
+      "expected": {
+        "lon": 263.3206236689,
+        "lat": 3.1004792495
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 199, corpus instant F3."
+    },
+    {
+      "id": "L1-POS-0234",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Venus",
+        "jd_tt": 2505964.8145946246
+      },
+      "expected": {
+        "lon": 267.7252398244,
+        "lat": 0.1458923591
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 299, corpus instant F3."
+    },
+    {
+      "id": "L1-POS-0235",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Mars",
+        "jd_tt": 2505964.8145946246
+      },
+      "expected": {
+        "lon": 64.9513813277,
+        "lat": 2.5872293121
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 4 (Mars system barycentre), corpus instant F3."
+    },
+    {
+      "id": "L1-POS-0236",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Jupiter",
+        "jd_tt": 2505964.8145946246
+      },
+      "expected": {
+        "lon": 240.9482260367,
+        "lat": 0.8400807873
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 5 (Jupiter system barycentre), corpus instant F3."
+    },
+    {
+      "id": "L1-POS-0237",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Saturn",
+        "jd_tt": 2505964.8145946246
+      },
+      "expected": {
+        "lon": 67.9659971805,
+        "lat": -1.8979702503
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 6 (Saturn system barycentre), corpus instant F3."
+    },
+    {
+      "id": "L1-POS-0238",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Uranus",
+        "jd_tt": 2505964.8145946246
+      },
+      "expected": {
+        "lon": 240.5678418401,
+        "lat": 0.2050027452
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 7 (Uranus system barycentre), corpus instant F3."
+    },
+    {
+      "id": "L1-POS-0239",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Neptune",
+        "jd_tt": 2505964.8145946246
+      },
+      "expected": {
+        "lon": 271.9389524187,
+        "lat": 1.1320611299
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 8 (Neptune system barycentre), corpus instant F3."
+    },
+    {
+      "id": "L1-POS-0240",
+      "kind": "position.apparent.ecliptic-true-of-date",
+      "input": {
+        "body": "Pluto",
+        "jd_tt": 2505964.8145946246
+      },
+      "expected": {
+        "lon": 79.8127411873,
+        "lat": -9.4943163688
+      },
+      "tolerance": {
+        "lon": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "lat": {
+          "abs": 1,
+          "unit": "arcsec"
+        }
+      },
+      "arbiter": "horizons-de441-iau2006",
+      "note": "Horizons target 9 (Pluto system barycentre), corpus instant F3."
+    }
+  ]
+}

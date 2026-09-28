@@ -1,0 +1,269 @@
+{
+  "note": "Per-instant celestial-pole offsets of the eopJpl model of NASA JPL Horizons's QUANTITIES=31 frame (IAU 1976 precession applied to the ICRF direction with no frame bias, IAU 1980 nutation with dpsi and deps added to its nutation in longitude and obliquity, the ecliptic of date at the IAU 1980 mean obliquity plus the corrected nutation in obliquity). Extracted unchanged from instants[].id, instants[].utc, instants[].eopJpl.offsetsMas and instants[].eopJpl.frameTermMeanArcsec of results.json in the zodiacs.org site repository (path and sha256 in extractedFrom), which decompose.py in the same folder wrote. There the offsets are the IAU 1980 dpsi, deps that put the IAU 1976/1980 pole on the IAU 2006/2000A pole plus the dX, dY of JPL's EOP2 file latest_eop2.long (fetched 2026-09-23, sha256 in eopSource), held at their 1962-01-20 and 2026-12-18 values outside Horizons's EOP file eop.260922.p261219 (held: true). frameTermMeanArcsec (Horizons longitude minus the IAU 2006/2000A longitude of the same direction, mean of the ten bodies, Mars to Pluto from the barycentre files) is kept only as a check value for arbiters/l1/build.py; it is not an input to the conversion.",
+  "extractedFrom": {
+    "repository": "ZodiacsOfficial/site",
+    "commit": "3f31ba1708dafd7380b079d68f9b72bbc643cb9d",
+    "path": "docs/platform/evidence/engine-beyond-swiss/horizons-frame/results.json",
+    "sha256": "c38dd0b1f2d594ee6b80554bd050b8a19036db68a6fdb1ea441b81c65d30eeb9",
+    "writtenBy": {
+      "path": "docs/platform/evidence/engine-beyond-swiss/horizons-frame/decompose.py",
+      "sha256": "cb22fedfcba6901508471ae3d77ed5088c40b77a4a99d52c8479e832d896e57b"
+    },
+    "eopSource": {
+      "url": "https://eop2-external.jpl.nasa.gov/eop2/latest_eop2.long",
+      "sha256": "0fc75ad22701ff4e7b8146c1a42dbf92d5b7be23b440188208d225f00bb75128",
+      "fetched": "2026-09-23"
+    },
+    "eopHeldAt": {
+      "first": "1962-01-20",
+      "last": "2026-12-18"
+    },
+    "models": {
+      "bare": "R1(eraObl80 + deps80) x eraNutm80 x eraPmat76 applied to the ICRF direction as it is",
+      "eopJpl": "bare with dpsi, deps added to the IAU 1980 nutation: the offsets that put its pole on the IAU 2006/2000A pole plus JPL EOP2 dX, dY; held at 1962-01-20 and 2026-12-18"
+    }
+  },
+  "units": "offsetsMas.dpsi and offsetsMas.deps in milliarcseconds (as rounded in results.json, 0.001 mas); frameTermMeanArcsec in arcseconds (4 decimals, as in results.json)",
+  "instants": [
+    {
+      "id": "A1",
+      "utc": "1851-03-14T04:37:00Z",
+      "offsetsMas": {
+        "dpsi": 63.2,
+        "deps": 6.335,
+        "held": true
+      },
+      "frameTermMeanArcsec": -0.373
+    },
+    {
+      "id": "A2",
+      "utc": "1866-11-02T19:12:00Z",
+      "offsetsMas": {
+        "dpsi": 63.2,
+        "deps": 6.335,
+        "held": true
+      },
+      "frameTermMeanArcsec": -0.3275
+    },
+    {
+      "id": "A3",
+      "utc": "1882-07-21T09:48:00Z",
+      "offsetsMas": {
+        "dpsi": 63.2,
+        "deps": 6.335,
+        "held": true
+      },
+      "frameTermMeanArcsec": -0.2898
+    },
+    {
+      "id": "A4",
+      "utc": "1897-01-09T22:05:00Z",
+      "offsetsMas": {
+        "dpsi": 63.2,
+        "deps": 6.335,
+        "held": true
+      },
+      "frameTermMeanArcsec": -0.2533
+    },
+    {
+      "id": "B1",
+      "utc": "1908-05-30T15:23:00Z",
+      "offsetsMas": {
+        "dpsi": 63.2,
+        "deps": 6.335,
+        "held": true
+      },
+      "frameTermMeanArcsec": -0.2097
+    },
+    {
+      "id": "B2",
+      "utc": "1919-12-04T02:41:00Z",
+      "offsetsMas": {
+        "dpsi": 63.2,
+        "deps": 6.335,
+        "held": true
+      },
+      "frameTermMeanArcsec": -0.1849
+    },
+    {
+      "id": "B3",
+      "utc": "1933-08-17T11:56:00Z",
+      "offsetsMas": {
+        "dpsi": 63.2,
+        "deps": 6.335,
+        "held": true
+      },
+      "frameTermMeanArcsec": -0.1381
+    },
+    {
+      "id": "B4",
+      "utc": "1946-02-23T20:14:00Z",
+      "offsetsMas": {
+        "dpsi": 63.2,
+        "deps": 6.335,
+        "held": true
+      },
+      "frameTermMeanArcsec": -0.0988
+    },
+    {
+      "id": "C1",
+      "utc": "1957-10-04T19:28:00Z",
+      "offsetsMas": {
+        "dpsi": 63.2,
+        "deps": 6.335,
+        "held": true
+      },
+      "frameTermMeanArcsec": -0.0675
+    },
+    {
+      "id": "C2",
+      "utc": "1969-07-20T20:17:00Z",
+      "offsetsMas": {
+        "dpsi": 47.836,
+        "deps": 4.484,
+        "held": false
+      },
+      "frameTermMeanArcsec": -0.0503
+    },
+    {
+      "id": "C3",
+      "utc": "1977-03-08T06:03:00Z",
+      "offsetsMas": {
+        "dpsi": 29.308,
+        "deps": -1.393,
+        "held": false
+      },
+      "frameTermMeanArcsec": -0.0501
+    },
+    {
+      "id": "C4",
+      "utc": "1986-11-13T13:47:00Z",
+      "offsetsMas": {
+        "dpsi": -3.677,
+        "deps": 2.78,
+        "held": false
+      },
+      "frameTermMeanArcsec": -0.05
+    },
+    {
+      "id": "C5",
+      "utc": "1999-08-11T10:51:00Z",
+      "offsetsMas": {
+        "dpsi": -55.472,
+        "deps": -7.134,
+        "held": false
+      },
+      "frameTermMeanArcsec": -0.0489
+    },
+    {
+      "id": "D1",
+      "utc": "2003-08-27T09:51:00Z",
+      "offsetsMas": {
+        "dpsi": -62.596,
+        "deps": -4.864,
+        "held": false
+      },
+      "frameTermMeanArcsec": -0.0491
+    },
+    {
+      "id": "D2",
+      "utc": "2012-05-21T00:33:00Z",
+      "offsetsMas": {
+        "dpsi": -70.865,
+        "deps": -13.298,
+        "held": false
+      },
+      "frameTermMeanArcsec": -0.049
+    },
+    {
+      "id": "D3",
+      "utc": "2020-12-21T18:20:00Z",
+      "offsetsMas": {
+        "dpsi": -110.161,
+        "deps": -5.946,
+        "held": false
+      },
+      "frameTermMeanArcsec": -0.0483
+    },
+    {
+      "id": "D4",
+      "utc": "2026-09-22T17:00:00Z",
+      "offsetsMas": {
+        "dpsi": -123.512,
+        "deps": -11.612,
+        "held": false
+      },
+      "frameTermMeanArcsec": -0.0471
+    },
+    {
+      "id": "D5",
+      "utc": "2038-01-19T03:14:07Z",
+      "offsetsMas": {
+        "dpsi": -116.616,
+        "deps": -8.401,
+        "held": true
+      },
+      "frameTermMeanArcsec": -0.0005
+    },
+    {
+      "id": "E1",
+      "utc": "2055-06-06T12:00:00Z",
+      "offsetsMas": {
+        "dpsi": -116.616,
+        "deps": -8.401,
+        "held": true
+      },
+      "frameTermMeanArcsec": 0.0496
+    },
+    {
+      "id": "E2",
+      "utc": "2071-10-29T21:39:00Z",
+      "offsetsMas": {
+        "dpsi": -116.616,
+        "deps": -8.401,
+        "held": true
+      },
+      "frameTermMeanArcsec": 0.1012
+    },
+    {
+      "id": "E3",
+      "utc": "2088-04-02T05:26:00Z",
+      "offsetsMas": {
+        "dpsi": -116.616,
+        "deps": -8.401,
+        "held": true
+      },
+      "frameTermMeanArcsec": 0.1386
+    },
+    {
+      "id": "F1",
+      "utc": "2104-09-15T14:08:00Z",
+      "offsetsMas": {
+        "dpsi": -116.616,
+        "deps": -8.401,
+        "held": true
+      },
+      "frameTermMeanArcsec": 0.198
+    },
+    {
+      "id": "F2",
+      "utc": "2125-02-11T23:45:00Z",
+      "offsetsMas": {
+        "dpsi": -116.616,
+        "deps": -8.401,
+        "held": true
+      },
+      "frameTermMeanArcsec": 0.2564
+    },
+    {
+      "id": "F3",
+      "utc": "2148-12-30T07:31:00Z",
+      "offsetsMas": {
+        "dpsi": -116.616,
+        "deps": -8.401,
+        "held": true
+      },
+      "frameTermMeanArcsec": 0.3445
+    }
+  ]
+}

@@ -85,3 +85,13 @@ that data are instructed to retain `NOTICE`.
 Timezone conversion uses the host's `Intl`/ICU implementation. The package
 does not redistribute tzdb, so historical timezone completeness is a runtime
 property rather than a package-data guarantee.
+
+## The conformance suite
+
+Everything under `conformance/` is dedicated to the public domain under CC0 1.0 (`conformance/LICENSE`). It is not part of the npm package: the package's `files` list leaves it out.
+
+Swiss Ephemeris is used there only as an instrument:
+
+- `conformance/adapters/pyswisseph.py` calls a separately installed pyswisseph;
+- no Swiss Ephemeris code, data file or output is committed;
+- its results are published as verdicts, returned flags and summary statistics.

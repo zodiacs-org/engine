@@ -1,0 +1,496 @@
+{
+  "release": "2025c",
+  "about": "Provenance of the IANA time zone database release that the L3 time-zone arbiter compiles. Neither tarball nor any compiled TZif file is committed; arbiters/l3/build.py fetches or reads the tarballs and checks every digest below before use.",
+  "tzdata": {
+    "url": "https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz",
+    "bytes": 469363,
+    "sha256": "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957",
+    "signature": {
+      "url": "https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz.asc",
+      "sha256": "6d72ec402e89cd426d5e22b28cf6f51bde6fe8e0f6ce2bd1a0129a3108735747",
+      "key": "7E37 92A9 D8AC F7D6 33BC 1588 ED97 E90E 62AA 7E34 (Paul Eggert <eggert@cs.ucla.edu>)",
+      "checked": "gpg --verify on 2026-09-28: good signature made 2025-12-10 22:45:25 UTC, key from keys.openpgp.org"
+    },
+    "files": [
+      {
+        "name": "CONTRIBUTING",
+        "bytes": 3785,
+        "sha256": "21158842f84b1b6a3eedf3b38bfbe85519d69320d6c1dd7441eb5af6ac26545f",
+        "use": "not read"
+      },
+      {
+        "name": "LICENSE",
+        "bytes": 252,
+        "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf",
+        "use": "not read"
+      },
+      {
+        "name": "Makefile",
+        "bytes": 57236,
+        "sha256": "be4ee6e48296cea0159c87e406f669441c091c15d85436bc2b7264c91c534220",
+        "use": "not read"
+      },
+      {
+        "name": "NEWS",
+        "bytes": 245317,
+        "sha256": "6786fdd586c42d9dc9e6cf0c977430753c6c4f3b2b9716c8cd12dbbe69a00243",
+        "use": "not read"
+      },
+      {
+        "name": "README",
+        "bytes": 2464,
+        "sha256": "f6d96b82996a6ccac80027816704183c63a754d5b1eb2e7b25858e32164e2707",
+        "use": "not read"
+      },
+      {
+        "name": "SECURITY",
+        "bytes": 779,
+        "sha256": "50429103d36ca3ad6c3cb9386eba7ce6f8db4cc7adf4a352460a161283bf906a",
+        "use": "not read"
+      },
+      {
+        "name": "africa",
+        "bytes": 63623,
+        "sha256": "c19940072a9e79d57ad844fc9f676f2067e5fada6708f3bf9a1cd4de34c8eeb7",
+        "use": "zic input"
+      },
+      {
+        "name": "antarctica",
+        "bytes": 14080,
+        "sha256": "e410ad71c9450828c592d21419301d41ac79ce50159fd0ac2d6c5031cb6bdfe6",
+        "use": "zic input"
+      },
+      {
+        "name": "asia",
+        "bytes": 192871,
+        "sha256": "cd12fe2bd64a02d808fd34abb92f08f19e5da20133a1c6c347d11171c00d9e1c",
+        "use": "zic input"
+      },
+      {
+        "name": "australasia",
+        "bytes": 98594,
+        "sha256": "e60bee81387d105dc2a31eef7defd0d0061322abd65c7a21c3bbcbb96e7c2d6b",
+        "use": "zic input"
+      },
+      {
+        "name": "backward",
+        "bytes": 12039,
+        "sha256": "d2f4c8953f204982ddf4dc0c2debf41b2464de376dad7d546d0fc70f889fa706",
+        "use": "zic input"
+      },
+      {
+        "name": "backzone",
+        "bytes": 71355,
+        "sha256": "a0db77e1f69aa79b5c4f0ff0ae960d6a61b94208765139380d8f37211a663fe3",
+        "use": "zic input"
+      },
+      {
+        "name": "calendars",
+        "bytes": 4764,
+        "sha256": "cadbd0289890572697d7fdd87dd55482ced2927789a6a661f04e92b8edf92240",
+        "use": "not read"
+      },
+      {
+        "name": "checklinks.awk",
+        "bytes": 1630,
+        "sha256": "9ff2404ca78181dbc40e868d1d08a8754c3672fa0305a214135e473a426a697c",
+        "use": "not read"
+      },
+      {
+        "name": "checknow.awk",
+        "bytes": 1212,
+        "sha256": "094a88171bdfe138a1ba0478eb268b0f5dd881a02133c406350420067e1ff3b2",
+        "use": "not read"
+      },
+      {
+        "name": "checktab.awk",
+        "bytes": 5377,
+        "sha256": "e7d73e141ce815779d42d05ba71dcd88bcdc62f87542f2e15f78ec8207e6112c",
+        "use": "not read"
+      },
+      {
+        "name": "etcetera",
+        "bytes": 3087,
+        "sha256": "e158fbdb05e3a0f2b5b6b6bce0cffd480305ec10d8b0769c959c30af6726d2b6",
+        "use": "zic input"
+      },
+      {
+        "name": "europe",
+        "bytes": 183293,
+        "sha256": "fb73f6b5a694e174af9f47feb95b2f5b5edb169b16a9e7212e5069183266d50f",
+        "use": "zic input"
+      },
+      {
+        "name": "factory",
+        "bytes": 989,
+        "sha256": "ae2ec1d36dabf79a69cb7dd4fb6fd9168d05fc8cfd31aee2dd19e4f18beb9885",
+        "use": "zic input"
+      },
+      {
+        "name": "iso3166.tab",
+        "bytes": 4841,
+        "sha256": "837c80785080c8433fd9d4ea87e78f161ac7a40389301c5153d4f90198baeb2a",
+        "use": "not read"
+      },
+      {
+        "name": "leap-seconds.list",
+        "bytes": 5065,
+        "sha256": "f060924e3a76ee4e464f6664035b7beae834155dd93a81c50e922f94dfdb1d20",
+        "use": "leap-second table (copied to sources/l3)"
+      },
+      {
+        "name": "leapseconds",
+        "bytes": 3694,
+        "sha256": "5514348190a3ef9f0f65fee87fca59b4d6d9292702ae0e84960011159a7c2767",
+        "use": "not read"
+      },
+      {
+        "name": "leapseconds.awk",
+        "bytes": 9448,
+        "sha256": "76c289f5827119e40f1451a96b04e4333f3c8d8b218e170a03c8432e72b3638c",
+        "use": "not read"
+      },
+      {
+        "name": "northamerica",
+        "bytes": 168527,
+        "sha256": "44706515a63546cde04a54f1dafcb254298f1a7c569ad1d106a88988d9c187cd",
+        "use": "zic input"
+      },
+      {
+        "name": "southamerica",
+        "bytes": 95320,
+        "sha256": "c6e17ee367c6d7c1ab613444641538bca6d11818d46feb96e565e98c45238a2b",
+        "use": "zic input"
+      },
+      {
+        "name": "theory.html",
+        "bytes": 67110,
+        "sha256": "6595250beade4e03269711bff79b07f0bbd00ee93c54fb1931b576786d49ab9b",
+        "use": "not read"
+      },
+      {
+        "name": "version",
+        "bytes": 6,
+        "sha256": "89db5dd3eb7803fde35d5bb1dd9a9718ebcf01c9a38d7005bb8a0318bb46e01e",
+        "use": "build script"
+      },
+      {
+        "name": "ziguard.awk",
+        "bytes": 11554,
+        "sha256": "e4600a2360b692242d6da76666411ece8ada76b61e6f8fb69cec79592b261785",
+        "use": "build script"
+      },
+      {
+        "name": "zishrink.awk",
+        "bytes": 10312,
+        "sha256": "ff6e7e886b015f061d173c7b2f691f7190a6db8b0c33f752136ff7d129808f8a",
+        "use": "build script"
+      },
+      {
+        "name": "zone.tab",
+        "bytes": 18822,
+        "sha256": "586b4207e6c76722de82adcda6bf49d761f668517f45a673f64da83b333eecc4",
+        "use": "PACKRATLIST"
+      },
+      {
+        "name": "zone1970.tab",
+        "bytes": 17605,
+        "sha256": "e9d9fe30942a880f756b73f649667d8647a1ecf2131149445d9cc24c65e4ee8f",
+        "use": "not read"
+      },
+      {
+        "name": "zonenow.tab",
+        "bytes": 8002,
+        "sha256": "a15b85312b66c33c2df5471e3a9d5c55fd98153f8d6eb47878d8a3488b0656a5",
+        "use": "not read"
+      }
+    ]
+  },
+  "tzcode": {
+    "url": "https://data.iana.org/time-zones/releases/tzcode2025c.tar.gz",
+    "bytes": 320200,
+    "sha256": "697ebe6625444aef5080f58e49d03424bbb52e08bf483d3ddb5acf10cbd15740",
+    "signature": {
+      "url": "https://data.iana.org/time-zones/releases/tzcode2025c.tar.gz.asc",
+      "sha256": "99b21584f0f9b1a2ce422e116e71c92f114dd86c03a90340f064aa494aec576a",
+      "key": "7E37 92A9 D8AC F7D6 33BC 1588 ED97 E90E 62AA 7E34 (Paul Eggert <eggert@cs.ucla.edu>)",
+      "checked": "gpg --verify on 2026-09-28: good signature made 2025-12-10 22:45:24 UTC, key from keys.openpgp.org"
+    },
+    "files": [
+      {
+        "name": "CONTRIBUTING",
+        "bytes": 3785,
+        "sha256": "21158842f84b1b6a3eedf3b38bfbe85519d69320d6c1dd7441eb5af6ac26545f",
+        "use": "not read"
+      },
+      {
+        "name": "LICENSE",
+        "bytes": 252,
+        "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf",
+        "use": "not read"
+      },
+      {
+        "name": "Makefile",
+        "bytes": 57236,
+        "sha256": "be4ee6e48296cea0159c87e406f669441c091c15d85436bc2b7264c91c534220",
+        "use": "zic/zdump source"
+      },
+      {
+        "name": "NEWS",
+        "bytes": 245317,
+        "sha256": "6786fdd586c42d9dc9e6cf0c977430753c6c4f3b2b9716c8cd12dbbe69a00243",
+        "use": "not read"
+      },
+      {
+        "name": "README",
+        "bytes": 2464,
+        "sha256": "f6d96b82996a6ccac80027816704183c63a754d5b1eb2e7b25858e32164e2707",
+        "use": "not read"
+      },
+      {
+        "name": "SECURITY",
+        "bytes": 779,
+        "sha256": "50429103d36ca3ad6c3cb9386eba7ce6f8db4cc7adf4a352460a161283bf906a",
+        "use": "not read"
+      },
+      {
+        "name": "asctime.c",
+        "bytes": 4581,
+        "sha256": "4ed8cecb4aa5227cf3f330b9f7b002adc64ff5a55b46b438e524eb23cf26a9f3",
+        "use": "not read"
+      },
+      {
+        "name": "calendars",
+        "bytes": 4764,
+        "sha256": "cadbd0289890572697d7fdd87dd55482ced2927789a6a661f04e92b8edf92240",
+        "use": "not read"
+      },
+      {
+        "name": "date.1",
+        "bytes": 1795,
+        "sha256": "5e4b812a32483a39e2e4344402c7bd4887a2986f6a26e49b52160aaf8baa1528",
+        "use": "not read"
+      },
+      {
+        "name": "date.1.txt",
+        "bytes": 1782,
+        "sha256": "8661ef3fd66dc95bc60e1c9007d99e82a5c2f8dc2e49ce88347fc3e5e31c3eaf",
+        "use": "not read"
+      },
+      {
+        "name": "date.c",
+        "bytes": 5414,
+        "sha256": "6c093549ddbbc94bde79a313cf37e7fe479ad007464c44f91d002d7c2b819d24",
+        "use": "not read"
+      },
+      {
+        "name": "difftime.c",
+        "bytes": 1432,
+        "sha256": "4f61e6ee1deda6662f66508005208c0186d82c0d928e04cf13fb3328ffa6cec7",
+        "use": "not read"
+      },
+      {
+        "name": "localtime.c",
+        "bytes": 82104,
+        "sha256": "33682b7381eab13e7cc94f4c2fd5c9b48f86780755bb9a6afa030e55f1776d70",
+        "use": "zic/zdump source"
+      },
+      {
+        "name": "newctime.3",
+        "bytes": 8631,
+        "sha256": "159ce91a19e2f228554e84e09f5608fe7a2b532b814608e856b0cabb424be198",
+        "use": "not read"
+      },
+      {
+        "name": "newctime.3.txt",
+        "bytes": 9054,
+        "sha256": "02fb2466db0bede54ee0a6cf4cbc68e8e7e452991018248872f873396caccb50",
+        "use": "not read"
+      },
+      {
+        "name": "newstrftime.3",
+        "bytes": 10797,
+        "sha256": "6914d73518d63842aad45125fb6e395e369e507a862c448c4a874a54e79bce41",
+        "use": "not read"
+      },
+      {
+        "name": "newstrftime.3.txt",
+        "bytes": 9489,
+        "sha256": "abc22509d65488306c02be3b6df00a7ae39c560fe77ffa15cc0c501605e3cda9",
+        "use": "not read"
+      },
+      {
+        "name": "newtzset.3",
+        "bytes": 10800,
+        "sha256": "b826b54be67a00b4fe765ea05b62aee8b38a01d12fe6e6774312b082f9ef33a2",
+        "use": "not read"
+      },
+      {
+        "name": "newtzset.3.txt",
+        "bytes": 12175,
+        "sha256": "8f568c93505b413a12fb3ddd9d265696e4621c62e890f095e99af3db23a5863e",
+        "use": "not read"
+      },
+      {
+        "name": "private.h",
+        "bytes": 30923,
+        "sha256": "b3c8fa167951fbd57500c6d8293cc91c83b951b0a2ae4b2c670f62c8f4aa64a5",
+        "use": "zic/zdump source"
+      },
+      {
+        "name": "strftime.c",
+        "bytes": 19356,
+        "sha256": "2511c7f095cde7ccb6fbf245f90459d1b3f3c210bdb3c50a65f30cc86122118e",
+        "use": "zic/zdump source"
+      },
+      {
+        "name": "theory.html",
+        "bytes": 67110,
+        "sha256": "6595250beade4e03269711bff79b07f0bbd00ee93c54fb1931b576786d49ab9b",
+        "use": "not read"
+      },
+      {
+        "name": "time2posix.3",
+        "bytes": 3440,
+        "sha256": "8b0fd4fec3a36c9fe9f0d6c4ddf510d2dc1b35e3b3f583a85e74dd371870129c",
+        "use": "not read"
+      },
+      {
+        "name": "time2posix.3.txt",
+        "bytes": 3621,
+        "sha256": "41cd8ffa95e922d26a100e8fd54ed2e0c2856263f4ff545f6ac9486d464228c2",
+        "use": "not read"
+      },
+      {
+        "name": "tz-art.html",
+        "bytes": 24590,
+        "sha256": "0665b9189cf5f6fb2e912c01da70a5ce5543d2f439e8d5be8b1185cea7ea0679",
+        "use": "not read"
+      },
+      {
+        "name": "tz-how-to.html",
+        "bytes": 24051,
+        "sha256": "038f744932a172ef7e8c039a29cfd72b62fe66c3e73dd10605702e6487834b65",
+        "use": "not read"
+      },
+      {
+        "name": "tz-link.html",
+        "bytes": 63411,
+        "sha256": "f1f9ab582449226111e7eef271a71f25875383c4c236f4531941c69faaab5db3",
+        "use": "not read"
+      },
+      {
+        "name": "tzfile.5",
+        "bytes": 20370,
+        "sha256": "7b105a9b33551ded6985bdffd34e97494a26884dc16e1c5f8414b4b00e26b479",
+        "use": "not read"
+      },
+      {
+        "name": "tzfile.5.txt",
+        "bytes": 22870,
+        "sha256": "a891b1d3179bbd485c3204121fdb9a72cb84fded0eea3f15c66a3eb4767b9b97",
+        "use": "not read"
+      },
+      {
+        "name": "tzfile.h",
+        "bytes": 4148,
+        "sha256": "c50b758c587854f6555b4ca039334208aee6582332c31874901b420098ce679f",
+        "use": "zic/zdump source"
+      },
+      {
+        "name": "tzselect.8",
+        "bytes": 3036,
+        "sha256": "a1325f57dc3a0809d03b3846d3d7c1fc42a62c92de9639cff38307392779d8c1",
+        "use": "not read"
+      },
+      {
+        "name": "tzselect.8.txt",
+        "bytes": 3198,
+        "sha256": "e02cc4e6cc85cc4c5dfb1e6ea79663851b9ffddd59e76b060e991642650019f4",
+        "use": "not read"
+      },
+      {
+        "name": "tzselect.ksh",
+        "bytes": 21819,
+        "sha256": "18a20b559db50b2c84c75ece7dbcf00e2ff2f98805cf1bdd77fc341434689de9",
+        "use": "not read"
+      },
+      {
+        "name": "version",
+        "bytes": 6,
+        "sha256": "89db5dd3eb7803fde35d5bb1dd9a9718ebcf01c9a38d7005bb8a0318bb46e01e",
+        "use": "zic/zdump source"
+      },
+      {
+        "name": "workman.sh",
+        "bytes": 1190,
+        "sha256": "7d9c660960a0227415512bca5761f25310390eadee8f2540736103c9d5080000",
+        "use": "not read"
+      },
+      {
+        "name": "zdump.8",
+        "bytes": 6838,
+        "sha256": "9169340a4c1590ab992f6d6f51a5b6c26c2f8f9796ec5bc673783ec14c0b987a",
+        "use": "not read"
+      },
+      {
+        "name": "zdump.8.txt",
+        "bytes": 7355,
+        "sha256": "ea3b0c8148174d0b6c7f223ddeca997b08f65cad672547eddc0335582d9032fd",
+        "use": "not read"
+      },
+      {
+        "name": "zdump.c",
+        "bytes": 33964,
+        "sha256": "72c0e35c7a6ea635a2b2e2a1afa0ba58d4df8b264c8942c6922fcd8e152fb655",
+        "use": "zic/zdump source"
+      },
+      {
+        "name": "zic.8",
+        "bytes": 26102,
+        "sha256": "34d8d42718508af1cc378e497e1d244d3e505e9255d70bb42f1ea0523dcbf2b2",
+        "use": "not read"
+      },
+      {
+        "name": "zic.8.txt",
+        "bytes": 28770,
+        "sha256": "d205026b10d121f294c4b91ab25043733a2d64ea404030c23e4def987a46e7a5",
+        "use": "not read"
+      },
+      {
+        "name": "zic.c",
+        "bytes": 110651,
+        "sha256": "d88a902537b02c729a665a291bd40b77509f84642a95b0732da109ce05ffe681",
+        "use": "zic/zdump source"
+      }
+    ]
+  },
+  "build": {
+    "makeEquivalent": "make PACKRATDATA=backzone PACKRATLIST=zone.tab tzdata.zi; zic -d DIR tzdata.zi",
+    "ziguard": "awk -v DATAFORM=main -v PACKRATDATA=backzone -v PACKRATLIST=zone.tab -f ziguard.awk africa antarctica asia australasia europe northamerica southamerica etcetera factory backward backzone >main.zi",
+    "zishrink": "LC_ALL=C awk -v dataform=main -v deps='ziguard.awk africa antarctica asia australasia  europe northamerica southamerica etcetera factory backward backzone zone.tab zishrink.awk' -v redo=posix_right -v version=2025c -f zishrink.awk main.zi >tzdata.zi",
+    "zic": "zic -d DIR tzdata.zi",
+    "zicOptions": "defaults of zic 2025c: -b slim, no -L (no leap seconds), no -r",
+    "zicInputs": [
+      "africa",
+      "antarctica",
+      "asia",
+      "australasia",
+      "europe",
+      "northamerica",
+      "southamerica",
+      "etcetera",
+      "factory",
+      "backward",
+      "backzone"
+    ],
+    "packratList": "zone.tab",
+    "zicAndZdump": "built from the tzcode tarball extracted over the tzdata tarball (one tree): make zic zdump"
+  },
+  "compiledTree": {
+    "zic": "zic (tzcode) 2025c",
+    "files": 598,
+    "sha256": "98ba2bd3eb549fced32814888318d478c96eb65d5fa5b482ee1d89ebb298bcc5",
+    "digestOf": "the lines '<path relative to the output directory> <sha256 of the file>\\n' of every compiled TZif file, sorted by path; informative only (another zic version may write different bytes for the same transitions)"
+  }
+}
