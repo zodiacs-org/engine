@@ -59,6 +59,7 @@ archives with a merge commit.
 | 0.1.1-rc.11 | `d88e0ff8db91e1183789763ad32feb2dac61716e35ad7676a943f7a1ad377862` | 70,989 | 30 | `be3585b3ebfeae1f69b56846b1cb6c31abf45735` | `be3585b` | Candidate, merged; the file `zodiacs-engine-0.1.1-rc.11.tgz` |
 | 0.1.1-rc.12 | `c4cf150fe8fb0b37f5769993c2e63275b2e5ef47b97d8a118aff3be00ebaf7f0` | 73,398 | 30 | `a1d0f2c6cefb2e83df397195515fa0558cf31185` | `a1d0f2c` | Candidate, merged |
 | 0.1.1-rc.13 | `12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840` | 79,092 | 30 | `f05ea02b3254ac5c00d203d64d2caf53e44c083a` | `4eee700` | Candidate, reviewed; its findings are addressed in rc.14 |
+| 0.1.1-rc.14 | `adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e` | 87,415 | 30 | `03db4bb602377896283775920519b26d1f19a890` | "Carry the packed 0.1.1-rc.14 tarball" | Candidate under review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -86,6 +87,8 @@ pushed or published, and neither is carried here:
 rc.14 was rebuilt with those fixes each time. See
 `docs/evidence/rc14-20260928/`.
 
-On 2026-09-28 every archive above was rebuilt from its source commit with
-`--rebuild-all` and the locked toolchain (Node 22.22.2, npm 10.9.7) and matched
-its recorded bytes. The record is in `docs/evidence/rc14-20260928/`.
+On 2026-09-28 every archive above through rc.13 was rebuilt from its source
+commit with `--rebuild-all` and the locked toolchain (Node 22.22.2, npm 10.9.7)
+and matched its recorded bytes; rc.14's source packed to the same bytes on Node
+20.19.0, 22.22.2 and 24.21.0 before its archive was committed. The record is in
+`docs/evidence/rc14-20260928/`.
