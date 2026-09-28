@@ -7,9 +7,12 @@ of 1919: local mean time, then railway or city time, then standard time, and
 summer time where it applied. `COVERAGE.md` lists the places and what is left
 out.
 
-The data are licensed under the Creative Commons Attribution 4.0
-International licence (`LICENSE`). They are not part of the `@zodiacs/engine`
-npm package: the package's `files` list leaves `atlas/` out.
+The data and the documentation are licensed under the Creative Commons
+Attribution 4.0 International licence (`LICENSE`); the tools and the schema
+are MIT, like the rest of the repository's code. `LICENSING.md` says which
+licence covers which file, and what the atlas quotes and copies. None of it
+is part of the `@zodiacs/engine` npm package: the package's `files` list
+leaves `atlas/` out.
 
 ## What is here
 
@@ -26,6 +29,7 @@ npm package: the package's `files` list leaves `atlas/` out.
 | `tzdb/` | the tzdb 2025c extract the comparison reads, and the differences found |
 | `TZDB-DIFFERENCES.md` | every difference from tzdb 2025c with backzone, explained, and where they agree |
 | `CORRECTIONS.md` | how corrections are accepted, and the log of accepted ones |
+| `LICENSE`, `LICENSING.md` | the text of CC BY 4.0, and which licence covers which part of the atlas |
 
 ## The rules for the data
 
@@ -172,8 +176,6 @@ conformance recipe (`conformance/arbiters/l3/README.md`) and run
 Cite the rule ids and versions you relied on. Place coordinates come from
 GeoNames (https://www.geonames.org/, CC BY 4.0); keep that attribution when
 you redistribute `data/places.json` (see `longitudeSource` in
-`data/atlas.json` for what was copied). The texts of the sources, printed
-between 1870 and 1919, are in the public domain. The scans and OCR text
-through which they were read are the archives' (Gallica, the Library of
-Congress, the Internet Archive); the atlas copies neither, and links to them
-and quotes short excerpts of the texts only.
+`data/atlas.json` for what was copied). `LICENSING.md` covers the rest:
+the source texts, which are in the public domain, and the archives' scans
+and OCR, which the atlas links to and does not copy.
