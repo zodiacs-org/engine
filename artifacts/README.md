@@ -16,12 +16,17 @@ included, so it needs full history. It fails unless:
 - in every commit, `artifacts/`, where present, is a real directory holding
   only regular files named `README.md`, `archives.json`,
   `zodiacs-engine-<version>.tgz` or `zodiacs-engine-<version>.sha256`: no
-  symbolic link, subdirectory or other file;
+  symbolic link, subdirectory or other file, and no two of its names, nor
+  another top-level name and `artifacts`, that differ only in case;
 - `archives.json` is append-only: every version of it committed anywhere in
   history is a prefix of HEAD's, entry for entry, and each commit's extends its
   parents'. Its superseded entries are exactly the ones pinned in the script:
   rc.11's first packing, allowed only in commit `00bdae7`, where it was
   committed;
+- every recorded version, every `<version>` in a file name here, and
+  `package.json`'s version at HEAD is a strict semantic version (SemVer 2.0.0
+  with no `v` prefix and no build metadata), and no two carried versions are
+  equal as npm compares them (`semver.eq`);
 - every archive in HEAD's tree has a carried entry whose digest, size and file
   count it matches, every carried entry's archive and receipt are in HEAD's
   tree with the receipt naming the recorded bytes, and this README lists every
@@ -35,7 +40,9 @@ included, so it needs full history. It fails unless:
 - once the current version's archive is carried, a clean worktree of HEAD,
   built and packed, reproduces it byte for byte. With `--rebuild-all`, which a
   second CI job runs, every recorded archive is also rebuilt from its source
-  commit and must match.
+  commit and must match. Each rebuild's worktree installs its commit's locked
+  dependencies afresh with `npm ci` (the npm cache may supply them) and builds
+  with those alone: nothing is taken from the checkout's `node_modules`.
 
 The check cannot detect history rewritten before CI sees it, and it relies on
 merge commits. A squash or rebase merge rewrites the commits an archive's
@@ -59,13 +66,24 @@ version. Only `d88e0ff8…` is rc.11; `13d637db…` must not be installed or cit
 as rc.11. The check now allows those first bytes in `00bdae7` alone, and the
 manifest cannot add another exception.
 
-A first local build of rc.14, SHA-256
-`5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02` (85,104
-bytes, packed from `74a4471`), was never pushed or published and is not carried
-here. Its review found ways past this check, a chart Sun flagged far from
-J2000 and the ΔT attribution naming the wrong file, and it packed a
-LICENSING.md that the merge of main then changed under the same version. rc.14
-was rebuilt from the merged source with those fixes. See
+Two local builds of rc.14 were superseded before publication. Neither was
+pushed or published, and neither is carried here:
+
+- the first, SHA-256
+  `5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02` (85,104
+  bytes), packed from `74a4471` and carried locally in `cca9f44`. Its review
+  found ways past this check, a chart Sun flagged far from J2000 and the ΔT
+  attribution naming the wrong file, and it packed a LICENSING.md that the
+  merge of main then changed under the same version;
+- the second, SHA-256
+  `d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4` (86,867
+  bytes), packed from `90d6cdb` and carried locally in `a4ee426`. Its review
+  found three more ways past this check (a version that npm reads as an
+  existing one, a rebuild decided by the checkout's `node_modules`, and a case
+  variant of `artifacts/`) and wording errors in its packed README and
+  CHANGELOG.
+
+rc.14 was rebuilt with those fixes each time. See
 `docs/evidence/rc14-20260928/`.
 
 On 2026-09-28 every archive above was rebuilt from its source commit with

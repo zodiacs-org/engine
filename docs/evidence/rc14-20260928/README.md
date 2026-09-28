@@ -1,45 +1,60 @@
 # 0.1.1-rc.14 checks, 2026-09-28
 
-rc.14 answers two independent reviews. The first reviewed rc.13 and made three
-major, five minor and three informational findings. The second reviewed a first
-local build of rc.14 and found one blocker and four minor issues. rc.13's
-commits (`f05ea02`, `4eee700`) and its archive (`12db9dce…`) are unchanged.
-Each finding below says what changed and which file here shows it.
+rc.14 answers three independent reviews. The first reviewed rc.13 and made
+three major, five minor and three informational findings. The second reviewed
+a first local build of rc.14 and found one blocker and four minor issues. The
+third reviewed a second local build and found no blocker and no major issue,
+three minor defects and wording errors in packed files. rc.13's commits
+(`f05ea02`, `4eee700`) and its archive (`12db9dce…`) are unchanged. Each
+finding below says what changed and which file here shows it.
 `validation.json` gathers the results; every figure in it is read from these
-files. Local paths in the outputs are shortened to `<checkout>`, `<work>` and
-`<tmp>`.
+files. Local paths in the outputs are shortened to `<checkout>`, `<work>`,
+`<tmp>` and `<consumer>`.
 
 ## The archive
 
-`artifacts/zodiacs-engine-0.1.1-rc.14.tgz` is carried by the commit after the
-one that adds this directory: SHA-256
-`d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4`, 86,867
+`artifacts/zodiacs-engine-0.1.1-rc.14.tgz` is packed from the commit that
+brings this version of this file, and carried by that commit's child: SHA-256
+`adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e`, 87,415
 bytes, 30 files. It was packed on Node 22.22.2 (npm 10.9.7). A second clean
 build and pack, and clean builds and packs on Node 20.19.0 (npm 10.8.2) and
 24.21.0 (npm 11.19.0), gave the same bytes (`pack.json`, `second-pack.json`,
 `pack-determinism.log`).
 
-## The first rc.14 build, superseded before publication
+## Two builds superseded before publication
 
-A first build of rc.14, SHA-256
+Neither build below was pushed, published or cited anywhere public, and
+neither is in any commit of this history, so the archive check has nothing to
+record for them. Each time, rc.14 was rebuilt rather than versioned anew.
+
+The first build, SHA-256
 `5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02` (85,104
 bytes, 30 files), was packed from `74a4471` and carried locally in `cca9f44`.
-It was never pushed, published or cited anywhere public. Its review found:
+Its review found:
 
 - a blocker: it packed LICENSING.md from before main's conformance section, so
   merging main, as the release must, changed a packed file under the same
   version, and the archive check would fail on the merge;
 - three ways past the archive check;
-- the chart's Sun flagged out of bounds far from J2000, at 1,407 of the 7,994
-  solstices in `EPHEMERIS_SPAN` (none in rc.13);
+- the chart's Sun flagged out of bounds far from J2000: at 1,408 of the 7,995
+  solstices in `EPHEMERIS_SPAN`, by the corrected count below (none in
+  rc.13);
 - NOTICE, LICENSING.md and the README naming the wrong file for the Table S15
   values.
 
-Since that build was never published, rc.14 was rebuilt rather than versioned
-anew. `cca9f44` was dropped, `74a4471` stays as the base of the fixes, main
-(`8c4946b`) was merged into it in `8c3d94f`, and the fixes and this archive
-follow. The first build's bytes are in no commit of this history, so the
-archive check has nothing to record for them.
+`cca9f44` was dropped, `74a4471` stays as the base of the fixes, and main
+(`8c4946b`) was merged into it in `8c3d94f`.
+
+The second build, SHA-256
+`d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4` (86,867
+bytes, 30 files), was packed from `90d6cdb`, which holds the fixes for the
+first build's review, and carried locally in `a4ee426`; `a0440c2` followed with
+the conformance results. Its review found three more ways past the archive
+check and wording errors in the packed README and CHANGELOG, which only a new
+archive can correct: a solstice count one short, a timing taken from the first
+build, a licensing paragraph that left out `dist/deltat.js`, and a link to a
+branch. `a4ee426` and `a0440c2` were dropped, `90d6cdb` stays as the base,
+and the fixes, the conformance results and this archive follow.
 
 ## Findings of the rc.13 review
 
@@ -76,8 +91,8 @@ version, the commit that introduces the archive is the source commit or a
 child of it, and the packed `package.json`, README, CHANGELOG, LICENSE,
 LICENSING.md and NOTICE are byte-identical to the source commit's.
 `--rebuild-all` rebuilds every archive from its source commit in a temporary
-worktree; a second CI job runs it. The second review's fixes to this check are
-under M1 and B1 below.
+worktree; a second CI job runs it. The later reviews' fixes to this check are
+under M1 and B1, and F1 to F3, below.
 
 - `review-synthetic.log`: the first review's two synthetic repositories,
   copied and given one commit that records the manifest. The rc.13 check
@@ -87,10 +102,10 @@ under M1 and B1 below.
   manifest in those synthetic trees, such as an archive that is not a tar file.
 - `archive-binding.log`: the default check on Node 20.19.0, 22.22.2 and
   24.21.0 before rc.14's archive is committed, so its rebuild is skipped: 8
-  recorded archives across 45 commits.
+  recorded archives (7 carried, 1 superseded) across 46 commits.
 - `archive-rebuilds.log`: `--rebuild-all` rebuilt all eight recorded archives
   from their source commits, rc.11's superseded packing included, byte for
-  byte.
+  byte, each in a worktree that `npm ci` installed afresh.
 
 ### 3. The Sun's exemption (major)
 
@@ -164,9 +179,10 @@ canonical URLs point to https://zodiacs.org/developers/engine/reference/.
 - `performance.json`, fastest of 63 runs per build on a shared four-core
   machine: in the review's worst case `findConfiguredAspects` took 1.72 s in
   rc.14 and 0.19 s in rc.12, and `findDeclinationAspects` 0.47 s and 0.07 s.
-  The second review measured 1.86 s and 0.48 s for rc.14 on the same
-  workload; the CHANGELOG gives both. An ordinary chart's configured aspects
-  and declinations took under 0.3 ms each.
+  An ordinary chart's configured aspects and declinations took under 0.3 ms
+  each. It was measured on the second build, whose `dist/` this build's
+  matches file for file (`dist-identity.log`), and the CHANGELOG gives these
+  figures alone.
 - Licence: `MIT AND CC-BY-4.0`. `package-contents.log` shows the check that
   `package.json`, LICENSING.md, NOTICE and the README agree, and the packed
   consumer checks the installed metadata.
@@ -209,7 +225,8 @@ package that npm packs.
 - The working tree: the check read HEAD's files from disk. It now reads git
   objects only, and rebuilds HEAD in a clean worktree. An archive that HEAD
   does not hold fails even when it is on disk, and uncommitted changes neither
-  pass nor fail the check.
+  pass nor fail the check. The rebuild still took the checkout's
+  `node_modules` when the lockfiles matched; F2 below removes that.
 
 The README and `artifacts/README.md` now state exactly what the check
 guarantees, and that it cannot detect history rewritten before CI sees it and
@@ -221,8 +238,8 @@ needs merge commits (a squash or rebase merge drops the source commits).
   HEAD, pass, as they should. The review's case 5 committed through a helper
   that ran `git add -A`, which added its "untracked" archive back; this copy
   commits without it, and the check fails the case.
-- `scripts/verify-archive-binding.test.mjs`: 13 cases, among them each of the
-  review's bypasses and the blocker, run in `npm test`.
+- `scripts/verify-archive-binding.test.mjs`: 17 cases, among them each bypass
+  the reviews found and the blocker, run in `npm test`.
 
 ### M2. The chart's Sun far from J2000 (minor)
 
@@ -230,17 +247,26 @@ The first build exempted a `Sun` row only within 0.001° of the ecliptic. The
 engine's own solar latitude exceeds that at most solstices far from J2000 (the
 longest run of years in which both stay within it is 1641 to 2413), reaching
 −68.3″ at the June solstice of year 2 and +25.8″ at that of 3902, while the
-real Sun's stays within about 1.2″. `chartDeclinations`
-now exempts the chart's own Sun at any latitude, as rc.13 did; the latitude
-rule applies to rows supplied to `declinationsForBodies`.
+real Sun's stays within about 1.2″. `chartDeclinations` now exempts the
+chart's own Sun at any latitude, as rc.13 did; the latitude rule applies to
+rows supplied to `declinationsForBodies`.
 
-- `sun-span.json`: at the engine's own 7,994 solstices from year 1 to 3997,
-  its solar latitude exceeds 3.6″ at 5,402, with a positive margin at 1,407.
-  rc.13 flags none of them, the first rc.14 build all 1,407, and this build
-  none.
-- `src/declination.test.ts` checks 2600-06-21T00:50:56Z, the June solstice of
-  year 2 and that of 3902: the chart's Sun is not flagged, while the same rows
-  given to `declinationsForBodies` are flagged wherever the margin is positive.
+- `sun-span.json`: at the engine's own 7,995 solstices in the span (June and
+  December of years 1 to 3997, and June of 3998), its solar latitude exceeds
+  3.6″ at 5,403, with a positive margin at 1,408. rc.13 flags none of them,
+  the first rc.14 build all 1,408, and this build none. The last, the June
+  solstice of 3998 (3998-06-19T17:56:46Z), has a margin of +29.4″.
+- The first build flags no solstice before 2591. Before 2000 the latitude
+  exceeds 3.6″ at 2,512 solstices, and the largest margin among them is
+  −3.608″: the latitude has the sign that pulls the Sun inside the bound, so
+  no early solstice can test the fix.
+- `src/declination.test.ts` checks 2591-06-20T20:25:27.709Z, the earliest
+  solstice the first build flags, 2600-06-21T00:50:56Z and the June solstice
+  of 3902: the chart's Sun is not flagged, while the same rows given to
+  `declinationsForBodies` are. All three fail on `74a4471`'s source and pass
+  on this one (`pre-fix-failures.log`). The June solstice of year 2, which the
+  test checked until the third review, has a margin of −68.3″, and the first
+  build did not flag it either.
 
 ### M4. The Table S15 values' file (minor)
 
@@ -249,25 +275,121 @@ a 161-byte re-export. They now say the package's ΔT module, exported as
 `@zodiacs/engine/deltat`, is in a shared chunk under `dist/` that
 `dist/deltat.js` re-exports. `npm run package:contents` checks that exactly one
 packed chunk holds the model and that `dist/deltat.js` re-exports it, without
-naming the chunk's hashed file name.
+naming the chunk's hashed file name, and, since the third review, that NOTICE,
+LICENSING.md and the README all say `dist/deltat.js` re-exports it.
 
 ### Informational
 
 - The earlier CHANGELOG entries now name pull request #5 of
   github.com/ZodiacsOfficial/sdk, which a reader can check.
-- The CHANGELOG's timings give the measured range, 1.7 s to 1.9 s.
+- The CHANGELOG's timings gave a range, 1.7 s to 1.9 s and 0.45 s to 0.48 s;
+  the third review found the 0.45 s taken from the first build, and they now
+  give this build's measurement (P2 below).
 - The README and `artifacts/README.md` say to merge with merge commits.
 - The TypeDoc canonical URL is unchanged; the site serves it.
+
+## Findings of the review of the second rc.14 build
+
+### F1. Versions that npm reads as the same (minor)
+
+The check keyed archives by file name, so a second archive under
+`0.1.1-rc.14+evil`, packed from a source commit with that version and changed
+engine code, passed in both modes; so did `v0.0.1` beside `0.0.1` in the
+review's synthetic cases, and a packed file changed under a HEAD version that
+differs only in build metadata, which skipped HEAD's rebuild. npm's
+`semver.eq` takes each of these for the other version. Every recorded version,
+every version in an archive's or receipt's file name, and `package.json`'s at
+HEAD must now be a strict semantic version (SemVer 2.0.0 with no `v` prefix and
+no build metadata), and no two carried versions may be equal under
+`semver.eq`.
+
+- `semver-replay.log` (`semver-replay.sh`): on real history, the review's
+  attack, which packs `0.1.1-rc.14+evil` to `dff11aca…` as the review found,
+  and a README changed under `0.1.1-rc.14+changed`. The check at `90d6cdb`
+  passes both, by default and with `--rebuild-all`; this one fails both.
+- `final-review-attacks.log` (`final-review-attacks.mjs`): the review's 16
+  synthetic cases, copied with a two-line note at the top. This check refuses
+  all 15 attacks, among them N3, N3b and N10, which are these, and passes the
+  control.
+- `scripts/verify-archive-binding.test.mjs` has all three cases.
+
+### F2. The rebuild and the checkout's `node_modules` (minor)
+
+HEAD's rebuild reused the checkout's ignored `node_modules` when its lockfile
+matched the commit's, so the check did not read git objects only: the
+review's replaced `tsup` gave a false failure, and a false pass for changed
+engine code. Each rebuild's worktree now installs its commit's locked
+dependencies afresh with `npm ci` (the npm cache may supply them) and builds
+with those alone. Nothing is linked or reused from the checkout, and the
+rebuild runs with no `node_modules/.bin` on `PATH` (`npm run` puts the
+checkout's there), no `NODE_PATH`, and none of npm's variables naming the
+checkout's package. The wording in the README, the CHANGELOG,
+`artifacts/README.md` and the script's header was re-read and is now exactly
+true; each also says how the rebuild installs.
+
+- `node-modules-replay.log` (`node-modules-replay.sh`): the review's
+  demonstration on real history, with the second build carried on `90d6cdb`.
+  The check at `90d6cdb` fails with a failing `tsup` and passes changed engine
+  code with a `tsup` that copies `dist/` from the carried archive. This one
+  passes the first and fails the second, run directly or with the clone's
+  `node_modules/.bin` first on `PATH`, and with `--rebuild-all`.
+- `scripts/verify-archive-binding.test.mjs`: the same on a synthetic package
+  whose lockfile supplies its own `tsup`, run directly and as `npm run` starts
+  it; and a build tool that only the checkout's `node_modules/.bin` holds is
+  not found.
+
+### F3. A case variant of `artifacts/`
+
+The review's synthetic case N9, `Artifacts/` beside `artifacts/`, passed. On a
+case-insensitive checkout its files would be written over `artifacts/`'s. The
+check now refuses another top-level name that differs from `artifacts` only in
+case, and two names under `artifacts/` that do (such as the archives of
+`0.0.1-RC.1` and `0.0.1-rc.1`). `final-review-attacks.log` and a test show it.
+
+### F4. A model name in rc.11's evidence (minor)
+
+This came with main. `docs/evidence/rc11-20260928/RESULTS.md` named a model
+in one sentence, which now reads without it. Six files there had a scratch
+directory named after one in their paths; that path component is now
+`continuation`, and RESULTS.md, the directory's index (it has no README), says
+in one line that the paths were neutralized on 2026-09-28. Nothing else in
+those files changed, and rc.13's evidence is untouched.
+
+### P. Wording in the packed files
+
+1. The span holds 7,995 solstices, not 7,994. `sun-span.mjs` stopped at 3997
+   and so missed the June solstice of 3998, which the first build would also
+   have flagged: 1,408 in all, not 1,407. The scan, `sun-span.json`, the
+   CHANGELOG and this file are corrected.
+2. The CHANGELOG's "0.45 s to 0.48 s" took 0.45 s from the first build's
+   measurement. It now gives `performance.json`'s figures alone: 1.72 s and
+   0.47 s, where rc.12 took 0.19 s and 0.07 s.
+3. The README's licensing paragraph now says, as NOTICE and LICENSING.md do,
+   that `dist/deltat.js` re-exports the chunk that holds the ΔT values.
+4. The README linked the site's evidence ledger on a branch. It now links it
+   at commit `75ae549` of github.com/ZodiacsOfficial/site, which is on that
+   repository's main branch.
+
+### Informational
+
+- The year-2 test case, whose margin is −68.3″, is replaced as M2 above
+  describes.
+- The section on the archive above no longer says it is carried by "the
+  commit after the one that adds this directory".
+- `artifacts/README.md` names `cca9f44`, which carried the first build, and
+  records the second build.
+- The second build is recorded above, with why it was superseded.
 
 ## Gates
 
 | Gate | Result | File |
 | --- | --- | --- |
 | Typecheck, Node 22.22.2, 20.19.0, 24.21.0 | pass | `typecheck.log`, `test-matrix.log` |
-| Tests, Node 22.22.2, 20.19.0, 24.21.0 | 2,677 passed in 34 files, each | `full-tests.log`, `test-matrix.log` |
-| New and changed tests on earlier sources | fail as they should: 27 of 59 on rc.13's, 11 of 38 on the first rc.14 build's | `pre-fix-failures.log` |
+| Tests, Node 22.22.2, 20.19.0, 24.21.0 | 2,681 passed in 34 files, each | `full-tests.log`, `test-matrix.log` |
+| New and changed tests on earlier sources | fail as they should: 31 of 63 on rc.13's, 16 of 42 on the first rc.14 build's, 5 of 17 on the second's | `pre-fix-failures.log` |
 | Build, export smoke, package contents, pack dry run | pass | `build.log`, `exports.log`, `package-contents.log`, `pack-dry-run.log` |
 | Pack determinism (Node 20.19.0, 22.22.2 twice, 24.21.0) | identical | `pack-determinism.log` |
+| `dist/` against the second build's | identical | `dist-identity.log` |
 | Packed consumer (Node 20.19.0, 22.7.0, 22.22.2, 24.21.0) | pass | `packed-consumer-matrix.json` |
 | Plain import on unsupported and supported Node | fails and loads as documented | `node-support.log` |
 | Archive binding, default (Node 20.19.0, 22.22.2, 24.21.0) | pass | `archive-binding.log` |
@@ -275,15 +397,21 @@ naming the chunk's hashed file name.
 | The first review's synthetic repositories | rc.13's check passes both, this one fails both | `review-synthetic.log` |
 | The second review's attacks | all 8 refused | `review-binding-attacks.log` |
 | The blocker replayed on real history | both modes fail, as they must | `b1-replay.log` |
+| The third review's attacks | all 15 refused, the control passes | `final-review-attacks.log` |
+| Versions npm reads as the same, on real history | `90d6cdb`'s check passes both cases, this one fails both | `semver-replay.log` |
+| The checkout's `node_modules`, on real history | `90d6cdb`'s check fails and passes wrongly, this one does not | `node-modules-replay.log` |
 | Exact rc.10 compatibility | 571 of 571 | `compatibility.json` |
 | Exact oracle (rc.13's script) | 53,168 cases, 0 mismatches | `exact-oracle.json` |
 | Independent progression mapping | 204 cases, within 1 ms | `progression-independent.json` |
-| The chart's Sun at every solstice in the span | never flagged | `sun-span.json` |
+| The chart's Sun at every solstice in the span | flagged at none of 7,995 | `sun-span.json` |
 | Site adapter parity (site `f2bd0dd`) | 1,020 of 1,020 rows exact | `site-adoption-parity.json` |
 | Conformance: self-test, vectors, verdicts, RESULTS.md | 7 of 7; 500 conform; 232 pass, 222 fail, 46 unsupported, as committed; current | `conformance.log` |
 
-The same gates are rerun on the carrier commit from a clean clone, and
-`conformance/results/` is regenerated for rc.14 in the commit after it.
+`conformance/results/` is regenerated for rc.14 in the source commit, on Node
+22.22.2 as its CI job pins: every verdict is unchanged, and the files differ
+from main's only in the version they name. The same gates are rerun on the
+carrier commit from a clean full-history clone and reported with it, since that
+record cannot precede the archive.
 
 ## What is not established
 
@@ -294,7 +422,8 @@ The same gates are rerun on the carrier commit from a clean clone, and
 - `EPHEMERIS_SPAN` is where astronomy-engine evaluates at all, not where it is
   accurate; accuracy was compared only within `REFERENCE_SPAN`.
 - The archive check cannot detect history rewritten before CI sees it, and
-  needs merge commits.
+  needs merge commits. Its rebuilds need the npm registry, or an npm cache that
+  holds each commit's locked packages.
 - The physical 0.01″ declination target remains unmet.
 - The CI jobs added in rc.14 (the packed consumer on each runtime,
   `--rebuild-all`) have run here with the same scripts, not yet on GitHub
@@ -334,5 +463,8 @@ python docs/evidence/rc14-20260928/declination-truth.py dist/index.js de440s.bsp
 for each build to compare, `orb-difference.mjs` two builds' `dist/index.js`,
 `node-support.sh` an archive and a list of Node `bin` directories,
 `review-synthetic.mjs` the first review's directory and this checkout,
-`review-binding-attacks.mjs` this checkout's check and a scratch directory, and
-`b1-replay.sh` this checkout and the first build's archive.
+`review-binding-attacks.mjs` and `final-review-attacks.mjs` this checkout's
+check and a scratch directory, `b1-replay.sh` this checkout and the first
+build's archive, and `semver-replay.sh` and `node-modules-replay.sh` this
+checkout and the second build's archive, which is what `npm pack` gives for
+`90d6cdb`.

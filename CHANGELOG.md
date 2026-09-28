@@ -42,7 +42,7 @@
   from J2000 the drift reaches tens of arcseconds: −68.3″ at the June solstice
   of year 2, +25.8″ at that of 3902. So `chartDeclinations` never flags the
   chart's own Sun, at any latitude, as rc.13 did not; it is unflagged at all
-  7,994 solstices in `EPHEMERIS_SPAN`. `declinationsForBodies` exempts a
+  7,995 solstices in `EPHEMERIS_SPAN`. `declinationsForBodies` exempts a
   supplied row labelled `Sun` only within `SUN_BOUND_LATITUDE` (0.001°) of the
   ecliptic, and holds it to the strict rule beyond.
 - `trueObliquity` is the IAU 2006 mean obliquity plus astronomy-engine's
@@ -66,16 +66,23 @@
 - The archive check reads git objects only, never the working tree, and every
   commit reachable from HEAD, with no history simplification. The rc.13 check
   missed a rewrite on a merged side branch and accepted rc.11's first packing
-  in any commit; review of an earlier rc.14 build found three more ways past
-  it. Now:
+  in any commit; reviews of two earlier local rc.14 builds found more ways
+  past it. Now:
   - `artifacts/archives.json` records each archive's digest, size, file count
     and source commit. It is append-only: every committed version of it must
     be a prefix of HEAD's, and each commit's must extend its parents'. Its
     superseded entries are pinned in the script: rc.11's first packing, allowed
     only in 00bdae7, where it was committed.
+  - Every recorded version, and `package.json`'s at HEAD, must be a strict
+    semantic version, with no `v` prefix and no build metadata, and no two
+    carried versions may be equal as npm compares them (`semver.eq`). A second
+    archive under `0.1.1-rc.14+evil` or `v0.1.1-rc.14` is refused, and so is a
+    HEAD version that differs only in build metadata, which let the check skip
+    HEAD's rebuild.
   - In every commit, `artifacts/` must be a real directory holding only
     archives, receipts, the manifest and its README, as regular files: no
-    symbolic link and no subdirectory.
+    symbolic link, no subdirectory, and no two names, nor another top-level
+    entry and `artifacts`, that differ only in case.
   - Every version's receipt is checked, and nothing ever committed under
     `artifacts/` may be missing from HEAD.
   - Each archive's packed `package.json`, README, CHANGELOG and licence files
@@ -83,8 +90,10 @@
     introduces it must be that source commit or a child of it.
   - A clean worktree of HEAD must rebuild the current version's archive byte
     for byte, both by default and with `--rebuild-all`, which also rebuilds
-    every archive from its source commit; CI runs both. A change to a packed
-    file under a version already carried fails either way.
+    every archive from its source commit; CI runs both. Each rebuild installs
+    its commit's locked dependencies afresh with `npm ci` in that worktree and
+    takes nothing from the checkout's `node_modules`. A change to a packed file
+    under a version already carried fails either way.
   - Merge with merge commits: a squash or rebase merge rewrites the source
     commit, and the check then fails.
 - rc.14 includes main's conformance suite (`conformance/`, not packed) and the
@@ -95,11 +104,11 @@
   licences. Earlier entries refer to the separate earlier package by its
   repository, github.com/ZodiacsOfficial/sdk, instead of its npm name.
 - rc.13's exact decisions cost time. In the review's worst case, 256 bodies
-  under 64 custom rules (32,045 aspects), `findConfiguredAspects` took 1.7 s to
-  1.9 s in two independent measurements, where rc.12 took 0.19 s, and 256
-  declinations all within a 90° orb took 0.45 s to 0.48 s, where rc.12 took
-  0.07 s (each the fastest of repeated runs on Node 22.22.2). An ordinary
-  chart's configured aspects or declinations still take under a millisecond.
+  under 64 custom rules (32,045 aspects), `findConfiguredAspects` took 1.72 s,
+  where rc.12 took 0.19 s, and 256 declinations all within a 90° orb took
+  0.47 s, where rc.12 took 0.07 s (each the fastest of 63 runs on Node 22.22.2
+  on a shared four-core machine). An ordinary chart's configured aspects or
+  declinations still take under a millisecond.
 
 Migration: plain Node consumers need Node 20.19.0 or a later 20.x, or 22.7.0
 or later. Calculations at instants outside `EPHEMERIS_SPAN` throw `RangeError`.

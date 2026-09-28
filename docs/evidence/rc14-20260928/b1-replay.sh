@@ -6,7 +6,7 @@
 # modes. Both must fail, the default and --rebuild-all alike, while every
 # recorded archive still rebuilds from its source commit.
 #
-# usage: b1-replay.sh <engine checkout, with node_modules> <the first rc.14 build's .tgz>
+# usage: b1-replay.sh <engine checkout> <the first rc.14 build's .tgz>
 set -u
 ENGINE=$(cd "$1" && pwd)
 FIRST=$2
@@ -32,7 +32,6 @@ echo "replayed carrier: $(g log --oneline -1)"
 g merge -q --no-ff --no-edit 8c4946b
 echo "merged main:      $(g log --oneline -1)"
 echo "LICENSING.md changed by the merge: $(g diff --stat HEAD^1 HEAD -- LICENSING.md | tail -1)"
-ln -s "$ENGINE/node_modules" "$CLONE/node_modules"
 echo
 echo "== default: node scripts/verify-archive-binding.mjs"
 node "$ENGINE/scripts/verify-archive-binding.mjs" --root "$CLONE" 2>&1

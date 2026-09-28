@@ -5,75 +5,85 @@
 
  RUN  v2.1.9 <checkout>
 
- ✓ src/receipt.test.ts (36 tests) 1591ms
- ✓ src/declination.test.ts (25 tests) 914ms
-   ✓ longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size 527ms
- ✓ src/configured-aspects.test.ts (52 tests) 598ms
-   ✓ legacy compatibility > preserves defaults across seeded geometry, retrogrades, wrap and equal speeds 377ms
- ✓ src/house-systems.test.ts (1903 tests) 2248ms
-   ✓ house systems inside the polar circle > keeps the midheaven on Alcabitius's 10th cusp and computes every other system 309ms
- ✓ src/aspect-exactness.test.ts (8 tests) 8477ms
-   ✓ configured aspects under exact binary semantics > agree with the exact rational oracle on a decimal grid, wrapped and unwrapped, in both row orders 2234ms
-   ✓ configured aspects under exact binary semantics > agree with the oracle with several bodies, rules, caps and luminaries 1173ms
-   ✓ configured aspects under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 2588ms
-   ✓ configured aspects under exact binary semantics > uses a faithful rc.11 copy: away from boundaries its decisions match the oracle 1075ms
-   ✓ declination parallels under exact binary semantics > agree with the exact rational oracle on decimal and rotated declinations 937ms
-   ✓ declination parallels under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 452ms
- ✓ src/crossings.test.ts (50 tests) 405ms
- ✓ src/input-flags.test.ts (66 tests) 533ms
- ✓ src/geo/geonames-schema.test.ts (67 tests) 142ms
- ✓ src/progressions.test.ts (21 tests) 221ms
- ✓ src/points.test.ts (14 tests) 172ms
- ✓ src/engine.test.ts (24 tests) 514ms
-   ✓ public composition APIs > finds the known 1990 Saturn return triple pass 383ms
- ✓ src/geo/geonames.test.ts (10 tests) 26ms
- ✓ src/deltat.test.ts (12 tests) 384ms
- ✓ src/deltat-chart.test.ts (10 tests) 115ms
- ✓ src/crossings-ephemeris.test.ts (11 tests) 7332ms
-   ✓ the audit's s2 cases, with the site's answers > returns 2100 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 884ms
-   ✓ the audit's s2 cases, with the site's answers > returns 2400 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 538ms
-   ✓ the audit's s2 cases, with the site's answers > matches an hourly scan of the 2,600-day Moon window, crossing by crossing 1308ms
-   ✓ the audit's s2 cases, with the site's answers > returns Saturn's crossings of 0° from 1900 to 2100 at a 5-day step, and a daily scan agrees 3662ms
-   ✓ grazing crossing pairs on the ephemeris > keeps all three first-return passes for a natal Saturn 0.002° below the 2019 station 541ms
- ✓ src/public-input.test.ts (78 tests) 221ms
- ✓ src/porphyry.test.ts (14 tests) 255ms
- ✓ src/returns-bounds.test.ts (19 tests) 191ms
- ✓ scripts/verify-archive-binding.test.mjs (13 tests) 22802ms
-   ✓ archive binding check > passes a clean history and skips the rebuild until the version's archive exists 882ms
-   ✓ archive binding check > sees a rewrite on a side branch hidden by merge simplification 1008ms
-   ✓ archive binding check > sees an archive carried and removed on a merged side branch 1018ms
-   ✓ archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 3046ms
-   ✓ archive binding check > refuses a rewritten manifest that whitelists replaced bytes 1279ms
-   ✓ archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 1601ms
-   ✓ archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 614ms
-   ✓ archive binding check > reads HEAD from git objects, never the working tree 1613ms
-   ✓ archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 9313ms
-   ✓ archive binding check > checks the receipt of every version, not only the current one 743ms
-   ✓ archive binding check > binds each archive to its recorded source commit 446ms
-   ✓ archive binding check > refuses an archive carried by a commit that does not follow its source commit 349ms
-   ✓ archive binding check > refuses an archive without a manifest entry, and a shallow checkout 742ms
- ✓ src/receipt-conventions.test.ts (6 tests) 136ms
- ✓ src/geo.test.ts (40 tests) 54ms
- ✓ src/reference-span.test.ts (7 tests) 456ms
- ✓ src/receipt-json.test.ts (88 tests) 95ms
- ✓ src/houses-regression.test.ts (6 tests) 581ms
- ✓ src/returns-crossings.test.ts (16 tests) 36ms
- ✓ src/geo/timezone-precision.test.ts (17 tests) 151ms
- ✓ src/exact.test.ts (5 tests) 5788ms
-   ✓ exact sums of binary64 terms > round once to the nearest double, ties to even, and give the exact sign 5483ms
- ✓ src/ephemeris-span.test.ts (6 tests) 319ms
- ✓ src/body-label.test.ts (15 tests) 39ms
- ✓ src/placidus-limit.test.ts (1 test) 1309ms
-   ✓ the Placidus limit against the ERFA arbiter (brief v1 rule 1h) > computes Placidus exactly where the arbiter's limit allows it 1307ms
- ✓ src/speed.test.ts (7 tests) 1212ms
-   ✓ longitude speeds > are the derivative of the reported longitude to 0.01″ a day 401ms
- ✓ src/ephemeris-errors.test.ts (6 tests) 200ms
- ✓ src/angles-erfa.test.ts (12 tests) 178ms
- ✓ src/aspects.test.ts (12 tests) 18069ms
-   ✓ findAspects applying flags against the engine's own motion > match the sign of the orb's rate, measured over ±1 s, every 30 minutes in the first quarter of 2024 17804ms
+ ✓ src/receipt.test.ts (36 tests) 851ms
+ ✓ src/declination.test.ts (25 tests) 631ms
+   ✓ longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size 365ms
+ ✓ src/configured-aspects.test.ts (52 tests) 592ms
+   ✓ legacy compatibility > preserves defaults across seeded geometry, retrogrades, wrap and equal speeds 353ms
+ ✓ src/house-systems.test.ts (1903 tests) 2624ms
+   ✓ house systems inside the polar circle > keeps the midheaven on Alcabitius's 10th cusp and computes every other system 622ms
+ ✓ src/aspect-exactness.test.ts (8 tests) 10504ms
+   ✓ configured aspects under exact binary semantics > agree with the exact rational oracle on a decimal grid, wrapped and unwrapped, in both row orders 2197ms
+   ✓ configured aspects under exact binary semantics > agree with the oracle with several bodies, rules, caps and luminaries 1121ms
+   ✓ configured aspects under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 4270ms
+   ✓ configured aspects under exact binary semantics > uses a faithful rc.11 copy: away from boundaries its decisions match the oracle 1283ms
+   ✓ declination parallels under exact binary semantics > agree with the exact rational oracle on decimal and rotated declinations 986ms
+   ✓ declination parallels under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 624ms
+ ✓ src/crossings.test.ts (50 tests) 403ms
+ ✓ src/input-flags.test.ts (66 tests) 882ms
+   ✓ public birth flag boundary > does not coerce flag members or invoke array member getters/iterators 309ms
+ ✓ src/geo/geonames-schema.test.ts (67 tests) 211ms
+ ✓ src/progressions.test.ts (21 tests) 265ms
+ ✓ src/points.test.ts (14 tests) 255ms
+ ✓ src/engine.test.ts (24 tests) 562ms
+   ✓ public composition APIs > finds the known 1990 Saturn return triple pass 445ms
+ ✓ src/geo/geonames.test.ts (10 tests) 58ms
+ ✓ src/deltat.test.ts (12 tests) 194ms
+ ✓ src/deltat-chart.test.ts (10 tests) 330ms
+ ✓ src/porphyry.test.ts (14 tests) 388ms
+ ✓ src/public-input.test.ts (78 tests) 278ms
+ ✓ src/crossings-ephemeris.test.ts (11 tests) 15260ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2100 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 1181ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2400 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 824ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2600 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 671ms
+   ✓ the audit's s2 cases, with the site's answers > matches an hourly scan of the 2,600-day Moon window, crossing by crossing 3793ms
+   ✓ the audit's s2 cases, with the site's answers > returns Saturn's crossings of 0° from 1900 to 2100 at a 5-day step, and a daily scan agrees 7713ms
+   ✓ grazing crossing pairs on the ephemeris > keeps all three first-return passes for a natal Saturn 0.002° below the 2019 station 934ms
+ ✓ src/returns-bounds.test.ts (19 tests) 290ms
+ ✓ src/receipt-conventions.test.ts (6 tests) 128ms
+ ✓ src/geo.test.ts (40 tests) 166ms
+ ✓ src/reference-span.test.ts (7 tests) 477ms
+   ✓ reference span (rule 1e) > flags a chart in 2300 and one in 900, and none inside the span 364ms
+ ✓ src/exact.test.ts (5 tests) 6807ms
+   ✓ exact sums of binary64 terms > round once to the nearest double, ties to even, and give the exact sign 6542ms
+ ✓ src/receipt-json.test.ts (88 tests) 212ms
+ ✓ src/houses-regression.test.ts (6 tests) 683ms
+   ✓ shared rising intersection > satisfies the horizon and rising-direction geometry in both hemispheres 343ms
+ ✓ src/returns-crossings.test.ts (16 tests) 14ms
+ ✓ src/geo/timezone-precision.test.ts (17 tests) 155ms
+ ✓ src/ephemeris-span.test.ts (6 tests) 689ms
+   ✓ the ephemeris span > applies to every calculation that evaluates the ephemeris 376ms
+ ✓ src/placidus-limit.test.ts (1 test) 1053ms
+   ✓ the Placidus limit against the ERFA arbiter (brief v1 rule 1h) > computes Placidus exactly where the arbiter's limit allows it 1052ms
+ ✓ src/body-label.test.ts (15 tests) 92ms
+ ✓ src/speed.test.ts (7 tests) 1441ms
+   ✓ longitude speeds > are the derivative of the reported longitude to 0.01″ a day 410ms
+ ✓ src/aspects.test.ts (12 tests) 32355ms
+   ✓ aspectMotion > agrees with linear motion on 400,000 seeded pairs 357ms
+   ✓ findAspects applying flags against the engine's own motion > match the sign of the orb's rate, measured over ±1 s, every 30 minutes in the first quarter of 2024 31972ms
+ ✓ src/ephemeris-errors.test.ts (6 tests) 561ms
+ ✓ src/angles-erfa.test.ts (12 tests) 287ms
+ ✓ scripts/verify-archive-binding.test.mjs (17 tests) 78009ms
+   ✓ archive binding check > passes a clean history and skips the rebuild until the version's archive exists 1457ms
+   ✓ archive binding check > sees a rewrite on a side branch hidden by merge simplification 2872ms
+   ✓ archive binding check > sees an archive carried and removed on a merged side branch 1418ms
+   ✓ archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 4521ms
+   ✓ archive binding check > refuses a rewritten manifest that whitelists replaced bytes 2233ms
+   ✓ archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 2998ms
+   ✓ archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 1352ms
+   ✓ archive binding check > reads HEAD from git objects, never the working tree 3880ms
+   ✓ archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 13693ms
+   ✓ archive binding check > checks the receipt of every version, not only the current one 1224ms
+   ✓ archive binding check > binds each archive to its recorded source commit 744ms
+   ✓ archive binding check > refuses an archive carried by a commit that does not follow its source commit 1163ms
+   ✓ archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata 2849ms
+   ✓ archive binding check > refuses names that differ only in case: a variant of artifacts/, or two archives in it 2078ms
+   ✓ archive binding check > rebuilds from the worktree's own npm ci, whatever the checkout's node_modules holds 32540ms
+   ✓ archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH 1831ms
+   ✓ archive binding check > refuses an archive without a manifest entry, and a shallow checkout 991ms
 
  Test Files  34 passed (34)
-      Tests  2677 passed (2677)
-   Start at  19:26:41
-   Duration  40.79s (transform 2.62s, setup 0ms, collect 7.60s, tests 75.76s, environment 137ms, prepare 6.04s)
+      Tests  2681 passed (2681)
+   Start at  21:34:07
+   Duration  79.34s (transform 3.36s, setup 0ms, collect 11.44s, tests 157.71s, environment 28ms, prepare 9.38s)
 

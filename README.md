@@ -35,22 +35,27 @@ records the artifact hash and runtime, and it removes its temporary consumer
 directory, which must have no `node_modules` above it (set `TMPDIR` if
 needed). A packed candidate is not a published release.
 
-`artifacts/archives.json` records every carried archive: its digest, size,
-file count and the commit it was packed from. On the history it is given, CI
-checks from git objects alone, never the working tree, that in every commit:
+`artifacts/archives.json` records every carried archive: its digest, size, file
+count and the commit it was packed from. On the history it is given, CI checks
+from git objects alone, never the working tree, that in every commit:
 `artifacts/`, where present, is a real directory holding only archives,
-receipts, the manifest and its README, as regular files; each archive and
-receipt holds only its
-recorded bytes, the one exception, pinned in the check, being rc.11's first
-packing in commit `00bdae7`; and the manifest only ever gains entries. It also
-checks that nothing committed under `artifacts/` has been removed; that each
-archive's packed `package.json`, README, CHANGELOG and licence files match its
-source commit's byte for byte, and that it was committed by that commit or a
-child of it; and, once the current version's archive is carried, that a clean
-checkout of HEAD rebuilds it byte for byte (`--rebuild-all` also rebuilds every
-archive from its source commit). It cannot detect history rewritten before CI
-sees it, and it needs merge commits: a squash or rebase merge drops the source
-commits it checks against, and the check then fails.
+receipts, the manifest and its README, as regular files, and no two of its
+names, nor another top-level name and `artifacts`, differ only in case; each
+archive and receipt holds only its recorded bytes, the one exception, pinned in
+the check, being rc.11's first packing in commit `00bdae7`; and the manifest
+only ever gains entries. Every recorded version, and `package.json`'s at HEAD,
+must be a strict semantic version, with no `v` prefix and no build metadata,
+and no two carried versions may be equal as npm compares them. It also checks
+that nothing committed under `artifacts/` has been removed; that each archive's
+packed `package.json`, README, CHANGELOG and licence files match its source
+commit's byte for byte, and that it was committed by that commit or a child of
+it; and, once the current version's archive is carried, that a clean worktree
+of HEAD rebuilds it byte for byte (`--rebuild-all` also rebuilds every archive
+from its source commit). Each rebuild installs that commit's locked
+dependencies afresh with `npm ci` and takes nothing from the checkout's
+`node_modules`. It cannot detect history rewritten before CI sees it, and it
+needs merge commits: a squash or rebase merge drops the source commits it
+checks against, and the check then fails.
 
 This candidate declares the Node versions that can load its dependency and the
 licence of its ΔT values, refuses instants outside the years astronomy-engine
@@ -506,7 +511,7 @@ bounded iteration and falls back if it cannot converge; it never returns the
 last unconverged iterate as a successful construction.
 
 See [CHANGELOG.md](CHANGELOG.md) for candidate changes. Reference coverage and
-known limits are recorded in the site [platform evidence ledger](https://github.com/zodiacs-org/site/blob/codex/platform-stage-a/docs/platform/EVIDENCE.md).
+known limits are recorded in the site [platform evidence ledger](https://github.com/ZodiacsOfficial/site/blob/75ae549c6bcedba67ccce7d467e1b54af0c83070/docs/platform/EVIDENCE.md).
 The date parser's representable range is not a claim of astronomical accuracy
 across that range. Reference cases are finite; broader numerical scope review
 remains a release gate.
@@ -662,8 +667,8 @@ full provenance audit and the explicit Swiss Ephemeris exclusion.
 The package's licence expression is `MIT AND CC-BY-4.0`: the code is MIT
 ([LICENSE](LICENSE)), and the 32 values of Stephenson, Morrison & Hohenkerk's
 Table S15 in the package's ΔT module (`@zodiacs/engine/deltat`, which the build
-places in a shared chunk under `dist/`) are CC BY 4.0, attributed in
-[NOTICE](NOTICE).
+places in a shared chunk under `dist/` that `dist/deltat.js` re-exports) are
+CC BY 4.0, attributed in [NOTICE](NOTICE).
 
 The npm package contains no place or timezone database. GeoNames attribution
 and the host-ICU historical-timezone caveat are recorded in [NOTICE](NOTICE),

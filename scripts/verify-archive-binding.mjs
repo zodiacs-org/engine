@@ -7,13 +7,16 @@
  * 1. Shape. In every commit reachable from HEAD, artifacts, where present, is
  *    a real directory whose entries are all regular files named README.md,
  *    archives.json, zodiacs-engine-<version>.tgz or
- *    zodiacs-engine-<version>.sha256: no symbolic link, subdirectory or other
- *    file.
+ *    zodiacs-engine-<version>.sha256, each <version> strict as in point 2: no
+ *    symbolic link, subdirectory or other file, and no two names, nor another
+ *    top-level entry and artifacts, that differ only in case.
  * 2. Manifest. archives.json at HEAD is well formed, with one carried entry
  *    per file. It is append-only: every version of it committed anywhere in
  *    history is a prefix of HEAD's, entry for entry, and each commit's extends
  *    each of its parents'. Its superseded entries are exactly the ones pinned
- *    below.
+ *    below. Every recorded version, and package.json's at HEAD, is a strict
+ *    semantic version (no "v" prefix, no build metadata), and no two carried
+ *    versions are equal as npm compares them (semver.eq).
  * 3. HEAD. Every archive in HEAD's tree has a carried entry whose digest,
  *    size and file count it matches; every carried entry's archive and receipt
  *    are in HEAD's tree, the receipt naming the recorded bytes; and
@@ -28,21 +31,24 @@
  * 6. Rebuild. When HEAD's version has a carried archive, a clean worktree of
  *    HEAD is built and packed and must reproduce it byte for byte, so no later
  *    commit can change a packed file without a new version. With
- *    --rebuild-all, every entry is also rebuilt from its source commit.
+ *    --rebuild-all, every entry is also rebuilt from its source commit. Each
+ *    rebuild's worktree installs its commit's locked dependencies afresh with
+ *    npm ci (the npm cache may supply them) and builds with those alone:
+ *    nothing is taken from the checkout's node_modules, not even through PATH.
  *
  * Merge with merge commits: a squash or rebase merge rewrites the source
  * commits, and this check then fails.
  *
- * Usage, after npm ci: node scripts/verify-archive-binding.mjs [--rebuild-all] [--root DIR]
+ * Usage: node scripts/verify-archive-binding.mjs [--rebuild-all] [--root DIR]
  * --pinned-superseded FILE replaces the pinned list with a JSON array; it
  * exists for this script's tests on synthetic repositories, and CI never
  * passes it.
  */
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdtempSync, readFileSync, rmSync, symlinkSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { delimiter, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
 
@@ -72,7 +78,24 @@ const gitBytes = (...list) => execFileSync("git", list, { cwd: root, maxBuffer: 
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const METADATA = ["package.json", "README.md", "CHANGELOG.md", "LICENSE", "LICENSING.md", "NOTICE"];
 const MANIFEST = "artifacts/archives.json";
-const ALLOWED_PATH = /^artifacts\/(?:README\.md|archives\.json|zodiacs-engine-[0-9A-Za-z.+-]+\.(?:tgz|sha256))$/u;
+/** SemVer 2.0.0 without build metadata and without a "v" prefix: the one version form accepted. */
+const STRICT_VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?$/u;
+const strictVersion = (version) => typeof version === "string" && STRICT_VERSION.test(version);
+/**
+ * A version as npm's semver.eq compares it: a leading "v" or "=" and build
+ * metadata ignored. Null when even that is not a version.
+ */
+function semverKey(version) {
+  if (typeof version !== "string") return null;
+  const match = STRICT_VERSION.exec(version.trim().replace(/^[=v]+/u, "").replace(/\+[0-9A-Za-z.-]*$/u, ""));
+  return match ? `${match[1]}.${match[2]}.${match[3]}${match[4] ? `-${match[4]}` : ""}` : null;
+}
+/** README.md, archives.json, or an archive or receipt named for a strict version. */
+function allowedPath(path) {
+  if (path === "artifacts/README.md" || path === "artifacts/archives.json") return true;
+  const match = /^artifacts\/zodiacs-engine-(.+)\.(?:tgz|sha256)$/u.exec(path);
+  return match !== null && strictVersion(match[1]);
+}
 const short = (commit) => commit.slice(0, 12);
 const listed = (commits) => `${commits.slice(0, 8).map(short).join(", ")}${commits.length > 8 ? ", ..." : ""}`;
 
@@ -131,22 +154,31 @@ const parents = new Map(git("rev-list", "--parents", "HEAD").split("\n").filter(
 const objectCache = new Map(); // object id -> tgz digest, receipt text, or parsed manifest
 const trees = new Map(); // commit -> Map(path -> { object, content })
 const shapeProblems = new Map(); // problem -> commits
+const noteShape = (problem, commit) => shapeProblems.set(problem, [...(shapeProblems.get(problem) ?? []), commit]);
+const caseless = (name) => name.toUpperCase().toLowerCase();
 for (const commit of commits) {
   const here = new Map();
+  // On a case-insensitive checkout a case variant would share artifacts/.
+  for (const name of git("ls-tree", "-z", "--name-only", commit).split("\0").filter(Boolean)) {
+    if (name !== "artifacts" && caseless(name) === "artifacts") noteShape(`${name} differs from artifacts only in case`, commit);
+  }
+  const folded = new Map();
   for (const record of git("ls-tree", "-r", "-t", "-z", commit, "--", "artifacts").split("\0").filter(Boolean)) {
     const tab = record.indexOf("\t");
     const [mode, type, object] = record.slice(0, tab).split(" ");
     const path = record.slice(tab + 1);
     let problem = null;
+    if (folded.has(caseless(path))) noteShape(`${path} and ${folded.get(caseless(path))} differ only in case`, commit);
+    folded.set(caseless(path), path);
     if (path === "artifacts") {
       if (mode !== "040000" || type !== "tree") problem = `artifacts is not a directory (git mode ${mode}, ${type})`;
-    } else if (!ALLOWED_PATH.test(path)) {
-      problem = `${path} is not an archive, a receipt, archives.json or README.md (git mode ${mode}, ${type})`;
+    } else if (!allowedPath(path)) {
+      problem = `${path} is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode ${mode}, ${type})`;
     } else if (mode !== "100644" || type !== "blob") {
       problem = `${path} is not a regular file (git mode ${mode}, ${type})`;
     }
     if (problem) {
-      shapeProblems.set(problem, [...(shapeProblems.get(problem) ?? []), commit]);
+      noteShape(problem, commit);
       continue;
     }
     if (type !== "blob") continue;
@@ -183,6 +215,25 @@ for (const entry of entries) {
     HEX40.test(entry.sourceCommit) && ((entry.status === "carried" && entry.onlyInCommit === undefined) ||
       (entry.status === "superseded" && HEX40.test(entry.onlyInCommit)));
   if (!valid) fail(MANIFEST, `Malformed manifest entry: ${JSON.stringify(entry)}`);
+}
+// Versions: strict, and no two carried ones that npm would take for the same.
+const STRICT_RULE = 'not a strict semantic version (SemVer 2.0.0 with no "v" prefix and no build metadata)';
+for (const entry of entries) {
+  if (!strictVersion(entry.version)) fail(MANIFEST, `The recorded version ${JSON.stringify(entry.version)} is ${STRICT_RULE}.`);
+}
+let headVersion = null;
+try { headVersion = JSON.parse(git("show", "HEAD:package.json")).version; } catch { /* reported below */ }
+if (!strictVersion(headVersion)) fail("package.json", `The version in package.json at HEAD, ${JSON.stringify(headVersion)}, is ${STRICT_RULE}.`);
+const carriedKeys = new Map(); // semver.eq key -> first carried version with it
+for (const entry of entries.filter((item) => item.status === "carried")) {
+  const key = semverKey(entry.version);
+  if (key === null) continue;
+  const first = carriedKeys.get(key);
+  if (first === undefined) carriedKeys.set(key, entry.version);
+  else if (first !== entry.version) {
+    fail(MANIFEST, `The carried versions ${first} and ${entry.version} are equal as npm compares versions (semver.eq); ` +
+      "a version string names one byte sequence.");
+  }
 }
 if (failures > 0) done();
 const headEntries = entries.map(canonical);
@@ -330,19 +381,17 @@ for (const entry of entries) {
 }
 
 // 6. Rebuilds, each in a clean temporary worktree of a commit.
-const quiet = { stdio: ["ignore", "pipe", "pipe"], maxBuffer: BIG };
-/** The locked dependency tree of a directory's package-lock.json, or null without one. */
-function dependencyLock(directory) {
-  const path = join(directory, "package-lock.json");
-  if (!existsSync(path)) return null;
-  const lock = JSON.parse(readFileSync(path, "utf8"));
-  const packages = { ...lock.packages };
-  delete packages[""];
-  return JSON.stringify({ lockfileVersion: lock.lockfileVersion, packages });
-}
-// Used only to decide whether the installed toolchain can be reused; what is
-// verified comes from git objects.
-const installedLock = dependencyLock(root);
+/**
+ * The environment of every rebuild step: no node_modules/.bin on PATH (npm
+ * run puts the checkout's there), no NODE_PATH, and none of npm's variables
+ * naming the checkout's package, so only the worktree's own install builds it.
+ */
+const REBUILD_ENV = Object.fromEntries(Object.entries(process.env)
+  .filter(([key]) => !/^(?:npm_package_|npm_lifecycle_)|^(?:npm_config_local_prefix|INIT_CWD|NODE_PATH)$/iu.test(key))
+  .map(([key, value]) => [key, key.toUpperCase() !== "PATH" ? value
+    : value.split(delimiter).filter((entry) => entry !== "" && !/[\\/]node_modules[\\/]\.bin[\\/]?$/u.test(entry)).join(delimiter)]));
+const quiet = { stdio: ["ignore", "pipe", "pipe"], maxBuffer: BIG, env: REBUILD_ENV };
+const lastLines = (error) => String(error?.stderr ?? error?.message ?? error).trim().split("\n").slice(-3);
 /** The packed bytes of a worktree, or null after reporting why it could not be built. */
 function rebuild(directory, version, path) {
   const scratch = mkdtempSync(join(tmpdir(), "zodiacs-engine-pack-"));
@@ -352,8 +401,7 @@ function rebuild(directory, version, path) {
       { cwd: directory, encoding: "utf8", ...quiet }));
     return readFileSync(join(scratch, report.filename));
   } catch (error) {
-    const detail = String(error?.stderr ?? error?.message ?? error).trim().split("\n").slice(-3);
-    fail(path, `The ${version} source could not be rebuilt and packed.`, detail);
+    fail(path, `The ${version} source could not be rebuilt and packed.`, lastLines(error));
     return null;
   } finally {
     rmSync(scratch, { recursive: true, force: true });
@@ -382,12 +430,15 @@ function rebuildAt(commit, version, path, label, expected, where) {
   try {
     git("worktree", "add", "--detach", tree, commit);
     try {
-      // The installed toolchain is reused only when the commit locks the same dependency tree.
-      const lock = dependencyLock(tree);
-      if (lock !== null && lock === installedLock && existsSync(join(root, "node_modules"))) {
-        symlinkSync(join(root, "node_modules"), join(tree, "node_modules"), "dir");
-      } else if (lock !== null) {
-        execFileSync("npm", ["ci", "--ignore-scripts", "--no-audit", "--no-fund"], { cwd: tree, ...quiet });
+      // The commit's own locked toolchain, installed afresh (the npm cache may
+      // supply the packages); the checkout's node_modules is never used.
+      if (existsSync(join(tree, "package-lock.json"))) {
+        try {
+          execFileSync("npm", ["ci", "--ignore-scripts", "--no-audit", "--no-fund"], { cwd: tree, ...quiet });
+        } catch (error) {
+          fail(path, `The locked dependencies of ${where} could not be installed.`, lastLines(error));
+          return;
+        }
       }
       compare(path, label, expected, rebuild(tree, version, path), where);
     } finally {
@@ -398,9 +449,7 @@ function rebuildAt(commit, version, path, label, expected, where) {
   }
 }
 
-let headVersion = null;
-try { headVersion = JSON.parse(git("show", "HEAD:package.json")).version; } catch { /* no package at HEAD */ }
-const current = headVersion === null ? undefined : carried.get(`zodiacs-engine-${headVersion}.tgz`);
+const current = strictVersion(headVersion) ? carried.get(`zodiacs-engine-${headVersion}.tgz`) : undefined;
 if (current && headTree.get(`artifacts/${current.file}`)?.bytes) {
   const path = `artifacts/${current.file}`;
   rebuildAt(head, headVersion, path, path, headTree.get(path).bytes, `HEAD (${short(head)})`);

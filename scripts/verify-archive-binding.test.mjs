@@ -3,12 +3,15 @@
 // rc.14 found: a rewrite hidden by merge simplification, superseded bytes
 // restored later, a rewritten manifest, a symbolic link in place of
 // artifacts/, an archive present only in the working tree, other files under
-// artifacts/, and a packed file changed after its archive was carried.
+// artifacts/, a packed file changed after its archive was carried, a second
+// archive under a version npm reads as an existing one, a HEAD version
+// changed only by build metadata, a case variant of artifacts/, and a
+// checkout whose node_modules would decide the rebuild.
 import { spawnSync, execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { delimiter, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterAll, describe, expect, it } from "vitest";
 
@@ -67,9 +70,16 @@ function repository() {
     const run = spawnSync(process.execPath, [SCRIPT, "--root", dir, ...args], { encoding: "utf8" });
     return { status: run.status, output: `${run.stdout}${run.stderr}` };
   };
+  /** The check as `npm run archive:binding` starts it in this checkout: its node_modules/.bin first on PATH. */
+  const checkAsNpmRun = (...args) => {
+    const env = { ...process.env, PATH: `${join(dir, "node_modules", ".bin")}${delimiter}${process.env.PATH}`,
+      INIT_CWD: dir, npm_config_local_prefix: dir, npm_package_json: join(dir, "package.json"), npm_lifecycle_event: "archive:binding" };
+    const run = spawnSync(process.execPath, [SCRIPT, "--root", dir, ...args], { encoding: "utf8", env });
+    return { status: run.status, output: `${run.stdout}${run.stderr}` };
+  };
   mkdirSync(join(dir, "artifacts"), { recursive: true });
   git("init", "-q", "-b", "main");
-  return { dir, git, write, commit, metadata, pack, carry, entries, writeManifest, source, check };
+  return { dir, git, write, commit, metadata, pack, carry, entries, writeManifest, source, check, checkAsNpmRun };
 }
 
 /** A clean history: 0.0.1 carried from its source commit, then work on 0.0.2 with no archive yet. */
@@ -88,6 +98,19 @@ function pinnedFile(entries) {
   const path = join(scratch("zodiacs-binding-pinned-"), "pinned.json");
   writeFileSync(path, JSON.stringify(entries));
   return path;
+}
+
+/**
+ * Commit files through the index alone, never the working tree, which on a
+ * case-insensitive disk could not hold names that differ only in case.
+ */
+function commitBlobs(r, files, message) {
+  for (const [path, bytes] of Object.entries(files)) {
+    const blob = execFileSync("git", ["hash-object", "-w", "--stdin"], { cwd: r.dir, input: bytes, encoding: "utf8" }).trim();
+    r.git("update-index", "--add", "--cacheinfo", `100644,${blob},${path}`);
+  }
+  r.git("commit", "-q", "-m", message);
+  return r.git("rev-parse", "HEAD").trim();
 }
 
 /** Replace artifacts/ in the working tree with a symbolic link to a directory holding other bytes for 0.0.1. */
@@ -249,8 +272,8 @@ describe("archive binding check", () => {
     r.commit("another copy under artifacts/old, and a note");
     const result = r.check();
     expect(result.status).toBe(1);
-    expect(result.output).toContain("artifacts/old is not an archive, a receipt, archives.json or README.md (git mode 040000, tree)");
-    expect(result.output).toContain("artifacts/notes.txt is not an archive");
+    expect(result.output).toContain("artifacts/old is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 040000, tree)");
+    expect(result.output).toContain("artifacts/notes.txt is not README.md");
   });
 
   it("reads HEAD from git objects, never the working tree", () => {
@@ -328,6 +351,125 @@ describe("archive binding check", () => {
     const result = r.check();
     expect(result.status).toBe(1);
     expect(result.output).toContain("which is neither its source commit nor a child of it");
+  });
+
+  it("refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata", () => {
+    // The final rc.14 review's attack D and its variants: npm's semver.eq takes
+    // 0.0.1+evil and v0.0.1 for 0.0.1, so either could be installed for it.
+    for (const version of ["0.0.1+evil", "v0.0.1"]) {
+      const r = carriedOnce();
+      const source = r.source(version);
+      r.carry(version, r.pack(r.metadata(version), "export const evil = true;\n"), source);
+      r.commit(`carry ${version}`);
+      r.source("0.0.2");
+      const result = r.check();
+      expect(result.status).toBe(1);
+      expect(result.output).toContain(`artifacts/zodiacs-engine-${version}.tgz is not README.md, archives.json, or an archive or receipt named for a strict semantic version`);
+      expect(result.output).toContain(`The recorded version "${version}" is not a strict semantic version`);
+      expect(result.output).toContain(`The carried versions 0.0.1 and ${version} are equal as npm compares versions (semver.eq)`);
+    }
+    // A packed file changed after 0.0.1 is carried, the version changed only by build
+    // metadata: no archive is carried for "0.0.1+changed", so HEAD's rebuild would be skipped.
+    const r = carriedOnce();
+    r.source("0.0.1+changed", "Synthetic 0.0.1, with a changed README\n");
+    const result = r.check();
+    expect(result.status).toBe(1);
+    expect(result.output).toContain('The version in package.json at HEAD, "0.0.1+changed", is not a strict semantic version');
+    expect(result.output).not.toContain("skipping the rebuild of HEAD");
+  });
+
+  it("refuses names that differ only in case: a variant of artifacts/, or two archives in it", () => {
+    // A case-insensitive checkout would write Artifacts/'s bytes over artifacts/'s.
+    const variant = carriedOnce();
+    const evil = variant.pack(variant.metadata("0.0.1"), "export const evil = true;\n");
+    const commit = commitBlobs(variant, { "Artifacts/zodiacs-engine-0.0.1.tgz": evil }, "Artifacts/ with other bytes for 0.0.1");
+    const top = variant.check();
+    expect(top.status).toBe(1);
+    expect(top.output).toContain(`Artifacts differs from artifacts only in case in 1 commit(s): ${commit.slice(0, 12)}`);
+    // Two strict versions that npm tells apart but such a disk does not.
+    const inside = carriedOnce();
+    commitBlobs(inside, { "artifacts/zodiacs-engine-0.0.1-RC.1.tgz": evil, "artifacts/zodiacs-engine-0.0.1-rc.1.tgz": evil }, "two archive names that differ only in case");
+    const pair = inside.check();
+    expect(pair.status).toBe(1);
+    expect(pair.output).toContain("artifacts/zodiacs-engine-0.0.1-rc.1.tgz and artifacts/zodiacs-engine-0.0.1-RC.1.tgz differ only in case");
+  });
+
+  it("rebuilds from the worktree's own npm ci, whatever the checkout's node_modules holds", () => {
+    // The final rc.14 review's working-tree demonstration. The build runs tsup, which the
+    // lockfile provides from a local builder (a file: dependency, so npm ci needs no
+    // registry). The checkout's ignored node_modules/.bin/tsup is then replaced: first by
+    // one that fails, then by one that copies dist from the carried archive.
+    const r = repository();
+    const packageJson = `${JSON.stringify({ name: "@zodiacs/engine", version: "0.0.1", type: "module", scripts: { build: "tsup" },
+      devDependencies: { builder: "file:tools/builder" }, files: ["dist", "README.md", "CHANGELOG.md", "LICENSE", "LICENSING.md", "NOTICE"] }, null, 2)}\n`;
+    const builder = `${JSON.stringify({ name: "builder", version: "1.0.0", type: "module", bin: { tsup: "bin.js" } }, null, 2)}\n`;
+    const copySource = "#!/usr/bin/env node\nimport { cpSync, rmSync } from \"node:fs\";\nrmSync(\"dist\", { recursive: true, force: true });\ncpSync(\"src\", \"dist\", { recursive: true });\n";
+    for (const [name, text] of Object.entries({ ...r.metadata("0.0.1"), "package.json": packageJson, ".gitignore": "node_modules/\ndist/\n",
+      "src/index.js": "export const phase = \"New Moon\";\n", "tools/builder/package.json": builder, "tools/builder/bin.js": copySource })) r.write(name, text);
+    chmodSync(join(r.dir, "tools", "builder", "bin.js"), 0o755);
+    const npm = (...args) => execFileSync("npm", args, { cwd: r.dir, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+    npm("install", "--ignore-scripts", "--no-audit", "--no-fund"); // writes package-lock.json
+    const s1 = r.commit("source 0.0.1 and its lockfile");
+    const packHere = () => {
+      const stage = scratch("zodiacs-binding-npm-");
+      const [report] = JSON.parse(npm("pack", "--ignore-scripts", "--json", "--pack-destination", stage));
+      return readFileSync(join(stage, report.filename));
+    };
+    npm("run", "build");
+    const carried = packHere();
+    r.carry("0.0.1", carried, s1);
+    r.commit("carry 0.0.1");
+    expect(r.check().status).toBe(0);
+    const tsup = join(r.dir, "node_modules", ".bin", "tsup");
+    const replaceTsup = (script) => { unlinkSync(tsup); writeFileSync(tsup, script, { mode: 0o755 }); };
+
+    // A. A tsup that fails: it would fail any build that used it, and the check still passes.
+    replaceTsup("#!/bin/sh\necho 'tsup replaced in the checkout' >&2\nexit 1\n");
+    expect(() => npm("run", "build")).toThrow();
+    expect(r.git("status", "--porcelain")).toBe("");
+    for (const result of [r.check(), r.checkAsNpmRun()]) {
+      expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz is byte-identical to a rebuild of HEAD");
+      expect(result.status).toBe(0);
+    }
+
+    // B. The packed code changes under 0.0.1, and a tsup that copies dist from the carried
+    // archive would rebuild the recorded bytes; the check still fails, in both modes.
+    r.write("src/index.js", "export const phase = \"Full Moon\";\n");
+    r.commit("change the packed code under 0.0.1");
+    replaceTsup("#!/bin/sh\nrm -rf dist && mkdir -p dist && git show HEAD:artifacts/zodiacs-engine-0.0.1.tgz | tar -xzf - -C dist --strip-components=2 package/dist\n");
+    npm("run", "build");
+    expect(packHere().equals(carried)).toBe(true);
+    expect(r.git("status", "--porcelain")).toBe("");
+    for (const result of [r.check(), r.checkAsNpmRun(), r.check("--rebuild-all")]) {
+      expect(result.status).toBe(1);
+      expect(result.output).toContain("is not the archive HEAD");
+      expect(result.output).toContain("package/dist/index.js");
+    }
+  });
+
+  it("never finds a build tool through the checkout's node_modules/.bin on PATH", () => {
+    // A build that names a tool its commit does not install. Started as npm run starts
+    // it, the check has the checkout's node_modules/.bin on PATH, where a planted tool
+    // would copy dist from the carried archive; the rebuild must not find it there.
+    const r = repository();
+    const packageJson = `${JSON.stringify({ name: "@zodiacs/engine", version: "0.0.1", scripts: { build: "zodiacs-synthetic-build" },
+      files: ["dist", "README.md", "CHANGELOG.md", "LICENSE", "LICENSING.md", "NOTICE"] }, null, 2)}\n`;
+    for (const [name, text] of Object.entries({ ...r.metadata("0.0.1"), "package.json": packageJson, ".gitignore": "node_modules/\n",
+      "dist/index.js": "export const phase = \"New Moon\";\n" })) r.write(name, text);
+    const s1 = r.commit("source 0.0.1");
+    const stage = scratch("zodiacs-binding-npm-");
+    const [report] = JSON.parse(execFileSync("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", stage], { cwd: r.dir, encoding: "utf8" }));
+    r.carry("0.0.1", readFileSync(join(stage, report.filename)), s1);
+    r.commit("carry 0.0.1");
+    r.write("dist/index.js", "export const phase = \"Full Moon\";\n");
+    r.commit("change the packed code under 0.0.1");
+    r.write("node_modules/.bin/zodiacs-synthetic-build", "#!/bin/sh\nrm -rf dist && mkdir -p dist && git show HEAD:artifacts/zodiacs-engine-0.0.1.tgz | tar -xzf - -C dist --strip-components=2 package/dist\n");
+    chmodSync(join(r.dir, "node_modules", ".bin", "zodiacs-synthetic-build"), 0o755);
+    expect(r.git("status", "--porcelain")).toBe("");
+    const result = r.checkAsNpmRun();
+    expect(result.status).toBe(1);
+    expect(result.output).toContain("The 0.0.1 source could not be rebuilt and packed.");
+    expect(result.output).not.toContain("is byte-identical to a rebuild of HEAD");
   });
 
   it("refuses an archive without a manifest entry, and a shallow checkout", () => {

@@ -2,66 +2,74 @@
 
  RUN  v2.1.9 <work>/prefix
 
- ❯ src/declination.test.ts (25 tests | 9 failed) 471ms
-   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at the June solstice 29ms
+ ❯ src/declination.test.ts (25 tests | 9 failed) 676ms
+   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at the June solstice 43ms
      → expected value must be number or bigint, received "undefined"
-   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at the December solstice 41ms
+   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at the December solstice 65ms
      → expected value must be number or bigint, received "undefined"
-   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at 2600-06-21T00:50:56Z, whatever its latitude 55ms
+   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at 2591-06-20T20:25:27.709Z, whatever its latitude 64ms
+     → expected undefined to be close to 3.605, received difference is NaN, but expected 0.0005
+   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at 2600-06-21T00:50:56Z, whatever its latitude 9ms
      → expected undefined to be close to 3.658, received difference is NaN, but expected 0.0005
-   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at 0002-06-23T02:41:29.283Z, whatever its latitude 37ms
-     → expected undefined to be close to -68.3, received difference is NaN, but expected 0.0005
-   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at 3902-06-20T13:31:29.226Z, whatever its latitude 33ms
+   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at 3902-06-20T13:31:29.226Z, whatever its latitude 52ms
      → expected undefined to be close to 25.824, received difference is NaN, but expected 0.0005
-   × the Sun and the out-of-bounds limit > exempts only a row labelled exactly Sun within 0.001° of the ecliptic 6ms
+   × the Sun and the out-of-bounds limit > exempts only a row labelled exactly Sun within 0.001° of the ecliptic 13ms
      → expected undefined to be 0.001 // Object.is equality
-   × the Sun and the out-of-bounds limit > gives every row a signed margin that decides its flag, apart from the exempt Sun 8ms
+   × the Sun and the out-of-bounds limit > gives every row a signed margin that decides its flag, apart from the exempt Sun 10ms
      → 2024-06-20T20:51:00Z Sun: expected undefined to be 0.18678734477219905 // Object.is equality
-   × longitude separation of declination aspects > reduces supplied longitudes exactly modulo 360 before rounding once 6ms
+   × longitude separation of declination aspects > reduces supplied longitudes exactly modulo 360 before rounding once 8ms
      → expected 5.684341886080802e-14 to be 1e-20 // Object.is equality
-   × longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size 2ms
+   × longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size 7ms
      → -0.007032679672961714 -0.4611100531183183: expected false to be true // Object.is equality
- ✓ src/body-label.test.ts (15 tests) 73ms
- ❯ src/ephemeris-span.test.ts (6 tests | 5 failed) 48354ms
-   × the ephemeris span > is astronomy-engine's own tabulated range, J2000 ± 730,000 days of TT 12ms
+ ✓ src/body-label.test.ts (15 tests) 90ms
+ ❯ src/ephemeris-span.test.ts (6 tests | 5 failed) 56986ms
+   × the ephemeris span > is astronomy-engine's own tabulated range, J2000 ± 730,000 days of TT 15ms
      → Cannot read properties of undefined (reading 'timeScale')
-   × the ephemeris span > refuses an instant, or any of its speed samples, outside the span 20ms
+   × the ephemeris span > refuses an instant, or any of its speed samples, outside the span 16ms
      → expected [Function] to throw an error
-   × the ephemeris span > refuses far dates at once instead of integrating for minutes 47836ms
+   × the ephemeris span > refuses far dates at once instead of integrating for minutes 55787ms
      → expected function to throw an error, but it didn't
-   × the ephemeris span > applies to every calculation that evaluates the ephemeris 17ms
+   × the ephemeris span > applies to every calculation that evaluates the ephemeris 20ms
      → natalChart: expected [Function] to throw an error
-   × the ephemeris span > checks Terrestrial Time on a pinned clock and restores the model afterwards 308ms
+   × the ephemeris span > checks Terrestrial Time on a pinned clock and restores the model afterwards 801ms
      → expected [Function] to throw an error
- ❯ scripts/verify-archive-binding.test.mjs (13 tests | 13 failed) 144380ms
-   × archive binding check > passes a clean history and skips the rebuild until the version's archive exists 12182ms
+ ❯ scripts/verify-archive-binding.test.mjs (17 tests | 17 failed) 284701ms
+   × archive binding check > passes a clean history and skips the rebuild until the version's archive exists 17478ms
      → expected '7 carried archive paths each hold one…' to contain 'skipping the rebuild of HEAD'
-   × archive binding check > sees a rewrite on a side branch hidden by merge simplification 11996ms
+   × archive binding check > sees a rewrite on a side branch hidden by merge simplification 17241ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > sees an archive carried and removed on a merged side branch 12531ms
+   × archive binding check > sees an archive carried and removed on a merged side branch 18742ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 12344ms
+   × archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 13697ms
      → expected '7 carried archive paths each hold one…' to contain '1 superseded'
-   × archive binding check > refuses a rewritten manifest that whitelists replaced bytes 10563ms
+   × archive binding check > refuses a rewritten manifest that whitelists replaced bytes 13766ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 11422ms
+   × archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 13722ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 10039ms
+   × archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 12425ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > reads HEAD from git objects, never the working tree 9831ms
+   × archive binding check > reads HEAD from git objects, never the working tree 13105ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 11250ms
+   × archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 13717ms
      → expected '7 carried archive paths each hold one…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
-   × archive binding check > checks the receipt of every version, not only the current one 10209ms
+   × archive binding check > checks the receipt of every version, not only the current one 14829ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > binds each archive to its recorded source commit 10317ms
+   × archive binding check > binds each archive to its recorded source commit 15121ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > refuses an archive carried by a commit that does not follow its source commit 11495ms
+   × archive binding check > refuses an archive carried by a commit that does not follow its source commit 14039ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > refuses an archive without a manifest entry, and a shallow checkout 10126ms
+   × archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata 13648ms
+     → expected +0 to be 1 // Object.is equality
+   × archive binding check > refuses names that differ only in case: a variant of artifacts/, or two archives in it 13626ms
+     → expected +0 to be 1 // Object.is equality
+   × archive binding check > rebuilds from the worktree's own npm ci, whatever the checkout's node_modules holds 46214ms
+     → expected '7 carried archive paths each hold one…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+   × archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH 15125ms
+     → expected +0 to be 1 // Object.is equality
+   × archive binding check > refuses an archive without a manifest entry, and a shallow checkout 18054ms
      → expected +0 to be 1 // Object.is equality
 
-⎯⎯⎯⎯⎯⎯ Failed Tests 27 ⎯⎯⎯⎯⎯⎯⎯
+⎯⎯⎯⎯⎯⎯ Failed Tests 31 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > passes a clean history and skips the rebuild until the version's archive exists
 AssertionError: expected '7 carried archive paths each hold one…' to contain 'skipping the rebuild of HEAD'
@@ -74,15 +82,15 @@ AssertionError: expected '7 carried archive paths each hold one…' to contain '
 + artifacts/zodiacs-engine-0.1.1-rc.13.tgz is byte-identical to a rebuild of this checkout on Node v22.22.2: sha256 12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840, 79092 bytes.
 +
 
- ❯ scripts/verify-archive-binding.test.mjs:104:27
-    102|     const r = carriedOnce();
-    103|     const result = r.check();
-    104|     expect(result.output).toContain("skipping the rebuild of HEAD");
+ ❯ scripts/verify-archive-binding.test.mjs:127:27
+    125|     const r = carriedOnce();
+    126|     const result = r.check();
+    127|     expect(result.output).toContain("skipping the rebuild of HEAD");
        |                           ^
-    105|     expect(result.status).toBe(0);
-    106|   });
+    128|     expect(result.status).toBe(0);
+    129|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > sees a rewrite on a side branch hidden by merge simplification
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -93,15 +101,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:123:27
-    121|     r.git("merge", "-q", "--no-edit", "side");
-    122|     const result = r.check();
-    123|     expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:146:27
+    144|     r.git("merge", "-q", "--no-edit", "side");
+    145|     const result = r.check();
+    146|     expect(result.status).toBe(1);
        |                           ^
-    124|     expect(result.output).toContain(`sha256 ${sha256(other)}`);
-    125|   });
+    147|     expect(result.output).toContain(`sha256 ${sha256(other)}`);
+    148|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > sees an archive carried and removed on a merged side branch
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -112,15 +120,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:139:27
-    137|     r.git("merge", "-q", "--no-edit", "side");
-    138|     const result = r.check();
-    139|     expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:162:27
+    160|     r.git("merge", "-q", "--no-edit", "side");
+    161|     const result = r.check();
+    162|     expect(result.status).toBe(1);
        |                           ^
-    140|     expect(result.output).toContain("artifacts/zodiacs-engine-0.0.2.tg…
-    141|   });
+    163|     expect(result.output).toContain("artifacts/zodiacs-engine-0.0.2.tg…
+    164|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry
 AssertionError: expected '7 carried archive paths each hold one…' to contain '1 superseded'
@@ -133,15 +141,15 @@ AssertionError: expected '7 carried archive paths each hold one…' to contain '
 + artifacts/zodiacs-engine-0.1.1-rc.13.tgz is byte-identical to a rebuild of this checkout on Node v22.22.2: sha256 12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840, 79092 bytes.
 +
 
- ❯ scripts/verify-archive-binding.test.mjs:172:26
-    170|     const r = breachHistory(false);
-    171|     const clean = r.check("--pinned-superseded", r.pin);
-    172|     expect(clean.output).toContain("1 superseded");
+ ❯ scripts/verify-archive-binding.test.mjs:195:26
+    193|     const r = breachHistory(false);
+    194|     const clean = r.check("--pinned-superseded", r.pin);
+    195|     expect(clean.output).toContain("1 superseded");
        |                          ^
-    173|     expect(clean.status).toBe(0);
-    174|     // The same manifest without the pin: a superseded entry cannot be…
+    196|     expect(clean.status).toBe(0);
+    197|     // The same manifest without the pin: a superseded entry cannot be…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses a rewritten manifest that whitelists replaced bytes
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -152,15 +160,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:211:27
-    209|     // Even with every whitelisted entry pinned, the manifest has chan…
-    210|     const result = r.check("--pinned-superseded", pinnedFile(r.entries…
-    211|     expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:234:27
+    232|     // Even with every whitelisted entry pinned, the manifest has chan…
+    233|     const result = r.check("--pinned-superseded", pinnedFile(r.entries…
+    234|     expect(result.status).toBe(1);
        |                           ^
-    212|     expect(result.output).toContain("is not a prefix of HEAD's (the ma…
-    213|     expect(result.output).toContain("drops or changes entries of its p…
+    235|     expect(result.output).toContain("is not a prefix of HEAD's (the ma…
+    236|     expect(result.output).toContain("drops or changes entries of its p…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -171,15 +179,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:221:25
-    219|     atHead.commit("artifacts is now a symbolic link to other bytes");
-    220|     const head = atHead.check();
-    221|     expect(head.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:244:25
+    242|     atHead.commit("artifacts is now a symbolic link to other bytes");
+    243|     const head = atHead.check();
+    244|     expect(head.status).toBe(1);
        |                         ^
-    222|     expect(head.output).toContain("artifacts is not a directory (git m…
-    223| 
+    245|     expect(head.output).toContain("artifacts is not a directory (git m…
+    246| 
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -190,15 +198,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:251:27
-    249|     r.commit("another copy under artifacts/old, and a note");
-    250|     const result = r.check();
-    251|     expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:274:27
+    272|     r.commit("another copy under artifacts/old, and a note");
+    273|     const result = r.check();
+    274|     expect(result.status).toBe(1);
        |                           ^
-    252|     expect(result.output).toContain("artifacts/old is not an archive, …
-    253|     expect(result.output).toContain("artifacts/notes.txt is not an arc…
+    275|     expect(result.output).toContain("artifacts/old is not README.md, a…
+    276|     expect(result.output).toContain("artifacts/notes.txt is not README…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > reads HEAD from git objects, never the working tree
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -209,15 +217,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:263:25
-    261|     expect(untracked.git("status", "--porcelain", "--untracked-files=a…
-    262|     const gone = untracked.check();
-    263|     expect(gone.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:286:25
+    284|     expect(untracked.git("status", "--porcelain", "--untracked-files=a…
+    285|     const gone = untracked.check();
+    286|     expect(gone.status).toBe(1);
        |                         ^
-    264|     expect(gone.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
-    265|     expect(gone.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+    287|     expect(gone.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+    288|     expect(gone.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way
 AssertionError: expected '7 carried archive paths each hold one…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
@@ -230,15 +238,15 @@ AssertionError: expected '7 carried archive paths each hold one…' to contain '
 + artifacts/zodiacs-engine-0.1.1-rc.13.tgz is byte-identical to a rebuild of this checkout on Node v22.22.2: sha256 12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840, 79092 bytes.
 +
 
- ❯ scripts/verify-archive-binding.test.mjs:286:32
-    284|     const carriedHead = r.check();
-    285|     expect(carriedHead.status).toBe(0);
-    286|     expect(carriedHead.output).toContain("artifacts/zodiacs-engine-0.0…
+ ❯ scripts/verify-archive-binding.test.mjs:309:32
+    307|     const carriedHead = r.check();
+    308|     expect(carriedHead.status).toBe(0);
+    309|     expect(carriedHead.output).toContain("artifacts/zodiacs-engine-0.0…
        |                                ^
-    287|     // The rc.14 review's blocker: a merge brings a new LICENSING.md, …
-    288|     r.write("LICENSING.md", "licensing, with a new section\n");
+    310|     // The rc.14 review's blocker: a merge brings a new LICENSING.md, …
+    311|     r.write("LICENSING.md", "licensing, with a new section\n");
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > checks the receipt of every version, not only the current one
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -249,15 +257,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:305:27
-    303|     r.commit("edit an old receipt");
-    304|     const result = r.check();
-    305|     expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:328:27
+    326|     r.commit("edit an old receipt");
+    327|     const result = r.check();
+    328|     expect(result.status).toBe(1);
        |                           ^
-    306|     expect(result.output).toContain("The receipt for 0.0.1 at HEAD doe…
-    307|   });
+    329|     expect(result.output).toContain("The receipt for 0.0.1 at HEAD doe…
+    330|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > binds each archive to its recorded source commit
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -268,15 +276,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:316:27
-    314|     r.source("0.0.2");
-    315|     const result = r.check();
-    316|     expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:339:27
+    337|     r.source("0.0.2");
+    338|     const result = r.check();
+    339|     expect(result.status).toBe(1);
        |                           ^
-    317|     expect(result.output).toContain("packs a README.md that is not byt…
-    318|   });
+    340|     expect(result.output).toContain("packs a README.md that is not byt…
+    341|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses an archive carried by a commit that does not follow its source commit
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -287,15 +295,93 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:329:27
-    327|     r.source("0.0.2");
-    328|     const result = r.check();
-    329|     expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:352:27
+    350|     r.source("0.0.2");
+    351|     const result = r.check();
+    352|     expect(result.status).toBe(1);
        |                           ^
-    330|     expect(result.output).toContain("which is neither its source commi…
-    331|   });
+    353|     expect(result.output).toContain("which is neither its source commi…
+    354|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/31]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:366:29
+    364|       r.source("0.0.2");
+    365|       const result = r.check();
+    366|       expect(result.status).toBe(1);
+       |                             ^
+    367|       expect(result.output).toContain(`artifacts/zodiacs-engine-${vers…
+    368|       expect(result.output).toContain(`The recorded version "${version…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/31]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses names that differ only in case: a variant of artifacts/, or two archives in it
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:387:24
+    385|     const commit = commitBlobs(variant, { "Artifacts/zodiacs-engine-0.…
+    386|     const top = variant.check();
+    387|     expect(top.status).toBe(1);
+       |                        ^
+    388|     expect(top.output).toContain(`Artifacts differs from artifacts onl…
+    389|     // Two strict versions that npm tells apart but such a disk does n…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/31]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > rebuilds from the worktree's own npm ci, whatever the checkout's node_modules holds
+AssertionError: expected '7 carried archive paths each hold one…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1.tgz is byte-identical to a rebuild of HEAD
++ 7 carried archive paths each hold one byte sequence in history (rc.11's recorded breach excepted).
++ artifacts/zodiacs-engine-0.1.1-rc.13.tgz is byte-identical to a rebuild of this checkout on Node v22.22.2: sha256 12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840, 79092 bytes.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:431:29
+    429|     expect(r.git("status", "--porcelain")).toBe("");
+    430|     for (const result of [r.check(), r.checkAsNpmRun()]) {
+    431|       expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.…
+       |                             ^
+    432|       expect(result.status).toBe(0);
+    433|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/31]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:470:27
+    468|     expect(r.git("status", "--porcelain")).toBe("");
+    469|     const result = r.checkAsNpmRun();
+    470|     expect(result.status).toBe(1);
+       |                           ^
+    471|     expect(result.output).toContain("The 0.0.1 source could not be reb…
+    472|     expect(result.output).not.toContain("is byte-identical to a rebuil…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/31]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses an archive without a manifest entry, and a shallow checkout
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -306,15 +392,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:338:31
-    336|     r.commit("carry an unrecorded archive");
-    337|     const unrecorded = r.check();
-    338|     expect(unrecorded.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:480:31
+    478|     r.commit("carry an unrecorded archive");
+    479|     const unrecorded = r.check();
+    480|     expect(unrecorded.status).toBe(1);
        |                               ^
-    339|     expect(unrecorded.output).toContain("is carried without a carried …
-    340| 
+    481|     expect(unrecorded.output).toContain("is carried without a carried …
+    482| 
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/31]⎯
 
  FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > does not flag the chart's Sun at the June solstice
  FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > does not flag the chart's Sun at the December solstice
@@ -327,43 +413,43 @@ TypeError: expected value must be number or bigint, received "undefined"
     250|     expect(sun.boundMarginArcsec).toBeGreaterThan(0);
     251|     expect(sun.boundMarginArcsec).toBeLessThan(1);
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/31]⎯
+
+ FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > does not flag the chart's Sun at 2591-06-20T20:25:27.709Z, whatever its latitude
+AssertionError: expected undefined to be close to 3.605, received difference is NaN, but expected 0.0005
+ ❯ src/declination.test.ts:269:35
+    267|     const sun = result.rows.find(row => row.body === "Sun")!;
+    268|     expect(sun.lat * 3600).toBeCloseTo(latArcsec, 3);
+    269|     expect(sun.boundMarginArcsec).toBeCloseTo(marginArcsec, 3);
+       |                                   ^
+    270|     expect(Math.abs(sun.lat)).toBeGreaterThan(SUN_BOUND_LATITUDE);
+    271|     expect(sun.outOfBounds).toBe(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/31]⎯
 
  FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > does not flag the chart's Sun at 2600-06-21T00:50:56Z, whatever its latitude
 AssertionError: expected undefined to be close to 3.658, received difference is NaN, but expected 0.0005
- ❯ src/declination.test.ts:266:35
-    264|     const sun = result.rows.find(row => row.body === "Sun")!;
-    265|     expect(sun.lat * 3600).toBeCloseTo(latArcsec, 3);
-    266|     expect(sun.boundMarginArcsec).toBeCloseTo(marginArcsec, 3);
+ ❯ src/declination.test.ts:269:35
+    267|     const sun = result.rows.find(row => row.body === "Sun")!;
+    268|     expect(sun.lat * 3600).toBeCloseTo(latArcsec, 3);
+    269|     expect(sun.boundMarginArcsec).toBeCloseTo(marginArcsec, 3);
        |                                   ^
-    267|     expect(Math.abs(sun.lat)).toBeGreaterThan(SUN_BOUND_LATITUDE);
-    268|     expect(sun.outOfBounds).toBe(false);
+    270|     expect(Math.abs(sun.lat)).toBeGreaterThan(SUN_BOUND_LATITUDE);
+    271|     expect(sun.outOfBounds).toBe(false);
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/27]⎯
-
- FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > does not flag the chart's Sun at 0002-06-23T02:41:29.283Z, whatever its latitude
-AssertionError: expected undefined to be close to -68.3, received difference is NaN, but expected 0.0005
- ❯ src/declination.test.ts:266:35
-    264|     const sun = result.rows.find(row => row.body === "Sun")!;
-    265|     expect(sun.lat * 3600).toBeCloseTo(latArcsec, 3);
-    266|     expect(sun.boundMarginArcsec).toBeCloseTo(marginArcsec, 3);
-       |                                   ^
-    267|     expect(Math.abs(sun.lat)).toBeGreaterThan(SUN_BOUND_LATITUDE);
-    268|     expect(sun.outOfBounds).toBe(false);
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/31]⎯
 
  FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > does not flag the chart's Sun at 3902-06-20T13:31:29.226Z, whatever its latitude
 AssertionError: expected undefined to be close to 25.824, received difference is NaN, but expected 0.0005
- ❯ src/declination.test.ts:266:35
-    264|     const sun = result.rows.find(row => row.body === "Sun")!;
-    265|     expect(sun.lat * 3600).toBeCloseTo(latArcsec, 3);
-    266|     expect(sun.boundMarginArcsec).toBeCloseTo(marginArcsec, 3);
+ ❯ src/declination.test.ts:269:35
+    267|     const sun = result.rows.find(row => row.body === "Sun")!;
+    268|     expect(sun.lat * 3600).toBeCloseTo(latArcsec, 3);
+    269|     expect(sun.boundMarginArcsec).toBeCloseTo(marginArcsec, 3);
        |                                   ^
-    267|     expect(Math.abs(sun.lat)).toBeGreaterThan(SUN_BOUND_LATITUDE);
-    268|     expect(sun.outOfBounds).toBe(false);
+    270|     expect(Math.abs(sun.lat)).toBeGreaterThan(SUN_BOUND_LATITUDE);
+    271|     expect(sun.outOfBounds).toBe(false);
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/31]⎯
 
  FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > exempts only a row labelled exactly Sun within 0.001° of the ecliptic
 AssertionError: expected undefined to be 0.001 // Object.is equality
@@ -374,15 +460,15 @@ AssertionError: expected undefined to be 0.001 // Object.is equality
 + Received: 
 undefined
 
- ❯ src/declination.test.ts:275:32
-    273| 
-    274|   it("exempts only a row labelled exactly Sun within 0.001° of the ecl…
-    275|     expect(SUN_BOUND_LATITUDE).toBe(0.001);
+ ❯ src/declination.test.ts:278:32
+    276| 
+    277|   it("exempts only a row labelled exactly Sun within 0.001° of the ecl…
+    278|     expect(SUN_BOUND_LATITUDE).toBe(0.001);
        |                                ^
-    276|     const row = (body: string, lon: number, lat: number) => declinatio…
-    277|     const justOff = 0.0010000000000000002; // the next double above 0.…
+    279|     const row = (body: string, lon: number, lat: number) => declinatio…
+    280|     const justOff = 0.0010000000000000002; // the next double above 0.…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/31]⎯
 
  FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > gives every row a signed margin that decides its flag, apart from the exempt Sun
 AssertionError: 2024-06-20T20:51:00Z Sun: expected undefined to be 0.18678734477219905 // Object.is equality
@@ -393,15 +479,15 @@ AssertionError: 2024-06-20T20:51:00Z Sun: expected undefined to be 0.18678734477
 + Received: 
 undefined
 
- ❯ src/declination.test.ts:299:61
-    297|       for (const row of chart.rows) {
-    298|         const exempt = row.body === "Sun" && Math.abs(row.lat) <= SUN_…
-    299|         expect(row.boundMarginArcsec, `${utc} ${row.body}`).toBe((Math…
+ ❯ src/declination.test.ts:302:61
+    300|       for (const row of chart.rows) {
+    301|         const exempt = row.body === "Sun" && Math.abs(row.lat) <= SUN_…
+    302|         expect(row.boundMarginArcsec, `${utc} ${row.body}`).toBe((Math…
        |                                                             ^
-    300|         expect(row.outOfBounds, `${utc} ${row.body}`).toBe(!exempt && …
-    301|         if (row.outOfBounds) flagged.push(`${utc.slice(0, 10)} ${row.b…
+    303|         expect(row.outOfBounds, `${utc} ${row.body}`).toBe(!exempt && …
+    304|         if (row.outOfBounds) flagged.push(`${utc.slice(0, 10)} ${row.b…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/31]⎯
 
  FAIL  src/declination.test.ts > longitude separation of declination aspects > reduces supplied longitudes exactly modulo 360 before rounding once
 AssertionError: expected 5.684341886080802e-14 to be 1e-20 // Object.is equality
@@ -412,15 +498,15 @@ AssertionError: expected 5.684341886080802e-14 to be 1e-20 // Object.is equality
 - 1e-20
 + 5.684341886080802e-14
 
- ❯ src/declination.test.ts:330:35
-    328|   it("reduces supplied longitudes exactly modulo 360 before rounding o…
-    329|     // The review's cases: the old rows rounded −1e-20 to 359.99999999…
-    330|     expect(separation(-1e-20, 0)).toBe(1e-20);
+ ❯ src/declination.test.ts:333:35
+    331|   it("reduces supplied longitudes exactly modulo 360 before rounding o…
+    332|     // The review's cases: the old rows rounded −1e-20 to 359.99999999…
+    333|     expect(separation(-1e-20, 0)).toBe(1e-20);
        |                                   ^
-    331|     expect(separation(-0.1, 0.2)).toBe(0.1 + 0.2);
-    332|     expect(separation(720.1, 0.2)).toBe(0.09999999999997727); // 720.1…
+    334|     expect(separation(-0.1, 0.2)).toBe(0.1 + 0.2);
+    335|     expect(separation(720.1, 0.2)).toBe(0.09999999999997727); // 720.1…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/31]⎯
 
  FAIL  src/declination.test.ts > longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size
 AssertionError: -0.007032679672961714 -0.4611100531183183: expected false to be true // Object.is equality
@@ -431,15 +517,15 @@ AssertionError: -0.007032679672961714 -0.4611100531183183: expected false to be 
 - true
 + false
 
- ❯ src/declination.test.ts:345:87
-    343|       const a = (random() - 0.5) * 2 * scale + (random() - 0.5) * 2 **…
-    344|       const b = (random() - 0.5) * 2 * scale;
-    345|       expect(isRoundedHalfEven(separation(a, b), exactSeparation(a, b)…
+ ❯ src/declination.test.ts:348:87
+    346|       const a = (random() - 0.5) * 2 * scale + (random() - 0.5) * 2 **…
+    347|       const b = (random() - 0.5) * 2 * scale;
+    348|       expect(isRoundedHalfEven(separation(a, b), exactSeparation(a, b)…
        |                                                                                       ^
-    346|     }
-    347|     expect(rational(0.1 + 0.2)).toEqual(rational(0.30000000000000004));
+    349|     }
+    350|     expect(rational(0.1 + 0.2)).toEqual(rational(0.30000000000000004));
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/31]⎯
 
  FAIL  src/ephemeris-span.test.ts > the ephemeris span > is astronomy-engine's own tabulated range, J2000 ± 730,000 days of TT
 TypeError: Cannot read properties of undefined (reading 'timeScale')
@@ -451,7 +537,7 @@ TypeError: Cannot read properties of undefined (reading 'timeScale')
      22|     expect(EPHEMERIS_SPAN.daysFromJ2000).toEqual({ from: -730000, to: …
      23|     expect(Date.parse(`${EPHEMERIS_SPAN.fromTT}Z`)).toBe(J2000_MS - 73…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/31]⎯
 
  FAIL  src/ephemeris-span.test.ts > the ephemeris span > refuses an instant, or any of its speed samples, outside the span
 AssertionError: expected [Function] to throw an error
@@ -470,7 +556,7 @@ undefined
      39|     expect(() => positions("3998-09-03T12:00:00Z")).toThrow(OUTSIDE);
      40|     // Inside by itself, but the nodes' samples six hours earlier are …
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/31]⎯
 
  FAIL  src/ephemeris-span.test.ts > the ephemeris span > refuses far dates at once instead of integrating for minutes
 AssertionError: expected function to throw an error, but it didn't
@@ -482,7 +568,7 @@ AssertionError: expected function to throw an error, but it didn't
      48|       expect(() => positions(utc)).toThrow(OUTSIDE);
      49|     }
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/31]⎯
 
  FAIL  src/ephemeris-span.test.ts > the ephemeris span > applies to every calculation that evaluates the ephemeris
 AssertionError: natalChart: expected [Function] to throw an error
@@ -501,7 +587,7 @@ undefined
      67|   });
      68| 
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/31]⎯
 
  FAIL  src/ephemeris-span.test.ts > the ephemeris span > checks Terrestrial Time on a pinned clock and restores the model afterwards
 AssertionError: expected [Function] to throw an error
@@ -520,48 +606,59 @@ undefined
      73|     expect(natalChart({ utc: "2000-01-01T00:00:00Z", deltaT: 1e10 }).b…
      74|     expect(positions("2000-01-01T00:00:00Z")).toEqual(expected);
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/27]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/31]⎯
 
  Test Files  3 failed | 1 passed (4)
-      Tests  27 failed | 32 passed (59)
-   Start at  19:29:00
-   Duration  145.76s (transform 1.96s, setup 0ms, collect 2.91s, tests 193.28s, environment 5ms, prepare 1.14s)
+      Tests  31 failed | 32 passed (63)
+   Start at  21:38:27
+   Duration  286.71s (transform 2.12s, setup 0ms, collect 4.04s, tests 342.45s, environment 1ms, prepare 1.12s)
 
 == 74a4471 Release candidate 0.1.1-rc.14: supported Node versions, the ep: src/declination.test.ts scripts/verify-archive-binding.test.mjs
 
  RUN  v2.1.9 <work>/prefix
 
- ❯ src/declination.test.ts (25 tests | 2 failed) 700ms
-   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at 2600-06-21T00:50:56Z, whatever its latitude 67ms
+ ❯ src/declination.test.ts (25 tests | 3 failed) 1299ms
+   ✓ chart-clock declination derivation > records observation/Delta-T and uses the provider's pinned true obliquity 372ms
+   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at 2591-06-20T20:25:27.709Z, whatever its latitude 37ms
      → expected true to be false // Object.is equality
-   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at 3902-06-20T13:31:29.226Z, whatever its latitude 22ms
+   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at 2600-06-21T00:50:56Z, whatever its latitude 4ms
      → expected true to be false // Object.is equality
-   ✓ longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size 372ms
- ❯ scripts/verify-archive-binding.test.mjs (13 tests | 9 failed) 10959ms
-   × archive binding check > passes a clean history and skips the rebuild until the version's archive exists 569ms
+   × the Sun and the out-of-bounds limit > does not flag the chart's Sun at 3902-06-20T13:31:29.226Z, whatever its latitude 29ms
+     → expected true to be false // Object.is equality
+   ✓ longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size 615ms
+ ❯ scripts/verify-archive-binding.test.mjs (17 tests | 13 failed) 23358ms
+   × archive binding check > passes a clean history and skips the rebuild until the version's archive exists 1391ms
      → expected 'No archive artifacts/zodiacs-engine-0…' to contain 'skipping the rebuild of HEAD'
-   ✓ archive binding check > sees a rewrite on a side branch hidden by merge simplification 850ms
-   × archive binding check > sees an archive carried and removed on a merged side branch 977ms
+   ✓ archive binding check > sees a rewrite on a side branch hidden by merge simplification 1524ms
+   × archive binding check > sees an archive carried and removed on a merged side branch 1831ms
      → expected 'No archive artifacts/zodiacs-engine-0…' to contain 'artifacts/zodiacs-engine-0.0.2.tgz wa…'
-   × archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 984ms
+   × archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 1261ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > refuses a rewritten manifest that whitelists replaced bytes 1066ms
+   × archive binding check > refuses a rewritten manifest that whitelists replaced bytes 1084ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 464ms
+   × archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 613ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 596ms
+   × archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 706ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > reads HEAD from git objects, never the working tree 457ms
+   × archive binding check > reads HEAD from git objects, never the working tree 412ms
      → expected +0 to be 1 // Object.is equality
-   × archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 2286ms
+   × archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 2330ms
      → expected 'artifacts/zodiacs-engine-0.0.1.tgz is…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
-   × archive binding check > checks the receipt of every version, not only the current one 550ms
+   × archive binding check > checks the receipt of every version, not only the current one 432ms
      → expected 'No archive artifacts/zodiacs-engine-0…' to contain 'The receipt for 0.0.1 at HEAD does no…'
-   ✓ archive binding check > binds each archive to its recorded source commit 497ms
-   ✓ archive binding check > refuses an archive carried by a commit that does not follow its source commit 652ms
-   ✓ archive binding check > refuses an archive without a manifest entry, and a shallow checkout 937ms
+   ✓ archive binding check > binds each archive to its recorded source commit 695ms
+   ✓ archive binding check > refuses an archive carried by a commit that does not follow its source commit 744ms
+   × archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata 956ms
+     → expected +0 to be 1 // Object.is equality
+   × archive binding check > refuses names that differ only in case: a variant of artifacts/, or two archives in it 663ms
+     → expected +0 to be 1 // Object.is equality
+   × archive binding check > rebuilds from the worktree's own npm ci, whatever the checkout's node_modules holds 5310ms
+     → expected '::error file=artifacts/zodiacs-engine…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+   × archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH 2339ms
+     → expected +0 to be 1 // Object.is equality
+   ✓ archive binding check > refuses an archive without a manifest entry, and a shallow checkout 927ms
 
-⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+⎯⎯⎯⎯⎯⎯ Failed Tests 16 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > passes a clean history and skips the rebuild until the version's archive exists
 AssertionError: expected 'No archive artifacts/zodiacs-engine-0…' to contain 'skipping the rebuild of HEAD'
@@ -574,15 +671,15 @@ AssertionError: expected 'No archive artifacts/zodiacs-engine-0…' to contain '
 + 1 recorded archives (1 carried, 0 superseded) and their receipts hold only their recorded bytes across 3 commits, and each is bound to its source commit.
 +
 
- ❯ scripts/verify-archive-binding.test.mjs:104:27
-    102|     const r = carriedOnce();
-    103|     const result = r.check();
-    104|     expect(result.output).toContain("skipping the rebuild of HEAD");
+ ❯ scripts/verify-archive-binding.test.mjs:127:27
+    125|     const r = carriedOnce();
+    126|     const result = r.check();
+    127|     expect(result.output).toContain("skipping the rebuild of HEAD");
        |                           ^
-    105|     expect(result.status).toBe(0);
-    106|   });
+    128|     expect(result.status).toBe(0);
+    129|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/16]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > sees an archive carried and removed on a merged side branch
 AssertionError: expected 'No archive artifacts/zodiacs-engine-0…' to contain 'artifacts/zodiacs-engine-0.0.2.tgz wa…'
@@ -595,21 +692,21 @@ AssertionError: expected 'No archive artifacts/zodiacs-engine-0…' to contain '
 + ::error file=artifacts/zodiacs-engine-0.0.2.sha256::artifacts/zodiacs-engine-0.0.2.sha256 was committed and has since been removed; carried archives and receipts are never removed.
 + ::error file=artifacts/zodiacs-engine-0.0.2.tgz::artifacts/zodiacs-engine-0.0.2.tgz was committed and has since been removed; carried archives and receipts are never removed.
 + ::error file=artifacts/zodiacs-engine-0.0.2.sha256::artifacts/zodiacs-engine-0.0.2.sha256 held bytes its manifest entry does not allow; a version string names one byte sequence.
-+   receipt "543c7adda281e078528f798beebf5395d6e961c94e1a37c710e03f3166473f25  zodiacs-engine-0.0.2.tgz\n" in 1 commit(s): f11da5f8d7ea
++   receipt "b467d0802a0a56d786aa94b5f393cec41441bba1456bb6836193f02bf4997ac4  zodiacs-engine-0.0.2.tgz\n" in 1 commit(s): 71fa841c161b
 + ::error file=artifacts/zodiacs-engine-0.0.2.tgz::artifacts/zodiacs-engine-0.0.2.tgz held bytes its manifest entry does not allow; a version string names one byte sequence.
-+   sha256 543c7adda281e078528f798beebf5395d6e961c94e1a37c710e03f3166473f25 in 1 commit(s): f11da5f8d7ea
++   sha256 b467d0802a0a56d786aa94b5f393cec41441bba1456bb6836193f02bf4997ac4 in 1 commit(s): 71fa841c161b
 + 4 archive binding failures.
 +
 
- ❯ scripts/verify-archive-binding.test.mjs:140:27
-    138|     const result = r.check();
-    139|     expect(result.status).toBe(1);
-    140|     expect(result.output).toContain("artifacts/zodiacs-engine-0.0.2.tg…
+ ❯ scripts/verify-archive-binding.test.mjs:163:27
+    161|     const result = r.check();
+    162|     expect(result.status).toBe(1);
+    163|     expect(result.output).toContain("artifacts/zodiacs-engine-0.0.2.tg…
        |                           ^
-    141|   });
-    142| 
+    164|   });
+    165| 
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/16]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -620,15 +717,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:176:29
-    174|     // The same manifest without the pin: a superseded entry cannot be…
-    175|     const unpinned = r.check();
-    176|     expect(unpinned.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:199:29
+    197|     // The same manifest without the pin: a superseded entry cannot be…
+    198|     const unpinned = r.check();
+    199|     expect(unpinned.status).toBe(1);
        |                             ^
-    177|     expect(unpinned.output).toContain("is a superseded entry that this…
-    178|     // Restoring the superseded bytes later is refused, as in the revi…
+    200|     expect(unpinned.output).toContain("is a superseded entry that this…
+    201|     // Restoring the superseded bytes later is refused, as in the revi…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/16]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses a rewritten manifest that whitelists replaced bytes
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -639,15 +736,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:211:27
-    209|     // Even with every whitelisted entry pinned, the manifest has chan…
-    210|     const result = r.check("--pinned-superseded", pinnedFile(r.entries…
-    211|     expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:234:27
+    232|     // Even with every whitelisted entry pinned, the manifest has chan…
+    233|     const result = r.check("--pinned-superseded", pinnedFile(r.entries…
+    234|     expect(result.status).toBe(1);
        |                           ^
-    212|     expect(result.output).toContain("is not a prefix of HEAD's (the ma…
-    213|     expect(result.output).toContain("drops or changes entries of its p…
+    235|     expect(result.output).toContain("is not a prefix of HEAD's (the ma…
+    236|     expect(result.output).toContain("drops or changes entries of its p…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/16]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -658,15 +755,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:221:25
-    219|     atHead.commit("artifacts is now a symbolic link to other bytes");
-    220|     const head = atHead.check();
-    221|     expect(head.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:244:25
+    242|     atHead.commit("artifacts is now a symbolic link to other bytes");
+    243|     const head = atHead.check();
+    244|     expect(head.status).toBe(1);
        |                         ^
-    222|     expect(head.output).toContain("artifacts is not a directory (git m…
-    223| 
+    245|     expect(head.output).toContain("artifacts is not a directory (git m…
+    246| 
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/16]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -677,15 +774,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:251:27
-    249|     r.commit("another copy under artifacts/old, and a note");
-    250|     const result = r.check();
-    251|     expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:274:27
+    272|     r.commit("another copy under artifacts/old, and a note");
+    273|     const result = r.check();
+    274|     expect(result.status).toBe(1);
        |                           ^
-    252|     expect(result.output).toContain("artifacts/old is not an archive, …
-    253|     expect(result.output).toContain("artifacts/notes.txt is not an arc…
+    275|     expect(result.output).toContain("artifacts/old is not README.md, a…
+    276|     expect(result.output).toContain("artifacts/notes.txt is not README…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/16]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > reads HEAD from git objects, never the working tree
 AssertionError: expected +0 to be 1 // Object.is equality
@@ -696,15 +793,15 @@ AssertionError: expected +0 to be 1 // Object.is equality
 - 1
 + 0
 
- ❯ scripts/verify-archive-binding.test.mjs:263:25
-    261|     expect(untracked.git("status", "--porcelain", "--untracked-files=a…
-    262|     const gone = untracked.check();
-    263|     expect(gone.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:286:25
+    284|     expect(untracked.git("status", "--porcelain", "--untracked-files=a…
+    285|     const gone = untracked.check();
+    286|     expect(gone.status).toBe(1);
        |                         ^
-    264|     expect(gone.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
-    265|     expect(gone.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+    287|     expect(gone.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+    288|     expect(gone.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/16]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way
 AssertionError: expected 'artifacts/zodiacs-engine-0.0.1.tgz is…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
@@ -717,15 +814,15 @@ AssertionError: expected 'artifacts/zodiacs-engine-0.0.1.tgz is…' to contain '
 + 1 recorded archives (1 carried, 0 superseded) and their receipts hold only their recorded bytes across 2 commits, and each is bound to its source commit.
 +
 
- ❯ scripts/verify-archive-binding.test.mjs:286:32
-    284|     const carriedHead = r.check();
-    285|     expect(carriedHead.status).toBe(0);
-    286|     expect(carriedHead.output).toContain("artifacts/zodiacs-engine-0.0…
+ ❯ scripts/verify-archive-binding.test.mjs:309:32
+    307|     const carriedHead = r.check();
+    308|     expect(carriedHead.status).toBe(0);
+    309|     expect(carriedHead.output).toContain("artifacts/zodiacs-engine-0.0…
        |                                ^
-    287|     // The rc.14 review's blocker: a merge brings a new LICENSING.md, …
-    288|     r.write("LICENSING.md", "licensing, with a new section\n");
+    310|     // The rc.14 review's blocker: a merge brings a new LICENSING.md, …
+    311|     r.write("LICENSING.md", "licensing, with a new section\n");
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/16]⎯
 
  FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > checks the receipt of every version, not only the current one
 AssertionError: expected 'No archive artifacts/zodiacs-engine-0…' to contain 'The receipt for 0.0.1 at HEAD does no…'
@@ -736,23 +833,103 @@ AssertionError: expected 'No archive artifacts/zodiacs-engine-0…' to contain '
 - The receipt for 0.0.1 at HEAD does not name its recorded bytes
 + No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of this checkout.
 + ::error file=artifacts/zodiacs-engine-0.0.1.sha256::The receipt for 0.0.1 does not name its recorded bytes.
-+   expected: "45d7ae2421d01b6ea338a70a3ab71430845840744eea72053df5ceadb9282822  zodiacs-engine-0.0.1.tgz\n"
++   expected: "1896be1c89b1a1377ce51ac408f27530b4b653067ae3d54525ccb37a6e4bb1f9  zodiacs-engine-0.0.1.tgz\n"
 +   found:    "0000000000000000000000000000000000000000000000000000000000000000  zodiacs-engine-0.0.1.tgz\n"
 + ::error file=artifacts/zodiacs-engine-0.0.1.sha256::artifacts/zodiacs-engine-0.0.1.sha256 held bytes its manifest entry does not allow; a version string names one byte sequence.
-+   receipt "0000000000000000000000000000000000000000000000000000000000000000  zodiacs-engine-0.0.1.tgz\n" in 1 commit(s): 9341c6717e84
++   receipt "0000000000000000000000000000000000000000000000000000000000000000  zodiacs-engine-0.0.1.tgz\n" in 1 commit(s): 3a26ed96c10c
 + 2 archive binding failures.
 +
 
- ❯ scripts/verify-archive-binding.test.mjs:306:27
-    304|     const result = r.check();
-    305|     expect(result.status).toBe(1);
-    306|     expect(result.output).toContain("The receipt for 0.0.1 at HEAD doe…
+ ❯ scripts/verify-archive-binding.test.mjs:329:27
+    327|     const result = r.check();
+    328|     expect(result.status).toBe(1);
+    329|     expect(result.output).toContain("The receipt for 0.0.1 at HEAD doe…
        |                           ^
-    307|   });
-    308| 
+    330|   });
+    331| 
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/11]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/16]⎯
 
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:366:29
+    364|       r.source("0.0.2");
+    365|       const result = r.check();
+    366|       expect(result.status).toBe(1);
+       |                             ^
+    367|       expect(result.output).toContain(`artifacts/zodiacs-engine-${vers…
+    368|       expect(result.output).toContain(`The recorded version "${version…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/16]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses names that differ only in case: a variant of artifacts/, or two archives in it
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:387:24
+    385|     const commit = commitBlobs(variant, { "Artifacts/zodiacs-engine-0.…
+    386|     const top = variant.check();
+    387|     expect(top.status).toBe(1);
+       |                        ^
+    388|     expect(top.output).toContain(`Artifacts differs from artifacts onl…
+    389|     // Two strict versions that npm tells apart but such a disk does n…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/16]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > rebuilds from the worktree's own npm ci, whatever the checkout's node_modules holds
+AssertionError: expected '::error file=artifacts/zodiacs-engine…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1.tgz is byte-identical to a rebuild of HEAD
++ ::error file=artifacts/zodiacs-engine-0.0.1.tgz::The 0.0.1 source could not be rebuilt and packed.
++   tsup replaced in the checkout
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:431:29
+    429|     expect(r.git("status", "--porcelain")).toBe("");
+    430|     for (const result of [r.check(), r.checkAsNpmRun()]) {
+    431|       expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.…
+       |                             ^
+    432|       expect(result.status).toBe(0);
+    433|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/16]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:470:27
+    468|     expect(r.git("status", "--porcelain")).toBe("");
+    469|     const result = r.checkAsNpmRun();
+    470|     expect(result.status).toBe(1);
+       |                           ^
+    471|     expect(result.output).toContain("The 0.0.1 source could not be reb…
+    472|     expect(result.output).not.toContain("is byte-identical to a rebuil…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/16]⎯
+
+ FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > does not flag the chart's Sun at 2591-06-20T20:25:27.709Z, whatever its latitude
  FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > does not flag the chart's Sun at 2600-06-21T00:50:56Z, whatever its latitude
  FAIL  src/declination.test.ts > the Sun and the out-of-bounds limit > does not flag the chart's Sun at 3902-06-20T13:31:29.226Z, whatever its latitude
 AssertionError: expected true to be false // Object.is equality
@@ -763,18 +940,155 @@ AssertionError: expected true to be false // Object.is equality
 - false
 + true
 
- ❯ src/declination.test.ts:268:29
-    266|     expect(sun.boundMarginArcsec).toBeCloseTo(marginArcsec, 3);
-    267|     expect(Math.abs(sun.lat)).toBeGreaterThan(SUN_BOUND_LATITUDE);
-    268|     expect(sun.outOfBounds).toBe(false);
+ ❯ src/declination.test.ts:271:29
+    269|     expect(sun.boundMarginArcsec).toBeCloseTo(marginArcsec, 3);
+    270|     expect(Math.abs(sun.lat)).toBeGreaterThan(SUN_BOUND_LATITUDE);
+    271|     expect(sun.outOfBounds).toBe(false);
        |                             ^
-    269|     const supplied = declinationsForBodies(natalChart({utc, timeKnown:…
-    270|     expect(supplied.boundMarginArcsec).toBe(sun.boundMarginArcsec);
+    272|     const supplied = declinationsForBodies(natalChart({utc, timeKnown:…
+    273|     expect(supplied.boundMarginArcsec).toBe(sun.boundMarginArcsec);
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/11]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/16]⎯
 
  Test Files  2 failed (2)
-      Tests  11 failed | 27 passed (38)
-   Start at  19:31:27
-   Duration  12.14s (transform 937ms, setup 0ms, collect 1.29s, tests 11.66s, environment 5ms, prepare 543ms)
+      Tests  16 failed | 26 passed (42)
+   Start at  21:43:15
+   Duration  24.88s (transform 2.17s, setup 0ms, collect 2.59s, tests 24.66s, environment 1ms, prepare 542ms)
+
+== 90d6cdb Finish rc.14: a stricter archive check, the chart's Sun at any: scripts/verify-archive-binding.test.mjs
+
+ RUN  v2.1.9 <work>/prefix
+
+ ❯ scripts/verify-archive-binding.test.mjs (17 tests | 5 failed) 30120ms
+   ✓ archive binding check > passes a clean history and skips the rebuild until the version's archive exists 477ms
+   ✓ archive binding check > sees a rewrite on a side branch hidden by merge simplification 867ms
+   ✓ archive binding check > sees an archive carried and removed on a merged side branch 969ms
+   ✓ archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 1957ms
+   ✓ archive binding check > refuses a rewritten manifest that whitelists replaced bytes 1311ms
+   ✓ archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 1301ms
+   × archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 698ms
+     → expected '::error file=artifacts::artifacts/not…' to contain 'artifacts/old is not README.md, archi…'
+   ✓ archive binding check > reads HEAD from git objects, never the working tree 1084ms
+   ✓ archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 8705ms
+   ✓ archive binding check > checks the receipt of every version, not only the current one 548ms
+   ✓ archive binding check > binds each archive to its recorded source commit 563ms
+   ✓ archive binding check > refuses an archive carried by a commit that does not follow its source commit 645ms
+   × archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata 894ms
+     → expected +0 to be 1 // Object.is equality
+   × archive binding check > refuses names that differ only in case: a variant of artifacts/, or two archives in it 575ms
+     → expected +0 to be 1 // Object.is equality
+   × archive binding check > rebuilds from the worktree's own npm ci, whatever the checkout's node_modules holds 5738ms
+     → expected '::error file=artifacts/zodiacs-engine…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+   × archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH 2944ms
+     → expected +0 to be 1 // Object.is equality
+   ✓ archive binding check > refuses an archive without a manifest entry, and a shallow checkout 731ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README
+AssertionError: expected '::error file=artifacts::artifacts/not…' to contain 'artifacts/old is not README.md, archi…'
+
+- Expected
++ Received
+
+- artifacts/old is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 040000, tree)
++ ::error file=artifacts::artifacts/notes.txt is not an archive, a receipt, archives.json or README.md (git mode 100644, blob) in 1 commit(s): 538a7bbec0d5.
++ ::error file=artifacts::artifacts/old is not an archive, a receipt, archives.json or README.md (git mode 040000, tree) in 1 commit(s): 538a7bbec0d5.
++ ::error file=artifacts::artifacts/old/zodiacs-engine-0.0.1.tgz is not an archive, a receipt, archives.json or README.md (git mode 100644, blob) in 1 commit(s): 538a7bbec0d5.
++ 3 archive binding failures.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:275:27
+    273|     const result = r.check();
+    274|     expect(result.status).toBe(1);
+    275|     expect(result.output).toContain("artifacts/old is not README.md, a…
+       |                           ^
+    276|     expect(result.output).toContain("artifacts/notes.txt is not README…
+    277|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:366:29
+    364|       r.source("0.0.2");
+    365|       const result = r.check();
+    366|       expect(result.status).toBe(1);
+       |                             ^
+    367|       expect(result.output).toContain(`artifacts/zodiacs-engine-${vers…
+    368|       expect(result.output).toContain(`The recorded version "${version…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses names that differ only in case: a variant of artifacts/, or two archives in it
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:387:24
+    385|     const commit = commitBlobs(variant, { "Artifacts/zodiacs-engine-0.…
+    386|     const top = variant.check();
+    387|     expect(top.status).toBe(1);
+       |                        ^
+    388|     expect(top.output).toContain(`Artifacts differs from artifacts onl…
+    389|     // Two strict versions that npm tells apart but such a disk does n…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > rebuilds from the worktree's own npm ci, whatever the checkout's node_modules holds
+AssertionError: expected '::error file=artifacts/zodiacs-engine…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1.tgz is byte-identical to a rebuild of HEAD
++ ::error file=artifacts/zodiacs-engine-0.0.1.tgz::The 0.0.1 source could not be rebuilt and packed.
++   tsup replaced in the checkout
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:431:29
+    429|     expect(r.git("status", "--porcelain")).toBe("");
+    430|     for (const result of [r.check(), r.checkAsNpmRun()]) {
+    431|       expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.…
+       |                             ^
+    432|       expect(result.status).toBe(0);
+    433|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:470:27
+    468|     expect(r.git("status", "--porcelain")).toBe("");
+    469|     const result = r.checkAsNpmRun();
+    470|     expect(result.status).toBe(1);
+       |                           ^
+    471|     expect(result.output).toContain("The 0.0.1 source could not be reb…
+    472|     expect(result.output).not.toContain("is byte-identical to a rebuil…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 12 passed (17)
+   Start at  21:43:42
+   Duration  31.84s (transform 177ms, setup 0ms, collect 129ms, tests 30.12s, environment 0ms, prepare 275ms)
 

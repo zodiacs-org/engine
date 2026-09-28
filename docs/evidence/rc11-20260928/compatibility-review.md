@@ -63,7 +63,7 @@ Reproduce from the engine checkout with absolute artifact and baseline paths:
 
 ```bash
 node scripts/verify-rc10-compatibility.mjs \
-  --candidate /workspace/scratch/c1943cbff40d/opus-continuation/engine/artifacts/zodiacs-engine-0.1.1-rc.11.tgz \
+  --candidate /workspace/scratch/c1943cbff40d/continuation/engine/artifacts/zodiacs-engine-0.1.1-rc.11.tgz \
   --baseline /workspace/scratch/c1943cbff40d/parallel-runtime/package/dist/index.js \
-  --output /workspace/scratch/c1943cbff40d/opus-continuation/engine/docs/evidence/rc11-20260928/compatibility.json
+  --output /workspace/scratch/c1943cbff40d/continuation/engine/docs/evidence/rc11-20260928/compatibility.json
 ```

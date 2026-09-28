@@ -254,10 +254,13 @@ describe("the Sun and the out-of-bounds limit", () => {
 
   // Far from J2000 the ephemeris's own solar latitude exceeds SUN_BOUND_LATITUDE (the real
   // Sun's stays within about 1.2″). The chart's Sun is exempt at any latitude, as in rc.13,
-  // while the same rows given to declinationsForBodies keep the supplied-row rule.
+  // while the same rows given to declinationsForBodies keep the supplied-row rule. The first
+  // rc.14 build flagged the chart's Sun at each instant below. It flagged no earlier solstice:
+  // before 2000, wherever the latitude exceeds the limit its margin is negative (it reaches
+  // −68.3″ in year 2), so no early solstice can test this.
   it.each([
+    ["2591-06-20T20:25:27.709Z", 3.605, 3.605], // the earliest solstice the first build flagged
     ["2600-06-21T00:50:56Z", 3.658, 3.658],
-    ["0002-06-23T02:41:29.283Z", -68.300, -68.300], // the June solstice of year 2
     ["3902-06-20T13:31:29.226Z", 25.824, 25.824] // the June solstice of 3902
   ])("does not flag the chart's Sun at %s, whatever its latitude", (utc, latArcsec, marginArcsec) => {
     const result = chartDeclinations({utc, timeKnown: false});

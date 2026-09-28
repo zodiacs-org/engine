@@ -55,10 +55,11 @@ jobs:
 
       # A version string names one byte sequence. The check reads git objects
       # only: artifacts/ must be a real directory in every commit, the manifest
-      # append-only, every archive and receipt its recorded bytes in every
-      # commit, each archive's packed metadata its source commit's, and when
-      # HEAD's version has a carried archive, a clean worktree of HEAD must
-      # rebuild it (reported as a skip before that archive is committed).
+      # append-only, every version strict, every archive and receipt its
+      # recorded bytes in every commit, each archive's packed metadata its
+      # source commit's, and when HEAD's version has a carried archive, a clean
+      # worktree of HEAD, installed by its own npm ci, must rebuild it
+      # (reported as a skip before that archive is committed).
       - name: Carried archives match history and source
         run: npm run archive:binding
 

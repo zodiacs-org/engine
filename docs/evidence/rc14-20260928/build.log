@@ -9,11 +9,11 @@ CLI Target: es2022
 CLI Cleaning output folder
 ESM Build start
 ESM dist/crossings.js      173.00 B
-ESM dist/geo.js            11.51 KB
 ESM dist/deltat.js         161.00 B
+ESM dist/geo.js            11.51 KB
+ESM dist/index.js          22.59 KB
 ESM dist/chunk-AECKV73C.js 9.02 KB
 ESM dist/chunk-PFGUCNOK.js 2.86 KB
-ESM dist/index.js          22.59 KB
 ESM dist/internal-math.js  1.29 KB
 ESM dist/internal.js       305.00 B
 ESM dist/chunk-RETEVD4F.js 22.69 KB
@@ -23,9 +23,9 @@ ESM dist/chunk-CPALRSPC.js 1.42 KB
 ESM dist/chunk-GFT24GFR.js 723.00 B
 ESM dist/chunk-ONBZ4HK7.js 4.69 KB
 ESM dist/chunk-NAJ735VN.js 5.14 KB
-ESM ⚡️ Build success in 163ms
+ESM ⚡️ Build success in 148ms
 DTS Build start
-DTS ⚡️ Build success in 6755ms
+DTS ⚡️ Build success in 9686ms
 DTS dist/crossings.d.ts              4.33 KB
 DTS dist/internal.d.ts               450.00 B
 DTS dist/receipt.d.ts                10.45 KB

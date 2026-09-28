@@ -1,7 +1,7 @@
 {
-  "schema": "zodiacs.rc14-review-fixes-validation.v2",
+  "schema": "zodiacs.rc14-review-fixes-validation.v3",
   "date": "2026-09-28",
-  "baseCommit": "8c3d94f2d05d544b450d3113e6b1cf877802d80f",
+  "baseCommit": "90d6cdba89253d14449e2ab4de05aa58f736e121",
   "runtime": "v22.22.2",
   "supersededFirstBuild": {
     "sha256": "5ed5ca1eebeb5a918ca0e37d80df78669a68c15af6cec6d33c9c8a590f683a02",
@@ -10,8 +10,16 @@
     "droppedCarrierCommit": "cca9f44e8bd5a2fac47b631ca694fa8569bf1219",
     "published": false
   },
+  "supersededSecondBuild": {
+    "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
+    "bytes": 86867,
+    "sourceCommit": "90d6cdba89253d14449e2ab4de05aa58f736e121",
+    "droppedCarrierCommit": "a4ee4261dad2b1c72d9c557054d9e20ddd52eb12",
+    "droppedResultsCommit": "a0440c21b3947d08528e5447e9b9fb136a2a849a",
+    "published": false
+  },
   "unitTests": {
-    "passed": 2677,
+    "passed": 2681,
     "files": 34,
     "matrix": [
       {
@@ -19,14 +27,14 @@
         "typecheck": "pass",
         "exit": 0,
         "files": 34,
-        "passed": 2677
+        "passed": 2681
       },
       {
         "node": "v24.21.0",
         "typecheck": "pass",
         "exit": 0,
         "files": 34,
-        "passed": 2677
+        "passed": 2681
       }
     ]
   },
@@ -46,6 +54,10 @@
     "reviewSyntheticCases": "pass",
     "reviewBindingAttacks": "pass",
     "blockerReplayFailsBothModes": "pass",
+    "finalReviewAttacks": "pass",
+    "semverReplay": "pass",
+    "nodeModulesReplay": "pass",
+    "distIdenticalToSecondBuild": "pass",
     "newTestsFailOnEarlierSources": "pass",
     "rc10Compatibility": "pass",
     "exactOracle": "pass",
@@ -57,40 +69,40 @@
   },
   "package": {
     "path": "artifacts/zodiacs-engine-0.1.1-rc.14.tgz",
-    "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
-    "bytes": 86867,
-    "unpackedBytes": 281370,
+    "sha256": "adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e",
+    "bytes": 87415,
+    "unpackedBytes": 282469,
     "files": 30,
-    "npmShasum": "386a03b3b69d40d11621f8a6d07b9e29cc8c12be",
-    "integrity": "sha512-1/aYEedBsJhjHfVDENmlpM7oxmDcngsVCHFlf+hldK7DEfYb1iqc43ht2H9hATGWsc5ma/eIFRx8R7zDq8BKsQ=="
+    "npmShasum": "30498f08cc95550445ef2666e1324a5ac007d7d4",
+    "integrity": "sha512-uOruhtGRmzAFnbaF+Kc8tPFDPZEk0cm77gLfF5Fdl78FjxkcZjvjyMrql/gTSkWFAniapdjpUoKxch4p/elc7Q=="
   },
   "packDeterminism": [
     {
       "run": "second",
       "node": "v22.22.2",
       "npm": "10.9.7",
-      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
+      "sha256": "adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e",
       "identical": true
     },
     {
       "run": "node20",
       "node": "v20.19.0",
       "npm": "10.8.2",
-      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
+      "sha256": "adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e",
       "identical": true
     },
     {
       "run": "node24",
       "node": "v24.21.0",
       "npm": "11.19.0",
-      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
+      "sha256": "adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e",
       "identical": true
     }
   ],
   "packedConsumer": [
     {
       "runtime": "v20.19.0",
-      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
+      "sha256": "adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e",
       "version": "0.1.1-rc.14",
       "types": "passed",
       "directoryRemoved": true,
@@ -98,7 +110,7 @@
     },
     {
       "runtime": "v22.7.0",
-      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
+      "sha256": "adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e",
       "version": "0.1.1-rc.14",
       "types": "passed",
       "directoryRemoved": true,
@@ -106,7 +118,7 @@
     },
     {
       "runtime": "v22.22.2",
-      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
+      "sha256": "adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e",
       "version": "0.1.1-rc.14",
       "types": "passed",
       "directoryRemoved": true,
@@ -114,7 +126,7 @@
     },
     {
       "runtime": "v24.21.0",
-      "sha256": "d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4",
+      "sha256": "adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e",
       "version": "0.1.1-rc.14",
       "types": "passed",
       "directoryRemoved": true,
@@ -168,21 +180,21 @@
       "node": "v20.19.0",
       "npm": "10.8.2",
       "exit": 0,
-      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 45 commits",
+      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 46 commits",
       "rc14Rebuild": "skipped: not yet carried"
     },
     {
       "node": "v22.22.2",
       "npm": "10.9.7",
       "exit": 0,
-      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 45 commits",
+      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 46 commits",
       "rc14Rebuild": "skipped: not yet carried"
     },
     {
       "node": "v24.21.0",
       "npm": "11.19.0",
       "exit": 0,
-      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 45 commits",
+      "summary": "8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 46 commits",
       "rc14Rebuild": "skipped: not yet carried"
     }
   ],
@@ -302,16 +314,158 @@
     ],
     "rebuiltDigest": "861e9000f9527164915e21b7cfbcd0799f7006b8c63a0fd3cf8cb7c4325872d1"
   },
+  "finalReviewAttacks": [
+    {
+      "case": "N1. archive mode 100755 in a middle commit",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N1b. receipt mode 100755 at HEAD",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N2. artifacts/ as a gitlink (mode 160000) in a middle commit",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N3. second archive for 0.0.1 via build metadata (0.0.1+evil)",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N3b. second archive for 0.0.1 via a v prefix (v0.0.1)",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N4. duplicate carried entry for 0.0.1",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N4b. identical duplicate carried entry for 0.0.1",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N5. later commit edits 0.0.1's sourceCommit",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N5b. sourceCommit re-pointed at an unrelated orphan with identical metadata (carrier not its child)",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N6-control. with --pinned-superseded on the command line",
+      "expect": "pass",
+      "exit": 0
+    },
+    {
+      "case": "N6. the same pin offered through environment variables only",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N6b. --pinned-superseded=FILE (equals form) on the command line",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N7. manifest reordered",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N8. receipt as a symbolic link inside artifacts/",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N9. Artifacts/ (capital A) with other bytes for 0.0.1",
+      "expect": "fail",
+      "exit": 1
+    },
+    {
+      "case": "N10. packed file changed after 0.0.1 is carried, version bumped only by build metadata (0.0.1+changed)",
+      "expect": "fail",
+      "exit": 1
+    }
+  ],
+  "semverReplay": [
+    {
+      "section": "A. A second archive under 0.1.1-rc.14+evil, with changed engine code",
+      "exits": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "section": "B. A packed README changed under 0.1.1-rc.14+changed",
+      "exits": [
+        0,
+        0,
+        1,
+        1
+      ]
+    }
+  ],
+  "nodeModulesReplay": [
+    {
+      "section": "Baseline: node_modules as npm ci left it",
+      "exits": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "section": "A. node_modules/.bin/tsup replaced by one that fails",
+      "exits": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "section": "B. Engine code changed under 0.1.1-rc.14, and a tsup that copies dist from the carried archive",
+      "exits": [
+        0,
+        1,
+        1,
+        1
+      ]
+    }
+  ],
+  "distIdenticalToSecondBuild": [
+    "dist/ of the second build (d3106eb3…, packed from 90d6cdb) and of this build:",
+    "second build: 24 files; this build: 24 files",
+    "every dist file is byte-identical",
+    "packed files that differ:",
+    "  CHANGELOG.md",
+    "  README.md"
+  ],
   "newTestsOnEarlierSources": [
     {
       "commit": "4eee700",
-      "failed": 27,
+      "failed": 31,
       "passed": 32
     },
     {
       "commit": "74a4471",
-      "failed": 11,
-      "passed": 27
+      "failed": 16,
+      "passed": 26
+    },
+    {
+      "commit": "90d6cdb",
+      "failed": 5,
+      "passed": 12
     }
   ],
   "compatibility": {
@@ -423,24 +577,73 @@
   "chartSunAcrossTheSpan": {
     "rc13": {
       "version": "0.1.1-rc.13",
-      "solstices": 7994,
+      "solstices": 7995,
       "flagged": 0,
-      "latitudeBeyond3_6Arcsec": 5402,
-      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1407
+      "latitudeBeyond3_6Arcsec": 5403,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1408,
+      "firstFlagged": [],
+      "lastSolstice": {
+        "utc": "3998-06-19T17:56:46.180Z",
+        "latArcsec": 29.385,
+        "marginArcsec": 29.385,
+        "flagged": false
+      },
+      "before2000LatitudeBeyond3_6Arcsec": {
+        "solstices": 2512,
+        "largestMarginArcsec": -3.608
+      }
     },
     "rc14-first-build": {
       "version": "0.1.1-rc.14",
-      "solstices": 7994,
-      "flagged": 1407,
-      "latitudeBeyond3_6Arcsec": 5402,
-      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1407
+      "solstices": 7995,
+      "flagged": 1408,
+      "latitudeBeyond3_6Arcsec": 5403,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1408,
+      "firstFlagged": [
+        {
+          "utc": "2591-06-20T20:25:27.709Z",
+          "latArcsec": 3.605,
+          "marginArcsec": 3.605
+        },
+        {
+          "utc": "2592-06-20T02:20:30.470Z",
+          "latArcsec": 3.61,
+          "marginArcsec": 3.61
+        },
+        {
+          "utc": "2593-06-20T08:09:10.361Z",
+          "latArcsec": 3.616,
+          "marginArcsec": 3.616
+        }
+      ],
+      "lastSolstice": {
+        "utc": "3998-06-19T17:56:46.180Z",
+        "latArcsec": 29.385,
+        "marginArcsec": 29.385,
+        "flagged": true
+      },
+      "before2000LatitudeBeyond3_6Arcsec": {
+        "solstices": 2512,
+        "largestMarginArcsec": -3.608
+      }
     },
     "rc14": {
       "version": "0.1.1-rc.14",
-      "solstices": 7994,
+      "solstices": 7995,
       "flagged": 0,
-      "latitudeBeyond3_6Arcsec": 5402,
-      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1407
+      "latitudeBeyond3_6Arcsec": 5403,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1408,
+      "firstFlagged": [],
+      "lastSolstice": {
+        "utc": "3998-06-19T17:56:46.180Z",
+        "latArcsec": 29.385,
+        "marginArcsec": 29.385,
+        "flagged": false
+      },
+      "before2000LatitudeBeyond3_6Arcsec": {
+        "solstices": 2512,
+        "largestMarginArcsec": -3.608
+      }
     }
   },
   "declinationAgainstDE440s": {
@@ -490,6 +693,7 @@
     ]
   },
   "performance": {
+    "measuredOn": "the second build's dist (d3106eb3…), byte-identical to this build's (dist-identity.log)",
     "runtime": "v22.22.2",
     "cpus": 4,
     "rounds": 3,
@@ -591,72 +795,72 @@
         {
           "utc": "-030000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -117004.934,
-          "ms": 23760.9
+          "ms": 21875.9
         },
         {
           "utc": "-000500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -71.878,
-          "ms": 527.5
+          "ms": 477.8
         },
         {
           "utc": "0001-04-30T00:00:00Z",
           "sunLatitudeArcsec": 2.671,
-          "ms": 4.4
+          "ms": 2.2
         },
         {
           "utc": "0001-05-01T00:00:00Z",
           "sunLatitudeArcsec": 1.315,
-          "ms": 15.9
+          "ms": 27
         },
         {
           "utc": "0500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -21.565,
-          "ms": 26.5
+          "ms": 15.3
         },
         {
           "utc": "1000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -9.897,
-          "ms": 17
+          "ms": 20
         },
         {
           "utc": "1500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -3.794,
-          "ms": 13.1
+          "ms": 15.9
         },
         {
           "utc": "1800-06-01T00:00:00Z",
           "sunLatitudeArcsec": -1.447,
-          "ms": 14.5
+          "ms": 15.9
         },
         {
           "utc": "2000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 0.019,
-          "ms": 14.5
+          "ms": 18.4
         },
         {
           "utc": "2200-06-01T00:00:00Z",
           "sunLatitudeArcsec": 1.623,
-          "ms": 14.2
+          "ms": 17.1
         },
         {
           "utc": "2500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 4.697,
-          "ms": 13.5
+          "ms": 14.6
         },
         {
           "utc": "3000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 13.267,
-          "ms": 15.9
+          "ms": 15.5
         },
         {
           "utc": "3500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 28.548,
-          "ms": 21.3
+          "ms": 13.2
         },
         {
           "utc": "3998-09-02T00:00:00Z",
           "sunLatitudeArcsec": -57.522,
-          "ms": 20.7
+          "ms": 15.1
         },
         {
           "utc": "3998-09-03T12:00:00Z",
@@ -666,12 +870,12 @@
         {
           "utc": "4500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 87.508,
-          "ms": 530.2
+          "ms": 429
         },
         {
           "utc": "+030000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -105345.902,
-          "ms": 22624.7
+          "ms": 22682.4
         }
       ]
     },
@@ -681,7 +885,7 @@
         {
           "utc": "-030000-06-01T00:00:00Z",
           "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
-          "ms": 1
+          "ms": 0.9
         },
         {
           "utc": "-000500-06-01T00:00:00Z",
@@ -696,62 +900,62 @@
         {
           "utc": "0001-05-01T00:00:00Z",
           "sunLatitudeArcsec": 1.315,
-          "ms": 85.7
+          "ms": 74.3
         },
         {
           "utc": "0500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -21.565,
-          "ms": 34.9
+          "ms": 24
         },
         {
           "utc": "1000-06-01T00:00:00Z",
           "sunLatitudeArcsec": -9.897,
-          "ms": 20.1
+          "ms": 17.9
         },
         {
           "utc": "1500-06-01T00:00:00Z",
           "sunLatitudeArcsec": -3.794,
-          "ms": 25.4
+          "ms": 14.9
         },
         {
           "utc": "1800-06-01T00:00:00Z",
           "sunLatitudeArcsec": -1.447,
-          "ms": 19
+          "ms": 29.4
         },
         {
           "utc": "2000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 0.019,
-          "ms": 17.7
+          "ms": 20.4
         },
         {
           "utc": "2200-06-01T00:00:00Z",
           "sunLatitudeArcsec": 1.623,
-          "ms": 16.6
+          "ms": 26.5
         },
         {
           "utc": "2500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 4.697,
-          "ms": 34.4
+          "ms": 27
         },
         {
           "utc": "3000-06-01T00:00:00Z",
           "sunLatitudeArcsec": 13.267,
-          "ms": 17.9
+          "ms": 20.3
         },
         {
           "utc": "3500-06-01T00:00:00Z",
           "sunLatitudeArcsec": 28.548,
-          "ms": 13.3
+          "ms": 19.7
         },
         {
           "utc": "3998-09-02T00:00:00Z",
           "sunLatitudeArcsec": -57.522,
-          "ms": 14.3
+          "ms": 28.3
         },
         {
           "utc": "3998-09-03T12:00:00Z",
           "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
-          "ms": 0.1
+          "ms": 0.2
         },
         {
           "utc": "4500-06-01T00:00:00Z",
@@ -780,8 +984,8 @@
   },
   "conformance": "zodiacs-engine 0.1.1-rc.14: 232 pass, 222 fail, 46 unsupported, 0 error (of 500)",
   "sourceFiles": {
-    "README.md": "7ff5fb710c2d348bce9a38b06ebbc75c635de70c7c33d76447a17043ede53b21",
-    "CHANGELOG.md": "35f504d921914c3de3f5475544758b36db9eabe926c82419b97dd66cbd266362",
+    "README.md": "71dd78ef1262e7c882ec84c84197532072d261fc47fd2380313e33b6e568da59",
+    "CHANGELOG.md": "808aa2bb77392f6c0d77de916e25f009201ef2485af1e30b3d0100fc8e600b6e",
     "LICENSE": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df",
     "LICENSING.md": "52cc2f753135930f8f117a403b6c9a6213339a0b3e9e3010a0d574b905006c79",
     "NOTICE": "4f6a9de3d38fefb588f21d5eba1912d7a6ddf321a17f868a3f7b653a6fd8c9e3",
@@ -792,9 +996,9 @@
     "tsconfig.build.json": "a22d6f6c1c4389ff75785b8867b5f9fbc5f58c2ecf0aac84b88666fb69b54517",
     "tsconfig.typecheck.json": "79191bb871130d3689ae45c952f8c20d1e2780669c227c22cb1f9a646f9e3ea1",
     "typedoc.json": "eb307dbbe7f0ae3114f547d3249ff7cc8d4d71a2b6381e30966c8f8ed08d79cf",
-    ".github/workflows/ci.yml": "e5fd25e5dade3c79deaf9d12dba164526130e5a1e5085905967e123ca0c6b0c6",
+    ".github/workflows/ci.yml": "b1c9b4b48e55e058121576861f1a6ff9227169ff802bfbaa2638ce0f33f6c44f",
     ".github/workflows/conformance.yml": "0cd50321bbc5592ac46cdcaedcce261bd09b1fb31312380ab0385d64d93a22b3",
-    "artifacts/README.md": "0cd8fbf52f3f50a4a39f1513e713216ef84d3de1bceb1c450f44249262f7f7cb",
+    "artifacts/README.md": "2c3b5ac96b6d9495379d0539ae231bb424b158286e66c8a2f5b30fe38ff437fe",
     "artifacts/archives.json": "279ff583a69a71485207148fdecc772215ee08f324968760c3a6679438ac777f",
     "src/angles-erfa.test.ts": "ce943febcb8fdddb3063ec6de75032a99fed98368ac1070239cc0eb51be9dfed",
     "src/api.ts": "cf85a9ee7906dee50739e0a9efde01129b5501b53f045d4b596c322a7cbbd383",
@@ -810,7 +1014,7 @@
     "src/crossings.test.ts": "54323a1dcf38cd1de846b5e8e3b1ce2e56f7b482bca81c2f1c50551b30c54c5e",
     "src/crossings.ts": "105d512921737886a254f71f5eb080ed11ee7b1a1175fe20ad2934291fdad9e4",
     "src/date-input.ts": "f9db8865bf143d6334eb93d9618f50aa6a81ba32273b0a103d2a83e3c8014675",
-    "src/declination.test.ts": "cf93954dda7755b0e18e586de36de11c5d3a916ee38485444371090a45761f67",
+    "src/declination.test.ts": "5c63b75dcb88d40bf4fe97ac578a75d52c76c09baa5d5d9f5a811b03723d729e",
     "src/declination.ts": "b2d8582ccdbd13396664fd9cd606169de75d7d7b9b10a9f7d1553ef1cc6c6b85",
     "src/deltat-chart.test.ts": "733e9eadc8c0a79a2090aec5240249f29cdab84b94466c3a60dbab54183874ea",
     "src/deltat.test.ts": "8684248f7284453f2602ab3cfb030c97f25751d7d0e15df219f046d64f8df173",
@@ -864,9 +1068,9 @@
     "src/types.ts": "dd0c03ea5b817859ceb167d701b91df6732dd303d7e57f6359ab119667304234",
     "scripts/module-resolution-smoke.mjs": "cee0c0720000eb827e2f3444e6e3f13d0d685fc3656919b6462d45ab2253f179",
     "scripts/typedoc-canonical.mjs": "b98f810257c4b05b525d8fbfc7b4954331aef8b22a4af6c04719046a4ce965ab",
-    "scripts/verify-archive-binding.mjs": "9061971fe34ec3e102fcd6b0eea5a09092a37d359033515c3fa341e9d500e3e7",
-    "scripts/verify-archive-binding.test.mjs": "4c5e729d6307ec8e3cae03120395ea0a718e4ea80e0ad84a7f7ab166209fd4e7",
-    "scripts/verify-package-contents.mjs": "63caeca3ed674be8df04634cfddf83ed0727a690251012a5463ea3db60f0f226",
+    "scripts/verify-archive-binding.mjs": "b752becd0a1f9ace8205055b8cc0ccefa8c4809d2ae4bf652fd5a55acef7fe39",
+    "scripts/verify-archive-binding.test.mjs": "08d8e7e5460c3cd4718110940ff48979b6672a1e343c3d6973422078a27372fc",
+    "scripts/verify-package-contents.mjs": "a82c5516afd55cd785c552f40a64a3ca6bfd5ab0e5c7d1d3aa42d86910a8d886",
     "scripts/verify-packed-consumer.mjs": "951e2313aea2bc2d4386929c0d2c2c03e2001aa08f6b1bf4aba6210fc78ba9a0",
     "scripts/verify-rc10-compatibility.mjs": "7d0b0fa15408d70b03653dd5345977b141e0a28c2211345d9153624a3d4bb603"
   },
