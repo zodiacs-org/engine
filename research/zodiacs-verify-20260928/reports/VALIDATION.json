@@ -1,0 +1,131 @@
+{
+  "generatedAt": "2026-09-28T05:33:46.298Z",
+  "node": "v24.19.0",
+  "tests": {
+    "total": 103,
+    "passed": 103,
+    "failed": 0,
+    "skipped": 0
+  },
+  "frozenEngineVersion": "0.1.1-rc.10",
+  "artifact": {
+    "digest": "sha256:2262b1e85cca39847d62b31ff9d0768407b183d5a498ef8adf78fa17500c3f74",
+    "scope": "sha256 manifest of all installed engine JS/MJS/CJS excluding node_modules, engine package.json, and every file of the resolved astronomy-engine 2.1.19 package; source ancestry and physical accuracy not authenticated"
+  },
+  "toolSession": {
+    "computedFactSupported": true,
+    "clearedEvidenceRefused": true
+  },
+  "realEngine": {
+    "chartReceiptId": "sha256:1f06a880b3354480357035b48233486eb54cf2c78d828b9fcaa7a26097ff6f92",
+    "factCount": 265,
+    "uncertaintyReportId": "sha256:119fe0ce51a7bfcb3e3ed11d842463e11ac8b9114a29b4280133e7aa4d8081b2",
+    "sampleCalls": 33,
+    "complete": false,
+    "features": [
+      {
+        "featureId": "sun-sign",
+        "status": "unresolved",
+        "coverage": "sampled",
+        "values": [
+          "Capricorn"
+        ]
+      },
+      {
+        "featureId": "moon-sign",
+        "status": "unresolved",
+        "coverage": "sampled",
+        "values": [
+          "Scorpio"
+        ]
+      },
+      {
+        "featureId": "ascendant-sign",
+        "status": "variable",
+        "coverage": "sampled",
+        "values": [
+          "Aries",
+          "Taurus"
+        ]
+      },
+      {
+        "featureId": "sun-moon-square",
+        "status": "unresolved",
+        "coverage": "sampled",
+        "values": [
+          false
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "claimId": "computed-sun",
+        "status": "supported"
+      },
+      {
+        "claimId": "unsupported-entire-window",
+        "status": "unresolved"
+      }
+    ]
+  },
+  "syntheticDemo": {
+    "label": "Synthetic demonstration; not real astronomical results",
+    "comparison": {
+      "verdict": "disagreement-or-incomplete",
+      "longitudeDeltaArcsec": 35.99999999999923
+    },
+    "uncertainty": [
+      {
+        "featureId": "sun-sign",
+        "status": "stable",
+        "coverage": "bounded",
+        "values": [
+          "Aries"
+        ]
+      },
+      {
+        "featureId": "moon-sign",
+        "status": "variable",
+        "coverage": "sampled",
+        "values": [
+          "Aries",
+          "Taurus"
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "claimId": "correct-sun",
+        "status": "supported"
+      },
+      {
+        "claimId": "invented-sun",
+        "status": "rejected"
+      },
+      {
+        "claimId": "stable-sun",
+        "status": "supported"
+      },
+      {
+        "claimId": "overconfident-moon",
+        "status": "rejected"
+      },
+      {
+        "claimId": "reflection",
+        "status": "supported"
+      }
+    ],
+    "expectedNegativeControls": true,
+    "limitations": [
+      "Supported fact and interval claims are conditional on explicitly trusted evidence and its documented model; seals establish integrity, not authenticity or astronomical correctness.",
+      "Supported interval conclusions are conditional on every explicitly trusted bound assumption; this checker does not independently establish the bounds.",
+      "Supported interpretations establish reviewed rule provenance and supported same-subject dependencies ONLY. They do not establish scientific truth, predictive validity or semantic entailment of the free text.",
+      "This checker does not read prose for hidden factual claims, infer tolerances, resolve birth records, or infer trust from an identifier or source title."
+    ]
+  },
+  "limits": [
+    "Local research preview; this validation runner performs no repository publication, release or deployment.",
+    "No changes to engine or earlier research packages.",
+    "Finite software checks do not certify astronomical accuracy or scientific validity."
+  ]
+}

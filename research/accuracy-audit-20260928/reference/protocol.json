@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "id": "jpl-icrf-correction-isolation-v1",
+  "purpose": "Follow-up diagnostic using the same 21 epochs as the prior apparent-longitude comparison; these are not blind holdout epochs.",
+  "frozenBeforeAcquisition": true,
+  "casesSha256": "464a443edce57537947a0200435044703416c956cb0d9509240721a59e17dbe2",
+  "clock": {
+    "input": "synthetic UT1 transported as ISO Z strings, not historical physical UTC",
+    "deltaTSeconds": 69,
+    "requestScale": "TT",
+    "conversion": "TT Julian day =2440587.5 +(synthetic UT1 Unix seconds+69)/86400",
+    "maxReturnedEpochDifferenceMilliseconds": 1,
+    "ttVsTdb": "Request TT explicitly and require JDTT in returned header. Horizons handles TT-to-TDB internally; no client TT-as-TDB substitution."
+  },
+  "baseParameters": {
+    "format": "json",
+    "EPHEM_TYPE": "VECTORS",
+    "CENTER": "500@399",
+    "REF_SYSTEM": "ICRF",
+    "REF_PLANE": "FRAME",
+    "TIME_TYPE": "TT",
+    "TLIST_TYPE": "JD",
+    "CAL_TYPE": "GREGORIAN",
+    "TIME_DIGITS": "FRACSEC",
+    "VEC_TABLE": "3",
+    "OUT_UNITS": "AU-D",
+    "CSV_FORMAT": "YES",
+    "VEC_LABELS": "YES",
+    "OBJ_DATA": "YES"
+  },
+  "primaryCorrections": [
+    "NONE",
+    "LT+S"
+  ],
+  "primaryBodies": [
+    {
+      "body": "Sun",
+      "command": "10",
+      "referenceTarget": "body-center"
+    },
+    {
+      "body": "Moon",
+      "command": "301",
+      "referenceTarget": "body-center"
+    },
+    {
+      "body": "Mercury",
+      "command": "199",
+      "referenceTarget": "body-center"
+    },
+    {
+      "body": "Venus",
+      "command": "299",
+      "referenceTarget": "body-center"
+    },
+    {
+      "body": "Mars",
+      "command": "4",
+      "referenceTarget": "system-barycenter"
+    },
+    {
+      "body": "Jupiter",
+      "command": "5",
+      "referenceTarget": "system-barycenter"
+    },
+    {
+      "body": "Saturn",
+      "command": "6",
+      "referenceTarget": "system-barycenter"
+    },
+    {
+      "body": "Uranus",
+      "command": "7",
+      "referenceTarget": "system-barycenter"
+    },
+    {
+      "body": "Neptune",
+      "command": "8",
+      "referenceTarget": "system-barycenter"
+    },
+    {
+      "body": "Pluto",
+      "command": "9",
+      "referenceTarget": "system-barycenter"
+    }
+  ],
+  "primaryEpochIndices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "optionalBodyCenterControls": {
+    "correction": "LT+S",
+    "epochIndices": [
+      9,
+      12,
+      15
+    ],
+    "bodies": [
+      {
+        "body": "Mars",
+        "command": "499",
+        "referenceTarget": "body-center"
+      },
+      {
+        "body": "Jupiter",
+        "command": "599",
+        "referenceTarget": "body-center"
+      },
+      {
+        "body": "Saturn",
+        "command": "699",
+        "referenceTarget": "body-center"
+      },
+      {
+        "body": "Uranus",
+        "command": "799",
+        "referenceTarget": "body-center"
+      },
+      {
+        "body": "Neptune",
+        "command": "899",
+        "referenceTarget": "body-center"
+      },
+      {
+        "body": "Pluto",
+        "command": "999",
+        "referenceTarget": "body-center"
+      }
+    ]
+  },
+  "expectedPrimaryRequests": 20,
+  "expectedPrimaryRows": 420,
+  "maximumOptionalRequests": 6,
+  "maximumOptionalRows": 18,
+  "correctionMeaning": {
+    "NONE": "Instantaneous geometric geocentric vectors. No light-time, stellar aberration or gravitational light bending.",
+    "LT+S": "Geocentric vectors with light-time and stellar aberration. No gravitational light bending or of-date rotation is applied. Not identical to the engine approximation that retards both heliocentric Earth and target."
+  },
+  "fields": "Position and velocity, one-way light time, range and range rate. Preserve AU/day outputs without rotating or normalizing in this acquisition layer.",
+  "sourceUrls": [
+    "https://ssd-api.jpl.nasa.gov/doc/horizons.html",
+    "https://ssd.jpl.nasa.gov/horizons/manual.html",
+    "https://ssd.jpl.nasa.gov/planets/eph_export.html"
+  ],
+  "acceptance": "Reference acquisition validates scope, actual headers, finite values, times and raw provenance only; no target values or accuracy gates influence selection.",
+  "limits": [
+    "Reuses earlier dates deliberately for attribution; not independent blind-holdout evaluation.",
+    "Mercury and Venus use body centers; Mars through Pluto primary rows use system barycenters, as in the prior Q31 comparison.",
+    "Optional body-center controls diagnose reference-target sensitivity; they do not establish the engine model target center.",
+    "ICRF versus the engine EQJ/J2000 axes still requires explicitly labeled frame-bias treatment.",
+    "Independent-frame projection is separate from same-engine-frame controlled ablation.",
+    "A finite vector comparison cannot establish all-epoch error bounds or global event completeness."
+  ]
+}

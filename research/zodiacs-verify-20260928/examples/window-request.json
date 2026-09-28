@@ -1,0 +1,13 @@
+{
+  "subjectId": "synthetic-example-person",
+  "intervals": [{"from":"2000-01-01T12:00:00Z","to":"2000-01-01T12:30:00Z"}],
+  "birth": {"latitude":51.5,"longitude":0,"timeKnowledge":"exact","houseSystem":"whole"},
+  "features": [
+    {"id":"sun-sign","kind":"sign","body":"Sun"},
+    {"id":"moon-sign","kind":"sign","body":"Moon"},
+    {"id":"ascendant-sign","kind":"sign","body":"Ascendant"},
+    {"id":"sun-moon-square","kind":"aspect","a":"Sun","b":"Moon","angle":90,"orb":5}
+  ],
+  "maxSamples": 33,
+  "resolutionMs": 60000
+}

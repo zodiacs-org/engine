@@ -1,0 +1,23 @@
+{
+  "validator": "jsonschema 4.26.0 Draft202012Validator",
+  "schemasValid": true,
+  "examplesValid": [
+    "utc-window.json",
+    "local-fold-proposal.json",
+    "rc10-finite-preview.json"
+  ],
+  "realEnginePreview": {
+    "chartEvaluations": 3602,
+    "complete": false,
+    "finiteDomainEvaluated": true,
+    "issues": 0
+  },
+  "nullableAncestry": {
+    "nullAccepted": true,
+    "placeholderStringRejected": true,
+    "appliesTo": [
+      "request.model.engineCommit",
+      "result.provenance.assertedEngineCommit"
+    ]
+  }
+}

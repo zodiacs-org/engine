@@ -1,0 +1,8 @@
+{
+  "subjectId": "synthetic-example-person",
+  "utc": "2000-01-01T12:00:00Z",
+  "latitude": 51.5,
+  "longitude": 0,
+  "timeKnowledge": "exact",
+  "houseSystem": "whole"
+}

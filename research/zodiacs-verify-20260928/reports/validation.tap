@@ -1,0 +1,628 @@
+TAP version 13
+# Subtest: matching typed instant fact requires explicit trusted receipt
+ok 1 - matching typed instant fact requires explicit trusted receipt
+  ---
+  duration_ms: 5.422231
+  type: 'test'
+  ...
+# Subtest: receipt seal is integrity only: modified payload and wrong subject cannot support
+ok 2 - receipt seal is integrity only: modified payload and wrong subject cannot support
+  ---
+  duration_ms: 1.657216
+  type: 'test'
+  ...
+# Subtest: numeric equality is typed and exact without implicit tolerance
+ok 3 - numeric equality is typed and exact without implicit tolerance
+  ---
+  duration_ms: 2.133396
+  type: 'test'
+  ...
+# Subtest: missing evidence is unresolved only when its ID was explicitly trusted
+ok 4 - missing evidence is unresolved only when its ID was explicitly trusted
+  ---
+  duration_ms: 1.553273
+  type: 'test'
+  ...
+# Subtest: reference-time receipt cannot support angle, angular-aspect or house claims
+ok 5 - reference-time receipt cannot support angle, angular-aspect or house claims
+  ---
+  duration_ms: 3.421459
+  type: 'test'
+  ...
+# Subtest: reference-time receipt can describe a planetary instant without promoting it to natal certainty
+ok 6 - reference-time receipt can describe a planetary instant without promoting it to natal certainty
+  ---
+  duration_ms: 0.722813
+  type: 'test'
+  ...
+# Subtest: reference-time support uses an explicit vocabulary and aspect grammar, not guessed entity semantics
+ok 7 - reference-time support uses an explicit vocabulary and aspect grammar, not guessed entity semantics
+  ---
+  duration_ms: 6.553012
+  type: 'test'
+  ...
+# Subtest: scope substitution and unknown kinds are rejected
+ok 8 - scope substitution and unknown kinds are rejected
+  ---
+  duration_ms: 1.176019
+  type: 'test'
+  ...
+# Subtest: duplicate evidence, claim, rule and trust IDs reject the whole ambiguous input
+ok 9 - duplicate evidence, claim, rule and trust IDs reject the whole ambiguous input
+  ---
+  duration_ms: 1.253522
+  type: 'test'
+  ...
+# Subtest: duplicate fact IDs, even in resealed evidence, fail receipt validation
+ok 10 - duplicate fact IDs, even in resealed evidence, fail receipt validation
+  ---
+  duration_ms: 0.791663
+  type: 'test'
+  ...
+# Subtest: bounded interval needs independently explicit report trust AND every bound trust
+ok 11 - bounded interval needs independently explicit report trust AND every bound trust
+  ---
+  duration_ms: 10.240252
+  type: 'test'
+  ...
+# Subtest: an aspect interval requires trust in both contributing body bounds
+ok 12 - an aspect interval requires trust in both contributing body bounds
+  ---
+  duration_ms: 3.513495
+  type: 'test'
+  ...
+# Subtest: same samples never establish interval stability; variable witnesses reject one stable value
+ok 13 - same samples never establish interval stability; variable witnesses reject one stable value
+  ---
+  duration_ms: 22.356592
+  type: 'test'
+  ...
+# Subtest: malformed resealed report cannot promote sampled evidence into stable bounded evidence
+ok 14 - malformed resealed report cannot promote sampled evidence into stable bounded evidence
+  ---
+  duration_ms: 8.299099
+  type: 'test'
+  ...
+# Subtest: interval subject, expected value, absent feature and scope must match
+ok 15 - interval subject, expected value, absent feature and scope must match
+  ---
+  duration_ms: 4.228094
+  type: 'test'
+  ...
+# Subtest: report IDs cannot collide or duplicate
+ok 16 - report IDs cannot collide or duplicate
+  ---
+  duration_ms: 1.698637
+  type: 'test'
+  ...
+# Subtest: one bound ID cannot carry different semantics across reports, while exact reuse is allowed
+ok 17 - one bound ID cannot carry different semantics across reports, while exact reuse is allowed
+  ---
+  duration_ms: 6.00022
+  type: 'test'
+  ...
+# Subtest: interpretation support means provenance/dependencies only, including unrelated prose
+ok 18 - interpretation support means provenance/dependencies only, including unrelated prose
+  ---
+  duration_ms: 0.904149
+  type: 'test'
+  ...
+# Subtest: interpretation requires explicit rule trust and complete source provenance
+ok 19 - interpretation requires explicit rule trust and complete source provenance
+  ---
+  duration_ms: 0.860565
+  type: 'test'
+  ...
+# Subtest: cross-subject or missing prerequisites cannot support an interpretation
+ok 20 - cross-subject or missing prerequisites cannot support an interpretation
+  ---
+  duration_ms: 1.894095
+  type: 'test'
+  ...
+# Subtest: dependency cycles and all downstream dependents are rejected independently of array order
+ok 21 - dependency cycles and all downstream dependents are rejected independently of array order
+  ---
+  duration_ms: 0.765706
+  type: 'test'
+  ...
+# Subtest: rejected versus unresolved prerequisites propagate without becoming interpretation support
+ok 22 - rejected versus unresolved prerequisites propagate without becoming interpretation support
+  ---
+  duration_ms: 0.576908
+  type: 'test'
+  ...
+# Subtest: unused malformed supplied evidence cannot yield blanket allSupported
+ok 23 - unused malformed supplied evidence cannot yield blanket allSupported
+  ---
+  duration_ms: 0.552812
+  type: 'test'
+  ...
+# Subtest: empty, malformed and typo-bearing input cannot silently approve
+ok 24 - empty, malformed and typo-bearing input cannot silently approve
+  ---
+  duration_ms: 0.349023
+  type: 'test'
+  ...
+# Subtest: prototype-looking opaque IDs do not resolve inherited properties
+ok 25 - prototype-looking opaque IDs do not resolve inherited properties
+  ---
+  duration_ms: 0.679579
+  type: 'test'
+  ...
+# Subtest: long acyclic dependency chains are evaluated iteratively
+ok 26 - long acyclic dependency chains are evaluated iteratively
+  ---
+  duration_ms: 41.057751
+  type: 'test'
+  ...
+# Subtest: CLI comparison and refusal to overwrite an existing output
+ok 27 - CLI comparison and refusal to overwrite an existing output
+  ---
+  duration_ms: 17.85192
+  type: 'test'
+  ...
+# Subtest: CLI claim result uses exit2 for unsupported claims and exit0 for supported
+ok 28 - CLI claim result uses exit2 for unsupported claims and exit0 for supported
+  ---
+  duration_ms: 17.242524
+  type: 'test'
+  ...
+# Subtest: wrap-aware comparison handles the zero-degree seam
+ok 29 - wrap-aware comparison handles the zero-degree seam
+  ---
+  duration_ms: 5.497751
+  type: 'test'
+  ...
+# Subtest: convention or time mismatch prevents accuracy attribution
+ok 30 - convention or time mismatch prevents accuracy attribution
+  ---
+  duration_ms: 5.627967
+  type: 'test'
+  ...
+# Subtest: provider differences alone preserve matched calculation settings
+ok 31 - provider differences alone preserve matched calculation settings
+  ---
+  duration_ms: 1.383133
+  type: 'test'
+  ...
+# Subtest: missing facts and same-id different semantics never count as agreement
+ok 32 - missing facts and same-id different semantics never count as agreement
+  ---
+  duration_ms: 3.410063
+  type: 'test'
+  ...
+# Subtest: invalid threshold, tampered receipt and different subjects fail closed
+ok 33 - invalid threshold, tampered receipt and different subjects fail closed
+  ---
+  duration_ms: 4.339539
+  type: 'test'
+  ...
+# Subtest: canonical content identity is order-independent and sensitive to every JSON field
+ok 34 - canonical content identity is order-independent and sensitive to every JSON field
+  ---
+  duration_ms: 2.203329
+  type: 'test'
+  ...
+# Subtest: rejects JSON ambiguities and nonfinite values
+ok 35 - rejects JSON ambiguities and nonfinite values
+  ---
+  duration_ms: 0.654572
+  type: 'test'
+  ...
+# Subtest: seal tampering and preexisting ids fail closed
+ok 36 - seal tampering and preexisting ids fail closed
+  ---
+  duration_ms: 2.365026
+  type: 'test'
+  ...
+# Subtest: strict resolved instants validate calendar, offsets and precision
+ok 37 - strict resolved instants validate calendar, offsets and precision
+  ---
+  duration_ms: 0.360069
+  type: 'test'
+  ...
+# Subtest: angular signs wrap and boundaries use lower inclusive convention
+ok 38 - angular signs wrap and boundaries use lower inclusive convention
+  ---
+  duration_ms: 0.254935
+  type: 'test'
+  ...
+# Subtest: canonicalization never invokes an array instance method
+ok 39 - canonicalization never invokes an array instance method
+  ---
+  duration_ms: 0.449951
+  type: 'test'
+  ...
+# Subtest: receipt forbids duplicate semantics, inconsistent signs and fabricated reference angles
+ok 40 - receipt forbids duplicate semantics, inconsistent signs and fabricated reference angles
+  ---
+  duration_ms: 4.357885
+  type: 'test'
+  ...
+# Subtest: adapter refuses relative paths and unqualified versions before import
+ok 41 - adapter refuses relative paths and unqualified versions before import
+  ---
+  duration_ms: 20.672587
+  type: 'test'
+  ...
+# Subtest: qualified runtime yields sealed, reproducible reference-time facts and explicit semantics
+ok 42 - qualified runtime yields sealed, reproducible reference-time facts and explicit semantics
+  ---
+  duration_ms: 122.189684
+  type: 'test'
+  ...
+# Subtest: exact profile preserves requested houses, location, and angular facts
+ok 43 - exact profile preserves requested houses, location, and angular facts
+  ---
+  duration_ms: 23.602323
+  type: 'test'
+  ...
+# Subtest: adapter refuses implicit polar fallback but permits an explicit whole-sign policy
+ok 44 - adapter refuses implicit polar fallback but permits an explicit whole-sign policy
+  ---
+  duration_ms: 7.730904
+  type: 'test'
+  ...
+# Subtest: sample honors requested clock and time/location profile without manufacturing bounds
+ok 45 - sample honors requested clock and time/location profile without manufacturing bounds
+  ---
+  duration_ms: 30.515274
+  type: 'test'
+  ...
+# Subtest: aspect facts expose pair, angle and effective orb with true and false values
+ok 46 - aspect facts expose pair, angle and effective orb with true and false values
+  ---
+  duration_ms: 6.797592
+  type: 'test'
+  ...
+# Subtest: strict input refuses missing zones, invalid dates and silently ignored settings
+ok 47 - strict input refuses missing zones, invalid dates and silently ignored settings
+  ---
+  duration_ms: 23.107937
+  type: 'test'
+  ...
+# Subtest: receipt and static model cannot share mutable provenance state
+ok 48 - receipt and static model cannot share mutable provenance state
+  ---
+  duration_ms: 19.409601
+  type: 'test'
+  ...
+# Subtest: changes to distribution JS or resolved dependency refuse qualification before import
+ok 49 - changes to distribution JS or resolved dependency refuse qualification before import
+  ---
+  duration_ms: 73.492327
+  type: 'test'
+  ...
+# Subtest: independent: every sign cusp retains the preceding representable longitude
+ok 50 - independent: every sign cusp retains the preceding representable longitude
+  ---
+  duration_ms: 1.129761
+  type: 'test'
+  ...
+# Subtest: independent: array methods are never executed while canonicalizing
+ok 51 - independent: array methods are never executed while canonicalizing
+  ---
+  duration_ms: 0.401821
+  type: 'test'
+  ...
+# Subtest: independent: poison-key content survives the seal without mutating prototypes
+ok 52 - independent: poison-key content survives the seal without mutating prototypes
+  ---
+  duration_ms: 0.856899
+  type: 'test'
+  ...
+# Subtest: independent: comparison preserves wrap, missing facts and fact-ID semantics
+ok 53 - independent: comparison preserves wrap, missing facts and fact-ID semantics
+  ---
+  duration_ms: 5.081349
+  type: 'test'
+  ...
+# Subtest: independent: invalid tolerance fails and model changes remain different assumptions
+ok 54 - independent: invalid tolerance fails and model changes remain different assumptions
+  ---
+  duration_ms: 4.474727
+  type: 'test'
+  ...
+# Subtest: independent: a narrow hidden sign excursion is never declared stable
+ok 55 - independent: a narrow hidden sign excursion is never declared stable
+  ---
+  duration_ms: 7.520143
+  type: 'test'
+  ...
+# Subtest: independent: unsampled sign tangency retains an unresolved region
+ok 56 - independent: unsampled sign tangency retains an unresolved region
+  ---
+  duration_ms: 2.344707
+  type: 'test'
+  ...
+# Subtest: independent: an exact unsampled aspect contact is not excluded by false samples
+ok 57 - independent: an exact unsampled aspect contact is not excluded by false samples
+  ---
+  duration_ms: 2.678968
+  type: 'test'
+  ...
+# Subtest: independent: nextfloat cusp with positive evaluation error cannot certify a sign
+ok 58 - independent: nextfloat cusp with positive evaluation error cannot certify a sign
+  ---
+  duration_ms: 1.838572
+  type: 'test'
+  ...
+# Subtest: independent: very large rates and overflowing enclosures fail closed
+ok 59 - independent: very large rates and overflowing enclosures fail closed
+  ---
+  duration_ms: 2.858376
+  type: 'test'
+  ...
+# Subtest: independent: nonadjacent error-bound contradiction cannot support stable coverage
+ok 60 - independent: nonadjacent error-bound contradiction cannot support stable coverage
+  ---
+  duration_ms: 4.389182
+  type: 'test'
+  ...
+# Subtest: independent: reference bound domains and model identity are enforced
+ok 61 - independent: reference bound domains and model identity are enforced
+  ---
+  duration_ms: 1.662664
+  type: 'test'
+  ...
+# Subtest: independent: failures share one call budget and preserve both disjoint components
+ok 62 - independent: failures share one call budget and preserve both disjoint components
+  ---
+  duration_ms: 1.526534
+  type: 'test'
+  ...
+# Subtest: independent: missing bodies never become bounded through another body bound
+ok 63 - independent: missing bodies never become bounded through another body bound
+  ---
+  duration_ms: 1.001152
+  type: 'test'
+  ...
+# Subtest: independent: resealed status and deleted domain evidence are rejected
+ok 64 - independent: resealed status and deleted domain evidence are rejected
+  ---
+  duration_ms: 9.10967
+  type: 'test'
+  ...
+# Subtest: independent: claim checker requires both report and bound trust
+ok 65 - independent: claim checker requires both report and bound trust
+  ---
+  duration_ms: 5.699778
+  type: 'test'
+  ...
+# Subtest: independent: trusting a resealed false stable report does not bypass evidence validation
+ok 66 - independent: trusting a resealed false stable report does not bypass evidence validation
+  ---
+  duration_ms: 2.064034
+  type: 'test'
+  ...
+# Subtest: reviewer: content resealing never inherits trust in a prior receipt
+ok 67 - reviewer: content resealing never inherits trust in a prior receipt
+  ---
+  duration_ms: 11.932299
+  type: 'test'
+  ...
+# Subtest: reviewer: provider-looking metadata and valid hashes do not establish authenticity
+ok 68 - reviewer: provider-looking metadata and valid hashes do not establish authenticity
+  ---
+  duration_ms: 1.270838
+  type: 'test'
+  ...
+# Subtest: reviewer: fact claims preserve types and reject malformed extra assertions
+ok 69 - reviewer: fact claims preserve types and reject malformed extra assertions
+  ---
+  duration_ms: 4.084934
+  type: 'test'
+  ...
+# Subtest: reviewer: interpretations explicitly support dependency provenance, never hidden prose assertions
+ok 70 - reviewer: interpretations explicitly support dependency provenance, never hidden prose assertions
+  ---
+  duration_ms: 1.359218
+  type: 'test'
+  ...
+# Subtest: reviewer: observer and clock declarations are bound into conditional uncertainty assumptions
+ok 71 - reviewer: observer and clock declarations are bound into conditional uncertainty assumptions
+  ---
+  duration_ms: 5.900814
+  type: 'test'
+  ...
+# Subtest: reviewer: a changed bounded report requires renewed report trust even with the same bound ID
+ok 72 - reviewer: a changed bounded report requires renewed report trust even with the same bound ID
+  ---
+  duration_ms: 3.379798
+  type: 'test'
+  ...
+# Subtest: reviewer: mismatched observation inputs never become a comparison agreement
+ok 73 - reviewer: mismatched observation inputs never become a comparison agreement
+  ---
+  duration_ms: 4.431974
+  type: 'test'
+  ...
+# Subtest: reviewer: mistyped comparison settings fail closed instead of defaulting to agreement
+ok 74 - reviewer: mistyped comparison settings fail closed instead of defaulting to agreement
+  ---
+  duration_ms: 2.644963
+  type: 'test'
+  ...
+# Subtest: reviewer: CLI rejects malformed input and preserves existing output files
+ok 75 - reviewer: CLI rejects malformed input and preserves existing output files
+  ---
+  duration_ms: 95.004108
+  type: 'test'
+  ...
+# Subtest: reviewer: CLI rejects misspelled comparison envelope fields
+ok 76 - reviewer: CLI rejects misspelled comparison envelope fields
+  ---
+  duration_ms: 8.588404
+  type: 'test'
+  ...
+# Subtest: reviewer: frozen adapter refuses symlinks inside the executable inventory
+ok 77 - reviewer: frozen adapter refuses symlinks inside the executable inventory
+  ---
+  duration_ms: 43.538828
+  type: 'test'
+  ...
+# Subtest: reviewer: CLI uncertainty binds observer and pinned Delta-T into the sealed model
+ok 78 - reviewer: CLI uncertainty binds observer and pinned Delta-T into the sealed model
+  ---
+  duration_ms: 96.851072
+  type: 'test'
+  ...
+# Subtest: tool definitions expose only four bounded input surfaces and are immutable
+ok 79 - tool definitions expose only four bounded input surfaces and are immutable
+  ---
+  duration_ms: 2.199282
+  type: 'test'
+  ...
+# Subtest: generated facts are usable, returned snapshots are detached, and sessions stay isolated
+ok 80 - generated facts are usable, returned snapshots are detached, and sessions stay isolated
+  ---
+  duration_ms: 10.650866
+  type: 'test'
+  ...
+# Subtest: caller trust/evidence/rule injections and unknown request fields are refused
+ok 81 - caller trust/evidence/rule injections and unknown request fields are refused
+  ---
+  duration_ms: 2.155413
+  type: 'test'
+  ...
+# Subtest: operator registry is cloned and cannot be replaced by subsequent caller mutation
+ok 82 - operator registry is cloned and cannot be replaced by subsequent caller mutation
+  ---
+  duration_ms: 8.67402
+  type: 'test'
+  ...
+# Subtest: uncertainty binds observer/pin, supplies no bounds, and cannot support sampled stability
+ok 83 - uncertainty binds observer/pin, supplies no bounds, and cannot support sampled stability
+  ---
+  duration_ms: 8.130271
+  type: 'test'
+  ...
+# Subtest: one FIFO limit applies jointly to chart receipts and uncertainty reports
+ok 84 - one FIFO limit applies jointly to chart receipts and uncertainty reports
+  ---
+  duration_ms: 7.386928
+  type: 'test'
+  ...
+# Subtest: clear prevents in-flight work from repopulating private evidence
+ok 85 - clear prevents in-flight work from repopulating private evidence
+  ---
+  duration_ms: 1.390934
+  type: 'test'
+  ...
+# Subtest: identical samples never imply stability without external bounds
+ok 86 - identical samples never imply stability without external bounds
+  ---
+  duration_ms: 17.30767
+  type: 'test'
+  ...
+# Subtest: external conservative bounds can establish full conditional sign coverage
+ok 87 - external conservative bounds can establish full conditional sign coverage
+  ---
+  duration_ms: 4.697165
+  type: 'test'
+  ...
+# Subtest: circular wrap yields observed variation and unresolved crossing region
+ok 88 - circular wrap yields observed variation and unresolved crossing region
+  ---
+  duration_ms: 4.858141
+  type: 'test'
+  ...
+# Subtest: an exact closed endpoint crossing is not dropped
+ok 89 - an exact closed endpoint crossing is not dropped
+  ---
+  duration_ms: 2.678147
+  type: 'test'
+  ...
+# Subtest: tangency at an unsampled point remains unresolved despite identical sampled signs
+ok 90 - tangency at an unsampled point remains unresolved despite identical sampled signs
+  ---
+  duration_ms: 1.2654
+  type: 'test'
+  ...
+# Subtest: huge rate radii never wrap modulo360 into false stability
+ok 91 - huge rate radii never wrap modulo360 into false stability
+  ---
+  duration_ms: 1.575095
+  type: 'test'
+  ...
+# Subtest: aspect membership uses inclusive orb and rejects uncertified exact boundary
+ok 92 - aspect membership uses inclusive orb and rejects uncertified exact boundary
+  ---
+  duration_ms: 6.916176
+  type: 'test'
+  ...
+# Subtest: position error allowance spanning a cusp prevents stability
+ok 93 - position error allowance spanning a cusp prevents stability
+  ---
+  duration_ms: 3.722752
+  type: 'test'
+  ...
+# Subtest: zero-duration input can be conditionally stable with exact supplied value bound
+ok 94 - zero-duration input can be conditionally stable with exact supplied value bound
+  ---
+  duration_ms: 1.123461
+  type: 'test'
+  ...
+# Subtest: disjoint intervals preserve gap and exact coverage under budget exhaustion
+ok 95 - disjoint intervals preserve gap and exact coverage under budget exhaustion
+  ---
+  duration_ms: 1.882658
+  type: 'test'
+  ...
+# Subtest: callbacks are shared across features and failures consume call budget
+ok 96 - callbacks are shared across features and failures consume call budget
+  ---
+  duration_ms: 1.289726
+  type: 'test'
+  ...
+# Subtest: contradicted external bounds invalidate previously bounded cells
+ok 97 - contradicted external bounds invalidate previously bounded cells
+  ---
+  duration_ms: 1.419166
+  type: 'test'
+  ...
+# Subtest: nonadjacent contradiction is caught when adjacent samples fit nonzero error allowances
+ok 98 - nonadjacent contradiction is caught when adjacent samples fit nonzero error allowances
+  ---
+  duration_ms: 1.477522
+  type: 'test'
+  ...
+# Subtest: bounded pair-check budget cannot silently promote unchecked assumptions to stability
+ok 99 - bounded pair-check budget cannot silently promote unchecked assumptions to stability
+  ---
+  duration_ms: 125.227669
+  type: 'test'
+  ...
+# Subtest: bound domains, model bindings and finite nonnegative parameters are enforced
+ok 100 - bound domains, model bindings and finite nonnegative parameters are enforced
+  ---
+  duration_ms: 1.143952
+  type: 'test'
+  ...
+# Subtest: missing one aspect body bound cannot produce a bounded result
+ok 101 - missing one aspect body bound cannot produce a bounded result
+  ---
+  duration_ms: 4.510711
+  type: 'test'
+  ...
+# Subtest: validator rejects resealed false stability, deleted coverage and incorrect bound references
+ok 102 - validator rejects resealed false stability, deleted coverage and incorrect bound references
+  ---
+  duration_ms: 8.102791
+  type: 'test'
+  ...
+# Subtest: seven-day span and input call-budget limits fail closed
+ok 103 - seven-day span and input call-budget limits fail closed
+  ---
+  duration_ms: 0.252191
+  type: 'test'
+  ...
+1..103
+# tests 103
+# suites 0
+# pass 103
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 445.630392

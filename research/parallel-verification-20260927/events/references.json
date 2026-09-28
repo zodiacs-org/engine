@@ -1,0 +1,317 @@
+{
+  "schemaVersion": 1,
+  "protocol": "jpl-october-2026-lunations-v1",
+  "protocolSha256": "596b0aca2d5077a65657699a91ec23bc4f3198768ae24e9880e94d8a5780a8d0",
+  "generatedAtUtc": "2026-09-27T15:18:22.716653+00:00",
+  "referenceBuildScriptSha256": "ee4ad00b0dd8accb76039b28d15be95a993057668fbb70d760460dd2c209bc02",
+  "referenceBuildMode": "offline raw replay",
+  "clock": {
+    "inputClock": "synthetic UT1 represented with ISO Z labels; not physical UTC",
+    "deltaTSeconds": 69,
+    "referenceClock": "TT = synthetic UT1 + 69 seconds",
+    "calendar": "proleptic Gregorian"
+  },
+  "observable": "apparent geocentric ecliptic longitude of date (ObsEcLon)",
+  "references": [
+    {
+      "id": "october-2026-new-moon",
+      "phase": "new",
+      "targetAngleDegrees": 0,
+      "from": "2026-10-01T00:00:00.000Z",
+      "to": "2026-10-16T00:00:00.000Z",
+      "referenceSyntheticUt1": "2026-10-10T15:50:05.245Z",
+      "referenceSyntheticUt1UnixSeconds": 1791647405.2455354,
+      "referenceTt": "2026-10-10T15:51:14.245Z",
+      "referenceTtJulianDay": 2461324.1605815454,
+      "sampleBracket": {
+        "lowerSeconds": 1791647405.0000234,
+        "upperSeconds": 1791647406.000018,
+        "lowerResidualDegrees": -3.4200000072814873e-05,
+        "upperResidualDegrees": 0.00010509999998475905,
+        "linearEstimateSeconds": 1791647405.2455354,
+        "localRateDegreesPerSecond": 0.00013930076393104863,
+        "lowerSyntheticUt1": "2026-10-10T15:50:05.000Z",
+        "upperSyntheticUt1": "2026-10-10T15:50:06.000Z",
+        "widthSeconds": 0.9999945163726807
+      },
+      "samplingStatement": "Linear interpolation inside an independently sampled <=1.01 second sign-change bracket. The bracket bounds the local increasing longitude root of this JPL observable subject to output rounding; it is not a bound on physical ephemeris/model uncertainty.",
+      "fineSamples": [
+        {
+          "syntheticUt1Seconds": 1791647402.9999537,
+          "ttJulianDay": 2461324.160555555,
+          "sunLongitudeDegrees": 197.3606346,
+          "moonLongitudeDegrees": 197.3603221,
+          "elongationDegrees": 359.9996875
+        },
+        {
+          "syntheticUt1Seconds": 1791647403.9999483,
+          "ttJulianDay": 2461324.160567129,
+          "sunLongitudeDegrees": 197.360646,
+          "moonLongitudeDegrees": 197.3604727,
+          "elongationDegrees": 359.99982669999997
+        },
+        {
+          "syntheticUt1Seconds": 1791647405.0000234,
+          "ttJulianDay": 2461324.160578704,
+          "sunLongitudeDegrees": 197.3606575,
+          "moonLongitudeDegrees": 197.3606233,
+          "elongationDegrees": 359.9999658
+        },
+        {
+          "syntheticUt1Seconds": 1791647406.000018,
+          "ttJulianDay": 2461324.160590278,
+          "sunLongitudeDegrees": 197.3606689,
+          "moonLongitudeDegrees": 197.360774,
+          "elongationDegrees": 0.00010509999998475905
+        },
+        {
+          "syntheticUt1Seconds": 1791647407.0000124,
+          "ttJulianDay": 2461324.160601852,
+          "sunLongitudeDegrees": 197.3606804,
+          "moonLongitudeDegrees": 197.3609246,
+          "elongationDegrees": 0.0002441999999973632
+        }
+      ],
+      "coarseBracket": {
+        "lowerSeconds": 1791644399.9999878,
+        "upperSeconds": 1791655199.9999878,
+        "lowerResidualDegrees": -0.4183998999999403,
+        "upperResidualDegrees": 1.0838986999999918,
+        "linearEstimateSeconds": 1791647407.8700078,
+        "localRateDegreesPerSecond": 0.00013910172222221593
+      },
+      "minuteBracket": {
+        "lowerSeconds": 1791647348.0000508,
+        "upperSeconds": 1791647408.0000072,
+        "lowerResidualDegrees": -0.007967199999939112,
+        "upperResidualDegrees": 0.0003833999999756088,
+        "linearEstimateSeconds": 1791647405.245237,
+        "localRateDegreesPerSecond": 0.00013917676787134344
+      }
+    },
+    {
+      "id": "october-2026-full-moon",
+      "phase": "full",
+      "targetAngleDegrees": 180,
+      "from": "2026-10-16T00:00:00.000Z",
+      "to": "2026-11-01T00:00:00.000Z",
+      "referenceSyntheticUt1": "2026-10-26T04:11:48.954Z",
+      "referenceSyntheticUt1UnixSeconds": 1792987908.954126,
+      "referenceTt": "2026-10-26T04:12:57.954Z",
+      "referenceTtJulianDay": 2461339.6756707653,
+      "sampleBracket": {
+        "lowerSeconds": 1792987907.9999967,
+        "upperSeconds": 1792987908.9999912,
+        "lowerResidualDegrees": -0.0001477000000136286,
+        "upperResidualDegrees": 7.100000004811591e-06,
+        "linearEstimateSeconds": 1792987908.954126,
+        "localRateDegreesPerSecond": 0.0001548008488886042,
+        "lowerSyntheticUt1": "2026-10-26T04:11:47.999Z",
+        "upperSyntheticUt1": "2026-10-26T04:11:48.999Z",
+        "widthSeconds": 0.9999945163726807
+      },
+      "samplingStatement": "Linear interpolation inside an independently sampled <=1.01 second sign-change bracket. The bracket bounds the local increasing longitude root of this JPL observable subject to output rounding; it is not a bound on physical ephemeris/model uncertainty.",
+      "fineSamples": [
+        {
+          "syntheticUt1Seconds": 1792987907.000002,
+          "ttJulianDay": 2461339.675648148,
+          "sunLongitudeDegrees": 212.7618496,
+          "moonLongitudeDegrees": 32.761547,
+          "elongationDegrees": 179.9996974
+        },
+        {
+          "syntheticUt1Seconds": 1792987907.9999967,
+          "ttJulianDay": 2461339.675659722,
+          "sunLongitudeDegrees": 212.7618611,
+          "moonLongitudeDegrees": 32.7617134,
+          "elongationDegrees": 179.9998523
+        },
+        {
+          "syntheticUt1Seconds": 1792987908.9999912,
+          "ttJulianDay": 2461339.675671296,
+          "sunLongitudeDegrees": 212.7618727,
+          "moonLongitudeDegrees": 32.7618798,
+          "elongationDegrees": 180.0000071
+        },
+        {
+          "syntheticUt1Seconds": 1792987909.9999857,
+          "ttJulianDay": 2461339.67568287,
+          "sunLongitudeDegrees": 212.7618842,
+          "moonLongitudeDegrees": 32.7620463,
+          "elongationDegrees": 180.0001621
+        },
+        {
+          "syntheticUt1Seconds": 1792987910.9999804,
+          "ttJulianDay": 2461339.675694444,
+          "sunLongitudeDegrees": 212.7618957,
+          "moonLongitudeDegrees": 32.7622127,
+          "elongationDegrees": 180.000317
+        }
+      ],
+      "coarseBracket": {
+        "lowerSeconds": 1792983599.9999878,
+        "upperSeconds": 1792994399.9999878,
+        "lowerResidualDegrees": -0.6671000000000049,
+        "upperResidualDegrees": 1.0062732000000096,
+        "linearEstimateSeconds": 1792987905.4830685,
+        "localRateDegreesPerSecond": 0.0001549419629629643
+      },
+      "minuteBracket": {
+        "lowerSeconds": 1792987905.0000129,
+        "upperSeconds": 1792987965.0000496,
+        "lowerResidualDegrees": -0.000612400000022717,
+        "upperResidualDegrees": 0.008681700000011006,
+        "linearEstimateSeconds": 1792987908.9534912,
+        "localRateDegreesPerSecond": 0.00015490157187660286
+      }
+    }
+  ],
+  "requests": [
+    {
+      "name": "coarse-sun",
+      "requestStartedAtUtc": "2026-09-27T15:16:03.695630+00:00",
+      "retrievedAtUtc": "2026-09-27T15:16:15.368259+00:00",
+      "method": "GET",
+      "httpStatus": 200,
+      "rawFile": "raw/coarse-sun.json",
+      "rawSha256": "792b00b1094e40b6f84a6a941fb6e47802b03821d64133a40b3aa5d1791b4aff",
+      "apiSignature": {
+        "version": "1.2",
+        "source": "NASA/JPL Horizons API"
+      },
+      "rows": 249
+    },
+    {
+      "name": "coarse-moon",
+      "requestStartedAtUtc": "2026-09-27T15:16:15.369427+00:00",
+      "retrievedAtUtc": "2026-09-27T15:16:24.754281+00:00",
+      "method": "GET",
+      "httpStatus": 200,
+      "rawFile": "raw/coarse-moon.json",
+      "rawSha256": "7159ea1c67c36fc3e67e3efb471767e2ea41427e9d8d743b6537e5c05fe0fdd7",
+      "apiSignature": {
+        "version": "1.2",
+        "source": "NASA/JPL Horizons API"
+      },
+      "rows": 249
+    },
+    {
+      "name": "october-2026-new-moon-minute-sun",
+      "requestStartedAtUtc": "2026-09-27T15:16:24.755603+00:00",
+      "retrievedAtUtc": "2026-09-27T15:16:33.258122+00:00",
+      "method": "GET",
+      "httpStatus": 200,
+      "rawFile": "raw/october-2026-new-moon-minute-sun.json",
+      "rawSha256": "4a96caf9bbb4ed14b2c248755bfaa8655836a4a504bd82542b7e31cf1b889d0c",
+      "apiSignature": {
+        "source": "NASA/JPL Horizons API",
+        "version": "1.2"
+      },
+      "rows": 41
+    },
+    {
+      "name": "october-2026-new-moon-minute-moon",
+      "requestStartedAtUtc": "2026-09-27T15:16:33.258740+00:00",
+      "retrievedAtUtc": "2026-09-27T15:16:41.907305+00:00",
+      "method": "GET",
+      "httpStatus": 200,
+      "rawFile": "raw/october-2026-new-moon-minute-moon.json",
+      "rawSha256": "579add40fe90c9013806331204ec27fc04a4d745815a3459cdcc195e6f4aca6b",
+      "apiSignature": {
+        "version": "1.2",
+        "source": "NASA/JPL Horizons API"
+      },
+      "rows": 41
+    },
+    {
+      "name": "october-2026-new-moon-second-sun",
+      "requestStartedAtUtc": "2026-09-27T15:16:41.908083+00:00",
+      "retrievedAtUtc": "2026-09-27T15:16:51.212039+00:00",
+      "method": "GET",
+      "httpStatus": 200,
+      "rawFile": "raw/october-2026-new-moon-second-sun.json",
+      "rawSha256": "28b1589a86854d17c7e220bd7567635e1ad86f7b2a7010123fcc7bb4453403e1",
+      "apiSignature": {
+        "source": "NASA/JPL Horizons API",
+        "version": "1.2"
+      },
+      "rows": 5
+    },
+    {
+      "name": "october-2026-new-moon-second-moon",
+      "requestStartedAtUtc": "2026-09-27T15:16:51.212797+00:00",
+      "retrievedAtUtc": "2026-09-27T15:16:59.958260+00:00",
+      "method": "GET",
+      "httpStatus": 200,
+      "rawFile": "raw/october-2026-new-moon-second-moon.json",
+      "rawSha256": "953273a09731a7f1eea9cf9a59c42a3d0114621af2c19161e5079e28da64ff30",
+      "apiSignature": {
+        "version": "1.2",
+        "source": "NASA/JPL Horizons API"
+      },
+      "rows": 5
+    },
+    {
+      "name": "october-2026-full-moon-minute-sun",
+      "requestStartedAtUtc": "2026-09-27T15:16:59.959333+00:00",
+      "retrievedAtUtc": "2026-09-27T15:17:13.324212+00:00",
+      "method": "GET",
+      "httpStatus": 200,
+      "rawFile": "raw/october-2026-full-moon-minute-sun.json",
+      "rawSha256": "5ab12a01607be41900928f524edb212ed018b91ebb1361a48a4c54723270de7f",
+      "apiSignature": {
+        "version": "1.2",
+        "source": "NASA/JPL Horizons API"
+      },
+      "rows": 41
+    },
+    {
+      "name": "october-2026-full-moon-minute-moon",
+      "requestStartedAtUtc": "2026-09-27T15:17:13.324908+00:00",
+      "retrievedAtUtc": "2026-09-27T15:17:22.445264+00:00",
+      "method": "GET",
+      "httpStatus": 200,
+      "rawFile": "raw/october-2026-full-moon-minute-moon.json",
+      "rawSha256": "f6912b9caf4062b48f8e1d6a35c423a94acd9f87a6343f905bcd9744cfba3b22",
+      "apiSignature": {
+        "source": "NASA/JPL Horizons API",
+        "version": "1.2"
+      },
+      "rows": 41
+    },
+    {
+      "name": "october-2026-full-moon-second-sun",
+      "requestStartedAtUtc": "2026-09-27T15:17:22.446394+00:00",
+      "retrievedAtUtc": "2026-09-27T15:17:32.588461+00:00",
+      "method": "GET",
+      "httpStatus": 200,
+      "rawFile": "raw/october-2026-full-moon-second-sun.json",
+      "rawSha256": "75a91fe9a08defe3e69d7affbab4cb95ea5cda5a589e5ba2f2bb2ba20d0c37ef",
+      "apiSignature": {
+        "source": "NASA/JPL Horizons API",
+        "version": "1.2"
+      },
+      "rows": 5
+    },
+    {
+      "name": "october-2026-full-moon-second-moon",
+      "requestStartedAtUtc": "2026-09-27T15:17:32.589013+00:00",
+      "retrievedAtUtc": "2026-09-27T15:17:41.520921+00:00",
+      "method": "GET",
+      "httpStatus": 200,
+      "rawFile": "raw/october-2026-full-moon-second-moon.json",
+      "rawSha256": "3f39a3f605f8e9023380c7c3a6c53bc0bb965a40b86e463597ddcc128a4534cc",
+      "apiSignature": {
+        "source": "NASA/JPL Horizons API",
+        "version": "1.2"
+      },
+      "rows": 5
+    }
+  ],
+  "limits": [
+    "Two ordinary lunations only. No station, ingress, eclipse-maximum, polar, boundary, multi-pass, catalog completeness or physical two-second guarantee is tested.",
+    "No target engine was imported or called to select or calculate expected roots.",
+    "A few local samples establish bounded ordinary crossings; they do not certify global root completeness.",
+    "The synthetic UT1 labels must not be published as UTC lunar phase times."
+  ]
+}
