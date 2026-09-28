@@ -42,7 +42,7 @@ for (const name of ["LICENSE", "LICENSING.md", "NOTICE"]) {
 writeFileSync(
   join(directory, "consumer.ts"),
   `
-import { natalChart, transits, synastry, moonPhase, positions, type Chart, type BirthInput, type ChartFlag, saturnReturn } from "@zodiacs/engine";
+import { natalChart, transits, synastry, moonPhase, positions, progressedInstant, progressedBodies, PROGRESSION_DAYS_PER_YEAR, type BodyPosition, type DateInput, type Chart, type BirthInput, type ChartFlag, saturnReturn } from "@zodiacs/engine";
 import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, type ChartDeclinations, type ConfiguredAspectResult } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
@@ -61,6 +61,11 @@ transits(chart, "2026-09-07T12:00:00Z");
 synastry(chart, { utc: "2001-01-01", timeKnown: false });
 moonPhase("2024-04-08T18:21:00Z");
 positions(0);
+const progressionBirth: DateInput = new Date("2019-12-31T00:00:00Z");
+const progressionAt: Date = progressedInstant(progressionBirth, "2020-12-30T05:48:46.080Z");
+const progressionRows: BodyPosition[] = progressedBodies(progressionBirth, Date.parse("2020-12-30T05:48:46.080Z"));
+const progressionYear: number = PROGRESSION_DAYS_PER_YEAR;
+void progressionAt; void progressionRows; void progressionYear;
 const places: ReturnType<typeof createGeoNamesClient> = createGeoNamesClient({baseUrl: "https://example.test/cities"});
 void places;
 const typedFlags: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"];
@@ -87,7 +92,7 @@ writeFileSync(
   join(directory, "consumer.mjs"),
   `
 import assert from "node:assert/strict";
-import { natalChart, positions, transits, synastry, moonPhase, ENGINE_VERSION } from "@zodiacs/engine";
+import { natalChart, positions, transits, synastry, moonPhase, progressedInstant, progressedBodies, PROGRESSION_DAYS_PER_YEAR, ENGINE_VERSION } from "@zodiacs/engine";
 import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, declinationsForBodies } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
@@ -100,6 +105,11 @@ assert(chart.flags.includes("polar-fallback"));
 assert(((chart.angles.asc-chart.angles.mc+360)%360) < 180);
 assert.equal(chart.houses.cusps[0], Math.floor(chart.angles.asc/30)*30);
 assert.equal(positions("2000-02-29").length, 12);
+assert.equal(PROGRESSION_DAYS_PER_YEAR, 365.2422);
+assert.equal(progressedInstant("2019-12-31", "2020-12-30T05:48:46.080Z").toISOString(), "2020-01-01T00:00:00.000Z");
+assert.deepEqual(progressedBodies("2019-12-31", "2020-12-30T05:48:46.080Z"), positions("2020-01-01"));
+assert.throws(() => progressedBodies("2020-01-01", "2023-02-29"), RangeError);
+assert(Math.abs(progressedInstant(0, -365.2422 * 86_400_000).getTime() + 86_400_000) <= 1);
 const configuredPolicy = createAspectPolicy({bodies: ["Mars", "Saturn"], aspects: [{type: "quincunx", orb: {applying: 2, separating: 0.5, stationary: 0}}], bodyOrbs: {Mars: 1}});
 const configured = findConfiguredAspects([{body: "Mars", lon: 0, speed: 0}, {body: "Saturn", lon: 149, speed: 1}], configuredPolicy);
 assert.equal(configured.aspects.length, 1);

@@ -1,5 +1,25 @@
 # Engine changelog
 
+## 0.1.1-rc.12 — unreleased candidate
+
+- Export `PROGRESSION_DAYS_PER_YEAR`, `progressedInstant` and
+  `progressedBodies` for the site's existing secondary-progression convention:
+  one 365.2422-day tropical year of elapsed life maps to one ephemeris day.
+- Accept the normal resolved `DateInput` forms with strict validation, retain
+  signed targets before birth and preserve the original floating-point
+  operation order and integer-millisecond Date truncation.
+- Return the same twelve position rows as `positions`, including true lunar
+  nodes. Speeds remain ephemeris degrees/day at the progressed instant, not
+  degrees per lived day. No progressed angles, houses, extra chart points,
+  solar-arc convention, aspect policy or receipt extension is added.
+- Reuse the existing public JPL fixture for a constructed mapping-and-position
+  component check and add a rounded published date-mapping example. These
+  checks do not establish predictive validity or new physical accuracy bounds.
+
+Migration: existing calculations and natal receipt conventions are unchanged
+apart from the reported engine version. The site remains separately pinned;
+this is an unpublished package candidate, not site adoption or npm release.
+
 ## 0.1.1-rc.11
 
 - `createAspectPolicy` and `findConfiguredAspects` add explicit, immutable

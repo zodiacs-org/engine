@@ -11,6 +11,8 @@ const internalMath = await import("@zodiacs/engine/internal/math");
 
 for (const name of [
   "positions",
+  "progressedInstant",
+  "progressedBodies",
   "natalChart",
   "transits",
   "synastry",
@@ -53,6 +55,10 @@ for (const name of ["deltaT", "deltaTAt", "DELTA_T_MODEL", "DELTA_T_TABLE"]) {
   assert.equal(engine[name], deltat[name], `root and deltat entry disagree: ${name}`);
 }
 assert.ok(Object.isFrozen(deltat.DELTA_T_TABLE), "the ΔT table must be frozen");
+
+assert.equal(engine.PROGRESSION_DAYS_PER_YEAR, 365.2422);
+assert.equal(engine.progressedInstant("2019-12-31", "2020-12-30T05:48:46.080Z").toISOString(), "2020-01-01T00:00:00.000Z");
+assert.deepEqual(engine.progressedBodies("2019-12-31", "2020-12-30T05:48:46.080Z"), engine.positions("2020-01-01"));
 
 assert.equal(typeof geo.resolveLocalToUtc, "function");
 assert.equal(typeof geo.createGeoNamesClient, "function");

@@ -15,6 +15,7 @@ modules:
 - `src/lib/engine/aspects.ts` — aspect matching
 - `src/lib/engine/synastry.ts` — inter-chart aspect and balance summaries
 - `src/lib/engine/returns.ts` — longitude crossing and Saturn-return scans
+- `src/lib/engine/progressions.ts` — elapsed-time secondary-progression mapping
 - `src/lib/time/localToUtc.ts` — host-`Intl` timezone conversion
 - `src/lib/geo/search.ts` — client for the separately hosted GeoNames index
 
