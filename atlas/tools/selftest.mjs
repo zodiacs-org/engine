@@ -241,6 +241,17 @@ test('the checks catch a gap between rules', () => {
   assert.ok(problems.some((text) => /gap of 1800 s between test-standard-1/.test(text)), problems.join('\n'));
 });
 
+test('the checks hold excerpts to 40 words and want a record of how each was checked', () => {
+  const atlas = load();
+  const citation = atlas.citations.get('fixture-source');
+  citation.excerpt = Array.from({ length: 41 }, (_, index) => `w${index}`).join(' ');
+  citation.checks = [{ method: 'ocr', date: '2026-09-27', result: 'partial' }];
+  const { problems } = checkAtlas(atlas, { today: '2026-09-28' });
+  assert.ok(problems.some((text) => /excerpt has 41 words \(at most 40\)/.test(text)), problems.join('\n'));
+  assert.ok(problems.some((text) => /checked \(2026-09-27\) before it was retrieved/.test(text)), problems.join('\n'));
+  assert.ok(problems.some((text) => /a partial ocr check needs a note/.test(text)), problems.join('\n'));
+});
+
 test('the checks catch a département listed twice for reading by longitude', () => {
   const atlas = load();
   atlas.jurisdictions.get('test-land').readByLongitude.excluded[0].departments.push('01');

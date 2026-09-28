@@ -86,7 +86,7 @@
     "citation": {
       "description": "One passage of one primary source, as fetched and read.",
       "type": "object",
-      "required": ["id", "type", "title", "date", "issuer", "url", "retrieved", "locator", "language", "excerpt", "excerptBasis"],
+      "required": ["id", "type", "title", "date", "issuer", "url", "retrieved", "locator", "language", "excerpt", "excerptBasis", "checks"],
       "properties": {
         "id": { "$ref": "#/$defs/id" },
         "type": {
@@ -111,10 +111,35 @@
         "retrieved": { "$ref": "#/$defs/date" },
         "locator": { "$ref": "#/$defs/text" },
         "language": { "enum": ["fr", "de", "en"] },
-        "excerpt": { "$ref": "#/$defs/text" },
+        "excerpt": {
+          "description": "A verbatim passage of at most 40 words (words are counted as runs of text between spaces; an omission is marked [...]).",
+          "$ref": "#/$defs/text"
+        },
         "excerptBasis": {
-          "description": "page-image: transcribed from the page image; ocr: copied from the archive's OCR text; ocr-checked: the archive's OCR, corrected against the page image.",
+          "description": "How the excerpt was taken. page-image: transcribed from the page image; ocr: copied from the archive's OCR text, including the snippets its search service returns; ocr-checked: the archive's OCR, corrected against the page image.",
           "enum": ["page-image", "ocr", "ocr-checked"]
+        },
+        "checks": {
+          "description": "Each time the excerpt was compared with the source after it was taken, and how.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["method", "date", "result"],
+            "properties": {
+              "method": {
+                "description": "page-image: against the page image; ocr: against the archive's OCR text of the page; search-service: against the snippets of the page's OCR that the archive's in-document search returns (Gallica's ContentSearch, used where Gallica's page and image servers refused automated requests).",
+                "enum": ["page-image", "ocr", "search-service"]
+              },
+              "date": { "$ref": "#/$defs/date" },
+              "result": {
+                "description": "matches: every word of the excerpt was found, allowing for OCR errors; partial: some words could not be confirmed by this method (the note says which and why).",
+                "enum": ["matches", "partial"]
+              },
+              "note": { "$ref": "#/$defs/text" }
+            },
+            "additionalProperties": false
+          }
         },
         "gloss": { "$ref": "#/$defs/text" },
         "note": { "$ref": "#/$defs/text" }

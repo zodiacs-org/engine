@@ -1,7 +1,7 @@
 {
   "$schema": "../schema/atlas.schema.json",
   "kind": "atlas-citations",
-  "description": "United States: the Statutes at Large (read on the Library of Congress page images) and newspapers of November 1883 read on Chronicling America page images (Library of Congress) on the retrieval date.",
+  "description": "United States: the Statutes at Large and newspapers of November 1883, read on Library of Congress page images (the newspapers in Chronicling America) on the retrieval date. The excerpts were checked again against the Library of Congress OCR text of each page, and against the page image where the OCR garbles a figure (each citation's checks).",
   "citations": [
     {
       "id": "us-stat-1918-zones",
@@ -15,7 +15,15 @@
       "locator": "40 Stat. 450-451, ch. 24, sec. 1",
       "language": "en",
       "excerpt": "The standard time of the first zone shall be based on the mean astronomical time of the seventy-fifth degree of longitude west from Greenwich; that of the second zone on the ninetieth degree",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "The passage runs from p. 450 to p. 451; the OCR of both pages was read."
+        }
+      ]
     },
     {
       "id": "us-stat-1918-dst",
@@ -28,8 +36,9 @@
       "retrieved": "2026-09-28",
       "locator": "40 Stat. 451, ch. 24, sec. 3",
       "language": "en",
-      "excerpt": "at two o'clock antemeridian of the last Sunday in March of each year the standard time of each zone shall be advanced one hour, and at two o'clock antemeridian of the last Sunday in October [...] by the retarding of one hour, be returned",
-      "excerptBasis": "page-image"
+      "excerpt": "at two o'clock antemeridian of the last Sunday in March [...] the standard time of each zone shall be advanced one hour, and at two o'clock antemeridian of the last Sunday in October [...] by the retarding of one hour",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-stat-1919-repeal",
@@ -43,7 +52,8 @@
       "locator": "41 Stat. 280, ch. 51",
       "language": "en",
       "excerpt": "That section 3 of the Act entitled \"An Act to save daylight and to provide standard time for the United States,\" approved March 19, 1918, is hereby repealed, effective on the last Sunday of October, 1919",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-stat-1884-dc",
@@ -57,7 +67,8 @@
       "locator": "23 Stat. 4, ch. 12",
       "language": "en",
       "excerpt": "That the legal standard of time in the District of Columbia shall hereafter be the mean time of the seventy-fifth meridian of longitude west from Greenwich.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-star-1883-11-10-nyc",
@@ -70,8 +81,9 @@
       "retrieved": "2026-09-28",
       "locator": "p. 5, col. 4",
       "language": "en",
-      "excerpt": "The mayor has signed the resolution changing the city time and reading \"that at noon, November 18, 1883, and thereafter all time in the city of New York shall conform to the new standard [...] and that all time shown by the public clocks shall agree therewith.\"",
-      "excerptBasis": "page-image"
+      "excerpt": "The mayor has signed the resolution changing the city time and reading \"that at noon, November 18, 1883, and thereafter all time in the city of New York shall conform to the new standard [...]\"",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-sun-1883-11-19-cityhall",
@@ -86,6 +98,15 @@
       "language": "en",
       "excerpt": "lifting a pin, stopped the great clock at 12 minutes past 12 o'clock. Three minutes 58 seconds and 38-100 seconds later he started the works again. Thus the metropolis officially recognized the new time",
       "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "The OCR garbles the figures (\"tlire nilnutei 33 seconds and 8lui seconds\")."
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ],
       "gloss": "The City Hall clock was stopped for 3 min 58.38 s to bring it from New York time to Eastern standard time."
     },
     {
@@ -100,7 +121,16 @@
       "locator": "p. 5, col. 5",
       "language": "en",
       "excerpt": "The new time standard of the 75th meridian, which advances Baltimore time six minutes and twenty-eight seconds, goes into effect here at noon to-morrow. [...] and city time reckoned by it.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "The OCR reads \"73 h meridian\" for \"75th meridian\"."
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ]
     },
     {
       "id": "us-star-1883-11-19-departments",
@@ -113,8 +143,9 @@
       "retrieved": "2026-09-28",
       "locator": "p. 1, col. 5",
       "language": "en",
-      "excerpt": "The business men generally who have no connection with the railroads will keep the old time, regulating their watches by the bells at noon. [...] The clocks in the up-town departments have not been changed to correspond with the new time",
-      "excerptBasis": "page-image"
+      "excerpt": "The business men generally who have no connection with the railroads will keep the old time, regulating their watches by the bells at noon. [...] The clocks in the up-town departments have not been changed",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-star-1883-11-19-bells",
@@ -127,8 +158,17 @@
       "retrieved": "2026-09-28",
       "locator": "p. 1, col. 5",
       "language": "en",
-      "excerpt": "the naval observatory will signal every day the new time, eight minutes and twelve seconds earlier, when the fire-alarm bells will each strike one simultaneously; then, eight minutes and twelve seconds later, they will strike the usual number (twelve) on the same bells.",
+      "excerpt": "the naval observatory will signal every day the new time, eight minutes and twelve seconds earlier, when the fire-alarm bells will each strike one simultaneously; then, eight minutes and twelve seconds later, they will strike the usual number (twelve)",
       "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "The OCR garbles the first \"twelve seconds\" (\"j tu v seconds\")."
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ],
       "gloss": "Washington noon came 8 min 12 s after Eastern standard noon."
     },
     {
@@ -143,7 +183,8 @@
       "locator": "p. 2, col. 1",
       "language": "en",
       "excerpt": "which will be a set back of 14 minutes and 40 seconds, thus the railroad time will be fifteen minutes slower than Providence time.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-pawtucket-1883-11-23-providence",
@@ -158,6 +199,7 @@
       "language": "en",
       "excerpt": "The Providence authorities, as in other important matters, procrastinated, and did not \"come to (the new) time\" until Tuesday.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }],
       "gloss": "Providence adopted standard time on Tuesday 20 November 1883."
     },
     {
@@ -172,7 +214,8 @@
       "locator": "p. 8, col. 1",
       "language": "en",
       "excerpt": "The new change in time, the central standard, as it is called, went into effect at 12 o'clock, noon, yesterday, and the jewelers of the city will to-day change their regulators to correspond.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-indj-1883-11-19-courthouse",
@@ -186,7 +229,8 @@
       "locator": "p. 8, col. 1",
       "language": "en",
       "excerpt": "Yesterday afternoon the court-house clock was set back sixteen minutes, and is now speeding along, judging from its placid face, wholly oblivious of the change.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-bourbon-1883-11-20-louisville",
@@ -200,7 +244,8 @@
       "locator": "p. 1, col. 2",
       "language": "en",
       "excerpt": "Dr. E. A. Grant, of Louisville, is the father of the \"standard time\" arrangement [...] In that city the fire bells rang at twelve o'clock, new time, and the city clock was turned back 18 minutes.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-argus-1883-11-19-chicago",
@@ -214,7 +259,8 @@
       "locator": "p. 4, col. 3",
       "language": "en",
       "excerpt": "The central time is based upon that of the 90th meridian, which is nine minutes slower than Chicago time.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-ottawa-1883-11-24-chicago",
@@ -227,8 +273,9 @@
       "retrieved": "2026-09-28",
       "locator": "p. 7, col. 4",
       "language": "en",
-      "excerpt": "The Chicago papers of Sunday, give full accounts, illustrated by maps, of the change in the standard time inaugurated in that city on Sunday noon. The new time standard has been adopted [...] by the Board of Trade and a number of hotels",
-      "excerptBasis": "page-image"
+      "excerpt": "The Chicago papers of Sunday [...] the change in the standard time inaugurated in that city on Sunday noon. The new time standard has been adopted [...] by the Board of Trade and a number of hotels",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-globe-1883-11-25-stpaul",
@@ -242,7 +289,8 @@
       "locator": "p. 5, col. 3",
       "language": "en",
       "excerpt": "At noon to-day in St. Paul and throughout this part of the northwest the new standard time will be inaugurated.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-globe-1883-11-25-meantime",
@@ -256,7 +304,8 @@
       "locator": "p. 5, col. 3",
       "language": "en",
       "excerpt": "Our new time will be twelve minutes faster than the old time, which places us only three degrees east of our former meantime.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-globe-1883-11-25-council",
@@ -270,7 +319,8 @@
       "locator": "p. 5, col. 3",
       "language": "en",
       "excerpt": "The city council and chamber of commerce have adopted it.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "us-globe-1883-11-25-minneapolis",
@@ -284,7 +334,8 @@
       "locator": "p. 6, col. 1",
       "language": "en",
       "excerpt": "The new standard time will be generally adopted in Minneapolis to-day.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
     }
   ]
 }

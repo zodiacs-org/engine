@@ -1,7 +1,7 @@
 {
   "$schema": "../schema/atlas.schema.json",
   "kind": "atlas-citations",
-  "description": "France: the laws, decrees and notices on legal time, the 1891 Senate debate, a railway company's standing instruction on station clocks, and Paris newspapers reporting how the clock changes were made. All read on Gallica (Bibliothèque nationale de France) page images on the retrieval date.",
+  "description": "France: the laws, decrees and notices on legal time, the 1891 Senate debate, a railway company's standing instruction on station clocks, and Paris newspapers reporting how the clock changes were made. The excerpts were transcribed from Gallica (Bibliothèque nationale de France) page images on the retrieval date, except where a citation's excerptBasis says otherwise, and checked again against the text Gallica's search service returns for the cited page (each citation's checks).",
   "citations": [
     {
       "id": "fr-jo-1870-11-06-promulgation",
@@ -14,8 +14,9 @@
       "retrieved": "2026-09-28",
       "locator": "p. 1, col. 1, art. 2",
       "language": "fr",
-      "excerpt": "Les lois et les décrets seront obligatoires à Paris un jour franc après la promulgation, et partout ailleurs dans l'étendue de chaque arrondissement, un jour franc après que le Journal officiel, qui les contient, sera parvenu au chef-lieu de cet arrondissement.",
+      "excerpt": "Les lois et les décrets seront obligatoires à Paris un jour franc après la promulgation, et partout ailleurs dans l'étendue de chaque arrondissement, un jour franc après que le Journal officiel [...] sera parvenu au chef-lieu de cet arrondissement.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "gloss": "Laws bind in Paris one clear day after promulgation (their printing in the Journal officiel), and elsewhere one clear day after the Journal reaches the seat of the arrondissement."
     },
     {
@@ -31,6 +32,7 @@
       "language": "fr",
       "excerpt": "le gouvernement de la Restauration s'est décidé à transformer l'heure légale, qui était alors l'heure vraie, en heure de temps moyen local pour toute la France.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "gloss": "Since the Restoration the legal time of every place in France had been its own local mean time."
     },
     {
@@ -46,6 +48,7 @@
       "language": "fr",
       "excerpt": "Ainsi, à Brest, il y a vingt-sept minutes d'écart entre l'heure du chemin de fer et l'heure de la localité. [...] Actuellement, il n'y en a qu'une qui donne cette heure au public : c'est l'horloge de la gare.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "gloss": "In Brest only the station clock showed Paris time; the town's other public clocks kept local time, 27 minutes behind."
     },
     {
@@ -61,6 +64,7 @@
       "language": "fr",
       "excerpt": "il y existe des horloges tenues, d'une manière assez régulière, en concordance avec l'heure de la gare du chemin de fer; elles marqueront ainsi désormais l'heure légale, l'heure moyenne de Paris.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "gloss": "In towns some clocks were already kept to the railway station's time, which the law would make legal time; in the countryside the commune's clock could be fast or slow."
     },
     {
@@ -75,7 +79,8 @@
       "locator": "p. 1233, col. 3",
       "language": "fr",
       "excerpt": "Article unique. — L'heure légale, en France et en Algérie, est l'heure temps moyen de Paris.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-orleans-1875-instruction-26",
@@ -90,6 +95,7 @@
       "language": "fr",
       "excerpt": "Les horloges ou régulateurs de la ligne seront réglés sur l'heure du temps moyen de Paris; les cadrans intérieurs marcheront avec un retard constant de cinq minutes.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "gloss": "On the Orléans company's lines, clocks were set to Paris mean time and the dials inside stations ran five minutes slow.",
       "note": "The collection's preface is dated Paris, 1 July 1875, and signed by the chef de l'exploitation, G. Lemercier (p. vi)."
     },
@@ -105,7 +111,8 @@
       "locator": "p. 1882, col. 3",
       "language": "fr",
       "excerpt": "Article unique. — L'heure légale en France et en Algérie est l'heure, temps moyen de Paris, retardée de neuf minutes vingt et une secondes.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-jo-1911-03-10-ptt",
@@ -119,7 +126,8 @@
       "locator": "p. 1882, col. 3, art. 1er",
       "language": "fr",
       "excerpt": "A partir de la nuit du 10 au 11 mars 1911, à minuit, l'heure de tous les bureaux de poste, télégraphe et téléphone est celle du temps moyen de Paris, retardée de neuf minutes et vingt et une secondes.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-jo-1911-03-10-etat-railways",
@@ -132,8 +140,9 @@
       "retrieved": "2026-09-28",
       "locator": "p. 1911, col. 1",
       "language": "fr",
-      "excerpt": "la différence de cinq minutes qui existe entre les horloges intérieures et extérieures des gares sera supprimée. En conséquence les horloges extérieures seront retardées de neuf minutes et les horloges intérieures de quatre minutes. La transition se fera à minuit (nuit du 10 au 11 mars).",
-      "excerptBasis": "page-image"
+      "excerpt": "la différence de cinq minutes qui existe entre les horloges intérieures et extérieures des gares sera supprimée. [...] La transition se fera à minuit (nuit du 10 au 11 mars).",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-petitjournal-1911-03-11-five-minutes",
@@ -147,7 +156,8 @@
       "locator": "p. 1, col. 4",
       "language": "fr",
       "excerpt": "On sait que jusqu'à hier les pendules intérieures retardaient de 5 minutes sur l'extérieur, en sorte qu'elles n'avaient plus à retarder que de 4 minutes 21 secondes pour avoir l'heure légale nouvelle.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-petitjournal-1911-03-11-midnight",
@@ -161,7 +171,8 @@
       "locator": "p. 1, col. 4",
       "language": "fr",
       "excerpt": "Pour les cadrans intérieurs, lorsqu'ils ont marqué minuit précis, le balancier de l'horloge a été arrêté pour n'être remis en mouvement que 4 minutes après.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-petitjournal-1911-03-11-pneumatic",
@@ -176,6 +187,7 @@
       "language": "fr",
       "excerpt": "A minuit, les pendules pneumatiques de Paris se sont arrêtées sous les yeux de quelques passants observateurs. Elles sont restées à cette heure neuf minutes vingt et une secondes et les aiguilles se sont alors remises en marche.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "gloss": "Paris's public pneumatic clocks stopped at midnight for 9 min 21 s and then ran on."
     },
     {
@@ -190,7 +202,15 @@
       "locator": "p. 5133, col. 3 to p. 5134, col. 1",
       "language": "fr",
       "excerpt": "Jusqu'au 1er octobre 1916, et à partir d'une date qui sera déterminée par décret, l'heure légale, telle qu'elle a été fixée par la loi du 9 mars 1911, sera avancée de soixante minutes.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "The passage runs over two views: the service finds its first part on view 1 and \"été fixée par la loi du 9 mars 1911, sera avancée de soixante minutes\" on view 2."
+        }
+      ]
     },
     {
       "id": "fr-jo-1916-06-11-decree",
@@ -204,7 +224,8 @@
       "locator": "p. 5134, col. 1, art. 1er",
       "language": "fr",
       "excerpt": "Dans la nuit du 14 au 15 juin, à vingt-trois heures, l'heure légale sera avancée de soixante minutes. L'heure normale sera rétablie le 1er octobre.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-petitparisien-1916-09-30",
@@ -217,8 +238,17 @@
       "retrieved": "2026-09-28",
       "locator": "p. 1, col. 5",
       "language": "fr",
-      "excerpt": "celle de demain, 1er octobre, ne s'ouvrira qu'à une heure du matin. [...] On a fixé le changement d'heure à une heure du matin, au lieu de 23 heures",
-      "excerptBasis": "page-image"
+      "excerpt": "celle de demain, 1er octobre, ne s'ouvrira qu'à une heure du matin. [...] On a fixé le changement d'heure à une heure du matin, au lieu de 23 heures 59, afin de ne pas créer de confusion",
+      "excerptBasis": "ocr",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "The corrected excerpt was copied from the search service's text of the page and compared with it again."
+        }
+      ],
+      "note": "Corrected on 2026-09-28. The excerpt first ended \"au lieu de 23 heures\", leaving out the \"59\" that follows; it is now copied from the search service's text of the page, which reads \"au lieu de 23 heures 59, afin de ne pas créer de confusion\"."
     },
     {
       "id": "fr-petitjournal-1916-09-30",
@@ -232,7 +262,8 @@
       "locator": "p. 2, col. 5",
       "language": "fr",
       "excerpt": "comme à une heure du matin, les aiguilles des horloges auront été remises à 0 heure, les trains stationneront soixante minutes dans une gare",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-jo-1917-03-21-law",
@@ -245,8 +276,16 @@
       "retrieved": "2026-09-28",
       "locator": "p. 2258, col. 3",
       "language": "fr",
-      "excerpt": "Pendant la durée de la guerre et jusqu'au décret fixant la cessation des hostilités, le Gouvernement est autorisé à avancer d'une heure, par voie de décret, en France et en Algérie, l'heure légale fixée par la loi du 9 mars 1911.",
-      "excerptBasis": "page-image"
+      "excerpt": "Pendant la durée de la guerre et jusqu'au décret fixant la cessation des hostilités, le Gouvernement est autorisé à avancer d'une heure, par voie de décret, [...] l'heure légale fixée par la loi du 9 mars 1911.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "The service's text is garbled here: \"par voie de décret\" reads \"par j[C;:r0 décret\", \"l'heure\" is missing and \"1911\" reads \"1 ut J\"; \"cessation\" and \"autorisé\" are broken up. The other words agree."
+        }
+      ]
     },
     {
       "id": "fr-jo-1917-03-21-decree",
@@ -260,7 +299,8 @@
       "locator": "p. 2274, col. 1, art. 1er and 2",
       "language": "fr",
       "excerpt": "Dans la nuit du 24 au 25 mars, à 23 heures, l'heure légale sera avancée de 60 minutes. Art. 2. — L'heure normale sera rétablie le 7 octobre.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-petitjournal-1917-10-06",
@@ -273,8 +313,9 @@
       "retrieved": "2026-09-28",
       "locator": "p. 1, col. 2",
       "language": "fr",
-      "excerpt": "C'est cette nuit que nous revenons à l'heure d'hiver. Pour intercaler une vingt-cinquième heure entre minuit et une heure, on arrêtera les horloges à minuit pendant une heure, ou bien à minuit 59 minutes 59 secondes on ramènera les aiguilles à minuit.",
-      "excerptBasis": "page-image"
+      "excerpt": "C'est cette nuit que nous revenons à l'heure d'hiver. [...] on arrêtera les horloges à minuit pendant une heure, ou bien à minuit 59 minutes 59 secondes on ramènera les aiguilles à minuit.",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-petitparisien-1917-10-07",
@@ -288,7 +329,8 @@
       "locator": "p. 2, col. 1",
       "language": "fr",
       "excerpt": "C'est cette nuit, à une heure moins une minute, que les horloges des administrations ont été ramenées à l'heure ancienne, c'est-à-dire retardées d'une heure.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-jo-1918-03-01-decree",
@@ -303,6 +345,7 @@
       "language": "fr",
       "excerpt": "Dans la nuit du 9 au 10 mars, à 23 heures, l'heure légale sera avancée de 60 minutes. Art. 2. — L'heure normale sera rétablie le 6 octobre.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "note": "The decree's preamble cites the enabling law as \"la loi du 10 mars 1917\"; the law is dated 19 March 1917 (fr-jo-1917-03-21-law)."
     },
     {
@@ -316,8 +359,16 @@
       "retrieved": "2026-09-28",
       "locator": "p. 2, col. 2",
       "language": "fr",
-      "excerpt": "La journée du 5 octobre comportera 25 heures. Les instructions données à tous les réseaux portent qu'une minute après 24 heures 59 de la nuit du 5 au 6 octobre, toutes les horloges, pendules et montres devront être retardées d'une heure",
-      "excerptBasis": "page-image"
+      "excerpt": "Les instructions données à tous les réseaux portent qu'une minute après 24 heures 59 de la nuit du 5 au 6 octobre, toutes les horloges, pendules et montres devront être retardées d'une heure",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "The service's text reads \"une minute après heures 59\", without the \"24\" read on the page image; the other words agree. It goes on \"c'est-à-dire mises «sur 0 heure\", which fits clocks set back from 01:00 to 00:00."
+        }
+      ]
     },
     {
       "id": "fr-jo-1919-02-11-decree",
@@ -331,7 +382,8 @@
       "locator": "p. 1604, col. 1, art. 1er and 2",
       "language": "fr",
       "excerpt": "Dans la nuit du 1er au 2 mars, à vingt-trois heures, l'heure légale sera avancée de soixante minutes. Art. 2. — L'heure normale sera rétablie le 5 octobre.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "fr-petitparisien-1919-03-01",
@@ -345,7 +397,15 @@
       "locator": "p. 2, col. 2",
       "language": "fr",
       "excerpt": "Dans les gares, à 11 heures tapant, toutes les horloges seront avancées de 60 minutes et inscriront subitement minuit à leur cadran.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "The service's text reads \"avancées de minutes\", without the \"60\" read on the page image; the other words agree. The decree (fr-jo-1919-02-11-decree) gives the same advance of sixty minutes."
+        }
+      ]
     },
     {
       "id": "fr-petitjournal-1919-10-05",
@@ -359,7 +419,8 @@
       "locator": "p. 1, col. 3",
       "language": "fr",
       "excerpt": "c'est au cours de la nuit du 4 au 5 octobre, ce soir, qu'aura lieu la reprise de l'heure normale. A une heure, l'heure légale sera retardée de soixante minutes, étant ainsi reculée à 0 heure.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     }
   ]
 }

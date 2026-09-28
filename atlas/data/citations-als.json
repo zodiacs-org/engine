@@ -1,7 +1,7 @@
 {
   "$schema": "../schema/atlas.schema.json",
   "kind": "atlas-citations",
-  "description": "Alsace and Moselle: the Reich law of 1893 (read on the Internet Archive scan of the Reichs-Gesetzblatt), and Strasbourg, Metz and Haguenau newspapers and a Paris daily read on Gallica page images on the retrieval date.",
+  "description": "Alsace and Moselle: the Reich law of 1893 (read on the Internet Archive scan of the Reichs-Gesetzblatt), and Strasbourg, Metz and Haguenau newspapers and a Paris daily read on Gallica. The excerpts were transcribed from page images on the retrieval date and checked again against the scan's OCR text (the Reichs-Gesetzblatt) or the text Gallica's search service returns for the cited page (each citation's checks).",
   "citations": [
     {
       "id": "als-snn-1892-03-31-mez",
@@ -16,6 +16,7 @@
       "language": "de",
       "excerpt": "Nachdem das k. Ministerium verfügt hat, daß mit morgen die mitteleuropäische Zeit in Elsaß-Lothringen auch als Ortszeit allgemein einzuführen ist, haben die Gemeindebehörden Anweisung erhalten, dementsprechend morgen eine Richtigstellung der öffentlichen Uhren zu veranlassen.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "gloss": "The Ministry for Alsace-Lorraine ordered Mid-European time to be introduced generally as local time from 1 April 1892; municipal authorities were to correct the public clocks that day, by the public clock of the nearest railway station."
     },
     {
@@ -31,6 +32,7 @@
       "language": "de",
       "excerpt": "Als wir heute Nacht die Münsterglocke die Mitternachtstunde und nach kaum einer Minute halb 1 Uhr schlagen hörten, da erfaßte den Hörer eine gewisse Aufregung",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "gloss": "In the night of 31 March to 1 April 1892 the cathedral clock struck midnight and, barely a minute later, half past twelve."
     },
     {
@@ -46,6 +48,7 @@
       "language": "de",
       "excerpt": "daß in der Nacht vom 31. März auf den 1. April um 11 Uhr 25 Min. Ortszeit, die Uhren des hiesigen Bahnhofs auf 12 Uhr M. E. Z. umgestellt werden.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "gloss": "Metz station's clocks were to be set from 23:25 local time to 00:00 Mid-European time in the night of 31 March to 1 April 1892."
     },
     {
@@ -61,6 +64,7 @@
       "language": "de",
       "excerpt": "Im Anschluß daran würden die sämmtlichen der städtischen Verwaltung unterstehenden Uhren, insbesondere auch die der Kathedrale in den frühesten Stunden des 1. April gleichfalls um 35 Minuten vorgerückt werden.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "gloss": "The city's clocks, the cathedral's among them, were to be put forward 35 minutes in the earliest hours of 1 April 1892."
     },
     {
@@ -75,7 +79,15 @@
       "locator": "p. 93",
       "language": "de",
       "excerpt": "Die gesetzliche Zeit in Deutschland ist die mittlere Sonnenzeit des fünfzehnten Längengrades östlich von Greenwich. Dieses Gesetz tritt mit dem Zeitpunkt in Kraft, in welchem nach der im vorhergehenden Absatz festgesetzten Zeitbestimmung der 1. April 1893 beginnt.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "Against the scan's OCR text on the Internet Archive."
+        }
+      ]
     },
     {
       "id": "de-snn-1916-04-08-wtb",
@@ -90,6 +102,14 @@
       "language": "de",
       "excerpt": "Der 1. Mai beginnt am 30. April 11 Uhr nachmittags; zu diesem Zeitpunkte werden alle Uhren im Reiche auf Mitternacht vorgestellt. Der 30. September endet eine Stunde nach Mitternacht; zu diesem Zeitpunkte werden sämtliche Uhren auf Mitternacht zurückgestellt werden.",
       "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "The service's snippets begin after \"Der 1.\" (at \"Nai beginnt am 30\") and after the first \"zu diesem\", so those words are not confirmed; the other words agree, allowing for OCR errors."
+        }
+      ],
       "gloss": "By order of the Bundesrat, every clock in the Reich went from 23:00 on 30 April 1916 to midnight, and back from 01:00 to midnight at the end of 30 September."
     },
     {
@@ -104,7 +124,8 @@
       "locator": "Gallica view 5, col. 1",
       "language": "de",
       "excerpt": "Die Zeitumschaltung wurde Montag 2 Uhr morgens durch Vorrücken des Zeigers auf 3 Uhr vollzogen.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     },
     {
       "id": "de-snn-1917-09-14-ende",
@@ -118,7 +139,15 @@
       "locator": "Zweites Blatt, first page (Gallica view 5), col. 1",
       "language": "de",
       "excerpt": "In der Nacht vom Sonntag, den 16., auf Montag, den 17. September, um 3 Uhr morgens, geht die Sommerzeit zu Ende. Die öffentlichen Uhren werden um 3 Uhr auf 2 Uhr zurückgestellt.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "\"September, um 3 Uhr\" reads \"Seb» & unt 31hr\" in the service's text, so the month is not confirmed; the other words agree, allowing for OCR errors."
+        }
+      ]
     },
     {
       "id": "de-snn-1918-03-08-sommerzeit",
@@ -132,7 +161,15 @@
       "locator": "Zweites Blatt, first page (Gallica view 5), col. 1",
       "language": "de",
       "excerpt": "Die öffentlichen Uhren sind am 15. April vormittags 2 Uhr auf 3 Uhr vorzustellen, am 16. September vormittags 3 Uhr auf 2 Uhr zurückzustellen.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "\"April vormittags\" reads \"Spru wrmittags\" in the service's text, so the month is not confirmed; the other words agree, allowing for OCR errors."
+        }
+      ]
     },
     {
       "id": "als-snn-1918-11-21-bekanntmachung",
@@ -147,6 +184,14 @@
       "language": "de",
       "excerpt": "Morgen mittag 12 Uhr werden die öffentlichen städtischen Uhren auf französische Zeit gebracht und demgemäß auf 11 Uhr 5 Minuten zurückgestellt.",
       "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "\"auf französische Zeit gebracht\" reads \"auf fran ’^e Reit gebradt\" in the service's text; the other words agree, allowing for OCR errors."
+        }
+      ],
       "gloss": "At noon on 21 November 1918 the city's public clocks were to be put on French time by setting them back to 11:05.",
       "note": "Noon Mid-European time is 11:00 UTC, so the clocks were set five minutes ahead of Greenwich time, not to French legal time."
     },
@@ -163,6 +208,7 @@
       "language": "de",
       "excerpt": "Nach den Zeitungen sollten unsere Uhren 55 Minuten später gestellt werden, was auch geschah am 21. November. [...] Auch in Straßburg geht die Bahnuhr 5 Minuten später als die öffentlichen Uhren.",
       "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
       "gloss": "A reader writes that the clocks were set back 55 minutes on 21 November and that Strasbourg's station clock runs five minutes behind the public clocks."
     },
     {
@@ -176,8 +222,10 @@
       "retrieved": "2026-09-28",
       "locator": "p. 1, cols. 3-4 (dateline Metz, 19 novembre; the passage is in col. 4)",
       "language": "fr",
-      "excerpt": "vers 16 h. 30 — heure française, car depuis le matin l'horloge de la cathédrale ne marque plus l'heure d'Europe centrale — se déroulait à la préfecture la cérémonie d'ordre civil",
-      "excerptBasis": "page-image"
+      "excerpt": "vers 16 h. 30 — heure française, car depuis le matin l'horloge de la cathédrale ne marque plus l'heure d'Europe centrale",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
+      "note": "Shortened on 2026-09-28. The page image, read when the excerpt was taken, goes on \"se déroulait à la préfecture la cérémonie d'ordre civil\"; the search service's text has \"se déroulait la prélation de M. Mirman\" there, so those words could not be confirmed and the excerpt now stops before them."
     },
     {
       "id": "als-jh-1919-02-28-railways",
@@ -191,7 +239,8 @@
       "locator": "p. 2, col. 1",
       "language": "de",
       "excerpt": "In der Nacht vom 1. zum 2. März wird auf den Eisenbahnen in Elsaß und Lothringen und der Wilhelm-Luxemburg-Eisenbahn die Sommerzeit eingeführt [...] Infolgedessen werden am 1. März um 23 Uhr die Bahnhofsuhren um eine Stunde vorgerückt.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
     }
   ]
 }

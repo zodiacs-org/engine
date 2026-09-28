@@ -12,7 +12,8 @@
       "locator": "p. 1",
       "language": "en",
       "excerpt": "The clocks shall be set forward.",
-      "excerptBasis": "page-image"
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "page-image", "date": "2026-09-28", "result": "matches" }]
     }
   ]
 }

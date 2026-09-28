@@ -306,7 +306,7 @@
     },
     {
       "id": "fr-summer-1916",
-      "version": 1,
+      "version": 2,
       "title": "Summer time 1916 (law of 9 June 1916)",
       "scope": "Metropolitan France outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918: civil clocks and the clocks inside railway stations",
       "clock": "civil",
@@ -323,7 +323,7 @@
         "kind": "event",
         "precision": "minute",
         "citations": ["fr-petitparisien-1916-09-30", "fr-petitjournal-1916-09-30"],
-        "note": "The decree says only that normal time would be restored on 1 October. Clocks were set back from 01:00 to 00:00 in the night of 30 September to 1 October (00:00 UTC); Le Petit Parisien says the change was fixed at one in the morning rather than at 23:00."
+        "note": "The decree says only that normal time would be restored on 1 October. Clocks were set back from 01:00 to 00:00 in the night of 30 September to 1 October (00:00 UTC); Le Petit Parisien says the change was fixed at one in the morning rather than at 23:59."
       },
       "offset": { "type": "fixed", "seconds": 3600 },
       "isDst": true,
@@ -337,11 +337,18 @@
         "fr-jo-1916-06-11-decree",
         "fr-petitparisien-1916-09-30",
         "fr-petitjournal-1916-09-30"
+      ],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Boundary note corrected to \"rather than at 23:59\" (it said 23:00): Le Petit Parisien reads \"au lieu de 23 heures 59\"."
+        }
       ]
     },
     {
       "id": "fr-wet-1916",
-      "version": 1,
+      "version": 2,
       "title": "Normal time, winter 1916-1917",
       "scope": "Metropolitan France outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918: civil clocks and the clocks inside railway stations",
       "clock": "civil",
@@ -351,7 +358,7 @@
         "kind": "event",
         "precision": "minute",
         "citations": ["fr-petitparisien-1916-09-30", "fr-petitjournal-1916-09-30"],
-        "note": "The decree says only that normal time would be restored on 1 October. Clocks were set back from 01:00 to 00:00 in the night of 30 September to 1 October (00:00 UTC); Le Petit Parisien says the change was fixed at one in the morning rather than at 23:00."
+        "note": "The decree says only that normal time would be restored on 1 October. Clocks were set back from 01:00 to 00:00 in the night of 30 September to 1 October (00:00 UTC); Le Petit Parisien says the change was fixed at one in the morning rather than at 23:59."
       },
       "end": {
         "local": "1917-03-24T23:00:00",
@@ -367,7 +374,14 @@
         "flag": "documented",
         "reason": "Normal time restored on 1 October 1916 as the decree of 10 June 1916 provided, until the decree of 20 March 1917."
       },
-      "citations": ["fr-jo-1911-03-10-law", "fr-jo-1916-06-11-decree", "fr-jo-1917-03-21-decree"]
+      "citations": ["fr-jo-1911-03-10-law", "fr-jo-1916-06-11-decree", "fr-jo-1917-03-21-decree"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Boundary note corrected to \"rather than at 23:59\" (it said 23:00): Le Petit Parisien reads \"au lieu de 23 heures 59\"."
+        }
+      ]
     },
     {
       "id": "fr-summer-1917",

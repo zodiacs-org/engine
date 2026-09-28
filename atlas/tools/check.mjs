@@ -6,10 +6,11 @@
  *
  * 1. Every data file validates against atlas/schema/atlas.schema.json.
  * 2. Every rule cites at least one citation, and every citation has a URL,
- *    a retrieval date, a locator and a short excerpt (at most 50 words);
- *    every id a rule, place, jurisdiction or explanation names exists, and
- *    nothing is defined and left unused. A jurisdiction that can be read by
- *    longitude lists each département once, as covered or refused.
+ *    a retrieval date, a locator, an excerpt of at most 40 words and a
+ *    record of how the excerpt was checked; every id a rule, place,
+ *    jurisdiction or explanation names exists, and nothing is defined and
+ *    left unused. A jurisdiction that can be read by longitude lists each
+ *    département once, as covered or refused.
  * 3. Every place's timeline, for each clock it keeps, starts at the start of
  *    the coverage window, ends at its end, and has no gap or overlap: each
  *    rule ends at the instant the next one starts. (A railway timeline may
@@ -26,6 +27,9 @@
 import { existsSync } from 'node:fs';
 import { DATA_DIR, SCHEMA_PATH, buildTimeline, formatUtc, formatWall, loadAtlas, parseLocal, readJson, resolveWall, wallAt } from './lib.mjs';
 import { checkSchemaKeywords, validate } from './schema.mjs';
+
+/** The longest excerpt, in words (runs of text between spaces, "[...]" included). */
+export const MAX_EXCERPT_WORDS = 40;
 
 /** Runs checks 1-4 on a loaded atlas; returns { problems, stats }. */
 export function checkAtlas(atlas, { today = new Date().toISOString().slice(0, 10) } = {}) {
@@ -44,13 +48,19 @@ export function checkAtlas(atlas, { today = new Date().toISOString().slice(0, 10
   // 2. Citations and references.
   const words = (text) => text.trim().split(/\s+/u).length;
   for (const citation of atlas.citations.values()) {
-    if (words(citation.excerpt) > 50) problem(`citation ${citation.id}: excerpt has ${words(citation.excerpt)} words (at most 50)`);
+    if (words(citation.excerpt) > MAX_EXCERPT_WORDS) problem(`citation ${citation.id}: excerpt has ${words(citation.excerpt)} words (at most ${MAX_EXCERPT_WORDS})`);
     if (citation.retrieved > today) problem(`citation ${citation.id}: retrieved in the future (${citation.retrieved})`);
     try {
       parseLocal(`${citation.date}T00:00:00`);
       parseLocal(`${citation.retrieved}T00:00:00`);
+      for (const check of citation.checks) parseLocal(`${check.date}T00:00:00`);
     } catch (error) {
       problem(`citation ${citation.id}: ${error.message}`);
+    }
+    for (const check of citation.checks) {
+      if (check.date > today) problem(`citation ${citation.id}: checked in the future (${check.date})`);
+      if (check.date < citation.retrieved) problem(`citation ${citation.id}: checked (${check.date}) before it was retrieved (${citation.retrieved})`);
+      if (check.result === 'partial' && !check.note) problem(`citation ${citation.id}: a partial ${check.method} check needs a note saying what was not confirmed`);
     }
   }
   const citedBy = new Map();
@@ -235,10 +245,18 @@ export function summary(atlas, stats) {
   for (const citation of atlas.citations.values()) byType[citation.type] = (byType[citation.type] ?? 0) + 1;
   const byFlag = {};
   for (const rule of atlas.rules.values()) byFlag[rule.uncertainty.flag] = (byFlag[rule.uncertainty.flag] ?? 0) + 1;
+  const byBasis = {};
+  const byCheck = {};
+  for (const citation of atlas.citations.values()) {
+    byBasis[citation.excerptBasis] = (byBasis[citation.excerptBasis] ?? 0) + 1;
+    for (const key of new Set(citation.checks.map((check) => `${check.method} ${check.result}`))) byCheck[key] = (byCheck[key] ?? 0) + 1;
+  }
   return [
     `atlas ${atlas.manifest.version}: ${atlas.places.size} places, ${atlas.jurisdictions.size} jurisdictions, ${atlas.rules.size} rules, ${atlas.citations.size} citations`,
     `  rules by flag: ${Object.entries(byFlag).map(([key, value]) => `${key} ${value}`).join(', ') || 'none'}`,
     `  citations by type: ${Object.entries(byType).sort().map(([key, value]) => `${key} ${value}`).join(', ') || 'none'}`,
+    `  excerpts taken from: ${Object.entries(byBasis).sort().map(([key, value]) => `${key} ${value}`).join(', ')}`,
+    `  excerpts checked against (citations): ${Object.entries(byCheck).sort().map(([key, value]) => `${key} ${value}`).join(', ')}`,
     `  ${stats.boundaries} boundaries and ${stats.roundTrips} round trips checked`,
   ].join('\n');
 }
