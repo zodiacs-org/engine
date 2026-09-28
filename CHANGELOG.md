@@ -6,6 +6,12 @@
   longitude-aspect policies: major, minor and custom angles; per-aspect,
   per-body and applying/separating/stationary orb limits; selected bodies;
   and deterministic matching. The result includes its resolved policy.
+- The unpublished candidate's review repair uses direct bounded subtraction
+  in configured matching and motion, preserving exact custom-angle matches
+  at zero orb without widening tolerances. Configured boundary behavior can
+  differ at roundoff scale from the historical helper; existing natal,
+  transit, synastry and receipt calculations are unchanged. Current repair
+  evidence is in `docs/evidence/rc11-20260928/decimal-orb-repair/`.
 - `chartDeclinations(natal)` derives right ascension and declination from
   full ecliptic longitude and latitude using true obliquity on the chart's
   pinned or model ΔT clock. It includes parallel/contraparallel aspects,

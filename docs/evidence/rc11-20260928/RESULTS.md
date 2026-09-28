@@ -1,5 +1,12 @@
 # rc.11 continuation results
 
+**Current candidate:** the merge review's decimal zero-orb repair, fresh gates
+and current archive binding are recorded in
+[decimal-orb-repair/README.md](decimal-orb-repair/README.md). The report below
+and sibling JSON/review files describe the **original candidate**, not that
+repair. Their original `13d637db…` archive remains recoverable from
+[immutable commit 00bdae79](https://github.com/zodiacs-org/engine/blob/00bdae79a9256c2bba4294ed07af79e323c6cd66/artifacts/zodiacs-engine-0.1.1-rc.11.tgz).
+
 2026-09-28. Review candidate; not an npm publication, merge or deployment.
 The immutable starting point is engine
 `f5f33892a95cd0d6cd4a11a80e66f802b11bccfa`, the merged rc.10 release.

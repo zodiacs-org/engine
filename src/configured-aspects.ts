@@ -215,11 +215,16 @@ export function createAspectPolicy(input: AspectPolicyInput = {}): AspectPolicy 
 /** Independent immutable copy of the historical five-aspect/ten-body defaults. */
 export const DEFAULT_ASPECT_POLICY: AspectPolicy = createAspectPolicy();
 
+/** Inputs have already been bounded to [0,360); fold only when needed. */
+function signedSeparation(a: number, b: number): number {
+  const difference = a - b;
+  return difference > 180 ? difference - 360 : difference < -180 ? difference + 360 : difference;
+}
+
 function motionAt(a: AspectPosition, b: AspectPosition, angle: number, threshold: number): ConfiguredAspectMotion {
   const relative = a.speed - b.speed;
   if (relative === 0 || Math.abs(relative) < threshold) return "stationary";
-  const wrapped = (((a.lon - b.lon) % 360) + 360) % 360;
-  const signed = wrapped > 180 ? wrapped - 360 : wrapped;
+  const signed = signedSeparation(a.lon, b.lon);
   const distance = Math.abs(signed);
   const deviation = distance - angle;
   if (deviation === 0) return "separating";
@@ -257,8 +262,7 @@ export function findConfiguredAspects(positions: readonly AspectPosition[], poli
   for (let i = 0; i < candidates.length; i += 1) {
     for (let j = i + 1; j < candidates.length; j += 1) {
       const a = candidates[i]!, b = candidates[j]!;
-      const difference = Math.abs((((a.lon - b.lon) % 360) + 360) % 360);
-      const distance = difference > 180 ? 360 - difference : difference;
+      const distance = Math.abs(signedSeparation(a.lon, b.lon));
       let best: ConfiguredAspect | null = null;
       for (const definition of policy.aspects) {
         const orb = Math.abs(distance - definition.angle);

@@ -168,6 +168,15 @@ revalidated through the factory. Its schema and conventions describe the
 calculation; they are not an authenticated receipt. This analysis does not
 replace `chart.aspects`, or configure `synastry` or `transits`.
 
+The configured API subtracts validated longitudes directly and folds only
+across the 180° boundary. It avoids the historical helper's unnecessary
+360° normalization, which could lose an exact decimal custom-angle match
+at zero orb. Configured orbs, and matches or motion at floating-point
+boundaries, can therefore differ from the historical helper at roundoff
+scale. No numerical tolerance is added; ordinary binary floating-point
+subtraction still applies. The historical natal, transit, synastry and
+receipt calculations retain their existing behavior.
+
 ### Declinations and parallels
 
 ```ts

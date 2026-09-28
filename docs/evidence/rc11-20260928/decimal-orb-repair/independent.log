@@ -1,0 +1,2 @@
+{"allPassed": true, "counts": {"rotations": 388, "aspects": 1500, "declinations": 507}, "maxUnitVectorDiscrepancy": 1.1331067106510727e-15, "maxDeclinationDegreeDiscrepancy": 7.105427357601002e-15}
+Failures: 0; report: /workspace/scratch/c13b7841ac1f/engine-review/docs/evidence/rc11-20260928/decimal-orb-repair/independent.json

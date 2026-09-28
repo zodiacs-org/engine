@@ -1,0 +1,86 @@
+{
+  "schema": "zodiacs.independent-arithmetic.v1",
+  "timestamp": "2026-09-28T10:09:58.955861+00:00",
+  "engineVersion": "0.1.1-rc.11",
+  "entry": "/workspace/scratch/c13b7841ac1f/engine-review/dist/index.js",
+  "entrySha256": "1d6490fe26941d21df474679c8ee58158feed04e7243af4a072927f471b9598f",
+  "builtJavaScript": {
+    "chunk-2XAKEYSD.js": "2ffc69f18444d4ee9bff2cae506e10eaa2ed900d131178c04bfdb6035c268490",
+    "chunk-753O4EXU.js": "45f41592533344591113e399bff8ecb7c5aa77a4a13628a463b9b5a2b0946b19",
+    "chunk-AECKV73C.js": "a812be9882c25f67c9fa8dfe19eb0d950a3867a7cdbede4c746c226ca760480c",
+    "chunk-CPALRSPC.js": "9db1a3814ec9bd00a40d4bc295e348debd6108f62a322ed91d18610c81b9fb08",
+    "chunk-IYNERVXW.js": "2d297d94afc12e305da43c865415bbf9c4bf0cd4292936c7c10089c8d41beb84",
+    "chunk-JCXBMXD4.js": "8a7dd0dce31a9b609e9e43879e0cbb956f72451eab513b91896dc0d7bac4d7f8",
+    "chunk-ONBZ4HK7.js": "50f11205373c177c728ea8c7d50d41b19ff80cd9921eb51c6e907a8045f93308",
+    "chunk-PFGUCNOK.js": "6d9d38ab4606288700b0959e732a61dfa5b4cdc570be21d17b4ac9b9fe1c0eb4",
+    "crossings.js": "bad1c9bcf76338a95d8c09d1019fb32a65f2d9622c611fd87f81a83392bd3f5f",
+    "deltat.js": "43b1503b6597e82ed6e920c18991703fe02be05856e6de0fc347e4abcf4c15e4",
+    "geo.js": "65b0af0d4c6823483ad321ab91a703889303a6e8051f171d2de8fc3df7e94d64",
+    "index.js": "1d6490fe26941d21df474679c8ee58158feed04e7243af4a072927f471b9598f",
+    "internal-math.js": "c0ccffe0d98e75bc232c9e70bfa62da12b4f2c49cd94279410d0d946df3d5e4d",
+    "internal.js": "abeb8513cac0edc5e321107d0cd78a3711e6526869867a74841972ad3d06def4",
+    "receipt.js": "e025026a361c84a0b35f13ff4bd5bae78ca2c818ed50838640b4f31abce08c05"
+  },
+  "builtJavaScriptAfterInvocation": {
+    "chunk-2XAKEYSD.js": "2ffc69f18444d4ee9bff2cae506e10eaa2ed900d131178c04bfdb6035c268490",
+    "chunk-753O4EXU.js": "45f41592533344591113e399bff8ecb7c5aa77a4a13628a463b9b5a2b0946b19",
+    "chunk-AECKV73C.js": "a812be9882c25f67c9fa8dfe19eb0d950a3867a7cdbede4c746c226ca760480c",
+    "chunk-CPALRSPC.js": "9db1a3814ec9bd00a40d4bc295e348debd6108f62a322ed91d18610c81b9fb08",
+    "chunk-IYNERVXW.js": "2d297d94afc12e305da43c865415bbf9c4bf0cd4292936c7c10089c8d41beb84",
+    "chunk-JCXBMXD4.js": "8a7dd0dce31a9b609e9e43879e0cbb956f72451eab513b91896dc0d7bac4d7f8",
+    "chunk-ONBZ4HK7.js": "50f11205373c177c728ea8c7d50d41b19ff80cd9921eb51c6e907a8045f93308",
+    "chunk-PFGUCNOK.js": "6d9d38ab4606288700b0959e732a61dfa5b4cdc570be21d17b4ac9b9fe1c0eb4",
+    "crossings.js": "bad1c9bcf76338a95d8c09d1019fb32a65f2d9622c611fd87f81a83392bd3f5f",
+    "deltat.js": "43b1503b6597e82ed6e920c18991703fe02be05856e6de0fc347e4abcf4c15e4",
+    "geo.js": "65b0af0d4c6823483ad321ab91a703889303a6e8051f171d2de8fc3df7e94d64",
+    "index.js": "1d6490fe26941d21df474679c8ee58158feed04e7243af4a072927f471b9598f",
+    "internal-math.js": "c0ccffe0d98e75bc232c9e70bfa62da12b4f2c49cd94279410d0d946df3d5e4d",
+    "internal.js": "abeb8513cac0edc5e321107d0cd78a3711e6526869867a74841972ad3d06def4",
+    "receipt.js": "e025026a361c84a0b35f13ff4bd5bae78ca2c818ed50838640b4f31abce08c05"
+  },
+  "archive": {
+    "path": "/workspace/scratch/c13b7841ac1f/engine-review/artifacts/zodiacs-engine-0.1.1-rc.11.tgz",
+    "sha256": "d88e0ff8db91e1183789763ad32feb2dac61716e35ad7676a943f7a1ad377862",
+    "distJavaScript": {
+      "chunk-2XAKEYSD.js": "2ffc69f18444d4ee9bff2cae506e10eaa2ed900d131178c04bfdb6035c268490",
+      "chunk-753O4EXU.js": "45f41592533344591113e399bff8ecb7c5aa77a4a13628a463b9b5a2b0946b19",
+      "chunk-AECKV73C.js": "a812be9882c25f67c9fa8dfe19eb0d950a3867a7cdbede4c746c226ca760480c",
+      "chunk-CPALRSPC.js": "9db1a3814ec9bd00a40d4bc295e348debd6108f62a322ed91d18610c81b9fb08",
+      "chunk-IYNERVXW.js": "2d297d94afc12e305da43c865415bbf9c4bf0cd4292936c7c10089c8d41beb84",
+      "chunk-JCXBMXD4.js": "8a7dd0dce31a9b609e9e43879e0cbb956f72451eab513b91896dc0d7bac4d7f8",
+      "chunk-ONBZ4HK7.js": "50f11205373c177c728ea8c7d50d41b19ff80cd9921eb51c6e907a8045f93308",
+      "chunk-PFGUCNOK.js": "6d9d38ab4606288700b0959e732a61dfa5b4cdc570be21d17b4ac9b9fe1c0eb4",
+      "crossings.js": "bad1c9bcf76338a95d8c09d1019fb32a65f2d9622c611fd87f81a83392bd3f5f",
+      "deltat.js": "43b1503b6597e82ed6e920c18991703fe02be05856e6de0fc347e4abcf4c15e4",
+      "geo.js": "65b0af0d4c6823483ad321ab91a703889303a6e8051f171d2de8fc3df7e94d64",
+      "index.js": "1d6490fe26941d21df474679c8ee58158feed04e7243af4a072927f471b9598f",
+      "internal-math.js": "c0ccffe0d98e75bc232c9e70bfa62da12b4f2c49cd94279410d0d946df3d5e4d",
+      "internal.js": "abeb8513cac0edc5e321107d0cd78a3711e6526869867a74841972ad3d06def4",
+      "receipt.js": "e025026a361c84a0b35f13ff4bd5bae78ca2c818ed50838640b4f31abce08c05"
+    },
+    "matchesInvokedDirectory": true
+  },
+  "scriptSha256": "564c02b45706c237bbbe4ebcd4db4585b2163e4b563a2ee0f9e137178c9cf201",
+  "bridgeSha256": "5771b7731ecc45746043d29fb2bf8b0e3a8c9794de036512d248ee4f57d55030",
+  "fixturesSha256": "8a8de49305d86d1864074a4aec11cfa8edc3c4c83db221a17b0e8ce30860ea27",
+  "counts": {
+    "rotations": 388,
+    "aspects": 1500,
+    "declinations": 507
+  },
+  "thresholds": {
+    "unitVectorEuclidean": 5e-13,
+    "degrees": 1e-10
+  },
+  "maxUnitVectorDiscrepancy": 1.1331067106510727e-15,
+  "maxDeclinationDegreeDiscrepancy": 7.105427357601002e-15,
+  "allPassed": true,
+  "failures": [],
+  "limits": [
+    "Finite synthetic arithmetic fixtures only; not physical astronomical accuracy.",
+    "No independent test of provider obliquity, time model, or Swiss agreement.",
+    "Declination per-body orb caps are not offered by this API.",
+    "RA is degrees; vector reconstruction detects a degree/hour mismatch.",
+    "Out-of-bounds comparison skips nonzero-latitude rounding-sensitive equalities."
+  ]
+}

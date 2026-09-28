@@ -15,7 +15,16 @@ const pair = (aLongitude: number, bLongitude: number, aSpeed = 1, bSpeed = 0) =>
 function policy(options: AspectPolicyInput = {}) {
   return createAspectPolicy({bodies:["A","B"],aspects:[{type:"conjunction",orb:8}],...options});
 }
-const legacyFields = ({a,b,type,orb,applying}: ConfiguredAspect) => ({a,b,type,orb,applying});
+const semanticFields = ({a,b,type,applying}: Pick<ConfiguredAspect,"a"|"b"|"type"|"applying">) => ({a,b,type,applying});
+function expectBoundedOrbs(aspects: readonly ConfiguredAspect[], bodies: readonly AspectPosition[]) {
+  for (const aspect of aspects) {
+    const a=bodies.find(body=>body.body===aspect.a)!;
+    const b=bodies.find(body=>body.body===aspect.b)!;
+    const difference=Math.abs(a.lon-b.lon);
+    const distance=Math.min(difference,360-difference);
+    expect(aspect.orb).toBe(Math.abs(distance-aspect.angle));
+  }
+}
 
 describe("policy resolution and ownership", () => {
   it("resolves named minor angles without prescribing their orbs", () => {
@@ -64,6 +73,57 @@ describe("policy resolution and ownership", () => {
 });
 
 describe("orb resolution and matching", () => {
+  it.each([0.1,0.3,360/7,179.9])("keeps exact custom angle %s at zero orb in either row order", angle => {
+    const configured=policy({aspects:[{type:"custom",angle,orb:0}]});
+    for (const speed of [-1,0,1]) {
+      const positions=pair(angle,0,speed);
+      for (const rows of [positions,[...positions].reverse()]) {
+        const result=findConfiguredAspects(rows,configured).aspects;
+        expect(result).toHaveLength(1);
+        expect(result[0]).toMatchObject({angle,orb:0,maximumOrb:0,motion:speed===0?"stationary":"separating"});
+      }
+    }
+    const outside=angle+Number.EPSILON*Math.max(1,angle);
+    expect(outside).toBeGreaterThan(angle);
+    expect(findConfiguredAspects(pair(outside,0),configured).aspects).toEqual([]);
+    expect(findConfiguredAspects(pair(outside,0).reverse(),configured).aspects).toEqual([]);
+  });
+
+  it("preserves decimal inclusive limits, just-outside rejection, motion and row reversal", () => {
+    const configured=policy({aspects:[{type:"conjunction",orb:{applying:0.1,separating:0,stationary:0}}]});
+    for (const rows of [pair(0.1,0,-1),pair(0.1,0,-1).reverse()]) {
+      expect(findConfiguredAspects(rows,configured).aspects[0]).toMatchObject({orb:0.1,maximumOrb:0.1,motion:"applying"});
+    }
+    for (const rows of [pair(0.10000000000000002,0,-1),pair(0.1,0,1),pair(0.1,0,0)]) {
+      expect(findConfiguredAspects(rows,configured).aspects).toEqual([]);
+      expect(findConfiguredAspects([...rows].reverse(),configured).aspects).toEqual([]);
+    }
+  });
+
+  it("does not collapse small positive separations and folds a wrapped boundary consistently", () => {
+    const zero=policy({aspects:[{type:"conjunction",orb:0}]});
+    const tiny=policy({aspects:[{type:"conjunction",orb:{applying:1e-14,separating:0,stationary:0}}]});
+    for (const rows of [pair(1e-14,0,-1),pair(1e-14,0,-1).reverse()]) {
+      expect(findConfiguredAspects(rows,zero).aspects).toEqual([]);
+      expect(findConfiguredAspects(rows,tiny).aspects[0]).toMatchObject({orb:1e-14,motion:"applying"});
+    }
+    const wrapped=policy({aspects:[{type:"conjunction",orb:{applying:0.125,separating:0,stationary:0}}]});
+    for (const rows of [pair(359.875,0,1),pair(359.875,0,1).reverse()]) {
+      expect(findConfiguredAspects(rows,wrapped).aspects[0]).toMatchObject({orb:0.125,motion:"applying"});
+    }
+    expect(findConfiguredAspects(pair(359.875,0,-1),wrapped).aspects).toEqual([]);
+    expect(findConfiguredAspects(pair(359.87499999999994,0,1),wrapped).aspects).toEqual([]);
+  });
+
+  it("does not round a just-outside default boundary into an eligible aspect", () => {
+    const at=[position("Mars",97),position("Saturn",0,0)];
+    const outside=[position("Mars",97.00000000000001),position("Saturn",0,0)];
+    expect(findConfiguredAspects(at,DEFAULT_ASPECT_POLICY).aspects[0]).toMatchObject({type:"square",orb:7});
+    expect(findConfiguredAspects([...at].reverse(),DEFAULT_ASPECT_POLICY).aspects[0]).toMatchObject({type:"square",orb:7});
+    expect(findConfiguredAspects(outside,DEFAULT_ASPECT_POLICY).aspects).toEqual([]);
+    expect(findConfiguredAspects([...outside].reverse(),DEFAULT_ASPECT_POLICY).aspects).toEqual([]);
+  });
+
   it("uses separate applying, separating and stationary limits, including exact boundaries", () => {
     const configured=policy({aspects:[{type:"square",orb:{applying:2,separating:1,stationary:0.5}}]});
     expect(findConfiguredAspects(pair(88,0,1),configured).aspects[0]).toMatchObject({motion:"applying",orb:2,maximumOrb:2});
@@ -141,10 +201,12 @@ describe("instantaneous motion and circular corners", () => {
 });
 
 describe("legacy compatibility", () => {
-  it("preserves every legacy result field on real charts with default policy", () => {
+  it("preserves default matches and motion on real charts, with exactly bounded configured orbs", () => {
     for(const utc of ["1907-07-06T15:07:00Z","2000-01-01T12:00:00Z","2026-09-28T00:00:00Z"]){
       const chart=natalChart({utc});
-      expect(findConfiguredAspects(chart.bodies,DEFAULT_ASPECT_POLICY).aspects.map(legacyFields)).toEqual(chart.aspects);
+      const aspects=findConfiguredAspects(chart.bodies,DEFAULT_ASPECT_POLICY).aspects;
+      expect(aspects.map(semanticFields)).toEqual(chart.aspects.map(semanticFields));
+      expectBoundedOrbs(aspects,chart.bodies);
     }
   });
 
@@ -153,7 +215,9 @@ describe("legacy compatibility", () => {
     const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/2**32;};
     for(let n=0;n<100;n++){
       const bodies=DEFAULT_ASPECT_POLICY.bodies.map(body=>({body,lon:random()*360,speed:n%10===0?0:random()*30-15,lat:0,retrograde:false,sign:"aries",degree:0})) as BodyPosition[];
-      expect(findConfiguredAspects(bodies,DEFAULT_ASPECT_POLICY).aspects.map(legacyFields)).toEqual(findAspects(bodies));
+      const aspects=findConfiguredAspects(bodies,DEFAULT_ASPECT_POLICY).aspects;
+      expect(aspects.map(semanticFields)).toEqual(findAspects(bodies).map(semanticFields));
+      expectBoundedOrbs(aspects,bodies);
     }
   });
 });

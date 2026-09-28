@@ -1,0 +1,46 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> @zodiacs/engine@0.1.1-rc.11 test
+> vitest run
+
+
+ RUN  v2.1.9 /workspace/scratch/c13b7841ac1f/engine-review
+
+ ✓ src/crossings.test.ts (50 tests) 180ms
+ ✓ src/geo/geonames-schema.test.ts (67 tests) 144ms
+ ✓ src/configured-aspects.test.ts (52 tests) 292ms
+ ✓ src/input-flags.test.ts (66 tests) 364ms
+ ✓ src/declination.test.ts (15 tests) 211ms
+ ✓ src/points.test.ts (14 tests) 220ms
+ ✓ src/receipt.test.ts (36 tests) 723ms
+ ✓ src/geo/geonames.test.ts (10 tests) 31ms
+ ✓ src/engine.test.ts (24 tests) 257ms
+ ✓ src/deltat.test.ts (12 tests) 153ms
+ ✓ src/porphyry.test.ts (14 tests) 103ms
+ ✓ src/deltat-chart.test.ts (10 tests) 102ms
+ ✓ src/returns-bounds.test.ts (19 tests) 104ms
+ ✓ src/public-input.test.ts (78 tests) 112ms
+ ✓ src/house-systems.test.ts (1903 tests) 1462ms
+ ✓ src/geo.test.ts (40 tests) 54ms
+ ✓ src/receipt-conventions.test.ts (6 tests) 95ms
+ ✓ src/receipt-json.test.ts (88 tests) 52ms
+ ✓ src/reference-span.test.ts (7 tests) 202ms
+ ✓ src/returns-crossings.test.ts (16 tests) 8ms
+ ✓ src/houses-regression.test.ts (6 tests) 316ms
+ ✓ src/geo/timezone-precision.test.ts (17 tests) 188ms
+ ✓ src/angles-erfa.test.ts (12 tests) 169ms
+ ✓ src/placidus-limit.test.ts (1 test) 477ms
+   ✓ the Placidus limit against the ERFA arbiter (brief v1 rule 1h) > computes Placidus exactly where the arbiter's limit allows it 476ms
+ ✓ src/speed.test.ts (7 tests) 547ms
+ ✓ src/crossings-ephemeris.test.ts (11 tests) 3564ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2100 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 450ms
+   ✓ the audit's s2 cases, with the site's answers > matches an hourly scan of the 2,600-day Moon window, crossing by crossing 1174ms
+   ✓ the audit's s2 cases, with the site's answers > returns Saturn's crossings of 0° from 1900 to 2100 at a 5-day step, and a daily scan agrees 1241ms
+ ✓ src/aspects.test.ts (12 tests) 6120ms
+   ✓ findAspects applying flags against the engine's own motion > match the sign of the orb's rate, measured over ±1 s, every 30 minutes in the first quarter of 2024 5929ms
+
+ Test Files  27 passed (27)
+      Tests  2593 passed (2593)
+   Start at  18:09:00
+   Duration  8.78s (transform 1.79s, setup 0ms, collect 6.78s, tests 16.25s, environment 12ms, prepare 2.98s)
+
