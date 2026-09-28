@@ -1,0 +1,362 @@
+{
+  "what": "Independent check of the L1 arbiter (not the arbiter): apparent geocentric positions in the IAU 2006/2000A true ecliptic and equinox of date reduced from DE440s, minus the vectors' expected values",
+  "vectors": {
+    "path": "vectors/L1-positions.json",
+    "sha256": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",
+    "n": 240,
+    "arbiter": "horizons-de441-iau2006"
+  },
+  "kernel": {
+    "file": "de440s.bsp",
+    "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+    "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp"
+  },
+  "software": {
+    "python": "3.11.15",
+    "numpy": "2.4.6",
+    "pyerfa": "2.0.1.5",
+    "erfa": "2.0.1",
+    "jplephem": "2.24"
+  },
+  "reduction": "TDB = TT + erfa.dtdb at the geocentre; geocentre 0->3 + 3->399 (position and velocity); light-time iterated to 1e-14 day; Sun deflection by erfa.ld (bm = 1, finite-distance q, the Sun at the light's closest approach, dlim = 1e-6/max(em^2, 1)); annual aberration by erfa.ab from the geocentre's barycentric velocity and its distance from the Sun; erfa.pnm06a and R1(erfa.obl06 + nut06a deps) at TT; erfa.c2s",
+  "targets": {
+    "Sun": "0->10",
+    "Moon": "0->3+3->301",
+    "Mercury": "0->1+1->199",
+    "Venus": "0->2+2->299",
+    "Mars": "0->4",
+    "Jupiter": "0->5",
+    "Saturn": "0->6",
+    "Uranus": "0->7",
+    "Neptune": "0->8",
+    "Pluto": "0->9"
+  },
+  "comparedWith": "each vector's expected value; Mars to Pluto are system barycentres on both sides (kernel targets 4 to 9, Horizons NAIF 4 to 9)",
+  "units": "milliarcseconds; lon is the longitude difference taken on the circle, lat the latitude difference, both DE440s minus the expected value; medianAbs and maxAbs are of the absolute difference",
+  "perBody": {
+    "Sun": {
+      "n": 24,
+      "lon": {
+        "medianAbs": 1.058,
+        "maxAbs": 2.817,
+        "maxAt": "C2"
+      },
+      "lat": {
+        "medianAbs": 0.049,
+        "maxAbs": 0.193,
+        "maxAt": "C1"
+      }
+    },
+    "Moon": {
+      "n": 24,
+      "lon": {
+        "medianAbs": 3.517,
+        "maxAbs": 12.628,
+        "maxAt": "A1"
+      },
+      "lat": {
+        "medianAbs": 0.156,
+        "maxAbs": 0.94,
+        "maxAt": "A1"
+      }
+    },
+    "Mercury": {
+      "n": 24,
+      "lon": {
+        "medianAbs": 1.011,
+        "maxAbs": 2.483,
+        "maxAt": "C2"
+      },
+      "lat": {
+        "medianAbs": 0.113,
+        "maxAbs": 0.215,
+        "maxAt": "F2"
+      }
+    },
+    "Venus": {
+      "n": 24,
+      "lon": {
+        "medianAbs": 1.193,
+        "maxAbs": 2.665,
+        "maxAt": "C2"
+      },
+      "lat": {
+        "medianAbs": 0.077,
+        "maxAbs": 0.207,
+        "maxAt": "B2"
+      }
+    },
+    "Mars": {
+      "n": 24,
+      "lon": {
+        "medianAbs": 1.152,
+        "maxAbs": 2.749,
+        "maxAt": "C2"
+      },
+      "lat": {
+        "medianAbs": 0.067,
+        "maxAbs": 0.175,
+        "maxAt": "F2"
+      }
+    },
+    "Jupiter": {
+      "n": 24,
+      "lon": {
+        "medianAbs": 1.038,
+        "maxAbs": 2.73,
+        "maxAt": "C2"
+      },
+      "lat": {
+        "medianAbs": 0.09,
+        "maxAbs": 0.174,
+        "maxAt": "C4"
+      }
+    },
+    "Saturn": {
+      "n": 24,
+      "lon": {
+        "medianAbs": 1.11,
+        "maxAbs": 2.611,
+        "maxAt": "C2"
+      },
+      "lat": {
+        "medianAbs": 0.076,
+        "maxAbs": 0.169,
+        "maxAt": "D1"
+      }
+    },
+    "Uranus": {
+      "n": 24,
+      "lon": {
+        "medianAbs": 1.233,
+        "maxAbs": 2.666,
+        "maxAt": "C2"
+      },
+      "lat": {
+        "medianAbs": 0.086,
+        "maxAbs": 0.172,
+        "maxAt": "D4"
+      }
+    },
+    "Neptune": {
+      "n": 24,
+      "lon": {
+        "medianAbs": 1.134,
+        "maxAbs": 2.602,
+        "maxAt": "C2"
+      },
+      "lat": {
+        "medianAbs": 0.071,
+        "maxAbs": 0.17,
+        "maxAt": "A2"
+      }
+    },
+    "Pluto": {
+      "n": 24,
+      "lon": {
+        "medianAbs": 1.1,
+        "maxAbs": 2.621,
+        "maxAt": "C2"
+      },
+      "lat": {
+        "medianAbs": 0.055,
+        "maxAbs": 0.178,
+        "maxAt": "C1"
+      }
+    }
+  },
+  "overall": {
+    "n": 240,
+    "lon": {
+      "medianAbs": 1.271,
+      "maxAbs": 12.628,
+      "maxAt": "Moon A1"
+    },
+    "lat": {
+      "medianAbs": 0.079,
+      "maxAbs": 0.94,
+      "maxAt": "Moon A1"
+    }
+  },
+  "overallWithoutMoon": {
+    "n": 216,
+    "lon": {
+      "medianAbs": 1.086,
+      "maxAbs": 2.817,
+      "maxAt": "Sun C2"
+    },
+    "lat": {
+      "medianAbs": 0.073,
+      "maxAbs": 0.215,
+      "maxAt": "Mercury F2"
+    }
+  },
+  "limitMas": 50.0,
+  "overLimit": [],
+  "perInstant": {
+    "what": "longitude differences at each instant: the mean and the spread (largest minus smallest) of the nine bodies other than the Moon, which is the frame model's remainder when the spread is small, and the Moon's, in mas",
+    "instants": [
+      {
+        "id": "A1",
+        "meanOfNineMas": -2.245,
+        "spreadOfNineMas": 0.262,
+        "moonMas": -12.628
+      },
+      {
+        "id": "A2",
+        "meanOfNineMas": -2.282,
+        "spreadOfNineMas": 0.352,
+        "moonMas": -8.579
+      },
+      {
+        "id": "A3",
+        "meanOfNineMas": -2.305,
+        "spreadOfNineMas": 0.365,
+        "moonMas": -6.547
+      },
+      {
+        "id": "A4",
+        "meanOfNineMas": -2.278,
+        "spreadOfNineMas": 0.273,
+        "moonMas": -4.902
+      },
+      {
+        "id": "B1",
+        "meanOfNineMas": -2.273,
+        "spreadOfNineMas": 0.274,
+        "moonMas": -4.265
+      },
+      {
+        "id": "B2",
+        "meanOfNineMas": -2.365,
+        "spreadOfNineMas": 0.229,
+        "moonMas": -3.919
+      },
+      {
+        "id": "B3",
+        "meanOfNineMas": -2.294,
+        "spreadOfNineMas": 0.272,
+        "moonMas": -3.114
+      },
+      {
+        "id": "B4",
+        "meanOfNineMas": -2.252,
+        "spreadOfNineMas": 0.323,
+        "moonMas": -2.393
+      },
+      {
+        "id": "C1",
+        "meanOfNineMas": -2.269,
+        "spreadOfNineMas": 0.26,
+        "moonMas": -2.674
+      },
+      {
+        "id": "C2",
+        "meanOfNineMas": -2.66,
+        "spreadOfNineMas": 0.333,
+        "moonMas": -2.445
+      },
+      {
+        "id": "C3",
+        "meanOfNineMas": -1.236,
+        "spreadOfNineMas": 0.344,
+        "moonMas": -1.242
+      },
+      {
+        "id": "C4",
+        "meanOfNineMas": -0.712,
+        "spreadOfNineMas": 0.337,
+        "moonMas": -0.797
+      },
+      {
+        "id": "C5",
+        "meanOfNineMas": 0.164,
+        "spreadOfNineMas": 0.205,
+        "moonMas": -0.216
+      },
+      {
+        "id": "D1",
+        "meanOfNineMas": -0.36,
+        "spreadOfNineMas": 0.172,
+        "moonMas": -0.994
+      },
+      {
+        "id": "D2",
+        "meanOfNineMas": -1.361,
+        "spreadOfNineMas": 0.316,
+        "moonMas": -2.261
+      },
+      {
+        "id": "D3",
+        "meanOfNineMas": -0.965,
+        "spreadOfNineMas": 0.308,
+        "moonMas": -1.6
+      },
+      {
+        "id": "D4",
+        "meanOfNineMas": -0.458,
+        "spreadOfNineMas": 0.275,
+        "moonMas": -1.444
+      },
+      {
+        "id": "D5",
+        "meanOfNineMas": -0.717,
+        "spreadOfNineMas": 0.303,
+        "moonMas": -2.749
+      },
+      {
+        "id": "E1",
+        "meanOfNineMas": -0.784,
+        "spreadOfNineMas": 0.322,
+        "moonMas": -4.077
+      },
+      {
+        "id": "E2",
+        "meanOfNineMas": -0.843,
+        "spreadOfNineMas": 0.331,
+        "moonMas": -4.314
+      },
+      {
+        "id": "E3",
+        "meanOfNineMas": -0.805,
+        "spreadOfNineMas": 0.288,
+        "moonMas": -5.449
+      },
+      {
+        "id": "F1",
+        "meanOfNineMas": -0.815,
+        "spreadOfNineMas": 0.334,
+        "moonMas": -6.203
+      },
+      {
+        "id": "F2",
+        "meanOfNineMas": -0.753,
+        "spreadOfNineMas": 0.349,
+        "moonMas": -7.971
+      },
+      {
+        "id": "F3",
+        "meanOfNineMas": -0.803,
+        "spreadOfNineMas": 0.313,
+        "moonMas": -9.153
+      }
+    ]
+  },
+  "tlistInstant": {
+    "what": "Horizons was sent each jd_tt to 8 decimals of a day (at most 0.43 ms away); largest angular motion of the DE440s position between jd_tt and that value, in mas",
+    "maxMasPerBody": {
+      "Sun": 0.0176,
+      "Moon": 0.2769,
+      "Mercury": 0.0244,
+      "Venus": 0.0211,
+      "Mars": 0.0106,
+      "Jupiter": 0.0033,
+      "Saturn": 0.0014,
+      "Uranus": 0.0009,
+      "Neptune": 0.0007,
+      "Pluto": 0.0004
+    }
+  },
+  "frameAcceptance": "In this suite the model's acceptance rests on validate.py's independent reduction from DE440s, not on Swiss: for the nine bodies other than the Moon it differs from the expected values by at most 2.82 mas in longitude and 0.22 mas in latitude, and at each instant their longitude differences agree to within 0.37 mas, so what the model leaves is a rotation common to all bodies.",
+  "summary": "Independent check: an apparent-place reduction from DE440s (arbiters/l1/validate.py with jplephem and pyerfa: light-time iteration, deflection by the Sun, annual aberration, pnm06a and the true obliquity; kernel de440s.bsp, sha256 c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2), with Mars to Pluto as the system barycentres 4 to 9 as in the vectors, differs from the 240 expected values by a median of 1.27 mas in longitude and at most 0.95 mas in latitude. For the nine bodies other than the Moon the longitude differences agree at each instant to within 0.37 mas, so what is left is a rotation common to all of them, the frame model's remainder, at most 2.82 mas (1969-07-20); the Moon differs by up to 12.63 mas (1851-03-14). Evaluating at the TLIST value Horizons was sent (jd_tt to 8 decimals of a day) instead of at jd_tt moves no position by more than 0.28 mas. Per-body statistics are in arbiters/l1/validation.json."
+}

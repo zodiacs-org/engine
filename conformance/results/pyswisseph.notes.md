@@ -1,0 +1,6 @@
+- **Houses and angles (L2).** Swiss Ephemeris 2.10.03 uses the IAU 2006/2000A sidereal time from 1850 to 2050, where its sidereal time agrees with the arbiter's to 0.001″ and its angles and cusps to within 0.007″. Outside that span it switches to its own long-term model. That model's sidereal time is 1.9″ from the IAU value just after 2050, falling to 0.7″ by 2199 (both measured with Swiss's own ΔT); the angles and cusps differ by up to 15.7″ here.
+  - All 47 failures are dated after 2050.
+  - The vectors before 1850 all pass.
+  - Given the arbiter's own sidereal time and obliquity, its house geometry agrees to within 0.0011″ in every system (see `arbiters/l2/README.md`).
+- **Flags.** Every position request returned `SEFLG_SWIEPH`: Swiss read its `.se1` files rather than falling back to its Moshier theory.
+- **Unsupported.** Swiss Ephemeris has no time zone database and no function for local mean time from a longitude.

@@ -1,0 +1,4792 @@
+{
+  "suite": "zodiacs-conformance",
+  "suiteVersion": "0.1.0",
+  "level": "L2",
+  "title": "Houses and angles",
+  "arbiters": {
+    "l2-angles-erfa": {
+      "name": "ERFA sidereal time and obliquity; spherical geometry of the angles",
+      "source": "ERFA 2.0.1 through pyerfa 2.0.1.5 (github.com/liberfa/erfa, derived from IAU SOFA): gst06a, obl06, nut06a. UT1−UTC: IERS finals2000A (the IERS Rapid Service/Prediction Centre finals.all fetched 2026-09-22, sha256 c672540e026d3cd4840c0858d4ce2bc4a18c3bc9751f9636c3285e11950d58a1; the three columns used are the committed CSV). TAI−UTC: IERS Bulletin C, hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat (through Bulletin C 72, fetched 2026-09-28). ΔT outside the IERS span: F. Espenak and J. Meeus, Five Millennium Canon of Solar Eclipses: −1999 to +3000, NASA/TP-2006-214141 (2006). Definitions: R. W. Holden, The Elements of House Division (1977); M. P. Munkasey, An Astrological House Formulary; W. M. Smart, Textbook on Spherical Astronomy.",
+      "inputs": [
+        {
+          "path": "sources/l2/iers-finals2000A-ut1.csv",
+          "sha256": "c698117a9c11524196e51a71493776e3287223b9ee75582548392dec8d45f669"
+        },
+        {
+          "path": "sources/l2/Leap_Second.dat",
+          "sha256": "6cb6f5d4b819f2e568e25db4b0b26d89dedf031fdffb18bc94d40f4e94e268d7"
+        }
+      ],
+      "method": "TT = UT1 + ΔT, ΔT = 32.184 s + (TAI−UTC) − (UT1−UTC) on the IERS rows flagged I (1973-01-02 to 2026-09-17, interpolated linearly in time; TAI−UTC equal to erfa.dat on every row), the Espenak–Meeus polynomials elsewhere; the TT used is input.jd_tt. GAST = ERFA gst06a (IAU 2006 precession, IAU 2000A nutation); true obliquity ε = obl06 + the Δε of nut06a; RAMC = GAST + east longitude (no polar motion; the latitude is used as given). With K the ecliptic pole, Z the zenith, E the east point, N the north point of the horizon and M the equator point on the upper meridian (unit vectors of date), each angle is the ecliptic's intersection with a great circle, ±(K × pole), on a named side: ascendant, the horizon (pole Z) on E's side (rising); MC, the meridian (pole E) on the upper branch, right ascension = RAMC; vertex, the prime vertical (pole N) on the WEST side, in both hemispheres; east point, the hour circle through E (pole M), i.e. the ecliptic point with right ascension RAMC + 90°. Checked against the closed forms (Asc = atan2(cos RAMC, −(sin RAMC cos ε + tan φ sin ε)); MC = atan2(sin RAMC, cos RAMC cos ε); east point = that Asc formula at φ = 0; vertex = that formula at co-latitude 90° − φ under RAMC + 180°, which returns the eastern intersection, 180° from the vertex, exactly when sign(φ)(sin φ cos ε − cos φ sin ε sin RAMC) ≤ 0, possible only for |φ| < ε) and, with ERFA, against altitude 0 (Asc), hour angle 0 (MC), azimuth 270° (vertex) and right ascension RAMC + 90° (east point). Cases come from the seeded design written in build.py and described in arbiters/l2/README.md (SplitMix64 streams; instants stratified over 1800–2200 UT1, longitudes stratified over −180…180°, latitudes from fixed lists); no engine output was consulted.",
+      "generator": "arbiters/l2/build.py",
+      "uncertainty": "Numerical: each value is computed by two independent routes (great-circle intersections of unit vectors, and the classical closed forms) and checked against its defining property with ERFA coordinate routines (s2c, rx, c2s, hd2ae); over this arbiter's 70 vectors the largest disagreement is 4e-09″. Time: TT is pinned by input.jd_tt; moving ΔT by 60 s moves no output by more than 0.00048″ (median 9e-05″), because IAU 2006 sidereal time depends on TT only through precession-nutation (about 1e-4″ per minute) and the geometry amplifies that at most 9.1-fold. Model: the values are defined by IAU 2006/2000A; another sidereal-time or obliquity model moves them by the model difference times the amplification, here at most 4.0 (sidereal time) and 9.1 (obliquity) arcsec per arcsec (vectors at 10 or more carry a note). Recomputed through ERFA with IAU 2000B sidereal time and nutation they move by at most 0.043″; with IAU 1982/1994 sidereal time and the IAU 1980 obliquity and nutation by at most 1.2″, more than the tolerance on 2 of these vectors (each carries a note). Rounding: 1e-10°. An after-the-fact comparison with Swiss Ephemeris is reported in arbiters/l2/swiss-check.json (statistics only)."
+    },
+    "l2-houses-ecliptic": {
+      "name": "Ecliptic divisions: equal, whole-sign, Vehlow, equal-MC, Porphyry",
+      "source": "ERFA 2.0.1 through pyerfa 2.0.1.5 (github.com/liberfa/erfa, derived from IAU SOFA): gst06a, obl06, nut06a. UT1−UTC: IERS finals2000A (the IERS Rapid Service/Prediction Centre finals.all fetched 2026-09-22, sha256 c672540e026d3cd4840c0858d4ce2bc4a18c3bc9751f9636c3285e11950d58a1; the three columns used are the committed CSV). TAI−UTC: IERS Bulletin C, hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat (through Bulletin C 72, fetched 2026-09-28). ΔT outside the IERS span: F. Espenak and J. Meeus, Five Millennium Canon of Solar Eclipses: −1999 to +3000, NASA/TP-2006-214141 (2006). Definitions: R. W. Holden, The Elements of House Division (1977); M. P. Munkasey, An Astrological House Formulary; W. M. Smart, Textbook on Spherical Astronomy.",
+      "inputs": [
+        {
+          "path": "sources/l2/iers-finals2000A-ut1.csv",
+          "sha256": "c698117a9c11524196e51a71493776e3287223b9ee75582548392dec8d45f669"
+        },
+        {
+          "path": "sources/l2/Leap_Second.dat",
+          "sha256": "6cb6f5d4b819f2e568e25db4b0b26d89dedf031fdffb18bc94d40f4e94e268d7"
+        }
+      ],
+      "method": "TT, RAMC, ε, ascendant and MC exactly as in l2-angles-erfa, then: equal, cusp k = Asc + 30°(k−1); whole-sign, cusp 1 = 0° of the sign holding the Asc, then +30° (cases are drawn with the Asc at least 0.01° from a sign boundary); Vehlow, cusp 1 = Asc − 15°, then +30°; equal-MC, cusp k = MC + 30°(k−10); Porphyry, each quadrant MC→Asc→IC trisected in longitude. Cusps 4–9 are opposite 10–3. Cases come from the seeded design written in build.py and described in arbiters/l2/README.md (SplitMix64 streams; instants stratified over 1800–2200 UT1, longitudes stratified over −180…180°, latitudes from fixed lists); no engine output was consulted.",
+      "generator": "arbiters/l2/build.py",
+      "uncertainty": "Numerical: each value is computed by two independent routes (the angles as in l2-angles-erfa, then the arithmetic re-done from the closed-form Asc and MC) and checked against its defining property with ERFA coordinate routines (s2c, rx, c2s, hd2ae); over this arbiter's 25 vectors the largest disagreement is 3.7e-10″. Time: TT is pinned by input.jd_tt; moving ΔT by 60 s moves no output by more than 0.00021″ (median 9e-05″), because IAU 2006 sidereal time depends on TT only through precession-nutation (about 1e-4″ per minute) and the geometry amplifies that at most 3.3-fold. Model: the values are defined by IAU 2006/2000A; another sidereal-time or obliquity model moves them by the model difference times the amplification, here at most 1.6 (sidereal time) and 3.3 (obliquity) arcsec per arcsec (vectors at 10 or more carry a note). Recomputed through ERFA with IAU 2000B sidereal time and nutation they move by at most 0.022″; with IAU 1982/1994 sidereal time and the IAU 1980 obliquity and nutation by at most 0.68″, within the tolerance on every one of these vectors. Rounding: 1e-10°. An after-the-fact comparison with Swiss Ephemeris is reported in arbiters/l2/swiss-check.json (statistics only)."
+    },
+    "l2-houses-great-circle": {
+      "name": "Fixed house circles: Regiomontanus, Campanus, meridian, Morinus",
+      "source": "ERFA 2.0.1 through pyerfa 2.0.1.5 (github.com/liberfa/erfa, derived from IAU SOFA): gst06a, obl06, nut06a. UT1−UTC: IERS finals2000A (the IERS Rapid Service/Prediction Centre finals.all fetched 2026-09-22, sha256 c672540e026d3cd4840c0858d4ce2bc4a18c3bc9751f9636c3285e11950d58a1; the three columns used are the committed CSV). TAI−UTC: IERS Bulletin C, hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat (through Bulletin C 72, fetched 2026-09-28). ΔT outside the IERS span: F. Espenak and J. Meeus, Five Millennium Canon of Solar Eclipses: −1999 to +3000, NASA/TP-2006-214141 (2006). Definitions: R. W. Holden, The Elements of House Division (1977); M. P. Munkasey, An Astrological House Formulary; W. M. Smart, Textbook on Spherical Astronomy.",
+      "inputs": [
+        {
+          "path": "sources/l2/iers-finals2000A-ut1.csv",
+          "sha256": "c698117a9c11524196e51a71493776e3287223b9ee75582548392dec8d45f669"
+        },
+        {
+          "path": "sources/l2/Leap_Second.dat",
+          "sha256": "6cb6f5d4b819f2e568e25db4b0b26d89dedf031fdffb18bc94d40f4e94e268d7"
+        }
+      ],
+      "method": "TT, RAMC and ε as in l2-angles-erfa. Each cusp is the ecliptic's intersection with a house circle, ±(K × pole), on a named side. Regiomontanus: the equator divided into 30° arcs from the meridian; circle k passes through the north and south points of the horizon and the equator point Q_k at right ascension RAMC + 90° + 30°(k−1); the cusp lies on the half-circle N→Q_k→S. Campanus: the prime vertical divided into 30° arcs from the east point; circle k passes through the north and south points and P_k = cos(a)E + sin(a)Z, a = 30°(1−k); the cusp lies on P_k's side. Meridian (axial rotation): cusp k is the ecliptic point with right ascension RAMC + 90° + 30°(k−1) (projection along hour circles; cusp 10 = MC, cusp 1 = east point). Morinus: cusp k is the ecliptic longitude of the equator point at right ascension RAMC + 90° + 30°(k−1) (projection along circles through the ecliptic poles; cusp 10 is not the MC). Second routes: the pole height tan p = tan φ cos(30°m) with the oblique-ascension Asc formula (Regiomontanus), the Asc formula for the house circle's own pole (Campanus), the closed-form projections (meridian, Morinus). Cases come from the seeded design written in build.py and described in arbiters/l2/README.md (SplitMix64 streams; instants stratified over 1800–2200 UT1, longitudes stratified over −180…180°, latitudes from fixed lists); no engine output was consulted.",
+      "generator": "arbiters/l2/build.py",
+      "uncertainty": "Numerical: each value is computed by two independent routes (cross-product intersections, and the pole-height or projection formulas) and checked against its defining property with ERFA coordinate routines (s2c, rx, c2s, hd2ae); over this arbiter's 22 vectors the largest disagreement is 7.3e-10″. Time: TT is pinned by input.jd_tt; moving ΔT by 60 s moves no output by more than 0.0026″ (median 5.2e-05″), because IAU 2006 sidereal time depends on TT only through precession-nutation (about 1e-4″ per minute) and the geometry amplifies that at most 49.6-fold. Model: the values are defined by IAU 2006/2000A; another sidereal-time or obliquity model moves them by the model difference times the amplification, here at most 19.7 (sidereal time) and 49.6 (obliquity) arcsec per arcsec (vectors at 10 or more carry a note). Recomputed through ERFA with IAU 2000B sidereal time and nutation they move by at most 0.36″; with IAU 1982/1994 sidereal time and the IAU 1980 obliquity and nutation by at most 14″, more than the tolerance on 1 of these vectors (each carries a note). Rounding: 1e-10°. An after-the-fact comparison with Swiss Ephemeris is reported in arbiters/l2/swiss-check.json (statistics only)."
+    },
+    "l2-houses-semi-arc": {
+      "name": "Semi-arc and pole systems: Placidus, Koch, Alcabitius, topocentric",
+      "source": "ERFA 2.0.1 through pyerfa 2.0.1.5 (github.com/liberfa/erfa, derived from IAU SOFA): gst06a, obl06, nut06a. UT1−UTC: IERS finals2000A (the IERS Rapid Service/Prediction Centre finals.all fetched 2026-09-22, sha256 c672540e026d3cd4840c0858d4ce2bc4a18c3bc9751f9636c3285e11950d58a1; the three columns used are the committed CSV). TAI−UTC: IERS Bulletin C, hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat (through Bulletin C 72, fetched 2026-09-28). ΔT outside the IERS span: F. Espenak and J. Meeus, Five Millennium Canon of Solar Eclipses: −1999 to +3000, NASA/TP-2006-214141 (2006). Definitions: R. W. Holden, The Elements of House Division (1977); M. P. Munkasey, An Astrological House Formulary; W. M. Smart, Textbook on Spherical Astronomy. Topocentric: W. Polich and A. P. Nelson Page, the topocentric system (tan of the house pole = n/3 · tan φ).",
+      "inputs": [
+        {
+          "path": "sources/l2/iers-finals2000A-ut1.csv",
+          "sha256": "c698117a9c11524196e51a71493776e3287223b9ee75582548392dec8d45f669"
+        },
+        {
+          "path": "sources/l2/Leap_Second.dat",
+          "sha256": "6cb6f5d4b819f2e568e25db4b0b26d89dedf031fdffb18bc94d40f4e94e268d7"
+        }
+      ],
+      "method": "TT, RAMC, ε, ascendant and MC as in l2-angles-erfa. With AD = asin(tan φ tan δ), DSA = 90° + AD, NSA = 90° − AD and m = k − 1 (cusps 11, 12, 2, 3 as m = −2, −1, 1, 2). Placidus: each cusp is the ecliptic point whose right ascension minus RAMC is 90° + 30°m + (1 − |m|/3)·AD of its own declination, i.e. DSA/3 and 2DSA/3 before culmination for cusps 11 and 12, and 2NSA/3 and NSA/3 after lower culmination for cusps 2 and 3; solved by bisection in longitude over the quadrant to adjacent doubles, and again in ascensional difference (sin AD = tan φ tan ε sin RA), each root checked unique on a 2000-point grid. Koch: the MC degree's diurnal semi-arc DSA_MC trisected in time; cusp k is the degree rising at RAMC + m·DSA_MC/3. Alcabitius: the ascendant's DSA trisected in right ascension and carried to the ecliptic along hour circles (RAMC + DSA/3, RAMC + 2DSA/3; RA(Asc) + NSA/3, RA(Asc) + 2NSA/3). Topocentric (Polich–Page): cusp k is the degree rising on the horizon of pole p, tan p = (1 − |m|/3) tan φ, at RAMC + 30°m. Cusps 4–9 are opposite 10–3. Cases come from the seeded design written in build.py and described in arbiters/l2/README.md (SplitMix64 streams; instants stratified over 1800–2200 UT1, longitudes stratified over −180…180°, latitudes from fixed lists); no engine output was consulted.",
+      "generator": "arbiters/l2/build.py",
+      "uncertainty": "Numerical: each value is computed by two independent routes (Placidus by bisection in longitude and again in ascensional difference; Koch, Alcabitius and topocentric by vector ascendants and by the oblique-ascension formula) and checked against its defining property with ERFA coordinate routines (s2c, rx, c2s, hd2ae); over this arbiter's 23 vectors the largest disagreement is 3.7e-10″. Time: TT is pinned by input.jd_tt; moving ΔT by 60 s moves no output by more than 0.0012″ (median 9.2e-05″), because IAU 2006 sidereal time depends on TT only through precession-nutation (about 1e-4″ per minute) and the geometry amplifies that at most 9.9-fold. Model: the values are defined by IAU 2006/2000A; another sidereal-time or obliquity model moves them by the model difference times the amplification, here at most 7.8 (sidereal time) and 9.9 (obliquity) arcsec per arcsec (vectors at 10 or more carry a note). Recomputed through ERFA with IAU 2000B sidereal time and nutation they move by at most 0.12″; with IAU 1982/1994 sidereal time and the IAU 1980 obliquity and nutation by at most 3.5″, more than the tolerance on 1 of these vectors (each carries a note). Rounding: 1e-10°. An after-the-fact comparison with Swiss Ephemeris is reported in arbiters/l2/swiss-check.json (statistics only)."
+    },
+    "l2-houses-undefined": {
+      "name": "Cusps that do not exist: the construction has no solution in zodiacal order",
+      "source": "Constructions: Placidus de Titis, Tabulae primi mobilis (Milan, 1657; English translation by J. Cooper, Primum Mobile, 1814); W. A. Koch and E. Schaeck, Häusertabellen des Geburtsortes (Göppingen, 1962); both restated in R. W. Holden, The Elements of House Division (L. N. Fowler, Romford, 1977; page numbers not verified for this file). TT, RAMC and ε as in l2-angles-erfa: ERFA 2.0.1 through pyerfa 2.0.1.5 (github.com/liberfa/erfa, derived from IAU SOFA): gst06a, obl06, nut06a. UT1−UTC: IERS finals2000A (the IERS Rapid Service/Prediction Centre finals.all fetched 2026-09-22, sha256 c672540e026d3cd4840c0858d4ce2bc4a18c3bc9751f9636c3285e11950d58a1; the three columns used are the committed CSV). TAI−UTC: IERS Bulletin C, hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat (through Bulletin C 72, fetched 2026-09-28). ΔT outside the IERS span: F. Espenak and J. Meeus, Five Millennium Canon of Solar Eclipses: −1999 to +3000, NASA/TP-2006-214141 (2006).",
+      "inputs": [
+        {
+          "path": "sources/l2/iers-finals2000A-ut1.csv",
+          "sha256": "c698117a9c11524196e51a71493776e3287223b9ee75582548392dec8d45f669"
+        },
+        {
+          "path": "sources/l2/Leap_Second.dat",
+          "sha256": "6cb6f5d4b819f2e568e25db4b0b26d89dedf031fdffb18bc94d40f4e94e268d7"
+        }
+      ],
+      "method": "Definition: a house system's cusps exist where its defining construction has a solution for every cusp and the twelve cusps that result are in zodiacal order (going 1→2→…→12→1 they advance through one turn of longitude, every step forward; with cusps 4–9 opposite 10–3, 0 < d11 < d12 < d1 < d2 < d3 < 180°, d_k the forward distance of cusp k from cusp 10). Placidus: cusps 11 and 12 are the degrees that still have 1/3 and 2/3 of their own diurnal semi-arc to go to culmination, cusps 3 and 2 the degrees that have completed 1/3 and 2/3 of their own nocturnal semi-arc since lower culmination; only degrees that rise and set have semi-arcs, and every such degree of the ecliptic is searched (on each arc of degrees that rise and set, parametrised by the ascensional difference, on a 4000-point grid with every sign change refined by bisection and every local minimum of the residual refined). Koch: cusp k is the degree rising at RAMC + (k−1)·DSA_MC/3, which needs the MC degree to rise and set. Cusp 10 is the degree on the upper meridian and cusp 1 the degree rising (eastern horizon), which always exist. Each status vector fails at its RAMC and also 0.1° either side. How each one fails: L2-POL-0001 (Placidus, φ = 70°, 1844): cusp 11 has no solution, since no degree that rises and sets meets the Placidus condition for it (closest miss 9.54° of hour angle); L2-POL-0002 (Placidus, φ = 75°, 2190): cusps 11, 2 and 3 have no solution, since no degree that rises and sets meets the Placidus condition for them (closest miss 21.17°, 25.41°, 25.41° of hour angle); L2-POL-0003 (Placidus, φ = 80°, 1912): cusps 2 and 3 have no solution, since no degree that rises and sets meets the Placidus condition for them (closest miss 1.50°, 1.50° of hour angle); L2-POL-0005 (Placidus, φ = −78°, 2135): cusps 11, 2 and 3 have no solution, since no degree that rises and sets meets the Placidus condition for them (closest miss 51.30°, 2.67°, 57.33° of hour angle); L2-POL-0006 (Koch, φ = 70°, 1832): the MC degree never rises (tan φ tan δ_MC = −1.173), so the diurnal semi-arc that Koch trisects does not exist and cusps 11, 12, 2 and 3 cannot be constructed; L2-POL-0007 (Koch, φ = 75°, 2088): the MC degree never sets (tan φ tan δ_MC = 1.613), so the diurnal semi-arc that Koch trisects does not exist and cusps 11, 12, 2 and 3 cannot be constructed; L2-POL-0008 (Koch, φ = 80°, 1937): every Koch cusp can be constructed but the cusps are not in zodiacal order (cusp 11 falls 15.40° before the MC; cusp 12 falls 21.06° before the MC); L2-POL-0009 (Koch, φ = −72°, 2059): every Koch cusp can be constructed but the cusps are not in zodiacal order (cusp 3 falls 65.52° past the IC); L2-POL-0010 (Koch, φ = −78°, 1964): the MC degree never rises (tan φ tan δ_MC = −1.738), so the diurnal semi-arc that Koch trisects does not exist and cusps 11, 12, 2 and 3 cannot be constructed; L2-POL-0011 (Placidus, φ = −72°, 2036): cusps 11, 12, 2 and 3 have no solution, since no degree that rises and sets meets the Placidus condition for them (closest miss 23.07°, 23.07°, 0.19°, 20.16° of hour angle). L2-POL-0004, the first draw of its case, was withdrawn before release: its Placidus construction has exactly one solution for each cusp and they are in zodiacal order, so its cusps exist. Cases come from the seeded design written in build.py and described in arbiters/l2/README.md (SplitMix64 streams; instants stratified over 1800–2200 UT1, longitudes stratified over −180…180°, latitudes from fixed lists); no engine output was consulted.",
+      "generator": "arbiters/l2/build.py",
+      "uncertainty": "None from the numbers: no failure is marginal. The Placidus residual moves by exactly the change of RAMC, so each Placidus failure survives any change of RAMC smaller than the largest closest miss of its unsolvable cusps, here at least 1.5°; each MC degree that never rises or sets has |tan φ tan δ_MC| ≥ 1.17; each order violation is at least 15.4°; and every failure was also verified at RAMC ± 0.1°. Model differences in sidereal time are of order 1 mas, legacy models 0.5″, so none can change a status."
+    }
+  },
+  "vectors": [
+    {
+      "id": "L2-ASC-0001",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2379925.241151,
+        "jd_tt": 2379925.241297913,
+        "lat": -45.0,
+        "lon": 136.6757
+      },
+      "expected": {
+        "asc": 219.8370182909,
+        "mc": 110.4556202628
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0002",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2382217.711273,
+        "jd_tt": 2382217.711417804,
+        "lat": -64.0,
+        "lon": 109.5924
+      },
+      "expected": {
+        "asc": 47.3926620645,
+        "mc": 353.3056505791
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0003",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2384990.265613,
+        "jd_tt": 2384990.26575592,
+        "lat": -45.0,
+        "lon": 158.6452
+      },
+      "expected": {
+        "asc": 190.0233253073,
+        "mc": 94.7956462188
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0004",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2388580.037852,
+        "jd_tt": 2388580.037953591,
+        "lat": 45.0,
+        "lon": 116.7231
+      },
+      "expected": {
+        "asc": 359.1636618042,
+        "mc": 269.6016263585
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0005",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2389898.713746,
+        "jd_tt": 2389898.713828815,
+        "lat": -60.0,
+        "lon": -36.498
+      },
+      "expected": {
+        "asc": 328.7237191799,
+        "mc": 221.8525924386
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0006",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2392787.826837,
+        "jd_tt": 2392787.826899913,
+        "lat": -30.0,
+        "lon": 70.2645
+      },
+      "expected": {
+        "asc": 55.3377822589,
+        "mc": 332.5640842631
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0007",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2396152.285438,
+        "jd_tt": 2396152.285517293,
+        "lat": 0.0,
+        "lon": -121.9596
+      },
+      "expected": {
+        "asc": 111.8176532748,
+        "mc": 25.4404964469
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0008",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2397251.313744,
+        "jd_tt": 2397251.313827813,
+        "lat": -15.0,
+        "lon": 89.3382
+      },
+      "expected": {
+        "asc": 338.9299110896,
+        "mc": 249.958623475
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0009",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2401121.594597,
+        "jd_tt": 2401121.59468844,
+        "lat": 64.0,
+        "lon": 104.953
+      },
+      "expected": {
+        "asc": 253.3917271852,
+        "mc": 222.2231536381
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0010",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2404302.025294,
+        "jd_tt": 2404302.025297531,
+        "lat": -64.0,
+        "lon": -11.7773
+      },
+      "expected": {
+        "asc": 294.0831708553,
+        "mc": 150.8173960155
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0011",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2407685.643098,
+        "jd_tt": 2407685.643040234,
+        "lat": 15.0,
+        "lon": 0.9004
+      },
+      "expected": {
+        "asc": 211.8900273153,
+        "mc": 120.8046882762
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0012",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2409832.446543,
+        "jd_tt": 2409832.446476834,
+        "lat": 0.0,
+        "lon": -96.5225
+      },
+      "expected": {
+        "asc": 0.89927435,
+        "mc": 270.756861401
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0013",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2412296.858629,
+        "jd_tt": 2412296.858555925,
+        "lat": -45.0,
+        "lon": -177.2507
+      },
+      "expected": {
+        "asc": 342.9113168377,
+        "mc": 249.18154291
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0014",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2413838.039291,
+        "jd_tt": 2413838.039225615,
+        "lat": -66.0,
+        "lon": -45.5221
+      },
+      "expected": {
+        "asc": 303.3597947938,
+        "mc": 161.9115662513
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0015",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2416052.611841,
+        "jd_tt": 2416052.611853523,
+        "lat": -66.0,
+        "lon": 81.4076
+      },
+      "expected": {
+        "asc": 301.2604878047,
+        "mc": 157.4584325914
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0016",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2419222.368114,
+        "jd_tt": 2419222.368258179,
+        "lat": 64.0,
+        "lon": 175.3883
+      },
+      "expected": {
+        "asc": 156.8624766432,
+        "mc": 52.0687415171
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0017",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2422202.104215,
+        "jd_tt": 2422202.104459122,
+        "lat": 45.0,
+        "lon": 168.1892
+      },
+      "expected": {
+        "asc": 115.1774894617,
+        "mc": 4.8199246719
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0018",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2424628.538994,
+        "jd_tt": 2424628.53927209,
+        "lat": -60.0,
+        "lon": 25.0822
+      },
+      "expected": {
+        "asc": 347.2180602972,
+        "mc": 251.009212748
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0019",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2428237.03497,
+        "jd_tt": 2428237.035245657,
+        "lat": -15.0,
+        "lon": -149.1525
+      },
+      "expected": {
+        "asc": 303.5606165724,
+        "mc": 212.6695317124
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0020",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2431240.067625,
+        "jd_tt": 2431240.067932771,
+        "lat": 45.0,
+        "lon": 147.5215
+      },
+      "expected": {
+        "asc": 306.7811876308,
+        "mc": 240.9618035373
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0021",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2433538.444715,
+        "jd_tt": 2433538.445054738,
+        "lat": -64.0,
+        "lon": -67.6656
+      },
+      "expected": {
+        "asc": 356.9880576973,
+        "mc": 265.2079607295
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0022",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2434662.61183,
+        "jd_tt": 2434662.612183795,
+        "lat": 64.0,
+        "lon": -137.8448
+      },
+      "expected": {
+        "asc": 70.4074880664,
+        "mc": 281.7709156749
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0023",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2439272.739707,
+        "jd_tt": 2439272.740133807,
+        "lat": 0.0,
+        "lon": 31.9063
+      },
+      "expected": {
+        "asc": 92.3275828173,
+        "mc": 2.7647096286
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0024",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2442193.128914,
+        "jd_tt": 2442193.1294338,
+        "lat": 66.0,
+        "lon": -153.263
+      },
+      "expected": {
+        "asc": 109.5853928506,
+        "mc": 313.4967981322
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0025",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2444421.120997,
+        "jd_tt": 2444421.121586994,
+        "lat": -52.0,
+        "lon": -81.0851
+      },
+      "expected": {
+        "asc": 121.6154065241,
+        "mc": 63.3287099783
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0026",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2446559.360969,
+        "jd_tt": 2446559.361606298,
+        "lat": 30.0,
+        "lon": 153.9949
+      },
+      "expected": {
+        "asc": 75.5060822153,
+        "mc": 328.1512016021
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0027",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2449595.186574,
+        "jd_tt": 2449595.187274094,
+        "lat": 30.0,
+        "lon": -159.9699
+      },
+      "expected": {
+        "asc": 159.0032175006,
+        "mc": 67.6224512261
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0028",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2451496.314166,
+        "jd_tt": 2451496.314904066,
+        "lat": -45.0,
+        "lon": -20.3673
+      },
+      "expected": {
+        "asc": 41.7096547942,
+        "mc": 322.8576019596
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0029",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2455210.861899,
+        "jd_tt": 2455210.86266382,
+        "lat": 66.0,
+        "lon": 56.6769
+      },
+      "expected": {
+        "asc": 101.5528687407,
+        "mc": 298.5537437204
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0030",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2456023.882139,
+        "jd_tt": 2456023.882911009,
+        "lat": 52.0,
+        "lon": 101.0559
+      },
+      "expected": {
+        "asc": 168.5742369761,
+        "mc": 74.9711397276
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0031",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2460665.108611,
+        "jd_tt": 2460665.109411182,
+        "lat": 15.0,
+        "lon": 14.1858
+      },
+      "expected": {
+        "asc": 60.7982568789,
+        "mc": 320.5593993739
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0032",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2461107.153789,
+        "jd_tt": 2461107.154589009,
+        "lat": -66.0,
+        "lon": 22.3024
+      },
+      "expected": {
+        "asc": 80.5318364021,
+        "mc": 64.9830490892
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0033",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2461151.212575,
+        "jd_tt": 2461151.213375288,
+        "lat": 64.0,
+        "lon": -54.5667
+      },
+      "expected": {
+        "asc": 157.4865834243,
+        "mc": 53.1543052658
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0034",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2461735.302513,
+        "jd_tt": 2461735.303395639,
+        "lat": 52.0,
+        "lon": 140.2718
+      },
+      "expected": {
+        "asc": 210.4999146145,
+        "mc": 131.228863975
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0035",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2462066.812344,
+        "jd_tt": 2462066.813233353,
+        "lat": 15.0,
+        "lon": -95.1847
+      },
+      "expected": {
+        "asc": 140.1635030915,
+        "mc": 50.9524220281
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0036",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2462263.285379,
+        "jd_tt": 2462263.286272382,
+        "lat": -66.0,
+        "lon": 91.767
+      },
+      "expected": {
+        "asc": 343.181590379,
+        "mc": 241.5323783364
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0037",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2462701.927198,
+        "jd_tt": 2462701.928100514,
+        "lat": -64.0,
+        "lon": -49.3674
+      },
+      "expected": {
+        "asc": 74.6339915617,
+        "mc": 44.1438499601
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0038",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2463895.142086,
+        "jd_tt": 2463895.143014297,
+        "lat": -30.0,
+        "lon": 74.4133
+      },
+      "expected": {
+        "asc": 59.0391998437,
+        "mc": 337.2018252276
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0039",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2467263.375601,
+        "jd_tt": 2467263.376609529,
+        "lat": 60.0,
+        "lon": -86.0079
+      },
+      "expected": {
+        "asc": 113.3769007744,
+        "mc": 340.9747972798
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0040",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2468811.02433,
+        "jd_tt": 2468811.025379084,
+        "lat": 66.0,
+        "lon": 164.3117
+      },
+      "expected": {
+        "asc": 234.1872539391,
+        "mc": 192.7691266166
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0041",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2472823.9642,
+        "jd_tt": 2472823.965473475,
+        "lat": 60.0,
+        "lon": 122.2748
+      },
+      "expected": {
+        "asc": 200.7252711826,
+        "mc": 121.1721428258
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0042",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2474635.589659,
+        "jd_tt": 2474635.591053236,
+        "lat": -60.0,
+        "lon": -5.0832
+      },
+      "expected": {
+        "asc": 321.0277332794,
+        "mc": 208.871482958
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0043",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2478412.526968,
+        "jd_tt": 2478412.528619862,
+        "lat": 30.0,
+        "lon": 61.8589
+      },
+      "expected": {
+        "asc": 114.897936588,
+        "mc": 15.1295204899
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0044",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2480066.320494,
+        "jd_tt": 2480066.322261161,
+        "lat": 30.0,
+        "lon": -29.009
+      },
+      "expected": {
+        "asc": 135.9028857832,
+        "mc": 41.218069131
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0045",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2483664.50755,
+        "jd_tt": 2483664.509573266,
+        "lat": -52.0,
+        "lon": -103.5386
+      },
+      "expected": {
+        "asc": 47.5057609578,
+        "mc": 336.3957823072
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0046",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2484991.31031,
+        "jd_tt": 2484991.312429517,
+        "lat": -52.0,
+        "lon": -12.9519
+      },
+      "expected": {
+        "asc": 328.9210580348,
+        "mc": 227.9455466316
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0047",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2489460.457108,
+        "jd_tt": 2489460.459558915,
+        "lat": -15.0,
+        "lon": 47.09
+      },
+      "expected": {
+        "asc": 147.8867617788,
+        "mc": 65.3070529237
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0048",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2491620.777192,
+        "jd_tt": 2491620.779807085,
+        "lat": 52.0,
+        "lon": -62.5923
+      },
+      "expected": {
+        "asc": 143.891855948,
+        "mc": 40.6574918258
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0049",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2493561.513426,
+        "jd_tt": 2493561.516190778,
+        "lat": 66.0,
+        "lon": -119.5928
+      },
+      "expected": {
+        "asc": 131.3358992725,
+        "mc": 359.0888750218
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0050",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2496428.759523,
+        "jd_tt": 2496428.762512761,
+        "lat": 52.0,
+        "lon": -35.4043
+      },
+      "expected": {
+        "asc": 199.6261979928,
+        "mc": 116.053628309
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0051",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2498250.428159,
+        "jd_tt": 2498250.431294072,
+        "lat": 60.0,
+        "lon": -126.9692
+      },
+      "expected": {
+        "asc": 330.2234428606,
+        "mc": 263.3052800007
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa",
+      "note": "Model-sensitive: IAU 1982/1994 sidereal time with the IAU 1980 obliquity and nutation, instead of IAU 2006/2000A, would move it by 1.01″, more than the tolerance."
+    },
+    {
+      "id": "L2-ASC-0052",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2502011.796441,
+        "jd_tt": 2502011.799881941,
+        "lat": 45.0,
+        "lon": -74.0292
+      },
+      "expected": {
+        "asc": 261.1187282501,
+        "mc": 196.9433075204
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0053",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2503539.444614,
+        "jd_tt": 2503539.448181411,
+        "lat": -15.0,
+        "lon": 128.1962
+      },
+      "expected": {
+        "asc": 63.1155863814,
+        "mc": 335.0799405362
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0054",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2506113.249273,
+        "jd_tt": 2506113.253056419,
+        "lat": 15.0,
+        "lon": -171.6241
+      },
+      "expected": {
+        "asc": 80.983455543,
+        "mc": 342.2412534731
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0055",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2510008.472482,
+        "jd_tt": 2510008.476533736,
+        "lat": 60.0,
+        "lon": -112.7542
+      },
+      "expected": {
+        "asc": 125.8936193672,
+        "mc": 2.3681375687
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0056",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2513602.434995,
+        "jd_tt": 2513602.439298193,
+        "lat": -30.0,
+        "lon": -165.1791
+      },
+      "expected": {
+        "asc": 332.7955264067,
+        "mc": 240.7682649849
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0057",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2514608.856893,
+        "jd_tt": 2514608.861267894,
+        "lat": -60.0,
+        "lon": -139.4126
+      },
+      "expected": {
+        "asc": 35.9818503174,
+        "mc": 326.0088502137
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0058",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2518195.754282,
+        "jd_tt": 2518195.758917012,
+        "lat": -30.0,
+        "lon": 36.284
+      },
+      "expected": {
+        "asc": 117.8333812862,
+        "mc": 44.8869964461
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0059",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2520649.20829,
+        "jd_tt": 2520649.213107049,
+        "lat": 0.0,
+        "lon": 51.9692
+      },
+      "expected": {
+        "asc": 211.96070666,
+        "mc": 117.7166203649
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-ASC-0060",
+      "kind": "angles.asc-mc",
+      "input": {
+        "jd_ut1": 2522142.20719,
+        "jd_tt": 2522142.212119459,
+        "lat": -52.0,
+        "lon": 6.7438
+      },
+      "expected": {
+        "asc": 215.9260128599,
+        "mc": 104.5063038083
+      },
+      "tolerance": {
+        "asc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "mc": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa",
+      "note": "Model-sensitive: IAU 1982/1994 sidereal time with the IAU 1980 obliquity and nutation, instead of IAU 2006/2000A, would move it by 1.21″, more than the tolerance."
+    },
+    {
+      "id": "L2-VTX-0001",
+      "kind": "angles.vertex-east-point",
+      "input": {
+        "jd_ut1": 2390798.536872,
+        "jd_tt": 2390798.536944611,
+        "lat": -60.0,
+        "lon": 20.5306
+      },
+      "expected": {
+        "vertex": 299.7705232404,
+        "east_point": 108.1555796558
+      },
+      "tolerance": {
+        "vertex": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "east_point": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-VTX-0002",
+      "kind": "angles.vertex-east-point",
+      "input": {
+        "jd_ut1": 2401242.256195,
+        "jd_tt": 2401242.256285366,
+        "lat": -5.0,
+        "lon": 109.7682
+      },
+      "expected": {
+        "vertex": 190.7317179125,
+        "east_point": 309.257484965
+      },
+      "tolerance": {
+        "vertex": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "east_point": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa",
+      "note": "Here the co-latitude closed form Asc(RAMC + 180°, 90° − φ) returns the eastern intersection (the anti-vertex); the vertex is the western one, 180° from it."
+    },
+    {
+      "id": "L2-VTX-0003",
+      "kind": "angles.vertex-east-point",
+      "input": {
+        "jd_ut1": 2407925.003747,
+        "jd_tt": 2407925.003687711,
+        "lat": 5.0,
+        "lon": -59.6531
+      },
+      "expected": {
+        "vertex": 5.7285381311,
+        "east_point": 156.4719389683
+      },
+      "tolerance": {
+        "vertex": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "east_point": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa",
+      "note": "Here the co-latitude closed form Asc(RAMC + 180°, 90° − φ) returns the eastern intersection (the anti-vertex); the vertex is the western one, 180° from it."
+    },
+    {
+      "id": "L2-VTX-0004",
+      "kind": "angles.vertex-east-point",
+      "input": {
+        "jd_ut1": 2436182.381993,
+        "jd_tt": 2436182.382366003,
+        "lat": 45.0,
+        "lon": -14.7981
+      },
+      "expected": {
+        "vertex": 265.8224368915,
+        "east_point": 109.4562719899
+      },
+      "tolerance": {
+        "vertex": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "east_point": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-VTX-0005",
+      "kind": "angles.vertex-east-point",
+      "input": {
+        "jd_ut1": 2448758.264524,
+        "jd_tt": 2448758.265202914,
+        "lat": 15.0,
+        "lon": -136.0185
+      },
+      "expected": {
+        "vertex": 217.3038029839,
+        "east_point": 101.9004980908
+      },
+      "tolerance": {
+        "vertex": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "east_point": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-VTX-0006",
+      "kind": "angles.vertex-east-point",
+      "input": {
+        "jd_ut1": 2464708.275977,
+        "jd_tt": 2464708.276923659,
+        "lat": 30.0,
+        "lon": 60.9411
+      },
+      "expected": {
+        "vertex": 21.5466652796,
+        "east_point": 185.5553560927
+      },
+      "tolerance": {
+        "vertex": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "east_point": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-VTX-0007",
+      "kind": "angles.vertex-east-point",
+      "input": {
+        "jd_ut1": 2479200.795136,
+        "jd_tt": 2479200.796842629,
+        "lat": -15.0,
+        "lon": 172.5172
+      },
+      "expected": {
+        "vertex": 166.2678443392,
+        "east_point": 8.7997995721
+      },
+      "tolerance": {
+        "vertex": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "east_point": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa",
+      "note": "Here the co-latitude closed form Asc(RAMC + 180°, 90° − φ) returns the eastern intersection (the anti-vertex); the vertex is the western one, 180° from it."
+    },
+    {
+      "id": "L2-VTX-0008",
+      "kind": "angles.vertex-east-point",
+      "input": {
+        "jd_ut1": 2483769.700602,
+        "jd_tt": 2483769.702632861,
+        "lat": -45.0,
+        "lon": -147.0357
+      },
+      "expected": {
+        "vertex": 13.5486793472,
+        "east_point": 199.3236809574
+      },
+      "tolerance": {
+        "vertex": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "east_point": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-VTX-0009",
+      "kind": "angles.vertex-east-point",
+      "input": {
+        "jd_ut1": 2509197.263507,
+        "jd_tt": 2509197.267502971,
+        "lat": 60.0,
+        "lon": 87.2222
+      },
+      "expected": {
+        "vertex": 303.3232876799,
+        "east_point": 134.8901857914
+      },
+      "tolerance": {
+        "vertex": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "east_point": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-VTX-0010",
+      "kind": "angles.vertex-east-point",
+      "input": {
+        "jd_ut1": 2518056.053374,
+        "jd_tt": 2518056.057998748,
+        "lat": -30.0,
+        "lon": -104.1153
+      },
+      "expected": {
+        "vertex": 93.2503136011,
+        "east_point": 319.5973383325
+      },
+      "tolerance": {
+        "vertex": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        },
+        "east_point": {
+          "abs": 1,
+          "unit": "arcsec",
+          "wrap": 360
+        }
+      },
+      "arbiter": "l2-angles-erfa"
+    },
+    {
+      "id": "L2-CSP-0001",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2394360.629577,
+        "jd_tt": 2394360.629644919,
+        "lat": 66.0,
+        "lon": -112.5021,
+        "system": "placidus"
+      },
+      "expected": {
+        "cusps": [
+          233.7679587567,
+          262.0349651731,
+          329.7632007553,
+          11.9500984966,
+          33.1799819543,
+          45.5994649151,
+          53.7679587567,
+          82.0349651731,
+          149.7632007553,
+          191.9500984966,
+          213.1799819543,
+          225.5994649151
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0002",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2398866.618762,
+        "jd_tt": 2398866.618845466,
+        "lat": 45.0,
+        "lon": -164.081,
+        "system": "placidus"
+      },
+      "expected": {
+        "cusps": [
+          335.2783960584,
+          25.3143778019,
+          55.9711303662,
+          77.8800241388,
+          97.6666486615,
+          120.3147838035,
+          155.2783960584,
+          205.3143778019,
+          235.9711303662,
+          257.8800241388,
+          277.6666486615,
+          300.3147838035
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0003",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2422345.273086,
+        "jd_tt": 2422345.273331908,
+        "lat": -45.0,
+        "lon": -124.1028,
+        "system": "placidus"
+      },
+      "expected": {
+        "cusps": [
+          3.0705186931,
+          28.6051806583,
+          59.1509243525,
+          93.7064212567,
+          128.0431181283,
+          158.1312822025,
+          183.0705186931,
+          208.6051806583,
+          239.1509243525,
+          273.7064212567,
+          308.0431181283,
+          338.1312822025
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0004",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2478946.34719,
+        "jd_tt": 2478946.348878913,
+        "lat": -15.0,
+        "lon": -11.2764,
+        "system": "placidus"
+      },
+      "expected": {
+        "cusps": [
+          124.5711039209,
+          159.1889818784,
+          193.824084848,
+          224.6951865112,
+          251.6678548529,
+          277.1926196504,
+          304.5711039209,
+          339.1889818784,
+          13.824084848,
+          44.6951865112,
+          71.6678548529,
+          97.1926196504
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0005",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2490312.416742,
+        "jd_tt": 2490312.419257349,
+        "lat": 15.0,
+        "lon": -46.6136,
+        "system": "placidus"
+      },
+      "expected": {
+        "cusps": [
+          165.2731821243,
+          195.0085690067,
+          225.8196883589,
+          256.0760227925,
+          285.6753310638,
+          315.3994930763,
+          345.2731821243,
+          15.0085690067,
+          45.8196883589,
+          76.0760227925,
+          105.6753310638,
+          135.3994930763
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0006",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2500172.760127,
+        "jd_tt": 2500172.763417412,
+        "lat": 60.0,
+        "lon": 174.9134,
+        "system": "placidus"
+      },
+      "expected": {
+        "cusps": [
+          160.6538745108,
+          179.1575764644,
+          204.9593892472,
+          240.9770135759,
+          283.2393996956,
+          316.197267471,
+          340.6538745108,
+          359.1575764644,
+          24.9593892472,
+          60.9770135759,
+          103.2393996956,
+          136.197267471
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0007",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2408720.610465,
+        "jd_tt": 2408720.610402083,
+        "lat": -66.0,
+        "lon": -145.4938,
+        "system": "koch"
+      },
+      "expected": {
+        "cusps": [
+          357.2351741809,
+          27.5000409269,
+          56.1614891084,
+          85.4034023057,
+          118.8153100227,
+          147.1724547861,
+          177.2351741809,
+          207.5000409269,
+          236.1614891084,
+          265.4034023057,
+          298.8153100227,
+          327.1724547861
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0008",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2441170.984351,
+        "jd_tt": 2441170.984835151,
+        "lat": 30.0,
+        "lon": 150.3994,
+        "system": "koch"
+      },
+      "expected": {
+        "cusps": [
+          14.6066545835,
+          48.1315709445,
+          75.7818948437,
+          99.2893249662,
+          125.9139442327,
+          158.2948343984,
+          194.6066545835,
+          228.1315709445,
+          255.7818948437,
+          279.2893249662,
+          305.9139442327,
+          338.2948343984
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0009",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2450475.259595,
+        "jd_tt": 2450475.260316555,
+        "lat": 52.0,
+        "lon": -40.7675,
+        "system": "koch"
+      },
+      "expected": {
+        "cusps": [
+          116.0753355754,
+          137.1571154496,
+          157.8341368707,
+          178.6496429064,
+          239.1420606934,
+          272.4321704488,
+          296.0753355754,
+          317.1571154496,
+          337.8341368707,
+          358.6496429064,
+          59.1420606934,
+          92.4321704488
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0010",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2468304.360865,
+        "jd_tt": 2468304.361900552,
+        "lat": -52.0,
+        "lon": -53.1623,
+        "system": "koch"
+      },
+      "expected": {
+        "cusps": [
+          32.1296148717,
+          58.3905251898,
+          87.6828653274,
+          133.5667152891,
+          159.663368977,
+          185.9436261987,
+          212.1296148717,
+          238.3905251898,
+          267.6828653274,
+          313.5667152891,
+          339.663368977,
+          5.9436261987
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0011",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2506919.755023,
+        "jd_tt": 2506919.75886436,
+        "lat": 0.0,
+        "lon": -87.016,
+        "system": "koch"
+      },
+      "expected": {
+        "cusps": [
+          57.5022903033,
+          85.6226105649,
+          113.3840978367,
+          142.8911897334,
+          174.8054302325,
+          207.1823697999,
+          237.5022903033,
+          265.6226105649,
+          293.3840978367,
+          322.8911897334,
+          354.8054302325,
+          27.1823697999
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0012",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2514531.855787,
+        "jd_tt": 2514531.860156388,
+        "lat": -30.0,
+        "lon": 162.9432,
+        "system": "koch"
+      },
+      "expected": {
+        "cusps": [
+          295.2189324141,
+          321.5852130576,
+          348.3983515901,
+          15.5398333908,
+          55.8781754011,
+          87.7989019809,
+          115.2189324141,
+          141.5852130576,
+          168.3983515901,
+          195.5398333908,
+          235.8781754011,
+          267.7989019809
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0013",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2390055.672753,
+        "jd_tt": 2390055.672833831,
+        "lat": 45.0,
+        "lon": -30.873,
+        "system": "regiomontanus"
+      },
+      "expected": {
+        "cusps": [
+          115.622642825,
+          136.7421911177,
+          157.6856378112,
+          185.4303979879,
+          226.058564824,
+          267.2733627412,
+          295.622642825,
+          316.7421911177,
+          337.6856378112,
+          5.4303979879,
+          46.058564824,
+          87.2733627412
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0014",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2417705.27058,
+        "jd_tt": 2417705.270659206,
+        "lat": -15.0,
+        "lon": -176.8001,
+        "system": "regiomontanus"
+      },
+      "expected": {
+        "cusps": [
+          54.1593679483,
+          82.0223664575,
+          112.2004370903,
+          144.7324491395,
+          176.935966088,
+          206.5446736907,
+          234.1593679483,
+          262.0223664575,
+          292.2004370903,
+          324.7324491395,
+          356.935966088,
+          26.5446736907
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0015",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2426925.952259,
+        "jd_tt": 2426925.95253623,
+        "lat": -60.0,
+        "lon": -75.9836,
+        "system": "regiomontanus"
+      },
+      "expected": {
+        "cusps": [
+          83.8724933523,
+          130.8987523668,
+          199.9345958587,
+          224.0538123154,
+          236.235369665,
+          247.1600350964,
+          263.8724933523,
+          310.8987523668,
+          19.9345958587,
+          44.0538123154,
+          56.235369665,
+          67.1600350964
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0016",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2466011.405825,
+        "jd_tt": 2466011.406802422,
+        "lat": -45.0,
+        "lon": 39.9443,
+        "system": "regiomontanus"
+      },
+      "expected": {
+        "cusps": [
+          41.7638170128,
+          67.1460538509,
+          102.0393154259,
+          142.9307358423,
+          175.766154103,
+          199.982084898,
+          221.7638170128,
+          247.1460538509,
+          282.0393154259,
+          322.9307358423,
+          355.766154103,
+          19.982084898
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0017",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2504402.916117,
+        "jd_tt": 2504402.919756468,
+        "lat": -64.0,
+        "lon": -5.3063,
+        "system": "regiomontanus"
+      },
+      "expected": {
+        "cusps": [
+          288.9409398598,
+          301.6536338946,
+          310.6842370296,
+          321.8594067262,
+          348.742667864,
+          72.2781928222,
+          108.9409398598,
+          121.6536338946,
+          130.6842370296,
+          141.8594067262,
+          168.742667864,
+          252.2781928222
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0018",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2521428.763888,
+        "jd_tt": 2521428.768763588,
+        "lat": 15.0,
+        "lon": 156.1305,
+        "system": "regiomontanus"
+      },
+      "expected": {
+        "cusps": [
+          201.6959273218,
+          230.4856007988,
+          259.9528595193,
+          290.6594356722,
+          321.9153213412,
+          352.4179594586,
+          21.6959273218,
+          50.4856007988,
+          79.9528595193,
+          110.6594356722,
+          141.9153213412,
+          172.4179594586
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0019",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2396909.815055,
+        "jd_tt": 2396909.815137825,
+        "lat": -52.0,
+        "lon": -172.3723,
+        "system": "campanus"
+      },
+      "expected": {
+        "cusps": [
+          304.5209823678,
+          331.9020381628,
+          351.6525898224,
+          11.400153037,
+          38.7701407531,
+          81.6395029549,
+          124.5209823678,
+          151.9020381628,
+          171.6525898224,
+          191.400153037,
+          218.7701407531,
+          261.6395029549
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0020",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2457734.139187,
+        "jd_tt": 2457734.13998063,
+        "lat": -30.0,
+        "lon": -150.9182,
+        "system": "campanus"
+      },
+      "expected": {
+        "cusps": [
+          264.8390636185,
+          292.7512454508,
+          315.2482223512,
+          338.3158766531,
+          7.9927496081,
+          47.1507254395,
+          84.8390636185,
+          112.7512454508,
+          135.2482223512,
+          158.3158766531,
+          187.9927496081,
+          227.1507254395
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0021",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2498570.813323,
+        "jd_tt": 2498570.81648382,
+        "lat": 30.0,
+        "lon": -167.3304,
+        "system": "campanus"
+      },
+      "expected": {
+        "cusps": [
+          61.3194919168,
+          92.2784260267,
+          114.1093441512,
+          134.3321868809,
+          159.7574224546,
+          197.8799039442,
+          241.3194919168,
+          272.2784260267,
+          294.1093441512,
+          314.3321868809,
+          339.7574224546,
+          17.8799039442
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0022",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2509381.254972,
+        "jd_tt": 2509381.258980587,
+        "lat": 60.0,
+        "lon": 82.5214,
+        "system": "campanus"
+      },
+      "expected": {
+        "cusps": [
+          263.4094437102,
+          0.0753156524,
+          33.1899997124,
+          43.378709045,
+          50.5525641208,
+          59.5789855344,
+          83.4094437102,
+          180.0753156524,
+          213.1899997124,
+          223.378709045,
+          230.5525641208,
+          239.5789855344
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0023",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2511483.632726,
+        "jd_tt": 2511483.63688008,
+        "lat": 0.0,
+        "lon": 60.8336,
+        "system": "campanus"
+      },
+      "expected": {
+        "cusps": [
+          335.6354322059,
+          8.0918413163,
+          39.8339714987,
+          69.1253807042,
+          96.8271262761,
+          125.0856803552,
+          155.6354322059,
+          188.0918413163,
+          219.8339714987,
+          249.1253807042,
+          276.8271262761,
+          305.0856803552
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0024",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2522722.041904,
+        "jd_tt": 2522722.046877449,
+        "lat": 66.0,
+        "lon": 20.4711,
+        "system": "campanus"
+      },
+      "expected": {
+        "cusps": [
+          46.3015527615,
+          90.3565936533,
+          91.0233922015,
+          91.3627854072,
+          91.7062387891,
+          92.4055186986,
+          226.3015527615,
+          270.3565936533,
+          271.0233922015,
+          271.3627854072,
+          271.7062387891,
+          272.4055186986
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle",
+      "note": "Ill-conditioned near the polar circle: 1 mas of sidereal time moves a cusp by up to 20 mas and 1 mas of obliquity by up to 50 mas, and IAU 1982/1994 sidereal time with the IAU 1980 obliquity and nutation, instead of IAU 2006/2000A, would move it by 14.46″."
+    },
+    {
+      "id": "L2-CSP-0025",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2385203.514005,
+        "jd_tt": 2385203.514146716,
+        "lat": 15.0,
+        "lon": 130.9796,
+        "system": "porphyry"
+      },
+      "expected": {
+        "cusps": [
+          102.5670379931,
+          130.9807862876,
+          159.3945345821,
+          187.8082828766,
+          219.3945345821,
+          250.9807862876,
+          282.5670379931,
+          310.9807862876,
+          339.3945345821,
+          7.8082828766,
+          39.3945345821,
+          70.9807862876
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0026",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2402990.801564,
+        "jd_tt": 2402990.801610242,
+        "lat": -45.0,
+        "lon": 114.6798,
+        "system": "porphyry"
+      },
+      "expected": {
+        "cusps": [
+          57.7200691642,
+          93.5507491936,
+          129.381429223,
+          165.2121092525,
+          189.381429223,
+          213.5507491936,
+          237.7200691642,
+          273.5507491936,
+          309.381429223,
+          345.2121092525,
+          9.381429223,
+          33.5507491936
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0027",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2406102.109622,
+        "jd_tt": 2406102.109582472,
+        "lat": 52.0,
+        "lon": 11.2839,
+        "system": "porphyry"
+      },
+      "expected": {
+        "cusps": [
+          243.3967118525,
+          282.461947346,
+          321.5271828395,
+          0.592418333,
+          21.5271828395,
+          42.461947346,
+          63.3967118525,
+          102.461947346,
+          141.5271828395,
+          180.592418333,
+          201.5271828395,
+          222.461947346
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0028",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2431904.884489,
+        "jd_tt": 2431904.884806742,
+        "lat": -60.0,
+        "lon": 87.7675,
+        "system": "porphyry"
+      },
+      "expected": {
+        "cusps": [
+          89.7414032307,
+          136.7768254808,
+          183.8122477308,
+          230.8476699809,
+          243.8122477308,
+          256.7768254808,
+          269.7414032307,
+          316.7768254808,
+          3.8122477308,
+          50.8476699809,
+          63.8122477308,
+          76.7768254808
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0029",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2471105.42451,
+        "jd_tt": 2471105.425670604,
+        "lat": -15.0,
+        "lon": -154.4511,
+        "system": "porphyry"
+      },
+      "expected": {
+        "cusps": [
+          214.3031075769,
+          241.7003431578,
+          269.0975787388,
+          296.4948143198,
+          329.0975787388,
+          1.7003431578,
+          34.3031075769,
+          61.7003431578,
+          89.0975787388,
+          116.4948143198,
+          149.0975787388,
+          181.7003431578
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0030",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2383336.631355,
+        "jd_tt": 2383336.631501315,
+        "lat": 60.0,
+        "lon": 53.813,
+        "system": "alcabitius"
+      },
+      "expected": {
+        "cusps": [
+          67.0192444238,
+          81.5917239767,
+          95.9698950316,
+          110.4867716556,
+          154.6427601974,
+          202.5436716648,
+          247.0192444238,
+          261.5917239767,
+          275.9698950316,
+          290.4867716556,
+          334.6427601974,
+          22.5436716648
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0031",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2430546.431988,
+        "jd_tt": 2430546.432284475,
+        "lat": 0.0,
+        "lon": 165.3381,
+        "system": "alcabitius"
+      },
+      "expected": {
+        "cusps": [
+          152.1405070886,
+          184.4998380005,
+          216.456872229,
+          246.0156769806,
+          273.7898283087,
+          301.8755252832,
+          332.1405070886,
+          4.4998380005,
+          36.456872229,
+          66.0156769806,
+          93.7898283087,
+          121.8755252832
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0032",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2476365.882231,
+        "jd_tt": 2476365.883742276,
+        "lat": 45.0,
+        "lon": -2.1866,
+        "system": "alcabitius"
+      },
+      "expected": {
+        "cusps": [
+          284.6346805127,
+          321.7258834573,
+          2.5147815423,
+          42.9669681837,
+          64.2860243577,
+          84.5804770472,
+          104.6346805127,
+          141.7258834573,
+          182.5147815423,
+          222.9669681837,
+          244.2860243577,
+          264.5804770472
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0033",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2478152.263805,
+        "jd_tt": 2478152.265438855,
+        "lat": -52.0,
+        "lon": 41.9681,
+        "system": "alcabitius"
+      },
+      "expected": {
+        "cusps": [
+          65.061757213,
+          101.9687580327,
+          140.4955535946,
+          183.0249548947,
+          204.7118034402,
+          225.4719459615,
+          245.061757213,
+          281.9687580327,
+          320.4955535946,
+          3.0249548947,
+          24.7118034402,
+          45.4719459615
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0034",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2483129.311169,
+        "jd_tt": 2483129.313153717,
+        "lat": -30.0,
+        "lon": 74.1988,
+        "system": "alcabitius"
+      },
+      "expected": {
+        "cusps": [
+          6.6907543443,
+          39.0424175445,
+          68.8763154344,
+          97.0515294556,
+          124.8233636283,
+          154.8089329618,
+          186.6907543443,
+          219.0424175445,
+          248.8763154344,
+          277.0515294556,
+          304.8233636283,
+          334.8089329618
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0035",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2381137.582136,
+        "jd_tt": 2381137.582279776,
+        "lat": -60.0,
+        "lon": 137.803,
+        "system": "equal"
+      },
+      "expected": {
+        "cusps": [
+          49.8219625045,
+          79.8219625045,
+          109.8219625045,
+          139.8219625045,
+          169.8219625045,
+          199.8219625045,
+          229.8219625045,
+          259.8219625045,
+          289.8219625045,
+          319.8219625045,
+          349.8219625045,
+          19.8219625045
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0036",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2418521.624481,
+        "jd_tt": 2418521.624594708,
+        "lat": 30.0,
+        "lon": -45.8653,
+        "system": "equal"
+      },
+      "expected": {
+        "cusps": [
+          53.6548639108,
+          83.6548639108,
+          113.6548639108,
+          143.6548639108,
+          173.6548639108,
+          203.6548639108,
+          233.6548639108,
+          263.6548639108,
+          293.6548639108,
+          323.6548639108,
+          353.6548639108,
+          23.6548639108
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0037",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2447767.290705,
+        "jd_tt": 2447767.291360426,
+        "lat": -45.0,
+        "lon": -141.3257,
+        "system": "equal"
+      },
+      "expected": {
+        "cusps": [
+          231.995060598,
+          261.995060598,
+          291.995060598,
+          321.995060598,
+          351.995060598,
+          21.995060598,
+          51.995060598,
+          81.995060598,
+          111.995060598,
+          141.995060598,
+          171.995060598,
+          201.995060598
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0038",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2458037.770377,
+        "jd_tt": 2458037.771174205,
+        "lat": 52.0,
+        "lon": 6.9918,
+        "system": "equal"
+      },
+      "expected": {
+        "cusps": [
+          204.0248680156,
+          234.0248680156,
+          264.0248680156,
+          294.0248680156,
+          324.0248680156,
+          354.0248680156,
+          24.0248680156,
+          54.0248680156,
+          84.0248680156,
+          114.0248680156,
+          144.0248680156,
+          174.0248680156
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0039",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2461179.899013,
+        "jd_tt": 2461179.899813445,
+        "lat": -15.0,
+        "lon": -118.5776,
+        "system": "equal"
+      },
+      "expected": {
+        "cusps": [
+          352.3320626331,
+          22.3320626331,
+          52.3320626331,
+          82.3320626331,
+          112.3320626331,
+          142.3320626331,
+          172.3320626331,
+          202.3320626331,
+          232.3320626331,
+          262.3320626331,
+          292.3320626331,
+          322.3320626331
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0040",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2401263.825532,
+        "jd_tt": 2401263.825622133,
+        "lat": 45.0,
+        "lon": 104.5708,
+        "system": "whole-sign"
+      },
+      "expected": {
+        "cusps": [
+          150.0,
+          180.0,
+          210.0,
+          240.0,
+          270.0,
+          300.0,
+          330.0,
+          0.0,
+          30.0,
+          60.0,
+          90.0,
+          120.0
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0041",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2410096.206628,
+        "jd_tt": 2410096.20656111,
+        "lat": 60.0,
+        "lon": -89.5513,
+        "system": "whole-sign"
+      },
+      "expected": {
+        "cusps": [
+          180.0,
+          210.0,
+          240.0,
+          270.0,
+          300.0,
+          330.0,
+          0.0,
+          30.0,
+          60.0,
+          90.0,
+          120.0,
+          150.0
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0042",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2413821.833653,
+        "jd_tt": 2413821.833587378,
+        "lat": -30.0,
+        "lon": 94.107,
+        "system": "whole-sign"
+      },
+      "expected": {
+        "cusps": [
+          300.0,
+          330.0,
+          0.0,
+          30.0,
+          60.0,
+          90.0,
+          120.0,
+          150.0,
+          180.0,
+          210.0,
+          240.0,
+          270.0
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0043",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2414547.911386,
+        "jd_tt": 2414547.91133648,
+        "lat": -52.0,
+        "lon": -133.03,
+        "system": "whole-sign"
+      },
+      "expected": {
+        "cusps": [
+          60.0,
+          90.0,
+          120.0,
+          150.0,
+          180.0,
+          210.0,
+          240.0,
+          270.0,
+          300.0,
+          330.0,
+          0.0,
+          30.0
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0044",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2443722.986179,
+        "jd_tt": 2443722.986747997,
+        "lat": 15.0,
+        "lon": 33.3861,
+        "system": "whole-sign"
+      },
+      "expected": {
+        "cusps": [
+          240.0,
+          270.0,
+          300.0,
+          330.0,
+          0.0,
+          30.0,
+          60.0,
+          90.0,
+          120.0,
+          150.0,
+          180.0,
+          210.0
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0045",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2452511.189872,
+        "jd_tt": 2452511.190617469,
+        "lat": 30.0,
+        "lon": 79.9273,
+        "system": "morinus"
+      },
+      "expected": {
+        "cusps": [
+          28.9248095543,
+          58.9241600527,
+          91.1557879896,
+          123.2836918833,
+          153.1012094353,
+          180.9729428148,
+          208.9248095543,
+          238.9241600527,
+          271.1557879896,
+          303.2836918833,
+          333.1012094353,
+          0.9729428148
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0046",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2454261.515069,
+        "jd_tt": 2454261.515825174,
+        "lat": 52.0,
+        "lon": 4.6642,
+        "system": "morinus"
+      },
+      "expected": {
+        "cusps": [
+          358.2354277974,
+          26.0774959308,
+          55.8216775218,
+          87.9039751943,
+          120.1742628585,
+          150.2480695303,
+          178.2354277974,
+          206.0774959308,
+          235.8216775218,
+          267.9039751943,
+          300.1742628585,
+          330.2480695303
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0047",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2493248.30476,
+        "jd_tt": 2493248.307500478,
+        "lat": 0.0,
+        "lon": 65.1151,
+        "system": "morinus"
+      },
+      "expected": {
+        "cusps": [
+          248.4043123037,
+          280.9190390308,
+          312.4806134281,
+          341.5678348814,
+          9.2256828889,
+          37.6316327965,
+          68.4043123037,
+          100.9190390308,
+          132.4806134281,
+          161.5678348814,
+          189.2256828889,
+          217.6316327965
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0048",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2493890.260467,
+        "jd_tt": 2493890.263257341,
+        "lat": -60.0,
+        "lon": 27.6145,
+        "system": "morinus"
+      },
+      "expected": {
+        "cusps": [
+          110.9269425356,
+          141.7526214157,
+          170.1963249962,
+          197.8465088438,
+          226.8860035512,
+          258.4019617967,
+          290.9269425356,
+          321.7526214157,
+          350.1963249962,
+          17.8465088438,
+          46.8860035512,
+          78.4019617967
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0049",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2516714.531828,
+        "jd_tt": 2516714.53635473,
+        "lat": -45.0,
+        "lon": -93.7906,
+        "system": "morinus"
+      },
+      "expected": {
+        "cusps": [
+          261.630181667,
+          294.0932627211,
+          324.6650243332,
+          352.9374663648,
+          20.6341876169,
+          49.9052089912,
+          81.630181667,
+          114.0932627211,
+          144.6650243332,
+          172.9374663648,
+          200.6341876169,
+          229.9052089912
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0050",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2404879.845608,
+        "jd_tt": 2404879.845595088,
+        "lat": 45.0,
+        "lon": -105.2524,
+        "system": "meridian"
+      },
+      "expected": {
+        "cusps": [
+          292.4401411769,
+          321.8636867807,
+          353.7217929129,
+          26.1394264059,
+          56.5463696597,
+          84.7103975081,
+          112.4401411769,
+          141.8636867807,
+          173.7217929129,
+          206.1394264059,
+          236.5463696597,
+          264.7103975081
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0051",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2425568.360579,
+        "jd_tt": 2425568.360858724,
+        "lat": -52.0,
+        "lon": -63.1656,
+        "system": "meridian"
+      },
+      "expected": {
+        "cusps": [
+          35.5963384681,
+          65.2247124283,
+          93.0219157576,
+          121.0678720669,
+          151.2603718487,
+          183.5891377433,
+          215.5963384681,
+          245.2247124283,
+          273.0219157576,
+          301.0678720669,
+          331.2603718487,
+          3.5891377433
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0052",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2445938.839969,
+        "jd_tt": 2445938.840595566,
+        "lat": 15.0,
+        "lon": 111.8399,
+        "system": "meridian"
+      },
+      "expected": {
+        "cusps": [
+          296.9453787787,
+          326.7670415781,
+          358.8980421,
+          31.1279639343,
+          61.1230329667,
+          89.0724142924,
+          116.9453787787,
+          146.7670415781,
+          178.8980421,
+          211.1279639343,
+          241.1230329667,
+          269.0724142924
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0053",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2468235.597262,
+        "jd_tt": 2468235.598295734,
+        "lat": -15.0,
+        "lon": 102.3005,
+        "system": "meridian"
+      },
+      "expected": {
+        "cusps": [
+          221.2501852553,
+          250.4306099414,
+          278.1038861101,
+          306.4370635902,
+          337.1067728558,
+          9.6004503776,
+          41.2501852553,
+          70.4306099414,
+          98.1038861101,
+          126.4370635902,
+          157.1067728558,
+          189.6004503776
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0054",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2496046.756919,
+        "jd_tt": 2496046.759878523,
+        "lat": 60.0,
+        "lon": 24.8176,
+        "system": "meridian"
+      },
+      "expected": {
+        "cusps": [
+          252.2913868768,
+          279.9402761778,
+          308.3932557108,
+          339.2312792752,
+          11.758060108,
+          43.2629109915,
+          72.2913868768,
+          99.9402761778,
+          128.3932557108,
+          159.2312792752,
+          191.758060108,
+          223.2629109915
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-great-circle"
+    },
+    {
+      "id": "L2-CSP-0055",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2387512.517086,
+        "jd_tt": 2387512.517203336,
+        "lat": 30.0,
+        "lon": 124.0387,
+        "system": "topocentric"
+      },
+      "expected": {
+        "cusps": [
+          203.6169912365,
+          232.2855458014,
+          263.075250095,
+          295.2485616698,
+          327.4275903294,
+          357.3921835505,
+          23.6169912365,
+          52.2855458014,
+          83.075250095,
+          115.2485616698,
+          147.4275903294,
+          177.3921835505
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0056",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2392032.506917,
+        "jd_tt": 2392032.506981301,
+        "lat": 64.0,
+        "lon": 148.6501,
+        "system": "topocentric"
+      },
+      "expected": {
+        "cusps": [
+          29.8065476392,
+          67.8976097977,
+          81.0584173339,
+          92.9980949086,
+          105.4500303053,
+          121.4452264705,
+          209.8065476392,
+          247.8976097977,
+          261.0584173339,
+          272.9980949086,
+          285.4500303053,
+          301.4452264705
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc",
+      "note": "Model-sensitive: IAU 1982/1994 sidereal time with the IAU 1980 obliquity and nutation, instead of IAU 2006/2000A, would move it by 3.52″, more than the tolerance."
+    },
+    {
+      "id": "L2-CSP-0057",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2437374.875746,
+        "jd_tt": 2437374.876135526,
+        "lat": -30.0,
+        "lon": 143.3056,
+        "system": "topocentric"
+      },
+      "expected": {
+        "cusps": [
+          183.3248103406,
+          220.6337961362,
+          248.4235332865,
+          272.098850985,
+          296.0655944266,
+          324.7946662718,
+          3.3248103406,
+          40.6337961362,
+          68.4235332865,
+          92.098850985,
+          116.0655944266,
+          144.7946662718
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0058",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2440699.586532,
+        "jd_tt": 2440699.587000778,
+        "lat": -60.0,
+        "lon": -60.695,
+        "system": "topocentric"
+      },
+      "expected": {
+        "cusps": [
+          305.2964445102,
+          317.512223886,
+          334.9816569493,
+          1.2699641472,
+          42.9814508811,
+          91.1092219052,
+          125.2964445102,
+          137.512223886,
+          154.9816569493,
+          181.2699641472,
+          222.9814508811,
+          271.1092219052
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0059",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2481864.331415,
+        "jd_tt": 2481864.333309237,
+        "lat": 52.0,
+        "lon": -116.9892,
+        "system": "topocentric"
+      },
+      "expected": {
+        "cusps": [
+          38.337205147,
+          68.5579767001,
+          87.7964885076,
+          105.6264108176,
+          126.2712537513,
+          157.850075951,
+          218.337205147,
+          248.5579767001,
+          267.7964885076,
+          285.6264108176,
+          306.2712537513,
+          337.850075951
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0060",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2488638.504091,
+        "jd_tt": 2488638.506480134,
+        "lat": 0.0,
+        "lon": -16.0633,
+        "system": "topocentric"
+      },
+      "expected": {
+        "cusps": [
+          18.4152020773,
+          49.4365494792,
+          78.0284572139,
+          105.6590836277,
+          134.524889714,
+          165.8640069662,
+          198.4152020773,
+          229.4365494792,
+          258.0284572139,
+          285.6590836277,
+          314.524889714,
+          345.8640069662
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-semi-arc"
+    },
+    {
+      "id": "L2-CSP-0061",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2436032.723136,
+        "jd_tt": 2436032.723507054,
+        "lat": 60.0,
+        "lon": -135.8318,
+        "system": "vehlow"
+      },
+      "expected": {
+        "cusps": [
+          261.5631126116,
+          291.5631126116,
+          321.5631126116,
+          351.5631126116,
+          21.5631126116,
+          51.5631126116,
+          81.5631126116,
+          111.5631126116,
+          141.5631126116,
+          171.5631126116,
+          201.5631126116,
+          231.5631126116
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0062",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2485663.303006,
+        "jd_tt": 2485663.305174638,
+        "lat": 15.0,
+        "lon": -69.1843,
+        "system": "vehlow"
+      },
+      "expected": {
+        "cusps": [
+          183.4519232591,
+          213.4519232591,
+          243.4519232591,
+          273.4519232591,
+          303.4519232591,
+          333.4519232591,
+          3.4519232591,
+          33.4519232591,
+          63.4519232591,
+          93.4519232591,
+          123.4519232591,
+          153.4519232591
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0063",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2502759.186062,
+        "jd_tt": 2502759.189564654,
+        "lat": -45.0,
+        "lon": 46.5028,
+        "system": "vehlow"
+      },
+      "expected": {
+        "cusps": [
+          206.2695867432,
+          236.2695867432,
+          266.2695867432,
+          296.2695867432,
+          326.2695867432,
+          356.2695867432,
+          26.2695867432,
+          56.2695867432,
+          86.2695867432,
+          116.2695867432,
+          146.2695867432,
+          176.2695867432
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0064",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2512668.935893,
+        "jd_tt": 2512668.94013019,
+        "lat": -15.0,
+        "lon": -102.3766,
+        "system": "vehlow"
+      },
+      "expected": {
+        "cusps": [
+          356.3577023296,
+          26.3577023296,
+          56.3577023296,
+          86.3577023296,
+          116.3577023296,
+          146.3577023296,
+          176.3577023296,
+          206.3577023296,
+          236.3577023296,
+          266.3577023296,
+          296.3577023296,
+          326.3577023296
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0065",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2518953.876108,
+        "jd_tt": 2518953.880798905,
+        "lat": 45.0,
+        "lon": 70.3765,
+        "system": "vehlow"
+      },
+      "expected": {
+        "cusps": [
+          208.5342908714,
+          238.5342908714,
+          268.5342908714,
+          298.5342908714,
+          328.5342908714,
+          358.5342908714,
+          28.5342908714,
+          58.5342908714,
+          88.5342908714,
+          118.5342908714,
+          148.5342908714,
+          178.5342908714
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0066",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2380200.794905,
+        "jd_tt": 2380200.79505064,
+        "lat": 0.0,
+        "lon": -80.3811,
+        "system": "equal-mc"
+      },
+      "expected": {
+        "cusps": [
+          96.5614838814,
+          126.5614838814,
+          156.5614838814,
+          186.5614838814,
+          216.5614838814,
+          246.5614838814,
+          276.5614838814,
+          306.5614838814,
+          336.5614838814,
+          6.5614838814,
+          36.5614838814,
+          66.5614838814
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0067",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2421773.305806,
+        "jd_tt": 2421773.306043319,
+        "lat": -30.0,
+        "lon": -29.788,
+        "system": "equal-mc"
+      },
+      "expected": {
+        "cusps": [
+          266.0502955036,
+          296.0502955036,
+          326.0502955036,
+          356.0502955036,
+          26.0502955036,
+          56.0502955036,
+          86.0502955036,
+          116.0502955036,
+          146.0502955036,
+          176.0502955036,
+          206.0502955036,
+          236.0502955036
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0068",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2434499.757741,
+        "jd_tt": 2434499.758092776,
+        "lat": -52.0,
+        "lon": -21.781,
+        "system": "equal-mc"
+      },
+      "expected": {
+        "cusps": [
+          19.2802684331,
+          49.2802684331,
+          79.2802684331,
+          109.2802684331,
+          139.2802684331,
+          169.2802684331,
+          199.2802684331,
+          229.2802684331,
+          259.2802684331,
+          289.2802684331,
+          319.2802684331,
+          349.2802684331
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0069",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2463709.040287,
+        "jd_tt": 2463709.041211185,
+        "lat": 30.0,
+        "lon": 122.2151,
+        "system": "equal-mc"
+      },
+      "expected": {
+        "cusps": [
+          255.4821560615,
+          285.4821560615,
+          315.4821560615,
+          345.4821560615,
+          15.4821560615,
+          45.4821560615,
+          75.4821560615,
+          105.4821560615,
+          135.4821560615,
+          165.4821560615,
+          195.4821560615,
+          225.4821560615
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-CSP-0070",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2473271.450244,
+        "jd_tt": 2473271.451547135,
+        "lat": 52.0,
+        "lon": 171.4231,
+        "system": "equal-mc"
+      },
+      "expected": {
+        "cusps": [
+          160.210217099,
+          190.210217099,
+          220.210217099,
+          250.210217099,
+          280.210217099,
+          310.210217099,
+          340.210217099,
+          10.210217099,
+          40.210217099,
+          70.210217099,
+          100.210217099,
+          130.210217099
+        ]
+      },
+      "tolerance": {
+        "cusps": {
+          "each": {
+            "abs": 1,
+            "unit": "arcsec",
+            "wrap": 360
+          }
+        }
+      },
+      "arbiter": "l2-houses-ecliptic"
+    },
+    {
+      "id": "L2-POL-0001",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2394834.002218,
+        "jd_tt": 2394834.002288819,
+        "lat": 70.0,
+        "lon": -130.7617,
+        "system": "placidus"
+      },
+      "expected": {
+        "status": "undefined"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "l2-houses-undefined",
+      "note": "Cusp 11 has no solution, since no degree that rises and sets meets the Placidus condition for it (closest miss 9.54° of hour angle)."
+    },
+    {
+      "id": "L2-POL-0002",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2521069.616289,
+        "jd_tt": 2521069.621137577,
+        "lat": 75.0,
+        "lon": 27.2934,
+        "system": "placidus"
+      },
+      "expected": {
+        "status": "undefined"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "l2-houses-undefined",
+      "note": "Cusps 11, 2 and 3 have no solution, since no degree that rises and sets meets the Placidus condition for them (closest miss 21.17°, 25.41°, 25.41° of hour angle)."
+    },
+    {
+      "id": "L2-POL-0003",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2419497.928056,
+        "jd_tt": 2419497.928212167,
+        "lat": 80.0,
+        "lon": -12.9244,
+        "system": "placidus"
+      },
+      "expected": {
+        "status": "undefined"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "l2-houses-undefined",
+      "note": "Cusps 2 and 3 have no solution, since no degree that rises and sets meets the Placidus condition for them (closest miss 1.50°, 1.50° of hour angle)."
+    },
+    {
+      "id": "L2-POL-0005",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2500854.657175,
+        "jd_tt": 2500854.660521008,
+        "lat": -78.0,
+        "lon": -65.6893,
+        "system": "placidus"
+      },
+      "expected": {
+        "status": "undefined"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "l2-houses-undefined",
+      "note": "Cusps 11, 2 and 3 have no solution, since no degree that rises and sets meets the Placidus condition for them (closest miss 51.30°, 2.67°, 57.33° of hour angle)."
+    },
+    {
+      "id": "L2-POL-0006",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2390257.015738,
+        "jd_tt": 2390257.015816402,
+        "lat": 70.0,
+        "lon": -98.0421,
+        "system": "koch"
+      },
+      "expected": {
+        "status": "undefined"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "l2-houses-undefined",
+      "note": "The MC degree never rises (tan φ tan δ_MC = −1.173), so the diurnal semi-arc that Koch trisects does not exist and cusps 11, 12, 2 and 3 cannot be constructed."
+    },
+    {
+      "id": "L2-POL-0007",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2483695.862686,
+        "jd_tt": 2483695.864711529,
+        "lat": 75.0,
+        "lon": -146.3995,
+        "system": "koch"
+      },
+      "expected": {
+        "status": "undefined"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "l2-houses-undefined",
+      "note": "The MC degree never sets (tan φ tan δ_MC = 1.613), so the diurnal semi-arc that Koch trisects does not exist and cusps 11, 12, 2 and 3 cannot be constructed."
+    },
+    {
+      "id": "L2-POL-0008",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2428854.111211,
+        "jd_tt": 2428854.111488145,
+        "lat": 80.0,
+        "lon": 80.4744,
+        "system": "koch"
+      },
+      "expected": {
+        "status": "undefined"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "l2-houses-undefined",
+      "note": "Every Koch cusp can be constructed but the cusps are not in zodiacal order (cusp 11 falls 15.40° before the MC; cusp 12 falls 21.06° before the MC)."
+    },
+    {
+      "id": "L2-POL-0009",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2473326.234444,
+        "jd_tt": 2473326.235750773,
+        "lat": -72.0,
+        "lon": 112.0417,
+        "system": "koch"
+      },
+      "expected": {
+        "status": "undefined"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "l2-houses-undefined",
+      "note": "Every Koch cusp can be constructed but the cusps are not in zodiacal order (cusp 3 falls 65.52° past the IC)."
+    },
+    {
+      "id": "L2-POL-0010",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2438647.508918,
+        "jd_tt": 2438647.509329646,
+        "lat": -78.0,
+        "lon": 67.1341,
+        "system": "koch"
+      },
+      "expected": {
+        "status": "undefined"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "l2-houses-undefined",
+      "note": "The MC degree never rises (tan φ tan δ_MC = −1.738), so the diurnal semi-arc that Koch trisects does not exist and cusps 11, 12, 2 and 3 cannot be constructed."
+    },
+    {
+      "id": "L2-POL-0011",
+      "kind": "houses.cusps",
+      "input": {
+        "jd_ut1": 2464960.256461,
+        "jd_tt": 2464960.257413479,
+        "lat": -72.0,
+        "lon": 156.1379,
+        "system": "placidus"
+      },
+      "expected": {
+        "status": "undefined"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "l2-houses-undefined",
+      "note": "Cusps 11, 12, 2 and 3 have no solution, since no degree that rises and sets meets the Placidus condition for them (closest miss 23.07°, 23.07°, 0.19°, 20.16° of hour angle)."
+    }
+  ]
+}
