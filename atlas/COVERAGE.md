@@ -60,13 +60,13 @@ covered.
 | --- | --- | --- |
 | 1870 | each commune's local mean time; in Paris, Paris mean time (+0:09:21) | Paris mean time less five minutes (+0:04:21) |
 | 17 March 1891 (law of 14 March 1891) | Paris mean time, +0:09:21 | unchanged, +0:04:21 |
-| 11 March 1911, midnight (law of 9 March 1911) | Paris mean time less 9 min 21 s, +0:00 | legal time, +0:00 |
+| 11 March 1911, midnight (law of 9 March 1911) | Paris mean time less 9 min 21 s, +0:00: in Paris at midnight; elsewhere from midnight, when the post offices changed, to the end of March (`inferred`) | legal time, +0:00, at the railway midnight |
 | 14 June 1916, 23:00 | summer time, +1:00 | the same |
 | 1 October 1916, 01:00 summer time | +0:00 | the same |
 | 24 March 1917, 23:00 | +1:00 | the same |
 | 7 October 1917, 01:00 summer time (within the hour after midnight) | +0:00 | the same |
 | 9 March 1918, 23:00 | +1:00 | the same |
-| 6 October 1918, 01:00 summer time | +0:00 | the same |
+| 6 October 1918, 01:00 summer time (the railways' hour; `inferred` for other clocks) | +0:00 | the same |
 | 1 March 1919, 23:00 | +1:00 | the same |
 | 5 October 1919, 01:00 summer time | +0:00 | the same |
 
@@ -82,9 +82,27 @@ Brest's clocks in 1891 only.
 
 The 1891 law bound Paris from 17 March and other arrondissements one clear
 day after the Journal officiel reached them; the change is placed at
-midnight starting 17 March with a window to the end of March. Summer time
-ended each autumn at 01:00 summer time on the date the decree names, as the
-newspapers cited report; the decrees give only the date.
+midnight starting 17 March with a window to the end of March.
+
+The law of 1911 names no date. In Paris the public clocks, the post offices
+and the railways changed at midnight in the night of 10 to 11 March 1911.
+Elsewhere the post offices and the railways changed at the same midnight,
+and a Chalon-sur-Saône paper told its readers that legal time moved back at
+midnight and that the new time could be read on 11 March at a bank's
+regulator clock, set by telephone from the Observatory. When each commune's
+other public clocks changed is not recorded, and the law bound each
+arrondissement one clear day after the Journal officiel reached it, as in
+1891. Outside Paris the change is therefore placed at the same midnight with
+a window to the end of March, and the rule that follows it,
+`fr-wet-1911-provinces`, is flagged `inferred`; Paris has its own rules for
+1891-1911 and keeps `fr-wet-1911`.
+
+Summer time ended each autumn at 01:00 summer time on the date the decree
+names; the decrees give only the date. The newspapers cited report that hour
+for all public clocks in 1916, for the clocks generally in 1917 and for
+legal time in 1919. For 1918 the source is the instructions to the railway
+networks; that the other public clocks changed at the same hour is assumed,
+and the rules on either side of that change are flagged `inferred`.
 
 ### Left out
 
@@ -202,10 +220,11 @@ of a change open, between noon by the old time and noon by the new
 Hall clock (New York) or between noon by the old time and the afternoon
 (Indianapolis), or gives only the day (Providence, Louisville,
 Minneapolis), the boundary's window covers every reading the report
-allows. Chicago's adoption is
-flagged `inferred`: the railroads, the Board of Trade, hotels and business
-houses are reported to have adopted the new time, the city government is
-not.
+allows. Chicago's adoption is flagged `inferred`: the railroads, the Board
+of Trade, hotels and business houses are reported to have adopted the new
+time, the city government is not. So is Minneapolis's: the new time was to
+be "generally adopted" on 25 November 1883 and two days later was "working
+finely throughout Minneapolis", though "some are slow in adopting it".
 
 Washington kept two times from 18 November 1883: the railroads and the
 businesses dealing with them went to Eastern time, while other businesses,
@@ -262,11 +281,12 @@ particular:
 - `inferred`: the rule rests on a stated assumption. A place's time reported
   only at the moment it was given up is carried back to 1870 (Brest,
   Strasbourg, Metz, eight of the American cities); a place's public clocks
-  are taken to have followed where the sources name only its railways or
-  its businesses (Chicago in 1883, Alsace and Lorraine on 5 October 1919);
-  the railway rule of one company is applied to the others
-  (`fr-rail-interior-before-1911`); a city is taken to be in the zone whose
-  time it kept (the zone rules of 1918 and 1919).
+  are taken to have followed where the sources name only its railways, its
+  post offices or its businesses (Chicago and Minneapolis in 1883, the
+  French communes outside Paris in 1911, France in the autumn of 1918,
+  Alsace and Lorraine on 5 October 1919); the railway rule of one company is
+  applied to the others (`fr-rail-interior-before-1911`); a city is taken to
+  be in the zone whose time it kept (the zone rules of 1918 and 1919).
 - `uncertain`: the sources leave the offset or the date open, or disagree;
   the atlas gives its best reading and the reason names the alternative.
 
@@ -285,10 +305,10 @@ archive's OCR text of the page.
 
 | archive | excerpts | checked against | checked | matches | partial |
 | --- | ---: | --- | ---: | ---: | ---: |
-| Gallica (BnF) | 38 | the text its search service returns for the cited page | 37 | 29 | 8 |
-| | | its OCR text of the page (ALTO) | 1 | 1 | 0 |
+| Gallica (BnF) | 41 | the text its search service returns for the cited page | 37 | 29 | 8 |
+| | | its OCR text of the page (ALTO) | 4 | 3 | 1 |
 | | | the page image | 11 | 11 | 0 |
-| Library of Congress | 22 | its OCR text of the page | 22 | 19 | 3 |
+| Library of Congress | 23 | its OCR text of the page | 23 | 20 | 3 |
 | | | the page image | 3 | 3 | 0 |
 | Internet Archive | 1 | the scan's OCR text | 1 | 1 | 0 |
 
@@ -303,7 +323,10 @@ meridian" for "75th meridian" in Baltimore, the seconds the New York City
 Hall clock stood still, the first "twelve seconds" in Washington). All
 eleven were read again on the page image, where they match; in Strasbourg's
 notice the scan is faded in the middle of "französische", which the notice's
-heading gives in full.
+heading gives in full. Of the excerpts added later, one OCR check is
+partial: the OCR garbles an "l'heure" in the Courrier de Saône-et-Loire of
+1911, whose letters a printing fault displaces on the page image the excerpt
+was transcribed from.
 
 Apart from such OCR errors the checks found the excerpts as transcribed,
 except one:
@@ -324,12 +347,12 @@ reads. Ten excerpts longer than 40 words were shortened with `[...]`.
 
 | | places | jurisdictions | rules | citations |
 | --- | ---: | ---: | ---: | ---: |
-| France | 10 | 3 | 14 | 25 |
+| France | 10 | 3 | 16 | 28 |
 | Alsace and Moselle | 2 | 2 | 16 | 14 |
-| United States | 9 | 9 | 27 | 22 |
-| all | 21 | 14 | 57 | 61 |
+| United States | 9 | 9 | 27 | 23 |
+| all | 21 | 14 | 59 | 65 |
 
-Rules by flag: 29 `documented`, 22 `inferred`, 6 `uncertain`.
+Rules by flag: 27 `documented`, 26 `inferred`, 6 `uncertain`.
 
 - `uncertain`: `fr-lmt-before-1891` (towns' clocks may already have shown
   Paris time), `als-strasbourg-french-1918` (when Strasbourg's five minutes
@@ -339,13 +362,14 @@ Rules by flag: 29 `documented`, 22 `inferred`, 6 `uncertain`.
   `us-louisville-city-time-before-1883` (the report's 18 minutes or the
   longitude).
 - `inferred`: `fr-brest-lmt-before-1891`, `fr-rail-interior-before-1911`,
+  `fr-wet-1911-provinces`, `fr-summer-1918`, `fr-wet-1918`,
   `als-strasbourg-lmt-before-1892`, `mos-metz-lmt-before-1892`,
   `als-mos-wet-1919`, the city-time rules before standard time of New York,
   Baltimore, Washington, Providence, Indianapolis, Chicago, Saint Paul and
-  Minneapolis, `us-chicago-central-1883`, and the eight zone rules of 1918
-  and 1919 (`us-eastern-*`, `us-central-*`).
+  Minneapolis, `us-chicago-central-1883`, `us-minneapolis-central-1883`, and
+  the eight zone rules of 1918 and 1919 (`us-eastern-*`, `us-central-*`).
 
-Citations by type: 40 newspaper reports, 9 laws, 5 decrees, 3
+Citations by type: 44 newspaper reports, 9 laws, 5 decrees, 3
 parliamentary debates, 2 railway notices, 1 ministerial decision, 1
 municipal notice.
 

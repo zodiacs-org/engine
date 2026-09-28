@@ -27,13 +27,14 @@
         "atlasOffsets": [0],
         "tzdbOffsets": [3600]
       },
-      "explanation": "tzdb ends French summer time in 1916-1919 at 23:00 UTC on the October date each decree names (Rule France, Oct Sun>=1 23:00s). The decrees give only the date. The newspapers cited report the clocks set back at 01:00 summer time at the start of that date, 00:00 UTC, in 1916, 1918 and 1919, and in the hour after midnight in 1917. The atlas ends summer time 23 hours before tzdb does; the starts agree. Strasbourg and Metz, French again in 1919, are taken to have changed with the rest of France that year.",
-      "tzdbReport": "Rule France ends summer time in 1916, 1917, 1918 and 1919 at Oct Sun>=1 23:00s, at the end of the Sunday on which each decree restores normal time. The decrees (Journal officiel of 11 June 1916, 21 March 1917, 1 March 1918 and 11 February 1919) name only that date. The Paris papers cited put the change at its start: clocks set back from 01:00 to 00:00 summer time on 1 October 1916, 6 October 1918 and 5 October 1919 (Le Petit Parisien, Le Petit Journal), and within the hour after midnight on 7 October 1917. That would read Oct Sun>=1 0:00s, 23 hours earlier.",
+      "explanation": "tzdb ends French summer time in 1916-1919 at 23:00 UTC on the October date each decree names (Rule France, Oct Sun>=1 23:00s). The decrees give only the date. The sources cited put the change at the start of that date, 00:00 UTC: in 1916 all public clocks were to be set back at 01:00 summer time; in 1917 the clocks were set back within the hour after midnight; in 1918 the instructions to the railway networks set all clocks back at 01:00, and the atlas applies that hour to the other public clocks (an inference); in 1919 legal time was set back at 01:00. The atlas ends summer time 23 hours before tzdb does; the starts agree. Strasbourg and Metz, French again in 1919, are taken to have changed with the rest of France that year.",
+      "tzdbReport": "Rule France ends summer time in 1916, 1917, 1918 and 1919 at Oct Sun>=1 23:00s, at the end of the Sunday on which each decree restores normal time. The decrees (Journal officiel of 11 June 1916, 21 March 1917, 1 March 1918 and 11 February 1919) name only that date. The Paris papers cited put the change at its start: all public clocks set back from 01:00 to 00:00 summer time on 1 October 1916, the clocks set back within the hour after midnight on 7 October 1917, legal time set back at 01:00 on 5 October 1919 (Le Petit Parisien, Le Petit Journal). For 6 October 1918 the source is the instructions to the railway networks, which set all clocks back at 01:00; that other clocks changed at that hour is an inference. That would read Oct Sun>=1 0:00s, 23 hours earlier.",
       "citations": [
         "fr-jo-1916-06-11-decree",
         "fr-jo-1917-03-21-decree",
         "fr-jo-1918-03-01-decree",
         "fr-jo-1919-02-11-decree",
+        "fr-petitparisien-1916-09-30-public-clocks",
         "fr-petitparisien-1916-09-30",
         "fr-petitjournal-1916-09-30",
         "fr-petitjournal-1917-10-06",

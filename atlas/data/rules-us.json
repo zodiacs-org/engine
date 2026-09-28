@@ -1052,7 +1052,7 @@
     },
     {
       "id": "us-minneapolis-central-1883",
-      "version": 1,
+      "version": 2,
       "title": "Minneapolis: Central standard time",
       "scope": "Minneapolis, from its adoption of standard time to the Standard Time Act of 1918",
       "clock": "civil",
@@ -1076,10 +1076,17 @@
       "isDst": false,
       "abbreviation": "CST",
       "uncertainty": {
-        "flag": "documented",
-        "reason": "The new standard time was to be generally adopted in the city on 25 November 1883."
+        "flag": "inferred",
+        "reason": "Standard time was to be \"generally adopted in Minneapolis\" on 25 November 1883, and two days later it was \"working finely throughout Minneapolis\", though \"some are slow in adopting it\"; action by the city government is not reported, and the public clocks are assumed to have followed."
       },
-      "citations": ["us-globe-1883-11-25-minneapolis"]
+      "citations": ["us-globe-1883-11-25-minneapolis", "us-globe-1883-11-27-minneapolis"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred, as Chicago's adoption is: the reports describe general use, not the city government's action. A report of 27 November, after the change, is now cited (us-globe-1883-11-27-minneapolis)."
+        }
+      ]
     }
   ]
 }

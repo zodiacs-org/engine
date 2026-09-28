@@ -74,7 +74,7 @@ Spans in which the atlas and tzdb give the same offset, or offsets less than a s
 
 Differences that look like errors in tzdb rather than differences of scope. Nothing has been sent to the tz project.
 
-- `fr-summer-time-end-hour`: Rule France ends summer time in 1916, 1917, 1918 and 1919 at Oct Sun>=1 23:00s, at the end of the Sunday on which each decree restores normal time. The decrees (Journal officiel of 11 June 1916, 21 March 1917, 1 March 1918 and 11 February 1919) name only that date. The Paris papers cited put the change at its start: clocks set back from 01:00 to 00:00 summer time on 1 October 1916, 6 October 1918 and 5 October 1919 (Le Petit Parisien, Le Petit Journal), and within the hour after midnight on 7 October 1917. That would read Oct Sun>=1 0:00s, 23 hours earlier.
+- `fr-summer-time-end-hour`: Rule France ends summer time in 1916, 1917, 1918 and 1919 at Oct Sun>=1 23:00s, at the end of the Sunday on which each decree restores normal time. The decrees (Journal officiel of 11 June 1916, 21 March 1917, 1 March 1918 and 11 February 1919) name only that date. The Paris papers cited put the change at its start: all public clocks set back from 01:00 to 00:00 summer time on 1 October 1916, the clocks set back within the hour after midnight on 7 October 1917, legal time set back at 01:00 on 5 October 1919 (Le Petit Parisien, Le Petit Journal). For 6 October 1918 the source is the instructions to the railway networks, which set all clocks back at 01:00; that other clocks changed at that hour is an inference. That would read Oct Sun>=1 0:00s, 23 hours earlier.
 - `de-reich-law-1893-instant`: Zone Europe/Berlin keeps LMT until 1893 Apr, midnight Berlin mean time, 23:06:32 UTC on 31 March. The Reich law of 12 March 1893 (Reichs-Gesetzblatt 1893, p. 93) came into force at the moment "in welchem nach der im vorhergehenden Absatz festgesetzten Zeitbestimmung der 1. April 1893 beginnt": midnight Mid-European time, 23:00 UTC, when Berlin mean time read 23:53:28. That would read 1893 Mar 31 23:00u, the form tzdb uses for Rome's change of 1893, 6 min 32 s earlier. Zone Europe/Kaliningrad (Königsberg, German in 1893) also ends its LMT line at 1893 Apr, 22 minutes before the law's instant there. Whether the clocks of Berlin or Königsberg were set at that instant was not researched; the atlas covers neither city.
 
 ## Differences and why
@@ -83,7 +83,7 @@ Differences that look like errors in tzdb rather than differences of scope. Noth
 
 *Category:* transition-instant. *Periods:* 42. *Matches:* places `fr-paris`, `fr-brest`, `fr-nantes`, `fr-bordeaux`, `fr-rouen`, `fr-toulouse`, `fr-lyon`, `fr-marseille`, `fr-nice`, `fr-ajaccio`, `fr-strasbourg`, `fr-metz`; zones Europe/Paris; rules `fr-wet-1916`, `fr-wet-1917`, `fr-wet-1918`, `fr-wet-1919`, `als-mos-wet-1919`; atlas offsets +0:00:00; tzdb offsets +1:00:00.
 
-tzdb ends French summer time in 1916-1919 at 23:00 UTC on the October date each decree names (Rule France, Oct Sun>=1 23:00s). The decrees give only the date. The newspapers cited report the clocks set back at 01:00 summer time at the start of that date, 00:00 UTC, in 1916, 1918 and 1919, and in the hour after midnight in 1917. The atlas ends summer time 23 hours before tzdb does; the starts agree. Strasbourg and Metz, French again in 1919, are taken to have changed with the rest of France that year.
+tzdb ends French summer time in 1916-1919 at 23:00 UTC on the October date each decree names (Rule France, Oct Sun>=1 23:00s). The decrees give only the date. The sources cited put the change at the start of that date, 00:00 UTC: in 1916 all public clocks were to be set back at 01:00 summer time; in 1917 the clocks were set back within the hour after midnight; in 1918 the instructions to the railway networks set all clocks back at 01:00, and the atlas applies that hour to the other public clocks (an inference); in 1919 legal time was set back at 01:00. The atlas ends summer time 23 hours before tzdb does; the starts agree. Strasbourg and Metz, French again in 1919, are taken to have changed with the rest of France that year.
 
 Decided by:
 
@@ -91,6 +91,7 @@ Decided by:
 - `fr-jo-1917-03-21-decree`: Décret relatif à l'avance de l'heure légale pendant la période d'été (20 mars 1917) (1917-03-20), p. 2274, col. 1, art. 1er and 2. <https://gallica.bnf.fr/ark:/12148/bpt6k63035685/f22.item>
 - `fr-jo-1918-03-01-decree`: Décret sur l'avance de l'heure légale (28 février 1918) (1918-02-28), p. 2016, col. 2, art. 1er and 2. <https://gallica.bnf.fr/ark:/12148/bpt6k6542734b/f14.item>
 - `fr-jo-1919-02-11-decree`: Décret avançant l'heure légale de soixante minutes dans la nuit du 1er au 2 mars et rétablissant l'heure normale le 5 octobre (9 février 1919) (1919-02-09), p. 1604, col. 1, art. 1er and 2. <https://gallica.bnf.fr/ark:/12148/bpt6k6361181p/f28.item>
+- `fr-petitparisien-1916-09-30-public-clocks`: Aujourd'hui la journée sera de 25 heures ! C'est la nuit prochaine qu'il faudra retarder les pendules d'une heure (1916-09-30), p. 1, col. 5, the paragraph before the one quoted in fr-petitparisien-1916-09-30. <https://gallica.bnf.fr/ark:/12148/bpt6k565938p/f1.item>
 - `fr-petitparisien-1916-09-30`: Aujourd'hui la journée sera de 25 heures ! C'est la nuit prochaine qu'il faudra retarder les pendules d'une heure (1916-09-30), p. 1, col. 5. <https://gallica.bnf.fr/ark:/12148/bpt6k565938p/f1.item>
 - `fr-petitjournal-1916-09-30`: Une heure pour rien cette nuit en chemin de fer (1916-09-30), p. 2, col. 5. <https://gallica.bnf.fr/ark:/12148/bpt6k621317w/f2.item>
 - `fr-petitjournal-1917-10-06`: Attention ! ce soir, retour à l'heure d'hiver (1917-10-06), p. 1, col. 2. <https://gallica.bnf.fr/ark:/12148/bpt6k6216890/f1.item>
@@ -375,7 +376,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 | --- | --- | ---: | --- | --- | --- | --- |
 | 1869-12-31T23:50:39Z | 1891-03-15T23:50:39Z | 7744 d | `fr-paris-mean-time-before-1891` | +0:09:21 | +0:09:21 LMT | agrees |
 | 1891-03-15T23:50:39Z | 1891-03-16T23:50:39Z | 1.0 d | `fr-paris-mean-time-before-1891` | +0:09:21 | +0:09:21 PMT | agrees |
-| 1891-03-16T23:50:39Z | 1911-03-10T23:50:39Z | 7298 d | `fr-pmt-1891` | +0:09:21 | +0:09:21 PMT | agrees |
+| 1891-03-16T23:50:39Z | 1911-03-10T23:50:39Z | 7298 d | `fr-paris-pmt-1891` | +0:09:21 | +0:09:21 PMT | agrees |
 | 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911` | +0:00:00 | +0:00:00 WET | agrees |
 | 1916-06-14T23:00:00Z | 1916-10-01T00:00:00Z | 108 d | `fr-summer-1916` | +1:00:00 | +1:00:00 WEST | agrees |
 | 1916-10-01T00:00:00Z | 1916-10-01T23:00:00Z | 23.00 h | `fr-wet-1916` | +0:00:00 | +1:00:00 WEST | differs by -3600 s |
@@ -397,7 +398,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 | 1870-01-01T00:17:56.707Z | 1891-03-15T23:50:39Z | 7744 d | `fr-brest-lmt-before-1891` | -0:17:56.707 | +0:09:21 LMT | differs by -1637.707 s |
 | 1891-03-15T23:50:39Z | 1891-03-17T00:17:56.707Z | 1.0 d | `fr-brest-lmt-before-1891` | -0:17:56.707 | +0:09:21 PMT | differs by -1637.707 s |
 | 1891-03-17T00:17:56.707Z | 1911-03-10T23:50:39Z | 7298 d | `fr-pmt-1891` | +0:09:21 | +0:09:21 PMT | agrees |
-| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911` | +0:00:00 | +0:00:00 WET | agrees |
+| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911-provinces` | +0:00:00 | +0:00:00 WET | agrees |
 | 1916-06-14T23:00:00Z | 1916-10-01T00:00:00Z | 108 d | `fr-summer-1916` | +1:00:00 | +1:00:00 WEST | agrees |
 | 1916-10-01T00:00:00Z | 1916-10-01T23:00:00Z | 23.00 h | `fr-wet-1916` | +0:00:00 | +1:00:00 WEST | differs by -3600 s |
 | 1916-10-01T23:00:00Z | 1917-03-24T23:00:00Z | 174 d | `fr-wet-1916` | +0:00:00 | +0:00:00 WET | agrees |
@@ -418,7 +419,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 | 1870-01-01T00:06:12.806Z | 1891-03-15T23:50:39Z | 7744 d | `fr-lmt-before-1891` | -0:06:12.806 | +0:09:21 LMT | differs by -933.806 s |
 | 1891-03-15T23:50:39Z | 1891-03-17T00:06:12.806Z | 1.0 d | `fr-lmt-before-1891` | -0:06:12.806 | +0:09:21 PMT | differs by -933.806 s |
 | 1891-03-17T00:06:12.806Z | 1911-03-10T23:50:39Z | 7298 d | `fr-pmt-1891` | +0:09:21 | +0:09:21 PMT | agrees |
-| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911` | +0:00:00 | +0:00:00 WET | agrees |
+| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911-provinces` | +0:00:00 | +0:00:00 WET | agrees |
 | 1916-06-14T23:00:00Z | 1916-10-01T00:00:00Z | 108 d | `fr-summer-1916` | +1:00:00 | +1:00:00 WEST | agrees |
 | 1916-10-01T00:00:00Z | 1916-10-01T23:00:00Z | 23.00 h | `fr-wet-1916` | +0:00:00 | +1:00:00 WEST | differs by -3600 s |
 | 1916-10-01T23:00:00Z | 1917-03-24T23:00:00Z | 174 d | `fr-wet-1916` | +0:00:00 | +0:00:00 WET | agrees |
@@ -439,7 +440,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 | 1870-01-01T00:02:19.310Z | 1891-03-15T23:50:39Z | 7744 d | `fr-lmt-before-1891` | -0:02:19.310 | +0:09:21 LMT | differs by -700.31 s |
 | 1891-03-15T23:50:39Z | 1891-03-17T00:02:19.310Z | 1.0 d | `fr-lmt-before-1891` | -0:02:19.310 | +0:09:21 PMT | differs by -700.31 s |
 | 1891-03-17T00:02:19.310Z | 1911-03-10T23:50:39Z | 7298 d | `fr-pmt-1891` | +0:09:21 | +0:09:21 PMT | agrees |
-| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911` | +0:00:00 | +0:00:00 WET | agrees |
+| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911-provinces` | +0:00:00 | +0:00:00 WET | agrees |
 | 1916-06-14T23:00:00Z | 1916-10-01T00:00:00Z | 108 d | `fr-summer-1916` | +1:00:00 | +1:00:00 WEST | agrees |
 | 1916-10-01T00:00:00Z | 1916-10-01T23:00:00Z | 23.00 h | `fr-wet-1916` | +0:00:00 | +1:00:00 WEST | differs by -3600 s |
 | 1916-10-01T23:00:00Z | 1917-03-24T23:00:00Z | 174 d | `fr-wet-1916` | +0:00:00 | +0:00:00 WET | agrees |
@@ -460,7 +461,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 | 1869-12-31T23:55:36.163Z | 1891-03-15T23:50:39Z | 7744 d | `fr-lmt-before-1891` | +0:04:23.837 | +0:09:21 LMT | differs by -297.163 s |
 | 1891-03-15T23:50:39Z | 1891-03-16T23:55:36.163Z | 1.0 d | `fr-lmt-before-1891` | +0:04:23.837 | +0:09:21 PMT | differs by -297.163 s |
 | 1891-03-16T23:55:36.163Z | 1911-03-10T23:50:39Z | 7298 d | `fr-pmt-1891` | +0:09:21 | +0:09:21 PMT | agrees |
-| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911` | +0:00:00 | +0:00:00 WET | agrees |
+| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911-provinces` | +0:00:00 | +0:00:00 WET | agrees |
 | 1916-06-14T23:00:00Z | 1916-10-01T00:00:00Z | 108 d | `fr-summer-1916` | +1:00:00 | +1:00:00 WEST | agrees |
 | 1916-10-01T00:00:00Z | 1916-10-01T23:00:00Z | 23.00 h | `fr-wet-1916` | +0:00:00 | +1:00:00 WEST | differs by -3600 s |
 | 1916-10-01T23:00:00Z | 1917-03-24T23:00:00Z | 174 d | `fr-wet-1916` | +0:00:00 | +0:00:00 WET | agrees |
@@ -481,7 +482,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 | 1869-12-31T23:54:13.519Z | 1891-03-15T23:50:39Z | 7744 d | `fr-lmt-before-1891` | +0:05:46.481 | +0:09:21 LMT | differs by -214.519 s |
 | 1891-03-15T23:50:39Z | 1891-03-16T23:54:13.519Z | 1.0 d | `fr-lmt-before-1891` | +0:05:46.481 | +0:09:21 PMT | differs by -214.519 s |
 | 1891-03-16T23:54:13.519Z | 1911-03-10T23:50:39Z | 7298 d | `fr-pmt-1891` | +0:09:21 | +0:09:21 PMT | agrees |
-| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911` | +0:00:00 | +0:00:00 WET | agrees |
+| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911-provinces` | +0:00:00 | +0:00:00 WET | agrees |
 | 1916-06-14T23:00:00Z | 1916-10-01T00:00:00Z | 108 d | `fr-summer-1916` | +1:00:00 | +1:00:00 WEST | agrees |
 | 1916-10-01T00:00:00Z | 1916-10-01T23:00:00Z | 23.00 h | `fr-wet-1916` | +0:00:00 | +1:00:00 WEST | differs by -3600 s |
 | 1916-10-01T23:00:00Z | 1917-03-24T23:00:00Z | 174 d | `fr-wet-1916` | +0:00:00 | +0:00:00 WET | agrees |
@@ -502,7 +503,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 | 1869-12-31T23:40:36.506Z | 1891-03-15T23:50:39Z | 7744 d | `fr-lmt-before-1891` | +0:19:23.494 | +0:09:21 LMT | differs by 602.494 s |
 | 1891-03-15T23:50:39Z | 1891-03-16T23:40:36.506Z | 23.83 h | `fr-lmt-before-1891` | +0:19:23.494 | +0:09:21 PMT | differs by 602.494 s |
 | 1891-03-16T23:40:36.506Z | 1911-03-10T23:50:39Z | 7298 d | `fr-pmt-1891` | +0:09:21 | +0:09:21 PMT | agrees |
-| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911` | +0:00:00 | +0:00:00 WET | agrees |
+| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911-provinces` | +0:00:00 | +0:00:00 WET | agrees |
 | 1916-06-14T23:00:00Z | 1916-10-01T00:00:00Z | 108 d | `fr-summer-1916` | +1:00:00 | +1:00:00 WEST | agrees |
 | 1916-10-01T00:00:00Z | 1916-10-01T23:00:00Z | 23.00 h | `fr-wet-1916` | +0:00:00 | +1:00:00 WEST | differs by -3600 s |
 | 1916-10-01T23:00:00Z | 1917-03-24T23:00:00Z | 174 d | `fr-wet-1916` | +0:00:00 | +0:00:00 WET | agrees |
@@ -523,7 +524,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 | 1869-12-31T23:38:28.543Z | 1891-03-15T23:50:39Z | 7744 d | `fr-lmt-before-1891` | +0:21:31.457 | +0:09:21 LMT | differs by 730.457 s |
 | 1891-03-15T23:50:39Z | 1891-03-16T23:38:28.543Z | 23.80 h | `fr-lmt-before-1891` | +0:21:31.457 | +0:09:21 PMT | differs by 730.457 s |
 | 1891-03-16T23:38:28.543Z | 1911-03-10T23:50:39Z | 7298 d | `fr-pmt-1891` | +0:09:21 | +0:09:21 PMT | agrees |
-| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911` | +0:00:00 | +0:00:00 WET | agrees |
+| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911-provinces` | +0:00:00 | +0:00:00 WET | agrees |
 | 1916-06-14T23:00:00Z | 1916-10-01T00:00:00Z | 108 d | `fr-summer-1916` | +1:00:00 | +1:00:00 WEST | agrees |
 | 1916-10-01T00:00:00Z | 1916-10-01T23:00:00Z | 23.00 h | `fr-wet-1916` | +0:00:00 | +1:00:00 WEST | differs by -3600 s |
 | 1916-10-01T23:00:00Z | 1917-03-24T23:00:00Z | 174 d | `fr-wet-1916` | +0:00:00 | +0:00:00 WET | agrees |
@@ -544,7 +545,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 | 1869-12-31T23:30:56.141Z | 1891-03-15T23:50:39Z | 7744 d | `fr-lmt-before-1891` | +0:29:03.859 | +0:09:21 LMT | differs by 1182.859 s |
 | 1891-03-15T23:50:39Z | 1891-03-16T23:30:56.141Z | 23.67 h | `fr-lmt-before-1891` | +0:29:03.859 | +0:09:21 PMT | differs by 1182.859 s |
 | 1891-03-16T23:30:56.141Z | 1911-03-10T23:50:39Z | 7298 d | `fr-pmt-1891` | +0:09:21 | +0:09:21 PMT | agrees |
-| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911` | +0:00:00 | +0:00:00 WET | agrees |
+| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911-provinces` | +0:00:00 | +0:00:00 WET | agrees |
 | 1916-06-14T23:00:00Z | 1916-10-01T00:00:00Z | 108 d | `fr-summer-1916` | +1:00:00 | +1:00:00 WEST | agrees |
 | 1916-10-01T00:00:00Z | 1916-10-01T23:00:00Z | 23.00 h | `fr-wet-1916` | +0:00:00 | +1:00:00 WEST | differs by -3600 s |
 | 1916-10-01T23:00:00Z | 1917-03-24T23:00:00Z | 174 d | `fr-wet-1916` | +0:00:00 | +0:00:00 WET | agrees |
@@ -565,7 +566,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 | 1869-12-31T23:25:02.851Z | 1891-03-15T23:50:39Z | 7744 d | `fr-lmt-before-1891` | +0:34:57.149 | +0:09:21 LMT | differs by 1536.149 s |
 | 1891-03-15T23:50:39Z | 1891-03-16T23:25:02.851Z | 23.57 h | `fr-lmt-before-1891` | +0:34:57.149 | +0:09:21 PMT | differs by 1536.149 s |
 | 1891-03-16T23:25:02.851Z | 1911-03-10T23:50:39Z | 7298 d | `fr-pmt-1891` | +0:09:21 | +0:09:21 PMT | agrees |
-| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911` | +0:00:00 | +0:00:00 WET | agrees |
+| 1911-03-10T23:50:39Z | 1916-06-14T23:00:00Z | 1923 d | `fr-wet-1911-provinces` | +0:00:00 | +0:00:00 WET | agrees |
 | 1916-06-14T23:00:00Z | 1916-10-01T00:00:00Z | 108 d | `fr-summer-1916` | +1:00:00 | +1:00:00 WEST | agrees |
 | 1916-10-01T00:00:00Z | 1916-10-01T23:00:00Z | 23.00 h | `fr-wet-1916` | +0:00:00 | +1:00:00 WEST | differs by -3600 s |
 | 1916-10-01T23:00:00Z | 1917-03-24T23:00:00Z | 174 d | `fr-wet-1916` | +0:00:00 | +0:00:00 WET | agrees |

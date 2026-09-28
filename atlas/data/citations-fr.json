@@ -191,6 +191,53 @@
       "gloss": "Paris's public pneumatic clocks stopped at midnight for 9 min 21 s and then ran on."
     },
     {
+      "id": "fr-courrier-sl-1911-03-11-midnight",
+      "type": "newspaper-report",
+      "title": "L'heure légale (Chronique locale, renseignements généraux)",
+      "date": "1911-03-11",
+      "issuer": "Le Courrier de Saône-et-Loire (Chalon-sur-Saône)",
+      "publication": "Le Courrier de Saône-et-Loire, 11 mars 1911",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k4394254g/f2.item",
+      "retrieved": "2026-09-28",
+      "locator": "p. 2, foot of col. 1, continued at the top of col. 2",
+      "language": "fr",
+      "excerpt": "C'est aujourd'hui 10 mars que l'heure légale, reculant à minuit de 9 minutes 25 secondes sur l'heure des horloges, des montres bien réglées et des chronomètres, fera rentrer l'heure française dans le fuseau horaire qui contient le méridien de Greenwich.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "Gallica's OCR text of the page garbles the first \"l'heure\" of the second line (\"l’ht). ,r e\"), which the page image shows with its letters displaced by a printing fault; the other words agree."
+        }
+      ],
+      "gloss": "A Chalon-sur-Saône paper, writing on 10 March 1911, told its readers that legal time would move back at midnight into the Greenwich time zone.",
+      "note": "The paper gives 9 minutes 25 secondes; the law says nine minutes twenty-one seconds (fr-jo-1911-03-10-law)."
+    },
+    {
+      "id": "fr-courrier-sl-1911-03-11-chalon",
+      "type": "newspaper-report",
+      "title": "Heure de Greenwich (Chalon, local news)",
+      "date": "1911-03-11",
+      "issuer": "Le Courrier de Saône-et-Loire (Chalon-sur-Saône)",
+      "publication": "Le Courrier de Saône-et-Loire, 11 mars 1911",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k4394254g/f2.item",
+      "retrieved": "2026-09-28",
+      "locator": "p. 2, col. 2, under \"Chalon\"",
+      "language": "fr",
+      "excerpt": "Heure de Greenwich. — Le public trouvera demain au régulateur du Crédit lyonnais la nouvelle heure légale, que M. Lombard doit recevoir téléphoniquement de l'Observatoire.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "Against Gallica's OCR text of the page (ALTO), allowing for OCR errors."
+        }
+      ],
+      "gloss": "In Chalon-sur-Saône the public could read the new legal time on 11 March 1911 at the regulator clock of the Crédit lyonnais, set by telephone from the Observatory. The item was written on 10 March, like the rest of the local news it belongs to."
+    },
+    {
       "id": "fr-jo-1916-06-11-law",
       "type": "law",
       "title": "Loi ayant pour objet d'avancer l'heure légale (9 juin 1916)",
@@ -255,6 +302,29 @@
         }
       ],
       "note": "Corrected on 2026-09-28. The excerpt first ended \"au lieu de 23 heures\", leaving out the \"59\" that follows. The corrected text, \"au lieu de 23 heures 59, afin de ne pas créer de confusion\", was taken from the search service's text of the page and then read on the page image, which it matches."
+    },
+    {
+      "id": "fr-petitparisien-1916-09-30-public-clocks",
+      "type": "newspaper-report",
+      "title": "Aujourd'hui la journée sera de 25 heures ! C'est la nuit prochaine qu'il faudra retarder les pendules d'une heure",
+      "date": "1916-09-30",
+      "issuer": "Le Petit Parisien",
+      "publication": "Le Petit Parisien, 30 septembre 1916",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k565938p/f1.item",
+      "retrieved": "2026-09-28",
+      "locator": "p. 1, col. 5, the paragraph before the one quoted in fr-petitparisien-1916-09-30",
+      "language": "fr",
+      "excerpt": "Cette nuit, une minute après 24 heures 59, les aiguilles de toutes les horloges publiques — horloges des chemins de fer, des bureaux de poste, [...] des départements et des communes — seront retardées d'une heure",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "Against Gallica's OCR text of the page (ALTO)."
+        }
+      ],
+      "gloss": "All public clocks, the railways', the post offices', the State's, the départements' and the communes', were to be set back an hour at 01:00 in the night of 30 September to 1 October 1916."
     },
     {
       "id": "fr-petitjournal-1916-09-30",

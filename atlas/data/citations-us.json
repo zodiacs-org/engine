@@ -368,6 +368,29 @@
       "excerpt": "The new standard time will be generally adopted in Minneapolis to-day.",
       "excerptBasis": "page-image",
       "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
+    },
+    {
+      "id": "us-globe-1883-11-27-minneapolis",
+      "type": "newspaper-report",
+      "title": "Minneapolis Globelets",
+      "date": "1883-11-27",
+      "issuer": "Daily Globe (St. Paul, Minn.)",
+      "publication": "The St. Paul Daily Globe, 27 November 1883",
+      "url": "https://www.loc.gov/resource/sn83025287/1883-11-27/ed-1/?sp=6",
+      "retrieved": "2026-09-28",
+      "locator": "p. 6, col. 1",
+      "language": "en",
+      "excerpt": "The new standard time is working finely throughout Minneapolis. Some are slow in adopting it as the English nation was in adopting the Gregorian calendar, but the prejudice will soon die out.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "Against the Library of Congress OCR text of the page, which garbles \"calendar\" (\"•dendar\"); its first letter is blotted on the page image too."
+        }
+      ],
+      "gloss": "Two days after the change, standard time was in general use in Minneapolis, though some were slow to adopt it."
     }
   ]
 }

@@ -63,11 +63,15 @@ with the periods they affect (explanations `fr-summer-time-end-hour` and
    23:00 standard time on the Sunday each decree names for the return to
    normal time (1 October 1916, 7 October 1917, 6 October 1918, 5 October
    1919). The decrees give only the date. The Paris papers cited put the
-   change at its start: clocks set back from 01:00 to 00:00 summer time,
-   00:00 UTC, in 1916, 1918 and 1919, and within the hour after midnight in
-   1917. That would read `Oct Sun>=1 0:00s`, 23 hours earlier. Citations:
-   `fr-jo-1916-06-11-decree`, `fr-jo-1917-03-21-decree`,
+   change at its start, 00:00 UTC: all public clocks set back from 01:00 to
+   00:00 summer time in 1916, the clocks set back within the hour after
+   midnight in 1917, legal time set back at 01:00 in 1919. For 1918 the
+   source is the instructions to the railway networks, which set all clocks
+   back at 01:00; that the other public clocks changed at that hour is an
+   inference. That would read `Oct Sun>=1 0:00s`, 23 hours earlier.
+   Citations: `fr-jo-1916-06-11-decree`, `fr-jo-1917-03-21-decree`,
    `fr-jo-1918-03-01-decree`, `fr-jo-1919-02-11-decree`,
+   `fr-petitparisien-1916-09-30-public-clocks`,
    `fr-petitparisien-1916-09-30`, `fr-petitjournal-1916-09-30`,
    `fr-petitjournal-1917-10-06`, `fr-petitparisien-1917-10-07`,
    `fr-petitparisien-1918-10-04`, `fr-petitjournal-1919-10-05`.
