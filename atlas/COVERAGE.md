@@ -44,14 +44,20 @@ for the whole window and was not occupied by German forces in 1914-1918.
 The towns listed are spread across the country's longitudes, from Brest to
 Ajaccio. Another commune is read by its longitude with its département. The
 resolver refuses Moselle, Bas-Rhin and Haut-Rhin (German from 1871 to
-1918), the ten départements with communes occupied in 1914-1918 (Aisne,
-Ardennes, Marne, Meurthe-et-Moselle, Meuse, Nord, Oise, Pas-de-Calais, Somme,
-Vosges; the atlas does not record where the front ran, so each is refused
-whole), and Paris (`fr-paris`); and it refuses a longitude outside
-mainland France (5.2° west to 7.6° east) or Corsica (8.5° to 9.6° east) for
-a département there. The limits are coarse: they catch a wrong département
-or a longitude from elsewhere, not every error. Tende and La Brigue
-(Alpes-Maritimes), Italian until 1947, fall inside them and are not
+1918); the ten départements occupied in 1914-1918 in the usual count
+(Aisne, Ardennes, Marne, Meurthe-et-Moselle, Meuse, Nord, Oise,
+Pas-de-Calais, Somme, Vosges) and Seine-et-Marne, which German forces
+entered in September 1914 (an official statement of 7 September has them
+advancing on 5 and 6 September into the region between Coulommiers and La
+Ferté-Gaucher, `fr-nytribune-1914-09-08-coulommiers`); the atlas does not
+record where the front ran or which communes were reached, so each is
+refused whole; and Paris (`fr-paris`). No other département is refused:
+that German forces held communes elsewhere in September 1914, in the Aube
+for instance, was not established. The resolver also refuses a longitude
+outside mainland France (5.2° west to 7.6° east) or Corsica (8.5° to 9.6°
+east) for a département there. The limits are coarse: they catch a wrong
+département or a longitude from elsewhere, not every error. Tende and La
+Brigue (Alpes-Maritimes), Italian until 1947, fall inside them and are not
 covered.
 
 ### What the clocks showed
@@ -111,8 +117,9 @@ and the rules on either side of that change are flagged `inferred`.
   jurisdictions (below).
 - Communes occupied by German forces in 1914-1918 (in the Nord,
   Pas-de-Calais, Somme, Oise, Aisne, Marne, Ardennes, Meuse,
-  Meurthe-et-Moselle and Vosges). What their clocks showed under occupation
-  was not researched, so they are not covered, before or after.
+  Meurthe-et-Moselle and Vosges, and in September 1914 the Seine-et-Marne).
+  What their clocks showed under occupation was not researched, so they are
+  not covered, before or after.
 - The outside clocks of stations before 1891, which showed Paris mean time,
   are not a separate clock in the atlas: the `railway` clock is the time
   inside stations, by which trains ran.
@@ -308,8 +315,8 @@ archive's OCR text of the page.
 | Gallica (BnF) | 41 | the text its search service returns for the cited page | 37 | 29 | 8 |
 | | | its OCR text of the page (ALTO) | 4 | 3 | 1 |
 | | | the page image | 12 | 12 | 0 |
-| Library of Congress | 23 | its OCR text of the page | 23 | 20 | 3 |
-| | | the page image | 3 | 3 | 0 |
+| Library of Congress | 24 | its OCR text of the page | 24 | 20 | 4 |
+| | | the page image | 4 | 4 | 0 |
 | Internet Archive | 1 | the scan's OCR text | 1 | 1 | 0 |
 
 A `partial` check is one where the method could not confirm some words,
@@ -323,10 +330,11 @@ meridian" for "75th meridian" in Baltimore, the seconds the New York City
 Hall clock stood still, the first "twelve seconds" in Washington). All
 eleven were read again on the page image, where they match; in Strasbourg's
 notice the scan is faded in the middle of "französische", which the notice's
-heading gives in full. Of the excerpts added later, one OCR check is
+heading gives in full. Of the excerpts added later, two OCR checks are
 partial: the OCR garbles an "l'heure" in the Courrier de Saône-et-Loire of
 1911, whose letters a printing fault displaces on the page image the excerpt
-was transcribed from. Read again on the page image, that excerpt matches.
+was transcribed from, and has "tlsa" for a "the" in the New York Tribune of
+1914. Read again on the page image, both excerpts match.
 
 Apart from such OCR errors the checks found the excerpts as transcribed,
 except one:
@@ -347,10 +355,10 @@ reads. Ten excerpts longer than 40 words were shortened with `[...]`.
 
 | | places | jurisdictions | rules | citations |
 | --- | ---: | ---: | ---: | ---: |
-| France | 10 | 3 | 16 | 28 |
+| France | 10 | 3 | 16 | 29 |
 | Alsace and Moselle | 2 | 2 | 16 | 14 |
 | United States | 9 | 9 | 27 | 23 |
-| all | 21 | 14 | 59 | 65 |
+| all | 21 | 14 | 59 | 66 |
 
 Rules by flag: 27 `documented`, 26 `inferred`, 6 `uncertain`.
 
@@ -369,7 +377,7 @@ Rules by flag: 27 `documented`, 26 `inferred`, 6 `uncertain`.
   Minneapolis, `us-chicago-central-1883`, `us-minneapolis-central-1883`, and
   the eight zone rules of 1918 and 1919 (`us-eastern-*`, `us-central-*`).
 
-Citations by type: 44 newspaper reports, 9 laws, 5 decrees, 3
+Citations by type: 45 newspaper reports, 9 laws, 5 decrees, 3
 parliamentary debates, 2 railway notices, 1 ministerial decision, 1
 municipal notice.
 

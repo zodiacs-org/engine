@@ -326,6 +326,25 @@ test('the checks catch a département listed twice for reading by longitude', ()
   assert.ok(problems.some((text) => /département 01 is listed in area the test mainland and in exclusion 1/.test(text)), problems.join('\n'));
 });
 
+test('the citations an exclusion names must exist, and count as cited', () => {
+  const atlas = load();
+  const exclusion = atlas.jurisdictions.get('test-land').readByLongitude.excluded[0];
+  exclusion.citations = ['no-such-source'];
+  let { problems } = checkAtlas(atlas, { today: '2026-09-28' });
+  assert.ok(problems.some((text) => /jurisdiction test-land exclusion 1: cites unknown citation no-such-source/.test(text)), problems.join('\n'));
+
+  // A citation named only by an exclusion is cited; once the exclusion drops it, it is cited by nothing.
+  const source = { ...structuredClone(atlas.citations.get('fixture-source')), id: 'fixture-exclusion-source' };
+  atlas.citations.set(source.id, source);
+  atlas.files.get('citations.json').citations.push(source);
+  exclusion.citations = [source.id];
+  ({ problems } = checkAtlas(atlas, { today: '2026-09-28' }));
+  assert.deepEqual(problems, []);
+  delete exclusion.citations;
+  ({ problems } = checkAtlas(atlas, { today: '2026-09-28' }));
+  assert.ok(problems.some((text) => /citation fixture-exclusion-source is cited by nothing/.test(text)), problems.join('\n'));
+});
+
 test('the checks catch a missing citation, excerpt or retrieval date', () => {
   const atlas = load();
   atlas.rules.get('test-lmt').citations = ['no-such-source'];

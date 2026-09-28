@@ -231,7 +231,7 @@
           "additionalProperties": false
         },
         "readByLongitude": {
-          "description": "Present only where the rules hold for places the atlas does not list: which départements (INSEE codes) may be read by longitude, the longitude limits in each area, and the départements refused with the reason.",
+          "description": "Present only where the rules hold for places the atlas does not list: which départements (INSEE codes) may be read by longitude, the longitude limits in each area, and the départements refused with the reason and any source read for it.",
           "type": "object",
           "required": ["areas", "excluded", "note"],
           "properties": {
@@ -257,7 +257,13 @@
                 "required": ["departments", "reason"],
                 "properties": {
                   "departments": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/department" } },
-                  "reason": { "$ref": "#/$defs/text" }
+                  "reason": { "$ref": "#/$defs/text" },
+                  "citations": {
+                    "description": "The sources read for the reason, where one was.",
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/id" }
+                  }
                 },
                 "additionalProperties": false
               }

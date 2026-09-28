@@ -129,7 +129,10 @@ export function checkAtlas(atlas, { today = new Date().toISOString().slice(0, 10
       if (!(area.minLongitude < area.maxLongitude)) problem(`jurisdiction ${jurisdiction.id}: area ${area.name} has no longitude range`);
       for (const department of area.departments) note(department, `area ${area.name}`);
     }
-    for (const [index, entry] of rule.excluded.entries()) for (const department of entry.departments) note(department, `exclusion ${index + 1}`);
+    for (const [index, entry] of rule.excluded.entries()) {
+      for (const department of entry.departments) note(department, `exclusion ${index + 1}`);
+      for (const id of entry.citations ?? []) cite(id, `jurisdiction ${jurisdiction.id} exclusion ${index + 1}`);
+    }
     for (const place of atlas.places.values()) {
       if (place.jurisdiction === jurisdiction.id && !rule.areas.some((area) => place.longitude >= area.minLongitude && place.longitude <= area.maxLongitude)) {
         problem(`place ${place.id}: longitude ${place.longitude} is outside every area of ${jurisdiction.id}`);

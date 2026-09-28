@@ -1,7 +1,7 @@
 {
   "$schema": "../schema/atlas.schema.json",
   "kind": "atlas-citations",
-  "description": "France: the laws, decrees and notices on legal time, the 1891 Senate debate, a railway company's standing instruction on station clocks, and Paris newspapers and a Chalon-sur-Saône paper reporting how the clock changes were made. The excerpts were transcribed from Gallica (Bibliothèque nationale de France) page images on the retrieval date and checked again against Gallica's text of the cited page (the text its search service returns, or its OCR text) and, where that text could not confirm a word, against the page image (each citation's checks).",
+  "description": "France: the laws, decrees and notices on legal time, the 1891 Senate debate, a railway company's standing instruction on station clocks, Paris newspapers and a Chalon-sur-Saône paper reporting how the clock changes were made, and a New York paper's report of an official statement of September 1914 on the German advance into Seine-et-Marne. The excerpts were transcribed from page images, Gallica's (Bibliothèque nationale de France) and, for the New York paper, the Library of Congress's, on the retrieval date and checked again against the archive's text of the cited page (for Gallica, the text its search service returns or its OCR text; for the Library of Congress, its OCR text) and, where that text could not confirm a word, against the page image (each citation's checks).",
   "citations": [
     {
       "id": "fr-jo-1870-11-06-promulgation",
@@ -237,6 +237,30 @@
         }
       ],
       "gloss": "In Chalon-sur-Saône the public could read the new legal time on 11 March 1911 at the regulator clock of the Crédit lyonnais, set by telephone from the Observatory. The item was written on 10 March, like the rest of the local news it belongs to."
+    },
+    {
+      "id": "fr-nytribune-1914-09-08-coulommiers",
+      "type": "newspaper-report",
+      "title": "Allies Force Back Germans from Paris Along 160 Mile Line",
+      "date": "1914-09-08",
+      "issuer": "New York Tribune",
+      "publication": "New York Tribune, 8 September 1914",
+      "url": "https://www.loc.gov/resource/sn83030214/1914-09-08/ed-1/?sp=1",
+      "retrieved": "2026-09-28",
+      "locator": "p. 1, right-hand column, under the dateline \"Paris, Sept. 7\", after the subheading \"Allies' Attack Vigorous\"",
+      "language": "en",
+      "excerpt": "An earlier official statement to-day said [...] The text of the earlier official notice follows: [...] \"The Germans had advanced Saturday and Sunday into the region between Coulommiers and La Ferte-Gaucher.\"",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "The Library of Congress OCR text of the page has \"tlsa\" for the \"the\" before \"region\"; the other words agree."
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ],
+      "gloss": "In its report from Paris of 7 September 1914, the paper prints an official statement of that day: German forces had advanced on the Saturday and Sunday, 5 and 6 September, into the region between Coulommiers and La Ferté-Gaucher. The paper places Coulommiers in the department of Seine-et-Marne."
     },
     {
       "id": "fr-jo-1916-06-11-law",

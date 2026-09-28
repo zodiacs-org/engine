@@ -109,8 +109,8 @@
               "01", "03", "04", "05", "06", "07", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
               "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37",
               "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "52", "53", "56", "58",
-              "61", "63", "64", "65", "66", "69", "70", "71", "72", "73", "74", "76", "77", "78", "79", "81", "82",
-              "83", "84", "85", "86", "87", "89", "90", "91", "92", "93", "94", "95"
+              "61", "63", "64", "65", "66", "69", "70", "71", "72", "73", "74", "76", "78", "79", "81", "82", "83",
+              "84", "85", "86", "87", "89", "90", "91", "92", "93", "94", "95"
             ],
             "minLongitude": -5.2,
             "maxLongitude": 7.6
@@ -126,9 +126,14 @@
             "departments": ["02", "08", "51", "54", "55", "59", "60", "62", "80", "88"],
             "reason": "parts of this département were occupied by German forces in 1914-1918, which the atlas does not cover, and it does not record where the front ran, so the whole département is refused"
           },
+          {
+            "departments": ["77"],
+            "reason": "German forces entered it in September 1914, between Coulommiers and La Ferté-Gaucher; the atlas does not cover the communes they reached and does not record which they were, so the whole département is refused",
+            "citations": ["fr-nytribune-1914-09-08-coulommiers"]
+          },
           { "departments": ["75"], "reason": "Paris has its own jurisdiction, fr-paris (place fr-paris)" }
         ],
-        "note": "The longitude limits are coarse: mainland France outside Alsace-Moselle lies between 5.2 degrees west (Ouessant) and 7.6 degrees east, Corsica between 8.5 and 9.6 degrees east. They catch a wrong département or a longitude from elsewhere, not every error: Tende and La Brigue (Alpes-Maritimes), Italian until 1947, fall inside the limits and are not covered."
+        "note": "The occupied départements refused are the ten in the usual count (Aisne, Ardennes, Marne, Meurthe-et-Moselle, Meuse, Nord, Oise, Pas-de-Calais, Somme, Vosges) and Seine-et-Marne, which German forces entered in September 1914: an official statement of 7 September has them advancing on 5 and 6 September into the region between Coulommiers and La Ferté-Gaucher (fr-nytribune-1914-09-08-coulommiers). No other département is refused: that German forces held communes elsewhere in September 1914, in the Aube for instance, was not established. The longitude limits are coarse: mainland France outside Alsace-Moselle lies between 5.2 degrees west (Ouessant) and 7.6 degrees east, Corsica between 8.5 and 9.6 degrees east. They catch a wrong département or a longitude from elsewhere, not every error: Tende and La Brigue (Alpes-Maritimes), Italian until 1947, fall inside the limits and are not covered."
       }
     }
   ],
