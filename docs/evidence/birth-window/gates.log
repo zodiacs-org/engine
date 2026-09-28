@@ -1,0 +1,162 @@
+Worktree at d1000e66 with the results commit's README.md, CHANGELOG.md and evidence changes; source identical to 670db8a6. node v22.22.2; npm 10.9.7
+
+## typecheck
+$ npm run typecheck
+
+> @zodiacs/engine@0.1.1-rc.12 typecheck
+> tsc -p tsconfig.typecheck.json --pretty false
+
+exit 0
+
+## unit tests
+$ npm test
+
+ Test Files  30 passed (30)
+      Tests  2663 passed (2663)
+   Start at  19:08:35
+   Duration  32.17s (transform 1.92s, setup 0ms, collect 5.78s, tests 62.17s, environment 12ms, prepare 3.30s)
+
+exit 0
+
+## build
+$ npm run build
+DTS Build start
+DTS ⚡️ Build success in 4927ms
+DTS dist/crossings.d.ts              4.33 KB
+DTS dist/internal.d.ts               450.00 B
+DTS dist/receipt.d.ts                10.45 KB
+DTS dist/window.d.ts                 5.98 KB
+DTS dist/deltat.d.ts                 3.72 KB
+DTS dist/geo.d.ts                    2.14 KB
+DTS dist/index.d.ts                  20.82 KB
+DTS dist/internal-math.d.ts          1.04 KB
+DTS dist/types-DICQY4X-.d.ts         7.37 KB
+DTS dist/internal-math-BN7vWxdc.d.ts 11.24 KB
+exit 0
+
+## export smoke
+$ npm run exports:smoke
+
+> @zodiacs/engine@0.1.1-rc.12 exports:smoke
+> node scripts/module-resolution-smoke.mjs
+
+@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports
+exit 0
+
+## package contents
+$ npm run package:contents
+
+> @zodiacs/engine@0.1.1-rc.12 package:contents
+> node scripts/verify-package-contents.mjs
+
+@zodiacs/engine package contents passed (32 files, 288104 bytes unpacked)
+exit 0
+
+## pack dry run
+$ npm run pack:dry-run
+npm notice filename: zodiacs-engine-0.1.1-rc.12.tgz
+npm notice package size: 86.4 kB
+npm notice unpacked size: 288.1 kB
+npm notice shasum: 0c28fc42914aed7c802d24a4cbaaf6130d0272cd
+npm notice integrity: sha512-aptsbhZieQ0M8[...]NOa8QgNGAiUDQ==
+npm notice total files: 32
+npm notice
+zodiacs-engine-0.1.1-rc.12.tgz
+exit 0
+
+## pack
+$ npm pack --ignore-scripts --pack-destination <scratch>
+npm notice 2.5kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 0.1.1-rc.12
+npm notice filename: zodiacs-engine-0.1.1-rc.12.tgz
+npm notice package size: 86.4 kB
+npm notice unpacked size: 288.1 kB
+npm notice shasum: 0c28fc42914aed7c802d24a4cbaaf6130d0272cd
+npm notice integrity: sha512-aptsbhZieQ0M8[...]NOa8QgNGAiUDQ==
+npm notice total files: 32
+npm notice
+zodiacs-engine-0.1.1-rc.12.tgz
+exit 0
+
+## packed consumer
+$ npm run consumer:smoke -- <scratch>/zodiacs-engine-0.1.1-rc.12.tgz
+
+> @zodiacs/engine@0.1.1-rc.12 consumer:smoke
+> node scripts/verify-packed-consumer.mjs <scratch>/zodiacs-engine-0.1.1-rc.12.tgz
+
+{
+  "version": "0.1.1-rc.12",
+  "birthWindow": "passed",
+  "configuredAspects": "passed",
+  "chartDeclinations": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "artifact": "<scratch>/zodiacs-engine-0.1.1-rc.12.tgz",
+  "sha256": "6a1e8648e2602d8e911fb93c1513700970bfe54e324a3492398c9e687b93b767",
+  "runtime": "v22.22.2",
+  "typescript": "5.9.3",
+  "directory": "/tmp/zodiacs-engine-consumer-zQGBW3",
+  "types": "passed"
+}
+exit 0
+
+## conformance self-test (plain)
+$ node conformance/harness/selftest.mjs
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 271.124123
+exit 0
+
+## conformance self-test (node --test, as CI)
+$ node --test conformance/harness/selftest.mjs
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 437.191056
+exit 0
+
+## conformance vectors
+$ node conformance/harness/validate.mjs --expect-total 500
+  calendar.to-jdn: 25
+  calendar.from-jdn: 10
+conformance: 500 vectors conform to SPEC.md
+exit 0
+
+## conformance verdicts
+$ node conformance/harness/run.mjs --adapter node conformance/adapters/zodiacs-engine.mjs --check conformance/results/zodiacs-engine.json
+zodiacs-engine 0.1.1-rc.12: 232 pass, 222 fail, 46 unsupported, 0 error (of 500)
+  L1: 47 pass, 193 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 35 pass, 29 fail, 46 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+exit 0
+
+## conformance report
+$ node conformance/harness/report.mjs --check
+conformance: RESULTS.md and results/summary.json are current
+exit 0
+

@@ -699,11 +699,17 @@ milliseconds are compared directly. The enclosures:
 
 Results carry `verification: "sampled at one-second resolution"`: the method
 is checked by comparing its switch instants with natalChart at every whole
-second of preregistered random windows (`docs/evidence/birth-window/`), not
-proven. A change and its reversal inside one second, such as the node's
-flicker, cannot be seen at that resolution; those are checked by natalChart at
-their own milliseconds. A window around a node ingress takes several seconds,
-because every millisecond near it is evaluated.
+second, not proven. On 1,000 preregistered random windows (1 minute to 23
+hours, 1800 to 2200, two thirds of them at 60° of latitude or more, all
+thirteen systems; 12.3 million samples), all 24,188 sampled transitions were
+matched, none missed and none extra, and natalChart confirmed every switch at
+its millisecond (`docs/evidence/birth-window/RESULTS.md`). A change and its
+reversal inside one second, such as the node's flicker, cannot be seen at
+that resolution; those are checked by natalChart at their own milliseconds.
+
+In one thread, a 10-minute window takes about 3 ms, two hours about 20 ms and
+a whole day about 0.25 s (medians; Node.js 22). A window around a node
+ingress takes seconds, because every millisecond near it is evaluated.
 
 Other flags are `polar-fallback`, when a cell uses whole-sign houses in place
 of Placidus or Koch, and `outside-reference-span`. Invalid input throws

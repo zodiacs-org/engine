@@ -1,0 +1,58 @@
+{
+  "baseline": "dist/ of a build of 8c4946b142c731ecdec186df6c04b91b7f2463e0 (origin/main)",
+  "javascript": {
+    "baselineFiles": 15,
+    "changed": [],
+    "added": [
+      "window.js"
+    ]
+  },
+  "declarations": {
+    "baselineFiles": 9,
+    "changedAfterResolvingAliases": [],
+    "onlyAddedExportsInSharedTypes": true
+  },
+  "sizes": {
+    "rootBaseline": {
+      "minified": 38434,
+      "gzip": 14555
+    },
+    "root": {
+      "minified": 38434,
+      "gzip": 14555
+    },
+    "window": {
+      "minified": 25116,
+      "gzip": 9998
+    },
+    "rootAndWindow": {
+      "minified": 52262,
+      "gzip": 19754
+    },
+    "windowAddsToRoot": {
+      "minified": 13828,
+      "gzip": 5199
+    },
+    "windowModuleAlone": {
+      "minified": 14484,
+      "gzip": 6216
+    }
+  },
+  "pack": {
+    "packed": 86370,
+    "unpacked": 288104,
+    "files": 32,
+    "gateUnpacked": 300000,
+    "headroom": 11896
+  },
+  "windowFiles": [
+    {
+      "path": "dist/window.d.ts",
+      "bytes": 6127
+    },
+    {
+      "path": "dist/window.js",
+      "bytes": 27982
+    }
+  ]
+}

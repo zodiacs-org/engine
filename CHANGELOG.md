@@ -34,9 +34,10 @@
 - `WINDOW_RATE_BOUNDS`, the per-body rate bounds the search relies on;
   `MAX_WINDOW_MS`; `WINDOW_VERIFICATION`, the label every result carries:
   "sampled at one-second resolution".
-- Evidence in `docs/evidence/birth-window/`: the scans behind the bounds and
-  the preregistered comparison with natalChart at every second of random
-  windows.
+- Evidence in `docs/evidence/birth-window/`: the scans behind the bounds, and
+  the preregistered comparison with natalChart at every second of 1,000
+  random windows: PASS, all 24,188 sampled transitions matched, none missed
+  and none extra; timings and package sizes.
 - The root entry point does not grow; its JavaScript files are byte-identical
   to rc.12's. The declaration rollup renames one shared chunk and re-letters
   internal aliases; exported types are unchanged.

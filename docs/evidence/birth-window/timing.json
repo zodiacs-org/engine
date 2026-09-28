@@ -1,0 +1,70 @@
+{
+  "node": "v22.22.2",
+  "loadAverageAfter": [
+    1.98,
+    4.53,
+    5.26
+  ],
+  "rows": [
+    {
+      "length": "10 minutes",
+      "latitudes": "-60° to 60°",
+      "windows": 39,
+      "medianMs": 3,
+      "p90Ms": 12,
+      "maxMs": 38,
+      "meanMs": 5,
+      "medianSwitches": 1
+    },
+    {
+      "length": "10 minutes",
+      "latitudes": "60° to 90°",
+      "windows": 39,
+      "medianMs": 1,
+      "p90Ms": 13,
+      "maxMs": 37,
+      "meanMs": 4,
+      "medianSwitches": 0
+    },
+    {
+      "length": "2 hours",
+      "latitudes": "-60° to 60°",
+      "windows": 39,
+      "medianMs": 20,
+      "p90Ms": 31,
+      "maxMs": 41,
+      "meanMs": 21,
+      "medianSwitches": 13
+    },
+    {
+      "length": "2 hours",
+      "latitudes": "60° to 90°",
+      "windows": 39,
+      "medianMs": 17,
+      "p90Ms": 26,
+      "maxMs": 68,
+      "meanMs": 17,
+      "medianSwitches": 7
+    },
+    {
+      "length": "24 hours",
+      "latitudes": "-60° to 60°",
+      "windows": 39,
+      "medianMs": 232,
+      "p90Ms": 361,
+      "maxMs": 389,
+      "meanMs": 235,
+      "medianSwitches": 163
+    },
+    {
+      "length": "24 hours",
+      "latitudes": "60° to 90°",
+      "windows": 39,
+      "medianMs": 229,
+      "p90Ms": 384,
+      "maxMs": 549,
+      "meanMs": 240,
+      "medianSwitches": 108
+    }
+  ]
+}
