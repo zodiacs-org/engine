@@ -1,0 +1,2445 @@
+{
+  "suite": "zodiacs-conformance",
+  "suiteVersion": "0.1.0",
+  "level": "L3",
+  "title": "Time and calendars",
+  "arbiters": {
+    "tzdb-2025c-backzone": {
+      "name": "IANA tzdb 2025c with backzone, compiled by zic 2025c",
+      "source": "IANA time zone database release 2025c: https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz (sha256 4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957) and https://data.iana.org/time-zones/releases/tzcode2025c.tar.gz (sha256 697ebe6625444aef5080f58e49d03424bbb52e08bf483d3ddb5acf10cbd15740), both OpenPGP-signed by Paul Eggert (key 7E37 92A9 D8AC F7D6 33BC 1588 ED97 E90E 62AA 7E34; signatures checked 2026-09-28). The data are the Makefile's `make PACKRATDATA=backzone PACKRATLIST=zone.tab` build: backzone's pre-1970 history for the zone.tab zones that the main data merge into links. Why backzone: a birth chart needs the local time in force where and when the birth happened, often before 1970, and tzdb's default build does not keep that history for these zones; it makes each of them a link to another zone whose clocks have agreed with it since 1970, so the zone answers with the other zone's history (Africa/Banjul at 1880-12-31T12:00:00 gets Abidjan's local mean time, -968 s, instead of its own, -3996 s). The maintainers' caveat applies: the Makefile of tzdata 2025c offers backzone as 'out-of-scope and often-wrong data', and its theory.html says the file 'is less reliable and does not necessarily follow database guidelines'. zic and zdump are built from the same release's tzcode.",
+      "inputs": [
+        {
+          "path": "sources/l3/tzdata.json",
+          "sha256": "f6b6fd03b9efd1c38afb716d37195a4e3777057fb74922119b74218d94795d69"
+        },
+        {
+          "url": "https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz",
+          "sha256": "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957"
+        },
+        {
+          "url": "https://data.iana.org/time-zones/releases/tzcode2025c.tar.gz",
+          "sha256": "697ebe6625444aef5080f58e49d03424bbb52e08bf483d3ddb5acf10cbd15740"
+        },
+        {
+          "path": "sources/l3/tzdb-divergence-98.json",
+          "sha256": "d3258be9118494fba3cff97dea1a954f13f7c084249494674f5eaed7b816ee3e"
+        }
+      ],
+      "method": "After checking every file digest recorded in sources/l3/tzdata.json, the generator runs tzdb's own recipe: ziguard.awk (DATAFORM=main, PACKRATDATA=backzone, PACKRATLIST=zone.tab) over africa, antarctica, asia, australasia, europe, northamerica, southamerica, etcetera, factory, backward and backzone, then zishrink.awk to tzdata.zi, then `zic -d DIR tzdata.zi` (zic's defaults: slim TZif, no leap seconds); main.zi compiled on its own gives byte-identical files (598 TZif files). For each vector three readers of the compiled file find every UT instant whose offset maps it to the given local time: zdump -V -c 1600,2040 (tzcode's localtime.c), an independent TZif v2+ parser with its own POSIX TZ-string evaluator, and CPython's zoneinfo.ZoneInfo.from_file (both folds, kept when they round-trip). They must agree on the verdict and the abbreviation; one instant gives ok with its offset, two give ambiguous (the earlier instant's offset first), none gives nonexistent. utc_offset_s is local time minus UTC in seconds, positive east of Greenwich (UTC = local time - utc_offset_s); utc_offsets_s holds the two offsets of an ambiguous local time, the earlier instant's first. Local mean time: in tzdb 2025c no Zone or Rule line has fractional seconds; LMT and other mean-time offsets are stated to the whole second, and the 33 more precise values the files know appear only in #STDOFF comments, each rounded to the nearest second (ties to even) in the data line (checked). zic rounds any fraction it is given the same way (zic(8), and a probe: 0:29:45.5 is stored as 1786 s, 0:29:44.5 as 1784 s). The expected offset is the one stored in the compiled TZif file. Case design (fixed rules, documented in the generator): 20 cases from the divergence list, the zones where tzdb-with-backzone and ICU's default build disagree before 1970, tagged backzone-history: they test which build an engine uses, and each one's note gives the answer of tzdb's default build (no backzone); then 7 ordinary cases after 1970, 9 skipped or repeated local times, 6 local-mean-time cases and 3 others; nothing after 2037.",
+      "generator": "arbiters/l3/build.py",
+      "uncertainty": "None in the computation: the three readers agree exactly on every vector. The data are tzdb's reconstruction, not history: offsets before 1970 are tzdb's best estimates and backzone's are the least reliable (see the maintainers' caveat under source), and some future offsets are predictions (the 2030 Ramadan rule, which tzdb 2026d has already replaced, and the 2035 summer time). A vector tests agreement with this build of tzdb 2025c."
+    },
+    "lmt-definition": {
+      "name": "Local mean time from longitude",
+      "source": "The definition of local mean time: mean solar time at east longitude lon runs ahead of UT by lon/15 hours, 240 s of UTC offset per degree.",
+      "inputs": [],
+      "method": "utc_offset_s is local mean time minus UT in seconds, positive east of Greenwich: lon x 240, computed exactly with rational arithmetic. The longitudes are multiples of 1/16 degree (5 x 0.0125), so the decimal input and the product are exact binary numbers and the expected value is an exact integer.",
+      "generator": "arbiters/l3/build.py",
+      "uncertainty": "None: a definition. The 0.001 s tolerance only absorbs an implementation's floating-point rounding."
+    },
+    "iers-leap-seconds-2025c": {
+      "name": "IERS leap-second table (leap-seconds.list, tzdata 2025c)",
+      "source": "leap-seconds.list as distributed in tzdata 2025c (IERS Earth Orientation Centre, Paris Observatory; updated through IERS Bulletin C; last update 2025-07-07 (NTP 3960835200); expires 2026-06-28 (NTP 3991593600); its #h line, SHA-1 49db2447571e5e1b2f002a539c8da8e439b8e49e, verified). TT = TAI + 32.184 s exactly (IAU 1991 Resolution A4), so TT - UTC = 32.184 s + (TAI - UTC).",
+      "inputs": [
+        {
+          "path": "sources/l3/leap-seconds.list",
+          "sha256": "f060924e3a76ee4e464f6664035b7beae834155dd93a81c50e922f94dfdb1d20"
+        }
+      ],
+      "method": "tt_minus_utc_s is TT - UTC in seconds. Parse the 28 data lines (NTP epoch, DTAI). Each epoch is 00:00:00 UTC of the day the line names (MJD = X/86400 + 15020, 'epoch in clear'), and DTAI is 'the quantity to add to UTC to get the time in TAI' from that epoch until the next line's. A UTC reading takes the DTAI of the last line whose epoch is at or before it. The leap second itself: 23:59:60 is the 86,401st second of the day that ends with it, so it precedes the next line's epoch (00:00:00 of the following day) and takes the old value; e.g. at 2016-12-31T23:59:60 TAI - UTC = 36 s and TT - UTC = 68.184 s, which puts TAI at 2017-01-01T00:00:36, one second after 23:59:59 + 36 s, and the new value 37 s applies from 2017-01-01T00:00:00. A 23:59:60 input is accepted only on a day the table ends with a leap second, and every input lies between the first line and the expiry.",
+      "generator": "arbiters/l3/build.py",
+      "uncertainty": "None: TAI - UTC is an integer number of seconds by definition and 32.184 s is exact. The 0.5 ms tolerance only absorbs floating-point representation."
+    },
+    "iers-ut1-finals2000a": {
+      "name": "IERS UT1 - UTC (finals2000A, observed rows) with the leap-second table",
+      "source": "UT1 - UTC per day at 0h UTC from the IERS finals.all (IAU 2000) file fetched 2026-09-22 (sha256 c672540e026d3cd4840c0858d4ce2bc4a18c3bc9751f9636c3285e11950d58a1, 3,767,520 bytes), extracted to CSV (MJD, date, I/P flag, UT1 - UTC, formal error) and copied here unchanged; TAI - UTC from leap-seconds.list of tzdata 2025c (arbiter iers-leap-seconds-2025c).",
+      "inputs": [
+        {
+          "path": "sources/l3/iers-finals2000A-ut1.csv",
+          "sha256": "c698117a9c11524196e51a71493776e3287223b9ee75582548392dec8d45f669"
+        },
+        {
+          "path": "sources/l3/leap-seconds.list",
+          "sha256": "f060924e3a76ee4e464f6664035b7beae834155dd93a81c50e922f94dfdb1d20"
+        }
+      ],
+      "method": "For 1 January and 1 July alternately, every 3.5 years from 1974-01-01 to 2023-01-01 (15 rows, all flagged I, observed), take the row at 0h UTC. The input is the UT1 reading at that instant, jd_ut1 = 2400000.5 + MJD + (UT1 - UTC)/86400 s, so nothing is interpolated; the extra input key utc names the row's instant. delta_t_s is Delta T = TT - UT1 in seconds: 32.184 s + (TAI - UTC) - (UT1 - UTC), with TAI - UTC at 0h UTC of that day.",
+      "generator": "arbiters/l3/build.py",
+      "uncertainty": "The IERS formal error of UT1 - UTC on these rows is at most 0.0007116 s; the values are published to 0.1 microsecond, and TAI - UTC and 32.184 s are exact. The tolerance is 0.1 s: a Delta T error of 0.1 s moves the Moon by about 0.05 arcsec (its mean motion is about 0.55 arcsec per second of time), which keeps Delta T's share of the L1 positional tolerance (1 arcsec) near 5%."
+    },
+    "calendar-arithmetic": {
+      "name": "Julian and Gregorian calendar arithmetic, two published algorithms",
+      "source": "Richards, E. G. (2013), 'Calendars', in Urban & Seidelmann (eds.), Explanatory Supplement to the Astronomical Almanac, 3rd ed., sec. 15.11 (Algorithms 3 and 4, Julian and Gregorian parameters); Fliegel, H. F. & Van Flandern, T. C. (1968), Communications of the ACM 11(10), 657; Meeus, J. (1998), Astronomical Algorithms, 2nd ed., ch. 7. Both calendars proleptic, astronomical year numbering; the JDN of a civil day is the Julian date at its noon.",
+      "inputs": [],
+      "method": "jdn is the integer Julian Day Number of the civil day: the Julian date at its noon, so the day that begins at JD n - 0.5 has JDN n (JDN 0 is Julian -4712-01-01). Exact integer arithmetic. Every vector is computed by Richards's algorithms and must be matched by a second published algorithm: Fliegel & Van Flandern for the Gregorian calendar, Meeus ch. 7 for the Julian calendar (INT as truncation, as published); Gregorian vectors must also match Meeus's Gregorian formulas with INT read as floor. to-jdn inputs are checked to be real dates of their calendar; from-jdn outputs round-trip. A dense check walks every day from -5000-01-01 to 5000-12-31 in both calendars with the calendar's month lengths: Richards gives consecutive JDNs, hits the anchors (JDN 0 = Julian -4712-01-01, 2451545 = Gregorian 2000-01-01) and round-trips every day; the second algorithm agrees on every day with JDN >= 0 (before JDN 0, with the truncating division it is published with, it does not; no vector lies there).",
+      "generator": "arbiters/l3/build.py",
+      "uncertainty": "None: exact integer arithmetic, with independent published algorithms agreeing on every vector and on the dense range."
+    }
+  },
+  "vectors": [
+    {
+      "id": "L3-TZ-0001",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Pacific/Majuro",
+        "local": "1928-01-16T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 39600
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 1 of 98: middle of its 1919-01-31..1936-12-31 segment; tzdb's default build (no backzone) gives +43200 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0002",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Atlantic/St_Helena",
+        "local": "1931-07-02T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -1368
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 7 of 98: middle of its 1912-01-01..1951-01-01 segment; tzdb's default build (no backzone) gives +0 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0003",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Africa/Banjul",
+        "local": "1880-12-31T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -3996
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 13 of 98: middle of its 1850-01-01..1912-01-01 segment; tzdb's default build (no backzone) gives -968 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0004",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Indian/Antananarivo",
+        "local": "1879-03-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 11404
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 17 of 98: middle of its 1850-01-01..1908-04-30 segment; tzdb's default build (no backzone) gives +8836 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0005",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Africa/Nouakchott",
+        "local": "1880-12-31T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -3828
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 21 of 98: middle of its 1850-01-01..1912-01-01 segment; tzdb's default build (no backzone) gives -968 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0006",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Asia/Brunei",
+        "local": "1888-01-30T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 27580
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 27 of 98: middle of its 1850-01-01..1926-02-28 segment; tzdb's default build (no backzone) gives +26480 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0007",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Asia/Phnom_Penh",
+        "local": "1878-03-31T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 25180
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 31 of 98: middle of its 1850-01-01..1906-06-30 segment; tzdb's default build (no backzone) gives +24124 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0008",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Africa/Bangui",
+        "local": "1877-09-30T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 4460
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 36 of 98: middle of its 1850-01-01..1905-06-30 segment; tzdb's default build (no backzone) gives +815 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0009",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/Aruba",
+        "local": "1927-03-24T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -16200
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 40 of 98: middle of its 1912-02-12..1942-05-03 segment; tzdb's default build (no backzone) gives -14400 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0010",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Africa/Mogadishu",
+        "local": "1918-05-31T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 10800
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 49 of 98: middle of its 1908-04-30..1928-06-30 segment; tzdb's default build (no backzone) gives +9000 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0011",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Pacific/Wallis",
+        "local": "1875-07-02T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 44120
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 54 of 98: middle of its 1850-01-01..1900-12-31 segment; tzdb's default build (no backzone) gives +41524 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0012",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Indian/Christmas",
+        "local": "1907-09-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 25200
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 59 of 98: middle of its 1895-01-31..1920-03-31 segment; tzdb's default build (no backzone) gives +24124 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0013",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Africa/Lubumbashi",
+        "local": "1914-08-28T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 3600
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 63 of 98: middle of its 1908-12-31..1920-04-24 segment; tzdb's default build (no backzone) gives +7200 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0014",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/Anguilla",
+        "local": "1944-01-16T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -14400
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 69 of 98: middle of its 1942-05-03..1945-09-30 segment; tzdb's default build (no backzone) gives -10800 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0015",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/St_Vincent",
+        "local": "1944-01-16T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -14400
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 75 of 98: middle of its 1942-05-03..1945-09-30 segment; tzdb's default build (no backzone) gives -10800 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0016",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/St_Thomas",
+        "local": "1905-05-14T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -15584
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 79 of 98: middle of its 1899-03-28..1911-07-01 segment; tzdb's default build (no backzone) gives -14400 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0017",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Africa/Maseru",
+        "local": "1897-08-18T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 6600
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 83 of 98: middle of its 1892-02-07..1903-02-28 segment; tzdb's default build (no backzone) gives +5400 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0018",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/Creston",
+        "local": "1917-07-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -28800
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 88 of 98: middle of its 1916-10-01..1918-03-31 segment; tzdb's default build (no backzone) gives -25200 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0019",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/Blanc-Sablon",
+        "local": "1918-07-21T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -10800
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 92 of 98: middle of its 1918-04-14..1918-10-27 segment; tzdb's default build (no backzone) gives -14400 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0020",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Europe/Zagreb",
+        "local": "1945-04-20T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 7200
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Divergence list entry 96 of 98: middle of its 1945-04-02..1945-05-08 segment; tzdb's default build (no backzone) gives +3600 s.",
+      "tags": [
+        "backzone-history"
+      ]
+    },
+    {
+      "id": "L3-TZ-0021",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/New_York",
+        "local": "1995-07-04T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -14400
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Northern summer time (EDT)."
+    },
+    {
+      "id": "L3-TZ-0022",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Australia/Sydney",
+        "local": "2001-01-15T09:30:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 39600
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Southern summer time (AEDT)."
+    },
+    {
+      "id": "L3-TZ-0023",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/Sao_Paulo",
+        "local": "1999-12-25T18:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -7200
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Southern summer time in a zone that dropped it in 2019."
+    },
+    {
+      "id": "L3-TZ-0024",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Asia/Kolkata",
+        "local": "2010-06-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 19800
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Half-hour offset, +05:30."
+    },
+    {
+      "id": "L3-TZ-0025",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Asia/Kathmandu",
+        "local": "2005-03-10T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 20700
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "45-minute offset, +05:45."
+    },
+    {
+      "id": "L3-TZ-0026",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Pacific/Chatham",
+        "local": "2020-02-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 49500
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "45-minute offset in summer time, +13:45."
+    },
+    {
+      "id": "L3-TZ-0027",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Europe/Paris",
+        "local": "2035-07-15T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 7200
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Summer time after the last explicit transition in the TZif file, from its TZ string."
+    },
+    {
+      "id": "L3-TZ-0028",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/New_York",
+        "local": "2021-03-14T02:30:00"
+      },
+      "expected": {
+        "status": "nonexistent"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Spring forward: 02:00 EST becomes 03:00 EDT."
+    },
+    {
+      "id": "L3-TZ-0029",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/New_York",
+        "local": "2021-11-07T01:30:00"
+      },
+      "expected": {
+        "status": "ambiguous",
+        "utc_offsets_s": [
+          -14400,
+          -18000
+        ]
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offsets_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Fall back: 01:00-02:00 occurs in EDT, then in EST."
+    },
+    {
+      "id": "L3-TZ-0030",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Australia/Sydney",
+        "local": "2020-04-05T02:30:00"
+      },
+      "expected": {
+        "status": "ambiguous",
+        "utc_offsets_s": [
+          39600,
+          36000
+        ]
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offsets_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Southern fall back: 02:00-03:00 occurs in AEDT, then in AEST."
+    },
+    {
+      "id": "L3-TZ-0031",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Australia/Lord_Howe",
+        "local": "2021-04-04T01:45:00"
+      },
+      "expected": {
+        "status": "ambiguous",
+        "utc_offsets_s": [
+          39600,
+          37800
+        ]
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offsets_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Half-hour summer time ends: 01:30-02:00 occurs at +11:00, then at +10:30."
+    },
+    {
+      "id": "L3-TZ-0032",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Europe/London",
+        "local": "1941-05-04T02:30:00"
+      },
+      "expected": {
+        "status": "nonexistent"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Double summer time begins: BST (+1) to BDST (+2) skips 02:00-03:00."
+    },
+    {
+      "id": "L3-TZ-0033",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Europe/London",
+        "local": "1941-08-10T02:30:00"
+      },
+      "expected": {
+        "status": "ambiguous",
+        "utc_offsets_s": [
+          7200,
+          3600
+        ]
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offsets_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Double summer time ends: 02:00-03:00 occurs at +2, then at +1."
+    },
+    {
+      "id": "L3-TZ-0034",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/Caracas",
+        "local": "2016-05-01T02:40:00"
+      },
+      "expected": {
+        "status": "nonexistent"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Standard offset change from -04:30 to -04:00 skips 02:30-03:00."
+    },
+    {
+      "id": "L3-TZ-0035",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Pacific/Apia",
+        "local": "2011-12-30T12:00:00"
+      },
+      "expected": {
+        "status": "nonexistent"
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Date line change: 30 December 2011 was skipped."
+    },
+    {
+      "id": "L3-TZ-0036",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/Sitka",
+        "local": "1867-10-19T00:00:00"
+      },
+      "expected": {
+        "status": "ambiguous",
+        "utc_offsets_s": [
+          53927,
+          -32473
+        ]
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offsets_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Date line change of 1867: local mean time went back a day, so this time occurs twice."
+    },
+    {
+      "id": "L3-TZ-0037",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/New_York",
+        "local": "1870-01-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -17762
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "LMT before 1883-11-18; tzdb gives -4:56:02 (its #STDOFF comment says -4:56:01.6)."
+    },
+    {
+      "id": "L3-TZ-0038",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Europe/Lisbon",
+        "local": "1880-06-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -2205
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "LMT before 1912; tzdb gives -0:36:45 (its #STDOFF comment says -0:36:44.68)."
+    },
+    {
+      "id": "L3-TZ-0039",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Europe/Paris",
+        "local": "1880-06-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 561
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "LMT before 1891-03-16; tzdb gives +0:09:21."
+    },
+    {
+      "id": "L3-TZ-0040",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Asia/Tokyo",
+        "local": "1880-06-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 33539
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "LMT before 1888; tzdb gives +9:18:59."
+    },
+    {
+      "id": "L3-TZ-0041",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Australia/Sydney",
+        "local": "1880-06-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 36292
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "LMT before 1895; tzdb gives +10:04:52."
+    },
+    {
+      "id": "L3-TZ-0042",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "America/Sao_Paulo",
+        "local": "1900-06-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": -11188
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "LMT before 1914; tzdb gives -3:06:28."
+    },
+    {
+      "id": "L3-TZ-0043",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Europe/Dublin",
+        "local": "1916-07-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 2079
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "Summer time on Dublin Mean Time: -0:25:21 + 1:00 = +0:34:39, an offset with seconds."
+    },
+    {
+      "id": "L3-TZ-0044",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Pacific/Kiritimati",
+        "local": "2020-06-01T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 50400
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "The largest offset in use, +14:00."
+    },
+    {
+      "id": "L3-TZ-0045",
+      "kind": "time.zone-offset",
+      "input": {
+        "zone": "Africa/Casablanca",
+        "local": "2030-01-20T12:00:00"
+      },
+      "expected": {
+        "status": "ok",
+        "utc_offset_s": 0
+      },
+      "tolerance": {
+        "status": {
+          "exact": true
+        },
+        "utc_offset_s": {
+          "exact": true
+        }
+      },
+      "arbiter": "tzdb-2025c-backzone",
+      "note": "tzdb 2025c's answer, its predicted Ramadan offset (+00) from explicit transitions rather than the TZ string; later releases differ: 2026d puts Morocco on permanent +00 from 2026-09-20, which gives the same offset here but +00 instead of +01 on most 2030 dates."
+    },
+    {
+      "id": "L3-LMT-0001",
+      "kind": "time.local-mean-time",
+      "input": {
+        "lon": -0.125
+      },
+      "expected": {
+        "utc_offset_s": -30
+      },
+      "tolerance": {
+        "utc_offset_s": {
+          "abs": 0.001,
+          "unit": "s"
+        }
+      },
+      "arbiter": "lmt-definition",
+      "note": "Just west of Greenwich."
+    },
+    {
+      "id": "L3-LMT-0002",
+      "kind": "time.local-mean-time",
+      "input": {
+        "lon": 2.3125
+      },
+      "expected": {
+        "utc_offset_s": 555
+      },
+      "tolerance": {
+        "utc_offset_s": {
+          "abs": 0.001,
+          "unit": "s"
+        }
+      },
+      "arbiter": "lmt-definition",
+      "note": "Near the Paris meridian."
+    },
+    {
+      "id": "L3-LMT-0003",
+      "kind": "time.local-mean-time",
+      "input": {
+        "lon": -77.0625
+      },
+      "expected": {
+        "utc_offset_s": -18495
+      },
+      "tolerance": {
+        "utc_offset_s": {
+          "abs": 0.001,
+          "unit": "s"
+        }
+      },
+      "arbiter": "lmt-definition",
+      "note": "Near Washington."
+    },
+    {
+      "id": "L3-LMT-0004",
+      "kind": "time.local-mean-time",
+      "input": {
+        "lon": 139.75
+      },
+      "expected": {
+        "utc_offset_s": 33540
+      },
+      "tolerance": {
+        "utc_offset_s": {
+          "abs": 0.001,
+          "unit": "s"
+        }
+      },
+      "arbiter": "lmt-definition",
+      "note": "Near Tokyo."
+    },
+    {
+      "id": "L3-LMT-0005",
+      "kind": "time.local-mean-time",
+      "input": {
+        "lon": 179.9375
+      },
+      "expected": {
+        "utc_offset_s": 43185
+      },
+      "tolerance": {
+        "utc_offset_s": {
+          "abs": 0.001,
+          "unit": "s"
+        }
+      },
+      "arbiter": "lmt-definition",
+      "note": "Near the antimeridian."
+    },
+    {
+      "id": "L3-TTU-0001",
+      "kind": "time.tt-minus-utc",
+      "input": {
+        "utc": "1972-01-01T00:00:00Z"
+      },
+      "expected": {
+        "tt_minus_utc_s": 42.184
+      },
+      "tolerance": {
+        "tt_minus_utc_s": {
+          "abs": 0.0005,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-leap-seconds-2025c",
+      "note": "First line of the table: TAI - UTC = 10 s."
+    },
+    {
+      "id": "L3-TTU-0002",
+      "kind": "time.tt-minus-utc",
+      "input": {
+        "utc": "1972-06-30T23:59:59Z"
+      },
+      "expected": {
+        "tt_minus_utc_s": 42.184
+      },
+      "tolerance": {
+        "tt_minus_utc_s": {
+          "abs": 0.0005,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-leap-seconds-2025c",
+      "note": "Last whole second before the first leap second."
+    },
+    {
+      "id": "L3-TTU-0003",
+      "kind": "time.tt-minus-utc",
+      "input": {
+        "utc": "1972-07-01T00:00:00Z"
+      },
+      "expected": {
+        "tt_minus_utc_s": 43.184
+      },
+      "tolerance": {
+        "tt_minus_utc_s": {
+          "abs": 0.0005,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-leap-seconds-2025c",
+      "note": "First second after the first leap second."
+    },
+    {
+      "id": "L3-TTU-0004",
+      "kind": "time.tt-minus-utc",
+      "input": {
+        "utc": "1980-01-06T00:00:00Z"
+      },
+      "expected": {
+        "tt_minus_utc_s": 51.184
+      },
+      "tolerance": {
+        "tt_minus_utc_s": {
+          "abs": 0.0005,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-leap-seconds-2025c",
+      "note": "The GPS epoch."
+    },
+    {
+      "id": "L3-TTU-0005",
+      "kind": "time.tt-minus-utc",
+      "input": {
+        "utc": "1990-06-15T12:00:00Z"
+      },
+      "expected": {
+        "tt_minus_utc_s": 57.184
+      },
+      "tolerance": {
+        "tt_minus_utc_s": {
+          "abs": 0.0005,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-leap-seconds-2025c",
+      "note": "Mid-1990."
+    },
+    {
+      "id": "L3-TTU-0006",
+      "kind": "time.tt-minus-utc",
+      "input": {
+        "utc": "2000-01-01T12:00:00Z"
+      },
+      "expected": {
+        "tt_minus_utc_s": 64.184
+      },
+      "tolerance": {
+        "tt_minus_utc_s": {
+          "abs": 0.0005,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-leap-seconds-2025c",
+      "note": "The J2000 instant read as UTC."
+    },
+    {
+      "id": "L3-TTU-0007",
+      "kind": "time.tt-minus-utc",
+      "input": {
+        "utc": "2016-12-31T23:59:59Z"
+      },
+      "expected": {
+        "tt_minus_utc_s": 68.184
+      },
+      "tolerance": {
+        "tt_minus_utc_s": {
+          "abs": 0.0005,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-leap-seconds-2025c",
+      "note": "Last second before the latest leap second."
+    },
+    {
+      "id": "L3-TTU-0008",
+      "kind": "time.tt-minus-utc",
+      "input": {
+        "utc": "2016-12-31T23:59:60Z"
+      },
+      "expected": {
+        "tt_minus_utc_s": 68.184
+      },
+      "tolerance": {
+        "tt_minus_utc_s": {
+          "abs": 0.0005,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-leap-seconds-2025c",
+      "note": "The leap second itself: TAI - UTC keeps the old value, 36 s."
+    },
+    {
+      "id": "L3-TTU-0009",
+      "kind": "time.tt-minus-utc",
+      "input": {
+        "utc": "2017-01-01T00:00:00Z"
+      },
+      "expected": {
+        "tt_minus_utc_s": 69.184
+      },
+      "tolerance": {
+        "tt_minus_utc_s": {
+          "abs": 0.0005,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-leap-seconds-2025c",
+      "note": "First second after the latest leap second: 37 s."
+    },
+    {
+      "id": "L3-TTU-0010",
+      "kind": "time.tt-minus-utc",
+      "input": {
+        "utc": "2026-03-01T00:00:00Z"
+      },
+      "expected": {
+        "tt_minus_utc_s": 69.184
+      },
+      "tolerance": {
+        "tt_minus_utc_s": {
+          "abs": 0.0005,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-leap-seconds-2025c",
+      "note": "Before the table's expiry, 2026-06-28."
+    },
+    {
+      "id": "L3-DT-0001",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2442048.500008101,
+        "utc": "1974-01-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 44.4840562
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 1974-01-01 0h UTC: UT1 - UTC = 0.6999438 s, TAI - UTC = 13 s, the first day after a leap second."
+    },
+    {
+      "id": "L3-DT-0002",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2443325.5000017267,
+        "utc": "1977-07-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 48.0348257
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 1977-07-01 0h UTC: UT1 - UTC = 0.1491743 s, TAI - UTC = 16 s."
+    },
+    {
+      "id": "L3-DT-0003",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2444605.4999977225,
+        "utc": "1981-01-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 51.3807849
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 1981-01-01 0h UTC: UT1 - UTC = -0.1967849 s, TAI - UTC = 19 s."
+    },
+    {
+      "id": "L3-DT-0004",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2445882.5000011385,
+        "utc": "1984-07-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 54.085644
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 1984-07-01 0h UTC: UT1 - UTC = 0.0983560 s, TAI - UTC = 22 s."
+    },
+    {
+      "id": "L3-DT-0005",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2447161.500004217,
+        "utc": "1988-01-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 55.8196609
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 1988-01-01 0h UTC: UT1 - UTC = 0.3643391 s, TAI - UTC = 24 s, the first day after a leap second."
+    },
+    {
+      "id": "L3-DT-0006",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2448438.5000026207,
+        "utc": "1991-07-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 57.9575663
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 1991-07-01 0h UTC: UT1 - UTC = 0.2264337 s, TAI - UTC = 26 s."
+    },
+    {
+      "id": "L3-DT-0007",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2449718.5000046142,
+        "utc": "1995-01-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 60.7853482
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 1995-01-01 0h UTC: UT1 - UTC = 0.3986518 s, TAI - UTC = 29 s."
+    },
+    {
+      "id": "L3-DT-0008",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2450995.4999988377,
+        "utc": "1998-07-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 63.2844088
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 1998-07-01 0h UTC: UT1 - UTC = -0.1004088 s, TAI - UTC = 31 s."
+    },
+    {
+      "id": "L3-DT-0009",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2452275.49999866,
+        "utc": "2002-01-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 64.2998037
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 2002-01-01 0h UTC: UT1 - UTC = -0.1158037 s, TAI - UTC = 32 s."
+    },
+    {
+      "id": "L3-DT-0010",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2453552.499992877,
+        "utc": "2005-07-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 64.7994561
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 2005-07-01 0h UTC: UT1 - UTC = -0.6154561 s, TAI - UTC = 32 s."
+    },
+    {
+      "id": "L3-DT-0011",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2454832.5000047125,
+        "utc": "2009-01-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 65.7768362
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 2009-01-01 0h UTC: UT1 - UTC = 0.4071638 s, TAI - UTC = 34 s, the first day after a leap second."
+    },
+    {
+      "id": "L3-DT-0012",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2456109.500004783,
+        "utc": "2012-07-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 66.7707625
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 2012-07-01 0h UTC: UT1 - UTC = 0.4132375 s, TAI - UTC = 35 s, the first day after a leap second."
+    },
+    {
+      "id": "L3-DT-0013",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2457388.5000009444,
+        "utc": "2016-01-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 68.1024205
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 2016-01-01 0h UTC: UT1 - UTC = 0.0815795 s, TAI - UTC = 36 s."
+    },
+    {
+      "id": "L3-DT-0014",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2458665.499997984,
+        "utc": "2019-07-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 69.3581722
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 2019-07-01 0h UTC: UT1 - UTC = -0.1741722 s, TAI - UTC = 37 s."
+    },
+    {
+      "id": "L3-DT-0015",
+      "kind": "time.delta-t",
+      "input": {
+        "jd_ut1": 2459945.49999977,
+        "utc": "2023-01-01T00:00:00Z"
+      },
+      "expected": {
+        "delta_t_s": 69.2038682
+      },
+      "tolerance": {
+        "delta_t_s": {
+          "abs": 0.1,
+          "unit": "s"
+        }
+      },
+      "arbiter": "iers-ut1-finals2000a",
+      "note": "IERS row 2023-01-01 0h UTC: UT1 - UTC = -0.0198682 s, TAI - UTC = 37 s."
+    },
+    {
+      "id": "L3-JDN-0001",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": -4712,
+        "month": 1,
+        "day": 1
+      },
+      "expected": {
+        "jdn": 0
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "JDN 0: the start of the Julian Period."
+    },
+    {
+      "id": "L3-JDN-0002",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": -4713,
+        "month": 11,
+        "day": 24
+      },
+      "expected": {
+        "jdn": 0
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "JDN 0 in the proleptic Gregorian calendar."
+    },
+    {
+      "id": "L3-JDN-0003",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": -4712,
+        "month": 2,
+        "day": 29
+      },
+      "expected": {
+        "jdn": 59
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Leap day of the first Julian Period year."
+    },
+    {
+      "id": "L3-JDN-0004",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": -4000,
+        "month": 2,
+        "day": 29
+      },
+      "expected": {
+        "jdn": 260149
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Leap day of a negative Gregorian year divisible by 400."
+    },
+    {
+      "id": "L3-JDN-0005",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": -1000,
+        "month": 2,
+        "day": 29
+      },
+      "expected": {
+        "jdn": 1355867
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Julian leap day of a negative century year."
+    },
+    {
+      "id": "L3-JDN-0006",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": -1000,
+        "month": 3,
+        "day": 1
+      },
+      "expected": {
+        "jdn": 1355877
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Day after 28 February in a negative Gregorian common century year."
+    },
+    {
+      "id": "L3-JDN-0007",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": -1,
+        "month": 12,
+        "day": 31
+      },
+      "expected": {
+        "jdn": 1721057
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Last day of year -1 (2 BC)."
+    },
+    {
+      "id": "L3-JDN-0008",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": 0,
+        "month": 1,
+        "day": 1
+      },
+      "expected": {
+        "jdn": 1721058
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Year 0 (1 BC)."
+    },
+    {
+      "id": "L3-JDN-0009",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": 0,
+        "month": 2,
+        "day": 29
+      },
+      "expected": {
+        "jdn": 1721119
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Year 0 is a Gregorian leap year."
+    },
+    {
+      "id": "L3-JDN-0010",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": 1,
+        "month": 1,
+        "day": 1
+      },
+      "expected": {
+        "jdn": 1721424
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "1 January AD 1, Julian."
+    },
+    {
+      "id": "L3-JDN-0011",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": 1,
+        "month": 1,
+        "day": 1
+      },
+      "expected": {
+        "jdn": 1721426
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "1 January AD 1, proleptic Gregorian."
+    },
+    {
+      "id": "L3-JDN-0012",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": 1582,
+        "month": 10,
+        "day": 4
+      },
+      "expected": {
+        "jdn": 2299160
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Last Julian day of the 1582 switch."
+    },
+    {
+      "id": "L3-JDN-0013",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": 1582,
+        "month": 10,
+        "day": 15
+      },
+      "expected": {
+        "jdn": 2299161
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "First Gregorian day of the 1582 switch."
+    },
+    {
+      "id": "L3-JDN-0014",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": 1582,
+        "month": 10,
+        "day": 15
+      },
+      "expected": {
+        "jdn": 2299171
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "The same label in the Julian calendar: ten days later."
+    },
+    {
+      "id": "L3-JDN-0015",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": 1582,
+        "month": 10,
+        "day": 4
+      },
+      "expected": {
+        "jdn": 2299150
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "The same label in the proleptic Gregorian calendar: ten days earlier."
+    },
+    {
+      "id": "L3-JDN-0016",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": 1700,
+        "month": 2,
+        "day": 29
+      },
+      "expected": {
+        "jdn": 2342042
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "1700: leap in the Julian calendar only."
+    },
+    {
+      "id": "L3-JDN-0017",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": 1700,
+        "month": 3,
+        "day": 1
+      },
+      "expected": {
+        "jdn": 2342032
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "1700: common in the Gregorian calendar."
+    },
+    {
+      "id": "L3-JDN-0018",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": 1752,
+        "month": 9,
+        "day": 2
+      },
+      "expected": {
+        "jdn": 2361221
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Last Julian day of the British 1752 switch."
+    },
+    {
+      "id": "L3-JDN-0019",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": 1752,
+        "month": 9,
+        "day": 14
+      },
+      "expected": {
+        "jdn": 2361222
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "First Gregorian day of the British 1752 switch."
+    },
+    {
+      "id": "L3-JDN-0020",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": 1900,
+        "month": 2,
+        "day": 29
+      },
+      "expected": {
+        "jdn": 2415092
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "1900: leap in the Julian calendar only."
+    },
+    {
+      "id": "L3-JDN-0021",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": 1900,
+        "month": 3,
+        "day": 1
+      },
+      "expected": {
+        "jdn": 2415080
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "1900: common in the Gregorian calendar."
+    },
+    {
+      "id": "L3-JDN-0022",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": 2000,
+        "month": 1,
+        "day": 1
+      },
+      "expected": {
+        "jdn": 2451545
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "The J2000 day."
+    },
+    {
+      "id": "L3-JDN-0023",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": 2000,
+        "month": 2,
+        "day": 29
+      },
+      "expected": {
+        "jdn": 2451604
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "2000: a Gregorian leap century year."
+    },
+    {
+      "id": "L3-JDN-0024",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "julian",
+        "year": 4000,
+        "month": 2,
+        "day": 29
+      },
+      "expected": {
+        "jdn": 3182117
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Far future, Julian."
+    },
+    {
+      "id": "L3-JDN-0025",
+      "kind": "calendar.to-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "year": 9999,
+        "month": 12,
+        "day": 31
+      },
+      "expected": {
+        "jdn": 5373484
+      },
+      "tolerance": {
+        "jdn": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Far future, Gregorian."
+    },
+    {
+      "id": "L3-CAL-0001",
+      "kind": "calendar.from-jdn",
+      "input": {
+        "calendar": "julian",
+        "jdn": 0
+      },
+      "expected": {
+        "year": -4712,
+        "month": 1,
+        "day": 1
+      },
+      "tolerance": {
+        "year": {
+          "exact": true
+        },
+        "month": {
+          "exact": true
+        },
+        "day": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "JDN 0, Julian."
+    },
+    {
+      "id": "L3-CAL-0002",
+      "kind": "calendar.from-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "jdn": 0
+      },
+      "expected": {
+        "year": -4713,
+        "month": 11,
+        "day": 24
+      },
+      "tolerance": {
+        "year": {
+          "exact": true
+        },
+        "month": {
+          "exact": true
+        },
+        "day": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "JDN 0, proleptic Gregorian."
+    },
+    {
+      "id": "L3-CAL-0003",
+      "kind": "calendar.from-jdn",
+      "input": {
+        "calendar": "julian",
+        "jdn": 1721423
+      },
+      "expected": {
+        "year": 0,
+        "month": 12,
+        "day": 31
+      },
+      "tolerance": {
+        "year": {
+          "exact": true
+        },
+        "month": {
+          "exact": true
+        },
+        "day": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Last day of year 0, Julian."
+    },
+    {
+      "id": "L3-CAL-0004",
+      "kind": "calendar.from-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "jdn": 1721119
+      },
+      "expected": {
+        "year": 0,
+        "month": 2,
+        "day": 29
+      },
+      "tolerance": {
+        "year": {
+          "exact": true
+        },
+        "month": {
+          "exact": true
+        },
+        "day": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Leap day of year 0, Gregorian."
+    },
+    {
+      "id": "L3-CAL-0005",
+      "kind": "calendar.from-jdn",
+      "input": {
+        "calendar": "julian",
+        "jdn": 2299160
+      },
+      "expected": {
+        "year": 1582,
+        "month": 10,
+        "day": 4
+      },
+      "tolerance": {
+        "year": {
+          "exact": true
+        },
+        "month": {
+          "exact": true
+        },
+        "day": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Last Julian day of the 1582 switch."
+    },
+    {
+      "id": "L3-CAL-0006",
+      "kind": "calendar.from-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "jdn": 2299161
+      },
+      "expected": {
+        "year": 1582,
+        "month": 10,
+        "day": 15
+      },
+      "tolerance": {
+        "year": {
+          "exact": true
+        },
+        "month": {
+          "exact": true
+        },
+        "day": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "First Gregorian day of the 1582 switch."
+    },
+    {
+      "id": "L3-CAL-0007",
+      "kind": "calendar.from-jdn",
+      "input": {
+        "calendar": "julian",
+        "jdn": 2415092
+      },
+      "expected": {
+        "year": 1900,
+        "month": 2,
+        "day": 29
+      },
+      "tolerance": {
+        "year": {
+          "exact": true
+        },
+        "month": {
+          "exact": true
+        },
+        "day": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "A Julian leap day that the Gregorian calendar lacks."
+    },
+    {
+      "id": "L3-CAL-0008",
+      "kind": "calendar.from-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "jdn": 2451604
+      },
+      "expected": {
+        "year": 2000,
+        "month": 2,
+        "day": 29
+      },
+      "tolerance": {
+        "year": {
+          "exact": true
+        },
+        "month": {
+          "exact": true
+        },
+        "day": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "A Gregorian leap day."
+    },
+    {
+      "id": "L3-CAL-0009",
+      "kind": "calendar.from-jdn",
+      "input": {
+        "calendar": "julian",
+        "jdn": 2451545
+      },
+      "expected": {
+        "year": 1999,
+        "month": 12,
+        "day": 19
+      },
+      "tolerance": {
+        "year": {
+          "exact": true
+        },
+        "month": {
+          "exact": true
+        },
+        "day": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "The J2000 day in the Julian calendar."
+    },
+    {
+      "id": "L3-CAL-0010",
+      "kind": "calendar.from-jdn",
+      "input": {
+        "calendar": "gregorian",
+        "jdn": 5373484
+      },
+      "expected": {
+        "year": 9999,
+        "month": 12,
+        "day": 31
+      },
+      "tolerance": {
+        "year": {
+          "exact": true
+        },
+        "month": {
+          "exact": true
+        },
+        "day": {
+          "exact": true
+        }
+      },
+      "arbiter": "calendar-arithmetic",
+      "note": "Far future, Gregorian."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+name: Conformance discrepancy
+description: Report a conformance vector whose expected value, tolerance or arbiter you believe is wrong.
+title: "Conformance discrepancy: "
+labels: ["conformance"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for a problem with a vector in `conformance/`. The process and every past decision are in `conformance/DISCREPANCIES.md`. A report about an engine's result belongs with that engine.
+  - type: input
+    id: vector
+    attributes:
+      label: Vector id and suite version
+      placeholder: "L2-CSP-0012, suite 0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: What you believe is wrong
+      description: The expected value, tolerance or arbiter you believe is right instead.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: An independent computation (name the software and version), a primary source, or the error in a generator script.
+    validations:
+      required: true
+  - type: textarea
+    id: engine
+    attributes:
+      label: Engine output, if relevant
+      description: The engine, its version, the flags or options it ran with, and what it returned.

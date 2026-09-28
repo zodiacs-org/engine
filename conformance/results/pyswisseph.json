@@ -1,0 +1,3765 @@
+{
+  "suite": "zodiacs-conformance",
+  "suiteVersion": "0.1.0",
+  "vectors": {
+    "vectors/L1-positions.json": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",
+    "vectors/L2-houses-angles.json": "5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0",
+    "vectors/L3-time-calendars.json": "434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8"
+  },
+  "adapter": {
+    "name": "pyswisseph",
+    "version": "0.1.0",
+    "engine": "Swiss Ephemeris",
+    "engineVersion": "2.10.03",
+    "configuration": {
+      "binding": "pyswisseph 20230604",
+      "flags": "SEFLG_SWIEPH: apparent geocentric positions in the true ecliptic and equinox of date",
+      "ephemerisFiles": {
+        "semo_18.se1": "1ca07bd67c24374d77226180c20a4f9996cba013697894810518e7eb582ca4f7",
+        "sepl_18.se1": "ca1393ceab3a44fbc895887cf789c68819ae6a1cbc9b22225872dbe4ccd99a66"
+      },
+      "houses": "houses_ex2 at the UT1 Julian date; a polar-circle error is reported as status undefined"
+    }
+  },
+  "values": "none",
+  "summary": {
+    "total": {
+      "count": 500,
+      "pass": 403,
+      "fail": 47,
+      "unsupported": 50,
+      "error": 0
+    },
+    "byLevel": {
+      "L1": {
+        "count": 240,
+        "pass": 240,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0
+      },
+      "L2": {
+        "count": 150,
+        "pass": 103,
+        "fail": 47,
+        "unsupported": 0,
+        "error": 0
+      },
+      "L3": {
+        "count": 110,
+        "pass": 60,
+        "fail": 0,
+        "unsupported": 50,
+        "error": 0
+      }
+    },
+    "byKind": {
+      "position.apparent.ecliptic-true-of-date": {
+        "count": 240,
+        "pass": 240,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "lon": {
+            "unit": "arcsec",
+            "n": 240,
+            "median": 0.00138710729,
+            "p95": 0.00328854373,
+            "max": 0.00545194169
+          },
+          "lat": {
+            "unit": "arcsec",
+            "n": 240,
+            "median": 0.000207826296,
+            "p95": 0.000732376763,
+            "max": 0.00186330806
+          }
+        }
+      },
+      "angles.asc-mc": {
+        "count": 60,
+        "pass": 41,
+        "fail": 19,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "asc": {
+            "unit": "arcsec",
+            "n": 60,
+            "median": 0.00160912676,
+            "p95": 1.59883683,
+            "max": 5.8616254
+          },
+          "mc": {
+            "unit": "arcsec",
+            "n": 60,
+            "median": 0.000899148301,
+            "p95": 1.89952004,
+            "max": 2.02849138
+          }
+        }
+      },
+      "angles.vertex-east-point": {
+        "count": 10,
+        "pass": 6,
+        "fail": 4,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "vertex": {
+            "unit": "arcsec",
+            "n": 10,
+            "median": 0.0242635718,
+            "p95": 2.95207683,
+            "max": 2.95207683
+          },
+          "east_point": {
+            "unit": "arcsec",
+            "n": 10,
+            "median": 0.0263022972,
+            "p95": 2.04007804,
+            "max": 2.04007804
+          }
+        }
+      },
+      "houses.cusps": {
+        "count": 80,
+        "pass": 56,
+        "fail": 24,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "cusps": {
+            "unit": "arcsec",
+            "n": 70,
+            "median": 0.00122145422,
+            "p95": 2.85521329,
+            "max": 15.6515816
+          }
+        }
+      },
+      "time.zone-offset": {
+        "count": 45,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 45,
+        "error": 0
+      },
+      "time.local-mean-time": {
+        "count": 5,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 5,
+        "error": 0
+      },
+      "time.tt-minus-utc": {
+        "count": 10,
+        "pass": 10,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "tt_minus_utc_s": {
+            "unit": "s",
+            "n": 10,
+            "median": 0.00000728631019,
+            "p95": 0.0000196251869,
+            "max": 0.0000196251869
+          }
+        }
+      },
+      "time.delta-t": {
+        "count": 15,
+        "pass": 15,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "delta_t_s": {
+            "unit": "s",
+            "n": 15,
+            "median": 0.00166470443,
+            "p95": 0.0512905044,
+            "max": 0.0512905044
+          }
+        }
+      },
+      "calendar.to-jdn": {
+        "count": 25,
+        "pass": 25,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0
+      },
+      "calendar.from-jdn": {
+        "count": 10,
+        "pass": 10,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0
+      }
+    },
+    "byTag": {
+      "backzone-history": {
+        "count": 20,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 20,
+        "error": 0
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "L1-POS-0001",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0002",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0003",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0004",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0005",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0006",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0007",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0008",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0009",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0010",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0011",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0012",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0013",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0014",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0015",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0016",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0017",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0018",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0019",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0020",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0021",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0022",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0023",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0024",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0025",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0026",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0027",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0028",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0029",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0030",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0031",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0032",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0033",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0034",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0035",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0036",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0037",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0038",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0039",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0040",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0041",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0042",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0043",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0044",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0045",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0046",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0047",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0048",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0049",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0050",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0051",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0052",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0053",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0054",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0055",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0056",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0057",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0058",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0059",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0060",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0061",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0062",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0063",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0064",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0065",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0066",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0067",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0068",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0069",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0070",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0071",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0072",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0073",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0074",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0075",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0076",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0077",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0078",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0079",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0080",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0081",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0082",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0083",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0084",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0085",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0086",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0087",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0088",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0089",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0090",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0091",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0092",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0093",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0094",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0095",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0096",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0097",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0098",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0099",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0100",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0101",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0102",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0103",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0104",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0105",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0106",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0107",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0108",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0109",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0110",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0111",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0112",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0113",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0114",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0115",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0116",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0117",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0118",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0119",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0120",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0121",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0122",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0123",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0124",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0125",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0126",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0127",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0128",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0129",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0130",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0131",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0132",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0133",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0134",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0135",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0136",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0137",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0138",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0139",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0140",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0141",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0142",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0143",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0144",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0145",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0146",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0147",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0148",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0149",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0150",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0151",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0152",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0153",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0154",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0155",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0156",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0157",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0158",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0159",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0160",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0161",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0162",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0163",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0164",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0165",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0166",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0167",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0168",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0169",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0170",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0171",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0172",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0173",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0174",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0175",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0176",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0177",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0178",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0179",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0180",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0181",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0182",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0183",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0184",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0185",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0186",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0187",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0188",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0189",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0190",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0191",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0192",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0193",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0194",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0195",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0196",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0197",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0198",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0199",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0200",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0201",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0202",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0203",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0204",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0205",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0206",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0207",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0208",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0209",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0210",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0211",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0212",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0213",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0214",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0215",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0216",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0217",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0218",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0219",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0220",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0221",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0222",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0223",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0224",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0225",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0226",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0227",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0228",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0229",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0230",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0231",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0232",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0233",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0234",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0235",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0236",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0237",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0238",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0239",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0240",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L2-ASC-0001",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0002",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0003",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0004",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0005",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0006",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0007",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0008",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0009",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0010",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0011",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0012",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0013",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0014",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0015",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0016",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0017",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0018",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0019",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0020",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0021",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0022",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0023",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0024",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0025",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0026",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0027",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0028",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0029",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0030",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0031",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0032",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0033",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0034",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0035",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0036",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0037",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0038",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0039",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0040",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0041",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0042",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0043",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0044",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0045",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0046",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0047",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0048",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0049",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0050",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0051",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0052",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0053",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0054",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0055",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0056",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0057",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0058",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-ASC-0059",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-ASC-0060",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-VTX-0001",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-VTX-0002",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-VTX-0003",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-VTX-0004",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-VTX-0005",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-VTX-0006",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-VTX-0007",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-VTX-0008",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-VTX-0009",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-VTX-0010",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0001",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0002",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0003",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0004",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0005",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0006",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0007",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0008",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0009",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0010",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0011",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0012",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0013",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0014",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0015",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0016",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0017",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0018",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0019",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0020",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0021",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0022",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0023",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0024",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0025",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0026",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0027",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0028",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0029",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0030",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0031",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0032",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0033",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0034",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0035",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0036",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0037",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0038",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0039",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0040",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0041",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0042",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0043",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0044",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0045",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0046",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0047",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0048",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0049",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0050",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0051",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0052",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0053",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0054",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0055",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0056",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0057",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0058",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0059",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0060",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0061",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0062",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0063",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0064",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-CSP-0065",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0066",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0067",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0068",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0069",
+      "verdict": "pass"
+    },
+    {
+      "id": "L2-CSP-0070",
+      "verdict": "fail"
+    },
+    {
+      "id": "L2-POL-0001",
+      "verdict": "pass",
+      "meta": {
+        "message": "swisseph.houses_ex2: within polar circle, switched to Porphyry"
+      }
+    },
+    {
+      "id": "L2-POL-0002",
+      "verdict": "pass",
+      "meta": {
+        "message": "swisseph.houses_ex2: within polar circle, switched to Porphyry"
+      }
+    },
+    {
+      "id": "L2-POL-0003",
+      "verdict": "pass",
+      "meta": {
+        "message": "swisseph.houses_ex2: within polar circle, switched to Porphyry"
+      }
+    },
+    {
+      "id": "L2-POL-0005",
+      "verdict": "pass",
+      "meta": {
+        "message": "swisseph.houses_ex2: within polar circle, switched to Porphyry"
+      }
+    },
+    {
+      "id": "L2-POL-0006",
+      "verdict": "pass",
+      "meta": {
+        "message": "swisseph.houses_ex2: within polar circle, switched to Porphyry"
+      }
+    },
+    {
+      "id": "L2-POL-0007",
+      "verdict": "pass",
+      "meta": {
+        "message": "swisseph.houses_ex2: within polar circle, switched to Porphyry"
+      }
+    },
+    {
+      "id": "L2-POL-0008",
+      "verdict": "pass",
+      "meta": {
+        "message": "swisseph.houses_ex2: within polar circle, switched to Porphyry"
+      }
+    },
+    {
+      "id": "L2-POL-0009",
+      "verdict": "pass",
+      "meta": {
+        "message": "swisseph.houses_ex2: within polar circle, switched to Porphyry"
+      }
+    },
+    {
+      "id": "L2-POL-0010",
+      "verdict": "pass",
+      "meta": {
+        "message": "swisseph.houses_ex2: within polar circle, switched to Porphyry"
+      }
+    },
+    {
+      "id": "L2-POL-0011",
+      "verdict": "pass",
+      "meta": {
+        "message": "swisseph.houses_ex2: within polar circle, switched to Porphyry"
+      }
+    },
+    {
+      "id": "L3-TZ-0001",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0002",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0003",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0004",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0005",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0006",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0007",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0008",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0009",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0010",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0011",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0012",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0013",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0014",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0015",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0016",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0017",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0018",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0019",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0020",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0021",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0022",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0023",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0024",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0025",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0026",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0027",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0028",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0029",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0030",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0031",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0032",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0033",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0034",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0035",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0036",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0037",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0038",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0039",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0040",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0041",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0042",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0043",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0044",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-TZ-0045",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris has no time zone database"
+    },
+    {
+      "id": "L3-LMT-0001",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris takes a zone offset as input and has no local mean time function"
+    },
+    {
+      "id": "L3-LMT-0002",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris takes a zone offset as input and has no local mean time function"
+    },
+    {
+      "id": "L3-LMT-0003",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris takes a zone offset as input and has no local mean time function"
+    },
+    {
+      "id": "L3-LMT-0004",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris takes a zone offset as input and has no local mean time function"
+    },
+    {
+      "id": "L3-LMT-0005",
+      "verdict": "unsupported",
+      "detail": "Swiss Ephemeris takes a zone offset as input and has no local mean time function"
+    },
+    {
+      "id": "L3-TTU-0001",
+      "verdict": "pass",
+      "meta": {
+        "note": "utc_to_jd TT minus julday of the same civil reading"
+      }
+    },
+    {
+      "id": "L3-TTU-0002",
+      "verdict": "pass",
+      "meta": {
+        "note": "utc_to_jd TT minus julday of the same civil reading"
+      }
+    },
+    {
+      "id": "L3-TTU-0003",
+      "verdict": "pass",
+      "meta": {
+        "note": "utc_to_jd TT minus julday of the same civil reading"
+      }
+    },
+    {
+      "id": "L3-TTU-0004",
+      "verdict": "pass",
+      "meta": {
+        "note": "utc_to_jd TT minus julday of the same civil reading"
+      }
+    },
+    {
+      "id": "L3-TTU-0005",
+      "verdict": "pass",
+      "meta": {
+        "note": "utc_to_jd TT minus julday of the same civil reading"
+      }
+    },
+    {
+      "id": "L3-TTU-0006",
+      "verdict": "pass",
+      "meta": {
+        "note": "utc_to_jd TT minus julday of the same civil reading"
+      }
+    },
+    {
+      "id": "L3-TTU-0007",
+      "verdict": "pass",
+      "meta": {
+        "note": "utc_to_jd TT minus julday of the same civil reading"
+      }
+    },
+    {
+      "id": "L3-TTU-0008",
+      "verdict": "pass",
+      "meta": {
+        "note": "utc_to_jd TT minus julday of the same civil reading"
+      }
+    },
+    {
+      "id": "L3-TTU-0009",
+      "verdict": "pass",
+      "meta": {
+        "note": "utc_to_jd TT minus julday of the same civil reading"
+      }
+    },
+    {
+      "id": "L3-TTU-0010",
+      "verdict": "pass",
+      "meta": {
+        "note": "utc_to_jd TT minus julday of the same civil reading"
+      }
+    },
+    {
+      "id": "L3-DT-0001",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0002",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0003",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0004",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0005",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0006",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0007",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0008",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0009",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0010",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0011",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0012",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0013",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0014",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-DT-0015",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0001",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0002",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0003",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0004",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0005",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0006",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0007",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0008",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0009",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0010",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0011",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0012",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0013",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0014",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0015",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0016",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0017",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0018",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0019",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0020",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0021",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0022",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0023",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0024",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-JDN-0025",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-CAL-0001",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-CAL-0002",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-CAL-0003",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-CAL-0004",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-CAL-0005",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-CAL-0006",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-CAL-0007",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-CAL-0008",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-CAL-0009",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-CAL-0010",
+      "verdict": "pass"
+    }
+  ]
+}

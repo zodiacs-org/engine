@@ -1,0 +1,5248 @@
+{
+  "suite": "zodiacs-conformance",
+  "suiteVersion": "0.1.0",
+  "vectors": {
+    "vectors/L1-positions.json": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",
+    "vectors/L2-houses-angles.json": "5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0",
+    "vectors/L3-time-calendars.json": "434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8"
+  },
+  "adapter": {
+    "name": "zodiacs-engine",
+    "version": "0.1.0",
+    "engine": "@zodiacs/engine",
+    "engineVersion": "0.1.1-rc.12",
+    "configuration": {
+      "ephemeris": "astronomy-engine 2.1.19",
+      "deltaTModel": "zodiacs-deltat/1",
+      "timeZones": "the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
+      "positions": "natalChart with ΔT pinned at 0 s, so the requested instant is read as TT",
+      "angles": "natalChart at the UT1 instant (the engine reads its instant as UT1)"
+    }
+  },
+  "values": "residuals",
+  "summary": {
+    "total": {
+      "count": 500,
+      "pass": 232,
+      "fail": 222,
+      "unsupported": 46,
+      "error": 0
+    },
+    "byLevel": {
+      "L1": {
+        "count": 240,
+        "pass": 47,
+        "fail": 193,
+        "unsupported": 0,
+        "error": 0
+      },
+      "L2": {
+        "count": 150,
+        "pass": 150,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0
+      },
+      "L3": {
+        "count": 110,
+        "pass": 35,
+        "fail": 29,
+        "unsupported": 46,
+        "error": 0
+      }
+    },
+    "byKind": {
+      "position.apparent.ecliptic-true-of-date": {
+        "count": 240,
+        "pass": 47,
+        "fail": 193,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "lon": {
+            "unit": "arcsec",
+            "n": 240,
+            "median": 2.06665513,
+            "p95": 12.0708824,
+            "max": 18.8455862
+          },
+          "lat": {
+            "unit": "arcsec",
+            "n": 240,
+            "median": 1.1869337,
+            "p95": 10.6010939,
+            "max": 19.0281186
+          }
+        }
+      },
+      "angles.asc-mc": {
+        "count": 60,
+        "pass": 60,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "asc": {
+            "unit": "arcsec",
+            "n": 60,
+            "median": 0.0372903239,
+            "p95": 0.112065798,
+            "max": 0.181607968
+          },
+          "mc": {
+            "unit": "arcsec",
+            "n": 60,
+            "median": 0.0425231826,
+            "p95": 0.131140526,
+            "max": 0.178394066
+          }
+        }
+      },
+      "angles.vertex-east-point": {
+        "count": 10,
+        "pass": 10,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "vertex": {
+            "unit": "arcsec",
+            "n": 10,
+            "median": 0.083046658,
+            "p95": 0.285075699,
+            "max": 0.285075699
+          },
+          "east_point": {
+            "unit": "arcsec",
+            "n": 10,
+            "median": 0.0830836175,
+            "p95": 0.102691353,
+            "max": 0.102691353
+          }
+        }
+      },
+      "houses.cusps": {
+        "count": 80,
+        "pass": 80,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "cusps": {
+            "unit": "arcsec",
+            "n": 70,
+            "median": 0.0508377514,
+            "p95": 0.166538852,
+            "max": 0.488720961
+          }
+        }
+      },
+      "time.zone-offset": {
+        "count": 45,
+        "pass": 20,
+        "fail": 20,
+        "unsupported": 5,
+        "error": 0
+      },
+      "time.local-mean-time": {
+        "count": 5,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 5,
+        "error": 0
+      },
+      "time.tt-minus-utc": {
+        "count": 10,
+        "pass": 0,
+        "fail": 9,
+        "unsupported": 1,
+        "error": 0,
+        "residuals": {
+          "tt_minus_utc_s": {
+            "unit": "s",
+            "n": 9,
+            "median": 0.387511294,
+            "p95": 0.633650924,
+            "max": 0.633650924
+          }
+        }
+      },
+      "time.delta-t": {
+        "count": 15,
+        "pass": 15,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "delta_t_s": {
+            "unit": "s",
+            "n": 15,
+            "median": 0.00409739545,
+            "p95": 0.0688908866,
+            "max": 0.0688908866
+          }
+        }
+      },
+      "calendar.to-jdn": {
+        "count": 25,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 25,
+        "error": 0
+      },
+      "calendar.from-jdn": {
+        "count": 10,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 10,
+        "error": 0
+      }
+    },
+    "byTag": {
+      "backzone-history": {
+        "count": 20,
+        "pass": 0,
+        "fail": 20,
+        "unsupported": 0,
+        "error": 0
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "L1-POS-0001",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.351594312,
+        "lat": -0.550800255
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0002",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.87422575,
+        "lat": -0.0949549012
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0003",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.91942141,
+        "lat": -0.967997949
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0004",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.10441052,
+        "lat": 1.56634738
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0005",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.06058621,
+        "lat": 0.490117039
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0006",
+      "verdict": "fail",
+      "residual": {
+        "lon": 4.15179064,
+        "lat": 0.317514163
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0007",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.06171148,
+        "lat": -10.1816945
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0008",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.84636747,
+        "lat": 3.87820044
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0009",
+      "verdict": "fail",
+      "residual": {
+        "lon": 15.5682219,
+        "lat": 7.57990741
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0010",
+      "verdict": "fail",
+      "residual": {
+        "lon": 9.59764622,
+        "lat": 0.580540123
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0011",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.406684609,
+        "lat": -0.831936656
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0012",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.59324236,
+        "lat": -0.0632975513
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0013",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.736720929,
+        "lat": -4.12153926
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0014",
+      "verdict": "fail",
+      "residual": {
+        "lon": -5.38771293,
+        "lat": -3.07839734
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0015",
+      "verdict": "fail",
+      "residual": {
+        "lon": -3.27911868,
+        "lat": -0.188855101
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0016",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.17624971,
+        "lat": -4.79005181
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0017",
+      "verdict": "fail",
+      "residual": {
+        "lon": -3.07706171,
+        "lat": 10.6010939
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0018",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.252801811,
+        "lat": 15.0916546
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0019",
+      "verdict": "fail",
+      "residual": {
+        "lon": 5.8426651,
+        "lat": 4.41435851
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0020",
+      "verdict": "fail",
+      "residual": {
+        "lon": 7.27204725,
+        "lat": 1.13513973
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0021",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.623882622,
+        "lat": -0.365521153
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0022",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.14079721,
+        "lat": 0.0228441443
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0023",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.8985873,
+        "lat": 4.09382193
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0024",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.501443649,
+        "lat": 1.43167346
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0025",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.23195314,
+        "lat": 0.667594512
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0026",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.41760245,
+        "lat": -0.475893408
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0027",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.62102611,
+        "lat": -3.29933498
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0028",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.108039071,
+        "lat": -4.42978761
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0029",
+      "verdict": "fail",
+      "residual": {
+        "lon": -3.11965906,
+        "lat": -1.19620528
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0030",
+      "verdict": "fail",
+      "residual": {
+        "lon": 4.90428762,
+        "lat": 1.18970889
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0031",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.661801004,
+        "lat": -1.03802135
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0032",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.2723347,
+        "lat": 0.297800404
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0033",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.4530286,
+        "lat": -2.43351578
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0034",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.67629928,
+        "lat": -2.92778389
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0035",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.54668314,
+        "lat": -5.27290035
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0036",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.0241083738,
+        "lat": 0.847376369
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0037",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.747438124,
+        "lat": -2.4351421
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0038",
+      "verdict": "fail",
+      "residual": {
+        "lon": -3.12223831,
+        "lat": 8.47973485
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0039",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.43719996,
+        "lat": -4.87185303
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0040",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.67767643,
+        "lat": 1.10860225
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0041",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.07643113,
+        "lat": -0.81414114
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0042",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.2458686,
+        "lat": -0.249867158
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0043",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.919210071,
+        "lat": 0.918197665
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0044",
+      "verdict": "fail",
+      "residual": {
+        "lon": -3.77991169,
+        "lat": 1.51290183
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0045",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.675461674,
+        "lat": -0.401585583
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0046",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.07938269,
+        "lat": 1.9487346
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0047",
+      "verdict": "fail",
+      "residual": {
+        "lon": -5.25590763,
+        "lat": -7.49282262
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0048",
+      "verdict": "fail",
+      "residual": {
+        "lon": -5.19945857,
+        "lat": -7.01864005
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0049",
+      "verdict": "fail",
+      "residual": {
+        "lon": 8.91955669,
+        "lat": -1.49664287
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0050",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.48974594,
+        "lat": 0.864313706
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0051",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.332427532,
+        "lat": -1.0673344
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0052",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.8826808,
+        "lat": -0.400363361
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0053",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.87510353,
+        "lat": -5.98225813
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0054",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.15176325,
+        "lat": 0.443946406
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0055",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.108248414,
+        "lat": -0.717250129
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0056",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.0790094033,
+        "lat": -1.28478907
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0057",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.51355579,
+        "lat": 1.81761723
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0058",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.528162218,
+        "lat": 0.365646637
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0059",
+      "verdict": "fail",
+      "residual": {
+        "lon": 13.1444996,
+        "lat": 2.42247768
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0060",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.92994452,
+        "lat": 0.534395229
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0061",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.227329911,
+        "lat": -1.26917648
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0062",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.85051653,
+        "lat": -0.185809635
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0063",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.185946219,
+        "lat": -2.44087146
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0064",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.45425546,
+        "lat": 0.315231452
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0065",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.42559348,
+        "lat": 0.43735089
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0066",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.17476961,
+        "lat": -0.762700179
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0067",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.31412843,
+        "lat": 0.531583744
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0068",
+      "verdict": "fail",
+      "residual": {
+        "lon": 4.52185308,
+        "lat": 2.58308396
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0069",
+      "verdict": "fail",
+      "residual": {
+        "lon": 7.6102196,
+        "lat": 6.51084579
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0070",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.18228235,
+        "lat": 0.0988860164
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0071",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.796757959,
+        "lat": -0.578615811
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0072",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.279902568,
+        "lat": 0.192712345
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0073",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.946976894,
+        "lat": -1.4334877
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0074",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.746510011,
+        "lat": 0.375558591
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0075",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.82905754,
+        "lat": -1.64831985
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0076",
+      "verdict": "fail",
+      "residual": {
+        "lon": -5.24222491,
+        "lat": 0.809598717
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0077",
+      "verdict": "fail",
+      "residual": {
+        "lon": -5.43047761,
+        "lat": -12.067853
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0078",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.71491623,
+        "lat": 11.4488457
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0079",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.40188812,
+        "lat": 5.42895
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0080",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.18126516,
+        "lat": -0.00144723484
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0081",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.907467787,
+        "lat": -0.953465541
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0082",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.547829095,
+        "lat": 0.361252298
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0083",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.89100691,
+        "lat": 0.453988356
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0084",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.366062,
+        "lat": -1.11344569
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0085",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.228515732,
+        "lat": 0.919126112
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0086",
+      "verdict": "fail",
+      "residual": {
+        "lon": 4.632839,
+        "lat": 0.422263793
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0087",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.549997453,
+        "lat": 4.42347309
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0088",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.12403,
+        "lat": 7.14627092
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0089",
+      "verdict": "fail",
+      "residual": {
+        "lon": -10.4101666,
+        "lat": 0.89511689
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0090",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.47527482,
+        "lat": 0.111961787
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0091",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.191269576,
+        "lat": 0.0591364083
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0092",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.641275872,
+        "lat": -0.497127776
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0093",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.69995667,
+        "lat": -0.676772544
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0094",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.49443519,
+        "lat": 0.895874152
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0095",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.69845521,
+        "lat": 1.1546807
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0096",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.22192673,
+        "lat": 0.838767039
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0097",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.67544179,
+        "lat": 3.83037622
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0098",
+      "verdict": "fail",
+      "residual": {
+        "lon": -5.11958443,
+        "lat": -2.21242689
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0099",
+      "verdict": "fail",
+      "residual": {
+        "lon": -17.2542991,
+        "lat": -1.34768093
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0100",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.31050339,
+        "lat": 0.303579876
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0101",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.577750099,
+        "lat": 0.0427318435
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0102",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.397759916,
+        "lat": 0.366340226
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0103",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.33066424,
+        "lat": -0.808215284
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0104",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.11558303,
+        "lat": -2.34001774
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0105",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.707664842,
+        "lat": 0.455216753
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0106",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.57733412,
+        "lat": -3.1973192
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0107",
+      "verdict": "fail",
+      "residual": {
+        "lon": -3.67374726,
+        "lat": 2.70466588
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0108",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.71757971,
+        "lat": 8.31566592
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0109",
+      "verdict": "fail",
+      "residual": {
+        "lon": -13.4220999,
+        "lat": -1.74668074
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0110",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.09733181,
+        "lat": 0.257339117
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0111",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.17832706,
+        "lat": -0.377744321
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0112",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.659192288,
+        "lat": 0.42921985
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0113",
+      "verdict": "fail",
+      "residual": {
+        "lon": 7.97144843,
+        "lat": 0.571453052
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0114",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.50829123,
+        "lat": -4.68248747
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0115",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.513605914,
+        "lat": -4.46348127
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0116",
+      "verdict": "fail",
+      "residual": {
+        "lon": 4.95696849,
+        "lat": -2.60242653
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0117",
+      "verdict": "fail",
+      "residual": {
+        "lon": 4.77867601,
+        "lat": 17.5987249
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0118",
+      "verdict": "fail",
+      "residual": {
+        "lon": -6.38131324,
+        "lat": 1.04313906
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0119",
+      "verdict": "fail",
+      "residual": {
+        "lon": -7.64346612,
+        "lat": 2.48355287
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0120",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.80689408,
+        "lat": -0.100579196
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0121",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.27367713,
+        "lat": -0.414270074
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0122",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.570020405,
+        "lat": 0.512690665
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0123",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.48362554,
+        "lat": -1.62018584
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0124",
+      "verdict": "fail",
+      "residual": {
+        "lon": -9.18673558,
+        "lat": -2.02954263
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0125",
+      "verdict": "fail",
+      "residual": {
+        "lon": 4.30526978,
+        "lat": 3.1534263
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0126",
+      "verdict": "fail",
+      "residual": {
+        "lon": 4.58669128,
+        "lat": 4.88537632
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0127",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.138873972,
+        "lat": 0.1357733
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0128",
+      "verdict": "fail",
+      "residual": {
+        "lon": -12.0708824,
+        "lat": -5.71638158
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0129",
+      "verdict": "fail",
+      "residual": {
+        "lon": 8.94133472,
+        "lat": 8.26637339
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0130",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.136109825,
+        "lat": -0.0865407718
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0131",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.359451408,
+        "lat": -0.381546241
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0132",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.117564111,
+        "lat": -0.291754506
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0133",
+      "verdict": "fail",
+      "residual": {
+        "lon": 4.10276429,
+        "lat": 0.546828871
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0134",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.16120576,
+        "lat": -1.13750619
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0135",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.77919032,
+        "lat": -1.37500284
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0136",
+      "verdict": "fail",
+      "residual": {
+        "lon": 6.0048519,
+        "lat": 0.674344976
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0137",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.308973719,
+        "lat": -5.70056867
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0138",
+      "verdict": "fail",
+      "residual": {
+        "lon": -5.18637869,
+        "lat": -1.74992719
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0139",
+      "verdict": "fail",
+      "residual": {
+        "lon": 14.6168862,
+        "lat": 7.62126715
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0140",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.0264374864,
+        "lat": -0.124078259
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0141",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.244311283,
+        "lat": 0.254648971
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0142",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.869681494,
+        "lat": -0.126970857
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0143",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.37959207,
+        "lat": -0.391574985
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0144",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.49234406,
+        "lat": 5.20457857
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0145",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.0607180699,
+        "lat": 1.31760925
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0146",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.71279972,
+        "lat": -1.33961516
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0147",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.03380305,
+        "lat": -16.2286724
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0148",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.57747048,
+        "lat": 1.86165212
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0149",
+      "verdict": "fail",
+      "residual": {
+        "lon": 16.1962422,
+        "lat": 9.27404864
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0150",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.476148522,
+        "lat": -0.0296052381
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0151",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.686804171,
+        "lat": 0.941228013
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0152",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.916793001,
+        "lat": -0.0669105503
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0153",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.26230504,
+        "lat": 1.13054706
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0154",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.381763828,
+        "lat": 1.68845193
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0155",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.295422721,
+        "lat": 0.358255679
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0156",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.02290996,
+        "lat": 1.59068409
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0157",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.56536526,
+        "lat": -9.13596255
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0158",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.70441529,
+        "lat": -0.0538531567
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0159",
+      "verdict": "fail",
+      "residual": {
+        "lon": 14.8432218,
+        "lat": 9.42300188
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0160",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.934523925,
+        "lat": 0.304006206
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0161",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.35389357,
+        "lat": 0.191309813
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0162",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.219412237,
+        "lat": 0.496779138
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0163",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.70351921,
+        "lat": -0.805910939
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0164",
+      "verdict": "fail",
+      "residual": {
+        "lon": -12.6427048,
+        "lat": 3.54923009
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0165",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.421518472,
+        "lat": -2.08049326
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0166",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.07159879,
+        "lat": -1.50822293
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0167",
+      "verdict": "fail",
+      "residual": {
+        "lon": -10.2648626,
+        "lat": 2.82461618
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0168",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.699618097,
+        "lat": 5.57680747
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0169",
+      "verdict": "fail",
+      "residual": {
+        "lon": 12.1131822,
+        "lat": 9.71331316
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0170",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.45768309,
+        "lat": 0.597237579
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0171",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.633651913,
+        "lat": 0.532264548
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0172",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.417453774,
+        "lat": 0.463261232
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0173",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.23239248,
+        "lat": -0.273057674
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0174",
+      "verdict": "fail",
+      "residual": {
+        "lon": 6.3495714,
+        "lat": 2.30581769
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0175",
+      "verdict": "fail",
+      "residual": {
+        "lon": -3.12455104,
+        "lat": -1.86636998
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0176",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.76146096,
+        "lat": -2.35965751
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0177",
+      "verdict": "fail",
+      "residual": {
+        "lon": 8.61068414,
+        "lat": 8.18610328
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0178",
+      "verdict": "fail",
+      "residual": {
+        "lon": -7.0115456,
+        "lat": 16.4161733
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0179",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.2327126,
+        "lat": 4.81577158
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0180",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.84277039,
+        "lat": 1.09620659
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0181",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.351439523,
+        "lat": -0.479717572
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0182",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.190504671,
+        "lat": 0.117933784
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0183",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.95225928,
+        "lat": -0.30832024
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0184",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.724802439,
+        "lat": 1.1004549
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0185",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.25431372,
+        "lat": -0.103966901
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0186",
+      "verdict": "fail",
+      "residual": {
+        "lon": 7.74020456,
+        "lat": 5.28046227
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0187",
+      "verdict": "fail",
+      "residual": {
+        "lon": -4.27022029,
+        "lat": 2.82376961
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0188",
+      "verdict": "fail",
+      "residual": {
+        "lon": 2.76168708,
+        "lat": 3.5564849
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0189",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.37552724,
+        "lat": -1.371185
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0190",
+      "verdict": "fail",
+      "residual": {
+        "lon": -5.72818307,
+        "lat": 1.34656805
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0191",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.302529829,
+        "lat": -0.354353723
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0192",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.25909677,
+        "lat": -0.124455465
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0193",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.961168771,
+        "lat": -0.315899281
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0194",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.0906401,
+        "lat": 1.19461901
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0195",
+      "verdict": "fail",
+      "residual": {
+        "lon": -4.40592377,
+        "lat": -1.55219571
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0196",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.75906721,
+        "lat": -0.0249726292
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0197",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.8720926,
+        "lat": -10.6589421
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0198",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.607025999,
+        "lat": 1.71256716
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0199",
+      "verdict": "fail",
+      "residual": {
+        "lon": 8.72589253,
+        "lat": -5.18720194
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0200",
+      "verdict": "fail",
+      "residual": {
+        "lon": -6.22927296,
+        "lat": 0.885535106
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0201",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.500268447,
+        "lat": 1.63344819
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0202",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.20947732,
+        "lat": -0.0598789602
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0203",
+      "verdict": "fail",
+      "residual": {
+        "lon": -5.88990859,
+        "lat": -0.186537109
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0204",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.039491571,
+        "lat": 1.85250026
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0205",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.753628569,
+        "lat": 1.25469891
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0206",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.355112603,
+        "lat": 0.990657706
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0207",
+      "verdict": "fail",
+      "residual": {
+        "lon": -4.98690281,
+        "lat": 14.6086098
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0208",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.154992948,
+        "lat": 0.7234536
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0209",
+      "verdict": "fail",
+      "residual": {
+        "lon": 18.8455862,
+        "lat": 1.04319536
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0210",
+      "verdict": "fail",
+      "residual": {
+        "lon": -6.3820756,
+        "lat": 0.063572903
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0211",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.20227831,
+        "lat": 0.749724766
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0212",
+      "verdict": "pass",
+      "residual": {
+        "lon": 0.664722352,
+        "lat": -0.957099
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0213",
+      "verdict": "fail",
+      "residual": {
+        "lon": -1.89622061,
+        "lat": 0.588184332
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0214",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.286797114,
+        "lat": 0.0523670811
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0215",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.266623527,
+        "lat": 1.71025028
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0216",
+      "verdict": "fail",
+      "residual": {
+        "lon": -4.02601555,
+        "lat": -6.63424291
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0217",
+      "verdict": "fail",
+      "residual": {
+        "lon": 4.38840577,
+        "lat": 12.0099017
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0218",
+      "verdict": "fail",
+      "residual": {
+        "lon": 4.10486979,
+        "lat": -3.14572901
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0219",
+      "verdict": "fail",
+      "residual": {
+        "lon": 9.020257,
+        "lat": 2.89354775
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0220",
+      "verdict": "fail",
+      "residual": {
+        "lon": -9.08068462,
+        "lat": -0.706551398
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0221",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.120905263,
+        "lat": 1.18415852
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0222",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.5315629,
+        "lat": -1.16693075
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0223",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.09771251,
+        "lat": 6.14800999
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0224",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.177790014,
+        "lat": 0.978530523
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0225",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.26607978,
+        "lat": 2.97767129
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0226",
+      "verdict": "fail",
+      "residual": {
+        "lon": -0.795773595,
+        "lat": 2.65997952
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0227",
+      "verdict": "fail",
+      "residual": {
+        "lon": -2.92029571,
+        "lat": -14.9606784
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0228",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.79078335,
+        "lat": 6.16428772
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0229",
+      "verdict": "fail",
+      "residual": {
+        "lon": -5.58758055,
+        "lat": -1.97362472
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0230",
+      "verdict": "fail",
+      "residual": {
+        "lon": -10.8960866,
+        "lat": -1.74796958
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0231",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.61609925,
+        "lat": 0.531175672
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0232",
+      "verdict": "fail",
+      "residual": {
+        "lon": 3.206731,
+        "lat": 1.71941828
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0233",
+      "verdict": "fail",
+      "residual": {
+        "lon": -3.57418095,
+        "lat": 1.47856335
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0234",
+      "verdict": "pass",
+      "residual": {
+        "lon": -0.552180267,
+        "lat": 0.22025206
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0235",
+      "verdict": "fail",
+      "residual": {
+        "lon": 1.34046033,
+        "lat": -3.22687621
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0236",
+      "verdict": "fail",
+      "residual": {
+        "lon": -4.28805196,
+        "lat": 5.2327312
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0237",
+      "verdict": "fail",
+      "residual": {
+        "lon": 0.582506494,
+        "lat": 19.0281186
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0238",
+      "verdict": "fail",
+      "residual": {
+        "lon": 7.65798079,
+        "lat": 14.8083386
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0239",
+      "verdict": "fail",
+      "residual": {
+        "lon": -14.9340338,
+        "lat": -0.537824042
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0240",
+      "verdict": "fail",
+      "residual": {
+        "lon": -14.3124856,
+        "lat": -3.51637174
+      },
+      "meta": {
+        "flags": [
+          "no-time"
+        ]
+      }
+    },
+    {
+      "id": "L2-ASC-0001",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.139330828,
+        "mc": -0.0941471883
+      }
+    },
+    {
+      "id": "L2-ASC-0002",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0168019273,
+        "mc": -0.0576281353
+      }
+    },
+    {
+      "id": "L2-ASC-0003",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0345773974,
+        "mc": -0.0109465005
+      }
+    },
+    {
+      "id": "L2-ASC-0004",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00726392652,
+        "mc": -0.00234448196
+      }
+    },
+    {
+      "id": "L2-ASC-0005",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00966282087,
+        "mc": 0.0283988229
+      }
+    },
+    {
+      "id": "L2-ASC-0006",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0414027269,
+        "mc": 0.0441077209
+      }
+    },
+    {
+      "id": "L2-ASC-0007",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0565907758,
+        "mc": -0.0550509225
+      }
+    },
+    {
+      "id": "L2-ASC-0008",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00200301722,
+        "mc": 0.00822879521
+      }
+    },
+    {
+      "id": "L2-ASC-0009",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.050559987,
+        "mc": 0.0440033747
+      }
+    },
+    {
+      "id": "L2-ASC-0010",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0627026422,
+        "mc": -0.0359439931
+      }
+    },
+    {
+      "id": "L2-ASC-0011",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.089751539,
+        "mc": 0.0955514421
+      }
+    },
+    {
+      "id": "L2-ASC-0012",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0372158774,
+        "mc": 0.0315868949
+      }
+    },
+    {
+      "id": "L2-ASC-0013",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0408187264,
+        "mc": 0.0509364354
+      }
+    },
+    {
+      "id": "L2-ASC-0014",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0907722892,
+        "mc": -0.0381206682
+      }
+    },
+    {
+      "id": "L2-ASC-0015",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0127260353,
+        "mc": -0.024256729
+      }
+    },
+    {
+      "id": "L2-ASC-0016",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0302648537,
+        "mc": -0.0411370745
+      }
+    },
+    {
+      "id": "L2-ASC-0017",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0245817279,
+        "mc": -0.0723762228
+      }
+    },
+    {
+      "id": "L2-ASC-0018",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0265791494,
+        "mc": 0.0338040607
+      }
+    },
+    {
+      "id": "L2-ASC-0019",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0645697189,
+        "mc": 0.0720851014
+      }
+    },
+    {
+      "id": "L2-ASC-0020",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.109398888,
+        "mc": -0.0420349247
+      }
+    },
+    {
+      "id": "L2-ASC-0021",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00551510034,
+        "mc": -0.00839322058
+      }
+    },
+    {
+      "id": "L2-ASC-0022",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.181607968,
+        "mc": 0.0193714559
+      }
+    },
+    {
+      "id": "L2-ASC-0023",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0859268224,
+        "mc": -0.101426753
+      }
+    },
+    {
+      "id": "L2-ASC-0024",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0545357304,
+        "mc": -0.0611886626
+      }
+    },
+    {
+      "id": "L2-ASC-0025",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0666331187,
+        "mc": 0.0633320524
+      }
+    },
+    {
+      "id": "L2-ASC-0026",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00949012803,
+        "mc": -0.0320473322
+      }
+    },
+    {
+      "id": "L2-ASC-0027",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00184696607,
+        "mc": 0.00207315222
+      }
+    },
+    {
+      "id": "L2-ASC-0028",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.103530535,
+        "mc": 0.140959089
+      }
+    },
+    {
+      "id": "L2-ASC-0029",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0494405117,
+        "mc": -0.076896054
+      }
+    },
+    {
+      "id": "L2-ASC-0030",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0794983067,
+        "mc": 0.105294026
+      }
+    },
+    {
+      "id": "L2-ASC-0031",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0648727783,
+        "mc": -0.0543520103
+      }
+    },
+    {
+      "id": "L2-ASC-0032",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.059631925,
+        "mc": 0.0457492311
+      }
+    },
+    {
+      "id": "L2-ASC-0033",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0273612936,
+        "mc": 0.0225282757
+      }
+    },
+    {
+      "id": "L2-ASC-0034",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0270223794,
+        "mc": 0.0413261732
+      }
+    },
+    {
+      "id": "L2-ASC-0035",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.167002944,
+        "mc": -0.178394066
+      }
+    },
+    {
+      "id": "L2-ASC-0036",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0215959109,
+        "mc": -0.0360387387
+      }
+    },
+    {
+      "id": "L2-ASC-0037",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0243891834,
+        "mc": 0.0465601436
+      }
+    },
+    {
+      "id": "L2-ASC-0038",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0153565506,
+        "mc": -0.0290967756
+      }
+    },
+    {
+      "id": "L2-ASC-0039",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0112796726,
+        "mc": -0.035483161
+      }
+    },
+    {
+      "id": "L2-ASC-0040",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0292213871,
+        "mc": 0.107552612
+      }
+    },
+    {
+      "id": "L2-ASC-0041",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0258916493,
+        "mc": 0.0509592449
+      }
+    },
+    {
+      "id": "L2-ASC-0042",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0135445764,
+        "mc": -0.0381721314
+      }
+    },
+    {
+      "id": "L2-ASC-0043",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00375821332,
+        "mc": -0.00195658171
+      }
+    },
+    {
+      "id": "L2-ASC-0044",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0373647703,
+        "mc": -0.0449919276
+      }
+    },
+    {
+      "id": "L2-ASC-0045",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00687884512,
+        "mc": -0.000225423059
+      }
+    },
+    {
+      "id": "L2-ASC-0046",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.015605023,
+        "mc": -0.0188773978
+      }
+    },
+    {
+      "id": "L2-ASC-0047",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0842181132,
+        "mc": -0.0988688191
+      }
+    },
+    {
+      "id": "L2-ASC-0048",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0142938893,
+        "mc": 0.0115938957
+      }
+    },
+    {
+      "id": "L2-ASC-0049",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0912034614,
+        "mc": -0.131140526
+      }
+    },
+    {
+      "id": "L2-ASC-0050",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0153256519,
+        "mc": 0.0156576273
+      }
+    },
+    {
+      "id": "L2-ASC-0051",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0147866517,
+        "mc": -0.00110212061
+      }
+    },
+    {
+      "id": "L2-ASC-0052",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.105357307,
+        "mc": 0.141442274
+      }
+    },
+    {
+      "id": "L2-ASC-0053",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0795305737,
+        "mc": -0.0966037511
+      }
+    },
+    {
+      "id": "L2-ASC-0054",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0638374471,
+        "mc": 0.0430114406
+      }
+    },
+    {
+      "id": "L2-ASC-0055",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.050478221,
+        "mc": -0.0434780485
+      }
+    },
+    {
+      "id": "L2-ASC-0056",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0179410448,
+        "mc": 0.0204292474
+      }
+    },
+    {
+      "id": "L2-ASC-0057",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.068898872,
+        "mc": -0.0830930216
+      }
+    },
+    {
+      "id": "L2-ASC-0058",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.109700765,
+        "mc": -0.0804826856
+      }
+    },
+    {
+      "id": "L2-ASC-0059",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00142614471,
+        "mc": 0.00373077692
+      }
+    },
+    {
+      "id": "L2-ASC-0060",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.112065798,
+        "mc": 0.0310194442
+      }
+    },
+    {
+      "id": "L2-VTX-0001",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.0878391077,
+        "east_point": 0.0994323581
+      }
+    },
+    {
+      "id": "L2-VTX-0002",
+      "verdict": "pass",
+      "residual": {
+        "vertex": -0.0139924028,
+        "east_point": 0.102691353
+      }
+    },
+    {
+      "id": "L2-VTX-0003",
+      "verdict": "pass",
+      "residual": {
+        "vertex": -0.0196563566,
+        "east_point": 0.0121677691
+      }
+    },
+    {
+      "id": "L2-VTX-0004",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.0836440302,
+        "east_point": 0.0831879725
+      }
+    },
+    {
+      "id": "L2-VTX-0005",
+      "verdict": "pass",
+      "residual": {
+        "vertex": -0.0824492858,
+        "east_point": -0.0543943723
+      }
+    },
+    {
+      "id": "L2-VTX-0006",
+      "verdict": "pass",
+      "residual": {
+        "vertex": -0.285075699,
+        "east_point": -0.0829792625
+      }
+    },
+    {
+      "id": "L2-VTX-0007",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.13510638,
+        "east_point": -0.072796328
+      }
+    },
+    {
+      "id": "L2-VTX-0008",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.0701886795,
+        "east_point": 0.099634337
+      }
+    },
+    {
+      "id": "L2-VTX-0009",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.120197073,
+        "east_point": 0.0891646125
+      }
+    },
+    {
+      "id": "L2-VTX-0010",
+      "verdict": "pass",
+      "residual": {
+        "vertex": -0.0373789018,
+        "east_point": -0.0384006402
+      }
+    },
+    {
+      "id": "L2-CSP-0001",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0413747407
+      }
+    },
+    {
+      "id": "L2-CSP-0002",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0925693456
+      }
+    },
+    {
+      "id": "L2-CSP-0003",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.019620664
+      }
+    },
+    {
+      "id": "L2-CSP-0004",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0635525868
+      }
+    },
+    {
+      "id": "L2-CSP-0005",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00815781086
+      }
+    },
+    {
+      "id": "L2-CSP-0006",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0845118813
+      }
+    },
+    {
+      "id": "L2-CSP-0007",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.201209925
+      }
+    },
+    {
+      "id": "L2-CSP-0008",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0337010171
+      }
+    },
+    {
+      "id": "L2-CSP-0009",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.027572587
+      }
+    },
+    {
+      "id": "L2-CSP-0010",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0880025292
+      }
+    },
+    {
+      "id": "L2-CSP-0011",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0403769533
+      }
+    },
+    {
+      "id": "L2-CSP-0012",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.109489376
+      }
+    },
+    {
+      "id": "L2-CSP-0013",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0509663818
+      }
+    },
+    {
+      "id": "L2-CSP-0014",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0866315352
+      }
+    },
+    {
+      "id": "L2-CSP-0015",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.165889816
+      }
+    },
+    {
+      "id": "L2-CSP-0016",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0409365369
+      }
+    },
+    {
+      "id": "L2-CSP-0017",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.102395829
+      }
+    },
+    {
+      "id": "L2-CSP-0018",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0172849043
+      }
+    },
+    {
+      "id": "L2-CSP-0019",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0576377768
+      }
+    },
+    {
+      "id": "L2-CSP-0020",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0582884495
+      }
+    },
+    {
+      "id": "L2-CSP-0021",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0627838346
+      }
+    },
+    {
+      "id": "L2-CSP-0022",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0495175881
+      }
+    },
+    {
+      "id": "L2-CSP-0023",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0185401249
+      }
+    },
+    {
+      "id": "L2-CSP-0024",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.488720961
+      }
+    },
+    {
+      "id": "L2-CSP-0025",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00564153978
+      }
+    },
+    {
+      "id": "L2-CSP-0026",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.067619627
+      }
+    },
+    {
+      "id": "L2-CSP-0027",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0780950683
+      }
+    },
+    {
+      "id": "L2-CSP-0028",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.186966408
+      }
+    },
+    {
+      "id": "L2-CSP-0029",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0472953096
+      }
+    },
+    {
+      "id": "L2-CSP-0030",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.104967702
+      }
+    },
+    {
+      "id": "L2-CSP-0031",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0725014591
+      }
+    },
+    {
+      "id": "L2-CSP-0032",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0547418961
+      }
+    },
+    {
+      "id": "L2-CSP-0033",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0353586935
+      }
+    },
+    {
+      "id": "L2-CSP-0034",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0290548965
+      }
+    },
+    {
+      "id": "L2-CSP-0035",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.052761268
+      }
+    },
+    {
+      "id": "L2-CSP-0036",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0264556662
+      }
+    },
+    {
+      "id": "L2-CSP-0037",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.156163517
+      }
+    },
+    {
+      "id": "L2-CSP-0038",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.016422792
+      }
+    },
+    {
+      "id": "L2-CSP-0039",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.116753188
+      }
+    },
+    {
+      "id": "L2-CSP-0040",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0
+      }
+    },
+    {
+      "id": "L2-CSP-0041",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0
+      }
+    },
+    {
+      "id": "L2-CSP-0042",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0
+      }
+    },
+    {
+      "id": "L2-CSP-0043",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0
+      }
+    },
+    {
+      "id": "L2-CSP-0044",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0
+      }
+    },
+    {
+      "id": "L2-CSP-0045",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0370720686
+      }
+    },
+    {
+      "id": "L2-CSP-0046",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0197491298
+      }
+    },
+    {
+      "id": "L2-CSP-0047",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0380656952
+      }
+    },
+    {
+      "id": "L2-CSP-0048",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0156739799
+      }
+    },
+    {
+      "id": "L2-CSP-0049",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0183291699
+      }
+    },
+    {
+      "id": "L2-CSP-0050",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.125727075
+      }
+    },
+    {
+      "id": "L2-CSP-0051",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.141653013
+      }
+    },
+    {
+      "id": "L2-CSP-0052",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0364026235
+      }
+    },
+    {
+      "id": "L2-CSP-0053",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0507091209
+      }
+    },
+    {
+      "id": "L2-CSP-0054",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0165461916
+      }
+    },
+    {
+      "id": "L2-CSP-0055",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0310062208
+      }
+    },
+    {
+      "id": "L2-CSP-0056",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0690605613
+      }
+    },
+    {
+      "id": "L2-CSP-0057",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0416284239
+      }
+    },
+    {
+      "id": "L2-CSP-0058",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.166538852
+      }
+    },
+    {
+      "id": "L2-CSP-0059",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0880779986
+      }
+    },
+    {
+      "id": "L2-CSP-0060",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0379884461
+      }
+    },
+    {
+      "id": "L2-CSP-0061",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.104776534
+      }
+    },
+    {
+      "id": "L2-CSP-0062",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0136601918
+      }
+    },
+    {
+      "id": "L2-CSP-0063",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.15555654
+      }
+    },
+    {
+      "id": "L2-CSP-0064",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.106999735
+      }
+    },
+    {
+      "id": "L2-CSP-0065",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0749898116
+      }
+    },
+    {
+      "id": "L2-CSP-0066",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.146549271
+      }
+    },
+    {
+      "id": "L2-CSP-0067",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0409830563
+      }
+    },
+    {
+      "id": "L2-CSP-0068",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0549094705
+      }
+    },
+    {
+      "id": "L2-CSP-0069",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.138517837
+      }
+    },
+    {
+      "id": "L2-CSP-0070",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0469507315
+      }
+    },
+    {
+      "id": "L2-POL-0001",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0002",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0003",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0005",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0006",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0007",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0008",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0009",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0010",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0011",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L3-TZ-0001",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0002",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0003",
+      "verdict": "fail",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0004",
+      "verdict": "fail",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0005",
+      "verdict": "fail",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0006",
+      "verdict": "fail",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0007",
+      "verdict": "fail",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0008",
+      "verdict": "fail",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0009",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0010",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0011",
+      "verdict": "fail",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0012",
+      "verdict": "fail",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0013",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0014",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0015",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0016",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0017",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0018",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0019",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0020",
+      "verdict": "fail"
+    },
+    {
+      "id": "L3-TZ-0021",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-TZ-0022",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-TZ-0023",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-TZ-0024",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-TZ-0025",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-TZ-0026",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-TZ-0027",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-TZ-0028",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-gap"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0029",
+      "verdict": "unsupported",
+      "detail": "the engine resolves a repeated local time to its earlier instant and does not return the later one",
+      "meta": {
+        "flags": [
+          "dst-fold"
+        ],
+        "earlierOffsetS": -14400
+      }
+    },
+    {
+      "id": "L3-TZ-0030",
+      "verdict": "unsupported",
+      "detail": "the engine resolves a repeated local time to its earlier instant and does not return the later one",
+      "meta": {
+        "flags": [
+          "dst-fold"
+        ],
+        "earlierOffsetS": 39600
+      }
+    },
+    {
+      "id": "L3-TZ-0031",
+      "verdict": "unsupported",
+      "detail": "the engine resolves a repeated local time to its earlier instant and does not return the later one",
+      "meta": {
+        "flags": [
+          "dst-fold"
+        ],
+        "earlierOffsetS": 39600
+      }
+    },
+    {
+      "id": "L3-TZ-0032",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-gap"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0033",
+      "verdict": "unsupported",
+      "detail": "the engine resolves a repeated local time to its earlier instant and does not return the later one",
+      "meta": {
+        "flags": [
+          "dst-fold"
+        ],
+        "earlierOffsetS": 7200
+      }
+    },
+    {
+      "id": "L3-TZ-0034",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-gap"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0035",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-gap"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0036",
+      "verdict": "unsupported",
+      "detail": "the engine resolves a repeated local time to its earlier instant and does not return the later one",
+      "meta": {
+        "flags": [
+          "dst-fold",
+          "lmt"
+        ],
+        "earlierOffsetS": 53927
+      }
+    },
+    {
+      "id": "L3-TZ-0037",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0038",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0039",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0040",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0041",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0042",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0043",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ]
+      }
+    },
+    {
+      "id": "L3-TZ-0044",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-TZ-0045",
+      "verdict": "pass"
+    },
+    {
+      "id": "L3-LMT-0001",
+      "verdict": "unsupported",
+      "detail": "the engine resolves local times against a zone's history only; it has no birthplace local mean time"
+    },
+    {
+      "id": "L3-LMT-0002",
+      "verdict": "unsupported",
+      "detail": "the engine resolves local times against a zone's history only; it has no birthplace local mean time"
+    },
+    {
+      "id": "L3-LMT-0003",
+      "verdict": "unsupported",
+      "detail": "the engine resolves local times against a zone's history only; it has no birthplace local mean time"
+    },
+    {
+      "id": "L3-LMT-0004",
+      "verdict": "unsupported",
+      "detail": "the engine resolves local times against a zone's history only; it has no birthplace local mean time"
+    },
+    {
+      "id": "L3-LMT-0005",
+      "verdict": "unsupported",
+      "detail": "the engine resolves local times against a zone's history only; it has no birthplace local mean time"
+    },
+    {
+      "id": "L3-TTU-0001",
+      "verdict": "fail",
+      "residual": {
+        "tt_minus_utc_s": 0.0445489391
+      },
+      "meta": {
+        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-TTU-0002",
+      "verdict": "fail",
+      "residual": {
+        "tt_minus_utc_s": 0.61248867
+      },
+      "meta": {
+        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-TTU-0003",
+      "verdict": "fail",
+      "residual": {
+        "tt_minus_utc_s": -0.387511294
+      },
+      "meta": {
+        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-TTU-0004",
+      "verdict": "fail",
+      "residual": {
+        "tt_minus_utc_s": -0.633650924
+      },
+      "meta": {
+        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-TTU-0005",
+      "verdict": "fail",
+      "residual": {
+        "tt_minus_utc_s": -0.00228884326
+      },
+      "meta": {
+        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-TTU-0006",
+      "verdict": "fail",
+      "residual": {
+        "tt_minus_utc_s": -0.354
+      },
+      "meta": {
+        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-TTU-0007",
+      "verdict": "fail",
+      "residual": {
+        "tt_minus_utc_s": 0.406260084
+      },
+      "meta": {
+        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-TTU-0008",
+      "verdict": "unsupported",
+      "detail": "the engine takes instants as JavaScript dates, which have no leap second"
+    },
+    {
+      "id": "L3-TTU-0009",
+      "verdict": "fail",
+      "residual": {
+        "tt_minus_utc_s": -0.593739904
+      },
+      "meta": {
+        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-TTU-0010",
+      "verdict": "fail",
+      "residual": {
+        "tt_minus_utc_s": -0.054037594
+      },
+      "meta": {
+        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0001",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.00405617782
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0002",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0136278855
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0003",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.000244179396
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0004",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0223380435
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0005",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.000345356924
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0006",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0213650627
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0007",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": 0.00409739545
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0008",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0666333054
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0009",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": 0.000196299229
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0010",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0300584303
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0011",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": 0.00336229792
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0012",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0167173214
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0013",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.00305020449
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0014",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0688908866
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0015",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0038065983
+      },
+      "meta": {
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-JDN-0001",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0002",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0003",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0004",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0005",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0006",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0007",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0008",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0009",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0010",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0011",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0012",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0013",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0014",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0015",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0016",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0017",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0018",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0019",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0020",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0021",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0022",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0023",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0024",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-JDN-0025",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-CAL-0001",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-CAL-0002",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-CAL-0003",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-CAL-0004",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-CAL-0005",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-CAL-0006",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-CAL-0007",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-CAL-0008",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-CAL-0009",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    },
+    {
+      "id": "L3-CAL-0010",
+      "verdict": "unsupported",
+      "detail": "the engine has no calendar conversion in its public API"
+    }
+  ]
+}
