@@ -200,7 +200,7 @@ export interface CalcPosition {
   readonly lon: number;
   /** Ecliptic latitude, or declination. */
   readonly lat: number;
-  /** au, the light path for apparent and astrometric positions; null for the nodes and Lilith. */
+  /** au: the light path for apparent and astrometric positions (the geocentric apparent Moon, its series, is geometric); null for the nodes and Lilith. */
   readonly dist: number | null;
   /** Per day, in the units of lon and lat, and au. */
   readonly speeds: { readonly lon: number; readonly lat: number; readonly dist: number | null } | null;
@@ -468,6 +468,28 @@ function evaluator(body: CalcBody, frame: CalcFrame, center: Center, correction:
   };
 }
 
+/** The convention ids of a position; calc(), events() and chart() share them. */
+function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], correction: CalcCorrection): string[] {
+  const ids = ["zodiac:tropical", `frame:${frame}`, `center:${kind}`];
+  if (isPoint(body)) {
+    ids.push("correction:not-applicable", body.endsWith("Lilith") ? "lilith:mean" : body.startsWith("Mean") ? "node:mean" : "node:true-osculating");
+  } else {
+    ids.push(`correction:${correction}`);
+    if (body === "Moon" && kind === "geocentric" && correction !== "astrometric") ids.push("moon:series-at-instant");
+    else if (correction !== "geometric") {
+      ids.push("light-time:newtonian", "deflection:none");
+      if (correction === "apparent" && kind !== "barycentric") ids.push("aberration:backdated-observer");
+    }
+  }
+  if (!inertial(frame)) ids.push("precession:iau2006");
+  if (frame.includes("true")) ids.push("nutation:iau2000b-five-terms");
+  if (frame.startsWith("ecliptic")) ids.push("obliquity:iau2006");
+  if (frame.endsWith("icrs")) ids.push("frame-bias:iau2000");
+  if (kind === "barycentric") ids.push("barycentre:sun-and-giant-planets");
+  if (kind === "topocentric") ids.push("observer:iers2003-ellipsoid;no-polar-motion");
+  return ids;
+}
+
 function bound(value: number | null | undefined, unit: CalcBound["unit"], estimated: string | null): CalcBound {
   return value === undefined || value === null
     ? { value: null, unit, label: "estimated", basis: "not compared with an independent ephemeris" }
@@ -557,30 +579,14 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
 
     // Bounds: measured for this center, correction and body where compared; a
     // topocentric body not compared takes its geocentric bound, as an estimate.
-    let row = MEASURED[`${kind}/${point ? "apparent" : correction}/${body}`];
+    let row = MEASURED[`${kind}/${point ? "apparent" : correction}`]?.[body];
     let estimated: string | null = null;
     if (!row && kind === "topocentric") {
-      row = MEASURED[`geocentric/${correction}/${body}`];
+      row = MEASURED[`geocentric/${correction}`]?.[body];
       estimated = "the geocentric bound; the topocentric reduction was compared for the Sun, the Moon and Mars";
     }
 
-    const ids = ["zodiac:tropical", `frame:${frame}`, `center:${kind}`];
-    if (point) {
-      ids.push("correction:not-applicable", body.endsWith("Lilith") ? "lilith:mean" : body.startsWith("Mean") ? "node:mean" : "node:true-osculating");
-    } else {
-      ids.push(`correction:${correction}`);
-      if (body === "Moon" && kind === "geocentric" && correction !== "astrometric") ids.push("moon:series-at-instant");
-      else if (correction !== "geometric") {
-        ids.push("light-time:newtonian", "deflection:none");
-        if (correction === "apparent" && kind !== "barycentric") ids.push("aberration:backdated-observer");
-      }
-    }
-    if (!inertial(frame)) ids.push("precession:iau2006");
-    if (frame.includes("true")) ids.push("nutation:iau2000b");
-    if (frame.startsWith("ecliptic")) ids.push("obliquity:iau2006");
-    if (frame.endsWith("icrs")) ids.push("frame-bias:iau2000");
-    if (kind === "barycentric") ids.push("barycentre:sun-and-giant-planets");
-    if (kind === "topocentric") ids.push("observer:iers2003-ellipsoid;no-polar-motion");
+    const ids = positionIds(body, frame, kind, correction);
     if (method) ids.push(method === "analytic" ? "speed:analytic" : `speed:central-difference-${step}d`);
 
     return {
@@ -681,7 +687,7 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
           ...(fellBack ? ["polar-fallback:whole"] : []),
           "angles:gast-and-true-obliquity",
           "sidereal-time:gast-iau2006-era",
-          "nutation:iau2000b",
+          "nutation:iau2000b-five-terms",
           "obliquity:iau2006"
         ],
         time.pin
@@ -786,7 +792,7 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
       receipt: receipt(
         { kind, body, longitude, from: from.record, to: to.record, zodiac: "tropical", stepDays, ...limit },
         [instant(start, undefined), instant(end, undefined)],
-        ["zodiac:tropical", "frame:ecliptic-true-of-date", "center:geocentric", "correction:apparent", "moon:series-at-instant", "search:scan-and-bisect"]
+        [...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent"), "search:scan-and-bisect"]
       )
     };
   });
@@ -867,12 +873,25 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
           "frame:ecliptic-true-of-date",
           "center:geocentric",
           "correction:apparent",
+          "light-time:newtonian",
+          "deflection:none",
+          "aberration:backdated-observer",
           "moon:series-at-instant",
           "node:true-osculating",
-          `house:${houseSystem}`,
-          "angles:gast-and-true-obliquity",
+          "precession:iau2006",
+          "nutation:iau2000b-five-terms",
+          "obliquity:iau2006",
+          ...(computed.houses === null
+            ? []
+            : [
+                `house:${houseSystem}`,
+                ...(computed.houses.system === houseSystem ? [] : ["polar-fallback:whole"]),
+                "angles:gast-and-true-obliquity",
+                "sidereal-time:gast-iau2006-era"
+              ]),
           "aspects:major",
-          `speed:central-difference-${STEP_DAYS}d`
+          `speed:central-difference-${STEP_DAYS}d`,
+          `speed:central-difference-${NODE_STEP_DAYS}d`
         ],
         time.pin
       )

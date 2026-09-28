@@ -2,7 +2,8 @@
  * The frames of the calc entry point. A position is first found as a vector on
  * astronomy-engine's EQJ axes, the mean equator and equinox of J2000.0 that its
  * precession starts from, and is then turned into one of eight frames. The
- * precession (IAU 2006) and the nutation (IAU 2000B) are astronomy-engine's;
+ * precession (IAU 2006) and the nutation (the five largest terms of IAU 2000B)
+ * are astronomy-engine's;
  * the mean-of-date, J2000.0-ecliptic and ICRS frames are built here on the
  * same models.
  */

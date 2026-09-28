@@ -13,6 +13,10 @@
   deflection), `unsupported-combination`, `out-of-range` (outside 1800 to
   2200) and `sample-budget`. `docs/calc.md` maps every Swiss Ephemeris
   `calc_ut` flag; `docs/evidence/calc-api/` holds the comparison.
+- The comparison found that astronomy-engine's nutation keeps five terms of
+  IAU 2000B, so true-of-date positions and angles carry up to 0.2″ of
+  nutation error. calc names it (`nutation:iau2000b-five-terms`) and keeps it;
+  nothing the engine computes has changed.
 
 Migration: none. With every default `calc` gives the position `positions()`
 gives, to the bit, and the root entry's build is byte for byte unchanged.

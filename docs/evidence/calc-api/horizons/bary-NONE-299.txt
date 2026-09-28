@@ -1,0 +1,135 @@
+API VERSION: 1.2
+API SOURCE: NASA/JPL Horizons API
+
+
+
+*******************************************************************************
+Ephemeris / API_USER Mon Sep 28 09:27:23 2026 Pasadena, USA      / Horizons
+*******************************************************************************
+Target body name: Venus (299)                     {source: DE441}
+Center body name: Solar System Barycenter (0)     {source: DE441}
+Center-site name: BODY CENTER
+*******************************************************************************
+Start time      : A.D. 1802-Aug-19 23:57:18.0000 TT 
+Stop  time      : A.D. 2188-Nov-08 03:31:07.7952 TT 
+Step-size       : DISCRETE TIME-LIST
+*******************************************************************************
+Center geodetic : 0.0, 0.0, 0.0                   {E-lon(deg),Lat(deg),Alt(km)}
+Center cylindric: 0.0, 0.0, 0.0                   {E-lon(deg),Dxy(km),Dz(km)}
+Center radii    : (undefined)
+Output units    : AU-D
+Calendar mode   : Mixed Julian/Gregorian
+Output type     : GEOMETRIC cartesian states
+Output format   : 2 (position and velocity)
+Reference frame : ICRF
+*******************************************************************************
+            JDTT ,            Calendar Date (TT ),                      X,                      Y,                      Z,                     VX,                     VY,                     VZ,
+**************************************************************************************************************************************************************************************************
+$$SOE
+2379457.498125000, A.D. 1802-Aug-19 23:57:18.0000, -2.493556682397331E-01, -6.247390505635930E-01, -2.645083487285796E-01,  1.875976777342558E-02, -6.220270809520705E-03, -3.984614697580500E-03,
+2384489.349632000, A.D. 1816-May-29 20:23:28.2048,  6.328646820272981E-01,  3.451028413407846E-01,  1.148426153358103E-01, -9.988579024554878E-03,  1.577454860646792E-02,  7.720468233259819E-03,
+2387599.204890000, A.D. 1824-Dec-03 16:55:02.4960,  6.441076910553623E-01, -2.984743668017358E-01, -1.747940220484801E-01,  9.329903584869854E-03,  1.645721291763778E-02,  6.802705169706430E-03,
+2392631.056397000, A.D. 1838-Sep-13 13:21:12.7008, -2.859476686460987E-01,  5.961015992219563E-01,  2.860075237195453E-01, -1.856711509476076E-02, -7.991644458309513E-03, -2.413823094471965E-03,
+2395740.911654000, A.D. 1847-Mar-20 09:52:46.9056,  4.002223543527627E-01,  5.511397213927172E-01,  2.221535128720723E-01, -1.679177922964597E-02,  9.894632200922028E-03,  5.511489966967884E-03,
+2400772.763162000, A.D. 1860-Dec-28 06:18:57.1968, -6.766737393039498E-01, -2.342640887450913E-01, -6.214700448979974E-02,  6.453215877983957E-03, -1.737642461747457E-02, -8.218371852903028E-03,
+2405804.614669000, A.D. 1874-Oct-08 02:45:07.4016,  6.828810529262509E-01, -2.142851386412914E-01, -1.395241975082236E-01,  6.957405909886827E-03,  1.736928173160848E-02,  7.365763395119100E-03,
+2408914.469926000, A.D. 1883-Apr-13 23:16:41.6064,  1.583829754875263E-01, -6.515032597709411E-01, -3.026708252350210E-01,  1.960784768821687E-02,  4.424976860639286E-03,  7.465439417370295E-04,
+2413946.321433000, A.D. 1897-Jan-21 19:42:51.8112,  3.306707390615086E-01,  5.946827096395152E-01,  2.466181638281445E-01, -1.813179217467275E-02,  7.798055287883313E-03,  4.654494340065476E-03,
+2422088.028198000, A.D. 1919-May-09 12:40:36.3072, -6.057951249787745E-01,  3.240915798352060E-01,  1.843882465225266E-01, -1.071529230532307E-02, -1.602418604073355E-02, -6.525688198944273E-03,
+2427119.879705000, A.D. 1933-Feb-16 09:06:46.5120,  2.526961210994137E-01, -6.176289428610867E-01, -2.935823173075886E-01,  1.887103451555910E-02,  6.683648107338299E-03,  1.810002175720440E-03,
+2430229.734963000, A.D. 1941-Aug-23 05:38:20.8032, -4.385598129773157E-01, -5.438179099641255E-01, -2.166702388232772E-01,  1.600904097236171E-02, -1.083885325233735E-02, -5.887688195262291E-03,
+2435261.586470000, A.D. 1955-Jun-03 02:04:31.0080,  7.121275667285863E-01,  1.652743517676811E-01,  2.944504398147796E-02, -4.680771057338820E-03,  1.777677390857540E-02,  8.291373905771594E-03,
+2440293.437977000, A.D. 1969-Mar-12 22:30:41.2128, -6.501343229194474E-01,  2.533817522135767E-01,  1.553439492034751E-01, -8.377359619533781E-03, -1.710235436219987E-02, -7.162036576890808E-03,
+2443403.293235000, A.D. 1977-Sep-16 19:02:15.5040, -9.058301685024264E-02,  6.441907510680395E-01,  2.956481379696807E-01, -2.011779579021240E-02, -2.949910192531305E-03, -5.305640976558232E-05,
+2448435.144742000, A.D. 1991-Jun-27 15:28:25.7088, -3.567607074914998E-01, -5.813230465471171E-01, -2.389150945865425E-01,  1.744040623327303E-02, -8.804984822566203E-03, -5.064758115514331E-03,
+2451545.000000000, A.D. 2000-Jan-01 12:00:00.0000, -7.254394755076734E-01, -4.892158506737942E-02,  2.371772970955961E-02,  8.034959756359419E-04, -1.849859566638525E-02, -8.372768198017053E-03,
+2456576.851507000, A.D. 2013-Oct-11 08:26:10.2048,  5.847060200673883E-01, -3.834712946368426E-01, -2.095565694622242E-01,  1.191980111445152E-02,  1.502494591514082E-02,  6.006090167004158E-03,
+2461608.703014000, A.D. 2027-Jul-22 04:52:20.4096, -1.852578156649893E-01,  6.252188499306952E-01,  2.931998158703825E-01, -1.960441433839386E-02, -5.309747948187118E-03, -1.148901867560242E-03,
+2464718.558272000, A.D. 2036-Jan-26 01:23:54.7008,  4.903105162692077E-01,  4.868750464531678E-01,  1.881272900270003E-01, -1.485072769844317E-02,  1.215387232027562E-02,  6.409096452738498E-03,
+2469750.409779000, A.D. 2049-Nov-04 21:50:04.9056, -7.080161703849598E-01, -1.347937223049218E-01, -1.578002760346891E-02,  3.430518834905850E-03, -1.816081124553736E-02, -8.390031068369459E-03,
+2474782.261286000, A.D. 2063-Aug-15 18:16:15.1104,  6.408150280380108E-01, -3.126082201852732E-01, -1.808361534017435E-01,  9.745287884128307E-03,  1.625943381997935E-02,  6.701996836704419E-03,
+2477892.116544000, A.D. 2072-Feb-19 14:47:49.4016,  5.083529276313214E-02, -6.634442036279788E-01, -3.017801405895926E-01,  2.004976705094214E-02,  1.661056612464308E-03, -5.197750773034329E-04,
+2482923.968051000, A.D. 2085-Nov-29 11:13:59.6064,  4.204216883039574E-01,  5.405660010489297E-01,  2.169789635444902E-01, -1.651583717625697E-02,  1.026317987772379E-02,  5.664493994387380E-03,
+2486033.823309000, A.D. 2094-Jun-05 07:45:33.8976,  7.221719609980555E-01, -2.160150367934939E-02, -5.537480012858679E-02,  9.593420404523417E-04,  1.835368613600157E-02,  8.202400888936614E-03,
+2491065.674816000, A.D. 2108-Mar-16 04:11:44.1024, -5.447380612327861E-01,  4.114819686035799E-01,  2.196954235366542E-01, -1.325254656824843E-02, -1.438791622924724E-02, -5.640236363019765E-03,
+2496097.526323000, A.D. 2121-Dec-25 00:37:54.3072,  1.484759108057352E-01, -6.523349554484610E-01, -3.027640481636363E-01,  1.970578009826319E-02,  4.004267588942720E-03,  5.580668650178684E-04,
+2499207.381581000, A.D. 2130-Jun-30 21:09:28.5984, -5.185999390685953E-01, -4.717148495922681E-01, -1.797199093228972E-01,  1.394959755201382E-02, -1.300489957364743E-02, -6.737431861991693E-03,
+2504239.233088000, A.D. 2144-Apr-09 17:35:38.8032,  7.218958933734567E-01,  6.470982833625603E-02, -1.639401463490822E-02, -1.636633352782279E-03,  1.826665363045931E-02,  8.330297463571111E-03,
+2512380.939853000, A.D. 2166-Jul-25 10:33:23.2992,  1.300674107765731E-02,  6.572850317262289E-01,  2.949810836119012E-01, -2.028347041329764E-02, -9.936152840179927E-05,  1.236464627333291E-03,
+2517412.791360000, A.D. 2180-May-04 06:59:33.5040, -4.501312268092159E-01, -5.335201420345114E-01, -2.117820372837072E-01,  1.571200764930676E-02, -1.118684129556386E-02, -6.031275098587552E-03,
+2520522.646618000, A.D. 2188-Nov-08 03:31:07.7952, -7.185229574060162E-01,  5.588428333299433E-02,  7.028132916590298E-02, -2.331218584441484E-03, -1.847202450399925E-02, -8.174612171350673E-03,
+$$EOE
+**************************************************************************************************************************************************************************************************
+ 
+TIME
+
+  Terrestrial Time ("TT") output was requested. This continuous timescale
+is the relativistic proper time of a clock at rest on the Earth's geoid (at
+"mean sea level"), but defined for a specified gravitational time dilation,
+so a coordinate time. It is appropriate for observations and measurements
+from the surface of the Earth.
+
+  TT runs at a uniform rate of one SI second per second and is independent of
+irregularities in Earth's rotation. It is a theoretical ideal, approximated
+(with a constant offset of 32.184 seconds) by the measured International Atomic
+Time (TAI) after 1955.  TT is the relativistic successor to the now deprecated
+non-relativistic Ephemeris Time (ET).
+
+  The TT scale requested here is a time-scale conversion from internal
+Barycentric Dynamical Time (TDB) and differs periodically from TDB with an
+amplitude less than 2 ms for several thousand years centered on present.
+The time-scale conversion for Earth is used regardless of observer location
+within the solar system, although clock rates may differ due to the local
+gravity field.
+ 
+CALENDAR SYSTEM
+
+  Mixed calendar mode was active such that calendar dates after AD 1582-Oct-15
+(if any) are in the modern Gregorian system. Dates prior to 1582-Oct-5 (if any)
+are in the Julian calendar system, which is automatically extended for dates
+prior to its adoption on 45-Jan-1 BC.  The Julian calendar is useful for
+matching historical dates. The Gregorian calendar more accurately corresponds
+to the Earth's orbital motion and seasons. A "Gregorian-only" calendar mode is
+available if such physical events are the primary interest.
+
+REFERENCE FRAME AND COORDINATES
+
+  International Celestial Reference Frame (ICRF)
+
+    The ICRF is an adopted reference frame whose axes are defined relative to 
+    fixed extragalactic radio sources distributed across the sky.
+
+    The ICRF was aligned with the prior FK5/J2000 dynamical system at the ~0.02 
+    arcsecond level but is not identical and has no associated standard epoch.
+
+  Symbol meaning [1 au= 149597870.700 km, 1 day= 86400.0 s]:
+
+    JDTT     Julian Day Number, Terrestrial Time
+      X      X-component of position vector (au)
+      Y      Y-component of position vector (au)
+      Z      Z-component of position vector (au)
+      VX     X-component of velocity vector (au/day)                           
+      VY     Y-component of velocity vector (au/day)                           
+      VZ     Z-component of velocity vector (au/day)                           
+
+ABERRATIONS AND CORRECTIONS
+
+ Geometric state vectors have NO corrections or aberrations applied.
+
+Computations by ...
+
+    Solar System Dynamics Group, Horizons On-Line Ephemeris System
+    4800 Oak Grove Drive, Jet Propulsion Laboratory
+    Pasadena, CA  91109   USA
+
+    General site: https://ssd.jpl.nasa.gov/
+    Mailing list: https://ssd.jpl.nasa.gov/email_list.html
+    System news : https://ssd.jpl.nasa.gov/horizons/news.html
+    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html
+    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x
+                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html
+                  command-line   telnet ssd.jpl.nasa.gov 6775
+                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/horizons_batch.txt
+                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS
+    Inquiries   : Jon.D.Giorgini@jpl.nasa.gov
+*******************************************************************************

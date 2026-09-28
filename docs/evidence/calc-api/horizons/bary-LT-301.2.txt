@@ -1,0 +1,117 @@
+API VERSION: 1.2
+API SOURCE: NASA/JPL Horizons API
+
+
+
+*******************************************************************************
+Ephemeris / API_USER Mon Sep 28 09:31:28 2026 Pasadena, USA      / Horizons
+*******************************************************************************
+Target body name: Moon (301)                      {source: DE441}
+Center body name: Solar System Barycenter (0)     {source: DE441}
+Center-site name: BODY CENTER
+*******************************************************************************
+Start time      : A.D. 1816-May-29 20:23:19.5648 TT 
+Stop  time      : A.D. 2121-Dec-25 00:38:02.9472 TT 
+Step-size       : DISCRETE TIME-LIST
+*******************************************************************************
+Center geodetic : 0.0, 0.0, 0.0                   {E-lon(deg),Lat(deg),Alt(km)}
+Center cylindric: 0.0, 0.0, 0.0                   {E-lon(deg),Dxy(km),Dz(km)}
+Center radii    : (undefined)
+Output units    : AU-D
+Calendar mode   : Mixed Julian/Gregorian
+Output type     : LT CORRECTED cartesian states
+Output format   : 1 (position only)
+Reference frame : ICRF
+*******************************************************************************
+            JDTT ,            Calendar Date (TT ),                      X,                      Y,                      Z,
+**************************************************************************************************************************
+$$SOE
+2384489.349532000, A.D. 1816-May-29 20:23:19.5648, -3.316597550221049E-01, -8.696517596476957E-01, -3.774646529173263E-01,
+2384489.349632000, A.D. 1816-May-29 20:23:28.2048, -3.316582156470304E-01, -8.696523005984824E-01, -3.774648824021473E-01,
+2384489.349732000, A.D. 1816-May-29 20:23:36.8448, -3.316566762745743E-01, -8.696528415466018E-01, -3.774651118858854E-01,
+2405804.614569000, A.D. 1874-Oct-08 02:44:58.7616,  9.575771772894720E-01,  2.607855519610398E-01,  1.133001559743162E-01,
+2405804.614669000, A.D. 1874-Oct-08 02:45:07.4016,  9.575766524095009E-01,  2.607870122316951E-01,  1.133007852321145E-01,
+2405804.614769000, A.D. 1874-Oct-08 02:45:16.0416,  9.575761275254460E-01,  2.607884725081916E-01,  1.133014144923512E-01,
+2440293.437877000, A.D. 1969-Mar-12 22:30:32.5728, -9.806558352209679E-01,  1.154765255638960E-01,  4.976864461564520E-02,
+2440293.437977000, A.D. 1969-Mar-12 22:30:41.2128, -9.806560258578342E-01,  1.154749677300997E-01,  4.976797046116040E-02,
+2440293.438077000, A.D. 1969-Mar-12 22:30:49.8528, -9.806562164911869E-01,  1.154734099044395E-01,  4.976729631034024E-02,
+2461608.703114000, A.D. 2027-Jul-22 04:52:29.0496,  4.923283968636116E-01, -8.216069600275849E-01, -3.559667683880041E-01,
+2474782.261186000, A.D. 2063-Aug-15 18:16:06.4704,  8.076631316794198E-01, -5.736798531891719E-01, -2.484833389109090E-01,
+2474782.261286000, A.D. 2063-Aug-15 18:16:15.1104,  8.076641267161335E-01, -5.736785725386323E-01, -2.484827814386565E-01,
+2474782.261386000, A.D. 2063-Aug-15 18:16:23.7504,  8.076651217541884E-01, -5.736772918810782E-01, -2.484822239634649E-01,
+2496097.526223000, A.D. 2121-Dec-25 00:37:45.6672, -1.929300581900645E-02,  8.994415798823119E-01,  3.895427558784412E-01,
+2496097.526323000, A.D. 2121-Dec-25 00:37:54.3072, -1.929481050452066E-02,  8.994415266827761E-01,  3.895427269743265E-01,
+2496097.526423000, A.D. 2121-Dec-25 00:38:02.9472, -1.929661519312573E-02,  8.994414734791356E-01,  3.895426980684224E-01,
+$$EOE
+**************************************************************************************************************************
+ 
+TIME
+
+  Terrestrial Time ("TT") output was requested. This continuous timescale
+is the relativistic proper time of a clock at rest on the Earth's geoid (at
+"mean sea level"), but defined for a specified gravitational time dilation,
+so a coordinate time. It is appropriate for observations and measurements
+from the surface of the Earth.
+
+  TT runs at a uniform rate of one SI second per second and is independent of
+irregularities in Earth's rotation. It is a theoretical ideal, approximated
+(with a constant offset of 32.184 seconds) by the measured International Atomic
+Time (TAI) after 1955.  TT is the relativistic successor to the now deprecated
+non-relativistic Ephemeris Time (ET).
+
+  The TT scale requested here is a time-scale conversion from internal
+Barycentric Dynamical Time (TDB) and differs periodically from TDB with an
+amplitude less than 2 ms for several thousand years centered on present.
+The time-scale conversion for Earth is used regardless of observer location
+within the solar system, although clock rates may differ due to the local
+gravity field.
+ 
+CALENDAR SYSTEM
+
+  Mixed calendar mode was active such that calendar dates after AD 1582-Oct-15
+(if any) are in the modern Gregorian system. Dates prior to 1582-Oct-5 (if any)
+are in the Julian calendar system, which is automatically extended for dates
+prior to its adoption on 45-Jan-1 BC.  The Julian calendar is useful for
+matching historical dates. The Gregorian calendar more accurately corresponds
+to the Earth's orbital motion and seasons. A "Gregorian-only" calendar mode is
+available if such physical events are the primary interest.
+
+REFERENCE FRAME AND COORDINATES
+
+  International Celestial Reference Frame (ICRF)
+
+    The ICRF is an adopted reference frame whose axes are defined relative to 
+    fixed extragalactic radio sources distributed across the sky.
+
+    The ICRF was aligned with the prior FK5/J2000 dynamical system at the ~0.02 
+    arcsecond level but is not identical and has no associated standard epoch.
+
+  Symbol meaning [1 au= 149597870.700 km, 1 day= 86400.0 s]:
+
+    JDTT     Julian Day Number, Terrestrial Time
+      X      X-component of position vector (au)
+      Y      Y-component of position vector (au)
+      Z      Z-component of position vector (au)
+
+ABERRATIONS AND CORRECTIONS
+
+ States have been corrected for Newtonian down-leg (receive) light-time
+ displacement.
+
+Computations by ...
+
+    Solar System Dynamics Group, Horizons On-Line Ephemeris System
+    4800 Oak Grove Drive, Jet Propulsion Laboratory
+    Pasadena, CA  91109   USA
+
+    General site: https://ssd.jpl.nasa.gov/
+    Mailing list: https://ssd.jpl.nasa.gov/email_list.html
+    System news : https://ssd.jpl.nasa.gov/horizons/news.html
+    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html
+    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x
+                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html
+                  command-line   telnet ssd.jpl.nasa.gov 6775
+                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/horizons_batch.txt
+                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS
+    Inquiries   : Jon.D.Giorgini@jpl.nasa.gov
+*******************************************************************************

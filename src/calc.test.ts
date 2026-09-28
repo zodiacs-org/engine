@@ -154,7 +154,7 @@ describe("receipts", () => {
       const { conventions } = ok(calc(request)).receipt;
       for (const id of conventions) expect(id).toMatch(/^[a-z0-9-]+:[^\s]+$/);
       expect(conventions).toContain(`frame:${request.frame ?? "ecliptic-true-of-date"}`);
-      expect(conventions.includes("nutation:iau2000b")).toBe((request.frame ?? "ecliptic-true-of-date").includes("true"));
+      expect(conventions.includes("nutation:iau2000b-five-terms")).toBe((request.frame ?? "ecliptic-true-of-date").includes("true"));
       expect(conventions.includes("frame-bias:iau2000")).toBe((request.frame ?? "").endsWith("icrs"));
     }
   });
@@ -400,6 +400,25 @@ describe("houses, events and chart wrap the engine's own functions", () => {
     }
     expect(() => chart({ time: utc, timeFlags: ["no-time"] })).toThrow(RangeError);
     expect(() => natalChart({ utc, flags: ["no-time"] })).toThrow(RangeError);
+  });
+
+  it("name the conventions calc() names for the same positions", () => {
+    const ids = (body: CalcBody) => ok(calc({ body, time: utc })).receipt.conventions;
+    const searched = events({ kind: "longitude-crossing", body: "Mars", longitude: 30, from: "2022-06-01", to: "2023-06-01" });
+    if (searched.status !== "ok") throw new Error("refused");
+    expect(new Set(searched.receipt.conventions)).toEqual(
+      new Set([...ids("Mars").filter((id) => !id.startsWith("speed:")), "search:scan-and-bisect"])
+    );
+    const place = { latitude: 78.2232, longitude: 15.6267 };
+    const full = chart({ time: utc, place, houseSystem: "placidus" });
+    const timeless = chart({ time: utc });
+    const pinned = chart({ time: { iso: utc, deltaT: 12.5 } });
+    if (full.status !== "ok" || timeless.status !== "ok" || pinned.status !== "ok") throw new Error("refused");
+    const wanted = [...ids("Mars"), ...ids("Moon"), ...ids("North Node")].filter((id) => id !== "correction:not-applicable");
+    for (const id of wanted) expect(full.receipt.conventions).toContain(id);
+    expect(full.receipt.conventions).toEqual(expect.arrayContaining(["house:placidus", "polar-fallback:whole", "sidereal-time:gast-iau2006-era"]));
+    expect(timeless.receipt.conventions.filter((id) => /^(house|polar-fallback|angles|sidereal-time):/.test(id))).toEqual([]);
+    expect(pinned.receipt.conventions).toContain("deltat:pinned");
   });
 });
 
