@@ -37,8 +37,9 @@ Open an issue or a pull request in `zodiacs-org/engine` that gives:
    reason are revised. A rule is never edited in place without a new
    version. A corrected excerpt is noted, with the date, in the citation's
    `note`.
-3. `npm run atlas:check` must pass, and `node atlas/tools/compare-tzdb.mjs`
-   is rerun so that `TZDB-DIFFERENCES.md` stays current.
+3. `node atlas/tools/check.mjs` and `node --test atlas/tools/selftest.mjs`
+   must pass, and `node atlas/tools/compare-tzdb.mjs` is rerun so that
+   `TZDB-DIFFERENCES.md` stays current.
 4. The correction is logged below.
 
 When two primary sources disagree, the rule keeps both citations, takes the

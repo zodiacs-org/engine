@@ -335,6 +335,6 @@ Citations by type: 39 newspaper reports, 9 laws, 5 decrees, 3
 parliamentary debates, 2 railway notices, 1 ministerial decision, 1
 municipal notice.
 
-`npm run atlas:check` checks 258 boundaries with 2,735 round trips and the
-comparison with tzdb (108 periods differ, each matched by exactly one
+`node atlas/tools/check.mjs` checks 258 boundaries with 2,735 round trips and
+the comparison with tzdb (108 periods differ, each matched by exactly one
 explanation in `TZDB-DIFFERENCES.md`).

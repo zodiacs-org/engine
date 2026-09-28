@@ -140,11 +140,12 @@ atlas does not cover. The library is `tools/lib.mjs` (`loadAtlas`,
 ## Checks
 
 ```bash
-npm run atlas:check
+node atlas/tools/check.mjs
+node --test atlas/tools/selftest.mjs
 ```
 
-runs `node atlas/tools/check.mjs` and the tools' self-test
-(`node --test atlas/tools/selftest.mjs`). The check validates every data file
+The first is the data check, the second the tools' self-test; they need
+nothing but Node, and nothing to install. The check validates every data file
 against the schema; requires every rule to cite at least one citation and
 every citation to have a URL, a retrieval date, a locator, an excerpt of at
 most 40 words and a record of how it was checked; checks that every
@@ -154,8 +155,8 @@ lie inside the areas their jurisdiction may be read by longitude in; round-trips
 local time to UTC and back at every boundary and inside every rule; and
 checks that the tzdb comparison is current and that every difference is
 matched by exactly one explanation, on its place, zone, rule and both
-offsets. A missing tzdb extract is a failure, not a skipped step. CI runs it
-(`.github/workflows/atlas.yml`).
+offsets. A missing tzdb extract is a failure, not a skipped step. CI runs
+both commands (`.github/workflows/atlas.yml`).
 
 To rebuild the tzdb extract, compile tzdata 2025c with backzone by the L3
 conformance recipe (`conformance/arbiters/l3/README.md`) and run
