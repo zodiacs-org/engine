@@ -15,7 +15,12 @@ for (const name of [
   "transits",
   "synastry",
   "moonPhase",
-  "saturnReturn"
+  "saturnReturn",
+  "createAspectPolicy",
+  "findConfiguredAspects",
+  "chartDeclinations",
+  "eclipticToEquatorial",
+  "findDeclinationAspects"
 ]) {
   assert.equal(typeof engine[name], "function", `missing root export: ${name}`);
 }

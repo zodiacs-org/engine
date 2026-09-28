@@ -1,4 +1,5 @@
-import { computeBodies, computeChart, computePoints, bodyLongitude } from "./ephemeris.js";
+import { computeBodies, computeChart, computeChartDeclinations, computePoints, bodyLongitude } from "./ephemeris.js";
+import type { ChartDeclinations } from "./declination.js";
 import { POLAR_FALLBACK, isPolarUndefinedHouseSystem } from "./houses.js";
 import { computeSaturnReturns } from "./returns.js";
 import { outsideReferenceSpan } from "./reference-span.js";
@@ -159,6 +160,16 @@ export function positions(date: DateInput): BodyPosition[] {
 /** Build a natal chart from an already resolved UTC instant. */
 export function natalChart(birth: BirthInput): Chart {
   return computedBirth(validateBirth(birth));
+}
+
+/**
+ * Equatorial coordinates and declination aspects derived from a natal chart's
+ * full ecliptic positions, on its own Delta T clock. A supplied Chart's
+ * numerical positions remain caller claims, as with chartPoints and synastry.
+ * This additional analysis is not included in the natal receipt.
+ */
+export function chartDeclinations(natal: NatalSource): ChartDeclinations {
+  return computeChartDeclinations(resolvedChart(natal).chart);
 }
 
 /**

@@ -7,22 +7,27 @@ ESM-only, has no import-time side effects, and performs no network request from
 its core entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see ΔT below).
 
-**Release candidate: 0.1.1-rc.10.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.11.** Public npm lookups for this package returned
 404 on 2026-09-26. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.10.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.11.tgz
 ```
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.10.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.11.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash, runtime and isolated consumer directory. A packed
-candidate is not a published release. This candidate adds Equal houses from the midheaven, and `chartPoints`: the mean node, Black Moon Lilith, the Vertex, the East Point and the Hellenistic lots; rc.9 before it added nine house systems, for twelve; rc.8 computed on observed ΔT with a band, named its ephemeris and ΔT in receipts, flagged charts outside the reference span, and shipped the site's longitude-crossing solver as `@zodiacs/engine/crossings`; rc.7 judged aspects applying from the orb's rate, took speeds as the derivative of the reported longitude, built the angles on the true obliquity, put the Placidus limit at the polar circle and added Porphyry houses. CHANGELOG.md says what each change moves. The site platform draft retains its immutable rc.5 archive, and the standalone starter retains rc.3, until their separate integrations are reviewed.
+candidate is not a published release. This candidate adds configurable
+longitude aspects and chart declinations as separate analyses. Existing
+natal, transit, synastry and receipt conventions remain unchanged. The
+ephemeris is still astronomy-engine 2.1.19. See CHANGELOG.md for the release
+history and `docs/evidence/rc11-20260928/` for this continuation's checks and
+remaining programme gates. Site adoption is reviewed separately.
 
 ## Natal chart in 10 lines
 
@@ -93,6 +98,10 @@ for (const aspect of today.aspects) {
 - `chartPoints(natal)` returns the mean node, Black Moon Lilith and, with a
   birth time and place, the Vertex, the East Point, the chart's sect and seven
   lots (see *Points*).
+- `findConfiguredAspects(bodies, policy)` calculates aspects under an explicit
+  policy from `createAspectPolicy`, including minor and custom angles.
+- `chartDeclinations(natal)` derives right ascension, declination, parallel
+  aspects and out-of-bounds flags on the chart's clock.
 - `transits(natal, date)` returns a sky snapshot and moving-to-natal aspects.
 - `synastry(a, b)` returns inter-chart aspects and element/modality balances.
 - `moonPhase(date)` returns elongation, illuminated fraction, and phase name.
@@ -113,6 +122,84 @@ package does not calculate topocentric parallax.
 Positions have been compared with an independent ephemeris from 1800-01-01T00:00Z
 up to 2200-01-01T00:00Z, exported as `REFERENCE_SPAN`. A chart outside that span
 is still computed, and carries the `outside-reference-span` flag.
+
+### Configurable aspects
+
+```ts
+import { createAspectPolicy, findConfiguredAspects } from "@zodiacs/engine";
+
+const policy = createAspectPolicy({
+  aspects: [
+    { type: "conjunction", orb: 8, luminaryOrb: 10 },
+    { type: "quincunx", orb: { applying: 2, separating: 1, stationary: 0.5 } },
+    { type: "quintile", orb: 1 }
+  ],
+  bodyOrbs: { Moon: 5, Pluto: 1 }
+});
+const analysis = findConfiguredAspects(chart.bodies, policy);
+console.log(analysis.policy, analysis.aspects);
+```
+
+`createAspectPolicy()` returns an immutable snapshot of the five existing
+major-aspect defaults. `CONFIGURED_ASPECT_ANGLES` also names semisextile (30°),
+semisquare (45°), quintile (72°), sesquiquadrate (135°), biquintile (144°) and
+quincunx (150°). Choose their orbs explicitly; custom identifiers require an
+explicit angle. Named angles cannot be redefined.
+
+For each pair, the rule's orb applies, replaced by its `luminaryOrb` when
+either body is Sun or Moon. Each selected body's `bodyOrbs` value is an upper
+bound: the smallest of the rule allowance and both body caps wins. A number
+sets all three motion limits; an object sets each separately. Boundaries are
+inclusive. The closest eligible aspect wins, with definition order breaking
+ties. Results sort by orb, then input-pair order.
+
+`bodies` explicitly selects identifiers; it defaults to Sun, Moon and the
+eight planets. Nodes or other points require selection. Positions require
+finite longitude in `[0,360)` and a finite longitude speed in degrees/day
+on the same time basis. Missing or null speed is rejected, including on
+unselected rows. A point whose speed is unknown must not be assigned zero to
+make it pass. Equal speeds, or relative speed below the policy threshold,
+are stationary; an exact moving aspect is separating. The one-sided motion
+at coincident and antipodal longitudes is defined in the returned policy.
+
+Policies and results are deeply frozen. Pass the factory's policy object to
+`findConfiguredAspects`; a JSON-deserialized copy must have its input fields
+revalidated through the factory. Its schema and conventions describe the
+calculation; they are not an authenticated receipt. This analysis does not
+replace `chart.aspects`, or configure `synastry` or `transits`.
+
+### Declinations and parallels
+
+```ts
+import { chartDeclinations, findDeclinationAspects } from "@zodiacs/engine";
+
+const equatorial = chartDeclinations(chart);
+console.log(equatorial.utc, equatorial.deltaT, equatorial.trueObliquity);
+console.log(equatorial.rows); // ra, dec and outOfBounds, in addition to lon/lat
+const tightParallels = findDeclinationAspects(
+  chart.bodies, equatorial.trueObliquity, { orb: 0.5, luminaryOrb: 1 }
+);
+```
+
+`chartDeclinations` accepts a birth input or an existing chart. It rotates
+the full ecliptic longitude **and latitude** into the true equator and equinox
+of date, using the chart instant and the same pinned or model ΔT. Right
+ascension is in **degrees**, not hours, and is `null` where the horizontal
+unit-vector magnitude is no greater than `RA_POLE_TOLERANCE`; `raDefined`
+then is false. Declination is north-positive in `[-90,90]`. Out-of-bounds
+means strictly `abs(dec) > trueObliquity`, without an uncertainty allowance.
+
+Every supplied body is eligible, including nodes; filter the input for a
+smaller set. Parallel/contraparallel matches choose the smaller of
+`abs(decA-decB)` and `abs(decA+decB)`, with parallel winning an exact tie.
+Orbs are inclusive, defaulting to 1° or 1.5° when Sun or Moon is involved.
+`eclipticToEquatorial` and `declinationsForBodies` expose the same geometry
+with an explicitly supplied obliquity.
+
+These are derived coordinates of the existing ephemeris, with its existing
+corrections and limits. They do not establish the programme's 0.01″ physical
+declination target against Swiss Ephemeris. The current natal receipt does
+not include this analysis; the result states that scope explicitly.
 
 ### House systems
 
