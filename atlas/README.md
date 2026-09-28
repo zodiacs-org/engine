@@ -28,7 +28,7 @@ leaves `atlas/` out.
 | `tools/` | the resolver, the checks, the tzdb extract and comparison |
 | `tzdb/` | the tzdb 2025c extract the comparison reads, and the differences found |
 | `TZDB-DIFFERENCES.md` | every difference from tzdb 2025c with backzone, explained, and where they agree |
-| `CORRECTIONS.md` | how corrections are accepted, and the log of accepted ones |
+| `CORRECTIONS.md` | how corrections are accepted, the findings to report to tzdb, and the log of accepted corrections |
 | `LICENSE`, `LICENSING.md` | the text of CC BY 4.0, and which licence covers which part of the atlas |
 
 ## The rules for the data

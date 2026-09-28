@@ -1065,7 +1065,7 @@
    "tzdbOffsetSeconds": 3208,
    "tzdbAbbreviation": "LMT",
    "differenceSeconds": 392,
-   "explanation": "als-mos-not-berlin"
+   "explanation": "de-reich-law-1893-instant"
   },
   {
    "place": "fr-strasbourg",
@@ -1317,7 +1317,7 @@
    "tzdbOffsetSeconds": 3208,
    "tzdbAbbreviation": "LMT",
    "differenceSeconds": 392,
-   "explanation": "als-mos-not-berlin"
+   "explanation": "de-reich-law-1893-instant"
   },
   {
    "place": "fr-metz",

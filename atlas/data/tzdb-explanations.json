@@ -132,7 +132,6 @@
           "mos-metz-lmt-before-1892",
           "als-strasbourg-mez-1892",
           "mos-metz-mez-1892",
-          "de-mez-1893",
           "als-strasbourg-french-1918",
           "mos-metz-french-1918",
           "als-mos-wet-1919"
@@ -140,7 +139,7 @@
         "atlasOffsets": [1858.927, 1481.446, 3600, 300, 0],
         "tzdbOffsets": [3208, 3600]
       },
-      "explanation": "Europe/Berlin, compared for information, keeps Berlin's mean time (+0:53:28) until midnight Berlin mean time at the start of 1 April 1893; the Reich law took effect when 1 April 1893 began by Mid-European time, 6 min 32 s earlier. Strasbourg and Metz kept their own mean time until 1 April 1892 and Mid-European time from then; from 1 April 1893 to their change to French time in November 1918 the atlas and Europe/Berlin agree, German summer time included. After that the two cities were French.",
+      "explanation": "Europe/Berlin, compared for information, keeps Berlin's mean time (+0:53:28) until 1 April 1893. Strasbourg and Metz kept their own mean time until 1 April 1892 and Mid-European time from then. From 1 April 1893 to their change to French time in November 1918 the atlas and Europe/Berlin agree, German summer time included, except in the first minutes of 1 April 1893 (de-reich-law-1893-instant). After that the two cities were French.",
       "citations": [
         "als-snn-1892-03-31-mez",
         "mos-lz-1892-03-29-city",
@@ -148,6 +147,20 @@
         "mos-matin-1918-11-21-metz",
         "als-snn-1918-11-21-bekanntmachung"
       ]
+    },
+    {
+      "id": "de-reich-law-1893-instant",
+      "category": "transition-instant",
+      "match": {
+        "places": ["fr-strasbourg", "fr-metz"],
+        "zones": ["Europe/Berlin"],
+        "rules": ["de-mez-1893"],
+        "atlasOffsets": [3600],
+        "tzdbOffsets": [3208]
+      },
+      "explanation": "Europe/Berlin, compared for information, keeps Berlin's mean time (+0:53:28) until midnight Berlin mean time at the start of 1 April 1893, 23:06:32 UTC on 31 March (tzdb's 1893 Apr). The Reich law of 12 March 1893 came into force when 1 April 1893 began by Mid-European time, 23:00 UTC, where the atlas starts de-mez-1893. Strasbourg and Metz, on Mid-European time since 1892, did not change; for the 6 min 32 s between the two instants the atlas gives them +1:00 and Europe/Berlin +0:53:28.",
+      "tzdbReport": "Zone Europe/Berlin keeps LMT until 1893 Apr, midnight Berlin mean time, 23:06:32 UTC on 31 March. The Reich law of 12 March 1893 (Reichs-Gesetzblatt 1893, p. 93) came into force at the moment \"in welchem nach der im vorhergehenden Absatz festgesetzten Zeitbestimmung der 1. April 1893 beginnt\": midnight Mid-European time, 23:00 UTC, when Berlin mean time read 23:53:28. That would read 1893 Mar 31 23:00u, the form tzdb uses for Rome's change of 1893, 6 min 32 s earlier. Zone Europe/Kaliningrad (Königsberg, German in 1893) also ends its LMT line at 1893 Apr, 22 minutes before the law's instant there. Whether the clocks of Berlin or Königsberg were set at that instant was not researched; the atlas covers neither city.",
+      "citations": ["de-rgbl-1893-03-12-law", "als-snn-1892-03-31-mez", "mos-lz-1892-03-29-city"]
     },
     {
       "id": "us-city-time-before-standard-time",

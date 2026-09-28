@@ -75,6 +75,7 @@ Spans in which the atlas and tzdb give the same offset, or offsets less than a s
 Differences that look like errors in tzdb rather than differences of scope. Nothing has been sent to the tz project.
 
 - `fr-summer-time-end-hour`: Rule France ends summer time in 1916, 1917, 1918 and 1919 at Oct Sun>=1 23:00s, at the end of the Sunday on which each decree restores normal time. The decrees (Journal officiel of 11 June 1916, 21 March 1917, 1 March 1918 and 11 February 1919) name only that date. The Paris papers cited put the change at its start: clocks set back from 01:00 to 00:00 summer time on 1 October 1916, 6 October 1918 and 5 October 1919 (Le Petit Parisien, Le Petit Journal), and within the hour after midnight on 7 October 1917. That would read Oct Sun>=1 0:00s, 23 hours earlier.
+- `de-reich-law-1893-instant`: Zone Europe/Berlin keeps LMT until 1893 Apr, midnight Berlin mean time, 23:06:32 UTC on 31 March. The Reich law of 12 March 1893 (Reichs-Gesetzblatt 1893, p. 93) came into force at the moment "in welchem nach der im vorhergehenden Absatz festgesetzten Zeitbestimmung der 1. April 1893 beginnt": midnight Mid-European time, 23:00 UTC, when Berlin mean time read 23:53:28. That would read 1893 Mar 31 23:00u, the form tzdb uses for Rome's change of 1893, 6 min 32 s earlier. Zone Europe/Kaliningrad (Königsberg, German in 1893) also ends its LMT line at 1893 Apr, 22 minutes before the law's instant there. Whether the clocks of Berlin or Königsberg were set at that instant was not researched; the atlas covers neither city.
 
 ## Differences and why
 
@@ -238,9 +239,9 @@ Decided by:
 
 ### als-mos-not-berlin
 
-*Category:* annexed-territory. *Periods:* 10. *Matches:* places `fr-strasbourg`, `fr-metz`; zones Europe/Berlin; rules `als-strasbourg-lmt-before-1892`, `mos-metz-lmt-before-1892`, `als-strasbourg-mez-1892`, `mos-metz-mez-1892`, `de-mez-1893`, `als-strasbourg-french-1918`, `mos-metz-french-1918`, `als-mos-wet-1919`; atlas offsets +0:30:58.927, +0:24:41.446, +1:00:00, +0:05:00, +0:00:00; tzdb offsets +0:53:28, +1:00:00.
+*Category:* annexed-territory. *Periods:* 8. *Matches:* places `fr-strasbourg`, `fr-metz`; zones Europe/Berlin; rules `als-strasbourg-lmt-before-1892`, `mos-metz-lmt-before-1892`, `als-strasbourg-mez-1892`, `mos-metz-mez-1892`, `als-strasbourg-french-1918`, `mos-metz-french-1918`, `als-mos-wet-1919`; atlas offsets +0:30:58.927, +0:24:41.446, +1:00:00, +0:05:00, +0:00:00; tzdb offsets +0:53:28, +1:00:00.
 
-Europe/Berlin, compared for information, keeps Berlin's mean time (+0:53:28) until midnight Berlin mean time at the start of 1 April 1893; the Reich law took effect when 1 April 1893 began by Mid-European time, 6 min 32 s earlier. Strasbourg and Metz kept their own mean time until 1 April 1892 and Mid-European time from then; from 1 April 1893 to their change to French time in November 1918 the atlas and Europe/Berlin agree, German summer time included. After that the two cities were French.
+Europe/Berlin, compared for information, keeps Berlin's mean time (+0:53:28) until 1 April 1893. Strasbourg and Metz kept their own mean time until 1 April 1892 and Mid-European time from then. From 1 April 1893 to their change to French time in November 1918 the atlas and Europe/Berlin agree, German summer time included, except in the first minutes of 1 April 1893 (de-reich-law-1893-instant). After that the two cities were French.
 
 Decided by:
 
@@ -254,14 +255,29 @@ Decided by:
 | --- | --- | --- | --- | --- | --- | --- | ---: |
 | `fr-strasbourg` | Europe/Berlin | 1869-12-31T23:29:01.073Z | 1892-03-31T23:29:01.073Z | `als-strasbourg-lmt-before-1892` | +0:30:58.927 | +0:53:28 LMT | -1349.073 s |
 | `fr-strasbourg` | Europe/Berlin | 1892-03-31T23:29:01.073Z | 1893-03-31T23:00:00Z | `als-strasbourg-mez-1892` | +1:00:00 | +0:53:28 LMT | 392 s |
-| `fr-strasbourg` | Europe/Berlin | 1893-03-31T23:00:00Z | 1893-03-31T23:06:32Z | `de-mez-1893` | +1:00:00 | +0:53:28 LMT | 392 s |
 | `fr-strasbourg` | Europe/Berlin | 1918-11-21T11:00:00Z | 1919-03-01T22:55:00Z | `als-strasbourg-french-1918` | +0:05:00 | +1:00:00 CET | -3300 s |
 | `fr-strasbourg` | Europe/Berlin | 1919-10-05T00:00:00Z | 1920-01-01T00:00:00Z | `als-mos-wet-1919` | +0:00:00 | +1:00:00 CET | -3600 s |
 | `fr-metz` | Europe/Berlin | 1869-12-31T23:35:18.554Z | 1892-03-31T23:35:18.554Z | `mos-metz-lmt-before-1892` | +0:24:41.446 | +0:53:28 LMT | -1726.554 s |
 | `fr-metz` | Europe/Berlin | 1892-03-31T23:35:18.554Z | 1893-03-31T23:00:00Z | `mos-metz-mez-1892` | +1:00:00 | +0:53:28 LMT | 392 s |
-| `fr-metz` | Europe/Berlin | 1893-03-31T23:00:00Z | 1893-03-31T23:06:32Z | `de-mez-1893` | +1:00:00 | +0:53:28 LMT | 392 s |
 | `fr-metz` | Europe/Berlin | 1918-11-19T05:00:00Z | 1919-03-01T23:00:00Z | `mos-metz-french-1918` | +0:00:00 | +1:00:00 CET | -3600 s |
 | `fr-metz` | Europe/Berlin | 1919-10-05T00:00:00Z | 1920-01-01T00:00:00Z | `als-mos-wet-1919` | +0:00:00 | +1:00:00 CET | -3600 s |
+
+### de-reich-law-1893-instant
+
+*Category:* transition-instant. *Periods:* 2. *Matches:* places `fr-strasbourg`, `fr-metz`; zones Europe/Berlin; rules `de-mez-1893`; atlas offsets +1:00:00; tzdb offsets +0:53:28.
+
+Europe/Berlin, compared for information, keeps Berlin's mean time (+0:53:28) until midnight Berlin mean time at the start of 1 April 1893, 23:06:32 UTC on 31 March (tzdb's 1893 Apr). The Reich law of 12 March 1893 came into force when 1 April 1893 began by Mid-European time, 23:00 UTC, where the atlas starts de-mez-1893. Strasbourg and Metz, on Mid-European time since 1892, did not change; for the 6 min 32 s between the two instants the atlas gives them +1:00 and Europe/Berlin +0:53:28.
+
+Decided by:
+
+- `de-rgbl-1893-03-12-law`: Gesetz, betreffend die Einführung einer einheitlichen Zeitbestimmung. Vom 12. März 1893 (Nr. 2075) (1893-03-12), p. 93. <https://archive.org/details/pbc.gda.pl.Nr_07_76958>
+- `als-snn-1892-03-31-mez`: Mitteleuropäische Zeit (Straßburg, local news) (1892-03-31), Zweites Blatt, first page (Gallica view 5), col. 2. <https://gallica.bnf.fr/ark:/12148/bd6t528094756/f5.item>
+- `mos-lz-1892-03-29-city`: Mitteleuropäische Zeit (Metz, local news) (1892-03-29), p. 3, col. 2. <https://gallica.bnf.fr/ark:/12148/bpt6k9340208n/f3.item>
+
+| place | zone | from (UTC) | to (UTC) | atlas rule | atlas | tzdb | atlas − tzdb |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| `fr-strasbourg` | Europe/Berlin | 1893-03-31T23:00:00Z | 1893-03-31T23:06:32Z | `de-mez-1893` | +1:00:00 | +0:53:28 LMT | 392 s |
+| `fr-metz` | Europe/Berlin | 1893-03-31T23:00:00Z | 1893-03-31T23:06:32Z | `de-mez-1893` | +1:00:00 | +0:53:28 LMT | 392 s |
 
 ### us-city-time-before-standard-time
 
