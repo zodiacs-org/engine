@@ -51,7 +51,7 @@
   "rules": [
     {
       "id": "als-strasbourg-lmt-before-1892",
-      "version": 2,
+      "version": 3,
       "title": "Strasbourg: local mean time",
       "scope": "Strasbourg, French until 1871 and German from 1871, before 1 April 1892",
       "clock": "civil",
@@ -60,10 +60,10 @@
         "local": "1892-04-01T00:00:00",
         "reckoning": "before",
         "kind": "event",
-        "precision": "day",
-        "window": { "earliest": "1892-04-01T00:00:00", "latest": "1892-04-01T23:59:59" },
-        "citations": ["als-snn-1892-04-01-muenster", "als-snn-1892-03-31-mez"],
-        "note": "The cathedral clock struck midnight Strasbourg mean time in the night of 31 March to 1 April 1892 and, barely a minute later, half past twelve (Mid-European time is 29 min 1 s ahead of Strasbourg's mean time); the atlas uses that instant. The other public clocks were to be corrected by the municipal authorities during 1 April, so the window is that day."
+        "precision": "days",
+        "window": { "earliest": "1892-03-31T12:00:00", "latest": "1892-04-01T23:59:59" },
+        "citations": ["als-snn-1892-04-01-muenster", "als-snn-1892-04-01-ruprechtsau", "als-snn-1892-03-31-mez"],
+        "note": "The cathedral clock struck midnight Strasbourg mean time in the night of 31 March to 1 April 1892 and, barely a minute later, half past twelve (Mid-European time is 29 min 1 s ahead of Strasbourg's mean time); the atlas uses that instant. The tower clocks of the suburb of Ruprechtsau already showed the new time on the afternoon of 31 March, and the municipal authorities were to correct the other public clocks on 1 April, so the window runs from noon on 31 March to the end of 1 April."
       },
       "offset": { "type": "local-mean-time" },
       "isDst": false,
@@ -78,6 +78,11 @@
           "version": 2,
           "date": "2026-09-28",
           "summary": "Flagged inferred again: the sources show Strasbourg mean time only at the change of 1892, and the rule carries it back to 1870 across the siege and the annexation. The change is timed by the cathedral clock only; the other public clocks were corrected during 1 April, now a window."
+        },
+        {
+          "version": 3,
+          "date": "2026-09-28",
+          "summary": "The window of the change now opens at noon on 31 March: the tower clocks of the suburb of Ruprechtsau already showed Mid-European time that afternoon (als-snn-1892-04-01-ruprechtsau)."
         }
       ],
       "note": "Legal time in France was each place's local mean time (the Senate debate of 1891 dates this from the Restoration), and no change is reported under German rule before 1892."
@@ -117,7 +122,7 @@
     },
     {
       "id": "als-strasbourg-mez-1892",
-      "version": 2,
+      "version": 3,
       "title": "Strasbourg: Mid-European time as local time (order of the Ministry for Alsace-Lorraine, 1892)",
       "scope": "Strasbourg, 1 April 1892 to the Reich law of 12 March 1893",
       "clock": "civil",
@@ -125,10 +130,10 @@
         "local": "1892-04-01T00:00:00",
         "reckoning": "before",
         "kind": "event",
-        "precision": "day",
-        "window": { "earliest": "1892-04-01T00:00:00", "latest": "1892-04-01T23:59:59" },
-        "citations": ["als-snn-1892-04-01-muenster", "als-snn-1892-03-31-mez"],
-        "note": "The cathedral clock struck midnight Strasbourg mean time in the night of 31 March to 1 April 1892 and, barely a minute later, half past twelve (Mid-European time is 29 min 1 s ahead of Strasbourg's mean time); the atlas uses that instant. The other public clocks were to be corrected by the municipal authorities during 1 April, so the window is that day."
+        "precision": "days",
+        "window": { "earliest": "1892-03-31T12:00:00", "latest": "1892-04-01T23:59:59" },
+        "citations": ["als-snn-1892-04-01-muenster", "als-snn-1892-04-01-ruprechtsau", "als-snn-1892-03-31-mez"],
+        "note": "The cathedral clock struck midnight Strasbourg mean time in the night of 31 March to 1 April 1892 and, barely a minute later, half past twelve (Mid-European time is 29 min 1 s ahead of Strasbourg's mean time); the atlas uses that instant. The tower clocks of the suburb of Ruprechtsau already showed the new time on the afternoon of 31 March, and the municipal authorities were to correct the other public clocks on 1 April, so the window runs from noon on 31 March to the end of 1 April."
       },
       "end": {
         "local": "1893-04-01T00:00:00",
@@ -143,14 +148,19 @@
       "abbreviation": "MEZ",
       "uncertainty": {
         "flag": "documented",
-        "reason": "The Ministry ordered Mid-European time as local time throughout Alsace-Lorraine from 1 April 1892, and the cathedral clock changed at midnight."
+        "reason": "The Ministry ordered Mid-European time as local time throughout Alsace-Lorraine from 1 April 1892; the cathedral clock changed at midnight, and the tower clocks of Ruprechtsau the afternoon before."
       },
-      "citations": ["als-snn-1892-03-31-mez", "als-snn-1892-04-01-muenster"],
+      "citations": ["als-snn-1892-03-31-mez", "als-snn-1892-04-01-muenster", "als-snn-1892-04-01-ruprechtsau"],
       "changes": [
         {
           "version": 2,
           "date": "2026-09-28",
           "summary": "The start is timed by the cathedral clock only; the other public clocks were corrected during 1 April, now a window."
+        },
+        {
+          "version": 3,
+          "date": "2026-09-28",
+          "summary": "The window of the change now opens at noon on 31 March: the tower clocks of the suburb of Ruprechtsau already showed Mid-European time that afternoon (als-snn-1892-04-01-ruprechtsau)."
         }
       ]
     },

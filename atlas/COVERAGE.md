@@ -119,7 +119,7 @@ city by city.
 | from | Strasbourg | Metz |
 | --- | --- | --- |
 | 1870 | local mean time | local mean time |
-| 1 April 1892 (order of the Ministry for Alsace-Lorraine) | Mid-European time, +1:00: the cathedral clock at midnight local time, the other public clocks during the day | Mid-European time, +1:00, in the early hours (window 23:25 to 06:00 local time) |
+| 1 April 1892 (order of the Ministry for Alsace-Lorraine) | Mid-European time, +1:00: the cathedral clock at midnight local time; some tower clocks the afternoon before, the other public clocks during 1 April | Mid-European time, +1:00, in the early hours (window 23:25 to 06:00 local time) |
 | 1 April 1893 (Reich law of 12 March 1893) | +1:00, now as legal time; the clocks did not change | the same |
 | 30 April 1916, 23:00 | German summer time, +2:00 | the same |
 | 1 October 1916, 01:00 summer time | +1:00 | the same |
@@ -133,11 +133,13 @@ city by city.
 | 5 October 1919, 01:00 summer time | +0:00 | the same |
 
 The change of 1892 in Strasbourg is timed by the cathedral clock, which
-struck midnight local time and, barely a minute later, half past twelve; the
-other public clocks were to be corrected by the municipal authorities during
-1 April, which the boundary's window covers. In both cities the rule for the
-time before 1892 is flagged `inferred`: the sources show local mean time
-only at the change.
+struck midnight local time and, barely a minute later, half past twelve. The
+tower clocks of the suburb of Ruprechtsau already showed the new time on the
+afternoon of 31 March, and the municipal authorities were to correct the
+other public clocks during 1 April, so the boundary's window runs from noon
+on 31 March to the end of 1 April. In both cities the rule for the time
+before 1892 is flagged `inferred`: the sources show local mean time only at
+the change.
 
 Strasbourg's public clocks were set five minutes ahead of Greenwich in
 November 1918 and were still so in mid-December, when the station clock ran
@@ -196,10 +198,11 @@ the report's 18 minutes put city time at −5:42:00 and the longitude at
 Nashville Railroad's trains standing still for 18 minutes at its change,
 which may be what the report measured. Where a report leaves the moment
 of a change open, between noon by the old time and noon by the new
-(Baltimore, Chicago, Saint Paul) or between noon and the setting of the City
-Hall clock (New York), or gives only the day (Providence, Louisville,
-Minneapolis) or the afternoon (Indianapolis), the boundary's window covers
-every reading the report allows. Chicago's adoption is
+(Baltimore, Chicago, Saint Paul), between noon and the setting of the City
+Hall clock (New York) or between noon by the old time and the afternoon
+(Indianapolis), or gives only the day (Providence, Louisville,
+Minneapolis), the boundary's window covers every reading the report
+allows. Chicago's adoption is
 flagged `inferred`: the railroads, the Board of Trade, hotels and business
 houses are reported to have adopted the new time, the city government is
 not.
@@ -276,11 +279,14 @@ image servers at first refused automated requests, so the Gallica excerpts
 were checked against the text its search service (ContentSearch) returns for
 the cited page. A second review found that Gallica serves page images and
 its OCR text (ALTO) to a plain, descriptive User-Agent; every excerpt whose
-check had been partial was then read on the page image.
+check had been partial was then read on the page image. Excerpts added after
+the reviews were transcribed from the page image and checked against the
+archive's OCR text of the page.
 
 | archive | excerpts | checked against | checked | matches | partial |
 | --- | ---: | --- | ---: | ---: | ---: |
-| Gallica (BnF) | 37 | the text its search service returns for the cited page | 37 | 29 | 8 |
+| Gallica (BnF) | 38 | the text its search service returns for the cited page | 37 | 29 | 8 |
+| | | its OCR text of the page (ALTO) | 1 | 1 | 0 |
 | | | the page image | 11 | 11 | 0 |
 | Library of Congress | 22 | its OCR text of the page | 22 | 19 | 3 |
 | | | the page image | 3 | 3 | 0 |
@@ -319,9 +325,9 @@ reads. Ten excerpts longer than 40 words were shortened with `[...]`.
 | | places | jurisdictions | rules | citations |
 | --- | ---: | ---: | ---: | ---: |
 | France | 10 | 3 | 14 | 25 |
-| Alsace and Moselle | 2 | 2 | 16 | 13 |
+| Alsace and Moselle | 2 | 2 | 16 | 14 |
 | United States | 9 | 9 | 27 | 22 |
-| all | 21 | 14 | 57 | 60 |
+| all | 21 | 14 | 57 | 61 |
 
 Rules by flag: 29 `documented`, 22 `inferred`, 6 `uncertain`.
 
@@ -339,7 +345,7 @@ Rules by flag: 29 `documented`, 22 `inferred`, 6 `uncertain`.
   Minneapolis, `us-chicago-central-1883`, and the eight zone rules of 1918
   and 1919 (`us-eastern-*`, `us-central-*`).
 
-Citations by type: 39 newspaper reports, 9 laws, 5 decrees, 3
+Citations by type: 40 newspaper reports, 9 laws, 5 decrees, 3
 parliamentary debates, 2 railway notices, 1 ministerial decision, 1
 municipal notice.
 

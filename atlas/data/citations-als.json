@@ -39,6 +39,29 @@
       "gloss": "In the night of 31 March to 1 April 1892 the cathedral clock struck midnight and, barely a minute later, half past twelve."
     },
     {
+      "id": "als-snn-1892-04-01-ruprechtsau",
+      "type": "newspaper-report",
+      "title": "M. E. Z.",
+      "date": "1892-04-01",
+      "issuer": "Straßburger Neueste Nachrichten",
+      "publication": "Straßburger Neueste Nachrichten, Nr. 78, Zweites Blatt, Freitag, 1. April 1892",
+      "url": "https://gallica.bnf.fr/ark:/12148/bd6t52809476m/f5.item",
+      "retrieved": "2026-09-28",
+      "locator": "Zweites Blatt, first page (Gallica view 5), col. 2, the paragraph after the one quoted in als-snn-1892-04-01-muenster",
+      "language": "de",
+      "excerpt": "Unser Vorort Ruprechtsau hat übrigens mit der Einführung der M. E. Z. den Vogel abgeschossen, dort zeigten die Thurmuhren bereits gestern Nachmittag die neue Zeit.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "Against Gallica's OCR text of the page (ALTO)."
+        }
+      ],
+      "gloss": "The tower clocks of the suburb of Ruprechtsau (Robertsau) already showed Mid-European time on the afternoon of 31 March 1892."
+    },
+    {
       "id": "mos-lz-1892-03-29-station",
       "type": "newspaper-report",
       "title": "Mitteleuropäische Zeit (Metz, local news)",

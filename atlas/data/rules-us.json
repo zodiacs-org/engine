@@ -593,7 +593,7 @@
     },
     {
       "id": "us-washington-two-times-1883",
-      "version": 1,
+      "version": 2,
       "title": "Washington: Washington mean time kept officially while standard time spread",
       "scope": "Washington, 18 November 1883 to the act of 13 March 1884",
       "clock": "civil",
@@ -610,7 +610,7 @@
         "reckoning": "before",
         "kind": "event",
         "precision": "weeks",
-        "window": { "earliest": "1884-03-13T00:00:00", "latest": "1884-03-31T00:00:00" },
+        "window": { "earliest": "1884-03-13T00:00:00", "latest": "1884-03-31T23:59:59" },
         "note": "The act took effect on its approval, 13 March 1884; when the departments and the fire bells changed is not recorded here, and the window runs to the end of March.",
         "citations": ["us-stat-1884-dc"]
       },
@@ -621,11 +621,18 @@
         "flag": "uncertain",
         "reason": "From 18 November 1883 the railroads and the businesses dealing with them kept Eastern time, while other businesses, the government departments and the fire bells at noon kept Washington time until Congress acted; the atlas gives Washington time."
       },
-      "citations": ["us-star-1883-11-19-departments", "us-star-1883-11-19-bells"]
+      "citations": ["us-star-1883-11-19-departments", "us-star-1883-11-19-bells"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The window now ends at the end of 31 March, as its note says, not at the start of that day."
+        }
+      ]
     },
     {
       "id": "us-washington-eastern-1884",
-      "version": 1,
+      "version": 2,
       "title": "Washington: Eastern standard time",
       "scope": "Washington, from its adoption of standard time to the Standard Time Act of 1918",
       "clock": "civil",
@@ -634,7 +641,7 @@
         "reckoning": "before",
         "kind": "event",
         "precision": "weeks",
-        "window": { "earliest": "1884-03-13T00:00:00", "latest": "1884-03-31T00:00:00" },
+        "window": { "earliest": "1884-03-13T00:00:00", "latest": "1884-03-31T23:59:59" },
         "note": "The act took effect on its approval, 13 March 1884; when the departments and the fire bells changed is not recorded here, and the window runs to the end of March.",
         "citations": ["us-stat-1884-dc"]
       },
@@ -652,7 +659,14 @@
         "flag": "documented",
         "reason": "The act of 13 March 1884 makes the mean time of the 75th meridian the legal standard of time in the District of Columbia."
       },
-      "citations": ["us-stat-1884-dc"]
+      "citations": ["us-stat-1884-dc"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The window now ends at the end of 31 March, as its note says, not at the start of that day."
+        }
+      ]
     },
     {
       "id": "us-providence-city-time-before-1883",
@@ -719,7 +733,7 @@
     },
     {
       "id": "us-indianapolis-city-time-before-1883",
-      "version": 2,
+      "version": 3,
       "title": "Indianapolis: Indianapolis local time (local mean time)",
       "scope": "Indianapolis, before standard time",
       "clock": "civil",
@@ -729,8 +743,8 @@
         "reckoning": "after",
         "kind": "event",
         "precision": "hour",
-        "window": { "earliest": "1883-11-18T12:00:00", "latest": "1883-11-18T18:00:00" },
-        "note": "Central time went into effect at noon on 18 November 1883 and the court-house clock was set back that afternoon; the jewelers were to change their regulators the next day.",
+        "window": { "earliest": "1883-11-18T11:44:00", "latest": "1883-11-18T18:00:00" },
+        "note": "Central time went into effect at noon on 18 November 1883, whether noon by the old time or by the new is not said, and the court-house clock was set back that afternoon; the jewelers were to change their regulators the next day. The window runs from noon by the old city time (11:44 Central) to 18:00.",
         "citations": ["us-indj-1883-11-19-noon", "us-indj-1883-11-19-courthouse"]
       },
       "offset": { "type": "fixed", "seconds": -20640 },
@@ -746,12 +760,17 @@
           "version": 2,
           "date": "2026-09-28",
           "summary": "City time now taken from the report (\"set back sixteen minutes\"), as for every city whose change a report measures, instead of from the longitude; the reason no longer mentions fifteen minutes, which no cited source says."
+        },
+        {
+          "version": 3,
+          "date": "2026-09-28",
+          "summary": "The window of the change now opens at noon by the old city time (11:44 Central): the report does not say whether the change came at noon by the old time or the new."
         }
       ]
     },
     {
       "id": "us-indianapolis-central-1883",
-      "version": 1,
+      "version": 2,
       "title": "Indianapolis: Central standard time",
       "scope": "Indianapolis, from its adoption of standard time to the Standard Time Act of 1918",
       "clock": "civil",
@@ -760,8 +779,8 @@
         "reckoning": "after",
         "kind": "event",
         "precision": "hour",
-        "window": { "earliest": "1883-11-18T12:00:00", "latest": "1883-11-18T18:00:00" },
-        "note": "Central time went into effect at noon on 18 November 1883 and the court-house clock was set back that afternoon; the jewelers were to change their regulators the next day.",
+        "window": { "earliest": "1883-11-18T11:44:00", "latest": "1883-11-18T18:00:00" },
+        "note": "Central time went into effect at noon on 18 November 1883, whether noon by the old time or by the new is not said, and the court-house clock was set back that afternoon; the jewelers were to change their regulators the next day. The window runs from noon by the old city time (11:44 Central) to 18:00.",
         "citations": ["us-indj-1883-11-19-noon", "us-indj-1883-11-19-courthouse"]
       },
       "end": {
@@ -778,7 +797,14 @@
         "flag": "documented",
         "reason": "Central standard time went into effect at noon on 18 November 1883 and the court-house clock was set back the same afternoon."
       },
-      "citations": ["us-indj-1883-11-19-noon", "us-indj-1883-11-19-courthouse"]
+      "citations": ["us-indj-1883-11-19-noon", "us-indj-1883-11-19-courthouse"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The window of the change now opens at noon by the old city time (11:44 Central): the report does not say whether the change came at noon by the old time or the new."
+        }
+      ]
     },
     {
       "id": "us-louisville-city-time-before-1883",

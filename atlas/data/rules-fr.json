@@ -160,7 +160,7 @@
     },
     {
       "id": "fr-brest-lmt-before-1891",
-      "version": 2,
+      "version": 3,
       "title": "Brest: local mean time",
       "scope": "Brest, before the law of 14 March 1891",
       "clock": "civil",
@@ -170,7 +170,7 @@
         "reckoning": "before",
         "kind": "event",
         "precision": "days",
-        "window": { "earliest": "1891-03-16T00:00:00", "latest": "1891-03-31T00:00:00" },
+        "window": { "earliest": "1891-03-16T00:00:00", "latest": "1891-03-31T23:59:59" },
         "citations": ["fr-jo-1891-03-15-law", "fr-jo-1870-11-06-promulgation"],
         "note": "The law was printed in the Journal officiel of Sunday 15 March 1891. Under the decree of 5 November 1870 it bound Paris one clear day later, from 17 March, and each other arrondissement one clear day after the Journal reached its chef-lieu. When each town reset its public clocks is not recorded; the window runs to the end of March."
       },
@@ -187,13 +187,18 @@
           "version": 2,
           "date": "2026-09-28",
           "summary": "Flagged inferred: the Senate debate describes Brest's clocks in February 1891 only, and the rule carries that back to 1870."
+        },
+        {
+          "version": 3,
+          "date": "2026-09-28",
+          "summary": "The window now ends at the end of 31 March, as its note says, not at the start of that day."
         }
       ],
       "note": "The offset comes from Brest's longitude; it puts Brest 27 min 18 s behind Paris mean time, as the debate says."
     },
     {
       "id": "fr-lmt-before-1891",
-      "version": 1,
+      "version": 2,
       "title": "Local mean time of each commune",
       "scope": "Communes of the fr-general jurisdiction, before the law of 14 March 1891",
       "clock": "civil",
@@ -203,7 +208,7 @@
         "reckoning": "before",
         "kind": "event",
         "precision": "days",
-        "window": { "earliest": "1891-03-16T00:00:00", "latest": "1891-03-31T00:00:00" },
+        "window": { "earliest": "1891-03-16T00:00:00", "latest": "1891-03-31T23:59:59" },
         "citations": ["fr-jo-1891-03-15-law", "fr-jo-1870-11-06-promulgation"],
         "note": "The law was printed in the Journal officiel of Sunday 15 March 1891. Under the decree of 5 November 1870 it bound Paris one clear day later, from 17 March, and each other arrondissement one clear day after the Journal reached its chef-lieu. When each town reset its public clocks is not recorded; the window runs to the end of March."
       },
@@ -215,11 +220,18 @@
         "reason": "Legal time was each place's local mean time, but the same Senate debate says towns kept some clocks to the railway station's Paris time; which one a given town's clocks showed is not recorded."
       },
       "citations": ["fr-senat-1891-02-17-restoration", "fr-senat-1891-02-17-towns"],
-      "note": "The offset is computed from the place's longitude, 240 seconds per degree east of Greenwich. Where a town's public clocks already followed the station, they showed Paris mean time (+0:09:21) instead."
+      "note": "The offset is computed from the place's longitude, 240 seconds per degree east of Greenwich. Where a town's public clocks already followed the station, they showed Paris mean time (+0:09:21) instead.",
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The window now ends at the end of 31 March, as its note says, not at the start of that day."
+        }
+      ]
     },
     {
       "id": "fr-pmt-1891",
-      "version": 1,
+      "version": 2,
       "title": "Paris mean time, legal time of France (law of 14 March 1891)",
       "scope": "Metropolitan France outside Alsace-Moselle (German from 1871): civil clocks and the outside clocks of railway stations",
       "clock": "civil",
@@ -228,7 +240,7 @@
         "reckoning": "before",
         "kind": "event",
         "precision": "days",
-        "window": { "earliest": "1891-03-16T00:00:00", "latest": "1891-03-31T00:00:00" },
+        "window": { "earliest": "1891-03-16T00:00:00", "latest": "1891-03-31T23:59:59" },
         "citations": ["fr-jo-1891-03-15-law", "fr-jo-1870-11-06-promulgation"],
         "note": "The law was printed in the Journal officiel of Sunday 15 March 1891. Under the decree of 5 November 1870 it bound Paris one clear day later, from 17 March, and each other arrondissement one clear day after the Journal reached its chef-lieu. When each town reset its public clocks is not recorded; the window runs to the end of March."
       },
@@ -247,7 +259,14 @@
         "flag": "documented",
         "reason": "The law of 14 March 1891 makes Paris mean time the legal time of France."
       },
-      "citations": ["fr-jo-1891-03-15-law"]
+      "citations": ["fr-jo-1891-03-15-law"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The window now ends at the end of 31 March, as its note says, not at the start of that day."
+        }
+      ]
     },
     {
       "id": "fr-rail-interior-before-1911",
