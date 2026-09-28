@@ -47,6 +47,34 @@ function clock(pin?: number): void {
   SetDeltaTFunction(pin === undefined ? deltaT : () => pin);
 }
 
+/**
+ * astronomy-engine reports an input it cannot evaluate by throwing a string,
+ * not an Error. Every entry point below turns such a throw into a RangeError
+ * that keeps the original value as its cause; Error objects pass unchanged.
+ */
+function evaluated<T>(run: () => T): T {
+  try {
+    return run();
+  } catch (thrown) {
+    if (thrown instanceof Error) throw thrown;
+    throw new RangeError(`The ephemeris could not evaluate this instant: ${String(thrown)}`, { cause: thrown });
+  }
+}
+
+/** JavaScript's Date range: ±8.64e15 ms around 1970-01-01T00:00Z. */
+const DATE_LIMIT_MS = 8.64e15;
+
+/** A speed sample stepDays from date; it must itself be a valid Date. */
+function sampleDate(date: Date, stepDays: number): Date {
+  const ms = date.getTime() + stepDays * 86_400_000;
+  if (!(Math.abs(ms) <= DATE_LIMIT_MS)) {
+    throw new RangeError(
+      `Speed samples ${Math.abs(stepDays)} day either side of this instant fall outside JavaScript's Date range (±8.64e15 ms).`
+    );
+  }
+  return new Date(ms);
+}
+
 function deltaTFor(date: Date, pin: number | undefined): DeltaT {
   if (pin !== undefined) {
     return { seconds: pin, sigma: null, model: "pinned", table: null, tableDigest: null, segment: "pinned" };
@@ -108,29 +136,34 @@ function longitudeAt(body: BodyName, date: Date): number {
 }
 
 export function bodyLongitude(body: BodyName, date: Date): number {
-  clock();
-  return longitudeAt(body, date);
+  return evaluated(() => {
+    clock();
+    return longitudeAt(body, date);
+  });
 }
 
 /**
  * Longitude speed in degrees per day: the derivative of the longitude this
  * engine reports, by a central difference over plus/minus 0.001 day (86.4 s).
  * The true node keeps plus/minus six hours, where its short-period noise
- * would otherwise dominate.
+ * would otherwise dominate. Both samples must lie in JavaScript's Date range,
+ * so positions need an instant at least six hours inside it.
  */
 export const SPEED_STEP_DAYS = 0.001;
 export const NODE_SPEED_STEP_DAYS = 0.25;
 
 export function longitudeSpeed(body: BodyName, date: Date): number {
-  clock();
-  return speedAt(body, date);
+  return evaluated(() => {
+    clock();
+    return speedAt(body, date);
+  });
 }
 
 function speedAt(body: BodyName, date: Date): number {
   const stepDays =
     body === "North Node" || body === "South Node" ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
-  const before = longitudeAt(body, new Date(date.getTime() - stepDays * 86_400_000));
-  const after = longitudeAt(body, new Date(date.getTime() + stepDays * 86_400_000));
+  const before = longitudeAt(body, sampleDate(date, -stepDays));
+  const after = longitudeAt(body, sampleDate(date, stepDays));
   let difference = after - before;
   if (difference > 180) difference -= 360;
   if (difference < -180) difference += 360;
@@ -150,8 +183,10 @@ function position(body: BodyName, lon: number, lat: number, speed: number): Body
 }
 
 export function computeBodies(date: Date): BodyPosition[] {
-  clock();
-  return bodiesAt(date);
+  return evaluated(() => {
+    clock();
+    return bodiesAt(date);
+  });
 }
 
 function bodiesAt(date: Date): BodyPosition[] {
@@ -177,12 +212,14 @@ function bodiesAt(date: Date): BodyPosition[] {
 
 export function computeChart(input: ChartInput): Chart {
   const pin = input.deltaT;
-  clock(pin);
-  try {
-    return chartAt(input, pin);
-  } finally {
-    if (pin !== undefined) clock();
-  }
+  return evaluated(() => {
+    clock(pin);
+    try {
+      return chartAt(input, pin);
+    } finally {
+      if (pin !== undefined) clock();
+    }
+  });
 }
 
 function chartAt(input: ChartInput, pin: number | undefined): Chart {
@@ -232,8 +269,8 @@ function meanLunarPoints(date: Date): { node: number; apogee: { lon: number; lat
 }
 
 function centralSpeed(longitudeOf: (date: Date) => number, date: Date): number {
-  const before = longitudeOf(new Date(date.getTime() - SPEED_STEP_DAYS * 86_400_000));
-  const after = longitudeOf(new Date(date.getTime() + SPEED_STEP_DAYS * 86_400_000));
+  const before = longitudeOf(sampleDate(date, -SPEED_STEP_DAYS));
+  const after = longitudeOf(sampleDate(date, SPEED_STEP_DAYS));
   let difference = after - before;
   if (difference > 180) difference -= 360;
   if (difference < -180) difference += 360;
@@ -261,12 +298,14 @@ function pointPosition(point: PointName, lon: number, lat: number, speed: number
  */
 export function computePoints(chart: Chart): ChartPoints {
   const pin = chart.input.deltaT;
-  clock(pin);
-  try {
-    return pointsAt(chart);
-  } finally {
-    if (pin !== undefined) clock();
-  }
+  return evaluated(() => {
+    clock(pin);
+    try {
+      return pointsAt(chart);
+    } finally {
+      if (pin !== undefined) clock();
+    }
+  });
 }
 
 /**
@@ -287,13 +326,15 @@ export function computeChartDeclinations(chart: Chart): ChartDeclinations {
   if (pin !== undefined && (!Number.isFinite(pin) || typeof pin !== "number" || Math.abs(pin) > 1e10)) {
     throw new RangeError("declination chart deltaT must be finite and at most 1e10 seconds in size.");
   }
-  clock(pin);
-  try {
-    return { ...declinationsForBodies(bodies, e_tilt(MakeTime(date)).tobl),
-      utc: date.toISOString(), deltaT: deltaTFor(date, pin) };
-  } finally {
-    if (pin !== undefined) clock();
-  }
+  return evaluated(() => {
+    clock(pin);
+    try {
+      return { ...declinationsForBodies(bodies, e_tilt(MakeTime(date)).tobl),
+        utc: date.toISOString(), deltaT: deltaTFor(date, pin) };
+    } finally {
+      if (pin !== undefined) clock();
+    }
+  });
 }
 
 function pointsAt(chart: Chart): ChartPoints {

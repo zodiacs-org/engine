@@ -19,6 +19,13 @@ modules:
 - `src/lib/time/localToUtc.ts` — host-`Intl` timezone conversion
 - `src/lib/geo/search.ts` — client for the separately hosted GeoNames index
 
+`src/exact.ts`, added in 0.1.1-rc.13, is this package's own implementation of
+exact sums of binary64 values for the configured-aspect and declination
+decisions. It follows published algorithms: the nonoverlapping expansions of
+J. R. Shewchuk, "Adaptive Precision Floating-Point Arithmetic and Fast Robust
+Geometric Predicates" (1997), in the partial-sums form documented for Python's
+`math.fsum`, with one round-to-nearest-even at the end. It adds no dependency.
+
 The computational dependency is `astronomy-engine@2.1.19`. Its installed npm
 metadata declares MIT, names Donald Cross as author, and links to
 `https://github.com/cosinekitty/astronomy`. Its distributed

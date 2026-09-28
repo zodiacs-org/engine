@@ -1,7 +1,7 @@
 import { MakeTime, SetDeltaTFunction, e_tilt } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
-import { natalChart } from "./api.js";
+import { chartDeclinations, natalChart } from "./api.js";
 import {
   DECLINATION_ORB,
   DECLINATION_ORB_LUMINARY,
@@ -226,5 +226,49 @@ describe("chart-clock declination derivation", () => {
     expect(derived.receiptScope).toBe("not-included-in-natal-receipt");
     expect(JSON.stringify(chart)).toBe(snapshot);
     expect(serializeNatalEnvelope(createNatalEnvelope(chart))).toBe(before);
+  });
+});
+
+describe("the Sun defines the out-of-bounds limit", () => {
+  // At these solstices the Sun's geocentric ecliptic latitude, a fraction of an
+  // arcsecond, puts its computed declination beyond the true obliquity.
+  it.each([
+    ["June", "2024-06-20T20:51:00Z"],
+    ["December", "1970-12-22T06:36:00Z"]
+  ])("never flags the Sun out of bounds at the %s solstice", (_month, utc) => {
+    const result = chartDeclinations({utc, latitude: 10, longitude: 20, houseSystem: "placidus"});
+    const sun = result.rows.find(row => row.body === "Sun")!;
+    expect(Math.abs(sun.dec)).toBeGreaterThan(result.trueObliquity);
+    expect(Math.abs(sun.dec) - result.trueObliquity).toBeLessThan(1 / 3600);
+    expect(sun.outOfBounds).toBe(false);
+  });
+
+  it("keeps the strict rule for every other body, by exact label", () => {
+    const result = declinationsForBodies([
+      {body: "Sun", lon: 90, lat: 8},
+      {body: "sun", lon: 90, lat: 8},
+      {body: "Synthetic", lon: 90, lat: 8},
+      {body: "Moon", lon: 90, lat: 8},
+      {body: "Mars", lon: 90, lat: 0}
+    ], 23.44);
+    expect(result.rows.map(row => [row.body, row.outOfBounds])).toEqual([
+      ["Sun", false], ["sun", true], ["Synthetic", true], ["Moon", true], ["Mars", false]
+    ]);
+    const flagged: string[] = [];
+    for (const utc of ["2024-06-20T20:51:00Z", "1970-12-22T06:36:00Z", "2025-03-01T00:00:00Z", "2006-09-15T00:00:00Z"]) {
+      const chart = chartDeclinations({utc});
+      for (const row of chart.rows) {
+        expect(row.outOfBounds, `${utc} ${row.body}`).toBe(row.body !== "Sun" && Math.abs(row.dec) > chart.trueObliquity);
+        if (row.outOfBounds) flagged.push(`${utc.slice(0, 10)} ${row.body}`);
+      }
+    }
+    expect(flagged).toEqual(["2024-06-20 Moon", "2024-06-20 Mercury", "2024-06-20 Venus", "2025-03-01 Mars", "2006-09-15 Moon"]);
+  });
+
+  it("uses the true obliquity of date on the chart's clock", () => {
+    const chart = natalChart({utc: "2024-06-20T20:51:00Z"});
+    const time = MakeTime(chart.input.utc);
+    expect(chartDeclinations(chart).trueObliquity).toBe(e_tilt(time).tobl);
+    expect(e_tilt(time).tobl).not.toBe(e_tilt(time).mobl);
   });
 });

@@ -1,0 +1,639 @@
+{
+ "schema": "zodiacs.exact-aspect-oracle.v1",
+ "timestamp": "2026-09-28T13:32:12.363886+00:00",
+ "engineVersion": "0.1.1-rc.11",
+ "expectation": "mismatches",
+ "passed": true,
+ "archive": "/tmp/claude-0/-home-user-site/25475091-052a-53d7-9cd4-cf04ce09dc68/scratchpad/engine-rc13/artifacts/zodiacs-engine-0.1.1-rc.11.tgz",
+ "binding": {
+  "archiveSha256": "d88e0ff8db91e1183789763ad32feb2dac61716e35ad7676a943f7a1ad377862",
+  "archiveBytes": 70989
+ },
+ "runtime": "v22.22.2",
+ "scriptSha256": "d1d72a89d2568fd9d60d58a60eebb1bc1573ccb552b2bb202a08c0991a04c7eb",
+ "fixturesSha256": "93a8b4478437f74b73b30c3c71a8f391bdbd5b01e71f53ba14f37c5fc61dc8e2",
+ "cases": 53168,
+ "mismatches": 13163,
+ "families": {
+  "boundary-0.1-orbs": {
+   "cases": 20000,
+   "mismatches": 4384
+  },
+  "decimal-boundary": {
+   "cases": 5520,
+   "mismatches": 1596
+  },
+  "declination-boundary": {
+   "cases": 2640,
+   "mismatches": 176
+  },
+  "declination-rotated": {
+   "cases": 2000,
+   "mismatches": 0
+  },
+  "multi-body": {
+   "cases": 3000,
+   "mismatches": 1266
+  },
+  "review-reproductions": {
+   "cases": 8,
+   "mismatches": 3
+  },
+  "zero-orb-0.01-grid": {
+   "cases": 20000,
+   "mismatches": 5738
+  }
+ },
+ "wrappedSplit": {
+  "boundary-0.1-orbs unwrapped": 14799,
+  "boundary-0.1-orbs wrapped": 5201,
+  "decimal-boundary unwrapped": 4236,
+  "decimal-boundary wrapped": 1284,
+  "multi-body unwrapped": 528,
+  "multi-body wrapped": 2472,
+  "review-reproductions wrapped": 3,
+  "zero-orb-0.01-grid unwrapped": 15720,
+  "zero-orb-0.01-grid wrapped": 4280
+ },
+ "mismatchKinds": {
+  "boundary-0.1-orbs: membership": 1958,
+  "boundary-0.1-orbs: orb-not-exact-rounded": 2426,
+  "decimal-boundary: membership": 590,
+  "decimal-boundary: motion": 594,
+  "decimal-boundary: orb-not-exact-rounded": 412,
+  "declination-boundary: membership": 176,
+  "multi-body: membership": 79,
+  "multi-body: motion": 78,
+  "multi-body: orb-not-exact-rounded": 1078,
+  "multi-body: order-or-type": 31,
+  "review-reproductions: membership": 3,
+  "zero-orb-0.01-grid: membership": 5738
+ },
+ "examples": [
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "A",
+      "lon": 183.67,
+      "speed": 0.7
+     },
+     {
+      "body": "B",
+      "lon": 183.67,
+      "speed": 0.1
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 0.0
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "A",
+      "b": "B",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 0,
+      "maximumOrb": 0,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  },
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "B",
+      "lon": 183.67,
+      "speed": 0.1
+     },
+     {
+      "body": "A",
+      "lon": 183.67,
+      "speed": 0.7
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 0.0
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "B",
+      "b": "A",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 0,
+      "maximumOrb": 0,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  },
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "A",
+      "lon": 20.9,
+      "speed": 0.7
+     },
+     {
+      "body": "B",
+      "lon": 20.9,
+      "speed": 0.1
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 0.0
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "A",
+      "b": "B",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 0,
+      "maximumOrb": 0,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  },
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "B",
+      "lon": 20.9,
+      "speed": 0.1
+     },
+     {
+      "body": "A",
+      "lon": 20.9,
+      "speed": 0.7
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 0.0
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "B",
+      "b": "A",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 0,
+      "maximumOrb": 0,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  },
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "A",
+      "lon": 20.9,
+      "speed": 0.7
+     },
+     {
+      "body": "B",
+      "lon": 20.9,
+      "speed": 0.1
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 0.0
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "A",
+      "b": "B",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 0,
+      "maximumOrb": 0,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  },
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "B",
+      "lon": 20.9,
+      "speed": 0.1
+     },
+     {
+      "body": "A",
+      "lon": 20.9,
+      "speed": 0.7
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 0.0
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "B",
+      "b": "A",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 0,
+      "maximumOrb": 0,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  },
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "A",
+      "lon": 16.39,
+      "speed": 0.7
+     },
+     {
+      "body": "B",
+      "lon": 16.39,
+      "speed": 0.1
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 0.0
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "A",
+      "b": "B",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 0,
+      "maximumOrb": 0,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  },
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "B",
+      "lon": 16.39,
+      "speed": 0.1
+     },
+     {
+      "body": "A",
+      "lon": 16.39,
+      "speed": 0.7
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 0.0
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "B",
+      "b": "A",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 0,
+      "maximumOrb": 0,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  },
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "A",
+      "lon": 349.5,
+      "speed": 0.7
+     },
+     {
+      "body": "B",
+      "lon": 348.5,
+      "speed": 0.1
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 1.0
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "A",
+      "b": "B",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 1,
+      "maximumOrb": 1,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  },
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "B",
+      "lon": 348.5,
+      "speed": 0.1
+     },
+     {
+      "body": "A",
+      "lon": 349.5,
+      "speed": 0.7
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 1.0
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "B",
+      "b": "A",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 1,
+      "maximumOrb": 1,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  },
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "A",
+      "lon": 135.83,
+      "speed": 0.7
+     },
+     {
+      "body": "B",
+      "lon": 133.33,
+      "speed": 0.1
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 2.5
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "A",
+      "b": "B",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 2.5,
+      "maximumOrb": 2.5,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  },
+  {
+   "family": "decimal-boundary",
+   "why": "motion",
+   "case": {
+    "kind": "aspects",
+    "wrapped": false,
+    "positions": [
+     {
+      "body": "B",
+      "lon": 133.33,
+      "speed": 0.1
+     },
+     {
+      "body": "A",
+      "lon": 135.83,
+      "speed": 0.7
+     }
+    ],
+    "policy": {
+     "bodies": [
+      "A",
+      "B"
+     ],
+     "aspects": [
+      {
+       "type": "conjunction",
+       "orb": 2.5
+      }
+     ],
+     "stationaryRelativeSpeed": 0.6
+    }
+   },
+   "engine": {
+    "aspects": [
+     {
+      "a": "B",
+      "b": "A",
+      "type": "conjunction",
+      "angle": 0,
+      "orb": 2.5,
+      "maximumOrb": 2.5,
+      "motion": "separating",
+      "applying": false
+     }
+    ]
+   }
+  }
+ ],
+ "method": "fractions.Fraction on the exact binary64 inputs; reported orbs compared with float(exact), correctly rounded half-even"
+}

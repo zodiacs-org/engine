@@ -152,7 +152,11 @@ function computedBirth({ input, flags }: ValidatedBirth): Chart {
   return chart;
 }
 
-/** Apparent geocentric tropical positions for an instant. */
+/**
+ * Apparent geocentric tropical positions for an instant. Speeds are sampled
+ * up to six hours either side of it, so an instant nearer either end of the
+ * Date range, or one astronomy-engine cannot evaluate, throws RangeError.
+ */
 export function positions(date: DateInput): BodyPosition[] {
   return computeBodies(dateFrom(date, "date"));
 }

@@ -1,7 +1,15 @@
 /**
  * Explicit longitude-aspect policies. This API does not change natal charts,
  * synastry defaults, or the existing calculation-receipt conventions.
+ *
+ * Arithmetic is exact on the binary64 inputs: each longitude, speed, angle,
+ * orb and threshold is the exact value of its double, every comparison is
+ * decided on exact values, and only the reported orb is rounded, once.
  */
+
+import { checkedBodyLabel } from "./body-label.js";
+import { absolute, compareExact, exactSign, exactSum, roundedValue, signOf } from "./exact.js";
+import type { ExactSum } from "./exact.js";
 
 export type ConfiguredAspectMotion = "applying" | "separating" | "stationary";
 
@@ -70,6 +78,12 @@ export interface AspectPolicy {
     readonly orb: "inclusive;luminary-replaces-rule;minimum-of-rule-and-both-body-caps";
     readonly matching: "one-per-pair;smallest-absolute-orb;definition-order-on-tie";
     readonly ordering: "ascending-orb;input-pair-order-on-tie";
+    /**
+     * Every input is the exact value of its double; separation, orb, motion,
+     * eligibility, matching and ordering are decided exactly, without a
+     * tolerance. The reported orb is the exact orb rounded to nearest, ties to even.
+     */
+    readonly arithmetic: "exact-binary64;reported-orb-rounded-half-even";
   };
 }
 
@@ -85,6 +99,7 @@ export interface ConfiguredAspect {
   readonly b: string;
   readonly type: string;
   readonly angle: number;
+  /** |separation − angle|, decided exactly and reported rounded to the nearest double. */
   readonly orb: number;
   readonly maximumOrb: number;
   readonly motion: ConfiguredAspectMotion;
@@ -113,7 +128,8 @@ const CONVENTIONS: AspectPolicy["conventions"] = Object.freeze({
   motion: "instantaneous-orb-rate;right-derivative-at-circular-corners;exact-separating-unless-stationary",
   orb: "inclusive;luminary-replaces-rule;minimum-of-rule-and-both-body-caps",
   matching: "one-per-pair;smallest-absolute-orb;definition-order-on-tie",
-  ordering: "ascending-orb;input-pair-order-on-tie"
+  ordering: "ascending-orb;input-pair-order-on-tie",
+  arithmetic: "exact-binary64;reported-orb-rounded-half-even"
 });
 
 function requireValue(condition: unknown, message: string): asserts condition {
@@ -151,10 +167,7 @@ function numberIn(value: unknown, low: number, high: number, label: string): num
   return value === 0 ? 0 : value;
 }
 
-function bodyLabel(value: unknown): string {
-  requireValue(typeof value === "string" && value.length > 0 && value.length <= 80 && value.trim() === value && !/[\u0000-\u001f\u007f]/.test(value), "Body labels must be nonempty, trimmed strings of at most 80 characters.");
-  return value;
-}
+const bodyLabel = checkedBodyLabel;
 
 function orbLimits(value: unknown): AspectOrbLimits {
   if (typeof value === "number") {
@@ -215,25 +228,44 @@ export function createAspectPolicy(input: AspectPolicyInput = {}): AspectPolicy 
 /** Independent immutable copy of the historical five-aspect/ten-body defaults. */
 export const DEFAULT_ASPECT_POLICY: AspectPolicy = createAspectPolicy();
 
-/** Inputs have already been bounded to [0,360); fold only when needed. */
-function signedSeparation(a: number, b: number): number {
-  const difference = a - b;
-  return difference > 180 ? difference - 360 : difference < -180 ? difference + 360 : difference;
+/**
+ * a − b, exactly, folded into (−180, 180]. Validated longitudes lie in
+ * [0,360), so one fold by exactly 360 suffices and itself adds no error.
+ */
+function signedSeparation(a: number, b: number): ExactSum {
+  const difference = exactSum(a, -b);
+  if (compareExact(difference, 180) > 0) return exactSum(difference, -360);
+  if (compareExact(difference, -180) <= 0) return exactSum(difference, 360);
+  return difference;
 }
 
-function motionAt(a: AspectPosition, b: AspectPosition, angle: number, threshold: number): ConfiguredAspectMotion {
-  const relative = a.speed - b.speed;
-  if (relative === 0 || Math.abs(relative) < threshold) return "stationary";
-  const signed = signedSeparation(a.lon, b.lon);
-  const distance = Math.abs(signed);
-  const deviation = distance - angle;
-  if (deviation === 0) return "separating";
-  // Right derivative: circular separation increases from 0 and decreases from
-  // 180 for either nonzero velocity sign. Away from a corner its usual signed
-  // derivative applies. Using signs avoids overflow for finite extreme speeds.
-  const distanceRateSign = distance === 0 ? 1 : distance === 180 ? -1
-    : Math.sign(signed) * Math.sign(relative);
-  return Math.sign(deviation) * distanceRateSign < 0 ? "applying" : "separating";
+/**
+ * The sign of a − b, or 0 when the pair is stationary: equal speeds, or an
+ * exact |a − b| below the threshold. Decided without forming a − b in
+ * floating point, so finite speeds of any magnitude are exact.
+ */
+function relativeSpeedSign(a: number, b: number, threshold: number): -1 | 0 | 1 {
+  if (a === b) return 0;
+  const sign = a > b ? 1 : -1;
+  return exactSign([threshold, -sign * a, sign * b]) > 0 ? 0 : sign;
+}
+
+/**
+ * Right derivative of the circular separation: it increases from 0 and
+ * decreases from 180 whichever way the pair moves; elsewhere it is the sign
+ * of the separation times the sign of the relative speed.
+ */
+function distanceRateSign(signed: ExactSum, distance: ExactSum, relative: -1 | 1): -1 | 1 {
+  if (signOf(distance) === 0) return 1;
+  if (compareExact(distance, 180) === 0) return -1;
+  return signOf(signed) * relative > 0 ? 1 : -1;
+}
+
+function motionOf(deviation: ExactSum, rate: -1 | 1 | null): ConfiguredAspectMotion {
+  if (rate === null) return "stationary";
+  const deviationSign = signOf(deviation);
+  if (deviationSign === 0) return "separating";
+  return deviationSign * rate < 0 ? "applying" : "separating";
 }
 
 /**
@@ -241,8 +273,11 @@ function motionAt(a: AspectPosition, b: AspectPosition, angle: number, threshold
  * Supply a policy made by createAspectPolicy (or DEFAULT_ASPECT_POLICY).
  * Speeds are required even for unselected rows: unknown speed is not stationary.
  * Every row is validated, duplicates reject, and absent selected bodies are
- * allowed. Equal-orb result ties preserve input pair order, as legacy findAspects.
- * The returned policy and results are immutable; they are not natal receipts.
+ * allowed. Separation, orb, motion, eligibility, the closest rule and the
+ * result order are decided on exact values; equal exact orbs keep definition
+ * order within a pair and input pair order in the result, as legacy
+ * findAspects does. The returned policy and results are immutable; they are
+ * not natal receipts.
  */
 export function findConfiguredAspects(positions: readonly AspectPosition[], policy: AspectPolicy): ConfiguredAspectResult {
   requireValue(policy !== null && typeof policy === "object" && POLICIES.has(policy), "Policy must be made by createAspectPolicy.");
@@ -258,25 +293,34 @@ export function findConfiguredAspects(positions: readonly AspectPosition[], poli
   });
   const selected = new Set(policy.bodies);
   const candidates = all.filter(row => selected.has(row.body));
-  const aspects: ConfiguredAspect[] = [];
+  const found: { aspect: ConfiguredAspect; exactOrb: ExactSum }[] = [];
   for (let i = 0; i < candidates.length; i += 1) {
     for (let j = i + 1; j < candidates.length; j += 1) {
       const a = candidates[i]!, b = candidates[j]!;
-      const distance = Math.abs(signedSeparation(a.lon, b.lon));
-      let best: ConfiguredAspect | null = null;
+      const signed = signedSeparation(a.lon, b.lon);
+      const distance = absolute(signed);
+      const relative = relativeSpeedSign(a.speed, b.speed, policy.stationaryRelativeSpeed);
+      const rate = relative === 0 ? null : distanceRateSign(signed, distance, relative);
+      const luminary = a.body === "Sun" || a.body === "Moon" || b.body === "Sun" || b.body === "Moon";
+      let best: { definition: ResolvedAspectRule; exactOrb: ExactSum; maximumOrb: number; motion: ConfiguredAspectMotion } | null = null;
       for (const definition of policy.aspects) {
-        const orb = Math.abs(distance - definition.angle);
-        const motion = motionAt(a,b,definition.angle,policy.stationaryRelativeSpeed);
-        const luminary = a.body === "Sun" || a.body === "Moon" || b.body === "Sun" || b.body === "Moon";
+        const deviation = exactSum(distance, -definition.angle);
+        const exactOrb = absolute(deviation);
+        const motion = motionOf(deviation, rate);
         const limits = luminary && definition.luminaryOrb ? definition.luminaryOrb : definition.orb;
         const maximumOrb = Math.min(limits[motion], policy.bodyOrbs[a.body]?.[motion] ?? 180, policy.bodyOrbs[b.body]?.[motion] ?? 180);
-        if (orb <= maximumOrb && (!best || orb < best.orb)) {
-          best = { a:a.body, b:b.body, type:definition.type, angle:definition.angle, orb, maximumOrb, motion, applying:motion === "applying" };
+        if (compareExact(exactOrb, maximumOrb) <= 0 && (!best || compareExact(exactOrb, best.exactOrb) < 0)) {
+          best = { definition, exactOrb, maximumOrb, motion };
         }
       }
-      if (best) aspects.push(Object.freeze(best));
+      if (best) {
+        const { definition, exactOrb, maximumOrb, motion } = best;
+        found.push({ exactOrb, aspect: Object.freeze({ a:a.body, b:b.body, type:definition.type, angle:definition.angle,
+          orb:roundedValue(exactOrb), maximumOrb, motion, applying:motion === "applying" }) });
+      }
     }
   }
-  aspects.sort((a,b) => a.orb-b.orb);
-  return Object.freeze({ schema:"zodiacs.configured-aspects.v1", policy, aspects:Object.freeze(aspects) });
+  // Array sort is stable: equal exact orbs keep input pair order.
+  found.sort((x, y) => compareExact(x.exactOrb, y.exactOrb));
+  return Object.freeze({ schema:"zodiacs.configured-aspects.v1", policy, aspects:Object.freeze(found.map(entry => entry.aspect)) });
 }

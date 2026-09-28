@@ -7,28 +7,34 @@ synchronous and ESM-only, has no import-time side effects, and performs no netwo
 its core entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see ΔT below).
 
-**Release candidate: 0.1.1-rc.12.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.13.** Public npm lookups for this package returned
 404 on 2026-09-26. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.12.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.13.tgz
 ```
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.12.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.13.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
-records the artifact hash, runtime and isolated consumer directory. A packed
-candidate is not a published release. This candidate adds secondary progression
-instants and positions using the existing site convention. Configurable longitude aspects and chart declinations
-from rc.11 remain available as separate analyses. Existing
-natal, transit, synastry and receipt conventions remain unchanged. The
-ephemeris is still astronomy-engine 2.1.19. See CHANGELOG.md for the release
-history and `docs/evidence/rc12-20260928/` for this continuation's checks and
-remaining programme gates. Site adoption is reviewed separately.
+records the artifact hash and runtime, and it removes its temporary consumer
+directory, which must have no `node_modules` above it (set `TMPDIR` if
+needed). A packed candidate is not a published release; `artifacts/README.md`
+lists every carried archive, and CI refuses one that changes in history or
+that the current source does not rebuild byte for byte. This candidate makes the
+configured-aspect and declination-parallel decisions exact on binary64 inputs,
+keeps the Sun inside the out-of-bounds limit it defines, applies one body-label
+rule to both analyses, and reports ephemeris failures as `RangeError`.
+Secondary progressions (rc.12) and configurable longitude aspects and chart
+declinations (rc.11) remain separate analyses. Existing natal, transit,
+synastry and receipt conventions remain unchanged. The ephemeris is still
+astronomy-engine 2.1.19. See CHANGELOG.md for the release history and
+`docs/evidence/rc13-20260928/` for this continuation's checks and remaining
+programme gates. Site adoption is reviewed separately.
 
 ## Natal chart in 10 lines
 
@@ -103,7 +109,8 @@ for (const aspect of today.aspects) {
   policy from `createAspectPolicy`, including minor and custom angles.
 - `chartDeclinations(natal)` derives right ascension, declination, parallel
   aspects and out-of-bounds flags on the chart's clock.
-- `progressedInstant(birthUtc, target)` maps elapsed tropical years to days.
+- `progressedInstant(birthUtc, target)` maps each elapsed tropical year of
+  life to one day after birth.
 - `progressedBodies(birthUtc, target)` returns the twelve ordinary position
   rows at that instant (see *Secondary progressions*).
 - `transits(natal, date)` returns a sky snapshot and moving-to-natal aspects.
@@ -142,7 +149,9 @@ console.log(progressedBodies(birthUtc, target));
 
 The fixed convention is one **365.2422-day tropical year of elapsed life**
 for one **86,400,000-millisecond day** after birth. `PROGRESSION_DAYS_PER_YEAR`
-exports that constant. This uses elapsed instants, not calendar anniversaries,
+exports that constant. Both are counted in UTC milliseconds as JavaScript
+`Date` counts them, 86,400,000 to the day with no leap seconds; they are not
+ephemeris (TT) days. This uses elapsed instants, not calendar anniversaries,
 local-time days or daylight-saving adjustments. Both arguments accept a valid
 `Date`, finite epoch-millisecond timestamp, or ISO calendar date/date-time.
 Date-only strings mean UTC midnight; date-times require an explicit offset.
@@ -150,16 +159,20 @@ Invalid dates and ambiguous local date-times throw `RangeError`. Resolve local
 birth times with the optional geo entry first.
 
 Targets before birth are accepted and map backwards with the same signed
-formula. Results preserve the site's existing floating-point operation order
+formula. That signed extension is not a converse progression, which takes a
+target after birth to an instant before it; no converse technique is offered.
+Results preserve the site's existing floating-point operation order
 and JavaScript `Date` truncation to integer milliseconds. Neither argument is
 mutated, and the returned Date and position rows are newly allocated.
 
 `progressedBodies` returns precisely `positions(progressedInstant(...))`:
-Sun, Moon, eight planets and the true north/south lunar nodes. **Speed is
-instantaneous ephemeris longitude motion in degrees per day at the progressed
-instant**, not degrees per day of lived time. A comparison between two target
-ages must use the progression mapping; do not treat this speed as a lived-time
-rate. No progressed angles, houses, extra chart points, solar-arc direction,
+Sun, Moon, eight planets and the true north/south lunar nodes. **Speed is the
+ephemeris longitude rate at the progressed instant, in degrees per day**: a
+central difference over ±0.001 day (±86.4 s), and over ±0.25 day for the true
+nodes, as in every position row. One progressed day stands for one tropical
+year of life, so the same number is the progressed motion in degrees per
+365.2422-day year of elapsed life. It is not a rate per lived day. No
+progressed angles, houses, extra chart points, solar-arc direction,
 progressed aspect policy or natal-receipt extension is implied.
 
 Positions retain the existing ephemeris and its accuracy limits. Reference
@@ -170,8 +183,11 @@ Date does not establish physical accuracy for that date. Validation includes a
 constructed mapping to the existing JPL longitude fixture and a rounded
 published date-mapping example; neither establishes predictive validity.
 The year convention and published mapping are cited to Juan Estadella,
-[*Predictive Astrology*, 3rd ed., pp. 84–85](https://juanestadella.com/Predictive_Astrology_Juan-Estadella_3rd_edition.pdf).
-See the candidate's evidence directory for the source-rounding distinction.
+[*Predictive Astrology*, 3rd ed., pp. 84–85](https://juanestadella.com/Predictive_Astrology_Juan-Estadella_3rd_edition.pdf)
+(PDF SHA-256 `bf52656b367ad7d1415a7b021a0a0db3a609bf35c7a40053ff0622e7a3325622`).
+The book's own rounding allows up to 4.73 s, hence the 5 s comparison; from the
+19.677 h birth time it actually used, the mapping lands within 50 ms of its
+unrounded result. See `docs/evidence/rc12-20260928/sources.md`.
 
 ### Configurable aspects
 
@@ -201,11 +217,14 @@ either body is Sun or Moon. Each selected body's `bodyOrbs` value is an upper
 bound: the smallest of the rule allowance and both body caps wins. A number
 sets all three motion limits; an object sets each separately. Boundaries are
 inclusive. The closest eligible aspect wins, with definition order breaking
-ties. Results sort by orb, then input-pair order.
+ties. Results sort by exact orb, then input-pair order.
 
 `bodies` explicitly selects identifiers; it defaults to Sun, Moon and the
-eight planets. Nodes or other points require selection. Positions require
-finite longitude in `[0,360)` and a finite longitude speed in degrees/day
+eight planets. Nodes or other points require selection. Labels, here and in
+the declination analysis, are exact and case-sensitive: nonempty strings of
+at most 80 characters, without surrounding whitespace or control characters.
+Positions require finite longitude in `[0,360)` and a finite longitude speed
+in degrees/day
 on the same time basis. Missing or null speed is rejected, including on
 unselected rows. A point whose speed is unknown must not be assigned zero to
 make it pass. Equal speeds, or relative speed below the policy threshold,
@@ -218,14 +237,31 @@ revalidated through the factory. Its schema and conventions describe the
 calculation; they are not an authenticated receipt. This analysis does not
 replace `chart.aspects`, or configure `synastry` or `transits`.
 
-The configured API subtracts validated longitudes directly and folds only
-across the 180° boundary. It avoids the historical helper's unnecessary
-360° normalization, which could lose an exact decimal custom-angle match
-at zero orb. Configured orbs, and matches or motion at floating-point
-boundaries, can therefore differ from the historical helper at roundoff
-scale. No numerical tolerance is added; ordinary binary floating-point
-subtraction still applies. The historical natal, transit, synastry and
-receipt calculations retain their existing behavior.
+#### Exact binary arithmetic
+
+Every longitude, speed, angle, orb and threshold is taken as the exact value
+of its binary64 double. The signed separation a − b is formed exactly, as an
+unrounded sum of doubles, and folded into (−180°, 180°] by exactly 360°. The
+orb |separation − angle|, its inclusive comparison with the limit, the choice
+of the closest rule, the order of results, and the motion (the signs of the
+separation, of the deviation from the angle and of the relative speed, and the
+stationary threshold) are all decided on those exact values. There is no
+epsilon or widened tolerance. Only the reported `orb` is rounded, once, to the
+nearest double with ties to even, so a reported orb never exceeds its
+`maximumOrb`. The policy records this as
+`conventions.arithmetic: "exact-binary64;reported-orb-rounded-half-even"`.
+
+Binary values are not decimals. At the default 7° square, 97.00000000000001
+is not rounded into eligibility. 188.86 − 98.86 is exactly 90 + 2⁻⁴⁶, so a
+zero-orb square does not match; 7.6999999999999895 and 359.7 are 8 + 2⁻⁵⁰
+apart, just outside the default 8° conjunction. 6.3 and 314 are exactly 45°
+plus the double 7.3 apart (6.3 carries 7.3's binary error), so a 7.3°
+semisquare orb includes them. Where a decimal boundary matters, use values
+that are exact in binary or allow for the difference in the orb.
+
+The historical helper behind `chart.aspects`, `transits`, `synastry` and the
+natal receipt keeps its floating-point arithmetic, so its orbs and its
+boundary decisions can differ from the configured API's at roundoff scale.
 
 ### Declinations and parallels
 
@@ -245,15 +281,29 @@ the full ecliptic longitude **and latitude** into the true equator and equinox
 of date, using the chart instant and the same pinned or model ΔT. Right
 ascension is in **degrees**, not hours, and is `null` where the horizontal
 unit-vector magnitude is no greater than `RA_POLE_TOLERANCE`; `raDefined`
-then is false. Declination is north-positive in `[-90,90]`. Out-of-bounds
-means strictly `abs(dec) > trueObliquity`, without an uncertainty allowance.
+then is false. Declination is north-positive in `[-90,90]`.
+
+Out-of-bounds means strictly `abs(dec) > trueObliquity`, without an
+uncertainty allowance. In `chartDeclinations`, `trueObliquity` is
+astronomy-engine's true obliquity of date, the IAU 2006 mean obliquity plus the
+IAU 2000B nutation in obliquity, at the chart instant on the chart's clock; the
+pure functions use the obliquity they are given. The Sun defines that bound, so
+a row labelled exactly `Sun` is never out of bounds. Its geocentric ecliptic
+latitude, of the order of an arcsecond, would otherwise put its computed
+declination beyond the obliquity at half of the solstices from 1800 to 2200,
+by up to 1.35″. Every other row keeps the strict rule.
 
 Every supplied body is eligible, including nodes; filter the input for a
 smaller set. Parallel/contraparallel matches choose the smaller of
 `abs(decA-decB)` and `abs(decA+decB)`, with parallel winning an exact tie.
 Orbs are inclusive, defaulting to 1° or 1.5° when Sun or Moon is involved.
-`eclipticToEquatorial` and `declinationsForBodies` expose the same geometry
-with an explicitly supplied obliquity.
+As with configured aspects, each declination double is taken as exact: the
+choice, the inclusive orb test and the order are decided without rounding, and
+only the reported `orb` and longitude `separation` are rounded, once. 13.3 and
+12.3 are exactly 1° apart and match at orb 1; 8.3 and 7.3 (1 + 2⁻⁵⁰ apart), and
+1.1 and 0.1 (1 + 3·2⁻⁵⁵), do not. Body labels follow the configured-aspect
+rule. `eclipticToEquatorial` and `declinationsForBodies` expose the same
+geometry with an explicitly supplied obliquity.
 
 These are derived coordinates of the existing ephemeris, with its existing
 corrections and limits. They do not establish the programme's 0.01″ physical
@@ -466,7 +516,20 @@ preserved. Resolve daylight-saving gaps/folds and historical local-time rules
 before calling these APIs. Accepted date syntax is not an accuracy guarantee
 outside the documented reference coverage.
 
-Birth settings accept only a `houseSystem` from the twelve above and
+Every valid `Date` is accepted, but not every instant can be evaluated.
+Positions, and the charts, transits, synastry, progressed bodies,
+declinations, points and returns built on them, take each speed from samples
+±0.001 day around the instant (±0.25 day for the true nodes), so an instant
+within six hours of either end of JavaScript's Date range (±8.64e15 ms) throws
+`RangeError`. astronomy-engine's own light-time solver also gives up at some
+far dates; this candidate's checks met that at years −250,000 and −270,000.
+Every failure it reports, which it does by throwing a string, reaches the
+caller as a `RangeError` whose `cause` is the original value. Far outside
+`REFERENCE_SPAN`, evaluation is slow as well as unverified: those checks took
+two to five minutes per call at years −200,000 to −150,000 and 150,000 to
+270,000.
+
+Birth settings accept only a `houseSystem` from the thirteen above and
 a boolean `timeKnown`. Omitting them defaults to `"whole"` and `true`; explicit
 `null` and other unsupported values throw `RangeError`, including when
 coordinates are absent. Latitude and longitude must be supplied together as finite numbers

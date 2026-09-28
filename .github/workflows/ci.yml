@@ -18,10 +18,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22]
+        node: [20, 22, 24]
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          # Full history: the archive check reads every carried archive's past.
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v5
@@ -49,3 +52,10 @@ jobs:
 
       - name: Pack dry run
         run: npm run pack:dry-run
+
+      # A version string names one byte sequence. No carried archive may change
+      # or disappear in history, and when package.json's version has a carried
+      # archive, a rebuild of this checkout must reproduce its bytes. Before
+      # that archive is committed, the rebuild comparison reports a skip.
+      - name: Carried archives match history and source
+        run: npm run archive:binding
