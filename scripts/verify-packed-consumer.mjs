@@ -94,11 +94,13 @@ const calcRequest: CalcRequest = {body: "Mars", time: {jd: 2451545, scale: "TT"}
 const calcResult: CalcPosition | CalcRefusal = calc(calcRequest);
 if (calcResult.status === "ok") { const replayed: CalcRequest = calcResult.receipt.request; void replayed; } else { const reason: string = calcResult.reason; void reason; }
 void houses; void events; void calcChart;
-import { birthWindow, WINDOW_VERIFICATION, type BirthWindow, type WindowChange } from "@zodiacs/engine/window";
+import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError, type BirthWindow, type WindowChange, type WindowUnresolved } from "@zodiacs/engine/window";
 const windowed: BirthWindow = birthWindow({start: "2000-02-29T11:50:00Z", end: "2000-02-29T12:10:00Z", latitude: 0, longitude: 180, houseSystem: "placidus", rounding: {recorded: "2000-02-29T12:00:00Z", minutes: 5}});
 const firstChanges: WindowChange[] = windowed.switches[0]?.changes ?? [];
 const label: "sampled at one-second resolution" = WINDOW_VERIFICATION;
-void firstChanges; void label;
+const open: WindowUnresolved[] = windowed.unresolved;
+const budget: Error = new WindowBudgetError();
+void firstChanges; void label; void open; void budget;
 const degreePerDay = (_body: string, date: Date) => (date.getTime() / 86_400_000) % 360;
 const passes: LongitudeCrossing[] = findLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), 1);
 const search: CrossingSearchResult = searchLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), {stepDays: 1, maxSamples: 2});
@@ -170,7 +172,7 @@ import { searchLongitudeCrossings, houseOf } from "@zodiacs/engine";
 import * as vedic from "@zodiacs/engine/vedic";
 import * as root from "@zodiacs/engine";
 import { calc } from "@zodiacs/engine/calc";
-import { birthWindow, WINDOW_VERIFICATION } from "@zodiacs/engine/window";
+import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError } from "@zodiacs/engine/window";
 globalThis.fetch = () => { throw new Error("Calculation attempted a network request"); };
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
@@ -413,6 +415,8 @@ const windowed = birthWindow({start: "2001-12-21T08:40:00Z", end: "2001-12-21T09
 assert.equal(windowed.verification, "sampled at one-second resolution");
 assert.equal(WINDOW_VERIFICATION, windowed.verification);
 assert(windowed.flags.includes("polar-fallback"));
+assert.deepEqual(windowed.unresolved, []);
+assert(new WindowBudgetError() instanceof Error);
 assert.equal(windowed.cells.reduce((total, cell) => total + cell.milliseconds, 0), 40 * 60_000);
 for (const cell of windowed.cells) {
   // astronomy-engine reuses nutation within 86.4 ms; evaluate a day away first.

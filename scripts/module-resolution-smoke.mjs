@@ -197,7 +197,8 @@ assert.equal(calc.calc({ body: "Moon", time: "2020-01-01", zodiac: { sidereal: "
 assert.equal(typeof window.birthWindow, "function", "missing window export: birthWindow");
 assert.equal(window.WINDOW_VERIFICATION, "sampled at one-second resolution");
 assert.ok(Object.isFrozen(window.WINDOW_RATE_BOUNDS), "window rate bounds must be frozen");
-for (const name of ["birthWindow", "WINDOW_RATE_BOUNDS", "WINDOW_VERIFICATION", "MAX_WINDOW_MS"]) {
+assert.equal(new window.WindowBudgetError().name, "WindowBudgetError");
+for (const name of ["birthWindow", "WINDOW_RATE_BOUNDS", "WINDOW_VERIFICATION", "MAX_WINDOW_MS", "WindowBudgetError"]) {
   assert.equal(name in engine, false, `window leaked into the root entry: ${name}`);
 }
 

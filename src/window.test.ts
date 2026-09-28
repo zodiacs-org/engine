@@ -4,16 +4,17 @@
  * switch must be the millisecond at which natalChart's features change as it
  * says. Inputs are synthetic places and instants.
  */
-import { MakeTime, SetDeltaTFunction, SiderealTime } from "astronomy-engine";
+import { MakeTime, SetDeltaTFunction, SiderealTime, e_tilt } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
 import { chartDeclinations, natalChart } from "./api.js";
-import { deltaT } from "./deltat.js";
+import { DELTA_T_TABLE, deltaT } from "./deltat.js";
+import { bodyLongitude } from "./ephemeris.js";
 import { houseOf } from "./houses.js";
 import { findLongitudeCrossings } from "./returns.js";
 import { signForLongitude } from "./signs.js";
 import type { HouseSystem } from "./types.js";
-import { MAX_WINDOW_MS, WINDOW_RATE_BOUNDS, WINDOW_VERIFICATION, birthWindow } from "./window.js";
+import { MAX_WINDOW_MS, WINDOW_RATE_BOUNDS, WINDOW_VERIFICATION, WindowBudgetError, birthWindow } from "./window.js";
 import type { BirthWindow, BirthWindowCell } from "./window.js";
 
 const DAY = 86_400_000;
@@ -344,6 +345,119 @@ describe("the true node's jitter", () => {
   }, 300_000);
 });
 
+describe("Placidus just below the polar limit", () => {
+  it("keeps Placidus through the review's reproduction, where the iteration alone fell back", () => {
+    // 3e-9° below the limit, with the RAMC passing 270°: 26 milliseconds of
+    // the 2.4 s around 2000-03-20T00:00Z fell back before the bisection.
+    const t0 = Date.UTC(2000, 2, 20);
+    const place: Place = { latitude: 66.56186339751429, longitude: 92.16879370494166, houseSystem: "placidus" };
+    const window = partition(t0 - 1_200, 2_400, place);
+    expect(window.flags).toEqual([]);
+    expect(window.cells.every((cell) => cell.features.houseSystem === "placidus")).toBe(true);
+    expect(disagreementsEverySecond(window, place, 1)).toEqual([]);
+    expect(unconfirmedSwitches(window, place)).toEqual([]);
+  }, 120_000);
+});
+
+describe("the ΔT model's seam", () => {
+  // deltat.ts hands over from its spline to its table at 1941.0, where ΔT
+  // steps from 24.834 s to 24.820 s and TT steps back 13.95 ms.
+  const seam = Date.UTC(DELTA_T_TABLE.from - 1, 11, 31, 18);
+  const place: Place = { latitude: 51.5, longitude: -0.12, houseSystem: "equal" };
+  /** Instants in [from, to) at which a body's longitude steps back against its motion. */
+  const backSteps = (body: "Moon" | "Sun", from: number, to: number) => {
+    SetDeltaTFunction(deltaT);
+    const found: number[] = [];
+    let previous = Number.NaN;
+    for (let time = from; time < to; time += 1) {
+      e_tilt(MakeTime(new Date(time + DAY)));
+      const value = bodyLongitude(body, new Date(time));
+      if (value < previous && previous - value < 1) found.push(time);
+      previous = value;
+    }
+    return found;
+  };
+
+  it("is the only discontinuity of ΔT inside the reference span", () => {
+    // Every knot of the table, where the linear pieces meet, and each end of
+    // the observed and predicted parts, 1 ms either side.
+    const ut = (year: number) => (year - 2000) * 365.25;
+    const knots = [DELTA_T_TABLE.from];
+    for (let year = DELTA_T_TABLE.from + 1; year < 2026; year += 1) knots.push(year);
+    const obs = 2000 + (DELTA_T_TABLE.observedTo - 51544.5) / 365.25;
+    const pred = 2000 + (DELTA_T_TABLE.predictedTo - 51544.5) / 365.25;
+    for (let k = 0; k <= 4; k += 1) knots.push(obs + (k * (pred - obs)) / 4);
+    for (let year = 1805; year < 2200; year += 5) knots.push(year);
+    const steps = knots.map((year) => deltaT(ut(year) + 1 / DAY) - deltaT(ut(year) - 1 / DAY));
+    expect(Math.abs(steps[0]! + 0.0139)).toBeLessThan(0.001);
+    expect(steps.slice(1).every((step) => Math.abs(step) < 1e-9)).toBe(true);
+  });
+
+  it("agrees with natalChart at every millisecond across the Moon's and the node's steps", () => {
+    expect(backSteps("Moon", seam - 3, seam + 3)).toEqual([seam]);
+    const window = partition(seam - 1_500, 3_000, place);
+    expect(window.flags).toEqual([]);
+    expect(disagreementsEverySecond(window, place, 1)).toEqual([]);
+    expect(unconfirmedSwitches(window, place)).toEqual([]);
+  }, 120_000);
+
+  it("agrees with natalChart at every millisecond across the Sun's step, one light time later", () => {
+    const [step] = backSteps("Sun", seam + 480_000, seam + 520_000);
+    expect(step).toBeDefined();
+    const window = partition(step! - 1_000, 2_000, place);
+    expect(window.flags).toEqual([]);
+    expect(disagreementsEverySecond(window, place, 1)).toEqual([]);
+  }, 120_000);
+});
+
+describe("sign ingresses of the true node", () => {
+  it("resolves every flicker of a fast ingress, where natalChart confirms each", () => {
+    // 2012-08-30, the node moving at 0.19°/day: its jitter makes the sign
+    // change back and forth for some tens of seconds.
+    const ingress = Date.parse("2012-08-30T02:55:46.875Z");
+    const place: Place = { latitude: 40.4, longitude: -3.7, houseSystem: "koch" };
+    const window = partition(ingress - 600_000, 1_200_000, place);
+    expect(window.flags).toEqual([]);
+    expect(window.unresolved).toEqual([]);
+    const node = window.switches.filter((entry) => entry.changes.some((change) => change.feature === "sign" && change.body === "North Node"));
+    expect(node.length).toBeGreaterThan(2);
+    expect(unconfirmedSwitches(window, place)).toEqual([]);
+    expect(disagreementsEverySecond(window, place)).toEqual([]);
+  }, 120_000);
+
+  it("leaves a slow ingress unresolved, and flags it, rather than run out of budget", () => {
+    // 1981-09-20, the node moving at 0.004°/day: its sign would change back
+    // and forth at millions of milliseconds.
+    const place: Place = { latitude: 51.5, longitude: -0.12, houseSystem: "placidus" };
+    const centre = Date.parse("1981-09-20T15:45:00Z");
+    const window = partition(centre - 3_600_000, 7_200_000, place);
+    expect(window.flags).toEqual(["node-unresolved"]);
+    expect(window.unresolved).toHaveLength(1);
+    const [gap] = window.unresolved;
+    expect(gap!.features).toEqual([
+      { feature: "sign", body: "North Node" },
+      { feature: "sign", body: "South Node" }
+    ]);
+    expect(gap!.milliseconds).toBe(gap!.end.getTime() - gap!.start.getTime());
+    for (const cell of window.cells) {
+      const inside = cell.start.getTime() >= gap!.start.getTime() && cell.end.getTime() <= gap!.end.getTime();
+      const outside = cell.end.getTime() <= gap!.start.getTime() || cell.start.getTime() >= gap!.end.getTime();
+      expect(inside || outside).toBe(true);
+      expect(cell.features.signs["North Node"] === null).toBe(inside);
+      expect(cell.features.signs["South Node"] === null).toBe(inside);
+    }
+    // Every other feature agrees with natalChart; the nodes' signs do outside the interval.
+    const found = disagreementsEverySecond(window, place, 10_000).filter((line) => {
+      const time = Date.parse(line.slice(0, 24));
+      const unresolved = time >= gap!.start.getTime() && time < gap!.end.getTime();
+      return !(unresolved && / sign:(North|South) Node: /.test(line));
+    });
+    expect(found).toEqual([]);
+    const confirmed = unconfirmedSwitches(window, place).filter((line) => !/ sign:(North|South) Node: /.test(line));
+    expect(confirmed).toEqual([]);
+  }, 120_000);
+});
+
 describe("shares", () => {
   const place: Place = { latitude: 40, longitude: -74, houseSystem: "placidus" };
 
@@ -397,10 +511,18 @@ describe("results", () => {
     expect(JSON.parse(JSON.stringify(partition(Date.UTC(2010, 9, 10, 10, 10, 10), 3_600_000, place)))).toEqual(JSON.parse(JSON.stringify(first)));
   });
 
-  it("flag windows outside the reference span", () => {
-    const window = partition(Date.UTC(1799, 11, 31, 23, 50), 1_200_000, place);
-    expect(window.flags).toContain("outside-reference-span");
-    expect(partition(Date.UTC(1800, 0, 1, 0, 0), 1_200_000, place).flags).not.toContain("outside-reference-span");
+  it("lie inside the reference span, where the bounds were scanned", () => {
+    expect(() => partition(Date.UTC(1799, 11, 31, 23, 50), 1_200_000, place)).toThrow(RangeError);
+    expect(() => partition(Date.UTC(2199, 11, 31, 23, 50), 1_200_000, place)).toThrow(RangeError);
+    expect(partition(Date.UTC(1800, 0, 1), 1_200_000, place).flags).toEqual([]);
+    expect(partition(Date.UTC(2200, 0, 1) - 1_200_000, 1_200_000, place).flags).toEqual([]);
+  });
+
+  it("report an exhausted budget with an error of its own", () => {
+    const error = new WindowBudgetError();
+    expect(error).toBeInstanceOf(Error);
+    expect(error.name).toBe("WindowBudgetError");
+    expect(error.limit).toBe(2_000_000);
   });
 
   it("publish their rate bounds", () => {
@@ -425,6 +547,10 @@ describe("invalid input", () => {
     ["a latitude past the pole", { ...place, latitude: 91, start, end: new Date(start.getTime() + 1000) }],
     ["the north pole, where no ascendant is defined", { ...place, latitude: 90, start, end: new Date(start.getTime() + 1000) }],
     ["the south pole", { ...place, latitude: -90, start, end: new Date(start.getTime() + 1000) }],
+    ["a latitude within 1e-6° of the north pole", { ...place, latitude: 90 - 5e-7, start, end: new Date(start.getTime() + 1000) }],
+    ["a latitude within 1e-6° of the south pole", { ...place, latitude: -90 + 5e-7, start, end: new Date(start.getTime() + 1000) }],
+    ["a window before 1800", { ...place, start: new Date(Date.UTC(1799, 11, 31, 23, 59)), end: new Date(Date.UTC(1800, 0, 1, 0, 1)) }],
+    ["a window after 2200", { ...place, start: new Date(Date.UTC(2199, 11, 31, 23, 59)), end: new Date(Date.UTC(2200, 0, 1, 0, 1)) }],
     ["an unknown house system", { ...place, houseSystem: "koch-ish", start, end: new Date(start.getTime() + 1000) }],
     ["a rounding unit outside the window", { ...place, start, end: new Date(start.getTime() + 60_000), rounding: { recorded: start, minutes: 5 } }],
     ["an unknown rounding mode", { ...place, rounding: { recorded: start, minutes: 5, mode: "up" } }]

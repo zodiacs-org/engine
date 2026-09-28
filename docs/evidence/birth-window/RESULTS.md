@@ -140,11 +140,14 @@ the conformance report check. All passed.
 - **Sampled, not proven.** The check compares the search with natalChart at
   every whole second. That the search misses nothing between samples rests on
   its enclosures, and three of their inputs are empirical: the body rate
-  bounds (about twice the largest rates scanned from 1800 to 2200), the
-  obliquity's rate bound (2.4 times) and the true node's jitter bound (at
-  least 3.9 times every value scanned from 1700 to 2300); see
-  `rate-bounds.json`. Outside 1800 to 2200 none was scanned, and results there
-  carry `outside-reference-span`. "Proven" needs the interval runtime.
+  bounds (about twice the largest rates scanned from 1800 to 2200) and the
+  obliquity's rate bound (2.4 times), in `rate-bounds.json`, and the true
+  node's jitter bound, at least 2.97 times every value found at 3,000
+  consecutive milliseconds every five days from 1800 to 2200, in
+  `node-jitter.json`. (The first scan of the jitter, two epochs a year, put
+  that factor at 3.9; the review found 3.34 in 2191, and the dense scan 2.97
+  in 2187.) Windows outside 1800 to 2200, where none was scanned, are refused.
+  "Proven" needs the interval runtime.
 - **What one second cannot see.** A change and its reversal inside one second
   is invisible to the check. The search's own sub-second changes are confirmed
   by natalChart at their milliseconds; one the search missed would not be
@@ -155,14 +158,17 @@ the conformance report check. All passed.
   configured aspects, declinations, and the brief's later slices (varga signs,
   KP sub-lords, dashas).
 - **The true node.** Its evaluation jitter makes its sign flicker at an
-  ingress, hundreds of times over up to seconds, all reported; such a window
-  takes seconds, and a node nearly stationary on a boundary can pass the
-  two-million-evaluation budget, which throws a RangeError.
-- **Places and time.** Exact poles are refused (no ascendant is defined
-  there); a place within about 1e-9° of a pole can pass the budget. ΔT is the
-  engine's model; a pinned ΔT is not supported. Windows of up to 48 hours are
-  accepted; this check covered 1 minute to 23.2 hours, and the unit tests
-  two-day windows around two planetary stations.
+  ingress, all reported where the budget allows: such a window takes from
+  seconds to minutes. At 24 of the 294 ingresses from 1800 to 2200 the
+  flicker is longer than the two-million-evaluation budget; a window that
+  holds too much of it returns within a fraction of a second with it left
+  unresolved and flagged `node-unresolved` (`node-ingresses.json`). A search
+  that still runs out throws `WindowBudgetError`.
+- **Places and time.** Latitudes within 1e-6° of a pole are refused (no
+  ascendant is defined at a pole). ΔT is the engine's model; a pinned ΔT is
+  not supported, and the search splits at the model's seam at 1941.0. Windows
+  of up to 48 hours are accepted; this check covered 1 minute to 23.2 hours,
+  and the unit tests two-day windows around two planetary stations.
 - **natalChart as a lone call.** astronomy-engine reuses its nutation within
   86.4 ms, so natalChart calls closer together than that can differ from
   these values in the last digits.

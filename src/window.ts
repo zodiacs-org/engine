@@ -5,16 +5,25 @@
  * This entry point carries the engine's ephemeris, like the root entry point,
  * and is separate from it so that the root entry point does not grow.
  */
-import { MakeTime, SetDeltaTFunction, SiderealTime, e_tilt } from "astronomy-engine";
+import {
+  BackdatePosition,
+  Body,
+  C_AUDAY,
+  GeoVector,
+  MakeTime,
+  SetDeltaTFunction,
+  SiderealTime,
+  e_tilt
+} from "astronomy-engine";
 
 import { ASPECTS, ASPECT_TYPES, matchAspect, separation } from "./aspects.js";
 import { validateBirthSettings } from "./birth-input.js";
 import { dateFrom } from "./date-input.js";
-import { deltaT } from "./deltat.js";
+import { DELTA_T_TABLE, deltaT } from "./deltat.js";
 import { bodyLongitude } from "./ephemeris.js";
 import { computeAngles, computeHouses, houseOf, isPolarUndefinedHouseSystem } from "./houses.js";
 import type { AngleInput } from "./houses.js";
-import { outsideReferenceSpan } from "./reference-span.js";
+import { REFERENCE_SPAN } from "./reference-span.js";
 import { SIGN_NAMES, normalizeLongitude, signIndexForLongitude } from "./signs.js";
 import type {
   AspectType,
@@ -75,8 +84,9 @@ export const WINDOW_RATE_BOUNDS: Readonly<Record<BodyName, number>> = Object.fre
  * from J2000: 5e-5 (1 + |T|). The engine's true node comes from a velocity
  * astronomy-engine takes by differencing the Moon's position over 1.728 s, so
  * from one millisecond to the next it departs from its smooth motion (at most
- * 0.26°/day) by up to 3.3e-5° from 1800 to 2200 and 4.3e-5° from 1700 to 2300;
- * the bound is at least 3.9 times every value scanned.
+ * 0.26°/day). Scanned at 3,000 consecutive milliseconds every five days from
+ * 1800 to 2200, the departure reaches 4.8e-5° (in 2187); the bound is at
+ * least 2.97 times every value found. Scanned, not derived.
  */
 function nodeJitter(utcMilliseconds: number): number {
   return 5e-5 * (1 + Math.abs((utcMilliseconds - J2000) / (36525 * DAY)));
@@ -92,6 +102,23 @@ const MAX_ANGLE_MS = Math.floor((45 / SIDEREAL_RATE) * DAY);
 const BAND = 1e-9;
 /** Instants the search may evaluate before it gives up. */
 const MAX_EVALUATIONS = 2_000_000;
+/** The span a window must lie in, over which the bounds above were scanned. */
+const SPAN_FROM = Date.parse(REFERENCE_SPAN.from);
+const SPAN_TO = Date.parse(REFERENCE_SPAN.to);
+/** Latitudes within this many degrees of a pole are refused. */
+const POLE_MARGIN = 1e-6;
+/**
+ * Where the node may come within its jitter band of a sign boundary it is
+ * sampled hourly, then every minute; a band reaches to where those samples lie
+ * BAND_EDGE jitter bounds from the boundary, and the cost of resolving it is
+ * estimated from where they lie within BAND_COST.
+ */
+const NODE_COARSE_MS = 3_600_000;
+const NODE_FINE_MS = 60_000;
+const BAND_EDGE = 5;
+const BAND_COST = 3;
+/** A component's value in an unresolved interval. */
+const UNRESOLVED = -2;
 
 const BODIES = [
   "Sun",
@@ -110,6 +137,21 @@ const BODIES = [
 const NORTH = 10;
 const SOUTH = 11;
 const RATES = BODIES.map((body) => WINDOW_RATE_BOUNDS[body]);
+/** astronomy-engine's bodies for the light-time backdating of the Sun and planets. */
+const BACKDATED: (Body | null)[] = [
+  Body.Sun,
+  null,
+  Body.Mercury,
+  Body.Venus,
+  Body.Mars,
+  Body.Jupiter,
+  Body.Saturn,
+  Body.Uranus,
+  Body.Neptune,
+  Body.Pluto,
+  null,
+  null
+];
 
 /** Aspect pairs in natalChart's order: the first ten bodies, earlier body first. */
 const PAIRS: (readonly [number, number])[] = [];
@@ -132,6 +174,22 @@ const MC = 13;
 const HOUSE = 14;
 const ASPECT = 26;
 const SYSTEM = ASPECT + PAIRS.length;
+
+/**
+ * RAMCs at which a Placidus cusp's right ascension reaches 90° or 270° as the
+ * latitude approaches the polar limit, and at which Koch's midheaven has its
+ * extreme declination: there the cusps carry the rounding of asin near ±1.
+ */
+const SENSITIVE_RAMC: Partial<Record<HouseSystem, readonly [north: number[], south: number[]]>> = {
+  placidus: [
+    [30, 150, 210, 270, 330],
+    [30, 90, 150, 210, 330]
+  ],
+  koch: [
+    [90, 270],
+    [90, 270]
+  ]
+};
 
 /** A rounding model: the true instant is uniform over the rounding unit of the record. */
 export interface WindowRounding {
@@ -176,11 +234,15 @@ export interface WindowAspect {
 
 /** The discrete features of the chart, as natalChart would give them, throughout a cell. */
 export interface WindowFeatures {
-  signs: Record<BodyName, ZodiacSign>;
+  /** Each body's sign; null for the nodes inside an unresolved interval. */
+  signs: Record<BodyName, ZodiacSign | null>;
   ascendant: ZodiacSign;
   midheaven: ZodiacSign;
-  /** Each body's house, as houseOf gives it from the chart's cusps. */
-  houses: Record<BodyName, HouseNumber>;
+  /**
+   * Each body's house, as houseOf gives it from the chart's cusps; null for
+   * the nodes inside an unresolved interval where the houses are whole signs.
+   */
+  houses: Record<BodyName, HouseNumber | null>;
   /** The aspects in orb, in natalChart's pair order. */
   aspects: WindowAspect[];
   /** The house system used: the requested one, or "whole" where Placidus or Koch falls back. */
@@ -200,10 +262,11 @@ export interface BirthWindowCell {
   features: WindowFeatures;
 }
 
+/** A change to or from null opens or closes an unresolved interval; it is not a crossing. */
 export type WindowChange =
-  | { feature: "sign"; body: BodyName; from: ZodiacSign; to: ZodiacSign }
+  | { feature: "sign"; body: BodyName; from: ZodiacSign | null; to: ZodiacSign | null }
   | { feature: "ascendant" | "midheaven"; from: ZodiacSign; to: ZodiacSign }
-  | { feature: "house"; body: BodyName; from: HouseNumber; to: HouseNumber }
+  | { feature: "house"; body: BodyName; from: HouseNumber | null; to: HouseNumber | null }
   | { feature: "aspect"; a: BodyName; b: BodyName; from: AspectType | null; to: AspectType | null }
   | { feature: "house-system"; from: HouseSystem; to: HouseSystem };
 
@@ -216,11 +279,26 @@ export interface BirthWindowSwitch {
   changes: WindowChange[];
 }
 
+/**
+ * An interval in which the true nodes' signs, and where the houses are whole
+ * signs their houses, are not resolved: at a slow ingress the node's
+ * millisecond jitter makes them change back and forth for longer than the
+ * search's budget allows. They are null in every cell of [start, end).
+ */
+export interface WindowUnresolved {
+  start: Date;
+  /** The first instant after the interval, at which the features are resolved again. */
+  end: Date;
+  milliseconds: number;
+  features: { feature: "sign" | "house"; body: "North Node" | "South Node" }[];
+}
+
 export type BirthWindowFlag =
   | "polar-fallback"
-  | "outside-reference-span"
-  /** A rate or enclosure check failed somewhere; completeness is then not established. */
-  | "bound-exceeded";
+  /** Some interval's end-to-end change exceeded a rate or enclosure bound; completeness is then not established. */
+  | "bound-exceeded"
+  /** The result lists unresolved intervals. */
+  | "node-unresolved";
 
 export interface BirthWindow {
   schema: "zodiacs.birth-window.v1";
@@ -237,8 +315,23 @@ export interface BirthWindow {
   cells: BirthWindowCell[];
   /** Switches in time order, one per cell boundary. */
   switches: BirthWindowSwitch[];
+  /** Intervals left unresolved, in time order; empty unless `node-unresolved` is flagged. */
+  unresolved: WindowUnresolved[];
   flags: BirthWindowFlag[];
   engineVersion: string;
+}
+
+/** Thrown when a window needs more evaluated instants than the search allows. */
+export class WindowBudgetError extends Error {
+  override readonly name = "WindowBudgetError";
+  /** The instants the search allows. */
+  readonly limit = MAX_EVALUATIONS;
+
+  constructor() {
+    super(
+      `The window needs more than ${MAX_EVALUATIONS} evaluated instants: a quantity stays within its rounding band of a boundary for too long.`
+    );
+  }
 }
 
 interface AngleState {
@@ -270,11 +363,20 @@ interface AngleContext {
 }
 
 /**
+ * Steps across which a quantity may jump: for each body and for the angles,
+ * instants z such that the step from z − 1 ms to z may cross a seam of the ΔT
+ * model, where TT, and every position computed from it, steps back.
+ */
+interface Seams {
+  bodies: number[][];
+  angles: number[];
+}
+
+/**
  * astronomy-engine reuses its last nutation for any instant within 1e-6 day
  * (86.4 ms) and its last sidereal time for the same instant. Moving both to a
  * day later first makes every value below a function of its millisecond
- * alone, and the same as natalChart computes there: its own calls are always
- * more than 86.4 ms apart.
+ * alone, and the same as a lone natalChart call computes there.
  */
 function freshCaches(time: number): void {
   const away = MakeTime(new Date(time + DAY));
@@ -282,28 +384,79 @@ function freshCaches(time: number): void {
   SiderealTime(away);
 }
 
+/** Days from J2000 on astronomy-engine's UT scale, computed as its AstroTime computes them. */
+const utDays = (time: number) => (time - J2000) / DAY;
+/** Whether ΔT at this UT comes from deltat.ts's table rather than its spline, decided as deltat.ts decides it. */
+const onTable = (ut: number) => !(2000 + ut / 365.25 < DELTA_T_TABLE.from);
+
+/** The first millisecond in (from, to] at which `holds` is true, given that it is false at `from` and true at `to`. */
+function firstWhere(holds: (time: number) => boolean, from: number, to: number): number {
+  let low = from;
+  let high = to;
+  while (high - low > 1) {
+    const middle = low + Math.floor((high - low) / 2);
+    if (holds(middle)) high = middle;
+    else low = middle;
+  }
+  return high;
+}
+
+/**
+ * The ΔT model's one discontinuity inside REFERENCE_SPAN is where its spline
+ * hands over to its table, at the start of DELTA_T_TABLE.from (1941.0,
+ * 1940-12-31T18:00:00Z). The Moon, the obliquity and the sidereal time step
+ * there; the true node also 864 ms either side, where one of the two lunar
+ * positions it differences crosses it; the Sun and planets one light time
+ * later, where their backdated positions cross it. Each step is found from the
+ * engine's own arithmetic, and kept with a millisecond either side.
+ */
+function seamsIn(start: number, end: number): Seams {
+  const none: Seams = { bodies: BODIES.map(() => []), angles: [] };
+  const near = J2000 + (DELTA_T_TABLE.from - 2000) * 365.25 * DAY;
+  // Pluto's light time is under six hours.
+  if (end < near - 2_000 || start > near + 7 * 3_600_000) return none;
+  const crossing = (offsetDays: number) =>
+    firstWhere((time) => onTable(utDays(time) + offsetDays), near - 2_000, near + 2_000);
+  const around = (time: number) => [time - 1, time, time + 1];
+  const seam = crossing(0);
+  const bodies = BODIES.map((_, index) => {
+    if (index >= NORTH) return [...around(crossing(1e-5)), ...around(seam), ...around(crossing(-1e-5))];
+    const body = BACKDATED[index];
+    if (body === undefined || body === null) return around(seam);
+    const departs = (time: number) => onTable(BackdatePosition(MakeTime(new Date(time)), Body.Earth, body, true).t.ut);
+    const light = (GeoVector(body, MakeTime(new Date(seam)), true).Length() / C_AUDAY) * DAY;
+    let from = seam + Math.floor(light) - 10_000;
+    let to = seam + Math.ceil(light) + 10_000;
+    while (departs(from)) from -= 60_000;
+    while (!departs(to)) to += 60_000;
+    return [...around(seam), ...around(firstWhere(departs, from, to))];
+  });
+  return { bodies, angles: around(seam) };
+}
+
 class Sky {
   readonly instants = new Map<number, Instant>();
   evaluations = 0;
   violations = 0;
   readonly tanPhi: number;
+  /** RAMCs near which the cusps are sensitive, for Placidus and Koch. */
+  readonly sensitive: readonly number[];
 
   constructor(
     readonly latitude: number,
     readonly longitude: number,
-    readonly system: HouseSystem
+    readonly system: HouseSystem,
+    readonly seams: Seams
   ) {
     this.tanPhi = Math.tan(latitude * DEG);
+    const values = SENSITIVE_RAMC[system];
+    this.sensitive = values ? values[latitude >= 0 ? 0 : 1] : [];
   }
 
   private instant(time: number): Instant {
     let found = this.instants.get(time);
     if (!found) {
-      if (++this.evaluations > MAX_EVALUATIONS) {
-        throw new RangeError(
-          "The window needs more evaluations than the search allows; a quantity stays within its rounding or jitter band of a boundary for too long."
-        );
-      }
+      if (++this.evaluations > MAX_EVALUATIONS) throw new WindowBudgetError();
       found = { lon: new Float64Array(12).fill(Number.NaN), angles: undefined };
       this.instants.set(time, found);
     }
@@ -326,6 +479,12 @@ class Sky {
       at.lon[body] = value;
     }
     return value;
+  }
+
+  /** The north node's longitude, outside the search and its budget. */
+  node(time: number): number {
+    freshCaches(time);
+    return bodyLongitude("North Node", new Date(time));
   }
 
   angles(time: number): AngleState {
@@ -381,6 +540,7 @@ class Interval {
   private cuspList: Range[] | null | undefined;
   private spans: boolean | undefined;
   private stable: boolean | undefined;
+  private guard: boolean | undefined;
 
   constructor(
     private readonly sky: Sky,
@@ -394,7 +554,7 @@ class Interval {
     if (id === MC) return reaches(this.angleContext()?.mc ?? null, 30, 0, BAND);
     if (id < ASPECT) return this.houseMayChange(id - HOUSE);
     if (id < SYSTEM) return this.aspectMayChange(id - ASPECT);
-    return !this.systemStable();
+    return this.guarded() || !this.systemStable();
   }
 
   private violation(): null {
@@ -402,7 +562,12 @@ class Interval {
     return null;
   }
 
-  /** A body's longitude: rate-bounded from both ends, widened by any jitter. */
+  /** Whether one of the steps in `seams` lies in the interval: t1 < z <= t2. */
+  private jumps(seams: readonly number[]): boolean {
+    return seams.some((z) => this.t1 < z && z <= this.t2);
+  }
+
+  /** A body's longitude: rate-bounded from both ends, widened by any jitter; unknown across a seam. */
   body(index: number): Range {
     const known = this.bodies[index];
     if (known !== undefined) return known;
@@ -411,15 +576,17 @@ class Interval {
     // Each end is the smooth motion plus at most J, and so is every instant
     // between: the enclosure of the smooth part widens by J, then by J again.
     const jitter = index >= NORTH ? 2 * Math.max(nodeJitter(t1), nodeJitter(t2)) : 0;
-    const l1 = sky.lon(t1, index);
-    const step = signedDelta(l1, sky.lon(t2, index));
     let range: Range;
-    if (reach + jitter >= 90) range = null;
-    else if (Math.abs(step) > reach + jitter + 1e-12) range = this.violation();
+    if (reach + jitter >= 90 || this.jumps(sky.seams.bodies[index]!)) range = null;
     else {
-      const middle = l1 + step / 2;
-      const half = reach / 2 + jitter;
-      range = [middle - half, middle + half];
+      const l1 = sky.lon(t1, index);
+      const step = signedDelta(l1, sky.lon(t2, index));
+      if (Math.abs(step) > reach + jitter + 1e-12) range = this.violation();
+      else {
+        const middle = l1 + step / 2;
+        const half = reach / 2 + jitter;
+        range = [middle - half, middle + half];
+      }
     }
     this.bodies[index] = range;
     return range;
@@ -428,6 +595,7 @@ class Interval {
   private aspectMayChange(pair: number): boolean {
     const { sky, t1, t2 } = this;
     const [first, second] = PAIRS[pair]!;
+    if (this.jumps(sky.seams.bodies[first]!) || this.jumps(sky.seams.bodies[second]!)) return true;
     const s1 = separation(sky.lon(t1, first), sky.lon(t1, second));
     const s2 = separation(sky.lon(t2, first), sky.lon(t2, second));
     const reach = ((RATES[first]! + RATES[second]!) * (t2 - t1)) / DAY;
@@ -447,26 +615,51 @@ class Interval {
     const { sky, t1, t2 } = this;
     let stable = true;
     if (isPolarUndefinedHouseSystem(sky.system)) {
-      const e1 = sky.angles(t1).obliquity;
-      const dEps = (OBLIQUITY_RATE * (t2 - t1)) / DAY;
-      if (Math.abs(sky.angles(t2).obliquity - e1) > dEps + 1e-12) {
-        this.violation();
-        stable = false;
-      } else {
-        const limit = 90 - Math.abs(sky.latitude);
-        stable = limit < e1 - dEps - 1e-12 || limit > e1 + dEps + 1e-12;
+      if (this.jumps(sky.seams.angles)) stable = false;
+      else {
+        const e1 = sky.angles(t1).obliquity;
+        const dEps = (OBLIQUITY_RATE * (t2 - t1)) / DAY;
+        if (Math.abs(sky.angles(t2).obliquity - e1) > dEps + 1e-12) {
+          this.violation();
+          stable = false;
+        } else {
+          const limit = 90 - Math.abs(sky.latitude);
+          stable = limit < e1 - dEps - 1e-12 || limit > e1 + dEps + 1e-12;
+        }
       }
     }
     this.stable = stable;
     return stable;
   }
 
-  /** The RAMC's advance, the obliquity, the midheaven and the ascendant. */
+  /**
+   * Whether Placidus or Koch is within 1e-8° (and the obliquity's possible
+   * change) of its polar limit while the RAMC passes within 0.1° of a value
+   * where its cusps carry asin's rounding near ±1. The system and the houses
+   * are then resolved millisecond by millisecond.
+   */
+  private guarded(): boolean {
+    if (this.guard !== undefined) return this.guard;
+    const { sky, t1, t2 } = this;
+    let guard = false;
+    if (sky.sensitive.length > 0) {
+      const a1 = sky.angles(t1);
+      const dEps = (OBLIQUITY_RATE * (t2 - t1)) / DAY;
+      if (Math.abs(90 - Math.abs(sky.latitude) - a1.obliquity) <= dEps + 1e-8) {
+        const turn = ((SIDEREAL_RATE * (t2 - t1)) / DAY) * (1 + 1e-6) + 1e-3;
+        guard = turn >= 360 || sky.sensitive.some((value) => reaches([a1.ramc, a1.ramc + turn], 360, value, 0.1));
+      }
+    }
+    this.guard = guard;
+    return guard;
+  }
+
+  /** The RAMC's advance, the obliquity, the midheaven and the ascendant; unknown across a seam. */
   angleContext(): AngleContext | null {
     if (this.context !== undefined) return this.context;
     this.context = null;
     const { sky, t1, t2 } = this;
-    if (t2 - t1 > MAX_ANGLE_MS) return null;
+    if (t2 - t1 > MAX_ANGLE_MS || this.jumps(sky.seams.angles)) return null;
     const a1 = sky.angles(t1);
     const a2 = sky.angles(t2);
     const turn = wrap360(a2.ramc - a1.ramc);
@@ -517,7 +710,7 @@ class Interval {
   }
 
   private houseMayChange(index: number): boolean {
-    if (!this.systemStable()) return true;
+    if (this.guarded() || !this.systemStable()) return true;
     const body = this.body(index);
     const context = this.angleContext();
     if (body === null || context === null) return true;
@@ -735,8 +928,22 @@ function circleSystem(system: HouseSystem, latitude: number): (readonly [number,
 interface Change {
   at: number;
   id: number;
+  /** NaN for the start or end of an unresolved interval: whatever the value was. */
   from: number;
   to: number;
+}
+
+/**
+ * An interval in which some components are left to a search of their own:
+ * the main search skips them on every interval inside [a − 1, b], so that it
+ * finds none of their changes at instants in [a, b].
+ */
+interface Band {
+  a: number;
+  b: number;
+  ids: readonly number[];
+  /** Estimated instants a search of the band evaluates. */
+  cost: number;
 }
 
 /**
@@ -745,7 +952,18 @@ interface Change {
  * enclosure keeps clear of every threshold and its two ends agree; otherwise it
  * is halved, down to single milliseconds, where the ends are compared directly.
  */
-function search(sky: Sky, t1: number, t2: number, active: readonly number[], changes: Change[]): void {
+function search(
+  sky: Sky,
+  t1: number,
+  t2: number,
+  active: readonly number[],
+  changes: Change[],
+  bands: readonly Band[]
+): void {
+  for (const band of bands) {
+    if (t1 >= band.a - 1 && t2 <= band.b) active = active.filter((id) => !band.ids.includes(id));
+  }
+  if (active.length === 0) return;
   if (t2 - t1 === 1) {
     for (const id of active) {
       const from = sky.value(t1, id);
@@ -764,9 +982,67 @@ function search(sky: Sky, t1: number, t2: number, active: readonly number[], cha
   }
   if (next.length === 0) return;
   const middle = t1 + Math.floor((t2 - t1) / 2);
-  search(sky, t1, middle, next, changes);
-  search(sky, middle, t2, next, changes);
+  search(sky, t1, middle, next, changes, bands);
+  search(sky, middle, t2, next, changes, bands);
   sky.forget(middle);
+}
+
+/**
+ * Stretches of [start, last] where the north node's smooth motion may come
+ * within BAND_EDGE jitter bounds of a sign boundary. Outside them the search
+ * drops the node's intervals of up to some seconds; inside, near a slow
+ * ingress, it would compare the node at every millisecond, where its jitter
+ * makes the sign change back and forth. Between samples a minute apart the
+ * smooth motion is their straight line to within 1e-7°, and each sample is
+ * that motion to within one jitter bound.
+ */
+function nodeBands(sky: Sky, start: number, last: number): { a: number; b: number; cost: number }[] {
+  const jitter = Math.max(nodeJitter(start), nodeJitter(last));
+  const edge = BAND_EDGE * jitter;
+  const width = BAND_COST * jitter;
+  const bands: { a: number; b: number; cost: number }[] = [];
+  let open: { a: number; b: number; cost: number } | null = null;
+  const include = (t0: number, u0: number, t1: number, u1: number) => {
+    const lo = Math.min(u0, u1);
+    const hi = Math.max(u0, u1);
+    if (!reaches([lo, hi], 30, 0, edge)) return;
+    // Milliseconds at which the straight line lies within `width` of a boundary.
+    let near = 0;
+    for (let boundary = Math.ceil((lo - width) / 30) * 30; boundary <= hi + width; boundary += 30) {
+      const overlap = Math.min(hi, boundary + width) - Math.max(lo, boundary - width);
+      if (overlap < 0) continue;
+      near += hi > lo ? (overlap / (hi - lo)) * (t1 - t0) : t1 - t0;
+    }
+    if (open && open.b >= t0) {
+      open.b = t1;
+      open.cost += near;
+    } else {
+      if (open) bands.push(open);
+      open = { a: t0, b: t1, cost: near };
+    }
+  };
+  let previous = start;
+  let value = sky.node(start);
+  for (let time = Math.min(start + NODE_COARSE_MS, last); time > previous; time = Math.min(time + NODE_COARSE_MS, last)) {
+    const next = value + signedDelta(value, sky.node(time));
+    const reach = (RATES[NORTH]! * (time - previous)) / DAY;
+    const half = reach / 2 + 2 * jitter;
+    const middle = (value + next) / 2;
+    if (reaches([middle - half, middle + half], 30, 0, edge)) {
+      let t0 = previous;
+      let u0 = value;
+      for (let t1 = Math.min(t0 + NODE_FINE_MS, time); t1 > t0; t1 = Math.min(t1 + NODE_FINE_MS, time)) {
+        const u1 = t1 === time ? next : u0 + signedDelta(u0, sky.node(t1));
+        include(t0, u0, t1, u1);
+        t0 = t1;
+        u0 = u1;
+      }
+    }
+    previous = time;
+    value = next;
+  }
+  if (open) bands.push(open);
+  return bands;
 }
 
 function finiteMinutes(value: unknown, label: string): number {
@@ -817,8 +1093,10 @@ function resolvedWindow(input: BirthWindowInput): { start: number; end: number; 
   }
   if (!(end > start)) throw new RangeError("The window must end after it starts.");
   if (end - start > MAX_WINDOW_MS) throw new RangeError("The window must be at most 48 hours long.");
-  if (!Number.isFinite(new Date(start).getTime()) || !Number.isFinite(new Date(end).getTime())) {
-    throw new RangeError("The window must lie within the range of Date.");
+  if (!(start >= SPAN_FROM && end <= SPAN_TO)) {
+    throw new RangeError(
+      `The window must lie within ${REFERENCE_SPAN.from} and ${REFERENCE_SPAN.to} (REFERENCE_SPAN), where the bounds its search relies on were scanned.`
+    );
   }
   if (rounding && (rounding.start.getTime() < start || rounding.end.getTime() > end)) {
     throw new RangeError("The rounding model's unit must lie inside the window.");
@@ -827,11 +1105,13 @@ function resolvedWindow(input: BirthWindowInput): { start: number; end: number; 
 }
 
 function features(values: readonly number[], system: HouseSystem): WindowFeatures {
-  const signs = {} as Record<BodyName, ZodiacSign>;
-  const houses = {} as Record<BodyName, HouseNumber>;
+  const signs = {} as Record<BodyName, ZodiacSign | null>;
+  const houses = {} as Record<BodyName, HouseNumber | null>;
   BODIES.forEach((body, index) => {
-    signs[body] = SIGN_NAMES[values[index]!]!;
-    houses[body] = values[HOUSE + index] as HouseNumber;
+    const sign = values[index]!;
+    const house = values[HOUSE + index]!;
+    signs[body] = sign === UNRESOLVED ? null : SIGN_NAMES[sign]!;
+    houses[body] = house === UNRESOLVED ? null : (house as HouseNumber);
   });
   const aspects: WindowAspect[] = [];
   PAIRS.forEach(([first, second], pair) => {
@@ -849,13 +1129,13 @@ function features(values: readonly number[], system: HouseSystem): WindowFeature
 }
 
 function change(id: number, from: number, to: number, system: HouseSystem): WindowChange {
-  if (id < ASC) return { feature: "sign", body: BODIES[id]!, from: SIGN_NAMES[from]!, to: SIGN_NAMES[to]! };
+  const sign = (value: number) => (value === UNRESOLVED ? null : SIGN_NAMES[value]!);
+  const house = (value: number) => (value === UNRESOLVED ? null : (value as HouseNumber));
+  if (id < ASC) return { feature: "sign", body: BODIES[id]!, from: sign(from), to: sign(to) };
   if (id === ASC || id === MC) {
     return { feature: id === ASC ? "ascendant" : "midheaven", from: SIGN_NAMES[from]!, to: SIGN_NAMES[to]! };
   }
-  if (id < ASPECT) {
-    return { feature: "house", body: BODIES[id - HOUSE]!, from: from as HouseNumber, to: to as HouseNumber };
-  }
+  if (id < ASPECT) return { feature: "house", body: BODIES[id - HOUSE]!, from: house(from), to: house(to) };
   if (id < SYSTEM) {
     const [first, second] = PAIRS[id - ASPECT]!;
     return {
@@ -878,13 +1158,21 @@ function change(id: number, from: number, to: number, system: HouseSystem): Wind
  * changed, from what to what; each cell gives its share of the window under a
  * uniform prior and, when `rounding` is given, under that rounding model.
  *
- * The window is [start, end), at most 48 hours. Every value is the engine's
- * own at a millisecond, so the cells agree with natalChart at every instant.
- * The search brackets each quantity with a rate bound and bisects to the
- * millisecond; how the bounds are justified is in the README. Results are
- * labelled {@link WINDOW_VERIFICATION}: they have been checked against dense
- * sampling, not proven. Throws RangeError for invalid input, and when the
- * search would need more than two million evaluated instants.
+ * The window is [start, end), at most 48 hours, inside REFERENCE_SPAN. Every
+ * value is the engine's own at a millisecond, computed as a lone natalChart
+ * call computes it with the engine's ΔT model. The search brackets each
+ * quantity with a rate bound and bisects to the millisecond; how the bounds
+ * are justified is in the README. Where they hold, a cell's features are
+ * natalChart's at every millisecond it contains, except that inside the
+ * intervals listed in `unresolved` the nodes' signs (and whole-sign houses)
+ * are null. The `bound-exceeded` flag records a bound that failed across some
+ * interval of the search; a failure that does not show in an interval's
+ * end-to-end change goes unflagged. Results are labelled
+ * {@link WINDOW_VERIFICATION}: checked against dense sampling, not proven.
+ *
+ * Throws RangeError for invalid input, and WindowBudgetError when the search
+ * outside the node's unresolved intervals would need more than two million
+ * evaluated instants.
  */
 export function birthWindow(input: BirthWindowInput): BirthWindow {
   if (!input || typeof input !== "object") throw new RangeError("input must be an object.");
@@ -898,22 +1186,70 @@ export function birthWindow(input: BirthWindowInput): BirthWindow {
   }
   const latitude = settings.latitude;
   const longitude = settings.longitude;
-  if (Math.abs(latitude) === 90) {
-    // The engine's ascendant there is 0° or 180° to rounding at every instant.
-    throw new RangeError("latitude must lie strictly between -90 and 90 degrees: no ascendant is defined at a pole.");
+  if (Math.abs(latitude) > 90 - POLE_MARGIN) {
+    // At a pole the engine's ascendant is 0° or 180° to rounding at every
+    // instant, and near one it turns too fast for the search's budget.
+    throw new RangeError("latitude must lie within 1e-6 degrees short of either pole.");
   }
   const system = settings.houseSystem ?? "whole";
   const { start, end, rounding } = resolvedWindow(input);
 
   SetDeltaTFunction(deltaT);
-  const sky = new Sky(latitude, longitude, system);
+  const sky = new Sky(latitude, longitude, system, seamsIn(start, end));
   const ids = Array.from({ length: SYSTEM + 1 }, (_, id) => id).filter(
     (id) => id !== SYSTEM || isPolarUndefinedHouseSystem(system)
   );
   const last = end - 1;
+
+  // Where the node lies within its jitter band of a sign boundary, its sign
+  // (and its house, where the houses are whole signs) are left to a search of
+  // their own, run after the rest only while the budget still covers it.
+  const bands: Band[] = nodeBands(sky, start, last).map(({ a, b, cost }) => {
+    const until = b >= last ? end : b;
+    const top = Math.min(until, last);
+    const whole =
+      system === "whole" ||
+      (isPolarUndefinedHouseSystem(system) &&
+        (sky.angles(a).fellBack || sky.angles(top).fellBack || new Interval(sky, a, top).mayChange(SYSTEM)));
+    return { a, b: until, ids: whole ? [NORTH, SOUTH, HOUSE + NORTH, HOUSE + SOUTH] : [NORTH, SOUTH], cost };
+  });
+  // Their values where each band ends, in case it is left unresolved.
+  const resume = bands.map((band) => (band.b < end ? band.ids.map((id) => sky.value(band.b, id)) : []));
+
   const values = Array.from({ length: SYSTEM + 1 }, (_, id) => (id === SYSTEM && !ids.includes(SYSTEM) ? 0 : sky.value(start, id)));
   const changes: Change[] = [];
-  if (last > start) search(sky, start, last, ids, changes);
+  if (last > start) search(sky, start, last, ids, changes, bands);
+
+  // Cheapest first: a band is searched when its every instant fits in what is
+  // left of the budget, or its estimated cost does; a search that runs out
+  // leaves it unresolved.
+  const unresolved: number[] = [];
+  for (const index of bands.map((_, index) => index).sort((x, y) => bands[x]!.cost - bands[y]!.cost)) {
+    const band = bands[index]!;
+    const from = Math.max(band.a - 1, start);
+    const to = Math.min(band.b, last);
+    const remaining = MAX_EVALUATIONS - sky.evaluations;
+    if (to - from + 1 <= remaining || band.cost + 1_000 <= remaining) {
+      const found: Change[] = [];
+      try {
+        search(sky, from, to, band.ids, found, []);
+        changes.push(...found);
+        continue;
+      } catch (error) {
+        if (!(error instanceof WindowBudgetError)) throw error;
+      }
+    }
+    unresolved.push(index);
+  }
+  unresolved.sort((x, y) => bands[x]!.a - bands[y]!.a);
+  for (const index of unresolved) {
+    const band = bands[index]!;
+    band.ids.forEach((id, position) => {
+      if (band.a === start) values[id] = UNRESOLVED;
+      else changes.push({ at: band.a, id, from: Number.NaN, to: UNRESOLVED });
+      if (band.b < end) changes.push({ at: band.b, id, from: UNRESOLVED, to: resume[index]![position]! });
+    });
+  }
   changes.sort((a, b) => a.at - b.at || a.id - b.id);
 
   const cells: BirthWindowCell[] = [];
@@ -940,14 +1276,18 @@ export function birthWindow(input: BirthWindowInput): BirthWindow {
   };
   for (let index = 0; index < changes.length; ) {
     const at = changes[index]!.at;
-    close(at);
     const list: WindowChange[] = [];
+    const updates: Change[] = [];
     for (; index < changes.length && changes[index]!.at === at; index += 1) {
-      const { id, from, to } = changes[index]!;
-      if (values[id] !== from) sky.violations += 1;
-      values[id] = to;
-      list.push(change(id, from, to, system));
+      const entry = changes[index]!;
+      const from = Number.isNaN(entry.from) ? values[entry.id]! : entry.from;
+      if (values[entry.id] !== from) sky.violations += 1;
+      if (from !== entry.to) list.push(change(entry.id, from, entry.to, system));
+      updates.push(entry);
     }
+    if (list.length === 0) continue;
+    close(at);
+    for (const { id, to } of updates) values[id] = to;
     if (values[SYSTEM] === 1) fallback = true;
     switches.push({ at: new Date(at), changes: list });
   }
@@ -955,10 +1295,8 @@ export function birthWindow(input: BirthWindowInput): BirthWindow {
 
   const flags: BirthWindowFlag[] = [];
   if (fallback) flags.push("polar-fallback");
-  if (outsideReferenceSpan(new Date(start)) || outsideReferenceSpan(new Date(last))) {
-    flags.push("outside-reference-span");
-  }
   if (sky.violations > 0) flags.push("bound-exceeded");
+  if (unresolved.length > 0) flags.push("node-unresolved");
   return {
     schema: "zodiacs.birth-window.v1",
     verification: WINDOW_VERIFICATION,
@@ -970,6 +1308,18 @@ export function birthWindow(input: BirthWindowInput): BirthWindow {
     rounding,
     cells,
     switches,
+    unresolved: unresolved.map((index) => {
+      const { a, b, ids: bandIds } = bands[index]!;
+      return {
+        start: new Date(a),
+        end: new Date(b),
+        milliseconds: b - a,
+        features: bandIds.map((id) => ({
+          feature: id < ASC ? ("sign" as const) : ("house" as const),
+          body: BODIES[id < ASC ? id : id - HOUSE] as "North Node" | "South Node"
+        }))
+      };
+    }),
     flags,
     engineVersion: ENGINE_VERSION
   };

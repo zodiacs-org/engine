@@ -11,9 +11,14 @@
  * - npm pack's packed and unpacked sizes against the package-contents gate
  *   (unpacked below 300,000 bytes).
  *
- *   node package-check.mjs --baseline DIR [--out FILE]
+ *   node package-check.mjs --baseline DIR [--original DIR] [--out FILE]
+ *     [--baseline-label TEXT] [--original-label TEXT]
  *
  * DIR is the dist/ of a baseline build; this checkout's dist/ is compared.
+ * The baseline is the base commit with the Placidus change carried onto it
+ * (src/houses.ts of the branch), so that the comparison isolates what the
+ * window entry point adds; --original, the dist/ of the base commit as it is,
+ * adds the root entry's size before the Placidus change.
  */
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
@@ -111,7 +116,9 @@ async function bundle(contents, dir) {
   const code = result.outputFiles[0].contents;
   return { minified: code.length, gzip: gzipSync(code, { level: 9 }).length };
 }
+const original = args.get("--original") ? resolve(args.get("--original")) : null;
 const sizes = {
+  ...(original ? { rootOriginal: await bundle(`export * from "./index.js";`, original) } : {}),
   rootBaseline: await bundle(`export * from "./index.js";`, baseline),
   root: await bundle(`export * from "./index.js";`, current),
   window: await bundle(`export * from "./window.js";`, current),
@@ -134,7 +141,8 @@ sizes.windowModuleAlone = { minified: own.outputFiles[0].contents.length, gzip: 
 // 4. npm pack's report, without scripts, for this checkout.
 const pack = JSON.parse(execFileSync("npm", ["pack", "--dry-run", "--json", "--ignore-scripts"], { cwd: root, encoding: "utf8" }))[0];
 const report = {
-  baseline,
+  baseline: args.get("--baseline-label") ?? baseline,
+  ...(original ? { original: args.get("--original-label") ?? original } : {}),
   javascript: { baselineFiles: baselineJs.length, changed: changedJs, added: addedJs },
   declarations: { baselineFiles: before.size, changedAfterResolvingAliases: changedDeclarations, onlyAddedExportsInSharedTypes: onlyAdded },
   sizes,
