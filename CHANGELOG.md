@@ -8,18 +8,25 @@
   houses, longitude crossings and natal charts in the same vocabulary. Eight
   frames, four centers and three corrections; speeds in every coordinate,
   analytic for geometric positions on fixed axes and central differences
-  otherwise; bounds measured against JPL Horizons; receipts of convention ids;
-  and typed refusals: `not-in-this-version` (the sidereal zodiac, light
-  deflection), `unsupported-combination`, `out-of-range` (outside 1800 to
-  2200) and `sample-budget`. `docs/calc.md` maps every Swiss Ephemeris
-  `calc_ut` flag; `docs/evidence/calc-api/` holds the comparison.
+  otherwise; bounds measured against JPL Horizons on 32 instants (sample
+  maxima, not limits), the barycentric Sun's derived from the barycentre's
+  error; receipts of convention ids; and typed refusals:
+  `not-in-this-version` (the sidereal zodiac, light deflection),
+  `unsupported-combination`, `out-of-range` and `sample-budget`. calc
+  refuses an instant whose UT or TT is outside 1800 to 2200, where it has no
+  comparison to take a bound from; the root entry's functions compute such
+  instants as before, with the `outside-reference-span` flag. `docs/calc.md`
+  maps every Swiss Ephemeris `calc_ut` flag; `docs/evidence/calc-api/` holds
+  the comparison.
 - The comparison found that astronomy-engine's nutation keeps five terms of
-  IAU 2000B, so true-of-date positions and angles carry up to 0.2″ of
-  nutation error. calc names it (`nutation:iau2000b-five-terms`) and keeps it;
+  IAU 2000B, so true-of-date positions and angles carry up to 0.27″ of
+  nutation error over 1800 to 2200 (0.087″ in obliquity, 0.08″ a day in
+  rates). calc names it (`nutation:iau2000b-five-terms`) and keeps it;
   nothing the engine computes has changed.
 
 Migration: none. With every default `calc` gives the position `positions()`
-gives, to the bit, and the root entry's build is byte for byte unchanged.
+gives, to the bit after the same earlier calls, and the root entry's build is
+byte for byte unchanged.
 
 ## 0.1.1-rc.15 — unreleased candidate
 

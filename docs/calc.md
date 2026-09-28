@@ -23,7 +23,12 @@ if (mars.status === "ok") {
 ```
 
 With every default, `calc({ body, time })` is the position `positions()` and
-`natalChart()` give, to the bit: the same longitude, latitude and speed.
+`natalChart()` give, to the bit: the same longitude, latitude and speed, after
+the same earlier calls. astronomy-engine keeps the last nutation it computed
+and reuses it for any instant within 10⁻⁶ day (86 ms) of that one, so a
+result can depend on what was computed just before it, by at most the
+nutation's change over 10⁻⁶ day, 1.7 × 10⁻⁷″. That holds for `positions()`
+and `natalChart()` as much as for `calc()`.
 
 ## The four functions
 
@@ -47,7 +52,9 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
   UT1, as everywhere in the engine: UTC is taken as UT1 and UT1 − UTC, under
   0.9 s, is not applied. A TT Julian date is converted with the model (or the
   pin) and recorded in the receipt with the UT the engine used. A Julian date
-  near 2.46 million holds time to about 4 × 10⁻¹⁰ of a day (40 µs).
+  near 2.46 million holds time to about 4 × 10⁻¹⁰ of a day (40 µs). An
+  instant is computed only when both its UT and its TT lie in the span (see
+  Refusals).
 - **`place`** and the topocentric observer: `{ latitude, longitude }`,
   geodetic, east longitude positive, degrees; the observer also takes
   `height` in metres above astronomy-engine's ellipsoid (IERS 2003,
@@ -107,7 +114,9 @@ terms of IAU 2000B (McCarthy and Luzum 2003) and its fixed offsets, of the
 series' 77. Over the comparison's 32 instants it differs from the full
 IAU 2000B by up to 0.20″ in longitude and 0.067″ in obliquity (0.068″ and
 0.018″ median), while the full IAU 2000B differs from IAU 2006/2000A by
-0.002″. Every true-of-date position and angle
+0.002″. Sampled every 0.1 day from 1800 to 2200 it differs by up to 0.27″ in
+longitude and 0.087″ in obliquity, and its rate by up to 0.079″ a day in
+longitude. Every true-of-date position, speed and angle
 the engine gives carries that difference; the mean-of-date, J2000.0 and ICRS
 frames do not. calc keeps astronomy-engine's nutation so that its default
 frame stays `positions()` to the bit, and names it
@@ -128,13 +137,17 @@ frame stays `positions()` to the bit, and names it
   astrometric position does carry light time.
 - **Heliocentric** and **barycentric**: every body but the Sun heliocentric;
   the barycentre is astronomy-engine's, from the Sun and the four giant
-  planets, each weighted m / (m + M☉). It is up to 1.1 × 10⁻⁵ au (1,650 km)
-  from Horizons's barycentre, as the same formula is when evaluated on
-  Horizons's own positions. That is small against every body's distance but
-  the Sun's: the Sun is only 0.0006 to 0.0093 au from the barycentre in the
-  comparison, where its barycentric direction was off by up to 519″, and it
-  can be off by a degree or more when the Sun passes closer. The barycentre
-  does not move, so a barycentric apparent position is its astrometric one.
+  planets, each weighted m / (m + M☉). Scanned daily from 1800 to 2200 it is
+  up to 1.26 × 10⁻⁵ au (1,880 km) from the full Newtonian barycentre of the
+  same positions, and at most as far from Horizons's where the scan found it
+  worst; calc takes 1.4 × 10⁻⁵ au and 1.2 × 10⁻⁷ au a day as its error
+  (`RESULTS.md`, Deviation 8). That is small against every body's
+  distance but the Sun's. The Sun comes within 1.0 × 10⁻⁴ au of the
+  barycentre (2130-03-11), where the error turns its barycentric direction by
+  degrees: at 2130-03-05T00:00Z it is 2.66° from Horizons's, and its distance
+  1.8% off. The barycentric Sun's bounds are therefore derived from the
+  barycentre's error, not measured (see Bounds). The barycentre does not move,
+  so a barycentric apparent position is its astrometric one.
 - **Topocentric**: the observer's position and velocity from astronomy-engine
   (its Greenwich apparent sidereal time on the engine's ΔT; no polar motion).
   Light time is solved from the observer.
@@ -159,7 +172,7 @@ are differenced in UT, which runs slower than TT by under one part in 10⁷.
   frames) of every body but the Moon: astronomy-engine's velocities from its
   differentiated VSOP87 series (Pluto: from its integrator), turned into the
   frame. Pluto's integrator velocity differs from the derivative of its
-  position by about 0.0005″ a day.
+  position by up to 0.00097″ a day.
 - **Central difference** everywhere else: the value at t + h minus the value
   at t − h, over 2h, with the engine's steps, h = 0.001 day, and h = 0.25 day
   for the true node, whose short-period motion would otherwise dominate. For an
@@ -168,11 +181,15 @@ are differenced in UT, which runs slower than TT by under one part in 10⁷.
 
 The differencing error is h²/6 times the third derivative. Estimated on the
 engine alone by Richardson's rule, |D(2h) − D(h)| / 3, it is at most
-1.3 × 10⁻⁴″ a day for geocentric positions (the Moon) and 0.094″ a day for
-the topocentric Moon, whose parallax turns with the Earth once a day.
-`bounds.speed` names the method and the step, and gives the largest rate
-difference measured against Horizons, which includes the differencing error.
-The true node's speed was not compared, so its `value` is null.
+1.3 × 10⁻⁴″ a day for apparent geocentric positions (the Moon),
+3.2 × 10⁻³″ a day for astrometric ones (the Moon again: the light-time
+solution stops at a tolerance, which leaves a small jitter in each position)
+and 0.094″ a day for the topocentric Moon, whose parallax turns with the Earth
+once a day. `bounds.speed` names the method and the step, and gives the
+largest rate difference measured against Horizons, which includes the
+differencing error. In the true-of-date frames the rates also carry the
+five-term nutation's rate error (see Frames). The true node's speed was not
+compared, so its `value` is null.
 
 ## Bounds
 
@@ -183,14 +200,27 @@ none is proven. The measured values are the largest differences from NASA JPL
 Horizons (DE441) over a preregistered corpus of 32 instants from 1802 to 2188,
 by center, correction and body, in every frame, rounded up to two
 significant figures: `docs/evidence/calc-api/`. They are the largest seen on
-those instants, not limits: another instant can exceed them. The barycentric
-Sun's 520″ is the clearest case (see Centers above); for it the error in au,
-1.1 × 10⁻⁵, is the meaningful figure. A topocentric body that was
-not compared takes its geocentric bound, labelled `estimated`. `houses()`
-carries the conformance suite's measured L2 bounds, 0.29″ for the angles and
-0.49″ for the cusps; `events()` gives the bisection bracket, the step divided
-by 2²⁴, as an estimate, to which the ephemeris's own error divided by the
-body's speed adds.
+those instants, not limits: another instant can exceed them. Topocentric
+positions were compared for the Sun, the Moon and Mars, in all three
+corrections; another topocentric body takes its geocentric bound for the
+same correction, labelled `estimated`.
+
+The barycentric Sun is the exception: its error comes from the barycentre,
+and its distance from the barycentre, 1.0 × 10⁻⁴ to 0.01 au, decides what
+that error does to it, so no sample of instants bounds it. Its bounds are
+labelled `estimated` and derived from the barycentre's error, e = 1.4 × 10⁻⁵ au
+and ė = 1.2 × 10⁻⁷ au a day, at the reported distance r and speed v: the
+direction within asin(e / r), the distance within e / (r − e) of the true
+one, and the rate of the direction within ė / r + (v + ė) e (1 / r² +
+1 / (r (r − e))), each rounded up to two significant figures. At
+2130-03-05T00:00Z that is 27,000″, 0.15 and 3,400″ a day, against 9,593″,
+0.018 and 378″ a day from Horizons; far from the barycentre, at 0.0097 au,
+it is 300″, 0.0015 and 3.1″ a day.
+
+`houses()` carries the conformance suite's measured L2 bounds, 0.29″ for the
+angles and 0.49″ for the cusps; `events()` gives the bisection bracket, the
+step divided by 2²⁴, as an estimate, to which the ephemeris's own error
+divided by the body's speed adds.
 
 ## Refusals
 
@@ -201,11 +231,16 @@ A refusal is `{ status: "refused", reason, detail }`, the `status` and
 | --- | --- | --- |
 | `not-in-this-version` | the sidereal zodiac; gravitational deflection | |
 | `unsupported-combination` | the Sun heliocentric; the Earth geocentric or topocentric; a node or Lilith with a center other than geocentric, or with `cartesian`; crossings of a body `positions()` does not give; a pinned ΔT for a crossing search | |
-| `out-of-range` | an instant outside `CALC_SPAN`, 1800-01-01T00:00Z up to 2200-01-01T00:00Z, where the positions have been compared with an independent ephemeris | `span` |
+| `out-of-range` | an instant whose UT or TT is outside `CALC_SPAN`, 1800-01-01T00:00Z up to 2200-01-01T00:00Z, where the positions have been compared with an independent ephemeris | `span` |
 | `sample-budget` | a crossing search that needs more evaluations than `maxSamples` | `samples`, `maxSamples` |
 
-The checks run in that order. `positions()` and `natalChart()` still compute
-outside the span, with the `outside-reference-span` flag.
+The checks run in that order. The span is checked on both time scales, so a
+ΔT pin cannot move the ephemeris outside it, and with the engine's ΔT the
+last instant computed is about 2199-12-31T23:57:53Z (UT). `positions()` and
+`natalChart()` still compute outside the span, with the
+`outside-reference-span` flag, as they always have. calc refuses instead
+because every result it returns carries a bound, and outside the span there
+is no comparison to take one from.
 
 ## Receipts
 
@@ -230,9 +265,9 @@ outside the span, with the `outside-reference-span` flag.
 | `aberration:backdated-observer` | first-order aberration from backdating the observer with the target |
 | `deflection:none` | no gravitational light deflection |
 | `moon:series-at-instant` | the engine's Moon: astronomy-engine's lunar series at the instant, without light time or aberration |
-| `precession:iau2006` | Capitaine et al. (2003) angles ψA, ωA, χA as astronomy-engine applies them to EQJ, without a frame bias |
-| `nutation:iau2000b-five-terms` | astronomy-engine's nutation: the five largest luni-solar terms of IAU 2000B (McCarthy and Luzum 2003) and its fixed offsets; up to 0.20″ from the full series (see Frames) |
-| `obliquity:iau2006` | the IAU 2006 mean obliquity (84381.406″ at J2000.0), with the five-term nutation in obliquity for a true-of-date frame |
+| `precession:iau2006` | Capitaine et al. (2003) angles ψA, ωA, χA as astronomy-engine applies them to EQJ, without a frame bias; named in every frame for the nodes and Lilith, which are found in the ecliptic of date |
+| `nutation:iau2000b-five-terms` | astronomy-engine's nutation: the five largest luni-solar terms of IAU 2000B (McCarthy and Luzum 2003) and its fixed offsets; from 1800 to 2200 up to 0.27″ in longitude and 0.087″ in obliquity from the full series (see Frames) |
+| `obliquity:iau2006` | the IAU 2006 mean obliquity (84381.406″ at J2000.0), with the five-term nutation in obliquity for a true-of-date frame; named in every frame for the nodes and Lilith |
 | `frame-bias:iau2000` | the IAU 2000 frame bias of the ICRS (IERS Conventions 2010, eq. 5.21) |
 | `barycentre:sun-and-giant-planets` | astronomy-engine's solar-system barycentre |
 | `observer:iers2003-ellipsoid;no-polar-motion` | the topocentric observer as above |
@@ -254,8 +289,8 @@ uses no Swiss Ephemeris code, data or output.
 | flag | meaning in Swiss Ephemeris | here | status |
 | --- | --- | --- | --- |
 | `SEFLG_SPEED` | compute speeds | `flags.speeds` | supported, on by default |
-| `SEFLG_HELCTR` | heliocentric | `center: "heliocentric"` | supported |
-| `SEFLG_BARYCTR` | barycentric | `center: "barycentric"` | supported, on astronomy-engine's barycentre |
+| `SEFLG_HELCTR` | heliocentric; Swiss Ephemeris then applies no aberration and no deflection | `center: "heliocentric"` with `flags.correction: "astrometric"` (`"geometric"` with `SEFLG_TRUEPOS`) | supported; the default correction here, apparent, adds the aberration of the Sun's motion, which Swiss Ephemeris leaves out |
+| `SEFLG_BARYCTR` | barycentric, with no aberration and no deflection as for `SEFLG_HELCTR` | `center: "barycentric"`, where apparent and astrometric coincide | supported, on astronomy-engine's barycentre |
 | `SEFLG_TOPOCTR` (with `swe_set_topo`) | topocentric | `center: { topocentric: { latitude, longitude, height } }` | supported |
 | `SEFLG_TRUEPOS` | geometric position | `flags.correction: "geometric"` | supported |
 | `SEFLG_NOABERR` | no aberration | `flags.correction: "astrometric"` | supported; there is never deflection here |
@@ -263,7 +298,7 @@ uses no Swiss Ephemeris code, data or output.
 | `SEFLG_ASTROMETRIC` | `NOABERR` and `NOGDEFL` | `flags.correction: "astrometric"` | supported |
 | `SEFLG_NONUT` | mean equinox of date | `frame: "ecliptic-mean-of-date"` or `"equatorial-mean-of-date"` | supported |
 | `SEFLG_J2000` | J2000.0 | `frame: "ecliptic-j2000"` or `"equatorial-j2000"` | supported |
-| `SEFLG_ICRS` | ICRS, no frame bias | `frame: "ecliptic-icrs"` or `"equatorial-icrs"` | supported |
+| `SEFLG_ICRS` | skip the frame bias; precession and nutation still follow unless `SEFLG_J2000` or `SEFLG_NONUT` | with `SEFLG_J2000`: `frame: "ecliptic-icrs"` or `"equatorial-icrs"` | supported with `SEFLG_J2000`; alone, not offered: the of-date frames here are precessed from J2000.0, as Swiss Ephemeris's are without the flag |
 | `SEFLG_EQUATORIAL` | right ascension and declination | `frame: "equatorial-…"` | supported |
 | `SEFLG_XYZ` | cartesian coordinates | `flags.cartesian: true` (given beside `lon`, `lat`, `dist`) | supported |
 | `SEFLG_RADIANS` | radians | `flags.units: "radians"` | supported |
@@ -275,7 +310,8 @@ uses no Swiss Ephemeris code, data or output.
 | `SEFLG_CENTER_BODY` | a planet's centre, not its system barycentre | none | not offered; Mars to Pluto were compared with system barycentres (see Bodies) |
 
 `swe_calc_ut` takes a UT Julian date and `swe_calc` a TT one; here both are
-`{ jd, scale }`. `swe_set_delta_t_userdef` is the `deltaT` pin. Its bodies
+`{ jd, scale }`. `swe_set_delta_t_userdef(dt)` is the `deltaT` pin, but `dt`
+is in days and `deltaT` in seconds: `deltaT` = 86,400 × `dt`. Its bodies
 map to `CalcBody` as `SE_SUN` to `SE_PLUTO` by name, `SE_EARTH` to `"Earth"`,
 `SE_TRUE_NODE` to `"North Node"`, `SE_MEAN_NODE` to `"Mean Node"` and
 `SE_MEAN_APOG` to `"Black Moon Lilith"`. `SE_OSCU_APOG` is left out: this
@@ -297,9 +333,9 @@ pooled:
 | geocentric, apparent (10 bodies) | 3.00 / 15.5 / 24.6 | 2.99 / 15.5 / 24.5 | 1.3 × 10⁻⁴ |
 | geocentric, astrometric or geometric | 2.88 / 15.5 / 24.6 | 2.86 / 15.5 / 24.4 | 6.7 × 10⁻⁵ |
 | heliocentric (10 bodies) | 2.95 / 16.4 / 24.3 | 3.01 / 16.4 / 24.2 | 8.6 × 10⁻⁵ |
-| barycentric, the Sun | 87 / 340 / 519 | 87 / 340 / 519 | 4.1 × 10⁻³ |
+| barycentric, the Sun (its bounds are derived, see Bounds) | 87 / 340 / 519 | 87 / 340 / 519 | 4.1 × 10⁻³ |
 | barycentric, the other 10 bodies | largest 24.3 | largest 24.2 | 7.7 × 10⁻⁵ |
-| topocentric, apparent (Sun, Moon, Mars; two sites) | 1.29 / 5.60 / 7.70 | 1.32 / 5.67 / 7.64 | 5.7 × 10⁻⁵ |
+| topocentric, each correction (Sun, Moon, Mars; two sites) | 1.29 / 5.60 / 7.70 | 1.32 / 5.67 / 7.64 | 5.7 × 10⁻⁵ |
 
 To the last digit shown, `equatorial-true-of-date` gives the figures of the
 true ecliptic of date, and the mean-of-date, J2000.0 and ICRS frames those of
@@ -307,7 +343,10 @@ the ICRS equator. The differences are the ephemeris's own: largest for the
 outer planets (Pluto 24.6″, Neptune 20.1″, Uranus 19.5″, Saturn 17.6″
 geocentric at worst), 2.9″ for the Sun and 8.3″ for the Moon. Geocentric
 angular rates differ from Horizons's by 0.03 to 0.04″ a day median and 2.1″ a
-day at worst (Mercury).
+day at worst (Mercury). For Jupiter to Pluto the true-of-date frames add the
+nutation's rate error to the ephemeris's: Neptune's largest rate difference
+is 0.013″ a day in the mean-of-date, J2000.0 and ICRS frames and 0.051″ a day
+in the true-of-date frames.
 
 The frame transforms were checked against ERFA 2.0.1 on the engine's own
 output. Those without the nutation agree to better than a microarcsecond:

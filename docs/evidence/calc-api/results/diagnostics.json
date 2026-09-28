@@ -67,5 +67,36 @@
    "median": 3.56436e-05,
    "max": 6.43119e-05
   }
+ },
+ "D4nutationOver1800to2200": {
+  "unit": "arcsec; rates arcsec/day",
+  "engineMinusNut00b": {
+   "dpsi": {
+    "max": 0.270134,
+    "jdTt": 2390991.1
+   },
+   "deps": {
+    "max": 0.0865317,
+    "jdTt": 2493300.003
+   },
+   "dpsiRate": {
+    "max": 0.0792026,
+    "jdTt": 2474184.901
+   },
+   "depsRate": {
+    "max": 0.0256962,
+    "jdTt": 2407064.2
+   }
+  },
+  "engineRate": {
+   "dpsi": {
+    "max": 0.167959,
+    "jdTt": 2515085.304
+   },
+   "deps": {
+    "max": 0.0733393,
+    "jdTt": 2435234.5
+   }
+  }
  }
 }

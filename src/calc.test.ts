@@ -18,7 +18,8 @@ const INSTANTS = [
   "1969-07-20T20:17:00Z",
   "2000-01-01T12:00:00Z",
   "2024-04-08T18:21:30.250Z",
-  "2199-12-31T23:59:59Z"
+  // The last minutes of 2199 whose TT is still before 2200 (ΔT is 126 s there).
+  "2199-12-31T23:57:00Z"
 ];
 
 function ok(result: CalcPosition | CalcRefusal | { status: string }): CalcPosition {
@@ -121,6 +122,14 @@ describe("time vocabulary", () => {
     expect(pinned.receipt.conventions).toContain("deltat:pinned");
   });
 
+  it("converts every TT Julian date, even where astronomy-engine's own conversion cycles", () => {
+    // At TT = J2000.0 - 65536 days, on the engine's ΔT, AstroTime.FromTerrestrialTime alternates between two doubles forever.
+    const jd = 2_451_545 - 65_536;
+    const result = ok(calc({ body: "Sun", time: { jd, scale: "TT" } }));
+    expect(Math.abs(result.receipt.instants[0]!.jdTt - jd) * 86_400).toBeLessThan(1e-6);
+    expect(houses({ time: { jd, scale: "TT" }, place: { latitude: 0, longitude: 0 } }).status).toBe("ok");
+  });
+
   it("leaves the engine's ΔT model installed after a pinned call, whatever its outcome", () => {
     const before = positions(iso);
     ok(calc({ body: "Mars", time: { iso, deltaT: 1000 } }));
@@ -147,6 +156,20 @@ describe("receipts", () => {
     const replayed = ok(calc(JSON.parse(JSON.stringify(first.receipt.request)) as CalcRequest));
     expect(replayed).toEqual(first);
     expect(JSON.parse(JSON.stringify(first))).toEqual(first);
+  });
+
+  it("name precession and the obliquity for the nodes and Lilith in every frame, which they reach from the ecliptic of date", () => {
+    for (const body of ["North Node", "Mean South Node", "Black Moon Lilith"] as const) {
+      for (const frame of CALC_FRAMES) {
+        const { conventions } = ok(calc({ body, time: "2000-01-01T00:00:00Z", frame })).receipt;
+        expect(conventions).toEqual(expect.arrayContaining(["precession:iau2006", "obliquity:iau2006"]));
+        // Outside the true-of-date frames the nutation in their definition and in the turn cancel.
+        expect(conventions.includes("nutation:iau2000b-five-terms")).toBe(frame.includes("true"));
+      }
+    }
+    const mars = ok(calc({ body: "Mars", time: "2000-01-01T00:00:00Z", frame: "equatorial-j2000" })).receipt.conventions;
+    expect(mars).not.toContain("precession:iau2006");
+    expect(mars).not.toContain("obliquity:iau2006");
   });
 
   it("name every convention by a namespaced id", () => {
@@ -459,20 +482,33 @@ describe("typed refusals", () => {
     expect(refused(events({ ...window, body: "Sun", from: { iso: time, deltaT: 60 } })).reason).toBe("unsupported-combination");
   });
 
-  it("refuse instants outside the span, and compute its first instant", () => {
+  it("refuse instants whose UT or TT is outside the span, and compute its first instant", () => {
+    const first = 2_378_496.5; // 1800-01-01T00:00
+    const last = 2_524_593.5; // 2200-01-01T00:00
     const outside = [
       "1799-12-31T23:59:59.999Z",
       CALC_SPAN.to,
+      "2199-12-31T23:59:59Z", // TT 126 s later, in 2200
       { jd: 2378496.4, scale: "UT" },
+      { jd: first, scale: "TT" }, // UT 18.7 s earlier, in 1799
+      { jd: last, scale: "TT" },
+      { jd: last + 2 / 1440, scale: "TT" }, // UT still in 2199
+      { jd: first + 30 / 86_400, scale: "UT", deltaT: -60 }, // TT in 1799
       { jd: 1e300, scale: "TT" },
       { jd: -1e300, scale: "UT" },
-      { jd: 2451545, scale: "TT", deltaT: 1e10 }
+      { jd: 2451545, scale: "TT", deltaT: 1e10 },
+      { iso: "2199-06-01T00:00:00Z", deltaT: 1e10 }, // TT in 2516
+      { iso: "1800-06-01T00:00:00Z", deltaT: -1e10 }
     ] as const;
     for (const t of outside) {
       const result = refused(calc({ body: "Moon", time: t }));
       expect(result).toMatchObject({ reason: "out-of-range", span: { from: CALC_SPAN.from, to: CALC_SPAN.to } });
     }
-    ok(calc({ body: "Moon", time: CALC_SPAN.from }));
+    for (const t of [CALC_SPAN.from, "2199-12-31T23:57:00Z", { jd: first + 30 / 86_400, scale: "TT" }, { jd: last - 1 / 86_400, scale: "TT" }] as const) {
+      ok(calc({ body: "Moon", time: t }));
+    }
+    expect(refused(houses({ time: { iso: "2199-06-01T00:00:00Z", deltaT: 1e10 }, place: { latitude: 0, longitude: 0 } })).reason).toBe("out-of-range");
+    expect(refused(chart({ time: { jd: last, scale: "TT" } })).reason).toBe("out-of-range");
     expect(refused(houses({ time: "1700-01-01", place: { latitude: 0, longitude: 0 } })).reason).toBe("out-of-range");
     expect(refused(chart({ time: "2300-01-01" })).reason).toBe("out-of-range");
     expect(refused(events({ kind: "longitude-crossing", body: "Sun", longitude: 0, from: "2199-06-01", to: "2200-06-01" })).reason).toBe("out-of-range");

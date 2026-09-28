@@ -34,7 +34,7 @@ import {
   transpose
 } from "./calc-frames.js";
 import type { CalcCorrection, CalcFrame, Vec3 } from "./calc-frames.js";
-import { geometricState, length, locate } from "./calc-reduce.js";
+import { BARYCENTRE_ERROR, geometricState, length, locate } from "./calc-reduce.js";
 import type { Center } from "./calc-reduce.js";
 import { searchLongitudeCrossingsWith } from "./crossings.js";
 import { dateFrom } from "./date-input.js";
@@ -233,7 +233,7 @@ export interface CalcSpan {
   readonly to: string;
 }
 
-/** calc() and the other functions compute instants in this span; positions() and natalChart() compute outside it, with a flag. */
+/** calc() and the other functions compute an instant only if its UT and its TT are in this span; positions() and natalChart() compute outside it, with a flag. */
 export const CALC_SPAN: CalcSpan = REFERENCE_SPAN;
 
 // ---------------------------------------------------------------- shared
@@ -346,7 +346,7 @@ function onClock<T>(pin: number | undefined, run: () => T | null): T | CalcRefus
       run() ?? {
         status: "refused",
         reason: "out-of-range",
-        detail: `The instant is outside ${CALC_SPAN.from} to ${CALC_SPAN.to}, where the engine's positions have been compared with an independent ephemeris.`,
+        detail: `The instant's UT or TT is outside ${CALC_SPAN.from} to ${CALC_SPAN.to}, where the engine's positions have been compared with an independent ephemeris.`,
         span: CALC_SPAN
       }
     );
@@ -355,20 +355,34 @@ function onClock<T>(pin: number | undefined, run: () => T | null): T | CalcRefus
   }
 }
 
-/** The instant on the installed clock, or null outside the span. */
-function resolve(time: TimeInput): AstroTime | null {
-  if (time.date === null) {
-    // Checked before converting, so that no conversion runs far outside the span.
-    const ut = time.jd - (time.tt ? (time.pin ?? 0) / 86_400 : 0);
-    if (!(ut > SPAN_JD[0]! - 2 && ut < SPAN_JD[1]! + 2)) return null;
+/**
+ * astronomy-engine's AstroTime.FromTerrestrialTime, whose loop can alternate
+ * forever between two neighbouring doubles (it does at J2000.0 - 65536 days TT
+ * on the engine's ΔT): the same steps, ten at most, keeping the closest.
+ */
+function fromTerrestrial(tt: number): AstroTime {
+  let time = new AstroTime(tt);
+  let best = time;
+  for (let step = 0; step < 10 && Math.abs(tt - time.tt) >= 1e-12; step++) {
+    time = time.AddDays(tt - time.tt);
+    if (Math.abs(tt - time.tt) < Math.abs(tt - best.tt)) best = time;
   }
+  return best;
+}
+
+/** The instant on the installed clock, or null unless its UT and its TT are both in the span. */
+function resolve(time: TimeInput): AstroTime | null {
+  const inside = (jd: number, margin = 0) => jd >= SPAN_JD[0]! - margin && jd < SPAN_JD[1]! + margin;
+  const shift = (time.pin ?? 0) / 86_400;
+  // Checked roughly before converting, so that no conversion runs far outside the span.
+  if (time.date === null && !(inside(time.jd, 2) && inside(time.jd + (time.tt ? -shift : shift), 2))) return null;
   const at =
     time.date !== null
       ? MakeTime(time.date)
       : time.tt
-        ? AstroTime.FromTerrestrialTime(time.jd - J2000_JD)
+        ? fromTerrestrial(time.jd - J2000_JD)
         : new AstroTime(time.jd - J2000_JD);
-  return outsideReferenceSpan(at.date) ? null : at;
+  return outsideReferenceSpan(at.date) || !inside(time.tt ? time.jd : J2000_JD + at.tt) ? null : at;
 }
 
 function instant(at: AstroTime, pin: number | undefined): CalcInstant {
@@ -481,9 +495,10 @@ function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], cor
       if (correction === "apparent" && kind !== "barycentric") ids.push("aberration:backdated-observer");
     }
   }
-  if (!inertial(frame)) ids.push("precession:iau2006");
+  // A node or Lilith is found in the ecliptic of date and turned from there into every other frame.
+  if (isPoint(body) || !inertial(frame)) ids.push("precession:iau2006");
   if (frame.includes("true")) ids.push("nutation:iau2000b-five-terms");
-  if (frame.startsWith("ecliptic")) ids.push("obliquity:iau2006");
+  if (isPoint(body) || frame.startsWith("ecliptic")) ids.push("obliquity:iau2006");
   if (frame.endsWith("icrs")) ids.push("frame-bias:iau2000");
   if (kind === "barycentric") ids.push("barycentre:sun-and-giant-planets");
   if (kind === "topocentric") ids.push("observer:iers2003-ellipsoid;no-polar-motion");
@@ -496,10 +511,29 @@ function bound(value: number | null | undefined, unit: CalcBound["unit"], estima
     : { value, unit, label: estimated === null ? "measured" : "estimated", basis: estimated ?? MEASURED_BASIS };
 }
 
+/** Rounded up to two significant figures. */
+function up2(x: number): number {
+  const unit = 10 ** (Math.floor(Math.log10(x)) - 1);
+  return Number((Math.ceil(x / unit) * unit).toPrecision(2));
+}
+
+/**
+ * The barycentric Sun is 1e-4 to 0.01 au from the barycentre, so the
+ * barycentre's own error bounds it: the widest angle, relative distance and
+ * rate of direction that an error of e au and ev au/day allows at distance r
+ * and speed v (the true distance is at least r - e).
+ */
+function barycentricSun(r: number, v: number | null): [number, number, number | null] {
+  const { au: e, auPerDay: ev } = BARYCENTRE_ERROR;
+  const rate = v === null ? null : ev / r + (v + ev) * e * (1 / r ** 2 + 1 / (r * (r - e)));
+  return [up2(Math.asin(e / r) * RAD * 3600), up2(e / (r - e)), rate === null ? null : up2(rate * RAD * 3600)];
+}
+
 /**
  * The position of `body` at `time` in `frame` from `center`, with the
  * correction and outputs `flags` asks for, or a typed refusal. With every
- * default it is the position positions() and natalChart() give, to the bit.
+ * default it is the position positions() and natalChart() give, to the bit
+ * after the same earlier calls (docs/calc.md).
  */
 export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
   const asked = fields(request, "calc request", ["body", "time", "frame", "center", "zodiac", "flags"]);
@@ -578,12 +612,16 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     const k = flags.units === "radians" ? DEG : 1;
 
     // Bounds: measured for this center, correction and body where compared; a
-    // topocentric body not compared takes its geocentric bound, as an estimate.
+    // topocentric body not compared takes its geocentric bound, as an estimate;
+    // the barycentric Sun's come from the barycentre's error.
     let row = MEASURED[`${kind}/${point ? "apparent" : correction}`]?.[body];
     let estimated: string | null = null;
     if (!row && kind === "topocentric") {
       row = MEASURED[`geocentric/${correction}`]?.[body];
-      estimated = "the geocentric bound; the topocentric reduction was compared for the Sun, the Moon and Mars";
+      estimated = "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars";
+    } else if (kind === "barycentric" && body === "Sun") {
+      row = barycentricSun(now.dist!, velocity && length(velocity));
+      estimated = `the largest angle, relative distance and rate of direction that the error of astronomy-engine's barycentre, ${BARYCENTRE_ERROR.au.toExponential()} au and ${BARYCENTRE_ERROR.auPerDay.toExponential()} au/day from 1800 to 2200, allows at this distance and speed; docs/evidence/calc-api`;
     }
 
     const ids = positionIds(body, frame, kind, correction);

@@ -11,6 +11,10 @@ found. None of them is a preregistered check or changes a verdict.
   own heliocentric vectors, against Horizons.
 - D3: the light path against the geometric distance, in Horizons's own
   geocentric vectors (|LT| / |NONE| - 1), for the Moon and Mars.
+- D4 (added at the review): the engine's nutation against IAU 2000B (nut00b)
+  over the whole span, every 0.1 day from 1800 to 2200, from
+  nutation_values.mjs: the angles and their rates (central differences over
+  ±0.01 day on both sides), and the engine's own rates.
 
     python3 docs/evidence/calc-api/tools/diagnostics.py engine.json
 
@@ -19,6 +23,7 @@ Writes ../results/diagnostics.json.
 import json
 import math
 import os
+import subprocess
 import sys
 
 import erfa
@@ -40,6 +45,33 @@ AE_GM = {'5': 0.2825345909524226e-06, '6': 0.8459715185680659e-07, '7': 0.129202
 def worst(values):
     values = np.abs(np.array(values))
     return {'median': float(np.median(values)), 'max': float(values.max())}
+
+
+def nutation_scan():
+    """D4: the engine's nutation against nut00b every 0.1 day from 1800 to 2200, in ten runs of nutation_values.mjs."""
+    script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'nutation_values.mjs')
+    best = {}
+    for run in range(10):
+        start = 2378496.5 + run * 14609.7
+        raw = subprocess.run(['node', script, repr(start), '146097', '0.1'], check=True, capture_output=True).stdout
+        a = np.frombuffer(raw, dtype=np.float64).reshape(-1, 9)
+        dp, de = erfa.nut00b(compare.MJD0, a[:, 0:3] - compare.MJD0)
+        dp, de = dp * AS, de * AS
+        span = a[:, 2] - a[:, 0]
+        values = {
+            'dpsi': a[:, 4] - dp[:, 1],
+            'deps': a[:, 7] - de[:, 1],
+            'dpsiRate': ((a[:, 5] - a[:, 3]) - (dp[:, 2] - dp[:, 0])) / span,
+            'depsRate': ((a[:, 8] - a[:, 6]) - (de[:, 2] - de[:, 0])) / span,
+            'engineDpsiRate': (a[:, 5] - a[:, 3]) / span,
+            'engineDepsRate': (a[:, 8] - a[:, 6]) / span,
+        }
+        for name, v in values.items():
+            i = int(np.argmax(np.abs(v)))
+            if abs(v[i]) > best.get(name, {'max': -1})['max']:
+                best[name] = {'max': float(abs(v[i])), 'jdTt': round(float(a[i, 1]), 3)}
+    return {'unit': 'arcsec; rates arcsec/day', 'engineMinusNut00b': {k: best[k] for k in ('dpsi', 'deps', 'dpsiRate', 'depsRate')},
+            'engineRate': {'dpsi': best['engineDpsiRate'], 'deps': best['engineDepsRate']}}
 
 
 def main():
@@ -90,6 +122,8 @@ def main():
         lt, none = compare.horizons('geo', 'LT', naif), compare.horizons('geo', 'NONE', naif)
         out['D3lightPathOverGeometricMinusOne'][label] = worst(
             [np.linalg.norm(lt[round(jd, 6)][0]) / np.linalg.norm(none[round(jd, 6)][0]) - 1 for jd in data['instants']])
+
+    out['D4nutationOver1800to2200'] = nutation_scan()
 
     with open(os.path.join(compare.RESULTS, 'diagnostics.json'), 'w') as f:
         json.dump(compare.trim(out), f, indent=1)

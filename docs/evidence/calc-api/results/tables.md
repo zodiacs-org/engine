@@ -169,6 +169,14 @@ Position: angle between directions, arcseconds, median / 95th percentile / maxim
 | Moon | 512 | 1.764 / 6.171 / 7.7 | 3.52e-05 | 0.494 / 1.193 / 1.394 |
 | Mars | 512 | 1.342 / 5.845 / 6.579 | 5.71e-05 | 0.076 / 0.269 / 0.451 |
 
+### topocentric, astrometric
+
+| body | n | position ″ | distance, max | speed ″/day |
+| --- | ---: | --- | ---: | --- |
+| Sun | 512 | 0.978 / 2.68 / 2.944 | 1.40e-05 | 0.121 / 0.167 / 0.175 |
+| Moon | 512 | 1.763 / 6.17 / 7.701 | 3.52e-05 | 0.494 / 1.196 / 1.398 |
+| Mars | 512 | 1.34 / 5.842 / 6.578 | 5.71e-05 | 0.063 / 0.269 / 0.442 |
+
 ### topocentric, geometric
 
 | body | n | position ″ | distance, max | speed ″/day |
@@ -261,6 +269,14 @@ Position: angle between directions, arcseconds, median / 95th percentile / maxim
 | topocentric, apparent | equatorial-j2000 | 192 | 1.291 / 5.598 / 7.7 | 0.136 / 0.988 / 1.385 |
 | topocentric, apparent | equatorial-mean-of-date | 192 | 1.291 / 5.598 / 7.7 | 0.136 / 0.982 / 1.372 |
 | topocentric, apparent | equatorial-true-of-date | 192 | 1.321 / 5.67 / 7.636 | 0.137 / 0.953 / 1.383 |
+| topocentric, astrometric | ecliptic-icrs | 192 | 1.289 / 5.597 / 7.701 | 0.133 / 0.825 / 1.398 |
+| topocentric, astrometric | ecliptic-j2000 | 192 | 1.289 / 5.597 / 7.701 | 0.133 / 0.825 / 1.398 |
+| topocentric, astrometric | ecliptic-mean-of-date | 192 | 1.289 / 5.597 / 7.701 | 0.133 / 0.825 / 1.398 |
+| topocentric, astrometric | ecliptic-true-of-date | 192 | 1.323 / 5.667 / 7.641 | 0.135 / 0.821 / 1.357 |
+| topocentric, astrometric | equatorial-icrs | 192 | 1.289 / 5.597 / 7.701 | 0.132 / 0.985 / 1.39 |
+| topocentric, astrometric | equatorial-j2000 | 192 | 1.289 / 5.597 / 7.701 | 0.132 / 0.985 / 1.39 |
+| topocentric, astrometric | equatorial-mean-of-date | 192 | 1.289 / 5.597 / 7.701 | 0.132 / 0.981 / 1.377 |
+| topocentric, astrometric | equatorial-true-of-date | 192 | 1.325 / 5.668 / 7.637 | 0.132 / 0.953 / 1.387 |
 | topocentric, geometric | ecliptic-icrs | 192 | 1.289 / 5.597 / 7.7 | 0.132 / 0.842 / 1.301 |
 | topocentric, geometric | ecliptic-j2000 | 192 | 1.289 / 5.597 / 7.7 | 0.132 / 0.842 / 1.301 |
 | topocentric, geometric | ecliptic-mean-of-date | 192 | 1.289 / 5.597 / 7.7 | 0.132 / 0.842 / 1.301 |
@@ -476,6 +492,12 @@ Arcseconds, median / 95th / max: the longitude (right ascension) difference time
 | topo1 | apparent | Moon | LTS | equatorial-icrs | 1.477 / 5.91 / 7.528 | 0.745 / 1.551 / 1.895 |
 | topo1 | apparent | Mars | LTS | ecliptic-true-of-date | 0.818 / 3.916 / 5.366 | 1.006 / 4.866 / 6.121 |
 | topo1 | apparent | Mars | LTS | equatorial-icrs | 0.949 / 4.639 / 4.977 | 0.82 / 4.057 / 6.388 |
+| topo1 | astrometric | Sun | LT | ecliptic-true-of-date | 0.497 / 1.081 / 1.899 | 0.545 / 2.535 / 2.858 |
+| topo1 | astrometric | Sun | LT | equatorial-icrs | 0.573 / 1.24 / 1.89 | 0.659 / 2.263 / 2.924 |
+| topo1 | astrometric | Moon | LT | ecliptic-true-of-date | 1.678 / 6.193 / 7.636 | 0.305 / 1.15 / 1.372 |
+| topo1 | astrometric | Moon | LT | equatorial-icrs | 1.477 / 5.909 / 7.529 | 0.745 / 1.551 / 1.896 |
+| topo1 | astrometric | Mars | LT | ecliptic-true-of-date | 0.81 / 3.912 / 5.363 | 1.005 / 4.867 / 6.123 |
+| topo1 | astrometric | Mars | LT | equatorial-icrs | 0.95 / 4.638 / 4.969 | 0.818 / 4.058 / 6.388 |
 | topo2 | geometric | Sun | NONE | ecliptic-true-of-date | 0.497 / 1.081 / 1.899 | 0.545 / 2.535 / 2.858 |
 | topo2 | geometric | Sun | NONE | equatorial-icrs | 0.573 / 1.24 / 1.89 | 0.659 / 2.263 / 2.924 |
 | topo2 | geometric | Moon | NONE | ecliptic-true-of-date | 1.674 / 6.158 / 7.476 | 0.273 / 1.095 / 1.464 |
@@ -488,6 +510,12 @@ Arcseconds, median / 95th / max: the longitude (right ascension) difference time
 | topo2 | apparent | Moon | LTS | equatorial-icrs | 1.551 / 5.864 / 7.349 | 0.655 / 1.601 / 1.962 |
 | topo2 | apparent | Mars | LTS | ecliptic-true-of-date | 0.817 / 3.917 / 5.362 | 1.004 / 4.867 / 6.119 |
 | topo2 | apparent | Mars | LTS | equatorial-icrs | 0.956 / 4.641 / 4.978 | 0.82 / 4.058 / 6.385 |
+| topo2 | astrometric | Sun | LT | ecliptic-true-of-date | 0.497 / 1.081 / 1.899 | 0.545 / 2.535 / 2.858 |
+| topo2 | astrometric | Sun | LT | equatorial-icrs | 0.573 / 1.24 / 1.89 | 0.659 / 2.263 / 2.924 |
+| topo2 | astrometric | Moon | LT | ecliptic-true-of-date | 1.674 / 6.158 / 7.477 | 0.273 / 1.095 / 1.463 |
+| topo2 | astrometric | Moon | LT | equatorial-icrs | 1.552 / 5.864 / 7.35 | 0.654 / 1.601 / 1.963 |
+| topo2 | astrometric | Mars | LT | ecliptic-true-of-date | 0.81 / 3.912 / 5.363 | 1.005 / 4.867 / 6.123 |
+| topo2 | astrometric | Mars | LT | equatorial-icrs | 0.95 / 4.638 / 4.969 | 0.818 / 4.058 / 6.388 |
 
 ## The lunar points
 
@@ -536,25 +564,39 @@ Arcseconds, median / 95th / max: the longitude (right ascension) difference time
 
 ## The central difference's own error (Richardson, engine only)
 
-| center | body | largest estimate, lon rate · cos lat ″/day | lat rate ″/day |
-| --- | --- | ---: | ---: |
-| geo | Sun | 7.78e-06 | 1.03e-08 |
-| geo | Moon | 1.32e-04 | 5.24e-05 |
-| geo | Mercury | 1.52e-05 | 2.27e-06 |
-| geo | Venus | 1.86e-05 | 1.34e-06 |
-| geo | Mars | 9.34e-06 | 1.95e-07 |
-| geo | Jupiter | 3.19e-06 | 1.78e-08 |
-| geo | Saturn | 1.41e-06 | 2.23e-08 |
-| geo | Uranus | 9.04e-07 | 8.46e-09 |
-| geo | Neptune | 4.43e-07 | 1.70e-08 |
-| geo | Pluto | 1.33e-07 | 4.40e-08 |
-| topo1 | Sun | 5.00e-04 | 9.91e-05 |
-| topo1 | Moon | 9.41e-02 | 4.55e-02 |
-| topo1 | Mars | 3.54e-04 | 1.37e-04 |
+| center | correction | body | largest estimate, lon rate · cos lat ″/day | lat rate ″/day |
+| --- | --- | --- | ---: | ---: |
+| geo | apparent | Sun | 7.78e-06 | 1.03e-08 |
+| geo | apparent | Moon | 1.32e-04 | 5.24e-05 |
+| geo | apparent | Mercury | 1.52e-05 | 2.27e-06 |
+| geo | apparent | Venus | 1.86e-05 | 1.34e-06 |
+| geo | apparent | Mars | 9.34e-06 | 1.95e-07 |
+| geo | apparent | Jupiter | 3.19e-06 | 1.78e-08 |
+| geo | apparent | Saturn | 1.41e-06 | 2.23e-08 |
+| geo | apparent | Uranus | 9.04e-07 | 8.46e-09 |
+| geo | apparent | Neptune | 4.43e-07 | 1.70e-08 |
+| geo | apparent | Pluto | 1.33e-07 | 4.40e-08 |
+| topo1 | apparent | Sun | 5.00e-04 | 9.91e-05 |
+| topo1 | apparent | Moon | 9.41e-02 | 4.55e-02 |
+| topo1 | apparent | Mars | 3.54e-04 | 1.37e-04 |
+| geo | astrometric | Sun | 1.17e-05 | 1.13e-08 |
+| geo | astrometric | Moon | 3.25e-03 | 2.96e-04 |
+| geo | astrometric | Mercury | 1.12e-05 | 2.44e-06 |
+| geo | astrometric | Venus | 4.24e-05 | 8.85e-07 |
+| geo | astrometric | Mars | 1.04e-05 | 4.03e-07 |
+| geo | astrometric | Jupiter | 2.32e-06 | 2.37e-08 |
+| geo | astrometric | Saturn | 9.21e-07 | 2.07e-08 |
+| geo | astrometric | Uranus | 3.75e-07 | 9.13e-09 |
+| geo | astrometric | Neptune | 1.53e-07 | 1.14e-08 |
+| geo | astrometric | Pluto | 1.19e-07 | 1.71e-08 |
 
 The engine's geocentric Moon without its light time: 0.667″ to 0.731″, median 0.706″, over the 32 instants.
 
-## The bounds table (src/calc-bounds.ts)
+Pluto's analytic speed against the derivative of its position (fourth-order central difference, h = 0.01 day), geocentric, heliocentric and barycentric, J2000.0 and ICRS frames: at most 9.68e-04″/day (geocentric, ecliptic-icrs, JD 2392631.056397 TT).
+
+The topocentric positions moved by UT1 − UTC, which the ΔT pins leave out after 1962: at most 0.070″ with the IERS values (Moon, JD 2451545 TT, UT1 − UTC = 0.355 s), and 0.019″ for 0.1 s after 2026.
+
+## The bounds rule's output (src/calc-bounds.ts, which leaves out the barycentric Sun)
 
 | center/correction/body | position ″ | distance, relative | speed ″/day |
 | --- | ---: | ---: | ---: |
@@ -659,6 +701,9 @@ The engine's geocentric Moon without its light time: 0.667″ to 0.731″, media
 | topocentric/apparent/Mars | 6.6 | 5.8e-05 | 0.46 |
 | topocentric/apparent/Moon | 7.8 | 3.6e-05 | 1.4 |
 | topocentric/apparent/Sun | 3 | 1.5e-05 | 0.21 |
+| topocentric/astrometric/Mars | 6.6 | 5.8e-05 | 0.45 |
+| topocentric/astrometric/Moon | 7.8 | 3.6e-05 | 1.4 |
+| topocentric/astrometric/Sun | 3 | 1.5e-05 | 0.18 |
 | topocentric/geometric/Mars | 6.6 | 5.8e-05 | 0.45 |
 | topocentric/geometric/Moon | 7.8 | 3.6e-05 | 1.5 |
 | topocentric/geometric/Sun | 3 | 1.5e-05 | 0.18 |

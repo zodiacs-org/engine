@@ -13,7 +13,7 @@ ORDER = ['Sun', 'Moon', 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn'
 GROUPS = [('geocentric', 'apparent'), ('geocentric', 'astrometric'), ('geocentric', 'geometric'),
           ('heliocentric', 'apparent'), ('heliocentric', 'astrometric'), ('heliocentric', 'geometric'),
           ('barycentric', 'apparent'), ('barycentric', 'astrometric'), ('barycentric', 'geometric'),
-          ('topocentric', 'apparent'), ('topocentric', 'geometric')]
+          ('topocentric', 'apparent'), ('topocentric', 'astrometric'), ('topocentric', 'geometric')]
 WHAT = {
     'C1': 'x, y, z against lon, lat, dist (angle)', 'C1dist': 'x, y, z against lon, lat, dist (relative length)',
     'C2': 'ICRS against J2000.0 turned by the frame bias (bp06)', 'C3': 'mean of date against J2000.0 precessed (bp06 rp)',
@@ -103,15 +103,25 @@ def main():
                 out.append(f"| {r['body']} | {r['arbiter']} | {e['frame']} | {trio(e['position'])} | {trio(e.get('speed'))} |")
 
     out.append('\n## The central difference\'s own error (Richardson, engine only)\n')
-    out.append('| center | body | largest estimate, lon rate · cos lat ″/day | lat rate ″/day |')
-    out.append('| --- | --- | ---: | ---: |')
+    out.append('| center | correction | body | largest estimate, lon rate · cos lat ″/day | lat rate ″/day |')
+    out.append('| --- | --- | --- | ---: | ---: |')
     for r in summary['richardson']:
-        out.append(f"| {r['center']} | {r['body']} | {r['maxLonRateCosLatArcsecPerDay']:.2e} | {r['maxLatRateArcsecPerDay']:.2e} |")
+        out.append(f"| {r['center']} | {r['correction']} | {r['body']} | {r['maxLonRateCosLatArcsecPerDay']:.2e} | "
+                   f"{r['maxLatRateArcsecPerDay']:.2e} |")
     m = summary['moonLightTimeArcsec']
     out.append(f"\nThe engine's geocentric Moon without its light time: {m['min']:.3f}″ to {m['max']:.3f}″, "
                f"median {m['median']:.3f}″, over the 32 instants.\n")
+    p = summary['plutoAnalyticMinusDerivative']
+    out.append(f"Pluto's analytic speed against the derivative of its position (fourth-order central difference, "
+               f"h = 0.01 day), geocentric, heliocentric and barycentric, J2000.0 and ICRS frames: at most "
+               f"{p['maxArcsecPerDay']:.2e}″/day ({p['center']}, {p['frame']}, JD {p['jdTt']} TT).\n")
+    u = summary['ut1MinusUtcEffect']
+    out.append('The topocentric positions moved by UT1 − UTC, which the ΔT pins leave out after 1962: at most '
+               f"{u['withEop']['maxArcsec']:.3f}″ with the IERS values ({u['withEop']['body']}, JD {u['withEop']['jdTt']} TT, "
+               f"UT1 − UTC = {u['withEop']['ut1MinusUtc']:.3f} s), and {u['after2026']['maxArcsec']:.3f}″ for 0.1 s "
+               'after 2026.\n')
 
-    out.append('## The bounds table (src/calc-bounds.ts)\n')
+    out.append('## The bounds rule\'s output (src/calc-bounds.ts, which leaves out the barycentric Sun)\n')
     out.append('| center/correction/body | position ″ | distance, relative | speed ″/day |')
     out.append('| --- | ---: | ---: | ---: |')
     for key, (pos, dist, speed) in summary['bounds'].items():

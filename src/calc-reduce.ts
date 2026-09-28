@@ -72,6 +72,14 @@ function retarded(at: (time: AstroTime) => Vec3, time: AstroTime): { v: Vec3; le
 }
 
 /**
+ * astronomy-engine's barycentre is the Sun and the four giant planets, each
+ * weighted m / (m + M☉). From 1800 to 2200 it is within these of DE441's:
+ * calc-bounds.test.ts scans it daily against the full Newtonian barycentre and
+ * compares it with Horizons where it is worst.
+ */
+export const BARYCENTRE_ERROR = { au: 1.4e-5, auPerDay: 1.2e-7 } as const;
+
+/**
  * How far the Sun moved about the barycentre while the light travelled. Added
  * to a light-time vector found on heliocentric positions, it gives the
  * barycentric (astrometric) one.

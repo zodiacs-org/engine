@@ -1,0 +1,93 @@
+{
+ "note": "added at the review; not a preregistered comparison",
+ "scan": {
+  "days": 146097,
+  "from": "JD 2378496.5",
+  "to": "JD 2524592.5",
+  "engineMinusReference": {
+   "position": {
+    "au": 0.000012575377020612837,
+    "jd": 2380231.5,
+    "distanceAu": 0.009749384007576476
+   },
+   "velocity": {
+    "auPerDay": 1.1513772054531049e-7,
+    "jd": 2402945.5
+   },
+   "closest": {
+    "au": 0.00010241567235979069,
+    "jd": 2499095.5,
+    "directionArcsec": 7940.540486570604
+   },
+   "angle": {
+    "arcsec": 8664.732795099568,
+    "jd": 2499089.5,
+    "distanceAu": 0.00010743816895155053
+   }
+  }
+ },
+ "horizons": {
+  "instants": 88,
+  "maxReferenceMinusHorizons": {
+   "au": 0.0000011000030261634323,
+   "auPerDay": 7.841884769278735e-10
+  },
+  "maxEngineMinusHorizons": {
+   "position": {
+    "au": 0.000012570096921226846,
+    "jd": 2511486.5,
+    "scale": "TT"
+   },
+   "velocity": {
+    "auPerDay": 1.1588851994243497e-7,
+    "jd": 2402945.5,
+    "scale": "TT"
+   }
+  }
+ },
+ "largestShareOfCalcBound": {
+  "position": {
+   "share": 0.4860805787195499,
+   "measured": 228.45787199818847,
+   "bound": 470,
+   "jd": 2512191.5,
+   "scale": "TT"
+  },
+  "distance": {
+   "share": 0.8696501261945762,
+   "measured": 0.0013044751892918643,
+   "bound": 0.0015,
+   "jd": 2511053.5,
+   "scale": "TT"
+  },
+  "speed": {
+   "share": 0.704127588015545,
+   "measured": 2.957335869665289,
+   "bound": 4.2,
+   "jd": 2384288.5,
+   "scale": "TT"
+  },
+  "speedLonLat": {
+   "share": 0.704101067624749,
+   "measured": 2.957224484023946,
+   "bound": 4.2,
+   "jd": 2384288.5,
+   "scale": "TT"
+  }
+ },
+ "review2130": {
+  "jdUt": 2499089.5,
+  "distanceAu": 0.00010744192621862377,
+  "position": 9592.557029670497,
+  "distance": 0.01838047742008202,
+  "speed": 378.00682633403744,
+  "speedLonLat": 439.58728727814054,
+  "bounds": {
+   "position": 27000,
+   "distance": 0.15,
+   "speed": 3400,
+   "speedLonLat": 3400
+  },
+  "basis": "the largest angle, relative distance and rate of direction that the error of astronomy-engine's barycentre, 1.4e-5 au and 1.2e-7 au/day from 1800 to 2200, allows at this distance and speed; docs/evidence/calc-api"
+ }
+}

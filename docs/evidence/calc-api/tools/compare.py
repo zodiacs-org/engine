@@ -381,11 +381,11 @@ def dumps(summary):
 
 
 def trim(value):
-    """Statistics to six significant figures; the bounds are already rounded up and are left alone."""
+    """Statistics to six significant figures; the bounds are already rounded up, and they and the dates are left alone."""
     if isinstance(value, float):
         return float(f'{value:.6g}')
     if isinstance(value, dict):
-        return {k: (v if k in ('bounds', 'instants', 'tolerance', 'statistics') else trim(v)) for k, v in value.items()}
+        return {k: (v if k in ('bounds', 'instants', 'tolerance', 'statistics', 'jdTt') else trim(v)) for k, v in value.items()}
     if isinstance(value, list):
         return [trim(v) for v in value]
     return value
@@ -469,6 +469,9 @@ def main():
         'bounds': rounded,
         'richardson': data['richardson'],
         'moonLightTimeArcsec': {'median': float(np.median(moon)), 'min': float(moon.min()), 'max': float(moon.max())},
+        # Added at the review (RESULTS.md, Deviation 9): engine-only, no arbiter.
+        'plutoAnalyticMinusDerivative': data['plutoAnalytic'],
+        'ut1MinusUtcEffect': data['ut1Shift'],
         'inputs': {name: hashlib.sha256(open(os.path.join(HORIZONS, name), 'rb').read()).hexdigest()
                    for name in sorted(os.listdir(HORIZONS)) if name.endswith('.txt')},
     }

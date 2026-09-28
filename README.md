@@ -185,11 +185,17 @@ vocabulary: instants as ISO strings, Dates or `{ jd, scale: "UT" | "TT" }`;
 eight frames (the ecliptic or the equator; true or mean of date, J2000.0 or
 the ICRS); geocentric, heliocentric, barycentric and topocentric centers; and
 apparent, astrometric or geometric positions with distances and speeds.
-Results carry bounds, labelled measured or estimated, and a receipt of
-convention ids; what this version does not compute, such as the sidereal
-zodiac, comes back as a typed refusal. With every default,
-`calc({ body, time })` is the position `positions()` gives, to the bit. The
-root entry loads none of it. The reference, with the Swiss Ephemeris flag
+Results carry bounds and a receipt of convention ids. A measured bound is the
+largest difference from JPL Horizons on 32 instants from 1802 to 2188: a
+sample maximum, not a limit. An estimated bound names what it rests on. What
+this version does not compute comes back as a typed refusal, such as the
+sidereal zodiac, or an instant whose UT or TT is outside 1800 to 2200: there
+calc has no comparison to take a bound from, while the root entry's functions
+still compute such an instant and flag it `outside-reference-span`. With
+every default, `calc({ body, time })` is the position `positions()` gives, to
+the bit after the same earlier calls: astronomy-engine reuses its last
+nutation for any instant within 86 ms of it, a difference under 2 × 10⁻⁷″.
+The root entry loads none of it. The reference, with the Swiss Ephemeris flag
 mapping and the measured accuracy, is
 [docs/calc.md](https://github.com/zodiacs-org/engine/blob/main/docs/calc.md).
 

@@ -3,10 +3,14 @@
  * The engine's side of the comparison in PREREGISTRATION.md: calc() from the
  * built dist/calc.js for every corpus case in all eight frames, written as
  * JSON to standard output. The ΔT pins for the topocentric cases come from
- * Horizons's TDB − UT (../horizons/deltat.txt). It also writes two
+ * Horizons's TDB − UT (../horizons/deltat.txt). It also writes
  * engine-internal measurements that use no arbiter: the Richardson estimate of
  * the central difference's error, and the light-time term the engine's
- * geocentric Moon leaves out.
+ * geocentric Moon leaves out; and, added at the review (RESULTS.md,
+ * Deviations 7 and 9), the topocentric astrometric cases, the Richardson
+ * estimate for astrometric positions, Pluto's analytic speed against the
+ * derivative of its position, and what UT1 − UTC does to the pinned
+ * topocentric positions.
  *
  *   npm run build
  *   node docs/evidence/calc-api/tools/engine_values.mjs > engine.json
@@ -51,8 +55,8 @@ const PLAN = [
   ["geo", ["Sun", "Moon", ...PLANETS], ["geometric", "astrometric", "apparent"]],
   ["helio", ["Moon", "Earth", ...PLANETS], ["geometric", "astrometric", "apparent"]],
   ["bary", ["Sun", "Moon", "Earth", ...PLANETS], ["geometric", "astrometric", "apparent"]],
-  ["topo1", ["Sun", "Moon", "Mars"], ["geometric", "apparent"]],
-  ["topo2", ["Sun", "Moon", "Mars"], ["geometric", "apparent"]]
+  ["topo1", ["Sun", "Moon", "Mars"], ["geometric", "apparent", "astrometric"]],
+  ["topo2", ["Sun", "Moon", "Mars"], ["geometric", "apparent", "astrometric"]]
 ];
 const CENTER = { geo: "geocentric", helio: "heliocentric", bary: "barycentric" };
 const POINTS = ["North Node", "South Node", "Mean Node", "Mean South Node", "Black Moon Lilith"];
@@ -110,7 +114,11 @@ const tilts = instants.map((jd) => {
 // Richardson: the central difference with h = 0.001 day against the one with 2h,
 // at ISO instants so that both are built from whole milliseconds.
 const richardson = [];
-for (const [center, bodies] of [["geo", ["Sun", "Moon", ...PLANETS]], ["topo1", ["Sun", "Moon", "Mars"]]]) {
+for (const [center, correction, bodies] of [
+  ["geo", "apparent", ["Sun", "Moon", ...PLANETS]],
+  ["topo1", "apparent", ["Sun", "Moon", "Mars"]],
+  ["geo", "astrometric", ["Sun", "Moon", ...PLANETS]]
+]) {
   for (const body of bodies) {
     const worst = { lon: 0, lat: 0 };
     for (const [k, jd] of instants.entries()) {
@@ -120,7 +128,8 @@ for (const [center, bodies] of [["geo", ["Sun", "Moon", ...PLANETS]], ["topo1", 
       const at = (offsetMs) => run({
         body,
         time: new Date(ms + offsetMs),
-        ...(site ? { center: { topocentric: site } } : {})
+        ...(site ? { center: { topocentric: site } } : {}),
+        flags: { correction }
       });
       const now = at(0);
       // 2h = 0.002 day = 172,800 ms.
@@ -135,7 +144,62 @@ for (const [center, bodies] of [["geo", ["Sun", "Moon", ...PLANETS]], ["topo1", 
       worst.lat = Math.max(worst.lat, lat * 3600);
       void k;
     }
-    richardson.push({ center, body, maxLonRateCosLatArcsecPerDay: worst.lon, maxLatRateArcsecPerDay: worst.lat });
+    richardson.push({ center, correction, body, maxLonRateCosLatArcsecPerDay: worst.lon, maxLatRateArcsecPerDay: worst.lat });
+  }
+}
+
+// Pluto's analytic speed (from astronomy-engine's integrator) against the derivative of its
+// geometric position on fixed axes, a fourth-order central difference with h = 0.01 day.
+const wrap = (x) => ((x + 540) % 360) - 180;
+const plutoAnalytic = { maxArcsecPerDay: 0 };
+for (const center of ["geocentric", "heliocentric", "barycentric"]) {
+  for (const frame of ["ecliptic-j2000", "ecliptic-icrs", "equatorial-j2000", "equatorial-icrs"]) {
+    for (const jd of instants) {
+      const at = (days) => run({ body: "Pluto", time: { jd: jd + days, scale: "TT" }, center, frame, flags: { correction: "geometric" } });
+      const now = at(0);
+      if (now.bounds.speed.method !== "analytic") throw new Error("Pluto's speed is not analytic");
+      const [m2, m1, p1, p2] = [at(-0.02), at(-0.01), at(0.01), at(0.02)];
+      const lon = (8 * wrap(p1.lon - m1.lon) - wrap(p2.lon - m2.lon)) / 0.12;
+      const lat = (8 * (p1.lat - m1.lat) - (p2.lat - m2.lat)) / 0.12;
+      const difference = Math.hypot((now.speeds.lon - lon) * Math.cos((now.lat * Math.PI) / 180), now.speeds.lat - lat) * 3600;
+      if (difference > plutoAnalytic.maxArcsecPerDay) Object.assign(plutoAnalytic, { maxArcsecPerDay: difference, center, frame, jdTt: jd });
+    }
+  }
+}
+
+// The topocentric pins are Horizons's TDB − UT, which from 1962 is TDB − UTC, so the engine turns
+// the Earth by UTC where Horizons turns it by UT1. The positions again with UT1 − UTC from IERS EOP 20
+// C04 (hpiers.obspm.fr/iers/eop/eopc04/eopc04.1962-now, at 0h UTC on the day and the next, linearly
+// interpolated) at the five instants from 1962 to 2026, and with 0.1 s at the later ones, where
+// Horizons holds its last prediction.
+const UT1_MINUS_UTC = {
+  2440292.5: [0.0249317, 0.0248188],
+  2443402.5: [-0.0176849, -0.020815],
+  2448434.5: [0.2304087, 0.2295876],
+  2451544.5: [0.3554724, 0.3546007],
+  2456576.5: [0.0003764, -0.0007731]
+};
+const ut1Shift = { withEop: { maxArcsec: 0 }, after2026: { maxArcsec: 0 } };
+for (const [k, jd] of instants.entries()) {
+  const utc = jd - horizonsDeltaT[k] / 86_400;
+  const day = Math.floor(utc - 0.5) + 0.5;
+  const eop = UT1_MINUS_UTC[day];
+  if (!eop && jd < 2461400.5) continue;
+  const dut1 = eop ? eop[0] + (utc - day) * (eop[1] - eop[0]) : 0.1;
+  const slot = eop ? ut1Shift.withEop : ut1Shift.after2026;
+  for (const topocentric of Object.values(SITES)) {
+    for (const body of ["Sun", "Moon", "Mars"]) {
+      for (const correction of ["geometric", "astrometric", "apparent"]) {
+        const request = (pin) => ({ body, time: { jd, scale: "TT", deltaT: pin }, frame: "equatorial-icrs", center: { topocentric }, flags: { correction, cartesian: true } });
+        const a = run(request(horizonsDeltaT[k]));
+        const b = run(request(horizonsDeltaT[k] - dut1));
+        const u = [a.cartesian.x, a.cartesian.y, a.cartesian.z];
+        const v = [b.cartesian.x, b.cartesian.y, b.cartesian.z];
+        const cross = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+        const arcsec = (Math.atan2(Math.hypot(...cross), u[0] * v[0] + u[1] * v[1] + u[2] * v[2]) * 180 * 3600) / Math.PI;
+        if (arcsec > slot.maxArcsec) Object.assign(slot, { maxArcsec: arcsec, body, correction, site: topocentric, jdTt: jd, ut1MinusUtc: dut1 });
+      }
+    }
   }
 }
 
@@ -150,4 +214,4 @@ const moonLightTime = instants.map((jd) => {
   return (Math.atan2(Math.hypot(...cross), a[0] * b[0] + a[1] * b[1] + a[2] * b[2]) * 180 * 3600) / Math.PI;
 });
 
-process.stdout.write(JSON.stringify({ engine: run({ body: "Sun", time: "2000-01-01" }).receipt.engine, instants, horizonsDeltaT, tilts, cases, richardson, moonLightTime }));
+process.stdout.write(JSON.stringify({ engine: run({ body: "Sun", time: "2000-01-01" }).receipt.engine, instants, horizonsDeltaT, tilts, cases, richardson, moonLightTime, plutoAnalytic, ut1Shift }));

@@ -10,6 +10,9 @@ Horizons answered at most 80 entries of a time list and dropped the rest
 without a message, so each list's missing entries are asked for again, and
 kept as NAME.2.txt beside NAME.txt (RESULTS.md, Deviations).
 
+The topocentric LT requests and the two barycentric Sun checks were added
+after the comparison, at its review (RESULTS.md, Deviations 7 and 8).
+
     python3 docs/evidence/calc-api/tools/fetch_horizons.py
 """
 import datetime
@@ -52,8 +55,21 @@ PLAN = [
     ('geo', ['10', '301'] + PLANETS, ['NONE', 'LT', 'LT+S']),
     ('helio', ['301', '399'] + PLANETS, ['NONE', 'LT', 'LT+S']),
     ('bary', ['10', '301', '399'] + PLANETS, ['NONE', 'LT']),
-    ('topo1', ['10', '301', '4'], ['NONE', 'LT+S']),
-    ('topo2', ['10', '301', '4'], ['NONE', 'LT+S']),
+    ('topo1', ['10', '301', '4'], ['NONE', 'LT+S', 'LT']),
+    ('topo2', ['10', '301', '4'], ['NONE', 'LT+S', 'LT']),
+]
+# The barycentric Sun at the days of a daily scan of 1800 to 2200 (on JD x.5,
+# requested as TT) where astronomy-engine's barycentre is furthest from the full
+# Newtonian one (the 25 largest peaks, at least 60 days apart), where the Sun
+# is closest to the barycentre (the 20 deepest minima) and where their
+# velocities differ most (10 peaks); src/calc-bounds.test.ts repeats the scan.
+BARY_CHECKS = [
+    2379521.5, 2380231.5, 2380665.5, 2382670.5, 2384288.5, 2384303.5, 2386598.5, 2391308.5, 2394220.5, 2394652.5,
+    2395360.5, 2397080.5, 2400628.5, 2402945.5, 2405362.5, 2411782.5, 2414643.5, 2416955.5, 2419516.5, 2425873.5,
+    2433785.5, 2442479.5, 2444930.5, 2445641.5, 2446072.5, 2448006.5, 2449722.5, 2456619.5, 2458448.5, 2459628.5,
+    2460064.5, 2460773.5, 2462529.5, 2470608.5, 2474770.5, 2477100.5, 2477103.5, 2484865.5, 2488802.5, 2490945.5,
+    2499095.5, 2500432.5, 2501137.5, 2501569.5, 2507844.5, 2510344.5, 2511053.5, 2511486.5, 2512191.5, 2513366.5,
+    2515126.5, 2515560.5, 2516270.5, 2521925.5, 2523811.5,
 ]
 
 
@@ -75,6 +91,13 @@ def requests():
         'CENTER': "'500@399'", 'QUANTITIES': "'30'", 'CSV_FORMAT': "'YES'", 'EXTRA_PREC': "'YES'",
         'TLIST': f"'{tlist(False)}'", 'TLIST_TYPE': "'JD'", 'TIME_TYPE': "'TT'",
     }
+    sun = {'format': 'text', 'COMMAND': "'10'", 'OBJ_DATA': "'NO'", 'MAKE_EPHEM': "'YES'", 'EPHEM_TYPE': "'VECTORS'",
+           **CENTERS['bary'], 'REF_SYSTEM': "'ICRF'", 'REF_PLANE': "'FRAME'", 'VEC_TABLE': "'2'",
+           'VEC_CORR': "'NONE'", 'OUT_UNITS': "'AU-D'", 'CSV_FORMAT': "'YES'", 'TLIST_TYPE': "'JD'"}
+    # The review's instant, 2130-03-05T00:00 UT.
+    yield 'bary-NONE-10-2130.txt', {**sun, 'TLIST': "'2499089.5'", 'TIME_TYPE': "'UT'"}
+    yield 'bary-NONE-10-scan.txt', {**sun, 'TLIST': "'" + ' '.join(f'{jd:.1f}' for jd in BARY_CHECKS) + "'",
+                                    'TIME_TYPE': "'TT'"}
 
 
 def returned(path):

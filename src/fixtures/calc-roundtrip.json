@@ -373,19 +373,19 @@
       "value": 11,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "the geocentric bound; the topocentric reduction was compared for the Sun, the Moon and Mars"
+      "basis": "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars"
      },
      "distance": {
       "value": 0.000032,
       "unit": "relative",
       "label": "estimated",
-      "basis": "the geocentric bound; the topocentric reduction was compared for the Sun, the Moon and Mars"
+      "basis": "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars"
      },
      "speed": {
       "value": 0.64,
       "unit": "arcsec/day",
       "label": "estimated",
-      "basis": "the geocentric bound; the topocentric reduction was compared for the Sun, the Moon and Mars",
+      "basis": "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -966,6 +966,7 @@
       "node:true-osculating",
       "precession:iau2006",
       "nutation:iau2000b-five-terms",
+      "obliquity:iau2006",
       "speed:central-difference-0.25d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:zodiacs-deltat/1",
@@ -1614,7 +1615,7 @@
    "result": {
     "status": "refused",
     "reason": "out-of-range",
-    "detail": "The instant is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the engine's positions have been compared with an independent ephemeris.",
+    "detail": "The instant's UT or TT is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the engine's positions have been compared with an independent ephemeris.",
     "span": {
      "from": "1800-01-01T00:00:00.000Z",
      "to": "2200-01-01T00:00:00.000Z"
@@ -1633,7 +1634,7 @@
    "result": {
     "status": "refused",
     "reason": "out-of-range",
-    "detail": "The instant is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the engine's positions have been compared with an independent ephemeris.",
+    "detail": "The instant's UT or TT is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the engine's positions have been compared with an independent ephemeris.",
     "span": {
      "from": "1800-01-01T00:00:00.000Z",
      "to": "2200-01-01T00:00:00.000Z"
