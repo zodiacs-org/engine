@@ -29,8 +29,9 @@ text is the repository's root `LICENSE`.
   France by settled case law, in Germany under § 5 UrhG, in the United
   States under 17 U.S.C. § 105); the parliamentary debates quoted are
   speeches made in the Senate on 17 February 1891 by Hervé Faye, who died in
-  1902, and Pierre Lacombe, who died in 1918; the newspaper reports and
-  railway notices quoted are unsigned items published before 1920, whose
+  1902, and a senator the debate names only as M. Lacombe (a senator had to
+  be at least forty, so both died long before 1956); the newspaper reports
+  and railway notices quoted are unsigned items published before 1920, whose
   protection as anonymous or collective works (70 years from publication in
   France and Germany) has expired; and every United States publication
   quoted appeared before 1931. No quoted passage comes from a signed
