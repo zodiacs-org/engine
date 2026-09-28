@@ -307,7 +307,7 @@ archive's OCR text of the page.
 | --- | ---: | --- | ---: | ---: | ---: |
 | Gallica (BnF) | 41 | the text its search service returns for the cited page | 37 | 29 | 8 |
 | | | its OCR text of the page (ALTO) | 4 | 3 | 1 |
-| | | the page image | 11 | 11 | 0 |
+| | | the page image | 12 | 12 | 0 |
 | Library of Congress | 23 | its OCR text of the page | 23 | 20 | 3 |
 | | | the page image | 3 | 3 | 0 |
 | Internet Archive | 1 | the scan's OCR text | 1 | 1 | 0 |
@@ -326,7 +326,7 @@ notice the scan is faded in the middle of "französische", which the notice's
 heading gives in full. Of the excerpts added later, one OCR check is
 partial: the OCR garbles an "l'heure" in the Courrier de Saône-et-Loire of
 1911, whose letters a printing fault displaces on the page image the excerpt
-was transcribed from.
+was transcribed from. Read again on the page image, that excerpt matches.
 
 Apart from such OCR errors the checks found the excerpts as transcribed,
 except one:

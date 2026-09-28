@@ -1,7 +1,7 @@
 {
   "$schema": "../schema/atlas.schema.json",
   "kind": "atlas-citations",
-  "description": "France: the laws, decrees and notices on legal time, the 1891 Senate debate, a railway company's standing instruction on station clocks, and Paris newspapers reporting how the clock changes were made. The excerpts were transcribed from Gallica (Bibliothèque nationale de France) page images on the retrieval date and checked again against the text Gallica's search service returns for the cited page and, where that text could not confirm a word, against the page image (each citation's checks).",
+  "description": "France: the laws, decrees and notices on legal time, the 1891 Senate debate, a railway company's standing instruction on station clocks, and Paris newspapers and a Chalon-sur-Saône paper reporting how the clock changes were made. The excerpts were transcribed from Gallica (Bibliothèque nationale de France) page images on the retrieval date and checked again against Gallica's text of the cited page (the text its search service returns, or its OCR text) and, where that text could not confirm a word, against the page image (each citation's checks).",
   "citations": [
     {
       "id": "fr-jo-1870-11-06-promulgation",
@@ -208,8 +208,9 @@
           "method": "ocr",
           "date": "2026-09-28",
           "result": "partial",
-          "note": "Gallica's OCR text of the page garbles the first \"l'heure\" of the second line (\"l’ht). ,r e\"), which the page image shows with its letters displaced by a printing fault; the other words agree."
-        }
+          "note": "Gallica's OCR text of the page garbles the second \"l'heure\" (\"l’ht). ,r e\"), whose last letters a printing fault displaces on the page image, and reads the third as \"1 heure\"; the other words agree."
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
       ],
       "gloss": "A Chalon-sur-Saône paper, writing on 10 March 1911, told its readers that legal time would move back at midnight into the Greenwich time zone.",
       "note": "The paper gives 9 minutes 25 secondes; the law says nine minutes twenty-one seconds (fr-jo-1911-03-10-law)."
