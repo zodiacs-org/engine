@@ -19,12 +19,15 @@
  *    and on both sides of every boundary, UTC -> local -> UTC and
  *    local -> UTC -> local come back unchanged; readings skipped by a change
  *    are reported nonexistent and readings repeated by one ambiguous.
- * 5. The tzdb comparison is current and every difference is explained
- *    (atlas/tools/compare-tzdb.mjs), once atlas/tzdb/tzdb-2025c.json exists.
+ * 5. The tzdb comparison is current and every difference is matched by
+ *    exactly one explanation (atlas/tools/compare-tzdb.mjs). The committed
+ *    extract atlas/tzdb/tzdb-2025c.json must exist; without it the check
+ *    fails rather than skipping the comparison.
  *
  * Exits 1 and lists every problem when any check fails.
  */
 import { existsSync } from 'node:fs';
+import { relative } from 'node:path';
 import { DATA_DIR, SCHEMA_PATH, buildTimeline, formatUtc, formatWall, loadAtlas, parseLocal, readJson, resolveWall, wallAt } from './lib.mjs';
 import { checkSchemaKeywords, validate } from './schema.mjs';
 
@@ -261,23 +264,32 @@ export function summary(atlas, stats) {
   ].join('\n');
 }
 
+/** The tzdb comparison's problems; a missing extract is itself a problem, never a skip. */
+export async function tzdbProblems(atlas, extractPath) {
+  if (!existsSync(extractPath)) {
+    return [`tzdb: ${relative(process.cwd(), extractPath)} is missing, so the comparison with tzdb cannot run; rebuild it with node atlas/tools/tzdb-extract.mjs --zoneinfo DIR`];
+  }
+  const { compareAll, checkComparison } = await import('./compare-tzdb.mjs');
+  try {
+    return checkComparison(atlas, compareAll(atlas));
+  } catch (error) {
+    return [`tzdb: ${error.message}`];
+  }
+}
+
 async function main() {
   const atlas = loadAtlas(DATA_DIR);
   const { problems, stats } = checkAtlas(atlas);
   if (!problems.length) {
     const { EXTRACT_PATH } = await import('./tzdb-extract.mjs');
-    if (existsSync(EXTRACT_PATH)) {
-      const { compareAll, checkComparison } = await import('./compare-tzdb.mjs');
-      problems.push(...checkComparison(atlas, compareAll(atlas)));
-      stats.tzdb = true;
-    }
+    problems.push(...await tzdbProblems(atlas, EXTRACT_PATH));
   }
   if (problems.length) {
     console.error(`atlas: ${problems.length} problem(s)\n  ${problems.slice(0, 200).join('\n  ')}${problems.length > 200 ? '\n  ...' : ''}`);
     process.exit(1);
   }
   console.log(summary(atlas, stats));
-  console.log(stats.tzdb ? '  tzdb comparison current, every difference explained' : '  tzdb comparison not present yet (atlas/tzdb/tzdb-2025c.json)');
+  console.log('  tzdb comparison current, every difference matched by exactly one explanation');
   console.log('atlas: all checks passed');
 }
 

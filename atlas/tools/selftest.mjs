@@ -10,7 +10,8 @@ import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { checkAtlas } from './check.mjs';
+import { checkAtlas, tzdbProblems } from './check.mjs';
+import { assignExplanations } from './compare-tzdb.mjs';
 import { buildTimeline, formatOffset, loadAtlas, offsetMs, parseLocal, parseUtc, resolve, resolveUtc, resolveWall, wallAt } from './lib.mjs';
 import { validate } from './schema.mjs';
 import { readJson, SCHEMA_PATH } from './lib.mjs';
@@ -225,6 +226,37 @@ test('UTC -> local -> UTC round trips at every millisecond near a change', () =>
     const back = resolveWall(timeline, wallMs).instants.map((item) => item.utcMs);
     assert.ok(back.includes(instant));
   }
+});
+
+test('each tzdb difference must match exactly one explanation, on its values', () => {
+  const difference = (extra = {}) => ({
+    place: 'test-east', zone: 'Europe/Paris', from: '1880-01-01T00:00:00Z', to: '1880-02-01T00:00:00Z',
+    atlasRule: 'test-lmt', atlasOffset: '+0:30:00', atlasOffsetSeconds: 1800, tzdbOffset: '+0:09:21', tzdbOffsetSeconds: 561,
+    differenceSeconds: 1239, explanation: null, ...extra,
+  });
+  const explanation = (id, match = {}) => ({
+    id, match: { places: ['test-east'], zones: ['Europe/Paris'], rules: ['test-lmt'], atlasOffsets: [1800], tzdbOffsets: [561], ...match },
+  });
+  const one = [difference()];
+  assert.deepEqual(assignExplanations(one, [explanation('a')]), []);
+  assert.equal(one[0].explanation, 'a');
+  // Two matching explanations are an error, not a choice.
+  const two = assignExplanations([difference()], [explanation('a'), explanation('b')]);
+  assert.ok(two.some((text) => /matches 2 explanations \(a, b\)/.test(text)), two.join('\n'));
+  // A changed value on either side leaves the difference unexplained.
+  assert.ok(assignExplanations([difference({ tzdbOffsetSeconds: 0 })], [explanation('a')]).some((text) => /with no explanation/.test(text)));
+  assert.ok(assignExplanations([difference({ atlasOffsetSeconds: 1800.5 })], [explanation('a')]).some((text) => /with no explanation/.test(text)));
+  // Values an explanation lists but none of its differences has are reported.
+  const loose = assignExplanations([difference()], [explanation('a', { places: ['test-east', 'test-west'], tzdbOffsets: [561, 0] })]);
+  assert.ok(loose.some((text) => /lists place test-west/.test(text)), loose.join('\n'));
+  assert.ok(loose.some((text) => /lists tzdb offset 0 s/.test(text)), loose.join('\n'));
+  assert.ok(assignExplanations([], [explanation('a')]).some((text) => /matches no difference/.test(text)));
+});
+
+test('a missing tzdb extract fails the check instead of skipping it', async () => {
+  const problems = await tzdbProblems(load(), join(FIXTURE, 'no-such-extract.json'));
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /is missing, so the comparison with tzdb cannot run/);
 });
 
 test('the checks pass on the fixture and count their round trips', () => {

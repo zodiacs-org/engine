@@ -160,7 +160,7 @@
     },
     {
       "id": "fr-brest-lmt-before-1891",
-      "version": 1,
+      "version": 2,
       "title": "Brest: local mean time",
       "scope": "Brest, before the law of 14 March 1891",
       "clock": "civil",
@@ -178,10 +178,17 @@
       "isDst": false,
       "abbreviation": "LMT",
       "uncertainty": {
-        "flag": "documented",
-        "reason": "The Senate debate of February 1891 says Brest's public clocks, all but the station's, kept local time, 27 minutes behind Paris."
+        "flag": "inferred",
+        "reason": "In February 1891 the Senate heard that Brest's public clocks, all but the station's, kept local time, 27 minutes behind Paris; that they did so from 1870 is assumed."
       },
       "citations": ["fr-senat-1891-02-17-brest", "fr-senat-1891-02-17-restoration"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the Senate debate describes Brest's clocks in February 1891 only, and the rule carries that back to 1870."
+        }
+      ],
       "note": "The offset comes from Brest's longitude; it puts Brest 27 min 18 s behind Paris mean time, as the debate says."
     },
     {

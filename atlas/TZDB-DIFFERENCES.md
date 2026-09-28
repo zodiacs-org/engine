@@ -32,13 +32,13 @@ tzdb is the comparison base, not a source: it decides nothing in the atlas. Ever
 | Baltimore (`us-baltimore`) | America/New_York | 6 | 5 | 1 | 0 | 5069.5 |
 | Washington (`us-washington`) | America/New_York | 7 | 5 | 2 | 0 | 5185.0 |
 | Providence (`us-providence`) | America/New_York | 7 | 5 | 2 | 0 | 5071.5 |
-| Indianapolis (`us-indianapolis`) | America/Indiana/Indianapolis | 6 | 5 | 0 | 1 | 0.0 |
+| Indianapolis (`us-indianapolis`) | America/Indiana/Indianapolis | 6 | 5 | 1 | 0 | 5069.5 |
 | Louisville (`us-louisville`) | America/Kentucky/Louisville | 6 | 5 | 1 | 0 | 5069.5 |
-| Chicago (`us-chicago`) | America/Chicago | 6 | 5 | 0 | 1 | 0.0 |
+| Chicago (`us-chicago`) | America/Chicago | 6 | 5 | 1 | 0 | 5069.5 |
 | Saint Paul (`us-saint-paul`) | America/Chicago | 7 | 5 | 2 | 0 | 5076.5 |
 | Minneapolis (`us-minneapolis`) | America/Chicago | 7 | 5 | 2 | 0 | 5076.5 |
 
-106 period(s) differ by a second or more; all are explained below.
+108 period(s) differ by a second or more; each is matched by exactly one explanation below.
 
 ## Where they agree
 
@@ -64,22 +64,32 @@ Spans in which the atlas and tzdb give the same offset, or offsets less than a s
 | Baltimore (`us-baltimore`) | America/New_York | 1883-11-18T17:00 to 1920-01-01T05:00 |
 | Washington (`us-washington`) | America/New_York | 1884-03-13T05:08 to 1920-01-01T05:00 |
 | Providence (`us-providence`) | America/New_York | 1883-11-20T17:00 to 1920-01-01T05:00 |
-| Indianapolis (`us-indianapolis`) | America/Indiana/Indianapolis | 1870-01-01T05:44 to 1920-01-01T06:00 |
+| Indianapolis (`us-indianapolis`) | America/Indiana/Indianapolis | 1883-11-18T18:00 to 1920-01-01T06:00 |
 | Louisville (`us-louisville`) | America/Kentucky/Louisville | 1883-11-18T18:00 to 1920-01-01T06:00 |
-| Chicago (`us-chicago`) | America/Chicago | 1870-01-01T05:50 to 1920-01-01T06:00 |
+| Chicago (`us-chicago`) | America/Chicago | 1883-11-18T18:00 to 1920-01-01T06:00 |
 | Saint Paul (`us-saint-paul`) | America/Chicago | 1883-11-25T18:00 to 1920-01-01T06:00 |
 | Minneapolis (`us-minneapolis`) | America/Chicago | 1883-11-25T18:00 to 1920-01-01T06:00 |
+
+## To report to tzdb
+
+Differences that look like errors in tzdb rather than differences of scope. Nothing has been sent to the tz project.
+
+- `fr-summer-time-end-hour`: Rule France ends summer time in 1916, 1917, 1918 and 1919 at Oct Sun>=1 23:00s, at the end of the Sunday on which each decree restores normal time. The decrees (Journal officiel of 11 June 1916, 21 March 1917, 1 March 1918 and 11 February 1919) name only that date. The Paris papers cited put the change at its start: clocks set back from 01:00 to 00:00 summer time on 1 October 1916, 6 October 1918 and 5 October 1919 (Le Petit Parisien, Le Petit Journal), and within the hour after midnight on 7 October 1917. That would read Oct Sun>=1 0:00s, 23 hours earlier.
 
 ## Differences and why
 
 ### fr-summer-time-end-hour
 
-*Category:* transition-instant. *Periods:* 42.
+*Category:* transition-instant. *Periods:* 42. *Matches:* places `fr-paris`, `fr-brest`, `fr-nantes`, `fr-bordeaux`, `fr-rouen`, `fr-toulouse`, `fr-lyon`, `fr-marseille`, `fr-nice`, `fr-ajaccio`, `fr-strasbourg`, `fr-metz`; zones Europe/Paris; rules `fr-wet-1916`, `fr-wet-1917`, `fr-wet-1918`, `fr-wet-1919`, `als-mos-wet-1919`; atlas offsets +0:00:00; tzdb offsets +1:00:00.
 
-tzdb ends French summer time in 1916-1919 at 23:00 UTC on the October date each decree names (Rule France, Oct Sun>=1 23:00s). The decrees give only the date. The newspapers cited report the clocks set back at 01:00 summer time at the start of that date, 00:00 UTC, in 1916, 1918 and 1919, and in the hour after midnight in 1917. The atlas ends summer time 23 hours before tzdb does; the starts agree.
+tzdb ends French summer time in 1916-1919 at 23:00 UTC on the October date each decree names (Rule France, Oct Sun>=1 23:00s). The decrees give only the date. The newspapers cited report the clocks set back at 01:00 summer time at the start of that date, 00:00 UTC, in 1916, 1918 and 1919, and in the hour after midnight in 1917. The atlas ends summer time 23 hours before tzdb does; the starts agree. Strasbourg and Metz, French again in 1919, are taken to have changed with the rest of France that year.
 
 Decided by:
 
+- `fr-jo-1916-06-11-decree`: Décret fixant l'application de la loi du 9 juin 1916 (10 juin 1916) (1916-06-10), p. 5134, col. 1, art. 1er. <https://gallica.bnf.fr/ark:/12148/bpt6k2024209k/f2.item>
+- `fr-jo-1917-03-21-decree`: Décret relatif à l'avance de l'heure légale pendant la période d'été (20 mars 1917) (1917-03-20), p. 2274, col. 1, art. 1er and 2. <https://gallica.bnf.fr/ark:/12148/bpt6k63035685/f22.item>
+- `fr-jo-1918-03-01-decree`: Décret sur l'avance de l'heure légale (28 février 1918) (1918-02-28), p. 2016, col. 2, art. 1er and 2. <https://gallica.bnf.fr/ark:/12148/bpt6k6542734b/f14.item>
+- `fr-jo-1919-02-11-decree`: Décret avançant l'heure légale de soixante minutes dans la nuit du 1er au 2 mars et rétablissant l'heure normale le 5 octobre (9 février 1919) (1919-02-09), p. 1604, col. 1, art. 1er and 2. <https://gallica.bnf.fr/ark:/12148/bpt6k6361181p/f28.item>
 - `fr-petitparisien-1916-09-30`: Aujourd'hui la journée sera de 25 heures ! C'est la nuit prochaine qu'il faudra retarder les pendules d'une heure (1916-09-30), p. 1, col. 5. <https://gallica.bnf.fr/ark:/12148/bpt6k565938p/f1.item>
 - `fr-petitjournal-1916-09-30`: Une heure pour rien cette nuit en chemin de fer (1916-09-30), p. 2, col. 5. <https://gallica.bnf.fr/ark:/12148/bpt6k621317w/f2.item>
 - `fr-petitjournal-1917-10-06`: Attention ! ce soir, retour à l'heure d'hiver (1917-10-06), p. 1, col. 2. <https://gallica.bnf.fr/ark:/12148/bpt6k6216890/f1.item>
@@ -134,9 +144,9 @@ Decided by:
 
 ### fr-own-mean-time-before-1891
 
-*Category:* place-mean-time. *Periods:* 18.
+*Category:* place-mean-time. *Periods:* 18. *Matches:* places `fr-brest`, `fr-nantes`, `fr-bordeaux`, `fr-rouen`, `fr-toulouse`, `fr-lyon`, `fr-marseille`, `fr-nice`, `fr-ajaccio`; zones Europe/Paris; rules `fr-lmt-before-1891`, `fr-brest-lmt-before-1891`; atlas offsets -0:17:56.707, -0:06:12.806, -0:02:19.310, +0:04:23.837, +0:05:46.481, +0:19:23.494, +0:21:31.457, +0:29:03.859, +0:34:57.149; tzdb offsets +0:09:21.
 
-Before the law of 14 March 1891 the legal time of each French commune was its own mean time. tzdb gives every place in Europe/Paris the mean time of Paris (+0:09:21) until then. The atlas uses each place's own mean time; for Brest the Senate debate of 1891 confirms that the town's clocks ran 27 minutes behind Paris. tzdb also dates the law's effect from 16 March 1891 and the atlas from 17 March (one clear day after the Journal officiel of 15 March, under the decree of 5 November 1870); Paris's offset did not change, so the date shows only as the end of these periods.
+Before the law of 14 March 1891 the legal time of each French commune was its own mean time. tzdb gives every place in Europe/Paris the mean time of Paris (+0:09:21) until then. The atlas uses each place's own mean time, from its longitude; for Brest the Senate debate of 1891 puts the town's time 27 minutes behind the railway's Paris time. tzdb also dates the law's effect from 16 March 1891 and the atlas from 17 March (one clear day after the Journal officiel of 15 March, under the decree of 5 November 1870); Paris's offset did not change, so the date shows only as the end of these periods.
 
 Decided by:
 
@@ -168,14 +178,15 @@ Decided by:
 
 ### als-strasbourg-five-minutes
 
-*Category:* local-adoption. *Periods:* 2.
+*Category:* local-adoption. *Periods:* 2. *Matches:* places `fr-strasbourg`; zones Europe/Paris; rules `als-strasbourg-french-1918`, `als-mos-summer-1919`; atlas offsets +0:05:00, +1:00:00; tzdb offsets +0:00:00.
 
-Strasbourg's public clocks were set to 11:05 at noon Mid-European time on 21 November 1918, five minutes ahead of Greenwich, and were still so in mid-December. tzdb has French legal time (+0:00) there. The atlas keeps the five minutes until the clocks went forward for summer time at 23:00 on 1 March 1919 by Strasbourg's clocks, five minutes before 23:00 UTC.
+Strasbourg's public clocks were set to 11:05 at noon Mid-European time on 21 November 1918, five minutes ahead of Greenwich, and were still so in mid-December. tzdb has French legal time (+0:00) there. When the five minutes ended is not known. The atlas keeps them until the start of summer time at 23:00 on 1 March 1919 by Strasbourg's clocks (22:55 UTC): that night the clocks go forward 55 minutes, to French summer time (+1:00) rather than +1:05, and the atlas is an hour ahead of tzdb for the five minutes until tzdb's summer time starts at 23:00 UTC. Both rules are flagged uncertain.
 
 Decided by:
 
 - `als-snn-1918-11-21-bekanntmachung`: Bekanntmachung, betreffend Einführung der französischen Zeit an Stelle der mitteleuropäischen (Straßburg, den 20. November 1918) (1918-11-20), p. 1, col. 2. <https://gallica.bnf.fr/ark:/12148/bpt6k9431850k/f1.item>
 - `als-elsasser-1918-12-16-pariser-zeit`: Pariser Zeit (reader's letter, Straßburger Stadtchronik) (1918-12-16), p. 2, col. 4. <https://gallica.bnf.fr/ark:/12148/bpt6k94432097/f2.item>
+- `als-jh-1919-02-28-railways`: Die Sommerzeit (1919-02-28), p. 2, col. 1. <https://gallica.bnf.fr/ark:/12148/bpt6k3039456z/f2.item>
 
 | place | zone | from (UTC) | to (UTC) | atlas rule | atlas | tzdb | atlas − tzdb |
 | --- | --- | --- | --- | --- | --- | --- | ---: |
@@ -184,7 +195,7 @@ Decided by:
 
 ### als-mos-german-rule
 
-*Category:* annexed-territory. *Periods:* 24.
+*Category:* annexed-territory. *Periods:* 24. *Matches:* places `fr-strasbourg`, `fr-metz`; zones Europe/Paris; rules `als-strasbourg-lmt-before-1892`, `mos-metz-lmt-before-1892`, `als-strasbourg-mez-1892`, `mos-metz-mez-1892`, `de-mez-1893`, `de-summer-1916`, `de-mez-1916`, `de-summer-1917`, `de-mez-1917`, `de-summer-1918`, `als-strasbourg-mez-1918`, `mos-metz-mez-1918`; atlas offsets +0:30:58.927, +0:24:41.446, +1:00:00, +2:00:00; tzdb offsets +0:09:21, +0:00:00, +1:00:00.
 
 tzdb has no zone for Alsace-Lorraine and gives Strasbourg and Metz the time of Paris throughout. Before 1871 their legal time was, as elsewhere in France, their own mean time. From 1871 to November 1918 they were German: local mean time until Mid-European time was made local time on 1 April 1892, legal time under the Reich law from 1 April 1893, German summer time 1916-1918. Metz changed to French time on 19 November 1918 and Strasbourg on 21 November.
 
@@ -192,6 +203,7 @@ Decided by:
 
 - `fr-senat-1891-02-17-restoration`: Sénat, séance du 17 février 1891: 1re délibération sur le projet de loi ayant pour objet l'adoption de l'heure, temps moyen de Paris, comme heure légale en France et en Algérie (1891-02-17), p. 72, col. 2 (speech of the commissaire du Gouvernement, M. Faye, president of the Bureau des longitudes, named on p. 71). <https://gallica.bnf.fr/ark:/12148/bpt6k6217603f/f2.item>
 - `als-snn-1892-03-31-mez`: Mitteleuropäische Zeit (Straßburg, local news) (1892-03-31), Zweites Blatt, first page (Gallica view 5), col. 2. <https://gallica.bnf.fr/ark:/12148/bd6t528094756/f5.item>
+- `mos-lz-1892-03-29-city`: Mitteleuropäische Zeit (Metz, local news) (1892-03-29), p. 3, col. 2. <https://gallica.bnf.fr/ark:/12148/bpt6k9340208n/f3.item>
 - `de-rgbl-1893-03-12-law`: Gesetz, betreffend die Einführung einer einheitlichen Zeitbestimmung. Vom 12. März 1893 (Nr. 2075) (1893-03-12), p. 93. <https://archive.org/details/pbc.gda.pl.Nr_07_76958>
 - `de-snn-1916-04-08-wtb`: Letzte Telegramme: WTB Berlin, 7. April. Amtlich (Verordnung des Bundesrats über die Sommerzeit) (1916-04-08), Gallica view 13, col. 2. <https://gallica.bnf.fr/ark:/12148/bpt6k9429782d/f13.item>
 - `mos-matin-1918-11-21-metz`: L'installation de M. Mirman comme commissaire de la République en Lorraine (Metz, 19 novembre) (1918-11-21), p. 1, cols. 3-4 (dateline Metz, 19 novembre; the passage is in col. 4). <https://gallica.bnf.fr/ark:/12148/bpt6k572721g/f1.item>
@@ -226,13 +238,14 @@ Decided by:
 
 ### als-mos-not-berlin
 
-*Category:* annexed-territory. *Periods:* 10.
+*Category:* annexed-territory. *Periods:* 10. *Matches:* places `fr-strasbourg`, `fr-metz`; zones Europe/Berlin; rules `als-strasbourg-lmt-before-1892`, `mos-metz-lmt-before-1892`, `als-strasbourg-mez-1892`, `mos-metz-mez-1892`, `de-mez-1893`, `als-strasbourg-french-1918`, `mos-metz-french-1918`, `als-mos-wet-1919`; atlas offsets +0:30:58.927, +0:24:41.446, +1:00:00, +0:05:00, +0:00:00; tzdb offsets +0:53:28, +1:00:00.
 
-Europe/Berlin, compared for information, keeps Berlin's mean time (+0:53:28) until 1 April 1893. Strasbourg and Metz kept their own mean time until 1 April 1892 and Mid-European time from then; from 1 April 1893 to their change to French time in November 1918 the atlas and Europe/Berlin agree, German summer time included. After that the two cities were French.
+Europe/Berlin, compared for information, keeps Berlin's mean time (+0:53:28) until midnight Berlin mean time at the start of 1 April 1893; the Reich law took effect when 1 April 1893 began by Mid-European time, 6 min 32 s earlier. Strasbourg and Metz kept their own mean time until 1 April 1892 and Mid-European time from then; from 1 April 1893 to their change to French time in November 1918 the atlas and Europe/Berlin agree, German summer time included. After that the two cities were French.
 
 Decided by:
 
 - `als-snn-1892-03-31-mez`: Mitteleuropäische Zeit (Straßburg, local news) (1892-03-31), Zweites Blatt, first page (Gallica view 5), col. 2. <https://gallica.bnf.fr/ark:/12148/bd6t528094756/f5.item>
+- `mos-lz-1892-03-29-city`: Mitteleuropäische Zeit (Metz, local news) (1892-03-29), p. 3, col. 2. <https://gallica.bnf.fr/ark:/12148/bpt6k9340208n/f3.item>
 - `de-rgbl-1893-03-12-law`: Gesetz, betreffend die Einführung einer einheitlichen Zeitbestimmung. Vom 12. März 1893 (Nr. 2075) (1893-03-12), p. 93. <https://archive.org/details/pbc.gda.pl.Nr_07_76958>
 - `mos-matin-1918-11-21-metz`: L'installation de M. Mirman comme commissaire de la République en Lorraine (Metz, 19 novembre) (1918-11-21), p. 1, cols. 3-4 (dateline Metz, 19 novembre; the passage is in col. 4). <https://gallica.bnf.fr/ark:/12148/bpt6k572721g/f1.item>
 - `als-snn-1918-11-21-bekanntmachung`: Bekanntmachung, betreffend Einführung der französischen Zeit an Stelle der mitteleuropäischen (Straßburg, den 20. November 1918) (1918-11-20), p. 1, col. 2. <https://gallica.bnf.fr/ark:/12148/bpt6k9431850k/f1.item>
@@ -252,34 +265,63 @@ Decided by:
 
 ### us-city-time-before-standard-time
 
-*Category:* place-mean-time. *Periods:* 8.
+*Category:* place-mean-time. *Periods:* 5. *Matches:* places `us-baltimore`, `us-washington`, `us-providence`, `us-saint-paul`, `us-minneapolis`; zones America/New_York, America/Chicago; rules `us-baltimore-city-time-before-1883`, `us-washington-city-time-before-1883`, `us-providence-city-time-before-1883`, `us-saint-paul-city-time-before-1883`, `us-minneapolis-city-time-before-1883`; atlas offsets -5:06:28, -5:08:12, -4:45:20, -6:12:08, -6:13:03.322; tzdb offsets -4:56:02, -5:50:36.
 
-Before standard time each city kept its own time: Baltimore 6 min 28 s and Washington 8 min 12 s behind Eastern time by the reports cited, Providence, Saint Paul and Minneapolis on the mean time of their longitude. tzdb gives every place in America/New_York the mean time of New York, and every place in America/Chicago that of Chicago, until noon on 18 November 1883, and standard time from then. Providence changed two days later, on 20 November, and Saint Paul and Minneapolis a week later, on 25 November 1883.
+Before standard time each city kept its own time. tzdb gives every place in America/New_York the mean time of New York (-4:56:02) and every place in America/Chicago that of Chicago (-5:50:36) until noon on 18 November 1883. The atlas gives each city its own: the city time the reports cited measure at the change for Baltimore (6 min 28 s behind Eastern time), Washington (8 min 12 s behind it), Providence (14 min 40 s ahead of it) and Saint Paul (12 min 8 s behind Central time), and the mean time of its longitude for Minneapolis, for which no report gives a figure.
 
 Decided by:
 
 - `us-star-1883-11-17-baltimore`: Standard Time in Baltimore (1883-11-17), p. 5, col. 5. <https://www.loc.gov/resource/sn83045462/1883-11-17/ed-1/?sp=5>
 - `us-star-1883-11-19-bells`: How Father Time Was Robbed of Eight Minutes Yesterday: the fire bells to give both times (1883-11-19), p. 1, col. 5. <https://www.loc.gov/resource/sn83045462/1883-11-19/ed-1/?sp=1>
 - `us-narragansett-1883-11-03-providence`: Local news (the railroads centering in Providence adopt standard time) (1883-11-03), p. 2, col. 1. <https://www.loc.gov/resource/sn92063989/1883-11-03/ed-1/?sp=2>
-- `us-pawtucket-1883-11-23-providence`: Local news (the new standard of time in Pawtucket and Providence) (1883-11-23), p. 2, col. 5. <https://www.loc.gov/resource/sn83021578/1883-11-23/ed-1/?sp=2>
+- `us-globe-1883-11-25-omaha`: New Standard Time: Its Adoption To-Day Throughout the Whole Northwest (1883-11-25), p. 5, col. 3. <https://www.loc.gov/resource/sn83025287/1883-11-25/ed-1/?sp=5>
 - `us-globe-1883-11-25-meantime`: New Standard Time: Its Adoption To-Day Throughout the Whole Northwest (1883-11-25), p. 5, col. 3. <https://www.loc.gov/resource/sn83025287/1883-11-25/ed-1/?sp=5>
-- `us-globe-1883-11-25-stpaul`: New Standard Time: Its Adoption To-Day Throughout the Whole Northwest (1883-11-25), p. 5, col. 3. <https://www.loc.gov/resource/sn83025287/1883-11-25/ed-1/?sp=5>
-- `us-globe-1883-11-25-minneapolis`: Minneapolis Globules (1883-11-25), p. 6, col. 1. <https://www.loc.gov/resource/sn83025287/1883-11-25/ed-1/?sp=6>
 
 | place | zone | from (UTC) | to (UTC) | atlas rule | atlas | tzdb | atlas − tzdb |
 | --- | --- | --- | --- | --- | --- | --- | ---: |
 | `us-baltimore` | America/New_York | 1870-01-01T05:06:28Z | 1883-11-18T17:00:00Z | `us-baltimore-city-time-before-1883` | -5:06:28 | -4:56:02 LMT | -626 s |
 | `us-washington` | America/New_York | 1870-01-01T05:08:12Z | 1883-11-18T17:00:00Z | `us-washington-city-time-before-1883` | -5:08:12 | -4:56:02 LMT | -730 s |
-| `us-providence` | America/New_York | 1870-01-01T04:45:39.079Z | 1883-11-18T17:00:00Z | `us-providence-city-time-before-1883` | -4:45:39.079 | -4:56:02 LMT | 622.921 s |
-| `us-providence` | America/New_York | 1883-11-18T17:00:00Z | 1883-11-20T17:00:00Z | `us-providence-city-time-before-1883` | -4:45:39.079 | -5:00:00 EST | 860.921 s |
-| `us-saint-paul` | America/Chicago | 1870-01-01T06:12:22.385Z | 1883-11-18T18:00:00Z | `us-saint-paul-city-time-before-1883` | -6:12:22.385 | -5:50:36 LMT | -1306.385 s |
-| `us-saint-paul` | America/Chicago | 1883-11-18T18:00:00Z | 1883-11-25T18:00:00Z | `us-saint-paul-city-time-before-1883` | -6:12:22.385 | -6:00:00 CST | -742.385 s |
+| `us-providence` | America/New_York | 1870-01-01T04:45:20Z | 1883-11-18T17:00:00Z | `us-providence-city-time-before-1883` | -4:45:20 | -4:56:02 LMT | 642 s |
+| `us-saint-paul` | America/Chicago | 1870-01-01T06:12:08Z | 1883-11-18T18:00:00Z | `us-saint-paul-city-time-before-1883` | -6:12:08 | -5:50:36 LMT | -1292 s |
 | `us-minneapolis` | America/Chicago | 1870-01-01T06:13:03.322Z | 1883-11-18T18:00:00Z | `us-minneapolis-city-time-before-1883` | -6:13:03.322 | -5:50:36 LMT | -1347.322 s |
+
+### us-standard-time-adopted-later
+
+*Category:* local-adoption. *Periods:* 3. *Matches:* places `us-providence`, `us-saint-paul`, `us-minneapolis`; zones America/New_York, America/Chicago; rules `us-providence-city-time-before-1883`, `us-saint-paul-city-time-before-1883`, `us-minneapolis-city-time-before-1883`; atlas offsets -4:45:20, -6:12:08, -6:13:03.322; tzdb offsets -5:00:00, -6:00:00.
+
+tzdb puts these cities on standard time at noon on 18 November 1883, when the railroads changed. The Providence authorities adopted it on Tuesday 20 November, and Saint Paul and Minneapolis on Sunday 25 November; the atlas keeps each city's own time until then.
+
+Decided by:
+
+- `us-pawtucket-1883-11-23-providence`: Local news (the new standard of time in Pawtucket and Providence) (1883-11-23), p. 2, col. 5. <https://www.loc.gov/resource/sn83021578/1883-11-23/ed-1/?sp=2>
+- `us-globe-1883-11-25-stpaul`: New Standard Time: Its Adoption To-Day Throughout the Whole Northwest (1883-11-25), p. 5, col. 3. <https://www.loc.gov/resource/sn83025287/1883-11-25/ed-1/?sp=5>
+- `us-globe-1883-11-25-minneapolis`: Minneapolis Globules (1883-11-25), p. 6, col. 1. <https://www.loc.gov/resource/sn83025287/1883-11-25/ed-1/?sp=6>
+
+| place | zone | from (UTC) | to (UTC) | atlas rule | atlas | tzdb | atlas − tzdb |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| `us-providence` | America/New_York | 1883-11-18T17:00:00Z | 1883-11-20T17:00:00Z | `us-providence-city-time-before-1883` | -4:45:20 | -5:00:00 EST | 880 s |
+| `us-saint-paul` | America/Chicago | 1883-11-18T18:00:00Z | 1883-11-25T18:00:00Z | `us-saint-paul-city-time-before-1883` | -6:12:08 | -6:00:00 CST | -728 s |
 | `us-minneapolis` | America/Chicago | 1883-11-18T18:00:00Z | 1883-11-25T18:00:00Z | `us-minneapolis-city-time-before-1883` | -6:13:03.322 | -6:00:00 CST | -783.322 s |
+
+### us-city-time-whole-minutes
+
+*Category:* reference-offset. *Periods:* 2. *Matches:* places `us-indianapolis`, `us-chicago`; zones America/Indiana/Indianapolis, America/Chicago; rules `us-indianapolis-city-time-before-1883`, `us-chicago-city-time-before-1883`; atlas offsets -5:44:00, -5:51:00; tzdb offsets -5:44:38, -5:50:36.
+
+tzdb gives Indianapolis and Chicago the mean time of their longitudes before standard time, -5:44:38 and -5:50:36. The reports cited measure each city's change in whole minutes: the Indianapolis court-house clock was set back sixteen minutes, and Central time was nine minutes slower than Chicago time. The atlas takes city time from the reports, -5:44:00 and -5:51:00, as it does wherever a report measures the change; the differences, 38 s and 24 s, are within the reports' rounding. The changes themselves agree.
+
+Decided by:
+
+- `us-indj-1883-11-19-courthouse`: The Change in Time: the Standard Time Duly Adopted (1883-11-19), p. 8, col. 1. <https://www.loc.gov/resource/sn82015679/1883-11-19/ed-1/?sp=8>
+- `us-argus-1883-11-19-chicago`: By Meridian Ninety: the New Standard Time Went into Effect at Noon Yesterday (1883-11-19), p. 4, col. 3. <https://www.loc.gov/resource/sn92053943/1883-11-19/ed-1/?sp=4>
+
+| place | zone | from (UTC) | to (UTC) | atlas rule | atlas | tzdb | atlas − tzdb |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| `us-indianapolis` | America/Indiana/Indianapolis | 1870-01-01T05:44:00Z | 1883-11-18T18:00:00Z | `us-indianapolis-city-time-before-1883` | -5:44:00 | -5:44:38 LMT | 38 s |
+| `us-chicago` | America/Chicago | 1870-01-01T05:51:00Z | 1883-11-18T18:00:00Z | `us-chicago-city-time-before-1883` | -5:51:00 | -5:50:36 LMT | -24 s |
 
 ### us-washington-until-1884
 
-*Category:* local-adoption. *Periods:* 1.
+*Category:* local-adoption. *Periods:* 1. *Matches:* places `us-washington`; zones America/New_York; rules `us-washington-two-times-1883`; atlas offsets -5:08:12; tzdb offsets -5:00:00.
 
 tzdb puts Washington on Eastern time from noon on 18 November 1883. The government departments and the fire bells kept Washington time after that date, and the District's legal time became the mean time of the 75th meridian only by the act of 13 March 1884. The atlas keeps Washington time until then and flags the period uncertain, since the railroads and the businesses dealing with them used Eastern time from 18 November 1883.
 
@@ -295,9 +337,9 @@ Decided by:
 
 ### us-louisville-city-clock
 
-*Category:* reference-offset. *Periods:* 1.
+*Category:* reference-offset. *Periods:* 1. *Matches:* places `us-louisville`; zones America/Kentucky/Louisville; rules `us-louisville-city-time-before-1883`; atlas offsets -5:42:00; tzdb offsets -5:43:02.
 
-tzdb gives Louisville the mean time of its longitude, -5:43:02, until noon on 18 November 1883. The report cited has the city clock turned back 18 minutes to Central time at that noon, which puts Louisville city time at -5:42:00; the atlas follows the report. The change itself agrees.
+tzdb gives Louisville the mean time of its longitude, -5:43:02, until noon Central time on 18 November 1883. The report cited has the fire bells ring noon by the new time and the city clock turned back 18 minutes, which puts Louisville city time at -5:42:00. The atlas uses the report's figure and flags the rule uncertain, giving both readings: tzdb's own comments (a lead, not a source) say the Louisville & Nashville Railroad's trains were to stand still for 18 minutes at its change that day, so the 18 minutes may measure the railroad's change rather than the city clock's. The change itself agrees.
 
 Decided by:
 
@@ -648,8 +690,8 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 
 | from (UTC) | to (UTC) | length | atlas rule | atlas | tzdb | result |
 | --- | --- | ---: | --- | --- | --- | --- |
-| 1870-01-01T04:45:39.079Z | 1883-11-18T17:00:00Z | 5070 d | `us-providence-city-time-before-1883` | -4:45:39.079 | -4:56:02 LMT | differs by 622.921 s |
-| 1883-11-18T17:00:00Z | 1883-11-20T17:00:00Z | 2.0 d | `us-providence-city-time-before-1883` | -4:45:39.079 | -5:00:00 EST | differs by 860.921 s |
+| 1870-01-01T04:45:20Z | 1883-11-18T17:00:00Z | 5070 d | `us-providence-city-time-before-1883` | -4:45:20 | -4:56:02 LMT | differs by 642 s |
+| 1883-11-18T17:00:00Z | 1883-11-20T17:00:00Z | 2.0 d | `us-providence-city-time-before-1883` | -4:45:20 | -5:00:00 EST | differs by 880 s |
 | 1883-11-20T17:00:00Z | 1918-03-31T07:00:00Z | 12549 d | `us-providence-eastern-1883` | -5:00:00 | -5:00:00 EST | agrees |
 | 1918-03-31T07:00:00Z | 1918-10-27T06:00:00Z | 210 d | `us-eastern-dst-1918` | -4:00:00 | -4:00:00 EDT | agrees |
 | 1918-10-27T06:00:00Z | 1919-03-30T07:00:00Z | 154 d | `us-eastern-1918` | -5:00:00 | -5:00:00 EST | agrees |
@@ -660,7 +702,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 
 | from (UTC) | to (UTC) | length | atlas rule | atlas | tzdb | result |
 | --- | --- | ---: | --- | --- | --- | --- |
-| 1870-01-01T05:44:37.930Z | 1883-11-18T18:00:00Z | 5070 d | `us-indianapolis-city-time-before-1883` | -5:44:37.930 | -5:44:38 LMT | rounding (70 ms) |
+| 1870-01-01T05:44:00Z | 1883-11-18T18:00:00Z | 5070 d | `us-indianapolis-city-time-before-1883` | -5:44:00 | -5:44:38 LMT | differs by 38 s |
 | 1883-11-18T18:00:00Z | 1918-03-31T08:00:00Z | 12551 d | `us-indianapolis-central-1883` | -6:00:00 | -6:00:00 CST | agrees |
 | 1918-03-31T08:00:00Z | 1918-10-27T07:00:00Z | 210 d | `us-central-dst-1918` | -5:00:00 | -5:00:00 CDT | agrees |
 | 1918-10-27T07:00:00Z | 1919-03-30T08:00:00Z | 154 d | `us-central-1918` | -6:00:00 | -6:00:00 CST | agrees |
@@ -682,7 +724,7 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 
 | from (UTC) | to (UTC) | length | atlas rule | atlas | tzdb | result |
 | --- | --- | ---: | --- | --- | --- | --- |
-| 1870-01-01T05:50:36.012Z | 1883-11-18T18:00:00Z | 5070 d | `us-chicago-city-time-before-1883` | -5:50:36.012 | -5:50:36 LMT | rounding (-12 ms) |
+| 1870-01-01T05:51:00Z | 1883-11-18T18:00:00Z | 5070 d | `us-chicago-city-time-before-1883` | -5:51:00 | -5:50:36 LMT | differs by -24 s |
 | 1883-11-18T18:00:00Z | 1918-03-31T08:00:00Z | 12551 d | `us-chicago-central-1883` | -6:00:00 | -6:00:00 CST | agrees |
 | 1918-03-31T08:00:00Z | 1918-10-27T07:00:00Z | 210 d | `us-central-dst-1918` | -5:00:00 | -5:00:00 CDT | agrees |
 | 1918-10-27T07:00:00Z | 1919-03-30T08:00:00Z | 154 d | `us-central-1918` | -6:00:00 | -6:00:00 CST | agrees |
@@ -693,8 +735,8 @@ Every period, in order. "agrees" means the offsets are equal; "rounding" that th
 
 | from (UTC) | to (UTC) | length | atlas rule | atlas | tzdb | result |
 | --- | --- | ---: | --- | --- | --- | --- |
-| 1870-01-01T06:12:22.385Z | 1883-11-18T18:00:00Z | 5069 d | `us-saint-paul-city-time-before-1883` | -6:12:22.385 | -5:50:36 LMT | differs by -1306.385 s |
-| 1883-11-18T18:00:00Z | 1883-11-25T18:00:00Z | 7.0 d | `us-saint-paul-city-time-before-1883` | -6:12:22.385 | -6:00:00 CST | differs by -742.385 s |
+| 1870-01-01T06:12:08Z | 1883-11-18T18:00:00Z | 5069 d | `us-saint-paul-city-time-before-1883` | -6:12:08 | -5:50:36 LMT | differs by -1292 s |
+| 1883-11-18T18:00:00Z | 1883-11-25T18:00:00Z | 7.0 d | `us-saint-paul-city-time-before-1883` | -6:12:08 | -6:00:00 CST | differs by -728 s |
 | 1883-11-25T18:00:00Z | 1918-03-31T08:00:00Z | 12544 d | `us-saint-paul-central-1883` | -6:00:00 | -6:00:00 CST | agrees |
 | 1918-03-31T08:00:00Z | 1918-10-27T07:00:00Z | 210 d | `us-central-dst-1918` | -5:00:00 | -5:00:00 CDT | agrees |
 | 1918-10-27T07:00:00Z | 1919-03-30T08:00:00Z | 154 d | `us-central-1918` | -6:00:00 | -6:00:00 CST | agrees |

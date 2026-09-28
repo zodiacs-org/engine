@@ -13,11 +13,15 @@
  * It reads the committed extract (atlas/tzdb/tzdb-2025c.json, from
  * tzdb-extract.mjs), so it runs offline. Each place is compared with its
  * `tzdbZone` (the zone tzdb assigns to where it is) and any `compareZones`.
- * A difference is a period in which the offsets differ by a second or more;
- * each must match exactly one entry of atlas/data/tzdb-explanations.json,
- * and each explanation must match at least one difference. Offsets that
- * differ by less than a second (tzdb rounds mean times to whole seconds)
- * are listed separately as rounding, not as differences.
+ * A difference is a period in which the offsets differ by a second or more.
+ * Each must match exactly one entry of atlas/data/tzdb-explanations.json:
+ * the entry lists the places, zones and atlas rules it covers and the atlas
+ * and tzdb offsets it expects, so a change on either side that alters a
+ * difference leaves it unexplained until the entry is reviewed. Each entry
+ * must explain at least one difference, and every value it lists must occur
+ * in a difference it explains. Offsets that differ by less than a second
+ * (tzdb rounds mean times to whole seconds) are listed separately as
+ * rounding, not as differences.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -73,10 +77,49 @@ export function comparePlace(atlas, place, zoneName, extract) {
   return periods;
 }
 
-function explanationFor(explanations, place, zone, rule) {
-  return explanations.find(({ match }) => (!match.places || match.places.includes(place))
-    && (!match.zones || match.zones.includes(zone))
-    && (!match.rules || match.rules.includes(rule)));
+/** Offsets are compared to the millisecond. */
+const sameOffset = (a, b) => Math.abs(a - b) < 0.0005;
+
+function explains(match, difference) {
+  return match.places.includes(difference.place)
+    && match.zones.includes(difference.zone)
+    && match.rules.includes(difference.atlasRule)
+    && match.atlasOffsets.some((value) => sameOffset(value, difference.atlasOffsetSeconds))
+    && match.tzdbOffsets.some((value) => sameOffset(value, difference.tzdbOffsetSeconds));
+}
+
+/**
+ * Gives each difference its explanation (the one entry that matches it) and
+ * returns the problems: differences matched by no entry or by several,
+ * entries that match nothing, and values an entry lists that none of its
+ * differences has.
+ */
+export function assignExplanations(differences, explanations) {
+  const problems = [];
+  const where = (difference) => `${difference.place} against ${difference.zone} from ${difference.from} to ${difference.to} (${difference.atlasRule}, atlas ${difference.atlasOffset}, tzdb ${difference.tzdbOffset})`;
+  const explained = new Map(explanations.map((explanation) => [explanation.id, []]));
+  for (const difference of differences) {
+    const found = explanations.filter((explanation) => explains(explanation.match, difference));
+    difference.explanation = found.length === 1 ? found[0].id : null;
+    if (found.length === 1) explained.get(found[0].id).push(difference);
+    else if (found.length === 0) problems.push(`tzdb: ${where(difference)} differs by ${difference.differenceSeconds} s with no explanation`);
+    else problems.push(`tzdb: ${where(difference)} matches ${found.length} explanations (${found.map((explanation) => explanation.id).join(', ')}); it must match exactly one`);
+  }
+  for (const explanation of explanations) {
+    const mine = explained.get(explanation.id);
+    if (!mine.length) {
+      problems.push(`tzdb: explanation ${explanation.id} matches no difference`);
+      continue;
+    }
+    const unused = (values, has) => values.filter((value) => !mine.some((difference) => has(difference, value)));
+    const { match } = explanation;
+    for (const value of unused(match.places, (d, v) => d.place === v)) problems.push(`tzdb: explanation ${explanation.id} lists place ${value}, which none of its differences has`);
+    for (const value of unused(match.zones, (d, v) => d.zone === v)) problems.push(`tzdb: explanation ${explanation.id} lists zone ${value}, which none of its differences has`);
+    for (const value of unused(match.rules, (d, v) => d.atlasRule === v)) problems.push(`tzdb: explanation ${explanation.id} lists rule ${value}, which none of its differences has`);
+    for (const value of unused(match.atlasOffsets, (d, v) => sameOffset(d.atlasOffsetSeconds, v))) problems.push(`tzdb: explanation ${explanation.id} lists atlas offset ${value} s, which none of its differences has`);
+    for (const value of unused(match.tzdbOffsets, (d, v) => sameOffset(d.tzdbOffsetSeconds, v))) problems.push(`tzdb: explanation ${explanation.id} lists tzdb offset ${value} s, which none of its differences has`);
+  }
+  return problems;
 }
 
 export function compareAll(atlas) {
@@ -92,7 +135,6 @@ export function compareAll(atlas) {
       entries.push({ place: place.id, zone, primary: zoneIndex === 0, periods });
       for (const period of periods) {
         if (Math.abs(period.deltaMs) < 1000) continue;
-        const explanation = explanationFor(explanations, place.id, zone, period.rule);
         differences.push({
           place: place.id,
           zone,
@@ -100,15 +142,18 @@ export function compareAll(atlas) {
           to: formatUtc(period.toMs),
           atlasRule: period.rule,
           atlasOffset: formatOffset(period.atlasOffsetMs),
+          atlasOffsetSeconds: period.atlasOffsetMs / 1000,
           tzdbOffset: formatOffset(period.tzdbOffsetMs),
+          tzdbOffsetSeconds: period.tzdbOffsetMs / 1000,
           tzdbAbbreviation: period.tzdbAbbr,
           differenceSeconds: period.deltaMs / 1000,
-          explanation: explanation?.id ?? null,
+          explanation: null,
         });
       }
     }
   }
-  return { extract, explanations, entries, differences };
+  const problems = assignExplanations(differences, explanations);
+  return { extract, explanations, entries, differences, problems };
 }
 
 function differencesText(comparison) {
@@ -157,7 +202,7 @@ function reportText(atlas, comparison) {
   }
   lines.push('');
   const total = comparison.differences.length;
-  lines.push(`${total} period(s) differ by a second or more; all are explained below.`);
+  lines.push(`${total} period(s) differ by a second or more; each is matched by exactly one explanation below.`);
   lines.push('');
 
   // Agreements: consecutive periods within a second of each other, merged.
@@ -182,6 +227,19 @@ function reportText(atlas, comparison) {
   }
   lines.push('');
 
+  // Findings the atlas would report to tzdb.
+  const reports = comparison.explanations.filter((explanation) => explanation.tzdbReport);
+  if (reports.length) {
+    lines.push('## To report to tzdb');
+    lines.push('');
+    lines.push('Differences that look like errors in tzdb rather than differences of scope. Nothing has been sent to the tz project.');
+    lines.push('');
+    for (const explanation of reports) {
+      lines.push(`- \`${explanation.id}\`: ${explanation.tzdbReport}`);
+    }
+    lines.push('');
+  }
+
   // Explanations.
   lines.push('## Differences and why');
   lines.push('');
@@ -189,7 +247,7 @@ function reportText(atlas, comparison) {
     const covered = comparison.differences.filter((difference) => difference.explanation === explanation.id);
     lines.push(`### ${explanation.id}`);
     lines.push('');
-    lines.push(`*Category:* ${explanation.category}. *Periods:* ${covered.length}.`);
+    lines.push(`*Category:* ${explanation.category}. *Periods:* ${covered.length}. *Matches:* places ${explanation.match.places.map((id) => `\`${id}\``).join(', ')}; zones ${explanation.match.zones.join(', ')}; rules ${explanation.match.rules.map((id) => `\`${id}\``).join(', ')}; atlas offsets ${explanation.match.atlasOffsets.map((value) => formatOffset(Math.round(value * 1000))).join(', ')}; tzdb offsets ${explanation.match.tzdbOffsets.map((value) => formatOffset(value * 1000)).join(', ')}.`);
     lines.push('');
     lines.push(explanation.explanation);
     lines.push('');
@@ -228,19 +286,9 @@ function reportText(atlas, comparison) {
   return `${lines.join('\n').replace(/\n+$/, '')}\n`;
 }
 
-/** Problems with the committed comparison: unexplained differences, unused explanations, stale files. */
+/** Problems with the committed comparison: differences without exactly one explanation, loose or unused explanations, stale files. */
 export function checkComparison(atlas, comparison) {
-  const problems = [];
-  for (const difference of comparison.differences) {
-    if (!difference.explanation) {
-      problems.push(`tzdb: ${difference.place} against ${difference.zone} differs by ${difference.differenceSeconds} s from ${difference.from} to ${difference.to} (${difference.atlasRule}) with no explanation`);
-    }
-  }
-  for (const explanation of comparison.explanations) {
-    if (!comparison.differences.some((difference) => difference.explanation === explanation.id)) {
-      problems.push(`tzdb: explanation ${explanation.id} matches no difference`);
-    }
-  }
+  const problems = [...comparison.problems];
   const read = (path) => {
     try {
       return readFileSync(path, 'utf8');
@@ -262,16 +310,14 @@ function main() {
       console.error(problems.join('\n'));
       process.exit(1);
     }
-    console.log(`compare-tzdb: ${comparison.differences.length} differences, all explained; files current`);
+    console.log(`compare-tzdb: ${comparison.differences.length} differences, each matched by exactly one explanation; files current`);
     return;
   }
   writeFileSync(DIFFERENCES_PATH, differencesText(comparison));
   writeFileSync(REPORT_PATH, reportText(atlas, comparison));
-  const unexplained = comparison.differences.filter((difference) => !difference.explanation);
-  console.log(`compare-tzdb: ${comparison.differences.length} differences (${unexplained.length} unexplained) -> atlas/tzdb/differences.json, atlas/TZDB-DIFFERENCES.md`);
-  for (const difference of unexplained) {
-    console.log(`  ${difference.place} ${difference.zone} ${difference.from} .. ${difference.to} ${difference.atlasRule} ${difference.differenceSeconds} s`);
-  }
+  console.log(`compare-tzdb: ${comparison.differences.length} differences, ${comparison.problems.length} problem(s) -> atlas/tzdb/differences.json, atlas/TZDB-DIFFERENCES.md`);
+  for (const problem of comparison.problems) console.log(`  ${problem}`);
+  if (comparison.problems.length) process.exit(1);
 }
 
 if (process.argv[1] && process.argv[1].endsWith('compare-tzdb.mjs')) {

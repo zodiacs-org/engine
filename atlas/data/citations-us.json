@@ -1,7 +1,7 @@
 {
   "$schema": "../schema/atlas.schema.json",
   "kind": "atlas-citations",
-  "description": "United States: the Statutes at Large and newspapers of November 1883, read on Library of Congress page images (the newspapers in Chronicling America) on the retrieval date. The excerpts were checked again against the Library of Congress OCR text of each page, and against the page image where the OCR garbles a figure (each citation's checks).",
+  "description": "United States: the Statutes at Large and newspapers of November 1883 and April 1918, read on Library of Congress page images (the newspapers in Chronicling America) on the retrieval date. The excerpts were checked again against the Library of Congress OCR text of each page, and against the page image where the OCR garbles a figure (each citation's checks).",
   "citations": [
     {
       "id": "us-stat-1918-zones",
@@ -54,6 +54,22 @@
       "excerpt": "That section 3 of the Act entitled \"An Act to save daylight and to provide standard time for the United States,\" approved March 19, 1918, is hereby repealed, effective on the last Sunday of October, 1919",
       "excerptBasis": "page-image",
       "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
+    },
+    {
+      "id": "us-laramie-1918-04-10-zones",
+      "type": "newspaper-report",
+      "title": "Recognition of Zones",
+      "date": "1918-04-10",
+      "issuer": "The Laramie Republican (Laramie, Wyo.)",
+      "publication": "The Laramie Republican, 10 April 1918",
+      "url": "https://www.loc.gov/resource/sn92066979/1918-04-10/ed-1/?sp=5",
+      "retrieved": "2026-09-28",
+      "locator": "p. 5, foot of col. 4, continued at the top of col. 5",
+      "language": "en",
+      "excerpt": "The existing standard time zones have been recognized by the interstate commerce commission. [...] there was not time [...] to do other than recognize the existing limits; and that has been done.",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }],
+      "gloss": "With no time to draw new limits before the Standard Time Act took effect, the Interstate Commerce Commission recognized the existing standard time zones."
     },
     {
       "id": "us-stat-1884-dc",
@@ -306,6 +322,22 @@
       "excerpt": "Our new time will be twelve minutes faster than the old time, which places us only three degrees east of our former meantime.",
       "excerptBasis": "page-image",
       "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }]
+    },
+    {
+      "id": "us-globe-1883-11-25-omaha",
+      "type": "newspaper-report",
+      "title": "New Standard Time: Its Adoption To-Day Throughout the Whole Northwest",
+      "date": "1883-11-25",
+      "issuer": "Daily Globe (St. Paul, Minn.)",
+      "publication": "The St. Paul Sunday Globe, 25 November 1883",
+      "url": "https://www.loc.gov/resource/sn83025287/1883-11-25/ed-1/?sp=5",
+      "retrieved": "2026-09-28",
+      "locator": "p. 5, col. 3",
+      "language": "en",
+      "excerpt": "The Chicago, St. Paul, Minneapolis & Omaha Railway company, which formerly was goverened by Omaha time, make a change ahead of 23 minutes and 40 seconds, or ahead 12 minutes and 8 seconds by St. Paul time.",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "ocr", "date": "2026-09-28", "result": "matches" }],
+      "gloss": "The railway moved its clocks from Omaha time to the new central time, 23 min 40 s ahead, which is 12 min 8 s ahead of Saint Paul time. \"goverened\" is the paper's spelling."
     },
     {
       "id": "us-globe-1883-11-25-council",
