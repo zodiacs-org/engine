@@ -51,11 +51,12 @@ and is flagged `uncertain` with the disagreement stated in its reason.
 
 ## To report to tzdb
 
-Two differences from tzdb 2025c look like errors in tzdb rather than
-differences of scope. Nothing has been sent to the tz project; the owner
-decides whether to send them. Both are also listed in `TZDB-DIFFERENCES.md`,
-with the periods they affect (explanations `fr-summer-time-end-hour` and
-`de-reich-law-1893-instant`).
+Two findings the owner may send to the tz project. The first looks like an
+error in tzdb; the second is a difference between the instant a law set and
+tzdb's entry, which may follow how the clocks were set. Nothing has been
+sent; the owner decides whether to send them. Both are also listed in
+`TZDB-DIFFERENCES.md`, with the periods they affect (explanations
+`fr-summer-time-end-hour` and `de-reich-law-1893-instant`).
 
 1. **French summer time, 1916-1919, ended at the start of the day the
    decrees name, not at its end.** tzdb's
@@ -75,19 +76,22 @@ with the periods they affect (explanations `fr-summer-time-end-hour` and
    `fr-petitparisien-1916-09-30`, `fr-petitjournal-1916-09-30`,
    `fr-petitjournal-1917-10-06`, `fr-petitparisien-1917-10-07`,
    `fr-petitparisien-1918-10-04`, `fr-petitjournal-1919-10-05`.
-2. **Mid-European time became Germany's legal time at midnight by the new
-   time.** tzdb's `Zone Europe/Berlin 0:53:28 - LMT 1893 Apr` keeps Berlin
-   mean time until midnight Berlin mean time, 23:06:32 UTC on 31 March
-   1893. The Reich law of 12 March 1893 came into force at the moment "in
-   welchem nach der im vorhergehenden Absatz festgesetzten Zeitbestimmung
-   der 1. April 1893 beginnt": midnight Mid-European time, 23:00 UTC, when
-   Berlin mean time read 23:53:28. That would read `1893 Mar 31 23:00u`, the
+2. **Germany's legal instant in 1893 differs from tzdb's entry.** tzdb's
+   `Zone Europe/Berlin 0:53:28 - LMT 1893 Apr` puts the change at midnight
+   Berlin mean time, 23:06:32 UTC on 31 March 1893. The Reich law of
+   12 March 1893 came into force at the moment "in welchem nach der im
+   vorhergehenden Absatz festgesetzten Zeitbestimmung der 1. April 1893
+   beginnt": midnight Mid-European time, 23:00 UTC, when Berlin mean time
+   read 23:53:28. As legal time that would read `1893 Mar 31 23:00u`, the
    form tzdb uses for Rome's change of 1893, 6 min 32 s earlier.
-   `Europe/Kaliningrad` (Königsberg, German in 1893) also ends its LMT line
-   at `1893 Apr`, 22 minutes before the law's instant there. Whether the
-   clocks of Berlin or Königsberg were set at that instant was not
-   researched; the atlas covers neither city. Citation:
-   `de-rgbl-1893-03-12-law`.
+   `Europe/Kaliningrad` (Königsberg, German in 1893) ends its LMT line the
+   same way, 22 minutes before the law's instant there. This is not shown
+   to be an error: public clocks may have been set at local midnight, as
+   Strasbourg's cathedral clock was when Alsace-Lorraine went over to
+   Mid-European time in 1892 (`als-snn-1892-04-01-muenster`). Whether the
+   clocks of Berlin or Königsberg changed at the legal instant or at local
+   midnight was not researched; the atlas covers neither city. Citations:
+   `de-rgbl-1893-03-12-law`, `als-snn-1892-04-01-muenster`.
 
 ## Log
 

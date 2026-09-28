@@ -409,7 +409,7 @@
               },
               "explanation": { "$ref": "#/$defs/text" },
               "tzdbReport": {
-                "description": "Where the difference looks like an error in tzdb: what the atlas would report to the tz project, with the sources. Nothing has been sent.",
+                "description": "What the atlas would report to the tz project about this difference, with the sources: an apparent error in tzdb, or a difference between the instant a law set and tzdb's entry, saying which. Nothing has been sent.",
                 "$ref": "#/$defs/text"
               },
               "citations": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } }

@@ -232,7 +232,7 @@ function reportText(atlas, comparison) {
   if (reports.length) {
     lines.push('## To report to tzdb');
     lines.push('');
-    lines.push('Differences that look like errors in tzdb rather than differences of scope. Nothing has been sent to the tz project.');
+    lines.push('Findings the owner may send to the tz project: an apparent error in tzdb, or a difference between the instant a law set and tzdb\'s entry. Each says which. Nothing has been sent.');
     lines.push('');
     for (const explanation of reports) {
       lines.push(`- \`${explanation.id}\`: ${explanation.tzdbReport}`);
