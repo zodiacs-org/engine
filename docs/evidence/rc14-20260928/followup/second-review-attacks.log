@@ -1,0 +1,77 @@
+
+### R1. second carried archive 0.0.1-9007199254740993 beside 0.0.1-9007199254740992 (semver.eq true)
+expectation: check should fail; exit 1: REFUSED (good)
+  Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+  ::error file=artifacts::artifacts/zodiacs-engine-0.0.1-9007199254740992.sha256 is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 4 commit(s): 4310f76aab4f, 007f1d3fe580, a6fce5a5224c, 078d4c9a13cf.
+  ::error file=artifacts::artifacts/zodiacs-engine-0.0.1-9007199254740992.tgz is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 4 commit(s): 4310f76aab4f, 007f1d3fe580, a6fce5a5224c, 078d4c9a13cf.
+  ::error file=artifacts::artifacts/zodiacs-engine-0.0.1-9007199254740993.sha256 is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 2 commit(s): 4310f76aab4f, 007f1d3fe580.
+  ::error file=artifacts::artifacts/zodiacs-engine-0.0.1-9007199254740993.tgz is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 2 commit(s): 4310f76aab4f, 007f1d3fe580.
+  ::error file=artifacts/archives.json::The recorded version "0.0.1-9007199254740992" is not a strict semantic version (SemVer 2.0.0 with no "v" prefix, no build metadata and no numeric identifier above 9007199254740991).
+  ::error file=artifacts/archives.json::The recorded version "0.0.1-9007199254740993" is not a strict semantic version (SemVer 2.0.0 with no "v" prefix, no build metadata and no numeric identifier above 9007199254740991).
+  ::error file=artifacts/archives.json::The carried versions 0.0.1-9007199254740992 and 0.0.1-9007199254740993 are equal as npm compares versions (semver.eq); a version string names one byte sequence.
+  7 archive binding failures.
+
+### R1b. packed change with HEAD at 0.0.1-9007199254740993, semver.eq to carried 0.0.1-9007199254740992
+expectation: check should fail; exit 1: REFUSED (good)
+  Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+  ::error file=artifacts::artifacts/zodiacs-engine-0.0.1-9007199254740992.sha256 is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 2 commit(s): 88cc0adb0600, 30f07fa88097.
+  ::error file=artifacts::artifacts/zodiacs-engine-0.0.1-9007199254740992.tgz is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 2 commit(s): 88cc0adb0600, 30f07fa88097.
+  ::error file=artifacts/archives.json::The recorded version "0.0.1-9007199254740992" is not a strict semantic version (SemVer 2.0.0 with no "v" prefix, no build metadata and no numeric identifier above 9007199254740991).
+  ::error file=package.json::The version in package.json at HEAD, "0.0.1-9007199254740993", is not a strict semantic version (SemVer 2.0.0 with no "v" prefix, no build metadata and no numeric identifier above 9007199254740991).
+  ::error file=package.json::The version in package.json at HEAD, 0.0.1-9007199254740993, and the carried 0.0.1-9007199254740992 are equal as npm compares versions (semver.eq), so HEAD must be that version or another one.
+  5 archive binding failures.
+
+### R2-longs. top-level "artifactſ"
+expectation: check should fail; exit 1: REFUSED (good)
+  Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+  ::error file=artifacts::"artifactſ" is not artifacts but is one name with it once case-folded and normalized in 1 commit(s): 38744ffa6d35.
+  1 archive binding failure.
+
+### R2-dotless. top-level "artıfacts"
+expectation: check should fail; exit 1: REFUSED (good)
+  Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+  ::error file=artifacts::"artıfacts" is not artifacts but is one name with it once case-folded and normalized in 1 commit(s): 2fe959ad3c9f.
+  1 archive binding failure.
+
+### R2-upperfile. top-level "ARTIFACTS"
+expectation: check should fail; exit 1: REFUSED (good)
+  Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+  ::error file=artifacts::"ARTIFACTS" is not artifacts but is one name with it once case-folded and normalized in 1 commit(s): 8a0e947ae976.
+  1 archive binding failure.
+
+### R3. top-level "artifacts\u200c" (information: only legacy HFS+ folds it)
+expectation: check should fail; exit 1: REFUSED (good)
+  Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+  ::error file=artifacts::"artifacts‌" is not artifacts but is one name with it once case-folded and normalized in 1 commit(s): 4cc5e249924f.
+  1 archive binding failure.
+
+### R4-control. packed change under 0.0.1, TMPDIR outside the checkout
+expectation: check should fail; exit 1: REFUSED (good)
+  Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::The 0.0.1 source could not be rebuilt and packed.
+    sh: 1: zodiacs-synthetic-build: not found
+  1 archive binding failure.
+
+### R4. the same with TMPDIR inside the checkout (git status: "")
+expectation: check should fail; exit 1: REFUSED (good)
+  Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+  ::error file=scripts/verify-archive-binding.mjs::The temporary directory <scratch>/case-tmpinside-zwxCx6/.tmp (TMPDIR) is inside the checkout; set TMPDIR to a directory outside it.
+  1 archive binding failure.
+
+### R5-control. packed change under 0.0.1, no hook
+expectation: check should fail; exit 1: REFUSED (good)
+  Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::artifacts/zodiacs-engine-0.0.1.tgz is not the archive HEAD (fdcf55692518) builds. Restore the source it was packed from, or bump the version and pack anew.
+    recorded: sha256 5ed73298a97855f2311d30c1af43bced9a05b9b2858187337902423792305b5b, 444 bytes
+    rebuilt:  sha256 37fc85a9a942f95f32b9fc589c33ede3a274242cf1629a0b4a6566f390caf015, 450 bytes on Node v22.22.2
+    package/dist/index.js: recorded c33d35fd21b34bfe0edbc4545d79d4142c00c349f1a0d09e5c0a83d72ed28b6a, rebuilt 804cceec31e9268e0777cb9905711bd573e10827781c4d136795fb41ff96494d
+  1 archive binding failure.
+
+### R5. the same with a local post-checkout hook (git status: "")
+expectation: check should fail; exit 1: REFUSED (good)
+  Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::artifacts/zodiacs-engine-0.0.1.tgz is not the archive HEAD (fdcf55692518) builds. Restore the source it was packed from, or bump the version and pack anew.
+    recorded: sha256 5ed73298a97855f2311d30c1af43bced9a05b9b2858187337902423792305b5b, 444 bytes
+    rebuilt:  sha256 37fc85a9a942f95f32b9fc589c33ede3a274242cf1629a0b4a6566f390caf015, 450 bytes on Node v22.22.2
+    package/dist/index.js: recorded c33d35fd21b34bfe0edbc4545d79d4142c00c349f1a0d09e5c0a83d72ed28b6a, rebuilt 804cceec31e9268e0777cb9905711bd573e10827781c4d136795fb41ff96494d
+  1 archive binding failure.

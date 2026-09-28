@@ -1,12 +1,16 @@
 # 0.1.1-rc.14 checks, 2026-09-28
 
-rc.14 answers three independent reviews. The first reviewed rc.13 and made
+rc.14 answers four independent reviews. The first reviewed rc.13 and made
 three major, five minor and three informational findings. The second reviewed
 a first local build of rc.14 and found one blocker and four minor issues. The
 third reviewed a second local build and found no blocker and no major issue,
-three minor defects and wording errors in packed files. rc.13's commits
-(`f05ea02`, `4eee700`) and its archive (`12db9dce…`) are unchanged. Each
-finding below says what changed and which file here shows it.
+three minor defects and wording errors in packed files. The fourth reviewed
+this build, found no blocker and no major issue, and found that the archive
+check could still be steered by the checkout it ran in; commits after the
+carrier fix that without changing any packed file (see "After the carrier"
+below). rc.13's commits (`f05ea02`, `4eee700`) and its archive (`12db9dce…`)
+are unchanged. Each finding below says what changed and which file here shows
+it.
 `validation.json` gathers the results; every figure in it is read from these
 files. Local paths in the outputs are shortened to `<checkout>`, `<work>`,
 `<tmp>` and `<consumer>`.
@@ -102,7 +106,9 @@ under M1 and B1, and F1 to F3, below.
   manifest in those synthetic trees, such as an archive that is not a tar file.
 - `archive-binding.log`: the default check on Node 20.19.0, 22.22.2 and
   24.21.0 before rc.14's archive is committed, so its rebuild is skipped: 8
-  recorded archives (7 carried, 1 superseded) across 46 commits.
+  recorded archives (7 carried, 1 superseded) across 46 commits. It ran before
+  the source commit existed, with HEAD at `90d6cdb`; the runs at the head of
+  the follow-up after the carrier are in `followup/archive-binding.log`.
 - `archive-rebuilds.log`: `--rebuild-all` rebuilt all eight recorded archives
   from their source commits, rc.11's superseded packing included, byte for
   byte, each in a worktree that `npm ci` installed afresh.
@@ -324,8 +330,10 @@ with those alone. Nothing is linked or reused from the checkout, and the
 rebuild runs with no `node_modules/.bin` on `PATH` (`npm run` puts the
 checkout's there), no `NODE_PATH`, and none of npm's variables naming the
 checkout's package. The wording in the README, the CHANGELOG,
-`artifacts/README.md` and the script's header was re-read and is now exactly
-true; each also says how the rebuild installs.
+`artifacts/README.md` and the script's header was re-read, and each says how
+the rebuild installs. That wording, and this source commit's message, called
+the claim exact; it was not until the follow-up after the carrier (see "After
+the carrier" below).
 
 - `node-modules-replay.log` (`node-modules-replay.sh`): the review's
   demonstration on real history, with the second build carried on `90d6cdb`.
@@ -413,6 +421,132 @@ from main's only in the version they name. The same gates are rerun on the
 carrier commit from a clean full-history clone and reported with it, since that
 record cannot precede the archive.
 
+## After the carrier: the check made exact
+
+The fourth review checked the rebuilt rc.14: source `03db4bb`, carrier
+`b221534`, archive `adc9805e…`. It found no blocker and no major issue. The
+archive reproduces on five Node versions, and a simulated merge onto main
+passes every CI job. The archive, `03db4bb` and `b221534` are unchanged. The
+commits after the carrier change the check, its tests, CI's workflow and
+unpacked documentation (`artifacts/README.md` and this file), and no packed
+file.
+
+### What was not exact
+
+`03db4bb`'s message says that the claim that the check reads git objects only,
+never the working tree, is "now exactly true". The packed README and CHANGELOG
+say that each rebuild "takes nothing from the checkout's `node_modules`" and
+that no two carried versions may be equal as npm compares them. At `03db4bb`
+and `b221534` none of this was exact. Started with `npm run archive:binding`,
+as CI's engine job and the documentation started it, the checkout could still
+decide the verdict:
+
+- git was found through `PATH`, where `npm run` puts the checkout's
+  `node_modules/.bin` first, so a git there could check out HEAD's parent when
+  asked for HEAD;
+- an `.npmrc` in the checkout could name code with `node-options`, which npm
+  passes on as `NODE_OPTIONS` into the check and every process it started, the
+  build included;
+- with `TMPDIR` inside the checkout, `npm run build` in a rebuild put the
+  checkout's `node_modules/.bin` on `PATH` as an ancestor's, so a tool planted
+  there ran;
+- `git worktree add` ran the post-checkout hook in the checkout's `.git`,
+  which could put other sources into the rebuild.
+
+And npm's `semver.eq` compares numeric identifiers as JavaScript numbers, so
+above 2^53 − 1 it takes two versions that `03db4bb`'s check accepted as strict
+for one, such as `0.0.1-9007199254740992` and `0.0.1-9007199254740993`: both
+could be carried side by side, and a packed change with HEAD at the other
+spelling skipped HEAD's rebuild. `03db4bb` cannot be amended, since `archives.json` records it
+as rc.14's source commit. The packed sentences are exact for the check as it
+stands after the carrier, which is the check CI runs.
+
+### What changed
+
+- git and npm are the first found on `PATH` outside the checkout, never in a
+  `node_modules/.bin`, and the check fails if there is none. Every process it
+  starts runs with that `PATH`, the running Node's directory first, and
+  without `NODE_OPTIONS`, `NODE_PATH` or any `npm_*` variable; git runs
+  without any `GIT_*` variable but the two named below.
+- With `NODE_OPTIONS` set, or options given to node itself, the check first
+  restarts itself in a new Node process without them, since code they name has
+  already run in the first one. This machine sets
+  `NODE_OPTIONS=--max-old-space-size=8192`, so the logs here show that restart.
+- A `TMPDIR` inside the checkout, or with a `node_modules` or `package.json`
+  at or above it, is refused, as the packed-consumer check refuses such a
+  location for its consumer.
+- Rebuilds no longer use `git worktree add`. Each writes the commit's tree
+  from git objects (`git ls-tree` and `git cat-file --batch`) into a new
+  temporary directory, so no hook, filter, attribute or sparse pattern of the
+  checkout applies; "a clean worktree of HEAD" in the packed README and
+  CHANGELOG now means that directory. Every git command runs with
+  `core.hooksPath` set to the null device, and with grafts, replace refs and
+  the commit-graph file ignored (`GIT_GRAFT_FILE`, `GIT_NO_REPLACE_OBJECTS`,
+  `core.commitGraph=false`), which could otherwise hide a commit from
+  `rev-list` or give other bytes for an object. Blobs are read with
+  `git cat-file`, not `git show`.
+- No version the check reads may have a numeric identifier above
+  9007199254740991, and HEAD's version may not be `semver.eq` to a carried one
+  under another spelling. The check computes `semver.eq` as semver 7 does,
+  including its habit of deciding a prerelease at the first identifiers that
+  differ as strings, so `0.0.1-9007199254740992.1` and
+  `0.0.1-9007199254740993.2` are equal to it too.
+- A top-level name that normalizes to `artifacts` (default-ignorable
+  characters removed, NFKC, case-folded) but is not `artifacts` is refused,
+  such as `artifacts` followed by U+200C or spelled with a fullwidth `ａ`; so
+  are two names under `artifacts/` that normalize to one.
+- CI's engine job starts the check with
+  `node scripts/verify-archive-binding.mjs`. `npm run` reads the checkout's
+  `.npmrc` before the check starts, and that file can replace the command npm
+  runs.
+
+### Evidence
+
+- `followup/checkout-replay.log` (`checkout-replay.sh`): the four cases on real
+  history, in a clone of `b221534` with engine code changed under
+  0.1.1-rc.14. `b221534`'s check passes all four; this one fails each, with
+  the honest verdict or by refusing the TMPDIR, and the planted git and hook
+  never run.
+- `followup/second-review-attacks.log` (`second-review-attacks.mjs`): the
+  review's ten synthetic cases, copied with a two-line note at the top. This
+  check refuses all eight attacks, and the two controls fail for the honest
+  reason.
+- `scripts/verify-archive-binding.test.mjs`: 23 cases, among them the git on
+  `PATH`, the `.npmrc` `node-options`, the TMPDIR (inside the checkout, and
+  below a `node_modules` or a `package.json`), the post-checkout hook, replace
+  refs and grafts, numeric identifiers above 2^53 − 1, and the names.
+  `followup/pre-fix-b221534.log`: with `b221534`'s check, 7 of the 23 fail,
+  each because an attack passes.
+- `followup/semver-eq-check.log` (`semver-eq-check.mjs`): on 200,007 seeded
+  pairs of versions, valid and not, the check's `semver.eq` agrees with the
+  semver that npm 10.8.2, 10.9.7 and 11.19.0 bundle (7.6.2, 7.7.4, 7.8.5), and
+  no two distinct versions that the check accepts are `semver.eq`.
+
+### What the check guarantees
+
+On a clean checkout with full history, such as CI's, the check establishes
+that every archive ever carried holds only its recorded bytes and is what its
+recorded source commit builds. It protects against commits that repack,
+replace, remove or re-version a carried archive, rewrite the manifest, hide
+such a change on a merged side branch, carry a second archive under a version
+npm takes for an existing one, or change a packed file under a version already
+carried. When it runs in a working checkout, nothing there beyond its git
+objects decides the verdict: not its files or `node_modules`, not the tools
+`npm run` puts on `PATH` from it, not a `TMPDIR` inside it, and not hooks,
+grafts, replace refs or a commit-graph file in its `.git`. It does not protect
+against history rewritten before CI sees it, a squash or rebase merge (which
+makes it fail), a change to the check or to CI's workflow, which review must
+catch, or whoever controls the machine that runs it (its git, Node and npm,
+their system and user configuration, the git object store, the environment),
+who can defeat any local check.
+
+### A note on links
+
+The packed README and CHANGELOG name the GitHub organization by its former
+name, ZodiacsOfficial: the site's evidence ledger at commit `75ae549` and pull
+request #5 of `github.com/ZodiacsOfficial/sdk`. GitHub's redirect for the
+renamed organization serves those links. They change with rc.15.
+
 ## What is not established
 
 - The DE440s declination errors are maxima of a seeded sample, not bounds, and
@@ -423,7 +557,9 @@ record cannot precede the archive.
   accurate; accuracy was compared only within `REFERENCE_SPAN`.
 - The archive check cannot detect history rewritten before CI sees it, and
   needs merge commits. Its rebuilds need the npm registry, or an npm cache that
-  holds each commit's locked packages.
+  holds each commit's locked packages. Whoever controls the machine that runs
+  it can defeat it, as any local check; CI's clean checkout is the run that
+  counts.
 - The physical 0.01″ declination target remains unmet.
 - The CI jobs added in rc.14 (the packed consumer on each runtime,
   `--rebuild-all`) have run here with the same scripts, not yet on GitHub
@@ -443,7 +579,7 @@ From a source checkout, with Node 20.19.0, 22.7.0 or later:
 npm ci
 npm run typecheck && npm test && npm run build
 npm run exports:smoke && npm run package:contents && npm run pack:dry-run
-npm run archive:binding
+node scripts/verify-archive-binding.mjs
 node scripts/verify-archive-binding.mjs --rebuild-all
 mkdir -p "$PWD/../pack" && npm pack --ignore-scripts --pack-destination "$PWD/../pack"
 TMPDIR=/a/directory/without/node_modules/above \
@@ -459,12 +595,16 @@ python docs/evidence/rc14-20260928/sun-solstices.py dist/index.js de440s.bsp sun
 python docs/evidence/rc14-20260928/declination-truth.py dist/index.js de440s.bsp declination-truth.json
 ```
 
-`performance.mjs`, `far-dates.mjs` and `sun-span.mjs` take `<label>=<dist/index.js>`
-for each build to compare, `orb-difference.mjs` two builds' `dist/index.js`,
-`node-support.sh` an archive and a list of Node `bin` directories,
-`review-synthetic.mjs` the first review's directory and this checkout,
-`review-binding-attacks.mjs` and `final-review-attacks.mjs` this checkout's
-check and a scratch directory, `b1-replay.sh` this checkout and the first
-build's archive, and `semver-replay.sh` and `node-modules-replay.sh` this
-checkout and the second build's archive, which is what `npm pack` gives for
-`90d6cdb`.
+`performance.mjs`, `far-dates.mjs` and `sun-span.mjs` take
+`<label>=<dist/index.js>` for each build to compare, `orb-difference.mjs` two
+builds' `dist/index.js`, `node-support.sh` an archive and a list of Node `bin`
+directories, `review-synthetic.mjs` the first review's directory and this
+checkout, `review-binding-attacks.mjs`, `final-review-attacks.mjs` and
+`followup/second-review-attacks.mjs` this checkout's check and a scratch
+directory, `b1-replay.sh` this checkout and the first build's archive,
+`semver-replay.sh` and `node-modules-replay.sh` this checkout and the second
+build's archive, which is what `npm pack` gives for `90d6cdb`,
+`followup/checkout-replay.sh` this checkout, and `followup/semver-eq-check.mjs`
+the check and one or more semver package directories. The replays run the
+check's rebuilds, so `TMPDIR` must be outside the checkout with no
+`node_modules` or `package.json` above it.

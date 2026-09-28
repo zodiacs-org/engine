@@ -4,12 +4,16 @@
 // restored later, a rewritten manifest, a symbolic link in place of
 // artifacts/, an archive present only in the working tree, other files under
 // artifacts/, a packed file changed after its archive was carried, a second
-// archive under a version npm reads as an existing one, a HEAD version
-// changed only by build metadata, a case variant of artifacts/, and a
-// checkout whose node_modules would decide the rebuild.
+// archive under a version npm reads as an existing one (build metadata, a "v"
+// prefix, numeric identifiers past 2^53), a HEAD version npm reads as a
+// carried one, names that a case-insensitive or normalizing file system takes
+// for artifacts/, and a checkout whose own state would decide the rebuild: its
+// node_modules, a git or node on the PATH npm run gives, an .npmrc naming code
+// for NODE_OPTIONS, a TMPDIR inside it, and hooks, grafts and replace refs in
+// its .git.
 import { spawnSync, execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { delimiter, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -70,6 +74,11 @@ function repository() {
     const run = spawnSync(process.execPath, [SCRIPT, "--root", dir, ...args], { encoding: "utf8" });
     return { status: run.status, output: `${run.stdout}${run.stderr}` };
   };
+  /** The check with some environment variables set. */
+  const checkEnv = (env, ...args) => {
+    const run = spawnSync(process.execPath, [SCRIPT, "--root", dir, ...args], { encoding: "utf8", env: { ...process.env, ...env } });
+    return { status: run.status, output: `${run.stdout}${run.stderr}` };
+  };
   /** The check as `npm run archive:binding` starts it in this checkout: its node_modules/.bin first on PATH. */
   const checkAsNpmRun = (...args) => {
     const env = { ...process.env, PATH: `${join(dir, "node_modules", ".bin")}${delimiter}${process.env.PATH}`,
@@ -79,7 +88,7 @@ function repository() {
   };
   mkdirSync(join(dir, "artifacts"), { recursive: true });
   git("init", "-q", "-b", "main");
-  return { dir, git, write, commit, metadata, pack, carry, entries, writeManifest, source, check, checkAsNpmRun };
+  return { dir, git, write, commit, metadata, pack, carry, entries, writeManifest, source, check, checkEnv, checkAsNpmRun };
 }
 
 /** A clean history: 0.0.1 carried from its source commit, then work on 0.0.2 with no archive yet. */
@@ -111,6 +120,57 @@ function commitBlobs(r, files, message) {
   }
   r.git("commit", "-q", "-m", message);
   return r.git("rev-parse", "HEAD").trim();
+}
+
+const npmIn = (dir, ...args) => execFileSync("npm", args, { cwd: dir, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+/** What npm pack gives for a directory. */
+function packDirectory(dir) {
+  const stage = scratch("zodiacs-binding-npm-");
+  const [report] = JSON.parse(npmIn(dir, "pack", "--ignore-scripts", "--json", "--pack-destination", stage));
+  return readFileSync(join(stage, report.filename));
+}
+const which = (name) => execFileSync("sh", ["-c", `command -v ${name}`], { encoding: "utf8" }).trim();
+/** A build step that writes dist/ from the carried archive instead of from the sources. */
+const COPY_CARRIED_DIST = "rm -rf dist && mkdir -p dist && git show HEAD:artifacts/zodiacs-engine-0.0.1.tgz | tar -xzf - -C dist --strip-components=2 package/dist";
+
+/**
+ * A package npm builds and packs: its build copies src/ to dist/, and its npm run
+ * archive:binding starts this check. 0.0.1 is carried, then its packed code changes under the
+ * same version, so the honest verdict is a failure. Each case below plants something outside git
+ * objects that would make a rebuild give back the carried bytes.
+ */
+function changedUnderSameVersion() {
+  const r = repository();
+  const packageJson = `${JSON.stringify({ name: "@zodiacs/engine", version: "0.0.1", type: "module",
+    scripts: { build: "node build.mjs", "archive:binding": `node ${JSON.stringify(SCRIPT)} --root .` },
+    files: ["dist", "README.md", "CHANGELOG.md", "LICENSE", "LICENSING.md", "NOTICE"] }, null, 2)}\n`;
+  const build = "import { cpSync, rmSync } from \"node:fs\";\nrmSync(\"dist\", { recursive: true, force: true });\ncpSync(\"src\", \"dist\", { recursive: true });\n";
+  for (const [name, text] of Object.entries({ ...r.metadata("0.0.1"), "package.json": packageJson, "build.mjs": build,
+    ".gitignore": "node_modules/\n.npmrc\n.tmp/\ndist/\n", "src/index.js": "export const phase = \"New Moon\";\n" })) r.write(name, text);
+  const s1 = r.commit("source 0.0.1");
+  npmIn(r.dir, "run", "build");
+  r.carry("0.0.1", packDirectory(r.dir), s1);
+  const c1 = r.commit("carry 0.0.1");
+  r.write("src/index.js", "export const phase = \"Full Moon\";\n");
+  r.commit("change the packed code under 0.0.1");
+  mkdirSync(join(r.dir, "node_modules", ".bin"), { recursive: true });
+  /** The check as npm run archive:binding starts it here, with the checkout's .npmrc and PATH. */
+  const npmRun = (...args) => {
+    const run = spawnSync("npm", ["run", "--silent", "archive:binding", ...(args.length > 0 ? ["--", ...args] : [])], { cwd: r.dir, encoding: "utf8" });
+    return { status: run.status, output: `${run.stdout}${run.stderr}` };
+  };
+  /** A script at path in the checkout, executable. */
+  const plant = (path, text) => {
+    r.write(path, text);
+    chmodSync(join(r.dir, path), 0o755);
+  };
+  return { ...r, c1, npmRun, plant };
+}
+/** The honest verdict on changedUnderSameVersion's HEAD. */
+function honestFailure(result) {
+  expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz is not the archive HEAD");
+  expect(result.output).toContain("package/dist/index.js");
+  expect(result.status).toBe(1);
 }
 
 /** Replace artifacts/ in the working tree with a symbolic link to a directory holding other bytes for 0.0.1. */
@@ -378,23 +438,76 @@ describe("archive binding check", () => {
     expect(result.output).not.toContain("skipping the rebuild of HEAD");
   });
 
-  it("refuses names that differ only in case: a variant of artifacts/, or two archives in it", () => {
-    // A case-insensitive checkout would write Artifacts/'s bytes over artifacts/'s.
-    const variant = carriedOnce();
-    const evil = variant.pack(variant.metadata("0.0.1"), "export const evil = true;\n");
-    const commit = commitBlobs(variant, { "Artifacts/zodiacs-engine-0.0.1.tgz": evil }, "Artifacts/ with other bytes for 0.0.1");
-    const top = variant.check();
-    expect(top.status).toBe(1);
-    expect(top.output).toContain(`Artifacts differs from artifacts only in case in 1 commit(s): ${commit.slice(0, 12)}`);
+  it("refuses numeric identifiers above 2^53 - 1, where npm's semver.eq takes two versions for one", () => {
+    // The second review of the rebuilt rc.14, R1: npm compares numeric identifiers as JavaScript
+    // numbers, so 9007199254740992 and 9007199254740993 are one. Both archives carried: refused.
+    const [a, b] = ["0.0.1-9007199254740992", "0.0.1-9007199254740993"];
+    const pair = repository();
+    pair.carry(a, pair.pack(pair.metadata(a)), pair.source(a));
+    pair.commit(`carry ${a}`);
+    pair.carry(b, pair.pack(pair.metadata(b), "export const evil = true;\n"), pair.source(b));
+    pair.commit(`carry ${b}`);
+    pair.source("0.0.2");
+    const both = pair.check();
+    expect(both.status).toBe(1);
+    expect(both.output).toContain(`The recorded version "${b}" is not a strict semantic version`);
+    expect(both.output).toContain(`The carried versions ${a} and ${b} are equal as npm compares versions (semver.eq)`);
+    // semver.eq stops at the first identifiers that differ as strings, so what follows them does not count.
+    const [c, d] = [`${a}.1`, `${b}.2`];
+    const longer = repository();
+    longer.carry(c, longer.pack(longer.metadata(c)), longer.source(c));
+    longer.commit(`carry ${c}`);
+    longer.carry(d, longer.pack(longer.metadata(d), "export const evil = true;\n"), longer.source(d));
+    longer.commit(`carry ${d}`);
+    longer.source("0.0.2");
+    const unequal = longer.check();
+    expect(unequal.status).toBe(1);
+    expect(unequal.output).toContain(`The carried versions ${c} and ${d} are equal as npm compares versions (semver.eq)`);
+    // R1b: a packed file changed with HEAD at the other spelling, so no archive is carried under
+    // HEAD's string and its rebuild would be skipped.
+    const head = repository();
+    head.carry(a, head.pack(head.metadata(a)), head.source(a));
+    head.commit(`carry ${a}`);
+    head.source(b, "A packed file changed; HEAD's version is npm-equal to the carried one\n");
+    const changed = head.check();
+    expect(changed.status).toBe(1);
+    expect(changed.output).toContain(`The version in package.json at HEAD, "${b}", is not a strict semantic version`);
+    expect(changed.output).toContain(`The version in package.json at HEAD, ${b}, and the carried ${a} are equal as npm compares versions`);
+    expect(changed.output).not.toContain("skipping the rebuild of HEAD");
+    // Up to 2^53 - 1 every numeric identifier is its own number, and the version is accepted.
+    const edge = repository();
+    const max = "0.0.1-9007199254740991";
+    edge.carry(max, edge.pack(edge.metadata(max)), edge.source(max));
+    edge.commit(`carry ${max}`);
+    edge.source("0.0.2");
+    const accepted = edge.check();
+    expect(accepted.output).toContain("1 recorded archives (1 carried, 0 superseded)");
+    expect(accepted.status).toBe(0);
+  });
+
+  it("refuses names that a case-insensitive or normalizing file system takes for one: variants of artifacts/, or two archives in it", () => {
+    // Such a checkout would write the variant's bytes over artifacts/'s.
+    const names = ["Artifacts", "ARTIFACTS", "artifactſ", "artıfacts", "artifacts\u200c", "\uff41rtifacts"];
+    const variants = names.map((name) => {
+      const variant = carriedOnce();
+      const evil = variant.pack(variant.metadata("0.0.1"), "export const evil = true;\n");
+      const commit = commitBlobs(variant, { [`${name}/zodiacs-engine-0.0.1.tgz`]: evil }, `${JSON.stringify(name)} with other bytes for 0.0.1`);
+      return { name, commit, result: variant.check() };
+    });
+    expect(Object.fromEntries(variants.map(({ name, result }) => [name, result.status]))).toEqual(Object.fromEntries(names.map((name) => [name, 1])));
+    for (const { name, commit, result } of variants) {
+      expect(result.output).toContain(`${JSON.stringify(name)} is not artifacts but is one name with it once case-folded and normalized in 1 commit(s): ${commit.slice(0, 12)}`);
+    }
     // Two strict versions that npm tells apart but such a disk does not.
     const inside = carriedOnce();
+    const evil = inside.pack(inside.metadata("0.0.1"), "export const evil = true;\n");
     commitBlobs(inside, { "artifacts/zodiacs-engine-0.0.1-RC.1.tgz": evil, "artifacts/zodiacs-engine-0.0.1-rc.1.tgz": evil }, "two archive names that differ only in case");
     const pair = inside.check();
     expect(pair.status).toBe(1);
-    expect(pair.output).toContain("artifacts/zodiacs-engine-0.0.1-rc.1.tgz and artifacts/zodiacs-engine-0.0.1-RC.1.tgz differ only in case");
+    expect(pair.output).toContain("artifacts/zodiacs-engine-0.0.1-rc.1.tgz and artifacts/zodiacs-engine-0.0.1-RC.1.tgz are one name once case-folded and normalized");
   });
 
-  it("rebuilds from the worktree's own npm ci, whatever the checkout's node_modules holds", () => {
+  it("rebuilds with its own npm ci, whatever the checkout's node_modules holds", () => {
     // The final rc.14 review's working-tree demonstration. The build runs tsup, which the
     // lockfile provides from a local builder (a file: dependency, so npm ci needs no
     // registry). The checkout's ignored node_modules/.bin/tsup is then replaced: first by
@@ -470,6 +583,98 @@ describe("archive binding check", () => {
     expect(result.status).toBe(1);
     expect(result.output).toContain("The 0.0.1 source could not be rebuilt and packed.");
     expect(result.output).not.toContain("is byte-identical to a rebuild of HEAD");
+  });
+
+  it("never runs a git that npm run puts on PATH from the checkout", () => {
+    // The second review of the rebuilt rc.14, real2.sh part C: a git in the checkout's
+    // node_modules/.bin that checks out the carrier's tree when asked for HEAD's.
+    const r = changedUnderSameVersion();
+    const log = join(r.dir, "node_modules", ".git-shim.log");
+    const git = JSON.stringify(which("git"));
+    r.plant("node_modules/.bin/git", `#!/bin/sh\necho "$*" >> ${JSON.stringify(log)}\n` +
+      `if [ "$1" = worktree ] && [ "$2" = add ]; then exec ${git} worktree add --detach "$4" ${r.c1}; fi\nexec ${git} "$@"\n`);
+    expect(r.git("status", "--porcelain")).toBe("");
+    honestFailure(r.npmRun());
+    honestFailure(r.npmRun("--rebuild-all"));
+    expect(existsSync(log)).toBe(false);
+  });
+
+  it("keeps code that an .npmrc names for NODE_OPTIONS out of the check and its rebuilds", () => {
+    // The second review's .npmrc demonstration: npm run turns node-options into NODE_OPTIONS,
+    // and this hook, loaded into the build, writes dist/ from the carried archive.
+    const r = changedUnderSameVersion();
+    const hook = join(r.dir, "node_modules", ".hook.cjs");
+    const log = join(r.dir, "node_modules", ".hook.log");
+    r.write("node_modules/.hook.cjs", `require("node:fs").appendFileSync(${JSON.stringify(log)}, \`\${process.argv[1]}\\n\`);\n` +
+      `if ((process.argv[1] ?? "").endsWith("build.mjs")) {\n  require("node:child_process").execSync(${JSON.stringify(COPY_CARRIED_DIST)});\n  process.exit(0);\n}\n`);
+    r.write(".npmrc", `node-options=--require ${hook}\n`);
+    expect(r.git("status", "--porcelain")).toBe("");
+    const result = r.npmRun();
+    honestFailure(result);
+    expect(result.output).toContain("Running the check in a new Node process without");
+    expect(result.output).toContain(hook);
+    // It ran only in the process npm started, which the verdict does not come from.
+    expect(readFileSync(log, "utf8").trim().split("\n")).toEqual([SCRIPT]);
+  });
+
+  it("refuses a TMPDIR inside the checkout, or with a node_modules or package.json above it", () => {
+    // The second review's R4: with TMPDIR inside the checkout, npm run build in a rebuild puts the
+    // checkout's node_modules/.bin on PATH, where a planted node builds the carried bytes.
+    const r = changedUnderSameVersion();
+    r.plant("node_modules/.bin/node", `#!/bin/sh\nif [ "$1" = build.mjs ]; then ${COPY_CARRIED_DIST}; exit 0; fi\nexec ${JSON.stringify(process.execPath)} "$@"\n`);
+    mkdirSync(join(r.dir, ".tmp"));
+    expect(r.git("status", "--porcelain")).toBe("");
+    const inside = r.checkEnv({ TMPDIR: join(r.dir, ".tmp") });
+    expect(inside.status).toBe(1);
+    expect(inside.output).toContain("(TMPDIR) is inside the checkout");
+    // Outside the checkout but below a node_modules or a package.json, which npm and Node would
+    // also consult from a rebuild.
+    for (const name of ["node_modules", "package.json"]) {
+      const base = realpathSync(scratch("zodiacs-binding-tmpbase-"));
+      if (name === "node_modules") mkdirSync(join(base, name));
+      else writeFileSync(join(base, name), "{}\n");
+      mkdirSync(join(base, "tmp"));
+      const below = r.checkEnv({ TMPDIR: join(base, "tmp") });
+      expect(below.output).toContain(`${join(base, name)} lies at or above the temporary directory`);
+      expect(below.status).toBe(1);
+    }
+    honestFailure(r.check());
+  });
+
+  it("runs no hook from the checkout's .git", () => {
+    // The second review's R5: a post-checkout hook, which git worktree add runs in the new
+    // checkout, puts the carried sources back.
+    const r = changedUnderSameVersion();
+    const marker = join(r.dir, "node_modules", ".hook-ran");
+    r.plant(".git/hooks/post-checkout", `#!/bin/sh\ntouch ${JSON.stringify(marker)}\ngit checkout ${r.c1} -- src 2>/dev/null\nexit 0\n`);
+    expect(r.git("status", "--porcelain")).toBe("");
+    honestFailure(r.check());
+    honestFailure(r.check("--rebuild-all"));
+    expect(existsSync(marker)).toBe(false);
+  });
+
+  it("ignores replace refs and grafts in the checkout's .git", () => {
+    // A replace ref would make git give the recorded bytes for other bytes carried at HEAD.
+    const replaced = carriedOnce();
+    const evil = replaced.pack(replaced.metadata("0.0.1"), "export const evil = true;\n");
+    writeFileSync(join(replaced.dir, "artifacts", "zodiacs-engine-0.0.1.tgz"), evil);
+    replaced.commit("other bytes for 0.0.1");
+    replaced.git("replace", replaced.git("rev-parse", "HEAD:artifacts/zodiacs-engine-0.0.1.tgz").trim(),
+      replaced.git("rev-parse", `${replaced.c1}:artifacts/zodiacs-engine-0.0.1.tgz`).trim());
+    const swapped = replaced.check();
+    expect(swapped.status).toBe(1);
+    expect(swapped.output).toContain(`sha256 ${sha256(evil)}`);
+    // A graft would hide a commit that held other bytes, restored by the next.
+    const grafted = carriedOnce();
+    const before = grafted.git("rev-parse", "HEAD").trim();
+    writeFileSync(join(grafted.dir, "artifacts", "zodiacs-engine-0.0.1.tgz"), evil);
+    grafted.commit("other bytes for 0.0.1");
+    writeFileSync(join(grafted.dir, "artifacts", "zodiacs-engine-0.0.1.tgz"), grafted.bytes);
+    const restored = grafted.commit("restore 0.0.1");
+    writeFileSync(join(grafted.dir, ".git", "info", "grafts"), `${restored} ${before}\n`);
+    const hidden = grafted.check();
+    expect(hidden.status).toBe(1);
+    expect(hidden.output).toContain(`sha256 ${sha256(evil)}`);
   });
 
   it("refuses an archive without a manifest entry, and a shallow checkout", () => {

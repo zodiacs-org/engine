@@ -57,11 +57,12 @@ jobs:
       # only: artifacts/ must be a real directory in every commit, the manifest
       # append-only, every version strict, every archive and receipt its
       # recorded bytes in every commit, each archive's packed metadata its
-      # source commit's, and when HEAD's version has a carried archive, a clean
-      # worktree of HEAD, installed by its own npm ci, must rebuild it
-      # (reported as a skip before that archive is committed).
+      # source commit's, and when HEAD's version has a carried archive, HEAD's
+      # tree, written from git objects and installed by its own npm ci, must
+      # rebuild it (reported as a skip before that archive is committed).
+      # Started with node, not npm run, which reads the checkout's .npmrc first.
       - name: Carried archives match history and source
-        run: npm run archive:binding
+        run: node scripts/verify-archive-binding.mjs
 
   archives:
     name: Every carried archive rebuilds from its source commit
