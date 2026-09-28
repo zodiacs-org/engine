@@ -21,6 +21,18 @@ const FIXTURE = join(TOOLS, 'fixture');
 const load = () => loadAtlas(FIXTURE);
 const utc = (text) => Date.parse(text);
 
+/** Runs resolve.mjs on the fixture; returns the exit status, the parsed output and stderr. */
+function cli(args, env = {}) {
+  try {
+    const stdout = execFileSync('node', [join(TOOLS, 'resolve.mjs'), '--data', FIXTURE, ...args], {
+      encoding: 'utf8', env: { ...process.env, ...env }, stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    return { code: 0, out: JSON.parse(stdout) };
+  } catch (error) {
+    return { code: error.status, out: error.stdout ? JSON.parse(error.stdout) : null, err: error.stderr };
+  }
+}
+
 test('local mean time is 240 s per degree east, to the millisecond', () => {
   assert.equal(offsetMs({ type: 'local-mean-time' }, { longitude: 7.5 }), 1_800_000);
   assert.equal(offsetMs({ type: 'local-mean-time' }, { longitude: -74.00597 }), -17_761_433);
@@ -94,16 +106,6 @@ test('--utc is always UTC, with or without Z, whatever the host time zone', () =
     if (saved === undefined) delete process.env.TZ;
     else process.env.TZ = saved;
   }
-  const cli = (args, env = {}) => {
-    try {
-      const stdout = execFileSync('node', [join(TOOLS, 'resolve.mjs'), '--data', FIXTURE, ...args], {
-        encoding: 'utf8', env: { ...process.env, ...env }, stdio: ['ignore', 'pipe', 'pipe'],
-      });
-      return { code: 0, out: JSON.parse(stdout) };
-    } catch (error) {
-      return { code: error.status, out: error.stdout ? JSON.parse(error.stdout) : null, err: error.stderr };
-    }
-  };
   const inNewYork = cli(['--place', 'test-east', '--utc', '1885-01-01T11:00:00'], { TZ: 'America/New_York' });
   const withZ = cli(['--place', 'test-east', '--utc', '1885-01-01T11:00:00Z'], { TZ: 'Asia/Tokyo' });
   assert.equal(inNewYork.code, 0);
@@ -132,6 +134,32 @@ test('--utc reports the same instant fields as --local, uncertainty included', (
   // A reading that occurred twice is said to.
   assert.equal(resolveUtc(atlas, 'test-east', '1890-10-26T00:30:00Z').localReading, 'occurred more than once');
   assert.equal(resolveUtc(atlas, 'test-east', '1869-12-31T12:00:00Z').status, 'out-of-coverage');
+});
+
+test('the resolver refuses out-of-range times, a malformed longitude and an unknown clock', () => {
+  // Fields out of range are refused, not carried into the next hour or day.
+  assert.throws(() => parseLocal('1905-06-01T12:75:00'), /no such time/);
+  assert.throws(() => parseLocal('1905-06-01T24:00:00'), /no such time/);
+  assert.throws(() => parseLocal('1905-06-01T12:30:60'), /no such time/);
+  assert.throws(() => parseUtc('1905-06-01T12:75Z'), /no such time/);
+  for (const args of [['--local', '1905-06-01T12:75'], ['--utc', '1905-06-01T24:00Z']]) {
+    const result = cli(['--place', 'test-east', ...args]);
+    assert.equal(result.code, 1, args.join(' '));
+    assert.match(result.err, /no such time/);
+  }
+  // Number() would read "" as 0 and "0x5" as 5.
+  for (const longitude of ['', '0x5', '1e1', '7,5', 'east']) {
+    const result = cli(['--jurisdiction', 'test-land', '--department', '01', '--longitude', longitude, '--local', '1875-01-01T12:00']);
+    assert.equal(result.code, 1, `--longitude "${longitude}"`);
+    assert.match(result.err, /--longitude must be decimal degrees east/);
+  }
+  assert.equal(cli(['--jurisdiction', 'test-land', '--department', '01', '--longitude', '-4.5', '--local', '1875-01-01T12:00']).code, 0);
+  // An unknown clock is an input error (exit 1), not a clock the place lacks (exit 4).
+  const unknown = cli(['--place', 'test-east', '--local', '1885-01-01T12:00', '--clock', 'solar']);
+  assert.equal(unknown.code, 1);
+  assert.match(unknown.err, /unknown clock solar: give civil or railway/);
+  assert.throws(() => resolve(load(), 'test-east', '1885-01-01T12:00:00', 'solar'), /unknown clock/);
+  assert.throws(() => resolveUtc(load(), 'test-east', '1885-01-01T11:00:00Z', 'Railway'), /unknown clock/);
 });
 
 test('a clock the jurisdiction does not keep is reported as such, not as out of coverage', () => {

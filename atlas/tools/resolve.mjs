@@ -11,9 +11,11 @@
  *   node atlas/tools/resolve.mjs --place us-new-york --utc 1883-11-18T17:00:00Z
  *
  * --local accepts YYYY-MM-DDTHH:MM or YYYY-MM-DDTHH:MM:SS. --utc accepts the
- * same, with or without a trailing Z, and is always read as UTC. A place not
- * listed in the atlas can be read by longitude only in a jurisdiction that
- * allows it (fr-general), with its département, which is checked.
+ * same, with or without a trailing Z, and is always read as UTC. Fields out of
+ * range (a minute of 75) are refused. --clock is civil or railway. A place
+ * not listed in the atlas can be read by longitude only in a jurisdiction
+ * that allows it (fr-general), with its département, which is checked; the
+ * longitude must be plain decimal degrees east.
  * --data DIR reads another data directory (the tools' self-test uses it).
  *
  * Exit status 0 for "ok", 2 for "ambiguous" or "nonexistent" (the answer is
@@ -37,6 +39,8 @@ function main() {
     const jurisdiction = argument('jurisdiction');
     const longitudeText = argument('longitude');
     if (!jurisdiction || longitudeText === undefined) throw new Error('give --place, or --jurisdiction with --department and --longitude');
+    // Number() would read "" as 0 and "0x5" as 5; only a plain decimal is a longitude.
+    if (!/^[+-]?\d+(\.\d+)?$/.test(longitudeText)) throw new Error(`--longitude must be decimal degrees east, such as -1.55, not "${longitudeText}"`);
     spec = { jurisdiction, longitude: Number(longitudeText), department: argument('department') };
   }
   const utc = argument('utc');

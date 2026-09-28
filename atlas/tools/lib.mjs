@@ -67,6 +67,8 @@ export function parseLocal(text) {
   const match = LOCAL.exec(text);
   if (!match) throw new RangeError(`not a local time: ${text}`);
   const [, y, mo, d, h, mi, s, ms = '0'] = match;
+  // Date.UTC would carry an hour of 24 or a minute of 75 into the next unit; refuse them instead.
+  if (Number(h) > 23 || Number(mi) > 59 || Number(s) > 59) throw new RangeError(`no such time: ${text}`);
   const wall = Date.UTC(Number(y), Number(mo) - 1, Number(d), Number(h), Number(mi), Number(s), Number(ms.padEnd(3, '0')));
   const check = new Date(wall);
   if (check.getUTCFullYear() !== Number(y) || check.getUTCMonth() !== Number(mo) - 1 || check.getUTCDate() !== Number(d)) {
@@ -335,7 +337,12 @@ function noSuchClock(atlas, place, clock) {
   };
 }
 
+function checkClock(clock) {
+  if (!CLOCKS.includes(clock)) throw new RangeError(`unknown clock ${clock}: give ${CLOCKS.join(' or ')}`);
+}
+
 export function resolve(atlas, spec, local, clock = 'civil') {
+  checkClock(clock);
   const place = placeFor(atlas, spec);
   const head = { place: place.id ?? null, jurisdiction: place.jurisdiction, clock, local };
   const timeline = buildTimeline(atlas, place, clock);
@@ -361,6 +368,7 @@ export function parseUtc(text) {
  * or twice on the clock.
  */
 export function resolveUtc(atlas, spec, utc, clock = 'civil') {
+  checkClock(clock);
   const place = placeFor(atlas, spec);
   const utcMs = parseUtc(utc);
   const head = { place: place.id ?? null, jurisdiction: place.jurisdiction, clock, utc: formatUtc(utcMs) };

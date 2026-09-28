@@ -110,7 +110,9 @@ takes a UTC time in the same form, with or without a trailing `Z`, always as
 UTC whatever the host's time zone (any other offset is refused), and prints
 what the place's clock read then, and whether that reading occurred once or
 more than once. Give one of the two, not both. `--clock` is `civil` (the
-default) or `railway`.
+default) or `railway`. Malformed input is refused rather than guessed at: a
+field out of range (`12:75`, `24:00`), a longitude that is not plain decimal
+degrees (empty, `0x5`, `1e1`), an unknown clock.
 
 A place not listed in `data/places.json` can be read by longitude only in a
 jurisdiction that allows it (`readByLongitude`; in this slice `fr-general`),
@@ -136,8 +138,8 @@ in the span as read on either clock, since the change may have come before
 or after it. A change of legal basis that left the clocks as they were never
 makes a reading uncertain. The exit status is 0 for `ok`, 2 for `ambiguous`
 or `nonexistent` (the answer is still printed), 3 for `out-of-coverage`, 4 for
-`no-such-clock`, and 1 for an error, including a place or longitude the
-atlas does not cover. The library is `tools/lib.mjs` (`loadAtlas`,
+`no-such-clock`, and 1 for an error, including malformed input and a place
+or longitude the atlas does not cover. The library is `tools/lib.mjs` (`loadAtlas`,
 `buildTimeline`, `resolve`, `resolveUtc`, `resolveWall`, `wallAt`,
 `placeFor`).
 
