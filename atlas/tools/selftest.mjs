@@ -147,12 +147,15 @@ test('the resolver refuses out-of-range times, a malformed longitude and an unkn
     assert.equal(result.code, 1, args.join(' '));
     assert.match(result.err, /no such time/);
   }
-  // Number() would read "" as 0 and "0x5" as 5.
-  for (const longitude of ['', '0x5', '1e1', '7,5', 'east']) {
+  // Number() would read "0x5" as 5 and "1e1" as 10, and "" as 0.
+  for (const longitude of ['0x5', '1e1', '7,5', 'east']) {
     const result = cli(['--jurisdiction', 'test-land', '--department', '01', '--longitude', longitude, '--local', '1875-01-01T12:00']);
     assert.equal(result.code, 1, `--longitude "${longitude}"`);
     assert.match(result.err, /--longitude must be decimal degrees east/);
   }
+  const empty = cli(['--jurisdiction', 'test-land', '--department', '01', '--longitude', '', '--local', '1875-01-01T12:00']);
+  assert.equal(empty.code, 1);
+  assert.match(empty.err, /--longitude needs a value/);
   assert.equal(cli(['--jurisdiction', 'test-land', '--department', '01', '--longitude', '-4.5', '--local', '1875-01-01T12:00']).code, 0);
   // An unknown clock is an input error (exit 1), not a clock the place lacks (exit 4).
   const unknown = cli(['--place', 'test-east', '--local', '1885-01-01T12:00', '--clock', 'solar']);
@@ -160,6 +163,35 @@ test('the resolver refuses out-of-range times, a malformed longitude and an unkn
   assert.match(unknown.err, /unknown clock solar: give civil or railway/);
   assert.throws(() => resolve(load(), 'test-east', '1885-01-01T12:00:00', 'solar'), /unknown clock/);
   assert.throws(() => resolveUtc(load(), 'test-east', '1885-01-01T11:00:00Z', 'Railway'), /unknown clock/);
+});
+
+test('the resolver refuses unknown, valueless, repeated and conflicting options', () => {
+  const at = ['--place', 'test-east', '--local', '1885-01-01T12:00'];
+  const refused = (args, pattern) => {
+    const result = cli(args);
+    assert.equal(result.code, 1, args.join(' '));
+    assert.equal(result.out, null, args.join(' '));
+    assert.match(result.err, pattern, args.join(' '));
+  };
+  // The same question asked properly is answered.
+  assert.equal(cli([...at, '--clock', 'railway']).code, 0);
+  // An unknown option, or a word that is not an option, is not skipped.
+  refused([...at, '--clok', 'railway'], /unknown option --clok; the options are --place, /);
+  refused([...at, 'railway'], /unexpected "railway": each value follows its option/);
+  // An option without its value is not taken as its default.
+  refused([...at, '--clock'], /--clock needs a value/);
+  refused(['--place', 'test-east', '--clock', '--local', '1885-01-01T12:00'], /--clock needs a value/);
+  refused(['--place', 'test-east', '--local', ''], /--local needs a value/);
+  // An option given twice is not settled by taking one of the two.
+  refused([...at, '--local', '1885-06-01T12:00'], /--local is given more than once/);
+  refused([...at, '--place', 'test-west'], /--place is given more than once/);
+  // --place with a place by longitude is refused, not resolved on --place alone.
+  refused([...at, '--jurisdiction', 'test-land', '--department', '03', '--longitude', '7.5'],
+    /give --place, or --jurisdiction with --department and --longitude, not both \(--place was given with --jurisdiction, --department, --longitude\)/);
+  for (const extra of [['--jurisdiction', 'test-land'], ['--department', '01'], ['--longitude', '7.5']]) {
+    refused([...at, ...extra], new RegExp(`not both \\(--place was given with ${extra[0]}\\)`));
+  }
+  refused(['--department', '01', '--longitude', '7.5', '--local', '1875-01-01T12:00'], /give --place, or --jurisdiction with --department and --longitude/);
 });
 
 test('a clock the jurisdiction does not keep is reported as such, not as out of coverage', () => {

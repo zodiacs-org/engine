@@ -18,39 +18,66 @@
  * longitude must be plain decimal degrees east.
  * --data DIR reads another data directory (the tools' self-test uses it).
  *
+ * Each option takes one value and is given once. An unknown option, an
+ * option without its value, an option given twice, a word that is not an
+ * option, and --place together with --jurisdiction, --department or
+ * --longitude are refused, so that the answer printed is always to the
+ * question asked.
+ *
  * Exit status 0 for "ok", 2 for "ambiguous" or "nonexistent" (the answer is
  * still printed), 3 for "out-of-coverage", 4 for "no-such-clock", 1 for
- * errors (including a place or longitude the atlas does not cover).
+ * errors (including malformed input and a place or longitude the atlas does
+ * not cover).
  */
 import { DATA_DIR, loadAtlas, resolve, resolveUtc } from './lib.mjs';
 
-function argument(name) {
-  const index = process.argv.indexOf(`--${name}`);
-  return index === -1 ? undefined : process.argv[index + 1];
+/** The options; each takes one value. */
+const OPTIONS = ['place', 'jurisdiction', 'department', 'longitude', 'local', 'utc', 'clock', 'data'];
+/** The options that name a place by longitude, in place of --place. */
+const BY_LONGITUDE = ['jurisdiction', 'department', 'longitude'];
+
+/** Reads "--name value" pairs, refusing anything else rather than ignoring it. */
+function readOptions(words) {
+  const options = {};
+  for (let index = 0; index < words.length; index += 2) {
+    const word = words[index];
+    if (!word.startsWith('--')) throw new Error(`unexpected "${word}": each value follows its option, as in --local 1885-06-01T12:00`);
+    const name = word.slice(2);
+    if (!OPTIONS.includes(name)) throw new Error(`unknown option ${word}; the options are ${OPTIONS.map((option) => `--${option}`).join(', ')}`);
+    if (Object.hasOwn(options, name)) throw new Error(`${word} is given more than once`);
+    const value = words[index + 1];
+    if (value === undefined || value === '' || value.startsWith('--')) throw new Error(`${word} needs a value`);
+    options[name] = value;
+  }
+  return options;
 }
 
 const EXIT = { ok: 0, ambiguous: 2, nonexistent: 2, 'out-of-coverage': 3, 'no-such-clock': 4 };
 
 function main() {
-  const atlas = loadAtlas(argument('data') ?? DATA_DIR);
-  const clock = argument('clock') ?? 'civil';
-  let spec = argument('place');
-  if (!spec) {
-    const jurisdiction = argument('jurisdiction');
-    const longitudeText = argument('longitude');
-    if (!jurisdiction || longitudeText === undefined) throw new Error('give --place, or --jurisdiction with --department and --longitude');
-    // Number() would read "" as 0 and "0x5" as 5; only a plain decimal is a longitude.
+  const options = readOptions(process.argv.slice(2));
+  let spec;
+  if (options.place !== undefined) {
+    const alsoGiven = BY_LONGITUDE.filter((name) => options[name] !== undefined).map((name) => `--${name}`);
+    if (alsoGiven.length) throw new Error(`give --place, or --jurisdiction with --department and --longitude, not both (--place was given with ${alsoGiven.join(', ')})`);
+    spec = options.place;
+  } else {
+    const { jurisdiction, department, longitude: longitudeText } = options;
+    if (jurisdiction === undefined || longitudeText === undefined) throw new Error('give --place, or --jurisdiction with --department and --longitude');
+    // Number() would read "0x5" as 5 and "1e1" as 10; only a plain decimal is a longitude.
     if (!/^[+-]?\d+(\.\d+)?$/.test(longitudeText)) throw new Error(`--longitude must be decimal degrees east, such as -1.55, not "${longitudeText}"`);
-    spec = { jurisdiction, longitude: Number(longitudeText), department: argument('department') };
+    spec = { jurisdiction, longitude: Number(longitudeText), department };
   }
-  const utc = argument('utc');
-  let local = argument('local');
+  const { utc } = options;
+  let { local } = options;
   if (utc !== undefined && local !== undefined) throw new Error('give --local or --utc, not both');
+  if (utc === undefined && local === undefined) throw new Error('give --local YYYY-MM-DDTHH:MM[:SS] or --utc YYYY-MM-DDTHH:MM[:SS][Z]');
+  const atlas = loadAtlas(options.data ?? DATA_DIR);
+  const clock = options.clock ?? 'civil';
   let result;
   if (utc !== undefined) {
     result = resolveUtc(atlas, spec, utc, clock);
   } else {
-    if (!local) throw new Error('give --local YYYY-MM-DDTHH:MM[:SS] or --utc YYYY-MM-DDTHH:MM[:SS][Z]');
     if (/T\d{2}:\d{2}$/.test(local)) local += ':00';
     result = resolve(atlas, spec, local, clock);
   }

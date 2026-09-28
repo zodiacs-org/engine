@@ -111,7 +111,10 @@ what the place's clock read then, and whether that reading occurred once or
 more than once. Give one of the two, not both. `--clock` is `civil` (the
 default) or `railway`. Malformed input is refused rather than guessed at: a
 field out of range (`12:75`, `24:00`), a longitude that is not plain decimal
-degrees (empty, `0x5`, `1e1`), an unknown clock.
+degrees (`0x5`, `1e1`), an unknown clock, an unknown option (`--clok`), an
+option without its value (`--clock` last, or an empty value) or given twice,
+and `--place` together with `--jurisdiction`, `--department` or
+`--longitude`.
 
 A place not listed in `data/places.json` can be read by longitude only in a
 jurisdiction that allows it (`readByLongitude`; in this slice `fr-general`),
