@@ -1,0 +1,34 @@
+name: Atlas
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  atlas:
+    name: Time atlas checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      # Schema, citations, coverage and contiguity, round trips, and the
+      # tzdb comparison against the committed tzdb 2025c extract. No
+      # dependencies are installed: the tools use only Node's standard library.
+      - name: Atlas data checks
+        run: node atlas/tools/check.mjs
+
+      - name: Atlas tools self-test
+        run: node --test atlas/tools/selftest.mjs

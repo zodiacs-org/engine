@@ -1,0 +1,25 @@
+{
+  "$schema": "../schema/atlas.schema.json",
+  "kind": "atlas-manifest",
+  "name": "Zodiacs.org historical time atlas: United States and France, 1870-1919",
+  "version": "0.1.0",
+  "released": "2026-09-28",
+  "license": "CC-BY-4.0",
+  "coverage": {
+    "start": "1870-01-01T00:00:00",
+    "end": "1920-01-01T00:00:00",
+    "countries": ["FR", "US"],
+    "note": "Civil time from 1 January 1870 to the end of 1919, read on each place's own clock. See atlas/COVERAGE.md for the places and what is left out."
+  },
+  "files": [],
+  "longitudeSource": {
+    "dataset": "GeoNames cities15000 (cities15000.zip)",
+    "url": "https://download.geonames.org/export/dump/cities15000.zip",
+    "retrieved": "2026-09-28",
+    "sha256": "2b63225616ed25a77577883b073ba65531e545e682ca9e2eddfaa776d3bd3972",
+    "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Place names, coordinates and GeoNames ids from GeoNames (https://www.geonames.org/).",
+    "changes": "For each covered place the atlas keeps only the GeoNames id, name, first-level administrative division, latitude and longitude, copied unchanged (decimal degrees as published). Nothing else from the file is redistributed."
+  }
+}

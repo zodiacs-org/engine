@@ -1,0 +1,27 @@
+{
+  "kind": "atlas-places",
+  "places": [
+    {
+      "id": "test-east",
+      "name": "Test East",
+      "country": "FR",
+      "admin1": "Nowhere",
+      "jurisdiction": "test-land",
+      "latitude": 45,
+      "longitude": 7.5,
+      "geonamesId": 1,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "test-west",
+      "name": "Test West",
+      "country": "FR",
+      "admin1": "Nowhere",
+      "jurisdiction": "test-land",
+      "latitude": 45,
+      "longitude": -4.5,
+      "geonamesId": 2,
+      "tzdbZone": "Europe/Paris"
+    }
+  ]
+}

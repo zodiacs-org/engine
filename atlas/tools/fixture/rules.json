@@ -1,0 +1,87 @@
+{
+  "kind": "atlas-rules",
+  "jurisdictions": [
+    {
+      "id": "test-land",
+      "name": "Test land",
+      "country": "FR",
+      "description": "Invented.",
+      "timeline": {
+        "civil": ["test-lmt", "test-standard-1", "test-summer", "test-standard-2"],
+        "railway": ["test-railway", "test-standard-1", "test-summer", "test-standard-2"]
+      }
+    }
+  ],
+  "rules": [
+    {
+      "id": "test-lmt",
+      "version": 1,
+      "title": "Local mean time",
+      "scope": "Test land",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": { "local": "1880-06-01T12:00:00", "reckoning": "after", "kind": "event", "precision": "minute" },
+      "offset": { "type": "local-mean-time" },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": { "flag": "inferred", "reason": "Invented." },
+      "citations": ["fixture-source"]
+    },
+    {
+      "id": "test-railway",
+      "version": 2,
+      "title": "Railway time, one hour ahead of UTC",
+      "scope": "Test land railways",
+      "clock": "railway",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": { "local": "1880-06-01T11:00:00", "reckoning": "utc", "kind": "event", "precision": "day" },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": false,
+      "uncertainty": { "flag": "uncertain", "reason": "Invented." },
+      "citations": ["fixture-source"],
+      "changes": [{ "version": 2, "date": "2026-09-28", "summary": "Invented change." }]
+    },
+    {
+      "id": "test-standard-1",
+      "version": 1,
+      "title": "Standard time",
+      "scope": "Test land",
+      "clock": "civil",
+      "start": { "local": "1880-06-01T12:00:00", "reckoning": "after", "kind": "event", "precision": "minute" },
+      "end": { "local": "1890-03-30T02:00:00", "reckoning": "before", "kind": "event", "precision": "minute" },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": false,
+      "abbreviation": "TST",
+      "uncertainty": { "flag": "documented", "reason": "Invented." },
+      "citations": ["fixture-source"]
+    },
+    {
+      "id": "test-summer",
+      "version": 1,
+      "title": "Summer time",
+      "scope": "Test land",
+      "clock": "civil",
+      "start": { "local": "1890-03-30T02:00:00", "reckoning": "before", "kind": "event", "precision": "minute" },
+      "end": { "local": "1890-10-26T03:00:00", "reckoning": "before", "kind": "event", "precision": "day", "window": { "earliest": "1890-10-25T03:00:00", "latest": "1890-10-27T03:00:00" } },
+      "offset": { "type": "fixed", "seconds": 7200 },
+      "isDst": true,
+      "abbreviation": "TSST",
+      "uncertainty": { "flag": "documented", "reason": "Invented." },
+      "citations": ["fixture-source"]
+    },
+    {
+      "id": "test-standard-2",
+      "version": 1,
+      "title": "Standard time again",
+      "scope": "Test land",
+      "clock": "civil",
+      "start": { "local": "1890-10-26T03:00:00", "reckoning": "before", "kind": "event", "precision": "day" },
+      "end": { "local": "1920-01-01T00:00:00", "reckoning": "before", "kind": "coverage", "precision": "second" },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": false,
+      "abbreviation": "TST",
+      "uncertainty": { "flag": "documented", "reason": "Invented." },
+      "citations": ["fixture-source"]
+    }
+  ]
+}

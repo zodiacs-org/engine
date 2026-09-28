@@ -97,3 +97,19 @@ Swiss Ephemeris is used there only as an instrument:
 - `conformance/adapters/pyswisseph.py` calls a separately installed pyswisseph;
 - no Swiss Ephemeris code, data file or output is committed;
 - its results are published as verdicts, returned flags and summary statistics.
+
+## The time atlas
+
+Everything under `atlas/` (the historical time atlas: data, schema, tools and
+documentation) is licensed under Creative Commons Attribution 4.0
+International (`atlas/LICENSE`), as the owner decided on 2026-09-28. It is
+not part of the npm package: the package's `files` list leaves it out.
+
+- Every rule cites primary sources (laws, gazettes, municipal notices,
+  newspapers, railway notices) by link and short excerpt; no scan or full
+  text of a source is committed. No proprietary atlas was consulted or
+  copied.
+- Place coordinates and ids come from GeoNames `cities15000` (CC BY 4.0);
+  `atlas/data/atlas.json` records the file's digest and what was copied.
+- `atlas/tzdb/` holds an extract of tzdb 2025c with backzone (public domain),
+  used only as the comparison base.
