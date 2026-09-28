@@ -9,6 +9,13 @@
       "title": "tzdb 2025c, file europe: comments before the France rules and Zone Europe/Paris",
       "url": "https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz",
       "note": "Pointed to the law of 14 March 1891 in the Journal officiel of 15 March 1891, the law of 9 March 1911 in the Journal officiel of 10 March 1911, Le Petit Journal of 11 March 1911 on the pneumatic clocks and the railway change, and the five-minute lag of railway clocks. All were read at the source before being cited."
+    },
+    {
+      "id": "lead-tzdb-northamerica-us",
+      "kind": "tzdb-comment",
+      "title": "tzdb 2025c, file northamerica: comments on the 1883 change, New York City Hall time, the Standard Time Act of 1918 and its repeal, and Louisville",
+      "url": "https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz",
+      "note": "Pointed to the Statutes at Large for the acts of 1918 and 1919 (the PDF links it gives could not be fetched; the Library of Congress page images were read instead), to New York City Hall time being about 3 min 58 s fast of Eastern time, and to an 18-minute stop on the Louisville railroads. The secondary works it names (Bartky 1989, Prerau 2005, the Monthly Notices note of 1884) were not consulted."
     }
   ]
 }

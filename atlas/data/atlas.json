@@ -17,7 +17,9 @@
     "citations-fr.json",
     "rules-fr.json",
     "citations-als.json",
-    "rules-als.json"
+    "rules-als.json",
+    "citations-us.json",
+    "rules-us.json"
   ],
   "longitudeSource": {
     "dataset": "GeoNames cities15000 (cities15000.zip)",

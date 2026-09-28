@@ -134,3 +134,68 @@ followed, and went back on 5 October with the rest of France, is inferred.
   in earlier years was not found. The station clock in Strasbourg in
   December 1918 is noted in `als-strasbourg-french-1918` but not kept as a
   separate clock.
+
+## United States
+
+### Places
+
+| place | jurisdiction | longitude | time before standard time | standard time from |
+| --- | --- | ---: | --- | --- |
+| New York (`us-new-york`) | `us-nyc` | −74.00597 | city time, −4:56:01.62 (City Hall clock) | 18 Nov 1883, noon Eastern |
+| Baltimore (`us-baltimore`) | `us-baltimore` | −76.61219 | city time, −5:06:28 | 18 Nov 1883, noon |
+| Washington (`us-washington`) | `us-washington` | −77.03637 | Washington time, −5:08:12 | 13 Mar 1884 (act of Congress) |
+| Providence (`us-providence`) | `us-providence` | −71.41283 | local mean time, −4:45:39 | 20 Nov 1883 |
+| Indianapolis (`us-indianapolis`) | `us-indianapolis` | −86.15804 | local mean time, −5:44:38 | 18 Nov 1883, noon Central |
+| Louisville (`us-louisville`) | `us-louisville` | −85.75941 | city time, −5:42:00 (clock set back 18 minutes) | 18 Nov 1883, noon Central |
+| Chicago (`us-chicago`) | `us-chicago` | −87.65005 | local mean time, −5:50:36 | 18 Nov 1883, noon Central |
+| Saint Paul (`us-saint-paul`) | `us-saint-paul` | −93.09327 | local mean time, −6:12:22 | 25 Nov 1883, noon Central |
+| Minneapolis (`us-minneapolis`) | `us-minneapolis` | −93.26384 | local mean time, −6:13:03 | 25 Nov 1883 |
+
+Where a report gives the size of a city's change to the second or the
+minute, the old city time is taken from it (New York, Baltimore,
+Washington, Louisville); otherwise it is the mean time of the city's
+longitude, and the rule says how the reports compare. Each city's old time
+is assumed to have held from 1870 to the change.
+
+Washington kept two times from 18 November 1883: the railroads and many
+businesses went to Eastern time, while the government departments and the
+noon fire bells kept Washington time until Congress fixed the District's
+legal time on 13 March 1884. The atlas gives Washington time for that
+period and flags it `uncertain`.
+
+From the Standard Time Act of 19 March 1918 every covered city is on its
+zone's time (Eastern: the 75th meridian; Central: the 90th), with daylight
+saving time from 02:00 on the last Sunday in March to 02:00 on the last
+Sunday in October in 1918 and 1919 (31 March to 27 October 1918, 30 March
+to 26 October 1919). The act of 20 August 1919 repealed daylight saving
+time after the October change. Zone limits were fixed by an order of the
+Interstate Commerce Commission, which was not read; the covered cities had
+kept their zone's time since 1883 or 1884 and lie well inside it.
+
+### Left out, and why
+
+The slice was first scoped as the twenty largest cities of the 1900 census
+(New York, Chicago, Philadelphia, St. Louis, Boston, Baltimore, Cleveland,
+Buffalo, San Francisco, Cincinnati, Pittsburgh, New Orleans, Detroit,
+Milwaukee, Washington, Newark, Jersey City, Louisville, Minneapolis,
+Providence) and the places tzdb gives zones of their own (Detroit,
+Louisville, Indianapolis, Boise, Menominee and others). A city is covered
+only where a primary source for its own change was found and read on a page
+image; that held for the nine cities above. For the others no such report
+was found in Chronicling America (Library of Congress) in the time
+available, so they are not covered rather than covered by assumption. In
+particular:
+
+- Cleveland and Cincinnati: reports seen only in the archive's OCR text say
+  both kept local time after the railroads changed on 18 November 1883
+  (railroad timetables printed in Cleveland in December 1883 still convert
+  from "Cleveland time"); when each city changed was not found.
+- San Francisco and the rest of California: a Sacramento report of
+  24 November 1883, seen in OCR, has the Central Pacific still running on
+  San Francisco time; the date of the change was not found.
+- Detroit (on local time until 1905 according to tzdb), Boise and
+  Menominee: no primary source was found.
+- Local daylight saving time before 1918 in the covered cities: none was
+  found, and none is included.
+- Railroad time before 1883 (each railroad kept its own standard, often the
+  time of its headquarters city) is not kept as a separate clock.
