@@ -696,25 +696,25 @@ milliseconds are compared directly. The enclosures:
 - Where the node's smooth motion lies within about 2J of a sign boundary, its
   sign can change back and forth from one millisecond to the next, and the
   search compares it at every millisecond: for about 4J/|rate| days around an
-  ingress, 1.5 minutes at the fastest ingress from
-  1800 to 2200, 4.5 minutes at the median one and 2.3 hours at the slowest.
-  Every change is reported where the search can afford it: at the ingresses of
-  March 2028 and September 2029 the sign changes 311 times in 1.1 s and 147
-  times in 0.6 s, and in 1,950 s around the ingress of 2032-11-25, 18,315
-  times. Before the search, the node is sampled every hour, and every minute
-  near a boundary, to find these stretches and estimate how many milliseconds
-  each needs. After the rest of the window is settled, each is searched,
-  cheapest first, if its milliseconds fit in what is left of the budget of two
-  million evaluated instants; one that does not is left unresolved: the nodes'
-  signs, and their houses where the houses are whole signs, are null
-  throughout it, the interval is listed in `unresolved` with the features it
-  leaves open, and the result carries `node-unresolved`. A change to or from
-  null marks where such an interval starts or ends; it is not a crossing. From
-  1800 to 2200, 24 of the node's 294 ingresses flicker for more than two
-  million milliseconds: in 1810, 1842 (two), 1848, 1865 (two), 1882 (two),
-  1946 (two), 1981 (two), 2007, 2032 (two), 2049 (two), 2090 (four), 2113 and
-  2127 (`node-ingresses.json`); a two-hour window around any of them returns
-  in under a fifth of a second with the flicker left unresolved. A true node
+  ingress, 1.5 minutes at the fastest ingress from 1800 to 2200, 4.5 minutes
+  at the median one and 2.3 hours at the slowest. Every change is reported
+  where the search can afford it: at the ingresses of March 2028 and September
+  2029 the sign changes 311 times in 1.1 s and 147 times in 0.6 s, and in
+  1,950 s around the ingress of 2032-11-25, 18,315 times. Before the search,
+  the node is sampled every hour, and every minute near a boundary, to find
+  these stretches and estimate how many milliseconds each needs. After the
+  rest of the window is settled, each is searched, cheapest first, if its
+  milliseconds fit in what is left of the budget of two million evaluated
+  instants; one that does not is left unresolved: the nodes' signs, and their
+  houses where the houses are whole signs, are null throughout it, the
+  interval is listed in `unresolved` with the features it leaves open, and the
+  result carries `node-unresolved`. A change to or from null marks where such
+  an interval starts or ends; it is not a crossing. From 1800 to 2200, 24 of
+  the node's 294 ingresses flicker for more than two million milliseconds: in
+  1810, 1842 (two), 1848, 1865 (two), 1882 (two), 1946 (two), 1981 (two),
+  2007, 2032 (two), 2049 (two), 2071, 2090 (four), 2113 and 2127
+  (`node-ingresses.json`); a two-hour window around any of them returns in
+  under a fifth of a second with the flicker left unresolved. A true node
   taken from the Moon's analytic velocity, rather than a 1.728 s difference,
   would move smoothly to far below 1e-9°; each ingress would then be a single
   switch and nothing would be left unresolved. It would change natalChart's

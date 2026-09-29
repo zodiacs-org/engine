@@ -1189,7 +1189,7 @@ export function birthWindow(input: BirthWindowInput): BirthWindow {
   if (Math.abs(latitude) > 90 - POLE_MARGIN) {
     // At a pole the engine's ascendant is 0° or 180° to rounding at every
     // instant, and near one it turns too fast for the search's budget.
-    throw new RangeError("latitude must lie within 1e-6 degrees short of either pole.");
+    throw new RangeError("latitude must be at least 1e-6 degrees from either pole.");
   }
   const system = settings.houseSystem ?? "whole";
   const { start, end, rounding } = resolvedWindow(input);
