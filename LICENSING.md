@@ -48,8 +48,13 @@ The computational dependency is `astronomy-engine@2.1.19`. Its installed npm
 metadata declares MIT, names Donald Cross as author, and links to
 `https://github.com/cosinekitty/astronomy`. Its distributed
 `esm/astronomy.js` begins with a preserved MIT notice and a 2019–2023 Don Cross
-copyright line. The package uses its geocentric vectors, coordinate rotations,
-Moon state, sidereal time, and date helpers.
+copyright line. The package uses its geocentric vectors (the Moon's
+included), Moon state, heliocentric and barycentric vectors, and date
+helpers. It no longer calls its nutation, its rotations to the ecliptic of
+date or its sidereal time: `src/frame.ts` reproduces its precession function
+(`precession_rot`, from J2000.0) line for line, under the same MIT notice,
+which `NOTICE` carries, and the nutation is the engine's own (*Nutation*
+below).
 
 Repository and dependency searches found no Swiss Ephemeris runtime import,
 package dependency, vendored source, or generated lookup table in this npm
@@ -86,6 +91,42 @@ digest, and the measurements are in the Zodiacs site repository,
 `docs/platform/evidence/deltat-2026-09-25/`. No Swiss Ephemeris
 output was used to build the table; Swiss is used there only as a comparison
 instrument, and only statistics are committed.
+
+## Nutation (IAU 2000B)
+
+`src/nutation.ts` carries the IAU 2000B nutation series: the multipliers
+(385) and coefficients (462) of its 77 luni-solar terms, the 10 coefficients
+of its five fundamental arguments and its two fixed offsets for the planetary
+terms. The build places them in the ephemeris chunk under `dist/`, which the
+root, `./internal`, `./timing` and `./vedic` import. The model is D. D.
+McCarthy and B. J. Luzum, "An abridged model of the precession-nutation of
+the celestial pole", Celestial Mechanics and Dynamical Astronomy 85, 37–49
+(2003), as the IERS Conventions (2003), chapter 5, give it.
+
+The values were transcribed from the function `iau2000b` in `Cdist/nutation.c`
+of NOVAS C 3.1, the Naval Observatory Vector Astrometry Software of the US
+Naval Observatory, as the package novas 3.1.1.5 on PyPI distributes it
+(`novas-3.1.1.5.tar.gz`, uploaded 2020-01-25, SHA-256
+`6784780f03589996c2cd0e2b7e68afbec734d953010612ed0a45ace714761935`, the digest
+PyPI lists; `nutation.c` SHA-256
+`49d193c9e0d6dfb14650ed0b2603e3954ef02ab51f83d66869a769e892e471bb`). Under
+"License and Citation" the package states: "This software was produced by the
+United States Naval Observatory at the expense of United States taxpayers, and
+is therefore not suseptible to copyright [...] Since it is not copyrighted, it
+cannot be licensed; it is simply free." NOVAS is a work of the US Government.
+The repository carries the function unchanged, lines 3019 to 3375 of that file
+(`src/fixtures/novas-c3.1-iau2000b.txt`, SHA-256
+`95ba8b40a582a23b5916a5dbb7839650deb9a7f7d9743554cc222f813f56bde5`), which is
+not packed, and `src/nutation.test.ts` compares every value with it. No code or
+table was taken from ERFA or SOFA, or from Swiss Ephemeris; ERFA, through
+pyerfa, is only the independent check (`src/fixtures/nutation-erfa.json`).
+
+The equation of the equinoxes adds the two largest of its complementary terms,
+2640.96 µas sin Ω and 63.52 µas sin 2Ω, as the IERS Conventions (2010),
+table 5.2e, publish them
+(https://iers-conventions.obspm.fr/content/chapter5/additional_info/tab5.2e.txt,
+read 2026-09-29, SHA-256
+`a5c690b277108e35d88df9cc20fea4120dfbc10a81444bb41b15cf9c6edcd6cb`).
 
 ## GeoNames and timezone data
 

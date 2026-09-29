@@ -34,11 +34,11 @@ Adapter `zodiacs-engine` 0.2.0; results in [`results/zodiacs-engine.json`](resul
 
 | level | kind | pass | fail | unsupported | error | residual median / 95th percentile / max |
 | --- | --- | ---: | ---: | ---: | ---: | --- |
-| L1 | `position.apparent.ecliptic-true-of-date` | 47 | 193 | 0 | 0 | lon: 2.067″ / 12.071″ / 18.846″<br>lat: 1.187″ / 10.601″ / 19.028″ |
-| **L1** | **all** | **47** | **193** | **0** | **0** | |
-| L2 | `angles.asc-mc` | 60 | 0 | 0 | 0 | asc: 0.037″ / 0.112″ / 0.182″<br>mc: 0.043″ / 0.131″ / 0.178″ |
-| L2 | `angles.vertex-east-point` | 10 | 0 | 0 | 0 | vertex: 0.083″ / 0.285″ / 0.285″<br>east_point: 0.083″ / 0.103″ / 0.103″ |
-| L2 | `houses.cusps` | 80 | 0 | 0 | 0 | cusps: 0.051″ / 0.167″ / 0.489″ |
+| L1 | `position.apparent.ecliptic-true-of-date` | 48 | 192 | 0 | 0 | lon: 2.083″ / 12.043″ / 18.774″<br>lat: 1.187″ / 10.601″ / 19.028″ |
+| **L1** | **all** | **48** | **192** | **0** | **0** | |
+| L2 | `angles.asc-mc` | 60 | 0 | 0 | 0 | asc: 0.003″ / 0.006″ / 0.019″<br>mc: 0.004″ / 0.006″ / 0.008″ |
+| L2 | `angles.vertex-east-point` | 10 | 0 | 0 | 0 | vertex: 0.003″ / 0.013″ / 0.013″<br>east_point: 0.003″ / 0.007″ / 0.007″ |
+| L2 | `houses.cusps` | 80 | 0 | 0 | 0 | cusps: 0.004″ / 0.009″ / 0.071″ |
 | **L2** | **all** | **150** | **0** | **0** | **0** | |
 | L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | — |
 | L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
@@ -52,7 +52,7 @@ Adapter `zodiacs-engine` 0.2.0; results in [`results/zodiacs-engine.json`](resul
 | --- | ---: | ---: | ---: | ---: |
 | `backzone-history` | 20 | 0 | 0 | 0 |
 
-- **Positions (L1).** The engine computes positions with astronomy-engine 2.1.19's series. Against DE441 they differ by a median of 2.07″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.0″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.9″. A precise backend is planned to close this gap.
+- **Positions (L1).** The engine computes positions with astronomy-engine 2.1.19's series. Against DE441 they differ by a median of 2.08″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.0″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.75″. Since the engine took the full IAU 2000B nutation in place of astronomy-engine's five terms, L1-POS-0041 (the Sun in 1908, 1.076″ off in longitude before) passes. A precise backend is planned to close this gap.
 - **Time zones (L3).** Before 1970 the engine reads the tzdb 2025c history with `backzone` that it ships, loaded with `prepareLocalTime`, so the 20 vectors tagged `backzone-history` pass; from 1970 it reads the host's `Intl` data. A repeated local time resolves to its earlier instant, and the transition the engine reports gives the offsets of both readings, so the five folds are answered. All 45 pass.
 - **TT − UTC and ΔT (L3).** From 1972 to 2027-10-02 the engine takes TAI − UTC from the IERS leap-second list updated 2026-07-06, and UT1 − UTC from IERS: the EOP 20 C04 series in 1972 and `finals2000A.all` of 2026-09-24 from 1973-01-02. The adapter reports TT − UTC as a chart's ΔT (TT − UT1) plus its UT1 − UTC. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.
 - **Unsupported (L3).** Release 0.1.1-rc.15 converts dates between the Julian and Gregorian calendars and reads a birthplace's local mean time inside a zone's local mean time era, but has no public function for a Julian Day Number or for local mean time from a longitude alone, so the 35 calendar vectors and the 5 local mean time vectors are unsupported.

@@ -107,10 +107,9 @@ export interface DeclinationAspect {
 export interface Declinations {
   /**
    * True obliquity of date in degrees: the bound for out-of-bounds flags. From
-   * chartDeclinations it is astronomy-engine's, at the chart instant on its TT
-   * clock: the IAU 2006 mean obliquity plus astronomy-engine's five-term
-   * truncation of the IAU 2000B nutation in obliquity. Elsewhere it is the
-   * value supplied.
+   * chartDeclinations it is the engine's, at the chart instant on its TT
+   * clock: the IAU 2006 mean obliquity plus the IAU 2000B nutation in
+   * obliquity, all 77 terms. Elsewhere it is the value supplied.
    */
   trueObliquity: number;
   rows: DeclinationRow[];

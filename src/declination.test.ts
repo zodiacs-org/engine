@@ -1,4 +1,4 @@
-import { MakeTime, SetDeltaTFunction, e_tilt } from "astronomy-engine";
+import { MakeTime } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
 import { chartDeclinations, natalChart } from "./api.js";
@@ -18,7 +18,9 @@ import {
 import type { DeclinationBody, DeclinationOrbPolicy } from "./declination.js";
 import { deltaT } from "./deltat.js";
 import { computeChartDeclinations } from "./ephemeris.js";
+import { tilt } from "./nutation.js";
 import { createNatalEnvelope, serializeNatalEnvelope } from "./receipt.js";
+import { timeBasis } from "./time-scale.js";
 import { abs, cmp, isRoundedHalfEven, rational, sub } from "./fixtures/rational.js";
 import type { Rational } from "./fixtures/rational.js";
 
@@ -192,21 +194,19 @@ describe("site-compatible declination aspect policy", () => {
 describe("chart-clock declination derivation", () => {
   const birth = {utc: "2026-09-22T12:00:00Z", latitude: 51.5, longitude: -0.12, houseSystem: "whole" as const};
 
-  it("records observation/Delta-T and uses the provider's pinned true obliquity", () => {
+  it("records observation/Delta-T and uses the true obliquity on the chart's pinned clock", () => {
     const chart = natalChart({...birth, deltaT: 86_400_000});
-    let expected: number;
-    try {
-      SetDeltaTFunction(() => 86_400_000);
-      expected = e_tilt(MakeTime(chart.input.utc)).tobl;
-    } finally { SetDeltaTFunction(deltaT); }
+    // The engine's IAU 2000B obliquity (src/nutation.ts, checked against ERFA in
+    // nutation.test.ts) at the chart's TT: UT1 from IERS, TT = UT1 + the pin.
+    const expected = tilt(timeBasis(chart.input.utc.getTime(), "utc", 86_400_000).ttDays).tobl;
     const result = computeChartDeclinations(chart);
     expect(result.utc).toBe(chart.input.utc.toISOString());
     expect(result.deltaT).toEqual(chart.deltaT);
-    expect(result.trueObliquity).toBe(expected!);
+    expect(result.trueObliquity).toBe(expected);
     expect(result.rows).toHaveLength(chart.bodies.length);
     for (const body of chart.bodies) {
       const row = result.rows.find(item => item.body === body.body)!;
-      expect(row.dec).toBe(declinationOf(body.lon, body.lat, expected!));
+      expect(row.dec).toBe(declinationOf(body.lon, body.lat, expected));
       expect(row.lat).toBe(body.lat);
     }
     const time = MakeTime(chart.input.utc);
@@ -309,9 +309,10 @@ describe("the Sun and the out-of-bounds limit", () => {
 
   it("uses the true obliquity of date on the chart's clock", () => {
     const chart = natalChart({utc: "2024-06-20T20:51:00Z"});
-    const time = MakeTime(chart.input.utc);
-    expect(chartDeclinations(chart).trueObliquity).toBe(e_tilt(time).tobl);
-    expect(e_tilt(time).tobl).not.toBe(e_tilt(time).mobl);
+    // The engine's IAU 2000B obliquity at the chart's TT (TT = UTC + 69.184 s).
+    const at = tilt(timeBasis(chart.input.utc.getTime(), "utc").ttDays);
+    expect(chartDeclinations(chart).trueObliquity).toBe(at.tobl);
+    expect(at.tobl).not.toBe(at.mobl);
   });
 });
 

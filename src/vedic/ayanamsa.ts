@@ -9,22 +9,14 @@
  * docs/vedic.md gives each definition's source and the construction; the
  * measurements are in docs/evidence/vedic-2026-09-28.
  */
-import {
-  AstroTime,
-  BaryState,
-  Body,
-  HelioVector,
-  InverseRotation,
-  RotateVector,
-  Rotation_EQJ_ECT,
-  Vector,
-  e_tilt
-} from "astronomy-engine";
-import type { RotationMatrix } from "astronomy-engine";
+import { BaryState, Body, HelioVector } from "astronomy-engine";
+import type { AstroTime } from "astronomy-engine";
 
 import { dateFrom } from "../date-input.js";
 import type { DeltaT } from "../deltat.js";
-import { onChartClock, onEngineClock } from "../ephemeris.js";
+import { onChartClock } from "../ephemeris.js";
+import { eclipticFrame, meanEcliptic } from "../frame.js";
+import type { EclipticFrame } from "../frame.js";
 import { REFERENCE_SPAN, outsideReferenceSpan } from "../reference-span.js";
 import { TIME_SCALE_NAMES, timeBasis } from "../time-scale.js";
 import type { TimeScale, TimeScaleName } from "../time-scale.js";
@@ -248,16 +240,10 @@ export function definitionOf(definition: AyanamsaName | AyanamsaDefinition): Aya
 
 // ── Frames ──────────────────────────────────────────────────────────────────
 
-/** Mean ecliptic longitude (radians) of an EQJ direction, given EQJ → true ecliptic of date and Δψ (radians). */
-function longitudeIn(rotation: RotationMatrix, dpsi: number, v: Vector): number {
-  const e = RotateVector(rotation, v);
-  return Math.atan2(e.y, e.x) - dpsi;
-}
-
-/** The mean equinox of date as an EQJ direction: at true longitude +Δψ on the ecliptic. */
-function meanEquinox(time: AstroTime): Vector {
-  const psi = e_tilt(time).dpsi * ARCSEC;
-  return RotateVector(InverseRotation(Rotation_EQJ_ECT(time)), new Vector(Math.cos(psi), Math.sin(psi), 0, time));
+/** Longitude (radians) of an EQJ direction on the mean ecliptic and equinox of a frame's date (src/frame.ts). */
+function longitudeIn(frame: EclipticFrame, x: number, y: number, z: number): number {
+  const [ex, ey] = meanEcliptic(frame, x, y, z);
+  return Math.atan2(ey, ex);
 }
 
 /**
@@ -297,35 +283,25 @@ function olderModelLongitude(model: "newcomb" | "iau1976", jd: number): number {
 }
 
 interface EpochFrame {
-  /** EQJ → true ecliptic of the epoch. */
-  readonly rotation: RotationMatrix;
-  /** Δψ at the epoch, radians. */
-  readonly dpsi: number;
+  /** EQJ → mean ecliptic of the epoch. */
+  readonly frame: EclipticFrame;
   /** The J2000.0 hold: the engine's minus the model's longitude of the J2000.0 equinox, radians. */
   readonly correction: number;
 }
 
 const FRAMES = new WeakMap<object, EpochFrame>();
 
-/**
- * The epoch's frame depends on its TT alone. It is built once per definition,
- * on a zero ΔT clock so that the AstroTime's TT is the epoch exactly, and
- * never under a caller's pin.
- */
+/** The epoch's frame depends on its TT alone, and is built once per definition. */
 function epochFrame(definition: EpochAyanamsa): EpochFrame {
-  let frame = FRAMES.get(definition);
-  if (frame === undefined) {
-    frame = onEngineClock(0, () => {
-      const epoch = new AstroTime(definition.epochTT - J2000);
-      const rotation = Rotation_EQJ_ECT(epoch);
-      const dpsi = e_tilt(epoch).dpsi * ARCSEC;
-      const correction = definition.model === "engine" ? 0
-        : longitudeIn(rotation, dpsi, new Vector(1, 0, 0, epoch)) - olderModelLongitude(definition.model, definition.epochTT);
-      return Object.freeze({ rotation, dpsi, correction });
-    });
-    FRAMES.set(definition, frame);
+  let epoch = FRAMES.get(definition);
+  if (epoch === undefined) {
+    const frame = eclipticFrame(definition.epochTT - J2000);
+    const correction = definition.model === "engine" ? 0
+      : longitudeIn(frame, 1, 0, 0) - olderModelLongitude(definition.model, definition.epochTT);
+    epoch = Object.freeze({ frame, correction });
+    FRAMES.set(definition, epoch);
   }
-  return frame;
+  return epoch;
 }
 
 type V3 = [number, number, number];
@@ -380,15 +356,16 @@ function apparentStar(s: CatalogueStar, time: AstroTime): V3 {
 function meanAyanamsa(definition: AyanamsaDefinition, time: AstroTime, frame: EpochFrame | undefined): number {
   switch (definition.kind) {
     case "epoch": {
-      const { rotation, dpsi, correction } = frame!;
-      return definition.value + (correction - longitudeIn(rotation, dpsi, meanEquinox(time))) / DEG;
+      // The mean equinox of date, as an EQJ direction, is the first row of its frame.
+      const { frame: at, correction } = frame!;
+      const [x, y, z] = eclipticFrame(time.tt).rows;
+      return definition.value + (correction - longitudeIn(at, x!, y!, z!)) / DEG;
     }
     case "linear":
       return definition.value + (definition.rate * (time.tt + J2000 - definition.epochTT)) / JULIAN_YEAR / 3600;
     case "star": {
       const [x, y, z] = apparentStar(definition.star, time);
-      const tilt = e_tilt(time).dpsi * ARCSEC;
-      return longitudeIn(Rotation_EQJ_ECT(time), tilt, new Vector(x, y, z, time)) / DEG - definition.longitude;
+      return longitudeIn(eclipticFrame(time.tt), x, y, z) / DEG - definition.longitude;
     }
   }
 }
@@ -450,9 +427,8 @@ export interface AyanamsaOptions {
 /**
  * The mean and true ayanamsa of a definition at an instant, read as a chart
  * reads its own: on the engine's time basis, or a pinned ΔT, and refused
- * outside EPHEMERIS_SPAN. `true` adds the engine's nutation (five IAU 2000B
- * terms, within 0.270″ of the full series), which cancels from sidereal
- * longitudes.
+ * outside EPHEMERIS_SPAN. `true` adds the engine's nutation in longitude (IAU
+ * 2000B, all 77 terms), which cancels from sidereal longitudes.
  */
 export function ayanamsa(
   definition: AyanamsaName | AyanamsaDefinition,
@@ -472,7 +448,7 @@ export function ayanamsa(
     || (resolved.kind === "epoch" && !(resolved.epochTT >= SPAN_FROM_JD && resolved.epochTT < SPAN_TO_JD));
   return onChartClock(date.getTime(), (scale ?? "utc") as TimeScaleName, pin, (time, basis) => {
     const mean = wrap(meanAyanamsa(resolved, time, frame));
-    const nutation = e_tilt(time).dpsi / 3600;
+    const nutation = eclipticFrame(time.tt).tilt.dpsi / 3600;
     const { ut1MinusUtc, leapSeconds } = basis.timeScale;
     const value: AyanamsaValue = Object.freeze({
       ayanamsa: resolved.name,

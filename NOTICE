@@ -9,6 +9,37 @@ Don Cross, distributed under the MIT License. Its distributed JavaScript source
 retains the full MIT permission and warranty notice. Source and license metadata:
 https://github.com/cosinekitty/astronomy
 
+The package's frame module (src/frame.ts, built into the ephemeris chunk under
+dist/) reproduces astronomy-engine's precession function, precession_rot:
+
+  Copyright (c) 2019-2023 Don Cross <cosinekitty@gmail.com>
+  MIT License: the permission and warranty notice is the one in this
+  package's LICENSE file, word for word.
+
+IAU 2000B nutation
+------------------
+
+The package's nutation module (src/nutation.ts, built into the same chunk)
+carries the 77 luni-solar terms, fundamental arguments and fixed planetary
+offsets of the IAU 2000B nutation model,
+
+  D. D. McCarthy and B. J. Luzum 2003, An abridged model of the
+  precession-nutation of the celestial pole. Celestial Mechanics and Dynamical
+  Astronomy 85, 37-49; IERS Conventions (2003), chapter 5,
+
+transcribed from the function iau2000b of the Naval Observatory Vector
+Astrometry Software (NOVAS) C 3.1, nutation.c, as the package novas 3.1.1.5
+distributes it (sha256
+49d193c9e0d6dfb14650ed0b2603e3954ef02ab51f83d66869a769e892e471bb), a work of
+the US Government, which its authors ask to be cited as:
+
+  Barron, E. G., Kaplan, G. H., Bangert, J., Bartlett, J. L., Puatua, W.,
+  Harris, W., & Barrett, P. (2011), "Naval Observatory Vector Astrometry
+  Software (NOVAS) Version 3.1, Introducing a Python Edition," Bull. AAS, 43.
+
+Its equation of the equinoxes adds two complementary terms from the IERS
+Conventions (2010), table 5.2e (IERS, https://www.iers.org/).
+
 ΔT (TT − UT1)
 ------------
 

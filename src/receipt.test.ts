@@ -92,14 +92,17 @@ describe("Zodiacs draft natal receipt", () => {
       deltaT: original.deltaT,
       timeScale: original.timeScale
     });
-    // ERFA (gst06a, obl06 plus nut06a's Δε, on this engine's clock, the instant
-    // read as UT1) puts this ascendant at 23.871950092381326°: 0.04″ away. The
-    // mean obliquity put it 0.12″ away, at 23.871984112302016°.
-    expect(chart({ timeScale: "ut1" }).angles?.asc).toBeCloseTo(23.87193938505851, 8);
+    // The engine's ascendant on the full IAU 2000B nutation, pinned. ERFA
+    // (gst06a, obl06 plus nut06a's Δε, on this engine's clock, the instant read
+    // as UT1) puts it at 23.87195009238585°, 0.0003″ away
+    // (docs/evidence/nutation-2026-09-29/results/test-expectations.json).
+    // astronomy-engine's five-term nutation put it 0.039″ away, at
+    // 23.87193938505851°, and the mean obliquity 0.12″ away, at 23.871984112302016°.
+    expect(chart({ timeScale: "ut1" }).angles?.asc).toBeCloseTo(23.871949998406535, 8);
     // Read as UTC, UT1 − UTC (IERS: −0.10511 s at 09:00 that day) turns the sky back 1.6″.
     expect(captured.receipt.timeScale).toBe("utc");
     expect(captured.result.timeScale?.ut1MinusUtc?.seconds).toBeCloseTo(-0.10511, 3);
-    expect(captured.result.angles?.asc).not.toBeCloseTo(23.87193938505851, 5);
+    expect(captured.result.angles?.asc).not.toBeCloseTo(23.871949998406535, 5);
     const parsed = parseNatalEnvelope(serializeNatalEnvelope(captured));
     expect(parsed.ok).toBe(true);
     if (!parsed.ok) throw new Error("Expected valid synthetic receipt");

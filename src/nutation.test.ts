@@ -2,9 +2,11 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 
 import { MakeTime, SetDeltaTFunction, e_tilt } from "astronomy-engine";
+import type { AstroTime } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
 import { deltaT } from "./deltat.js";
+import { gastHours } from "./ephemeris.js";
 import { eclipticFrame, eclipticOfDate } from "./frame.js";
 import { ARGUMENTS, COEFFICIENTS, MULTIPLIERS, NUTATION_TERMS, OFFSETS, nutation, tilt } from "./nutation.js";
 
@@ -116,6 +118,20 @@ describe("the engine's nutation and obliquity against ERFA", () => {
     let worst = 0;
     for (const epoch of ERFA.epochs) worst = Math.max(worst, Math.abs(tilt(epoch.tt).ee - epoch.ee2000B));
     expect(worst).toBeLessThanOrEqual(tolerance.equationOfEquinoxesArcsec);
+  });
+
+  it("gives the chart's sidereal time as gmst06 plus ee00 on obl06 and nut00b, and within the 2000B model of gst06a", () => {
+    const seconds = (hours: number) => ((((hours % 24) + 36) % 24) - 12) * 15 * 3600;
+    let fromB = 0;
+    let fromA = 0;
+    for (const epoch of ERFA.epochs) {
+      // gastHours reads UT1 and TT from the time, as the chart gives them.
+      const gast = gastHours({ ut: epoch.ut1, tt: epoch.tt } as AstroTime);
+      fromB = Math.max(fromB, Math.abs(seconds(gast - epoch.gast2000B)));
+      fromA = Math.max(fromA, Math.abs(seconds(gast - epoch.gst06a)));
+    }
+    expect(fromB).toBeLessThanOrEqual(tolerance.gast2000BArcsec);
+    expect(fromA).toBeLessThanOrEqual(tolerance.gastGst06aArcsec);
   });
 
   it("turns EQJ to the true ecliptic and equinox of date as Rz(−Δψ) Rx(εA) P does with bp06, obl06 and nut00b", () => {

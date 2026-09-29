@@ -1,0 +1,57 @@
+{
+ "pyerfa": "2.0.1.5",
+ "erfa": "2.0.1",
+ "mercuryStation": {
+  "method": "cubic fitted to longitudes every 5 s, 05:47:10Z to 07:47:10Z UTC; TT = UTC + 69.184 s",
+  "utc": {
+   "erfa2000A": "2026-02-26T06:47:13.971Z",
+   "rc15": "2026-02-26T06:47:07.815Z",
+   "build": "2026-02-26T06:47:13.924Z"
+  },
+  "rc15MinusErfaSeconds": -6.156,
+  "buildMinusErfaSeconds": -0.047
+ },
+ "receipt": {
+  "birth": {
+   "utc": "2001-12-21T09:00:00.000Z",
+   "latitude": 78.2232,
+   "longitude": 15.6267,
+   "houseSystem": "placidus",
+   "timeScale": "ut1"
+  },
+  "rc15": {
+   "engineAsc": 23.871939385062774,
+   "erfaAsc": 23.871950092385845,
+   "engineMinusErfaArcsec": -0.03855
+  },
+  "build": {
+   "engineAsc": 23.871949998406535,
+   "erfaAsc": 23.871950092385845,
+   "engineMinusErfaArcsec": -0.00034
+  }
+ },
+ "placidusLimit": {
+  "birth": {
+   "utc": "2000-03-20T00:00:00.000Z",
+   "latitude": 66.56186339751429,
+   "longitude": 92.16879370494166,
+   "houseSystem": "placidus"
+  },
+  "rc15": {
+   "engineTrueObliquity": 23.438136599503885,
+   "erfaTrueObliquity": 23.43813798386399,
+   "engineMinusErfaArcsec": -0.004984,
+   "latitudeBelowErfaLimitArcsec": -0.004973,
+   "latitudeBelowEngineLimitArcsec": 1.1e-05,
+   "houses": "placidus"
+  },
+  "build": {
+   "engineTrueObliquity": 23.438138065768914,
+   "erfaTrueObliquity": 23.43813798386399,
+   "engineMinusErfaArcsec": 0.000295,
+   "latitudeBelowErfaLimitArcsec": -0.004973,
+   "latitudeBelowEngineLimitArcsec": -0.005268,
+   "houses": "whole"
+  }
+ }
+}
