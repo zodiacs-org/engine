@@ -12,7 +12,8 @@ import { planetaryHourAt, planetaryHours, skyEvents, skyEventsOn } from "@zodiac
 const place = { latitude: 38.89, longitude: -77.03 }; // height defaults to 0 m
 
 skyEventsOn("Sun", place, "2024-06-21", { utcOffsetMinutes: 0 });
-// set 00:36:46Z, lower transit 05:09:59Z, rise 09:43:11Z, upper transit 17:10:05Z
+// set 00:36:46Z, lower transit 05:09:58Z, rise 09:43:11Z, upper transit 17:10:05Z
+// (USNO: set 00:37, rise 09:43, upper transit 17:10)
 skyEvents("Moon", place, "2024-06-20T00:00:00Z", "2024-06-23T00:00:00Z"); // every event in the window
 planetaryHours({ latitude: 40, longitude: -75 }, "2025-12-18", { utcOffsetMinutes: -300 });
 planetaryHourAt({ latitude: 40, longitude: -75 }, "2025-12-18T19:00:00Z"); // the ninth hour, Mars's
@@ -57,8 +58,9 @@ standard altitudes.
 - **Refraction**: `refraction: "standard"` (default) is R = 34′
   (`STANDARD_REFRACTION_ARCMIN`), USNO's "average amount of atmospheric
   refraction at the horizon"; `"none"` is R = 0, the geometric horizon.
-  Refraction depends on the weather: USNO states that computed times "may be
-  in error by a minute or more" for that reason alone, more at high latitudes.
+  Refraction depends on the weather: USNO states that even under ideal
+  conditions computed times "may be in error by a minute or more", and that
+  the accuracy "decreases at high latitudes".
 - **Limb**: `limb: "upper"` (default for the Sun and the Moon), `"centre"` or
   `"lower"`. Planets are taken at their centre, without a disc, and accept
   only `"centre"`.
@@ -66,8 +68,9 @@ standard altitudes.
   1 au (the solar semi-diameter at unit distance in Meeus ch. 55 is 959.63″);
   the Moon 1,737.4 km, the IAU mean radius (Archinal et al. 2018).
 - **Parallax**: every body is observed from the observer's place on the
-  ellipsoid, so the Moon's horizontal parallax (54′ to 61′) enters through its
-  topocentric position, as do the few arcseconds of Venus and Mars.
+  ellipsoid, so the Moon's horizontal parallax, asin(6,378.137 km /
+  distance), about 1°, enters through its topocentric position, as does the
+  planets' (8.79″ at 1 au, more when nearer).
 - **Height** moves the observer; it does not lower the horizon. No dip is
   applied: the horizon is the plane perpendicular to the ellipsoid normal, as
   in USNO's definition ("the observer's eye is considered to be on the surface
@@ -99,20 +102,60 @@ aberration, the Moon from its series, rotated to the true equator and equinox
 of date with astronomy-engine's precession and five-term nutation. The
 observer is placed with the engine's own Greenwich apparent sidereal time (the
 formula of `src/ephemeris.ts`). The difference is the topocentric vector.
-Diurnal aberration (at most 0.32″) and polar motion are not applied.
+Diurnal aberration (at most 0.32″, the equator's rotation speed of 465 m/s
+over the speed of light) and polar motion are not applied.
 
 Events are found with the engine's crossing solver (`src/crossings.ts`): the
 altitude less h0 against 0, and the hour angle against 0° and 180°, sampled
 every hour and bisected to an hour divided by 2^24 (0.2 ms); a turn between
 samples that could reach the horizon is searched by golden section, so a
-grazing rise and set are both found. Each result says whether its search
+grazing rise and set are both found. Each event is then taken to the first
+whole millisecond at which it has happened, so that every window gives the
+same instants (`src/first-millisecond.ts`). Each result says whether its search
 completed: `status` is `"complete"`, or `"refused"` with `reason:
 "sample-budget"` and no events when `maxSamples` (a positive integer, default
 unlimited) ran out. `samples` counts the position evaluations.
 
 ### Accuracy
 
-EVIDENCE_SKY
+Against skyfield with JPL DE440s, on a grid of 88 sites (latitude −65° to
+65°, eight longitudes, height 0) and 54 dates from 1900 to 2100, both
+programs on the engine's UT1 and ΔT (gate S1 of the evidence), with the
+default conventions:
+
+| Body | Events | Median | 95th percentile | Largest | Over 5 s |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Sun | 19,025 | 0.038 s | 0.154 s | 1.13 s | 0 |
+| Moon | 18,227 | 0.054 s | 0.182 s | 0.44 s | 0 |
+| Mercury | 18,896 | 0.140 s | 0.485 s | 1.87 s | 0 |
+| Venus | 18,933 | 0.089 s | 0.488 s | 2.31 s | 0 |
+| Mars | 18,968 | 0.061 s | 0.336 s | 2.29 s | 0 |
+| Jupiter | 19,083 | 0.154 s | 0.709 s | 2.38 s | 0 |
+| Saturn | 19,088 | 0.463 s | 1.915 s | 4.93 s | 0 |
+| Uranus | 19,083 | 0.196 s | 1.492 s | 11.62 s | 192 |
+| Neptune | 19,151 | 0.695 s | 1.390 s | 3.17 s | 0 |
+| Pluto | 19,037 | 0.163 s | 0.495 s | 0.94 s | 0 |
+
+No event is missing or extra. The 192 events over 5 s, which fail the
+preregistered gate, are Uranus's rises and sets of 1950 at 65° N and 65° S:
+at declination +23.6° the planet crossed the horizon there at a grazing
+angle, 1.5′ to 2.5′ of altitude a minute, so the 15″ to 18″ between the two
+positions moved the times by up to 11.6 s. That is the size of
+astronomy-engine's error for Uranus (up to 19.3″ in declination in the
+comparison in the README). The transits do not depend on the declination
+and are within 1.15 s everywhere. With the centre of the Sun and the Moon
+and no refraction, all 37,226 events are within 2.19 s.
+
+Against Swiss Ephemeris `rise_trans` with matching flags (gate S2), 188,982
+events have a median difference of 0.155 s; 192 of Uranus at 65° are over
+5 s, up to 11.62 s. Against USNO's tables, which give the minute (gate S3),
+465 of 467 rises, sets and transits of the Sun and the Moon at 10 sites on 8
+dates are within 30 s; the other two are 30.06 s and 30.15 s from USNO's
+minute, and three more events are listed by one side only (a lunar transit
+at 23:59:30, which USNO lists at 00:00 the next day, and a transit below the
+horizon, which USNO omits), so that gate fails too. These are differences
+between computations; against the sky, USNO notes, a computed rise or set
+"may be in error by a minute or more" because the refraction varies.
 
 ## Planetary hours
 
@@ -145,10 +188,14 @@ weekday rulers from Sunday: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn.
   sunrise + k (sunset − sunrise) / 12 or sunset + k (next sunrise − sunset) /
   12, rounded to the millisecond.
 - The weekday is that of `date` itself.
-- `status` is `"complete"` with the 24 hours; `"polar"` when the Sun does not
-  rise on the date, or does not set and rise again within three days (inside
-  and near the polar circles; `flags` says `"never-sets"` or `"never-rises"`
-  when the Sun neither rose nor set on the date); or `"refused"` when the
+- `status` is `"complete"` with the 24 hours; `"no-sunrise"` when the date's
+  24 hours on the chosen clock hold no sunrise, in polar day or night (`flags`
+  says `"never-sets"` or `"never-rises"`) or on a clock whose midnight falls
+  next to sunrise (on UTC at 90° E in March, sunrise comes a few minutes after
+  midnight and later each day, so one date has none); `"no-sunset"` when the
+  Sun rose but did not set within three days of the date's start, as polar
+  day begins; `"no-next-sunrise"` when it rose and set but did not rise again
+  within those three days, as polar night begins; or `"refused"` when the
   sample budget ran out.
 
 `planetaryHourAt(observer, at, options?)` returns `{ day, hour }` for an
@@ -160,8 +207,8 @@ The worked examples the tests pin:
 | Source | Date and place | Engine |
 | --- | --- | --- |
 | Chaucer, *Astrolabe* II.12: "The 13 day of March fil up-on a Saterday per aventure" | 13 March 1389 (Julian; 21 March Gregorian), a Saturday, at Oxford, 51°50′ N (Chaucer II.25), 1°15′ W | day hours Saturn … Venus, night beginning with Mercury and the Moon, the next sunrise the Sun's |
-| Skeat's notes to II.7–10: a day of 16½ hours at Oxford when the Sun enters Cancer, "each 'hour inequal' is 1 h. 22½ m.", the night's 37½ m. | 2000-06-21 at Oxford, centre and no refraction (the astrolabe's horizon) | EVIDENCE_SKEAT |
-| Heindel, *Simplified Scientific Astrology* (1919), pp. 155–156: at latitude 40 on a Thursday in December, Mars rules "from 1:32 to 2:18 P.M." | Thursday 2025-12-18, 40° N 75° W, local mean time | EVIDENCE_HEINDEL |
+| Skeat's notes to II.7–10: a day of 16½ hours at Oxford when the Sun enters Cancer, "each 'hour inequal' is 1 h. 22½ m.", the night's 37½ m. | 2000-06-21 at Oxford, centre and no refraction (the astrolabe's horizon) | hours of 82.32 min by day and 37.70 min by night |
+| Heindel, *Simplified Scientific Astrology* (1919), pp. 155–156: at latitude 40 on a Thursday in December, Mars rules "from 1:32 to 2:18 P.M." | Thursday 2025-12-18, 40° N 75° W, local mean time | a Thursday (Jupiter's day); the ninth hour, Mars's, from 13:30:06 to 14:16:46 |
 
 Robson also mentions a "modern" division of the day at noon and midnight into
 four quarters of six hours; the engine does not offer it.

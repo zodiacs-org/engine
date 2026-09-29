@@ -8,7 +8,7 @@ import { writeFileSync } from "node:fs";
 import { CHALDEAN_ORDER, PLANETARY_DAY_RULERS, planetaryHours, skyEvents } from "../../../../dist/sky.js";
 import { CONVENTIONS, DATES, SITES } from "./grid.mjs";
 
-const counts = { days: 0, complete: 0, polar: 0, refused: 0, hoursChecked: 0, failures: 0 };
+const counts = { days: 0, complete: 0, "no-sunrise": 0, "no-sunset": 0, "no-next-sunrise": 0, refused: 0, hoursChecked: 0, failures: 0 };
 const failures = [];
 const fail = (what) => {
   counts.failures += 1;

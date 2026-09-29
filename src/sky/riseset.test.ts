@@ -12,8 +12,10 @@ describe("skyEvents", () => {
     expect(kinds(sun)).toEqual(["set", "lower-transit", "rise", "upper-transit"]);
     expect(sun.conventions).toEqual({ limb: "upper", refraction: "standard", refractionArcmin: 34 });
     const [set, lower, rise, upper] = sun.events;
-    // At a rise or set the centre is 34′ plus the semi-diameter (15.7′ in June) below the horizon.
-    expect(rise!.altitude).toBeCloseTo(-(34 + 15.74) / 60, 2);
+    // The example of docs/sky.md.
+    expect(sun.events.map((event) => event.at.toISOString().slice(11, 19))).toEqual(["00:36:46", "05:09:58", "09:43:11", "17:10:05"]);
+    // At a rise or set the centre is 34′ plus the semi-diameter below the horizon: 15.74′ in June, not USNO's fixed 16′.
+    expect(Math.abs(-rise!.altitude * 60 - 34 - 15.74)).toBeLessThan(0.01);
     expect(set!.altitude).toBeCloseTo(rise!.altitude, 3);
     expect(rise!.azimuth).toBeGreaterThan(55);
     expect(rise!.azimuth).toBeLessThan(62);

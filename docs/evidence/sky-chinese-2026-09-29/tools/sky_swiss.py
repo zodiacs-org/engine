@@ -11,6 +11,7 @@ Flags: default convention: rise_trans_true_hor with BIT_NO_REFRACTION and a
 horizon of -34', upper limb for the Sun and Moon, BIT_DISC_CENTER for the
 planets; centre-no-refraction: BIT_DISC_CENTER | BIT_NO_REFRACTION, horizon 0.
 """
+import gzip
 import json
 import sys
 
@@ -24,7 +25,7 @@ KINDS = {"rise": swe.CALC_RISE, "set": swe.CALC_SET, "upper-transit": swe.CALC_M
 DAY_S = 86400.0
 
 rows = []
-for text in open(ENGINE):
+for text in gzip.open(ENGINE, "rt"):
     line = json.loads(text)
     start_s = __import__("calendar").timegm(tuple(int(v) for v in line["date"].split("-")) + (0, 0, 0))
     ut1_jd = 2440587.5 + (start_s + line["dut1"]) / DAY_S

@@ -1,0 +1,90 @@
+{
+ "tolerance_s": 30,
+ "S3_usno_rise_set_transit": {
+  "source": "https://aa.usno.navy.mil/api/rstt/oneday, tz=0, fetched 2026-09-29 (API 4.0.1)",
+  "Sun": {
+   "count": 240,
+   "median": 12.106,
+   "p95": 27.978,
+   "max": 30.148,
+   "over": 1,
+   "signedMean": 2.2593291666666677,
+   "signedMin": -30.148,
+   "signedMax": 29.782
+  },
+  "Moon": {
+   "count": 227,
+   "median": 14.5,
+   "p95": 27.541,
+   "max": 30.057,
+   "over": 1,
+   "signedMean": -2.0143348017621134,
+   "signedMin": -30.057,
+   "signedMax": 29.058
+  },
+  "all": {
+   "count": 467,
+   "median": 13.833,
+   "p95": 27.925,
+   "max": 30.148,
+   "over": 2,
+   "signedMean": 0.18198072805139195,
+   "signedMin": -30.148,
+   "signedMax": 29.782
+  },
+  "unpaired": [
+   {
+    "site": [
+     0,
+     0
+    ],
+    "date": "2024-06-21",
+    "body": "Moon",
+    "kind": "upper-transit",
+    "side": "engine-only"
+   },
+   {
+    "site": [
+     51.48,
+     0
+    ],
+    "date": "2024-06-21",
+    "body": "Moon",
+    "kind": "upper-transit",
+    "side": "engine-only"
+   },
+   {
+    "site": [
+     64.84,
+     -147.72
+    ],
+    "date": "2024-06-21",
+    "body": "Moon",
+    "kind": "upper-transit",
+    "side": "engine-only"
+   }
+  ],
+  "over": [
+   {
+    "site": [
+     -34.6,
+     -58.38
+    ],
+    "date": "1950-03-20",
+    "body": "Moon",
+    "kind": "rise",
+    "deltaSeconds": -30.057
+   },
+   {
+    "site": [
+     -34.6,
+     -58.38
+    ],
+    "date": "2024-06-21",
+    "body": "Sun",
+    "kind": "set",
+    "deltaSeconds": -30.148
+   }
+  ]
+ }
+}

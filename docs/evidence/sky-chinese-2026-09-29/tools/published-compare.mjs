@@ -22,7 +22,9 @@ function stats(values) {
     p95: sorted[Math.ceil(0.95 * n) - 1],
     max: sorted[n - 1],
     over: sorted.filter((v) => v > TOLERANCE_S).length,
-    signedMean: values.reduce((a, b) => a + b, 0) / n
+    signedMean: values.reduce((a, b) => a + b, 0) / n,
+    signedMin: Math.min(...values),
+    signedMax: Math.max(...values)
   };
 }
 

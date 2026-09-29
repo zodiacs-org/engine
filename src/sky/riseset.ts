@@ -77,7 +77,7 @@ interface SkyWindow {
   readonly to: Date;
   readonly conventions: SkyConventions;
   readonly flags: readonly SkyFlag[];
-  /** Position evaluations the solver made. */
+  /** Position evaluations the searches made. */
   readonly samples: number;
 }
 
@@ -90,9 +90,9 @@ const RAD = Math.PI / 180;
 const DAY_MS = 86_400_000;
 /** Coarse step of every search: one hour. */
 const STEP_DAYS = 1 / 24;
-/** Refraction at the horizon, arcminutes (USNO; Explanatory Supplement). */
+/** Refraction at the horizon, arcminutes (USNO, Rise, Set, and Twilight Definitions). */
 export const STANDARD_REFRACTION_ARCMIN = 34;
-/** Radii for the semi-diameter, km: the Sun's 959.63″ at 1 au (Auwers), the Moon's IAU mean radius. */
+/** Radii for the semi-diameter, km: the Sun's (959.64″ at 1 au), the Moon's IAU mean radius. */
 export const SKY_RADII_KM = Object.freeze({ Sun: 696_000, Moon: 1_737.4 });
 const KM_PER_AU = 149_597_870.7;
 /** WGS84: equatorial radius (km) and flattening. */
@@ -122,7 +122,7 @@ export function optionsOf(value: unknown, allowed: readonly string[], label: str
   }
   for (const key of Reflect.ownKeys(value)) {
     if (typeof key !== "string" || !allowed.includes(key)) {
-      throw new RangeError(`${label} has an unknown option: ${String(key)}.`);
+      throw new RangeError(`${label} has an unknown key: ${String(key)}.`);
     }
     const slot = Object.getOwnPropertyDescriptor(value, key);
     if (!slot || !("value" in slot)) throw new RangeError(`${label} must contain only data properties.`);

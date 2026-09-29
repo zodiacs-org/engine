@@ -20,6 +20,7 @@ Delta T, held through the day. Only the line's convention, site, day and body,
 and its UT1 - UTC and Delta T, are read from the engine before the events are
 found; the engine's events are read afterwards, to pair them.
 """
+import gzip
 import json
 import sys
 from collections import defaultdict
@@ -40,7 +41,7 @@ base = load.timescale(builtin=True)
 DAY_S = 86400.0
 TOL_S = 5.0
 
-lines = [json.loads(line) for line in open(ENGINE)]
+lines = [json.loads(line) for line in gzip.open(ENGINE, "rt")]
 groups = defaultdict(list)
 for index, line in enumerate(lines):
     groups[(line["lat"], line["lon"], line["body"])].append(index)
@@ -190,8 +191,48 @@ for (lat, lon, body), indices in groups.items():
                 used.add(best)
                 pairs.append((kind, te, reference[best][1]))
         missing = [(rk, tr) for j, (rk, tr) in enumerate(reference) if j not in used and start + 60 <= tr <= start + DAY_S - 60]
+        failing = []
+        for k, te, tr in pairs:
+            if abs(te - tr) > TOL_S:
+                # The altitude rate at the event, arcminutes per minute (not gated).
+                rate = None
+                if k in ("rise", "set"):
+                    name = w["convention"]
+                    around = evaluate(np.array([tr - 30.0, tr + 30.0]), np.array([d_i, d_i]))[name]
+                    rate = round(float(abs(around[1] - around[0]) * 60.0), 4)
+                failing.append({"kind": k, "deltaSeconds": round(te - tr, 3), "rateArcminPerMinute": rate})
         results.append({"convention": w["convention"], "body": body, "lat": lat, "lon": lon, "date": w["date"],
-                        "pairs": [[k, round(te - tr, 4)] for k, te, tr in pairs], "extra": extra, "missing": missing})
+                        "deltas": [te - tr for _, te, tr in pairs], "kinds": [k for k, _, _ in pairs],
+                        "failing": failing, "extra": [k for k, _ in extra], "missing": [k for k, _ in missing]})
     print(f"{lat:>4} {lon:>5} {body:8} {len(results)}", flush=True)
 
-json.dump(results, open(OUT, "w"))
+
+def stats(values):
+    values = sorted(abs(float(v)) for v in values)
+    n = len(values)
+    if not n:
+        return {"count": 0}
+    return {"count": n, "median": values[(n - 1) // 2], "p95": values[-(-95 * n // 100) - 1], "max": values[-1],
+            "over": int(sum(v > TOL_S for v in values))}
+
+
+summary = {}
+for convention in sorted({r["convention"] for r in results}):
+    part = [r for r in results if r["convention"] == convention]
+    block = {"all": dict(stats([d for r in part for d in r["deltas"]]),
+                         extra=sum(len(r["extra"]) for r in part), missing=sum(len(r["missing"]) for r in part))}
+    block["byBody"] = {body: dict(stats([d for r in part if r["body"] == body for d in r["deltas"]]),
+                                  extra=sum(len(r["extra"]) for r in part if r["body"] == body),
+                                  missing=sum(len(r["missing"]) for r in part if r["body"] == body))
+                       for body in TARGETS if any(r["body"] == body for r in part)}
+    block["byAbsLatitude"] = {str(lat): stats([d for r in part if abs(r["lat"]) == lat for d in r["deltas"]])
+                              for lat in sorted({abs(r["lat"]) for r in part})}
+    block["byKind"] = {kind: stats([d for r in part for d, k in zip(r["deltas"], r["kinds"]) if k == kind])
+                       for kind in ("rise", "set", "upper-transit", "lower-transit")}
+    block["failing"] = [dict(f, body=r["body"], lat=r["lat"], lon=r["lon"], date=r["date"]) for r in part for f in r["failing"]]
+    block["extra"] = [dict(kind=k, body=r["body"], lat=r["lat"], lon=r["lon"], date=r["date"]) for r in part for k in r["extra"]]
+    block["missing"] = [dict(kind=k, body=r["body"], lat=r["lat"], lon=r["lon"], date=r["date"]) for r in part for k in r["missing"]]
+    summary[convention] = block
+json.dump({"reference": "skyfield 1.55, JPL DE440s (sha256 c1c7feea...), WGS84, IAU 2006/2000A; engine UT1 and Delta T",
+           "tolerance_s": TOL_S, "summary": summary}, open(OUT, "w"), indent=1)
+print(json.dumps({c: v["all"] for c, v in summary.items()}, indent=1))

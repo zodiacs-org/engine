@@ -101,8 +101,8 @@ const ENTRY_BUDGETS = {
   // it shares with ./geo (docs/evidence/techniques-2026-09-29/); 5.8 per
   // cent of headroom.
   "./techniques": 150_000,
-  // Unreleased: rise, set, transit and planetary hours, 83,184 bytes, of which
-  // 15,832 are beyond the core's graph; it reaches the ephemeris chunk for the
+  // Unreleased: rise, set, transit and planetary hours, 83,254 bytes, of which
+  // 15,902 are beyond the core's graph; it reaches the ephemeris chunk for the
   // engine's clock (onChartClock), and so the core modules that chunk imports.
   "./sky": 92_000,
   "./timing": 120_000, // rc.15: 112,485, the core's graph included; with planetary returns (unreleased) 114,646

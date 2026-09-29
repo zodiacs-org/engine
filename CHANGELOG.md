@@ -141,6 +141,27 @@ re-splits the declaration chunks the entries share, so `dist/index.d.ts`
 imports the same house types from a new chunk, and it lists the imports of
 `dist/geo.js` in another order. The version is unchanged.
 
+- `@zodiacs/engine/sky` (`docs/sky.md`): `skyEvents` and `skyEventsOn` give
+  the rise, set and upper and lower transit of the Sun, the Moon and the
+  planets for an observer on the WGS84 ellipsoid, with 34′ of refraction
+  (USNO), the topocentric semi-diameter (upper limb by default) and parallax,
+  named `limb` and `refraction` options, and polar flags. `planetaryHours`
+  and `planetaryHourAt` give the planetary hours in the Chaldean order.
+  Against skyfield with JPL DE440s (226,717 events, 1900–2100) and Swiss
+  `rise_trans` (statistics only), all events agree within 5 s but 192 rises
+  and sets of Uranus at 65° (up to 11.6 s, from astronomy-engine's Uranus):
+  those gates fail. 465 of 467 USNO times are within 30 s of the minute; that
+  gate fails on the other two and on three events only one side lists.
+  Gates, preregistered before measuring, and results:
+  `docs/evidence/sky-chinese-2026-09-29/`. `package:contents` budgets
+  `./sky` (92,000 bytes); `./timing` grows by 129 bytes, its rulers now in a
+  chunk shared with `./sky`.
+- Held back: the branch's Chinese-calendar entry (the 24 solar terms and the
+  Four Pillars). Its apparent Sun is a series fitted to JPL DE430, and no
+  coefficient set derived from a JPL ephemeris ships until NAIF answers the
+  derived-coefficient question; the entry waits for a Sun source that is not
+  JPL-derived.
+
 Migration: none. With every default `calc` gives the position `positions()`
 gives, to the bit after the same earlier calls, and the root entry's build is
 byte for byte unchanged. `@zodiacs/engine/window` changes no existing

@@ -55,8 +55,12 @@ interface PlanetaryDayBase {
 
 /**
  * `"complete"`: the Sun rose on the date, set, and rose again, and the 24
- * hours are given. `"polar"`: it did not (polar day or night; `flags` says
- * which when the Sun neither rose nor set). `"refused"`: the sample budget ran out.
+ * hours are given. `"no-sunrise"`: the date's 24 hours on the chosen clock
+ * hold no sunrise, in polar day or night (`flags` says which) or when the
+ * clock's midnight falls next to sunrise. `"no-sunset"`: the Sun rose but did
+ * not set within three days of the date's start, as polar day begins.
+ * `"no-next-sunrise"`: it rose and set but did not rise again within those
+ * three days, as polar night begins. `"refused"`: the sample budget ran out.
  */
 export type PlanetaryDay =
   | (PlanetaryDayBase & {
@@ -67,7 +71,7 @@ export type PlanetaryDay =
       readonly hours: readonly PlanetaryHour[];
     })
   | (PlanetaryDayBase & {
-      readonly status: "polar" | "refused";
+      readonly status: "no-sunrise" | "no-sunset" | "no-next-sunrise" | "refused";
       readonly sunrise: null;
       readonly sunset: null;
       readonly nextSunrise: null;
@@ -107,7 +111,8 @@ function dayOf(site: Readonly<Required<Observer>>, input: Record<string, unknown
     const flags: SkyFlag[] = [];
     const firstDay = search.events.filter((event) => event.at.getTime() < startMs + DAY_MS);
     if (firstDay.length === 0) flags.push(search.first!.above > 0 ? "never-sets" : "never-rises");
-    return Object.freeze({ ...base, flags: Object.freeze(flags), status: "polar", ...empty });
+    const status = !rise ? "no-sunrise" : !set ? "no-sunset" : "no-next-sunrise";
+    return Object.freeze({ ...base, flags: Object.freeze(flags), status, ...empty });
   }
   const hours: PlanetaryHour[] = [];
   const marks = [rise.at.getTime(), set.at.getTime(), next.at.getTime()];

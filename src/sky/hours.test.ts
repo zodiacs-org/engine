@@ -35,6 +35,8 @@ describe("planetary hours: worked examples", () => {
     const length = (index: number) => (day.hours[index]!.end.getTime() - day.hours[index]!.start.getTime()) / MINUTE;
     expect(Math.abs(length(0) - 82.5)).toBeLessThanOrEqual(1);
     expect(Math.abs(length(12) - 37.5)).toBeLessThanOrEqual(1);
+    // The figures docs/sky.md gives.
+    expect([length(0).toFixed(2), length(12).toFixed(2)]).toEqual(["82.32", "37.70"]);
   });
 
   it("Heindel (1919), pp. 155–156: latitude 40, a Thursday in December, Mars from 1:32 to 2:18 P.M.", () => {
@@ -47,6 +49,9 @@ describe("planetary hours: worked examples", () => {
     const local = (date: Date) => (date.getTime() - Date.parse("2025-12-18T05:00:00Z")) / MINUTE;
     expect(Math.abs(local(hour!.start) - (13 * 60 + 32))).toBeLessThanOrEqual(5);
     expect(Math.abs(local(hour!.end) - (14 * 60 + 18))).toBeLessThanOrEqual(5);
+    // The figures docs/sky.md gives, local mean time.
+    const clock = (date: Date) => new Date(date.getTime() - 5 * 60 * MINUTE).toISOString().slice(11, 19);
+    expect([clock(hour!.start), clock(hour!.end)]).toEqual(["13:30:06", "14:16:46"]);
   });
 
   it("Cassius Dio 37.19: counting the hours from Saturn, each day's first hour falls to its own planet", () => {
@@ -103,16 +108,34 @@ describe("planetary hours: consistency with the rise/set function", () => {
     expect(at.hour?.number).toBe(1);
   });
 
-  it("reports polar days and nights instead of hours", () => {
+  it("reports polar days and nights, and dates without a sunrise, instead of hours", () => {
     const svalbard = { latitude: 78, longitude: 15 };
     const summer = planetaryHours(svalbard, "2024-06-21");
-    expect(summer.status).toBe("polar");
+    expect(summer.status).toBe("no-sunrise");
     expect(summer.flags).toEqual(["never-sets"]);
     expect(summer.hours).toEqual([]);
     const winter = planetaryHours(svalbard, "2024-12-21");
-    expect(winter.status).toBe("polar");
+    expect(winter.status).toBe("no-sunrise");
     expect(winter.flags).toEqual(["never-rises"]);
     expect(planetaryHourAt(svalbard, "2024-12-21T12:00:00Z").hour).toBeNull();
+    // On the UTC clock at 90° E the March sunrise falls just after midnight,
+    // later each day: 2000-03-20 has none, though the Sun rises and sets daily.
+    const clockMissesIt = planetaryHours({ latitude: -65, longitude: 90 }, "2000-03-20", { utcOffsetMinutes: 0 });
+    expect(clockMissesIt.status).toBe("no-sunrise");
+    expect(clockMissesIt.flags).toEqual([]);
+    // Polar day begins at 70° N 25° E: the Sun rises early on 2024-05-16 (local
+    // mean time) and does not set again for weeks.
+    const begins = planetaryHours({ latitude: 70, longitude: 25 }, "2024-05-16");
+    expect(begins.status).toBe("no-sunset");
+    expect(begins.flags).toEqual([]);
+    expect(planetaryHours({ latitude: 70, longitude: 25 }, "2024-05-15").status).toBe("complete");
+    // Polar night begins there: the Sun rises and sets on 2024-11-24 and does
+    // not rise again until January.
+    const ends = planetaryHours({ latitude: 70, longitude: 25 }, "2024-11-24");
+    expect(ends.status).toBe("no-next-sunrise");
+    expect(ends.flags).toEqual([]);
+    expect(planetaryHours({ latitude: 70, longitude: 25 }, "2024-11-23").status).toBe("complete");
+    expect(planetaryHours({ latitude: 70, longitude: 25 }, "2024-11-25").flags).toEqual(["never-rises"]);
   });
 
   it("refuses bad input", () => {

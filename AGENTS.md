@@ -13,8 +13,9 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
 - Source and unit tests: `src/`, with tests beside the code as `*.test.ts`,
   and tests of the scripts as `scripts/*.test.mjs` (Vitest). Build output
   goes to `dist/`, which is not committed. The opt-in entry points live in
-  `src/geo/`, `src/timing/` and `src/vedic/`; their guides are
-  `docs/time.md`, `docs/timing-hellenistic.md` and `docs/vedic.md`.
+  `src/geo/`, `src/timing/`, `src/vedic/` and `src/sky/`; their guides are
+  `docs/time.md`, `docs/timing-hellenistic.md`, `docs/vedic.md` and
+  `docs/sky.md`.
 - Package and release scripts: `scripts/` (export smoke test, package
   contents and size budgets, packed consumer, archive binding, release
   archive check, compatibility checks), and the generators of the time data:
@@ -135,7 +136,7 @@ below no `package.json` or `node_modules`. The package supports Node
 - Keep the core entry point free of network requests and import-time side
   effects, and keep `@zodiacs/engine/crossings` and
   `@zodiacs/engine/deltat` free of the ephemeris. The root must not import
-  `@zodiacs/engine/timing`, `/vedic` or `/geo`, which are opt-in;
+  `@zodiacs/engine/timing`, `/vedic`, `/geo` or `/sky`, which are opt-in;
   `npm run exports:smoke` checks it.
 - Every entry point in `package.json` `exports` has a budget for its import
   graph in `scripts/verify-package-contents.mjs`, the zone histories have

@@ -185,6 +185,8 @@ for (const aspect of today.aspects) {
   imports no ephemeris and no module of the root entry.
 - `@zodiacs/engine/vedic` provides the sidereal zodiac: ayanamsas, sidereal
   charts, nakshatras, vargas, KP sub-lords and dashas (see `docs/vedic.md`).
+- `@zodiacs/engine/sky` provides rise, set and transit times for an observer
+  and planetary hours (see `docs/sky.md`).
 - `@zodiacs/engine/window` partitions a birth-time window into cells within
   which the chart's signs, houses and aspects are constant (see *Birth-time
   windows*).
@@ -214,8 +216,9 @@ mapping and the measured accuracy, is
 Returned longitudes use degrees in `[0, 360)` and positions include sign and degree
 annotations. Charts use the tropical ecliptic of date. Planetary positions are
 geocentric and corrected for light time and aberration, but not for the Sun's
-gravitational deflection; the Moon's series carries neither correction. This
-package does not calculate topocentric parallax.
+gravitational deflection; the Moon's series carries neither correction. The
+chart functions do not calculate topocentric parallax; `@zodiacs/engine/sky`
+does, for rise and set.
 
 Positions have been compared with an independent ephemeris from 1800-01-01T00:00Z
 up to 2200-01-01T00:00Z, exported as `REFERENCE_SPAN`. A chart outside that span
@@ -865,7 +868,7 @@ compatibility boundaries for Zodiacs.org. They let the site consume the exact
 package implementation while keeping its scanner-oriented functions and lazy
 bundle boundary intact. They are not covered by semantic-versioning guarantees;
 third-party code must use the documented entry points: the root, `/geo`,
-`/techniques`, `/timing`, `/vedic`, `/receipt`, `/crossings` and `/deltat`.
+`/sky`, `/techniques`, `/timing`, `/vedic`, `/receipt`, `/crossings` and `/deltat`.
 
 ## GeoNames request recovery
 
