@@ -521,6 +521,19 @@ stands after the carrier, which is the check CI runs.
   pairs of versions, valid and not, the check's `semver.eq` agrees with the
   semver that npm 10.8.2, 10.9.7 and 11.19.0 bundle (7.6.2, 7.7.4, 7.8.5), and
   no two distinct versions that the check accepts are `semver.eq`.
+- `followup/gates.log`: every gate on `452c98b`, the head of the follow-up's
+  code, from a clean full-history clone. On Node 20.19.0, 22.22.2 and 24.21.0:
+  `npm ci`, 2,687 tests in 34 files passing, and a build and pack that gives
+  the carried archive, `adc9805e…`, byte for byte. Package contents and the
+  pack dry run pass. With `b221534`'s check in place of this one, 7 of the 23
+  binding tests fail; with this one, all pass. A simulated merge onto main
+  (`8c4946b`, with a merge commit) has the same tree as `452c98b`.
+- `followup/archive-binding.log`: the archive check at `452c98b` in both
+  modes, started with node and with `npm run`, on each of the three Node
+  versions, and on the simulated merge: every run rebuilds HEAD to
+  `adc9805e…`, `--rebuild-all` rebuilds all nine archives byte for byte, and
+  every run passes, across 49 commits and 50 on the merge. The commit that
+  adds these two files changes only files under `docs/evidence/`.
 
 ### What the check guarantees
 
