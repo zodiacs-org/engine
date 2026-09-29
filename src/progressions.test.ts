@@ -34,14 +34,28 @@ describe("secondary progression instant", () => {
   it("matches the rounded published Chaplin date-mapping example", () => {
     // Juan Estadella, Predictive Astrology, 3rd ed. (2019), pp. 84–85:
     // https://juanestadella.com/Predictive_Astrology_Juan-Estadella_3rd_edition.pdf
+    // (PDF SHA-256 bf52656b367ad7d1415a7b021a0a0db3a609bf35c7a40053ff0622e7a3325622).
     // Use the book's stated birth/target instants as UT inputs, not independently
-    // verified biography. Its intermediate arithmetic is rounded, so its
-    // published result has a predeclared 5-second comparison tolerance.
+    // verified biography. Its intermediate arithmetic is rounded: its own
+    // precision allows up to 4.73 s (docs/evidence/rc12-20260928/sources.md),
+    // hence the predeclared 5-second comparison tolerance.
     const actual = progressedInstant("1889-04-16T19:40:40Z", "1901-05-09T12:00:00Z");
     expect(Math.abs(actual.getTime() - Date.parse("1889-04-28T21:06:27Z"))).toBeLessThanOrEqual(5_000);
     // Independent Decimal evaluation of the same literal inputs and convention
     // yields 21:06:30.683683...; this pre-epoch Date truncates toward zero.
     expect(Math.abs(actual.getTime() - Date.parse("1889-04-28T21:06:30.684Z"))).toBeLessThanOrEqual(1);
+  });
+
+  it("reproduces the book's own arithmetic from the birth time it actually used", () => {
+    // The book writes 19:40:40 UT as 19.677 h, which is 19:40:37.2 UT. Its
+    // six-decimal day arithmetic then gives 0.879489 d = 21:06:27.8496, printed
+    // as 21:06:27; the exact mapping of 19:40:37.2 is 21:06:27.8913..., which
+    // this pre-epoch Date truncates toward zero to 21:06:27.892. The 42 ms left
+    // is the book's rounding of 4404.680125 / 365.2422 to 12.059614 days.
+    const actual = progressedInstant("1889-04-16T19:40:37.200Z", "1901-05-09T12:00:00Z").getTime();
+    expect(new Date(Math.floor(actual / 1000) * 1000).toISOString()).toBe("1889-04-28T21:06:27.000Z");
+    expect(Math.abs(actual - Date.parse("1889-04-28T21:06:27.850Z"))).toBeLessThanOrEqual(50);
+    expect(actual).toBe(Date.parse("1889-04-28T21:06:27.892Z"));
   });
 
   it.each(["2000-02-29", "0099-01-01", "0000-02-29", "-000001-12-31"])(
@@ -147,6 +161,18 @@ describe("secondary progressed positions", () => {
       SetDeltaTFunction(() => 86_400_000);
       expect(progressedBodies(birth, target)).toEqual(expected);
     } finally { SetDeltaTFunction(deltaT); }
+  });
+
+  it("throws RangeError, not astronomy-engine's string, at the ends of the Date range", () => {
+    // At the ends a speed sample is an invalid Date; far inside them too, the
+    // ephemeris evaluates only EPHEMERIS_SPAN. Every case names the span.
+    for (const ms of [8.64e15, -8.64e15, 8.64e15 - 1]) {
+      expect(() => progressedBodies(ms, ms)).toThrow(RangeError);
+      expect(() => progressedBodies(ms, ms)).toThrow(/outside the ephemeris span/);
+      expect(() => positions(ms)).toThrow(/outside the ephemeris span/);
+    }
+    // The mapping itself is arithmetic and remains defined at the Date limits.
+    expect(progressedInstant(8.64e15, 8.64e15).getTime()).toBe(8.64e15);
   });
 
   it("maps the target before evaluating reference coverage", () => {

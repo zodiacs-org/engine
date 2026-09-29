@@ -48,6 +48,7 @@ export {
   DECLINATION_ORB_LUMINARY,
   DEFAULT_DECLINATION_ORB_POLICY,
   RA_POLE_TOLERANCE,
+  SUN_BOUND_LATITUDE,
   declinationOf,
   declinationOrb,
   declinationsForBodies,
@@ -111,7 +112,7 @@ export type { LotInputs } from "./points.js";
 export { DELTA_T_MODEL, DELTA_T_TABLE, deltaT, deltaTAt } from "./deltat.js";
 export type { DeltaT, DeltaTSegment, DeltaTTable } from "./deltat.js";
 
-export { REFERENCE_SPAN, outsideReferenceSpan } from "./reference-span.js";
+export { EPHEMERIS_SPAN, REFERENCE_SPAN, outsideReferenceSpan } from "./reference-span.js";
 
 export { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "./crossings.js";
 export type {

@@ -1,0 +1,89 @@
+{
+  "schema": "zodiacs.engine-archives.v1",
+  "rule": "A version string names one byte sequence. Carried archives are never repacked, replaced or removed.",
+  "archives": [
+    {
+      "version": "0.1.1-rc.7",
+      "file": "zodiacs-engine-0.1.1-rc.7.tgz",
+      "sha256": "49b2b03f50fea8a625d443d4fd0f6d03ffc22831e54009fd09c49d07c8698f90",
+      "bytes": 39252,
+      "files": 23,
+      "sourceCommit": "6e14f3f7c5e3475fefce973a65ce4fc5d846ad85",
+      "status": "carried"
+    },
+    {
+      "version": "0.1.1-rc.8",
+      "file": "zodiacs-engine-0.1.1-rc.8.tgz",
+      "sha256": "3b934376fa53983cbdd7eb1a6ecf0eb0d50fbc49df01bc610b20c63bd5d12be6",
+      "bytes": 51748,
+      "files": 30,
+      "sourceCommit": "352ea49d9e1d7b07975a050bb4877acc454f86f5",
+      "status": "carried"
+    },
+    {
+      "version": "0.1.1-rc.9",
+      "file": "zodiacs-engine-0.1.1-rc.9.tgz",
+      "sha256": "bb5592302b1fa542cc745a9410b5a77faf49bbf4e205347ab771810efc300a20",
+      "bytes": 55576,
+      "files": 30,
+      "sourceCommit": "82aad2fcc9b204a687e0b67f709681e62f9e889a",
+      "status": "carried"
+    },
+    {
+      "version": "0.1.1-rc.10",
+      "file": "zodiacs-engine-0.1.1-rc.10.tgz",
+      "sha256": "a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c",
+      "bytes": 61318,
+      "files": 30,
+      "sourceCommit": "9c4f3fd77b5d6235288d9cdfc2ac1d183a5c4d6b",
+      "status": "carried"
+    },
+    {
+      "version": "0.1.1-rc.11",
+      "file": "zodiacs-engine-0.1.1-rc.11.tgz",
+      "sha256": "13d637db21e3e444c783fd85832e4f61dfdb4b7777b2c84038ec887b47029c4e",
+      "bytes": 70676,
+      "files": 30,
+      "sourceCommit": "00bdae79a9256c2bba4294ed07af79e323c6cd66",
+      "status": "superseded",
+      "onlyInCommit": "00bdae79a9256c2bba4294ed07af79e323c6cd66",
+      "note": "Packed first at 00bdae79 and replaced under the same version by be3585b before merge; never released."
+    },
+    {
+      "version": "0.1.1-rc.11",
+      "file": "zodiacs-engine-0.1.1-rc.11.tgz",
+      "sha256": "d88e0ff8db91e1183789763ad32feb2dac61716e35ad7676a943f7a1ad377862",
+      "bytes": 70989,
+      "files": 30,
+      "sourceCommit": "be3585b3ebfeae1f69b56846b1cb6c31abf45735",
+      "status": "carried"
+    },
+    {
+      "version": "0.1.1-rc.12",
+      "file": "zodiacs-engine-0.1.1-rc.12.tgz",
+      "sha256": "c4cf150fe8fb0b37f5769993c2e63275b2e5ef47b97d8a118aff3be00ebaf7f0",
+      "bytes": 73398,
+      "files": 30,
+      "sourceCommit": "a1d0f2c6cefb2e83df397195515fa0558cf31185",
+      "status": "carried"
+    },
+    {
+      "version": "0.1.1-rc.13",
+      "file": "zodiacs-engine-0.1.1-rc.13.tgz",
+      "sha256": "12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840",
+      "bytes": 79092,
+      "files": 30,
+      "sourceCommit": "f05ea02b3254ac5c00d203d64d2caf53e44c083a",
+      "status": "carried"
+    },
+    {
+      "version": "0.1.1-rc.14",
+      "file": "zodiacs-engine-0.1.1-rc.14.tgz",
+      "sha256": "adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e",
+      "bytes": 87415,
+      "files": 30,
+      "sourceCommit": "03db4bb602377896283775920519b26d1f19a890",
+      "status": "carried"
+    }
+  ]
+}

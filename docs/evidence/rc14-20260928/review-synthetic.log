@@ -1,0 +1,59 @@
+== synthetic-binding
+  *   7507314 merge side2
+  |\  
+  | * 96ad41c remove 0.0.2
+  | * 8e32a34 carry 0.0.2
+  |/  
+  *   ef05eb8 merge side
+  |\  
+  | * 7a0c182 restore 0.0.1
+  | * eabd776 repack 0.0.1 (breach)
+  * | ec904d5 unrelated
+  |/  
+  * 2a35b85 carry 0.0.1
+
+$ rc.13 check (scripts/verify-archive-binding.mjs at 4eee700)
+  1 carried archive paths each hold one byte sequence in history.
+  No archive artifacts/zodiacs-engine-9.9.9.tgz is carried for 9.9.9 yet; skipping the source binding check.
+  exit 0
+
+  manifest commit 6d41ae7: ["0.0.1 556aef627638 carried"]
+
+$ rc.14 check (scripts/verify-archive-binding.mjs in this checkout)
+  No archive artifacts/zodiacs-engine-9.9.9.tgz is carried for 9.9.9 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::artifacts/zodiacs-engine-0.0.1.tgz is not a gzip-compressed tar archive.
+  ::error file=artifacts/zodiacs-engine-0.0.2.tgz::artifacts/zodiacs-engine-0.0.2.tgz was committed and is missing from HEAD; nothing under artifacts/ is ever removed.
+  ::error file=artifacts/zodiacs-engine-0.0.2.tgz::artifacts/zodiacs-engine-0.0.2.tgz held bytes its manifest entry does not allow; a version string names one byte sequence.
+    sha256 af5c8183b2c2133bfb2429be4a68a7fdc40154240567881fcd83b446a85fadf9 in 1 commit(s): 8e32a34bbaac
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::artifacts/zodiacs-engine-0.0.1.tgz held bytes its manifest entry does not allow; a version string names one byte sequence.
+    sha256 e1510363ebd5c1698888cd8e3f99b427be4ace5ab817adeae650d887740b833a in 1 commit(s): eabd77614c45
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::The source commit of 0.0.1 (556aef627638…) is version 9.9.9, not 0.0.1.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::0.0.1 (556aef627638…) was introduced by 7a0c1826f8e0, which is neither its source commit nor a child of it.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::0.0.1 (556aef627638…) is not a gzip-compressed tar archive.
+  7 archive binding failures.
+  exit 1
+
+== synthetic-breach
+  * 06487d5 swap rc.11 back to the superseded 13d637db bytes
+  * 33f8263 carry rc.11 (d88e0ff8)
+
+$ rc.13 check (scripts/verify-archive-binding.mjs at 4eee700)
+  1 carried archive paths each hold one byte sequence in history (rc.11's recorded breach excepted).
+  No archive artifacts/zodiacs-engine-9.9.9.tgz is carried for 9.9.9 yet; skipping the source binding check.
+  exit 0
+
+  manifest commit 39724ef: ["0.1.1-rc.11 13d637db21e3 superseded","0.1.1-rc.11 d88e0ff8db91 carried"]
+
+$ rc.14 check (scripts/verify-archive-binding.mjs in this checkout)
+  No archive artifacts/zodiacs-engine-9.9.9.tgz is carried for 9.9.9 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/zodiacs-engine-0.1.1-rc.11.tgz::artifacts/zodiacs-engine-0.1.1-rc.11.tgz does not match its manifest entry.
+    carried:  sha256 13d637db21e3e444c783fd85832e4f61dfdb4b7777b2c84038ec887b47029c4e, 70676 bytes, 30 files
+    recorded: sha256 d88e0ff8db91e1183789763ad32feb2dac61716e35ad7676a943f7a1ad377862, 70989 bytes, 30 files
+  ::error file=artifacts/zodiacs-engine-0.1.1-rc.11.tgz::artifacts/zodiacs-engine-0.1.1-rc.11.tgz held bytes its manifest entry does not allow; a version string names one byte sequence.
+    sha256 13d637db21e3e444c783fd85832e4f61dfdb4b7777b2c84038ec887b47029c4e in 2 commit(s): 39724ef399ed, 06487d5380e0
+  ::error file=artifacts/zodiacs-engine-0.1.1-rc.11.tgz::The source commit of 0.1.1-rc.11 (13d637db21e3…), 00bdae79a9256c2bba4294ed07af79e323c6cd66, is not in the history of HEAD.
+  ::error file=artifacts/zodiacs-engine-0.1.1-rc.11.tgz::The source commit of 0.1.1-rc.11 (d88e0ff8db91…), be3585b3ebfeae1f69b56846b1cb6c31abf45735, is not in the history of HEAD.
+  4 archive binding failures.
+  exit 1
+
+summary: synthetic-binding rc.13 exit 0, rc.14 exit 1; synthetic-breach rc.13 exit 0, rc.14 exit 1

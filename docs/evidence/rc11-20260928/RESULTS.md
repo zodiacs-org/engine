@@ -7,6 +7,8 @@ and sibling JSON/review files describe the **original candidate**, not that
 repair. Their original `13d637db…` archive remains recoverable from
 [immutable commit 00bdae79](https://github.com/zodiacs-org/engine/blob/00bdae79a9256c2bba4294ed07af79e323c6cd66/artifacts/zodiacs-engine-0.1.1-rc.11.tgz).
 
+Scratch paths in six files here were neutralized on 2026-09-28; nothing else in those files changed.
+
 2026-09-28. Review candidate; not an npm publication, merge or deployment.
 The immutable starting point is engine
 `f5f33892a95cd0d6cd4a11a80e66f802b11bccfa`, the merged rc.10 release.
@@ -71,7 +73,7 @@ in `scripts/verify-rc10-compatibility.mjs` and the review record.
 - This is a Phase 2 feature slice. It does not complete Phase 2 or establish
   a Swiss Ephemeris replacement. The brief's 0.01-arcsecond physical
   declination target remains unqualified by these tests.
-- The published site continuation adopts **rc.10**, preserving Opus's pending
+- The published site continuation adopts **rc.10**, preserving the pending
   site PR #588 budget fix. It does not silently adopt this newer candidate.
   Engine PR #5's historical full Swiss record for its new points was not in
   the published handoff; the site continuation names that evidence gap.

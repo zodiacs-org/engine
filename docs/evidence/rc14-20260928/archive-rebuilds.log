@@ -1,0 +1,12 @@
+== node v22.22.2, npm 10.9.7
+No archive artifacts/zodiacs-engine-0.1.1-rc.14.tgz is carried for 0.1.1-rc.14 yet; skipping the rebuild of HEAD.
+0.1.1-rc.7 (49b2b03f50fe…) is byte-identical to a rebuild of source commit 6e14f3f7c5e3 on Node v22.22.2: sha256 49b2b03f50fea8a625d443d4fd0f6d03ffc22831e54009fd09c49d07c8698f90, 39252 bytes.
+0.1.1-rc.8 (3b934376fa53…) is byte-identical to a rebuild of source commit 352ea49d9e1d on Node v22.22.2: sha256 3b934376fa53983cbdd7eb1a6ecf0eb0d50fbc49df01bc610b20c63bd5d12be6, 51748 bytes.
+0.1.1-rc.9 (bb5592302b1f…) is byte-identical to a rebuild of source commit 82aad2fcc9b2 on Node v22.22.2: sha256 bb5592302b1fa542cc745a9410b5a77faf49bbf4e205347ab771810efc300a20, 55576 bytes.
+0.1.1-rc.10 (a377cdc8c12e…) is byte-identical to a rebuild of source commit 9c4f3fd77b5d on Node v22.22.2: sha256 a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c, 61318 bytes.
+0.1.1-rc.11 (13d637db21e3…) is byte-identical to a rebuild of source commit 00bdae79a925 on Node v22.22.2: sha256 13d637db21e3e444c783fd85832e4f61dfdb4b7777b2c84038ec887b47029c4e, 70676 bytes.
+0.1.1-rc.11 (d88e0ff8db91…) is byte-identical to a rebuild of source commit be3585b3ebfe on Node v22.22.2: sha256 d88e0ff8db91e1183789763ad32feb2dac61716e35ad7676a943f7a1ad377862, 70989 bytes.
+0.1.1-rc.12 (c4cf150fe8fb…) is byte-identical to a rebuild of source commit a1d0f2c6cefb on Node v22.22.2: sha256 c4cf150fe8fb0b37f5769993c2e63275b2e5ef47b97d8a118aff3be00ebaf7f0, 73398 bytes.
+0.1.1-rc.13 (12db9dce0f2c…) is byte-identical to a rebuild of source commit f05ea02b3254 on Node v22.22.2: sha256 12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840, 79092 bytes.
+8 recorded archives (7 carried, 1 superseded) and their receipts hold only their recorded bytes across 46 commits, and each is bound to its source commit.
+exit=0

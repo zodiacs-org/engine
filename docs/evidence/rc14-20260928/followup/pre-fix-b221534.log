@@ -1,0 +1,192 @@
+== b221534's scripts/verify-archive-binding.mjs, with this checkout's scripts/verify-archive-binding.test.mjs
+
+ RUN  v2.1.9 <tmp>/prefix-b221534
+
+ ❯ scripts/verify-archive-binding.test.mjs (23 tests | 7 failed) 169985ms
+   ✓ archive binding check > passes a clean history and skips the rebuild until the version's archive exists 308ms
+   ✓ archive binding check > sees a rewrite on a side branch hidden by merge simplification 442ms
+   ✓ archive binding check > sees an archive carried and removed on a merged side branch 440ms
+   ✓ archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 1514ms
+   ✓ archive binding check > refuses a rewritten manifest that whitelists replaced bytes 685ms
+   ✓ archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 784ms
+   ✓ archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 316ms
+   ✓ archive binding check > reads HEAD from git objects, never the working tree 641ms
+   ✓ archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 4339ms
+   ✓ archive binding check > checks the receipt of every version, not only the current one 327ms
+   ✓ archive binding check > refuses an archive carried by a commit that does not follow its source commit 339ms
+   ✓ archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata 974ms
+   × archive binding check > refuses numeric identifiers above 2^53 - 1, where npm's semver.eq takes two versions for one 507ms
+     → expected +0 to be 1 // Object.is equality
+   × archive binding check > refuses names that a case-insensitive or normalizing file system takes for one: variants of artifacts/, or two archives in it 1948ms
+     → expected { Artifacts: 1, ARTIFACTS: 1, …(4) } to deeply equal { Artifacts: 1, ARTIFACTS: 1, …(4) }
+   ✓ archive binding check > rebuilds with its own npm ci, whatever the checkout's node_modules holds 13567ms
+   ✓ archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH 1048ms
+   × archive binding check > never runs a git that npm run puts on PATH from the checkout 2128ms
+     → expected 'artifacts/zodiacs-engine-0.0.1.tgz is…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+   × archive binding check > keeps code that an .npmrc names for NODE_OPTIONS out of the check and its rebuilds 2114ms
+     → expected 'artifacts/zodiacs-engine-0.0.1.tgz is…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+   × archive binding check > refuses a TMPDIR inside the checkout, or with a node_modules or package.json above it 2170ms
+     → expected +0 to be 1 // Object.is equality
+   × archive binding check > runs no hook from the checkout's .git 134033ms
+     → expected 'artifacts/zodiacs-engine-0.0.1.tgz is…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+   × archive binding check > ignores replace refs and grafts in the checkout's .git 351ms
+     → expected +0 to be 1 // Object.is equality
+   ✓ archive binding check > refuses an archive without a manifest entry, and a shallow checkout 518ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses numeric identifiers above 2^53 - 1, where npm's semver.eq takes two versions for one
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:452:25
+    450|     pair.source("0.0.2");
+    451|     const both = pair.check();
+    452|     expect(both.status).toBe(1);
+       |                         ^
+    453|     expect(both.output).toContain(`The recorded version "${b}" is not …
+    454|     expect(both.output).toContain(`The carried versions ${a} and ${b} …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses names that a case-insensitive or normalizing file system takes for one: variants of artifacts/, or two archives in it
+AssertionError: expected { Artifacts: 1, ARTIFACTS: 1, …(4) } to deeply equal { Artifacts: 1, ARTIFACTS: 1, …(4) }
+
+- Expected
++ Received
+
+  Object {
+    "ARTIFACTS": 1,
+    "Artifacts": 1,
+-   "artifacts‌": 1,
++   "artifacts‌": 0,
+    "artifactſ": 1,
+    "artıfacts": 1,
+-   "ａrtifacts": 1,
++   "ａrtifacts": 0,
+  }
+
+ ❯ scripts/verify-archive-binding.test.mjs:497:91
+    495|       return { name, commit, result: variant.check() };
+    496|     });
+    497|     expect(Object.fromEntries(variants.map(({ name, result }) => [name…
+       |                                                                                           ^
+    498|     for (const { name, commit, result } of variants) {
+    499|       expect(result.output).toContain(`${JSON.stringify(name)} is not …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > never runs a git that npm run puts on PATH from the checkout
+AssertionError: expected 'artifacts/zodiacs-engine-0.0.1.tgz is…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1.tgz is not the archive HEAD
++ artifacts/zodiacs-engine-0.0.1.tgz is byte-identical to a rebuild of HEAD (1806e9a8473d) on Node v22.22.2: sha256 022ea85067290ead013320b27b7094a8ba9857857ea052a1793ed69ae581beda, 559 bytes.
++ 1 recorded archives (1 carried, 0 superseded) and their receipts hold only their recorded bytes across 3 commits, and each is bound to its source commit.
++
+
+ ❯ honestFailure scripts/verify-archive-binding.test.mjs:171:25
+    169| /** The honest verdict on changedUnderSameVersion's HEAD. */
+    170| function honestFailure(result) {
+    171|   expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+       |                         ^
+    172|   expect(result.output).toContain("package/dist/index.js");
+    173|   expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:597:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > keeps code that an .npmrc names for NODE_OPTIONS out of the check and its rebuilds
+AssertionError: expected 'artifacts/zodiacs-engine-0.0.1.tgz is…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1.tgz is not the archive HEAD
++ artifacts/zodiacs-engine-0.0.1.tgz is byte-identical to a rebuild of HEAD (ef5a45f322b8) on Node v22.22.2: sha256 022ea85067290ead013320b27b7094a8ba9857857ea052a1793ed69ae581beda, 559 bytes.
++ 1 recorded archives (1 carried, 0 superseded) and their receipts hold only their recorded bytes across 3 commits, and each is bound to its source commit.
++
+
+ ❯ honestFailure scripts/verify-archive-binding.test.mjs:171:25
+    169| /** The honest verdict on changedUnderSameVersion's HEAD. */
+    170| function honestFailure(result) {
+    171|   expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+       |                         ^
+    172|   expect(result.output).toContain("package/dist/index.js");
+    173|   expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:613:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses a TMPDIR inside the checkout, or with a node_modules or package.json above it
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:628:27
+    626|     expect(r.git("status", "--porcelain")).toBe("");
+    627|     const inside = r.checkEnv({ TMPDIR: join(r.dir, ".tmp") });
+    628|     expect(inside.status).toBe(1);
+       |                           ^
+    629|     expect(inside.output).toContain("(TMPDIR) is inside the checkout");
+    630|     // Outside the checkout but below a node_modules or a package.json…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > runs no hook from the checkout's .git
+AssertionError: expected 'artifacts/zodiacs-engine-0.0.1.tgz is…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1.tgz is not the archive HEAD
++ artifacts/zodiacs-engine-0.0.1.tgz is byte-identical to a rebuild of HEAD (caf28600fdb7) on Node v22.22.2: sha256 022ea85067290ead013320b27b7094a8ba9857857ea052a1793ed69ae581beda, 559 bytes.
++ 1 recorded archives (1 carried, 0 superseded) and their receipts hold only their recorded bytes across 3 commits, and each is bound to its source commit.
++
+
+ ❯ honestFailure scripts/verify-archive-binding.test.mjs:171:25
+    169| /** The honest verdict on changedUnderSameVersion's HEAD. */
+    170| function honestFailure(result) {
+    171|   expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+       |                         ^
+    172|   expect(result.output).toContain("package/dist/index.js");
+    173|   expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:651:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > ignores replace refs and grafts in the checkout's .git
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ scripts/verify-archive-binding.test.mjs:665:28
+    663|       replaced.git("rev-parse", `${replaced.c1}:artifacts/zodiacs-engi…
+    664|     const swapped = replaced.check();
+    665|     expect(swapped.status).toBe(1);
+       |                            ^
+    666|     expect(swapped.output).toContain(`sha256 ${sha256(evil)}`);
+    667|     // A graft would hide a commit that held other bytes, restored by …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+ Test Files  1 failed (1)
+      Tests  7 failed | 16 passed (23)
+   Start at  23:44:00
+   Duration  170.85s (transform 100ms, setup 0ms, collect 95ms, tests 169.99s, environment 0ms, prepare 112ms)
+

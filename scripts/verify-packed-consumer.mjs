@@ -1,16 +1,34 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdtempSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { isAbsolute, join, resolve } from "node:path";
+import { dirname, isAbsolute, join, resolve } from "node:path";
 
+// astronomy-engine 2.1.19 ships ESM in a package without "type": "module"; plain
+// Node loads it as ESM only from 20.19.0 on the 20 line and from 22.7.0 on.
+const [major, minor] = process.versions.node.split(".").map(Number);
+if (!((major === 20 && minor >= 19) || (major === 22 && minor >= 7) || major > 22)) {
+  console.error(`Node ${process.version} is outside @zodiacs/engine's supported range (^20.19.0 || >=22.7.0): ` +
+    "it would load astronomy-engine's ESM as CommonJS. Use Node 20.19.0, 22.7.0 or later.");
+  process.exit(1);
+}
 const artifactArgument = process.argv[2];
 assert(artifactArgument, "Usage: consumer:smoke /absolute/path/to/engine.tgz");
 assert(isAbsolute(artifactArgument), "Pass the exact packed artifact as an absolute path.");
 const artifact = realpathSync(artifactArgument);
-const directory = mkdtempSync(join(tmpdir(), "zodiacs-engine-consumer-"));
 const manifest = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+// The consumer lives in a fresh temporary directory, removed however the check ends.
+const directory = mkdtempSync(join(tmpdir(), "zodiacs-engine-consumer-"));
+let report;
+try {
+// Module resolution walks up the directory tree, so a node_modules above the
+// consumer would leak packages into it. Refuse such a location outright.
+for (let parent = dirname(directory); ; parent = dirname(parent)) {
+  assert(!existsSync(join(parent, "node_modules")),
+    `${join(parent, "node_modules")} lies above the temporary consumer; set TMPDIR to a directory with no node_modules above it.`);
+  if (dirname(parent) === parent) break;
+}
 const run = (command, args) =>
   execFileSync(command, args, {
     cwd: directory,
@@ -33,6 +51,8 @@ const installed = JSON.parse(
   readFileSync(join(directory, "node_modules/@zodiacs/engine/package.json"), "utf8")
 );
 assert.equal(installed.version, manifest.version);
+assert.equal(installed.license, "MIT AND CC-BY-4.0");
+assert.deepEqual(installed.engines, { node: "^20.19.0 || >=22.7.0" });
 assert(
   realpathSync(join(directory, "node_modules/@zodiacs/engine")).startsWith(realpathSync(directory))
 );
@@ -43,7 +63,8 @@ writeFileSync(
   join(directory, "consumer.ts"),
   `
 import { natalChart, transits, synastry, moonPhase, positions, progressedInstant, progressedBodies, PROGRESSION_DAYS_PER_YEAR, type BodyPosition, type DateInput, type Chart, type BirthInput, type ChartFlag, saturnReturn } from "@zodiacs/engine";
-import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, type ChartDeclinations, type ConfiguredAspectResult } from "@zodiacs/engine";
+import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, type AspectPolicy, type ChartDeclinations, type ConfiguredAspectResult } from "@zodiacs/engine";
+import { EPHEMERIS_SPAN, SUN_BOUND_LATITUDE, type DeclinationRow } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
 import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith, type CrossingSearchResult, type LongitudeCrossing } from "@zodiacs/engine/crossings";
@@ -56,7 +77,13 @@ const chart: Chart = natalChart(resolveBirth({date: "2000-02-29", time: "12:00",
 const declinations: ChartDeclinations = chartDeclinations(chart);
 const configured: ConfiguredAspectResult = findConfiguredAspects(chart.bodies, createAspectPolicy({aspects: [{type: "quincunx", orb: {applying: 2, separating: 1, stationary: 0.5}}], bodyOrbs: {Moon: 1}}));
 const rightAscension: number | null = eclipticToEquatorial(90, 5, 23.4).ra;
-void declinations; void configured; void rightAscension;
+const arithmetic: AspectPolicy["conventions"]["arithmetic"] = configured.policy.conventions.arithmetic;
+void declinations; void configured; void rightAscension; void arithmetic;
+const margin: DeclinationRow["boundMarginArcsec"] = declinations.rows[0].boundMarginArcsec;
+const spanStart: -730000 = EPHEMERIS_SPAN.daysFromJ2000.from;
+const spanScale: "TT" = EPHEMERIS_SPAN.timeScale;
+const sunLatitude: number = SUN_BOUND_LATITUDE;
+void margin; void spanStart; void spanScale; void sunLatitude;
 transits(chart, "2026-09-07T12:00:00Z");
 synastry(chart, { utc: "2001-01-01", timeKnown: false });
 moonPhase("2024-04-08T18:21:00Z");
@@ -78,22 +105,24 @@ const parsed = parseNatalEnvelope(encoded);
 if (parsed.ok) { natalChart(natalReplayInput(parsed.envelope)); redactNatalEnvelope(parsed.envelope); }
 `
 );
-run(process.execPath, [
-  resolve(directory, "node_modules/typescript/bin/tsc"),
-  "--strict",
-  "--module",
-  "nodenext",
-  "--target",
-  "ES2022",
-  "--noEmit",
-  "consumer.ts"
-]);
+// An explicit project: "types": [] keeps @types packages in parent directories
+// out of the check, so only the packed declarations and TypeScript's own
+// default library (ES2022 with DOM) are in scope.
+writeFileSync(
+  join(directory, "tsconfig.json"),
+  JSON.stringify({
+    compilerOptions: { strict: true, module: "nodenext", moduleResolution: "nodenext", target: "ES2022", noEmit: true, types: [] },
+    files: ["consumer.ts"]
+  }, null, 2)
+);
+run(process.execPath, [resolve(directory, "node_modules/typescript/bin/tsc"), "-p", "tsconfig.json"]);
 writeFileSync(
   join(directory, "consumer.mjs"),
   `
 import assert from "node:assert/strict";
 import { natalChart, positions, transits, synastry, moonPhase, progressedInstant, progressedBodies, PROGRESSION_DAYS_PER_YEAR, ENGINE_VERSION } from "@zodiacs/engine";
-import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, declinationsForBodies } from "@zodiacs/engine";
+import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, declinationsForBodies, findDeclinationAspects } from "@zodiacs/engine";
+import { EPHEMERIS_SPAN, SUN_BOUND_LATITUDE } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
 import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "@zodiacs/engine/crossings";
@@ -126,6 +155,40 @@ assert.equal(chartDeclinations({...chart.input, deltaT: 1000}).deltaT.seconds, 1
 assert.deepEqual(chartDeclinations(chart), declinations);
 assert(Math.abs(eclipticToEquatorial(90, 5, 23.4).dec - 28.4) < 1e-12);
 assert.equal(declinationsForBodies([{body: "Synthetic", lon: 90, lat: 5}], 23.4).rows[0].outOfBounds, true);
+// Exact binary decisions: 8 + 2^-50 is outside an 8° conjunction; 6.3 − 314 + 360 − 45 is exactly the double 7.3.
+assert.equal(findConfiguredAspects([{body: "Mars", lon: 7.6999999999999895, speed: 1}, {body: "Saturn", lon: 359.7, speed: 0}], createAspectPolicy()).aspects.length, 0);
+assert.equal(findConfiguredAspects([{body: "Jupiter", lon: 6.3, speed: 0}, {body: "Sun", lon: 314, speed: 0}], createAspectPolicy({bodies: ["Jupiter", "Sun"], aspects: [{type: "semisquare", orb: 7.3}]})).aspects[0].orb, 7.3);
+assert.equal(createAspectPolicy().conventions.arithmetic, "exact-binary64;reported-orb-rounded-half-even");
+assert.equal(findDeclinationAspects([{body: "A", lon: 0, lat: 0.1}, {body: "B", lon: 10, lat: 1.1}], 0).length, 0);
+// By convention the Sun is not flagged while its latitude is within SUN_BOUND_LATITUDE; its margin is still
+// reported. At this solstice the engine puts it 0.19" beyond the bound, where the real Sun is 0.59" inside.
+const solstice = chartDeclinations({utc: "2024-06-20T20:51:00Z", latitude: 10, longitude: 20, houseSystem: "placidus"});
+const solsticeSun = solstice.rows.find((row) => row.body === "Sun");
+assert(Math.abs(solsticeSun.lat) <= SUN_BOUND_LATITUDE);
+assert(solsticeSun.boundMarginArcsec > 0 && solsticeSun.boundMarginArcsec < 1);
+assert.equal(solsticeSun.outOfBounds, false);
+for (const row of solstice.rows.filter((item) => item.body !== "Sun")) {
+  assert.equal(row.boundMarginArcsec, (Math.abs(row.dec) - solstice.trueObliquity) * 3600);
+  assert.equal(row.outOfBounds, row.boundMarginArcsec > 0);
+}
+assert.equal(declinationsForBodies([{body: "Sun", lon: 90, lat: 8}], 23.4).rows[0].outOfBounds, true);
+// Far from J2000 the ephemeris's own solar latitude passes 0.001°; the chart's Sun is still not flagged.
+const farSun = chartDeclinations({utc: "2600-06-21T00:50:56Z", timeKnown: false}).rows.find((row) => row.body === "Sun");
+assert(Math.abs(farSun.lat) > SUN_BOUND_LATITUDE && farSun.boundMarginArcsec > 0);
+assert.equal(farSun.outOfBounds, false);
+// Longitude separations are reduced exactly modulo 360 and rounded once.
+assert.equal(findDeclinationAspects([{body: "A", lon: -0.1, lat: 0}, {body: "B", lon: 0.2, lat: 0}], 23.4)[0].separation, 0.30000000000000004);
+assert.equal(findDeclinationAspects([{body: "A", lon: -1e-20, lat: 0}, {body: "B", lon: 0, lat: 0}], 23.4)[0].separation, 1e-20);
+// Outside astronomy-engine's tabulated years every calculation refuses at once.
+assert.deepEqual(EPHEMERIS_SPAN.daysFromJ2000, {from: -730000, to: 730000});
+assert.throws(() => positions("4000-01-01"), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
+assert.throws(() => natalChart({utc: "0001-01-01"}), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
+for (const label of [" Mars", "Mars\\u0000", "x".repeat(200)]) {
+  assert.throws(() => declinationsForBodies([{body: label, lon: 0, lat: 0}], 23.4), RangeError);
+  assert.throws(() => createAspectPolicy({bodies: [label]}), RangeError);
+}
+assert.throws(() => progressedBodies(8.64e15, 8.64e15), RangeError);
+assert.throws(() => positions(-8.64e15), RangeError);
 assert.equal(transits(chart, "2026-09-07T12:00:00Z").positions.length, 12);
 assert(synastry(chart, {utc: "2000-01-01", timeKnown: false}).aspects.length > 0);
 assert(moonPhase("2024-04-08T18:21:00Z").illumination < 0.001);
@@ -263,22 +326,21 @@ const degreePerDay = (_body, date) => (date.getTime() / 86_400_000) % 360;
 assert.deepEqual(findLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), 1).map((crossing) => crossing.retrograde), [false]);
 assert.deepEqual(searchLongitudeCrossingsWith(degreePerDay, "Sun", 1.5, new Date(0), new Date(4 * 86_400_000), {stepDays: 1, maxSamples: 2}), {status: "refused", reason: "sample-budget", samples: 0, maxSamples: 2, crossings: []});
 assert.equal(searchLongitudeCrossings("Moon", 0, new Date("2000-01-01"), new Date("2007-02-13"), {stepDays: 0.25}).crossings.length, 95);
-console.log(JSON.stringify({version: ENGINE_VERSION, configuredAspects: "passed", chartDeclinations: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
+console.log(JSON.stringify({version: ENGINE_VERSION, configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());
-console.log(
-  JSON.stringify(
-    {
-      ...result,
-      artifact,
-      sha256: createHash("sha256").update(readFileSync(artifact)).digest("hex"),
-      runtime: process.version,
-      typescript: "5.9.3",
-      directory,
-      types: "passed"
-    },
-    null,
-    2
-  )
-);
+report = {
+  ...result,
+  artifact,
+  sha256: createHash("sha256").update(readFileSync(artifact)).digest("hex"),
+  runtime: process.version,
+  typescript: "5.9.3",
+  typeRoots: "none (types: [])",
+  directory,
+  types: "passed"
+};
+} finally {
+  rmSync(directory, { recursive: true, force: true });
+}
+console.log(JSON.stringify({ ...report, directoryRemoved: !existsSync(directory) }, null, 2));

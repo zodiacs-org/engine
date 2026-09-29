@@ -8,6 +8,7 @@ import {
   findConfiguredAspects
 } from "./configured-aspects.js";
 import type { AspectPolicyInput, AspectPosition, ConfiguredAspect, ConfiguredAspectMotion } from "./configured-aspects.js";
+import { abs, cmp, isRoundedHalfEven, sub } from "./fixtures/rational.js";
 import type { BodyPosition } from "./types.js";
 
 const position = (body: string, lon: number, speed = 1): AspectPosition => ({body,lon,speed});
@@ -16,13 +17,15 @@ function policy(options: AspectPolicyInput = {}) {
   return createAspectPolicy({bodies:["A","B"],aspects:[{type:"conjunction",orb:8}],...options});
 }
 const semanticFields = ({a,b,type,applying}: Pick<ConfiguredAspect,"a"|"b"|"type"|"applying">) => ({a,b,type,applying});
+/** Each orb is the exact |separation − angle| of the input doubles, rounded once, and within its limit. */
 function expectBoundedOrbs(aspects: readonly ConfiguredAspect[], bodies: readonly AspectPosition[]) {
   for (const aspect of aspects) {
     const a=bodies.find(body=>body.body===aspect.a)!;
     const b=bodies.find(body=>body.body===aspect.b)!;
-    const difference=Math.abs(a.lon-b.lon);
-    const distance=Math.min(difference,360-difference);
-    expect(aspect.orb).toBe(Math.abs(distance-aspect.angle));
+    const difference=abs(sub(a.lon,b.lon));
+    const distance=cmp(difference,180)>0?sub(360,difference):difference;
+    expect(isRoundedHalfEven(aspect.orb,abs(sub(distance,aspect.angle)))).toBe(true);
+    expect(aspect.orb).toBeLessThanOrEqual(aspect.maximumOrb);
   }
 }
 
@@ -122,6 +125,15 @@ describe("orb resolution and matching", () => {
     expect(findConfiguredAspects([...at].reverse(),DEFAULT_ASPECT_POLICY).aspects[0]).toMatchObject({type:"square",orb:7});
     expect(findConfiguredAspects(outside,DEFAULT_ASPECT_POLICY).aspects).toEqual([]);
     expect(findConfiguredAspects([...outside].reverse(),DEFAULT_ASPECT_POLICY).aspects).toEqual([]);
+    // Across 0°, with b ≠ 0: the exact separation is 8 + 2^-50, just outside the 8° conjunction.
+    const wrappedOutside=[position("Mars",7.6999999999999895),position("Saturn",359.7,0)];
+    expect(findConfiguredAspects(wrappedOutside,DEFAULT_ASPECT_POLICY).aspects).toEqual([]);
+    expect(findConfiguredAspects([...wrappedOutside].reverse(),DEFAULT_ASPECT_POLICY).aspects).toEqual([]);
+    // One ulp lower, 7.699999999999989 is exactly 8° from 359.7: included at the inclusive limit.
+    const wrappedAt=[position("Mars",359.7-352),position("Saturn",359.7,0)];
+    expect(wrappedAt[0]!.lon).toBe(7.699999999999989);
+    expect(findConfiguredAspects(wrappedAt,DEFAULT_ASPECT_POLICY).aspects[0]).toMatchObject({type:"conjunction",orb:8,maximumOrb:8});
+    expect(findConfiguredAspects([...wrappedAt].reverse(),DEFAULT_ASPECT_POLICY).aspects[0]).toMatchObject({type:"conjunction",orb:8});
   });
 
   it("uses separate applying, separating and stationary limits, including exact boundaries", () => {

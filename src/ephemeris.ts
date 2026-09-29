@@ -11,15 +11,16 @@ import {
   Vector,
   e_tilt
 } from "astronomy-engine";
+import type { AstroTime } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
-import { declinationsForBodies } from "./declination.js";
+import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
 import { deltaT, deltaTAt } from "./deltat.js";
 import type { DeltaT } from "./deltat.js";
 import { computeAngles, computeHouses, eastPointOf, vertexOf } from "./houses.js";
 import { hellenisticLots, meanApogee, meanNodeLongitude, sectOf } from "./points.js";
-import { outsideReferenceSpan } from "./reference-span.js";
+import { EPHEMERIS_SPAN, outsideReferenceSpan } from "./reference-span.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "./signs.js";
 import type {
   BodyName,
@@ -47,6 +48,44 @@ function clock(pin?: number): void {
   SetDeltaTFunction(pin === undefined ? deltaT : () => pin);
 }
 
+/**
+ * astronomy-engine reports an input it cannot evaluate by throwing a string,
+ * not an Error. Every entry point below turns such a throw into a RangeError
+ * that keeps the original value as its cause; Error objects pass unchanged.
+ */
+function evaluated<T>(run: () => T): T {
+  try {
+    return run();
+  } catch (thrown) {
+    if (thrown instanceof Error) throw thrown;
+    throw new RangeError(`The ephemeris could not evaluate this instant: ${String(thrown)}`, { cause: thrown });
+  }
+}
+
+/**
+ * astronomy-engine's time for date on the installed ΔT clock, refused outside
+ * EPHEMERIS_SPAN. Every evaluation below takes its time from here, so the
+ * instant and each speed sample are checked, on a pinned clock as on the model.
+ */
+function timeOf(date: Date): AstroTime {
+  // A speed sample past the end of JavaScript's Date range is an invalid Date,
+  // and so outside the span too.
+  const time = Number.isFinite(date.getTime()) ? MakeTime(date) : null;
+  const { from, to } = EPHEMERIS_SPAN.daysFromJ2000;
+  if (!(time !== null && time.tt >= from && time.tt <= to)) {
+    throw new RangeError(
+      "The instant is outside the ephemeris span: its Terrestrial Time, and that of each speed sample, " +
+        "must lie between 0001-04-30T12:00 and 3998-09-03T12:00 TT, the years astronomy-engine tabulates (EPHEMERIS_SPAN)."
+    );
+  }
+  return time;
+}
+
+/** A speed sample stepDays from date. */
+function sampleDate(date: Date, stepDays: number): Date {
+  return new Date(date.getTime() + stepDays * 86_400_000);
+}
+
 function deltaTFor(date: Date, pin: number | undefined): DeltaT {
   if (pin !== undefined) {
     return { seconds: pin, sigma: null, model: "pinned", table: null, tableDigest: null, segment: "pinned" };
@@ -67,7 +106,7 @@ const PLANETS = [
 ] as const satisfies readonly { name: BodyName; body: Body }[];
 
 function eclipticOfDate(body: Body, date: Date): { lon: number; lat: number } {
-  const time = MakeTime(date);
+  const time = timeOf(date);
   const equatorial = GeoVector(body, time, true);
   const ecliptic = RotateVector(Rotation_EQJ_ECT(time), equatorial);
   const lon = normalizeLongitude(Math.atan2(ecliptic.y, ecliptic.x) * RAD);
@@ -76,13 +115,13 @@ function eclipticOfDate(body: Body, date: Date): { lon: number; lat: number } {
 }
 
 function moonOfDate(date: Date): { lon: number; lat: number } {
-  const moon = EclipticGeoMoon(MakeTime(date));
+  const moon = EclipticGeoMoon(timeOf(date));
   return { lon: normalizeLongitude(moon.lon), lat: moon.lat };
 }
 
 /** Ascending node of the Moon's instantaneous geocentric orbit plane. */
 function trueNodeLongitude(date: Date): number {
-  const time = MakeTime(date);
+  const time = timeOf(date);
   const state = GeoMoonState(time);
   const angularMomentum = {
     x: state.y * state.vz - state.z * state.vy,
@@ -108,29 +147,34 @@ function longitudeAt(body: BodyName, date: Date): number {
 }
 
 export function bodyLongitude(body: BodyName, date: Date): number {
-  clock();
-  return longitudeAt(body, date);
+  return evaluated(() => {
+    clock();
+    return longitudeAt(body, date);
+  });
 }
 
 /**
  * Longitude speed in degrees per day: the derivative of the longitude this
  * engine reports, by a central difference over plus/minus 0.001 day (86.4 s).
  * The true node keeps plus/minus six hours, where its short-period noise
- * would otherwise dominate.
+ * would otherwise dominate. Both samples must lie in EPHEMERIS_SPAN, so
+ * positions need an instant at least six hours inside it.
  */
 export const SPEED_STEP_DAYS = 0.001;
 export const NODE_SPEED_STEP_DAYS = 0.25;
 
 export function longitudeSpeed(body: BodyName, date: Date): number {
-  clock();
-  return speedAt(body, date);
+  return evaluated(() => {
+    clock();
+    return speedAt(body, date);
+  });
 }
 
 function speedAt(body: BodyName, date: Date): number {
   const stepDays =
     body === "North Node" || body === "South Node" ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
-  const before = longitudeAt(body, new Date(date.getTime() - stepDays * 86_400_000));
-  const after = longitudeAt(body, new Date(date.getTime() + stepDays * 86_400_000));
+  const before = longitudeAt(body, sampleDate(date, -stepDays));
+  const after = longitudeAt(body, sampleDate(date, stepDays));
   let difference = after - before;
   if (difference > 180) difference -= 360;
   if (difference < -180) difference += 360;
@@ -150,8 +194,10 @@ function position(body: BodyName, lon: number, lat: number, speed: number): Body
 }
 
 export function computeBodies(date: Date): BodyPosition[] {
-  clock();
-  return bodiesAt(date);
+  return evaluated(() => {
+    clock();
+    return bodiesAt(date);
+  });
 }
 
 function bodiesAt(date: Date): BodyPosition[] {
@@ -177,12 +223,14 @@ function bodiesAt(date: Date): BodyPosition[] {
 
 export function computeChart(input: ChartInput): Chart {
   const pin = input.deltaT;
-  clock(pin);
-  try {
-    return chartAt(input, pin);
-  } finally {
-    if (pin !== undefined) clock();
-  }
+  return evaluated(() => {
+    clock(pin);
+    try {
+      return chartAt(input, pin);
+    } finally {
+      if (pin !== undefined) clock();
+    }
+  });
 }
 
 function chartAt(input: ChartInput, pin: number | undefined): Chart {
@@ -195,7 +243,7 @@ function chartAt(input: ChartInput, pin: number | undefined): Chart {
     // Apparent sidereal time already carries the nutation in longitude, so the
     // ecliptic it is projected onto must be the true one of date: the mean
     // obliquity plus the nutation in obliquity, from the same model and on TT.
-    const time = MakeTime(input.utc);
+    const time = timeOf(input.utc);
     const angleInput = {
       gastHours: SiderealTime(time),
       latitude: input.latitude,
@@ -225,15 +273,15 @@ function chartAt(input: ChartInput, pin: number | undefined): Chart {
 
 /** The mean node and the mean apogee at an instant, on the engine's clock. */
 function meanLunarPoints(date: Date): { node: number; apogee: { lon: number; lat: number } } {
-  const time = MakeTime(date);
+  const time = timeOf(date);
   const centuries = time.tt / 36525;
   const nutation = e_tilt(time).dpsi / 3600;
   return { node: meanNodeLongitude(centuries, nutation), apogee: meanApogee(centuries, nutation) };
 }
 
 function centralSpeed(longitudeOf: (date: Date) => number, date: Date): number {
-  const before = longitudeOf(new Date(date.getTime() - SPEED_STEP_DAYS * 86_400_000));
-  const after = longitudeOf(new Date(date.getTime() + SPEED_STEP_DAYS * 86_400_000));
+  const before = longitudeOf(sampleDate(date, -SPEED_STEP_DAYS));
+  const after = longitudeOf(sampleDate(date, SPEED_STEP_DAYS));
   let difference = after - before;
   if (difference > 180) difference -= 360;
   if (difference < -180) difference += 360;
@@ -261,12 +309,14 @@ function pointPosition(point: PointName, lon: number, lat: number, speed: number
  */
 export function computePoints(chart: Chart): ChartPoints {
   const pin = chart.input.deltaT;
-  clock(pin);
-  try {
-    return pointsAt(chart);
-  } finally {
-    if (pin !== undefined) clock();
-  }
+  return evaluated(() => {
+    clock(pin);
+    try {
+      return pointsAt(chart);
+    } finally {
+      if (pin !== undefined) clock();
+    }
+  });
 }
 
 /**
@@ -287,13 +337,15 @@ export function computeChartDeclinations(chart: Chart): ChartDeclinations {
   if (pin !== undefined && (!Number.isFinite(pin) || typeof pin !== "number" || Math.abs(pin) > 1e10)) {
     throw new RangeError("declination chart deltaT must be finite and at most 1e10 seconds in size.");
   }
-  clock(pin);
-  try {
-    return { ...declinationsForBodies(bodies, e_tilt(MakeTime(date)).tobl),
-      utc: date.toISOString(), deltaT: deltaTFor(date, pin) };
-  } finally {
-    if (pin !== undefined) clock();
-  }
+  return evaluated(() => {
+    clock(pin);
+    try {
+      return { ...chartBodyDeclinations(bodies, e_tilt(timeOf(date)).tobl),
+        utc: date.toISOString(), deltaT: deltaTFor(date, pin) };
+    } finally {
+      if (pin !== undefined) clock();
+    }
+  });
 }
 
 function pointsAt(chart: Chart): ChartPoints {
@@ -309,7 +361,7 @@ function pointsAt(chart: Chart): ChartPoints {
   if (chart.angles === null || latitude === undefined || longitude === undefined) {
     return { sect: null, points };
   }
-  const time = MakeTime(utc);
+  const time = timeOf(utc);
   const angleInput = {
     gastHours: SiderealTime(time),
     latitude,

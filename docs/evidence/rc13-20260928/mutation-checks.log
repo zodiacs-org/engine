@@ -1,0 +1,6 @@
+# Mutants of src/exact.ts, each run against src/exact.test.ts and src/aspect-exactness.test.ts.
+# A mutant is caught when at least one test fails. Generated 2026-09-28T13:33:22Z on Node v22.22.2.
+no-half-even-fix: roundedValue ignores partials below a half-ulp tie => Tests  2 failed | 11 passed (13)
+drop-error-terms: add() drops each Fast2Sum error term => Tests  9 failed | 4 passed (13)
+float-rounding: roundedValue sums the partials in floating point => Tests  2 failed | 11 passed (13)
+sign-from-smallest-partial: signOf reads the smallest partial => Tests  8 failed | 5 passed (13)

@@ -1,0 +1,1540 @@
+{
+  "schema": "zodiacs.independent-progression-time.v1",
+  "timestamp": "2026-09-28T13:26:21.578312+00:00",
+  "allPassed": true,
+  "entry": "/tmp/claude-0/-home-user-site/25475091-052a-53d7-9cd4-cf04ce09dc68/isolated-tmp/rc13/package/dist/index.js",
+  "archive": "/tmp/claude-0/-home-user-site/25475091-052a-53d7-9cd4-cf04ce09dc68/scratchpad/engine-rc13/artifacts/zodiacs-engine-0.1.1-rc.13.tgz",
+  "bindingBefore": {
+    "archiveSha256": "12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840",
+    "archiveBytes": 79092,
+    "packageFiles": {
+      "dist/chunk-76IEYGXN.js": "39d4f46df4d3a1e88d3b603c591d4cd1561a57c5afa17cbafa01ca406863101c",
+      "dist/chunk-AECKV73C.js": "a812be9882c25f67c9fa8dfe19eb0d950a3867a7cdbede4c746c226ca760480c",
+      "dist/chunk-CJU35IJP.js": "16dd606996d707b59bee2c546dd00027535318cc59a43b4e34c31e9111121b20",
+      "dist/chunk-CPALRSPC.js": "9db1a3814ec9bd00a40d4bc295e348debd6108f62a322ed91d18610c81b9fb08",
+      "dist/chunk-IYNERVXW.js": "2d297d94afc12e305da43c865415bbf9c4bf0cd4292936c7c10089c8d41beb84",
+      "dist/chunk-ONBZ4HK7.js": "50f11205373c177c728ea8c7d50d41b19ff80cd9921eb51c6e907a8045f93308",
+      "dist/chunk-PFGUCNOK.js": "6d9d38ab4606288700b0959e732a61dfa5b4cdc570be21d17b4ac9b9fe1c0eb4",
+      "dist/chunk-YK7SXVIK.js": "47048243d32a842e9d50a5e79d221c5300602ba8599649f94d24f1a4a64c2b0a",
+      "dist/crossings.d.ts": "ca5f55a780ace4f14f857d04c6f1c94de8adcc0597bd09ee817bdb0686f3fa7b",
+      "dist/crossings.js": "bad1c9bcf76338a95d8c09d1019fb32a65f2d9622c611fd87f81a83392bd3f5f",
+      "dist/deltat.d.ts": "cf6e092131aa2c6f5a4a8893078503a35fe5e5ca4bdcb52741f07650a93a1b86",
+      "dist/deltat.js": "43b1503b6597e82ed6e920c18991703fe02be05856e6de0fc347e4abcf4c15e4",
+      "dist/geo.d.ts": "ed3f026e44168b42e17ff044074a4486fd19433b5c1c0865fc14f2b5e7594784",
+      "dist/geo.js": "65b0af0d4c6823483ad321ab91a703889303a6e8051f171d2de8fc3df7e94d64",
+      "dist/index.d.ts": "da68c5aba52cd07c1654b2d6eab29c44f553ac63d2da59e85e5c27aab1c78467",
+      "dist/index.js": "dc58ff2cc8d4ab0e31f04c7ab492fa7b1b47c40ea9691ae1b14a878c9fab2559",
+      "dist/internal-math-CGFfHR54.d.ts": "1deef658c0e48f217fc6d4d47154c6b56efa5db548f1e593f3b06b43f85b1f9c",
+      "dist/internal-math.d.ts": "0b8adc77431fea69b824ccb2cfbd6fed42d9a2adbfa9be5fef1f67be4c44b92a",
+      "dist/internal-math.js": "92937f99d6bb1904d0f360cecade2ee17544c248b838423217d8e69e39221765",
+      "dist/internal.d.ts": "e8ed348ae1f127b9507b22edd31a6e388a8956e48c5c78decc173d715f8451d8",
+      "dist/internal.js": "d83d05971352085ebf8e46cd256b19634745b7db15e7539ff36e43e859692d86",
+      "dist/receipt.d.ts": "f8c1419d8fedce69049ce61128607c5f898d458468d7c73bc5e68f60c1069fb7",
+      "dist/receipt.js": "2abac00b320487a20f39e0cc3d1ba40185214bc08c1026edc9c1e9cb2ceb436d",
+      "dist/types-BYay_rM2.d.ts": "ed0e5e109bcb6b5a4806ff59ba93663a01487a7b4bcd4fdcc430bb4cbc5b5a85",
+      "package.json": "561c9aad983e63be2abc28299f22ab39f075cd7cbb9cb9a65bfd17c437afaee5"
+    }
+  },
+  "bindingAfter": {
+    "archiveSha256": "12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840",
+    "archiveBytes": 79092,
+    "packageFiles": {
+      "dist/chunk-76IEYGXN.js": "39d4f46df4d3a1e88d3b603c591d4cd1561a57c5afa17cbafa01ca406863101c",
+      "dist/chunk-AECKV73C.js": "a812be9882c25f67c9fa8dfe19eb0d950a3867a7cdbede4c746c226ca760480c",
+      "dist/chunk-CJU35IJP.js": "16dd606996d707b59bee2c546dd00027535318cc59a43b4e34c31e9111121b20",
+      "dist/chunk-CPALRSPC.js": "9db1a3814ec9bd00a40d4bc295e348debd6108f62a322ed91d18610c81b9fb08",
+      "dist/chunk-IYNERVXW.js": "2d297d94afc12e305da43c865415bbf9c4bf0cd4292936c7c10089c8d41beb84",
+      "dist/chunk-ONBZ4HK7.js": "50f11205373c177c728ea8c7d50d41b19ff80cd9921eb51c6e907a8045f93308",
+      "dist/chunk-PFGUCNOK.js": "6d9d38ab4606288700b0959e732a61dfa5b4cdc570be21d17b4ac9b9fe1c0eb4",
+      "dist/chunk-YK7SXVIK.js": "47048243d32a842e9d50a5e79d221c5300602ba8599649f94d24f1a4a64c2b0a",
+      "dist/crossings.d.ts": "ca5f55a780ace4f14f857d04c6f1c94de8adcc0597bd09ee817bdb0686f3fa7b",
+      "dist/crossings.js": "bad1c9bcf76338a95d8c09d1019fb32a65f2d9622c611fd87f81a83392bd3f5f",
+      "dist/deltat.d.ts": "cf6e092131aa2c6f5a4a8893078503a35fe5e5ca4bdcb52741f07650a93a1b86",
+      "dist/deltat.js": "43b1503b6597e82ed6e920c18991703fe02be05856e6de0fc347e4abcf4c15e4",
+      "dist/geo.d.ts": "ed3f026e44168b42e17ff044074a4486fd19433b5c1c0865fc14f2b5e7594784",
+      "dist/geo.js": "65b0af0d4c6823483ad321ab91a703889303a6e8051f171d2de8fc3df7e94d64",
+      "dist/index.d.ts": "da68c5aba52cd07c1654b2d6eab29c44f553ac63d2da59e85e5c27aab1c78467",
+      "dist/index.js": "dc58ff2cc8d4ab0e31f04c7ab492fa7b1b47c40ea9691ae1b14a878c9fab2559",
+      "dist/internal-math-CGFfHR54.d.ts": "1deef658c0e48f217fc6d4d47154c6b56efa5db548f1e593f3b06b43f85b1f9c",
+      "dist/internal-math.d.ts": "0b8adc77431fea69b824ccb2cfbd6fed42d9a2adbfa9be5fef1f67be4c44b92a",
+      "dist/internal-math.js": "92937f99d6bb1904d0f360cecade2ee17544c248b838423217d8e69e39221765",
+      "dist/internal.d.ts": "e8ed348ae1f127b9507b22edd31a6e388a8956e48c5c78decc173d715f8451d8",
+      "dist/internal.js": "d83d05971352085ebf8e46cd256b19634745b7db15e7539ff36e43e859692d86",
+      "dist/receipt.d.ts": "f8c1419d8fedce69049ce61128607c5f898d458468d7c73bc5e68f60c1069fb7",
+      "dist/receipt.js": "2abac00b320487a20f39e0cc3d1ba40185214bc08c1026edc9c1e9cb2ceb436d",
+      "dist/types-BYay_rM2.d.ts": "ed0e5e109bcb6b5a4806ff59ba93663a01487a7b4bcd4fdcc430bb4cbc5b5a85",
+      "package.json": "561c9aad983e63be2abc28299f22ab39f075cd7cbb9cb9a65bfd17c437afaee5"
+    }
+  },
+  "scriptSha256": "b89c27ede566f9825363fe147de4c18da7e547b32d86e66e523d4b4abb69b437",
+  "bridgeSha256": "1f1f29876543e9bed9b2d9d81af874e282504ad32cfd601d00de0e9544b771cb",
+  "fixturesSha256": "27d79a7855a5e2b09ba038402e6fa9f7ebd6ec67a5e66173298c673834300f9d",
+  "caseCount": 204,
+  "oracle": {
+    "yearDaysNumerator": 1826211,
+    "yearDaysDenominator": 5000,
+    "outputRounding": "truncate toward zero",
+    "toleranceMs": 1
+  },
+  "maximumMappingErrorMs": 1,
+  "publishedWorkedExample": {
+    "source": "https://juanestadella.com/Predictive_Astrology_Juan-Estadella_3rd_edition.pdf",
+    "sourceSha256": "bf52656b367ad7d1415a7b021a0a0db3a609bf35c7a40053ff0622e7a3325622",
+    "printedPages": [
+      84,
+      85
+    ],
+    "birth": "1889-04-16T19:40:40Z",
+    "target": "1901-05-09T12:00:00Z",
+    "printedProgressedTime": "1889-04-28T21:06:27Z",
+    "toleranceMs": 5000,
+    "toleranceBasis": "book precision: 0.001 h birth time (3.6 s) + three six-decimal day values (0.13 s) + seconds truncation (1 s) = 4.73 s",
+    "errorMs": 3684,
+    "passed": true,
+    "bookArithmetic": {
+      "effectiveBirth": "1889-04-16T19:40:37.200Z",
+      "unroundedResult": "1889-04-28T21:06:27.8496Z",
+      "actualMs": -2545872812108,
+      "errorMs": 42.4,
+      "floorsToPrinted": true,
+      "toleranceMs": 50,
+      "passed": true
+    }
+  },
+  "results": [
+    {
+      "id": "epoch-iso",
+      "actualMs": 0,
+      "expectedMs": 0,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "epoch-number",
+      "actualMs": 0,
+      "expectedMs": 0,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "epoch-date",
+      "actualMs": 0,
+      "expectedMs": 0,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "prebirth-iso",
+      "actualMs": 943187624812,
+      "expectedMs": 943187624812,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "prebirth-number",
+      "actualMs": 943187624812,
+      "expectedMs": 943187624812,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "prebirth-date",
+      "actualMs": 943187624812,
+      "expectedMs": 943187624812,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "leap-birthday-iso",
+      "actualMs": 953901341072,
+      "expectedMs": 953901341072,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "leap-birthday-number",
+      "actualMs": 953901341072,
+      "expectedMs": 953901341072,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "leap-birthday-date",
+      "actualMs": 953901341072,
+      "expectedMs": 953901341072,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "century-nonleap-iso",
+      "actualMs": -2329775992619,
+      "expectedMs": -2329775992619,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "century-nonleap-number",
+      "actualMs": -2329775992619,
+      "expectedMs": -2329775992619,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "century-nonleap-date",
+      "actualMs": -2329775992619,
+      "expectedMs": -2329775992619,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "negative-epoch-iso",
+      "actualMs": -5360299550358,
+      "expectedMs": -5360299550358,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "negative-epoch-number",
+      "actualMs": -5360299550358,
+      "expectedMs": -5360299550358,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "negative-epoch-date",
+      "actualMs": -5360299550358,
+      "expectedMs": -5360299550358,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "cross-epoch-iso",
+      "actualMs": 2591937075,
+      "expectedMs": 2591937075,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "cross-epoch-number",
+      "actualMs": 2591937075,
+      "expectedMs": 2591937075,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "cross-epoch-date",
+      "actualMs": 2591937075,
+      "expectedMs": 2591937075,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "offset-input-iso",
+      "actualMs": 1126423611744,
+      "expectedMs": 1126423611744,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "offset-input-number",
+      "actualMs": 1126423611744,
+      "expectedMs": 1126423611744,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "offset-input-date",
+      "actualMs": 1126423611744,
+      "expectedMs": 1126423611744,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "published-chaplin-iso",
+      "actualMs": -2545872809316,
+      "expectedMs": -2545872809316,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "published-chaplin-number",
+      "actualMs": -2545872809316,
+      "expectedMs": -2545872809316,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "published-chaplin-date",
+      "actualMs": -2545872809316,
+      "expectedMs": -2545872809316,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "book-effective-birth-iso",
+      "actualMs": -2545872812108,
+      "expectedMs": -2545872812108,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "book-effective-birth-number",
+      "actualMs": -2545872812108,
+      "expectedMs": -2545872812108,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "book-effective-birth-date",
+      "actualMs": -2545872812108,
+      "expectedMs": -2545872812108,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-27",
+      "actualMs": -8640000000000000,
+      "expectedMs": -8640000000000000,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-28",
+      "actualMs": -8616344464266177,
+      "expectedMs": -8616344464266177,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-29",
+      "actualMs": -8616344464029622,
+      "expectedMs": -8616344464029621,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-30",
+      "actualMs": -8616344464029622,
+      "expectedMs": -8616344464029621,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-31",
+      "actualMs": -8616344464029622,
+      "expectedMs": -8616344464029621,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-32",
+      "actualMs": -8616344463793067,
+      "expectedMs": -8616344463793066,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-33",
+      "actualMs": -8592688928059244,
+      "expectedMs": -8592688928059243,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-34",
+      "actualMs": -8001752261923732,
+      "expectedMs": -8001752261923731,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-35",
+      "actualMs": -7978096726189909,
+      "expectedMs": -7978096726189909,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-36",
+      "actualMs": -7978096725953354,
+      "expectedMs": -7978096725953353,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-37",
+      "actualMs": -7978096725953354,
+      "expectedMs": -7978096725953353,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-38",
+      "actualMs": -7978096725953354,
+      "expectedMs": -7978096725953353,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-39",
+      "actualMs": -7978096725716798,
+      "expectedMs": -7978096725716798,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-40",
+      "actualMs": -7954441189982976,
+      "expectedMs": -7954441189982975,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-41",
+      "actualMs": -23655535970379,
+      "expectedMs": -23655535970379,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-42",
+      "actualMs": -236556,
+      "expectedMs": -236556,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-43",
+      "actualMs": -1,
+      "expectedMs": -1,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-44",
+      "actualMs": 0,
+      "expectedMs": 0,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-45",
+      "actualMs": 0,
+      "expectedMs": 0,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-46",
+      "actualMs": 236554,
+      "expectedMs": 236554,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-47",
+      "actualMs": 23655535970377,
+      "expectedMs": 23655535970377,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-48",
+      "actualMs": -23655535970378,
+      "expectedMs": -23655535970378,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-49",
+      "actualMs": -236555,
+      "expectedMs": -236555,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-50",
+      "actualMs": 0,
+      "expectedMs": 0,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-51",
+      "actualMs": 0,
+      "expectedMs": 0,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-52",
+      "actualMs": 0,
+      "expectedMs": 0,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-53",
+      "actualMs": 236555,
+      "expectedMs": 236555,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-54",
+      "actualMs": 23655535970378,
+      "expectedMs": 23655535970378,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-55",
+      "actualMs": -23655535970377,
+      "expectedMs": -23655535970377,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-56",
+      "actualMs": -236554,
+      "expectedMs": -236554,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-57",
+      "actualMs": 0,
+      "expectedMs": 0,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-58",
+      "actualMs": 0,
+      "expectedMs": 0,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-59",
+      "actualMs": 1,
+      "expectedMs": 1,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-60",
+      "actualMs": 236556,
+      "expectedMs": 236556,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-61",
+      "actualMs": 23655535970379,
+      "expectedMs": 23655535970379,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-62",
+      "actualMs": 7954441189982976,
+      "expectedMs": 7954441189982975,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-63",
+      "actualMs": 7978096725716798,
+      "expectedMs": 7978096725716798,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-64",
+      "actualMs": 7978096725953354,
+      "expectedMs": 7978096725953353,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-65",
+      "actualMs": 7978096725953354,
+      "expectedMs": 7978096725953353,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-66",
+      "actualMs": 7978096725953354,
+      "expectedMs": 7978096725953353,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-67",
+      "actualMs": 7978096726189909,
+      "expectedMs": 7978096726189909,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-68",
+      "actualMs": 8001752261923732,
+      "expectedMs": 8001752261923731,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-69",
+      "actualMs": 8592688928059244,
+      "expectedMs": 8592688928059243,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-70",
+      "actualMs": 8616344463793067,
+      "expectedMs": 8616344463793066,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-71",
+      "actualMs": 8616344464029622,
+      "expectedMs": 8616344464029621,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-72",
+      "actualMs": 8616344464029622,
+      "expectedMs": 8616344464029621,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-73",
+      "actualMs": 8616344464029622,
+      "expectedMs": 8616344464029621,
+      "errorMs": 1,
+      "passed": true
+    },
+    {
+      "id": "numeric-74",
+      "actualMs": 8616344464266177,
+      "expectedMs": 8616344464266177,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "numeric-75",
+      "actualMs": 8640000000000000,
+      "expectedMs": 8640000000000000,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-0",
+      "actualMs": 4288998426955,
+      "expectedMs": 4288998426955,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-1",
+      "actualMs": -1607873340202,
+      "expectedMs": -1607873340202,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-2",
+      "actualMs": 2451100191968,
+      "expectedMs": 2451100191968,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-3",
+      "actualMs": 5577598953278,
+      "expectedMs": 5577598953278,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-4",
+      "actualMs": 2764665598503,
+      "expectedMs": 2764665598503,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-5",
+      "actualMs": 6731051703597,
+      "expectedMs": 6731051703597,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-6",
+      "actualMs": 6579099124843,
+      "expectedMs": 6579099124843,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-7",
+      "actualMs": -3620777638270,
+      "expectedMs": -3620777638270,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-8",
+      "actualMs": -1170956094701,
+      "expectedMs": -1170956094701,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-9",
+      "actualMs": -2320687384845,
+      "expectedMs": -2320687384845,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-10",
+      "actualMs": -2207652816083,
+      "expectedMs": -2207652816083,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-11",
+      "actualMs": -2421799909027,
+      "expectedMs": -2421799909027,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-12",
+      "actualMs": -5305158582993,
+      "expectedMs": -5305158582993,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-13",
+      "actualMs": 5005138910035,
+      "expectedMs": 5005138910035,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-14",
+      "actualMs": 4593964136651,
+      "expectedMs": 4593964136651,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-15",
+      "actualMs": 7057097845728,
+      "expectedMs": 7057097845728,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-16",
+      "actualMs": 2197725243064,
+      "expectedMs": 2197725243064,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-17",
+      "actualMs": 987297174675,
+      "expectedMs": 987297174675,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-18",
+      "actualMs": -3101705439464,
+      "expectedMs": -3101705439464,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-19",
+      "actualMs": 906696879387,
+      "expectedMs": 906696879387,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-20",
+      "actualMs": 6446861002960,
+      "expectedMs": 6446861002960,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-21",
+      "actualMs": 4028189993091,
+      "expectedMs": 4028189993091,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-22",
+      "actualMs": -479554227528,
+      "expectedMs": -479554227528,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-23",
+      "actualMs": -3622956405400,
+      "expectedMs": -3622956405400,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-24",
+      "actualMs": 2629624392329,
+      "expectedMs": 2629624392329,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-25",
+      "actualMs": 4511073389889,
+      "expectedMs": 4511073389889,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-26",
+      "actualMs": -2565722620043,
+      "expectedMs": -2565722620043,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-27",
+      "actualMs": -3632709156465,
+      "expectedMs": -3632709156465,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-28",
+      "actualMs": -3760949388949,
+      "expectedMs": -3760949388949,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-29",
+      "actualMs": 804641248109,
+      "expectedMs": 804641248109,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-30",
+      "actualMs": -1628993785777,
+      "expectedMs": -1628993785777,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-31",
+      "actualMs": 2271357524785,
+      "expectedMs": 2271357524785,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-32",
+      "actualMs": -5013812996489,
+      "expectedMs": -5013812996489,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-33",
+      "actualMs": 1627878619489,
+      "expectedMs": 1627878619489,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-34",
+      "actualMs": 1159285281573,
+      "expectedMs": 1159285281573,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-35",
+      "actualMs": -145209802297,
+      "expectedMs": -145209802297,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-36",
+      "actualMs": -5136028094185,
+      "expectedMs": -5136028094185,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-37",
+      "actualMs": 4595825908817,
+      "expectedMs": 4595825908817,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-38",
+      "actualMs": 3724313410137,
+      "expectedMs": 3724313410137,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-39",
+      "actualMs": -3292801016705,
+      "expectedMs": -3292801016705,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-40",
+      "actualMs": 2772947943440,
+      "expectedMs": 2772947943440,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-41",
+      "actualMs": 1730129003068,
+      "expectedMs": 1730129003068,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-42",
+      "actualMs": -1143054711870,
+      "expectedMs": -1143054711870,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-43",
+      "actualMs": 1077929073774,
+      "expectedMs": 1077929073774,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-44",
+      "actualMs": -5033217831255,
+      "expectedMs": -5033217831255,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-45",
+      "actualMs": -2681255089503,
+      "expectedMs": -2681255089503,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-46",
+      "actualMs": 5699498512132,
+      "expectedMs": 5699498512132,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-47",
+      "actualMs": -1622336841287,
+      "expectedMs": -1622336841287,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-48",
+      "actualMs": 7148055970748,
+      "expectedMs": 7148055970748,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-49",
+      "actualMs": -5026355443531,
+      "expectedMs": -5026355443531,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-50",
+      "actualMs": 6764101989488,
+      "expectedMs": 6764101989488,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-51",
+      "actualMs": -1452175982108,
+      "expectedMs": -1452175982108,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-52",
+      "actualMs": 658851740825,
+      "expectedMs": 658851740825,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-53",
+      "actualMs": -3481766357596,
+      "expectedMs": -3481766357596,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-54",
+      "actualMs": 3602945549199,
+      "expectedMs": 3602945549199,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-55",
+      "actualMs": -2635398769885,
+      "expectedMs": -2635398769885,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-56",
+      "actualMs": 1576707332565,
+      "expectedMs": 1576707332565,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-57",
+      "actualMs": 2981290200378,
+      "expectedMs": 2981290200378,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-58",
+      "actualMs": -2949851698427,
+      "expectedMs": -2949851698427,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-59",
+      "actualMs": -336927030467,
+      "expectedMs": -336927030467,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-60",
+      "actualMs": 6273495753310,
+      "expectedMs": 6273495753310,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-61",
+      "actualMs": 6346123008399,
+      "expectedMs": 6346123008399,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-62",
+      "actualMs": 6880109391139,
+      "expectedMs": 6880109391139,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-63",
+      "actualMs": 4109759485848,
+      "expectedMs": 4109759485848,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-64",
+      "actualMs": 156793019651,
+      "expectedMs": 156793019651,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-65",
+      "actualMs": 6104758245870,
+      "expectedMs": 6104758245870,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-66",
+      "actualMs": -2676095956257,
+      "expectedMs": -2676095956257,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-67",
+      "actualMs": -3980979658224,
+      "expectedMs": -3980979658224,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-68",
+      "actualMs": -3139628471375,
+      "expectedMs": -3139628471375,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-69",
+      "actualMs": -87439601165,
+      "expectedMs": -87439601165,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-70",
+      "actualMs": 6831106911762,
+      "expectedMs": 6831106911762,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-71",
+      "actualMs": -4403941718962,
+      "expectedMs": -4403941718962,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-72",
+      "actualMs": -5310981425341,
+      "expectedMs": -5310981425341,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-73",
+      "actualMs": 3092309041366,
+      "expectedMs": 3092309041366,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-74",
+      "actualMs": -3666135677832,
+      "expectedMs": -3666135677832,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-75",
+      "actualMs": 3948885994432,
+      "expectedMs": 3948885994432,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-76",
+      "actualMs": 5602915858469,
+      "expectedMs": 5602915858469,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-77",
+      "actualMs": 6426102315327,
+      "expectedMs": 6426102315327,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-78",
+      "actualMs": 3095039185802,
+      "expectedMs": 3095039185802,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-79",
+      "actualMs": 1370603155565,
+      "expectedMs": 1370603155565,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-80",
+      "actualMs": -3766846756899,
+      "expectedMs": -3766846756899,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-81",
+      "actualMs": 5113108874826,
+      "expectedMs": 5113108874826,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-82",
+      "actualMs": 5985441279509,
+      "expectedMs": 5985441279509,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-83",
+      "actualMs": 5782470397669,
+      "expectedMs": 5782470397669,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-84",
+      "actualMs": 4528225245627,
+      "expectedMs": 4528225245627,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-85",
+      "actualMs": -728952880741,
+      "expectedMs": -728952880741,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-86",
+      "actualMs": 6059246914564,
+      "expectedMs": 6059246914564,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-87",
+      "actualMs": 4820859320554,
+      "expectedMs": 4820859320554,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-88",
+      "actualMs": -4132187175753,
+      "expectedMs": -4132187175753,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-89",
+      "actualMs": 6620239063149,
+      "expectedMs": 6620239063149,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-90",
+      "actualMs": -5169576346370,
+      "expectedMs": -5169576346370,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-91",
+      "actualMs": 3072752841440,
+      "expectedMs": 3072752841440,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-92",
+      "actualMs": 6799902825452,
+      "expectedMs": 6799902825452,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-93",
+      "actualMs": 3878007835577,
+      "expectedMs": 3878007835577,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-94",
+      "actualMs": -3263469614506,
+      "expectedMs": -3263469614506,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-95",
+      "actualMs": 525377189243,
+      "expectedMs": 525377189243,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-96",
+      "actualMs": -1084070569619,
+      "expectedMs": -1084070569619,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-97",
+      "actualMs": -857299273494,
+      "expectedMs": -857299273494,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-98",
+      "actualMs": 1699350541959,
+      "expectedMs": 1699350541959,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-99",
+      "actualMs": 6881260894182,
+      "expectedMs": 6881260894182,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-100",
+      "actualMs": 3273130717533,
+      "expectedMs": 3273130717533,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-101",
+      "actualMs": 945156673018,
+      "expectedMs": 945156673018,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-102",
+      "actualMs": -1295062940619,
+      "expectedMs": -1295062940619,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-103",
+      "actualMs": -5221915255397,
+      "expectedMs": -5221915255397,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-104",
+      "actualMs": 2174746002567,
+      "expectedMs": 2174746002567,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-105",
+      "actualMs": 3944862513315,
+      "expectedMs": 3944862513315,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-106",
+      "actualMs": -2245587806785,
+      "expectedMs": -2245587806785,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-107",
+      "actualMs": 3937558046217,
+      "expectedMs": 3937558046217,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-108",
+      "actualMs": 6270069595885,
+      "expectedMs": 6270069595885,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-109",
+      "actualMs": -5052221676651,
+      "expectedMs": -5052221676651,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-110",
+      "actualMs": 2490098450053,
+      "expectedMs": 2490098450053,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-111",
+      "actualMs": 4115928863390,
+      "expectedMs": 4115928863390,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-112",
+      "actualMs": -1399512347745,
+      "expectedMs": -1399512347745,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-113",
+      "actualMs": 4182214884800,
+      "expectedMs": 4182214884800,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-114",
+      "actualMs": 5429463805437,
+      "expectedMs": 5429463805437,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-115",
+      "actualMs": 310086265296,
+      "expectedMs": 310086265296,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-116",
+      "actualMs": 4341395649168,
+      "expectedMs": 4341395649168,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-117",
+      "actualMs": -3212783514455,
+      "expectedMs": -3212783514455,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-118",
+      "actualMs": 3189323343426,
+      "expectedMs": 3189323343426,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-119",
+      "actualMs": -383736856460,
+      "expectedMs": -383736856460,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-120",
+      "actualMs": 1127235036475,
+      "expectedMs": 1127235036475,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-121",
+      "actualMs": -2175531490224,
+      "expectedMs": -2175531490224,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-122",
+      "actualMs": 3991430994518,
+      "expectedMs": 3991430994518,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-123",
+      "actualMs": -1701225589074,
+      "expectedMs": -1701225589074,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-124",
+      "actualMs": -1315490993606,
+      "expectedMs": -1315490993606,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-125",
+      "actualMs": 4897562538953,
+      "expectedMs": 4897562538953,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-126",
+      "actualMs": -1912045845959,
+      "expectedMs": -1912045845959,
+      "errorMs": 0,
+      "passed": true
+    },
+    {
+      "id": "deterministic-127",
+      "actualMs": 1086645957365,
+      "expectedMs": 1086645957365,
+      "errorMs": 0,
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "limits": [
+    "Time mapping only; not physical ephemeris or astrological validity.",
+    "Published example uses rounded intermediate manual arithmetic.",
+    "Published planetary table, angles, houses and mean node are not accepted by this gate."
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "runtime": "v22.22.2",
+  "builds": {
+    "rc13": {
+      "version": "0.1.1-rc.13",
+      "solsticesScanned": 7995,
+      "chartSunFlaggedOutOfBounds": 0,
+      "firstFlagged": [],
+      "lastSolstice": {
+        "utc": "3998-06-19T17:56:46.180Z",
+        "latArcsec": 29.385,
+        "marginArcsec": 29.385,
+        "flagged": false
+      },
+      "latitudeBeyond3_6Arcsec": 5403,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1408,
+      "before2000LatitudeBeyond3_6Arcsec": {
+        "solstices": 2512,
+        "largestMarginArcsec": -3.608
+      },
+      "yearsWithinTheLimitAtBothSolstices": {
+        "longestRun": {
+          "from": 1641,
+          "to": 2413,
+          "length": 773
+        }
+      },
+      "solarLatitudeArcsecByMillennium": {
+        "1-1000": [
+          -68.4,
+          34.3
+        ],
+        "1001-2000": [
+          -17,
+          1.5
+        ],
+        "2001-3000": [
+          0,
+          8.3
+        ],
+        "3001-4000": [
+          1.5,
+          29.4
+        ]
+      }
+    },
+    "rc14-first-build": {
+      "version": "0.1.1-rc.14",
+      "solsticesScanned": 7995,
+      "chartSunFlaggedOutOfBounds": 1408,
+      "firstFlagged": [
+        {
+          "utc": "2591-06-20T20:25:27.709Z",
+          "latArcsec": 3.605,
+          "marginArcsec": 3.605
+        },
+        {
+          "utc": "2592-06-20T02:20:30.470Z",
+          "latArcsec": 3.61,
+          "marginArcsec": 3.61
+        },
+        {
+          "utc": "2593-06-20T08:09:10.361Z",
+          "latArcsec": 3.616,
+          "marginArcsec": 3.616
+        }
+      ],
+      "lastSolstice": {
+        "utc": "3998-06-19T17:56:46.180Z",
+        "latArcsec": 29.385,
+        "marginArcsec": 29.385,
+        "flagged": true
+      },
+      "latitudeBeyond3_6Arcsec": 5403,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1408,
+      "before2000LatitudeBeyond3_6Arcsec": {
+        "solstices": 2512,
+        "largestMarginArcsec": -3.608
+      },
+      "yearsWithinTheLimitAtBothSolstices": {
+        "longestRun": {
+          "from": 1641,
+          "to": 2413,
+          "length": 773
+        }
+      },
+      "solarLatitudeArcsecByMillennium": {
+        "1-1000": [
+          -68.4,
+          34.3
+        ],
+        "1001-2000": [
+          -17,
+          1.5
+        ],
+        "2001-3000": [
+          0,
+          8.3
+        ],
+        "3001-4000": [
+          1.5,
+          29.4
+        ]
+      }
+    },
+    "rc14": {
+      "version": "0.1.1-rc.14",
+      "solsticesScanned": 7995,
+      "chartSunFlaggedOutOfBounds": 0,
+      "firstFlagged": [],
+      "lastSolstice": {
+        "utc": "3998-06-19T17:56:46.180Z",
+        "latArcsec": 29.385,
+        "marginArcsec": 29.385,
+        "flagged": false
+      },
+      "latitudeBeyond3_6Arcsec": 5403,
+      "latitudeBeyond3_6ArcsecWithPositiveMargin": 1408,
+      "before2000LatitudeBeyond3_6Arcsec": {
+        "solstices": 2512,
+        "largestMarginArcsec": -3.608
+      },
+      "yearsWithinTheLimitAtBothSolstices": {
+        "longestRun": {
+          "from": 1641,
+          "to": 2413,
+          "length": 773
+        }
+      },
+      "solarLatitudeArcsecByMillennium": {
+        "1-1000": [
+          -68.4,
+          34.3
+        ],
+        "1001-2000": [
+          -17,
+          1.5
+        ],
+        "2001-3000": [
+          0,
+          8.3
+        ],
+        "3001-4000": [
+          1.5,
+          29.4
+        ]
+      }
+    }
+  }
+}

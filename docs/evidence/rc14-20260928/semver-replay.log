@@ -1,0 +1,50 @@
+replayed carrier: 25e3ba6 Carry the second rc.14 build (replay of a4ee426)
+npm's semver.eq("0.1.1-rc.14+evil", "0.1.1-rc.14"): true
+
+#### A. A second archive under 0.1.1-rc.14+evil, with changed engine code
+source d8ff541 0.1.1-rc.14+evil, with the new-Moon phase renamed: packed zodiacs-engine-0.1.1-rc.14+evil.tgz, sha256 dff11acaa0d79aad9fb86c9e915dc8d36de54b6b07c18b4f8b90718987d14377, 86867 bytes
+HEAD: 9b27229 Carry 0.1.1-rc.14+evil; HEAD back to 0.1.1-rc.14, version 0.1.1-rc.14
+== the check at 90d6cdb, default
+artifacts/zodiacs-engine-0.1.1-rc.14.tgz is byte-identical to a rebuild of HEAD (9b27229a69ab) on Node v22.22.2: sha256 d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4, 86867 bytes.
+10 recorded archives (9 carried, 1 superseded) and their receipts hold only their recorded bytes across 49 commits, and each is bound to its source commit.
+exit=0
+== the check at 90d6cdb, --rebuild-all
+artifacts/zodiacs-engine-0.1.1-rc.14.tgz is byte-identical to a rebuild of HEAD (9b27229a69ab) on Node v22.22.2: sha256 d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4, 86867 bytes.
+0.1.1-rc.14 (d3106eb39fca…) is byte-identical to a rebuild of source commit 90d6cdba8925 on Node v22.22.2: sha256 d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4, 86867 bytes.
+0.1.1-rc.14+evil (dff11acaa0d7…) is byte-identical to a rebuild of source commit d8ff54159163 on Node v22.22.2: sha256 dff11acaa0d79aad9fb86c9e915dc8d36de54b6b07c18b4f8b90718987d14377, 86867 bytes.
+10 recorded archives (9 carried, 1 superseded) and their receipts hold only their recorded bytes across 49 commits, and each is bound to its source commit.
+exit=0
+== this checkout's check, default
+::error file=artifacts::artifacts/zodiacs-engine-0.1.1-rc.14+evil.sha256 is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 1 commit(s): 9b27229a69ab.
+::error file=artifacts::artifacts/zodiacs-engine-0.1.1-rc.14+evil.tgz is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 1 commit(s): 9b27229a69ab.
+::error file=artifacts/archives.json::The recorded version "0.1.1-rc.14+evil" is not a strict semantic version (SemVer 2.0.0 with no "v" prefix and no build metadata).
+::error file=artifacts/archives.json::The carried versions 0.1.1-rc.14 and 0.1.1-rc.14+evil are equal as npm compares versions (semver.eq); a version string names one byte sequence.
+4 archive binding failures.
+exit=1
+== this checkout's check, --rebuild-all
+::error file=artifacts::artifacts/zodiacs-engine-0.1.1-rc.14+evil.sha256 is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 1 commit(s): 9b27229a69ab.
+::error file=artifacts::artifacts/zodiacs-engine-0.1.1-rc.14+evil.tgz is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 1 commit(s): 9b27229a69ab.
+::error file=artifacts/archives.json::The recorded version "0.1.1-rc.14+evil" is not a strict semantic version (SemVer 2.0.0 with no "v" prefix and no build metadata).
+::error file=artifacts/archives.json::The carried versions 0.1.1-rc.14 and 0.1.1-rc.14+evil are equal as npm compares versions (semver.eq); a version string names one byte sequence.
+4 archive binding failures.
+exit=1
+
+#### B. A packed README changed under 0.1.1-rc.14+changed
+HEAD: 9a68681 Change the packed README; version 0.1.1-rc.14+changed, version 0.1.1-rc.14+changed
+== the check at 90d6cdb, default
+No archive artifacts/zodiacs-engine-0.1.1-rc.14+changed.tgz is carried for 0.1.1-rc.14+changed yet; skipping the rebuild of HEAD.
+9 recorded archives (8 carried, 1 superseded) and their receipts hold only their recorded bytes across 48 commits, and each is bound to its source commit.
+exit=0
+== the check at 90d6cdb, --rebuild-all
+No archive artifacts/zodiacs-engine-0.1.1-rc.14+changed.tgz is carried for 0.1.1-rc.14+changed yet; skipping the rebuild of HEAD.
+0.1.1-rc.14 (d3106eb39fca…) is byte-identical to a rebuild of source commit 90d6cdba8925 on Node v22.22.2: sha256 d3106eb39fcad0b0cee1ad9010c5b44c01acb8fc3a1bac28a84abf66bacee5e4, 86867 bytes.
+9 recorded archives (8 carried, 1 superseded) and their receipts hold only their recorded bytes across 48 commits, and each is bound to its source commit.
+exit=0
+== this checkout's check, default
+::error file=package.json::The version in package.json at HEAD, "0.1.1-rc.14+changed", is not a strict semantic version (SemVer 2.0.0 with no "v" prefix and no build metadata).
+1 archive binding failure.
+exit=1
+== this checkout's check, --rebuild-all
+::error file=package.json::The version in package.json at HEAD, "0.1.1-rc.14+changed", is not a strict semantic version (SemVer 2.0.0 with no "v" prefix and no build metadata).
+1 archive binding failure.
+exit=1

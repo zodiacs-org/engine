@@ -1,0 +1,31 @@
+# New and changed tests run against the rc.12 sources of src/configured-aspects.ts,
+# src/declination.ts and src/ephemeris.ts (HEAD df01d2d), with every other file as in rc.13.
+# Generated 2026-09-28T13:20:02Z on Node v22.22.2.
+   × the Sun defines the out-of-bounds limit > never flags the Sun out of bounds at the June solstice
+   × the Sun defines the out-of-bounds limit > never flags the Sun out of bounds at the December solstice
+   × the Sun defines the out-of-bounds limit > keeps the strict rule for every other body, by exact label
+   × orb resolution and matching > does not round a just-outside default boundary into an eligible aspect
+   × one body-label rule for configured aspects and declinations > createAspectPolicy bodies rejects untrimmed, control-character, empty and over-long labels
+   × one body-label rule for configured aspects and declinations > createAspectPolicy bodyOrbs rejects untrimmed, control-character, empty and over-long labels
+   × one body-label rule for configured aspects and declinations > findConfiguredAspects rejects untrimmed, control-character, empty and over-long labels
+   × one body-label rule for configured aspects and declinations > declinationsForBodies rejects untrimmed, control-character, empty and over-long labels
+   × one body-label rule for configured aspects and declinations > findDeclinationAspects rejects untrimmed, control-character, empty and over-long labels
+   × one body-label rule for configured aspects and declinations > declinationOrb first rejects untrimmed, control-character, empty and over-long labels
+   × one body-label rule for configured aspects and declinations > declinationOrb second rejects untrimmed, control-character, empty and over-long labels
+   × one body-label rule for configured aspects and declinations > rejects the three labels the declination API used to accept
+   × secondary progressed positions > throws RangeError, not astronomy-engine's string, where speed samples leave the Date range
+   × ephemeris failures surface as RangeError > positions wraps a thrown string in a RangeError that keeps it as the cause
+   × ephemeris failures surface as RangeError > natalChart wraps a thrown string in a RangeError that keeps it as the cause
+   × ephemeris failures surface as RangeError > chartDeclinations wraps a thrown string in a RangeError that keeps it as the cause
+   × ephemeris failures surface as RangeError > progressedBodies wraps a thrown string in a RangeError that keeps it as the cause
+   × ephemeris failures surface as RangeError > moonPhase wraps a thrown string in a RangeError that keeps it as the cause
+   × configured aspects under exact binary semantics > decide the three review reproductions as exact arithmetic does
+   × configured aspects under exact binary semantics > agree with the exact rational oracle on a decimal grid, wrapped and unwrapped, in both row orders
+   × configured aspects under exact binary semantics > agree with the oracle with several bodies, rules, caps and luminaries
+   ✓ configured aspects under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic
+   ✓ configured aspects under exact binary semantics > uses a faithful rc.11 copy: away from boundaries its decisions match the oracle
+   × declination parallels under exact binary semantics > decide the reviewed decimal boundaries exactly
+   × declination parallels under exact binary semantics > agree with the exact rational oracle on decimal and rotated declinations
+⎯⎯⎯⎯⎯⎯ Failed Tests 23 ⎯⎯⎯⎯⎯⎯⎯
+ Test Files  6 failed (6)
+      Tests  23 failed | 98 passed (121)

@@ -1,0 +1,106 @@
+
+### N1. archive mode 100755 in a middle commit
+expectation: check should fail; exit 1: REFUSED (good)
+  ::error file=artifacts::artifacts/zodiacs-engine-0.0.1.tgz is not a regular file (git mode 100755, blob) in 1 commit(s): 73e3326c76f5.
+  1 archive binding failure.
+
+### N1b. receipt mode 100755 at HEAD
+expectation: check should fail; exit 1: REFUSED (good)
+  ::error file=artifacts::artifacts/zodiacs-engine-0.0.1.sha256 is not a regular file (git mode 100755, blob) in 1 commit(s): 2df32ed27281.
+  1 archive binding failure.
+
+### N2. artifacts/ as a gitlink (mode 160000) in a middle commit
+expectation: check should fail; exit 1: REFUSED (good)
+  ::error file=artifacts::artifacts is not a directory (git mode 160000, commit) in 1 commit(s): 5a4389bdaabc.
+  1 archive binding failure.
+
+### N3. second archive for 0.0.1 via build metadata (0.0.1+evil)
+expectation: check should fail; exit 1: REFUSED (good)
+  ::error file=artifacts::artifacts/zodiacs-engine-0.0.1+evil.sha256 is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 2 commit(s): 1c185f348c17, b0f4cd74265c.
+  ::error file=artifacts::artifacts/zodiacs-engine-0.0.1+evil.tgz is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 2 commit(s): 1c185f348c17, b0f4cd74265c.
+  ::error file=artifacts/archives.json::The recorded version "0.0.1+evil" is not a strict semantic version (SemVer 2.0.0 with no "v" prefix and no build metadata).
+  ::error file=artifacts/archives.json::The carried versions 0.0.1 and 0.0.1+evil are equal as npm compares versions (semver.eq); a version string names one byte sequence.
+  4 archive binding failures.
+
+### N3b. second archive for 0.0.1 via a v prefix (v0.0.1)
+expectation: check should fail; exit 1: REFUSED (good)
+  ::error file=artifacts::artifacts/zodiacs-engine-v0.0.1.sha256 is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 2 commit(s): 13576a0203e2, 5f3b0c2d974b.
+  ::error file=artifacts::artifacts/zodiacs-engine-v0.0.1.tgz is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 100644, blob) in 2 commit(s): 13576a0203e2, 5f3b0c2d974b.
+  ::error file=artifacts/archives.json::The recorded version "v0.0.1" is not a strict semantic version (SemVer 2.0.0 with no "v" prefix and no build metadata).
+  ::error file=artifacts/archives.json::The carried versions 0.0.1 and v0.0.1 are equal as npm compares versions (semver.eq); a version string names one byte sequence.
+  4 archive binding failures.
+
+### N4. duplicate carried entry for 0.0.1
+expectation: check should fail; exit 1: REFUSED (good)
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/archives.json::zodiacs-engine-0.0.1.tgz has more than one carried entry.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::artifacts/zodiacs-engine-0.0.1.tgz does not match its manifest entry.
+    carried:  sha256 9f2a32842f58840679d1ca6521663e25b57282e38e41d3b19267f615721bc0fa, 397 bytes, 7 files
+    recorded: sha256 0000000000000000000000000000000000000000000000000000000000000000, 397 bytes, 7 files
+  ::error file=artifacts/zodiacs-engine-0.0.1.sha256::The receipt for 0.0.1 at HEAD does not name its recorded bytes.
+    expected: "0000000000000000000000000000000000000000000000000000000000000000  zodiacs-engine-0.0.1.tgz\n"
+    found:    "9f2a32842f58840679d1ca6521663e25b57282e38e41d3b19267f615721bc0fa  zodiacs-engine-0.0.1.tgz\n"
+  ::error file=artifacts/zodiacs-engine-0.0.1.sha256::artifacts/zodiacs-engine-0.0.1.sha256 held bytes its manifest entry does not allow; a version string names one byte sequence.
+    receipt "9f2a32842f58840679d1ca6521663e25b57282e38e41d3b19267f615721bc0fa  zodiacs-engine-0.0.1.tgz\n" in 3 commit(s): d723e8f2a206, 1f42d2b00b17, 44f0d39f277c
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::artifacts/zodiacs-engine-0.0.1.tgz held bytes its manifest entry does not allow; a version string names one byte sequence.
+    sha256 9f2a32842f58840679d1ca6521663e25b57282e38e41d3b19267f615721bc0fa in 3 commit(s): d723e8f2a206, 1f42d2b00b17, 44f0d39f277c
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::0.0.1 (000000000000…) never appears in the history of HEAD.
+  6 archive binding failures.
+
+### N4b. identical duplicate carried entry for 0.0.1
+expectation: check should fail; exit 1: REFUSED (good)
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/archives.json::zodiacs-engine-0.0.1.tgz has more than one carried entry.
+  1 archive binding failure.
+
+### N5. later commit edits 0.0.1's sourceCommit
+expectation: check should fail; exit 1: REFUSED (good)
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/archives.json::artifacts/archives.json drops or changes entries of its parent d94fb44994c5's (the manifest is append-only), in 1 commit(s): 0a4239e1e70a.
+  ::error file=artifacts/archives.json::artifacts/archives.json is not a prefix of HEAD's (the manifest is append-only), in 2 commit(s): d94fb44994c5, de908b991790.
+  2 archive binding failures.
+
+### N5b. sourceCommit re-pointed at an unrelated orphan with identical metadata (carrier not its child)
+expectation: check should fail; exit 1: REFUSED (good)
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/zodiacs-engine-0.0.1.tgz::0.0.1 (abf01e0c4922…) was introduced by 7dd6fd3e5def, which is neither its source commit nor a child of it.
+  1 archive binding failure.
+
+### N6-control. with --pinned-superseded on the command line
+expectation: check should pass; exit 0: passed
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  2 recorded archives (1 carried, 1 superseded) and their receipts hold only their recorded bytes across 4 commits, and each is bound to its source commit.
+
+### N6. the same pin offered through environment variables only
+expectation: check should fail; exit 1: REFUSED (good)
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/archives.json::0.0.1 (fab6640b6e0b…) is a superseded entry that this script does not pin; superseded archives are pinned in scripts/verify-archive-binding.mjs, not added through the manifest.
+  1 archive binding failure.
+
+### N6b. --pinned-superseded=FILE (equals form) on the command line
+expectation: check should fail; exit 1: REFUSED (good)
+  No archive artifacts/zodiacs-engine-0.0.2.tgz is carried for 0.0.2 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/archives.json::0.0.1 (fab6640b6e0b…) is a superseded entry that this script does not pin; superseded archives are pinned in scripts/verify-archive-binding.mjs, not added through the manifest.
+  1 archive binding failure.
+
+### N7. manifest reordered
+expectation: check should fail; exit 1: REFUSED (good)
+  No archive artifacts/zodiacs-engine-0.0.3.tgz is carried for 0.0.3 yet; skipping the rebuild of HEAD.
+  ::error file=artifacts/archives.json::artifacts/archives.json drops or changes entries of its parent 07ea862bcde7's (the manifest is append-only), in 1 commit(s): 9645e9c3901c.
+  ::error file=artifacts/archives.json::artifacts/archives.json is not a prefix of HEAD's (the manifest is append-only), in 3 commit(s): 07ea862bcde7, f4dc020572d4, 28fe638c70a9.
+  2 archive binding failures.
+
+### N8. receipt as a symbolic link inside artifacts/
+expectation: check should fail; exit 1: REFUSED (good)
+  ::error file=artifacts::artifacts/zodiacs-engine-0.0.1.sha256 is not a regular file (git mode 120000, blob) in 1 commit(s): 99358607adcc.
+  1 archive binding failure.
+
+### N9. Artifacts/ (capital A) with other bytes for 0.0.1
+expectation: check should fail; exit 1: REFUSED (good)
+  ::error file=artifacts::Artifacts differs from artifacts only in case in 1 commit(s): e5b80942246e.
+  1 archive binding failure.
+
+### N10. packed file changed after 0.0.1 is carried, version bumped only by build metadata (0.0.1+changed)
+expectation: check should fail; exit 1: REFUSED (good)
+  ::error file=package.json::The version in package.json at HEAD, "0.0.1+changed", is not a strict semantic version (SemVer 2.0.0 with no "v" prefix and no build metadata).
+  1 archive binding failure.

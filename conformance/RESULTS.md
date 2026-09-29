@@ -19,7 +19,7 @@ Suite 0.1.0: 500 vectors (L1 240, L2 150, L3 110). Each vector names its arbiter
 | L3 | `calendar.to-jdn` | 25 | jdn exact |
 | L3 | `calendar.from-jdn` | 10 | year exact; month exact; day exact |
 
-## @zodiacs/engine 0.1.1-rc.12
+## @zodiacs/engine 0.1.1-rc.14
 
 Adapter `zodiacs-engine` 0.1.0; results in [`results/zodiacs-engine.json`](results/zodiacs-engine.json).
 
@@ -55,7 +55,7 @@ Adapter `zodiacs-engine` 0.1.0; results in [`results/zodiacs-engine.json`](resul
 - **Time zones (L3).** The engine reads the host's `Intl` time zone data, which does not carry tzdb's `backzone` history. All 20 failures are the vectors tagged `backzone-history`, and on each the engine returns what tzdb's default build gives.
   - A repeated local time is resolved to its earlier instant only, and the engine has no public way to give the later one. Those vectors are unsupported.
 - **TT − UTC (L3).** The engine reads a UTC instant as UT1, so its TT − UTC is its ΔT. Each residual (engine minus expected) is −(UT1 − UTC) for that date, up to 0.63 s here. A leap-second table is planned. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.
-- **Unsupported (L3).** Release 0.1.1-rc.12 has no public function for local mean time from a longitude or for calendar conversion. Both are planned for the next engine release.
+- **Unsupported (L3).** Release 0.1.1-rc.14 has no public function for local mean time from a longitude or for calendar conversion. Both are planned for the next engine release.
 
 ## Swiss Ephemeris 2.10.03
 

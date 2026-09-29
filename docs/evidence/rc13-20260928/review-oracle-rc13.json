@@ -1,0 +1,43 @@
+{
+ "note": "Summary of the rc.11 review's own oracle (aspect_oracle.py with aspect-bridge.mjs, not in this repository) run unchanged against the dist of the packed rc.13 archive. Its exact model X is the documented rules on Fractions; its float model F replicates rc.11 arithmetic, so F mismatches are expected once the engine is exact. Decimal intent is not promised.",
+ "archiveSha256": "12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840",
+ "scriptSha256": "364b95a5d6cb09a7d0d15440810d7ea0d5d63842d25eb8661fc8c990f2cfc78b",
+ "bridgeSha256": "d1a8343e133a85b1a55f51b418f38e9c9709656e053b52eb11683f37bfbad676",
+ "rc11ReferenceFromTheReview": {
+  "exactDecisionDifferences": 1695,
+  "orderDiffersFromExactOrdering": 1,
+  "orbErrorVsExactMaxUlp": 7318349394477056.0,
+  "source": "aspect-oracle.log of the rc.11 review: same script and seed, run on rc.11"
+ },
+ "rc13": {
+  "stats": {
+   "cases": 39179,
+   "families": {
+    "A-decimal-angle": 9000,
+    "B-default-boundary": 12800,
+    "C-fold": 5600,
+    "D-exact": 350,
+    "E-threshold": 2400,
+    "F-precedence": 3000,
+    "G-random": 6000,
+    "H-invalid-policy": 16,
+    "H-invalid-positions": 12,
+    "H-valid-negzero": 1
+   },
+   "engineVersion": "0.1.1-rc.13"
+  },
+  "exactDecisionDifferences": 0,
+  "exactDecisionDifferenceFamilies": {},
+  "errorExpectationMismatches": 0,
+  "orbErrorVsExactMaxUlp": 0.5,
+  "orbErrorVsExactHistogram": {
+   "0": 35433,
+   "<=0.5": 237
+  },
+  "orderDiffersFromExactOrdering": 0,
+  "orbAbsErrorVsExactMaxDeg": 8.881784197001252e-16,
+  "decisionFlipKinds": {},
+  "floatModelBitMismatches": 8570,
+  "decimalIntentDifferences": 2327
+ }
+}

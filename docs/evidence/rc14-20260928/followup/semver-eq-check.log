@@ -1,0 +1,24 @@
+semver 7.6.2: 200007 pairs, 19514 equal under semver.eq; npmEqual differs on 0; distinct strict versions equal under semver.eq: 0
+  semver.eq("0.0.1", "0.0.1+evil") = true; strict: true, false
+  semver.eq("0.0.1", "v0.0.1") = true; strict: true, false
+  semver.eq("0.1.1-rc.14", "0.1.1-rc.14+evil") = true; strict: true, false
+  semver.eq("0.0.1-9007199254740992", "0.0.1-9007199254740993") = true; strict: false, false
+  semver.eq("0.0.1-9007199254740991", "0.0.1-9007199254740992") = false; strict: true, false
+  semver.eq("0.0.1-9007199254740992.1", "0.0.1-9007199254740993.2") = true; strict: false, false
+  semver.eq("0.0.1-RC.1", "0.0.1-rc.1") = false; strict: true, true
+semver 7.7.4: 200007 pairs, 19514 equal under semver.eq; npmEqual differs on 0; distinct strict versions equal under semver.eq: 0
+  semver.eq("0.0.1", "0.0.1+evil") = true; strict: true, false
+  semver.eq("0.0.1", "v0.0.1") = true; strict: true, false
+  semver.eq("0.1.1-rc.14", "0.1.1-rc.14+evil") = true; strict: true, false
+  semver.eq("0.0.1-9007199254740992", "0.0.1-9007199254740993") = true; strict: false, false
+  semver.eq("0.0.1-9007199254740991", "0.0.1-9007199254740992") = false; strict: true, false
+  semver.eq("0.0.1-9007199254740992.1", "0.0.1-9007199254740993.2") = true; strict: false, false
+  semver.eq("0.0.1-RC.1", "0.0.1-rc.1") = false; strict: true, true
+semver 7.8.5: 200007 pairs, 19514 equal under semver.eq; npmEqual differs on 0; distinct strict versions equal under semver.eq: 0
+  semver.eq("0.0.1", "0.0.1+evil") = true; strict: true, false
+  semver.eq("0.0.1", "v0.0.1") = true; strict: true, false
+  semver.eq("0.1.1-rc.14", "0.1.1-rc.14+evil") = true; strict: true, false
+  semver.eq("0.0.1-9007199254740992", "0.0.1-9007199254740993") = true; strict: false, false
+  semver.eq("0.0.1-9007199254740991", "0.0.1-9007199254740992") = false; strict: true, false
+  semver.eq("0.0.1-9007199254740992.1", "0.0.1-9007199254740993.2") = true; strict: false, false
+  semver.eq("0.0.1-RC.1", "0.0.1-rc.1") = false; strict: true, true

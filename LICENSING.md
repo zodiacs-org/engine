@@ -1,8 +1,17 @@
 # Licensing gate
 
-Status: **GO for an MIT package**, subject to the repository operator having
-authority to publish the Zodiacs.org-authored TypeScript under the package's
-MIT license.
+Status: **GO for a package licensed `MIT AND CC-BY-4.0`**, subject to the
+repository operator having authority to publish the Zodiacs.org-authored
+TypeScript under the MIT license.
+
+SPDX licence expression: `MIT AND CC-BY-4.0`. The code is MIT (`LICENSE`). The
+package's ΔT module, exported as `@zodiacs/engine/deltat`, carries 32 values
+of Table S15 of Stephenson, Morrison & Hohenkerk 2016, which are CC BY 4.0
+(see *ΔT data* below), with their attribution in `NOTICE`. The build places
+that module in a shared chunk under `dist/`, which `dist/deltat.js`
+re-exports. Both licences apply to the package as distributed. From
+0.1.1-rc.8, which added those values, to rc.13, `package.json` declared `MIT`
+alone; rc.14 corrects it.
 
 ## Provenance chain
 
@@ -18,6 +27,13 @@ modules:
 - `src/lib/engine/progressions.ts` — elapsed-time secondary-progression mapping
 - `src/lib/time/localToUtc.ts` — host-`Intl` timezone conversion
 - `src/lib/geo/search.ts` — client for the separately hosted GeoNames index
+
+`src/exact.ts`, added in 0.1.1-rc.13, is this package's own implementation of
+exact sums of binary64 values for the configured-aspect and declination
+decisions. It follows published algorithms: the nonoverlapping expansions of
+J. R. Shewchuk, "Adaptive Precision Floating-Point Arithmetic and Fast Robust
+Geometric Predicates" (1997), in the partial-sums form documented for Python's
+`math.fsum`, with one round-to-nearest-even at the end. It adds no dependency.
 
 The computational dependency is `astronomy-engine@2.1.19`. Its installed npm
 metadata declares MIT, names Donald Cross as author, and links to

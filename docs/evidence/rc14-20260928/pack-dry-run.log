@@ -1,0 +1,89 @@
+
+> @zodiacs/engine@0.1.1-rc.14 pack:dry-run
+> npm pack --dry-run
+
+
+> @zodiacs/engine@0.1.1-rc.14 prepack
+> npm run build
+
+
+> @zodiacs/engine@0.1.1-rc.14 build
+> tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json
+
+CLI Building entry: src/crossings.ts, src/deltat.ts, src/geo.ts, src/index.ts, src/internal-math.ts, src/internal.ts, src/receipt.ts
+CLI Using tsconfig: tsconfig.build.json
+CLI tsup v8.5.1
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+ESM dist/crossings.js      173.00 B
+ESM dist/deltat.js         161.00 B
+ESM dist/geo.js            11.51 KB
+ESM dist/index.js          22.59 KB
+ESM dist/chunk-AECKV73C.js 9.02 KB
+ESM dist/chunk-PFGUCNOK.js 2.86 KB
+ESM dist/internal-math.js  1.29 KB
+ESM dist/internal.js       305.00 B
+ESM dist/chunk-RETEVD4F.js 22.69 KB
+ESM dist/chunk-4OSOCZY2.js 10.67 KB
+ESM dist/receipt.js        31.00 KB
+ESM dist/chunk-CPALRSPC.js 1.42 KB
+ESM dist/chunk-GFT24GFR.js 723.00 B
+ESM dist/chunk-ONBZ4HK7.js 4.69 KB
+ESM dist/chunk-NAJ735VN.js 5.14 KB
+ESM ⚡️ Build success in 166ms
+DTS Build start
+DTS ⚡️ Build success in 12913ms
+DTS dist/crossings.d.ts              4.33 KB
+DTS dist/internal.d.ts               450.00 B
+DTS dist/receipt.d.ts                10.45 KB
+DTS dist/deltat.d.ts                 3.72 KB
+DTS dist/geo.d.ts                    2.14 KB
+DTS dist/index.d.ts                  25.41 KB
+DTS dist/internal-math.d.ts          1.04 KB
+DTS dist/types-CeafogFp.d.ts         7.37 KB
+DTS dist/internal-math-BE2hcSHd.d.ts 11.24 KB
+npm notice
+npm notice package: @zodiacs/engine@0.1.1-rc.14
+npm notice Tarball Contents
+npm notice 32.4kB CHANGELOG.md
+npm notice 1.1kB LICENSE
+npm notice 5.1kB LICENSING.md
+npm notice 2.6kB NOTICE
+npm notice 43.8kB README.md
+npm notice 10.9kB dist/chunk-4OSOCZY2.js
+npm notice 9.2kB dist/chunk-AECKV73C.js
+npm notice 1.5kB dist/chunk-CPALRSPC.js
+npm notice 723B dist/chunk-GFT24GFR.js
+npm notice 5.3kB dist/chunk-NAJ735VN.js
+npm notice 4.8kB dist/chunk-ONBZ4HK7.js
+npm notice 2.9kB dist/chunk-PFGUCNOK.js
+npm notice 23.2kB dist/chunk-RETEVD4F.js
+npm notice 4.4kB dist/crossings.d.ts
+npm notice 173B dist/crossings.js
+npm notice 3.9kB dist/deltat.d.ts
+npm notice 161B dist/deltat.js
+npm notice 2.2kB dist/geo.d.ts
+npm notice 11.8kB dist/geo.js
+npm notice 26.1kB dist/index.d.ts
+npm notice 23.1kB dist/index.js
+npm notice 11.5kB dist/internal-math-BE2hcSHd.d.ts
+npm notice 1.1kB dist/internal-math.d.ts
+npm notice 1.3kB dist/internal-math.js
+npm notice 450B dist/internal.d.ts
+npm notice 305B dist/internal.js
+npm notice 10.7kB dist/receipt.d.ts
+npm notice 31.7kB dist/receipt.js
+npm notice 7.6kB dist/types-CeafogFp.d.ts
+npm notice 2.5kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 0.1.1-rc.14
+npm notice filename: zodiacs-engine-0.1.1-rc.14.tgz
+npm notice package size: 87.4 kB
+npm notice unpacked size: 282.5 kB
+npm notice shasum: 30498f08cc95550445ef2666e1324a5ac007d7d4
+npm notice integrity: sha512-uOruhtGRmzAFn[...]oKxch4p/elc7Q==
+npm notice total files: 30
+npm notice
+zodiacs-engine-0.1.1-rc.14.tgz

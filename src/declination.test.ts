@@ -1,13 +1,14 @@
 import { MakeTime, SetDeltaTFunction, e_tilt } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
-import { natalChart } from "./api.js";
+import { chartDeclinations, natalChart } from "./api.js";
 import {
   DECLINATION_ORB,
   DECLINATION_ORB_LUMINARY,
   DEFAULT_DECLINATION_ORB_POLICY,
   MAX_DECLINATION_BODIES,
   RA_POLE_TOLERANCE,
+  SUN_BOUND_LATITUDE,
   declinationOf,
   declinationOrb,
   declinationsForBodies,
@@ -18,6 +19,8 @@ import type { DeclinationBody, DeclinationOrbPolicy } from "./declination.js";
 import { deltaT } from "./deltat.js";
 import { computeChartDeclinations } from "./ephemeris.js";
 import { createNatalEnvelope, serializeNatalEnvelope } from "./receipt.js";
+import { abs, cmp, isRoundedHalfEven, rational, sub } from "./fixtures/rational.js";
+import type { Rational } from "./fixtures/rational.js";
 
 const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
@@ -226,5 +229,124 @@ describe("chart-clock declination derivation", () => {
     expect(derived.receiptScope).toBe("not-included-in-natal-receipt");
     expect(JSON.stringify(chart)).toBe(snapshot);
     expect(serializeNatalEnvelope(createNatalEnvelope(chart))).toBe(before);
+  });
+});
+
+describe("the Sun and the out-of-bounds limit", () => {
+  // A convention, not a physical claim. The real Sun passes the true obliquity
+  // at about half of all solstices (ERFA: 402 of the 800 from 1800 to 2199), by
+  // up to 1.09″; this ephemeris's solar declination is off by up to 2.7″
+  // (against DE440s), more than that, so the flag could not say which. At both
+  // instants below the computed Sun is beyond the computed obliquity, while the
+  // real Sun (DE440s with ERFA) was 0.59″ inside at the 2024 June solstice and
+  // 0.05″ beyond at the 1970 December one. See docs/evidence/rc14-20260928/.
+  it.each([
+    ["June", "2024-06-20T20:51:00Z"],
+    ["December", "1970-12-22T06:36:00Z"]
+  ])("does not flag the chart's Sun at the %s solstice", (_month, utc) => {
+    const result = chartDeclinations({utc, latitude: 10, longitude: 20, houseSystem: "placidus"});
+    const sun = result.rows.find(row => row.body === "Sun")!;
+    expect(Math.abs(sun.lat)).toBeLessThanOrEqual(SUN_BOUND_LATITUDE);
+    expect(sun.boundMarginArcsec).toBeGreaterThan(0);
+    expect(sun.boundMarginArcsec).toBeLessThan(1);
+    expect(sun.outOfBounds).toBe(false);
+  });
+
+  // Far from J2000 the ephemeris's own solar latitude exceeds SUN_BOUND_LATITUDE (the real
+  // Sun's stays within about 1.2″). The chart's Sun is exempt at any latitude, as in rc.13,
+  // while the same rows given to declinationsForBodies keep the supplied-row rule. The first
+  // rc.14 build flagged the chart's Sun at each instant below. It flagged no earlier solstice:
+  // before 2000, wherever the latitude exceeds the limit its margin is negative (it reaches
+  // −68.3″ in year 2), so no early solstice can test this.
+  it.each([
+    ["2591-06-20T20:25:27.709Z", 3.605, 3.605], // the earliest solstice the first build flagged
+    ["2600-06-21T00:50:56Z", 3.658, 3.658],
+    ["3902-06-20T13:31:29.226Z", 25.824, 25.824] // the June solstice of 3902
+  ])("does not flag the chart's Sun at %s, whatever its latitude", (utc, latArcsec, marginArcsec) => {
+    const result = chartDeclinations({utc, timeKnown: false});
+    const sun = result.rows.find(row => row.body === "Sun")!;
+    expect(sun.lat * 3600).toBeCloseTo(latArcsec, 3);
+    expect(sun.boundMarginArcsec).toBeCloseTo(marginArcsec, 3);
+    expect(Math.abs(sun.lat)).toBeGreaterThan(SUN_BOUND_LATITUDE);
+    expect(sun.outOfBounds).toBe(false);
+    const supplied = declinationsForBodies(natalChart({utc, timeKnown: false}).bodies, result.trueObliquity).rows.find(row => row.body === "Sun")!;
+    expect(supplied.boundMarginArcsec).toBe(sun.boundMarginArcsec);
+    expect(supplied.outOfBounds).toBe(sun.boundMarginArcsec > 0);
+  });
+
+  it("exempts only a row labelled exactly Sun within 0.001° of the ecliptic", () => {
+    expect(SUN_BOUND_LATITUDE).toBe(0.001);
+    const row = (body: string, lon: number, lat: number) => declinationsForBodies([{body, lon, lat}], 23.44).rows[0]!;
+    const justOff = 0.0010000000000000002; // the next double above 0.001
+    const cases: [string, number, number, boolean][] = [
+      ["Sun", 90, 0.001, false], ["Sun", 270, -0.001, false], ["Sun", 90, 0.0005, false],
+      ["Sun", 90, justOff, true], ["Sun", 270, -justOff, true], ["Sun", 90, 8, true],
+      ["sun", 90, 0.0005, true], ["Synthetic", 90, 0.0005, true], ["Moon", 90, 0.0005, true],
+      ["Mars", 90, 0, false]
+    ];
+    for (const [body, lon, lat, flagged] of cases) {
+      const placed = row(body, lon, lat);
+      expect(placed.outOfBounds, `${body} ${lat}`).toBe(flagged);
+      expect(placed.boundMarginArcsec, `${body} ${lat}`).toBe((Math.abs(placed.dec) - 23.44) * 3600);
+    }
+    // At lat 0 on the solstitial colure the declination is exactly the obliquity: margin 0.
+    expect(row("Mars", 90, 0).boundMarginArcsec).toBe(0);
+  });
+
+  it("gives every row a signed margin that decides its flag, apart from the exempt Sun", () => {
+    const flagged: string[] = [];
+    for (const utc of ["2024-06-20T20:51:00Z", "1970-12-22T06:36:00Z", "2025-03-01T00:00:00Z", "2006-09-15T00:00:00Z"]) {
+      const chart = chartDeclinations({utc});
+      for (const row of chart.rows) {
+        const exempt = row.body === "Sun" && Math.abs(row.lat) <= SUN_BOUND_LATITUDE;
+        expect(row.boundMarginArcsec, `${utc} ${row.body}`).toBe((Math.abs(row.dec) - chart.trueObliquity) * 3600);
+        expect(row.outOfBounds, `${utc} ${row.body}`).toBe(!exempt && row.boundMarginArcsec > 0);
+        if (row.outOfBounds) flagged.push(`${utc.slice(0, 10)} ${row.body}`);
+      }
+    }
+    expect(flagged).toEqual(["2024-06-20 Moon", "2024-06-20 Mercury", "2024-06-20 Venus", "2025-03-01 Mars", "2006-09-15 Moon"]);
+  });
+
+  it("uses the true obliquity of date on the chart's clock", () => {
+    const chart = natalChart({utc: "2024-06-20T20:51:00Z"});
+    const time = MakeTime(chart.input.utc);
+    expect(chartDeclinations(chart).trueObliquity).toBe(e_tilt(time).tobl);
+    expect(e_tilt(time).tobl).not.toBe(e_tilt(time).mobl);
+  });
+});
+
+describe("longitude separation of declination aspects", () => {
+  /** The exact circular distance of two doubles, by rational arithmetic modulo 360. */
+  function exactSeparation(a: number, b: number): Rational {
+    let d = sub(a, b);
+    const turns = d.n / (d.d * 360n);
+    d = sub(d, {n: turns * 360n * d.d, d: d.d});
+    while (cmp(d, 0) < 0) d = sub(d, -360);
+    while (cmp(d, 360) >= 0) d = sub(d, 360);
+    return cmp(d, 180) > 0 ? sub(360, d) : abs(d);
+  }
+  const separation = (a: number, b: number) =>
+    findDeclinationAspects([{body: "A", lon: a, lat: 1}, {body: "B", lon: b, lat: 1}], 0)[0]!.separation;
+
+  it("reduces supplied longitudes exactly modulo 360 before rounding once", () => {
+    // The review's cases: the old rows rounded −1e-20 to 359.99999999999994 and −0.1 to 359.9 first.
+    expect(separation(-1e-20, 0)).toBe(1e-20);
+    expect(separation(-0.1, 0.2)).toBe(0.1 + 0.2);
+    expect(separation(720.1, 0.2)).toBe(0.09999999999997727); // 720.1 is 720 + 0.1000000000000227…
+    for (const [a, b] of [[-1e-20, 0], [-0.1, 0.2], [720.1, 0.2], [1e20, -3e19], [-359.99999999999994, 0.5], [1e300, 7]] as const) {
+      expect(isRoundedHalfEven(separation(a, b), exactSeparation(a, b)), `${a} ${b}`).toBe(true);
+    }
+  });
+
+  it("agrees with exact rational arithmetic on longitudes of any size", () => {
+    let seed = 0x5e9a;
+    const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 2 ** 32; };
+    for (let n = 0; n < 3_000; n += 1) {
+      const scale = [1, 360, 1e3, 1e6, 1e15, 1e100][n % 6]!;
+      const a = (random() - 0.5) * 2 * scale + (random() - 0.5) * 2 ** -30;
+      const b = (random() - 0.5) * 2 * scale;
+      expect(isRoundedHalfEven(separation(a, b), exactSeparation(a, b)), `${a} ${b}`).toBe(true);
+    }
+    expect(rational(0.1 + 0.2)).toEqual(rational(0.30000000000000004));
   });
 });

@@ -1,0 +1,185 @@
+{
+  "runtime": "v22.22.2",
+  "builds": {
+    "rc13": {
+      "version": "0.1.1-rc.13",
+      "rows": [
+        {
+          "utc": "-030000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -117004.934,
+          "ms": 21875.9
+        },
+        {
+          "utc": "-000500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -71.878,
+          "ms": 477.8
+        },
+        {
+          "utc": "0001-04-30T00:00:00Z",
+          "sunLatitudeArcsec": 2.671,
+          "ms": 2.2
+        },
+        {
+          "utc": "0001-05-01T00:00:00Z",
+          "sunLatitudeArcsec": 1.315,
+          "ms": 27
+        },
+        {
+          "utc": "0500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -21.565,
+          "ms": 15.3
+        },
+        {
+          "utc": "1000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -9.897,
+          "ms": 20
+        },
+        {
+          "utc": "1500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -3.794,
+          "ms": 15.9
+        },
+        {
+          "utc": "1800-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -1.447,
+          "ms": 15.9
+        },
+        {
+          "utc": "2000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 0.019,
+          "ms": 18.4
+        },
+        {
+          "utc": "2200-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 1.623,
+          "ms": 17.1
+        },
+        {
+          "utc": "2500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 4.697,
+          "ms": 14.6
+        },
+        {
+          "utc": "3000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 13.267,
+          "ms": 15.5
+        },
+        {
+          "utc": "3500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 28.548,
+          "ms": 13.2
+        },
+        {
+          "utc": "3998-09-02T00:00:00Z",
+          "sunLatitudeArcsec": -57.522,
+          "ms": 15.1
+        },
+        {
+          "utc": "3998-09-03T12:00:00Z",
+          "sunLatitudeArcsec": -58.557,
+          "ms": 1.7
+        },
+        {
+          "utc": "4500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 87.508,
+          "ms": 429
+        },
+        {
+          "utc": "+030000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -105345.902,
+          "ms": 22682.4
+        }
+      ]
+    },
+    "rc14": {
+      "version": "0.1.1-rc.14",
+      "rows": [
+        {
+          "utc": "-030000-06-01T00:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 0.9
+        },
+        {
+          "utc": "-000500-06-01T00:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 0
+        },
+        {
+          "utc": "0001-04-30T00:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 0
+        },
+        {
+          "utc": "0001-05-01T00:00:00Z",
+          "sunLatitudeArcsec": 1.315,
+          "ms": 74.3
+        },
+        {
+          "utc": "0500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -21.565,
+          "ms": 24
+        },
+        {
+          "utc": "1000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -9.897,
+          "ms": 17.9
+        },
+        {
+          "utc": "1500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -3.794,
+          "ms": 14.9
+        },
+        {
+          "utc": "1800-06-01T00:00:00Z",
+          "sunLatitudeArcsec": -1.447,
+          "ms": 29.4
+        },
+        {
+          "utc": "2000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 0.019,
+          "ms": 20.4
+        },
+        {
+          "utc": "2200-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 1.623,
+          "ms": 26.5
+        },
+        {
+          "utc": "2500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 4.697,
+          "ms": 27
+        },
+        {
+          "utc": "3000-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 13.267,
+          "ms": 20.3
+        },
+        {
+          "utc": "3500-06-01T00:00:00Z",
+          "sunLatitudeArcsec": 28.548,
+          "ms": 19.7
+        },
+        {
+          "utc": "3998-09-02T00:00:00Z",
+          "sunLatitudeArcsec": -57.522,
+          "ms": 28.3
+        },
+        {
+          "utc": "3998-09-03T12:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 0.2
+        },
+        {
+          "utc": "4500-06-01T00:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 0
+        },
+        {
+          "utc": "+030000-06-01T00:00:00Z",
+          "refused": "RangeError: The instant is outside the ephemeris span: its Terrestrial T…",
+          "ms": 0
+        }
+      ]
+    }
+  }
+}

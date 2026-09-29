@@ -7,28 +7,69 @@ synchronous and ESM-only, has no import-time side effects, and performs no netwo
 its core entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see ΔT below).
 
-**Release candidate: 0.1.1-rc.12.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.14.** Public npm lookups for this package returned
 404 on 2026-09-26. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.12.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.14.tgz
 ```
+
+The package runs in browsers through a bundler, and in Node.js 20.19.0 or a
+later 20.x, or 22.7.0 or later (`"engines": { "node": "^20.19.0 || >=22.7.0" }`).
+Its dependency, astronomy-engine 2.1.19, ships ES modules in a package that does
+not declare `"type": "module"`. Earlier Node versions load that file as
+CommonJS, so a plain Node import of this package fails there with "Named export
+'Body' not found"; it did on 18.20.8, 20.18.3, 21.7.3 and 22.6.0. Node 22.7.0
+loads it with a harmless `MODULE_TYPELESS_PACKAGE_JSON` warning, which 22.22.2
+no longer prints. Bundlers resolve the dependency's `import` condition
+themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.12.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.14.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
-records the artifact hash, runtime and isolated consumer directory. A packed
-candidate is not a published release. This candidate adds secondary progression
-instants and positions using the existing site convention. Configurable longitude aspects and chart declinations
-from rc.11 remain available as separate analyses. Existing
-natal, transit, synastry and receipt conventions remain unchanged. The
-ephemeris is still astronomy-engine 2.1.19. See CHANGELOG.md for the release
-history and `docs/evidence/rc12-20260928/` for this continuation's checks and
-remaining programme gates. Site adoption is reviewed separately.
+records the artifact hash and runtime, and it removes its temporary consumer
+directory, which must have no `node_modules` above it (set `TMPDIR` if
+needed). A packed candidate is not a published release.
+
+`artifacts/archives.json` records every carried archive: its digest, size, file
+count and the commit it was packed from. On the history it is given, CI checks
+from git objects alone, never the working tree, that in every commit:
+`artifacts/`, where present, is a real directory holding only archives,
+receipts, the manifest and its README, as regular files, and no two of its
+names, nor another top-level name and `artifacts`, differ only in case; each
+archive and receipt holds only its recorded bytes, the one exception, pinned in
+the check, being rc.11's first packing in commit `00bdae7`; and the manifest
+only ever gains entries. Every recorded version, and `package.json`'s at HEAD,
+must be a strict semantic version, with no `v` prefix and no build metadata,
+and no two carried versions may be equal as npm compares them. It also checks
+that nothing committed under `artifacts/` has been removed; that each archive's
+packed `package.json`, README, CHANGELOG and licence files match its source
+commit's byte for byte, and that it was committed by that commit or a child of
+it; and, once the current version's archive is carried, that a clean worktree
+of HEAD rebuilds it byte for byte (`--rebuild-all` also rebuilds every archive
+from its source commit). Each rebuild installs that commit's locked
+dependencies afresh with `npm ci` and takes nothing from the checkout's
+`node_modules`. It cannot detect history rewritten before CI sees it, and it
+needs merge commits: a squash or rebase merge drops the source commits it
+checks against, and the check then fails.
+
+This candidate declares the Node versions that can load its dependency and the
+licence of its ΔT values, refuses instants outside the years astronomy-engine
+tabulates (`EPHEMERIS_SPAN`), reports each declination row's signed margin to
+the out-of-bounds limit, restates the Sun's exemption from that limit as a
+convention, and reduces declination-aspect longitude separations exactly.
+Configured-aspect and declination-parallel decisions stay exact on binary64
+inputs (rc.13).
+Secondary progressions (rc.12) and configurable longitude aspects and chart
+declinations (rc.11) remain separate analyses. Existing natal, transit,
+synastry and receipt conventions remain unchanged. The ephemeris is still
+astronomy-engine 2.1.19. See CHANGELOG.md for the release history and
+`docs/evidence/rc14-20260928/` for this continuation's checks and remaining
+programme gates. Site adoption is reviewed separately.
 
 ## Natal chart in 10 lines
 
@@ -103,7 +144,8 @@ for (const aspect of today.aspects) {
   policy from `createAspectPolicy`, including minor and custom angles.
 - `chartDeclinations(natal)` derives right ascension, declination, parallel
   aspects and out-of-bounds flags on the chart's clock.
-- `progressedInstant(birthUtc, target)` maps elapsed tropical years to days.
+- `progressedInstant(birthUtc, target)` maps each elapsed tropical year of
+  life to one day after birth.
 - `progressedBodies(birthUtc, target)` returns the twelve ordinary position
   rows at that instant (see *Secondary progressions*).
 - `transits(natal, date)` returns a sky snapshot and moving-to-natal aspects.
@@ -125,7 +167,9 @@ package does not calculate topocentric parallax.
 
 Positions have been compared with an independent ephemeris from 1800-01-01T00:00Z
 up to 2200-01-01T00:00Z, exported as `REFERENCE_SPAN`. A chart outside that span
-is still computed, and carries the `outside-reference-span` flag.
+is still computed, and carries the `outside-reference-span` flag. No instant
+outside `EPHEMERIS_SPAN`, the years 1 to 3998 that astronomy-engine tabulates,
+is computed at all (see *Resolved instant inputs*).
 
 ### Secondary progressions
 
@@ -142,7 +186,9 @@ console.log(progressedBodies(birthUtc, target));
 
 The fixed convention is one **365.2422-day tropical year of elapsed life**
 for one **86,400,000-millisecond day** after birth. `PROGRESSION_DAYS_PER_YEAR`
-exports that constant. This uses elapsed instants, not calendar anniversaries,
+exports that constant. Both are counted in UTC milliseconds as JavaScript
+`Date` counts them, 86,400,000 to the day with no leap seconds; they are not
+ephemeris (TT) days. This uses elapsed instants, not calendar anniversaries,
 local-time days or daylight-saving adjustments. Both arguments accept a valid
 `Date`, finite epoch-millisecond timestamp, or ISO calendar date/date-time.
 Date-only strings mean UTC midnight; date-times require an explicit offset.
@@ -150,16 +196,20 @@ Invalid dates and ambiguous local date-times throw `RangeError`. Resolve local
 birth times with the optional geo entry first.
 
 Targets before birth are accepted and map backwards with the same signed
-formula. Results preserve the site's existing floating-point operation order
+formula. That signed extension is not a converse progression, which takes a
+target after birth to an instant before it; no converse technique is offered.
+Results preserve the site's existing floating-point operation order
 and JavaScript `Date` truncation to integer milliseconds. Neither argument is
 mutated, and the returned Date and position rows are newly allocated.
 
 `progressedBodies` returns precisely `positions(progressedInstant(...))`:
-Sun, Moon, eight planets and the true north/south lunar nodes. **Speed is
-instantaneous ephemeris longitude motion in degrees per day at the progressed
-instant**, not degrees per day of lived time. A comparison between two target
-ages must use the progression mapping; do not treat this speed as a lived-time
-rate. No progressed angles, houses, extra chart points, solar-arc direction,
+Sun, Moon, eight planets and the true north/south lunar nodes. **Speed is the
+ephemeris longitude rate at the progressed instant, in degrees per day**: a
+central difference over ±0.001 day (±86.4 s), and over ±0.25 day for the true
+nodes, as in every position row. One progressed day stands for one tropical
+year of life, so the same number is the progressed motion in degrees per
+365.2422-day year of elapsed life. It is not a rate per lived day. No
+progressed angles, houses, extra chart points, solar-arc direction,
 progressed aspect policy or natal-receipt extension is implied.
 
 Positions retain the existing ephemeris and its accuracy limits. Reference
@@ -170,8 +220,11 @@ Date does not establish physical accuracy for that date. Validation includes a
 constructed mapping to the existing JPL longitude fixture and a rounded
 published date-mapping example; neither establishes predictive validity.
 The year convention and published mapping are cited to Juan Estadella,
-[*Predictive Astrology*, 3rd ed., pp. 84–85](https://juanestadella.com/Predictive_Astrology_Juan-Estadella_3rd_edition.pdf).
-See the candidate's evidence directory for the source-rounding distinction.
+[*Predictive Astrology*, 3rd ed., pp. 84–85](https://juanestadella.com/Predictive_Astrology_Juan-Estadella_3rd_edition.pdf)
+(PDF SHA-256 `bf52656b367ad7d1415a7b021a0a0db3a609bf35c7a40053ff0622e7a3325622`).
+The book's own rounding allows up to 4.73 s, hence the 5 s comparison; from the
+19.677 h birth time it actually used, the mapping lands within 50 ms of its
+unrounded result. See `docs/evidence/rc12-20260928/sources.md`.
 
 ### Configurable aspects
 
@@ -201,11 +254,19 @@ either body is Sun or Moon. Each selected body's `bodyOrbs` value is an upper
 bound: the smallest of the rule allowance and both body caps wins. A number
 sets all three motion limits; an object sets each separately. Boundaries are
 inclusive. The closest eligible aspect wins, with definition order breaking
-ties. Results sort by orb, then input-pair order.
+ties. Results sort by exact orb, then input-pair order.
 
 `bodies` explicitly selects identifiers; it defaults to Sun, Moon and the
-eight planets. Nodes or other points require selection. Positions require
-finite longitude in `[0,360)` and a finite longitude speed in degrees/day
+eight planets. Nodes or other points require selection. Labels, here and in
+the declination analysis, are exact and case-sensitive strings of 1 to 80
+UTF-16 code units (a character outside the Basic Multilingual Plane counts
+two). `String.prototype.trim` must leave a label unchanged, which rules out
+leading or trailing whitespace, including U+3000 and U+FEFF, and a label may
+not contain a C0 control character (U+0000–U+001F) or DEL (U+007F). C1
+controls (U+0080–U+009F), zero-width characters such as U+200B, and lone
+surrogates are not rejected. Other labels throw `RangeError`.
+Positions require finite longitude in `[0,360)` and a finite longitude speed
+in degrees/day
 on the same time basis. Missing or null speed is rejected, including on
 unselected rows. A point whose speed is unknown must not be assigned zero to
 make it pass. Equal speeds, or relative speed below the policy threshold,
@@ -218,14 +279,31 @@ revalidated through the factory. Its schema and conventions describe the
 calculation; they are not an authenticated receipt. This analysis does not
 replace `chart.aspects`, or configure `synastry` or `transits`.
 
-The configured API subtracts validated longitudes directly and folds only
-across the 180° boundary. It avoids the historical helper's unnecessary
-360° normalization, which could lose an exact decimal custom-angle match
-at zero orb. Configured orbs, and matches or motion at floating-point
-boundaries, can therefore differ from the historical helper at roundoff
-scale. No numerical tolerance is added; ordinary binary floating-point
-subtraction still applies. The historical natal, transit, synastry and
-receipt calculations retain their existing behavior.
+#### Exact binary arithmetic
+
+Every longitude, speed, angle, orb and threshold is taken as the exact value
+of its binary64 double. The signed separation a − b is formed exactly, as an
+unrounded sum of doubles, and folded into (−180°, 180°] by exactly 360°. The
+orb |separation − angle|, its inclusive comparison with the limit, the choice
+of the closest rule, the order of results, and the motion (the signs of the
+separation, of the deviation from the angle and of the relative speed, and the
+stationary threshold) are all decided on those exact values. There is no
+epsilon or widened tolerance. Only the reported `orb` is rounded, once, to the
+nearest double with ties to even, so a reported orb never exceeds its
+`maximumOrb`. The policy records this as
+`conventions.arithmetic: "exact-binary64;reported-orb-rounded-half-even"`.
+
+Binary values are not decimals. At the default 7° square, 97.00000000000001
+is not rounded into eligibility. 188.86 − 98.86 is exactly 90 + 2⁻⁴⁶, so a
+zero-orb square does not match; 7.6999999999999895 and 359.7 are 8 + 2⁻⁵⁰
+apart, just outside the default 8° conjunction. 6.3 and 314 are exactly 45°
+plus the double 7.3 apart (6.3 carries 7.3's binary error), so a 7.3°
+semisquare orb includes them. Where a decimal boundary matters, use values
+that are exact in binary or allow for the difference in the orb.
+
+The historical helper behind `chart.aspects`, `transits`, `synastry` and the
+natal receipt keeps its floating-point arithmetic, so its orbs and its
+boundary decisions can differ from the configured API's at roundoff scale.
 
 ### Declinations and parallels
 
@@ -234,7 +312,7 @@ import { chartDeclinations, findDeclinationAspects } from "@zodiacs/engine";
 
 const equatorial = chartDeclinations(chart);
 console.log(equatorial.utc, equatorial.deltaT, equatorial.trueObliquity);
-console.log(equatorial.rows); // ra, dec and outOfBounds, in addition to lon/lat
+console.log(equatorial.rows); // lon, lat, ra, dec, outOfBounds, boundMarginArcsec
 const tightParallels = findDeclinationAspects(
   chart.bodies, equatorial.trueObliquity, { orb: 0.5, luminaryOrb: 1 }
 );
@@ -245,15 +323,68 @@ the full ecliptic longitude **and latitude** into the true equator and equinox
 of date, using the chart instant and the same pinned or model ΔT. Right
 ascension is in **degrees**, not hours, and is `null` where the horizontal
 unit-vector magnitude is no greater than `RA_POLE_TOLERANCE`; `raDefined`
-then is false. Declination is north-positive in `[-90,90]`. Out-of-bounds
-means strictly `abs(dec) > trueObliquity`, without an uncertainty allowance.
+then is false. Declination is north-positive in `[-90,90]`.
+
+Out-of-bounds means strictly `abs(dec) > trueObliquity`, without an
+uncertainty allowance. Each row also carries `boundMarginArcsec`, the signed
+margin `(abs(dec) − trueObliquity) × 3600`: positive beyond the bound, negative
+inside it. For every row but the exempt Sun below, `outOfBounds` is exactly
+`boundMarginArcsec > 0`. In `chartDeclinations`, `trueObliquity` is
+astronomy-engine's true obliquity of date at the chart instant on the chart's
+clock: the IAU 2006 mean obliquity plus astronomy-engine's five-term truncation
+of the IAU 2000B nutation in obliquity. That is not the full IAU 2000B value:
+it differed from ERFA's `obl06` plus `nut00b` by up to 0.086″ at 20,000
+instants from 1850 to 2150. The pure functions use the obliquity they are given.
+
+The flag describes the ephemeris's position, and it agrees with the real sky
+only where the margin exceeds the ephemeris's error in declination. Against
+JPL's DE440s at those 20,000 instants, the largest declination errors were:
+
+| Body | Largest error | Body | Largest error |
+| --- | ---: | --- | ---: |
+| Sun | 2.7″ | Jupiter | 16.1″ |
+| Moon | 3.4″ | Saturn | 21.6″ |
+| Mercury | 12.2″ | Uranus | 19.3″ |
+| Venus | 14.7″ | Neptune | 15.4″ |
+| Mars | 14.5″ | Pluto | 4.6″ |
+
+These are sample maxima, not bounds, and they grow outside `REFERENCE_SPAN`.
+Within them the flag can be wrong either way: at 2022-10-22T08:11:10.756Z the
+engine puts Mars 1.57″ inside the bound, where DE440s has it 1.05″ beyond.
+Treat a flag as settled only when `abs(boundMarginArcsec)` exceeds the body's
+figure.
+
+The Sun's exemption is a convention. At a solstice the size of the Sun's
+declination differs from the true obliquity by exactly its ecliptic latitude,
+which stays within about 1.2″ of zero: computed with ERFA (IAU 2006/2000A), the
+real Sun is beyond the bound at 402 of the 800 solstices from 1800 to 2199, by
+up to 1.09″. The engine's solar declination is off by more than that, up to
+2.7″ in the comparison above, and its solar latitude drifts from −1.1″ on
+average in the 1800s to +1.1″ in the 2100s, so its margin at a solstice has the
+real sign at only 404 of those 800. Far from J2000 the drift grows to tens of
+arcseconds, −68.3″ at the June solstice of year 2 and +25.8″ at that of 3902,
+while the real Sun's latitude stays within about 1.2″. So `chartDeclinations`
+never flags the chart's own Sun as out of bounds, at any latitude; its margin
+is still reported, and says nothing about the real Sun. (It is the Sun of the
+chart given, which is not recomputed.) `declinationsForBodies` exempts a
+supplied row labelled exactly `Sun` only while its ecliptic latitude is within
+`SUN_BOUND_LATITUDE` (0.001°, 3.6″); a `Sun` row with a larger latitude, such
+as a synthetic input, and every other row keep the strict rule.
 
 Every supplied body is eligible, including nodes; filter the input for a
 smaller set. Parallel/contraparallel matches choose the smaller of
 `abs(decA-decB)` and `abs(decA+decB)`, with parallel winning an exact tie.
 Orbs are inclusive, defaulting to 1° or 1.5° when Sun or Moon is involved.
-`eclipticToEquatorial` and `declinationsForBodies` expose the same geometry
-with an explicitly supplied obliquity.
+As with configured aspects, each declination double is taken as exact: the
+choice, the inclusive orb test and the order are decided without rounding, and
+only the reported `orb` is rounded, once. The longitude `separation` is the
+short way round between the two supplied longitudes, reduced exactly modulo
+360 whatever their size, and rounded once: −0.1 and 0.2 are
+0.30000000000000004 apart, the exact sum of the doubles 0.1 and 0.2, rounded.
+13.3 and 12.3 are exactly 1° apart and match at orb 1; 8.3 and 7.3
+(1 + 2⁻⁵⁰ apart), and 1.1 and 0.1 (1 + 3·2⁻⁵⁵), do not. Body labels follow
+the configured-aspect rule. `eclipticToEquatorial` and `declinationsForBodies`
+expose the same geometry with an explicitly supplied obliquity.
 
 These are derived coordinates of the existing ephemeris, with its existing
 corrections and limits. They do not establish the programme's 0.01″ physical
@@ -380,7 +511,7 @@ bounded iteration and falls back if it cannot converge; it never returns the
 last unconverged iterate as a successful construction.
 
 See [CHANGELOG.md](CHANGELOG.md) for candidate changes. Reference coverage and
-known limits are recorded in the site [platform evidence ledger](https://github.com/zodiacs-org/site/blob/codex/platform-stage-a/docs/platform/EVIDENCE.md).
+known limits are recorded in the site [platform evidence ledger](https://github.com/ZodiacsOfficial/site/blob/75ae549c6bcedba67ccce7d467e1b54af0c83070/docs/platform/EVIDENCE.md).
 The date parser's representable range is not a claim of astronomical accuracy
 across that range. Reference cases are finite; broader numerical scope review
 remains a release gate.
@@ -466,7 +597,29 @@ preserved. Resolve daylight-saving gaps/folds and historical local-time rules
 before calling these APIs. Accepted date syntax is not an accuracy guarantee
 outside the documented reference coverage.
 
-Birth settings accept only a `houseSystem` from the twelve above and
+Every valid `Date` is accepted as input, but the ephemeris is evaluated only
+inside `EPHEMERIS_SPAN`: Terrestrial Time from 0001-04-30T12:00 to
+3998-09-03T12:00, J2000 ± 730,000 days, the years astronomy-engine tabulates.
+Its source says of instants beyond them: "The target time is outside the year
+range 0000..4000. Calculate it by crawling backward from 0000 or forward from
+4000. FIXFIXFIX - This is super slow." rc.13 still evaluated them: a position
+at year 30,000 took more than 20 s and put the Sun 29° off the ecliptic. Now
+positions, and the charts, transits, synastry, progressions, declinations,
+points, crossings and returns built on them, throw `RangeError` at once for
+such an instant, with a message that names the span. The check is on
+Terrestrial Time, and it covers the speed samples ±0.001 day around the
+instant (±0.25 day for the true nodes), so an instant must lie six hours
+inside. On the model ΔT clock every instant from 0001-05-01T00:00Z to
+3998-09-02T00:00Z qualifies; a pinned `deltaT` moves TT and is checked as
+given. astronomy-engine reports any other failure by throwing a string, which
+reaches the caller as a `RangeError` whose `cause` is the original value.
+
+Inside the span, results are computed but not verified: accuracy was compared
+only within `REFERENCE_SPAN`, and it falls away from it. The Sun's ecliptic
+latitude, which in reality stays within about 1.2″ of zero, comes out as
+−9.9″ on 1000-06-01, +13.3″ on 3000-06-01 and −57.5″ on 3998-09-02.
+
+Birth settings accept only a `houseSystem` from the thirteen above and
 a boolean `timeKnown`. Omitting them defaults to `"whole"` and `true`; explicit
 `null` and other unsupported values throw `RangeError`, including when
 coordinates are absent. Latitude and longitude must be supplied together as finite numbers
@@ -510,6 +663,12 @@ The ephemeris is powered by the MIT-licensed `astronomy-engine`. Tests compare
 modern and historical positions with public JPL Horizons vectors and exercise
 astronomical and geometric invariants. See [LICENSING.md](LICENSING.md) for the
 full provenance audit and the explicit Swiss Ephemeris exclusion.
+
+The package's licence expression is `MIT AND CC-BY-4.0`: the code is MIT
+([LICENSE](LICENSE)), and the 32 values of Stephenson, Morrison & Hohenkerk's
+Table S15 in the package's ΔT module (`@zodiacs/engine/deltat`, which the build
+places in a shared chunk under `dist/` that `dist/deltat.js` re-exports) are
+CC BY 4.0, attributed in [NOTICE](NOTICE).
 
 The npm package contains no place or timezone database. GeoNames attribution
 and the host-ICU historical-timezone caveat are recorded in [NOTICE](NOTICE),

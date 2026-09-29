@@ -1,0 +1,290 @@
+{
+  "runtime": "v22.22.2",
+  "platform": "linux-x64",
+  "cpus": 4,
+  "rounds": 3,
+  "runsPerRound": 21,
+  "fastest": {
+    "rc12": {
+      "version": "0.1.1-rc.12",
+      "counts": {
+        "configuredWorst": 32045,
+        "declinationWorst": 32640
+      },
+      "configuredWorstMs": 186.433,
+      "declinationWorstMs": 70.86,
+      "configuredChartMs": 0.094,
+      "chartDeclinationsMs": 0.168
+    },
+    "rc13": {
+      "version": "0.1.1-rc.13",
+      "counts": {
+        "configuredWorst": 32045,
+        "declinationWorst": 32640
+      },
+      "configuredWorstMs": 1911.289,
+      "declinationWorstMs": 428.328,
+      "configuredChartMs": 0.303,
+      "chartDeclinationsMs": 0.289
+    },
+    "rc14": {
+      "version": "0.1.1-rc.14",
+      "counts": {
+        "configuredWorst": 32045,
+        "declinationWorst": 32640
+      },
+      "configuredWorstMs": 1715.748,
+      "declinationWorstMs": 469.066,
+      "configuredChartMs": 0.28,
+      "chartDeclinationsMs": 0.278
+    }
+  },
+  "relativeToFirst": {
+    "configuredWorstMs": {
+      "rc12": 1,
+      "rc13": 10.25,
+      "rc14": 9.2
+    },
+    "declinationWorstMs": {
+      "rc12": 1,
+      "rc13": 6.04,
+      "rc14": 6.62
+    }
+  },
+  "perRound": [
+    {
+      "loadAverage": [
+        7.76,
+        7.7,
+        6.27
+      ],
+      "results": {
+        "rc12": {
+          "version": "0.1.1-rc.12",
+          "counts": {
+            "configuredWorst": 32045,
+            "declinationWorst": 32640
+          },
+          "configuredWorst": {
+            "fastestMs": 186.433,
+            "medianMs": 239.565
+          },
+          "declinationWorst": {
+            "fastestMs": 70.86,
+            "medianMs": 94.574
+          },
+          "configuredChart": {
+            "fastestMs": 0.094,
+            "medianMs": 0.129
+          },
+          "chartDeclinations": {
+            "fastestMs": 0.172,
+            "medianMs": 0.222
+          }
+        },
+        "rc13": {
+          "version": "0.1.1-rc.13",
+          "counts": {
+            "configuredWorst": 32045,
+            "declinationWorst": 32640
+          },
+          "configuredWorst": {
+            "fastestMs": 1937.364,
+            "medianMs": 2149.242
+          },
+          "declinationWorst": {
+            "fastestMs": 428.328,
+            "medianMs": 586.584
+          },
+          "configuredChart": {
+            "fastestMs": 0.308,
+            "medianMs": 0.377
+          },
+          "chartDeclinations": {
+            "fastestMs": 0.289,
+            "medianMs": 0.415
+          }
+        },
+        "rc14": {
+          "version": "0.1.1-rc.14",
+          "counts": {
+            "configuredWorst": 32045,
+            "declinationWorst": 32640
+          },
+          "configuredWorst": {
+            "fastestMs": 1862.991,
+            "medianMs": 2415.946
+          },
+          "declinationWorst": {
+            "fastestMs": 469.066,
+            "medianMs": 569.986
+          },
+          "configuredChart": {
+            "fastestMs": 0.288,
+            "medianMs": 0.321
+          },
+          "chartDeclinations": {
+            "fastestMs": 0.305,
+            "medianMs": 0.358
+          }
+        }
+      }
+    },
+    {
+      "loadAverage": [
+        7.94,
+        7.93,
+        6.58
+      ],
+      "results": {
+        "rc12": {
+          "version": "0.1.1-rc.12",
+          "counts": {
+            "configuredWorst": 32045,
+            "declinationWorst": 32640
+          },
+          "configuredWorst": {
+            "fastestMs": 198.609,
+            "medianMs": 265.158
+          },
+          "declinationWorst": {
+            "fastestMs": 73.293,
+            "medianMs": 102.195
+          },
+          "configuredChart": {
+            "fastestMs": 0.124,
+            "medianMs": 0.192
+          },
+          "chartDeclinations": {
+            "fastestMs": 0.193,
+            "medianMs": 0.328
+          }
+        },
+        "rc13": {
+          "version": "0.1.1-rc.13",
+          "counts": {
+            "configuredWorst": 32045,
+            "declinationWorst": 32640
+          },
+          "configuredWorst": {
+            "fastestMs": 1995.134,
+            "medianMs": 2719.96
+          },
+          "declinationWorst": {
+            "fastestMs": 441.612,
+            "medianMs": 527.916
+          },
+          "configuredChart": {
+            "fastestMs": 0.305,
+            "medianMs": 0.361
+          },
+          "chartDeclinations": {
+            "fastestMs": 0.295,
+            "medianMs": 0.37
+          }
+        },
+        "rc14": {
+          "version": "0.1.1-rc.14",
+          "counts": {
+            "configuredWorst": 32045,
+            "declinationWorst": 32640
+          },
+          "configuredWorst": {
+            "fastestMs": 1715.748,
+            "medianMs": 2072.853
+          },
+          "declinationWorst": {
+            "fastestMs": 498.346,
+            "medianMs": 604.752
+          },
+          "configuredChart": {
+            "fastestMs": 0.28,
+            "medianMs": 0.326
+          },
+          "chartDeclinations": {
+            "fastestMs": 0.278,
+            "medianMs": 0.333
+          }
+        }
+      }
+    },
+    {
+      "loadAverage": [
+        8.95,
+        8.07,
+        6.81
+      ],
+      "results": {
+        "rc12": {
+          "version": "0.1.1-rc.12",
+          "counts": {
+            "configuredWorst": 32045,
+            "declinationWorst": 32640
+          },
+          "configuredWorst": {
+            "fastestMs": 189.515,
+            "medianMs": 236.366
+          },
+          "declinationWorst": {
+            "fastestMs": 76.28,
+            "medianMs": 92.703
+          },
+          "configuredChart": {
+            "fastestMs": 0.127,
+            "medianMs": 0.141
+          },
+          "chartDeclinations": {
+            "fastestMs": 0.168,
+            "medianMs": 0.213
+          }
+        },
+        "rc13": {
+          "version": "0.1.1-rc.13",
+          "counts": {
+            "configuredWorst": 32045,
+            "declinationWorst": 32640
+          },
+          "configuredWorst": {
+            "fastestMs": 1911.289,
+            "medianMs": 2120.836
+          },
+          "declinationWorst": {
+            "fastestMs": 466.449,
+            "medianMs": 590.954
+          },
+          "configuredChart": {
+            "fastestMs": 0.303,
+            "medianMs": 0.374
+          },
+          "chartDeclinations": {
+            "fastestMs": 0.293,
+            "medianMs": 0.374
+          }
+        },
+        "rc14": {
+          "version": "0.1.1-rc.14",
+          "counts": {
+            "configuredWorst": 32045,
+            "declinationWorst": 32640
+          },
+          "configuredWorst": {
+            "fastestMs": 1983.133,
+            "medianMs": 2414.769
+          },
+          "declinationWorst": {
+            "fastestMs": 510.7,
+            "medianMs": 623.283
+          },
+          "configuredChart": {
+            "fastestMs": 0.285,
+            "medianMs": 0.325
+          },
+          "chartDeclinations": {
+            "fastestMs": 0.29,
+            "medianMs": 0.391
+          }
+        }
+      }
+    }
+  ]
+}
