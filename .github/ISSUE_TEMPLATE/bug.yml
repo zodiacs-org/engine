@@ -1,5 +1,5 @@
 name: Bug
-description: Any other problem, such as installing or importing the package, its types, the geo client, the receipt codec, the build, the conformance harness, or a statement in the documentation.
+description: Any other problem, such as installing or importing the package, its types, the geo client, the receipt codec, the build, the conformance harness, the atlas tools, or a statement in the documentation.
 title: "Bug: "
 labels: ["bug"]
 body:
@@ -8,7 +8,7 @@ body:
       value: |
         Issues here are public. Leave out real birth details; invented ones are enough to show a problem.
 
-        A computed value that looks wrong has its own form, "Wrong result", and a conformance vector has "Conformance discrepancy". Security problems go through SECURITY.md, not an issue.
+        A computed value that looks wrong has its own form, "Wrong result"; so do a conformance vector, "Conformance discrepancy", and a rule in the time atlas, "Atlas correction". Security problems go through SECURITY.md, not an issue.
   - type: textarea
     id: happened
     attributes:

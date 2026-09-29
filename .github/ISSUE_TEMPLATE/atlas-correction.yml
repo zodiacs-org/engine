@@ -1,0 +1,38 @@
+name: Atlas correction
+description: A correction or addition to the historical time atlas, with a primary source.
+title: "Atlas correction: "
+labels: ["atlas"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A correction is accepted only with a citation to a primary source that meets the rules in `atlas/README.md`: a law or decree, an official gazette, a municipal notice or council record, a contemporary newspaper report, or a railway notice or timetable. `atlas/CORRECTIONS.md` describes how it is reviewed. Secondary works, tzdb comments, websites and proprietary atlases are not accepted as evidence; offer them as leads.
+
+        Issues here are public.
+  - type: input
+    id: rule
+    attributes:
+      label: Rule id, or the place and period
+      description: The rule id for a rule the atlas has, or the place and the period for something it does not yet cover.
+      placeholder: "fr-pmt-1891, or a town and the years in question"
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What the clock showed, and when it changed
+      description: The time the clock kept, and the instant it changed, with the clock that instant is read on (the one in force before the change, the one after it, or UTC).
+    validations:
+      required: true
+  - type: textarea
+    id: citation
+    attributes:
+      label: Citation
+      description: Type, title, date, issuer, a stable URL, the page and column, the language, and a verbatim excerpt of at most 40 words in the original language.
+    validations:
+      required: true
+  - type: textarea
+    id: leads
+    attributes:
+      label: Leads
+      description: Secondary works or tzdb comments that pointed you to the source, if any.
