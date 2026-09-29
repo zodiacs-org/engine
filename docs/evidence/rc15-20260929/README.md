@@ -57,10 +57,13 @@ that birth data. On `b0ddb88` it has three commits:
 
 | Commit | Subject |
 | --- | --- |
-| the commit that brings this version of this file | Release candidate 0.1.1-rc.15: time basis, timing and Vedic entries, Placidus bisection, review fixes (the source commit) |
+| `104bd5a` | Release candidate 0.1.1-rc.15: time basis, timing and Vedic entries, Placidus bisection, review fixes (the source commit) |
+| `cbad72c` | Carry the packed 0.1.1-rc.15 tarball (the carrier) |
+| the commit that brings this version of this file | Record the gates on the rc.15 carrier cbad72c |
 
-The archive packed from the source commit is carried by its child, and the
-gates on that carrier follow in a commit that changes only files under
+The archive packed from `104bd5a` is carried by its child `cbad72c`. The
+gates on that carrier (*The gates on the carrier*, below) are recorded by the
+commit that brings this version of this file, which changes only files under
 `docs/evidence/`.
 
 The source commit carries the whole reviewed integration at once. Its tree is
@@ -84,8 +87,11 @@ outside, gives the published worked examples' names, birth dates and
 citations, and the check lists the files of the tree that hold each one's
 birth data and whether each such file cites it. On the re-cut's
 history, `b0ddb88..bcd532c`, it finds birth data added by 8 of its 46
-commits, and in its tree (`rebuilt/history-check-control.txt`); the gate
-records commit runs it on this history (`rebuilt/history-check.txt`).
+commits, and in its tree (`rebuilt/history-check-control.txt`). On this
+history, `b0ddb88..cbad72c`, with the changes of the commit that brings this
+version of this file staged, it finds none in any commit, the staged changes
+or the carrier's tree, and lists the published examples in the files that
+cite them (`rebuilt/history-check.txt`).
 
 ### Commit identifiers in these records
 
@@ -241,17 +247,58 @@ On the source commit's tree before it was made:
 ### The archive
 
 `artifacts/zodiacs-engine-0.1.1-rc.15.tgz` is packed from the source commit
-and carried by its child: SHA-256
+`104bd5a` and carried by its child `cbad72c`: SHA-256
 `24eeb597b0157598c0faa26bb615c0cb5dfaaeac0393d62c73fbd37c5da4d348`, 190,974
 bytes, 54 files, 668,343 bytes unpacked. It differs from the re-cut's archive
 in `CHANGELOG.md`, `LICENSING.md` and `NOTICE` alone
-(`rebuilt/archive-diff.log`).
+(`rebuilt/archive-diff.log`). Clean clones of `104bd5a` packed these bytes on
+Node 22.22.2 (npm 10.9.7), 20.19.0 (npm 10.8.2) and 24.21.0 (npm 11.19.0),
+54 files each time (`rebuilt/carrier/pack-source.log`, from
+`rebuilt/carrier/pack-source.sh`, a copy of `recut/carrier/pack-source.sh`),
+and the carried file is the Node 22.22.2 one.
 
 Three local builds of rc.15 came before it, and none was pushed or published:
 the first cut's archive, SHA-256 `3651c525…` (177,715 bytes), packed from
 `d90a00a`; a first attempt at the re-cut, `554ed7ea…` (189,485 bytes), packed
 from `8345003`; and the re-cut's, `bddfb3b7…` (189,575 bytes), packed from
 `51f567e`. `artifacts/README.md` records them.
+
+### The gates on the carrier
+
+`rebuilt/carrier/carrier-gates.sh`, a copy of
+`recut/carrier/carrier-gates.sh`, ran each of CI's jobs on the carrier,
+`cbad72c`, in a clean clone of the repository with full history, with
+`TMPDIR` outside the clone and no `package.json` or `node_modules` at or
+above it. Every job passes (logs in `rebuilt/carrier/`):
+
+| Job | Node (npm) | Result | Log |
+| --- | --- | --- | --- |
+| engine: npm ci, typecheck, tests, build, export smoke, package contents, pack dry run, archive check | 22.22.2 (10.9.7) | 3,256 tests passed, 1 skipped, in 59 files; the other steps pass; the archive check as below | `engine-v22.22.2.log` |
+| engine | 20.19.0 (10.8.2) | 3,255 passed, 2 skipped, in 59 files; the other steps pass | `engine-v20.19.0.log` |
+| engine | 24.21.0 (11.19.0) | 3,255 passed, 2 skipped, in 59 files; the other steps pass (npm warns that esbuild's two install scripts are not covered by `allowScripts`) | `engine-v24.21.0.log` |
+| archives: the archive check with `--rebuild-all` | 22.22.2 (10.9.7) | a rebuild of HEAD, and of each of the 10 recorded archives from its source commit, byte-identical to the recorded archive | `archives-v22.22.2.log` |
+| pack: npm ci, build, `npm pack --ignore-scripts` | 22.22.2 (10.9.7) | byte-identical to the carried archive (`cmp`) | `pack-v22.22.2.log` |
+| packed consumer, on that archive | 20.19.0 (10.8.2), 22.7.0 (10.8.2), 22.22.2 (10.9.7), 24.21.0 (11.19.0) | all 29 sections pass on each version, on the archive of SHA-256 `24eeb597…` | `consumer-v*.log` |
+| conformance: npm ci, build, self-test, vectors, verdicts, `RESULTS.md` | 22.22.2 (10.9.7) | self-test 7 of 7; 500 vectors conform; 266 pass, 193 fail, 41 unsupported, 0 error, every verdict as committed; `RESULTS.md` and `results/summary.json` current | `conformance-v22.22.2.log` |
+| conformance generators | Python 3.11.15, pyerfa 2.0.1.5, numpy 2.4.6 | L1, L2 and L3 rebuilt from their sources (tzdata and tzcode 2025c downloaded from IANA, digests checked) byte-identical to the committed vectors | `generators-v22.22.2.log` |
+| atlas: checks and self-test, nothing installed | 22.22.2 (10.9.7) | all checks pass; self-test 26 of 26 | `atlas-v22.22.2.log` |
+
+In a clean clone the tests run before the build, as in CI, so the test in
+`scripts/root-isolation.test.mjs` that checks the checkout's own build is
+skipped (it ran on the tree before the source commit, where a build was
+present), and on 20.19.0 and 24.21.0 so is the tzdb 2025c comparison.
+
+On each engine run the archive check found
+`artifacts/zodiacs-engine-0.1.1-rc.15.tgz` byte-identical to a rebuild of
+HEAD, and the 10 recorded archives (9 carried, 1 superseded) and their
+receipts holding only their recorded bytes across 85 commits, each bound to
+its source commit. With `--rebuild-all` each of the 10 was also rebuilt from
+its source commit on Node 22.22.2 and matched its recorded bytes, rc.11's
+superseded first packing and rc.15's, from `104bd5a`, included.
+
+The clones were made on a memory-backed file system; `TMPDIR` was the
+directory prepared for the re-cut, and the generators' Python a virtual
+environment with the two libraries at the versions CI pins.
 
 ## The re-cut
 
@@ -1219,8 +1266,8 @@ exported, so the reference names them without pages. The fifth,
 The first cut's carrier gates were recorded in `eb58011`, and those of the
 re-cut's carrier, `7daf832`, in `bcd532c`, all three local commits (*The
 re-cut*, *The gates on the re-cut's carrier*). The gates on the carrier of
-the published history follow it in a commit that changes only files under
-`docs/evidence/` (*The published history*).
+the published history, `cbad72c`, are under *The published history*, *The
+gates on the carrier*.
 
 ## What is not established
 
@@ -1360,3 +1407,14 @@ node docs/evidence/rc15-20260929/rebuilt/history-check.mjs b0ddb88..HEAD <patter
 The history check's two input files are not committed, because they hold
 birth data: the patterns searched for, and the published examples' birth
 dates. The script's header gives their formats.
+
+The published history's source commit packed from clean clones, and its
+carrier's gates, one job and one Node version per call, each in a clean clone
+of `<repository>`:
+
+```sh
+TMPDIR=<tmp> sh docs/evidence/rc15-20260929/rebuilt/carrier/pack-source.sh <repository> 104bd5a <node 22.22.2 bin> <node 20.19.0 bin> <node 24.21.0 bin>
+TMPDIR=<tmp> sh docs/evidence/rc15-20260929/rebuilt/carrier/carrier-gates.sh <job> <repository> cbad72c <work directory> <directory of node and npm>
+```
+
+The jobs are those of the re-cut's carrier, above.
