@@ -34,6 +34,7 @@ import {
   checkVoidOfCourse,
   largestMsDifference
 } from "../../../scripts/techniques-parity-check.mjs";
+import { moonSignCorpus, returnsCorpus } from "../../../scripts/techniques-parity-corpus.mjs";
 
 const root = new URL("../../../", import.meta.url);
 const json = (path) => JSON.parse(readFileSync(new URL(path, root), "utf8"));
@@ -62,13 +63,55 @@ const parity = results.map((result) => ({
     : result.disagreements.slice(0, 5)
 }));
 const siteAnswered = results.find((row) => row.corpus === "R-E").disagreements.filter((row) => typeof row.site === "number");
+
+// The inputs of the cases that differ, regenerated from the corpus script.
+const iso = (ms) => new Date(ms).toISOString();
+const edgeInputs = returnsCorpus().RE;
+const edgeRows = results
+  .find((row) => row.corpus === "R-E")
+  .disagreements.map(({ index, site, package: ours }) => ({
+    index,
+    fn: edgeInputs[index].fn,
+    birth: iso(edgeInputs[index].birth),
+    date: iso(edgeInputs[index].date),
+    site: typeof site === "number" ? iso(site) : site,
+    package: typeof ours === "number" ? iso(ours) : Array.isArray(ours) ? iso(ours[0]) : ours
+  }));
+const moonInputs = moonSignCorpus();
+const zonedRows = results.find((row) => row.corpus === "M-Z").disagreements.map((row) => ({ ...moonInputs.MZ[row.index], ...row }));
+
+/** Signed h:mm:ss. */
+const hms = (ms) => {
+  const s = Math.round(Math.abs(ms) / 1000);
+  return `${ms < 0 ? "-" : "+"}${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+};
 const mp = results.find((row) => row.corpus === "M-P");
+const mpRows = [];
+for (const { index, site, package: ours } of mp.disagreements) {
+  const { date, timeZone } = moonInputs.MP[index];
+  const noon = Date.parse(`${date}T12:00:00Z`);
+  // A date's first midnight is noon + site[0]; its UTC offset is the rest of the half day.
+  const offset = (relative) => hms(-12 * 3_600_000 - relative);
+  await prepareLocalTime(date, "Europe/Berlin");
+  const berlin = techniques.moonSignCandidates(date, { timeZone: "Europe/Berlin" });
+  mpRows.push({
+    index,
+    date,
+    timeZone,
+    siteMidnightOffset: offset(site[0]),
+    packageMidnightOffset: offset(ours[0]),
+    midnightsApart: hms(site[0] - ours[0]),
+    sameSigns: site[2] === ours[2],
+    siteMidnightIsThePackagesBerlinMidnight: berlin.from.getTime() === noon + site[0]
+  });
+}
 const G7 = {
   cases: mp.cases,
   disagree: mp.disagreements.length,
   everyDisagreementIsADifferentMidnight: mp.disagreements.every(
     (row) => Array.isArray(row.site) && Array.isArray(row.package) && (row.site[0] !== row.package[0] || row.site[1] !== row.package[1])
-  )
+  ),
+  rows: mpRows
 };
 
 // ---------------------------------------------------------------------- G2
@@ -176,6 +219,8 @@ console.log(
       },
       G1: parity,
       siteAnsweredOutsideSpan: siteAnswered,
+      edgeCases: edgeRows,
+      zonedDisagreements: zonedRows,
       G2,
       G3,
       G5,
