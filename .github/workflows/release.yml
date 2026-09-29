@@ -1,0 +1,171 @@
+name: Release
+
+# Publishes a carried release candidate from artifacts/ to npm with trusted
+# publishing: npm exchanges the job's OIDC token for a short-lived publish
+# token, so no npm token is stored anywhere. Run it by hand from main.
+#
+# npm's trusted publisher for @zodiacs/engine names this repository, this file
+# (release.yml) and the environment npm, and must allow `npm publish`. npm does
+# not check the branch, so the npm environment must allow deployments from
+# main only; CONTRIBUTING.md describes the settings.
+#
+# Two jobs: `verify` installs dependencies and rebuilds the package, and has no
+# id-token permission, so no dependency's code runs where an npm token can be
+# minted. `publish` runs only git, npm and this repository's own check, on the
+# same commit.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The carried version to publish, for example 0.1.1-rc.14
+        required: true
+        type: string
+      tag:
+        description: The npm dist-tag to publish it under
+        required: true
+        default: next
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  verify:
+    name: Verify the carried archive
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      VERSION: ${{ inputs.version }}
+      TAG: ${{ inputs.tag }}
+    steps:
+      - name: Check the branch and the inputs
+        run: |
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+            echo "::error::Run the release workflow from main."
+            exit 1
+          fi
+          if [[ ! "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then
+            echo "::error::version must be a semantic version without a v prefix or build metadata, such as 0.1.1-rc.14."
+            exit 1
+          fi
+          if [[ ! "$TAG" =~ ^[a-z][a-z0-9-]*$ ]]; then
+            echo "::error::tag must start with a lower-case letter and hold only lower-case letters, digits and hyphens, such as next."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Full history: the archive-binding check reads every commit.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          # No cache in a release workflow.
+          package-manager-cache: false
+
+      - name: The archive matches its carried entry and receipt
+        run: node scripts/verify-release-archive.mjs "$VERSION"
+
+      - name: Install
+        run: npm ci
+
+      # Started with node, not npm run, which reads the checkout's .npmrc
+      # first; see artifacts/README.md.
+      - name: Carried archives match history and source
+        run: node scripts/verify-archive-binding.mjs
+
+  publish:
+    name: Publish to npm
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      # Trusted publishing and provenance: the job's OIDC token.
+      id-token: write
+    env:
+      VERSION: ${{ inputs.version }}
+      TAG: ${{ inputs.tag }}
+    steps:
+      - name: Check the branch and the inputs
+        run: |
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+            echo "::error::Run the release workflow from main."
+            exit 1
+          fi
+          if [[ ! "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then
+            echo "::error::version must be a semantic version without a v prefix or build metadata, such as 0.1.1-rc.14."
+            exit 1
+          fi
+          if [[ ! "$TAG" =~ ^[a-z][a-z0-9-]*$ ]]; then
+            echo "::error::tag must start with a lower-case letter and hold only lower-case letters, digits and hyphens, such as next."
+            exit 1
+          fi
+
+      # The same commit as the verify job: both check out github.sha.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: npm supports trusted publishing
+        run: |
+          npm_version=$(npm --version)
+          node_version=$(node --version)
+          node_version=${node_version#v}
+          echo "Node.js $node_version, npm $npm_version"
+          if [[ "$(printf '%s\n' 11.5.1 "$npm_version" | sort -V | head -n 1)" != "11.5.1" ]]; then
+            echo "::error::Trusted publishing needs npm 11.5.1 or later."
+            exit 1
+          fi
+          if [[ "$(printf '%s\n' 22.14.0 "$node_version" | sort -V | head -n 1)" != "22.14.0" ]]; then
+            echo "::error::Trusted publishing needs Node.js 22.14.0 or later."
+            exit 1
+          fi
+
+      # Again, on the bytes npm is about to upload.
+      - name: The archive matches its carried entry and receipt
+        run: node scripts/verify-release-archive.mjs "$VERSION"
+
+      # npm runs outside the checkout from here on, so no .npmrc in the
+      # checkout configures it.
+      - name: The version is not on npm yet
+        working-directory: ${{ runner.temp }}
+        run: |
+          if npm view "@zodiacs/engine@$VERSION" version --json > view.json; then
+            echo "::error::This version is already on npm. A version is published once."
+            exit 1
+          fi
+          code=$(node -e 'try { console.log(JSON.parse(require("node:fs").readFileSync("view.json", "utf8")).error.code) } catch { console.log("unreadable") }')
+          if [[ "$code" != "E404" ]]; then
+            echo "npm view answered: $code"
+            echo "::error::npm view failed, so whether this version is on npm is unknown."
+            exit 1
+          fi
+          echo "@zodiacs/engine@$VERSION is not on npm."
+
+      # A path that starts with / or ./ is a file to npm; artifacts/… alone
+      # would be read as a GitHub repository (github:artifacts/…).
+      # --provenance makes the attestation required rather than automatic.
+      - name: Publish
+        working-directory: ${{ runner.temp }}
+        run: npm publish "$GITHUB_WORKSPACE/artifacts/zodiacs-engine-$VERSION.tgz" --access public --tag "$TAG" --provenance

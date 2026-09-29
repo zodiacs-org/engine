@@ -1,0 +1,42 @@
+# version, date-released and doi are left out on purpose. No DOI has been
+# minted, and a version here would go stale with every release candidate;
+# cite the version or commit you used, as the message says. Add them when a
+# release is archived with a DOI.
+#
+# license lists the two licences of the package as distributed, matching
+# package.json's SPDX expression "MIT AND CC-BY-4.0": the code is MIT, and
+# the ΔT table values it ships are CC BY 4.0. Both apply together. The
+# Citation File Format reads a list of licences as a choice between them
+# (OR); that is not meant here. LICENSING.md gives the details. atlas/ and
+# conformance/ carry their own licences: atlas/LICENSING.md and
+# conformance/LICENSE.
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below, with the version or commit you used. The time atlas in atlas/ has its own citation in atlas/README.md."
+type: software
+title: "Zodiacs Engine (@zodiacs/engine)"
+abstract: >-
+  TypeScript astrology calculations for browsers and Node.js: tropical
+  planetary positions, natal charts with houses and aspects, transits,
+  synastry, secondary progressions, Moon phase and Saturn returns. The
+  repository also holds a conformance suite for astrology computation (test
+  vectors, each decided by an independent arbiter with a stated tolerance,
+  and a harness that runs any engine against them) and a historical time
+  atlas of what civil clocks showed, where and when, with a primary source
+  for every rule.
+authors:
+  - name: "Zodiacs.org"
+    website: "https://zodiacs.org"
+repository-code: "https://github.com/zodiacs-org/engine"
+url: "https://zodiacs.org/developers/engine/"
+license:
+  - MIT
+  - CC-BY-4.0
+keywords:
+  - astrology
+  - ephemeris
+  - natal chart
+  - house systems
+  - synastry
+  - transits
+  - TypeScript
+  - conformance testing

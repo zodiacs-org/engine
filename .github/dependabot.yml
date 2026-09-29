@@ -1,0 +1,35 @@
+# Weekly version updates for the npm tree and for the GitHub Actions the
+# workflows use. Minor and patch npm updates arrive as one pull request.
+#
+# astronomy-engine is kept out of that group. It is pinned to one exact
+# version, which receipts record (EPHEMERIS in src/types.ts) and a test
+# checks against the installed copy, so an update to it is an engine change
+# and arrives as its own pull request.
+#
+# package.json is packed. While the current version's archive is carried,
+# CI refuses any change to a packed file, and any update that changes the
+# build output, until a new candidate is cut (artifacts/README.md). Such
+# updates wait for the next candidate.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    # Change package.json only when a new version falls outside its range,
+    # so an update within range touches only package-lock.json. A requirement
+    # that must change is raised, never widened into a range, so the exact
+    # astronomy-engine pin stays exact.
+    versioning-strategy: increase-if-necessary
+    groups:
+      npm-minor-patch:
+        update-types:
+          - minor
+          - patch
+        exclude-patterns:
+          - astronomy-engine
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

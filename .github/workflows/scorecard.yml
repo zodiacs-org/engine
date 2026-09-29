@@ -1,0 +1,43 @@
+name: Scorecard
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # Mondays at 04:47 UTC.
+    - cron: "47 4 * * 1"
+
+# No permissions by default; the job asks for what it needs.
+permissions: {}
+
+jobs:
+  analysis:
+    name: Scorecard analysis
+    runs-on: ubuntu-latest
+    permissions:
+      # Check out the repository.
+      contents: read
+      # Upload the results to code scanning.
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Run Scorecard
+        uses: ossf/scorecard-action@2d1146689b8cda280b9bc96326124645441f03bc # v2.4.4
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          # Do not send the results to the public Scorecard API
+          # (api.scorecard.dev). They go only to this repository's code
+          # scanning, so no Scorecard badge is published and the job needs
+          # no id-token permission.
+          publish_results: false
+
+      - name: Upload to code scanning
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        with:
+          sarif_file: results.sarif
