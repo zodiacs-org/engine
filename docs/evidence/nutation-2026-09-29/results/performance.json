@@ -1,0 +1,34 @@
+{
+ "node": "v22.22.2",
+ "rounds": 7,
+ "rc15": {
+  "natalChartMs": 0.792,
+  "longitudeMicroseconds": {
+   "Sun": 6.44,
+   "Moon": 10.47,
+   "Saturn": 11.03,
+   "North Node": 20.02
+  },
+  "saturnReturnMs": 62.2
+ },
+ "build": {
+  "natalChartMs": 0.819,
+  "longitudeMicroseconds": {
+   "Sun": 7.72,
+   "Moon": 12.45,
+   "Saturn": 13.26,
+   "North Node": 21.27
+  },
+  "saturnReturnMs": 73.9
+ },
+ "ratio": {
+  "natalChart": 1.03,
+  "longitude": {
+   "Sun": 1.2,
+   "Moon": 1.19,
+   "Saturn": 1.2,
+   "North Node": 1.06
+  },
+  "saturnReturn": 1.19
+ }
+}

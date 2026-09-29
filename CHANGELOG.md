@@ -162,6 +162,132 @@ imports the same house types from a new chunk, and it lists the imports of
   derived-coefficient question; the entry waits for a Sun source that is not
   JPL-derived.
 
+For the next candidate; the version is still 0.1.1-rc.15. The nutation is now
+the full IAU 2000B series. astronomy-engine 2.1.19, which is still the
+ephemeris, keeps 5 of that model's 77 luni-solar terms; the engine now
+evaluates all 77 and the two fixed offsets for the planetary terms itself
+(`src/nutation.ts`, transcribed from `iau2000b` in NOVAS C 3.1, a work of the
+US Government; `LICENSING.md` and `NOTICE` record the source), and turns
+astronomy-engine's vectors on the J2000 mean equator to the ecliptic of date
+with astronomy-engine's own precession, reproduced line for line
+(`src/frame.ts`), and that nutation. The engine no longer calls
+astronomy-engine's `e_tilt`, `Rotation_EQJ_ECT`, `EclipticGeoMoon` or
+`SiderealTime`. This answers finding production-positions-7 of the engine
+audit of 2026-09-22 (Zodiacs site repository,
+`docs/platform/evidence/engine-audit-2026-09-22/LEDGER.md`). Evidence, with
+every figure below: `docs/evidence/nutation-2026-09-29/` (`results/` there).
+
+Changes to results:
+
+- Every longitude moves by the change in the nutation in longitude Δψ, the
+  same for the Sun, the Moon, the planets, the true and mean nodes, Black Moon
+  Lilith and the lots. Sampled every 10 minutes from 1800 to 2200, that
+  change reaches 0.2701″, and the true obliquity's 0.08654″
+  (`nutation-change.json`); over 9,697 synthetic charts from 1850 to 2150 the
+  longitudes moved by up to 0.2635″ (`rc15-comparison.json`). Latitudes do not move (by less than 1e-10″).
+  Speeds move by the change's rate, up to 0.0725″ a day at 520 charts from
+  200 to 3900 (`plumbing.json`).
+- Against ERFA (pyerfa 2.0.1.5) turning the same astronomy-engine vectors
+  with the IAU 2006/2000A chain, at those 4,001 instants from 1800 to 2200,
+  the rotation to the ecliptic of date put every longitude up to 0.2520″ off
+  (95th percentile 0.1486″) and now puts it up to 0.003691″ off (0.002011″),
+  which is IAU 2000B's own difference from IAU 2000A there; against the IAU
+  2000B chain, up to 4.4e-7″ (`erfa-frame.json`).
+- The sidereal time's equation of the equinoxes is Δψ cos εA plus the two
+  largest IAU 2000 complementary terms, 2640.96 µas sin Ω and 63.52 µas sin
+  2Ω (IERS Conventions 2010, table 5.2e), and the true obliquity is εA + Δε,
+  both on the full series; astronomy-engine had neither the full series nor
+  the complementary terms. Leaving the terms out would put the sidereal time
+  up to 2.65 mas from ERFA's IAU 2000B value and 5.79 mas from gst06a over
+  1800–2200; with them it is within 0.035 mas and 3.60 mas
+  (`ee-choice.json`). So the angles, all thirteen house systems, the Vertex,
+  the East Point, the sect and lots, right ascensions, declinations and the
+  out-of-bounds bound move. Against ERFA (gst06a, obl06 plus nut06a's Δε) at
+  the 4,001 instants, latitudes within 60°, the ascendant was up to 0.8235″
+  off and is up to 0.006284″ off, the midheaven 0.2457″ and 0.003358″
+  (`erfa-frame.json`). Against Swiss Ephemeris 2.10.03's houses from 1850 to
+  2049, the ascendant was up to 0.5292″ away and is up to 0.00394″ away, the
+  midheaven 0.2177″ and 0.001503″ (`swiss.json`). Over the 9,697 charts, at
+  places up to 60.17° N, the ascendant and Placidus cusps moved by up to
+  0.8003″ and the midheaven by up to 0.2576″; no chart changed house system
+  (`rc15-comparison.json`). Nearer the polar circle they move more: at 520
+  charts, a tenth of them at 66°–80°, Koch cusps by up to 3.88″ and the lots
+  by up to 3.34″ (`plumbing.json`).
+- The house ladder of the Zodiacs site's rc.9 record (55°–66.6° every 0.2°,
+  both hemispheres, 1800–2199, and 3,000 draws within 66°), end to end
+  against Swiss's `swe_houses_ex` with the instant read as UT1 on both sides:
+  from 1850 to 2049 every one of the thirteen systems is within 0.035″ of
+  Swiss on the ladder and 0.055″ on the draws, where rc.15 was up to 3.727″
+  (Koch, 1 case of 353 over 3″) and 1.947″. The Koch case over 3″,
+  2004-01-08T16:35:29Z at 65.6° N, is now 0.035″ away. Before 1850 and from
+  2050, where Swiss uses its long-term sidereal time, the differences are
+  Swiss's and hardly change (`ladder.json`, `worst-koch.json`).
+- The true obliquity equals ERFA's obl06 plus nut00b within the tests'
+  tolerances (1e-9″ and 1e-10″, `src/nutation.test.ts`) and is within
+  1.63 mas of obl06 plus nut06a at 20,000 instants from 1850 to 2150, where
+  astronomy-engine's was up to 85.6 mas away from each; against DE440s at
+  those instants each body's largest declination error changes by less than
+  0.04″ (`declination-truth.json`, `declination-truth-rc15.json`).
+- The mean node and Black Moon Lilith are within 0.4503″ and 0.4887″ of Swiss
+  Ephemeris's `SE_MEAN_NODE` and `SE_MEAN_APOG` from 1800 to 2199 (2,000
+  instants); rc.15 was within 0.6091″ and 0.6785″ (`swiss.json`).
+- Ayanamsas: `mean` no longer involves the nutation and does not change;
+  `nutation` and `true` move by the change in Δψ, which cancels from sidereal
+  longitudes (`plumbing.json`).
+- The engine's nutation is computed for each instant, where astronomy-engine
+  reused the last one it computed for any time within 1e-6 day, so no result
+  now depends on what was computed before it.
+- One conformance verdict moves: `L1-POS-0041`, the Sun on 1908-05-30, was
+  1.076″ off in longitude and passes. The L2 residuals shrink: the ascendant
+  from 0.182″ to 0.019″ at most, the midheaven from 0.178″ to 0.0081″, the
+  cusps from 0.489″ to 0.071″ (`conformance/RESULTS.md`).
+- Receipts: no conventions set changes; none of the sets names the nutation
+  model, and the engine version tells the results apart. Receipts written
+  before this change carry astronomy-engine's five-term nutation: replayed on
+  UT1 with the recorded ΔT pinned, 16,218 rc.14 receipts from 1972 to
+  2027-10-02 now differ from their recorded results by up to 0.2554″ in the
+  bodies, 3.022″ in the angles and cusps and 0.0000276 °/day in the speeds,
+  where rc.15 reproduced the angles and cusps exactly
+  (`receipt-replay.json`, `docs/time.md`). `src/replay-time-basis.test.ts`
+  shows the recorded angles and cusps of its 1973 receipt to be exactly
+  astronomy-engine's five-term sidereal time and obliquity.
+
+Cost:
+
+- Time: a natal chart takes 3 per cent longer, one longitude 6 to 20 per cent
+  and a Saturn-return scan 19 per cent (medians of seven rounds,
+  `performance.json`). The series is evaluated from products of its
+  arguments' multiples, ten calls to `Math.sin` and `Math.cos` where 154
+  would do it directly, within 1e-14″ of NOVAS's own loop
+  (`src/nutation.test.ts`).
+- Size: the chunk holding the ephemeris grows by 5,813 bytes, 2,428 gzipped;
+  minified by esbuild, by 2,108 bytes gzipped; `./internal` bundled and
+  minified with astronomy-engine, whose own nutation code then drops out, by
+  1,089 bytes gzipped, from 32,506 to 33,595 (`sizes.json`). A stand-in for
+  the Zodiacs site's engine chunk (the four functions its `full.ts` imports,
+  built with Rollup and esbuild as its Vite build does, without the site's
+  adapter) grows by 1,080 bytes gzipped. The same stand-in grows by 5,301
+  bytes from rc.14 to rc.15 (the time basis), so the site's chunk, 27,303
+  bytes on rc.14 against its limit of 27,648, would be about 32,604 on rc.15
+  and 33,684 with this change; no site build measured either. Four import
+  graphs exceed their budgets in `scripts/verify-package-contents.mjs`: by
+  3,517 bytes (`.`), 4,810 (`./internal`), 729 (`./timing`) and 2,111
+  (`./vedic`), so `npm run package:contents` fails until the candidate that
+  carries this change raises those budgets and says why.
+
+Tests whose expectations changed, each saying where its expectation now
+comes from: the Mercury station of February 2026 moves 5.94 s, to
+06:47:13.822Z, 0.047 s from where ERFA's frame puts it (rc.15's was 6.156 s
+from it; `test-expectations.json`); the polar-fallback receipt's ascendant
+follows the engine, 0.0003″ from ERFA's (0.039″ before); the Placidus
+test's latitude, 1.07e-5″ below the polar limit on the five-term obliquity
+and inside the polar circle on ERFA's and the full series', moves by the
+obliquity's change; the 1973 rc.14 replay separates the time basis from the
+nutation; and tests that took astronomy-engine's nutation as the engine's
+(declinations, ayanamsas, speeds across time-basis steps, the Moon's error
+path) take the engine's own. `docs/evidence/nutation-2026-09-29/README.md`
+lists each.
+
 Migration: none. With every default `calc` gives the position `positions()`
 gives, to the bit after the same earlier calls, and the root entry's build is
 byte for byte unchanged. `@zodiacs/engine/window` changes no existing

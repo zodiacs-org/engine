@@ -1,0 +1,3 @@
+# TMPDIR=<tmp> node conformance/harness/report.mjs --check, Node v22.22.2
+conformance: RESULTS.md and results/summary.json are current
+# exit 0

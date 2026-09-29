@@ -1,0 +1,24 @@
+# TMPDIR=<tmp> node scripts/verify-archive-binding.mjs, Node v22.22.2
+Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+::error file=artifacts/zodiacs-engine-0.1.1-rc.15.tgz::artifacts/zodiacs-engine-0.1.1-rc.15.tgz is not the archive HEAD (45bdd3473574) builds. Restore the source it was packed from, or bump the version and pack anew.
+  recorded: sha256 bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637, 189575 bytes
+  rebuilt:  sha256 a1acf0ff6bf26246add1b358a0738293139f77ab8aad2ed0afa51d79037615be, 193536 bytes on Node v22.22.2
+  package/LICENSING.md: recorded 51449347800ff7170656f3ca14bcb451d705b179ebcee6d7da7b9c4541e3c404, rebuilt b441d291892b644d37503594a81cddaaff26fe9aac87ee9161799179ecaa32be
+  package/NOTICE: recorded cc04a118ce81b4c723a8a5a2e8b35bde69795c51026ca5e9e5a89fbcdc7b3c93, rebuilt 4147b5dade38d841e16215e37bc4a5f8f16a9a29df008ab86d6c43c060171a23
+  package/dist/api-CVDPPO5E.d.ts: recorded (absent), rebuilt d3599670bb83c23c6c13a0e621181a702e8067e583f273ee9cc44cd9c04aad8a
+  package/dist/api-CoB_kqE3.d.ts: recorded 132bcb7344e77ce42ccbef0b49912012f7d141b934dbee206a02e274f9ba02cd, rebuilt (absent)
+  package/dist/chunk-AMIGY7MI.js: recorded (absent), rebuilt ad10126022d6844e3150c70bf625a08508c46bdbf8fe7057f8fb0e9c0f1214cb
+  package/dist/chunk-CWI4YUDL.js: recorded 169dbddc7a5fc821355899dcee698212f36e8a8d951cf9fd2034f14126bb4713, rebuilt (absent)
+  package/dist/chunk-M4NDAZMA.js: recorded (absent), rebuilt 951e6510bede6e429737566fd164eb6d535113effa7775a7ff1018697b9256a8
+  package/dist/chunk-NE4KZWYJ.js: recorded (absent), rebuilt d5e1267782fb75fa84eff0bddf47dd52288bf9ffab872b3c9b776b657bef9b55
+  package/dist/chunk-OYGRVGXD.js: recorded 5a7d633bba7b3bd01070346e4a3ebdfee2297c3cd681d2aa10c6b2290d9dd130, rebuilt (absent)
+  package/dist/chunk-ZZPITHQS.js: recorded fa4aff2dc4a32cce8e01d0fa6c065ba5a2136c6f6bb13b537c0eef10dfd7dd91, rebuilt (absent)
+  package/dist/index.d.ts: recorded 460a4a0f6658ac995f255e6d4d52de77a8785ca062579217f83b98bf25b3cf70, rebuilt 92d3026a13793e721ce51b96c2e47cd50e2e9e490cb18031ca95d37d7b64865f
+  package/dist/index.js: recorded 2ca4824f6cfd80c11509cd4fad7e93694a249704905fee1959b010ac6b6013ea, rebuilt 0ae54c847baa55f61592b0f551434f8e27e29bdb4c4f3361a32317359c7671a6
+  package/dist/internal.js: recorded 1a3e0d2005a501a07515dd64b1ad72845e716cea5400bae05b3b11484746b16f, rebuilt f30b655041ce32b3e6bc9824211faa492842143397bac195d1a4e201344b4000
+  package/dist/timing.d.ts: recorded 5e250b928dd2e756786beeb5cf91c9390a022bcf821c674992eb95694dabbae0, rebuilt 7f06ffd6f6bf2f1855213d2dffd0b1fe55df61e815dad188814b0afd4e59083d
+  package/dist/timing.js: recorded 6f20e9a4b35a951346a0eb3bf5d65f3c0c4e29cfe9386acfd7f3bf70cb679c4b, rebuilt f26299a4cfb03ca777150c97ebe811b4296bf5e0242b864bfe356e10011617f0
+  package/dist/vedic.d.ts: recorded 6f434ede44b0e98321c965efc57ff4a5df9b90b08f877b087367593f896e0971, rebuilt b49e72e2579868116e7f1cdcd983085e0bfc12fa9aa21fd71ab2dd3955d5d88d
+  package/dist/vedic.js: recorded 42fa3906790653c83a84a98f4084b693ed00424ef69f06604798eb5a91236d3d, rebuilt 6f716d1acb7ac075fdb5762e258bed5dd8465cd5fcfd9da632d5f1644f95b05f
+1 archive binding failure.
+# exit 1

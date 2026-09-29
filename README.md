@@ -384,24 +384,27 @@ Out-of-bounds means strictly `abs(dec) > trueObliquity`, without an
 uncertainty allowance. Each row also carries `boundMarginArcsec`, the signed
 margin `(abs(dec) − trueObliquity) × 3600`: positive beyond the bound, negative
 inside it. For every row but the exempt Sun below, `outOfBounds` is exactly
-`boundMarginArcsec > 0`. In `chartDeclinations`, `trueObliquity` is
-astronomy-engine's true obliquity of date at the chart instant on the chart's
-clock: the IAU 2006 mean obliquity plus astronomy-engine's five-term truncation
-of the IAU 2000B nutation in obliquity. That is not the full IAU 2000B value:
-it differed from ERFA's `obl06` plus `nut00b` by up to 0.086″ at 20,000
-instants from 1850 to 2150. The pure functions use the obliquity they are given.
+`boundMarginArcsec > 0`. In `chartDeclinations`, `trueObliquity` is the
+engine's true obliquity of date at the chart instant on the chart's clock: the
+IAU 2006 mean obliquity plus the IAU 2000B nutation in obliquity, all 77 terms
+(see *Nutation*). It equals ERFA's `obl06` plus `nut00b` within the tests'
+tolerances (1e-9″ and 1e-10″), and at 20,000 instants from 1850 to 2150 it was
+within 1.63 mas of `obl06` plus `nut06a` (IAU 2000A), where astronomy-engine's
+five-term value, used until this change, was up to 85.6 mas from both. The
+pure functions use the obliquity they are given.
 
 The flag describes the ephemeris's position, and it agrees with the real sky
 only where the margin exceeds the ephemeris's error in declination. Against
-JPL's DE440s at those 20,000 instants, the largest declination errors were:
+JPL's DE440s at those 20,000 instants, the largest declination errors were,
+rounded up (`docs/evidence/nutation-2026-09-29/results/declination-truth.json`):
 
 | Body | Largest error | Body | Largest error |
 | --- | ---: | --- | ---: |
 | Sun | 2.7″ | Jupiter | 16.1″ |
 | Moon | 3.4″ | Saturn | 21.6″ |
 | Mercury | 12.2″ | Uranus | 19.3″ |
-| Venus | 14.7″ | Neptune | 15.4″ |
-| Mars | 14.5″ | Pluto | 4.6″ |
+| Venus | 14.8″ | Neptune | 15.5″ |
+| Mars | 14.6″ | Pluto | 4.6″ |
 
 These are sample maxima, not bounds, and they grow outside `REFERENCE_SPAN`.
 Within them the flag can be wrong either way: at 2022-10-22T08:11:10.756Z the
@@ -451,7 +454,11 @@ not include this analysis; the result states that scope explicitly.
 `houseSystem` takes one of thirteen systems. Each is the definition Swiss
 Ephemeris uses, and every one agrees with Swiss's `swe_houses_armc` to within
 0.0001″ given the same sidereal time, latitude and obliquity (Placidus, which
-iterates, to 0.01″).
+iterates, to 0.01″). End to end, from an instant read as UT1 as Swiss reads
+it, every system was within 0.055″ of Swiss's `swe_houses_ex` from 1850 to
+2049, on a ladder of latitudes from 55° to 66.6° and on 3,000 draws within 66°
+of the equator (`docs/evidence/nutation-2026-09-29/results/ladder.json`);
+outside those years Swiss uses a long-term sidereal time of its own.
 
 | `houseSystem` | System | Cusps |
 | --- | --- | --- |
@@ -502,9 +509,11 @@ Each point has a longitude, a latitude, a sign and a degree, like a body.
 The mean node and Black Moon Lilith come from the Moon's mean elements: the
 IERS Conventions' fundamental arguments (Simon et al. 1994), with a mean
 inclination of 5.1453964°. The nutation in longitude puts them on the true
-equinox of date, like every other longitude here. They are within 0.7″ of Swiss
-Ephemeris's `SE_MEAN_NODE` and `SE_MEAN_APOG` from 1800 to 2199. Both carry a
-speed in degrees per day.
+equinox of date, like every other longitude here. At 2,000 instants from 1800
+to 2199 they were within 0.4503″ and 0.4887″ of Swiss Ephemeris's
+`SE_MEAN_NODE` and `SE_MEAN_APOG`
+(`docs/evidence/nutation-2026-09-29/results/swiss.json`). Both carry a speed in
+degrees per day.
 
 Every chart gets those three. The Vertex, the East Point, the sect and the
 lots need a birth time and place.
@@ -841,6 +850,25 @@ Gregorian adoption. Each resolution names the tzdb version, the transition
 behind the offset and its cause (`dst`, `legal-change` or `date-line`).
 [docs/time.md](docs/time.md) describes every field.
 
+## Nutation
+
+Longitudes, the sidereal time and the obliquity of date use the IAU 2000B
+nutation (McCarthy & Luzum 2003; IERS Conventions 2003, chapter 5), all 77 of
+its luni-solar terms and its two fixed planetary offsets, which the engine
+evaluates itself (`src/nutation.ts`, transcribed from NOVAS C 3.1). Its Δψ and
+Δε equal ERFA's `nut00b` within 1e-10″ at 101 instants from 1800 to 2200
+(`src/nutation.test.ts`). astronomy-engine's vectors on the J2000 mean equator
+are turned to the ecliptic of date with astronomy-engine's own IAU 2006
+precession (`src/frame.ts`) and that nutation. Measured against ERFA's IAU
+2006/2000A chain applied to the same vectors at 4,001 instants from 1800 to
+2200, that rotation puts a longitude at most 0.003691″ off, and the ascendant
+and midheaven at latitudes within 60° at most 0.006284″ and 0.003358″ off; with
+astronomy-engine's five-term nutation, used until this change, they were up to
+0.2520″, 0.8235″ and 0.2457″ off
+(`docs/evidence/nutation-2026-09-29/results/erfa-frame.json`). The equation of
+the equinoxes adds the two largest IAU 2000 complementary terms (IERS
+Conventions 2010, table 5.2e).
+
 ## Accuracy and licensing
 
 The ephemeris is powered by the MIT-licensed `astronomy-engine`. Tests compare
@@ -856,9 +884,10 @@ CC BY 4.0, attributed in [NOTICE](NOTICE).
 
 The npm package contains no place database. It carries tzdb 2025c's zone
 histories before 1970, the IERS leap-second list, an IERS UT1 − UTC table, a
-table of Gregorian adoption dates from public-domain sources, and 22 catalogue
-values for the stars of the Vedic ayanamsas; [NOTICE](NOTICE) records their
-sources and the GeoNames attribution, and downstream users should retain it.
+table of Gregorian adoption dates from public-domain sources, 22 catalogue
+values for the stars of the Vedic ayanamsas, and the IAU 2000B nutation series
+from NOVAS C 3.1, a US Government work; [NOTICE](NOTICE) records their sources
+and the GeoNames attribution, and downstream users should retain it.
 [LICENSING.md](LICENSING.md) gives the terms of each.
 
 ## Internal site entry points
