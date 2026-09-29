@@ -5,7 +5,9 @@ preregistered in `PREREGISTRATION.md` (commit `d1000e66`), on the build of
 commit `670db8a6`. An independent review then reproduced it and ran 300
 windows of its own; its findings were fixed in commits `94b9fa2` to `e0833ee`,
 and on the build of `e0833ee` the review's checker ran both sets again ("After
-the review", below).
+the review", below). A second round of review asked for documentation fixes
+only, made in `f9ae1de`, whose built JavaScript is byte-identical to
+`e0833ee`'s, and for a stricter check of the unresolved intervals.
 
 ## The search
 
@@ -163,8 +165,10 @@ this directory's (`check.mjs`, sha256 `f2026d46…`, outside this repository).
 Its findings, and what changed:
 
 - **Placidus fell back outside the polar circle**, at isolated milliseconds
-  within a few 1e-9° of the limit (26 of the 2,201 from 1 s before to 1.2 s
-  after 2000-03-20T00:00Z at 66.56186339751429°, 92.16879370494166°).
+  within about 1e-8° of the limit (26 of the 2,201 from 1 s before to 1.2 s
+  after 2000-03-20T00:00Z at 66.56186339751429°, 92.16879370494166°; a scan
+  at 2e-6° steps of RAMC found the 64-step iteration failing up to 9.5e-9°
+  below the limit).
   `94b9fa2` bisects each cusp where the fixed-point iteration does not settle;
   `placidus-limit.test.ts` checks the reproduction and 14,140 inputs from one
   unit in the last place to 1e-6° below the limit near the sensitive RAMCs
@@ -225,11 +229,31 @@ predates the `unresolved` field, reads the null nodes there as disagreements:
 its 53,592 are exactly the samples inside those intervals times the two
 components each leaves open (18,600, 11,572, 9,670, 9,194 and 4,556), and
 its misses, extras and four millisecond failures are the sampled flicker and
-the intervals' edges. The same checker, with those components taken as null
-inside their intervals at samples and at switches (a ten-line change, kept
-with the review's material), passes all five: 49 sampled transitions
-matched, none missed, none extra, no disagreements, 3,222 millisecond checks
-passed (`review-recheck.json`).
+the intervals' edges.
+
+The review's second-round checker, kept here as `review-check2.mjs` and
+credited to the review, is written for unresolved intervals. Inside each
+interval only the components it lists are wildcards, and the partition must
+be null for exactly those, exactly there. At each edge the resolved side is
+verified at its millisecond: the switch at a takes each listed component from
+its value to null, and natalChart at a − 1 has that value; the switch at b
+takes it from null to the value natalChart has at b. Every millisecond within
+1,000 ms of each edge, outside the interval, is compared for all 72
+components; everything else is checked as by `check.mjs`. On the build of
+`f9ae1de` it passes all 57 windows of `review-edge-windows.json`: the five
+former budget windows; the review's 35 with an ascendant change, or a
+Placidus cusp crossing the node, at a − 1, a, a + 1, b − 1, b and b + 1 of an
+interval; and its 17 others, 8 of them with a Placidus or Koch fallback
+switch inside an interval. 48 of the 57 have an unresolved interval. None of
+their 278 edge checks, 87,000 compared edge milliseconds or 5,009,252
+millisecond checks at switches fails, and no cell is null where it should
+not be. As a check of the checker, the review's mutation that hides a node
+sign change 300 ms before a fake interval opens fails it (234 mismatches at
+the edge's milliseconds); the same window unmutated passes. A masked copy of
+`check.mjs` recorded here before skipped every switch to or from null and
+every switch inside or at the end of an interval, so it verified neither side
+of an edge: it passed that mutation, and failed all 18 edge windows whose
+nodes' houses are null. Its results are withdrawn (`review-recheck.json`).
 
 ## Run time
 
@@ -274,8 +298,8 @@ Regiomontanus 26 s and Topocentric 54 s.
 
 ## Package
 
-`package-check.mjs` on the build of `e0833ee`, against a build of the base
-commit `8c4946b1` with the Placidus change (`src/houses.ts` of `94b9fa2`)
+`package-check.mjs` on the build of `f9ae1de`, against a build of the base
+commit `8c4946b1` with the Placidus change (`src/houses.ts` of `f9ae1de`)
 carried onto it, so that the comparison isolates the window entry point; and
 against the base as it is for the root entry's size (`package-check.json`):
 
@@ -291,16 +315,16 @@ against the base as it is for the root entry's size (`package-check.json`):
   the engine code it shares, astronomy-engine excluded). Added to a bundle
   that already has the root entry point: 17,244 bytes minified, 6,770
   gzipped. Its own module: 17,973 and 7,790.
-- `npm pack`: 89,788 bytes packed and 299,059 unpacked, 32 files; the
-  package-contents gate requires under 300,000 unpacked, which leaves 941.
-  `dist/window.js` is 35,079 bytes and `dist/window.d.ts` 6,988. The review's
+- `npm pack`: 89,868 bytes packed and 299,301 unpacked, 32 files; the
+  package-contents gate requires under 300,000 unpacked, which leaves 699.
+  `dist/window.js` is 35,079 bytes and `dist/window.d.ts` 7,035. The review's
   fixes first took the package to 307,066; the README's window section was
   condensed, its method moved to "The search" above, and comments that the
   build kept in `dist/window.js` moved where it drops them.
 
 ## Gates
 
-Run on a clean tree at `e0833ee` (`gates.log`; the commit that adds this
+Run on a clean tree at `f9ae1de` (`gates.log`; the commit that adds this
 file changes only `docs/evidence/`): typecheck; unit tests, 2,676 in 30
 files; build; export smoke; package contents; `npm pack --dry-run`;
 `npm pack`; the clean packed consumer, which types and runs
@@ -346,4 +370,4 @@ committed results; and the conformance report check. All 13 passed.
 - **natalChart as a lone call.** astronomy-engine reuses its nutation within
   86.4 ms, so natalChart calls closer together than that can differ from
   these values in the last digits.
-- **Package.** 941 bytes remain under the unpacked-size gate.
+- **Package.** 699 bytes remain under the unpacked-size gate.

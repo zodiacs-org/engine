@@ -1,5 +1,5 @@
 {
-  "baseline": "dist/ of a build of 8c4946b142c731ecdec186df6c04b91b7f2463e0 (origin/main) with src/houses.ts of 94b9fa2 (the Placidus change)",
+  "baseline": "dist/ of a build of 8c4946b142c731ecdec186df6c04b91b7f2463e0 (origin/main) with src/houses.ts of f9ae1ded (the Placidus change)",
   "original": "dist/ of a build of 8c4946b142c731ecdec186df6c04b91b7f2463e0 (origin/main)",
   "javascript": {
     "baselineFiles": 15,
@@ -44,16 +44,16 @@
     }
   },
   "pack": {
-    "packed": 89788,
-    "unpacked": 299059,
+    "packed": 89868,
+    "unpacked": 299301,
     "files": 32,
     "gateUnpacked": 300000,
-    "headroom": 941
+    "headroom": 699
   },
   "windowFiles": [
     {
       "path": "dist/window.d.ts",
-      "bytes": 6988
+      "bytes": 7035
     },
     {
       "path": "dist/window.js",
