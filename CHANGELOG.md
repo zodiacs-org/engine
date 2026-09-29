@@ -49,6 +49,49 @@
   change carried onto rc.12, every JavaScript file of rc.12's build is
   byte-identical.
 
+Not yet in a candidate; the version is unchanged. A new opt-in entry point,
+`@zodiacs/engine/techniques`, holds six techniques Zodiacs.org computed
+outside the package. The root entry does not import it. Guide:
+`docs/techniques.md`; checks: `docs/evidence/techniques-2026-09-29/`.
+
+New:
+
+- Solar and lunar returns: `solarReturnInstant`,
+  `mostRecentSolarReturnInstant`, `lunarReturnInstant`, and `solarReturn` and
+  `lunarReturn`, which cast the return chart. For USNO's 20 equinoxes and
+  solstices of 1850, 1900, 1950, 2000 and 2022 the solar return is within
+  45.35 s of the published minute; for the Horizons Sun and Moon of the 48 L1
+  vectors, within 33.23 s and 6.87 s.
+- Composite charts (`compositeMidpoints`, `compositeAspects`,
+  `compositeChart`), and Davison charts for the mean instant and the mean or
+  great-circle place (`davisonChart`, `davisonPlace`).
+- The void-of-course Moon (`moonIngresses`, `moonAspects`,
+  `voidOfCourseWindows`, `voidOfCourseAt`) under one named convention,
+  `VOID_OF_COURSE_CONVENTION`: from the Moon's last exact Ptolemaic aspect in
+  a sign, to the Sun and planets or to the Sun to Saturn, to its next
+  ingress.
+- Grand trines, T-squares, grand crosses and kites from a chart's aspect
+  records (`aspectPatterns`, `chartAspectPatterns`), and which contain which
+  (`patternContainment`).
+- Essential dignities with cited tables (Dorothean triplicities, Egyptian
+  terms, Chaldean faces), peregrine planets, and mutual reception by any of
+  the five dignities (`dignityRulersAt`, `essentialDignities`,
+  `mutualReceptions`), beside the site's `dignityFor` and `dignitiesFor`.
+- `moonSignCandidates`: the Moon signs possible over a date, in a time zone
+  or in every time zone, and `moonSignsBetween`.
+
+Each ported function gives the site's result on a seeded synthetic corpus:
+6,795 of 6,796 cases agree exactly. The one that does not is 2011-12-30 in
+Pacific/Apia, a date the zone skipped, which the package refuses. By design,
+returns are not clipped to 1800–2200 as the site clips them but flagged, and
+dates before 1970 are read on the shipped tzdata rather than the host's.
+
+Sizes: the root entry's import graph is unchanged, the same files and bytes
+(95,273). `./techniques` has a budget of 150,000 bytes; its graph is 141,745,
+the core's included. `./geo`'s graph grows by 464 bytes to 32,136, because its
+local-time code is now a chunk it shares with `./techniques`. The package is
+694,949 bytes unpacked, within the 700,000 cap.
+
 Migration: none. With every default `calc` gives the position `positions()`
 gives, to the bit after the same earlier calls, and the root entry's build is
 byte for byte unchanged. `@zodiacs/engine/window` changes no existing

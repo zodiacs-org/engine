@@ -173,6 +173,9 @@ for (const aspect of today.aspects) {
   longitude function of your own, without the ephemeris.
 - `@zodiacs/engine/geo` provides IANA local-time resolution, Julian calendar
   dates and a client for a separately hosted, sharded GeoNames index.
+- `@zodiacs/engine/techniques` provides solar and lunar returns, composite and
+  Davison charts, the void-of-course Moon, aspect patterns, essential
+  dignities and the Moon signs possible over a date (see `docs/techniques.md`).
 - `@zodiacs/engine/timing` provides profections, firdaria, zodiacal releasing
   and solar arc directions (see `docs/timing-hellenistic.md`).
 - `@zodiacs/engine/vedic` provides the sidereal zodiac: ayanamsas, sidereal
@@ -852,7 +855,7 @@ compatibility boundaries for Zodiacs.org. They let the site consume the exact
 package implementation while keeping its scanner-oriented functions and lazy
 bundle boundary intact. They are not covered by semantic-versioning guarantees;
 third-party code must use the documented entry points: the root, `/geo`,
-`/timing`, `/vedic`, `/receipt`, `/crossings` and `/deltat`.
+`/techniques`, `/timing`, `/vedic`, `/receipt`, `/crossings` and `/deltat`.
 
 ## GeoNames request recovery
 

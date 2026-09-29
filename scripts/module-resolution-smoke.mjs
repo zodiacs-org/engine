@@ -9,6 +9,7 @@ const crossings = await import("@zodiacs/engine/crossings");
 const deltat = await import("@zodiacs/engine/deltat");
 const geo = await import("@zodiacs/engine/geo");
 const receipt = await import("@zodiacs/engine/receipt");
+const techniques = await import("@zodiacs/engine/techniques");
 const timing = await import("@zodiacs/engine/timing");
 const vedic = await import("@zodiacs/engine/vedic");
 const window = await import("@zodiacs/engine/window");
@@ -110,6 +111,73 @@ assert(Math.abs(timing.solarArc("1952-09-25T07:12:00Z", "1995-05-26T06:02:46Z").
 for (const name of ["TRADITIONAL_RULERS", "VALENS_MINOR_YEARS", "FIRDARIA_YEARS", "RELEASING_UNIT_DAYS", "PROFECTION_MONTH_CONVENTIONS"]) {
   assert.ok(Object.isFrozen(timing[name]), `${name} must be frozen`);
 }
+
+// The techniques moved from Zodiacs.org are a separate entry point, absent from the root.
+for (const name of [
+  "solarReturnInstant",
+  "mostRecentSolarReturnInstant",
+  "lunarReturnInstant",
+  "solarReturn",
+  "lunarReturn",
+  "compositeMidpoints",
+  "compositeAspects",
+  "compositeChart",
+  "davisonChart",
+  "davisonPlace",
+  "moonIngresses",
+  "moonAspects",
+  "voidOfCourseWindows",
+  "voidOfCourseAt",
+  "aspectPatterns",
+  "chartAspectPatterns",
+  "patternContainment",
+  "dignityFor",
+  "dignitiesFor",
+  "hasClassicalDignities",
+  "dignityRulersAt",
+  "essentialDignities",
+  "mutualReceptions",
+  "moonSignCandidates",
+  "moonSignsBetween"
+]) {
+  assert.equal(typeof techniques[name], "function", `missing techniques export: ${name}`);
+}
+for (const name of Object.keys(techniques)) {
+  assert.equal(name in engine, false, `techniques leaked into root: ${name}`);
+}
+for (const name of ["VOID_BODIES", "VOID_OF_COURSE_CONVENTION", "PATTERN_BODIES", "EGYPTIAN_TERMS", "CHALDEAN_FACES", "TRIPLICITY_LORDS", "EVERY_ZONE_OFFSETS"]) {
+  assert.ok(Object.isFrozen(techniques[name]), `techniques ${name} must be frozen`);
+}
+// Worked examples the unit tests pin, checked again through the built package:
+// Lilly's three receptions (Christian Astrology, 1647, p. 112), a grand trine,
+// the site's composite case, the every-time-zone span of a date, and the
+// Egyptian terms of Aries (Tetrabiblos I.20). See docs/techniques.md.
+assert.deepEqual(techniques.mutualReceptions([{ body: "Sun", lon: 15 }, { body: "Mars", lon: 135 }]), [
+  { a: "Sun", b: "Mars", aReceivesB: ["domicile"], bReceivesA: ["domicile"] }
+]);
+assert.deepEqual(
+  techniques.mutualReceptions([{ body: "Venus", lon: 10 }, { body: "Sun", lon: 40 }], { dignities: ["triplicity"], sect: "day" }),
+  [{ a: "Sun", b: "Venus", aReceivesB: ["triplicity"], bReceivesA: ["triplicity"] }]
+);
+assert.deepEqual(
+  techniques.mutualReceptions([{ body: "Venus", lon: 23.5 }, { body: "Mars", lon: 75.5 }], { dignities: ["term"] }).map((row) => row.aReceivesB),
+  [["term"]]
+);
+assert.throws(() => techniques.mutualReceptions([], { dignities: ["triplicity"] }), RangeError);
+const trine = [{ body: "Mercury", lon: 0 }, { body: "Venus", lon: 120 }, { body: "Mars", lon: 240 }];
+assert.deepEqual(
+  techniques.aspectPatterns(trine, [
+    { a: "Mercury", b: "Venus", type: "trine", orb: 0 },
+    { a: "Mercury", b: "Mars", type: "trine", orb: 0 },
+    { a: "Venus", b: "Mars", type: "trine", orb: 0 }
+  ]).patterns.map((pattern) => pattern.id),
+  ["grand-trine:Mercury,Venus,Mars"]
+);
+assert.deepEqual(techniques.compositeMidpoints([{ body: "Sun", lon: 359 }], [{ body: "Sun", lon: 1 }]), [{ body: "Sun", lon: 0 }]);
+const untimed = techniques.moonSignCandidates("2000-04-11");
+assert.deepEqual([untimed.from.toISOString(), untimed.to.toISOString()], ["2000-04-10T10:00:00.000Z", "2000-04-12T11:59:59.999Z"]);
+assert.deepEqual(techniques.EGYPTIAN_TERMS.aries, [["Jupiter", 6], ["Venus", 12], ["Mercury", 20], ["Mars", 25], ["Saturn", 30]]);
+assert.equal(techniques.VOID_OF_COURSE_CONVENTION.name, "last-exact-ptolemaic-aspect-to-sign-exit");
 
 for (const name of [
   "createNatalEnvelope",
@@ -255,27 +323,39 @@ const root = checkRootIsolation({ metafile, files: builtFiles, read: readBuilt }
 for (const reading of [root.sources, root.held, root.marked]) {
   assert(reading.includes("src/api.ts") && reading.includes("src/ephemeris.ts"), "the build no longer lists or marks its modules' sources");
 }
-for (const [entry, own] of [["timing", /^src\/timing\//u], ["vedic", /^src\/vedic\//u], ["geo", /^src\/geo\//u]]) {
+for (const [entry, own] of [
+  ["timing", /^src\/timing\//u],
+  ["vedic", /^src\/vedic\//u],
+  ["geo", /^src\/geo\//u],
+  ["techniques", /^src\/techniques\//u]
+]) {
   const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
   for (const reading of [graph.sources, graph.held, graph.marked]) {
     assert(reading.some((source) => own.test(source)), `the ${entry} entry's own modules are not listed or marked`);
   }
 }
 
-// No module of the calc entry is in the root's static graph, read either way.
+// No module of the calc or techniques entries is in the root's static graph, read either way.
 for (const source of new Set([...root.sources, ...root.held, ...root.marked])) {
-  assert(!/^src\/calc(?:-[a-z]+)?\.ts$/u.test(source), `the root entry reaches ${source}`);
+  assert(!/^src\/(?:calc(?:-[a-z]+)?\.ts$|techniques(?:\.ts$|\/))/u.test(source), `the root entry reaches ${source}`);
 }
 
 // The geo entry reaches the zone histories only through dynamic imports, one
-// per shard file.
-const geoCode = readFileSync(new URL("../dist/geo.js", import.meta.url), "utf8");
-const lazy = [...geoCode.matchAll(/\bimport\s*\(\s*["']([^"']+)["']\s*\)/gu)].map((match) => match[1]);
+// per shard file. Since ./techniques shares the local-time code, that code,
+// and so the imports, can sit in a chunk of the geo entry's static graph.
+const outputsOf = (entry) =>
+  staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` }).outputs;
+const lazy = outputsOf("geo").flatMap((file) =>
+  [...readBuilt(file).matchAll(/\bimport\s*\(\s*["']([^"']+)["']\s*\)/gu)].map((match) => match[1])
+);
 assert.equal(lazy.length, 16, "the geo entry should load 16 zone-history shards lazily");
 assert(lazy.every((specifier) => /^\.\/tzdb-2025c-\d{2}-[A-Za-z0-9]+\.js$/u.test(specifier)));
+for (const entry of ["geo", "techniques"]) {
+  for (const file of outputsOf(entry)) assert(!/(?:^|\/)tzdb-[^/]*$/u.test(file), `zone-history shard in the static ${entry} graph`);
+}
 console.log(
   "@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, " +
     `the core graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
-    `${root.outputs.length} files) reaches no timing, Vedic, geo or calc module and no zone history, ` +
+    `${root.outputs.length} files) reaches no timing, Vedic, geo, calc or techniques module and no zone history, ` +
     "and the geo entry loads its 16 shards lazily"
 );

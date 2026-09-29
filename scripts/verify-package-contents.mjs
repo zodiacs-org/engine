@@ -26,6 +26,8 @@ const required = [
   "dist/geo.js",
   "dist/receipt.d.ts",
   "dist/receipt.js",
+  "dist/techniques.d.ts",
+  "dist/techniques.js",
   "dist/timing.d.ts",
   "dist/timing.js",
   "dist/vedic.d.ts",
@@ -78,10 +80,19 @@ const ENTRY_BUDGETS = {
   ".": 100_000,
   "./crossings": 10_000, // rc.15: 9,410
   "./deltat": 5_500, // rc.15: 4,968
-  "./geo": 35_000, // rc.15: 31,672, the zone histories not included (below)
+  // rc.15: 31,672, the zone histories not included (below). With ./techniques
+  // 32,136: the local-time code moves to a chunk the two entries share, and
+  // geo.js re-exports it.
+  "./geo": 35_000,
   "./internal": 60_000, // rc.15: 56,961
   "./internal/math": 20_000, // rc.15: 18,165
   "./receipt": 70_000, // rc.15: 62,880
+  // Returns, composite and Davison charts, the void-of-course Moon, aspect
+  // patterns, dignities and Moon-sign candidates, moved from Zodiacs.org:
+  // 141,745 as first built, with the core's graph and the local-time chunk
+  // it shares with ./geo (docs/evidence/techniques-2026-09-29/); 5.8 per
+  // cent of headroom.
+  "./techniques": 150_000,
   "./timing": 120_000, // rc.15: 112,485, the core's graph included
   "./vedic": 120_000 // rc.15: 114,106, the core's graph included
 };
