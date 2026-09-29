@@ -14,6 +14,7 @@ const techniques = await import("@zodiacs/engine/techniques");
 const timing = await import("@zodiacs/engine/timing");
 const vedic = await import("@zodiacs/engine/vedic");
 const window = await import("@zodiacs/engine/window");
+const sky = await import("@zodiacs/engine/sky");
 const internal = await import("@zodiacs/engine/internal");
 const internalMath = await import("@zodiacs/engine/internal/math");
 
@@ -206,6 +207,21 @@ assert.equal(houses.SIDEREAL_RATE, 360.98564736629);
   assert.equal(jupiter.status, "complete");
   assert.deepEqual(jupiter.returns.map((row) => [row.retrograde, row.pass]), [[false, 1], [true, 1], [false, 1]]);
 }
+// Rise, set, transits and planetary hours are their own entry, absent from the
+// root. A worked example the unit tests pin is checked again through the built
+// package (docs/sky.md).
+for (const name of ["skyEvents", "skyEventsOn", "planetaryHours", "planetaryHourAt"]) {
+  assert.equal(typeof sky[name], "function", `missing sky export: ${name}`);
+  assert.equal(name in engine, false, `sky leaked into root: ${name}`);
+}
+for (const name of ["PLANETARY_DAY_RULERS", "SKY_RADII_KM"]) assert.ok(Object.isFrozen(sky[name]), `${name} must be frozen`);
+assert.equal(sky.CHALDEAN_ORDER, timing.CHALDEAN_ORDER, "one Chaldean order for the sky and timing entries");
+{
+  // Heindel (1919): latitude 40, a Thursday in December, Mars from 1:32 to 2:18 P.M.
+  const { hour } = sky.planetaryHourAt({ latitude: 40, longitude: -75 }, "2025-12-18T19:00:00Z", { utcOffsetMinutes: -300 });
+  assert.equal(hour.ruler, "Mars");
+  assert.ok(Math.abs(hour.start.getTime() - Date.parse("2025-12-18T18:32:00Z")) <= 300_000);
+}
 
 for (const name of [
   "createNatalEnvelope",
@@ -360,7 +376,8 @@ for (const [entry, own] of [
   ["vedic", /^src\/vedic\//u],
   ["geo", /^src\/geo\//u],
   ["techniques", /^src\/techniques\//u],
-  ["houses-extra", /^src\/houses-extra\.ts$/u]
+  ["houses-extra", /^src\/houses-extra\.ts$/u],
+  ["sky", /^src\/sky\//u]
 ]) {
   const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
   for (const reading of [graph.sources, graph.held, graph.marked]) {
@@ -368,9 +385,9 @@ for (const [entry, own] of [
   }
 }
 
-// No module of the calc, techniques or houses entries is in the root's static graph, read either way.
+// No module of the calc, techniques, houses or sky entries is in the root's static graph, read either way.
 for (const source of new Set([...root.sources, ...root.held, ...root.marked])) {
-  assert(!/^src\/(?:calc(?:-[a-z]+)?\.ts$|techniques(?:\.ts$|\/)|houses-extra\.ts$)/u.test(source), `the root entry reaches ${source}`);
+  assert(!/^src\/(?:calc(?:-[a-z]+)?\.ts$|techniques(?:\.ts$|\/)|houses-extra\.ts$|sky(?:\.ts$|\/)|first-millisecond\.ts$)/u.test(source), `the root entry reaches ${source}`);
 }
 
 // The geo entry reaches the zone histories only through dynamic imports, one
@@ -389,6 +406,6 @@ for (const entry of ["geo", "techniques"]) {
 console.log(
   "@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, " +
     `the core graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
-    `${root.outputs.length} files) reaches no timing, Vedic, geo, calc, techniques or houses module and no zone history, ` +
+    `${root.outputs.length} files) reaches no timing, Vedic, geo, calc, techniques, houses or sky module and no zone history, ` +
     "and the geo entry loads its 16 shards lazily"
 );
