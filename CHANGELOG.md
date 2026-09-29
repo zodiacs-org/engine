@@ -36,7 +36,9 @@
 - Where the true node's jitter would make its sign flicker for longer than
   the search's budget of two million instants (24 of its 294 ingresses from
   1800 to 2200), the flicker is left unresolved, found before the budget is
-  spent: the nodes' signs are null there, the interval is listed in
+  spent: the nodes' signs are null there, and so are their houses where
+  those are whole signs (the whole-sign system, or Placidus or Koch falling
+  back, or able to, during the interval); the interval is listed in
   `unresolved`, and the result carries `node-unresolved`.
 - Evidence in `docs/evidence/birth-window/`: the scans behind the bounds,
   the preregistered comparison with natalChart at every second of 1,000

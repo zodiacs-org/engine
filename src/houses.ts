@@ -155,7 +155,7 @@ export function wholeSignCusps(ascendant: number): number[] {
  * the ascensional difference asin(tan φ tan δ(α)) and m = 1/3 or 2/3. With
  * tan δ = tan ε sin α, |dAD/dα| <= q = |tan φ| tan ε < 1 outside the polar
  * circle, so the map is a contraction with slope at most 2q/3. The iteration
- * settles to 1e-9° within 64 steps except within about 4e-9° of the polar
+ * settles to 1e-9° within 64 steps except within about 1e-8° of the polar
  * limit, near the sidereal times at which a cusp's right ascension reaches 90°
  * or 270°: it needs up to 63 steps there, and the rounding of asin near ±1
  * moves each step by about the tolerance. Where it does not settle, the cusp

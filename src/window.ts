@@ -316,7 +316,7 @@ export interface BirthWindow {
   engineVersion: string;
 }
 
-/** Thrown when a window needs more evaluated instants than the search allows. */
+/** Thrown when a window needs more evaluated instants than the search allows. An Error, not a RangeError. */
 export class WindowBudgetError extends Error {
   override readonly name = "WindowBudgetError";
   /** The instants the search allows. */
@@ -1149,8 +1149,8 @@ function change(id: number, from: number, to: number, system: HouseSystem): Wind
  * (README), each cell holds natalChart's features at every millisecond, except
  * the nodes' in the intervals listed in `unresolved`, which are null. Labelled
  * {@link WINDOW_VERIFICATION}: checked against dense sampling, not proven.
- * Throws RangeError for invalid input and WindowBudgetError when the search
- * would need more than two million evaluated instants.
+ * Throws RangeError for invalid input, and WindowBudgetError, which is not a
+ * RangeError, when the search would need more than two million instants.
  */
 export function birthWindow(input: BirthWindowInput): BirthWindow {
   if (!input || typeof input !== "object") throw new RangeError("input must be an object.");

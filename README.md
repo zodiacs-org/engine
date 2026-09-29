@@ -714,17 +714,19 @@ a whole day about 0.23 s (medians, Node.js 22; `timing.json`). A window over a
 node ingress takes from seconds to a few minutes, as the node is compared at
 every millisecond of its flicker (1,950 s around the ingress of 2032-11-25:
 77 s, 18,315 switches); an unresolved stretch costs a fraction of a second.
-Within 1e-8° of the polar limit each passage of a sensitive RAMC adds seconds,
-and at 89.999999° a 48-hour window takes up to three minutes (Alcabitius).
+Within 1e-8° of the polar limit each passage of a sensitive RAMC adds about
+20 s, and at 89.999999° a 48-hour window takes up to three minutes
+(Alcabitius).
 
 Other flags are `polar-fallback`, when a cell uses whole-sign houses in place
 of Placidus or Koch, `bound-exceeded` and `node-unresolved`. Invalid input
 throws `RangeError`, including a window outside `REFERENCE_SPAN` and a
 latitude within 1e-6° of either pole, where the ascendant is undefined or
 turns too fast for the search. A search that would evaluate more than two
-million instants outside the unresolved intervals throws `WindowBudgetError`.
-The entry point carries the ephemeris and is separate from the root entry
-point, so that the root does not grow.
+million instants outside the unresolved intervals throws `WindowBudgetError`,
+which is an `Error` and not a `RangeError`. The entry point carries the
+ephemeris and is separate from the root entry point, so that the root does not
+grow.
 
 ### Resolved instant inputs
 
