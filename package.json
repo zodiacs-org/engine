@@ -85,7 +85,7 @@
     "astronomy-engine": "2.1.19"
   },
   "devDependencies": {
-    "@types/node": "^22.19.19",
+    "@types/node": "^26.6.3",
     "tsup": "^8.5.1",
     "typedoc": "^0.28.20",
     "typescript": "^5.9.3",
