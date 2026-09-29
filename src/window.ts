@@ -279,15 +279,10 @@ export interface BirthWindowSwitch {
   changes: WindowChange[];
 }
 
-/**
- * An interval in which the true nodes' signs, and where the houses are whole
- * signs their houses, are not resolved: at a slow ingress the node's
- * millisecond jitter makes them change back and forth for longer than the
- * search's budget allows. They are null in every cell of [start, end).
- */
+/** Where the node's jitter would outlast the budget: these features are null in every cell of [start, end). */
 export interface WindowUnresolved {
   start: Date;
-  /** The first instant after the interval, at which the features are resolved again. */
+  /** The first instant at which they are resolved again. */
   end: Date;
   milliseconds: number;
   features: { feature: "sign" | "house"; body: "North Node" | "South Node" }[];
@@ -295,7 +290,7 @@ export interface WindowUnresolved {
 
 export type BirthWindowFlag =
   | "polar-fallback"
-  /** Some interval's end-to-end change exceeded a rate or enclosure bound; completeness is then not established. */
+  /** An interval's end-to-end change broke a bound; completeness is then not established. */
   | "bound-exceeded"
   /** The result lists unresolved intervals. */
   | "node-unresolved";
@@ -329,7 +324,7 @@ export class WindowBudgetError extends Error {
 
   constructor() {
     super(
-      `The window needs more than ${MAX_EVALUATIONS} evaluated instants: a quantity stays within its rounding band of a boundary for too long.`
+      `The window needs more than ${MAX_EVALUATIONS} evaluated instants.`
     );
   }
 }
@@ -439,7 +434,6 @@ class Sky {
   evaluations = 0;
   violations = 0;
   readonly tanPhi: number;
-  /** RAMCs near which the cusps are sensitive, for Placidus and Koch. */
   readonly sensitive: readonly number[];
 
   constructor(
@@ -449,6 +443,7 @@ class Sky {
     readonly seams: Seams
   ) {
     this.tanPhi = Math.tan(latitude * DEG);
+    // RAMCs near which the cusps are sensitive, for Placidus and Koch.
     const values = SENSITIVE_RAMC[system];
     this.sensitive = values ? values[latitude >= 0 ? 0 : 1] : [];
   }
@@ -481,8 +476,8 @@ class Sky {
     return value;
   }
 
-  /** The north node's longitude, outside the search and its budget. */
   node(time: number): number {
+    // The north node's longitude, outside the search and its budget.
     freshCaches(time);
     return bodyLongitude("North Node", new Date(time));
   }
@@ -513,8 +508,8 @@ class Sky {
     return at.angles;
   }
 
-  /** A component's discrete value at a millisecond, computed as natalChart computes it. */
   value(time: number, id: number): number {
+    // A component's discrete value at a millisecond, computed as natalChart computes it.
     if (id < ASC) return signIndexForLongitude(this.lon(time, id));
     if (id === ASC) return signIndexForLongitude(this.angles(time).asc);
     if (id === MC) return signIndexForLongitude(this.angles(time).mc);
@@ -562,13 +557,13 @@ class Interval {
     return null;
   }
 
-  /** Whether one of the steps in `seams` lies in the interval: t1 < z <= t2. */
   private jumps(seams: readonly number[]): boolean {
+    // Whether one of the steps in `seams` lies in the interval: t1 < z <= t2.
     return seams.some((z) => this.t1 < z && z <= this.t2);
   }
 
-  /** A body's longitude: rate-bounded from both ends, widened by any jitter; unknown across a seam. */
   body(index: number): Range {
+    // A body's longitude: rate-bounded from both ends, widened by any jitter; unknown across a seam.
     const known = this.bodies[index];
     if (known !== undefined) return known;
     const { sky, t1, t2 } = this;
@@ -609,8 +604,8 @@ class Interval {
     return edges.some((edge) => edge >= lo && edge <= hi);
   }
 
-  /** Whether Placidus or Koch keeps one side of its polar limit throughout. */
   private systemStable(): boolean {
+    // Whether Placidus or Koch keeps one side of its polar limit throughout.
     if (this.stable !== undefined) return this.stable;
     const { sky, t1, t2 } = this;
     let stable = true;
@@ -632,13 +627,11 @@ class Interval {
     return stable;
   }
 
-  /**
-   * Whether Placidus or Koch is within 1e-8° (and the obliquity's possible
-   * change) of its polar limit while the RAMC passes within 0.1° of a value
-   * where its cusps carry asin's rounding near ±1. The system and the houses
-   * are then resolved millisecond by millisecond.
-   */
   private guarded(): boolean {
+    // Whether Placidus or Koch is within 1e-8° (and the obliquity's possible
+    // change) of its polar limit while the RAMC passes within 0.1° of a value
+    // where its cusps carry asin's rounding near ±1. The system and the houses
+    // are then resolved millisecond by millisecond.
     if (this.guard !== undefined) return this.guard;
     const { sky, t1, t2 } = this;
     let guard = false;
@@ -654,8 +647,8 @@ class Interval {
     return guard;
   }
 
-  /** The RAMC's advance, the obliquity, the midheaven and the ascendant; unknown across a seam. */
   angleContext(): AngleContext | null {
+    // The RAMC's advance, the obliquity, the midheaven and the ascendant; unknown across a seam.
     if (this.context !== undefined) return this.context;
     this.context = null;
     const { sky, t1, t2 } = this;
@@ -701,8 +694,8 @@ class Interval {
     return context;
   }
 
-  /** The range, if the engine's own values at both ends lie in it; otherwise a recorded violation. */
   private holds(range: Range, v1: number, v2: number): Range {
+    // The range, if the engine's own values at both ends lie in it; otherwise a recorded violation.
     if (range === null) return null;
     return reaches(range, 360, v1, 1e-7) && reaches(range, 360, v2, 1e-7)
       ? range
@@ -725,8 +718,8 @@ class Interval {
     );
   }
 
-  /** Whether two neighbouring cusps may meet, which would reorder houseOf's arcs. */
   private spansMayClose(): boolean {
+    // Whether two neighbouring cusps may meet, which would reorder houseOf's arcs.
     if (this.spans !== undefined) return this.spans;
     const cusps = this.cusps();
     const system = this.sky.system;
@@ -742,8 +735,8 @@ class Interval {
     return spans;
   }
 
-  /** Ranges of the twelve cusps of a system that has not fallen back; null if any is unknown. */
   private cusps(): Range[] | null {
+    // Ranges of the twelve cusps of a system that has not fallen back; null if any is unknown.
     if (this.cuspList !== undefined) return this.cuspList;
     this.cuspList = null;
     const context = this.angleContext();
@@ -1094,9 +1087,7 @@ function resolvedWindow(input: BirthWindowInput): { start: number; end: number; 
   if (!(end > start)) throw new RangeError("The window must end after it starts.");
   if (end - start > MAX_WINDOW_MS) throw new RangeError("The window must be at most 48 hours long.");
   if (!(start >= SPAN_FROM && end <= SPAN_TO)) {
-    throw new RangeError(
-      `The window must lie within ${REFERENCE_SPAN.from} and ${REFERENCE_SPAN.to} (REFERENCE_SPAN), where the bounds its search relies on were scanned.`
-    );
+    throw new RangeError("The window must lie inside REFERENCE_SPAN, 1800 to 2200.");
   }
   if (rounding && (rounding.start.getTime() < start || rounding.end.getTime() > end)) {
     throw new RangeError("The rounding model's unit must lie inside the window.");
@@ -1150,29 +1141,16 @@ function change(id: number, from: number, to: number, system: HouseSystem): Wind
 }
 
 /**
- * Partition a birth-time window into cells within which every discrete feature
- * of the chart is constant: each body's sign and house, the signs of the
- * ascendant and midheaven, the aspects in orb (natalChart's definitions and
- * orbs) and, for Placidus and Koch, whether the houses fall back to whole
- * signs. Each switch gives the first millisecond of its new cell and what
- * changed, from what to what; each cell gives its share of the window under a
- * uniform prior and, when `rounding` is given, under that rounding model.
- *
- * The window is [start, end), at most 48 hours, inside REFERENCE_SPAN. Every
- * value is the engine's own at a millisecond, computed as a lone natalChart
- * call computes it with the engine's ΔT model. The search brackets each
- * quantity with a rate bound and bisects to the millisecond; how the bounds
- * are justified is in the README. Where they hold, a cell's features are
- * natalChart's at every millisecond it contains, except that inside the
- * intervals listed in `unresolved` the nodes' signs (and whole-sign houses)
- * are null. The `bound-exceeded` flag records a bound that failed across some
- * interval of the search; a failure that does not show in an interval's
- * end-to-end change goes unflagged. Results are labelled
+ * Partition a birth-time window, [start, end) of at most 48 hours inside
+ * REFERENCE_SPAN, into cells within which each body's sign and house, the
+ * signs of the ascendant and midheaven, the aspects in orb and any Placidus or
+ * Koch fallback are constant. Values are the engine's own at each millisecond,
+ * as a lone natalChart call computes them. Where the search's bounds hold
+ * (README), each cell holds natalChart's features at every millisecond, except
+ * the nodes' in the intervals listed in `unresolved`, which are null. Labelled
  * {@link WINDOW_VERIFICATION}: checked against dense sampling, not proven.
- *
- * Throws RangeError for invalid input, and WindowBudgetError when the search
- * outside the node's unresolved intervals would need more than two million
- * evaluated instants.
+ * Throws RangeError for invalid input and WindowBudgetError when the search
+ * would need more than two million evaluated instants.
  */
 export function birthWindow(input: BirthWindowInput): BirthWindow {
   if (!input || typeof input !== "object") throw new RangeError("input must be an object.");

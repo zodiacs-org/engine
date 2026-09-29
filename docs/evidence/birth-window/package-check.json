@@ -1,5 +1,6 @@
 {
-  "baseline": "dist/ of a build of 8c4946b142c731ecdec186df6c04b91b7f2463e0 (origin/main)",
+  "baseline": "dist/ of a build of 8c4946b142c731ecdec186df6c04b91b7f2463e0 (origin/main) with src/houses.ts of 94b9fa2 (the Placidus change)",
+  "original": "dist/ of a build of 8c4946b142c731ecdec186df6c04b91b7f2463e0 (origin/main)",
   "javascript": {
     "baselineFiles": 15,
     "changed": [],
@@ -13,46 +14,50 @@
     "onlyAddedExportsInSharedTypes": true
   },
   "sizes": {
-    "rootBaseline": {
+    "rootOriginal": {
       "minified": 38434,
       "gzip": 14555
+    },
+    "rootBaseline": {
+      "minified": 38635,
+      "gzip": 14653
     },
     "root": {
-      "minified": 38434,
-      "gzip": 14555
+      "minified": 38635,
+      "gzip": 14653
     },
     "window": {
-      "minified": 25116,
-      "gzip": 9998
+      "minified": 28652,
+      "gzip": 11614
     },
     "rootAndWindow": {
-      "minified": 52262,
-      "gzip": 19754
+      "minified": 55879,
+      "gzip": 21423
     },
     "windowAddsToRoot": {
-      "minified": 13828,
-      "gzip": 5199
+      "minified": 17244,
+      "gzip": 6770
     },
     "windowModuleAlone": {
-      "minified": 14484,
-      "gzip": 6216
+      "minified": 17973,
+      "gzip": 7790
     }
   },
   "pack": {
-    "packed": 86370,
-    "unpacked": 288104,
+    "packed": 89788,
+    "unpacked": 299059,
     "files": 32,
     "gateUnpacked": 300000,
-    "headroom": 11896
+    "headroom": 941
   },
   "windowFiles": [
     {
       "path": "dist/window.d.ts",
-      "bytes": 6127
+      "bytes": 6988
     },
     {
       "path": "dist/window.js",
-      "bytes": 27982
+      "bytes": 35079
     }
   ]
 }

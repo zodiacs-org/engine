@@ -25,38 +25,27 @@
   nutation error over 1800 to 2200 (0.087″ in obliquity, 0.08″ a day in
   rates). calc names it (`nutation:iau2000b-five-terms`) and keeps it;
   nothing the engine computes has changed.
-- New entry point `@zodiacs/engine/window`. `birthWindow(input)` partitions a
-  birth-time window of up to 48 hours, inside `REFERENCE_SPAN` (1800 to
-  2200), into cells within which each body's sign and house, the signs of the
-  ascendant and midheaven, the aspects in orb and any Placidus or Koch
-  fallback are constant. Each switch gives its first millisecond and each
-  change, from and to; each cell gives its share under a uniform prior and,
-  optionally, a rounding model.
-- Where the true node's jitter makes its sign flicker for longer than the
-  search's budget of two million evaluated instants, at 24 of its 294
-  ingresses from 1800 to 2200, the flicker is left unresolved: the nodes'
-  signs (and whole-sign houses) are null there, the interval is listed in
-  `unresolved`, and the result carries `node-unresolved`. The search
-  estimates this before it spends the budget. A search that still runs out
-  throws `WindowBudgetError`.
-- The search never drops an interval across the ΔT model's seam at
-  1940-12-31T18:00Z, or across the instants where the node and the planets'
-  backdated positions cross it, and compares Placidus and Koch at every
-  millisecond within 1e-8° of the polar limit near the RAMCs where their
-  cusps are ill-conditioned. Latitudes within 1e-6° of a pole are refused.
-- `WINDOW_RATE_BOUNDS`, the per-body rate bounds the search relies on;
-  `MAX_WINDOW_MS`; `WINDOW_VERIFICATION`, the label every result carries:
-  "sampled at one-second resolution"; `WindowBudgetError`.
+- New entry point `@zodiacs/engine/window`: `birthWindow(input)` partitions a
+  window of up to 48 hours inside `REFERENCE_SPAN` into cells within which
+  each body's sign and house, the signs of the ascendant and midheaven, the
+  aspects in orb and any Placidus or Koch fallback are constant, with each
+  switch's first millisecond and changes, and each cell's share under a
+  uniform prior and, optionally, a rounding model. Also `WINDOW_RATE_BOUNDS`,
+  `MAX_WINDOW_MS`, `WINDOW_VERIFICATION` ("sampled at one-second resolution")
+  and `WindowBudgetError`.
+- Where the true node's jitter would make its sign flicker for longer than
+  the search's budget of two million instants (24 of its 294 ingresses from
+  1800 to 2200), the flicker is left unresolved, found before the budget is
+  spent: the nodes' signs are null there, the interval is listed in
+  `unresolved`, and the result carries `node-unresolved`.
 - Evidence in `docs/evidence/birth-window/`: the scans behind the bounds,
-  including the node's jitter at 29,220 epochs and its ingresses; the
-  preregistered comparison with natalChart at every second of 1,000 random
-  windows (PASS, all 24,188 sampled transitions matched, none missed and none
-  extra), repeated after the review with its independent checker, with its
-  300 further windows; timings and package sizes.
-- The window entry point changes no existing file: with the Placidus change
-  below carried onto rc.12, every JavaScript file of rc.12's build is
-  byte-identical. The declaration rollup renames one shared chunk and
-  re-letters internal aliases; exported types are unchanged.
+  the preregistered comparison with natalChart at every second of 1,000
+  random windows (PASS: all 24,188 sampled transitions matched, none missed,
+  none extra), its repeat after review with the review's own checker and 300
+  further windows, timings and package sizes.
+- The window entry point changes no existing file: with rc.15's Placidus
+  change carried onto rc.12, every JavaScript file of rc.12's build is
+  byte-identical.
 
 Migration: none. With every default `calc` gives the position `positions()`
 gives, to the bit after the same earlier calls, and the root entry's build is

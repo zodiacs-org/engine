@@ -640,156 +640,91 @@ which every discrete feature of the chart is constant: each body's sign and
 house, the signs of the ascendant and the midheaven, the aspects in orb and,
 for Placidus and Koch, whether the houses fall back to whole signs. The
 features are natalChart's: houses are `houseOf` on the chart's cusps, and
-aspects are its five major aspects with their orbs, entering or leaving orb.
-Each switch gives the first millisecond of its new cell and every change at
-it, from and to. Each cell gives its share of the window under a uniform prior
-and, when `rounding` is given, under that rounding model.
-
-Only those features are partitioned. natalChart's retrograde flags, which
-change at a station, are not, and neither are positions within a sign, speeds,
-the orbs of aspects and whether they apply, the degrees of the angles and
-cusps, declinations and chart points: two instants in one cell can differ in
-any of them.
+aspects are its five major aspects with their orbs. Each switch gives the
+first millisecond of its new cell and every change at it, from and to. Each
+cell gives its share of the window under a uniform prior and, when `rounding`
+is given, under that rounding model. Nothing else is partitioned: two instants
+in one cell can differ in natalChart's retrograde flags, positions within a
+sign, speeds, orbs and whether they apply, the degrees of angles and cusps,
+declinations and chart points.
 
 The window is `start` to `end`, excluding `end`, at most 48 hours; or `at`
 and `minutes`, for `minutes` either side of `at`; or only `rounding`, whose
-unit is then the window. It must lie inside `REFERENCE_SPAN`, from
-1800-01-01T00:00Z to 2200-01-01T00:00Z, where the bounds below were scanned;
-a window outside it throws `RangeError`. `rounding: { recorded, minutes, mode }`
-says the recorded time was rounded to `minutes`, to the nearest (`"nearest"`,
-the default) or down (`"down"`); the true instant is taken as uniform over that
-unit, which must lie inside the window. Resolve local times first, for example
-with `resolveLocalToUtc` from `@zodiacs/engine/geo`.
+unit is then the window. It must lie inside `REFERENCE_SPAN` (1800-01-01 to
+2200-01-01, UTC), where the search's bounds were scanned. `rounding:
+{ recorded, minutes, mode }` says the recorded time was rounded to `minutes`,
+to the nearest (the default) or `"down"`; the true instant is taken as
+uniform over that unit, which must lie inside the window. Resolve local times
+first, for example with `resolveLocalToUtc` from `@zodiacs/engine/geo`.
 
-Every value is the engine's own at a millisecond, computed as a lone natalChart
-call computes it with the engine's ΔT model, not a pinned `deltaT`.
-astronomy-engine reuses its nutation for any instant within 86.4 ms of the
-last, so two calls closer together than that can differ in the last digits.
-Where the bounds below hold, each cell holds natalChart's features at every
-millisecond in it, and at each switch natalChart's value at the millisecond
-before `at` differs from its value at `at` exactly as listed, so the crossing
-lies in (at − 1 ms, at]. The exception is an interval listed in `unresolved`,
-described below, where the nodes' signs are null, and so are their houses
-where the houses are whole signs.
+Every value is the engine's own at a millisecond, as a lone natalChart call
+computes it with the engine's ΔT model (not a pinned `deltaT`);
+astronomy-engine reuses its nutation within 86.4 ms, so calls closer together
+can differ in the last digits. Where the search's bounds hold, each cell holds
+natalChart's features at every millisecond in it, and at each switch
+natalChart's value at the millisecond before `at` differs from its value at
+`at` exactly as listed, except inside an interval listed in `unresolved`.
 
-The search halves the window until each feature is settled. On an interval, a
-feature is dropped when an enclosure of every quantity it depends on keeps
+The search halves the window until each feature is settled, dropping an
+interval for a feature when enclosures of the quantities it depends on keep
 clear of every threshold and the feature agrees at both ends; single
-milliseconds are compared directly. The enclosures:
+milliseconds are compared directly. The enclosures rest on bounds scanned
+from 1800 to 2200: `WINDOW_RATE_BOUNDS` (about twice each body's largest
+rate), the obliquity's rate, and the true node's millisecond jitter, J =
+5e-5·(1 + |T|)° with T in centuries from 2000, at least 2.97 times every
+departure found at 3,000 consecutive milliseconds every five days
+(`node-jitter.json`). They assume ΔT is continuous. The model's one seam in
+the span is at 1940-12-31T18:00:00Z, where ΔT steps from 24.834 s to 24.820 s;
+the search splits at every millisecond where a computation crosses it (the
+Moon and the angles there, the node 864 ms either side, the Sun and planets
+one light time later) and compares both sides. Within 1e-8° of the Placidus
+or Koch polar limit, near the RAMCs where their cusps carry the rounding of
+asin near ±1, the house system and the houses are compared at every
+millisecond. A failed check of an enclosure adds `bound-exceeded`, and
+completeness is then not established; a failure that does not show in an
+interval's end-to-end change goes unseen. The method in full is in
+`docs/evidence/birth-window/RESULTS.md`.
 
-- A body's longitude, from its values at both ends and `WINDOW_RATE_BOUNDS`:
-  twice the largest rate the engine's positions reach from 1800 to 2200, in
-  degrees per day (Moon 31, Mercury 4.5, Venus 2.6, Sun 2.1, Mars 1.6, Jupiter
-  0.49, Saturn 0.27, Uranus 0.13, Pluto 0.082, Neptune 0.077, nodes 0.53). The
-  separation of two bodies takes the sum of their bounds.
-- The true node, as the engine computes it, departs from its smooth motion
-  from one millisecond to the next, because astronomy-engine differences the
-  Moon's position over 1.728 s for its velocity. Its enclosure is widened by
-  twice J = 5e-5·(1 + |T|)°, T in Julian centuries from 2000. A scan of
-  3,000 consecutive milliseconds every five days from 1800 to 2200 (29,220
-  epochs, `node-jitter.json`) finds the departure growing away from 2000: at
-  most 2.4e-6° in the 1990s and 2000s, 2.5e-5° around 1900 and 2100, and
-  4.8e-5° near the ends of the span, the largest in 2187, where J is 2.97
-  times as large. J is at least 2.97 times every value found. It was
-  scanned, not derived, so a larger departure between the samples is not
-  ruled out.
-- Where the node's smooth motion lies within about 2J of a sign boundary, its
-  sign can change back and forth from one millisecond to the next, and the
-  search compares it at every millisecond: for about 4J/|rate| days around an
-  ingress, 1.5 minutes at the fastest ingress from 1800 to 2200, 4.5 minutes
-  at the median one and 2.3 hours at the slowest. Every change is reported
-  where the search can afford it: at the ingresses of March 2028 and September
-  2029 the sign changes 311 times in 1.1 s and 147 times in 0.6 s, and in
-  1,950 s around the ingress of 2032-11-25, 18,315 times. Before the search,
-  the node is sampled every hour, and every minute near a boundary, to find
-  these stretches and estimate how many milliseconds each needs. After the
-  rest of the window is settled, each is searched, cheapest first, if its
-  milliseconds fit in what is left of the budget of two million evaluated
-  instants; one that does not is left unresolved: the nodes' signs, and their
-  houses where the houses are whole signs, are null throughout it, the
-  interval is listed in `unresolved` with the features it leaves open, and the
-  result carries `node-unresolved`. A change to or from null marks where such
-  an interval starts or ends; it is not a crossing. From 1800 to 2200, 24 of
-  the node's 294 ingresses flicker for more than two million milliseconds: in
-  1810, 1842 (two), 1848, 1865 (two), 1882 (two), 1946 (two), 1981 (two),
-  2007, 2032 (two), 2049 (two), 2071, 2090 (four), 2113 and 2127
-  (`node-ingresses.json`); a two-hour window around any of them returns in
-  under a fifth of a second with the flicker left unresolved. A true node
-  taken from the Moon's analytic velocity, rather than a 1.728 s difference,
-  would move smoothly to far below 1e-9°; each ingress would then be a single
-  switch and nothing would be left unresolved. It would change natalChart's
-  node in its last digits, so it is left for a later release.
-- Angles and cusps follow the sidereal time, which increases, and the
-  obliquity, which changes by less than 5e-5° a day. The ascendant, the
-  midheaven and the Regiomontanus, Campanus, Topocentric, Koch, Alcabitius and
-  Meridian cusps are oblique longitudes, whose exact range over an interval of
-  ascensions comes from its ends and turning points. Outside the polar circle
-  Placidus cusps increase with the sidereal time (the iteration's slope is at
-  most 2/3); Morinus cusps always do; Porphyry and the equal systems follow
-  from the angles. Inside the polar circle the ascendant turns half a circle
-  where the horizon meets the ecliptic on the meridian, and an interval that
-  may contain such a turn is halved to the millisecond.
-- Near the polar limit Placidus cusps carry the rounding of asin near ±1, up
-  to 6.5e-7° one unit in the last place below it, where the RAMC is near a
-  value at which a cusp's right ascension reaches 90° or 270°: 30°, 150°,
-  210°, 270° and 330° in the north, 30°, 90°, 150°, 210° and 330° in the
-  south. Koch's cusps do near 90° and 270°, where the midheaven's declination
-  is extreme. Where the latitude is within 1e-8° of the limit, plus what the
-  obliquity can change over the interval, and the RAMC within 0.1° of those
-  values, the house system and the houses are compared at every millisecond.
-- The bounds assume ΔT is continuous. The engine's ΔT model has one
-  discontinuity inside `REFERENCE_SPAN`, at 1940-12-31T18:00:00.000Z (1941.0),
-  where its spline for the past hands over to its table and ΔT steps from
-  24.834 s to 24.820 s: TT, and every position computed from it, steps back
-  13.95 ms. The Moon, the obliquity and the sidereal time step there; the true
-  node also 864 ms either side of it, where one of the two lunar positions it
-  differences crosses it; the Sun and planets one light time later, from
-  about 8 minutes (the Sun) to 5.6 hours (Pluto), where their backdated
-  positions cross it. The search finds each of those milliseconds from the
-  engine's own arithmetic and never drops an interval that contains one: it
-  halves it down to the step and compares both sides directly.
-- Thresholds carry a band of 1e-9° for rounding. Every enclosure is checked
-  against the engine's values at both ends of its interval; a failed check,
-  or a change between an interval's ends larger than its rate bound allows,
-  adds the flag `bound-exceeded`, and completeness is then not established
-  for that result. A bound that fails only between an interval's ends, and
-  not in its end-to-end change, goes unseen.
+Near a sign boundary the true node's jitter makes its sign change back and
+forth between milliseconds, for about 4J/|rate| days around an ingress: 1.5
+minutes at the fastest from 1800 to 2200, 4.5 at the median, 2.3 hours at the
+slowest. Every change is reported where the budget of two million evaluated
+instants allows (311 in 1.1 s at the ingress of March 2028). Where the node
+would need more, the stretch is left unresolved, found before any of the
+budget is spent on it: the nodes' signs, and their houses where the houses are
+whole signs, are null there, the interval is listed in `unresolved`, and the
+result carries `node-unresolved`; a change to or from null is its edge, not a
+crossing. 24 of the 294 ingresses from 1800 to 2200 flicker for longer than
+the budget, in 1810, 1842 (two), 1848, 1865 (two), 1882 (two), 1946 (two),
+1981 (two), 2007, 2032 (two), 2049 (two), 2071, 2090 (four), 2113 and 2127
+(`node-ingresses.json`). A true node from the Moon's analytic velocity,
+instead of astronomy-engine's 1.728 s difference, would be smooth and leave
+nothing unresolved; it changes natalChart's node in its last digits and is
+left for a later release.
 
-Results carry `verification: "sampled at one-second resolution"`: the method
-is checked by comparing its switch instants with natalChart at every whole
-second, not proven. On 1,000 preregistered random windows (1 minute to 23
-hours, 1800 to 2200, two thirds of them at 60° of latitude or more, all
-thirteen systems; 12.3 million samples), all 24,188 sampled transitions were
-matched, none missed and none extra, and natalChart confirmed every switch at
-its millisecond (`docs/evidence/birth-window/RESULTS.md`). A change and its
-reversal inside one second, such as the node's flicker, cannot be seen at
-that resolution; those are checked by natalChart at their own milliseconds.
+Results carry `verification: "sampled at one-second resolution"`: checked
+against natalChart at every whole second, not proven. On 1,000 preregistered
+random windows (1800 to 2200, all thirteen systems, two thirds at 60° of
+latitude or more), all 24,188 sampled transitions were matched, none missed
+and none extra, and natalChart confirmed every switch at its millisecond
+(`docs/evidence/birth-window/RESULTS.md`).
 
 In one thread, a 10-minute window takes about 2 ms, two hours about 20 ms and
-a whole day about 0.23 s (medians at latitudes up to 60°, Node.js 22;
-`timing.json`). A window over a node ingress takes longer, because the node is
-compared at every millisecond of its flicker: from a few seconds to about half
-a minute at most ingresses, and up to a few minutes where the flicker nearly
-fills the budget (the 1,950 s from 2032-11-25T04:45:19Z, around an ingress,
-took 77 s, with 18,315 switches). Where the budget cannot cover it, the
-flicker is left unresolved before any of it is spent. Within 1e-8° of the
-Placidus or Koch polar limit, each passage of the RAMC through a sensitive
-value adds some seconds: the 40 s around 2000-03-20T00:00Z at
-66.56186339751429°, 92.16879370494166°, 3e-9° short of the limit, took 16 s.
-At 89.999999°, the highest latitude accepted, a 48-hour window takes from
-under a second (Equal, Vehlow, Porphyry, Campanus, Morinus, Meridian) to about
-three minutes (Alcabitius).
+a whole day about 0.23 s (medians, Node.js 22; `timing.json`). A window over a
+node ingress takes from seconds to a few minutes, as the node is compared at
+every millisecond of its flicker (1,950 s around the ingress of 2032-11-25:
+77 s, 18,315 switches); an unresolved stretch costs a fraction of a second.
+Within 1e-8° of the polar limit each passage of a sensitive RAMC adds seconds,
+and at 89.999999° a 48-hour window takes up to three minutes (Alcabitius).
 
 Other flags are `polar-fallback`, when a cell uses whole-sign houses in place
-of Placidus or Koch, and `bound-exceeded` and `node-unresolved`, above.
-Invalid input throws `RangeError`, including a window outside
-`REFERENCE_SPAN` and a latitude within 1e-6° of either pole: at a pole no
-ascendant is defined and the engine's value is 0° or 180° to rounding, and
-near one the ascendant turns too fast for the search. A search that would
-evaluate more than two million instants outside the node's unresolved
-intervals throws `WindowBudgetError`; none of the windows checked does. The
-entry point carries the ephemeris, like the root entry point, and is separate
-from it so that the root does not grow.
+of Placidus or Koch, `bound-exceeded` and `node-unresolved`. Invalid input
+throws `RangeError`, including a window outside `REFERENCE_SPAN` and a
+latitude within 1e-6° of either pole, where the ascendant is undefined or
+turns too fast for the search. A search that would evaluate more than two
+million instants outside the unresolved intervals throws `WindowBudgetError`.
+The entry point carries the ephemeris and is separate from the root entry
+point, so that the root does not grow.
 
 ### Resolved instant inputs
 

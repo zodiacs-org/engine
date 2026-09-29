@@ -4,6 +4,81 @@ Programme unit B2.a, `@zodiacs/engine/window`. The 1,000-window check ran as
 preregistered in `PREREGISTRATION.md` (commit `d1000e66`), on the build of
 commit `670db8a6`.
 
+## The search
+
+`birthWindow` halves the window until each feature is settled. On an
+interval, a feature is dropped when an enclosure of every quantity it depends
+on keeps clear of every threshold and the feature agrees at both ends; single
+milliseconds are compared directly. The enclosures:
+
+- A body's longitude, from its values at both ends and `WINDOW_RATE_BOUNDS`:
+  twice the largest rate the engine's positions reach from 1800 to 2200, in
+  degrees per day (Moon 31, Mercury 4.5, Venus 2.6, Sun 2.1, Mars 1.6, Jupiter
+  0.49, Saturn 0.27, Uranus 0.13, Pluto 0.082, Neptune 0.077, nodes 0.53;
+  `rate-bounds.json`). The separation of two bodies takes the sum of their
+  bounds.
+- The true node, as the engine computes it, departs from its smooth motion
+  from one millisecond to the next, because astronomy-engine differences the
+  Moon's position over 1.728 s for its velocity. Its enclosure is widened by
+  twice J = 5e-5·(1 + |T|)°, T in Julian centuries from 2000. A scan of 3,000
+  consecutive milliseconds every five days from 1800 to 2200 (29,220 epochs,
+  `node-jitter.json`) finds the departure growing away from 2000: at most
+  2.4e-6° in the 1990s and 2000s, 2.5e-5° around 1900 and 2100, and 4.8e-5°
+  near the ends of the span, the largest in 2187, where J is 2.97 times as
+  large. J is at least 2.97 times every value found. It was scanned, not
+  derived, so a larger departure between the samples is not ruled out.
+- Where the node's smooth motion lies within about 2J of a sign boundary, its
+  sign can change back and forth from one millisecond to the next, and the
+  search compares it at every millisecond: for about 4J/|rate| days around an
+  ingress, 1.5 minutes at the fastest ingress from 1800 to 2200, 4.5 minutes
+  at the median one and 2.3 hours at the slowest (`node-ingresses.json`).
+  Before the search, the node is sampled every hour, and every minute where
+  it may be near a boundary; stretches of those samples within 5J of one are
+  set aside, with the milliseconds a search of each would need estimated from
+  where the samples lie within 3J. The rest of the window is settled first.
+  Each stretch is then searched, cheapest first, if all its milliseconds, or
+  its estimate, fit in what is left of the budget of two million evaluated
+  instants; one that does not, or whose search runs out, is left unresolved:
+  the nodes' signs, and their houses where the houses are whole signs, are
+  null throughout it, it is listed in `unresolved`, and the result carries
+  `node-unresolved`. Outside the stretches the node stays at least 4J from a
+  boundary, where the search drops its intervals of up to some seconds.
+- Angles and cusps follow the sidereal time, which increases, and the
+  obliquity, which changes by less than 5e-5° a day. The ascendant, the
+  midheaven and the Regiomontanus, Campanus, Topocentric, Koch, Alcabitius and
+  Meridian cusps are oblique longitudes, whose exact range over an interval of
+  ascensions comes from its ends and turning points. Outside the polar circle
+  Placidus cusps increase with the sidereal time (the iteration's slope is at
+  most 2/3); Morinus cusps always do; Porphyry and the equal systems follow
+  from the angles. Inside the polar circle the ascendant turns half a circle
+  where the horizon meets the ecliptic on the meridian, and an interval that
+  may contain such a turn is halved to the millisecond.
+- Near the polar limit Placidus cusps carry the rounding of asin near ±1, up
+  to 6.5e-7° one unit in the last place below it, where the RAMC is near a
+  value at which a cusp's right ascension reaches 90° or 270°: 30°, 150°,
+  210°, 270° and 330° in the north, 30°, 90°, 150°, 210° and 330° in the
+  south. Koch's cusps do near 90° and 270°, where the midheaven's declination
+  is extreme. Where the latitude is within 1e-8° of the limit, plus what the
+  obliquity can change over the interval, and the RAMC within 0.1° of those
+  values, the house system and the houses are compared at every millisecond.
+- The bounds assume ΔT is continuous. The engine's ΔT model has one
+  discontinuity inside `REFERENCE_SPAN`, at 1940-12-31T18:00:00.000Z (1941.0),
+  where its spline for the past hands over to its table and ΔT steps from
+  24.834 s to 24.820 s: TT, and every position computed from it, steps back
+  13.95 ms. The Moon, the obliquity and the sidereal time step there; the true
+  node also 864 ms either side of it, where one of the two lunar positions it
+  differences crosses it; the Sun and planets one light time later, from about
+  8 minutes (the Sun) to 5.6 hours (Pluto), where their backdated positions
+  cross it. The search finds each of those milliseconds from the engine's own
+  arithmetic and never drops an interval that holds one: it halves it down to
+  the step and compares both sides directly.
+- Thresholds carry a band of 1e-9° for rounding. Every enclosure is checked
+  against the engine's values at both ends of its interval; a failed check,
+  or a change between an interval's ends larger than its rate bound allows,
+  adds the flag `bound-exceeded`, and completeness is then not established for
+  that result. A bound that fails only between an interval's ends, and not in
+  its end-to-end change, goes unseen.
+
 ## The 1,000-window check: PASS
 
 | | |
