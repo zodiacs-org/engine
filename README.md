@@ -765,7 +765,7 @@ its millisecond (`docs/evidence/birth-window/RESULTS.md`). A change and its
 reversal inside one second, such as the node's flicker, cannot be seen at
 that resolution; those are checked by natalChart at their own milliseconds.
 
-In one thread, a 10-minute window takes about 3 ms, two hours about 20 ms and
+In one thread, a 10-minute window takes about 2 ms, two hours about 20 ms and
 a whole day about 0.23 s (medians at latitudes up to 60°, Node.js 22;
 `timing.json`). A window over a node ingress takes longer, because the node is
 compared at every millisecond of its flicker: from a few seconds to about half

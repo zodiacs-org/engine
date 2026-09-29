@@ -1,19 +1,19 @@
 {
   "node": "v22.22.2",
   "loadAverageAfter": [
-    1.98,
-    4.53,
-    5.26
+    4.29,
+    5.71,
+    6.06
   ],
   "rows": [
     {
       "length": "10 minutes",
       "latitudes": "-60° to 60°",
       "windows": 39,
-      "medianMs": 3,
-      "p90Ms": 12,
-      "maxMs": 38,
-      "meanMs": 5,
+      "medianMs": 2,
+      "p90Ms": 7,
+      "maxMs": 15,
+      "meanMs": 3,
       "medianSwitches": 1
     },
     {
@@ -21,19 +21,19 @@
       "latitudes": "60° to 90°",
       "windows": 39,
       "medianMs": 1,
-      "p90Ms": 13,
-      "maxMs": 37,
-      "meanMs": 4,
+      "p90Ms": 10,
+      "maxMs": 26,
+      "meanMs": 3,
       "medianSwitches": 0
     },
     {
       "length": "2 hours",
       "latitudes": "-60° to 60°",
       "windows": 39,
-      "medianMs": 20,
-      "p90Ms": 31,
-      "maxMs": 41,
-      "meanMs": 21,
+      "medianMs": 22,
+      "p90Ms": 30,
+      "maxMs": 54,
+      "meanMs": 22,
       "medianSwitches": 13
     },
     {
@@ -41,19 +41,19 @@
       "latitudes": "60° to 90°",
       "windows": 39,
       "medianMs": 17,
-      "p90Ms": 26,
+      "p90Ms": 34,
       "maxMs": 68,
-      "meanMs": 17,
+      "meanMs": 18,
       "medianSwitches": 7
     },
     {
       "length": "24 hours",
       "latitudes": "-60° to 60°",
       "windows": 39,
-      "medianMs": 232,
-      "p90Ms": 361,
-      "maxMs": 389,
-      "meanMs": 235,
+      "medianMs": 228,
+      "p90Ms": 317,
+      "maxMs": 382,
+      "meanMs": 230,
       "medianSwitches": 163
     },
     {
@@ -61,9 +61,9 @@
       "latitudes": "60° to 90°",
       "windows": 39,
       "medianMs": 229,
-      "p90Ms": 384,
-      "maxMs": 549,
-      "meanMs": 240,
+      "p90Ms": 390,
+      "maxMs": 556,
+      "meanMs": 238,
       "medianSwitches": 108
     }
   ]
