@@ -1,0 +1,728 @@
+{
+  "$schema": "../schema/atlas.schema.json",
+  "kind": "atlas-rules",
+  "description": "France outside Alsace-Moselle: local mean time, Paris mean time from 1891, the legal time of 1911, summer time 1916-1919, and the clocks inside railway stations, five minutes slow until 1911.",
+  "jurisdictions": [
+    {
+      "id": "fr-paris",
+      "name": "Paris",
+      "country": "FR",
+      "description": "The city of Paris. Its own mean time was Paris mean time, which the law of 1891 made the legal time of all France.",
+      "timeline": {
+        "civil": [
+          "fr-paris-mean-time-before-1891",
+          "fr-paris-pmt-1891",
+          "fr-wet-1911",
+          "fr-summer-1916",
+          "fr-wet-1916",
+          "fr-summer-1917",
+          "fr-wet-1917",
+          "fr-summer-1918",
+          "fr-wet-1918",
+          "fr-summer-1919",
+          "fr-wet-1919"
+        ],
+        "railway": [
+          "fr-rail-interior-before-1911",
+          "fr-wet-1911",
+          "fr-summer-1916",
+          "fr-wet-1916",
+          "fr-summer-1917",
+          "fr-wet-1917",
+          "fr-summer-1918",
+          "fr-wet-1918",
+          "fr-summer-1919",
+          "fr-wet-1919"
+        ]
+      }
+    },
+    {
+      "id": "fr-brest",
+      "name": "Brest",
+      "country": "FR",
+      "description": "Brest, where the Senate debate of 1891 records the town's public clocks on local time and only the station clock on Paris time.",
+      "timeline": {
+        "civil": [
+          "fr-brest-lmt-before-1891",
+          "fr-pmt-1891",
+          "fr-wet-1911-provinces",
+          "fr-summer-1916",
+          "fr-wet-1916",
+          "fr-summer-1917",
+          "fr-wet-1917",
+          "fr-summer-1918",
+          "fr-wet-1918",
+          "fr-summer-1919",
+          "fr-wet-1919"
+        ],
+        "railway": [
+          "fr-rail-interior-before-1911",
+          "fr-wet-1911",
+          "fr-summer-1916",
+          "fr-wet-1916",
+          "fr-summer-1917",
+          "fr-wet-1917",
+          "fr-summer-1918",
+          "fr-wet-1918",
+          "fr-summer-1919",
+          "fr-wet-1919"
+        ]
+      }
+    },
+    {
+      "id": "fr-general",
+      "name": "Other communes of France",
+      "country": "FR",
+      "description": "Every other commune of metropolitan France that was French from 1870 to 1919 and was not occupied by German forces in 1914-1918: its own local mean time until the law of 1891, national legal time after it. The places listed are examples. Another commune can be read by its longitude with its département, which is checked against the départements and longitudes this jurisdiction covers (readByLongitude).",
+      "timeline": {
+        "civil": [
+          "fr-lmt-before-1891",
+          "fr-pmt-1891",
+          "fr-wet-1911-provinces",
+          "fr-summer-1916",
+          "fr-wet-1916",
+          "fr-summer-1917",
+          "fr-wet-1917",
+          "fr-summer-1918",
+          "fr-wet-1918",
+          "fr-summer-1919",
+          "fr-wet-1919"
+        ],
+        "railway": [
+          "fr-rail-interior-before-1911",
+          "fr-wet-1911",
+          "fr-summer-1916",
+          "fr-wet-1916",
+          "fr-summer-1917",
+          "fr-wet-1917",
+          "fr-summer-1918",
+          "fr-wet-1918",
+          "fr-summer-1919",
+          "fr-wet-1919"
+        ]
+      },
+      "readByLongitude": {
+        "areas": [
+          {
+            "name": "mainland France",
+            "departments": [
+              "01", "03", "04", "05", "06", "07", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+              "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37",
+              "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "52", "53", "56", "58",
+              "61", "63", "64", "65", "66", "69", "70", "71", "72", "73", "74", "76", "78", "79", "81", "82", "83",
+              "84", "85", "86", "87", "89", "90", "91", "92", "93", "94", "95"
+            ],
+            "minLongitude": -5.2,
+            "maxLongitude": 7.6
+          },
+          { "name": "Corsica", "departments": ["2A", "2B"], "minLongitude": 8.5, "maxLongitude": 9.6 }
+        ],
+        "excluded": [
+          {
+            "departments": ["57", "67", "68"],
+            "reason": "Alsace and Moselle were German from 1871 to 1918; only Strasbourg (als-strasbourg) and Metz (mos-metz) are covered"
+          },
+          {
+            "departments": ["02", "08", "51", "54", "55", "59", "60", "62", "80", "88"],
+            "reason": "parts of this département were occupied by German forces in 1914-1918, which the atlas does not cover, and it does not record where the front ran, so the whole département is refused"
+          },
+          {
+            "departments": ["77"],
+            "reason": "German forces entered it in September 1914, between Coulommiers and La Ferté-Gaucher; the atlas does not cover the communes they reached and does not record which they were, so the whole département is refused",
+            "citations": ["fr-nytribune-1914-09-08-coulommiers"]
+          },
+          { "departments": ["75"], "reason": "Paris has its own jurisdiction, fr-paris (place fr-paris)" }
+        ],
+        "note": "The occupied départements refused are the ten in the usual count (Aisne, Ardennes, Marne, Meurthe-et-Moselle, Meuse, Nord, Oise, Pas-de-Calais, Somme, Vosges) and Seine-et-Marne, which German forces entered in September 1914: an official statement of 7 September has them advancing on 5 and 6 September into the region between Coulommiers and La Ferté-Gaucher (fr-nytribune-1914-09-08-coulommiers). No other département is refused: that German forces held communes elsewhere in September 1914, in the Aube for instance, was not established. The longitude limits are coarse: mainland France outside Alsace-Moselle lies between 5.2 degrees west (Ouessant) and 7.6 degrees east, Corsica between 8.5 and 9.6 degrees east. They catch a wrong département or a longitude from elsewhere, not every error: Tende and La Brigue (Alpes-Maritimes), Italian until 1947, fall inside the limits and are not covered."
+      }
+    }
+  ],
+  "rules": [
+    {
+      "id": "fr-paris-mean-time-before-1891",
+      "version": 1,
+      "title": "Paris: Paris mean time as local time",
+      "scope": "Paris, before the law of 14 March 1891",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1891-03-17T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "day",
+        "citations": ["fr-jo-1891-03-15-law", "fr-jo-1870-11-06-promulgation"],
+        "note": "Paris mean time became the legal time of all France; in Paris the clocks did not change. The law bound Paris from 17 March, one clear day after the Journal officiel of 15 March."
+      },
+      "offset": { "type": "fixed", "seconds": 561 },
+      "isDst": false,
+      "abbreviation": "PMT",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "Legal time was each place's local mean time (Senate, 1891); Paris's own was Paris mean time, 9 min 21 s ahead of the time adopted in 1911."
+      },
+      "citations": ["fr-senat-1891-02-17-restoration", "fr-jo-1911-03-10-law"],
+      "note": "The offset is the 9 min 21 s by which the law of 9 March 1911 retarded Paris mean time to bring legal time into the universal system of time zones, whose zero is the Greenwich meridian. The mean time of the GeoNames point for Paris would be 2.7 s more."
+    },
+    {
+      "id": "fr-brest-lmt-before-1891",
+      "version": 3,
+      "title": "Brest: local mean time",
+      "scope": "Brest, before the law of 14 March 1891",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1891-03-17T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "days",
+        "window": { "earliest": "1891-03-16T00:00:00", "latest": "1891-03-31T23:59:59" },
+        "citations": ["fr-jo-1891-03-15-law", "fr-jo-1870-11-06-promulgation"],
+        "note": "The law was printed in the Journal officiel of Sunday 15 March 1891. Under the decree of 5 November 1870 it bound Paris one clear day later, from 17 March, and each other arrondissement one clear day after the Journal reached its chef-lieu. When each town reset its public clocks is not recorded; the window runs to the end of March."
+      },
+      "offset": { "type": "local-mean-time" },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "In February 1891 the Senate heard that Brest's public clocks, all but the station's, kept local time, 27 minutes behind Paris; that they did so from 1870 is assumed."
+      },
+      "citations": ["fr-senat-1891-02-17-brest", "fr-senat-1891-02-17-restoration"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the Senate debate describes Brest's clocks in February 1891 only, and the rule carries that back to 1870."
+        },
+        {
+          "version": 3,
+          "date": "2026-09-28",
+          "summary": "The window now ends at the end of 31 March, as its note says, not at the start of that day."
+        }
+      ],
+      "note": "The offset comes from Brest's longitude; it puts Brest 27 min 18 s behind Paris mean time, as the debate says."
+    },
+    {
+      "id": "fr-lmt-before-1891",
+      "version": 2,
+      "title": "Local mean time of each commune",
+      "scope": "Communes of the fr-general jurisdiction, before the law of 14 March 1891",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1891-03-17T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "days",
+        "window": { "earliest": "1891-03-16T00:00:00", "latest": "1891-03-31T23:59:59" },
+        "citations": ["fr-jo-1891-03-15-law", "fr-jo-1870-11-06-promulgation"],
+        "note": "The law was printed in the Journal officiel of Sunday 15 March 1891. Under the decree of 5 November 1870 it bound Paris one clear day later, from 17 March, and each other arrondissement one clear day after the Journal reached its chef-lieu. When each town reset its public clocks is not recorded; the window runs to the end of March."
+      },
+      "offset": { "type": "local-mean-time" },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "uncertain",
+        "reason": "Legal time was each place's local mean time, but the same Senate debate says towns kept some clocks to the railway station's Paris time; which one a given town's clocks showed is not recorded."
+      },
+      "citations": ["fr-senat-1891-02-17-restoration", "fr-senat-1891-02-17-towns"],
+      "note": "The offset is computed from the place's longitude, 240 seconds per degree east of Greenwich. Where a town's public clocks already followed the station, they showed Paris mean time (+0:09:21) instead.",
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The window now ends at the end of 31 March, as its note says, not at the start of that day."
+        }
+      ]
+    },
+    {
+      "id": "fr-pmt-1891",
+      "version": 3,
+      "title": "Paris mean time, legal time of France (law of 14 March 1891)",
+      "scope": "Communes of metropolitan France other than Paris, outside Alsace-Moselle (German from 1871): civil clocks and the outside clocks of railway stations",
+      "clock": "civil",
+      "start": {
+        "local": "1891-03-17T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "days",
+        "window": { "earliest": "1891-03-16T00:00:00", "latest": "1891-03-31T23:59:59" },
+        "citations": ["fr-jo-1891-03-15-law", "fr-jo-1870-11-06-promulgation"],
+        "note": "The law was printed in the Journal officiel of Sunday 15 March 1891. Under the decree of 5 November 1870 it bound Paris one clear day later, from 17 March, and each other arrondissement one clear day after the Journal reached its chef-lieu. When each town reset its public clocks is not recorded; the window runs to the end of March."
+      },
+      "end": {
+        "local": "1911-03-11T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "weeks",
+        "window": { "earliest": "1911-03-11T00:00:00", "latest": "1911-03-31T23:59:59" },
+        "citations": [
+          "fr-jo-1911-03-10-ptt",
+          "fr-courrier-sl-1911-03-11-midnight",
+          "fr-courrier-sl-1911-03-11-chalon",
+          "fr-jo-1870-11-06-promulgation"
+        ],
+        "note": "The law of 9 March 1911 names no date. Outside Paris the post offices changed at midnight Paris mean time in the night of 10 to 11 March 1911 (23:50:39 UTC), the instant used here. A Chalon-sur-Saône paper told its readers that legal time moved back at that midnight, and that on 11 March the new time could be read at a bank's regulator clock, set by telephone from the Observatory. When each commune reset its other public clocks is not recorded; the law bound each arrondissement one clear day after the Journal officiel reached it, as in 1891, so the window runs to the end of March."
+      },
+      "offset": { "type": "fixed", "seconds": 561 },
+      "isDst": false,
+      "abbreviation": "PMT",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The law of 14 March 1891 makes Paris mean time the legal time of France."
+      },
+      "citations": ["fr-jo-1891-03-15-law"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The window now ends at the end of 31 March, as its note says, not at the start of that day."
+        },
+        {
+          "version": 3,
+          "date": "2026-09-28",
+          "summary": "Now the rule of the communes other than Paris; Paris has fr-paris-pmt-1891. Its end, the change of 1911, has a window to the end of March 1911 and cites a provincial report (fr-courrier-sl-1911-03-11-midnight, fr-courrier-sl-1911-03-11-chalon)."
+        }
+      ]
+    },
+    {
+      "id": "fr-paris-pmt-1891",
+      "version": 1,
+      "title": "Paris: Paris mean time as legal time (law of 14 March 1891)",
+      "scope": "Paris, from the law of 14 March 1891 to the law of 9 March 1911: civil clocks and the outside clocks of railway stations",
+      "clock": "civil",
+      "start": {
+        "local": "1891-03-17T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "day",
+        "citations": ["fr-jo-1891-03-15-law", "fr-jo-1870-11-06-promulgation"],
+        "note": "Paris mean time became the legal time of all France; in Paris the clocks did not change. The law bound Paris from 17 March, one clear day after the Journal officiel of 15 March."
+      },
+      "end": {
+        "local": "1911-03-11T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-petitjournal-1911-03-11-pneumatic", "fr-jo-1911-03-10-ptt"],
+        "note": "Midnight Paris mean time in the night of 10 to 11 March 1911 (23:50:39 UTC): Paris's pneumatic public clocks stopped at midnight for 9 min 21 s, and the post, telegraph and telephone offices changed at the same midnight. The law itself names no date."
+      },
+      "offset": { "type": "fixed", "seconds": 561 },
+      "isDst": false,
+      "abbreviation": "PMT",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The law of 14 March 1891 makes Paris mean time the legal time of France; Paris's clocks already showed it."
+      },
+      "citations": ["fr-jo-1891-03-15-law"],
+      "note": "Split from fr-pmt-1891 on 2026-09-28, when the change of 1911 outside Paris was given a window."
+    },
+    {
+      "id": "fr-rail-interior-before-1911",
+      "version": 1,
+      "title": "Railway time inside stations: Paris mean time less five minutes",
+      "scope": "Clocks inside French railway stations, by which trains ran, until 10 March 1911",
+      "clock": "railway",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1911-03-11T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-jo-1911-03-10-etat-railways", "fr-petitjournal-1911-03-11-midnight"],
+        "note": "Midnight on the clocks inside stations in the night of 10 to 11 March 1911 (23:55:39 UTC). Their dials were stopped at midnight for about four minutes to reach the new legal time, and the five-minute difference between inside and outside clocks ended."
+      },
+      "offset": { "type": "fixed", "seconds": 261 },
+      "isDst": false,
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "Stated for the Orléans company's lines in 1875 and for the railways generally up to 10 March 1911; assumed for the other companies and the years between."
+      },
+      "citations": [
+        "fr-orleans-1875-instruction-26",
+        "fr-petitjournal-1911-03-11-five-minutes",
+        "fr-jo-1911-03-10-etat-railways"
+      ],
+      "note": "The clocks outside stations showed Paris mean time."
+    },
+    {
+      "id": "fr-wet-1911",
+      "version": 2,
+      "title": "Legal time: Paris mean time retarded by 9 min 21 s (law of 9 March 1911)",
+      "scope": "Paris's civil clocks, and the clocks inside the railway stations of metropolitan France outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918",
+      "clock": "civil",
+      "start": {
+        "local": "1911-03-11T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": [
+          "fr-petitjournal-1911-03-11-pneumatic",
+          "fr-jo-1911-03-10-ptt",
+          "fr-jo-1911-03-10-etat-railways"
+        ],
+        "note": "Midnight in the night of 10 to 11 March 1911 on the clock in force before: Paris mean time on civil clocks (23:50:39 UTC); inside stations, whose clocks ran five minutes slow, the railway midnight (23:55:39 UTC)."
+      },
+      "end": {
+        "local": "1916-06-14T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-jo-1916-06-11-decree"]
+      },
+      "offset": { "type": "fixed", "seconds": 0 },
+      "isDst": false,
+      "abbreviation": "WET",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The law of 9 March 1911 fixes the offset; the post offices' order, the railways' notice and a report on Paris's public clocks fix the midnight of 10 to 11 March."
+      },
+      "citations": ["fr-jo-1911-03-10-law", "fr-jo-1911-03-10-ptt", "fr-petitjournal-1911-03-11-pneumatic"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Now the rule of Paris's civil clocks and of the clocks inside railway stations; the other communes' civil clocks follow fr-wet-1911-provinces, whose start has a window."
+        }
+      ]
+    },
+    {
+      "id": "fr-wet-1911-provinces",
+      "version": 1,
+      "title": "Legal time outside Paris: Paris mean time retarded by 9 min 21 s (law of 9 March 1911)",
+      "scope": "Civil clocks of the communes of metropolitan France other than Paris, outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918",
+      "clock": "civil",
+      "start": {
+        "local": "1911-03-11T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "weeks",
+        "window": { "earliest": "1911-03-11T00:00:00", "latest": "1911-03-31T23:59:59" },
+        "citations": [
+          "fr-jo-1911-03-10-ptt",
+          "fr-courrier-sl-1911-03-11-midnight",
+          "fr-courrier-sl-1911-03-11-chalon",
+          "fr-jo-1870-11-06-promulgation"
+        ],
+        "note": "The law of 9 March 1911 names no date. Outside Paris the post offices changed at midnight Paris mean time in the night of 10 to 11 March 1911 (23:50:39 UTC), the instant used here. A Chalon-sur-Saône paper told its readers that legal time moved back at that midnight, and that on 11 March the new time could be read at a bank's regulator clock, set by telephone from the Observatory. When each commune reset its other public clocks is not recorded; the law bound each arrondissement one clear day after the Journal officiel reached it, as in 1891, so the window runs to the end of March."
+      },
+      "end": {
+        "local": "1916-06-14T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-jo-1916-06-11-decree"]
+      },
+      "offset": { "type": "fixed", "seconds": 0 },
+      "isDst": false,
+      "abbreviation": "WET",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The law of 9 March 1911 fixes the offset. Outside Paris the post offices changed at midnight in the night of 10 to 11 March, and a Chalon-sur-Saône paper announced the new time at a bank's regulator clock for 11 March; that each commune's public clocks followed within the month is assumed."
+      },
+      "citations": [
+        "fr-jo-1911-03-10-law",
+        "fr-jo-1911-03-10-ptt",
+        "fr-courrier-sl-1911-03-11-midnight",
+        "fr-courrier-sl-1911-03-11-chalon"
+      ]
+    },
+    {
+      "id": "fr-summer-1916",
+      "version": 3,
+      "title": "Summer time 1916 (law of 9 June 1916)",
+      "scope": "Metropolitan France outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918: civil clocks and the clocks inside railway stations",
+      "clock": "civil",
+      "start": {
+        "local": "1916-06-14T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-jo-1916-06-11-decree"]
+      },
+      "end": {
+        "local": "1916-10-01T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": [
+          "fr-petitparisien-1916-09-30-public-clocks",
+          "fr-petitparisien-1916-09-30",
+          "fr-petitjournal-1916-09-30"
+        ],
+        "note": "The decree says only that normal time would be restored on 1 October. Le Petit Parisien reports that all public clocks, the communes' among them, were to be set back from 01:00 to 00:00 in the night of 30 September to 1 October (00:00 UTC), the change being fixed at one in the morning rather than at 23:59."
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": true,
+      "abbreviation": "WEST",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The law and decree fix the offset and the start; the decree gives only the date of the return, and Le Petit Parisien gives the hour for all public clocks."
+      },
+      "citations": [
+        "fr-jo-1916-06-11-law",
+        "fr-jo-1916-06-11-decree",
+        "fr-petitparisien-1916-09-30-public-clocks",
+        "fr-petitparisien-1916-09-30",
+        "fr-petitjournal-1916-09-30"
+      ],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Boundary note corrected to \"rather than at 23:59\" (it said 23:00): Le Petit Parisien reads \"au lieu de 23 heures 59\"."
+        },
+        {
+          "version": 3,
+          "date": "2026-09-28",
+          "summary": "Now also cites Le Petit Parisien's statement that all public clocks, the communes' among them, were to be set back at 01:00 (fr-petitparisien-1916-09-30-public-clocks)."
+        }
+      ]
+    },
+    {
+      "id": "fr-wet-1916",
+      "version": 3,
+      "title": "Normal time, winter 1916-1917",
+      "scope": "Metropolitan France outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918: civil clocks and the clocks inside railway stations",
+      "clock": "civil",
+      "start": {
+        "local": "1916-10-01T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": [
+          "fr-petitparisien-1916-09-30-public-clocks",
+          "fr-petitparisien-1916-09-30",
+          "fr-petitjournal-1916-09-30"
+        ],
+        "note": "The decree says only that normal time would be restored on 1 October. Le Petit Parisien reports that all public clocks, the communes' among them, were to be set back from 01:00 to 00:00 in the night of 30 September to 1 October (00:00 UTC), the change being fixed at one in the morning rather than at 23:59."
+      },
+      "end": {
+        "local": "1917-03-24T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-jo-1917-03-21-decree"]
+      },
+      "offset": { "type": "fixed", "seconds": 0 },
+      "isDst": false,
+      "abbreviation": "WET",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "Normal time restored on 1 October 1916 as the decree of 10 June 1916 provided, until the decree of 20 March 1917."
+      },
+      "citations": ["fr-jo-1911-03-10-law", "fr-jo-1916-06-11-decree", "fr-jo-1917-03-21-decree"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Boundary note corrected to \"rather than at 23:59\" (it said 23:00): Le Petit Parisien reads \"au lieu de 23 heures 59\"."
+        },
+        {
+          "version": 3,
+          "date": "2026-09-28",
+          "summary": "Now also cites Le Petit Parisien's statement that all public clocks, the communes' among them, were to be set back at 01:00 (fr-petitparisien-1916-09-30-public-clocks)."
+        }
+      ]
+    },
+    {
+      "id": "fr-summer-1917",
+      "version": 1,
+      "title": "Summer time 1917 (law of 19 March 1917)",
+      "scope": "Metropolitan France outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918: civil clocks and the clocks inside railway stations",
+      "clock": "civil",
+      "start": {
+        "local": "1917-03-24T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-jo-1917-03-21-decree"]
+      },
+      "end": {
+        "local": "1917-10-07T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "hour",
+        "window": { "earliest": "1917-10-07T00:00:00", "latest": "1917-10-07T01:00:00" },
+        "citations": ["fr-petitjournal-1917-10-06", "fr-petitparisien-1917-10-07"],
+        "note": "The decree says only that normal time would be restored on 7 October. Le Petit Journal gave two ways of adding the hour: stopping clocks at midnight for an hour, or setting them back to midnight at 00:59:59; Le Petit Parisien reports the administrations' clocks set back an hour at 00:59. Either way clocks read the old time again by 01:00 summer time (00:00 UTC), the instant used here; the window is the hour in which clocks may have stood still."
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": true,
+      "abbreviation": "WEST",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The law and decree fix the offset and the start; the decree gives only the date of the return, which two Paris newspapers put in the hour after midnight."
+      },
+      "citations": [
+        "fr-jo-1917-03-21-law",
+        "fr-jo-1917-03-21-decree",
+        "fr-petitjournal-1917-10-06",
+        "fr-petitparisien-1917-10-07"
+      ]
+    },
+    {
+      "id": "fr-wet-1917",
+      "version": 1,
+      "title": "Normal time, winter 1917-1918",
+      "scope": "Metropolitan France outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918: civil clocks and the clocks inside railway stations",
+      "clock": "civil",
+      "start": {
+        "local": "1917-10-07T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "hour",
+        "window": { "earliest": "1917-10-07T00:00:00", "latest": "1917-10-07T01:00:00" },
+        "citations": ["fr-petitjournal-1917-10-06", "fr-petitparisien-1917-10-07"],
+        "note": "The decree says only that normal time would be restored on 7 October. Le Petit Journal gave two ways of adding the hour: stopping clocks at midnight for an hour, or setting them back to midnight at 00:59:59; Le Petit Parisien reports the administrations' clocks set back an hour at 00:59. Either way clocks read the old time again by 01:00 summer time (00:00 UTC), the instant used here; the window is the hour in which clocks may have stood still."
+      },
+      "end": {
+        "local": "1918-03-09T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-jo-1918-03-01-decree"]
+      },
+      "offset": { "type": "fixed", "seconds": 0 },
+      "isDst": false,
+      "abbreviation": "WET",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "Normal time restored on 7 October 1917 as the decree of 20 March 1917 provided, until the decree of 28 February 1918."
+      },
+      "citations": ["fr-jo-1911-03-10-law", "fr-jo-1917-03-21-decree", "fr-jo-1918-03-01-decree"]
+    },
+    {
+      "id": "fr-summer-1918",
+      "version": 2,
+      "title": "Summer time 1918 (decree of 28 February 1918)",
+      "scope": "Metropolitan France outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918: civil clocks and the clocks inside railway stations",
+      "clock": "civil",
+      "start": {
+        "local": "1918-03-09T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-jo-1918-03-01-decree"]
+      },
+      "end": {
+        "local": "1918-10-06T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-petitparisien-1918-10-04"],
+        "note": "The decree says only that normal time would be restored on 6 October. The instructions to the railway networks, as Le Petit Parisien printed them, set all clocks back an hour one minute after 24:59 in the night of 5 to 6 October, that is at 01:00 summer time on 6 October (00:00 UTC); the other public clocks are taken to have been set back at the same hour."
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": true,
+      "abbreviation": "WEST",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The decree fixes the offset and the start and gives only the date of the return. The hour, 01:00 summer time, is that of the instructions to the railway networks as Le Petit Parisien printed them; that the other public clocks were set back at the same hour is assumed."
+      },
+      "citations": ["fr-jo-1917-03-21-law", "fr-jo-1918-03-01-decree", "fr-petitparisien-1918-10-04"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the hour of the return to normal time comes from the instructions to the railway networks, and the other public clocks are assumed to have followed."
+        }
+      ]
+    },
+    {
+      "id": "fr-wet-1918",
+      "version": 2,
+      "title": "Normal time, winter 1918-1919",
+      "scope": "Metropolitan France outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918: civil clocks and the clocks inside railway stations",
+      "clock": "civil",
+      "start": {
+        "local": "1918-10-06T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-petitparisien-1918-10-04"],
+        "note": "The decree says only that normal time would be restored on 6 October. The instructions to the railway networks, as Le Petit Parisien printed them, set all clocks back an hour one minute after 24:59 in the night of 5 to 6 October, that is at 01:00 summer time on 6 October (00:00 UTC); the other public clocks are taken to have been set back at the same hour."
+      },
+      "end": {
+        "local": "1919-03-01T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-jo-1919-02-11-decree", "fr-petitparisien-1919-03-01"]
+      },
+      "offset": { "type": "fixed", "seconds": 0 },
+      "isDst": false,
+      "abbreviation": "WET",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "Normal time was restored on 6 October 1918, as the decree of 28 February 1918 provided, until the decree of 9 February 1919. The hour of the return comes from the instructions to the railway networks; that the other public clocks followed is assumed."
+      },
+      "citations": ["fr-jo-1911-03-10-law", "fr-jo-1918-03-01-decree", "fr-jo-1919-02-11-decree"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the hour of the return to normal time comes from the instructions to the railway networks, and the other public clocks are assumed to have followed."
+        }
+      ]
+    },
+    {
+      "id": "fr-summer-1919",
+      "version": 1,
+      "title": "Summer time 1919 (decree of 9 February 1919)",
+      "scope": "Metropolitan France outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918: civil clocks and the clocks inside railway stations",
+      "clock": "civil",
+      "start": {
+        "local": "1919-03-01T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-jo-1919-02-11-decree", "fr-petitparisien-1919-03-01"]
+      },
+      "end": {
+        "local": "1919-10-05T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-petitjournal-1919-10-05"],
+        "note": "The decree says only that normal time would be restored on 5 October. The note of the sous-secrétariat d'État aux Transports set legal time back sixty minutes at one o'clock in the night of 4 to 5 October (00:00 UTC)."
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": true,
+      "abbreviation": "WEST",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The decree fixes the offset and the start; it gives only the date of the return, and the Transport sub-ministry's note gives the hour."
+      },
+      "citations": [
+        "fr-jo-1917-03-21-law",
+        "fr-jo-1919-02-11-decree",
+        "fr-petitparisien-1919-03-01",
+        "fr-petitjournal-1919-10-05"
+      ]
+    },
+    {
+      "id": "fr-wet-1919",
+      "version": 1,
+      "title": "Normal time from 5 October 1919",
+      "scope": "Metropolitan France outside Alsace-Moselle (German until November 1918) and outside the areas occupied by German forces in 1914-1918: civil clocks and the clocks inside railway stations",
+      "clock": "civil",
+      "start": {
+        "local": "1919-10-05T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-petitjournal-1919-10-05"],
+        "note": "The decree says only that normal time would be restored on 5 October. The note of the sous-secrétariat d'État aux Transports set legal time back sixty minutes at one o'clock in the night of 4 to 5 October (00:00 UTC)."
+      },
+      "end": { "local": "1920-01-01T00:00:00", "reckoning": "before", "kind": "coverage", "precision": "second" },
+      "offset": { "type": "fixed", "seconds": 0 },
+      "isDst": false,
+      "abbreviation": "WET",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "Normal time restored on 5 October 1919 as the decree of 9 February 1919 provided."
+      },
+      "citations": ["fr-jo-1911-03-10-law", "fr-jo-1919-02-11-decree", "fr-petitjournal-1919-10-05"]
+    }
+  ]
+}

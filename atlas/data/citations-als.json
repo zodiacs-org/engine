@@ -1,0 +1,293 @@
+{
+  "$schema": "../schema/atlas.schema.json",
+  "kind": "atlas-citations",
+  "description": "Alsace and Moselle: the Reich law of 1893 (read on the Internet Archive scan of the Reichs-Gesetzblatt), and Strasbourg, Metz and Haguenau newspapers and a Paris daily read on Gallica. The excerpts were transcribed from page images on the retrieval date and checked again against the scan's OCR text (the Reichs-Gesetzblatt) or Gallica's text of the cited page (the text its search service returns, or its OCR text) and, where that text could not confirm a word, against the page image (each citation's checks).",
+  "citations": [
+    {
+      "id": "als-snn-1892-03-31-mez",
+      "type": "newspaper-report",
+      "title": "Mitteleuropäische Zeit (Straßburg, local news)",
+      "date": "1892-03-31",
+      "issuer": "Straßburger Neueste Nachrichten",
+      "publication": "Straßburger Neueste Nachrichten, Nr. 77, Zweites Blatt, Donnerstag, 31. März 1892",
+      "url": "https://gallica.bnf.fr/ark:/12148/bd6t528094756/f5.item",
+      "retrieved": "2026-09-28",
+      "locator": "Zweites Blatt, first page (Gallica view 5), col. 2",
+      "language": "de",
+      "excerpt": "Nachdem das k. Ministerium verfügt hat, daß mit morgen die mitteleuropäische Zeit in Elsaß-Lothringen auch als Ortszeit allgemein einzuführen ist, haben die Gemeindebehörden Anweisung erhalten, dementsprechend morgen eine Richtigstellung der öffentlichen Uhren zu veranlassen.",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
+      "gloss": "The Ministry for Alsace-Lorraine ordered Mid-European time to be introduced generally as local time from 1 April 1892; municipal authorities were to correct the public clocks that day, by the public clock of the nearest railway station."
+    },
+    {
+      "id": "als-snn-1892-04-01-muenster",
+      "type": "newspaper-report",
+      "title": "M. E. Z.",
+      "date": "1892-04-01",
+      "issuer": "Straßburger Neueste Nachrichten",
+      "publication": "Straßburger Neueste Nachrichten, Nr. 78, Zweites Blatt, Freitag, 1. April 1892",
+      "url": "https://gallica.bnf.fr/ark:/12148/bd6t52809476m/f5.item",
+      "retrieved": "2026-09-28",
+      "locator": "Zweites Blatt, first page (Gallica view 5), col. 2",
+      "language": "de",
+      "excerpt": "Als wir heute Nacht die Münsterglocke die Mitternachtstunde und nach kaum einer Minute halb 1 Uhr schlagen hörten, da erfaßte den Hörer eine gewisse Aufregung",
+      "excerptBasis": "page-image",
+      "checks": [
+        { "method": "search-service", "date": "2026-09-28", "result": "matches" },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ],
+      "gloss": "In the night of 31 March to 1 April 1892 the cathedral clock struck midnight and, barely a minute later, half past twelve."
+    },
+    {
+      "id": "als-snn-1892-04-01-ruprechtsau",
+      "type": "newspaper-report",
+      "title": "M. E. Z.",
+      "date": "1892-04-01",
+      "issuer": "Straßburger Neueste Nachrichten",
+      "publication": "Straßburger Neueste Nachrichten, Nr. 78, Zweites Blatt, Freitag, 1. April 1892",
+      "url": "https://gallica.bnf.fr/ark:/12148/bd6t52809476m/f5.item",
+      "retrieved": "2026-09-28",
+      "locator": "Zweites Blatt, first page (Gallica view 5), col. 2, the paragraph after the one quoted in als-snn-1892-04-01-muenster",
+      "language": "de",
+      "excerpt": "Unser Vorort Ruprechtsau hat übrigens mit der Einführung der M. E. Z. den Vogel abgeschossen, dort zeigten die Thurmuhren bereits gestern Nachmittag die neue Zeit.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "Against Gallica's OCR text of the page (ALTO)."
+        }
+      ],
+      "gloss": "The tower clocks of the suburb of Ruprechtsau (Robertsau) already showed Mid-European time on the afternoon of 31 March 1892."
+    },
+    {
+      "id": "mos-lz-1892-03-29-station",
+      "type": "newspaper-report",
+      "title": "Mitteleuropäische Zeit (Metz, local news)",
+      "date": "1892-03-29",
+      "issuer": "Lothringer Zeitung",
+      "publication": "Lothringer Zeitung und amtliche Nachrichten (Metz), 29. März 1892",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k9340208n/f3.item",
+      "retrieved": "2026-09-28",
+      "locator": "p. 3, col. 2",
+      "language": "de",
+      "excerpt": "daß in der Nacht vom 31. März auf den 1. April um 11 Uhr 25 Min. Ortszeit, die Uhren des hiesigen Bahnhofs auf 12 Uhr M. E. Z. umgestellt werden.",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
+      "gloss": "Metz station's clocks were to be set from 23:25 local time to 00:00 Mid-European time in the night of 31 March to 1 April 1892."
+    },
+    {
+      "id": "mos-lz-1892-03-29-city",
+      "type": "newspaper-report",
+      "title": "Mitteleuropäische Zeit (Metz, local news)",
+      "date": "1892-03-29",
+      "issuer": "Lothringer Zeitung",
+      "publication": "Lothringer Zeitung und amtliche Nachrichten (Metz), 29. März 1892",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k9340208n/f3.item",
+      "retrieved": "2026-09-28",
+      "locator": "p. 3, col. 2",
+      "language": "de",
+      "excerpt": "Im Anschluß daran würden die sämmtlichen der städtischen Verwaltung unterstehenden Uhren, insbesondere auch die der Kathedrale in den frühesten Stunden des 1. April gleichfalls um 35 Minuten vorgerückt werden.",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
+      "gloss": "The city's clocks, the cathedral's among them, were to be put forward 35 minutes in the earliest hours of 1 April 1892."
+    },
+    {
+      "id": "de-rgbl-1893-03-12-law",
+      "type": "law",
+      "title": "Gesetz, betreffend die Einführung einer einheitlichen Zeitbestimmung. Vom 12. März 1893 (Nr. 2075)",
+      "date": "1893-03-12",
+      "issuer": "Deutsches Reich (the Emperor, with the Bundesrat and the Reichstag)",
+      "publication": "Reichs-Gesetzblatt 1893, Nr. 7, ausgegeben zu Berlin den 16. März 1893 (scan from the Pomeranian Digital Library, on the Internet Archive)",
+      "url": "https://archive.org/details/pbc.gda.pl.Nr_07_76958",
+      "retrieved": "2026-09-28",
+      "locator": "p. 93",
+      "language": "de",
+      "excerpt": "Die gesetzliche Zeit in Deutschland ist die mittlere Sonnenzeit des fünfzehnten Längengrades östlich von Greenwich. Dieses Gesetz tritt mit dem Zeitpunkt in Kraft, in welchem nach der im vorhergehenden Absatz festgesetzten Zeitbestimmung der 1. April 1893 beginnt.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "ocr",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "Against the scan's OCR text on the Internet Archive."
+        }
+      ]
+    },
+    {
+      "id": "de-snn-1916-04-08-wtb",
+      "type": "newspaper-report",
+      "title": "Letzte Telegramme: WTB Berlin, 7. April. Amtlich (Verordnung des Bundesrats über die Sommerzeit)",
+      "date": "1916-04-08",
+      "issuer": "Straßburger Neueste Nachrichten, printing an official telegram of Wolff's Telegraphisches Bureau",
+      "publication": "Straßburger Neueste Nachrichten, 8. April 1916",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k9429782d/f13.item",
+      "retrieved": "2026-09-28",
+      "locator": "Gallica view 13, col. 2",
+      "language": "de",
+      "excerpt": "Der 1. Mai beginnt am 30. April 11 Uhr nachmittags; zu diesem Zeitpunkte werden alle Uhren im Reiche auf Mitternacht vorgestellt. Der 30. September endet eine Stunde nach Mitternacht; zu diesem Zeitpunkte werden sämtliche Uhren auf Mitternacht zurückgestellt werden.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "The service's snippets begin after \"Der 1.\" (at \"Nai beginnt am 30\") and after the first \"zu diesem\", so those words are not confirmed; the other words agree, allowing for OCR errors."
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ],
+      "gloss": "By order of the Bundesrat, every clock in the Reich went from 23:00 on 30 April 1916 to midnight, and back from 01:00 to midnight at the end of 30 September."
+    },
+    {
+      "id": "de-snn-1917-04-16-beginn",
+      "type": "newspaper-report",
+      "title": "Beginn der Sommerzeit",
+      "date": "1917-04-16",
+      "issuer": "Straßburger Neueste Nachrichten",
+      "publication": "Straßburger Neueste Nachrichten, Montag, 16. April 1917",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k9429988k/f5.item",
+      "retrieved": "2026-09-28",
+      "locator": "Gallica view 5, col. 1",
+      "language": "de",
+      "excerpt": "Die Zeitumschaltung wurde Montag 2 Uhr morgens durch Vorrücken des Zeigers auf 3 Uhr vollzogen.",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }]
+    },
+    {
+      "id": "de-snn-1917-09-14-ende",
+      "type": "newspaper-report",
+      "title": "Das Ende der Sommerzeit",
+      "date": "1917-09-14",
+      "issuer": "Straßburger Neueste Nachrichten",
+      "publication": "Straßburger Neueste Nachrichten, Nr. 215, Zweites Blatt, Freitag, 14. September 1917",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k94456119/f5.item",
+      "retrieved": "2026-09-28",
+      "locator": "Zweites Blatt, first page (Gallica view 5), col. 1",
+      "language": "de",
+      "excerpt": "In der Nacht vom Sonntag, den 16., auf Montag, den 17. September, um 3 Uhr morgens, geht die Sommerzeit zu Ende. Die öffentlichen Uhren werden um 3 Uhr auf 2 Uhr zurückgestellt.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "\"September, um 3 Uhr\" reads \"Seb» & unt 31hr\" in the service's text, so the month is not confirmed; the other words agree, allowing for OCR errors."
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ],
+      "note": "Corrected on 2026-09-28: the issue number was given as Nr. 255; the masthead reads \"Nr. 215. Zweites Blatt\"."
+    },
+    {
+      "id": "de-snn-1918-03-08-sommerzeit",
+      "type": "newspaper-report",
+      "title": "Die Sommerzeit 1918",
+      "date": "1918-03-08",
+      "issuer": "Straßburger Neueste Nachrichten",
+      "publication": "Straßburger Neueste Nachrichten, Nr. 57, Zweites Blatt, 8. März 1918",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k9433577t/f5.item",
+      "retrieved": "2026-09-28",
+      "locator": "Zweites Blatt, first page (Gallica view 5), col. 1",
+      "language": "de",
+      "excerpt": "Die öffentlichen Uhren sind am 15. April vormittags 2 Uhr auf 3 Uhr vorzustellen, am 16. September vormittags 3 Uhr auf 2 Uhr zurückzustellen.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "\"April vormittags\" reads \"Spru wrmittags\" in the service's text, so the month is not confirmed; the other words agree, allowing for OCR errors."
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ]
+    },
+    {
+      "id": "als-snn-1918-11-21-bekanntmachung",
+      "type": "municipal-notice",
+      "title": "Bekanntmachung, betreffend Einführung der französischen Zeit an Stelle der mitteleuropäischen (Straßburg, den 20. November 1918)",
+      "date": "1918-11-20",
+      "issuer": "Der Bürgermeister der Stadt Straßburg (Peirotes)",
+      "publication": "Straßburger Neueste Nachrichten, Nr. 272, Donnerstag, 21. November 1918",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k9431850k/f1.item",
+      "retrieved": "2026-09-28",
+      "locator": "p. 1, col. 2",
+      "language": "de",
+      "excerpt": "Morgen mittag 12 Uhr werden die öffentlichen städtischen Uhren auf französische Zeit gebracht und demgemäß auf 11 Uhr 5 Minuten zurückgestellt.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "\"auf französische Zeit gebracht\" reads \"auf fran ’^e Reit gebradt\" in the service's text; the other words agree, allowing for OCR errors."
+        },
+        {
+          "method": "page-image",
+          "date": "2026-09-28",
+          "result": "matches",
+          "note": "The scan is faded in the middle of \"französische\": only \"fran\" and \"sche\" show. The heading of the notice, \"Einführung der französischen Zeit\", is clear."
+        }
+      ],
+      "gloss": "At noon on 21 November 1918 the city's public clocks were to be put on French time by setting them back to 11:05.",
+      "note": "Noon Mid-European time is 11:00 UTC, so the clocks were set five minutes ahead of Greenwich time, not to French legal time."
+    },
+    {
+      "id": "als-elsasser-1918-12-16-pariser-zeit",
+      "type": "newspaper-report",
+      "title": "Pariser Zeit (reader's letter, Straßburger Stadtchronik)",
+      "date": "1918-12-16",
+      "issuer": "Der Elsässer",
+      "publication": "Der Elsässer (Straßburg), 16. Dezember 1918",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k94432097/f2.item",
+      "retrieved": "2026-09-28",
+      "locator": "p. 2, col. 4",
+      "language": "de",
+      "excerpt": "Nach den Zeitungen sollten unsere Uhren 55 Minuten später gestellt werden, was auch geschah am 21. November. [...] Auch in Straßburg geht die Bahnuhr 5 Minuten später als die öffentlichen Uhren.",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "search-service", "date": "2026-09-28", "result": "matches" }],
+      "gloss": "A reader writes that the clocks were set back 55 minutes on 21 November and that Strasbourg's station clock runs five minutes behind the public clocks."
+    },
+    {
+      "id": "mos-matin-1918-11-21-metz",
+      "type": "newspaper-report",
+      "title": "L'installation de M. Mirman comme commissaire de la République en Lorraine (Metz, 19 novembre)",
+      "date": "1918-11-21",
+      "issuer": "Le Matin",
+      "publication": "Le Matin, 21 novembre 1918",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k572721g/f1.item",
+      "retrieved": "2026-09-28",
+      "locator": "p. 1, cols. 3-4 (dateline Metz, 19 novembre; the passage is in col. 4)",
+      "language": "fr",
+      "excerpt": "vers 16 h. 30 — heure française, car depuis le matin l'horloge de la cathédrale ne marque plus l'heure d'Europe centrale",
+      "excerptBasis": "page-image",
+      "checks": [
+        { "method": "search-service", "date": "2026-09-28", "result": "matches" },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ],
+      "note": "Shortened on 2026-09-28, when only the search service's text of the page could be read: it drops a line, and the words that follow the excerpt, \"se déroulait à la préfecture la cérémonie d'ordre civil\", could not be confirmed. Read again on the page image the same day, they are there as first transcribed; the shorter excerpt is kept."
+    },
+    {
+      "id": "als-jh-1919-02-28-railways",
+      "type": "newspaper-report",
+      "title": "Die Sommerzeit",
+      "date": "1919-02-28",
+      "issuer": "Journal de Haguenau",
+      "publication": "Journal de Haguenau: indicateur général du Bas-Rhin, 28 février 1919",
+      "url": "https://gallica.bnf.fr/ark:/12148/bpt6k3039456z/f2.item",
+      "retrieved": "2026-09-28",
+      "locator": "p. 2, col. 1",
+      "language": "de",
+      "excerpt": "In der Nacht vom 1. zum 2. März wird auf den Eisenbahnen in Elsaß und Lothringen und der Wilhelm-Luxemburg-Eisenbahn die Sommerzeit eingeführt [...] Infolgedessen werden am 1. März um 23 Uhr die Bahnhofsuhren um eine Stunde vorgerückt.",
+      "excerptBasis": "page-image",
+      "checks": [
+        {
+          "method": "search-service",
+          "date": "2026-09-28",
+          "result": "partial",
+          "note": "Both \"März\" are garbled in the service's text (\"Mrz\", \"Nr3\"), so the month is not confirmed there; the other words agree, allowing for OCR errors."
+        },
+        { "method": "page-image", "date": "2026-09-28", "result": "matches" }
+      ]
+    }
+  ]
+}

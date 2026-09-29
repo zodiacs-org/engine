@@ -1,0 +1,37 @@
+name: Atlas
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  atlas:
+    name: Time atlas checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # Pinned like the conformance workflow, to the Node the committed
+      # atlas files were checked with.
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22.22.2
+
+      # Schema, citations and how each was checked, coverage and contiguity,
+      # round trips, and the tzdb comparison against the committed tzdb 2025c
+      # extract, which must be present. Nothing is installed: the tools use
+      # only Node's standard library, and package.json is left alone.
+      - name: Atlas data checks
+        run: node atlas/tools/check.mjs
+
+      - name: Atlas tools self-test
+        run: node --test atlas/tools/selftest.mjs

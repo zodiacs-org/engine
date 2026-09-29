@@ -1,0 +1,19 @@
+{
+  "kind": "atlas-citations",
+  "citations": [
+    {
+      "id": "fixture-source",
+      "type": "municipal-notice",
+      "title": "An invented notice used only by the tool tests",
+      "date": "1880-05-01",
+      "issuer": "Nobody",
+      "url": "https://example.org/fixture",
+      "retrieved": "2026-09-28",
+      "locator": "p. 1",
+      "language": "en",
+      "excerpt": "The clocks shall be set forward.",
+      "excerptBasis": "page-image",
+      "checks": [{ "method": "page-image", "date": "2026-09-28", "result": "matches" }]
+    }
+  ]
+}

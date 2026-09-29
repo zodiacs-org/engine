@@ -1,0 +1,14 @@
+{
+  "kind": "atlas-manifest",
+  "name": "Test fixture for the atlas tools (synthetic, not history)",
+  "version": "0.0.1",
+  "released": "2026-09-28",
+  "license": "CC-BY-4.0",
+  "coverage": {
+    "start": "1870-01-01T00:00:00",
+    "end": "1920-01-01T00:00:00",
+    "countries": ["FR"],
+    "note": "A made-up jurisdiction with one change of each kind: a skipped half hour, a skipped hour and a repeated hour."
+  },
+  "files": ["citations.json", "places.json", "rules.json"]
+}

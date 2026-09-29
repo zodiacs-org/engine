@@ -1,0 +1,141 @@
+#!/usr/bin/env node
+/*
+ * Writes atlas/tzdb/tzdb-2025c.json: for every zone the atlas compares a
+ * place with, tzdb's offsets from the first transition up to 1920, read
+ * from TZif files compiled from tzdata 2025c with backzone.
+ *
+ *   node atlas/tools/tzdb-extract.mjs --zoneinfo DIR           write the extract
+ *   node atlas/tools/tzdb-extract.mjs --zoneinfo DIR --check   compare with the committed one
+ *
+ * DIR is a tree built by the L3 conformance arbiter's recipe
+ * (conformance/arbiters/l3/README.md, "Build"): tzdata2025c + tzcode2025c,
+ * ziguard.awk in main form with PACKRATDATA=backzone PACKRATLIST=zone.tab,
+ * zishrink.awk, then `zic -d DIR tzdata.zi`. With zic 2025c that tree has
+ * 598 files and the digest recorded in conformance/sources/l3/tzdata.json;
+ * this script recomputes the digest and says whether it matches. The
+ * extract itself depends only on the transitions, which other zic versions
+ * reproduce (L3's cross-check with glibc's zic found the same answers).
+ *
+ * tzdb is in the public domain; the extract is a subset of its data.
+ */
+import { createHash } from 'node:crypto';
+import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { ATLAS_DIR, loadAtlas, readJson } from './lib.mjs';
+
+export const EXTRACT_PATH = join(ATLAS_DIR, 'tzdb', 'tzdb-2025c.json');
+const TZDATA_RECORD = join(ATLAS_DIR, '..', 'conformance', 'sources', 'l3', 'tzdata.json');
+/** Transitions are kept up to this instant (UTC seconds): 1920-01-02T00:00:00Z. */
+const UNTIL = Date.UTC(1920, 0, 2) / 1000;
+
+/** The 64-bit data of a TZif file (RFC 8536): transition times, their types, and each type's offset, DST flag and designation. */
+export function readTzif(buffer) {
+  if (buffer.toString('latin1', 0, 4) !== 'TZif') throw new Error('not a TZif file');
+  if (buffer[4] < 0x32) throw new Error('TZif version 1 has no 64-bit data');
+  const counts = (at) => [0, 1, 2, 3, 4, 5].map((index) => buffer.readUInt32BE(at + 20 + index * 4));
+  const [isutcnt, isstdcnt, leapcnt, timecnt, typecnt, charcnt] = counts(0);
+  const header = 44 + timecnt * 5 + typecnt * 6 + charcnt + leapcnt * 8 + isstdcnt + isutcnt;
+  if (buffer.toString('latin1', header, header + 4) !== 'TZif') throw new Error('missing second TZif header');
+  const [, , , times, types, chars] = counts(header);
+  let at = header + 44;
+  const t = [];
+  for (let index = 0; index < times; index += 1, at += 8) t.push(Number(buffer.readBigInt64BE(at)));
+  const typeOf = [...buffer.subarray(at, at + times)];
+  at += times;
+  const typeList = [];
+  for (let index = 0; index < types; index += 1, at += 6) {
+    typeList.push({ offset: buffer.readInt32BE(at), isDst: buffer[at + 4] === 1, designationAt: buffer[at + 5] });
+  }
+  const text = buffer.toString('latin1', at, at + chars);
+  for (const type of typeList) type.abbr = text.slice(type.designationAt, text.indexOf('\0', type.designationAt));
+  return { t, typeOf, types: typeList };
+}
+
+function zoneExtract(zoneinfo, zone) {
+  const bytes = readFileSync(join(zoneinfo, zone));
+  const { t, typeOf, types } = readTzif(bytes);
+  const describe = (type) => ({ offset: types[type].offset, abbr: types[type].abbr, isDst: types[type].isDst });
+  // RFC 8536: before the first transition, local time type 0 applies.
+  const initial = describe(0);
+  const transitions = [];
+  let current = initial;
+  for (let index = 0; index < t.length; index += 1) {
+    if (t[index] >= UNTIL) break;
+    const next = describe(typeOf[index]);
+    if (next.offset === current.offset && next.abbr === current.abbr && next.isDst === current.isDst) continue;
+    transitions.push({ at: t[index], utc: new Date(t[index] * 1000).toISOString().replace('.000Z', 'Z'), ...next });
+    current = next;
+  }
+  return { sha256: createHash('sha256').update(bytes).digest('hex'), initial, transitions };
+}
+
+function treeDigest(zoneinfo) {
+  const lines = [];
+  const walk = (directory) => {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) walk(path);
+      else lines.push(`${relative(zoneinfo, path)} ${createHash('sha256').update(readFileSync(path)).digest('hex')}\n`);
+    }
+  };
+  walk(zoneinfo);
+  lines.sort();
+  return { files: lines.length, sha256: createHash('sha256').update(lines.join('')).digest('hex') };
+}
+
+export function buildExtract(zoneinfo) {
+  const atlas = loadAtlas();
+  const zones = new Set();
+  for (const place of atlas.places.values()) {
+    zones.add(place.tzdbZone);
+    for (const zone of place.compareZones ?? []) zones.add(zone);
+  }
+  const record = readJson(TZDATA_RECORD);
+  const tree = treeDigest(zoneinfo);
+  const extract = {
+    kind: 'atlas-tzdb-extract',
+    release: record.release,
+    about: 'Offsets of the zones the atlas compares with, from tzdb 2025c with backzone, up to 1920-01-02T00:00:00Z. Generated by atlas/tools/tzdb-extract.mjs; do not edit.',
+    source: {
+      tzdata: { url: record.tzdata.url, sha256: record.tzdata.sha256 },
+      tzcode: { url: record.tzcode.url, sha256: record.tzcode.sha256 },
+      recipe: 'conformance/arbiters/l3/README.md, "Build" (make PACKRATDATA=backzone PACKRATLIST=zone.tab tzdata.zi; zic -d DIR tzdata.zi)',
+      compiledTree: { ...tree, matchesL3Record: tree.files === record.compiledTree.files && tree.sha256 === record.compiledTree.sha256 },
+    },
+    zones: {},
+  };
+  for (const zone of [...zones].sort()) extract.zones[zone] = zoneExtract(zoneinfo, zone);
+  return `${JSON.stringify(extract, null, 1)}\n`;
+}
+
+function main() {
+  const index = process.argv.indexOf('--zoneinfo');
+  if (index === -1) throw new Error('give --zoneinfo DIR (a tree compiled by the L3 recipe)');
+  const text = buildExtract(process.argv[index + 1]);
+  if (process.argv.includes('--check')) {
+    let committed = '';
+    try {
+      committed = readFileSync(EXTRACT_PATH, 'utf8');
+    } catch {
+      // Not written yet.
+    }
+    if (committed !== text) {
+      console.error('tzdb-extract: atlas/tzdb/tzdb-2025c.json differs from the compiled tree; run without --check');
+      process.exit(1);
+    }
+    console.log('tzdb-extract: atlas/tzdb/tzdb-2025c.json is current');
+    return;
+  }
+  writeFileSync(EXTRACT_PATH, text);
+  const parsed = JSON.parse(text);
+  console.log(`tzdb-extract: ${Object.keys(parsed.zones).length} zones -> atlas/tzdb/tzdb-2025c.json (compiled tree ${parsed.source.compiledTree.matchesL3Record ? 'matches' : 'does NOT match'} the L3 record)`);
+}
+
+if (process.argv[1] && process.argv[1].endsWith('tzdb-extract.mjs')) {
+  try {
+    main();
+  } catch (error) {
+    console.error(`tzdb-extract: ${error.message}`);
+    process.exit(1);
+  }
+}

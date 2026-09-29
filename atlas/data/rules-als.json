@@ -1,0 +1,578 @@
+{
+  "$schema": "../schema/atlas.schema.json",
+  "kind": "atlas-rules",
+  "description": "Alsace and Moselle: local mean time, Mid-European time as local time from 1 April 1892 and as legal time from 1 April 1893, German summer time 1916-1918, the change to French time in November 1918, and French summer time 1919.",
+  "jurisdictions": [
+    {
+      "id": "als-strasbourg",
+      "name": "Strasbourg",
+      "country": "FR",
+      "description": "Strasbourg (Bas-Rhin): French until 1871, part of the German Reichsland Elsaß-Lothringen from 1871 to November 1918, French again after.",
+      "timeline": {
+        "civil": [
+          "als-strasbourg-lmt-before-1892",
+          "als-strasbourg-mez-1892",
+          "de-mez-1893",
+          "de-summer-1916",
+          "de-mez-1916",
+          "de-summer-1917",
+          "de-mez-1917",
+          "de-summer-1918",
+          "als-strasbourg-mez-1918",
+          "als-strasbourg-french-1918",
+          "als-mos-summer-1919",
+          "als-mos-wet-1919"
+        ]
+      }
+    },
+    {
+      "id": "mos-metz",
+      "name": "Metz",
+      "country": "FR",
+      "description": "Metz (Moselle): French until 1871, part of the German Reichsland Elsaß-Lothringen from 1871 to November 1918, French again after.",
+      "timeline": {
+        "civil": [
+          "mos-metz-lmt-before-1892",
+          "mos-metz-mez-1892",
+          "de-mez-1893",
+          "de-summer-1916",
+          "de-mez-1916",
+          "de-summer-1917",
+          "de-mez-1917",
+          "de-summer-1918",
+          "mos-metz-mez-1918",
+          "mos-metz-french-1918",
+          "als-mos-summer-1919",
+          "als-mos-wet-1919"
+        ]
+      }
+    }
+  ],
+  "rules": [
+    {
+      "id": "als-strasbourg-lmt-before-1892",
+      "version": 3,
+      "title": "Strasbourg: local mean time",
+      "scope": "Strasbourg, French until 1871 and German from 1871, before 1 April 1892",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1892-04-01T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "days",
+        "window": { "earliest": "1892-03-31T12:00:00", "latest": "1892-04-01T23:59:59" },
+        "citations": ["als-snn-1892-04-01-muenster", "als-snn-1892-04-01-ruprechtsau", "als-snn-1892-03-31-mez"],
+        "note": "The cathedral clock struck midnight Strasbourg mean time in the night of 31 March to 1 April 1892 and, barely a minute later, half past twelve (Mid-European time is 29 min 1 s ahead of Strasbourg's mean time); the atlas uses that instant. The tower clocks of the suburb of Ruprechtsau already showed the new time on the afternoon of 31 March, and the municipal authorities were to correct the other public clocks on 1 April, so the window runs from noon on 31 March to the end of 1 April."
+      },
+      "offset": { "type": "local-mean-time" },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The 1892 change (the cathedral clock struck midnight and, a minute later, half past twelve) fits Strasbourg mean time; that the city's clocks kept it from 1870, through the siege of 1870 and the annexation of 1871, is assumed."
+      },
+      "citations": ["als-snn-1892-04-01-muenster", "als-snn-1892-03-31-mez", "fr-senat-1891-02-17-restoration"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred again: the sources show Strasbourg mean time only at the change of 1892, and the rule carries it back to 1870 across the siege and the annexation. The change is timed by the cathedral clock only; the other public clocks were corrected during 1 April, now a window."
+        },
+        {
+          "version": 3,
+          "date": "2026-09-28",
+          "summary": "The window of the change now opens at noon on 31 March: the tower clocks of the suburb of Ruprechtsau already showed Mid-European time that afternoon (als-snn-1892-04-01-ruprechtsau)."
+        }
+      ],
+      "note": "Legal time in France was each place's local mean time (the Senate debate of 1891 dates this from the Restoration), and no change is reported under German rule before 1892."
+    },
+    {
+      "id": "mos-metz-lmt-before-1892",
+      "version": 2,
+      "title": "Metz: local mean time",
+      "scope": "Metz, French until 1871 and German from 1871, before 1 April 1892",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1892-04-01T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "hour",
+        "window": { "earliest": "1892-03-31T23:25:00", "latest": "1892-04-01T06:00:00" },
+        "citations": ["mos-lz-1892-03-29-city", "mos-lz-1892-03-29-station"],
+        "note": "Announced for the earliest hours of 1 April 1892, after the station's clocks changed at 23:25 Metz time (midnight Mid-European time); the hour is not reported. The window runs from the station's change to 06:00."
+      },
+      "offset": { "type": "local-mean-time" },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The city's clocks were put forward 35 minutes to Mid-European time in 1892, which fits Metz mean time; that they kept it from 1870, through the siege of 1870 and the annexation of 1871, is assumed."
+      },
+      "citations": ["mos-lz-1892-03-29-city", "fr-senat-1891-02-17-restoration"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred again: the sources show Metz mean time only at the change of 1892, and the rule carries it back to 1870 across the siege and the annexation."
+        }
+      ],
+      "note": "Mid-European time is 35 min 19 s ahead of Metz mean time."
+    },
+    {
+      "id": "als-strasbourg-mez-1892",
+      "version": 3,
+      "title": "Strasbourg: Mid-European time as local time (order of the Ministry for Alsace-Lorraine, 1892)",
+      "scope": "Strasbourg, 1 April 1892 to the Reich law of 12 March 1893",
+      "clock": "civil",
+      "start": {
+        "local": "1892-04-01T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "days",
+        "window": { "earliest": "1892-03-31T12:00:00", "latest": "1892-04-01T23:59:59" },
+        "citations": ["als-snn-1892-04-01-muenster", "als-snn-1892-04-01-ruprechtsau", "als-snn-1892-03-31-mez"],
+        "note": "The cathedral clock struck midnight Strasbourg mean time in the night of 31 March to 1 April 1892 and, barely a minute later, half past twelve (Mid-European time is 29 min 1 s ahead of Strasbourg's mean time); the atlas uses that instant. The tower clocks of the suburb of Ruprechtsau already showed the new time on the afternoon of 31 March, and the municipal authorities were to correct the other public clocks on 1 April, so the window runs from noon on 31 March to the end of 1 April."
+      },
+      "end": {
+        "local": "1893-04-01T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "second",
+        "citations": ["de-rgbl-1893-03-12-law"],
+        "note": "The law came into force at the moment 1 April 1893 began on Mid-European time. The clocks, already on Mid-European time, did not change."
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": false,
+      "abbreviation": "MEZ",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The Ministry ordered Mid-European time as local time throughout Alsace-Lorraine from 1 April 1892; the cathedral clock changed at midnight, and the tower clocks of Ruprechtsau the afternoon before."
+      },
+      "citations": ["als-snn-1892-03-31-mez", "als-snn-1892-04-01-muenster", "als-snn-1892-04-01-ruprechtsau"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The start is timed by the cathedral clock only; the other public clocks were corrected during 1 April, now a window."
+        },
+        {
+          "version": 3,
+          "date": "2026-09-28",
+          "summary": "The window of the change now opens at noon on 31 March: the tower clocks of the suburb of Ruprechtsau already showed Mid-European time that afternoon (als-snn-1892-04-01-ruprechtsau)."
+        }
+      ]
+    },
+    {
+      "id": "mos-metz-mez-1892",
+      "version": 1,
+      "title": "Metz: Mid-European time as local time (order of the Ministry for Alsace-Lorraine, 1892)",
+      "scope": "Metz, 1 April 1892 to the Reich law of 12 March 1893",
+      "clock": "civil",
+      "start": {
+        "local": "1892-04-01T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "hour",
+        "window": { "earliest": "1892-03-31T23:25:00", "latest": "1892-04-01T06:00:00" },
+        "citations": ["mos-lz-1892-03-29-city", "mos-lz-1892-03-29-station"],
+        "note": "Announced for the earliest hours of 1 April 1892, after the station's clocks changed at 23:25 Metz time (midnight Mid-European time); the hour is not reported. The window runs from the station's change to 06:00."
+      },
+      "end": {
+        "local": "1893-04-01T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "second",
+        "citations": ["de-rgbl-1893-03-12-law"],
+        "note": "The law came into force at the moment 1 April 1893 began on Mid-European time. The clocks, already on Mid-European time, did not change."
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": false,
+      "abbreviation": "MEZ",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The Ministry ordered Mid-European time as local time throughout Alsace-Lorraine from 1 April 1892; the city's clocks were to be put forward in the earliest hours of that day."
+      },
+      "citations": ["als-snn-1892-03-31-mez", "mos-lz-1892-03-29-city"]
+    },
+    {
+      "id": "de-mez-1893",
+      "version": 1,
+      "title": "Mid-European time, legal time of Germany (law of 12 March 1893)",
+      "scope": "Alsace-Lorraine (Strasbourg, Metz) as part of the German Reich, from 1 April 1893",
+      "clock": "civil",
+      "start": {
+        "local": "1893-04-01T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "second",
+        "citations": ["de-rgbl-1893-03-12-law"],
+        "note": "The law came into force at the moment 1 April 1893 began on Mid-European time. The clocks, already on Mid-European time, did not change."
+      },
+      "end": {
+        "local": "1916-04-30T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1916-04-08-wtb"]
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": false,
+      "abbreviation": "MEZ",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The law of 12 March 1893 makes the mean time of the 15th meridian east the legal time of Germany from 1 April 1893."
+      },
+      "citations": ["de-rgbl-1893-03-12-law"]
+    },
+    {
+      "id": "de-summer-1916",
+      "version": 1,
+      "title": "German summer time 1916 (Bundesrat order of 6 April 1916)",
+      "scope": "Alsace-Lorraine (Strasbourg, Metz) as part of the German Reich",
+      "clock": "civil",
+      "start": {
+        "local": "1916-04-30T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1916-04-08-wtb"]
+      },
+      "end": {
+        "local": "1916-10-01T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1916-04-08-wtb"],
+        "note": "One hour after midnight at the end of 30 September, on summer time, clocks were set back to midnight."
+      },
+      "offset": { "type": "fixed", "seconds": 7200 },
+      "isDst": true,
+      "abbreviation": "MESZ",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The official telegram on the Bundesrat order gives the offset and both changes for every clock in the Reich."
+      },
+      "citations": ["de-snn-1916-04-08-wtb"]
+    },
+    {
+      "id": "de-mez-1916",
+      "version": 1,
+      "title": "Mid-European time, winter 1916-1917",
+      "scope": "Alsace-Lorraine (Strasbourg, Metz) as part of the German Reich",
+      "clock": "civil",
+      "start": {
+        "local": "1916-10-01T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1916-04-08-wtb"],
+        "note": "One hour after midnight at the end of 30 September, on summer time, clocks were set back to midnight."
+      },
+      "end": {
+        "local": "1917-04-16T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1917-04-16-beginn"]
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": false,
+      "abbreviation": "MEZ",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "Legal time under the law of 1893 between the summer times of 1916 and 1917."
+      },
+      "citations": ["de-rgbl-1893-03-12-law", "de-snn-1916-04-08-wtb", "de-snn-1917-04-16-beginn"]
+    },
+    {
+      "id": "de-summer-1917",
+      "version": 1,
+      "title": "German summer time 1917",
+      "scope": "Alsace-Lorraine (Strasbourg, Metz) as part of the German Reich",
+      "clock": "civil",
+      "start": {
+        "local": "1917-04-16T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1917-04-16-beginn"]
+      },
+      "end": {
+        "local": "1917-09-17T03:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1917-09-14-ende"]
+      },
+      "offset": { "type": "fixed", "seconds": 7200 },
+      "isDst": true,
+      "abbreviation": "MESZ",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "A Strasbourg newspaper reports clocks put forward at 02:00 on Monday 16 April 1917 and announces the return at 03:00 on 17 September."
+      },
+      "citations": ["de-snn-1917-04-16-beginn", "de-snn-1917-09-14-ende"]
+    },
+    {
+      "id": "de-mez-1917",
+      "version": 1,
+      "title": "Mid-European time, winter 1917-1918",
+      "scope": "Alsace-Lorraine (Strasbourg, Metz) as part of the German Reich",
+      "clock": "civil",
+      "start": {
+        "local": "1917-09-17T03:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1917-09-14-ende"]
+      },
+      "end": {
+        "local": "1918-04-15T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1918-03-08-sommerzeit"]
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": false,
+      "abbreviation": "MEZ",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "Legal time under the law of 1893 between the summer times of 1917 and 1918."
+      },
+      "citations": ["de-rgbl-1893-03-12-law", "de-snn-1917-09-14-ende", "de-snn-1918-03-08-sommerzeit"]
+    },
+    {
+      "id": "de-summer-1918",
+      "version": 1,
+      "title": "German summer time 1918",
+      "scope": "Alsace-Lorraine (Strasbourg, Metz) as part of the German Reich",
+      "clock": "civil",
+      "start": {
+        "local": "1918-04-15T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1918-03-08-sommerzeit"]
+      },
+      "end": {
+        "local": "1918-09-16T03:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1918-03-08-sommerzeit"]
+      },
+      "offset": { "type": "fixed", "seconds": 7200 },
+      "isDst": true,
+      "abbreviation": "MESZ",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "A Strasbourg newspaper gives the public clocks forward at 02:00 on 15 April and back at 03:00 on 16 September 1918."
+      },
+      "citations": ["de-snn-1918-03-08-sommerzeit"]
+    },
+    {
+      "id": "als-strasbourg-mez-1918",
+      "version": 1,
+      "title": "Strasbourg: Mid-European time, autumn 1918",
+      "scope": "Strasbourg, from the end of summer time to the change to French time",
+      "clock": "civil",
+      "start": {
+        "local": "1918-09-16T03:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1918-03-08-sommerzeit"]
+      },
+      "end": {
+        "local": "1918-11-21T12:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["als-snn-1918-11-21-bekanntmachung", "als-elsasser-1918-12-16-pariser-zeit"],
+        "note": "Noon Mid-European time on 21 November 1918 (11:00 UTC): the city's public clocks were set back to 11:05."
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": false,
+      "abbreviation": "MEZ",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "Legal time under the law of 1893 until the mayor's notice put the public clocks on French time at noon on 21 November 1918."
+      },
+      "citations": ["de-rgbl-1893-03-12-law", "als-snn-1918-11-21-bekanntmachung"]
+    },
+    {
+      "id": "mos-metz-mez-1918",
+      "version": 1,
+      "title": "Metz: Mid-European time, autumn 1918",
+      "scope": "Metz, from the end of summer time to the change to French time",
+      "clock": "civil",
+      "start": {
+        "local": "1918-09-16T03:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["de-snn-1918-03-08-sommerzeit"]
+      },
+      "end": {
+        "local": "1918-11-19T06:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "day",
+        "window": { "earliest": "1918-11-19T00:00:00", "latest": "1918-11-19T12:00:00" },
+        "citations": ["mos-matin-1918-11-21-metz"],
+        "note": "On 19 November 1918, the day French troops and Marshal Pétain entered Metz, the cathedral clock had shown French time 'since the morning'; the hour of the change is not reported, and the window is that morning."
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": false,
+      "abbreviation": "MEZ",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "Legal time under the law of 1893 until the cathedral clock was put on French time on the morning of 19 November 1918."
+      },
+      "citations": ["de-rgbl-1893-03-12-law", "mos-matin-1918-11-21-metz"]
+    },
+    {
+      "id": "als-strasbourg-french-1918",
+      "version": 2,
+      "title": "Strasbourg: 'French time' as the city set it, five minutes ahead of Greenwich",
+      "scope": "Strasbourg's public clocks, from noon on 21 November 1918",
+      "clock": "civil",
+      "start": {
+        "local": "1918-11-21T12:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["als-snn-1918-11-21-bekanntmachung", "als-elsasser-1918-12-16-pariser-zeit"],
+        "note": "Noon Mid-European time on 21 November 1918 (11:00 UTC): the city's public clocks were set back to 11:05."
+      },
+      "end": {
+        "local": "1919-03-01T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "weeks",
+        "window": { "earliest": "1918-12-16T12:00:00", "latest": "1919-03-01T23:00:00" },
+        "citations": ["als-elsasser-1918-12-16-pariser-zeit", "als-jh-1919-02-28-railways"],
+        "note": "The public clocks were still five minutes ahead of Greenwich in mid-December 1918; when they were corrected is not known. The atlas ends the five minutes at the latest date the sources allow, the start of summer time at 23:00 on 1 March 1919 by these clocks (22:55 UTC), so that night the clocks go forward 55 minutes; it does not carry the five minutes into summer time as +1:05. The window covers every date on which the correction may have been made."
+      },
+      "offset": { "type": "fixed", "seconds": 300 },
+      "isDst": false,
+      "uncertainty": {
+        "flag": "uncertain",
+        "reason": "The city set its clocks to 11:05 at noon Mid-European time, five minutes ahead of Greenwich and of French legal time, and they were still so in mid-December; when they were corrected is not known."
+      },
+      "citations": ["als-snn-1918-11-21-bekanntmachung", "als-elsasser-1918-12-16-pariser-zeit"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The end note states the decision: the five minutes end at the latest date the sources allow, the start of summer time, and are not carried into summer time as +1:05."
+        }
+      ],
+      "note": "The station clock ran five minutes behind the public clocks, that is on French legal time (+0:00). Offsets read on Strasbourg's public clocks during this rule are five minutes ahead of the railway's."
+    },
+    {
+      "id": "mos-metz-french-1918",
+      "version": 2,
+      "title": "Metz: French time from 19 November 1918",
+      "scope": "Metz, from 19 November 1918",
+      "clock": "civil",
+      "start": {
+        "local": "1918-11-19T06:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "day",
+        "window": { "earliest": "1918-11-19T00:00:00", "latest": "1918-11-19T12:00:00" },
+        "citations": ["mos-matin-1918-11-21-metz"],
+        "note": "On 19 November 1918, the day French troops and Marshal Pétain entered Metz, the cathedral clock had shown French time 'since the morning'; the hour of the change is not reported, and the window is that morning."
+      },
+      "end": {
+        "local": "1919-03-01T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["als-jh-1919-02-28-railways"],
+        "note": "The railways of Alsace and Lorraine put their station clocks forward an hour at 23:00 on 1 March 1919, as in the rest of France; the public clocks of Strasbourg and Metz are assumed to have followed."
+      },
+      "offset": { "type": "fixed", "seconds": 0 },
+      "isDst": false,
+      "abbreviation": "WET",
+      "uncertainty": {
+        "flag": "uncertain",
+        "reason": "A report has the cathedral clock on French time from the morning of 19 November 1918 without saying by how much it changed; the atlas takes French legal time (+0:00), but when Strasbourg went over to French time two days later, the city set its clocks five minutes ahead of Greenwich."
+      },
+      "citations": ["mos-matin-1918-11-21-metz", "fr-jo-1911-03-10-law"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged uncertain: the size of the change is not reported, and Strasbourg's clocks, put on French time two days later, were five minutes ahead of Greenwich."
+        }
+      ]
+    },
+    {
+      "id": "als-mos-summer-1919",
+      "version": 2,
+      "title": "French summer time 1919 in Alsace and Lorraine",
+      "scope": "Strasbourg and Metz, 1919",
+      "clock": "civil",
+      "start": {
+        "local": "1919-03-01T23:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["als-jh-1919-02-28-railways"],
+        "note": "The railways of Alsace and Lorraine put their station clocks forward an hour at 23:00 on 1 March 1919, as in the rest of France; the public clocks of Strasbourg and Metz are assumed to have followed."
+      },
+      "end": {
+        "local": "1919-10-05T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-petitjournal-1919-10-05"],
+        "note": "At 01:00 summer time on 5 October 1919 (00:00 UTC), as in the rest of France; no Alsatian or Lorraine source was found for this change."
+      },
+      "offset": { "type": "fixed", "seconds": 3600 },
+      "isDst": true,
+      "abbreviation": "WEST",
+      "uncertainty": {
+        "flag": "uncertain",
+        "reason": "The railways of Alsace and Lorraine put their clocks forward to French summer time at 23:00 on 1 March 1919; the atlas takes the cities' public clocks to have gone to it too (+1:00), though Strasbourg's had been five minutes fast that winter and could have become +1:05."
+      },
+      "citations": ["als-jh-1919-02-28-railways", "fr-jo-1919-02-11-decree", "fr-petitjournal-1919-10-05"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged uncertain: whether the cities' public clocks went to French summer time (+1:00) or kept a five-minute difference (+1:05) is not known."
+        }
+      ]
+    },
+    {
+      "id": "als-mos-wet-1919",
+      "version": 1,
+      "title": "French legal time from 5 October 1919 in Alsace and Lorraine",
+      "scope": "Strasbourg and Metz, from 5 October 1919",
+      "clock": "civil",
+      "start": {
+        "local": "1919-10-05T01:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["fr-petitjournal-1919-10-05"],
+        "note": "At 01:00 summer time on 5 October 1919 (00:00 UTC), as in the rest of France; no Alsatian or Lorraine source was found for this change."
+      },
+      "end": { "local": "1920-01-01T00:00:00", "reckoning": "before", "kind": "coverage", "precision": "second" },
+      "offset": { "type": "fixed", "seconds": 0 },
+      "isDst": false,
+      "abbreviation": "WET",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "Assumed to follow the return to normal time in the rest of France on 5 October 1919; no Alsatian or Lorraine source was found for it."
+      },
+      "citations": ["fr-jo-1911-03-10-law", "fr-petitjournal-1919-10-05"]
+    }
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "$schema": "../schema/atlas.schema.json",
+  "kind": "atlas-places",
+  "description": "Covered places. Names, first-level administrative divisions (as GeoNames names them today), coordinates and ids are from GeoNames (https://www.geonames.org/, CC BY 4.0), copied unchanged; see longitudeSource in atlas.json.",
+  "places": [
+    {
+      "id": "fr-paris",
+      "name": "Paris",
+      "country": "FR",
+      "admin1": "Île-de-France",
+      "jurisdiction": "fr-paris",
+      "latitude": 48.85341,
+      "longitude": 2.3488,
+      "geonamesId": 2988507,
+      "tzdbZone": "Europe/Paris",
+      "note": "Legal time before 1891 is Paris mean time (+0:09:21), not the mean time of these coordinates."
+    },
+    {
+      "id": "fr-brest",
+      "name": "Brest",
+      "country": "FR",
+      "admin1": "Brittany",
+      "jurisdiction": "fr-brest",
+      "latitude": 48.39029,
+      "longitude": -4.48628,
+      "geonamesId": 3030300,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-nantes",
+      "name": "Nantes",
+      "country": "FR",
+      "admin1": "Pays de la Loire",
+      "jurisdiction": "fr-general",
+      "latitude": 47.21725,
+      "longitude": -1.55336,
+      "geonamesId": 2990969,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-bordeaux",
+      "name": "Bordeaux",
+      "country": "FR",
+      "admin1": "New Aquitaine",
+      "jurisdiction": "fr-general",
+      "latitude": 44.84124,
+      "longitude": -0.58046,
+      "geonamesId": 3031582,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-rouen",
+      "name": "Rouen",
+      "country": "FR",
+      "admin1": "Normandy",
+      "jurisdiction": "fr-general",
+      "latitude": 49.44313,
+      "longitude": 1.09932,
+      "geonamesId": 2982652,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-toulouse",
+      "name": "Toulouse",
+      "country": "FR",
+      "admin1": "Occitanie",
+      "jurisdiction": "fr-general",
+      "latitude": 43.60426,
+      "longitude": 1.44367,
+      "geonamesId": 2972315,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-lyon",
+      "name": "Lyon",
+      "country": "FR",
+      "admin1": "Auvergne-Rhône-Alpes",
+      "jurisdiction": "fr-general",
+      "latitude": 45.74906,
+      "longitude": 4.84789,
+      "geonamesId": 2996944,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-marseille",
+      "name": "Marseille",
+      "country": "FR",
+      "admin1": "Provence-Alpes-Côte d'Azur",
+      "jurisdiction": "fr-general",
+      "latitude": 43.29695,
+      "longitude": 5.38107,
+      "geonamesId": 2995469,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-nice",
+      "name": "Nice",
+      "country": "FR",
+      "admin1": "Provence-Alpes-Côte d'Azur",
+      "jurisdiction": "fr-general",
+      "latitude": 43.70313,
+      "longitude": 7.26608,
+      "geonamesId": 2990440,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-ajaccio",
+      "name": "Ajaccio",
+      "country": "FR",
+      "admin1": "Corsica",
+      "jurisdiction": "fr-general",
+      "latitude": 41.91886,
+      "longitude": 8.73812,
+      "geonamesId": 3038334,
+      "tzdbZone": "Europe/Paris"
+    },
+    {
+      "id": "fr-strasbourg",
+      "name": "Strasbourg",
+      "country": "FR",
+      "admin1": "Grand Est",
+      "jurisdiction": "als-strasbourg",
+      "latitude": 48.58392,
+      "longitude": 7.74553,
+      "geonamesId": 2973783,
+      "tzdbZone": "Europe/Paris",
+      "compareZones": ["Europe/Berlin"],
+      "note": "German from 1871 to November 1918. tzdb has no zone for Alsace-Lorraine; Europe/Berlin is compared for information."
+    },
+    {
+      "id": "fr-metz",
+      "name": "Metz",
+      "country": "FR",
+      "admin1": "Grand Est",
+      "jurisdiction": "mos-metz",
+      "latitude": 49.11911,
+      "longitude": 6.17269,
+      "geonamesId": 2994160,
+      "tzdbZone": "Europe/Paris",
+      "compareZones": ["Europe/Berlin"],
+      "note": "German from 1871 to November 1918. tzdb has no zone for Alsace-Lorraine; Europe/Berlin is compared for information."
+    },
+    {
+      "id": "us-new-york",
+      "name": "New York City",
+      "country": "US",
+      "admin1": "New York",
+      "jurisdiction": "us-nyc",
+      "latitude": 40.71427,
+      "longitude": -74.00597,
+      "geonamesId": 5128581,
+      "tzdbZone": "America/New_York"
+    },
+    {
+      "id": "us-baltimore",
+      "name": "Baltimore",
+      "country": "US",
+      "admin1": "Maryland",
+      "jurisdiction": "us-baltimore",
+      "latitude": 39.29038,
+      "longitude": -76.61219,
+      "geonamesId": 4347778,
+      "tzdbZone": "America/New_York"
+    },
+    {
+      "id": "us-washington",
+      "name": "Washington",
+      "country": "US",
+      "admin1": "District of Columbia",
+      "jurisdiction": "us-washington",
+      "latitude": 38.89511,
+      "longitude": -77.03637,
+      "geonamesId": 4140963,
+      "tzdbZone": "America/New_York"
+    },
+    {
+      "id": "us-providence",
+      "name": "Providence",
+      "country": "US",
+      "admin1": "Rhode Island",
+      "jurisdiction": "us-providence",
+      "latitude": 41.82399,
+      "longitude": -71.41283,
+      "geonamesId": 5224151,
+      "tzdbZone": "America/New_York"
+    },
+    {
+      "id": "us-indianapolis",
+      "name": "Indianapolis",
+      "country": "US",
+      "admin1": "Indiana",
+      "jurisdiction": "us-indianapolis",
+      "latitude": 39.76838,
+      "longitude": -86.15804,
+      "geonamesId": 4259418,
+      "tzdbZone": "America/Indiana/Indianapolis"
+    },
+    {
+      "id": "us-louisville",
+      "name": "Louisville",
+      "country": "US",
+      "admin1": "Kentucky",
+      "jurisdiction": "us-louisville",
+      "latitude": 38.25424,
+      "longitude": -85.75941,
+      "geonamesId": 4299276,
+      "tzdbZone": "America/Kentucky/Louisville"
+    },
+    {
+      "id": "us-chicago",
+      "name": "Chicago",
+      "country": "US",
+      "admin1": "Illinois",
+      "jurisdiction": "us-chicago",
+      "latitude": 41.85003,
+      "longitude": -87.65005,
+      "geonamesId": 4887398,
+      "tzdbZone": "America/Chicago"
+    },
+    {
+      "id": "us-saint-paul",
+      "name": "Saint Paul",
+      "country": "US",
+      "admin1": "Minnesota",
+      "jurisdiction": "us-saint-paul",
+      "latitude": 44.94441,
+      "longitude": -93.09327,
+      "geonamesId": 5045360,
+      "tzdbZone": "America/Chicago"
+    },
+    {
+      "id": "us-minneapolis",
+      "name": "Minneapolis",
+      "country": "US",
+      "admin1": "Minnesota",
+      "jurisdiction": "us-minneapolis",
+      "latitude": 44.97997,
+      "longitude": -93.26384,
+      "geonamesId": 5037649,
+      "tzdbZone": "America/Chicago"
+    }
+  ]
+}

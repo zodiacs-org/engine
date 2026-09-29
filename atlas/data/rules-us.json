@@ -1,0 +1,1092 @@
+{
+  "$schema": "../schema/atlas.schema.json",
+  "kind": "atlas-rules",
+  "description": "United States: city time until each city adopted standard time in November 1883 (Washington in March 1884), and the Standard Time Act of 1918 with daylight saving time in 1918 and 1919.",
+  "jurisdictions": [
+    {
+      "id": "us-nyc",
+      "name": "New York",
+      "country": "US",
+      "description": "The city of New York (Manhattan).",
+      "timeline": {
+        "civil": [
+          "us-nyc-city-time-before-1883",
+          "us-nyc-eastern-1883",
+          "us-eastern-dst-1918",
+          "us-eastern-1918",
+          "us-eastern-dst-1919",
+          "us-eastern-1919"
+        ]
+      }
+    },
+    {
+      "id": "us-baltimore",
+      "name": "Baltimore",
+      "country": "US",
+      "description": "The city of Baltimore, Maryland.",
+      "timeline": {
+        "civil": [
+          "us-baltimore-city-time-before-1883",
+          "us-baltimore-eastern-1883",
+          "us-eastern-dst-1918",
+          "us-eastern-1918",
+          "us-eastern-dst-1919",
+          "us-eastern-1919"
+        ]
+      }
+    },
+    {
+      "id": "us-washington",
+      "name": "Washington",
+      "country": "US",
+      "description": "The city of Washington, District of Columbia.",
+      "timeline": {
+        "civil": [
+          "us-washington-city-time-before-1883",
+          "us-washington-two-times-1883",
+          "us-washington-eastern-1884",
+          "us-eastern-dst-1918",
+          "us-eastern-1918",
+          "us-eastern-dst-1919",
+          "us-eastern-1919"
+        ]
+      }
+    },
+    {
+      "id": "us-providence",
+      "name": "Providence",
+      "country": "US",
+      "description": "The city of Providence, Rhode Island.",
+      "timeline": {
+        "civil": [
+          "us-providence-city-time-before-1883",
+          "us-providence-eastern-1883",
+          "us-eastern-dst-1918",
+          "us-eastern-1918",
+          "us-eastern-dst-1919",
+          "us-eastern-1919"
+        ]
+      }
+    },
+    {
+      "id": "us-indianapolis",
+      "name": "Indianapolis",
+      "country": "US",
+      "description": "The city of Indianapolis, Indiana.",
+      "timeline": {
+        "civil": [
+          "us-indianapolis-city-time-before-1883",
+          "us-indianapolis-central-1883",
+          "us-central-dst-1918",
+          "us-central-1918",
+          "us-central-dst-1919",
+          "us-central-1919"
+        ]
+      }
+    },
+    {
+      "id": "us-louisville",
+      "name": "Louisville",
+      "country": "US",
+      "description": "The city of Louisville, Kentucky.",
+      "timeline": {
+        "civil": [
+          "us-louisville-city-time-before-1883",
+          "us-louisville-central-1883",
+          "us-central-dst-1918",
+          "us-central-1918",
+          "us-central-dst-1919",
+          "us-central-1919"
+        ]
+      }
+    },
+    {
+      "id": "us-chicago",
+      "name": "Chicago",
+      "country": "US",
+      "description": "The city of Chicago, Illinois.",
+      "timeline": {
+        "civil": [
+          "us-chicago-city-time-before-1883",
+          "us-chicago-central-1883",
+          "us-central-dst-1918",
+          "us-central-1918",
+          "us-central-dst-1919",
+          "us-central-1919"
+        ]
+      }
+    },
+    {
+      "id": "us-saint-paul",
+      "name": "Saint Paul",
+      "country": "US",
+      "description": "The city of Saint Paul, Minnesota.",
+      "timeline": {
+        "civil": [
+          "us-saint-paul-city-time-before-1883",
+          "us-saint-paul-central-1883",
+          "us-central-dst-1918",
+          "us-central-1918",
+          "us-central-dst-1919",
+          "us-central-1919"
+        ]
+      }
+    },
+    {
+      "id": "us-minneapolis",
+      "name": "Minneapolis",
+      "country": "US",
+      "description": "The city of Minneapolis, Minnesota.",
+      "timeline": {
+        "civil": [
+          "us-minneapolis-city-time-before-1883",
+          "us-minneapolis-central-1883",
+          "us-central-dst-1918",
+          "us-central-1918",
+          "us-central-dst-1919",
+          "us-central-1919"
+        ]
+      }
+    }
+  ],
+  "rules": [
+    {
+      "id": "us-eastern-dst-1918",
+      "version": 2,
+      "title": "Eastern daylight saving time 1918 (Standard Time Act, 1918)",
+      "scope": "Eastern zone (the 75th meridian): the cities covered here that kept its time",
+      "clock": "civil",
+      "start": {
+        "local": "1918-03-31T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "end": {
+        "local": "1918-10-27T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -14400 },
+      "isDst": true,
+      "abbreviation": "EDT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The Act of 19 March 1918 advances each zone's standard time one hour from 02:00 on the last Sunday in March to 02:00 on the last Sunday in October. The Interstate Commerce Commission's zone order was not read: a report says that for 1918 it recognized the zone limits already in use, and each covered city is taken to be in the zone whose time it had kept since 1883 or 1884."
+      },
+      "citations": ["us-stat-1918-dst", "us-stat-1918-zones", "us-laramie-1918-04-10-zones"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the Interstate Commerce Commission's zone order was not read, so which zone each city was in is assumed from the time it had kept since 1883 or 1884. A report that the Commission recognized the existing zone limits for 1918 is now cited."
+        }
+      ],
+      "note": "The Interstate Commerce Commission, charged by the Act with defining the zones, recognized the limits already in use for 1918 (a report; the order itself was not read)."
+    },
+    {
+      "id": "us-eastern-1918",
+      "version": 2,
+      "title": "Eastern standard time, winter 1918-1919",
+      "scope": "Eastern zone (the 75th meridian): the cities covered here that kept its time",
+      "clock": "civil",
+      "start": {
+        "local": "1918-10-27T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "end": {
+        "local": "1919-03-30T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -18000 },
+      "isDst": false,
+      "abbreviation": "EST",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "Standard time of the zone under the Act of 19 March 1918 between its first and second summers; which zone each city was in is assumed, as for 1918."
+      },
+      "citations": ["us-stat-1918-zones", "us-stat-1918-dst", "us-laramie-1918-04-10-zones"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the Interstate Commerce Commission's zone orders were not read, so which zone each city was in is assumed."
+        }
+      ],
+      "note": "The Interstate Commerce Commission's zone orders were not read; a report says that for 1918 it recognized the zone limits already in use, and each covered city is taken to have stayed in the zone whose time it had kept since 1883 or 1884."
+    },
+    {
+      "id": "us-eastern-dst-1919",
+      "version": 2,
+      "title": "Eastern daylight saving time 1919",
+      "scope": "Eastern zone (the 75th meridian): the cities covered here that kept its time",
+      "clock": "civil",
+      "start": {
+        "local": "1919-03-30T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "end": {
+        "local": "1919-10-26T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst", "us-stat-1919-repeal"]
+      },
+      "offset": { "type": "fixed", "seconds": -14400 },
+      "isDst": true,
+      "abbreviation": "EDT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The Act again advanced the clocks on the last Sunday in March 1919, and the repeal of August 1919 took effect after the last Sunday in October; which zone each city was in is assumed, as for 1918."
+      },
+      "citations": ["us-stat-1918-dst", "us-stat-1919-repeal", "us-laramie-1918-04-10-zones"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the Interstate Commerce Commission's zone orders were not read, so which zone each city was in is assumed."
+        }
+      ],
+      "note": "The Interstate Commerce Commission's zone orders were not read; a report says that for 1918 it recognized the zone limits already in use, and each covered city is taken to have stayed in the zone whose time it had kept since 1883 or 1884."
+    },
+    {
+      "id": "us-eastern-1919",
+      "version": 2,
+      "title": "Eastern standard time from 26 October 1919",
+      "scope": "Eastern zone (the 75th meridian): the cities covered here that kept its time",
+      "clock": "civil",
+      "start": {
+        "local": "1919-10-26T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst", "us-stat-1919-repeal"]
+      },
+      "end": { "local": "1920-01-01T00:00:00", "reckoning": "before", "kind": "coverage", "precision": "second" },
+      "offset": { "type": "fixed", "seconds": -18000 },
+      "isDst": false,
+      "abbreviation": "EST",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The repeal returned each zone to the mean time of its meridian on the last Sunday in October 1919; which zone each city was in is assumed, as for 1918."
+      },
+      "citations": ["us-stat-1918-zones", "us-stat-1919-repeal", "us-laramie-1918-04-10-zones"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the Interstate Commerce Commission's zone orders were not read, so which zone each city was in is assumed."
+        }
+      ],
+      "note": "The Interstate Commerce Commission's zone orders were not read; a report says that for 1918 it recognized the zone limits already in use, and each covered city is taken to have stayed in the zone whose time it had kept since 1883 or 1884."
+    },
+    {
+      "id": "us-central-dst-1918",
+      "version": 2,
+      "title": "Central daylight saving time 1918 (Standard Time Act, 1918)",
+      "scope": "Central zone (the 90th meridian): the cities covered here that kept its time",
+      "clock": "civil",
+      "start": {
+        "local": "1918-03-31T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "end": {
+        "local": "1918-10-27T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -18000 },
+      "isDst": true,
+      "abbreviation": "CDT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The Act of 19 March 1918 advances each zone's standard time one hour from 02:00 on the last Sunday in March to 02:00 on the last Sunday in October. The Interstate Commerce Commission's zone order was not read: a report says that for 1918 it recognized the zone limits already in use, and each covered city is taken to be in the zone whose time it had kept since 1883 or 1884."
+      },
+      "citations": ["us-stat-1918-dst", "us-stat-1918-zones", "us-laramie-1918-04-10-zones"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the Interstate Commerce Commission's zone order was not read, so which zone each city was in is assumed from the time it had kept since 1883 or 1884. A report that the Commission recognized the existing zone limits for 1918 is now cited."
+        }
+      ],
+      "note": "The Interstate Commerce Commission, charged by the Act with defining the zones, recognized the limits already in use for 1918 (a report; the order itself was not read)."
+    },
+    {
+      "id": "us-central-1918",
+      "version": 2,
+      "title": "Central standard time, winter 1918-1919",
+      "scope": "Central zone (the 90th meridian): the cities covered here that kept its time",
+      "clock": "civil",
+      "start": {
+        "local": "1918-10-27T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "end": {
+        "local": "1919-03-30T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -21600 },
+      "isDst": false,
+      "abbreviation": "CST",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "Standard time of the zone under the Act of 19 March 1918 between its first and second summers; which zone each city was in is assumed, as for 1918."
+      },
+      "citations": ["us-stat-1918-zones", "us-stat-1918-dst", "us-laramie-1918-04-10-zones"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the Interstate Commerce Commission's zone orders were not read, so which zone each city was in is assumed."
+        }
+      ],
+      "note": "The Interstate Commerce Commission's zone orders were not read; a report says that for 1918 it recognized the zone limits already in use, and each covered city is taken to have stayed in the zone whose time it had kept since 1883 or 1884."
+    },
+    {
+      "id": "us-central-dst-1919",
+      "version": 2,
+      "title": "Central daylight saving time 1919",
+      "scope": "Central zone (the 90th meridian): the cities covered here that kept its time",
+      "clock": "civil",
+      "start": {
+        "local": "1919-03-30T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "end": {
+        "local": "1919-10-26T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst", "us-stat-1919-repeal"]
+      },
+      "offset": { "type": "fixed", "seconds": -18000 },
+      "isDst": true,
+      "abbreviation": "CDT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The Act again advanced the clocks on the last Sunday in March 1919, and the repeal of August 1919 took effect after the last Sunday in October; which zone each city was in is assumed, as for 1918."
+      },
+      "citations": ["us-stat-1918-dst", "us-stat-1919-repeal", "us-laramie-1918-04-10-zones"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the Interstate Commerce Commission's zone orders were not read, so which zone each city was in is assumed."
+        }
+      ],
+      "note": "The Interstate Commerce Commission's zone orders were not read; a report says that for 1918 it recognized the zone limits already in use, and each covered city is taken to have stayed in the zone whose time it had kept since 1883 or 1884."
+    },
+    {
+      "id": "us-central-1919",
+      "version": 2,
+      "title": "Central standard time from 26 October 1919",
+      "scope": "Central zone (the 90th meridian): the cities covered here that kept its time",
+      "clock": "civil",
+      "start": {
+        "local": "1919-10-26T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst", "us-stat-1919-repeal"]
+      },
+      "end": { "local": "1920-01-01T00:00:00", "reckoning": "before", "kind": "coverage", "precision": "second" },
+      "offset": { "type": "fixed", "seconds": -21600 },
+      "isDst": false,
+      "abbreviation": "CST",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The repeal returned each zone to the mean time of its meridian on the last Sunday in October 1919; which zone each city was in is assumed, as for 1918."
+      },
+      "citations": ["us-stat-1918-zones", "us-stat-1919-repeal", "us-laramie-1918-04-10-zones"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the Interstate Commerce Commission's zone orders were not read, so which zone each city was in is assumed."
+        }
+      ],
+      "note": "The Interstate Commerce Commission's zone orders were not read; a report says that for 1918 it recognized the zone limits already in use, and each covered city is taken to have stayed in the zone whose time it had kept since 1883 or 1884."
+    },
+    {
+      "id": "us-nyc-city-time-before-1883",
+      "version": 2,
+      "title": "New York: New York city time",
+      "scope": "New York, before standard time",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1883-11-18T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "minute",
+        "window": { "earliest": "1883-11-18T12:00:00", "latest": "1883-11-18T12:08:01.620" },
+        "note": "The city resolved that its time conform to the new standard at noon on 18 November 1883; the Western Union time ball fell at noon Eastern time, and the City Hall clock was stopped at 12:12 city time (12:08:01.62 Eastern) until the new time caught up.",
+        "citations": ["us-star-1883-11-10-nyc", "us-sun-1883-11-19-cityhall"]
+      },
+      "offset": { "type": "fixed", "seconds": -17761.62 },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The City Hall clock was stopped for \"Three minutes 58 seconds and 38-100 seconds\" to take up Eastern time, so city time was 4 h 56 min 1.62 s behind Greenwich (the longitude gives 4 h 56 min 1.4 s); that the city kept it from 1870 is assumed."
+      },
+      "citations": ["us-sun-1883-11-19-cityhall", "us-star-1883-11-10-nyc"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the report describes the city's time at the change of 1883 only, and the rule carries it back to 1870."
+        }
+      ]
+    },
+    {
+      "id": "us-nyc-eastern-1883",
+      "version": 1,
+      "title": "New York: Eastern standard time",
+      "scope": "New York, from its adoption of standard time to the Standard Time Act of 1918",
+      "clock": "civil",
+      "start": {
+        "local": "1883-11-18T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "minute",
+        "window": { "earliest": "1883-11-18T12:00:00", "latest": "1883-11-18T12:08:01.620" },
+        "note": "The city resolved that its time conform to the new standard at noon on 18 November 1883; the Western Union time ball fell at noon Eastern time, and the City Hall clock was stopped at 12:12 city time (12:08:01.62 Eastern) until the new time caught up.",
+        "citations": ["us-star-1883-11-10-nyc", "us-sun-1883-11-19-cityhall"]
+      },
+      "end": {
+        "local": "1918-03-31T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -18000 },
+      "isDst": false,
+      "abbreviation": "EST",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The mayor signed the resolution that from noon on 18 November 1883 all time in the city conform to the 75th-meridian standard."
+      },
+      "citations": ["us-star-1883-11-10-nyc", "us-sun-1883-11-19-cityhall"]
+    },
+    {
+      "id": "us-baltimore-city-time-before-1883",
+      "version": 2,
+      "title": "Baltimore: Baltimore city time",
+      "scope": "Baltimore, before standard time",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1883-11-18T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "minute",
+        "window": { "earliest": "1883-11-18T12:00:00", "latest": "1883-11-18T12:06:28" },
+        "note": "Announced for noon on 18 November 1883; whether noon by the old or the new time is not said, and the window covers both.",
+        "citations": ["us-star-1883-11-17-baltimore"]
+      },
+      "offset": { "type": "fixed", "seconds": -18388 },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The new standard \"advances Baltimore time six minutes and twenty-eight seconds\", so city time was 5 h 6 min 28 s behind Greenwich (the longitude gives 5 h 6 min 26.9 s); that the city kept it from 1870 is assumed."
+      },
+      "citations": ["us-star-1883-11-17-baltimore"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the report describes the city's time at the change of 1883 only, and the rule carries it back to 1870."
+        }
+      ]
+    },
+    {
+      "id": "us-baltimore-eastern-1883",
+      "version": 1,
+      "title": "Baltimore: Eastern standard time",
+      "scope": "Baltimore, from its adoption of standard time to the Standard Time Act of 1918",
+      "clock": "civil",
+      "start": {
+        "local": "1883-11-18T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "minute",
+        "window": { "earliest": "1883-11-18T12:00:00", "latest": "1883-11-18T12:06:28" },
+        "note": "Announced for noon on 18 November 1883; whether noon by the old or the new time is not said, and the window covers both.",
+        "citations": ["us-star-1883-11-17-baltimore"]
+      },
+      "end": {
+        "local": "1918-03-31T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -18000 },
+      "isDst": false,
+      "abbreviation": "EST",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The new standard was announced to take effect at noon on 18 November 1883, with city time reckoned by it."
+      },
+      "citations": ["us-star-1883-11-17-baltimore"]
+    },
+    {
+      "id": "us-washington-city-time-before-1883",
+      "version": 2,
+      "title": "Washington: Washington mean time",
+      "scope": "Washington, before standard time",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1883-11-18T17:00:00",
+        "reckoning": "utc",
+        "kind": "event",
+        "precision": "minute",
+        "note": "Noon Eastern time on 18 November 1883, when the railroads and part of the city changed; the offset used here does not change.",
+        "citations": ["us-star-1883-11-19-departments"]
+      },
+      "offset": { "type": "fixed", "seconds": -18492 },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The Naval Observatory was to signal the new time \"eight minutes and twelve seconds earlier\" than Washington noon, so Washington time was 5 h 8 min 12 s behind Greenwich (the longitude gives 5 h 8 min 8.7 s); that the city kept it from 1870 is assumed."
+      },
+      "citations": ["us-star-1883-11-19-bells"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred: the report describes the city's time at the change of 1883 only, and the rule carries it back to 1870."
+        }
+      ]
+    },
+    {
+      "id": "us-washington-two-times-1883",
+      "version": 2,
+      "title": "Washington: Washington mean time kept officially while standard time spread",
+      "scope": "Washington, 18 November 1883 to the act of 13 March 1884",
+      "clock": "civil",
+      "start": {
+        "local": "1883-11-18T17:00:00",
+        "reckoning": "utc",
+        "kind": "event",
+        "precision": "minute",
+        "note": "Noon Eastern time on 18 November 1883, when the railroads and part of the city changed; the offset used here does not change.",
+        "citations": ["us-star-1883-11-19-departments"]
+      },
+      "end": {
+        "local": "1884-03-13T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "weeks",
+        "window": { "earliest": "1884-03-13T00:00:00", "latest": "1884-03-31T23:59:59" },
+        "note": "The act took effect on its approval, 13 March 1884; when the departments and the fire bells changed is not recorded here, and the window runs to the end of March.",
+        "citations": ["us-stat-1884-dc"]
+      },
+      "offset": { "type": "fixed", "seconds": -18492 },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "uncertain",
+        "reason": "From 18 November 1883 the railroads and the businesses dealing with them kept Eastern time, while other businesses, the government departments and the fire bells at noon kept Washington time until Congress acted; the atlas gives Washington time."
+      },
+      "citations": ["us-star-1883-11-19-departments", "us-star-1883-11-19-bells"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The window now ends at the end of 31 March, as its note says, not at the start of that day."
+        }
+      ]
+    },
+    {
+      "id": "us-washington-eastern-1884",
+      "version": 2,
+      "title": "Washington: Eastern standard time",
+      "scope": "Washington, from its adoption of standard time to the Standard Time Act of 1918",
+      "clock": "civil",
+      "start": {
+        "local": "1884-03-13T00:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "weeks",
+        "window": { "earliest": "1884-03-13T00:00:00", "latest": "1884-03-31T23:59:59" },
+        "note": "The act took effect on its approval, 13 March 1884; when the departments and the fire bells changed is not recorded here, and the window runs to the end of March.",
+        "citations": ["us-stat-1884-dc"]
+      },
+      "end": {
+        "local": "1918-03-31T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -18000 },
+      "isDst": false,
+      "abbreviation": "EST",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The act of 13 March 1884 makes the mean time of the 75th meridian the legal standard of time in the District of Columbia."
+      },
+      "citations": ["us-stat-1884-dc"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The window now ends at the end of 31 March, as its note says, not at the start of that day."
+        }
+      ]
+    },
+    {
+      "id": "us-providence-city-time-before-1883",
+      "version": 2,
+      "title": "Providence: Providence time (local mean time)",
+      "scope": "Providence, before standard time",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1883-11-20T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "day",
+        "window": { "earliest": "1883-11-20T00:00:00", "latest": "1883-11-20T23:59:59" },
+        "note": "The city authorities adopted the new time on Tuesday 20 November 1883, two days after the railroads; the hour is not reported, and noon is used.",
+        "citations": ["us-pawtucket-1883-11-23-providence"]
+      },
+      "offset": { "type": "fixed", "seconds": -17120 },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The railroads centering in Providence were to make \"a set back of 14 minutes and 40 seconds\", so that \"the railroad time will be fifteen minutes slower than Providence time\". Taking the set-back as measured from Providence time, the atlas puts Providence time 4 h 45 min 20 s behind Greenwich (the report rounds it to fifteen minutes; the longitude gives 4 h 45 min 39.1 s) and assumes the city kept it from 1870."
+      },
+      "citations": ["us-narragansett-1883-11-03-providence", "us-pawtucket-1883-11-23-providence"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "City time now taken from the report (\"a set back of 14 minutes and 40 seconds\"), as for every city whose change a report measures, instead of from the longitude; reason corrected."
+        }
+      ]
+    },
+    {
+      "id": "us-providence-eastern-1883",
+      "version": 1,
+      "title": "Providence: Eastern standard time",
+      "scope": "Providence, from its adoption of standard time to the Standard Time Act of 1918",
+      "clock": "civil",
+      "start": {
+        "local": "1883-11-20T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "day",
+        "window": { "earliest": "1883-11-20T00:00:00", "latest": "1883-11-20T23:59:59" },
+        "note": "The city authorities adopted the new time on Tuesday 20 November 1883, two days after the railroads; the hour is not reported, and noon is used.",
+        "citations": ["us-pawtucket-1883-11-23-providence"]
+      },
+      "end": {
+        "local": "1918-03-31T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -18000 },
+      "isDst": false,
+      "abbreviation": "EST",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The city authorities adopted the new time on Tuesday 20 November 1883."
+      },
+      "citations": ["us-pawtucket-1883-11-23-providence"]
+    },
+    {
+      "id": "us-indianapolis-city-time-before-1883",
+      "version": 3,
+      "title": "Indianapolis: Indianapolis local time (local mean time)",
+      "scope": "Indianapolis, before standard time",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1883-11-18T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "hour",
+        "window": { "earliest": "1883-11-18T11:44:00", "latest": "1883-11-18T18:00:00" },
+        "note": "Central time went into effect at noon on 18 November 1883, whether noon by the old time or by the new is not said, and the court-house clock was set back that afternoon; the jewelers were to change their regulators the next day. The window runs from noon by the old city time (11:44 Central) to 18:00.",
+        "citations": ["us-indj-1883-11-19-noon", "us-indj-1883-11-19-courthouse"]
+      },
+      "offset": { "type": "fixed", "seconds": -20640 },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "\"Yesterday afternoon the court-house clock was set back sixteen minutes\", so city time is taken as 5 h 44 min behind Greenwich, 16 minutes ahead of Central time (the report gives whole minutes; the longitude gives 5 h 44 min 37.9 s); that the city kept it from 1870 is assumed."
+      },
+      "citations": ["us-indj-1883-11-19-courthouse", "us-indj-1883-11-19-noon"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "City time now taken from the report (\"set back sixteen minutes\"), as for every city whose change a report measures, instead of from the longitude; the reason no longer mentions fifteen minutes, which no cited source says."
+        },
+        {
+          "version": 3,
+          "date": "2026-09-28",
+          "summary": "The window of the change now opens at noon by the old city time (11:44 Central): the report does not say whether the change came at noon by the old time or the new."
+        }
+      ]
+    },
+    {
+      "id": "us-indianapolis-central-1883",
+      "version": 2,
+      "title": "Indianapolis: Central standard time",
+      "scope": "Indianapolis, from its adoption of standard time to the Standard Time Act of 1918",
+      "clock": "civil",
+      "start": {
+        "local": "1883-11-18T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "hour",
+        "window": { "earliest": "1883-11-18T11:44:00", "latest": "1883-11-18T18:00:00" },
+        "note": "Central time went into effect at noon on 18 November 1883, whether noon by the old time or by the new is not said, and the court-house clock was set back that afternoon; the jewelers were to change their regulators the next day. The window runs from noon by the old city time (11:44 Central) to 18:00.",
+        "citations": ["us-indj-1883-11-19-noon", "us-indj-1883-11-19-courthouse"]
+      },
+      "end": {
+        "local": "1918-03-31T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -21600 },
+      "isDst": false,
+      "abbreviation": "CST",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "Central standard time went into effect at noon on 18 November 1883 and the court-house clock was set back the same afternoon."
+      },
+      "citations": ["us-indj-1883-11-19-noon", "us-indj-1883-11-19-courthouse"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The window of the change now opens at noon by the old city time (11:44 Central): the report does not say whether the change came at noon by the old time or the new."
+        }
+      ]
+    },
+    {
+      "id": "us-louisville-city-time-before-1883",
+      "version": 2,
+      "title": "Louisville: Louisville city time",
+      "scope": "Louisville, before standard time",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1883-11-18T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "day",
+        "window": { "earliest": "1883-11-18T11:42:00", "latest": "1883-11-18T23:59:59" },
+        "citations": ["us-bourbon-1883-11-20-louisville"],
+        "note": "The fire bells rang noon by the new time on Sunday 18 November 1883, and the city clock was turned back 18 minutes, the report does not say at what hour. The atlas uses noon, new time; the window runs from noon by the old city time to the end of the day."
+      },
+      "offset": { "type": "fixed", "seconds": -20520 },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "uncertain",
+        "reason": "A Paris, Ky., paper reports that \"the city clock was turned back 18 minutes\", which puts city time at -5:42:00; the mean time of the city's longitude, -5:43:02.3, is 62 s behind that, and the 18 minutes may describe the railroad's change rather than the city clock's. The atlas uses the report."
+      },
+      "citations": ["us-bourbon-1883-11-20-louisville"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged uncertain: the 18 minutes come from one second-hand sentence and differ from the longitude by 62 seconds; both readings are given. The adoption instant now has a window: the source does not say whether the change was at noon by the old time or the new, or when that day the clocks were set."
+        }
+      ],
+      "note": "The two readings differ by 62 seconds. tzdb's comments (a lead, not a source) say the Louisville & Nashville Railroad's trains were to stand still for 18 minutes at its change on 18 November 1883, which may be what the report's 18 minutes measures. The atlas takes the report's figure, as it does for every city whose change a report measures."
+    },
+    {
+      "id": "us-louisville-central-1883",
+      "version": 2,
+      "title": "Louisville: Central standard time",
+      "scope": "Louisville, from its adoption of standard time to the Standard Time Act of 1918",
+      "clock": "civil",
+      "start": {
+        "local": "1883-11-18T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "day",
+        "window": { "earliest": "1883-11-18T11:42:00", "latest": "1883-11-18T23:59:59" },
+        "citations": ["us-bourbon-1883-11-20-louisville"],
+        "note": "The fire bells rang noon by the new time on Sunday 18 November 1883, and the city clock was turned back 18 minutes, the report does not say at what hour. The atlas uses noon, new time; the window runs from noon by the old city time to the end of the day."
+      },
+      "end": {
+        "local": "1918-03-31T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -21600 },
+      "isDst": false,
+      "abbreviation": "CST",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "The fire bells rang noon by Central time on 18 November 1883 and the city clock was set back to it."
+      },
+      "citations": ["us-bourbon-1883-11-20-louisville"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The adoption instant now has a window: the source does not say whether the change was at noon by the old time or the new, or when that day the clocks were set."
+        }
+      ]
+    },
+    {
+      "id": "us-chicago-city-time-before-1883",
+      "version": 2,
+      "title": "Chicago: Chicago time (local mean time)",
+      "scope": "Chicago, before standard time",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1883-11-18T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "minute",
+        "window": { "earliest": "1883-11-18T11:51:00", "latest": "1883-11-18T12:00:00" },
+        "citations": ["us-ottawa-1883-11-24-chicago"],
+        "note": "Inaugurated in the city at noon on Sunday 18 November 1883; whether noon by Chicago time or by the new time is not said, and the window covers both."
+      },
+      "offset": { "type": "fixed", "seconds": -21060 },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The new central time \"is nine minutes slower than Chicago time\", so Chicago time is taken as 5 h 51 min behind Greenwich (the report gives whole minutes; the longitude gives 5 h 50 min 36 s); that the city kept it from 1870 is assumed."
+      },
+      "citations": ["us-argus-1883-11-19-chicago", "us-ottawa-1883-11-24-chicago"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "City time now taken from the report (\"nine minutes slower than Chicago time\"), as for every city whose change a report measures, instead of from the longitude; flagged inferred, the report describing the city's time at the change only. The adoption instant now has a window: the source does not say whether the change was at noon by the old time or the new, or when that day the clocks were set."
+        }
+      ]
+    },
+    {
+      "id": "us-chicago-central-1883",
+      "version": 2,
+      "title": "Chicago: Central standard time",
+      "scope": "Chicago, from its adoption of standard time to the Standard Time Act of 1918",
+      "clock": "civil",
+      "start": {
+        "local": "1883-11-18T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "minute",
+        "window": { "earliest": "1883-11-18T11:51:00", "latest": "1883-11-18T12:00:00" },
+        "citations": ["us-ottawa-1883-11-24-chicago"],
+        "note": "Inaugurated in the city at noon on Sunday 18 November 1883; whether noon by Chicago time or by the new time is not said, and the window covers both."
+      },
+      "end": {
+        "local": "1918-03-31T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -21600 },
+      "isDst": false,
+      "abbreviation": "CST",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "Standard time was inaugurated in Chicago at noon on 18 November 1883 and adopted by the railroads, the Board of Trade, hotels and businesses; action by the city government is not reported, and the public clocks are assumed to have followed."
+      },
+      "citations": ["us-ottawa-1883-11-24-chicago", "us-argus-1883-11-19-chicago"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The adoption instant now has a window: the source does not say whether the change was at noon by the old time or the new, or when that day the clocks were set. Flagged inferred: the city government's own action is not reported."
+        }
+      ]
+    },
+    {
+      "id": "us-saint-paul-city-time-before-1883",
+      "version": 2,
+      "title": "Saint Paul: Saint Paul mean time",
+      "scope": "Saint Paul, before standard time",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1883-11-25T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "minute",
+        "window": { "earliest": "1883-11-25T12:00:00", "latest": "1883-11-25T12:12:08" },
+        "citations": ["us-globe-1883-11-25-stpaul"],
+        "note": "At noon on Sunday 25 November 1883, a week after the railroads of the east; whether noon by the old time or by the new is not said, and the window covers both."
+      },
+      "offset": { "type": "fixed", "seconds": -22328 },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "The new time was \"twelve minutes faster than the old time\", and a railroad's change was \"ahead 12 minutes and 8 seconds by St. Paul time\"; the atlas takes Saint Paul time as 6 h 12 min 8 s behind Greenwich (the longitude gives 6 h 12 min 22.4 s) and assumes the city kept it from 1870."
+      },
+      "citations": ["us-globe-1883-11-25-meantime", "us-globe-1883-11-25-omaha"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "City time now taken from the report (\"ahead 12 minutes and 8 seconds by St. Paul time\"), as for every city whose change a report measures, instead of from the longitude; flagged inferred, the report describing the city's time at the change only. The adoption instant now has a window: the source does not say whether the change was at noon by the old time or the new, or when that day the clocks were set."
+        }
+      ]
+    },
+    {
+      "id": "us-saint-paul-central-1883",
+      "version": 2,
+      "title": "Saint Paul: Central standard time",
+      "scope": "Saint Paul, from its adoption of standard time to the Standard Time Act of 1918",
+      "clock": "civil",
+      "start": {
+        "local": "1883-11-25T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "minute",
+        "window": { "earliest": "1883-11-25T12:00:00", "latest": "1883-11-25T12:12:08" },
+        "citations": ["us-globe-1883-11-25-stpaul"],
+        "note": "At noon on Sunday 25 November 1883, a week after the railroads of the east; whether noon by the old time or by the new is not said, and the window covers both."
+      },
+      "end": {
+        "local": "1918-03-31T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -21600 },
+      "isDst": false,
+      "abbreviation": "CST",
+      "uncertainty": {
+        "flag": "documented",
+        "reason": "Standard time was inaugurated at noon on 25 November 1883, and the city council and chamber of commerce adopted it."
+      },
+      "citations": ["us-globe-1883-11-25-stpaul", "us-globe-1883-11-25-council"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "The adoption instant now has a window: the source does not say whether the change was at noon by the old time or the new, or when that day the clocks were set."
+        }
+      ]
+    },
+    {
+      "id": "us-minneapolis-city-time-before-1883",
+      "version": 2,
+      "title": "Minneapolis: Minneapolis local time (local mean time)",
+      "scope": "Minneapolis, before standard time",
+      "clock": "civil",
+      "start": { "local": "1870-01-01T00:00:00", "reckoning": "after", "kind": "coverage", "precision": "second" },
+      "end": {
+        "local": "1883-11-25T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "day",
+        "window": { "earliest": "1883-11-25T00:00:00", "latest": "1883-11-25T23:59:59" },
+        "note": "Generally adopted on 25 November 1883; the hour is not reported, and noon is used, as in Saint Paul.",
+        "citations": ["us-globe-1883-11-25-minneapolis"]
+      },
+      "offset": { "type": "local-mean-time" },
+      "isDst": false,
+      "abbreviation": "LMT",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "No report gives Minneapolis's own figure, so the mean time of the city's longitude is used, 13 min 3.3 s behind Central time; neighbouring Saint Paul called its old time its \"former meantime\". That the city kept it from 1870 is assumed."
+      },
+      "citations": ["us-globe-1883-11-25-minneapolis", "us-globe-1883-11-25-meantime"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Reason corrected: Saint Paul's time now comes from a report, so Minneapolis, which no report measures, is no longer said to follow it."
+        }
+      ],
+      "note": "Offset computed from the city's longitude, 240 seconds per degree."
+    },
+    {
+      "id": "us-minneapolis-central-1883",
+      "version": 2,
+      "title": "Minneapolis: Central standard time",
+      "scope": "Minneapolis, from its adoption of standard time to the Standard Time Act of 1918",
+      "clock": "civil",
+      "start": {
+        "local": "1883-11-25T12:00:00",
+        "reckoning": "after",
+        "kind": "event",
+        "precision": "day",
+        "window": { "earliest": "1883-11-25T00:00:00", "latest": "1883-11-25T23:59:59" },
+        "note": "Generally adopted on 25 November 1883; the hour is not reported, and noon is used, as in Saint Paul.",
+        "citations": ["us-globe-1883-11-25-minneapolis"]
+      },
+      "end": {
+        "local": "1918-03-31T02:00:00",
+        "reckoning": "before",
+        "kind": "event",
+        "precision": "minute",
+        "citations": ["us-stat-1918-dst"]
+      },
+      "offset": { "type": "fixed", "seconds": -21600 },
+      "isDst": false,
+      "abbreviation": "CST",
+      "uncertainty": {
+        "flag": "inferred",
+        "reason": "Standard time was to be \"generally adopted in Minneapolis\" on 25 November 1883, and two days later it was \"working finely throughout Minneapolis\", though \"some are slow in adopting it\"; action by the city government is not reported, and the public clocks are assumed to have followed."
+      },
+      "citations": ["us-globe-1883-11-25-minneapolis", "us-globe-1883-11-27-minneapolis"],
+      "changes": [
+        {
+          "version": 2,
+          "date": "2026-09-28",
+          "summary": "Flagged inferred, as Chicago's adoption is: the reports describe general use, not the city government's action. A report of 27 November, after the change, is now cited (us-globe-1883-11-27-minneapolis)."
+        }
+      ]
+    }
+  ]
+}
