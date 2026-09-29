@@ -71,6 +71,8 @@ import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith, type Crossing
 import { annualProfection, firdaria, profectionAt, solarArc, zodiacalReleasingAt, type ProfectionAt, type TimingFlag, type TimingOrigin } from "@zodiacs/engine/timing";
 import { siderealChart, nakshatraOf, type SiderealChart, type NakshatraPosition } from "@zodiacs/engine/vedic";
 import { ayanamsa, type AyanamsaValue } from "@zodiacs/engine/vedic";
+import { housePosition, coAscendants, houseSpeeds, SIDEREAL_RATE, type AngleInput, type CoAscendants, type EclipticPosition, type HouseSpeeds } from "@zodiacs/engine/houses";
+import { planetaryReturns, type PlanetaryReturns } from "@zodiacs/engine/timing";
 import { prepareLocalTime, resolveLocalToUtc, julianToGregorian, TZDB, type LocalTimeResolution, type ZoneTransition, type TransitionCause, type CalendarName } from "@zodiacs/engine/geo";
 import { type TimeScale, type TimeScaleName, type LeapSeconds, type Ut1MinusUtc } from "@zodiacs/engine";
 const onTt: Chart = natalChart({utc: "1990-06-15T12:30:00Z", timeScale: "tt" satisfies TimeScaleName, timeKnown: false});
@@ -143,6 +145,13 @@ synastry(echoChart, chart);
 const encoded = serializeNatalEnvelope(createNatalEnvelope(chart));
 const parsed = parseNatalEnvelope(encoded);
 if (parsed.ok) { natalChart(natalReplayInput(parsed.envelope)); redactNatalEnvelope(parsed.envelope); }
+const houseInput: AngleInput = {gastHours: 3, latitude: 51.5, longitude: 0, obliquity: 23.44};
+const housePlace: number | null = housePosition("placidus", houseInput, {lon: 120, lat: 4} satisfies EclipticPosition);
+const coAscendantPoints: CoAscendants = coAscendants(houseInput);
+const cuspSpeeds: HouseSpeeds = houseSpeeds("koch", houseInput);
+const jupiterReturns: PlanetaryReturns = planetaryReturns(chart, "Jupiter", "2030-01-01", "2031-01-01");
+if (jupiterReturns.status === "complete") { const pass: number | undefined = jupiterReturns.returns[0]?.pass; void pass; }
+void housePlace; void coAscendantPoints; void cuspSpeeds; void SIDEREAL_RATE;
 `
 );
 // An explicit project: "types": [] keeps @types packages in parent directories
@@ -170,6 +179,8 @@ import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "@zodia
 import { annualProfection, firdariaPeriods, releasingAt, solarArc } from "@zodiacs/engine/timing";
 import { searchLongitudeCrossings, houseOf } from "@zodiacs/engine";
 import * as vedic from "@zodiacs/engine/vedic";
+import * as houses from "@zodiacs/engine/houses";
+import { planetaryReturns } from "@zodiacs/engine/timing";
 import * as root from "@zodiacs/engine";
 import { calc } from "@zodiacs/engine/calc";
 import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError } from "@zodiacs/engine/window";
@@ -429,7 +440,17 @@ for (const cell of windowed.cells) {
   }
 }
 assert.throws(() => birthWindow({start: "2000-01-01T00:00:00Z", end: "2000-01-03T00:00:01Z", latitude: 0, longitude: 0}), RangeError);
-console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", timeBasis: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
+assert.equal("housePosition" in root, false);
+const houseInput = {gastHours: 0.5, latitude: 55, longitude: 0, obliquity: 23.4392911};
+assert.equal(houses.coAscendants(houseInput).equatorialAscendant, root.eastPointOf(houseInput));
+const ascendantPosition = houses.housePosition("campanus", houseInput, {lon: root.computeAngles(houseInput).asc});
+assert(Math.abs(((ascendantPosition - 1 + 6) % 12) - 6) < 1e-9);
+assert.deepEqual(houses.houseSpeeds("placidus", {...houseInput, latitude: 70}).cusps, Array(12).fill(0));
+const moonReturns = planetaryReturns(chart, "Moon", "2002-01-01", "2002-02-01");
+assert.equal(moonReturns.status, "complete");
+assert.equal(moonReturns.returns.length, 1);
+assert.equal(planetaryReturns(chart, "Moon", "2002-01-01", "2002-02-01", {maxSamples: 3}).status, "refused");
+console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

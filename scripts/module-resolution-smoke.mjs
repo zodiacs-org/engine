@@ -8,6 +8,7 @@ const calc = await import("@zodiacs/engine/calc");
 const crossings = await import("@zodiacs/engine/crossings");
 const deltat = await import("@zodiacs/engine/deltat");
 const geo = await import("@zodiacs/engine/geo");
+const houses = await import("@zodiacs/engine/houses");
 const receipt = await import("@zodiacs/engine/receipt");
 const techniques = await import("@zodiacs/engine/techniques");
 const timing = await import("@zodiacs/engine/timing");
@@ -74,7 +75,8 @@ for (const name of [
   "zodiacalReleasingAt",
   "solarArc",
   "solarArcDirections",
-  "directLongitudes"
+  "directLongitudes",
+  "planetaryReturns"
 ]) {
   assert.equal(typeof timing[name], "function", `missing timing export: ${name}`);
   assert.equal(name in engine, false, `timing leaked into root: ${name}`);
@@ -178,6 +180,32 @@ const untimed = techniques.moonSignCandidates("2000-04-11");
 assert.deepEqual([untimed.from.toISOString(), untimed.to.toISOString()], ["2000-04-10T10:00:00.000Z", "2000-04-12T11:59:59.999Z"]);
 assert.deepEqual(techniques.EGYPTIAN_TERMS.aries, [["Jupiter", 6], ["Venus", 12], ["Mercury", 20], ["Mars", 25], ["Saturn", 30]]);
 assert.equal(techniques.VOID_OF_COURSE_CONVENTION.name, "last-exact-ptolemaic-aspect-to-sign-exit");
+
+// House positions, co-ascendants and speeds are their own entry, absent from the root.
+assert.deepEqual(Object.keys(houses).sort(), ["SIDEREAL_RATE", "coAscendants", "housePosition", "houseSpeeds"]);
+for (const name of Object.keys(houses)) {
+  assert.equal(name in engine, false, `houses leaked into root: ${name}`);
+}
+assert.equal(houses.SIDEREAL_RATE, 360.98564736629);
+{
+  const input = { gastHours: 0.5, latitude: 55, longitude: 0, obliquity: 23.4392911 };
+  const angles = engine.computeAngles(input);
+  const cusps = engine.computeHouses("regiomontanus", input, angles).houses.cusps;
+  cusps.forEach((cusp, index) => {
+    const position = houses.housePosition("regiomontanus", input, { lon: cusp });
+    assert(Math.abs(((position - 1 - index + 18) % 12) - 6) < 1e-9, `regiomontanus cusp ${index + 1} is not at its house`);
+  });
+  assert.equal(houses.coAscendants(input).equatorialAscendant, engine.eastPointOf(input));
+  assert.equal(houses.houseSpeeds("placidus", input).cusps.length, 12);
+}
+// Planetary returns are in the timing entry: an invented chart's Jupiter,
+// direct, retrograde and direct over its natal degree in 2037-38 (as JPL
+// Horizons has it; src/timing/fixtures/planetary-returns-horizons.json).
+{
+  const jupiter = timing.planetaryReturns({ utc: "2025-10-26T23:39:00Z" }, "Jupiter", "2037-08-01", "2038-07-31");
+  assert.equal(jupiter.status, "complete");
+  assert.deepEqual(jupiter.returns.map((row) => [row.retrograde, row.pass]), [[false, 1], [true, 1], [false, 1]]);
+}
 
 for (const name of [
   "createNatalEnvelope",
@@ -304,6 +332,10 @@ function checkSelfContained(entry, allowed = []) {
   visit(new URL(`../dist/${entry}.js`, import.meta.url));
 }
 checkSelfContained("receipt");
+// The houses entry is one file: it imports nothing, the root's modules included.
+checkSelfContained("houses-extra");
+assert(!/^(?:import|export)\s[^;]*?\bfrom\s*["']/mu.test(readFileSync(new URL("../dist/houses-extra.js", import.meta.url), "utf8")),
+  "the houses entry imports a module");
 checkSelfContained("crossings");
 checkSelfContained("deltat");
 // The core entry reaches no zone history and loads nothing lazily; its one
@@ -327,7 +359,8 @@ for (const [entry, own] of [
   ["timing", /^src\/timing\//u],
   ["vedic", /^src\/vedic\//u],
   ["geo", /^src\/geo\//u],
-  ["techniques", /^src\/techniques\//u]
+  ["techniques", /^src\/techniques\//u],
+  ["houses-extra", /^src\/houses-extra\.ts$/u]
 ]) {
   const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
   for (const reading of [graph.sources, graph.held, graph.marked]) {
@@ -335,9 +368,9 @@ for (const [entry, own] of [
   }
 }
 
-// No module of the calc or techniques entries is in the root's static graph, read either way.
+// No module of the calc, techniques or houses entries is in the root's static graph, read either way.
 for (const source of new Set([...root.sources, ...root.held, ...root.marked])) {
-  assert(!/^src\/(?:calc(?:-[a-z]+)?\.ts$|techniques(?:\.ts$|\/))/u.test(source), `the root entry reaches ${source}`);
+  assert(!/^src\/(?:calc(?:-[a-z]+)?\.ts$|techniques(?:\.ts$|\/)|houses-extra\.ts$)/u.test(source), `the root entry reaches ${source}`);
 }
 
 // The geo entry reaches the zone histories only through dynamic imports, one
@@ -356,6 +389,6 @@ for (const entry of ["geo", "techniques"]) {
 console.log(
   "@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, " +
     `the core graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
-    `${root.outputs.length} files) reaches no timing, Vedic, geo, calc or techniques module and no zone history, ` +
+    `${root.outputs.length} files) reaches no timing, Vedic, geo, calc, techniques or houses module and no zone history, ` +
     "and the geo entry loads its 16 shards lazily"
 );

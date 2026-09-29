@@ -1,0 +1,14 @@
+# The root entry's import graph (dist/index.js and the chunks it loads, as verify-package-contents.mjs counts it),
+# built from rc15-work (eb58011) and from this branch. SHA-256 and bytes of each file.
+index.js                13003  42fd87e28b11efa8938aa85a30cee47e632495583a4e27d61f971204fa1573fd  identical
+chunk-6DA3Y4TT.js         672  0fcb86bc770479bc45c718d63f8637eece65bdbff34db5f90d962a32aac18d5a  identical
+chunk-PQ66USYB.js       23874  46befb4ab28aede6e9d478e83e810a64642e05473bad3e19dbf71c273a45a5b3  identical
+chunk-ZHVI3KWJ.js       11577  59d9f91c8414e301169cd5dc792c70b903c9c0138e9a5044d49e01e44dc09dfc  identical
+chunk-MFF3VKO3.js        5263  be053c94c84610fd0c8647ebaa97405d3057d5b41ed18f14a41a203805a42dba  identical
+chunk-M66QAZSZ.js       11135  c43b4ab5d2a37d64eac4b21fc62bd36b675fd20c4d2d35e820d7a1e90f78109a  identical
+chunk-ONBZ4HK7.js        4807  50f11205373c177c728ea8c7d50d41b19ff80cd9921eb51c6e907a8045f93308  identical
+chunk-CPALRSPC.js        1459  9db1a3814ec9bd00a40d4bc295e348debd6108f62a322ed91d18610c81b9fb08  identical
+chunk-Z5MBBXLG.js       11317  f92258fc250b2ec24ba6e6b962db2e8344a09f224f2b3ebd8fd4d96ac1f71638  identical
+chunk-AECKV73C.js        9237  a812be9882c25f67c9fa8dfe19eb0d950a3867a7cdbede4c746c226ca760480c  identical
+chunk-PFGUCNOK.js        2929  6d9d38ab4606288700b0959e732a61dfa5b4cdc570be21d17b4ac9b9fe1c0eb4  identical
+total: rc15-work 95273 bytes, this branch 95273 bytes

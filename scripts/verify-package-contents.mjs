@@ -24,6 +24,8 @@ const required = [
   "dist/deltat.js",
   "dist/geo.d.ts",
   "dist/geo.js",
+  "dist/houses-extra.d.ts",
+  "dist/houses-extra.js",
   "dist/receipt.d.ts",
   "dist/receipt.js",
   "dist/techniques.d.ts",
@@ -84,6 +86,10 @@ const ENTRY_BUDGETS = {
   // 32,136: the local-time code moves to a chunk the two entries share, and
   // geo.js re-exports it.
   "./geo": 35_000,
+  // Unreleased (feature-houses-extra): 13,606, one file that imports no other
+  // module, the root's included, so that its graph cannot grow with the core
+  // (docs/evidence/houses-extra-2026-09-29/).
+  "./houses": 15_000,
   "./internal": 60_000, // rc.15: 56,961
   "./internal/math": 20_000, // rc.15: 18,165
   "./receipt": 70_000, // rc.15: 62,880
@@ -93,7 +99,7 @@ const ENTRY_BUDGETS = {
   // it shares with ./geo (docs/evidence/techniques-2026-09-29/); 5.8 per
   // cent of headroom.
   "./techniques": 150_000,
-  "./timing": 120_000, // rc.15: 112,485, the core's graph included
+  "./timing": 120_000, // rc.15: 112,485, the core's graph included; with planetary returns (unreleased) 114,646
   "./vedic": 120_000 // rc.15: 114,106, the core's graph included
 };
 

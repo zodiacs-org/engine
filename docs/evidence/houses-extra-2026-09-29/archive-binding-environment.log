@@ -1,0 +1,6 @@
+# Paths: $SCRATCH stands for the session's scratchpad directory, the parent of the worktree and of TMPDIR.
+# scripts/verify-archive-binding.test.mjs on the unchanged rc15-work tree (eb58011, git archive), TMPDIR=$SCRATCH/isolated-tmp
+   scratchpad lrwxrwxrwx 1 root root 28 Sep 28 11:37 ../../node_modules -> /home/user/site/node_modules
+      Tests  23 failed (23)
+ Test Files  1 failed (1)
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.

@@ -94,6 +94,53 @@ the core's included. `./geo`'s graph grows by 464 bytes to 32,136, because its
 local-time code is now a chunk it shares with `./techniques`. The package is
 695,069 bytes unpacked, within the 700,000 cap.
 
+Additions only: no existing function's output changes, and the root entry's
+import graph is unchanged, file for file. Checks:
+`docs/evidence/houses-extra-2026-09-29/`, preregistered in its
+`PREREGISTRATION.md`. User documentation: `docs/houses.md`.
+
+New:
+
+- A new entry point, `@zodiacs/engine/houses`, one file that imports no other
+  module: no ephemeris and nothing of the root entry.
+  - `housePosition(system, input, { lon, lat })`: the house position of a body
+    with ecliptic latitude in each of the thirteen systems, a number in
+    [1, 13), as Swiss Ephemeris's `swe_house_pos` defines it; `null` for Koch
+    where the body lies outside the house circles of its half of the sky or
+    the midheaven never rises, and for Topocentric where no circle reaches a
+    body that never rises or sets. Given the same inputs it is within 0.01″ of
+    `swe_house_pos` on the 55°–66.6° ladder and a global grid for eleven
+    systems, with polar status agreeing. Porphyry is not, in 11 of the global
+    grid's 20,000 cases, where Swiss adds 0.001″ to the longitude and a
+    quadrant under 9° magnifies it; Topocentric is not, in 444 and 301 cases,
+    Swiss's positions leaving up to 0.445″ in the equation that defines them,
+    and it has no position in 519 and 979 cases where Swiss gives one.
+  - `coAscendants(input)`: the equatorial ascendant, Koch's and Munkasey's
+    co-ascendants and Munkasey's polar ascendant, within 0.00000001″ of
+    Swiss's `ascmc[4]` to `ascmc[7]` given the same inputs.
+  - `houseSpeeds(system, input)` and `SIDEREAL_RATE`: the speeds of the cusps
+    and the angles in degrees per day, derived analytically; within
+    0.00035° a day of a central difference of the engine's own cusps on both
+    grids. They agree with Swiss's `houses_armc_ex2` speeds for the angles
+    and eight systems, and not for Koch, Placidus, Porphyry, whole sign or, in
+    5 cases, Alcabitius, where Swiss's own speeds are not the derivatives of
+    its cusps.
+- `planetaryReturns(natal, body, from, to)`, with `RETURN_BODIES` and
+  `RETURN_STEP_DAYS`, in `@zodiacs/engine/timing`: every instant in a window
+  at which the Sun, the Moon or Mercury to Pluto stands on its natal
+  longitude, retrograde returns included, from the engine's crossing search,
+  each result carrying its verdict (`complete`, or `refused` over a sample
+  budget). Checked against JPL Horizons for invented charts, including a
+  direct, retrograde and direct return of each of Mercury to Pluto, and
+  against USNO's published equinoxes.
+
+Package: `./houses` has a budget of 15,000 bytes for its import graph, which
+is 13,606. `./timing` grows to 114,646 bytes, within its 120,000. The root's
+graph stays at 95,273 bytes and its files are byte-identical. The bundler
+re-splits the declaration chunks the entries share, so `dist/index.d.ts`
+imports the same house types from a new chunk, and it lists the imports of
+`dist/geo.js` in another order. The version is unchanged.
+
 Migration: none. With every default `calc` gives the position `positions()`
 gives, to the bit after the same earlier calls, and the root entry's build is
 byte for byte unchanged. `@zodiacs/engine/window` changes no existing

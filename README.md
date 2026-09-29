@@ -177,7 +177,12 @@ for (const aspect of today.aspects) {
   Davison charts, the void-of-course Moon, aspect patterns, essential
   dignities and the Moon signs possible over a date (see `docs/techniques.md`).
 - `@zodiacs/engine/timing` provides profections, firdaria, zodiacal releasing
-  and solar arc directions (see `docs/timing-hellenistic.md`).
+  and solar arc directions (see `docs/timing-hellenistic.md`), and planetary
+  returns (see `docs/houses.md`).
+- `@zodiacs/engine/houses` provides the house position of a body with ecliptic
+  latitude in each house system, the co-ascendants and the polar ascendant,
+  and the speeds of the cusps and the angles (see `docs/houses.md`). It
+  imports no ephemeris and no module of the root entry.
 - `@zodiacs/engine/vedic` provides the sidereal zodiac: ayanamsas, sidereal
   charts, nakshatras, vargas, KP sub-lords and dashas (see `docs/vedic.md`).
 - `@zodiacs/engine/window` partitions a birth-time window into cells within
@@ -472,6 +477,11 @@ and Topocentric cusps turn with it, so their 10th cusp is then the lower
 meridian, as in Swiss Ephemeris. When the birth time is unknown, pass a
 conventional UTC instant with `timeKnown: false`; angles and houses remain
 absent and the chart carries the `no-time` flag.
+
+`@zodiacs/engine/houses` places a body with ecliptic latitude in any of these
+systems, as Swiss Ephemeris's `swe_house_pos` defines the position, and gives
+the co-ascendants, the polar ascendant and the speeds of the cusps and angles
+(`docs/houses.md`).
 
 ### Points
 
