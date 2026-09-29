@@ -1,8 +1,8 @@
 /*
- * The void-of-course Moon. William Lilly, Christian Astrology (1647), p. 112:
- * "A Planet is void of course, when he is separated from a Planet, nor doth
- * forthwith, during his being in that Signe, apply to any other: This is most
- * usually in the Moon". Ported from the Zodiacs.org site
+ * The void-of-course Moon. William Lilly, Christian Astrology (1647), p. 112
+ * (long s printed as s): "A Planet is voyd of course, when he is seperated
+ * from a Planet, nor doth forthwith, during his being in that Signe, apply to
+ * any other: This is most usually in the ☽". Ported from the Zodiacs.org site
  * (src/lib/engine/void-of-course.ts); VOID_OF_COURSE_CONVENTION names the
  * convention and docs/techniques.md describes it.
  */

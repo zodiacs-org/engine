@@ -68,8 +68,8 @@ New:
 - The void-of-course Moon (`moonIngresses`, `moonAspects`,
   `voidOfCourseWindows`, `voidOfCourseAt`) under one named convention,
   `VOID_OF_COURSE_CONVENTION`: from the Moon's last exact Ptolemaic aspect in
-  a sign, to the Sun and planets or to the Sun to Saturn, to its next
-  ingress.
+  a sign (to the Sun and the planets through Pluto, or through Saturn) to its
+  next ingress.
 - Grand trines, T-squares, grand crosses and kites from a chart's aspect
   records (`aspectPatterns`, `chartAspectPatterns`), and which contain which
   (`patternContainment`).
@@ -80,17 +80,19 @@ New:
 - `moonSignCandidates`: the Moon signs possible over a date, in a time zone
   or in every time zone, and `moonSignsBetween`.
 
-Each ported function gives the site's result on a seeded synthetic corpus:
-6,795 of 6,796 cases agree exactly. The one that does not is 2011-12-30 in
-Pacific/Apia, a date the zone skipped, which the package refuses. By design,
-returns are not clipped to 1800–2200 as the site clips them but flagged, and
-dates before 1970 are read on the shipped tzdata rather than the host's.
+Each ported function was run against the site's code on a seeded synthetic
+corpus: 6,795 of 6,796 cases agree exactly. The one that does not is
+2011-12-30 in Pacific/Apia, a date the zone skipped: the site answers, the
+package refuses it. The preregistered parity gate allowed no disagreement, so
+it is recorded as failed. By design, returns are not clipped to 1800–2200 as
+the site clips them but flagged, and dates before 1970 are read on the
+shipped tzdata rather than the host's.
 
 Sizes: the root entry's import graph is unchanged, the same files and bytes
 (95,273). `./techniques` has a budget of 150,000 bytes; its graph is 141,745,
 the core's included. `./geo`'s graph grows by 464 bytes to 32,136, because its
 local-time code is now a chunk it shares with `./techniques`. The package is
-694,949 bytes unpacked, within the 700,000 cap.
+695,069 bytes unpacked, within the 700,000 cap.
 
 Migration: none. With every default `calc` gives the position `positions()`
 gives, to the bit after the same earlier calls, and the root entry's build is

@@ -2,17 +2,16 @@
  * Two charts of a relationship.
  *
  * The composite chart takes the midpoint of each pair of like points: John
- * Townley, The Composite Chart: Horoscope of a Relationship (Samuel Weiser),
- * and Robert Hand, Planets in Composite (Para Research, 1975). Ported from
- * the Zodiacs.org site (src/lib/composite.ts), with its convention for exact
- * oppositions.
+ * Townley, The Composite Chart (1973), and Robert Hand, Planets in
+ * Composite (Para Research, 1975). Ported from the Zodiacs.org site
+ * (src/lib/composite.ts), with its convention for exact oppositions.
  *
- * The Davison chart, the "relationship horoscope", is an ordinary chart cast
- * for the midpoint in time between the two births and the midpoint in space
- * between the two birthplaces: Ronald C. Davison, Synastry: Understanding
- * Human Relations Through Astrology (New York: ASI, 1977). New here. See
- * docs/techniques.md for what was and was not read of these sources, and for
- * the conventions.
+ * The Davison chart is an ordinary chart cast for the midpoint in time between
+ * the two births and a place between the two birthplaces: Ronald C. Davison,
+ * Synastry: Understanding Human Relations Through Astrology (New York: ASI
+ * Publishers, 1977). New here. None of these books was read for this work;
+ * the definitions come from secondary accounts, and the place conventions are
+ * this package's. See docs/techniques.md.
  */
 import { natalChart, resolvedChart, utcOf } from "../api.js";
 import type { NatalSource } from "../api.js";

@@ -47,10 +47,10 @@ are in [`evidence/techniques-2026-09-29/`](evidence/techniques-2026-09-29/README
 
 A return is the moment the transiting body comes back to the longitude it had
 at birth, and the chart cast for that moment. al-Bīrūnī, *Book of
-Instruction* §§522–524 (tr. Wright, p. 119): "each year the ascendant is
-ascertained when the sun comes round to the same minute of the ecliptic in
-which it stood at the birth". The lunar return takes the Moon's natal
-longitude in the same way.
+Instruction* §522 (tr. Wright): "each year the ascendant is ascertained when
+the sun comes round to the same minute of the ecliptic in which it stood at
+the birth". The lunar return takes the Moon's natal longitude in the same
+way.
 
 Longitudes are the engine's apparent geocentric longitudes of date. Instants
 are found with the engine's crossing solver on its UTC time basis
@@ -107,10 +107,12 @@ root entry's `saturnReturn` already computes them.
 ## Composite charts
 
 The composite chart takes the midpoint of each pair of like points of two
-charts: the two Suns, the two Moons, and so on. John Townley introduced it
-(*The Composite Chart: Horoscope of a Relationship*, Samuel Weiser) and
-Robert Hand treated it at length (*Planets in Composite*, Para Research,
-1975). Neither book could be read for this work; see *Sources*.
+charts: the two Suns, the two Moons, and so on. John Townley put it into use
+with a 48-page book, *The Composite Chart* (1973), from the idea of "a chart
+out of mutual midpoints", which he traces to the German midpoint schools;
+Robert Hand wrote *Planets in Composite* (Para Research, 1975). Neither book
+could be read for this work: the account is from an interview with Townley
+(*The Astrology Podcast*, ep. 128); see *Sources*.
 
 - `compositeMidpoints(first, second)` takes two lists of `{ body, lon }` and
   returns the midpoint of each body in both, in the first list's order. The
@@ -125,12 +127,14 @@ Robert Hand treated it at length (*Planets in Composite*, Para Research,
 
 ## Davison charts
 
-Ronald C. Davison's relationship horoscope (*Synastry: Understanding Human
-Relations Through Astrology*, New York: ASI, 1977) is an ordinary chart cast
-for the midpoint in time between two births and the midpoint in space between
-the two birthplaces. The book could not be read for this work, so the
-conventions below are this package's reading of that definition, not
-Davison's text.
+Ronald C. Davison introduced this chart in *Synastry: Understanding Human
+Relations Through Astrology* (New York: ASI Publishers, 1977). It is an
+ordinary chart cast for the midpoint in time between two births and for a
+place between the two birthplaces: "you create a chart for ... the midpoint
+in time between those two ... and for a location that's between the two"
+(*The Astrology Podcast*, ep. 128). The book could not be read for this
+work, so the conventions below are this package's reading of that
+definition, not Davison's text.
 
 - **Time**: the mean of the two births' UTC instants, rounded down to the
   millisecond. A chart given on UT1 or TT is read at its UTC instant.
@@ -154,9 +158,10 @@ triangle rather than from vectors, at 500 random pairs of places.
 
 ## The void-of-course Moon
 
-William Lilly, *Christian Astrology* (1647), p. 112: "A Planet is void of
-course, when he is separated from a Planet, nor doth forthwith, during his
-being in that Signe, apply to any other: This is most usually in the Moon".
+William Lilly, *Christian Astrology* (1647), p. 112, with the long s printed
+as s: "A Planet is voyd of course, when he is seperated from a Planet, nor
+doth forthwith, during his being in that Signe, apply to any other: This is
+most usually in the ☽" (the Moon).
 
 The functions follow one named convention, `VOID_OF_COURSE_CONVENTION`,
 `"last-exact-ptolemaic-aspect-to-sign-exit"`:
@@ -369,7 +374,9 @@ Access date for every URL: 2026-09-29.
   Astrology* (1029), tr. R. Ramsay Wright (London: Luzac, 1934). Typescript
   on archive.org, `albirunibookofinstruction`: §§440–445 (domiciles,
   detriment, exaltation, triplicities), §§449 and 451 (faces, and the table
-  of lords of faces), §453 (terms), §§522–524 (the solar revolution).
+  of lords of faces), §453 (terms), §522 (the solar revolution). Quoted from
+  the item's OCR text with its misreadings corrected ("eoliptio" is
+  "ecliptic").
 - Dorotheus of Sidon, *Carmen Astrologicum*, ed. and tr. David Pingree
   (Leipzig: Teubner, 1976), book I, ch. 1–2, pp. 161–162; the copy on
   archive.org, `PingreeDS1976`, read from the page images.
@@ -377,19 +384,24 @@ Access date for every URL: 2026-09-29.
   book I, ch. 17–23, via LacusCurtius:
   <https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Ptolemy/Tetrabiblos/1B*.html>.
 - William Lilly, *Christian Astrology* (London, 1647), p. 112: reception,
-  peregrine and void of course. Scan on archive.org, `ca-william-lilly`.
+  peregrine and void of course. Scan on archive.org, `ca-william-lilly`,
+  read from its OCR text; quotations print the long s as s.
 - Robert Hand, *Horoscope Symbols* (1981; Schiffer, Red Feather ebook),
   ch. 6, "Aspect Patterns or Harmonic Syndromes"; copy on archive.org,
   `robert-hand-horoscope-symbols-schiffer-publishing-1981`.
 - Ronald C. Davison, *Synastry: Understanding Human Relations Through
-  Astrology* (New York: ASI, 1977; Aurora Press, 1983). Not read: the only
-  copy found, archive.org `synastry00rona`, is lending-only. The definition
-  above is the one the book's publisher and secondary sources give; the
-  conventions for the place are this package's.
-- John Townley, *The Composite Chart: Horoscope of a Relationship* (Samuel
-  Weiser; 1973 by the author's account in *The Astrology Podcast*, ep. 128,
-  1974 in book listings), and Robert Hand, *Planets in Composite: Analyzing
-  Human Relationships* (Para Research, 1975). Not read; no copy was found.
+  Astrology* (New York: ASI Publishers, 1977; Aurora Press, 1983; editions as
+  Open Library lists them). Not read: the only copy found, archive.org
+  `synastry00rona` (the 1983 edition), is lending-only. The definition above
+  is the interview's, below; the conventions for the place are this
+  package's.
+- John Townley, *The Composite Chart* (1973, the year given in the interview
+  below; Open Library lists a 48-page Weiser edition of 1982), and Robert
+  Hand, *Planets in Composite* (Para Research, 1975, as Open Library lists
+  it). Not read; no copy was found.
+- *The Astrology Podcast*, ep. 128, "Composite Charts with Originator John
+  Townley", transcript published 2021-04-17:
+  <https://theastrologypodcast.com/transcripts/ep-128-transcript-composite-charts-with-originator-john-townley/>.
 - U.S. Naval Observatory, Astronomical Applications Department, *Earth's
   Seasons* API: <https://aa.usno.navy.mil/api/seasons?year=2022> and the
   other years (`src/techniques/fixtures/usno-seasons.json` keeps the times

@@ -127,9 +127,11 @@ const here = new URL(".", root).pathname;
 const scratch = mkdtempSync(join(tmpdir(), "techniques-measure-"));
 execFileSync("tar", ["-xzf", new URL("artifacts/zodiacs-engine-0.1.1-rc.15.tgz", root).pathname, "-C", scratch]);
 const archived = graph(join(scratch, "package"), "dist/index.js");
+const archivedGeo = graph(join(scratch, "package"), "dist/geo.js");
 rmSync(scratch, { recursive: true, force: true });
 const built = graph(here, "dist/index.js");
-const coreFiles = graph(here, "dist/index.js");
+const coreFiles = built;
+const builtGeo = graph(here, "dist/geo.js");
 const techniquesGraph = graph(here, "dist/techniques.js");
 const pack = JSON.parse(execFileSync("npm", ["pack", "--dry-run", "--json", "--ignore-scripts"], { cwd: here, encoding: "utf8" }))[0];
 const G5 = {
@@ -145,6 +147,8 @@ const G5 = {
     beyondCore: [...techniquesGraph].filter(([file]) => !coreFiles.has(file)).reduce((sum, [, record]) => sum + record.bytes, 0),
     ceiling: 150_000
   },
+  // ./geo now shares its local-time chunk with ./techniques.
+  geo: { rc15ArchiveBytes: total(archivedGeo), builtBytes: total(builtGeo), difference: total(builtGeo) - total(archivedGeo), ceiling: 35_000 },
   unpacked: { bytes: pack.unpackedSize, files: pack.entryCount, cap: 700_000 }
 };
 

@@ -2,9 +2,9 @@
  * Solar and lunar returns: the instant the transiting Sun or Moon comes back
  * to its natal longitude, and the chart cast for that instant.
  *
- * Definition: al-Bīrūnī, Book of Instruction §§522–524 (tr. Wright, p. 119):
- * "each year the ascendant is ascertained when the sun comes round to the
- * same minute of the ecliptic in which it stood at the birth". The lunar
+ * Definition: al-Bīrūnī, Book of Instruction §522 (tr. Wright): "each year
+ * the ascendant is ascertained when the sun comes round to the same minute of
+ * the ecliptic in which it stood at the birth". The lunar
  * return takes the Moon's natal longitude in the same way. Ported from the
  * Zodiacs.org site (src/lib/engine/solar-return.ts, lunar-return.ts), whose
  * windows, steps and refusals it keeps, except that it does not clip its
