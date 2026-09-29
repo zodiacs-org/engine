@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import { deltaT } from "./deltat.js";
 import { gastHours } from "./ephemeris.js";
 import { eclipticFrame, eclipticOfDate } from "./frame.js";
-import { ARGUMENTS, COEFFICIENTS, MULTIPLIERS, NUTATION_TERMS, OFFSETS, nutation, tilt } from "./nutation.js";
+import { ARGUMENTS, MULTIPLIERS, NUTATION_TERMS, OFFSETS, coefficients, nutation, tilt } from "./nutation.js";
 
 interface Epoch {
   tt: number;
@@ -64,12 +64,12 @@ describe("the IAU 2000B series as NOVAS C 3.1 gives it", () => {
       return rows;
     };
     const multipliers = table("nals_t[77][5] =", 5);
-    const coefficients = table("cls_t[77][6] =", 6);
+    const coefficientRows = table("cls_t[77][6] =", 6);
     expect(multipliers).toHaveLength(NUTATION_TERMS);
-    expect(coefficients).toHaveLength(NUTATION_TERMS);
+    expect(coefficientRows).toHaveLength(NUTATION_TERMS);
     expect(MULTIPLIERS).toHaveLength(5 * NUTATION_TERMS);
     expect([...MULTIPLIERS].map((digit) => Number(digit) - 2)).toEqual(multipliers.flat());
-    expect(COEFFICIENTS).toEqual(coefficients.flat());
+    expect(coefficients()).toEqual(coefficientRows.flat());
     // The arguments l, l′, F, D and Ω, arcseconds at J2000.0 and per century.
     const argumentsInSource = [...source.matchAll(/fmod \((\d+\.\d+) ([+-])\s+t \* (\d+\.\d+), ASEC360\)/g)].flatMap(
       (match) => [Number(match[1]), Number(`${match[2]}${match[3]}`)]
@@ -79,6 +79,46 @@ describe("the IAU 2000B series as NOVAS C 3.1 gives it", () => {
     // The fixed offsets for the planetary terms, added to Δψ and Δε.
     const offset = (name: string) => Number(source.match(new RegExp(`double ${name} = +(-?[0-9.]+);`))![1]);
     expect(OFFSETS).toEqual([offset("dpplan"), offset("deplan")]);
+  });
+
+  it("sums to what iau2000b's own loop gives with its own numbers, within 1e-14″ from 1800 to 2200", () => {
+    // NOVAS's evaluation, written out from the excerpt: sin and cos of each
+    // term's argument, reduced modulo 2π, summed from the last term.
+    const table = (name: string, columns: number) => {
+      const start = source.indexOf(name);
+      const body = source.slice(source.indexOf("{", start), source.indexOf("}};", start) + 2);
+      return [...body.matchAll(/\{([^{}]*)\}/g)].map((match) => match[1]!.split(",").map(Number)).filter((row) => row.length === columns);
+    };
+    const multipliers = table("nals_t[77][5] =", 5);
+    const coefficientRows = table("cls_t[77][6] =", 6);
+    const ASEC2RAD = Math.PI / 648_000;
+    const novas = (t: number) => {
+      const f = [
+        (485868.249036 + t * 1717915923.2178) % 1_296_000,
+        (1287104.79305 + t * 129596581.0481) % 1_296_000,
+        (335779.526232 + t * 1739527262.8478) % 1_296_000,
+        (1072260.70369 + t * 1602961601.209) % 1_296_000,
+        (450160.398036 - t * 6962890.5431) % 1_296_000
+      ].map((arcseconds) => arcseconds * ASEC2RAD);
+      let dp = 0;
+      let de = 0;
+      for (let i = 76; i >= 0; i -= 1) {
+        const n = multipliers[i]!;
+        const arg = (n[0]! * f[0]! + n[1]! * f[1]! + n[2]! * f[2]! + n[3]! * f[3]! + n[4]! * f[4]!) % (2 * Math.PI);
+        const [a, a1, a2, b, b1, b2] = coefficientRows[i]!;
+        dp += (a! + a1! * t) * Math.sin(arg) + a2! * Math.cos(arg);
+        de += (b! + b1! * t) * Math.cos(arg) + b2! * Math.sin(arg);
+      }
+      return { dpsi: dp * 1e-7 - 0.000135, deps: de * 1e-7 + 0.000388 };
+    };
+    let worst = 0;
+    for (let i = 0; i <= 4000; i += 1) {
+      const t = -2 + i / 1000;
+      const direct = novas(t);
+      const engine = nutation(t);
+      worst = Math.max(worst, Math.abs(engine.dpsi - direct.dpsi), Math.abs(engine.deps - direct.deps));
+    }
+    expect(worst).toBeLessThanOrEqual(1e-14);
   });
 
   it("begins with the five terms astronomy-engine 2.1.19 keeps", () => {
