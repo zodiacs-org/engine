@@ -1,0 +1,41 @@
+{
+ "tool": "docs/evidence/vedic-2026-09-28/tools/dasha_independent.py",
+ "engineVersion": "0.1.1-rc.12",
+ "cases": 240,
+ "yearLengths": {
+  "julian": "1461/4",
+  "tropical": "1826211/5000",
+  "savana": "360"
+ },
+ "periodsCompared": 402240,
+ "vimshottariPeriodsByLevel": {
+  "1": 2160,
+  "2": 19440,
+  "3": 174960,
+  "4": 19440,
+  "5": 174960
+ },
+ "lordMismatches": 0,
+ "countMismatches": 0,
+ "maxAbsDifferenceSeconds": {
+  "vimshottari": 2.2630405426025387e-06,
+  "vimshottariAt": 1.9321465492248537e-06,
+  "yogini": 1.2421607971191406e-06,
+  "ashtottari": 1.8796920776367188e-06
+ },
+ "maxAbsBalanceDifferenceYears": 2.7533531010703882e-14,
+ "publishedExample": {
+  "source": "BPHS 46, notes to v. 16 (R. Santhanam tr.), Moon at Sagittarius 13 deg",
+  "publishedBalance": "Ketu, 2 months 3 days",
+  "engineLord": "Ketu",
+  "engineBalanceYears": 0.17500000000000016,
+  "engineBalanceMonthsDays": [
+   2,
+   3.0
+  ],
+  "matches": true
+ },
+ "gateSeconds": 5,
+ "passes": true,
+ "note": "Engine instants are unrounded milliseconds (startMs/endMs); its ISO strings round them to the millisecond, and vimshottariAt compares whole-millisecond instants with those rounded boundaries, as this tool does with the exact ones. An exact boundary within a few microseconds of a half millisecond can round the other way from the engine's; src/vedic/dasha.test.ts checks that each period's own ISO start and end find it."
+}

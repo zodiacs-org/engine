@@ -1,0 +1,200 @@
+{
+ "firstCut": "0.1.1-rc.15",
+ "candidate": "0.1.1-rc.15",
+ "instants": 14647,
+ "ayanamsas": {
+  "lahiri": {
+   "meanIdentical": 14645,
+   "trueIdentical": 14644,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 1.2789769243681803e-11,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "fagan-bradley": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "krishnamurti": {
+   "meanIdentical": 14646,
+   "trueIdentical": 14645,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 1.2789769243681803e-11,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "raman": {
+   "meanIdentical": 14646,
+   "trueIdentical": 14645,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 7.673861546209082e-11,
+   "maxTrueDifferenceArcsec": 7.673861546209082e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "yukteswar": {
+   "meanIdentical": 14646,
+   "trueIdentical": 14645,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 6.394884621840902e-11,
+   "maxTrueDifferenceArcsec": 6.394884621840902e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "true-chitra": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "true-revati": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "true-pushya": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "galactic-center": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "user-j1900": {
+   "meanIdentical": 14646,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 1.2789769243681803e-11,
+   "maxTrueDifferenceArcsec": 2.5579538487363607e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "user-b1950": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "user-j2000": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  }
+ },
+ "sunIdentical": 14632
+}

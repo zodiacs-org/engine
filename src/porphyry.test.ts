@@ -28,8 +28,9 @@ function trisect(asc: number, mc: number): number[] {
 }
 
 // Four of the ERFA anchors in angles-erfa.test.ts (the preregistered angle grid,
-// pyerfa 2.0.1.5, true obliquity, this engine's clock). Each cusp is a weighted
-// mean of the ascendant and the midheaven, so it is held to the ascendant's gate.
+// pyerfa 2.0.1.5, true obliquity, this engine's clock, each instant read as UT1).
+// Each cusp is a weighted mean of the ascendant and the midheaven, so it is held
+// to the ascendant's gate.
 const ERFA: ReadonlyArray<readonly [utc: string, latitude: number, asc: number, mc: number]> = [
   ["1950-03-21T18:00:00Z", -66, 135.48915566, 88.789425669],
   ["2100-03-21T06:00:00Z", 66, 320.516526998, 268.946408931],
@@ -48,7 +49,7 @@ const POLAR: ReadonlyArray<readonly [utc: string, latitude: number, longitude: n
 
 describe("Porphyry houses (brief v1 rule 1h)", () => {
   it.each(ERFA)("trisects ERFA's angles, %s at %s°", (utc, latitude, asc, mc) => {
-    const chart = natalChart({ utc, latitude, longitude: 0, houseSystem: "porphyry" });
+    const chart = natalChart({ utc, timeScale: "ut1", latitude, longitude: 0, houseSystem: "porphyry" });
     expect(chart.houses?.system).toBe("porphyry");
     const gate = Math.abs(latitude) <= 45 ? 0.5 : 8;
     trisect(asc, mc).forEach((expected, index) => {
@@ -149,9 +150,11 @@ describe("Porphyry receipts", () => {
 
   it("refuses Porphyry in a receipt from rc.3 to rc.6, which never offered it", () => {
     const old = edit((e) => {
-      e.receipt.conventions = { ...NATAL_RECEIPT_CONVENTION_SETS[2] };
+      e.receipt.conventions = { ...NATAL_RECEIPT_CONVENTION_SETS[3] };
       e.receipt.engine = { name: "@zodiacs/engine", version: "0.1.1-rc.6" };
+      delete e.receipt.timeScale;
       delete e.result.deltaT;
+      delete e.result.timeScale;
     });
     expect(parseNatalEnvelope(old)).toMatchObject({ ok: false, code: "inconsistent_result" });
   });

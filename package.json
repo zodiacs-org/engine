@@ -1,7 +1,7 @@
 {
   "name": "@zodiacs/engine",
-  "version": "0.1.1-rc.14",
-  "description": "Browser-first tropical astrology calculations used by Zodiacs.org.",
+  "version": "0.1.1-rc.15",
+  "description": "Browser-first astrology calculations used by Zodiacs.org: tropical charts, Hellenistic timing techniques in ./timing, and the sidereal zodiac and Jyotish techniques in ./vedic.",
   "license": "MIT AND CC-BY-4.0",
   "keywords": [
     "astrology",
@@ -52,6 +52,14 @@
     "./receipt": {
       "types": "./dist/receipt.d.ts",
       "import": "./dist/receipt.js"
+    },
+    "./timing": {
+      "types": "./dist/timing.d.ts",
+      "import": "./dist/timing.js"
+    },
+    "./vedic": {
+      "types": "./dist/vedic.d.ts",
+      "import": "./dist/vedic.js"
     }
   },
   "files": [
@@ -70,7 +78,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json",
+    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json",
     "docs": "typedoc --options typedoc.json",
     "exports:smoke": "node scripts/module-resolution-smoke.mjs",
     "consumer:smoke": "node scripts/verify-packed-consumer.mjs",

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-29T20:18:50.077Z",
+  "runtime": "v22.22.2",
+  "status": "passed",
+  "scope": "Exact existing-site Date-input behavior and body-shape compatibility; not independent astrometric certification",
+  "site": {
+    "mergedCommit": "f2bd0dd45947ff392d0de1135695f584a71bfa08",
+    "expectedTree": "bb92c6ef5a6794526614c10b0332dc56b41a4c90",
+    "readCommit": "f2bd0dd45947ff392d0de1135695f584a71bfa08",
+    "sourceSha256": {
+      "src/lib/engine/progressions.ts": "5bac39d815857b0322b4ef93e48cf7f8046881b4a7d0cca2918e6140c12db48e",
+      "src/lib/engine/full.ts": "2f34bf48efd52d47fa9771b2373d4d5f696616b4e3faf6a4ec784190782ae624",
+      "src/lib/engine/chart-adapter.ts": "12cbde8ea2b1704c1fd5a6a87200621a9719b078e3461a9dcfb506527d6f44f1"
+    }
+  },
+  "packages": {
+    "old": {
+      "version": "0.1.1-rc.10",
+      "sha256": "a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c"
+    },
+    "candidate": {
+      "version": "0.1.1-rc.12",
+      "sha256": "c4cf150fe8fb0b37f5769993c2e63275b2e5ef47b97d8a118aff3be00ebaf7f0"
+    }
+  },
+  "adapterPatchSha256": "1e879d79cf23a4528a9202167746df16b865b43247c0be507461ab69fff88b50",
+  "proposedAdapterSourceSha256": "a08a74147ae93e77af0a70dc24696573362dbcf11b28778f89cecfbf37a67e5e",
+  "results": {
+    "bodyCases": 85,
+    "rowsPerCase": 12,
+    "comparedBodyRows": 1020,
+    "exactBodyRows": 1020,
+    "additionalMappingCases": 321,
+    "instantMismatches": 0,
+    "bodyMismatches": 0,
+    "mappingMismatches": 0,
+    "mismatchedCases": []
+  },
+  "method": "Actual frozen site modules transpiled with TypeScript; proposed patch applied only in a temporary copy; separate physical npm installations and identical ordered API calls",
+  "limitations": [
+    "Both versions use astronomy-engine 2.1.19; parity is not a new precision bound.",
+    "Only valid ordinary Date arguments are compared; from rc.12 the candidate deliberately rejects malformed inputs and adds DateInput forms.",
+    "This does not install 0.1.1-rc.12 in the site or validate its full production build, bundle budget, MCP artifacts or published metadata."
+  ]
+}

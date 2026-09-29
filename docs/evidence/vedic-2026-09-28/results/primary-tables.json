@@ -1,0 +1,66 @@
+{
+ "tool": "docs/evidence/vedic-2026-09-28/tools/primary_tables.py",
+ "lahiriAgainstIae": [
+  {
+   "table": "IAE 1989 p. 512, 1989.0",
+   "jdTT": 2447527.5,
+   "tableArcsec": 85332.34,
+   "engineMinusTableArcsec": 0.073
+  },
+  {
+   "table": "IAE 1989 p. 512, 1990.0",
+   "jdTT": 2447892.5,
+   "tableArcsec": 85382.62,
+   "engineMinusTableArcsec": 0.044
+  },
+  {
+   "table": "IAE 2019 p. 429, 2000 Jan 1 12h",
+   "jdTT": 2451545.0,
+   "tableArcsec": 85885.53,
+   "engineMinusTableArcsec": 0.002
+  },
+  {
+   "table": "IAE 2019 p. 429, 2019 Jan 1 12h",
+   "jdTT": 2458485.0,
+   "tableArcsec": 86841.2,
+   "engineMinusTableArcsec": -0.122
+  },
+  {
+   "table": "IAE 2019 p. 429, 2020 Jan 1 12h",
+   "jdTT": 2458850.0,
+   "tableArcsec": 86891.46,
+   "engineMinusTableArcsec": -0.124
+  }
+ ],
+ "krishnamurtiAgainstReader1": {
+  "krishnamurti, January 1": {
+   "yearsMatchingToTheMinute": 145,
+   "years": 161,
+   "maxAbsDifferenceArcsec": 67.8,
+   "meanDifferenceArcsec": 0.1
+  },
+  "j1900, January 1": {
+   "yearsMatchingToTheMinute": 145,
+   "years": 161,
+   "maxAbsDifferenceArcsec": 67.7,
+   "meanDifferenceArcsec": 0.1
+  },
+  "krishnamurti, April 15": {
+   "yearsMatchingToTheMinute": 110,
+   "years": 161,
+   "maxAbsDifferenceArcsec": 53.3,
+   "meanDifferenceArcsec": 14.4
+  },
+  "j1900, April 15": {
+   "yearsMatchingToTheMinute": 110,
+   "years": 161,
+   "maxAbsDifferenceArcsec": 53.2,
+   "meanDifferenceArcsec": 14.5
+  }
+ },
+ "engineNutationMinusIau2000B": {
+  "n": 200139,
+  "maxAbsArcsec": 0.2701
+ },
+ "notes": "IAE values before 2021 are quoted from the Swiss Ephemeris documentation, appendix E. KP Reader 1's table is quoted from Senthilathiban (2019), table 29; it rounds to the minute."
+}

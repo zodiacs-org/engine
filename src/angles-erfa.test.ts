@@ -8,6 +8,8 @@ import { computeChart } from "./ephemeris.js";
 // grid sha256 82a5466caefb919df66060dd46861ac4f68a678ef9ce3c16bfc423a94042cd9d).
 // pyerfa 2.0.1.5: gst06a with UT1 taken as UTC, and the true obliquity (obl06
 // plus the Δε of nut06a), on this engine's own clock. Longitude 0 throughout.
+// The arbiter read each instant as UT1, so the charts do too (timeScale "ut1");
+// read as UTC, UT1 − UTC would turn the sky by up to 13.5″ more.
 // The first two were the grid's worst ascendants on the mean obliquity: 506.8″
 // from ERFA at −66° in 1950, and 512.5″ from Swiss at +66° in 2100.
 const CASES: ReadonlyArray<readonly [utc: string, latitude: number, asc: number, mc: number]> = [
@@ -32,6 +34,7 @@ describe("the angles against the ERFA arbiter (brief v1 rule 1b)", () => {
   it.each(CASES)("%s at %s°", (utc, latitude, asc, mc) => {
     const { angles } = computeChart({
       utc: new Date(utc),
+      timeScale: "ut1",
       latitude,
       longitude: 0,
       houseSystem: "whole",

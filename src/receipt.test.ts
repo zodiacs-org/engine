@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 import { natalChart } from "./api.js";
-import { resolveBirth, resolveLocalToUtc } from "./geo.js";
+import { prepareLocalTime, resolveBirth, resolveLocalToUtc } from "./geo.js";
 import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
 import type { BirthInput, Chart, ChartFlag } from "./types.js";
 import {
@@ -49,6 +49,7 @@ function errorFrom(action: () => unknown, code?: NatalEnvelopeErrorCode): NatalE
 function imported(value: unknown) {
   return parseNatalEnvelope(JSON.stringify(value));
 }
+/** A receipt carrying the resolver's own local resolution; the gap shift is checked against it. */
 function local(
   date: string,
   time: string,
@@ -58,21 +59,14 @@ function local(
   reference: NatalEnvelopeContext["reference"] = "supplied-instant"
 ) {
   const resolved = resolveLocalToUtc(date, time, zone);
+  expect(resolved.localResolution.gapShiftMinutes).toBe(gapShiftMinutes);
   return envelope(
     { utc: resolved.utc, flags: resolved.flags, latitude: 40, timeKnown },
-    {
-      reference,
-      localResolution: {
-        date,
-        time,
-        timeZone: zone,
-        offsetMinutes: resolved.offsetMinutes,
-        gapShiftMinutes,
-        policy: { fold: "earlier", gap: "shift-forward" }
-      }
-    }
+    { reference, localResolution: resolved.localResolution }
   );
 }
+
+beforeAll(() => prepareLocalTime("1908-02-11", "America/Mexico_City"));
 
 describe("Zodiacs draft natal receipt", () => {
   it("preserves a fresh full result and requested Placidus across a polar fallback replay", () => {
@@ -95,12 +89,17 @@ describe("Zodiacs draft natal receipt", () => {
       angles: original.angles,
       houses: original.houses,
       aspects: original.aspects,
-      deltaT: original.deltaT
+      deltaT: original.deltaT,
+      timeScale: original.timeScale
     });
-    // ERFA (gst06a, obl06 plus nut06a's Δε, on this engine's clock) puts this
-    // ascendant at 23.871950092381326°: 0.04″ away. The mean obliquity put it
-    // 0.12″ away, at 23.871984112302016°.
-    expect(captured.result.angles?.asc).toBeCloseTo(23.87193938505851, 8);
+    // ERFA (gst06a, obl06 plus nut06a's Δε, on this engine's clock, the instant
+    // read as UT1) puts this ascendant at 23.871950092381326°: 0.04″ away. The
+    // mean obliquity put it 0.12″ away, at 23.871984112302016°.
+    expect(chart({ timeScale: "ut1" }).angles?.asc).toBeCloseTo(23.87193938505851, 8);
+    // Read as UTC, UT1 − UTC (IERS: −0.10511 s at 09:00 that day) turns the sky back 1.6″.
+    expect(captured.receipt.timeScale).toBe("utc");
+    expect(captured.result.timeScale?.ut1MinusUtc?.seconds).toBeCloseTo(-0.10511, 3);
+    expect(captured.result.angles?.asc).not.toBeCloseTo(23.87193938505851, 5);
     const parsed = parseNatalEnvelope(serializeNatalEnvelope(captured));
     expect(parsed.ok).toBe(true);
     if (!parsed.ok) throw new Error("Expected valid synthetic receipt");
@@ -253,7 +252,7 @@ describe("Zodiacs draft natal receipt", () => {
   it.each([
     ["2024-03-10", "02:30", "America/New_York", 60, "2024-03-10T07:30:00.000Z", ["dst-gap"]],
     ["2024-11-03", "01:30", "America/New_York", 0, "2024-11-03T05:30:00.000Z", ["dst-fold"]],
-    ["1907-07-06", "08:30", "America/Mexico_City", 0, "1907-07-06T15:06:36.000Z", ["lmt"]]
+    ["1908-02-11", "02:47", "America/Mexico_City", 0, "1908-02-11T09:23:36.000Z", ["lmt"]]
   ] as const)(
     "preserves captured %s %s resolution without recomputing its historical policy",
     (date, time, zone, shift, instant, flags) => {
@@ -298,7 +297,7 @@ describe("Zodiacs draft natal receipt", () => {
       Object.assign(altered.receipt.localResolution!, change);
       expect(imported(altered).ok).toBe(false);
     }
-    const lmt = local("1907-07-06", "08:30", "America/Mexico_City");
+    const lmt = local("1908-02-11", "02:47", "America/Mexico_City");
     lmt.receipt.inputFlags = [];
     lmt.receipt.resultFlags = [];
     expect(imported(lmt)).toEqual({ ok: false, code: "invalid_context" });

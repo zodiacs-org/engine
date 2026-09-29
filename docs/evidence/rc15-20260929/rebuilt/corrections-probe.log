@@ -1,0 +1,28 @@
+# node docs/evidence/rc15-20260929/rebuilt/corrections-probe.mjs <rc.14 package> ., on this tree, built; Node v22.22.2, 2026-09-29
+
+## rc.14 (0.1.1-rc.14)
+{ utc, timescale: "tt" }: natalChart accepted; saturnReturn accepted; transits accepted
+{ utc, Latitude: 40 }: natalChart accepted; saturnReturn accepted; transits accepted
+{ utc, deltat: 60 }: natalChart accepted; saturnReturn accepted; transits accepted
+{ utc, timeScale: null }: natalChart accepted; saturnReturn accepted; transits accepted
+{ utc, timeScale: "UTC" }: natalChart accepted; saturnReturn accepted; transits accepted
+{ utc, timeScale: "TT" }: natalChart accepted; saturnReturn accepted; transits accepted
+{ utc, timeScale: "tt" (control) }: natalChart accepted; saturnReturn accepted; transits accepted
+{ utc, colour: "red" (control) }: natalChart accepted; saturnReturn accepted; transits accepted
+
+## this build (0.1.1-rc.15)
+{ utc, timescale: "tt" }: natalChart RangeError: birth has no field "timescale"; field names are case-sensitive: "timeScale".; saturnReturn RangeError; transits RangeError
+{ utc, Latitude: 40 }: natalChart RangeError: birth has no field "Latitude"; field names are case-sensitive: "latitude".; saturnReturn RangeError; transits RangeError
+{ utc, deltat: 60 }: natalChart RangeError: birth has no field "deltat"; field names are case-sensitive: "deltaT".; saturnReturn RangeError; transits RangeError
+{ utc, timeScale: null }: natalChart RangeError: timeScale must be "utc", "ut1" or "tt".; saturnReturn RangeError; transits RangeError
+{ utc, timeScale: "UTC" }: natalChart RangeError: timeScale must be "utc", "ut1" or "tt".; saturnReturn RangeError; transits RangeError
+{ utc, timeScale: "TT" }: natalChart RangeError: timeScale must be "utc", "ut1" or "tt".; saturnReturn RangeError; transits RangeError
+{ utc, timeScale: "tt" (control) }: natalChart accepted; saturnReturn accepted; transits accepted
+{ utc, colour: "red" (control) }: natalChart accepted; saturnReturn accepted; transits accepted
+2030-01-01T00:00:00Z on utc: ut1MinusUtc {"seconds":0,"sigma":0.9,"source":"fallback"}, deltaT.model zodiacs-deltat/1
+2030-01-01T00:00:00Z on tt: ut1MinusUtc {"seconds":0,"sigma":0.9,"source":"fallback"}, deltaT.model zodiacs-deltat/1
+2030-01-01T00:00:00Z on ut1: ut1MinusUtc null, deltaT.model zodiacs-deltat/1
+prepareLocalTime("1971-01-01", "Asia/Tokyo"): a wall time of 1969-12-31 12:00 there, before: Error: The zone's history before 1970 is not loaded: await prepareLocalTime(date, timeZone) first.; after: Error: The zone's history before 1970 is not loaded: await prepareLocalTime(date, timeZone) first.
+prepareLocalTime("1970-06-01", "Europe/Paris"): a wall time of 1969-12-31 12:00 there, before: Error: The zone's history before 1970 is not loaded: await prepareLocalTime(date, timeZone) first.; after: 1969-12-31T11:00:00.000Z
+
+exit 0

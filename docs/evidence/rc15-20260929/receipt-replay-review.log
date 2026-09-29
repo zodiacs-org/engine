@@ -1,0 +1,8 @@
+# node receipt-replay.mjs <rc.14 package> <checkout>, Node v22.22.2, 2026-09-29
+{"instant":"1985-03-10T04:20:00.000Z","coordinates":{"latitude":48.85,"longitude":2.35},"houses":"placidus","bodies":0.00004362066681551369,"angles":0.0014488857605101657,"cusps":0.0017909420764681272}
+{"instant":"1955-11-01T23:00:00.000Z","coordinates":{"latitude":-33.9,"longitude":18.4},"houses":"koch","bodies":1.0538769856793806e-10,"angles":0,"cusps":0}
+{"instant":"2031-07-04T12:00:00.000Z","coordinates":{"latitude":35.7,"longitude":139.7},"houses":"whole","bodies":2.8194335754960775e-11,"angles":0,"cusps":0}
+{"instant":"2016-12-31T23:59:30.000Z","coordinates":{"latitude":10,"longitude":10},"houses":"whole","bodies":0.00005972512838070543,"angles":0.0017022694889874401,"cusps":0}
+{"instant":"2003-05-05T05:05:05.000Z","coordinates":null,"houses":"whole","bodies":0.00004461182197701419,"angles":null,"cusps":null}
+{"instant":"1990-06-15T12:30:00.000Z","coordinates":{"latitude":40.7128,"longitude":-74.006},"houses":"placidus","bodies":0.0000016558035440539243,"angles":0.00005844863630954933,"cusps":0.00005844863630954933}
+largest: bodies 0.0000597°, angles 0.00170°, cusps 0.00179°

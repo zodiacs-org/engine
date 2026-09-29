@@ -1,0 +1,27 @@
+# sh analyses.sh jdn, Node v22.22.2, npm 10.9.7, 2026-09-29
+
+## Julian and Gregorian against Richards's algorithm
+$ python3 scripts/verify-jdn.py --json <checkout>/docs/evidence/rc15-20260929/recut/jdn-richards.json
+{
+ "check": "src/civil-calendar.ts against Richards (Explanatory Supplement, 3rd ed., 2013, section 15.11)",
+ "from": {
+  "jdn": 0,
+  "julian": "-4712-01-01",
+  "gregorian": "-4713-11-24"
+ },
+ "to": {
+  "jdn": 2817173,
+  "julian": "3000-12-31",
+  "gregorian": "3001-01-21"
+ },
+ "days": 2817174,
+ "stringRoundTrips": 1096114,
+ "failures": 0,
+ "firstFailures": [],
+ "nodeOutputSha256": "41efd337d54d3f4d8dca3818c443ec91b5ac6aa3066ec9c3b0531140bd2532bb",
+ "node": "v22.22.2",
+ "python": "3.11.15",
+ "seconds": 29.7
+}
+exit 0
+

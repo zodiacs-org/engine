@@ -17,12 +17,14 @@ title: "Zodiacs Engine (@zodiacs/engine)"
 abstract: >-
   TypeScript astrology calculations for browsers and Node.js: tropical
   planetary positions, natal charts with houses and aspects, transits,
-  synastry, secondary progressions, Moon phase and Saturn returns. The
-  repository also holds a conformance suite for astrology computation (test
-  vectors, each decided by an independent arbiter with a stated tolerance,
-  and a harness that runs any engine against them) and a historical time
-  atlas of what civil clocks showed, where and when, with a primary source
-  for every rule.
+  synastry, secondary progressions, Moon phase and Saturn returns; local
+  birth times resolved on the tz database's history, and instants read as
+  UTC, UT1 or TT; Hellenistic timing techniques; and the sidereal zodiac
+  with Jyotish techniques. The repository also holds a conformance suite for
+  astrology computation (test vectors, each decided by an independent
+  arbiter with a stated tolerance, and a harness that runs any engine
+  against them) and a historical time atlas of what civil clocks showed,
+  where and when, with a primary source for every rule.
 authors:
   - name: "Zodiacs.org"
     website: "https://zodiacs.org"

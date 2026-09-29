@@ -1,10 +1,10 @@
 /**
  * ΔT = TT − UT1 in seconds, with a 1-σ band: the model "zodiacs-deltat/1".
  *
- * The argument is astronomy-engine's `ut`, days since 2000-01-01T12:00Z, with
- * the instant read as UT1 (UTC is taken as UT1; UT1 − UTC and leap seconds
- * belong to the time-scale work, M3). Years are y = 2000 + ut / 365.25, so
- * y = 2027 falls on 2027-01-01T06:00Z.
+ * The argument is astronomy-engine's `ut`, days since 2000-01-01T12:00Z on
+ * UT1. Years are y = 2000 + ut / 365.25, so y = 2027 falls on
+ * 2027-01-01T06:00Z. Charts use the model before 1972 and after the IERS UT1
+ * table (docs/time.md).
  *
  * - y < −720, "long-term": the integral of Stephenson, Morrison & Hohenkerk
  *   2016 (SMH, Proc. R. Soc. A 472: 20160404, CC BY 4.0), eq. (5.1),
@@ -37,17 +37,18 @@ export type DeltaTSegment =
   | "observed"
   | "predicted"
   | "extrapolated"
-  | "pinned";
+  | "pinned"
+  | "fallback";
 
-/** ΔT with its band and provenance. A caller's pin has sigma, table and tableDigest null. */
+/** ΔT with its band and provenance: this model, "iers-utc/1" (docs/time.md), or a caller's pin, whose sigma, table and tableDigest are null. */
 export interface DeltaT {
   seconds: number;
   /** 1-σ band in seconds; null for a pin. */
   sigma: number | null;
-  model: "zodiacs-deltat/1" | "pinned";
+  model: "zodiacs-deltat/1" | "iers-utc/1" | "pinned";
   /** Date of the last observed IERS day behind the table; null for a pin. */
   table: string | null;
-  /** DELTA_T_TABLE.digest; null for a pin. */
+  /** The table's digest (DELTA_T_TABLE's, or the UT1 table's); null for a pin. */
   tableDigest: string | null;
   segment: DeltaTSegment;
 }

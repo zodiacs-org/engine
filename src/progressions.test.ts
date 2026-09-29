@@ -32,7 +32,8 @@ describe("secondary progression instant", () => {
   });
 
   it("matches the rounded published Chaplin date-mapping example", () => {
-    // Juan Estadella, Predictive Astrology, 3rd ed. (2019), pp. 84–85:
+    // Charlie Chaplin (1889-1977), as Juan Estadella works his chart,
+    // Predictive Astrology, 3rd ed. (2019), pp. 84–85:
     // https://juanestadella.com/Predictive_Astrology_Juan-Estadella_3rd_edition.pdf
     // (PDF SHA-256 bf52656b367ad7d1415a7b021a0a0db3a609bf35c7a40053ff0622e7a3325622).
     // Use the book's stated birth/target instants as UT inputs, not independently
@@ -129,9 +130,9 @@ describe("secondary progressed positions", () => {
     }
   });
 
-  it.each(["1887-07-06T00:00:00Z", "1907-07-06T15:06:36Z", "2026-07-06T00:00:00Z"])(
+  it.each(["1888-02-11T00:00:00Z", "1908-02-11T09:23:36Z", "2026-02-11T00:00:00Z"])(
     "returns the exact ordinary positions row set, including speeds and true nodes, for %s", (target) => {
-      const birth = "1907-07-06T15:06:36Z";
+      const birth = "1908-02-11T09:23:36Z";
       const rows = progressedBodies(birth, target);
       expect(rows).toEqual(positions(progressedInstant(birth, target)));
       expect(rows.map((row) => row.body)).toEqual([

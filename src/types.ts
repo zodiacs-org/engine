@@ -1,7 +1,9 @@
 /** Public, serializable vocabulary shared by the chart APIs. */
 
 import type { DeltaT } from "./deltat.js";
+import type { TimeScale, TimeScaleName } from "./time-scale.js";
 export type { DeltaT, DeltaTSegment } from "./deltat.js";
+export type { LeapSeconds, TimeScale, TimeScaleName, Ut1MinusUtc } from "./time-scale.js";
 
 export type DateInput = Date | string | number;
 
@@ -74,7 +76,10 @@ export type ChartFlag =
  * when starting from a local wall time and IANA timezone.
  */
 export interface BirthInput {
+  /** The instant, on the scale `timeScale` names. */
   utc: DateInput;
+  /** "utc" (default), "ut1" or "tt" (docs/time.md). */
+  timeScale?: TimeScaleName;
   latitude?: number;
   longitude?: number;
   houseSystem?: HouseSystem;
@@ -86,14 +91,17 @@ export interface BirthInput {
    * natalChart returns canonical semantic flags, not the raw submitted array. */
   flags?: readonly ChartFlag[];
   /**
-   * Fix ΔT (TT − UT1) at this many seconds instead of the engine's model. The
-   * chart then reports `deltaT.model` "pinned". Finite, at most 1e10 in size.
+   * Fix ΔT (TT − UT1) at this many seconds instead of the engine's time
+   * basis; UT1 still comes from the instant. The chart then reports
+   * `deltaT.model` "pinned". Finite, at most 1e10 in size.
    */
   deltaT?: number;
 }
 
 export interface ChartInput {
   utc: Date;
+  /** Present when the instant is not UTC. */
+  timeScale?: Exclude<TimeScaleName, "utc">;
   /** A caller's fixed ΔT in seconds; the engine's model when absent. */
   deltaT?: number;
   latitude?: number;
@@ -205,6 +213,8 @@ export interface Chart {
   flags: ChartFlag[];
   /** The ΔT (TT − UT1) the chart was computed with, its band and its source. */
   deltaT: DeltaT;
+  /** How the instant became UT1 (for the angles) and TT (for the positions). */
+  timeScale: TimeScale;
   engineVersion: string;
 }
 
@@ -273,7 +283,7 @@ export interface MoonPhase {
   waxing: boolean;
 }
 
-export const ENGINE_VERSION = "0.1.1-rc.14";
+export const ENGINE_VERSION = "0.1.1-rc.15";
 
 /**
  * The ephemeris underneath every position. The dependency is pinned to this

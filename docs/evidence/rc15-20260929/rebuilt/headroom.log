@@ -1,0 +1,13 @@
+# Headroom of each budget over its size, from rebuilt/sizes.json (label rebuilt): (budget - bytes) / bytes as a percentage, to six decimals, and rounded down to two
+entry bytes budget headroom% rounded-down
+. 97704 100000 2.349955 2.34
+./crossings 9410 10000 6.269926 6.26
+./deltat 4968 5500 10.708535 10.70
+./geo 34135 35000 2.534056 2.53
+./internal 58997 60000 1.700086 1.70
+./internal/math 18165 20000 10.101844 10.10
+./receipt 66200 70000 5.740181 5.74
+./timing 114916 120000 4.424101 4.42
+./vedic 116779 120000 2.758201 2.75
+zone-histories 189144 200000 5.739542 5.73
+package 668343 700000 4.736640 4.73

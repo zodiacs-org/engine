@@ -1,0 +1,15 @@
+# sh root-isolation-control.sh <checkout> <scratch>, on branch rc15-fix-records (its tree before the commit), Node v22.22.2
+## 1. root imports src/timing/rulers.ts
+the root entry reaches src/timing/rulers.ts
+exit 1
+## 2. root imports src/timing/rulers.mts (the review's bypass)
+the root entry reaches src/timing/rulers.mts
+exit 1
+// src/timing/rulers.mts
+## 3. root imports src/vedic/space name.ts
+the root entry reaches src/vedic/space name.ts
+exit 1
+// src/vedic/space name.ts
+## 4. unchanged
+@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, the core graph (22 source modules in the build's module list, 21 marked in 11 files) reaches no timing, Vedic or geo module and no zone history, and the geo entry loads its 16 shards lazily
+exit 0

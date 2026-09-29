@@ -19,17 +19,18 @@ Suite 0.1.0: 500 vectors (L1 240, L2 150, L3 110). Each vector names its arbiter
 | L3 | `calendar.to-jdn` | 25 | jdn exact |
 | L3 | `calendar.from-jdn` | 10 | year exact; month exact; day exact |
 
-## @zodiacs/engine 0.1.1-rc.14
+## @zodiacs/engine 0.1.1-rc.15
 
-Adapter `zodiacs-engine` 0.1.0; results in [`results/zodiacs-engine.json`](results/zodiacs-engine.json).
+Adapter `zodiacs-engine` 0.2.0; results in [`results/zodiacs-engine.json`](results/zodiacs-engine.json).
 
 | configuration | |
 | --- | --- |
 | ephemeris | astronomy-engine 2.1.19 |
 | deltaTModel | zodiacs-deltat/1 |
-| timeZones | the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c) |
-| positions | natalChart with ΔT pinned at 0 s, so the requested instant is read as TT |
-| angles | natalChart at the UT1 instant (the engine reads its instant as UT1) |
+| timeBasis | from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise |
+| timeZones | before 1970 the shipped tzdb 2025c history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c) |
+| positions | natalChart with timeScale "tt": the requested instant is read as TT |
+| angles | natalChart with timeScale "ut1": the requested instant is read as UT1 |
 
 | level | kind | pass | fail | unsupported | error | residual median / 95th percentile / max |
 | --- | --- | ---: | ---: | ---: | ---: | --- |
@@ -39,23 +40,22 @@ Adapter `zodiacs-engine` 0.1.0; results in [`results/zodiacs-engine.json`](resul
 | L2 | `angles.vertex-east-point` | 10 | 0 | 0 | 0 | vertex: 0.083″ / 0.285″ / 0.285″<br>east_point: 0.083″ / 0.103″ / 0.103″ |
 | L2 | `houses.cusps` | 80 | 0 | 0 | 0 | cusps: 0.051″ / 0.167″ / 0.489″ |
 | **L2** | **all** | **150** | **0** | **0** | **0** | |
-| L3 | `time.zone-offset` | 20 | 20 | 5 | 0 | — |
+| L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | — |
 | L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
-| L3 | `time.tt-minus-utc` | 0 | 9 | 1 | 0 | tt_minus_utc_s: 0.388 s / 0.634 s / 0.634 s |
-| L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 0.00410 s / 0.0689 s / 0.0689 s |
+| L3 | `time.tt-minus-utc` | 9 | 0 | 1 | 0 | tt_minus_utc_s: 0.00 s / 2.03e-8 s / 2.03e-8 s |
+| L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 0.000132 s / 0.000505 s / 0.000505 s |
 | L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | — |
 | L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | — |
-| **L3** | **all** | **35** | **29** | **46** | **0** | |
+| **L3** | **all** | **69** | **0** | **41** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
 | --- | ---: | ---: | ---: | ---: |
-| `backzone-history` | 0 | 20 | 0 | 0 |
+| `backzone-history` | 20 | 0 | 0 | 0 |
 
 - **Positions (L1).** The engine computes positions with astronomy-engine 2.1.19's series. Against DE441 they differ by a median of 2.07″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.0″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.9″. A precise backend is planned to close this gap.
-- **Time zones (L3).** The engine reads the host's `Intl` time zone data, which does not carry tzdb's `backzone` history. All 20 failures are the vectors tagged `backzone-history`, and on each the engine returns what tzdb's default build gives.
-  - A repeated local time is resolved to its earlier instant only, and the engine has no public way to give the later one. Those vectors are unsupported.
-- **TT − UTC (L3).** The engine reads a UTC instant as UT1, so its TT − UTC is its ΔT. Each residual (engine minus expected) is −(UT1 − UTC) for that date, up to 0.63 s here. A leap-second table is planned. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.
-- **Unsupported (L3).** Release 0.1.1-rc.14 has no public function for local mean time from a longitude or for calendar conversion. Both are planned for the next engine release.
+- **Time zones (L3).** Before 1970 the engine reads the tzdb 2025c history with `backzone` that it ships, loaded with `prepareLocalTime`, so the 20 vectors tagged `backzone-history` pass; from 1970 it reads the host's `Intl` data. A repeated local time resolves to its earlier instant, and the transition the engine reports gives the offsets of both readings, so the five folds are answered. All 45 pass.
+- **TT − UTC and ΔT (L3).** From 1972 to 2027-10-02 the engine takes TAI − UTC from the IERS leap-second list updated 2026-07-06, and UT1 − UTC from IERS: the EOP 20 C04 series in 1972 and `finals2000A.all` of 2026-09-24 from 1973-01-02. The adapter reports TT − UTC as a chart's ΔT (TT − UT1) plus its UT1 − UTC. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.
+- **Unsupported (L3).** Release 0.1.1-rc.15 converts dates between the Julian and Gregorian calendars and reads a birthplace's local mean time inside a zone's local mean time era, but has no public function for a Julian Day Number or for local mean time from a longitude alone, so the 35 calendar vectors and the 5 local mean time vectors are unsupported.
 
 ## Swiss Ephemeris 2.10.03
 

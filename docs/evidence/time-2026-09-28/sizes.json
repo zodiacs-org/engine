@@ -1,0 +1,43 @@
+{
+ "note": "Unpacked bytes. docs = README.md, CHANGELOG.md, LICENSE, LICENSING.md, NOTICE, package.json. Unminified = the same source built without --minify-whitespace (and its 20 bytes fewer in package.json).",
+ "rc13": {
+  "js": 125747,
+  "dts": 65175,
+  "docs": 70723,
+  "total": 261645,
+  "coreEntryGraph": 80251,
+  "geoEntryGraph": 14714,
+  "receiptEntryGraph": 43656
+ },
+ "thisBranch": {
+  "minified": {
+   "js": 130927,
+   "dts": 72644,
+   "docs": 72954,
+   "withoutShards": 276525,
+   "coreEntryGraph": 74475,
+   "geoEntryGraph": 26400,
+   "receiptEntryGraph": 50259
+  },
+  "unminified": {
+   "js": 160087,
+   "dts": 72644,
+   "docs": 72934,
+   "withoutShards": 305665,
+   "coreEntryGraph": 91561,
+   "geoEntryGraph": 31672,
+   "receiptEntryGraph": 62537
+  },
+  "shards": {
+   "files": 16,
+   "bytes": 188504,
+   "smallest": 8689,
+   "largest": 16682,
+   "unminifiedBytes": 189144
+  }
+ },
+ "budgets": {
+  "withoutShards": 300000,
+  "shards": 200000
+ }
+}

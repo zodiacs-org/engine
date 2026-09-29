@@ -1,0 +1,712 @@
+{
+ "before": "0.1.1-rc.14",
+ "after": "0.1.1-rc.15",
+ "charts": 4525,
+ "eras": {
+  "before 1850": {
+   "charts": 400,
+   "systemChanged": 0,
+   "maxArcsec": {
+    "Sun": {
+     "value": 5.02587e-7,
+     "input": {
+      "utc": "1827-08-13T06:13:09.555Z",
+      "latitude": 28.80602555628866,
+      "longitude": 106.73165855929255,
+      "houseSystem": "koch"
+     }
+    },
+    "Moon": {
+     "value": 0,
+     "input": {
+      "utc": "1833-09-14T04:58:12.745Z",
+      "latitude": 26.249028000980616,
+      "longitude": 121.87954377382994,
+      "houseSystem": "whole"
+     }
+    },
+    "Mercury": {
+     "value": 0.00000133996,
+     "input": {
+      "utc": "1826-06-20T00:38:39.488Z",
+      "latitude": -9.49426584597677,
+      "longitude": 96.93057085387409,
+      "houseSystem": "placidus"
+     }
+    },
+    "Venus": {
+     "value": 0.0000010195,
+     "input": {
+      "utc": "1827-10-13T20:48:04.820Z",
+      "latitude": -51.02925659995526,
+      "longitude": -24.65559935197234,
+      "houseSystem": "regiomontanus"
+     }
+    },
+    "Mars": {
+     "value": 8.19773e-7,
+     "input": {
+      "utc": "1827-06-06T02:15:31.374Z",
+      "latitude": -31.75684425327927,
+      "longitude": 149.7798585612327,
+      "houseSystem": "placidus"
+     }
+    },
+    "Jupiter": {
+     "value": 6.70389e-7,
+     "input": {
+      "utc": "1827-10-13T20:48:04.820Z",
+      "latitude": -51.02925659995526,
+      "longitude": -24.65559935197234,
+      "houseSystem": "regiomontanus"
+     }
+    },
+    "Saturn": {
+     "value": 6.29871e-7,
+     "input": {
+      "utc": "1826-06-12T05:11:21.972Z",
+      "latitude": -54.82734500057995,
+      "longitude": 83.11121829785407,
+      "houseSystem": "regiomontanus"
+     }
+    },
+    "Uranus": {
+     "value": 5.84441e-7,
+     "input": {
+      "utc": "1827-01-14T22:33:15.721Z",
+      "latitude": 28.127433529123664,
+      "longitude": 153.72211631387472,
+      "houseSystem": "campanus"
+     }
+    },
+    "Neptune": {
+     "value": 5.61113e-7,
+     "input": {
+      "utc": "1827-01-14T22:33:15.721Z",
+      "latitude": 28.127433529123664,
+      "longitude": 153.72211631387472,
+      "houseSystem": "campanus"
+     }
+    },
+    "Pluto": {
+     "value": 5.42695e-7,
+     "input": {
+      "utc": "1828-03-31T00:36:58.935Z",
+      "latitude": -65.38142027053982,
+      "longitude": 83.20277181454003,
+      "houseSystem": "koch"
+     }
+    },
+    "North Node": {
+     "value": 0.0693948,
+     "input": {
+      "utc": "1843-03-06T14:21:09.972Z",
+      "latitude": -5.101787153631449,
+      "longitude": -173.9822722133249,
+      "houseSystem": "porphyry"
+     }
+    },
+    "South Node": {
+     "value": 0.0693948,
+     "input": {
+      "utc": "1843-03-06T14:21:09.972Z",
+      "latitude": -5.101787153631449,
+      "longitude": -173.9822722133249,
+      "houseSystem": "porphyry"
+     }
+    },
+    "asc": {
+     "value": 0,
+     "input": {
+      "utc": "1833-09-14T04:58:12.745Z",
+      "latitude": 26.249028000980616,
+      "longitude": 121.87954377382994,
+      "houseSystem": "whole"
+     }
+    },
+    "mc": {
+     "value": 0,
+     "input": {
+      "utc": "1833-09-14T04:58:12.745Z",
+      "latitude": 26.249028000980616,
+      "longitude": 121.87954377382994,
+      "houseSystem": "whole"
+     }
+    },
+    "cusps": {
+     "value": 0,
+     "input": {
+      "utc": "1833-09-14T04:58:12.745Z",
+      "latitude": 26.249028000980616,
+      "longitude": 121.87954377382994,
+      "houseSystem": "whole"
+     }
+    }
+   }
+  },
+  "1850 to 1972": {
+   "charts": 957,
+   "systemChanged": 0,
+   "maxArcsec": {
+    "Sun": {
+     "value": 9.77343e-7,
+     "input": {
+      "utc": "1902-11-04T07:27:47.858Z",
+      "latitude": -4.340534253045917,
+      "longitude": -14.034373601898551,
+      "houseSystem": "whole"
+     }
+    },
+    "Moon": {
+     "value": 0,
+     "input": {
+      "utc": "1964-08-19T14:19:41.811Z",
+      "latitude": 45.12017819099128,
+      "longitude": -102.14797046966851,
+      "houseSystem": "placidus"
+     }
+    },
+    "Mercury": {
+     "value": 0.00000256368,
+     "input": {
+      "utc": "1904-07-05T12:13:07.196Z",
+      "latitude": 58.228706516325474,
+      "longitude": -11.878575095906854,
+      "houseSystem": "campanus"
+     }
+    },
+    "Venus": {
+     "value": 0.00000206192,
+     "input": {
+      "utc": "1902-11-22T12:38:24.022Z",
+      "latitude": 64.60554752871394,
+      "longitude": -100.93322147615254,
+      "houseSystem": "koch"
+     }
+    },
+    "Mars": {
+     "value": 0.00000174596,
+     "input": {
+      "utc": "1902-03-06T00:52:29.753Z",
+      "latitude": -48.068369284272194,
+      "longitude": -48.69943301193416,
+      "houseSystem": "equal"
+     }
+    },
+    "Jupiter": {
+     "value": 0.0000013727,
+     "input": {
+      "utc": "1903-02-04T15:46:53.488Z",
+      "latitude": -10.687073612585664,
+      "longitude": 79.71404811367393,
+      "houseSystem": "porphyry"
+     }
+    },
+    "Saturn": {
+     "value": 0.00000123928,
+     "input": {
+      "utc": "1903-02-01T00:00:56.560Z",
+      "latitude": 25.153408748097718,
+      "longitude": 80.15750418417156,
+      "houseSystem": "campanus"
+     }
+    },
+    "Uranus": {
+     "value": 0.00000111281,
+     "input": {
+      "utc": "1902-11-22T12:38:24.022Z",
+      "latitude": 64.60554752871394,
+      "longitude": -100.93322147615254,
+      "houseSystem": "koch"
+     }
+    },
+    "Neptune": {
+     "value": 0.00000110217,
+     "input": {
+      "utc": "1903-06-22T07:14:51.657Z",
+      "latitude": -15.260620588436723,
+      "longitude": 22.632470279932022,
+      "houseSystem": "regiomontanus"
+     }
+    },
+    "Pluto": {
+     "value": 0.00000106002,
+     "input": {
+      "utc": "1903-06-16T01:05:38.628Z",
+      "latitude": 28.904348141513765,
+      "longitude": -75.51808272488415,
+      "houseSystem": "porphyry"
+     }
+    },
+    "North Node": {
+     "value": 0.0340891,
+     "input": {
+      "utc": "1901-09-20T21:06:02.123Z",
+      "latitude": -11.439546125940979,
+      "longitude": -160.0842327810824,
+      "houseSystem": "regiomontanus"
+     }
+    },
+    "South Node": {
+     "value": 0.0340891,
+     "input": {
+      "utc": "1901-09-20T21:06:02.123Z",
+      "latitude": -11.439546125940979,
+      "longitude": -160.0842327810824,
+      "houseSystem": "regiomontanus"
+     }
+    },
+    "asc": {
+     "value": 0,
+     "input": {
+      "utc": "1964-08-19T14:19:41.811Z",
+      "latitude": 45.12017819099128,
+      "longitude": -102.14797046966851,
+      "houseSystem": "placidus"
+     }
+    },
+    "mc": {
+     "value": 0,
+     "input": {
+      "utc": "1964-08-19T14:19:41.811Z",
+      "latitude": 45.12017819099128,
+      "longitude": -102.14797046966851,
+      "houseSystem": "placidus"
+     }
+    },
+    "cusps": {
+     "value": 0,
+     "input": {
+      "utc": "1964-08-19T14:19:41.811Z",
+      "latitude": 45.12017819099128,
+      "longitude": -102.14797046966851,
+      "houseSystem": "placidus"
+     }
+    }
+   }
+  },
+  "1972 to 2027-10-02": {
+   "charts": 1912,
+   "systemChanged": 0,
+   "maxArcsec": {
+    "Sun": {
+     "value": 0.0323257,
+     "input": {
+      "utc": "1973-01-17T19:18:44.836Z",
+      "latitude": 59.75896392669529,
+      "longitude": -121.0384471155703,
+      "houseSystem": "placidus"
+     }
+    },
+    "Moon": {
+     "value": 0.488475,
+     "input": {
+      "utc": "1983-07-13T04:38:00.672Z",
+      "latitude": -65.35216064192355,
+      "longitude": -65.62526699155569,
+      "houseSystem": "equal"
+     }
+    },
+    "Mercury": {
+     "value": 0.0721021,
+     "input": {
+      "utc": "1983-07-07T21:10:27.954Z",
+      "latitude": 43.82866858597845,
+      "longitude": 122.85578252747655,
+      "houseSystem": "placidus"
+     }
+    },
+    "Venus": {
+     "value": 0.0397265,
+     "input": {
+      "utc": "1973-01-17T19:18:44.836Z",
+      "latitude": 59.75896392669529,
+      "longitude": -121.0384471155703,
+      "houseSystem": "placidus"
+     }
+    },
+    "Mars": {
+     "value": 0.0227623,
+     "input": {
+      "utc": "1983-07-01T21:48:56.095Z",
+      "latitude": -18.962654147297144,
+      "longitude": -95.29617676511407,
+      "houseSystem": "campanus"
+     }
+    },
+    "Jupiter": {
+     "value": 0.00741124,
+     "input": {
+      "utc": "1973-01-17T19:18:44.836Z",
+      "latitude": 59.75896392669529,
+      "longitude": -121.0384471155703,
+      "houseSystem": "placidus"
+     }
+    },
+    "Saturn": {
+     "value": 0.0032103,
+     "input": {
+      "utc": "2005-07-26T13:05:06.432Z",
+      "latitude": 37.47136768698692,
+      "longitude": -121.774688847363,
+      "houseSystem": "placidus"
+     }
+    },
+    "Uranus": {
+     "value": 0.0016651,
+     "input": {
+      "utc": "1999-01-22T14:24:56.859Z",
+      "latitude": 38.014374582096934,
+      "longitude": 96.921027302742,
+      "houseSystem": "placidus"
+     }
+    },
+    "Neptune": {
+     "value": 0.00110087,
+     "input": {
+      "utc": "1999-01-19T14:35:11.920Z",
+      "latitude": -43.78361091110855,
+      "longitude": 23.029389521107078,
+      "houseSystem": "placidus"
+     }
+    },
+    "Pluto": {
+     "value": 0.00103015,
+     "input": {
+      "utc": "2005-12-18T04:38:37.450Z",
+      "latitude": -37.54469675011933,
+      "longitude": -87.62609733268619,
+      "houseSystem": "placidus"
+     }
+    },
+    "North Node": {
+     "value": 0.0177305,
+     "input": {
+      "utc": "2026-10-17T12:18:16.285Z",
+      "latitude": 57.16493383515626,
+      "longitude": -152.70690690726042,
+      "houseSystem": "placidus"
+     }
+    },
+    "South Node": {
+     "value": 0.0177305,
+     "input": {
+      "utc": "2026-10-17T12:18:16.285Z",
+      "latitude": 57.16493383515626,
+      "longitude": -152.70690690726042,
+      "houseSystem": "placidus"
+     }
+    },
+    "asc": {
+     "value": 101.022,
+     "input": {
+      "utc": "1989-04-15T19:05:42.489Z",
+      "latitude": -65.61376708745956,
+      "longitude": -40.2748962957412,
+      "houseSystem": "porphyry"
+     }
+    },
+    "mc": {
+     "value": 12.1006,
+     "input": {
+      "utc": "1983-07-07T21:10:27.954Z",
+      "latitude": 43.82866858597845,
+      "longitude": 122.85578252747655,
+      "houseSystem": "placidus"
+     }
+    },
+    "cusps": {
+     "value": 101.022,
+     "input": {
+      "utc": "1989-04-15T19:05:42.489Z",
+      "latitude": -65.61376708745956,
+      "longitude": -40.2748962957412,
+      "houseSystem": "porphyry"
+     }
+    }
+   }
+  },
+  "2027-10-02 to 2150": {
+   "charts": 885,
+   "systemChanged": 0,
+   "maxArcsec": {
+    "Sun": {
+     "value": 3.34785e-7,
+     "input": {
+      "utc": "2147-11-12T01:31:01.642Z",
+      "latitude": -45.01802358124405,
+      "longitude": -95.38428029045463,
+      "houseSystem": "campanus"
+     }
+    },
+    "Moon": {
+     "value": 0,
+     "input": {
+      "utc": "2039-11-26T15:00:20.933Z",
+      "latitude": -31.480661516077816,
+      "longitude": -108.76558712683618,
+      "houseSystem": "campanus"
+     }
+    },
+    "Mercury": {
+     "value": 8.68476e-7,
+     "input": {
+      "utc": "2146-04-25T08:28:09.301Z",
+      "latitude": 54.78619062155485,
+      "longitude": 2.7402564603835344,
+      "houseSystem": "whole"
+     }
+    },
+    "Venus": {
+     "value": 6.47469e-7,
+     "input": {
+      "utc": "2145-12-09T05:44:39.639Z",
+      "latitude": 36.85385487601161,
+      "longitude": 107.34951387159526,
+      "houseSystem": "whole"
+     }
+    },
+    "Mars": {
+     "value": 5.27962e-7,
+     "input": {
+      "utc": "2147-11-08T04:45:41.728Z",
+      "latitude": -54.54047497641295,
+      "longitude": 101.97614195756614,
+      "houseSystem": "whole"
+     }
+    },
+    "Jupiter": {
+     "value": 4.0518e-7,
+     "input": {
+      "utc": "2142-04-26T08:04:41.091Z",
+      "latitude": 13.717023055069149,
+      "longitude": -163.1958727631718,
+      "houseSystem": "porphyry"
+     }
+    },
+    "Saturn": {
+     "value": 3.92083e-7,
+     "input": {
+      "utc": "2148-05-23T00:47:28.431Z",
+      "latitude": 60.946839773096144,
+      "longitude": -166.54156314209104,
+      "houseSystem": "regiomontanus"
+     }
+    },
+    "Uranus": {
+     "value": 3.65071e-7,
+     "input": {
+      "utc": "2147-11-12T01:31:01.642Z",
+      "latitude": -45.01802358124405,
+      "longitude": -95.38428029045463,
+      "houseSystem": "campanus"
+     }
+    },
+    "Neptune": {
+     "value": 3.55249e-7,
+     "input": {
+      "utc": "2148-12-24T21:04:49.726Z",
+      "latitude": 52.531984593719244,
+      "longitude": -88.73675432056189,
+      "houseSystem": "porphyry"
+     }
+    },
+    "Pluto": {
+     "value": 3.28237e-7,
+     "input": {
+      "utc": "2147-06-06T23:11:00.057Z",
+      "latitude": 49.15869531221688,
+      "longitude": -116.05233388021588,
+      "houseSystem": "placidus"
+     }
+    },
+    "North Node": {
+     "value": 0.0284177,
+     "input": {
+      "utc": "2141-03-27T23:01:24.204Z",
+      "latitude": 17.090546557679772,
+      "longitude": -73.2694267295301,
+      "houseSystem": "porphyry"
+     }
+    },
+    "South Node": {
+     "value": 0.0284177,
+     "input": {
+      "utc": "2141-03-27T23:01:24.204Z",
+      "latitude": 17.090546557679772,
+      "longitude": -73.2694267295301,
+      "houseSystem": "porphyry"
+     }
+    },
+    "asc": {
+     "value": 0,
+     "input": {
+      "utc": "2039-11-26T15:00:20.933Z",
+      "latitude": -31.480661516077816,
+      "longitude": -108.76558712683618,
+      "houseSystem": "campanus"
+     }
+    },
+    "mc": {
+     "value": 0,
+     "input": {
+      "utc": "2039-11-26T15:00:20.933Z",
+      "latitude": -31.480661516077816,
+      "longitude": -108.76558712683618,
+      "houseSystem": "campanus"
+     }
+    },
+    "cusps": {
+     "value": 0,
+     "input": {
+      "utc": "2039-11-26T15:00:20.933Z",
+      "latitude": -31.480661516077816,
+      "longitude": -108.76558712683618,
+      "houseSystem": "campanus"
+     }
+    }
+   }
+  },
+  "after 2150": {
+   "charts": 371,
+   "systemChanged": 0,
+   "maxArcsec": {
+    "Sun": {
+     "value": 5.70935e-7,
+     "input": {
+      "utc": "2198-03-11T17:28:57.437Z",
+      "latitude": 28.262554490938783,
+      "longitude": 112.02223151922226,
+      "houseSystem": "whole"
+     }
+    },
+    "Moon": {
+     "value": 0,
+     "input": {
+      "utc": "2193-02-24T04:17:14.578Z",
+      "latitude": -63.32714357972145,
+      "longitude": 109.0530227869749,
+      "houseSystem": "koch"
+     }
+    },
+    "Mercury": {
+     "value": 0.00000142018,
+     "input": {
+      "utc": "2198-05-03T21:42:03.714Z",
+      "latitude": -22.874722173437476,
+      "longitude": -86.08709231950343,
+      "houseSystem": "placidus"
+     }
+    },
+    "Venus": {
+     "value": 0.0000011255,
+     "input": {
+      "utc": "2198-09-13T13:28:04.198Z",
+      "latitude": -63.90181120019406,
+      "longitude": -55.19117494113743,
+      "houseSystem": "regiomontanus"
+     }
+    },
+    "Mars": {
+     "value": 9.02855e-7,
+     "input": {
+      "utc": "2199-02-10T22:55:53.047Z",
+      "latitude": 53.90377192385495,
+      "longitude": -118.04365564137697,
+      "houseSystem": "placidus"
+     }
+    },
+    "Jupiter": {
+     "value": 7.04358e-7,
+     "input": {
+      "utc": "2199-02-20T04:16:03.703Z",
+      "latitude": 50.40877983625978,
+      "longitude": -32.66755850985646,
+      "houseSystem": "porphyry"
+     }
+    },
+    "Saturn": {
+     "value": 6.49925e-7,
+     "input": {
+      "utc": "2199-02-10T22:55:53.047Z",
+      "latitude": 53.90377192385495,
+      "longitude": -118.04365564137697,
+      "houseSystem": "placidus"
+     }
+    },
+    "Uranus": {
+     "value": 5.70935e-7,
+     "input": {
+      "utc": "2195-06-04T10:32:28.006Z",
+      "latitude": 41.21513676736504,
+      "longitude": -23.140795407816768,
+      "houseSystem": "regiomontanus"
+     }
+    },
+    "Neptune": {
+     "value": 5.72982e-7,
+     "input": {
+      "utc": "2199-04-03T02:24:54.560Z",
+      "latitude": -52.75967664644122,
+      "longitude": -65.12746710330248,
+      "houseSystem": "placidus"
+     }
+    },
+    "Pluto": {
+     "value": 5.49244e-7,
+     "input": {
+      "utc": "2198-08-27T09:47:00.316Z",
+      "latitude": 13.489687389694154,
+      "longitude": -165.39216206409037,
+      "houseSystem": "placidus"
+     }
+    },
+    "North Node": {
+     "value": 0.0680597,
+     "input": {
+      "utc": "2156-05-24T16:14:31.804Z",
+      "latitude": 51.27986101526767,
+      "longitude": 36.41678128391504,
+      "houseSystem": "campanus"
+     }
+    },
+    "South Node": {
+     "value": 0.0680597,
+     "input": {
+      "utc": "2156-05-24T16:14:31.804Z",
+      "latitude": 51.27986101526767,
+      "longitude": 36.41678128391504,
+      "houseSystem": "campanus"
+     }
+    },
+    "asc": {
+     "value": 0,
+     "input": {
+      "utc": "2193-02-24T04:17:14.578Z",
+      "latitude": -63.32714357972145,
+      "longitude": 109.0530227869749,
+      "houseSystem": "koch"
+     }
+    },
+    "mc": {
+     "value": 0,
+     "input": {
+      "utc": "2193-02-24T04:17:14.578Z",
+      "latitude": -63.32714357972145,
+      "longitude": 109.0530227869749,
+      "houseSystem": "koch"
+     }
+    },
+    "cusps": {
+     "value": 0,
+     "input": {
+      "utc": "2193-02-24T04:17:14.578Z",
+      "latitude": -63.32714357972145,
+      "longitude": 109.0530227869749,
+      "houseSystem": "koch"
+     }
+    }
+   }
+  }
+ }
+}

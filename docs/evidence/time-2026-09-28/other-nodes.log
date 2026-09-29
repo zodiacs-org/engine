@@ -1,0 +1,13 @@
+# npm test (vitest run) on two more Node releases, run on the working tree of
+# the feature commit before two type-only edits (the root entry's time-scale
+# type exports, and the typing of src/receipt-time-basis.test.ts). Summary
+# lines only. The one skipped test compares with the host's tzdb and runs
+# only where that is 2025c.
+
+=== Node v20.19.0, ICU 76.1, tz 2025a
+ Test Files  40 passed (40)
+      Tests  2888 passed | 1 skipped (2889)
+
+=== Node v24.21.0, ICU 78.3, tz 2026c
+ Test Files  40 passed (40)
+      Tests  2888 passed | 1 skipped (2889)

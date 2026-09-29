@@ -1,0 +1,115 @@
+{
+ "rc14": "0.1.1-rc.14",
+ "candidate": "0.1.1-rc.15",
+ "instants": "1972-01-01T00:00Z to 2027-10-02, every 11 d 7 h 13 min",
+ "latitudes": [
+  0,
+  30,
+  -30,
+  45,
+  -45,
+  55,
+  60,
+  -60,
+  65
+ ],
+ "receipts": 16218,
+ "refused": 0,
+ "maxUt1MinusUtcSeconds": 0.7903,
+ "asUtc": {
+  "byLatitude": {
+   "0": {
+    "mc": 12.27,
+    "asc": 12.52,
+    "cusps": 12.94
+   },
+   "30": {
+    "mc": 12.75,
+    "asc": 15.81,
+    "cusps": 15.81
+   },
+   "45": {
+    "mc": 12.63,
+    "asc": 19.99,
+    "cusps": 19.99
+   },
+   "55": {
+    "mc": 12.33,
+    "asc": 30.84,
+    "cusps": 30.84
+   },
+   "60": {
+    "mc": 12.85,
+    "asc": 40.55,
+    "cusps": 40.55
+   },
+   "65": {
+    "mc": 12.57,
+    "asc": 129.1,
+    "cusps": 129.1
+   },
+   "-30": {
+    "mc": 12.69,
+    "asc": 14.72,
+    "cusps": 14.84
+   },
+   "-45": {
+    "mc": 12.32,
+    "asc": 20.07,
+    "cusps": 20.07
+   },
+   "-60": {
+    "mc": 12.55,
+    "asc": 39.84,
+    "cusps": 39.84
+   }
+  },
+  "bodies": {
+   "Sun": 0.03366,
+   "Moon": 0.4619,
+   "Mercury": 0.07225,
+   "Venus": 0.04128,
+   "Mars": 0.02286,
+   "Jupiter": 0.007716,
+   "Saturn": 0.003225,
+   "Uranus": 0.001669,
+   "Neptune": 0.001104,
+   "Pluto": 0.001029,
+   "North Node": 0.01736,
+   "South Node": 0.01736
+  }
+ },
+ "onUt1WithRecordedDeltaT": {
+  "angles": 0,
+  "cusps": 0,
+  "bodies": {
+   "Sun": 8.256e-7,
+   "Moon": 0,
+   "Mercury": 0.000002175,
+   "Venus": 0.00000157,
+   "Mars": 0.000001289,
+   "Jupiter": 0.000001065,
+   "Saturn": 9.807e-7,
+   "Uranus": 9.185e-7,
+   "Neptune": 8.833e-7,
+   "Pluto": 9.156e-7,
+   "North Node": 0.009425,
+   "South Node": 0.009425
+  },
+  "speeds": {
+   "Sun": 3.766e-8,
+   "Moon": 5.456e-7,
+   "Mercury": 8.001e-8,
+   "Venus": 4.652e-8,
+   "Mars": 2.61e-8,
+   "Jupiter": 8.385e-9,
+   "Saturn": 4.775e-9,
+   "Uranus": 2.288e-9,
+   "Neptune": 1.322e-9,
+   "Pluto": 1.407e-9,
+   "North Node": 0.00001636,
+   "South Node": 0.00001636
+  }
+ },
+ "siderealTimeShiftArcsecAtMostOverTheseInstants": 11.89
+}

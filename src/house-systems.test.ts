@@ -20,7 +20,9 @@ import {
   vertexOf
 } from "./houses.js";
 import type { AngleInput } from "./houses.js";
+import { deltaTAt } from "./deltat.js";
 import {
+  NATAL_RECEIPT_CONVENTION_SETS,
   createNatalEnvelope,
   natalReplayInput,
   parseNatalEnvelope,
@@ -319,6 +321,17 @@ describe("house-system receipts", () => {
     change(parsed);
     return JSON.stringify(parsed);
   };
+  /**
+   * The same chart as a receipt of the rc.8 conventions set, the one rc.8 to
+   * rc.13 wrote: the instant read as UT1, ΔT from the model, no time basis.
+   */
+  const asEngine = (e: any, version: string) => {
+    e.receipt.conventions = { ...NATAL_RECEIPT_CONVENTION_SETS[1] };
+    delete e.receipt.timeScale;
+    delete e.result.timeScale;
+    e.result.deltaT = deltaTAt((Date.parse(e.receipt.instant) - Date.UTC(2000, 0, 1, 12)) / 86_400_000);
+    e.receipt.engine.version = version;
+  };
 
   it.each(NEW)("records, reads and replays %s", (system) => {
     const json = envelope(system);
@@ -338,30 +351,20 @@ describe("house-system receipts", () => {
   });
 
   it("refuses a new system in a receipt that names an engine before rc.9", () => {
-    const older = edit(envelope("koch"), (e) => {
-      e.receipt.engine.version = "0.1.1-rc.8";
-    });
+    const older = edit(envelope("koch"), (e) => asEngine(e, "0.1.1-rc.8"));
     expect(parseNatalEnvelope(older)).toMatchObject({ ok: false, code: "inconsistent_result" });
-    const placidus = edit(envelope("placidus"), (e) => {
-      e.receipt.engine.version = "0.1.1-rc.8";
-    });
+    const placidus = edit(envelope("placidus"), (e) => asEngine(e, "0.1.1-rc.8"));
     expect(parseNatalEnvelope(placidus).ok).toBe(true);
   });
 
   it("refuses Equal houses from the midheaven in a receipt that names an engine before rc.10", () => {
     for (const version of ["0.1.1-rc.9", "0.1.1-rc.1", "0.1.0"]) {
-      const older = edit(envelope("equal-mc"), (e) => {
-        e.receipt.engine.version = version;
-      });
+      const older = edit(envelope("equal-mc"), (e) => asEngine(e, version));
       expect(parseNatalEnvelope(older)).toMatchObject({ ok: false, code: "inconsistent_result" });
     }
-    const koch = edit(envelope("koch"), (e) => {
-      e.receipt.engine.version = "0.1.1-rc.9";
-    });
+    const koch = edit(envelope("koch"), (e) => asEngine(e, "0.1.1-rc.9"));
     expect(parseNatalEnvelope(koch).ok).toBe(true);
-    const later = edit(envelope("equal-mc"), (e) => {
-      e.receipt.engine.version = "0.1.1-rc.11";
-    });
+    const later = edit(envelope("equal-mc"), (e) => asEngine(e, "0.1.1-rc.11"));
     expect(parseNatalEnvelope(later).ok).toBe(true);
   });
 

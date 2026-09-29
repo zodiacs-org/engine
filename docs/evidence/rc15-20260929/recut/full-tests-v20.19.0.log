@@ -1,0 +1,137 @@
+# TMPDIR=<tmp> npm test, Node v20.19.0
+
+> @zodiacs/engine@0.1.1-rc.15 test
+> vitest run
+
+
+ RUN  v2.1.9 <checkout>
+
+ ✓ src/timing/releasing.test.ts (18 tests) 676ms
+   ✓ zodiacal releasing invariants > tile every period exactly with its sub-periods, loosening at most once and only after a full round 438ms
+ ✓ src/time-scale.test.ts (103 tests) 1237ms
+   ✓ UT1 − UTC from IERS: EOP 20 C04 in 1972, finals2000A.all of 2026-09-24 from 1973-01-02 > reproduces every daily IERS value, observed and predicted, within the table's stated bound 664ms
+ ✓ src/receipt.test.ts (36 tests) 590ms
+ ✓ src/receipt-time-basis.test.ts (52 tests) 464ms
+ ✓ src/vedic/ayanamsa.test.ts (24 tests) 236ms
+ ✓ src/aspect-exactness.test.ts (8 tests) 3121ms
+   ✓ configured aspects under exact binary semantics > agree with the exact rational oracle on a decimal grid, wrapped and unwrapped, in both row orders 853ms
+   ✓ configured aspects under exact binary semantics > agree with the oracle with several bodies, rules, caps and luminaries 496ms
+   ✓ configured aspects under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 880ms
+   ✓ configured aspects under exact binary semantics > uses a faithful rc.11 copy: away from boundaries its decisions match the oracle 373ms
+ ✓ src/declination.test.ts (25 tests) 342ms
+ ✓ src/geo/calendar.test.ts (30 tests) 500ms
+   ✓ Julian and Gregorian calendar dates > agrees, day by day from 1500 to 2199, with two counters walked from the 1582 changeover 377ms
+ ✓ src/timing/profections.test.ts (16 tests) 916ms
+   ✓ dated profections > place a date in the same year and month profectionYear lists 383ms
+ ✓ src/configured-aspects.test.ts (52 tests) 346ms
+ ✓ src/geo/birthplace.test.ts (44 tests) 310ms
+ ✓ src/input-flags.test.ts (66 tests) 309ms
+ ✓ src/house-systems.test.ts (1903 tests) 805ms
+ ✓ src/geo/zone-history.test.ts (24 tests | 1 skipped) 181ms
+ ✓ src/crossings.test.ts (50 tests) 107ms
+ ✓ src/geo/geonames-schema.test.ts (67 tests) 118ms
+ ✓ src/vedic/dasha.test.ts (17 tests) 1527ms
+   ✓ Vimshottari > finds each period from its own start and end: boundaries round-trip through the ISO strings 1228ms
+ ✓ src/timing/solar-arc.test.ts (16 tests) 364ms
+ ✓ src/timing/firdaria.test.ts (12 tests) 727ms
+   ✓ firdaria invariants > date whole ages at the solar returns and fractional ages linearly within their year 367ms
+ ✓ src/crossings-ephemeris.test.ts (11 tests) 3297ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2100 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 316ms
+   ✓ the audit's s2 cases, with the site's answers > matches an hourly scan of the 2,600-day Moon window, crossing by crossing 1044ms
+   ✓ the audit's s2 cases, with the site's answers > returns Saturn's crossings of 0° from 1900 to 2100 at a 5-day step, and a daily scan agrees 1267ms
+ ✓ src/vedic/jyotish.test.ts (14 tests) 218ms
+ ✓ src/geo/birthplace-clock.test.ts (28 tests) 5120ms
+   ✓ the birthplace clock at the end of its local mean time era > America/New_York: Buffalo 376ms
+   ✓ the birthplace clock at each change of its shipped history before 1970 > America/New_York: New York 549ms
+   ✓ the birthplace clock on its zone's own meridian > matches the zone clock at every such era end 1290ms
+ ✓ src/engine.test.ts (24 tests) 213ms
+ ✓ src/timing/shared.test.ts (7 tests) 1153ms
+   ✓ timing checks that need no chart > know every name a chart can profect before computing it 327ms
+   ✓ timing flags > mark the sect exactly when the Sun's altitude, found another way, disagrees with it 414ms
+ ✓ src/progressions.test.ts (21 tests) 99ms
+ ✓ src/geo/flags.test.ts (47 tests) 190ms
+ ✓ src/speed.test.ts (23 tests) 745ms
+ ✓ src/points.test.ts (14 tests) 87ms
+ ✓ src/placidus-limit.test.ts (3 tests) 3459ms
+   ✓ the Placidus limit against the ERFA arbiter (brief v1 rule 1h) > computes Placidus exactly where the arbiter's limit allows it 486ms
+   ✓ Placidus just below the polar limit > keeps Placidus at every millisecond of the review's reproduction, where the iteration alone fell back 1548ms
+   ✓ Placidus just below the polar limit > solves every cusp within 1e-6° of the limit, at the sidereal times where the iteration alone fails 1423ms
+ ✓ src/deltat-chart.test.ts (11 tests) 99ms
+ ✓ scripts/root-isolation.test.mjs (8 tests) 49ms
+ ✓ src/geo/geonames.test.ts (10 tests) 71ms
+ ✓ src/deltat.test.ts (12 tests) 107ms
+ ✓ src/porphyry.test.ts (14 tests) 110ms
+ ✓ src/public-input.test.ts (78 tests) 114ms
+ ✓ scripts/verify-release-archive.test.mjs (10 tests) 3790ms
+   ✓ verify-release-archive > refuses an entry that names another file, size or digest 324ms
+   ✓ verify-release-archive > refuses a receipt that is not the entry's digest, two spaces, the file name and a newline 525ms
+   ✓ verify-release-archive > refuses versions that are not strict 845ms
+   ✓ verify-release-archive > passes every archive carried in this repository 1106ms
+ ✓ src/returns-bounds.test.ts (19 tests) 128ms
+ ✓ src/geo.test.ts (40 tests) 83ms
+ ✓ src/receipt-conventions.test.ts (6 tests) 115ms
+ ✓ src/reference-span.test.ts (7 tests) 161ms
+ ✓ src/semver.test.ts (22 tests) 190ms
+ ✓ src/aspects.test.ts (12 tests) 8933ms
+   ✓ findAspects applying flags against the engine's own motion > match the sign of the orb's rate, measured over ±1 s, every 30 minutes in the first quarter of 2024 8809ms
+ ✓ src/exact.test.ts (5 tests) 2231ms
+   ✓ exact sums of binary64 terms > round once to the nearest double, ties to even, and give the exact sign 2137ms
+ ✓ src/receipt-json.test.ts (88 tests) 33ms
+ ✓ src/replay-time-basis.test.ts (3 tests) 81ms
+ ✓ src/houses-regression.test.ts (6 tests) 259ms
+ ✓ src/geo/timezone-precision.test.ts (17 tests) 126ms
+ ✓ src/returns-crossings.test.ts (16 tests) 15ms
+ ✓ src/ephemeris-span.test.ts (6 tests) 169ms
+ ✓ src/vedic/boundaries.test.ts (21 tests) 96ms
+ ✓ src/body-label.test.ts (15 tests) 33ms
+ ✓ src/receipt-versions.test.ts (10 tests) 218ms
+ ✓ scripts/build-tz-shards.test.mjs (3 tests) 5ms
+ ✓ src/angles-erfa.test.ts (12 tests) 120ms
+ ✓ src/ephemeris-errors.test.ts (6 tests) 69ms
+ ✓ scripts/build-time-scales.test.mjs (3 tests) 168ms
+ ✓ src/timing/solar-years.test.ts (1 test) 1637ms
+   ✓ solar-return years > stay within hours of the mean tropical year, far inside the three days the solver searches 1636ms
+ ✓ scripts/verify-archive-binding.test.mjs (23 tests) 49695ms
+   ✓ archive binding check > passes a clean history and skips the rebuild until the version's archive exists 458ms
+   ✓ archive binding check > sees a rewrite on a side branch hidden by merge simplification 579ms
+   ✓ archive binding check > sees an archive carried and removed on a merged side branch 542ms
+   ✓ archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 1803ms
+   ✓ archive binding check > refuses a rewritten manifest that whitelists replaced bytes 715ms
+   ✓ archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 931ms
+   ✓ archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 460ms
+   ✓ archive binding check > reads HEAD from git objects, never the working tree 911ms
+   ✓ archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 5104ms
+   ✓ archive binding check > checks the receipt of every version, not only the current one 546ms
+   ✓ archive binding check > binds each archive to its recorded source commit 407ms
+   ✓ archive binding check > refuses an archive carried by a commit that does not follow its source commit 447ms
+   ✓ archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata 1366ms
+   ✓ archive binding check > refuses numeric identifiers above 2^53 - 1, where npm's semver.eq takes two versions for one 1575ms
+   ✓ archive binding check > refuses names that a case-insensitive or normalizing file system takes for one: variants of artifacts/, or two archives in it 2965ms
+   ✓ archive binding check > rebuilds with its own npm ci, whatever the checkout's node_modules holds 14038ms
+   ✓ archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH 1165ms
+   ✓ archive binding check > never runs a git that npm run puts on PATH from the checkout 4328ms
+   ✓ archive binding check > keeps code that an .npmrc names for NODE_OPTIONS out of the check and its rebuilds 2088ms
+   ✓ archive binding check > refuses a TMPDIR inside the checkout, or with a node_modules or package.json above it 3056ms
+   ✓ archive binding check > runs no hook from the checkout's .git 4409ms
+   ✓ archive binding check > ignores replace refs and grafts in the checkout's .git 885ms
+   ✓ archive binding check > refuses an archive without a manifest entry, and a shallow checkout 786ms
+ ✓ src/geo/roundtrip.test.ts (18 tests) 49094ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 1 of 12 3918ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 2 of 12 3847ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 3 of 12 4198ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 4 of 12 4524ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 5 of 12 4067ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 6 of 12 3899ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 7 of 12 4132ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 8 of 12 4315ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 9 of 12 4236ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 10 of 12 3974ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 11 of 12 3812ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 12 of 12 3773ms
+
+ Test Files  59 passed (59)
+      Tests  3256 passed | 1 skipped (3257)
+   Start at  18:22:47
+   Duration  82.54s (transform 2.56s, setup 0ms, collect 7.44s, tests 145.45s, environment 12ms, prepare 5.02s)
+
+exit 0

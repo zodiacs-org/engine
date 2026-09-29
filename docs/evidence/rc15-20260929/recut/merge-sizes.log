@@ -1,0 +1,6 @@
+# sh analyses.sh merge-sizes, Node v22.22.2, npm 10.9.7, 2026-09-29
+
+## sizes of the merge commit e756f93, built
+$ sh -c node '<checkout>/docs/evidence/rc15-20260929/sizes.mjs' merge='<e756f93 tree>' > '<checkout>/docs/evidence/rc15-20260929/recut/sizes-merge.json'
+exit 0
+

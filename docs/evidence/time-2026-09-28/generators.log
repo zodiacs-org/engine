@@ -1,0 +1,17 @@
+# v22.22.2, zic zic (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39, commit 353b71b
+
+## tzdata2025c.tar.gz from a local copy
+4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957  tzdata2025c.tar.gz
+tz-shards: src/tzdb/ matches tzdb 2025c (597 names)
+exit 0
+
+## tzdata2025c.tar.gz downloaded afresh from IANA into .cache/
+downloading https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz ...
+tz-shards: src/tzdb/ matches tzdb 2025c (597 names)
+exit 0
+4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957  .cache/tzdata2025c.tar.gz
+
+## time scales from the same release and IERS finals2000A.all of 2026-09-24
+cc80680ec05c91b65e7d02c6068fe0d44dd0998dc880551975092d2d14aa8e18  finals2000A.all
+time-scales: src/time-scale-data.ts and its fixtures match their sources
+exit 0

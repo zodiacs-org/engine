@@ -1,0 +1,15 @@
+# v22.22.2, npm 10.9.7; HEAD 5af1929 with the rc.15 changes uncommitted (the source commit's tree)
+## npm run docs
+
+> @zodiacs/engine@0.1.1-rc.15 docs
+> typedoc --options typedoc.json
+
+[info] Loaded plugin <checkout>/scripts/typedoc-canonical.mjs
+[warning] CONVENTIONS, defined in @zodiacs/engine/src/receipt.ts, is referenced by receipt.NATAL_RECEIPT_CONVENTION_SETS but not included in the documentation
+[warning] CONVENTIONS_RC8, defined in @zodiacs/engine/src/receipt.ts, is referenced by receipt.NATAL_RECEIPT_CONVENTION_SETS but not included in the documentation
+[warning] CONVENTIONS_RC7, defined in @zodiacs/engine/src/receipt.ts, is referenced by receipt.NATAL_RECEIPT_CONVENTION_SETS but not included in the documentation
+[warning] CONVENTIONS_RC3, defined in @zodiacs/engine/src/receipt.ts, is referenced by receipt.NATAL_RECEIPT_CONVENTION_SETS but not included in the documentation
+[warning] ConventionSet, defined in @zodiacs/engine/src/receipt.ts, is referenced by receipt.NatalReceipt.conventions but not included in the documentation
+[info] html generated at ./docs/engine-api
+[warning] Found 0 errors and 5 warnings
+exit 0

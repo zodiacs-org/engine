@@ -1,0 +1,926 @@
+{
+ "about": "The sources of GREGORIAN_ADOPTION (src/geo/calendar.ts), quoted for every row and for every date in its note. src/geo/calendar.test.ts checks the table against this file, and every tzdb quote against src/fixtures/tzdata-2025c-calendars. A quote's firstGregorian is the first New Style day it gives, null when it gives none; lastJulian, where it gives one, is the Old Style day before. noteSays is the text of the row's note that the quote supports. Grotefend's text is transcribed from the page images; spaced-out emphasis is set normally.",
+ "rule": "One row per present-day country the sources date, for the region of its present capital where they date it. Where the sources disagree on that region, the row follows tzdb, which quotes the 1941 edition, the latest of the three; for Hungary all three give the legal change of 1587. A note's dates are tzdb's unless another source is named.",
+ "sources": {
+  "tzdb": {
+   "citation": "IANA Time Zone Database, release 2025c, file calendars. Its section \"Grotefend's data\" quotes H. Grotefend, Taschenbuch der Zeitrechnung des deutschen Mittelalters und der Neuzeit, herausgegeben von O. Grotefend (Hannover: Hahnsche Buchhandlung, 1941), pp. 26-28.",
+   "archive": "https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz",
+   "archiveSha256": "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957",
+   "file": "src/fixtures/tzdata-2025c-calendars",
+   "sha256": "cadbd0289890572697d7fdd87dd55482ced2927789a6a661f04e92b8edf92240",
+   "licence": "Public domain: \"This file is in the public domain, so clarified as of 2009-05-17 by Arthur David Olson.\" (the file's last lines)"
+  },
+  "grotefend-1891": {
+   "citation": "H. Grotefend, Zeitrechnung des deutschen Mittelalters und der Neuzeit, vol. 1: Glossar und Tafeln (Hannover: Hahn'sche Buchhandlung, 1891), pp. 133-134, s.v. \"Neuer Stil\".",
+   "scan": "https://archive.org/details/bub_gb_z-UwAAAAMAAJ/page/n266 (p. 133) and /page/n267 (p. 134): University of Michigan copy, digitized by Google",
+   "licence": "Public domain: published in 1891; the author, Hermann Grotefend (1845-1931), died in 1931."
+  },
+  "grotefend-1898": {
+   "citation": "H. Grotefend, Taschenbuch der Zeitrechnung des deutschen Mittelalters und der Neuzeit (Hannover und Leipzig: Hahn'sche Buchhandlung, 1898), pp. 23-24, \"Kalenderverbesserung\".",
+   "scan": "https://archive.org/details/taschenbuchderz01grotgoog/page/n32 (p. 23) and /page/n33 (p. 24): University of California copy, digitized by Google",
+   "licence": "Public domain: published in 1898; the author, Hermann Grotefend (1845-1931), died in 1931."
+  }
+ },
+ "names": {
+  "citation": "IANA Time Zone Database, release 2025c, file iso3166.tab: \"The usual English name for the coded region.\"",
+  "file": "src/fixtures/tzdata-2025c-iso3166.tab",
+  "sha256": "837c80785080c8433fd9d4ea87e78f161ac7a40389301c5153d4f90198baeb2a",
+  "licence": "Public domain: \"This file is in the public domain, so clarified as of 2009-05-17 by Arthur David Olson.\" (the file's header)"
+ },
+ "rows": [
+  {
+   "code": "AT",
+   "country": "Austria",
+   "region": "Austria",
+   "firstGregorian": "1584-01-17",
+   "sources": [
+    "tzdb"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 84",
+     "text": "06/17 Jan 1584 - Austria and Bohemia",
+     "lastJulian": "1584-01-06",
+     "firstGregorian": "1584-01-17"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 23",
+     "text": "Oesterreich, Bayern, Bisthümer Freising, Eichstädt, Regensburg, Salzburg, Brixen 5. — 16. Oct.",
+     "context": "1583: the sentence begins \"Das katholische Deutschland führte den Kalender 1583 zu den verschiedensten Terminen ein\"",
+     "lastJulian": "1583-10-05",
+     "firstGregorian": "1583-10-16",
+     "noteSays": "Grotefend 1898: 1583-10-16, with Bavaria"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 72-73",
+     "text": "05/16 Oct 1583 - Bavaria, bishoprics of Freising, Eichstedt, Regensburg,\n                 Salzburg, Brixen",
+     "lastJulian": "1583-10-05",
+     "firstGregorian": "1583-10-16",
+     "noteSays": "Salzburg 1583-10-16"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 82",
+     "text": "14/25 Dec 1583 - Steiermark",
+     "lastJulian": "1583-12-14",
+     "firstGregorian": "1583-12-25",
+     "noteSays": "Styria 1583-12-25"
+    }
+   ]
+  },
+  {
+   "code": "BE",
+   "country": "Belgium",
+   "region": "Brabant, Flanders, Hainaut",
+   "firstGregorian": "1583-01-01",
+   "sources": [
+    "tzdb"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 67-68",
+     "text": "21 Dec 1582/\n   01 Jan 1583 - Holland, Brabant, Flanders, Hennegau",
+     "lastJulian": "1582-12-21",
+     "firstGregorian": "1583-01-01"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Holland, Brabant, Flandern, Hennegau 1582, Dec. 14 — Dec. 25.",
+     "lastJulian": "1582-12-14",
+     "firstGregorian": "1582-12-25",
+     "noteSays": "Grotefend 1891, 1898: 1582-12-25"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 23",
+     "text": "Holland, Brabant, Flandern, Hennegau 14. — 25. Dec. 1582.",
+     "lastJulian": "1582-12-14",
+     "firstGregorian": "1582-12-25",
+     "noteSays": "Grotefend 1891, 1898: 1582-12-25"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 69",
+     "text": "10/21 Feb 1583 - bishopric of Liege (Lüttich)",
+     "lastJulian": "1583-02-10",
+     "firstGregorian": "1583-02-21",
+     "noteSays": "Bishopric of Liège 1583-02-21"
+    }
+   ]
+  },
+  {
+   "code": "CH",
+   "country": "Switzerland",
+   "region": "Zürich, Bern, Basel, Schaffhausen",
+   "firstGregorian": "1701-01-12",
+   "sources": [
+    "tzdb",
+    "grotefend-1891",
+    "grotefend-1898"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 122-124",
+     "text": "31 Dec 1700/\n   12 Jan 1701 - Friesland, Groningen, Zürich, Bern, Basel, Geneva,\n                 Thurgau, and Schaffhausen",
+     "lastJulian": "1700-12-31",
+     "firstGregorian": "1701-01-12",
+     "noteSays": "Also Geneva and Thurgau"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Zürich, Bern, Basel, Schaffhausen 1700, Dec. 31 — 1701, Jan. 12.",
+     "lastJulian": "1700-12-31",
+     "firstGregorian": "1701-01-12"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "Friesland, Groningen 31. Dec. 1700 — 12. Jan. 1701, ebenso Zürich, Bern, Basel, Schaffhausen.",
+     "lastJulian": "1700-12-31",
+     "firstGregorian": "1701-01-12"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 85",
+     "text": "11/22 Jan 1584 - Lucerne, Uri, Schwyz, Zug, Freiburg, Solothurn",
+     "lastJulian": "1584-01-11",
+     "firstGregorian": "1584-01-22",
+     "noteSays": "Catholic cantons 1584-01-22"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Schlesien, katholische Schweiz 1584, Jan. 12 — Jan. 23.",
+     "lastJulian": "1584-01-12",
+     "firstGregorian": "1584-01-23",
+     "noteSays": "(Grotefend 1891: 1584-01-23)"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 89",
+     "text": "      Jun 1584 - Unterwalden",
+     "firstGregorian": null,
+     "reading": "June 1584, no day given",
+     "noteSays": "Unterwalden June 1584"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 126",
+     "text": "          1724 - Glarus, Appenzell, and the city of St. Gallen",
+     "firstGregorian": null,
+     "reading": "1724, no day given",
+     "noteSays": "Glarus, Appenzell, St. Gallen city 1724"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 110",
+     "text": "          1655 - Kanton Wallis",
+     "firstGregorian": null,
+     "reading": "1655, no day given",
+     "noteSays": "Valais 1655"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "1622 Kanton Wallis.",
+     "firstGregorian": null,
+     "reading": "1622, no day given",
+     "noteSays": "(Grotefend 1898: 1622)"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 135",
+     "text": "1760-1812      - Graubünden",
+     "firstGregorian": null,
+     "reading": "1760 to 1812",
+     "noteSays": "Graubünden 1760-1812"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "Zuletzt folgte Graubünden zu verschiedenen Terminen von 1760 — 1811.",
+     "firstGregorian": null,
+     "reading": "1760 to 1811",
+     "noteSays": "(Grotefend 1898: to 1811)"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 75",
+     "text": "20/31 Oct 1583 - bishopric of Basel",
+     "lastJulian": "1583-10-20",
+     "firstGregorian": "1583-10-31",
+     "noteSays": "bishopric of Basel 1583-10-31"
+    }
+   ]
+  },
+  {
+   "code": "CZ",
+   "country": "Czech Republic",
+   "region": "Bohemia",
+   "firstGregorian": "1584-01-17",
+   "sources": [
+    "tzdb",
+    "grotefend-1891",
+    "grotefend-1898"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 84",
+     "text": "06/17 Jan 1584 - Austria and Bohemia",
+     "lastJulian": "1584-01-06",
+     "firstGregorian": "1584-01-17"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Böhmen 1584, Jan. 6 — Jan. 17.",
+     "lastJulian": "1584-01-06",
+     "firstGregorian": "1584-01-17"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 23",
+     "text": "1584 folgten die Lausitz und Böhmen 6. — 17. Jan.",
+     "lastJulian": "1584-01-06",
+     "firstGregorian": "1584-01-17"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 86",
+     "text": "12/23 Jan 1584 - Silesia and the Lausitz",
+     "lastJulian": "1584-01-12",
+     "firstGregorian": "1584-01-23",
+     "noteSays": "Silesia 1584-01-23"
+    }
+   ]
+  },
+  {
+   "code": "DE",
+   "country": "Germany",
+   "region": "Protestant states",
+   "firstGregorian": "1700-03-01",
+   "sources": [
+    "tzdb",
+    "grotefend-1891",
+    "grotefend-1898"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 114-116",
+     "text": "18 Feb/\n   01 Mar 1700 - Protestant Germany (including Swedish possessions in\n                 Germany), Denmark, Norway",
+     "lastJulian": "1700-02-18",
+     "firstGregorian": "1700-03-01"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Protest. Deutschland und Dänemark 1700, Febr. 18 — März 1.",
+     "lastJulian": "1700-02-18",
+     "firstGregorian": "1700-03-01"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "1700 das protestantische Deutschland und Dänemark 18. Febr. — 1. März",
+     "lastJulian": "1700-02-18",
+     "firstGregorian": "1700-03-01"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Katholisches Deutschland 1583 zu verschiedenen Terminen.",
+     "firstGregorian": null,
+     "reading": "1583, at various dates",
+     "noteSays": "Catholic states from 1583"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 70",
+     "text": "13/24 Feb 1583 - bishopric of Augsburg",
+     "lastJulian": "1583-02-13",
+     "firstGregorian": "1583-02-24",
+     "noteSays": "bishopric of Augsburg 1583-02-24"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 72-73",
+     "text": "05/16 Oct 1583 - Bavaria, bishoprics of Freising, Eichstedt, Regensburg,\n                 Salzburg, Brixen",
+     "lastJulian": "1583-10-05",
+     "firstGregorian": "1583-10-16",
+     "noteSays": "Bavaria 1583-10-16"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 108",
+     "text": "15/26 Mar 1631 - bishopric of Hildesheim",
+     "lastJulian": "1631-03-15",
+     "firstGregorian": "1631-03-26",
+     "noteSays": "the latest listed the bishopric of Hildesheim 1631-03-26"
+    }
+   ]
+  },
+  {
+   "code": "DK",
+   "country": "Denmark",
+   "region": null,
+   "firstGregorian": "1700-03-01",
+   "sources": [
+    "tzdb",
+    "grotefend-1891",
+    "grotefend-1898"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 114-116",
+     "text": "18 Feb/\n   01 Mar 1700 - Protestant Germany (including Swedish possessions in\n                 Germany), Denmark, Norway",
+     "lastJulian": "1700-02-18",
+     "firstGregorian": "1700-03-01"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Protest. Deutschland und Dänemark 1700, Febr. 18 — März 1.",
+     "lastJulian": "1700-02-18",
+     "firstGregorian": "1700-03-01"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "1700 das protestantische Deutschland und Dänemark 18. Febr. — 1. März",
+     "lastJulian": "1700-02-18",
+     "firstGregorian": "1700-03-01"
+    }
+   ]
+  },
+  {
+   "code": "ES",
+   "country": "Spain",
+   "region": null,
+   "firstGregorian": "1582-10-15",
+   "sources": [
+    "tzdb",
+    "grotefend-1891",
+    "grotefend-1898"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 63-64",
+     "text": "04/15 Oct 1582 - Italy (with exceptions), Spain, Portugal, Poland (Roman\n                 Catholics and Danzig only)",
+     "lastJulian": "1582-10-04",
+     "firstGregorian": "1582-10-15"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Italien (mit Ausnahmen), Spanien und Portugal nach der päpstlichen Bulle 1582, Oct. 4 — Oct. 15.",
+     "lastJulian": "1582-10-04",
+     "firstGregorian": "1582-10-15"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 23",
+     "text": "Die Einführung des neuen Kalenders geschah durch Uebergang vom 4. zum 15. Oct. 1582 nach der Bulle des Papstes Gregor XIII. nur in Italien (mit Ausnahmen), Spanien und Portugal.",
+     "lastJulian": "1582-10-04",
+     "firstGregorian": "1582-10-15"
+    }
+   ]
+  },
+  {
+   "code": "FI",
+   "country": "Finland",
+   "region": null,
+   "firstGregorian": "1753-03-01",
+   "sources": [
+    "tzdb"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 24",
+     "text": "Sweden (and Finland)",
+     "firstGregorian": null,
+     "reading": "the section's heading: Sweden's dates are Finland's"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 132-133",
+     "text": "17 Feb/\n   01 Mar 1753 - Sweden",
+     "lastJulian": "1753-02-17",
+     "firstGregorian": "1753-03-01",
+     "noteSays": "With Sweden"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 137-138",
+     "text": "The Russian empire (including Finland and the Baltic states) did not\nconvert to the Gregorian calendar until the Soviet revolution of 1917.",
+     "firstGregorian": null,
+     "reading": "until 1917, no day given",
+     "noteSays": "tzdb's list says the Russian empire, Finland included, kept the Julian calendar until 1917"
+    }
+   ]
+  },
+  {
+   "code": "FR",
+   "country": "France",
+   "region": "France, Lorraine",
+   "firstGregorian": "1582-12-20",
+   "sources": [
+    "tzdb",
+    "grotefend-1891",
+    "grotefend-1898"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 65",
+     "text": "09/20 Dec 1582 - France, Lorraine",
+     "lastJulian": "1582-12-09",
+     "firstGregorian": "1582-12-20"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 12",
+     "text": "Gregorian calendar adopted 1582-12-20.",
+     "firstGregorian": "1582-12-20"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Frankreich, Lothringen 1582, Dec. 9 — Dec. 20.",
+     "lastJulian": "1582-12-09",
+     "firstGregorian": "1582-12-20"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 23",
+     "text": "Frankreich und Lothringen ging vom 9. zum 20. Dec. 1582 über.",
+     "lastJulian": "1582-12-09",
+     "firstGregorian": "1582-12-20"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 112",
+     "text": "05/16 Feb 1682 - city of Strassburg",
+     "lastJulian": "1682-02-05",
+     "firstGregorian": "1682-02-16",
+     "noteSays": "City of Strasbourg 1682-02-16"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 80",
+     "text": "16/27 Nov 1583 - bishopric of Strassburg and the margraviate of Baden",
+     "lastJulian": "1583-11-16",
+     "firstGregorian": "1583-11-27",
+     "noteSays": "bishopric of Strasbourg 1583-11-27"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 23",
+     "text": "Erzbisthum Mainz, Bisthum Strassburg 11. — 22. Nov.",
+     "context": "1583, as above",
+     "lastJulian": "1583-11-11",
+     "firstGregorian": "1583-11-22",
+     "noteSays": "(Grotefend 1898: 1583-11-22)"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 74",
+     "text": "13/24 Oct 1583 - Austrian Oberelsaß and Breisgau",
+     "lastJulian": "1583-10-13",
+     "firstGregorian": "1583-10-24",
+     "noteSays": "Austrian Upper Alsace 1583-10-24"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 13-14",
+     "text": "French Revolutionary calendar used 1793-11-24 through 1805-12-31,\nand (in Paris only) 1871-05-06 through 1871-05-23.",
+     "firstGregorian": null,
+     "reading": "another calendar, not a change of style",
+     "noteSays": "Republican calendar 1793-11-24 to 1805-12-31, in Paris also 1871-05-06 to 1871-05-23"
+    }
+   ]
+  },
+  {
+   "code": "GB",
+   "country": "Britain (UK)",
+   "region": "Great Britain",
+   "firstGregorian": "1752-09-14",
+   "sources": [
+    "tzdb",
+    "grotefend-1891",
+    "grotefend-1898"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 130",
+     "text": "02/14 Sep 1752 - Great Britain",
+     "lastJulian": "1752-09-02",
+     "firstGregorian": "1752-09-14"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 134",
+     "text": "Grossbritannien 1752, Sept. 2 — Sept. 14.",
+     "lastJulian": "1752-09-02",
+     "firstGregorian": "1752-09-14"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "1752 Grossbrittannien 2. — 14. Sept.",
+     "lastJulian": "1752-09-02",
+     "firstGregorian": "1752-09-14"
+    }
+   ]
+  },
+  {
+   "code": "HU",
+   "country": "Hungary",
+   "region": null,
+   "firstGregorian": "1587-11-01",
+   "sources": [
+    "tzdb",
+    "grotefend-1891",
+    "grotefend-1898"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 87-88",
+     "text": "22 Jan/\n   02 Feb 1584 - Hungary (legally on 21 Oct 1587)",
+     "lastJulian": "1587-10-21",
+     "firstGregorian": "1587-11-01",
+     "reading": "the legal change: \"legally on 21 Oct 1587\", read as the last Old Style day, as Grotefend 1891 and 1898 print it"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Ungarn 1587, Oct. 21 — Nov. 1.",
+     "lastJulian": "1587-10-21",
+     "firstGregorian": "1587-11-01"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "1587 Ungarn 21. Oct. — 1. Nov.",
+     "lastJulian": "1587-10-21",
+     "firstGregorian": "1587-11-01"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 87-88",
+     "text": "22 Jan/\n   02 Feb 1584 - Hungary (legally on 21 Oct 1587)",
+     "lastJulian": "1584-01-22",
+     "firstGregorian": "1584-02-02",
+     "noteSays": "tzdb's list also gives 1584-02-02"
+    }
+   ]
+  },
+  {
+   "code": "IT",
+   "country": "Italy",
+   "region": "Italy, with exceptions",
+   "firstGregorian": "1582-10-15",
+   "sources": [
+    "tzdb",
+    "grotefend-1891",
+    "grotefend-1898"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 63-64",
+     "text": "04/15 Oct 1582 - Italy (with exceptions), Spain, Portugal, Poland (Roman\n                 Catholics and Danzig only)",
+     "lastJulian": "1582-10-04",
+     "firstGregorian": "1582-10-15"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Italien (mit Ausnahmen), Spanien und Portugal nach der päpstlichen Bulle 1582, Oct. 4 — Oct. 15.",
+     "lastJulian": "1582-10-04",
+     "firstGregorian": "1582-10-15"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 23",
+     "text": "Die Einführung des neuen Kalenders geschah durch Uebergang vom 4. zum 15. Oct. 1582 nach der Bulle des Papstes Gregor XIII. nur in Italien (mit Ausnahmen), Spanien und Portugal.",
+     "lastJulian": "1582-10-04",
+     "firstGregorian": "1582-10-15"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 72-73",
+     "text": "05/16 Oct 1583 - Bavaria, bishoprics of Freising, Eichstedt, Regensburg,\n                 Salzburg, Brixen",
+     "lastJulian": "1583-10-05",
+     "firstGregorian": "1583-10-16",
+     "noteSays": "Bishopric of Brixen (Bressanone) 1583-10-16"
+    }
+   ]
+  },
+  {
+   "code": "NL",
+   "country": "Netherlands",
+   "region": "Holland",
+   "firstGregorian": "1583-01-01",
+   "sources": [
+    "tzdb"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 67-68",
+     "text": "21 Dec 1582/\n   01 Jan 1583 - Holland, Brabant, Flanders, Hennegau",
+     "lastJulian": "1582-12-21",
+     "firstGregorian": "1583-01-01"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Holland, Brabant, Flandern, Hennegau 1582, Dec. 14 — Dec. 25.",
+     "lastJulian": "1582-12-14",
+     "firstGregorian": "1582-12-25",
+     "noteSays": "Grotefend 1891, 1898: 1582-12-25"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 23",
+     "text": "Holland, Brabant, Flandern, Hennegau 14. — 25. Dec. 1582.",
+     "lastJulian": "1582-12-14",
+     "firstGregorian": "1582-12-25",
+     "noteSays": "Grotefend 1891, 1898: 1582-12-25"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 117-118",
+     "text": "30 Jun/\n   12 Jul 1700 - Gelderland, Zutphen",
+     "lastJulian": "1700-06-30",
+     "firstGregorian": "1700-07-12",
+     "noteSays": "Gelderland 1700-07-12; Zutphen 1700-07-12"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "Zutphen, Utrecht, Overijssel 30. Nov. — 12. Dec.",
+     "context": "1700: the entry follows \"1700 das protestantische Deutschland und Dänemark\"",
+     "lastJulian": "1700-11-30",
+     "firstGregorian": "1700-12-12",
+     "noteSays": "(Grotefend 1898: 1700-12-12)"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 119-120",
+     "text": "10 Nov/\n   12 Dec 1700 - Utrecht, Overijssel",
+     "firstGregorian": "1700-12-12",
+     "reading": "the Old Style day is printed \"10 Nov\", which is not the day before; Grotefend 1898 prints 30 Nov",
+     "noteSays": "Utrecht, Overijssel 1700-12-12"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 122-124",
+     "text": "31 Dec 1700/\n   12 Jan 1701 - Friesland, Groningen, Zürich, Bern, Basel, Geneva,\n                 Thurgau, and Schaffhausen",
+     "lastJulian": "1700-12-31",
+     "firstGregorian": "1701-01-12",
+     "noteSays": "Friesland, Groningen 1701-01-12"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Geldern, Zütphen, Utrecht, Groningen, Friesland, Overyssel 1700, Dec. 1 — Dec. 12.",
+     "firstGregorian": "1700-12-12",
+     "reading": "\"Dec. 1\" is the Old Style name of 12 December, not the day before it",
+     "noteSays": "Grotefend 1891: 1700-12-12 for all six"
+    }
+   ]
+  },
+  {
+   "code": "NO",
+   "country": "Norway",
+   "region": null,
+   "firstGregorian": "1700-03-01",
+   "sources": [
+    "tzdb"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 114-116",
+     "text": "18 Feb/\n   01 Mar 1700 - Protestant Germany (including Swedish possessions in\n                 Germany), Denmark, Norway",
+     "lastJulian": "1700-02-18",
+     "firstGregorian": "1700-03-01"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Protest. Deutschland und Dänemark 1700, Febr. 18 — März 1.",
+     "lastJulian": "1700-02-18",
+     "firstGregorian": "1700-03-01",
+     "noteSays": "Grotefend 1891, 1898 name Denmark only"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "1700 das protestantische Deutschland und Dänemark 18. Febr. — 1. März",
+     "lastJulian": "1700-02-18",
+     "firstGregorian": "1700-03-01",
+     "noteSays": "Grotefend 1891, 1898 name Denmark only"
+    }
+   ]
+  },
+  {
+   "code": "PL",
+   "country": "Poland",
+   "region": "Roman Catholics, and Danzig",
+   "firstGregorian": "1582-10-15",
+   "sources": [
+    "tzdb"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 63-64",
+     "text": "04/15 Oct 1582 - Italy (with exceptions), Spain, Portugal, Poland (Roman\n                 Catholics and Danzig only)",
+     "lastJulian": "1582-10-04",
+     "firstGregorian": "1582-10-15"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 23",
+     "text": "In Polen gelang sie nicht überall, namentlich nicht bei den Anhängern der protestantischen und griechischen Kirche.",
+     "firstGregorian": null,
+     "reading": "no date of its own",
+     "noteSays": "Grotefend 1898: not everywhere, notably not among Protestants and the Greek Church"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Polen 1586.",
+     "firstGregorian": null,
+     "reading": "1586, no day given",
+     "noteSays": "Grotefend 1891: 1586"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 86",
+     "text": "12/23 Jan 1584 - Silesia and the Lausitz",
+     "lastJulian": "1584-01-12",
+     "firstGregorian": "1584-01-23",
+     "noteSays": "Silesia 1584-01-23"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 96-97",
+     "text": "22 Aug/\n   02 Sep 1612 - duchy of Prussia",
+     "lastJulian": "1612-08-22",
+     "firstGregorian": "1612-09-02",
+     "noteSays": "duchy of Prussia 1612-09-02"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "1612 Herzogthum Preussen 21. Aug. — 1. Sept.",
+     "lastJulian": "1612-08-21",
+     "firstGregorian": "1612-09-01",
+     "noteSays": "(Grotefend 1898: 1612-09-01)"
+    }
+   ]
+  },
+  {
+   "code": "PT",
+   "country": "Portugal",
+   "region": null,
+   "firstGregorian": "1582-10-15",
+   "sources": [
+    "tzdb",
+    "grotefend-1891",
+    "grotefend-1898"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 63-64",
+     "text": "04/15 Oct 1582 - Italy (with exceptions), Spain, Portugal, Poland (Roman\n                 Catholics and Danzig only)",
+     "lastJulian": "1582-10-04",
+     "firstGregorian": "1582-10-15"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 133",
+     "text": "Italien (mit Ausnahmen), Spanien und Portugal nach der päpstlichen Bulle 1582, Oct. 4 — Oct. 15.",
+     "lastJulian": "1582-10-04",
+     "firstGregorian": "1582-10-15"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 23",
+     "text": "Die Einführung des neuen Kalenders geschah durch Uebergang vom 4. zum 15. Oct. 1582 nach der Bulle des Papstes Gregor XIII. nur in Italien (mit Ausnahmen), Spanien und Portugal.",
+     "lastJulian": "1582-10-04",
+     "firstGregorian": "1582-10-15"
+    }
+   ]
+  },
+  {
+   "code": "RU",
+   "country": "Russia",
+   "region": "Soviet Russia",
+   "firstGregorian": "1918-02-14",
+   "sources": [
+    "tzdb"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 19",
+     "text": "Soviet Russia adopted the Gregorian calendar on 1918-02-14.",
+     "firstGregorian": "1918-02-14"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 134",
+     "text": "In Russland, wo man bis dahin nach der Weltära gerechnet hatte (s. diese), führte man zwar 1700 die Jahresbezeichnung der christlichen Aera ein, behielt aber bis auf unsern Tag den Julianischen Kalender bei.",
+     "firstGregorian": null,
+     "reading": "still Julian in 1891",
+     "noteSays": "Grotefend 1891, 1898: still Julian"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "Russland, Griechenland und die christlichen Balkanstaaten rechnen noch heute nach dem Julianischen Kalender.",
+     "firstGregorian": null,
+     "reading": "still Julian in 1898",
+     "noteSays": "Grotefend 1891, 1898: still Julian"
+    },
+    {
+     "source": "tzdb",
+     "locator": "line 96-97",
+     "text": "22 Aug/\n   02 Sep 1612 - duchy of Prussia",
+     "lastJulian": "1612-08-22",
+     "firstGregorian": "1612-09-02",
+     "noteSays": "Duchy of Prussia, now partly Kaliningrad, 1612-09-02"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "1612 Herzogthum Preussen 21. Aug. — 1. Sept.",
+     "lastJulian": "1612-08-21",
+     "firstGregorian": "1612-09-01",
+     "noteSays": "(Grotefend 1898: 1612-09-01)"
+    }
+   ]
+  },
+  {
+   "code": "SE",
+   "country": "Sweden",
+   "region": null,
+   "firstGregorian": "1753-03-01",
+   "sources": [
+    "tzdb",
+    "grotefend-1891",
+    "grotefend-1898"
+   ],
+   "evidence": [
+    {
+     "source": "tzdb",
+     "locator": "line 132-133",
+     "text": "17 Feb/\n   01 Mar 1753 - Sweden",
+     "lastJulian": "1753-02-17",
+     "firstGregorian": "1753-03-01"
+    },
+    {
+     "source": "grotefend-1891",
+     "locator": "p. 134",
+     "text": "Schweden 1753, Febr. 17 — März 1.",
+     "lastJulian": "1753-02-17",
+     "firstGregorian": "1753-03-01"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24",
+     "text": "1753 Schweden 17. Febr. — 1. März",
+     "lastJulian": "1753-02-17",
+     "firstGregorian": "1753-03-01"
+    },
+    {
+     "source": "grotefend-1898",
+     "locator": "p. 24, note 1",
+     "text": "Vom 1. März 1700 bis 30. Febr. 1712 ist von schwedischen Daten ein Tag abzuziehen, um Julianische zu erhalten",
+     "firstGregorian": null,
+     "reading": "a Swedish date less one day is the Julian date",
+     "noteSays": "From 1 March 1700 to 30 February 1712 Swedish dates are one day ahead of the Julian (Grotefend 1898)"
+    }
+   ]
+  }
+ ]
+}

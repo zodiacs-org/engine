@@ -157,15 +157,16 @@
       "file": "results/zodiacs-engine.json",
       "adapter": {
         "name": "zodiacs-engine",
-        "version": "0.1.0",
+        "version": "0.2.0",
         "engine": "@zodiacs/engine",
-        "engineVersion": "0.1.1-rc.14",
+        "engineVersion": "0.1.1-rc.15",
         "configuration": {
           "ephemeris": "astronomy-engine 2.1.19",
           "deltaTModel": "zodiacs-deltat/1",
-          "timeZones": "the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
-          "positions": "natalChart with ΔT pinned at 0 s, so the requested instant is read as TT",
-          "angles": "natalChart at the UT1 instant (the engine reads its instant as UT1)"
+          "timeBasis": "from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise",
+          "timeZones": "before 1970 the shipped tzdb 2025c history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
+          "positions": "natalChart with timeScale \"tt\": the requested instant is read as TT",
+          "angles": "natalChart with timeScale \"ut1\": the requested instant is read as UT1"
         }
       },
       "values": "residuals",
@@ -177,9 +178,9 @@
       "summary": {
         "total": {
           "count": 500,
-          "pass": 232,
-          "fail": 222,
-          "unsupported": 46,
+          "pass": 266,
+          "fail": 193,
+          "unsupported": 41,
           "error": 0
         },
         "byLevel": {
@@ -199,9 +200,9 @@
           },
           "L3": {
             "count": 110,
-            "pass": 35,
-            "fail": 29,
-            "unsupported": 46,
+            "pass": 69,
+            "fail": 0,
+            "unsupported": 41,
             "error": 0
           }
         },
@@ -262,7 +263,7 @@
               "vertex": {
                 "unit": "arcsec",
                 "n": 10,
-                "median": 0.083046658,
+                "median": 0.0830466234,
                 "p95": 0.285075699,
                 "max": 0.285075699
               },
@@ -293,9 +294,9 @@
           },
           "time.zone-offset": {
             "count": 45,
-            "pass": 20,
-            "fail": 20,
-            "unsupported": 5,
+            "pass": 45,
+            "fail": 0,
+            "unsupported": 0,
             "error": 0
           },
           "time.local-mean-time": {
@@ -307,17 +308,17 @@
           },
           "time.tt-minus-utc": {
             "count": 10,
-            "pass": 0,
-            "fail": 9,
+            "pass": 9,
+            "fail": 0,
             "unsupported": 1,
             "error": 0,
             "residuals": {
               "tt_minus_utc_s": {
                 "unit": "s",
                 "n": 9,
-                "median": 0.387511294,
-                "p95": 0.633650924,
-                "max": 0.633650924
+                "median": 0,
+                "p95": 2.03450554e-8,
+                "max": 2.03450554e-8
               }
             }
           },
@@ -331,9 +332,9 @@
               "delta_t_s": {
                 "unit": "s",
                 "n": 15,
-                "median": 0.00409739545,
-                "p95": 0.0688908866,
-                "max": 0.0688908866
+                "median": 0.0001318,
+                "p95": 0.000505451953,
+                "max": 0.000505451953
               }
             }
           },
@@ -355,14 +356,14 @@
         "byTag": {
           "backzone-history": {
             "count": 20,
-            "pass": 0,
-            "fail": 20,
+            "pass": 20,
+            "fail": 0,
             "unsupported": 0,
             "error": 0
           }
         }
       },
-      "notes": "- **Positions (L1).** The engine computes positions with astronomy-engine 2.1.19's series. Against DE441 they differ by a median of 2.07″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.0″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.9″. A precise backend is planned to close this gap.\n- **Time zones (L3).** The engine reads the host's `Intl` time zone data, which does not carry tzdb's `backzone` history. All 20 failures are the vectors tagged `backzone-history`, and on each the engine returns what tzdb's default build gives.\n  - A repeated local time is resolved to its earlier instant only, and the engine has no public way to give the later one. Those vectors are unsupported.\n- **TT − UTC (L3).** The engine reads a UTC instant as UT1, so its TT − UTC is its ΔT. Each residual (engine minus expected) is −(UT1 − UTC) for that date, up to 0.63 s here. A leap-second table is planned. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.\n- **Unsupported (L3).** Release 0.1.1-rc.14 has no public function for local mean time from a longitude or for calendar conversion. Both are planned for the next engine release."
+      "notes": "- **Positions (L1).** The engine computes positions with astronomy-engine 2.1.19's series. Against DE441 they differ by a median of 2.07″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.0″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.9″. A precise backend is planned to close this gap.\n- **Time zones (L3).** Before 1970 the engine reads the tzdb 2025c history with `backzone` that it ships, loaded with `prepareLocalTime`, so the 20 vectors tagged `backzone-history` pass; from 1970 it reads the host's `Intl` data. A repeated local time resolves to its earlier instant, and the transition the engine reports gives the offsets of both readings, so the five folds are answered. All 45 pass.\n- **TT − UTC and ΔT (L3).** From 1972 to 2027-10-02 the engine takes TAI − UTC from the IERS leap-second list updated 2026-07-06, and UT1 − UTC from IERS: the EOP 20 C04 series in 1972 and `finals2000A.all` of 2026-09-24 from 1973-01-02. The adapter reports TT − UTC as a chart's ΔT (TT − UT1) plus its UT1 − UTC. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.\n- **Unsupported (L3).** Release 0.1.1-rc.15 converts dates between the Julian and Gregorian calendars and reads a birthplace's local mean time inside a zone's local mean time era, but has no public function for a Julian Day Number or for local mean time from a longitude alone, so the 35 calendar vectors and the 5 local mean time vectors are unsupported."
     },
     {
       "file": "results/pyswisseph.json",

@@ -1,0 +1,12 @@
+# The second review's tools/dasha-scale.mjs (not in this repository): a chart
+# given at 1990-06-15T12:30:00 on UTC, TT and UT1 at 12.97 N 77.59 E; the
+# Vimshottari dasha's birth against firdaria's start, which is the UTC instant.
+# Run with each build installed as @zodiacs/engine, Node v22.22.2.
+## d90a00a
+utc  dasha birth 1990-06-15T12:30:00.000Z | firdaria start 1990-06-15T12:30:00.000Z
+tt   dasha birth 1990-06-15T12:30:00.000Z | firdaria start 1990-06-15T12:29:02.816Z
+ut1  dasha birth 1990-06-15T12:30:00.000Z | firdaria start 1990-06-15T12:30:00.013Z
+## rc15-fix-records
+utc  dasha birth 1990-06-15T12:30:00.000Z | firdaria start 1990-06-15T12:30:00.000Z
+tt   dasha birth 1990-06-15T12:29:02.816Z | firdaria start 1990-06-15T12:29:02.816Z
+ut1  dasha birth 1990-06-15T12:30:00.013Z | firdaria start 1990-06-15T12:30:00.013Z

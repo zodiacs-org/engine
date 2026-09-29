@@ -1,0 +1,30 @@
+# sh analyses.sh roundtrip-default, Node v22.22.2, npm 10.9.7, 2026-09-29
+
+## every offset change 1850-2037, three-day step
+$ node scripts/roundtrip-scan.mjs --out <checkout>/docs/evidence/rc15-20260929/recut/roundtrip-default.json
+100/597 zones, 25450 wall minutes
+200/597 zones, 86343 wall minutes
+300/597 zones, 127125 wall minutes
+400/597 zones, 180309 wall minutes
+500/597 zones, 246095 wall minutes
+{
+ "scan": "default: 1850-2037, three-day step",
+ "host": {
+  "node": "v22.22.2",
+  "icu": "78.2",
+  "tz": "2025c"
+ },
+ "tzdb": {
+  "version": "2025c",
+  "sha256": "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957",
+  "form": "main+backzone"
+ },
+ "zones": 597,
+ "transitions": 39839,
+ "tested": 278869,
+ "failures": 0,
+ "firstFailures": [],
+ "seconds": 53.3
+}
+exit 0
+

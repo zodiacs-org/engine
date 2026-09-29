@@ -160,6 +160,7 @@ export type {
   Houses,
   HouseSystem,
   InterAspect,
+  LeapSeconds,
   MinimalBody,
   Modality,
   MoonPhase,
@@ -171,6 +172,9 @@ export type {
   Sect,
   SignDefinition,
   SynastryResult,
+  TimeScale,
+  TimeScaleName,
   TransitResult,
+  Ut1MinusUtc,
   ZodiacSign
 } from "./types.js";

@@ -1,0 +1,19 @@
+{
+ "scan": "default: 1850-2037, three-day step",
+ "host": {
+  "node": "v22.22.2",
+  "icu": "78.2",
+  "tz": "2025c"
+ },
+ "tzdb": {
+  "version": "2025c",
+  "sha256": "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957",
+  "form": "main+backzone"
+ },
+ "zones": 597,
+ "transitions": 39839,
+ "tested": 278869,
+ "failures": 0,
+ "firstFailures": [],
+ "seconds": 53.3
+}

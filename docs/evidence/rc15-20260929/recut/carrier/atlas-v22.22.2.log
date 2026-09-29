@@ -1,0 +1,180 @@
+# sh carrier-gates.sh atlas at 7daf832 in a clean full-history clone; Node v22.22.2, npm 10.9.7, git 2.43.0, 2026-09-29
+## node atlas/tools/check.mjs
+atlas 0.1.0: 21 places, 14 jurisdictions, 59 rules, 66 citations
+  rules by flag: documented 27, inferred 26, uncertain 6
+  citations by type: decree 5, law 9, ministerial-decision 1, municipal-notice 1, newspaper-report 45, parliamentary-debate 3, railway-notice 2
+  excerpts taken from: page-image 66
+  excerpts checked against (citations): ocr matches 24, ocr partial 5, page-image matches 16, search-service matches 29, search-service partial 8
+  258 boundaries and 2735 round trips checked
+  tzdb comparison current, every difference matched by exactly one explanation
+atlas: all checks passed
+exit 0
+## node --test atlas/tools/selftest.mjs
+TAP version 13
+# Subtest: local mean time is 240 s per degree east, to the millisecond
+ok 1 - local mean time is 240 s per degree east, to the millisecond
+  ---
+  duration_ms: 1.550215
+  type: 'test'
+  ...
+# Subtest: boundaries resolve on the clock their reckoning names
+ok 2 - boundaries resolve on the clock their reckoning names
+  ---
+  duration_ms: 1.331982
+  type: 'test'
+  ...
+# Subtest: an ordinary reading resolves to one instant
+ok 3 - an ordinary reading resolves to one instant
+  ---
+  duration_ms: 1.032994
+  type: 'test'
+  ...
+# Subtest: local mean time differs by place
+ok 4 - local mean time differs by place
+  ---
+  duration_ms: 1.154491
+  type: 'test'
+  ...
+# Subtest: a place read by longitude must lie in a covered département and inside its area
+ok 5 - a place read by longitude must lie in a covered département and inside its area
+  ---
+  duration_ms: 0.808023
+  type: 'test'
+  ...
+# Subtest: --utc is always UTC, with or without Z, whatever the host time zone
+ok 6 - --utc is always UTC, with or without Z, whatever the host time zone
+  ---
+  duration_ms: 190.181999
+  type: 'test'
+  ...
+# Subtest: --utc reports the same instant fields as --local, uncertainty included
+ok 7 - --utc reports the same instant fields as --local, uncertainty included
+  ---
+  duration_ms: 1.902423
+  type: 'test'
+  ...
+# Subtest: the resolver refuses out-of-range times, a malformed longitude and an unknown clock
+ok 8 - the resolver refuses out-of-range times, a malformed longitude and an unknown clock
+  ---
+  duration_ms: 558.960442
+  type: 'test'
+  ...
+# Subtest: the resolver refuses unknown, valueless, repeated and conflicting options
+ok 9 - the resolver refuses unknown, valueless, repeated and conflicting options
+  ---
+  duration_ms: 721.070301
+  type: 'test'
+  ...
+# Subtest: a clock the jurisdiction does not keep is reported as such, not as out of coverage
+ok 10 - a clock the jurisdiction does not keep is reported as such, not as out of coverage
+  ---
+  duration_ms: 1.210837
+  type: 'test'
+  ...
+# Subtest: a skipped reading is nonexistent and taken on the earlier clock
+ok 11 - a skipped reading is nonexistent and taken on the earlier clock
+  ---
+  duration_ms: 0.980667
+  type: 'test'
+  ...
+# Subtest: a repeated reading is ambiguous, earliest first
+ok 12 - a repeated reading is ambiguous, earliest first
+  ---
+  duration_ms: 0.521571
+  type: 'test'
+  ...
+# Subtest: readings outside the window are out of coverage
+ok 13 - readings outside the window are out of coverage
+  ---
+  duration_ms: 0.466013
+  type: 'test'
+  ...
+# Subtest: readings near a boundary the sources do not fix exactly are flagged uncertain
+ok 14 - readings near a boundary the sources do not fix exactly are flagged uncertain
+  ---
+  duration_ms: 0.552312
+  type: 'test'
+  ...
+# Subtest: a local reading inside the span of an imprecise change, read on either clock, is uncertain
+ok 15 - a local reading inside the span of an imprecise change, read on either clock, is uncertain
+  ---
+  duration_ms: 0.971318
+  type: 'test'
+  ...
+# Subtest: UTC -> local -> UTC round trips at every millisecond near a change
+ok 16 - UTC -> local -> UTC round trips at every millisecond near a change
+  ---
+  duration_ms: 0.595935
+  type: 'test'
+  ...
+# Subtest: each tzdb difference must match exactly one explanation, on its values
+ok 17 - each tzdb difference must match exactly one explanation, on its values
+  ---
+  duration_ms: 0.986009
+  type: 'test'
+  ...
+# Subtest: a missing tzdb extract fails the check instead of skipping it
+ok 18 - a missing tzdb extract fails the check instead of skipping it
+  ---
+  duration_ms: 0.39231
+  type: 'test'
+  ...
+# Subtest: the checks pass on the fixture and count their round trips
+ok 19 - the checks pass on the fixture and count their round trips
+  ---
+  duration_ms: 7.476488
+  type: 'test'
+  ...
+# Subtest: the checks catch a gap between rules
+ok 20 - the checks catch a gap between rules
+  ---
+  duration_ms: 2.330924
+  type: 'test'
+  ...
+# Subtest: the checks hold excerpts to 40 words and want a record of how each was checked
+ok 21 - the checks hold excerpts to 40 words and want a record of how each was checked
+  ---
+  duration_ms: 1.787941
+  type: 'test'
+  ...
+# Subtest: the checks catch a département listed twice for reading by longitude
+ok 22 - the checks catch a département listed twice for reading by longitude
+  ---
+  duration_ms: 1.196634
+  type: 'test'
+  ...
+# Subtest: the citations an exclusion names must exist, and count as cited
+ok 23 - the citations an exclusion names must exist, and count as cited
+  ---
+  duration_ms: 6.391862
+  type: 'test'
+  ...
+# Subtest: the checks catch a missing citation, excerpt or retrieval date
+ok 24 - the checks catch a missing citation, excerpt or retrieval date
+  ---
+  duration_ms: 1.587119
+  type: 'test'
+  ...
+# Subtest: the checks catch a rule without citations and an unused citation
+ok 25 - the checks catch a rule without citations and an unused citation
+  ---
+  duration_ms: 1.136673
+  type: 'test'
+  ...
+# Subtest: the schema validator reports types, patterns and unknown properties
+ok 26 - the schema validator reports types, patterns and unknown properties
+  ---
+  duration_ms: 0.67094
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1659.406019
+exit 0
+

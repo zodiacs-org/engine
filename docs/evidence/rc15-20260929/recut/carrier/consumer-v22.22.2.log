@@ -1,0 +1,43 @@
+# sh carrier-gates.sh consumer at 7daf832 in a clean full-history clone; Node v22.22.2, npm 10.9.7, git 2.43.0, 2026-09-29
+## node scripts/verify-packed-consumer.mjs
+{
+  "version": "0.1.1-rc.15",
+  "timeBasis": "passed",
+  "zoneHistory": "passed",
+  "timing": "passed",
+  "configuredAspects": "passed",
+  "exactAspectBoundaries": "passed",
+  "chartDeclinations": "passed",
+  "sunConvention": "passed",
+  "boundMargin": "passed",
+  "exactSeparation": "passed",
+  "ephemerisSpan": "passed",
+  "metadata": "passed",
+  "bodyLabels": "passed",
+  "ephemerisRangeErrors": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "artifact": "<work>/pack/zodiacs-engine-0.1.1-rc.15.tgz",
+  "sha256": "bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637",
+  "runtime": "v22.22.2",
+  "typescript": "5.9.3",
+  "typeRoots": "none (types: [])",
+  "directory": "<tmp>/zodiacs-engine-consumer-ASPUAw",
+  "types": "passed",
+  "directoryRemoved": true
+}
+exit 0
+

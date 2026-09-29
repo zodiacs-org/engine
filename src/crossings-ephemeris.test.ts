@@ -100,8 +100,10 @@ describe("the audit's s2 cases, with the site's answers", () => {
       else lower = a;
     }
     const station = Math.round((lower + upper) / 2);
-    // rc.7 put it at 06:47:01.559Z; the observed ΔT, 6.3 s smaller, moves it later.
-    expect(new Date(station).toISOString()).toBe("2026-02-26T06:47:07.889Z");
+    // rc.7 put it at 06:47:01.559Z; the observed ΔT, 6.3 s smaller, moved it
+    // later, to 06:47:07.889Z; TT = UTC + 69.184 s exactly, 7 ms more than the
+    // model's ΔT, moves it back 7 ms.
+    expect(new Date(station).toISOString()).toBe("2026-02-26T06:47:07.882Z");
     const window = [new Date(station - 2 * DAY), new Date(station + 2 * DAY)] as const;
 
     // astronomy-engine reuses its nutation for instants within 1e-6 day, so

@@ -1,0 +1,405 @@
+(The worktree path is shown as <worktree> and the scratch directory as <scratch>.)
+Node v22.22.2, npm 10.9.7; HEAD b10ea6e with the evidence commit's files in the working tree
+=== npm run typecheck
+
+> @zodiacs/engine@0.1.1-rc.12 typecheck
+> tsc -p tsconfig.typecheck.json --pretty false
+
+=== exit 0
+=== npm run build
+
+> @zodiacs/engine@0.1.1-rc.12 build
+> tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/vedic.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json
+
+CLI Building entry: src/crossings.ts, src/deltat.ts, src/geo.ts, src/index.ts, src/internal-math.ts, src/internal.ts, src/receipt.ts, src/vedic.ts
+CLI Using tsconfig: tsconfig.build.json
+CLI tsup v8.5.1
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+ESM dist/deltat.js         161.00 B
+ESM dist/geo.js            11.51 KB
+ESM dist/index.js          12.37 KB
+ESM dist/internal-math.js  1.29 KB
+ESM dist/internal.js       305.00 B
+ESM dist/receipt.js        31.00 KB
+ESM dist/vedic.js          31.29 KB
+ESM dist/chunk-BQUX5KKE.js 10.55 KB
+ESM dist/chunk-AECKV73C.js 9.02 KB
+ESM dist/chunk-PFGUCNOK.js 2.86 KB
+ESM dist/chunk-GT6VTO57.js 18.17 KB
+ESM dist/chunk-WVB5S7ZI.js 10.67 KB
+ESM dist/chunk-CPALRSPC.js 1.42 KB
+ESM dist/chunk-IYNERVXW.js 380.00 B
+ESM dist/chunk-ONBZ4HK7.js 4.69 KB
+ESM dist/chunk-M52XEBPK.js 5.14 KB
+ESM dist/crossings.js      173.00 B
+ESM ⚡️ Build success in 345ms
+DTS Build start
+DTS ⚡️ Build success in 15736ms
+DTS dist/crossings.d.ts              4.33 KB
+DTS dist/internal.d.ts               450.00 B
+DTS dist/receipt.d.ts                10.45 KB
+DTS dist/deltat.d.ts                 3.72 KB
+DTS dist/geo.d.ts                    2.14 KB
+DTS dist/vedic.d.ts                  17.84 KB
+DTS dist/index.d.ts                  20.82 KB
+DTS dist/internal-math.d.ts          1.04 KB
+DTS dist/types-BAxJaaO5.d.ts         7.37 KB
+DTS dist/internal-math-1ntN4Tcl.d.ts 11.24 KB
+=== exit 0
+=== npm test
+
+> @zodiacs/engine@0.1.1-rc.12 test
+> vitest run
+
+
+ RUN  v2.1.9 <worktree>
+
+ ✓ src/vedic/ayanamsa.test.ts (23 tests) 788ms
+ ✓ src/receipt.test.ts (36 tests) 1633ms
+ ✓ src/configured-aspects.test.ts (52 tests) 958ms
+   ✓ legacy compatibility > preserves default matches and motion on real charts, with exactly bounded configured orbs 414ms
+   ✓ legacy compatibility > preserves defaults across seeded geometry, retrogrades, wrap and equal speeds 317ms
+ ✓ src/input-flags.test.ts (66 tests) 842ms
+ ✓ src/house-systems.test.ts (1903 tests) 4223ms
+   ✓ house systems inside the polar circle > keeps the midheaven on Alcabitius's 10th cusp and computes every other system 905ms
+ ✓ src/crossings.test.ts (50 tests) 459ms
+ ✓ src/geo/geonames-schema.test.ts (67 tests) 171ms
+ ✓ src/declination.test.ts (15 tests) 358ms
+ ✓ src/vedic/jyotish.test.ts (14 tests) 326ms
+ ✓ src/vedic/dasha.test.ts (15 tests) 4838ms
+   ✓ Vimshottari > finds each period from its own start and end: boundaries round-trip through the ISO strings 4744ms
+ ✓ src/points.test.ts (14 tests) 378ms
+ ✓ src/engine.test.ts (24 tests) 385ms
+   ✓ public composition APIs > finds the known 1990 Saturn return triple pass 324ms
+ ✓ src/progressions.test.ts (19 tests) 556ms
+ ✓ src/geo/geonames.test.ts (10 tests) 41ms
+ ✓ src/deltat-chart.test.ts (10 tests) 127ms
+ ✓ src/deltat.test.ts (12 tests) 423ms
+ ✓ src/porphyry.test.ts (14 tests) 781ms
+ ✓ src/public-input.test.ts (78 tests) 265ms
+ ✓ src/returns-bounds.test.ts (19 tests) 584ms
+   ✓ longitude crossing searches, with and without a budget > stops at the budget when refinements pass it, and has no budget of its own 351ms
+ ✓ src/crossings-ephemeris.test.ts (11 tests) 18865ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2100 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 1131ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2400 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 1429ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2600 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 550ms
+   ✓ the audit's s2 cases, with the site's answers > matches an hourly scan of the 2,600-day Moon window, crossing by crossing 4484ms
+   ✓ the audit's s2 cases, with the site's answers > returns Saturn's crossings of 0° from 1900 to 2100 at a 5-day step, and a daily scan agrees 9462ms
+   ✓ grazing crossing pairs on the ephemeris > keeps all three first-return passes for a natal Saturn 0.002° below the 2019 station 1377ms
+ ✓ src/receipt-conventions.test.ts (6 tests) 662ms
+   ✓ receipt conventions > records the current conventions, and judges applying by them 503ms
+ ✓ src/geo.test.ts (40 tests) 262ms
+ ✓ src/reference-span.test.ts (7 tests) 380ms
+ ✓ src/receipt-json.test.ts (88 tests) 162ms
+ ✓ src/returns-crossings.test.ts (16 tests) 46ms
+ ✓ src/houses-regression.test.ts (6 tests) 1664ms
+   ✓ shared rising intersection > satisfies the horizon and rising-direction geometry in both hemispheres 862ms
+   ✓ shared rising intersection > anchors public natal whole houses after correction 540ms
+ ✓ src/geo/timezone-precision.test.ts (17 tests) 390ms
+ ✓ src/placidus-limit.test.ts (1 test) 2053ms
+   ✓ the Placidus limit against the ERFA arbiter (brief v1 rule 1h) > computes Placidus exactly where the arbiter's limit allows it 2051ms
+ ✓ src/vedic/boundaries.test.ts (21 tests) 258ms
+ ✓ src/angles-erfa.test.ts (12 tests) 540ms
+ ✓ src/speed.test.ts (7 tests) 3057ms
+   ✓ longitude speeds > are the derivative of the reported longitude to 0.01″ a day 749ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 2026-07-26T19:57:16.990Z 602ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 2026-07-26T19:57:29.612Z 553ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 2026-07-26T19:57:49.612Z 606ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 1990-02-01T12:00:00Z 529ms
+ ✓ src/aspects.test.ts (12 tests) 32651ms
+   ✓ aspectMotion > agrees with linear motion on 400,000 seeded pairs 750ms
+   ✓ findAspects applying flags against the engine's own motion > match the sign of the orb's rate, measured over ±1 s, every 30 minutes in the first quarter of 2024 31836ms
+
+ Test Files  32 passed (32)
+      Tests  2685 passed (2685)
+   Start at  17:44:24
+   Duration  53.14s (transform 3.32s, setup 0ms, collect 13.20s, tests 79.12s, environment 23ms, prepare 12.14s)
+
+=== exit 0
+=== npm run exports:smoke
+
+> @zodiacs/engine@0.1.1-rc.12 exports:smoke
+> node scripts/module-resolution-smoke.mjs
+
+@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports
+=== exit 0
+=== npm run package:contents
+
+> @zodiacs/engine@0.1.1-rc.12 package:contents
+> node scripts/verify-package-contents.mjs
+
+@zodiacs/engine package contents passed (33 files, 298903 bytes unpacked)
+=== exit 0
+=== npm run pack:dry-run
+
+> @zodiacs/engine@0.1.1-rc.12 pack:dry-run
+> npm pack --dry-run
+
+
+> @zodiacs/engine@0.1.1-rc.12 prepack
+> npm run build
+
+
+> @zodiacs/engine@0.1.1-rc.12 build
+> tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/vedic.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --tsconfig tsconfig.build.json
+
+CLI Building entry: src/crossings.ts, src/deltat.ts, src/geo.ts, src/index.ts, src/internal-math.ts, src/internal.ts, src/receipt.ts, src/vedic.ts
+CLI Using tsconfig: tsconfig.build.json
+CLI tsup v8.5.1
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+ESM dist/crossings.js      173.00 B
+ESM dist/deltat.js         161.00 B
+ESM dist/geo.js            11.51 KB
+ESM dist/index.js          12.37 KB
+ESM dist/internal-math.js  1.29 KB
+ESM dist/internal.js       305.00 B
+ESM dist/receipt.js        31.00 KB
+ESM dist/vedic.js          31.29 KB
+ESM dist/chunk-BQUX5KKE.js 10.55 KB
+ESM dist/chunk-AECKV73C.js 9.02 KB
+ESM dist/chunk-PFGUCNOK.js 2.86 KB
+ESM dist/chunk-GT6VTO57.js 18.17 KB
+ESM dist/chunk-WVB5S7ZI.js 10.67 KB
+ESM dist/chunk-CPALRSPC.js 1.42 KB
+ESM dist/chunk-IYNERVXW.js 380.00 B
+ESM dist/chunk-ONBZ4HK7.js 4.69 KB
+ESM dist/chunk-M52XEBPK.js 5.14 KB
+ESM ⚡️ Build success in 322ms
+DTS Build start
+DTS ⚡️ Build success in 13217ms
+DTS dist/crossings.d.ts              4.33 KB
+DTS dist/internal.d.ts               450.00 B
+DTS dist/receipt.d.ts                10.45 KB
+DTS dist/deltat.d.ts                 3.72 KB
+DTS dist/geo.d.ts                    2.14 KB
+DTS dist/vedic.d.ts                  17.84 KB
+DTS dist/index.d.ts                  20.82 KB
+DTS dist/internal-math.d.ts          1.04 KB
+DTS dist/types-BAxJaaO5.d.ts         7.37 KB
+DTS dist/internal-math-1ntN4Tcl.d.ts 11.24 KB
+npm notice
+npm notice package: @zodiacs/engine@0.1.1-rc.12
+npm notice Tarball Contents
+npm notice 19.1kB CHANGELOG.md
+npm notice 1.1kB LICENSE
+npm notice 4.0kB LICENSING.md
+npm notice 2.3kB NOTICE
+npm notice 33.7kB README.md
+npm notice 9.2kB dist/chunk-AECKV73C.js
+npm notice 10.8kB dist/chunk-BQUX5KKE.js
+npm notice 1.5kB dist/chunk-CPALRSPC.js
+npm notice 18.6kB dist/chunk-GT6VTO57.js
+npm notice 380B dist/chunk-IYNERVXW.js
+npm notice 5.3kB dist/chunk-M52XEBPK.js
+npm notice 4.8kB dist/chunk-ONBZ4HK7.js
+npm notice 2.9kB dist/chunk-PFGUCNOK.js
+npm notice 10.9kB dist/chunk-WVB5S7ZI.js
+npm notice 4.4kB dist/crossings.d.ts
+npm notice 173B dist/crossings.js
+npm notice 3.9kB dist/deltat.d.ts
+npm notice 161B dist/deltat.js
+npm notice 2.2kB dist/geo.d.ts
+npm notice 11.8kB dist/geo.js
+npm notice 21.3kB dist/index.d.ts
+npm notice 12.7kB dist/index.js
+npm notice 11.5kB dist/internal-math-1ntN4Tcl.d.ts
+npm notice 1.1kB dist/internal-math.d.ts
+npm notice 1.3kB dist/internal-math.js
+npm notice 450B dist/internal.d.ts
+npm notice 305B dist/internal.js
+npm notice 10.7kB dist/receipt.d.ts
+npm notice 31.7kB dist/receipt.js
+npm notice 7.6kB dist/types-BAxJaaO5.d.ts
+npm notice 18.3kB dist/vedic.d.ts
+npm notice 32.1kB dist/vedic.js
+npm notice 2.6kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 0.1.1-rc.12
+npm notice filename: zodiacs-engine-0.1.1-rc.12.tgz
+npm notice package size: 89.6 kB
+npm notice unpacked size: 298.9 kB
+npm notice shasum: bc8b989733507b9910dbc6b6abf89754ed39f7e5
+npm notice integrity: sha512-jiA1/CvHHlsiT[...]/EDZvIhOODIkA==
+npm notice total files: 33
+npm notice
+zodiacs-engine-0.1.1-rc.12.tgz
+=== exit 0
+=== npm pack --ignore-scripts --pack-destination <scratch>/vedic-fix/pack
+npm notice
+npm notice package: @zodiacs/engine@0.1.1-rc.12
+npm notice Tarball Contents
+npm notice 19.1kB CHANGELOG.md
+npm notice 1.1kB LICENSE
+npm notice 4.0kB LICENSING.md
+npm notice 2.3kB NOTICE
+npm notice 33.7kB README.md
+npm notice 9.2kB dist/chunk-AECKV73C.js
+npm notice 10.8kB dist/chunk-BQUX5KKE.js
+npm notice 1.5kB dist/chunk-CPALRSPC.js
+npm notice 18.6kB dist/chunk-GT6VTO57.js
+npm notice 380B dist/chunk-IYNERVXW.js
+npm notice 5.3kB dist/chunk-M52XEBPK.js
+npm notice 4.8kB dist/chunk-ONBZ4HK7.js
+npm notice 2.9kB dist/chunk-PFGUCNOK.js
+npm notice 10.9kB dist/chunk-WVB5S7ZI.js
+npm notice 4.4kB dist/crossings.d.ts
+npm notice 173B dist/crossings.js
+npm notice 3.9kB dist/deltat.d.ts
+npm notice 161B dist/deltat.js
+npm notice 2.2kB dist/geo.d.ts
+npm notice 11.8kB dist/geo.js
+npm notice 21.3kB dist/index.d.ts
+npm notice 12.7kB dist/index.js
+npm notice 11.5kB dist/internal-math-1ntN4Tcl.d.ts
+npm notice 1.1kB dist/internal-math.d.ts
+npm notice 1.3kB dist/internal-math.js
+npm notice 450B dist/internal.d.ts
+npm notice 305B dist/internal.js
+npm notice 10.7kB dist/receipt.d.ts
+npm notice 31.7kB dist/receipt.js
+npm notice 7.6kB dist/types-BAxJaaO5.d.ts
+npm notice 18.3kB dist/vedic.d.ts
+npm notice 32.1kB dist/vedic.js
+npm notice 2.6kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 0.1.1-rc.12
+npm notice filename: zodiacs-engine-0.1.1-rc.12.tgz
+npm notice package size: 89.6 kB
+npm notice unpacked size: 298.9 kB
+npm notice shasum: bc8b989733507b9910dbc6b6abf89754ed39f7e5
+npm notice integrity: sha512-jiA1/CvHHlsiT[...]/EDZvIhOODIkA==
+npm notice total files: 33
+npm notice
+zodiacs-engine-0.1.1-rc.12.tgz
+=== exit 0
+=== npm run consumer:smoke -- <scratch>/vedic-fix/pack/zodiacs-engine-0.1.1-rc.12.tgz
+
+> @zodiacs/engine@0.1.1-rc.12 consumer:smoke
+> node scripts/verify-packed-consumer.mjs <scratch>/vedic-fix/pack/zodiacs-engine-0.1.1-rc.12.tgz
+
+{
+  "version": "0.1.1-rc.12",
+  "configuredAspects": "passed",
+  "chartDeclinations": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "artifact": "<scratch>/vedic-fix/pack/zodiacs-engine-0.1.1-rc.12.tgz",
+  "sha256": "ca2e1371789627d57234b2b8749fa8cc377b1bf4455619e2a54215351f35b0e6",
+  "runtime": "v22.22.2",
+  "typescript": "5.9.3",
+  "directory": "<tmp>/zodiacs-engine-consumer-XXXXXX",
+  "types": "passed"
+}
+=== exit 0
+=== node --test conformance/harness/selftest.mjs
+TAP version 13
+# Subtest: longitudes compare on the circle, in the rule unit
+ok 1 - longitudes compare on the circle, in the rule unit
+  ---
+  duration_ms: 1.415211
+  type: 'test'
+  ...
+# Subtest: arrays compare element by element and report the worst residual
+ok 2 - arrays compare element by element and report the worst residual
+  ---
+  duration_ms: 0.654726
+  type: 'test'
+  ...
+# Subtest: exact fields, missing fields and non-numbers fail
+ok 3 - exact fields, missing fields and non-numbers fail
+  ---
+  duration_ms: 0.683199
+  type: 'test'
+  ...
+# Subtest: validation accepts a conforming file and names each problem in a bad one
+ok 4 - validation accepts a conforming file and names each problem in a bad one
+  ---
+  duration_ms: 8.47639
+  type: 'test'
+  ...
+# Subtest: the committed vector files conform to SPEC.md
+ok 5 - the committed vector files conform to SPEC.md
+  ---
+  duration_ms: 44.961683
+  type: 'test'
+  ...
+# Subtest: the protocol: a handshake, then one response per request, in order
+ok 6 - the protocol: a handshake, then one response per request, in order
+  ---
+  duration_ms: 166.627056
+  type: 'test'
+  ...
+# Subtest: the protocol: a missing handshake or an answer out of order is refused
+ok 7 - the protocol: a missing handshake or an answer out of order is refused
+  ---
+  duration_ms: 320.931081
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 859.085504
+=== exit 0
+=== node conformance/harness/validate.mjs --expect-total 500
+L1 Positions: 240 vectors, 1 arbiter(s), sha256 853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c
+  position.apparent.ecliptic-true-of-date: 240
+L2 Houses and angles: 150 vectors, 5 arbiter(s), sha256 5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0
+  angles.asc-mc: 60
+  angles.vertex-east-point: 10
+  houses.cusps: 80
+L3 Time and calendars: 110 vectors, 5 arbiter(s), sha256 434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8
+  time.zone-offset: 45
+  time.local-mean-time: 5
+  time.tt-minus-utc: 10
+  time.delta-t: 15
+  calendar.to-jdn: 25
+  calendar.from-jdn: 10
+conformance: 500 vectors conform to SPEC.md
+=== exit 0
+=== node conformance/harness/run.mjs --adapter node conformance/adapters/zodiacs-engine.mjs --check conformance/results/zodiacs-engine.json
+zodiacs-engine 0.1.1-rc.12: 232 pass, 222 fail, 46 unsupported, 0 error (of 500)
+  L1: 47 pass, 193 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 35 pass, 29 fail, 46 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+=== exit 0
+=== node conformance/harness/report.mjs --check
+conformance: RESULTS.md and results/summary.json are current
+=== exit 0
+=== <scratch>/erfa-venv/bin/python -W ignore docs/evidence/vedic-2026-09-28/tools/reference_values.py --check
+ayanamsa-reference.json matches a rebuild
+=== exit 0
+=== npm run docs
+
+> @zodiacs/engine@0.1.1-rc.12 docs
+> typedoc --options typedoc.json
+
+[info] Loaded plugin <worktree>/scripts/typedoc-canonical.mjs
+[warning] ConventionSet, defined in @zodiacs/engine/src/receipt.ts, is referenced by receipt.NatalReceipt.conventions but not included in the documentation
+[info] html generated at ./docs/engine-api
+[warning] Found 0 errors and 1 warnings
+=== exit 0

@@ -8,24 +8,25 @@
   },
   "adapter": {
     "name": "zodiacs-engine",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "engine": "@zodiacs/engine",
-    "engineVersion": "0.1.1-rc.14",
+    "engineVersion": "0.1.1-rc.15",
     "configuration": {
       "ephemeris": "astronomy-engine 2.1.19",
       "deltaTModel": "zodiacs-deltat/1",
-      "timeZones": "the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
-      "positions": "natalChart with ΔT pinned at 0 s, so the requested instant is read as TT",
-      "angles": "natalChart at the UT1 instant (the engine reads its instant as UT1)"
+      "timeBasis": "from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise",
+      "timeZones": "before 1970 the shipped tzdb 2025c history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
+      "positions": "natalChart with timeScale \"tt\": the requested instant is read as TT",
+      "angles": "natalChart with timeScale \"ut1\": the requested instant is read as UT1"
     }
   },
   "values": "residuals",
   "summary": {
     "total": {
       "count": 500,
-      "pass": 232,
-      "fail": 222,
-      "unsupported": 46,
+      "pass": 266,
+      "fail": 193,
+      "unsupported": 41,
       "error": 0
     },
     "byLevel": {
@@ -45,9 +46,9 @@
       },
       "L3": {
         "count": 110,
-        "pass": 35,
-        "fail": 29,
-        "unsupported": 46,
+        "pass": 69,
+        "fail": 0,
+        "unsupported": 41,
         "error": 0
       }
     },
@@ -108,7 +109,7 @@
           "vertex": {
             "unit": "arcsec",
             "n": 10,
-            "median": 0.083046658,
+            "median": 0.0830466234,
             "p95": 0.285075699,
             "max": 0.285075699
           },
@@ -139,9 +140,9 @@
       },
       "time.zone-offset": {
         "count": 45,
-        "pass": 20,
-        "fail": 20,
-        "unsupported": 5,
+        "pass": 45,
+        "fail": 0,
+        "unsupported": 0,
         "error": 0
       },
       "time.local-mean-time": {
@@ -153,17 +154,17 @@
       },
       "time.tt-minus-utc": {
         "count": 10,
-        "pass": 0,
-        "fail": 9,
+        "pass": 9,
+        "fail": 0,
         "unsupported": 1,
         "error": 0,
         "residuals": {
           "tt_minus_utc_s": {
             "unit": "s",
             "n": 9,
-            "median": 0.387511294,
-            "p95": 0.633650924,
-            "max": 0.633650924
+            "median": 0,
+            "p95": 2.03450554e-8,
+            "max": 2.03450554e-8
           }
         }
       },
@@ -177,9 +178,9 @@
           "delta_t_s": {
             "unit": "s",
             "n": 15,
-            "median": 0.00409739545,
-            "p95": 0.0688908866,
-            "max": 0.0688908866
+            "median": 0.0001318,
+            "p95": 0.000505451953,
+            "max": 0.000505451953
           }
         }
       },
@@ -201,8 +202,8 @@
     "byTag": {
       "backzone-history": {
         "count": 20,
-        "pass": 0,
-        "fail": 20,
+        "pass": 20,
+        "fail": 0,
         "unsupported": 0,
         "error": 0
       }
@@ -863,7 +864,7 @@
       "id": "L1-POS-0051",
       "verdict": "fail",
       "residual": {
-        "lon": -0.332427532,
+        "lon": -0.332427556,
         "lat": -1.0673344
       },
       "meta": {
@@ -876,8 +877,8 @@
       "id": "L1-POS-0052",
       "verdict": "fail",
       "residual": {
-        "lon": 1.8826808,
-        "lat": -0.400363361
+        "lon": 1.8826805,
+        "lat": -0.400363337
       },
       "meta": {
         "flags": [
@@ -889,7 +890,7 @@
       "id": "L1-POS-0053",
       "verdict": "fail",
       "residual": {
-        "lon": -2.87510353,
+        "lon": -2.87510349,
         "lat": -5.98225813
       },
       "meta": {
@@ -902,8 +903,8 @@
       "id": "L1-POS-0054",
       "verdict": "fail",
       "residual": {
-        "lon": -2.15176325,
-        "lat": 0.443946406
+        "lon": -2.15176328,
+        "lat": 0.443946405
       },
       "meta": {
         "flags": [
@@ -915,7 +916,7 @@
       "id": "L1-POS-0055",
       "verdict": "pass",
       "residual": {
-        "lon": 0.108248414,
+        "lon": 0.108248404,
         "lat": -0.717250129
       },
       "meta": {
@@ -1383,7 +1384,7 @@
       "id": "L1-POS-0091",
       "verdict": "pass",
       "residual": {
-        "lon": -0.191269576,
+        "lon": -0.191269565,
         "lat": 0.0591364083
       },
       "meta": {
@@ -1396,8 +1397,8 @@
       "id": "L1-POS-0092",
       "verdict": "pass",
       "residual": {
-        "lon": 0.641275872,
-        "lat": -0.497127776
+        "lon": 0.641275941,
+        "lat": -0.497127782
       },
       "meta": {
         "flags": [
@@ -1409,8 +1410,8 @@
       "id": "L1-POS-0093",
       "verdict": "fail",
       "residual": {
-        "lon": -2.69995667,
-        "lat": -0.676772544
+        "lon": -2.69995665,
+        "lat": -0.676772543
       },
       "meta": {
         "flags": [
@@ -1422,8 +1423,8 @@
       "id": "L1-POS-0094",
       "verdict": "fail",
       "residual": {
-        "lon": 2.49443519,
-        "lat": 0.895874152
+        "lon": 2.4944352,
+        "lat": 0.895874153
       },
       "meta": {
         "flags": [
@@ -1435,7 +1436,7 @@
       "id": "L1-POS-0095",
       "verdict": "fail",
       "residual": {
-        "lon": 3.69845521,
+        "lon": 3.6984552,
         "lat": 1.1546807
       },
       "meta": {
@@ -1448,7 +1449,7 @@
       "id": "L1-POS-0096",
       "verdict": "fail",
       "residual": {
-        "lon": 2.22192673,
+        "lon": 2.22192674,
         "lat": 0.838767039
       },
       "meta": {
@@ -1513,7 +1514,7 @@
       "id": "L1-POS-0101",
       "verdict": "pass",
       "residual": {
-        "lon": -0.577750099,
+        "lon": -0.577750105,
         "lat": 0.0427318435
       },
       "meta": {
@@ -1526,8 +1527,8 @@
       "id": "L1-POS-0102",
       "verdict": "pass",
       "residual": {
-        "lon": 0.397759916,
-        "lat": 0.366340226
+        "lon": 0.397759836,
+        "lat": 0.366340212
       },
       "meta": {
         "flags": [
@@ -1539,7 +1540,7 @@
       "id": "L1-POS-0103",
       "verdict": "fail",
       "residual": {
-        "lon": -1.33066424,
+        "lon": -1.33066426,
         "lat": -0.808215284
       },
       "meta": {
@@ -1552,7 +1553,7 @@
       "id": "L1-POS-0104",
       "verdict": "fail",
       "residual": {
-        "lon": -1.11558303,
+        "lon": -1.11558302,
         "lat": -2.34001774
       },
       "meta": {
@@ -1565,7 +1566,7 @@
       "id": "L1-POS-0105",
       "verdict": "pass",
       "residual": {
-        "lon": -0.707664842,
+        "lon": -0.707664847,
         "lat": 0.455216753
       },
       "meta": {
@@ -2293,7 +2294,7 @@
       "id": "L1-POS-0161",
       "verdict": "fail",
       "residual": {
-        "lon": -1.35389357,
+        "lon": -1.35389355,
         "lat": 0.191309813
       },
       "meta": {
@@ -2306,8 +2307,8 @@
       "id": "L1-POS-0162",
       "verdict": "pass",
       "residual": {
-        "lon": 0.219412237,
-        "lat": 0.496779138
+        "lon": 0.219412379,
+        "lat": 0.49677915
       },
       "meta": {
         "flags": [
@@ -2319,7 +2320,7 @@
       "id": "L1-POS-0163",
       "verdict": "fail",
       "residual": {
-        "lon": -2.70351921,
+        "lon": -2.7035192,
         "lat": -0.805910939
       },
       "meta": {
@@ -2345,7 +2346,7 @@
       "id": "L1-POS-0165",
       "verdict": "fail",
       "residual": {
-        "lon": -0.421518472,
+        "lon": -0.421518469,
         "lat": -2.08049326
       },
       "meta": {
@@ -2553,7 +2554,7 @@
       "id": "L1-POS-0181",
       "verdict": "pass",
       "residual": {
-        "lon": 0.351439523,
+        "lon": 0.351439512,
         "lat": -0.479717572
       },
       "meta": {
@@ -2566,8 +2567,8 @@
       "id": "L1-POS-0182",
       "verdict": "pass",
       "residual": {
-        "lon": 0.190504671,
-        "lat": 0.117933784
+        "lon": 0.190504511,
+        "lat": 0.117933783
       },
       "meta": {
         "flags": [
@@ -2592,7 +2593,7 @@
       "id": "L1-POS-0184",
       "verdict": "fail",
       "residual": {
-        "lon": -0.724802439,
+        "lon": -0.724802462,
         "lat": 1.1004549
       },
       "meta": {
@@ -2605,7 +2606,7 @@
       "id": "L1-POS-0185",
       "verdict": "fail",
       "residual": {
-        "lon": 1.25431372,
+        "lon": 1.25431371,
         "lat": -0.103966901
       },
       "meta": {
@@ -2683,7 +2684,7 @@
       "id": "L1-POS-0191",
       "verdict": "pass",
       "residual": {
-        "lon": -0.302529829,
+        "lon": -0.302529841,
         "lat": -0.354353723
       },
       "meta": {
@@ -2696,8 +2697,8 @@
       "id": "L1-POS-0192",
       "verdict": "fail",
       "residual": {
-        "lon": -1.25909677,
-        "lat": -0.124455465
+        "lon": -1.25909703,
+        "lat": -0.124455453
       },
       "meta": {
         "flags": [
@@ -2709,8 +2710,8 @@
       "id": "L1-POS-0193",
       "verdict": "pass",
       "residual": {
-        "lon": 0.961168771,
-        "lat": -0.315899281
+        "lon": 0.961168756,
+        "lat": -0.31589928
       },
       "meta": {
         "flags": [
@@ -2748,7 +2749,7 @@
       "id": "L1-POS-0196",
       "verdict": "fail",
       "residual": {
-        "lon": 3.75906721,
+        "lon": 3.75906722,
         "lat": -0.0249726292
       },
       "meta": {
@@ -2774,7 +2775,7 @@
       "id": "L1-POS-0198",
       "verdict": "fail",
       "residual": {
-        "lon": -0.607025999,
+        "lon": -0.607026001,
         "lat": 1.71256716
       },
       "meta": {
@@ -2956,8 +2957,8 @@
       "id": "L1-POS-0212",
       "verdict": "pass",
       "residual": {
-        "lon": 0.664722352,
-        "lat": -0.957099
+        "lon": 0.66472263,
+        "lat": -0.957099032
       },
       "meta": {
         "flags": [
@@ -2969,8 +2970,8 @@
       "id": "L1-POS-0213",
       "verdict": "fail",
       "residual": {
-        "lon": -1.89622061,
-        "lat": 0.588184332
+        "lon": -1.8962206,
+        "lat": 0.58818433
       },
       "meta": {
         "flags": [
@@ -2982,8 +2983,8 @@
       "id": "L1-POS-0214",
       "verdict": "pass",
       "residual": {
-        "lon": -0.286797114,
-        "lat": 0.0523670811
+        "lon": -0.286797082,
+        "lat": 0.0523670797
       },
       "meta": {
         "flags": [
@@ -2995,7 +2996,7 @@
       "id": "L1-POS-0215",
       "verdict": "fail",
       "residual": {
-        "lon": -0.266623527,
+        "lon": -0.266623511,
         "lat": 1.71025028
       },
       "meta": {
@@ -3034,7 +3035,7 @@
       "id": "L1-POS-0218",
       "verdict": "fail",
       "residual": {
-        "lon": 4.10486979,
+        "lon": 4.10486978,
         "lat": -3.14572901
       },
       "meta": {
@@ -3216,8 +3217,8 @@
       "id": "L1-POS-0232",
       "verdict": "fail",
       "residual": {
-        "lon": 3.206731,
-        "lat": 1.71941828
+        "lon": 3.20673072,
+        "lat": 1.71941826
       },
       "meta": {
         "flags": [
@@ -3229,7 +3230,7 @@
       "id": "L1-POS-0233",
       "verdict": "fail",
       "residual": {
-        "lon": -3.57418095,
+        "lon": -3.57418094,
         "lat": 1.47856335
       },
       "meta": {
@@ -3242,8 +3243,8 @@
       "id": "L1-POS-0234",
       "verdict": "pass",
       "residual": {
-        "lon": -0.552180267,
-        "lat": 0.22025206
+        "lon": -0.552180334,
+        "lat": 0.220252061
       },
       "meta": {
         "flags": [
@@ -3255,7 +3256,7 @@
       "id": "L1-POS-0235",
       "verdict": "fail",
       "residual": {
-        "lon": 1.34046033,
+        "lon": 1.34046036,
         "lat": -3.22687621
       },
       "meta": {
@@ -3281,7 +3282,7 @@
       "id": "L1-POS-0237",
       "verdict": "fail",
       "residual": {
-        "lon": 0.582506494,
+        "lon": 0.582506495,
         "lat": 19.0281186
       },
       "meta": {
@@ -3517,80 +3518,80 @@
       "id": "L2-ASC-0024",
       "verdict": "pass",
       "residual": {
-        "asc": -0.0545357304,
-        "mc": -0.0611886626
+        "asc": -0.054535678,
+        "mc": -0.0611885787
       }
     },
     {
       "id": "L2-ASC-0025",
       "verdict": "pass",
       "residual": {
-        "asc": 0.0666331187,
-        "mc": 0.0633320524
+        "asc": 0.0666331441,
+        "mc": 0.0633320885
       }
     },
     {
       "id": "L2-ASC-0026",
       "verdict": "pass",
       "residual": {
-        "asc": -0.00949012803,
-        "mc": -0.0320473322
+        "asc": -0.00949009058,
+        "mc": -0.0320472675
       }
     },
     {
       "id": "L2-ASC-0027",
       "verdict": "pass",
       "residual": {
-        "asc": 0.00184696607,
-        "mc": 0.00207315222
+        "asc": 0.00184691655,
+        "mc": 0.0020730982
       }
     },
     {
       "id": "L2-ASC-0028",
       "verdict": "pass",
       "residual": {
-        "asc": 0.103530535,
-        "mc": 0.140959089
+        "asc": 0.103530515,
+        "mc": 0.140959061
       }
     },
     {
       "id": "L2-ASC-0029",
       "verdict": "pass",
       "residual": {
-        "asc": -0.0494405117,
-        "mc": -0.076896054
+        "asc": -0.049440507,
+        "mc": -0.0768960495
       }
     },
     {
       "id": "L2-ASC-0030",
       "verdict": "pass",
       "residual": {
-        "asc": 0.0794983067,
-        "mc": 0.105294026
+        "asc": 0.0794983059,
+        "mc": 0.105294025
       }
     },
     {
       "id": "L2-ASC-0031",
       "verdict": "pass",
       "residual": {
-        "asc": -0.0648727783,
-        "mc": -0.0543520103
+        "asc": -0.0648727881,
+        "mc": -0.0543520185
       }
     },
     {
       "id": "L2-ASC-0032",
       "verdict": "pass",
       "residual": {
-        "asc": 0.059631925,
-        "mc": 0.0457492311
+        "asc": 0.0596318962,
+        "mc": 0.0457492238
       }
     },
     {
       "id": "L2-ASC-0033",
       "verdict": "pass",
       "residual": {
-        "asc": 0.0273612936,
-        "mc": 0.0225282757
+        "asc": 0.0273612912,
+        "mc": 0.0225282706
       }
     },
     {
@@ -3845,8 +3846,8 @@
       "id": "L2-VTX-0005",
       "verdict": "pass",
       "residual": {
-        "vertex": -0.0824492858,
-        "east_point": -0.0543943723
+        "vertex": -0.0824492166,
+        "east_point": -0.0543943072
       }
     },
     {
@@ -3949,7 +3950,7 @@
       "id": "L2-CSP-0009",
       "verdict": "pass",
       "residual": {
-        "cusps": 0.027572587
+        "cusps": 0.0275725935
       }
     },
     {
@@ -4026,7 +4027,7 @@
       "id": "L2-CSP-0020",
       "verdict": "pass",
       "residual": {
-        "cusps": 0.0582884495
+        "cusps": 0.0582884643
       }
     },
     {
@@ -4145,21 +4146,21 @@
       "id": "L2-CSP-0037",
       "verdict": "pass",
       "residual": {
-        "cusps": -0.156163517
+        "cusps": -0.156163647
       }
     },
     {
       "id": "L2-CSP-0038",
       "verdict": "pass",
       "residual": {
-        "cusps": -0.016422792
+        "cusps": -0.016422802
       }
     },
     {
       "id": "L2-CSP-0039",
       "verdict": "pass",
       "residual": {
-        "cusps": -0.116753188
+        "cusps": -0.116753183
       }
     },
     {
@@ -4208,7 +4209,7 @@
       "id": "L2-CSP-0046",
       "verdict": "pass",
       "residual": {
-        "cusps": 0.0197491298
+        "cusps": 0.0197491832
       }
     },
     {
@@ -4250,7 +4251,7 @@
       "id": "L2-CSP-0052",
       "verdict": "pass",
       "residual": {
-        "cusps": -0.0364026235
+        "cusps": -0.0364026313
       }
     },
     {
@@ -4481,151 +4482,264 @@
     },
     {
       "id": "L3-TZ-0001",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0002",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0003",
-      "verdict": "fail",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
       "id": "L3-TZ-0004",
-      "verdict": "fail",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
       "id": "L3-TZ-0005",
-      "verdict": "fail",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
       "id": "L3-TZ-0006",
-      "verdict": "fail",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
       "id": "L3-TZ-0007",
-      "verdict": "fail",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
       "id": "L3-TZ-0008",
-      "verdict": "fail",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
       "id": "L3-TZ-0009",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0010",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0011",
-      "verdict": "fail",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
       "id": "L3-TZ-0012",
-      "verdict": "fail",
+      "verdict": "pass",
       "meta": {
-        "flags": [
-          "lmt"
-        ]
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
       "id": "L3-TZ-0013",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0014",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0015",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0016",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0017",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0018",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0019",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0020",
-      "verdict": "fail"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
     },
     {
       "id": "L3-TZ-0021",
-      "verdict": "pass"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
     },
     {
       "id": "L3-TZ-0022",
-      "verdict": "pass"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
     },
     {
       "id": "L3-TZ-0023",
-      "verdict": "pass"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
     },
     {
       "id": "L3-TZ-0024",
-      "verdict": "pass"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
     },
     {
       "id": "L3-TZ-0025",
-      "verdict": "pass"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
     },
     {
       "id": "L3-TZ-0026",
-      "verdict": "pass"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
     },
     {
       "id": "L3-TZ-0027",
-      "verdict": "pass"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
     },
     {
       "id": "L3-TZ-0028",
@@ -4633,40 +4747,46 @@
       "meta": {
         "flags": [
           "dst-gap"
-        ]
+        ],
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "dst"
       }
     },
     {
       "id": "L3-TZ-0029",
-      "verdict": "unsupported",
-      "detail": "the engine resolves a repeated local time to its earlier instant and does not return the later one",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "dst-fold"
         ],
-        "earlierOffsetS": -14400
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "dst"
       }
     },
     {
       "id": "L3-TZ-0030",
-      "verdict": "unsupported",
-      "detail": "the engine resolves a repeated local time to its earlier instant and does not return the later one",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "dst-fold"
         ],
-        "earlierOffsetS": 39600
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "dst"
       }
     },
     {
       "id": "L3-TZ-0031",
-      "verdict": "unsupported",
-      "detail": "the engine resolves a repeated local time to its earlier instant and does not return the later one",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "dst-fold"
         ],
-        "earlierOffsetS": 39600
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "dst"
       }
     },
     {
@@ -4675,18 +4795,22 @@
       "meta": {
         "flags": [
           "dst-gap"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone",
+        "cause": "dst"
       }
     },
     {
       "id": "L3-TZ-0033",
-      "verdict": "unsupported",
-      "detail": "the engine resolves a repeated local time to its earlier instant and does not return the later one",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "dst-fold"
         ],
-        "earlierOffsetS": 7200
+        "zone": "tzdb",
+        "dataForm": "main+backzone",
+        "cause": "dst"
       }
     },
     {
@@ -4695,7 +4819,10 @@
       "meta": {
         "flags": [
           "dst-gap"
-        ]
+        ],
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "legal-change"
       }
     },
     {
@@ -4704,19 +4831,23 @@
       "meta": {
         "flags": [
           "dst-gap"
-        ]
+        ],
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "date-line"
       }
     },
     {
       "id": "L3-TZ-0036",
-      "verdict": "unsupported",
-      "detail": "the engine resolves a repeated local time to its earlier instant and does not return the later one",
+      "verdict": "pass",
       "meta": {
         "flags": [
           "dst-fold",
           "lmt"
         ],
-        "earlierOffsetS": 53927
+        "zone": "tzdb",
+        "dataForm": "main+backzone",
+        "cause": "date-line"
       }
     },
     {
@@ -4725,7 +4856,9 @@
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
@@ -4734,7 +4867,9 @@
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
@@ -4743,7 +4878,9 @@
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
@@ -4752,7 +4889,9 @@
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
@@ -4761,7 +4900,9 @@
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
@@ -4770,126 +4911,166 @@
       "meta": {
         "flags": [
           "lmt"
-        ]
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
       "id": "L3-TZ-0043",
       "verdict": "pass",
       "meta": {
-        "flags": [
-          "lmt"
-        ]
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
       }
     },
     {
       "id": "L3-TZ-0044",
-      "verdict": "pass"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
     },
     {
       "id": "L3-TZ-0045",
-      "verdict": "pass"
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
     },
     {
       "id": "L3-LMT-0001",
       "verdict": "unsupported",
-      "detail": "the engine resolves local times against a zone's history only; it has no birthplace local mean time"
+      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
     },
     {
       "id": "L3-LMT-0002",
       "verdict": "unsupported",
-      "detail": "the engine resolves local times against a zone's history only; it has no birthplace local mean time"
+      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
     },
     {
       "id": "L3-LMT-0003",
       "verdict": "unsupported",
-      "detail": "the engine resolves local times against a zone's history only; it has no birthplace local mean time"
+      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
     },
     {
       "id": "L3-LMT-0004",
       "verdict": "unsupported",
-      "detail": "the engine resolves local times against a zone's history only; it has no birthplace local mean time"
+      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
     },
     {
       "id": "L3-LMT-0005",
       "verdict": "unsupported",
-      "detail": "the engine resolves local times against a zone's history only; it has no birthplace local mean time"
+      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
     },
     {
       "id": "L3-TTU-0001",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "tt_minus_utc_s": 0.0445489391
+        "tt_minus_utc_s": 0
       },
       "meta": {
-        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
-        "segment": "observed"
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 10,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
       }
     },
     {
       "id": "L3-TTU-0002",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "tt_minus_utc_s": 0.61248867
+        "tt_minus_utc_s": 4.20464374e-9
       },
       "meta": {
-        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
-        "segment": "observed"
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 10,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
       }
     },
     {
       "id": "L3-TTU-0003",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "tt_minus_utc_s": -0.387511294
+        "tt_minus_utc_s": 7.10542736e-15
       },
       "meta": {
-        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
-        "segment": "observed"
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 11,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
       }
     },
     {
       "id": "L3-TTU-0004",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "tt_minus_utc_s": -0.633650924
+        "tt_minus_utc_s": -2.03450554e-8
       },
       "meta": {
-        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
-        "segment": "observed"
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 19,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
       }
     },
     {
       "id": "L3-TTU-0005",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "tt_minus_utc_s": -0.00228884326
+        "tt_minus_utc_s": 0
       },
       "meta": {
-        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
-        "segment": "observed"
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 25,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
       }
     },
     {
       "id": "L3-TTU-0006",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "tt_minus_utc_s": -0.354
+        "tt_minus_utc_s": 0
       },
       "meta": {
-        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
-        "segment": "observed"
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 32,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
       }
     },
     {
       "id": "L3-TTU-0007",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "tt_minus_utc_s": 0.406260084
+        "tt_minus_utc_s": 1.15740875e-8
       },
       "meta": {
-        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
-        "segment": "observed"
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 36,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
       }
     },
     {
@@ -4899,33 +5080,42 @@
     },
     {
       "id": "L3-TTU-0009",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "tt_minus_utc_s": -0.593739904
+        "tt_minus_utc_s": 0
       },
       "meta": {
-        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
-        "segment": "observed"
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 37,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
       }
     },
     {
       "id": "L3-TTU-0010",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "tt_minus_utc_s": -0.054037594
+        "tt_minus_utc_s": 0
       },
       "meta": {
-        "note": "the engine reads UTC as UT1, so its TT − UTC is its ΔT",
-        "segment": "observed"
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 37,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
       }
     },
     {
       "id": "L3-DT-0001",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.00405617782
+        "delta_t_s": -0.0000561694824
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -4933,9 +5123,10 @@
       "id": "L3-DT-0002",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.0136278855
+        "delta_t_s": 0.0001743
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -4943,9 +5134,10 @@
       "id": "L3-DT-0003",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.000244179396
+        "delta_t_s": -0.000118212988
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -4953,9 +5145,10 @@
       "id": "L3-DT-0004",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.0223380435
+        "delta_t_s": 0.0000226870117
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -4963,9 +5156,10 @@
       "id": "L3-DT-0005",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.000345356924
+        "delta_t_s": 0.00000572597656
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -4973,9 +5167,10 @@
       "id": "L3-DT-0006",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.0213650627
+        "delta_t_s": -0.000232925977
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -4983,9 +5178,10 @@
       "id": "L3-DT-0007",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": 0.00409739545
+        "delta_t_s": -0.0003482
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -4993,9 +5189,10 @@
       "id": "L3-DT-0008",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.0666333054
+        "delta_t_s": -0.0000754259766
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -5003,9 +5200,10 @@
       "id": "L3-DT-0009",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": 0.000196299229
+        "delta_t_s": 0.0001963
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -5013,9 +5211,10 @@
       "id": "L3-DT-0010",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.0300584303
+        "delta_t_s": -0.0004561
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -5023,9 +5222,10 @@
       "id": "L3-DT-0011",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": 0.00336229792
+        "delta_t_s": 0.0001638
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -5033,9 +5233,10 @@
       "id": "L3-DT-0012",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.0167173214
+        "delta_t_s": -0.0000957519531
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -5043,9 +5244,10 @@
       "id": "L3-DT-0013",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.00305020449
+        "delta_t_s": -0.0000872480469
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -5053,9 +5255,10 @@
       "id": "L3-DT-0014",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.0688908866
+        "delta_t_s": -0.000505451953
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
@@ -5063,186 +5266,187 @@
       "id": "L3-DT-0015",
       "verdict": "pass",
       "residual": {
-        "delta_t_s": -0.0038065983
+        "delta_t_s": 0.0001318
       },
       "meta": {
+        "model": "iers-utc/1",
         "segment": "observed"
       }
     },
     {
       "id": "L3-JDN-0001",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0002",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0003",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0004",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0005",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0006",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0007",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0008",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0009",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0010",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0011",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0012",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0013",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0014",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0015",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0016",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0017",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0018",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0019",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0020",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0021",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0022",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0023",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0024",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-JDN-0025",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-CAL-0001",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-CAL-0002",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-CAL-0003",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-CAL-0004",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-CAL-0005",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-CAL-0006",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-CAL-0007",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-CAL-0008",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-CAL-0009",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     },
     {
       "id": "L3-CAL-0010",
       "verdict": "unsupported",
-      "detail": "the engine has no calendar conversion in its public API"
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     }
   ]
 }

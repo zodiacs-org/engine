@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { createGeoNamesClient, offsetAt, resolveBirth, resolveLocalToUtc } from "./geo.js";
+import { createGeoNamesClient, offsetAt, prepareLocalTime, resolveBirth, resolveLocalToUtc } from "./geo.js";
 import type { LocalBirthInput } from "./geo.js";
 
 describe("timezone resolution", () => {
@@ -61,7 +61,8 @@ describe("timezone resolution", () => {
     }
   );
 
-  it("handles ordinary, gap, fold, and local-mean-time instants", () => {
+  it("handles ordinary, gap, fold, and local-mean-time instants", async () => {
+    await prepareLocalTime("1908-02-11", "America/Mexico_City");
     expect(resolveLocalToUtc("2024-01-15", "12:00", "America/New_York").utc.toISOString()).toBe(
       "2024-01-15T17:00:00.000Z"
     );
@@ -74,8 +75,9 @@ describe("timezone resolution", () => {
     expect(fold.flags).toContain("dst-fold");
     expect(fold.utc.toISOString()).toBe("2024-11-03T05:30:00.000Z");
 
-    const historic = resolveLocalToUtc("1907-07-06", "08:30", "America/Mexico_City");
-    expect(historic.utc.toISOString()).toBe("1907-07-06T15:06:36.000Z");
+    // A synthetic birth time on Mexico City's local mean time, −6:36:36 in tzdb.
+    const historic = resolveLocalToUtc("1908-02-11", "02:47", "America/Mexico_City");
+    expect(historic.utc.toISOString()).toBe("1908-02-11T09:23:36.000Z");
     expect(historic.offsetMinutes).toBeCloseTo(-396.6, 10);
     expect(historic.flags).toEqual(["lmt"]);
   });

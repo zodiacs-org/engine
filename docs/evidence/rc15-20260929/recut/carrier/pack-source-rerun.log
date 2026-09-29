@@ -1,0 +1,4 @@
+# Clean clones of 51f567ebd9ae8d0b74598e408ab54dd6ffc8f334, npm ci, npm run build, npm pack --ignore-scripts
+first: 51f567e, node v22.22.2, npm 10.9.7: sha256 bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637, 189575 bytes, 54 files
+node20: 51f567e, node v20.19.0, npm 10.8.2: sha256 bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637, 189575 bytes, 54 files
+node24: 51f567e, node v24.21.0, npm 11.19.0: sha256 bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637, 189575 bytes, 54 files

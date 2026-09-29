@@ -1,0 +1,207 @@
+# v22.22.2, commit 353b71b
+
+## npm run typecheck
+
+> @zodiacs/engine@0.1.1-rc.13 typecheck
+> tsc -p tsconfig.typecheck.json --pretty false
+
+exit 0
+
+## npm run build
+
+> @zodiacs/engine@0.1.1-rc.13 build
+> tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --minify-whitespace --tsconfig tsconfig.build.json
+
+CLI Building entry: src/crossings.ts, src/deltat.ts, src/geo.ts, src/index.ts, src/internal-math.ts, src/internal.ts, src/receipt.ts
+CLI Using tsconfig: tsconfig.build.json
+CLI tsup v8.5.1
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+ESM dist/tzdb-2025c-09-7MFBN5QM.js 10.01 KB
+ESM dist/tzdb-2025c-10-PQJ2JGGQ.js 8.95 KB
+ESM dist/tzdb-2025c-11-HINLTUQK.js 13.87 KB
+ESM dist/tzdb-2025c-12-EMYZEPXM.js 11.91 KB
+ESM dist/tzdb-2025c-13-OWCPDRL5.js 9.93 KB
+ESM dist/tzdb-2025c-14-6AQ62DBT.js 9.96 KB
+ESM dist/tzdb-2025c-15-PYEFR7P3.js 11.23 KB
+ESM dist/tzdb-2025c-01-MJBOAZYR.js 10.59 KB
+ESM dist/tzdb-2025c-02-GQQTFFSH.js 16.29 KB
+ESM dist/tzdb-2025c-03-Y6KSRPWM.js 8.49 KB
+ESM dist/tzdb-2025c-04-RBKQASOG.js 11.78 KB
+ESM dist/tzdb-2025c-05-L3W3NCRK.js 12.32 KB
+ESM dist/tzdb-2025c-06-5SF4ARJN.js 10.20 KB
+ESM dist/tzdb-2025c-07-IT7YNTS3.js 15.14 KB
+ESM dist/tzdb-2025c-08-AOS37KZU.js 12.11 KB
+ESM dist/crossings.js              154.00 B
+ESM dist/deltat.js                 130.00 B
+ESM dist/geo.js                    21.50 KB
+ESM dist/index.js                  19.14 KB
+ESM dist/chunk-M3LIDGDI.js         7.26 KB
+ESM dist/chunk-WIVWGEBZ.js         2.39 KB
+ESM dist/internal-math.js          1.08 KB
+ESM dist/internal.js               266.00 B
+ESM dist/chunk-A6MGVJRZ.js         18.24 KB
+ESM dist/chunk-Q5MKOEIN.js         8.64 KB
+ESM dist/receipt.js                30.13 KB
+ESM dist/chunk-EURVDBZF.js         1.89 KB
+ESM dist/chunk-XWCYBOLP.js         1.17 KB
+ESM dist/chunk-AGCWGEZV.js         8.85 KB
+ESM dist/chunk-ACHO6QPL.js         3.10 KB
+ESM dist/tzdb-2025c-00-C6FKXJV6.js 11.29 KB
+ESM dist/chunk-5EN2HVEE.js         3.94 KB
+ESM ⚡️ Build success in 189ms
+DTS Build start
+DTS ⚡️ Build success in 12165ms
+DTS dist/crossings.d.ts              4.33 KB
+DTS dist/internal.d.ts               522.00 B
+DTS dist/receipt.d.ts                10.92 KB
+DTS dist/deltat.d.ts                 3.81 KB
+DTS dist/geo.d.ts                    7.41 KB
+DTS dist/index.d.ts                  22.89 KB
+DTS dist/internal-math.d.ts          1.04 KB
+DTS dist/types-DXsp9xTk.d.ts         8.71 KB
+DTS dist/internal-math-B_vv0Cf_.d.ts 11.24 KB
+exit 0
+
+## npm run exports:smoke
+
+> @zodiacs/engine@0.1.1-rc.13 exports:smoke
+> node scripts/module-resolution-smoke.mjs
+
+@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, the core graph carries no zone history, and the geo entry loads its 16 shards lazily
+exit 0
+
+## npm run package:contents
+
+> @zodiacs/engine@0.1.1-rc.13 package:contents
+> node scripts/verify-package-contents.mjs
+
+@zodiacs/engine package contents passed (47 files, 465029 bytes unpacked: 276525 without the zone-history shards, 188504 in 16 shards)
+exit 0
+
+## npm run pack:dry-run
+
+> @zodiacs/engine@0.1.1-rc.13 pack:dry-run
+> npm pack --dry-run
+
+
+> @zodiacs/engine@0.1.1-rc.13 prepack
+> npm run build
+
+
+> @zodiacs/engine@0.1.1-rc.13 build
+> tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/internal.ts src/internal-math.ts --format esm --dts --clean --splitting --minify-whitespace --tsconfig tsconfig.build.json
+
+CLI Building entry: src/crossings.ts, src/deltat.ts, src/geo.ts, src/index.ts, src/internal-math.ts, src/internal.ts, src/receipt.ts
+CLI Using tsconfig: tsconfig.build.json
+CLI tsup v8.5.1
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+ESM dist/tzdb-2025c-09-7MFBN5QM.js 10.01 KB
+ESM dist/tzdb-2025c-10-PQJ2JGGQ.js 8.95 KB
+ESM dist/tzdb-2025c-11-HINLTUQK.js 13.87 KB
+ESM dist/tzdb-2025c-12-EMYZEPXM.js 11.91 KB
+ESM dist/tzdb-2025c-13-OWCPDRL5.js 9.93 KB
+ESM dist/tzdb-2025c-14-6AQ62DBT.js 9.96 KB
+ESM dist/tzdb-2025c-15-PYEFR7P3.js 11.23 KB
+ESM dist/tzdb-2025c-01-MJBOAZYR.js 10.59 KB
+ESM dist/tzdb-2025c-02-GQQTFFSH.js 16.29 KB
+ESM dist/tzdb-2025c-03-Y6KSRPWM.js 8.49 KB
+ESM dist/tzdb-2025c-04-RBKQASOG.js 11.78 KB
+ESM dist/tzdb-2025c-05-L3W3NCRK.js 12.32 KB
+ESM dist/tzdb-2025c-06-5SF4ARJN.js 10.20 KB
+ESM dist/tzdb-2025c-07-IT7YNTS3.js 15.14 KB
+ESM dist/tzdb-2025c-08-AOS37KZU.js 12.11 KB
+ESM dist/crossings.js              154.00 B
+ESM dist/deltat.js                 130.00 B
+ESM dist/geo.js                    21.50 KB
+ESM dist/index.js                  19.14 KB
+ESM dist/chunk-M3LIDGDI.js         7.26 KB
+ESM dist/chunk-WIVWGEBZ.js         2.39 KB
+ESM dist/internal-math.js          1.08 KB
+ESM dist/internal.js               266.00 B
+ESM dist/chunk-A6MGVJRZ.js         18.24 KB
+ESM dist/chunk-Q5MKOEIN.js         8.64 KB
+ESM dist/receipt.js                30.13 KB
+ESM dist/chunk-EURVDBZF.js         1.89 KB
+ESM dist/chunk-XWCYBOLP.js         1.17 KB
+ESM dist/chunk-AGCWGEZV.js         8.85 KB
+ESM dist/chunk-ACHO6QPL.js         3.10 KB
+ESM dist/chunk-5EN2HVEE.js         3.94 KB
+ESM dist/tzdb-2025c-00-C6FKXJV6.js 11.29 KB
+ESM ⚡️ Build success in 328ms
+DTS Build start
+DTS ⚡️ Build success in 12433ms
+DTS dist/crossings.d.ts              4.33 KB
+DTS dist/internal.d.ts               522.00 B
+DTS dist/receipt.d.ts                10.92 KB
+DTS dist/deltat.d.ts                 3.81 KB
+DTS dist/geo.d.ts                    7.41 KB
+DTS dist/index.d.ts                  22.89 KB
+DTS dist/internal-math.d.ts          1.04 KB
+DTS dist/types-DXsp9xTk.d.ts         8.71 KB
+DTS dist/internal-math-B_vv0Cf_.d.ts 11.24 KB
+npm notice
+npm notice package: @zodiacs/engine@0.1.1-rc.13
+npm notice Tarball Contents
+npm notice 23.2kB CHANGELOG.md
+npm notice 1.1kB LICENSE
+npm notice 4.5kB LICENSING.md
+npm notice 2.7kB NOTICE
+npm notice 38.9kB README.md
+npm notice 4.0kB dist/chunk-5EN2HVEE.js
+npm notice 18.7kB dist/chunk-A6MGVJRZ.js
+npm notice 3.2kB dist/chunk-ACHO6QPL.js
+npm notice 9.1kB dist/chunk-AGCWGEZV.js
+npm notice 1.9kB dist/chunk-EURVDBZF.js
+npm notice 7.4kB dist/chunk-M3LIDGDI.js
+npm notice 8.8kB dist/chunk-Q5MKOEIN.js
+npm notice 2.5kB dist/chunk-WIVWGEBZ.js
+npm notice 1.2kB dist/chunk-XWCYBOLP.js
+npm notice 4.4kB dist/crossings.d.ts
+npm notice 154B dist/crossings.js
+npm notice 3.9kB dist/deltat.d.ts
+npm notice 130B dist/deltat.js
+npm notice 7.6kB dist/geo.d.ts
+npm notice 22.0kB dist/geo.js
+npm notice 23.5kB dist/index.d.ts
+npm notice 19.6kB dist/index.js
+npm notice 11.5kB dist/internal-math-B_vv0Cf_.d.ts
+npm notice 1.1kB dist/internal-math.d.ts
+npm notice 1.1kB dist/internal-math.js
+npm notice 522B dist/internal.d.ts
+npm notice 266B dist/internal.js
+npm notice 11.2kB dist/receipt.d.ts
+npm notice 30.9kB dist/receipt.js
+npm notice 8.9kB dist/types-DXsp9xTk.d.ts
+npm notice 11.6kB dist/tzdb-2025c-00-C6FKXJV6.js
+npm notice 10.8kB dist/tzdb-2025c-01-MJBOAZYR.js
+npm notice 16.7kB dist/tzdb-2025c-02-GQQTFFSH.js
+npm notice 8.7kB dist/tzdb-2025c-03-Y6KSRPWM.js
+npm notice 12.1kB dist/tzdb-2025c-04-RBKQASOG.js
+npm notice 12.6kB dist/tzdb-2025c-05-L3W3NCRK.js
+npm notice 10.4kB dist/tzdb-2025c-06-5SF4ARJN.js
+npm notice 15.5kB dist/tzdb-2025c-07-IT7YNTS3.js
+npm notice 12.4kB dist/tzdb-2025c-08-AOS37KZU.js
+npm notice 10.3kB dist/tzdb-2025c-09-7MFBN5QM.js
+npm notice 9.2kB dist/tzdb-2025c-10-PQJ2JGGQ.js
+npm notice 14.2kB dist/tzdb-2025c-11-HINLTUQK.js
+npm notice 12.2kB dist/tzdb-2025c-12-EMYZEPXM.js
+npm notice 10.2kB dist/tzdb-2025c-13-OWCPDRL5.js
+npm notice 10.2kB dist/tzdb-2025c-14-6AQ62DBT.js
+npm notice 11.5kB dist/tzdb-2025c-15-PYEFR7P3.js
+npm notice 2.5kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 0.1.1-rc.13
+npm notice filename: zodiacs-engine-0.1.1-rc.13.tgz
+npm notice package size: 131.3 kB
+npm notice unpacked size: 465.0 kB
+npm notice shasum: 2c8225672aa0177522cfd83aba63ed91ccbddf7c
+npm notice integrity: sha512-VKZ3EA7QxGwjv[...]LDai0kVWhqkNg==
+npm notice total files: 47
+npm notice
+zodiacs-engine-0.1.1-rc.13.tgz
+exit 0

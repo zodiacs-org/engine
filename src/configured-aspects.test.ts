@@ -214,7 +214,7 @@ describe("instantaneous motion and circular corners", () => {
 
 describe("legacy compatibility", () => {
   it("preserves default matches and motion on real charts, with exactly bounded configured orbs", () => {
-    for(const utc of ["1907-07-06T15:07:00Z","2000-01-01T12:00:00Z","2026-09-28T00:00:00Z"]){
+    for(const utc of ["1908-02-11T09:23:00Z","2000-01-01T12:00:00Z","2026-09-28T00:00:00Z"]){
       const chart=natalChart({utc});
       const aspects=findConfiguredAspects(chart.bodies,DEFAULT_ASPECT_POLICY).aspects;
       expect(aspects.map(semanticFields)).toEqual(chart.aspects.map(semanticFields));
