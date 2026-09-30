@@ -12,27 +12,41 @@
 // The Moon seen from the geocentre is the exception: its apparent position
 // keeps the engine's convention, the series at the instant, without light time
 // or aberration, so that calc agrees with positions() and natalChart().
+//
+// A topocentric observer sits on the IERS 2003 ellipsoid, turned by the
+// engine's apparent sidereal time and taken back to EQJ by the engine's own
+// nutation and precession, without polar motion.
 import {
   BaryState,
   Body,
   CorrectLightTravel,
+  DEG2RAD,
   GeoMoon,
   GeoVector,
   HelioState,
   HelioVector,
-  ObserverState,
-  ObserverVector,
+  KM_PER_AU,
   Vector
 } from "astronomy-engine";
-import type { AstroTime, Observer } from "astronomy-engine";
+import type { AstroTime } from "astronomy-engine";
 
+import { apply, transpose } from "./calc-frames.js";
 import type { CalcCorrection as Correction, Vec3 } from "./calc-frames.js";
+import { gastHours } from "./ephemeris.js";
+import { equatorRows } from "./equator.js";
+
+/** Geodetic latitude and east longitude, degrees, and height above the ellipsoid, metres. */
+export interface Site {
+  readonly latitude: number;
+  readonly longitude: number;
+  readonly height: number;
+}
 
 export type Center =
   | { readonly kind: "geocentric" }
   | { readonly kind: "heliocentric" }
   | { readonly kind: "barycentric" }
-  | { readonly kind: "topocentric"; readonly observer: Observer };
+  | { readonly kind: "topocentric"; readonly site: Site };
 
 interface Cartesian {
   x: number;
@@ -51,8 +65,53 @@ const add = (a: Vec3, b: Vec3): Vec3 => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
 const sub = (a: Vec3, b: Vec3): Vec3 => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 export const length = ([x, y, z]: Vec3): number => Math.hypot(x, y, z);
 
+// astronomy-engine 2.1.19's figure and rotation of the Earth, as its terra
+// uses them: the IERS 2003 ellipsoid (a = 6378.1366 km, 1/f = 298.25642) and
+// the Earth's angular velocity, rad/s.
+const EARTH_FLATTENING = 0.996647180302104;
+const EARTH_FLATTENING_SQUARED = EARTH_FLATTENING * EARTH_FLATTENING;
+const EARTH_EQUATORIAL_RADIUS_KM = 6378.1366;
+const ANGVEL = 7.292115e-5;
+
+/**
+ * The observer's position (au) and velocity (au/day) on the true equator and
+ * equinox of date, at `st`, the Greenwich apparent sidereal time in hours:
+ * astronomy-engine 2.1.19's terra, term for term. astronomy-engine is
+ * Copyright (c) 2019-2023 Don Cross, MIT License; NOTICE carries it.
+ */
+function terra(site: Site, st: number): { pos: Vec3; vel: Vec3 } {
+  const phi = site.latitude * DEG2RAD;
+  const sinphi = Math.sin(phi);
+  const cosphi = Math.cos(phi);
+  const c = 1 / Math.hypot(cosphi, EARTH_FLATTENING * sinphi);
+  const s = EARTH_FLATTENING_SQUARED * c;
+  const heightKm = site.height / 1000;
+  const ach = EARTH_EQUATORIAL_RADIUS_KM * c + heightKm;
+  const ash = EARTH_EQUATORIAL_RADIUS_KM * s + heightKm;
+  const stlocl = (15 * st + site.longitude) * DEG2RAD;
+  const sinst = Math.sin(stlocl);
+  const cosst = Math.cos(stlocl);
+  return {
+    pos: [(ach * cosphi * cosst) / KM_PER_AU, (ach * cosphi * sinst) / KM_PER_AU, (ash * sinphi) / KM_PER_AU],
+    vel: [(-ANGVEL * ach * cosphi * sinst * 86400) / KM_PER_AU, (ANGVEL * ach * cosphi * cosst * 86400) / KM_PER_AU, 0]
+  };
+}
+
+/**
+ * The observer's geocentric position and velocity on EQJ axes: terra at the
+ * engine's apparent sidereal time (src/ephemeris.ts), turned back from the
+ * true equator and equinox of date by the engine's nutation and precession
+ * (src/equator.ts). astronomy-engine's ObserverState does the same with its
+ * five-term nutation and a sidereal time it caches by TT alone.
+ */
+function observerState(site: Site, time: AstroTime): { r: Vec3; v: Vec3 } {
+  const { pos, vel } = terra(site, gastHours(time));
+  const back = transpose(equatorRows(time.tt, "true"));
+  return { r: apply(back, pos), v: apply(back, vel) };
+}
+
 function observerAt(center: Center, time: AstroTime): Vec3 {
-  return center.kind === "topocentric" ? vec(ObserverVector(time, center.observer, false)) : ZERO;
+  return center.kind === "topocentric" ? observerState(center.site, time).r : ZERO;
 }
 
 /** Geometric, from the geocentre: the Moon from its series, the rest from heliocentric vectors. */
@@ -140,6 +199,6 @@ export function geometricState(body: Body, center: Center, time: AstroTime): { r
   const r = sub(target.r, earth.r);
   const v = sub(target.v, earth.v);
   if (center.kind === "geocentric") return { r, v };
-  const site = split(ObserverState(time, center.observer, false));
+  const site = observerState(center.site, time);
   return { r: sub(r, site.r), v: sub(v, site.v) };
 }

@@ -114,9 +114,13 @@ describe("the root entry's isolation check", () => {
   it("names the modules of the calc, window, techniques, houses and sky entries, and not the root's houses.ts", () => {
     for (const path of [
       "src/calc.ts", "src/calc-frames.ts", "src/calc-reduce.mts", "src/window.ts", "src/window-ranges.ts",
-      "src/techniques.ts", "src/techniques/returns.ts", "src/sky.ts", "src/sky/riseset.ts", "src/houses-extra.ts", "src/houses-extra.mts"
+      "src/techniques.ts", "src/techniques/returns.ts", "src/sky.ts", "src/sky/riseset.ts", "src/houses-extra.ts", "src/houses-extra.mts",
+      "src/equator.ts"
     ]) expect(OPT_IN_SOURCE.test(path), path).toBe(true);
-    for (const path of ["src/houses.ts", "src/calculus.ts", "src/windows.ts", "src/skyline.ts", "src/techniquesx/a.ts", "src/first-millisecond.ts"]) {
+    for (const path of [
+      "src/houses.ts", "src/calculus.ts", "src/windows.ts", "src/skyline.ts", "src/techniquesx/a.ts", "src/first-millisecond.ts",
+      "src/frame.ts", "src/nutation.ts", "src/equatorial.ts"
+    ]) {
       expect(OPT_IN_SOURCE.test(path), path).toBe(false);
     }
     const bypass = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", "src/window-ranges.ts"], rootImports: ["src/window-ranges.ts"] });

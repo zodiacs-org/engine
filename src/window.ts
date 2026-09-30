@@ -5,15 +5,13 @@
  * This entry point carries the engine's ephemeris, like the root entry point,
  * and is separate from it so that the root entry point does not grow.
  */
-import { MakeTime, SetDeltaTFunction, e_tilt } from "astronomy-engine";
-
 import { ASPECTS, ASPECT_TYPES, matchAspect, separation } from "./aspects.js";
 import { validateBirthSettings } from "./birth-input.js";
 import { dateFrom } from "./date-input.js";
-import { deltaT } from "./deltat.js";
 import { bodyLongitude, gastHours, onChartClock } from "./ephemeris.js";
 import { computeAngles, computeHouses, houseOf, isPolarUndefinedHouseSystem } from "./houses.js";
 import type { AngleInput } from "./houses.js";
+import { tilt } from "./nutation.js";
 import { REFERENCE_SPAN } from "./reference-span.js";
 import { SIGN_NAMES, normalizeLongitude, signIndexForLongitude } from "./signs.js";
 import { elapsedDays, timeBasis } from "./time-scale.js";
@@ -344,16 +342,6 @@ interface Seams {
   angles: number[];
 }
 
-/**
- * astronomy-engine reuses its last nutation for any instant within 1e-6 day
- * (86.4 ms). Moving it to a day later first makes every value below a
- * function of its millisecond alone, and the same as a lone natalChart call
- * computes there.
- */
-function freshCaches(time: number): void {
-  e_tilt(MakeTime(new Date(time + DAY)));
-}
-
 /** The first millisecond in (from, to] at which `holds` is true, given that it is false at `from` and true at `to`. */
 function firstWhere(holds: (time: number) => boolean, from: number, to: number): number {
   let low = from;
@@ -433,10 +421,7 @@ class Sky {
     let value = at.lon[body]!;
     if (Number.isNaN(value)) {
       if (body === SOUTH) value = normalizeLongitude(this.lon(time, NORTH) + 180);
-      else {
-        freshCaches(time);
-        value = bodyLongitude(BODIES[body]!, new Date(time));
-      }
+      else value = bodyLongitude(BODIES[body]!, new Date(time));
       at.lon[body] = value;
     }
     return value;
@@ -444,21 +429,19 @@ class Sky {
 
   node(time: number): number {
     // The north node's longitude, outside the search and its budget.
-    freshCaches(time);
     return bodyLongitude("North Node", new Date(time));
   }
 
   angles(time: number): AngleState {
     const at = this.instant(time);
     if (!at.angles) {
-      freshCaches(time);
       // As computeChart: the sidereal time from the basis's UT1 and the true
       // obliquity on its TT, from one AstroTime on the chart's clock.
       const input: AngleInput = onChartClock(time, "utc", undefined, (astroTime) => ({
         gastHours: gastHours(astroTime),
         latitude: this.latitude,
         longitude: this.longitude,
-        obliquity: e_tilt(astroTime).tobl
+        obliquity: tilt(astroTime.tt).tobl
       }));
       const angles = computeAngles(input);
       const houses = computeHouses(this.system, input, angles);
@@ -1138,7 +1121,6 @@ export function birthWindow(input: BirthWindowInput): BirthWindow {
   const system = settings.houseSystem ?? "whole";
   const { start, end, rounding } = resolvedWindow(input);
 
-  SetDeltaTFunction(deltaT);
   const sky = new Sky(latitude, longitude, system, seamsIn(start, end));
   const ids = Array.from({ length: SYSTEM + 1 }, (_, id) => id).filter(
     (id) => id !== SYSTEM || isPolarUndefinedHouseSystem(system)

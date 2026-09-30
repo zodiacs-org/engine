@@ -28,11 +28,11 @@ describe("skyEvents", () => {
   });
 
   it("returns the events of [from, to), the same instants from any window", () => {
-    // The angles can differ in the eleventh decimal: astronomy-engine reuses the
-    // nutation of the last time within 86 ms (docs/time.md).
+    // Each value is a function of its instant alone: the engine computes the
+    // nutation for each instant (docs/time.md), so the angles agree exactly.
     const same = (a: readonly { kind: string; at: Date; altitude: number }[], b: typeof a) => {
       expect(a.map((event) => [event.kind, event.at.getTime()])).toEqual(b.map((event) => [event.kind, event.at.getTime()]));
-      a.forEach((event, i) => expect(Math.abs(event.altitude - b[i]!.altitude)).toBeLessThan(1e-9));
+      a.forEach((event, i) => expect(event.altitude).toBe(b[i]!.altitude));
     };
     const whole = skyEvents("Moon", WASHINGTON, "2024-06-20T00:00:00Z", "2024-06-23T00:00:00Z");
     const cut = whole.events[3]!.at;

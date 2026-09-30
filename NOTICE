@@ -10,7 +10,9 @@ retains the full MIT permission and warranty notice. Source and license metadata
 https://github.com/cosinekitty/astronomy
 
 The package's frame module (src/frame.ts, built into the ephemeris chunk under
-dist/) reproduces astronomy-engine's precession function, precession_rot:
+dist/) reproduces astronomy-engine's precession function, precession_rot, and
+the calc entry's reduction module (src/calc-reduce.ts, built into
+dist/calc.js) its function for an observer on the Earth's ellipsoid, terra:
 
   Copyright (c) 2019-2023 Don Cross <cosinekitty@gmail.com>
   MIT License: the permission and warranty notice is the one in this

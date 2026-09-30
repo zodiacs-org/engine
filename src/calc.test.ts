@@ -1,6 +1,5 @@
 import { readFileSync } from "node:fs";
 
-import { e_tilt, MakeTime } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
 import { CALC_AYANAMSAS, CALC_BODIES, CALC_FRAMES, CALC_SPAN, calc, chart, events, houses } from "./calc.js";
@@ -8,6 +7,8 @@ import type { CalcBody, CalcFrame, CalcPosition, CalcRefusal, CalcRequest } from
 import { NODE_SPEED_STEP_DAYS, SPEED_STEP_DAYS } from "./ephemeris.js";
 import { HOUSE_SYSTEMS } from "./houses.js";
 import { chartPoints, natalChart, positions, searchLongitudeCrossings } from "./index.js";
+import { tilt } from "./nutation.js";
+import { timeBasis } from "./time-scale.js";
 import type { BodyName } from "./types.js";
 
 const ARCSEC = Math.PI / 648_000;
@@ -187,7 +188,7 @@ describe("receipts", () => {
         const { conventions } = ok(calc({ body, time: "2000-01-01T00:00:00Z", frame })).receipt;
         expect(conventions).toEqual(expect.arrayContaining(["precession:iau2006", "obliquity:iau2006"]));
         // Outside the true-of-date frames the nutation in their definition and in the turn cancel.
-        expect(conventions.includes("nutation:iau2000b-five-terms")).toBe(frame.includes("true"));
+        expect(conventions.includes("nutation:iau2000b")).toBe(frame.includes("true"));
       }
     }
     const mars = ok(calc({ body: "Mars", time: "2000-01-01T00:00:00Z", frame: "equatorial-j2000" })).receipt.conventions;
@@ -200,7 +201,7 @@ describe("receipts", () => {
       const { conventions } = ok(calc(request)).receipt;
       for (const id of conventions) expect(id).toMatch(/^[a-z0-9-]+:[^\s]+$/);
       expect(conventions).toContain(`frame:${request.frame ?? "ecliptic-true-of-date"}`);
-      expect(conventions.includes("nutation:iau2000b-five-terms")).toBe((request.frame ?? "ecliptic-true-of-date").includes("true"));
+      expect(conventions.includes("nutation:iau2000b")).toBe((request.frame ?? "ecliptic-true-of-date").includes("true"));
       expect(conventions.includes("frame-bias:iau2000")).toBe((request.frame ?? "").endsWith("icrs"));
     }
   });
@@ -226,7 +227,8 @@ describe("frames", () => {
 
   it("differ between true and mean of date by the nutation in longitude along the ecliptic", () => {
     const frames = all("Mars");
-    const dpsi = e_tilt(MakeTime(new Date(time))).dpsi;
+    // The engine's Δψ (src/nutation.ts) at the instant's TT.
+    const dpsi = tilt(timeBasis(Date.parse(time), "utc").ttDays).dpsi;
     const lon = (frames["ecliptic-true-of-date"].lon - frames["ecliptic-mean-of-date"].lon) * 3600;
     expect(Math.abs(lon - dpsi)).toBeLessThan(1e-6);
     expect(Math.abs(frames["ecliptic-true-of-date"].lat - frames["ecliptic-mean-of-date"].lat) * 3600).toBeLessThan(1e-6);
@@ -369,6 +371,26 @@ describe("centers and corrections", () => {
     const parallax = angle(direction(cartesian("Moon", site, "apparent")), direction(cartesian("Moon", "geocentric", "apparent")));
     expect(parallax / 3600).toBeGreaterThan(0.1);
     expect(parallax / 3600).toBeLessThan(1.05);
+  });
+
+  it("put the observer at the local apparent sidereal time, on the true equator of date", () => {
+    // The geocentric Moon less the topocentric one is the observer's
+    // geocentric position. On the true equator and equinox of date its right
+    // ascension is the RAMC of houses() and its declination the observer's
+    // geocentric latitude on the IERS 2003 ellipsoid.
+    for (const [latitude, longitude] of [[45, 10], [-33.9, 18.4], [69.6, -140.2]] as const) {
+      const site = { topocentric: { latitude, longitude, height: 0 } };
+      const frame = "equatorial-true-of-date";
+      const geo = xyzOf(cartesian("Moon", "geocentric", "geometric", frame));
+      const topo = xyzOf(cartesian("Moon", site, "geometric", frame));
+      const [x, y, z] = [0, 1, 2].map((i) => geo[i]! - topo[i]!);
+      const placed = houses({ time, place: { latitude, longitude } });
+      if (placed.status !== "ok") throw new Error("refused");
+      const ra = (Math.atan2(y!, x!) / DEG + 360) % 360;
+      expect(Math.abs(((ra - placed.armc + 540) % 360) - 180) * 3600).toBeLessThan(1e-6);
+      const geocentric = Math.atan(0.996647180302104 ** 2 * Math.tan(latitude * DEG)) / DEG;
+      expect(Math.abs(Math.atan2(z!, Math.hypot(x!, y!)) / DEG - geocentric) * 3600).toBeLessThan(1e-6);
+    }
   });
 });
 

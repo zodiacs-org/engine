@@ -50,11 +50,12 @@ metadata declares MIT, names Donald Cross as author, and links to
 `esm/astronomy.js` begins with a preserved MIT notice and a 2019–2023 Don Cross
 copyright line. The package uses its geocentric vectors (the Moon's
 included), Moon state, heliocentric and barycentric vectors, and date
-helpers. It no longer calls its nutation, its rotations to the ecliptic of
-date or its sidereal time: `src/frame.ts` reproduces its precession function
-(`precession_rot`, from J2000.0) line for line, under the same MIT notice,
-which `NOTICE` carries, and the nutation is the engine's own (*Nutation*
-below).
+helpers. It no longer calls its nutation, its rotations to the ecliptic or
+equator of date, its sidereal time or its observer functions (`ObserverVector`,
+`ObserverState`): `src/frame.ts` reproduces its precession function
+(`precession_rot`, from J2000.0) line for line, and `src/calc-reduce.ts` its
+observer on the ellipsoid (`terra`), under the same MIT notice, which `NOTICE`
+carries, and the nutation is the engine's own (*Nutation* below).
 
 Repository and dependency searches found no Swiss Ephemeris runtime import,
 package dependency, vendored source, or generated lookup table in this npm

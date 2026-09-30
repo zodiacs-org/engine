@@ -99,9 +99,10 @@ no set, or a set but no rise, has no flag.
 The body's apparent geocentric place comes from astronomy-engine, as the
 engine's other positions do: the Sun and planets with light time and
 aberration, the Moon from its series, rotated to the true equator and equinox
-of date with astronomy-engine's precession and five-term nutation. The
-observer is placed with the engine's own Greenwich apparent sidereal time (the
-formula of `src/ephemeris.ts`). The difference is the topocentric vector.
+of date with the engine's precession and IAU 2000B nutation (`src/equator.ts`,
+the README's *Nutation*). The observer is placed with the engine's own
+Greenwich apparent sidereal time (`src/ephemeris.ts`), the one the chart's
+angles use. The difference is the topocentric vector.
 Diurnal aberration (at most 0.32″, the equator's rotation speed of 465 m/s
 over the speed of light) and polar motion are not applied.
 

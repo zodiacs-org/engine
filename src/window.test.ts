@@ -4,13 +4,12 @@
  * switch must be the millisecond at which natalChart's features change as it
  * says. Inputs are synthetic places and instants.
  */
-import { MakeTime, SetDeltaTFunction, SiderealTime, e_tilt } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
 import { chartDeclinations, natalChart } from "./api.js";
 import { DELTA_T_TABLE, deltaT } from "./deltat.js";
 import { UT1_DATA } from "./time-scale.js";
-import { bodyLongitude } from "./ephemeris.js";
+import { bodyLongitude, gastHours, onChartClock } from "./ephemeris.js";
 import { houseOf } from "./houses.js";
 import { findLongitudeCrossings } from "./returns.js";
 import { signForLongitude } from "./signs.js";
@@ -31,15 +30,8 @@ interface Place {
 
 type Features = Record<string, string | number | null>;
 
-/**
- * natalChart's features at an instant. astronomy-engine reuses its nutation
- * within 86.4 ms, so an instant close to the one before is preceded by an
- * evaluation a day away: each value is then what a lone call computes.
- */
-let lastProbe = Number.NaN;
+/** natalChart's features at an instant. */
 function chartFeatures(time: number, place: Place): Features {
-  if (!(Math.abs(time - lastProbe) > 100)) natalChart({ utc: new Date(time + DAY) });
-  lastProbe = time;
   const chart = natalChart({ utc: new Date(time), ...place });
   const features: Features = {};
   for (const body of chart.bodies) {
@@ -208,9 +200,7 @@ describe("close and simultaneous switches", () => {
   // 0.0035°, which the ascendant at 45° N passes some 0.4 s later.
   const [ingress] = findLongitudeCrossings("Sun", 0, new Date(Date.UTC(2031, 2, 19)), new Date(Date.UTC(2031, 2, 22)), 1);
   const target = ingress!.at.getTime() + 300_000;
-  natalChart({ utc: new Date(target) });
-  SetDeltaTFunction(deltaT);
-  const gast = SiderealTime(MakeTime(new Date(target))) * 15;
+  const gast = onChartClock(target, "utc", undefined, (time) => gastHours(time)) * 15;
   const east = ((((270 - gast) % 360) + 540) % 360) - 180;
   const holding = (window: BirthWindow, test: (change: BirthWindow["switches"][number]["changes"][number]) => boolean) =>
     window.switches.filter((entry) => entry.changes.some(test));
@@ -349,9 +339,13 @@ describe("the true node's jitter", () => {
 describe("Placidus just below the polar limit", () => {
   it("keeps Placidus through the review's reproduction, where the iteration alone fell back", () => {
     // 3e-9° below the limit, with the RAMC passing 270°: 26 milliseconds of
-    // the 2.4 s around 2000-03-20T00:00Z fell back before the bisection.
+    // the 2.4 s around 2000-03-20T00:00Z fell back before the bisection. The
+    // review took 66.56186339751429°, 3e-9° below the limit on
+    // astronomy-engine's five-term nutation; on the engine's full IAU 2000B
+    // series that latitude is inside the polar circle, so the latitude here
+    // is 3e-9° below the limit now, as in src/placidus-limit.test.ts.
     const t0 = Date.UTC(2000, 2, 20);
-    const place: Place = { latitude: 66.56186339751429, longitude: 92.16879370494166, houseSystem: "placidus" };
+    const place: Place = { latitude: 66.56186193124925, longitude: 92.16879370494166, houseSystem: "placidus" };
     const window = partition(t0 - 1_200, 2_400, place);
     expect(window.flags).toEqual([]);
     expect(window.cells.every((cell) => cell.features.houseSystem === "placidus")).toBe(true);
@@ -367,11 +361,9 @@ describe("the ΔT model's seam", () => {
   const place: Place = { latitude: 51.5, longitude: -0.12, houseSystem: "equal" };
   /** Instants in [from, to) at which a body's longitude steps back against its motion. */
   const backSteps = (body: "Moon" | "Sun", from: number, to: number) => {
-    SetDeltaTFunction(deltaT);
     const found: number[] = [];
     let previous = Number.NaN;
     for (let time = from; time < to; time += 1) {
-      e_tilt(MakeTime(new Date(time + DAY)));
       const value = bodyLongitude(body, new Date(time));
       if (value < previous && previous - value < 1) found.push(time);
       previous = value;

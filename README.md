@@ -207,9 +207,7 @@ sidereal zodiac, or an instant whose UT1 or TT is outside 1800 to 2200: there
 calc has no comparison to take a bound from, while the root entry's functions
 still compute such an instant and flag it `outside-reference-span`. With
 every default, `calc({ body, time })` is the position `positions()` gives, to
-the bit after the same earlier calls: astronomy-engine reuses its last
-nutation for any instant within 86 ms of it, a difference under 2 × 10⁻⁷″.
-The root entry loads none of it. The reference, with the Swiss Ephemeris flag
+the bit. The root entry loads none of it. The reference, with the Swiss Ephemeris flag
 mapping and the measured accuracy, is
 [docs/calc.md](https://github.com/zodiacs-org/engine/blob/main/docs/calc.md).
 
@@ -682,10 +680,9 @@ to the nearest (the default) or `"down"`; the true instant is taken as
 uniform over that unit, which must lie inside the window. Resolve local times
 first, for example with `resolveLocalToUtc` from `@zodiacs/engine/geo`.
 
-Every value is the engine's own at a millisecond, as a lone natalChart call
-computes it on UTC and the engine's time basis (not a pinned `deltaT`);
-astronomy-engine reuses its nutation within 86.4 ms, so calls closer together
-can differ in the last digits. Where the search's bounds hold, each cell holds
+Every value is the engine's own at a millisecond, as natalChart computes it
+on UTC and the engine's time basis (not a pinned `deltaT`). Where the search's
+bounds hold, each cell holds
 natalChart's features at every millisecond in it, and at each switch
 natalChart's value at the millisecond before `at` differs from its value at
 `at` exactly as listed, except inside an interval listed in `unresolved`.
@@ -867,7 +864,11 @@ astronomy-engine's five-term nutation, used until this change, they were up to
 0.2520″, 0.8235″ and 0.2457″ off
 (`docs/evidence/nutation-2026-09-29/results/erfa-frame.json`). The equation of
 the equinoxes adds the two largest IAU 2000 complementary terms (IERS
-Conventions 2010, table 5.2e).
+Conventions 2010, table 5.2e). The opt-in entries use the same precession,
+nutation and sidereal time: `@zodiacs/engine/calc` for its true-of-date
+frames and its topocentric observer, `@zodiacs/engine/window` for the angles,
+and `@zodiacs/engine/sky` for its apparent places and the observer's
+sidereal angle.
 
 ## Accuracy and licensing
 

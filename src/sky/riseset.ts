@@ -1,15 +1,15 @@
 /*
  * Rise, set and upper and lower transit for an observer on the WGS84
- * ellipsoid, from the engine's own positions (astronomy-engine, on the
- * engine's time basis), found with the engine's crossing solver.
- * docs/sky.md is the guide.
+ * ellipsoid, from the engine's own positions (astronomy-engine's vectors, on
+ * the engine's time basis, precession and nutation), found with the engine's
+ * crossing solver. docs/sky.md is the guide.
  */
-import { Body, GeoVector, RotateVector, Rotation_EQJ_EQD, e_tilt } from "astronomy-engine";
-import type { AstroTime } from "astronomy-engine";
+import { Body, GeoVector } from "astronomy-engine";
 
 import { searchLongitudeCrossingsWith } from "../crossings.js";
 import { dateFrom } from "../date-input.js";
-import { onChartClock } from "../ephemeris.js";
+import { gastHours, onChartClock } from "../ephemeris.js";
+import { equatorRows, turn } from "../equator.js";
 import { firstMillisecond } from "../first-millisecond.js";
 import { outsideReferenceSpan } from "../reference-span.js";
 import type { BodyName, DateInput } from "../types.js";
@@ -174,22 +174,6 @@ export function conventionsOf(body: SkyBody, input: Record<string, unknown>): Sk
   return Object.freeze({ limb, refraction, refractionArcmin: refraction === "standard" ? STANDARD_REFRACTION_ARCMIN : 0 });
 }
 
-/**
- * Greenwich apparent sidereal time, degrees: astronomy-engine 2.1.19's own
- * formula (the Earth rotation angle from UT1, the IAU 2006 polynomial and the
- * equation of the equinoxes on TT), as src/ephemeris.ts computes it for the
- * angles, without astronomy-engine's cache keyed by TT alone.
- */
-function gastDegrees(time: AstroTime): number {
-  const t = time.tt / 36525;
-  const era = 360 * ((0.779057273264 + 0.00273781191135448 * time.ut + (time.ut % 1)) % 1);
-  const seconds =
-    15 * e_tilt(time).ee +
-    0.014506 +
-    ((((-0.0000000368 * t - 0.000029956) * t - 0.00000044) * t + 1.3915817) * t + 4612.156534) * t;
-  return era + seconds / 3600;
-}
-
 /** The topocentric place of a body at an instant, and how far its centre is above the event's horizon. */
 interface State {
   /** Altitude of the centre minus the altitude at which the chosen limb meets the horizon, degrees. */
@@ -203,10 +187,13 @@ interface State {
 function stateAt(body: SkyBody, site: Readonly<Required<Observer>>, conventions: SkyConventions, ms: number): State {
   return onChartClock(ms, "utc", undefined, (time) => {
     // Geocentric apparent place (light time and aberration, as astronomy-engine
-    // gives them) on the true equator and equinox of date, in au.
-    const v = RotateVector(Rotation_EQJ_EQD(time), GeoVector(BODIES[body], time, true));
-    // The local apparent sidereal angle, and the observer on the ellipsoid.
-    const theta = (gastDegrees(time) + site.longitude) * RAD;
+    // gives them) on the true equator and equinox of date, in au, by the
+    // engine's precession and nutation (src/equator.ts).
+    const g = GeoVector(BODIES[body], time, true);
+    const [vx, vy, vz] = turn(equatorRows(time.tt, "true"), g.x, g.y, g.z);
+    // The local apparent sidereal angle, from the engine's Greenwich apparent
+    // sidereal time (src/ephemeris.ts), and the observer on the ellipsoid.
+    const theta = (gastHours(time) * 15 + site.longitude) * RAD;
     const phi = site.latitude * RAD;
     const sinPhi = Math.sin(phi);
     const cosPhi = Math.cos(phi);
@@ -214,9 +201,9 @@ function stateAt(body: SkyBody, site: Readonly<Required<Observer>>, conventions:
     const h = site.height / 1000;
     const cosT = Math.cos(theta);
     const sinT = Math.sin(theta);
-    const x = v.x - ((n + h) * cosPhi * cosT) / KM_PER_AU;
-    const y = v.y - ((n + h) * cosPhi * sinT) / KM_PER_AU;
-    const z = v.z - ((n * (1 - E2) + h) * sinPhi) / KM_PER_AU;
+    const x = vx - ((n + h) * cosPhi * cosT) / KM_PER_AU;
+    const y = vy - ((n + h) * cosPhi * sinT) / KM_PER_AU;
+    const z = vz - ((n * (1 - E2) + h) * sinPhi) / KM_PER_AU;
     // East, north and up at the observer (up along the ellipsoid normal).
     const east = -x * sinT + y * cosT;
     const radial = x * cosT + y * sinT;

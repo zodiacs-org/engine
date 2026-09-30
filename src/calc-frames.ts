@@ -2,14 +2,14 @@
  * The frames of the calc entry point. A position is first found as a vector on
  * astronomy-engine's EQJ axes, the mean equator and equinox of J2000.0 that its
  * precession starts from, and is then turned into one of eight frames. The
- * precession (IAU 2006) and the nutation (the five largest terms of IAU 2000B)
- * are astronomy-engine's;
- * the mean-of-date, J2000.0-ecliptic and ICRS frames are built here on the
- * same models.
+ * precession (IAU 2006, astronomy-engine's own, reproduced in src/frame.ts) and
+ * the nutation (IAU 2000B, src/nutation.ts) are the engine's, as positions()
+ * and natalChart() use them (src/equator.ts); the J2000.0-ecliptic and ICRS
+ * frames are built here.
  */
-import { Rotation_EQJ_ECT, Rotation_EQJ_EQD, e_tilt } from "astronomy-engine";
-import type { AstroTime, RotationMatrix } from "astronomy-engine";
+import type { AstroTime } from "astronomy-engine";
 
+import { eclipticRows, equatorRows } from "./equator.js";
 import { normalizeLongitude } from "./signs.js";
 
 /**
@@ -56,8 +56,7 @@ const ARCSEC = DEG / 3600;
 const at = (m: Mat3, i: number): number => m[i] as number;
 
 export function apply(m: Mat3, [x, y, z]: Vec3): Vec3 {
-  // The operation order of astronomy-engine's RotateVector, so that its
-  // matrices give the same bits here as there.
+  // Row by row, in the operation order of astronomy-engine's RotateVector.
   return [m[0] * x + m[1] * y + m[2] * z, m[3] * x + m[4] * y + m[5] * z, m[6] * x + m[7] * y + m[8] * z];
 }
 
@@ -69,12 +68,6 @@ function product(a: Mat3, b: Mat3): Mat3 {
 
 export function transpose(m: Mat3): Mat3 {
   return [m[0], m[3], m[6], m[1], m[4], m[7], m[2], m[5], m[8]];
-}
-
-/** astronomy-engine keeps its matrices column by column. */
-function fromEngine({ rot }: RotationMatrix): Mat3 {
-  const [a, b, c] = rot as [number[], number[], number[]];
-  return [a[0]!, b[0]!, c[0]!, a[1]!, b[1]!, c[1]!, a[2]!, b[2]!, c[2]!];
 }
 
 /** Rotations about the x, y and z axes, in ERFA's sense (eraRx, eraRy, eraRz). */
@@ -108,38 +101,17 @@ const BIAS = product(
 );
 const J2000_TO_ICRS = transpose(BIAS);
 
-/** The nutation matrix, mean to true equator of date, from astronomy-engine's own angles. */
-function nutation(time: AstroTime): Mat3 {
-  const { mobl, tobl, dpsi } = e_tilt(time);
-  const cm = Math.cos(mobl * DEG);
-  const sm = Math.sin(mobl * DEG);
-  const ct = Math.cos(tobl * DEG);
-  const st = Math.sin(tobl * DEG);
-  const cp = Math.cos(dpsi * ARCSEC);
-  const sp = Math.sin(dpsi * ARCSEC);
-  return [
-    cp, -sp * cm, -sp * sm,
-    sp * ct, cp * cm * ct + sm * st, cp * sm * ct - cm * st,
-    sp * st, cp * cm * st - sm * ct, cp * sm * st + cm * ct
-  ];
-}
-
-/** Precession alone: astronomy-engine's precession and nutation, less its nutation. */
-function meanEquator(time: AstroTime): Mat3 {
-  return product(transpose(nutation(time)), fromEngine(Rotation_EQJ_EQD(time)));
-}
-
 /** The rotation from EQJ into `frame` at `time`. */
 export function frameMatrix(frame: CalcFrame, time: AstroTime): Mat3 {
   switch (frame) {
     case "ecliptic-true-of-date":
-      return fromEngine(Rotation_EQJ_ECT(time));
+      return eclipticRows(time.tt, "true");
     case "equatorial-true-of-date":
-      return fromEngine(Rotation_EQJ_EQD(time));
+      return equatorRows(time.tt, "true");
     case "ecliptic-mean-of-date":
-      return product(r1(e_tilt(time).mobl * DEG), meanEquator(time));
+      return eclipticRows(time.tt, "mean");
     case "equatorial-mean-of-date":
-      return meanEquator(time);
+      return equatorRows(time.tt, "mean");
     case "ecliptic-j2000":
       return ECLIPTIC_J2000;
     case "equatorial-j2000":

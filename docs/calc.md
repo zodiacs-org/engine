@@ -2,8 +2,7 @@
 
 One calculation API over the engine's positions, houses, longitude crossings
 and charts. It is a separate entry point, so the root entry
-(`@zodiacs/engine`) loads none of it: the root entry's build is byte for byte
-the same with or without it.
+(`@zodiacs/engine`) loads none of it.
 
 ```ts
 import { calc, houses, events, chart } from "@zodiacs/engine/calc";
@@ -23,12 +22,9 @@ if (mars.status === "ok") {
 ```
 
 With every default, `calc({ body, time })` is the position `positions()` and
-`natalChart()` give, to the bit: the same longitude, latitude and speed, after
-the same earlier calls. astronomy-engine keeps the last nutation it computed
-and reuses it for any instant within 10⁻⁶ day (86 ms) of that one, so a
-result can depend on what was computed just before it, by at most the
-nutation's change over 10⁻⁶ day, 1.7 × 10⁻⁷″. That holds for `positions()`
-and `natalChart()` as much as for `calc()`.
+`natalChart()` give, to the bit: the same longitude, latitude and speed. Every
+result is a function of its request alone: nothing depends on what was
+computed before it.
 
 ## The four functions
 
@@ -98,12 +94,12 @@ into the frame asked for:
 
 | `frame` | plane and equinox | how |
 | --- | --- | --- |
-| `ecliptic-true-of-date` | ecliptic of date, true equinox | astronomy-engine's `Rotation_EQJ_ECT`: IAU 2006 precession, astronomy-engine's nutation (the five largest terms of IAU 2000B; see below), true obliquity |
-| `ecliptic-mean-of-date` | ecliptic of date, mean equinox | the same precession without the nutation; IAU 2006 mean obliquity |
+| `ecliptic-true-of-date` | ecliptic of date, true equinox | IAU 2006 precession, the IAU 2006 mean obliquity and the IAU 2000B nutation in longitude, as `positions()` turns a vector: the longitude on the mean ecliptic of date plus Δψ (see below) |
+| `ecliptic-mean-of-date` | ecliptic of date, mean equinox | the same without the nutation |
 | `ecliptic-j2000` | mean ecliptic and equinox of J2000.0 | EQJ turned by the IAU 2006 obliquity of J2000.0, 84381.406″ |
 | `ecliptic-icrs` | ecliptic on ICRS axes | the ICRS turned by 84381.406″ about its x axis |
-| `equatorial-true-of-date` | true equator and equinox of date (apparent right ascension and declination) | astronomy-engine's `Rotation_EQJ_EQD` |
-| `equatorial-mean-of-date` | mean equator and equinox of date | the same, less its own nutation |
+| `equatorial-true-of-date` | true equator and equinox of date (apparent right ascension and declination) | the same precession and nutation, on the true obliquity (the mean obliquity plus Δε) |
+| `equatorial-mean-of-date` | mean equator and equinox of date | the precession alone |
 | `equatorial-j2000` | mean equator and equinox of J2000.0 | EQJ itself |
 | `equatorial-icrs` | ICRS | EQJ less the IAU 2000 frame bias (dψ = −0.041775″, dε = −0.0068192″, dα₀ = −0.0146″, composed as ERFA's `eraBp00`) |
 
@@ -114,18 +110,20 @@ is not settled below that level; its planetary series is referred to the FK5
 by a fixed rotation. Horizons's `ECLIPTIC` reference plane uses the IAU 1976
 obliquity, 84381.448″, so it is tilted 0.042″ from `ecliptic-icrs`.
 
-The nutation is astronomy-engine's, which keeps the five largest luni-solar
-terms of IAU 2000B (McCarthy and Luzum 2003) and its fixed offsets, of the
-series' 77. Over the comparison's 32 instants it differs from the full
-IAU 2000B by up to 0.20″ in longitude and 0.067″ in obliquity (0.068″ and
-0.018″ median), while the full IAU 2000B differs from IAU 2006/2000A by
-0.002″. Sampled every 0.1 day from 1800 to 2200 it differs by up to 0.27″ in
-longitude and 0.087″ in obliquity, and its rate by up to 0.079″ a day in
-longitude. Every true-of-date position, speed and angle
-the engine gives carries that difference; the mean-of-date, J2000.0 and ICRS
-frames do not. calc keeps astronomy-engine's nutation so that its default
-frame stays `positions()` to the bit, and names it
-`nutation:iau2000b-five-terms`.
+The precession is astronomy-engine's (IAU 2006, the angles of Capitaine et
+al. 2003), which the engine reproduces term for term (`src/frame.ts`), and the
+nutation the engine's own IAU 2000B (McCarthy and Luzum 2003): all 77 of its
+luni-solar terms and its two fixed planetary offsets (`src/nutation.ts`; the
+README's *Nutation*). They are the precession and nutation of `positions()`
+and `natalChart()`, so the default frame is `positions()` to the bit. Its Δψ
+and Δε equal ERFA's `nut00b` within 10⁻¹⁰″ from 1800 to 2200, and IAU 2000B
+puts a longitude at most 0.0037″ from IAU 2006/2000A there
+(`docs/evidence/nutation-2026-09-29`). The receipts name it
+`nutation:iau2000b`. Up to 0.1.1-rc.15 the engine took astronomy-engine's
+nutation, which keeps five of the 77 terms: sampled every 0.1 day from 1800 to
+2200 it was up to 0.27″ from the full series in longitude and 0.087″ in
+obliquity, and its rate up to 0.079″ a day in longitude
+(`docs/evidence/calc-api`, diagnostic D4).
 
 ## Centers and corrections
 
@@ -153,9 +151,11 @@ frame stays `positions()` to the bit, and names it
   1.8% off. The barycentric Sun's bounds are therefore derived from the
   barycentre's error, not measured (see Bounds). The barycentre does not move,
   so a barycentric apparent position is its astrometric one.
-- **Topocentric**: the observer's position and velocity from astronomy-engine
-  (its Greenwich apparent sidereal time on the engine's ΔT; no polar motion).
-  Light time is solved from the observer.
+- **Topocentric**: the observer's position and velocity on astronomy-engine's
+  ellipsoid, turned by the engine's Greenwich apparent sidereal time and taken
+  back to the J2000.0 axes by the engine's precession and nutation (the
+  arithmetic of astronomy-engine's `ObserverState`, on the engine's own
+  models; no polar motion). Light time is solved from the observer.
 - **Distances**: `dist` is in au: the light path for apparent and astrometric
   positions (the length of the light-time-corrected vector), the geometric
   distance for geometric ones. The geocentric apparent Moon, being the series
@@ -196,9 +196,8 @@ solution stops at a tolerance, which leaves a small jitter in each position)
 and 0.094″ a day for the topocentric Moon, whose parallax turns with the Earth
 once a day. `bounds.speed` names the method and the step, and gives the
 largest rate difference measured against Horizons, which includes the
-differencing error. In the true-of-date frames the rates also carry the
-five-term nutation's rate error (see Frames). The true node's speed was not
-compared, so its `value` is null.
+differencing error. The true node's speed was not compared, so its `value` is
+null.
 
 ## Bounds
 
@@ -226,8 +225,8 @@ one, and the rate of the direction within ė / r + (v + ė) e (1 / r² +
 0.018 and 378″ a day from Horizons; far from the barycentre, at 0.0097 au,
 it is 300″, 0.0015 and 3.1″ a day.
 
-`houses()` carries the conformance suite's measured L2 bounds, 0.29″ for the
-angles and 0.49″ for the cusps; `events()` gives the bisection bracket, the
+`houses()` carries the conformance suite's measured L2 bounds, 0.02″ for the
+angles and 0.08″ for the cusps (`conformance/RESULTS.md`); `events()` gives the bisection bracket, the
 step divided by 2²⁴, as an estimate, to which the ephemeris's own error
 divided by the body's speed adds.
 
@@ -278,8 +277,8 @@ is no comparison to take one from.
 | `deflection:none` | no gravitational light deflection |
 | `moon:series-at-instant` | the engine's Moon: astronomy-engine's lunar series at the instant, without light time or aberration |
 | `precession:iau2006` | Capitaine et al. (2003) angles ψA, ωA, χA as astronomy-engine applies them to EQJ, without a frame bias; named in every frame for the nodes and Lilith, which are found in the ecliptic of date |
-| `nutation:iau2000b-five-terms` | astronomy-engine's nutation: the five largest luni-solar terms of IAU 2000B (McCarthy and Luzum 2003) and its fixed offsets; from 1800 to 2200 up to 0.27″ in longitude and 0.087″ in obliquity from the full series (see Frames) |
-| `obliquity:iau2006` | the IAU 2006 mean obliquity (84381.406″ at J2000.0), with the five-term nutation in obliquity for a true-of-date frame; named in every frame for the nodes and Lilith |
+| `nutation:iau2000b` | the engine's IAU 2000B nutation (McCarthy and Luzum 2003): all 77 luni-solar terms and the two fixed planetary offsets (see Frames) |
+| `obliquity:iau2006` | the IAU 2006 mean obliquity (84381.406″ at J2000.0), with the nutation in obliquity for a true-of-date frame; named in every frame for the nodes and Lilith |
 | `frame-bias:iau2000` | the IAU 2000 frame bias of the ICRS (IERS Conventions 2010, eq. 5.21) |
 | `barycentre:sun-and-giant-planets` | astronomy-engine's solar-system barycentre |
 | `observer:iers2003-ellipsoid;no-polar-motion` | the topocentric observer as above |
@@ -289,7 +288,7 @@ is no comparison to take one from.
 | `deltat:time-basis`, `deltat:pinned` | ΔT from the time basis (`iers-utc/1` from 1972-01-01 to the end of the IERS table, `zodiacs-deltat/1` outside it; each instant's `deltaT.model` says which), or the caller's value |
 | `time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise` | the time basis above, as the natal receipt's time-basis set names it ([time.md](time.md)) |
 | `house:<system>`, `polar-fallback:whole` | the house system asked for, and whole sign where Placidus or Koch is undefined |
-| `angles:gast-and-true-obliquity`, `sidereal-time:gast-iau2006-era` | the angles from astronomy-engine's apparent sidereal time (Earth rotation angle, IAU 2006 polynomial, the equation of the equinoxes from the five-term nutation) and the true obliquity |
+| `angles:gast-and-true-obliquity`, `sidereal-time:gast-iau2006-era` | the angles from the engine's apparent sidereal time (the Earth rotation angle, astronomy-engine's IAU 2006 polynomial, and the equation of the equinoxes: Δψ cos εA and the two largest IAU 2000 complementary terms) and the true obliquity |
 | `aspects:major`, `search:scan-and-bisect` | the chart's major aspects; the crossing search |
 
 ## Swiss Ephemeris `calc_ut` flags
@@ -318,7 +317,7 @@ uses no Swiss Ephemeris code, data or output.
 | `SEFLG_TROPICAL` | tropical zodiac | `zodiac: "tropical"` | supported, the default |
 | `SEFLG_SWIEPH`, `SEFLG_JPLEPH`, `SEFLG_MOSEPH` | which ephemeris | none: one ephemeris, named in every receipt | not offered; a DE440 backend on the hosted API is planned |
 | `SEFLG_SPEED3` | speeds from three positions | none | not offered; speeds are analytic or central differences |
-| `SEFLG_DPSIDEPS_1980`, `SEFLG_JPLHOR`, `SEFLG_JPLHOR_APPROX` | IAU 1980 nutation corrections, Horizons's frame | none | not offered; the nutation is astronomy-engine's five-term IAU 2000B |
+| `SEFLG_DPSIDEPS_1980`, `SEFLG_JPLHOR`, `SEFLG_JPLHOR_APPROX` | IAU 1980 nutation corrections, Horizons's frame | none | not offered; the nutation is IAU 2000B |
 | `SEFLG_CENTER_BODY` | a planet's centre, not its system barycentre | none | not offered; Mars to Pluto were compared with system barycentres (see Bodies) |
 
 `swe_calc_ut` takes a UT1 Julian date and `swe_calc` a TT one; here they are
@@ -365,8 +364,8 @@ output. Those without the nutation agree to better than a microarcsecond:
 spherical against cartesian, the frame bias, the IAU 2006 precession, and the
 equator against the ecliptic in the mean-of-date, J2000.0 and ICRS frames.
 The four checks through the nutation fail their preregistered 5 mas
-tolerance, by up to 0.20″: that is astronomy-engine's five-term nutation,
-described under Frames. The mean node and Lilith agree with their definitions
+tolerance, by up to 0.20″: that was astronomy-engine's five-term nutation,
+which calc used up to 0.1.1-rc.15 (see Frames). The mean node and Lilith agree with their definitions
 evaluated on ERFA's fundamental arguments to 10⁻⁹″ in the mean-of-date frames
 and 5 × 10⁻⁷″ on the J2000.0 and ICRS axes (0.2″ in the true-of-date frames:
 the nutation again); the true node is 6.6″ median and 16″ at worst from the

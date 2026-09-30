@@ -7,7 +7,7 @@
  * Malformed input throws RangeError, as everywhere in the engine. The
  * repository's docs/calc.md is the reference.
  */
-import { AstroTime, Body, EclipticGeoMoon, GeoMoonState, Observer, e_tilt } from "astronomy-engine";
+import { AstroTime, Body, GeoMoonState } from "astronomy-engine";
 
 // Imported first so that the build keeps the root entry's shared chunks byte for byte.
 import { bodyLongitude, computeChart, gastHours, onChartClock } from "./ephemeris.js";
@@ -29,7 +29,9 @@ import type { Center } from "./calc-reduce.js";
 import { searchLongitudeCrossingsWith } from "./crossings.js";
 import { dateFrom } from "./date-input.js";
 import type { DeltaT } from "./deltat.js";
+import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
 import { computeAngles, computeHouses, eastPointOf, isPolarUndefinedHouseSystem, ramcOf, vertexOf } from "./houses.js";
+import { tilt } from "./nutation.js";
 import { meanApogee, meanNodeLongitude } from "./points.js";
 import { REFERENCE_SPAN } from "./reference-span.js";
 import { normalizeLongitude } from "./signs.js";
@@ -419,15 +421,20 @@ interface Row {
 const isPoint = (body: CalcBody): body is Point => (POINTS as readonly string[]).includes(body);
 const isTrueNode = (body: CalcBody): boolean => body === "North Node" || body === "South Node";
 
-/** The Moon's true node: the ascending node of its instantaneous orbit, as ephemeris.ts computes it. */
+/**
+ * The Moon's true node: the ascending node of its instantaneous orbit, as
+ * ephemeris.ts computes it, on the mean ecliptic of date plus Δψ.
+ */
 function trueNode(at: AstroTime): number {
   const s = GeoMoonState(at);
-  const [x, y] = apply(frameMatrix("ecliptic-true-of-date", at), [
+  const frame = eclipticFrame(at.tt);
+  const [x, y] = meanEcliptic(
+    frame,
     s.y * s.vz - s.z * s.vy,
     s.z * s.vx - s.x * s.vz,
     s.x * s.vy - s.y * s.vx
-  ]);
-  return normalizeLongitude(Math.atan2(x, -y) * RAD);
+  );
+  return normalizeLongitude(Math.atan2(x, -y) * RAD + frame.tilt.dpsi / 3600);
 }
 
 /** A point in the true ecliptic of date, rounded as positions() and chartPoints() round it. */
@@ -438,7 +445,7 @@ function pointAt(body: Point, at: AstroTime): Row {
     return row(raw, body === "North Node" ? raw : normalizeLongitude(raw + 180));
   }
   const centuries = at.tt / 36525;
-  const nutation = e_tilt(at).dpsi / 3600;
+  const nutation = tilt(at.tt).dpsi / 3600;
   if (body === "Black Moon Lilith") {
     const apogee = meanApogee(centuries, nutation);
     return row(apogee.lon, normalizeLongitude(apogee.lon), apogee.lat);
@@ -458,18 +465,13 @@ function evaluator(body: CalcBody, frame: CalcFrame, center: Center, correction:
     };
   }
   const target = body as Body;
-  const series =
-    body === "Moon" && center.kind === "geocentric" && correction !== "astrometric" && frame === "ecliptic-true-of-date";
   return (at) => {
-    if (series) {
-      // The engine's own Moon: astronomy-engine's series in the true ecliptic of date.
-      const moon = EclipticGeoMoon(at);
-      const lon = normalizeLongitude(moon.lon);
-      return { lon, lat: moon.lat, dist: moon.dist, xyz: fromSpherical(lon, moon.lat, moon.dist), raw: lon };
-    }
     const { v, dist } = locate(target, center, correction, at);
     const turned = apply(frameMatrix(frame, at), v);
-    const { lon, lat } = toSpherical(turned);
+    // In the true ecliptic of date, the longitude and latitude as positions()
+    // turns a vector (src/frame.ts): the longitude on the mean ecliptic of
+    // date plus Δψ, to the bit.
+    const { lon, lat } = frame === "ecliptic-true-of-date" ? eclipticOfDate(v[0], v[1], v[2], at.tt) : toSpherical(turned);
     const k = dist / length(turned);
     return { lon, lat, dist, xyz: [turned[0] * k, turned[1] * k, turned[2] * k], raw: lon };
   };
@@ -490,7 +492,7 @@ function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], cor
   }
   // A node or Lilith is found in the ecliptic of date and turned from there into every other frame.
   if (isPoint(body) || !inertial(frame)) ids.push("precession:iau2006");
-  if (frame.includes("true")) ids.push("nutation:iau2000b-five-terms");
+  if (frame.includes("true")) ids.push("nutation:iau2000b");
   if (isPoint(body) || frame.startsWith("ecliptic")) ids.push("obliquity:iau2006");
   if (frame.endsWith("icrs")) ids.push("frame-bias:iau2000");
   if (kind === "barycentric") ids.push("barycentre:sun-and-giant-planets");
@@ -541,7 +543,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     centerRecord = kind;
   } else {
     const site = readPlace(fields(asked.center, "center", ["topocentric"]).topocentric, "center.topocentric", true);
-    center = { kind: "topocentric", observer: new Observer(site.latitude, site.longitude, site.height) };
+    center = { kind: "topocentric", site };
     centerRecord = { topocentric: site };
   }
   const given = asked.flags === undefined ? {} : fields(asked.flags, "flags", ["correction", "speeds", "cartesian", "units", "deflection"]);
@@ -692,7 +694,7 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
   if (refusal) return refusal;
   return inSpan(time, (used): HousesResult => {
     // As natalChart(): the Earth's rotation from UT1, the true obliquity on TT.
-    const input = onInput(time, time.ms, (at) => ({ gastHours: gastHours(at), latitude, longitude, obliquity: e_tilt(at).tobl }));
+    const input = onInput(time, time.ms, (at) => ({ gastHours: gastHours(at), latitude, longitude, obliquity: tilt(at.tt).tobl }));
     const angles = computeAngles(input);
     const { houses: computed, fellBack } = computeHouses(system, input, angles);
     // Conformance suite 0.1.0, level L2, for this engine: conformance/RESULTS.md.
@@ -711,8 +713,8 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
       obliquity: input.obliquity,
       flags: fellBack ? ["polar-fallback"] : [],
       bounds: {
-        angles: { value: 0.29, unit: "arcsec", label: "measured", basis: basis("vectors of the ascendant, midheaven, Vertex and East Point") },
-        cusps: { value: 0.49, unit: "arcsec", label: "measured", basis: basis("cusp vectors, thirteen systems") }
+        angles: { value: 0.02, unit: "arcsec", label: "measured", basis: basis("vectors of the ascendant, midheaven, Vertex and East Point") },
+        cusps: { value: 0.08, unit: "arcsec", label: "measured", basis: basis("cusp vectors, thirteen systems") }
       },
       receipt: receipt(
         { time: time.record, place: { latitude, longitude }, system, zodiac: "tropical" },
@@ -723,7 +725,7 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
           ...(fellBack ? ["polar-fallback:whole"] : []),
           "angles:gast-and-true-obliquity",
           "sidereal-time:gast-iau2006-era",
-          "nutation:iau2000b-five-terms",
+          "nutation:iau2000b",
           "obliquity:iau2006"
         ],
         time.pin
@@ -916,7 +918,7 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
           "moon:series-at-instant",
           "node:true-osculating",
           "precession:iau2006",
-          "nutation:iau2000b-five-terms",
+          "nutation:iau2000b",
           "obliquity:iau2006",
           ...(computed.houses === null
             ? []

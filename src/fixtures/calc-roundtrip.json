@@ -11,12 +11,12 @@
     "status": "ok",
     "body": "Mars",
     "frame": "ecliptic-true-of-date",
-    "lon": 342.9869863533577,
-    "lat": -1.244304782474928,
+    "lon": 342.98696862022194,
+    "lat": -1.244304782474929,
     "dist": 2.061065991654686,
     "speeds": {
-     "lon": 0.7774727002356485,
-     "lat": -0.0024177860027396747,
+     "lon": 0.7774701872733658,
+     "lat": -0.0024177860022955855,
      "dist": -0.003813886306325287
     },
     "cartesian": null,
@@ -97,7 +97,7 @@
       "deflection:none",
       "aberration:backdated-observer",
       "precession:iau2006",
-      "nutation:iau2000b-five-terms",
+      "nutation:iau2000b",
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
@@ -377,21 +377,21 @@
     "status": "ok",
     "body": "Venus",
     "frame": "equatorial-true-of-date",
-    "lon": 76.2005994947283,
-    "lat": 22.000704050304986,
-    "dist": 1.5722279056395765,
+    "lon": 76.20062962322163,
+    "lat": 22.00071375765135,
+    "dist": 1.5722279056427058,
     "speeds": {
-     "lon": 1.3055183922006108,
-     "lat": 0.15628160724290296,
-     "dist": 0.00392583812180991
+     "lon": 1.305515382739486,
+     "lat": 0.15628131492562147,
+     "dist": 0.003925838139018367
     },
     "cartesian": {
-     "x": 0.3477042566330268,
-     "y": 1.4156620997599052,
-     "z": 0.5889848525169893,
-     "vx": -0.03177168345216974,
-     "vy": 0.009897380716439308,
-     "vz": 0.0054468549661734755
+     "x": 0.3477034884179995,
+     "y": 1.415662185691168,
+     "z": 0.5889850994954869,
+     "vx": -0.03177161159068076,
+     "vy": 0.009897347241882848,
+     "vz": 0.005446847880008487
     },
     "bounds": {
      "position": {
@@ -473,7 +473,7 @@
       "deflection:none",
       "aberration:backdated-observer",
       "precession:iau2006",
-      "nutation:iau2000b-five-terms",
+      "nutation:iau2000b",
       "observer:iers2003-ellipsoid;no-polar-motion",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
@@ -505,12 +505,12 @@
     "status": "ok",
     "body": "Black Moon Lilith",
     "frame": "ecliptic-mean-of-date",
-    "lon": 280.0365949515386,
-    "lat": 3.716297056173528,
+    "lon": 280.0365949515385,
+    "lat": 3.716297056173532,
     "dist": null,
     "speeds": {
-     "lon": 0.11143265840019012,
-     "lat": -0.0102090139530997,
+     "lon": 0.11143265831492499,
+     "lat": -0.010209013954209922,
      "dist": null
     },
     "cartesian": null,
@@ -614,20 +614,20 @@
     "body": "Saturn",
     "frame": "equatorial-mean-of-date",
     "lon": 128.7323006122113,
-    "lat": 19.31197490833248,
+    "lat": 19.311974908332477,
     "dist": 9.103913513366692,
     "speeds": {
-     "lon": 0.03812456643004225,
-     "lat": -0.007651428095556412,
+     "lon": 0.03812456645846396,
+     "lat": -0.0076514280991091255,
      "dist": 0.00018543034308038386
     },
     "cartesian": {
      "x": -5.375647258876846,
-     "y": 6.702157915492463,
-     "z": 3.0107701809989145,
-     "vx": -0.004820668592753208,
+     "y": 6.702157915492462,
+     "z": 3.0107701809989136,
+     "vx": -0.004820668594973654,
      "vy": -0.0031267976887683346,
-     "vz": -0.001086027838992365
+     "vz": -0.0010860278394364542
     },
     "bounds": {
      "position": {
@@ -969,12 +969,12 @@
     "status": "ok",
     "body": "North Node",
     "frame": "equatorial-true-of-date",
-    "lon": 231.20798285407577,
-    "lat": -18.666608463838163,
+    "lon": 231.2079718653262,
+    "lat": -18.666602265921203,
     "dist": null,
     "speeds": {
-     "lon": -0.2311427808414237,
-     "lat": 0.056324240432729766,
+     "lon": -0.23114718277588508,
+     "lat": 0.05632755245400034,
      "dist": null
     },
     "cartesian": null,
@@ -1045,7 +1045,7 @@
       "correction:not-applicable",
       "node:true-osculating",
       "precession:iau2006",
-      "nutation:iau2000b-five-terms",
+      "nutation:iau2000b",
       "obliquity:iau2006",
       "speed:central-difference-0.25d",
       "ephemeris:astronomy-engine@2.1.19",
@@ -1077,21 +1077,21 @@
     "status": "ok",
     "body": "Mercury",
     "frame": "ecliptic-true-of-date",
-    "lon": 48.76954889451008,
+    "lon": 48.7695158827986,
     "lat": 0.34065697821776064,
     "dist": 0.31275789550560884,
     "speeds": {
-     "lon": 6.090791756037106,
-     "lat": 0.7462729193950801,
+     "lon": 6.090783593549531,
+     "lat": 0.7462729193938311,
      "dist": -0.002505706818645148
     },
     "cartesian": {
-     "x": 0.20613172477790612,
-     "y": 0.23521002409354183,
-     "z": 0.0018595179747373399,
-     "vx": -0.026671271894693205,
-     "vy": 0.02001006767386737,
-     "vz": 0.004058676625873421
+     "x": 0.20613186029719827,
+     "y": 0.23520990532801825,
+     "z": 0.00185951797473734,
+     "vx": -0.026671226857108432,
+     "vy": 0.020010053674940353,
+     "vz": 0.0040586766258666985
     },
     "bounds": {
      "position": {
@@ -1163,7 +1163,7 @@
       "deflection:none",
       "aberration:backdated-observer",
       "precession:iau2006",
-      "nutation:iau2000b-five-terms",
+      "nutation:iau2000b",
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
@@ -1202,21 +1202,21 @@
     "status": "ok",
     "body": "Sun",
     "frame": "ecliptic-mean-of-date",
-    "lon": 280.09919781093595,
-    "lat": -0.002035019554667873,
-    "dist": 0.9833430298214739,
+    "lon": 280.0991978108896,
+    "lat": -0.0020350195502362714,
+    "dist": 0.9833430298216823,
     "speeds": {
-     "lon": 1.0080262989902167,
-     "lat": 0.0015264006454022289,
-     "dist": 0.000010731464383795242
+     "lon": 1.008026298961795,
+     "lat": 0.0015264008879840082,
+     "dist": 0.000010731464494817544
     },
     "cartesian": {
-     "x": 0.17243209336515863,
-     "y": -0.9681067535434034,
-     "z": -0.00003492617276906752,
-     "vx": 0.01703414989284724,
-     "vy": 0.003023096874832376,
-     "vz": 0.000026196582181281514
+     "x": 0.1724320933644121,
+     "y": -0.968106753543748,
+     "z": -0.00003492617269301724,
+     "vx": 0.017034149892555805,
+     "vy": 0.003023096874499309,
+     "vz": 0.00002619658634461108
     },
     "bounds": {
      "position": {
@@ -1438,11 +1438,11 @@
     "status": "ok",
     "body": "Mean South Node",
     "frame": "ecliptic-true-of-date",
-    "lon": 180.1715946584635,
+    "lon": 180.17159532857568,
     "lat": 0,
     "dist": null,
     "speeds": {
-     "lon": -0.05296237978313911,
+     "lon": -0.05295935304161503,
      "lat": 0,
      "dist": null
     },
@@ -1517,7 +1517,7 @@
       "correction:not-applicable",
       "node:mean",
       "precession:iau2006",
-      "nutation:iau2000b-five-terms",
+      "nutation:iau2000b",
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
@@ -1788,39 +1788,39 @@
     "requested": "placidus",
     "system": "placidus",
     "cusps": [
-     261.05219144706274,
-     296.8527334092595,
-     337.02649872434665,
-     12.256425499880379,
-     39.449783440779015,
-     61.26806445211912,
-     81.05219144706274,
-     116.85273340925949,
-     157.02649872434665,
-     192.2564254998804,
-     219.44978344077902,
-     241.2680644521191
+     261.0521957204781,
+     296.85274098211465,
+     337.0265134182806,
+     12.256442391687301,
+     39.44979737673725,
+     61.26807367544262,
+     81.0521957204781,
+     116.85274098211465,
+     157.02651341828062,
+     192.25644239168727,
+     219.44979737673728,
+     241.26807367544262
     ],
     "angles": {
-     "asc": 261.05219144706274,
-     "mc": 192.2564254998804,
-     "dsc": 81.05219144706274,
-     "ic": 12.256425499880379
+     "asc": 261.0521957204781,
+     "mc": 192.25644239168727,
+     "dsc": 81.0521957204781,
+     "ic": 12.256442391687301
     },
-    "vertex": 123.67230387494578,
-    "eastPoint": 280.36315447831396,
-    "armc": 191.27217656848973,
-    "obliquity": 23.43787306288458,
+    "vertex": 123.67232184892032,
+    "eastPoint": 280.3631673407018,
+    "armc": 191.2721913403492,
+    "obliquity": 23.437883140687056,
     "flags": [],
     "bounds": {
      "angles": {
-      "value": 0.29,
+      "value": 0.02,
       "unit": "arcsec",
       "label": "measured",
       "basis": "largest difference over the conformance suite's L2 vectors of the ascendant, midheaven, Vertex and East Point, whose arbiter is ERFA with each system's definition"
      },
      "cusps": {
-      "value": 0.49,
+      "value": 0.08,
       "unit": "arcsec",
       "label": "measured",
       "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition"
@@ -1872,7 +1872,7 @@
       "house:placidus",
       "angles:gast-and-true-obliquity",
       "sidereal-time:gast-iau2006-era",
-      "nutation:iau2000b-five-terms",
+      "nutation:iau2000b",
       "obliquity:iau2006",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
@@ -1903,9 +1903,9 @@
     "kind": "longitude-crossing",
     "events": [
      {
-      "at": "2024-03-20T03:06:26.773Z",
-      "jdUt1": 2460389.6294764346,
-      "jdTt": 2460389.63027728,
+      "at": "2024-03-20T03:06:26.001Z",
+      "jdUt1": 2460389.6294674994,
+      "jdTt": 2460389.630268345,
       "retrograde": false
      }
     ],
@@ -1996,7 +1996,7 @@
       "deflection:none",
       "aberration:backdated-observer",
       "precession:iau2006",
-      "nutation:iau2000b-five-terms",
+      "nutation:iau2000b",
       "obliquity:iau2006",
       "search:scan-and-bisect",
       "ephemeris:astronomy-engine@2.1.19",

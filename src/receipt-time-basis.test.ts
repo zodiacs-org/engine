@@ -319,10 +319,9 @@ describe("receipts of an instant on TT or UT1", () => {
     expect(again.receipt).toEqual(envelope.receipt);
     expect(again.result.timeScale).toEqual(envelope.result.timeScale);
     expect(again.result.deltaT).toEqual(envelope.result.deltaT);
-    // astronomy-engine reuses the nutation of any time within 1e-6 day of the
-    // last one it computed, so a replay can differ from the first run in the
-    // last digits (here the UTC chart just computed has almost the same TT).
-    again.result.bodies.forEach((body, index) => expect(body.lon).toBeCloseTo(envelope.result.bodies[index]!.lon, 9));
+    // The engine's nutation is computed for each instant (src/nutation.ts), so
+    // the replay gives the first run's result, whatever was computed between.
+    expect(again.result).toEqual(envelope.result);
     // The scale is part of the request: read as UTC, the same digits are another instant.
     expect(verdict(envelope, (copy) => (copy.receipt.timeScale = "utc"))).toBe("inconsistent_result");
   });
