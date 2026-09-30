@@ -9,8 +9,9 @@ frame-transform consistency checks.
     python3 docs/evidence/calc-api/tools/compare.py engine.json
 
 Writes ../results/summary.json (tools/report.py turns it into
-../results/tables.md). Needs pyerfa and numpy; uses no code of the engine and
-no Swiss Ephemeris.
+../results/tables.md), or into the directory CALC_API_RESULTS names (a rerun
+on a later build writes beside the original results). Needs pyerfa and numpy;
+uses no code of the engine and no Swiss Ephemeris.
 """
 import hashlib
 import json
@@ -25,7 +26,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, '..'))
 HORIZONS = os.path.join(ROOT, 'horizons')
-RESULTS = os.path.join(ROOT, 'results')
+RESULTS = os.environ.get('CALC_API_RESULTS') or os.path.join(ROOT, 'results')
 MJD0 = 2400000.5
 AS = 180 * 3600 / math.pi  # arcseconds per radian
 STEP = 0.0001

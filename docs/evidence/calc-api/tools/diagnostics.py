@@ -18,7 +18,9 @@ found. None of them is a preregistered check or changes a verdict.
 
     python3 docs/evidence/calc-api/tools/diagnostics.py engine.json
 
-Writes ../results/diagnostics.json.
+Writes ../results/diagnostics.json, or into CALC_API_RESULTS as compare.py.
+CALC_API_NUTATION_VALUES names another script for D4, with
+nutation_values.mjs's arguments and output.
 """
 import json
 import math
@@ -49,7 +51,7 @@ def worst(values):
 
 def nutation_scan():
     """D4: the engine's nutation against nut00b every 0.1 day from 1800 to 2200, in ten runs of nutation_values.mjs."""
-    script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'nutation_values.mjs')
+    script = os.environ.get('CALC_API_NUTATION_VALUES') or os.path.join(os.path.dirname(os.path.abspath(__file__)), 'nutation_values.mjs')
     best = {}
     for run in range(10):
         start = 2378496.5 + run * 14609.7

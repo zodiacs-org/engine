@@ -14,12 +14,22 @@
  *
  *   npm run build
  *   node docs/evidence/calc-api/tools/engine_values.mjs > engine.json
+ *
+ * A rerun on a later build: ZODIACS_ENGINE_DIST names the build directory in
+ * place of the repository's dist/, and ENGINE_TILT_MODULE a module whose
+ * tilt(tt) gives that engine's own nutation and obliquities (from 0.1.1-rc.16,
+ * src/nutation.ts bundled; before, the engine's were astronomy-engine's
+ * e_tilt, the default).
  */
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { AstroTime, SetDeltaTFunction, e_tilt } from "astronomy-engine";
 
-const dist = new URL("../../../../dist/", import.meta.url);
+const dist = process.env.ZODIACS_ENGINE_DIST
+  ? pathToFileURL(`${resolve(process.env.ZODIACS_ENGINE_DIST)}/`)
+  : new URL("../../../../dist/", import.meta.url);
 const { calc, CALC_FRAMES } = await import(new URL("calc.js", dist).href);
 const { deltaT } = await import(new URL("deltat.js", dist).href);
 
@@ -77,7 +87,8 @@ function row(result) {
     xyz: result.cartesian && [result.cartesian.x, result.cartesian.y, result.cartesian.z],
     vxyz: result.cartesian && [result.cartesian.vx, result.cartesian.vy, result.cartesian.vz],
     method: result.bounds.speed?.method ?? null,
-    jdUt: instant.jdUt,
+    // The instant's UT1 as a Julian date: `jdUt1` from 0.1.1-rc.16's time vocabulary.
+    jdUt: instant.jdUt ?? instant.jdUt1,
     jdTt: instant.jdTt
   };
 }
@@ -106,8 +117,11 @@ for (const body of POINTS) {
 
 // The engine's own obliquities and nutation at each instant (C5b), on its own clock.
 SetDeltaTFunction(deltaT);
+const engineTilt = process.env.ENGINE_TILT_MODULE
+  ? (await import(pathToFileURL(resolve(process.env.ENGINE_TILT_MODULE)).href)).tilt
+  : null;
 const tilts = instants.map((jd) => {
-  const tilt = e_tilt(AstroTime.FromTerrestrialTime(jd - J2000));
+  const tilt = engineTilt ? { tt: jd - J2000, ...engineTilt(jd - J2000) } : e_tilt(AstroTime.FromTerrestrialTime(jd - J2000));
   return { tt: tilt.tt, mobl: tilt.mobl, tobl: tilt.tobl, dpsi: tilt.dpsi, deps: tilt.deps };
 });
 

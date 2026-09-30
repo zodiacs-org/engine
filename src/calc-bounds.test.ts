@@ -9,7 +9,9 @@ import { calc } from "./calc.js";
 import type { CalcPosition } from "./calc.js";
 
 const evidence = (path: string) => readFileSync(new URL(`../docs/evidence/calc-api/${path}`, import.meta.url), "utf8");
-const summary = JSON.parse(evidence("results/summary.json")) as { bounds: Record<string, [number, number | null, number | null]> };
+// The comparison rerun on 0.1.1-rc.16's build, after the engine took the full
+// IAU 2000B nutation; the first run, on astronomy-engine's, stays in results/.
+const summary = JSON.parse(evidence("rc16/summary.json")) as { bounds: Record<string, [number, number | null, number | null]> };
 
 const time = "2011-02-03T04:05:06Z";
 const ok = (result: ReturnType<typeof calc>): CalcPosition => {

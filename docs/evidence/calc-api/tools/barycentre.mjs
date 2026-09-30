@@ -14,12 +14,19 @@
  *
  *   npm run build
  *   node docs/evidence/calc-api/tools/barycentre.mjs    # writes ../results/barycentre.json
+ *
+ * ZODIACS_ENGINE_DIST names another build directory, and CALC_API_RESULTS
+ * another results directory, for a rerun on a later build.
  */
 import { readFileSync, writeFileSync } from "node:fs";
+import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { AstroTime, BaryState, Body, HelioState } from "astronomy-engine";
 
-const dist = new URL("../../../../dist/", import.meta.url);
+const dist = process.env.ZODIACS_ENGINE_DIST
+  ? pathToFileURL(`${resolve(process.env.ZODIACS_ENGINE_DIST)}/`)
+  : new URL("../../../../dist/", import.meta.url);
 const { calc } = await import(new URL("calc.js", dist).href);
 
 const J2000 = 2451545;
@@ -101,7 +108,8 @@ for (const check of checks) {
   const result = calc({ body: "Sun", time: check.time, center: "barycentric", frame: "equatorial-icrs", flags: { correction: "geometric", cartesian: true } });
   if (result.status !== "ok") throw new Error(`refused: ${check.jd}`);
   const at = result.receipt.instants[0];
-  const time = new AstroTime(at.jdUt - J2000);
+  // The instant's UT1 as a Julian date: `jdUt1` from 0.1.1-rc.16's time vocabulary.
+  const time = new AstroTime((at.jdUt ?? at.jdUt1) - J2000);
   const f = reference(time);
   const r = [result.cartesian.x, result.cartesian.y, result.cartesian.z];
   const v = [result.cartesian.vx, result.cartesian.vy, result.cartesian.vz];
@@ -134,5 +142,8 @@ const out = {
   largestShareOfCalcBound: shares,
   review2130: review
 };
-writeFileSync(new URL("../results/barycentre.json", import.meta.url), JSON.stringify(out, null, 1) + "\n");
+const target = process.env.CALC_API_RESULTS
+  ? join(resolve(process.env.CALC_API_RESULTS), "barycentre.json")
+  : new URL("../results/barycentre.json", import.meta.url);
+writeFileSync(target, JSON.stringify(out, null, 1) + "\n");
 console.log(JSON.stringify(out, null, 1));

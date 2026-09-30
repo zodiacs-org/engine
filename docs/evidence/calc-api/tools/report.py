@@ -7,7 +7,8 @@ import json
 import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RESULTS = os.path.normpath(os.path.join(HERE, '..', 'results'))
+# CALC_API_RESULTS names another results directory, as for compare.py.
+RESULTS = os.environ.get('CALC_API_RESULTS') or os.path.normpath(os.path.join(HERE, '..', 'results'))
 ORDER = ['Sun', 'Moon', 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto',
          'North Node', 'South Node', 'Mean Node', 'Mean South Node', 'Black Moon Lilith']
 GROUPS = [('geocentric', 'apparent'), ('geocentric', 'astrometric'), ('geocentric', 'geometric'),

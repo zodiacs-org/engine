@@ -327,3 +327,11 @@ python3 docs/evidence/calc-api/tools/bounds.py --check      # src/calc-bounds.ts
 in `results/summary.json` (`inputs`): the 152 of the plan and the 14 fetched
 at the review; they are the ones `horizons/requests.jsonl` logged when each
 was fetched.
+
+## Rerun on 0.1.1-rc.16's build
+
+The same comparison, rerun unchanged in method on the integrated 0.1.1-rc.16
+candidate after the engine took the full IAU 2000B nutation, is in `rc16/`
+(`rc16/README.md`): all twelve consistency checks pass there, and calc's
+bounds now come from that run. This document and `results/` are the first
+run's, unchanged.

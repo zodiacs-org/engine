@@ -190,7 +190,7 @@ divides it.
 
 The differencing error is h²/6 times the third derivative. Estimated on the
 engine alone by Richardson's rule, |D(2h) − D(h)| / 3, it is at most
-1.3 × 10⁻⁴″ a day for apparent geocentric positions (the Moon),
+1.2 × 10⁻⁴″ a day for apparent geocentric positions (the Moon),
 3.2 × 10⁻³″ a day for astrometric ones (the Moon again: the light-time
 solution stops at a tolerance, which leaves a small jitter in each position)
 and 0.094″ a day for the topocentric Moon, whose parallax turns with the Earth
@@ -208,7 +208,12 @@ none is proven. The measured values are the largest differences from NASA JPL
 Horizons (DE441) over a preregistered corpus of 32 instants from 1802 to 2188,
 by center, correction and body, in every frame, rounded up to two
 significant figures: `docs/evidence/calc-api/`. They are the largest seen on
-those instants, not limits: another instant can exceed them. Topocentric
+those instants, not limits: another instant can exceed them. They come from
+the comparison rerun on this version's build, after the engine took the full
+IAU 2000B nutation (`docs/evidence/calc-api/rc16/`); none is larger than the
+first run's, and the rate bounds of the outer planets and the position and
+rate bounds of the mean node and Lilith, which carried the five-term
+nutation's error, are smaller. Topocentric
 positions were compared for the Sun, the Moon and Mars, in all three
 corrections; another topocentric body takes its geocentric bound for the
 same correction, labelled `estimated`.
@@ -334,39 +339,45 @@ and its error returns to the typed refusals.
 ## Measured against JPL Horizons and ERFA
 
 `docs/evidence/calc-api/` holds the preregistration, the Horizons requests and
-responses with their SHA-256, the scripts, and the results (`RESULTS.md`).
-The angle between the engine's direction and Horizons's, over 32 instants from
-1802 to 2188, in arcseconds, median / 95th percentile / maximum, the bodies
-pooled:
+responses with their SHA-256, the scripts, and the results of the first run,
+on astronomy-engine's five-term nutation (`RESULTS.md`, `results/`);
+`rc16/` holds the same comparison rerun unchanged on this version's build,
+with the engine's IAU 2000B nutation. The angle between the engine's
+direction and Horizons's, over 32 instants from 1802 to 2188, in arcseconds,
+median / 95th percentile / maximum, the bodies pooled, from the rerun:
 
 | center, correction | ICRS equator | true ecliptic of date | largest relative distance difference |
 | --- | --- | --- | ---: |
-| geocentric, apparent (10 bodies) | 3.00 / 15.5 / 24.6 | 2.99 / 15.5 / 24.5 | 1.3 × 10⁻⁴ |
-| geocentric, astrometric or geometric | 2.88 / 15.5 / 24.6 | 2.86 / 15.5 / 24.4 | 6.7 × 10⁻⁵ |
-| heliocentric (10 bodies) | 2.95 / 16.4 / 24.3 | 3.01 / 16.4 / 24.2 | 8.6 × 10⁻⁵ |
+| geocentric, apparent (10 bodies) | 3.00 / 15.5 / 24.6 | 3.00 / 15.5 / 24.6 | 1.3 × 10⁻⁴ |
+| geocentric, astrometric or geometric | 2.88 / 15.5 / 24.6 | 2.88 / 15.5 / 24.6 | 6.7 × 10⁻⁵ |
+| heliocentric (10 bodies) | 2.95 / 16.4 / 24.3 | 2.95 / 16.4 / 24.3 | 8.6 × 10⁻⁵ |
 | barycentric, the Sun (its bounds are derived, see Bounds) | 87 / 340 / 519 | 87 / 340 / 519 | 4.1 × 10⁻³ |
-| barycentric, the other 10 bodies | largest 24.3 | largest 24.2 | 7.7 × 10⁻⁵ |
-| topocentric, each correction (Sun, Moon, Mars; two sites) | 1.29 / 5.60 / 7.70 | 1.32 / 5.67 / 7.64 | 5.7 × 10⁻⁵ |
+| barycentric, the other 10 bodies | largest 24.3 | largest 24.3 | 7.7 × 10⁻⁵ |
+| topocentric, each correction (Sun, Moon, Mars; two sites) | 1.29 / 5.60 / 7.70 | 1.29 / 5.60 / 7.70 | 5.7 × 10⁻⁵ |
 
-To the last digit shown, `equatorial-true-of-date` gives the figures of the
-true ecliptic of date, and the mean-of-date, J2000.0 and ICRS frames those of
-the ICRS equator. The differences are the ephemeris's own: largest for the
+To the last digit shown, every frame gives the same figures: the frames of
+date now differ from Horizons's turned by ERFA's IAU 2006/2000A chain only by
+IAU 2000B's own difference from IAU 2000A, under 0.0023″ here. The first run's
+true-of-date figures differed from the others in the last digit, by the
+five-term nutation. The differences are the ephemeris's own: largest for the
 outer planets (Pluto 24.6″, Neptune 20.1″, Uranus 19.5″, Saturn 17.6″
 geocentric at worst), 2.9″ for the Sun and 8.3″ for the Moon. Geocentric
-angular rates differ from Horizons's by 0.03 to 0.04″ a day median and 2.1″ a
-day at worst (Mercury). For Jupiter to Pluto the true-of-date frames add the
-nutation's rate error to the ephemeris's: Neptune's largest rate difference
-is 0.013″ a day in the mean-of-date, J2000.0 and ICRS frames and 0.051″ a day
-in the true-of-date frames.
+angular rates differ from Horizons's by 0.03″ a day median and 2.1″ a day at
+worst (Mercury). For Jupiter to Pluto the largest rate difference is 0.013″
+(Neptune) to 0.060″ a day (Jupiter) in every frame; on the five-term
+nutation it was up to 0.082″ a day in the true-of-date frames (Neptune's
+0.051″ against 0.013″ in the other frames).
 
 The frame transforms were checked against ERFA 2.0.1 on the engine's own
-output. Those without the nutation agree to better than a microarcsecond:
-spherical against cartesian, the frame bias, the IAU 2006 precession, and the
-equator against the ecliptic in the mean-of-date, J2000.0 and ICRS frames.
-The four checks through the nutation fail their preregistered 5 mas
-tolerance, by up to 0.20″: that was astronomy-engine's five-term nutation,
-which calc used up to 0.1.1-rc.15 (see Frames). The mean node and Lilith agree with their definitions
-evaluated on ERFA's fundamental arguments to 10⁻⁹″ in the mean-of-date frames
-and 5 × 10⁻⁷″ on the J2000.0 and ICRS axes (0.2″ in the true-of-date frames:
-the nutation again); the true node is 6.6″ median and 16″ at worst from the
-node of the osculating orbit of Horizons's Moon.
+output, and all twelve checks pass on this version's build. Those without
+the nutation agree to better than a microarcsecond: spherical against
+cartesian, the frame bias, the IAU 2006 precession, and the equator against
+the ecliptic in the mean-of-date, J2000.0 and ICRS frames. The four checks
+through the nutation, which the first run failed by up to 0.20″ on
+astronomy-engine's five-term nutation, pass their preregistered 5 mas
+tolerance: at most 0.0023″, IAU 2000B's difference from ERFA's IAU 2006/2000A.
+The mean node and Lilith agree with their definitions evaluated on ERFA's
+fundamental arguments to under 10⁻⁶″ in the frames without the nutation, and
+to 0.0023″ in the true-of-date frames, where ERFA's definition takes IAU
+2000A's nutation (0.2″ on the five-term nutation); the true node is 6.6″ median and 16″ at worst from the node of the
+osculating orbit of Horizons's Moon.
