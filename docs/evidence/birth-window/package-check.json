@@ -1,0 +1,63 @@
+{
+  "baseline": "dist/ of a build of 8c4946b142c731ecdec186df6c04b91b7f2463e0 (origin/main) with src/houses.ts of f9ae1ded (the Placidus change)",
+  "original": "dist/ of a build of 8c4946b142c731ecdec186df6c04b91b7f2463e0 (origin/main)",
+  "javascript": {
+    "baselineFiles": 15,
+    "changed": [],
+    "added": [
+      "window.js"
+    ]
+  },
+  "declarations": {
+    "baselineFiles": 9,
+    "changedAfterResolvingAliases": [],
+    "onlyAddedExportsInSharedTypes": true
+  },
+  "sizes": {
+    "rootOriginal": {
+      "minified": 38434,
+      "gzip": 14555
+    },
+    "rootBaseline": {
+      "minified": 38635,
+      "gzip": 14653
+    },
+    "root": {
+      "minified": 38635,
+      "gzip": 14653
+    },
+    "window": {
+      "minified": 28652,
+      "gzip": 11614
+    },
+    "rootAndWindow": {
+      "minified": 55879,
+      "gzip": 21423
+    },
+    "windowAddsToRoot": {
+      "minified": 17244,
+      "gzip": 6770
+    },
+    "windowModuleAlone": {
+      "minified": 17973,
+      "gzip": 7790
+    }
+  },
+  "pack": {
+    "packed": 89868,
+    "unpacked": 299301,
+    "files": 32,
+    "gateUnpacked": 300000,
+    "headroom": 699
+  },
+  "windowFiles": [
+    {
+      "path": "dist/window.d.ts",
+      "bytes": 7035
+    },
+    {
+      "path": "dist/window.js",
+      "bytes": 35079
+    }
+  ]
+}

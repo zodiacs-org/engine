@@ -1,15 +1,16 @@
 import { describe, expect, it, vi } from "vitest";
 
 // astronomy-engine throws strings, not Error objects, for inputs it cannot
-// evaluate. Make its lunar series fail on demand, as it does at extreme dates.
+// evaluate. Make its lunar series fail on demand, as it does at extreme dates:
+// GeoMoon, which the engine's Moon comes from.
 const failure = vi.hoisted(() => ({ value: undefined as unknown }));
 vi.mock("astronomy-engine", async (importOriginal) => {
   const original = await importOriginal<typeof import("astronomy-engine")>();
   return {
     ...original,
-    EclipticGeoMoon: (...args: Parameters<typeof original.EclipticGeoMoon>) => {
+    GeoMoon: (...args: Parameters<typeof original.GeoMoon>) => {
       if (failure.value !== undefined) throw failure.value;
-      return original.EclipticGeoMoon(...args);
+      return original.GeoMoon(...args);
     }
   };
 });

@@ -1,0 +1,104 @@
+{
+ "swisseph": "2.10.03",
+ "koch": {
+  "counts": [
+   {
+    "case": [
+     "body and midheaven rise and set",
+     "inside the house circles",
+     "Swiss defined"
+    ],
+    "count": 48931
+   },
+   {
+    "case": [
+     "body and midheaven rise and set",
+     "outside",
+     "Swiss undefined"
+    ],
+    "count": 6005
+   },
+   {
+    "case": [
+     "circumpolar body or midheaven",
+     "inside the house circles",
+     "Swiss defined"
+    ],
+    "count": 4984
+   },
+   {
+    "case": [
+     "circumpolar body or midheaven",
+     "outside",
+     "Swiss undefined"
+    ],
+    "count": 5008
+   }
+  ],
+  "swissPositionsWithLudwigSemiArcs": {
+   "matched": 4984,
+   "unmatched": 0
+  }
+ },
+ "topocentric": {
+  "unit": "arcseconds of ascension: the equation of the circle of the position, at each side's position",
+  "residualEngine": {
+   "n": 55997,
+   "median": 4.64e-11,
+   "p95": 1.79e-10,
+   "max": 1.13e-09
+  },
+  "residualSwiss": {
+   "n": 55997,
+   "median": 0.00205,
+   "p95": 0.00598,
+   "max": 0.445
+  },
+  "differenceByFractionOfHouse": {
+   "0": {
+    "n": 4284,
+    "median": 0.0,
+    "p95": 4.09e-10,
+    "max": 1.23e-09
+   },
+   "0.125": {
+    "n": 4284,
+    "median": 0.00171,
+    "p95": 0.00448,
+    "max": 0.0284
+   },
+   "0.25": {
+    "n": 4284,
+    "median": 0.00173,
+    "p95": 0.00445,
+    "max": 0.0197
+   },
+   "0.5": {
+    "n": 4284,
+    "median": 0.00163,
+    "p95": 0.00435,
+    "max": 0.0219
+   },
+   "0.75": {
+    "n": 4284,
+    "median": 0.00167,
+    "p95": 0.00453,
+    "max": 0.0197
+   }
+  }
+ },
+ "porphyry": {
+  "unit": "arcseconds of mundane position",
+  "exactPositionOfLongitudePlus0.001arcsecVsSwiss": {
+   "n": 64928,
+   "median": 1.02e-10,
+   "p95": 2.05e-10,
+   "max": 5.01e-09
+  },
+  "casesOver0.01arcsec": 11,
+  "theirSmallerQuadrantDegrees": {
+   "min": 1.78,
+   "max": 8.67
+  }
+ }
+}

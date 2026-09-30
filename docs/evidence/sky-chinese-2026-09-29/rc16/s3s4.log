@@ -1,0 +1,35 @@
+# S3: USNO rstt/oneday fetched 2026-09-30T08:03:20Z
+80 rstt days
+python3 $E/tools/usno_fetch.py <tmp>/sky-rc16  2.64s user 0.14s system 1% cpu 2:30.98 total
+4feed8a9483a28a15a09671c456708dfd2262391d453a6e70d078d2a1cb40db5  <tmp>/sky-rc16/usno-rstt.json
+{
+ "S3": {
+  "count": 467,
+  "median": 13.832,
+  "p95": 27.925,
+  "max": 30.149,
+  "over": 2,
+  "signedMean": 0.18174304068522543,
+  "signedMin": -30.149,
+  "signedMax": 29.781
+ },
+ "S3unpaired": 3
+}
+node $E/tools/published-compare.mjs <tmp>/sky-rc16   0.69s user 0.05s system 68% cpu 1.061 total
+# S4
+{"days":9504,"complete":9495,"no-sunrise":9,"no-sunset":0,"no-next-sunrise":0,"refused":0,"hoursChecked":227880,"failures":0}
+node $E/tools/hours-consistency.mjs $E/rc16/hours-consistency.json  43.17s user 0.21s system 89% cpu 48.600 total
+# S3 again, with the download's date (published-compare.mjs gained its FETCHED argument; the numbers are the same)
+{
+ "S3": {
+  "count": 467,
+  "median": 13.832,
+  "p95": 27.925,
+  "max": 30.149,
+  "over": 2,
+  "signedMean": 0.18174304068522543,
+  "signedMin": -30.149,
+  "signedMax": 29.781
+ },
+ "S3unpaired": 3
+}

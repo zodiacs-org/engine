@@ -129,10 +129,12 @@ astronomy-engine keeps one ΔT function for its whole module. The engine
 installs a constant ΔT for each sample and restores its model,
 `deltaT` from `@zodiacs/engine/deltat`, when every call returns. Code that calls
 astronomy-engine directly should install that model too
-(`SetDeltaTFunction(deltaT)`). astronomy-engine also reuses the nutation it
-computed for any time within 1e-6 day (86 ms) of the last one, so two
-calculations at almost the same TT can differ in the twelfth decimal of a
-degree depending on what was computed before.
+(`SetDeltaTFunction(deltaT)`). The nutation is the engine's own
+(`src/nutation.ts`), computed for each TT, so no calculation depends on what
+was computed before it. astronomy-engine's own nutation, which the engine no
+longer calls, reuses the one it computed last for any time within 1e-6 day
+(86 ms), so code that calls astronomy-engine directly can see two calculations
+at almost the same TT differ in the twelfth decimal of a degree.
 
 ## Local wall times: `@zodiacs/engine/geo`
 
@@ -348,14 +350,27 @@ The six probes of the audit's time-5 finding resolve as follows (tests in
 ## Receipts
 
 The current conventions set, `NATAL_RECEIPT_CONVENTION_SETS[0]`, first
-written by 0.1.1-rc.15, adds to the rc.8 set:
+written by 0.1.1-rc.16, is rc.15's time-basis set with the nutation named:
+
+- `nutation: "iau2000b;equation-of-equinoxes-with-two-complementary-terms"`,
+  the engine's IAU 2000B series, all 77 luni-solar terms and the two fixed
+  planetary offsets, with the two largest complementary terms in the
+  equation of the equinoxes (the README's *Nutation*);
+- `moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration"`:
+  the Moon is astronomy-engine's geocentric series (`GeoMoon`) turned to the
+  ecliptic of date by the engine's precession and nutation, where rc.15's
+  set named astronomy-engine's `EclipticGeoMoon`.
+
+rc.15's time-basis set, `NATAL_RECEIPT_CONVENTION_SETS[1]`, which rc.15 wrote
+with astronomy-engine's five-term nutation and did not name it, added to the
+rc.8 set:
 
 - `deltaT: "tt-minus-ut1;value-in-result"` (the instant is no longer read as
   UT1);
 - `timeScale: "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result"`;
 - `localTime: "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record"`.
 
-A receipt under it carries `receipt.timeScale` (the scale of
+A receipt under either carries `receipt.timeScale` (the scale of
 `receipt.instant`) and `result.timeScale`, and the codec checks that they agree
 with `result.deltaT`; where the ΔT names this engine's IERS or model table, it
 recomputes the basis at the instant and requires the same values. Another
@@ -369,32 +384,47 @@ shift, a date-line cause needs a change of 12 hours or more, and a birthplace
 mean time must equal `longitude × 240` seconds at the instant (or just before
 a gap out of it). A local resolution requires `receipt.timeScale` `"utc"`.
 
-Receipts under the rc.8 set (0.1.1-rc.8 to rc.14), which read the instant as
-UT1, and the older sets, stay readable, each accepted only from the engine
-versions that wrote it: the current set only from 0.1.1-rc.15 on, in SemVer
-2.0.0 order (so not under 0.1.1-rc.14.1 or 0.1.1-beta), the rc.8 set only
-from rc.8 to rc.14. `natalReplayInput` replays the recorded request,
+Receipts under rc.15's set, under the rc.8 set (0.1.1-rc.8 to rc.14), which
+read the instant as UT1, and under the older sets stay readable, each
+accepted only from the engine versions that wrote it: the current set only
+from 0.1.1-rc.16 on, in SemVer 2.0.0 order (so not under 0.1.1-rc.15.1 or
+0.1.1-beta), rc.15's set only under 0.1.1-rc.15, the rc.8 set only from rc.8
+to rc.14. `natalReplayInput` replays the recorded request,
 `timeScale` and pinned ΔT included. A receipt promises its request, not its
 values, and an rc.8-set receipt's request is a UTC instant that its engine
 read as UT1 (`deltaT: "tt-minus-ut1;ut1-read-as-utc;value-in-result"`). This
 engine reads a UTC instant from 1972 to 2027-10-02 as UTC, so a replay moves
 the sidereal time by (UT1 − UTC) × 15.04″ per second of it, up to 12.2″ (the
 table's largest |UT1 − UTC| is 0.8106 s, on 1973-01-01), and the positions by
-the change from the ΔT model to IERS ΔT. Over 16,218 receipts that the carried
-rc.14 archive wrote for synthetic instants from 1972-01-01 to 2027-10-02 at
-latitudes from 0° to 65° (`docs/evidence/rc15-20260929/receipt-replay.json`),
-the midheaven moved by up to 12.85″; the ascendant and cusps by up to 12.94″ at
-the equator, 20.07″ at 45°, 40.55″ at 60° and 129.1″ at 65°, and more toward the
-polar circle; the Moon by up to 0.462″, the other planets by up to 0.0723″
-and the true nodes by up to 0.0174″. An ascendant that close to a sign's edge
-changes sign: an rc.14 receipt of 1973-01-05T06:56:44Z at 59.33° N 18.07° E
-records Sagittarius 29.99765° and replays to Capricorn 0.00072°
-(`src/replay-time-basis.test.ts`). Before 1972 and after 2027-10-02, where
-both engines read the instant as UT1 on the model, the angles and cusps do
-not move, the planets move by less than 0.000003″ and the true nodes by up to
-0.035″ (`docs/evidence/rc15-20260929/rc14-comparison.json`).
+the change from the ΔT model to IERS ΔT.
 
-To reproduce such a receipt as its engine computed it, read the recorded
+Every receipt written before the engine took the full IAU 2000B nutation,
+rc.15's included, was computed with astronomy-engine's five-term nutation, so
+a replay also moves every longitude by the change in Δψ, which reaches 0.2701″
+sampled every 10 minutes from 1800 to 2200
+(`docs/evidence/nutation-2026-09-29/results/nutation-change.json`), and the
+angles and cusps by the change in the sidereal time and the true obliquity
+(see *Nutation* in the README). Over 16,218 receipts that the
+carried rc.14 archive wrote for synthetic instants from 1972-01-01 to
+2027-10-02 at latitudes from 0° to 65°, a replay on this engine moved the
+midheaven by up to 12.81″; the ascendant and cusps by up to 12.9″ at the
+equator, 20.15″ at 45°, 40.69″ at 60° and 129.9″ at 65°, and more toward the
+polar circle; the Moon by up to 0.5981″, the other planets by up to 0.2717″
+and the true nodes by up to 0.2545″
+(`docs/evidence/nutation-2026-09-29/results/receipt-replay.json`; before the
+nutation changed, rc.15 moved them by up to 12.85″, 12.94″, 20.07″, 40.55″,
+129.1″, 0.462″, 0.0723″ and 0.0174″,
+`docs/evidence/rc15-20260929/receipt-replay.json`). An ascendant that close to
+a sign's edge changes sign: an rc.14 receipt of 1973-01-05T06:56:44Z at
+59.33° N 18.07° E records Sagittarius 29.99765° and replays to Capricorn
+(`src/replay-time-basis.test.ts`). Before 1972 and after 2027-10-02, where
+both engines read the instant as UT1 on the model, only the nutation moves
+them: over 7,896 synthetic charts from 1850 to 2150 at four places up to
+60.17° N, every longitude by up to 0.2635″, the ascendant and cusps by up to
+0.8003″ and the midheaven by up to 0.2576″
+(`docs/evidence/nutation-2026-09-29/results/rc14-comparison.json`).
+
+To reproduce such a receipt as closely as this engine can, read the recorded
 instant on UT1 with the recorded ΔT pinned:
 
 ```ts
@@ -406,12 +436,20 @@ const chart = natalChart({
 });
 ```
 
-On those 16,218 receipts that gives the recorded angles and cusps exactly,
-the Moon exactly, the other planets within 0.0000022″ and the true nodes
-within 0.0095″; the speeds differ in the last digits (up to 0.000017 °/day for
-the nodes, 0.00000055 °/day for the Moon), because rc.14 installed its ΔT
-model for each speed sample and a pin is one constant. The chart then reports
-the pinned basis, not rc.14's model.
+Up to rc.15 that gave, on those 16,218 receipts, the recorded angles and cusps
+exactly, the Moon exactly, the other planets within 0.0000022″ and the true
+nodes within 0.0095″, the speeds differing in the last digits (up to
+0.000017 °/day for the nodes, 0.00000055 °/day for the Moon), because rc.14
+installed its ΔT model for each speed sample and a pin is one constant
+(`docs/evidence/rc15-20260929/receipt-replay.json`). This engine's nutation
+differs from the one those receipts were computed with, so it gives them
+within the change in Δψ: every longitude within 0.2554″, the angles and cusps
+within 3.022″ and the speeds within 0.0000276 °/day
+(`docs/evidence/nutation-2026-09-29/results/receipt-replay.json`). The 1973
+receipt's recorded angles and cusps are exactly astronomy-engine's five-term
+sidereal time and obliquity at that clock, and its longitudes differ from this
+engine's by the change in Δψ alone (`src/replay-time-basis.test.ts`). The chart
+then reports the pinned basis, not rc.14's model.
 
 ## Regenerating the data
 

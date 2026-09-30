@@ -1,0 +1,695 @@
+# Paths: $SCRATCH stands for the session's scratchpad directory, the parent of the worktree and of TMPDIR.
+
+> @zodiacs/engine@0.1.1-rc.15 test
+> vitest run
+
+
+ RUN  v2.1.9 $SCRATCH/engine-houses-extra
+
+ ✓ src/timing/releasing.test.ts (18 tests) 1235ms
+   ✓ zodiacal releasing invariants > tile every period exactly with its sub-periods, loosening at most once and only after a full round 752ms
+ ✓ src/aspect-exactness.test.ts (8 tests) 4983ms
+   ✓ configured aspects under exact binary semantics > agree with the exact rational oracle on a decimal grid, wrapped and unwrapped, in both row orders 1373ms
+   ✓ configured aspects under exact binary semantics > agree with the oracle with several bodies, rules, caps and luminaries 618ms
+   ✓ configured aspects under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 1453ms
+   ✓ configured aspects under exact binary semantics > uses a faithful rc.11 copy: away from boundaries its decisions match the oracle 720ms
+   ✓ declination parallels under exact binary semantics > agree with the exact rational oracle on decimal and rotated declinations 473ms
+   ✓ declination parallels under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 333ms
+ ✓ src/receipt.test.ts (36 tests) 1088ms
+ ✓ src/vedic/ayanamsa.test.ts (24 tests) 414ms
+ ✓ src/declination.test.ts (25 tests) 956ms
+   ✓ longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size 648ms
+ ✓ src/timing/profections.test.ts (16 tests) 1823ms
+   ✓ dated profections > place a date in the same year and month profectionYear lists 809ms
+   ✓ profection invariants > repeat every twelve years and name the traditional ruler (Valens IV.11: 'every 12 years') 353ms
+ ✓ src/configured-aspects.test.ts (52 tests) 431ms
+ ✓ src/geo/birthplace.test.ts (44 tests) 387ms
+ ✓ src/houses-extra.test.ts (22 tests) 18670ms
+   ✓ the entry's angles are the root's > puts the root's cusps at whole house positions, for every system, in and out of the polar circle 3938ms
+   ✓ the entry's angles are the root's > orders ecliptic points between the cusps: positions rise with longitude, once round 780ms
+   ✓ the entry's angles are the root's > gives whole sign, Equal, Vehlow, Equal from the midheaven, Porphyry and Morinus by longitude alone 1891ms
+   ✓ house circles through a body off the ecliptic > Campanus: the circle through the north point and the prime vertical at the body's position holds the body 893ms
+   ✓ house circles through a body off the ecliptic > Regiomontanus: the circle through the north point and the equator at the body's position holds the body 818ms
+   ✓ house circles through a body off the ecliptic > Meridian and Alcabitius: hour circles, so the body's right ascension alone decides 470ms
+   ✓ house circles through a body off the ecliptic > Placidus: the fraction of the body's own semi-arc, from its diurnal circle searched numerically 320ms
+   ✓ house circles through a body off the ecliptic > Koch: the body is on the horizon of the sidereal time its position names, within the house circles 1235ms
+   ✓ where a system defines no position > Topocentric has none where no circle of the quadrant passes through a body that never rises or sets 364ms
+   ✓ where a system defines no position > Placidus follows Otto Ludwig for circumpolar bodies: 10th to 12th house east, 7th to 9th west 4037ms
+   ✓ speeds > agree with a central difference of the root's own cusps and angles 2420ms
+   ✓ speeds > differentiates the cusps of every other system inside the polar circle, away from their jumps 1089ms
+ ✓ src/input-flags.test.ts (66 tests) 417ms
+ ✓ src/house-systems.test.ts (1903 tests) 1435ms
+ ✓ src/receipt-time-basis.test.ts (32 tests) 577ms
+ ❯ scripts/verify-archive-binding.test.mjs (23 tests | 23 failed) 21558ms
+   × archive binding check > passes a clean history and skips the rebuild until the version's archive exists 490ms
+     → expected 'Running the check in a new Node proce…' to contain 'skipping the rebuild of HEAD'
+   × archive binding check > sees a rewrite on a side branch hidden by merge simplification 539ms
+     → expected 'Running the check in a new Node proce…' to contain 'sha256 9b06ae6cc09af96a354f557f9eecf9…'
+   × archive binding check > sees an archive carried and removed on a merged side branch 616ms
+     → expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.2.tgz wa…'
+   × archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 747ms
+     → expected 'Running the check in a new Node proce…' to contain '1 superseded'
+   × archive binding check > refuses a rewritten manifest that whitelists replaced bytes 820ms
+     → expected 'Running the check in a new Node proce…' to contain 'is not a prefix of HEAD\'s (the manif…'
+   × archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 496ms
+     → expected 'Running the check in a new Node proce…' to contain 'artifacts is not a directory (git mod…'
+   × archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 486ms
+     → expected 'Running the check in a new Node proce…' to contain 'artifacts/old is not README.md, archi…'
+   × archive binding check > reads HEAD from git objects, never the working tree 390ms
+     → expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+   × archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 1065ms
+     → expected 1 to be +0 // Object.is equality
+   × archive binding check > checks the receipt of every version, not only the current one 374ms
+     → expected 'Running the check in a new Node proce…' to contain 'The receipt for 0.0.1 at HEAD does no…'
+   × archive binding check > binds each archive to its recorded source commit 389ms
+     → expected 'Running the check in a new Node proce…' to contain 'packs a README.md that is not byte-id…'
+   × archive binding check > refuses an archive carried by a commit that does not follow its source commit 397ms
+     → expected 'Running the check in a new Node proce…' to contain 'which is neither its source commit no…'
+   × archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata 465ms
+     → expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1+evil.t…'
+   × archive binding check > refuses numeric identifiers above 2^53 - 1, where npm's semver.eq takes two versions for one 481ms
+     → expected 'Running the check in a new Node proce…' to contain 'The recorded version "0.0.1-900719925…'
+   × archive binding check > refuses names that a case-insensitive or normalizing file system takes for one: variants of artifacts/, or two archives in it 2686ms
+     → expected 'Running the check in a new Node proce…' to contain '"Artifacts" is not artifacts but is o…'
+   × archive binding check > rebuilds with its own npm ci, whatever the checkout's node_modules holds 2205ms
+     → expected 1 to be +0 // Object.is equality
+   × archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH 1432ms
+     → expected 'Running the check in a new Node proce…' to contain 'The 0.0.1 source could not be rebuilt…'
+   × archive binding check > never runs a git that npm run puts on PATH from the checkout 1776ms
+     → expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+   × archive binding check > keeps code that an .npmrc names for NODE_OPTIONS out of the check and its rebuilds 1529ms
+     → expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+   × archive binding check > refuses a TMPDIR inside the checkout, or with a node_modules or package.json above it 1899ms
+     → expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+   × archive binding check > runs no hook from the checkout's .git 1259ms
+     → expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+   × archive binding check > ignores replace refs and grafts in the checkout's .git 450ms
+     → expected 'Running the check in a new Node proce…' to contain 'sha256 5f08eed2fbb55e032a025907f12247…'
+   × archive binding check > refuses an archive without a manifest entry, and a shallow checkout 399ms
+     → expected 'Running the check in a new Node proce…' to contain 'is carried without a carried entry'
+ ✓ src/geo/calendar.test.ts (52 tests) 745ms
+   ✓ Julian and Gregorian calendar dates > agrees, day by day from 1500 to 2199, with two counters walked from the 1582 changeover 572ms
+ ✓ src/crossings.test.ts (50 tests) 165ms
+ ✓ src/geo/geonames-schema.test.ts (67 tests) 112ms
+ ✓ src/timing/solar-arc.test.ts (16 tests) 671ms
+   ✓ solar arc invariants > is the progressed Sun minus the natal Sun 381ms
+ ✓ src/timing/firdaria.test.ts (12 tests) 1153ms
+   ✓ firdaria invariants > date whole ages at the solar returns and fractional ages linearly within their year 488ms
+ ✓ src/geo/zone-history.test.ts (23 tests) 256ms
+ ✓ src/timing/planetary-returns.test.ts (36 tests) 7879ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Sun': the same returns as a fine plain scan over the fixture's window 1117ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Moon': the same returns as a fine plain scan over the fixture's window 651ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Jupiter': the same returns as a fine plain scan over the fixture's window 460ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Saturn': the same returns as a fine plain scan over the fixture's window 541ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Uranus': the same returns as a fine plain scan over the fixture's window 548ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Neptune': the same returns as a fine plain scan over the fixture's window 455ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Pluto': the same returns as a fine plain scan over the fixture's window 2691ms
+ ✓ src/crossings-ephemeris.test.ts (11 tests) 6964ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2100 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 646ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2400 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 510ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2600 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 332ms
+   ✓ the audit's s2 cases, with the site's answers > matches an hourly scan of the 2,600-day Moon window, crossing by crossing 2105ms
+   ✓ the audit's s2 cases, with the site's answers > returns Saturn's crossings of 0° from 1900 to 2100 at a 5-day step, and a daily scan agrees 2699ms
+   ✓ grazing crossing pairs on the ephemeris > keeps all three first-return passes for a natal Saturn 0.002° below the 2019 station 451ms
+ ✓ src/time-scale.test.ts (31 tests) 2216ms
+   ✓ UT1 − UTC from IERS finals2000A.all of 2026-09-24 > reproduces every daily IERS value, observed and predicted, within the table's stated bound 1301ms
+   ✓ the time basis of a chart > scans Saturn returns from a TT birth on UTC 735ms
+ ✓ src/vedic/jyotish.test.ts (14 tests) 469ms
+   ✓ the exact tick grid > floors lon × 7560 exactly, including doubles an ulp either side of a boundary 412ms
+ ✓ src/geo/birthplace-clock.test.ts (28 tests) 9704ms
+   ✓ the birthplace clock at the end of its local mean time era > America/New_York: Buffalo 390ms
+   ✓ the birthplace clock at each change of its shipped history before 1970 > America/New_York: New York 896ms
+   ✓ the birthplace clock at each change of its shipped history before 1970 > Europe/Amsterdam: Amsterdam 399ms
+   ✓ the birthplace clock at each change of its shipped history before 1970 > Atlantic/Reykjavik: Reykjavik 561ms
+   ✓ the birthplace clock on its zone's own meridian > matches the zone clock at every such era end 3287ms
+ ✓ src/vedic/dasha.test.ts (15 tests) 2726ms
+   ✓ Vimshottari > finds each period from its own start and end: boundaries round-trip through the ISO strings 2690ms
+ ✓ src/progressions.test.ts (21 tests) 162ms
+ ✓ src/points.test.ts (14 tests) 148ms
+ ✓ src/timing/shared.test.ts (7 tests) 2056ms
+   ✓ timing checks that need no chart > know every name a chart can profect before computing it 605ms
+   ✓ timing flags > mark results that read the ephemeris outside the reference span 528ms
+   ✓ timing flags > mark the sect exactly when the Sun's altitude, found another way, disagrees with it 680ms
+ ✓ src/deltat-chart.test.ts (11 tests) 150ms
+ ✓ src/engine.test.ts (24 tests) 357ms
+ ✓ src/geo/geonames.test.ts (10 tests) 34ms
+ ✓ src/deltat.test.ts (12 tests) 230ms
+ ✓ src/porphyry.test.ts (14 tests) 187ms
+ ✓ src/public-input.test.ts (78 tests) 199ms
+ ✓ src/placidus-limit.test.ts (3 tests) 6870ms
+   ✓ the Placidus limit against the ERFA arbiter (brief v1 rule 1h) > computes Placidus exactly where the arbiter's limit allows it 943ms
+   ✓ Placidus just below the polar limit > keeps Placidus at every millisecond of the review's reproduction, where the iteration alone fell back 3560ms
+   ✓ Placidus just below the polar limit > solves every cusp within 1e-6° of the limit, at the sidereal times where the iteration alone fails 2366ms
+ ✓ src/returns-bounds.test.ts (19 tests) 224ms
+ ✓ src/geo.test.ts (40 tests) 57ms
+ ✓ scripts/verify-release-archive.test.mjs (10 tests) 3293ms
+   ✓ verify-release-archive > refuses an entry that names another file, size or digest 317ms
+   ✓ verify-release-archive > refuses a receipt that is not the entry's digest, two spaces, the file name and a newline 435ms
+   ✓ verify-release-archive > refuses versions that are not strict 878ms
+   ✓ verify-release-archive > passes every archive carried in this repository 884ms
+ ✓ src/receipt-conventions.test.ts (6 tests) 172ms
+ ✓ src/geo/flags.test.ts (16 tests) 528ms
+ ✓ src/reference-span.test.ts (7 tests) 382ms
+ ✓ src/receipt-json.test.ts (88 tests) 57ms
+ ✓ src/houses-regression.test.ts (6 tests) 386ms
+ ✓ src/geo/timezone-precision.test.ts (17 tests) 167ms
+ ✓ src/returns-crossings.test.ts (16 tests) 15ms
+ ✓ src/ephemeris-span.test.ts (6 tests) 314ms
+ ✓ src/vedic/boundaries.test.ts (21 tests) 117ms
+ ✓ src/exact.test.ts (5 tests) 4218ms
+   ✓ exact sums of binary64 terms > round once to the nearest double, ties to even, and give the exact sign 4103ms
+ ✓ src/body-label.test.ts (15 tests) 54ms
+ ✓ src/angles-erfa.test.ts (12 tests) 296ms
+ ✓ src/speed.test.ts (7 tests) 1792ms
+   ✓ longitude speeds > are the derivative of the reported longitude to 0.01″ a day 721ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 1990-02-01T12:00:00Z 304ms
+ ✓ src/ephemeris-errors.test.ts (6 tests) 195ms
+ ✓ src/timing/solar-years.test.ts (1 test) 3261ms
+   ✓ solar-return years > stay within hours of the mean tropical year, far inside the three days the solver searches 3260ms
+ ✓ src/aspects.test.ts (12 tests) 18708ms
+   ✓ findAspects applying flags against the engine's own motion > match the sign of the orb's rate, measured over ±1 s, every 30 minutes in the first quarter of 2024 18520ms
+ ✓ src/geo/roundtrip.test.ts (13 tests) 52751ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 1 of 12 5345ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 2 of 12 4601ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 3 of 12 4084ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 4 of 12 4002ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 5 of 12 4409ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 6 of 12 3584ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 7 of 12 4089ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 8 of 12 4506ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 9 of 12 3999ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 10 of 12 4779ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 11 of 12 4849ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 12 of 12 4090ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 23 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > passes a clean history and skips the rebuild until the version's archive exists
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'skipping the rebuild of HEAD'
+
+- Expected
++ Received
+
+- skipping the rebuild of HEAD
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:187:27
+    185|     const r = carriedOnce();
+    186|     const result = r.check();
+    187|     expect(result.output).toContain("skipping the rebuild of HEAD");
+       |                           ^
+    188|     expect(result.status).toBe(0);
+    189|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > sees a rewrite on a side branch hidden by merge simplification
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'sha256 9b06ae6cc09af96a354f557f9eecf9…'
+
+- Expected
++ Received
+
+- sha256 9b06ae6cc09af96a354f557f9eecf9d16dc7e571d053779db93f7c123e640715
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:207:27
+    205|     const result = r.check();
+    206|     expect(result.status).toBe(1);
+    207|     expect(result.output).toContain(`sha256 ${sha256(other)}`);
+       |                           ^
+    208|   });
+    209| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > sees an archive carried and removed on a merged side branch
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.2.tgz wa…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.2.tgz was committed and is missing from HEAD
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:223:27
+    221|     const result = r.check();
+    222|     expect(result.status).toBe(1);
+    223|     expect(result.output).toContain("artifacts/zodiacs-engine-0.0.2.tg…
+       |                           ^
+    224|   });
+    225| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry
+AssertionError: expected 'Running the check in a new Node proce…' to contain '1 superseded'
+
+- Expected
++ Received
+
+- 1 superseded
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:255:26
+    253|     const r = breachHistory(false);
+    254|     const clean = r.check("--pinned-superseded", r.pin);
+    255|     expect(clean.output).toContain("1 superseded");
+       |                          ^
+    256|     expect(clean.status).toBe(0);
+    257|     // The same manifest without the pin: a superseded entry cannot be…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses a rewritten manifest that whitelists replaced bytes
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'is not a prefix of HEAD\'s (the manif…'
+
+- Expected
++ Received
+
+- is not a prefix of HEAD's (the manifest is append-only)
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:295:27
+    293|     const result = r.check("--pinned-superseded", pinnedFile(r.entries…
+    294|     expect(result.status).toBe(1);
+    295|     expect(result.output).toContain("is not a prefix of HEAD's (the ma…
+       |                           ^
+    296|     expect(result.output).toContain("drops or changes entries of its p…
+    297|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'artifacts is not a directory (git mod…'
+
+- Expected
++ Received
+
+- artifacts is not a directory (git mode 120000, blob) in 1 commit(s)
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:305:25
+    303|     const head = atHead.check();
+    304|     expect(head.status).toBe(1);
+    305|     expect(head.output).toContain("artifacts is not a directory (git m…
+       |                         ^
+    306| 
+    307|     // The rc.14 review's case 2c: main swaps artifacts/ for a link, a…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'artifacts/old is not README.md, archi…'
+
+- Expected
++ Received
+
+- artifacts/old is not README.md, archives.json, or an archive or receipt named for a strict semantic version (git mode 040000, tree)
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:335:27
+    333|     const result = r.check();
+    334|     expect(result.status).toBe(1);
+    335|     expect(result.output).toContain("artifacts/old is not README.md, a…
+       |                           ^
+    336|     expect(result.output).toContain("artifacts/notes.txt is not README…
+    337|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > reads HEAD from git objects, never the working tree
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1.tgz is recorded as carried but HEAD does not hold it
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:347:25
+    345|     const gone = untracked.check();
+    346|     expect(gone.status).toBe(1);
+    347|     expect(gone.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+       |                         ^
+    348|     expect(gone.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+    349|     // Uncommitted bytes in the working tree neither pass nor fail the…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ scripts/verify-archive-binding.test.mjs:368:32
+    366|     r.commit("carry 0.0.1");
+    367|     const carriedHead = r.check();
+    368|     expect(carriedHead.status).toBe(0);
+       |                                ^
+    369|     expect(carriedHead.output).toContain("artifacts/zodiacs-engine-0.0…
+    370|     // The rc.14 review's blocker: a merge brings a new LICENSING.md, …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > checks the receipt of every version, not only the current one
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'The receipt for 0.0.1 at HEAD does no…'
+
+- Expected
++ Received
+
+- The receipt for 0.0.1 at HEAD does not name its recorded bytes
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:389:27
+    387|     const result = r.check();
+    388|     expect(result.status).toBe(1);
+    389|     expect(result.output).toContain("The receipt for 0.0.1 at HEAD doe…
+       |                           ^
+    390|   });
+    391| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > binds each archive to its recorded source commit
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'packs a README.md that is not byte-id…'
+
+- Expected
++ Received
+
+- packs a README.md that is not byte-identical to its source commit's
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:400:27
+    398|     const result = r.check();
+    399|     expect(result.status).toBe(1);
+    400|     expect(result.output).toContain("packs a README.md that is not byt…
+       |                           ^
+    401|   });
+    402| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses an archive carried by a commit that does not follow its source commit
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'which is neither its source commit no…'
+
+- Expected
++ Received
+
+- which is neither its source commit nor a child of it
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:413:27
+    411|     const result = r.check();
+    412|     expect(result.status).toBe(1);
+    413|     expect(result.output).toContain("which is neither its source commi…
+       |                           ^
+    414|   });
+    415| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1+evil.t…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1+evil.tgz is not README.md, archives.json, or an archive or receipt named for a strict semantic version
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:427:29
+    425|       const result = r.check();
+    426|       expect(result.status).toBe(1);
+    427|       expect(result.output).toContain(`artifacts/zodiacs-engine-${vers…
+       |                             ^
+    428|       expect(result.output).toContain(`The recorded version "${version…
+    429|       expect(result.output).toContain(`The carried versions 0.0.1 and …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses numeric identifiers above 2^53 - 1, where npm's semver.eq takes two versions for one
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'The recorded version "0.0.1-900719925…'
+
+- Expected
++ Received
+
+- The recorded version "0.0.1-9007199254740993" is not a strict semantic version
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:453:25
+    451|     const both = pair.check();
+    452|     expect(both.status).toBe(1);
+    453|     expect(both.output).toContain(`The recorded version "${b}" is not …
+       |                         ^
+    454|     expect(both.output).toContain(`The carried versions ${a} and ${b} …
+    455|     // semver.eq stops at the first identifiers that differ as strings…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses names that a case-insensitive or normalizing file system takes for one: variants of artifacts/, or two archives in it
+AssertionError: expected 'Running the check in a new Node proce…' to contain '"Artifacts" is not artifacts but is o…'
+
+- Expected
++ Received
+
+- "Artifacts" is not artifacts but is one name with it once case-folded and normalized in 1 commit(s): 5cbe6c6a05e8
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:499:29
+    497|     expect(Object.fromEntries(variants.map(({ name, result }) => [name…
+    498|     for (const { name, commit, result } of variants) {
+    499|       expect(result.output).toContain(`${JSON.stringify(name)} is not …
+       |                             ^
+    500|     }
+    501|     // Two strict versions that npm tells apart but such a disk does n…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > rebuilds with its own npm ci, whatever the checkout's node_modules holds
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ scripts/verify-archive-binding.test.mjs:535:30
+    533|     r.carry("0.0.1", carried, s1);
+    534|     r.commit("carry 0.0.1");
+    535|     expect(r.check().status).toBe(0);
+       |                              ^
+    536|     const tsup = join(r.dir, "node_modules", ".bin", "tsup");
+    537|     const replaceTsup = (script) => { unlinkSync(tsup); writeFileSync(…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'The 0.0.1 source could not be rebuilt…'
+
+- Expected
++ Received
+
+- The 0.0.1 source could not be rebuilt and packed.
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:584:27
+    582|     const result = r.checkAsNpmRun();
+    583|     expect(result.status).toBe(1);
+    584|     expect(result.output).toContain("The 0.0.1 source could not be reb…
+       |                           ^
+    585|     expect(result.output).not.toContain("is byte-identical to a rebuil…
+    586|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > never runs a git that npm run puts on PATH from the checkout
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1.tgz is not the archive HEAD
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ honestFailure scripts/verify-archive-binding.test.mjs:171:25
+    169| /** The honest verdict on changedUnderSameVersion's HEAD. */
+    170| function honestFailure(result) {
+    171|   expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+       |                         ^
+    172|   expect(result.output).toContain("package/dist/index.js");
+    173|   expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:597:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > keeps code that an .npmrc names for NODE_OPTIONS out of the check and its rebuilds
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1.tgz is not the archive HEAD
++ Running the check in a new Node process without NODE_OPTIONS=--require $SCRATCH/isolated-tmp/zodiacs-binding-case-cHyok6/node_modules/.hook.cjs.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ honestFailure scripts/verify-archive-binding.test.mjs:171:25
+    169| /** The honest verdict on changedUnderSameVersion's HEAD. */
+    170| function honestFailure(result) {
+    171|   expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+       |                         ^
+    172|   expect(result.output).toContain("package/dist/index.js");
+    173|   expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:613:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses a TMPDIR inside the checkout, or with a node_modules or package.json above it
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1.tgz is not the archive HEAD
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ honestFailure scripts/verify-archive-binding.test.mjs:171:25
+    169| /** The honest verdict on changedUnderSameVersion's HEAD. */
+    170| function honestFailure(result) {
+    171|   expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+       |                         ^
+    172|   expect(result.output).toContain("package/dist/index.js");
+    173|   expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:641:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > runs no hook from the checkout's .git
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'artifacts/zodiacs-engine-0.0.1.tgz is…'
+
+- Expected
++ Received
+
+- artifacts/zodiacs-engine-0.0.1.tgz is not the archive HEAD
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ honestFailure scripts/verify-archive-binding.test.mjs:171:25
+    169| /** The honest verdict on changedUnderSameVersion's HEAD. */
+    170| function honestFailure(result) {
+    171|   expect(result.output).toContain("artifacts/zodiacs-engine-0.0.1.tgz …
+       |                         ^
+    172|   expect(result.output).toContain("package/dist/index.js");
+    173|   expect(result.status).toBe(1);
+ ❯ scripts/verify-archive-binding.test.mjs:651:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > ignores replace refs and grafts in the checkout's .git
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'sha256 5f08eed2fbb55e032a025907f12247…'
+
+- Expected
++ Received
+
+- sha256 5f08eed2fbb55e032a025907f12247d1d797946d6ad1501c1d2774f29cf53982
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:666:28
+    664|     const swapped = replaced.check();
+    665|     expect(swapped.status).toBe(1);
+    666|     expect(swapped.output).toContain(`sha256 ${sha256(evil)}`);
+       |                            ^
+    667|     // A graft would hide a commit that held other bytes, restored by …
+    668|     const grafted = carriedOnce();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/23]⎯
+
+ FAIL  scripts/verify-archive-binding.test.mjs > archive binding check > refuses an archive without a manifest entry, and a shallow checkout
+AssertionError: expected 'Running the check in a new Node proce…' to contain 'is carried without a carried entry'
+
+- Expected
++ Received
+
+- is carried without a carried entry
++ Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
++ ::error file=scripts/verify-archive-binding.mjs::$SCRATCH/node_modules lies at or above the temporary directory $SCRATCH/isolated-tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:686:31
+    684|     const unrecorded = r.check();
+    685|     expect(unrecorded.status).toBe(1);
+    686|     expect(unrecorded.output).toContain("is carried without a carried …
+       |                               ^
+    687| 
+    688|     const clone = scratch("zodiacs-binding-shallow-");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/23]⎯
+
+ Test Files  1 failed | 54 passed (55)
+      Tests  23 failed | 3118 passed (3141)
+   Start at  14:01:54
+   Duration  106.24s (transform 4.12s, setup 0ms, collect 9.92s, tests 184.42s, environment 15ms, prepare 7.27s)
+

@@ -55,10 +55,14 @@ values, all in degrees:
 
 `siderealLongitude(tropical, value)` subtracts `value.true`. The sidereal
 longitude is therefore the mean-equinox longitude minus the mean ayanamsa, and
-nutation cancels. The engine's nutation is the one astronomy-engine uses: the
-five largest terms of IAU 2000B, which differ from the full series by up to
-0.270″. That error appears in `nutation` and `true`, but it cancels out of
-sidereal longitudes.
+nutation cancels. The engine's nutation is the IAU 2000B series, all 77 of its
+terms (the README's *Nutation*), whose Δψ equals ERFA's `nut00b` within
+1e-10″ (`src/nutation.test.ts`). Until it took the full series, the engine used
+astronomy-engine's five largest terms, which differ from it by up to 0.2701″
+sampled every 10 minutes from 1800 to 2200
+(`docs/evidence/nutation-2026-09-29/results/nutation-change.json`); either way
+the nutation appears in `nutation` and `true` and cancels out of sidereal
+longitudes, and `mean` does not involve it.
 
 `AyanamsaValue.flags` is `["outside-reference-span"]` when the instant lies
 outside 1800–2200 (`REFERENCE_SPAN`), or when an epoch definition's epoch does,
@@ -469,7 +473,6 @@ Results outside 1800–2200 carry `outside-reference-span`, as charts do.
   ayanamsa (zero at the 291 CE equinox), other star anchors, and
   galactic-equator zodiacs. Any value at an epoch can be given to
   `userAyanamsa`.
-- Full-series nutation in `true`. Sidereal longitudes are unaffected.
 - Light deflection for a star behind the Sun's disk (see `true-pushya` above).
 - Sidereal house systems (bhava chalit, Sripati). Apart from whole-sign
   houses, `siderealChart` subtracts the ayanamsa from the chart's own cusps.

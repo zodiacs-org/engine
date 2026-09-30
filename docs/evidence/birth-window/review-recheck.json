@@ -1,0 +1,793 @@
+{
+ "checker": {
+  "file": "check.mjs, the review's independent checker (not in this repository)",
+  "sha256": "f2026d4627de87d1fa9ff233ffde8bb8805d528cd0bbaca0f9509d4bb258a17a",
+  "command": "DIST=<dist of e0833ee> node check.mjs --windows FILE --out FILE.jsonl --workers 3"
+ },
+ "build": "e0833eee (npm run build; the dist/ checked is that build, copied aside)",
+ "preregistered": {
+  "windows": "windows.json",
+  "sha256": "238071ceea6c19a32eb11db28ff128f11532939f050d0a96ac0df5d33c533d17",
+  "before": {
+   "windows": 1000,
+   "errors": [],
+   "samples": 12259372,
+   "sampledTransitions": 24188,
+   "matched": 24188,
+   "missed": 0,
+   "extra": 0,
+   "excursionChanges": 8,
+   "excursionConfirmed": 8,
+   "cellDisagreements": 0,
+   "structural": 0,
+   "switches": 20629,
+   "changes": 25425,
+   "msChecks": 1485288,
+   "msFailures": 0,
+   "houseOfCrossCheckMismatches": 0,
+   "boundExceeded": [],
+   "polarFallback": 41,
+   "failedIds": [],
+   "verdict": "PASS",
+   "strictVerdict": "PASS",
+   "finderSeconds": 100.1,
+   "wallMinutes": 158.7
+  },
+  "after": {
+   "windows": 1000,
+   "errors": [],
+   "samples": 12259372,
+   "sampledTransitions": 24188,
+   "matched": 24188,
+   "missed": 0,
+   "extra": 0,
+   "excursionChanges": 8,
+   "excursionConfirmed": 8,
+   "cellDisagreements": 0,
+   "structural": 0,
+   "switches": 20629,
+   "changes": 25425,
+   "msChecks": 1485288,
+   "msFailures": 0,
+   "houseOfCrossCheckMismatches": 0,
+   "boundExceeded": [],
+   "polarFallback": 41,
+   "failedIds": [],
+   "verdict": "PASS",
+   "strictVerdict": "PASS",
+   "finderSeconds": 59.5,
+   "wallMinutes": 88.3
+  },
+  "perWindow": {
+   "windows": 1000,
+   "identicalToBefore": 1000,
+   "differing": []
+  }
+ },
+ "review300": {
+  "windows": "the review's extra300.json",
+  "sha256": "c9459fc5b2593e353810423649a18e4de1945f93089779f93732ecf2b99f85e7",
+  "before": {
+   "windows": 300,
+   "errors": [
+    {
+     "id": 163,
+     "error": "The window needs more evaluations than the search allows; a quantity stays within its rounding or jitter band of a boundary for too long."
+    },
+    {
+     "id": 158,
+     "error": "The window needs more evaluations than the search allows; a quantity stays within its rounding or jitter band of a boundary for too long."
+    },
+    {
+     "id": 159,
+     "error": "The window needs more evaluations than the search allows; a quantity stays within its rounding or jitter band of a boundary for too long."
+    },
+    {
+     "id": 162,
+     "error": "The window needs more evaluations than the search allows; a quantity stays within its rounding or jitter band of a boundary for too long."
+    },
+    {
+     "id": 161,
+     "error": "The window needs more evaluations than the search allows; a quantity stays within its rounding or jitter band of a boundary for too long."
+    }
+   ],
+   "samples": 5901060,
+   "sampledTransitions": 11805,
+   "matched": 11552,
+   "missed": 253,
+   "extra": 0,
+   "excursionChanges": 80924,
+   "excursionConfirmed": 80924,
+   "cellDisagreements": 0,
+   "structural": 0,
+   "switches": 67582,
+   "changes": 143520,
+   "msChecks": 4865904,
+   "msFailures": 0,
+   "houseOfCrossCheckMismatches": 0,
+   "boundExceeded": [],
+   "polarFallback": 39,
+   "failedIds": [
+    163,
+    158,
+    159,
+    162,
+    161
+   ],
+   "verdict": "FAIL",
+   "strictVerdict": "FAIL",
+   "finderSeconds": 1112.2,
+   "wallMinutes": 87.7
+  },
+  "after": {
+   "windows": 300,
+   "errors": [],
+   "samples": 5901060,
+   "sampledTransitions": 11805,
+   "matched": 11599,
+   "missed": 206,
+   "extra": 2,
+   "excursionChanges": 80926,
+   "excursionConfirmed": 80924,
+   "cellDisagreements": 53592,
+   "structural": 0,
+   "switches": 67628,
+   "changes": 143569,
+   "msChecks": 4869216,
+   "msFailures": 4,
+   "houseOfCrossCheckMismatches": 0,
+   "boundExceeded": [],
+   "polarFallback": 39,
+   "failedIds": [
+    163,
+    158,
+    159,
+    162,
+    161
+   ],
+   "verdict": "FAIL",
+   "strictVerdict": "FAIL",
+   "finderSeconds": 573.1,
+   "wallMinutes": 64.3
+  },
+  "perWindow": {
+   "windows": 300,
+   "identicalToBefore": 295,
+   "differing": [
+    {
+     "id": 163,
+     "tag": "F-node-ingress-slowest",
+     "houseSystem": "regiomontanus",
+     "diff": {
+      "error": [
+       "The window needs more evaluations than the search allows; a quantity stays within its rounding or jitter band of a boundary for too long.",
+       null
+      ],
+      "cells": [
+       null,
+       15
+      ],
+      "switches": [
+       null,
+       14
+      ],
+      "changes": [
+       null,
+       16
+      ],
+      "matched": [
+       0,
+       14
+      ],
+      "missed": [
+       20,
+       6
+      ],
+      "extra": [
+       0,
+       2
+      ],
+      "excursionChanges": [
+       null,
+       2
+      ],
+      "excursionConfirmed": [
+       null,
+       0
+      ],
+      "disagree": [
+       null,
+       18600
+      ],
+      "structural": [
+       null,
+       0
+      ],
+      "msChecks": [
+       null,
+       1008
+      ],
+      "msFailures": [
+       null,
+       2
+      ],
+      "houseMismatch": [
+       null,
+       0
+      ],
+      "flags": [
+       null,
+       [
+        "node-unresolved"
+       ]
+      ]
+     }
+    },
+    {
+     "id": 158,
+     "tag": "F-node-ingress-slowest",
+     "houseSystem": "porphyry",
+     "diff": {
+      "error": [
+       "The window needs more evaluations than the search allows; a quantity stays within its rounding or jitter band of a boundary for too long.",
+       null
+      ],
+      "cells": [
+       null,
+       11
+      ],
+      "switches": [
+       null,
+       10
+      ],
+      "changes": [
+       null,
+       10
+      ],
+      "matched": [
+       0,
+       10
+      ],
+      "missed": [
+       40,
+       30
+      ],
+      "excursionChanges": [
+       null,
+       0
+      ],
+      "excursionConfirmed": [
+       null,
+       0
+      ],
+      "disagree": [
+       null,
+       11572
+      ],
+      "structural": [
+       null,
+       0
+      ],
+      "msChecks": [
+       null,
+       720
+      ],
+      "msFailures": [
+       null,
+       0
+      ],
+      "houseMismatch": [
+       null,
+       0
+      ],
+      "flags": [
+       null,
+       [
+        "node-unresolved"
+       ]
+      ]
+     }
+    },
+    {
+     "id": 159,
+     "tag": "F-node-ingress-slowest",
+     "houseSystem": "equal",
+     "diff": {
+      "error": [
+       "The window needs more evaluations than the search allows; a quantity stays within its rounding or jitter band of a boundary for too long.",
+       null
+      ],
+      "cells": [
+       null,
+       7
+      ],
+      "switches": [
+       null,
+       6
+      ],
+      "changes": [
+       null,
+       7
+      ],
+      "matched": [
+       0,
+       7
+      ],
+      "missed": [
+       41,
+       34
+      ],
+      "excursionChanges": [
+       null,
+       0
+      ],
+      "excursionConfirmed": [
+       null,
+       0
+      ],
+      "disagree": [
+       null,
+       9670
+      ],
+      "structural": [
+       null,
+       0
+      ],
+      "msChecks": [
+       null,
+       432
+      ],
+      "msFailures": [
+       null,
+       0
+      ],
+      "houseMismatch": [
+       null,
+       0
+      ],
+      "flags": [
+       null,
+       [
+        "node-unresolved"
+       ]
+      ]
+     }
+    },
+    {
+     "id": 162,
+     "tag": "F-node-ingress-slowest",
+     "houseSystem": "koch",
+     "diff": {
+      "error": [
+       "The window needs more evaluations than the search allows; a quantity stays within its rounding or jitter band of a boundary for too long.",
+       null
+      ],
+      "cells": [
+       null,
+       10
+      ],
+      "switches": [
+       null,
+       9
+      ],
+      "changes": [
+       null,
+       9
+      ],
+      "matched": [
+       0,
+       9
+      ],
+      "missed": [
+       75,
+       66
+      ],
+      "excursionChanges": [
+       null,
+       0
+      ],
+      "excursionConfirmed": [
+       null,
+       0
+      ],
+      "disagree": [
+       null,
+       9194
+      ],
+      "structural": [
+       null,
+       0
+      ],
+      "msChecks": [
+       null,
+       648
+      ],
+      "msFailures": [
+       null,
+       0
+      ],
+      "houseMismatch": [
+       null,
+       0
+      ],
+      "flags": [
+       null,
+       [
+        "node-unresolved"
+       ]
+      ]
+     }
+    },
+    {
+     "id": 161,
+     "tag": "F-node-ingress-slowest",
+     "houseSystem": "vehlow",
+     "diff": {
+      "error": [
+       "The window needs more evaluations than the search allows; a quantity stays within its rounding or jitter band of a boundary for too long.",
+       null
+      ],
+      "cells": [
+       null,
+       8
+      ],
+      "switches": [
+       null,
+       7
+      ],
+      "changes": [
+       null,
+       7
+      ],
+      "matched": [
+       0,
+       7
+      ],
+      "missed": [
+       77,
+       70
+      ],
+      "excursionChanges": [
+       null,
+       0
+      ],
+      "excursionConfirmed": [
+       null,
+       0
+      ],
+      "disagree": [
+       null,
+       4556
+      ],
+      "structural": [
+       null,
+       0
+      ],
+      "msChecks": [
+       null,
+       504
+      ],
+      "msFailures": [
+       null,
+       2
+      ],
+      "houseMismatch": [
+       null,
+       0
+      ],
+      "flags": [
+       null,
+       [
+        "node-unresolved"
+       ]
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "unresolvedChecked": {
+  "build": "f9ae1ded (npm run build; its JavaScript is byte-identical to e0833eee's)",
+  "checker": {
+   "file": "review-check2.mjs in this directory: the review's second-round checker, credited to the review, with only its header and default DIST changed",
+   "sha256": "448f61c8bec622af5b87b0af79b03d662f462d150a695c909e3939f3324dfc45",
+   "reviewCopySha256": "eb7c45bdfa3f5c19493c1c89b9e497e88e5b5a06b2ff4b06500d49fdb5b12b29",
+   "covers": "Inside each unresolved interval [a, b) only the listed components are wildcards, and the partition must be null for exactly those, exactly there. At each edge the resolved side is verified at its millisecond: the switch at a takes each listed component from its value to null, and natalChart at a - 1 has that value; the switch at b takes it from null to a value natalChart has at b. Every millisecond within 1,000 ms of each edge, outside the interval, is compared for all 72 components. Everything else is checked as by check.mjs.",
+   "command": "DIST=<dist of the build> node review-check2.mjs --windows review-edge-windows.json --out FILE.jsonl --workers 3"
+  },
+  "windows": "review-edge-windows.json",
+  "summary": {
+   "windows": 57,
+   "errors": [],
+   "samples": 903662,
+   "sampledTransitions": 7888,
+   "maskedTransitions": 5752,
+   "matched": 2136,
+   "missed": 0,
+   "extra": 0,
+   "excursionChanges": 79668,
+   "excursionConfirmed": 79668,
+   "cellDisagreements": 0,
+   "maskedSamples": 2365512,
+   "nullMismatch": 0,
+   "structural": 0,
+   "switches": 69605,
+   "changes": 139278,
+   "msChecks": 5009252,
+   "msFailures": 0,
+   "msMaskedSkips": 2308,
+   "edgeChecks": 278,
+   "edgeFailures": 0,
+   "denseEdgeSamples": 87000,
+   "denseEdgeFailures": 0,
+   "houseOfCrossCheckMismatches": 0,
+   "unresolvedWindows": [
+    1013,
+    1014,
+    1012,
+    1015,
+    1016,
+    1017,
+    1019,
+    1018,
+    1020,
+    1021,
+    1023,
+    1022,
+    2009,
+    2010,
+    2011,
+    2012,
+    1024,
+    1025,
+    1026,
+    1027,
+    1028,
+    1029,
+    1030,
+    1031,
+    1032,
+    1033,
+    1034,
+    163,
+    2005,
+    2006,
+    2007,
+    2008,
+    1000,
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008,
+    1009,
+    1010,
+    1011,
+    158,
+    159,
+    162,
+    161
+   ],
+   "failedIds": [],
+   "verdict": "PASS"
+  },
+  "groups": {
+   "formerBudgetWindows": {
+    "windows": 5,
+    "passed": 5,
+    "withUnresolved": 5,
+    "maskedSamples": 53592,
+    "edgeChecks": 2,
+    "edgeFailures": 0,
+    "denseEdgeSamples": 1000,
+    "denseEdgeFailures": 0,
+    "nullMismatch": 0,
+    "missed": 0,
+    "extra": 0,
+    "disagree": 0,
+    "msFailures": 0
+   },
+   "abutting": {
+    "windows": 35,
+    "passed": 35,
+    "withUnresolved": 35,
+    "maskedSamples": 2039280,
+    "edgeChecks": 212,
+    "edgeFailures": 0,
+    "denseEdgeSamples": 70000,
+    "denseEdgeFailures": 0,
+    "nullMismatch": 0,
+    "missed": 0,
+    "extra": 0,
+    "disagree": 0,
+    "msFailures": 0
+   },
+   "others": {
+    "windows": 17,
+    "passed": 17,
+    "withUnresolved": 8,
+    "maskedSamples": 272640,
+    "edgeChecks": 64,
+    "edgeFailures": 0,
+    "denseEdgeSamples": 16000,
+    "denseEdgeFailures": 0,
+    "nullMismatch": 0,
+    "missed": 0,
+    "extra": 0,
+    "disagree": 0,
+    "msFailures": 0
+   }
+  },
+  "formerBudgetWindows": [
+   {
+    "id": 158,
+    "pass": true,
+    "unresolved": [
+     [
+      "1981-09-20T23:00:44.694Z",
+      "1981-09-21T00:37:09.694Z",
+      "sign:North Node,sign:South Node"
+     ]
+    ],
+    "maskedSamples": 11572,
+    "maskedTransitions": 30,
+    "edgeChecks": 0,
+    "edgeFailures": 0,
+    "denseEdgeSamples": 0,
+    "denseEdgeFailures": 0,
+    "msChecks": 700,
+    "msFailures": 0,
+    "searchMs": 72.1
+   },
+   {
+    "id": 159,
+    "pass": true,
+    "unresolved": [
+     [
+      "1981-09-20T14:55:07.116Z",
+      "1981-09-20T16:15:41.116Z",
+      "sign:North Node,sign:South Node"
+     ]
+    ],
+    "maskedSamples": 9670,
+    "maskedTransitions": 34,
+    "edgeChecks": 0,
+    "edgeFailures": 0,
+    "denseEdgeSamples": 0,
+    "denseEdgeFailures": 0,
+    "msChecks": 420,
+    "msFailures": 0,
+    "searchMs": 32.3
+   },
+   {
+    "id": 161,
+    "pass": true,
+    "unresolved": [
+     [
+      "2032-11-24T16:50:34.569Z",
+      "2032-11-24T17:28:31.569Z",
+      "sign:North Node,sign:South Node"
+     ]
+    ],
+    "maskedSamples": 4556,
+    "maskedTransitions": 70,
+    "edgeChecks": 0,
+    "edgeFailures": 0,
+    "denseEdgeSamples": 0,
+    "denseEdgeFailures": 0,
+    "msChecks": 490,
+    "msFailures": 0,
+    "searchMs": 67
+   },
+   {
+    "id": 162,
+    "pass": true,
+    "unresolved": [
+     [
+      "1810-12-31T17:13:33.413Z",
+      "1810-12-31T18:30:09.413Z",
+      "sign:North Node,sign:South Node"
+     ]
+    ],
+    "maskedSamples": 9194,
+    "maskedTransitions": 66,
+    "edgeChecks": 0,
+    "edgeFailures": 0,
+    "denseEdgeSamples": 0,
+    "denseEdgeFailures": 0,
+    "msChecks": 630,
+    "msFailures": 0,
+    "searchMs": 90.9
+   },
+   {
+    "id": 163,
+    "pass": true,
+    "unresolved": [
+     [
+      "2090-03-10T06:15:38.191Z",
+      "2090-03-10T08:50:38.191Z",
+      "sign:North Node,sign:South Node"
+     ]
+    ],
+    "maskedSamples": 18600,
+    "maskedTransitions": 6,
+    "edgeChecks": 2,
+    "edgeFailures": 0,
+    "denseEdgeSamples": 1000,
+    "denseEdgeFailures": 0,
+    "msChecks": 982,
+    "msFailures": 0,
+    "searchMs": 33.7
+   }
+  ],
+  "mutationSelfTest": {
+   "note": "The review's mutation (its mutation-window.js, not in this repository): the real result with the first node sign change hidden and a fake unresolved interval opened 300 ms after it, on its mut.json window. Run without MUTATION as a control.",
+   "mutated": {
+    "windows": 1,
+    "errors": [],
+    "samples": 601,
+    "sampledTransitions": 3,
+    "maskedTransitions": 2,
+    "matched": 1,
+    "missed": 0,
+    "extra": 0,
+    "excursionChanges": 0,
+    "excursionConfirmed": 0,
+    "cellDisagreements": 0,
+    "maskedSamples": 40,
+    "nullMismatch": 0,
+    "structural": 0,
+    "switches": 3,
+    "changes": 5,
+    "msChecks": 212,
+    "msFailures": 0,
+    "msMaskedSkips": 4,
+    "edgeChecks": 4,
+    "edgeFailures": 0,
+    "denseEdgeSamples": 2000,
+    "denseEdgeFailures": 234,
+    "houseOfCrossCheckMismatches": 0,
+    "unresolvedWindows": [
+     0
+    ],
+    "failedIds": [
+     0
+    ],
+    "verdict": "FAIL"
+   },
+   "control": {
+    "windows": 1,
+    "errors": [],
+    "samples": 601,
+    "sampledTransitions": 3,
+    "maskedTransitions": 0,
+    "matched": 3,
+    "missed": 0,
+    "extra": 0,
+    "excursionChanges": 0,
+    "excursionConfirmed": 0,
+    "cellDisagreements": 0,
+    "maskedSamples": 0,
+    "nullMismatch": 0,
+    "structural": 0,
+    "switches": 100,
+    "changes": 199,
+    "msChecks": 7200,
+    "msFailures": 0,
+    "msMaskedSkips": 0,
+    "edgeChecks": 0,
+    "edgeFailures": 0,
+    "denseEdgeSamples": 0,
+    "denseEdgeFailures": 0,
+    "houseOfCrossCheckMismatches": 0,
+    "unresolvedWindows": [],
+    "failedIds": [],
+    "verdict": "PASS"
+   }
+  },
+  "retracted": "An earlier masked copy of check.mjs, used before this record, skipped every switch to or from null and every switch inside or at the end of an unresolved interval, so it verified neither side of an edge; the review showed that it passed the mutation above and failed 18 of 18 edge windows whose nodes' houses are null. Its results are withdrawn."
+ }
+}

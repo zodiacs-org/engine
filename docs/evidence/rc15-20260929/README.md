@@ -681,11 +681,11 @@ fails there and passes on the branch.
    North Macedonia, Romania, Serbia, South Korea, Turkey, Ukraine and the
    United States. `LICENSING.md` and `NOTICE` record the sources and their
    terms, and NOTICE's GeoNames paragraph says where the names come from.
-2. **Birth data.** The first cut's tests used living people's charts: Al
-   Gore's and George Lucas's in the releasing tests, and two more in the
+2. **Birth data.** The first cut's tests used living people's charts: person
+   A's and person B's in the releasing tests, and two more in the
    profection tests, all from podcast episodes. Other tests used the birth
    dates of people who have died, taken from the public record for podcast
-   examples, and Frida Kahlo's birth time, as the Zodiacs site's demo chart
+   examples, and person G's birth time, as the Zodiacs site's demo chart
    gives it, in five test files. *Birth data*, below, says what replaced each.
    The rule in `CONTRIBUTING.md` and `AGENTS.md` now reads: synthetic by
    default; a worked example from a published source about a person who has
@@ -1220,10 +1220,11 @@ more. The tree held:
   `src/progressions.test.ts`, the solar arc invariants and the progression
   evidence of rc.12 to rc.14;
 - from two episodes of The Astrology Podcast, the charts of four living
-  people, Al Gore and George Lucas in the releasing tests and two in the
-  profection tests, and the birth dates of Robert and Ted Kennedy and Lisa
-  Marie Presley, taken from the public record, in the profection tests;
-- Frida Kahlo's birth time (1907–1954), as the Zodiacs site's demo chart gives
+  people, person A and person B in the releasing tests and two in the
+  profection tests, and the birth dates of the two people under the label
+  person F and of person E, taken from the public record, in the profection
+  tests;
+- person G's birth time (1907–1954), as the Zodiacs site's demo chart gives
   it, in five test files and the rc.12 site-adoption evidence.
 
 On branch `rc15-fix-records` the rule is: synthetic by default; a worked
@@ -1232,7 +1233,7 @@ is used with author, title, year and page; a living person's, never. Saunders's
 and Estadella's examples stay, now cited with page wherever they are used
 (Saunders's figures are on pp. 3, 4 and 5). Every podcast example on a
 person's chart is replaced by invented charts counted by hand from the
-rules, and Kahlo's time by a synthetic 1908 birth in Mexico City's local
+rules, and person G's time by a synthetic 1908 birth in Mexico City's local
 mean time era, whose JPL positions are in `horizons-1908.txt`. The records
 branch left her instant in the rc.12 evidence script, with a comment that
 named her, and a test title that dated a birthday in the first cut's test log
@@ -1418,3 +1419,14 @@ TMPDIR=<tmp> sh docs/evidence/rc15-20260929/rebuilt/carrier/carrier-gates.sh <jo
 ```
 
 The jobs are those of the re-cut's carrier, above.
+
+## Labels in place of names (2026-09-30)
+
+On 2026-09-30, for privacy, opaque labels replaced the names of the people
+whose birth data rc.15's reviews removed, in this README and in
+`rebuilt/history-check.txt` and `rebuilt/history-check-control.txt`: person A
+to person G, the labels rc.16's records use for the same people
+(`../rc16-20260930/`). Which person each label stands for is kept outside the
+repository, with the check's patterns. The results are unchanged: every
+count, each commit's line counts and the positive control's totals are as
+recorded here on 2026-09-29; only the names changed.

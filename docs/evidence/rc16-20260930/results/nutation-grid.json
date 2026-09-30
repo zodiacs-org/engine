@@ -1,0 +1,74 @@
+{
+ "tool": "docs/evidence/rc16-20260930/tools/nutation-grid.mjs and nutation-grid.py",
+ "node": "v22.22.2",
+ "head": "aba647e1efbc7c0429d921ebea48d9ce2bf8e27e",
+ "srcTree": "70e3f630ba51da29f9096ef5d4c09cee53e18b82",
+ "grid": "every 0.1 day of TT from 1800-01-01T00:00 TT to 2200-01-01T00:00 TT (days from J2000.0: -73048.5 to 73048.5); UT1 = TT - (-20 + 32 u^2) s, u = (year - 1820) / 100",
+ "python": "3.11.15",
+ "pyerfa": "2.0.1.5",
+ "numpy": "2.4.6",
+ "samples": 1460971,
+ "unit": "arcseconds; at: the TT instant of the largest difference",
+ "largest": {
+  "dpsi against nut00b": {
+   "arcsec": 1.066e-14,
+   "ttDays": 18077.1,
+   "at": "2049-06-29T14:24 TT"
+  },
+  "deps against nut00b": {
+   "arcsec": 5.329e-15,
+   "ttDays": -72846.9,
+   "at": "1800-07-21T14:24 TT"
+  },
+  "mean obliquity against obl06": {
+   "arcsec": 4.366e-11,
+   "ttDays": -71402.5,
+   "at": "1804-07-05T00:00 TT"
+  },
+  "true obliquity against obl06 + nut00b deps": {
+   "arcsec": 5.821e-11,
+   "ttDays": -70026.4,
+   "at": "1808-04-11T02:24 TT"
+  },
+  "equation of the equinoxes against ee00 (obl06, nut00b)": {
+   "arcsec": 0.00003499,
+   "ttDays": 53633.3,
+   "at": "2146-11-04T19:12 TT"
+  },
+  "equation of the equinoxes against dpsi cos epsA + the two complementary terms kept": {
+   "arcsec": 3.936e-7,
+   "ttDays": -72449.1,
+   "at": "1801-08-23T09:35 TT"
+  },
+  "sidereal time against gmst06 + ee00 (obl06, nut00b)": {
+   "arcsec": 0.000035,
+   "ttDays": 53633.3,
+   "at": "2146-11-04T19:12 TT"
+  },
+  "sidereal time against gst06a": {
+   "arcsec": 0.003599,
+   "ttDays": 70260.6,
+   "at": "2192-05-14T02:24 TT"
+  },
+  "sidereal time against gst00b": {
+   "arcsec": 0.02215,
+   "ttDays": 72945.8,
+   "at": "2199-09-20T07:12 TT"
+  },
+  "ERFA: nut06a - nut00b, dpsi": {
+   "arcsec": 0.003939,
+   "ttDays": 70260.6,
+   "at": "2192-05-14T02:24 TT"
+  },
+  "ERFA: nut06a - nut00b, deps": {
+   "arcsec": 0.002426,
+   "ttDays": -67517.5,
+   "at": "1815-02-23T00:00 TT"
+  },
+  "ERFA: nut06a - nut00b, dpsi cos epsA": {
+   "arcsec": 0.003615,
+   "ttDays": 70260.6,
+   "at": "2192-05-14T02:24 TT"
+  }
+ }
+}

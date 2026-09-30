@@ -1,10 +1,11 @@
 import { readFileSync } from "node:fs";
 import { runInThisContext } from "node:vm";
 
-import { MakeTime, SetDeltaTFunction, e_tilt } from "astronomy-engine";
+import { SetDeltaTFunction } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
 import { deltaT, natalChart } from "../index.js";
+import { tilt } from "../nutation.js";
 import { timeBasis } from "../time-scale.js";
 import {
   AYANAMSAS,
@@ -119,12 +120,11 @@ describe("ayanamsa definitions", () => {
   it("consistency: true is mean plus the engine's own nutation, on the engine's clock", () => {
     for (const instant of ["1850-06-01T00:00:00Z", "2024-03-20T03:06:00Z", "2150-12-31T23:59:59Z"]) {
       const value = ayanamsa("lahiri", instant);
-      // The instant's UT1 and TT on the engine's time basis, as a chart reads it.
+      // The instant's TT on the engine's time basis, as a chart reads it, and
+      // the engine's IAU 2000B Δψ there (src/nutation.ts; ERFA checks it in
+      // nutation.test.ts).
       const basis = timeBasis(Date.parse(instant), "utc");
-      SetDeltaTFunction(() => basis.deltaT.seconds);
-      const time = MakeTime(basis.ut1Days);
-      const dpsi = e_tilt(time).dpsi;
-      SetDeltaTFunction(deltaT);
+      const dpsi = tilt(basis.ttDays).dpsi;
       expect(value.nutation * 3600).toBeCloseTo(dpsi, 12);
       expect(value.true).toBeCloseTo(value.mean + value.nutation, 12);
       expect(value.julianDateTT).toBeCloseTo(2_451_545 + basis.ttDays, 9);

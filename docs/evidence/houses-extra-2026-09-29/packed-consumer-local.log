@@ -1,0 +1,43 @@
+# scripts/verify-packed-consumer.mjs, run locally on the packed branch (npm pack --ignore-scripts), not as the CI gate.
+# Under this session's TMPDIR a node_modules (a symbolic link to the site's) lies above the consumer, so the copy run here
+# had two environment checks removed: the TMPDIR ancestry assertion and the check that react and @zodiacs/sdk do not resolve.
+# Everything else, the TypeScript check of consumer.ts and every runtime assertion, ran unchanged.
+{
+  "version": "0.1.1-rc.15",
+  "houses": "passed",
+  "planetaryReturns": "passed",
+  "timeBasis": "passed",
+  "zoneHistory": "passed",
+  "timing": "passed",
+  "configuredAspects": "passed",
+  "exactAspectBoundaries": "passed",
+  "chartDeclinations": "passed",
+  "sunConvention": "passed",
+  "boundMargin": "passed",
+  "exactSeparation": "passed",
+  "ephemerisSpan": "passed",
+  "metadata": "passed",
+  "bodyLabels": "passed",
+  "ephemerisRangeErrors": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "sha256": "dfd279f6c6f36627eabd051ae1ef2c5cccc47176bd3131f43bd722ca779511b3",
+  "runtime": "v22.22.2",
+  "typescript": "5.9.3",
+  "typeRoots": "none (types: [])",
+  "types": "passed",
+  "directoryRemoved": true
+}

@@ -1,0 +1,109 @@
+{
+ "source": "US Naval Observatory, Astronomical Applications API v4.0.1, Complete Sun and Moon Data for One Day (rstt/oneday), tz=0: times in UT to the minute; fetched 2026-09-29. USNO: \"the geometric zenith distance of center of the Sun is 90.8333 degrees\"; moonrise and moonset \"90.5666 degrees + Moon's apparent angular radius - Moon's horizontal parallax\" (https://aa.usno.navy.mil/faq/RST_defs).",
+ "days": [
+  {
+   "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2024-06-21&coords=38.89,-77.03&tz=0",
+   "latitude": 38.89,
+   "longitude": -77.03,
+   "date": "2024-06-21",
+   "events": [
+    [
+     "Sun",
+     "set",
+     "00:37"
+    ],
+    [
+     "Sun",
+     "rise",
+     "09:43"
+    ],
+    [
+     "Sun",
+     "upper-transit",
+     "17:10"
+    ],
+    [
+     "Moon",
+     "upper-transit",
+     "04:21"
+    ],
+    [
+     "Moon",
+     "set",
+     "08:50"
+    ]
+   ]
+  },
+  {
+   "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2000-09-22&coords=51.48,0.00&tz=0",
+   "latitude": 51.48,
+   "longitude": 0.0,
+   "date": "2000-09-22",
+   "events": [
+    [
+     "Sun",
+     "rise",
+     "05:46"
+    ],
+    [
+     "Sun",
+     "upper-transit",
+     "11:53"
+    ],
+    [
+     "Sun",
+     "set",
+     "17:58"
+    ],
+    [
+     "Moon",
+     "upper-transit",
+     "07:02"
+    ],
+    [
+     "Moon",
+     "set",
+     "15:21"
+    ],
+    [
+     "Moon",
+     "rise",
+     "23:46"
+    ]
+   ]
+  },
+  {
+   "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2020-01-15&coords=-33.87,151.21&tz=0",
+   "latitude": -33.87,
+   "longitude": 151.21,
+   "date": "2020-01-15",
+   "events": [
+    [
+     "Sun",
+     "upper-transit",
+     "02:04"
+    ],
+    [
+     "Sun",
+     "set",
+     "09:09"
+    ],
+    [
+     "Sun",
+     "rise",
+     "19:00"
+    ],
+    [
+     "Moon",
+     "rise",
+     "12:34"
+    ],
+    [
+     "Moon",
+     "upper-transit",
+     "18:31"
+    ]
+   ]
+  }
+ ]
+}

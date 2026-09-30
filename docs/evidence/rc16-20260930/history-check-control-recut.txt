@@ -1,0 +1,215 @@
+# node history-check.mjs b0ddb88..bcd532c <patterns> <examples>
+# 2026-09-30, git 2.43.0, Node v22.22.2
+
+Labels searched (79 data patterns and 10 name patterns, kept outside the repository):
+  person A
+  person B
+  person C
+  person D
+  person E
+  person F
+  person G
+
+Commits: 46. For each, the lines it adds, the contents of the binary files it adds or changes, the paths it adds and its message:
+- c588623 Time basis: tzdb 2025c history, birthplace mean time, Julian dates, leap seconds and IERS UT1
+    binary files read: 1; paths added: 41
+    BIRTH DATA: person G: 3 lines, in src/engine.test.ts, src/geo.test.ts, src/receipt.test.ts
+- 77dc7e0 Record the time-basis evidence
+    binary files read: 0; paths added: 9
+    birth data: none
+- 15006e6 Add Hellenistic timing: profections, firdaria, releasing, solar arcs
+    binary files read: 0; paths added: 11
+    BIRTH DATA: person A: 3 lines, in src/timing/releasing.test.ts
+    BIRTH DATA: person B: 2 lines, in src/timing/releasing.test.ts
+    BIRTH DATA: person E: 2 lines, in src/timing/profections.test.ts
+    BIRTH DATA: person F: 6 lines, in src/timing/profections.test.ts
+    name only: person A: 2 lines, in src/timing/releasing.test.ts
+    name only: person B: 2 lines, in src/timing/releasing.test.ts
+    name only: person C: 1 lines, in src/timing/profections.test.ts
+    name only: person D: 1 lines, in src/timing/profections.test.ts
+    name only: person E: 3 lines, in src/timing/profections.test.ts
+    name only: person F: 4 lines, in src/timing/profections.test.ts
+- dc0ac17 Document the Hellenistic timing techniques and their evidence
+    binary files read: 0; paths added: 2
+    BIRTH DATA: person A: 1 lines, in docs/evidence/timing-hellenistic-2026-09-28/README.md
+    BIRTH DATA: person E: 1 lines, in docs/evidence/timing-hellenistic-2026-09-28/README.md
+    BIRTH DATA: person F: 3 lines, in docs/evidence/timing-hellenistic-2026-09-28/README.md
+    name only: person A: 7 lines, in docs/evidence/timing-hellenistic-2026-09-28/README.md
+    name only: person B: 5 lines, in docs/evidence/timing-hellenistic-2026-09-28/README.md
+    name only: person C: 1 lines, in docs/evidence/timing-hellenistic-2026-09-28/README.md
+    name only: person D: 1 lines, in docs/evidence/timing-hellenistic-2026-09-28/README.md
+    name only: person E: 3 lines, in docs/evidence/timing-hellenistic-2026-09-28/README.md
+    name only: person F: 4 lines, in docs/evidence/timing-hellenistic-2026-09-28/README.md
+- a9274a1 Move the timing API to the @zodiacs/engine/timing entry point
+    binary files read: 0; paths added: 1
+    birth data: none
+- 54f9a03 Name the timing API's origins and longitudes consistently
+    binary files read: 0; paths added: 0
+    BIRTH DATA: person F: 1 lines, in src/timing/profections.test.ts
+- 23a9cd0 Check timing names and dates before the chart; refuse ephemeris failures
+    binary files read: 0; paths added: 1
+    birth data: none
+- ffa783d Keep the timing modules' file headers out of the declarations
+    binary files read: 0; paths added: 0
+    birth data: none
+- 60fed1c Condense the timing JSDoc to the API contract
+    binary files read: 0; paths added: 0
+    birth data: none
+- a6d50f2 Flag timing results outside the reference span or on a contradicted sect
+    binary files read: 0; paths added: 0
+    birth data: none
+- d908eea Describe the profection months by what their sources say
+    binary files read: 0; paths added: 1
+    birth data: none
+- 2d3aaa4 Add Saunders's third solar arc example, Princess Diana's wedding
+    binary files read: 0; paths added: 0
+    birth data: none
+- cb96085 Add the timing entry point to the changelog under Unreleased
+    binary files read: 0; paths added: 0
+    birth data: none
+- 937f00e Record the independent comparison; relabel the evidence's self-checks
+    binary files read: 0; paths added: 0
+    birth data: none
+- 008a800 Check the timing entry point in the packed-consumer smoke test
+    binary files read: 0; paths added: 0
+    birth data: none
+- bee5ff8 Show the timing entry point's description in the API reference
+    binary files read: 0; paths added: 0
+    birth data: none
+- af40408 Rename releasing's internal date window so it shadows no DOM global
+    binary files read: 0; paths added: 0
+    birth data: none
+- 70a4c20 Note the pinned-ΔT solar arc caveat; bring the evidence figures up to date
+    binary files read: 0; paths added: 0
+    birth data: none
+- 6b80fc3 Keep the timing entry point on rc.14's ephemeris span and the time basis
+    binary files read: 0; paths added: 0
+    birth data: none
+- ccc5dca Add sidereal zodiac and core Jyotish techniques
+    binary files read: 0; paths added: 13
+    birth data: none
+- e3f43e7 Document the Vedic techniques and record their evidence
+    binary files read: 0; paths added: 9
+    birth data: none
+- bb7fe9f Build each ayanamsa's epoch frame outside the caller's ΔT clock
+    binary files read: 0; paths added: 0
+    birth data: none
+- fd7767b Rebuild sidereal whole-sign houses from the sidereal ascendant
+    binary files read: 0; paths added: 0
+    birth data: none
+- 2c8b9d7 Look up Vimshottari periods on the boundaries their ISO strings show
+    binary files read: 0; paths added: 0
+    birth data: none
+- 7dc60bf Move the Vedic API to the @zodiacs/engine/vedic entry
+    binary files read: 0; paths added: 2
+    birth data: none
+- 94afd71 Ayanamsas: Krishnamurti from 1 January 1900, flags, and tests against ERFA and the IAE
+    binary files read: 0; paths added: 1
+    birth data: none
+- 1441eea Document the ayanamsa construction and update the evidence
+    binary files read: 0; paths added: 4
+    birth data: none
+- 5a61d80 Read Vedic ayanamsas on the chart's time basis and scale
+    binary files read: 0; paths added: 0
+    birth data: none
+- 07a154f Keep Placidus outside the polar circle: bisect where the iteration does not settle
+    binary files read: 0; paths added: 0
+    birth data: none
+- 5af1929 Budget each entry point's import graph; check the root reaches no subpath
+    binary files read: 0; paths added: 0
+    birth data: none
+- d90a00a Release candidate 0.1.1-rc.15: time basis, timing and Vedic entries, Placidus bisection
+    binary files read: 0; paths added: 29
+    BIRTH DATA: person F: 2 lines, in docs/evidence/rc15-20260929/full-tests.log
+    name only: person F: 1 lines, in docs/evidence/rc15-20260929/full-tests.log
+- d3a469a Check the root's isolation from the build's module list
+    binary files read: 0; paths added: 3
+    birth data: none
+- 4fa290e Source the Gregorian adoption table from public-domain sources
+    binary files read: 0; paths added: 3
+    birth data: none
+- b48d427 Accept rc.14's local resolution in receipts; date dashas in UTC
+    binary files read: 0; paths added: 1
+    birth data: none
+- bcd0922 Replace people's birth data with invented charts; cite published examples
+    binary files read: 0; paths added: 4
+    BIRTH DATA: person G: 3 lines, in docs/evidence/rc12-20260928/verify-site-adoption.mjs, docs/evidence/rc15-20260929/horizons-1908.sh
+    name only: person G: 5 lines, in (message), docs/evidence/rc12-20260928/verify-site-adoption.mjs
+- 2283db9 Correct rc.15's figures, size statements and records after review
+    binary files read: 0; paths added: 6
+    birth data: none
+    name only: person A: 3 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person B: 4 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person E: 1 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person F: 1 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person G: 5 lines, in docs/evidence/rc15-20260929/README.md
+- d85cbb5 Local time: end wall-clock zone lines where zic does; one answer from zoneOffsetAt
+    binary files read: 0; paths added: 5
+    birth data: none
+- 77c67d7 Time basis: UT1 through leap seconds, 1972 from IERS C04, speeds on TT
+    binary files read: 1; paths added: 11
+    birth data: none
+- 3b3f4f2 Give the rc.14-shape receipt tests' count as run on d90a00a
+    binary files read: 0; paths added: 0
+    birth data: none
+- 2db913c Measure the time-basis fixes on TT and UT1 input as well
+    binary files read: 0; paths added: 0
+    birth data: none
+- 81fe41e Merge the records review's fixes to rc.15 (rc15-fix-records) (a merge, read against each of its 2 parents)
+    binary files read: 0; paths added: 17
+    BIRTH DATA: person G: 3 lines, in docs/evidence/rc12-20260928/verify-site-adoption.mjs, docs/evidence/rc15-20260929/horizons-1908.sh
+    name only: person A: 3 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person B: 4 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person E: 1 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person F: 1 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person G: 7 lines, in docs/evidence/rc12-20260928/verify-site-adoption.mjs, docs/evidence/rc15-20260929/README.md
+- e756f93 Merge the time-basis review's fixes to rc.15 (rc15-fix-time) (a merge, read against each of its 2 parents)
+    binary files read: 1; paths added: 34
+    BIRTH DATA: person G: 3 lines, in docs/evidence/rc12-20260928/verify-site-adoption.mjs, docs/evidence/rc15-20260929/horizons-1908.sh
+    name only: person A: 3 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person B: 4 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person E: 1 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person F: 1 lines, in docs/evidence/rc15-20260929/README.md
+    name only: person G: 7 lines, in docs/evidence/rc12-20260928/verify-site-adoption.mjs, docs/evidence/rc15-20260929/README.md
+- 8e1be15 Order receipts' engine versions by SemVer 2.0.0 precedence
+    binary files read: 0; paths added: 3
+    birth data: none
+- 51f567e Re-cut release candidate 0.1.1-rc.15: IERS data licensing, re-measured figures and evidence
+    binary files read: 0; paths added: 45
+    birth data: none
+- 7daf832 Carry the re-cut 0.1.1-rc.15 tarball
+    binary files read: 1; paths added: 2
+    birth data: none
+- bcd532c Record the gates on the rc.15 carrier 7daf832
+    binary files read: 0; paths added: 16
+    birth data: none
+
+The tree of bcd532c, 572 files, gzip archives decompressed:
+  BIRTH DATA: person F: 2 lines, in docs/evidence/rc15-20260929/full-tests.log
+  BIRTH DATA: person G: 3 lines, in docs/evidence/rc12-20260928/verify-site-adoption.mjs, docs/evidence/rc15-20260929/horizons-1908.sh
+  name only: person A: 3 lines, in docs/evidence/rc15-20260929/README.md
+  name only: person B: 4 lines, in docs/evidence/rc15-20260929/README.md
+  name only: person E: 1 lines, in docs/evidence/rc15-20260929/README.md
+  name only: person F: 2 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/full-tests.log
+  name only: person G: 7 lines, in docs/evidence/rc12-20260928/verify-site-adoption.mjs, docs/evidence/rc15-20260929/README.md
+
+The published worked examples that CONTRIBUTING.md allows: the files of that tree that name each, and those that hold its birth data (cited: the file also holds every part of the citation):
+- Christopher Reeve: Hamish Saunders, Solar Arc Directions (1996), p. 3
+    named in 11 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/timing-hellenistic-2026-09-28/README.md, docs/timing-hellenistic.md, scripts/module-resolution-smoke.mjs, scripts/verify-packed-consumer.mjs, src/timing/firdaria.test.ts, src/timing/profections.test.ts, src/timing/releasing.test.ts, src/timing/solar-arc.test.ts
+    birth data in 1 files:
+      src/timing/profections.test.ts (cited)
+- Coretta Scott King: Hamish Saunders, Solar Arc Directions (1996), p. 4
+    named in 7 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/timing/firdaria.test.ts, src/timing/releasing.test.ts, src/timing/solar-arc.test.ts
+    birth data in 0 files:
+- Princess Diana: Hamish Saunders, Solar Arc Directions (1996), p. 5
+    named in 5 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/timing/solar-arc.test.ts
+    birth data in 0 files:
+- Charlie Chaplin: Juan Estadella, Predictive Astrology, 3rd ed. (2019), pp. 84-85
+    named in 6 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/progressions.test.ts, src/timing/solar-arc.test.ts
+    birth data in 1 files:
+      docs/evidence/rc12-20260928/sources.md (cited)
+- The native of Vettius Valens, Anthologies IV.9, tr. Mark T. Riley (2010), pp. 75-76
+    named in 9 files: docs/evidence/rc15-20260929/fix-full-tests.log, docs/evidence/rc15-20260929/full-tests.log, docs/evidence/timing-hellenistic-2026-09-28/README.md, docs/timing-hellenistic.md, scripts/module-resolution-smoke.mjs, src/timing/profections.test.ts, src/timing/profections.ts, src/timing/releasing.test.ts, src/timing/releasing.ts
+    birth data in 0 files:
+
+Birth data found: 33 lines added in the commits, 5 lines in the tree.

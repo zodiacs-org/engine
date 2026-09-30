@@ -1,0 +1,1988 @@
+{
+ "method": "Hourly samples of the engine's north node, 1800-2200; ingresses bisected to the minute; rate from longitudeSpeed; band 4J/|rate| with J = 5e-5 (1 + |T|) degrees; over budget when the band exceeds 2,000,000 ms.",
+ "ingresses": 294,
+ "overBudget": 24,
+ "overBudgetDates": [
+  "1810-12-31",
+  "1842-01-02",
+  "1842-01-05",
+  "1848-04-29",
+  "1865-04-30",
+  "1865-05-04",
+  "1882-04-24",
+  "1882-04-26",
+  "1946-01-01",
+  "1946-01-03",
+  "1981-09-20",
+  "1981-09-20",
+  "2007-12-16",
+  "2032-11-24",
+  "2032-11-25",
+  "2049-12-21",
+  "2049-12-22",
+  "2071-07-18",
+  "2090-03-08",
+  "2090-03-10",
+  "2090-03-29",
+  "2090-03-31",
+  "2113-07-21",
+  "2127-06-16"
+ ],
+ "windowsAroundThem": {
+  "all": 24,
+  "unresolved": 24,
+  "slowestSeconds": 0.14
+ },
+ "stationsNearBoundaries": [
+  {
+   "at": "1811-01-01T21:53:00.000Z",
+   "boundary": 180,
+   "degreesFromIt": 0.00011015475570275157
+  },
+  {
+   "at": "1981-09-20T19:45:00.000Z",
+   "boundary": 120,
+   "degreesFromIt": 0.00028226824474586465
+  },
+  {
+   "at": "2032-11-24T23:08:00.000Z",
+   "boundary": 210,
+   "degreesFromIt": 0.0006985538864796581
+  }
+ ],
+ "rows": [
+  {
+   "at": "1800-02-09T22:16:00.000Z",
+   "rate": -0.1905,
+   "bandMs": 271978,
+   "overBudget": false
+  },
+  {
+   "at": "1801-09-05T11:27:00.000Z",
+   "rate": -0.04672,
+   "bandMs": 1103340,
+   "overBudget": false
+  },
+  {
+   "at": "1803-04-26T16:57:00.000Z",
+   "rate": -0.05873,
+   "bandMs": 872954,
+   "overBudget": false
+  },
+  {
+   "at": "1804-10-29T08:38:00.000Z",
+   "rate": -0.1267,
+   "bandMs": 402666,
+   "overBudget": false
+  },
+  {
+   "at": "1806-04-19T11:31:00.000Z",
+   "rate": -0.1507,
+   "bandMs": 336710,
+   "overBudget": false
+  },
+  {
+   "at": "1807-12-31T05:26:00.000Z",
+   "rate": -0.1203,
+   "bandMs": 419534,
+   "overBudget": false
+  },
+  {
+   "at": "1809-07-10T15:29:00.000Z",
+   "rate": -0.1704,
+   "bandMs": 294495,
+   "overBudget": false
+  },
+  {
+   "at": "1810-12-31T17:53:00.000Z",
+   "rate": -0.005989,
+   "bandMs": 8338169,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.14,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 7200000
+   }
+  },
+  {
+   "at": "1812-07-06T01:30:00.000Z",
+   "rate": -0.1155,
+   "bandMs": 430179,
+   "overBudget": false
+  },
+  {
+   "at": "1814-03-10T06:08:00.000Z",
+   "rate": -0.1198,
+   "bandMs": 412151,
+   "overBudget": false
+  },
+  {
+   "at": "1815-09-18T00:06:00.000Z",
+   "rate": -0.2285,
+   "bandMs": 214984,
+   "overBudget": false
+  },
+  {
+   "at": "1817-03-06T01:50:00.000Z",
+   "rate": -0.1009,
+   "bandMs": 484492,
+   "overBudget": false
+  },
+  {
+   "at": "1818-09-26T07:57:00.000Z",
+   "rate": -0.07035,
+   "bandMs": 690901,
+   "overBudget": false
+  },
+  {
+   "at": "1820-05-25T03:29:00.000Z",
+   "rate": -0.08271,
+   "bandMs": 584129,
+   "overBudget": false
+  },
+  {
+   "at": "1821-11-23T13:19:00.000Z",
+   "rate": -0.2438,
+   "bandMs": 197126,
+   "overBudget": false
+  },
+  {
+   "at": "1823-05-19T05:58:00.000Z",
+   "rate": -0.06095,
+   "bandMs": 784299,
+   "overBudget": false
+  },
+  {
+   "at": "1825-01-21T10:47:00.000Z",
+   "rate": -0.09994,
+   "bandMs": 475378,
+   "overBudget": false
+  },
+  {
+   "at": "1826-08-03T19:01:00.000Z",
+   "rate": -0.1886,
+   "bandMs": 250535,
+   "overBudget": false
+  },
+  {
+   "at": "1828-01-29T09:39:00.000Z",
+   "rate": -0.2074,
+   "bandMs": 226586,
+   "overBudget": false
+  },
+  {
+   "at": "1829-07-28T22:43:00.000Z",
+   "rate": -0.1631,
+   "bandMs": 286528,
+   "overBudget": false
+  },
+  {
+   "at": "1831-04-02T19:43:00.000Z",
+   "rate": -0.07979,
+   "bandMs": 581998,
+   "overBudget": false
+  },
+  {
+   "at": "1832-10-11T03:14:00.000Z",
+   "rate": -0.2019,
+   "bandMs": 228680,
+   "overBudget": false
+  },
+  {
+   "at": "1834-04-06T00:37:00.000Z",
+   "rate": -0.1842,
+   "bandMs": 249273,
+   "overBudget": false
+  },
+  {
+   "at": "1835-10-07T19:35:00.000Z",
+   "rate": -0.09375,
+   "bandMs": 487012,
+   "overBudget": false
+  },
+  {
+   "at": "1837-06-19T04:07:00.000Z",
+   "rate": -0.1408,
+   "bandMs": 322153,
+   "overBudget": false
+  },
+  {
+   "at": "1838-12-17T11:13:00.000Z",
+   "rate": -0.2316,
+   "bandMs": 194741,
+   "overBudget": false
+  },
+  {
+   "at": "1840-06-12T22:18:00.000Z",
+   "rate": -0.1969,
+   "bandMs": 227791,
+   "overBudget": false
+  },
+  {
+   "at": "1841-12-27T09:40:00.000Z",
+   "rate": -0.04945,
+   "bandMs": 901558,
+   "overBudget": false
+  },
+  {
+   "at": "1842-01-02T09:14:00.000Z",
+   "rate": 0.0177,
+   "bandMs": 2518630,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.08,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 6360000
+   }
+  },
+  {
+   "at": "1842-01-05T11:49:00.000Z",
+   "rate": -0.02045,
+   "bandMs": 2180284,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.06,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 5460000
+   }
+  },
+  {
+   "at": "1843-08-28T10:54:00.000Z",
+   "rate": -0.129,
+   "bandMs": 343395,
+   "overBudget": false
+  },
+  {
+   "at": "1845-02-21T13:08:00.000Z",
+   "rate": -0.2301,
+   "bandMs": 191423,
+   "overBudget": false
+  },
+  {
+   "at": "1846-08-21T13:25:00.000Z",
+   "rate": -0.193,
+   "bandMs": 226819,
+   "overBudget": false
+  },
+  {
+   "at": "1848-04-24T14:25:00.000Z",
+   "rate": -0.05207,
+   "bandMs": 835316,
+   "overBudget": false
+  },
+  {
+   "at": "1848-04-29T05:49:00.000Z",
+   "rate": 0.02025,
+   "bandMs": 2148014,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.07,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 5400000
+   }
+  },
+  {
+   "at": "1848-05-01T11:10:00.000Z",
+   "rate": -0.0294,
+   "bandMs": 1479053,
+   "overBudget": false
+  },
+  {
+   "at": "1849-11-05T04:24:00.000Z",
+   "rate": -0.06797,
+   "bandMs": 635967,
+   "overBudget": false
+  },
+  {
+   "at": "1851-04-30T20:16:00.000Z",
+   "rate": -0.2202,
+   "bandMs": 195171,
+   "overBudget": false
+  },
+  {
+   "at": "1852-10-28T21:45:00.000Z",
+   "rate": -0.1406,
+   "bandMs": 303874,
+   "overBudget": false
+  },
+  {
+   "at": "1854-07-14T00:42:00.000Z",
+   "rate": -0.08957,
+   "bandMs": 473583,
+   "overBudget": false
+  },
+  {
+   "at": "1856-01-10T09:27:00.000Z",
+   "rate": -0.1578,
+   "bandMs": 267148,
+   "overBudget": false
+  },
+  {
+   "at": "1857-07-08T04:09:00.000Z",
+   "rate": -0.1826,
+   "bandMs": 229419,
+   "overBudget": false
+  },
+  {
+   "at": "1859-01-05T21:35:00.000Z",
+   "rate": -0.07943,
+   "bandMs": 524262,
+   "overBudget": false
+  },
+  {
+   "at": "1860-09-28T07:37:00.000Z",
+   "rate": -0.1513,
+   "bandMs": 273212,
+   "overBudget": false
+  },
+  {
+   "at": "1862-03-17T08:28:00.000Z",
+   "rate": -0.1893,
+   "bandMs": 217079,
+   "overBudget": false
+  },
+  {
+   "at": "1863-09-15T18:29:00.000Z",
+   "rate": -0.1076,
+   "bandMs": 379404,
+   "overBudget": false
+  },
+  {
+   "at": "1865-04-30T09:48:00.000Z",
+   "rate": -0.01679,
+   "bandMs": 2414986,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.06,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 6060000
+   }
+  },
+  {
+   "at": "1865-05-04T17:03:00.000Z",
+   "rate": 0.0182,
+   "bandMs": 2227444,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.07,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 5580000
+   }
+  },
+  {
+   "at": "1865-05-12T07:13:00.000Z",
+   "rate": -0.04857,
+   "bandMs": 834736,
+   "overBudget": false
+  },
+  {
+   "at": "1866-12-05T14:55:00.000Z",
+   "rate": -0.1965,
+   "bandMs": 204987,
+   "overBudget": false
+  },
+  {
+   "at": "1868-05-24T08:23:00.000Z",
+   "rate": -0.1451,
+   "bandMs": 275735,
+   "overBudget": false
+  },
+  {
+   "at": "1869-11-28T03:42:00.000Z",
+   "rate": -0.04471,
+   "bandMs": 889259,
+   "overBudget": false
+  },
+  {
+   "at": "1871-08-05T00:35:00.000Z",
+   "rate": -0.0839,
+   "bandMs": 470410,
+   "overBudget": false
+  },
+  {
+   "at": "1873-02-09T09:31:00.000Z",
+   "rate": -0.1515,
+   "bandMs": 258775,
+   "overBudget": false
+  },
+  {
+   "at": "1874-08-07T21:46:00.000Z",
+   "rate": -0.09807,
+   "bandMs": 397158,
+   "overBudget": false
+  },
+  {
+   "at": "1876-02-05T01:42:00.000Z",
+   "rate": -0.06275,
+   "bandMs": 616545,
+   "overBudget": false
+  },
+  {
+   "at": "1877-10-21T20:37:00.000Z",
+   "rate": -0.1606,
+   "bandMs": 239091,
+   "overBudget": false
+  },
+  {
+   "at": "1879-04-17T11:36:00.000Z",
+   "rate": -0.112,
+   "bandMs": 340427,
+   "overBudget": false
+  },
+  {
+   "at": "1880-10-15T03:56:00.000Z",
+   "rate": -0.1551,
+   "bandMs": 244256,
+   "overBudget": false
+  },
+  {
+   "at": "1882-04-17T12:06:00.000Z",
+   "rate": -0.06502,
+   "bandMs": 578541,
+   "overBudget": false
+  },
+  {
+   "at": "1882-04-24T12:46:00.000Z",
+   "rate": 0.01263,
+   "bandMs": 2978482,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.04,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 7200000
+   }
+  },
+  {
+   "at": "1882-04-26T02:52:00.000Z",
+   "rate": -0.01384,
+   "bandMs": 2718090,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.03,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 6840000
+   }
+  },
+  {
+   "at": "1883-12-29T03:06:00.000Z",
+   "rate": -0.202,
+   "bandMs": 184813,
+   "overBudget": false
+  },
+  {
+   "at": "1885-06-24T22:14:00.000Z",
+   "rate": -0.1832,
+   "bandMs": 202294,
+   "overBudget": false
+  },
+  {
+   "at": "1886-12-22T11:12:00.000Z",
+   "rate": -0.1556,
+   "bandMs": 236535,
+   "overBudget": false
+  },
+  {
+   "at": "1888-08-25T21:14:00.000Z",
+   "rate": -0.08254,
+   "bandMs": 442443,
+   "overBudget": false
+  },
+  {
+   "at": "1890-03-05T19:19:00.000Z",
+   "rate": -0.2064,
+   "bandMs": 175653,
+   "overBudget": false
+  },
+  {
+   "at": "1891-09-02T04:03:00.000Z",
+   "rate": -0.2274,
+   "bandMs": 158317,
+   "overBudget": false
+  },
+  {
+   "at": "1893-02-27T20:53:00.000Z",
+   "rate": -0.1371,
+   "bandMs": 260745,
+   "overBudget": false
+  },
+  {
+   "at": "1894-11-13T18:22:00.000Z",
+   "rate": -0.1383,
+   "bandMs": 256269,
+   "overBudget": false
+  },
+  {
+   "at": "1896-05-11T23:35:00.000Z",
+   "rate": -0.2162,
+   "bandMs": 162734,
+   "overBudget": false
+  },
+  {
+   "at": "1897-11-08T01:09:00.000Z",
+   "rate": -0.2285,
+   "bandMs": 152843,
+   "overBudget": false
+  },
+  {
+   "at": "1899-05-09T22:08:00.000Z",
+   "rate": -0.08946,
+   "bandMs": 387583,
+   "overBudget": false
+  },
+  {
+   "at": "1901-01-20T22:50:00.000Z",
+   "rate": -0.1711,
+   "bandMs": 200913,
+   "overBudget": false
+  },
+  {
+   "at": "1902-07-21T06:27:00.000Z",
+   "rate": -0.2218,
+   "bandMs": 153803,
+   "overBudget": false
+  },
+  {
+   "at": "1904-01-15T12:53:00.000Z",
+   "rate": -0.2089,
+   "bandMs": 162068,
+   "overBudget": false
+  },
+  {
+   "at": "1905-09-18T04:06:00.000Z",
+   "rate": -0.0643,
+   "bandMs": 522121,
+   "overBudget": false
+  },
+  {
+   "at": "1907-03-30T05:48:00.000Z",
+   "rate": -0.1863,
+   "bandMs": 178753,
+   "overBudget": false
+  },
+  {
+   "at": "1908-09-27T04:06:00.000Z",
+   "rate": -0.2098,
+   "bandMs": 157525,
+   "overBudget": false
+  },
+  {
+   "at": "1910-03-23T17:30:00.000Z",
+   "rate": -0.1809,
+   "bandMs": 181234,
+   "overBudget": false
+  },
+  {
+   "at": "1911-12-08T07:35:00.000Z",
+   "rate": -0.1172,
+   "bandMs": 277218,
+   "overBudget": false
+  },
+  {
+   "at": "1913-06-06T04:23:00.000Z",
+   "rate": -0.1849,
+   "bandMs": 174407,
+   "overBudget": false
+  },
+  {
+   "at": "1914-12-03T11:21:00.000Z",
+   "rate": -0.231,
+   "bandMs": 138478,
+   "overBudget": false
+  },
+  {
+   "at": "1916-05-31T18:42:00.000Z",
+   "rate": -0.1377,
+   "bandMs": 230360,
+   "overBudget": false
+  },
+  {
+   "at": "1918-02-13T17:59:00.000Z",
+   "rate": -0.1367,
+   "bandMs": 229955,
+   "overBudget": false
+  },
+  {
+   "at": "1919-08-15T08:46:00.000Z",
+   "rate": -0.1064,
+   "bandMs": 293051,
+   "overBudget": false
+  },
+  {
+   "at": "1921-02-07T13:03:00.000Z",
+   "rate": -0.2362,
+   "bandMs": 130902,
+   "overBudget": false
+  },
+  {
+   "at": "1922-08-22T23:53:00.000Z",
+   "rate": -0.0468,
+   "bandMs": 654926,
+   "overBudget": false
+  },
+  {
+   "at": "1922-08-27T12:46:00.000Z",
+   "rate": 0.02272,
+   "bandMs": 1348649,
+   "overBudget": false
+  },
+  {
+   "at": "1922-08-31T07:59:00.000Z",
+   "rate": -0.03299,
+   "bandMs": 928867,
+   "overBudget": false
+  },
+  {
+   "at": "1924-04-23T00:41:00.000Z",
+   "rate": -0.1059,
+   "bandMs": 286707,
+   "overBudget": false
+  },
+  {
+   "at": "1925-10-26T17:01:00.000Z",
+   "rate": -0.04271,
+   "bandMs": 704652,
+   "overBudget": false
+  },
+  {
+   "at": "1927-04-16T20:13:00.000Z",
+   "rate": -0.1987,
+   "bandMs": 150231,
+   "overBudget": false
+  },
+  {
+   "at": "1928-12-28T10:52:00.000Z",
+   "rate": -0.0958,
+   "bandMs": 308453,
+   "overBudget": false
+  },
+  {
+   "at": "1930-07-07T16:31:00.000Z",
+   "rate": -0.1099,
+   "bandMs": 266573,
+   "overBudget": false
+  },
+  {
+   "at": "1931-12-28T05:17:00.000Z",
+   "rate": -0.1164,
+   "bandMs": 249451,
+   "overBudget": false
+  },
+  {
+   "at": "1933-06-24T15:58:00.000Z",
+   "rate": -0.1191,
+   "bandMs": 241586,
+   "overBudget": false
+  },
+  {
+   "at": "1935-03-08T16:31:00.000Z",
+   "rate": -0.1018,
+   "bandMs": 279723,
+   "overBudget": false
+  },
+  {
+   "at": "1936-09-14T05:54:00.000Z",
+   "rate": -0.1985,
+   "bandMs": 142171,
+   "overBudget": false
+  },
+  {
+   "at": "1938-03-03T22:22:00.000Z",
+   "rate": -0.1706,
+   "bandMs": 163887,
+   "overBudget": false
+  },
+  {
+   "at": "1939-09-11T22:18:00.000Z",
+   "rate": -0.1042,
+   "bandMs": 265858,
+   "overBudget": false
+  },
+  {
+   "at": "1941-05-24T07:43:00.000Z",
+   "rate": -0.1324,
+   "bandMs": 206971,
+   "overBudget": false
+  },
+  {
+   "at": "1942-11-21T06:15:00.000Z",
+   "rate": -0.215,
+   "bandMs": 126260,
+   "overBudget": false
+  },
+  {
+   "at": "1944-05-11T15:49:00.000Z",
+   "rate": -0.06913,
+   "bandMs": 389052,
+   "overBudget": false
+  },
+  {
+   "at": "1945-12-02T21:20:00.000Z",
+   "rate": -0.05164,
+   "bandMs": 515548,
+   "overBudget": false
+  },
+  {
+   "at": "1946-01-01T08:15:00.000Z",
+   "rate": 0.01039,
+   "bandMs": 2560601,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.06,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 6480000
+   }
+  },
+  {
+   "at": "1946-01-03T14:20:00.000Z",
+   "rate": -0.01232,
+   "bandMs": 2159975,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.04,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 5460000
+   }
+  },
+  {
+   "at": "1947-08-02T10:48:00.000Z",
+   "rate": -0.207,
+   "bandMs": 127253,
+   "overBudget": false
+  },
+  {
+   "at": "1949-01-25T23:55:00.000Z",
+   "rate": -0.1648,
+   "bandMs": 158303,
+   "overBudget": false
+  },
+  {
+   "at": "1950-07-26T20:57:00.000Z",
+   "rate": -0.1366,
+   "bandMs": 189079,
+   "overBudget": false
+  },
+  {
+   "at": "1952-03-28T10:04:00.000Z",
+   "rate": -0.1063,
+   "bandMs": 240283,
+   "overBudget": false
+  },
+  {
+   "at": "1953-10-09T03:47:00.000Z",
+   "rate": -0.2324,
+   "bandMs": 108750,
+   "overBudget": false
+  },
+  {
+   "at": "1955-04-02T21:34:00.000Z",
+   "rate": -0.1039,
+   "bandMs": 240769,
+   "overBudget": false
+  },
+  {
+   "at": "1956-10-04T08:34:00.000Z",
+   "rate": -0.1137,
+   "bandMs": 217629,
+   "overBudget": false
+  },
+  {
+   "at": "1958-06-16T11:13:00.000Z",
+   "rate": -0.1242,
+   "bandMs": 196926,
+   "overBudget": false
+  },
+  {
+   "at": "1959-12-15T17:23:00.000Z",
+   "rate": -0.2526,
+   "bandMs": 95805,
+   "overBudget": false
+  },
+  {
+   "at": "1961-06-10T20:29:00.000Z",
+   "rate": -0.1767,
+   "bandMs": 135492,
+   "overBudget": false
+  },
+  {
+   "at": "1962-12-23T04:53:00.000Z",
+   "rate": -0.08449,
+   "bandMs": 280234,
+   "overBudget": false
+  },
+  {
+   "at": "1964-08-25T10:57:00.000Z",
+   "rate": -0.1659,
+   "bandMs": 140946,
+   "overBudget": false
+  },
+  {
+   "at": "1966-02-19T17:09:00.000Z",
+   "rate": -0.2525,
+   "bandMs": 91617,
+   "overBudget": false
+  },
+  {
+   "at": "1967-08-19T17:41:00.000Z",
+   "rate": -0.1833,
+   "bandMs": 124780,
+   "overBudget": false
+  },
+  {
+   "at": "1969-04-19T07:09:00.000Z",
+   "rate": -0.08534,
+   "bandMs": 264650,
+   "overBudget": false
+  },
+  {
+   "at": "1970-11-02T07:51:00.000Z",
+   "rate": -0.1612,
+   "bandMs": 138454,
+   "overBudget": false
+  },
+  {
+   "at": "1972-04-27T07:32:00.000Z",
+   "rate": -0.2295,
+   "bandMs": 96141,
+   "overBudget": false
+  },
+  {
+   "at": "1973-10-27T00:57:00.000Z",
+   "rate": -0.141,
+   "bandMs": 154690,
+   "overBudget": false
+  },
+  {
+   "at": "1975-07-10T00:19:00.000Z",
+   "rate": -0.1169,
+   "bandMs": 183944,
+   "overBudget": false
+  },
+  {
+   "at": "1977-01-07T17:42:00.000Z",
+   "rate": -0.1973,
+   "bandMs": 107687,
+   "overBudget": false
+  },
+  {
+   "at": "1978-07-05T10:40:00.000Z",
+   "rate": -0.2227,
+   "bandMs": 94253,
+   "overBudget": false
+  },
+  {
+   "at": "1980-01-05T16:14:00.000Z",
+   "rate": -0.01936,
+   "bandMs": 1070761,
+   "overBudget": false
+  },
+  {
+   "at": "1980-01-07T00:49:00.000Z",
+   "rate": 0.01586,
+   "bandMs": 1307134,
+   "overBudget": false
+  },
+  {
+   "at": "1980-01-12T19:00:00.000Z",
+   "rate": -0.06359,
+   "bandMs": 326030,
+   "overBudget": false
+  },
+  {
+   "at": "1981-09-20T15:45:00.000Z",
+   "rate": -0.003767,
+   "bandMs": 5426431,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.03,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 7200000
+   }
+  },
+  {
+   "at": "1981-09-20T23:32:00.000Z",
+   "rate": 0.00317,
+   "bandMs": 6446735,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.03,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 7200000
+   }
+  },
+  {
+   "at": "1981-09-24T09:03:00.000Z",
+   "rate": -0.03732,
+   "bandMs": 547644,
+   "overBudget": false
+  },
+  {
+   "at": "1983-03-16T02:24:00.000Z",
+   "rate": -0.2188,
+   "bandMs": 92255,
+   "overBudget": false
+  },
+  {
+   "at": "1984-09-11T17:35:00.000Z",
+   "rate": -0.1792,
+   "bandMs": 111180,
+   "overBudget": false
+  },
+  {
+   "at": "1986-04-06T07:19:00.000Z",
+   "rate": -0.03307,
+   "bandMs": 594387,
+   "overBudget": false
+  },
+  {
+   "at": "1986-05-05T19:41:00.000Z",
+   "rate": 0.01641,
+   "bandMs": 1196963,
+   "overBudget": false
+  },
+  {
+   "at": "1986-05-08T19:58:00.000Z",
+   "rate": -0.02136,
+   "bandMs": 919240,
+   "overBudget": false
+  },
+  {
+   "at": "1987-12-02T05:00:00.000Z",
+   "rate": -0.09016,
+   "bandMs": 214825,
+   "overBudget": false
+  },
+  {
+   "at": "1989-05-22T11:29:00.000Z",
+   "rate": -0.1925,
+   "bandMs": 99267,
+   "overBudget": false
+  },
+  {
+   "at": "1990-11-18T18:25:00.000Z",
+   "rate": -0.1679,
+   "bandMs": 112277,
+   "overBudget": false
+  },
+  {
+   "at": "1992-08-01T20:34:00.000Z",
+   "rate": -0.08775,
+   "bandMs": 211525,
+   "overBudget": false
+  },
+  {
+   "at": "1994-02-01T07:05:00.000Z",
+   "rate": -0.0652,
+   "bandMs": 280720,
+   "overBudget": false
+  },
+  {
+   "at": "1995-07-31T11:26:00.000Z",
+   "rate": -0.09275,
+   "bandMs": 194545,
+   "overBudget": false
+  },
+  {
+   "at": "1997-01-25T00:38:00.000Z",
+   "rate": -0.1301,
+   "bandMs": 136697,
+   "overBudget": false
+  },
+  {
+   "at": "1998-10-20T06:08:00.000Z",
+   "rate": -0.1713,
+   "bandMs": 102091,
+   "overBudget": false
+  },
+  {
+   "at": "2000-04-09T01:17:00.000Z",
+   "rate": -0.0754,
+   "bandMs": 229801,
+   "overBudget": false
+  },
+  {
+   "at": "2001-10-13T02:38:00.000Z",
+   "rate": -0.1008,
+   "bandMs": 174500,
+   "overBudget": false
+  },
+  {
+   "at": "2003-04-14T00:23:00.000Z",
+   "rate": -0.08752,
+   "bandMs": 203927,
+   "overBudget": false
+  },
+  {
+   "at": "2004-12-26T07:42:00.000Z",
+   "rate": -0.2045,
+   "bandMs": 88715,
+   "overBudget": false
+  },
+  {
+   "at": "2006-06-22T09:08:00.000Z",
+   "rate": -0.1174,
+   "bandMs": 156653,
+   "overBudget": false
+  },
+  {
+   "at": "2007-12-14T21:44:00.000Z",
+   "rate": -0.01659,
+   "bandMs": 1124524,
+   "overBudget": false
+  },
+  {
+   "at": "2007-12-16T09:13:00.000Z",
+   "rate": 0.009133,
+   "bandMs": 2042590,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.04,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 5040000
+   }
+  },
+  {
+   "at": "2007-12-18T04:44:00.000Z",
+   "rate": -0.0202,
+   "bandMs": 923697,
+   "overBudget": false
+  },
+  {
+   "at": "2009-08-21T17:14:00.000Z",
+   "rate": -0.06434,
+   "bandMs": 294472,
+   "overBudget": false
+  },
+  {
+   "at": "2011-03-03T11:55:00.000Z",
+   "rate": -0.1955,
+   "bandMs": 98237,
+   "overBudget": false
+  },
+  {
+   "at": "2012-08-30T02:56:00.000Z",
+   "rate": -0.1925,
+   "bandMs": 101145,
+   "overBudget": false
+  },
+  {
+   "at": "2014-02-18T14:27:00.000Z",
+   "rate": -0.05285,
+   "bandMs": 373183,
+   "overBudget": false
+  },
+  {
+   "at": "2015-11-12T00:42:00.000Z",
+   "rate": -0.148,
+   "bandMs": 135301,
+   "overBudget": false
+  },
+  {
+   "at": "2017-05-09T18:17:00.000Z",
+   "rate": -0.2054,
+   "bandMs": 98714,
+   "overBudget": false
+  },
+  {
+   "at": "2018-11-06T18:13:00.000Z",
+   "rate": -0.2092,
+   "bandMs": 98155,
+   "overBudget": false
+  },
+  {
+   "at": "2020-05-05T05:47:00.000Z",
+   "rate": -0.1094,
+   "bandMs": 190082,
+   "overBudget": false
+  },
+  {
+   "at": "2022-01-18T18:33:00.000Z",
+   "rate": -0.1924,
+   "bandMs": 109589,
+   "overBudget": false
+  },
+  {
+   "at": "2023-07-17T19:53:00.000Z",
+   "rate": -0.2307,
+   "bandMs": 92542,
+   "overBudget": false
+  },
+  {
+   "at": "2025-01-11T22:48:00.000Z",
+   "rate": -0.1823,
+   "bandMs": 118528,
+   "overBudget": false
+  },
+  {
+   "at": "2026-07-27T00:07:00.000Z",
+   "rate": -0.07327,
+   "bandMs": 298479,
+   "overBudget": false
+  },
+  {
+   "at": "2028-03-26T15:37:00.000Z",
+   "rate": -0.2097,
+   "bandMs": 105694,
+   "overBudget": false
+  },
+  {
+   "at": "2029-09-23T11:37:00.000Z",
+   "rate": -0.2319,
+   "bandMs": 96647,
+   "overBudget": false
+  },
+  {
+   "at": "2031-03-20T23:02:00.000Z",
+   "rate": -0.1596,
+   "bandMs": 142062,
+   "overBudget": false
+  },
+  {
+   "at": "2032-11-24T17:13:00.000Z",
+   "rate": -0.005785,
+   "bandMs": 3969843,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.03,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 7200000
+   }
+  },
+  {
+   "at": "2032-11-25T05:04:00.000Z",
+   "rate": 0.005535,
+   "bandMs": 4149203,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.03,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 7200000
+   }
+  },
+  {
+   "at": "2032-12-02T04:32:00.000Z",
+   "rate": -0.07934,
+   "bandMs": 289483,
+   "overBudget": false
+  },
+  {
+   "at": "2034-06-03T17:20:00.000Z",
+   "rate": -0.2063,
+   "bandMs": 112616,
+   "overBudget": false
+  },
+  {
+   "at": "2035-11-30T07:30:00.000Z",
+   "rate": -0.2427,
+   "bandMs": 96774,
+   "overBudget": false
+  },
+  {
+   "at": "2037-05-29T10:42:00.000Z",
+   "rate": -0.12,
+   "bandMs": 197929,
+   "overBudget": false
+  },
+  {
+   "at": "2039-02-10T03:40:00.000Z",
+   "rate": -0.1505,
+   "bandMs": 159751,
+   "overBudget": false
+  },
+  {
+   "at": "2040-08-11T08:22:00.000Z",
+   "rate": -0.1578,
+   "bandMs": 153994,
+   "overBudget": false
+  },
+  {
+   "at": "2042-02-04T09:31:00.000Z",
+   "rate": -0.2312,
+   "bandMs": 106186,
+   "overBudget": false
+  },
+  {
+   "at": "2043-08-18T14:15:00.000Z",
+   "rate": -0.09488,
+   "bandMs": 261592,
+   "overBudget": false
+  },
+  {
+   "at": "2045-04-18T21:20:00.000Z",
+   "rate": -0.1675,
+   "bandMs": 149931,
+   "overBudget": false
+  },
+  {
+   "at": "2046-10-18T20:34:00.000Z",
+   "rate": -0.1349,
+   "bandMs": 188046,
+   "overBudget": false
+  },
+  {
+   "at": "2048-04-12T09:06:00.000Z",
+   "rate": -0.2054,
+   "bandMs": 124749,
+   "overBudget": false
+  },
+  {
+   "at": "2049-12-14T08:51:00.000Z",
+   "rate": -0.05428,
+   "bandMs": 477343,
+   "overBudget": false
+  },
+  {
+   "at": "2049-12-21T21:31:00.000Z",
+   "rate": 0.01139,
+   "bandMs": 2275988,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.03,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 5700000
+   }
+  },
+  {
+   "at": "2049-12-22T22:25:00.000Z",
+   "rate": -0.01286,
+   "bandMs": 2015623,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.02,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 5100000
+   }
+  },
+  {
+   "at": "2051-06-28T09:46:00.000Z",
+   "rate": -0.09805,
+   "bandMs": 266988,
+   "overBudget": false
+  },
+  {
+   "at": "2052-12-23T17:18:00.000Z",
+   "rate": -0.1927,
+   "bandMs": 137200,
+   "overBudget": false
+  },
+  {
+   "at": "2054-06-21T16:42:00.000Z",
+   "rate": -0.1246,
+   "bandMs": 214254,
+   "overBudget": false
+  },
+  {
+   "at": "2056-03-04T06:37:00.000Z",
+   "rate": -0.1152,
+   "bandMs": 234346,
+   "overBudget": false
+  },
+  {
+   "at": "2057-09-11T09:12:00.000Z",
+   "rate": -0.1514,
+   "bandMs": 179966,
+   "overBudget": false
+  },
+  {
+   "at": "2059-02-28T16:32:00.000Z",
+   "rate": -0.2182,
+   "bandMs": 126072,
+   "overBudget": false
+  },
+  {
+   "at": "2060-09-08T04:30:00.000Z",
+   "rate": -0.115,
+   "bandMs": 241475,
+   "overBudget": false
+  },
+  {
+   "at": "2062-05-13T16:53:00.000Z",
+   "rate": -0.06505,
+   "bandMs": 431319,
+   "overBudget": false
+  },
+  {
+   "at": "2063-11-18T11:16:00.000Z",
+   "rate": -0.1711,
+   "bandMs": 165506,
+   "overBudget": false
+  },
+  {
+   "at": "2065-05-06T17:39:00.000Z",
+   "rate": -0.1921,
+   "bandMs": 148744,
+   "overBudget": false
+  },
+  {
+   "at": "2066-11-28T04:07:00.000Z",
+   "rate": -0.06535,
+   "bandMs": 441371,
+   "overBudget": false
+  },
+  {
+   "at": "2068-07-28T11:01:00.000Z",
+   "rate": -0.1729,
+   "bandMs": 168480,
+   "overBudget": false
+  },
+  {
+   "at": "2070-01-22T21:13:00.000Z",
+   "rate": -0.09682,
+   "bandMs": 303517,
+   "overBudget": false
+  },
+  {
+   "at": "2071-07-17T13:10:00.000Z",
+   "rate": -0.01521,
+   "bandMs": 1948414,
+   "overBudget": false
+  },
+  {
+   "at": "2071-07-18T22:51:00.000Z",
+   "rate": 0.009572,
+   "bandMs": 3096895,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.02,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 7200000
+   }
+  },
+  {
+   "at": "2071-07-21T08:00:00.000Z",
+   "rate": -0.0253,
+   "bandMs": 1171819,
+   "overBudget": false
+  },
+  {
+   "at": "2073-03-26T05:42:00.000Z",
+   "rate": -0.08851,
+   "bandMs": 338215,
+   "overBudget": false
+  },
+  {
+   "at": "2074-10-05T19:49:00.000Z",
+   "rate": -0.2187,
+   "bandMs": 138097,
+   "overBudget": false
+  },
+  {
+   "at": "2076-03-29T21:44:00.000Z",
+   "rate": -0.04897,
+   "bandMs": 621939,
+   "overBudget": false
+  },
+  {
+   "at": "2077-09-30T06:21:00.000Z",
+   "rate": -0.1323,
+   "bandMs": 232071,
+   "overBudget": false
+  },
+  {
+   "at": "2079-06-14T01:56:00.000Z",
+   "rate": -0.1392,
+   "bandMs": 222835,
+   "overBudget": false
+  },
+  {
+   "at": "2080-12-11T10:13:00.000Z",
+   "rate": -0.2389,
+   "bandMs": 130857,
+   "overBudget": false
+  },
+  {
+   "at": "2082-06-07T16:09:00.000Z",
+   "rate": -0.1221,
+   "bandMs": 258135,
+   "overBudget": false
+  },
+  {
+   "at": "2083-12-08T20:04:00.000Z",
+   "rate": -0.103,
+   "bandMs": 308696,
+   "overBudget": false
+  },
+  {
+   "at": "2085-08-22T08:19:00.000Z",
+   "rate": -0.1893,
+   "bandMs": 169479,
+   "overBudget": false
+  },
+  {
+   "at": "2087-02-16T08:09:00.000Z",
+   "rate": -0.2149,
+   "bandMs": 150494,
+   "overBudget": false
+  },
+  {
+   "at": "2088-08-15T23:40:00.000Z",
+   "rate": -0.1666,
+   "bandMs": 195673,
+   "overBudget": false
+  },
+  {
+   "at": "2090-02-27T17:37:00.000Z",
+   "rate": -0.05211,
+   "bandMs": 630541,
+   "overBudget": false
+  },
+  {
+   "at": "2090-03-08T13:39:00.000Z",
+   "rate": 0.007736,
+   "bandMs": 4248094,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.04,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 7200000
+   }
+  },
+  {
+   "at": "2090-03-10T07:23:00.000Z",
+   "rate": -0.007557,
+   "bandMs": 4348616,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.04,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 7200000
+   }
+  },
+  {
+   "at": "2090-03-29T04:40:00.000Z",
+   "rate": 0.00798,
+   "bandMs": 4119239,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.02,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 7200000
+   }
+  },
+  {
+   "at": "2090-03-31T05:32:00.000Z",
+   "rate": -0.0093,
+   "bandMs": 3534755,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.03,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 7200000
+   }
+  },
+  {
+   "at": "2091-10-30T12:14:00.000Z",
+   "rate": -0.1845,
+   "bandMs": 179647,
+   "overBudget": false
+  },
+  {
+   "at": "2093-04-24T10:21:00.000Z",
+   "rate": -0.2089,
+   "bandMs": 159877,
+   "overBudget": false
+  },
+  {
+   "at": "2094-10-24T09:32:00.000Z",
+   "rate": -0.1308,
+   "bandMs": 257456,
+   "overBudget": false
+  },
+  {
+   "at": "2096-07-05T15:34:00.000Z",
+   "rate": -0.1083,
+   "bandMs": 313617,
+   "overBudget": false
+  },
+  {
+   "at": "2098-01-04T17:25:00.000Z",
+   "rate": -0.2277,
+   "bandMs": 150281,
+   "overBudget": false
+  },
+  {
+   "at": "2099-07-02T12:41:00.000Z",
+   "rate": -0.206,
+   "bandMs": 167330,
+   "overBudget": false
+  },
+  {
+   "at": "2100-12-31T16:26:00.000Z",
+   "rate": -0.104,
+   "bandMs": 333937,
+   "overBudget": false
+  },
+  {
+   "at": "2102-09-15T23:15:00.000Z",
+   "rate": -0.1347,
+   "bandMs": 260001,
+   "overBudget": false
+  },
+  {
+   "at": "2104-03-12T17:42:00.000Z",
+   "rate": -0.2429,
+   "bandMs": 145264,
+   "overBudget": false
+  },
+  {
+   "at": "2105-09-10T02:23:00.000Z",
+   "rate": -0.1649,
+   "bandMs": 215488,
+   "overBudget": false
+  },
+  {
+   "at": "2107-03-20T13:01:00.000Z",
+   "rate": -0.08632,
+   "bandMs": 414794,
+   "overBudget": false
+  },
+  {
+   "at": "2108-11-24T03:41:00.000Z",
+   "rate": -0.07094,
+   "bandMs": 508823,
+   "overBudget": false
+  },
+  {
+   "at": "2110-05-20T01:51:00.000Z",
+   "rate": -0.2263,
+   "bandMs": 160621,
+   "overBudget": false
+  },
+  {
+   "at": "2111-11-18T02:58:00.000Z",
+   "rate": -0.1078,
+   "bandMs": 339506,
+   "overBudget": false
+  },
+  {
+   "at": "2113-07-19T20:59:00.000Z",
+   "rate": -0.01969,
+   "bandMs": 1874054,
+   "overBudget": false
+  },
+  {
+   "at": "2113-07-21T20:39:00.000Z",
+   "rate": 0.0167,
+   "bandMs": 2209149,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.03,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 5520000
+   }
+  },
+  {
+   "at": "2113-07-28T14:11:00.000Z",
+   "rate": -0.06697,
+   "bandMs": 551060,
+   "overBudget": false
+  },
+  {
+   "at": "2115-01-30T05:48:00.000Z",
+   "rate": -0.125,
+   "bandMs": 297426,
+   "overBudget": false
+  },
+  {
+   "at": "2116-07-27T08:36:00.000Z",
+   "rate": -0.1698,
+   "bandMs": 220428,
+   "overBudget": false
+  },
+  {
+   "at": "2118-01-24T01:51:00.000Z",
+   "rate": -0.09051,
+   "bandMs": 416312,
+   "overBudget": false
+  },
+  {
+   "at": "2119-10-09T12:58:00.000Z",
+   "rate": -0.06087,
+   "bandMs": 623932,
+   "overBudget": false
+  },
+  {
+   "at": "2121-04-06T16:03:00.000Z",
+   "rate": -0.1505,
+   "bandMs": 253973,
+   "overBudget": false
+  },
+  {
+   "at": "2122-10-04T09:16:00.000Z",
+   "rate": -0.1135,
+   "bandMs": 339149,
+   "overBudget": false
+  },
+  {
+   "at": "2124-04-11T01:09:00.000Z",
+   "rate": -0.0999,
+   "bandMs": 387932,
+   "overBudget": false
+  },
+  {
+   "at": "2125-12-23T05:41:00.000Z",
+   "rate": -0.126,
+   "bandMs": 309902,
+   "overBudget": false
+  },
+  {
+   "at": "2127-06-16T15:39:00.000Z",
+   "rate": -0.01584,
+   "bandMs": 2480610,
+   "overBudget": true,
+   "window": {
+    "seconds": 0.03,
+    "flags": [
+     "node-unresolved"
+    ],
+    "unresolvedMs": 6360000
+   }
+  },
+  {
+   "at": "2128-12-10T05:48:00.000Z",
+   "rate": -0.1073,
+   "bandMs": 368852,
+   "overBudget": false
+  },
+  {
+   "at": "2130-08-09T10:50:00.000Z",
+   "rate": -0.03326,
+   "bandMs": 1198207,
+   "overBudget": false
+  },
+  {
+   "at": "2130-08-15T08:50:00.000Z",
+   "rate": 0.02401,
+   "bandMs": 1659942,
+   "overBudget": false
+  },
+  {
+   "at": "2130-08-19T09:34:00.000Z",
+   "rate": -0.0373,
+   "bandMs": 1068420,
+   "overBudget": false
+  },
+  {
+   "at": "2132-02-28T19:39:00.000Z",
+   "rate": -0.1185,
+   "bandMs": 338504,
+   "overBudget": false
+  },
+  {
+   "at": "2133-08-28T14:06:00.000Z",
+   "rate": -0.1617,
+   "bandMs": 249763,
+   "overBudget": false
+  },
+  {
+   "at": "2135-02-15T12:52:00.000Z",
+   "rate": -0.1212,
+   "bandMs": 335189,
+   "overBudget": false
+  },
+  {
+   "at": "2136-11-08T14:58:00.000Z",
+   "rate": -0.1264,
+   "bandMs": 323812,
+   "overBudget": false
+  },
+  {
+   "at": "2138-05-07T03:40:00.000Z",
+   "rate": -0.1415,
+   "bandMs": 291011,
+   "overBudget": false
+  },
+  {
+   "at": "2139-11-04T14:41:00.000Z",
+   "rate": -0.1688,
+   "bandMs": 245573,
+   "overBudget": false
+  },
+  {
+   "at": "2141-05-02T09:48:00.000Z",
+   "rate": -0.09174,
+   "bandMs": 454571,
+   "overBudget": false
+  },
+  {
+   "at": "2143-01-16T08:53:00.000Z",
+   "rate": -0.1837,
+   "bandMs": 228648,
+   "overBudget": false
+  },
+  {
+   "at": "2144-07-14T20:09:00.000Z",
+   "rate": -0.1985,
+   "bandMs": 212823,
+   "overBudget": false
+  },
+  {
+   "at": "2146-01-09T15:41:00.000Z",
+   "rate": -0.1299,
+   "bandMs": 327276,
+   "overBudget": false
+  },
+  {
+   "at": "2147-07-23T18:00:00.000Z",
+   "rate": -0.0744,
+   "bandMs": 574930,
+   "overBudget": false
+  },
+  {
+   "at": "2149-03-24T11:24:00.000Z",
+   "rate": -0.2003,
+   "bandMs": 214982,
+   "overBudget": false
+  },
+  {
+   "at": "2150-09-22T06:32:00.000Z",
+   "rate": -0.2029,
+   "bandMs": 213493,
+   "overBudget": false
+  },
+  {
+   "at": "2152-03-16T22:02:00.000Z",
+   "rate": -0.08758,
+   "bandMs": 497584,
+   "overBudget": false
+  },
+  {
+   "at": "2153-11-30T13:19:00.000Z",
+   "rate": -0.08335,
+   "bandMs": 526388,
+   "overBudget": false
+  },
+  {
+   "at": "2155-06-01T02:28:00.000Z",
+   "rate": -0.2133,
+   "bandMs": 206931,
+   "overBudget": false
+  },
+  {
+   "at": "2156-11-27T22:23:00.000Z",
+   "rate": -0.2094,
+   "bandMs": 212047,
+   "overBudget": false
+  },
+  {
+   "at": "2158-05-25T21:42:00.000Z",
+   "rate": -0.1315,
+   "bandMs": 339561,
+   "overBudget": false
+  },
+  {
+   "at": "2160-02-08T09:27:00.000Z",
+   "rate": -0.1628,
+   "bandMs": 276040,
+   "overBudget": false
+  },
+  {
+   "at": "2161-08-08T10:29:00.000Z",
+   "rate": -0.1971,
+   "bandMs": 229371,
+   "overBudget": false
+  },
+  {
+   "at": "2163-02-03T02:01:00.000Z",
+   "rate": -0.2066,
+   "bandMs": 220074,
+   "overBudget": false
+  },
+  {
+   "at": "2164-08-12T12:48:00.000Z",
+   "rate": -0.0756,
+   "bandMs": 604856,
+   "overBudget": false
+  },
+  {
+   "at": "2166-04-17T14:05:00.000Z",
+   "rate": -0.1814,
+   "bandMs": 253639,
+   "overBudget": false
+  },
+  {
+   "at": "2167-10-16T11:13:00.000Z",
+   "rate": -0.1667,
+   "bandMs": 277564,
+   "overBudget": false
+  },
+  {
+   "at": "2169-04-11T04:28:00.000Z",
+   "rate": -0.1807,
+   "bandMs": 257496,
+   "overBudget": false
+  },
+  {
+   "at": "2170-10-25T02:35:00.000Z",
+   "rate": -0.05159,
+   "bandMs": 907106,
+   "overBudget": false
+  },
+  {
+   "at": "2170-10-30T03:24:00.000Z",
+   "rate": 0.02789,
+   "bandMs": 1678216,
+   "overBudget": false
+  },
+  {
+   "at": "2170-11-04T05:21:00.000Z",
+   "rate": -0.03356,
+   "bandMs": 1394442,
+   "overBudget": false
+  },
+  {
+   "at": "2172-06-25T08:42:00.000Z",
+   "rate": -0.1418,
+   "bandMs": 332054,
+   "overBudget": false
+  },
+  {
+   "at": "2173-12-21T12:49:00.000Z",
+   "rate": -0.2048,
+   "bandMs": 231175,
+   "overBudget": false
+  },
+  {
+   "at": "2175-06-20T02:08:00.000Z",
+   "rate": -0.1145,
+   "bandMs": 415701,
+   "overBudget": false
+  },
+  {
+   "at": "2177-02-28T09:31:00.000Z",
+   "rate": -0.09229,
+   "bandMs": 518932,
+   "overBudget": false
+  },
+  {
+   "at": "2178-09-08T18:55:00.000Z",
+   "rate": -0.07064,
+   "bandMs": 681677,
+   "overBudget": false
+  },
+  {
+   "at": "2180-02-26T12:47:00.000Z",
+   "rate": -0.2243,
+   "bandMs": 215811,
+   "overBudget": false
+  },
+  {
+   "at": "2181-09-05T15:52:00.000Z",
+   "rate": -0.1307,
+   "bandMs": 372277,
+   "overBudget": false
+  },
+  {
+   "at": "2183-05-10T10:34:00.000Z",
+   "rate": -0.134,
+   "bandMs": 365295,
+   "overBudget": false
+  },
+  {
+   "at": "2184-11-15T13:39:00.000Z",
+   "rate": -0.1199,
+   "bandMs": 410570,
+   "overBudget": false
+  },
+  {
+   "at": "2186-05-05T02:24:00.000Z",
+   "rate": -0.1782,
+   "bandMs": 277662,
+   "overBudget": false
+  },
+  {
+   "at": "2187-11-15T16:04:00.000Z",
+   "rate": -0.0948,
+   "bandMs": 524697,
+   "overBudget": false
+  },
+  {
+   "at": "2189-07-26T02:51:00.000Z",
+   "rate": -0.1113,
+   "bandMs": 449499,
+   "overBudget": false
+  },
+  {
+   "at": "2191-01-15T23:41:00.000Z",
+   "rate": -0.07391,
+   "bandMs": 680450,
+   "overBudget": false
+  },
+  {
+   "at": "2192-07-19T03:37:00.000Z",
+   "rate": -0.04307,
+   "bandMs": 1173698,
+   "overBudget": false
+  },
+  {
+   "at": "2194-03-11T05:26:00.000Z",
+   "rate": -0.05509,
+   "bandMs": 922717,
+   "overBudget": false
+  },
+  {
+   "at": "2195-10-04T00:44:00.000Z",
+   "rate": -0.1881,
+   "bandMs": 271667,
+   "overBudget": false
+  },
+  {
+   "at": "2197-03-22T02:11:00.000Z",
+   "rate": -0.1586,
+   "bandMs": 323928,
+   "overBudget": false
+  },
+  {
+   "at": "2198-09-28T16:38:00.000Z",
+   "rate": -0.1494,
+   "bandMs": 345622,
+   "overBudget": false
+  }
+ ],
+ "minutes": 1
+}

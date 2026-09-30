@@ -1,0 +1,87 @@
+{
+ "from": "1800-01-01",
+ "to": "2200-01-01",
+ "stepDays": 0.25,
+ "bodies": {
+  "Sun": {
+   "stepDays": 5,
+   "stations": 0,
+   "shortestDaysBetweenStations": null,
+   "fastestDegreesPerDay": 1.02,
+   "degreesInOneStepAtMost": 5.1,
+   "twoStepsShorterThanShortestInterval": true
+  },
+  "Moon": {
+   "stepDays": 1,
+   "stations": 0,
+   "shortestDaysBetweenStations": null,
+   "fastestDegreesPerDay": 15.396,
+   "degreesInOneStepAtMost": 15.4,
+   "twoStepsShorterThanShortestInterval": true
+  },
+  "Mercury": {
+   "stepDays": 2,
+   "stations": 2521,
+   "shortestDaysBetweenStations": 19.75,
+   "fastestDegreesPerDay": 2.203,
+   "degreesInOneStepAtMost": 4.41,
+   "twoStepsShorterThanShortestInterval": true
+  },
+  "Venus": {
+   "stepDays": 4,
+   "stations": 500,
+   "shortestDaysBetweenStations": 40.75,
+   "fastestDegreesPerDay": 1.259,
+   "degreesInOneStepAtMost": 5.04,
+   "twoStepsShorterThanShortestInterval": true
+  },
+  "Mars": {
+   "stepDays": 5,
+   "stations": 374,
+   "shortestDaysBetweenStations": 59.75,
+   "fastestDegreesPerDay": 0.791,
+   "degreesInOneStepAtMost": 3.96,
+   "twoStepsShorterThanShortestInterval": true
+  },
+  "Jupiter": {
+   "stepDays": 5,
+   "stations": 733,
+   "shortestDaysBetweenStations": 117.25,
+   "fastestDegreesPerDay": 0.243,
+   "degreesInOneStepAtMost": 1.21,
+   "twoStepsShorterThanShortestInterval": true
+  },
+  "Saturn": {
+   "stepDays": 5,
+   "stations": 773,
+   "shortestDaysBetweenStations": 133.5,
+   "fastestDegreesPerDay": 0.13,
+   "degreesInOneStepAtMost": 0.65,
+   "twoStepsShorterThanShortestInterval": true
+  },
+  "Uranus": {
+   "stepDays": 5,
+   "stations": 791,
+   "shortestDaysBetweenStations": 149,
+   "fastestDegreesPerDay": 0.063,
+   "degreesInOneStepAtMost": 0.32,
+   "twoStepsShorterThanShortestInterval": true
+  },
+  "Neptune": {
+   "stepDays": 5,
+   "stations": 795,
+   "shortestDaysBetweenStations": 156.25,
+   "fastestDegreesPerDay": 0.038,
+   "degreesInOneStepAtMost": 0.19,
+   "twoStepsShorterThanShortestInterval": true
+  },
+  "Pluto": {
+   "stepDays": 5,
+   "stations": 797,
+   "shortestDaysBetweenStations": 156,
+   "fastestDegreesPerDay": 0.041,
+   "degreesInOneStepAtMost": 0.2,
+   "twoStepsShorterThanShortestInterval": true
+  }
+ }
+}

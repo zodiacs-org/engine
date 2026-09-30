@@ -1,0 +1,82 @@
+{
+  "question": "Is the Sun beyond the out-of-bounds limit (|dec| > true obliquity) at the solstices, and does the engine agree?",
+  "instrument": {
+    "erfa": "2.0.1.5",
+    "numpy": "2.4.6",
+    "de440s": {
+      "file": "de440s.bsp",
+      "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
+    },
+    "engine": "0.1.1-rc.15",
+    "scripts": [
+      "apparent.py",
+      "sun-solstices.py",
+      "engine-at-tt.mjs"
+    ]
+  },
+  "erfa": {
+    "solstices": 800,
+    "years": "1800-2199",
+    "beyond": 402,
+    "maxExcessArcsec": 1.0899,
+    "minExcessArcsec": -1.1561
+  },
+  "de440s": {
+    "solstices": 600,
+    "years": "1850-2149",
+    "beyond": 300,
+    "maxExcessArcsec": 1.0926,
+    "maxAbsDifferenceFromErfaArcsec": 0.0079
+  },
+  "engine": {
+    "solstices": 800,
+    "beyond": 400,
+    "flagged": 0,
+    "maxMarginArcsec": 1.3526,
+    "sunLatitudeArcsec": [
+      -1.761,
+      1.626
+    ],
+    "maxAbsSunLatitudeDegrees": 0.0004892747019622244,
+    "signDisagreementsWithErfa": 396,
+    "maxAbsMarginMinusErfaExcessArcsec": 2.5798,
+    "byCentury": [
+      {
+        "years": "1800-1899",
+        "engineLatitudeMeanArcsec": -1.121,
+        "erfaLatitudeMeanArcsec": 0.0
+      },
+      {
+        "years": "1900-1999",
+        "engineLatitudeMeanArcsec": -0.372,
+        "erfaLatitudeMeanArcsec": 0.006
+      },
+      {
+        "years": "2000-2099",
+        "engineLatitudeMeanArcsec": 0.375,
+        "erfaLatitudeMeanArcsec": 0.004
+      },
+      {
+        "years": "2100-2199",
+        "engineLatitudeMeanArcsec": 1.12,
+        "erfaLatitudeMeanArcsec": 0.001
+      }
+    ]
+  },
+  "examples": [
+    {
+      "solstice": "2024-06-20T20:52:09 TT",
+      "erfaExcessArcsec": -0.5944,
+      "engineMarginArcsec": 0.1868,
+      "engineFlag": false,
+      "de440sExcessArcsec": -0.594
+    },
+    {
+      "solstice": "1970-12-22T06:36:20 TT",
+      "erfaExcessArcsec": 0.0506,
+      "engineMarginArcsec": 0.2104,
+      "engineFlag": false,
+      "de440sExcessArcsec": 0.0509
+    }
+  ]
+}

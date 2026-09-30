@@ -9,6 +9,99 @@ Don Cross, distributed under the MIT License. Its distributed JavaScript source
 retains the full MIT permission and warranty notice. Source and license metadata:
 https://github.com/cosinekitty/astronomy
 
+The package's frame module (src/frame.ts, built into the ephemeris chunk under
+dist/) reproduces astronomy-engine's precession function, precession_rot, and
+the calc entry's reduction module (src/calc-reduce.ts, built into
+dist/calc.js) its function for an observer on the Earth's ellipsoid, terra:
+
+  Copyright (c) 2019-2023 Don Cross <cosinekitty@gmail.com>
+  MIT License: the permission and warranty notice is the one in this
+  package's LICENSE file, word for word.
+
+IAU 2000B nutation
+------------------
+
+The package's nutation module (src/nutation.ts, built into the same chunk)
+carries the 77 luni-solar terms, fundamental arguments and fixed planetary
+offsets of the IAU 2000B nutation model,
+
+  D. D. McCarthy and B. J. Luzum 2003, An abridged model of the
+  precession-nutation of the celestial pole. Celestial Mechanics and Dynamical
+  Astronomy 85, 37-49; IERS Conventions (2003), chapter 5,
+
+transcribed from the function iau2000b of the Naval Observatory Vector
+Astrometry Software (NOVAS) C 3.1, nutation.c, as the package novas 3.1.1.5
+distributes it (sha256
+49d193c9e0d6dfb14650ed0b2603e3954ef02ab51f83d66869a769e892e471bb), a work of
+the US Government, which its authors ask to be cited as:
+
+  Barron, E. G., Kaplan, G. H., Bangert, J., Bartlett, J. L., Puatua, W.,
+  Harris, W., & Barrett, P. (2011), "Naval Observatory Vector Astrometry
+  Software (NOVAS) Version 3.1, Introducing a Python Edition," Bull. AAS, 43.
+
+Its equation of the equinoxes adds two complementary terms from the IERS
+Conventions (2010), table 5.2e (IERS, https://www.iers.org/).
+
+Calculation entry
+-----------------
+
+The calc entry (dist/calc.js and the chunks it imports) carries the frame
+bias of the IAU 2000 precession-nutation model, dpsi = -0.041775",
+deps = -0.0068192" and dalpha0 = -0.0146", composed as
+
+  G. Petit and B. Luzum (eds.) 2010, IERS Conventions (2010), IERS Technical
+  Note No. 36, chapter 5, eq. 5.21,
+
+composes it, and the obliquity of J2000.0 of the IAU 2006 precession,
+84381.406", from
+
+  N. Capitaine, P. T. Wallace and J. Chapront 2003, Expressions for IAU 2000
+  precession quantities. Astronomy & Astrophysics 412, 567-586 (adopted by
+  IAU 2006 Resolution B1).
+
+Its bounds and its barycentre's error are measurements: the largest
+differences of this package's own results from NASA JPL Horizons (DE441)
+responses at 32 instants, and of astronomy-engine's barycentre from a
+Newtonian barycentre and from Horizons's. They are not coefficients derived
+from JPL data, and no JPL ephemeris value is in the package.
+
+Essential dignities
+-------------------
+
+The techniques entry (dist/techniques.js) carries the tables of the
+essential dignities as these works give them, and none of their text:
+
+  Ptolemy, Tetrabiblos I.17-I.20, tr. F. E. Robbins (Loeb Classical Library,
+  1940): domiciles, exaltations, the Egyptian terms.
+  Dorotheus of Sidon, Carmen Astrologicum I.1-I.2, ed. and tr. D. Pingree
+  (Leipzig: Teubner, 1976), pp. 161-162: domiciles, exaltations, triplicity
+  lords.
+  al-Biruni, The Book of Instruction in the Elements of the Art of Astrology
+  (1029), tr. R. Ramsay Wright (London: Luzac, 1934), sections 440-453:
+  detriments, triplicities, terms, the Chaldean faces.
+  W. Lilly, Christian Astrology (London, 1647), p. 112: reception and the
+  peregrine planet.
+
+Rise, set and transit
+---------------------
+
+The sky entry (dist/sky.js) carries 34' of refraction at the horizon, from
+the US Naval Observatory's Rise, Set, and Twilight Definitions
+(https://aa.usno.navy.mil/faq/RST_defs, a work of the US Government); the
+Moon's mean radius, 1,737.4 km, from
+
+  B. A. Archinal et al. 2018, Report of the IAU Working Group on
+  Cartographic Coordinates and Rotational Elements: 2015. Celestial
+  Mechanics and Dynamical Astronomy 130:22;
+
+the Sun's radius, 696,000 km, which subtends 959.64" at 1 au, where J.
+Meeus, Astronomical Algorithms, 2nd ed. (Willmann-Bell, 1998), ch. 55, gives
+959.63"; the astronomical unit, 149,597,870.7 km (IAU 2012 Resolution B2);
+and the WGS84 ellipsoid, a = 6,378,137 m and 1/f = 298.257223563, from
+
+  NIMA TR8350.2 2000, Department of Defense World Geodetic System 1984: Its
+  Definition and Relationships with Local Geodetic Systems, 3rd ed.
+
 ΔT (TT − UT1)
 ------------
 

@@ -1,4 +1,4 @@
-import { Body, EclipticGeoMoon, GeoVector, RotateVector, Rotation_EQJ_ECT } from "astronomy-engine";
+import { Body, GeoMoon, GeoVector } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -9,6 +9,7 @@ import {
   longitudeSpeed,
   onChartClock
 } from "./ephemeris.js";
+import { eclipticOfDate } from "./frame.js";
 import { computeSaturnReturns } from "./returns.js";
 import { chartPoints, natalChart } from "./api.js";
 import { timeBasis } from "./time-scale.js";
@@ -80,12 +81,15 @@ describe("speeds where the time basis steps between their samples", () => {
   const J2000 = Date.UTC(2000, 0, 1, 12);
   const DAY_MS = 86_400_000;
   const wrap = (difference: number) => (difference > 180 ? difference - 360 : difference < -180 ? difference + 360 : difference);
-  /** A planet's or the Moon's apparent longitude at a TT instant, ms, which may be fractional (a Date is not). */
+  /**
+   * A planet's or the Moon's apparent longitude at a TT instant, ms, which may
+   * be fractional (a Date is not): astronomy-engine's vector on the engine's
+   * ecliptic of date (src/frame.ts), as the chart computes it.
+   */
   const longitudeAtTt = (body: BodyName, ttMs: number, pin: number | undefined): number =>
     onChartClock(ttMs, "tt", pin, (time) => {
-      if (body === "Moon") return EclipticGeoMoon(time).lon;
-      const vector = RotateVector(Rotation_EQJ_ECT(time), GeoVector(Body[body as keyof typeof Body], time, true));
-      return (Math.atan2(vector.y, vector.x) * 180) / Math.PI;
+      const vector = body === "Moon" ? GeoMoon(time) : GeoVector(Body[body as keyof typeof Body], time, true);
+      return eclipticOfDate(vector.x, vector.y, vector.z, time.tt).lon;
     });
   /**
    * Each body's change of longitude between the chart's own speed samples,

@@ -1,0 +1,322 @@
+{
+ "horizons": [
+  {
+   "body": "Sun",
+   "status": "complete",
+   "returns": 3,
+   "horizonsReturns": 3,
+   "toleranceArcseconds": 6,
+   "pass": true,
+   "natalLongitudeMinusHorizonsArcseconds": -0.114,
+   "samples": 293,
+   "detail": [
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 4.8,
+     "arcseconds": 0.204
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 10.8,
+     "arcseconds": 0.456
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": -19.9,
+     "arcseconds": 0.84
+    }
+   ]
+  },
+  {
+   "body": "Moon",
+   "status": "complete",
+   "returns": 4,
+   "horizonsReturns": 4,
+   "toleranceArcseconds": 8,
+   "pass": true,
+   "natalLongitudeMinusHorizonsArcseconds": -0.154,
+   "samples": 208,
+   "detail": [
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 1.5,
+     "arcseconds": 0.741
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 1.6,
+     "arcseconds": 0.815
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 1.1,
+     "arcseconds": 0.553
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": -0.9,
+     "arcseconds": 0.458
+    }
+   ]
+  },
+  {
+   "body": "Mercury",
+   "status": "complete",
+   "returns": 3,
+   "horizonsReturns": 3,
+   "toleranceArcseconds": 45,
+   "pass": true,
+   "natalLongitudeMinusHorizonsArcseconds": 4.399,
+   "samples": 133,
+   "detail": [
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 50.7,
+     "arcseconds": 2.541
+    },
+    {
+     "retrograde": true,
+     "directionAgrees": true,
+     "differenceSeconds": -16.2,
+     "arcseconds": 0.546
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 37.7,
+     "arcseconds": 1.382
+    }
+   ]
+  },
+  {
+   "body": "Venus",
+   "status": "complete",
+   "returns": 3,
+   "horizonsReturns": 3,
+   "toleranceArcseconds": 45,
+   "pass": true,
+   "natalLongitudeMinusHorizonsArcseconds": -0.528,
+   "samples": 123,
+   "detail": [
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 170.9,
+     "arcseconds": 4.747
+    },
+    {
+     "retrograde": true,
+     "directionAgrees": true,
+     "differenceSeconds": 223.2,
+     "arcseconds": 5.866
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": -220.8,
+     "arcseconds": 5.958
+    }
+   ]
+  },
+  {
+   "body": "Mars",
+   "status": "complete",
+   "returns": 3,
+   "horizonsReturns": 3,
+   "toleranceArcseconds": 45,
+   "pass": true,
+   "natalLongitudeMinusHorizonsArcseconds": -0.551,
+   "samples": 116,
+   "detail": [
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": -349.7,
+     "arcseconds": 4.972
+    },
+    {
+     "retrograde": true,
+     "directionAgrees": true,
+     "differenceSeconds": 1013.4,
+     "arcseconds": 11.778
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": -786,
+     "arcseconds": 10.847
+    }
+   ]
+  },
+  {
+   "body": "Jupiter",
+   "status": "complete",
+   "returns": 3,
+   "horizonsReturns": 3,
+   "toleranceArcseconds": 45,
+   "pass": true,
+   "natalLongitudeMinusHorizonsArcseconds": -2.734,
+   "samples": 146,
+   "detail": [
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": -438,
+     "arcseconds": 2.868
+    },
+    {
+     "retrograde": true,
+     "directionAgrees": true,
+     "differenceSeconds": -6.2,
+     "arcseconds": 0.035
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 108.3,
+     "arcseconds": 0.697
+    }
+   ]
+  },
+  {
+   "body": "Saturn",
+   "status": "complete",
+   "returns": 3,
+   "horizonsReturns": 3,
+   "toleranceArcseconds": 45,
+   "pass": true,
+   "natalLongitudeMinusHorizonsArcseconds": -4.405,
+   "samples": 159,
+   "detail": [
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": -1258.4,
+     "arcseconds": 5.097
+    },
+    {
+     "retrograde": true,
+     "directionAgrees": true,
+     "differenceSeconds": 1626.8,
+     "arcseconds": 5.291
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": -1453.8,
+     "arcseconds": 5.708
+    }
+   ]
+  },
+  {
+   "body": "Uranus",
+   "status": "complete",
+   "returns": 3,
+   "horizonsReturns": 3,
+   "toleranceArcseconds": 45,
+   "pass": true,
+   "natalLongitudeMinusHorizonsArcseconds": 0.858,
+   "samples": 171,
+   "detail": [
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 542.1,
+     "arcseconds": 1.192
+    },
+    {
+     "retrograde": true,
+     "directionAgrees": true,
+     "differenceSeconds": 48.6,
+     "arcseconds": 0.089
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": -217.7,
+     "arcseconds": 0.476
+    }
+   ]
+  },
+  {
+   "body": "Neptune",
+   "status": "complete",
+   "returns": 3,
+   "horizonsReturns": 3,
+   "toleranceArcseconds": 45,
+   "pass": true,
+   "natalLongitudeMinusHorizonsArcseconds": -1.607,
+   "samples": 171,
+   "detail": [
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": -2279.9,
+     "arcseconds": 3.194
+    },
+    {
+     "retrograde": true,
+     "directionAgrees": true,
+     "differenceSeconds": 2409.5,
+     "arcseconds": 2.82
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": -1711.5,
+     "arcseconds": 2.434
+    }
+   ]
+  },
+  {
+   "body": "Pluto",
+   "status": "complete",
+   "returns": 3,
+   "horizonsReturns": 3,
+   "toleranceArcseconds": 45,
+   "pass": true,
+   "natalLongitudeMinusHorizonsArcseconds": 17.525,
+   "samples": 170,
+   "detail": [
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 21114,
+     "arcseconds": 22.321
+    },
+    {
+     "retrograde": true,
+     "directionAgrees": true,
+     "differenceSeconds": -25650.9,
+     "arcseconds": 22.578
+    },
+    {
+     "retrograde": false,
+     "directionAgrees": true,
+     "differenceSeconds": 20863,
+     "arcseconds": 22.243
+    }
+   ]
+  }
+ ],
+ "usno": {
+  "status": "complete",
+  "returns": 4,
+  "differenceSeconds": [
+   -22.3,
+   -14.2,
+   11,
+   -49.4
+  ],
+  "toleranceSeconds": 210,
+  "pass": true
+ }
+}

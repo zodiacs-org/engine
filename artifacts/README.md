@@ -89,7 +89,8 @@ runs, so CI starts the check with node directly.
 | 0.1.1-rc.12 | `c4cf150fe8fb0b37f5769993c2e63275b2e5ef47b97d8a118aff3be00ebaf7f0` | 73,398 | 30 | `a1d0f2c6cefb2e83df397195515fa0558cf31185` | `a1d0f2c` | Candidate, merged |
 | 0.1.1-rc.13 | `12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840` | 79,092 | 30 | `f05ea02b3254ac5c00d203d64d2caf53e44c083a` | `4eee700` | Candidate, reviewed; its findings are addressed in rc.14 |
 | 0.1.1-rc.14 | `adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e` | 87,415 | 30 | `03db4bb602377896283775920519b26d1f19a890` | `b221534` | Candidate, merged |
-| 0.1.1-rc.15 | `24eeb597b0157598c0faa26bb615c0cb5dfaaeac0393d62c73fbd37c5da4d348` | 190,974 | 54 | `104bd5a56ee00356eecc75f15f0aa946f5a39f41` | "Carry the packed 0.1.1-rc.15 tarball" | Candidate under review |
+| 0.1.1-rc.15 | `24eeb597b0157598c0faa26bb615c0cb5dfaaeac0393d62c73fbd37c5da4d348` | 190,974 | 54 | `104bd5a56ee00356eecc75f15f0aa946f5a39f41` | `cbad72c` | Candidate, merged |
+| 0.1.1-rc.16 | `43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8` | 266,934 | 69 | `ddbbaa0b1d21e16834722f81e8708816849c6726` | "Carry the packed 0.1.1-rc.16 tarball" | Candidate under review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -172,3 +173,29 @@ clean copies of its source commit's tree packed the same bytes on Node
 20.19.0, 22.22.2 (twice) and 24.21.0, and clean clones of that commit packed
 them on Node 22.22.2, 20.19.0 and 24.21.0. The record is in
 `docs/evidence/rc15-20260929/`.
+
+One local build of rc.16 was superseded before publication. It was neither
+pushed nor published, it is not carried here, and the commits named here are
+local commits that are not in this repository: SHA-256
+`f73e55929d5b2daf64e781c078645839e1e83f0ce492989e09b0b569e59fe0bd` (262,109
+bytes), packed from `b3c34d4` and carried locally in `6815110`. Its review
+found preregistered size and scope gates that fail described as not
+applying, and budgets raised after the results without saying so; three
+figures in its packed CHANGELOG given for samples too sparse or for the
+wrong band of latitude; the new entries' sources missing from its packed
+LICENSING.md and NOTICE; a module of the sky entry missing from the root's
+isolation check; a packed-consumer check that did not load two of the new
+entry points; and smaller points.
+
+rc.16 was rebuilt with those fixes before its first push. It brings five
+opt-in entry points (`/calc`, `/window`, `/techniques`, `/houses` and
+`/sky`), planetary returns in `/timing` and the engine's own full IAU 2000B
+nutation onto rc.15; the sky branch's Chinese-calendar entry is held back.
+Its source commit holds the local build's code with the review's fixes, and
+its archive differs from that build's in `CHANGELOG.md`, `LICENSING.md` and
+`NOTICE` alone. The archive is 266,934 bytes, 923,282 unpacked in 69 files,
+under the package cap of 950,000 (CHANGELOG.md). It was packed once, after
+the gates on its source commit's tree had passed: clean clones of that
+commit, each installed with `npm ci`, packed the same bytes on Node 22.22.2,
+20.19.0 and 24.21.0, and the carried file is the Node 22.22.2 one. The
+record is in `docs/evidence/rc16-20260930/`.

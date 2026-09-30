@@ -1,0 +1,30 @@
+{
+ "unit": "arcseconds",
+ "againstErfaFixture": {
+  "instants": 101,
+  "largest": {
+   "dpsi": 5.33e-15,
+   "deps": 3.55e-15,
+   "meanObliquity": 2.91e-11,
+   "equationOfEquinoxes": 0.000015,
+   "gast2000B": 0.000015,
+   "gst06a": 0.00205,
+   "gst00b": 0.021,
+   "rotation": 7.11e-7
+  },
+  "tolerance": {
+   "nutationArcsec": 1e-10,
+   "meanObliquityArcsec": 1e-9,
+   "equationOfEquinoxesArcsec": 0.00005,
+   "gast2000BArcsec": 0.00005,
+   "gastGst06aArcsec": 0.00208,
+   "rotationArcsec": 0.000005
+  }
+ },
+ "againstNovasLoop": {
+  "instants": 4001,
+  "span": "t = -2 to 2 Julian centuries of TT from J2000.0, every 0.001",
+  "largest": 5.33e-15,
+  "tolerance": 1e-14
+ }
+}

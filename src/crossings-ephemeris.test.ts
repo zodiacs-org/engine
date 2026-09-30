@@ -102,22 +102,28 @@ describe("the audit's s2 cases, with the site's answers", () => {
     const station = Math.round((lower + upper) / 2);
     // rc.7 put it at 06:47:01.559Z; the observed ΔT, 6.3 s smaller, moved it
     // later, to 06:47:07.889Z; TT = UTC + 69.184 s exactly, 7 ms more than the
-    // model's ΔT, moves it back 7 ms.
-    expect(new Date(station).toISOString()).toBe("2026-02-26T06:47:07.882Z");
+    // model's ΔT, moved it back 7 ms, to 06:47:07.882Z. The full IAU 2000B
+    // nutation moves it 5.94 s later. The expectation is this engine's search;
+    // what makes it the better one is ERFA: on ERFA's IAU 2006/2000A ecliptic
+    // of date the same astronomy-engine vectors put the station at
+    // 06:47:13.971Z, a fit to this engine's longitudes puts it 0.047 s from
+    // that and one to rc.15's 6.156 s from it
+    // (docs/evidence/nutation-2026-09-29/results/test-expectations.json). The
+    // search itself can only find a maximum this flat to about 0.1 s.
+    expect(new Date(station).toISOString()).toBe("2026-02-26T06:47:13.822Z");
     const window = [new Date(station - 2 * DAY), new Date(station + 2 * DAY)] as const;
 
-    // astronomy-engine reuses its nutation for instants within 1e-6 day, so
-    // the longitude taken 1 ms after the search's last sample is 2.3e-11°
-    // above the one the scan computes afresh at the station. The target
-    // stays just beyond the maximum: no crossing, as for the site and rc.7.
-    const audit = L(station);
-    expect(findLongitudeCrossings("Mercury", audit, ...window, 0.5)).toEqual([]);
-
-    // Computed afresh, the target is the station sample's own longitude, and
-    // the touch is reported once, in the direction it arrived. rc.7 dropped it.
-    L(Date.UTC(1900, 0, 1));
+    // The audit took its target from astronomy-engine's nutation, which that
+    // reused for instants within 1e-6 day: read 1 ms after the search's last
+    // sample, it was 2.3e-11° above the station sample's own longitude, just
+    // beyond the maximum. The engine's nutation is computed for each instant,
+    // so that target is the station's longitude plus 2.3e-11°: no crossing,
+    // as for the site and rc.7.
     const fresh = L(station);
-    expect(fresh - audit).toBeLessThan(0);
+    expect(findLongitudeCrossings("Mercury", fresh + 2.3e-11, ...window, 0.5)).toEqual([]);
+
+    // The station sample's own longitude as the target: the touch is reported
+    // once, in the direction it arrived. rc.7 dropped it.
     expect(findLongitudeCrossings("Mercury", fresh, ...window, 0.5)).toEqual([
       { at: new Date(station), retrograde: false }
     ]);

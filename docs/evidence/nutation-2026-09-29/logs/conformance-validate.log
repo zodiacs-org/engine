@@ -1,0 +1,16 @@
+# TMPDIR=<tmp> node conformance/harness/validate.mjs --expect-total 500, Node v22.22.2
+L1 Positions: 240 vectors, 1 arbiter(s), sha256 853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c
+  position.apparent.ecliptic-true-of-date: 240
+L2 Houses and angles: 150 vectors, 5 arbiter(s), sha256 5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0
+  angles.asc-mc: 60
+  angles.vertex-east-point: 10
+  houses.cusps: 80
+L3 Time and calendars: 110 vectors, 5 arbiter(s), sha256 434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8
+  time.zone-offset: 45
+  time.local-mean-time: 5
+  time.tt-minus-utc: 10
+  time.delta-t: 15
+  calendar.to-jdn: 25
+  calendar.from-jdn: 10
+conformance: 500 vectors conform to SPEC.md
+# exit 0

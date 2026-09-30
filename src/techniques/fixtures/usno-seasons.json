@@ -1,0 +1,115 @@
+{
+ "source": "U.S. Naval Observatory, Astronomical Applications Department, Earth's Seasons API, https://aa.usno.navy.mil/api/seasons?year=<year>",
+ "retrieved": "2026-09-29",
+ "apiversion": "4.0.1",
+ "timeScale": "UT (tz 0, no daylight saving); published to the minute",
+ "responseSha256": {
+  "1850": "1589780260de242422ca8f37d278f197dc3be9abd17edf6c03282fea3c987444",
+  "1900": "33670160f04f41587dd7bc71bf760e11958eba42e73c4cb497cd975b6605fd88",
+  "1950": "0e8eadcb939217f23a239f48f47a678c01dee9f20fdd8f2a4494622526ca84c5",
+  "2000": "6d88f397190d946d045b44dd52bed81b63fb07d579af7c87a89410ab8c9a26e6",
+  "2022": "088dde435f2ed68b91ce1069d048cad77b0ca53d3578dddccd8f4f68d0d07f85"
+ },
+ "events": [
+  {
+   "published": "1850-03-20T23:02:00Z",
+   "phenomenon": "Equinox",
+   "longitude": 0
+  },
+  {
+   "published": "1850-06-21T19:59:00Z",
+   "phenomenon": "Solstice",
+   "longitude": 90
+  },
+  {
+   "published": "1850-09-23T10:00:00Z",
+   "phenomenon": "Equinox",
+   "longitude": 180
+  },
+  {
+   "published": "1850-12-22T03:37:00Z",
+   "phenomenon": "Solstice",
+   "longitude": 270
+  },
+  {
+   "published": "1900-03-21T01:39:00Z",
+   "phenomenon": "Equinox",
+   "longitude": 0
+  },
+  {
+   "published": "1900-06-21T21:40:00Z",
+   "phenomenon": "Solstice",
+   "longitude": 90
+  },
+  {
+   "published": "1900-09-23T12:20:00Z",
+   "phenomenon": "Equinox",
+   "longitude": 180
+  },
+  {
+   "published": "1900-12-22T06:41:00Z",
+   "phenomenon": "Solstice",
+   "longitude": 270
+  },
+  {
+   "published": "1950-03-21T04:35:00Z",
+   "phenomenon": "Equinox",
+   "longitude": 0
+  },
+  {
+   "published": "1950-06-21T23:36:00Z",
+   "phenomenon": "Solstice",
+   "longitude": 90
+  },
+  {
+   "published": "1950-09-23T14:43:00Z",
+   "phenomenon": "Equinox",
+   "longitude": 180
+  },
+  {
+   "published": "1950-12-22T10:13:00Z",
+   "phenomenon": "Solstice",
+   "longitude": 270
+  },
+  {
+   "published": "2000-03-20T07:35:00Z",
+   "phenomenon": "Equinox",
+   "longitude": 0
+  },
+  {
+   "published": "2000-06-21T01:48:00Z",
+   "phenomenon": "Solstice",
+   "longitude": 90
+  },
+  {
+   "published": "2000-09-22T17:28:00Z",
+   "phenomenon": "Equinox",
+   "longitude": 180
+  },
+  {
+   "published": "2000-12-21T13:37:00Z",
+   "phenomenon": "Solstice",
+   "longitude": 270
+  },
+  {
+   "published": "2022-03-20T15:33:00Z",
+   "phenomenon": "Equinox",
+   "longitude": 0
+  },
+  {
+   "published": "2022-06-21T09:14:00Z",
+   "phenomenon": "Solstice",
+   "longitude": 90
+  },
+  {
+   "published": "2022-09-23T01:04:00Z",
+   "phenomenon": "Equinox",
+   "longitude": 180
+  },
+  {
+   "published": "2022-12-21T21:48:00Z",
+   "phenomenon": "Solstice",
+   "longitude": 270
+  }
+ ]
+}

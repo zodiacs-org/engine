@@ -1,0 +1,54 @@
+# TMPDIR=<tmp> node --test conformance/harness/selftest.mjs, Node v22.22.2
+TAP version 13
+# Subtest: longitudes compare on the circle, in the rule unit
+ok 1 - longitudes compare on the circle, in the rule unit
+  ---
+  duration_ms: 1.296119
+  type: 'test'
+  ...
+# Subtest: arrays compare element by element and report the worst residual
+ok 2 - arrays compare element by element and report the worst residual
+  ---
+  duration_ms: 0.378972
+  type: 'test'
+  ...
+# Subtest: exact fields, missing fields and non-numbers fail
+ok 3 - exact fields, missing fields and non-numbers fail
+  ---
+  duration_ms: 0.691611
+  type: 'test'
+  ...
+# Subtest: validation accepts a conforming file and names each problem in a bad one
+ok 4 - validation accepts a conforming file and names each problem in a bad one
+  ---
+  duration_ms: 4.332999
+  type: 'test'
+  ...
+# Subtest: the committed vector files conform to SPEC.md
+ok 5 - the committed vector files conform to SPEC.md
+  ---
+  duration_ms: 20.059071
+  type: 'test'
+  ...
+# Subtest: the protocol: a handshake, then one response per request, in order
+ok 6 - the protocol: a handshake, then one response per request, in order
+  ---
+  duration_ms: 52.114055
+  type: 'test'
+  ...
+# Subtest: the protocol: a missing handshake or an answer out of order is refused
+ok 7 - the protocol: a missing handshake or an answer out of order is refused
+  ---
+  duration_ms: 110.275505
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 295.610287
+# exit 0

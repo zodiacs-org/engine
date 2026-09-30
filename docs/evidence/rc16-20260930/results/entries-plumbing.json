@@ -1,0 +1,808 @@
+{
+ "tool": "docs/evidence/rc16-20260930/tools/entries-plumbing.mjs",
+ "node": "v22.22.2",
+ "head": "aba647e1efbc7c0429d921ebea48d9ce2bf8e27e",
+ "srcTree": "70e3f630ba51da29f9096ef5d4c09cee53e18b82",
+ "before": {
+  "commit": "5e0d00c6e998d4ef50b57ad713e10234deeb51fd",
+  "what": "the integrated candidate before the nutation commits"
+ },
+ "patches": [
+  {
+   "from": "const { dpsi, deps, om } = nutation(t);",
+   "to": "const { dpsi, deps, om } = nutation(t, 5);"
+  },
+  {
+   "from": " + 0.00264096 * Math.sin(om) + 0.00006352 * Math.sin(2 * om)",
+   "to": ""
+  }
+ ],
+ "rows": 178416,
+ "seconds": {
+  "before": 7.4,
+  "five": 7.3,
+  "full": 7.5
+ },
+ "units": "deg: degrees (angles wrapped); degday: degrees a day (a velocity's difference over its position's length, as an angular rate); ms: milliseconds; rel and vec: relative to the size of the value",
+ "gate": {
+  "degrees": 1e-9,
+  "degreesPerDay": 1e-9,
+  "milliseconds": 1,
+  "relative": 1e-12
+ },
+ "proof": {
+  "verdict": "pass",
+  "failures": [],
+  "structural": {},
+  "idChanges": {},
+  "summary": {
+   "calc/lon/true": {
+    "type": "deg",
+    "count": 2592,
+    "max": 1.1368683772161603e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "0.576"
+   },
+   "calc/lat/true": {
+    "type": "deg",
+    "count": 2592,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "calc/dist": {
+    "type": "rel",
+    "count": 11712,
+    "max": 3.4803806360886956e-16,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "21.8"
+   },
+   "calc/speed/true": {
+    "type": "degday",
+    "count": 5184,
+    "max": 1.1368683772161603e-10,
+    "p50": 2.710505431213761e-17,
+    "p95": 2.8421709430404007e-11,
+    "largestAt": "0.384"
+   },
+   "calc/xyz": {
+    "type": "vec",
+    "count": 11712,
+    "max": 1.0202179770524106e-15,
+    "p50": 0,
+    "p95": 2.0295147191704415e-16,
+    "largestAt": "0.8"
+   },
+   "calc/vxyz": {
+    "type": "degday",
+    "count": 11712,
+    "max": 4.923301496376129e-11,
+    "p50": 0,
+    "p95": 8.724975669700405e-12,
+    "largestAt": "20.8"
+   },
+   "calc/lon/mean": {
+    "type": "deg",
+    "count": 2592,
+    "max": 1.1368683772161603e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "3.97"
+   },
+   "calc/lat/mean": {
+    "type": "deg",
+    "count": 2592,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "calc/speed/mean": {
+    "type": "degday",
+    "count": 5184,
+    "max": 5.6843418860808015e-11,
+    "p50": 1.1900203045200897e-15,
+    "p95": 1.2434497875801753e-11,
+    "largestAt": "0.385"
+   },
+   "calc/lon/fixed": {
+    "type": "deg",
+    "count": 5184,
+    "max": 2.2737367544323206e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "3.102"
+   },
+   "calc/lat/fixed": {
+    "type": "deg",
+    "count": 5184,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "calc/speed/fixed": {
+    "type": "degday",
+    "count": 10368,
+    "max": 5.6843418860808015e-11,
+    "p50": 0,
+    "p95": 2.0816681711721685e-17,
+    "largestAt": "1.107"
+   },
+   "calc/lon/true-topocentric": {
+    "type": "deg",
+    "count": 576,
+    "max": 1.1368683772161603e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "1.408"
+   },
+   "calc/lat/true-topocentric": {
+    "type": "deg",
+    "count": 576,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "calc/speed/true-topocentric": {
+    "type": "degday",
+    "count": 1152,
+    "max": 5.6843418860808015e-11,
+    "p50": 5.551115123125783e-14,
+    "p95": 1.4210854715202004e-11,
+    "largestAt": "13.216"
+   },
+   "calc/lon/mean-topocentric": {
+    "type": "deg",
+    "count": 576,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "calc/lat/mean-topocentric": {
+    "type": "deg",
+    "count": 576,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "calc/speed/mean-topocentric": {
+    "type": "degday",
+    "count": 1152,
+    "max": 5.6843418860808015e-11,
+    "p50": 0,
+    "p95": 1.4210854715202004e-11,
+    "largestAt": "14.413"
+   },
+   "calc/lon/fixed-topocentric": {
+    "type": "deg",
+    "count": 1152,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "calc/lat/fixed-topocentric": {
+    "type": "deg",
+    "count": 1152,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "calc/speed/fixed-topocentric": {
+    "type": "degday",
+    "count": 2304,
+    "max": 5.329070518200751e-12,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "17.398"
+   },
+   "calc/houses.angles": {
+    "type": "deg",
+    "count": 1872,
+    "max": 1.1368683772161603e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "12.whole.-63.4"
+   },
+   "calc/houses.vertex-east-point": {
+    "type": "deg",
+    "count": 1872,
+    "max": 1.1368683772161603e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "13.whole.51.5"
+   },
+   "calc/houses.armc": {
+    "type": "deg",
+    "count": 936,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "calc/houses.obliquity": {
+    "type": "deg",
+    "count": 936,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "calc/houses.cusps": {
+    "type": "deg",
+    "count": 11232,
+    "max": 1.1368683772161603e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "1.koch.51.5"
+   },
+   "houses/coAscendants": {
+    "type": "deg",
+    "count": 3744,
+    "max": 1.1368683772161603e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "2.whole.-63.4"
+   },
+   "houses/speeds": {
+    "type": "degday",
+    "count": 11232,
+    "max": 4.547473508864641e-12,
+    "p50": 0,
+    "p95": 1.1368683772161603e-13,
+    "largestAt": "12.koch.-63.4"
+   },
+   "houses/housePosition": {
+    "type": "deg",
+    "count": 11208,
+    "max": 4.547473508864641e-13,
+    "p50": 0,
+    "p95": 1.1368683772161603e-13,
+    "largestAt": "1.campanus.-63.4"
+   },
+   "calc/events": {
+    "type": "ms",
+    "count": 7,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "window/switches": {
+    "type": "ms",
+    "count": 268,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "sky/events": {
+    "type": "ms",
+    "count": 2873,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "sky/altitude": {
+    "type": "deg",
+    "count": 2873,
+    "max": 1.7053025658242404e-11,
+    "p50": 1.3642420526593924e-12,
+    "p95": 8.753886504564434e-12,
+    "largestAt": "4.3.Jupiter"
+   },
+   "sky/azimuth": {
+    "type": "deg",
+    "count": 2873,
+    "max": 6.889422365929931e-11,
+    "p50": 7.958078640513122e-13,
+    "p95": 7.16227077646181e-12,
+    "largestAt": "3.5.Neptune"
+   },
+   "sky/hours": {
+    "type": "ms",
+    "count": 864,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "techniques/solarReturn": {
+    "type": "ms",
+    "count": 6,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "techniques/returnChart": {
+    "type": "deg",
+    "count": 18,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "techniques/lunarReturn": {
+    "type": "ms",
+    "count": 6,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "techniques/voidOfCourse": {
+    "type": "ms",
+    "count": 52,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "techniques/davison.instant": {
+    "type": "ms",
+    "count": 6,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "techniques/davison.bodies": {
+    "type": "deg",
+    "count": 72,
+    "max": 1.1368683772161603e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "0"
+   },
+   "techniques/davison.angles": {
+    "type": "deg",
+    "count": 6,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "techniques/composite": {
+    "type": "deg",
+    "count": 72,
+    "max": 1.1368683772161603e-13,
+    "p50": 0,
+    "p95": 1.1368683772161603e-13,
+    "largestAt": "0"
+   },
+   "timing/planetaryReturns": {
+    "type": "ms",
+    "count": 258,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   }
+  }
+ },
+ "change": {
+  "structural": {
+   "window/switches": {
+    "count": 2,
+    "cases": [
+     {
+      "key": "0",
+      "rows": [
+       52,
+       50
+      ],
+      "onlyHere": [
+       [
+        -1856710321463,
+        "[{\"feature\":\"house\",\"body\":\"North Node\",\"from\":1,\"to\":2},{\"feature\":\"house\",\"body\":\"South Node\",\"from\":7,\"to\":8}]"
+       ],
+       [
+        -1856710321462,
+        "[{\"feature\":\"house\",\"body\":\"North Node\",\"from\":2,\"to\":1},{\"feature\":\"house\",\"body\":\"South Node\",\"from\":8,\"to\":7}]"
+       ]
+      ],
+      "onlyBefore": []
+     },
+     {
+      "key": "7",
+      "rows": [
+       41,
+       39
+      ],
+      "onlyHere": [
+       [
+        5699256915163,
+        "[{\"feature\":\"house\",\"body\":\"North Node\",\"from\":6,\"to\":7},{\"feature\":\"house\",\"body\":\"South Node\",\"from\":12,\"to\":1}]"
+       ],
+       [
+        5699256915164,
+        "[{\"feature\":\"house\",\"body\":\"North Node\",\"from\":7,\"to\":6},{\"feature\":\"house\",\"body\":\"South Node\",\"from\":1,\"to\":12}]"
+       ]
+      ],
+      "onlyBefore": []
+     }
+    ]
+   },
+   "window/cells": {
+    "count": 2,
+    "cases": [
+     {
+      "key": "0",
+      "here": 53,
+      "before": 51
+     },
+     {
+      "key": "7",
+      "here": 42,
+      "before": 40
+     }
+    ]
+   }
+  },
+  "idChanges": {},
+  "summary": {
+   "calc/lon/true": {
+    "type": "deg",
+    "count": 2592,
+    "max": 0.000031550919288747536,
+    "p50": 0.000012994249118492007,
+    "p95": 0.00002740972468018299,
+    "largestAt": "12.236"
+   },
+   "calc/lat/true": {
+    "type": "deg",
+    "count": 2592,
+    "max": 0.00001871075323833793,
+    "p50": 5.545791736949468e-8,
+    "p95": 0.000010797013146657264,
+    "largestAt": "12.84"
+   },
+   "calc/dist": {
+    "type": "rel",
+    "count": 11712,
+    "max": 3.0006399676567307e-9,
+    "p50": 0,
+    "p95": 1.2651485644402507e-11,
+    "largestAt": "17.296"
+   },
+   "calc/speed/true": {
+    "type": "degday",
+    "count": 5184,
+    "max": 0.000015388508245450794,
+    "p50": 0.0000026564581645516228,
+    "p95": 0.000012943502269990859,
+    "largestAt": "22.68"
+   },
+   "calc/xyz": {
+    "type": "vec",
+    "count": 11712,
+    "max": 5.475649636966103e-7,
+    "p50": 1.0610837170618501e-16,
+    "p95": 2.9785077628155655e-7,
+    "largestAt": "12.20"
+   },
+   "calc/vxyz": {
+    "type": "degday",
+    "count": 11712,
+    "max": 0.000014757755499815138,
+    "p50": 4.3466263356466844e-12,
+    "p95": 0.0000119585448689073,
+    "largestAt": "22.316"
+   },
+   "calc/lon/mean": {
+    "type": "deg",
+    "count": 2592,
+    "max": 3.410605131648481e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "10.113"
+   },
+   "calc/lat/mean": {
+    "type": "deg",
+    "count": 2592,
+    "max": 1.1368683772161603e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "6.109"
+   },
+   "calc/speed/mean": {
+    "type": "degday",
+    "count": 5184,
+    "max": 2.842170943040401e-10,
+    "p50": 1.1102230246251565e-13,
+    "p95": 2.8421709430404007e-11,
+    "largestAt": "10.113"
+   },
+   "calc/lon/fixed": {
+    "type": "deg",
+    "count": 5184,
+    "max": 3.410605131648481e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "9.126"
+   },
+   "calc/lat/fixed": {
+    "type": "deg",
+    "count": 5184,
+    "max": 1.1368683772161603e-13,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": "6.110"
+   },
+   "calc/speed/fixed": {
+    "type": "degday",
+    "count": 10368,
+    "max": 2.842170943040401e-10,
+    "p50": 0,
+    "p95": 3.410605131648481e-13,
+    "largestAt": "10.122"
+   },
+   "calc/lon/true-topocentric": {
+    "type": "deg",
+    "count": 576,
+    "max": 0.00003151543023705017,
+    "p50": 0.000013117390494699066,
+    "p95": 0.000027409690574131673,
+    "largestAt": "12.308"
+   },
+   "calc/lat/true-topocentric": {
+    "type": "deg",
+    "count": 576,
+    "max": 0.00001827400933507306,
+    "p50": 1.3415626654023072e-7,
+    "p95": 0.000010778175010273117,
+    "largestAt": "12.204"
+   },
+   "calc/speed/true-topocentric": {
+    "type": "degday",
+    "count": 1152,
+    "max": 0.000015021896615508012,
+    "p50": 0.000002583362856967142,
+    "p95": 0.000013267339227240882,
+    "largestAt": "22.300"
+   },
+   "calc/lon/mean-topocentric": {
+    "type": "deg",
+    "count": 576,
+    "max": 2.5395706870767754e-7,
+    "p50": 9.606537787476555e-11,
+    "p95": 1.252194579137722e-7,
+    "largestAt": "12.313"
+   },
+   "calc/lat/mean-topocentric": {
+    "type": "deg",
+    "count": 576,
+    "max": 2.217720975750126e-7,
+    "p50": 1.375610736431554e-10,
+    "p95": 1.152508275481523e-7,
+    "largestAt": "15.309"
+   },
+   "calc/speed/mean-topocentric": {
+    "type": "degday",
+    "count": 1152,
+    "max": 4.850893020602598e-7,
+    "p50": 2.2737367544323206e-10,
+    "p95": 3.0131142025879853e-7,
+    "largestAt": "3.309"
+   },
+   "calc/lon/fixed-topocentric": {
+    "type": "deg",
+    "count": 1152,
+    "max": 2.539859451644588e-7,
+    "p50": 9.526957001071423e-11,
+    "p95": 1.2408099792082794e-7,
+    "largestAt": "12.314"
+   },
+   "calc/lat/fixed-topocentric": {
+    "type": "deg",
+    "count": 1152,
+    "max": 2.2176971015142044e-7,
+    "p50": 1.3744738680543378e-10,
+    "p95": 1.152476443166961e-7,
+    "largestAt": "15.310"
+   },
+   "calc/speed/fixed-topocentric": {
+    "type": "degday",
+    "count": 2304,
+    "max": 4.850555512803112e-7,
+    "p50": 2.1893598045608087e-10,
+    "p95": 3.013038707422311e-7,
+    "largestAt": "3.310"
+   },
+   "calc/houses.angles": {
+    "type": "deg",
+    "count": 1872,
+    "max": 0.00008919177525967825,
+    "p50": 0.000011646996199488058,
+    "p95": 0.00002950278280877683,
+    "largestAt": "22.whole.-63.4"
+   },
+   "calc/houses.vertex-east-point": {
+    "type": "deg",
+    "count": 1872,
+    "max": 0.000031688254694017814,
+    "p50": 0.000007162731208154582,
+    "p95": 0.000024821362103466527,
+    "largestAt": "8.whole.-63.4"
+   },
+   "calc/houses.armc": {
+    "type": "deg",
+    "count": 936,
+    "max": 0.00002585432162049983,
+    "p50": 0.000011663883924484253,
+    "p95": 0.00002548234101595881,
+    "largestAt": "23.whole.0.5"
+   },
+   "calc/houses.obliquity": {
+    "type": "deg",
+    "count": 936,
+    "max": 0.00001555654091589531,
+    "p50": 0.000004959061698173173,
+    "p95": 0.000014876365639793221,
+    "largestAt": "17.whole.0.5"
+   },
+   "calc/houses.cusps": {
+    "type": "deg",
+    "count": 11232,
+    "max": 0.0002425373171490719,
+    "p50": 0.000010462320460646879,
+    "p95": 0.000027900300096916908,
+    "largestAt": "15.koch.-63.4"
+   },
+   "houses/coAscendants": {
+    "type": "deg",
+    "count": 3744,
+    "max": 0.00008455856095679337,
+    "p50": 0.000008996645647130208,
+    "p95": 0.00002917105223332328,
+    "largestAt": "6.whole.-63.4"
+   },
+   "houses/speeds": {
+    "type": "degday",
+    "count": 11232,
+    "max": 0.0090628344128163,
+    "p50": 0.000014236589493066276,
+    "p95": 0.00021377429175117868,
+    "largestAt": "12.koch.-63.4"
+   },
+   "houses/housePosition": {
+    "type": "deg",
+    "count": 11208,
+    "max": 0.00021456916238093982,
+    "p50": 0.0000025154345166811254,
+    "p95": 0.000024817146822897485,
+    "largestAt": "12.koch.-63.4"
+   },
+   "calc/events": {
+    "type": "ms",
+    "count": 7,
+    "max": 4867,
+    "p50": 772,
+    "p95": 4867,
+    "largestAt": "5"
+   },
+   "window/switches": {
+    "type": "ms",
+    "count": 179,
+    "max": 17,
+    "p50": 2,
+    "p95": 8,
+    "largestAt": "5"
+   },
+   "sky/events": {
+    "type": "ms",
+    "count": 2873,
+    "max": 25,
+    "p50": 1,
+    "p95": 4,
+    "largestAt": "2.2.Moon"
+   },
+   "sky/altitude": {
+    "type": "deg",
+    "count": 2873,
+    "max": 0.00001681215724147478,
+    "p50": 0.000001657889697526116,
+    "p95": 0.000011295902027086413,
+    "largestAt": "5.5.Uranus"
+   },
+   "sky/azimuth": {
+    "type": "deg",
+    "count": 2873,
+    "max": 0.0006798924605391221,
+    "p50": 0.00000344968429999426,
+    "p95": 0.00002232097335763683,
+    "largestAt": "3.5.Neptune"
+   },
+   "sky/hours": {
+    "type": "ms",
+    "count": 864,
+    "max": 8,
+    "p50": 1,
+    "p95": 4,
+    "largestAt": "2.1"
+   },
+   "techniques/solarReturn": {
+    "type": "ms",
+    "count": 6,
+    "max": 2652,
+    "p50": 1452,
+    "p95": 2652,
+    "largestAt": "4"
+   },
+   "techniques/returnChart": {
+    "type": "deg",
+    "count": 18,
+    "max": 0.011379088907801815,
+    "p50": 0.004019763733936088,
+    "p95": 0.011379088907801815,
+    "largestAt": "4"
+   },
+   "techniques/lunarReturn": {
+    "type": "ms",
+    "count": 6,
+    "max": 424,
+    "p50": 157,
+    "p95": 424,
+    "largestAt": "3"
+   },
+   "techniques/voidOfCourse": {
+    "type": "ms",
+    "count": 52,
+    "max": 210,
+    "p50": 16,
+    "p95": 179,
+    "largestAt": "1"
+   },
+   "techniques/davison.instant": {
+    "type": "ms",
+    "count": 6,
+    "max": 0,
+    "p50": 0,
+    "p95": 0,
+    "largestAt": null
+   },
+   "techniques/davison.bodies": {
+    "type": "deg",
+    "count": 72,
+    "max": 0.000035822635027216165,
+    "p50": 0.00003092762142387073,
+    "p95": 0.000035822635027216165,
+    "largestAt": "3"
+   },
+   "techniques/davison.angles": {
+    "type": "deg",
+    "count": 6,
+    "max": 0.0000400102544517722,
+    "p50": 0.000023465895537810866,
+    "p95": 0.0000400102544517722,
+    "largestAt": "3"
+   },
+   "techniques/composite": {
+    "type": "deg",
+    "count": 72,
+    "max": 0.000030005934263499512,
+    "p50": 0.000027614531290964806,
+    "p95": 0.000030005934263499512,
+    "largestAt": "3"
+   },
+   "timing/planetaryReturns": {
+    "type": "ms",
+    "count": 258,
+    "max": 79153,
+    "p50": 2327,
+    "p95": 12772,
+    "largestAt": "0"
+   }
+  }
+ }
+}

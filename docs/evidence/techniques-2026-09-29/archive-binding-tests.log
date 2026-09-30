@@ -1,0 +1,33 @@
+
+ RUN  v2.1.9 <scratch>/engine-techniques
+
+ ✓ scripts/verify-archive-binding.test.mjs (23 tests) 56107ms
+   ✓ archive binding check > passes a clean history and skips the rebuild until the version's archive exists 537ms
+   ✓ archive binding check > sees a rewrite on a side branch hidden by merge simplification 666ms
+   ✓ archive binding check > sees an archive carried and removed on a merged side branch 667ms
+   ✓ archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 2062ms
+   ✓ archive binding check > refuses a rewritten manifest that whitelists replaced bytes 956ms
+   ✓ archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 1268ms
+   ✓ archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 532ms
+   ✓ archive binding check > reads HEAD from git objects, never the working tree 1025ms
+   ✓ archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 5241ms
+   ✓ archive binding check > checks the receipt of every version, not only the current one 528ms
+   ✓ archive binding check > binds each archive to its recorded source commit 502ms
+   ✓ archive binding check > refuses an archive carried by a commit that does not follow its source commit 539ms
+   ✓ archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata 1654ms
+   ✓ archive binding check > refuses numeric identifiers above 2^53 - 1, where npm's semver.eq takes two versions for one 2018ms
+   ✓ archive binding check > refuses names that a case-insensitive or normalizing file system takes for one: variants of artifacts/, or two archives in it 3661ms
+   ✓ archive binding check > rebuilds with its own npm ci, whatever the checkout's node_modules holds 15092ms
+   ✓ archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH 1507ms
+   ✓ archive binding check > never runs a git that npm run puts on PATH from the checkout 5196ms
+   ✓ archive binding check > keeps code that an .npmrc names for NODE_OPTIONS out of the check and its rebuilds 2525ms
+   ✓ archive binding check > refuses a TMPDIR inside the checkout, or with a node_modules or package.json above it 3212ms
+   ✓ archive binding check > runs no hook from the checkout's .git 4539ms
+   ✓ archive binding check > ignores replace refs and grafts in the checkout's .git 1162ms
+   ✓ archive binding check > refuses an archive without a manifest entry, and a shallow checkout 782ms
+
+ Test Files  1 passed (1)
+      Tests  23 passed (23)
+   Start at  13:32:32
+   Duration  56.83s (transform 139ms, setup 0ms, collect 151ms, tests 56.11s, environment 0ms, prepare 117ms)
+

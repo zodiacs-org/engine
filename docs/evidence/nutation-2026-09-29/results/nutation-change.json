@@ -1,0 +1,23 @@
+{
+ "instants": 21037969,
+ "span": "1800-01-01T00:00 to 2200-01-01T00:00 TT, every 10 minutes",
+ "unit": "arcseconds, |engine - astronomy-engine|",
+ "largest": {
+  "dpsi": {
+   "arcsec": 0.2701,
+   "tt": "1834-03-18T14:40:00Z"
+  },
+  "deps": {
+   "arcsec": 0.08654,
+   "tt": "2114-04-28T13:00:00Z"
+  },
+  "ee": {
+   "arcsec": 0.2452,
+   "tt": "1834-03-18T14:40:00Z"
+  },
+  "tobl": {
+   "arcsec": 0.08654,
+   "tt": "2114-04-28T13:00:00Z"
+  }
+ }
+}

@@ -1,4 +1,3 @@
-import { MakeTime, e_tilt } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
 import { computeChart } from "./ephemeris.js";
@@ -147,16 +146,20 @@ const INTERMEDIATE = [
 
 describe("Placidus just below the polar limit", () => {
   it("keeps Placidus at every millisecond of the review's reproduction, where the iteration alone fell back", () => {
-    // 2000-03-20T00:00Z at 66.56186339751429°, 92.16879370494166°: the RAMC
-    // passes 270°, where the 2nd and 3rd cusps reach right ascension 270°.
+    // 2000-03-20T00:00Z at 92.16879370494166° E: the RAMC passes 270°, where
+    // the 2nd and 3rd cusps reach right ascension 270°. The review took
+    // 66.56186339751429°, 1.07e-5″ below the polar limit on astronomy-engine's
+    // five-term nutation. That obliquity was 0.00498″ below ERFA's (obl06 plus
+    // nut06a's Δε), and the full IAU 2000B series puts it 0.00030″ above: the
+    // review's latitude is now inside the polar circle, as ERFA puts it
+    // (docs/evidence/nutation-2026-09-29/results/test-expectations.json). The
+    // latitude here is the same 1.07e-5″ below the engine's limit now.
     const t0 = Date.UTC(2000, 2, 20);
     let placidus = 0;
     for (let time = t0 - 1_000; time <= t0 + 1_200; time += 1) {
-      // Each instant with its own nutation, as natalChart computes it alone.
-      e_tilt(MakeTime(new Date(time + 86_400_000)));
       const chart = computeChart({
         utc: new Date(time),
-        latitude: 66.56186339751429,
+        latitude: 66.56186193124925,
         longitude: 92.16879370494166,
         houseSystem: "placidus",
         timeKnown: true

@@ -1,0 +1,102 @@
+{
+ "note": "post hoc diagnostics; not preregistered checks",
+ "D1nutationArcsec": {
+  "engineMinusNut00b": {
+   "dpsi": {
+    "median": 2.498e-16,
+    "max": 3.55271e-15
+   },
+   "deps": {
+    "median": 6.66134e-16,
+    "max": 3.55271e-15
+   }
+  },
+  "engineMinusNut06a": {
+   "dpsi": {
+    "median": 0.000562042,
+    "max": 0.00228726
+   },
+   "deps": {
+    "median": 0.000236539,
+    "max": 0.00175923
+   }
+  },
+  "nut00bMinusNut06a": {
+   "dpsi": {
+    "median": 0.000562042,
+    "max": 0.00228726
+   },
+   "deps": {
+    "median": 0.000236539,
+    "max": 0.00175923
+   }
+  }
+ },
+ "D1meanObliquityMinusObl06Arcsec": {
+  "median": 7.27596e-12,
+  "max": 2.91038e-11
+ },
+ "D2barycentricSunAu": {
+  "engineMinusHorizons": {
+   "median": 4.54009e-06,
+   "max": 1.10582e-05
+  },
+  "astronomyEngineFormulaOnHorizonsPositionsMinusHorizons": {
+   "median": 4.55718e-06,
+   "max": 1.10485e-05
+  },
+  "fullNewtonianFormulaOnHorizonsPositionsMinusHorizons": {
+   "median": 7.76715e-07,
+   "max": 9.12932e-07
+  },
+  "engineMinusAstronomyEngineFormulaOnHorizonsPositions": {
+   "median": 1.46674e-07,
+   "max": 3.72579e-07
+  },
+  "sunDistanceFromBarycentre": {
+   "min": 0.000643082,
+   "max": 0.00932805
+  }
+ },
+ "D3lightPathOverGeometricMinusOne": {
+  "Moon": {
+   "median": 6.74066e-05,
+   "max": 9.82412e-05
+  },
+  "Mars": {
+   "median": 3.56436e-05,
+   "max": 6.43119e-05
+  }
+ },
+ "D4nutationOver1800to2200": {
+  "unit": "arcsec; rates arcsec/day",
+  "engineMinusNut00b": {
+   "dpsi": {
+    "max": 6.00586e-11,
+    "jdTt": 2386891.5
+   },
+   "deps": {
+    "max": 2.39799e-11,
+    "jdTt": 2521332.205
+   },
+   "dpsiRate": {
+    "max": 5.51735e-09,
+    "jdTt": 2508159.204
+   },
+   "depsRate": {
+    "max": 2.0921e-09,
+    "jdTt": 2439162.5
+   }
+  },
+  "engineRate": {
+   "dpsi": {
+    "max": 0.246441,
+    "jdTt": 2412820.6
+   },
+   "deps": {
+    "max": 0.0933446,
+    "jdTt": 2466552.101
+   }
+  }
+ }
+}

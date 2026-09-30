@@ -1,0 +1,94 @@
+{
+ "tool": "docs/evidence/birth-window/rc16/node-flicker.mjs",
+ "node": "v22.22.2",
+ "builds": {
+  "pre-nutation": [
+   {
+    "ingress": "2026-07-27T00:06:00.000Z",
+    "window": [
+     "2026-07-26T22:36:00.000Z",
+     "2026-07-27T01:36:00.000Z"
+    ],
+    "nodeSignSwitches": 1603,
+    "firstNodeSwitch": "2026-07-27T00:05:56.921Z",
+    "lastNodeSwitch": "2026-07-27T00:06:05.061Z",
+    "switches": 1627,
+    "unresolved": 0,
+    "flags": [],
+    "bestSeconds": 16.3
+   },
+   {
+    "ingress": "2028-03-26T15:37:00.000Z",
+    "window": [
+     "2028-03-26T14:07:00.000Z",
+     "2028-03-26T17:07:00.000Z"
+    ],
+    "nodeSignSwitches": 311,
+    "firstNodeSwitch": "2028-03-26T15:36:49.941Z",
+    "lastNodeSwitch": "2028-03-26T15:36:51.006Z",
+    "switches": 330,
+    "unresolved": 0,
+    "flags": [],
+    "bestSeconds": 5.31
+   },
+   {
+    "ingress": "2029-09-23T11:37:00.000Z",
+    "window": [
+     "2029-09-23T10:07:00.000Z",
+     "2029-09-23T13:07:00.000Z"
+    ],
+    "nodeSignSwitches": 147,
+    "firstNodeSwitch": "2029-09-23T11:36:24.204Z",
+    "lastNodeSwitch": "2029-09-23T11:36:24.781Z",
+    "switches": 164,
+    "unresolved": 0,
+    "flags": [],
+    "bestSeconds": 5.41
+   }
+  ],
+  "rc16": [
+   {
+    "ingress": "2026-07-27T00:06:00.000Z",
+    "window": [
+     "2026-07-26T22:36:00.000Z",
+     "2026-07-27T01:36:00.000Z"
+    ],
+    "nodeSignSwitches": 1349,
+    "firstNodeSwitch": "2026-07-27T00:05:50.336Z",
+    "lastNodeSwitch": "2026-07-27T00:05:55.822Z",
+    "switches": 1373,
+    "unresolved": 0,
+    "flags": [],
+    "bestSeconds": 15.49
+   },
+   {
+    "ingress": "2028-03-26T15:37:00.000Z",
+    "window": [
+     "2028-03-26T14:07:00.000Z",
+     "2028-03-26T17:07:00.000Z"
+    ],
+    "nodeSignSwitches": 299,
+    "firstNodeSwitch": "2028-03-26T15:36:37.836Z",
+    "lastNodeSwitch": "2028-03-26T15:36:38.999Z",
+    "switches": 318,
+    "unresolved": 0,
+    "flags": [],
+    "bestSeconds": 5.02
+   },
+   {
+    "ingress": "2029-09-23T11:37:00.000Z",
+    "window": [
+     "2029-09-23T10:07:00.000Z",
+     "2029-09-23T13:07:00.000Z"
+    ],
+    "nodeSignSwitches": 179,
+    "firstNodeSwitch": "2029-09-23T11:36:30.305Z",
+    "lastNodeSwitch": "2029-09-23T11:36:30.903Z",
+    "switches": 197,
+    "unresolved": 0,
+    "flags": [],
+    "bestSeconds": 4.03
+   }
+  ]
+ }
+}

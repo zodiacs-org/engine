@@ -1,9 +1,9 @@
 /**
  * Traditional timing techniques: annual and monthly profections, firdaria,
- * zodiacal releasing and solar arc directions. This is the
- * `@zodiacs/engine/timing` entry point, kept out of the root entry point so
- * that code which does not use it does not carry it.
- * See docs/timing-hellenistic.md.
+ * zodiacal releasing and solar arc directions, and planetary returns. This is
+ * the `@zodiacs/engine/timing` entry point, kept out of the root entry point
+ * so that code which does not use it does not carry it.
+ * See docs/timing-hellenistic.md, and docs/houses.md for planetary returns.
  *
  * @module
  */
@@ -81,3 +81,11 @@ export type {
 
 export { directLongitudes, solarArc, solarArcDirections } from "./timing/solar-arc.js";
 export type { DirectedLongitude, DirectedPosition, SolarArc, SolarArcDirections } from "./timing/solar-arc.js";
+
+export { RETURN_BODIES, RETURN_STEP_DAYS, planetaryReturns } from "./timing/planetary-returns.js";
+export type {
+  PlanetaryReturn,
+  PlanetaryReturnOptions,
+  PlanetaryReturns,
+  ReturnBody
+} from "./timing/planetary-returns.js";

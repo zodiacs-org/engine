@@ -46,7 +46,7 @@ describe("a receipt written by 0.1.1-rc.13 (the rc.8 conventions set)", () => {
     const parsed = parseNatalEnvelope(RC13);
     if (!parsed.ok) throw new Error(parsed.code);
     const { receipt, result } = parsed.envelope;
-    expect(receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[1]);
+    expect(receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[2]);
     expect(receipt.conventions).toMatchObject({ deltaT: "tt-minus-ut1;ut1-read-as-utc;value-in-result" });
     expect(receipt.engine.version).toBe("0.1.1-rc.13");
     expect("timeScale" in receipt).toBe(false);
@@ -104,7 +104,7 @@ describe("a receipt written by 0.1.1-rc.14 (the rc.8 conventions set)", () => {
     const parsed = parseNatalEnvelope(RC14);
     if (!parsed.ok) throw new Error(parsed.code);
     const { receipt, result } = parsed.envelope;
-    expect(receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[1]);
+    expect(receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[2]);
     expect(receipt.engine).toEqual({ name: "@zodiacs/engine", version: "0.1.1-rc.14", ephemeris: { name: "astronomy-engine", version: "2.1.19" } });
     expect("timeScale" in receipt).toBe(false);
     expect("timeScale" in result).toBe(false);
@@ -137,7 +137,7 @@ describe("a receipt written by 0.1.1-rc.14 (the rc.8 conventions set)", () => {
     // Replayed today, the chart's own receipt is of the current set, under this version.
     const today = createNatalEnvelope(chart);
     expect(today.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[0]);
-    expect(today.receipt.engine.version).toBe("0.1.1-rc.15");
+    expect(today.receipt.engine.version).toBe("0.1.1-rc.16");
     expect(verdict(today)).toBe("ok");
   });
 
@@ -197,11 +197,12 @@ describe("a receipt of the current conventions set", () => {
     expect(verdict(envelopeOf(), (copy) => (foreign(copy), (copy.result.timeScale.ut1MinusUtc.source = "tabled")))).toBe("invalid_value");
   });
 
-  it("is refused under an engine version before the set, which 0.1.1-rc.15 released", () => {
-    for (const version of ["0.1.1-rc.12", "0.1.1-rc.13", "0.1.1-rc.14", "0.1.1-rc.14+build.1", "0.1.0"]) {
+  it("is refused under an engine version before the set, which 0.1.1-rc.16 released", () => {
+    // 0.1.1-rc.15 wrote the time-basis set without the nutation (src/receipt-nutation.test.ts).
+    for (const version of ["0.1.1-rc.12", "0.1.1-rc.13", "0.1.1-rc.14", "0.1.1-rc.14+build.1", "0.1.1-rc.15", "0.1.0"]) {
       expect(verdict(envelopeOf(), (copy) => (copy.receipt.engine.version = version))).toBe("inconsistent_result");
     }
-    for (const version of ["0.1.1-rc.15", "0.1.1-rc.16", "0.1.1", "0.2.0"]) {
+    for (const version of ["0.1.1-rc.16", "0.1.1-rc.17", "0.1.1", "0.2.0"]) {
       expect(verdict(envelopeOf(), (copy) => (copy.receipt.engine.version = version))).toBe("ok");
     }
   });
@@ -319,10 +320,9 @@ describe("receipts of an instant on TT or UT1", () => {
     expect(again.receipt).toEqual(envelope.receipt);
     expect(again.result.timeScale).toEqual(envelope.result.timeScale);
     expect(again.result.deltaT).toEqual(envelope.result.deltaT);
-    // astronomy-engine reuses the nutation of any time within 1e-6 day of the
-    // last one it computed, so a replay can differ from the first run in the
-    // last digits (here the UTC chart just computed has almost the same TT).
-    again.result.bodies.forEach((body, index) => expect(body.lon).toBeCloseTo(envelope.result.bodies[index]!.lon, 9));
+    // The engine's nutation is computed for each instant (src/nutation.ts), so
+    // the replay gives the first run's result, whatever was computed between.
+    expect(again.result).toEqual(envelope.result);
     // The scale is part of the request: read as UTC, the same digits are another instant.
     expect(verdict(envelope, (copy) => (copy.receipt.timeScale = "utc"))).toBe("inconsistent_result");
   });

@@ -1,0 +1,158 @@
+# node history-check.mjs 93ebae9..ef44477 <patterns> <examples> --staged
+# 2026-09-30, git 2.43.0, Node v22.22.2
+
+Labels searched (79 data patterns and 10 name patterns, kept outside the repository):
+  person A
+  person B
+  person C
+  person D
+  person E
+  person F
+  person G
+
+Commits: 38, the last of them the index. For each, the lines it adds, the contents of the binary files it adds or changes, the paths it adds and its message:
+- 9f38ed6 Add @zodiacs/engine/calc: a uniform calculation API with frames and outputs
+    binary files read: 0; paths added: 6
+    birth data: none
+- 5bd3a8e Preregister the calc API's comparison with JPL Horizons and ERFA
+    binary files read: 0; paths added: 1
+    birth data: none
+- 8f8f25e Compare the calc API with JPL Horizons and ERFA; measured bounds
+    binary files read: 0; paths added: 164
+    birth data: none
+- ed45426 Add round-trip fixtures for the calc API
+    binary files read: 0; paths added: 2
+    birth data: none
+- 3838e51 Address the review of the calc API: bounds, span, receipts, evidence
+    binary files read: 0; paths added: 17
+    birth data: none
+- 5d3400e Read the calc API's instants on rc.15's time basis
+    binary files read: 0; paths added: 1
+    birth data: none
+- c637381 Add @zodiacs/engine/window: birth-time window partitions
+    binary files read: 0; paths added: 6
+    birth data: none
+- d03f60c Preregister the 1,000-window check of birth-time windows
+    binary files read: 0; paths added: 6
+    birth data: none
+- 09f8aa1 Record the 1,000-window check of birth-time windows: PASS
+    binary files read: 0; paths added: 9
+    birth data: none
+- a8fb519 birthWindow: leave slow node ingresses unresolved, split at the ΔT seam, guard the polar limit
+    binary files read: 0; paths added: 4
+    birth data: none
+- e271718 Name 2071 among the node's over-budget ingresses; reword the pole refusal
+    binary files read: 0; paths added: 0
+    birth data: none
+- c68e68c Time birth-time windows again on the reworked search
+    binary files read: 0; paths added: 0
+    birth data: none
+- a33ac3e Fit the package under its 300,000-byte gate
+    binary files read: 0; paths added: 0
+    birth data: none
+- b9f566c Record the checks after the review: gates, the 1,000 windows and the review's 300
+    binary files read: 0; paths added: 1
+    birth data: none
+- 4440865 Correct the review's documentation points; add its second-round checker
+    binary files read: 0; paths added: 2
+    birth data: none
+- c1b047f Check the unresolved intervals' edges with the review's second-round checker
+    binary files read: 0; paths added: 0
+    birth data: none
+- f36d69e Put birth-time windows on rc.15's time basis
+    binary files read: 0; paths added: 0
+    birth data: none
+- ecc4748 Preregister the gates for the techniques entry point
+    binary files read: 0; paths added: 1
+    birth data: none
+- 99f454e Add @zodiacs/engine/techniques: returns, relationship charts, void of course, patterns, dignities, Moon signs
+    binary files read: 0; paths added: 29
+    birth data: none
+- 2646eef Correct the techniques' citations; measure ./geo's graph
+    binary files read: 0; paths added: 0
+    birth data: none
+- eba9452 Name the inputs of the differing cases in measure.mjs
+    binary files read: 0; paths added: 0
+    birth data: none
+- 0872cc0 Record the results of the techniques gates
+    binary files read: 0; paths added: 4
+    birth data: none
+- e17ad9a Preregister the gates for house positions, co-ascendants, speeds and returns
+    binary files read: 0; paths added: 1
+    birth data: none
+- d71567a Add house positions, co-ascendants, cusp speeds and planetary returns
+    binary files read: 0; paths added: 35
+    birth data: none
+- e8e526f Preregister the sky and Chinese-calendar gates before measuring
+    binary files read: 0; paths added: 1
+    birth data: none
+- 578c28d Add the sky entry point: rise, set, transit and planetary hours
+    binary files read: 0; paths added: 14
+    birth data: none
+- d66d30e Measure the sky entry; record the results
+    binary files read: 0; paths added: 7
+    birth data: none
+- 5e0d00c Budget the calc and window entries; keep the root off every opt-in entry
+    binary files read: 0; paths added: 0
+    birth data: none
+- 5df60b5 Add the IAU 2000B nutation, all 77 terms, as an engine module
+    binary files read: 0; paths added: 6
+    birth data: none
+- c3aabbd Take the engine's nutation from its own IAU 2000B series
+    binary files read: 0; paths added: 6
+    birth data: none
+- 3f8a55f Keep the nutation coefficients as text and sum the terms from products
+    binary files read: 0; paths added: 0
+    birth data: none
+- 148004a Record the evidence for the full IAU 2000B nutation, and document it
+    binary files read: 0; paths added: 46
+    birth data: none
+- 704cadc Move calc, window and sky onto the engine's IAU 2000B nutation
+    binary files read: 0; paths added: 2
+    birth data: none
+- 7e721b7 Measure calc against Horizons and ERFA again after the nutation; bounds from the rerun
+    binary files read: 0; paths added: 6
+    birth data: none
+- aba647e Rerun each feature's gates and evidence figures after the nutation
+    binary files read: 0; paths added: 33
+    birth data: none
+- ddbbaa0 Release candidate 0.1.1-rc.16: five opt-in entries and the full IAU 2000B nutation
+    binary files read: 0; paths added: 29
+    birth data: none
+- ef44477 Carry the packed 0.1.1-rc.16 tarball
+    binary files read: 1; paths added: 2
+    birth data: none
+- (the index against HEAD: the commit being made)
+    binary files read: 0; paths added: 13
+    birth data: none
+
+The tree of ef44477, 1046 files, gzip archives decompressed:
+  birth data: none
+  name only: person A: 27 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt
+  name only: person B: 26 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt
+  name only: person C: 8 lines, in docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt
+  name only: person D: 6 lines, in docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt
+  name only: person E: 13 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt
+  name only: person F: 17 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt
+  name only: person G: 33 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt
+
+The published worked examples that CONTRIBUTING.md allows: the files of that tree that name each, and those that hold its birth data (cited: the file also holds every part of the citation):
+- Christopher Reeve: Hamish Saunders, Solar Arc Directions (1996), p. 3
+    named in 18 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, docs/timing-hellenistic.md, scripts/module-resolution-smoke.mjs, scripts/verify-packed-consumer.mjs, src/timing/firdaria.test.ts, src/timing/profections.test.ts, src/timing/releasing.test.ts, src/timing/solar-arc.test.ts
+    birth data in 1 files:
+      src/timing/profections.test.ts (cited)
+- Coretta Scott King: Hamish Saunders, Solar Arc Directions (1996), p. 4
+    named in 14 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/timing/firdaria.test.ts, src/timing/releasing.test.ts, src/timing/solar-arc.test.ts
+    birth data in 0 files:
+- Princess Diana: Hamish Saunders, Solar Arc Directions (1996), p. 5
+    named in 12 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/timing/solar-arc.test.ts
+    birth data in 0 files:
+- Charlie Chaplin: Juan Estadella, Predictive Astrology, 3rd ed. (2019), pp. 84-85
+    named in 13 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/progressions.test.ts, src/timing/solar-arc.test.ts
+    birth data in 1 files:
+      docs/evidence/rc12-20260928/sources.md (cited)
+- The native of Vettius Valens, Anthologies IV.9, tr. Mark T. Riley (2010), pp. 75-76
+    named in 24 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, docs/evidence/houses-extra-2026-09-29/full-tests.log, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/fix-full-tests.log, docs/evidence/rc15-20260929/full-tests.log, docs/evidence/rc15-20260929/rebuilt/full-tests-v20.19.0.log, docs/evidence/rc15-20260929/rebuilt/full-tests-v22.22.2.log, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/full-tests-v20.19.0.log, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/techniques-2026-09-29/gates.log, docs/evidence/timing-hellenistic-2026-09-28/README.md, docs/timing-hellenistic.md, scripts/module-resolution-smoke.mjs, src/timing/profections.test.ts, src/timing/profections.ts, src/timing/releasing.test.ts, src/timing/releasing.ts
+    birth data in 0 files:
+
+Birth data found: 0 lines added in the commits, 0 lines in the tree.

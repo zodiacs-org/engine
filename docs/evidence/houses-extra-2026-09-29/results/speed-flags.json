@@ -1,0 +1,218 @@
+{
+ "swisseph": "2.10.03",
+ "what": "Values over 0.004 deg/day + 1e-6 |v| against the engine's speed (gate S) and against a central difference of Swiss's own cusps (swiss-self-difference.py), value by value",
+ "sets": {
+  "G": {
+   "alcabitius": {
+    "values": 240000,
+    "overInBoth": 42,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "campanus": {
+    "values": 240000,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "equal": {
+    "values": 240000,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "equal-mc": {
+    "values": 240000,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "koch": {
+    "values": 177804,
+    "overInBoth": 118504,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "meridian": {
+    "values": 240000,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "morinus": {
+    "values": 240000,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "placidus": {
+    "values": 177804,
+    "overInBoth": 93984,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "porphyry": {
+    "values": 240000,
+    "overInBoth": 80000,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "regiomontanus": {
+    "values": 240000,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "topocentric": {
+    "values": 240000,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "vehlow": {
+    "values": 240000,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "whole": {
+    "values": 240000,
+    "overInBoth": 80000,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   }
+  },
+  "L": {
+   "alcabitius": {
+    "values": 67392,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "campanus": {
+    "values": 67392,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "equal": {
+    "values": 67392,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "equal-mc": {
+    "values": 67392,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "koch": {
+    "values": 66816,
+    "overInBoth": 44544,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "meridian": {
+    "values": 67392,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "morinus": {
+    "values": 67392,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "placidus": {
+    "values": 66816,
+    "overInBoth": 44544,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "porphyry": {
+    "values": 67392,
+    "overInBoth": 22464,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "regiomontanus": {
+    "values": 67392,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "topocentric": {
+    "values": 67392,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "vehlow": {
+    "values": 67392,
+    "overInBoth": 0,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   },
+   "whole": {
+    "values": 67392,
+    "overInBoth": 22464,
+    "overAgainstEngineOnly": 0,
+    "overAgainstOwnDifferenceOnly": 0,
+    "notDifferenced": 0,
+    "notDifferencedOverAgainstEngine": 0
+   }
+  }
+ }
+}

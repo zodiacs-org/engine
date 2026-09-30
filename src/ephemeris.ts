@@ -1,22 +1,20 @@
 import {
   AstroTime,
   Body,
-  EclipticGeoMoon,
+  GeoMoon,
   GeoMoonState,
   GeoVector,
   MakeTime,
-  RotateVector,
-  Rotation_EQJ_ECT,
-  SetDeltaTFunction,
-  Vector,
-  e_tilt
+  SetDeltaTFunction
 } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
 import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
 import { deltaT } from "./deltat.js";
+import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
 import { computeAngles, computeHouses, eastPointOf, vertexOf } from "./houses.js";
+import { tilt } from "./nutation.js";
 import { hellenisticLots, meanApogee, meanNodeLongitude, sectOf } from "./points.js";
 import { EPHEMERIS_SPAN, outsideReferenceSpan } from "./reference-span.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "./signs.js";
@@ -100,13 +98,14 @@ function evaluated<T>(run: () => T): T {
 
 /**
  * Greenwich apparent sidereal time, hours: astronomy-engine 2.1.19's own
- * sidereal_time, term for term (the Earth rotation angle from UT1, the IAU
- * 2006 polynomial and the equation of the equinoxes on TT), without its cache,
- * which is keyed by TT alone and so cannot tell two UT1s at one TT apart.
+ * sidereal_time, term for term (the Earth rotation angle from UT1 and the IAU
+ * 2006 polynomial on TT), with the engine's equation of the equinoxes on TT
+ * (src/nutation.ts), and without its cache, which is keyed by TT alone and so
+ * cannot tell two UT1s at one TT apart.
  */
 export function gastHours(time: AstroTime): number {
   const t = time.tt / 36525;
-  const eqeq = 15 * e_tilt(time).ee;
+  const eqeq = tilt(time.tt).ee;
   const thet1 = 0.779057273264 + 0.00273781191135448 * time.ut;
   const thet3 = time.ut % 1;
   let theta = 360 * ((thet1 + thet3) % 1);
@@ -118,20 +117,6 @@ export function gastHours(time: AstroTime): number {
   let gst = ((st / 3600 + theta) % 360) / 15;
   if (gst < 0) gst += 24;
   return gst;
-}
-
-/**
- * Run `fn` with astronomy-engine's ΔT fixed at `seconds` (with 0, an
- * AstroTime built from TT days has exactly that TT), restoring the engine's
- * model afterwards. For modules that call astronomy-engine directly.
- */
-export function onEngineClock<T>(seconds: number, fn: () => T): T {
-  SetDeltaTFunction(() => seconds);
-  try {
-    return fn();
-  } finally {
-    SetDeltaTFunction(deltaT);
-  }
 }
 
 /**
@@ -166,32 +151,34 @@ const PLANETS = [
   { name: "Pluto", body: Body.Pluto }
 ] as const satisfies readonly { name: BodyName; body: Body }[];
 
-function eclipticOfDate(body: Body, time: AstroTime): { lon: number; lat: number } {
+/** A planet's apparent geocentric vector on the ecliptic and equinox of date (src/frame.ts). */
+function planetOfDate(body: Body, time: AstroTime): { lon: number; lat: number } {
   const equatorial = GeoVector(body, time, true);
-  const ecliptic = RotateVector(Rotation_EQJ_ECT(time), equatorial);
-  const lon = normalizeLongitude(Math.atan2(ecliptic.y, ecliptic.x) * RAD);
-  const lat = Math.asin(ecliptic.z / Math.hypot(ecliptic.x, ecliptic.y, ecliptic.z)) * RAD;
-  return { lon, lat };
+  return eclipticOfDate(equatorial.x, equatorial.y, equatorial.z, time.tt);
 }
 
+/**
+ * The Moon on the ecliptic of date: astronomy-engine's lunar series, which
+ * GeoMoon turns from the mean ecliptic of date to EQJ with its own precession.
+ */
 function moonOfDate(time: AstroTime): { lon: number; lat: number } {
-  const moon = EclipticGeoMoon(time);
-  return { lon: normalizeLongitude(moon.lon), lat: moon.lat };
+  const equatorial = GeoMoon(time);
+  return eclipticOfDate(equatorial.x, equatorial.y, equatorial.z, time.tt);
 }
 
 /** Ascending node of the Moon's instantaneous geocentric orbit plane. */
 function trueNodeLongitude(time: AstroTime): number {
   const state = GeoMoonState(time);
-  const angularMomentum = {
-    x: state.y * state.vz - state.z * state.vy,
-    y: state.z * state.vx - state.x * state.vz,
-    z: state.x * state.vy - state.y * state.vx
-  };
-  const eclipticMomentum = RotateVector(
-    Rotation_EQJ_ECT(time),
-    new Vector(angularMomentum.x, angularMomentum.y, angularMomentum.z, time)
+  const frame = eclipticFrame(time.tt);
+  // The orbit's angular momentum on the mean ecliptic of date, whose
+  // longitudes gain Δψ on the true equinox.
+  const [x, y] = meanEcliptic(
+    frame,
+    state.y * state.vz - state.z * state.vy,
+    state.z * state.vx - state.x * state.vz,
+    state.x * state.vy - state.y * state.vx
   );
-  return normalizeLongitude(Math.atan2(eclipticMomentum.x, -eclipticMomentum.y) * RAD);
+  return normalizeLongitude(Math.atan2(x, -y) * RAD + frame.tilt.dpsi / 3600);
 }
 
 function longitudeAt(body: BodyName, ms: number, clock: Clock): number {
@@ -207,7 +194,7 @@ function longitudeOn(body: BodyName, basis: TimeBasis): number {
   }
   const planet = PLANETS.find((candidate) => candidate.name === body);
   if (!planet) throw new RangeError(`Unknown body: ${body}`);
-  return eclipticOfDate(planet.body, time).lon;
+  return planetOfDate(planet.body, time).lon;
 }
 
 /** Apparent longitude at a UTC instant, on the engine's time basis. */
@@ -273,7 +260,7 @@ export function computeBodies(date: Date): BodyPosition[] {
 function bodiesAt(ms: number, clock: Clock): BodyPosition[] {
   const bodies: BodyPosition[] = [];
   for (const planet of PLANETS) {
-    const coordinates = eclipticOfDate(planet.body, timeAt(ms, clock));
+    const coordinates = planetOfDate(planet.body, timeAt(ms, clock));
     bodies.push(
       position(planet.name, coordinates.lon, coordinates.lat, speedAt(planet.name, ms, clock))
     );
@@ -319,7 +306,7 @@ function chartAt(input: ChartInput): Chart {
       gastHours: gastHours(time),
       latitude: input.latitude,
       longitude: input.longitude,
-      obliquity: e_tilt(time).tobl
+      obliquity: tilt(time.tt).tobl
     };
     angles = computeAngles(angleInput);
     const result = computeHouses(input.houseSystem, angleInput, angles);
@@ -347,7 +334,7 @@ function chartAt(input: ChartInput): Chart {
 function meanLunarPoints(basis: TimeBasis): { node: number; apogee: { lon: number; lat: number } } {
   const time = timeOf(basis);
   const centuries = time.tt / 36525;
-  const nutation = e_tilt(time).dpsi / 3600;
+  const nutation = tilt(time.tt).dpsi / 3600;
   return { node: meanNodeLongitude(centuries, nutation), apogee: meanApogee(centuries, nutation) };
 }
 
@@ -375,7 +362,7 @@ export function computePoints(chart: Chart): ChartPoints {
 
 /**
  * Derive equatorial coordinates and declination aspects from the chart's full
- * ecliptic positions, using the provider's true obliquity on the chart's clock
+ * ecliptic positions, using the engine's true obliquity on the chart's clock
  * (its time scale and any pinned ΔT). This adds no claim to the natal receipt.
  */
 export function computeChartDeclinations(chart: Chart): ChartDeclinations {
@@ -394,7 +381,7 @@ export function computeChartDeclinations(chart: Chart): ChartDeclinations {
   return evaluated(() => {
     const basis = timeBasis(date.getTime(), scale, pin);
     return {
-      ...chartBodyDeclinations(bodies, e_tilt(timeOf(basis)).tobl),
+      ...chartBodyDeclinations(bodies, tilt(timeOf(basis).tt).tobl),
       utc: date.toISOString(),
       deltaT: basis.deltaT
     };
@@ -421,7 +408,7 @@ function pointsAt(chart: Chart): ChartPoints {
     gastHours: gastHours(time),
     latitude,
     longitude,
-    obliquity: e_tilt(time).tobl
+    obliquity: tilt(time.tt).tobl
   };
   points.push(
     pointPosition("Vertex", vertexOf(angleInput, computeAngles(angleInput)), 0, null),

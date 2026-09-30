@@ -2,25 +2,25 @@
 # 2026-09-29, git 2.43.0, Node v22.22.2
 
 Labels searched (73 data patterns and 7 name patterns, kept outside the repository):
-  Al Gore
-  George Lucas
-  Dr Dre
-  Steve Wozniak
-  Lisa Marie Presley
-  Robert and Ted Kennedy
-  Frida Kahlo
+  person A
+  person B
+  person C
+  person D
+  person E
+  person F
+  person G
 
 Commits: 3, the last of them the index. For each, the lines it adds, the contents of the binary files it adds or changes, the paths it adds and its message:
 - 104bd5a Release candidate 0.1.1-rc.15: time basis, timing and Vedic entries, Placidus bisection, review fixes
     binary files read: 1; paths added: 236
     birth data: none
-    name only: Al Gore: 11 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-    name only: George Lucas: 10 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-    name only: Dr Dre: 5 lines, in docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-    name only: Steve Wozniak: 3 lines, in docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-    name only: Lisa Marie Presley: 10 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-    name only: Robert and Ted Kennedy: 14 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-    name only: Frida Kahlo: 14 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+    name only: person A: 11 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+    name only: person B: 10 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+    name only: person C: 5 lines, in docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+    name only: person D: 3 lines, in docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+    name only: person E: 10 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+    name only: person F: 14 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+    name only: person G: 14 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
 - cbad72c Carry the packed 0.1.1-rc.15 tarball
     binary files read: 1; paths added: 2
     birth data: none
@@ -30,13 +30,13 @@ Commits: 3, the last of them the index. For each, the lines it adds, the content
 
 The tree of cbad72c, 589 files, gzip archives decompressed:
   birth data: none
-  name only: Al Gore: 11 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-  name only: George Lucas: 10 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-  name only: Dr Dre: 5 lines, in docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-  name only: Steve Wozniak: 3 lines, in docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-  name only: Lisa Marie Presley: 10 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-  name only: Robert and Ted Kennedy: 14 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
-  name only: Frida Kahlo: 14 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+  name only: person A: 11 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+  name only: person B: 10 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+  name only: person C: 5 lines, in docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+  name only: person D: 3 lines, in docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+  name only: person E: 10 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+  name only: person F: 14 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
+  name only: person G: 14 lines, in docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt
 
 The published worked examples that CONTRIBUTING.md allows: the files of that tree that name each, and those that hold its birth data (cited: the file also holds every part of the citation):
 - Christopher Reeve: Hamish Saunders, Solar Arc Directions (1996), p. 3

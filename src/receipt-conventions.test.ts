@@ -62,7 +62,7 @@ describe("receipt conventions", () => {
     expect(parsed.ok).toBe(true);
     if (!parsed.ok) return;
     expect(parsed.envelope.receipt.engine).toEqual({ name: "@zodiacs/engine", version: "0.1.1-rc.7" });
-    expect(parsed.envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[2]);
+    expect(parsed.envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[3]);
     expect(parsed.envelope.receipt.conventions.planetPositions).toBe(
       "apparent-geocentric-ecliptic-of-date"
     );
@@ -92,9 +92,9 @@ describe("receipt conventions", () => {
   it("names what the positions are corrected for", () => {
     const [current] = NATAL_RECEIPT_CONVENTION_SETS;
     expect(current.planetPositions).toBe("aberrated-geocentric-ecliptic-of-date;no-deflection");
-    expect(current.moonPosition).toBe(
-      "astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration"
-    );
+    // From 0.1.1-rc.16 the Moon is astronomy-engine's GeoMoon turned by the
+    // engine's own frame and nutation (src/receipt-nutation.test.ts).
+    expect(current.moonPosition).toBe("astronomy-engine-geo-moon;no-light-time;no-aberration");
   });
 
   it("does not judge an old receipt's flags by the new rule", () => {

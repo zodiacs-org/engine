@@ -3,21 +3,24 @@
 Pure TypeScript astrology calculations for browsers and Node.js. The package
 computes tropical planetary positions, natal charts, transit snapshots,
 synastry, secondary progressions, Moon phase, and Saturn-return seasons, and,
-in separate entries, Hellenistic timing techniques and sidereal positions and
-Jyotish techniques. Its calculations are synchronous; only loading a zone's
+in separate entries, one calculation API over frames, centers and
+corrections with bounds and receipts, birth-time windows, house positions and
+cusp speeds, rise, set and transit times and planetary hours, returns and
+relationship charts, Hellenistic timing techniques, and sidereal positions
+and Jyotish techniques. Its calculations are synchronous; only loading a zone's
 history before 1970 (`prepareLocalTime`) and the GeoNames client, both in
 `@zodiacs/engine/geo`, are asynchronous. It is ESM-only, has no import-time
 side effects, and performs no network request from its core entry point. Its
 one runtime side effect is the ΔT it installs in astronomy-engine (see Time
 below).
 
-**Release candidate: 0.1.1-rc.15.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.16.** Public npm lookups for this package returned
 404 on 2026-09-26. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.15.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.16.tgz
 ```
 
 The package runs in browsers through a bundler, and in Node.js 20.19.0 or a
@@ -32,7 +35,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.15.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.16.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -61,27 +64,26 @@ dependencies afresh with `npm ci` and takes nothing from the checkout's
 needs merge commits: a squash or rebase merge drops the source commits it
 checks against, and the check then fails.
 
-This candidate reads a chart's instant on a time basis: from 1972 to
-2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS UT1 − UTC,
-and otherwise as UT1 with the ΔT model, or on UT1 or TT when `timeScale` says
-so (see Time). From 1972 to 2027-10-02 a chart's angles therefore differ from
-rc.14's by UT1 − UTC, and its positions by less: in 1,801 synthetic charts the
-ascendant by up to 45.0″ and the Moon by up to 0.462″, and in a review's wider
-sample by up to 101.03″ and 0.4885″, near 65° S
-(`docs/evidence/rc15-20260929/review-sample.json`). Before and after that span
-its angles and houses are unchanged. `@zodiacs/engine/geo` reads wall times before 1970 on the
-tzdb 2025c history it ships, which `prepareLocalTime` must load first, and can
-read a birthplace's own mean time and a Julian date; unknown options and form
-keys now throw, and `lmt` means that a local-mean-time clock read the time. Two
-entry points are new, `@zodiacs/engine/timing` and `@zodiacs/engine/vedic`, and
-the root imports neither. Placidus no longer falls back to whole signs just
-below the polar limit. Receipts gain a conventions set that records the time
-basis; receipts of the earlier sets, rc.13's and rc.14's included, stay
-readable and replay. The package gate is now a budget for each entry point's
-import graph and a stated cap for the whole package (CHANGELOG.md). The
-ephemeris is still astronomy-engine 2.1.19. See CHANGELOG.md for the release
-history and `docs/evidence/rc15-20260929/` for this candidate's checks. Site
-adoption is reviewed separately.
+This candidate brings five opt-in entry points onto rc.15:
+`@zodiacs/engine/calc`, one calculation API over eight frames, four centers
+and three corrections, with speeds, bounds and receipts; `/window`, birth-time
+window partitions; `/techniques`, returns, composite and Davison charts, the
+void-of-course Moon, aspect patterns, dignities and Moon signs; `/houses`,
+house positions of bodies with latitude, co-ascendants and cusp speeds; and
+`/sky`, rise, set, transit and planetary hours. `@zodiacs/engine/timing`
+gains planetary returns. The root imports none of them. The nutation is now
+the full IAU 2000B series, which the engine evaluates itself (see Nutation):
+every longitude moves from rc.15's by the change in Δψ, up to 0.2701″ from
+1800 to 2200, and the angles and cusps by the change in the sidereal time and
+the true obliquity, up to 0.8003″ over 9,697 synthetic charts at places up to
+60.17° N, and more toward the polar circle. Receipts gain a
+conventions set that names the nutation; rc.15's receipts stay readable. As
+in rc.15, a chart's instant is read on a time basis: from 1972 to 2027-10-02
+as UTC, with TT from the leap seconds and UT1 from IERS UT1 − UTC, and
+otherwise as UT1 with the ΔT model, or on UT1 or TT when `timeScale` says so
+(see Time). The ephemeris is still astronomy-engine 2.1.19. See CHANGELOG.md
+for the release history and `docs/evidence/rc16-20260930/` for this
+candidate's checks. Site adoption is reviewed separately.
 
 ## Natal chart in 10 lines
 
@@ -173,16 +175,51 @@ for (const aspect of today.aspects) {
   longitude function of your own, without the ephemeris.
 - `@zodiacs/engine/geo` provides IANA local-time resolution, Julian calendar
   dates and a client for a separately hosted, sharded GeoNames index.
+- `@zodiacs/engine/techniques` provides solar and lunar returns, composite and
+  Davison charts, the void-of-course Moon, aspect patterns, essential
+  dignities and the Moon signs possible over a date (see `docs/techniques.md`).
 - `@zodiacs/engine/timing` provides profections, firdaria, zodiacal releasing
-  and solar arc directions (see `docs/timing-hellenistic.md`).
+  and solar arc directions (see `docs/timing-hellenistic.md`), and planetary
+  returns (see `docs/houses.md`).
+- `@zodiacs/engine/houses` provides the house position of a body with ecliptic
+  latitude in each house system, the co-ascendants and the polar ascendant,
+  and the speeds of the cusps and the angles (see `docs/houses.md`). It
+  imports no ephemeris and no module of the root entry.
 - `@zodiacs/engine/vedic` provides the sidereal zodiac: ayanamsas, sidereal
   charts, nakshatras, vargas, KP sub-lords and dashas (see `docs/vedic.md`).
+- `@zodiacs/engine/sky` provides rise, set and transit times for an observer
+  and planetary hours (see `docs/sky.md`).
+- `@zodiacs/engine/window` partitions a birth-time window into cells within
+  which the chart's signs, houses and aspects are constant (see *Birth-time
+  windows*).
+
+### Uniform calculation API
+
+`@zodiacs/engine/calc` offers `calc`, `houses`, `events` and `chart` with one
+vocabulary: instants as ISO strings, Dates or `{ jd, scale: "UTC" | "UT1" | "TT" }`
+on the engine's time basis, as `positions()` reads them;
+eight frames (the ecliptic or the equator; true or mean of date, J2000.0 or
+the ICRS); geocentric, heliocentric, barycentric and topocentric centers; and
+apparent, astrometric or geometric positions with distances and speeds.
+Results carry bounds and a receipt of convention ids. A measured bound is the
+largest difference from JPL Horizons on 32 instants from 1802 to 2188: a
+sample maximum, not a limit. An estimated bound names what it rests on. What
+this version does not compute comes back as a typed refusal, such as the
+sidereal zodiac, or an instant whose UT1 or TT is outside 1800 to 2200: there
+calc has no comparison to take a bound from, while the root entry's functions
+still compute such an instant and flag it `outside-reference-span`. With
+every default, `calc({ body, time })` is the position `positions()` gives, to
+the bit. The root entry loads none of it. The reference, with the Swiss Ephemeris flag
+mapping and the measured accuracy, is
+[docs/calc.md](https://github.com/zodiacs-org/engine/blob/main/docs/calc.md).
 
 Returned longitudes use degrees in `[0, 360)` and positions include sign and degree
 annotations. Charts use the tropical ecliptic of date. Planetary positions are
 geocentric and corrected for light time and aberration, but not for the Sun's
-gravitational deflection; the Moon's series carries neither correction. This
-package does not calculate topocentric parallax.
+gravitational deflection; the Moon's series carries neither correction. The
+chart functions do not calculate topocentric parallax; `@zodiacs/engine/calc`
+gives topocentric positions (`center: { topocentric }`), and
+`@zodiacs/engine/sky` finds rise and set for a topocentric observer.
 
 Positions have been compared with an independent ephemeris from 1800-01-01T00:00Z
 up to 2200-01-01T00:00Z, exported as `REFERENCE_SPAN`. A chart outside that span
@@ -348,24 +385,27 @@ Out-of-bounds means strictly `abs(dec) > trueObliquity`, without an
 uncertainty allowance. Each row also carries `boundMarginArcsec`, the signed
 margin `(abs(dec) − trueObliquity) × 3600`: positive beyond the bound, negative
 inside it. For every row but the exempt Sun below, `outOfBounds` is exactly
-`boundMarginArcsec > 0`. In `chartDeclinations`, `trueObliquity` is
-astronomy-engine's true obliquity of date at the chart instant on the chart's
-clock: the IAU 2006 mean obliquity plus astronomy-engine's five-term truncation
-of the IAU 2000B nutation in obliquity. That is not the full IAU 2000B value:
-it differed from ERFA's `obl06` plus `nut00b` by up to 0.086″ at 20,000
-instants from 1850 to 2150. The pure functions use the obliquity they are given.
+`boundMarginArcsec > 0`. In `chartDeclinations`, `trueObliquity` is the
+engine's true obliquity of date at the chart instant on the chart's clock: the
+IAU 2006 mean obliquity plus the IAU 2000B nutation in obliquity, all 77 terms
+(see *Nutation*). It equals ERFA's `obl06` plus `nut00b` within the tests'
+tolerances (1e-9″ and 1e-10″), and at 20,000 instants from 1850 to 2150 it was
+within 1.63 mas of `obl06` plus `nut06a` (IAU 2000A), where astronomy-engine's
+five-term value, used until this change, was up to 85.6 mas from both. The
+pure functions use the obliquity they are given.
 
 The flag describes the ephemeris's position, and it agrees with the real sky
 only where the margin exceeds the ephemeris's error in declination. Against
-JPL's DE440s at those 20,000 instants, the largest declination errors were:
+JPL's DE440s at those 20,000 instants, the largest declination errors were,
+rounded up (`docs/evidence/nutation-2026-09-29/results/declination-truth.json`):
 
 | Body | Largest error | Body | Largest error |
 | --- | ---: | --- | ---: |
 | Sun | 2.7″ | Jupiter | 16.1″ |
 | Moon | 3.4″ | Saturn | 21.6″ |
 | Mercury | 12.2″ | Uranus | 19.3″ |
-| Venus | 14.7″ | Neptune | 15.4″ |
-| Mars | 14.5″ | Pluto | 4.6″ |
+| Venus | 14.8″ | Neptune | 15.5″ |
+| Mars | 14.6″ | Pluto | 4.6″ |
 
 These are sample maxima, not bounds, and they grow outside `REFERENCE_SPAN`.
 Within them the flag can be wrong either way: at 2022-10-22T08:11:10.756Z the
@@ -415,7 +455,11 @@ not include this analysis; the result states that scope explicitly.
 `houseSystem` takes one of thirteen systems. Each is the definition Swiss
 Ephemeris uses, and every one agrees with Swiss's `swe_houses_armc` to within
 0.0001″ given the same sidereal time, latitude and obliquity (Placidus, which
-iterates, to 0.01″).
+iterates, to 0.01″). End to end, from an instant read as UT1 as Swiss reads
+it, every system was within 0.055″ of Swiss's `swe_houses_ex` from 1850 to
+2049, on a ladder of latitudes from 55° to 66.6° and on 3,000 draws within 66°
+of the equator (`docs/evidence/nutation-2026-09-29/results/ladder.json`);
+outside those years Swiss uses a long-term sidereal time of its own.
 
 | `houseSystem` | System | Cusps |
 | --- | --- | --- |
@@ -445,6 +489,11 @@ meridian, as in Swiss Ephemeris. When the birth time is unknown, pass a
 conventional UTC instant with `timeKnown: false`; angles and houses remain
 absent and the chart carries the `no-time` flag.
 
+`@zodiacs/engine/houses` places a body with ecliptic latitude in any of these
+systems, as Swiss Ephemeris's `swe_house_pos` defines the position, and gives
+the co-ascendants, the polar ascendant and the speeds of the cusps and angles
+(`docs/houses.md`).
+
 ### Points
 
 `chartPoints(natal)` takes a birth or a chart and returns `{ sect, points }`.
@@ -461,9 +510,11 @@ Each point has a longitude, a latitude, a sign and a degree, like a body.
 The mean node and Black Moon Lilith come from the Moon's mean elements: the
 IERS Conventions' fundamental arguments (Simon et al. 1994), with a mean
 inclination of 5.1453964°. The nutation in longitude puts them on the true
-equinox of date, like every other longitude here. They are within 0.7″ of Swiss
-Ephemeris's `SE_MEAN_NODE` and `SE_MEAN_APOG` from 1800 to 2199. Both carry a
-speed in degrees per day.
+equinox of date, like every other longitude here. At 2,000 instants from 1800
+to 2199 they were within 0.4503″ and 0.4887″ of Swiss Ephemeris's
+`SE_MEAN_NODE` and `SE_MEAN_APOG`
+(`docs/evidence/nutation-2026-09-29/results/swiss.json`). Both carry a speed in
+degrees per day.
 
 Every chart gets those three. The Vertex, the East Point, the sect and the
 lots need a birth time and place.
@@ -593,6 +644,121 @@ Invalid input throws `RangeError` before any sampling: an invalid `Date`,
 shorter than a millisecond, or a `maxSamples` that is not a positive integer or
 `Infinity`. A non-finite longitude from the ephemeris throws `RangeError` too.
 
+### Birth-time windows
+
+```ts
+import { birthWindow } from "@zodiacs/engine/window";
+
+const result = birthWindow({
+  start: "1990-06-15T12:20:00Z",
+  end: "1990-06-15T12:40:00Z",
+  latitude: 40.7128,
+  longitude: -74.006,
+  houseSystem: "placidus",
+  rounding: { recorded: "1990-06-15T12:30:00Z", minutes: 5 }
+});
+for (const cell of result.cells) console.log(cell.start, cell.share, cell.roundedShare, cell.features.ascendant);
+for (const change of result.switches) console.log(change.at, change.changes);
+```
+
+`birthWindow` divides a window of possible birth instants into cells within
+which every discrete feature of the chart is constant: each body's sign and
+house, the signs of the ascendant and the midheaven, the aspects in orb and,
+for Placidus and Koch, whether the houses fall back to whole signs. The
+features are natalChart's: houses are `houseOf` on the chart's cusps, and
+aspects are its five major aspects with their orbs. Each switch gives the
+first millisecond of its new cell and every change at it, from and to. Each
+cell gives its share of the window under a uniform prior and, when `rounding`
+is given, under that rounding model. Nothing else is partitioned: two instants
+in one cell can differ in natalChart's retrograde flags, positions within a
+sign, speeds, orbs and whether they apply, the degrees of angles and cusps,
+declinations and chart points.
+
+The window is `start` to `end`, excluding `end`, at most 48 hours; or `at`
+and `minutes`, for `minutes` either side of `at`; or only `rounding`, whose
+unit is then the window. It must lie inside `REFERENCE_SPAN` (1800-01-01 to
+2200-01-01, UTC), where the search's bounds were scanned. `rounding:
+{ recorded, minutes, mode }` says the recorded time was rounded to `minutes`,
+to the nearest (the default) or `"down"`; the true instant is taken as
+uniform over that unit, which must lie inside the window. Resolve local times
+first, for example with `resolveLocalToUtc` from `@zodiacs/engine/geo`.
+
+Every value is the engine's own at a millisecond, as natalChart computes it
+on UTC and the engine's time basis (not a pinned `deltaT`). Where the search's
+bounds hold, each cell holds
+natalChart's features at every millisecond in it, and at each switch
+natalChart's value at the millisecond before `at` differs from its value at
+`at` exactly as listed, except inside an interval listed in `unresolved`.
+
+The search halves the window until each feature is settled, dropping an
+interval for a feature when enclosures of the quantities it depends on keep
+clear of every threshold and the feature agrees at both ends; single
+milliseconds are compared directly. The enclosures rest on bounds scanned
+from 1800 to 2200: `WINDOW_RATE_BOUNDS` (about twice each body's largest
+rate), the obliquity's rate, and the true node's millisecond jitter, J =
+5e-5·(1 + |T|)° with T in centuries from 2000, at least 3.01 times every
+departure found at 3,000 consecutive milliseconds every five days
+(`docs/evidence/birth-window/rc16/node-jitter.json`). They assume TT and
+UT1 run on continuously. The time basis steps at the ΔT model's seam,
+1940-12-31T18:00:00Z, where ΔT steps from
+24.834 s to 24.820 s; at 1972-01-01, where the leap seconds begin; at each
+leap second, where TT and UT1 step by a second; and where the IERS UT1 table
+ends, 2027-10-02. Each sample installs its own ΔT, so every position and
+angle steps there together: the search finds each step inside the window
+from the engine's own arithmetic, splits at its millisecond and compares
+both sides. Within 1e-8° of the Placidus
+or Koch polar limit, near the RAMCs where their cusps carry the rounding of
+asin near ±1, the house system and the houses are compared at every
+millisecond. A failed check of an enclosure adds `bound-exceeded`, and
+completeness is then not established; a failure that does not show in an
+interval's end-to-end change goes unseen. The method in full is in
+`docs/evidence/birth-window/RESULTS.md`.
+
+Near a sign boundary the true node's jitter makes its sign change back and
+forth between milliseconds, for about 4J/|rate| days around an ingress: 1.5
+minutes at the fastest from 1800 to 2200, 4.5 at the median, 2.3 hours at the
+slowest. Every change is reported where the budget of two million evaluated
+instants allows (299 at the ingress of March 2028,
+`docs/evidence/birth-window/rc16/node-flicker.json`). Where the node
+would need more, the stretch is left unresolved, found before any of the
+budget is spent on it: the nodes' signs, and their houses where the houses are
+whole signs, are null there, the interval is listed in `unresolved`, and the
+result carries `node-unresolved`; a change to or from null is its edge, not a
+crossing. 24 of the 294 ingresses from 1800 to 2200 flicker for longer than
+the budget, in 1810, 1842 (two), 1848, 1865 (two), 1882 (two), 1946 (two),
+1981 (two), 2007, 2032 (two), 2049 (two), 2071, 2090 (four), 2113 and 2127
+(`node-ingresses.json`). A true node from the Moon's analytic velocity,
+instead of astronomy-engine's 1.728 s difference, would be smooth and leave
+nothing unresolved; it changes natalChart's node in its last digits and is
+left for a later release.
+
+Results carry `verification: "sampled at one-second resolution"`: checked
+against natalChart at every whole second, not proven. On 1,000 preregistered
+random windows (1800 to 2200, all thirteen systems, two thirds at 60° of
+latitude or more), all 24,188 sampled transitions were matched, none missed
+and none extra, and natalChart confirmed every switch at its millisecond
+(`docs/evidence/birth-window/RESULTS.md`); on this candidate's build, after
+the time basis and the nutation, again (`docs/evidence/birth-window/rc16/`).
+
+In one thread, a 10-minute window takes about 2 ms, two hours about 20 ms and
+a whole day about 0.23 s (medians, Node.js 22; `timing.json`). A window over a
+node ingress takes from seconds to a few minutes, as the node is compared at
+every millisecond of its flicker (1,950 s around the ingress of 2032-11-25:
+77 s, 18,315 switches); an unresolved stretch costs a fraction of a second.
+Within 1e-8° of the polar limit each passage of a sensitive RAMC adds about
+20 s, and at 89.999999° a 48-hour window takes up to three minutes
+(Alcabitius).
+
+Other flags are `polar-fallback`, when a cell uses whole-sign houses in place
+of Placidus or Koch, `bound-exceeded` and `node-unresolved`. Invalid input
+throws `RangeError`, including a window outside `REFERENCE_SPAN` and a
+latitude within 1e-6° of either pole, where the ascendant is undefined or
+turns too fast for the search. A search that would evaluate more than two
+million instants outside the unresolved intervals throws `WindowBudgetError`,
+which is an `Error` and not a `RangeError`. The entry point carries the
+ephemeris and is separate from the root entry point, so that the root does not
+grow.
+
 ### Resolved instant inputs
 
 `DateInput` values passed to the calculation APIs accept a valid `Date`, a finite
@@ -687,6 +853,29 @@ Gregorian adoption. Each resolution names the tzdb version, the transition
 behind the offset and its cause (`dst`, `legal-change` or `date-line`).
 [docs/time.md](docs/time.md) describes every field.
 
+## Nutation
+
+Longitudes, the sidereal time and the obliquity of date use the IAU 2000B
+nutation (McCarthy & Luzum 2003; IERS Conventions 2003, chapter 5), all 77 of
+its luni-solar terms and its two fixed planetary offsets, which the engine
+evaluates itself (`src/nutation.ts`, transcribed from NOVAS C 3.1). Its Δψ and
+Δε equal ERFA's `nut00b` within 1e-10″ at 101 instants from 1800 to 2200
+(`src/nutation.test.ts`). astronomy-engine's vectors on the J2000 mean equator
+are turned to the ecliptic of date with astronomy-engine's own IAU 2006
+precession (`src/frame.ts`) and that nutation. Measured against ERFA's IAU
+2006/2000A chain applied to the same vectors at 4,001 instants from 1800 to
+2200, that rotation puts a longitude at most 0.003691″ off, and the ascendant
+and midheaven at latitudes within 60° at most 0.006284″ and 0.003358″ off; with
+astronomy-engine's five-term nutation, used until this change, they were up to
+0.2520″, 0.8235″ and 0.2457″ off
+(`docs/evidence/nutation-2026-09-29/results/erfa-frame.json`). The equation of
+the equinoxes adds the two largest IAU 2000 complementary terms (IERS
+Conventions 2010, table 5.2e). The opt-in entries use the same precession,
+nutation and sidereal time: `@zodiacs/engine/calc` for its true-of-date
+frames and its topocentric observer, `@zodiacs/engine/window` for the angles,
+and `@zodiacs/engine/sky` for its apparent places and the observer's
+sidereal angle.
+
 ## Accuracy and licensing
 
 The ephemeris is powered by the MIT-licensed `astronomy-engine`. Tests compare
@@ -702,9 +891,10 @@ CC BY 4.0, attributed in [NOTICE](NOTICE).
 
 The npm package contains no place database. It carries tzdb 2025c's zone
 histories before 1970, the IERS leap-second list, an IERS UT1 − UTC table, a
-table of Gregorian adoption dates from public-domain sources, and 22 catalogue
-values for the stars of the Vedic ayanamsas; [NOTICE](NOTICE) records their
-sources and the GeoNames attribution, and downstream users should retain it.
+table of Gregorian adoption dates from public-domain sources, 22 catalogue
+values for the stars of the Vedic ayanamsas, and the IAU 2000B nutation series
+from NOVAS C 3.1, a US Government work; [NOTICE](NOTICE) records their sources
+and the GeoNames attribution, and downstream users should retain it.
 [LICENSING.md](LICENSING.md) gives the terms of each.
 
 ## Internal site entry points
@@ -713,8 +903,9 @@ sources and the GeoNames attribution, and downstream users should retain it.
 compatibility boundaries for Zodiacs.org. They let the site consume the exact
 package implementation while keeping its scanner-oriented functions and lazy
 bundle boundary intact. They are not covered by semantic-versioning guarantees;
-third-party code must use the documented entry points: the root, `/geo`,
-`/timing`, `/vedic`, `/receipt`, `/crossings` and `/deltat`.
+third-party code must use the documented entry points: the root, `/calc`,
+`/geo`, `/houses`, `/sky`, `/techniques`, `/timing`, `/vedic`, `/window`,
+`/receipt`, `/crossings` and `/deltat`.
 
 ## GeoNames request recovery
 
@@ -800,18 +991,23 @@ and that the Moon has neither correction. Receipts from rc.3 to rc.7 are still
 read, each under the conventions its engine recorded, and a set is accepted
 only from the engine versions that wrote it.
 
-The current set, written from 0.1.1-rc.15 on, also records the instant's scale
-(`receipt.timeScale`) and its time basis (`result.timeScale`), and a local
-resolution records the calendar, the tzdb version and form, the clock, the
-transition behind the offset and any birthplace mean time, each checked
-against the offsets and flags. Receipts under the rc.8 set (rc.8 to rc.14),
-which read the instant as UT1, stay readable and replay as UTC requests (see
-docs/time.md). A receipt's engine, ephemeris and package versions must be
-SemVer 2.0.0 versions. The codec accepts an earlier set only under the versions
-that wrote it, and compares the engine's version in SemVer order with
-0.1.1-rc.15, which brought the current set, and with the releases that brought
-each house system: a receipt of the current set that names a version before
-0.1.1-rc.15, such as 0.1.1-rc.14.1 or 0.1.1-beta, is refused.
+The time-basis sets, written from 0.1.1-rc.15 on, also record the instant's
+scale (`receipt.timeScale`) and its time basis (`result.timeScale`), and a
+local resolution records the calendar, the tzdb version and form, the clock,
+the transition behind the offset and any birthplace mean time, each checked
+against the offsets and flags. The current set, written from 0.1.1-rc.16 on,
+also names the nutation, the engine's IAU 2000B (`nutation`), and takes the
+Moon from astronomy-engine's geocentric series turned by the engine's frame
+(`moonPosition`); rc.15's set, which does not name the nutation, stays
+readable. Receipts under the rc.8 set (rc.8 to rc.14), which read the instant
+as UT1, stay readable and replay as UTC requests (see docs/time.md). A
+receipt's engine, ephemeris and package versions must be SemVer 2.0.0
+versions. The codec accepts an earlier set only under the versions that wrote
+it, rc.15's under 0.1.1-rc.15 alone, and compares the engine's version in
+SemVer order with 0.1.1-rc.16, which brought the current set, and with the
+releases that brought each house system: a receipt of the current set that
+names a version before 0.1.1-rc.16, such as 0.1.1-rc.15.1 or 0.1.1-beta, is
+refused.
 
 `natalReplayInput` recovers the recorded request. It does not select or install
 the original engine. Recalculation with another engine, ephemeris dependency or

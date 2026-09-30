@@ -1,0 +1,1597 @@
+{
+ "meta": {
+  "script": "docs/evidence/techniques-2026-09-29/measure.mjs",
+  "head": "704cadcb324730936dcbd2da5cc71cad4ba93776",
+  "node": "v22.22.2",
+  "tz": "2025c",
+  "engine": "0.1.1-rc.15"
+ },
+ "G1": [
+  {
+   "corpus": "R-SI",
+   "cases": 300,
+   "agree": 300,
+   "disagree": 0,
+   "largestMsDifference": 0,
+   "disagreements": []
+  },
+  {
+   "corpus": "R-SM",
+   "cases": 300,
+   "agree": 300,
+   "disagree": 0,
+   "largestMsDifference": 0,
+   "disagreements": []
+  },
+  {
+   "corpus": "R-SC",
+   "cases": 60,
+   "agree": 60,
+   "disagree": 0,
+   "largestMsDifference": 0,
+   "disagreements": []
+  },
+  {
+   "corpus": "R-LI",
+   "cases": 300,
+   "agree": 300,
+   "disagree": 0,
+   "largestMsDifference": 0,
+   "disagreements": []
+  },
+  {
+   "corpus": "R-LC",
+   "cases": 60,
+   "agree": 60,
+   "disagree": 0,
+   "largestMsDifference": 0,
+   "disagreements": []
+  },
+  {
+   "corpus": "R-E",
+   "cases": 40,
+   "agree": 5,
+   "disagree": 35,
+   "largestMsDifference": 3,
+   "disagreements": [
+    {
+     "index": 0,
+     "site": {
+      "error": "RangeError: No solar return found in the scan window."
+     },
+     "package": -5352978684018
+    },
+    {
+     "index": 1,
+     "site": -5359234538735,
+     "package": -5359234538738
+    },
+    {
+     "index": 2,
+     "site": {
+      "error": "RangeError: No solar return found in the scan window."
+     },
+     "package": -5375470920547
+    },
+    {
+     "index": 3,
+     "site": {
+      "error": "RangeError: No solar return found in the scan window."
+     },
+     "package": -5366382687865
+    },
+    {
+     "index": 4,
+     "site": -5350928229820,
+     "package": -5350928229819
+    },
+    {
+     "index": 5,
+     "site": {
+      "error": "RangeError: No solar return found in the scan window."
+     },
+     "package": 7268058398897
+    },
+    {
+     "index": 6,
+     "site": {
+      "error": "RangeError: No solar return found in the scan window."
+     },
+     "package": 7244970273123
+    },
+    {
+     "index": 7,
+     "site": {
+      "error": "RangeError: No solar return found in the scan window."
+     },
+     "package": 7262057307874
+    },
+    {
+     "index": 8,
+     "site": {
+      "error": "RangeError: No solar return found in the scan window."
+     },
+     "package": 7270976816390
+    },
+    {
+     "index": 10,
+     "site": {
+      "error": "RangeError: No previous solar return found in the scan window."
+     },
+     "package": -5376830796961
+    },
+    {
+     "index": 12,
+     "site": {
+      "error": "RangeError: No previous solar return found in the scan window."
+     },
+     "package": -5388041038584
+    },
+    {
+     "index": 14,
+     "site": {
+      "error": "RangeError: No previous solar return found in the scan window."
+     },
+     "package": -5382925738233
+    },
+    {
+     "index": 17,
+     "site": {
+      "error": "RangeError: No previous solar return found in the scan window."
+     },
+     "package": 7258911045278
+    },
+    {
+     "index": 18,
+     "site": {
+      "error": "RangeError: No previous solar return found in the scan window."
+     },
+     "package": 7261554456357
+    },
+    {
+     "index": 19,
+     "site": {
+      "error": "RangeError: No previous solar return found in the scan window."
+     },
+     "package": 7264151435043
+    },
+    {
+     "index": 20,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": -5364918993849
+    },
+    {
+     "index": 21,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": -5364241074475
+    },
+    {
+     "index": 22,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": -5364390905496
+    },
+    {
+     "index": 23,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": -5366063586735
+    },
+    {
+     "index": 24,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": -5364352472786
+    },
+    {
+     "index": 25,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": 7260218933226
+    },
+    {
+     "index": 26,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": 7259199182186
+    },
+    {
+     "index": 27,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": 7256684132536
+    },
+    {
+     "index": 28,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": 7259376576172
+    },
+    {
+     "index": 29,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": 7256956966606
+    },
+    {
+     "index": 30,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": {
+      "error": "RangeError: after must not precede the birth instant."
+     }
+    },
+    {
+     "index": 31,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": {
+      "error": "RangeError: after must not precede the birth instant."
+     }
+    },
+    {
+     "index": 32,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": {
+      "error": "RangeError: after must not precede the birth instant."
+     }
+    },
+    {
+     "index": 33,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": {
+      "error": "RangeError: after must not precede the birth instant."
+     }
+    },
+    {
+     "index": 34,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": {
+      "error": "RangeError: after must not precede the birth instant."
+     }
+    },
+    {
+     "index": 35,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": [
+      7258076915688,
+      "3711eb71c4e6849db4752464a911be70"
+     ]
+    },
+    {
+     "index": 36,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": [
+      7256740864262,
+      "e277167e896fadcbddfe06b203bfa9ca"
+     ]
+    },
+    {
+     "index": 37,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": [
+      7259095969174,
+      "7ac110a3ee51cdc0018b81c1ab0b8c3d"
+     ]
+    },
+    {
+     "index": 38,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": [
+      7257599374541,
+      "0015937f8f3d5749d7cf852eca422cac"
+     ]
+    },
+    {
+     "index": 39,
+     "site": {
+      "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+     },
+     "package": [
+      7260149691601,
+      "b4382471ee87cb9bced27f09fbb45e2c"
+     ]
+    }
+   ]
+  },
+  {
+   "corpus": "C-M+C-A",
+   "cases": 400,
+   "agree": 400,
+   "disagree": 0,
+   "largestMsDifference": 0,
+   "disagreements": []
+  },
+  {
+   "corpus": "V-W",
+   "cases": 20,
+   "agree": 20,
+   "disagree": 0,
+   "largestMsDifference": 0,
+   "disagreements": []
+  },
+  {
+   "corpus": "V-S",
+   "cases": 40,
+   "agree": 40,
+   "disagree": 0,
+   "largestMsDifference": 0,
+   "disagreements": []
+  },
+  {
+   "corpus": "P-D+P-C",
+   "cases": 630,
+   "agree": 630,
+   "disagree": 0,
+   "largestMsDifference": 0,
+   "disagreements": []
+  },
+  {
+   "corpus": "D-X",
+   "cases": 144,
+   "agree": 144,
+   "disagree": 0,
+   "largestMsDifference": 0,
+   "disagreements": []
+  },
+  {
+   "corpus": "M-A",
+   "cases": 3000,
+   "agree": 3000,
+   "disagree": 0,
+   "largestMsDifference": 0,
+   "disagreements": []
+  },
+  {
+   "corpus": "M-Z (signs over the site's endpoints)",
+   "cases": 1542,
+   "agree": 1541,
+   "disagree": 1,
+   "largestMsDifference": 0,
+   "disagreements": [
+    {
+     "index": 1522,
+     "site": [
+      -7200000,
+      -7200001,
+      "l"
+     ],
+     "package": {
+      "error": "RangeError: from must not be after to."
+     }
+    }
+   ]
+  },
+  {
+   "corpus": "M-Z",
+   "cases": 1542,
+   "agree": 1541,
+   "disagree": 1,
+   "largestMsDifference": 0,
+   "disagreements": [
+    {
+     "index": 1522,
+     "site": [
+      -7200000,
+      -7200001,
+      "l"
+     ],
+     "package": {
+      "error": "RangeError: The date did not occur in that time zone."
+     }
+    }
+   ]
+  },
+  {
+   "corpus": "M-P",
+   "cases": 500,
+   "agree": 493,
+   "disagree": 7,
+   "largestMsDifference": 0,
+   "disagreements": [
+    {
+     "index": 203,
+     "site": [
+      -46408000,
+      39991999,
+      "kl"
+     ],
+     "package": [
+      -47532000,
+      38867999,
+      "kl"
+     ]
+    },
+    {
+     "index": 284,
+     "site": [
+      -46408000,
+      39991999,
+      "gh"
+     ],
+     "package": [
+      -47532000,
+      38867999,
+      "gh"
+     ]
+    },
+    {
+     "index": 352,
+     "site": [
+      -46408000,
+      39991999,
+      "e"
+     ],
+     "package": [
+      -46814000,
+      39585999,
+      "e"
+     ]
+    },
+    {
+     "index": 355,
+     "site": [
+      -46408000,
+      39991999,
+      "fg"
+     ],
+     "package": [
+      -47532000,
+      38867999,
+      "fg"
+     ]
+    },
+    {
+     "index": 390,
+     "site": [
+      -46408000,
+      39991999,
+      "jk"
+     ],
+     "package": [
+      -47532000,
+      38867999,
+      "jk"
+     ]
+    },
+    {
+     "index": 413,
+     "site": [
+      -46408000,
+      39991999,
+      "cd"
+     ],
+     "package": [
+      -46814000,
+      39585999,
+      "cd"
+     ]
+    },
+    {
+     "index": 483,
+     "site": [
+      -46408000,
+      39991999,
+      "g"
+     ],
+     "package": [
+      -47532000,
+      38867999,
+      "g"
+     ]
+    }
+   ]
+  }
+ ],
+ "siteAnsweredOutsideSpan": [
+  {
+   "index": 1,
+   "site": -5359234538735,
+   "package": -5359234538738
+  },
+  {
+   "index": 4,
+   "site": -5350928229820,
+   "package": -5350928229819
+  }
+ ],
+ "edgeCases": [
+  {
+   "index": 0,
+   "fn": "solarReturnInstant",
+   "birth": "2054-05-15T15:33:37.486Z",
+   "date": "1800-01-11T04:16:26.773Z",
+   "site": {
+    "error": "RangeError: No solar return found in the scan window."
+   },
+   "package": "1800-05-16T05:28:35.982Z"
+  },
+  {
+   "index": 1,
+   "fn": "solarReturnInstant",
+   "birth": "1857-03-04T15:29:56.660Z",
+   "date": "1800-05-07T12:21:20.392Z",
+   "site": "1800-03-04T19:44:21.265Z",
+   "package": "1800-03-04T19:44:21.262Z"
+  },
+  {
+   "index": 2,
+   "fn": "solarReturnInstant",
+   "birth": "2024-08-28T07:30:59.219Z",
+   "date": "1799-12-18T23:51:04.184Z",
+   "site": {
+    "error": "RangeError: No solar return found in the scan window."
+   },
+   "package": "1799-08-28T21:37:59.453Z"
+  },
+  {
+   "index": 3,
+   "fn": "solarReturnInstant",
+   "birth": "1872-12-11T19:25:46.883Z",
+   "date": "1799-07-30T09:26:03.229Z",
+   "site": {
+    "error": "RangeError: No solar return found in the scan window."
+   },
+   "package": "1799-12-12T02:08:32.135Z"
+  },
+  {
+   "index": 4,
+   "fn": "solarReturnInstant",
+   "birth": "1963-06-09T08:26:32.474Z",
+   "date": "1800-04-16T22:45:51.861Z",
+   "site": "1800-06-08T23:02:50.180Z",
+   "package": "1800-06-08T23:02:50.181Z"
+  },
+  {
+   "index": 5,
+   "fn": "solarReturnInstant",
+   "birth": "1898-04-25T23:01:44.924Z",
+   "date": "2200-01-27T21:04:14.875Z",
+   "site": {
+    "error": "RangeError: No solar return found in the scan window."
+   },
+   "package": "2200-04-26T01:06:38.897Z"
+  },
+  {
+   "index": 6,
+   "fn": "solarReturnInstant",
+   "birth": "2047-08-02T02:15:24.574Z",
+   "date": "2200-01-02T05:49:25.919Z",
+   "site": {
+    "error": "RangeError: No solar return found in the scan window."
+   },
+   "package": "2199-08-01T19:44:33.123Z"
+  },
+  {
+   "index": 7,
+   "fn": "solarReturnInstant",
+   "birth": "2129-02-15T08:54:33.528Z",
+   "date": "2199-09-22T22:23:23.507Z",
+   "site": {
+    "error": "RangeError: No solar return found in the scan window."
+   },
+   "package": "2200-02-15T14:08:27.874Z"
+  },
+  {
+   "index": 8,
+   "fn": "solarReturnInstant",
+   "birth": "2038-05-29T16:08:25.122Z",
+   "date": "2200-03-04T05:32:52.719Z",
+   "site": {
+    "error": "RangeError: No solar return found in the scan window."
+   },
+   "package": "2200-05-29T19:46:56.390Z"
+  },
+  {
+   "index": 10,
+   "fn": "mostRecentSolarReturnInstant",
+   "birth": "2086-08-12T12:34:49.588Z",
+   "date": "1800-07-03T00:37:07.144Z",
+   "site": {
+    "error": "RangeError: No previous solar return found in the scan window."
+   },
+   "package": "1799-08-13T03:53:23.039Z"
+  },
+  {
+   "index": 12,
+   "fn": "mostRecentSolarReturnInstant",
+   "birth": "2030-04-05T08:23:18.898Z",
+   "date": "1800-03-26T21:02:06.223Z",
+   "site": {
+    "error": "RangeError: No previous solar return found in the scan window."
+   },
+   "package": "1799-04-05T09:56:01.416Z"
+  },
+  {
+   "index": 14,
+   "fn": "mostRecentSolarReturnInstant",
+   "birth": "1897-06-03T07:10:49.223Z",
+   "date": "1800-01-21T17:09:38.013Z",
+   "site": {
+    "error": "RangeError: No previous solar return found in the scan window."
+   },
+   "package": "1799-06-03T14:51:01.767Z"
+  },
+  {
+   "index": 17,
+   "fn": "mostRecentSolarReturnInstant",
+   "birth": "1964-01-10T21:25:29.860Z",
+   "date": "2200-10-04T14:50:48.315Z",
+   "site": {
+    "error": "RangeError: No previous solar return found in the scan window."
+   },
+   "package": "2200-01-10T04:10:45.278Z"
+  },
+  {
+   "index": 18,
+   "fn": "mostRecentSolarReturnInstant",
+   "birth": "2007-02-09T22:25:28.473Z",
+   "date": "2200-08-12T04:07:02.524Z",
+   "site": {
+    "error": "RangeError: No previous solar return found in the scan window."
+   },
+   "package": "2200-02-09T18:27:36.357Z"
+  },
+  {
+   "index": 19,
+   "fn": "mostRecentSolarReturnInstant",
+   "birth": "1887-03-11T22:40:33.343Z",
+   "date": "2200-09-12T23:26:47.314Z",
+   "site": {
+    "error": "RangeError: No previous solar return found in the scan window."
+   },
+   "package": "2200-03-11T19:50:35.043Z"
+  },
+  {
+   "index": 20,
+   "fn": "lunarReturnInstant",
+   "birth": "1867-06-20T21:22:13.154Z",
+   "date": "1799-12-07T15:29:44.792Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "1799-12-29T00:43:26.151Z"
+  },
+  {
+   "index": 21,
+   "fn": "lunarReturnInstant",
+   "birth": "1917-01-30T14:42:10.173Z",
+   "date": "1799-12-28T21:07:24.570Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "1800-01-05T21:02:05.525Z"
+  },
+  {
+   "index": 22,
+   "fn": "lunarReturnInstant",
+   "birth": "2042-01-27T15:45:39.474Z",
+   "date": "1799-12-28T15:59:38.867Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "1800-01-04T03:24:54.504Z"
+  },
+  {
+   "index": 23,
+   "fn": "lunarReturnInstant",
+   "birth": "2008-01-22T15:26:24.821Z",
+   "date": "1799-12-14T18:56:27.646Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "1799-12-15T18:46:53.265Z"
+  },
+  {
+   "index": 24,
+   "fn": "lunarReturnInstant",
+   "birth": "2116-12-15T16:05:42.619Z",
+   "date": "1799-12-17T06:45:14.839Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "1800-01-04T14:05:27.214Z"
+  },
+  {
+   "index": 25,
+   "fn": "lunarReturnInstant",
+   "birth": "1915-08-04T16:50:38.760Z",
+   "date": "2200-01-05T08:48:09.913Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "2200-01-25T07:28:53.226Z"
+  },
+  {
+   "index": 26,
+   "fn": "lunarReturnInstant",
+   "birth": "2019-03-26T06:14:26.727Z",
+   "date": "2199-12-19T21:24:53.223Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "2200-01-13T12:13:02.186Z"
+  },
+  {
+   "index": 27,
+   "fn": "lunarReturnInstant",
+   "birth": "2144-08-06T18:17:02.794Z",
+   "date": "2199-11-25T12:09:26.286Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "2199-12-15T09:35:32.536Z"
+  },
+  {
+   "index": 28,
+   "fn": "lunarReturnInstant",
+   "birth": "1961-04-08T02:40:03.813Z",
+   "date": "2200-01-11T10:28:20.767Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "2200-01-15T13:29:36.172Z"
+  },
+  {
+   "index": 29,
+   "fn": "lunarReturnInstant",
+   "birth": "1989-01-06T23:21:06.694Z",
+   "date": "2199-12-13T05:55:46.730Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "2199-12-18T13:22:46.606Z"
+  },
+  {
+   "index": 30,
+   "fn": "lunarReturnChart",
+   "birth": "2004-04-30T12:13:01.257Z",
+   "date": "1799-12-09T20:10:27.150Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": {
+    "error": "RangeError: after must not precede the birth instant."
+   }
+  },
+  {
+   "index": 31,
+   "fn": "lunarReturnChart",
+   "birth": "2127-05-18T18:23:16.591Z",
+   "date": "1799-12-24T17:20:42.002Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": {
+    "error": "RangeError: after must not precede the birth instant."
+   }
+  },
+  {
+   "index": 32,
+   "fn": "lunarReturnChart",
+   "birth": "2120-07-13T00:24:27.551Z",
+   "date": "1799-12-29T22:23:18.520Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": {
+    "error": "RangeError: after must not precede the birth instant."
+   }
+  },
+  {
+   "index": 33,
+   "fn": "lunarReturnChart",
+   "birth": "2123-07-01T04:13:17.382Z",
+   "date": "1799-12-27T01:11:25.188Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": {
+    "error": "RangeError: after must not precede the birth instant."
+   }
+  },
+  {
+   "index": 34,
+   "fn": "lunarReturnChart",
+   "birth": "1893-01-02T10:25:44.035Z",
+   "date": "1800-01-01T00:35:12.820Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": {
+    "error": "RangeError: after must not precede the birth instant."
+   }
+  },
+  {
+   "index": 35,
+   "fn": "lunarReturnChart",
+   "birth": "2140-03-25T06:39:15.516Z",
+   "date": "2199-12-29T02:53:32.901Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "2199-12-31T12:28:35.688Z"
+  },
+  {
+   "index": 36,
+   "fn": "lunarReturnChart",
+   "birth": "2087-10-01T08:31:30.196Z",
+   "date": "2199-12-05T16:07:58.775Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "2199-12-16T01:21:04.262Z"
+  },
+  {
+   "index": 37,
+   "fn": "lunarReturnChart",
+   "birth": "2127-02-05T01:58:45.440Z",
+   "date": "2199-12-28T05:08:45.351Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "2200-01-12T07:32:49.174Z"
+  },
+  {
+   "index": 38,
+   "fn": "lunarReturnChart",
+   "birth": "1861-07-28T14:49:19.371Z",
+   "date": "2199-12-08T09:59:00.676Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "2199-12-25T23:49:34.541Z"
+  },
+  {
+   "index": 39,
+   "fn": "lunarReturnChart",
+   "birth": "2067-01-23T18:18:16.663Z",
+   "date": "2200-01-14T19:19:34.478Z",
+   "site": {
+    "error": "RangeError: The reference instant must allow a full 40-day scan within the supported dates."
+   },
+   "package": "2200-01-24T12:14:51.601Z"
+  }
+ ],
+ "zonedDisagreements": [
+  {
+   "date": "2011-12-30",
+   "timeZone": "Pacific/Apia",
+   "index": 1522,
+   "site": [
+    -7200000,
+    -7200001,
+    "l"
+   ],
+   "package": {
+    "error": "RangeError: The date did not occur in that time zone."
+   }
+  }
+ ],
+ "G2": {
+  "gateSeconds": 120,
+  "events": 20,
+  "maxAbsSeconds": 42.27,
+  "pass": true,
+  "rows": [
+   {
+    "published": "1850-03-20T23:02:00Z",
+    "longitude": 0,
+    "found": "1850-03-20T23:01:18.992Z",
+    "residualSeconds": -41.008
+   },
+   {
+    "published": "1850-06-21T19:59:00Z",
+    "longitude": 90,
+    "found": "1850-06-21T19:58:21.014Z",
+    "residualSeconds": -38.986
+   },
+   {
+    "published": "1850-09-23T10:00:00Z",
+    "longitude": 180,
+    "found": "1850-09-23T09:59:42.508Z",
+    "residualSeconds": -17.492
+   },
+   {
+    "published": "1850-12-22T03:37:00Z",
+    "longitude": 270,
+    "found": "1850-12-22T03:37:03.815Z",
+    "residualSeconds": 3.815
+   },
+   {
+    "published": "1900-03-21T01:39:00Z",
+    "longitude": 0,
+    "found": "1900-03-21T01:38:57.752Z",
+    "residualSeconds": -2.248
+   },
+   {
+    "published": "1900-06-21T21:40:00Z",
+    "longitude": 90,
+    "found": "1900-06-21T21:40:07.732Z",
+    "residualSeconds": 7.732
+   },
+   {
+    "published": "1900-09-23T12:20:00Z",
+    "longitude": 180,
+    "found": "1900-09-23T12:20:38.270Z",
+    "residualSeconds": 38.27
+   },
+   {
+    "published": "1900-12-22T06:41:00Z",
+    "longitude": 270,
+    "found": "1900-12-22T06:41:25.340Z",
+    "residualSeconds": 25.34
+   },
+   {
+    "published": "1950-03-21T04:35:00Z",
+    "longitude": 0,
+    "found": "1950-03-21T04:34:56.600Z",
+    "residualSeconds": -3.4
+   },
+   {
+    "published": "1950-06-21T23:36:00Z",
+    "longitude": 90,
+    "found": "1950-06-21T23:36:02.942Z",
+    "residualSeconds": 2.942
+   },
+   {
+    "published": "1950-09-23T14:43:00Z",
+    "longitude": 180,
+    "found": "1950-09-23T14:43:41.500Z",
+    "residualSeconds": 41.5
+   },
+   {
+    "published": "1950-12-22T10:13:00Z",
+    "longitude": 270,
+    "found": "1950-12-22T10:12:53.617Z",
+    "residualSeconds": -6.383
+   },
+   {
+    "published": "2000-03-20T07:35:00Z",
+    "longitude": 0,
+    "found": "2000-03-20T07:35:13.887Z",
+    "residualSeconds": 13.887
+   },
+   {
+    "published": "2000-06-21T01:48:00Z",
+    "longitude": 90,
+    "found": "2000-06-21T01:47:48.041Z",
+    "residualSeconds": -11.959
+   },
+   {
+    "published": "2000-09-22T17:28:00Z",
+    "longitude": 180,
+    "found": "2000-09-22T17:27:58.285Z",
+    "residualSeconds": -1.715
+   },
+   {
+    "published": "2000-12-21T13:37:00Z",
+    "longitude": 270,
+    "found": "2000-12-21T13:37:42.270Z",
+    "residualSeconds": 42.27
+   },
+   {
+    "published": "2022-03-20T15:33:00Z",
+    "longitude": 0,
+    "found": "2022-03-20T15:33:26.022Z",
+    "residualSeconds": 26.022
+   },
+   {
+    "published": "2022-06-21T09:14:00Z",
+    "longitude": 90,
+    "found": "2022-06-21T09:13:54.809Z",
+    "residualSeconds": -5.191
+   },
+   {
+    "published": "2022-09-23T01:04:00Z",
+    "longitude": 180,
+    "found": "2022-09-23T01:04:10.536Z",
+    "residualSeconds": 10.536
+   },
+   {
+    "published": "2022-12-21T21:48:00Z",
+    "longitude": 270,
+    "found": "2022-12-21T21:47:54.126Z",
+    "residualSeconds": -5.874
+   }
+  ]
+ },
+ "G3": {
+  "sun": {
+   "vectors": 24,
+   "gateSeconds": 60,
+   "maxAbsSeconds": 32.047221064567566,
+   "pass": true
+  },
+  "moon": {
+   "vectors": 24,
+   "gateSeconds": 15,
+   "maxAbsSeconds": 6.808935105800629,
+   "pass": true
+  },
+  "rows": [
+   {
+    "id": "L1-POS-0001",
+    "body": "Sun",
+    "jdTT": 2397195.6924745925,
+    "found": "1851-03-14T04:36:54.825Z",
+    "residualSeconds": -5.255252122879028
+   },
+   {
+    "id": "L1-POS-0002",
+    "body": "Moon",
+    "jdTT": 2397195.6924745925,
+    "found": "1851-03-14T04:36:53.952Z",
+    "residualSeconds": -6.128230690956116
+   },
+   {
+    "id": "L1-POS-0011",
+    "body": "Sun",
+    "jdTT": 2402908.300075087,
+    "found": "1866-11-02T19:12:10.572Z",
+    "residualSeconds": 10.511067509651184
+   },
+   {
+    "id": "L1-POS-0012",
+    "body": "Moon",
+    "jdTT": 2402908.300075087,
+    "found": "1866-11-02T19:11:53.252Z",
+    "residualSeconds": -6.808935105800629
+   },
+   {
+    "id": "L1-POS-0021",
+    "body": "Sun",
+    "jdTT": 2408647.9082867857,
+    "found": "1882-07-21T09:47:46.272Z",
+    "residualSeconds": -13.770031929016113
+   },
+   {
+    "id": "L1-POS-0022",
+    "body": "Moon",
+    "jdTT": 2408647.9082867857,
+    "found": "1882-07-21T09:47:53.847Z",
+    "residualSeconds": -6.195017695426941
+   },
+   {
+    "id": "L1-POS-0031",
+    "body": "Sun",
+    "jdTT": 2413934.4200875396,
+    "found": "1897-01-09T22:04:44.075Z",
+    "residualSeconds": -15.954329073429108
+   },
+   {
+    "id": "L1-POS-0032",
+    "body": "Moon",
+    "jdTT": 2413934.4200875396,
+    "found": "1897-01-09T22:04:55.445Z",
+    "residualSeconds": -4.584324359893799
+   },
+   {
+    "id": "L1-POS-0041",
+    "body": "Sun",
+    "jdTT": 2418092.141078796,
+    "found": "1908-05-30T15:23:24.612Z",
+    "residualSeconds": 24.59266483783722
+   },
+   {
+    "id": "L1-POS-0042",
+    "body": "Moon",
+    "jdTT": 2418092.141078796,
+    "found": "1908-05-30T15:22:55.590Z",
+    "residualSeconds": -4.429346323013306
+   },
+   {
+    "id": "L1-POS-0051",
+    "body": "Sun",
+    "jdTT": 2422296.612055316,
+    "found": "1919-12-04T02:41:10.776Z",
+    "residualSeconds": 10.769565403461456
+   },
+   {
+    "id": "L1-POS-0052",
+    "body": "Moon",
+    "jdTT": 2422296.612055316,
+    "found": "1919-12-04T02:40:57.101Z",
+    "residualSeconds": -2.905435860157013
+   },
+   {
+    "id": "L1-POS-0061",
+    "body": "Sun",
+    "jdTT": 2427301.997503209,
+    "found": "1933-08-17T11:55:54.502Z",
+    "residualSeconds": -5.504254996776581
+   },
+   {
+    "id": "L1-POS-0062",
+    "body": "Moon",
+    "jdTT": 2427301.997503209,
+    "found": "1933-08-17T11:55:56.314Z",
+    "residualSeconds": -3.692235052585602
+   },
+   {
+    "id": "L1-POS-0071",
+    "body": "Sun",
+    "jdTT": 2431875.3433746113,
+    "found": "1946-02-23T20:13:42.697Z",
+    "residualSeconds": -17.525674402713776
+   },
+   {
+    "id": "L1-POS-0072",
+    "body": "Moon",
+    "jdTT": 2431875.3433746113,
+    "found": "1946-02-23T20:13:59.780Z",
+    "residualSeconds": -0.44268518686294556
+   },
+   {
+    "id": "L1-POS-0081",
+    "body": "Sun",
+    "jdTT": 2436116.311482087,
+    "found": "1957-10-04T19:27:36.677Z",
+    "residualSeconds": -23.32359105348587
+   },
+   {
+    "id": "L1-POS-0082",
+    "body": "Moon",
+    "jdTT": 2436116.311482087,
+    "found": "1957-10-04T19:27:58.792Z",
+    "residualSeconds": -1.2086033821105957
+   },
+   {
+    "id": "L1-POS-0091",
+    "body": "Sun",
+    "jdTT": 2440423.3455988024,
+    "found": "1969-07-20T20:17:07.520Z",
+    "residualSeconds": 7.523033022880554
+   },
+   {
+    "id": "L1-POS-0092",
+    "body": "Moon",
+    "jdTT": 2440423.3455988024,
+    "found": "1969-07-20T20:16:58.992Z",
+    "residualSeconds": -1.0049834847450256
+   },
+   {
+    "id": "L1-POS-0101",
+    "body": "Sun",
+    "jdTT": 2443210.752635514,
+    "found": "1977-03-08T06:03:14.733Z",
+    "residualSeconds": 15.208607912063599
+   },
+   {
+    "id": "L1-POS-0102",
+    "body": "Moon",
+    "jdTT": 2443210.752635514,
+    "found": "1977-03-08T06:02:58.955Z",
+    "residualSeconds": -0.5693793296813965
+   },
+   {
+    "id": "L1-POS-0111",
+    "body": "Sun",
+    "jdTT": 2446748.07494517,
+    "found": "1986-11-13T13:46:31.932Z",
+    "residualSeconds": -28.14669907093048
+   },
+   {
+    "id": "L1-POS-0112",
+    "body": "Moon",
+    "jdTT": 2446748.07494517,
+    "found": "1986-11-13T13:46:58.815Z",
+    "residualSeconds": -1.2637227773666382
+   },
+   {
+    "id": "L1-POS-0121",
+    "body": "Sun",
+    "jdTT": 2451401.9528206224,
+    "found": "1999-08-11T10:51:30.685Z",
+    "residualSeconds": 31.16724193096161
+   },
+   {
+    "id": "L1-POS-0122",
+    "body": "Moon",
+    "jdTT": 2451401.9528206224,
+    "found": "1999-08-11T10:50:58.491Z",
+    "residualSeconds": -1.026749610900879
+   },
+   {
+    "id": "L1-POS-0131",
+    "body": "Sun",
+    "jdTT": 2452878.911163686,
+    "found": "2003-08-27T09:51:08.959Z",
+    "residualSeconds": 8.600516617298126
+   },
+   {
+    "id": "L1-POS-0132",
+    "body": "Moon",
+    "jdTT": 2452878.911163686,
+    "found": "2003-08-27T09:51:00.541Z",
+    "residualSeconds": 0.1825377345085144
+   },
+   {
+    "id": "L1-POS-0141",
+    "body": "Sun",
+    "jdTT": 2456068.523688819,
+    "found": "2012-05-21T00:32:53.080Z",
+    "residualSeconds": -7.449929416179657
+   },
+   {
+    "id": "L1-POS-0142",
+    "body": "Moon",
+    "jdTT": 2456068.523688819,
+    "found": "2012-05-21T00:33:02.186Z",
+    "residualSeconds": 1.6560360789299011
+   },
+   {
+    "id": "L1-POS-0151",
+    "body": "Sun",
+    "jdTT": 2459205.264691673,
+    "found": "2020-12-21T18:20:15.044Z",
+    "residualSeconds": 14.867430925369263
+   },
+   {
+    "id": "L1-POS-0152",
+    "body": "Moon",
+    "jdTT": 2459205.264691673,
+    "found": "2020-12-21T18:20:01.879Z",
+    "residualSeconds": 1.7024248838424683
+   },
+   {
+    "id": "L1-POS-0161",
+    "body": "Sun",
+    "jdTT": 2461306.20912987,
+    "found": "2026-09-22T17:00:31.684Z",
+    "residualSeconds": 32.047221064567566
+   },
+   {
+    "id": "L1-POS-0162",
+    "body": "Moon",
+    "jdTT": 2461306.20912987,
+    "found": "2026-09-22T16:59:59.116Z",
+    "residualSeconds": -0.520777702331543
+   },
+   {
+    "id": "L1-POS-0171",
+    "body": "Sun",
+    "jdTT": 2465442.6356283394,
+    "found": "2038-01-19T03:13:55.344Z",
+    "residualSeconds": -12.531977891921997
+   },
+   {
+    "id": "L1-POS-0172",
+    "body": "Moon",
+    "jdTT": 2465442.6356283394,
+    "found": "2038-01-19T03:14:08.812Z",
+    "residualSeconds": 0.9360238909721375
+   },
+   {
+    "id": "L1-POS-0181",
+    "body": "Sun",
+    "jdTT": 2471790.000882015,
+    "found": "2055-06-06T11:59:53.391Z",
+    "residualSeconds": -10.865642130374908
+   },
+   {
+    "id": "L1-POS-0182",
+    "body": "Moon",
+    "jdTT": 2471790.000882015,
+    "found": "2055-06-06T12:00:03.803Z",
+    "residualSeconds": -0.4536285996437073
+   },
+   {
+    "id": "L1-POS-0191",
+    "body": "Sun",
+    "jdTT": 2477779.403028457,
+    "found": "2071-10-29T21:39:15.930Z",
+    "residualSeconds": 8.083762228488922
+   },
+   {
+    "id": "L1-POS-0192",
+    "body": "Moon",
+    "jdTT": 2477779.403028457,
+    "found": "2071-10-29T21:39:10.455Z",
+    "residualSeconds": 2.608756721019745
+   },
+   {
+    "id": "L1-POS-0201",
+    "body": "Sun",
+    "jdTT": 2483778.7274076417,
+    "found": "2088-04-02T05:26:25.470Z",
+    "residualSeconds": 13.90380710363388
+   },
+   {
+    "id": "L1-POS-0202",
+    "body": "Moon",
+    "jdTT": 2483778.7274076417,
+    "found": "2088-04-02T05:26:13.857Z",
+    "residualSeconds": 2.2908344864845276
+   },
+   {
+    "id": "L1-POS-0211",
+    "body": "Sun",
+    "jdTT": 2489788.089993089,
+    "found": "2104-09-15T14:08:41.241Z",
+    "residualSeconds": 25.90535134077072
+   },
+   {
+    "id": "L1-POS-0212",
+    "body": "Moon",
+    "jdTT": 2489788.089993089,
+    "found": "2104-09-15T14:08:13.780Z",
+    "residualSeconds": -1.5556544065475464
+   },
+   {
+    "id": "L1-POS-0221",
+    "body": "Sun",
+    "jdTT": 2497242.4908116646,
+    "found": "2125-02-11T23:45:23.945Z",
+    "residualSeconds": 3.9098963141441345
+   },
+   {
+    "id": "L1-POS-0222",
+    "body": "Moon",
+    "jdTT": 2497242.4908116646,
+    "found": "2125-02-11T23:45:19.157Z",
+    "residualSeconds": -0.8781284093856812
+   },
+   {
+    "id": "L1-POS-0231",
+    "body": "Sun",
+    "jdTT": 2505964.8145946246,
+    "found": "2148-12-30T07:31:38.860Z",
+    "residualSeconds": 13.475123047828674
+   },
+   {
+    "id": "L1-POS-0232",
+    "body": "Moon",
+    "jdTT": 2505964.8145946246,
+    "found": "2148-12-30T07:31:19.071Z",
+    "residualSeconds": -6.313906610012054
+   }
+  ]
+ },
+ "G5": {
+  "root": {
+   "rc15ArchiveBytes": 97704,
+   "builtBytes": 103537,
+   "sameFilesAndBytes": false
+  },
+  "techniques": {
+   "files": 12,
+   "bytes": 152472,
+   "beyondCore": 62610,
+   "ceiling": 150000
+  },
+  "geo": {
+   "rc15ArchiveBytes": 34135,
+   "builtBytes": 34659,
+   "difference": 524,
+   "ceiling": 35000
+  },
+  "unpacked": {
+   "bytes": 900986,
+   "files": 69,
+   "cap": 700000
+  }
+ },
+ "G6": {
+  "since": "eb58011",
+  "added": [
+   "src/calc-bounds.test.ts",
+   "src/calc-bounds.ts",
+   "src/calc-fixtures.test.ts",
+   "src/calc-frames.ts",
+   "src/calc-reduce.ts",
+   "src/calc.test.ts",
+   "src/calc.ts",
+   "src/equator.test.ts",
+   "src/equator.ts",
+   "src/first-millisecond.ts",
+   "src/fixtures/calc-roundtrip.json",
+   "src/fixtures/gregorian-adoption.json",
+   "src/fixtures/novas-c3.1-iau2000b.txt",
+   "src/fixtures/nutation-erfa.json",
+   "src/fixtures/receipt-rc14-1973.json",
+   "src/fixtures/tzdata-2025c-calendars",
+   "src/fixtures/tzdata-2025c-iso3166.tab",
+   "src/frame.ts",
+   "src/houses-extra.test.ts",
+   "src/houses-extra.ts",
+   "src/nutation.test.ts",
+   "src/nutation.ts",
+   "src/receipt-versions.test.ts",
+   "src/replay-time-basis.test.ts",
+   "src/semver.test.ts",
+   "src/semver.ts",
+   "src/sky.ts",
+   "src/sky/fixtures/usno-rstt.json",
+   "src/sky/hours.test.ts",
+   "src/sky/hours.ts",
+   "src/sky/published.test.ts",
+   "src/sky/riseset.test.ts",
+   "src/sky/riseset.ts",
+   "src/techniques.ts",
+   "src/techniques/aspect-patterns.test.ts",
+   "src/techniques/aspect-patterns.ts",
+   "src/techniques/dignities.test.ts",
+   "src/techniques/dignities.ts",
+   "src/techniques/fixtures/site-parity/aspect-patterns.json",
+   "src/techniques/fixtures/site-parity/composite.json",
+   "src/techniques/fixtures/site-parity/dignities.json",
+   "src/techniques/fixtures/site-parity/moon-sign.json",
+   "src/techniques/fixtures/site-parity/returns.json",
+   "src/techniques/fixtures/site-parity/void-of-course.json",
+   "src/techniques/fixtures/usno-seasons.json",
+   "src/techniques/moon-sign.test.ts",
+   "src/techniques/moon-sign.ts",
+   "src/techniques/relationship.test.ts",
+   "src/techniques/relationship.ts",
+   "src/techniques/returns.test.ts",
+   "src/techniques/returns.ts",
+   "src/techniques/shared.ts",
+   "src/techniques/site-parity.test.ts",
+   "src/techniques/void-of-course.test.ts",
+   "src/techniques/void-of-course.ts",
+   "src/timing/fixtures/planetary-returns-horizons.json",
+   "src/timing/planetary-returns.test.ts",
+   "src/timing/planetary-returns.ts",
+   "src/window-ranges.test.ts",
+   "src/window-ranges.ts",
+   "src/window.test.ts",
+   "src/window.ts"
+  ],
+  "changedOrRemoved": [
+   "M src/api.ts",
+   "M src/configured-aspects.test.ts",
+   "M src/crossings-ephemeris.test.ts",
+   "M src/declination.test.ts",
+   "M src/declination.ts",
+   "M src/engine.test.ts",
+   "M src/ephemeris-errors.test.ts",
+   "M src/ephemeris.ts",
+   "D src/fixtures/iers-finals2000A-ut1-20260924.csv.gz",
+   "D src/fixtures/leap-seconds-2025c.list",
+   "M src/geo.test.ts",
+   "M src/geo.ts",
+   "M src/geo/calendar.test.ts",
+   "M src/geo/calendar.ts",
+   "M src/geo/flags.test.ts",
+   "M src/geo/roundtrip.test.ts",
+   "M src/geo/timezone.ts",
+   "M src/geo/zone-history.test.ts",
+   "M src/houses.ts",
+   "M src/placidus-limit.test.ts",
+   "M src/progressions.test.ts",
+   "M src/receipt-time-basis.test.ts",
+   "M src/receipt.test.ts",
+   "M src/receipt.ts",
+   "M src/speed.test.ts",
+   "M src/time-scale-data.ts",
+   "M src/time-scale.test.ts",
+   "M src/time-scale.ts",
+   "M src/timing.ts",
+   "M src/timing/firdaria.test.ts",
+   "M src/timing/profections.test.ts",
+   "M src/timing/releasing.test.ts",
+   "M src/timing/shared.test.ts",
+   "M src/timing/solar-arc.test.ts",
+   "M src/tzdb/tzdb-2025c-01.ts",
+   "M src/tzdb/tzdb-2025c-02.ts",
+   "M src/tzdb/tzdb-2025c-07.ts",
+   "M src/tzdb/tzdb-2025c-08.ts",
+   "M src/tzdb/tzdb-2025c-09.ts",
+   "M src/tzdb/tzdb-2025c-10.ts",
+   "M src/tzdb/tzdb-2025c-11.ts",
+   "M src/tzdb/tzdb-2025c-14.ts",
+   "M src/tzdb/tzdb-2025c-15.ts",
+   "M src/tzdb/tzdb-2025c.ts",
+   "M src/vedic/ayanamsa.test.ts",
+   "M src/vedic/ayanamsa.ts",
+   "M src/vedic/dasha.test.ts",
+   "M src/vedic/sidereal.ts"
+  ]
+ },
+ "G7": {
+  "cases": 500,
+  "disagree": 7,
+  "everyDisagreementIsADifferentMidnight": true,
+  "rows": [
+   {
+    "index": 203,
+    "date": "1867-11-06",
+    "timeZone": "Europe/Stockholm",
+    "siteMidnightOffset": "+0:53:28",
+    "packageMidnightOffset": "+1:12:12",
+    "midnightsApart": "+0:18:44",
+    "sameSigns": true,
+    "siteMidnightIsThePackagesBerlinMidnight": true
+   },
+   {
+    "index": 284,
+    "date": "1821-12-19",
+    "timeZone": "Europe/Stockholm",
+    "siteMidnightOffset": "+0:53:28",
+    "packageMidnightOffset": "+1:12:12",
+    "midnightsApart": "+0:18:44",
+    "sameSigns": true,
+    "siteMidnightIsThePackagesBerlinMidnight": true
+   },
+   {
+    "index": 352,
+    "date": "1888-08-07",
+    "timeZone": "Europe/Stockholm",
+    "siteMidnightOffset": "+0:53:28",
+    "packageMidnightOffset": "+1:00:14",
+    "midnightsApart": "+0:06:46",
+    "sameSigns": true,
+    "siteMidnightIsThePackagesBerlinMidnight": true
+   },
+   {
+    "index": 355,
+    "date": "1818-01-26",
+    "timeZone": "Europe/Stockholm",
+    "siteMidnightOffset": "+0:53:28",
+    "packageMidnightOffset": "+1:12:12",
+    "midnightsApart": "+0:18:44",
+    "sameSigns": true,
+    "siteMidnightIsThePackagesBerlinMidnight": true
+   },
+   {
+    "index": 390,
+    "date": "1859-07-15",
+    "timeZone": "Europe/Stockholm",
+    "siteMidnightOffset": "+0:53:28",
+    "packageMidnightOffset": "+1:12:12",
+    "midnightsApart": "+0:18:44",
+    "sameSigns": true,
+    "siteMidnightIsThePackagesBerlinMidnight": true
+   },
+   {
+    "index": 413,
+    "date": "1879-04-26",
+    "timeZone": "Europe/Stockholm",
+    "siteMidnightOffset": "+0:53:28",
+    "packageMidnightOffset": "+1:00:14",
+    "midnightsApart": "+0:06:46",
+    "sameSigns": true,
+    "siteMidnightIsThePackagesBerlinMidnight": true
+   },
+   {
+    "index": 483,
+    "date": "1846-02-15",
+    "timeZone": "Europe/Stockholm",
+    "siteMidnightOffset": "+0:53:28",
+    "packageMidnightOffset": "+1:12:12",
+    "midnightsApart": "+0:18:44",
+    "sameSigns": true,
+    "siteMidnightIsThePackagesBerlinMidnight": true
+   }
+  ]
+ }
+}

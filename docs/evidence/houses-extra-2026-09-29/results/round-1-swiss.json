@@ -1,0 +1,756 @@
+{
+ "swisseph": "2.10.03",
+ "positions": {
+  "unit": "arcseconds of mundane position, (p - 1) x 30 degrees",
+  "tolerance": 0.01,
+  "sets": {
+   "G": {
+    "alcabitius": {
+     "n": 20000,
+     "median": 0.0,
+     "p95": 4.09e-10,
+     "max": 4.64e-07,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "campanus": {
+     "n": 20000,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "equal": {
+     "n": 20000,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "equal-mc": {
+     "n": 20000,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "koch": {
+     "n": 14188,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 2338,
+     "engineOnlyUndefined": 2314,
+     "swissOnlyUndefined": 1160
+    },
+    "meridian": {
+     "n": 20000,
+     "median": 0.0,
+     "p95": 2.05e-10,
+     "max": 6.14e-10,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "morinus": {
+     "n": 20000,
+     "median": 0.0,
+     "p95": 2.05e-10,
+     "max": 4.09e-10,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "placidus": {
+     "n": 20000,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "porphyry": {
+     "n": 20000,
+     "median": 0.00096,
+     "p95": 0.00149,
+     "max": 0.0507,
+     "over": 11,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "regiomontanus": {
+     "n": 20000,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "topocentric": {
+     "n": 20000,
+     "median": 0.00179,
+     "p95": 0.0382,
+     "max": 186000.0,
+     "over": 1280,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "vehlow": {
+     "n": 20000,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "whole": {
+     "n": 20000,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    }
+   },
+   "L": {
+    "alcabitius": {
+     "n": 44928,
+     "median": 0.0,
+     "p95": 3.07e-10,
+     "max": 1.84e-09,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "campanus": {
+     "n": 44928,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "equal": {
+     "n": 44928,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "equal-mc": {
+     "n": 44928,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "koch": {
+     "n": 34743,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 2670,
+     "engineOnlyUndefined": 2670,
+     "swissOnlyUndefined": 4845
+    },
+    "meridian": {
+     "n": 44928,
+     "median": 0.0,
+     "p95": 2.05e-10,
+     "max": 4.09e-10,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "morinus": {
+     "n": 44928,
+     "median": 0.0,
+     "p95": 2.05e-10,
+     "max": 2.05e-10,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "placidus": {
+     "n": 44928,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "porphyry": {
+     "n": 44928,
+     "median": 0.000831,
+     "p95": 0.00201,
+     "max": 0.00881,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "regiomontanus": {
+     "n": 44928,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "topocentric": {
+     "n": 44928,
+     "median": 0.00189,
+     "p95": 0.00664,
+     "max": 32600.0,
+     "over": 963,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "vehlow": {
+     "n": 44928,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "whole": {
+     "n": 44928,
+     "median": 0.001,
+     "p95": 0.001,
+     "max": 0.001,
+     "over": 0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    }
+   }
+  }
+ },
+ "coAscendants": {
+  "unit": "arcseconds",
+  "tolerance": 0.01,
+  "sets": {
+   "G": {
+    "equatorialAscendant": {
+     "n": 20000,
+     "median": 0.0,
+     "p95": 2.05e-10,
+     "max": 3.07e-10,
+     "over": 0
+    },
+    "kochCoAscendant": {
+     "n": 20000,
+     "median": 0.0,
+     "p95": 4.09e-10,
+     "max": 4.71e-09,
+     "over": 0
+    },
+    "munkaseyCoAscendant": {
+     "n": 20000,
+     "median": 0.0,
+     "p95": 2.05e-10,
+     "max": 1.94e-09,
+     "over": 0
+    },
+    "polarAscendant": {
+     "n": 20000,
+     "median": 0.0,
+     "p95": 2.05e-10,
+     "max": 4.71e-09,
+     "over": 0
+    }
+   },
+   "L": {
+    "equatorialAscendant": {
+     "n": 5616,
+     "median": 0.0,
+     "p95": 2.05e-10,
+     "max": 2.05e-10,
+     "over": 0
+    },
+    "kochCoAscendant": {
+     "n": 5616,
+     "median": 0.0,
+     "p95": 4.09e-10,
+     "max": 8.19e-10,
+     "over": 0
+    },
+    "munkaseyCoAscendant": {
+     "n": 5616,
+     "median": 0.0,
+     "p95": 2.05e-10,
+     "max": 3.07e-10,
+     "over": 0
+    },
+    "polarAscendant": {
+     "n": 5616,
+     "median": 0.0,
+     "p95": 3.07e-10,
+     "max": 8.19e-10,
+     "over": 0
+    }
+   }
+  }
+ },
+ "speeds": {
+  "unit": "degrees per day; per case the largest of the twelve cusps; rel is |delta| / |Swiss speed| per value",
+  "tolerance": "0.004 deg/day + 1e-6 |v|",
+  "rateScaledCases": 25616,
+  "rateUnscaledCases": 0,
+  "swissRateRelativeToEngineRate": 8.67e-11,
+  "sets": {
+   "G": {
+    "alcabitius": {
+     "n": 20000,
+     "median": 1.21e-07,
+     "p95": 1.74e-06,
+     "max": 0.85,
+     "over": 42,
+     "casesOver": 5,
+     "relMedian": 2.18e-10,
+     "relP95": 2.86e-09,
+     "relMax": 6.49e-05,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "campanus": {
+     "n": 20000,
+     "median": 1.14e-13,
+     "p95": 2.84e-13,
+     "max": 3.2e-10,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.48e-16,
+     "relP95": 3.68e-16,
+     "relMax": 6.16e-14,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "equal": {
+     "n": 20000,
+     "median": 2.84e-14,
+     "p95": 1.14e-13,
+     "max": 3.2e-10,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.46e-16,
+     "relP95": 4.17e-16,
+     "relMax": 6.16e-14,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "equal-mc": {
+     "n": 20000,
+     "median": 5.68e-14,
+     "p95": 1.14e-13,
+     "max": 2.27e-13,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.47e-16,
+     "relP95": 3.13e-16,
+     "relMax": 6.6e-16,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "koch": {
+     "n": 14817,
+     "median": 43.4,
+     "p95": 284.0,
+     "max": 12300.0,
+     "over": 118504,
+     "casesOver": 14815,
+     "relMedian": 0.0258,
+     "relP95": 0.334,
+     "relMax": 0.666,
+     "bothUndefined": 5183,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "meridian": {
+     "n": 20000,
+     "median": 1.26e-07,
+     "p95": 1.34e-07,
+     "max": 1.41e-07,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 2.15e-10,
+     "relP95": 3.3e-10,
+     "relMax": 3.58e-10,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "morinus": {
+     "n": 20000,
+     "median": 1.27e-07,
+     "p95": 1.34e-07,
+     "max": 1.38e-07,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 2.15e-10,
+     "relP95": 3.32e-10,
+     "relMax": 3.51e-10,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "placidus": {
+     "n": 14817,
+     "median": 0.364,
+     "p95": 19.9,
+     "max": 494.0,
+     "over": 93984,
+     "casesOver": 12842,
+     "relMedian": 2.35e-05,
+     "relP95": 0.0176,
+     "relMax": 1.04,
+     "bothUndefined": 5183,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "porphyry": {
+     "n": 20000,
+     "median": 100.0,
+     "p95": 447.0,
+     "max": 41600.0,
+     "over": 80000,
+     "casesOver": 20000,
+     "relMedian": 1.77e-16,
+     "relP95": 2.22,
+     "relMax": 8140.0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "regiomontanus": {
+     "n": 20000,
+     "median": 1.14e-13,
+     "p95": 4.55e-13,
+     "max": 3.07e-09,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.56e-16,
+     "relP95": 8.02e-16,
+     "relMax": 3.95e-12,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "topocentric": {
+     "n": 20000,
+     "median": 1.14e-13,
+     "p95": 4.12e-13,
+     "max": 3.2e-10,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.53e-16,
+     "relP95": 6.05e-16,
+     "relMax": 7.11e-12,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "vehlow": {
+     "n": 20000,
+     "median": 2.84e-14,
+     "p95": 1.14e-13,
+     "max": 3.2e-10,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.46e-16,
+     "relP95": 4.17e-16,
+     "relMax": 6.16e-14,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "whole": {
+     "n": 20000,
+     "median": 379.0,
+     "p95": 553.0,
+     "max": 42000.0,
+     "over": 80000,
+     "casesOver": 20000,
+     "relMedian": 0.0,
+     "relP95": 1.0,
+     "relMax": 1.0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "asc": {
+     "n": 20000,
+     "median": 2.84e-14,
+     "p95": 1.14e-13,
+     "max": 3.2e-10,
+     "over": 0,
+     "relMedian": 1.46e-16,
+     "relP95": 4.17e-16,
+     "relMax": 6.16e-14
+    },
+    "mc": {
+     "n": 20000,
+     "median": 5.68e-14,
+     "p95": 1.14e-13,
+     "max": 2.27e-13,
+     "over": 0,
+     "relMedian": 1.47e-16,
+     "relP95": 3.13e-16,
+     "relMax": 6.6e-16
+    }
+   },
+   "L": {
+    "alcabitius": {
+     "n": 5616,
+     "median": 1.24e-07,
+     "p95": 7.36e-06,
+     "max": 0.000208,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 2.04e-10,
+     "relP95": 7.1e-09,
+     "relMax": 2.16e-07,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "campanus": {
+     "n": 5616,
+     "median": 1.14e-13,
+     "p95": 4.55e-13,
+     "max": 2.73e-12,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.48e-16,
+     "relP95": 4.08e-16,
+     "relMax": 1.76e-14,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "equal": {
+     "n": 5616,
+     "median": 2.84e-14,
+     "p95": 3.41e-13,
+     "max": 2.73e-12,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.34e-16,
+     "relP95": 5.34e-16,
+     "relMax": 1.76e-14,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "equal-mc": {
+     "n": 5616,
+     "median": 5.68e-14,
+     "p95": 1.14e-13,
+     "max": 1.14e-13,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.48e-16,
+     "relP95": 3.23e-16,
+     "relMax": 3.23e-16,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "koch": {
+     "n": 5568,
+     "median": 159.0,
+     "p95": 759.0,
+     "max": 11100.0,
+     "over": 44544,
+     "casesOver": 5568,
+     "relMedian": 0.184,
+     "relP95": 0.571,
+     "relMax": 0.665,
+     "bothUndefined": 48,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "meridian": {
+     "n": 5616,
+     "median": 1.27e-07,
+     "p95": 1.27e-07,
+     "max": 1.27e-07,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 2.19e-10,
+     "relP95": 3.23e-10,
+     "relMax": 3.25e-10,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "morinus": {
+     "n": 5616,
+     "median": 1.25e-07,
+     "p95": 1.27e-07,
+     "max": 1.27e-07,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 2.16e-10,
+     "relP95": 3.18e-10,
+     "relMax": 3.25e-10,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "placidus": {
+     "n": 5568,
+     "median": 11.5,
+     "p95": 69.6,
+     "max": 399.0,
+     "over": 44544,
+     "casesOver": 5568,
+     "relMedian": 0.00539,
+     "relP95": 0.0712,
+     "relMax": 0.683,
+     "bothUndefined": 48,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "porphyry": {
+     "n": 5616,
+     "median": 147.0,
+     "p95": 811.0,
+     "max": 1210.0,
+     "over": 22464,
+     "casesOver": 5616,
+     "relMedian": 1.94e-16,
+     "relP95": 1.48,
+     "relMax": 34.8,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "regiomontanus": {
+     "n": 5616,
+     "median": 1.14e-13,
+     "p95": 6.82e-13,
+     "max": 2.73e-12,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.48e-16,
+     "relP95": 4.36e-16,
+     "relMax": 1.76e-14,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "topocentric": {
+     "n": 5616,
+     "median": 1.14e-13,
+     "p95": 4.55e-13,
+     "max": 2.73e-12,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.46e-16,
+     "relP95": 3.81e-16,
+     "relMax": 1.76e-14,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "vehlow": {
+     "n": 5616,
+     "median": 2.84e-14,
+     "p95": 3.41e-13,
+     "max": 2.73e-12,
+     "over": 0,
+     "casesOver": 0,
+     "relMedian": 1.34e-16,
+     "relP95": 5.34e-16,
+     "relMax": 1.76e-14,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "whole": {
+     "n": 5616,
+     "median": 383.0,
+     "p95": 1140.0,
+     "max": 1550.0,
+     "over": 22464,
+     "casesOver": 5616,
+     "relMedian": 0.0,
+     "relP95": 1.0,
+     "relMax": 1.0,
+     "bothUndefined": 0,
+     "engineOnlyUndefined": 0,
+     "swissOnlyUndefined": 0
+    },
+    "asc": {
+     "n": 5616,
+     "median": 2.84e-14,
+     "p95": 3.41e-13,
+     "max": 2.73e-12,
+     "over": 0,
+     "relMedian": 1.34e-16,
+     "relP95": 5.34e-16,
+     "relMax": 1.76e-14
+    },
+    "mc": {
+     "n": 5616,
+     "median": 5.68e-14,
+     "p95": 1.14e-13,
+     "max": 1.14e-13,
+     "over": 0,
+     "relMedian": 1.48e-16,
+     "relP95": 3.23e-16,
+     "relMax": 3.23e-16
+    }
+   }
+  }
+ }
+}

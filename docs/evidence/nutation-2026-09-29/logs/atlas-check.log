@@ -1,0 +1,10 @@
+# TMPDIR=<tmp> node atlas/tools/check.mjs, Node v22.22.2
+atlas 0.1.0: 21 places, 14 jurisdictions, 59 rules, 66 citations
+  rules by flag: documented 27, inferred 26, uncertain 6
+  citations by type: decree 5, law 9, ministerial-decision 1, municipal-notice 1, newspaper-report 45, parliamentary-debate 3, railway-notice 2
+  excerpts taken from: page-image 66
+  excerpts checked against (citations): ocr matches 24, ocr partial 5, page-image matches 16, search-service matches 29, search-service partial 8
+  258 boundaries and 2735 round trips checked
+  tzdb comparison current, every difference matched by exactly one explanation
+atlas: all checks passed
+# exit 0

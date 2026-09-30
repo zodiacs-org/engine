@@ -1,0 +1,321 @@
+# calc-api rerun on the build of 704cadcb324730936dcbd2da5cc71cad4ba93776 (dist frozen at <frozen dist of 704cadc>, digest of its files c6df25f6...), 2026-09-30T07:47:26Z
+# node v22.22.2; Python 3.11.15; pyerfa 2.0.1.5
+node docs/evidence/calc-api/tools/engine_values.mjs > $TMPDIR/calc-engine.json 7.19s user 0.31s system 91% cpu 8.154 total
+engine.json sha256 1537e382ed3a09049df4b95ec48460575a5e525ba8d3703aad198f4778668b12, 11439117 bytes
+[
+ {
+  "check": "C1",
+  "unit": "arcsec",
+  "tolerance": 1e-06,
+  "n": 2560,
+  "median": 5.884313641751461e-11,
+  "max": 3.1690160254731087e-10,
+  "verdict": "PASS"
+ },
+ {
+  "check": "C1dist",
+  "unit": "relative",
+  "tolerance": 1e-12,
+  "n": 2560,
+  "median": 0.0,
+  "max": 4.36869970611877e-16,
+  "verdict": "PASS"
+ },
+ {
+  "check": "C2",
+  "unit": "arcsec",
+  "tolerance": 1e-05,
+  "n": 320,
+  "median": 2.3291311823698915e-07,
+  "max": 2.729982313457513e-07,
+  "verdict": "PASS"
+ },
+ {
+  "check": "C3",
+  "unit": "arcsec",
+  "tolerance": 0.0001,
+  "n": 320,
+  "median": 1.490840455879655e-07,
+  "max": 6.436296433164836e-07,
+  "verdict": "PASS"
+ },
+ {
+  "check": "C4",
+  "unit": "arcsec",
+  "tolerance": 0.005,
+  "n": 320,
+  "median": 0.0006628005242521624,
+  "max": 0.0022973188198886856,
+  "verdict": "PASS"
+ },
+ {
+  "check": "C5a",
+  "unit": "arcsec",
+  "tolerance": 0.005,
+  "n": 320,
+  "median": 0.00013825692722767811,
+  "max": 0.001757053660587066,
+  "verdict": "PASS"
+ },
+ {
+  "check": "C5b",
+  "unit": "arcsec",
+  "tolerance": 1e-06,
+  "n": 320,
+  "median": 7.829471694260929e-11,
+  "max": 3.9154552950094627e-10,
+  "verdict": "PASS"
+ },
+ {
+  "check": "C6",
+  "unit": "arcsec",
+  "tolerance": 1e-06,
+  "n": 320,
+  "median": 7.61583284784784e-11,
+  "max": 4.0487987163375305e-10,
+  "verdict": "PASS"
+ },
+ {
+  "check": "C7",
+  "unit": "arcsec",
+  "tolerance": 1e-06,
+  "n": 320,
+  "median": 6.740315337957815e-11,
+  "max": 4.0834782846422586e-10,
+  "verdict": "PASS"
+ },
+ {
+  "check": "C8",
+  "unit": "arcsec",
+  "tolerance": 1e-06,
+  "n": 320,
+  "median": 7.500743869236133e-11,
+  "max": 3.6148185206777803e-10,
+  "verdict": "PASS"
+ },
+ {
+  "check": "C9",
+  "unit": "arcsec",
+  "tolerance": 0.005,
+  "n": 320,
+  "median": 0.0006628385172180096,
+  "max": 0.0022977359903178455,
+  "verdict": "PASS"
+ },
+ {
+  "check": "C10",
+  "unit": "arcsec",
+  "tolerance": 0.005,
+  "n": 32,
+  "median": 0.00011349310178006267,
+  "max": 0.0016925363431558478,
+  "verdict": "PASS"
+ }
+]
+{
+ "note": "post hoc diagnostics; not preregistered checks",
+ "D1nutationArcsec": {
+  "engineMinusNut00b": {
+   "dpsi": {
+    "median": 2.498e-16,
+    "max": 3.55271e-15
+   },
+   "deps": {
+    "median": 6.66134e-16,
+    "max": 3.55271e-15
+   }
+  },
+  "engineMinusNut06a": {
+   "dpsi": {
+    "median": 0.000562042,
+    "max": 0.00228726
+   },
+   "deps": {
+    "median": 0.000236539,
+    "max": 0.00175923
+   }
+  },
+  "nut00bMinusNut06a": {
+   "dpsi": {
+    "median": 0.000562042,
+    "max": 0.00228726
+   },
+   "deps": {
+    "median": 0.000236539,
+    "max": 0.00175923
+   }
+  }
+ },
+ "D1meanObliquityMinusObl06Arcsec": {
+  "median": 7.27596e-12,
+  "max": 2.91038e-11
+ },
+ "D2barycentricSunAu": {
+  "engineMinusHorizons": {
+   "median": 4.54009e-06,
+   "max": 1.10582e-05
+  },
+  "astronomyEngineFormulaOnHorizonsPositionsMinusHorizons": {
+   "median": 4.55718e-06,
+   "max": 1.10485e-05
+  },
+  "fullNewtonianFormulaOnHorizonsPositionsMinusHorizons": {
+   "median": 7.76715e-07,
+   "max": 9.12932e-07
+  },
+  "engineMinusAstronomyEngineFormulaOnHorizonsPositions": {
+   "median": 1.46674e-07,
+   "max": 3.72579e-07
+  },
+  "sunDistanceFromBarycentre": {
+   "min": 0.000643082,
+   "max": 0.00932805
+  }
+ },
+ "D3lightPathOverGeometricMinusOne": {
+  "Moon": {
+   "median": 6.74066e-05,
+   "max": 9.82412e-05
+  },
+  "Mars": {
+   "median": 3.56436e-05,
+   "max": 6.43119e-05
+  }
+ },
+ "D4nutationOver1800to2200": {
+  "unit": "arcsec; rates arcsec/day",
+  "engineMinusNut00b": {
+   "dpsi": {
+    "max": 6.00586e-11,
+    "jdTt": 2386891.5
+   },
+   "deps": {
+    "max": 2.39799e-11,
+    "jdTt": 2521332.205
+   },
+   "dpsiRate": {
+    "max": 5.51735e-09,
+    "jdTt": 2508159.204
+   },
+   "depsRate": {
+    "max": 2.0921e-09,
+    "jdTt": 2439162.5
+   }
+  },
+  "engineRate": {
+   "dpsi": {
+    "max": 0.246441,
+    "jdTt": 2412820.6
+   },
+   "deps": {
+    "max": 0.0933446,
+    "jdTt": 2466552.101
+   }
+  }
+ }
+}
+$PY docs/evidence/calc-api/tools/diagnostics.py $TMPDIR/calc-engine.json  19.96s user 0.42s system 93% cpu 21.911 total
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+Argument must be a Date object, an AstroTime object, or a numeric UTC Julian date.
+(Use `node --trace-uncaught ...` to show where the exception was thrown)
+
+Node.js v22.22.2
+node docs/evidence/calc-api/tools/barycentre.mjs  12.65s user 0.08s system 94% cpu 13.411 total
+# barycentre.mjs again, reading jdUt1
+{
+ "note": "added at the review; not a preregistered comparison",
+ "scan": {
+  "days": 146097,
+  "from": "JD 2378496.5",
+  "to": "JD 2524592.5",
+  "engineMinusReference": {
+   "position": {
+    "au": 0.000012575377020612837,
+    "jd": 2380231.5,
+    "distanceAu": 0.009749384007576476
+   },
+   "velocity": {
+    "auPerDay": 1.1513772054531049e-7,
+    "jd": 2402945.5
+   },
+   "closest": {
+    "au": 0.00010241567235979069,
+    "jd": 2499095.5,
+    "directionArcsec": 7940.540486570604
+   },
+   "angle": {
+    "arcsec": 8664.732795099568,
+    "jd": 2499089.5,
+    "distanceAu": 0.00010743816895155053
+   }
+  }
+ },
+ "horizons": {
+  "instants": 88,
+  "maxReferenceMinusHorizons": {
+   "au": 0.0000011000030261634323,
+   "auPerDay": 7.841884769278735e-10
+  },
+  "maxEngineMinusHorizons": {
+   "position": {
+    "au": 0.000012570096921226846,
+    "jd": 2511486.5,
+    "scale": "TT"
+   },
+   "velocity": {
+    "auPerDay": 1.1588851994243497e-7,
+    "jd": 2402945.5,
+    "scale": "TT"
+   }
+  }
+ },
+ "largestShareOfCalcBound": {
+  "position": {
+   "share": 0.4860805787195499,
+   "measured": 228.45787199818847,
+   "bound": 470,
+   "jd": 2512191.5,
+   "scale": "TT"
+  },
+  "distance": {
+   "share": 0.8696501261945762,
+   "measured": 0.0013044751892918643,
+   "bound": 0.0015,
+   "jd": 2511053.5,
+   "scale": "TT"
+  },
+  "speed": {
+   "share": 0.704127588015615,
+   "measured": 2.957335869665583,
+   "bound": 4.2,
+   "jd": 2384288.5,
+   "scale": "TT"
+  },
+  "speedLonLat": {
+   "share": 0.7041010676248082,
+   "measured": 2.9572244840241946,
+   "bound": 4.2,
+   "jd": 2384288.5,
+   "scale": "TT"
+  }
+ },
+ "review2130": {
+  "jdUt": 2499089.5,
+  "distanceAu": 0.00010744192621862377,
+  "position": 9592.557029670497,
+  "distance": 0.01838047742008202,
+  "speed": 378.00682633403744,
+  "speedLonLat": 439.58728727814054,
+  "bounds": {
+   "position": 27000,
+   "distance": 0.15,
+   "speed": 3400,
+   "speedLonLat": 3400
+  },
+  "basis": "the largest angle, relative distance and rate of direction that the error of astronomy-engine's barycentre, 1.4e-5 au and 1.2e-7 au/day from 1800 to 2200, allows at this distance and speed; docs/evidence/calc-api"
+ }
+}
+node docs/evidence/calc-api/tools/barycentre.mjs  12.30s user 0.07s system 96% cpu 12.814 total

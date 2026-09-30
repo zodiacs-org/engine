@@ -1,0 +1,130 @@
+{
+ "before": "0.1.1-rc.15",
+ "after": "0.1.1-rc.15",
+ "charts": 9697,
+ "places": [
+  [
+   0,
+   0
+  ],
+  [
+   40.7128,
+   -74.006
+  ],
+  [
+   -33.87,
+   151.21
+  ],
+  [
+   60.17,
+   24.94
+  ]
+ ],
+ "eras": {
+  "before 1972": {
+   "charts": 3944,
+   "identicalCharts": 0,
+   "systemChanged": 0,
+   "maxArcsec": {
+    "Sun lon": 0.2635,
+    "Sun lat": 6.983e-11,
+    "Moon lon": 0.2635,
+    "Moon lat": 7.994e-11,
+    "Mercury lon": 0.2635,
+    "Mercury lat": 6.395e-11,
+    "Venus lon": 0.2635,
+    "Venus lat": 6.555e-11,
+    "Mars lon": 0.2635,
+    "Mars lat": 6.315e-11,
+    "Jupiter lon": 0.2635,
+    "Jupiter lat": 7.674e-11,
+    "Saturn lon": 0.2635,
+    "Saturn lat": 6.675e-11,
+    "Uranus lon": 0.2635,
+    "Uranus lat": 5.79e-11,
+    "Neptune lon": 0.2635,
+    "Neptune lat": 7.194e-11,
+    "Pluto lon": 0.2635,
+    "Pluto lat": 6.715e-11,
+    "North Node lon": 0.2635,
+    "North Node lat": 0,
+    "South Node lon": 0.2635,
+    "South Node lat": 0,
+    "asc": 0.5911,
+    "mc": 0.2576,
+    "cusps": 0.5911
+   },
+   "maxDeltaTChange": 0
+  },
+  "1972 to 2027-10-02": {
+   "charts": 1801,
+   "identicalCharts": 0,
+   "systemChanged": 0,
+   "maxArcsec": {
+    "Sun lon": 0.2509,
+    "Sun lat": 5.808e-11,
+    "Moon lon": 0.2509,
+    "Moon lat": 8.371e-11,
+    "Mercury lon": 0.2509,
+    "Mercury lat": 5.276e-11,
+    "Venus lon": 0.2509,
+    "Venus lat": 6.755e-11,
+    "Mars lon": 0.2509,
+    "Mars lat": 5.675e-11,
+    "Jupiter lon": 0.2509,
+    "Jupiter lat": 6.005e-11,
+    "Saturn lon": 0.2509,
+    "Saturn lat": 5.576e-11,
+    "Uranus lon": 0.2509,
+    "Uranus lat": 5.835e-11,
+    "Neptune lon": 0.2509,
+    "Neptune lat": 6.155e-11,
+    "Pluto lon": 0.2509,
+    "Pluto lat": 5.596e-11,
+    "North Node lon": 0.2509,
+    "North Node lat": 0,
+    "South Node lon": 0.2509,
+    "South Node lat": 0,
+    "asc": 0.5927,
+    "mc": 0.245,
+    "cusps": 0.5927
+   },
+   "maxDeltaTChange": 0
+  },
+  "after 2027-10-02": {
+   "charts": 3952,
+   "identicalCharts": 0,
+   "systemChanged": 0,
+   "maxArcsec": {
+    "Sun lon": 0.2533,
+    "Sun lat": 5.8e-11,
+    "Moon lon": 0.2533,
+    "Moon lat": 9.273e-11,
+    "Mercury lon": 0.2533,
+    "Mercury lat": 5.835e-11,
+    "Venus lon": 0.2533,
+    "Venus lat": 6.395e-11,
+    "Mars lon": 0.2533,
+    "Mars lat": 6.115e-11,
+    "Jupiter lon": 0.2533,
+    "Jupiter lat": 6.31e-11,
+    "Saturn lon": 0.2533,
+    "Saturn lat": 6.315e-11,
+    "Uranus lon": 0.2533,
+    "Uranus lat": 6.894e-11,
+    "Neptune lon": 0.2533,
+    "Neptune lat": 6.395e-11,
+    "Pluto lon": 0.2533,
+    "Pluto lat": 6.395e-11,
+    "North Node lon": 0.2533,
+    "North Node lat": 0,
+    "South Node lon": 0.2533,
+    "South Node lat": 0,
+    "asc": 0.8003,
+    "mc": 0.2356,
+    "cusps": 0.8003
+   },
+   "maxDeltaTChange": 0
+  }
+ }
+}

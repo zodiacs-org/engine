@@ -1,0 +1,115 @@
+{
+ "rc14": "0.1.1-rc.14",
+ "candidate": "0.1.1-rc.15",
+ "instants": "1972-01-01T00:00Z to 2027-10-02, every 11 d 7 h 13 min",
+ "latitudes": [
+  0,
+  30,
+  -30,
+  45,
+  -45,
+  55,
+  60,
+  -60,
+  65
+ ],
+ "receipts": 16218,
+ "refused": 0,
+ "maxUt1MinusUtcSeconds": 0.7903,
+ "asUtc": {
+  "byLatitude": {
+   "0": {
+    "mc": 12.31,
+    "asc": 12.42,
+    "cusps": 12.9
+   },
+   "30": {
+    "mc": 12.71,
+    "asc": 15.98,
+    "cusps": 15.98
+   },
+   "45": {
+    "mc": 12.53,
+    "asc": 20.07,
+    "cusps": 20.07
+   },
+   "55": {
+    "mc": 12.38,
+    "asc": 30.76,
+    "cusps": 30.76
+   },
+   "60": {
+    "mc": 12.81,
+    "asc": 40.69,
+    "cusps": 40.69
+   },
+   "65": {
+    "mc": 12.47,
+    "asc": 129.9,
+    "cusps": 129.9
+   },
+   "-30": {
+    "mc": 12.65,
+    "asc": 14.82,
+    "cusps": 14.89
+   },
+   "-45": {
+    "mc": 12.46,
+    "asc": 20.15,
+    "cusps": 20.15
+   },
+   "-60": {
+    "mc": 12.51,
+    "asc": 39.61,
+    "cusps": 39.61
+   }
+  },
+  "bodies": {
+   "Sun": 0.2506,
+   "Moon": 0.5981,
+   "Mercury": 0.2717,
+   "Venus": 0.2511,
+   "Mars": 0.2522,
+   "Jupiter": 0.2537,
+   "Saturn": 0.2557,
+   "Uranus": 0.2553,
+   "Neptune": 0.2552,
+   "Pluto": 0.2556,
+   "North Node": 0.2545,
+   "South Node": 0.2545
+  }
+ },
+ "onUt1WithRecordedDeltaT": {
+  "angles": 3.022,
+  "cusps": 3.022,
+  "bodies": {
+   "Sun": 0.2554,
+   "Moon": 0.2554,
+   "Mercury": 0.2554,
+   "Venus": 0.2554,
+   "Mars": 0.2554,
+   "Jupiter": 0.2554,
+   "Saturn": 0.2554,
+   "Uranus": 0.2554,
+   "Neptune": 0.2554,
+   "Pluto": 0.2554,
+   "North Node": 0.2554,
+   "South Node": 0.2554
+  },
+  "speeds": {
+   "Sun": 0.00002073,
+   "Moon": 0.00002074,
+   "Mercury": 0.00002073,
+   "Venus": 0.00002073,
+   "Mars": 0.00002073,
+   "Jupiter": 0.00002073,
+   "Saturn": 0.00002073,
+   "Uranus": 0.00002073,
+   "Neptune": 0.00002073,
+   "Pluto": 0.00002073,
+   "North Node": 0.00002752,
+   "South Node": 0.00002752
+  }
+ },
+ "siderealTimeShiftArcsecAtMostOverTheseInstants": 11.89
+}

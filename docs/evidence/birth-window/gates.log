@@ -1,0 +1,163 @@
+Worktree at f9ae1ded, 0 changed files besides this log; node v22.22.2; npm 10.9.7
+
+## typecheck
+$ npm run typecheck
+
+> @zodiacs/engine@0.1.1-rc.12 typecheck
+> tsc -p tsconfig.typecheck.json --pretty false
+
+exit 0
+
+## unit tests
+$ npm test
+ Test Files  30 passed (30)
+      Tests  2676 passed (2676)
+   Start at  11:50:03
+   Duration  89.13s (transform 3.73s, setup 0ms, collect 10.95s, tests 156.63s, environment 40ms, prepare 8.33s)
+exit 0
+
+## build
+$ npm run build
+ESM dist/crossings.js      173.00 B
+ESM dist/deltat.js         161.00 B
+ESM dist/geo.js            11.51 KB
+ESM dist/index.js          21.86 KB
+ESM dist/chunk-AECKV73C.js 9.02 KB
+ESM dist/internal-math.js  1.29 KB
+ESM dist/internal.js       305.00 B
+ESM dist/receipt.js        31.00 KB
+ESM dist/window.js         34.26 KB
+ESM dist/chunk-PFGUCNOK.js 2.86 KB
+ESM dist/chunk-JNIEZBOU.js 18.01 KB
+ESM dist/chunk-S3PWE4HR.js 11.31 KB
+ESM dist/chunk-CPALRSPC.js 1.42 KB
+ESM dist/chunk-IYNERVXW.js 380.00 B
+ESM dist/chunk-ONBZ4HK7.js 4.69 KB
+ESM dist/chunk-M52XEBPK.js 5.14 KB
+DTS dist/crossings.d.ts              4.33 KB
+DTS dist/internal.d.ts               450.00 B
+DTS dist/receipt.d.ts                10.45 KB
+DTS dist/window.d.ts                 6.87 KB
+DTS dist/deltat.d.ts                 3.72 KB
+DTS dist/geo.d.ts                    2.14 KB
+DTS dist/index.d.ts                  20.82 KB
+DTS dist/internal-math.d.ts          1.04 KB
+DTS dist/types-DICQY4X-.d.ts         7.37 KB
+DTS dist/internal-math-BxoTM2BT.d.ts 12.14 KB
+exit 0
+
+## export smoke
+$ npm run exports:smoke
+
+> @zodiacs/engine@0.1.1-rc.12 exports:smoke
+> node scripts/module-resolution-smoke.mjs
+
+@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports
+exit 0
+
+## package contents
+$ npm run package:contents
+
+> @zodiacs/engine@0.1.1-rc.12 package:contents
+> node scripts/verify-package-contents.mjs
+
+@zodiacs/engine package contents passed (32 files, 299301 bytes unpacked)
+exit 0
+
+## pack dry run
+$ npm run pack:dry-run
+npm notice filename: zodiacs-engine-0.1.1-rc.12.tgz
+npm notice package size: 89.9 kB
+npm notice unpacked size: 299.3 kB
+npm notice shasum: e30e1ee2a956c4c1aa95d873546aa9ab0b7ec4f7
+npm notice integrity: sha512-tNbbf4HliKXHH[...]ww2t94YGBu8TQ==
+npm notice total files: 32
+zodiacs-engine-0.1.1-rc.12.tgz
+exit 0
+
+## pack
+$ npm pack --ignore-scripts --pack-destination <scratch>/pack
+npm notice name: @zodiacs/engine
+npm notice version: 0.1.1-rc.12
+npm notice filename: zodiacs-engine-0.1.1-rc.12.tgz
+npm notice package size: 89.9 kB
+npm notice unpacked size: 299.3 kB
+npm notice shasum: e30e1ee2a956c4c1aa95d873546aa9ab0b7ec4f7
+npm notice integrity: sha512-tNbbf4HliKXHH[...]ww2t94YGBu8TQ==
+npm notice total files: 32
+zodiacs-engine-0.1.1-rc.12.tgz
+exit 0
+
+## packed consumer
+$ npm run consumer:smoke -- <scratch>/pack/zodiacs-engine-0.1.1-rc.12.tgz
+
+> @zodiacs/engine@0.1.1-rc.12 consumer:smoke
+> node scripts/verify-packed-consumer.mjs <scratch>/pack/zodiacs-engine-0.1.1-rc.12.tgz
+
+{
+  "version": "0.1.1-rc.12",
+  "birthWindow": "passed",
+  "configuredAspects": "passed",
+  "chartDeclinations": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "artifact": "<scratch>/pack/zodiacs-engine-0.1.1-rc.12.tgz",
+  "sha256": "128d94a2c7ea1c26d888ed13ee7e2a55d5e1db8221379b0b743437a2af0ba5d1",
+  "runtime": "v22.22.2",
+  "typescript": "5.9.3",
+  "directory": "/tmp/zodiacs-engine-consumer-nUTMNu",
+  "types": "passed"
+}
+exit 0
+
+## conformance self-test (plain)
+$ node conformance/harness/selftest.mjs
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+exit 0
+
+## conformance self-test (node --test, as CI)
+$ node --test conformance/harness/selftest.mjs
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+exit 0
+
+## conformance vectors
+$ node conformance/harness/validate.mjs --expect-total 500
+conformance: 500 vectors conform to SPEC.md
+exit 0
+
+## conformance verdicts
+$ node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" --check conformance/results/zodiacs-engine.json
+zodiacs-engine 0.1.1-rc.12: 232 pass, 222 fail, 46 unsupported, 0 error (of 500)
+  L1: 47 pass, 193 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 35 pass, 29 fail, 46 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+exit 0
+
+## conformance report
+$ node conformance/harness/report.mjs --check
+conformance: RESULTS.md and results/summary.json are current
+exit 0

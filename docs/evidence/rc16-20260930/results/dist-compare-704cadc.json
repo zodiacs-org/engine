@@ -1,0 +1,28 @@
+{
+ "files": [
+  44,
+  44
+ ],
+ "same": 42,
+ "differ": [
+  {
+   "file": "calc.js",
+   "modules": [
+    "src/calc.ts",
+    "src/calc-bounds.ts",
+    "src/calc-frames.ts",
+    "src/calc-reduce.ts"
+   ]
+  },
+  {
+   "file": "receipt.js",
+   "modules": [
+    "src/receipt-json.ts",
+    "src/semver.ts",
+    "src/receipt.ts"
+   ]
+  }
+ ],
+ "onlyFirst": [],
+ "onlySecond": []
+}

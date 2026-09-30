@@ -1,0 +1,146 @@
+{
+ "node": "v22.22.2",
+ "esbuild": "0.27.7",
+ "rc15Archive": "bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637",
+ "unit": "bytes",
+ "rc15": {
+  "mainChunk": {
+   "bytes": 23963,
+   "gzip9": 7364,
+   "minifiedBytes": 12863,
+   "minifiedGzip9": 5656
+  },
+  "importGraphs": {
+   ".": 97704,
+   "./internal": 58997,
+   "./internal/math": 18165,
+   "./timing": 114916,
+   "./vedic": 116779,
+   "./receipt": 66200,
+   "./crossings": 9410,
+   "./deltat": 4968,
+   "./geo": 34135
+  },
+  "internalBundled": {
+   "withAstronomyEngine": {
+    "bytes": 70868,
+    "gzip9": 32506
+   },
+   "astronomyEngineExternal": {
+    "bytes": 21267,
+    "gzip9": 10714
+   }
+  }
+ },
+ "build": {
+  "mainChunk": {
+   "bytes": 29776,
+   "gzip9": 9792,
+   "minifiedBytes": 16939,
+   "minifiedGzip9": 7764
+  },
+  "importGraphs": {
+   ".": 103517,
+   "./internal": 64810,
+   "./internal/math": 18165,
+   "./timing": 120729,
+   "./vedic": 122111,
+   "./receipt": 66200,
+   "./crossings": 9410,
+   "./deltat": 4968,
+   "./geo": 34135
+  },
+  "internalBundled": {
+   "withAstronomyEngine": {
+    "bytes": 71995,
+    "gzip9": 33595
+   },
+   "astronomyEngineExternal": {
+    "bytes": 25430,
+    "gzip9": 12877
+   }
+  }
+ },
+ "growth": {
+  "mainChunk": {
+   "bytes": 5813,
+   "gzip9": 2428,
+   "minifiedBytes": 4076,
+   "minifiedGzip9": 2108
+  },
+  "importGraphs": {
+   ".": 5813,
+   "./internal": 5813,
+   "./internal/math": 0,
+   "./timing": 5813,
+   "./vedic": 5332,
+   "./receipt": 0,
+   "./crossings": 0,
+   "./deltat": 0,
+   "./geo": 0
+  },
+  "internalBundled": {
+   "withAstronomyEngine": {
+    "bytes": 1127,
+    "gzip9": 1089
+   },
+   "astronomyEngineExternal": {
+    "bytes": 4163,
+    "gzip9": 2163
+   }
+  }
+ },
+ "packageBudgets": {
+  ".": 100000,
+  "./crossings": 10000,
+  "./deltat": 5500,
+  "./geo": 35000,
+  "./internal": 60000,
+  "./internal/math": 20000,
+  "./receipt": 70000,
+  "./timing": 120000,
+  "./vedic": 120000
+ },
+ "overBudget": {
+  ".": 3517,
+  "./internal": 4810,
+  "./timing": 729,
+  "./vedic": 2111
+ },
+ "siteEngineChunkStandIn": {
+  "rollup": "4.63.4",
+  "imports": [
+   "bodyLongitude",
+   "computeBodies",
+   "computeChart",
+   "longitudeSpeed"
+  ],
+  "target": [
+   "es2020",
+   "edge88",
+   "firefox78",
+   "chrome87"
+  ],
+  "rc14Archive": "adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e",
+  "rc14": {
+   "bytes": 61934,
+   "gzip9": 26750
+  },
+  "rc15": {
+   "bytes": 70104,
+   "gzip9": 32051
+  },
+  "build": {
+   "bytes": 71225,
+   "gzip9": 33131
+  },
+  "gzip9Growth": {
+   "rc14ToRc15": 5301,
+   "rc15ToBuild": 1080
+  },
+  "siteRecordedRc14": 27303,
+  "siteLimit": 27648,
+  "estimateForThisBuild": 33684,
+  "estimateOverLimit": 6036
+ }
+}
