@@ -1,0 +1,354 @@
+{
+ "tool": "docs/evidence/rc16-20260930/tools/plumbing-by-latitude.mjs",
+ "node": "v22.22.2",
+ "head": "aba647e1efbc7c0429d921ebea48d9ce2bf8e27e",
+ "srcTree": "70e3f630ba51da29f9096ef5d4c09cee53e18b82",
+ "rc15Archive": {
+  "file": "artifacts/zodiacs-engine-0.1.1-rc.15.tgz",
+  "sha256": "24eeb597b0157598c0faa26bb615c0cb5dfaaeac0393d62c73fbd37c5da4d348"
+ },
+ "workload": "docs/evidence/nutation-2026-09-29/tools/plumbing.mjs --run, its 520 synthetic charts; this checkout's src/ (full series) against rc.15 as carried",
+ "unit": "arcseconds; each largest change with the case it falls on (its index in the grid, UTC as given, latitude)",
+ "classes": {
+  "1800-2200, within 66°": {
+   "cases": 432,
+   "fallbacks": {},
+   "largest": {
+    "longitudes": {
+     "arcsec": 0.237972,
+     "case": 351,
+     "utc": "2007-10-03T16:36:24.415Z",
+     "latitude": -32.34
+    },
+    "angles": {
+     "arcsec": 0.409345,
+     "case": 163,
+     "utc": "2140-07-29T20:40:27.862Z",
+     "latitude": -62.45
+    },
+    "cusps, whole asked": {
+     "arcsec": 0
+    },
+    "cusps, placidus asked": {
+     "arcsec": 0.516465,
+     "case": 460,
+     "utc": "2014-10-14T15:11:24.802Z",
+     "latitude": -65.28
+    },
+    "cusps, porphyry asked": {
+     "arcsec": 0.409345,
+     "case": 163,
+     "utc": "2140-07-29T20:40:27.862Z",
+     "latitude": -62.45
+    },
+    "cusps, equal asked": {
+     "arcsec": 0.409345,
+     "case": 163,
+     "utc": "2140-07-29T20:40:27.862Z",
+     "latitude": -62.45
+    },
+    "cusps, equal-mc asked": {
+     "arcsec": 0.224137,
+     "case": 194,
+     "utc": "1949-04-04T13:03:39.370Z",
+     "latitude": 60.47
+    },
+    "cusps, vehlow asked": {
+     "arcsec": 0.409345,
+     "case": 163,
+     "utc": "2140-07-29T20:40:27.862Z",
+     "latitude": -62.45
+    },
+    "cusps, koch asked": {
+     "arcsec": 3.8821,
+     "case": 3,
+     "utc": "1813-03-13T14:20:32.845Z",
+     "latitude": 65.75
+    },
+    "cusps, regiomontanus asked": {
+     "arcsec": 0.707586,
+     "case": 460,
+     "utc": "2014-10-14T15:11:24.802Z",
+     "latitude": -65.28
+    },
+    "cusps, campanus asked": {
+     "arcsec": 0.409345,
+     "case": 163,
+     "utc": "2140-07-29T20:40:27.862Z",
+     "latitude": -62.45
+    },
+    "cusps, topocentric asked": {
+     "arcsec": 0.440545,
+     "case": 460,
+     "utc": "2014-10-14T15:11:24.802Z",
+     "latitude": -65.28
+    },
+    "cusps, alcabitius asked": {
+     "arcsec": 0.409345,
+     "case": 163,
+     "utc": "2140-07-29T20:40:27.862Z",
+     "latitude": -62.45
+    },
+    "cusps, morinus asked": {
+     "arcsec": 0.23474,
+     "case": 351,
+     "utc": "2007-10-03T16:36:24.415Z",
+     "latitude": -32.34
+    },
+    "cusps, meridian asked": {
+     "arcsec": 0.23474,
+     "case": 351,
+     "utc": "2007-10-03T16:36:24.415Z",
+     "latitude": -32.34
+    },
+    "mean node and Lilith": {
+     "arcsec": 0.237972,
+     "case": 351,
+     "utc": "2007-10-03T16:36:24.415Z",
+     "latitude": -32.34
+    },
+    "Vertex and East Point": {
+     "arcsec": 0.964543,
+     "case": 305,
+     "utc": "1946-01-30T03:25:54.387Z",
+     "latitude": 23.77
+    },
+    "lots": {
+     "arcsec": 0.739174,
+     "case": 163,
+     "utc": "2140-07-29T20:40:27.862Z",
+     "latitude": -62.45
+    }
+   }
+  },
+  "1800-2200, 66° to 80°": {
+   "cases": 48,
+   "fallbacks": {
+    "placidus": {
+     "whole": 46
+    },
+    "koch": {
+     "whole": 46
+    }
+   },
+   "largest": {
+    "longitudes": {
+     "arcsec": 0.14101,
+     "case": 419,
+     "utc": "1802-11-25T23:41:29.829Z",
+     "latitude": 70.34
+    },
+    "angles": {
+     "arcsec": 1.62144,
+     "case": 259,
+     "utc": "1987-07-31T11:48:28.785Z",
+     "latitude": 67.21
+    },
+    "cusps, whole asked": {
+     "arcsec": 0
+    },
+    "cusps, placidus asked": {
+     "arcsec": 0.0485994,
+     "case": 189,
+     "utc": "1866-03-02T00:53:29.333Z",
+     "latitude": -66.49
+    },
+    "cusps, porphyry asked": {
+     "arcsec": 1.62144,
+     "case": 259,
+     "utc": "1987-07-31T11:48:28.785Z",
+     "latitude": 67.21
+    },
+    "cusps, equal asked": {
+     "arcsec": 1.62144,
+     "case": 259,
+     "utc": "1987-07-31T11:48:28.785Z",
+     "latitude": 67.21
+    },
+    "cusps, equal-mc asked": {
+     "arcsec": 0.137781,
+     "case": 419,
+     "utc": "1802-11-25T23:41:29.829Z",
+     "latitude": 70.34
+    },
+    "cusps, vehlow asked": {
+     "arcsec": 1.62144,
+     "case": 259,
+     "utc": "1987-07-31T11:48:28.785Z",
+     "latitude": 67.21
+    },
+    "cusps, koch asked": {
+     "arcsec": 0.102279,
+     "case": 9,
+     "utc": "1834-02-12T08:54:06.979Z",
+     "latitude": -66.4
+    },
+    "cusps, regiomontanus asked": {
+     "arcsec": 1.62144,
+     "case": 259,
+     "utc": "1987-07-31T11:48:28.785Z",
+     "latitude": 67.21
+    },
+    "cusps, campanus asked": {
+     "arcsec": 1.62144,
+     "case": 259,
+     "utc": "1987-07-31T11:48:28.785Z",
+     "latitude": 67.21
+    },
+    "cusps, topocentric asked": {
+     "arcsec": 1.62144,
+     "case": 259,
+     "utc": "1987-07-31T11:48:28.785Z",
+     "latitude": 67.21
+    },
+    "cusps, alcabitius asked": {
+     "arcsec": 1.62144,
+     "case": 259,
+     "utc": "1987-07-31T11:48:28.785Z",
+     "latitude": 67.21
+    },
+    "cusps, morinus asked": {
+     "arcsec": 0.141939,
+     "case": 419,
+     "utc": "1802-11-25T23:41:29.829Z",
+     "latitude": 70.34
+    },
+    "cusps, meridian asked": {
+     "arcsec": 0.141939,
+     "case": 419,
+     "utc": "1802-11-25T23:41:29.829Z",
+     "latitude": 70.34
+    },
+    "mean node and Lilith": {
+     "arcsec": 0.14101,
+     "case": 419,
+     "utc": "1802-11-25T23:41:29.829Z",
+     "latitude": 70.34
+    },
+    "Vertex and East Point": {
+     "arcsec": 0.142092,
+     "case": 269,
+     "utc": "2137-06-28T04:46:08.849Z",
+     "latitude": -77.27
+    },
+    "lots": {
+     "arcsec": 3.34464,
+     "case": 259,
+     "utc": "1987-07-31T11:48:28.785Z",
+     "latitude": 67.21
+    }
+   }
+  },
+  "200-1800 and 2200-3900, within 60°": {
+   "cases": 40,
+   "fallbacks": {},
+   "largest": {
+    "longitudes": {
+     "arcsec": 0.136991,
+     "case": 483,
+     "utc": "2543-04-14T19:48:02.702Z",
+     "latitude": 55.72
+    },
+    "angles": {
+     "arcsec": 0.21479,
+     "case": 485,
+     "utc": "2588-04-24T22:52:17.969Z",
+     "latitude": -54.87
+    },
+    "cusps, whole asked": {
+     "arcsec": 0
+    },
+    "cusps, placidus asked": {
+     "arcsec": 0.21479,
+     "case": 485,
+     "utc": "2588-04-24T22:52:17.969Z",
+     "latitude": -54.87
+    },
+    "cusps, porphyry asked": {
+     "arcsec": 0.21479,
+     "case": 485,
+     "utc": "2588-04-24T22:52:17.969Z",
+     "latitude": -54.87
+    },
+    "cusps, equal asked": {
+     "arcsec": 0.21479,
+     "case": 485,
+     "utc": "2588-04-24T22:52:17.969Z",
+     "latitude": -54.87
+    },
+    "cusps, equal-mc asked": {
+     "arcsec": 0.122725,
+     "case": 495,
+     "utc": "2644-08-20T17:23:07.298Z",
+     "latitude": -10.66
+    },
+    "cusps, vehlow asked": {
+     "arcsec": 0.21479,
+     "case": 485,
+     "utc": "2588-04-24T22:52:17.969Z",
+     "latitude": -54.87
+    },
+    "cusps, koch asked": {
+     "arcsec": 0.246107,
+     "case": 485,
+     "utc": "2588-04-24T22:52:17.969Z",
+     "latitude": -54.87
+    },
+    "cusps, regiomontanus asked": {
+     "arcsec": 0.21479,
+     "case": 485,
+     "utc": "2588-04-24T22:52:17.969Z",
+     "latitude": -54.87
+    },
+    "cusps, campanus asked": {
+     "arcsec": 0.21479,
+     "case": 485,
+     "utc": "2588-04-24T22:52:17.969Z",
+     "latitude": -54.87
+    },
+    "cusps, topocentric asked": {
+     "arcsec": 0.21479,
+     "case": 485,
+     "utc": "2588-04-24T22:52:17.969Z",
+     "latitude": -54.87
+    },
+    "cusps, alcabitius asked": {
+     "arcsec": 0.21479,
+     "case": 485,
+     "utc": "2588-04-24T22:52:17.969Z",
+     "latitude": -54.87
+    },
+    "cusps, morinus asked": {
+     "arcsec": 0.143461,
+     "case": 483,
+     "utc": "2543-04-14T19:48:02.702Z",
+     "latitude": 55.72
+    },
+    "cusps, meridian asked": {
+     "arcsec": 0.143461,
+     "case": 483,
+     "utc": "2543-04-14T19:48:02.702Z",
+     "latitude": 55.72
+    },
+    "mean node and Lilith": {
+     "arcsec": 0.136991,
+     "case": 483,
+     "utc": "2543-04-14T19:48:02.702Z",
+     "latitude": 55.72
+    },
+    "Vertex and East Point": {
+     "arcsec": 0.207602,
+     "case": 483,
+     "utc": "2543-04-14T19:48:02.702Z",
+     "latitude": 55.72
+    },
+    "lots": {
+     "arcsec": 0.335254,
+     "case": 485,
+     "utc": "2588-04-24T22:52:17.969Z",
+     "latitude": -54.87
+    }
+   }
+  }
+ }
+}

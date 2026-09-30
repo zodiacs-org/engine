@@ -42,6 +42,66 @@ the US Government, which its authors ask to be cited as:
 Its equation of the equinoxes adds two complementary terms from the IERS
 Conventions (2010), table 5.2e (IERS, https://www.iers.org/).
 
+Calculation entry
+-----------------
+
+The calc entry (dist/calc.js and the chunks it imports) carries the frame
+bias of the IAU 2000 precession-nutation model, dpsi = -0.041775",
+deps = -0.0068192" and dalpha0 = -0.0146", composed as
+
+  G. Petit and B. Luzum (eds.) 2010, IERS Conventions (2010), IERS Technical
+  Note No. 36, chapter 5, eq. 5.21,
+
+composes it, and the obliquity of J2000.0 of the IAU 2006 precession,
+84381.406", from
+
+  N. Capitaine, P. T. Wallace and J. Chapront 2003, Expressions for IAU 2000
+  precession quantities. Astronomy & Astrophysics 412, 567-586 (adopted by
+  IAU 2006 Resolution B1).
+
+Its bounds and its barycentre's error are measurements: the largest
+differences of this package's own results from NASA JPL Horizons (DE441)
+responses at 32 instants, and of astronomy-engine's barycentre from a
+Newtonian barycentre and from Horizons's. They are not coefficients derived
+from JPL data, and no JPL ephemeris value is in the package.
+
+Essential dignities
+-------------------
+
+The techniques entry (dist/techniques.js) carries the tables of the
+essential dignities as these works give them, and none of their text:
+
+  Ptolemy, Tetrabiblos I.17-I.20, tr. F. E. Robbins (Loeb Classical Library,
+  1940): domiciles, exaltations, the Egyptian terms.
+  Dorotheus of Sidon, Carmen Astrologicum I.1-I.2, ed. and tr. D. Pingree
+  (Leipzig: Teubner, 1976), pp. 161-162: domiciles, exaltations, triplicity
+  lords.
+  al-Biruni, The Book of Instruction in the Elements of the Art of Astrology
+  (1029), tr. R. Ramsay Wright (London: Luzac, 1934), sections 440-453:
+  detriments, triplicities, terms, the Chaldean faces.
+  W. Lilly, Christian Astrology (London, 1647), p. 112: reception and the
+  peregrine planet.
+
+Rise, set and transit
+---------------------
+
+The sky entry (dist/sky.js) carries 34' of refraction at the horizon, from
+the US Naval Observatory's Rise, Set, and Twilight Definitions
+(https://aa.usno.navy.mil/faq/RST_defs, a work of the US Government); the
+Moon's mean radius, 1,737.4 km, from
+
+  B. A. Archinal et al. 2018, Report of the IAU Working Group on
+  Cartographic Coordinates and Rotational Elements: 2015. Celestial
+  Mechanics and Dynamical Astronomy 130:22;
+
+the Sun's radius, 696,000 km, which subtends 959.64" at 1 au, where J.
+Meeus, Astronomical Algorithms, 2nd ed. (Willmann-Bell, 1998), ch. 55, gives
+959.63"; the astronomical unit, 149,597,870.7 km (IAU 2012 Resolution B2);
+and the WGS84 ellipsoid, a = 6,378,137 m and 1/f = 298.257223563, from
+
+  NIMA TR8350.2 2000, Department of Defense World Geodetic System 1984: Its
+  Definition and Relationships with Local Geodetic Systems, 3rd ed.
+
 ΔT (TT − UT1)
 ------------
 

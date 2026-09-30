@@ -202,7 +202,9 @@ npm packs it by default (`package.json` and any README, LICENSE, LICENCE or
 COPYING file). `conformance/` and `atlas/` are not packed. The core entry
 point makes no network request and has no import-time side effects;
 `@zodiacs/engine/crossings` and `@zodiacs/engine/deltat` import no ephemeris.
-`@zodiacs/engine/timing`, `@zodiacs/engine/vedic`, `@zodiacs/engine/geo` and
+`@zodiacs/engine/timing`, `@zodiacs/engine/vedic`, `@zodiacs/engine/geo`,
+`@zodiacs/engine/calc`, `@zodiacs/engine/window`,
+`@zodiacs/engine/techniques`, `@zodiacs/engine/houses` and
 `@zodiacs/engine/sky` are opt-in: the root imports none of them, and
 `npm run exports:smoke` fails if its static graph reaches one of their
 modules or a zone history.

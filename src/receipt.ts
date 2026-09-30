@@ -148,18 +148,33 @@ const CONVENTIONS_RC8 = Object.freeze({
   deltaT: "tt-minus-ut1;ut1-read-as-utc;value-in-result"
 } as const);
 /**
- * The conventions this engine records: the rc.8 set, with the time basis in
- * the result (`result.timeScale`, docs/time.md) and local times resolved on
- * the shipped tzdb history before 1970, their flags from its records.
+ * The conventions engine version 0.1.1-rc.15 recorded: the rc.8 set, with the
+ * time basis in the result (`result.timeScale`, docs/time.md) and local times
+ * resolved on the shipped tzdb history before 1970, their flags from its
+ * records. Its engine took astronomy-engine's nutation, the five largest terms
+ * of IAU 2000B, which the set does not name. Its receipts stay readable.
  */
-const CONVENTIONS = Object.freeze({
+const CONVENTIONS_RC15 = Object.freeze({
   ...CONVENTIONS_RC8,
   deltaT: "tt-minus-ut1;value-in-result",
   timeScale: "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result",
   localTime: "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record"
 } as const);
+/**
+ * The conventions this engine records: the rc.15 set, naming the nutation,
+ * the engine's own IAU 2000B series (all 77 luni-solar terms and the planetary
+ * offsets, src/nutation.ts) with the two largest complementary terms of the
+ * equation of the equinoxes, and the Moon as astronomy-engine's geocentric
+ * series (GeoMoon) turned to the ecliptic of date by it.
+ */
+const CONVENTIONS = Object.freeze({
+  ...CONVENTIONS_RC15,
+  moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration",
+  nutation: "iau2000b;equation-of-equinoxes-with-two-complementary-terms"
+} as const);
 type ConventionSet =
   | typeof CONVENTIONS
+  | typeof CONVENTIONS_RC15
   | typeof CONVENTIONS_RC8
   | typeof CONVENTIONS_RC7
   | typeof CONVENTIONS_RC3;
@@ -167,23 +182,25 @@ type ConventionSet =
 /** Every conventions set a receipt may carry, the current one first. */
 export const NATAL_RECEIPT_CONVENTION_SETS: readonly [
   typeof CONVENTIONS,
+  typeof CONVENTIONS_RC15,
   typeof CONVENTIONS_RC8,
   typeof CONVENTIONS_RC7,
   typeof CONVENTIONS_RC3
-] = Object.freeze([CONVENTIONS, CONVENTIONS_RC8, CONVENTIONS_RC7, CONVENTIONS_RC3] as const);
+] = Object.freeze([CONVENTIONS, CONVENTIONS_RC15, CONVENTIONS_RC8, CONVENTIONS_RC7, CONVENTIONS_RC3] as const);
 // The released versions that wrote each earlier set, with any build metadata:
 // exact lists, not ranges, so no other spelling passes them.
 const RC3_TO_RC6 = /^0\.1\.1-rc\.[3-6](?:\+[A-Za-z0-9.-]+)?$/;
 const RC7 = /^0\.1\.1-rc\.7(?:\+[A-Za-z0-9.-]+)?$/;
 const RC8_TO_RC14 = /^0\.1\.1-rc\.(?:[89]|1[0-4])(?:\+[A-Za-z0-9.-]+)?$/;
+const RC15 = /^0\.1\.1-rc\.15(?:\+[A-Za-z0-9.-]+)?$/;
 /**
  * Whether an engine version comes before `release` in SemVer 2.0.0 precedence
- * (src/semver.ts): 0.1.1-rc.14.1, 0.1.1-beta and 0.1.1-rc come before
- * 0.1.1-rc.15, and build metadata changes nothing.
+ * (src/semver.ts): 0.1.1-rc.15.1, 0.1.1-beta and 0.1.1-rc come before
+ * 0.1.1-rc.16, and build metadata changes nothing.
  */
 const before = (version: string, release: string): boolean => compareVersions(version, release) < 0;
-/** 0.1.1-rc.15 released the time-basis set. */
-const TIME_BASIS_RELEASE = "0.1.1-rc.15";
+/** 0.1.1-rc.16 released the set that names the nutation. */
+const NUTATION_RELEASE = "0.1.1-rc.16";
 /** Engines before 0.1.1-rc.9 offered only three house systems. */
 const RC9_RELEASE = "0.1.1-rc.9";
 /** Engines before 0.1.1-rc.10 did not offer Equal houses from the midheaven. */
@@ -984,9 +1001,9 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     if (timeKnown && Math.abs(coords.latitude as number) === 90) fail("unsupported_feature");
   }
   const conventions = conventionSet(receipt.conventions);
-  // The rc.8 set on records ΔT; the time-basis set also the instant's scale and basis.
-  const current = conventions === CONVENTIONS || conventions === CONVENTIONS_RC8;
-  const timeBasis = conventions === CONVENTIONS;
+  // The rc.8 set on records ΔT; the time-basis sets (rc.15 on) also the instant's scale and basis.
+  const timeBasis = conventions === CONVENTIONS || conventions === CONVENTIONS_RC15;
+  const current = timeBasis || conventions === CONVENTIONS_RC8;
   if (timeBasis !== Object.hasOwn(receipt, "timeScale")) fail("invalid_shape");
   const scale = timeBasis ? choice(receipt.timeScale, TIME_SCALE_NAMES) : null;
   const result = validateResult(
@@ -1057,7 +1074,8 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     (conventions === CONVENTIONS_RC3 && !RC3_TO_RC6.test(engineVersion)) ||
     (conventions === CONVENTIONS_RC7 && !RC7.test(engineVersion)) ||
     (conventions === CONVENTIONS_RC8 && !RC8_TO_RC14.test(engineVersion)) ||
-    (timeBasis && before(engineVersion, TIME_BASIS_RELEASE)) ||
+    (conventions === CONVENTIONS_RC15 && !RC15.test(engineVersion)) ||
+    (conventions === CONVENTIONS && before(engineVersion, NUTATION_RELEASE)) ||
     (!HOUSE_SYSTEMS_BEFORE_RC9.includes(requested) && before(engineVersion, RC9_RELEASE)) ||
     (!HOUSE_SYSTEMS_BEFORE_RC10.includes(requested) && before(engineVersion, RC10_RELEASE))
   )

@@ -41,7 +41,7 @@ describe("an rc.14 receipt of 1973, when UT1 − UTC was +0.80 s", () => {
   it("is the carried archive's, under the rc.8 set", () => {
     expect(createHash("sha256").update(TEXT).digest("hex")).toBe("6234a8ef034020d26807506659e07fbb20d3ddf6bb822a7ad4446a49f23432e4");
     const { receipt, result } = parsed();
-    expect(receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[1]);
+    expect(receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[2]);
     expect(receipt.conventions).toMatchObject({ deltaT: "tt-minus-ut1;ut1-read-as-utc;value-in-result" });
     expect(receipt.engine.version).toBe("0.1.1-rc.14");
     expect(receipt.instant).toBe("1973-01-05T06:56:44.000Z");

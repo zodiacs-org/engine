@@ -15,7 +15,7 @@ results stay in `../results/`.
 | F, speeds against a central difference of the engine's own cusps | `finite-difference.json` byte for byte the branch's: pass |
 | R, planetary returns against JPL Horizons and USNO | `returns.json`: pass, every body (below) |
 | stations over 1800–2200 | `stations.json` byte for byte the branch's |
-| B, the root's graph and the budgets | not the branch's question on this tree (see `docs/evidence/rc16-20260930/`) |
+| B, the root's graph, the budgets and existing behaviour | **failed** (the branch's run passed): the root's graph is 103,537 bytes, where it was to stay at rc.15's 95,273 with its files byte-identical; `./timing` is 123,039 bytes, over its 120,000-byte budget; the package is 923,282 bytes, over the 700,000-byte cap; 13 of rc.15's test files change and released functions' results move with the nutation. `./houses`, 13,606 bytes of its 15,000, holds. rc.16 raised `./timing`'s budget to 129,000 and the cap to 950,000 after these sizes were measured; that does not make B pass (`docs/evidence/rc16-20260930/`, *Sizes and budgets*) |
 
 P, A, S and F take their sidereal times, latitudes and obliquities from the
 grids of `../tools/grids.mjs`, not from the ephemeris, so the nutation cannot

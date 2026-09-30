@@ -1,0 +1,248 @@
+{
+ "before": {
+  "engine": {
+   "name": "zodiacs-engine",
+   "version": "0.2.0",
+   "engine": "@zodiacs/engine",
+   "engineVersion": "0.1.1-rc.15",
+   "configuration": {
+    "ephemeris": "astronomy-engine 2.1.19",
+    "deltaTModel": "zodiacs-deltat/1",
+    "timeBasis": "from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise",
+    "timeZones": "before 1970 the shipped tzdb 2025c history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
+    "positions": "natalChart with timeScale \"tt\": the requested instant is read as TT",
+    "angles": "natalChart with timeScale \"ut1\": the requested instant is read as UT1"
+   }
+  },
+  "total": {
+   "count": 500,
+   "pass": 266,
+   "fail": 193,
+   "unsupported": 41,
+   "error": 0
+  }
+ },
+ "after": {
+  "engine": {
+   "name": "zodiacs-engine",
+   "version": "0.2.0",
+   "engine": "@zodiacs/engine",
+   "engineVersion": "0.1.1-rc.16",
+   "configuration": {
+    "ephemeris": "astronomy-engine 2.1.19",
+    "deltaTModel": "zodiacs-deltat/1",
+    "timeBasis": "from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise",
+    "timeZones": "before 1970 the shipped tzdb 2025c history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
+    "positions": "natalChart with timeScale \"tt\": the requested instant is read as TT",
+    "angles": "natalChart with timeScale \"ut1\": the requested instant is read as UT1"
+   }
+  },
+  "total": {
+   "count": 500,
+   "pass": 267,
+   "fail": 192,
+   "unsupported": 41,
+   "error": 0
+  }
+ },
+ "changed": 1,
+ "groups": {
+  "position.apparent.ecliptic-true-of-date: fail -> pass": {
+   "count": 1,
+   "ids": [
+    "L1-POS-0041"
+   ]
+  }
+ },
+ "residualsByKind": {
+  "position.apparent.ecliptic-true-of-date": {
+   "before": {
+    "lon": {
+     "unit": "arcsec",
+     "n": 240,
+     "median": 2.06665513,
+     "p95": 12.0708824,
+     "max": 18.8455862
+    },
+    "lat": {
+     "unit": "arcsec",
+     "n": 240,
+     "median": 1.1869337,
+     "p95": 10.6010939,
+     "max": 19.0281186
+    }
+   },
+   "after": {
+    "lon": {
+     "unit": "arcsec",
+     "n": 240,
+     "median": 2.0834337,
+     "p95": 12.0434774,
+     "max": 18.7744819
+    },
+    "lat": {
+     "unit": "arcsec",
+     "n": 240,
+     "median": 1.1869337,
+     "p95": 10.6010939,
+     "max": 19.0281186
+    }
+   }
+  },
+  "angles.asc-mc": {
+   "before": {
+    "asc": {
+     "unit": "arcsec",
+     "n": 60,
+     "median": 0.0372903239,
+     "p95": 0.112065798,
+     "max": 0.181607968
+    },
+    "mc": {
+     "unit": "arcsec",
+     "n": 60,
+     "median": 0.0425231826,
+     "p95": 0.131140526,
+     "max": 0.178394066
+    }
+   },
+   "after": {
+    "asc": {
+     "unit": "arcsec",
+     "n": 60,
+     "median": 0.00339286018,
+     "p95": 0.00579574655,
+     "max": 0.0189601719
+    },
+    "mc": {
+     "unit": "arcsec",
+     "n": 60,
+     "median": 0.00438274993,
+     "p95": 0.00643026337,
+     "max": 0.0081454935
+    }
+   }
+  },
+  "angles.vertex-east-point": {
+   "before": {
+    "vertex": {
+     "unit": "arcsec",
+     "n": 10,
+     "median": 0.0830466234,
+     "p95": 0.285075699,
+     "max": 0.285075699
+    },
+    "east_point": {
+     "unit": "arcsec",
+     "n": 10,
+     "median": 0.0830836175,
+     "p95": 0.102691353,
+     "max": 0.102691353
+    }
+   },
+   "after": {
+    "vertex": {
+     "unit": "arcsec",
+     "n": 10,
+     "median": 0.00289897902,
+     "p95": 0.013370956,
+     "max": 0.013370956
+    },
+    "east_point": {
+     "unit": "arcsec",
+     "n": 10,
+     "median": 0.00346328309,
+     "p95": 0.00679320316,
+     "max": 0.00679320316
+    }
+   }
+  },
+  "houses.cusps": {
+   "before": {
+    "cusps": {
+     "unit": "arcsec",
+     "n": 70,
+     "median": 0.0508377514,
+     "p95": 0.166538852,
+     "max": 0.488720961
+    }
+   },
+   "after": {
+    "cusps": {
+     "unit": "arcsec",
+     "n": 70,
+     "median": 0.00389697157,
+     "p95": 0.00933804084,
+     "max": 0.0711573788
+    }
+   }
+  },
+  "time.zone-offset": {
+   "before": null,
+   "after": null
+  },
+  "time.local-mean-time": {
+   "before": null,
+   "after": null
+  },
+  "time.tt-minus-utc": {
+   "before": {
+    "tt_minus_utc_s": {
+     "unit": "s",
+     "n": 9,
+     "median": 0,
+     "p95": 2.03450554e-8,
+     "max": 2.03450554e-8
+    }
+   },
+   "after": {
+    "tt_minus_utc_s": {
+     "unit": "s",
+     "n": 9,
+     "median": 0,
+     "p95": 2.03450554e-8,
+     "max": 2.03450554e-8
+    }
+   }
+  },
+  "time.delta-t": {
+   "before": {
+    "delta_t_s": {
+     "unit": "s",
+     "n": 15,
+     "median": 0.0001318,
+     "p95": 0.000505451953,
+     "max": 0.000505451953
+    }
+   },
+   "after": {
+    "delta_t_s": {
+     "unit": "s",
+     "n": 15,
+     "median": 0.0001318,
+     "p95": 0.000505451953,
+     "max": 0.000505451953
+    }
+   }
+  },
+  "calendar.to-jdn": {
+   "before": null,
+   "after": null
+  },
+  "calendar.from-jdn": {
+   "before": null,
+   "after": null
+  }
+ },
+ "largestResidualChange": {
+  "L1-POS:lon": 0.151,
+  "L1-POS:lat": 1e-9,
+  "L2-ASC:asc": 0.178,
+  "L2-ASC:mc": 0.185,
+  "L2-VTX:vertex": 0.298,
+  "L2-VTX:east_point": 0.103,
+  "L2-CSP:cusps": 0.56,
+  "L3-TTU:tt_minus_utc_s": 0,
+  "L3-DT:delta_t_s": 0
+ }
+}

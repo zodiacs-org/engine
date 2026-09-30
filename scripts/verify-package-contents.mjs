@@ -74,18 +74,36 @@ for (const file of files) {
 // cent (/receipt). docs/evidence/rc15-20260929/sizes.json gives later
 // measurements and each one's headroom. A budget is raised only in a
 // candidate whose CHANGELOG says so, with the reason; never in passing.
+//
+// 0.1.1-rc.16 raises six, each for the feature that grew it, to about 5 per
+// cent over its measured graph (docs/evidence/rc16-20260930/sizes.json):
+// each was raised after the size it fits had been measured. The IAU 2000B
+// nutation (src/nutation.ts, src/frame.ts) sits in the root's ephemeris
+// chunk, so every graph that loads the ephemeris carries it: 5,794 bytes in
+// the root. Two of the six were preregistered limits: ./techniques's 150,000
+// (the techniques entry's gate G5) and ./timing's 120,000 (the houses entry's
+// gate B). Raising them does not make those gates pass; rc.16 records both
+// as failed (CHANGELOG.md).
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
   // tables, 5,300, and src/time-scale.ts, 4,994), 1,069 its use in the
   // ephemeris and the API, 655 the Placidus bisection, and 1,543 the imports
   // and exports of the chunks the new entry points share with the root
-  // (docs/evidence/rc15-20260929/sizes.json).
-  ".": 100_000,
+  // (docs/evidence/rc15-20260929/sizes.json). rc.15 as carried: 97,704.
+  // rc.16: 103,537, raised from 100,000 for the nutation, 5,794 bytes
+  // (src/nutation.ts 4,146 and src/frame.ts 2,110, less 508 in
+  // src/ephemeris.ts, and 46 of imports, exports and their use in
+  // src/declination.ts and src/points.ts), and for 39 bytes of export names
+  // the calc, window and sky entries import from the root's chunk (gastHours,
+  // tilt, eclipticOfDate); 4.79 per cent of headroom.
+  ".": 108_500,
   // New in rc.16 (feature-api): the uniform calculation API, its frames,
   // centers, corrections, bounds and receipts. 106,779 bytes as integrated on
   // rc.15's time basis, 34,449 of them beyond the core's graph; 7.69 per cent
-  // of headroom (docs/evidence/rc16-20260930/sizes.json).
+  // of headroom. With the nutation, and its frames of date (src/equator.ts)
+  // and topocentric observer on it, 113,904: 0.96 per cent, not raised
+  // (docs/evidence/rc16-20260930/sizes.json).
   "./calc": 115_000,
   "./crossings": 10_000, // rc.15: 9,410
   "./deltat": 5_500, // rc.15: 4,968
@@ -97,24 +115,38 @@ const ENTRY_BUDGETS = {
   // module, the root's included, so that its graph cannot grow with the core
   // (docs/evidence/houses-extra-2026-09-29/).
   "./houses": 15_000,
-  "./internal": 60_000, // rc.15: 56,961
+  // rc.15: 56,961; as carried, 58,997. rc.16: 64,830, raised from 60,000 for
+  // the nutation in the ephemeris chunk; 4.88 per cent of headroom.
+  "./internal": 68_000,
   "./internal/math": 20_000, // rc.15: 18,165
   "./receipt": 70_000, // rc.15: 62,880
   // Returns, composite and Davison charts, the void-of-course Moon, aspect
   // patterns, dignities and Moon-sign candidates, moved from Zodiacs.org:
   // 141,745 as first built, with the core's graph and the local-time chunk
   // it shares with ./geo (docs/evidence/techniques-2026-09-29/); 5.8 per
-  // cent of headroom.
-  "./techniques": 150_000,
-  // Unreleased: rise, set, transit and planetary hours, 83,254 bytes, of which
-  // 15,902 are beyond the core's graph; it reaches the ephemeris chunk for the
-  // engine's clock (onChartClock), and so the core modules that chunk imports.
-  "./sky": 92_000,
-  "./timing": 120_000, // rc.15: 112,485, the core's graph included; with planetary returns (unreleased) 114,646
-  "./vedic": 120_000, // rc.15: 114,106, the core's graph included
+  // cent of headroom. rc.16: 152,472, raised from 150,000 for the nutation
+  // in the ephemeris chunk; 4.93 per cent of headroom.
+  "./techniques": 160_000,
+  // Rise, set, transit and planetary hours, 83,254 bytes as first built, of
+  // which 15,902 are beyond the core's graph; it reaches the ephemeris chunk
+  // for the engine's clock (onChartClock), and so the core modules that chunk
+  // imports. 85,237 on rc.15. rc.16: 92,109, raised from 92,000 for the
+  // nutation in the ephemeris chunk and the frames of date the entry now
+  // takes from it (src/equator.ts, shared with ./calc) in place of
+  // astronomy-engine's; 5.31 per cent of headroom.
+  "./sky": 97_000,
+  // rc.15: 112,485, the core's graph included; as carried, 114,916. With
+  // planetary returns 117,219. rc.16: 123,039, raised from 120,000 for the
+  // nutation in the ephemeris chunk; 4.84 per cent of headroom.
+  "./timing": 129_000,
+  // rc.15: 114,106, the core's graph included; as carried, 116,779. rc.16:
+  // 122,131, raised from 120,000 for the nutation in the ephemeris chunk
+  // (the ayanamsas now use its frame); 4.80 per cent of headroom.
+  "./vedic": 128_000,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
-  // 33,971 of them beyond the core's graph; 8.17 per cent of headroom
+  // 33,971 of them beyond the core's graph; 8.17 per cent of headroom. With
+  // the nutation, 102,590: 2.34 per cent, not raised
   // (docs/evidence/rc16-20260930/sizes.json).
   "./window": 105_000
 };
@@ -187,8 +219,17 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // sizes.json): 137,039 (64.81 per cent) of JavaScript that only the opt-in
 // entry points load; 54,041 (25.56 per cent) of declarations; 20,341 (9.62
 // per cent) of README, CHANGELOG and manifest; and 13 of the root's own graph.
-// The cap is 950,000 bytes: room for the nutation series and for rc.16's
-// documentation.
+// The cap was raised to 950,000 bytes after those sizes had been measured
+// (5e0d00c), for the new entry points and their documentation, with room for
+// the nutation series; the techniques and houses entries' preregistrations
+// had fixed it at 700,000 (their gates G5 and B, which rc.16 records as
+// failed). rc.16 as packed, with them: 923,282 bytes in 69 files, 254,939
+// more than rc.15 as carried: 137,705 (54.01 per cent) of JavaScript that
+// only the opt-in entry points load; 56,021 (21.97) of their declarations;
+// 54,434 (21.35) of README, CHANGELOG, licences and notices; 5,833 (2.29) of
+// the root's own graph, the nutation and 39 bytes of shared exports (above);
+// 868 (0.34) of manifest; and 78 (0.03) of the root's declarations. The cap
+// leaves 2.89 per cent (docs/evidence/rc16-20260930/sizes.json).
 const TOTAL_CAP = 950_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 

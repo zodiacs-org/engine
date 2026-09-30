@@ -115,10 +115,10 @@ describe("the root entry's isolation check", () => {
     for (const path of [
       "src/calc.ts", "src/calc-frames.ts", "src/calc-reduce.mts", "src/window.ts", "src/window-ranges.ts",
       "src/techniques.ts", "src/techniques/returns.ts", "src/sky.ts", "src/sky/riseset.ts", "src/houses-extra.ts", "src/houses-extra.mts",
-      "src/equator.ts"
+      "src/equator.ts", "src/first-millisecond.ts", "src/first-millisecond.mts"
     ]) expect(OPT_IN_SOURCE.test(path), path).toBe(true);
     for (const path of [
-      "src/houses.ts", "src/calculus.ts", "src/windows.ts", "src/skyline.ts", "src/techniquesx/a.ts", "src/first-millisecond.ts",
+      "src/houses.ts", "src/calculus.ts", "src/windows.ts", "src/skyline.ts", "src/techniquesx/a.ts", "src/first-milliseconds.ts",
       "src/frame.ts", "src/nutation.ts", "src/equatorial.ts"
     ]) {
       expect(OPT_IN_SOURCE.test(path), path).toBe(false);

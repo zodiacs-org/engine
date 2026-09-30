@@ -49,8 +49,8 @@ apart from the site's rc.9 ladder, whose cases are synthetic too.
 | Δψ, Δε against ERFA `nut00b`, 101 TT instants 1800–2200, tolerance 1e-10″ | largest 5.33e-15″ and 3.55e-15″ | `results/module-against-erfa.json` |
 | The series against NOVAS's own loop on its own numbers, 4,001 instants, tolerance 1e-14″ | largest 5.33e-15″ | same |
 | Mean obliquity against `obl06`, tolerance 1e-9″ | 2.91e-11″ | same |
-| Equation of the equinoxes against `ee00` (obl06, nut00b), tolerance 5e-5″ | 1.50e-5″ | same |
-| Sidereal time against gmst06 + ee00 (obl06, nut00b); against `gst06a`; against `gst00b` | 1.50e-5″ (tolerance 5e-5″); 0.00205″ (tolerance 0.00208″); 0.0210″ (no gate; gst00b uses the IAU 2000 GMST) | same |
+| Equation of the equinoxes against `ee00` (obl06, nut00b), tolerance 5e-5″ | 1.50e-5″ at the 101 instants; 3.50e-5″ every 0.1 day of TT from 1800 to 2200 (added in rc.16's re-cut) | same; `../rc16-20260930/results/nutation-grid.json` |
+| Sidereal time against gmst06 + ee00 (obl06, nut00b); against `gst06a`; against `gst00b` | at the 101 instants 1.50e-5″ (tolerance 5e-5″); 0.00205″ (tolerance 0.00208″); 0.0210″ (no gate; gst00b uses the IAU 2000 GMST). Every 0.1 day of TT from 1800 to 2200 (added in rc.16's re-cut): 3.50e-5″, 0.00360″ and 0.0222″ | same; `../rc16-20260930/results/nutation-grid.json` |
 | J2000 mean equator → true ecliptic of date against Rz(−Δψ) Rx(εA) P (bp06, obl06, nut00b), tolerance 5e-6″ | 7.11e-7″, the IAU 2006 precession's two formulations (P03 angles and bp06) | same |
 | Plumbing: this source with astronomy-engine's five terms and no complementary terms against rc.15 as carried, 520 charts, gate 1e-9° | pass: largest 7.96e-13°, speeds 1.14e-10°/day, crossings 0 ms, flags and fallbacks identical | `results/plumbing.json` |
 | Longitudes against ERFA's 2006/2000A rotation of the same vectors, 4,001 instants 1800–2200 | before 0.2520″ (p95 0.1486″); after 0.003691″ (p95 0.002011″) | `results/erfa-frame.json` |
@@ -83,13 +83,17 @@ copied; ERFA (pyerfa) is the independent check.
 `tools/erfa_fixtures.py` wrote `src/fixtures/nutation-erfa.json` from pyerfa
 2.0.1.5 (ERFA 2.0.1) at 101 TT instants from 1800-01-01 to 2199-12-30, with
 the tolerances and their reasons, before the engine was run against it. The
-only measured quantities the tolerances use are differences between ERFA's
-own functions, which the file records: the IAU 2006 precession built from the
-P03 angles of `p06e`, as astronomy-engine builds it, is within 7.09e-7″ of
-`bp06`'s matrix; gmst06 + ee00 (obl06, nut00b) is within 0.00203″ of
-`gst06a`; the complementary terms beyond the two the engine keeps reach
+only measured quantities the tolerances use are differences between ERFA's own
+functions at those instants, which the file records: the IAU 2006 precession
+built from the P03 angles of `p06e`, as astronomy-engine builds it, is within
+7.09e-7″ of `bp06`'s matrix; gmst06 + ee00 (obl06, nut00b) is within 0.00203″
+of `gst06a`; the complementary terms beyond the two the engine keeps reach
 1.5e-5″ there (at most 44.0 µas within two centuries, from IERS Conventions
-2010 table 5.2e). `--check` rebuilds the file byte for byte.
+2010 table 5.2e). Sampled every 0.1 day of TT from 1800 to 2200 those terms
+reach 3.50e-5″ (in 2146), and gmst06 + ee00 (obl06, nut00b) is within 0.00360″
+of `gst06a`, IAU 2000B's Δψ being up to 0.00394″ from `nut06a`'s (in 2192)
+(`../rc16-20260930/results/nutation-grid.json`, added in rc.16's re-cut).
+`--check` rebuilds the file byte for byte.
 
 The series is summed from the smallest term, as NOVAS sums it, but each
 term's cos θ and sin θ come from the product of cos kf + i sin kf over its
@@ -124,13 +128,16 @@ before any test was changed for the full series, and rerun on the final source
 `4e477243…`, which is `45bdd34`'s).
 
 The same run gives what the full series changes (not gated): longitudes by up
-to 0.2380″ (latitudes not at all), speeds by up to 0.0725″/day, the angles by
-up to 1.62″ and Koch cusps by up to 3.88″ at 66°–80°, the lots by up to
-3.34″, the true obliquity by up to 0.0782″, declinations by up to 0.0974″,
-the ayanamsas' `nutation` and `true` by up to 0.2380″ with `mean` unchanged,
-the Moon's phase not at all, and Saturn-return crossings by up to 257 s
-(median 20 s) near stations. No flag, fallback, aspect pair or retrograde
-flag changed at those 520 charts.
+to 0.2380″ (latitudes not at all), speeds by up to 0.0725″/day, Koch cusps by
+up to 3.88″ at 65.75°, the angles by up to 1.62″ and the lots by up to 3.34″,
+both at 67.21°, among the tenth at 66°–80°, where Koch's cusps moved by at
+most 0.1023″ (`../rc16-20260930/results/plumbing-by-latitude.json`, added in
+rc.16's re-cut, places each figure; an earlier version of this paragraph put
+the Koch figure at 66°–80°), the true obliquity by up to 0.0782″, declinations
+by up to 0.0974″, the ayanamsas' `nutation` and `true` by up to 0.2380″ with
+`mean` unchanged, the Moon's phase not at all, and Saturn-return crossings by
+up to 257 s (median 20 s) near stations. No flag, fallback, aspect pair or
+retrograde flag changed at those 520 charts.
 
 ## The equation of the equinoxes
 
@@ -146,14 +153,16 @@ engine's equal to 5.3e-15″ and 2.9e-11″, so it does not run the engine:
 | 2640.96 µas sin Ω | 0.092 (p95 0.075) | 3.590 (p95 1.855) | 22.16 |
 | and 63.52 µas sin 2Ω (**chosen**) | 0.035 (p95 0.024) | 3.599 (p95 1.846) | 22.10 |
 
-What remains against `gst06a` is IAU 2000B's own difference from IAU 2000A
-(Δψ cos εA up to 3.615 mas over 1800–2200). `gst00b` is not a fair arbiter
-for this engine: it uses the IAU 2000 GMST, which differs from the IAU 2006
-GMST the engine uses by up to 22.05 mas there. The engine keeps the two
-terms: the definition of the sidereal time includes them, they cost two
-sines, and with them the sidereal time is within 0.035 mas of the IAU 2000B
-value built on the IAU 2006 GMST. At the fixture's 101 instants the engine's
-own sidereal time is within 1.50e-5″ of that value and 0.00205″ of `gst06a`.
+What remains against `gst06a` is IAU 2000B's own difference from IAU 2000A (Δψ
+cos εA up to 3.615 mas over 1800–2200). `gst00b` is not a fair arbiter for
+this engine: it uses the IAU 2000 GMST, which differs from the IAU 2006 GMST
+the engine uses by up to 22.05 mas there. The engine keeps the two terms: the
+definition of the sidereal time includes them, they cost two sines, and with
+them the sidereal time is within 0.035 mas of the IAU 2000B value built on the
+IAU 2006 GMST. At the fixture's 101 instants the engine's own sidereal time is
+within 1.50e-5″ of that value and 0.00205″ of `gst06a`; every 0.1 day of TT
+from 1800 to 2200, within 3.50e-5″ and 0.00360″
+(`../rc16-20260930/results/nutation-grid.json`).
 
 ## Against ERFA, before and after
 

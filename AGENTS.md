@@ -13,9 +13,15 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
 - Source and unit tests: `src/`, with tests beside the code as `*.test.ts`,
   and tests of the scripts as `scripts/*.test.mjs` (Vitest). Build output
   goes to `dist/`, which is not committed. The opt-in entry points live in
-  `src/geo/`, `src/timing/`, `src/vedic/` and `src/sky/`; their guides are
-  `docs/time.md`, `docs/timing-hellenistic.md`, `docs/vedic.md` and
-  `docs/sky.md`.
+  `src/geo/`, `src/timing/`, `src/vedic/`, `src/techniques/` and
+  `src/sky/`, and in the flat files `src/calc.ts` and `src/calc-*.ts`,
+  `src/window.ts` and `src/window-*.ts`, `src/houses-extra.ts` (the houses
+  entry), `src/equator.ts` (shared by calc and sky) and
+  `src/first-millisecond.ts` (the sky entry's); `OPT_IN_SOURCE` in
+  `scripts/root-isolation.mjs` names them all. Their guides are
+  `docs/time.md`, `docs/timing-hellenistic.md`, `docs/vedic.md`,
+  `docs/techniques.md`, `docs/calc.md`, `docs/houses.md` and `docs/sky.md`,
+  and the README's *Birth-time windows* for the window entry.
 - Package and release scripts: `scripts/` (export smoke test, package
   contents and size budgets, packed consumer, archive binding, release
   archive check, compatibility checks), and the generators of the time data:
@@ -136,8 +142,9 @@ below no `package.json` or `node_modules`. The package supports Node
 - Keep the core entry point free of network requests and import-time side
   effects, and keep `@zodiacs/engine/crossings` and
   `@zodiacs/engine/deltat` free of the ephemeris. The root must not import
-  `@zodiacs/engine/timing`, `/vedic`, `/geo` or `/sky`, which are opt-in;
-  `npm run exports:smoke` checks it.
+  `@zodiacs/engine/timing`, `/vedic`, `/geo`, `/calc`, `/window`,
+  `/techniques`, `/houses` or `/sky`, which are opt-in; `npm run
+  exports:smoke` checks it.
 - Every entry point in `package.json` `exports` has a budget for its import
   graph in `scripts/verify-package-contents.mjs`, the zone histories have
   their own (200,000 bytes, 16 files) and the package a total cap. Add a

@@ -350,14 +350,27 @@ The six probes of the audit's time-5 finding resolve as follows (tests in
 ## Receipts
 
 The current conventions set, `NATAL_RECEIPT_CONVENTION_SETS[0]`, first
-written by 0.1.1-rc.15, adds to the rc.8 set:
+written by 0.1.1-rc.16, is rc.15's time-basis set with the nutation named:
+
+- `nutation: "iau2000b;equation-of-equinoxes-with-two-complementary-terms"`,
+  the engine's IAU 2000B series, all 77 luni-solar terms and the two fixed
+  planetary offsets, with the two largest complementary terms in the
+  equation of the equinoxes (the README's *Nutation*);
+- `moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration"`:
+  the Moon is astronomy-engine's geocentric series (`GeoMoon`) turned to the
+  ecliptic of date by the engine's precession and nutation, where rc.15's
+  set named astronomy-engine's `EclipticGeoMoon`.
+
+rc.15's time-basis set, `NATAL_RECEIPT_CONVENTION_SETS[1]`, which rc.15 wrote
+with astronomy-engine's five-term nutation and did not name it, added to the
+rc.8 set:
 
 - `deltaT: "tt-minus-ut1;value-in-result"` (the instant is no longer read as
   UT1);
 - `timeScale: "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result"`;
 - `localTime: "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record"`.
 
-A receipt under it carries `receipt.timeScale` (the scale of
+A receipt under either carries `receipt.timeScale` (the scale of
 `receipt.instant`) and `result.timeScale`, and the codec checks that they agree
 with `result.deltaT`; where the ΔT names this engine's IERS or model table, it
 recomputes the basis at the instant and requires the same values. Another
@@ -371,11 +384,12 @@ shift, a date-line cause needs a change of 12 hours or more, and a birthplace
 mean time must equal `longitude × 240` seconds at the instant (or just before
 a gap out of it). A local resolution requires `receipt.timeScale` `"utc"`.
 
-Receipts under the rc.8 set (0.1.1-rc.8 to rc.14), which read the instant as
-UT1, and the older sets, stay readable, each accepted only from the engine
-versions that wrote it: the current set only from 0.1.1-rc.15 on, in SemVer
-2.0.0 order (so not under 0.1.1-rc.14.1 or 0.1.1-beta), the rc.8 set only
-from rc.8 to rc.14. `natalReplayInput` replays the recorded request,
+Receipts under rc.15's set, under the rc.8 set (0.1.1-rc.8 to rc.14), which
+read the instant as UT1, and under the older sets stay readable, each
+accepted only from the engine versions that wrote it: the current set only
+from 0.1.1-rc.16 on, in SemVer 2.0.0 order (so not under 0.1.1-rc.15.1 or
+0.1.1-beta), rc.15's set only under 0.1.1-rc.15, the rc.8 set only from rc.8
+to rc.14. `natalReplayInput` replays the recorded request,
 `timeScale` and pinned ΔT included. A receipt promises its request, not its
 values, and an rc.8-set receipt's request is a UTC instant that its engine
 read as UT1 (`deltaT: "tt-minus-ut1;ut1-read-as-utc;value-in-result"`). This

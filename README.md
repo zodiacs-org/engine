@@ -3,21 +3,24 @@
 Pure TypeScript astrology calculations for browsers and Node.js. The package
 computes tropical planetary positions, natal charts, transit snapshots,
 synastry, secondary progressions, Moon phase, and Saturn-return seasons, and,
-in separate entries, Hellenistic timing techniques and sidereal positions and
-Jyotish techniques. Its calculations are synchronous; only loading a zone's
+in separate entries, one calculation API over frames, centers and
+corrections with bounds and receipts, birth-time windows, house positions and
+cusp speeds, rise, set and transit times and planetary hours, returns and
+relationship charts, Hellenistic timing techniques, and sidereal positions
+and Jyotish techniques. Its calculations are synchronous; only loading a zone's
 history before 1970 (`prepareLocalTime`) and the GeoNames client, both in
 `@zodiacs/engine/geo`, are asynchronous. It is ESM-only, has no import-time
 side effects, and performs no network request from its core entry point. Its
 one runtime side effect is the ΔT it installs in astronomy-engine (see Time
 below).
 
-**Release candidate: 0.1.1-rc.15.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.16.** Public npm lookups for this package returned
 404 on 2026-09-26. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.15.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.16.tgz
 ```
 
 The package runs in browsers through a bundler, and in Node.js 20.19.0 or a
@@ -32,7 +35,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.15.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.16.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -61,27 +64,26 @@ dependencies afresh with `npm ci` and takes nothing from the checkout's
 needs merge commits: a squash or rebase merge drops the source commits it
 checks against, and the check then fails.
 
-This candidate reads a chart's instant on a time basis: from 1972 to
-2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS UT1 − UTC,
-and otherwise as UT1 with the ΔT model, or on UT1 or TT when `timeScale` says
-so (see Time). From 1972 to 2027-10-02 a chart's angles therefore differ from
-rc.14's by UT1 − UTC, and its positions by less: in 1,801 synthetic charts the
-ascendant by up to 45.0″ and the Moon by up to 0.462″, and in a review's wider
-sample by up to 101.03″ and 0.4885″, near 65° S
-(`docs/evidence/rc15-20260929/review-sample.json`). Before and after that span
-its angles and houses are unchanged. `@zodiacs/engine/geo` reads wall times before 1970 on the
-tzdb 2025c history it ships, which `prepareLocalTime` must load first, and can
-read a birthplace's own mean time and a Julian date; unknown options and form
-keys now throw, and `lmt` means that a local-mean-time clock read the time. Two
-entry points are new, `@zodiacs/engine/timing` and `@zodiacs/engine/vedic`, and
-the root imports neither. Placidus no longer falls back to whole signs just
-below the polar limit. Receipts gain a conventions set that records the time
-basis; receipts of the earlier sets, rc.13's and rc.14's included, stay
-readable and replay. The package gate is now a budget for each entry point's
-import graph and a stated cap for the whole package (CHANGELOG.md). The
-ephemeris is still astronomy-engine 2.1.19. See CHANGELOG.md for the release
-history and `docs/evidence/rc15-20260929/` for this candidate's checks. Site
-adoption is reviewed separately.
+This candidate brings five opt-in entry points onto rc.15:
+`@zodiacs/engine/calc`, one calculation API over eight frames, four centers
+and three corrections, with speeds, bounds and receipts; `/window`, birth-time
+window partitions; `/techniques`, returns, composite and Davison charts, the
+void-of-course Moon, aspect patterns, dignities and Moon signs; `/houses`,
+house positions of bodies with latitude, co-ascendants and cusp speeds; and
+`/sky`, rise, set, transit and planetary hours. `@zodiacs/engine/timing`
+gains planetary returns. The root imports none of them. The nutation is now
+the full IAU 2000B series, which the engine evaluates itself (see Nutation):
+every longitude moves from rc.15's by the change in Δψ, up to 0.2701″ from
+1800 to 2200, and the angles and cusps by the change in the sidereal time and
+the true obliquity, up to 0.8003″ over 9,697 synthetic charts at places up to
+60.17° N, and more toward the polar circle. Receipts gain a
+conventions set that names the nutation; rc.15's receipts stay readable. As
+in rc.15, a chart's instant is read on a time basis: from 1972 to 2027-10-02
+as UTC, with TT from the leap seconds and UT1 from IERS UT1 − UTC, and
+otherwise as UT1 with the ΔT model, or on UT1 or TT when `timeScale` says so
+(see Time). The ephemeris is still astronomy-engine 2.1.19. See CHANGELOG.md
+for the release history and `docs/evidence/rc16-20260930/` for this
+candidate's checks. Site adoption is reviewed separately.
 
 ## Natal chart in 10 lines
 
@@ -215,8 +217,9 @@ Returned longitudes use degrees in `[0, 360)` and positions include sign and deg
 annotations. Charts use the tropical ecliptic of date. Planetary positions are
 geocentric and corrected for light time and aberration, but not for the Sun's
 gravitational deflection; the Moon's series carries neither correction. The
-chart functions do not calculate topocentric parallax; `@zodiacs/engine/sky`
-does, for rise and set.
+chart functions do not calculate topocentric parallax; `@zodiacs/engine/calc`
+gives topocentric positions (`center: { topocentric }`), and
+`@zodiacs/engine/sky` finds rise and set for a topocentric observer.
 
 Positions have been compared with an independent ephemeris from 1800-01-01T00:00Z
 up to 2200-01-01T00:00Z, exported as `REFERENCE_SPAN`. A chart outside that span
@@ -900,8 +903,9 @@ and the GeoNames attribution, and downstream users should retain it.
 compatibility boundaries for Zodiacs.org. They let the site consume the exact
 package implementation while keeping its scanner-oriented functions and lazy
 bundle boundary intact. They are not covered by semantic-versioning guarantees;
-third-party code must use the documented entry points: the root, `/geo`,
-`/sky`, `/techniques`, `/timing`, `/vedic`, `/receipt`, `/crossings` and `/deltat`.
+third-party code must use the documented entry points: the root, `/calc`,
+`/geo`, `/houses`, `/sky`, `/techniques`, `/timing`, `/vedic`, `/window`,
+`/receipt`, `/crossings` and `/deltat`.
 
 ## GeoNames request recovery
 
@@ -987,18 +991,23 @@ and that the Moon has neither correction. Receipts from rc.3 to rc.7 are still
 read, each under the conventions its engine recorded, and a set is accepted
 only from the engine versions that wrote it.
 
-The current set, written from 0.1.1-rc.15 on, also records the instant's scale
-(`receipt.timeScale`) and its time basis (`result.timeScale`), and a local
-resolution records the calendar, the tzdb version and form, the clock, the
-transition behind the offset and any birthplace mean time, each checked
-against the offsets and flags. Receipts under the rc.8 set (rc.8 to rc.14),
-which read the instant as UT1, stay readable and replay as UTC requests (see
-docs/time.md). A receipt's engine, ephemeris and package versions must be
-SemVer 2.0.0 versions. The codec accepts an earlier set only under the versions
-that wrote it, and compares the engine's version in SemVer order with
-0.1.1-rc.15, which brought the current set, and with the releases that brought
-each house system: a receipt of the current set that names a version before
-0.1.1-rc.15, such as 0.1.1-rc.14.1 or 0.1.1-beta, is refused.
+The time-basis sets, written from 0.1.1-rc.15 on, also record the instant's
+scale (`receipt.timeScale`) and its time basis (`result.timeScale`), and a
+local resolution records the calendar, the tzdb version and form, the clock,
+the transition behind the offset and any birthplace mean time, each checked
+against the offsets and flags. The current set, written from 0.1.1-rc.16 on,
+also names the nutation, the engine's IAU 2000B (`nutation`), and takes the
+Moon from astronomy-engine's geocentric series turned by the engine's frame
+(`moonPosition`); rc.15's set, which does not name the nutation, stays
+readable. Receipts under the rc.8 set (rc.8 to rc.14), which read the instant
+as UT1, stay readable and replay as UTC requests (see docs/time.md). A
+receipt's engine, ephemeris and package versions must be SemVer 2.0.0
+versions. The codec accepts an earlier set only under the versions that wrote
+it, rc.15's under 0.1.1-rc.15 alone, and compares the engine's version in
+SemVer order with 0.1.1-rc.16, which brought the current set, and with the
+releases that brought each house system: a receipt of the current set that
+names a version before 0.1.1-rc.16, such as 0.1.1-rc.15.1 or 0.1.1-beta, is
+refused.
 
 `natalReplayInput` recovers the recorded request. It does not select or install
 the original engine. Recalculation with another engine, ephemeris dependency or

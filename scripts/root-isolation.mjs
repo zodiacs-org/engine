@@ -23,11 +23,13 @@ import assert from "node:assert/strict";
  * geo, techniques and sky and the zone histories; the calc and window
  * entries' flat files, src/calc.ts and src/calc-*.ts, src/window.ts and
  * src/window-*.ts; the houses entry's one file, src/houses-extra.ts
- * (src/houses.ts is the root's own); and src/equator.ts, the equator of date
- * that calc and sky share (the root's charts need only src/frame.ts).
+ * (src/houses.ts is the root's own); src/equator.ts, the equator of date
+ * that calc and sky share (the root's charts need only src/frame.ts); and
+ * src/first-millisecond.ts, the sky entry's search for an event's first
+ * millisecond, which sits outside src/sky/.
  */
 export const OPT_IN_SOURCE =
-  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator)\.[^/]*$)/u;
+  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond)\.[^/]*$)/u;
 
 /** The source path of every module esbuild marks in an output file: `// src/...`, any extension. */
 export function sourceMarkers(code) {

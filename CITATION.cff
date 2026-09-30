@@ -19,8 +19,12 @@ abstract: >-
   planetary positions, natal charts with houses and aspects, transits,
   synastry, secondary progressions, Moon phase and Saturn returns; local
   birth times resolved on the tz database's history, and instants read as
-  UTC, UT1 or TT; Hellenistic timing techniques; and the sidereal zodiac
-  with Jyotish techniques. The repository also holds a conformance suite for
+  UTC, UT1 or TT; one calculation API over frames, centers and corrections
+  with measured bounds and receipts; birth-time windows; house positions and
+  cusp speeds; rise, set and transit times and planetary hours; returns,
+  composite and Davison charts, the void-of-course Moon, aspect patterns and
+  dignities; Hellenistic timing techniques; and the sidereal zodiac with
+  Jyotish techniques. The repository also holds a conformance suite for
   astrology computation (test vectors, each decided by an independent
   arbiter with a stated tolerance, and a harness that runs any engine
   against them) and a historical time atlas of what civil clocks showed,

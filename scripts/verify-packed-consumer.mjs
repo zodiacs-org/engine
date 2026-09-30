@@ -152,6 +152,26 @@ const cuspSpeeds: HouseSpeeds = houseSpeeds("koch", houseInput);
 const jupiterReturns: PlanetaryReturns = planetaryReturns(chart, "Jupiter", "2030-01-01", "2031-01-01");
 if (jupiterReturns.status === "complete") { const pass: number | undefined = jupiterReturns.returns[0]?.pass; void pass; }
 void housePlace; void coAscendantPoints; void cuspSpeeds; void SIDEREAL_RATE;
+import { solarReturn, lunarReturn, davisonChart, compositeChart, voidOfCourseAt, essentialDignities, dignityFor, moonSignsBetween, type SolarReturn, type LunarReturn, type DavisonChart, type CompositeChart, type VoidOfCourseStatus, type VoidOfCourseWindow, type PlanetDignities, type SignDignity } from "@zodiacs/engine/techniques";
+const solarReturned: SolarReturn = solarReturn(chart, "2010-03-01");
+const lunarReturned: LunarReturn = lunarReturn(chart, "2010-03-01", {location: {latitude: 0, longitude: 180}});
+const davison: DavisonChart = davisonChart(chart, echoChart);
+const composite: CompositeChart = compositeChart(chart, echoChart);
+const voidStatus: VoidOfCourseStatus = voidOfCourseAt("2020-06-02T12:00:00Z");
+const voidWindow: VoidOfCourseWindow | null = voidStatus.current;
+const marsDignities: PlanetDignities = essentialDignities("Mars", 10, "day");
+const sunInLeo: SignDignity | null = dignityFor("Sun", "leo");
+const moonSigns: readonly string[] = moonSignsBetween("2020-06-01T00:00:00Z", "2020-06-05T00:00:00Z");
+void solarReturned; void lunarReturned; void davison; void composite; void voidWindow; void marsDignities; void sunInLeo; void moonSigns;
+import { skyEvents, planetaryHours, planetaryHourAt, STANDARD_REFRACTION_ARCMIN, type SkyEvents, type SkyEventKind, type Observer, type PlanetaryDay, type PlanetaryHour } from "@zodiacs/engine/sky";
+const observer: Observer = {latitude: 51.48, longitude: 0, height: 45};
+const sunEvents: SkyEvents = skyEvents("Sun", observer, "2024-06-21T00:00:00Z", "2024-06-22T00:00:00Z", {limb: "upper", refraction: "standard"});
+if (sunEvents.status === "complete") { const kinds: SkyEventKind[] = sunEvents.events.map((event) => event.kind); void kinds; } else { const none: readonly [] = sunEvents.events; void none; }
+const hoursOfDay: PlanetaryDay = planetaryHours(observer, "2024-06-21", {utcOffsetMinutes: 60});
+if (hoursOfDay.status === "complete") { const first: PlanetaryHour | undefined = hoursOfDay.hours[0]; void first; }
+const hourNow: PlanetaryHour | null = planetaryHourAt(observer, "2024-06-21T12:00:00Z").hour;
+const refraction: number = STANDARD_REFRACTION_ARCMIN;
+void hourNow; void refraction;
 `
 );
 // An explicit project: "types": [] keeps @types packages in parent directories
@@ -184,6 +204,8 @@ import { planetaryReturns } from "@zodiacs/engine/timing";
 import * as root from "@zodiacs/engine";
 import { calc } from "@zodiacs/engine/calc";
 import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError } from "@zodiacs/engine/window";
+import * as techniques from "@zodiacs/engine/techniques";
+import * as sky from "@zodiacs/engine/sky";
 globalThis.fetch = () => { throw new Error("Calculation attempted a network request"); };
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
@@ -430,8 +452,6 @@ assert.deepEqual(windowed.unresolved, []);
 assert(new WindowBudgetError() instanceof Error);
 assert.equal(windowed.cells.reduce((total, cell) => total + cell.milliseconds, 0), 40 * 60_000);
 for (const cell of windowed.cells) {
-  // astronomy-engine reuses nutation within 86.4 ms; evaluate a day away first.
-  natalChart({utc: new Date(cell.start.getTime() + 86_400_000)});
   const at = natalChart({utc: cell.start, latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
   assert.equal(cell.features.houseSystem, at.houses.system);
   for (const body of at.bodies) {
@@ -450,7 +470,59 @@ const moonReturns = planetaryReturns(chart, "Moon", "2002-01-01", "2002-02-01");
 assert.equal(moonReturns.status, "complete");
 assert.equal(moonReturns.returns.length, 1);
 assert.equal(planetaryReturns(chart, "Moon", "2002-01-01", "2002-02-01", {maxSamples: 3}).status, "refused");
-console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
+// The techniques entry, on an invented birth and the polar chart above: each
+// return puts its body back on the natal longitude; a Davison chart is cast
+// for the mean of the two instants; a composite body is the nearer midpoint;
+// the dignities are the cited tables'; the void-of-course and Moon-sign
+// functions agree with the charts.
+assert.equal("solarReturn" in root, false);
+const wrapped = (degrees) => Math.abs(((degrees % 360) + 540) % 360 - 180);
+const invented = natalChart({utc: "2000-02-29T12:00:00Z", latitude: 0, longitude: 180, houseSystem: "placidus"});
+const solarReturned = techniques.solarReturn(invented, "2010-03-01");
+assert.equal(solarReturned.selection, "nearest");
+assert(wrapped(solarReturned.chart.bodies[0].lon - invented.bodies[0].lon) < 1e-6);
+assert(Math.abs(solarReturned.instant.getTime() - Date.parse("2010-03-01")) < 3 * 86_400_000);
+const lunarReturned = techniques.lunarReturn(invented, "2010-03-01");
+assert(wrapped(lunarReturned.chart.bodies[1].lon - invented.bodies[1].lon) < 1e-5);
+assert(lunarReturned.instant.getTime() > Date.parse("2010-03-01") && lunarReturned.instant.getTime() < Date.parse("2010-03-29"));
+const davison = techniques.davisonChart(invented, chart);
+assert.equal(davison.instant.getTime(), Math.floor((invented.input.utc.getTime() + chart.input.utc.getTime()) / 2));
+const composite = techniques.compositeChart(invented, chart);
+const [sunA, sunB] = [invented.bodies[0].lon, chart.bodies[0].lon];
+assert(wrapped(composite.bodies.find((row) => row.body === "Sun").lon - (sunA + (((sunB - sunA + 540) % 360) - 180) / 2)) < 1e-9);
+assert.equal(techniques.dignityFor("Sun", "leo"), "domicile");
+assert.deepEqual(techniques.essentialDignities("Mars", 10, "day").dignities, ["domicile"]);
+assert.deepEqual(techniques.EGYPTIAN_TERMS.aries.map(([planet]) => planet), ["Jupiter", "Venus", "Mercury", "Mars", "Saturn"]);
+const moonSign = (at) => natalChart({utc: at, timeKnown: false}).bodies[1].sign;
+const moonSigns = techniques.moonSignsBetween("2020-06-01T00:00:00Z", "2020-06-05T00:00:00Z");
+assert.equal(moonSigns[0], moonSign("2020-06-01T00:00:00Z"));
+assert.equal(moonSigns.at(-1), moonSign("2020-06-05T00:00:00Z"));
+const voids = techniques.voidOfCourseWindows("2020-06-01T00:00:00Z", "2020-06-08T00:00:00Z");
+assert(voids.length > 0);
+const voidStatus = techniques.voidOfCourseAt(new Date((voids[0].from.getTime() + voids[0].to.getTime()) / 2));
+assert.equal(voidStatus.isVoid, true);
+assert.equal(voidStatus.current.to.getTime(), voids[0].to.getTime());
+assert.equal(moonSign(new Date(voids[0].to.getTime() + 1000).toISOString()), voids[0].nextSign);
+// The sky entry: the Sun's rise at Greenwich on 2024-06-21, a Friday, begins
+// Venus's day; its hours follow the Chaldean order; the rise is where the
+// Sun's upper limb meets the standard refraction.
+assert.equal("skyEvents" in root, false);
+const greenwich = {latitude: 51.48, longitude: 0};
+const day = sky.planetaryHours(greenwich, "2024-06-21");
+assert.equal(day.status, "complete");
+assert.equal(day.ruler, "Venus");
+assert.equal(day.hours.length, 24);
+day.hours.forEach((hour, index) => assert.equal(hour.ruler, sky.CHALDEAN_ORDER[(sky.CHALDEAN_ORDER.indexOf("Venus") + index) % 7]));
+const sunEvents = sky.skyEvents("Sun", greenwich, "2024-06-21T00:00:00Z", "2024-06-22T00:00:00Z");
+assert.equal(sunEvents.status, "complete");
+assert.deepEqual(sunEvents.events.map((event) => event.kind), ["lower-transit", "rise", "upper-transit", "set"]);
+const sunrise = sunEvents.events[1];
+assert.equal(sunrise.at.getTime(), day.sunrise.getTime());
+assert(sunrise.altitude < -sky.STANDARD_REFRACTION_ARCMIN / 60 && sunrise.altitude > -sky.STANDARD_REFRACTION_ARCMIN / 60 - 0.3);
+const noon = Date.parse("2024-06-21T12:00:00Z");
+assert.equal(sky.planetaryHourAt(greenwich, noon).hour.ruler, day.hours.find((hour) => hour.start.getTime() <= noon && noon < hour.end.getTime()).ruler);
+assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-21T00:00:00Z", "2024-06-22T00:00:00Z"), RangeError);
+console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

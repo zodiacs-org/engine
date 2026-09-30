@@ -1,9 +1,11 @@
 /*
  * The receipt codec orders engine versions by SemVer 2.0.0 precedence
- * (src/semver.ts, src/semver.test.ts). A receipt of the time-basis set, which
- * 0.1.1-rc.15 released, is refused under any engine version that comes before
- * 0.1.1-rc.15, however it is spelled, and a version that is not SemVer 2.0.0
- * is refused as malformed. The charts are synthetic.
+ * (src/semver.ts, src/semver.test.ts). A receipt of the current set, which
+ * 0.1.1-rc.16 released, is refused under any engine version that comes before
+ * 0.1.1-rc.16, however it is spelled; rc.15's time-basis set is accepted under
+ * 0.1.1-rc.15 alone, as each earlier set under the versions that wrote it; and
+ * a version that is not SemVer 2.0.0 is refused as malformed. The charts are
+ * synthetic.
  */
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
@@ -12,6 +14,7 @@ import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from 
 import type { NatalEnvelopeErrorCode } from "./receipt.js";
 
 const RC14 = readFileSync(new URL("./fixtures/receipt-rc14.json", import.meta.url), "utf8");
+const RC15 = readFileSync(new URL("./fixtures/receipt-rc15.json", import.meta.url), "utf8");
 const CURRENT = serializeNatalEnvelope(
   createNatalEnvelope(natalChart({ utc: "1990-06-15T12:30:00Z", latitude: 40.7128, longitude: -74.006, houseSystem: "placidus" }))
 );
@@ -25,8 +28,8 @@ function underVersion(json: string, version: string): "ok" | NatalEnvelopeErrorC
 }
 
 describe("the engine version of a receipt, in SemVer 2.0.0 order", () => {
-  it.each(["0.1.1-rc.14.1", "0.1.1-beta", "0.1.1-alpha.7", "0.1.1-rc"])(
-    "refuses the time-basis set under %s, which comes before 0.1.1-rc.15",
+  it.each(["0.1.1-rc.15.1", "0.1.1-rc.15", "0.1.1-rc.14.1", "0.1.1-beta", "0.1.1-alpha.7", "0.1.1-rc"])(
+    "refuses the current set under %s, which comes before 0.1.1-rc.16",
     (version) => {
       expect(underVersion(CURRENT, version)).toBe("inconsistent_result");
     }
@@ -36,6 +39,7 @@ describe("the engine version of a receipt, in SemVer 2.0.0 order", () => {
     "refuses %s, which is not a SemVer 2.0.0 version",
     (version) => {
       expect(underVersion(CURRENT, version)).toBe("invalid_value");
+      expect(underVersion(RC15, version)).toBe("invalid_value");
       expect(underVersion(RC14, version)).toBe("invalid_value");
     }
   );
@@ -44,15 +48,23 @@ describe("the engine version of a receipt, in SemVer 2.0.0 order", () => {
     for (let n = 0; n <= 40; n += 1) {
       for (const build of ["", "+build.1"]) {
         const version = `0.1.1-rc.${n}${build}`;
-        expect(underVersion(CURRENT, version), version).toBe(n < 15 ? "inconsistent_result" : "ok");
+        expect(underVersion(CURRENT, version), version).toBe(n < 16 ? "inconsistent_result" : "ok");
+        expect(underVersion(RC15, version), version).toBe(n === 15 ? "ok" : "inconsistent_result");
         expect(underVersion(RC14, version), version).toBe(n >= 8 && n <= 14 ? "ok" : "inconsistent_result");
       }
     }
   });
 
-  it("accepts the time-basis set under versions at or after 0.1.1-rc.15", () => {
-    for (const version of ["0.1.1-rc.15", "0.1.1-rc.15+build.7", "0.1.1-rc.15.1", "0.1.1-rc.15-hotfix", "0.1.1", "0.1.2-alpha", "1.0.0"]) {
+  it("accepts the current set under versions at or after 0.1.1-rc.16", () => {
+    for (const version of ["0.1.1-rc.16", "0.1.1-rc.16+build.7", "0.1.1-rc.16.1", "0.1.1-rc.16-hotfix", "0.1.1", "0.1.2-alpha", "1.0.0"]) {
       expect(underVersion(CURRENT, version), version).toBe("ok");
+    }
+  });
+
+  it("accepts rc.15's time-basis set under 0.1.1-rc.15 alone, with or without build metadata", () => {
+    for (const version of ["0.1.1-rc.15", "0.1.1-rc.15+build.7"]) expect(underVersion(RC15, version), version).toBe("ok");
+    for (const version of ["0.1.1-rc.15.1", "0.1.1-rc.15-hotfix", "0.1.1-rc.16", "0.1.1", "1.0.0"]) {
+      expect(underVersion(RC15, version), version).toBe("inconsistent_result");
     }
   });
 });

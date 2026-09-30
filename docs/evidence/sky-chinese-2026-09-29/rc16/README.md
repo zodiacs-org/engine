@@ -1,12 +1,12 @@
 # The sky gates rerun on 0.1.1-rc.16's build
 
-The sky entry's preregistered gates, S1 to S4 of `../PREREGISTRATION.md`, run
-again with `../tools/`, unchanged but for `published-compare.mjs`'s new
-argument (below), on the integrated 0.1.1-rc.16 candidate after the engine
-took the full IAU 2000B nutation: the build of `704cadc`, whose sky code the
-later commits of rc.16 do not change, with Node.js v22.22.2. The branch's
-results stay in `../results/`. The Chinese gates C1 to C4 are not run: rc.16
-holds that entry back (`../README.md`).
+The sky entry's preregistered gates, S1 to S4 and the package gates of
+`../PREREGISTRATION.md`, run again with `../tools/`, unchanged but for
+`published-compare.mjs`'s new argument (below), on the integrated 0.1.1-rc.16
+candidate after the engine took the full IAU 2000B nutation: the build of
+`704cadc`, whose sky code the later commits of rc.16 do not change, with
+Node.js v22.22.2. The branch's results stay in `../results/`. The Chinese
+gates C1 to C4 are not run: rc.16 holds that entry back (`../README.md`).
 
 On this build the sky entry turns the apparent place to the true equator of
 date with the engine's precession and IAU 2000B nutation (`src/equator.ts`)
@@ -25,6 +25,7 @@ transit passes near the zenith, and the planetary hours' boundaries by up to
 | S3, USNO's rise, set and transit, 30 s | 467 events, median 13.833 s, largest 30.148 s, 2 over, 3 listed by one side only | 467 events, median 13.832 s, largest 30.149 s, the same 2 over (the Moon's rise at 34.60° S on 1950-03-20, −30.058 s; the Sun's set there on 2024-06-21, −30.149 s), the same 3 listed by one side only | fail, as on the branch |
 | S4, consistency with the rise and set function, 1 ms | 9,504 dates, 9,495 complete, 227,880 hours, 0 failures | the same counts, 0 failures | pass |
 | S4, the worked examples | `src/sky/hours.test.ts` | the same tests, in the suite, pass | pass |
+| Package gates: the six commands; the root's graph does not grow (rc.15: 95,273 bytes); each new entry has a budget with its reason | pass: the root 95,273 bytes; `./sky` 83,254 of 92,000 (`../README.md`) | the six commands pass (`docs/evidence/rc16-20260930/gates.log`); the root's graph is 103,537 bytes; `./sky` is 92,109 bytes, under 97,000, a budget raised from 92,000 after the measurement, for the nutation | **fail**: the root's graph grew |
 
 S1 and S2 fail at the same 192 events as on the branch, the rises and sets of
 Uranus in 1950 at 65° N and 65° S, where astronomy-engine's Uranus is 15″ to

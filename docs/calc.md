@@ -110,16 +110,18 @@ is not settled below that level; its planetary series is referred to the FK5
 by a fixed rotation. Horizons's `ECLIPTIC` reference plane uses the IAU 1976
 obliquity, 84381.448″, so it is tilted 0.042″ from `ecliptic-icrs`.
 
-The precession is astronomy-engine's (IAU 2006, the angles of Capitaine et
-al. 2003), which the engine reproduces term for term (`src/frame.ts`), and the
+The precession is astronomy-engine's (IAU 2006, the angles of Capitaine et al.
+2003), which the engine reproduces term for term (`src/frame.ts`), and the
 nutation the engine's own IAU 2000B (McCarthy and Luzum 2003): all 77 of its
 luni-solar terms and its two fixed planetary offsets (`src/nutation.ts`; the
 README's *Nutation*). They are the precession and nutation of `positions()`
 and `natalChart()`, so the default frame is `positions()` to the bit. Its Δψ
-and Δε equal ERFA's `nut00b` within 10⁻¹⁰″ from 1800 to 2200, and IAU 2000B
-puts a longitude at most 0.0037″ from IAU 2006/2000A there
-(`docs/evidence/nutation-2026-09-29`). The receipts name it
-`nutation:iau2000b`. Up to 0.1.1-rc.15 the engine took astronomy-engine's
+and Δε equal ERFA's `nut00b` within 10⁻¹⁰″ from 1800 to 2200
+(`docs/evidence/nutation-2026-09-29`), and IAU 2000B's Δψ is at most 0.00394″
+from IAU 2006/2000A's (ERFA's `nut06a`) there, sampled every 0.1 day of TT
+(the largest in 2192), which a longitude of date inherits
+(`docs/evidence/rc16-20260930/results/nutation-grid.json`). The receipts name
+it `nutation:iau2000b`. Up to 0.1.1-rc.15 the engine took astronomy-engine's
 nutation, which keeps five of the 77 terms: sampled every 0.1 day from 1800 to
 2200 it was up to 0.27″ from the full series in longitude and 0.087″ in
 obliquity, and its rate up to 0.079″ a day in longitude

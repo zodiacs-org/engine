@@ -1,297 +1,437 @@
 # Engine changelog
 
-## Unreleased
+## 0.1.1-rc.16 — unreleased candidate
 
-- `@zodiacs/engine/calc`, a new entry point. `calc({ body, time, frame,
+rc.16 brings six pieces of work onto rc.15 (main at `93ebae9`, the merge of
+zodiacs-org/engine#20), each from its feature branch as that branch's own
+commits, in this order: the uniform calculation API (`@zodiacs/engine/calc`),
+birth-time windows (`@zodiacs/engine/window`), the techniques entry
+(`@zodiacs/engine/techniques`), house positions, cusp speeds and planetary
+returns (`@zodiacs/engine/houses`, and `planetaryReturns` in
+`@zodiacs/engine/timing`), the sky entry (`@zodiacs/engine/sky`) and, last,
+the full IAU 2000B nutation. The branches' copies of earlier local rc.15
+builds were left out. The calc and window entries were then put on rc.15's
+time basis, the budgets and the root's isolation extended to the new entries,
+and calc, window and sky moved onto the engine's nutation. Nothing was pushed
+or published. One build came before this one, on a local branch, and was
+neither pushed nor published; its review found preregistered gates that fail
+described as not applying, figures read off samples too sparse or placed in
+the wrong band of latitude, and sources missing from `LICENSING.md` and
+`NOTICE`, and this candidate corrects them
+(`docs/evidence/rc16-20260930/README.md`, *The re-cut*). Checks:
+`docs/evidence/rc16-20260930/`, and each piece's own evidence, beside which
+its preregistered gates were run again after the nutation, on this candidate's
+code (the `rc16/` directory of each; the evidence README says which build each
+ran on, and that the source commit's computing code is the same).
+
+**Held back:** the sky branch's Chinese-calendar entry
+(`@zodiacs/engine/chinese`: the 24 solar terms and the Four Pillars). Its
+apparent Sun is a series fitted to JPL DE430, and no coefficient set derived
+from a JPL ephemeris ships until NAIF answers whether such derived
+coefficients may be redistributed. The entry waits for a Sun source that is
+not JPL-derived. Its source, tests, export, guide, data script, licensing
+notes and evidence claims are all left out; the sky branch's
+preregistration, which set the Chinese gates C1 to C4 beside the sky's, is
+carried unchanged, and rc.16 acts on none of them.
+
+Breaking changes:
+
+- `NATAL_RECEIPT_CONVENTION_SETS` (`@zodiacs/engine/receipt`) has a new set
+  at index 0, which names the nutation, so each earlier set is one index
+  later: rc.15's time-basis set is at 1 and the rc.8 set at 2. Code that
+  takes a set by its index needs the new one. A receipt of the new set
+  carries `nutation: "iau2000b;equation-of-equinoxes-with-two-complementary-terms"`
+  and `moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration"`.
+  The codec accepts it from 0.1.1-rc.16 on, in SemVer order, and now accepts
+  rc.15's set under 0.1.1-rc.15 alone, where rc.15 accepted it from rc.15 on
+  (`src/receipt-nutation.test.ts`, `src/receipt-versions.test.ts`).
+- Every result that depends on the nutation moves, by the amounts under
+  *The nutation* below: longitudes of date, the angles and the cusps, the
+  Vertex, the East Point and the lots, right ascensions and declinations, the
+  mean nodes and Black Moon Lilith, the ayanamsas' `nutation` and `true`
+  values, and every instant found from them (longitude crossings, returns,
+  stations, void-of-course windows, window switches, rises and sets). No
+  function signature of the root entry or of an rc.15 entry point changes,
+  and the root's exports are rc.15's.
+
+Migration: take a conventions set by its content (the `nutation` key marks
+the current one), or add one to its index. A test or a stored value that
+pins a longitude, an angle or an instant to rc.15's last digits needs rc.16's
+value. A receipt replays its request, not its engine: to reproduce an rc.15
+result as rc.15 computed it, run the carried rc.15 archive.
+
+### New entry points
+
+- `@zodiacs/engine/calc` (`docs/calc.md`). `calc({ body, time, frame,
   center, zodiac, flags })` returns `{ lon, lat, dist, speeds, cartesian,
   bounds, receipt }`; `houses()`, `events()` and `chart()` give the engine's
   houses, longitude crossings and natal charts in the same vocabulary. Eight
-  frames, four centers and three corrections; speeds in every coordinate,
-  analytic for geometric positions on fixed axes and central differences
-  otherwise; bounds measured against JPL Horizons on 32 instants (sample
-  maxima, not limits), the barycentric Sun's derived from the barycentre's
-  error; receipts of convention ids; and typed refusals:
-  `not-in-this-version` (the sidereal zodiac, light deflection),
-  `unsupported-combination`, `out-of-range` and `sample-budget`. An instant
-  is an ISO string, a `Date` or `{ jd, scale: "UTC" | "UT1" | "TT" }`, read
-  on the engine's time basis as `positions()` reads it. calc
-  refuses an instant whose UT1 or TT is outside 1800 to 2200, where it has no
-  comparison to take a bound from; the root entry's functions compute such
-  instants as before, with the `outside-reference-span` flag. `docs/calc.md`
-  maps every Swiss Ephemeris `calc_ut` flag; `docs/evidence/calc-api/` holds
-  the comparison.
-- The comparison found that astronomy-engine's nutation keeps five terms of
-  IAU 2000B, so true-of-date positions and angles carry up to 0.27″ of
-  nutation error over 1800 to 2200 (0.087″ in obliquity, 0.08″ a day in
-  rates). calc names it (`nutation:iau2000b-five-terms`) and keeps it;
-  nothing the engine computes has changed.
-- New entry point `@zodiacs/engine/window`: `birthWindow(input)` partitions a
-  window of up to 48 hours inside `REFERENCE_SPAN` into cells within which
-  each body's sign and house, the signs of the ascendant and midheaven, the
-  aspects in orb and any Placidus or Koch fallback are constant, with each
-  switch's first millisecond and changes, and each cell's share under a
-  uniform prior and, optionally, a rounding model. Also `WINDOW_RATE_BOUNDS`,
-  `MAX_WINDOW_MS`, `WINDOW_VERIFICATION` ("sampled at one-second resolution")
-  and `WindowBudgetError`.
-- Where the true node's jitter would make its sign flicker for longer than
-  the search's budget of two million instants (24 of its 294 ingresses from
-  1800 to 2200), the flicker is left unresolved, found before the budget is
-  spent: the nodes' signs are null there, and so are their houses where
-  those are whole signs (the whole-sign system, or Placidus or Koch falling
-  back, or able to, during the interval); the interval is listed in
-  `unresolved`, and the result carries `node-unresolved`.
-- Evidence in `docs/evidence/birth-window/`: the scans behind the bounds,
-  the preregistered comparison with natalChart at every second of 1,000
-  random windows (PASS: all 24,188 sampled transitions matched, none missed,
-  none extra), its repeat after review with the review's own checker and 300
-  further windows, timings and package sizes.
-- The window entry point changes no existing file: with rc.15's Placidus
-  change carried onto rc.12, every JavaScript file of rc.12's build is
-  byte-identical.
-
-Not yet in a candidate; the version is unchanged. A new opt-in entry point,
-`@zodiacs/engine/techniques`, holds six techniques Zodiacs.org computed
-outside the package. The root entry does not import it. Guide:
-`docs/techniques.md`; checks: `docs/evidence/techniques-2026-09-29/`.
-
-New:
-
-- Solar and lunar returns: `solarReturnInstant`,
-  `mostRecentSolarReturnInstant`, `lunarReturnInstant`, and `solarReturn` and
-  `lunarReturn`, which cast the return chart. For USNO's 20 equinoxes and
-  solstices of 1850, 1900, 1950, 2000 and 2022 the solar return is within
-  45.35 s of the published minute; for the Horizons Sun and Moon of the 48 L1
-  vectors, within 33.23 s and 6.87 s.
-- Composite charts (`compositeMidpoints`, `compositeAspects`,
-  `compositeChart`), and Davison charts for the mean instant and the mean or
-  great-circle place (`davisonChart`, `davisonPlace`).
-- The void-of-course Moon (`moonIngresses`, `moonAspects`,
+  frames (the ecliptic or the equator; true or mean of date, J2000.0 or the
+  ICRS), four centers (geocentric, heliocentric, barycentric, topocentric) and
+  three corrections (apparent, astrometric, geometric); speeds in every
+  coordinate, analytic for geometric positions on fixed axes and central
+  differences otherwise; receipts of convention ids; and typed refusals,
+  `not-in-this-version` (the sidereal zodiac, which `@zodiacs/engine/vedic`
+  gives, and light deflection), `unsupported-combination`, `out-of-range`
+  and `sample-budget`. An instant is an ISO string, a `Date` or
+  `{ jd, scale: "UTC" | "UT1" | "TT" }`, read on the engine's time basis as
+  `positions()` reads it, with an optional pinned ΔT; the receipt records its
+  UTC, `jdUt1` and `jdTt`. calc refuses an instant whose UT1 or TT is outside
+  1800 to 2200, where it has no comparison to take a bound from. With every
+  default it is the position `positions()` gives, to the bit. Bounds are the
+  largest differences from JPL Horizons (DE441) over 32 preregistered
+  instants from 1802 to 2188 (sample maxima, not limits), from the comparison
+  rerun after the nutation (`docs/evidence/calc-api/rc16/`): 3.00″ median and
+  24.6″ at worst, geocentric and apparent, the ephemeris's own error; the
+  barycentric Sun's are derived from the barycentre's error. All twelve
+  frame checks against ERFA pass there; on astronomy-engine's five-term
+  nutation the four through the nutation had failed by up to 0.20″.
+  `houses()` carries the conformance suite's L2 bounds, 0.02″ for the angles
+  and 0.08″ for the cusps. `docs/calc.md` maps every Swiss Ephemeris
+  `calc_ut` flag.
+- `@zodiacs/engine/window` (the README's *Birth-time windows*).
+  `birthWindow(input)` partitions a window of up to 48 hours inside
+  `REFERENCE_SPAN` into cells within which each body's sign and house, the
+  signs of the ascendant and midheaven, the aspects in orb and any Placidus or
+  Koch fallback are constant, with each switch's first millisecond and
+  changes, and each cell's share under a uniform prior and, optionally, a
+  rounding model; also `WINDOW_RATE_BOUNDS`, `MAX_WINDOW_MS`,
+  `WINDOW_VERIFICATION` ("sampled at one-second resolution") and
+  `WindowBudgetError`. The search splits at every step of the time basis (the
+  ΔT model's seam in 1941, 1972-01-01, each leap second and the end of the
+  IERS table) and compares both sides. Where the true node's millisecond
+  jitter would make its sign flicker for longer than the budget of two
+  million instants allows (24 of its 294 ingresses from 1800 to 2200), the
+  flicker is left unresolved, found before the budget is spent: the nodes'
+  signs are null there, and so are their houses where those are whole signs,
+  the interval is listed in `unresolved`, and the result carries
+  `node-unresolved`. The preregistered check, natalChart at every second of
+  1,000 random windows, rerun after the nutation, passes: all 24,188 sampled
+  transitions matched, none missed and none extra, and natalChart confirmed
+  every switch at its millisecond (1,487,520 checks)
+  (`docs/evidence/birth-window/rc16/`).
+- `@zodiacs/engine/techniques` (`docs/techniques.md`), six techniques the
+  Zodiacs.org site computed outside the package: solar and lunar returns
+  (`solarReturnInstant`, `mostRecentSolarReturnInstant`, `lunarReturnInstant`,
+  `solarReturn`, `lunarReturn`); composite and Davison charts
+  (`compositeMidpoints`, `compositeAspects`, `compositeChart`, `davisonChart`,
+  `davisonPlace`); the void-of-course Moon (`moonIngresses`, `moonAspects`,
   `voidOfCourseWindows`, `voidOfCourseAt`) under one named convention,
-  `VOID_OF_COURSE_CONVENTION`: from the Moon's last exact Ptolemaic aspect in
-  a sign (to the Sun and the planets through Pluto, or through Saturn) to its
-  next ingress.
-- Grand trines, T-squares, grand crosses and kites from a chart's aspect
-  records (`aspectPatterns`, `chartAspectPatterns`), and which contain which
-  (`patternContainment`).
-- Essential dignities with cited tables (Dorothean triplicities, Egyptian
-  terms, Chaldean faces), peregrine planets, and mutual reception by any of
-  the five dignities (`dignityRulersAt`, `essentialDignities`,
-  `mutualReceptions`), beside the site's `dignityFor` and `dignitiesFor`.
-- `moonSignCandidates`: the Moon signs possible over a date, in a time zone
-  or in every time zone, and `moonSignsBetween`.
-
-Each ported function was run against the site's code on a seeded synthetic
-corpus: 6,795 of 6,796 cases agree exactly. The one that does not is
-2011-12-30 in Pacific/Apia, a date the zone skipped: the site answers, the
-package refuses it. The preregistered parity gate allowed no disagreement, so
-it is recorded as failed. By design, returns are not clipped to 1800–2200 as
-the site clips them but flagged, and dates before 1970 are read on the
-shipped tzdata rather than the host's.
-
-Sizes: the root entry's import graph is unchanged, the same files and bytes
-(95,273). `./techniques` has a budget of 150,000 bytes; its graph is 141,745,
-the core's included. `./geo`'s graph grows by 464 bytes to 32,136, because its
-local-time code is now a chunk it shares with `./techniques`. The package is
-695,069 bytes unpacked, within the 700,000 cap.
-
-Additions only: no existing function's output changes, and the root entry's
-import graph is unchanged, file for file. Checks:
-`docs/evidence/houses-extra-2026-09-29/`, preregistered in its
-`PREREGISTRATION.md`. User documentation: `docs/houses.md`.
-
-New:
-
-- A new entry point, `@zodiacs/engine/houses`, one file that imports no other
-  module: no ephemeris and nothing of the root entry.
-  - `housePosition(system, input, { lon, lat })`: the house position of a body
-    with ecliptic latitude in each of the thirteen systems, a number in
-    [1, 13), as Swiss Ephemeris's `swe_house_pos` defines it; `null` for Koch
-    where the body lies outside the house circles of its half of the sky or
-    the midheaven never rises, and for Topocentric where no circle reaches a
-    body that never rises or sets. Given the same inputs it is within 0.01″ of
-    `swe_house_pos` on the 55°–66.6° ladder and a global grid for eleven
-    systems, with polar status agreeing. Porphyry is not, in 11 of the global
-    grid's 20,000 cases, where Swiss adds 0.001″ to the longitude and a
-    quadrant under 9° magnifies it; Topocentric is not, in 444 and 301 cases,
-    Swiss's positions leaving up to 0.445″ in the equation that defines them,
-    and it has no position in 519 and 979 cases where Swiss gives one.
-  - `coAscendants(input)`: the equatorial ascendant, Koch's and Munkasey's
-    co-ascendants and Munkasey's polar ascendant, within 0.00000001″ of
-    Swiss's `ascmc[4]` to `ascmc[7]` given the same inputs.
-  - `houseSpeeds(system, input)` and `SIDEREAL_RATE`: the speeds of the cusps
-    and the angles in degrees per day, derived analytically; within
-    0.00035° a day of a central difference of the engine's own cusps on both
-    grids. They agree with Swiss's `houses_armc_ex2` speeds for the angles
-    and eight systems, and not for Koch, Placidus, Porphyry, whole sign or, in
-    5 cases, Alcabitius, where Swiss's own speeds are not the derivatives of
-    its cusps.
+  `VOID_OF_COURSE_CONVENTION`; grand trines, T-squares, grand crosses and
+  kites (`aspectPatterns`, `chartAspectPatterns`, `patternContainment`);
+  essential dignities with cited tables and mutual reception
+  (`dignityRulersAt`, `essentialDignities`, `mutualReceptions`, beside the
+  site's `dignityFor` and `dignitiesFor`); and the Moon signs possible over a
+  date (`moonSignCandidates`, `moonSignsBetween`). Against the site's code on
+  a seeded synthetic corpus, 6,795 of 6,796 cases agree exactly; the
+  preregistered parity gate, G1, allowed none to differ, so it is recorded as
+  failed. The one that differs is 2011-12-30 in Pacific/Apia, a date the zone
+  skipped, which the site answers and the package refuses. The rerun after the
+  nutation generated the site's outputs on rc.16's build, where the
+  preregistration named the carried rc.15 archive: a deviation, made so that a
+  difference comes from the port and not from the nutation. By design, returns
+  are not clipped to 1800–2200 but flagged, and dates before 1970 are read on
+  the shipped tzdata. The solar return is within 42.27 s of USNO's 20
+  published equinoxes and solstices of 1850 to 2022 (gate 120 s), and within
+  32.05 s and 6.81 s of the Horizons Sun and Moon of the conformance suite's
+  L1 vectors (60 s and 15 s). Two more of its gates fail on rc.16. G5, sizes:
+  the root's graph was to stay at rc.15's 95,273 bytes and is 103,537; the
+  package was to stay within the 700,000-byte cap, not raised, and is 923,282
+  bytes; `./techniques` was to be at most 150,000 bytes and is 152,472. G6: no
+  existing file under `src/` was to change and every existing test was to pass
+  unchanged; it failed as run on its branch, and rc.16 changes 20 of rc.15's
+  files under `src/`, 13 of them tests
+  (`docs/evidence/techniques-2026-09-29/rc16/`).
+- `@zodiacs/engine/houses` (`docs/houses.md`), one file that imports no other
+  module, no ephemeris and nothing of the root entry:
+  `housePosition(system, input, { lon, lat })`, a body's house position in
+  each of the thirteen systems as Swiss Ephemeris's `swe_house_pos` defines it
+  (`null` for Koch or Topocentric where the system has none);
+  `coAscendants(input)`, the equatorial ascendant, Koch's and Munkasey's
+  co-ascendants and Munkasey's polar ascendant; and
+  `houseSpeeds(system, input)` with `SIDEREAL_RATE`, the speeds of the cusps
+  and angles, derived analytically. Given the same inputs, house positions are
+  within 0.01″ of `swe_house_pos` for eleven systems and not for Porphyry (11
+  of 20,000 cases) or Topocentric, where Swiss's positions leave up to 0.445″
+  in their defining equation; the co-ascendants are within 0.00000001″ of
+  Swiss's `ascmc[4]` to `ascmc[7]`; the speeds are within 0.00035° a day of a
+  central difference of the engine's own cusps, and differ from Swiss's for
+  Koch, Placidus, Porphyry, whole sign and, in 5 cases, Alcabitius, where
+  Swiss's are not the derivatives of its cusps
+  (`docs/evidence/houses-extra-2026-09-29/`, Swiss Ephemeris an instrument
+  only). These take their inputs as given and do not move with the nutation.
+  Gate B of its preregistration fails on rc.16: the root's graph was to stay
+  at rc.15's 95,273 bytes, its files byte-identical, and is 103,537 bytes;
+  `./timing` was to stay within its 120,000-byte budget and is 123,039; the
+  package was to stay within the 700,000-byte cap and is 923,282; and existing
+  tests and released functions' results change with the nutation. Its part for
+  `./houses`, a budget with its reason, holds: 13,606 bytes of 15,000
+  (`docs/evidence/houses-extra-2026-09-29/rc16/`).
 - `planetaryReturns(natal, body, from, to)`, with `RETURN_BODIES` and
   `RETURN_STEP_DAYS`, in `@zodiacs/engine/timing`: every instant in a window
   at which the Sun, the Moon or Mercury to Pluto stands on its natal
-  longitude, retrograde returns included, from the engine's crossing search,
-  each result carrying its verdict (`complete`, or `refused` over a sample
-  budget). Checked against JPL Horizons for invented charts, including a
-  direct, retrograde and direct return of each of Mercury to Pluto, and
-  against USNO's published equinoxes.
-
-Package: `./houses` has a budget of 15,000 bytes for its import graph, which
-is 13,606. `./timing` grows to 114,646 bytes, within its 120,000. The root's
-graph stays at 95,273 bytes and its files are byte-identical. The bundler
-re-splits the declaration chunks the entries share, so `dist/index.d.ts`
-imports the same house types from a new chunk, and it lists the imports of
-`dist/geo.js` in another order. The version is unchanged.
-
+  longitude, retrograde returns included, each result carrying its verdict
+  (`complete`, or `refused` over a sample budget). Against JPL Horizons, for
+  invented charts that include a direct, retrograde and direct return of each
+  of Mercury to Pluto, every return is found with its direction and within
+  the preregistered τ, and the solar returns of an invented native are within
+  49.7 s of USNO's March equinoxes of 2001 to 2004
+  (`docs/evidence/houses-extra-2026-09-29/rc16/`).
 - `@zodiacs/engine/sky` (`docs/sky.md`): `skyEvents` and `skyEventsOn` give
   the rise, set and upper and lower transit of the Sun, the Moon and the
   planets for an observer on the WGS84 ellipsoid, with 34′ of refraction
   (USNO), the topocentric semi-diameter (upper limb by default) and parallax,
-  named `limb` and `refraction` options, and polar flags. `planetaryHours`
-  and `planetaryHourAt` give the planetary hours in the Chaldean order.
-  Against skyfield with JPL DE440s (226,717 events, 1900–2100) and Swiss
-  `rise_trans` (statistics only), all events agree within 5 s but 192 rises
-  and sets of Uranus at 65° (up to 11.6 s, from astronomy-engine's Uranus):
-  those gates fail. 465 of 467 USNO times are within 30 s of the minute; that
-  gate fails on the other two and on three events only one side lists.
-  Gates, preregistered before measuring, and results:
-  `docs/evidence/sky-chinese-2026-09-29/`. `package:contents` budgets
-  `./sky` (92,000 bytes); `./timing` grows by 129 bytes, its rulers now in a
-  chunk shared with `./sky`.
-- Held back: the branch's Chinese-calendar entry (the 24 solar terms and the
-  Four Pillars). Its apparent Sun is a series fitted to JPL DE430, and no
-  coefficient set derived from a JPL ephemeris ships until NAIF answers the
-  derived-coefficient question; the entry waits for a Sun source that is not
-  JPL-derived.
+  `limb` and `refraction` options and polar flags; `planetaryHours` and
+  `planetaryHourAt` give the planetary hours in the Chaldean order, and say
+  why a day has none. Rerun after the nutation against the preregistered
+  gates: against skyfield with JPL DE440s (226,717 events, 1900–2100) and
+  Swiss `rise_trans` (statistics only), every event agrees within 5 s but 192
+  rises and sets of Uranus at 65° in 1950 (up to 11.61 s, from
+  astronomy-engine's Uranus), so gates S1 and S2 fail, as they did on the
+  branch; 465 of 467 USNO times are within 30 s of the published minute, and
+  S3 fails on the other two (30.06 s and 30.15 s) and on three events only one
+  side lists; S4, the planetary hours' worked examples and their consistency
+  with the rise and set function, passes. Its package gate fails on rc.16: the
+  root's graph was not to grow from rc.15's 95,273 bytes, and is 103,537
+  (`docs/evidence/sky-chinese-2026-09-29/rc16/`).
 
-For the next candidate; the version is still 0.1.1-rc.15. The nutation is now
-the full IAU 2000B series. astronomy-engine 2.1.19, which is still the
+The root imports none of these, and `scripts/root-isolation.mjs` checks it
+from the build's own module list (`OPT_IN_SOURCE` names each entry's
+modules, with `src/equator.ts`, which calc and sky share, and
+`src/first-millisecond.ts`, the sky entry's).
+
+### The nutation
+
+The nutation is now the full IAU 2000B series (McCarthy & Luzum 2003; IERS
+Conventions 2003, chapter 5). astronomy-engine 2.1.19, which is still the
 ephemeris, keeps 5 of that model's 77 luni-solar terms; the engine now
-evaluates all 77 and the two fixed offsets for the planetary terms itself
+evaluates all 77 and the two fixed planetary offsets itself
 (`src/nutation.ts`, transcribed from `iau2000b` in NOVAS C 3.1, a work of the
-US Government; `LICENSING.md` and `NOTICE` record the source), and turns
-astronomy-engine's vectors on the J2000 mean equator to the ecliptic of date
-with astronomy-engine's own precession, reproduced line for line
-(`src/frame.ts`), and that nutation. The engine no longer calls
-astronomy-engine's `e_tilt`, `Rotation_EQJ_ECT`, `EclipticGeoMoon` or
-`SiderealTime`. This answers finding production-positions-7 of the engine
-audit of 2026-09-22 (Zodiacs site repository,
-`docs/platform/evidence/engine-audit-2026-09-22/LEDGER.md`). Evidence, with
-every figure below: `docs/evidence/nutation-2026-09-29/` (`results/` there).
+US Government), adds the two largest IAU 2000 complementary terms to the
+equation of the equinoxes (IERS Conventions 2010, table 5.2e), and turns
+astronomy-engine's vectors on the J2000 mean equator to the ecliptic and
+equator of date with astronomy-engine's own IAU 2006 precession, reproduced
+line for line (`src/frame.ts`, `src/equator.ts`). No code of the package
+calls astronomy-engine's nutation, its rotations to the ecliptic or equator
+of date, its sidereal time or its observer functions any more; the calc
+entry's topocentric observer is astronomy-engine's `terra`, reproduced term
+for term, on the engine's sidereal time and frames. `LICENSING.md` and
+`NOTICE` record the sources. This answers finding production-positions-7 of
+the engine audit of 2026-09-22 (Zodiacs site repository,
+`docs/platform/evidence/engine-audit-2026-09-22/LEDGER.md`). Evidence:
+`docs/evidence/nutation-2026-09-29/`; the figures for the new entries are
+from `docs/evidence/rc16-20260930/results/entries-plumbing.json` and each
+entry's rerun.
 
-Changes to results:
+The model: Δψ and Δε equal ERFA's `nut00b` within 1e-10″ at 101 instants
+from 1800 to 2200 and within 6e-11″ every 0.1 day over that span
+(`docs/evidence/calc-api/rc16/diagnostics.json`, D4). Sampled every 0.1 day
+of TT from 1800 to 2200, the equation of the equinoxes is within 3.50e-5″ of
+ERFA's `ee00` on IAU 2000B (the largest in 2146; 1.5e-5″ at the 101
+instants), and the sidereal time within 3.50e-5″ of gmst06 plus that `ee00`
+(`docs/evidence/rc16-20260930/results/nutation-grid.json`). The rotation to
+the ecliptic of date is within 7.1e-7″ of ERFA's with `bp06` at the 101
+instants (`docs/evidence/nutation-2026-09-29/results/module-against-erfa.json`).
+IAU 2000B itself differs from IAU 2006/2000A (ERFA's `nut06a`) by up to
+0.00394″ in Δψ on the same 0.1-day grid (in 2192), and so puts a longitude
+of date up to that far from it. The engine's nutation is computed for each
+instant, where astronomy-engine reused the last one for any time within
+1e-6 day, so no result depends on what was computed before it.
 
-- Every longitude moves by the change in the nutation in longitude Δψ, the
-  same for the Sun, the Moon, the planets, the true and mean nodes, Black Moon
-  Lilith and the lots. Sampled every 10 minutes from 1800 to 2200, that
-  change reaches 0.2701″, and the true obliquity's 0.08654″
-  (`nutation-change.json`); over 9,697 synthetic charts from 1850 to 2150 the
-  longitudes moved by up to 0.2635″ (`rc15-comparison.json`). Latitudes do not move (by less than 1e-10″).
-  Speeds move by the change's rate, up to 0.0725″ a day at 520 charts from
-  200 to 3900 (`plumbing.json`).
-- Against ERFA (pyerfa 2.0.1.5) turning the same astronomy-engine vectors
-  with the IAU 2006/2000A chain, at those 4,001 instants from 1800 to 2200,
-  the rotation to the ecliptic of date put every longitude up to 0.2520″ off
-  (95th percentile 0.1486″) and now puts it up to 0.003691″ off (0.002011″),
-  which is IAU 2000B's own difference from IAU 2000A there; against the IAU
-  2000B chain, up to 4.4e-7″ (`erfa-frame.json`).
-- The sidereal time's equation of the equinoxes is Δψ cos εA plus the two
-  largest IAU 2000 complementary terms, 2640.96 µas sin Ω and 63.52 µas sin
-  2Ω (IERS Conventions 2010, table 5.2e), and the true obliquity is εA + Δε,
-  both on the full series; astronomy-engine had neither the full series nor
-  the complementary terms. Leaving the terms out would put the sidereal time
-  up to 2.65 mas from ERFA's IAU 2000B value and 5.79 mas from gst06a over
-  1800–2200; with them it is within 0.035 mas and 3.60 mas
-  (`ee-choice.json`). So the angles, all thirteen house systems, the Vertex,
-  the East Point, the sect and lots, right ascensions, declinations and the
-  out-of-bounds bound move. Against ERFA (gst06a, obl06 plus nut06a's Δε) at
-  the 4,001 instants, latitudes within 60°, the ascendant was up to 0.8235″
-  off and is up to 0.006284″ off, the midheaven 0.2457″ and 0.003358″
-  (`erfa-frame.json`). Against Swiss Ephemeris 2.10.03's houses from 1850 to
-  2049, the ascendant was up to 0.5292″ away and is up to 0.00394″ away, the
-  midheaven 0.2177″ and 0.001503″ (`swiss.json`). Over the 9,697 charts, at
-  places up to 60.17° N, the ascendant and Placidus cusps moved by up to
-  0.8003″ and the midheaven by up to 0.2576″; no chart changed house system
-  (`rc15-comparison.json`). Nearer the polar circle they move more: at 520
-  charts, a tenth of them at 66°–80°, Koch cusps by up to 3.88″ and the lots
-  by up to 3.34″ (`plumbing.json`).
-- The house ladder of the Zodiacs site's rc.9 record (55°–66.6° every 0.2°,
-  both hemispheres, 1800–2199, and 3,000 draws within 66°), end to end
-  against Swiss's `swe_houses_ex` with the instant read as UT1 on both sides:
-  from 1850 to 2049 every one of the thirteen systems is within 0.035″ of
-  Swiss on the ladder and 0.055″ on the draws, where rc.15 was up to 3.727″
-  (Koch, 1 case of 353 over 3″) and 1.947″. The Koch case over 3″,
-  2004-01-08T16:35:29Z at 65.6° N, is now 0.035″ away. Before 1850 and from
-  2050, where Swiss uses its long-term sidereal time, the differences are
-  Swiss's and hardly change (`ladder.json`, `worst-koch.json`).
-- The true obliquity equals ERFA's obl06 plus nut00b within the tests'
-  tolerances (1e-9″ and 1e-10″, `src/nutation.test.ts`) and is within
-  1.63 mas of obl06 plus nut06a at 20,000 instants from 1850 to 2150, where
-  astronomy-engine's was up to 85.6 mas away from each; against DE440s at
-  those instants each body's largest declination error changes by less than
-  0.04″ (`declination-truth.json`, `declination-truth-rc15.json`).
-- The mean node and Black Moon Lilith are within 0.4503″ and 0.4887″ of Swiss
-  Ephemeris's `SE_MEAN_NODE` and `SE_MEAN_APOG` from 1800 to 2199 (2,000
-  instants); rc.15 was within 0.6091″ and 0.6785″ (`swiss.json`).
-- Ayanamsas: `mean` no longer involves the nutation and does not change;
+What it moved, from rc.15 (and, in the new entries, from their builds on
+rc.15 before the nutation):
+
+- The root entry. Every longitude of date moves by the change in Δψ, the same
+  for every body, node, Lilith and lot: up to 0.2701″ sampled every 10 minutes
+  from 1800 to 2200, and up to 0.2635″ over 9,697 synthetic charts from 1850
+  to 2150; latitudes by less than 1e-10″; speeds by up to 0.0726″ a day in the
+  plumbing check's 520 charts (below). The sidereal time and the true
+  obliquity move by up to 0.2452″ and 0.08654″ (every 10 minutes), so over the
+  9,697 charts, at places up to 60.17° N, the ascendant and Placidus cusps
+  moved by up to 0.8003″ and the midheaven by up to 0.2576″, and no chart
+  changed house system. Toward the polar circle they move more: in those 520
+  charts, Koch's cusps by up to 3.883″ at 65.75°, and at 66° to 80° the angles
+  by up to 1.622″ and the lots by up to 3.345″, both at 67.21°, where Koch's
+  cusps moved by at most 0.1023″ (46 of the 48 charts there fall back to whole
+  signs) (`docs/evidence/rc16-20260930/results/plumbing-by-latitude.json`).
+  Saturn-return crossings move by up to 257 s near stations (median 20 s).
+  Against ERFA's IAU 2006/2000A chain on the same vectors, at 4,001 instants
+  from 1800 to 2200, a longitude was up to 0.2520″ off and is up to 0.003691″
+  off; the ascendant and midheaven were up to 0.8235″ and 0.2457″ off and are
+  up to 0.006284″ and 0.003358″ off, at latitudes within 60°. Against Swiss
+  Ephemeris 2.10.03 (statistics only), the house ladder of the Zodiacs site's
+  rc.9 record is within 0.035″ in every system from 1850 to 2049, where rc.15
+  was up to 3.727″ (Koch); the mean node and Lilith within 0.4503″ and 0.4887″
+  (0.6091″ and 0.6785″). Each body's largest declination error against DE440s
+  changes by less than 0.04″. The ayanamsas' `mean` values do not change;
   `nutation` and `true` move by the change in Δψ, which cancels from sidereal
-  longitudes (`plumbing.json`).
-- The engine's nutation is computed for each instant, where astronomy-engine
-  reused the last one it computed for any time within 1e-6 day, so no result
-  now depends on what was computed before it.
-- One conformance verdict moves: `L1-POS-0041`, the Sun on 1908-05-30, was
-  1.076″ off in longitude and passes. The L2 residuals shrink: the ascendant
-  from 0.182″ to 0.019″ at most, the midheaven from 0.178″ to 0.0081″, the
-  cusps from 0.489″ to 0.071″ (`conformance/RESULTS.md`).
-- Receipts: no conventions set changes; none of the sets names the nutation
-  model, and the engine version tells the results apart. Receipts written
-  before this change carry astronomy-engine's five-term nutation: replayed on
-  UT1 with the recorded ΔT pinned, 16,218 rc.14 receipts from 1972 to
-  2027-10-02 now differ from their recorded results by up to 0.2554″ in the
-  bodies, 3.022″ in the angles and cusps and 0.0000276 °/day in the speeds,
-  where rc.15 reproduced the angles and cusps exactly
-  (`receipt-replay.json`, `docs/time.md`). `src/replay-time-basis.test.ts`
-  shows the recorded angles and cusps of its 1973 receipt to be exactly
-  astronomy-engine's five-term sidereal time and obliquity.
+  longitudes. (`docs/evidence/nutation-2026-09-29/results/`; on this tree the
+  same run gives the same figures,
+  `docs/evidence/rc16-20260930/results/root-plumbing.json`.)
+- `@zodiacs/engine/calc`: in the true-of-date frames by the root's amounts (up
+  to 0.114″ in longitude and 0.0554″ a day in speed at the plumbing check's 24
+  instants); in the mean-of-date, J2000.0 and ICRS frames not at all, except a
+  topocentric position, whose observer now turns with the engine's sidereal
+  time and nutation: by up to 0.00092″. `houses()` moves with the root's
+  angles (up to 0.322″ in the angles and 0.874″ in Koch's cusps at 63.4° S in
+  that check); `events()` by the longitudes' change over the body's speed, up
+  to 4.9 s there for the true node. Of calc's 107 rows of bounds, 104 are
+  measured against Horizons and 3, the barycentric Sun's, derived from the
+  barycentre's error. 71 of the measured rows fall and none rises, among them
+  the outer planets' rate bounds, which the five-term nutation's rate error
+  dominated (geocentric apparent Neptune 0.051 to 0.013″ a day), and the mean
+  nodes' and Lilith's position bounds, 0.2 to 0.0023″; the derived rows do not
+  change.
+- `@zodiacs/engine/window`: switch instants by up to 17 ms in the plumbing
+  check's eight windows, whose switches otherwise match one for one, but for
+  two one-millisecond flickers of the true node's house at a cusp that
+  appear in two windows, which natalChart confirms. The node's flicker at an
+  ingress changes with it: at the ingresses of July 2026, March 2028 and
+  September 2029, 1,349, 299 and 179 sign changes where the build before the
+  nutation gave 1,603, 311 and 147
+  (`docs/evidence/birth-window/rc16/node-flicker.json`). The engine's
+  obliquity now changes by up to 2.60e-5° a day (2.073e-5° on the five-term
+  series); the window's bound, 5e-5° a day, is 1.9 times that
+  (`docs/evidence/birth-window/rc16/window-rates.json`). Scanned again on
+  this build, the true node's millisecond jitter reaches 4.394e-5° (in 1835),
+  so its bound is at least 3.01 times every value found (the branch's scan,
+  before the time basis and the nutation, gave 4.832e-5° in 2187 and 2.97),
+  and the same 24 of 294 ingresses are over the budget
+  (`docs/evidence/birth-window/rc16/`).
+- `@zodiacs/engine/techniques`: over the site-parity corpus, solar returns by
+  up to 7.2 s, lunar returns by up to 0.59 s and void-of-course windows by up
+  to 0.372 s, and no window, sign or aspect changes; over the plumbing check's
+  six invented natives, composite positions by up to 0.1081″ and a Davison
+  chart's bodies by up to 0.129″. Against USNO the solar returns moved from
+  45.35 s at worst to 42.27 s, against Horizons from 33.23 s and 6.87 s to
+  32.05 s and 6.81 s.
+- `@zodiacs/engine/houses`: nothing, given the same input; an input taken
+  from the engine moves with its sidereal time and obliquity.
+- `planetaryReturns`: by the longitudes' change over the body's speed, up to
+  79.2 s for a slow body near a station in the plumbing check; against
+  Horizons the largest differences, as motion, went from 0.840″ to 0.804″
+  (Sun) and 0.815″ to 0.705″ (Moon), and the planets' changed by up to
+  0.239″.
+- `@zodiacs/engine/sky`: event instants by up to 25 ms (the Moon), the
+  planetary hours' boundaries by up to 8 ms, altitudes by up to 0.061″;
+  azimuths by up to 2.45″, where a transit passes near the zenith. Against
+  skyfield and Swiss each body's largest difference moved by at most 0.018 s,
+  and the same 192 events fail.
 
-Cost:
+The plumbing was checked first: the tree with the series cut to
+astronomy-engine's five terms and no complementary terms gives rc.15's
+results (the root, 520 charts, largest difference 8.0e-13°,
+`docs/evidence/nutation-2026-09-29/results/plumbing.json`, and again on this
+tree, `docs/evidence/rc16-20260930/results/root-plumbing.json`) and the new
+entries' results before the nutation (178,416 values: longitudes within
+2.3e-13° and every angle within 6.9e-11°, speeds within 1.2e-10° a day,
+every instant to the millisecond, every structure the same;
+`docs/evidence/rc16-20260930/results/entries-plumbing.json`).
 
-- Time: a natal chart takes 3 per cent longer, one longitude 6 to 20 per cent
-  and a Saturn-return scan 19 per cent (medians of seven rounds,
-  `performance.json`). The series is evaluated from products of its
-  arguments' multiples, ten calls to `Math.sin` and `Math.cos` where 154
-  would do it directly, within 1e-14″ of NOVAS's own loop
-  (`src/nutation.test.ts`).
-- Size: the chunk holding the ephemeris grows by 5,813 bytes, 2,428 gzipped;
-  minified by esbuild, by 2,108 bytes gzipped; `./internal` bundled and
-  minified with astronomy-engine, whose own nutation code then drops out, by
-  1,089 bytes gzipped, from 32,506 to 33,595 (`sizes.json`). A stand-in for
-  the Zodiacs site's engine chunk (the four functions its `full.ts` imports,
-  built with Rollup and esbuild as its Vite build does, without the site's
-  adapter) grows by 1,080 bytes gzipped. The same stand-in grows by 5,301
-  bytes from rc.14 to rc.15 (the time basis), so the site's chunk, 27,303
-  bytes on rc.14 against its limit of 27,648, would be about 32,604 on rc.15
-  and 33,684 with this change; no site build measured either. Four import
-  graphs exceed their budgets in `scripts/verify-package-contents.mjs`: by
-  3,517 bytes (`.`), 4,810 (`./internal`), 729 (`./timing`) and 2,111
-  (`./vedic`), so `npm run package:contents` fails until the candidate that
-  carries this change raises those budgets and says why.
+Cost: a natal chart takes 3 per cent longer, one longitude 6 to 20 per cent
+and a Saturn-return scan 19 per cent (the nutation's
+`results/performance.json`). The series is evaluated from products of its
+arguments' multiples, ten calls to `Math.sin` and `Math.cos` where 154 would
+do it directly, within 1e-14″ of NOVAS's own loop.
+
+Conformance: one verdict moves, `L1-POS-0041`, the Sun on 1908-05-30, which
+was 1.076″ off in longitude and passes: 267 pass, 192 fail, 41 unsupported
+of 500. The L2 residuals shrink: the ascendant from 0.182″ to 0.0190″ at
+most, the midheaven from 0.178″ to 0.00815″, the Vertex from 0.285″ to
+0.0134″, the East Point from 0.103″ to 0.00680″ and the cusps from 0.489″
+to 0.0712″ (`conformance/RESULTS.md`, regenerated on this build;
+`docs/evidence/rc16-20260930/conformance-changes.json`).
 
 Tests whose expectations changed, each saying where its expectation now
 comes from: the Mercury station of February 2026 moves 5.94 s, to
-06:47:13.822Z, 0.047 s from where ERFA's frame puts it (rc.15's was 6.156 s
-from it; `test-expectations.json`); the polar-fallback receipt's ascendant
-follows the engine, 0.0003″ from ERFA's (0.039″ before); the Placidus
-test's latitude, 1.07e-5″ below the polar limit on the five-term obliquity
-and inside the polar circle on ERFA's and the full series', moves by the
+06:47:13.822Z, 0.047 s from where ERFA's frame puts it; the polar-fallback
+receipt's ascendant follows the engine, 0.0003″ from ERFA's; the Placidus
+latitude of the polar-limit tests (the root's and the window's), which was
+1.07e-5″ below the limit on the five-term obliquity, moves by the
 obliquity's change; the 1973 rc.14 replay separates the time basis from the
-nutation; and tests that took astronomy-engine's nutation as the engine's
-(declinations, ayanamsas, speeds across time-basis steps, the Moon's error
-path) take the engine's own. `docs/evidence/nutation-2026-09-29/README.md`
-lists each.
+nutation; the calc round-trip fixture and the techniques' site-parity
+fixtures were generated again on this build; and tests that took
+astronomy-engine's nutation as the engine's take the engine's own.
 
-Migration: none. With every default `calc` gives the position `positions()`
-gives, to the bit after the same earlier calls, and the root entry's build is
-byte for byte unchanged. `@zodiacs/engine/window` changes no existing
-calculation or receipt.
+### Receipts
+
+The current conventions set names the nutation (*Breaking changes*). rc.15's
+receipts, as the carried rc.15 archive serializes them
+(`src/fixtures/receipt-rc15.json`), still parse under rc.15's set and replay
+as the requests they record, on the same time basis; recomputed today every
+longitude moves by the change in Δψ (0.2701″ at most) and the angles and cusps
+by the change in the sidereal time and the obliquity. Receipts that rc.13 and
+rc.14 wrote still parse under the rc.8 set; replayed on UT1 with the recorded
+ΔT pinned, 16,218 rc.14 receipts from 1972 to 2027-10-02 differ from their
+recorded results by up to 0.2554″ in the bodies and 3.022″ in the angles and
+cusps, where rc.15 reproduced the angles and cusps exactly
+(`docs/evidence/nutation-2026-09-29/results/receipt-replay.json`,
+`docs/time.md`).
+
+### Sizes and budgets
+
+Import graphs (`scripts/verify-package-contents.mjs`'s measure: the
+JavaScript a plain import loads), in bytes, with the sum of the graph's files
+each gzipped at level 9 in parentheses
+(`docs/evidence/rc16-20260930/sizes.json`):
+
+| Entry | rc.15 as carried | rc.16 | Budget |
+| --- | ---: | ---: | ---: |
+| `.` | 97,704 (32,408) | 103,537 (34,828) | 108,500 (was 100,000) |
+| `./calc` |  | 113,904 (37,490) | 115,000 |
+| `./crossings` | 9,410 (2,768) | 9,410 (2,768) | 10,000 |
+| `./deltat` | 4,968 (1,944) | 4,968 (1,944) | 5,500 |
+| `./geo` | 34,135 (12,459) | 34,659 (12,953) | 35,000 |
+| `./houses` |  | 13,606 (3,503) | 15,000 |
+| `./internal` | 58,997 (20,156) | 64,830 (22,572) | 68,000 (was 60,000) |
+| `./internal/math` | 18,165 (4,928) | 18,165 (4,928) | 20,000 |
+| `./receipt` | 66,200 (22,290) | 66,580 (22,374) | 70,000 |
+| `./sky` |  | 92,109 (31,262) | 97,000 (92,000 on its branch) |
+| `./techniques` |  | 152,472 (50,308) | 160,000 (150,000 on its branch) |
+| `./timing` | 114,916 (36,305) | 123,039 (39,477) | 129,000 (was 120,000) |
+| `./vedic` | 116,779 (38,359) | 122,131 (40,647) | 128,000 (was 120,000) |
+| `./window` |  | 102,590 (34,123) | 105,000 |
+
+The root grows by 5,833 bytes, 2,420 gzipped: the nutation, 5,794
+(`src/nutation.ts` 4,146, `src/frame.ts` 2,110, less 508 in
+`src/ephemeris.ts`, and 46 of imports, exports and their use in
+`src/declination.ts` and `src/points.ts`), and 39 bytes of export names that
+the calc, window and sky entries import from the root's shared chunk
+(`gastHours`, `tilt`, `eclipticOfDate`).
+
+Every budget raised here was raised after these sizes were measured, to fit
+them; each has its reason in the budget file. For the nutation, which every
+graph that loads the ephemeris carries: the root from 100,000 to 108,500,
+`./internal` from 60,000 to 68,000, `./timing` from 120,000 to 129,000,
+`./vedic` from 120,000 to 128,000 and `./techniques` from its branch's
+150,000 to 160,000. For the nutation and the frames of date it now takes
+from `src/equator.ts`: `./sky` from its branch's 92,000 to 97,000. The
+techniques and houses preregistrations had fixed `./techniques` at 150,000
+and `./timing` at 120,000, and the sky's did not let the root grow; those
+gates are recorded as failed (*New entry points*), and the raised budgets
+do not make them pass. New budgets: `./calc` 115,000, `./window` 105,000 and
+`./houses` 15,000; calc and window, set before the nutation, keep theirs,
+with 0.96 and 2.34 per cent of headroom left. `./geo` grows by 524 bytes,
+the imports and exports of the local-time chunk it now shares with
+`./techniques`, and `./receipt` by 380, the conventions set that names the
+nutation; both stay within their budgets.
+
+The cap on the whole package was raised from 700,000 to 950,000 bytes after
+the five new entry points were measured (in `5e0d00c`, before the nutation,
+when they took the package to 879,777 bytes), for them and their
+documentation; the techniques and houses preregistrations had required the
+package to stay within 700,000 bytes without raising the cap. The package is
+923,282 bytes unpacked in 69 files (rc.15: 668,343 in 54). A stand-in for the
+Zodiacs site's engine chunk grows by 1,080 bytes gzipped with the nutation
+(the nutation's `results/sizes.json`); no site build measured it.
+
+### Corrections
+
+- rc.15's entry says that Placidus's iteration settles to 1e-9° within 64
+  steps "except within about 4e-9° of the polar limit". The window branch's
+  review measured the band at about 1e-8°; `src/houses.ts` says so, and the
+  window search compares the house system and the houses at every
+  millisecond within 1e-8° of the limit.
 
 ## 0.1.1-rc.15 — unreleased candidate
 

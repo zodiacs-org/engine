@@ -1,0 +1,54 @@
+# The birth-data check of rc.16: names only
+#
+# A review aid, kept outside the repository because its output holds the
+# lines it matches, listed every line added by each commit of
+# 93ebae9..aba647e and by the staged changes of the source commit, that holds a
+# year from 1700 to 2029 beside birth vocabulary (born, birth, birthday,
+# native, nativity, died, podcast, celebrity and the like) or beside a
+# capitalized pair of words, and every capitalized pair of words; each hit was
+# read by hand. The people it found, and why each may be there, follow. No
+# line added by any of these commits holds a real person's birth data.
+
+Authors, translators, editors and publishers of the works cited where they are
+used (docs/techniques.md, docs/houses.md, docs/sky.md, src/techniques/,
+src/houses-extra.ts, src/sky/, src/nutation.ts, NOTICE, the evidence
+directories):
+  Robert Hand; William Lilly; Ronald C. Davison; John Townley; Dorotheus of
+  Sidon and David Pingree (translator); al-Biruni and R. Ramsay Wright
+  (translator); Ptolemy and F. E. Robbins (translator); Samuel Weiser
+  (publisher); Michael Munkasey; Walter Koch; Otto Ludwig; D. and J. Parker;
+  Jean Meeus; V. E. Robson; Max Heindel; Geoffrey Chaucer and W. W. Skeat
+  (editor); Cassius Dio and E. Cary (translator); D. McCarthy and B. Luzum;
+  W. Harris and P. Barrett (NOVAS); Tommy Ettinger (the mulberry32
+  generator's author, credited in the window evidence); G. Petit and
+  B. Luzum (editors of the IERS Conventions 2010), N. Capitaine,
+  P. T. Wallace and J. Chapront, and B. A. Archinal (LICENSING.md and
+  NOTICE).
+
+Named in the sky branch's preregistration, carried unchanged, in its
+held-back Chinese part: Duke Yin of Lu, whose third year dates the solar
+eclipse the Chunqiu records (-719 February 22), an anchor of the day count,
+not a birth.
+
+This directory's history-check*.txt label the birth data they search for
+opaquely, person A to person G; which person each label stands for is kept
+outside the repository with the patterns. They name the published examples
+below, as the check lists them.
+
+Birth data, all invented and labelled so where used:
+  the techniques' synthetic native (src/techniques/returns.test.ts,
+  docs/techniques.md) and the seeded corpora of their preregistration; the
+  houses entry's native "invented as born at the March equinox of 2000"
+  (src/timing/planetary-returns.test.ts, docs/houses.md and its
+  preregistration); the window's 1,000 seeded windows (mulberry32, seed
+  20260928) and its tests' instants; calc's preregistered instants; the
+  nutation's seeded charts; rc.15's synthetic 1990-06-15 08:30 birth in New
+  York in src/fixtures/receipt-rc15.json; the six invented births and eight
+  invented birth-time windows of tools/entries-plumbing.mjs, labelled so
+  there, at the coordinates of cities or of open sea (one birth, first placed
+  on the date and in the city of a historical event, was moved in the re-cut
+  to 1948-05-18 11:20 UTC at 15° N, 70° E, in the Arabian Sea).
+
+The published worked examples that CONTRIBUTING.md allows, about people who
+have died, are rc.15's; no commit of rc.16 adds a line with their birth data
+(history-check.txt).
