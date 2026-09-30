@@ -1,0 +1,69 @@
+name: Publish Python package to PyPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Exact Python package version to publish
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: pypi-publish
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+      - name: Verify requested version and bundled provenance
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          python - <<'PY'
+          import os, pathlib, tomllib
+          project = tomllib.loads(pathlib.Path('python/pyproject.toml').read_text())['project']
+          assert project['name'] == 'zodiacs'
+          assert project['version'] == os.environ['RELEASE_VERSION'], 'Version mismatch'
+          PY
+          python python/tools/verify_vendor.py
+      - run: python -m pip install build==1.6.1 twine==7.0.0
+      - run: python -m build python
+      - run: python -m twine check --strict python/dist/*
+      - run: python -m pip install --no-deps python/dist/*.whl
+      - run: python -m unittest discover -s python/tests -v
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: python-distributions
+          path: python/dist/*
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/zodiacs/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: python-distributions
+          path: dist/
+      - name: Publish with PyPI trusted publishing
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2

@@ -1,0 +1,69 @@
+# Third-party notices
+
+The bundled @zodiacs/engine 0.1.1-rc.14 archive is unchanged and carries
+its LICENSE, LICENSING.md, and NOTICE. Its code is MIT; its Delta T data
+is CC-BY-4.0. Python wrapper code is MIT.
+
+@zodiacs/engine notice
+========================
+
+Astronomy Engine
+----------------
+
+The core runtime depends on astronomy-engine 2.1.19, Copyright (c) 2019-2023
+Don Cross, distributed under the MIT License. Its distributed JavaScript source
+retains the full MIT permission and warranty notice. Source and license metadata:
+https://github.com/cosinekitty/astronomy
+
+ΔT (TT − UT1)
+------------
+
+The package's ΔT module, the model "zodiacs-deltat/1" that the package
+exports as @zodiacs/engine/deltat, contains 32 values of Table S15, rounded
+to 0.01 s, and constants of equations (4.1) and (5.1) from the work below.
+The build places that module in a shared chunk under dist/, which
+dist/deltat.js re-exports, so the values are in that chunk rather than in
+dist/deltat.js itself.
+
+  Stephenson, F. R., Morrison, L. V. & Hohenkerk, C. Y. 2016, Measurement of
+  the Earth's rotation: 720 BC to AD 2015. Proc. R. Soc. A 472: 20160404.
+  doi:10.1098/rspa.2016.0404
+  Published under Creative Commons Attribution 4.0 International (CC BY 4.0):
+  https://creativecommons.org/licenses/by/4.0/
+  The values are used unmodified except for rounding; the engine rebuilds the
+  authors' spline from them.
+
+Its values from 1941 come from the United States Naval Observatory
+(historic_deltat.data and tai-utc.dat, US Government works) and from the
+International Earth Rotation and Reference Systems Service (IERS EOP 20 C04
+and Bulletin A, finals2000A.all), which asks that its products be cited:
+IERS, https://www.iers.org/. They enter the table as 91 values in 0.01 s.
+
+GeoNames
+--------
+
+The optional @zodiacs/engine/geo client can read a compact index derived from
+GeoNames cities15000, admin1CodesASCII, and countryInfo. GeoNames data is
+licensed under Creative Commons Attribution 4.0 International (CC BY 4.0):
+
+  https://www.geonames.org/
+  https://creativecommons.org/licenses/by/4.0/
+
+The Zodiacs.org index rounds latitude and longitude to two decimal places,
+interns timezone, administrative-area, and country strings, sorts cities by
+population, and shards records by the first folded ASCII letter. No GeoNames
+records are bundled in this npm package. If you host, copy, or redistribute a
+compatible GeoNames-derived index, retain this notice and attribution.
+
+Timezone data
+-------------
+
+@zodiacs/engine/geo does not redistribute the IANA Time Zone Database. Local
+time conversion uses the host JavaScript runtime's Intl/ICU data. Historical
+coverage, including pre-standardization local mean time, therefore depends on
+the browser or Node.js build used by the consumer.
+
+
+The bundled astronomy-engine 2.1.19 archive is unchanged. Its MIT license
+and Donald Cross copyright notice are preserved in its JavaScript sources.
+See https://github.com/cosinekitty/astronomy.
