@@ -9,15 +9,24 @@
 // - from the comment esbuild writes before each module's code in an output
 //   file, `// src/...`, read whatever the path's extension, spaces included.
 //
-// Either way, no module of the timing, Vedic or geo entries and no zone
-// history may be in the root's static graph. The two readings must agree:
+// Either way, no module of an opt-in entry (timing, Vedic, geo, calc,
+// window, techniques, houses or sky) and no zone history may be in the root's
+// static graph. The two readings must agree:
 // every marked module must be one the module list gives for that file, and
 // the module list must describe the files on disk byte for byte, so that a
 // stale list cannot hide a module either.
 import assert from "node:assert/strict";
 
-/** Source paths of the opt-in entries' modules and of the zone histories, whatever the extension. */
-export const OPT_IN_SOURCE = /^src\/(?:timing|vedic|geo|tzdb)(?:\/|\.[^/]*$)/u;
+/**
+ * Source paths of the opt-in entries' modules and of the zone histories,
+ * whatever the extension: the directories and entry files of timing, Vedic,
+ * geo, techniques and sky and the zone histories; the calc and window
+ * entries' flat files, src/calc.ts and src/calc-*.ts, src/window.ts and
+ * src/window-*.ts; and the houses entry's one file, src/houses-extra.ts
+ * (src/houses.ts is the root's own).
+ */
+export const OPT_IN_SOURCE =
+  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|houses-extra\.[^/]*$)/u;
 
 /** The source path of every module esbuild marks in an output file: `// src/...`, any extension. */
 export function sourceMarkers(code) {
@@ -84,7 +93,7 @@ export function staticGraph({ metafile, read, entryOutput, entrySource }) {
 
 /**
  * The root entry's check: its static graph, read both ways, holds no module
- * of the timing, Vedic or geo entries and no zone history. Throws an
+ * of an opt-in entry (OPT_IN_SOURCE) and no zone history. Throws an
  * AssertionError naming the first module found; returns the graph.
  */
 export function checkRootIsolation({ metafile, files, read, entryOutput = "dist/index.js", entrySource = "src/index.ts" }) {

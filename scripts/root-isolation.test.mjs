@@ -1,5 +1,5 @@
 // Cases for scripts/root-isolation.mjs, the export smoke test's check that the
-// root entry's static graph holds no timing, Vedic or geo module and no zone
+// root entry's static graph holds no module of an opt-in entry and no zone
 // history. Each case is a synthetic build: an esbuild metafile and the files
 // it describes. The 0.1.1-rc.15 check read only `// src/<path>.ts` markers; a
 // review defeated it by renaming src/timing/rulers.ts to rulers.mts, which the
@@ -109,6 +109,18 @@ describe("the root entry's isolation check", () => {
   it("names the opt-in sources by directory and entry file, not by extension", () => {
     for (const path of ["src/timing.ts", "src/vedic.mts", "src/geo/timezone.ts", "src/tzdb/x.js", "src/timing/a b.cts"]) expect(OPT_IN_SOURCE.test(path)).toBe(true);
     for (const path of ["src/api.ts", "src/timing-shared.ts", "src/geometry.ts", "src/vedicx/a.ts"]) expect(OPT_IN_SOURCE.test(path)).toBe(false);
+  });
+
+  it("names the modules of the calc, window, techniques, houses and sky entries, and not the root's houses.ts", () => {
+    for (const path of [
+      "src/calc.ts", "src/calc-frames.ts", "src/calc-reduce.mts", "src/window.ts", "src/window-ranges.ts",
+      "src/techniques.ts", "src/techniques/returns.ts", "src/sky.ts", "src/sky/riseset.ts", "src/houses-extra.ts", "src/houses-extra.mts"
+    ]) expect(OPT_IN_SOURCE.test(path), path).toBe(true);
+    for (const path of ["src/houses.ts", "src/calculus.ts", "src/windows.ts", "src/skyline.ts", "src/techniquesx/a.ts", "src/first-millisecond.ts"]) {
+      expect(OPT_IN_SOURCE.test(path), path).toBe(false);
+    }
+    const bypass = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", "src/window-ranges.ts"], rootImports: ["src/window-ranges.ts"] });
+    expect(() => checkRootIsolation(bypass)).toThrow(/the root entry reaches src\/window-ranges\.ts/);
   });
 
   it.runIf(existsSync(new URL("../dist/metafile-esm.json", import.meta.url)))("passes this checkout's build", () => {

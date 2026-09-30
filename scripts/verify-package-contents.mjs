@@ -82,6 +82,11 @@ const ENTRY_BUDGETS = {
   // and exports of the chunks the new entry points share with the root
   // (docs/evidence/rc15-20260929/sizes.json).
   ".": 100_000,
+  // New in rc.16 (feature-api): the uniform calculation API, its frames,
+  // centers, corrections, bounds and receipts. 106,779 bytes as integrated on
+  // rc.15's time basis, 34,449 of them beyond the core's graph; 7.69 per cent
+  // of headroom (docs/evidence/rc16-20260930/sizes.json).
+  "./calc": 115_000,
   "./crossings": 10_000, // rc.15: 9,410
   "./deltat": 5_500, // rc.15: 4,968
   // rc.15: 31,672, the zone histories not included (below). With ./techniques
@@ -106,7 +111,12 @@ const ENTRY_BUDGETS = {
   // engine's clock (onChartClock), and so the core modules that chunk imports.
   "./sky": 92_000,
   "./timing": 120_000, // rc.15: 112,485, the core's graph included; with planetary returns (unreleased) 114,646
-  "./vedic": 120_000 // rc.15: 114,106, the core's graph included
+  "./vedic": 120_000, // rc.15: 114,106, the core's graph included
+  // New in rc.16 (feature-window): birth-time window partitions, the search
+  // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
+  // 33,971 of them beyond the core's graph; 8.17 per cent of headroom
+  // (docs/evidence/rc16-20260930/sizes.json).
+  "./window": 105_000
 };
 
 /** The dist/ files an entry loads statically, with their bytes. */
@@ -168,9 +178,18 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // declarations, which no runtime loads; 15,183 (4.32 per cent) of README,
 // CHANGELOG, licences and manifest; and 13,561 (3.86 per cent) of the root's
 // own graph, 11,363 of them the time basis, which the root's budget above
-// holds. Code that imports only the root loads only that graph. The cap is
-// 700,000 bytes, with room for the documentation of the next candidate.
-const TOTAL_CAP = 700_000;
+// holds. Code that imports only the root loads only that graph. rc.15 as
+// carried was 668,343 bytes, under that cap of 700,000.
+//
+// rc.16 adds five opt-in entry points (./calc, ./window, ./techniques,
+// ./houses and ./sky). Brought onto rc.15, before the nutation, they took the
+// package to 879,777 bytes, 211,434 more (docs/evidence/rc16-20260930/
+// sizes.json): 137,039 (64.81 per cent) of JavaScript that only the opt-in
+// entry points load; 54,041 (25.56 per cent) of declarations; 20,341 (9.62
+// per cent) of README, CHANGELOG and manifest; and 13 of the root's own graph.
+// The cap is 950,000 bytes: room for the nutation series and for rc.16's
+// documentation.
+const TOTAL_CAP = 950_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 
 // The licence expression covers the code (MIT) and the ΔT values (CC BY 4.0),

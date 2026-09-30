@@ -358,8 +358,9 @@ checkSelfContained("deltat");
 // dependency is the ephemeris.
 checkSelfContained("index", ["astronomy-engine"]);
 
-// The root imports no subpath: no module of the timing, Vedic or geo entries,
-// and no zone history, is in its static graph. scripts/root-isolation.mjs
+// The root imports no subpath: no module of an opt-in entry (timing, Vedic,
+// geo, calc, window, techniques, houses or sky), and no zone history, is in
+// its static graph (OPT_IN_SOURCE in scripts/root-isolation.mjs). That script
 // reads the graph from the build's own module list (dist/metafile-esm.json,
 // which `npm run build` writes and which must match dist/ byte for byte) and
 // from every `// src/...` marker the build writes, whatever the extension.
@@ -375,6 +376,8 @@ for (const [entry, own] of [
   ["timing", /^src\/timing\//u],
   ["vedic", /^src\/vedic\//u],
   ["geo", /^src\/geo\//u],
+  ["calc", /^src\/calc-[a-z]+\.ts$/u],
+  ["window", /^src\/window-ranges\.ts$/u],
   ["techniques", /^src\/techniques\//u],
   ["houses-extra", /^src\/houses-extra\.ts$/u],
   ["sky", /^src\/sky\//u]
@@ -383,11 +386,6 @@ for (const [entry, own] of [
   for (const reading of [graph.sources, graph.held, graph.marked]) {
     assert(reading.some((source) => own.test(source)), `the ${entry} entry's own modules are not listed or marked`);
   }
-}
-
-// No module of the calc, techniques, houses or sky entries is in the root's static graph, read either way.
-for (const source of new Set([...root.sources, ...root.held, ...root.marked])) {
-  assert(!/^src\/(?:calc(?:-[a-z]+)?\.ts$|techniques(?:\.ts$|\/)|houses-extra\.ts$|sky(?:\.ts$|\/)|first-millisecond\.ts$)/u.test(source), `the root entry reaches ${source}`);
 }
 
 // The geo entry reaches the zone histories only through dynamic imports, one
@@ -406,6 +404,6 @@ for (const entry of ["geo", "techniques"]) {
 console.log(
   "@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, " +
     `the core graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
-    `${root.outputs.length} files) reaches no timing, Vedic, geo, calc, techniques, houses or sky module and no zone history, ` +
+    `${root.outputs.length} files) reaches no module of an opt-in entry and no zone history, ` +
     "and the geo entry loads its 16 shards lazily"
 );
