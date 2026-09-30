@@ -5,26 +5,18 @@
  * This entry point carries the engine's ephemeris, like the root entry point,
  * and is separate from it so that the root entry point does not grow.
  */
-import {
-  BackdatePosition,
-  Body,
-  C_AUDAY,
-  GeoVector,
-  MakeTime,
-  SetDeltaTFunction,
-  SiderealTime,
-  e_tilt
-} from "astronomy-engine";
+import { MakeTime, SetDeltaTFunction, e_tilt } from "astronomy-engine";
 
 import { ASPECTS, ASPECT_TYPES, matchAspect, separation } from "./aspects.js";
 import { validateBirthSettings } from "./birth-input.js";
 import { dateFrom } from "./date-input.js";
-import { DELTA_T_TABLE, deltaT } from "./deltat.js";
-import { bodyLongitude } from "./ephemeris.js";
+import { deltaT } from "./deltat.js";
+import { bodyLongitude, gastHours, onChartClock } from "./ephemeris.js";
 import { computeAngles, computeHouses, houseOf, isPolarUndefinedHouseSystem } from "./houses.js";
 import type { AngleInput } from "./houses.js";
 import { REFERENCE_SPAN } from "./reference-span.js";
 import { SIGN_NAMES, normalizeLongitude, signIndexForLongitude } from "./signs.js";
+import { elapsedDays, timeBasis } from "./time-scale.js";
 import type {
   AspectType,
   BodyName,
@@ -137,22 +129,6 @@ const BODIES = [
 const NORTH = 10;
 const SOUTH = 11;
 const RATES = BODIES.map((body) => WINDOW_RATE_BOUNDS[body]);
-/** astronomy-engine's bodies for the light-time backdating of the Sun and planets. */
-const BACKDATED: (Body | null)[] = [
-  Body.Sun,
-  null,
-  Body.Mercury,
-  Body.Venus,
-  Body.Mars,
-  Body.Jupiter,
-  Body.Saturn,
-  Body.Uranus,
-  Body.Neptune,
-  Body.Pluto,
-  null,
-  null
-];
-
 /** Aspect pairs in natalChart's order: the first ten bodies, earlier body first. */
 const PAIRS: (readonly [number, number])[] = [];
 for (let first = 0; first < 10; first += 1) {
@@ -359,8 +335,9 @@ interface AngleContext {
 
 /**
  * Steps across which a quantity may jump: for each body and for the angles,
- * instants z such that the step from z − 1 ms to z may cross a seam of the ΔT
- * model, where TT, and every position computed from it, steps back.
+ * instants z such that the step from z − 1 ms to z may cross a step of the
+ * time basis, where TT and UT1, and every position and angle computed from
+ * them, jump.
  */
 interface Seams {
   bodies: number[][];
@@ -369,20 +346,13 @@ interface Seams {
 
 /**
  * astronomy-engine reuses its last nutation for any instant within 1e-6 day
- * (86.4 ms) and its last sidereal time for the same instant. Moving both to a
- * day later first makes every value below a function of its millisecond
- * alone, and the same as a lone natalChart call computes there.
+ * (86.4 ms). Moving it to a day later first makes every value below a
+ * function of its millisecond alone, and the same as a lone natalChart call
+ * computes there.
  */
 function freshCaches(time: number): void {
-  const away = MakeTime(new Date(time + DAY));
-  e_tilt(away);
-  SiderealTime(away);
+  e_tilt(MakeTime(new Date(time + DAY)));
 }
-
-/** Days from J2000 on astronomy-engine's UT scale, computed as its AstroTime computes them. */
-const utDays = (time: number) => (time - J2000) / DAY;
-/** Whether ΔT at this UT comes from deltat.ts's table rather than its spline, decided as deltat.ts decides it. */
-const onTable = (ut: number) => !(2000 + ut / 365.25 < DELTA_T_TABLE.from);
 
 /** The first millisecond in (from, to] at which `holds` is true, given that it is false at `from` and true at `to`. */
 function firstWhere(holds: (time: number) => boolean, from: number, to: number): number {
@@ -397,36 +367,32 @@ function firstWhere(holds: (time: number) => boolean, from: number, to: number):
 }
 
 /**
- * The ΔT model's one discontinuity inside REFERENCE_SPAN is where its spline
- * hands over to its table, at the start of DELTA_T_TABLE.from (1941.0,
- * 1940-12-31T18:00:00Z). The Moon, the obliquity and the sidereal time step
- * there; the true node also 864 ms either side, where one of the two lunar
- * positions it differences crosses it; the Sun and planets one light time
- * later, where their backdated positions cross it. Each step is found from the
- * engine's own arithmetic, and kept with a millisecond either side.
+ * Whether two UTC instants lie in one piece of the time basis
+ * (src/time-scale.ts), within which TT and UT1 run on continuously from the
+ * instant: `elapsedDays` gives back the step it is handed exactly when they
+ * do, and the TT between them where a step of the basis lies between them.
+ */
+const onePiece = (a: number, b: number): boolean =>
+  Number.isNaN(elapsedDays(timeBasis(a, "utc"), timeBasis(b, "utc"), Number.NaN));
+
+/**
+ * Where the time basis steps inside REFERENCE_SPAN: at the ΔT model's handover
+ * from its spline to its knots (1941.0, 1940-12-31T18:00:00Z), at 1972-01-01,
+ * at each leap second, and where the IERS UT1 table ends (2027-10-02). Every
+ * sample installs its own ΔT (src/ephemeris.ts), so TT, UT1 and every position
+ * and angle computed from them step there together, and nowhere else. Each
+ * step is found from the engine's own arithmetic and kept with a millisecond
+ * either side. A window of 48 hours holds at most two.
  */
 function seamsIn(start: number, end: number): Seams {
-  const none: Seams = { bodies: BODIES.map(() => []), angles: [] };
-  const near = J2000 + (DELTA_T_TABLE.from - 2000) * 365.25 * DAY;
-  // Pluto's light time is under six hours.
-  if (end < near - 2_000 || start > near + 7 * 3_600_000) return none;
-  const crossing = (offsetDays: number) =>
-    firstWhere((time) => onTable(utDays(time) + offsetDays), near - 2_000, near + 2_000);
-  const around = (time: number) => [time - 1, time, time + 1];
-  const seam = crossing(0);
-  const bodies = BODIES.map((_, index) => {
-    if (index >= NORTH) return [...around(crossing(1e-5)), ...around(seam), ...around(crossing(-1e-5))];
-    const body = BACKDATED[index];
-    if (body === undefined || body === null) return around(seam);
-    const departs = (time: number) => onTable(BackdatePosition(MakeTime(new Date(time)), Body.Earth, body, true).t.ut);
-    const light = (GeoVector(body, MakeTime(new Date(seam)), true).Length() / C_AUDAY) * DAY;
-    let from = seam + Math.floor(light) - 10_000;
-    let to = seam + Math.ceil(light) + 10_000;
-    while (departs(from)) from -= 60_000;
-    while (!departs(to)) to += 60_000;
-    return [...around(seam), ...around(firstWhere(departs, from, to))];
-  });
-  return { bodies, angles: around(seam) };
+  const steps: number[] = [];
+  let from = start - 1;
+  while (from < end && !onePiece(from, end)) {
+    const at = firstWhere((time) => !onePiece(from, time), from, end);
+    steps.push(at - 1, at, at + 1);
+    from = at;
+  }
+  return { bodies: BODIES.map(() => steps), angles: steps };
 }
 
 class Sky {
@@ -486,14 +452,14 @@ class Sky {
     const at = this.instant(time);
     if (!at.angles) {
       freshCaches(time);
-      // As computeChart: sidereal time and true obliquity from one AstroTime.
-      const astroTime = MakeTime(new Date(time));
-      const input: AngleInput = {
-        gastHours: SiderealTime(astroTime),
+      // As computeChart: the sidereal time from the basis's UT1 and the true
+      // obliquity on its TT, from one AstroTime on the chart's clock.
+      const input: AngleInput = onChartClock(time, "utc", undefined, (astroTime) => ({
+        gastHours: gastHours(astroTime),
         latitude: this.latitude,
         longitude: this.longitude,
         obliquity: e_tilt(astroTime).tobl
-      };
+      }));
       const angles = computeAngles(input);
       const houses = computeHouses(this.system, input, angles);
       at.angles = {

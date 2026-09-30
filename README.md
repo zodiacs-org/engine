@@ -658,7 +658,7 @@ uniform over that unit, which must lie inside the window. Resolve local times
 first, for example with `resolveLocalToUtc` from `@zodiacs/engine/geo`.
 
 Every value is the engine's own at a millisecond, as a lone natalChart call
-computes it with the engine's ΔT model (not a pinned `deltaT`);
+computes it on UTC and the engine's time basis (not a pinned `deltaT`);
 astronomy-engine reuses its nutation within 86.4 ms, so calls closer together
 can differ in the last digits. Where the search's bounds hold, each cell holds
 natalChart's features at every millisecond in it, and at each switch
@@ -673,11 +673,14 @@ from 1800 to 2200: `WINDOW_RATE_BOUNDS` (about twice each body's largest
 rate), the obliquity's rate, and the true node's millisecond jitter, J =
 5e-5·(1 + |T|)° with T in centuries from 2000, at least 2.97 times every
 departure found at 3,000 consecutive milliseconds every five days
-(`node-jitter.json`). They assume ΔT is continuous. The model's one seam in
-the span is at 1940-12-31T18:00:00Z, where ΔT steps from 24.834 s to 24.820 s;
-the search splits at every millisecond where a computation crosses it (the
-Moon and the angles there, the node 864 ms either side, the Sun and planets
-one light time later) and compares both sides. Within 1e-8° of the Placidus
+(`node-jitter.json`). They assume TT and UT1 run on continuously. The time
+basis steps at the ΔT model's seam, 1940-12-31T18:00:00Z, where ΔT steps from
+24.834 s to 24.820 s; at 1972-01-01, where the leap seconds begin; at each
+leap second, where TT and UT1 step by a second; and where the IERS UT1 table
+ends, 2027-10-02. Each sample installs its own ΔT, so every position and
+angle steps there together: the search finds each step inside the window
+from the engine's own arithmetic, splits at its millisecond and compares
+both sides. Within 1e-8° of the Placidus
 or Koch polar limit, near the RAMCs where their cusps carry the rounding of
 asin near ±1, the house system and the houses are compared at every
 millisecond. A failed check of an enclosure adds `bound-exceeded`, and

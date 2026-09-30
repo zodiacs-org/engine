@@ -9,6 +9,7 @@ import { describe, expect, it } from "vitest";
 
 import { chartDeclinations, natalChart } from "./api.js";
 import { DELTA_T_TABLE, deltaT } from "./deltat.js";
+import { UT1_DATA } from "./time-scale.js";
 import { bodyLongitude } from "./ephemeris.js";
 import { houseOf } from "./houses.js";
 import { findLongitudeCrossings } from "./returns.js";
@@ -401,11 +402,61 @@ describe("the ΔT model's seam", () => {
     expect(unconfirmedSwitches(window, place)).toEqual([]);
   }, 120_000);
 
-  it("agrees with natalChart at every millisecond across the Sun's step, one light time later", () => {
-    const [step] = backSteps("Sun", seam + 480_000, seam + 520_000);
-    expect(step).toBeDefined();
-    const window = partition(step! - 1_000, 2_000, place);
+  it("steps the Sun at the same millisecond, not one light time later, and agrees with natalChart there", () => {
+    // Each sample installs its own ΔT (src/ephemeris.ts), so the light-time
+    // backdating reads no other ΔT and every position steps at the seam itself.
+    expect(backSteps("Sun", seam - 3, seam + 3)).toEqual([seam]);
+    expect(backSteps("Sun", seam + 480_000, seam + 520_000)).toEqual([]);
+    const window = partition(seam - 1_000, 2_000, place);
     expect(window.flags).toEqual([]);
+    expect(disagreementsEverySecond(window, place, 1)).toEqual([]);
+  }, 120_000);
+});
+
+describe("the steps of the time basis", () => {
+  // From 1972 the time basis reads UTC through the leap seconds and IERS
+  // UT1 − UTC (src/time-scale.ts): TT and UT1 step at 1972-01-01, at each leap
+  // second and where the IERS table ends, and the angles step with UT1. A
+  // longitude is chosen so that the ascendant crosses a sign boundary inside
+  // the step, which the search must report at its millisecond.
+  const latitude = 50;
+  const ascendant = (time: number, longitude: number) =>
+    natalChart({ utc: new Date(time), latitude, longitude, houseSystem: "equal" }).angles!.asc;
+  /** A longitude at which the ascendant is below a sign boundary at `at` − 1 ms and above it at `at`. */
+  function straddling(at: number): { longitude: number; jump: number } {
+    const boundary = Math.ceil(ascendant(at - 1, 0) / 30) * 30;
+    const east = (time: number) => {
+      // The longitude at which the ascendant reaches the boundary, by bisection on longitude.
+      let low = -60;
+      let high = 60;
+      const past = (longitude: number) => ((ascendant(time, longitude) - (boundary % 360) + 540) % 360) - 180 >= 0;
+      for (let round = 0; round < 60; round += 1) {
+        const middle = (low + high) / 2;
+        if (past(middle)) high = middle;
+        else low = middle;
+      }
+      return (low + high) / 2;
+    };
+    const longitude = (east(at - 1) + east(at)) / 2;
+    const jump = ((ascendant(at, longitude) - ascendant(at - 1, longitude) + 540) % 360) - 180;
+    return { longitude, jump };
+  }
+  const steps: [string, number][] = [
+    ["the leap second of 2016-12-31", Date.UTC(2017, 0, 1)],
+    ["1972-01-01, where the leap seconds begin", Date.UTC(1972, 0, 1)],
+    ["the end of the IERS table", (UT1_DATA.to - 40_587) * DAY + 1]
+  ];
+  it.each(steps)("reports a switch at %s, where the angles step, and agrees with natalChart around it", (_, at) => {
+    const { longitude, jump } = straddling(at);
+    // The step is many times the ascendant's motion in one millisecond.
+    const motion = ((ascendant(at - 1, longitude) - ascendant(at - 2, longitude) + 540) % 360) - 180;
+    expect(Math.abs(jump)).toBeGreaterThan(10 * Math.abs(motion));
+    const place: Place = { latitude, longitude, houseSystem: "equal" };
+    const window = partition(at - 1_000, 2_000, place);
+    expect(window.flags).toEqual([]);
+    const switched = window.switches.find((entry) => entry.at.getTime() === at);
+    expect(switched?.changes.some((change) => change.feature === "ascendant")).toBe(true);
+    expect(unconfirmedSwitches(window, place)).toEqual([]);
     expect(disagreementsEverySecond(window, place, 1)).toEqual([]);
   }, 120_000);
 });
