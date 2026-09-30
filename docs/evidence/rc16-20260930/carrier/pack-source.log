@@ -1,0 +1,4 @@
+# Clean clones of ddbbaa0, npm ci, npm run build, npm pack --ignore-scripts
+first: ddbbaa0, node v22.22.2, npm 10.9.7: sha256 43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8, 266934 bytes, 69 files
+node20: ddbbaa0, node v20.19.0, npm 10.8.2: sha256 43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8, 266934 bytes, 69 files
+node24: ddbbaa0, node v24.21.0, npm 11.19.0: sha256 43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8, 266934 bytes, 69 files

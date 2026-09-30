@@ -77,10 +77,14 @@ this repository.
 | (new) | `704cadc` | Move calc, window and sky onto the engine's IAU 2000B nutation |
 | (new) | `7e721b7` | Measure calc against Horizons and ERFA again after the nutation; bounds from the rerun |
 | (new) | `aba647e` | Rerun each feature's gates and evidence figures after the nutation |
-| (new) | the source commit, which brings this file | Release candidate 0.1.1-rc.16: five opt-in entries and the full IAU 2000B nutation |
+| (new) | `ddbbaa0` | Release candidate 0.1.1-rc.16: five opt-in entries and the full IAU 2000B nutation (the source commit) |
+| (new) | `ef44477` | Carry the packed 0.1.1-rc.16 tarball (the carrier) |
+| (new) | the commit that brings this version of this file | Record the gates on the rc.16 carrier ef44477 |
 
-The carrier and the record of its gates follow (*The archive*, *The gates on
-the carrier*).
+The archive packed from `ddbbaa0` is carried by its child `ef44477`, which
+changes only `artifacts/`; the gates on the carrier are recorded by the
+commit that brings this version of this file, which changes only this
+directory (*The archive*, *The gates on the carrier*).
 
 ### The integration commits
 
@@ -319,37 +323,39 @@ commit on this branch was checked, with two tools.
    commit's added lines, the binary files it adds or changes (archives
    decompressed), the paths it adds and its message, and then the whole tree
    of the last commit, for the birth data that rc.15's reviews removed, and
-   lists the files that name each published example and whether each file
-   that holds its birth data cites it. Its patterns and the examples' birth
-   dates are kept outside the repository, because they are the birth data it
-   looks for; it prints labels, counts, commits and paths, never a matched
-   line, and its labels here are opaque, person A to person G, with the key
-   kept outside the repository beside the patterns. `history-check.txt` is
-   its output on `93ebae9..HEAD`, the 35 commits before the source commit,
-   with the source commit's changes staged: no birth data in any commit, in
-   the staged changes or in the tree of the last commit. The only names it
-   finds are in rc.15's records, `../rc15-20260929/`, which name the people
-   whose birth data rc.15's reviews removed, and the published examples
-   appear only in files that cite them. As positive controls, with the same
-   patterns, `history-check-control-first-cut.txt` is its output on the
-   history of rc.15's first cut, `b0ddb88..eb58011`, from which the
+   lists the files that name each published example and whether each file that
+   holds its birth data cites it. Its patterns and the examples' birth dates
+   are kept outside the repository, because they are the birth data it looks
+   for; it prints labels, counts, commits and paths, never a matched line, and
+   its labels here are opaque, person A to person G, with the key kept outside
+   the repository beside the patterns. `history-check.txt` is its output on
+   `93ebae9..ef44477`, the 37 commits up to the carrier, with the changes of
+   the commit that brings this version of this file staged: no birth data in
+   any commit (the carried archive decompressed and read), in the staged
+   changes or in the carrier's tree. The only names it finds are in rc.15's
+   records, `../rc15-20260929/`, which name the people whose birth data
+   rc.15's reviews removed, and the published examples appear only in files
+   that cite them. The source commit held the same check on the 35 commits
+   before it and its own changes, with the same result. As positive controls,
+   with the same patterns, `history-check-control-first-cut.txt` is its output
+   on the history of rc.15's first cut, `b0ddb88..eb58011`, from which the
    techniques, houses and sky branches were cut: birth data in 6 of its 33
    commits (24 lines) and in the tree of `eb58011` (28 lines); and
-   `history-check-control-recut.txt` on the re-cut's, `b0ddb88..bcd532c`,
-   from which the nutation branch was cut: in 9 of its 46 commits (33 lines)
-   and in the tree of `bcd532c` (5 lines). Both histories are local and are
-   not in this repository.
-2. A broad review aid, run outside the repository because its output holds
-   the lines it matches, listed every added line with a year from 1700 to
-   2029 beside birth vocabulary or a capitalized pair of words, and every such
+   `history-check-control-recut.txt` on the re-cut's, `b0ddb88..bcd532c`, from
+   which the nutation branch was cut: in 9 of its 46 commits (33 lines) and in
+   the tree of `bcd532c` (5 lines). Both histories are local and are not in
+   this repository.
+2. A broad review aid, run outside the repository because its output holds the
+   lines it matches, listed every added line with a year from 1700 to 2029
+   beside birth vocabulary or a capitalized pair of words, and every such
    pair, commit by commit and for the staged changes; each hit was read.
    `birth-data-names.txt` lists, names only, the people it found and why each
-   may be there: authors, translators, editors and publishers of the works
-   the new entries cite, figures of the sky entry's worked examples, a Duke of
-   Lu whose reign dates an eclipse in the held-back Chinese part of the sky
+   may be there: authors, translators, editors and publishers of the works the
+   new entries cite, figures of the sky entry's worked examples, a Duke of Lu
+   whose reign dates an eclipse in the held-back Chinese part of the sky
    preregistration, and the author of the window evidence's random-number
-   generator. The only birth data it found are invented and labelled so,
-   the entries' plumbing tool's births and windows among them.
+   generator. The only birth data it found are invented and labelled so, the
+   entries' plumbing tool's births and windows among them.
 
 No commit adds a living person's birth data, and none adds a real person's
 but the published examples rc.15 already carried (Saunders's charts of
@@ -606,26 +612,59 @@ reads commits, so it ran on the carrier (below).
 
 ## The archive
 
-The archive is packed once, after every gate on the tree has passed, from
-the source commit itself: clean clones of it, each installed with `npm ci`,
-built and packed on Node 22.22.2, 20.19.0 and 24.21.0
-(`carrier/pack-source.sh`), must give the same bytes, and the Node 22.22.2
-one is carried by the source commit's child, with its SHA-256 receipt, an
-entry in `artifacts/archives.json` naming the source commit, and a row in
-`artifacts/README.md`. Its digest, size and file count are recorded there,
-and here by the commit that records the carrier's gates.
+`artifacts/zodiacs-engine-0.1.1-rc.16.tgz` is packed from the source commit
+`ddbbaa0` and carried by its child `ef44477`: SHA-256
+`43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8`, 266,934
+bytes, 69 files, 923,282 bytes unpacked. It was packed once, after every gate
+on the tree had passed: clean clones of `ddbbaa0`, each installed with
+`npm ci`, built and packed the same bytes on Node 22.22.2 (npm 10.9.7),
+20.19.0 (npm 10.8.2) and 24.21.0 (npm 11.19.0), 69 files each time
+(`carrier/pack-source.log`, from `carrier/pack-source.sh`), and the carried
+file is the Node 22.22.2 one. Unpacked, it differs from the first build's
+archive, `f73e5592…`, in `CHANGELOG.md`, `LICENSING.md` and `NOTICE` alone;
+that archive is not carried (*The re-cut*). The carrier's gates rebuild and
+repack its source, as CI does, to the same bytes. `artifacts/archives.json`
+records it with its source commit, its receipt
+`artifacts/zodiacs-engine-0.1.1-rc.16.sha256` names its digest, and
+`artifacts/README.md` lists it and lists the first build's archive as a
+superseded local build; rc.15's row there now names its carrier, `cbad72c`,
+and says it was merged.
 
 ## The gates on the carrier
 
-`carrier/carrier-gates.sh` runs each of CI's jobs on the carrier in a clean
-clone of the repository with full history, with `TMPDIR` outside the clone
-and no `package.json` or `node_modules` at or above it: the engine job on
-Node 20.19.0, 22.22.2 and 24.21.0, the archive check with `--rebuild-all`,
-the pack compared with the carried archive, the packed consumer on Node
-20.19.0, 22.7.0, 22.22.2 and 24.21.0 (on the carried archive itself), the
-conformance job, the conformance generators and the atlas. The commit after
-the carrier records their logs in `carrier/`, and changes only this
-directory.
+`carrier/carrier-gates.sh` ran each of CI's jobs on the carrier, `ef44477`,
+in a clean clone of the repository with full history, with `TMPDIR` outside
+the clone and no `package.json` or `node_modules` at or above it. Every job
+passes (logs in `carrier/`):
+
+| Job | Node (npm) | Result | Log |
+| --- | --- | --- | --- |
+| engine: npm ci, typecheck, tests, build, export smoke, package contents, pack dry run, archive check | 22.22.2 (10.9.7) | 3,705 tests passed, 1 skipped, in 79 files; the other steps pass; the archive check as below | `engine-v22.22.2.log` |
+| engine | 20.19.0 (10.8.2) | 3,704 passed, 2 skipped, in 79 files; the other steps pass | `engine-v20.19.0.log` |
+| engine | 24.21.0 (11.19.0) | 3,704 passed, 2 skipped, in 79 files; the other steps pass (npm warns that esbuild's two install scripts are not covered by `allowScripts`) | `engine-v24.21.0.log` |
+| archives: the archive check with `--rebuild-all` | 22.22.2 (10.9.7) | a rebuild of HEAD, and of each of the 11 recorded archives from its source commit, byte-identical to the recorded archive | `archives-v22.22.2.log` |
+| pack: npm ci, build, `npm pack --ignore-scripts` | 22.22.2 (10.9.7) | byte-identical to the carried archive (`cmp`) | `pack-v22.22.2.log` |
+| packed consumer, on the carried archive itself | 20.19.0 (10.8.2), 22.7.0 (10.8.2), 22.22.2 (10.9.7), 24.21.0 (11.19.0) | all 33 sections and the types pass on each version, `./techniques` and `./sky` among them, on the archive of SHA-256 `43a72d30…` | `consumer-v*.log` |
+| conformance: npm ci, build, self-test, vectors, verdicts, `RESULTS.md` | 22.22.2 (10.9.7) | self-test 7 of 7; 500 vectors conform; 267 pass, 192 fail, 41 unsupported, 0 error, every verdict as committed; `RESULTS.md` and `results/summary.json` current | `conformance-v22.22.2.log` |
+| conformance generators | Python 3.11.15, pyerfa 2.0.1.5, numpy 2.4.6 | L1, L2 and L3 rebuilt from their sources (tzdata and tzcode 2025c downloaded from IANA, digests checked) byte-identical to the committed vectors | `generators-v22.22.2.log` |
+| atlas: checks and self-test, nothing installed | 22.22.2 (10.9.7) | all checks pass; self-test 26 of 26 | `atlas-v22.22.2.log` |
+
+In a clean clone the tests run before the build, as in CI, so the test in
+`scripts/root-isolation.test.mjs` that checks the checkout's own build is
+skipped (it ran on the tree before the source commit, where a build was
+present, *Gates on the tree*), and on 20.19.0 and 24.21.0 so is the tzdb
+2025c comparison.
+
+On each engine run the archive check found
+`artifacts/zodiacs-engine-0.1.1-rc.16.tgz` byte-identical to a rebuild of
+HEAD, and the 11 recorded archives (10 carried, 1 superseded) and their
+receipts holding only their recorded bytes across 124 commits, each bound to
+its source commit. With `--rebuild-all` each of the 11 was also rebuilt from
+its source commit on Node 22.22.2 and matched its recorded bytes, rc.11's
+superseded first packing and rc.16's, from `ddbbaa0`, included. The packed
+consumer ran on the carried file, where CI's runs on the pack job's output;
+the pack job shows the two are the same bytes. The generators' Python was a
+virtual environment with the two libraries at the versions CI pins.
 
 ## What is not established
 
