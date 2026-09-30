@@ -66,9 +66,13 @@ def _instant(value: str | datetime) -> str:
         value = datetime.fromisoformat(value.replace("Z", "+00:00"))
     if not isinstance(value, datetime) or value.utcoffset() is None:
         raise ValueError("Use a timezone-aware datetime or ISO timestamp")
+    try:
+        value = value.astimezone(timezone.utc)
+    except OverflowError:
+        raise ValueError("Timestamp is outside Python's UTC date range") from None
     if value.microsecond % 1000:
         raise ValueError("The engine supports millisecond precision; round explicitly")
-    return value.astimezone(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+    return value.isoformat(timespec="milliseconds").replace("+00:00", "Z")
 
 
 def _birth(value: dict[str, Any]) -> dict[str, Any]:

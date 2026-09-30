@@ -1,5 +1,5 @@
 """Installed-wheel regression and transport tests, not accuracy claims."""
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from importlib.metadata import version
 import json
 from pathlib import Path
@@ -57,6 +57,8 @@ class InstalledPackageTests(unittest.TestCase):
         for value in ["2000-01-01", "2000-02-30T00:00:00Z", "2000-01-01T12:00:00",
                       "2000-01-01T12:00:00.0001Z", "2000-01-01T12:00:00+00:99",
                       datetime(2000, 1, 1), 946728000,
+                      datetime(2000, 1, 1, tzinfo=timezone(timedelta(microseconds=1))),
+                      datetime(1, 1, 1, tzinfo=timezone(timedelta(hours=1))),
                       datetime(2000, 1, 1, microsecond=1, tzinfo=timezone.utc)]:
             with self.subTest(value=value), self.assertRaises(ValueError):
                 zodiacs.positions(value)
