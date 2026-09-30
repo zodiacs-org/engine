@@ -161,7 +161,7 @@ describe("the barycentric Sun's bounds", () => {
     let residualRate = 0;
     for (const check of checks) {
       const sun = ok(calc({ body: "Sun", time: check.time, center: "barycentric", flags: { speeds: false } }));
-      const at = new AstroTime(sun.receipt.instants[0]!.jdUt - 2_451_545);
+      const at = new AstroTime(sun.receipt.instants[0]!.jdUt1 - 2_451_545);
       residual = Math.max(residual, norm(sub(newtonian(at), check.r)));
       const rate = sub(newtonian(at.AddDays(1)), newtonian(at.AddDays(-1))).map((x) => x / 2) as unknown as Vec;
       residualRate = Math.max(residualRate, norm(sub(rate, check.v)));

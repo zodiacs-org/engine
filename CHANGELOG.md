@@ -12,8 +12,10 @@
   maxima, not limits), the barycentric Sun's derived from the barycentre's
   error; receipts of convention ids; and typed refusals:
   `not-in-this-version` (the sidereal zodiac, light deflection),
-  `unsupported-combination`, `out-of-range` and `sample-budget`. calc
-  refuses an instant whose UT or TT is outside 1800 to 2200, where it has no
+  `unsupported-combination`, `out-of-range` and `sample-budget`. An instant
+  is an ISO string, a `Date` or `{ jd, scale: "UTC" | "UT1" | "TT" }`, read
+  on the engine's time basis as `positions()` reads it. calc
+  refuses an instant whose UT1 or TT is outside 1800 to 2200, where it has no
   comparison to take a bound from; the root entry's functions compute such
   instants as before, with the `outside-reference-span` flag. `docs/calc.md`
   maps every Swiss Ephemeris `calc_ut` flag; `docs/evidence/calc-api/` holds

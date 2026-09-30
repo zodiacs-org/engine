@@ -1,5 +1,5 @@
 {
- "note": "Results of @zodiacs/engine/calc as first built. calc-fixtures.test.ts replays each request and each result's receipt, and turns each cartesian position into the other frames. Synthetic instants and places only.",
+ "note": "Results of @zodiacs/engine/calc as scripts/build-calc-roundtrip.mjs rebuilt them from the build. calc-fixtures.test.ts replays each request and each result's receipt, and turns each cartesian position into the other frames. Synthetic instants and places only.",
  "cases": [
   {
    "function": "calc",
@@ -11,13 +11,13 @@
     "status": "ok",
     "body": "Mars",
     "frame": "ecliptic-true-of-date",
-    "lon": 342.98698622062267,
-    "lat": -1.244304782062147,
-    "dist": 2.06106599230598,
+    "lon": 342.9869863533577,
+    "lat": -1.244304782474928,
+    "dist": 2.061065991654686,
     "speeds": {
-     "lon": 0.7774726977061164,
-     "lat": -0.002417786024833113,
-     "dist": -0.0038138862930026107
+     "lon": 0.7774727002356485,
+     "lat": -0.0024177860027396747,
+     "dist": -0.003813886306325287
     },
     "cartesian": null,
     "bounds": {
@@ -63,15 +63,28 @@
      "instants": [
       {
        "utc": "2024-04-08T16:21:30.000Z",
-       "jdUt": 2460409.181597222,
-       "jdTt": 2460409.182397792,
+       "jdUt1": 2460409.181597036,
+       "jdTt": 2460409.182397963,
        "deltaT": {
-        "seconds": 69.16924773747054,
-        "sigma": 0.03,
-        "model": "zodiacs-deltat/1",
+        "seconds": 69.20012109375,
+        "sigma": 0.000809,
+        "model": "iers-utc/1",
         "table": "2026-09-24",
-        "tableDigest": "6371988c510a1c6c",
+        "tableDigest": "064d98b4a531053a",
         "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": -0.016121064814811348,
+         "sigma": 0.000809,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": true
+        }
        }
       }
      ],
@@ -88,12 +101,12 @@
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -181,7 +194,7 @@
      "instants": [
       {
        "utc": "2000-01-01T17:58:56.000Z",
-       "jdUt": 2451545.249259259,
+       "jdUt1": 2451545.249259259,
        "jdTt": 2451545.25,
        "deltaT": {
         "seconds": 64,
@@ -190,6 +203,12 @@
         "table": null,
         "tableDigest": null,
         "segment": "pinned"
+       },
+       "timeScale": {
+        "input": "tt",
+        "basis": "pinned",
+        "ut1MinusUtc": null,
+        "leapSeconds": null
        }
       }
      ],
@@ -203,11 +222,11 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:pinned",
-      "time:ut1-read-as-utc"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -233,21 +252,21 @@
     "status": "ok",
     "body": "Earth",
     "frame": "ecliptic-j2000",
-    "lon": 2.3519124906856566,
-    "lat": 0.00012329432967606344,
-    "dist": 0.990829188913441,
+    "lon": 2.3519124906899624,
+    "lat": 0.00012329432967538896,
+    "dist": 0.9908291889134586,
     "speeds": {
      "lon": 0.017609248519692235,
-     "lat": -0.0000028122793551708816,
-     "dist": 0.00007262003115515725
+     "lat": -0.000002812279383191909,
+     "dist": 0.0000726200312106684
     },
     "cartesian": {
-     "x": -0.6976155559958614,
-     "y": 0.7036156640606448,
-     "z": 0.00012216362036104877,
+     "x": -0.6976155559989037,
+     "y": 0.7036156640576535,
+     "z": 0.00012216362036038267,
      "vx": -0.012441273096519545,
      "vy": -0.012232915925947108,
-     "vz": -0.0000027775348132585975
+     "vz": -0.0000027775348410277257
     },
     "bounds": {
      "position": {
@@ -292,7 +311,7 @@
      "instants": [
       {
        "utc": "1901-02-03T04:05:06.000Z",
-       "jdUt": 2415418.6702083335,
+       "jdUt1": 2415418.6702083335,
        "jdTt": 2415418.6702010534,
        "deltaT": {
         "seconds": -0.6290027098648538,
@@ -301,6 +320,12 @@
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
         "segment": "reconstructed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": null,
+        "leapSeconds": null
        }
       }
      ],
@@ -315,12 +340,12 @@
       "barycentre:sun-and-giant-planets",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -352,21 +377,21 @@
     "status": "ok",
     "body": "Venus",
     "frame": "equatorial-true-of-date",
-    "lon": 76.20059949455248,
-    "lat": 22.000704050283947,
-    "dist": 1.572227905638178,
+    "lon": 76.2005994947283,
+    "lat": 22.000704050304986,
+    "dist": 1.5722279056395765,
     "speeds": {
-     "lon": 1.305518389443705,
-     "lat": 0.15628160698533122,
-     "dist": 0.003925838121698888
+     "lon": 1.3055183922006108,
+     "lat": 0.15628160724290296,
+     "dist": 0.00392583812180991
     },
     "cartesian": {
-     "x": 0.3477042566371123,
-     "y": 1.4156620997577891,
-     "z": 0.5889848525159301,
-     "vx": -0.03177168338311387,
-     "vy": 0.00989738070256152,
-     "vz": 0.005446854959678671
+     "x": 0.3477042566330268,
+     "y": 1.4156620997599052,
+     "z": 0.5889848525169893,
+     "vx": -0.03177168345216974,
+     "vy": 0.009897380716439308,
+     "vz": 0.0054468549661734755
     },
     "bounds": {
      "position": {
@@ -417,7 +442,7 @@
      "instants": [
       {
        "utc": "2150-06-30T00:00:00.000Z",
-       "jdUt": 2506511.5,
+       "jdUt1": 2506511.5,
        "jdTt": 2506511.5011143656,
        "deltaT": {
         "seconds": 96.28118626170394,
@@ -426,6 +451,16 @@
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
         "segment": "extrapolated"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": {
+         "seconds": 0,
+         "sigma": 0.9,
+         "source": "fallback"
+        },
+        "leapSeconds": null
        }
       }
      ],
@@ -442,12 +477,12 @@
       "observer:iers2003-ellipsoid;no-polar-motion",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -517,7 +552,7 @@
      "instants": [
       {
        "utc": "1850-01-01T00:00:00.000Z",
-       "jdUt": 2396758.5,
+       "jdUt1": 2396758.5,
        "jdTt": 2396758.5001078807,
        "deltaT": {
         "seconds": 9.320908970356989,
@@ -526,6 +561,12 @@
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
         "segment": "reconstructed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": null,
+        "leapSeconds": null
        }
       }
      ],
@@ -539,12 +580,12 @@
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -559,7 +600,7 @@
     "body": "Saturn",
     "time": {
      "jd": 2400000.5,
-     "scale": "UT"
+     "scale": "UTC"
     },
     "center": "heliocentric",
     "frame": "equatorial-mean-of-date",
@@ -616,7 +657,7 @@
       "body": "Saturn",
       "time": {
        "jd": 2400000.5,
-       "scale": "UT"
+       "scale": "UTC"
       },
       "frame": "equatorial-mean-of-date",
       "center": "heliocentric",
@@ -632,7 +673,7 @@
      "instants": [
       {
        "utc": "1858-11-17T00:00:00.000Z",
-       "jdUt": 2400000.5,
+       "jdUt1": 2400000.5,
        "jdTt": 2400000.5001073577,
        "deltaT": {
         "seconds": 9.275718684530554,
@@ -641,6 +682,12 @@
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
         "segment": "reconstructed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": null,
+        "leapSeconds": null
        }
       }
      ],
@@ -652,12 +699,12 @@
       "precession:iau2006",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -681,21 +728,21 @@
     "status": "ok",
     "body": "Jupiter",
     "frame": "ecliptic-icrs",
-    "lon": 67.26318041908735,
-    "lat": -0.534764128511504,
-    "dist": 5.984932613044321,
+    "lon": 67.26318124551551,
+    "lat": -0.5347641211681097,
+    "dist": 5.984932635636135,
     "speeds": {
-     "lon": 0.22536613787912457,
-     "lat": 0.0020025346560525667,
-     "dist": 0.006160766907842918
+     "lon": 0.22536613987021828,
+     "lat": 0.002002534583393403,
+     "dist": 0.0061607662181269295
     },
     "cartesian": {
-     "x": 2.313068561260544,
-     "y": 5.519602521358318,
-     "z": -0.05585892770618807,
-     "vx": -0.019328920480349482,
-     "vy": 0.014781746481945482,
-     "vz": 0.00015166917552649276
+     "x": 2.3130684903804886,
+     "y": 5.519602575563668,
+     "z": -0.05585892715000941,
+     "vx": -0.019328921233946247,
+     "vy": 0.014781745681716658,
+     "vz": 0.00015166917595376642
     },
     "bounds": {
      "position": {
@@ -740,15 +787,28 @@
      "instants": [
       {
        "utc": "1977-05-06T07:08:09.000Z",
-       "jdUt": 2443269.797326389,
-       "jdTt": 2443269.797880407,
+       "jdUt1": 2443269.797329735,
+       "jdTt": 2443269.797884074,
        "deltaT": {
-        "seconds": 47.867167144839925,
-        "sigma": 0.03,
-        "model": "zodiacs-deltat/1",
+        "seconds": 47.89489196777344,
+        "sigma": 0.002256,
+        "model": "iers-utc/1",
         "table": "2026-09-24",
-        "tableDigest": "6371988c510a1c6c",
+        "tableDigest": "064d98b4a531053a",
         "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": 0.28910802083333387,
+         "sigma": 0.002256,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 16,
+         "listed": true
+        }
        }
       }
      ],
@@ -761,12 +821,12 @@
       "frame-bias:iau2000",
       "speed:analytic",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -793,21 +853,21 @@
     "status": "ok",
     "body": "Pluto",
     "frame": "equatorial-j2000",
-    "lon": 343.55144569342656,
-    "lat": -20.744336817585197,
-    "dist": 41.95260552950078,
+    "lon": 343.55144569342906,
+    "lat": -20.744336817584724,
+    "dist": 41.95260552950119,
     "speeds": {
      "lon": 0.014703352604783504,
-     "lat": 0.009842044992325327,
-     "dist": 0.014846089619879876
+     "lat": 0.009842044976338116,
+     "dist": 0.01484608959501088
     },
     "cartesian": {
-     "x": 37.627199109306446,
-     "y": -11.10894416843347,
-     "z": -14.859554413411459,
-     "vx": 0.01861427627503076,
-     "vy": 0.005002000825093944,
-     "vz": 0.0014807974624275744
+     "x": 37.627199109307405,
+     "y": -11.108944168431984,
+     "z": -14.859554413411283,
+     "vx": 0.01861427624660905,
+     "vy": 0.005002000811771268,
+     "vz": 0.0014807974597630391
     },
     "bounds": {
      "position": {
@@ -852,8 +912,8 @@
      },
      "instants": [
       {
-       "utc": "2049-12-31T23:58:48.548Z",
-       "jdUt": 2469807.49917302,
+       "utc": "2049-12-31T23:58:48.549Z",
+       "jdUt1": 2469807.49917302,
        "jdTt": 2469807.5,
        "deltaT": {
         "seconds": 71.45106134495356,
@@ -862,6 +922,16 @@
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
         "segment": "extrapolated"
+       },
+       "timeScale": {
+        "input": "tt",
+        "basis": "delta-t",
+        "ut1MinusUtc": {
+         "seconds": 0,
+         "sigma": 0.9,
+         "source": "fallback"
+        },
+        "leapSeconds": null
        }
       }
      ],
@@ -874,12 +944,12 @@
       "deflection:none",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -946,7 +1016,7 @@
      "instants": [
       {
        "utc": "2031-08-17T05:00:00.000Z",
-       "jdUt": 2463095.7083333335,
+       "jdUt1": 2463095.7083333335,
        "jdTt": 2463095.709141011,
        "deltaT": {
         "seconds": 69.78332743704144,
@@ -955,6 +1025,16 @@
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
         "segment": "extrapolated"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": {
+         "seconds": 0,
+         "sigma": 0.9,
+         "source": "fallback"
+        },
+        "leapSeconds": null
        }
       }
      ],
@@ -969,12 +1049,12 @@
       "obliquity:iau2006",
       "speed:central-difference-0.25d",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -997,21 +1077,21 @@
     "status": "ok",
     "body": "Mercury",
     "frame": "ecliptic-true-of-date",
-    "lon": 48.769548894689535,
-    "lat": 0.3406569782452246,
-    "dist": 0.312757895505517,
+    "lon": 48.76954889451008,
+    "lat": 0.34065697821776064,
+    "dist": 0.31275789550560884,
     "speeds": {
-     "lon": 6.090791755809732,
-     "lat": 0.7462729189105233,
-     "dist": -0.0025057068170353247
+     "lon": 6.090791756037106,
+     "lat": 0.7462729193950801,
+     "dist": -0.002505706818645148
     },
     "cartesian": {
-     "x": 0.20613172477710817,
-     "y": 0.23521002409411787,
-     "z": 0.0018595179748867078,
-     "vx": -0.026671271892694803,
-     "vy": 0.020010067674228194,
-     "vz": 0.0040586766232365325
+     "x": 0.20613172477790612,
+     "y": 0.23521002409354183,
+     "z": 0.0018595179747373399,
+     "vx": -0.026671271894693205,
+     "vy": 0.02001006767386737,
+     "vz": 0.004058676625873421
     },
     "bounds": {
      "position": {
@@ -1056,7 +1136,7 @@
      "instants": [
       {
        "utc": "1801-03-04T00:00:00.000Z",
-       "jdUt": 2378923.5,
+       "jdUt1": 2378923.5,
        "jdTt": 2378923.5002103215,
        "deltaT": {
         "seconds": 18.171776061093503,
@@ -1065,6 +1145,12 @@
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
         "segment": "reconstructed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": null,
+        "leapSeconds": null
        }
       }
      ],
@@ -1081,12 +1167,12 @@
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1181,7 +1267,7 @@
      "instants": [
       {
        "utc": "2099-12-31T12:00:00.000Z",
-       "jdUt": 2488069,
+       "jdUt1": 2488069,
        "jdTt": 2488069.0009135013,
        "deltaT": {
         "seconds": 78.9264969856253,
@@ -1190,6 +1276,16 @@
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
         "segment": "extrapolated"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": {
+         "seconds": 0,
+         "sigma": 0.9,
+         "source": "fallback"
+        },
+        "leapSeconds": null
        }
       }
      ],
@@ -1203,12 +1299,12 @@
       "observer:iers2003-ellipsoid;no-polar-motion",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1233,14 +1329,14 @@
     "status": "ok",
     "body": "Uranus",
     "frame": "equatorial-icrs",
-    "lon": 319.0646349794888,
-    "lat": -16.577057388368846,
-    "dist": 19.920756299316626,
+    "lon": 319.0646350239266,
+    "lat": -16.577057375236933,
+    "dist": 19.920756299748966,
     "speeds": null,
     "cartesian": {
-     "x": 14.423631182233118,
-     "y": -12.50973258555314,
-     "z": -5.683483587873325,
+     "x": 14.423631193232598,
+     "y": -12.50973257549136,
+     "z": -5.6834835836207,
      "vx": null,
      "vy": null,
      "vz": null
@@ -1281,15 +1377,28 @@
      "instants": [
       {
        "utc": "2000-01-01T12:00:00.000Z",
-       "jdUt": 2451545,
-       "jdTt": 2451545.000738773,
+       "jdUt1": 2451545.0000041146,
+       "jdTt": 2451545.0007428704,
        "deltaT": {
-        "seconds": 63.83,
-        "sigma": 0.03,
-        "model": "zodiacs-deltat/1",
+        "seconds": 63.8285,
+        "sigma": 0.000827,
+        "model": "iers-utc/1",
         "table": "2026-09-24",
-        "tableDigest": "6371988c510a1c6c",
+        "tableDigest": "064d98b4a531053a",
         "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": 0.35549999999999926,
+         "sigma": 0.000827,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 32,
+         "listed": true
+        }
        }
       }
      ],
@@ -1303,12 +1412,12 @@
       "frame-bias:iau2000",
       "barycentre:sun-and-giant-planets",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1329,11 +1438,11 @@
     "status": "ok",
     "body": "Mean South Node",
     "frame": "ecliptic-true-of-date",
-    "lon": 180.17159431663526,
+    "lon": 180.1715946584635,
     "lat": 0,
     "dist": null,
     "speeds": {
-     "lon": -0.05296238055052527,
+     "lon": -0.05296237978313911,
      "lat": 0,
      "dist": null
     },
@@ -1376,15 +1485,28 @@
      "instants": [
       {
        "utc": "1987-11-05T06:12:00.000Z",
-       "jdUt": 2447104.7583333333,
-       "jdTt": 2447104.758978491,
+       "jdUt1": 2447104.758327066,
+       "jdTt": 2447104.758972037,
        "deltaT": {
-        "seconds": 55.741640428930005,
-        "sigma": 0.03,
-        "model": "zodiacs-deltat/1",
+        "seconds": 55.725516723632815,
+        "sigma": 0.000909,
+        "model": "iers-utc/1",
         "table": "2026-09-24",
-        "tableDigest": "6371988c510a1c6c",
+        "tableDigest": "064d98b4a531053a",
         "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": -0.5415166666666664,
+         "sigma": 0.000909,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 23,
+         "listed": true
+        }
        }
       }
      ],
@@ -1399,12 +1521,12 @@
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1427,21 +1549,21 @@
     "status": "ok",
     "body": "Neptune",
     "frame": "ecliptic-j2000",
-    "lon": 355.2363552091303,
-    "lat": -1.2744003619456705,
-    "dist": 29.230361313011493,
+    "lon": 355.2363552090716,
+    "lat": -1.274400361944054,
+    "dist": 29.230361313011116,
     "speeds": {
-     "lon": -0.01607557015859129,
-     "lat": 0.000441816451202115,
-     "dist": 0.013036863853344016
+     "lon": -0.01607557010174787,
+     "lat": 0.0004418164514241596,
+     "dist": 0.013036863848014946
     },
     "cartesian": {
-     "x": 29.122187180853317,
-     "y": -2.426850518415285,
-     "z": -0.6501021872052352,
+     "x": 29.122187180850474,
+     "y": -2.4268505184451166,
+     "z": -0.6501021872044023,
      "vx": 0.01231270805313045,
-     "vy": -0.009253661308328276,
-     "vz": -0.0000646043059604473
+     "vy": -0.0092536612805727,
+     "vz": -0.00006460430568289155
     },
     "bounds": {
      "position": {
@@ -1486,7 +1608,7 @@
      "instants": [
       {
        "utc": "2188-11-08T00:00:00.000Z",
-       "jdUt": 2520522.5,
+       "jdUt1": 2520522.5,
        "jdTt": 2520522.5013683042,
        "deltaT": {
         "seconds": 118.2214841265093,
@@ -1495,6 +1617,16 @@
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
         "segment": "extrapolated"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": {
+         "seconds": 0,
+         "sigma": 0.9,
+         "source": "fallback"
+        },
+        "leapSeconds": null
        }
       }
      ],
@@ -1509,12 +1641,12 @@
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1535,7 +1667,7 @@
    "result": {
     "status": "refused",
     "reason": "not-in-this-version",
-    "detail": "The sidereal zodiac (lahiri) is not in this version; it comes with the Vedic techniques."
+    "detail": "The sidereal zodiac (lahiri) is not in the calc entry in this version; @zodiacs/engine/vedic gives sidereal longitudes on this ayanamsa."
    }
   },
   {
@@ -1615,7 +1747,7 @@
    "result": {
     "status": "refused",
     "reason": "out-of-range",
-    "detail": "The instant's UT or TT is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the engine's positions have been compared with an independent ephemeris.",
+    "detail": "The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the engine's positions have been compared with an independent ephemeris.",
     "span": {
      "from": "1800-01-01T00:00:00.000Z",
      "to": "2200-01-01T00:00:00.000Z"
@@ -1634,7 +1766,7 @@
    "result": {
     "status": "refused",
     "reason": "out-of-range",
-    "detail": "The instant's UT or TT is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the engine's positions have been compared with an independent ephemeris.",
+    "detail": "The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the engine's positions have been compared with an independent ephemeris.",
     "span": {
      "from": "1800-01-01T00:00:00.000Z",
      "to": "2200-01-01T00:00:00.000Z"
@@ -1656,29 +1788,29 @@
     "requested": "placidus",
     "system": "placidus",
     "cusps": [
-     261.05276266027806,
-     296.8534515194441,
-     337.02729180418396,
-     12.257140383489684,
-     39.45039664607026,
-     61.268623658799015,
-     81.05276266027806,
-     116.85345151944409,
-     157.02729180418396,
-     192.25714038348968,
-     219.45039664607026,
-     241.26862365879902
+     261.05219144706274,
+     296.8527334092595,
+     337.02649872434665,
+     12.256425499880379,
+     39.449783440779015,
+     61.26806445211912,
+     81.05219144706274,
+     116.85273340925949,
+     157.02649872434665,
+     192.2564254998804,
+     219.44978344077902,
+     241.2680644521191
     ],
     "angles": {
-     "asc": 261.05276266027806,
-     "mc": 192.25714038348968,
-     "dsc": 81.05276266027806,
-     "ic": 12.257140383489684
+     "asc": 261.05219144706274,
+     "mc": 192.2564254998804,
+     "dsc": 81.05219144706274,
+     "ic": 12.256425499880379
     },
-    "vertex": 123.6727844136912,
-    "eastPoint": 280.36376426918696,
-    "armc": 191.2728371787091,
-    "obliquity": 23.437873062912825,
+    "vertex": 123.67230387494578,
+    "eastPoint": 280.36315447831396,
+    "armc": 191.27217656848973,
+    "obliquity": 23.43787306288458,
     "flags": [],
     "bounds": {
      "angles": {
@@ -1710,15 +1842,28 @@
      "instants": [
       {
        "utc": "2011-02-03T04:05:06.000Z",
-       "jdUt": 2455595.6702083335,
-       "jdTt": 2455595.670976218,
+       "jdUt1": 2455595.6702065035,
+       "jdTt": 2455595.670974352,
        "deltaT": {
-        "seconds": 66.34523657312343,
-        "sigma": 0.03,
-        "model": "zodiacs-deltat/1",
+        "seconds": 66.34211352539063,
+        "sigma": 0.000811,
+        "model": "iers-utc/1",
         "table": "2026-09-24",
-        "tableDigest": "6371988c510a1c6c",
+        "tableDigest": "064d98b4a531053a",
         "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": -0.15811347222221883,
+         "sigma": 0.000811,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 34,
+         "listed": true
+        }
        }
       }
      ],
@@ -1730,12 +1875,12 @@
       "nutation:iau2000b-five-terms",
       "obliquity:iau2006",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1759,8 +1904,8 @@
     "events": [
      {
       "at": "2024-03-20T03:06:26.773Z",
-      "jdUt": 2460389.6294765393,
-      "jdTt": 2460389.630277134,
+      "jdUt1": 2460389.6294764346,
+      "jdTt": 2460389.63027728,
       "retrograde": false
      }
     ],
@@ -1791,28 +1936,54 @@
      "instants": [
       {
        "utc": "2024-01-01T00:00:00.000Z",
-       "jdUt": 2460310.5,
-       "jdTt": 2460310.500800695,
+       "jdUt1": 2460310.5000000964,
+       "jdTt": 2460310.500800741,
        "deltaT": {
-        "seconds": 69.18002737850787,
-        "sigma": 0.03,
-        "model": "zodiacs-deltat/1",
+        "seconds": 69.17566674804688,
+        "sigma": 0.000809,
+        "model": "iers-utc/1",
         "table": "2026-09-24",
-        "tableDigest": "6371988c510a1c6c",
+        "tableDigest": "064d98b4a531053a",
         "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": 0.00833333333333286,
+         "sigma": 0.000809,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": true
+        }
        }
       },
       {
        "utc": "2025-01-01T00:00:00.000Z",
-       "jdUt": 2460676.5,
-       "jdTt": 2460676.5008002315,
+       "jdUt1": 2460676.5000005323,
+       "jdTt": 2460676.500800741,
        "deltaT": {
-        "seconds": 69.1399794661191,
-        "sigma": 0.03,
-        "model": "zodiacs-deltat/1",
+        "seconds": 69.138,
+        "sigma": 0.000809,
+        "model": "iers-utc/1",
         "table": "2026-09-24",
-        "tableDigest": "6371988c510a1c6c",
+        "tableDigest": "064d98b4a531053a",
         "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": 0.045999999999999375,
+         "sigma": 0.000809,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": true
+        }
        }
       }
      ],
@@ -1829,12 +2000,12 @@
       "obliquity:iau2006",
       "search:scan-and-bisect",
       "ephemeris:astronomy-engine@2.1.19",
-      "deltat:zodiacs-deltat/1",
-      "time:ut1-read-as-utc"
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.12",
+      "version": "0.1.1-rc.15",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"

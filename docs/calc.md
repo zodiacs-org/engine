@@ -45,16 +45,20 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
 
 ## The input vocabulary
 
-- **`time`**: an ISO 8601 string or a `Date`, read as UT, or
-  `{ jd, scale: "UT" | "TT" }`, a Julian date in a named time scale, or
-  `{ iso }`. Any of the object forms takes `deltaT`, a fixed ΔT = TT − UT1 in
-  seconds, in place of the engine's model (`zodiacs-deltat/1`). UT is read as
-  UT1, as everywhere in the engine: UTC is taken as UT1 and UT1 − UTC, under
-  0.9 s, is not applied. A TT Julian date is converted with the model (or the
-  pin) and recorded in the receipt with the UT the engine used. A Julian date
-  near 2.46 million holds time to about 4 × 10⁻¹⁰ of a day (40 µs). An
-  instant is computed only when both its UT and its TT lie in the span (see
-  Refusals).
+- **`time`**: an ISO 8601 string or a `Date`, read as UTC on the engine's
+  time basis, as `positions()` and `natalChart()` read one
+  ([time.md](time.md)): from 1972-01-01 to the end of the IERS UT1 table
+  (2027-10-02), TT = UTC + (TAI − UTC) + 32.184 s from the IERS leap-second
+  list, and UT1 = UTC + (UT1 − UTC) from IERS; before and after, civil time
+  is read as UT1 and TT comes from the ΔT model (`zodiacs-deltat/1`). Or
+  `{ jd, scale: "UTC" | "UT1" | "TT" }`, a Julian date on a named time scale,
+  read on the same basis, or `{ iso }`. Any of the object forms takes
+  `deltaT`, a fixed ΔT = TT − UT1 in seconds, in place of the basis's: UT1
+  still comes from the instant, and TT = UT1 + ΔT. The receipt records the
+  UTC, UT1 and TT the engine used. A Julian date near 2.46 million holds time
+  to about 4 × 10⁻¹⁰ of a day (40 µs); `chart()` reads it to the nearest
+  millisecond, because `natalChart()` takes a `Date`. An instant is computed
+  only when both its UT1 and its TT lie in the span (see Refusals).
 - **`place`** and the topocentric observer: `{ latitude, longitude }`,
   geodetic, east longitude positive, degrees; the observer also takes
   `height` in metres above astronomy-engine's ellipsoid (IERS 2003,
@@ -65,9 +69,10 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
 - **`zodiac`**: `"tropical"` (default) or `{ sidereal: ayanamsa }` with one of
   `lahiri`, `fagan-bradley`, `krishnamurti`, `raman`, `yukteswar`,
   `true-chitra`, `true-revati`, `true-pushya` or `galactic-center`. The
-  sidereal zodiac is not in this version: every function refuses it with
-  `not-in-this-version`. The ayanamsas are being built on another branch, with
-  the Vedic techniques, and these names are theirs.
+  sidereal zodiac is not in this entry in this version: every function
+  refuses it with `not-in-this-version`. These are the names of
+  `@zodiacs/engine/vedic`'s ayanamsas, which give sidereal longitudes there
+  ([vedic.md](vedic.md)).
 - **`flags`**: `correction` (`"apparent"`, `"astrometric"` or `"geometric"`,
   default apparent), `speeds` (default true), `cartesian` (default false),
   `units` (`"degrees"` or `"radians"`, default degrees) and `deflection`
@@ -166,7 +171,11 @@ frame stays `positions()` to the bit, and names it
 
 `speeds` holds the rate of `lon`, `lat` and `dist` per day, and with
 `cartesian` the rates of x, y and z. Every rate is per day of 86,400 s; they
-are differenced in UT, which runs slower than TT by under one part in 10⁷.
+are differenced on the scale the instant was given on, UTC unless a Julian
+date names another, which runs slower than TT by under one part in 10⁷;
+where a leap second or another step of the time basis lies between the two
+samples, the difference is divided by the TT between them, as `positions()`
+divides it.
 
 - **Analytic** for geometric positions on fixed axes (the J2000.0 and ICRS
   frames) of every body but the Moon: astronomy-engine's velocities from its
@@ -175,9 +184,9 @@ are differenced in UT, which runs slower than TT by under one part in 10⁷.
   position by up to 0.00097″ a day.
 - **Central difference** everywhere else: the value at t + h minus the value
   at t − h, over 2h, with the engine's steps, h = 0.001 day, and h = 0.25 day
-  for the true node, whose short-period motion would otherwise dominate. For an
-  ISO or `Date` instant the two instants are built as `positions()` builds
-  them, so the longitude speed is its speed to the bit.
+  for the true node, whose short-period motion would otherwise dominate. The
+  two instants are built as `positions()` builds them, so for an ISO or
+  `Date` instant the longitude speed is its speed to the bit.
 
 The differencing error is h²/6 times the third derivative. Estimated on the
 engine alone by Richardson's rule, |D(2h) − D(h)| / 3, it is at most
@@ -231,12 +240,12 @@ A refusal is `{ status: "refused", reason, detail }`, the `status` and
 | --- | --- | --- |
 | `not-in-this-version` | the sidereal zodiac; gravitational deflection | |
 | `unsupported-combination` | the Sun heliocentric; the Earth geocentric or topocentric; a node or Lilith with a center other than geocentric, or with `cartesian`; crossings of a body `positions()` does not give; a pinned ΔT for a crossing search | |
-| `out-of-range` | an instant whose UT or TT is outside `CALC_SPAN`, 1800-01-01T00:00Z up to 2200-01-01T00:00Z, where the positions have been compared with an independent ephemeris | `span` |
+| `out-of-range` | an instant whose UT1 or TT is outside `CALC_SPAN`, 1800-01-01T00:00Z up to 2200-01-01T00:00Z, where the positions have been compared with an independent ephemeris | `span` |
 | `sample-budget` | a crossing search that needs more evaluations than `maxSamples` | `samples`, `maxSamples` |
 
 The checks run in that order. The span is checked on both time scales, so a
 ΔT pin cannot move the ephemeris outside it, and with the engine's ΔT the
-last instant computed is about 2199-12-31T23:57:53Z (UT). `positions()` and
+last instant computed is about 2199-12-31T23:57:53Z (UTC, read as UT1 there). `positions()` and
 `natalChart()` still compute outside the span, with the
 `outside-reference-span` flag, as they always have. calc refuses instead
 because every result it returns carries a bound, and outside the span there
@@ -248,8 +257,11 @@ is no comparison to take one from.
 
 - `request`: the request as read, every default filled in, as JSON. Passing it
   back to the same function repeats the calculation.
-- `instants`: each instant used, `{ utc, jdUt, jdTt, deltaT }`, with the ΔT
-  value, its band and its source.
+- `instants`: each instant used, `{ utc, jdUt1, jdTt, deltaT, timeScale }`:
+  its UTC to the millisecond (before 1972 and after the IERS table, the civil
+  time read as UT1), its UT1 and TT as Julian dates, the ΔT value with its
+  band and its source, and the time basis's record, as a chart's `timeScale`
+  gives it.
 - `conventions`: ids from the vocabulary below.
 - `engine`: the package version and the ephemeris.
 
@@ -274,8 +286,8 @@ is no comparison to take one from.
 | `node:true-osculating`, `node:mean`, `lilith:mean` | the Moon's osculating node from its state vector; its mean node (IERS 2003 Ω plus the nutation in longitude); its mean apogee |
 | `speed:analytic`, `speed:central-difference-0.001d`, `speed:central-difference-0.25d` | how the speeds were found |
 | `ephemeris:astronomy-engine@2.1.19` | the ephemeris: truncated VSOP87 for the planets, a lunar series after Brown's theory (Montenbruck and Pfleger), an integrated Pluto |
-| `deltat:zodiacs-deltat/1`, `deltat:pinned` | the engine's ΔT model, or the caller's value |
-| `time:ut1-read-as-utc` | UT read as UT1 |
+| `deltat:time-basis`, `deltat:pinned` | ΔT from the time basis (`iers-utc/1` from 1972-01-01 to the end of the IERS table, `zodiacs-deltat/1` outside it; each instant's `deltaT.model` says which), or the caller's value |
+| `time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise` | the time basis above, as the natal receipt's time-basis set names it ([time.md](time.md)) |
 | `house:<system>`, `polar-fallback:whole` | the house system asked for, and whole sign where Placidus or Koch is undefined |
 | `angles:gast-and-true-obliquity`, `sidereal-time:gast-iau2006-era` | the angles from astronomy-engine's apparent sidereal time (Earth rotation angle, IAU 2006 polynomial, the equation of the equinoxes from the five-term nutation) and the true obliquity |
 | `aspects:major`, `search:scan-and-bisect` | the chart's major aspects; the crossing search |
@@ -309,8 +321,8 @@ uses no Swiss Ephemeris code, data or output.
 | `SEFLG_DPSIDEPS_1980`, `SEFLG_JPLHOR`, `SEFLG_JPLHOR_APPROX` | IAU 1980 nutation corrections, Horizons's frame | none | not offered; the nutation is astronomy-engine's five-term IAU 2000B |
 | `SEFLG_CENTER_BODY` | a planet's centre, not its system barycentre | none | not offered; Mars to Pluto were compared with system barycentres (see Bodies) |
 
-`swe_calc_ut` takes a UT Julian date and `swe_calc` a TT one; here both are
-`{ jd, scale }`. `swe_set_delta_t_userdef(dt)` is the `deltaT` pin, but `dt`
+`swe_calc_ut` takes a UT1 Julian date and `swe_calc` a TT one; here they are
+`{ jd, scale: "UT1" }` and `{ jd, scale: "TT" }`. `swe_set_delta_t_userdef(dt)` is the `deltaT` pin, but `dt`
 is in days and `deltaT` in seconds: `deltaT` = 86,400 × `dt`. Its bodies
 map to `CalcBody` as `SE_SUN` to `SE_PLUTO` by name, `SE_EARTH` to `"Earth"`,
 `SE_TRUE_NODE` to `"North Node"`, `SE_MEAN_NODE` to `"Mean Node"` and

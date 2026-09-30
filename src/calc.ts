@@ -7,20 +7,10 @@
  * Malformed input throws RangeError, as everywhere in the engine. The
  * repository's docs/calc.md is the reference.
  */
-import {
-  AstroTime,
-  Body,
-  EclipticGeoMoon,
-  GeoMoonState,
-  MakeTime,
-  Observer,
-  SetDeltaTFunction,
-  SiderealTime,
-  e_tilt
-} from "astronomy-engine";
+import { AstroTime, Body, EclipticGeoMoon, GeoMoonState, Observer, e_tilt } from "astronomy-engine";
 
 // Imported first so that the build keeps the root entry's shared chunks byte for byte.
-import { bodyLongitude, computeChart } from "./ephemeris.js";
+import { bodyLongitude, computeChart, gastHours, onChartClock } from "./ephemeris.js";
 import { assertDerivedFlags, snapshotFlags, timeFlags, validateBirthSettings } from "./birth-input.js";
 import { MEASURED, MEASURED_BASIS } from "./calc-bounds.js";
 import {
@@ -38,17 +28,18 @@ import { BARYCENTRE_ERROR, geometricState, length, locate } from "./calc-reduce.
 import type { Center } from "./calc-reduce.js";
 import { searchLongitudeCrossingsWith } from "./crossings.js";
 import { dateFrom } from "./date-input.js";
-import { deltaT, deltaTAt } from "./deltat.js";
 import type { DeltaT } from "./deltat.js";
 import { computeAngles, computeHouses, eastPointOf, isPolarUndefinedHouseSystem, ramcOf, vertexOf } from "./houses.js";
 import { meanApogee, meanNodeLongitude } from "./points.js";
-import { REFERENCE_SPAN, outsideReferenceSpan } from "./reference-span.js";
+import { REFERENCE_SPAN } from "./reference-span.js";
 import { normalizeLongitude } from "./signs.js";
+import { elapsedDays, timeBasis } from "./time-scale.js";
+import type { TimeBasis, TimeScale, TimeScaleName } from "./time-scale.js";
 import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
 import type { Angles, BodyName, Chart, ChartFlag, ChartInput, HouseSystem } from "./types.js";
 
 export { CALC_FRAMES };
-export type { Angles, CalcCorrection, CalcFrame, Chart, ChartFlag, DeltaT, HouseSystem };
+export type { Angles, CalcCorrection, CalcFrame, Chart, ChartFlag, DeltaT, HouseSystem, TimeScale };
 
 /** The Sun, Moon, Earth and planets, the true and mean lunar nodes, and Black Moon Lilith (the mean apogee). */
 export type CalcBody =
@@ -76,16 +67,21 @@ export const CALC_BODIES = [...PLANETS, ...POINTS] as readonly CalcBody[];
 /** positions() gives these; events() searches them. */
 const CHART_BODIES = CALC_BODIES.filter((body) => body !== "Earth" && !/^Mean|Lilith/.test(body));
 
+/** The time scale of a Julian date: UTC, UT1 or TT, the root entry's `timeScale` values. */
+export type CalcScale = "UTC" | "UT1" | "TT";
+
 /**
- * An instant: an ISO 8601 string or a Date, read as UT; or a Julian date with
- * its time scale, "UT" (UTC read as UT1, as everywhere in the engine) or "TT".
- * `deltaT` fixes ΔT = TT − UT1, seconds, in place of the engine's model.
+ * An instant: an ISO 8601 string or a Date, read as UTC on the engine's time
+ * basis, as positions() and natalChart() read one; or a Julian date on a
+ * named time scale. `deltaT` fixes ΔT = TT − UT1, seconds, in place of the
+ * time basis's: UT1 still comes from the instant (UTC plus IERS UT1 − UTC
+ * from 1972), and TT = UT1 + ΔT.
  */
 export type CalcTime =
   | string
   | Date
   | { readonly iso: string; readonly deltaT?: number }
-  | { readonly jd: number; readonly scale: "UT" | "TT"; readonly deltaT?: number };
+  | { readonly jd: number; readonly scale: CalcScale; readonly deltaT?: number };
 
 /** Geodetic latitude and east longitude, degrees; `height` in metres, 0 by default (topocentric only). */
 export interface CalcPlace {
@@ -96,7 +92,7 @@ export interface CalcPlace {
 
 export type CalcCenter = "geocentric" | "heliocentric" | "barycentric" | { readonly topocentric: CalcPlace };
 
-/** Ayanamsa names for the sidereal zodiac, which is refused in this version. */
+/** Ayanamsa names for the sidereal zodiac, which calc refuses in this version: those of @zodiacs/engine/vedic. */
 export type CalcAyanamsa =
   | "lahiri"
   | "fagan-bradley"
@@ -147,13 +143,15 @@ export interface CalcRequest {
   readonly flags?: CalcFlags;
 }
 
-/** An instant as the engine used it. */
+/** An instant as the engine used it: its UTC, UT1 and TT, and how the time basis gave them. */
 export interface CalcInstant {
-  /** UT, ISO 8601, to the millisecond. */
+  /** UTC, ISO 8601, to the millisecond; before 1972 and after the IERS table, the civil time read as UT1. */
   readonly utc: string;
-  readonly jdUt: number;
+  readonly jdUt1: number;
   readonly jdTt: number;
   readonly deltaT: DeltaT;
+  /** The scale the instant was given on and the basis that gave UT1 and TT, as a chart records it. */
+  readonly timeScale: TimeScale;
 }
 
 export const CALC_RECEIPT_SCHEMA = "zodiacs.calc-receipt.draft-v1";
@@ -233,7 +231,7 @@ export interface CalcSpan {
   readonly to: string;
 }
 
-/** calc() and the other functions compute an instant only if its UT and its TT are in this span; positions() and natalChart() compute outside it, with a flag. */
+/** calc() and the other functions compute an instant only if its UT1 and its TT are in this span; positions() and natalChart() compute outside it, with a flag. */
 export const CALC_SPAN: CalcSpan = REFERENCE_SPAN;
 
 // ---------------------------------------------------------------- shared
@@ -243,7 +241,8 @@ const RAD = 180 / Math.PI;
 const DAY_MS = 86_400_000;
 const J2000_JD = 2_451_545;
 const J2000_MS = Date.UTC(2000, 0, 1, 12);
-const SPAN_JD = [CALC_SPAN.from, CALC_SPAN.to].map((iso) => J2000_JD + (Date.parse(iso) - J2000_MS) / DAY_MS);
+/** CALC_SPAN in days from J2000.0, the unit of a time basis's UT1 and TT. */
+const SPAN_DAYS = [CALC_SPAN.from, CALC_SPAN.to].map((iso) => (Date.parse(iso) - J2000_MS) / DAY_MS);
 /** The engine's steps: 0.001 day, and 0.25 day for the true node (ephemeris.ts). */
 const STEP_DAYS = 0.001;
 const NODE_STEP_DAYS = 0.25;
@@ -282,12 +281,15 @@ function yesNo(value: unknown, label: string, fallback: boolean): boolean {
 interface TimeInput {
   /** The time as receipts record it. */
   readonly record: Exclude<CalcTime, string | Date>;
-  /** An ISO string or a Date, as the rest of the engine reads it. */
-  readonly date: Date | null;
-  readonly jd: number;
-  readonly tt: boolean;
+  /** Milliseconds since 1970 on `scale`; a Julian date's may have a fraction. */
+  readonly ms: number;
+  readonly scale: TimeScaleName;
   readonly pin: number | undefined;
+  /** Whether it came as an ISO string or a Date (always UTC) rather than a Julian date. */
+  readonly civil: boolean;
 }
+
+const SCALES: Readonly<Record<CalcScale, TimeScaleName>> = { UTC: "utc", UT1: "ut1", TT: "tt" };
 
 function readTime(value: unknown, label: string): TimeInput {
   const iso = (text: string | Date) => {
@@ -299,7 +301,8 @@ function readTime(value: unknown, label: string): TimeInput {
   };
   if (typeof value === "string" || value instanceof Date) {
     const date = iso(value);
-    return { record: { iso: typeof value === "string" ? value : date.toISOString() }, date, jd: NaN, tt: false, pin: undefined };
+    const record = { iso: typeof value === "string" ? value : date.toISOString() };
+    return { record, ms: date.getTime(), scale: "utc", pin: undefined, civil: true };
   }
   if (typeof value === "number") throw new RangeError(`${label} must be an ISO string, a Date or { jd, scale }.`);
   const time = fields(value, label, ["iso", "jd", "scale", "deltaT"]);
@@ -308,12 +311,12 @@ function readTime(value: unknown, label: string): TimeInput {
   if ((time.iso === undefined) === (time.jd === undefined)) throw new RangeError(`${label} takes iso, or jd and scale.`);
   if (time.iso !== undefined) {
     if (typeof time.iso !== "string" || time.scale !== undefined) throw new RangeError(`${label}.iso must be an ISO string, without a scale.`);
-    return { record: { iso: time.iso, ...pinned }, date: iso(time.iso), jd: NaN, tt: false, pin };
+    return { record: { iso: time.iso, ...pinned }, ms: iso(time.iso).getTime(), scale: "utc", pin, civil: true };
   }
   const jd = time.jd;
   if (typeof jd !== "number" || !Number.isFinite(jd)) throw new RangeError(`${label}.jd must be a finite Julian date.`);
-  const scale = oneOf(time.scale, ["UT", "TT"] as const, `${label}.scale`);
-  return { record: { jd, scale, ...pinned }, date: null, jd, tt: scale === "TT", pin };
+  const scale = oneOf(time.scale, ["UTC", "UT1", "TT"] as const, `${label}.scale`);
+  return { record: { jd, scale, ...pinned }, ms: J2000_MS + (jd - J2000_JD) * DAY_MS, scale: SCALES[scale], pin, civil: false };
 }
 
 function readPlace(value: unknown, label: string, withHeight = false): Required<CalcPlace> {
@@ -332,70 +335,60 @@ function refuse(reason: "unsupported-combination" | "not-in-this-version", detai
 function sidereal(value: unknown): CalcRefusal | null {
   if (value === undefined || value === "tropical") return null;
   const name = oneOf(fields(value, "zodiac", ["sidereal"]).sidereal, CALC_AYANAMSAS, "zodiac.sidereal");
-  return refuse("not-in-this-version", `The sidereal zodiac (${name}) is not in this version; it comes with the Vedic techniques.`);
+  return refuse("not-in-this-version", `The sidereal zodiac (${name}) is not in the calc entry in this version; @zodiacs/engine/vedic gives sidereal longitudes on this ayanamsa.`);
 }
+
+const outOfRange = (): CalcRefusal => ({
+  status: "refused",
+  reason: "out-of-range",
+  detail: `The instant's UT1 or TT is outside ${CALC_SPAN.from} to ${CALC_SPAN.to}, where the engine's positions have been compared with an independent ephemeris.`,
+  span: CALC_SPAN
+});
 
 /**
- * Run with astronomy-engine's one module-wide ΔT set to the engine's model, or
- * to a pin for this call only; null from `run` means the instant is out of range.
+ * The instant's time basis, as positions() and natalChart() build one
+ * (src/time-scale.ts): UTC through the leap seconds and IERS UT1 − UTC from
+ * 1972 to the end of the IERS table, and read as UT1 with the ΔT model
+ * outside it; or a pinned ΔT. Null unless its UT1 and its TT both lie in the
+ * span.
  */
-function onClock<T>(pin: number | undefined, run: () => T | null): T | CalcRefusal {
-  SetDeltaTFunction(pin === undefined ? deltaT : () => pin);
-  try {
-    return (
-      run() ?? {
-        status: "refused",
-        reason: "out-of-range",
-        detail: `The instant's UT or TT is outside ${CALC_SPAN.from} to ${CALC_SPAN.to}, where the engine's positions have been compared with an independent ephemeris.`,
-        span: CALC_SPAN
-      }
-    );
-  } finally {
-    if (pin !== undefined) SetDeltaTFunction(deltaT);
-  }
-}
-
-/**
- * astronomy-engine's AstroTime.FromTerrestrialTime, whose loop can alternate
- * forever between two neighbouring doubles (it does at J2000.0 - 65536 days TT
- * on the engine's ΔT): the same steps, ten at most, keeping the closest.
- */
-function fromTerrestrial(tt: number): AstroTime {
-  let time = new AstroTime(tt);
-  let best = time;
-  for (let step = 0; step < 10 && Math.abs(tt - time.tt) >= 1e-12; step++) {
-    time = time.AddDays(tt - time.tt);
-    if (Math.abs(tt - time.tt) < Math.abs(tt - best.tt)) best = time;
-  }
-  return best;
-}
-
-/** The instant on the installed clock, or null unless its UT and its TT are both in the span. */
-function resolve(time: TimeInput): AstroTime | null {
-  const inside = (jd: number, margin = 0) => jd >= SPAN_JD[0]! - margin && jd < SPAN_JD[1]! + margin;
+function resolve(time: TimeInput): TimeBasis | null {
+  const inside = (days: number, margin = 0) => days >= SPAN_DAYS[0]! - margin && days < SPAN_DAYS[1]! + margin;
+  const days = (time.ms - J2000_MS) / DAY_MS;
   const shift = (time.pin ?? 0) / 86_400;
   // Checked roughly before converting, so that no conversion runs far outside the span.
-  if (time.date === null && !(inside(time.jd, 2) && inside(time.jd + (time.tt ? -shift : shift), 2))) return null;
-  const at =
-    time.date !== null
-      ? MakeTime(time.date)
-      : time.tt
-        ? fromTerrestrial(time.jd - J2000_JD)
-        : new AstroTime(time.jd - J2000_JD);
-  return outsideReferenceSpan(at.date) || !inside(time.tt ? time.jd : J2000_JD + at.tt) ? null : at;
+  if (!(inside(days, 2) && inside(days + (time.scale === "tt" ? -shift : shift), 2))) return null;
+  const basis = timeBasis(time.ms, time.scale, time.pin);
+  return inside(basis.ut1Days) && inside(basis.ttDays) ? basis : null;
 }
 
-function instant(at: AstroTime, pin: number | undefined): CalcInstant {
+/** `run` on the instant's time basis, or the out-of-range refusal. */
+function inSpan<T>(time: TimeInput, run: (basis: TimeBasis) => T): T | CalcRefusal {
+  const basis = resolve(time);
+  return basis === null ? outOfRange() : run(basis);
+}
+
+/**
+ * `evaluate` on astronomy-engine's time for `ms` on the input's scale, as the
+ * engine's ephemeris reads a chart's instant (onChartClock in src/ephemeris.ts):
+ * the basis's UT1 with its ΔT installed for the call.
+ */
+function onInput<T>(time: TimeInput, ms: number, evaluate: (at: AstroTime, basis: TimeBasis) => T): T {
+  return onChartClock(ms, time.scale, time.pin, evaluate);
+}
+
+function instant(basis: TimeBasis): CalcInstant {
   return {
-    utc: at.date.toISOString(),
-    jdUt: J2000_JD + at.ut,
-    jdTt: J2000_JD + at.tt,
-    deltaT:
-      pin === undefined
-        ? deltaTAt(at.ut)
-        : { seconds: pin, sigma: null, model: "pinned", table: null, tableDigest: null, segment: "pinned" }
+    utc: new Date(Math.round(basis.utcMs)).toISOString(),
+    jdUt1: J2000_JD + basis.ut1Days,
+    jdTt: J2000_JD + basis.ttDays,
+    deltaT: basis.deltaT,
+    timeScale: basis.timeScale
   };
 }
+
+/** The time basis, as the natal receipt's time-basis set names it (src/receipt.ts). */
+const TIME_BASIS_ID = "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise";
 
 function receipt<Request>(request: Request, instants: CalcInstant[], ids: string[], pin?: number): CalcReceipt<Request> {
   return {
@@ -405,8 +398,8 @@ function receipt<Request>(request: Request, instants: CalcInstant[], ids: string
     conventions: [
       ...ids,
       `ephemeris:astronomy-engine@${EPHEMERIS.version}`,
-      pin === undefined ? "deltat:zodiacs-deltat/1" : "deltat:pinned",
-      "time:ut1-read-as-utc"
+      pin === undefined ? "deltat:time-basis" : "deltat:pinned",
+      TIME_BASIS_ID
     ],
     engine: { name: "@zodiacs/engine", version: ENGINE_VERSION, ephemeris: { ...EPHEMERIS } }
   };
@@ -576,36 +569,42 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
               : null);
   if (refusal) return refusal;
   const correction = flags.correction;
-  return onClock(time.pin, (): CalcPosition | null => {
-    const at = resolve(time);
-    if (at === null) return null;
+  return inSpan(time, (basis): CalcPosition => {
     const evaluate = evaluator(body, frame, center, correction);
-    const now = evaluate(at);
+    const now = onInput(time, time.ms, evaluate);
     const step = isTrueNode(body) ? NODE_STEP_DAYS : STEP_DAYS;
     const analytic = flags.speeds && correction === "geometric" && inertial(frame) && !point && body !== "Moon";
     let speeds: { lon: number; lat: number; dist: number | null } | null = null;
     let velocity: Vec3 | null = null;
     if (analytic) {
-      const state = geometricState(body as Body, center, at)!;
-      const turn = frameMatrix(frame, at);
+      const { state, turn } = onInput(time, time.ms, (at) => ({
+        state: geometricState(body as Body, center, at)!,
+        turn: frameMatrix(frame, at)
+      }));
       velocity = apply(turn, state.v);
       speeds = sphericalRates(apply(turn, state.r), velocity);
     } else if (flags.speeds) {
-      // Built as positions() builds them, so that its speeds are reproduced to the bit.
-      const shift = (days: number) =>
-        evaluate(time.date !== null ? MakeTime(new Date(time.date.getTime() + days * DAY_MS)) : at.AddDays(days));
+      // Built as positions() builds them, so that its speeds are reproduced to the
+      // bit: samples `step` days either side on the input's scale, and the time
+      // between them the TT they span where the time basis steps between them
+      // (elapsedDays in src/time-scale.ts).
+      const shift = (days: number) => {
+        const ms = time.ms + days * DAY_MS;
+        return onInput(time, ms, (at, sampled) => ({ row: evaluate(at), basis: sampled }));
+      };
       const before = shift(-step);
       const after = shift(step);
-      const rate = (a: number, b: number) => (a - b) / (2 * step);
-      let turn = after.raw - before.raw;
+      const elapsed = elapsedDays(before.basis, after.basis, 2 * step);
+      const rate = (a: number, b: number) => (a - b) / elapsed;
+      let turn = after.row.raw - before.row.raw;
       if (turn > 180) turn -= 360;
       if (turn < -180) turn += 360;
       speeds = {
-        lon: turn / (2 * step),
-        lat: rate(after.lat, before.lat),
-        dist: now.dist === null ? null : rate(after.dist!, before.dist!)
+        lon: turn / elapsed,
+        lat: rate(after.row.lat, before.row.lat),
+        dist: now.dist === null ? null : rate(after.row.dist!, before.row.dist!)
       };
-      const [a, b] = [after.xyz, before.xyz];
+      const [a, b] = [after.row.xyz, before.row.xyz];
       if (a && b) velocity = [rate(a[0], b[0]), rate(a[1], b[1]), rate(a[2], b[2])];
     }
     const method = !flags.speeds ? null : analytic ? "analytic" : "central-difference";
@@ -646,7 +645,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
       },
       receipt: receipt(
         { body, time: time.record, frame, center: centerRecord, zodiac: "tropical", flags },
-        [instant(at, time.pin)],
+        [instant(basis)],
         ids,
         time.pin
       )
@@ -691,10 +690,9 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
   const system = validateBirthSettings({ houseSystem: asked.system as HouseSystem }).houseSystem ?? "whole";
   const refusal = sidereal(asked.zodiac);
   if (refusal) return refusal;
-  return onClock(time.pin, (): HousesResult | null => {
-    const at = resolve(time);
-    if (at === null) return null;
-    const input = { gastHours: SiderealTime(at), latitude, longitude, obliquity: e_tilt(at).tobl };
+  return inSpan(time, (used): HousesResult => {
+    // As natalChart(): the Earth's rotation from UT1, the true obliquity on TT.
+    const input = onInput(time, time.ms, (at) => ({ gastHours: gastHours(at), latitude, longitude, obliquity: e_tilt(at).tobl }));
     const angles = computeAngles(input);
     const { houses: computed, fellBack } = computeHouses(system, input, angles);
     // Conformance suite 0.1.0, level L2, for this engine: conformance/RESULTS.md.
@@ -718,7 +716,7 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
       },
       receipt: receipt(
         { time: time.record, place: { latitude, longitude }, system, zodiac: "tropical" },
-        [instant(at, time.pin)],
+        [instant(used)],
         [
           "zodiac:tropical",
           `house:${system}`,
@@ -753,9 +751,9 @@ export interface EventsRequest {
 }
 
 export interface CalcEvent {
-  /** UT, ISO 8601, to the millisecond. */
+  /** UTC, ISO 8601, to the millisecond, as the crossing search gives it. */
   readonly at: string;
-  readonly jdUt: number;
+  readonly jdUt1: number;
   readonly jdTt: number;
   /** True when the body moved backward through the longitude. */
   readonly retrograde: boolean;
@@ -794,17 +792,18 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
         ? refuse("unsupported-combination", "Crossing searches run on the engine's ΔT model; a pinned ΔT is not offered.")
         : null);
   if (refusal) return refusal;
-  return onClock(undefined, (): EventsResult | CalcRefusal | null => {
-    const start = resolve(from);
-    const end = resolve(to);
-    if (start === null || end === null) return null;
-    const dated = (time: TimeInput, at: AstroTime) => time.date ?? new Date(Math.round(J2000_MS + at.ut * DAY_MS));
+  const start = resolve(from);
+  const end = resolve(to);
+  if (start === null || end === null) return outOfRange();
+  {
+    // The search runs on UTC instants, as searchLongitudeCrossings does.
+    const dated = (basis: TimeBasis) => new Date(Math.round(basis.utcMs));
     const found = searchLongitudeCrossingsWith(
       bodyLongitude,
       body as BodyName,
       longitude,
-      dated(from, start),
-      dated(to, end),
+      dated(start),
+      dated(end),
       { stepDays, ...limit }
     );
     if (found.status === "refused") {
@@ -815,8 +814,8 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
       status: "ok",
       kind,
       events: found.crossings.map(({ at, retrograde }) => {
-        const ut = (at.getTime() - J2000_MS) / DAY_MS;
-        return { at: at.toISOString(), jdUt: J2000_JD + ut, jdTt: J2000_JD + ut + deltaT(ut) / 86_400, retrograde };
+        const { ut1Days, ttDays } = timeBasis(at.getTime(), "utc");
+        return { at: at.toISOString(), jdUt1: J2000_JD + ut1Days, jdTt: J2000_JD + ttDays, retrograde };
       }),
       samples: found.samples,
       bounds: {
@@ -829,11 +828,11 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
       },
       receipt: receipt(
         { kind, body, longitude, from: from.record, to: to.record, zodiac: "tropical", stepDays, ...limit },
-        [instant(start, undefined), instant(end, undefined)],
+        [instant(start), instant(end)],
         [...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent"), "search:scan-and-bisect"]
       )
     };
-  });
+  }
 }
 
 // ---------------------------------------------------------------- chart()
@@ -868,10 +867,10 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
   const supplied = asked.timeFlags === undefined ? undefined : snapshotFlags(asked.timeFlags).values;
   const refusal = sidereal(asked.zodiac);
   if (refusal) return refusal;
-  return onClock(time.pin, (): ChartResult | null => {
-    const at = resolve(time);
-    if (at === null) return null;
-    const utc = time.date ?? new Date(Math.round(J2000_MS + at.ut * DAY_MS));
+  // natalChart() takes a Date, so a Julian date is read to the nearest millisecond on its scale.
+  const whole: TimeInput = { ...time, ms: Math.round(time.ms) };
+  return inSpan(whole, (basis): ChartResult => {
+    const utc = new Date(whole.ms);
     const houseSystem = settings.houseSystem ?? "whole";
     const timeKnown = settings.timeKnown ?? true;
     // natalChart()'s checks: a derived flag may be echoed only where the calculation can produce it.
@@ -887,10 +886,10 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
       timeKnown,
       ...place,
       ...(supplied && { flags: timeFlags(supplied) }),
-      ...(time.pin === undefined ? {} : { deltaT: time.pin })
+      ...(whole.pin === undefined ? {} : { deltaT: whole.pin }),
+      ...(whole.scale === "utc" ? {} : { timeScale: whole.scale })
     };
-    // computeChart sets its own clock and leaves the engine's model behind, so record the instant first.
-    const used = instant(MakeTime(utc), time.pin);
+    const used = instant(basis);
     const computed = computeChart(input);
     assertDerivedFlags(supplied ?? [], computed.flags);
     return {

@@ -17,6 +17,10 @@ const INSTANTS = [
   "1851-03-14T04:37:00Z",
   "1969-07-20T20:17:00Z",
   "2000-01-01T12:00:00Z",
+  // Within 86.4 s of the time basis's steps, where a speed's two samples straddle
+  // one: the start of the leap-second era and the leap second of 2016-12-31.
+  "1972-01-01T00:00:30Z",
+  "2016-12-31T23:59:30Z",
   "2024-04-08T18:21:30.250Z",
   // The last minutes of 2199 whose TT is still before 2200 (ΔT is 126 s there).
   "2199-12-31T23:57:00Z"
@@ -73,13 +77,21 @@ describe("calc with every default is the engine's own position", () => {
     expect(ok(calc({ body: "North Node", time: INSTANTS[3]! })).bounds.speed!.stepDays).toBe(NODE_SPEED_STEP_DAYS);
   });
 
-  it("with ΔT pinned at zero reads the instant as TT, like the conformance adapter", () => {
+  it("with ΔT pinned, and on a TT Julian date, is natalChart()'s chart on the same pin and scale", () => {
+    // Before 1972 civil time is read as UT1, so a pin of zero makes the instant TT.
     const utc = "1969-07-20T20:17:00Z";
     const natal = natalChart({ utc, timeKnown: false, deltaT: 0 });
     for (const row of natal.bodies) {
       const result = ok(calc({ body: row.body, time: { iso: utc, deltaT: 0 } }));
       expect(result.lon).toBe(row.lon);
-      expect(result.receipt.instants[0]!.jdTt).toBe(result.receipt.instants[0]!.jdUt);
+      expect(result.receipt.instants[0]!.jdTt).toBe(result.receipt.instants[0]!.jdUt1);
+    }
+    // At any date a TT Julian date is TT, as the conformance adapter asks for it.
+    const tt = "1990-06-15T12:30:00Z";
+    const onTt = natalChart({ utc: tt, timeScale: "tt", timeKnown: false });
+    for (const row of onTt.bodies) {
+      const result = ok(calc({ body: row.body, time: { jd: 2_440_587.5 + Date.parse(tt) / 86_400_000, scale: "TT" } }));
+      expect(Math.abs(result.lon - row.lon) * 3600).toBeLessThan(1e-4);
     }
   });
 });
@@ -89,13 +101,24 @@ describe("time vocabulary", () => {
   const jdUt = 2440587.5 + Date.parse(iso) / 86_400_000;
 
   // A Julian date near 2.46e6 holds time to about 4e-10 of a day, 40 µs, in which the Moon moves 2e-5″.
-  it("reads a UT Julian date as the same instant as an ISO string", () => {
+  it("reads a UTC Julian date as the same instant as an ISO string", () => {
     for (const body of ["Sun", "Moon", "Mercury", "Pluto", "North Node", "Black Moon Lilith"] as const) {
       const a = ok(calc({ body, time: iso }));
-      const b = ok(calc({ body, time: { jd: jdUt, scale: "UT" } }));
+      const b = ok(calc({ body, time: { jd: jdUt, scale: "UTC" } }));
       expect(Math.abs(a.lon - b.lon) * 3600).toBeLessThan(1e-4);
       expect(Math.abs(a.speeds!.lon - b.speeds!.lon) * 3600).toBeLessThan(1e-3);
     }
+  });
+
+  it("reads a UT1 Julian date as UT1, UT1 − UTC away from the same UTC date", () => {
+    const utc = ok(calc({ body: "Moon", time: { jd: jdUt, scale: "UTC" } }));
+    const [used] = utc.receipt.instants;
+    const offset = used!.timeScale.ut1MinusUtc!.seconds;
+    expect(Math.abs(offset)).toBeGreaterThan(0);
+    expect(Math.abs(used!.jdUt1 - jdUt - offset / 86_400) * 86_400).toBeLessThan(1e-5);
+    const ut1 = ok(calc({ body: "Moon", time: { jd: used!.jdUt1, scale: "UT1" } }));
+    expect(Math.abs(ut1.lon - utc.lon) * 3600).toBeLessThan(1e-4);
+    expect(Math.abs(ut1.receipt.instants[0]!.jdTt - used!.jdTt) * 86_400).toBeLessThan(1e-5);
   });
 
   it("reads a TT Julian date through ΔT, the model's or a pin", () => {
@@ -104,12 +127,12 @@ describe("time vocabulary", () => {
     const [used] = modelled.receipt.instants;
     expect(Math.abs(used!.jdTt - tt) * 86_400).toBeLessThan(1e-6);
     // A Julian date near 2.46e6 holds time to about 4e-10 of a day.
-    expect(Math.abs(used!.jdTt - used!.jdUt - used!.deltaT.seconds / 86_400)).toBeLessThan(1e-9);
-    const again = ok(calc({ body: "Moon", time: { jd: used!.jdUt, scale: "UT" } }));
+    expect(Math.abs(used!.jdTt - used!.jdUt1 - used!.deltaT.seconds / 86_400)).toBeLessThan(1e-9);
+    const again = ok(calc({ body: "Moon", time: { jd: used!.jdUt1, scale: "UT1" } }));
     expect(Math.abs(again.lon - modelled.lon) * 3600).toBeLessThan(1e-4);
 
     const pinned = ok(calc({ body: "Moon", time: { jd: tt, scale: "TT", deltaT: 50 } }));
-    const same = ok(calc({ body: "Moon", time: { jd: tt - 50 / 86_400, scale: "UT", deltaT: 50 } }));
+    const same = ok(calc({ body: "Moon", time: { jd: tt - 50 / 86_400, scale: "UT1", deltaT: 50 } }));
     expect(Math.abs(pinned.lon - same.lon) * 3600).toBeLessThan(1e-4);
     expect(pinned.receipt.instants[0]!.deltaT).toEqual({
       seconds: 50,
@@ -148,7 +171,7 @@ describe("receipts", () => {
     { body: "Earth", time: new Date("1901-02-03T04:05:06Z"), center: "barycentric", frame: "ecliptic-j2000", flags: { correction: "astrometric", units: "radians" } },
     { body: "Venus", time: { iso: "2150-06-30" }, center: { topocentric: { latitude: -33.9, longitude: 18.4, height: 25 } }, frame: "equatorial-true-of-date", flags: { speeds: false } },
     { body: "Black Moon Lilith", time: "1850-01-01", frame: "ecliptic-mean-of-date", flags: { correction: "geometric" } },
-    { body: "Saturn", time: { jd: 2400000.5, scale: "UT" }, center: "heliocentric", frame: "equatorial-mean-of-date", flags: { correction: "geometric", cartesian: true } }
+    { body: "Saturn", time: { jd: 2400000.5, scale: "UTC" }, center: "heliocentric", frame: "equatorial-mean-of-date", flags: { correction: "geometric", cartesian: true } }
   ];
 
   it.each(requests.map((request) => [JSON.stringify(request), request] as const))("replay %s", (_, request) => {
@@ -482,20 +505,20 @@ describe("typed refusals", () => {
     expect(refused(events({ ...window, body: "Sun", from: { iso: time, deltaT: 60 } })).reason).toBe("unsupported-combination");
   });
 
-  it("refuse instants whose UT or TT is outside the span, and compute its first instant", () => {
+  it("refuse instants whose UT1 or TT is outside the span, and compute its first instant", () => {
     const first = 2_378_496.5; // 1800-01-01T00:00
     const last = 2_524_593.5; // 2200-01-01T00:00
     const outside = [
       "1799-12-31T23:59:59.999Z",
       CALC_SPAN.to,
       "2199-12-31T23:59:59Z", // TT 126 s later, in 2200
-      { jd: 2378496.4, scale: "UT" },
-      { jd: first, scale: "TT" }, // UT 18.7 s earlier, in 1799
+      { jd: 2378496.4, scale: "UTC" },
+      { jd: first, scale: "TT" }, // UT1 18.7 s earlier, in 1799
       { jd: last, scale: "TT" },
-      { jd: last + 2 / 1440, scale: "TT" }, // UT still in 2199
-      { jd: first + 30 / 86_400, scale: "UT", deltaT: -60 }, // TT in 1799
+      { jd: last + 2 / 1440, scale: "TT" }, // UT1 still in 2199
+      { jd: first + 30 / 86_400, scale: "UT1", deltaT: -60 }, // TT in 1799
       { jd: 1e300, scale: "TT" },
-      { jd: -1e300, scale: "UT" },
+      { jd: -1e300, scale: "UTC" },
       { jd: 2451545, scale: "TT", deltaT: 1e10 },
       { iso: "2199-06-01T00:00:00Z", deltaT: 1e10 }, // TT in 2516
       { iso: "1800-06-01T00:00:00Z", deltaT: -1e10 }
@@ -537,7 +560,8 @@ describe("malformed input throws RangeError", () => {
     ["an invalid ISO date", { body: "Sun", time: "2000-02-30" }],
     ["a local time without an offset", { body: "Sun", time: "2000-01-01T12:00" }],
     ["a Julian date without a scale", { body: "Sun", time: { jd: 2451545 } }],
-    ["an unknown time scale", { body: "Sun", time: { jd: 2451545, scale: "UTC" } }],
+    ["an unknown time scale", { body: "Sun", time: { jd: 2451545, scale: "UT" } }],
+    ["a time scale in lower case", { body: "Sun", time: { jd: 2451545, scale: "utc" } }],
     ["a non-finite Julian date", { body: "Sun", time: { jd: Number.NaN, scale: "TT" } }],
     ["both iso and jd", { body: "Sun", time: { iso: time, jd: 2451545, scale: "TT" } }],
     ["a non-finite ΔT", { body: "Sun", time: { iso: time, deltaT: Number.POSITIVE_INFINITY } }],

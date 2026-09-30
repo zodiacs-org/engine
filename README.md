@@ -181,7 +181,8 @@ for (const aspect of today.aspects) {
 ### Uniform calculation API
 
 `@zodiacs/engine/calc` offers `calc`, `houses`, `events` and `chart` with one
-vocabulary: instants as ISO strings, Dates or `{ jd, scale: "UT" | "TT" }`;
+vocabulary: instants as ISO strings, Dates or `{ jd, scale: "UTC" | "UT1" | "TT" }`
+on the engine's time basis, as `positions()` reads them;
 eight frames (the ecliptic or the equator; true or mean of date, J2000.0 or
 the ICRS); geocentric, heliocentric, barycentric and topocentric centers; and
 apparent, astrometric or geometric positions with distances and speeds.
@@ -189,7 +190,7 @@ Results carry bounds and a receipt of convention ids. A measured bound is the
 largest difference from JPL Horizons on 32 instants from 1802 to 2188: a
 sample maximum, not a limit. An estimated bound names what it rests on. What
 this version does not compute comes back as a typed refusal, such as the
-sidereal zodiac, or an instant whose UT or TT is outside 1800 to 2200: there
+sidereal zodiac, or an instant whose UT1 or TT is outside 1800 to 2200: there
 calc has no comparison to take a bound from, while the root entry's functions
 still compute such an instant and flag it `outside-reference-span`. With
 every default, `calc({ body, time })` is the position `positions()` gives, to
