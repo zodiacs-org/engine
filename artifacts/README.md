@@ -88,7 +88,8 @@ runs, so CI starts the check with node directly.
 | 0.1.1-rc.11 | `d88e0ff8db91e1183789763ad32feb2dac61716e35ad7676a943f7a1ad377862` | 70,989 | 30 | `be3585b3ebfeae1f69b56846b1cb6c31abf45735` | `be3585b` | Candidate, merged; the file `zodiacs-engine-0.1.1-rc.11.tgz` |
 | 0.1.1-rc.12 | `c4cf150fe8fb0b37f5769993c2e63275b2e5ef47b97d8a118aff3be00ebaf7f0` | 73,398 | 30 | `a1d0f2c6cefb2e83df397195515fa0558cf31185` | `a1d0f2c` | Candidate, merged |
 | 0.1.1-rc.13 | `12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840` | 79,092 | 30 | `f05ea02b3254ac5c00d203d64d2caf53e44c083a` | `4eee700` | Candidate, reviewed; its findings are addressed in rc.14 |
-| 0.1.1-rc.14 | `adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e` | 87,415 | 30 | `03db4bb602377896283775920519b26d1f19a890` | `b221534` | Candidate under review |
+| 0.1.1-rc.14 | `adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e` | 87,415 | 30 | `03db4bb602377896283775920519b26d1f19a890` | `b221534` | Candidate, merged |
+| 0.1.1-rc.15 | `24eeb597b0157598c0faa26bb615c0cb5dfaaeac0393d62c73fbd37c5da4d348` | 190,974 | 54 | `104bd5a56ee00356eecc75f15f0aa946f5a39f41` | "Carry the packed 0.1.1-rc.15 tarball" | Candidate under review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -123,3 +124,51 @@ and matched its recorded bytes; rc.14's source packed to the same bytes on Node
 carried, commits that change no packed file corrected the check as described
 above; with it, `--rebuild-all` rebuilt all nine archives, rc.14's included,
 byte for byte. The record is in `docs/evidence/rc14-20260928/`.
+
+Three local builds of rc.15 were superseded before publication. None was
+pushed or published, none is carried here, and the commits named in this
+list are local commits that are not in this repository:
+
+- the first, SHA-256
+  `3651c525e98ff83e20a46bded84ede5ad1465dde22674830347bceed87c31309` (177,715
+  bytes), packed from `d90a00a` and carried locally in `cc98060`. A review of
+  its records found a Gregorian adoption table taken from Wikipedia (CC BY-SA)
+  and GeoNames, living people's birth data in its tests, a root-isolation
+  check that missed modules under other file extensions, receipts in rc.14's
+  local-resolution shape refused, dashas dated on a TT chart's scale, and
+  figures, size statements and breaking changes understated. A review of its
+  time basis found UT1 read one second early inside leap seconds, 1972 taken
+  as UT1 − UTC = 0, speeds divided by the wrong interval across steps of the
+  time basis, 30 zone-line ends placed late, an order-dependent
+  `zoneOffsetAt`, an expired leap-second list, birth keys differing only in
+  letter case ignored, and receipt version gates that missed spellings such as
+  0.1.1-rc.14.1;
+- the second, SHA-256
+  `554ed7eaeec6c6ca833a127f965a95959541e00679e282598cfa399e6bf6967e` (189,485
+  bytes), packed from `8345003` and carried locally in `a1a9e95`, with those
+  fixes. It was dropped before review for four wrong sentences in its packed
+  CHANGELOG, README and LICENSING.md;
+- the third, the re-cut, SHA-256
+  `bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637` (189,575
+  bytes), packed from `51f567e` and carried locally in `7daf832`, with those
+  fixes and corrections. A re-check of it confirmed its archive and gates,
+  and found living people's birth data in commits of its history that later
+  commits had removed from the tree, a real person's birth still in three
+  evidence files, a test title in a log that dated a birthday, two refusals
+  missing from its changelog's breaking changes, a licensing status that did
+  not name its open questions, and three statements that the code or its
+  evidence contradicts.
+
+The history was then rebuilt before the first push, so that no commit carries
+that birth data. rc.15's source commit here holds the re-cut's code with the
+re-check's corrections, and its archive differs from the re-cut's in
+`CHANGELOG.md`, `LICENSING.md` and `NOTICE` alone. The ΔT model's step at
+1941.0 stays, as a known limitation, because changing the model's values would
+make valid rc.8 to rc.14 receipts fail validation. rc.15 adds opt-in entry
+points and zone histories, so its archive is a little over twice rc.14's
+(190,974 bytes, 668,343 unpacked); the package gate now budgets each entry
+point and caps the whole (CHANGELOG.md). Before its archive was committed,
+clean copies of its source commit's tree packed the same bytes on Node
+20.19.0, 22.22.2 (twice) and 24.21.0, and clean clones of that commit packed
+them on Node 22.22.2, 20.19.0 and 24.21.0. The record is in
+`docs/evidence/rc15-20260929/`.

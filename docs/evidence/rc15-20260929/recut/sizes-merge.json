@@ -1,0 +1,115 @@
+{
+ "merge": {
+  "version": "0.1.1-rc.15",
+  "entries": {
+   ".": {
+    "files": 11,
+    "bytes": 97704,
+    "beyondCore": 0,
+    "budget": 100000,
+    "headroomPercent": 2.35
+   },
+   "./crossings": {
+    "files": 2,
+    "bytes": 9410,
+    "beyondCore": 173,
+    "budget": 10000,
+    "headroomPercent": 6.27
+   },
+   "./deltat": {
+    "files": 2,
+    "bytes": 4968,
+    "beyondCore": 161,
+    "budget": 5500,
+    "headroomPercent": 10.71
+   },
+   "./geo": {
+    "files": 3,
+    "bytes": 34135,
+    "beyondCore": 31206,
+    "budget": 35000,
+    "headroomPercent": 2.53
+   },
+   "./internal": {
+    "files": 6,
+    "bytes": 58997,
+    "beyondCore": 305,
+    "budget": 60000,
+    "headroomPercent": 1.7
+   },
+   "./internal/math": {
+    "files": 3,
+    "bytes": 18165,
+    "beyondCore": 1325,
+    "budget": 20000,
+    "headroomPercent": 10.1
+   },
+   "./receipt": {
+    "files": 6,
+    "bytes": 65164,
+    "beyondCore": 40553,
+    "budget": 70000,
+    "headroomPercent": 7.42
+   },
+   "./timing": {
+    "files": 11,
+    "bytes": 114916,
+    "beyondCore": 30215,
+    "budget": 120000,
+    "headroomPercent": 4.42
+   },
+   "./vedic": {
+    "files": 10,
+    "bytes": 116779,
+    "beyondCore": 32750,
+    "budget": 120000,
+    "headroomPercent": 2.76
+   }
+  },
+  "coreByModule": {
+   "(exports)": 3986,
+   "(imports)": 3466,
+   "src/api.ts": 6666,
+   "src/aspects.ts": 2503,
+   "src/birth-input.ts": 2841,
+   "src/body-label.ts": 415,
+   "src/configured-aspects.ts": 9124,
+   "src/crossings.ts": 9164,
+   "src/date-input.ts": 1436,
+   "src/declination.ts": 7642,
+   "src/deltat.ts": 4740,
+   "src/ephemeris.ts": 10326,
+   "src/exact.ts": 2203,
+   "src/houses.ts": 11059,
+   "src/points.ts": 2319,
+   "src/progressions.ts": 485,
+   "src/reference-span.ts": 652,
+   "src/returns.ts": 2123,
+   "src/signs.ts": 2320,
+   "src/synastry.ts": 1892,
+   "src/time-scale-data.ts": 5710,
+   "src/time-scale.ts": 6499,
+   "src/types.ts": 133
+  },
+  "package": {
+   "files": 54,
+   "total": 655990,
+   "cap": 700000,
+   "headroomPercent": 6.71,
+   "split": {
+    "rootJs": 97704,
+    "optInJs": 134291,
+    "zoneHistories": 189144,
+    "rootDeclarations": 57014,
+    "otherDeclarations": 60459,
+    "documents": 114505,
+    "manifest": 2873
+   },
+   "zoneHistories": {
+    "files": 16,
+    "budget": 200000,
+    "headroomPercent": 5.74
+   }
+  }
+ }
+}

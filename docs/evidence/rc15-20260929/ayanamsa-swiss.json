@@ -1,0 +1,424 @@
+{
+ "tool": "docs/evidence/vedic-2026-09-28/tools/swiss_ayanamsa.py",
+ "engineVersion": "0.1.1-rc.15",
+ "reference": {
+  "function": "swe_get_ayanamsa_ex_ut (pyswisseph)",
+  "meanFlags": "FLG_SWIEPH | FLG_NONUT",
+  "trueFlags": "FLG_SWIEPH",
+  "sidBits": "none (default)",
+  "ephemeris": "sepl_18.se1, semo_18.se1"
+ },
+ "grid": {
+  "from": "1800-01-01",
+  "to": "2200-12-31",
+  "stepDays": 10,
+  "timeOfDay": "pseudo-random (LCG seed 20260928)",
+  "n": 14647
+ },
+ "gateArcsec": 0.01,
+ "units": "differences engine \u2212 Swiss; arcseconds unless named; nutationDifference is engine \u0394\u03c8 \u2212 Swiss (true \u2212 mean)",
+ "ayanamsas": {
+  "lahiri": {
+   "swissMode": "SE_SIDM_LAHIRI",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": 0.00023,
+    "maxAbsArcsec": 0.001284,
+    "passes": true
+   },
+   "true": {
+    "medianArcsec": 0.001555,
+    "maxAbsArcsec": 0.256428
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   }
+  },
+  "fagan-bradley": {
+   "swissMode": "SE_SIDM_FAGAN_BRADLEY",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": -0.000678,
+    "maxAbsArcsec": 0.00091,
+    "passes": true
+   },
+   "true": {
+    "medianArcsec": 0.000647,
+    "maxAbsArcsec": 0.256795
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   }
+  },
+  "krishnamurti": {
+   "swissMode": "SE_SIDM_KRISHNAMURTI",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": -0.070921,
+    "maxAbsArcsec": 0.071153,
+    "passes": false
+   },
+   "true": {
+    "medianArcsec": -0.069596,
+    "maxAbsArcsec": 0.327038
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   }
+  },
+  "raman": {
+   "swissMode": "SE_SIDM_RAMAN",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": 5.508275,
+    "maxAbsArcsec": 10.137788,
+    "passes": false
+   },
+   "true": {
+    "medianArcsec": 5.508852,
+    "maxAbsArcsec": 10.358843
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   }
+  },
+  "yukteswar": {
+   "swissMode": "SE_SIDM_YUKTESHWAR",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": 66.387516,
+    "maxAbsArcsec": 806.15428,
+    "passes": false
+   },
+   "true": {
+    "medianArcsec": 66.406415,
+    "maxAbsArcsec": 806.154077
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   }
+  },
+  "true-chitra": {
+   "swissMode": "SE_SIDM_TRUE_CITRA",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": 0.000236,
+    "maxAbsArcsec": 0.002,
+    "passes": true
+   },
+   "true": {
+    "medianArcsec": 0.001425,
+    "maxAbsArcsec": 0.255911
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   },
+   "nearSun": {
+    "thresholdDeg": 0.3,
+    "away": {
+     "n": 14621,
+     "medianArcsec": 0.000236,
+     "maxAbsArcsec": 0.002
+    },
+    "near": {
+     "n": 26,
+     "medianArcsec": 0.000173,
+     "maxAbsArcsec": 0.001338
+    },
+    "beyondGate": {
+     "n": 0
+    }
+   }
+  },
+  "true-revati": {
+   "swissMode": "SE_SIDM_TRUE_REVATI",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": 0.000226,
+    "maxAbsArcsec": 0.004363,
+    "passes": true
+   },
+   "true": {
+    "medianArcsec": 0.001483,
+    "maxAbsArcsec": 0.256898
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   },
+   "nearSun": {
+    "thresholdDeg": 0.3,
+    "away": {
+     "n": 14622,
+     "medianArcsec": 0.000226,
+     "maxAbsArcsec": 0.002636
+    },
+    "near": {
+     "n": 25,
+     "medianArcsec": 0.000186,
+     "maxAbsArcsec": 0.004363
+    },
+    "beyondGate": {
+     "n": 0
+    }
+   }
+  },
+  "true-pushya": {
+   "swissMode": "SE_SIDM_TRUE_PUSHYA",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": 0.00028,
+    "maxAbsArcsec": 0.543838,
+    "passes": false
+   },
+   "true": {
+    "medianArcsec": 0.001526,
+    "maxAbsArcsec": 0.485384
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   },
+   "nearSun": {
+    "thresholdDeg": 0.3,
+    "away": {
+     "n": 14628,
+     "medianArcsec": 0.00028,
+     "maxAbsArcsec": 0.002089
+    },
+    "near": {
+     "n": 19,
+     "medianArcsec": -0.000654,
+     "maxAbsArcsec": 0.543838
+    },
+    "beyondGate": {
+     "n": 12,
+     "maxElongationDeg": 0.1966,
+     "maxAbsDifferenceArcsec": 0.543838,
+     "swissDeflectionRangeArcsec": [
+      1.0,
+      2.8
+     ]
+    }
+   }
+  },
+  "galactic-center": {
+   "swissMode": "SE_SIDM_GALCENT_0SAG",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": 0.019496,
+    "maxAbsArcsec": 0.100779,
+    "passes": false
+   },
+   "true": {
+    "medianArcsec": 0.020681,
+    "maxAbsArcsec": 0.341072
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   },
+   "nearSun": {
+    "thresholdDeg": 0.3,
+    "away": {
+     "n": 14620,
+     "medianArcsec": 0.019492,
+     "maxAbsArcsec": 0.100779
+    },
+    "near": {
+     "n": 27,
+     "medianArcsec": 0.027462,
+     "maxAbsArcsec": 0.090056
+    },
+    "beyondGate": {
+     "n": 12801,
+     "maxElongationDeg": 179.9885,
+     "maxAbsDifferenceArcsec": 0.100779,
+     "swissDeflectionRangeArcsec": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  }
+ },
+ "userDefined": {
+  "user-j1900": {
+   "swissMode": "SE_SIDM_USER",
+   "t0TT": 2415020.0,
+   "value": 22.46,
+   "n": 14647,
+   "mean": {
+    "medianArcsec": -4.8e-05,
+    "maxAbsArcsec": 0.001006,
+    "passes": true
+   },
+   "true": {
+    "medianArcsec": 0.001277,
+    "maxAbsArcsec": 0.256165
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   }
+  },
+  "user-b1950": {
+   "swissMode": "SE_SIDM_USER",
+   "t0TT": 2433282.5,
+   "value": 23.15,
+   "n": 14647,
+   "mean": {
+    "medianArcsec": 0.000169,
+    "maxAbsArcsec": 0.001223,
+    "passes": true
+   },
+   "true": {
+    "medianArcsec": 0.001494,
+    "maxAbsArcsec": 0.256367
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   }
+  },
+  "user-j2000": {
+   "swissMode": "SE_SIDM_USER",
+   "t0TT": 2451545.0,
+   "value": 23.85,
+   "n": 14647,
+   "mean": {
+    "medianArcsec": 0.000231,
+    "maxAbsArcsec": 0.001285,
+    "passes": true
+   },
+   "true": {
+    "medianArcsec": 0.001556,
+    "maxAbsArcsec": 0.256429
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   }
+  }
+ },
+ "diagnostics": {
+  "raman": {
+   "what": "SE_SIDM_RAMAN's own constant at JD 2415020.0 TT given to userAyanamsa (model newcomb)",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": -0.002122,
+    "maxAbsArcsec": 0.002354,
+    "passes": true
+   },
+   "true": {
+    "medianArcsec": -0.000797,
+    "maxAbsArcsec": 0.258239
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   }
+  },
+  "yukteswar": {
+   "what": "SE_SIDM_YUKTESHWAR's own constant at JD 2415020.0 TT given to userAyanamsa (model engine)",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": -4.8e-05,
+    "maxAbsArcsec": 0.001006,
+    "passes": true
+   },
+   "true": {
+    "medianArcsec": 0.001277,
+    "maxAbsArcsec": 0.256165
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   }
+  },
+  "krishnamurti": {
+   "what": "SE_SIDM_KRISHNAMURTI's own constant at JD 2415020.0 TT given to userAyanamsa (model newcomb)",
+   "n": 14647,
+   "mean": {
+    "medianArcsec": -0.002122,
+    "maxAbsArcsec": 0.002354,
+    "passes": true
+   },
+   "true": {
+    "medianArcsec": -0.000797,
+    "maxAbsArcsec": 0.258239
+   },
+   "nutationDifference": {
+    "medianArcsec": 0.001217,
+    "maxAbsArcsec": 0.256392
+   },
+   "deltaTDifferenceSeconds": {
+    "median": -0.126,
+    "maxAbs": 36.971
+   }
+  }
+ },
+ "swissVersion": "2.10.03"
+}

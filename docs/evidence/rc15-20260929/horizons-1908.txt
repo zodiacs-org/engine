@@ -1,0 +1,18 @@
+Target body name: Sun (10)                        {source: DE441}
+Start time      : A.D. 1908-Feb-11 09:23:00.0000 UT      
+$$SOE
+ 1908-Feb-11 09:23     321.2707941  -0.0000640
+ 1908-Feb-11 09:24     321.2714965  -0.0000640
+$$EOE
+Target body name: Moon (301)                      {source: DE441}
+Start time      : A.D. 1908-Feb-11 09:23:00.0000 UT      
+$$SOE
+ 1908-Feb-11 09:23      76.3230925  -2.4083508
+ 1908-Feb-11 09:24      76.3314796  -2.4076730
+$$EOE
+Target body name: Mars (499)                      {source: mar099}
+Start time      : A.D. 1908-Feb-11 09:23:00.0000 UT      
+$$SOE
+ 1908-Feb-11 09:23      21.8469781   0.2301710
+ 1908-Feb-11 09:24      21.8474617   0.2301809
+$$EOE

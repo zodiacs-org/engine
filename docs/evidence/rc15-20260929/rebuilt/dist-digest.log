@@ -1,0 +1,10 @@
+# SHA-256 over the sorted list of SHA-256 digests of dist/*.js and dist/*.d.ts: (cd dist && ls *.js *.d.ts | sort | xargs sha256sum) | sha256sum
+## the checkout's dist/ after gates.sh, last built on Node v24.21.0
+1b09c94fca9e752199ade843377f1fff5beed9ab01384f1daa74a0e1128ffaa2
+## the checkout's dist/ built again on Node v22.22.2
+1b09c94fca9e752199ade843377f1fff5beed9ab01384f1daa74a0e1128ffaa2
+## dist/ of the archive packed from the tree on Node v22.22.2 (pack-determinism.log, first), extracted
+1b09c94fca9e752199ade843377f1fff5beed9ab01384f1daa74a0e1128ffaa2
+## dist/ of the re-cut's archive, SHA-256 bddfb3b7..., extracted
+1b09c94fca9e752199ade843377f1fff5beed9ab01384f1daa74a0e1128ffaa2
+## files: 48 in the build, 48 in the archive

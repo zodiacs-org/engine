@@ -1,4 +1,5 @@
 import {
+  AstroTime,
   Body,
   EclipticGeoMoon,
   GeoMoonState,
@@ -7,26 +8,24 @@ import {
   RotateVector,
   Rotation_EQJ_ECT,
   SetDeltaTFunction,
-  SiderealTime,
   Vector,
   e_tilt
 } from "astronomy-engine";
-import type { AstroTime } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
 import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
-import { deltaT, deltaTAt } from "./deltat.js";
-import type { DeltaT } from "./deltat.js";
+import { deltaT } from "./deltat.js";
 import { computeAngles, computeHouses, eastPointOf, vertexOf } from "./houses.js";
 import { hellenisticLots, meanApogee, meanNodeLongitude, sectOf } from "./points.js";
 import { EPHEMERIS_SPAN, outsideReferenceSpan } from "./reference-span.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "./signs.js";
+import { elapsedDays, timeBasis } from "./time-scale.js";
+import type { TimeBasis, TimeScaleName } from "./time-scale.js";
 import type {
   BodyName,
   BodyPosition,
   Chart,
-  ChartFlag,
   ChartInput,
   ChartPoints,
   PointName,
@@ -35,23 +34,58 @@ import type {
 import { ENGINE_VERSION } from "./types.js";
 
 const RAD = 180 / Math.PI;
-const J2000_MS = Date.UTC(2000, 0, 1, 12);
+const DAY = 86_400_000;
 
 /**
- * astronomy-engine keeps one ΔT function for the whole module, and every time
- * it builds (in the light-time loop, for one) reads it. Each entry point below
- * therefore installs this engine's model, or a caller's pinned value for the
- * length of one computeChart call, before it computes anything. Code that
- * calls astronomy-engine directly should install `deltaT` itself.
+ * An instant as the ephemeris reads it: milliseconds on a time scale, and a
+ * caller's ΔT when one is pinned. Every sample of a calculation, speed samples
+ * included, is taken on the same scale and pin.
  */
-function clock(pin?: number): void {
-  SetDeltaTFunction(pin === undefined ? deltaT : () => pin);
+interface Clock {
+  scale: TimeScaleName;
+  pin: number | undefined;
 }
+
+const UTC_CLOCK: Clock = { scale: "utc", pin: undefined };
+
+/**
+ * astronomy-engine keeps one ΔT function for its whole module, and every time
+ * it builds (in the light-time loop, for one) reads it. So each sample
+ * installs its own ΔT (TT − UT1) as a constant and is built on its UT1, which
+ * gives it exactly the basis's UT1 and TT (src/time-scale.ts). Each entry
+ * point below restores the engine's model when it returns, so astronomy-engine
+ * is left with `deltaT` after any call. Code that calls astronomy-engine
+ * directly should install `deltaT` itself.
+ */
+function timeOf(basis: TimeBasis): AstroTime {
+  const { from, to } = EPHEMERIS_SPAN.daysFromJ2000;
+  // Refused outside EPHEMERIS_SPAN: every evaluation below takes its time from
+  // here, so the instant and each speed sample are checked, on a pinned clock
+  // as on the basis. A NaN (an instant past JavaScript's Date range) fails too.
+  if (!(basis.ttDays >= from && basis.ttDays <= to)) {
+    throw new RangeError(
+      "The instant is outside the ephemeris span: its Terrestrial Time, and that of each speed sample, " +
+        "must lie between 0001-04-30T12:00 and 3998-09-03T12:00 TT, the years astronomy-engine tabulates (EPHEMERIS_SPAN)."
+    );
+  }
+  const seconds = basis.deltaT.seconds;
+  SetDeltaTFunction(() => seconds);
+  return MakeTime(basis.ut1Days);
+}
+
+/** A speed sample stepDays from ms; timeOf refuses it outside EPHEMERIS_SPAN. */
+function sample(ms: number, stepDays: number): number {
+  return ms + stepDays * DAY;
+}
+
+const basisAt = (ms: number, clock: Clock): TimeBasis => timeBasis(ms, clock.scale, clock.pin);
+const timeAt = (ms: number, clock: Clock): AstroTime => timeOf(basisAt(ms, clock));
 
 /**
  * astronomy-engine reports an input it cannot evaluate by throwing a string,
  * not an Error. Every entry point below turns such a throw into a RangeError
  * that keeps the original value as its cause; Error objects pass unchanged.
+ * It also restores the engine's ΔT model, whatever happened.
  */
 function evaluated<T>(run: () => T): T {
   try {
@@ -59,38 +93,65 @@ function evaluated<T>(run: () => T): T {
   } catch (thrown) {
     if (thrown instanceof Error) throw thrown;
     throw new RangeError(`The ephemeris could not evaluate this instant: ${String(thrown)}`, { cause: thrown });
+  } finally {
+    SetDeltaTFunction(deltaT);
   }
 }
 
 /**
- * astronomy-engine's time for date on the installed ΔT clock, refused outside
- * EPHEMERIS_SPAN. Every evaluation below takes its time from here, so the
- * instant and each speed sample are checked, on a pinned clock as on the model.
+ * Greenwich apparent sidereal time, hours: astronomy-engine 2.1.19's own
+ * sidereal_time, term for term (the Earth rotation angle from UT1, the IAU
+ * 2006 polynomial and the equation of the equinoxes on TT), without its cache,
+ * which is keyed by TT alone and so cannot tell two UT1s at one TT apart.
  */
-function timeOf(date: Date): AstroTime {
-  // A speed sample past the end of JavaScript's Date range is an invalid Date,
-  // and so outside the span too.
-  const time = Number.isFinite(date.getTime()) ? MakeTime(date) : null;
-  const { from, to } = EPHEMERIS_SPAN.daysFromJ2000;
-  if (!(time !== null && time.tt >= from && time.tt <= to)) {
-    throw new RangeError(
-      "The instant is outside the ephemeris span: its Terrestrial Time, and that of each speed sample, " +
-        "must lie between 0001-04-30T12:00 and 3998-09-03T12:00 TT, the years astronomy-engine tabulates (EPHEMERIS_SPAN)."
-    );
-  }
-  return time;
+export function gastHours(time: AstroTime): number {
+  const t = time.tt / 36525;
+  const eqeq = 15 * e_tilt(time).ee;
+  const thet1 = 0.779057273264 + 0.00273781191135448 * time.ut;
+  const thet3 = time.ut % 1;
+  let theta = 360 * ((thet1 + thet3) % 1);
+  if (theta < 0) theta += 360;
+  const st =
+    eqeq +
+    0.014506 +
+    ((((-0.0000000368 * t - 0.000029956) * t - 0.00000044) * t + 1.3915817) * t + 4612.156534) * t;
+  let gst = ((st / 3600 + theta) % 360) / 15;
+  if (gst < 0) gst += 24;
+  return gst;
 }
 
-/** A speed sample stepDays from date. */
-function sampleDate(date: Date, stepDays: number): Date {
-  return new Date(date.getTime() + stepDays * 86_400_000);
+/**
+ * Run `fn` with astronomy-engine's ΔT fixed at `seconds` (with 0, an
+ * AstroTime built from TT days has exactly that TT), restoring the engine's
+ * model afterwards. For modules that call astronomy-engine directly.
+ */
+export function onEngineClock<T>(seconds: number, fn: () => T): T {
+  SetDeltaTFunction(() => seconds);
+  try {
+    return fn();
+  } finally {
+    SetDeltaTFunction(deltaT);
+  }
 }
 
-function deltaTFor(date: Date, pin: number | undefined): DeltaT {
-  if (pin !== undefined) {
-    return { seconds: pin, sigma: null, model: "pinned", table: null, tableDigest: null, segment: "pinned" };
-  }
-  return deltaTAt((date.getTime() - J2000_MS) / 86_400_000);
+/**
+ * Run `fn` on astronomy-engine's time for an instant read as a chart reads
+ * its own: on `scale` (UTC unless given) and the engine's time basis, or a
+ * caller's pinned ΔT, refused outside EPHEMERIS_SPAN. A string astronomy-engine
+ * throws becomes a RangeError, and the engine's ΔT model is restored when `fn`
+ * returns. For modules that call astronomy-engine directly and must agree
+ * with a chart's instant.
+ */
+export function onChartClock<T>(
+  ms: number,
+  scale: TimeScaleName,
+  pin: number | undefined,
+  fn: (time: AstroTime, basis: TimeBasis) => T
+): T {
+  return evaluated(() => {
+    const basis = timeBasis(ms, scale, pin);
+    return fn(timeOf(basis), basis);
+  });
 }
 
 const PLANETS = [
@@ -105,8 +166,7 @@ const PLANETS = [
   { name: "Pluto", body: Body.Pluto }
 ] as const satisfies readonly { name: BodyName; body: Body }[];
 
-function eclipticOfDate(body: Body, date: Date): { lon: number; lat: number } {
-  const time = timeOf(date);
+function eclipticOfDate(body: Body, time: AstroTime): { lon: number; lat: number } {
   const equatorial = GeoVector(body, time, true);
   const ecliptic = RotateVector(Rotation_EQJ_ECT(time), equatorial);
   const lon = normalizeLongitude(Math.atan2(ecliptic.y, ecliptic.x) * RAD);
@@ -114,14 +174,13 @@ function eclipticOfDate(body: Body, date: Date): { lon: number; lat: number } {
   return { lon, lat };
 }
 
-function moonOfDate(date: Date): { lon: number; lat: number } {
-  const moon = EclipticGeoMoon(timeOf(date));
+function moonOfDate(time: AstroTime): { lon: number; lat: number } {
+  const moon = EclipticGeoMoon(time);
   return { lon: normalizeLongitude(moon.lon), lat: moon.lat };
 }
 
 /** Ascending node of the Moon's instantaneous geocentric orbit plane. */
-function trueNodeLongitude(date: Date): number {
-  const time = timeOf(date);
+function trueNodeLongitude(time: AstroTime): number {
   const state = GeoMoonState(time);
   const angularMomentum = {
     x: state.y * state.vz - state.z * state.vy,
@@ -135,22 +194,25 @@ function trueNodeLongitude(date: Date): number {
   return normalizeLongitude(Math.atan2(eclipticMomentum.x, -eclipticMomentum.y) * RAD);
 }
 
-function longitudeAt(body: BodyName, date: Date): number {
-  if (body === "Moon") return moonOfDate(date).lon;
-  if (body === "North Node") return trueNodeLongitude(date);
+function longitudeAt(body: BodyName, ms: number, clock: Clock): number {
+  return longitudeOn(body, basisAt(ms, clock));
+}
+
+function longitudeOn(body: BodyName, basis: TimeBasis): number {
+  const time = timeOf(basis);
+  if (body === "Moon") return moonOfDate(time).lon;
+  if (body === "North Node") return trueNodeLongitude(time);
   if (body === "South Node") {
-    return normalizeLongitude(trueNodeLongitude(date) + 180);
+    return normalizeLongitude(trueNodeLongitude(time) + 180);
   }
   const planet = PLANETS.find((candidate) => candidate.name === body);
   if (!planet) throw new RangeError(`Unknown body: ${body}`);
-  return eclipticOfDate(planet.body, date).lon;
+  return eclipticOfDate(planet.body, time).lon;
 }
 
+/** Apparent longitude at a UTC instant, on the engine's time basis. */
 export function bodyLongitude(body: BodyName, date: Date): number {
-  return evaluated(() => {
-    clock();
-    return longitudeAt(body, date);
-  });
+  return evaluated(() => longitudeAt(body, date.getTime(), UTC_CLOCK));
 }
 
 /**
@@ -158,27 +220,38 @@ export function bodyLongitude(body: BodyName, date: Date): number {
  * engine reports, by a central difference over plus/minus 0.001 day (86.4 s).
  * The true node keeps plus/minus six hours, where its short-period noise
  * would otherwise dominate. Both samples must lie in EPHEMERIS_SPAN, so
- * positions need an instant at least six hours inside it.
+ * positions need an instant at least six hours inside it. The difference is
+ * divided by the time between the samples: twice the step on the input's
+ * scale, or their TT interval where a leap second or a change of the time
+ * basis lies between them (`elapsedDays` in src/time-scale.ts).
  */
 export const SPEED_STEP_DAYS = 0.001;
 export const NODE_SPEED_STEP_DAYS = 0.25;
 
 export function longitudeSpeed(body: BodyName, date: Date): number {
-  return evaluated(() => {
-    clock();
-    return speedAt(body, date);
-  });
+  return evaluated(() => speedAt(body, date.getTime(), UTC_CLOCK));
 }
 
-function speedAt(body: BodyName, date: Date): number {
-  const stepDays =
-    body === "North Node" || body === "South Node" ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
-  const before = longitudeAt(body, sampleDate(date, -stepDays));
-  const after = longitudeAt(body, sampleDate(date, stepDays));
-  let difference = after - before;
+/** A central difference of `longitudeOf` over plus/minus `stepDays` about `ms`, per day elapsed between the samples. */
+function centralDifference(
+  longitudeOf: (basis: TimeBasis) => number,
+  ms: number,
+  clock: Clock,
+  stepDays: number
+): number {
+  const before = basisAt(sample(ms, -stepDays), clock);
+  const lonBefore = longitudeOf(before);
+  const after = basisAt(sample(ms, stepDays), clock);
+  let difference = longitudeOf(after) - lonBefore;
   if (difference > 180) difference -= 360;
   if (difference < -180) difference += 360;
-  return difference / (2 * stepDays);
+  return difference / elapsedDays(before, after, 2 * stepDays);
+}
+
+function speedAt(body: BodyName, ms: number, clock: Clock): number {
+  const stepDays =
+    body === "North Node" || body === "South Node" ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
+  return centralDifference((basis) => longitudeOn(body, basis), ms, clock, stepDays);
 }
 
 function position(body: BodyName, lon: number, lat: number, speed: number): BodyPosition {
@@ -194,26 +267,23 @@ function position(body: BodyName, lon: number, lat: number, speed: number): Body
 }
 
 export function computeBodies(date: Date): BodyPosition[] {
-  return evaluated(() => {
-    clock();
-    return bodiesAt(date);
-  });
+  return evaluated(() => bodiesAt(date.getTime(), UTC_CLOCK));
 }
 
-function bodiesAt(date: Date): BodyPosition[] {
+function bodiesAt(ms: number, clock: Clock): BodyPosition[] {
   const bodies: BodyPosition[] = [];
   for (const planet of PLANETS) {
-    const coordinates = eclipticOfDate(planet.body, date);
+    const coordinates = eclipticOfDate(planet.body, timeAt(ms, clock));
     bodies.push(
-      position(planet.name, coordinates.lon, coordinates.lat, speedAt(planet.name, date))
+      position(planet.name, coordinates.lon, coordinates.lat, speedAt(planet.name, ms, clock))
     );
   }
 
-  const moon = moonOfDate(date);
-  bodies.splice(1, 0, position("Moon", moon.lon, moon.lat, speedAt("Moon", date)));
+  const moon = moonOfDate(timeAt(ms, clock));
+  bodies.splice(1, 0, position("Moon", moon.lon, moon.lat, speedAt("Moon", ms, clock)));
 
-  const northNode = trueNodeLongitude(date);
-  const nodeSpeed = speedAt("North Node", date);
+  const northNode = trueNodeLongitude(timeAt(ms, clock));
+  const nodeSpeed = speedAt("North Node", ms, clock);
   bodies.push(
     position("North Node", northNode, 0, nodeSpeed),
     position("South Node", normalizeLongitude(northNode + 180), 0, nodeSpeed)
@@ -221,21 +291,21 @@ function bodiesAt(date: Date): BodyPosition[] {
   return bodies;
 }
 
+const clockOf = (input: Pick<ChartInput, "timeScale" | "deltaT">): Clock => ({
+  scale: input.timeScale ?? "utc",
+  pin: input.deltaT
+});
+
 export function computeChart(input: ChartInput): Chart {
-  const pin = input.deltaT;
-  return evaluated(() => {
-    clock(pin);
-    try {
-      return chartAt(input, pin);
-    } finally {
-      if (pin !== undefined) clock();
-    }
-  });
+  return evaluated(() => chartAt(input));
 }
 
-function chartAt(input: ChartInput, pin: number | undefined): Chart {
+function chartAt(input: ChartInput): Chart {
   const flags = [...(input.flags ?? [])];
-  const bodies = bodiesAt(input.utc);
+  const ms = input.utc.getTime();
+  const clock = clockOf(input);
+  const bodies = bodiesAt(ms, clock);
+  const basis = timeBasis(ms, clock.scale, clock.pin);
   let angles = null;
   let houses = null;
 
@@ -243,9 +313,10 @@ function chartAt(input: ChartInput, pin: number | undefined): Chart {
     // Apparent sidereal time already carries the nutation in longitude, so the
     // ecliptic it is projected onto must be the true one of date: the mean
     // obliquity plus the nutation in obliquity, from the same model and on TT.
-    const time = timeOf(input.utc);
+    // The Earth's rotation is read from UT1.
+    const time = timeOf(basis);
     const angleInput = {
-      gastHours: SiderealTime(time),
+      gastHours: gastHours(time),
       latitude: input.latitude,
       longitude: input.longitude,
       obliquity: e_tilt(time).tobl
@@ -266,26 +337,18 @@ function chartAt(input: ChartInput, pin: number | undefined): Chart {
     houses,
     aspects: findAspects(bodies),
     flags,
-    deltaT: deltaTFor(input.utc, pin),
+    deltaT: basis.deltaT,
+    timeScale: basis.timeScale,
     engineVersion: ENGINE_VERSION
   };
 }
 
-/** The mean node and the mean apogee at an instant, on the engine's clock. */
-function meanLunarPoints(date: Date): { node: number; apogee: { lon: number; lat: number } } {
-  const time = timeOf(date);
+/** The mean node and the mean apogee at an instant's time basis, on the chart's clock. */
+function meanLunarPoints(basis: TimeBasis): { node: number; apogee: { lon: number; lat: number } } {
+  const time = timeOf(basis);
   const centuries = time.tt / 36525;
   const nutation = e_tilt(time).dpsi / 3600;
   return { node: meanNodeLongitude(centuries, nutation), apogee: meanApogee(centuries, nutation) };
-}
-
-function centralSpeed(longitudeOf: (date: Date) => number, date: Date): number {
-  const before = longitudeOf(sampleDate(date, -SPEED_STEP_DAYS));
-  const after = longitudeOf(sampleDate(date, SPEED_STEP_DAYS));
-  let difference = after - before;
-  if (difference > 180) difference -= 360;
-  if (difference < -180) difference += 360;
-  return difference / (2 * SPEED_STEP_DAYS);
 }
 
 function pointPosition(point: PointName, lon: number, lat: number, speed: number | null): PointPosition {
@@ -301,29 +364,19 @@ function pointPosition(point: PointName, lon: number, lat: number, speed: number
 }
 
 /**
- * The chart's points, computed on the same clock as the chart: the caller's
- * pinned ΔT when the chart has one, the engine's model otherwise. The mean
- * node and Black Moon Lilith depend on the instant alone; the Vertex and the
- * East Point on the instant and the place; the lots on the chart's own
- * ascendant and bodies.
+ * The chart's points, computed on the same clock as the chart: its time
+ * scale and its pinned ΔT when it has one. The mean node and Black Moon
+ * Lilith depend on the instant alone; the Vertex and the East Point on the
+ * instant and the place; the lots on the chart's own ascendant and bodies.
  */
 export function computePoints(chart: Chart): ChartPoints {
-  const pin = chart.input.deltaT;
-  return evaluated(() => {
-    clock(pin);
-    try {
-      return pointsAt(chart);
-    } finally {
-      if (pin !== undefined) clock();
-    }
-  });
+  return evaluated(() => pointsAt(chart));
 }
 
 /**
  * Derive equatorial coordinates and declination aspects from the chart's full
- * ecliptic positions, using the provider's true obliquity on the chart's clock.
- * This preserves the caller's pinned Delta-T for the calculation, restores the
- * engine model afterwards, and adds no claim to the current natal receipt.
+ * ecliptic positions, using the provider's true obliquity on the chart's clock
+ * (its time scale and any pinned ΔT). This adds no claim to the natal receipt.
  */
 export function computeChartDeclinations(chart: Chart): ChartDeclinations {
   const input = chart?.input;
@@ -337,22 +390,24 @@ export function computeChartDeclinations(chart: Chart): ChartDeclinations {
   if (pin !== undefined && (!Number.isFinite(pin) || typeof pin !== "number" || Math.abs(pin) > 1e10)) {
     throw new RangeError("declination chart deltaT must be finite and at most 1e10 seconds in size.");
   }
+  const scale = input.timeScale ?? "utc";
   return evaluated(() => {
-    clock(pin);
-    try {
-      return { ...chartBodyDeclinations(bodies, e_tilt(timeOf(date)).tobl),
-        utc: date.toISOString(), deltaT: deltaTFor(date, pin) };
-    } finally {
-      if (pin !== undefined) clock();
-    }
+    const basis = timeBasis(date.getTime(), scale, pin);
+    return {
+      ...chartBodyDeclinations(bodies, e_tilt(timeOf(basis)).tobl),
+      utc: date.toISOString(),
+      deltaT: basis.deltaT
+    };
   });
 }
 
 function pointsAt(chart: Chart): ChartPoints {
   const { utc, latitude, longitude } = chart.input;
-  const mean = meanLunarPoints(utc);
-  const nodeSpeed = centralSpeed((date) => meanLunarPoints(date).node, utc);
-  const apogeeSpeed = centralSpeed((date) => meanLunarPoints(date).apogee.lon, utc);
+  const ms = utc.getTime();
+  const clock = clockOf(chart.input);
+  const mean = meanLunarPoints(basisAt(ms, clock));
+  const nodeSpeed = centralDifference((basis) => meanLunarPoints(basis).node, ms, clock, SPEED_STEP_DAYS);
+  const apogeeSpeed = centralDifference((basis) => meanLunarPoints(basis).apogee.lon, ms, clock, SPEED_STEP_DAYS);
   const points: PointPosition[] = [
     pointPosition("Mean Node", mean.node, 0, nodeSpeed),
     pointPosition("Mean South Node", mean.node + 180, 0, nodeSpeed),
@@ -361,9 +416,9 @@ function pointsAt(chart: Chart): ChartPoints {
   if (chart.angles === null || latitude === undefined || longitude === undefined) {
     return { sect: null, points };
   }
-  const time = timeOf(utc);
+  const time = timeAt(ms, clock);
   const angleInput = {
-    gastHours: SiderealTime(time),
+    gastHours: gastHours(time),
     latitude,
     longitude,
     obliquity: e_tilt(time).tobl

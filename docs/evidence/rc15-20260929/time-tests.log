@@ -1,0 +1,210 @@
+# v22.22.2; HEAD 5af1929 with the rc.15 changes uncommitted (the source commit's tree)
+## npx vitest run --reporter verbose src/time-scale.test.ts src/receipt-time-basis.test.ts src/geo/birthplace.test.ts src/geo/calendar.test.ts src/geo/flags.test.ts src/geo/zone-history.test.ts
+
+ RUN  v2.1.9 <checkout>
+
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.13 (the rc.8 conventions set) > still parses, under the set its engine recorded, with no time basis
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.13 (the rc.8 conventions set) > replays as a UTC request; today's basis moves the result by well under an arcsecond
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.13 (the rc.8 conventions set) > is refused with a time basis added, or under a version the set did not come from
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.14 (the rc.8 conventions set) > still parses, under the set its engine recorded, with no time basis
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.14 (the rc.8 conventions set) > replays as a UTC request under this engine, within the time basis's change
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.14 (the rc.8 conventions set) > is refused under a version after rc.14, and with a time basis added
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > records the scale, the basis and the ΔT it came with
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses the receipt's scale removed
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses an unknown receipt scale
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses the result's basis removed
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses another input scale
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses another basis
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses an unknown basis
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses UT1 − UTC moved 1 µs
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses UT1 − UTC beyond a second
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses its σ changed
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses a predicted source
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses no UT1 − UTC
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses another TAI − UTC
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses a fractional TAI − UTC
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses the list marked expired
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses ΔT moved 1 µs
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses the model's ΔT in the leap-second era
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses a model the set does not know
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses the IERS model without a basis to match
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > keeps another release's UT1 table as a claim, checked for shape only
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > is refused under an engine version before the set, which 0.1.1-rc.15 released
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > records the model before 1972, and after the IERS table the fallback band
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > records a pinned ΔT as the pinned basis
+ ✓ src/receipt-time-basis.test.ts > receipts of an instant on TT or UT1 > record the tt instant and replay the same request and result
+ ✓ src/receipt-time-basis.test.ts > receipts of an instant on TT or UT1 > record the ut1 instant and replay the same request and result
+ ✓ src/receipt-time-basis.test.ts > receipts of an instant on TT or UT1 > refuses a local resolution on any scale but UTC
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Buffalo 1870 uses the birthplace's mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Brest 1880 uses the birthplace's mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Omaha 1880 uses the birthplace's mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Porto 1880 uses the birthplace's mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > agrees with the zone at its own reference city: New York 1870
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > agrees with the zone at its own reference city: Chicago 1880
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > moves Paris before 1891 by the 3 s between the city index and tzdb
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Brest under Paris Mean Time, 1900 is unchanged, and no local mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Galway under Dublin Mean Time, 1885 is unchanged, and no local mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Porto under Lisbon Mean Time, 1890 is unchanged, and no local mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Amsterdam under Amsterdam Mean Time, 1900 is unchanged, and no local mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Kolkata under Madras time, 1900 is unchanged, and no local mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Monrovia under Monrovia Mean Time, 1960 is unchanged, and no local mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Buffalo under Eastern time, 1900 is unchanged, and no local mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > Buffalo today is unchanged, and no local mean time
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > follows backzone where the zone kept its own mean time longer than its link
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > keeps the calendar day of a zone that later moved across the date line
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > moves a skipped wall time forward by the gap the change to standard time left, and keeps its mean time (F-38)
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > takes the earlier instant of a wall time the change to standard time repeated
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > refuses the longitude null instead of ignoring it
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > refuses the longitude 200 instead of ignoring it
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > refuses the longitude -180.5 instead of ignoring it
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > refuses the longitude "74" instead of ignoring it
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > keeps a skipped or repeated date across a date-line move inside the era
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > treats a whole-minute mean time as local mean time too
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > bounds the departure in whole seconds, alike in every zone
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > ignores a longitude hours away from the zone, as a birthplace in another zone
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > leaves UTC, which has no local mean time era, to Intl
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > leaves Etc/GMT+5, which has no local mean time era, to Intl
+ ✓ src/geo/birthplace.test.ts > birthplace local mean time > produces portable receipts that validate, the mean time recorded
+ ✓ src/geo/birthplace.test.ts > loading the birthplace clock > refuses to guess an early time before the zone is prepared, and needs nothing after 1970
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > records its tzdb release and source digest
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > holds whole seconds, every era ending before 1953
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > ends America/New_York at 1883-11-18T17:00:00.000Z
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > ends America/Chicago at 1883-11-18T18:00:00.000Z
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > ends Europe/Paris at 1891-03-15T23:50:39.000Z
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > ends Europe/Dublin at 1880-08-02T00:25:21.000Z
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > ends Europe/Lisbon at 1884-01-01T00:36:45.000Z
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > ends Europe/Oslo at 1894-12-31T23:17:00.000Z
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > ends Asia/Manila at 1899-09-06T04:00:00.000Z
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > ends America/Anchorage at 1900-08-20T21:59:36.000Z
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > ends America/Kralendijk at 1912-02-12T04:35:47.000Z
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > ends Europe/Isle_of_Man at 1883-03-30T00:17:55.000Z
+ ✓ src/geo/birthplace.test.ts > the local mean time eras shipped > matches Intl on the offset change where the zone and the host agree
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > agrees, day by day from 1500 to 2199, with two counters walked from the 1582 changeover 1149ms
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > reads Old Style 1917-10-25 as 1917-11-07
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > reads Old Style 1918-01-31 as 1918-02-13
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > reads Old Style 1900-02-29 as 1900-03-13
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > reads Old Style 1800-02-29 as 1800-03-12
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > reads Old Style 2100-02-29 as 2100-03-14
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > reads Old Style 1752-09-02 as 1752-09-13
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > reads Old Style 1923-02-15 as 1923-02-28
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > reads Old Style 1800-01-01 as 1800-01-12
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > reads Old Style 2199-12-17 as 2199-12-31
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > reads Old Style 0004-02-29 as 0004-02-27
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > reads Old Style 0200-03-01 as 0200-03-01
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > keeps each calendar's own leap rule
+ ✓ src/geo/calendar.test.ts > Julian and Gregorian calendar dates > counts Julian Day Numbers from -4712-01-01 Julian, 0
+ ✓ src/geo/calendar.test.ts > an Old Style birth > gives the same chart in Petrograd as typing its Gregorian date, 1917-11-07
+ ✓ src/geo/calendar.test.ts > an Old Style birth > records the calendar as written in a receipt that validates
+ ✓ src/geo/calendar.test.ts > an Old Style birth > refuses a date that does not exist in the calendar chosen for it, and a calendar it does not know
+ ✓ src/geo/calendar.test.ts > an Old Style birth > refuses unknown keys instead of ignoring them (the site's F-36)
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > names every country once, with a valid first New Style day after the Old Style one
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > derives the site table's last Old Style day for every Julian country
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives RU its first New Style day, 1918-02-14
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives BY its first New Style day, 1918-02-14
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives UA its first New Style day, 1918-03-01
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives EE its first New Style day, 1918-03-01
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives LV its first New Style day, 1918-02-14
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives LT its first New Style day, 1915-05-25
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives GE its first New Style day, 1918-05-01
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives GR its first New Style day, 1923-03-01
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives BG its first New Style day, 1916-04-14
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives RO its first New Style day, 1919-04-14
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives RS its first New Style day, 1919-01-28
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives TR its first New Style day, 1917-03-01
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives GB its first New Style day, 1752-09-14
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives US its first New Style day, 1752-09-14
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives CA its first New Style day, 1752-09-14
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives SE its first New Style day, 1753-03-01
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives FI its first New Style day, 1753-03-01
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives DE its first New Style day, 1700-03-01
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives NL its first New Style day, 1701-05-12
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives CH its first New Style day, 1798-12-25
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives JP its first New Style day, 1873-01-01
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives CN its first New Style day, 1912-01-01
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives KR its first New Style day, 1896-01-01
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives EG its first New Style day, 1875-09-11
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > gives FR its first New Style day, 1582-12-20
+ ✓ src/geo/calendar.test.ts > the Gregorian adoption table > marks exactly the countries whose calendar before was not the Julian
+ ✓ src/geo/calendar.test.ts > the birthplace country's calendar note > suggests the Old Style for a Russian date before 14 February 1918 left Gregorian
+ ✓ src/geo/calendar.test.ts > the birthplace country's calendar note > is silent when the calendar matches the country's
+ ✓ src/geo/calendar.test.ts > the birthplace country's calendar note > notes an Old Style date that falls after the country took the New Style
+ ✓ src/geo/calendar.test.ts > the birthplace country's calendar note > says the date cannot be converted where the calendar before was not the Julian
+ ✓ src/geo/calendar.test.ts > the birthplace country's calendar note > follows Greece to the last change, in 1923, and knows nothing of other countries
+ ✓ src/geo/calendar.test.ts > the birthplace country's calendar note > comes with a resolved birth when a country is given
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > Stockholm, July 1947
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > Stockholm, June 1947
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > Amsterdam, 1938
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > Rotterdam, 1880
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > Reykjavik, 1950
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > Oslo, 1960
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > Oranjestad, 1943
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > St John's, Antigua, 1930
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > Copenhagen, 1945
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > Kinshasa, 1900
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > changes nothing where the host already has the place's history
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > resolves across the hand-over to the host at 1970
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > matches a zone name in any letter case, as Intl does
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > reads the host where the shipped history has no local time ("-00")
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > gives a name whose backzone history differs after 1970 the default build's history, so 1970 cannot jump
+ ✓ src/geo/zone-history.test.ts > the shipped zone history before 1970 > offers the zone's own clock as zoneOffsetAt
+ ✓ src/geo/zone-history.test.ts > loading the shipped history > refuses a time before 1970 until the zone is prepared, and nothing else prepares it
+ ✓ src/geo/zone-history.test.ts > loading the shipped history > prepares 1 January 1970, whose early wall times fall in 1969
+ ✓ src/geo/zone-history.test.ts > loading the shipped history > refuses a malformed date or zone
+ ✓ src/geo/zone-history.test.ts > loading the shipped history > loads a bucket once, and does not remember a failed load
+ ✓ src/geo/zone-history.test.ts > loading the shipped history > raises no unhandled rejection when a caller stops waiting for a failed load
+ ✓ src/geo/zone-history.test.ts > the audit's 98-zone divergence list > is the audit's list
+ ✓ src/geo/zone-history.test.ts > the audit's 98-zone divergence list > reproduces every segment before 1970 but six, which the reference got otherwise
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > Guam 1890: local mean time in whole minutes
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > Kolkata 1900: Madras time, a legal time with seconds
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > Monrovia 1960: Monrovia Mean Time, legal
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > New York 1883-11-18 12:02: the change to standard time repeated the minute
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > Apia 2011-12-30: Samoa skipped the day across the date line
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > Kwajalein 1993-08-21: skipped across the date line
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > classified them wrongly under the old rule, which receipts from before this set still use
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 2024-03-10 02:30 in America/New_York is a gap caused by dst
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 2024-11-03 01:30 in America/New_York is a fold caused by dst
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 1941-05-04 02:30 in Europe/London is a gap caused by dst
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 1941-08-10 02:30 in Europe/London is a fold caused by dst
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 2011-03-27 02:30 in Europe/Moscow is a gap caused by legal-change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 2014-10-26 01:30 in Europe/Moscow is a fold caused by legal-change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 1972-01-07 00:20 in Africa/Monrovia is a gap caused by legal-change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 1892-07-04 12:00 in Pacific/Apia is a fold caused by date-line
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > gives an ordinary time the transition behind its offset where the shipped history has one
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > is the list tzdata 2025c ships, intact by its own hash, with its update and expiry
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > holds every change of the list, from 10 s in 1972 to 37 s since 2017
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > gives TAI − UTC at 1972-01-01T00:00:00.000Z as 10 s, and TT = UTC + (TAI − UTC) + 32.184 s exactly
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > gives TAI − UTC at 1972-06-30T23:59:59.999Z as 10 s, and TT = UTC + (TAI − UTC) + 32.184 s exactly
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > gives TAI − UTC at 1972-07-01T00:00:00.000Z as 11 s, and TT = UTC + (TAI − UTC) + 32.184 s exactly
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > gives TAI − UTC at 1998-12-31T23:59:59.999Z as 31 s, and TT = UTC + (TAI − UTC) + 32.184 s exactly
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > gives TAI − UTC at 1999-01-01T00:00:00.000Z as 32 s, and TT = UTC + (TAI − UTC) + 32.184 s exactly
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > gives TAI − UTC at 2016-12-31T23:59:59.999Z as 36 s, and TT = UTC + (TAI − UTC) + 32.184 s exactly
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > gives TAI − UTC at 2017-01-01T00:00:00.000Z as 37 s, and TT = UTC + (TAI − UTC) + 32.184 s exactly
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > gives TAI − UTC at 2026-06-27T23:59:59.999Z as 37 s, and TT = UTC + (TAI − UTC) + 32.184 s exactly
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > counts the leap second itself: TT runs 2 s from 23:59:59 to 00:00:00 across it
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > keeps UT1 and ΔT continuous across a leap second, where UT1 − UTC steps by a second
+ ✓ src/time-scale.test.ts > the leap-second list (IERS, as shipped in tzdata 2025c) > carries 37 s past the list's expiry, and says so
+ ✓ src/time-scale.test.ts > UT1 − UTC from IERS finals2000A.all of 2026-09-24 > is the file the ΔT table came from
+ ✓ src/time-scale.test.ts > UT1 − UTC from IERS finals2000A.all of 2026-09-24 > reproduces every daily IERS value, observed and predicted, within the table's stated bound 1827ms
+ ✓ src/time-scale.test.ts > UT1 − UTC from IERS finals2000A.all of 2026-09-24 > falls back to 0 within ±0.9 s outside the table
+ ✓ src/time-scale.test.ts > UT1 − UTC from IERS finals2000A.all of 2026-09-24 > gives ΔT = 32.184 s + (TAI − UTC) − (UT1 − UTC) inside it, with the band of UT1 − UTC
+ ✓ src/time-scale.test.ts > the time basis of a chart > reads civil time as UT1 and takes ΔT from the model before 1972 and after the table
+ ✓ src/time-scale.test.ts > the time basis of a chart > uses UT1 for the angles: a UTC chart turns the sky as a UT1 chart at UTC + (UT1 − UTC)
+ ✓ src/time-scale.test.ts > the time basis of a chart > uses TT from the leap seconds for the positions: a UTC instant is TT − 69.184 s since 2017
+ ✓ src/time-scale.test.ts > the time basis of a chart > reads UT1 and TT input before 1972 through the model, both ways
+ ✓ src/time-scale.test.ts > the time basis of a chart > round-trips UTC, UT1 and TT inside the leap-second era
+ ✓ src/time-scale.test.ts > the time basis of a chart > keeps a pin as TT − UT1 with UT1 from the instant
+ ✓ src/time-scale.test.ts > the time basis of a chart > refuses the time scale "UTC"
+ ✓ src/time-scale.test.ts > the time basis of a chart > refuses the time scale "TT"
+ ✓ src/time-scale.test.ts > the time basis of a chart > refuses the time scale "tai"
+ ✓ src/time-scale.test.ts > the time basis of a chart > refuses the time scale ""
+ ✓ src/time-scale.test.ts > the time basis of a chart > refuses the time scale null
+ ✓ src/time-scale.test.ts > the time basis of a chart > refuses the time scale 0
+ ✓ src/time-scale.test.ts > the time basis of a chart > refuses the time scale {}
+ ✓ src/time-scale.test.ts > the time basis of a chart > scans Saturn returns from a TT birth on UTC 406ms
+
+ Test Files  6 passed (6)
+      Tests  198 passed (198)
+   Start at  08:49:58
+   Duration  8.34s (transform 4.82s, setup 0ms, collect 7.72s, tests 6.45s, environment 2ms, prepare 1.32s)
+
+exit 0

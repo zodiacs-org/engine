@@ -1,0 +1,31 @@
+# sh birth-data-mutations.sh <checkout> <scratch>, on this branch's working tree, 2026-09-29, Node v22.22.2
+none (control)
+  d90a00a: signs pass, dated pass, capri pass, 211 pass
+  invented: signs pass, dated pass, capri pass, 211 pass
+house counted one short (placeFrom)
+  d90a00a: signs FAIL, dated FAIL, capri pass, 211 pass
+  invented: signs FAIL, dated FAIL, capri pass, 211 pass
+sign one ahead (annualProfection)
+  d90a00a: signs FAIL, dated pass, capri pass, 211 pass
+  invented: signs FAIL, dated pass, capri pass, 211 pass
+age counted from one (solar-return years)
+  d90a00a: signs pass, dated FAIL, capri pass, 211 pass
+  invented: signs pass, dated FAIL, capri pass, 211 pass
+Scorpio ruled by Pluto
+  d90a00a: signs pass, dated pass, capri pass, 211 pass
+  invented: signs FAIL, dated pass, capri pass, 211 pass
+365.25-day years by default
+  d90a00a: signs pass, dated pass, capri FAIL, 211 FAIL
+  invented: signs pass, dated pass, capri FAIL, 211 FAIL
+30.4375-day months
+  d90a00a: signs pass, dated pass, capri FAIL, 211 FAIL
+  invented: signs pass, dated pass, capri FAIL, 211 FAIL
+loosing after eleven signs
+  d90a00a: signs pass, dated pass, capri FAIL, 211 FAIL
+  invented: signs pass, dated pass, capri FAIL, 211 FAIL
+loosing to the sign after the opposite
+  d90a00a: signs pass, dated pass, capri FAIL, 211 FAIL
+  invented: signs pass, dated pass, capri FAIL, 211 FAIL
+no loosing of the bond
+  d90a00a: signs pass, dated pass, capri FAIL, 211 FAIL
+  invented: signs pass, dated pass, capri FAIL, 211 FAIL

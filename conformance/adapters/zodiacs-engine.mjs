@@ -33,8 +33,11 @@ function seconds(minutes) {
 }
 
 function chartAt(input, houseSystem = 'porphyry') {
+  // The instant is given as UT1; from 0.1.1-rc.15 the engine reads an instant
+  // as UTC unless told its scale.
   return engine.natalChart({
     utc: dateOfJd(input.jd_ut1),
+    timeScale: 'ut1',
     timeKnown: true,
     latitude: input.lat,
     longitude: input.lon,
@@ -46,8 +49,8 @@ const flagsMeta = (chart) => (chart.flags.length ? { meta: { flags: chart.flags 
 
 const handlers = {
   'position.apparent.ecliptic-true-of-date'(input) {
-    // With ΔT pinned at zero the engine's clock reads the given instant as TT.
-    const chart = engine.natalChart({ utc: dateOfJd(input.jd_tt), timeKnown: false, deltaT: 0 });
+    // The instant is given as TT, and the engine reads it on that scale.
+    const chart = engine.natalChart({ utc: dateOfJd(input.jd_tt), timeScale: 'tt', timeKnown: false });
     const body = chart.bodies.find((candidate) => candidate.body === input.body);
     if (!body) return { unsupported: `no body ${input.body}` };
     return { output: { lon: body.lon, lat: body.lat }, ...flagsMeta(chart) };
@@ -76,60 +79,75 @@ const handlers = {
     return { output: { cusps: chart.houses.cusps }, ...flagsMeta(chart) };
   },
 
-  'time.zone-offset'(input) {
+  async 'time.zone-offset'(input) {
     const [date, clock] = input.local.split('T');
     if (!clock.endsWith(':00')) return { unsupported: 'the engine takes local times to the minute' };
     const time = clock.slice(0, 5);
+    // Before 1970 the engine reads its shipped tzdb history, which the caller
+    // loads first; from 1970 this resolves at once.
+    await geo.prepareLocalTime(date, input.zone);
     const resolution = geo.resolveLocalToUtc(date, time, input.zone);
-    if (resolution.flags.includes('dst-gap')) return { output: { status: 'nonexistent' }, meta: { flags: resolution.flags } };
-    if (resolution.flags.includes('dst-fold')) {
-      // The engine resolves a repeated local time to its earlier instant only;
-      // it has no public way to give the later one, so the pair is not answered.
-      return { unsupported: 'the engine resolves a repeated local time to its earlier instant and does not return the later one', meta: { flags: resolution.flags, earlierOffsetS: seconds(resolution.offsetMinutes) } };
+    const meta = { flags: resolution.flags, zone: resolution.zone.source, dataForm: resolution.zone.dataForm };
+    if (resolution.jump?.kind === 'gap') return { output: { status: 'nonexistent' }, meta: { ...meta, cause: resolution.jump.cause } };
+    if (resolution.jump?.kind === 'fold') {
+      // A repeated wall time resolves to its earlier instant; the transition
+      // the engine reports gives the offsets before and after it, that is of
+      // the earlier and the later reading.
+      const { transition } = resolution;
+      if (!transition || transition.offsetBeforeMinutes !== resolution.offsetMinutes) {
+        return { error: 'a fold without the transition that makes it' };
+      }
+      return {
+        output: { status: 'ambiguous', utc_offsets_s: [seconds(transition.offsetBeforeMinutes), seconds(transition.offsetAfterMinutes)] },
+        meta: { ...meta, cause: resolution.jump.cause },
+      };
     }
-    return {
-      output: { status: 'ok', utc_offset_s: seconds(resolution.offsetMinutes) },
-      ...(resolution.flags.length ? { meta: { flags: resolution.flags } } : {}),
-    };
+    return { output: { status: 'ok', utc_offset_s: seconds(resolution.offsetMinutes) }, meta };
   },
 
   'time.local-mean-time'() {
-    return { unsupported: "the engine resolves local times against a zone's history only; it has no birthplace local mean time" };
+    return { unsupported: "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone" };
   },
 
   'time.tt-minus-utc'(input) {
     if (/:60(\.\d+)?Z$/u.test(input.utc)) return { unsupported: 'the engine takes instants as JavaScript dates, which have no leap second' };
-    const ut = (Date.parse(input.utc) - (J2000_JD - UNIX_EPOCH_JD) * DAY_MS) / DAY_MS;
-    const deltaT = engine.deltaTAt(ut);
-    return { output: { tt_minus_utc_s: deltaT.seconds }, meta: { note: 'the engine reads UTC as UT1, so its TT − UTC is its ΔT', segment: deltaT.segment } };
+    // TT − UTC is the chart's ΔT (TT − UT1) plus its UT1 − UTC; before 1972
+    // the engine reads UTC as UT1, and there the second term is zero.
+    const { deltaT, timeScale } = engine.natalChart({ utc: input.utc, timeKnown: false });
+    return {
+      output: { tt_minus_utc_s: deltaT.seconds + (timeScale.ut1MinusUtc?.seconds ?? 0) },
+      meta: { basis: timeScale.basis, leapSeconds: timeScale.leapSeconds, deltaTModel: deltaT.model },
+    };
   },
 
   'time.delta-t'(input) {
-    const deltaT = engine.deltaTAt(input.jd_ut1 - J2000_JD);
-    return { output: { delta_t_s: deltaT.seconds }, meta: { segment: deltaT.segment } };
+    // ΔT as a chart at that UT1 instant has it, on the engine's time basis.
+    const { deltaT } = engine.natalChart({ utc: dateOfJd(input.jd_ut1), timeScale: 'ut1', timeKnown: false });
+    return { output: { delta_t_s: deltaT.seconds }, meta: { model: deltaT.model, segment: deltaT.segment } };
   },
 
   'calendar.to-jdn'() {
-    return { unsupported: 'the engine has no calendar conversion in its public API' };
+    return { unsupported: 'the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API' };
   },
 
   'calendar.from-jdn'() {
-    return { unsupported: 'the engine has no calendar conversion in its public API' };
+    return { unsupported: 'the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API' };
   },
 };
 
 process.stdout.write(`${JSON.stringify({
   adapter: {
     name: 'zodiacs-engine',
-    version: '0.1.0',
+    version: '0.2.0',
     engine: '@zodiacs/engine',
     engineVersion: engine.ENGINE_VERSION,
     configuration: {
       ephemeris: `${engine.EPHEMERIS.name} ${engine.EPHEMERIS.version}`,
       deltaTModel: engine.DELTA_T_MODEL,
-      timeZones: `the host's Intl time zone data (Node ${process.versions.node}, ICU ${process.versions.icu}, tz ${process.versions.tz})`,
-      positions: 'natalChart with ΔT pinned at 0 s, so the requested instant is read as TT',
-      angles: 'natalChart at the UT1 instant (the engine reads its instant as UT1)',
+      timeBasis: 'from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise',
+      timeZones: `before 1970 the shipped tzdb ${geo.TZDB.version} history (${geo.TZDB.form}), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node ${process.versions.node}, ICU ${process.versions.icu}, tz ${process.versions.tz})`,
+      positions: 'natalChart with timeScale "tt": the requested instant is read as TT',
+      angles: 'natalChart with timeScale "ut1": the requested instant is read as UT1',
     },
   },
 })}\n`);
@@ -141,7 +159,7 @@ for await (const line of lines) {
   let response;
   try {
     const handler = handlers[request.kind];
-    response = handler ? handler(request.input) : { unsupported: `unknown kind ${request.kind}` };
+    response = handler ? await handler(request.input) : { unsupported: `unknown kind ${request.kind}` };
   } catch (error) {
     response = { error: error instanceof Error ? error.message : String(error) };
   }

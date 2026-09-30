@@ -1,0 +1,393 @@
+{
+ "rc14": {
+  "version": "0.1.1-rc.14",
+  "entries": {
+   ".": {
+    "files": 9,
+    "bytes": 81712,
+    "beyondCore": 0,
+    "budget": 100000,
+    "headroomPercent": 22.38
+   },
+   "./crossings": {
+    "files": 2,
+    "bytes": 9410,
+    "beyondCore": 173,
+    "budget": 10000,
+    "headroomPercent": 6.27
+   },
+   "./deltat": {
+    "files": 2,
+    "bytes": 4968,
+    "beyondCore": 161,
+    "budget": 5500,
+    "headroomPercent": 10.71
+   },
+   "./geo": {
+    "files": 2,
+    "bytes": 14714,
+    "beyondCore": 11785,
+    "budget": 35000,
+    "headroomPercent": 137.87
+   },
+   "./internal": {
+    "files": 6,
+    "bytes": 45259,
+    "beyondCore": 305,
+    "budget": 60000,
+    "headroomPercent": 32.57
+   },
+   "./internal/math": {
+    "files": 3,
+    "bytes": 17510,
+    "beyondCore": 1325,
+    "budget": 20000,
+    "headroomPercent": 14.22
+   },
+   "./receipt": {
+    "files": 5,
+    "bytes": 43999,
+    "beyondCore": 31747,
+    "budget": 70000,
+    "headroomPercent": 59.09
+   }
+  },
+  "coreByModule": {
+   "(exports)": 3489,
+   "(imports)": 2373,
+   "src/api.ts": 5803,
+   "src/aspects.ts": 2503,
+   "src/birth-input.ts": 2841,
+   "src/body-label.ts": 415,
+   "src/configured-aspects.ts": 9124,
+   "src/crossings.ts": 9164,
+   "src/date-input.ts": 1436,
+   "src/declination.ts": 7642,
+   "src/deltat.ts": 4740,
+   "src/ephemeris.ts": 9651,
+   "src/exact.ts": 2203,
+   "src/houses.ts": 10404,
+   "src/points.ts": 2319,
+   "src/progressions.ts": 485,
+   "src/reference-span.ts": 652,
+   "src/returns.ts": 2123,
+   "src/signs.ts": 2320,
+   "src/synastry.ts": 1892,
+   "src/types.ts": 133
+  },
+  "package": {
+   "files": 30,
+   "total": 282469,
+   "cap": 700000,
+   "headroomPercent": 147.81,
+   "split": {
+    "rootJs": 81712,
+    "optInJs": 45496,
+    "zoneHistories": 0,
+    "rootDeclarations": 53446,
+    "otherDeclarations": 14407,
+    "documents": 84874,
+    "manifest": 2534
+   },
+   "zoneHistories": {
+    "files": 0,
+    "budget": 200000,
+    "headroomPercent": null
+   }
+  }
+ },
+ "rc15": {
+  "version": "0.1.1-rc.15",
+  "entries": {
+   ".": {
+    "files": 11,
+    "bytes": 95273,
+    "beyondCore": 0,
+    "budget": 100000,
+    "headroomPercent": 4.96
+   },
+   "./crossings": {
+    "files": 2,
+    "bytes": 9410,
+    "beyondCore": 173,
+    "budget": 10000,
+    "headroomPercent": 6.27
+   },
+   "./deltat": {
+    "files": 2,
+    "bytes": 4968,
+    "beyondCore": 161,
+    "budget": 5500,
+    "headroomPercent": 10.71
+   },
+   "./geo": {
+    "files": 3,
+    "bytes": 31672,
+    "beyondCore": 28743,
+    "budget": 35000,
+    "headroomPercent": 10.51
+   },
+   "./internal": {
+    "files": 6,
+    "bytes": 56961,
+    "beyondCore": 305,
+    "budget": 60000,
+    "headroomPercent": 5.34
+   },
+   "./internal/math": {
+    "files": 3,
+    "bytes": 18165,
+    "beyondCore": 1325,
+    "budget": 20000,
+    "headroomPercent": 10.1
+   },
+   "./receipt": {
+    "files": 6,
+    "bytes": 62880,
+    "beyondCore": 40216,
+    "budget": 70000,
+    "headroomPercent": 11.32
+   },
+   "./timing": {
+    "files": 11,
+    "bytes": 112485,
+    "beyondCore": 30215,
+    "budget": 120000,
+    "headroomPercent": 6.68
+   },
+   "./vedic": {
+    "files": 10,
+    "bytes": 114106,
+    "beyondCore": 32508,
+    "budget": 120000,
+    "headroomPercent": 5.17
+   }
+  },
+  "coreByModule": {
+   "(exports)": 3971,
+   "(imports)": 3434,
+   "src/api.ts": 6271,
+   "src/aspects.ts": 2503,
+   "src/birth-input.ts": 2841,
+   "src/body-label.ts": 415,
+   "src/configured-aspects.ts": 9124,
+   "src/crossings.ts": 9164,
+   "src/date-input.ts": 1436,
+   "src/declination.ts": 7642,
+   "src/deltat.ts": 4740,
+   "src/ephemeris.ts": 10252,
+   "src/exact.ts": 2203,
+   "src/houses.ts": 11059,
+   "src/points.ts": 2319,
+   "src/progressions.ts": 485,
+   "src/reference-span.ts": 652,
+   "src/returns.ts": 2123,
+   "src/signs.ts": 2320,
+   "src/synastry.ts": 1892,
+   "src/time-scale-data.ts": 5300,
+   "src/time-scale.ts": 4994,
+   "src/types.ts": 133
+  },
+  "package": {
+   "files": 54,
+   "total": 634490,
+   "cap": 700000,
+   "headroomPercent": 10.32,
+   "split": {
+    "rootJs": 95273,
+    "optInJs": 131249,
+    "zoneHistories": 189144,
+    "rootDeclarations": 57014,
+    "otherDeclarations": 59219,
+    "documents": 99729,
+    "manifest": 2862
+   },
+   "zoneHistories": {
+    "files": 16,
+    "budget": 200000,
+    "headroomPercent": 5.74
+   },
+   "growthFrom": {
+    "label": "rc14",
+    "bytes": 352021,
+    "split": {
+     "rootJs": {
+      "bytes": 13561,
+      "percentOfGrowth": 3.85
+     },
+     "optInJs": {
+      "bytes": 85753,
+      "percentOfGrowth": 24.36
+     },
+     "zoneHistories": {
+      "bytes": 189144,
+      "percentOfGrowth": 53.73
+     },
+     "rootDeclarations": {
+      "bytes": 3568,
+      "percentOfGrowth": 1.01
+     },
+     "otherDeclarations": {
+      "bytes": 44812,
+      "percentOfGrowth": 12.73
+     },
+     "documents": {
+      "bytes": 14855,
+      "percentOfGrowth": 4.22
+     },
+     "manifest": {
+      "bytes": 328,
+      "percentOfGrowth": 0.09
+     }
+    }
+   }
+  }
+ },
+ "recut": {
+  "version": "0.1.1-rc.15",
+  "entries": {
+   ".": {
+    "files": 11,
+    "bytes": 97704,
+    "beyondCore": 0,
+    "budget": 100000,
+    "headroomPercent": 2.35
+   },
+   "./crossings": {
+    "files": 2,
+    "bytes": 9410,
+    "beyondCore": 173,
+    "budget": 10000,
+    "headroomPercent": 6.27
+   },
+   "./deltat": {
+    "files": 2,
+    "bytes": 4968,
+    "beyondCore": 161,
+    "budget": 5500,
+    "headroomPercent": 10.71
+   },
+   "./geo": {
+    "files": 3,
+    "bytes": 34135,
+    "beyondCore": 31206,
+    "budget": 35000,
+    "headroomPercent": 2.53
+   },
+   "./internal": {
+    "files": 6,
+    "bytes": 58997,
+    "beyondCore": 305,
+    "budget": 60000,
+    "headroomPercent": 1.7
+   },
+   "./internal/math": {
+    "files": 3,
+    "bytes": 18165,
+    "beyondCore": 1325,
+    "budget": 20000,
+    "headroomPercent": 10.1
+   },
+   "./receipt": {
+    "files": 6,
+    "bytes": 66200,
+    "beyondCore": 41589,
+    "budget": 70000,
+    "headroomPercent": 5.74
+   },
+   "./timing": {
+    "files": 11,
+    "bytes": 114916,
+    "beyondCore": 30215,
+    "budget": 120000,
+    "headroomPercent": 4.42
+   },
+   "./vedic": {
+    "files": 10,
+    "bytes": 116779,
+    "beyondCore": 32750,
+    "budget": 120000,
+    "headroomPercent": 2.76
+   }
+  },
+  "coreByModule": {
+   "(exports)": 3986,
+   "(imports)": 3466,
+   "src/api.ts": 6666,
+   "src/aspects.ts": 2503,
+   "src/birth-input.ts": 2841,
+   "src/body-label.ts": 415,
+   "src/configured-aspects.ts": 9124,
+   "src/crossings.ts": 9164,
+   "src/date-input.ts": 1436,
+   "src/declination.ts": 7642,
+   "src/deltat.ts": 4740,
+   "src/ephemeris.ts": 10326,
+   "src/exact.ts": 2203,
+   "src/houses.ts": 11059,
+   "src/points.ts": 2319,
+   "src/progressions.ts": 485,
+   "src/reference-span.ts": 652,
+   "src/returns.ts": 2123,
+   "src/signs.ts": 2320,
+   "src/synastry.ts": 1892,
+   "src/time-scale-data.ts": 5710,
+   "src/time-scale.ts": 6499,
+   "src/types.ts": 133
+  },
+  "package": {
+   "files": 54,
+   "total": 664684,
+   "cap": 700000,
+   "headroomPercent": 5.31,
+   "split": {
+    "rootJs": 97704,
+    "optInJs": 135327,
+    "zoneHistories": 189144,
+    "rootDeclarations": 57014,
+    "otherDeclarations": 60459,
+    "documents": 122163,
+    "manifest": 2873
+   },
+   "zoneHistories": {
+    "files": 16,
+    "budget": 200000,
+    "headroomPercent": 5.74
+   },
+   "growthFrom": {
+    "label": "rc14",
+    "bytes": 382215,
+    "split": {
+     "rootJs": {
+      "bytes": 15992,
+      "percentOfGrowth": 4.18
+     },
+     "optInJs": {
+      "bytes": 89831,
+      "percentOfGrowth": 23.5
+     },
+     "zoneHistories": {
+      "bytes": 189144,
+      "percentOfGrowth": 49.49
+     },
+     "rootDeclarations": {
+      "bytes": 3568,
+      "percentOfGrowth": 0.93
+     },
+     "otherDeclarations": {
+      "bytes": 46052,
+      "percentOfGrowth": 12.05
+     },
+     "documents": {
+      "bytes": 37289,
+      "percentOfGrowth": 9.76
+     },
+     "manifest": {
+      "bytes": 339,
+      "percentOfGrowth": 0.09
+     }
+    }
+   }
+  }
+ }
+}

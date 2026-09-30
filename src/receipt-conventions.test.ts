@@ -62,7 +62,7 @@ describe("receipt conventions", () => {
     expect(parsed.ok).toBe(true);
     if (!parsed.ok) return;
     expect(parsed.envelope.receipt.engine).toEqual({ name: "@zodiacs/engine", version: "0.1.1-rc.7" });
-    expect(parsed.envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[1]);
+    expect(parsed.envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[2]);
     expect(parsed.envelope.receipt.conventions.planetPositions).toBe(
       "apparent-geocentric-ecliptic-of-date"
     );

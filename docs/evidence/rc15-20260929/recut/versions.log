@@ -1,0 +1,15 @@
+# sh analyses.sh versions, Node v22.22.2, npm 10.9.7, 2026-09-29
+
+## engine versions no release wrote, rc.14 against this build
+$ node <checkout>/docs/evidence/rc15-20260929/recut/version-probe.mjs <rc.14 package> .
+version            rc.8 set: rc.14 | this build   time-basis set: this build
+0.1.1-rc.13        ok                    ok                                 inconsistent_result
+0.1.1-rc.13+..     ok                    invalid_value                      invalid_value
+0.1.1-rc.01        ok                    invalid_value                      invalid_value
+0.1.1-rc.14.1      ok                    inconsistent_result                inconsistent_result
+0.1.1-beta         ok                    inconsistent_result                inconsistent_result
+0.1.1-alpha.7      ok                    inconsistent_result                inconsistent_result
+0.1.1-rc           ok                    inconsistent_result                inconsistent_result
+0.1.1-rc.15        ok                    inconsistent_result                ok
+exit 0
+

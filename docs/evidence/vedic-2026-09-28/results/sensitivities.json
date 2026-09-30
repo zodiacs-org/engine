@@ -1,0 +1,29 @@
+{
+ "tool": "docs/evidence/vedic-2026-09-28/tools/sensitivities.py",
+ "newcombKinoshitaMinusEs1961AtJ2000Mas": {
+  "fagan-bradley": {
+   "fromJ2000": -4.48,
+   "fromEpochInverted": -4.84
+  },
+  "krishnamurti": {
+   "fromJ2000": -7.67,
+   "fromEpochInverted": -9.1
+  }
+ },
+ "hipparcosMinusGaiaArcsec": {
+  "true-revati": {
+   "1800": -0.211,
+   "1900": -0.098,
+   "2000": 0.016,
+   "2100": 0.13,
+   "2200": 0.245
+  },
+  "true-pushya": {
+   "1800": -0.221,
+   "1900": -0.109,
+   "2000": 0.002,
+   "2100": 0.114,
+   "2200": 0.226
+  }
+ }
+}

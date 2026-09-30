@@ -1,0 +1,268 @@
+# sh analyses.sh time-basis, Node v22.22.2, npm 10.9.7, 2026-09-29
+
+## the time-basis fixes against the first cut
+$ node <checkout>/docs/evidence/rc15-20260929/time-basis-fixes.mjs <first cut package> . <checkout>/docs/evidence/rc15-20260929/recut/time-basis-fixes.json
+{
+ "firstCut": "d90a00a",
+ "cases": 21472,
+ "modelStepAt1941Seconds": -0.01395,
+ "leapSecondTtInput": {
+  "instants": 108,
+  "deltaTFirstCutMinusNowSeconds": [
+   0.3619,
+   1
+  ],
+  "example": {
+   "tt": "2017-01-01T00:01:08.684Z",
+   "deltaTFirstCut": 69.593,
+   "deltaTNow": 68.593
+  },
+  "maxChangeArcsec": {
+   "mc": 14.11,
+   "asc and cusps": 31.23,
+   "Sun": 1.228e-8,
+   "Moon": 1.445e-7,
+   "Mercury": 1.556e-8,
+   "Venus": 1.474e-8,
+   "Mars": 9.004e-9,
+   "Jupiter": 2.456e-9,
+   "Saturn": 1.228e-9,
+   "Uranus": 8.186e-10,
+   "Neptune": 4.093e-10,
+   "Pluto": 4.093e-10,
+   "North Node": 0.00899,
+   "South Node": 0.00899
+  }
+ },
+ "utcInput1972": {
+  "charts": 283,
+  "ut1MinusUtcSeconds": [
+   -0.6346,
+   0.8086
+  ],
+  "firstCutSource": [
+   "fallback"
+  ],
+  "source": [
+   "observed"
+  ],
+  "deltaTChangeSeconds": [
+   -0.8086,
+   0.6346
+  ],
+  "maxChangeArcsec": {
+   "mc": 13.26,
+   "asc and cusps": 32.12,
+   "Sun": 1.228e-8,
+   "Moon": 1.646e-7,
+   "Mercury": 2.292e-8,
+   "Venus": 3.848e-8,
+   "Mars": 7.777e-9,
+   "Jupiter": 2.456e-9,
+   "Saturn": 1.638e-9,
+   "Uranus": 8.186e-10,
+   "Neptune": 8.186e-10,
+   "Pluto": 4.093e-10,
+   "North Node": 0.01496,
+   "South Node": 0.01496
+  }
+ },
+ "speedsAcrossSteps": {
+  "instants": 210,
+  "firstCutOverNowRatio": {
+   "a leap second": [
+    1.005787,
+    1.005787
+   ],
+   "1972-01-01": [
+    0.9997422,
+    0.9997422
+   ],
+   "2027-10-02": [
+    1.000845,
+    1.000845
+   ],
+   "1941.0": [
+    0.9999193,
+    0.9999193
+   ]
+  },
+  "maxChangeArcsec": {
+   "mc": 11.44,
+   "asc and cusps": 19.88,
+   "Sun": 1.228e-8,
+   "Moon": 1.482e-7,
+   "Mercury": 1.146e-8,
+   "Venus": 1.638e-8,
+   "Mars": 7.777e-9,
+   "Jupiter": 1.638e-9,
+   "Saturn": 8.186e-10,
+   "Uranus": 4.093e-10,
+   "Neptune": 4.093e-10,
+   "Pluto": 0,
+   "North Node": 0.01723,
+   "South Node": 0.01723
+  }
+ },
+ "joinOf1973": {
+  "place": [
+   60.17,
+   24.94
+  ],
+  "midheavenJumpArcsec": {
+   "firstCut": 11.83,
+   "now": 0.01462
+  }
+ },
+ "tableEdges": [
+  {
+   "input": "1973-01-02T00:00:00.000Z ut1",
+   "firstCut": "fallback, sigma 0.9 s",
+   "now": "observed, sigma 0.00269 s",
+   "deltaTChangeSeconds": 0
+  },
+  {
+   "input": "1973-01-02T00:00:00.500Z ut1",
+   "firstCut": "fallback, sigma 0.9 s",
+   "now": "observed, sigma 0.00269 s",
+   "deltaTChangeSeconds": 0
+  },
+  {
+   "input": "2027-10-01T23:59:59.900Z ut1",
+   "firstCut": "fallback, sigma 0.9 s",
+   "now": "predicted, sigma 0.0262 s",
+   "deltaTChangeSeconds": 0
+  },
+  {
+   "input": "2027-10-02T00:00:00.000Z ut1",
+   "firstCut": "fallback, sigma 0.9 s",
+   "now": "predicted, sigma 0.0262 s",
+   "deltaTChangeSeconds": 0
+  },
+  {
+   "input": "2027-10-02T00:01:09.250Z tt",
+   "firstCut": "fallback, sigma 0.9 s",
+   "now": "predicted, sigma 0.0262 s",
+   "deltaTChangeSeconds": 0.148
+  },
+  {
+   "input": "1973-01-02T00:00:43.500Z tt",
+   "firstCut": "fallback, sigma 0.9 s",
+   "now": "observed, sigma 0.00269 s",
+   "deltaTChangeSeconds": -0.8081
+  }
+ ],
+ "elsewhere": {
+  "charts": 20000,
+  "pinned": 3995,
+  "changed": 0,
+  "listedChanged": 89,
+  "listedChangedFrom": "2026-06-29T02:17:05.295Z"
+ },
+ "leapSecondUt1Input": {
+  "from1974": {
+   "instants": 275,
+   "deltaTChangeSeconds": [
+    0,
+    0
+   ],
+   "ut1MinusUtcChanged": 98,
+   "largestIdentityResidualSeconds": {
+    "firstCut": 1,
+    "now": 1.422e-14
+   },
+   "maxChangeArcsec": {
+    "mc": 0,
+    "asc and cusps": 0,
+    "Sun": 0,
+    "Moon": 0,
+    "Mercury": 0,
+    "Venus": 0,
+    "Mars": 0,
+    "Jupiter": 0,
+    "Saturn": 0,
+    "Uranus": 0,
+    "Neptune": 0,
+    "Pluto": 0,
+    "North Node": 0,
+    "South Node": 0
+   }
+  },
+  "inThe1972C04Span": {
+   "instants": 22,
+   "deltaTChangeSeconds": [
+    -0.8107,
+    0.638
+   ],
+   "ut1MinusUtcChanged": 22,
+   "largestIdentityResidualSeconds": {
+    "firstCut": 0,
+    "now": 7.106e-15
+   },
+   "maxChangeArcsec": {
+    "mc": 0.000001969,
+    "asc and cusps": 0.000002569,
+    "Sun": 0.03445,
+    "Moon": 0.399,
+    "Mercury": 0.04978,
+    "Venus": 0.0422,
+    "Mars": 0.02299,
+    "Jupiter": 0.007858,
+    "Saturn": 0.003239,
+    "Uranus": 0.000819,
+    "Neptune": 0.001098,
+    "Pluto": 0.0003109,
+    "North Node": 0.01487,
+    "South Node": 0.01487
+   }
+  }
+ },
+ "ttInput1972": {
+  "charts": 283,
+  "deltaTChangeSeconds": [
+   -0.8086,
+   0.6346
+  ],
+  "maxChangeArcsec": {
+   "mc": 13.26,
+   "asc and cusps": 32.12,
+   "Sun": 1.228e-8,
+   "Moon": 1.711e-7,
+   "Mercury": 2.088e-8,
+   "Venus": 1.638e-8,
+   "Mars": 7.777e-9,
+   "Jupiter": 2.456e-9,
+   "Saturn": 1.638e-9,
+   "Uranus": 8.186e-10,
+   "Neptune": 4.093e-10,
+   "Pluto": 4.093e-10,
+   "North Node": 0.01831,
+   "South Node": 0.01831
+  }
+ },
+ "ut1Input1972": {
+  "charts": 283,
+  "deltaTChangeSeconds": [
+   -0.8086,
+   0.6346
+  ],
+  "maxChangeArcsec": {
+   "mc": 0.000002497,
+   "asc and cusps": 0.000003376,
+   "Sun": 0.03436,
+   "Moon": 0.3988,
+   "Mercury": 0.05256,
+   "Venus": 0.0421,
+   "Mars": 0.02294,
+   "Jupiter": 0.007844,
+   "Saturn": 0.003243,
+   "Uranus": 0.0007935,
+   "Neptune": 0.001088,
+   "Pluto": 0.0004019,
+   "North Node": 0.01695,
+   "South Node": 0.01695
+  }
+ }
+}
+exit 0
+

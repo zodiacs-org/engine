@@ -1,0 +1,13 @@
+# v22.22.2; inputs: tzdata2025c.tar.gz sha256 4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957, finals2000A.all sha256 cc80680ec05c91b65e7d02c6068fe0d44dd0998dc880551975092d2d14aa8e18, eopc04.1962-now sha256 e16cfbba34574b8bad3cf81e2e56a84c2b4bbfd3c822cf9ebdd860bf97d711dc; zic: zic (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39 and zic (tzcode) 2025c
+## TZDATA_TARBALL=<tzdata2025c.tar.gz> node scripts/build-tz-shards.mjs --check
+tz-shards: src/tzdb/ matches tzdb 2025c (597 names)
+exit 0
+## the same with zic (tzcode) 2025c first on PATH
+tz-shards: src/tzdb/ matches tzdb 2025c (597 names)
+exit 0
+## node scripts/build-time-scales.mjs --check
+time-scales: src/time-scale-data.ts matches scripts/time-scale-sources/
+exit 0
+## IERS_FINALS=<finals2000A.all> IERS_C04=<eopc04.1962-now> node scripts/build-time-scales.mjs --check
+time-scales: src/time-scale-data.ts matches scripts/time-scale-sources/, and its rows match finals2000A.all and eopc04.1962-now
+exit 0

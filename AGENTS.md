@@ -12,10 +12,15 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
 
 - Source and unit tests: `src/`, with tests beside the code as `*.test.ts`,
   and tests of the scripts as `scripts/*.test.mjs` (Vitest). Build output
-  goes to `dist/`, which is not committed.
+  goes to `dist/`, which is not committed. The opt-in entry points live in
+  `src/geo/`, `src/timing/` and `src/vedic/`; their guides are
+  `docs/time.md`, `docs/timing-hellenistic.md` and `docs/vedic.md`.
 - Package and release scripts: `scripts/` (export smoke test, package
-  contents, packed consumer, archive binding, release archive check,
-  compatibility checks).
+  contents and size budgets, packed consumer, archive binding, release
+  archive check, compatibility checks), and the generators of the time data:
+  `scripts/build-tz-shards.mjs` writes `src/tzdb/` and
+  `scripts/build-time-scales.mjs` writes `src/time-scale-data.ts`. Regenerate
+  those files; never edit them by hand.
 - Release candidates: `artifacts/` (packed archives, SHA-256 receipts,
   `archives.json`), `CHANGELOG.md`, and each candidate's evidence in
   `docs/evidence/`.
@@ -104,8 +109,10 @@ below no `package.json` or `node_modules`. The package supports Node
   from it. It may be run as an instrument through
   `conformance/adapters/pyswisseph.py`, recording verdicts and summary
   statistics only (`--values none`).
-- Synthetic birth data only, in tests, fixtures, vectors, examples and
-  documentation.
+- Birth data is synthetic by default, in tests, fixtures, vectors, examples
+  and documentation. A worked example from a published source about a person
+  who has died may be used, cited where it is used with author, title, year
+  and page. Never a living person's birth data.
 - Released conformance vectors never change. A wrong vector is withdrawn and
   replaced under a new id and logged in `conformance/DISCREPANCIES.md`.
   Change a generator, never the vector JSON by hand. Regenerate this
@@ -127,6 +134,13 @@ below no `package.json` or `node_modules`. The package supports Node
   by default. Run `npm run package:contents` after adding files.
 - Keep the core entry point free of network requests and import-time side
   effects, and keep `@zodiacs/engine/crossings` and
-  `@zodiacs/engine/deltat` free of the ephemeris.
+  `@zodiacs/engine/deltat` free of the ephemeris. The root must not import
+  `@zodiacs/engine/timing`, `/vedic` or `/geo`, which are opt-in;
+  `npm run exports:smoke` checks it.
+- Every entry point in `package.json` `exports` has a budget for its import
+  graph in `scripts/verify-package-contents.mjs`, the zone histories have
+  their own (200,000 bytes, 16 files) and the package a total cap. Add a
+  budget with a new entry point. Raise a budget or the cap only when cutting
+  a candidate, and say why in `CHANGELOG.md`.
 - Write documentation plainly: what the code does, with units, and what was
   measured against what.

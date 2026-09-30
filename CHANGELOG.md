@@ -1,5 +1,363 @@
 # Engine changelog
 
+## 0.1.1-rc.15 — unreleased candidate
+
+rc.15 brings four pieces of work onto rc.14: the time basis and local time
+(tzdb 2025c history before 1970, a birthplace's own mean time, Julian dates,
+leap seconds and IERS UT1), Hellenistic timing techniques in
+`@zodiacs/engine/timing`, the sidereal zodiac and Jyotish techniques in
+`@zodiacs/engine/vedic`, and a Placidus fix near the polar limit. Three
+builds came before this one, on local branches, and none was pushed or
+published: the first, which had two reviews; a first attempt at a re-cut
+with their fixes, dropped before review; and the re-cut. A re-check of the
+re-cut found living people's birth data in commits of its history that later
+commits removed, and asked for corrections to the records. This build is the
+re-cut's code with those corrections, from a history rebuilt before the
+first push so that no commit carries that birth data: the commits of the
+earlier builds are not in this repository, and `artifacts/README.md` lists
+their archives. Its `dist/` is byte-identical to the re-cut's
+(`rebuilt/dist-digest.log`). The figures below that describe this build were
+measured on the re-cut's tree (`recut/`) or on this one (`rebuilt/`), except
+the Swiss Ephemeris statistics in the Vedic entry, measured on the first
+build, whose ayanamsas are within 7.7e-11″ of this build's. Checks:
+`docs/evidence/rc15-20260929/`, whose `recut/` and `rebuilt/` directories
+hold the outputs cited here by those names, with each piece's own evidence
+beside it.
+
+Breaking changes, in `@zodiacs/engine/geo` unless another entry is named:
+
+- A wall time before 1970-01-02 throws until `prepareLocalTime(date,
+  timeZone)` has loaded the zone's history, one of 16 files.
+  `resolveLocalToUtc`, `resolveLocalBirth` and `resolveBirth` throw an
+  `Error` naming `prepareLocalTime`; `prepareLocalTime` resolves at once for
+  a date in 1971 or later and for the fixed zones, and loads the history for
+  any earlier date, 1970's included (`rebuilt/corrections-probe.log`).
+- Unknown birth-form keys and options throw `RangeError`: an unknown key of
+  `resolveLocalBirth`'s or `resolveBirth`'s input, an unknown key or a value
+  of the wrong kind in `resolveLocalToUtc`'s options (`longitude`,
+  `calendar`, `country`), and an unknown calendar. A misspelled `calender`
+  is refused rather than ignored.
+- In the root entry, a birth input (to `natalChart` or `saturnReturn`, or in
+  place of a chart, as to `transits`) with a key that differs from a field
+  only in letter case, such as `timescale`, `Latitude` or `deltat`, throws
+  `RangeError`, and so does a `timeScale` other than `"utc"`, `"ut1"` or
+  `"tt"`, `null` and `"UTC"` included. rc.14 accepted both, ignoring them as
+  unknown keys (`rebuilt/corrections-probe.log`).
+- `lmt` means that a local-mean-time clock read the wall time. It used to
+  mean an offset with seconds, which flagged legal times such as Madras time
+  in Kolkata and missed local mean time in whole minutes, such as Guam's in
+  1890.
+- `DeltaT.model` has a new value, `"iers-utc/1"`, for a chart from 1972 to
+  2027-10-02, and the type `DeltaTSegment` a new one, `"fallback"` (types of
+  the root and `@zodiacs/engine/deltat`). Code that handles each value of
+  either type needs the new ones. No chart's `deltaT.segment` is
+  `"fallback"`: the first cut gave it to charts in 1972 before the UT1
+  table's first day, which now come from IERS C04.
+- `NATAL_RECEIPT_CONVENTION_SETS` (`@zodiacs/engine/receipt`) has a new set
+  at index 0, the time-basis set, so each earlier set is one index later:
+  the rc.8 set is at 1, where rc.14 had it at 0. Code that takes a set by
+  its index needs the new one.
+
+Other changes to existing results:
+
+- Wall times before 1970 are read on tzdata 2025c with its `backzone` file,
+  compiled by zic and shipped in the package, not on the host's `Intl` data:
+  the main data files without `backward`, and all of backzone, as the tzdb
+  Makefile's `PACKRATDATA=backzone` with an empty `PACKRATLIST`. Before 1970
+  that is the Makefile's own build for 584 of the 597 names; for the other
+  13, links that backzone points at a zone it adds, the Makefile keeps
+  `backward`'s target and the package follows backzone
+  (`recut/backzone-divergence.json`, as `docs/time.md` describes). Where the
+  package and the host differ, the offset changes: at some instant before
+  1970, 122 of the 597 names the package ships give another offset than
+  tzdata 2025c's default build, which `Intl` carries on a host with tzdb
+  2025c (`recut/backzone-divergence.json`, computed from zic's output; the
+  audit's list of 98 zones that the tests carry,
+  `src/fixtures/tzdb-divergence-98.json`, compared another build and misses
+  28 of them). Stockholm 1947-07-01 12:00, for one, is now +1:00, where a
+  default build gives +2:00.
+- From 1972 to 2027-10-02 a chart's `utc` is read as UTC: TT = UTC +
+  (TAI − UTC) + 32.184 s from the IERS leap-second list, and UT1 = UTC +
+  (UT1 − UTC) from IERS, the EOP 20 C04 series in 1972 and `finals2000A.all`
+  of 2026-09-24 from 1973-01-02, observed then predicted, which the engine's
+  table reproduces within 0.66 ms on each of C04's 367 days and within
+  0.79 ms on each of `finals2000A.all`'s 19,997. rc.14 read the instant as UT1
+  with the ΔT model. Over 1,801 synthetic charts at four places in that span,
+  with Placidus houses, the ascendant and cusps moved by up to 45.0″ from
+  rc.14, the midheaven by up to 12.4″, the Moon by up to 0.462″, the other
+  bodies by up to 0.0723″ and ΔT by up to 0.0829 s
+  (`recut/rc14-comparison.json`). Those are that sample's largest. A review's
+  wider sample, 4,525 charts from 1800 to 2200 at random places within 66° of
+  the equator in seven house systems, found 101.03″ in the ascendant and
+  cusps (1989-04-15T19:05:42.489Z, 65.61° S 40.27° W, Porphyry) and 0.4885″
+  in the Moon (1983-07-13T04:38:00.672Z, 65.35° S 65.63° W)
+  (`recut/review-sample.json`). Before 1972 and after 2027-10-02 the instant
+  is still read as UT1 with the model: over 7,896 charts from 1850 to 2150
+  the angles and cusps are unchanged, the Sun, Moon and planets are within
+  0.000003″ of rc.14's, and the true nodes within 0.035″, the rounding of
+  astronomy-engine's numerical Moon velocity, which now samples on a fixed ΔT
+  (`recut/rc14-comparison.json`, `recut/node-velocity.json`). Outside
+  1850–2150 the nodes differ by more: by 0.0694″ at 1843-03-06T14:21:09.972Z
+  and 0.0681″ at 2156-05-24T16:14:31.804Z in the review's sample.
+- The leap-second list is IERS's `leap-seconds.list` updated 2026-07-06
+  through Bulletin C 72, which expires 2027-06-28 (sha256
+  `db5a895f16853b03bfc865e8d68f9fc8710ef1740e3400c701cd46a5bbbc3433`); after
+  the expiry the last value, 37 s, is carried and
+  `chart.timeScale.leapSeconds.listed` is `false`. The list has no leap
+  second after 2017, and the engine matches all 28 changes of Bulletin C 72
+  (`recut/leap-seconds.json`). After 2027-10-02 UT1 − UTC is taken as 0
+  within ±0.9 s.
+- The flag names `dst-gap` and `dst-fold` are kept, deprecated, and now
+  mean a gap or fold of any cause; `jump.cause` gives it (`dst`,
+  `legal-change` or `date-line`).
+- Receipts gain a conventions set, `NATAL_RECEIPT_CONVENTION_SETS[0]`, which
+  records the instant's scale (`receipt.timeScale`), its time basis
+  (`result.timeScale`) and, for a local resolution, the calendar, tzdb
+  version and form, clock, transition and birthplace mean time. Each of
+  those is optional, so a local resolution in rc.14's six fields is still
+  accepted, and each one given is checked arithmetically. The set is
+  accepted only from 0.1.1-rc.15 on, and the rc.8 set only from rc.8 to
+  rc.14. Receipts that rc.13 and rc.14 wrote, serialized by their carried
+  archives, still parse under the rc.8 set and replay as the UTC requests
+  they record, which their engines read as UT1. Recomputed today their
+  sidereal time moves by UT1 − UTC, up to 12.2″ from 1972 to 2027-10-02:
+  over 16,218 rc.14 receipts on synthetic instants in that span at latitudes
+  up to 65°, the midheaven by up to 12.85″ and the ascendant and cusps by up
+  to 12.94″ at the equator, 40.55″ at 60° and 129.1″ at 65°, enough to
+  change its sign near a sign's edge, and the Moon by up to 0.462″
+  (`recut/receipt-replay.json`, `src/replay-time-basis.test.ts`); the rc.14
+  fixture's angles by 5.85e-5° (`src/receipt-time-basis.test.ts`); and five
+  charts a review chose by up to 1.71e-3° in the angles, 1.80e-3° in the
+  cusps and 5.98e-5° in the bodies (`recut/replay.log`). Read on UT1 with
+  the recorded ΔT pinned (`timeScale: "ut1"`, `deltaT` from the receipt's
+  result), the same receipts reproduce the recorded angles and cusps exactly
+  (`docs/time.md`).
+- The receipt codec orders a receipt's engine version by SemVer 2.0.0
+  precedence against the release that brought what it checks: 0.1.1-rc.15
+  for the time-basis set, rc.9 and rc.10 for the house systems they added. A
+  receipt of the time-basis set under a version before 0.1.1-rc.15 in that
+  order, such as 0.1.1-rc.14.1, 0.1.1-beta, 0.1.1-alpha.7 or 0.1.1-rc, is
+  refused; the first cut's regular expressions let those four through. A
+  receipt's engine, ephemeris and package versions must be SemVer 2.0.0
+  versions, and one that is not, such as 0.1.1-rc.01 or 0.1.1-rc.13+.., is
+  refused as `invalid_value`. The rc.8 set is accepted only under the
+  versions that wrote it, rc.8 to rc.14, with or without build metadata;
+  rc.14 accepted it under each of the six versions above and under 0.1.1-rc.15
+  (`recut/versions.log`, `src/receipt-versions.test.ts`,
+  `src/semver.test.ts`).
+- Placidus no longer falls back to whole signs outside the polar circle
+  (finding F-46). Within about 4e-9° of the polar limit, near the sidereal
+  times at which a cusp's right ascension reaches 90° or 270°, the 64-step
+  iteration could fail to settle to 1e-9° and the chart fell back at
+  isolated milliseconds (for example at 66.56186339751429°,
+  92.16879370494166° around 2000-03-20T00:00Z). Where the iteration does
+  not settle, the cusp is now found by bisection on its bracket, which
+  cannot fail there. Wherever the iteration settles, cusps are bit-identical
+  to before.
+
+Changes to the time basis and to local time since this candidate's first cut,
+after its review, measured against that build on synthetic instants and
+places (`recut/time-basis-fixes.json`, `recut/tz-line-ends.json`):
+
+- Inside a leap second (23:59:60 on UTC), a TT instant was read one second
+  early on UT1, and a UT1 instant was reported with a UT1 − UTC that did not
+  add up. UT1 is now TAI + (UT1 − TAI) and the old TAI − UTC holds through
+  the leap second. For TT input at 108 instants inside the 27 leap seconds,
+  ΔT falls by 0.36 s to 1 s, the midheaven moves by up to 14.11″ and the
+  ascendant and cusps by up to 31.23″ at 59.91° N. On UT1 input at 275
+  instants around the 25 leap seconds from 1974, ΔT, the angles and the
+  positions do not change; at 98 of them the reported UT1 − UTC does, where
+  the first cut's was 1 s away from 32.184 s + (TAI − UTC) − ΔT.
+- 1972 took UT1 − UTC as 0 within ±0.9 s. It now comes from IERS EOP 20
+  C04, −0.635 s to +0.811 s, continuous with `finals2000A.all` at
+  1973-01-02, where the midheaven jumped by 11.83″ in a millisecond (now
+  0.01462″, the millisecond's own). Over 283 charts in 1972 at four places,
+  on UTC and on TT input the midheaven moves by up to 13.26″ and the
+  ascendant and cusps by up to 32.12″, while the Sun, Moon and planets keep
+  their positions (within 2e-7″; the true nodes within 0.0184″); on UT1
+  input the angles stay and ΔT changes by up to 0.811 s (also at 22 UT1
+  instants around 1972's two leap seconds), which moves the Moon by up to
+  0.399″, the other planets by up to 0.0526″ and the true nodes by up to
+  0.017″.
+- A speed whose two samples straddle a leap second or a step of the time
+  basis (1972-01-01, 2027-10-02, and the ΔT model's 13.95 ms step at
+  1941.0) is now divided by the TT between them. The first cut's speeds
+  there were 1.005787 times this rate within 86.4 s of each leap second,
+  0.9997422 at 1972-01-01, 1.000845 at 2027-10-02 and 0.9999193 at 1941.0.
+- UT1 and TT input whose UTC fell just outside the first cut's UT1 table,
+  before 1973-01-02 or after 2027-10-02, is labelled by the table
+  (`"observed"` or `"predicted"` and its σ), not `"fallback"` with σ 0.9 s;
+  TT input whose UTC falls up to 0.148 s past 2027-10-02 now takes UT1 − UTC
+  from the table, which moves its ΔT by 0.148 s.
+- The leap-second list is IERS's current one: `timeScale.leapSeconds.listed`
+  is `true` from 2026-06-28 to 2027-06-28, where the first cut's expired
+  list gave `false`.
+- Charts change nowhere else: 20,000 charts from 1850 to 2150 on the three
+  scales, 3,995 of them with a pinned ΔT, away from those instants, give the
+  first cut's results but for `listed` and the UT1 table's digest, now
+  `064d98b4a531053a`.
+- 30 changes of standard offset that the shard generator labelled `"dst"`,
+  where a zone line ended during daylight saving and the clock went back,
+  are `"legal-change"` in `jump.cause` and the receipts'
+  `transition.cause` (`recut/tz-line-ends.json`).
+- `zoneOffsetAt` answered from `Intl` until another call loaded a zone's
+  history, so one question could get two answers; it now throws until
+  `prepareLocalTime` has.
+
+New:
+
+- Birth input takes `timeScale`: `"utc"` (default), `"ut1"` or `"tt"`; any
+  other value throws `RangeError`, and so does a key that differs from a
+  birth field only in letter case, such as `timescale`, which was ignored
+  and read a TT instant as UTC (other unknown keys are still ignored).
+  Charts report `chart.timeScale` beside `chart.deltaT`, whose `model` is
+  `"iers-utc/1"` from 1972 to 2027-10-02. UT1 turns the Earth (sidereal
+  time, the angles) and TT moves the planets. See `docs/time.md`.
+- `@zodiacs/engine/geo`: `prepareLocalTime`, `resolveLocalBirth` and
+  `zoneOffsetAt`, which before 1970 throws, as `resolveLocalToUtc` does,
+  until `prepareLocalTime` has loaded the zone's history; a `longitude`
+  option that reads a wall time in a zone's local mean time era on the
+  birthplace's own mean time (only eras tzdb records as LMT, never a legal
+  mean time); `calendar: "julian"`, converted exactly through the Julian Day
+  Number, with `julianToGregorian`, `gregorianToJulian`, `country` and
+  `calendarNote` from a table of the Gregorian calendar's adoption in 18
+  countries, each date cited to public-domain sources (tzdata's `calendars`
+  file and Grotefend's tables of 1891 and 1898) and each country named as
+  tzdata's `iso3166.tab` names it (`GREGORIAN_ADOPTION`,
+  `GREGORIAN_ADOPTION_SOURCES`). Each resolution names the tzdb version and
+  data form, the transition behind the offset and its cause. Around each of
+  the 65,237 changes of offset from 1850 to 2100 in 597 zones, 2,548,849
+  sampled wall minutes in all round-trip (`recut/roundtrip-full.json`), and
+  the calendar conversion matches an independent implementation of
+  Richards's algorithm on all 2,817,174 days from JDN 0 to Julian 3000-12-31
+  (`recut/jdn-richards.json`). NOTICE and LICENSING.md record the tzdb,
+  leap-second and IERS data the package now carries, the adoption table's
+  sources and the Vedic ayanamsas' star values.
+- `@zodiacs/engine/timing`: annual and monthly profections, firdaria,
+  zodiacal releasing from the Lots of Fortune and Spirit, and solar arc
+  directions. Ages count in solar-return years, each result names its
+  conventions, and dated results carry `flags` (`"outside-reference-span"`,
+  `"sect-contradicts-altitude"`). A chart given on UT1 or TT is read at its
+  UTC instant; a chart's pinned ΔT is not applied to the solar returns or
+  the arc. See `docs/timing-hellenistic.md` and
+  `docs/evidence/timing-hellenistic-2026-09-28/`.
+- `@zodiacs/engine/vedic`: nine ayanamsas and user-defined ones, sidereal
+  charts, nakshatras and padas, the sixteen Parashari vargas, KP sub-lords,
+  Vimshottari dashas to five levels, and Yogini and Ashtottari mahadashas.
+  Epoch ayanamsas are held at J2000.0 in their own precession model and
+  carried with IAU 2006, as the Indian Astronomical Ephemeris has done since
+  2021. An ayanamsa is read as a chart reads its instant, on the time
+  basis, with an optional `timeScale` and pinned ΔT, and records its
+  `timeScale`; `siderealChart` uses the chart's own. Against Swiss
+  Ephemeris 2.10.03 (pyswisseph, used as an instrument; statistics only),
+  at 14,647 instants from 1800 to 2200, the mean ayanamsa is within the
+  0.01″ gate for Lahiri (0.0013″), Fagan–Bradley (0.00091″), True Chitra
+  (0.0020″), True Revati (0.0044″) and three user-defined epochs. Four
+  named ayanamsas miss it: Raman (10.14″) and Yukteswar (806.16″) by
+  definition, True Pushya (0.544″) at 12 instants with δ Cnc within 0.2° of
+  the Sun, and the Galactic Center (0.101″) on catalogue data. Krishnamurti
+  misses it by design (0.0712″): the engine reads its epoch as 1900-01-01
+  0h TT, where Swiss Ephemeris uses J1900.0. Those statistics are from the
+  comparison run on the first cut (`ayanamsa-swiss.json`); at the same
+  instants this build's mean and true ayanamsas are within 7.7e-11″ of the
+  first cut's (`recut/ayanamsa-engine.json`). Dasha dates and a sidereal
+  longitude's `utc` are UTC instants, for a chart given on UT1 or TT too.
+  See `docs/vedic.md` and `docs/evidence/vedic-2026-09-28/`.
+- The root entry imports none of `/timing`, `/vedic` or `/geo`, and
+  `npm run exports:smoke` fails if its static graph reaches one of their
+  modules or a zone history. It reads the graph from the build's own module
+  list (esbuild's metafile, `dist/metafile-esm.json`, which is not packed),
+  so a module is found whatever its file's name or extension.
+- The conformance results (`conformance/RESULTS.md`, adapter 0.2.0, which
+  now gives the instant's scale) are 266 pass, 193 fail and 41 unsupported
+  of 500 (rc.14: 232, 222, 46). All 34 changes are time vectors: the 20
+  backzone-history zone offsets and 9 values of TT − UTC now pass, and the
+  5 repeated local times are answered from the reported transition
+  (`recut/conformance.log`, `recut/conformance-changes.json`). Against the
+  first cut's results no verdict changes; the residuals of TT − UTC at
+  1972-06-30T23:59:59Z and 1972-07-01T00:00:00Z move from 0 to 4.2e-9 s and
+  7.1e-15 s (tolerance 0.0005 s), because UT1 − UTC in 1972 is no longer
+  taken as 0, and the results file is regenerated.
+
+The package gate changes. rc.14 had one cap, 300,000 bytes unpacked, for
+everything (rc.14: 282,469). rc.15 has a budget for each entry point's
+import graph, the JavaScript a plain import of it loads, and a stated cap for
+the whole package; `scripts/verify-package-contents.mjs` gives each with its
+reason. No budget or cap changed after the first cut. On this build
+(`rebuilt/sizes.json`, `rebuilt/gates.log`; each headroom rounded down):
+
+- the root, `.`: 97,704 bytes, budget 100,000, 2.34 per cent above its size.
+  rc.14's was 81,712. The 15,992 bytes more are the time basis every chart
+  now needs (the leap-second and UT1 tables, 5,710; `src/time-scale.ts`,
+  6,499; its use in the API and the ephemeris, 863 and 675), 655 of Placidus
+  bisection, and 1,590 of imports and exports of the chunks that the new
+  entry points share with the root. The first cut's root was 95,273; the
+  fixes to the time basis added 2,431 of those bytes (the 1972 knots, 410;
+  `src/time-scale.ts`, 1,505; the API and the ephemeris, 395 and 74; imports
+  and exports, 47);
+- `/timing` 114,916 (30,215 beyond the root's graph), budget 120,000;
+  `/vedic` 116,779 (32,750 beyond), budget 120,000; `/geo` 34,135 (31,206
+  beyond), budget 35,000, and its zone histories, loaded only by
+  `prepareLocalTime`, 189,144 bytes in 16 files, budget 200,000 and exactly
+  16 files; `/receipt` 66,200 (41,589 beyond), budget 70,000; `/internal`
+  58,997, budget 60,000; `/internal/math` 18,165, budget 20,000;
+  `/crossings` 9,410, budget 10,000; `/deltat` 4,968, budget 5,500. Each
+  budget is above its graph by 1.70 per cent (`/internal`), 2.34 (the root),
+  2.53 (`/geo`), 2.75 (`/vedic`), 4.42 (`/timing`), 5.74 (`/receipt`), 6.26
+  (`/crossings`), 10.10 (`/internal/math`) and 10.70 (`/deltat`). As first
+  cut, `/geo` was 31,672, `/receipt` 62,880, `/internal` 56,961, `/timing`
+  112,485 and `/vedic` 114,106;
+- the whole package: 668,343 bytes unpacked in 54 files, cap 700,000,
+  4.73 per cent above its size. It grew by 385,874 bytes from rc.14's:
+  278,975 (72.30 per cent) of JavaScript that only the opt-in entry points
+  load, 189,144 of it the zone histories; 49,620 (12.86 per cent) of
+  declarations, which no runtime loads; 41,287 (10.70 per cent) of the
+  README, this file, the licences and the manifest; and 15,992
+  (4.14 per cent) of the root's own graph, which its budget holds. Code that
+  imports only the root loads only that graph. A budget is raised only in a
+  candidate whose changelog says so.
+
+Known limitation: the ΔT model `zodiacs-deltat/1` steps back 13.95 ms at
+1941.0 (1940-12-31T18:00 UT1), where its spline hands over to its knots
+(review finding F-47), and rc.15 keeps the step. Removing it would change
+the model's values there. A receipt that rc.8 to rc.14 wrote records the
+model's ΔT, which the receipt codec recomputes and checks to 1e-9 s, so
+valid receipts of those versions would fail validation. The fix needs a new
+model name, in a later candidate. Until then a speed whose samples straddle
+the step is divided by the TT between them (`docs/time.md`).
+
+Links to the organization's repositories, in the README and in this file's
+earlier entries, now use its current name, zodiacs-org; GitHub redirects the
+former name, ZodiacsOfficial.
+
+Birth data in the tests, examples and documentation is synthetic, except
+worked examples from published sources about people who have died, cited
+with page: Saunders's charts of Christopher Reeve, Coretta Scott King and
+Princess Diana, Estadella's of Charlie Chaplin, and the native of Valens's
+*Anthologies* IV.9. Checks that used living people's charts, or birth dates
+taken from the public record, now use invented charts; `CONTRIBUTING.md` and
+`AGENTS.md` state the rule. The commits of this candidate add no living
+person's birth data, and no real person's but those cited examples: the
+history was rebuilt before its first push
+(`docs/evidence/rc15-20260929/README.md`, *The published history*). One real
+person's birth, taken from the Zodiacs site's demo chart, is in earlier
+candidates' tests and evidence, in main's history; rc.15's tree no longer
+holds it.
+
+Migration: before resolving a wall time before 1970, `await
+prepareLocalTime(date, timeZone)`; remove unknown keys from birth forms and
+options; in birth inputs, correct keys that differ from a field only in
+letter case, and give `timeScale` only as `"utc"`, `"ut1"` or `"tt"`, or leave
+it out; read `lmt` as a local-mean-time clock and `jump.cause` for the kind
+of a gap or fold. Expect charts from 1972 to 2027-10-02 to differ from
+rc.14's by UT1 − UTC in their angles and by up to half an arcsecond in their
+positions, and wall times before 1970 in the zones where backzone differs
+from the host's data to resolve to other instants. Pass `timeScale: "ut1"`
+or `"tt"` for an instant on one of those scales. Receipts of every earlier
+set remain readable; to recompute an rc.8 to rc.14 receipt as its engine did,
+pass its recorded instant with `timeScale: "ut1"` and its recorded ΔT as
+`deltaT`. Before 1970, `await prepareLocalTime` before `zoneOffsetAt` too.
+
 ## 0.1.1-rc.14 — unreleased candidate
 
 - `engines` now reads `"node": "^20.19.0 || >=22.7.0"`; rc.13's `>=18` was
@@ -102,7 +460,7 @@
 - TypeDoc canonical URLs point to
   https://zodiacs.org/developers/engine/reference/, and the footer names both
   licences. Earlier entries refer to the separate earlier package by its
-  repository, github.com/ZodiacsOfficial/sdk, instead of its npm name.
+  repository, github.com/zodiacs-org/sdk, instead of its npm name.
 - rc.13's exact decisions cost time. In the review's worst case, 256 bodies
   under 64 custom rules (32,045 aspects), `findConfiguredAspects` took 1.72 s,
   where rc.12 took 0.19 s, and 256 declinations all within a 90° orb took
@@ -398,7 +756,7 @@ to exact can change. Recorded receipts are immutable and are not rewritten.
 
 Recorded receipts are immutable and are not rewritten. Recomputations can have
 corrected time flags under this new version. The receipt schema, core numerical
-formulas, the earlier package in github.com/ZodiacsOfficial/sdk, site/starter
+formulas, the earlier package in github.com/zodiacs-org/sdk, site/starter
 pins and account protocols are unchanged. The explicit merge/publication hold
 and required review on pull request #5 of that repository remain.
 
@@ -423,7 +781,7 @@ Fix contradictory/missing result claims in supplied Charts. Arrays over 64 raw
 entries reject. Historical time flags remain assertions; executable same-realm
 getters/proxies are not sandboxed. Internal computation, receipt wire format,
 site/starter pins and the APIs of the earlier package in
-github.com/ZodiacsOfficial/sdk are unchanged. Required review and the explicit
+github.com/zodiacs-org/sdk are unchanged. Required review and the explicit
 merge/publication hold on pull request #5 of that repository remain.
 
 ## 0.1.1-rc.4 — unreleased candidate
@@ -445,7 +803,7 @@ merge/publication hold on pull request #5 of that repository remain.
 Site application rc.1 and the separately delivered standalone starter rc.3
 remain pinned to their existing artifacts. Numerical calculations are unchanged
 apart from the reported engine version. The explicit review/publication hold on
-pull request #5 of github.com/ZodiacsOfficial/sdk, the repository of an earlier
+pull request #5 of github.com/zodiacs-org/sdk, the repository of an earlier
 package, remains; this entry is not npm publication or production release.
 
 ## 0.1.1-rc.3 — unreleased candidate
@@ -473,7 +831,7 @@ package, remains; this entry is not npm publication or production release.
 
 This candidate changes the optional geo client only; existing numerical
 calculations are unchanged apart from the reported package version. The
-review/publication hold on pull request #5 of github.com/ZodiacsOfficial/sdk,
+review/publication hold on pull request #5 of github.com/zodiacs-org/sdk,
 the repository of an earlier package, remains.
 
 ## 0.1.1-rc.1 — unreleased candidate
@@ -495,7 +853,7 @@ Migration: valid resolved inputs retain their shape. Callers previously relying
 on `Date` rollover, implicit machine timezone, or silently ignored settings must
 resolve/correct those inputs. Do not compare cached chart receipts across
 versions without recalculation. The API of the earlier package in
-github.com/ZodiacsOfficial/sdk is unchanged.
+github.com/zodiacs-org/sdk is unchanged.
 
 Release holds remain in pull request #5 of that repository. This entry records
 implementation, not publication, deployment, full external review, or

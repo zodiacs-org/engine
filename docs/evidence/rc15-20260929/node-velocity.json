@@ -1,0 +1,34 @@
+{
+ "instant": "1870-06-26T01:26:00.000Z",
+ "deltaTSeconds": 1.8543555619496623,
+ "centralTtIdentical": true,
+ "rc14MinusRc15Arcsec": -0.03462,
+ "physicalBoundOver200MicrosecondsArcsec": 0.000016666666666666667,
+ "scatter": [
+  {
+   "instant": "1600-06-15T00:00:00.000Z",
+   "shifts": 200,
+   "maxAbsArcsec": 0.18,
+   "sdArcsec": 0.0665
+  },
+  {
+   "instant": "1870-06-26T01:26:00.000Z",
+   "shifts": 200,
+   "maxAbsArcsec": 0.0668,
+   "sdArcsec": 0.0196
+  },
+  {
+   "instant": "2000-01-01T12:00:00.000Z",
+   "shifts": 200,
+   "maxAbsArcsec": 0.0000658,
+   "sdArcsec": 0.0000194
+  },
+  {
+   "instant": "2100-06-01T00:00:00.000Z",
+   "shifts": 200,
+   "maxAbsArcsec": 0.0261,
+   "sdArcsec": 0.00767
+  }
+ ],
+ "node": "v22.22.2"
+}

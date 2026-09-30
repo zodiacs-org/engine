@@ -1,0 +1,69 @@
+# d90a00a's tree (git archive d90a00a) with the re-cut's node_modules linked in (the lockfile is the same) and src/receipt-versions.test.ts from the re-cut added; Node v22.22.2
+## npx vitest run src/receipt-versions.test.ts
+
+ RUN  v2.1.9 <d90a00a tree>
+
+ ❯ src/receipt-versions.test.ts (10 tests | 8 failed) 288ms
+   × the engine version of a receipt, in SemVer 2.0.0 order > refuses the time-basis set under 0.1.1-rc.14.1, which comes before 0.1.1-rc.15 10ms
+     → expected 'ok' to be 'inconsistent_result' // Object.is equality
+   × the engine version of a receipt, in SemVer 2.0.0 order > refuses the time-basis set under 0.1.1-beta, which comes before 0.1.1-rc.15 9ms
+     → expected 'ok' to be 'inconsistent_result' // Object.is equality
+   × the engine version of a receipt, in SemVer 2.0.0 order > refuses the time-basis set under 0.1.1-alpha.7, which comes before 0.1.1-rc.15 3ms
+     → expected 'ok' to be 'inconsistent_result' // Object.is equality
+   × the engine version of a receipt, in SemVer 2.0.0 order > refuses the time-basis set under 0.1.1-rc, which comes before 0.1.1-rc.15 2ms
+     → expected 'ok' to be 'inconsistent_result' // Object.is equality
+   × the engine version of a receipt, in SemVer 2.0.0 order > refuses 0.1.1-rc.01, which is not a SemVer 2.0.0 version 5ms
+     → expected 'ok' to be 'invalid_value' // Object.is equality
+   × the engine version of a receipt, in SemVer 2.0.0 order > refuses 00.1.1, which is not a SemVer 2.0.0 version 2ms
+     → expected 'ok' to be 'invalid_value' // Object.is equality
+   × the engine version of a receipt, in SemVer 2.0.0 order > refuses 0.1.1-rc..16, which is not a SemVer 2.0.0 version 3ms
+     → expected 'ok' to be 'invalid_value' // Object.is equality
+   × the engine version of a receipt, in SemVer 2.0.0 order > refuses 0.1.1-rc.16+.., which is not a SemVer 2.0.0 version 3ms
+     → expected 'ok' to be 'invalid_value' // Object.is equality
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/receipt-versions.test.ts > the engine version of a receipt, in SemVer 2.0.0 order > refuses the time-basis set under 0.1.1-rc.14.1, which comes before 0.1.1-rc.15
+ FAIL  src/receipt-versions.test.ts > the engine version of a receipt, in SemVer 2.0.0 order > refuses the time-basis set under 0.1.1-beta, which comes before 0.1.1-rc.15
+ FAIL  src/receipt-versions.test.ts > the engine version of a receipt, in SemVer 2.0.0 order > refuses the time-basis set under 0.1.1-alpha.7, which comes before 0.1.1-rc.15
+ FAIL  src/receipt-versions.test.ts > the engine version of a receipt, in SemVer 2.0.0 order > refuses the time-basis set under 0.1.1-rc, which comes before 0.1.1-rc.15
+AssertionError: expected 'ok' to be 'inconsistent_result' // Object.is equality
+
+Expected: "inconsistent_result"
+Received: "ok"
+
+ ❯ src/receipt-versions.test.ts:31:46
+     29|     "refuses the time-basis set under %s, which comes before 0.1.1-rc.…
+     30|     (version) => {
+     31|       expect(underVersion(CURRENT, version)).toBe("inconsistent_result…
+       |                                              ^
+     32|     }
+     33|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  src/receipt-versions.test.ts > the engine version of a receipt, in SemVer 2.0.0 order > refuses 0.1.1-rc.01, which is not a SemVer 2.0.0 version
+ FAIL  src/receipt-versions.test.ts > the engine version of a receipt, in SemVer 2.0.0 order > refuses 00.1.1, which is not a SemVer 2.0.0 version
+ FAIL  src/receipt-versions.test.ts > the engine version of a receipt, in SemVer 2.0.0 order > refuses 0.1.1-rc..16, which is not a SemVer 2.0.0 version
+ FAIL  src/receipt-versions.test.ts > the engine version of a receipt, in SemVer 2.0.0 order > refuses 0.1.1-rc.16+.., which is not a SemVer 2.0.0 version
+AssertionError: expected 'ok' to be 'invalid_value' // Object.is equality
+
+Expected: "invalid_value"
+Received: "ok"
+
+ ❯ src/receipt-versions.test.ts:38:46
+     36|     "refuses %s, which is not a SemVer 2.0.0 version",
+     37|     (version) => {
+     38|       expect(underVersion(CURRENT, version)).toBe("invalid_value");
+       |                                              ^
+     39|       expect(underVersion(RC14, version)).toBe("invalid_value");
+     40|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ Test Files  1 failed (1)
+      Tests  8 failed | 2 passed (10)
+   Start at  17:25:42
+   Duration  2.08s (transform 621ms, setup 0ms, collect 970ms, tests 288ms, environment 0ms, prepare 109ms)
+
+exit 1

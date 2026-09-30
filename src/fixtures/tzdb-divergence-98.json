@@ -1,0 +1,2139 @@
+{
+ "host": {
+  "node": "v22.22.2",
+  "icu": "78.2",
+  "tz": "2025c",
+  "zoneinfo": "# version 2025b"
+ },
+ "zonesCompared": 418,
+ "zonesDiffering": 98,
+ "zones": [
+  {
+   "tz": "Pacific/Majuro",
+   "segments": 7,
+   "totalDays": 43737,
+   "yearsDiffering": 119.7,
+   "maxAbsMinutes": 180,
+   "daysAfter1900": 43737,
+   "sample": [
+    {
+     "from": "1900-12-31",
+     "to": "1914-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 5021
+    },
+    {
+     "from": "1914-09-30",
+     "to": "1919-01-31",
+     "tzifMinusIcuMinutes": -180,
+     "days": 1584
+    },
+    {
+     "from": "1919-01-31",
+     "to": "1936-12-31",
+     "tzifMinusIcuMinutes": -60,
+     "days": 6544
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Malabo",
+   "segments": 6,
+   "totalDays": 41620,
+   "yearsDiffering": 113.9,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 41620,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1905-06-30",
+     "tzifMinusIcuMinutes": 21.55,
+     "days": 20269
+    },
+    {
+     "from": "1905-06-30",
+     "to": "1908-07-01",
+     "tzifMinusIcuMinutes": 35.13333333333333,
+     "days": 1096
+    },
+    {
+     "from": "1908-07-01",
+     "to": "1911-12-31",
+     "tzifMinusIcuMinutes": 21.55,
+     "days": 1279
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Niamey",
+   "segments": 7,
+   "totalDays": 40176,
+   "yearsDiffering": 110,
+   "maxAbsMinutes": 120,
+   "daysAfter1900": 40176,
+   "sample": [
+    {
+     "from": "1911-12-31",
+     "to": "1913-12-31",
+     "tzifMinusIcuMinutes": -73.58333333333333,
+     "days": 731
+    },
+    {
+     "from": "1913-12-31",
+     "to": "1919-08-31",
+     "tzifMinusIcuMinutes": -90,
+     "days": 2069
+    },
+    {
+     "from": "1919-08-31",
+     "to": "1934-02-26",
+     "tzifMinusIcuMinutes": -120,
+     "days": 5292
+    }
+   ]
+  },
+  {
+   "tz": "Indian/Kerguelen",
+   "segments": 2,
+   "totalDays": 40176,
+   "yearsDiffering": 110,
+   "maxAbsMinutes": 294,
+   "daysAfter1900": 40176,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1950-01-01",
+     "tzifMinusIcuMinutes": -294,
+     "days": 36524
+    }
+   ]
+  },
+  {
+   "tz": "Antarctica/Syowa",
+   "segments": 2,
+   "totalDays": 39109,
+   "yearsDiffering": 107.1,
+   "maxAbsMinutes": 186.86666666666667,
+   "daysAfter1900": 39109,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1947-03-13",
+     "tzifMinusIcuMinutes": -186.86666666666667,
+     "days": 35500
+    },
+    {
+     "from": "1947-03-13",
+     "to": "1957-01-29",
+     "tzifMinusIcuMinutes": -180,
+     "days": 3609
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Dar_es_Salaam",
+   "segments": 7,
+   "totalDays": 38563,
+   "yearsDiffering": 105.6,
+   "maxAbsMinutes": 30,
+   "daysAfter1900": 38563,
+   "sample": [
+    {
+     "from": "1928-06-30",
+     "to": "1930-01-04",
+     "tzifMinusIcuMinutes": -22.866666666666667,
+     "days": 553
+    },
+    {
+     "from": "1930-12-31",
+     "to": "1936-12-31",
+     "tzifMinusIcuMinutes": 30,
+     "days": 2192
+    },
+    {
+     "from": "1936-12-31",
+     "to": "1942-07-31",
+     "tzifMinusIcuMinutes": 15,
+     "days": 2038
+    }
+   ]
+  },
+  {
+   "tz": "Atlantic/St_Helena",
+   "segments": 2,
+   "totalDays": 36889,
+   "yearsDiffering": 101,
+   "maxAbsMinutes": 22.8,
+   "daysAfter1900": 36889,
+   "sample": [
+    {
+     "from": "1912-01-01",
+     "to": "1951-01-01",
+     "tzifMinusIcuMinutes": -22.8,
+     "days": 14245
+    }
+   ]
+  },
+  {
+   "tz": "Asia/Aden",
+   "segments": 2,
+   "totalDays": 36524,
+   "yearsDiffering": 100,
+   "maxAbsMinutes": 6.966666666666667,
+   "daysAfter1900": 36524,
+   "sample": []
+  },
+  {
+   "tz": "Asia/Kuwait",
+   "segments": 2,
+   "totalDays": 36524,
+   "yearsDiffering": 100,
+   "maxAbsMinutes": 11.933333333333334,
+   "daysAfter1900": 36524,
+   "sample": []
+  },
+  {
+   "tz": "Atlantic/Reykjavik",
+   "segments": 36,
+   "totalDays": 36173,
+   "yearsDiffering": 99,
+   "maxAbsMinutes": 71.86666666666666,
+   "daysAfter1900": 36173,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1908-01-01",
+     "tzifMinusIcuMinutes": -71.86666666666666,
+     "days": 21183
+    },
+    {
+     "from": "1908-01-01",
+     "to": "1912-01-01",
+     "tzifMinusIcuMinutes": -43.86666666666667,
+     "days": 1461
+    },
+    {
+     "from": "1912-01-01",
+     "to": "1917-02-20",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1877
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Kampala",
+   "segments": 6,
+   "totalDays": 35979,
+   "yearsDiffering": 98.5,
+   "maxAbsMinutes": 30,
+   "daysAfter1900": 35979,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1908-04-30",
+     "tzifMinusIcuMinutes": -17.6,
+     "days": 21304
+    },
+    {
+     "from": "1908-04-30",
+     "to": "1928-06-30",
+     "tzifMinusIcuMinutes": -20.333333333333332,
+     "days": 7366
+    },
+    {
+     "from": "1929-12-31",
+     "to": "1930-01-04",
+     "tzifMinusIcuMinutes": -30,
+     "days": 4
+    }
+   ]
+  },
+  {
+   "tz": "Asia/Bahrain",
+   "segments": 3,
+   "totalDays": 34332,
+   "yearsDiffering": 94,
+   "maxAbsMinutes": 37.666666666666664,
+   "daysAfter1900": 34332,
+   "sample": [
+    {
+     "from": "1919-12-31",
+     "to": "1941-07-19",
+     "tzifMinusIcuMinutes": -37.666666666666664,
+     "days": 7871
+    },
+    {
+     "from": "1941-07-19",
+     "to": "1943-12-31",
+     "tzifMinusIcuMinutes": -30,
+     "days": 895
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Banjul",
+   "segments": 3,
+   "totalDays": 33633,
+   "yearsDiffering": 92.1,
+   "maxAbsMinutes": 66.6,
+   "daysAfter1900": 33633,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1912-01-01",
+     "tzifMinusIcuMinutes": -50.46666666666667,
+     "days": 22644
+    },
+    {
+     "from": "1912-01-01",
+     "to": "1933-04-01",
+     "tzifMinusIcuMinutes": -66.6,
+     "days": 7761
+    },
+    {
+     "from": "1933-04-01",
+     "to": "1942-02-01",
+     "tzifMinusIcuMinutes": -60,
+     "days": 3228
+    }
+   ]
+  },
+  {
+   "tz": "Pacific/Saipan",
+   "segments": 3,
+   "totalDays": 33602,
+   "yearsDiffering": 92,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 33602,
+   "sample": [
+    {
+     "from": "1900-12-31",
+     "to": "1941-12-09",
+     "tzifMinusIcuMinutes": -60,
+     "days": 14953
+    },
+    {
+     "from": "1944-07-08",
+     "to": "1944-07-30",
+     "tzifMinusIcuMinutes": 60,
+     "days": 22
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Freetown",
+   "segments": 19,
+   "totalDays": 33577,
+   "yearsDiffering": 91.9,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 33577,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1912-01-01",
+     "tzifMinusIcuMinutes": -36.86666666666667,
+     "days": 22644
+    },
+    {
+     "from": "1912-01-01",
+     "to": "1913-07-01",
+     "tzifMinusIcuMinutes": -53,
+     "days": 547
+    },
+    {
+     "from": "1913-07-01",
+     "to": "1932-12-01",
+     "tzifMinusIcuMinutes": -60,
+     "days": 7093
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Dakar",
+   "segments": 2,
+   "totalDays": 33388,
+   "yearsDiffering": 91.4,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 33388,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1912-01-01",
+     "tzifMinusIcuMinutes": -53.6,
+     "days": 22644
+    },
+    {
+     "from": "1912-01-01",
+     "to": "1941-06-01",
+     "tzifMinusIcuMinutes": -60,
+     "days": 10744
+    }
+   ]
+  },
+  {
+   "tz": "Indian/Antananarivo",
+   "segments": 6,
+   "totalDays": 33352,
+   "yearsDiffering": 91.3,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 33352,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1908-04-30",
+     "tzifMinusIcuMinutes": 42.8,
+     "days": 21304
+    },
+    {
+     "from": "1908-04-30",
+     "to": "1911-06-30",
+     "tzifMinusIcuMinutes": 40.06666666666667,
+     "days": 1156
+    },
+    {
+     "from": "1911-06-30",
+     "to": "1928-06-30",
+     "tzifMinusIcuMinutes": 30,
+     "days": 6210
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Djibouti",
+   "segments": 5,
+   "totalDays": 33261,
+   "yearsDiffering": 91.1,
+   "maxAbsMinutes": 30,
+   "daysAfter1900": 33261,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1908-04-30",
+     "tzifMinusIcuMinutes": 25.333333333333332,
+     "days": 21304
+    },
+    {
+     "from": "1908-04-30",
+     "to": "1911-06-30",
+     "tzifMinusIcuMinutes": 22.6,
+     "days": 1156
+    },
+    {
+     "from": "1911-06-30",
+     "to": "1928-06-30",
+     "tzifMinusIcuMinutes": 30,
+     "days": 6210
+    }
+   ]
+  },
+  {
+   "tz": "Indian/Comoro",
+   "segments": 5,
+   "totalDays": 33261,
+   "yearsDiffering": 91.1,
+   "maxAbsMinutes": 30,
+   "daysAfter1900": 33261,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1908-04-30",
+     "tzifMinusIcuMinutes": 25.8,
+     "days": 21304
+    },
+    {
+     "from": "1908-04-30",
+     "to": "1911-06-30",
+     "tzifMinusIcuMinutes": 23.066666666666666,
+     "days": 1156
+    },
+    {
+     "from": "1911-06-30",
+     "to": "1928-06-30",
+     "tzifMinusIcuMinutes": 30,
+     "days": 6210
+    }
+   ]
+  },
+  {
+   "tz": "Indian/Mayotte",
+   "segments": 5,
+   "totalDays": 33261,
+   "yearsDiffering": 91.1,
+   "maxAbsMinutes": 33.666666666666664,
+   "daysAfter1900": 33261,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1908-04-30",
+     "tzifMinusIcuMinutes": 33.666666666666664,
+     "days": 21304
+    },
+    {
+     "from": "1908-04-30",
+     "to": "1911-06-30",
+     "tzifMinusIcuMinutes": 30.933333333333334,
+     "days": 1156
+    },
+    {
+     "from": "1911-06-30",
+     "to": "1928-06-30",
+     "tzifMinusIcuMinutes": 30,
+     "days": 6210
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Nouakchott",
+   "segments": 2,
+   "totalDays": 32416,
+   "yearsDiffering": 88.8,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 32416,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1912-01-01",
+     "tzifMinusIcuMinutes": -47.666666666666664,
+     "days": 22644
+    },
+    {
+     "from": "1934-02-26",
+     "to": "1960-11-28",
+     "tzifMinusIcuMinutes": -60,
+     "days": 9772
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Bamako",
+   "segments": 2,
+   "totalDays": 32255,
+   "yearsDiffering": 88.3,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 32255,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1912-01-01",
+     "tzifMinusIcuMinutes": -15.866666666666667,
+     "days": 22644
+    },
+    {
+     "from": "1934-02-26",
+     "to": "1960-06-20",
+     "tzifMinusIcuMinutes": -60,
+     "days": 9611
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Conakry",
+   "segments": 2,
+   "totalDays": 32084,
+   "yearsDiffering": 87.8,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 32084,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1912-01-01",
+     "tzifMinusIcuMinutes": -38.733333333333334,
+     "days": 22644
+    },
+    {
+     "from": "1934-02-26",
+     "to": "1960-01-01",
+     "tzifMinusIcuMinutes": -60,
+     "days": 9440
+    }
+   ]
+  },
+  {
+   "tz": "Antarctica/McMurdo",
+   "segments": 29,
+   "totalDays": 38715,
+   "yearsDiffering": 106,
+   "maxAbsMinutes": 750,
+   "daysAfter1900": 31835,
+   "sample": [
+    {
+     "from": "1868-11-01",
+     "to": "1927-11-05",
+     "tzifMinusIcuMinutes": -690,
+     "days": 21552
+    },
+    {
+     "from": "1927-11-05",
+     "to": "1928-03-03",
+     "tzifMinusIcuMinutes": -750,
+     "days": 119
+    },
+    {
+     "from": "1928-03-03",
+     "to": "1928-10-13",
+     "tzifMinusIcuMinutes": -690,
+     "days": 224
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Kigali",
+   "segments": 2,
+   "totalDays": 31196,
+   "yearsDiffering": 85.4,
+   "maxAbsMinutes": 10.033333333333333,
+   "daysAfter1900": 31196,
+   "sample": []
+  },
+  {
+   "tz": "Africa/Porto-Novo",
+   "segments": 6,
+   "totalDays": 30736,
+   "yearsDiffering": 84.2,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 30736,
+   "sample": [
+    {
+     "from": "1913-12-31",
+     "to": "1919-08-31",
+     "tzifMinusIcuMinutes": -30,
+     "days": 2069
+    },
+    {
+     "from": "1919-08-31",
+     "to": "1934-02-26",
+     "tzifMinusIcuMinutes": -60,
+     "days": 5292
+    }
+   ]
+  },
+  {
+   "tz": "Asia/Brunei",
+   "segments": 9,
+   "totalDays": 29758,
+   "yearsDiffering": 81.5,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 29758,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1926-02-28",
+     "tzifMinusIcuMinutes": 18.333333333333332,
+     "days": 27817
+    },
+    {
+     "from": "1935-09-13",
+     "to": "1935-12-13",
+     "tzifMinusIcuMinutes": -20,
+     "days": 91
+    },
+    {
+     "from": "1936-09-13",
+     "to": "1936-12-13",
+     "tzifMinusIcuMinutes": -20,
+     "days": 91
+    }
+   ]
+  },
+  {
+   "tz": "Asia/Vientiane",
+   "segments": 6,
+   "totalDays": 29568,
+   "yearsDiffering": 81,
+   "maxAbsMinutes": 120,
+   "daysAfter1900": 29568,
+   "sample": [
+    {
+     "from": "1906-06-30",
+     "to": "1911-04-30",
+     "tzifMinusIcuMinutes": 24.433333333333334,
+     "days": 1765
+    },
+    {
+     "from": "1911-04-30",
+     "to": "1920-03-31",
+     "tzifMinusIcuMinutes": 17.933333333333334,
+     "days": 3258
+    },
+    {
+     "from": "1942-12-31",
+     "to": "1945-03-14",
+     "tzifMinusIcuMinutes": 60,
+     "days": 804
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Accra",
+   "segments": 32,
+   "totalDays": 29173,
+   "yearsDiffering": 79.9,
+   "maxAbsMinutes": 30,
+   "daysAfter1900": 29173,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1912-01-01",
+     "tzifMinusIcuMinutes": 15.266666666666667,
+     "days": 22644
+    },
+    {
+     "from": "1919-11-24",
+     "to": "1920-01-01",
+     "tzifMinusIcuMinutes": 20,
+     "days": 38
+    },
+    {
+     "from": "1920-09-01",
+     "to": "1921-01-01",
+     "tzifMinusIcuMinutes": 20,
+     "days": 122
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Blantyre",
+   "segments": 4,
+   "totalDays": 27574,
+   "yearsDiffering": 75.5,
+   "maxAbsMinutes": 21.166666666666668,
+   "daysAfter1900": 27574,
+   "sample": [
+    {
+     "from": "1908-12-31",
+     "to": "1911-07-23",
+     "tzifMinusIcuMinutes": 20,
+     "days": 934
+    },
+    {
+     "from": "1911-07-23",
+     "to": "1914-06-29",
+     "tzifMinusIcuMinutes": 21.166666666666668,
+     "days": 1072
+    },
+    {
+     "from": "1914-06-29",
+     "to": "1925-06-30",
+     "tzifMinusIcuMinutes": 21,
+     "days": 4019
+    }
+   ]
+  },
+  {
+   "tz": "Asia/Phnom_Penh",
+   "segments": 5,
+   "totalDays": 26632,
+   "yearsDiffering": 72.9,
+   "maxAbsMinutes": 120,
+   "daysAfter1900": 26632,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1906-06-30",
+     "tzifMinusIcuMinutes": 17.6,
+     "days": 20634
+    },
+    {
+     "from": "1906-06-30",
+     "to": "1911-04-30",
+     "tzifMinusIcuMinutes": 24.433333333333334,
+     "days": 1765
+    },
+    {
+     "from": "1911-04-30",
+     "to": "1920-03-31",
+     "tzifMinusIcuMinutes": 17.933333333333334,
+     "days": 3258
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Addis_Ababa",
+   "segments": 7,
+   "totalDays": 33814,
+   "yearsDiffering": 92.6,
+   "maxAbsMinutes": 30,
+   "daysAfter1900": 26509,
+   "sample": [
+    {
+     "from": "1928-06-30",
+     "to": "1930-01-04",
+     "tzifMinusIcuMinutes": -24.666666666666668,
+     "days": 553
+    },
+    {
+     "from": "1936-05-04",
+     "to": "1936-12-31",
+     "tzifMinusIcuMinutes": 30,
+     "days": 241
+    },
+    {
+     "from": "1936-12-31",
+     "to": "1942-07-31",
+     "tzifMinusIcuMinutes": 15,
+     "days": 2038
+    }
+   ]
+  },
+  {
+   "tz": "Asia/Muscat",
+   "segments": 1,
+   "totalDays": 25566,
+   "yearsDiffering": 70,
+   "maxAbsMinutes": 13.2,
+   "daysAfter1900": 25566,
+   "sample": []
+  },
+  {
+   "tz": "Indian/Mahe",
+   "segments": 2,
+   "totalDays": 25566,
+   "yearsDiffering": 70,
+   "maxAbsMinutes": 18.8,
+   "daysAfter1900": 25566,
+   "sample": [
+    {
+     "from": "1906-12-31",
+     "to": "1919-12-31",
+     "tzifMinusIcuMinutes": 18.8,
+     "days": 4748
+    }
+   ]
+  },
+  {
+   "tz": "Indian/Reunion",
+   "segments": 2,
+   "totalDays": 25566,
+   "yearsDiffering": 70,
+   "maxAbsMinutes": 18.8,
+   "daysAfter1900": 25566,
+   "sample": [
+    {
+     "from": "1911-05-31",
+     "to": "1919-12-31",
+     "tzifMinusIcuMinutes": 18.8,
+     "days": 3136
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Bangui",
+   "segments": 5,
+   "totalDays": 25444,
+   "yearsDiffering": 69.7,
+   "maxAbsMinutes": 74.33333333333333,
+   "daysAfter1900": 25444,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1905-06-30",
+     "tzifMinusIcuMinutes": 60.75,
+     "days": 20269
+    },
+    {
+     "from": "1905-06-30",
+     "to": "1908-07-01",
+     "tzifMinusIcuMinutes": 74.33333333333333,
+     "days": 1096
+    },
+    {
+     "from": "1908-07-01",
+     "to": "1911-12-31",
+     "tzifMinusIcuMinutes": 60.75,
+     "days": 1279
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Brazzaville",
+   "segments": 5,
+   "totalDays": 25444,
+   "yearsDiffering": 69.7,
+   "maxAbsMinutes": 61.13333333333333,
+   "daysAfter1900": 25444,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1905-06-30",
+     "tzifMinusIcuMinutes": 47.55,
+     "days": 20269
+    },
+    {
+     "from": "1905-06-30",
+     "to": "1908-07-01",
+     "tzifMinusIcuMinutes": 61.13333333333333,
+     "days": 1096
+    },
+    {
+     "from": "1908-07-01",
+     "to": "1911-12-31",
+     "tzifMinusIcuMinutes": 47.55,
+     "days": 1279
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Douala",
+   "segments": 5,
+   "totalDays": 25444,
+   "yearsDiffering": 69.7,
+   "maxAbsMinutes": 46.416666666666664,
+   "daysAfter1900": 25444,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1905-06-30",
+     "tzifMinusIcuMinutes": 25.216666666666665,
+     "days": 20269
+    },
+    {
+     "from": "1905-06-30",
+     "to": "1908-07-01",
+     "tzifMinusIcuMinutes": 38.8,
+     "days": 1096
+    },
+    {
+     "from": "1908-07-01",
+     "to": "1911-12-31",
+     "tzifMinusIcuMinutes": 25.216666666666665,
+     "days": 1279
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Libreville",
+   "segments": 5,
+   "totalDays": 25444,
+   "yearsDiffering": 69.7,
+   "maxAbsMinutes": 46.416666666666664,
+   "daysAfter1900": 25444,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1905-06-30",
+     "tzifMinusIcuMinutes": 24.216666666666665,
+     "days": 20269
+    },
+    {
+     "from": "1905-06-30",
+     "to": "1908-07-01",
+     "tzifMinusIcuMinutes": 37.8,
+     "days": 1096
+    },
+    {
+     "from": "1908-07-01",
+     "to": "1911-12-31",
+     "tzifMinusIcuMinutes": 24.216666666666665,
+     "days": 1279
+    }
+   ]
+  },
+  {
+   "tz": "America/Aruba",
+   "segments": 5,
+   "totalDays": 42004,
+   "yearsDiffering": 115,
+   "maxAbsMinutes": 90,
+   "daysAfter1900": 24020,
+   "sample": [
+    {
+     "from": "1899-03-28",
+     "to": "1912-02-12",
+     "tzifMinusIcuMinutes": -40.4,
+     "days": 4703
+    },
+    {
+     "from": "1912-02-12",
+     "to": "1942-05-03",
+     "tzifMinusIcuMinutes": -30,
+     "days": 11038
+    },
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -90,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/Curacao",
+   "segments": 5,
+   "totalDays": 42004,
+   "yearsDiffering": 115,
+   "maxAbsMinutes": 90,
+   "daysAfter1900": 24020,
+   "sample": [
+    {
+     "from": "1899-03-28",
+     "to": "1912-02-12",
+     "tzifMinusIcuMinutes": -35.78333333333333,
+     "days": 4703
+    },
+    {
+     "from": "1912-02-12",
+     "to": "1942-05-03",
+     "tzifMinusIcuMinutes": -30,
+     "days": 11038
+    },
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -90,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/Kralendijk",
+   "segments": 5,
+   "totalDays": 42004,
+   "yearsDiffering": 115,
+   "maxAbsMinutes": 90,
+   "daysAfter1900": 24020,
+   "sample": [
+    {
+     "from": "1899-03-28",
+     "to": "1912-02-12",
+     "tzifMinusIcuMinutes": -35.78333333333333,
+     "days": 4703
+    },
+    {
+     "from": "1912-02-12",
+     "to": "1942-05-03",
+     "tzifMinusIcuMinutes": -30,
+     "days": 11038
+    },
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -90,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/Lower_Princes",
+   "segments": 5,
+   "totalDays": 42004,
+   "yearsDiffering": 115,
+   "maxAbsMinutes": 90,
+   "daysAfter1900": 24020,
+   "sample": [
+    {
+     "from": "1899-03-28",
+     "to": "1912-02-12",
+     "tzifMinusIcuMinutes": -35.78333333333333,
+     "days": 4703
+    },
+    {
+     "from": "1912-02-12",
+     "to": "1942-05-03",
+     "tzifMinusIcuMinutes": -30,
+     "days": 11038
+    },
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -90,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Guernsey",
+   "segments": 8,
+   "totalDays": 23879,
+   "yearsDiffering": 65.4,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 23879,
+   "sample": [
+    {
+     "from": "1940-07-01",
+     "to": "1941-05-04",
+     "tzifMinusIcuMinutes": 60,
+     "days": 306
+    },
+    {
+     "from": "1941-08-10",
+     "to": "1942-04-05",
+     "tzifMinusIcuMinutes": 60,
+     "days": 238
+    },
+    {
+     "from": "1942-08-09",
+     "to": "1942-11-02",
+     "tzifMinusIcuMinutes": 60,
+     "days": 85
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Ouagadougou",
+   "segments": 1,
+   "totalDays": 22644,
+   "yearsDiffering": 62,
+   "maxAbsMinutes": 10.066666666666666,
+   "daysAfter1900": 22644,
+   "sample": []
+  },
+  {
+   "tz": "Africa/Harare",
+   "segments": 2,
+   "totalDays": 21549,
+   "yearsDiffering": 59,
+   "maxAbsMinutes": 10.3,
+   "daysAfter1900": 21549,
+   "sample": []
+  },
+  {
+   "tz": "Africa/Lusaka",
+   "segments": 2,
+   "totalDays": 21549,
+   "yearsDiffering": 59,
+   "maxAbsMinutes": 17.166666666666668,
+   "daysAfter1900": 21549,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1903-02-28",
+     "tzifMinusIcuMinutes": -17.166666666666668,
+     "days": 19416
+    }
+   ]
+  },
+  {
+   "tz": "Antarctica/DumontDUrville",
+   "segments": 4,
+   "totalDays": 37181,
+   "yearsDiffering": 101.8,
+   "maxAbsMinutes": 600,
+   "daysAfter1900": 20745,
+   "sample": [
+    {
+     "from": "1894-12-31",
+     "to": "1947-01-01",
+     "tzifMinusIcuMinutes": -600,
+     "days": 18992
+    },
+    {
+     "from": "1952-01-13",
+     "to": "1956-11-01",
+     "tzifMinusIcuMinutes": -600,
+     "days": 1753
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Mogadishu",
+   "segments": 6,
+   "totalDays": 36336,
+   "yearsDiffering": 99.5,
+   "maxAbsMinutes": 34.2,
+   "daysAfter1900": 20326,
+   "sample": [
+    {
+     "from": "1893-10-31",
+     "to": "1908-04-30",
+     "tzifMinusIcuMinutes": 32.733333333333334,
+     "days": 5294
+    },
+    {
+     "from": "1908-04-30",
+     "to": "1928-06-30",
+     "tzifMinusIcuMinutes": 30,
+     "days": 7366
+    },
+    {
+     "from": "1930-01-04",
+     "to": "1930-12-31",
+     "tzifMinusIcuMinutes": 30,
+     "days": 361
+    }
+   ]
+  },
+  {
+   "tz": "America/Antigua",
+   "segments": 5,
+   "totalDays": 36889,
+   "yearsDiffering": 101,
+   "maxAbsMinutes": 120,
+   "daysAfter1900": 18905,
+   "sample": [
+    {
+     "from": "1912-03-02",
+     "to": "1942-05-03",
+     "tzifMinusIcuMinutes": -60,
+     "days": 11019
+    },
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -120,
+     "days": 1246
+    },
+    {
+     "from": "1945-09-30",
+     "to": "1951-01-01",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1919
+    }
+   ]
+  },
+  {
+   "tz": "Asia/Kuala_Lumpur",
+   "segments": 1,
+   "totalDays": 18627,
+   "yearsDiffering": 51,
+   "maxAbsMinutes": 8.65,
+   "daysAfter1900": 18627,
+   "sample": []
+  },
+  {
+   "tz": "Pacific/Funafuti",
+   "segments": 1,
+   "totalDays": 18627,
+   "yearsDiffering": 51,
+   "maxAbsMinutes": 24.8,
+   "daysAfter1900": 18627,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1900-12-31",
+     "tzifMinusIcuMinutes": 24.8,
+     "days": 18627
+    }
+   ]
+  },
+  {
+   "tz": "Pacific/Wake",
+   "segments": 1,
+   "totalDays": 18627,
+   "yearsDiffering": 51,
+   "maxAbsMinutes": 25.6,
+   "daysAfter1900": 18627,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1900-12-31",
+     "tzifMinusIcuMinutes": -25.6,
+     "days": 18627
+    }
+   ]
+  },
+  {
+   "tz": "Pacific/Wallis",
+   "segments": 1,
+   "totalDays": 18626,
+   "yearsDiffering": 51,
+   "maxAbsMinutes": 43.266666666666666,
+   "daysAfter1900": 18626,
+   "sample": [
+    {
+     "from": "1850-01-01",
+     "to": "1900-12-31",
+     "tzifMinusIcuMinutes": 43.266666666666666,
+     "days": 18626
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Amsterdam",
+   "segments": 75,
+   "totalDays": 33167,
+   "yearsDiffering": 90.8,
+   "maxAbsMinutes": 79.53333333333333,
+   "daysAfter1900": 17706,
+   "sample": [
+    {
+     "from": "1892-05-01",
+     "to": "1914-11-08",
+     "tzifMinusIcuMinutes": 19.533333333333335,
+     "days": 8225
+    },
+    {
+     "from": "1914-11-08",
+     "to": "1918-04-01",
+     "tzifMinusIcuMinutes": -40.46666666666667,
+     "days": 1240
+    },
+    {
+     "from": "1918-04-01",
+     "to": "1918-04-15",
+     "tzifMinusIcuMinutes": 19.533333333333335,
+     "days": 14
+    }
+   ]
+  },
+  {
+   "tz": "America/Coral_Harbour",
+   "segments": 5,
+   "totalDays": 32947,
+   "yearsDiffering": 90.2,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 16511,
+   "sample": [
+    {
+     "from": "1895-01-01",
+     "to": "1908-04-22",
+     "tzifMinusIcuMinutes": -40.4,
+     "days": 4859
+    },
+    {
+     "from": "1908-04-22",
+     "to": "1918-04-14",
+     "tzifMinusIcuMinutes": -60,
+     "days": 3644
+    },
+    {
+     "from": "1918-10-27",
+     "to": "1940-09-29",
+     "tzifMinusIcuMinutes": -60,
+     "days": 8008
+    }
+   ]
+  },
+  {
+   "tz": "America/Nassau",
+   "segments": 45,
+   "totalDays": 29910,
+   "yearsDiffering": 81.9,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 13474,
+   "sample": [
+    {
+     "from": "1918-04-14",
+     "to": "1918-10-27",
+     "tzifMinusIcuMinutes": -60,
+     "days": 196
+    },
+    {
+     "from": "1919-03-31",
+     "to": "1919-10-26",
+     "tzifMinusIcuMinutes": -60,
+     "days": 209
+    },
+    {
+     "from": "1920-05-02",
+     "to": "1920-09-26",
+     "tzifMinusIcuMinutes": -60,
+     "days": 147
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Luanda",
+   "segments": 6,
+   "totalDays": 25444,
+   "yearsDiffering": 69.7,
+   "maxAbsMinutes": 52.06666666666667,
+   "daysAfter1900": 10104,
+   "sample": [
+    {
+     "from": "1891-12-31",
+     "to": "1905-06-30",
+     "tzifMinusIcuMinutes": 38.483333333333334,
+     "days": 4929
+    },
+    {
+     "from": "1905-06-30",
+     "to": "1908-07-01",
+     "tzifMinusIcuMinutes": 52.06666666666667,
+     "days": 1096
+    },
+    {
+     "from": "1908-07-01",
+     "to": "1911-12-31",
+     "tzifMinusIcuMinutes": 38.483333333333334,
+     "days": 1279
+    }
+   ]
+  },
+  {
+   "tz": "Indian/Christmas",
+   "segments": 2,
+   "totalDays": 25657,
+   "yearsDiffering": 70.2,
+   "maxAbsMinutes": 20.8,
+   "daysAfter1900": 9190,
+   "sample": [
+    {
+     "from": "1895-01-31",
+     "to": "1920-03-31",
+     "tzifMinusIcuMinutes": 17.933333333333334,
+     "days": 9190
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Gaborone",
+   "segments": 4,
+   "totalDays": 21731,
+   "yearsDiffering": 59.5,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 8947,
+   "sample": [
+    {
+     "from": "1884-12-31",
+     "to": "1903-02-28",
+     "tzifMinusIcuMinutes": -40.3,
+     "days": 6632
+    },
+    {
+     "from": "1943-09-19",
+     "to": "1944-03-18",
+     "tzifMinusIcuMinutes": 60,
+     "days": 182
+    }
+   ]
+  },
+  {
+   "tz": "Indian/Cocos",
+   "segments": 3,
+   "totalDays": 26664,
+   "yearsDiffering": 73,
+   "maxAbsMinutes": 150,
+   "daysAfter1900": 8402,
+   "sample": [
+    {
+     "from": "1942-04-30",
+     "to": "1945-05-02",
+     "tzifMinusIcuMinutes": -150,
+     "days": 1098
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Luxembourg",
+   "segments": 16,
+   "totalDays": 23735,
+   "yearsDiffering": 65,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 8274,
+   "sample": [
+    {
+     "from": "1892-05-01",
+     "to": "1904-05-31",
+     "tzifMinusIcuMinutes": 24.6,
+     "days": 4413
+    },
+    {
+     "from": "1904-05-31",
+     "to": "1914-11-08",
+     "tzifMinusIcuMinutes": 60,
+     "days": 3812
+    },
+    {
+     "from": "1916-04-30",
+     "to": "1916-05-14",
+     "tzifMinusIcuMinutes": -60,
+     "days": 14
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Lubumbashi",
+   "segments": 3,
+   "totalDays": 25681,
+   "yearsDiffering": 70.3,
+   "maxAbsMinutes": 70.3,
+   "daysAfter1900": 8202,
+   "sample": [
+    {
+     "from": "1897-11-08",
+     "to": "1908-12-31",
+     "tzifMinusIcuMinutes": -70.3,
+     "days": 4070
+    },
+    {
+     "from": "1908-12-31",
+     "to": "1920-04-24",
+     "tzifMinusIcuMinutes": -60,
+     "days": 4132
+    }
+   ]
+  },
+  {
+   "tz": "America/Cayman",
+   "segments": 3,
+   "totalDays": 22675,
+   "yearsDiffering": 62.1,
+   "maxAbsMinutes": 12.433333333333334,
+   "daysAfter1900": 8065,
+   "sample": []
+  },
+  {
+   "tz": "Africa/Kinshasa",
+   "segments": 5,
+   "totalDays": 25444,
+   "yearsDiffering": 69.7,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 7965,
+   "sample": [
+    {
+     "from": "1897-11-08",
+     "to": "1905-06-30",
+     "tzifMinusIcuMinutes": 46.416666666666664,
+     "days": 2790
+    },
+    {
+     "from": "1905-06-30",
+     "to": "1908-07-01",
+     "tzifMinusIcuMinutes": 60,
+     "days": 1096
+    },
+    {
+     "from": "1908-07-01",
+     "to": "1913-12-31",
+     "tzifMinusIcuMinutes": 46.416666666666664,
+     "days": 2010
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Bujumbura",
+   "segments": 2,
+   "totalDays": 21549,
+   "yearsDiffering": 59,
+   "maxAbsMinutes": 12.833333333333334,
+   "daysAfter1900": 6939,
+   "sample": []
+  },
+  {
+   "tz": "Africa/Lome",
+   "segments": 2,
+   "totalDays": 22644,
+   "yearsDiffering": 62,
+   "maxAbsMinutes": 21,
+   "daysAfter1900": 6938,
+   "sample": [
+    {
+     "from": "1892-12-31",
+     "to": "1912-01-01",
+     "tzifMinusIcuMinutes": 16.133333333333333,
+     "days": 6938
+    }
+   ]
+  },
+  {
+   "tz": "Pacific/Midway",
+   "segments": 4,
+   "totalDays": 22370,
+   "yearsDiffering": 61.2,
+   "maxAbsMinutes": 1466.6666666666667,
+   "daysAfter1900": 6845,
+   "sample": [
+    {
+     "from": "1892-07-04",
+     "to": "1901-01-01",
+     "tzifMinusIcuMinutes": -26.666666666666668,
+     "days": 3102
+    },
+    {
+     "from": "1901-01-01",
+     "to": "1911-01-01",
+     "tzifMinusIcuMinutes": 22.8,
+     "days": 3652
+    },
+    {
+     "from": "1956-06-03",
+     "to": "1956-09-02",
+     "tzifMinusIcuMinutes": 60,
+     "days": 91
+    }
+   ]
+  },
+  {
+   "tz": "America/Anguilla",
+   "segments": 3,
+   "totalDays": 23951,
+   "yearsDiffering": 65.6,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5967,
+   "sample": [
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/Marigot",
+   "segments": 3,
+   "totalDays": 23951,
+   "yearsDiffering": 65.6,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5967,
+   "sample": [
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/Port_of_Spain",
+   "segments": 3,
+   "totalDays": 23951,
+   "yearsDiffering": 65.6,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5967,
+   "sample": [
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/St_Barthelemy",
+   "segments": 3,
+   "totalDays": 23951,
+   "yearsDiffering": 65.6,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5967,
+   "sample": [
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/St_Kitts",
+   "segments": 3,
+   "totalDays": 23951,
+   "yearsDiffering": 65.6,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5967,
+   "sample": [
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/St_Lucia",
+   "segments": 3,
+   "totalDays": 23890,
+   "yearsDiffering": 65.4,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5906,
+   "sample": [
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/St_Vincent",
+   "segments": 3,
+   "totalDays": 23890,
+   "yearsDiffering": 65.4,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5906,
+   "sample": [
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/Dominica",
+   "segments": 3,
+   "totalDays": 23706,
+   "yearsDiffering": 64.9,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5722,
+   "sample": [
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/Grenada",
+   "segments": 3,
+   "totalDays": 23706,
+   "yearsDiffering": 64.9,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5722,
+   "sample": [
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/Montserrat",
+   "segments": 3,
+   "totalDays": 23706,
+   "yearsDiffering": 64.9,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5722,
+   "sample": [
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/St_Thomas",
+   "segments": 3,
+   "totalDays": 23706,
+   "yearsDiffering": 64.9,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5722,
+   "sample": [
+    {
+     "from": "1899-03-28",
+     "to": "1911-07-01",
+     "tzifMinusIcuMinutes": -19.733333333333334,
+     "days": 4476
+    },
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/Tortola",
+   "segments": 3,
+   "totalDays": 23706,
+   "yearsDiffering": 64.9,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5722,
+   "sample": [
+    {
+     "from": "1899-03-28",
+     "to": "1911-07-01",
+     "tzifMinusIcuMinutes": -18.466666666666665,
+     "days": 4476
+    },
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "America/Guadeloupe",
+   "segments": 3,
+   "totalDays": 23683,
+   "yearsDiffering": 64.8,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 5699,
+   "sample": [
+    {
+     "from": "1942-05-03",
+     "to": "1945-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1246
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Mbabane",
+   "segments": 4,
+   "totalDays": 19780,
+   "yearsDiffering": 54.2,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 4402,
+   "sample": [
+    {
+     "from": "1892-02-07",
+     "to": "1903-02-28",
+     "tzifMinusIcuMinutes": 34.4,
+     "days": 4038
+    },
+    {
+     "from": "1942-09-20",
+     "to": "1943-03-20",
+     "tzifMinusIcuMinutes": -60,
+     "days": 182
+    },
+    {
+     "from": "1943-09-19",
+     "to": "1944-03-18",
+     "tzifMinusIcuMinutes": -60,
+     "days": 182
+    }
+   ]
+  },
+  {
+   "tz": "Africa/Maseru",
+   "segments": 3,
+   "totalDays": 19598,
+   "yearsDiffering": 53.7,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 4220,
+   "sample": [
+    {
+     "from": "1892-02-07",
+     "to": "1903-02-28",
+     "tzifMinusIcuMinutes": 20,
+     "days": 4038
+    },
+    {
+     "from": "1942-09-20",
+     "to": "1943-03-20",
+     "tzifMinusIcuMinutes": -60,
+     "days": 182
+    }
+   ]
+  },
+  {
+   "tz": "America/Tijuana",
+   "segments": 16,
+   "totalDays": 3045,
+   "yearsDiffering": 8.3,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 3045,
+   "sample": [
+    {
+     "from": "1953-04-26",
+     "to": "1953-09-27",
+     "tzifMinusIcuMinutes": -60,
+     "days": 154
+    },
+    {
+     "from": "1961-04-30",
+     "to": "1961-09-24",
+     "tzifMinusIcuMinutes": -60,
+     "days": 147
+    },
+    {
+     "from": "1962-04-29",
+     "to": "1962-10-28",
+     "tzifMinusIcuMinutes": -60,
+     "days": 182
+    }
+   ]
+  },
+  {
+   "tz": "Arctic/Longyearbyen",
+   "segments": 22,
+   "totalDays": 19023,
+   "yearsDiffering": 52.1,
+   "maxAbsMinutes": 120,
+   "daysAfter1900": 2587,
+   "sample": [
+    {
+     "from": "1916-04-30",
+     "to": "1916-05-22",
+     "tzifMinusIcuMinutes": -60,
+     "days": 21
+    },
+    {
+     "from": "1916-09-29",
+     "to": "1916-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1
+    },
+    {
+     "from": "1917-04-16",
+     "to": "1917-09-17",
+     "tzifMinusIcuMinutes": -60,
+     "days": 154
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Oslo",
+   "segments": 22,
+   "totalDays": 19023,
+   "yearsDiffering": 52.1,
+   "maxAbsMinutes": 120,
+   "daysAfter1900": 2587,
+   "sample": [
+    {
+     "from": "1916-04-30",
+     "to": "1916-05-22",
+     "tzifMinusIcuMinutes": -60,
+     "days": 21
+    },
+    {
+     "from": "1916-09-29",
+     "to": "1916-09-30",
+     "tzifMinusIcuMinutes": -60,
+     "days": 1
+    },
+    {
+     "from": "1917-04-16",
+     "to": "1917-09-17",
+     "tzifMinusIcuMinutes": -60,
+     "days": 154
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Stockholm",
+   "segments": 18,
+   "totalDays": 20831,
+   "yearsDiffering": 57,
+   "maxAbsMinutes": 120,
+   "daysAfter1900": 2569,
+   "sample": [
+    {
+     "from": "1916-04-30",
+     "to": "1916-05-14",
+     "tzifMinusIcuMinutes": -60,
+     "days": 14
+    },
+    {
+     "from": "1917-04-16",
+     "to": "1917-09-17",
+     "tzifMinusIcuMinutes": -60,
+     "days": 154
+    },
+    {
+     "from": "1918-04-15",
+     "to": "1918-09-16",
+     "tzifMinusIcuMinutes": -60,
+     "days": 154
+    }
+   ]
+  },
+  {
+   "tz": "America/Creston",
+   "segments": 9,
+   "totalDays": 14441,
+   "yearsDiffering": 39.5,
+   "maxAbsMinutes": 120,
+   "daysAfter1900": 2022,
+   "sample": [
+    {
+     "from": "1916-10-01",
+     "to": "1918-03-31",
+     "tzifMinusIcuMinutes": -60,
+     "days": 546
+    },
+    {
+     "from": "1918-03-31",
+     "to": "1918-06-02",
+     "tzifMinusIcuMinutes": -120,
+     "days": 63
+    },
+    {
+     "from": "1918-06-02",
+     "to": "1918-10-27",
+     "tzifMinusIcuMinutes": -60,
+     "days": 147
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Copenhagen",
+   "segments": 17,
+   "totalDays": 17053,
+   "yearsDiffering": 46.7,
+   "maxAbsMinutes": 120,
+   "daysAfter1900": 982,
+   "sample": [
+    {
+     "from": "1916-04-30",
+     "to": "1916-05-14",
+     "tzifMinusIcuMinutes": -60,
+     "days": 14
+    },
+    {
+     "from": "1917-04-16",
+     "to": "1917-09-17",
+     "tzifMinusIcuMinutes": -60,
+     "days": 154
+    },
+    {
+     "from": "1918-04-15",
+     "to": "1918-09-16",
+     "tzifMinusIcuMinutes": -60,
+     "days": 154
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Jersey",
+   "segments": 8,
+   "totalDays": 18395,
+   "yearsDiffering": 50.4,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 701,
+   "sample": [
+    {
+     "from": "1940-07-01",
+     "to": "1941-05-04",
+     "tzifMinusIcuMinutes": 60,
+     "days": 306
+    },
+    {
+     "from": "1941-08-10",
+     "to": "1942-04-05",
+     "tzifMinusIcuMinutes": 60,
+     "days": 238
+    },
+    {
+     "from": "1942-08-09",
+     "to": "1942-11-02",
+     "tzifMinusIcuMinutes": 60,
+     "days": 85
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Monaco",
+   "segments": 4,
+   "totalDays": 15988,
+   "yearsDiffering": 43.8,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 496,
+   "sample": [
+    {
+     "from": "1940-06-14",
+     "to": "1941-05-04",
+     "tzifMinusIcuMinutes": -60,
+     "days": 324
+    },
+    {
+     "from": "1941-10-05",
+     "to": "1942-03-08",
+     "tzifMinusIcuMinutes": -60,
+     "days": 154
+    }
+   ]
+  },
+  {
+   "tz": "America/Blanc-Sablon",
+   "segments": 4,
+   "totalDays": 18263,
+   "yearsDiffering": 50,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 279,
+   "sample": [
+    {
+     "from": "1918-04-14",
+     "to": "1918-10-27",
+     "tzifMinusIcuMinutes": 60,
+     "days": 196
+    },
+    {
+     "from": "1942-02-09",
+     "to": "1942-05-03",
+     "tzifMinusIcuMinutes": 60,
+     "days": 83
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Ljubljana",
+   "segments": 2,
+   "totalDays": 12454,
+   "yearsDiffering": 34.1,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 36,
+   "sample": [
+    {
+     "from": "1945-04-02",
+     "to": "1945-05-08",
+     "tzifMinusIcuMinutes": 60,
+     "days": 36
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Sarajevo",
+   "segments": 2,
+   "totalDays": 12454,
+   "yearsDiffering": 34.1,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 36,
+   "sample": [
+    {
+     "from": "1945-04-02",
+     "to": "1945-05-08",
+     "tzifMinusIcuMinutes": 60,
+     "days": 36
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Skopje",
+   "segments": 2,
+   "totalDays": 12454,
+   "yearsDiffering": 34.1,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 36,
+   "sample": [
+    {
+     "from": "1945-04-02",
+     "to": "1945-05-08",
+     "tzifMinusIcuMinutes": 60,
+     "days": 36
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Zagreb",
+   "segments": 2,
+   "totalDays": 12454,
+   "yearsDiffering": 34.1,
+   "maxAbsMinutes": 60,
+   "daysAfter1900": 36,
+   "sample": [
+    {
+     "from": "1945-04-02",
+     "to": "1945-05-08",
+     "tzifMinusIcuMinutes": 60,
+     "days": 36
+    }
+   ]
+  },
+  {
+   "tz": "Europe/Isle_of_Man",
+   "segments": 1,
+   "totalDays": 12141,
+   "yearsDiffering": 33.2,
+   "maxAbsMinutes": 17.916666666666668,
+   "daysAfter1900": 0,
+   "sample": []
+  },
+  {
+   "tz": "Europe/Vaduz",
+   "segments": 2,
+   "totalDays": 16222,
+   "yearsDiffering": 44.4,
+   "maxAbsMinutes": 8.3,
+   "daysAfter1900": 0,
+   "sample": []
+  }
+ ]
+}

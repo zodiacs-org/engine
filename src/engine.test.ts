@@ -27,7 +27,7 @@ import {
   transits,
   wholeSignCusps
 } from "./index.js";
-import { resolveBirth } from "./geo.js";
+import { prepareLocalTime, resolveBirth } from "./geo.js";
 import type { BodyPosition } from "./types.js";
 
 function longitudeOf(bodies: readonly BodyPosition[], name: string): number {
@@ -52,11 +52,14 @@ describe("positions", () => {
     });
   }
 
-  it("matches the historic JPL vector for 1907-07-06", () => {
-    const historic = positions("1907-07-06T15:07:00Z");
-    expect(angleDifference(longitudeOf(historic, "Sun"), 103.3759585)).toBeLessThan(0.01);
-    expect(angleDifference(longitudeOf(historic, "Moon"), 59.714797)).toBeLessThan(0.01);
-    expect(angleDifference(longitudeOf(historic, "Mars"), 283.394441)).toBeLessThan(0.01);
+  it("matches the historic JPL vector for 1908-02-11", () => {
+    // A synthetic instant. JPL Horizons (DE441; Mars mar099), QUANTITIES='31',
+    // CENTER='500@399', 1908-Feb-11 09:23 UT, fetched 2026-09-29 by
+    // docs/evidence/rc15-20260929/horizons-1908.sh.
+    const historic = positions("1908-02-11T09:23:00Z");
+    expect(angleDifference(longitudeOf(historic, "Sun"), 321.2707941)).toBeLessThan(0.01);
+    expect(angleDifference(longitudeOf(historic, "Moon"), 76.3230925)).toBeLessThan(0.01);
+    expect(angleDifference(longitudeOf(historic, "Mars"), 21.8469781)).toBeLessThan(0.01);
   });
 
   it("annotates longitude with sign and degree", () => {
@@ -149,22 +152,43 @@ describe("angles and houses", () => {
   });
 });
 
+// A birth before 1970 reads the zone's shipped history, loaded first.
+await prepareLocalTime("1908-02-11", "America/Mexico_City");
+
 describe("public composition APIs", () => {
-  const frida = natalChart(
+  // A synthetic birth before Mexico City's clock left local mean time (1922
+  // in tzdb): resolveBirth reads 02:47 on the birthplace's own mean time,
+  // 99.13° × 240 s = 6 h 36 min 31 s behind Greenwich, so 09:23:31 UT, 31 s
+  // after the JPL vector above.
+  const natal = natalChart(
     resolveBirth({
-      date: "1907-07-06",
-      time: "08:30",
+      date: "1908-02-11",
+      time: "02:47",
       timeZone: "America/Mexico_City",
-      latitude: 19.35,
-      longitude: -99.16
+      latitude: 19.43,
+      longitude: -99.13
     })
   );
 
-  it("reproduces the documented Frida Kahlo big three", () => {
-    expect(signForLongitude(longitudeOf(frida.bodies, "Sun")).slug).toBe("cancer");
-    expect(signForLongitude(longitudeOf(frida.bodies, "Moon")).slug).toBe("taurus");
-    expect(signForLongitude(frida.angles?.asc ?? 0).slug).toBe("leo");
-    expect(frida.flags).toContain("lmt");
+  it("puts the Sun, Moon and ascendant of a local-mean-time birth in the signs independent sources give", () => {
+    // Sun 321.27° and Moon 76.32° from JPL Horizons (above; the Moon moves
+    // 0.004° in the 31 s). The ascendant from the textbook formula on the
+    // IAU 1982 mean sidereal time and the IAU 1980 mean obliquity of date
+    // (23.4512°), written out here rather than taken from the engine: 263.64°,
+    // Sagittarius. With nutation (the engine's apparent frame) it is 263.633°.
+    expect(natal.input.utc.toISOString()).toBe("1908-02-11T09:23:31.000Z");
+    expect(signForLongitude(longitudeOf(natal.bodies, "Sun")).slug).toBe("aquarius");
+    expect(signForLongitude(longitudeOf(natal.bodies, "Moon")).slug).toBe("gemini");
+    const jd = Date.parse("1908-02-11T09:23:31Z") / 86_400_000 + 2_440_587.5;
+    const t = (jd - 2_451_545) / 36_525;
+    const ramc = normalizeLongitude(280.46061837 + 360.98564736629 * (jd - 2_451_545) + 0.000387933 * t * t - t ** 3 / 38_710_000 - 99.13);
+    const obliquity = 23.4392911 - 0.0130041667 * t - 1.639e-7 * t * t + 5.036e-7 * t ** 3;
+    const [r, e, phi] = [(ramc * Math.PI) / 180, (obliquity * Math.PI) / 180, (19.43 * Math.PI) / 180];
+    const ascendant = normalizeLongitude((Math.atan2(Math.cos(r), -(Math.sin(r) * Math.cos(e) + Math.tan(phi) * Math.sin(e))) * 180) / Math.PI);
+    expect(ascendant).toBeCloseTo(263.637, 2);
+    expect(angleDifference(natal.angles!.asc, ascendant)).toBeLessThan(0.05);
+    expect(signForLongitude(natal.angles!.asc).slug).toBe("sagittarius");
+    expect(natal.flags).toContain("lmt");
   });
 
   it("computes transit and synastry summaries", () => {
@@ -172,11 +196,11 @@ describe("public composition APIs", () => {
       utc: "1990-02-01T12:00:00Z",
       timeKnown: false
     });
-    const current = transits(frida, "2026-07-15T00:00:00Z");
+    const current = transits(natal, "2026-07-15T00:00:00Z");
     expect(current.positions).toHaveLength(12);
     expect(current.aspects.length).toBeGreaterThan(0);
 
-    const pair = synastry(frida, other);
+    const pair = synastry(natal, other);
     expect(pair.aspects.length).toBeGreaterThan(0);
     expect(pair.top).toEqual(pair.aspects.slice(0, pair.top.length));
   });

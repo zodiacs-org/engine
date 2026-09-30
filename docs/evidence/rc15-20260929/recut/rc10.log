@@ -1,0 +1,23 @@
+# sh analyses.sh rc10, Node v22.22.2, npm 10.9.7, 2026-09-29
+
+## the rc.10 compatibility script (its full report goes to <scratch>/rc10-full.json)
+$ sh -c node scripts/verify-rc10-compatibility.mjs --candidate '<tmp>/zodiacs-engine-0.1.1-rc.15.tgz' --baseline '<tmp>/rc10-baseline' --output '<scratch>/rc10-full.json' > /dev/null
+exit 1
+
+## its report, reduced
+$ sh -c node '<checkout>/docs/evidence/rc15-20260929/recut/rc10-reduce.mjs' '<scratch>/rc10-full.json' '<tmp>/rc10-baseline' '<tmp>/zodiacs-engine-0.1.1-rc.15.tgz' > '<checkout>/docs/evidence/rc15-20260929/recut/rc10-compatibility.json'
+exit 0
+
+## the reduced report against the first cut's
+$ node -e 
+      const read = (f) => JSON.parse(require('fs').readFileSync(f, 'utf8'));
+      const [a, b] = [read('<checkout>/docs/evidence/rc15-20260929/rc10-compatibility.json'), read('<checkout>/docs/evidence/rc15-20260929/recut/rc10-compatibility.json')];
+      const verdicts = (r) => JSON.stringify(r.checks);
+      console.log('summary', JSON.stringify({ checks: b.summary.checks, passed: b.summary.passed, failed: b.summary.failed }));
+      console.log('checks, with their first three mismatches, as the first cut:', verdicts(a) === verdicts(b));
+      console.log('candidate archive', b.metadata.candidate.artifactSha256);
+summary {"checks":571,"passed":382,"failed":189}
+checks, with their first three mismatches, as the first cut: true
+candidate archive bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637
+exit 0
+

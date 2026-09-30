@@ -1,0 +1,404 @@
+# sh analyses.sh compare, Node v22.22.2, npm 10.9.7, 2026-09-29
+
+## rc.14 against this build, 9,697 charts
+$ node <checkout>/docs/evidence/rc15-20260929/rc14-comparison.mjs <rc.14 package> . <checkout>/docs/evidence/rc15-20260929/recut/rc14-comparison.json
+{
+ "before": "0.1.1-rc.14",
+ "after": "0.1.1-rc.15",
+ "charts": 9697,
+ "places": [
+  [
+   0,
+   0
+  ],
+  [
+   40.7128,
+   -74.006
+  ],
+  [
+   -33.87,
+   151.21
+  ],
+  [
+   60.17,
+   24.94
+  ]
+ ],
+ "eras": {
+  "before 1972": {
+   "charts": 3944,
+   "identicalCharts": 2,
+   "systemChanged": 0,
+   "maxArcsec": {
+    "Sun lon": 9.855e-7,
+    "Sun lat": 3.494e-11,
+    "Moon lon": 0,
+    "Moon lat": 0,
+    "Mercury lon": 0.000002747,
+    "Mercury lat": 2.341e-7,
+    "Venus lon": 0.000002073,
+    "Venus lat": 7.735e-8,
+    "Mars lon": 0.000001766,
+    "Mars lat": 3.222e-8,
+    "Jupiter lon": 0.000001389,
+    "Jupiter lat": 2.242e-8,
+    "Saturn lon": 0.000001256,
+    "Saturn lat": 3.861e-8,
+    "Uranus lon": 0.000001175,
+    "Uranus lat": 1.005e-8,
+    "Neptune lon": 0.000001102,
+    "Neptune lat": 2.598e-8,
+    "Pluto lon": 0.000001063,
+    "Pluto lat": 2.48e-7,
+    "North Node lon": 0.03462,
+    "North Node lat": 0,
+    "South Node lon": 0.03462,
+    "South Node lat": 0,
+    "asc": 0,
+    "mc": 0,
+    "cusps": 0
+   },
+   "maxDeltaTChange": 0
+  },
+  "1972 to 2027-10-02": {
+   "charts": 1801,
+   "identicalCharts": 0,
+   "systemChanged": 0,
+   "maxArcsec": {
+    "Sun lon": 0.0337,
+    "Sun lat": 7.008e-9,
+    "Moon lon": 0.4616,
+    "Moon lat": 0.04167,
+    "Mercury lon": 0.07221,
+    "Mercury lat": 0.008593,
+    "Venus lon": 0.04133,
+    "Venus lat": 0.006965,
+    "Mars lon": 0.02289,
+    "Mars lat": 0.001549,
+    "Jupiter lon": 0.007725,
+    "Jupiter lat": 0.000146,
+    "Saturn lon": 0.003224,
+    "Saturn lat": 0.0001495,
+    "Uranus lon": 0.001668,
+    "Uranus lat": 0.00001775,
+    "Neptune lon": 0.001103,
+    "Neptune lat": 0.00002303,
+    "Pluto lon": 0.001029,
+    "Pluto lat": 0.0003201,
+    "North Node lon": 0.0172,
+    "North Node lat": 0,
+    "South Node lon": 0.0172,
+    "South Node lat": 0,
+    "asc": 44.98,
+    "mc": 12.34,
+    "cusps": 44.98
+   },
+   "maxDeltaTChange": 0.08287
+  },
+  "after 2027-10-02": {
+   "charts": 3952,
+   "identicalCharts": 0,
+   "systemChanged": 0,
+   "maxArcsec": {
+    "Sun lon": 3.389e-7,
+    "Sun lat": 3.492e-11,
+    "Moon lon": 0,
+    "Moon lat": 0,
+    "Mercury lon": 8.775e-7,
+    "Mercury lat": 7.772e-8,
+    "Venus lon": 6.802e-7,
+    "Venus lat": 3.054e-8,
+    "Mars lon": 5.648e-7,
+    "Mars lat": 1.207e-8,
+    "Jupiter lon": 4.379e-7,
+    "Jupiter lat": 6.919e-9,
+    "Saturn lon": 3.986e-7,
+    "Saturn lat": 1.32e-8,
+    "Uranus lon": 3.724e-7,
+    "Uranus lat": 3.478e-9,
+    "Neptune lon": 3.593e-7,
+    "Neptune lat": 7.781e-9,
+    "Pluto lon": 3.364e-7,
+    "Pluto lat": 6.102e-8,
+    "North Node lon": 0.03423,
+    "North Node lat": 0,
+    "South Node lon": 0.03423,
+    "South Node lat": 0,
+    "asc": 0,
+    "mc": 0,
+    "cusps": 0
+   },
+   "maxDeltaTChange": 0
+  }
+ }
+}
+exit 0
+
+## rc.14 against this build, the review's sample
+$ node <checkout>/docs/evidence/rc15-20260929/review-sample.mjs <rc.14 package> . <checkout>/docs/evidence/rc15-20260929/recut/review-sample.json
+exit 0
+
+## sizes of rc.14, the first cut and this tree
+$ sh -c node '<checkout>/docs/evidence/rc15-20260929/sizes.mjs' rc14='<rc.14 package>' rc15='<first cut package>' recut=. > '<checkout>/docs/evidence/rc15-20260929/recut/sizes.json'
+exit 0
+
+## leap seconds against Bulletin C 72
+$ node <checkout>/docs/evidence/rc15-20260929/leap-seconds.mjs <checkout>/docs/evidence/rc15-20260929/recut/leap-seconds.json
+{
+ "reference": "conformance/sources/l2/Leap_Second.dat (IERS Bulletin C, through Bulletin 72, July 2026)",
+ "referenceSha256": "6cb6f5d4b819f2e568e25db4b0b26d89dedf031fdffb18bc94d40f4e94e268d7",
+ "engineVersion": "0.1.1-rc.15",
+ "changes": 28,
+ "lastChange": {
+  "mjd": 57754,
+  "taiMinusUtc": 37
+ },
+ "checks": 58,
+ "failures": 0,
+ "firstFailures": [],
+ "node": "v22.22.2"
+}
+exit 0
+
+## the true node's numerical noise
+$ node <checkout>/docs/evidence/rc15-20260929/node-velocity.mjs <checkout>/docs/evidence/rc15-20260929/recut/node-velocity.json
+{
+ "instant": "1870-06-26T01:26:00.000Z",
+ "deltaTSeconds": 1.8543555619496623,
+ "centralTtIdentical": true,
+ "rc14MinusRc15Arcsec": -0.03462,
+ "physicalBoundOver200MicrosecondsArcsec": 0.000016666666666666667,
+ "scatter": [
+  {
+   "instant": "1600-06-15T00:00:00.000Z",
+   "shifts": 200,
+   "maxAbsArcsec": 0.18,
+   "sdArcsec": 0.0665
+  },
+  {
+   "instant": "1870-06-26T01:26:00.000Z",
+   "shifts": 200,
+   "maxAbsArcsec": 0.0668,
+   "sdArcsec": 0.0196
+  },
+  {
+   "instant": "2000-01-01T12:00:00.000Z",
+   "shifts": 200,
+   "maxAbsArcsec": 0.0000658,
+   "sdArcsec": 0.0000194
+  },
+  {
+   "instant": "2100-06-01T00:00:00.000Z",
+   "shifts": 200,
+   "maxAbsArcsec": 0.0261,
+   "sdArcsec": 0.00767
+  }
+ ],
+ "node": "v22.22.2"
+}
+exit 0
+
+## the engine's side of the Swiss ayanamsa comparison, first cut against this build
+$ node <checkout>/docs/evidence/rc15-20260929/recut/ayanamsa-engine.mjs <first cut package> . <checkout>/docs/evidence/rc15-20260929/recut/ayanamsa-engine.json
+{
+ "firstCut": "0.1.1-rc.15",
+ "candidate": "0.1.1-rc.15",
+ "instants": 14647,
+ "ayanamsas": {
+  "lahiri": {
+   "meanIdentical": 14645,
+   "trueIdentical": 14644,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 1.2789769243681803e-11,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "fagan-bradley": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "krishnamurti": {
+   "meanIdentical": 14646,
+   "trueIdentical": 14645,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 1.2789769243681803e-11,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "raman": {
+   "meanIdentical": 14646,
+   "trueIdentical": 14645,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 7.673861546209082e-11,
+   "maxTrueDifferenceArcsec": 7.673861546209082e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "yukteswar": {
+   "meanIdentical": 14646,
+   "trueIdentical": 14645,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 6.394884621840902e-11,
+   "maxTrueDifferenceArcsec": 6.394884621840902e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "true-chitra": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "true-revati": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "true-pushya": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "galactic-center": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "user-j1900": {
+   "meanIdentical": 14646,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 1.2789769243681803e-11,
+   "maxTrueDifferenceArcsec": 2.5579538487363607e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "user-b1950": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  },
+  "user-j2000": {
+   "meanIdentical": 14647,
+   "trueIdentical": 14646,
+   "nutationIdentical": 14630,
+   "julianDateTTIdentical": 14646,
+   "maxMeanDifferenceArcsec": 0,
+   "maxTrueDifferenceArcsec": 1.2789769243681803e-11,
+   "deltaT": {
+    "changedAt": 36,
+    "between": [
+     "1972-01-10",
+     "1972-12-25"
+    ],
+    "maxChangeSeconds": 0.6318
+   }
+  }
+ },
+ "sunIdentical": 14632
+}
+exit 0
+

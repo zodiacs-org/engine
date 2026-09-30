@@ -1,0 +1,6529 @@
+{
+  "schema": "zodiacs.rc10-compatibility-report.v1",
+  "startedAt": "2026-09-29T08:51:28.034Z",
+  "completedAt": "2026-09-29T08:51:33.098Z",
+  "status": "fail",
+  "runtime": {
+    "node": "v22.22.2",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "scope": "Finite exact legacy-behavior comparison of a packed candidate against a caller-supplied frozen rc.10 package, with identical copied pinned dependencies in separate processes.",
+  "limitations": [
+    "This is not an independent astronomical accuracy reference, exhaustive compatibility proof, Swiss equivalence claim, or test of the new optional APIs.",
+    "It does not test every date, place, host runtime, or transit/return search. Source ancestry and artifact authenticity are not inferred from package versions.",
+    "The exact geographic pole fixture checks observed chart acceptance and receipt refusal, not mathematical validity of its angles.",
+    "Only known engine version metadata fields are normalized; numerical fields, types, ordering, flags, DeltaT values and provenance, receipt conventions, and requested/effective houses are compared without tolerance."
+  ],
+  "metadata": {
+    "baseline": {
+      "sourcePath": "<tmp>/rc10/package",
+      "packageVersion": "0.1.1-rc.10",
+      "fileInventorySha256": "0aa82ab81d97966a7a07c39dcf2e2264a8f868906c205e566870510d937a350e"
+    },
+    "candidate": {
+      "artifactPath": "<work>/pack/zodiacs-engine-0.1.1-rc.15.tgz",
+      "artifactSha256": "3651c525e98ff83e20a46bded84ede5ad1465dde22674830347bceed87c31309",
+      "packageVersion": "0.1.1-rc.15",
+      "fileInventorySha256": "4a22bb7d412942a17d919b2e650d6704eebc344a988903bb72c3a186ddcc6b7a"
+    },
+    "dependencies": {
+      "declarations": {
+        "astronomy-engine": "2.1.19"
+      },
+      "identicalSeparateCopies": true,
+      "source": "supplied frozen baseline node_modules",
+      "inventorySha256": "1332f9b15c60207d7e6f82e531d66b7413c7c7219c1e3967feb76e4372579260"
+    }
+  },
+  "fixtureSha256": "a06f14843bce15ca71ac6ffd0cc5d4e41adefb6060b0245c81165a7a14495b64",
+  "normalization": [
+    "chart.engineVersion",
+    "replayed.engineVersion",
+    "envelope.receipt.engine.version",
+    "decoded.envelope.receipt.engine.version",
+    "transits.natal.engineVersion",
+    "synastry.a.engineVersion",
+    "synastry.b.engineVersion",
+    "exact-geographic-pole.chart.engineVersion"
+  ],
+  "summary": {
+    "chartCases": 91,
+    "invalidInputCases": 11,
+    "legacyApiCases": 7,
+    "checks": 571,
+    "passed": 382,
+    "failed": 189,
+    "rc10ReceiptsReplayedByCandidate": 91,
+    "addedMainExports": [
+      "CONFIGURED_ASPECT_ANGLES",
+      "DECLINATION_ORB",
+      "DECLINATION_ORB_LUMINARY",
+      "DEFAULT_ASPECT_POLICY",
+      "DEFAULT_DECLINATION_ORB_POLICY",
+      "EPHEMERIS_SPAN",
+      "PROGRESSION_DAYS_PER_YEAR",
+      "RA_POLE_TOLERANCE",
+      "SUN_BOUND_LATITUDE",
+      "chartDeclinations",
+      "createAspectPolicy",
+      "declinationOf",
+      "declinationOrb",
+      "declinationsForBodies",
+      "eclipticToEquatorial",
+      "findConfiguredAspects",
+      "findDeclinationAspects",
+      "progressedBodies",
+      "progressedInstant"
+    ]
+  },
+  "baselineObservationSha256": "c5527b1cb9dbb8fae35e59c091768979d2105316249858d924f89d2b051b1dbb",
+  "candidateObservationSha256": "b27a1046d3da1a72e83b1c5016d394e57894e7897b4bbcfaba69fb997488aebc",
+  "operationTrace": {
+    "callsPerWorker": 1124,
+    "identical": true,
+    "baselineSha256": "ba7af3a170d8e53753dc79dfd6ac59276647f0de4fea25cb3befb0d6365af2d9",
+    "candidateSha256": "ba7af3a170d8e53753dc79dfd6ac59276647f0de4fea25cb3befb0d6365af2d9"
+  },
+  "differentCallHistoryDiagnostics": {
+    "baseline": {
+      "meaning": "Same artifact and input, earlier versus later calls in this worker; different call history, not a cross-version comparison.",
+      "differingCases": 2,
+      "cases": [
+        {
+          "id": "reference-start",
+          "mismatchCount": 3,
+          "mismatches": [
+            {
+              "path": "$.bodies[0].degree",
+              "why": "value-or-type",
+              "baseline": 10.429444288083687,
+              "candidate": 10.4294442880838
+            },
+            {
+              "path": "$.bodies[0].lat",
+              "why": "value-or-type",
+              "baseline": -0.00030364093330900976,
+              "candidate": -0.00030364093330577504
+            },
+            {
+              "path": "$.bodies[0].lon",
+              "why": "value-or-type",
+              "baseline": 280.4294442880837,
+              "candidate": 280.4294442880838
+            }
+          ]
+        },
+        {
+          "id": "reference-end",
+          "mismatchCount": 5,
+          "mismatches": [
+            {
+              "path": "$.aspects[7].orb",
+              "why": "value-or-type",
+              "baseline": 3.8117302175016903,
+              "candidate": 3.8117302175012355
+            },
+            {
+              "path": "$.aspects[10].orb",
+              "why": "value-or-type",
+              "baseline": 7.0380223007287555,
+              "candidate": 7.038022300728301
+            },
+            {
+              "path": "$.bodies[0].degree",
+              "why": "value-or-type",
+              "baseline": 10.326882857879355,
+              "candidate": 10.3268828578789
+            },
+            {
+              "path": "$.bodies[0].lat",
+              "why": "value-or-type",
+              "baseline": 0.0004890080840760109,
+              "candidate": 0.0004890080840857133
+            },
+            {
+              "path": "$.bodies[0].lon",
+              "why": "value-or-type",
+              "baseline": 280.3268828578794,
+              "candidate": 280.32688285787896
+            }
+          ]
+        }
+      ]
+    },
+    "candidate": {
+      "meaning": "Same artifact and input, earlier versus later calls in this worker; different call history, not a cross-version comparison.",
+      "differingCases": 2,
+      "cases": [
+        {
+          "id": "reference-start",
+          "mismatchCount": 3,
+          "mismatches": [
+            {
+              "path": "$.bodies[0].degree",
+              "why": "value-or-type",
+              "baseline": 10.42944428798944,
+              "candidate": 10.429444287989554
+            },
+            {
+              "path": "$.bodies[0].lat",
+              "why": "value-or-type",
+              "baseline": -0.00030364093330900976,
+              "candidate": -0.00030364093330577504
+            },
+            {
+              "path": "$.bodies[0].lon",
+              "why": "value-or-type",
+              "baseline": 280.42944428798944,
+              "candidate": 280.4294442879895
+            }
+          ]
+        },
+        {
+          "id": "reference-end",
+          "mismatchCount": 5,
+          "mismatches": [
+            {
+              "path": "$.aspects[7].orb",
+              "why": "value-or-type",
+              "baseline": 3.8117302176367502,
+              "candidate": 3.8117302176362955
+            },
+            {
+              "path": "$.aspects[10].orb",
+              "why": "value-or-type",
+              "baseline": 7.038022300856369,
+              "candidate": 7.038022300855914
+            },
+            {
+              "path": "$.bodies[0].degree",
+              "why": "value-or-type",
+              "baseline": 10.326882858014528,
+              "candidate": 10.326882858014073
+            },
+            {
+              "path": "$.bodies[0].lat",
+              "why": "value-or-type",
+              "baseline": 0.0004890080840760135,
+              "candidate": 0.0004890080840889499
+            },
+            {
+              "path": "$.bodies[0].lon",
+              "why": "value-or-type",
+              "baseline": 280.3268828580145,
+              "candidate": 280.3268828580141
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "negativeControl": {
+    "passed": true,
+    "injectedChange": "Clone of one observed Sun longitude increased by 0.000001 degrees; no artifact altered.",
+    "mismatchCount": 1,
+    "mismatches": [
+      {
+        "path": "$.chart.bodies[0].lon",
+        "why": "value-or-type",
+        "baseline": 280.36873843817517,
+        "candidate": 280.36873943817517
+      }
+    ]
+  },
+  "checks": [
+    {
+      "id": "all-13-house-systems",
+      "passed": true
+    },
+    {
+      "id": "baseline-all-13-house-systems",
+      "passed": true
+    },
+    {
+      "id": "ephemeris-identity",
+      "passed": true
+    },
+    {
+      "id": "identical-public-operation-order",
+      "passed": true
+    },
+    {
+      "id": "main-legacy-export-preservation",
+      "passed": true
+    },
+    {
+      "id": "receipt-legacy-export-preservation",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-whole",
+      "passed": false,
+      "mismatchCount": 348,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-whole",
+      "passed": false,
+      "mismatchCount": 67,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-whole",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-placidus",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-placidus",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-placidus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-porphyry",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-porphyry",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-porphyry",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-equal",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-equal",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-equal",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-equal-mc",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-equal-mc",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-vehlow",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-vehlow",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-vehlow",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-koch",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-koch",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-koch",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-regiomontanus",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-regiomontanus",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-campanus",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-campanus",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-campanus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-topocentric",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-topocentric",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-topocentric",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-alcabitius",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-alcabitius",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-morinus",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-morinus",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-morinus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:equator-meridian",
+      "passed": false,
+      "mismatchCount": 396,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:equator-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:equator-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:equator-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:equator-meridian",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 11.373869662149616,
+          "candidate": 11.37547857346999
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 191.37386966214967,
+          "candidate": 191.37547857347
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 99.6110618554153,
+          "candidate": 99.61243175354343
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:equator-meridian",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-whole",
+      "passed": false,
+      "mismatchCount": 354,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-whole",
+      "passed": false,
+      "mismatchCount": 68,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-whole",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-placidus",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-placidus",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-placidus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-porphyry",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-porphyry",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-porphyry",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-equal",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-equal",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-equal",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-equal-mc",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-equal-mc",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-vehlow",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-vehlow",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-vehlow",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-koch",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-koch",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-koch",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-regiomontanus",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-regiomontanus",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-campanus",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-campanus",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-campanus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-topocentric",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-topocentric",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-topocentric",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-alcabitius",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-alcabitius",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-morinus",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-morinus",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-morinus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-temperate-meridian",
+      "passed": false,
+      "mismatchCount": 402,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-temperate-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-temperate-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-temperate-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-temperate-meridian",
+      "passed": false,
+      "mismatchCount": 80,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-temperate-meridian",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-whole",
+      "passed": false,
+      "mismatchCount": 350,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-whole",
+      "passed": false,
+      "mismatchCount": 67,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-whole",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-placidus",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-placidus",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-placidus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-porphyry",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-porphyry",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-porphyry",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-equal",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-equal",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-equal",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-equal-mc",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-equal-mc",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-vehlow",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-vehlow",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-vehlow",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-koch",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-koch",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-koch",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-regiomontanus",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-regiomontanus",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-campanus",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-campanus",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-campanus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-topocentric",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-topocentric",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-topocentric",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-alcabitius",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-alcabitius",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-morinus",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-morinus",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-morinus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-temperate-meridian",
+      "passed": false,
+      "mismatchCount": 398,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-temperate-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-temperate-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-temperate-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-temperate-meridian",
+      "passed": false,
+      "mismatchCount": 79,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 227.82338053225953,
+          "candidate": 227.82535445985212
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 47.823380532259534,
+          "candidate": 47.82535445985212
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 301.1796749471714,
+          "candidate": 301.181186805739
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-temperate-meridian",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-whole",
+      "passed": false,
+      "mismatchCount": 362,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-whole",
+      "passed": false,
+      "mismatchCount": 70,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-whole",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-placidus",
+      "passed": false,
+      "mismatchCount": 362,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-placidus",
+      "passed": false,
+      "mismatchCount": 70,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-placidus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-porphyry",
+      "passed": false,
+      "mismatchCount": 410,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-porphyry",
+      "passed": false,
+      "mismatchCount": 82,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-porphyry",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-equal",
+      "passed": false,
+      "mismatchCount": 410,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-equal",
+      "passed": false,
+      "mismatchCount": 82,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-equal",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-equal-mc",
+      "passed": false,
+      "mismatchCount": 410,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-equal-mc",
+      "passed": false,
+      "mismatchCount": 82,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-vehlow",
+      "passed": false,
+      "mismatchCount": 410,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-vehlow",
+      "passed": false,
+      "mismatchCount": 82,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-vehlow",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-koch",
+      "passed": false,
+      "mismatchCount": 362,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-koch",
+      "passed": false,
+      "mismatchCount": 70,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-koch",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-regiomontanus",
+      "passed": false,
+      "mismatchCount": 410,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-regiomontanus",
+      "passed": false,
+      "mismatchCount": 82,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-campanus",
+      "passed": false,
+      "mismatchCount": 410,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-campanus",
+      "passed": false,
+      "mismatchCount": 82,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-campanus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-topocentric",
+      "passed": false,
+      "mismatchCount": 410,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-topocentric",
+      "passed": false,
+      "mismatchCount": 82,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-topocentric",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-alcabitius",
+      "passed": false,
+      "mismatchCount": 410,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-alcabitius",
+      "passed": false,
+      "mismatchCount": 82,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-morinus",
+      "passed": false,
+      "mismatchCount": 410,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-morinus",
+      "passed": false,
+      "mismatchCount": 82,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-morinus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:north-polar-meridian",
+      "passed": false,
+      "mismatchCount": 410,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:north-polar-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:north-polar-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:north-polar-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:north-polar-meridian",
+      "passed": false,
+      "mismatchCount": 82,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:north-polar-meridian",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-whole",
+      "passed": false,
+      "mismatchCount": 378,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-whole",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-whole",
+      "passed": false,
+      "mismatchCount": 74,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-whole",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-placidus",
+      "passed": false,
+      "mismatchCount": 378,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-placidus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-placidus",
+      "passed": false,
+      "mismatchCount": 74,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-placidus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-porphyry",
+      "passed": false,
+      "mismatchCount": 426,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-porphyry",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-porphyry",
+      "passed": false,
+      "mismatchCount": 86,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-porphyry",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-equal",
+      "passed": false,
+      "mismatchCount": 426,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-equal",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-equal",
+      "passed": false,
+      "mismatchCount": 86,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-equal",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-equal-mc",
+      "passed": false,
+      "mismatchCount": 426,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-equal-mc",
+      "passed": false,
+      "mismatchCount": 86,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-equal-mc",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-vehlow",
+      "passed": false,
+      "mismatchCount": 426,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-vehlow",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-vehlow",
+      "passed": false,
+      "mismatchCount": 86,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-vehlow",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-koch",
+      "passed": false,
+      "mismatchCount": 378,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-koch",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-koch",
+      "passed": false,
+      "mismatchCount": 74,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-koch",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-regiomontanus",
+      "passed": false,
+      "mismatchCount": 426,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-regiomontanus",
+      "passed": false,
+      "mismatchCount": 86,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-regiomontanus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-campanus",
+      "passed": false,
+      "mismatchCount": 426,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-campanus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-campanus",
+      "passed": false,
+      "mismatchCount": 86,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-campanus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-topocentric",
+      "passed": false,
+      "mismatchCount": 426,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-topocentric",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-topocentric",
+      "passed": false,
+      "mismatchCount": 86,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-topocentric",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-alcabitius",
+      "passed": false,
+      "mismatchCount": 426,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-alcabitius",
+      "passed": false,
+      "mismatchCount": 86,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-alcabitius",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-morinus",
+      "passed": false,
+      "mismatchCount": 426,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-morinus",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-morinus",
+      "passed": false,
+      "mismatchCount": 86,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-morinus",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:south-polar-meridian",
+      "passed": false,
+      "mismatchCount": 426,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:south-polar-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:south-polar-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:south-polar-meridian",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:south-polar-meridian",
+      "passed": false,
+      "mismatchCount": 86,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 194.25205108533873,
+          "candidate": 194.2521448123124
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 14.252051085338735,
+          "candidate": 14.252144812312395
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 257.0616171104266,
+          "candidate": 257.06152037421475
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:south-polar-meridian",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:historical-1600",
+      "passed": false,
+      "mismatchCount": 280,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.00208633353543064,
+          "candidate": 0.0020863334385694543
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.302202406414267,
+          "candidate": 0.3022024061572779
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.3295597070921872,
+          "candidate": 0.3295597071114571
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:historical-1600",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:historical-1600",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:historical-1600",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:historical-1600",
+      "passed": false,
+      "mismatchCount": 53,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.00208633353543064,
+          "candidate": 0.0020863334385694543
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.302202406414267,
+          "candidate": 0.3022024061572779
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.3295597070921872,
+          "candidate": 0.3295597071114571
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:historical-1600",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:reference-before",
+      "passed": false,
+      "mismatchCount": 252,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 1.2182111567514085,
+          "candidate": 1.2182111568029086
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 1.8529208338957233,
+          "candidate": 1.8529208339585352
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 2.599228199027266,
+          "candidate": 2.599228198980313
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:reference-before",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:reference-before",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:reference-before",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:reference-before",
+      "passed": false,
+      "mismatchCount": 46,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 1.2182111567514085,
+          "candidate": 1.2182111568029086
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 1.8529208338957233,
+          "candidate": 1.8529208339585352
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 2.599228199027266,
+          "candidate": 2.599228198980313
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:reference-before",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:reference-start",
+      "passed": false,
+      "mismatchCount": 264,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 1.2182111469580263,
+          "candidate": 1.2182111470174277
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 1.852920978657039,
+          "candidate": 1.852920978719851
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 2.5992282004849585,
+          "candidate": 2.5992282004402227
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:reference-start",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:reference-start",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:reference-start",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:reference-start",
+      "passed": false,
+      "mismatchCount": 49,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 1.2182111469580263,
+          "candidate": 1.2182111470174277
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 1.852920978657039,
+          "candidate": 1.852920978719851
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 2.5992282004849585,
+          "candidate": 2.5992282004402227
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:reference-start",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:historical-1900",
+      "passed": false,
+      "mismatchCount": 244,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 2.4957567097171705,
+          "candidate": 2.495756710150431
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 3.714224011002557,
+          "candidate": 3.7142240111787146
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 3.745401461132815,
+          "candidate": 3.745401461611209
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:historical-1900",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:historical-1900",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:historical-1900",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:historical-1900",
+      "passed": false,
+      "mismatchCount": 44,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 2.4957567097171705,
+          "candidate": 2.495756710150431
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 3.714224011002557,
+          "candidate": 3.7142240111787146
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 3.745401461132815,
+          "candidate": 3.745401461611209
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:historical-1900",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:leap-date",
+      "passed": false,
+      "mismatchCount": 414,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 177.90393453450565,
+          "candidate": 177.90518579714876
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 357.90393453450565,
+          "candidate": 357.90518579714876
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 268.0480415742694,
+          "candidate": 268.0492071031183
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:leap-date",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:leap-date",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:leap-date",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:leap-date",
+      "passed": false,
+      "mismatchCount": 83,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 177.90393453450565,
+          "candidate": 177.90518579714876
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 357.90393453450565,
+          "candidate": 357.90518579714876
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 268.0480415742694,
+          "candidate": 268.0492071031183
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:leap-date",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:modern-eclipse-date",
+      "passed": false,
+      "mismatchCount": 382,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 295.8775610050689,
+          "candidate": 295.8774934078517
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 115.87756100506891,
+          "candidate": 115.87749340785172
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 35.54944611706463,
+          "candidate": 35.54937639303466
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:modern-eclipse-date",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:modern-eclipse-date",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:modern-eclipse-date",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:modern-eclipse-date",
+      "passed": false,
+      "mismatchCount": 75,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 295.8775610050689,
+          "candidate": 295.8774934078517
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 115.87756100506891,
+          "candidate": 115.87749340785172
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 35.54944611706463,
+          "candidate": 35.54937639303466
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:modern-eclipse-date",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:reference-last",
+      "passed": false,
+      "mismatchCount": 264,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 1.0622774451201167,
+          "candidate": 1.062277445361815
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 1.0623114439381425,
+          "candidate": 1.0623114440754193
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 2.1639805010287887,
+          "candidate": 2.163980500884236
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:reference-last",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:reference-last",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:reference-last",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:reference-last",
+      "passed": false,
+      "mismatchCount": 49,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 1.0622774451201167,
+          "candidate": 1.062277445361815
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 1.0623114439381425,
+          "candidate": 1.0623114440754193
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 2.1639805010287887,
+          "candidate": 2.163980500884236
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:reference-last",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:reference-end",
+      "passed": false,
+      "mismatchCount": 264,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 1.0622774466858118,
+          "candidate": 1.062277446926828
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 1.0623114457684437,
+          "candidate": 1.0623114459046405
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 2.1639806374586215,
+          "candidate": 2.1639806373149213
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:reference-end",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:reference-end",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:reference-end",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:reference-end",
+      "passed": false,
+      "mismatchCount": 49,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 1.0622774466858118,
+          "candidate": 1.062277446926828
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 1.0623114457684437,
+          "candidate": 1.0623114459046405
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 2.1639806374586215,
+          "candidate": 2.1639806373149213
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:reference-end",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:future-2300",
+      "passed": false,
+      "mismatchCount": 276,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.4474693666212488,
+          "candidate": 0.447469366746418
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 1.0906536229119865,
+          "candidate": 1.0906536221382908
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 1.3034197677043267,
+          "candidate": 1.3034197674196548
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:future-2300",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:future-2300",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:future-2300",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:future-2300",
+      "passed": false,
+      "mismatchCount": 52,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.4474693666212488,
+          "candidate": 0.447469366746418
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 1.0906536229119865,
+          "candidate": 1.0906536221382908
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 1.3034197677043267,
+          "candidate": 1.3034197674196548
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:future-2300",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:unknown-with-coordinates",
+      "passed": false,
+      "mismatchCount": 320,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.18333793933243214,
+          "candidate": 0.18334157990977928
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.2759609754088501,
+          "candidate": 0.27596366042243403
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.29864556826169064,
+          "candidate": 0.2986416653482138
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:unknown-with-coordinates",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:unknown-with-coordinates",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:unknown-with-coordinates",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:unknown-with-coordinates",
+      "passed": false,
+      "mismatchCount": 64,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.18333793933243214,
+          "candidate": 0.18334157990977928
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.2759609754088501,
+          "candidate": 0.27596366042243403
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.29864556826169064,
+          "candidate": 0.2986416653482138
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:unknown-with-coordinates",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:unknown-no-location",
+      "passed": false,
+      "mismatchCount": 320,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.18333793933243214,
+          "candidate": 0.18334157990977928
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.2759609754088501,
+          "candidate": 0.27596366042243403
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.29864556826169064,
+          "candidate": 0.2986416653482138
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:unknown-no-location",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:unknown-no-location",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:unknown-no-location",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:unknown-no-location",
+      "passed": false,
+      "mismatchCount": 64,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.18333793933243214,
+          "candidate": 0.18334157990977928
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.2759609754088501,
+          "candidate": 0.27596366042243403
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.29864556826169064,
+          "candidate": 0.2986416653482138
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:unknown-no-location",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:known-no-location",
+      "passed": false,
+      "mismatchCount": 320,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.18333793933243214,
+          "candidate": 0.18334157990977928
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.2759609754088501,
+          "candidate": 0.27596366042243403
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.29864556826169064,
+          "candidate": 0.2986416653482138
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:known-no-location",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:known-no-location",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:known-no-location",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:known-no-location",
+      "passed": false,
+      "mismatchCount": 64,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.18333793933243214,
+          "candidate": 0.18334157990977928
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.2759609754088501,
+          "candidate": 0.27596366042243403
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.29864556826169064,
+          "candidate": 0.2986416653482138
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:known-no-location",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:unknown-no-time-echo",
+      "passed": false,
+      "mismatchCount": 320,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.18333793933243214,
+          "candidate": 0.18334157990977928
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.2759609754088501,
+          "candidate": 0.27596366042243403
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.29864556826169064,
+          "candidate": 0.2986416653482138
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:unknown-no-time-echo",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:unknown-no-time-echo",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:unknown-no-time-echo",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:unknown-no-time-echo",
+      "passed": false,
+      "mismatchCount": 64,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.18333793933243214,
+          "candidate": 0.18334157990977928
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.2759609754088501,
+          "candidate": 0.27596366042243403
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.29864556826169064,
+          "candidate": 0.2986416653482138
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:unknown-no-time-echo",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:polar-fallback-echo",
+      "passed": false,
+      "mismatchCount": 362,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:polar-fallback-echo",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:polar-fallback-echo",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:polar-fallback-echo",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:polar-fallback-echo",
+      "passed": false,
+      "mismatchCount": 70,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 23.87193938506141,
+          "candidate": 23.872162687398372
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 203.8719393850614,
+          "candidate": 203.87216268739837
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 62.686818131963264,
+          "candidate": 62.6863982102721
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:polar-fallback-echo",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:asserted-gap",
+      "passed": false,
+      "mismatchCount": 354,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 274.7279544166309,
+          "candidate": 274.7279363318024
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 94.7279544166309,
+          "candidate": 94.72793633180243
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 29.006988724486973,
+          "candidate": 29.006968811447678
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:asserted-gap",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:asserted-gap",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:asserted-gap",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:asserted-gap",
+      "passed": false,
+      "mismatchCount": 68,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 274.7279544166309,
+          "candidate": 274.7279363318024
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 94.7279544166309,
+          "candidate": 94.72793633180243
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 29.006988724486973,
+          "candidate": 29.006968811447678
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:asserted-gap",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:asserted-fold",
+      "passed": false,
+      "mismatchCount": 374,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 149.55570458785695,
+          "candidate": 149.55588173536955
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 329.555704587857,
+          "candidate": 329.55588173536955
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 233.8442077062317,
+          "candidate": 233.84442856092983
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:asserted-fold",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:asserted-fold",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:asserted-fold",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:asserted-fold",
+      "passed": false,
+      "mismatchCount": 73,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 149.55570458785695,
+          "candidate": 149.55588173536955
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 329.555704587857,
+          "candidate": 329.55588173536955
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 233.8442077062317,
+          "candidate": 233.84442856092983
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:asserted-fold",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:asserted-lmt",
+      "passed": false,
+      "mismatchCount": 284,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.22565143786050612,
+          "candidate": 0.22565143777330832
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.26587032451209325,
+          "candidate": 0.2658703246013374
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.3126906107806917,
+          "candidate": 0.3126906108930143
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:asserted-lmt",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:asserted-lmt",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:asserted-lmt",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:asserted-lmt",
+      "passed": false,
+      "mismatchCount": 54,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.22565143786050612,
+          "candidate": 0.22565143777330832
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.26587032451209325,
+          "candidate": 0.2658703246013374
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.3126906107806917,
+          "candidate": 0.3126906108930143
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:asserted-lmt",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:offset-spelling",
+      "passed": false,
+      "mismatchCount": 350,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 114.49928912717576,
+          "candidate": 114.50063222870614
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 294.49928912717576,
+          "candidate": 294.5006322287061
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 202.659828525055,
+          "candidate": 202.6614093821995
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:offset-spelling",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:offset-spelling",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:offset-spelling",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:offset-spelling",
+      "passed": false,
+      "mismatchCount": 67,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 114.49928912717576,
+          "candidate": 114.50063222870614
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 294.49928912717576,
+          "candidate": 294.5006322287061
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 202.659828525055,
+          "candidate": 202.6614093821995
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:offset-spelling",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:date-only",
+      "passed": false,
+      "mismatchCount": 324,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.012713487938441403,
+          "candidate": 0.012716175217008185
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.17021192917752614,
+          "candidate": 0.17020835663100797
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.49235604045657055,
+          "candidate": 0.4923577877242451
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:date-only",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:date-only",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:date-only",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:date-only",
+      "passed": false,
+      "mismatchCount": 65,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.012713487938441403,
+          "candidate": 0.012716175217008185
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.17021192917752614,
+          "candidate": 0.17020835663100797
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.49235604045657055,
+          "candidate": 0.4923577877242451
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:date-only",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:numeric-instant",
+      "passed": false,
+      "mismatchCount": 268,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.2631752543577477,
+          "candidate": 0.2631752545071322
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.5430328015521582,
+          "candidate": 0.5430328013702592
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.8598281217732051,
+          "candidate": 0.8598281218510238
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:numeric-instant",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:numeric-instant",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:numeric-instant",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:numeric-instant",
+      "passed": false,
+      "mismatchCount": 50,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.2631752543577477,
+          "candidate": 0.2631752545071322
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.5430328015521582,
+          "candidate": 0.5430328013702592
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.8598281217732051,
+          "candidate": 0.8598281218510238
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:numeric-instant",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:date-object",
+      "passed": false,
+      "mismatchCount": 364,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 250.23307474867946,
+          "candidate": 250.2342651348905
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 70.23307474867943,
+          "candidate": 70.2342651348905
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 336.88177703248675,
+          "candidate": 336.8831276274102
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:date-object",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:date-object",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:date-object",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:date-object",
+      "passed": false,
+      "mismatchCount": 71,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 250.23307474867946,
+          "candidate": 250.2342651348905
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 70.23307474867943,
+          "candidate": 70.2342651348905
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 336.88177703248675,
+          "candidate": 336.8831276274102
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:date-object",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:pinned-zero",
+      "passed": false,
+      "mismatchCount": 382,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 114.49928910224241,
+          "candidate": 114.5006322037733
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 294.4992891022424,
+          "candidate": 294.5006322037733
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 202.65982849613988,
+          "candidate": 202.6614093532852
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:pinned-zero",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:pinned-zero",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:pinned-zero",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:pinned-zero",
+      "passed": false,
+      "mismatchCount": 75,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 114.49928910224241,
+          "candidate": 114.5006322037733
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 294.4992891022424,
+          "candidate": 294.5006322037733
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 202.65982849613988,
+          "candidate": 202.6614093532852
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:pinned-zero",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:pinned-modern",
+      "passed": false,
+      "mismatchCount": 362,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.asc",
+          "why": "value-or-type",
+          "baseline": 295.87756100446046,
+          "candidate": 295.877493407239
+        },
+        {
+          "path": "$.chart.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 115.87756100446046,
+          "candidate": 115.877493407239
+        },
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 35.54944611677308,
+          "candidate": 35.54937639274101
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:pinned-modern",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:pinned-modern",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:pinned-modern",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:pinned-modern",
+      "passed": false,
+      "mismatchCount": 70,
+      "mismatches": [
+        {
+          "path": "$.angles.asc",
+          "why": "value-or-type",
+          "baseline": 295.87756100446046,
+          "candidate": 295.877493407239
+        },
+        {
+          "path": "$.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 115.87756100446046,
+          "candidate": 115.877493407239
+        },
+        {
+          "path": "$.angles.ic",
+          "why": "value-or-type",
+          "baseline": 35.54944611677308,
+          "candidate": 35.54937639274101
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:pinned-modern",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:pinned-historical",
+      "passed": false,
+      "mismatchCount": 58,
+      "mismatches": [
+        {
+          "path": "$.chart.timeScale",
+          "why": "missing-or-extra-property",
+          "baselinePresent": false,
+          "candidatePresent": true
+        },
+        {
+          "path": "$.decoded.envelope.receipt.conventions.deltaT",
+          "why": "value-or-type",
+          "baseline": "tt-minus-ut1;ut1-read-as-utc;value-in-result",
+          "candidate": "tt-minus-ut1;value-in-result"
+        },
+        {
+          "path": "$.decoded.envelope.receipt.conventions.localTime",
+          "why": "missing-or-extra-property",
+          "baselinePresent": false,
+          "candidatePresent": true
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:pinned-historical",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:pinned-historical",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:pinned-historical",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:pinned-historical",
+      "passed": false,
+      "mismatchCount": 1,
+      "mismatches": [
+        {
+          "path": "$.timeScale",
+          "why": "missing-or-extra-property",
+          "baselinePresent": false,
+          "candidatePresent": true
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:pinned-historical",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:pinned-negative",
+      "passed": false,
+      "mismatchCount": 58,
+      "mismatches": [
+        {
+          "path": "$.chart.timeScale",
+          "why": "missing-or-extra-property",
+          "baselinePresent": false,
+          "candidatePresent": true
+        },
+        {
+          "path": "$.decoded.envelope.receipt.conventions.deltaT",
+          "why": "value-or-type",
+          "baseline": "tt-minus-ut1;ut1-read-as-utc;value-in-result",
+          "candidate": "tt-minus-ut1;value-in-result"
+        },
+        {
+          "path": "$.decoded.envelope.receipt.conventions.localTime",
+          "why": "missing-or-extra-property",
+          "baselinePresent": false,
+          "candidatePresent": true
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:pinned-negative",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:pinned-negative",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:pinned-negative",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:pinned-negative",
+      "passed": false,
+      "mismatchCount": 1,
+      "mismatches": [
+        {
+          "path": "$.timeScale",
+          "why": "missing-or-extra-property",
+          "baselinePresent": false,
+          "candidatePresent": true
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:pinned-negative",
+      "passed": true
+    },
+    {
+      "id": "chart-and-receipt:pinned-unknown",
+      "passed": false,
+      "mismatchCount": 304,
+      "mismatches": [
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.18352606567032126,
+          "candidate": 0.1835296128290338
+        },
+        {
+          "path": "$.chart.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.2760997207848277,
+          "candidate": 0.27610233684262653
+        },
+        {
+          "path": "$.chart.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.2984438868552388,
+          "candidate": 0.29844008411407685
+        }
+      ]
+    },
+    {
+      "id": "baseline-self-replay:pinned-unknown",
+      "passed": true
+    },
+    {
+      "id": "candidate-self-replay:pinned-unknown",
+      "passed": true
+    },
+    {
+      "id": "candidate-parses-rc10:pinned-unknown",
+      "passed": true
+    },
+    {
+      "id": "candidate-replays-rc10:pinned-unknown",
+      "passed": false,
+      "mismatchCount": 60,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.18352606567032126,
+          "candidate": 0.1835296128290338
+        },
+        {
+          "path": "$.aspects[1].orb",
+          "why": "value-or-type",
+          "baseline": 0.2760997207848277,
+          "candidate": 0.27610233684262653
+        },
+        {
+          "path": "$.aspects[2].orb",
+          "why": "value-or-type",
+          "baseline": 0.2984438868552388,
+          "candidate": 0.29844008411407685
+        }
+      ]
+    },
+    {
+      "id": "candidate-rc10-replay-request:pinned-unknown",
+      "passed": true
+    },
+    {
+      "id": "invalid-input:invalid-leap-day",
+      "passed": true
+    },
+    {
+      "id": "invalid-input:missing-offset",
+      "passed": true
+    },
+    {
+      "id": "invalid-input:unsupported-house",
+      "passed": true
+    },
+    {
+      "id": "invalid-input:null-house",
+      "passed": true
+    },
+    {
+      "id": "invalid-input:null-time-known",
+      "passed": true
+    },
+    {
+      "id": "invalid-input:latitude-out-of-range",
+      "passed": true
+    },
+    {
+      "id": "invalid-input:partial-location",
+      "passed": true
+    },
+    {
+      "id": "invalid-input:contradictory-dst-flags",
+      "passed": true
+    },
+    {
+      "id": "invalid-input:false-no-time-echo",
+      "passed": true
+    },
+    {
+      "id": "invalid-input:false-polar-echo",
+      "passed": true
+    },
+    {
+      "id": "invalid-input:delta-t-too-large",
+      "passed": true
+    },
+    {
+      "id": "legacy-api:positions-phase-1600-06-15T03:00:00Z",
+      "passed": false,
+      "mismatchCount": 38,
+      "mismatches": [
+        {
+          "path": "$.moonPhase.angle",
+          "why": "value-or-type",
+          "baseline": 50.85405741366901,
+          "candidate": 50.85405741392134
+        },
+        {
+          "path": "$.moonPhase.illumination",
+          "why": "value-or-type",
+          "baseline": 0.18435106152060782,
+          "candidate": 0.1843510615223155
+        },
+        {
+          "path": "$.positions[0].degree",
+          "why": "value-or-type",
+          "baseline": 24.0075831628144,
+          "candidate": 24.00758316256207
+        }
+      ]
+    },
+    {
+      "id": "legacy-api:positions-phase-2000-02-29T12:00:00Z",
+      "passed": false,
+      "mismatchCount": 48,
+      "mismatches": [
+        {
+          "path": "$.moonPhase.angle",
+          "why": "value-or-type",
+          "baseline": 295.33050496891656,
+          "candidate": 295.3305440289745
+        },
+        {
+          "path": "$.moonPhase.illumination",
+          "why": "value-or-type",
+          "baseline": 0.28608042633764796,
+          "candidate": 0.2860801182467293
+        },
+        {
+          "path": "$.positions[0].degree",
+          "why": "value-or-type",
+          "baseline": 10.205948010734687,
+          "candidate": 10.205951636865962
+        }
+      ]
+    },
+    {
+      "id": "legacy-api:positions-phase-2024-04-08T18:21:00Z",
+      "passed": false,
+      "mismatchCount": 48,
+      "mismatches": [
+        {
+          "path": "$.moonPhase.angle",
+          "why": "value-or-type",
+          "baseline": 0.0007998857621487332,
+          "candidate": 0.0008022795848887654
+        },
+        {
+          "path": "$.moonPhase.illumination",
+          "why": "value-or-type",
+          "baseline": 4.8724857482085326e-11,
+          "candidate": 4.9016957159864205e-11
+        },
+        {
+          "path": "$.positions[0].degree",
+          "why": "value-or-type",
+          "baseline": 19.400448967583714,
+          "candidate": 19.40044913551469
+        }
+      ]
+    },
+    {
+      "id": "legacy-api:positions-phase-2200-01-01T00:00:00Z",
+      "passed": false,
+      "mismatchCount": 38,
+      "mismatches": [
+        {
+          "path": "$.moonPhase.angle",
+          "why": "value-or-type",
+          "baseline": 176.1882697824983,
+          "candidate": 176.1882697823632
+        },
+        {
+          "path": "$.moonPhase.illumination",
+          "why": "value-or-type",
+          "baseline": 0.9988939395322094,
+          "candidate": 0.998893939532131
+        },
+        {
+          "path": "$.positions[0].degree",
+          "why": "value-or-type",
+          "baseline": 10.326882857879355,
+          "candidate": 10.326882858014528
+        }
+      ]
+    },
+    {
+      "id": "legacy-api:transits",
+      "passed": false,
+      "mismatchCount": 246,
+      "mismatches": [
+        {
+          "path": "$.aspects[0].aLon",
+          "why": "value-or-type",
+          "baseline": 343.0515050473602,
+          "candidate": 343.05150518017604
+        },
+        {
+          "path": "$.aspects[0].bLon",
+          "why": "value-or-type",
+          "baseline": 282.93013441271063,
+          "candidate": 282.93013442965514
+        },
+        {
+          "path": "$.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.12137063464956555,
+          "candidate": 0.12137075052089585
+        }
+      ]
+    },
+    {
+      "id": "legacy-api:synastry",
+      "passed": false,
+      "mismatchCount": 233,
+      "mismatches": [
+        {
+          "path": "$.a.angles.asc",
+          "why": "value-or-type",
+          "baseline": 108.32173099458635,
+          "candidate": 108.32154938912777
+        },
+        {
+          "path": "$.a.angles.dsc",
+          "why": "value-or-type",
+          "baseline": 288.32173099458635,
+          "candidate": 288.32154938912777
+        },
+        {
+          "path": "$.a.angles.ic",
+          "why": "value-or-type",
+          "baseline": 168.02697736941423,
+          "candidate": 168.02672163359887
+        }
+      ]
+    },
+    {
+      "id": "legacy-api:exact-geographic-pole",
+      "passed": false,
+      "mismatchCount": 66,
+      "mismatches": [
+        {
+          "path": "$.chart.angles.ic",
+          "why": "value-or-type",
+          "baseline": 279.15663959904236,
+          "candidate": 279.1580107693385
+        },
+        {
+          "path": "$.chart.angles.mc",
+          "why": "value-or-type",
+          "baseline": 99.15663959904236,
+          "candidate": 99.15801076933855
+        },
+        {
+          "path": "$.chart.aspects[0].orb",
+          "why": "value-or-type",
+          "baseline": 0.5472858252286414,
+          "candidate": 0.5472815571721412
+        }
+      ]
+    },
+    {
+      "id": "malformed-receipt-rejections",
+      "passed": true
+    }
+  ],
+  "reduced": "Reduced for the repository from the script's full report: the fixtures (fixtureSha256 identifies them), the list of calls (operationTrace.calls) and the file inventories are left out, and each failed check keeps three of its mismatch examples.",
+  "checksByCategory": {
+    "all-13-house-systems": {
+      "passed": 1,
+      "failed": 0
+    },
+    "baseline-all-13-house-systems": {
+      "passed": 1,
+      "failed": 0
+    },
+    "ephemeris-identity": {
+      "passed": 1,
+      "failed": 0
+    },
+    "identical-public-operation-order": {
+      "passed": 1,
+      "failed": 0
+    },
+    "main-legacy-export-preservation": {
+      "passed": 1,
+      "failed": 0
+    },
+    "receipt-legacy-export-preservation": {
+      "passed": 1,
+      "failed": 0
+    },
+    "chart-and-receipt": {
+      "passed": 0,
+      "failed": 91
+    },
+    "baseline-self-replay": {
+      "passed": 91,
+      "failed": 0
+    },
+    "candidate-self-replay": {
+      "passed": 91,
+      "failed": 0
+    },
+    "candidate-parses-rc10": {
+      "passed": 91,
+      "failed": 0
+    },
+    "candidate-replays-rc10": {
+      "passed": 0,
+      "failed": 91
+    },
+    "candidate-rc10-replay-request": {
+      "passed": 91,
+      "failed": 0
+    },
+    "invalid-input": {
+      "passed": 11,
+      "failed": 0
+    },
+    "legacy-api": {
+      "passed": 0,
+      "failed": 7
+    },
+    "malformed-receipt-rejections": {
+      "passed": 1,
+      "failed": 0
+    }
+  }
+}

@@ -150,6 +150,19 @@ export function wholeSignCusps(ascendant: number): number[] {
  * Placidus intermediate cusps using iterative semi-arc trisection.
  * Returns `null` inside the polar circle, |latitude| ≥ 90° − ε, where part of
  * the ecliptic never rises or sets and the semi-arcs are undefined.
+ *
+ * Each cusp's right ascension α solves α = RAMC + offset + m·AD(α), with AD
+ * the ascensional difference asin(tan φ tan δ(α)) and m = 1/3 or 2/3. With
+ * tan δ = tan ε sin α, |dAD/dα| <= q = |tan φ| tan ε < 1 outside the polar
+ * circle, so the map is a contraction with slope at most 2q/3. The iteration
+ * settles to 1e-9° within 64 steps except within about 4e-9° of the polar
+ * limit, near the sidereal times at which a cusp's right ascension reaches 90°
+ * or 270°: it needs up to 63 steps there, and the rounding of asin near ±1
+ * moves each step by about the tolerance. Where it does not settle, the cusp
+ * is found by bisection on RAMC + offset ± (90° m + 1°), across which
+ * α − RAMC − offset − m·AD(α) increases strictly, so below the limit Placidus
+ * never falls back. Near the limit, either way, a cusp carries the rounding of
+ * asin near ±1: up to 6.5e-7° one unit in the last place below it.
  */
 export function placidusCusps(input: AngleInput, angles: Angles): number[] | null {
   if (Math.abs(input.latitude) >= 90 - input.obliquity) return null;
@@ -157,14 +170,14 @@ export function placidusCusps(input: AngleInput, angles: Angles): number[] | nul
   const ramc = ramcOf(input);
   const phi = input.latitude * DEG;
 
-  function iterate(offset: number, multiplier: number): number | null {
+  function iterate(offset: number, multiplier: number): number {
     let ra = ramc + offset;
     let converged = false;
     for (let index = 0; index < 64; index += 1) {
       const lon = eclipticLongitudeOfRightAscension(normalizeLongitude(ra), input.obliquity);
       const declination = declinationOfLongitude(lon, input.obliquity);
       const argument = Math.tan(phi) * Math.tan(declination * DEG);
-      if (Math.abs(argument) >= 1) return null;
+      if (Math.abs(argument) >= 1) break;
       const ascensionalDifference = Math.asin(argument) * RAD;
       const next = ramc + offset + multiplier * ascensionalDifference;
       // Bound the final longitude error as well as the RA iteration step.
@@ -175,18 +188,33 @@ export function placidusCusps(input: AngleInput, angles: Angles): number[] | nul
       }
       ra = next;
     }
-    return converged
-      ? eclipticLongitudeOfRightAscension(normalizeLongitude(ra), input.obliquity)
-      : null;
+    return eclipticLongitudeOfRightAscension(
+      normalizeLongitude(converged ? ra : bracketed(offset, multiplier)),
+      input.obliquity
+    );
+  }
+
+  /** The same fixed point by bisection; |tan φ tan δ| < 1 here, so only rounding can reach ±1. */
+  function bracketed(offset: number, multiplier: number): number {
+    const centre = ramc + offset;
+    let low = centre - 90 * multiplier - 1;
+    let high = centre + 90 * multiplier + 1;
+    for (let index = 0; index < 128; index += 1) {
+      const middle = (low + high) / 2;
+      if (!(middle > low && middle < high)) break;
+      const lon = eclipticLongitudeOfRightAscension(normalizeLongitude(middle), input.obliquity);
+      const declination = declinationOfLongitude(lon, input.obliquity);
+      const argument = Math.min(1, Math.max(-1, Math.tan(phi) * Math.tan(declination * DEG)));
+      if (centre + multiplier * Math.asin(argument) * RAD > middle) low = middle;
+      else high = middle;
+    }
+    return (low + high) / 2;
   }
 
   const cusp11 = iterate(30, 1 / 3);
   const cusp12 = iterate(60, 2 / 3);
   const cusp2 = iterate(120, 2 / 3);
   const cusp3 = iterate(150, 1 / 3);
-  if (cusp11 === null || cusp12 === null || cusp2 === null || cusp3 === null) {
-    return null;
-  }
 
   return [
     angles.asc,

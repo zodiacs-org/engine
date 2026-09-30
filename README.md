@@ -2,18 +2,22 @@
 
 Pure TypeScript astrology calculations for browsers and Node.js. The package
 computes tropical planetary positions, natal charts, transit snapshots,
-synastry, secondary progressions, Moon phase, and Saturn-return seasons. It is
-synchronous and ESM-only, has no import-time side effects, and performs no network request from
-its core entry point. Its one runtime side effect is the ΔT it installs in
-astronomy-engine (see ΔT below).
+synastry, secondary progressions, Moon phase, and Saturn-return seasons, and,
+in separate entries, Hellenistic timing techniques and sidereal positions and
+Jyotish techniques. Its calculations are synchronous; only loading a zone's
+history before 1970 (`prepareLocalTime`) and the GeoNames client, both in
+`@zodiacs/engine/geo`, are asynchronous. It is ESM-only, has no import-time
+side effects, and performs no network request from its core entry point. Its
+one runtime side effect is the ΔT it installs in astronomy-engine (see Time
+below).
 
-**Release candidate: 0.1.1-rc.14.** Public npm lookups for this package returned
+**Release candidate: 0.1.1-rc.15.** Public npm lookups for this package returned
 404 on 2026-09-26. The expansion release remains held for review and operator
 publication authority. Install the exact candidate tarball supplied with the
 review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.14.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.15.tgz
 ```
 
 The package runs in browsers through a bundler, and in Node.js 20.19.0 or a
@@ -28,7 +32,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.14.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.15.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -57,19 +61,27 @@ dependencies afresh with `npm ci` and takes nothing from the checkout's
 needs merge commits: a squash or rebase merge drops the source commits it
 checks against, and the check then fails.
 
-This candidate declares the Node versions that can load its dependency and the
-licence of its ΔT values, refuses instants outside the years astronomy-engine
-tabulates (`EPHEMERIS_SPAN`), reports each declination row's signed margin to
-the out-of-bounds limit, restates the Sun's exemption from that limit as a
-convention, and reduces declination-aspect longitude separations exactly.
-Configured-aspect and declination-parallel decisions stay exact on binary64
-inputs (rc.13).
-Secondary progressions (rc.12) and configurable longitude aspects and chart
-declinations (rc.11) remain separate analyses. Existing natal, transit,
-synastry and receipt conventions remain unchanged. The ephemeris is still
-astronomy-engine 2.1.19. See CHANGELOG.md for the release history and
-`docs/evidence/rc14-20260928/` for this continuation's checks and remaining
-programme gates. Site adoption is reviewed separately.
+This candidate reads a chart's instant on a time basis: from 1972 to
+2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS UT1 − UTC,
+and otherwise as UT1 with the ΔT model, or on UT1 or TT when `timeScale` says
+so (see Time). From 1972 to 2027-10-02 a chart's angles therefore differ from
+rc.14's by UT1 − UTC, and its positions by less: in 1,801 synthetic charts the
+ascendant by up to 45.0″ and the Moon by up to 0.462″, and in a review's wider
+sample by up to 101.03″ and 0.4885″, near 65° S
+(`docs/evidence/rc15-20260929/review-sample.json`). Before and after that span
+its angles and houses are unchanged. `@zodiacs/engine/geo` reads wall times before 1970 on the
+tzdb 2025c history it ships, which `prepareLocalTime` must load first, and can
+read a birthplace's own mean time and a Julian date; unknown options and form
+keys now throw, and `lmt` means that a local-mean-time clock read the time. Two
+entry points are new, `@zodiacs/engine/timing` and `@zodiacs/engine/vedic`, and
+the root imports neither. Placidus no longer falls back to whole signs just
+below the polar limit. Receipts gain a conventions set that records the time
+basis; receipts of the earlier sets, rc.13's and rc.14's included, stay
+readable and replay. The package gate is now a budget for each entry point's
+import graph and a stated cap for the whole package (CHANGELOG.md). The
+ephemeris is still astronomy-engine 2.1.19. See CHANGELOG.md for the release
+history and `docs/evidence/rc15-20260929/` for this candidate's checks. Site
+adoption is reviewed separately.
 
 ## Natal chart in 10 lines
 
@@ -105,6 +117,9 @@ const birth = resolveBirth({
 
 const chart = natalChart(birth);
 ```
+
+For a date before 1970, first `await prepareLocalTime(date, timeZone)`, also
+from `@zodiacs/engine/geo`: it loads the zone's history (see Time).
 
 ## Compatibility
 
@@ -156,8 +171,12 @@ for (const aspect of today.aspects) {
   body crosses a longitude, and `searchLongitudeCrossings` does the same under
   a sample budget. `@zodiacs/engine/crossings` provides the same solver for a
   longitude function of your own, without the ephemeris.
-- `@zodiacs/engine/geo` provides IANA local-time resolution and a client for a
-  separately hosted, sharded GeoNames index.
+- `@zodiacs/engine/geo` provides IANA local-time resolution, Julian calendar
+  dates and a client for a separately hosted, sharded GeoNames index.
+- `@zodiacs/engine/timing` provides profections, firdaria, zodiacal releasing
+  and solar arc directions (see `docs/timing-hellenistic.md`).
+- `@zodiacs/engine/vedic` provides the sidereal zodiac: ayanamsas, sidereal
+  charts, nakshatras, vargas, KP sub-lords and dashas (see `docs/vedic.md`).
 
 Returned longitudes use degrees in `[0, 360)` and positions include sign and degree
 annotations. Charts use the tropical ecliptic of date. Planetary positions are
@@ -473,11 +492,14 @@ slots, accessor slots, non-array iterables and simultaneous `dst-gap`/`dst-fold`
 claims reject with a `RangeError` that does not include supplied flag values.
 
 `dst-gap`, `dst-fold` and `lmt` remain caller assertions: a UTC instant alone
-cannot verify a historical local-time resolution. `no-time`,
+cannot verify a historical local-time resolution. The geo resolver sets
+`dst-gap` or `dst-fold` for a skipped or repeated wall time of any cause (the
+names are kept; its `jump.cause` gives the cause) and `lmt` when a local mean
+time clock read it. `no-time`,
 `polar-fallback` and `outside-reference-span` may be echoed for compatibility,
 but must agree with the calculation. Set `timeKnown: false` for unknown time; a flag never overrides that
 setting. A fallback assertion requires the actual requested Placidus calculation
-to produce whole-sign houses, including fallback caused by nonconvergence.
+to produce whole-sign houses, which it does only inside the polar circle.
 
 `natalChart` stores only distinct time-resolution assertions in `chart.input.flags`
 and derives result flags once. This is canonical semantic input, not a lossless
@@ -507,11 +529,13 @@ houses, including in either polar hemisphere. At exact geographic poles no
 point physically rises; at ecliptic/horizon coincidence an ascendant is not
 unique. Those degenerate configurations are outside the verified angle scope.
 Near tangencies the selected axis can change by 180 degrees. Placidus uses a
-bounded iteration and falls back if it cannot converge; it never returns the
-last unconverged iterate as a successful construction.
+bounded iteration and, where it does not settle, bisection on each cusp's
+bracket, which cannot fail outside the polar circle; it never returns the last
+unconverged iterate. Near the polar limit a cusp carries the rounding of asin
+near ±1: up to 6.5e-7° one unit in the last place below it.
 
 See [CHANGELOG.md](CHANGELOG.md) for candidate changes. Reference coverage and
-known limits are recorded in the site [platform evidence ledger](https://github.com/ZodiacsOfficial/site/blob/75ae549c6bcedba67ccce7d467e1b54af0c83070/docs/platform/EVIDENCE.md).
+known limits are recorded in the site [platform evidence ledger](https://github.com/zodiacs-org/site/blob/75ae549c6bcedba67ccce7d467e1b54af0c83070/docs/platform/EVIDENCE.md).
 The date parser's representable range is not a claim of astronomical accuracy
 across that range. Reference cases are finite; broader numerical scope review
 remains a release gate.
@@ -619,43 +643,49 @@ only within `REFERENCE_SPAN`, and it falls away from it. The Sun's ecliptic
 latitude, which in reality stays within about 1.2″ of zero, comes out as
 −9.9″ on 1000-06-01, +13.3″ on 3000-06-01 and −57.5″ on 3998-09-02.
 
-Birth settings accept only a `houseSystem` from the thirteen above and
-a boolean `timeKnown`. Omitting them defaults to `"whole"` and `true`; explicit
-`null` and other unsupported values throw `RangeError`, including when
-coordinates are absent. Latitude and longitude must be supplied together as finite numbers
-within `[-90, 90]` and `[-180, 180]` respectively.
+Birth settings accept only a `houseSystem` from the thirteen above, a boolean
+`timeKnown` and a `timeScale` (see Time). Omitting them defaults to `"whole"`,
+`true` and `"utc"`; explicit `null` and other unsupported values throw
+`RangeError`, including when coordinates are absent. Latitude and longitude
+must be supplied together as finite numbers within `[-90, 90]` and
+`[-180, 180]` respectively.
 
-## ΔT
+## Time
 
-Positions are computed in Terrestrial Time, and a birth time is Universal
-Time, so every chart needs ΔT = TT − UT1. From 0.1.1-rc.8 the engine uses its
-own model, `zodiacs-deltat/1`, in place of astronomy-engine's 2004
-polynomial, which was 6.3 s off the observed value in 2026 and 110 s off
-Swiss Ephemeris's prediction for 2100:
+A chart reads the Earth's rotation (sidereal time, the angles) on UT1 and the
+planets on Terrestrial Time (TT). `utc` is on UTC unless `timeScale` says
+`"ut1"` or `"tt"`; any other value throws `RangeError`.
 
-- up to 1941, the reconstruction of Stephenson, Morrison & Hohenkerk 2016
-  (their Table S15, CC BY 4.0);
-- from 1941, observed values from USNO and IERS, then Bulletin A's
-  predictions, then a damped extrapolation;
-- a 1-σ band: 0.03 s where observed, growing with the years since the last
-  observation (about 12 s by 2050 and 42 s by 2100), and an estimate rather
-  than a calibrated band before 1620.
+- From 1972 to 2027-10-02, TT = UTC + (TAI − UTC) + 32.184 s, with TAI − UTC
+  from the IERS leap-second list of 2026-07-06 (it expires 2027-06-28; its
+  last value is carried after that), and UT1 = UTC + (UT1 − UTC) from IERS:
+  the EOP 20 C04 series in 1972, then `finals2000A.all` of 2026-09-24,
+  observed then predicted. ΔT = TT − UT1 is then reported with
+  `model: "iers-utc/1"`.
+- Before 1972 and after that table the instant is read as UT1, and TT = UT1 +
+  ΔT from the engine's model `zodiacs-deltat/1`: Stephenson, Morrison &
+  Hohenkerk 2016 (CC BY 4.0) up to 1941, then USNO and IERS observations,
+  Bulletin A's predictions and a damped extrapolation, with a 1-σ band. After
+  the table UT1 − UTC is taken as 0 within ±0.9 s.
+- `deltaT` (seconds) in a birth input pins ΔT; the chart reports
+  `model: "pinned"`.
 
-It is within 0.031 s of IERS on twelve dated values from 1962 to 2026 and
-within 0.084 s on every IERS day since 1962. Each chart reports the value it
-used as `chart.deltaT`: `{ seconds, sigma, model, table, tableDigest,
-segment }`. The table is part of the release (`DELTA_T_TABLE`, IERS data of
-2026-09-24) and changes only with a new release. `@zodiacs/engine/deltat`
-exports the model with no dependencies.
+`chart.deltaT` is `{ seconds, sigma, model, table, tableDigest, segment }`, and
+`chart.timeScale` says how the instant became UT1 and TT (`{ input, basis,
+ut1MinusUtc, leapSeconds }`). `@zodiacs/engine/deltat` exports the model with
+no dependencies. astronomy-engine keeps one ΔT for its whole module; every
+engine call leaves the model installed, and code that calls astronomy-engine
+directly should install it too: `SetDeltaTFunction(deltaT)`.
 
-The instant is read as UT1: UTC is taken as UT1, as Swiss Ephemeris's
-`calc_ut` does; UT1 − UTC stays under 0.9 s. To fix ΔT yourself, pass
-`deltaT` (seconds) in a birth input; the chart reports `model: "pinned"`.
-
-astronomy-engine keeps one ΔT for its whole module. Every engine call
-installs the engine's model first, so after any call astronomy-engine carries
-it. Code that calls astronomy-engine directly should install it too:
-`SetDeltaTFunction(deltaT)` with `deltaT` from `@zodiacs/engine/deltat`.
+`@zodiacs/engine/geo` reads wall times before 1970 on the tzdb 2025c history
+with backzone, shipped as 16 lazily imported chunks: `prepareLocalTime(date,
+timeZone)` loads the one a zone needs, and a wall time before 1970 throws until
+it has. From 1970 the host's Intl answers. A `longitude` reads a time in a
+zone's local mean time era on the birthplace's own mean time; `calendar:
+"julian"` takes an Old Style date, and `country` adds a note from the country's
+Gregorian adoption. Each resolution names the tzdb version, the transition
+behind the offset and its cause (`dst`, `legal-change` or `date-line`).
+[docs/time.md](docs/time.md) describes every field.
 
 ## Accuracy and licensing
 
@@ -670,9 +700,12 @@ Table S15 in the package's ΔT module (`@zodiacs/engine/deltat`, which the build
 places in a shared chunk under `dist/` that `dist/deltat.js` re-exports) are
 CC BY 4.0, attributed in [NOTICE](NOTICE).
 
-The npm package contains no place or timezone database. GeoNames attribution
-and the host-ICU historical-timezone caveat are recorded in [NOTICE](NOTICE),
-which downstream users should retain.
+The npm package contains no place database. It carries tzdb 2025c's zone
+histories before 1970, the IERS leap-second list, an IERS UT1 − UTC table, a
+table of Gregorian adoption dates from public-domain sources, and 22 catalogue
+values for the stars of the Vedic ayanamsas; [NOTICE](NOTICE) records their
+sources and the GeoNames attribution, and downstream users should retain it.
+[LICENSING.md](LICENSING.md) gives the terms of each.
 
 ## Internal site entry points
 
@@ -680,7 +713,8 @@ which downstream users should retain.
 compatibility boundaries for Zodiacs.org. They let the site consume the exact
 package implementation while keeping its scanner-oriented functions and lazy
 bundle boundary intact. They are not covered by semantic-versioning guarantees;
-third-party code must use the documented root and `/geo` entry points.
+third-party code must use the documented entry points: the root, `/geo`,
+`/timing`, `/vedic`, `/receipt`, `/crossings` and `/deltat`.
 
 ## GeoNames request recovery
 
@@ -765,6 +799,19 @@ positions are corrected for (`aberrated-geocentric-ecliptic-of-date;no-deflectio
 and that the Moon has neither correction. Receipts from rc.3 to rc.7 are still
 read, each under the conventions its engine recorded, and a set is accepted
 only from the engine versions that wrote it.
+
+The current set, written from 0.1.1-rc.15 on, also records the instant's scale
+(`receipt.timeScale`) and its time basis (`result.timeScale`), and a local
+resolution records the calendar, the tzdb version and form, the clock, the
+transition behind the offset and any birthplace mean time, each checked
+against the offsets and flags. Receipts under the rc.8 set (rc.8 to rc.14),
+which read the instant as UT1, stay readable and replay as UTC requests (see
+docs/time.md). A receipt's engine, ephemeris and package versions must be
+SemVer 2.0.0 versions. The codec accepts an earlier set only under the versions
+that wrote it, and compares the engine's version in SemVer order with
+0.1.1-rc.15, which brought the current set, and with the releases that brought
+each house system: a receipt of the current set that names a version before
+0.1.1-rc.15, such as 0.1.1-rc.14.1 or 0.1.1-beta, is refused.
 
 `natalReplayInput` recovers the recorded request. It does not select or install
 the original engine. Recalculation with another engine, ephemeris dependency or

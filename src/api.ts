@@ -6,6 +6,7 @@ import { outsideReferenceSpan } from "./reference-span.js";
 import { normalizeLongitude } from "./signs.js";
 import { findInterAspects, summarizePair } from "./synastry.js";
 import { dateFrom } from "./date-input.js";
+import { TIME_SCALE_NAMES, timeBasis } from "./time-scale.js";
 import {
   assertDerivedFlags,
   snapshotFlags,
@@ -45,7 +46,14 @@ function isBirth(value: unknown): value is BirthInput {
   return Boolean(value && typeof value === "object" && "utc" in value);
 }
 
-function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } {
+/**
+ * The chart a NatalSource names: a birth is computed, a supplied Chart is
+ * checked as `transits` checks one. Shared with the timing and Vedic
+ * modules; not re-exported from the package root.
+ *
+ * @internal
+ */
+export function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } {
   if (!isChart(source)) {
     const chart = natalChart(source);
     return { chart, utc: chart.input.utc };
@@ -110,9 +118,26 @@ interface ValidatedBirth {
   flags: FlagSnapshot | undefined;
 }
 
+/** The fields of `BirthInput`. Other keys are ignored, except a field's name in other letter case. */
+const BIRTH_FIELDS: readonly (keyof BirthInput)[] = [
+  "utc",
+  "timeScale",
+  "latitude",
+  "longitude",
+  "houseSystem",
+  "timeKnown",
+  "flags",
+  "deltaT"
+];
+
 function validateBirth(birth: BirthInput): ValidatedBirth {
   if (!birth || typeof birth !== "object" || Array.isArray(birth)) {
     throw new RangeError("birth must be an object containing a resolved utc instant.");
+  }
+  // A misspelled `timescale` would otherwise read a TT instant as UTC, silently.
+  for (const key of Object.keys(birth)) {
+    const field = BIRTH_FIELDS.find((name) => name !== key && name.toLowerCase() === key.toLowerCase());
+    if (field) throw new RangeError(`birth has no field "${key}"; field names are case-sensitive: "${field}".`);
   }
   const settings = validateBirthSettings(birth);
   const supplied = birth.flags;
@@ -121,6 +146,10 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   const pin = birth.deltaT;
   if (pin !== undefined && (typeof pin !== "number" || !Number.isFinite(pin) || Math.abs(pin) > 1e10)) {
     throw new RangeError("deltaT must be a finite number of seconds, at most 1e10 in size.");
+  }
+  const scale: unknown = birth.timeScale;
+  if (scale !== undefined && !TIME_SCALE_NAMES.includes(scale as never)) {
+    throw new RangeError('timeScale must be "utc", "ut1" or "tt".');
   }
   const possible: ChartFlag[] = [];
   if (settings.timeKnown === false) possible.push("no-time");
@@ -141,7 +170,8 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
       ? {}
       : { latitude: settings.latitude, longitude: settings.longitude }),
     ...(flags === undefined ? {} : { flags: timeFlags(flags.values) }),
-    ...(pin === undefined ? {} : { deltaT: pin })
+    ...(pin === undefined ? {} : { deltaT: pin }),
+    ...(scale === undefined || scale === "utc" ? {} : { timeScale: scale as "ut1" | "tt" })
   };
   return { input, flags };
 }
@@ -232,18 +262,31 @@ export function moonPhase(date: DateInput): MoonPhase {
   };
 }
 
+/**
+ * The UTC instant of a validated input given on another scale; the scans run
+ * on UTC. Shared with the timing modules; not re-exported from the package
+ * root.
+ *
+ * @internal
+ */
+export function utcOf(input: ChartInput): Date {
+  if (input.timeScale === undefined) return input.utc;
+  return new Date(Math.round(timeBasis(input.utc.getTime(), input.timeScale, input.deltaT).utcMs));
+}
+
 /** Natal Saturn and return seasons through approximately age 92. */
 export function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult {
   let utc: Date;
   if (isChart(birth)) {
-    utc = resolvedChart(birth).utc;
+    const { chart } = resolvedChart(birth);
+    utc = utcOf(chart.input);
   } else if (isBirth(birth)) {
     const validated = validateBirth(birth);
     // Only an explicit compatibility assertion needs a natal calculation to
     // establish actual Placidus fallback. Ordinary return inputs remain date-only.
-    utc = validated.flags?.values.includes("polar-fallback")
-      ? computedBirth(validated).input.utc
-      : validated.input.utc;
+    utc = utcOf(
+      validated.flags?.values.includes("polar-fallback") ? computedBirth(validated).input : validated.input
+    );
   } else utc = dateFrom(birth, "birth");
   return computeSaturnReturns(utc);
 }

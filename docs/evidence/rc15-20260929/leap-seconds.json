@@ -1,0 +1,14 @@
+{
+ "reference": "conformance/sources/l2/Leap_Second.dat (IERS Bulletin C, through Bulletin 72, July 2026)",
+ "referenceSha256": "6cb6f5d4b819f2e568e25db4b0b26d89dedf031fdffb18bc94d40f4e94e268d7",
+ "engineVersion": "0.1.1-rc.15",
+ "changes": 28,
+ "lastChange": {
+  "mjd": 57754,
+  "taiMinusUtc": 37
+ },
+ "checks": 58,
+ "failures": 0,
+ "firstFailures": [],
+ "node": "v22.22.2"
+}

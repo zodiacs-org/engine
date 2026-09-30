@@ -1,0 +1,6 @@
+# Clean builds and packs of the tree before the source commit (tracked and new files copied to a directory
+# outside the checkout, npm ci, npm run build, npm pack --ignore-scripts); the first is pack.json.
+first: node v22.22.2, npm 10.9.7: sha256 bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637, 189575 bytes
+second: node v22.22.2, npm 10.9.7: sha256 bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637, 189575 bytes
+node20: node v20.19.0, npm 10.8.2: sha256 bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637, 189575 bytes
+node24: node v24.21.0, npm 11.19.0: sha256 bddfb3b708076c2ccf592779c38f3e1bd7f840221f257dbbac01ce1d87459637, 189575 bytes

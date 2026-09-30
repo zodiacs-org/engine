@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { natalChart, positions } from "./api.js";
 import { DELTA_T_MODEL, DELTA_T_TABLE, deltaT, deltaTAt } from "./deltat.js";
 import { bodyLongitude, computeChart } from "./ephemeris.js";
+import { DELTA_T_IERS_MODEL, UT1_DATA, timeBasis } from "./time-scale.js";
 import {
   createNatalEnvelope,
   natalReplayInput,
@@ -23,15 +24,27 @@ const birth = {
 };
 
 describe("the engine's clock", () => {
-  it("computes every chart on the model and says so", () => {
+  it("computes a chart in the leap-second era from the leap seconds and IERS UT1 − UTC, and says so", () => {
     const chart = natalChart(birth);
+    expect(chart.deltaT).toEqual(timeBasis(chart.input.utc.getTime()).deltaT);
+    expect(chart.deltaT.model).toBe(DELTA_T_IERS_MODEL);
+    expect(chart.deltaT.table).toBe(UT1_DATA.version);
+    expect(chart.deltaT.tableDigest).toBe(UT1_DATA.digest);
+    // 32.184 s + 37 s − (UT1 − UTC); IERS observed −0.0114083 s at 0h that day and −0.0123494 s the next.
+    expect(chart.deltaT.seconds).toBeCloseTo(69.1959, 3);
+    expect(chart.deltaT.segment).toBe("observed");
+    // astronomy-engine's own clock is left on the model.
+    const time = MakeTime(chart.input.utc);
+    expect((time.tt - time.ut) * 86_400).toBeCloseTo(deltaT(time.ut), 6);
+  });
+
+  it("computes a chart before 1972, where UTC as now was not defined, on the model", () => {
+    const chart = natalChart({ ...birth, utc: "1960-09-22T12:00:00Z" });
     expect(chart.deltaT).toEqual(deltaTAt(utOf(chart.input.utc)));
     expect(chart.deltaT.model).toBe(DELTA_T_MODEL);
     expect(chart.deltaT.table).toBe(DELTA_T_TABLE.version);
     expect(chart.deltaT.tableDigest).toBe(DELTA_T_TABLE.digest);
-    // astronomy-engine's own clock now reads the model.
-    const time = MakeTime(chart.input.utc);
-    expect((time.tt - time.ut) * 86_400).toBeCloseTo(deltaT(time.ut), 6);
+    expect(chart.timeScale).toEqual({ input: "utc", basis: "delta-t", ut1MinusUtc: null, leapSeconds: null });
   });
 
   it("uses a caller's pin for one chart and restores the model after it", () => {
@@ -52,7 +65,7 @@ describe("the engine's clock", () => {
     const moon = pinned.bodies.find((body) => body.body === "Moon")!;
     expect(Math.abs(moon.lon - model) * 3600).toBeGreaterThan(20);
     expect(bodyLongitude("Moon", utc)).toBe(model);
-    expect(natalChart(birth).deltaT.model).toBe(DELTA_T_MODEL);
+    expect(natalChart(birth).deltaT.model).toBe(DELTA_T_IERS_MODEL);
   });
 
   it("restores the model when a pinned chart throws", () => {
@@ -104,16 +117,20 @@ describe("ΔT in receipts", () => {
     if (!parsed.ok) return;
     expect(parsed.envelope.result.deltaT).toEqual(natalChart(birth).deltaT);
     expect((parsed.envelope.receipt.conventions as Record<string, string>).deltaT).toBe(
-      "tt-minus-ut1;ut1-read-as-utc;value-in-result"
+      "tt-minus-ut1;value-in-result"
     );
     const moved = edit((e) => {
       e.result.deltaT.seconds += 0.5;
     });
     expect(parseNatalEnvelope(moved)).toMatchObject({ ok: false, code: "inconsistent_result" });
     const segment = edit((e) => {
-      e.result.deltaT.segment = "extrapolated";
+      e.result.deltaT.segment = "predicted";
     });
     expect(parseNatalEnvelope(segment)).toMatchObject({ ok: false, code: "inconsistent_result" });
+    const modelSegment = edit((e) => {
+      e.result.deltaT.segment = "extrapolated";
+    });
+    expect(parseNatalEnvelope(modelSegment)).toMatchObject({ ok: false, code: "invalid_value" });
   });
 
   it("reads a value from another release's table as a claim", () => {

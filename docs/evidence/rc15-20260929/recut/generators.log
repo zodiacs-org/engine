@@ -1,0 +1,29 @@
+# sh analyses.sh generators, Node v22.22.2, npm 10.9.7, 2026-09-29
+
+## zone histories, the system's zic
+$ env TZDATA_TARBALL=<tzdata2025c.tar.gz> node scripts/build-tz-shards.mjs --check
+tz-shards: src/tzdb/ matches tzdb 2025c (597 names)
+exit 0
+
+## zone histories, zic 2025c first on PATH
+$ env TZDATA_TARBALL=<tzdata2025c.tar.gz> PATH=<zic 2025c directory>:$PATH node scripts/build-tz-shards.mjs --check
+tz-shards: src/tzdb/ matches tzdb 2025c (597 names)
+exit 0
+
+## time scales from the committed sources
+$ node scripts/build-time-scales.mjs --check
+time-scales: src/time-scale-data.ts matches scripts/time-scale-sources/
+exit 0
+
+## time scales, and the finals2000A.all rows against the whole file
+$ env IERS_FINALS=<finals2000A.all> node scripts/build-time-scales.mjs --check
+time-scales: src/time-scale-data.ts matches scripts/time-scale-sources/, and its rows match finals2000A.all
+exit 0
+
+## the committed C04 extract against eopc04.1962-now as IERS serves it today
+$ node <checkout>/docs/evidence/rc15-20260929/recut/c04-today.mjs <eopc04.1962-now of today>
+today's file: 5173071 bytes, sha256 3e3408f7a4a5c05baee80c7ea4b11a348e8d8546b27e9da20543f944cd182c01 (the pinned file of 2026-09-28: sha256 e16cfbba34574b8bad3cf81e2e56a84c2b4bbfd3c822cf9ebdd860bf97d711dc)
+rows of 1972-01-01 to 1973-01-01 (MJD 41317 to 41683): 367, identical to the 367 committed
+header lines: 6, identical to the 6 committed
+exit 0
+

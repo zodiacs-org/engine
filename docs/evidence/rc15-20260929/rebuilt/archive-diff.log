@@ -1,0 +1,10 @@
+# The archive packed from the tree (SHA-256 24eeb597..., pack-determinism.log, first) against the re-cut's (SHA-256 bddfb3b7...), both extracted: diff -rq, and the sizes of the files that differ
+## file lists: 54 and 54 files, the same names
+## diff -rq
+Files <re-cut>/CHANGELOG.md and <this>/CHANGELOG.md differ
+Files <re-cut>/LICENSING.md and <this>/LICENSING.md differ
+Files <re-cut>/NOTICE and <this>/NOTICE differ
+## bytes: re-cut, this
+CHANGELOG.md 53985 56083
+LICENSING.md 14297 15561
+NOTICE 5527 5824

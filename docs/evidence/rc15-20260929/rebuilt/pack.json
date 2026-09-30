@@ -1,0 +1,286 @@
+[
+  {
+    "id": "@zodiacs/engine@0.1.1-rc.15",
+    "name": "@zodiacs/engine",
+    "version": "0.1.1-rc.15",
+    "size": 190974,
+    "unpackedSize": 668343,
+    "shasum": "e4a49148b2cedc1c21fdba324e83b76f6d6b4862",
+    "integrity": "sha512-eezpBQ0NU73dsp519FZ54A1dJUNK7C+2YRtRHWmNeiKc8wDN9CHe8SIbQy37T0RqqlZIno/PfeF7Y2f8A24hsw==",
+    "filename": "zodiacs-engine-0.1.1-rc.15.tgz",
+    "files": [
+      {
+        "path": "CHANGELOG.md",
+        "size": 56083,
+        "mode": 420
+      },
+      {
+        "path": "LICENSE",
+        "size": 1068,
+        "mode": 420
+      },
+      {
+        "path": "LICENSING.md",
+        "size": 15561,
+        "mode": 420
+      },
+      {
+        "path": "NOTICE",
+        "size": 5824,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 47286,
+        "mode": 420
+      },
+      {
+        "path": "dist/api-CoB_kqE3.d.ts",
+        "size": 10824,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-AECKV73C.js",
+        "size": 9237,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-CPALRSPC.js",
+        "size": 1459,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-CWI4YUDL.js",
+        "size": 11712,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-KFTJMMG7.js",
+        "size": 2397,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-KHBLFXFG.js",
+        "size": 13082,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-MFF3VKO3.js",
+        "size": 5263,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-ONBZ4HK7.js",
+        "size": 4807,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-OYGRVGXD.js",
+        "size": 672,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-PFGUCNOK.js",
+        "size": 2929,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-ZHVI3KWJ.js",
+        "size": 11577,
+        "mode": 420
+      },
+      {
+        "path": "dist/chunk-ZZPITHQS.js",
+        "size": 23963,
+        "mode": 420
+      },
+      {
+        "path": "dist/crossings.d.ts",
+        "size": 4436,
+        "mode": 420
+      },
+      {
+        "path": "dist/crossings.js",
+        "size": 173,
+        "mode": 420
+      },
+      {
+        "path": "dist/deltat.d.ts",
+        "size": 3936,
+        "mode": 420
+      },
+      {
+        "path": "dist/deltat.js",
+        "size": 161,
+        "mode": 420
+      },
+      {
+        "path": "dist/geo.d.ts",
+        "size": 8593,
+        "mode": 420
+      },
+      {
+        "path": "dist/geo.js",
+        "size": 28809,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.d.ts",
+        "size": 16406,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.js",
+        "size": 13003,
+        "mode": 420
+      },
+      {
+        "path": "dist/internal-math-BbktkHCc.d.ts",
+        "size": 12479,
+        "mode": 420
+      },
+      {
+        "path": "dist/internal-math.d.ts",
+        "size": 1060,
+        "mode": 420
+      },
+      {
+        "path": "dist/internal-math.js",
+        "size": 1325,
+        "mode": 420
+      },
+      {
+        "path": "dist/internal.d.ts",
+        "size": 522,
+        "mode": 420
+      },
+      {
+        "path": "dist/internal.js",
+        "size": 305,
+        "mode": 420
+      },
+      {
+        "path": "dist/receipt.d.ts",
+        "size": 11251,
+        "mode": 420
+      },
+      {
+        "path": "dist/receipt.js",
+        "size": 39192,
+        "mode": 420
+      },
+      {
+        "path": "dist/timing.d.ts",
+        "size": 20064,
+        "mode": 420
+      },
+      {
+        "path": "dist/timing.js",
+        "size": 30215,
+        "mode": 420
+      },
+      {
+        "path": "dist/types-BsWaqwU_.d.ts",
+        "size": 8933,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-00-6GVG6RYL.js",
+        "size": 11600,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-01-CEYMG3LE.js",
+        "size": 10882,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-02-NWQJCVUU.js",
+        "size": 16722,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-03-PLHP6VH4.js",
+        "size": 8729,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-04-MEKUJA6M.js",
+        "size": 12107,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-05-3K5YKZBL.js",
+        "size": 12660,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-06-L2VV5XJV.js",
+        "size": 10484,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-07-H3GLGJGY.js",
+        "size": 15543,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-08-DA7QQIGD.js",
+        "size": 12443,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-09-MTXIO3QL.js",
+        "size": 10295,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-10-ASL4UW5C.js",
+        "size": 9206,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-11-EQEOANYB.js",
+        "size": 14246,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-12-NKCCXJ5G.js",
+        "size": 12240,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-13-DYTF3UC7.js",
+        "size": 10206,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-14-C25H45R5.js",
+        "size": 10241,
+        "mode": 420
+      },
+      {
+        "path": "dist/tzdb-2025c-15-7OYYZWRY.js",
+        "size": 11540,
+        "mode": 420
+      },
+      {
+        "path": "dist/vedic.d.ts",
+        "size": 18969,
+        "mode": 420
+      },
+      {
+        "path": "dist/vedic.js",
+        "size": 32750,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 2873,
+        "mode": 420
+      }
+    ],
+    "entryCount": 54,
+    "bundled": []
+  }
+]

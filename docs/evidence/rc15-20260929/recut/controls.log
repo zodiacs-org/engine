@@ -1,0 +1,54 @@
+# sh analyses.sh controls, Node v22.22.2, npm 10.9.7, 2026-09-29
+
+## root isolation, negative controls
+$ sh <checkout>/docs/evidence/rc15-20260929/root-isolation-control.sh <checkout> <scratch>/root-isolation
+## 1. root imports src/timing/rulers.ts
+the root entry reaches src/timing/rulers.ts
+exit 1
+## 2. root imports src/timing/rulers.mts (the review's bypass)
+the root entry reaches src/timing/rulers.mts
+exit 1
+// src/timing/rulers.mts
+## 3. root imports src/vedic/space name.ts
+the root entry reaches src/vedic/space name.ts
+exit 1
+// src/vedic/space name.ts
+## 4. unchanged
+@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, the core graph (22 source modules in the build's module list, 21 marked in 11 files) reaches no timing, Vedic or geo module and no zone history, and the geo entry loads its 16 shards lazily
+exit 0
+exit 0
+
+## invented charts against the defects the replaced tests caught
+$ sh <checkout>/docs/evidence/rc15-20260929/birth-data-mutations.sh <checkout> <scratch>/mutations
+none (control)
+  d90a00a: signs pass, dated pass, capri pass, 211 pass
+  invented: signs pass, dated pass, capri pass, 211 pass
+house counted one short (placeFrom)
+  d90a00a: signs FAIL, dated FAIL, capri pass, 211 pass
+  invented: signs FAIL, dated FAIL, capri pass, 211 pass
+sign one ahead (annualProfection)
+  d90a00a: signs FAIL, dated pass, capri pass, 211 pass
+  invented: signs FAIL, dated pass, capri pass, 211 pass
+age counted from one (solar-return years)
+  d90a00a: signs pass, dated FAIL, capri pass, 211 pass
+  invented: signs pass, dated FAIL, capri pass, 211 pass
+Scorpio ruled by Pluto
+  d90a00a: signs pass, dated pass, capri pass, 211 pass
+  invented: signs FAIL, dated pass, capri pass, 211 pass
+365.25-day years by default
+  d90a00a: signs pass, dated pass, capri FAIL, 211 FAIL
+  invented: signs pass, dated pass, capri FAIL, 211 FAIL
+30.4375-day months
+  d90a00a: signs pass, dated pass, capri FAIL, 211 FAIL
+  invented: signs pass, dated pass, capri FAIL, 211 FAIL
+loosing after eleven signs
+  d90a00a: signs pass, dated pass, capri FAIL, 211 FAIL
+  invented: signs pass, dated pass, capri FAIL, 211 FAIL
+loosing to the sign after the opposite
+  d90a00a: signs pass, dated pass, capri FAIL, 211 FAIL
+  invented: signs pass, dated pass, capri FAIL, 211 FAIL
+no loosing of the bond
+  d90a00a: signs pass, dated pass, capri FAIL, 211 FAIL
+  invented: signs pass, dated pass, capri FAIL, 211 FAIL
+exit 0
+

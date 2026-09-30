@@ -74,10 +74,16 @@ assert.equal(before.PROGRESSION_DAYS_PER_YEAR, after.PROGRESSION_DAYS_PER_YEAR);
 
 // Nine birth epochs times eight target epochs cover historical dates, equal
 // instants, pre-birth targets, leap days and negative Unix timestamps.
-const birthStrings = ["1800-01-02T12:00:00Z", "1889-12-20T11:45:00Z", "1907-07-06T15:06:36Z",
+// Changed in rc.15: when this ran for rc.12, the third birth epoch and the
+// second target epoch were a real person's birth, taken from the site's demo
+// chart, which the repository's rules do not allow (CONTRIBUTING.md, "Birth
+// data is synthetic by default"). The synthetic birth that the engine's tests
+// use in its place, 1908-02-11T09:23:31Z, stands there now. The script is
+// otherwise as it ran; site-adoption-parity.json is the output of that run.
+const birthStrings = ["1800-01-02T12:00:00Z", "1889-12-20T11:45:00Z", "1908-02-11T09:23:31Z",
   "1969-12-31T23:59:59.999Z", "1970-01-01T00:00:00Z", "1989-12-20T11:45:00Z",
   "2000-02-29T12:34:56.789Z", "2019-12-31T00:00:00Z", "2199-12-31T12:00:00Z"];
-const targetStrings = ["1800-01-02T12:00:00Z", "1907-07-06T15:06:36Z", "1969-12-31T23:59:59.999Z",
+const targetStrings = ["1800-01-02T12:00:00Z", "1908-02-11T09:23:31Z", "1969-12-31T23:59:59.999Z",
   "1970-01-01T00:00:00Z", "2000-02-29T12:34:56.789Z", "2020-12-30T05:48:46.080Z",
   "2026-09-28T12:00:00Z", "2199-12-31T12:00:00Z"];
 const bodyCases = birthStrings.flatMap((birth) => targetStrings.map((target) => [Date.parse(birth), Date.parse(target)]));

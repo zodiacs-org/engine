@@ -8,3 +8,6 @@ __pycache__/
 
 # Packed release candidates carried for immutable download
 !artifacts/*.tgz
+
+# The tzdata release the shard and time-scale generators download
+.cache/
