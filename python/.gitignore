@@ -1,0 +1,4 @@
+build/
+dist/
+*.egg-info/
+!src/zodiacs/_vendor/*.tgz

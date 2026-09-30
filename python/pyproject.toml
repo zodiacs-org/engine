@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zodiacs"
+version = "0.1.0a1"
+description = "Local Python API and CLI for Zodiacs tropical astrology calculations (requires Node.js)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT AND CC-BY-4.0"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+authors = [{name = "Zodiacs.org", email = "admin@zodiacs.org"}]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering :: Astronomy",
+]
+
+[project.urls]
+Homepage = "https://zodiacs.org"
+Repository = "https://github.com/zodiacs-org/engine"
+Documentation = "https://github.com/zodiacs-org/engine/tree/main/python"
+Issues = "https://github.com/zodiacs-org/engine/issues"
+
+[project.scripts]
+zodiacs = "zodiacs.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+zodiacs = ["bridge.mjs", "_vendor/*.tgz", "_vendor/*.json"]
