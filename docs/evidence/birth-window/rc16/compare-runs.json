@@ -1,0 +1,2241 @@
+{
+ "note": "[branch run on 670db8a6, rc16 run]; the window counts of compare.mjs, timings left out",
+ "windows": [
+  1000,
+  1000
+ ],
+ "passed": [
+  1000,
+  1000
+ ],
+ "totals": {
+  "cells": [
+   21629,
+   21660
+  ],
+  "samples": [
+   12259372,
+   12259372
+  ],
+  "sampledTransitions": [
+   24188,
+   24188
+  ],
+  "matched": [
+   24188,
+   24188
+  ],
+  "missed": [
+   0,
+   0
+  ],
+  "extra": [
+   0,
+   0
+  ],
+  "switches": [
+   20629,
+   20660
+  ],
+  "changes": [
+   25425,
+   25475
+  ],
+  "excursions": [
+   8,
+   4
+  ],
+  "excursionsConfirmed": [
+   8,
+   4
+  ],
+  "sampleDisagreements": [
+   0,
+   0
+  ],
+  "millisecondChecks": [
+   1485288,
+   1487520
+  ],
+  "millisecondFailures": [
+   0,
+   0
+  ]
+ },
+ "identical": 913,
+ "differing": 87,
+ "differingSince1972": 41,
+ "rows": [
+  {
+   "id": 0,
+   "start": "1887-04-22T23:02:58.520Z",
+   "end": "1887-04-23T14:40:58.520Z",
+   "latitude": -66.366917,
+   "houseSystem": "meridian",
+   "fields": {
+    "cells": [
+     100,
+     102
+    ],
+    "switches": [
+     99,
+     101
+    ],
+    "changes": [
+     108,
+     112
+    ],
+    "millisecondChecks": [
+     7128,
+     7272
+    ]
+   }
+  },
+  {
+   "id": 3,
+   "start": "2137-09-12T03:22:09.256Z",
+   "end": "2137-09-13T00:01:33.256Z",
+   "latitude": 62.817714,
+   "houseSystem": "equal-mc",
+   "fields": {
+    "cells": [
+     142,
+     144
+    ],
+    "switches": [
+     141,
+     143
+    ],
+    "changes": [
+     157,
+     161
+    ],
+    "millisecondChecks": [
+     10152,
+     10296
+    ]
+   }
+  },
+  {
+   "id": 25,
+   "start": "2117-02-04T22:08:49.484Z",
+   "end": "2117-02-05T12:33:24.484Z",
+   "latitude": 69.05999,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     92,
+     89
+    ],
+    "switches": [
+     91,
+     88
+    ],
+    "changes": [
+     121,
+     108
+    ],
+    "millisecondChecks": [
+     6552,
+     6336
+    ]
+   }
+  },
+  {
+   "id": 28,
+   "start": "1920-09-13T16:13:04.061Z",
+   "end": "1920-09-14T06:22:33.061Z",
+   "latitude": -66.199858,
+   "houseSystem": "porphyry",
+   "fields": {
+    "cells": [
+     112,
+     108
+    ],
+    "switches": [
+     111,
+     107
+    ],
+    "changes": [
+     124,
+     116
+    ],
+    "millisecondChecks": [
+     7992,
+     7704
+    ]
+   }
+  },
+  {
+   "id": 30,
+   "start": "1855-11-24T15:59:26.569Z",
+   "end": "1855-11-25T14:24:05.569Z",
+   "latitude": -85.107758,
+   "houseSystem": "vehlow",
+   "fields": {
+    "cells": [
+     49,
+     57
+    ],
+    "switches": [
+     48,
+     56
+    ],
+    "changes": [
+     91,
+     107
+    ],
+    "millisecondChecks": [
+     3456,
+     4032
+    ]
+   }
+  },
+  {
+   "id": 33,
+   "start": "2189-03-18T05:18:47.882Z",
+   "end": "2189-03-18T05:35:27.882Z",
+   "latitude": 38.462027,
+   "houseSystem": "porphyry",
+   "fields": {
+    "cells": [
+     6,
+     8
+    ],
+    "switches": [
+     5,
+     7
+    ],
+    "changes": [
+     8,
+     12
+    ],
+    "millisecondChecks": [
+     360,
+     504
+    ]
+   }
+  },
+  {
+   "id": 46,
+   "start": "1914-03-14T13:29:01.396Z",
+   "end": "1914-03-15T10:50:41.396Z",
+   "latitude": -20.655902,
+   "houseSystem": "regiomontanus",
+   "fields": {
+    "cells": [
+     152,
+     150
+    ],
+    "switches": [
+     151,
+     149
+    ],
+    "changes": [
+     170,
+     166
+    ],
+    "millisecondChecks": [
+     10872,
+     10728
+    ]
+   }
+  },
+  {
+   "id": 58,
+   "start": "1825-10-11T00:23:17.298Z",
+   "end": "1825-10-11T03:22:43.298Z",
+   "latitude": -66.42346,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     13,
+     21
+    ],
+    "switches": [
+     12,
+     20
+    ],
+    "changes": [
+     14,
+     30
+    ],
+    "millisecondChecks": [
+     864,
+     1440
+    ]
+   }
+  },
+  {
+   "id": 67,
+   "start": "1806-07-23T12:33:31.620Z",
+   "end": "1806-07-23T13:28:48.620Z",
+   "latitude": -66.263215,
+   "houseSystem": "koch",
+   "fields": {
+    "cells": [
+     11,
+     7
+    ],
+    "switches": [
+     10,
+     6
+    ],
+    "changes": [
+     17,
+     9
+    ],
+    "millisecondChecks": [
+     720,
+     432
+    ]
+   }
+  },
+  {
+   "id": 72,
+   "start": "1868-10-21T19:04:37.523Z",
+   "end": "1868-10-21T21:37:04.523Z",
+   "latitude": -66.685228,
+   "houseSystem": "topocentric",
+   "fields": {
+    "cells": [
+     17,
+     15
+    ],
+    "switches": [
+     16,
+     14
+    ],
+    "changes": [
+     19,
+     15
+    ],
+    "millisecondChecks": [
+     1152,
+     1008
+    ]
+   }
+  },
+  {
+   "id": 79,
+   "start": "1827-11-12T04:27:51.449Z",
+   "end": "1827-11-12T09:21:05.449Z",
+   "latitude": 66.594101,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     30,
+     28
+    ],
+    "switches": [
+     29,
+     27
+    ],
+    "changes": [
+     34,
+     30
+    ],
+    "millisecondChecks": [
+     2088,
+     1944
+    ]
+   }
+  },
+  {
+   "id": 84,
+   "start": "1817-02-27T16:48:17.473Z",
+   "end": "1817-02-27T17:55:12.473Z",
+   "latitude": 6.581854,
+   "houseSystem": "meridian",
+   "fields": {
+    "cells": [
+     15,
+     11
+    ],
+    "switches": [
+     14,
+     10
+    ],
+    "changes": [
+     21,
+     13
+    ],
+    "millisecondChecks": [
+     1008,
+     720
+    ]
+   }
+  },
+  {
+   "id": 98,
+   "start": "1821-08-04T21:32:30.752Z",
+   "end": "1821-08-05T02:27:21.752Z",
+   "latitude": 63.604742,
+   "houseSystem": "topocentric",
+   "fields": {
+    "cells": [
+     55,
+     49
+    ],
+    "switches": [
+     54,
+     48
+    ],
+    "changes": [
+     64,
+     52
+    ],
+    "millisecondChecks": [
+     3888,
+     3456
+    ]
+   }
+  },
+  {
+   "id": 122,
+   "start": "2165-01-17T20:06:32.534Z",
+   "end": "2165-01-18T04:17:16.534Z",
+   "latitude": -66.718022,
+   "houseSystem": "vehlow",
+   "fields": {
+    "cells": [
+     41,
+     43
+    ],
+    "switches": [
+     40,
+     42
+    ],
+    "changes": [
+     47,
+     51
+    ],
+    "millisecondChecks": [
+     2880,
+     3024
+    ]
+   }
+  },
+  {
+   "id": 134,
+   "start": "2157-11-05T22:31:52.035Z",
+   "end": "2157-11-06T07:12:59.035Z",
+   "latitude": 61.227251,
+   "houseSystem": "koch",
+   "fields": {
+    "cells": [
+     103,
+     95
+    ],
+    "switches": [
+     102,
+     94
+    ],
+    "changes": [
+     134,
+     118
+    ],
+    "millisecondChecks": [
+     7344,
+     6768
+    ]
+   }
+  },
+  {
+   "id": 147,
+   "start": "2158-04-16T01:51:13.474Z",
+   "end": "2158-04-16T06:01:38.474Z",
+   "latitude": -62.595905,
+   "houseSystem": "placidus",
+   "fields": {
+    "cells": [
+     38,
+     42
+    ],
+    "switches": [
+     37,
+     41
+    ],
+    "changes": [
+     47,
+     55
+    ],
+    "millisecondChecks": [
+     2664,
+     2952
+    ]
+   }
+  },
+  {
+   "id": 149,
+   "start": "1847-10-09T19:50:20.002Z",
+   "end": "1847-10-10T14:59:25.002Z",
+   "latitude": -66.802809,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "changes": [
+     177,
+     179
+    ]
+   }
+  },
+  {
+   "id": 153,
+   "start": "1868-03-19T09:46:42.046Z",
+   "end": "1868-03-20T02:07:52.046Z",
+   "latitude": 66.422108,
+   "houseSystem": "placidus",
+   "fields": {
+    "cells": [
+     115,
+     117
+    ],
+    "switches": [
+     114,
+     116
+    ],
+    "changes": [
+     129,
+     133
+    ],
+    "millisecondChecks": [
+     8208,
+     8352
+    ]
+   }
+  },
+  {
+   "id": 157,
+   "start": "2148-10-25T01:50:33.827Z",
+   "end": "2148-10-25T11:39:36.827Z",
+   "latitude": -63.303843,
+   "houseSystem": "vehlow",
+   "fields": {
+    "cells": [
+     46,
+     44
+    ],
+    "switches": [
+     45,
+     43
+    ],
+    "changes": [
+     50,
+     46
+    ],
+    "millisecondChecks": [
+     3240,
+     3096
+    ]
+   }
+  },
+  {
+   "id": 169,
+   "start": "2193-11-25T18:25:32.878Z",
+   "end": "2193-11-25T19:47:10.878Z",
+   "latitude": -60.486607,
+   "houseSystem": "placidus",
+   "fields": {
+    "cells": [
+     8,
+     10
+    ],
+    "switches": [
+     7,
+     9
+    ],
+    "changes": [
+     8,
+     12
+    ],
+    "millisecondChecks": [
+     504,
+     648
+    ]
+   }
+  },
+  {
+   "id": 182,
+   "start": "2154-11-20T03:07:34.363Z",
+   "end": "2154-11-20T09:20:47.363Z",
+   "latitude": -66.117319,
+   "houseSystem": "vehlow",
+   "fields": {
+    "cells": [
+     36,
+     40
+    ],
+    "switches": [
+     35,
+     39
+    ],
+    "changes": [
+     45,
+     53
+    ],
+    "millisecondChecks": [
+     2520,
+     2808
+    ]
+   }
+  },
+  {
+   "id": 189,
+   "start": "2174-11-19T03:47:24.413Z",
+   "end": "2174-11-19T20:10:40.413Z",
+   "latitude": -17.668588,
+   "houseSystem": "equal-mc",
+   "fields": {
+    "cells": [
+     119,
+     125
+    ],
+    "switches": [
+     118,
+     124
+    ],
+    "changes": [
+     137,
+     149
+    ],
+    "millisecondChecks": [
+     8496,
+     8928
+    ]
+   }
+  },
+  {
+   "id": 208,
+   "start": "1867-10-01T02:40:07.269Z",
+   "end": "1867-10-01T14:50:16.269Z",
+   "latitude": -75.321426,
+   "houseSystem": "equal-mc",
+   "fields": {
+    "cells": [
+     82,
+     80
+    ],
+    "switches": [
+     81,
+     79
+    ],
+    "changes": [
+     90,
+     86
+    ],
+    "millisecondChecks": [
+     5832,
+     5688
+    ]
+   }
+  },
+  {
+   "id": 215,
+   "start": "2177-11-26T03:30:00.733Z",
+   "end": "2177-11-26T13:49:54.733Z",
+   "latitude": -66.996413,
+   "houseSystem": "vehlow",
+   "fields": {
+    "cells": [
+     117,
+     111
+    ],
+    "switches": [
+     116,
+     110
+    ],
+    "changes": [
+     164,
+     152
+    ],
+    "millisecondChecks": [
+     8352,
+     7920
+    ]
+   }
+  },
+  {
+   "id": 233,
+   "start": "2198-07-24T22:50:22.013Z",
+   "end": "2198-07-25T16:14:43.013Z",
+   "latitude": -66.925362,
+   "houseSystem": "campanus",
+   "fields": {
+    "cells": [
+     151,
+     149
+    ],
+    "switches": [
+     150,
+     148
+    ],
+    "changes": [
+     227,
+     223
+    ],
+    "millisecondChecks": [
+     10800,
+     10656
+    ]
+   }
+  },
+  {
+   "id": 253,
+   "start": "2181-09-08T20:08:16.468Z",
+   "end": "2181-09-09T00:04:17.468Z",
+   "latitude": 66.595336,
+   "houseSystem": "porphyry",
+   "fields": {
+    "cells": [
+     25,
+     27
+    ],
+    "switches": [
+     24,
+     26
+    ],
+    "changes": [
+     33,
+     37
+    ],
+    "millisecondChecks": [
+     1728,
+     1872
+    ]
+   }
+  },
+  {
+   "id": 263,
+   "start": "1839-01-03T01:53:18.226Z",
+   "end": "1839-01-03T18:24:24.226Z",
+   "latitude": -66.042972,
+   "houseSystem": "topocentric",
+   "fields": {
+    "cells": [
+     123,
+     131
+    ],
+    "switches": [
+     122,
+     130
+    ],
+    "changes": [
+     174,
+     190
+    ],
+    "millisecondChecks": [
+     8784,
+     9360
+    ]
+   }
+  },
+  {
+   "id": 266,
+   "start": "1873-08-04T20:20:39.211Z",
+   "end": "1873-08-05T07:20:43.211Z",
+   "latitude": -66.955709,
+   "houseSystem": "equal",
+   "fields": {
+    "cells": [
+     99,
+     101
+    ],
+    "switches": [
+     98,
+     100
+    ],
+    "changes": [
+     134,
+     138
+    ],
+    "millisecondChecks": [
+     7056,
+     7200
+    ]
+   }
+  },
+  {
+   "id": 275,
+   "start": "2197-05-10T11:48:51.121Z",
+   "end": "2197-05-10T21:04:11.121Z",
+   "latitude": -75.73106,
+   "houseSystem": "vehlow",
+   "fields": {
+    "cells": [
+     31,
+     29
+    ],
+    "switches": [
+     30,
+     28
+    ],
+    "changes": [
+     47,
+     43
+    ],
+    "excursions": [
+     8,
+     4
+    ],
+    "excursionsConfirmed": [
+     8,
+     4
+    ],
+    "millisecondChecks": [
+     2160,
+     2016
+    ]
+   }
+  },
+  {
+   "id": 282,
+   "start": "1957-03-03T09:10:19.040Z",
+   "end": "1957-03-03T20:03:00.040Z",
+   "latitude": -14.527194,
+   "houseSystem": "campanus",
+   "fields": {
+    "cells": [
+     75,
+     77
+    ],
+    "switches": [
+     74,
+     76
+    ],
+    "changes": [
+     82,
+     86
+    ],
+    "millisecondChecks": [
+     5328,
+     5472
+    ]
+   }
+  },
+  {
+   "id": 311,
+   "start": "1826-11-08T10:52:22.701Z",
+   "end": "1826-11-08T19:16:03.701Z",
+   "latitude": -60.711235,
+   "houseSystem": "meridian",
+   "fields": {
+    "cells": [
+     66,
+     62
+    ],
+    "switches": [
+     65,
+     61
+    ],
+    "changes": [
+     75,
+     67
+    ],
+    "millisecondChecks": [
+     4680,
+     4392
+    ]
+   }
+  },
+  {
+   "id": 318,
+   "start": "1841-01-07T18:37:49.129Z",
+   "end": "1841-01-08T00:38:51.129Z",
+   "latitude": -67.965185,
+   "houseSystem": "meridian",
+   "fields": {
+    "cells": [
+     43,
+     41
+    ],
+    "switches": [
+     42,
+     40
+    ],
+    "changes": [
+     51,
+     47
+    ],
+    "millisecondChecks": [
+     3024,
+     2880
+    ]
+   }
+  },
+  {
+   "id": 320,
+   "start": "1810-06-10T13:57:27.118Z",
+   "end": "1810-06-10T14:07:47.118Z",
+   "latitude": 61.074536,
+   "houseSystem": "placidus",
+   "fields": {
+    "cells": [
+     4,
+     2
+    ],
+    "switches": [
+     3,
+     1
+    ],
+    "changes": [
+     6,
+     2
+    ],
+    "millisecondChecks": [
+     216,
+     72
+    ]
+   }
+  },
+  {
+   "id": 336,
+   "start": "1845-09-17T21:40:39.211Z",
+   "end": "1845-09-18T03:50:07.211Z",
+   "latitude": 64.087372,
+   "houseSystem": "campanus",
+   "fields": {
+    "cells": [
+     37,
+     31
+    ],
+    "switches": [
+     36,
+     30
+    ],
+    "changes": [
+     50,
+     38
+    ],
+    "millisecondChecks": [
+     2592,
+     2160
+    ]
+   }
+  },
+  {
+   "id": 339,
+   "start": "2186-07-08T04:02:46.239Z",
+   "end": "2186-07-08T08:25:27.239Z",
+   "latitude": -64.882741,
+   "houseSystem": "campanus",
+   "fields": {
+    "cells": [
+     23,
+     25
+    ],
+    "switches": [
+     22,
+     24
+    ],
+    "changes": [
+     25,
+     29
+    ],
+    "millisecondChecks": [
+     1584,
+     1728
+    ]
+   }
+  },
+  {
+   "id": 349,
+   "start": "1886-07-28T08:03:38.301Z",
+   "end": "1886-07-28T08:31:02.301Z",
+   "latitude": -62.786995,
+   "houseSystem": "vehlow",
+   "fields": {
+    "cells": [
+     2,
+     4
+    ],
+    "switches": [
+     1,
+     3
+    ],
+    "changes": [
+     2,
+     6
+    ],
+    "millisecondChecks": [
+     72,
+     216
+    ]
+   }
+  },
+  {
+   "id": 383,
+   "start": "1843-07-28T07:34:15.324Z",
+   "end": "1843-07-28T08:51:26.324Z",
+   "latitude": -5.607195,
+   "houseSystem": "porphyry",
+   "fields": {
+    "cells": [
+     16,
+     14
+    ],
+    "switches": [
+     15,
+     13
+    ],
+    "changes": [
+     20,
+     16
+    ],
+    "millisecondChecks": [
+     1080,
+     936
+    ]
+   }
+  },
+  {
+   "id": 388,
+   "start": "2142-10-04T17:43:36.296Z",
+   "end": "2142-10-05T02:32:17.296Z",
+   "latitude": -68.799585,
+   "houseSystem": "topocentric",
+   "fields": {
+    "cells": [
+     46,
+     48
+    ],
+    "switches": [
+     45,
+     47
+    ],
+    "changes": [
+     58,
+     62
+    ],
+    "millisecondChecks": [
+     3240,
+     3384
+    ]
+   }
+  },
+  {
+   "id": 419,
+   "start": "1832-03-15T22:59:24.911Z",
+   "end": "1832-03-16T13:46:56.911Z",
+   "latitude": -60.345127,
+   "houseSystem": "porphyry",
+   "fields": {
+    "cells": [
+     89,
+     91
+    ],
+    "switches": [
+     88,
+     90
+    ],
+    "changes": [
+     104,
+     108
+    ],
+    "millisecondChecks": [
+     6336,
+     6480
+    ]
+   }
+  },
+  {
+   "id": 422,
+   "start": "2077-04-10T04:41:46.351Z",
+   "end": "2077-04-10T07:10:56.351Z",
+   "latitude": -25.090991,
+   "houseSystem": "porphyry",
+   "fields": {
+    "cells": [
+     16,
+     14
+    ],
+    "switches": [
+     15,
+     13
+    ],
+    "changes": [
+     18,
+     14
+    ],
+    "millisecondChecks": [
+     1080,
+     936
+    ]
+   }
+  },
+  {
+   "id": 445,
+   "start": "2169-03-29T13:23:50.936Z",
+   "end": "2169-03-29T19:36:06.936Z",
+   "latitude": -61.468114,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     37,
+     41
+    ],
+    "switches": [
+     36,
+     40
+    ],
+    "changes": [
+     44,
+     52
+    ],
+    "millisecondChecks": [
+     2592,
+     2880
+    ]
+   }
+  },
+  {
+   "id": 471,
+   "start": "1838-06-23T21:19:10.654Z",
+   "end": "1838-06-24T15:31:45.654Z",
+   "latitude": -82.637176,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     92,
+     94
+    ],
+    "switches": [
+     91,
+     93
+    ],
+    "changes": [
+     153,
+     155
+    ],
+    "millisecondChecks": [
+     6552,
+     6696
+    ]
+   }
+  },
+  {
+   "id": 493,
+   "start": "2177-08-21T21:25:52.221Z",
+   "end": "2177-08-22T10:48:50.221Z",
+   "latitude": 53.747952,
+   "houseSystem": "meridian",
+   "fields": {
+    "cells": [
+     96,
+     92
+    ],
+    "switches": [
+     95,
+     91
+    ],
+    "changes": [
+     107,
+     99
+    ],
+    "millisecondChecks": [
+     6840,
+     6552
+    ]
+   }
+  },
+  {
+   "id": 510,
+   "start": "1807-02-21T22:08:29.609Z",
+   "end": "1807-02-22T00:20:39.609Z",
+   "latitude": -60.285514,
+   "houseSystem": "vehlow",
+   "fields": {
+    "cells": [
+     19,
+     17
+    ],
+    "switches": [
+     18,
+     16
+    ],
+    "changes": [
+     21,
+     17
+    ],
+    "millisecondChecks": [
+     1296,
+     1152
+    ]
+   }
+  },
+  {
+   "id": 540,
+   "start": "1805-05-24T01:22:41.521Z",
+   "end": "1805-05-24T05:05:01.521Z",
+   "latitude": -56.822553,
+   "houseSystem": "topocentric",
+   "fields": {
+    "cells": [
+     34,
+     44
+    ],
+    "switches": [
+     33,
+     43
+    ],
+    "changes": [
+     40,
+     60
+    ],
+    "millisecondChecks": [
+     2376,
+     3096
+    ]
+   }
+  },
+  {
+   "id": 547,
+   "start": "1868-08-08T03:12:19.333Z",
+   "end": "1868-08-08T17:26:14.333Z",
+   "latitude": -27.407943,
+   "houseSystem": "morinus",
+   "fields": {
+    "cells": [
+     103,
+     101
+    ],
+    "switches": [
+     102,
+     100
+    ],
+    "changes": [
+     118,
+     114
+    ],
+    "millisecondChecks": [
+     7344,
+     7200
+    ]
+   }
+  },
+  {
+   "id": 580,
+   "start": "1810-07-27T14:56:25.747Z",
+   "end": "1810-07-28T01:52:46.747Z",
+   "latitude": 85.012461,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     52,
+     53
+    ],
+    "switches": [
+     51,
+     52
+    ],
+    "changes": [
+     92,
+     85
+    ],
+    "millisecondChecks": [
+     3672,
+     3744
+    ]
+   }
+  },
+  {
+   "id": 588,
+   "start": "1834-05-15T01:55:00.607Z",
+   "end": "1834-05-15T07:42:24.607Z",
+   "latitude": 67.446165,
+   "houseSystem": "topocentric",
+   "fields": {
+    "cells": [
+     61,
+     57
+    ],
+    "switches": [
+     60,
+     56
+    ],
+    "changes": [
+     76,
+     72
+    ],
+    "millisecondChecks": [
+     4320,
+     4032
+    ]
+   }
+  },
+  {
+   "id": 596,
+   "start": "2108-09-25T16:35:15.931Z",
+   "end": "2108-09-25T18:02:42.931Z",
+   "latitude": 57.600923,
+   "houseSystem": "morinus",
+   "fields": {
+    "cells": [
+     13,
+     11
+    ],
+    "switches": [
+     12,
+     10
+    ],
+    "changes": [
+     15,
+     11
+    ],
+    "millisecondChecks": [
+     864,
+     720
+    ]
+   }
+  },
+  {
+   "id": 607,
+   "start": "1911-02-02T06:42:34.207Z",
+   "end": "1911-02-03T01:22:21.207Z",
+   "latitude": -61.082974,
+   "houseSystem": "campanus",
+   "fields": {
+    "cells": [
+     128,
+     126
+    ],
+    "switches": [
+     127,
+     125
+    ],
+    "changes": [
+     138,
+     134
+    ],
+    "millisecondChecks": [
+     9144,
+     9000
+    ]
+   }
+  },
+  {
+   "id": 621,
+   "start": "1860-09-12T12:04:24.651Z",
+   "end": "1860-09-13T09:57:13.651Z",
+   "latitude": 63.009848,
+   "houseSystem": "vehlow",
+   "fields": {
+    "cells": [
+     152,
+     154
+    ],
+    "switches": [
+     151,
+     153
+    ],
+    "changes": [
+     164,
+     168
+    ],
+    "millisecondChecks": [
+     10872,
+     11016
+    ]
+   }
+  },
+  {
+   "id": 639,
+   "start": "2132-01-07T18:22:00.435Z",
+   "end": "2132-01-08T07:38:37.435Z",
+   "latitude": -74.228032,
+   "houseSystem": "vehlow",
+   "fields": {
+    "cells": [
+     40,
+     42
+    ],
+    "switches": [
+     39,
+     41
+    ],
+    "changes": [
+     54,
+     58
+    ],
+    "millisecondChecks": [
+     2808,
+     2952
+    ]
+   }
+  },
+  {
+   "id": 658,
+   "start": "2086-02-04T22:28:54.987Z",
+   "end": "2086-02-05T03:05:11.987Z",
+   "latitude": 50.237424,
+   "houseSystem": "vehlow",
+   "fields": {
+    "cells": [
+     24,
+     26
+    ],
+    "switches": [
+     23,
+     25
+    ],
+    "changes": [
+     25,
+     29
+    ],
+    "millisecondChecks": [
+     1656,
+     1800
+    ]
+   }
+  },
+  {
+   "id": 669,
+   "start": "2174-05-17T22:30:59.038Z",
+   "end": "2174-05-18T11:45:10.038Z",
+   "latitude": 45.618502,
+   "houseSystem": "meridian",
+   "fields": {
+    "cells": [
+     90,
+     92
+    ],
+    "switches": [
+     89,
+     91
+    ],
+    "changes": [
+     97,
+     101
+    ],
+    "millisecondChecks": [
+     6408,
+     6552
+    ]
+   }
+  },
+  {
+   "id": 670,
+   "start": "2137-02-18T01:51:31.363Z",
+   "end": "2137-02-18T09:16:55.363Z",
+   "latitude": 66.120417,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     39,
+     41
+    ],
+    "switches": [
+     38,
+     40
+    ],
+    "changes": [
+     44,
+     48
+    ],
+    "millisecondChecks": [
+     2736,
+     2880
+    ]
+   }
+  },
+  {
+   "id": 679,
+   "start": "1937-08-11T04:40:04.854Z",
+   "end": "1937-08-11T11:44:27.854Z",
+   "latitude": -66.476978,
+   "houseSystem": "campanus",
+   "fields": {
+    "cells": [
+     47,
+     45
+    ],
+    "switches": [
+     46,
+     44
+    ],
+    "changes": [
+     49,
+     45
+    ],
+    "millisecondChecks": [
+     3312,
+     3168
+    ]
+   }
+  },
+  {
+   "id": 680,
+   "start": "1832-11-07T15:45:56.746Z",
+   "end": "1832-11-07T17:58:45.746Z",
+   "latitude": -60.393968,
+   "houseSystem": "regiomontanus",
+   "fields": {
+    "cells": [
+     16,
+     14
+    ],
+    "switches": [
+     15,
+     13
+    ],
+    "changes": [
+     18,
+     14
+    ],
+    "millisecondChecks": [
+     1080,
+     936
+    ]
+   }
+  },
+  {
+   "id": 707,
+   "start": "1911-01-22T09:32:44.257Z",
+   "end": "1911-01-22T10:10:33.257Z",
+   "latitude": -66.379392,
+   "houseSystem": "placidus",
+   "fields": {
+    "cells": [
+     5,
+     7
+    ],
+    "switches": [
+     4,
+     6
+    ],
+    "changes": [
+     5,
+     9
+    ],
+    "millisecondChecks": [
+     288,
+     432
+    ]
+   }
+  },
+  {
+   "id": 726,
+   "start": "2125-01-02T04:27:50.172Z",
+   "end": "2125-01-02T08:42:50.172Z",
+   "latitude": 61.925597,
+   "houseSystem": "equal",
+   "fields": {
+    "cells": [
+     20,
+     22
+    ],
+    "switches": [
+     19,
+     21
+    ],
+    "changes": [
+     21,
+     25
+    ],
+    "millisecondChecks": [
+     1368,
+     1512
+    ]
+   }
+  },
+  {
+   "id": 738,
+   "start": "1824-01-13T19:08:22.111Z",
+   "end": "1824-01-14T01:23:09.111Z",
+   "latitude": 66.947173,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     30,
+     36
+    ],
+    "switches": [
+     29,
+     35
+    ],
+    "changes": [
+     31,
+     43
+    ],
+    "millisecondChecks": [
+     2088,
+     2520
+    ]
+   }
+  },
+  {
+   "id": 740,
+   "start": "2145-08-10T04:32:16.641Z",
+   "end": "2145-08-10T22:32:49.641Z",
+   "latitude": -70.599367,
+   "houseSystem": "regiomontanus",
+   "fields": {
+    "cells": [
+     92,
+     100
+    ],
+    "switches": [
+     91,
+     99
+    ],
+    "changes": [
+     115,
+     131
+    ],
+    "millisecondChecks": [
+     6552,
+     7128
+    ]
+   }
+  },
+  {
+   "id": 751,
+   "start": "2090-10-28T05:08:29.685Z",
+   "end": "2090-10-28T16:10:44.685Z",
+   "latitude": -6.617049,
+   "houseSystem": "equal",
+   "fields": {
+    "cells": [
+     74,
+     72
+    ],
+    "switches": [
+     73,
+     71
+    ],
+    "changes": [
+     81,
+     77
+    ],
+    "millisecondChecks": [
+     5256,
+     5112
+    ]
+   }
+  },
+  {
+   "id": 752,
+   "start": "1867-02-25T22:49:57.907Z",
+   "end": "1867-02-26T02:18:30.907Z",
+   "latitude": -28.129899,
+   "houseSystem": "campanus",
+   "fields": {
+    "cells": [
+     25,
+     23
+    ],
+    "switches": [
+     24,
+     22
+    ],
+    "changes": [
+     28,
+     24
+    ],
+    "millisecondChecks": [
+     1728,
+     1584
+    ]
+   }
+  },
+  {
+   "id": 757,
+   "start": "2132-01-31T05:00:39.058Z",
+   "end": "2132-01-31T18:19:52.058Z",
+   "latitude": -60.905462,
+   "houseSystem": "equal-mc",
+   "fields": {
+    "cells": [
+     94,
+     92
+    ],
+    "switches": [
+     93,
+     91
+    ],
+    "changes": [
+     103,
+     99
+    ],
+    "millisecondChecks": [
+     6696,
+     6552
+    ]
+   }
+  },
+  {
+   "id": 761,
+   "start": "2040-08-31T18:06:07.895Z",
+   "end": "2040-08-31T19:19:55.895Z",
+   "latitude": -65.565971,
+   "houseSystem": "porphyry",
+   "fields": {
+    "cells": [
+     7,
+     9
+    ],
+    "switches": [
+     6,
+     8
+    ],
+    "changes": [
+     7,
+     11
+    ],
+    "millisecondChecks": [
+     432,
+     576
+    ]
+   }
+  },
+  {
+   "id": 777,
+   "start": "1845-10-21T01:15:36.291Z",
+   "end": "1845-10-21T03:22:12.291Z",
+   "latitude": 66.950836,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     43,
+     38
+    ],
+    "switches": [
+     42,
+     37
+    ],
+    "changes": [
+     69,
+     59
+    ],
+    "millisecondChecks": [
+     3024,
+     2664
+    ]
+   }
+  },
+  {
+   "id": 784,
+   "start": "1889-10-26T14:14:50.544Z",
+   "end": "1889-10-27T13:07:01.544Z",
+   "latitude": -61.270945,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     157,
+     161
+    ],
+    "switches": [
+     156,
+     160
+    ],
+    "changes": [
+     170,
+     178
+    ],
+    "millisecondChecks": [
+     11232,
+     11520
+    ]
+   }
+  },
+  {
+   "id": 803,
+   "start": "1939-03-28T13:28:05.973Z",
+   "end": "1939-03-28T22:25:01.973Z",
+   "latitude": 60.250137,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     53,
+     55
+    ],
+    "switches": [
+     52,
+     54
+    ],
+    "changes": [
+     57,
+     61
+    ],
+    "millisecondChecks": [
+     3744,
+     3888
+    ]
+   }
+  },
+  {
+   "id": 807,
+   "start": "2098-10-07T09:11:20.502Z",
+   "end": "2098-10-07T11:39:50.502Z",
+   "latitude": -21.317534,
+   "houseSystem": "topocentric",
+   "fields": {
+    "cells": [
+     18,
+     16
+    ],
+    "switches": [
+     17,
+     15
+    ],
+    "changes": [
+     21,
+     17
+    ],
+    "millisecondChecks": [
+     1224,
+     1080
+    ]
+   }
+  },
+  {
+   "id": 816,
+   "start": "2093-06-20T11:26:46.485Z",
+   "end": "2093-06-20T15:45:38.485Z",
+   "latitude": -34.54654,
+   "houseSystem": "topocentric",
+   "fields": {
+    "cells": [
+     36,
+     34
+    ],
+    "switches": [
+     35,
+     33
+    ],
+    "changes": [
+     40,
+     36
+    ],
+    "millisecondChecks": [
+     2520,
+     2376
+    ]
+   }
+  },
+  {
+   "id": 835,
+   "start": "1865-11-26T16:40:06.270Z",
+   "end": "1865-11-27T00:57:04.270Z",
+   "latitude": 28.938744,
+   "houseSystem": "morinus",
+   "fields": {
+    "cells": [
+     60,
+     62
+    ],
+    "switches": [
+     59,
+     61
+    ],
+    "changes": [
+     64,
+     68
+    ],
+    "millisecondChecks": [
+     4248,
+     4392
+    ]
+   }
+  },
+  {
+   "id": 843,
+   "start": "2166-09-16T08:21:08.019Z",
+   "end": "2166-09-16T17:15:17.019Z",
+   "latitude": 61.254142,
+   "houseSystem": "regiomontanus",
+   "fields": {
+    "cells": [
+     49,
+     53
+    ],
+    "switches": [
+     48,
+     52
+    ],
+    "changes": [
+     58,
+     66
+    ],
+    "millisecondChecks": [
+     3456,
+     3744
+    ]
+   }
+  },
+  {
+   "id": 846,
+   "start": "1900-09-18T06:38:18.853Z",
+   "end": "1900-09-18T14:15:07.853Z",
+   "latitude": 66.273753,
+   "houseSystem": "regiomontanus",
+   "fields": {
+    "cells": [
+     36,
+     34
+    ],
+    "switches": [
+     35,
+     33
+    ],
+    "changes": [
+     40,
+     36
+    ],
+    "millisecondChecks": [
+     2520,
+     2376
+    ]
+   }
+  },
+  {
+   "id": 865,
+   "start": "2162-02-08T04:19:10.384Z",
+   "end": "2162-02-08T05:36:08.384Z",
+   "latitude": -64.978275,
+   "houseSystem": "campanus",
+   "fields": {
+    "cells": [
+     11,
+     9
+    ],
+    "switches": [
+     10,
+     8
+    ],
+    "changes": [
+     13,
+     9
+    ],
+    "millisecondChecks": [
+     720,
+     576
+    ]
+   }
+  },
+  {
+   "id": 869,
+   "start": "2092-10-26T11:39:49.385Z",
+   "end": "2092-10-27T09:19:48.385Z",
+   "latitude": 8.272308,
+   "houseSystem": "topocentric",
+   "fields": {
+    "cells": [
+     150,
+     148
+    ],
+    "switches": [
+     149,
+     147
+    ],
+    "changes": [
+     164,
+     160
+    ],
+    "millisecondChecks": [
+     10728,
+     10584
+    ]
+   }
+  },
+  {
+   "id": 882,
+   "start": "2087-10-31T19:33:39.631Z",
+   "end": "2087-11-01T12:34:42.631Z",
+   "latitude": 75.893575,
+   "houseSystem": "meridian",
+   "fields": {
+    "cells": [
+     111,
+     113
+    ],
+    "switches": [
+     110,
+     112
+    ],
+    "changes": [
+     122,
+     126
+    ],
+    "millisecondChecks": [
+     7920,
+     8064
+    ]
+   }
+  },
+  {
+   "id": 892,
+   "start": "1811-05-23T04:35:28.918Z",
+   "end": "1811-05-23T10:29:58.918Z",
+   "latitude": 39.961532,
+   "houseSystem": "equal-mc",
+   "fields": {
+    "cells": [
+     38,
+     42
+    ],
+    "switches": [
+     37,
+     41
+    ],
+    "changes": [
+     41,
+     49
+    ],
+    "millisecondChecks": [
+     2664,
+     2952
+    ]
+   }
+  },
+  {
+   "id": 910,
+   "start": "1812-06-18T18:57:58.992Z",
+   "end": "1812-06-19T08:46:46.992Z",
+   "latitude": -76.170052,
+   "houseSystem": "porphyry",
+   "fields": {
+    "cells": [
+     90,
+     96
+    ],
+    "switches": [
+     89,
+     95
+    ],
+    "changes": [
+     124,
+     136
+    ],
+    "millisecondChecks": [
+     6408,
+     6840
+    ]
+   }
+  },
+  {
+   "id": 922,
+   "start": "2191-09-03T18:03:54.418Z",
+   "end": "2191-09-03T20:40:58.418Z",
+   "latitude": -65.740658,
+   "houseSystem": "campanus",
+   "fields": {
+    "cells": [
+     19,
+     21
+    ],
+    "switches": [
+     18,
+     20
+    ],
+    "changes": [
+     20,
+     24
+    ],
+    "millisecondChecks": [
+     1296,
+     1440
+    ]
+   }
+  },
+  {
+   "id": 923,
+   "start": "2181-04-09T16:23:04.677Z",
+   "end": "2181-04-10T00:30:27.677Z",
+   "latitude": -43.603845,
+   "houseSystem": "morinus",
+   "fields": {
+    "cells": [
+     68,
+     70
+    ],
+    "switches": [
+     67,
+     69
+    ],
+    "changes": [
+     82,
+     86
+    ],
+    "millisecondChecks": [
+     4824,
+     4968
+    ]
+   }
+  },
+  {
+   "id": 943,
+   "start": "2141-01-29T02:05:59.079Z",
+   "end": "2141-01-29T13:04:24.079Z",
+   "latitude": -66.004692,
+   "houseSystem": "topocentric",
+   "fields": {
+    "cells": [
+     64,
+     60
+    ],
+    "switches": [
+     63,
+     59
+    ],
+    "changes": [
+     71,
+     63
+    ],
+    "millisecondChecks": [
+     4536,
+     4248
+    ]
+   }
+  },
+  {
+   "id": 950,
+   "start": "1929-05-18T11:48:39.470Z",
+   "end": "1929-05-18T18:59:15.470Z",
+   "latitude": 66.296018,
+   "houseSystem": "campanus",
+   "fields": {
+    "cells": [
+     56,
+     52
+    ],
+    "switches": [
+     55,
+     51
+    ],
+    "changes": [
+     65,
+     57
+    ],
+    "millisecondChecks": [
+     3960,
+     3672
+    ]
+   }
+  },
+  {
+   "id": 967,
+   "start": "2157-12-02T04:44:50.167Z",
+   "end": "2157-12-02T06:35:05.167Z",
+   "latitude": -21.444385,
+   "houseSystem": "equal-mc",
+   "fields": {
+    "cells": [
+     18,
+     16
+    ],
+    "switches": [
+     17,
+     15
+    ],
+    "changes": [
+     22,
+     18
+    ],
+    "millisecondChecks": [
+     1224,
+     1080
+    ]
+   }
+  },
+  {
+   "id": 971,
+   "start": "2180-05-19T07:50:48.872Z",
+   "end": "2180-05-19T13:33:46.872Z",
+   "latitude": 52.569375,
+   "houseSystem": "alcabitius",
+   "fields": {
+    "cells": [
+     51,
+     59
+    ],
+    "switches": [
+     50,
+     58
+    ],
+    "changes": [
+     60,
+     76
+    ],
+    "millisecondChecks": [
+     3600,
+     4176
+    ]
+   }
+  },
+  {
+   "id": 974,
+   "start": "1863-08-18T20:03:47.924Z",
+   "end": "1863-08-19T00:22:24.924Z",
+   "latitude": 63.135661,
+   "houseSystem": "regiomontanus",
+   "fields": {
+    "cells": [
+     25,
+     23
+    ],
+    "switches": [
+     24,
+     22
+    ],
+    "changes": [
+     28,
+     24
+    ],
+    "millisecondChecks": [
+     1728,
+     1584
+    ]
+   }
+  },
+  {
+   "id": 982,
+   "start": "2146-12-17T17:08:25.252Z",
+   "end": "2146-12-18T01:51:58.252Z",
+   "latitude": -63.921511,
+   "houseSystem": "equal",
+   "fields": {
+    "cells": [
+     37,
+     39
+    ],
+    "switches": [
+     36,
+     38
+    ],
+    "changes": [
+     40,
+     44
+    ],
+    "millisecondChecks": [
+     2592,
+     2736
+    ]
+   }
+  },
+  {
+   "id": 991,
+   "start": "1893-07-16T15:29:01.195Z",
+   "end": "1893-07-16T16:19:11.195Z",
+   "latitude": -65.325445,
+   "houseSystem": "placidus",
+   "fields": {
+    "cells": [
+     6,
+     8
+    ],
+    "switches": [
+     5,
+     7
+    ],
+    "changes": [
+     6,
+     10
+    ],
+    "millisecondChecks": [
+     360,
+     504
+    ]
+   }
+  }
+ ]
+}

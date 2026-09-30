@@ -693,10 +693,11 @@ clear of every threshold and the feature agrees at both ends; single
 milliseconds are compared directly. The enclosures rest on bounds scanned
 from 1800 to 2200: `WINDOW_RATE_BOUNDS` (about twice each body's largest
 rate), the obliquity's rate, and the true node's millisecond jitter, J =
-5e-5·(1 + |T|)° with T in centuries from 2000, at least 2.97 times every
+5e-5·(1 + |T|)° with T in centuries from 2000, at least 3.01 times every
 departure found at 3,000 consecutive milliseconds every five days
-(`node-jitter.json`). They assume TT and UT1 run on continuously. The time
-basis steps at the ΔT model's seam, 1940-12-31T18:00:00Z, where ΔT steps from
+(`docs/evidence/birth-window/rc16/node-jitter.json`). They assume TT and
+UT1 run on continuously. The time basis steps at the ΔT model's seam,
+1940-12-31T18:00:00Z, where ΔT steps from
 24.834 s to 24.820 s; at 1972-01-01, where the leap seconds begin; at each
 leap second, where TT and UT1 step by a second; and where the IERS UT1 table
 ends, 2027-10-02. Each sample installs its own ΔT, so every position and
@@ -714,7 +715,8 @@ Near a sign boundary the true node's jitter makes its sign change back and
 forth between milliseconds, for about 4J/|rate| days around an ingress: 1.5
 minutes at the fastest from 1800 to 2200, 4.5 at the median, 2.3 hours at the
 slowest. Every change is reported where the budget of two million evaluated
-instants allows (311 in 1.1 s at the ingress of March 2028). Where the node
+instants allows (299 at the ingress of March 2028,
+`docs/evidence/birth-window/rc16/node-flicker.json`). Where the node
 would need more, the stretch is left unresolved, found before any of the
 budget is spent on it: the nodes' signs, and their houses where the houses are
 whole signs, are null there, the interval is listed in `unresolved`, and the
@@ -732,7 +734,8 @@ against natalChart at every whole second, not proven. On 1,000 preregistered
 random windows (1800 to 2200, all thirteen systems, two thirds at 60° of
 latitude or more), all 24,188 sampled transitions were matched, none missed
 and none extra, and natalChart confirmed every switch at its millisecond
-(`docs/evidence/birth-window/RESULTS.md`).
+(`docs/evidence/birth-window/RESULTS.md`); on this candidate's build, after
+the time basis and the nutation, again (`docs/evidence/birth-window/rc16/`).
 
 In one thread, a 10-minute window takes about 2 ms, two hours about 20 ms and
 a whole day about 0.23 s (medians, Node.js 22; `timing.json`). A window over a

@@ -371,3 +371,15 @@ committed results; and the conformance report check. All 13 passed.
   86.4 ms, so natalChart calls closer together than that can differ from
   these values in the last digits.
 - **Package.** 699 bytes remain under the unpacked-size gate.
+
+## Rerun on 0.1.1-rc.16's build
+
+The 1,000-window check, the review's second-round checker and the scans
+behind the bounds, run again with these tools unchanged on the integrated
+0.1.1-rc.16 candidate, after rc.15's time basis and the engine's full IAU
+2000B nutation, are in `rc16/` (`rc16/README.md`): the check passes again,
+all 24,188 sampled transitions matched, and the review's checker passes all
+57 of its windows. That README also says which statements of this document
+no longer hold on rc.16 (the obliquity's margin, the nutation cache, the
+jitter's factor, the steps of the time basis). This document and the results
+in this directory are the branch's, unchanged.

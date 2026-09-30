@@ -1,0 +1,2023 @@
+{
+ "reference": "skyfield 1.55, JPL DE440s (sha256 c1c7feea...), WGS84, IAU 2006/2000A; engine UT1 and Delta T",
+ "tolerance_s": 5.0,
+ "summary": {
+  "centre-no-refraction": {
+   "all": {
+    "count": 37226,
+    "median": 0.045517802238464355,
+    "p95": 0.17313432693481445,
+    "max": 2.181793212890625,
+    "over": 0,
+    "extra": 0,
+    "missing": 0
+   },
+   "byBody": {
+    "Sun": {
+     "count": 19008,
+     "median": 0.038399696350097656,
+     "p95": 0.15516328811645508,
+     "max": 0.7790446281433105,
+     "over": 0,
+     "extra": 0,
+     "missing": 0
+    },
+    "Moon": {
+     "count": 18218,
+     "median": 0.05425441265106201,
+     "p95": 0.18233299255371094,
+     "max": 2.181793212890625,
+     "over": 0,
+     "extra": 0,
+     "missing": 0
+    }
+   },
+   "byAbsLatitude": {
+    "0": {
+     "count": 3403,
+     "median": 0.03996777534484863,
+     "p95": 0.1336987018585205,
+     "max": 0.2616710662841797,
+     "over": 0
+    },
+    "15": {
+     "count": 6799,
+     "median": 0.03982877731323242,
+     "p95": 0.13506269454956055,
+     "max": 0.26109886169433594,
+     "over": 0
+    },
+    "30": {
+     "count": 6802,
+     "median": 0.04252469539642334,
+     "p95": 0.13759231567382812,
+     "max": 0.27459287643432617,
+     "over": 0
+    },
+    "45": {
+     "count": 6799,
+     "median": 0.045792341232299805,
+     "p95": 0.14954185485839844,
+     "max": 0.3049635887145996,
+     "over": 0
+    },
+    "55": {
+     "count": 6806,
+     "median": 0.048700809478759766,
+     "p95": 0.16916608810424805,
+     "max": 0.34369373321533203,
+     "over": 0
+    },
+    "65": {
+     "count": 6617,
+     "median": 0.05434000492095947,
+     "p95": 0.2942678928375244,
+     "max": 2.181793212890625,
+     "over": 0
+    }
+   },
+   "byKind": {
+    "rise": {
+     "count": 9259,
+     "median": 0.05131888389587402,
+     "p95": 0.22092771530151367,
+     "max": 2.181793212890625,
+     "over": 0
+    },
+    "set": {
+     "count": 9245,
+     "median": 0.04922255873680115,
+     "p95": 0.2127084732055664,
+     "max": 2.055856704711914,
+     "over": 0
+    },
+    "upper-transit": {
+     "count": 9361,
+     "median": 0.04511547088623047,
+     "p95": 0.1268322467803955,
+     "max": 0.2273387908935547,
+     "over": 0
+    },
+    "lower-transit": {
+     "count": 9361,
+     "median": 0.03687572479248047,
+     "p95": 0.14187979698181152,
+     "max": 0.2616710662841797,
+     "over": 0
+    }
+   },
+   "failing": [],
+   "extra": [],
+   "missing": []
+  },
+  "default": {
+   "all": {
+    "count": 189491,
+    "median": 0.13067960739135742,
+    "p95": 0.9995460510253906,
+    "max": 11.602711796760559,
+    "over": 192,
+    "extra": 0,
+    "missing": 0
+   },
+   "byBody": {
+    "Sun": {
+     "count": 19025,
+     "median": 0.038396358489990234,
+     "p95": 0.1539468765258789,
+     "max": 1.121328353881836,
+     "over": 0,
+     "extra": 0,
+     "missing": 0
+    },
+    "Moon": {
+     "count": 18227,
+     "median": 0.05437004566192627,
+     "p95": 0.1816718578338623,
+     "max": 0.43959856033325195,
+     "over": 0,
+     "extra": 0,
+     "missing": 0
+    },
+    "Mercury": {
+     "count": 18896,
+     "median": 0.14048218727111816,
+     "p95": 0.4860038757324219,
+     "max": 1.8546411991119385,
+     "over": 0,
+     "extra": 0,
+     "missing": 0
+    },
+    "Venus": {
+     "count": 18933,
+     "median": 0.08912694454193115,
+     "p95": 0.4882466793060303,
+     "max": 2.3022775650024414,
+     "over": 0,
+     "extra": 0,
+     "missing": 0
+    },
+    "Mars": {
+     "count": 18968,
+     "median": 0.060411930084228516,
+     "p95": 0.33579254150390625,
+     "max": 2.277928113937378,
+     "over": 0,
+     "extra": 0,
+     "missing": 0
+    },
+    "Jupiter": {
+     "count": 19083,
+     "median": 0.15341806411743164,
+     "p95": 0.7119622230529785,
+     "max": 2.379547595977783,
+     "over": 0,
+     "extra": 0,
+     "missing": 0
+    },
+    "Saturn": {
+     "count": 19088,
+     "median": 0.4625530242919922,
+     "p95": 1.9140504598617554,
+     "max": 4.929364591836929,
+     "over": 0,
+     "extra": 0,
+     "missing": 0
+    },
+    "Uranus": {
+     "count": 19083,
+     "median": 0.19663190841674805,
+     "p95": 1.4925609827041626,
+     "max": 11.602711796760559,
+     "over": 192,
+     "extra": 0,
+     "missing": 0
+    },
+    "Neptune": {
+     "count": 19151,
+     "median": 0.6946010589599609,
+     "p95": 1.3898793160915375,
+     "max": 3.170166254043579,
+     "over": 0,
+     "extra": 0,
+     "missing": 0
+    },
+    "Pluto": {
+     "count": 19037,
+     "median": 0.1630907952785492,
+     "p95": 0.4957613945007324,
+     "max": 0.943871021270752,
+     "over": 0,
+     "extra": 0,
+     "missing": 0
+    }
+   },
+   "byAbsLatitude": {
+    "0": {
+     "count": 17264,
+     "median": 0.1165471076965332,
+     "p95": 0.7082092463970184,
+     "max": 1.144306719303131,
+     "over": 0
+    },
+    "15": {
+     "count": 34518,
+     "median": 0.11654090881347656,
+     "p95": 0.7491965293884277,
+     "max": 1.1431623101234436,
+     "over": 0
+    },
+    "30": {
+     "count": 34522,
+     "median": 0.11818456649780273,
+     "p95": 0.8266315460205078,
+     "max": 1.4541232585906982,
+     "over": 0
+    },
+    "45": {
+     "count": 34529,
+     "median": 0.12519502639770508,
+     "p95": 0.9616913795471191,
+     "max": 2.0041168928146362,
+     "over": 0
+    },
+    "55": {
+     "count": 34555,
+     "median": 0.13834428787231445,
+     "p95": 1.0599015057086945,
+     "max": 2.727281928062439,
+     "over": 0
+    },
+    "65": {
+     "count": 34103,
+     "median": 0.1728801727294922,
+     "p95": 1.923431396484375,
+     "max": 11.602711796760559,
+     "over": 192
+    }
+   },
+   "byKind": {
+    "rise": {
+     "count": 47237,
+     "median": 0.1529785394668579,
+     "p95": 1.306699275970459,
+     "max": 11.540786862373352,
+     "over": 96
+    },
+    "set": {
+     "count": 47236,
+     "median": 0.1516270637512207,
+     "p95": 1.306168556213379,
+     "max": 11.602711796760559,
+     "over": 96
+    },
+    "upper-transit": {
+     "count": 47509,
+     "median": 0.11628389358520508,
+     "p95": 0.7118930816650391,
+     "max": 1.144306719303131,
+     "over": 0
+    },
+    "lower-transit": {
+     "count": 47509,
+     "median": 0.11688780784606934,
+     "p95": 0.6962238550186157,
+     "max": 1.1116910576820374,
+     "over": 0
+    }
+   },
+   "failing": [
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.303,
+     "rateArcminPerMinute": 2.3367,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.241,
+     "rateArcminPerMinute": 2.3367,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.027,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.994,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.735,
+     "rateArcminPerMinute": 2.3466,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.662,
+     "rateArcminPerMinute": 2.3466,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.485,
+     "rateArcminPerMinute": 2.3808,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.588,
+     "rateArcminPerMinute": 2.382,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.649,
+     "rateArcminPerMinute": 2.5024,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.446,
+     "rateArcminPerMinute": 2.5024,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.31,
+     "rateArcminPerMinute": 2.4311,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.126,
+     "rateArcminPerMinute": 2.4311,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -180,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.302,
+     "rateArcminPerMinute": 2.3368,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.241,
+     "rateArcminPerMinute": 2.3368,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.029,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.995,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.664,
+     "rateArcminPerMinute": 2.3466,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.729,
+     "rateArcminPerMinute": 2.3472,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.588,
+     "rateArcminPerMinute": 2.3819,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.483,
+     "rateArcminPerMinute": 2.3819,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.649,
+     "rateArcminPerMinute": 2.5023,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.446,
+     "rateArcminPerMinute": 2.5023,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.31,
+     "rateArcminPerMinute": 2.4313,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.126,
+     "rateArcminPerMinute": 2.4313,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -135,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.302,
+     "rateArcminPerMinute": 2.3368,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.241,
+     "rateArcminPerMinute": 2.3368,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.996,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.021,
+     "rateArcminPerMinute": 2.3299,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.73,
+     "rateArcminPerMinute": 2.3471,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.657,
+     "rateArcminPerMinute": 2.3471,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.588,
+     "rateArcminPerMinute": 2.3817,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.484,
+     "rateArcminPerMinute": 2.3817,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.648,
+     "rateArcminPerMinute": 2.5022,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.445,
+     "rateArcminPerMinute": 2.5022,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.309,
+     "rateArcminPerMinute": 2.4315,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.126,
+     "rateArcminPerMinute": 2.4315,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -90,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.241,
+     "rateArcminPerMinute": 2.3369,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.303,
+     "rateArcminPerMinute": 2.3364,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.022,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.989,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.73,
+     "rateArcminPerMinute": 2.347,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.658,
+     "rateArcminPerMinute": 2.347,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.588,
+     "rateArcminPerMinute": 2.3816,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.483,
+     "rateArcminPerMinute": 2.3816,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.647,
+     "rateArcminPerMinute": 2.5021,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.445,
+     "rateArcminPerMinute": 2.5021,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.308,
+     "rateArcminPerMinute": 2.4317,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.125,
+     "rateArcminPerMinute": 2.4317,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": -45,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.24,
+     "rateArcminPerMinute": 2.3369,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.303,
+     "rateArcminPerMinute": 2.3365,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.023,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.99,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.731,
+     "rateArcminPerMinute": 2.347,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.659,
+     "rateArcminPerMinute": 2.347,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.589,
+     "rateArcminPerMinute": 2.3814,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.484,
+     "rateArcminPerMinute": 2.3814,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.647,
+     "rateArcminPerMinute": 2.5021,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.444,
+     "rateArcminPerMinute": 2.5021,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.124,
+     "rateArcminPerMinute": 2.4319,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.313,
+     "rateArcminPerMinute": 2.4303,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 0,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.304,
+     "rateArcminPerMinute": 2.3366,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.241,
+     "rateArcminPerMinute": 2.3366,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.024,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.991,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.732,
+     "rateArcminPerMinute": 2.3469,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.66,
+     "rateArcminPerMinute": 2.3469,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.589,
+     "rateArcminPerMinute": 2.3813,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.484,
+     "rateArcminPerMinute": 2.3813,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.648,
+     "rateArcminPerMinute": 2.502,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.444,
+     "rateArcminPerMinute": 2.502,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.313,
+     "rateArcminPerMinute": 2.4305,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.129,
+     "rateArcminPerMinute": 2.4305,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 45,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.302,
+     "rateArcminPerMinute": 2.3366,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.241,
+     "rateArcminPerMinute": 2.3366,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.025,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.993,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.734,
+     "rateArcminPerMinute": 2.3468,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.66,
+     "rateArcminPerMinute": 2.3468,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.59,
+     "rateArcminPerMinute": 2.3811,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.484,
+     "rateArcminPerMinute": 2.3811,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.444,
+     "rateArcminPerMinute": 2.5019,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.649,
+     "rateArcminPerMinute": 2.5025,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.311,
+     "rateArcminPerMinute": 2.4307,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.129,
+     "rateArcminPerMinute": 2.4307,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 90,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.302,
+     "rateArcminPerMinute": 2.3367,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.241,
+     "rateArcminPerMinute": 2.3367,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.026,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.993,
+     "rateArcminPerMinute": 2.3298,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.734,
+     "rateArcminPerMinute": 2.3467,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.662,
+     "rateArcminPerMinute": 2.3467,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.59,
+     "rateArcminPerMinute": 2.381,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.485,
+     "rateArcminPerMinute": 2.381,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 6.65,
+     "rateArcminPerMinute": 2.5024,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -6.446,
+     "rateArcminPerMinute": 2.5024,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": 7.31,
+     "rateArcminPerMinute": 2.4309,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": -7.128,
+     "rateArcminPerMinute": 2.4309,
+     "body": "Uranus",
+     "lat": -65,
+     "lon": 135,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.603,
+     "rateArcminPerMinute": 1.4827,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.541,
+     "rateArcminPerMinute": 1.4827,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.214,
+     "rateArcminPerMinute": 1.472,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.181,
+     "rateArcminPerMinute": 1.472,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.61,
+     "rateArcminPerMinute": 1.5005,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.537,
+     "rateArcminPerMinute": 1.5005,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.15,
+     "rateArcminPerMinute": 1.5563,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.046,
+     "rateArcminPerMinute": 1.5562,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 9.586,
+     "rateArcminPerMinute": 1.7428,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -9.383,
+     "rateArcminPerMinute": 1.7428,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.742,
+     "rateArcminPerMinute": 1.6352,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.941,
+     "rateArcminPerMinute": 1.6328,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -180,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.602,
+     "rateArcminPerMinute": 1.4828,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.541,
+     "rateArcminPerMinute": 1.4828,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.216,
+     "rateArcminPerMinute": 1.472,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.183,
+     "rateArcminPerMinute": 1.472,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.612,
+     "rateArcminPerMinute": 1.5003,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.539,
+     "rateArcminPerMinute": 1.5003,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.151,
+     "rateArcminPerMinute": 1.556,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.046,
+     "rateArcminPerMinute": 1.556,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 9.586,
+     "rateArcminPerMinute": 1.7427,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -9.383,
+     "rateArcminPerMinute": 1.7427,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.94,
+     "rateArcminPerMinute": 1.6331,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.757,
+     "rateArcminPerMinute": 1.6331,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -135,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.602,
+     "rateArcminPerMinute": 1.4828,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.54,
+     "rateArcminPerMinute": 1.4828,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.219,
+     "rateArcminPerMinute": 1.472,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.185,
+     "rateArcminPerMinute": 1.472,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.614,
+     "rateArcminPerMinute": 1.5002,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.541,
+     "rateArcminPerMinute": 1.5002,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.153,
+     "rateArcminPerMinute": 1.5558,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.047,
+     "rateArcminPerMinute": 1.5558,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -9.383,
+     "rateArcminPerMinute": 1.7426,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 9.588,
+     "rateArcminPerMinute": 1.7435,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.938,
+     "rateArcminPerMinute": 1.6334,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.755,
+     "rateArcminPerMinute": 1.6334,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -90,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.601,
+     "rateArcminPerMinute": 1.4829,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.54,
+     "rateArcminPerMinute": 1.4829,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.22,
+     "rateArcminPerMinute": 1.4719,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.187,
+     "rateArcminPerMinute": 1.4719,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.616,
+     "rateArcminPerMinute": 1.5001,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.544,
+     "rateArcminPerMinute": 1.5001,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.154,
+     "rateArcminPerMinute": 1.5555,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.048,
+     "rateArcminPerMinute": 1.5555,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 9.588,
+     "rateArcminPerMinute": 1.7434,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -9.385,
+     "rateArcminPerMinute": 1.7434,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.936,
+     "rateArcminPerMinute": 1.6337,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.753,
+     "rateArcminPerMinute": 1.6337,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": -45,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.601,
+     "rateArcminPerMinute": 1.483,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.539,
+     "rateArcminPerMinute": 1.483,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.221,
+     "rateArcminPerMinute": 1.4719,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.188,
+     "rateArcminPerMinute": 1.4719,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.618,
+     "rateArcminPerMinute": 1.4999,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.545,
+     "rateArcminPerMinute": 1.4999,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.05,
+     "rateArcminPerMinute": 1.5553,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.145,
+     "rateArcminPerMinute": 1.5572,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 9.587,
+     "rateArcminPerMinute": 1.7433,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -9.384,
+     "rateArcminPerMinute": 1.7433,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.934,
+     "rateArcminPerMinute": 1.634,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.751,
+     "rateArcminPerMinute": 1.634,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 0,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.6,
+     "rateArcminPerMinute": 1.4831,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.539,
+     "rateArcminPerMinute": 1.4831,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.223,
+     "rateArcminPerMinute": 1.4719,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.19,
+     "rateArcminPerMinute": 1.4719,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.547,
+     "rateArcminPerMinute": 1.4998,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.605,
+     "rateArcminPerMinute": 1.5009,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.147,
+     "rateArcminPerMinute": 1.557,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.042,
+     "rateArcminPerMinute": 1.557,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 9.587,
+     "rateArcminPerMinute": 1.7431,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -9.384,
+     "rateArcminPerMinute": 1.7431,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.932,
+     "rateArcminPerMinute": 1.6343,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.748,
+     "rateArcminPerMinute": 1.6343,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 45,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.599,
+     "rateArcminPerMinute": 1.4832,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.538,
+     "rateArcminPerMinute": 1.4832,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.192,
+     "rateArcminPerMinute": 1.4719,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.211,
+     "rateArcminPerMinute": 1.472,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.606,
+     "rateArcminPerMinute": 1.5007,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.533,
+     "rateArcminPerMinute": 1.5007,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.148,
+     "rateArcminPerMinute": 1.5567,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.043,
+     "rateArcminPerMinute": 1.5567,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 9.587,
+     "rateArcminPerMinute": 1.743,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -9.384,
+     "rateArcminPerMinute": 1.743,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.929,
+     "rateArcminPerMinute": 1.6346,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.746,
+     "rateArcminPerMinute": 1.6346,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 90,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.599,
+     "rateArcminPerMinute": 1.4833,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.537,
+     "rateArcminPerMinute": 1.4833,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-01-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 11.213,
+     "rateArcminPerMinute": 1.472,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -11.18,
+     "rateArcminPerMinute": 1.472,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-03-20"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.608,
+     "rateArcminPerMinute": 1.5006,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.536,
+     "rateArcminPerMinute": 1.5006,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-05-15"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.149,
+     "rateArcminPerMinute": 1.5565,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.044,
+     "rateArcminPerMinute": 1.5565,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-06-21"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 9.587,
+     "rateArcminPerMinute": 1.7429,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -9.384,
+     "rateArcminPerMinute": 1.7429,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-09-22"
+    },
+    {
+     "kind": "set",
+     "deltaSeconds": 10.927,
+     "rateArcminPerMinute": 1.6349,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-12-21"
+    },
+    {
+     "kind": "rise",
+     "deltaSeconds": -10.744,
+     "rateArcminPerMinute": 1.6349,
+     "body": "Uranus",
+     "lat": 65,
+     "lon": 135,
+     "date": "1950-12-21"
+    }
+   ],
+   "extra": [],
+   "missing": []
+  }
+ }
+}

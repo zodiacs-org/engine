@@ -1,0 +1,101 @@
+# The birth-window evidence rerun on 0.1.1-rc.16's build (704cadc), Node v22.22.2, 2026-09-30, from docs/evidence/birth-window.
+# <704cadc build> is that commit's dist/ beside the checkout's astronomy-engine. Each tool's result is its JSON file in rc16/;
+# the progress lines follow.
+
+## node run.mjs --out rc16 --workers 3   (the checkout's dist/, built at 704cadc; started 2026-09-30T07:45:17Z)
+25/1000 windows, 1.9 min
+50/1000 windows, 3.6 min
+75/1000 windows, 4.9 min
+100/1000 windows, 7.2 min
+125/1000 windows, 8.0 min
+150/1000 windows, 9.9 min
+175/1000 windows, 11.6 min
+200/1000 windows, 15.0 min
+225/1000 windows, 17.2 min
+250/1000 windows, 18.8 min
+275/1000 windows, 20.3 min
+300/1000 windows, 22.4 min
+325/1000 windows, 24.1 min
+350/1000 windows, 28.6 min
+375/1000 windows, 31.3 min
+400/1000 windows, 36.6 min
+425/1000 windows, 40.9 min
+450/1000 windows, 44.2 min
+475/1000 windows, 46.4 min
+500/1000 windows, 55.6 min
+525/1000 windows, 60.4 min
+550/1000 windows, 66.4 min
+575/1000 windows, 69.6 min
+600/1000 windows, 74.5 min
+625/1000 windows, 79.9 min
+650/1000 windows, 83.9 min
+675/1000 windows, 87.2 min
+700/1000 windows, 90.7 min
+725/1000 windows, 96.0 min
+750/1000 windows, 102.5 min
+775/1000 windows, 106.5 min
+800/1000 windows, 115.2 min
+825/1000 windows, 119.3 min
+850/1000 windows, 123.1 min
+875/1000 windows, 125.3 min
+900/1000 windows, 127.4 min
+925/1000 windows, 128.8 min
+950/1000 windows, 131.1 min
+975/1000 windows, 132.4 min
+1000/1000 windows, 135.2 min
+(summary.json)
+
+## the scans, one after another: ZODIACS_ENGINE_DIST=<704cadc build> (DIST= for review-check2)
+## node-ingresses.mjs --out rc16/node-ingresses.json; node-jitter.mjs --out rc16/node-jitter.json --workers 2;
+## rate-bounds.mjs --out rc16/rate-bounds.json; review-check2.mjs --windows review-edge-windows.json --out rc16/review-check2.jsonl --workers 2
+node v22.22.2 dist <704cadc build> start 2026-09-30T08:23:26Z
+== node-ingresses 2026-09-30T08:23:26Z
+exit 0
+== node-jitter 2026-09-30T08:26:10Z
+exit 0
+== rate-bounds 2026-09-30T09:24:29Z
+exit 0
+== review-check2 2026-09-30T09:32:41Z
+exit 0
+== done 2026-09-30T09:48:56Z
+window-reruns exit 0
+
+## node-jitter
+1827 epochs, 4.7 min
+3654 epochs, 4.8 min
+5481 epochs, 13.0 min
+7308 epochs, 13.1 min
+9135 epochs, 18.7 min
+10962 epochs, 18.8 min
+12789 epochs, 27.2 min
+14616 epochs, 27.9 min
+16443 epochs, 37.0 min
+18270 epochs, 37.5 min
+20097 epochs, 44.0 min
+21924 epochs, 44.2 min
+23751 epochs, 50.7 min
+25578 epochs, 51.0 min
+27405 epochs, 58.1 min
+27406 epochs, 58.1 min
+29221 epochs, 58.3 min
+
+## rate-bounds
+Venus done
+Mercury done
+Sun done
+Jupiter done
+Saturn done
+Uranus done
+Neptune done
+Mars done
+obliquity done
+RAMC done
+Pluto done
+Moon done
+North Node done
+written <window evidence>/rc16/rate-bounds.json
+
+## review-check2
+20/57 9.7 min
+40/57 12.9 min
+57/57 16.2 min

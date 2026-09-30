@@ -75,14 +75,21 @@ export const WINDOW_RATE_BOUNDS: Readonly<Record<BodyName, number>> = Object.fre
  * astronomy-engine takes by differencing the Moon's position over 1.728 s, so
  * from one millisecond to the next it departs from its smooth motion (at most
  * 0.26°/day). Scanned at 3,000 consecutive milliseconds every five days from
- * 1800 to 2200, the departure reaches 4.8e-5° (in 2187); the bound is at
- * least 2.97 times every value found. Scanned, not derived.
+ * 1800 to 2200, the departure reaches 4.4e-5° (in 1835); the bound is at
+ * least 3.01 times every value found (docs/evidence/birth-window/rc16/
+ * node-jitter.json; 4.8e-5° in 2187 and 2.97 times before the time basis and
+ * the nutation). Scanned, not derived.
  */
 function nodeJitter(utcMilliseconds: number): number {
   return 5e-5 * (1 + Math.abs((utcMilliseconds - J2000) / (36525 * DAY)));
 }
 
-/** |dε/dt| bound, degrees/day: 2.4 times the largest the engine's obliquity reaches from 1800 to 2200. */
+/**
+ * |dε/dt| bound, degrees/day: 1.9 times the largest the engine's true
+ * obliquity reaches from 1800 to 2200 on the full IAU 2000B nutation,
+ * 2.60e-5 (docs/evidence/birth-window/rc16/window-rates.json); 2.4 times on
+ * astronomy-engine's five terms, up to 0.1.1-rc.15. Scanned, not derived.
+ */
 const OBLIQUITY_RATE = 5e-5;
 /** Sidereal rate of the RAMC, degrees/day, for checking that its advance is unwrapped correctly. */
 const SIDEREAL_RATE = 360.98562;

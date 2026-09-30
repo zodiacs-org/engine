@@ -1,0 +1,13 @@
+{
+ "counts": {
+  "days": 9504,
+  "complete": 9495,
+  "no-sunrise": 9,
+  "no-sunset": 0,
+  "no-next-sunrise": 0,
+  "refused": 0,
+  "hoursChecked": 227880,
+  "failures": 0
+ },
+ "failures": []
+}

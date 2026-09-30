@@ -283,11 +283,16 @@ direct, retrograde and direct return for each of Mercury to Pluto, three solar
 and four lunar returns: every result complete, every return found with its
 direction, and each within τ / |v| of Horizons's instant, τ being 6″ for the
 Sun, 8″ for the Moon and 45″ for the planets. The largest differences, as
-motion: 0.84″ (Sun), 0.82″ (Moon), 11.8″ (Mars) and 22.6″ (Pluto, whose natal
-longitude in 1804 is itself 17.53″ from Horizons's). Against the US Naval
+motion: 0.804″ (Sun), 0.705″ (Moon), 11.796″ (Mars) and 22.600″ (Pluto, whose
+natal longitude in 1804 is itself 17.571″ from Horizons's). Against the US Naval
 Observatory's published March equinoxes of 2001 to 2004, the solar returns of
-a native invented as born at the equinox of 2000 fall within 49.4 s of them;
-USNO gives each instant to the minute. **Pass.**
+a native invented as born at the equinox of 2000 fall within 49.7 s of them;
+USNO gives each instant to the minute. **Pass.** Those are 0.1.1-rc.16's
+figures, on the engine's full IAU 2000B nutation; on astronomy-engine's
+five-term nutation they were 0.84″, 0.82″, 11.8″, 22.6″ (17.53″) and 49.4 s
+(`docs/evidence/houses-extra-2026-09-29/rc16/`). The house positions,
+co-ascendants and speeds, which take their inputs as given, do not depend on
+the nutation.
 
 ## Sources
 

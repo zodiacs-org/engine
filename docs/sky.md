@@ -122,39 +122,44 @@ unlimited) ran out. `samples` counts the position evaluations.
 Against skyfield with JPL DE440s, on a grid of 88 sites (latitude −65° to
 65°, eight longitudes, height 0) and 54 dates from 1900 to 2100, both
 programs on the engine's UT1 and ΔT (gate S1 of the evidence), with the
-default conventions:
+default conventions, on 0.1.1-rc.16's build
+(`docs/evidence/sky-chinese-2026-09-29/rc16/`, rounded up):
 
 | Body | Events | Median | 95th percentile | Largest | Over 5 s |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Sun | 19,025 | 0.038 s | 0.154 s | 1.13 s | 0 |
-| Moon | 18,227 | 0.054 s | 0.182 s | 0.44 s | 0 |
-| Mercury | 18,896 | 0.140 s | 0.485 s | 1.87 s | 0 |
-| Venus | 18,933 | 0.089 s | 0.488 s | 2.31 s | 0 |
-| Mars | 18,968 | 0.061 s | 0.336 s | 2.29 s | 0 |
-| Jupiter | 19,083 | 0.154 s | 0.709 s | 2.38 s | 0 |
+| Sun | 19,025 | 0.039 s | 0.154 s | 1.13 s | 0 |
+| Moon | 18,227 | 0.055 s | 0.182 s | 0.44 s | 0 |
+| Mercury | 18,896 | 0.141 s | 0.487 s | 1.86 s | 0 |
+| Venus | 18,933 | 0.090 s | 0.489 s | 2.31 s | 0 |
+| Mars | 18,968 | 0.061 s | 0.336 s | 2.28 s | 0 |
+| Jupiter | 19,083 | 0.154 s | 0.712 s | 2.38 s | 0 |
 | Saturn | 19,088 | 0.463 s | 1.915 s | 4.93 s | 0 |
-| Uranus | 19,083 | 0.196 s | 1.492 s | 11.62 s | 192 |
-| Neptune | 19,151 | 0.695 s | 1.390 s | 3.17 s | 0 |
-| Pluto | 19,037 | 0.163 s | 0.495 s | 0.94 s | 0 |
+| Uranus | 19,083 | 0.197 s | 1.493 s | 11.61 s | 192 |
+| Neptune | 19,151 | 0.695 s | 1.390 s | 3.18 s | 0 |
+| Pluto | 19,037 | 0.164 s | 0.496 s | 0.95 s | 0 |
 
 No event is missing or extra. The 192 events over 5 s, which fail the
 preregistered gate, are Uranus's rises and sets of 1950 at 65° N and 65° S:
 at declination +23.6° the planet crossed the horizon there at a grazing
 angle, 1.5′ to 2.5′ of altitude a minute, so the 15″ to 18″ between the two
-positions moved the times by up to 11.6 s. That is the size of
+positions moved the times by up to 11.61 s. That is the size of
 astronomy-engine's error for Uranus (up to 19.3″ in declination in the
 comparison in the README). The transits do not depend on the declination
 and are within 1.15 s everywhere. With the centre of the Sun and the Moon
-and no refraction, all 37,226 events are within 2.19 s.
+and no refraction, all 37,226 events are within 2.19 s. The branch's run,
+before the engine took the full IAU 2000B nutation, gave the same counts and
+differs from these by at most 0.02 s in any figure of the table
+(`docs/evidence/sky-chinese-2026-09-29/results/`).
 
 Against Swiss Ephemeris `rise_trans` with matching flags (gate S2), 188,982
 events have a median difference of 0.155 s; 192 of Uranus at 65° are over
-5 s, up to 11.62 s. Against USNO's tables, which give the minute (gate S3),
-465 of 467 rises, sets and transits of the Sun and the Moon at 10 sites on 8
-dates are within 30 s; the other two are 30.06 s and 30.15 s from USNO's
-minute, and three more events are listed by one side only (a lunar transit
-at 23:59:30, which USNO lists at 00:00 the next day, and a transit below the
-horizon, which USNO omits), so that gate fails too. These are differences
+5 s, up to 11.61 s, and no other event is over 4.94 s (Saturn). Against
+USNO's tables, which give the minute (gate S3), 465 of 467 rises, sets and
+transits of the Sun and the Moon at 10 sites on 8 dates are within 30 s; the
+other two are 30.06 s and 30.15 s from USNO's minute, and three more events
+are listed by one side only (a lunar transit at 23:59:30, which USNO lists at
+00:00 the next day, and a transit below the horizon, which USNO omits), so
+that gate fails too. These are differences
 between computations; against the sky, USNO notes, a computed rise or set
 "may be in error by a minute or more" because the refraction varies.
 

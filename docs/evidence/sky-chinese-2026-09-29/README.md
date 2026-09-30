@@ -24,8 +24,9 @@ Of this directory, as the branch recorded it, rc.16 carries:
 
 The rest of this file is the branch's, with its Chinese sections and its
 figures about the Chinese entry taken out; the measurements are the
-branch's, on its build. rc.16 measures the sky gates again on its own build
-(`docs/evidence/rc16-20260930/`).
+branch's, on its build. The sky gates were run again on rc.16's build after
+the engine took the full IAU 2000B nutation: `rc16/` (`rc16/README.md`),
+beside these results, which stay the branch's.
 
 **Branch and base.** `feature-sky`, from `rc15-work` at `eb58011`
 (0.1.1-rc.15, under review). The version was unchanged, the changelog had an

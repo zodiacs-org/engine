@@ -4,11 +4,12 @@
 // values themselves). On feature-sky this tool also compared the Chinese
 // entry's solar terms with USNO and HKO (C3); that entry is held back from
 // 0.1.1-rc.16, and its part is left out here.
-// Usage: node published-compare.mjs USNO_DIR OUT.json   (after npm run build)
+// Usage: node published-compare.mjs USNO_DIR OUT.json [FETCHED]   (after npm run build)
+// FETCHED is the date of the download (default 2026-09-29, the branch's).
 import { readFileSync, writeFileSync } from "node:fs";
 import { skyEventsOn } from "../../../../dist/sky.js";
 
-const [dir, out] = process.argv.slice(2);
+const [dir, out, fetched = "2026-09-29"] = process.argv.slice(2);
 const rstt = JSON.parse(readFileSync(`${dir}/usno-rstt.json`, "utf8"));
 const TOLERANCE_S = 30;
 
@@ -65,7 +66,7 @@ for (const day of rstt) {
 const result = {
   tolerance_s: TOLERANCE_S,
   S3_usno_rise_set_transit: {
-    source: "https://aa.usno.navy.mil/api/rstt/oneday, tz=0, fetched 2026-09-29 (API 4.0.1)",
+    source: `https://aa.usno.navy.mil/api/rstt/oneday, tz=0, fetched ${fetched} (API 4.0.1)`,
     Sun: stats(s3.Sun),
     Moon: stats(s3.Moon),
     all: stats([...s3.Sun, ...s3.Moon]),

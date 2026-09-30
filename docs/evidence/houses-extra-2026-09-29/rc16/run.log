@@ -1,0 +1,6 @@
+# houses-extra gates rerun on the build of 704cadcb324730936dcbd2da5cc71cad4ba93776 plus the uncommitted calc bounds (the houses and timing entries' code is 704cadc's), 2026-09-30T07:54:19Z, node v22.22.2, Python 3.11.15, pyswisseph 2.10.03
+node $E/tools/dump-engine.mjs > "$W/engine.jsonl"  2.61s user 0.16s system 99% cpu 2.784 total
+python3 $E/tools/compare-swiss.py "$W/engine.jsonl" > $E/rc16/swiss.json  9.06s user 0.20s system 96% cpu 9.576 total
+node $E/tools/finite-difference.mjs > $E/rc16/finite-difference.json  10.67s user 0.43s system 94% cpu 11.708 total
+node $E/tools/returns-report.mjs > $E/rc16/returns.json  0.43s user 0.03s system 98% cpu 0.462 total
+node $E/tools/stations.mjs > $E/rc16/stations.json  112.99s user 0.17s system 97% cpu 1:55.93 total

@@ -242,3 +242,12 @@ later fetch need not reproduce their hashes. Not read: Davison's
 Chart* and Hand's *Planets in Composite* (no copy found). What
 `docs/techniques.md` says of them comes from the interview and the catalogue
 records above.
+
+## Rerun on 0.1.1-rc.16's build
+
+`measure.mjs`, unchanged, run again on the integrated 0.1.1-rc.16 candidate
+after the engine took the full IAU 2000B nutation, with the site-parity
+fixtures generated again on that build, is in `rc16/` (`rc16/README.md`):
+G2 and G3 pass with 42.27 s, 32.047 s and 6.809 s, and G1 agrees on the same
+6,795 of 6,796 cases. This document, `measurements.json` and the other
+results here are the branch's, unchanged.

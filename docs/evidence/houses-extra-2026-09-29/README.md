@@ -365,3 +365,11 @@ and programmer's documentation (SHA-256 recorded there), J. Meeus,
 transit" (wikitext SHA-256 recorded there), JPL Horizons (DE441) and the US
 Naval Observatory's `seasons` API (2000–2004 responses, SHA-256
 `6d88f397…`, `3ea9a337…`, `a11d8f92…`, `447fa437…`, `8706cbe0…`).
+
+## Rerun on 0.1.1-rc.16's build
+
+The tools of *Rerun*, unchanged, run again on the integrated 0.1.1-rc.16
+candidate after the engine took the full IAU 2000B nutation, are in `rc16/`
+(`rc16/README.md`): gates P, A, S and F and the stations give the branch's
+files byte for byte, and gate R passes for every body. This document and
+`results/` are the branch's, unchanged.

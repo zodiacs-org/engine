@@ -88,11 +88,14 @@ return is found on the engine's UTC basis, as `solarArc` does.
 **Against published times.** The U.S. Naval Observatory publishes the
 equinoxes and solstices, the Sun's returns to 0°, 90°, 180° and 270°, in UT
 to the minute. For the 20 of 1850, 1900, 1950, 2000 and 2022,
-`solarReturnInstant` is within 45.35 s of the published minute; the gate was
+`solarReturnInstant` is within 42.27 s of the published minute; the gate was
 120 s. Inverting the 24 JPL Horizons longitudes of the Sun and the 24 of the
 Moon in the conformance suite's L1 vectors (1851 to 2148) gives the vectors'
-instants within 33.23 s for the Sun and 6.87 s for the Moon, compared in TT;
-the gates were 60 s and 15 s.
+instants within 32.05 s for the Sun and 6.81 s for the Moon, compared in TT;
+the gates were 60 s and 15 s. Those are 0.1.1-rc.16's figures, on the
+engine's full IAU 2000B nutation; on astronomy-engine's five-term nutation,
+which the engine used up to rc.15, they were 45.35 s, 33.23 s and 6.87 s
+(`docs/evidence/techniques-2026-09-29/rc16/`).
 
 **Differences from the site.** The site clips its searches to 1800–2200 and
 refuses a return it cannot find inside; it limits a lunar return's date to
