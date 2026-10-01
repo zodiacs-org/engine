@@ -1,0 +1,12 @@
+{
+  "schema": "zodiacs.agent-skill-bundle.v1",
+  "name": "zodiacs-compute",
+  "engineBaseCommit": "6807f632fc5aad08999d97f61e50793c6ca9a0b4",
+  "files": {
+    "skills/zodiacs-compute/SKILL.md": "f9d124e4759474fbced49fce3d24626d7c3fd3a2d2178b9b26f1822109ec35f3",
+    "skills/zodiacs-compute/agents/openai.yaml": "d7cf9a69b6bcebc9d40c7292140b5f9bbc59f115d04a6bd11ff94795e6b9dc37",
+    "skills/zodiacs-compute/references/tools.md": "ed28ef5b1e54db956783b9fa9281f2db2484d9e0439671859627cdb7acfd999f"
+  },
+  "packagePublication": false,
+  "frontendChanges": false
+}
