@@ -1,0 +1,77 @@
+{
+  "schema": "zodiacs.agent-skill-validation.v1",
+  "date": "2026-10-01",
+  "runtime": "Node 22.22.2",
+  "changes": "repository skill and evidence documentation only",
+  "skillStructure": "pass",
+  "forwardCases": {
+    "passed": 4,
+    "productionRequests": 0,
+    "personalData": false
+  },
+  "stdioVerification": "node examples/mcp-server/verify.mjs passed against rc.15 source",
+  "typecheck": "pass",
+  "build": "pass",
+  "exportsSmoke": "pass",
+  "packageContents": {
+    "passed": true,
+    "files": 69,
+    "unpackedBytes": 923282,
+    "skillIncludedInPackage": false
+  },
+  "fullTests": {
+    "passed": 3706,
+    "failed": 0,
+    "skipped": 0,
+    "runner": "isolated writable HOME; completed build before suite"
+  },
+  "initialFullTests": {
+    "passed": 3699,
+    "failed": 6,
+    "skipped": 1,
+    "classification": "archive fixture rebuilds could not use unwritable npm home; initial build overlapped suite; preserved, not used as release gate"
+  },
+  "archiveFixtureTestsAfterRunnerCorrection": {
+    "passed": 23,
+    "failed": 0
+  },
+  "conformanceCheck": {
+    "matchesCommittedVerdicts": true,
+    "pass": 267,
+    "fail": 192,
+    "unsupported": 41,
+    "accuracyGatesUnchanged": true
+  },
+  "atlasSelftests": {
+    "passed": 26,
+    "failed": 0
+  },
+  "publication": "private-pattern scan passed on recorded local revision; final pre-publication rescan and remote required CI remain",
+  "acceptanceChanged": false,
+  "archiveBinding": {
+    "checkedCommit": "5eee0b4eeeceade45c66823248a7cef1bd90d3e8",
+    "rebuildAllPassed": true,
+    "recordedArchives": 11,
+    "carried": 10,
+    "superseded": 1,
+    "commitsChecked": 132,
+    "rc16Sha256": "43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8",
+    "rc16Bytes": 266934
+  },
+  "privatePatternScan": {
+    "head": "c583f31b965bc8895c063fec487c26add615b092",
+    "range": "6807f632fc5aad08999d97f61e50793c6ca9a0b4..c583f31b965bc8895c063fec487c26add615b092",
+    "tree": "bb47e27b98ce18291f2c11bbdd7cb750d898d31e",
+    "scriptSha256": "4f88a2a14b78c9ca6416f23e1ad68d6106f2d2e37784468e2cfff121f5d7b0de",
+    "exitCode": 0,
+    "birthDataAddedLines": 0,
+    "birthDataTreeLines": 0,
+    "nameOnlyMatchedLines": 0,
+    "commitsScanned": 3,
+    "treeFilesScanned": 1080,
+    "optionalPublishedExamplesCheck": "not run; optional input not supplied",
+    "privateInputIncluded": false,
+    "rawOutputRetained": false,
+    "scope": "Owner-supplied external patterns; local unpublished history and final tree; no labels, patterns or private-input digest are in this receipt"
+  }
+}
