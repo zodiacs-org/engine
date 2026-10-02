@@ -1,0 +1,10 @@
+{
+  "astronomy.browser.min.js": "f41139a87941ea017ab902b954c9389fa27ea72083d7fab4971756d7769d14e6",
+  "astronomy.min.js": "6268029496ec7072e91a6ee3588dc645144dccc91ddbaa03b7f646fa0959da59",
+  "astronomy.d.ts": "fc5f1ede68dbebc32ce2f3f878cb3b261dc1bf8c16422451f0c4092c41fc871e",
+  "astronomy.js": "729c0ce37cc1a8096034a689039a5f04585ee8184177c638e8c74dec4fa3185a",
+  "astronomy.browser.js": "a2cfab19cab1a15843e4c8cc7410b6cbaafd0907122a8698c25d63d00c2774e4",
+  "package.json": "d035702763839ae11f41600cf4b8210005672658dcb19cea4a09591078af4931",
+  "README.md": "73c2de22668374bafd2d238ef43bccd96017550d47ba05afaedd969a00490b1f",
+  "esm/astronomy.js": "068f1445ed0c636c94818fe6d20d7d125120e605e0bab9fc4675c3d531be5ad7"
+}

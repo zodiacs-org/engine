@@ -1,0 +1,121 @@
+name: JSR release
+
+# Prepared workflow. First publication requires the handoff section 6 approval.
+# No automatic publication, secrets, new environment or registry account setup.
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the reviewed rc.16 candidate after specific owner approval
+        required: true
+        default: false
+        type: boolean
+permissions: {}
+concurrency:
+  group: jsr-engine-release
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Require the intended main branch
+        run: |
+          test "$GITHUB_REPOSITORY" = zodiacs-org/engine
+          test "$GITHUB_REF" = refs/heads/main
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.19.0
+          package-manager-cache: false
+      - name: Pin the SBOM tool in this unprivileged job
+        run: npm install --global npm@11.9.0 --ignore-scripts --no-audit --no-fund
+      - name: Verify the carried npm archive and rebuild binding
+        env:
+          TMPDIR: ${{ runner.temp }}
+        run: |
+          npm ci
+          node scripts/verify-release-archive.mjs 0.1.1-rc.16
+          node scripts/verify-archive-binding.mjs
+      - name: Stage twice and require the reviewed inventory
+        run: |
+          mkdir "$RUNNER_TEMP/jsr-release"
+          python3 -I scripts/jsr/stage.py artifacts/zodiacs-engine-0.1.1-rc.16.tgz "$RUNNER_TEMP/jsr-release/package"
+          python3 -I scripts/jsr/stage.py artifacts/zodiacs-engine-0.1.1-rc.16.tgz "$RUNNER_TEMP/jsr-check"
+          python3 -I scripts/jsr/check-files.py "$RUNNER_TEMP/jsr-release/package"
+          python3 -I scripts/jsr/check-files.py "$RUNNER_TEMP/jsr-check"
+          # Prove an extra file cannot enter the exact artifact unnoticed.
+          printf sentinel > "$RUNNER_TEMP/jsr-check/unexpected-sentinel.txt"
+          if python3 -I scripts/jsr/check-files.py "$RUNNER_TEMP/jsr-check"; then exit 1; fi
+          rm "$RUNNER_TEMP/jsr-check/unexpected-sentinel.txt"
+          mkdir "$RUNNER_TEMP/jsr-check/node_modules"
+          cp -R node_modules/astronomy-engine "$RUNNER_TEMP/jsr-check/node_modules/astronomy-engine"
+          python3 -I scripts/jsr/check-files.py "$RUNNER_TEMP/jsr-check" --with-dependency
+          mkdir "$RUNNER_TEMP/jsr-release/dependency"
+          cp -R node_modules/astronomy-engine "$RUNNER_TEMP/jsr-release/dependency/astronomy-engine"
+      - name: Obtain the exact official Deno tool
+        run: bash scripts/jsr/install-deno.sh
+      - name: Typecheck and check all fourteen wrapper bindings
+        run: |
+          node scripts/jsr/check-exports.mjs "$RUNNER_TEMP/jsr-check" > "$RUNNER_TEMP/jsr-release/node-exports.json"
+          "$RUNNER_TEMP/jsr-deno/deno" check --no-remote --no-lock --unstable-byonm --config "$RUNNER_TEMP/jsr-check/deno.json" "$RUNNER_TEMP/jsr-check"/jsr-*.js
+          "$RUNNER_TEMP/jsr-deno/deno" run --cached-only --no-remote --no-lock --unstable-byonm --allow-read="$RUNNER_TEMP/jsr-check" --config "$RUNNER_TEMP/jsr-check/deno.json" scripts/jsr/check-exports.mjs "$RUNNER_TEMP/jsr-check" > "$RUNNER_TEMP/jsr-release/deno-exports.json"
+      - name: Dry run the exact publication staging
+        run: |
+          cd "$RUNNER_TEMP/jsr-check"
+          "$RUNNER_TEMP/jsr-deno/deno" publish --dry-run --allow-dirty --no-check > "$RUNNER_TEMP/jsr-release/dry-run.log" 2>&1
+          python3 -I "$GITHUB_WORKSPACE/scripts/jsr/check-files.py" . --with-dependency
+          python3 -I "$GITHUB_WORKSPACE/scripts/jsr/check-dry-run.py" . "$RUNNER_TEMP/jsr-release/dry-run.log"
+      - name: Emit the reviewed runtime-only SBOM
+        run: |
+          npm sbom --package-lock-only --omit=dev --sbom-format cyclonedx > "$RUNNER_TEMP/jsr-release/sbom.raw.json"
+          python3 -I scripts/jsr/normalize-sbom.py "$RUNNER_TEMP/jsr-release/sbom.raw.json" artifacts/zodiacs-engine-0.1.1-rc.16.tgz "$RUNNER_TEMP/jsr-release/sbom.cdx.json" 6807f632fc5aad08999d97f61e50793c6ca9a0b4 1790783159
+          printf '%s  %s\n' 24e72652c771c863f5e8a82d45dd0d27910861dc1f991c5a8916dd5c893f2009 "$RUNNER_TEMP/jsr-release/sbom.cdx.json" | sha256sum --check --strict
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: jsr-rc16-${{ github.sha }}
+          path: ${{ runner.temp }}/jsr-release/
+          if-no-files-found: error
+          retention-days: 90
+  publish:
+    needs: verify
+    if: ${{ inputs.publish && github.ref == 'refs/heads/main' && github.repository == 'zodiacs-org/engine' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: jsr-rc16-${{ github.sha }}
+          path: ${{ runner.temp }}/jsr-release/
+      - name: Recheck the exact reviewed staging
+        run: |
+          python3 -I scripts/jsr/check-files.py "$RUNNER_TEMP/jsr-release/package"
+          mkdir "$RUNNER_TEMP/jsr-release/package/node_modules"
+          cp -R "$RUNNER_TEMP/jsr-release/dependency/astronomy-engine" "$RUNNER_TEMP/jsr-release/package/node_modules/astronomy-engine"
+          python3 -I scripts/jsr/check-files.py "$RUNNER_TEMP/jsr-release/package" --with-dependency
+      - name: Obtain the same exact official Deno tool
+        run: bash scripts/jsr/install-deno.sh
+      - name: Refuse an existing or unknown registry version
+        run: python3 -I scripts/jsr/check-registry.py
+      - name: Publish the exact rc.16 staging through existing JSR OIDC
+        run: |
+          cd "$RUNNER_TEMP/jsr-release/package"
+          "$RUNNER_TEMP/jsr-deno/deno" publish --dry-run --allow-dirty --no-check > "$RUNNER_TEMP/publish-dry-run.log" 2>&1
+          python3 -I "$GITHUB_WORKSPACE/scripts/jsr/check-dry-run.py" . "$RUNNER_TEMP/publish-dry-run.log"
+          "$RUNNER_TEMP/jsr-deno/deno" publish --allow-dirty --no-check
