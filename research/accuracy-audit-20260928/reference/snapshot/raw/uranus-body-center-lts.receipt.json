@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "requestId": "uranus-body-center-lts",
+  "method": "GET",
+  "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&EPHEM_TYPE=VECTORS&CENTER=500%40399&REF_SYSTEM=ICRF&REF_PLANE=FRAME&TIME_TYPE=TT&TLIST_TYPE=JD&CAL_TYPE=GREGORIAN&TIME_DIGITS=FRACSEC&VEC_TABLE=3&OUT_UNITS=AU-D&CSV_FORMAT=YES&VEC_LABELS=YES&OBJ_DATA=YES&COMMAND=799&VEC_CORR=LT%2BS&TLIST=%272451545.0007986110%2C2461311.0896875001%2C2470245.1323495372%27",
+  "parameters": {
+    "format": "json",
+    "EPHEM_TYPE": "VECTORS",
+    "CENTER": "500@399",
+    "REF_SYSTEM": "ICRF",
+    "REF_PLANE": "FRAME",
+    "TIME_TYPE": "TT",
+    "TLIST_TYPE": "JD",
+    "CAL_TYPE": "GREGORIAN",
+    "TIME_DIGITS": "FRACSEC",
+    "VEC_TABLE": "3",
+    "OUT_UNITS": "AU-D",
+    "CSV_FORMAT": "YES",
+    "VEC_LABELS": "YES",
+    "OBJ_DATA": "YES",
+    "COMMAND": "799",
+    "VEC_CORR": "LT+S",
+    "TLIST": "'2451545.0007986110,2461311.0896875001,2470245.1323495372'"
+  },
+  "requestStartedAtUtc": "2026-09-27T17:55:58.637457+00:00",
+  "retrievedAtUtc": "2026-09-27T17:56:07.292566+00:00",
+  "httpStatus": 200,
+  "rawFile": "raw/uranus-body-center-lts.json",
+  "rawSha256": "920e31f2214a95633a3e430a100410fbdd0edebdde6161579a6c9885e5902c41",
+  "transportError": null
+}

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "zodiacs-candidate-qualification-20260928-v1",
+  "policyStatus": "research-defaults-not-a-production-release-policy",
+  "referenceCoverage": "210 previously examined rows, 21 epochs, 10 bodies; regression coverage, not a blind holdout",
+  "requiredExports": ["natalChart", "houseOf", "ASPECTS", "ENGINE_VERSION", "EPHEMERIS"],
+  "expectedRows": 210,
+  "expectedBodies": 10,
+  "expectedEpochs": 21,
+  "thresholds": {
+    "referenceCoordinateTargetArcsec": 1,
+    "perCoordinateRegressionAllowanceArcsec": 0.1,
+    "maxChartP95Ms": 100,
+    "maxChartP95GrowthFactor": 3,
+    "chartRatioFloorMs": 1,
+    "maxInstalledBytes": 67108864,
+    "maxInstalledGrowthFactor": 3,
+    "installedRatioFloorBytes": 1048576
+  },
+  "executionLimits": {
+    "timeoutMs": 30000,
+    "memoryMb": 256,
+    "maxInputBytes": 1048576,
+    "maxOutputBytes": 2097152,
+    "maxStderrBytes": 65536
+  },
+  "authority": {
+    "automaticAdapterQualification": false,
+    "automaticRelease": false,
+    "automaticThresholdTuning": false
+  },
+  "limitations": [
+    "One arcsecond is a research reference-residual target, not an existing production release gate or a certified physical error bound.",
+    "Reference correction, frame and physical-center differences remain explicit; matching declaration fields does not authenticate implementation semantics.",
+    "Existing cases are public regression data. A new unseen candidate does not turn them into a blind holdout.",
+    "Node timings and installed file bytes are diagnostic budgets, not browser performance, download size or peak-RSS measurements.",
+    "The child process bounds wall time, V8 old-space and transport; it does not cap total RSS and is not an OS security sandbox. Only trusted local candidate code may be executed.",
+    "Every outcome requires separate adapter and release review. No Verify trust inventory is changed."
+  ]
+}
