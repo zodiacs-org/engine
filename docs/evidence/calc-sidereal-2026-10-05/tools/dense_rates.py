@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """ERFA's mean ayanamsas and their rates where ayanamsa_rates.py's rows are
-sparse; writes src/fixtures/ayanamsa-rates-dense.json.
+sparse; writes src/fixtures/ayanamsa-rates-dense.json, and with --every-year
+the rows the bounds rest on, outside the repository.
 
-  python3 dense_rates.py [--check]      (numpy, pyerfa 2.0.1.5)
+  python3 dense_rates.py [--check]                     (numpy, pyerfa 2.0.1.5)
+  python3 dense_rates.py --every-year FILE [--jobs N]
 
 ayanamsa_rates.py's rows come near the Sun only on the days and three-hour
 steps around each star's conjunctions, and take callers' ayanamsas only with
@@ -10,29 +12,49 @@ values near today's. This adds two sets of rows.
 
 Near the Sun. Within a few degrees of the Sun the deflection of a star's light
 grows as the star's angle from the Sun falls, and its rate faster still, so
-those steps miss where the engine and ERFA differ most. For each star, in the
-year of each of its conjunctions with the Sun in 1801, 1900, 2000, 2100 and
-2199, this samples:
+those steps miss where the engine and ERFA differ most. For a star and a year,
+star_series samples:
 
 - every 5 days through the year, and every 0.05 day for 3 days either side of
-  the star's closest approach to the Sun;
+  the star's closest approach to the Sun that year;
 - where the star passes within 2 degrees of the Sun, every 0.02 day for 3 days
   either side of the closest approach, and every 0.001 day for 0.3 day either
   side of it;
 - where it passes so close that ERFA caps the deflection's denominator
   (eraLdsun's dlim: 1e-6 over the square of the Sun's distance in au, or 1e-6
-  inside 1 au), every 0.00001 day for 0.002 day either side of each instant at
-  which the cap starts or stops applying.
+  inside 1 au), every 0.00001 day for 0.005 day either side of each instant at
+  which ERFA's cap starts or stops applying. The engine caps the same way, but
+  its Earth differs a little from ERFA's, and its own crossings fall up to
+  about 2.1 minutes from ERFA's; 0.005 day, 7.2 minutes, covers the 1.44
+  minutes either side of the engine's crossing in which a rate's central
+  difference straddles it.
+
+How far the two programs part near the Sun changes from one conjunction to the
+next, because their Earths differ by an amount that changes from year to year.
+--every-year writes the series of every star definition for every year from
+1800 to 2199, 1,600 series, as JSON lines; differences.ts --every-year reads
+them, and the bounds are the largest differences there. The fixture holds the
+series of 1801, 1900, 2000, 2100 and 2199 for every star, and for each star the
+years in which that run found a band's largest difference (EXTRA_YEARS), so
+that the test meets each bound's worst case.
 
 Callers' ayanamsas at the ends of what calc accepts: values from -359.9 to
-359.9 degrees, epochs at either end of the span and at J2000.0, each precession
-model, and rates of up to 3,600 arcseconds a year, at nine instants across the
-span. An epoch definition is reference_values.py's epoch_ayanamsa; a linear
-one is its own arithmetic, so there the comparison measures rounding alone.
+359.9 degrees; for an epoch definition (held by precession, which calc takes
+only with an epoch inside the span), epochs at both ends of the span, at
+J2000.0 and at eight steps between, and each precession model; for a linear
+one, those epochs and also the first and last days a Date can hold and the
+start of the Kali Yuga, with rates of up to 3,600 arcseconds a year. The
+fixture has each at nine instants across the span; --every-year at 401, and
+the fixture holds at 401 the definitions in which that run found the largest
+difference (EXTRA_CALLERS). An epoch definition is reference_values.py's
+epoch_ayanamsa. A linear one is computed exactly, in rational arithmetic on the
+same binary inputs, its mean reduced to (-180, 180] and its rate the exact
+central difference over the same two instants: what is left in the comparison
+is the engine's rounding.
 
 The mean ayanamsa of a star is reference_values.py's star_ayanamsa. A rate is
 the central difference over plus and minus 0.001 day of TT, the step of calc's
-speeds. `--check` rebuilds the file in memory and compares. Nothing here
+speeds. `--check` rebuilds the fixture in memory and compares. Nothing here
 imports or runs the engine, and no Swiss Ephemeris code or values are used.
 """
 import argparse
@@ -40,10 +62,19 @@ import importlib.util
 import json
 import math
 import sys
+from fractions import Fraction
+from multiprocessing import Pool
 from pathlib import Path
+
+import warnings
 
 import erfa
 import numpy as np
+
+# epv00, ERFA's Earth, is documented for 1900 to 2100 and warns outside it;
+# the record says so (README, *What is not established*), and the warning,
+# once per call, would bury the output.
+warnings.filterwarnings("ignore", category=erfa.ErfaWarning)
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[3]
@@ -56,10 +87,20 @@ _spec.loader.exec_module(ref)
 
 STEP = 0.001          # days of TT: the step of calc's speeds
 YEARS = [1801, 1900, 2000, 2100, 2199]
+EVERY_YEAR = range(1800, 2200)
+# The years, beyond YEARS, in which --every-year found a band's largest
+# difference of the position or the rate (differences.ts --every-year,
+# results/every-year.json): True Chitra's in the band 2 degrees or more from
+# the Sun, True Revati's position and True Pushya's rate from 0.3 to 2
+# degrees, and True Pushya's within 0.3 degree.
+EXTRA_YEARS = {"true-chitra": [1825, 2197], "true-revati": [2196], "true-pushya": [1804, 1821]}
 NEAR = 2.0            # degrees: within this, the dense steps
+CAP_HALF_WIDTH = 0.005  # days either side of a cap crossing
 GOLDEN = (math.sqrt(5) - 1) / 2
 SPAN_FROM = 2_378_496.5   # 1800-01-01 0h TT
 SPAN_LAST = 2_524_592.5   # 2199-12-31 0h TT, the span's last day
+UNIX_JD = 2_440_587.5     # 1970-01-01, the middle of a Date's range of 1e8 days either way
+KALI_YUGA = 588_465.5     # -3101-02-18 (3102 BCE) 0h, proleptic Julian calendar
 JULIAN_YEAR = 365.25
 
 
@@ -124,7 +165,8 @@ def instants(centre, half_width, step):
     return [centre + k * step for k in range(-count, count + 1)]
 
 
-def star_series(name, star, year):
+def star_series(name, year):
+    star = ref.STARS[name]
     closest = closest_approach(star, year)
     least = elongation_at(star, closest)
     first = sum(erfa.cal2jd(year, 1, 1))
@@ -137,7 +179,7 @@ def star_series(name, star, year):
     if cap_margin(star, closest) < 0:
         caps = [crossing(star, closest, closest - 0.3), crossing(star, closest, closest + 0.3)]
         for edge in caps:
-            times += instants(edge, 0.002, 0.00001)
+            times += instants(edge, CAP_HALF_WIDTH, 0.00001)
     jds = sorted({round(t, 8) for t in times})
     mean = lambda jd: ref.star_ayanamsa(star, jd)[0]
     return {
@@ -157,35 +199,85 @@ def star_series(name, star, year):
 VALUES = [-359.9, -180.0, 0.0001, 23.85, 180.0, 359.9]
 LINEAR_VALUES = [-359.9, 23.85, 359.9]
 RATES = [-3600.0, -50.29, 50.29, 3600.0]
-EPOCHS = [SPAN_FROM, ref.J2000, SPAN_LAST]
+MODELS = ["engine", "newcomb", "iau1976"]
+# Both ends of the span, J2000.0 and eight steps between.
+EPOCHS = sorted({SPAN_FROM + k * (SPAN_LAST - SPAN_FROM) / 8 for k in range(9)} | {ref.J2000})
+# A linear definition's epoch may be any instant a Date holds.
+LINEAR_EPOCHS = sorted(set(EPOCHS) | {UNIX_JD - 1e8 + 1, KALI_YUGA, UNIX_JD + 1e8 - 1})
 AT = [SPAN_FROM + 0.5 + k * (SPAN_LAST - SPAN_FROM - 1.0) / 8 for k in range(9)]
+AT_EVERY = [SPAN_FROM + 0.5 + k * (SPAN_LAST - SPAN_FROM - 1.0) / 400 for k in range(401)]
+# The definitions that the fixture holds at 401 instants, not nine: those in
+# which --every-year found the largest difference of the position and of the
+# rate (differences.ts --every-year, results/every-year.json).
+EXTRA_CALLERS = [
+    {"epoch": SPAN_FROM, "value": -180.0, "model": "engine"},
+    {"epoch": UNIX_JD - 1e8 + 1, "value": -359.9, "rate": -3600.0},
+]
 
 
-def caller_series(definition, mean):
-    jds = [round(t, 8) for t in AT]
-    return {
-        "definition": definition,
-        "jd": jds,
-        "mean": [round(mean(jd), 12) for jd in jds],
-        "rate": [round(central(mean, jd), 15) for jd in jds],
-    }
-
-
-def callers():
+def definitions():
     out = []
     for epoch in EPOCHS:
-        for model in ["engine", "newcomb", "iau1976"]:
+        for model in MODELS:
             for value in VALUES:
-                mean = lambda jd, v=value, e=epoch, m=model: ref.epoch_ayanamsa(v, e, m, jd)
-                out.append(caller_series({"epoch": epoch, "value": value, "model": model}, mean))
+                out.append({"epoch": epoch, "value": value, "model": model})
+    for epoch in LINEAR_EPOCHS:
         for value in LINEAR_VALUES:
             for rate in RATES:
-                mean = lambda jd, v=value, e=epoch, r=rate: v + r * (jd - e) / JULIAN_YEAR / 3600
-                out.append(caller_series({"epoch": epoch, "value": value, "rate": rate}, mean))
+                out.append({"epoch": epoch, "value": value, "rate": rate})
     return out
 
 
+def exact_linear(definition, jd):
+    """The linear definition's mean ayanamsa at a TT Julian date, exactly, in degrees, as a Fraction."""
+    days = Fraction(jd) - Fraction(definition["epoch"])
+    return Fraction(definition["value"]) + Fraction(definition["rate"]) * days / Fraction(1461, 4) / 3600
+
+
+def half_turn(x):
+    """A Fraction of degrees reduced to (-180, 180]."""
+    r = x % 360
+    return r - 360 if r > 180 else r
+
+
+def caller_series(definition, jds):
+    jds = [round(t, 8) for t in jds]
+    if "rate" in definition:
+        mean = [float(half_turn(exact_linear(definition, jd))) for jd in jds]
+        rate = [float((exact_linear(definition, jd + STEP) - exact_linear(definition, jd - STEP)) / Fraction(2 * STEP)) for jd in jds]
+    else:
+        f = lambda jd: ref.epoch_ayanamsa(definition["value"], definition["epoch"], definition["model"], jd)
+        mean = [f(jd) for jd in jds]
+        rate = [central(f, jd) for jd in jds]
+    return {
+        "definition": definition,
+        "jd": jds,
+        "mean": [round(m, 12) for m in mean],
+        "rate": [round(r, 15) for r in rate],
+    }
+
+
+# ---------------------------------------------------------------- output
+
+def star_task(task):
+    name, year = task
+    return json.dumps({"kind": "star", **star_series(name, year)}, separators=(",", ":"))
+
+
+def caller_task(definition):
+    return json.dumps({"kind": "caller", **caller_series(definition, AT_EVERY)}, separators=(",", ":"))
+
+
+def identity(definition):
+    return (float(definition["epoch"]), float(definition["value"]), definition.get("model"), float(definition.get("rate", "nan")))
+
+
 def build():
+    stars = [star_series(name, year) for name in ref.STARS for year in sorted(set(YEARS) | set(EXTRA_YEARS.get(name, [])))]
+    extra = {repr(identity(d)) for d in EXTRA_CALLERS}
+    callers = [caller_series(d, AT_EVERY if repr(identity(d)) in extra else AT) for d in definitions()]
+    if sum(len(c["jd"]) == len(AT_EVERY) for c in callers) != len(EXTRA_CALLERS):
+        raise SystemExit("an EXTRA_CALLERS entry names no definition")
     out = {
         "generator": "docs/evidence/calc-sidereal-2026-10-05/tools/dense_rates.py",
         "erfa": f"pyerfa {erfa.__version__}",
@@ -194,16 +286,36 @@ def build():
                  " from the Sun that year, degrees; capFromTo: when eraLdsun's cap starts and stops applying; a"
                  " definition's rate: arcseconds a Julian year",
         "step": STEP,
-        "stars": [star_series(name, star, year) for name, star in ref.STARS.items() for year in YEARS],
-        "callers": callers(),
+        "stars": stars,
+        "callers": callers,
     }
     return json.dumps(out, separators=(",", ":")) + "\n"
+
+
+def every_year(path, jobs):
+    """The series of every star for every year from 1800 to 2199, and every caller at 401 instants, as JSON lines."""
+    tasks = [(name, year) for name in ref.STARS for year in EVERY_YEAR]
+    with open(path, "w") as out, Pool(jobs) as pool:
+        out.write(json.dumps({"generator": "docs/evidence/calc-sidereal-2026-10-05/tools/dense_rates.py --every-year",
+                              "erfa": f"pyerfa {erfa.__version__}", "step": STEP}) + "\n")
+        for k, line in enumerate(pool.imap(star_task, tasks)):
+            out.write(line + "\n")
+            if k % 100 == 99:
+                print(f"{k + 1} of {len(tasks)} star series", file=sys.stderr, flush=True)
+        for line in pool.imap(caller_task, definitions(), chunksize=8):
+            out.write(line + "\n")
+    print(f"wrote {path}: {len(tasks)} star series and {len(definitions())} callers", file=sys.stderr)
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--every-year", metavar="FILE")
+    parser.add_argument("--jobs", type=int, default=1)
     args = parser.parse_args()
+    if args.every_year:
+        every_year(args.every_year, args.jobs)
+        return
     text = build()
     if args.check:
         if OUTPUT.read_text() != text:

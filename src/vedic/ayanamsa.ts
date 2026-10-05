@@ -198,11 +198,16 @@ export interface UserAyanamsaInput {
 
 const EPOCH_JD_LIMIT = 1e8; // days either side of 1970-01-01, the Date range
 
+/** Internal: a name a caller's ayanamsa may take: a lowercase identifier of at most 64 characters, not a built-in name. */
+export function isUserAyanamsaName(name: unknown): name is string {
+  return typeof name === "string" && /^[a-z][a-z0-9-]{0,63}$/.test(name) && !Object.hasOwn(AYANAMSAS, name);
+}
+
 /** A caller's ayanamsa, frozen. Refuses a built-in name, both `rate` and `model`, and out-of-range values. */
 export function userAyanamsa(input: UserAyanamsaInput): AyanamsaDefinition {
   if (!input || typeof input !== "object") throw new RangeError("userAyanamsa needs an input object.");
   const name = input.name ?? "user";
-  if (typeof name !== "string" || !/^[a-z][a-z0-9-]{0,63}$/.test(name) || Object.hasOwn(AYANAMSAS, name)) {
+  if (!isUserAyanamsaName(name)) {
     throw new RangeError("Ayanamsa name must be a new lowercase identifier of at most 64 characters.");
   }
   const epoch = input.epoch;
@@ -371,13 +376,15 @@ function meanAyanamsa(
       const [x, y, z] = eclipticFrame(time.tt).rows;
       return { value: definition.value + (correction - longitudeIn(at, x!, y!, z!)) / DEG, elongation: null };
     }
-    case "linear":
-      // Days from the epoch counted from TT days since J2000.0: a Julian date near 2.4 million rebuilt
-      // from them is held only to about 5e-10 day, which a rate of 3,600″ a year turns into 2e-6″ a day.
-      return {
-        value: definition.value + (definition.rate * (time.tt - (definition.epochTT - J2000))) / JULIAN_YEAR / 3600,
-        elongation: null
-      };
+    case "linear": {
+      // The value at J2000.0 less whole turns, plus the rate times TT days since J2000.0. Counted from
+      // an epoch far from the span, the value runs to hundreds of thousands of degrees, whose rounding a
+      // rate of 3,600″ a year turned into up to 2e-4″ a day; and a Julian date near 2.4 million, rebuilt
+      // from TT days, is held only to about 5e-10 day, which that rate turned into 2e-6″ a day.
+      const perDay = definition.rate / JULIAN_YEAR / 3600;
+      const atJ2000 = definition.value - perDay * (definition.epochTT - J2000);
+      return { value: atJ2000 - 360 * Math.round(atJ2000 / 360) + perDay * time.tt, elongation: null };
+    }
     case "star": {
       const { direction: [x, y, z], elongation } = apparentStar(definition.star, time);
       return { value: longitudeIn(eclipticFrame(time.tt), x, y, z) / DEG - definition.longitude, elongation };

@@ -306,29 +306,32 @@ divided by the body's speed adds.
 In the sidereal zodiac each bound adds the ayanamsa's own: the largest
 difference of the engine's mean ayanamsa, and of its rate, from ERFA's
 construction of the same definition, rounded up to two significant figures,
-over 16,116 comparisons from 1800 to 2200
-(`docs/evidence/calc-sidereal-2026-10-05/`). They include every star's
-passes near the Sun, sampled down to 0.00001 day, and callers' ayanamsas at
-the ends of what calc accepts. `ayanamsa.bound` gives it, and
+over 1,647,452 comparisons from 1800 to 2200
+(`docs/evidence/calc-sidereal-2026-10-05/`). They take every star definition
+in every year of the span, densely around its pass by the Sun and down to
+0.00001 day where the deflection's cap starts and stops applying, and
+callers' ayanamsas at the ends of what calc accepts. `ayanamsa.bound` gives it, and
 `bounds.position` and `bounds.speed` add it, in whole nanoarcseconds rounded
 up; a speed bound that is null stays null. A star definition's band is set by
 its star's angle from the Sun.
 
 | definitions | comparisons | ayanamsa | its rate |
 | --- | ---: | --- | --- |
-| epoch and linear, built-in and callers' | 906 | 4.5 × 10⁻⁷″ | 1.1 × 10⁻⁷″ a day |
-| star, 2° or more from the Sun | 4,510 | 0.0011″ | 0.00034″ a day |
-| star, 0.3° to 2° from the Sun | 3,120 | 0.0034″ | 0.022″ a day |
-| star, within 0.3° of the Sun | 7,580 | 0.036″ | 18″ a day |
+| epoch and linear, built-in and callers' | 134,832 | 4.6 × 10⁻⁷″ | 1.5 × 10⁻⁷″ a day |
+| star, 2° or more from the Sun | 306,850 | 0.0013″ | 0.00039″ a day |
+| star, 0.3° to 2° from the Sun | 238,364 | 0.0048″ | 0.026″ a day |
+| star, within 0.3° of the Sun | 967,406 | 0.058″ | 27″ a day |
 
 The engine and ERFA deflect a star's light by the Sun with the same formula,
 and both cap its denominator at the same small number, which only True
 Pushya's star reaches, within about 0.08° of the Sun's centre. Their Earth
-positions differ slightly, so they put the star at slightly different angles
-from the Sun. The deflection, and still more its rate, grows so fast as that
-angle falls that the difference grows with it, and where the cap starts and
-stops applying the two computations do so at instants a little apart: there
-their rates part by up to 17″ a day. Within 0.3° the star is on or beside the
+positions differ slightly, by an amount that changes from year to year, so
+they put the star at slightly different angles from the Sun. The deflection,
+and still more its rate, grows so fast as that angle falls that the
+difference grows with it, and where the cap starts and stops applying the two
+computations do so at instants a little apart: there their rates part by up
+to 27″ a day. How far apart they come changes from one pass to the next,
+which is why every year is compared. Within 0.3° the star is on or beside the
 Sun's disc, whose radius is about 0.27°. The bound says how far
 apart the two computations of the same definition are, not that such a star
 is seen. It is against this engine's definition, not another program's:

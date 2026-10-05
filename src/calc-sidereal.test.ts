@@ -192,18 +192,22 @@ describe("the sidereal zodiac in calc()", () => {
     }
   });
 
-  it("takes a linear ayanamsa's rate from its definition, within the rate's bound, at instants on any clock", () => {
+  it("takes a linear ayanamsa's rate from its definition to within 5 × 10⁻⁷″ a day, from any epoch, at instants on any clock", () => {
     // In the mean ecliptic of date the subtracted ayanamsa is the mean one, which for a linear definition grows at its stated rate exactly.
-    for (const rate of [3600, -3600, 50.29]) {
-      const zodiac = { sidereal: { epoch: { jd: 2_415_020, scale: "TT" }, value: 359.9, rate } } as const;
-      for (const time of [...INSTANTS.slice(1, -1), { jd: 2_488_128.123456789, scale: "UT1" } as const]) {
-        const frame = "ecliptic-mean-of-date" as const;
-        const tropical = ok(calc({ body: "Sun", time, frame }));
-        const sidereal = ok(calc({ body: "Sun", time, frame, zodiac }));
-        // Within the rounding of the two subtractions themselves, a few tenths of a microarcsecond a day;
-        // a Julian date rebuilt from TT days put up to two microarcseconds a day here at 3,600″ a year.
-        const gap = (tropical.speeds!.lon - sidereal.speeds!.lon) - rate / 365.25 / 3600;
-        expect(Math.abs(gap) * 3600, `${rate} ${JSON.stringify(time)}`).toBeLessThan(5e-7);
+    // The epochs: 1900, the first and the last day a Date holds, and the start of the Kali Yuga.
+    for (const epoch of [2_415_020, 2_440_587.5 - 1e8 + 1, 2_440_587.5 + 1e8 - 1, 588_465.5]) {
+      for (const rate of [3600, -3600, 50.29]) {
+        const zodiac = { sidereal: { epoch: { jd: epoch, scale: "TT" }, value: 359.9, rate } } as const;
+        for (const time of [...INSTANTS.slice(1, -1), { jd: 2_488_128.123456789, scale: "UT1" } as const]) {
+          const frame = "ecliptic-mean-of-date" as const;
+          const tropical = ok(calc({ body: "Sun", time, frame }));
+          const sidereal = ok(calc({ body: "Sun", time, frame, zodiac }));
+          // Within the rounding of the two subtractions themselves, a few tenths of a microarcsecond a day. Counted
+          // from a far epoch, the ayanamsa ran to hundreds of thousands of degrees, whose rounding put up to 2e-4″ a
+          // day here at 3,600″ a year; and a Julian date rebuilt from TT days, up to 2e-6″ a day.
+          const gap = (tropical.speeds!.lon - sidereal.speeds!.lon) - rate / 365.25 / 3600;
+          expect(Math.abs(gap) * 3600, `${epoch} ${rate} ${JSON.stringify(time)}`).toBeLessThan(5e-7);
+        }
       }
     }
   });
@@ -263,9 +267,9 @@ describe("the sidereal zodiac in calc()", () => {
     // δ Cnc, True Pushya's star, passed about 0.08° from the Sun's centre at about 15:30 UTC on 2000-07-31.
     const zodiac = { sidereal: "true-pushya" } as const;
     const cases = [
-      ["2000-07-31T15:30:00Z", [0, 0.3], 0.036, 18],
-      ["2000-08-01T15:30:00Z", [0.3, 2], 0.0034, 0.022],
-      ["2001-01-31T15:00:00Z", [2, 180], 0.0011, 0.00034]
+      ["2000-07-31T15:30:00Z", [0, 0.3], 0.058, 27],
+      ["2000-08-01T15:30:00Z", [0.3, 2], 0.0048, 0.026],
+      ["2001-01-31T15:00:00Z", [2, 180], 0.0013, 0.00039]
     ] as const;
     for (const [time, [from, to], position, rate] of cases) {
       const result = ok(calc({ body: "Moon", time, zodiac }));
@@ -281,8 +285,8 @@ describe("the sidereal zodiac in calc()", () => {
       expect(housesResult.bounds.angles.value).toBe(addBounds(0.02, position));
     }
     const lahiri = ok(calc({ body: "Moon", time: "2000-07-31T15:30:00Z", zodiac: { sidereal: "lahiri" } }));
-    expect(lahiri.ayanamsa!.bound.value).toBe(4.5e-7);
-    expect(lahiri.bounds.speed!.value).toBe(addBounds(1.1, 1.1e-7));
+    expect(lahiri.ayanamsa!.bound.value).toBe(4.6e-7);
+    expect(lahiri.bounds.speed!.value).toBe(addBounds(1.1, 1.5e-7));
   });
 
   it("put each band's edge in the band beyond it", () => {
@@ -344,19 +348,21 @@ describe("a caller's ayanamsa", () => {
   });
 
   it.each([
-    ["a built-in name", { name: "lahiri", epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }, "zodiac.sidereal.name"],
-    ["a name in capitals", { name: "Mine", epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }, "zodiac.sidereal.name"],
-    ["a name that is not a string", { name: 7, epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }, "zodiac.sidereal.name"],
-    ["both a rate and a model", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, rate: 50, model: "engine" }, "zodiac.sidereal"],
-    ["a value out of range", { epoch: { jd: 2_451_545, scale: "TT" }, value: 361 }, "zodiac.sidereal.value"],
-    ["a rate out of range", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, rate: 3601 }, "zodiac.sidereal.rate"],
-    ["an unknown model", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, model: "iau2000" }, "zodiac.sidereal.model"],
-    ["no epoch", { value: 23 }, "zodiac.sidereal.epoch"],
-    ["an unknown field", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, ayanamsa: "lahiri" }, "zodiac.sidereal"],
-    ["a TT epoch beyond any date", { epoch: { jd: 1e300, scale: "TT" }, value: 23 }, "zodiac.sidereal.epoch"],
-    ["a UTC epoch beyond any date", { epoch: { jd: 1e12, scale: "UTC" }, value: 23 }, "zodiac.sidereal.epoch"],
-    ["an epoch without a scale", { epoch: { jd: 2_451_545 }, value: 23 }, "zodiac.sidereal.epoch"]
-  ])("is malformed with %s, and throws RangeError naming %s", (_, sidereal, field) => {
+    ["a built-in name", "zodiac.sidereal.name", { name: "lahiri", epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }],
+    ["a name in capitals", "zodiac.sidereal.name", { name: "Mine", epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }],
+    ["a name that is not a string", "zodiac.sidereal.name", { name: 7, epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }],
+    ["both a rate and a model", "zodiac.sidereal takes a rate or a model, not both", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, rate: 50, model: "engine" }],
+    ["a value out of range", "zodiac.sidereal.value", { epoch: { jd: 2_451_545, scale: "TT" }, value: 361 }],
+    ["a rate out of range", "zodiac.sidereal.rate", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, rate: 3601 }],
+    ["an unknown model", "zodiac.sidereal.model", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, model: "iau2000" }],
+    ["no epoch", "zodiac.sidereal.epoch", { value: 23 }],
+    ["an unknown field", "zodiac.sidereal takes only name, epoch, value, rate, model", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, ayanamsa: "lahiri" }],
+    ["a TT epoch beyond any date", "zodiac.sidereal.epoch must be an instant in the range of a Date", { epoch: { jd: 1e300, scale: "TT" }, value: 23 }],
+    ["a UTC epoch beyond any date", "zodiac.sidereal.epoch must be an instant in the range of a Date", { epoch: { jd: 1e12, scale: "UTC" }, value: 23 }],
+    // In range on UT1, but past the end of the range on TT, where ΔT is days.
+    ["a UT1 epoch whose TT is beyond any date", "zodiac.sidereal.epoch must be an instant in the range of a Date", { epoch: { jd: 2_440_587.5 + 1e8 - 1, scale: "UT1" }, value: 23, rate: 50 }],
+    ["an epoch without a scale", "zodiac.sidereal.epoch", { epoch: { jd: 2_451_545 }, value: 23 }]
+  ])("is malformed with %s, and throws a RangeError that names %s", (_, field, sidereal) => {
     const request = () => calc({ body: "Sun", time: INSTANTS[3]!, zodiac: { sidereal } as never });
     expect(request).toThrow(RangeError);
     expect(request).toThrow(field);
@@ -644,15 +650,22 @@ describe("the ayanamsa's bounds", () => {
   };
 
   it("compare every built-in and caller's ayanamsa with ERFA, and each star near the Sun", () => {
-    expect(counts).toEqual({ epochOrLinear: 906, star: 4510, starNearSun: 3120, starAtSun: 7580 });
+    expect(counts).toEqual({ epochOrLinear: 3904, star: 5458, starNearSun: 3921, starAtSun: 16822 });
     expect(new Set(rows.map((row) => row.name))).toEqual(new Set([...CALC_AYANAMSAS, "user-engine-b1950", "user-newcomb-j1900", "user-iau1976-1956"]));
     expect(new Set(dense.stars.map((series) => series.name))).toEqual(new Set(["true-chitra", "true-revati", "true-pushya", "galactic-center"]));
-    // The near-Sun rows reach inside the deflection's cap: True Pushya passed within 0.08° of the Sun in 1801, 1900 and 2000.
-    expect(dense.stars.filter((series) => (series as unknown as { capFromTo: number[] }).capFromTo.length > 0).length).toBe(3);
-    const values = dense.callers.map((series) => series.definition.value);
-    expect(Math.min(...values)).toBe(-359.9);
-    expect(Math.max(...values)).toBe(359.9);
+    // The years of the fixture: five through the span, and those in which the every-year run found a band's largest differences.
+    const years = (name: string) => dense.stars.filter((series) => series.name === name).map((series) => (series as unknown as { year: number }).year);
+    expect(years("true-chitra")).toEqual([1801, 1825, 1900, 2000, 2100, 2197, 2199]);
+    expect(years("true-revati")).toEqual([1801, 1900, 2000, 2100, 2196, 2199]);
+    expect(years("true-pushya")).toEqual([1801, 1804, 1821, 1900, 2000, 2100, 2199]);
+    // The near-Sun rows reach inside the deflection's cap: True Pushya passed within 0.08° of the Sun in 1801, 1804, 1821, 1900 and 2000.
+    expect(dense.stars.filter((series) => (series as unknown as { capFromTo: number[] }).capFromTo.length > 0).length).toBe(5);
+    expect(new Set(dense.callers.map((series) => series.definition.value))).toEqual(new Set([-359.9, -180, 0.0001, 23.85, 180, 359.9]));
     expect(new Set(dense.callers.map((series) => series.definition.rate).filter((rate) => rate !== undefined))).toEqual(new Set([-3600, -50.29, 50.29, 3600]));
+    // An epoch definition's epoch spans the span; a linear one's also reaches the first and last days of a Date and the Kali Yuga.
+    const epochs = (linear: boolean) => dense.callers.filter((series) => (series.definition.rate !== undefined) === linear).map((series) => series.definition.epoch);
+    expect([Math.min(...epochs(false)), Math.max(...epochs(false))]).toEqual([2_378_496.5, 2_524_592.5]);
+    expect(new Set(epochs(true))).toEqual(new Set([...epochs(false), 2_440_587.5 - 1e8 + 1, 588_465.5, 2_440_587.5 + 1e8 - 1]));
   });
 
   it.each(["epochOrLinear", "star", "starNearSun", "starAtSun"] as const)("are %s's largest differences, rounded up to two significant figures", (band) => {
@@ -672,8 +685,9 @@ describe("the ayanamsa's bounds", () => {
     expect(addBounds(8.3, 4.4e-7)).toBe(8.30000044);
     expect(addBounds(0.00081, 6.4e-9)).toBe(0.000810007);
     expect(addBounds(25, 0.0011)).toBe(25.0011);
-    expect(addBounds(519, 0.036)).toBe(519.036);
-    expect(addBounds(1.1, 18)).toBe(19.1);
+    expect(addBounds(519, 0.058)).toBe(519.058);
+    expect(addBounds(1.1, 27)).toBe(28.1);
+    expect(addBounds(1.1, 1.5e-7)).toBe(1.10000015);
   });
 });
 

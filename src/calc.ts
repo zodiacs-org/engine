@@ -42,7 +42,7 @@ import type { TimeBasis, TimeScale, TimeScaleName } from "./time-scale.js";
 import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
 import type { Angles, BodyName, Chart, ChartFlag, ChartInput, HouseSystem } from "./types.js";
 import { AYANAMSA_BASIS, addBounds, ayanamsaBound } from "./calc-ayanamsa.js";
-import { AYANAMSAS, ayanamsaAt, outsideSpanEpoch, userAyanamsa } from "./vedic/ayanamsa.js";
+import { AYANAMSAS, ayanamsaAt, isUserAyanamsaName, outsideSpanEpoch, userAyanamsa } from "./vedic/ayanamsa.js";
 import type { AyanamsaDefinition } from "./vedic/ayanamsa.js";
 import { siderealChartOf, wholeSignCusps, wrap360 } from "./vedic/sidereal.js";
 
@@ -426,11 +426,19 @@ const UNIX_JD = 2_440_587.5;
 /** The TT Julian date of a caller's ayanamsa's epoch, read as an instant is read. */
 function epochTT(epoch: TimeInput, label: string): number {
   const record = epoch.record;
-  // The range of a Date, as userAyanamsa takes an epoch; the time basis reads any instant in it.
-  const outside = "jd" in record && record.scale === "TT" ? !(Math.abs(record.jd - UNIX_JD) <= 1e8) : !(Math.abs(epoch.ms) <= 8.64e15);
-  if (outside) throw new RangeError(`${label} must be an instant in the range of a Date.`);
-  if ("jd" in record && record.scale === "TT") return record.jd;
-  return J2000_JD + timeBasis(epoch.ms, epoch.scale, epoch.pin).ttDays;
+  const message = `${label} must be an instant in the range of a Date.`;
+  let jd: number;
+  if ("jd" in record && record.scale === "TT") {
+    jd = record.jd;
+  } else {
+    // The time basis reads any instant a Date holds.
+    if (!(Math.abs(epoch.ms) <= 8.64e15)) throw new RangeError(message);
+    jd = J2000_JD + timeBasis(epoch.ms, epoch.scale, epoch.pin).ttDays;
+  }
+  // The range of a Date on TT, as userAyanamsa takes an epoch: an instant on UTC or UT1 near either end can
+  // fall outside it on TT, where ΔT is days.
+  if (!(Math.abs(jd - UNIX_JD) <= 1e8)) throw new RangeError(message);
+  return jd;
 }
 
 function readZodiac(value: unknown): Zodiac {
@@ -443,7 +451,7 @@ function readZodiac(value: unknown): Zodiac {
   const label = "zodiac.sidereal";
   const given = fields(sidereal, label, ["name", "epoch", "value", "rate", "model"]);
   // userAyanamsa's rule for a name, checked here so that the message names the field.
-  if (given.name !== undefined && (typeof given.name !== "string" || !/^[a-z][a-z0-9-]{0,63}$/.test(given.name) || Object.hasOwn(AYANAMSAS, given.name))) {
+  if (given.name !== undefined && !isUserAyanamsaName(given.name)) {
     throw new RangeError(`${label}.name must be a lowercase identifier of at most 64 characters that is not a built-in name.`);
   }
   const epoch = readTime(given.epoch, `${label}.epoch`);
