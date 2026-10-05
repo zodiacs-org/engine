@@ -1,6 +1,7 @@
 // Rebuilds src/fixtures/calc-roundtrip.json from the build in dist/: the same
-// requests, each run again through calc(), houses() or events(), with the
-// results as this build gives them. src/calc-fixtures.test.ts replays them.
+// requests, each run again through calc(), houses(), events() or chart(), with
+// the results as this build gives them, as JSON. src/calc-fixtures.test.ts
+// replays them.
 // The fixture pins the engine's own output (a regression test, not accuracy
 // evidence); rebuild it when a change to the engine moves those results on
 // purpose, and say why in the commit.
@@ -13,7 +14,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 
 const fixture = new URL("../src/fixtures/calc-roundtrip.json", import.meta.url);
 const calc = await import(new URL("../dist/calc.js", import.meta.url).href);
-const run = { calc: calc.calc, houses: calc.houses, events: calc.events };
+const run = { calc: calc.calc, houses: calc.houses, events: calc.events, chart: calc.chart };
 
 /** A copy of a request with every { jd, scale: "UT" } given on "UTC". */
 function renamed(value) {

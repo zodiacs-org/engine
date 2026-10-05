@@ -704,3 +704,14 @@ pyerfa 2.0.1.5 and numpy 2.4.6.
   departs from long-term models by about 0.34″ at 0 CE and 10″ at 3000 BCE.
 - **Sidereal house systems, a sidereal field in the natal receipt, panchanga,
   shadbala and ashtakavarga.**
+
+## Correction, 2026-10-05
+
+The star ayanamsas' comparison with ERFA in *Results* ran on 41 instants
+about ten years apart, which land near the same date each decade; none of
+the 164 was within 17° of the Sun, so its filter at 5° left nothing out, and
+"more than 5° from the Sun" describes the filter, not a sample near it.
+`docs/evidence/calc-sidereal-2026-10-05/` compares the same definitions near
+each star's conjunction with the Sun: within 0.0011″ a degree or more from
+the Sun (0.00101″ at its largest, 7.7° from it), and within 0.022″ inside a
+degree. The figures above are left as they were measured.

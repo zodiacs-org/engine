@@ -1,9 +1,10 @@
 /**
  * `@zodiacs/engine/calc`: one calculation API over the engine's positions,
- * houses, longitude crossings and charts. The four functions share one
- * vocabulary for instants, places, frames, centers and the zodiac; each result
- * carries a receipt that names its conventions by id; positions carry bounds;
- * and what this version does not compute comes back as a typed refusal.
+ * houses, longitude crossings and charts, in the tropical or the sidereal
+ * zodiac. The four functions share one vocabulary for instants, places,
+ * frames, centers and the zodiac; each result carries a receipt that names its
+ * conventions by id; positions carry bounds; and what this version does not
+ * compute comes back as a typed refusal.
  * Malformed input throws RangeError, as everywhere in the engine. The
  * repository's docs/calc.md is the reference.
  */
@@ -27,6 +28,7 @@ import type { CalcCorrection, CalcFrame, Vec3 } from "./calc-frames.js";
 import { BARYCENTRE_ERROR, geometricState, length, locate } from "./calc-reduce.js";
 import type { Center } from "./calc-reduce.js";
 import { searchLongitudeCrossingsWith } from "./crossings.js";
+import type { BodyLongitudeAt } from "./crossings.js";
 import { dateFrom } from "./date-input.js";
 import type { DeltaT } from "./deltat.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
@@ -39,6 +41,10 @@ import { elapsedDays, timeBasis } from "./time-scale.js";
 import type { TimeBasis, TimeScale, TimeScaleName } from "./time-scale.js";
 import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
 import type { Angles, BodyName, Chart, ChartFlag, ChartInput, HouseSystem } from "./types.js";
+import { AYANAMSA_BASIS, addBounds, ayanamsaBound } from "./calc-ayanamsa.js";
+import { AYANAMSAS, ayanamsaAt, outsideSpanEpoch, userAyanamsa } from "./vedic/ayanamsa.js";
+import type { AyanamsaDefinition } from "./vedic/ayanamsa.js";
+import { siderealChartOf, wholeSignCusps, wrap360 } from "./vedic/sidereal.js";
 
 export { CALC_FRAMES };
 export type { Angles, CalcCorrection, CalcFrame, Chart, ChartFlag, DeltaT, HouseSystem, TimeScale };
@@ -94,7 +100,7 @@ export interface CalcPlace {
 
 export type CalcCenter = "geocentric" | "heliocentric" | "barycentric" | { readonly topocentric: CalcPlace };
 
-/** Ayanamsa names for the sidereal zodiac, which calc refuses in this version: those of @zodiacs/engine/vedic. */
+/** The built-in ayanamsas, by name: those of @zodiacs/engine/vedic, whose guide (docs/vedic.md) defines each. */
 export type CalcAyanamsa =
   | "lahiri"
   | "fagan-bradley"
@@ -118,7 +124,49 @@ export const CALC_AYANAMSAS = [
   "galactic-center"
 ] as readonly CalcAyanamsa[];
 
-export type CalcZodiac = "tropical" | { readonly sidereal: CalcAyanamsa };
+/** The precession model a caller's ayanamsa was computed with: the engine's IAU 2006, Newcomb's (Kinoshita 1975) or IAU 1976. */
+export type CalcAyanamsaModel = "engine" | "newcomb" | "iau1976";
+
+/**
+ * A caller's ayanamsa, the counterpart of Swiss Ephemeris's SE_SIDM_USER: the
+ * mean ayanamsa `value` at `epoch`, carried from there by precession in
+ * `model`, or by a fixed `rate`. It is @zodiacs/engine/vedic's userAyanamsa
+ * in JSON, and is read the same way.
+ */
+export interface CalcUserAyanamsa {
+  /** A lowercase identifier of at most 64 characters that is not a built-in name; default "user". */
+  readonly name?: string;
+  /**
+   * When `value` holds, read as `time` is: `{ jd, scale: "TT" }` is
+   * SE_SIDM_USER's TT epoch, and `{ jd, scale: "UT1" }` its UT epoch
+   * (SE_SIDBIT_USER_UT), whose TT comes from the time basis.
+   */
+  readonly epoch: CalcTime;
+  /** The mean ayanamsa at `epoch`, degrees, from −360 to 360. */
+  readonly value: number;
+  /** Arcseconds per Julian year, from −3600 to 3600: an ayanamsa that grows by this rate, with no precession model. */
+  readonly rate?: number;
+  /** Without `rate`: the model `value` was computed with, default "engine". An older model's zodiac is held where that model puts it at J2000.0. */
+  readonly model?: CalcAyanamsaModel;
+}
+
+/**
+ * "tropical" (default), or `{ sidereal }` with a built-in ayanamsa's name or a
+ * caller's ayanamsa. A sidereal longitude is the longitude in the ecliptic of
+ * date less the ayanamsa: the true ayanamsa (the mean plus the nutation in
+ * longitude) in the true ecliptic of date, the mean ayanamsa in the mean one.
+ */
+export type CalcZodiac = "tropical" | { readonly sidereal: CalcAyanamsa | CalcUserAyanamsa };
+
+/** The ayanamsa a sidereal result subtracted. */
+export interface CalcAyanamsaValue {
+  /** The definition's name. */
+  readonly name: string;
+  /** In the units of `lon`: the true ayanamsa in the true ecliptic of date, the mean ayanamsa in the mean ecliptic of date. */
+  readonly value: number;
+  /** Its difference from ERFA's construction of the same definition. */
+  readonly bound: CalcBound;
+}
 
 export interface CalcFlags {
   /** Default "apparent". */
@@ -213,6 +261,9 @@ export interface CalcPosition {
     readonly vy: number | null;
     readonly vz: number | null;
   } | null;
+  /** In the sidereal zodiac, the ayanamsa subtracted from `lon`; null in the tropical zodiac. */
+  readonly ayanamsa: CalcAyanamsaValue | null;
+  /** In the sidereal zodiac, each includes the ayanamsa's own bound. */
   readonly bounds: CalcBounds;
   readonly receipt: CalcReceipt<CalcRequest>;
 }
@@ -334,18 +385,104 @@ function refuse(reason: "unsupported-combination" | "not-in-this-version", detai
   return { status: "refused", reason, detail };
 }
 
-function sidereal(value: unknown): CalcRefusal | null {
-  if (value === undefined || value === "tropical") return null;
-  const name = oneOf(fields(value, "zodiac", ["sidereal"]).sidereal, CALC_AYANAMSAS, "zodiac.sidereal");
-  return refuse("not-in-this-version", `The sidereal zodiac (${name}) is not in the calc entry in this version; @zodiacs/engine/vedic gives sidereal longitudes on this ayanamsa.`);
-}
-
 const outOfRange = (): CalcRefusal => ({
   status: "refused",
   reason: "out-of-range",
   detail: `The instant's UT1 or TT is outside ${CALC_SPAN.from} to ${CALC_SPAN.to}, where the engine's positions have been compared with an independent ephemeris.`,
   span: CALC_SPAN
 });
+
+// ---------------------------------------------------------------- the zodiac
+
+/** A request's zodiac as read. */
+interface Zodiac {
+  /** As the receipt records it, every default filled in. */
+  readonly record: CalcZodiac;
+  /** The ayanamsa; null in the tropical zodiac. */
+  readonly definition: AyanamsaDefinition | null;
+  /** Its convention ids. */
+  readonly ids: readonly string[];
+}
+
+const TROPICAL: Zodiac = { record: "tropical", definition: null, ids: ["zodiac:tropical"] };
+
+/** The TT Julian date of a caller's ayanamsa's epoch, read as an instant is read. */
+function epochTT(epoch: TimeInput, label: string): number {
+  const record = epoch.record;
+  if ("jd" in record && record.scale === "TT") return record.jd;
+  // The range of a Date, as userAyanamsa takes an epoch; the time basis reads any instant in it.
+  if (!(Math.abs(epoch.ms) <= 8.64e15)) throw new RangeError(`${label} must be an instant in the range of a Date.`);
+  return J2000_JD + timeBasis(epoch.ms, epoch.scale, epoch.pin).ttDays;
+}
+
+function readZodiac(value: unknown): Zodiac {
+  if (value === undefined || value === "tropical") return TROPICAL;
+  const sidereal = fields(value, "zodiac", ["sidereal"]).sidereal;
+  if (sidereal === undefined || typeof sidereal === "string") {
+    const name = oneOf(sidereal, CALC_AYANAMSAS, "zodiac.sidereal");
+    return { record: { sidereal: name }, definition: AYANAMSAS[name], ids: ["zodiac:sidereal", `ayanamsa:${name}`] };
+  }
+  const label = "zodiac.sidereal";
+  const given = fields(sidereal, label, ["name", "epoch", "value", "rate", "model"]);
+  if (given.name !== undefined && typeof given.name !== "string") throw new RangeError(`${label}.name must be a string.`);
+  const epoch = readTime(given.epoch, `${label}.epoch`);
+  const value_ = within(given.value, `${label}.value`, -360, 360);
+  if (given.rate !== undefined && given.model !== undefined) throw new RangeError(`${label} takes a rate or a model, not both.`);
+  const rate = given.rate === undefined ? undefined : within(given.rate, `${label}.rate`, -3600, 3600);
+  const model = given.model === undefined ? undefined : oneOf(given.model, ["engine", "newcomb", "iau1976"] as const, `${label}.model`);
+  // userAyanamsa checks the name, and the epoch's range.
+  const definition = userAyanamsa({
+    ...(given.name === undefined ? {} : { name: given.name }),
+    epoch: { julianDateTT: epochTT(epoch, `${label}.epoch`) },
+    value: value_,
+    ...(rate === undefined ? {} : { rate }),
+    ...(model === undefined ? {} : { model })
+  });
+  const user: CalcUserAyanamsa =
+    rate === undefined
+      ? { name: definition.name, epoch: epoch.record, value: value_, model: model ?? "engine" }
+      : { name: definition.name, epoch: epoch.record, value: value_, rate };
+  return { record: { sidereal: user }, definition, ids: ["zodiac:sidereal", `ayanamsa:user-${definition.kind}`] };
+}
+
+/** Out of range for an epoch definition whose epoch is outside the span, where the ayanamsas have been compared. */
+function epochRefusal(zodiac: Zodiac): CalcRefusal | null {
+  return zodiac.definition && outsideSpanEpoch(zodiac.definition)
+    ? {
+        status: "refused",
+        reason: "out-of-range",
+        detail: `The ayanamsa's epoch is outside ${CALC_SPAN.from} to ${CALC_SPAN.to}, where the ayanamsas have been compared with ERFA.`,
+        span: CALC_SPAN
+      }
+    : null;
+}
+
+/** A sidereal frame: the ecliptics of date, from whose equinox the ayanamsa is counted. */
+const siderealFrame = (frame: CalcFrame): boolean => frame === "ecliptic-true-of-date" || frame === "ecliptic-mean-of-date";
+
+function frameRefusal(zodiac: Zodiac, frame: CalcFrame): CalcRefusal | null {
+  return zodiac.definition && !siderealFrame(frame)
+    ? refuse(
+        "unsupported-combination",
+        `The sidereal zodiac is counted along the ecliptic of date; frame ${frame} is not offered with it, only ecliptic-true-of-date and ecliptic-mean-of-date.`
+      )
+    : null;
+}
+
+/** The ayanamsa's bound at an instant, as a result reports it. */
+function ayanamsaValue(definition: AyanamsaDefinition, value: number, elongation: number | null, k: number): CalcAyanamsaValue {
+  return {
+    name: definition.name,
+    value: value * k,
+    bound: { value: ayanamsaBound(definition, elongation).position, unit: "arcsec", label: "measured", basis: AYANAMSA_BASIS }
+  };
+}
+
+/** A bound with the ayanamsa's added, or the bound itself in the tropical zodiac. */
+function withAyanamsa(b: CalcBound, add: number | null): CalcBound {
+  if (add === null || b.value === null) return b;
+  return { ...b, value: addBounds(b.value, add), basis: `${b.basis}; plus the ayanamsa's, ${add} ${b.unit}: ${AYANAMSA_BASIS}` };
+}
 
 /**
  * The instant's time basis, as positions() and natalChart() build one
@@ -477,9 +614,48 @@ function evaluator(body: CalcBody, frame: CalcFrame, center: Center, correction:
   };
 }
 
+/** A vector turned about the pole of its ecliptic so that its longitude falls by `angle` degrees. */
+function turnedBack([x, y, z]: Vec3, angle: number): Vec3 {
+  const c = Math.cos(angle * DEG);
+  const s = Math.sin(angle * DEG);
+  return [x * c + y * s, y * c - x * s, z];
+}
+
+interface SiderealRow extends Row {
+  /** The ayanamsa subtracted, degrees. */
+  readonly ayanamsa: number;
+  /** A star definition's star's angle from the Sun, degrees; null for other definitions. */
+  readonly elongation: number | null;
+}
+
+/**
+ * `evaluate` in the sidereal zodiac: the longitude less the true ayanamsa in
+ * the true ecliptic of date, or the mean one in the mean ecliptic of date,
+ * subtracted as @zodiacs/engine/vedic's siderealLongitude subtracts it; the
+ * vector turned with it. The longitude a speed differences is turned too, so
+ * a speed is the sidereal longitude's.
+ */
+function siderealOf(evaluate: (at: AstroTime) => Row, definition: AyanamsaDefinition, frame: CalcFrame): (at: AstroTime) => SiderealRow {
+  const trueOfDate = frame === "ecliptic-true-of-date";
+  return (at) => {
+    const row = evaluate(at);
+    const value = ayanamsaAt(definition, at);
+    const subtracted = trueOfDate ? value.true : value.mean;
+    return {
+      lon: wrap360(wrap360(row.lon) - subtracted),
+      lat: row.lat,
+      dist: row.dist,
+      xyz: row.xyz && turnedBack(row.xyz, subtracted),
+      raw: row.raw - subtracted,
+      ayanamsa: subtracted,
+      elongation: value.elongation
+    };
+  };
+}
+
 /** The convention ids of a position; calc(), events() and chart() share them. */
-function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], correction: CalcCorrection): string[] {
-  const ids = ["zodiac:tropical", `frame:${frame}`, `center:${kind}`];
+function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], correction: CalcCorrection, zodiac: Zodiac): string[] {
+  const ids = [...zodiac.ids, `frame:${frame}`, `center:${kind}`];
   if (isPoint(body)) {
     ids.push("correction:not-applicable", body.endsWith("Lilith") ? "lilith:mean" : body.startsWith("Mean") ? "node:mean" : "node:true-osculating");
   } else {
@@ -554,10 +730,10 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     units: oneOf(given.units, ["degrees", "radians"] as const, "flags.units", "degrees"),
     deflection: yesNo(given.deflection, "flags.deflection", false)
   };
+  const zodiac = readZodiac(asked.zodiac);
   const point = isPoint(body);
   const kind = center.kind;
   const refusal =
-    sidereal(asked.zodiac) ??
     (flags.deflection
       ? refuse("not-in-this-version", "Gravitational light deflection is not modelled in this version.")
       : point && kind !== "geocentric"
@@ -568,11 +744,13 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
             ? refuse("unsupported-combination", "The Sun is the heliocentric origin.")
             : body === "Earth" && (kind === "geocentric" || kind === "topocentric")
               ? refuse("unsupported-combination", "The Earth is offered heliocentric or barycentric only.")
-              : null);
+              : frameRefusal(zodiac, frame)) ?? epochRefusal(zodiac);
   if (refusal) return refusal;
   const correction = flags.correction;
+  const definition = zodiac.definition;
   return inSpan(time, (basis): CalcPosition => {
-    const evaluate = evaluator(body, frame, center, correction);
+    const tropical = evaluator(body, frame, center, correction);
+    const evaluate = definition === null ? tropical : siderealOf(tropical, definition, frame);
     const now = onInput(time, time.ms, evaluate);
     const step = isTrueNode(body) ? NODE_STEP_DAYS : STEP_DAYS;
     const analytic = flags.speeds && correction === "geometric" && inertial(frame) && !point && body !== "Moon";
@@ -625,8 +803,12 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
       estimated = `the largest angle, relative distance and rate of direction that the error of astronomy-engine's barycentre, ${BARYCENTRE_ERROR.au.toExponential()} au and ${BARYCENTRE_ERROR.auPerDay.toExponential()} au/day from 1800 to 2200, allows at this distance and speed; docs/evidence/calc-api`;
     }
 
-    const ids = positionIds(body, frame, kind, correction);
+    const ids = positionIds(body, frame, kind, correction, zodiac);
     if (method) ids.push(method === "analytic" ? "speed:analytic" : `speed:central-difference-${step}d`);
+
+    // In the sidereal zodiac, the ayanamsa subtracted and its own bounds, at this instant.
+    const sidereal = definition === null ? null : (now as SiderealRow);
+    const added = sidereal && ayanamsaBound(definition!, sidereal.elongation);
 
     return {
       status: "ok",
@@ -640,13 +822,18 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
         flags.cartesian && now.xyz
           ? { x: now.xyz[0], y: now.xyz[1], z: now.xyz[2], vx: velocity?.[0] ?? null, vy: velocity?.[1] ?? null, vz: velocity?.[2] ?? null }
           : null,
+      ayanamsa: sidereal && ayanamsaValue(definition!, sidereal.ayanamsa, sidereal.elongation, k),
       bounds: {
-        position: bound(row?.[0], "arcsec", estimated),
+        position: withAyanamsa(bound(row?.[0], "arcsec", estimated), added && added.position),
         distance: point ? null : bound(row?.[1], "relative", estimated),
-        speed: method && { ...bound(row?.[2], "arcsec/day", estimated), method, stepDays: analytic ? null : step }
+        speed: method && {
+          ...withAyanamsa(bound(row?.[2], "arcsec/day", estimated), added && added.rate),
+          method,
+          stepDays: analytic ? null : step
+        }
       },
       receipt: receipt(
-        { body, time: time.record, frame, center: centerRecord, zodiac: "tropical", flags },
+        { body, time: time.record, frame, center: centerRecord, zodiac: zodiac.record, flags },
         [instant(basis)],
         ids,
         time.pin
@@ -670,8 +857,13 @@ export interface HousesResult {
   readonly requested: HouseSystem;
   /** The requested system, or whole sign where Placidus or Koch is undefined (flag "polar-fallback"). */
   readonly system: HouseSystem;
-  /** Twelve cusps from the first house, degrees in the true ecliptic of date. */
+  /**
+   * Twelve cusps from the first house, degrees in the true ecliptic of date,
+   * in the zodiac asked for; in the sidereal zodiac, whole-sign cusps start at
+   * the sidereal ascendant's sign.
+   */
   readonly cusps: readonly number[];
+  /** In the zodiac asked for, as the Vertex and the East Point are. */
   readonly angles: Angles;
   readonly vertex: number;
   readonly eastPoint: number;
@@ -680,6 +872,9 @@ export interface HousesResult {
   /** The true obliquity used, degrees. */
   readonly obliquity: number;
   readonly flags: readonly ChartFlag[];
+  /** In the sidereal zodiac, the true ayanamsa subtracted; null in the tropical zodiac. */
+  readonly ayanamsa: CalcAyanamsaValue | null;
+  /** In the sidereal zodiac, each includes the ayanamsa's own bound. */
   readonly bounds: { readonly angles: CalcBound; readonly cusps: CalcBound };
   readonly receipt: CalcReceipt<HousesRequest>;
 }
@@ -690,13 +885,26 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
   const time = readTime(asked.time, "time");
   const { latitude, longitude } = readPlace(asked.place, "place");
   const system = validateBirthSettings({ houseSystem: asked.system as HouseSystem }).houseSystem ?? "whole";
-  const refusal = sidereal(asked.zodiac);
+  const zodiac = readZodiac(asked.zodiac);
+  const refusal = epochRefusal(zodiac);
   if (refusal) return refusal;
+  const definition = zodiac.definition;
   return inSpan(time, (used): HousesResult => {
     // As natalChart(): the Earth's rotation from UT1, the true obliquity on TT.
-    const input = onInput(time, time.ms, (at) => ({ gastHours: gastHours(at), latitude, longitude, obliquity: tilt(at.tt).tobl }));
-    const angles = computeAngles(input);
-    const { houses: computed, fellBack } = computeHouses(system, input, angles);
+    const { input, value } = onInput(time, time.ms, (at) => ({
+      input: { gastHours: gastHours(at), latitude, longitude, obliquity: tilt(at.tt).tobl },
+      value: definition && ayanamsaAt(definition, at)
+    }));
+    const tropical = computeAngles(input);
+    const { houses: computed, fellBack } = computeHouses(system, input, tropical);
+    // In the sidereal zodiac, every longitude less the true ayanamsa, as siderealChart() takes it.
+    const zodiacal = value === null ? (lon: number) => lon : (lon: number) => wrap360(wrap360(lon) - value.true);
+    const angles: Angles =
+      value === null
+        ? tropical
+        : { asc: zodiacal(tropical.asc), mc: zodiacal(tropical.mc), dsc: zodiacal(tropical.dsc), ic: zodiacal(tropical.ic) };
+    const cusps = value === null ? computed.cusps : computed.system === "whole" ? wholeSignCusps(angles.asc) : computed.cusps.map(zodiacal);
+    const added = definition && value && ayanamsaBound(definition, value.elongation).position;
     // Conformance suite 0.1.0, level L2, for this engine: conformance/RESULTS.md.
     const basis = (what: string) =>
       `largest difference over the conformance suite's L2 ${what}, whose arbiter is ERFA with each system's definition`;
@@ -704,23 +912,27 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
       status: "ok",
       requested: system,
       system: computed.system,
-      cusps: computed.cusps,
+      cusps,
       angles,
       // Normalized once more, as chartPoints() reports them.
-      vertex: normalizeLongitude(vertexOf(input, angles)),
-      eastPoint: normalizeLongitude(eastPointOf(input)),
+      vertex: zodiacal(normalizeLongitude(vertexOf(input, tropical))),
+      eastPoint: zodiacal(normalizeLongitude(eastPointOf(input))),
       armc: ramcOf(input),
       obliquity: input.obliquity,
       flags: fellBack ? ["polar-fallback"] : [],
+      ayanamsa: value && ayanamsaValue(definition!, value.true, value.elongation, 1),
       bounds: {
-        angles: { value: 0.02, unit: "arcsec", label: "measured", basis: basis("vectors of the ascendant, midheaven, Vertex and East Point") },
-        cusps: { value: 0.08, unit: "arcsec", label: "measured", basis: basis("cusp vectors, thirteen systems") }
+        angles: withAyanamsa(
+          { value: 0.02, unit: "arcsec", label: "measured", basis: basis("vectors of the ascendant, midheaven, Vertex and East Point") },
+          added
+        ),
+        cusps: withAyanamsa({ value: 0.08, unit: "arcsec", label: "measured", basis: basis("cusp vectors, thirteen systems") }, added)
       },
       receipt: receipt(
-        { time: time.record, place: { latitude, longitude }, system, zodiac: "tropical" },
+        { time: time.record, place: { latitude, longitude }, system, zodiac: zodiac.record },
         [instant(used)],
         [
-          "zodiac:tropical",
+          ...zodiac.ids,
           `house:${system}`,
           ...(fellBack ? ["polar-fallback:whole"] : []),
           "angles:gast-and-true-obliquity",
@@ -740,7 +952,7 @@ export interface EventsRequest {
   /** The one kind in this version: the instants a body sits on a longitude. */
   readonly kind: "longitude-crossing";
   readonly body: CalcBody;
-  /** Apparent geocentric ecliptic longitude of date, degrees. */
+  /** Apparent geocentric ecliptic longitude of date, degrees, in the zodiac asked for. */
   readonly longitude: number;
   /** The search covers (from, to]. */
   readonly from: CalcTime;
@@ -786,14 +998,23 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
   const stepDays = asked.stepDays === undefined ? 5 : (asked.stepDays as number);
   const budget = asked.maxSamples === Infinity ? undefined : (asked.maxSamples as number | undefined);
   const limit = budget === undefined ? {} : { maxSamples: budget };
+  const zodiac = readZodiac(asked.zodiac);
   const refusal =
-    sidereal(asked.zodiac) ??
     (!CHART_BODIES.includes(body)
       ? refuse("unsupported-combination", `Crossings are searched for the bodies positions() gives; ${body} is not one.`)
       : from.pin !== undefined || to.pin !== undefined
         ? refuse("unsupported-combination", "Crossing searches run on the engine's ΔT model; a pinned ΔT is not offered.")
-        : null);
+        : null) ?? epochRefusal(zodiac);
   if (refusal) return refusal;
+  const definition = zodiac.definition;
+  // In the sidereal zodiac, each longitude less the true ayanamsa at its own instant and clock.
+  const longitudeAt: BodyLongitudeAt =
+    definition === null
+      ? bodyLongitude
+      : (b, date) => {
+          const tropical = bodyLongitude(b, date);
+          return wrap360(wrap360(tropical) - onChartClock(date.getTime(), "utc", undefined, (at) => ayanamsaAt(definition, at).true));
+        };
   const start = resolve(from);
   const end = resolve(to);
   if (start === null || end === null) return outOfRange();
@@ -801,7 +1022,7 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
     // The search runs on UTC instants, as searchLongitudeCrossings does.
     const dated = (basis: TimeBasis) => new Date(Math.round(basis.utcMs));
     const found = searchLongitudeCrossingsWith(
-      bodyLongitude,
+      longitudeAt,
       body as BodyName,
       longitude,
       dated(start),
@@ -825,13 +1046,15 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
           value: (stepDays * 86_400) / 2 ** 24,
           unit: "s",
           label: "estimated",
-          basis: "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it"
+          basis:
+            "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it" +
+            (definition === null ? "" : ", and in the sidereal zodiac the ayanamsa's")
         }
       },
       receipt: receipt(
-        { kind, body, longitude, from: from.record, to: to.record, zodiac: "tropical", stepDays, ...limit },
+        { kind, body, longitude, from: from.record, to: to.record, zodiac: zodiac.record, stepDays, ...limit },
         [instant(start), instant(end)],
-        [...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent"), "search:scan-and-bisect"]
+        [...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent", zodiac), "search:scan-and-bisect"]
       )
     };
   }
@@ -854,9 +1077,40 @@ export interface ChartRequest {
 
 export interface ChartResult {
   readonly status: "ok";
-  /** The chart natalChart() gives for the same instant (to the millisecond), place, settings and ΔT. */
+  /** The chart natalChart() gives for the same instant (to the millisecond), place, settings and ΔT: tropical. */
   readonly chart: Chart;
+  /** In the sidereal zodiac, the chart's longitudes as @zodiacs/engine/vedic's siderealChart() gives them; null in the tropical zodiac. */
+  readonly sidereal: CalcSiderealChart | null;
   readonly receipt: CalcReceipt<ChartRequest>;
+}
+
+/** A chart's sidereal longitudes, degrees in [0, 360), as siderealChart() gives them. */
+export interface CalcSiderealChart {
+  /** The ayanamsa at the chart's instant and on its clock: mean, the nutation in longitude, and true, the value subtracted. */
+  readonly ayanamsa: { readonly name: string; readonly mean: number; readonly nutation: number; readonly true: number };
+  /** The chart's bodies, in its order. */
+  readonly bodies: readonly { readonly body: BodyName; readonly lon: number }[];
+  /** Null when the chart has no angles. */
+  readonly ascendant: number | null;
+  readonly midheaven: number | null;
+  /** The house system as computed, after any polar fallback; null without houses. */
+  readonly houseSystem: HouseSystem | null;
+  /** First house first; whole-sign cusps start at the sidereal ascendant's sign. Null without houses. */
+  readonly cusps: readonly number[] | null;
+}
+
+/** siderealChart()'s longitudes of a computed chart, as plain numbers. */
+function siderealOfChart(computed: Chart, definition: AyanamsaDefinition): CalcSiderealChart {
+  const sidereal = siderealChartOf(computed, definition);
+  const value = sidereal.ayanamsaValue;
+  return {
+    ayanamsa: { name: value.ayanamsa, mean: value.mean, nutation: value.nutation, true: value.true },
+    bodies: sidereal.bodies.map(({ body, lon }) => ({ body, lon })),
+    ascendant: sidereal.ascendant === null ? null : sidereal.ascendant.lon,
+    midheaven: sidereal.midheaven === null ? null : sidereal.midheaven.lon,
+    houseSystem: sidereal.houseSystem,
+    cusps: sidereal.cusps === null ? null : sidereal.cusps.map((cusp) => cusp.lon)
+  };
 }
 
 /** A natal chart from the calc vocabulary: natalChart()'s chart, with a receipt. */
@@ -867,7 +1121,8 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
   const place = site === null ? null : { latitude: site.latitude, longitude: site.longitude };
   const settings = validateBirthSettings({ houseSystem: asked.houseSystem as HouseSystem, timeKnown: asked.timeKnown as boolean });
   const supplied = asked.timeFlags === undefined ? undefined : snapshotFlags(asked.timeFlags).values;
-  const refusal = sidereal(asked.zodiac);
+  const zodiac = readZodiac(asked.zodiac);
+  const refusal = epochRefusal(zodiac);
   if (refusal) return refusal;
   // natalChart() takes a Date, so a Julian date is read to the nearest millisecond on its scale.
   const whole: TimeInput = { ...time, ms: Math.round(time.ms) };
@@ -897,6 +1152,7 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
     return {
       status: "ok",
       chart: computed,
+      sidereal: zodiac.definition && siderealOfChart(computed, zodiac.definition),
       receipt: receipt(
         {
           time: time.record,
@@ -904,11 +1160,11 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
           houseSystem,
           timeKnown,
           ...(supplied && { timeFlags: supplied }),
-          zodiac: "tropical"
+          zodiac: zodiac.record
         },
         [used],
         [
-          "zodiac:tropical",
+          ...zodiac.ids,
           "frame:ecliptic-true-of-date",
           "center:geocentric",
           "correction:apparent",

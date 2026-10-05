@@ -303,7 +303,13 @@ for (const name of ["calc", "houses", "events", "chart"]) {
 const sun = calc.calc({ body: "Sun", time: "2020-01-01" });
 assert.equal(sun.status, "ok");
 assert.equal(sun.lon, engine.positions("2020-01-01")[0].lon);
-assert.equal(calc.calc({ body: "Moon", time: "2020-01-01", zodiac: { sidereal: "lahiri" } }).reason, "not-in-this-version");
+// The sidereal zodiac: the Vedic entry's sidereal longitude, to the bit.
+const siderealMoon = calc.calc({ body: "Moon", time: "2020-01-01", zodiac: { sidereal: "lahiri" } });
+assert.equal(siderealMoon.status, "ok");
+assert.equal(
+  siderealMoon.lon,
+  vedic.siderealLongitude(engine.positions("2020-01-01")[1].lon, vedic.ayanamsa("lahiri", "2020-01-01")).lon
+);
 
 // Birth-time windows are their own entry, so the root entry does not grow.
 assert.equal(typeof window.birthWindow, "function", "missing window export: birthWindow");

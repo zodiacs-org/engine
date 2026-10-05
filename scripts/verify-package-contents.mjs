@@ -103,8 +103,13 @@ const ENTRY_BUDGETS = {
   // rc.15's time basis, 34,449 of them beyond the core's graph; 7.69 per cent
   // of headroom. With the nutation, and its frames of date (src/equator.ts)
   // and topocentric observer on it, 113,904: 0.96 per cent, not raised
-  // (docs/evidence/rc16-20260930/sizes.json).
-  "./calc": 115_000,
+  // (docs/evidence/rc16-20260930/sizes.json). rc.17: 138,580, raised from
+  // 115,000 for the sidereal zodiac, which imports the Vedic entry's
+  // ayanamsas, with their star catalogue and apparent places, and its
+  // sidereal charts: 17,411 bytes in a chunk the two entries share and 7,265
+  // in calc.js (docs/evidence/calc-sidereal-2026-10-05/); 4.99 per cent of
+  // headroom.
+  "./calc": 145_500,
   "./crossings": 10_000, // rc.15: 9,410
   "./deltat": 5_500, // rc.15: 4,968
   // rc.15: 31,672, the zone histories not included (below). With ./techniques

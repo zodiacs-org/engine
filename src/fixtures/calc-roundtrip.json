@@ -20,6 +20,7 @@
      "dist": -0.003813886306325287
     },
     "cartesian": null,
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 6.6,
@@ -149,6 +150,7 @@
      "vy": -0.000363773394795007,
      "vz": -0.00016801459090892788
     },
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 8.3,
@@ -268,6 +270,7 @@
      "vy": -0.012232915925947108,
      "vz": -0.0000027775348410277257
     },
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 3,
@@ -393,6 +396,7 @@
      "vy": 0.009897347241882848,
      "vz": 0.005446847880008487
     },
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 11,
@@ -514,6 +518,7 @@
      "dist": null
     },
     "cartesian": null,
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 0.0023,
@@ -629,6 +634,7 @@
      "vy": -0.0031267976887683346,
      "vz": -0.0010860278394364542
     },
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 18,
@@ -744,6 +750,7 @@
      "vy": 0.014781745681716658,
      "vz": 0.00015166917595376642
     },
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 13,
@@ -869,6 +876,7 @@
      "vy": 0.005002000811771268,
      "vz": 0.0014807974597630391
     },
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 25,
@@ -978,6 +986,7 @@
      "dist": null
     },
     "cartesian": null,
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 16,
@@ -1093,6 +1102,7 @@
      "vy": 0.020010053674940353,
      "vz": 0.0040586766258666985
     },
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 23,
@@ -1218,6 +1228,7 @@
      "vy": 0.003023096874499309,
      "vz": 0.00002619658634461108
     },
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 3,
@@ -1341,6 +1352,7 @@
      "vy": null,
      "vz": null
     },
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 19,
@@ -1447,6 +1459,7 @@
      "dist": null
     },
     "cartesian": null,
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 0.0023,
@@ -1565,6 +1578,7 @@
      "vy": -0.0092536612805727,
      "vz": -0.00006460430568289155
     },
+    "ayanamsa": null,
     "bounds": {
      "position": {
       "value": 21,
@@ -1665,9 +1679,122 @@
     }
    },
    "result": {
-    "status": "refused",
-    "reason": "not-in-this-version",
-    "detail": "The sidereal zodiac (lahiri) is not in the calc entry in this version; @zodiacs/engine/vedic gives sidereal longitudes on this ayanamsa."
+    "status": "ok",
+    "body": "Moon",
+    "frame": "ecliptic-true-of-date",
+    "lon": 193.44026021358079,
+    "lat": 5.231366335062896,
+    "dist": 0.0026800028065764652,
+    "speeds": {
+     "lon": 12.103188055235137,
+     "lat": -0.06366097565146944,
+     "dist": 0.0000220273514040404
+    },
+    "cartesian": null,
+    "ayanamsa": {
+     "name": "lahiri",
+     "value": 23.85320345531025,
+     "bound": {
+      "value": 4.4e-7,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     }
+    },
+    "bounds": {
+     "position": {
+      "value": 8.300000441,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.4e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     },
+     "distance": {
+      "value": 0.00014,
+      "unit": "relative",
+      "label": "measured",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+     },
+     "speed": {
+      "value": 1.100000007,
+      "unit": "arcsec/day",
+      "label": "measured",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 6.4e-9 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "method": "central-difference",
+      "stepDays": 0.001
+     }
+    },
+    "receipt": {
+     "schema": "zodiacs.calc-receipt.draft-v1",
+     "request": {
+      "body": "Moon",
+      "time": {
+       "iso": "2000-01-01T00:00:00Z"
+      },
+      "frame": "ecliptic-true-of-date",
+      "center": "geocentric",
+      "zodiac": {
+       "sidereal": "lahiri"
+      },
+      "flags": {
+       "correction": "apparent",
+       "speeds": true,
+       "cartesian": false,
+       "units": "degrees",
+       "deflection": false
+      }
+     },
+     "instants": [
+      {
+       "utc": "2000-01-01T00:00:00.000Z",
+       "jdUt1": 2451544.50000412,
+       "jdTt": 2451544.5007428704,
+       "deltaT": {
+        "seconds": 63.828,
+        "sigma": 0.000827,
+        "model": "iers-utc/1",
+        "table": "2026-09-24",
+        "tableDigest": "064d98b4a531053a",
+        "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": 0.35600000000000165,
+         "sigma": 0.000827,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 32,
+         "listed": true
+        }
+       }
+      }
+     ],
+     "conventions": [
+      "zodiac:sidereal",
+      "ayanamsa:lahiri",
+      "frame:ecliptic-true-of-date",
+      "center:geocentric",
+      "correction:apparent",
+      "moon:series-at-instant",
+      "precession:iau2006",
+      "nutation:iau2000b",
+      "obliquity:iau2006",
+      "speed:central-difference-0.001d",
+      "ephemeris:astronomy-engine@2.1.19",
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+     ],
+     "engine": {
+      "name": "@zodiacs/engine",
+      "version": "0.1.1-rc.16",
+      "ephemeris": {
+       "name": "astronomy-engine",
+       "version": "2.1.19"
+      }
+     }
+    }
    }
   },
   {
@@ -1812,6 +1939,7 @@
     "armc": 191.2721913403492,
     "obliquity": 23.437883140687056,
     "flags": [],
+    "ayanamsa": null,
     "bounds": {
      "angles": {
       "value": 0.02,
@@ -2030,6 +2158,1928 @@
     "detail": "The search needs more than 10 evaluations.",
     "samples": 0,
     "maxSamples": 10
+   }
+  },
+  {
+   "function": "calc",
+   "request": {
+    "body": "Saturn",
+    "time": "1923-05-06T07:00:00Z",
+    "frame": "ecliptic-mean-of-date",
+    "zodiac": {
+     "sidereal": {
+      "name": "fixture-user",
+      "epoch": {
+       "jd": 2433282.5,
+       "scale": "TT"
+      },
+      "value": 23.15
+     }
+    },
+    "flags": {
+     "cartesian": true
+    }
+   },
+   "result": {
+    "status": "ok",
+    "body": "Saturn",
+    "frame": "ecliptic-mean-of-date",
+    "lon": 171.94253530655143,
+    "lat": 2.730449761932382,
+    "dist": 8.774775214115875,
+    "speeds": {
+     "lon": -0.06130560184658407,
+     "lat": -0.0023546375975680434,
+     "dist": 0.008300858666210331
+    },
+    "cartesian": {
+     "x": -8.678286857987642,
+     "y": 1.2285307208868184,
+     "z": 0.41800662264923194,
+     "vx": -0.006912081481402765,
+     "vy": 0.010450220196078774,
+     "vz": 0.00003523018626827579
+    },
+    "ayanamsa": {
+     "name": "fixture-user",
+     "value": 22.777726156966686,
+     "bound": {
+      "value": 4.4e-7,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     }
+    },
+    "bounds": {
+     "position": {
+      "value": 18.00000044,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.4e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     },
+     "distance": {
+      "value": 0.000068,
+      "unit": "relative",
+      "label": "measured",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+     },
+     "speed": {
+      "value": 0.030000007,
+      "unit": "arcsec/day",
+      "label": "measured",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 6.4e-9 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "method": "central-difference",
+      "stepDays": 0.001
+     }
+    },
+    "receipt": {
+     "schema": "zodiacs.calc-receipt.draft-v1",
+     "request": {
+      "body": "Saturn",
+      "time": {
+       "iso": "1923-05-06T07:00:00Z"
+      },
+      "frame": "ecliptic-mean-of-date",
+      "center": "geocentric",
+      "zodiac": {
+       "sidereal": {
+        "name": "fixture-user",
+        "epoch": {
+         "jd": 2433282.5,
+         "scale": "TT"
+        },
+        "value": 23.15,
+        "model": "engine"
+       }
+      },
+      "flags": {
+       "correction": "apparent",
+       "speeds": true,
+       "cartesian": true,
+       "units": "degrees",
+       "deflection": false
+      }
+     },
+     "instants": [
+      {
+       "utc": "1923-05-06T07:00:00.000Z",
+       "jdUt1": 2423545.7916666665,
+       "jdTt": 2423545.791935844,
+       "deltaT": {
+        "seconds": 23.25689268784975,
+        "sigma": 0.46,
+        "model": "zodiacs-deltat/1",
+        "table": "2026-09-24",
+        "tableDigest": "6371988c510a1c6c",
+        "segment": "reconstructed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": null,
+        "leapSeconds": null
+       }
+      }
+     ],
+     "conventions": [
+      "zodiac:sidereal",
+      "ayanamsa:user-epoch",
+      "frame:ecliptic-mean-of-date",
+      "center:geocentric",
+      "correction:apparent",
+      "light-time:newtonian",
+      "deflection:none",
+      "aberration:backdated-observer",
+      "precession:iau2006",
+      "obliquity:iau2006",
+      "speed:central-difference-0.001d",
+      "ephemeris:astronomy-engine@2.1.19",
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+     ],
+     "engine": {
+      "name": "@zodiacs/engine",
+      "version": "0.1.1-rc.16",
+      "ephemeris": {
+       "name": "astronomy-engine",
+       "version": "2.1.19"
+      }
+     }
+    }
+   }
+  },
+  {
+   "function": "calc",
+   "request": {
+    "body": "Mean Node",
+    "time": "2077-09-01T00:00:00Z",
+    "zodiac": {
+     "sidereal": "true-chitra"
+    }
+   },
+   "result": {
+    "status": "ok",
+    "body": "Mean Node",
+    "frame": "ecliptic-true-of-date",
+    "lon": 37.958306259282395,
+    "lat": 0,
+    "dist": null,
+    "speeds": {
+     "lon": -0.05292371075782398,
+     "lat": 0,
+     "dist": null
+    },
+    "cartesian": null,
+    "ayanamsa": {
+     "name": "true-chitra",
+     "value": 24.917577097275156,
+     "bound": {
+      "value": 0.0011,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     }
+    },
+    "bounds": {
+     "position": {
+      "value": 0.0034,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.0011 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     },
+     "distance": null,
+     "speed": {
+      "value": 0.0012,
+      "unit": "arcsec/day",
+      "label": "measured",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.00039 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "method": "central-difference",
+      "stepDays": 0.001
+     }
+    },
+    "receipt": {
+     "schema": "zodiacs.calc-receipt.draft-v1",
+     "request": {
+      "body": "Mean Node",
+      "time": {
+       "iso": "2077-09-01T00:00:00Z"
+      },
+      "frame": "ecliptic-true-of-date",
+      "center": "geocentric",
+      "zodiac": {
+       "sidereal": "true-chitra"
+      },
+      "flags": {
+       "correction": "apparent",
+       "speeds": true,
+       "cartesian": false,
+       "units": "degrees",
+       "deflection": false
+      }
+     },
+     "instants": [
+      {
+       "utc": "2077-09-01T00:00:00.000Z",
+       "jdUt1": 2479912.5,
+       "jdTt": 2479912.500864017,
+       "deltaT": {
+        "seconds": 74.65106215320853,
+        "sigma": 28.76673867570166,
+        "model": "zodiacs-deltat/1",
+        "table": "2026-09-24",
+        "tableDigest": "6371988c510a1c6c",
+        "segment": "extrapolated"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": {
+         "seconds": 0,
+         "sigma": 0.9,
+         "source": "fallback"
+        },
+        "leapSeconds": null
+       }
+      }
+     ],
+     "conventions": [
+      "zodiac:sidereal",
+      "ayanamsa:true-chitra",
+      "frame:ecliptic-true-of-date",
+      "center:geocentric",
+      "correction:not-applicable",
+      "node:mean",
+      "precession:iau2006",
+      "nutation:iau2000b",
+      "obliquity:iau2006",
+      "speed:central-difference-0.001d",
+      "ephemeris:astronomy-engine@2.1.19",
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+     ],
+     "engine": {
+      "name": "@zodiacs/engine",
+      "version": "0.1.1-rc.16",
+      "ephemeris": {
+       "name": "astronomy-engine",
+       "version": "2.1.19"
+      }
+     }
+    }
+   }
+  },
+  {
+   "function": "calc",
+   "request": {
+    "body": "Venus",
+    "time": {
+     "jd": 2460000.5,
+     "scale": "UT1"
+    },
+    "zodiac": {
+     "sidereal": {
+      "epoch": "2000-01-01T12:00:00Z",
+      "value": 23.9,
+      "rate": 50.29
+     }
+    },
+    "flags": {
+     "units": "radians"
+    }
+   },
+   "result": {
+    "status": "ok",
+    "body": "Venus",
+    "frame": "ecliptic-true-of-date",
+    "lon": 5.960595037743434,
+    "lat": -0.014701389971588581,
+    "dist": 1.3919454674204936,
+    "speeds": {
+     "lon": 0.021411796157840224,
+     "lat": 0.0007066559042853944,
+     "dist": -0.00499794343300497
+    },
+    "cartesian": null,
+    "ayanamsa": {
+     "name": "user",
+     "value": 0.4227329677024957,
+     "bound": {
+      "value": 4.4e-7,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     }
+    },
+    "bounds": {
+     "position": {
+      "value": 11.00000044,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.4e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     },
+     "distance": {
+      "value": 0.000032,
+      "unit": "relative",
+      "label": "measured",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+     },
+     "speed": {
+      "value": 0.640000007,
+      "unit": "arcsec/day",
+      "label": "measured",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 6.4e-9 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "method": "central-difference",
+      "stepDays": 0.001
+     }
+    },
+    "receipt": {
+     "schema": "zodiacs.calc-receipt.draft-v1",
+     "request": {
+      "body": "Venus",
+      "time": {
+       "jd": 2460000.5,
+       "scale": "UT1"
+      },
+      "frame": "ecliptic-true-of-date",
+      "center": "geocentric",
+      "zodiac": {
+       "sidereal": {
+        "name": "user",
+        "epoch": {
+         "iso": "2000-01-01T12:00:00Z"
+        },
+        "value": 23.9,
+        "rate": 50.29
+       }
+      },
+      "flags": {
+       "correction": "apparent",
+       "speeds": true,
+       "cartesian": false,
+       "units": "radians",
+       "deflection": false
+      }
+     },
+     "instants": [
+      {
+       "utc": "2023-02-25T00:00:00.015Z",
+       "jdUt1": 2460000.5,
+       "jdTt": 2460000.5008009183,
+       "deltaT": {
+        "seconds": 69.19933325195312,
+        "sigma": 0.000811,
+        "model": "iers-utc/1",
+        "table": "2026-09-24",
+        "tableDigest": "064d98b4a531053a",
+        "segment": "observed"
+       },
+       "timeScale": {
+        "input": "ut1",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": -0.015333251953125,
+         "sigma": 0.000811,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": true
+        }
+       }
+      }
+     ],
+     "conventions": [
+      "zodiac:sidereal",
+      "ayanamsa:user-linear",
+      "frame:ecliptic-true-of-date",
+      "center:geocentric",
+      "correction:apparent",
+      "light-time:newtonian",
+      "deflection:none",
+      "aberration:backdated-observer",
+      "precession:iau2006",
+      "nutation:iau2000b",
+      "obliquity:iau2006",
+      "speed:central-difference-0.001d",
+      "ephemeris:astronomy-engine@2.1.19",
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+     ],
+     "engine": {
+      "name": "@zodiacs/engine",
+      "version": "0.1.1-rc.16",
+      "ephemeris": {
+       "name": "astronomy-engine",
+       "version": "2.1.19"
+      }
+     }
+    }
+   }
+  },
+  {
+   "function": "calc",
+   "request": {
+    "body": "Mars",
+    "time": "2000-01-01T00:00:00Z",
+    "frame": "equatorial-true-of-date",
+    "zodiac": {
+     "sidereal": "lahiri"
+    }
+   },
+   "result": {
+    "status": "refused",
+    "reason": "unsupported-combination",
+    "detail": "The sidereal zodiac is counted along the ecliptic of date; frame equatorial-true-of-date is not offered with it, only ecliptic-true-of-date and ecliptic-mean-of-date."
+   }
+  },
+  {
+   "function": "calc",
+   "request": {
+    "body": "Mars",
+    "time": "2000-01-01T00:00:00Z",
+    "zodiac": {
+     "sidereal": {
+      "epoch": {
+       "jd": 2000000.5,
+       "scale": "TT"
+      },
+      "value": 18
+     }
+    }
+   },
+   "result": {
+    "status": "refused",
+    "reason": "out-of-range",
+    "detail": "The ayanamsa's epoch is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the ayanamsas have been compared with ERFA.",
+    "span": {
+     "from": "1800-01-01T00:00:00.000Z",
+     "to": "2200-01-01T00:00:00.000Z"
+    }
+   }
+  },
+  {
+   "function": "houses",
+   "request": {
+    "time": "1950-06-07T08:09:10Z",
+    "place": {
+     "latitude": 13,
+     "longitude": 80
+    },
+    "system": "whole",
+    "zodiac": {
+     "sidereal": "krishnamurti"
+    }
+   },
+   "result": {
+    "status": "ok",
+    "requested": "whole",
+    "system": "whole",
+    "cusps": [
+     150,
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120
+    ],
+    "angles": {
+     "asc": 164.30758711810023,
+     "mc": 73.7720102960302,
+     "dsc": 344.30758711810023,
+     "ic": 253.7720102960302
+    },
+    "vertex": 327.8826470858603,
+    "eastPoint": 165.04291780023414,
+    "armc": 97.44849781601903,
+    "obliquity": 23.448143727356054,
+    "flags": [],
+    "ayanamsa": {
+     "name": "krishnamurti",
+     "value": 23.067479464167487,
+     "bound": {
+      "value": 4.4e-7,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     }
+    },
+    "bounds": {
+     "angles": {
+      "value": 0.02000044,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference over the conformance suite's L2 vectors of the ascendant, midheaven, Vertex and East Point, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 4.4e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     },
+     "cusps": {
+      "value": 0.08000044,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 4.4e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     }
+    },
+    "receipt": {
+     "schema": "zodiacs.calc-receipt.draft-v1",
+     "request": {
+      "time": {
+       "iso": "1950-06-07T08:09:10Z"
+      },
+      "place": {
+       "latitude": 13,
+       "longitude": 80
+      },
+      "system": "whole",
+      "zodiac": {
+       "sidereal": "krishnamurti"
+      }
+     },
+     "instants": [
+      {
+       "utc": "1950-06-07T08:09:10.000Z",
+       "jdUt1": 2433439.839699074,
+       "jdTt": 2433439.8400385524,
+       "deltaT": {
+        "seconds": 29.33092449996194,
+        "sigma": 0.46,
+        "model": "zodiacs-deltat/1",
+        "table": "2026-09-24",
+        "tableDigest": "6371988c510a1c6c",
+        "segment": "reconstructed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": null,
+        "leapSeconds": null
+       }
+      }
+     ],
+     "conventions": [
+      "zodiac:sidereal",
+      "ayanamsa:krishnamurti",
+      "house:whole",
+      "angles:gast-and-true-obliquity",
+      "sidereal-time:gast-iau2006-era",
+      "nutation:iau2000b",
+      "obliquity:iau2006",
+      "ephemeris:astronomy-engine@2.1.19",
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+     ],
+     "engine": {
+      "name": "@zodiacs/engine",
+      "version": "0.1.1-rc.16",
+      "ephemeris": {
+       "name": "astronomy-engine",
+       "version": "2.1.19"
+      }
+     }
+    }
+   }
+  },
+  {
+   "function": "houses",
+   "request": {
+    "time": "2133-10-11T12:13:14Z",
+    "place": {
+     "latitude": -36.8,
+     "longitude": 174.7
+    },
+    "system": "placidus",
+    "zodiac": {
+     "sidereal": "galactic-center"
+    }
+   },
+   "result": {
+    "status": "ok",
+    "requested": "placidus",
+    "system": "placidus",
+    "cusps": [
+     60.6261450030832,
+     97.29185115249771,
+     136.91785559816333,
+     170.98852390230934,
+     197.61292927419947,
+     219.67577349778435,
+     240.62614500308325,
+     277.29185115249777,
+     316.9178555981633,
+     350.9885239023093,
+     17.612929274199537,
+     39.675773497784355
+    ],
+    "angles": {
+     "asc": 60.6261450030832,
+     "mc": 350.9885239023093,
+     "dsc": 240.62614500308325,
+     "ic": 170.98852390230934
+    },
+    "vertex": 282.0090950067896,
+    "eastPoint": 78.06464477895213,
+    "armc": 18.19068480449107,
+    "obliquity": 23.423405660773263,
+    "flags": [],
+    "ayanamsa": {
+     "name": "galactic-center",
+     "value": 28.714659087099214,
+     "bound": {
+      "value": 0.0011,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     }
+    },
+    "bounds": {
+     "angles": {
+      "value": 0.0211,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference over the conformance suite's L2 vectors of the ascendant, midheaven, Vertex and East Point, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 0.0011 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     },
+     "cusps": {
+      "value": 0.0811,
+      "unit": "arcsec",
+      "label": "measured",
+      "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 0.0011 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+     }
+    },
+    "receipt": {
+     "schema": "zodiacs.calc-receipt.draft-v1",
+     "request": {
+      "time": {
+       "iso": "2133-10-11T12:13:14Z"
+      },
+      "place": {
+       "latitude": -36.8,
+       "longitude": 174.7
+      },
+      "system": "placidus",
+      "zodiac": {
+       "sidereal": "galactic-center"
+      }
+     },
+     "instants": [
+      {
+       "utc": "2133-10-11T12:13:14.000Z",
+       "jdUt1": 2500406.009189815,
+       "jdTt": 2500406.0102224117,
+       "deltaT": {
+        "seconds": 89.21635329211125,
+        "sigma": 62.99272253822595,
+        "model": "zodiacs-deltat/1",
+        "table": "2026-09-24",
+        "tableDigest": "6371988c510a1c6c",
+        "segment": "extrapolated"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "delta-t",
+        "ut1MinusUtc": {
+         "seconds": 0,
+         "sigma": 0.9,
+         "source": "fallback"
+        },
+        "leapSeconds": null
+       }
+      }
+     ],
+     "conventions": [
+      "zodiac:sidereal",
+      "ayanamsa:galactic-center",
+      "house:placidus",
+      "angles:gast-and-true-obliquity",
+      "sidereal-time:gast-iau2006-era",
+      "nutation:iau2000b",
+      "obliquity:iau2006",
+      "ephemeris:astronomy-engine@2.1.19",
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+     ],
+     "engine": {
+      "name": "@zodiacs/engine",
+      "version": "0.1.1-rc.16",
+      "ephemeris": {
+       "name": "astronomy-engine",
+       "version": "2.1.19"
+      }
+     }
+    }
+   }
+  },
+  {
+   "function": "events",
+   "request": {
+    "kind": "longitude-crossing",
+    "body": "Moon",
+    "longitude": 0,
+    "from": "2026-01-01",
+    "to": "2026-03-01",
+    "zodiac": {
+     "sidereal": "lahiri"
+    }
+   },
+   "result": {
+    "status": "ok",
+    "kind": "longitude-crossing",
+    "events": [
+     {
+      "at": "2026-01-25T08:05:56.475Z",
+      "jdUt1": 2461065.8374600294,
+      "jdTt": 2461065.838259942,
+      "retrograde": false
+     },
+     {
+      "at": "2026-02-21T13:37:15.522Z",
+      "jdUt1": 2461093.067541545,
+      "jdTt": 2461093.068341505,
+      "retrograde": false
+     }
+    ],
+    "samples": 61,
+    "bounds": {
+     "timing": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "receipt": {
+     "schema": "zodiacs.calc-receipt.draft-v1",
+     "request": {
+      "kind": "longitude-crossing",
+      "body": "Moon",
+      "longitude": 0,
+      "from": {
+       "iso": "2026-01-01"
+      },
+      "to": {
+       "iso": "2026-03-01"
+      },
+      "zodiac": {
+       "sidereal": "lahiri"
+      },
+      "stepDays": 5
+     },
+     "instants": [
+      {
+       "utc": "2026-01-01T00:00:00.000Z",
+       "jdUt1": 2461041.5000008564,
+       "jdTt": 2461041.500800741,
+       "deltaT": {
+        "seconds": 69.11,
+        "sigma": 0.000817,
+        "model": "iers-utc/1",
+        "table": "2026-09-24",
+        "tableDigest": "064d98b4a531053a",
+        "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": 0.07399999999999807,
+         "sigma": 0.000817,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": true
+        }
+       }
+      },
+      {
+       "utc": "2026-03-01T00:00:00.000Z",
+       "jdUt1": 2461100.5000007753,
+       "jdTt": 2461100.500800741,
+       "deltaT": {
+        "seconds": 69.117,
+        "sigma": 0.000817,
+        "model": "iers-utc/1",
+        "table": "2026-09-24",
+        "tableDigest": "064d98b4a531053a",
+        "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": 0.06700000000000017,
+         "sigma": 0.000817,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": true
+        }
+       }
+      }
+     ],
+     "conventions": [
+      "zodiac:sidereal",
+      "ayanamsa:lahiri",
+      "frame:ecliptic-true-of-date",
+      "center:geocentric",
+      "correction:apparent",
+      "moon:series-at-instant",
+      "precession:iau2006",
+      "nutation:iau2000b",
+      "obliquity:iau2006",
+      "search:scan-and-bisect",
+      "ephemeris:astronomy-engine@2.1.19",
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+     ],
+     "engine": {
+      "name": "@zodiacs/engine",
+      "version": "0.1.1-rc.16",
+      "ephemeris": {
+       "name": "astronomy-engine",
+       "version": "2.1.19"
+      }
+     }
+    }
+   }
+  },
+  {
+   "function": "chart",
+   "request": {
+    "time": "1991-02-03T04:05:00Z",
+    "place": {
+     "latitude": 52,
+     "longitude": 5
+    },
+    "houseSystem": "koch"
+   },
+   "result": {
+    "status": "ok",
+    "chart": {
+     "input": {
+      "utc": "1991-02-03T04:05:00.000Z",
+      "houseSystem": "koch",
+      "timeKnown": true,
+      "latitude": 52,
+      "longitude": 5
+     },
+     "bodies": [
+      {
+       "body": "Sun",
+       "lon": 313.8145323123739,
+       "lat": -0.000011117709912775589,
+       "speed": 1.0142025214463501,
+       "retrograde": false,
+       "sign": "aquarius",
+       "degree": 13.814532312373899
+      },
+      {
+       "body": "Moon",
+       "lon": 184.44370582880475,
+       "lat": -4.834761370703018,
+       "speed": 13.181034408717096,
+       "retrograde": false,
+       "sign": "libra",
+       "degree": 4.443705828804696
+      },
+      {
+       "body": "Mercury",
+       "lon": 295.84278178063784,
+       "lat": -1.1486621855228174,
+       "speed": 1.4873373502553022,
+       "retrograde": false,
+       "sign": "capricorn",
+       "degree": 25.84278178063778
+      },
+      {
+       "body": "Venus",
+       "lon": 336.1935504793711,
+       "lat": -1.5036860119116682,
+       "speed": 1.2444120250449942,
+       "retrograde": false,
+       "sign": "pisces",
+       "degree": 6.193550479371083
+      },
+      {
+       "body": "Mars",
+       "lon": 63.574200954052344,
+       "lat": 2.3381478744906863,
+       "speed": 0.32089397856793767,
+       "retrograde": false,
+       "sign": "gemini",
+       "degree": 3.574200954052344
+      },
+      {
+       "body": "Jupiter",
+       "lon": 127.89964129946475,
+       "lat": 0.7671276313579903,
+       "speed": -0.13231639161404019,
+       "retrograde": true,
+       "sign": "leo",
+       "degree": 7.899641299464747
+      },
+      {
+       "body": "Saturn",
+       "lon": 299.5805870770136,
+       "lat": -0.18294558762658597,
+       "speed": 0.1165775042579753,
+       "retrograde": false,
+       "sign": "capricorn",
+       "degree": 29.58058707701366
+      },
+      {
+       "body": "Uranus",
+       "lon": 281.6387301431133,
+       "lat": -0.3279391359243826,
+       "speed": 0.05292307616855396,
+       "retrograde": false,
+       "sign": "capricorn",
+       "degree": 11.638730143113321
+      },
+      {
+       "body": "Neptune",
+       "lon": 285.3390850242705,
+       "lat": 0.7889898179997695,
+       "speed": 0.03423317937745196,
+       "retrograde": false,
+       "sign": "capricorn",
+       "degree": 15.339085024270503
+      },
+      {
+       "body": "Pluto",
+       "lon": 230.27106025164545,
+       "lat": 15.166684984824366,
+       "speed": 0.011285587305565059,
+       "retrograde": false,
+       "sign": "scorpio",
+       "degree": 20.271060251645395
+      },
+      {
+       "body": "North Node",
+       "lon": 297.9452479262924,
+       "lat": 0,
+       "speed": -0.03638443356578591,
+       "retrograde": true,
+       "sign": "capricorn",
+       "degree": 27.94524792629238
+      },
+      {
+       "body": "South Node",
+       "lon": 117.94524792629238,
+       "lat": 0,
+       "speed": -0.03638443356578591,
+       "retrograde": true,
+       "sign": "cancer",
+       "degree": 27.94524792629238
+      }
+     ],
+     "angles": {
+      "asc": 257.52650548006653,
+      "mc": 200.67327578845365,
+      "dsc": 77.52650548006653,
+      "ic": 20.67327578845368
+     },
+     "houses": {
+      "system": "koch",
+      "cusps": [
+       257.5265054800666,
+       281.82163325560043,
+       319.8544996958649,
+       20.67327578845368,
+       39.090660814942,
+       57.66935856921009,
+       77.52650548006653,
+       101.82163325560043,
+       139.85449969586483,
+       200.67327578845368,
+       219.090660814942,
+       237.6693585692101
+      ]
+     },
+     "aspects": [
+      {
+       "a": "Moon",
+       "b": "Mars",
+       "type": "trine",
+       "orb": 0.8695048747524083,
+       "applying": false
+      },
+      {
+       "a": "Venus",
+       "b": "Mars",
+       "type": "square",
+       "orb": 2.6193495253187393,
+       "applying": false
+      },
+      {
+       "a": "Moon",
+       "b": "Jupiter",
+       "type": "sextile",
+       "orb": 3.4559354706599947,
+       "applying": true
+      },
+      {
+       "a": "Uranus",
+       "b": "Neptune",
+       "type": "conjunction",
+       "orb": 3.700354881157182,
+       "applying": true
+      },
+      {
+       "a": "Mercury",
+       "b": "Saturn",
+       "type": "conjunction",
+       "orb": 3.737805296375768,
+       "applying": true
+      },
+      {
+       "a": "Mars",
+       "b": "Saturn",
+       "type": "trine",
+       "orb": 3.99361387703874,
+       "applying": false
+      },
+      {
+       "a": "Moon",
+       "b": "Saturn",
+       "type": "trine",
+       "orb": 4.8631187517911485,
+       "applying": false
+      },
+      {
+       "a": "Sun",
+       "b": "Jupiter",
+       "type": "opposition",
+       "orb": 5.914891012909152,
+       "applying": false
+      },
+      {
+       "a": "Sun",
+       "b": "Pluto",
+       "type": "square",
+       "orb": 6.456527939271552,
+       "applying": true
+      },
+      {
+       "a": "Moon",
+       "b": "Uranus",
+       "type": "square",
+       "orb": 7.195024314308569,
+       "applying": true
+      }
+     ],
+     "flags": [],
+     "deltaT": {
+      "seconds": 57.63939697265625,
+      "sigma": 0.000842,
+      "model": "iers-utc/1",
+      "table": "2026-09-24",
+      "tableDigest": "064d98b4a531053a",
+      "segment": "observed"
+     },
+     "timeScale": {
+      "input": "utc",
+      "basis": "iers",
+      "ut1MinusUtc": {
+       "seconds": 0.5446030092592586,
+       "sigma": 0.000842,
+       "source": "observed"
+      },
+      "leapSeconds": {
+       "taiMinusUtc": 26,
+       "listed": true
+      }
+     },
+     "engineVersion": "0.1.1-rc.16"
+    },
+    "sidereal": null,
+    "receipt": {
+     "schema": "zodiacs.calc-receipt.draft-v1",
+     "request": {
+      "time": {
+       "iso": "1991-02-03T04:05:00Z"
+      },
+      "place": {
+       "latitude": 52,
+       "longitude": 5
+      },
+      "houseSystem": "koch",
+      "timeKnown": true,
+      "zodiac": "tropical"
+     },
+     "instants": [
+      {
+       "utc": "1991-02-03T04:05:00.000Z",
+       "jdUt1": 2448290.670145192,
+       "jdTt": 2448290.670812315,
+       "deltaT": {
+        "seconds": 57.63939697265625,
+        "sigma": 0.000842,
+        "model": "iers-utc/1",
+        "table": "2026-09-24",
+        "tableDigest": "064d98b4a531053a",
+        "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": 0.5446030092592586,
+         "sigma": 0.000842,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 26,
+         "listed": true
+        }
+       }
+      }
+     ],
+     "conventions": [
+      "zodiac:tropical",
+      "frame:ecliptic-true-of-date",
+      "center:geocentric",
+      "correction:apparent",
+      "light-time:newtonian",
+      "deflection:none",
+      "aberration:backdated-observer",
+      "moon:series-at-instant",
+      "node:true-osculating",
+      "precession:iau2006",
+      "nutation:iau2000b",
+      "obliquity:iau2006",
+      "house:koch",
+      "angles:gast-and-true-obliquity",
+      "sidereal-time:gast-iau2006-era",
+      "aspects:major",
+      "speed:central-difference-0.001d",
+      "speed:central-difference-0.25d",
+      "ephemeris:astronomy-engine@2.1.19",
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+     ],
+     "engine": {
+      "name": "@zodiacs/engine",
+      "version": "0.1.1-rc.16",
+      "ephemeris": {
+       "name": "astronomy-engine",
+       "version": "2.1.19"
+      }
+     }
+    }
+   }
+  },
+  {
+   "function": "chart",
+   "request": {
+    "time": "2015-07-07T12:00:00Z",
+    "timeKnown": false
+   },
+   "result": {
+    "status": "ok",
+    "chart": {
+     "input": {
+      "utc": "2015-07-07T12:00:00.000Z",
+      "houseSystem": "whole",
+      "timeKnown": false
+     },
+     "bodies": [
+      {
+       "body": "Sun",
+       "lon": 105.07118035671863,
+       "lat": 0.000030244894327725405,
+       "speed": 0.9532717641604904,
+       "retrograde": false,
+       "sign": "cancer",
+       "degree": 15.071180356718628
+      },
+      {
+       "body": "Moon",
+       "lon": 357.2583612911887,
+       "lat": 0.6317703262751287,
+       "speed": 14.241356910702052,
+       "retrograde": false,
+       "sign": "pisces",
+       "degree": 27.25836129118875
+      },
+      {
+       "body": "Mercury",
+       "lon": 87.74558918737682,
+       "lat": -0.9449565854654021,
+       "speed": 1.7186230215600062,
+       "retrograde": false,
+       "sign": "gemini",
+       "degree": 27.745589187376822
+      },
+      {
+       "body": "Venus",
+       "lon": 145.4044569376315,
+       "lat": -0.33628410071808634,
+       "speed": 0.5483235592009805,
+       "retrograde": false,
+       "sign": "leo",
+       "degree": 25.404456937631494
+      },
+      {
+       "body": "Mars",
+       "lon": 98.66978313267111,
+       "lat": 0.7971887766514503,
+       "speed": 0.6661197668336172,
+       "retrograde": false,
+       "sign": "cancer",
+       "degree": 8.669783132671114
+      },
+      {
+       "body": "Jupiter",
+       "lon": 142.79474859761297,
+       "lat": 0.8574203733909405,
+       "speed": 0.1926322427721061,
+       "retrograde": false,
+       "sign": "leo",
+       "degree": 22.794748597612966
+      },
+      {
+       "body": "Saturn",
+       "lon": 238.80393896966348,
+       "lat": 2.0775891489148313,
+       "speed": -0.039546704016402145,
+       "retrograde": true,
+       "sign": "scorpio",
+       "degree": 28.803938969663477
+      },
+      {
+       "body": "Uranus",
+       "lon": 20.357583915181863,
+       "lat": -0.6426871214516113,
+       "speed": 0.015295423537509123,
+       "retrograde": false,
+       "sign": "aries",
+       "degree": 20.357583915181863
+      },
+      {
+       "body": "Neptune",
+       "lon": 339.65635931167446,
+       "lat": -0.7917697973955828,
+       "speed": -0.012909345940670391,
+       "retrograde": true,
+       "sign": "pisces",
+       "degree": 9.656359311674464
+      },
+      {
+       "body": "Pluto",
+       "lon": 284.24130207555146,
+       "lat": 1.9828897060668758,
+       "speed": -0.02492199723747035,
+       "retrograde": true,
+       "sign": "capricorn",
+       "degree": 14.241302075551403
+      },
+      {
+       "body": "North Node",
+       "lon": 184.42260783299915,
+       "lat": 0,
+       "speed": -0.0074616040516843896,
+       "retrograde": true,
+       "sign": "libra",
+       "degree": 4.42260783299912
+      },
+      {
+       "body": "South Node",
+       "lon": 4.42260783299912,
+       "lat": 0,
+       "speed": -0.0074616040516843896,
+       "retrograde": true,
+       "sign": "aries",
+       "degree": 4.42260783299912
+      }
+     ],
+     "angles": null,
+     "houses": null,
+     "aspects": [
+      {
+       "a": "Moon",
+       "b": "Mercury",
+       "type": "square",
+       "orb": 0.4872278961881875,
+       "applying": true
+      },
+      {
+       "a": "Sun",
+       "b": "Pluto",
+       "type": "opposition",
+       "orb": 0.8298782811671686,
+       "applying": false
+      },
+      {
+       "a": "Mars",
+       "b": "Neptune",
+       "type": "trine",
+       "orb": 0.9865761790033503,
+       "applying": true
+      },
+      {
+       "a": "Moon",
+       "b": "Saturn",
+       "type": "trine",
+       "orb": 1.5455776784747854,
+       "applying": true
+      },
+      {
+       "a": "Mercury",
+       "b": "Venus",
+       "type": "sextile",
+       "orb": 2.3411322497453284,
+       "applying": false
+      },
+      {
+       "a": "Jupiter",
+       "b": "Uranus",
+       "type": "trine",
+       "orb": 2.437164682431103,
+       "applying": false
+      },
+      {
+       "a": "Venus",
+       "b": "Jupiter",
+       "type": "conjunction",
+       "orb": 2.6097083400185284,
+       "applying": false
+      },
+      {
+       "a": "Venus",
+       "b": "Saturn",
+       "type": "square",
+       "orb": 3.399482032031983,
+       "applying": true
+      },
+      {
+       "a": "Venus",
+       "b": "Uranus",
+       "type": "trine",
+       "orb": 5.046873022449631,
+       "applying": false
+      },
+      {
+       "a": "Sun",
+       "b": "Uranus",
+       "type": "square",
+       "orb": 5.286403558463235,
+       "applying": true
+      },
+      {
+       "a": "Sun",
+       "b": "Neptune",
+       "type": "trine",
+       "orb": 5.414821045044164,
+       "applying": false
+      },
+      {
+       "a": "Mars",
+       "b": "Pluto",
+       "type": "opposition",
+       "orb": 5.5715189428803455,
+       "applying": true
+      },
+      {
+       "a": "Jupiter",
+       "b": "Saturn",
+       "type": "square",
+       "orb": 6.0091903720505115,
+       "applying": true
+      },
+      {
+       "a": "Uranus",
+       "b": "Pluto",
+       "type": "square",
+       "orb": 6.116281839630403,
+       "applying": false
+      },
+      {
+       "a": "Sun",
+       "b": "Mars",
+       "type": "conjunction",
+       "orb": 6.401397224047514,
+       "applying": false
+      }
+     ],
+     "flags": [
+      "no-time"
+     ],
+     "deltaT": {
+      "seconds": 67.867,
+      "sigma": 0.000804,
+      "model": "iers-utc/1",
+      "table": "2026-09-24",
+      "tableDigest": "064d98b4a531053a",
+      "segment": "observed"
+     },
+     "timeScale": {
+      "input": "utc",
+      "basis": "iers",
+      "ut1MinusUtc": {
+       "seconds": 0.31700000000000017,
+       "sigma": 0.000804,
+       "source": "observed"
+      },
+      "leapSeconds": {
+       "taiMinusUtc": 36,
+       "listed": true
+      }
+     },
+     "engineVersion": "0.1.1-rc.16"
+    },
+    "sidereal": null,
+    "receipt": {
+     "schema": "zodiacs.calc-receipt.draft-v1",
+     "request": {
+      "time": {
+       "iso": "2015-07-07T12:00:00Z"
+      },
+      "houseSystem": "whole",
+      "timeKnown": false,
+      "zodiac": "tropical"
+     },
+     "instants": [
+      {
+       "utc": "2015-07-07T12:00:00.000Z",
+       "jdUt1": 2457211.000003669,
+       "jdTt": 2457211.000789167,
+       "deltaT": {
+        "seconds": 67.867,
+        "sigma": 0.000804,
+        "model": "iers-utc/1",
+        "table": "2026-09-24",
+        "tableDigest": "064d98b4a531053a",
+        "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": 0.31700000000000017,
+         "sigma": 0.000804,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 36,
+         "listed": true
+        }
+       }
+      }
+     ],
+     "conventions": [
+      "zodiac:tropical",
+      "frame:ecliptic-true-of-date",
+      "center:geocentric",
+      "correction:apparent",
+      "light-time:newtonian",
+      "deflection:none",
+      "aberration:backdated-observer",
+      "moon:series-at-instant",
+      "node:true-osculating",
+      "precession:iau2006",
+      "nutation:iau2000b",
+      "obliquity:iau2006",
+      "aspects:major",
+      "speed:central-difference-0.001d",
+      "speed:central-difference-0.25d",
+      "ephemeris:astronomy-engine@2.1.19",
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+     ],
+     "engine": {
+      "name": "@zodiacs/engine",
+      "version": "0.1.1-rc.16",
+      "ephemeris": {
+       "name": "astronomy-engine",
+       "version": "2.1.19"
+      }
+     }
+    }
+   }
+  },
+  {
+   "function": "chart",
+   "request": {
+    "time": "1991-02-03T04:05:00Z",
+    "place": {
+     "latitude": 52,
+     "longitude": 5
+    },
+    "houseSystem": "whole",
+    "zodiac": {
+     "sidereal": "raman"
+    }
+   },
+   "result": {
+    "status": "ok",
+    "chart": {
+     "input": {
+      "utc": "1991-02-03T04:05:00.000Z",
+      "houseSystem": "whole",
+      "timeKnown": true,
+      "latitude": 52,
+      "longitude": 5
+     },
+     "bodies": [
+      {
+       "body": "Sun",
+       "lon": 313.8145323123739,
+       "lat": -0.000011117709912775589,
+       "speed": 1.0142025214463501,
+       "retrograde": false,
+       "sign": "aquarius",
+       "degree": 13.814532312373899
+      },
+      {
+       "body": "Moon",
+       "lon": 184.44370582880475,
+       "lat": -4.834761370703018,
+       "speed": 13.181034408717096,
+       "retrograde": false,
+       "sign": "libra",
+       "degree": 4.443705828804696
+      },
+      {
+       "body": "Mercury",
+       "lon": 295.84278178063784,
+       "lat": -1.1486621855228174,
+       "speed": 1.4873373502553022,
+       "retrograde": false,
+       "sign": "capricorn",
+       "degree": 25.84278178063778
+      },
+      {
+       "body": "Venus",
+       "lon": 336.1935504793711,
+       "lat": -1.5036860119116682,
+       "speed": 1.2444120250449942,
+       "retrograde": false,
+       "sign": "pisces",
+       "degree": 6.193550479371083
+      },
+      {
+       "body": "Mars",
+       "lon": 63.574200954052344,
+       "lat": 2.3381478744906863,
+       "speed": 0.32089397856793767,
+       "retrograde": false,
+       "sign": "gemini",
+       "degree": 3.574200954052344
+      },
+      {
+       "body": "Jupiter",
+       "lon": 127.89964129946475,
+       "lat": 0.7671276313579903,
+       "speed": -0.13231639161404019,
+       "retrograde": true,
+       "sign": "leo",
+       "degree": 7.899641299464747
+      },
+      {
+       "body": "Saturn",
+       "lon": 299.5805870770136,
+       "lat": -0.18294558762658597,
+       "speed": 0.1165775042579753,
+       "retrograde": false,
+       "sign": "capricorn",
+       "degree": 29.58058707701366
+      },
+      {
+       "body": "Uranus",
+       "lon": 281.6387301431133,
+       "lat": -0.3279391359243826,
+       "speed": 0.05292307616855396,
+       "retrograde": false,
+       "sign": "capricorn",
+       "degree": 11.638730143113321
+      },
+      {
+       "body": "Neptune",
+       "lon": 285.3390850242705,
+       "lat": 0.7889898179997695,
+       "speed": 0.03423317937745196,
+       "retrograde": false,
+       "sign": "capricorn",
+       "degree": 15.339085024270503
+      },
+      {
+       "body": "Pluto",
+       "lon": 230.27106025164545,
+       "lat": 15.166684984824366,
+       "speed": 0.011285587305565059,
+       "retrograde": false,
+       "sign": "scorpio",
+       "degree": 20.271060251645395
+      },
+      {
+       "body": "North Node",
+       "lon": 297.9452479262924,
+       "lat": 0,
+       "speed": -0.03638443356578591,
+       "retrograde": true,
+       "sign": "capricorn",
+       "degree": 27.94524792629238
+      },
+      {
+       "body": "South Node",
+       "lon": 117.94524792629238,
+       "lat": 0,
+       "speed": -0.03638443356578591,
+       "retrograde": true,
+       "sign": "cancer",
+       "degree": 27.94524792629238
+      }
+     ],
+     "angles": {
+      "asc": 257.52650548006653,
+      "mc": 200.67327578845365,
+      "dsc": 77.52650548006653,
+      "ic": 20.67327578845368
+     },
+     "houses": {
+      "system": "whole",
+      "cusps": [
+       240,
+       270,
+       300,
+       330,
+       0,
+       30,
+       60,
+       90,
+       120,
+       150,
+       180,
+       210
+      ]
+     },
+     "aspects": [
+      {
+       "a": "Moon",
+       "b": "Mars",
+       "type": "trine",
+       "orb": 0.8695048747524083,
+       "applying": false
+      },
+      {
+       "a": "Venus",
+       "b": "Mars",
+       "type": "square",
+       "orb": 2.6193495253187393,
+       "applying": false
+      },
+      {
+       "a": "Moon",
+       "b": "Jupiter",
+       "type": "sextile",
+       "orb": 3.4559354706599947,
+       "applying": true
+      },
+      {
+       "a": "Uranus",
+       "b": "Neptune",
+       "type": "conjunction",
+       "orb": 3.700354881157182,
+       "applying": true
+      },
+      {
+       "a": "Mercury",
+       "b": "Saturn",
+       "type": "conjunction",
+       "orb": 3.737805296375768,
+       "applying": true
+      },
+      {
+       "a": "Mars",
+       "b": "Saturn",
+       "type": "trine",
+       "orb": 3.99361387703874,
+       "applying": false
+      },
+      {
+       "a": "Moon",
+       "b": "Saturn",
+       "type": "trine",
+       "orb": 4.8631187517911485,
+       "applying": false
+      },
+      {
+       "a": "Sun",
+       "b": "Jupiter",
+       "type": "opposition",
+       "orb": 5.914891012909152,
+       "applying": false
+      },
+      {
+       "a": "Sun",
+       "b": "Pluto",
+       "type": "square",
+       "orb": 6.456527939271552,
+       "applying": true
+      },
+      {
+       "a": "Moon",
+       "b": "Uranus",
+       "type": "square",
+       "orb": 7.195024314308569,
+       "applying": true
+      }
+     ],
+     "flags": [],
+     "deltaT": {
+      "seconds": 57.63939697265625,
+      "sigma": 0.000842,
+      "model": "iers-utc/1",
+      "table": "2026-09-24",
+      "tableDigest": "064d98b4a531053a",
+      "segment": "observed"
+     },
+     "timeScale": {
+      "input": "utc",
+      "basis": "iers",
+      "ut1MinusUtc": {
+       "seconds": 0.5446030092592586,
+       "sigma": 0.000842,
+       "source": "observed"
+      },
+      "leapSeconds": {
+       "taiMinusUtc": 26,
+       "listed": true
+      }
+     },
+     "engineVersion": "0.1.1-rc.16"
+    },
+    "sidereal": {
+     "ayanamsa": {
+      "name": "raman",
+      "mean": 22.287741664172064,
+      "nutation": 0.004595949257690061,
+      "true": 22.292337613429755
+     },
+     "bodies": [
+      {
+       "body": "Sun",
+       "lon": 291.52219469894413
+      },
+      {
+       "body": "Moon",
+       "lon": 162.151368215375
+      },
+      {
+       "body": "Mercury",
+       "lon": 273.55044416720807
+      },
+      {
+       "body": "Venus",
+       "lon": 313.9012128659413
+      },
+      {
+       "body": "Mars",
+       "lon": 41.28186334062259
+      },
+      {
+       "body": "Jupiter",
+       "lon": 105.607303686035
+      },
+      {
+       "body": "Saturn",
+       "lon": 277.28824946358384
+      },
+      {
+       "body": "Uranus",
+       "lon": 259.34639252968356
+      },
+      {
+       "body": "Neptune",
+       "lon": 263.04674741084074
+      },
+      {
+       "body": "Pluto",
+       "lon": 207.9787226382157
+      },
+      {
+       "body": "North Node",
+       "lon": 275.6529103128626
+      },
+      {
+       "body": "South Node",
+       "lon": 95.65291031286263
+      }
+     ],
+     "ascendant": 235.23416786663677,
+     "midheaven": 178.38093817502389,
+     "houseSystem": "whole",
+     "cusps": [
+      210,
+      240,
+      270,
+      300,
+      330,
+      0,
+      30,
+      60,
+      90,
+      120,
+      150,
+      180
+     ]
+    },
+    "receipt": {
+     "schema": "zodiacs.calc-receipt.draft-v1",
+     "request": {
+      "time": {
+       "iso": "1991-02-03T04:05:00Z"
+      },
+      "place": {
+       "latitude": 52,
+       "longitude": 5
+      },
+      "houseSystem": "whole",
+      "timeKnown": true,
+      "zodiac": {
+       "sidereal": "raman"
+      }
+     },
+     "instants": [
+      {
+       "utc": "1991-02-03T04:05:00.000Z",
+       "jdUt1": 2448290.670145192,
+       "jdTt": 2448290.670812315,
+       "deltaT": {
+        "seconds": 57.63939697265625,
+        "sigma": 0.000842,
+        "model": "iers-utc/1",
+        "table": "2026-09-24",
+        "tableDigest": "064d98b4a531053a",
+        "segment": "observed"
+       },
+       "timeScale": {
+        "input": "utc",
+        "basis": "iers",
+        "ut1MinusUtc": {
+         "seconds": 0.5446030092592586,
+         "sigma": 0.000842,
+         "source": "observed"
+        },
+        "leapSeconds": {
+         "taiMinusUtc": 26,
+         "listed": true
+        }
+       }
+      }
+     ],
+     "conventions": [
+      "zodiac:sidereal",
+      "ayanamsa:raman",
+      "frame:ecliptic-true-of-date",
+      "center:geocentric",
+      "correction:apparent",
+      "light-time:newtonian",
+      "deflection:none",
+      "aberration:backdated-observer",
+      "moon:series-at-instant",
+      "node:true-osculating",
+      "precession:iau2006",
+      "nutation:iau2000b",
+      "obliquity:iau2006",
+      "house:whole",
+      "angles:gast-and-true-obliquity",
+      "sidereal-time:gast-iau2006-era",
+      "aspects:major",
+      "speed:central-difference-0.001d",
+      "speed:central-difference-0.25d",
+      "ephemeris:astronomy-engine@2.1.19",
+      "deltat:time-basis",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+     ],
+     "engine": {
+      "name": "@zodiacs/engine",
+      "version": "0.1.1-rc.16",
+      "ephemeris": {
+       "name": "astronomy-engine",
+       "version": "2.1.19"
+      }
+     }
+    }
+   }
+  },
+  {
+   "function": "chart",
+   "request": {
+    "time": "2300-01-01"
+   },
+   "result": {
+    "status": "refused",
+    "reason": "out-of-range",
+    "detail": "The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the engine's positions have been compared with an independent ephemeris.",
+    "span": {
+     "from": "1800-01-01T00:00:00.000Z",
+     "to": "2200-01-01T00:00:00.000Z"
+    }
    }
   }
  ]

@@ -1,0 +1,66 @@
+{
+ "generator": "docs/evidence/calc-sidereal-2026-10-05/tools/differences.ts",
+ "units": "largest |engine − ERFA| of the mean ayanamsa, arcseconds, and of its rate, arcseconds a day; jd in TT",
+ "nearSunDegrees": 1,
+ "bands": {
+  "epochOrLinear": {
+   "comparisons": 96,
+   "position": {
+    "arcsec": 4.3013272943426273e-7,
+    "name": "user-iau1976-1956",
+    "jd": 2378496.5,
+    "elongation": null
+   },
+   "rate": {
+    "arcsec": 6.396650055343414e-9,
+    "name": "fagan-bradley",
+    "jd": 2461311.5,
+    "elongation": null
+   }
+  },
+  "star": {
+   "comparisons": 741,
+   "position": {
+    "arcsec": 0.001012010763190574,
+    "name": "true-chitra",
+    "jd": 2488352.5,
+    "elongation": 7.7483659905321645
+   },
+   "rate": {
+    "arcsec": 0.0003842046694973783,
+    "name": "true-revati",
+    "jd": 2524328.5,
+    "elongation": 1.44914946543875
+   }
+  },
+  "starNearSun": {
+   "comparisons": 123,
+   "position": {
+    "arcsec": 0.02142224509782409,
+    "name": "true-pushya",
+    "jd": 2379071.25,
+    "elongation": 0.11108497017771103
+   },
+   "rate": {
+    "arcsec": 0.39569714545030776,
+    "name": "true-pushya",
+    "jd": 2451757.125,
+    "elongation": 0.08205749924090144
+   }
+  }
+ },
+ "bounds": {
+  "epochOrLinear": {
+   "position": 4.4e-7,
+   "rate": 6.4e-9
+  },
+  "star": {
+   "position": 0.0011,
+   "rate": 0.00039
+  },
+  "starNearSun": {
+   "position": 0.022,
+   "rate": 0.4
+  }
+ }
+}

@@ -1,0 +1,35 @@
+Faults planted one at a time in a throwaway worktree of the change, each run against
+src/calc-sidereal.test.ts, src/calc-fixtures.test.ts, src/calc.test.ts and src/vedic/ (vitest).
+Columns: the fault; caught or survived; the number of failing tests; the first two.
+
+First run, on the change before its near-Sun test:
+  ["F1 true-of-date subtracts the mean ayanamsa", "caught", 28, ["× calc round-trip fixtures > 14: calc gives the committed result for the committed request 8ms", "× calc round-trip fixtures > 26: calc gives the committed result for the committed request 2ms"]]
+  ["F2 speed differences the tropical longitude", "caught", 10, ["× calc round-trip fixtures > 14: calc gives the committed result for the committed request 9ms", "× calc round-trip fixtures > 25: calc gives the committed result for the committed request 2ms"]]
+  ["F3 cartesian turned the wrong way", "caught", 3, ["× calc round-trip fixtures > 25: calc gives the committed result for the committed request 7ms", "× calc round-trip fixtures > 17: calc gives the same result again for its receipt's request 2ms"]]
+  ["F4 whole-sign cusps shifted, not rebuilt", "caught", 3, ["× calc round-trip fixtures > 30: houses gives the committed result for the committed request 6ms", "× calc round-trip fixtures > 20: houses gives the same result again for its receipt's request 2ms"]]
+  ["F5 events search tropical longitudes", "caught", 7, ["× calc round-trip fixtures > 32: events gives the committed result for the committed request 31ms", "× calc round-trip fixtures > 22: events gives the same result again for its receipt's request 9ms"]]
+  ["F6 the J2000 ecliptic offered", "caught", 1, ["× refusals in the sidereal zodiac > refuse every frame outside the ecliptic of date 8ms"]]
+  ["F7 no epoch refusal", "caught", 2, ["× calc round-trip fixtures > 29: calc gives the committed result for the committed request 13ms", "× a caller's ayanamsa > is refused out of range when it holds its value at an epoch outside the span; a rate is not 11ms"]]
+  ["F8 no near-Sun band", "SURVIVED", 0, []]
+  ["F9 bounds summed rounding down", "caught", 7, ["× calc round-trip fixtures > 14: calc gives the committed result for the committed request 9ms", "× calc round-trip fixtures > 25: calc gives the committed result for the committed request 5ms"]]
+  ["F10 user model default left out of the record", "caught", 2, ["× calc round-trip fixtures > 25: calc gives the committed result for the committed request 14ms", "× a caller's ayanamsa > records every default, and reads its epoch as an instant is read 11ms"]]
+  ["F11 UT1 epoch read as TT", "caught", 1, ["× a caller's ayanamsa > records every default, and reads its epoch as an instant is read 10ms"]]
+  ["F12 chart's sidereal ascendant left tropical", "caught", 3, ["× calc round-trip fixtures > 35: chart gives the committed result for the committed request 13ms", "× calc round-trip fixtures > 25: chart gives the same result again for its receipt's request 6ms"]]
+  ["F13 ayanamsa value not in radians", "caught", 3, ["× calc round-trip fixtures > 27: calc gives the committed result for the committed request 7ms", "× calc round-trip fixtures > 19: calc gives the same result again for its receipt's request 1ms"]]
+  ["F14 elongation measured from the anti-Sun", "caught", 3, ["× the ayanamsa's bounds > compare every built-in and caller's ayanamsa with ERFA, and a star's near the Sun 11ms", "× the ayanamsa's bounds > are star's largest differences, rounded up to two significant figures 1ms"]]
+  ["F15 star bound lowered to 0.001", "caught", 5, ["× calc round-trip fixtures > 26: calc gives the committed result for the committed request 11ms", "× calc round-trip fixtures > 31: houses gives the committed result for the committed request 2ms"]]
+  ["F16 sidereal latitude zeroed", "caught", 14, ["× calc round-trip fixtures > 14: calc gives the committed result for the committed request 7ms", "× calc round-trip fixtures > 25: calc gives the committed result for the committed request 1ms"]]
+  ["F17 houses vertex left tropical", "caught", 5, ["× calc round-trip fixtures > 30: houses gives the committed result for the committed request 8ms", "× calc round-trip fixtures > 31: houses gives the committed result for the committed request 2ms"]]
+  ["F18 receipt names the tropical zodiac", "SURVIVED", 0, []]
+
+F8 survived: the bounds test took its expected bound from ayanamsaBound() itself, and no
+tested instant had a star within a degree of the Sun. The test "take a star definition's
+larger bound when its star is within a degree of the Sun" was added. The first F18 planted
+an unused constant, a fault that changes nothing; it was replaced by the F18 below.
+
+Second run, on the change with that test:
+  ["F8 no near-Sun band", "caught", 1, ["× the sidereal zodiac in calc() > take a star definition's larger bound when its star is within a degree of the Sun"]]
+  ["F18 receipt leaves out zodiac:sidereal", "caught", 18, ["× calc round-trip fixtures > 14: calc gives the committed result for the committed request", "× calc round-trip fixtures > 26: calc gives the committed result for the committed request"]]
+  ["F19 near-Sun threshold at 0.05 degrees", "caught", 4, ["× the sidereal zodiac in calc() > take a star definition's larger bound when its star is within a degree of the Sun", "× the ayanamsa's bounds > compare every built-in and caller's ayanamsa with ERFA, and a star's near the Sun"]]
+
+Every fault but the replaced no-op is caught: 19 of 19.
