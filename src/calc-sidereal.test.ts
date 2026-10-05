@@ -650,7 +650,7 @@ describe("the ayanamsa's bounds", () => {
   };
 
   it("compare every built-in and caller's ayanamsa with ERFA, and each star near the Sun", () => {
-    expect(counts).toEqual({ epochOrLinear: 3513, star: 5458, starNearSun: 3921, starAtSun: 20449 });
+    expect(counts).toEqual({ epochOrLinear: 3513, star: 5458, starNearSun: 3921, starAtSun: 25593 });
     expect(new Set(rows.map((row) => row.name))).toEqual(new Set([...CALC_AYANAMSAS, "user-engine-b1950", "user-newcomb-j1900", "user-iau1976-1956"]));
     expect(new Set(dense.stars.map((series) => series.name))).toEqual(new Set(["true-chitra", "true-revati", "true-pushya", "galactic-center"]));
     // The years of the fixture: five through the span, and those in which the every-year run found a band's largest differences.
@@ -660,9 +660,12 @@ describe("the ayanamsa's bounds", () => {
     expect(years("true-pushya")).toEqual([1801, 1804, 1821, 1900, 2000, 2100, 2199]);
     // The near-Sun rows reach inside the deflection's cap: True Pushya passed within 0.08° of the Sun in 1801, 1804, 1821, 1900 and 2000.
     expect(dense.stars.filter((series) => (series as unknown as { capFromTo: number[] }).capFromTo.length > 0).length).toBe(5);
-    // In 2100 it came within 5e-8 of ERFA's cap, near enough that the engine's own margin may cross it, and is sampled as finely.
+    // Wherever ERFA's cap margin is within 5e-8 of zero, where the engine's own margin may cross it, the rows are as fine as at a
+    // crossing: a stretch around each crossing in those years, and in 2100, which came that near without capping, the whole pass.
     const nearCap = dense.stars.filter((series) => (series as unknown as { nearCapFromTo: number[] }).nearCapFromTo.length > 0);
-    expect(nearCap.map((series) => `${series.name} ${(series as unknown as { year: number }).year}`)).toEqual(["true-pushya 2100"]);
+    expect(nearCap.map((series) => `${series.name} ${(series as unknown as { year: number }).year} ${(series as unknown as { nearCapFromTo: number[] }).nearCapFromTo.length}`)).toEqual(
+      ["true-pushya 1801 4", "true-pushya 1804 4", "true-pushya 1821 4", "true-pushya 1900 4", "true-pushya 2000 4", "true-pushya 2100 2"]
+    );
     expect(new Set(dense.callers.map((series) => series.definition.value))).toEqual(new Set([-359.9, -180, 0.0001, 23.85, 180, 359.9]));
     // 3,599.999734″ a year: the linear definition at which tools/rounding_floor.py found the rate's rounding nearest its floor.
     expect(new Set(dense.callers.map((series) => series.definition.rate).filter((rate) => rate !== undefined))).toEqual(

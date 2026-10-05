@@ -306,7 +306,7 @@ divided by the body's speed adds.
 In the sidereal zodiac each bound adds the ayanamsa's own: the largest
 difference of the engine's mean ayanamsa, and of its rate, from ERFA's
 construction of the same definition, rounded up to two significant figures,
-over 1,856,820 comparisons from 1800 to 2200
+over 2,333,979 comparisons from 1800 to 2200
 (`docs/evidence/calc-sidereal-2026-10-05/`). They take every star definition
 in every year of the span, densely around its pass by the Sun and down to
 0.00001 day where either computation's cap on the deflection starts and stops
@@ -320,13 +320,20 @@ its star's angle from the Sun.
 | epoch and linear, built-in and callers' | 134,833 | 4.6 × 10⁻⁷″ | 1.6 × 10⁻⁷″ a day |
 | star, 2° or more from the Sun | 306,850 | 0.0013″ | 0.00039″ a day |
 | star, 0.3° to 2° from the Sun | 238,364 | 0.0048″ | 0.026″ a day |
-| star, within 0.3° of the Sun | 1,176,773 | 0.058″ | 27″ a day |
+| star, within 0.3° of the Sun | 1,653,932 | 0.058″ | 27″ a day |
 
-For an epoch or linear definition the rate's difference is the engine's
-rounding alone. For a linear one it is at most one and a half units in the
-last place of a value below 512°, over the 0.002 day of the difference:
-1.535 × 10⁻⁷″ a day. A search found a definition and instant within one per
-cent of that, and the comparison includes it.
+For an epoch or linear definition the rate's difference is rounding: for an
+epoch definition, the two programs' in their precession and the engine's in
+adding the value; for a linear one, the engine's alone, at most one and a
+half units in the last place of a value below 512° over the 0.002 day of the
+difference, 1.535 × 10⁻⁷″ a day. A search found a definition and instant
+within one per cent of that, and the comparison includes it. These are
+differences of the ayanamsa at the same two instants. A speed in calc adds
+rounding of its own: in each instant's Terrestrial Time, in the nutation the
+true ayanamsa adds, and in subtracting the ayanamsa from the longitude. For a
+linear ayanamsa at 3,600″ a year that comes to a few tenths of a
+microarcsecond a day (the largest found is 3.0 × 10⁻⁷″ a day). No bound
+includes it; the smallest speed bound calc gives is 8.1 × 10⁻⁴″ a day.
 
 The engine and ERFA deflect a star's light by the Sun with the same formula,
 and both cap its denominator at the same small number, which only True

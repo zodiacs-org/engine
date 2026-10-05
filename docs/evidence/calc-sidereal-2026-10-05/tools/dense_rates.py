@@ -20,20 +20,26 @@ star_series samples:
 - where the star passes within 2 degrees of the Sun, every 0.02 day for 3 days
   either side of the closest approach, and every 0.001 day for 0.3 day either
   side of it;
-- where it passes so close that ERFA caps the deflection's denominator
-  (eraLdsun's dlim: 1e-6 over the square of the Sun's distance in au, or 1e-6
-  inside 1 au), every 0.00001 day for 0.005 day either side of each instant at
-  which ERFA's cap starts or stops applying;
-- where it comes within NEAR_CAP of the cap without reaching it, every
-  0.00001 day for as long as ERFA's margin, 1 + p·e less dlim, is below
-  NEAR_CAP, and 0.001 day either side.
+- where ERFA's margin, 1 + p·e less eraLdsun's dlim (1e-6 over the square of
+  the Sun's distance in au, or 1e-6 inside 1 au), comes within NEAR_CAP of
+  zero, every 0.00001 day through each stretch in which it stays within
+  NEAR_CAP of zero, and 0.001 day either side. Below zero ERFA caps the
+  deflection's denominator. Where the margin goes below -NEAR_CAP there is a
+  stretch around each instant at which the cap starts or stops applying, and
+  its steps are counted from that instant, for at least 0.005 day either
+  side; otherwise one stretch holds the whole pass.
 
-The engine caps the same way, but its Earth differs a little from ERFA's, so
-its margin differs from ERFA's, by up to 1.8e-8 at a closest approach, and it
-caps in years that ERFA does not, and starts and stops a few minutes from
-ERFA's crossings. differences.ts --every-year finds the engine's own crossings
-and checks that these steps cover the 0.001 day either side of each, in which
-a rate's central difference straddles it (results/every-year.json, `caps`).
+ERFA's margin takes the star's direction before the deflection and the
+aberration, so it is least about eight minutes from the star's least apparent
+angle from the Sun, and about 5e-9 lower there (least_margin). The engine caps
+the same way, but its Earth differs a little from ERFA's, so its margin
+differs from ERFA's, by up to 1.7e-8 at the instant of ERFA's least, and it
+caps in years that ERFA does not, and starts and stops minutes from ERFA's
+crossings. Where the engine's margin passes zero ERFA's is within that
+difference of zero, inside the stretches above. differences.ts --every-year
+finds the engine's own crossings and checks that these steps cover the 0.001
+day either side of each, in which a rate's central difference straddles it
+(results/every-year.json, `caps`).
 
 How far the two programs part near the Sun changes from one conjunction to the
 next, because their Earths differ by an amount that changes from year to year.
@@ -63,12 +69,14 @@ difference over the same two instants. Neither adds rounding of its own at
 the value's size, so what is left in the comparison is the engine's rounding
 (and, for an epoch definition, the two programs' precessions).
 
-The engine's rate for those definitions differs from the exact one by its
-rounding alone, and that is largest for a linear definition: the rate times
-the time and their sum, each rounded, give at most one and a half units in the
-last place of a value below 512 degrees, 2**-44 degree, over the 0.002 day of
-the central difference. FLOOR_CALLERS holds a definition and instant at which
-the engine comes within one per cent of that, which rounding_floor.py found.
+At the same two instants, the engine's rate for a linear definition differs
+from the exact one by its rounding alone, the largest of these differences:
+the rate times the time and their sum, each rounded, give at most one and a
+half units in the last place of a value below 512 degrees, 2**-44 degree,
+over the 0.002 day of the central difference. FLOOR_CALLERS holds a
+definition and instant at which the engine comes within one per cent of that,
+which rounding_floor.py found. calc's speeds add rounding of their own
+(docs/calc.md).
 
 The mean ayanamsa of a star is reference_values.py's star_ayanamsa. A rate is
 the central difference over plus and minus 0.001 day of TT, the step of calc's
@@ -113,10 +121,10 @@ EVERY_YEAR = range(1800, 2200)
 # degrees, and True Pushya's within 0.3 degree.
 EXTRA_YEARS = {"true-chitra": [1825, 2197], "true-revati": [2196], "true-pushya": [1804, 1821]}
 NEAR = 2.0            # degrees: within this, the dense steps
-CAP_HALF_WIDTH = 0.005  # days either side of a cap crossing
-# ERFA's cap margin below which a pass that ERFA does not cap is sampled as
+CAP_HALF_WIDTH = 0.005  # days either side of a cap crossing, at least
+# How near zero ERFA's cap margin must come for a stretch to be sampled as
 # finely as a crossing: nearly three times the largest difference of the
-# engine's margin from ERFA's at a closest approach (differences.ts).
+# engine's margin from ERFA's at the instant of ERFA's least (differences.ts).
 NEAR_CAP = 5e-8
 GOLDEN = (math.sqrt(5) - 1) / 2
 SPAN_FROM = 2_378_496.5   # 1800-01-01 0h TT
@@ -167,6 +175,24 @@ def cap_margin(star, jd):
     return 1.0 + float(np.dot(p, astrom["eh"])) - 1e-6 / max(em * em, 1.0)
 
 
+def least_margin(star, centre):
+    """The TT Julian date, to 1e-8 day, of ERFA's least cap margin within 0.05 day of `centre`.
+
+    The margin takes the star's direction before the deflection and the
+    aberration, so its least falls some minutes from the least apparent angle
+    from the Sun that closest_approach finds.
+    """
+    lo, hi = centre - 0.05, centre + 0.05
+    while hi - lo > 1e-8:
+        a = hi - GOLDEN * (hi - lo)
+        b = lo + GOLDEN * (hi - lo)
+        if cap_margin(star, a) < cap_margin(star, b):
+            hi = b
+        else:
+            lo = a
+    return (lo + hi) / 2
+
+
 def crossing(star, inside, outside, level=0.0):
     """Where cap_margin passes `level` between `inside` (below it) and `outside`, to 1e-8 day.
 
@@ -199,14 +225,21 @@ def star_series(name, year):
     if least < NEAR:
         times += instants(closest, 3.0, 0.02)
         times += instants(closest, 0.3, 0.001)
-    margin = cap_margin(star, closest)
+    lowest = least_margin(star, closest)
+    margin = cap_margin(star, lowest)
     if margin < 0:
-        caps = [crossing(star, closest, closest - 0.3), crossing(star, closest, closest + 0.3)]
-        for edge in caps:
-            times += instants(edge, CAP_HALF_WIDTH, 0.00001)
-    elif margin < NEAR_CAP:
-        near_cap = [crossing(star, closest, closest - 0.3, NEAR_CAP), crossing(star, closest, closest + 0.3, NEAR_CAP)]
-        times += instants((near_cap[0] + near_cap[1]) / 2, (near_cap[1] - near_cap[0]) / 2 + STEP, 0.00001)
+        caps = [crossing(star, lowest, lowest - 0.3), crossing(star, lowest, lowest + 0.3)]
+    if margin < NEAR_CAP:
+        outer = [crossing(star, lowest, lowest - 0.3, NEAR_CAP), crossing(star, lowest, lowest + 0.3, NEAR_CAP)]
+        if margin < -NEAR_CAP:
+            inner = [crossing(star, lowest, lowest - 0.3, -NEAR_CAP), crossing(star, lowest, lowest + 0.3, -NEAR_CAP)]
+            near_cap = [outer[0], inner[0], inner[1], outer[1]]
+            for edge, ends in zip(caps, [near_cap[:2], near_cap[2:]]):
+                reach = max(edge - ends[0], ends[1] - edge) + STEP
+                times += instants(edge, max(CAP_HALF_WIDTH, reach), 0.00001)
+        else:
+            near_cap = outer
+            times += instants((outer[0] + outer[1]) / 2, (outer[1] - outer[0]) / 2 + STEP, 0.00001)
     jds = sorted({round(t, 8) for t in times})
     mean = lambda jd: ref.star_ayanamsa(star, jd)[0]
     return {
@@ -214,6 +247,7 @@ def star_series(name, year):
         "year": year,
         "closest": round(closest, 8),
         "leastElongation": round(least, 6),
+        "leastMarginAt": round(lowest, 8),
         "capMargin": float(f"{margin:.6e}"),
         "capFromTo": [round(t, 8) for t in caps],
         "nearCapFromTo": [round(t, 8) for t in near_cap],
@@ -317,8 +351,10 @@ def build():
         "erfa": f"pyerfa {erfa.__version__}",
         "units": "jd: Julian dates in TT; mean: the mean ayanamsa, degrees, not wrapped; rate: its central difference"
                  " over plus and minus 0.001 day of TT, degrees a day; leastElongation: ERFA's least angle of the star"
-                 " from the Sun that year, degrees; capFromTo: when eraLdsun's cap starts and stops applying; a"
-                 " definition's rate: arcseconds a Julian year",
+                 " from the Sun that year, degrees; leastMarginAt: when ERFA's margin 1 + p·e less eraLdsun's dlim is"
+                 " least; capMargin: that least margin; capFromTo: when the cap starts and stops applying, the margin"
+                 " being below zero; nearCapFromTo: the ends of each stretch in which that margin is within NEAR_CAP,"
+                 " 5e-8, of zero; a definition's rate: arcseconds a Julian year",
         "step": STEP,
         "stars": stars,
         "callers": callers,

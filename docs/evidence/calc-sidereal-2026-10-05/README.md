@@ -48,7 +48,7 @@ position and houses result now carries, and the one case that was refused as
 
 A sidereal result's bounds add the ayanamsa's own. For that the engine's mean
 ayanamsas, and their rates, were compared with ERFA's construction of the same
-definitions, 1,856,820 comparisons in all:
+definitions, 2,333,979 comparisons in all:
 
 - `tools/ayanamsa_rates.py` writes `src/fixtures/ayanamsa-rates.json` with
   pyerfa 2.0.1.5: 960 rows. It imports the constructions of the Vedic
@@ -66,21 +66,25 @@ definitions, 1,856,820 comparisons in all:
   every 5 days through the year and every 0.05 day for 3 days either side of
   the star's closest approach to the Sun; where the star passes within 2° of
   the Sun, every 0.02 day for 3 days and every 0.001 day for 0.3 day either
-  side; where ERFA caps the deflection's denominator (eraLdsun's `dlim`),
-  every 0.00001 day for 0.005 day either side of each instant at which the
-  cap starts or stops applying; and where ERFA's margin, 1 + p·e less `dlim`,
-  comes within 5 × 10⁻⁸ of the cap without reaching it, every 0.00001 day for
-  as long as it is below that and 0.001 day either side. Only True Pushya's
-  star comes that close: ERFA caps it in 278 of the 400 years, and comes
-  within 5 × 10⁻⁸ in 69 more. It then takes 336 callers' ayanamsas at 401
-  instants across the span: values from −359.9° to 359.9°; for an epoch
+  side; and where ERFA's margin, 1 + p·e less eraLdsun's `dlim`, comes
+  within 5 × 10⁻⁸ of zero, every 0.00001 day through each stretch in which it
+  stays that near, and 0.001 day either side. Below zero ERFA caps the
+  deflection's denominator; where the margin goes below −5 × 10⁻⁸ there is
+  such a stretch around each instant at which the cap starts or stops
+  applying, sampled from that instant for at least 0.005 day either side.
+  The margin takes the star's direction before the aberration, so it is
+  least about eight minutes from the star's least apparent angle from the
+  Sun; whether ERFA caps a pass is read at that least margin. Only True
+  Pushya's star comes that close: ERFA caps it in 286 of the 400 years, and
+  comes within 5 × 10⁻⁸ in 66 more. It then takes 336 callers' ayanamsas at
+  401 instants across the span: values from −359.9° to 359.9°; for an epoch
   definition, epochs at both ends of the span, at J2000.0 and at eight steps
   between, and each precession model; for a linear one, those epochs and
   also the first and last days a Date holds and the start of the Kali Yuga,
   with rates of up to 3,600″ a year; and one more linear definition, at the
   instant where its rate comes nearest the floor of the engine's rounding
-  (below). Its rows, 94 MB, are not committed; it writes them in about three
-  minutes on four cores.
+  (below). Its rows, 118 MB, are not committed; it writes them in about four
+  and a half minutes on four cores.
 - `tools/differences.ts --every-year` runs the engine at each of those rows
   and at `ayanamsa_rates.py`'s, and writes `results/every-year.json`: each
   band's comparisons and largest differences, from which the bounds are set,
@@ -91,23 +95,24 @@ definitions, 1,856,820 comparisons in all:
   distance from the Sun, as `apparentStar` computes them), and checks that
   the rows sample every 0.00001 day through the 0.001 day either side of each
   of those instants, where a rate's central difference straddles one; it
-  fails if they do not. The engine caps in 290 years: ERFA's 278 and twelve
-  more, 2075, 2077, 2078, 2080 and 2082 to 2089, all among the 69. Where both
-  cap, the engine's crossings fall up to 4.2 minutes from ERFA's (in 2068),
-  and at a closest approach the engine's margin differs from ERFA's by up to
-  1.8 × 10⁻⁸ (in 1804). All 580 of the engine's crossings are covered. In
-  the twelve years only the engine caps, the largest differences are 0.0274″
-  and 1.57″ a day.
+  fails if they do not. The engine caps in 290 years: ERFA's 286 and four
+  more, 2084, 2085, 2087 and 2089, all among the 66. Where both cap, the
+  engine's crossings fall up to 6.3 minutes from ERFA's (in 2082), and at the
+  instant of ERFA's least margin the engine's margin differs from ERFA's by
+  up to 1.7 × 10⁻⁸ (in 1804), so the engine's crossings lie where ERFA's
+  margin is within that of zero, inside the stretches sampled finely. All 580
+  of them are covered. In the four years only the engine caps, the largest
+  differences are 0.0167″ and 0.810″ a day.
 - `tools/dense_rates.py`, without `--every-year`, writes
-  `src/fixtures/ayanamsa-rates-dense.json` (1,657,923 bytes): the same series
+  `src/fixtures/ayanamsa-rates-dense.json` (1,925,524 bytes): the same series
   for 1801, 1900, 2000, 2100 and 2199 and for the years that hold a band's
   largest difference (True Chitra's 1825 and 2197, True Revati's 2196, True
-  Pushya's 1804 and 1821), 25 series and 28,964 rows (True Pushya's 2100 is
-  one of the 69), and every caller at nine instants, the one that holds the
+  Pushya's 1804 and 1821), 25 series and 34,108 rows (True Pushya's 2100 is
+  one of the 66), and every caller at nine instants, the one that holds the
   largest difference of the position at all 401, and the definition at the
   rounding's floor at its instant, 3,417 rows.
   `src/calc-sidereal.test.ts` repeats the comparison on it and on
-  `ayanamsa_rates.py`'s rows on every run (33,341 comparisons, with each
+  `ayanamsa_rates.py`'s rows on every run (38,485 comparisons, with each
   band's largest among them), holds the engine to the bounds, and holds each
   bound to be its band's largest difference rounded up to two significant
   figures, the rule of the calc entry's other measured bounds; without
@@ -122,7 +127,7 @@ definitions, 1,856,820 comparisons in all:
 | epoch and linear definitions | 134,833 | 4.53 × 10⁻⁷″ | a caller's −180° on the engine's precession from 1800, in 2055 | 1.52 × 10⁻⁷″ a day | a caller's −359.9° at 3,599.999734″ a year from 1800, in 1802: the rounding's floor (below) | 4.6 × 10⁻⁷″; 1.6 × 10⁻⁷″ a day |
 | star definitions, 2° or more | 306,850 | 0.00123″ | True Chitra, 2197, 2.4° | 0.000384″ a day | True Chitra, 1825, 2.04° | 0.0013″; 0.00039″ a day |
 | star definitions, 0.3° to 2° | 238,364 | 0.00471″ | True Revati, 2196, 0.30° | 0.0256″ a day | True Pushya, 1821, 0.30° | 0.0048″; 0.026″ a day |
-| star definitions, within 0.3° | 1,176,773 | 0.0574″ | True Pushya, 1821, 0.080° | 27.0″ a day | True Pushya, 1804, 0.080° | 0.058″; 27″ a day |
+| star definitions, within 0.3° | 1,653,932 | 0.0574″ | True Pushya, 1821, 0.080° | 27.0″ a day | True Pushya, 1804, 0.080° | 0.058″; 27″ a day |
 
 The engine and ERFA deflect a star's light by the Sun with the same formula,
 p + (2GM/c²E)(e − (p·e)p)/(1 + p·e), and both cap its denominator at
@@ -131,8 +136,8 @@ astronomy-engine's), by an amount that changes from year to year, so they put
 the star at slightly different angles from the Sun. The deflection grows as
 that angle falls, and its rate faster still, so the difference grows with
 them; and where the cap starts and stops applying, about 0.08° from the Sun's
-centre, the two computations do so at instants a little apart (up to 4.2
-minutes, in 2068; and in twelve years only the engine's caps), and their
+centre, the two computations do so at instants a little apart (up to 6.3
+minutes, in 2082; and in four years only the engine's caps), and their
 rates part by up to 27″ a day. How far apart the two come changes from one pass to
 the next: within 0.3° the largest rate differences are 17.1″ a day in 1801,
 27.0″ in 1804, 4.6″ in 1900 and 2.6″ in 2000. ERFA documents `epv00` for 1900
@@ -162,8 +167,22 @@ arithmetic and searched for where it comes nearest: at 3,599.999734″ a year
 from 1800, at an instant in 1802, the engine's rate is 1.525 × 10⁻⁷″ a day
 from the definition's. The comparison includes that definition and instant,
 and they set the bound, 1.6 × 10⁻⁷″ a day. An epoch definition's rate
-carries at most one such unit and its precession's rounding; its largest
-difference is 1.02 × 10⁻⁷″ a day.
+carries at most one such unit and the rounding of the two programs'
+precessions; its largest difference is 1.02 × 10⁻⁷″ a day.
+
+That floor is the ayanamsa's own, between the same two instants as the exact
+definition's. A speed in calc adds rounding of its own. It divides by 0.002
+day, while the Terrestrial Time of each of its two instants is rounded, by up
+to about a unit in its last place; the true ayanamsa adds the nutation to the
+mean one, which rounds by up to a quarter of a unit of 2⁻⁴⁴° at each instant;
+and subtracting the ayanamsa from the longitude rounds a value that can pass
+512°, by up to a unit at each. For a linear ayanamsa at 3,600″ a year these
+come to a few tenths of a microarcsecond a day: the fourth review found
+3.0 × 10⁻⁷″ a day for the Sun on 1818-03-09 in the mean ecliptic of date,
+and 2.0 × 10⁻⁷″ a day for the Moon on 1806-12-18. No bound includes them;
+the smallest speed bound calc gives is 8.1 × 10⁻⁴″ a day, the mean node's,
+and the speed test holds a linear ayanamsa's rate in calc to its definition
+within 5 × 10⁻⁷″ a day.
 
 Measuring these differences turned up two engine changes, both in the
 linear ayanamsa. Its value was computed from
@@ -179,7 +198,7 @@ J2000.0. Raman's and Sri Yukteswar's ayanamsas move by less than 10⁻¹³° wit
 the two changes, and the speed test holds a linear ayanamsa's rate within
 5 × 10⁻⁷″ a day of its definition from every one of those epochs.
 
-### Corrections to this record's first three versions
+### Corrections to this record's first four versions
 
 The first version of this change measured the star definitions on the rows
 of `ayanamsa_rates.py` alone and set two star bands at 1°: 0.0011″ and
@@ -222,6 +241,20 @@ not the 2.1 the second review saw in the years it sampled; and that the third
 version's count of 78 star-years over the second version's bounds counted a
 star-year once for each band it exceeded: they are 74.
 
+The fourth version read ERFA's cap at the star's least apparent angle from
+the Sun, about eight minutes from where ERFA's margin is least and about
+5 × 10⁻⁹ above it there. A fourth independent review found that ERFA also
+caps in eight of the twelve years the record gave to the engine alone: ERFA
+caps in 286 years, not 278; the engine alone in four, where the largest
+differences are 0.0167″ and 0.810″ a day, not 0.0274″ and 1.57″; and where
+both cap, the crossings fall up to 6.3 minutes apart (2082), not 4.2. Read at
+ERFA's least margin, the windows of 0.005 day either side of ERFA's crossings
+no longer reached the engine's own in 2075 and 2082, and the coverage check
+failed; the rows are now every 0.00001 day wherever ERFA's margin is within
+5 × 10⁻⁸ of zero. No band's largest difference, and no bound, changed. The
+review also found the rate bound's floor stated as a bound on calc's speeds,
+which add rounding of their own (above).
+
 The Vedic guide said the engine agrees with ERFA "within 0.001″ at instants
 more than 5° from the Sun". That was true of the 164 comparisons it made, but
 none was within 17° of the Sun: its filter at 5° left nothing out.
@@ -231,7 +264,7 @@ none was within 17° of the Sun: its filter at 5° left nothing out.
 
 Thirty-seven faults were planted in a throwaway copy of the change, one at a
 time, and the calc and Vedic tests run against each (`results/faults.txt`,
-the fifth run): the mean ayanamsa subtracted in the true ecliptic of date;
+the sixth run): the mean ayanamsa subtracted in the true ecliptic of date;
 the speed taken from the tropical longitude; the cartesian vector turned the
 wrong way; whole-sign cusps shifted rather than rebuilt; a crossing search on
 tropical longitudes; the J2000.0 ecliptic offered; no refusal for an epoch
@@ -251,9 +284,9 @@ and linear rate bound lowered to 6.4 × 10⁻⁹″ a day; the nutation left out
 from a far epoch without reducing it; a caller's name in capitals let
 through; each band's bounds put back at the second version's values; and the
 epoch and linear rate bound put back at the third version's. All thirty-seven
-fail a test. The earlier versions' runs, of nineteen, twenty-nine and
-thirty-six, are kept beside them: in the first the near-Sun band survived
-at first, because the bounds test took its expected value from
+fail a test. The earlier versions' runs, of nineteen, twenty-nine,
+thirty-six and thirty-seven, are kept beside them: in the first the near-Sun
+band survived at first, because the bounds test took its expected value from
 `ayanamsaBound()` itself and no tested instant had a star near the Sun, and a
 first version of the receipt fault changed nothing and was replaced.
 
@@ -263,8 +296,8 @@ The calc entry now imports the ayanamsas (`src/vedic/ayanamsa.ts`, with its
 star catalogue and its apparent places) and the sidereal chart
 (`src/vedic/sidereal.ts`, `src/vedic/grid.ts`). esbuild puts those three
 modules, whole, in a chunk the calc and Vedic entries share. The calc entry's
-import graph grows from 113,904 to 139,821 bytes: 17,596 in the shared chunk
-and 8,321 in `calc.js` itself. The root entry's graph is unchanged, every file
+import graph grows from 113,904 to 139,836 bytes: 17,596 in the shared chunk
+and 8,336 in `calc.js` itself. The root entry's graph is unchanged, every file
 of it byte for byte (103,537 bytes), and so are the other eleven entries'. The
 Vedic entry's is 1,508 bytes larger, 122,131 to 123,639: its three modules
 moved into the shared chunk, with the `ayanamsaAt`, `isUserAyanamsaName`,

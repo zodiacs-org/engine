@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Where a linear ayanamsa's rate comes nearest the floor of the engine's rounding.
+"""Where a linear ayanamsa's rate comes nearest the floor of its rounding.
 
   python3 rounding_floor.py
 
@@ -8,22 +8,28 @@ the rate per day times TT days since J2000.0, P (src/vedic/ayanamsa.ts). The
 engine rounds P, and then R + P; in the span, with rates up to 3,600" a year,
 P stays below 256 degrees and R + P below 512, so the two roundings put at
 most 2**-46 and 2**-45 degree into each mean, and one and a half units of
-2**-44 degree into the difference of two means. calc's rate is that
-difference over 0.002 day, so the engine's rate differs from the exact one by
-at most 1.5 * 2**-44 / 0.002 degree a day, 1.535e-7" a day.
+2**-44 degree into the difference of two means. The rate the comparison takes
+(differences.ts and src/calc-sidereal.test.ts) is that difference over 0.002
+day, between the same two instants as the exact definition's, so it differs
+from the exact rate by at most 1.5 * 2**-44 / 0.002 degree a day, 1.535e-7"
+a day. calc's speeds add rounding of their own: of their instants' TT, of
+the nutation and of the subtraction from the longitude (docs/calc.md).
 
-The difference of two engine means is a whole number of units of 2**-44
-degree, and the exact difference, N, is not: if N is k + f units, the engine's
+Where both means lie between 256 and 512 degrees from zero, as at the case
+this finds, their difference is a whole number of units of 2**-44 degree,
+and the exact difference, N, is not: if N is k + f units, the engine's
 difference can be k - 1 units, f + 1 from N, when the roundings fall the same
 way at both instants. So the largest differences come with f just below one
-half. N depends on the rate and on the two instants' spacing, which for a
-Julian date in the span, held to 2**-31 day, is 0.0020000003278 day, the
-whole number of those units nearest 0.002 day. This takes rates of 3,600" a
-year less a whole number of millionths, finds for each of three fractions f
-the first rate with an N that close to it, and scans 40,001 instants across
-the span with the value -359.9 degrees from an epoch at the span's start. It replicates the engine's arithmetic in IEEE
-doubles, which Python's floats round the same way; differences.ts --every-year
-runs the engine itself at the instant found (dense_rates.py's FLOOR_CALLERS).
+half. N depends on the rate and on the two instants' spacing. A Julian date in
+the span is held to 2**-31 day; 0.001 day is 2,147,483.648 of those units,
+and each instant 0.001 day from one in the span rounds to 2,147,484 of them,
+so the spacing is 4,294,968 units, 0.0020000003278 day. This takes rates of
+3,600" a year less a whole number of millionths, finds for each of three
+fractions f the first rate with an N that close to it, and scans 40,001
+instants across the span with the value -359.9 degrees from an epoch at the
+span's start. It replicates the engine's arithmetic in IEEE doubles, which
+Python's floats round the same way; differences.ts --every-year runs the
+engine itself at the instant found (dense_rates.py's FLOOR_CALLERS).
 """
 import math
 from fractions import Fraction

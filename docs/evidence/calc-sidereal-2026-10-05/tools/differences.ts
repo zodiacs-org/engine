@@ -19,7 +19,7 @@
  * in the fixture. And for every pass that ERFA or the engine caps, or comes
  * within dense_rates.py's NEAR_CAP of capping, `caps`: where each caps the
  * deflection's denominator, how far the engine's crossings fall from ERFA's,
- * how far the engine's margin is from ERFA's at the closest approach, and
+ * how far the engine's margin is from ERFA's at the instant of ERFA's least, and
  * whether the series samples every 0.00001 day through the 0.001 day either
  * side of each engine crossing, in which a rate's central difference
  * straddles it. It exits with an error if one is not.
@@ -67,6 +67,7 @@ type StarSeries = Series & {
   readonly year: number;
   readonly closest: number;
   readonly leastElongation: number;
+  readonly leastMarginAt: number;
   readonly capMargin: number;
   readonly capFromTo: readonly number[];
   readonly nearCapFromTo: readonly number[];
@@ -163,9 +164,10 @@ function sampledFinely(jds: readonly number[], from: number, to: number): boolea
 /** One row of `caps`, for a star series whose pass ERFA caps or nearly caps, or null when neither ERFA nor the engine comes near. */
 function capRow(series: StarSeries): unknown[] | null {
   const definition = AYANAMSAS[series.name];
-  const engineAtClosest = engineMargin(definition, series.closest);
-  if (series.capFromTo.length === 0 && series.nearCapFromTo.length === 0 && engineAtClosest >= 1e-7) return null;
-  const lowest = engineLeast(definition, series.closest);
+  // The engine's margin at the instant of ERFA's least, where capMargin is ERFA's.
+  const engineThere = engineMargin(definition, series.leastMarginAt);
+  if (series.capFromTo.length === 0 && series.nearCapFromTo.length === 0 && engineThere >= 1e-7) return null;
+  const lowest = engineLeast(definition, series.leastMarginAt);
   const engineCaps = engineMargin(definition, lowest) < 0 ? [engineCrossing(definition, lowest, lowest - 0.3), engineCrossing(definition, lowest, lowest + 0.3)] : [];
   const jds = [...series.jd].sort((a, b) => a - b);
   const covered = engineCaps.every((c) => sampledFinely(jds, c - STEP, c + STEP));
@@ -174,7 +176,7 @@ function capRow(series: StarSeries): unknown[] | null {
     series.name,
     series.year,
     series.capMargin,
-    sig(engineAtClosest - series.capMargin),
+    sig(engineThere - series.capMargin),
     series.capFromTo,
     engineCaps.map((c) => Number(c.toFixed(8))),
     series.capFromTo.length === 2 && engineCaps.length === 2 ? engineCaps.map((c, k) => minutes(c - series.capFromTo[k]!)) : null,
@@ -291,9 +293,9 @@ if (everyYearAt === -1) {
       "largest |engine − ERFA| of the mean ayanamsa, arcseconds, and of its rate, arcseconds a day; jd in TT. years: for each star, one row a year:" +
       " [year, ERFA's least angle from the Sun that year (degrees), then for each of the bands star, starNearSun and starAtSun: comparisons," +
       " largest position difference, largest rate difference]. callers: [definition, comparisons, largest position difference, largest rate difference]." +
-      " caps: one row for each pass ERFA or the engine caps or comes near capping: [star, year, ERFA's margin 1 + p·e − dlim at its closest" +
-      " approach, the engine's margin there less ERFA's, ERFA's crossings, the engine's crossings, the engine's less ERFA's in minutes, whether the" +
-      " series samples every 0.00001 day through 0.001 day either side of each engine crossing]",
+      " caps: one row for each pass ERFA or the engine caps or comes near capping: [star, year, ERFA's least margin 1 + p·e − dlim that" +
+      " pass, the engine's margin at that instant less ERFA's, ERFA's crossings, the engine's crossings, the engine's less ERFA's in minutes," +
+      " whether the series samples every 0.00001 day through 0.001 day either side of each engine crossing]",
     nearSunDegrees: NEAR_SUN_DEGREES,
     atSunDegrees: AT_SUN_DEGREES,
     bands,

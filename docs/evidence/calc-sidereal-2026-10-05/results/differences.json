@@ -54,7 +54,7 @@
    }
   },
   "starAtSun": {
-   "comparisons": 20449,
+   "comparisons": 25593,
    "position": {
     "arcsec": 0.05743847723209683,
     "name": "true-pushya",
@@ -63,10 +63,10 @@
     "year": 1821
    },
    "rate": {
-    "arcsec": 26.969798886976218,
+    "arcsec": 26.969801572804528,
     "name": "true-pushya",
-    "jd": 2380166.89157309,
-    "elongation": 0.0802583467121429,
+    "jd": 2380166.89157308,
+    "elongation": 0.08025835117154775,
     "year": 1804
    }
   }
