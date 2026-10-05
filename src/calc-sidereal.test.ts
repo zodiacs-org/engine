@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { AstroTime } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
-import { AYANAMSA_BASIS, AYANAMSA_BOUNDS, NEAR_SUN_DEGREES, addBounds, ayanamsaBound } from "./calc-ayanamsa.js";
+import { AYANAMSA_BASIS, AYANAMSA_BOUNDS, addBounds, ayanamsaBand, ayanamsaBound } from "./calc-ayanamsa.js";
 import { CALC_AYANAMSAS, CALC_FRAMES, calc, chart, events, houses } from "./calc.js";
 import type {
   CalcAyanamsa,
@@ -92,7 +92,9 @@ describe("the sidereal zodiac in calc()", () => {
         expect(sidereal.lon, `${body} ${definition.name}`).toBe(siderealLongitude(tropical.lon, value).lon);
         expect(sidereal.lat).toBe(tropical.lat);
         expect(sidereal.dist).toBe(tropical.dist);
-        expect(sidereal.ayanamsa).toMatchObject({ name: definition.name, value: value.true });
+        expect(sidereal.ayanamsa).toMatchObject({
+          name: definition.name, mean: value.mean, nutation: value.nutation, true: value.true, subtracted: "true"
+        });
       }
     }
   });
@@ -115,7 +117,9 @@ describe("the sidereal zodiac in calc()", () => {
           const gap = ((onMean.lon - onTrue.lon + 540) % 360) - 180;
           expect(Math.abs(gap) * 3600, `${body} ${definition.name} ${iso}`).toBeLessThan(1e-6);
           expect(Math.abs(onMean.lat - onTrue.lat) * 3600).toBeLessThan(1e-6);
-          expect(onMean.ayanamsa!.value).toBe(trueAt(definition, iso).mean);
+          const value = trueAt(definition, iso);
+          expect(onMean.ayanamsa).toMatchObject({ mean: value.mean, true: value.true, subtracted: "mean" });
+          expect(onMean.ayanamsa!.bound).toEqual(onTrue.ayanamsa!.bound);
         }
       }
     }
@@ -133,7 +137,12 @@ describe("the sidereal zodiac in calc()", () => {
     const degrees = ok(calc({ body: "Moon", time: iso, zodiac }));
     const radians = ok(calc({ body: "Moon", time: iso, zodiac, flags: { units: "radians" } }));
     expect(radians.lon).toBe(degrees.lon * DEG);
-    expect(radians.ayanamsa!.value).toBe(degrees.ayanamsa!.value * DEG);
+    expect(radians.ayanamsa).toEqual({
+      ...degrees.ayanamsa!,
+      mean: degrees.ayanamsa!.mean * DEG,
+      nutation: degrees.ayanamsa!.nutation * DEG,
+      true: degrees.ayanamsa!.true * DEG
+    });
     expect(radians.speeds!.lon).toBe(degrees.speeds!.lon * DEG);
   });
 
@@ -158,24 +167,72 @@ describe("the sidereal zodiac in calc()", () => {
     }
   });
 
-  it("gives the sidereal longitude's speed: the tropical speed less the ayanamsa's rate", () => {
+  it("gives the sidereal longitude's speed: the tropical speed less the ayanamsa's rate, over the TT that elapsed", () => {
     const h = 0.001;
     for (const iso of INSTANTS.slice(1, -1)) {
+      const ms = Date.parse(iso);
+      // The TT between the two samples: 2h but at the leap second of 2016, which adds one second.
+      const elapsed = timeBasis(ms + h * 86_400_000, "utc").ttDays - timeBasis(ms - h * 86_400_000, "utc").ttDays;
+      if (iso === "2016-12-31T23:59:30Z") expect(Math.abs(elapsed - 2 * h - 1 / 86_400) * 86_400).toBeLessThan(1e-6);
       for (const { zodiac, definition } of ZODIACS) {
-        const ms = Date.parse(iso);
         const before = trueAt(definition, new Date(ms - h * 86_400_000).toISOString()).true;
         const after = trueAt(definition, new Date(ms + h * 86_400_000).toISOString()).true;
         for (const body of ["Sun", "Moon", "Saturn", "North Node", "Mean Node"] as const) {
           const step = body === "North Node" ? 0.25 : h;
           const tropical = ok(calc({ body, time: iso }));
           const sidereal = ok(calc({ body, time: iso, zodiac }));
-          if (step === h && iso !== "2016-12-31T23:59:30Z") {
-            const rate = (after - before) / (2 * h);
-            expect(Math.abs(sidereal.speeds!.lon - (tropical.speeds!.lon - rate)) * 3600, `${body} ${definition.name}`).toBeLessThan(1e-6);
+          if (step === h) {
+            const rate = (after - before) / elapsed;
+            expect(Math.abs(sidereal.speeds!.lon - (tropical.speeds!.lon - rate)) * 3600, `${body} ${definition.name} ${iso}`).toBeLessThan(1e-6);
           }
           expect(sidereal.speeds!.lat).toBe(tropical.speeds!.lat);
           expect(sidereal.bounds.speed!.stepDays).toBe(step);
         }
+      }
+    }
+  });
+
+  it("takes a linear ayanamsa's rate from its definition, within the rate's bound, at instants on any clock", () => {
+    // In the mean ecliptic of date the subtracted ayanamsa is the mean one, which for a linear definition grows at its stated rate exactly.
+    for (const rate of [3600, -3600, 50.29]) {
+      const zodiac = { sidereal: { epoch: { jd: 2_415_020, scale: "TT" }, value: 359.9, rate } } as const;
+      for (const time of [...INSTANTS.slice(1, -1), { jd: 2_488_128.123456789, scale: "UT1" } as const]) {
+        const frame = "ecliptic-mean-of-date" as const;
+        const tropical = ok(calc({ body: "Sun", time, frame }));
+        const sidereal = ok(calc({ body: "Sun", time, frame, zodiac }));
+        // Within the rounding of the two subtractions themselves, a few tenths of a microarcsecond a day;
+        // a Julian date rebuilt from TT days put up to two microarcseconds a day here at 3,600″ a year.
+        const gap = (tropical.speeds!.lon - sidereal.speeds!.lon) - rate / 365.25 / 3600;
+        expect(Math.abs(gap) * 3600, `${rate} ${JSON.stringify(time)}`).toBeLessThan(5e-7);
+      }
+    }
+  });
+
+  it("keeps the longitude, speed and vector continuous where a caller's ayanamsa passes ±180°", () => {
+    // 179.9999° at J2000.0 growing by a degree a year: it reaches 180° about 0.0365 day later.
+    const zodiac = { sidereal: { epoch: { jd: 2_451_545, scale: "TT" }, value: 179.9999, rate: 3600 } } as const;
+    const definition = userAyanamsa({ epoch: { julianDateTT: 2_451_545 }, value: 179.9999, rate: 3600 });
+    for (const minutes of [52, 52.5, 52.56, 53, 54]) {
+      const time = { jd: 2_451_545 + minutes / 1440, scale: "TT" } as const;
+      for (const body of ["Sun", "Mars"] as const) {
+        const tropical = ok(calc({ body, time, flags: { cartesian: true } }));
+        const sidereal = ok(calc({ body, time, zodiac, flags: { cartesian: true } }));
+        const at = ayanamsaAt(definition, AstroTime.FromTerrestrialTime(time.jd - 2_451_545));
+        expect(sidereal.ayanamsa!.true).toBe(at.true);
+        expect(Math.abs(((sidereal.lon - (tropical.lon - at.true) + 540) % 360) - 180) * 3600).toBeLessThan(1e-9);
+        expect(sidereal.lon).toBeGreaterThanOrEqual(0);
+        expect(sidereal.lon).toBeLessThan(360);
+        // The true ayanamsa's rate, a degree a year and the nutation's, over the same 0.001 day either side, across the wrap.
+        const step = (days: number) => ayanamsaAt(definition, AstroTime.FromTerrestrialTime(time.jd - 2_451_545 + days)).true;
+        let change = step(0.001) - step(-0.001);
+        if (change > 180) change -= 360;
+        if (change < -180) change += 360;
+        expect(Math.abs(change * 365.25 / 0.002 - 1)).toBeLessThan(0.01);
+        expect(Math.abs(sidereal.speeds!.lon - (tropical.speeds!.lon - change / 0.002)) * 3600, `${body} ${minutes}`).toBeLessThan(1e-6);
+        const { x, y, vx, vy } = sidereal.cartesian!;
+        const lon = ((Math.atan2(y, x) / DEG) % 360 + 360) % 360;
+        expect(Math.abs(((lon - sidereal.lon + 540) % 360) - 180) * 3600).toBeLessThan(1e-6);
+        expect(Math.abs(((x * vy! - y * vx!) / (x * x + y * y)) / DEG - sidereal.speeds!.lon) * 3600).toBeLessThan(1e-3);
       }
     }
   });
@@ -202,19 +259,43 @@ describe("the sidereal zodiac in calc()", () => {
     expect(node.bounds.speed!.value).toBeNull();
   });
 
-  it("take a star definition's larger bound when its star is within a degree of the Sun", () => {
-    // δ Cnc, True Pushya's star, passed 0.08° from the Sun on 2000-07-31 (TT about 15:01 UTC).
+  it("take a star definition's larger bounds as its star nears the Sun", () => {
+    // δ Cnc, True Pushya's star, passed about 0.08° from the Sun's centre at about 15:30 UTC on 2000-07-31.
     const zodiac = { sidereal: "true-pushya" } as const;
-    const near = ok(calc({ body: "Moon", time: "2000-07-31T15:00:00Z", zodiac }));
-    const far = ok(calc({ body: "Moon", time: "2001-01-31T15:00:00Z", zodiac }));
-    expect(near.ayanamsa!.bound.value).toBe(0.022);
-    expect(far.ayanamsa!.bound.value).toBe(0.0011);
-    expect(near.bounds.speed!.value).toBe(addBounds(1.1, 0.4));
-    expect(far.bounds.speed!.value).toBe(addBounds(1.1, 0.00039));
-    expect(ok(calc({ body: "Moon", time: "2000-07-31T15:00:00Z", zodiac: { sidereal: "lahiri" } })).ayanamsa!.bound.value).toBe(4.4e-7);
-    const houses_ = ok(houses({ time: "2000-07-31T15:00:00Z", place: PLACE, zodiac })) as HousesResult;
-    expect(houses_.ayanamsa!.bound.value).toBe(0.022);
-    expect(houses_.bounds.angles.value).toBe(addBounds(0.02, 0.022));
+    const cases = [
+      ["2000-07-31T15:30:00Z", [0, 0.3], 0.036, 18],
+      ["2000-08-01T15:30:00Z", [0.3, 2], 0.0034, 0.022],
+      ["2001-01-31T15:00:00Z", [2, 180], 0.0011, 0.00034]
+    ] as const;
+    for (const [time, [from, to], position, rate] of cases) {
+      const result = ok(calc({ body: "Moon", time, zodiac }));
+      const at = AstroTime.FromTerrestrialTime(result.receipt.instants[0]!.jdTt - 2_451_545);
+      const elongation = ayanamsaAt(AYANAMSAS["true-pushya"], at).elongation!;
+      expect(elongation, time).toBeGreaterThanOrEqual(from);
+      expect(elongation, time).toBeLessThan(to);
+      expect(result.ayanamsa!.bound.value).toBe(position);
+      expect(result.bounds.position.value).toBe(addBounds(ok(calc({ body: "Moon", time })).bounds.position.value!, position));
+      expect(result.bounds.speed!.value).toBe(addBounds(1.1, rate));
+      const housesResult = ok(houses({ time, place: PLACE, zodiac })) as HousesResult;
+      expect(housesResult.ayanamsa!.bound.value).toBe(position);
+      expect(housesResult.bounds.angles.value).toBe(addBounds(0.02, position));
+    }
+    const lahiri = ok(calc({ body: "Moon", time: "2000-07-31T15:30:00Z", zodiac: { sidereal: "lahiri" } }));
+    expect(lahiri.ayanamsa!.bound.value).toBe(4.5e-7);
+    expect(lahiri.bounds.speed!.value).toBe(addBounds(1.1, 1.1e-7));
+  });
+
+  it("put each band's edge in the band beyond it", () => {
+    const star = AYANAMSAS["true-revati"];
+    expect(ayanamsaBand(star, 0)).toBe("starAtSun");
+    expect(ayanamsaBand(star, 0.2999999999)).toBe("starAtSun");
+    expect(ayanamsaBand(star, 0.3)).toBe("starNearSun");
+    expect(ayanamsaBand(star, 1.9999999999)).toBe("starNearSun");
+    expect(ayanamsaBand(star, 2)).toBe("star");
+    expect(ayanamsaBand(star, 180)).toBe("star");
+    for (const definition of [AYANAMSAS.lahiri, AYANAMSAS.raman, USERS[0]!.vedic, USERS[3]!.vedic]) {
+      expect(ayanamsaBand(definition, null)).toBe("epochOrLinear");
+    }
   });
 
   it("names the zodiac and the ayanamsa in the receipt, and repeats itself from it", () => {
@@ -263,20 +344,22 @@ describe("a caller's ayanamsa", () => {
   });
 
   it.each([
-    ["a built-in name", { name: "lahiri", epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }],
-    ["a name in capitals", { name: "Mine", epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }],
-    ["a name that is not a string", { name: 7, epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }],
-    ["both a rate and a model", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, rate: 50, model: "engine" }],
-    ["a value out of range", { epoch: { jd: 2_451_545, scale: "TT" }, value: 361 }],
-    ["a rate out of range", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, rate: 3601 }],
-    ["an unknown model", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, model: "iau2000" }],
-    ["no epoch", { value: 23 }],
-    ["an unknown field", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, ayanamsa: "lahiri" }],
-    ["a TT epoch beyond any date", { epoch: { jd: 1e300, scale: "TT" }, value: 23 }],
-    ["a UTC epoch beyond any date", { epoch: { jd: 1e12, scale: "UTC" }, value: 23 }],
-    ["an epoch without a scale", { epoch: { jd: 2_451_545 }, value: 23 }]
-  ])("is malformed with %s, and throws RangeError", (_, sidereal) => {
-    expect(() => calc({ body: "Sun", time: INSTANTS[3]!, zodiac: { sidereal } as never })).toThrow(RangeError);
+    ["a built-in name", { name: "lahiri", epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }, "zodiac.sidereal.name"],
+    ["a name in capitals", { name: "Mine", epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }, "zodiac.sidereal.name"],
+    ["a name that is not a string", { name: 7, epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }, "zodiac.sidereal.name"],
+    ["both a rate and a model", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, rate: 50, model: "engine" }, "zodiac.sidereal"],
+    ["a value out of range", { epoch: { jd: 2_451_545, scale: "TT" }, value: 361 }, "zodiac.sidereal.value"],
+    ["a rate out of range", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, rate: 3601 }, "zodiac.sidereal.rate"],
+    ["an unknown model", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, model: "iau2000" }, "zodiac.sidereal.model"],
+    ["no epoch", { value: 23 }, "zodiac.sidereal.epoch"],
+    ["an unknown field", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, ayanamsa: "lahiri" }, "zodiac.sidereal"],
+    ["a TT epoch beyond any date", { epoch: { jd: 1e300, scale: "TT" }, value: 23 }, "zodiac.sidereal.epoch"],
+    ["a UTC epoch beyond any date", { epoch: { jd: 1e12, scale: "UTC" }, value: 23 }, "zodiac.sidereal.epoch"],
+    ["an epoch without a scale", { epoch: { jd: 2_451_545 }, value: 23 }, "zodiac.sidereal.epoch"]
+  ])("is malformed with %s, and throws RangeError naming %s", (_, sidereal, field) => {
+    const request = () => calc({ body: "Sun", time: INSTANTS[3]!, zodiac: { sidereal } as never });
+    expect(request).toThrow(RangeError);
+    expect(request).toThrow(field);
   });
 
   it("is refused out of range when it holds its value at an epoch outside the span; a rate is not", () => {
@@ -358,7 +441,9 @@ describe("the sidereal zodiac in houses()", () => {
         expect(sidereal.cusps).toEqual(tropical.cusps.map(turn));
         expect(sidereal.armc).toBe(tropical.armc);
         expect(sidereal.obliquity).toBe(tropical.obliquity);
-        expect(sidereal.ayanamsa).toMatchObject({ name: definition.name, value: value.true });
+        expect(sidereal.ayanamsa).toMatchObject({
+          name: definition.name, mean: value.mean, nutation: value.nutation, true: value.true, subtracted: "true"
+        });
         const added = ayanamsaBound(definition, ayanamsaAt(definition, AstroTime.FromTerrestrialTime(sidereal.receipt.instants[0]!.jdTt - 2_451_545)).elongation).position;
         expect(sidereal.bounds.angles.value).toBe(addBounds(0.02, added));
         expect(sidereal.bounds.cusps.value).toBe(addBounds(0.08, added));
@@ -431,6 +516,20 @@ describe("the sidereal zodiac in events()", () => {
     const result = ok(events({ kind: "longitude-crossing", body: "Mercury", longitude: 215, from: "2025-10-01T00:00:00Z", to: "2026-01-01T00:00:00Z", zodiac }));
     expect(result.events.map((event) => event.retrograde)).toEqual([false, true, false]);
   });
+
+  it.each(USERS.map((user) => [user.vedic.name, user.calc] as const))("finds the crossings a dense scan finds with a caller's ayanamsa (%s)", (_, user) => {
+    const zodiac = { sidereal: user };
+    const [from, to] = ["2026-01-01T00:00:00Z", "2026-03-01T00:00:00Z"];
+    const result = ok(events({ kind: "longitude-crossing", body: "Venus", longitude: 300, from, to, zodiac, stepDays: 1 }));
+    const expected = scan("Venus", 300, zodiac, from, to, 12);
+    expect(result.events.length).toBe(expected.length);
+    expect(expected.length).toBeGreaterThan(0);
+    const slackMs = result.bounds.timing.value! * 1000 + 0.5;
+    result.events.forEach((event, k) => expect(Math.abs(Date.parse(event.at) - expected[k]!)).toBeLessThanOrEqual(slackMs + 1));
+    expect(result.receipt.request.zodiac).toEqual(ok(calc({ body: "Venus", time: from, zodiac })).receipt.request.zodiac);
+    expect(result.receipt.conventions[1]).toBe(`ayanamsa:user-${"rate" in user ? "linear" : "epoch"}`);
+    expect(JSON.parse(JSON.stringify(events(result.receipt.request)))).toEqual(JSON.parse(JSON.stringify(result)));
+  });
 });
 
 describe("the sidereal zodiac in chart()", () => {
@@ -441,9 +540,18 @@ describe("the sidereal zodiac in chart()", () => {
           const result = ok(chart({ time: iso, zodiac, ...settings }));
           const natal = natalChart({ utc: iso, ...("place" in settings ? settings.place : {}), ...("houseSystem" in settings ? { houseSystem: settings.houseSystem } : {}) });
           const expected = siderealChart(natal, definition);
+          const value = expected.ayanamsaValue;
+          const { elongation } = ayanamsaAt(definition, AstroTime.FromTerrestrialTime(value.julianDateTT - 2_451_545));
           expect(result.chart).toEqual(ok(chart({ time: iso, ...settings })).chart);
           expect(result.sidereal).toEqual({
-            ayanamsa: { name: definition.name, mean: expected.ayanamsaValue.mean, nutation: expected.ayanamsaValue.nutation, true: expected.ayanamsaValue.true },
+            ayanamsa: {
+              name: definition.name,
+              mean: value.mean,
+              nutation: value.nutation,
+              true: value.true,
+              subtracted: "true",
+              bound: { value: ayanamsaBound(definition, elongation).position, unit: "arcsec", label: "measured", basis: AYANAMSA_BASIS }
+            },
             bodies: expected.bodies.map(({ body, lon }) => ({ body, lon })),
             ascendant: expected.ascendant && expected.ascendant.lon,
             midheaven: expected.midheaven && expected.midheaven.lon,
@@ -460,7 +568,13 @@ describe("the sidereal zodiac in chart()", () => {
 });
 
 describe("the ayanamsa's bounds", () => {
-  /** Written by docs/evidence/calc-sidereal-2026-10-05/tools/ayanamsa_rates.py from ERFA; see there. */
+  /**
+   * ERFA's mean ayanamsas and their rates: ayanamsa-rates.json from
+   * docs/evidence/calc-sidereal-2026-10-05/tools/ayanamsa_rates.py, and
+   * ayanamsa-rates-dense.json, densely near each star's closest approach to
+   * the Sun and with callers' ayanamsas at the ends of what calc accepts, from
+   * dense_rates.py beside it.
+   */
   interface Row {
     readonly kind: "epoch" | "user" | "linear" | "star";
     readonly name: string;
@@ -471,25 +585,57 @@ describe("the ayanamsa's bounds", () => {
     readonly value?: number;
     readonly model?: "engine" | "newcomb" | "iau1976";
   }
-  const { rows } = JSON.parse(readFileSync(new URL("./fixtures/ayanamsa-rates.json", import.meta.url), "utf8")) as { rows: Row[] };
+  interface Series {
+    readonly jd: readonly number[];
+    readonly mean: readonly number[];
+    readonly rate: readonly number[];
+  }
+  interface Dense {
+    readonly stars: readonly (Series & { readonly name: CalcAyanamsa })[];
+    readonly callers: readonly (Series & {
+      readonly definition: { readonly epoch: number; readonly value: number; readonly rate?: number; readonly model?: "engine" | "newcomb" | "iau1976" };
+    })[];
+  }
+  const fixture = (name: string) => JSON.parse(readFileSync(new URL(`./fixtures/${name}`, import.meta.url), "utf8"));
+  const { rows } = fixture("ayanamsa-rates.json") as { rows: Row[] };
+  const dense = fixture("ayanamsa-rates-dense.json") as Dense;
+
+  const comparisons: { readonly definition: AyanamsaDefinition; readonly jd: number; readonly mean: number; readonly rate: number }[] = [];
   const users = new Map<string, AyanamsaDefinition>();
-  const definitionOf = (row: Row): AyanamsaDefinition => {
-    if (row.kind !== "user") return AYANAMSAS[row.name as CalcAyanamsa];
-    if (!users.has(row.name)) users.set(row.name, userAyanamsa({ name: row.name, epoch: { julianDateTT: row.epoch! }, value: row.value!, model: row.model! }));
-    return users.get(row.name)!;
-  };
+  for (const row of rows) {
+    if (row.kind === "user" && !users.has(row.name)) {
+      users.set(row.name, userAyanamsa({ name: row.name, epoch: { julianDateTT: row.epoch! }, value: row.value!, model: row.model! }));
+    }
+    comparisons.push({ definition: row.kind === "user" ? users.get(row.name)! : AYANAMSAS[row.name as CalcAyanamsa], jd: row.jd, mean: row.mean, rate: row.rate });
+  }
+  for (const series of dense.stars) {
+    series.jd.forEach((jd, k) => comparisons.push({ definition: AYANAMSAS[series.name], jd, mean: series.mean[k]!, rate: series.rate[k]! }));
+  }
+  for (const series of dense.callers) {
+    const { epoch, value, rate, model } = series.definition;
+    const definition = userAyanamsa({ name: "caller", epoch: { julianDateTT: epoch }, value, ...(rate === undefined ? { model: model! } : { rate }) });
+    series.jd.forEach((jd, k) => comparisons.push({ definition, jd, mean: series.mean[k]!, rate: series.rate[k]! }));
+  }
+
   const STEP = 0.001;
   const at = (jd: number) => AstroTime.FromTerrestrialTime(jd - 2_451_545);
-  /** Each band's largest difference of the mean ayanamsa (arcseconds) and of its rate (arcseconds a day), by the engine's own angle from the Sun. */
-  const largest = { epochOrLinear: [0, 0], star: [0, 0], starNearSun: [0, 0] } as Record<keyof typeof AYANAMSA_BOUNDS, [number, number]>;
-  const counts = { epochOrLinear: 0, star: 0, starNearSun: 0 } as Record<keyof typeof AYANAMSA_BOUNDS, number>;
-  for (const row of rows) {
-    const definition = definitionOf(row);
-    const now = ayanamsaAt(definition, at(row.jd));
-    const rate = (ayanamsaAt(definition, at(row.jd + STEP)).mean - ayanamsaAt(definition, at(row.jd - STEP)).mean) / (2 * STEP);
-    const band = definition.kind !== "star" ? "epochOrLinear" : now.elongation! >= NEAR_SUN_DEGREES ? "star" : "starNearSun";
+  /** To the nearest whole turn: a caller's ayanamsa need not lie within a turn of zero, and the engine's is wrapped. */
+  const turn = (degrees: number) => degrees - 360 * Math.round(degrees / 360);
+  type Band = keyof typeof AYANAMSA_BOUNDS;
+  /** Each band's largest difference of the mean ayanamsa (arcseconds) and of its rate (arcseconds a day), by the engine's own angle of the star from the Sun. */
+  const largest = { epochOrLinear: [0, 0], star: [0, 0], starNearSun: [0, 0], starAtSun: [0, 0] } as Record<Band, [number, number]>;
+  const counts = { epochOrLinear: 0, star: 0, starNearSun: 0, starAtSun: 0 } as Record<Band, number>;
+  for (const { definition, jd, mean, rate } of comparisons) {
+    const now = ayanamsaAt(definition, at(jd));
+    const engineRate = turn(ayanamsaAt(definition, at(jd + STEP)).mean - ayanamsaAt(definition, at(jd - STEP)).mean) / (2 * STEP);
+    // The bands' edges as docs/calc.md states them, not as calc-ayanamsa.ts computes them.
+    const elongation = now.elongation!;
+    const band: Band = definition.kind !== "star" ? "epochOrLinear" : elongation >= 2 ? "star" : elongation >= 0.3 ? "starNearSun" : "starAtSun";
     counts[band]++;
-    largest[band] = [Math.max(largest[band][0], Math.abs(now.mean - row.mean) * 3600), Math.max(largest[band][1], Math.abs(rate - row.rate) * 3600)];
+    largest[band] = [
+      Math.max(largest[band][0], Math.abs(turn(now.mean - mean)) * 3600),
+      Math.max(largest[band][1], Math.abs(engineRate - rate) * 3600)
+    ];
   }
   /** Rounded up to two significant figures, the rule of the calc entry's other measured bounds. */
   const up2 = (x: number) => {
@@ -497,12 +643,19 @@ describe("the ayanamsa's bounds", () => {
     return Number((Math.ceil(x / unit) * unit).toPrecision(2));
   };
 
-  it("compare every built-in and caller's ayanamsa with ERFA, and a star's near the Sun", () => {
-    expect(counts).toEqual({ epochOrLinear: 96, star: 741, starNearSun: 123 });
+  it("compare every built-in and caller's ayanamsa with ERFA, and each star near the Sun", () => {
+    expect(counts).toEqual({ epochOrLinear: 906, star: 4510, starNearSun: 3120, starAtSun: 7580 });
     expect(new Set(rows.map((row) => row.name))).toEqual(new Set([...CALC_AYANAMSAS, "user-engine-b1950", "user-newcomb-j1900", "user-iau1976-1956"]));
+    expect(new Set(dense.stars.map((series) => series.name))).toEqual(new Set(["true-chitra", "true-revati", "true-pushya", "galactic-center"]));
+    // The near-Sun rows reach inside the deflection's cap: True Pushya passed within 0.08° of the Sun in 1801, 1900 and 2000.
+    expect(dense.stars.filter((series) => (series as unknown as { capFromTo: number[] }).capFromTo.length > 0).length).toBe(3);
+    const values = dense.callers.map((series) => series.definition.value);
+    expect(Math.min(...values)).toBe(-359.9);
+    expect(Math.max(...values)).toBe(359.9);
+    expect(new Set(dense.callers.map((series) => series.definition.rate).filter((rate) => rate !== undefined))).toEqual(new Set([-3600, -50.29, 50.29, 3600]));
   });
 
-  it.each(["epochOrLinear", "star", "starNearSun"] as const)("are %s's largest differences, rounded up to two significant figures", (band) => {
+  it.each(["epochOrLinear", "star", "starNearSun", "starAtSun"] as const)("are %s's largest differences, rounded up to two significant figures", (band) => {
     expect(largest[band][0]).toBeLessThanOrEqual(AYANAMSA_BOUNDS[band].position);
     expect(largest[band][1]).toBeLessThanOrEqual(AYANAMSA_BOUNDS[band].rate);
     expect(up2(largest[band][0])).toBe(AYANAMSA_BOUNDS[band].position);
@@ -511,12 +664,16 @@ describe("the ayanamsa's bounds", () => {
 
   it("add in whole nanoarcseconds, rounded up", () => {
     expect(addBounds(3, 0.0011)).toBe(3.0011);
-    expect(addBounds(0.0023, 4.4e-7)).toBe(0.00230044);
+    expect(addBounds(0.0023, 4.5e-7)).toBe(0.00230045);
     expect(addBounds(0.18, 0.4)).toBe(0.58);
     expect(addBounds(0.0023, 1e-10)).toBe(0.002300001);
     expect(addBounds(8.3, 0.022)).toBe(8.322);
+    // A sum of a few arcseconds and a fraction of a nanoarcsecond's noise is not rounded up a whole step.
+    expect(addBounds(8.3, 4.4e-7)).toBe(8.30000044);
     expect(addBounds(0.00081, 6.4e-9)).toBe(0.000810007);
     expect(addBounds(25, 0.0011)).toBe(25.0011);
+    expect(addBounds(519, 0.036)).toBe(519.036);
+    expect(addBounds(1.1, 18)).toBe(19.1);
   });
 });
 

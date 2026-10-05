@@ -98,8 +98,10 @@ if (calcResult.status === "ok") { const replayed: CalcRequest = calcResult.recei
 const userAyanamsa: CalcUserAyanamsa = {epoch: {jd: 2451545, scale: "TT"}, value: 23.85};
 const siderealResult = calc({body: "Moon", time: "2000-02-29", zodiac: {sidereal: userAyanamsa}});
 if (siderealResult.status === "ok") { const subtracted: CalcAyanamsaValue | null = siderealResult.ayanamsa; void subtracted; }
+if (siderealResult.status === "ok" && siderealResult.ayanamsa) { const which: "true" | "mean" = siderealResult.ayanamsa.subtracted; const mean: number = siderealResult.ayanamsa.mean; const bound: number | null = siderealResult.ayanamsa.bound.value; void which; void mean; void bound; }
 const siderealChartResult = calcChart({time: "2000-02-29", zodiac: {sidereal: "lahiri"}});
 if (siderealChartResult.status === "ok") { const sidereal: CalcSiderealChart | null = siderealChartResult.sidereal; void sidereal; }
+if (siderealChartResult.status === "ok" && siderealChartResult.sidereal) { const chartAyanamsa: CalcAyanamsaValue = siderealChartResult.sidereal.ayanamsa; void chartAyanamsa; }
 void houses; void events;
 import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError, type BirthWindow, type WindowChange, type WindowUnresolved } from "@zodiacs/engine/window";
 const windowed: BirthWindow = birthWindow({start: "2000-02-29T11:50:00Z", end: "2000-02-29T12:10:00Z", latitude: 0, longitude: 180, houseSystem: "placidus", rounding: {recorded: "2000-02-29T12:00:00Z", minutes: 5}});

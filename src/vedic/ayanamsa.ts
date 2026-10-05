@@ -372,8 +372,10 @@ function meanAyanamsa(
       return { value: definition.value + (correction - longitudeIn(at, x!, y!, z!)) / DEG, elongation: null };
     }
     case "linear":
+      // Days from the epoch counted from TT days since J2000.0: a Julian date near 2.4 million rebuilt
+      // from them is held only to about 5e-10 day, which a rate of 3,600″ a year turns into 2e-6″ a day.
       return {
-        value: definition.value + (definition.rate * (time.tt + J2000 - definition.epochTT)) / JULIAN_YEAR / 3600,
+        value: definition.value + (definition.rate * (time.tt - (definition.epochTT - J2000))) / JULIAN_YEAR / 3600,
         elongation: null
       };
     case "star": {

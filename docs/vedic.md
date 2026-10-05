@@ -233,13 +233,15 @@ apparent longitude of date minus `true` is exactly the anchor longitude.
 The catalogue matters more than the computation. Gaia EDR3's values for
 ζ Psc and δ Cnc move True Revati and True Pushya by −0.22″ to +0.25″ over
 1800–2200 (zero near 2000); Gaia has no usable astrometry for Spica. The engine agrees with ERFA's astrometry on the
-same catalogue values within 0.001″ at the 164 instants of the first
-comparison, none of them within 17° of the Sun, and within 0.0011″ at the 741
-instants a degree or more from the Sun of the calc entry's
-(`docs/evidence/calc-sidereal-2026-10-05/`),
-and with Swiss Ephemeris within 0.0044″. Within a degree of the Sun, where the
-star is near or behind the Sun's disc, the engine and ERFA part by up to
-0.022″, from their limits on the light deflection there. That shows the
+same catalogue values within 0.001″ in the 164 comparisons of the first
+evidence, 41 instants for each star and none within 17° of the Sun, and within
+0.0011″ in the 4,510 comparisons of the calc entry's with the star 2° or more
+from the Sun (`docs/evidence/calc-sidereal-2026-10-05/`), and with Swiss
+Ephemeris within 0.0044″. Nearer the Sun the two part further: by up to
+0.0034″ from 0.3° to 2°, and by up to 0.036″ within 0.3°, where the star is on
+or beside the Sun's disc. There the deflection of the star's light grows so
+fast as its angle from the Sun falls that the small difference between the
+two programs' positions of the Earth grows with it. That shows the
 computations agree on shared inputs, not that either is that accurate.
 
 ### User-defined ayanamsas

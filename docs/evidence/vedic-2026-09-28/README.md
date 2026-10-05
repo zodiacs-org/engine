@@ -712,6 +712,7 @@ about ten years apart, which land near the same date each decade; none of
 the 164 was within 17° of the Sun, so its filter at 5° left nothing out, and
 "more than 5° from the Sun" describes the filter, not a sample near it.
 `docs/evidence/calc-sidereal-2026-10-05/` compares the same definitions near
-each star's conjunction with the Sun: within 0.0011″ a degree or more from
-the Sun (0.00101″ at its largest, 7.7° from it), and within 0.022″ inside a
-degree. The figures above are left as they were measured.
+each star's conjunction with the Sun, densely around its closest approach:
+within 0.0011″ with the star 2° or more from the Sun (0.00101″ at its
+largest, 7.7° from it), within 0.0034″ from 0.3° to 2°, and within 0.036″
+inside 0.3°. The figures above are left as they were measured.

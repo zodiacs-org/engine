@@ -158,13 +158,27 @@ export interface CalcUserAyanamsa {
  */
 export type CalcZodiac = "tropical" | { readonly sidereal: CalcAyanamsa | CalcUserAyanamsa };
 
-/** The ayanamsa a sidereal result subtracted. */
+/**
+ * The ayanamsa of a sidereal result, at its instant and on its clock, in the
+ * result's angular unit; calc(), houses() and chart() give the same shape.
+ */
 export interface CalcAyanamsaValue {
   /** The definition's name. */
   readonly name: string;
-  /** In the units of `lon`: the true ayanamsa in the true ecliptic of date, the mean ayanamsa in the mean ecliptic of date. */
-  readonly value: number;
-  /** Its difference from ERFA's construction of the same definition. */
+  /** The mean ayanamsa, counted along the mean ecliptic of date. */
+  readonly mean: number;
+  /** The engine's nutation in longitude (IAU 2000B). */
+  readonly nutation: number;
+  /** The mean ayanamsa plus the nutation in longitude, counted along the true ecliptic of date, in (−180°, 180°]. */
+  readonly true: number;
+  /** The one subtracted: "true" in the true ecliptic of date, "mean" in the mean ecliptic of date. */
+  readonly subtracted: "true" | "mean";
+  /**
+   * The mean ayanamsa's difference from ERFA's construction of the same
+   * definition, the bound a sidereal result's own bounds add. The nutation
+   * cancels from a sidereal longitude; `true`, read on its own, also differs
+   * from IAU 2000A's by the nutation model's difference (docs/calc.md).
+   */
   readonly bound: CalcBound;
 }
 
@@ -261,7 +275,7 @@ export interface CalcPosition {
     readonly vy: number | null;
     readonly vz: number | null;
   } | null;
-  /** In the sidereal zodiac, the ayanamsa subtracted from `lon`; null in the tropical zodiac. */
+  /** In the sidereal zodiac, the ayanamsa and which value of it `lon` has subtracted; null in the tropical zodiac. */
   readonly ayanamsa: CalcAyanamsaValue | null;
   /** In the sidereal zodiac, each includes the ayanamsa's own bound. */
   readonly bounds: CalcBounds;
@@ -406,12 +420,16 @@ interface Zodiac {
 
 const TROPICAL: Zodiac = { record: "tropical", definition: null, ids: ["zodiac:tropical"] };
 
+/** The Julian date of 1970-01-01T00:00Z, the middle of a Date's range of 10⁸ days either way. */
+const UNIX_JD = 2_440_587.5;
+
 /** The TT Julian date of a caller's ayanamsa's epoch, read as an instant is read. */
 function epochTT(epoch: TimeInput, label: string): number {
   const record = epoch.record;
-  if ("jd" in record && record.scale === "TT") return record.jd;
   // The range of a Date, as userAyanamsa takes an epoch; the time basis reads any instant in it.
-  if (!(Math.abs(epoch.ms) <= 8.64e15)) throw new RangeError(`${label} must be an instant in the range of a Date.`);
+  const outside = "jd" in record && record.scale === "TT" ? !(Math.abs(record.jd - UNIX_JD) <= 1e8) : !(Math.abs(epoch.ms) <= 8.64e15);
+  if (outside) throw new RangeError(`${label} must be an instant in the range of a Date.`);
+  if ("jd" in record && record.scale === "TT") return record.jd;
   return J2000_JD + timeBasis(epoch.ms, epoch.scale, epoch.pin).ttDays;
 }
 
@@ -424,13 +442,16 @@ function readZodiac(value: unknown): Zodiac {
   }
   const label = "zodiac.sidereal";
   const given = fields(sidereal, label, ["name", "epoch", "value", "rate", "model"]);
-  if (given.name !== undefined && typeof given.name !== "string") throw new RangeError(`${label}.name must be a string.`);
+  // userAyanamsa's rule for a name, checked here so that the message names the field.
+  if (given.name !== undefined && (typeof given.name !== "string" || !/^[a-z][a-z0-9-]{0,63}$/.test(given.name) || Object.hasOwn(AYANAMSAS, given.name))) {
+    throw new RangeError(`${label}.name must be a lowercase identifier of at most 64 characters that is not a built-in name.`);
+  }
   const epoch = readTime(given.epoch, `${label}.epoch`);
   const value_ = within(given.value, `${label}.value`, -360, 360);
   if (given.rate !== undefined && given.model !== undefined) throw new RangeError(`${label} takes a rate or a model, not both.`);
   const rate = given.rate === undefined ? undefined : within(given.rate, `${label}.rate`, -3600, 3600);
   const model = given.model === undefined ? undefined : oneOf(given.model, ["engine", "newcomb", "iau1976"] as const, `${label}.model`);
-  // userAyanamsa checks the name, and the epoch's range.
+  // Every field is checked above, as userAyanamsa would check it.
   const definition = userAyanamsa({
     ...(given.name === undefined ? {} : { name: given.name }),
     epoch: { julianDateTT: epochTT(epoch, `${label}.epoch`) },
@@ -469,12 +490,18 @@ function frameRefusal(zodiac: Zodiac, frame: CalcFrame): CalcRefusal | null {
     : null;
 }
 
-/** The ayanamsa's bound at an instant, as a result reports it. */
-function ayanamsaValue(definition: AyanamsaDefinition, value: number, elongation: number | null, k: number): CalcAyanamsaValue {
+/** A definition's ayanamsa at an instant, degrees, with a star definition's star's angle from the Sun. */
+type AyanamsaAt = ReturnType<typeof ayanamsaAt>;
+
+/** The ayanamsa at an instant as a result reports it, in units of `k` per degree, with its bound. */
+function ayanamsaValue(definition: AyanamsaDefinition, value: AyanamsaAt, subtracted: "true" | "mean", k: number): CalcAyanamsaValue {
   return {
     name: definition.name,
-    value: value * k,
-    bound: { value: ayanamsaBound(definition, elongation).position, unit: "arcsec", label: "measured", basis: AYANAMSA_BASIS }
+    mean: value.mean * k,
+    nutation: value.nutation * k,
+    true: value.true * k,
+    subtracted,
+    bound: { value: ayanamsaBound(definition, value.elongation).position, unit: "arcsec", label: "measured", basis: AYANAMSA_BASIS }
   };
 }
 
@@ -622,10 +649,8 @@ function turnedBack([x, y, z]: Vec3, angle: number): Vec3 {
 }
 
 interface SiderealRow extends Row {
-  /** The ayanamsa subtracted, degrees. */
-  readonly ayanamsa: number;
-  /** A star definition's star's angle from the Sun, degrees; null for other definitions. */
-  readonly elongation: number | null;
+  /** The ayanamsa at the instant, degrees, and a star definition's star's angle from the Sun. */
+  readonly ayanamsa: AyanamsaAt;
 }
 
 /**
@@ -647,8 +672,7 @@ function siderealOf(evaluate: (at: AstroTime) => Row, definition: AyanamsaDefini
       dist: row.dist,
       xyz: row.xyz && turnedBack(row.xyz, subtracted),
       raw: row.raw - subtracted,
-      ayanamsa: subtracted,
-      elongation: value.elongation
+      ayanamsa: value
     };
   };
 }
@@ -807,7 +831,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     if (method) ids.push(method === "analytic" ? "speed:analytic" : `speed:central-difference-${step}d`);
 
     // In the sidereal zodiac, the ayanamsa subtracted and its own bounds, at this instant.
-    const sidereal = definition === null ? null : (now as SiderealRow);
+    const sidereal = definition === null ? null : (now as SiderealRow).ayanamsa;
     const added = sidereal && ayanamsaBound(definition!, sidereal.elongation);
 
     return {
@@ -822,7 +846,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
         flags.cartesian && now.xyz
           ? { x: now.xyz[0], y: now.xyz[1], z: now.xyz[2], vx: velocity?.[0] ?? null, vy: velocity?.[1] ?? null, vz: velocity?.[2] ?? null }
           : null,
-      ayanamsa: sidereal && ayanamsaValue(definition!, sidereal.ayanamsa, sidereal.elongation, k),
+      ayanamsa: sidereal && ayanamsaValue(definition!, sidereal, frame === "ecliptic-true-of-date" ? "true" : "mean", k),
       bounds: {
         position: withAyanamsa(bound(row?.[0], "arcsec", estimated), added && added.position),
         distance: point ? null : bound(row?.[1], "relative", estimated),
@@ -872,7 +896,7 @@ export interface HousesResult {
   /** The true obliquity used, degrees. */
   readonly obliquity: number;
   readonly flags: readonly ChartFlag[];
-  /** In the sidereal zodiac, the true ayanamsa subtracted; null in the tropical zodiac. */
+  /** In the sidereal zodiac, the ayanamsa, degrees, whose true value is subtracted; null in the tropical zodiac. */
   readonly ayanamsa: CalcAyanamsaValue | null;
   /** In the sidereal zodiac, each includes the ayanamsa's own bound. */
   readonly bounds: { readonly angles: CalcBound; readonly cusps: CalcBound };
@@ -920,7 +944,7 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
       armc: ramcOf(input),
       obliquity: input.obliquity,
       flags: fellBack ? ["polar-fallback"] : [],
-      ayanamsa: value && ayanamsaValue(definition!, value.true, value.elongation, 1),
+      ayanamsa: value && ayanamsaValue(definition!, value, "true", 1),
       bounds: {
         angles: withAyanamsa(
           { value: 0.02, unit: "arcsec", label: "measured", basis: basis("vectors of the ascendant, midheaven, Vertex and East Point") },
@@ -1086,8 +1110,8 @@ export interface ChartResult {
 
 /** A chart's sidereal longitudes, degrees in [0, 360), as siderealChart() gives them. */
 export interface CalcSiderealChart {
-  /** The ayanamsa at the chart's instant and on its clock: mean, the nutation in longitude, and true, the value subtracted. */
-  readonly ayanamsa: { readonly name: string; readonly mean: number; readonly nutation: number; readonly true: number };
+  /** The ayanamsa at the chart's instant and on its clock, degrees, whose true value is subtracted. */
+  readonly ayanamsa: CalcAyanamsaValue;
   /** The chart's bodies, in its order. */
   readonly bodies: readonly { readonly body: BodyName; readonly lon: number }[];
   /** Null when the chart has no angles. */
@@ -1103,8 +1127,10 @@ export interface CalcSiderealChart {
 function siderealOfChart(computed: Chart, definition: AyanamsaDefinition): CalcSiderealChart {
   const sidereal = siderealChartOf(computed, definition);
   const value = sidereal.ayanamsaValue;
+  // The star's angle from the Sun, for the bound, at the TT instant the ayanamsa was taken at.
+  const { elongation } = ayanamsaAt(definition, AstroTime.FromTerrestrialTime(value.julianDateTT - J2000_JD));
   return {
-    ayanamsa: { name: value.ayanamsa, mean: value.mean, nutation: value.nutation, true: value.true },
+    ayanamsa: ayanamsaValue(definition, { mean: value.mean, nutation: value.nutation, true: value.true, elongation }, "true", 1),
     bodies: sidereal.bodies.map(({ body, lon }) => ({ body, lon })),
     ascendant: sidereal.ascendant === null ? null : sidereal.ascendant.lon,
     midheaven: sidereal.midheaven === null ? null : sidereal.midheaven.lon,

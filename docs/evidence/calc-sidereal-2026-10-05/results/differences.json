@@ -1,25 +1,26 @@
 {
  "generator": "docs/evidence/calc-sidereal-2026-10-05/tools/differences.ts",
  "units": "largest |engine − ERFA| of the mean ayanamsa, arcseconds, and of its rate, arcseconds a day; jd in TT",
- "nearSunDegrees": 1,
+ "nearSunDegrees": 2,
+ "atSunDegrees": 0.3,
  "bands": {
   "epochOrLinear": {
-   "comparisons": 96,
+   "comparisons": 906,
    "position": {
-    "arcsec": 4.3013272943426273e-7,
-    "name": "user-iau1976-1956",
-    "jd": 2378496.5,
+    "arcsec": 4.4958596845390275e-7,
+    "name": "caller: epoch 2378496.5, value 359.9, model engine",
+    "jd": 2469806.375,
     "elongation": null
    },
    "rate": {
-    "arcsec": 6.396650055343414e-9,
-    "name": "fagan-bradley",
-    "jd": 2461311.5,
+    "arcsec": 1.0231958188437317e-7,
+    "name": "caller: epoch 2378496.5, value -359.9, model engine",
+    "jd": 2469806.375,
     "elongation": null
    }
   },
   "star": {
-   "comparisons": 741,
+   "comparisons": 4510,
    "position": {
     "arcsec": 0.001012010763190574,
     "name": "true-chitra",
@@ -27,40 +28,59 @@
     "elongation": 7.7483659905321645
    },
    "rate": {
-    "arcsec": 0.0003842046694973783,
+    "arcsec": 0.00033529659156469774,
     "name": "true-revati",
-    "jd": 2524328.5,
-    "elongation": 1.44914946543875
+    "jd": 2488179.5,
+    "elongation": 9.72309522424394
    }
   },
   "starNearSun": {
-   "comparisons": 123,
+   "comparisons": 3120,
    "position": {
-    "arcsec": 0.02142224509782409,
-    "name": "true-pushya",
-    "jd": 2379071.25,
-    "elongation": 0.11108497017771103
+    "arcsec": 0.003375962255347531,
+    "name": "true-revati",
+    "jd": 2524329.73944714,
+    "elongation": 0.3005516507500804
    },
    "rate": {
-    "arcsec": 0.39569714545030776,
+    "arcsec": 0.02169267645647382,
+    "name": "true-revati",
+    "jd": 2524330.17944714,
+    "elongation": 0.30028445678726373
+   }
+  },
+  "starAtSun": {
+   "comparisons": 7580,
+   "position": {
+    "arcsec": 0.035203714170961575,
     "name": "true-pushya",
-    "jd": 2451757.125,
-    "elongation": 0.08205749924090144
+    "jd": 2379071.20222068,
+    "elongation": 0.08153547865244683
+   },
+   "rate": {
+    "arcsec": 17.105209050775688,
+    "name": "true-pushya",
+    "jd": 2379071.12257818,
+    "elongation": 0.0802685748909779
    }
   }
  },
  "bounds": {
   "epochOrLinear": {
-   "position": 4.4e-7,
-   "rate": 6.4e-9
+   "position": 4.5e-7,
+   "rate": 1.1e-7
   },
   "star": {
    "position": 0.0011,
-   "rate": 0.00039
+   "rate": 0.00034
   },
   "starNearSun": {
-   "position": 0.022,
-   "rate": 0.4
+   "position": 0.0034,
+   "rate": 0.022
+  },
+  "starAtSun": {
+   "position": 0.036,
+   "rate": 18
   }
  }
 }

@@ -1693,9 +1693,12 @@
     "cartesian": null,
     "ayanamsa": {
      "name": "lahiri",
-     "value": 23.85320345531025,
+     "mean": 23.857073231118726,
+     "nutation": -0.0038697758084767523,
+     "true": 23.85320345531025,
+     "subtracted": "true",
      "bound": {
-      "value": 4.4e-7,
+      "value": 4.5e-7,
       "unit": "arcsec",
       "label": "measured",
       "basis": "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
@@ -1703,10 +1706,10 @@
     },
     "bounds": {
      "position": {
-      "value": 8.300000441,
+      "value": 8.30000045,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.4e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.5e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
       "value": 0.00014,
@@ -1715,10 +1718,10 @@
       "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
      },
      "speed": {
-      "value": 1.100000007,
+      "value": 1.10000011,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 6.4e-9 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 1.1e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2202,9 +2205,12 @@
     },
     "ayanamsa": {
      "name": "fixture-user",
-     "value": 22.777726156966686,
+     "mean": 22.777726156966686,
+     "nutation": -0.001314121143408181,
+     "true": 22.776412035823277,
+     "subtracted": "mean",
      "bound": {
-      "value": 4.4e-7,
+      "value": 4.5e-7,
       "unit": "arcsec",
       "label": "measured",
       "basis": "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
@@ -2212,10 +2218,10 @@
     },
     "bounds": {
      "position": {
-      "value": 18.00000044,
+      "value": 18.00000045,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.4e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.5e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
       "value": 0.000068,
@@ -2224,10 +2230,10 @@
       "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
      },
      "speed": {
-      "value": 0.030000007,
+      "value": 0.03000011,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 6.4e-9 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 1.1e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2332,7 +2338,10 @@
     "cartesian": null,
     "ayanamsa": {
      "name": "true-chitra",
-     "value": 24.917577097275156,
+     "mean": 24.921530979875,
+     "nutation": -0.003953882599845568,
+     "true": 24.917577097275156,
+     "subtracted": "true",
      "bound": {
       "value": 0.0011,
       "unit": "arcsec",
@@ -2349,10 +2358,10 @@
      },
      "distance": null,
      "speed": {
-      "value": 0.0012,
+      "value": 0.00115,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.00039 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.00034 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2455,16 +2464,19 @@
     "lat": -0.014701389971588581,
     "dist": 1.3919454674204936,
     "speeds": {
-     "lon": 0.021411796157840224,
+     "lon": 0.021411796157778218,
      "lat": 0.0007066559042853944,
      "dist": -0.00499794343300497
     },
     "cartesian": null,
     "ayanamsa": {
      "name": "user",
-     "value": 0.4227329677024957,
+     "mean": 0.42277793255860213,
+     "nutation": -0.000044964856106486075,
+     "true": 0.42273296770249563,
+     "subtracted": "true",
      "bound": {
-      "value": 4.4e-7,
+      "value": 4.5e-7,
       "unit": "arcsec",
       "label": "measured",
       "basis": "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
@@ -2472,10 +2484,10 @@
     },
     "bounds": {
      "position": {
-      "value": 11.00000044,
+      "value": 11.00000045,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.4e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.5e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
       "value": 0.000032,
@@ -2484,10 +2496,10 @@
       "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
      },
      "speed": {
-      "value": 0.640000007,
+      "value": 0.64000011,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 6.4e-9 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 1.1e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2661,9 +2673,12 @@
     "flags": [],
     "ayanamsa": {
      "name": "krishnamurti",
-     "value": 23.067479464167487,
+     "mean": 23.067869108952152,
+     "nutation": -0.0003896447846657813,
+     "true": 23.067479464167487,
+     "subtracted": "true",
      "bound": {
-      "value": 4.4e-7,
+      "value": 4.5e-7,
       "unit": "arcsec",
       "label": "measured",
       "basis": "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
@@ -2671,16 +2686,16 @@
     },
     "bounds": {
      "angles": {
-      "value": 0.02000044,
+      "value": 0.02000045,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference over the conformance suite's L2 vectors of the ascendant, midheaven, Vertex and East Point, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 4.4e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest difference over the conformance suite's L2 vectors of the ascendant, midheaven, Vertex and East Point, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 4.5e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "cusps": {
-      "value": 0.08000044,
+      "value": 0.08000045,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 4.4e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 4.5e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      }
     },
     "receipt": {
@@ -2786,7 +2801,10 @@
     "flags": [],
     "ayanamsa": {
      "name": "galactic-center",
-     "value": 28.714659087099214,
+     "mean": 28.718890626551,
+     "nutation": -0.004231539451788194,
+     "true": 28.714659087099214,
+     "subtracted": "true",
      "bound": {
       "value": 0.0011,
       "unit": "arcsec",
@@ -3918,7 +3936,14 @@
       "name": "raman",
       "mean": 22.287741664172064,
       "nutation": 0.004595949257690061,
-      "true": 22.292337613429755
+      "true": 22.292337613429755,
+      "subtracted": "true",
+      "bound": {
+       "value": 4.5e-7,
+       "unit": "arcsec",
+       "label": "measured",
+       "basis": "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      }
      },
      "bodies": [
       {

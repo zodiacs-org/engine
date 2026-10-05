@@ -105,7 +105,8 @@ The tests and their fixtures, none of which is packed, contain:
   such as `src/timing/fixtures/planetary-returns-horizons.json`;
 - values computed with ERFA (BSD 3-Clause) through pyerfa 2.0.1.5, such as
   `src/fixtures/nutation-erfa.json`, the ayanamsas and rates of
-  `src/fixtures/ayanamsa-rates.json`, and the Vedic and angle references:
+  `src/fixtures/ayanamsa-rates.json` and `src/fixtures/ayanamsa-rates-dense.json`,
+  and the Vedic and angle references:
   numbers ERFA returned, not its code or tables, none of which is copied;
 - US Naval Observatory tables from its Astronomical Applications API, the
   Earth's Seasons times of `src/techniques/fixtures/usno-seasons.json` and the

@@ -145,9 +145,9 @@ ecliptic of an epoch or the solar system's plane (`SE_SIDBIT_ECL_T0`,
   are the tropical ones; a cartesian position and its velocity are turned
   about the pole of the ecliptic with the longitude. The speed is the
   sidereal longitude's, differenced as the tropical one is: the tropical
-  speed less the ayanamsa's rate, about 0.14″ a day for a precessing
-  definition. `ayanamsa` gives the definition's name, the value subtracted,
-  in the units of `lon`, and its bound.
+  speed less the rate of the ayanamsa subtracted. A precessing definition's
+  mean ayanamsa grows by about 0.138″ a day; the true one adds the rate of
+  Δψ, so Lahiri's true ayanamsa moved by −0.016″ to 0.378″ a day in 2026.
 - **`houses()`** subtracts the true ayanamsa from the angles, the cusps, the
   Vertex and the East Point. Whole-sign cusps, asked for or as the polar
   fallback, start at the sidereal ascendant's sign, as `siderealChart()`'s
@@ -155,9 +155,20 @@ ecliptic of an epoch or the solar system's plane (`SE_SIDBIT_ECL_T0`,
 - **`events()`** reads `longitude` as a sidereal longitude and searches the
   body's longitude less the true ayanamsa at each instant it samples.
 - **`chart()`** keeps `chart`, `natalChart()`'s tropical chart, and adds
-  `sidereal`: the ayanamsa at the chart's instant (mean, nutation and true),
-  the bodies' sidereal longitudes, the ascendant, the midheaven, the house
-  system and the cusps, each as `siderealChart()` gives it.
+  `sidereal`: the ayanamsa at the chart's instant, the bodies' sidereal
+  longitudes, the ascendant, the midheaven, the house system and the cusps,
+  each as `siderealChart()` gives it.
+
+All three give the ayanamsa in one shape, `ayanamsa`, in the result's
+angular unit: `{ name, mean, nutation, true, subtracted, bound }`. `mean` is
+counted along the mean ecliptic of date, `nutation` is the engine's Δψ (IAU
+2000B), and `true` is their sum, wrapped into (−180°, 180°]. `subtracted`
+says which was subtracted: `"true"` in `ecliptic-true-of-date`, which
+`houses()` and `chart()` always use, `"mean"` in `ecliptic-mean-of-date`.
+`bound` is the mean ayanamsa's (*Bounds*). Δψ cancels from a sidereal
+longitude, so that is the bound a sidereal result adds; `true` read on its
+own also differs from IAU 2000A's by the nutation model's difference, up to
+0.00394″ (*Frames*).
 
 A caller's ayanamsa is `@zodiacs/engine/vedic`'s `userAyanamsa` in JSON,
 `{ name?, epoch, value, rate?, model? }`, and the receipt records it with
@@ -295,22 +306,33 @@ divided by the body's speed adds.
 In the sidereal zodiac each bound adds the ayanamsa's own: the largest
 difference of the engine's mean ayanamsa, and of its rate, from ERFA's
 construction of the same definition, rounded up to two significant figures,
-over 960 comparisons from 1800 to 2200
-(`docs/evidence/calc-sidereal-2026-10-05/`). `ayanamsa.bound` gives it, and
+over 16,116 comparisons from 1800 to 2200
+(`docs/evidence/calc-sidereal-2026-10-05/`). They include every star's
+passes near the Sun, sampled down to 0.00001 day, and callers' ayanamsas at
+the ends of what calc accepts. `ayanamsa.bound` gives it, and
 `bounds.position` and `bounds.speed` add it, in whole nanoarcseconds rounded
-up; a speed bound that is null stays null.
+up; a speed bound that is null stays null. A star definition's band is set by
+its star's angle from the Sun.
 
-| definitions | ayanamsa | its rate |
-| --- | --- | --- |
-| epoch and linear, built-in and callers' | 4.4 × 10⁻⁷″ | 6.4 × 10⁻⁹″ a day |
-| star, the star a degree or more from the Sun | 0.0011″ | 0.00039″ a day |
-| star, the star within a degree of the Sun | 0.022″ | 0.40″ a day |
+| definitions | comparisons | ayanamsa | its rate |
+| --- | ---: | --- | --- |
+| epoch and linear, built-in and callers' | 906 | 4.5 × 10⁻⁷″ | 1.1 × 10⁻⁷″ a day |
+| star, 2° or more from the Sun | 4,510 | 0.0011″ | 0.00034″ a day |
+| star, 0.3° to 2° from the Sun | 3,120 | 0.0034″ | 0.022″ a day |
+| star, within 0.3° of the Sun | 7,580 | 0.036″ | 18″ a day |
 
-Within a degree of the Sun the star is near or behind the Sun's disc, where
-the light deflection is largest and the engine's and ERFA's limits on it
-part; the true ayanamsas of True Revati and True Pushya move by several
-arcseconds there, in both. The bound is against this engine's definition,
-not another program's: definitions differ between programs by far more.
+The engine and ERFA deflect a star's light by the Sun with the same formula,
+and both cap its denominator at the same small number, which only True
+Pushya's star reaches, within about 0.08° of the Sun's centre. Their Earth
+positions differ slightly, so they put the star at slightly different angles
+from the Sun. The deflection, and still more its rate, grows so fast as that
+angle falls that the difference grows with it, and where the cap starts and
+stops applying the two computations do so at instants a little apart: there
+their rates part by up to 17″ a day. Within 0.3° the star is on or beside the
+Sun's disc, whose radius is about 0.27°. The bound says how far
+apart the two computations of the same definition are, not that such a star
+is seen. It is against this engine's definition, not another program's:
+definitions differ between programs by far more.
 
 ## Refusals
 
