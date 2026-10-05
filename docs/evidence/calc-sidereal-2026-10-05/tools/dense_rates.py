@@ -5,6 +5,7 @@ the rows the bounds rest on, outside the repository.
 
   python3 dense_rates.py [--check]                     (numpy, pyerfa 2.0.1.5)
   python3 dense_rates.py --every-year FILE [--jobs N]
+  python3 dense_rates.py --erfa-at-crossings
 
 ayanamsa_rates.py's rows come near the Sun only on the days and three-hour
 steps around each star's conjunctions, and take callers' ayanamsas only with
@@ -35,11 +36,15 @@ angle from the Sun, and about 5e-9 lower there (least_margin). The engine caps
 the same way, but its Earth differs a little from ERFA's, so its margin
 differs from ERFA's, by up to 1.7e-8 at the instant of ERFA's least, and it
 caps in years that ERFA does not, and starts and stops minutes from ERFA's
-crossings. Where the engine's margin passes zero ERFA's is within that
-difference of zero, inside the stretches above. differences.ts --every-year
-finds the engine's own crossings and checks that these steps cover the 0.001
-day either side of each, in which a rate's central difference straddles it
-(results/every-year.json, `caps`).
+crossings. At the engine's crossings the two margins differ by more than at
+ERFA's least: there the star is off the Sun along the Sun's path as well as
+across it. --erfa-at-crossings reads the engine's crossings that
+differences.ts --every-year found (results/every-year.json, `caps`) and
+writes ERFA's margin at each (results/erfa-at-crossings.json): up to 2.0e-8
+from zero, inside the stretches above. That is a measurement, not a bound;
+what shows the steps cover the engine's crossings is differences.ts's check
+that they cover the 0.001 day either side of each, in which a rate's central
+difference straddles it.
 
 How far the two programs part near the Sun changes from one conjunction to the
 next, because their Earths differ by an amount that changes from year to year.
@@ -123,8 +128,9 @@ EXTRA_YEARS = {"true-chitra": [1825, 2197], "true-revati": [2196], "true-pushya"
 NEAR = 2.0            # degrees: within this, the dense steps
 CAP_HALF_WIDTH = 0.005  # days either side of a cap crossing, at least
 # How near zero ERFA's cap margin must come for a stretch to be sampled as
-# finely as a crossing: nearly three times the largest difference of the
-# engine's margin from ERFA's at the instant of ERFA's least (differences.ts).
+# finely as a crossing: two and a half times the farthest ERFA's margin is
+# from zero at any of the engine's own crossings, 2.0e-8 in 1804
+# (--erfa-at-crossings, results/erfa-at-crossings.json).
 NEAR_CAP = 5e-8
 GOLDEN = (math.sqrt(5) - 1) / 2
 SPAN_FROM = 2_378_496.5   # 1800-01-01 0h TT
@@ -176,11 +182,14 @@ def cap_margin(star, jd):
 
 
 def least_margin(star, centre):
-    """The TT Julian date, to 1e-8 day, of ERFA's least cap margin within 0.05 day of `centre`.
+    """The TT Julian date of ERFA's least cap margin within 0.05 day of `centre`.
 
     The margin takes the star's direction before the deflection and the
     aberration, so its least falls some minutes from the least apparent angle
-    from the Sun that closest_approach finds.
+    from the Sun that closest_approach finds. The search narrows to 1e-8 day,
+    but the margin is so flat there that its rounding, about 3e-16, leaves the
+    instant uncertain by about 1e-6 day; the least margin itself, which
+    decides whether ERFA caps, is found to about 3e-16.
     """
     lo, hi = centre - 0.05, centre + 0.05
     while hi - lo > 1e-8:
@@ -349,9 +358,10 @@ def build():
     out = {
         "generator": "docs/evidence/calc-sidereal-2026-10-05/tools/dense_rates.py",
         "erfa": f"pyerfa {erfa.__version__}",
-        "units": "jd: Julian dates in TT; mean: the mean ayanamsa, degrees, not wrapped; rate: its central difference"
-                 " over plus and minus 0.001 day of TT, degrees a day; leastElongation: ERFA's least angle of the star"
-                 " from the Sun that year, degrees; leastMarginAt: when ERFA's margin 1 + p·e less eraLdsun's dlim is"
+        "units": "jd: Julian dates in TT; mean: the mean ayanamsa, degrees, a star's in [-180, 180), a linear"
+                 " definition's in (-180, 180], an epoch definition's not wrapped; rate: its central difference"
+                 " over plus and minus 0.001 day of TT, degrees a day; closest: when ERFA's angle of the star from the"
+                 " Sun is least that year; leastElongation: that least angle, degrees; leastMarginAt: when ERFA's margin 1 + p·e less eraLdsun's dlim is"
                  " least; capMargin: that least margin; capFromTo: when the cap starts and stops applying, the margin"
                  " being below zero; nearCapFromTo: the ends of each stretch in which that margin is within NEAR_CAP,"
                  " 5e-8, of zero; a definition's rate: arcseconds a Julian year",
@@ -379,14 +389,39 @@ def every_year(path, jobs):
     print(f"wrote {path}: {len(tasks)} star series, {len(definitions())} callers and {len(FLOOR_CALLERS)} at the floor", file=sys.stderr)
 
 
+def erfa_at_crossings():
+    """ERFA's margin at each of the engine's cap crossings in results/every-year.json, into results/erfa-at-crossings.json."""
+    source = HERE.parent / "results/every-year.json"
+    rows = [row for row in json.loads(source.read_text())["caps"] if row[5]]
+    crossings = [[name, year, *(float(f"{cap_margin(ref.STARS[name], jd):.6e}") for jd in engine)]
+                 for name, year, _, _, _, engine, *_ in rows]
+    largest = max(((m, name, year) for name, year, *margins in crossings for m in margins), key=lambda x: abs(x[0]))
+    out = {
+        "generator": "docs/evidence/calc-sidereal-2026-10-05/tools/dense_rates.py --erfa-at-crossings",
+        "erfa": f"pyerfa {erfa.__version__}",
+        "source": "results/every-year.json (differences.ts --every-year), caps: the engine's crossings, to 1e-8 day",
+        "units": "ERFA's margin, 1 + p·e less eraLdsun's dlim, at the instants at which the engine's own margin passes zero:"
+                 " [star, year, at the cap's start, at its end]; largest: the one farthest from zero",
+        "largest": list(largest),
+        "crossings": crossings,
+    }
+    target = HERE.parent / "results/erfa-at-crossings.json"
+    target.write_text(json.dumps(out, separators=(",", ":")) + "\n")
+    print(f"wrote {target}: {2 * len(crossings)} crossings in {len(crossings)} years, the farthest from zero {largest[0]:.3e} ({largest[1]} {largest[2]})")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--every-year", metavar="FILE")
     parser.add_argument("--jobs", type=int, default=1)
+    parser.add_argument("--erfa-at-crossings", action="store_true")
     args = parser.parse_args()
     if args.every_year:
         every_year(args.every_year, args.jobs)
+        return
+    if args.erfa_at_crossings:
+        erfa_at_crossings()
         return
     text = build()
     if args.check:

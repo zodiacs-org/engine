@@ -202,14 +202,21 @@ describe("the sidereal zodiac in calc()", () => {
           const frame = "ecliptic-mean-of-date" as const;
           const tropical = ok(calc({ body: "Sun", time, frame }));
           const sidereal = ok(calc({ body: "Sun", time, frame, zodiac }));
-          // Within the rounding of the two subtractions themselves, a few tenths of a microarcsecond a day. Counted
-          // from a far epoch, the ayanamsa ran to hundreds of thousands of degrees, whose rounding put up to 2e-4″ a
-          // day here at 3,600″ a year; and a Julian date rebuilt from TT days, up to 2e-6″ a day.
+          // Within rounding: the ayanamsa's own, the instants' TT and the subtraction from the longitude, a few
+          // tenths of a microarcsecond a day here, at most about 6e-7″ a day (docs/calc.md). Counted from a far epoch,
+          // the ayanamsa ran to hundreds of thousands of degrees, whose rounding put up to 2e-4″ a day here at 3,600″
+          // a year; and a Julian date rebuilt from TT days, up to 2e-6″ a day.
           const gap = (tropical.speeds!.lon - sidereal.speeds!.lon) - rate / 365.25 / 3600;
           expect(Math.abs(gap) * 3600, `${epoch} ${rate} ${JSON.stringify(time)}`).toBeLessThan(5e-7);
         }
       }
     }
+    // The largest difference found, 3.45e-7″ a day, by a search over Julian dates in TT: the Sun on 1804-03-17.
+    const zodiac = { sidereal: { epoch: { jd: 2_489_029.689060211, scale: "TT" }, value: 125.61857699773054, rate: 3599.706139 } } as const;
+    const time = { jd: 2_380_033.0453590155, scale: "TT" } as const;
+    const frame = "ecliptic-mean-of-date" as const;
+    const gap = (ok(calc({ body: "Sun", time, frame })).speeds!.lon - ok(calc({ body: "Sun", time, frame, zodiac })).speeds!.lon) - 3599.706139 / 365.25 / 3600;
+    expect(Math.abs(gap) * 3600).toBeLessThan(5e-7);
   });
 
   it("keeps the longitude, speed and vector continuous where a caller's ayanamsa passes ±180°", () => {

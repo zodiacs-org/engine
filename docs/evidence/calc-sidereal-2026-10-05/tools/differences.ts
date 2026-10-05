@@ -22,7 +22,8 @@
  * how far the engine's margin is from ERFA's at the instant of ERFA's least, and
  * whether the series samples every 0.00001 day through the 0.001 day either
  * side of each engine crossing, in which a rate's central difference
- * straddles it. It exits with an error if one is not.
+ * straddles it. It exits with an error if one is not. `dense_rates.py
+ * --erfa-at-crossings` reads those crossings and gives ERFA's margin at each.
  *
  * The engine side is src/vedic/ayanamsa.ts's ayanamsaAt at each row's TT
  * instant, and its rate the central difference over plus and minus 0.001 day
@@ -140,7 +141,11 @@ function engineCrossing(definition: AyanamsaDefinition, inside: number, outside:
   return (inside + outside) / 2;
 }
 
-/** The instant of the engine's least margin within 0.05 day of `centre`, to 1e-8 day. */
+/**
+ * The instant of the engine's least margin within 0.05 day of `centre`. The search narrows to 1e-8 day, but the
+ * margin is so flat there that its rounding leaves the instant uncertain by about 1e-6 day; the least margin
+ * itself is found far more closely.
+ */
 function engineLeast(definition: AyanamsaDefinition, centre: number): number {
   const golden = (Math.sqrt(5) - 1) / 2;
   let [lo, hi] = [centre - 0.05, centre + 0.05];

@@ -97,14 +97,19 @@ definitions, 2,333,979 comparisons in all:
   of those instants, where a rate's central difference straddles one; it
   fails if they do not. The engine caps in 290 years: ERFA's 286 and four
   more, 2084, 2085, 2087 and 2089, all among the 66. Where both cap, the
-  engine's crossings fall up to 6.3 minutes from ERFA's (in 2082), and at the
+  engine's crossings fall up to 6.3 minutes from ERFA's (in 2082). At the
   instant of ERFA's least margin the engine's margin differs from ERFA's by
-  up to 1.7 × 10⁻⁸ (in 1804), so the engine's crossings lie where ERFA's
-  margin is within that of zero, inside the stretches sampled finely. All 580
-  of them are covered. In the four years only the engine caps, the largest
+  up to 1.7 × 10⁻⁸ (in 1804); at the engine's crossings, where the star is
+  off the Sun along the Sun's path as well as across it, they differ by more.
+  `tools/dense_rates.py --erfa-at-crossings` reads the engine's crossings
+  from `results/every-year.json` and writes ERFA's margin at each to
+  `results/erfa-at-crossings.json`: up to 2.0 × 10⁻⁸ from zero (in 1804),
+  inside the stretches sampled finely, which reach to 5 × 10⁻⁸. That is a
+  measurement; the check is what shows the rows cover the crossings, and all
+  580 are covered. In the four years only the engine caps, the largest
   differences are 0.0167″ and 0.810″ a day.
 - `tools/dense_rates.py`, without `--every-year`, writes
-  `src/fixtures/ayanamsa-rates-dense.json` (1,925,524 bytes): the same series
+  `src/fixtures/ayanamsa-rates-dense.json` (1,925,644 bytes): the same series
   for 1801, 1900, 2000, 2100 and 2199 and for the years that hold a band's
   largest difference (True Chitra's 1825 and 2197, True Revati's 2196, True
   Pushya's 1804 and 1821), 25 series and 34,108 rows (True Pushya's 2100 is
@@ -171,18 +176,27 @@ carries at most one such unit and the rounding of the two programs'
 precessions; its largest difference is 1.02 × 10⁻⁷″ a day.
 
 That floor is the ayanamsa's own, between the same two instants as the exact
-definition's. A speed in calc adds rounding of its own. It divides by 0.002
-day, while the Terrestrial Time of each of its two instants is rounded, by up
-to about a unit in its last place; the true ayanamsa adds the nutation to the
-mean one, which rounds by up to a quarter of a unit of 2⁻⁴⁴° at each instant;
+definition's. A speed in calc adds rounding of its own. Take U, 2⁻⁴⁴° over
+the 0.002 day of the difference, 1.023 × 10⁻⁷″ a day; the floor is 1.5 U.
+calc divides by 0.002 day, while the Terrestrial Time of each of its two
+instants is rounded, by a unit or so in its last place: within calc's span
+TT is less than 2¹⁷ days from J2000.0, so that unit is at most 2⁻³⁶ day, in
+which a rate of 3,600″ a year moves the ayanamsa by 0.7 U, up to about 2 U
+for the two instants. The true ayanamsa adds the nutation to the mean one,
+which rounds by up to a quarter of a unit of 2⁻⁴⁴° at each instant, 0.5 U;
 and subtracting the ayanamsa from the longitude rounds a value that can pass
-512°, by up to a unit at each. For a linear ayanamsa at 3,600″ a year these
-come to a few tenths of a microarcsecond a day: the fourth review found
-3.0 × 10⁻⁷″ a day for the Sun on 1818-03-09 in the mean ecliptic of date,
-and 2.0 × 10⁻⁷″ a day for the Moon on 1806-12-18. No bound includes them;
-the smallest speed bound calc gives is 8.1 × 10⁻⁴″ a day, the mean node's,
-and the speed test holds a linear ayanamsa's rate in calc to its definition
-within 5 × 10⁻⁷″ a day.
+512°, by up to a unit at each, 2 U. So for a linear ayanamsa at 3,600″ a
+year the rate in calc's speeds, the tropical speed less the sidereal, can be
+up to about 6 U, 6 × 10⁻⁷″ a day, from the definition's. The largest found
+is 3.5 × 10⁻⁷″ a day, by the fifth review's search over Julian dates in TT,
+for the Sun on 1804-03-17 in the mean ecliptic of date, which the speed test
+now holds; the fourth review's search over ISO times found 3.0 × 10⁻⁷″ a
+day for the Sun on 1818-03-09 and 2.0 × 10⁻⁷″ a day for the Moon on
+1806-12-18. These are the whole difference from the definition's rate, the
+ayanamsa's own rounding with calc's. No bound includes them; the smallest
+speed bound calc gives is 8.1 × 10⁻⁴″ a day, the mean node's. The speed test
+holds a linear ayanamsa's rate in calc to its definition within 5 × 10⁻⁷″ a
+day at its own instants; the worst case could pass that.
 
 Measuring these differences turned up two engine changes, both in the
 linear ayanamsa. Its value was computed from
@@ -198,7 +212,7 @@ J2000.0. Raman's and Sri Yukteswar's ayanamsas move by less than 10⁻¹³° wit
 the two changes, and the speed test holds a linear ayanamsa's rate within
 5 × 10⁻⁷″ a day of its definition from every one of those epochs.
 
-### Corrections to this record's first four versions
+### Corrections to this record's first five versions
 
 The first version of this change measured the star definitions on the rows
 of `ayanamsa_rates.py` alone and set two star bands at 1°: 0.0011″ and
@@ -251,9 +265,28 @@ both cap, the crossings fall up to 6.3 minutes apart (2082), not 4.2. Read at
 ERFA's least margin, the windows of 0.005 day either side of ERFA's crossings
 no longer reached the engine's own in 2075 and 2082, and the coverage check
 failed; the rows are now every 0.00001 day wherever ERFA's margin is within
-5 × 10⁻⁸ of zero. No band's largest difference, and no bound, changed. The
-review also found the rate bound's floor stated as a bound on calc's speeds,
-which add rounding of their own (above).
+5 × 10⁻⁸ of zero. No bound changed, nor any band's largest difference to the
+figures of the table; the largest rate within 0.3° of the Sun, in 1804, is
+now sampled 1 × 10⁻⁸ day earlier and moved from 26.969799″ to 26.969802″ a
+day. The review also found the rate bound's floor stated as a bound on
+calc's speeds, which add rounding of their own (above).
+
+A fifth independent review found the fourth version's fixes correct and no
+defect in the engine or the data, and rebuilt the every-year rows and
+results byte for byte. It found the account of why the fine rows cover the
+engine's crossings wrong: the record said ERFA's margin there is within the
+margins' difference at ERFA's least, 1.7 × 10⁻⁸, of zero, but at the
+crossings the two margins differ by more, and ERFA's is up to 2.0 × 10⁻⁸
+from zero (1804), now measured (`results/erfa-at-crossings.json`); the rows
+cover every crossing, as the check shows. It found the speed figures above
+given as what calc adds, when they are calc's whole difference from the
+definition's rate, and a larger one for a Julian date in TT, 3.5 × 10⁻⁷″ a
+day; the paragraph on the floor now gives both and the limit, about
+6 × 10⁻⁷″ a day. And it found three small points: the fixture's units said
+no mean is wrapped, where a star's and a linear definition's are;
+`least_margin` gave its instant to 1 × 10⁻⁸ day, where the flat margin
+leaves it uncertain by about 1 × 10⁻⁶; and the paragraph above said no
+band's largest difference changed.
 
 The Vedic guide said the engine agrees with ERFA "within 0.001″ at instants
 more than 5° from the Sun". That was true of the 164 comparisons it made, but
@@ -313,6 +346,7 @@ python3 docs/evidence/calc-sidereal-2026-10-05/tools/dense_rates.py --check
 python3 docs/evidence/calc-sidereal-2026-10-05/tools/rounding_floor.py
 python3 docs/evidence/calc-sidereal-2026-10-05/tools/dense_rates.py --every-year <rows> --jobs 4
 npx vite-node docs/evidence/calc-sidereal-2026-10-05/tools/differences.ts --every-year <rows>
+python3 docs/evidence/calc-sidereal-2026-10-05/tools/dense_rates.py --erfa-at-crossings
 npx vite-node docs/evidence/calc-sidereal-2026-10-05/tools/differences.ts
 npx vitest run src/calc-sidereal.test.ts src/calc-fixtures.test.ts src/calc.test.ts
 ```

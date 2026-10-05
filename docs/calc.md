@@ -331,9 +331,11 @@ within one per cent of that, and the comparison includes it. These are
 differences of the ayanamsa at the same two instants. A speed in calc adds
 rounding of its own: in each instant's Terrestrial Time, in the nutation the
 true ayanamsa adds, and in subtracting the ayanamsa from the longitude. For a
-linear ayanamsa at 3,600″ a year that comes to a few tenths of a
-microarcsecond a day (the largest found is 3.0 × 10⁻⁷″ a day). No bound
-includes it; the smallest speed bound calc gives is 8.1 × 10⁻⁴″ a day.
+linear ayanamsa at 3,600″ a year, within calc's span, that is at most about
+4.5 × 10⁻⁷″ a day, so the ayanamsa's rate in calc's speeds, the tropical
+speed less the sidereal, can be up to about 6 × 10⁻⁷″ a day from the
+definition's; the largest found is 3.5 × 10⁻⁷″ a day. No bound includes it;
+the smallest speed bound calc gives is 8.1 × 10⁻⁴″ a day.
 
 The engine and ERFA deflect a star's light by the Sun with the same formula,
 and both cap its denominator at the same small number, which only True
