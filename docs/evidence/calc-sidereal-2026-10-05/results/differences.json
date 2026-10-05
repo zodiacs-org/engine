@@ -5,7 +5,7 @@
  "atSunDegrees": 0.3,
  "bands": {
   "epochOrLinear": {
-   "comparisons": 3904,
+   "comparisons": 3513,
    "position": {
     "arcsec": 4.526555130723864e-7,
     "name": "caller: epoch 2378496.5, value -180, model engine",
@@ -13,9 +13,9 @@
     "elongation": null
    },
    "rate": {
-    "arcsec": 1.4244637813048966e-7,
-    "name": "caller: epoch -97559411.5, value -359.9, rate -3600″/yr",
-    "jd": 2382514.6125,
+    "arcsec": 1.5246596173079663e-7,
+    "name": "caller: epoch 2378496.5, value -359.9, rate 3599.999734″/yr",
+    "jd": 2379402.789,
     "elongation": null
    }
   },
@@ -54,7 +54,7 @@
    }
   },
   "starAtSun": {
-   "comparisons": 16822,
+   "comparisons": 20449,
    "position": {
     "arcsec": 0.05743847723209683,
     "name": "true-pushya",
@@ -74,7 +74,7 @@
  "bounds": {
   "epochOrLinear": {
    "position": 4.6e-7,
-   "rate": 1.5e-7
+   "rate": 1.6e-7
   },
   "star": {
    "position": 0.0013,

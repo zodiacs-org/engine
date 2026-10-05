@@ -23,11 +23,17 @@ star_series samples:
 - where it passes so close that ERFA caps the deflection's denominator
   (eraLdsun's dlim: 1e-6 over the square of the Sun's distance in au, or 1e-6
   inside 1 au), every 0.00001 day for 0.005 day either side of each instant at
-  which ERFA's cap starts or stops applying. The engine caps the same way, but
-  its Earth differs a little from ERFA's, and its own crossings fall up to
-  about 2.1 minutes from ERFA's; 0.005 day, 7.2 minutes, covers the 1.44
-  minutes either side of the engine's crossing in which a rate's central
-  difference straddles it.
+  which ERFA's cap starts or stops applying;
+- where it comes within NEAR_CAP of the cap without reaching it, every
+  0.00001 day for as long as ERFA's margin, 1 + p·e less dlim, is below
+  NEAR_CAP, and 0.001 day either side.
+
+The engine caps the same way, but its Earth differs a little from ERFA's, so
+its margin differs from ERFA's, by up to 1.8e-8 at a closest approach, and it
+caps in years that ERFA does not, and starts and stops a few minutes from
+ERFA's crossings. differences.ts --every-year finds the engine's own crossings
+and checks that these steps cover the 0.001 day either side of each, in which
+a rate's central difference straddles it (results/every-year.json, `caps`).
 
 How far the two programs part near the Sun changes from one conjunction to the
 next, because their Earths differ by an amount that changes from year to year.
@@ -45,12 +51,24 @@ J2000.0 and at eight steps between, and each precession model; for a linear
 one, those epochs and also the first and last days a Date can hold and the
 start of the Kali Yuga, with rates of up to 3,600 arcseconds a year. The
 fixture has each at nine instants across the span; --every-year at 401, and
-the fixture holds at 401 the definitions in which that run found the largest
-difference (EXTRA_CALLERS). An epoch definition is reference_values.py's
-epoch_ayanamsa. A linear one is computed exactly, in rational arithmetic on the
-same binary inputs, its mean reduced to (-180, 180] and its rate the exact
-central difference over the same two instants: what is left in the comparison
-is the engine's rounding.
+the fixture holds at 401 the definition in which that run found the largest
+difference of the position (EXTRA_CALLERS). An epoch definition is
+reference_values.py's epoch_ayanamsa: ERFA's precession from the epoch, to
+which the value is added exactly, in rational arithmetic, and its rate the
+exact central difference of that precession over the same two instants,
+which the value does not change.
+A linear one is computed exactly, in rational arithmetic on the same binary
+inputs, its mean reduced to (-180, 180] and its rate the exact central
+difference over the same two instants. Neither adds rounding of its own at
+the value's size, so what is left in the comparison is the engine's rounding
+(and, for an epoch definition, the two programs' precessions).
+
+The engine's rate for those definitions differs from the exact one by its
+rounding alone, and that is largest for a linear definition: the rate times
+the time and their sum, each rounded, give at most one and a half units in the
+last place of a value below 512 degrees, 2**-44 degree, over the 0.002 day of
+the central difference. FLOOR_CALLERS holds a definition and instant at which
+the engine comes within one per cent of that, which rounding_floor.py found.
 
 The mean ayanamsa of a star is reference_values.py's star_ayanamsa. A rate is
 the central difference over plus and minus 0.001 day of TT, the step of calc's
@@ -72,8 +90,8 @@ import erfa
 import numpy as np
 
 # epv00, ERFA's Earth, is documented for 1900 to 2100 and warns outside it;
-# the record says so (README, *What is not established*), and the warning,
-# once per call, would bury the output.
+# the record says so (README, *The ayanamsa's bounds*), and the warning, once
+# per call, would bury the output.
 warnings.filterwarnings("ignore", category=erfa.ErfaWarning)
 
 HERE = Path(__file__).resolve().parent
@@ -96,6 +114,10 @@ EVERY_YEAR = range(1800, 2200)
 EXTRA_YEARS = {"true-chitra": [1825, 2197], "true-revati": [2196], "true-pushya": [1804, 1821]}
 NEAR = 2.0            # degrees: within this, the dense steps
 CAP_HALF_WIDTH = 0.005  # days either side of a cap crossing
+# ERFA's cap margin below which a pass that ERFA does not cap is sampled as
+# finely as a crossing: nearly three times the largest difference of the
+# engine's margin from ERFA's at a closest approach (differences.ts).
+NEAR_CAP = 5e-8
 GOLDEN = (math.sqrt(5) - 1) / 2
 SPAN_FROM = 2_378_496.5   # 1800-01-01 0h TT
 SPAN_LAST = 2_524_592.5   # 2199-12-31 0h TT, the span's last day
@@ -145,15 +167,15 @@ def cap_margin(star, jd):
     return 1.0 + float(np.dot(p, astrom["eh"])) - 1e-6 / max(em * em, 1.0)
 
 
-def crossing(star, inside, outside):
-    """Where cap_margin changes sign between `inside` (below zero) and `outside`, to 1e-8 day.
+def crossing(star, inside, outside, level=0.0):
+    """Where cap_margin passes `level` between `inside` (below it) and `outside`, to 1e-8 day.
 
     A Julian date near 2.4 million is held to about 5e-10 day, so a finer
     tolerance would never be met.
     """
     while abs(outside - inside) > 1e-8:
         middle = (inside + outside) / 2
-        if cap_margin(star, middle) < 0:
+        if cap_margin(star, middle) < level:
             inside = middle
         else:
             outside = middle
@@ -173,13 +195,18 @@ def star_series(name, year):
     times = [first + 5 * k for k in range(74)]
     times += instants(closest, 3.0, 0.05)
     caps = []
+    near_cap = []
     if least < NEAR:
         times += instants(closest, 3.0, 0.02)
         times += instants(closest, 0.3, 0.001)
-    if cap_margin(star, closest) < 0:
+    margin = cap_margin(star, closest)
+    if margin < 0:
         caps = [crossing(star, closest, closest - 0.3), crossing(star, closest, closest + 0.3)]
         for edge in caps:
             times += instants(edge, CAP_HALF_WIDTH, 0.00001)
+    elif margin < NEAR_CAP:
+        near_cap = [crossing(star, closest, closest - 0.3, NEAR_CAP), crossing(star, closest, closest + 0.3, NEAR_CAP)]
+        times += instants((near_cap[0] + near_cap[1]) / 2, (near_cap[1] - near_cap[0]) / 2 + STEP, 0.00001)
     jds = sorted({round(t, 8) for t in times})
     mean = lambda jd: ref.star_ayanamsa(star, jd)[0]
     return {
@@ -187,7 +214,9 @@ def star_series(name, year):
         "year": year,
         "closest": round(closest, 8),
         "leastElongation": round(least, 6),
+        "capMargin": float(f"{margin:.6e}"),
         "capFromTo": [round(t, 8) for t in caps],
+        "nearCapFromTo": [round(t, 8) for t in near_cap],
         "jd": jds,
         "mean": [round(mean(jd), 13) for jd in jds],
         "rate": [round(central(mean, jd), 14) for jd in jds],
@@ -208,11 +237,15 @@ AT = [SPAN_FROM + 0.5 + k * (SPAN_LAST - SPAN_FROM - 1.0) / 8 for k in range(9)]
 AT_EVERY = [SPAN_FROM + 0.5 + k * (SPAN_LAST - SPAN_FROM - 1.0) / 400 for k in range(401)]
 # The definitions that the fixture holds at 401 instants, not nine: those in
 # which --every-year found the largest difference of the position and of the
-# rate (differences.ts --every-year, results/every-year.json).
+# rate (differences.ts --every-year, results/every-year.json), but for the
+# rate's, which is FLOOR_CALLERS' and held at its own instant.
 EXTRA_CALLERS = [
     {"epoch": SPAN_FROM, "value": -180.0, "model": "engine"},
-    {"epoch": UNIX_JD - 1e8 + 1, "value": -359.9, "rate": -3600.0},
 ]
+# A linear definition, and the instant, at which the engine's rate comes
+# nearest the floor of its rounding (rounding_floor.py): the fixture and
+# --every-year take it at that instant.
+FLOOR_CALLERS = [({"epoch": SPAN_FROM, "value": -359.9, "rate": 3599.999734}, [2_379_402.789])]
 
 
 def definitions():
@@ -246,9 +279,9 @@ def caller_series(definition, jds):
         mean = [float(half_turn(exact_linear(definition, jd))) for jd in jds]
         rate = [float((exact_linear(definition, jd + STEP) - exact_linear(definition, jd - STEP)) / Fraction(2 * STEP)) for jd in jds]
     else:
-        f = lambda jd: ref.epoch_ayanamsa(definition["value"], definition["epoch"], definition["model"], jd)
-        mean = [f(jd) for jd in jds]
-        rate = [central(f, jd) for jd in jds]
+        precession = lambda jd: Fraction(ref.epoch_ayanamsa(0.0, definition["epoch"], definition["model"], jd))
+        mean = [float(Fraction(definition["value"]) + precession(jd)) for jd in jds]
+        rate = [float((precession(jd + STEP) - precession(jd - STEP)) / Fraction(2 * STEP)) for jd in jds]
     return {
         "definition": definition,
         "jd": jds,
@@ -278,6 +311,7 @@ def build():
     callers = [caller_series(d, AT_EVERY if repr(identity(d)) in extra else AT) for d in definitions()]
     if sum(len(c["jd"]) == len(AT_EVERY) for c in callers) != len(EXTRA_CALLERS):
         raise SystemExit("an EXTRA_CALLERS entry names no definition")
+    callers += [caller_series(d, at) for d, at in FLOOR_CALLERS]
     out = {
         "generator": "docs/evidence/calc-sidereal-2026-10-05/tools/dense_rates.py",
         "erfa": f"pyerfa {erfa.__version__}",
@@ -293,7 +327,7 @@ def build():
 
 
 def every_year(path, jobs):
-    """The series of every star for every year from 1800 to 2199, and every caller at 401 instants, as JSON lines."""
+    """The series of every star for every year from 1800 to 2199, every caller at 401 instants and FLOOR_CALLERS, as JSON lines."""
     tasks = [(name, year) for name in ref.STARS for year in EVERY_YEAR]
     with open(path, "w") as out, Pool(jobs) as pool:
         out.write(json.dumps({"generator": "docs/evidence/calc-sidereal-2026-10-05/tools/dense_rates.py --every-year",
@@ -304,7 +338,9 @@ def every_year(path, jobs):
                 print(f"{k + 1} of {len(tasks)} star series", file=sys.stderr, flush=True)
         for line in pool.imap(caller_task, definitions(), chunksize=8):
             out.write(line + "\n")
-    print(f"wrote {path}: {len(tasks)} star series and {len(definitions())} callers", file=sys.stderr)
+        for definition, at in FLOOR_CALLERS:
+            out.write(json.dumps({"kind": "caller", **caller_series(definition, at)}, separators=(",", ":")) + "\n")
+    print(f"wrote {path}: {len(tasks)} star series, {len(definitions())} callers and {len(FLOOR_CALLERS)} at the floor", file=sys.stderr)
 
 
 def main():

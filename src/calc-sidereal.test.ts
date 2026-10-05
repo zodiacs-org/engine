@@ -286,7 +286,7 @@ describe("the sidereal zodiac in calc()", () => {
     }
     const lahiri = ok(calc({ body: "Moon", time: "2000-07-31T15:30:00Z", zodiac: { sidereal: "lahiri" } }));
     expect(lahiri.ayanamsa!.bound.value).toBe(4.6e-7);
-    expect(lahiri.bounds.speed!.value).toBe(addBounds(1.1, 1.5e-7));
+    expect(lahiri.bounds.speed!.value).toBe(addBounds(1.1, 1.6e-7));
   });
 
   it("put each band's edge in the band beyond it", () => {
@@ -650,7 +650,7 @@ describe("the ayanamsa's bounds", () => {
   };
 
   it("compare every built-in and caller's ayanamsa with ERFA, and each star near the Sun", () => {
-    expect(counts).toEqual({ epochOrLinear: 3904, star: 5458, starNearSun: 3921, starAtSun: 16822 });
+    expect(counts).toEqual({ epochOrLinear: 3513, star: 5458, starNearSun: 3921, starAtSun: 20449 });
     expect(new Set(rows.map((row) => row.name))).toEqual(new Set([...CALC_AYANAMSAS, "user-engine-b1950", "user-newcomb-j1900", "user-iau1976-1956"]));
     expect(new Set(dense.stars.map((series) => series.name))).toEqual(new Set(["true-chitra", "true-revati", "true-pushya", "galactic-center"]));
     // The years of the fixture: five through the span, and those in which the every-year run found a band's largest differences.
@@ -660,12 +660,27 @@ describe("the ayanamsa's bounds", () => {
     expect(years("true-pushya")).toEqual([1801, 1804, 1821, 1900, 2000, 2100, 2199]);
     // The near-Sun rows reach inside the deflection's cap: True Pushya passed within 0.08° of the Sun in 1801, 1804, 1821, 1900 and 2000.
     expect(dense.stars.filter((series) => (series as unknown as { capFromTo: number[] }).capFromTo.length > 0).length).toBe(5);
+    // In 2100 it came within 5e-8 of ERFA's cap, near enough that the engine's own margin may cross it, and is sampled as finely.
+    const nearCap = dense.stars.filter((series) => (series as unknown as { nearCapFromTo: number[] }).nearCapFromTo.length > 0);
+    expect(nearCap.map((series) => `${series.name} ${(series as unknown as { year: number }).year}`)).toEqual(["true-pushya 2100"]);
     expect(new Set(dense.callers.map((series) => series.definition.value))).toEqual(new Set([-359.9, -180, 0.0001, 23.85, 180, 359.9]));
-    expect(new Set(dense.callers.map((series) => series.definition.rate).filter((rate) => rate !== undefined))).toEqual(new Set([-3600, -50.29, 50.29, 3600]));
+    // 3,599.999734″ a year: the linear definition at which tools/rounding_floor.py found the rate's rounding nearest its floor.
+    expect(new Set(dense.callers.map((series) => series.definition.rate).filter((rate) => rate !== undefined))).toEqual(
+      new Set([-3600, -50.29, 50.29, 3600, 3599.999734])
+    );
     // An epoch definition's epoch spans the span; a linear one's also reaches the first and last days of a Date and the Kali Yuga.
     const epochs = (linear: boolean) => dense.callers.filter((series) => (series.definition.rate !== undefined) === linear).map((series) => series.definition.epoch);
     expect([Math.min(...epochs(false)), Math.max(...epochs(false))]).toEqual([2_378_496.5, 2_524_592.5]);
     expect(new Set(epochs(true))).toEqual(new Set([...epochs(false), 2_440_587.5 - 1e8 + 1, 588_465.5, 2_440_587.5 + 1e8 - 1]));
+  });
+
+  it("cover a linear ayanamsa's rate at the floor of the engine's rounding", () => {
+    // One and a half units of 2⁻⁴⁴°, the last place of a value below 512°, over the 0.002 day of the rate.
+    const floor = ((1.5 * 2 ** -44) / 0.002) * 3600;
+    expect(floor).toBeCloseTo(1.535e-7, 10);
+    expect(AYANAMSA_BOUNDS.epochOrLinear.rate).toBeGreaterThanOrEqual(floor);
+    // The search's case comes within one per cent of it.
+    expect(largest.epochOrLinear[1]).toBeGreaterThan(0.99 * floor);
   });
 
   it.each(["epochOrLinear", "star", "starNearSun", "starAtSun"] as const)("are %s's largest differences, rounded up to two significant figures", (band) => {
@@ -687,7 +702,7 @@ describe("the ayanamsa's bounds", () => {
     expect(addBounds(25, 0.0011)).toBe(25.0011);
     expect(addBounds(519, 0.058)).toBe(519.058);
     expect(addBounds(1.1, 27)).toBe(28.1);
-    expect(addBounds(1.1, 1.5e-7)).toBe(1.10000015);
+    expect(addBounds(1.1, 1.6e-7)).toBe(1.10000016);
   });
 });
 

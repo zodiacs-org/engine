@@ -6,7 +6,7 @@
  * central difference over plus and minus 0.001 day of TT, the step of calc's
  * speeds.
  *
- * Measured over 1,647,452 comparisons, which the tools in
+ * Measured over 1,856,820 comparisons, which the tools in
  * docs/evidence/calc-sidereal-2026-10-05/tools/ write from ERFA: every star
  * definition in every year from 1800 to 2199, densely near each pass by the
  * Sun, and callers' ayanamsas at the ends of what calc accepts
@@ -28,14 +28,15 @@ export const AT_SUN_DEGREES = 0.3;
 export const AYANAMSA_BOUNDS = {
   /**
    * Epoch and linear definitions, built-in and callers': values from −359.9° to 359.9°, an epoch definition's
-   * epoch anywhere in the span, a linear one's anywhere a Date reaches, rates to ±3,600″ a year; 134,832 comparisons.
+   * epoch anywhere in the span, a linear one's anywhere a Date reaches, rates to ±3,600″ a year; 134,833 comparisons.
+   * The rate's is the floor of the engine's rounding, 1.5 units of 2⁻⁴⁴° in 0.002 day (docs/calc.md).
    */
-  epochOrLinear: { position: 4.6e-7, rate: 1.5e-7 },
+  epochOrLinear: { position: 4.6e-7, rate: 1.6e-7 },
   /** Star definitions, the star 2° or more from the Sun: 306,850 comparisons. */
   star: { position: 0.0013, rate: 0.00039 },
   /** Star definitions, the star 0.3° to 2° from the Sun: 238,364 comparisons. */
   starNearSun: { position: 0.0048, rate: 0.026 },
-  /** Star definitions, the star within 0.3° of the Sun, on or near its disc: 967,406 comparisons. */
+  /** Star definitions, the star within 0.3° of the Sun, on or near its disc: 1,176,773 comparisons. */
   starAtSun: { position: 0.058, rate: 27 }
 } as const;
 

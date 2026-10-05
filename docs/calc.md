@@ -306,21 +306,27 @@ divided by the body's speed adds.
 In the sidereal zodiac each bound adds the ayanamsa's own: the largest
 difference of the engine's mean ayanamsa, and of its rate, from ERFA's
 construction of the same definition, rounded up to two significant figures,
-over 1,647,452 comparisons from 1800 to 2200
+over 1,856,820 comparisons from 1800 to 2200
 (`docs/evidence/calc-sidereal-2026-10-05/`). They take every star definition
 in every year of the span, densely around its pass by the Sun and down to
-0.00001 day where the deflection's cap starts and stops applying, and
-callers' ayanamsas at the ends of what calc accepts. `ayanamsa.bound` gives it, and
+0.00001 day where either computation's cap on the deflection starts and stops
+applying, and callers' ayanamsas at the ends of what calc accepts. `ayanamsa.bound` gives it, and
 `bounds.position` and `bounds.speed` add it, in whole nanoarcseconds rounded
 up; a speed bound that is null stays null. A star definition's band is set by
 its star's angle from the Sun.
 
 | definitions | comparisons | ayanamsa | its rate |
 | --- | ---: | --- | --- |
-| epoch and linear, built-in and callers' | 134,832 | 4.6 × 10⁻⁷″ | 1.5 × 10⁻⁷″ a day |
+| epoch and linear, built-in and callers' | 134,833 | 4.6 × 10⁻⁷″ | 1.6 × 10⁻⁷″ a day |
 | star, 2° or more from the Sun | 306,850 | 0.0013″ | 0.00039″ a day |
 | star, 0.3° to 2° from the Sun | 238,364 | 0.0048″ | 0.026″ a day |
-| star, within 0.3° of the Sun | 967,406 | 0.058″ | 27″ a day |
+| star, within 0.3° of the Sun | 1,176,773 | 0.058″ | 27″ a day |
+
+For an epoch or linear definition the rate's difference is the engine's
+rounding alone. For a linear one it is at most one and a half units in the
+last place of a value below 512°, over the 0.002 day of the difference:
+1.535 × 10⁻⁷″ a day. A search found a definition and instant within one per
+cent of that, and the comparison includes it.
 
 The engine and ERFA deflect a star's light by the Sun with the same formula,
 and both cap its denominator at the same small number, which only True
