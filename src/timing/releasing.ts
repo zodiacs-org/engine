@@ -69,11 +69,10 @@ export const RELEASING_YEAR_CONVENTIONS: readonly ReleasingYearConvention[] = /*
 /** The year convention used when none is named. */
 export const DEFAULT_RELEASING_YEARS: ReleasingYearConvention = "valens-360";
 
-/**
- * Days in one unit of levels 1 to 4 (index 0 is level 1). The quotients are
- * written as the numbers they are, 5/24 and 365.25/12, /144 and /1728, each
- * the double those divisions give, so that a bundler can leave the table out.
- */
+// The quotients are written as numbers, each the double that 5/24, or
+// 365.25/12, /144 or /1728, gives, so that a bundler can leave the table out
+// (scripts/pure-tables.mjs).
+/** Days in one unit of levels 1 to 4 (index 0 is level 1). */
 export const RELEASING_UNIT_DAYS: Readonly<Record<ReleasingYearConvention, readonly [number, number, number, number]>> =
   /*#__PURE__*/ Object.freeze({
     "valens-360": /*#__PURE__*/ Object.freeze([360, 30, 2.5, 0.20833333333333334] as [number, number, number, number]),
