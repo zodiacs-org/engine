@@ -31,7 +31,7 @@ export type ReturnBody = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupite
  * are grouped into passes, and the searches' steps, may change in a minor
  * release.
  */
-export const RETURN_BODIES: readonly ReturnBody[] = Object.freeze([
+export const RETURN_BODIES: readonly ReturnBody[] = /*#__PURE__*/ Object.freeze([
   "Sun",
   "Moon",
   "Mercury",
@@ -54,7 +54,7 @@ export const RETURN_BODIES: readonly ReturnBody[] = Object.freeze([
  * are grouped into passes, and the searches' steps, may change in a minor
  * release.
  */
-export const RETURN_STEP_DAYS: Readonly<Record<ReturnBody, number>> = Object.freeze({
+export const RETURN_STEP_DAYS: Readonly<Record<ReturnBody, number>> = /*#__PURE__*/ Object.freeze({
   Sun: 5,
   Moon: 1,
   Mercury: 2,

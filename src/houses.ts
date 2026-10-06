@@ -4,7 +4,7 @@ import { normalizeLongitude } from "./signs.js";
 const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
 
-export const HOUSE_SYSTEMS = Object.freeze([
+export const HOUSE_SYSTEMS = /*#__PURE__*/ Object.freeze([
   "whole",
   "placidus",
   "porphyry",
@@ -25,7 +25,7 @@ export const HOUSE_SYSTEMS = Object.freeze([
  * where part of the ecliptic never rises or sets: Placidus and Koch both divide
  * a semi-arc that no longer exists there.
  */
-export const POLAR_UNDEFINED_HOUSE_SYSTEMS = Object.freeze(["placidus", "koch"] as const) satisfies readonly HouseSystem[];
+export const POLAR_UNDEFINED_HOUSE_SYSTEMS = /*#__PURE__*/ Object.freeze(["placidus", "koch"] as const) satisfies readonly HouseSystem[];
 
 /**
  * The system Placidus and Koch fall back to where they are undefined. The chart

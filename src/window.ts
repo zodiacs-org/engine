@@ -57,7 +57,7 @@ export const MAX_WINDOW_MS: number = 172_800_000;
  * every hour for the Moon and the nodes, every three hours for Mercury, Venus
  * and Mars, every six for the Sun and daily for the rest.
  */
-export const WINDOW_RATE_BOUNDS: Readonly<Record<BodyName, number>> = Object.freeze({
+export const WINDOW_RATE_BOUNDS: Readonly<Record<BodyName, number>> = /*#__PURE__*/ Object.freeze({
   Sun: 2.1,
   Moon: 31,
   Mercury: 4.5,

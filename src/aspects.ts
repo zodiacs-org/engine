@@ -7,7 +7,7 @@ export interface AspectDefinition {
   readonly luminaryOrb: number;
 }
 
-export const ASPECT_TYPES = Object.freeze([
+export const ASPECT_TYPES = /*#__PURE__*/ Object.freeze([
   "conjunction",
   "sextile",
   "square",
@@ -16,16 +16,16 @@ export const ASPECT_TYPES = Object.freeze([
 ] as const) satisfies readonly AspectType[];
 
 /** The five major aspects and their orbs, frozen: matchAspect returns these objects themselves. */
-export const ASPECTS = Object.freeze([
-  Object.freeze({ type: "conjunction", angle: 0, orb: 8, luminaryOrb: 10 } as const),
-  Object.freeze({ type: "sextile", angle: 60, orb: 4, luminaryOrb: 5 } as const),
-  Object.freeze({ type: "square", angle: 90, orb: 7, luminaryOrb: 8 } as const),
-  Object.freeze({ type: "trine", angle: 120, orb: 7, luminaryOrb: 8 } as const),
-  Object.freeze({ type: "opposition", angle: 180, orb: 8, luminaryOrb: 10 } as const)
+export const ASPECTS = /*#__PURE__*/ Object.freeze([
+  /*#__PURE__*/ Object.freeze({ type: "conjunction", angle: 0, orb: 8, luminaryOrb: 10 } as const),
+  /*#__PURE__*/ Object.freeze({ type: "sextile", angle: 60, orb: 4, luminaryOrb: 5 } as const),
+  /*#__PURE__*/ Object.freeze({ type: "square", angle: 90, orb: 7, luminaryOrb: 8 } as const),
+  /*#__PURE__*/ Object.freeze({ type: "trine", angle: 120, orb: 7, luminaryOrb: 8 } as const),
+  /*#__PURE__*/ Object.freeze({ type: "opposition", angle: 180, orb: 8, luminaryOrb: 10 } as const)
 ] as const) satisfies readonly AspectDefinition[];
 
 const LUMINARIES = new Set(["Sun", "Moon"]);
-const ASPECT_BODY_NAMES = Object.freeze([
+const ASPECT_BODY_NAMES = /*#__PURE__*/ Object.freeze([
   "Sun",
   "Moon",
   "Mercury",

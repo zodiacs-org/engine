@@ -4,7 +4,7 @@
  * 2200-01-01T00:00Z. Charts outside it are still computed, and carry the
  * `outside-reference-span` flag.
  */
-export const REFERENCE_SPAN = Object.freeze({
+export const REFERENCE_SPAN = /*#__PURE__*/ Object.freeze({
   from: "1800-01-01T00:00:00.000Z",
   to: "2200-01-01T00:00:00.000Z"
 } as const);
@@ -23,11 +23,11 @@ export const REFERENCE_SPAN = Object.freeze({
  * With the model ΔT, instants from 0001-05-01T00:00Z to 3998-09-02T00:00Z are
  * always inside. Being inside is not an accuracy claim: see REFERENCE_SPAN.
  */
-export const EPHEMERIS_SPAN = Object.freeze({
+export const EPHEMERIS_SPAN = /*#__PURE__*/ Object.freeze({
   /** The scale of the bounds, as a label, like `fromTT` and `toTT`: not a TimeScaleName, which is lowercase. */
   timeScale: "TT",
   /** Days of Terrestrial Time from J2000.0, 2000-01-01T12:00 TT, inclusive. */
-  daysFromJ2000: Object.freeze({ from: -730000, to: 730000 } as const),
+  daysFromJ2000: /*#__PURE__*/ Object.freeze({ from: -730000, to: 730000 } as const),
   /** The same bounds as Terrestrial Time labels (not UTC). */
   fromTT: "0001-04-30T12:00:00",
   toTT: "3998-09-03T12:00:00"

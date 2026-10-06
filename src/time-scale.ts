@@ -21,7 +21,7 @@ export { LEAP_SECOND_LIST, UT1_DATA };
 
 /** The scale an input instant is on. UTC unless a caller says otherwise. */
 export type TimeScaleName = "utc" | "ut1" | "tt";
-export const TIME_SCALE_NAMES: readonly TimeScaleName[] = Object.freeze(["utc", "ut1", "tt"]);
+export const TIME_SCALE_NAMES: readonly TimeScaleName[] = /*#__PURE__*/ Object.freeze(["utc", "ut1", "tt"]);
 
 /**
  * The ΔT model name for a value derived from leap seconds and IERS UT1 − UTC:

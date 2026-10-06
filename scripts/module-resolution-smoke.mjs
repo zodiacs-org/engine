@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 
+import { assertNoBreaches, checkBuild } from "./pure-tables.mjs";
 import { checkRootIsolation, staticGraph } from "./root-isolation.mjs";
 
 const engine = await import("@zodiacs/engine");
@@ -379,6 +380,11 @@ const root = checkRootIsolation({ metafile, files: builtFiles, read: readBuilt }
 for (const reading of [root.sources, root.held, root.marked]) {
   assert(reading.includes("src/api.ts") && reading.includes("src/ephemeris.ts"), "the build no longer lists or marks its modules' sources");
 }
+
+// The build keeps the marks that let a bundler leave out a frozen table
+// nothing reads (scripts/pure-tables.mjs), module by module as the markers
+// above attribute its code.
+assertNoBreaches(checkBuild({ files: builtFiles, read: readBuilt }), "dist/");
 for (const [entry, own] of [
   ["timing", /^src\/timing\//u],
   ["vedic", /^src\/vedic\//u],
@@ -412,5 +418,5 @@ console.log(
   "@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, " +
     `the core graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
     `${root.outputs.length} files) reaches no module of an opt-in entry and no zone history, ` +
-    "and the geo entry loads its 16 shards lazily"
+    "the geo entry loads its 16 shards lazily, and the built files mark their frozen tables"
 );

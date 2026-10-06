@@ -293,14 +293,14 @@ export function render({ list, table, digest }) {
 // and ${table.source} (sha256 ${table.sha256}). Do not edit.
 
 /** The IERS leap-second list: MJD of each change and TAI − UTC from it. */
-export const LEAP_SECOND_LIST = Object.freeze({
+export const LEAP_SECOND_LIST = /*#__PURE__*/ Object.freeze({
   source: ${q(list.source)},
   sha256: ${q(list.sha256)},
   /** The list's last update. */
   updated: ${q(list.updated)},
   /** The list's expiry: after it the last value is carried, not known. */
   expires: ${q(list.expires)},
-  changes: Object.freeze(${q(list.changes)}.map((change) => Object.freeze(change) as readonly [number, number]))
+  changes: /*#__PURE__*/ Object.freeze(/*#__PURE__*/ ${q(list.changes)}.map((change) => Object.freeze(change) as readonly [number, number]))
 });
 
 /**
@@ -310,7 +310,7 @@ export const LEAP_SECOND_LIST = Object.freeze({
  * finals2000A rows from the next day, packed as second differences, and one
  * on the last day.
  */
-export const UT1_DATA = Object.freeze({
+export const UT1_DATA = /*#__PURE__*/ Object.freeze({
   version: ${q(table.version)},
   source: ${q(table.source)},
   sha256: ${q(table.sha256)},

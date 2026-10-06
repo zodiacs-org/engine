@@ -92,7 +92,7 @@ export interface LotInputs {
 }
 
 /** The lots, in the order {@link hellenisticLots} returns them. */
-export const LOTS = Object.freeze([
+export const LOTS = /*#__PURE__*/ Object.freeze([
   "Lot of Fortune",
   "Lot of Spirit",
   "Lot of Eros",

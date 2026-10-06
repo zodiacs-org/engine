@@ -23,7 +23,7 @@ import type { TransitionCause } from "./geo/timezone.js";
 export const NATAL_ENVELOPE_SCHEMA = "zodiacs.natal-envelope.draft-v1";
 export const NATAL_RECEIPT_SCHEMA = "zodiacs.calculation-receipt.draft-v1";
 export const NATAL_DIAGNOSTIC_SCHEMA = "zodiacs.natal-diagnostic.draft-v1";
-export const NATAL_ENVELOPE_LIMITS = Object.freeze({ bytes: 65_536, depth: 12, nodes: 4096 });
+export const NATAL_ENVELOPE_LIMITS = /*#__PURE__*/ Object.freeze({ bytes: 65_536, depth: 12, nodes: 4096 });
 
 export type NatalEnvelopeErrorCode =
   | "invalid_json"
@@ -125,7 +125,7 @@ export interface NatalEnvelopeContext {
 }
 
 /** The conventions engine versions 0.1.1-rc.3 to rc.6 recorded. Their receipts stay readable. */
-const CONVENTIONS_RC3 = Object.freeze({
+const CONVENTIONS_RC3 = /*#__PURE__*/ Object.freeze({
   calendar: "proleptic-gregorian",
   zodiac: "tropical",
   planetPositions: "apparent-geocentric-ecliptic-of-date",
@@ -137,7 +137,7 @@ const CONVENTIONS_RC3 = Object.freeze({
   aspects: "major-aspects;sun-moon-eight-planets;no-nodes"
 } as const);
 /** The conventions engine version 0.1.1-rc.7 recorded. Its receipts stay readable. */
-const CONVENTIONS_RC7 = Object.freeze({
+const CONVENTIONS_RC7 = /*#__PURE__*/ Object.freeze({
   ...CONVENTIONS_RC3,
   angles: "gast-and-true-obliquity",
   speed: "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day",
@@ -149,7 +149,7 @@ const CONVENTIONS_RC7 = Object.freeze({
  * deflection, the Moon's series for neither, and the instant read as UT1.
  * Their receipts stay readable.
  */
-const CONVENTIONS_RC8 = Object.freeze({
+const CONVENTIONS_RC8 = /*#__PURE__*/ Object.freeze({
   ...CONVENTIONS_RC7,
   planetPositions: "aberrated-geocentric-ecliptic-of-date;no-deflection",
   moonPosition: "astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration",
@@ -162,7 +162,7 @@ const CONVENTIONS_RC8 = Object.freeze({
  * records. Its engine took astronomy-engine's nutation, the five largest terms
  * of IAU 2000B, which the set does not name. Its receipts stay readable.
  */
-const CONVENTIONS_RC15 = Object.freeze({
+const CONVENTIONS_RC15 = /*#__PURE__*/ Object.freeze({
   ...CONVENTIONS_RC8,
   deltaT: "tt-minus-ut1;value-in-result",
   timeScale: "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result",
@@ -175,7 +175,7 @@ const CONVENTIONS_RC15 = Object.freeze({
  * equation of the equinoxes, and the Moon as astronomy-engine's geocentric
  * series (GeoMoon) turned to the ecliptic of date by it.
  */
-const CONVENTIONS = Object.freeze({
+const CONVENTIONS = /*#__PURE__*/ Object.freeze({
   ...CONVENTIONS_RC15,
   moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration",
   nutation: "iau2000b;equation-of-equinoxes-with-two-complementary-terms"
@@ -193,7 +193,7 @@ export type NatalConventionSet = Readonly<Record<string, string>>;
  * add a set at the front, so take a set by its content, not by an index other
  * than 0.
  */
-export const NATAL_RECEIPT_CONVENTION_SETS: readonly NatalConventionSet[] = Object.freeze([
+export const NATAL_RECEIPT_CONVENTION_SETS: readonly NatalConventionSet[] = /*#__PURE__*/ Object.freeze([
   CONVENTIONS,
   CONVENTIONS_RC15,
   CONVENTIONS_RC8,
@@ -218,7 +218,7 @@ const NUTATION_RELEASE = "0.1.1-rc.16";
 const RC9_RELEASE = "0.1.1-rc.9";
 /** Engines before 0.1.1-rc.10 did not offer Equal houses from the midheaven. */
 const RC10_RELEASE = "0.1.1-rc.10";
-const COVERAGE = Object.freeze({
+const COVERAGE = /*#__PURE__*/ Object.freeze({
   assessment: "finite-reference-cases-only",
   broadDateRange: "not-certified",
   angleExclusions: "exact-geographic-poles-and-ecliptic-horizon-coincidence",
