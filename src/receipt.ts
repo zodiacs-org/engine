@@ -36,7 +36,7 @@ export type NatalEnvelopeErrorCode =
   | "unsupported_version"
   | "unsupported_feature";
 
-const ERROR_CODES = new Set<NatalEnvelopeErrorCode>([
+const ERROR_CODES = /*#__PURE__*/ new Set<NatalEnvelopeErrorCode>([
   "invalid_json",
   "invalid_shape",
   "invalid_value",
@@ -137,24 +137,24 @@ const CONVENTIONS_RC3 = /*#__PURE__*/ Object.freeze({
   aspects: "major-aspects;sun-moon-eight-planets;no-nodes"
 } as const);
 /** The conventions engine version 0.1.1-rc.7 recorded. Its receipts stay readable. */
-const CONVENTIONS_RC7 = /*#__PURE__*/ Object.freeze({
+const CONVENTIONS_RC7 = /*#__PURE__*/ (() => Object.freeze({
   ...CONVENTIONS_RC3,
   angles: "gast-and-true-obliquity",
   speed: "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day",
   aspects: "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate"
-} as const);
+} as const))();
 /**
  * The conventions engine versions 0.1.1-rc.8 to rc.14 recorded: the planets
  * corrected for light time and aberration but not for gravitational
  * deflection, the Moon's series for neither, and the instant read as UT1.
  * Their receipts stay readable.
  */
-const CONVENTIONS_RC8 = /*#__PURE__*/ Object.freeze({
+const CONVENTIONS_RC8 = /*#__PURE__*/ (() => Object.freeze({
   ...CONVENTIONS_RC7,
   planetPositions: "aberrated-geocentric-ecliptic-of-date;no-deflection",
   moonPosition: "astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration",
   deltaT: "tt-minus-ut1;ut1-read-as-utc;value-in-result"
-} as const);
+} as const))();
 /**
  * The conventions engine version 0.1.1-rc.15 recorded: the rc.8 set, with the
  * time basis in the result (`result.timeScale`, docs/time.md) and local times
@@ -162,12 +162,12 @@ const CONVENTIONS_RC8 = /*#__PURE__*/ Object.freeze({
  * records. Its engine took astronomy-engine's nutation, the five largest terms
  * of IAU 2000B, which the set does not name. Its receipts stay readable.
  */
-const CONVENTIONS_RC15 = /*#__PURE__*/ Object.freeze({
+const CONVENTIONS_RC15 = /*#__PURE__*/ (() => Object.freeze({
   ...CONVENTIONS_RC8,
   deltaT: "tt-minus-ut1;value-in-result",
   timeScale: "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result",
   localTime: "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record"
-} as const);
+} as const))();
 /**
  * The conventions this engine records: the rc.15 set, naming the nutation,
  * the engine's own IAU 2000B series (all 77 luni-solar terms and the planetary
@@ -175,11 +175,11 @@ const CONVENTIONS_RC15 = /*#__PURE__*/ Object.freeze({
  * equation of the equinoxes, and the Moon as astronomy-engine's geocentric
  * series (GeoMoon) turned to the ecliptic of date by it.
  */
-const CONVENTIONS = /*#__PURE__*/ Object.freeze({
+const CONVENTIONS = /*#__PURE__*/ (() => Object.freeze({
   ...CONVENTIONS_RC15,
   moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration",
   nutation: "iau2000b;equation-of-equinoxes-with-two-complementary-terms"
-} as const);
+} as const))();
 /**
  * A conventions set: what a receipt's numbers mean, as named ids, one for each
  * part of the calculation (`zodiac`, `nutation`, `angles` and so on). A
@@ -392,7 +392,7 @@ const HOUSE_SYSTEMS_BEFORE_RC10: readonly string[] = HOUSE_SYSTEMS.filter(
 const POLAR_UNDEFINED: readonly string[] = ["placidus", "koch"];
 /** The systems whose cusps turn with the ascendant inside the polar circle. */
 const TURNING_WITH_ASCENDANT: readonly string[] = ["regiomontanus", "campanus", "topocentric"];
-const HOSTILE_KEYS = new Set(["__proto__", "prototype", "constructor"]);
+const HOSTILE_KEYS = /*#__PURE__*/ new Set(["__proto__", "prototype", "constructor"]);
 type RecordValue = Record<string, unknown>;
 
 // The fields a natal record holds, for the writer and the reader alike. A chart

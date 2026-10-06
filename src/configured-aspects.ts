@@ -236,7 +236,7 @@ export function createAspectPolicy(input: AspectPolicyInput = {}): AspectPolicy 
 }
 
 /** Independent immutable copy of the historical five-aspect/ten-body defaults. */
-export const DEFAULT_ASPECT_POLICY: AspectPolicy = createAspectPolicy();
+export const DEFAULT_ASPECT_POLICY: AspectPolicy = /*#__PURE__*/ createAspectPolicy();
 
 /**
  * a − b, exactly, folded into (−180, 180]. Validated longitudes lie in

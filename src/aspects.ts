@@ -24,7 +24,7 @@ export const ASPECTS = /*#__PURE__*/ Object.freeze([
   /*#__PURE__*/ Object.freeze({ type: "opposition", angle: 180, orb: 8, luminaryOrb: 10 } as const)
 ] as const) satisfies readonly AspectDefinition[];
 
-const LUMINARIES = new Set(["Sun", "Moon"]);
+const LUMINARIES = /*#__PURE__*/ new Set(["Sun", "Moon"]);
 const ASPECT_BODY_NAMES = /*#__PURE__*/ Object.freeze([
   "Sun",
   "Moon",
@@ -39,7 +39,7 @@ const ASPECT_BODY_NAMES = /*#__PURE__*/ Object.freeze([
 ] as const);
 
 /** Internal: the bodies aspects are found between. The engine reads this set and never ASPECT_BODIES. */
-export const ASPECT_BODY_SET: ReadonlySet<string> = new Set(ASPECT_BODY_NAMES);
+export const ASPECT_BODY_SET: ReadonlySet<string> = /*#__PURE__*/ new Set(ASPECT_BODY_NAMES);
 
 /**
  * The bodies `findAspects`, `findInterAspects`, `elementBalance` and
@@ -47,7 +47,7 @@ export const ASPECT_BODY_SET: ReadonlySet<string> = new Set(ASPECT_BODY_NAMES);
  * A copy for reading; the engine keeps its own, so changing this set changes
  * nothing it computes.
  */
-export const ASPECT_BODIES: ReadonlySet<string> = new Set(ASPECT_BODY_NAMES);
+export const ASPECT_BODIES: ReadonlySet<string> = /*#__PURE__*/ new Set(ASPECT_BODY_NAMES);
 
 /** Whether an aspect's orb is shrinking, growing, or neither, at an instant. */
 export type AspectMotion = "applying" | "separating" | "stationary";

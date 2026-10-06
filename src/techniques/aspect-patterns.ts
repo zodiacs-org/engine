@@ -75,7 +75,7 @@ const ordered = (bodies: readonly PatternBody[]): PatternBody[] => [...bodies].s
 const pair = (a: PatternBody, b: PatternBody): [PatternBody, PatternBody] => (rank(a) < rank(b) ? [a, b] : [b, a]);
 const pairKey = (a: PatternBody, b: PatternBody): string => pair(a, b).join("|");
 const normalize = (lon: number): number => ((lon % 360) + 360) % 360;
-const LUMINARIES = new Set(["Sun", "Moon"]);
+const LUMINARIES = /*#__PURE__*/ new Set(["Sun", "Moon"]);
 
 interface MutableEdge {
   a: PatternBody;
