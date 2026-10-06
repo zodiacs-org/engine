@@ -112,9 +112,9 @@ interface LocalTimeResolution {
 }
 
 declare const TZDB: Readonly<{
-    readonly version: "2025c";
-    readonly sha256: "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957";
-    readonly form: "main+backzone";
+    version: string;
+    sha256: string;
+    form: "main+backzone";
 }>;
 
 type TransitionCause = "dst" | "legal-change" | "date-line";

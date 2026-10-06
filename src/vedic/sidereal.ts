@@ -9,6 +9,7 @@ import { ayanamsa, isAyanamsaValue, utcInstantOf } from "./ayanamsa.js";
 import type { AyanamsaDefinition, AyanamsaName, AyanamsaValue } from "./ayanamsa.js";
 import { SIGN_TICKS, ticksOf } from "./grid.js";
 import { dateFrom } from "../date-input.js";
+import { readOptions } from "../read-options.js";
 import type { BodyName, Chart, ChartFlag, DateInput, HouseSystem } from "../types.js";
 
 /**
@@ -97,13 +98,16 @@ export interface SiderealDeclaration {
 /**
  * A longitude the caller asserts is already sidereal (from another program,
  * a table, a test). The engine cannot check the claim; it records the label.
+ * A declaration key not named in SiderealDeclaration is refused with a
+ * RangeError, so that a misspelt `at` is not an instant silently left out.
  */
 export function declareSiderealLongitude(longitude: number, declaration: SiderealDeclaration): SiderealLongitude {
-  const label = declaration?.ayanamsa;
+  const read = readOptions(declaration, ["ayanamsa", "at"], "declaration");
+  const label = read.ayanamsa;
   if (typeof label !== "string" || !label || label.length > 80 || label.trim() !== label || /[\u0000-\u001f\u007f]/.test(label)) {
     throw new RangeError("declaration.ayanamsa must be a nonempty trimmed label of at most 80 characters.");
   }
-  const at = declaration.at;
+  const at = read.at as DateInput | undefined;
   return make({
     frame: "sidereal",
     lon: finiteLongitude(longitude, "longitude"),

@@ -435,6 +435,11 @@ begun.
   and `end`, so a period's own `start` finds that period. An instant outside
   the 120-year cycle is a `RangeError`.
 
+The Yogini and Ashtottari dashas (`yoginiDasha`, `ashtottariDasha`,
+`YOGINIS`, `ASHTOTTARI_YEARS` and `CycleOptions`) are experimental from 1.0
+([versioning.md](versioning.md)): they give mahadashas only, traditions group
+Ashtottari's nakshatras differently, and a minor release may change either.
+
 **Yogini** (BPHS 46.195–199):
 
 - `yoginiDasha(moon, { yearLength, cycles })` starts from the birth

@@ -408,12 +408,17 @@ export function searchLongitudeCrossingsWith<B extends string = BodyName>(
   to: Date,
   options: CrossingSearchOptions = {}
 ): CrossingSearchResult {
-  if (options === null || typeof options !== "object") {
-    throw new RangeError("Crossing search options must be an object.");
+  // The rules of the engine's shared options reader, written out here because
+  // this entry carries no module of the others: a plain object of the two
+  // named keys, as own data properties.
+  const prototype: unknown = options !== null && typeof options === "object" ? Object.getPrototypeOf(options) : undefined;
+  if (prototype !== Object.prototype && prototype !== null) {
+    throw new RangeError("Crossing search options must be a plain options object.");
   }
-  // This entry carries no shared modules, so it names its two options itself.
-  for (const key of Object.keys(options)) {
-    if (key !== "stepDays" && key !== "maxSamples") throw new RangeError(`Crossing search options has an unknown option: ${key}.`);
+  for (const key of Reflect.ownKeys(options)) {
+    if (key !== "stepDays" && key !== "maxSamples") throw new RangeError(`Crossing search options has an unknown option: ${String(key)}.`);
+    const slot = Object.getOwnPropertyDescriptor(options, key);
+    if (!slot || !("value" in slot) || !slot.enumerable) throw new RangeError("Crossing search options must contain only plain data properties.");
   }
   const stepDays = options.stepDays === undefined ? 5 : options.stepDays;
   const window = validWindow(targetLongitude, from, to, stepDays);

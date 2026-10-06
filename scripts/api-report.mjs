@@ -30,27 +30,55 @@ function importName(packageName, subpath) {
   return subpath === "." ? packageName : `${packageName}/${subpath.slice(2)}`;
 }
 
-const printer = ts.createPrinter({ removeComments: true, newLine: ts.NewLineKind.LineFeed });
+// Comments are kept off node by node (prepare), so that release tags can be put back as comments of their own.
+const printer = ts.createPrinter({ removeComments: false, newLine: ts.NewLineKind.LineFeed });
 
 /**
  * The release tags docs/versioning.md gives a meaning to, as they stand in a
  * declaration's documentation comment. The comments themselves are left out of
  * the report; these two tags are not, because each changes what the
- * declaration promises.
+ * declaration promises: above a declaration, above any member of it that
+ * carries one, and above an export under another name that does.
  */
 export const RELEASE_TAGS = Object.freeze(["deprecated", "experimental"]);
+
+/** A node's release tags, sorted, each once. */
+function releaseTags(...nodes) {
+  return [...new Set(nodes.flatMap((each) => ts.getJSDocTags(each).map((tag) => tag.tagName.text))
+    .filter((name) => RELEASE_TAGS.includes(name)))].sort();
+}
+
+/** Nodes whose source comments are already suppressed and members' tags already attached. */
+const prepared = new WeakSet();
+
+/**
+ * Leave a declaration's own comments out of the printed text, and put each
+ * member's release tags above the member as a comment of their own.
+ */
+function prepare(node) {
+  if (prepared.has(node)) return;
+  prepared.add(node);
+  const visit = (each, top) => {
+    ts.setEmitFlags(each, ts.EmitFlags.NoComments);
+    // Members only: a variable's declaration list and declaration take their tags from the statement, above.
+    if (!top && (ts.isTypeElement(each) || ts.isClassElement(each) || ts.isEnumMember(each))) {
+      for (const name of releaseTags(each)) ts.addSyntheticLeadingComment(each, ts.SyntaxKind.MultiLineCommentTrivia, `* @${name} `, true);
+    }
+    ts.forEachChild(each, (child) => visit(child, false));
+  };
+  visit(node, true);
+}
 
 /** A declaration as source text, comments removed, without `export` or `export default`, after its release tags. */
 function print(node) {
   const target = ts.isVariableDeclaration(node) && node.parent.declarations.length === 1
     ? node.parent.parent
     : node;
+  prepare(target);
   let text = printer.printNode(ts.EmitHint.Unspecified, target, target.getSourceFile());
   if (ts.isVariableDeclaration(target)) text = `declare const ${text};`;
-  const tagged = ts.isVariableDeclaration(node) ? [node, node.parent.parent] : [node];
-  const tags = new Set(tagged.flatMap((each) => ts.getJSDocTags(each).map((tag) => tag.tagName.text))
-    .filter((name) => RELEASE_TAGS.includes(name)));
-  const head = [...tags].sort().map((name) => `/** @${name} */\n`).join("");
+  const tags = ts.isVariableDeclaration(node) ? releaseTags(node, node.parent.parent) : releaseTags(node);
+  const head = tags.map((name) => `/** @${name} */\n`).join("");
   return head + text.replace(/^export (default )?/u, "");
 }
 
@@ -98,7 +126,12 @@ export function buildApiReports(packageDir = ROOT) {
     if (!source) throw new Error(`no declarations at ${relative(packageDir, entry.file)}`);
     const moduleSymbol = checker.getSymbolAtLocation(source);
     const list = checker.getExportsOfModule(moduleSymbol)
-      .map((symbol) => ({ name: symbol.name, target: resolveAlias(symbol) }))
+      .map((symbol) => ({
+        name: symbol.name,
+        target: resolveAlias(symbol),
+        // Tags on the export itself, as on `export { X as OLD }`.
+        tags: symbol.flags & ts.SymbolFlags.Alias ? releaseTags(...(symbol.declarations ?? []).filter(ts.isExportSpecifier)) : []
+      }))
       .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
     exportsOf.set(entry.subpath, list);
     for (const { name, target } of list) {
@@ -115,12 +148,13 @@ export function buildApiReports(packageDir = ROOT) {
   for (const entry of entries) {
     const exported = new Set();
     const exportedText = [];
-    for (const { name, target } of exportsOf.get(entry.subpath)) {
+    for (const { name, target, tags } of exportsOf.get(entry.subpath)) {
       const declarations = target.declarations ?? [];
       if (!declarations.length) throw new Error(`${entry.subpath} exports ${name} with no declaration`);
       for (const declaration of declarations) exported.add(owner(declaration));
       const declaredName = target.name;
-      const head = declaredName === name ? "" : `// exported as ${name}\n`;
+      const alias = declaredName === name ? "" : `// exported as ${name}${tags.map((tag) => ` @${tag}`).join("")}\n`;
+      const head = alias || (tags.length ? `// exported${tags.map((tag) => ` @${tag}`).join("")}\n` : "");
       exportedText.push(head + declarations.map((declaration) => print(declaration)).join("\n"));
     }
 
@@ -135,6 +169,7 @@ export function buildApiReports(packageDir = ROOT) {
       if (ts.isTypeReferenceNode(node)) name = node.typeName;
       else if (ts.isExpressionWithTypeArguments(node)) name = node.expression;
       else if (ts.isTypeQueryNode(node)) name = node.exprName;
+      else if (ts.isImportTypeNode(node) && node.qualifier) name = node.qualifier;
       if (name) {
         const identifier = ts.isQualifiedName(name) ? name.left : name;
         const symbol = checker.getSymbolAtLocation(ts.isPropertyAccessExpression(identifier) ? identifier.expression : identifier);
@@ -198,6 +233,43 @@ export function buildApiReports(packageDir = ROOT) {
   return reports;
 }
 
+/**
+ * The lines that differ between two texts, as a diff with a line of context,
+ * at most `limit` lines: what --check prints, so that a failure shows the
+ * change and not only the file.
+ */
+export function lineDiff(before, after, limit = 40) {
+  const a = before.split("\n");
+  const b = after.split("\n");
+  // Longest common subsequence, by dynamic programming from the end.
+  const width = b.length + 1;
+  const table = new Uint32Array((a.length + 1) * width);
+  for (let i = a.length - 1; i >= 0; i -= 1) {
+    for (let j = b.length - 1; j >= 0; j -= 1) {
+      table[i * width + j] = a[i] === b[j] ? table[(i + 1) * width + j + 1] + 1 : Math.max(table[(i + 1) * width + j], table[i * width + j + 1]);
+    }
+  }
+  const lines = [];
+  let i = 0;
+  let j = 0;
+  while (i < a.length || j < b.length) {
+    if (i < a.length && j < b.length && a[i] === b[j]) {
+      lines.push({ mark: " ", text: a[i] });
+      i += 1;
+      j += 1;
+    } else if (i < a.length && (j === b.length || table[(i + 1) * width + j] >= table[i * width + j + 1])) {
+      lines.push({ mark: "-", text: a[i] });
+      i += 1;
+    } else {
+      lines.push({ mark: "+", text: b[j] });
+      j += 1;
+    }
+  }
+  const near = (k) => lines.slice(Math.max(0, k - 1), k + 2).some((line) => line.mark !== " ");
+  const shown = lines.filter((line, k) => line.mark !== " " || near(k)).map((line) => `${line.mark} ${line.text}`);
+  return shown.length > limit ? [...shown.slice(0, limit), `… ${shown.length - limit} more lines`] : shown;
+}
+
 const invokedDirectly = process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url;
 if (invokedDirectly) {
   const check = process.argv.includes("--check");
@@ -209,7 +281,12 @@ if (invokedDirectly) {
     for (const [name, text] of reports) {
       const path = join(apiDir, name);
       if (!existsSync(path)) problems.push(`api/${name} is missing`);
-      else if (readFileSync(path, "utf8") !== text) problems.push(`api/${name} differs from the build's declarations`);
+      else {
+        const committed = readFileSync(path, "utf8");
+        if (committed !== text) {
+          problems.push(`api/${name} differs from the build's declarations (- api/, + the build):\n${lineDiff(committed, text).map((line) => `    ${line}`).join("\n")}`);
+        }
+      }
     }
     for (const name of present) if (!reports.has(name)) problems.push(`api/${name} names no public entry point`);
     if (problems.length) {

@@ -45,6 +45,7 @@ list and a workflow disagree, the workflow is right.
   npm test
   npm run build
   npm run exports:smoke      # every entry point resolves and exports what it should
+  npm run api:check          # the public declarations match api/ (docs/versioning.md)
   npm run package:contents   # the packed files, each entry point's size budget and the total cap
   npm run pack:dry-run
   node scripts/verify-archive-binding.mjs

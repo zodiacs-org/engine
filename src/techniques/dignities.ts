@@ -39,7 +39,7 @@ export const CLASSICAL_PLANETS: readonly ClassicalPlanet[] = /*#__PURE__*/ Objec
 
 /**
  * Each sign's domicile ruler (Tetrabiblos I.17): the same rulers as
- * @zodiacs/engine/timing's TRADITIONAL_RULERS and @zodiacs/engine/vedic's
+ * `@zodiacs/engine/timing`'s TRADITIONAL_RULERS and `@zodiacs/engine/vedic`'s
  * SIGN_LORDS. Each entry point carries its own copy, so that none imports
  * another; a test keeps the three equal.
  */

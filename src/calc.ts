@@ -96,7 +96,7 @@ export type CalcTime =
 /**
  * Geodetic latitude and east longitude, degrees; `height` in metres above the
  * IERS 2003 ellipsoid, from −12,000 to 100,000, 0 by default (topocentric
- * only). @zodiacs/engine/sky's Observer has the same fields on WGS84, with
+ * only). `@zodiacs/engine/sky`'s Observer has the same fields on WGS84, with
  * heights from −10,000 m.
  */
 export interface CalcPlace {
@@ -107,19 +107,19 @@ export interface CalcPlace {
 
 export type CalcCenter = "geocentric" | "heliocentric" | "barycentric" | { readonly topocentric: CalcPlace };
 
-/** The built-in ayanamsas, by name: @zodiacs/engine/vedic's AyanamsaName, whose guide (docs/vedic.md) defines each. */
+/** The built-in ayanamsas, by name: `@zodiacs/engine/vedic`'s AyanamsaName, whose guide (docs/vedic.md) defines each. */
 export type CalcAyanamsa = AyanamsaName;
 
-/** The built-in ayanamsas' names, in the order of @zodiacs/engine/vedic's AYANAMSAS, from which they are taken. */
+/** The built-in ayanamsas' names, in the order of `@zodiacs/engine/vedic`'s AYANAMSAS, from which they are taken. */
 export const CALC_AYANAMSAS = Object.freeze(Object.keys(AYANAMSAS)) as readonly CalcAyanamsa[];
 
-/** The precession model a caller's ayanamsa was computed with: the engine's IAU 2006, Newcomb's (Kinoshita 1975) or IAU 1976; @zodiacs/engine/vedic's AyanamsaPrecessionModel. */
+/** The precession model a caller's ayanamsa was computed with: the engine's IAU 2006, Newcomb's (Kinoshita 1975) or IAU 1976; `@zodiacs/engine/vedic`'s AyanamsaPrecessionModel. */
 export type CalcAyanamsaModel = AyanamsaPrecessionModel;
 
 /**
  * A caller's ayanamsa, the counterpart of Swiss Ephemeris's SE_SIDM_USER: the
  * mean ayanamsa `value` at `epoch`, carried from there by precession in
- * `model`, or by a fixed `rate`. It defines what @zodiacs/engine/vedic's
+ * `model`, or by a fixed `rate`. It defines what `@zodiacs/engine/vedic`'s
  * userAyanamsa defines, with its epoch given as any instant in a request is.
  */
 export interface CalcUserAyanamsa {
@@ -207,7 +207,13 @@ export interface CalcInstant {
   readonly timeScale: TimeScale;
 }
 
-export const CALC_RECEIPT_SCHEMA = "zodiacs.calc-receipt.draft-v1";
+/**
+ * The schema id of a calc receipt. Candidates before 1.0.0 wrote
+ * "zodiacs.calc-receipt.draft-v1", whose requests name a Julian date's scale
+ * in capitals and houses()'s house system as `system`; from 1.0.0 the id is
+ * this one, and its requests are 1.0's.
+ */
+export const CALC_RECEIPT_SCHEMA = "zodiacs.calc-receipt.v1";
 
 export interface CalcReceipt<Request> {
   readonly schema: typeof CALC_RECEIPT_SCHEMA;
@@ -272,8 +278,8 @@ export interface CalcPosition {
 }
 
 /**
- * Why a request was not computed. A refused search in @zodiacs/engine/crossings
- * and @zodiacs/engine/sky carries the same `status: "refused"`, and for a
+ * Why a request was not computed. A refused search in `@zodiacs/engine/crossings`
+ * and `@zodiacs/engine/sky` carries the same `status: "refused"`, and for a
  * spent budget the same `reason: "sample-budget"`.
  */
 export type CalcRefusal = {
@@ -669,7 +675,7 @@ interface SiderealRow extends Row {
 /**
  * `evaluate` in the sidereal zodiac: the longitude less the true ayanamsa in
  * the true ecliptic of date, or the mean one in the mean ecliptic of date,
- * subtracted as @zodiacs/engine/vedic's siderealLongitude subtracts it; the
+ * subtracted as `@zodiacs/engine/vedic`'s siderealLongitude subtracts it; the
  * vector turned with it. The longitude a speed differences is turned too, so
  * a speed is the sidereal longitude's.
  */
@@ -1117,7 +1123,7 @@ export interface ChartResult {
   readonly status: "ok";
   /** The chart natalChart() gives for the same instant (to the millisecond), place, settings and ΔT: tropical. */
   readonly chart: Chart;
-  /** In the sidereal zodiac, the chart's longitudes as @zodiacs/engine/vedic's siderealChart() gives them; null in the tropical zodiac. */
+  /** In the sidereal zodiac, the chart's longitudes as `@zodiacs/engine/vedic`'s siderealChart() gives them; null in the tropical zodiac. */
   readonly sidereal: CalcSiderealChart | null;
   readonly receipt: CalcReceipt<ChartRequest>;
 }

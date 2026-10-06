@@ -137,7 +137,11 @@ place between the two birthplaces: "you create a chart for ... the midpoint
 in time between those two ... and for a location that's between the two"
 (*The Astrology Podcast*, ep. 128). The book could not be read for this
 work, so the conventions below are this package's reading of that
-definition, not Davison's text.
+definition, not Davison's text. For that reason the Davison chart,
+`davisonChart`, `davisonPlace` and their three types, is experimental from
+1.0 ([versioning.md](versioning.md)): these conventions (the place's default,
+the house system, a known time only when both are known) may change in a
+minor release.
 
 - **Time**: the mean of the two births' UTC instants, rounded down to the
   millisecond. A chart given on UT1 or TT is read at its UTC instant.
@@ -145,8 +149,10 @@ definition, not Davison's text.
   and the longitude halfway along the shorter arc between the two
   longitudes. For longitudes exactly 180° apart it takes the one 90° east of
   the first. `place: "great-circle"`: the point halfway along the great
-  circle between the two places; antipodal places are refused. The two
-  readings differ when the places are far apart.
+  circle between the two places; antipodal places are refused, and so, from
+  1.0, are a place outside latitudes −90 to 90 or longitudes −180 to 180 and
+  a convention not named. The two readings differ when the places are far
+  apart.
 - **The chart**: `davisonChart(first, second, { place, houseSystem })` casts
   it with the first chart's house system unless another is named. Its time is
   known only when both birth times are, and it has angles and houses only when

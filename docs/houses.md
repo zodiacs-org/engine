@@ -192,6 +192,12 @@ the largest difference for any of the four points is under 0.00000001″, on L
 
 ## Speeds of the cusps and the angles
 
+`houseSpeeds` and `HouseSpeeds` are experimental from 1.0
+([versioning.md](versioning.md)): what a speed is here, a derivative with the
+latitude and the obliquity held fixed and 0 for whole-sign cusps, differs from
+Swiss Ephemeris's for several systems (below), and a minor release may change
+it.
+
 `houseSpeeds(system, input)` returns the speeds of the twelve cusps
 `computeHouses` returns and of the four angles, in degrees per day. Each is
 the derivative with respect to the RAMC, found analytically, times
@@ -244,6 +250,11 @@ difference of Swiss's own cusps in exactly those values, compared value by
 value, and in no other: there they are not the derivatives of its cusps.
 
 ## Planetary returns
+
+`planetaryReturns`, its types, `ReturnBody`, `RETURN_BODIES` and
+`RETURN_STEP_DAYS` are experimental from 1.0 ([versioning.md](versioning.md)):
+they came in 0.1.1-rc.16, and how returns are grouped into passes, and the
+searches' steps, may change in a minor release.
 
 `planetaryReturns(natal, body, from, to, options?)` in
 `@zodiacs/engine/timing` returns every instant in (from, to] at which `body`

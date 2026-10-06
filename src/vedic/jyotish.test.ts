@@ -194,6 +194,9 @@ describe("frame safety", () => {
     expect(at(360).lon).toBe(0);
     expect(Object.isFrozen(at(1))).toBe(true);
     expect(() => declareSiderealLongitude(Number.NaN, { ayanamsa: "x" })).toThrow(RangeError);
+    // A misspelt `at` is refused, not left out: a dasha would only fail later, for want of an instant.
+    expect(() => declareSiderealLongitude(12.3, { ayanamsa: "x", time: "2000-01-01T00:00:00Z" } as never)).toThrow(/unknown option: time/);
+    expect(declareSiderealLongitude(12.3, { ayanamsa: "x", at: undefined }).utc).toBeNull();
     expect(() => declareSiderealLongitude(1, { ayanamsa: " x" })).toThrow(RangeError);
     expect(() => declareSiderealLongitude(1, { ayanamsa: "x", at: "not a date" })).toThrow(RangeError);
     expect(declareSiderealLongitude(1, { ayanamsa: "x", at: "2000-01-01" }).utc).toBe("2000-01-01T00:00:00.000Z");

@@ -44,7 +44,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Mars",
       "time": {
@@ -174,7 +174,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Moon",
       "time": {
@@ -294,7 +294,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Earth",
       "time": {
@@ -420,7 +420,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Venus",
       "time": {
@@ -537,7 +537,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Black Moon Lilith",
       "time": {
@@ -658,7 +658,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Saturn",
       "time": {
@@ -774,7 +774,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Jupiter",
       "time": {
@@ -900,7 +900,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Pluto",
       "time": {
@@ -1005,7 +1005,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "North Node",
       "time": {
@@ -1126,7 +1126,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Mercury",
       "time": {
@@ -1252,7 +1252,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Sun",
       "time": {
@@ -1369,7 +1369,7 @@
      "speed": null
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Uranus",
       "time": {
@@ -1478,7 +1478,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Mean South Node",
       "time": {
@@ -1602,7 +1602,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Neptune",
       "time": {
@@ -1727,7 +1727,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Moon",
       "time": {
@@ -1958,7 +1958,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "time": {
        "iso": "2011-02-03T04:05:06Z"
@@ -2050,7 +2050,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "kind": "longitude-crossing",
       "body": "Sun",
@@ -2239,7 +2239,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Saturn",
       "time": {
@@ -2367,7 +2367,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Mean Node",
       "time": {
@@ -2505,7 +2505,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Venus",
       "time": {
@@ -2668,7 +2668,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "body": "Mars",
       "time": {
@@ -2821,7 +2821,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "time": {
        "iso": "1950-06-07T08:09:10Z"
@@ -2949,7 +2949,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "time": {
        "iso": "2133-10-11T12:13:14Z"
@@ -3050,7 +3050,7 @@
      }
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "kind": "longitude-crossing",
       "body": "Moon",
@@ -3397,7 +3397,7 @@
     },
     "sidereal": null,
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "time": {
        "iso": "1991-02-03T04:05:00Z"
@@ -3733,7 +3733,7 @@
     },
     "sidereal": null,
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "time": {
        "iso": "2015-07-07T12:00:00Z"
@@ -4136,7 +4136,7 @@
      ]
     },
     "receipt": {
-     "schema": "zodiacs.calc-receipt.draft-v1",
+     "schema": "zodiacs.calc-receipt.v1",
      "request": {
       "time": {
        "iso": "1991-02-03T04:05:00Z"

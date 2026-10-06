@@ -21,7 +21,7 @@ declare const CALC_BODIES: readonly CalcBody[];
 
 declare const CALC_FRAMES: readonly CalcFrame[];
 
-declare const CALC_RECEIPT_SCHEMA = "zodiacs.calc-receipt.draft-v1";
+declare const CALC_RECEIPT_SCHEMA = "zodiacs.calc-receipt.v1";
 
 declare const CALC_SPAN: CalcSpan;
 

@@ -26,10 +26,13 @@ the release it leads to.
   is committed with the regenerated file and a CHANGELOG entry.
 - **Documented behaviour.** What the README and `docs/` say a function does
   with its input: what it computes, under which conventions, which input it
-  refuses and how. A malformed input throws a `RangeError` or `TypeError`; a
-  well-formed request the engine does not compute returns a typed refusal
-  where the entry point has them (`./calc`'s `CalcRefusal`, a crossing
-  search's `refused`). Which of the two a given input meets is public.
+  refuses and how. A malformed input throws a `RangeError` (or, where an
+  entry point names one, its own error class: `./receipt`'s
+  `NatalEnvelopeError`); a well-formed request the engine does not compute
+  returns a typed refusal where the entry point has them (`./calc`'s
+  `CalcRefusal`, a crossing search's `refused`), or throws a named error
+  where it says so (`./geo`'s `ZoneHistoryNotLoadedError`, `./window`'s
+  `WindowBudgetError`). Which of these a given input meets is public.
 - **Records.** What a receipt or envelope holds, and which records the
   `./receipt` codec reads (below).
 
@@ -41,10 +44,12 @@ where no order is documented.
 
 Results are the engine's to make. Where a declaration says a result is
 frozen, it is frozen at its top level: a `Date` or a chart inside it is not,
-and changing one is not supported. Records and the results built to be
-stored, `./receipt`'s envelopes, `./calc`'s results and `./vedic`'s dasha
-periods, give instants as ISO 8601 strings; the other entry points give
-`Date`s. Some values are accepted only as the engine made them, such as
+and changing one is not supported. An instant in a result is a `Date` or an
+ISO 8601 string, as its declaration says, and the two do not change places
+within a major version: records and the results built to be stored or
+compared (`./receipt`'s envelopes, `./calc`'s results, `./vedic`'s values and
+dasha periods, a chart's declinations, a zone's transitions) give strings,
+and the rest `Date`s. Some values are accepted only as the engine made them, such as
 `./vedic`'s `SiderealLongitude` and the root's aspect policies: a copy, even
 through JSON, is refused, although the types do not say so.
 
@@ -118,7 +123,9 @@ for a different shape.
 
 The other ids name values the engine makes and does not read back:
 `./calc`'s `CALC_RECEIPT_SCHEMA` (a receipt's `request` can be passed back to
-repeat a calculation, but no codec parses a calc receipt),
+repeat a calculation, but no codec parses a calc receipt; candidates before
+1.0.0 wrote `zodiacs.calc-receipt.draft-v1`, with requests in their own
+vocabulary, and 1.0.0 writes `zodiacs.calc-receipt.v1`),
 `ASPECT_POLICY_SCHEMA` and `CONFIGURED_ASPECTS_SCHEMA` (a policy is accepted
 only as `createAspectPolicy` made it) and `./window`'s `BIRTH_WINDOW_SCHEMA`.
 Their shapes are their declarations', under the rules above, and their ids

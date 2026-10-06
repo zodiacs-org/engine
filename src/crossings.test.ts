@@ -322,10 +322,17 @@ describe("input errors", () => {
     }
   );
 
-  it("rejects an option it does not name, before any sample", () => {
+  it("rejects an option it does not name, and options that are not plain data, before any sample", () => {
     expect(() =>
       searchLongitudeCrossingsWith(longitudeAt, "Sun", 0, start, end, { stepdays: 1 } as unknown as CrossingSearchOptions)
     ).toThrowError(/unknown option: stepdays/u);
+    // As the engine's shared options reader refuses them: an inherited key, a getter, an instance of a class.
+    const inherited = Object.create({ stepdays: 1 }) as CrossingSearchOptions;
+    const getter = Object.defineProperty({}, "stepDays", { enumerable: true, get: () => 1 }) as CrossingSearchOptions;
+    class Options { stepDays = 1; }
+    for (const options of [inherited, getter, new Options(), [] as unknown as CrossingSearchOptions]) {
+      expect(() => searchLongitudeCrossingsWith(longitudeAt, "Sun", 0, start, end, options)).toThrowError(RangeError);
+    }
     expect(calls).toEqual([]);
   });
 

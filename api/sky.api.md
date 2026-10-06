@@ -69,7 +69,7 @@ interface SkyConventions {
 }
 
 interface SkyDayOptions extends SkyOptions {
-    utcOffsetMinutes?: number;
+    readonly utcOffsetMinutes?: number | undefined;
 }
 
 interface SkyEvent {
@@ -94,9 +94,9 @@ type SkyEvents = (SkyWindow & {
 type SkyFlag = "never-rises" | "never-sets" | "outside-reference-span";
 
 interface SkyOptions {
-    limb?: Limb;
-    refraction?: Refraction;
-    maxSamples?: number;
+    readonly limb?: Limb | undefined;
+    readonly refraction?: Refraction | undefined;
+    readonly maxSamples?: number | undefined;
 }
 
 type TraditionalPlanet = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn";

@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { INTERNAL_ENTRIES, buildApiReports, reportName } from "./api-report.mjs";
+import { INTERNAL_ENTRIES, buildApiReports, lineDiff, reportName } from "./api-report.mjs";
 
 const made = [];
 afterEach(() => {
@@ -145,6 +145,45 @@ describe("the API report", () => {
         .replace("declare const LIMIT = 10;", "/** @experimental */\ndeclare const LIMIT = 10;");
     }).get("engine.api.md");
     expect(reworded).toBe(tagged);
+  });
+
+  it("keeps a release tag on a member, and on an export under another name", () => {
+    const base = buildApiReports(makePackage()).get("engine.api.md");
+    const member = with_((f) => {
+      f["index.d.ts"] = f["index.d.ts"].replace("    readonly label: string;", "    /** The label. @deprecated Use another. */\n    readonly label: string;");
+    }).get("engine.api.md");
+    expect(member).not.toBe(base);
+    expect(member).toContain("    /** @deprecated */\n    readonly label: string;");
+    expect(member).not.toContain("The label");
+    const nested = with_((f) => {
+      f["index.d.ts"] = f["index.d.ts"].replace("    readonly when: Date;", "    /** @experimental */\n    readonly when: Date;");
+    }).get("engine.api.md");
+    expect(nested).toContain("    /** @experimental */\n    readonly when: Date;");
+    const alias = with_((f) => {
+      f["index.d.ts"] = f["index.d.ts"].replace("export { type Name, type Options, LIMIT, Shared, add };", "export { type Name, type Options, LIMIT, Shared, add, /** @deprecated Use add. */ add as plus };");
+    }).get("engine.api.md");
+    expect(alias).toContain("// exported as plus @deprecated\ndeclare function add(");
+  });
+
+  it("follows a type written as import(\"…\")", () => {
+    const files = {
+      ...BASE,
+      "index.d.ts": "declare function make(): import(\"./shared.js\").S;\nexport { make };\n"
+    };
+    const base = buildApiReports(makePackage(files)).get("engine.api.md");
+    expect(base).toContain("// exported by @scope/pkg/b (Renamed)\ninterface Shared {");
+    const changed = buildApiReports(makePackage({ ...files, "shared.d.ts": files["shared.d.ts"].replace("readonly value: number;", "readonly value: string;") })).get("engine.api.md");
+    expect(changed).not.toBe(base);
+  });
+
+  it("shows what changed when the check fails, removals first", () => {
+    const before = "# a\none\ntwo\nthree\nfour\nfive";
+    const after = "# a\none\ntwo\nTHREE\nfour\nfive";
+    expect(lineDiff(before, after)).toEqual(["  two", "- three", "+ THREE", "  four"]);
+    expect(lineDiff(before, before)).toEqual([]);
+    const long = lineDiff("", Array.from({ length: 100 }, (_, k) => `line ${k}`).join("\n"), 10);
+    expect(long).toHaveLength(11);
+    expect(long[10]).toMatch(/more lines/);
   });
 
   it("refuses declarations that do not compile", () => {

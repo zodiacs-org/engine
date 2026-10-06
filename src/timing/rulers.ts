@@ -8,8 +8,8 @@ export type TraditionalPlanet = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | 
 
 /**
  * The traditional domicile ruler of each sign; the outer planets rule none.
- * The same rulers as @zodiacs/engine/techniques's DOMICILE_RULERS and
- * @zodiacs/engine/vedic's SIGN_LORDS. Each entry point carries its own copy,
+ * The same rulers as `@zodiacs/engine/techniques`'s DOMICILE_RULERS and
+ * `@zodiacs/engine/vedic`'s SIGN_LORDS. Each entry point carries its own copy,
  * so that none imports another; a test keeps the three equal.
  */
 export const TRADITIONAL_RULERS: Readonly<Record<ZodiacSign, TraditionalPlanet>> = /*#__PURE__*/ Object.freeze({

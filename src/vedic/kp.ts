@@ -15,8 +15,8 @@ import type { ZodiacSign } from "../types.js";
 
 /**
  * Traditional sign rulers, Aries to Pisces (BPHS 4, Santhanam 1984): the same
- * rulers as @zodiacs/engine/techniques's DOMICILE_RULERS and
- * @zodiacs/engine/timing's TRADITIONAL_RULERS. Each entry point carries its
+ * rulers as `@zodiacs/engine/techniques`'s DOMICILE_RULERS and
+ * `@zodiacs/engine/timing`'s TRADITIONAL_RULERS. Each entry point carries its
  * own copy, so that none imports another; a test keeps the three equal.
  */
 export const SIGN_LORDS = Object.freeze([

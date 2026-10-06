@@ -489,8 +489,9 @@ outside those years Swiss uses a long-term sidereal time of its own.
 
 Placidus and Koch are undefined in polar regions, where |latitude| ≥ 90° − ε,
 with ε the true obliquity of date (about 66.56° today). There the engine falls
-back to whole-sign houses, exported as `POLAR_FALLBACK` (and, as before,
-`PLACIDUS_POLAR_FALLBACK`), and adds `polar-fallback` to the chart flags. Swiss
+back to whole-sign houses, exported as `POLAR_FALLBACK` (and as
+`PLACIDUS_POLAR_FALLBACK`, deprecated from 1.0, since Koch falls back too),
+and adds `polar-fallback` to the chart flags. Swiss
 Ephemeris falls back to Porphyry instead. Every other system is defined at
 every latitude where the angles are. Inside the polar circle, where the
 ascendant is taken on the eastern half of the horizon, Regiomontanus, Campanus
@@ -540,7 +541,10 @@ lots need a birth time and place.
 
 `antiscion`, `contraAntiscion` and `midpoint` work on any two longitudes.
 `meanNodeLongitude`, `meanApogee`, `lunarMeanArguments`, `hellenisticLots` and
-`sectOf` expose the calculations underneath. The osculating ("true") Lilith is
+`sectOf` expose the calculations underneath. The first three, with
+`MEAN_LUNAR_INCLINATION`, are experimental from 1.0
+([docs/versioning.md](docs/versioning.md)): a minor release may change them,
+and `chartPoints` and `@zodiacs/engine/calc` give the points themselves. The osculating ("true") Lilith is
 not offered: from astronomy-engine's lunar series it would be several
 arcminutes from Swiss's.
 

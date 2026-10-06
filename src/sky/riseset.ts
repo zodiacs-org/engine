@@ -20,7 +20,7 @@ export type SkyBody = Exclude<BodyName, "North Node" | "South Node">;
 /**
  * A place: geodetic latitude and longitude in degrees (east positive) and
  * height in metres above the WGS84 ellipsoid, on which the sky functions place
- * the observer. @zodiacs/engine/calc's CalcPlace has the same three fields on
+ * the observer. `@zodiacs/engine/calc`'s CalcPlace has the same three fields on
  * the IERS 2003 ellipsoid, which its topocentric reduction uses, and accepts
  * heights from −12,000 m: the two ellipsoids' equatorial radii differ by
  * 0.4 m, and a height from −12,000 to −10,000 m is refused here.
@@ -39,16 +39,16 @@ export type Refraction = "standard" | "none";
 
 export interface SkyOptions {
   /** `"upper"` for the Sun and Moon unless given; the planets accept only `"centre"`. */
-  limb?: Limb;
+  readonly limb?: Limb | undefined;
   /** `"standard"` unless given. */
-  refraction?: Refraction;
+  readonly refraction?: Refraction | undefined;
   /** Most position evaluations the searches may make: a positive integer or `Infinity` (default). */
-  maxSamples?: number;
+  readonly maxSamples?: number | undefined;
 }
 
 export interface SkyDayOptions extends SkyOptions {
   /** The clock that defines the day, minutes east of UTC. Default: the observer's local mean time, longitude × 4. */
-  utcOffsetMinutes?: number;
+  readonly utcOffsetMinutes?: number | undefined;
 }
 
 export type SkyEventKind = "rise" | "set" | "upper-transit" | "lower-transit";

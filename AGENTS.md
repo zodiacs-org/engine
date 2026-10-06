@@ -50,6 +50,7 @@ npm run typecheck
 npm test
 npm run build
 npm run exports:smoke
+npm run api:check
 npm run package:contents
 npm run pack:dry-run
 node scripts/verify-archive-binding.mjs

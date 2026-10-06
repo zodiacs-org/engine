@@ -65,7 +65,7 @@ export interface ReturnChart {
 /**
  * A solar or lunar return, under its first name.
  *
- * @deprecated Use ReturnChart, the same type: @zodiacs/engine/timing's PlanetaryReturn is another one.
+ * @deprecated Use ReturnChart, the same type: `@zodiacs/engine/timing`'s PlanetaryReturn is another one.
  */
 export type PlanetaryReturn = ReturnChart;
 
