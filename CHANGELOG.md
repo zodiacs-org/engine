@@ -1,5 +1,117 @@
 # Engine changelog
 
+## 0.1.1-rc.17 — unreleased candidate
+
+rc.17 adds the sidereal zodiac to the calc entry (`@zodiacs/engine/calc`), on
+rc.16 (main at `23660f5`, the merge of zodiacs-org/engine#25). In rc.16 its
+four functions refused `zodiac: { sidereal }` with `not-in-this-version`,
+though the entry's own map of Swiss Ephemeris's `calc_ut` flags typed the
+option in and `@zodiacs/engine/vedic` computed sidereal longitudes. Tropical
+values are rc.16's: the root entry and eleven others build to rc.16's files
+but for the version's value and the hashed chunk names that follow from it,
+calc's tropical round-trip values are unchanged, and so are the conformance
+suite's 500 verdicts and values. rc.17 is not to be published on npm: under
+the owner's decision of 2026-10-05 the next publication is the 1.0
+candidate. Checks: `docs/evidence/calc-sidereal-2026-10-05/` and
+`docs/evidence/rc17-20261005/`.
+
+- `calc()`, `houses()`, `events()` and `chart()` take `zodiac: { sidereal }`
+  with one of the nine built-in ayanamsas by name, or a caller's own,
+  `{ name?, epoch, value, rate?, model? }` (`CalcUserAyanamsa`):
+  `userAyanamsa` in JSON, and the counterpart of `SE_SIDM_USER`. A sidereal
+  longitude is the longitude in the ecliptic of date less the ayanamsa, the
+  true one in the true ecliptic of date and the mean one in the mean
+  ecliptic of date, subtracted as `siderealLongitude()` subtracts it: with
+  every other default, `calc()` gives `siderealChart()`'s longitudes to the
+  bit. Speeds are the sidereal longitude's, and a cartesian position turns
+  with it. `houses()` rebuilds whole-sign cusps from the sidereal
+  ascendant's sign, as `siderealChart()` does; `events()` searches sidereal
+  longitudes; `chart()` adds `sidereal`, `siderealChart()`'s longitudes as
+  plain numbers.
+- Two new refusals: the sidereal zodiac in a frame other than the two
+  ecliptics of date (`unsupported-combination`), and a caller's ayanamsa
+  carried by precession from an epoch outside 1800 to 2200 (`out-of-range`).
+  A malformed caller's ayanamsa throws a RangeError that names its field
+  under `zodiac.sidereal`, an epoch whose TT falls outside the range of a
+  Date among them.
+- `CalcPosition` and `HousesResult` gain `ayanamsa`, and `ChartResult` gains
+  `sidereal`, whose own `ayanamsa` has the same shape; both are null in the
+  tropical zodiac. That shape, `CalcAyanamsaValue`, is `{ name, mean,
+  nutation, true, subtracted, bound }`, in the result's angular unit:
+  `subtracted` says whether the true or the mean ayanamsa was subtracted, and
+  `bound` is the mean ayanamsa's. Receipts name `zodiac:sidereal` and
+  `ayanamsa:<name>`, or `ayanamsa:user-epoch` or `ayanamsa:user-linear`, and
+  record a caller's ayanamsa with every default filled in.
+- In the sidereal zodiac each bound adds the ayanamsa's own: the largest
+  difference of the engine's mean ayanamsa, and of its rate, from ERFA's
+  construction of the same definition, over 2,333,979 comparisons: every
+  star definition in every year from 1800 to 2199, densely around its pass
+  by the Sun, and callers' ayanamsas at the ends of what calc accepts. That
+  is 4.6 × 10⁻⁷″ and 1.6 × 10⁻⁷″ a day for epoch and linear definitions,
+  the rate's the floor of a linear ayanamsa's own rounding; a speed adds a
+  few tenths of a microarcsecond a day of rounding of its own, which no
+  bound includes (`docs/calc.md`). For a star definition it depends on the
+  star's angle from the Sun: 0.0013″ and 0.00039″ a day at 2° or more,
+  0.0048″ and 0.026″ a day from 0.3° to 2°, and 0.058″ and 27″ a day within
+  0.3°, where the star is on or beside the Sun's disc. The fixtures
+  `src/fixtures/ayanamsa-rates.json` and
+  `src/fixtures/ayanamsa-rates-dense.json`, which keep the years and callers
+  that hold each band's largest differences, and `src/calc-sidereal.test.ts`
+  hold the engine to them.
+- `@zodiacs/engine/vedic`: `ayanamsa()` now computes through an internal
+  `ayanamsaAt`, which also gives a star definition's star's angle from the
+  Sun. A linear ayanamsa is now its value at J2000.0, less whole turns, plus
+  its rate times TT days since J2000.0. It was counted from its epoch, so
+  that from an epoch far from the span its value ran to hundreds of
+  thousands of degrees, whose rounding put up to 2 × 10⁻⁴″ a day into its
+  rate at 3,600″ a year; and from a Julian date rebuilt from TT days, held
+  near 2.4 million only to about 5 × 10⁻¹⁰ day, which put up to 2 × 10⁻⁶″ a
+  day there. A linear ayanamsa moves by the rounding this removes: Raman's and
+  Sri Yukteswar's by less than 10⁻¹³°, and a caller's by less than 10⁻¹²°
+  from an epoch from 1800 to 2200 and by up to 8.6 × 10⁻¹¹° from an epoch at
+  the end of a Date's range (`docs/evidence/rc17-20261005/`). Every epoch and
+  star definition's value is rc.16's. `docs/vedic.md` corrects its agreement
+  with ERFA: none of its first comparison's 164 was within 17° of the Sun,
+  and near the Sun the engine and ERFA part by up to 0.058″.
+- The calc round-trip fixture gains twelve cases, among them its first four
+  of `chart()`. Of its 25 earlier cases, the sidereal Moon, refused
+  `not-in-this-version` in rc.16, is now computed; 15 gain `ayanamsa: null`;
+  and every receipt names rc.17. The conformance results are regenerated: 267
+  pass, 192 fail and 41 unsupported of 500, every verdict and value as in
+  rc.16.
+- Sizes: the calc entry's import graph grows from 113,904 to 139,836 bytes,
+  and its budget is raised from 115,000 to 145,500, because it now loads the
+  ayanamsas, with their star catalogue and apparent places, and the sidereal
+  charts, in a chunk it shares with `./vedic`. `./vedic`'s graph grows by
+  1,508 bytes, to 123,639 of its 128,000. The package is 946,349 bytes
+  unpacked in 70 files (rc.16: 923,282 in 69): of the 23,067 bytes it grows
+  by, 9,844 are opt-in JavaScript, 4,618 declarations and 8,605 documents.
+  That leaves 0.38 per cent of the cap of 950,000, which was not raised; a
+  candidate that grows by more than about 3,600 bytes will need it raised, or
+  the package trimmed.
+
+Breaking changes:
+
+- A calc request with `zodiac: { sidereal }`, refused `not-in-this-version`
+  in rc.16, is now computed, or refused `unsupported-combination` in a frame
+  outside the ecliptics of date. `not-in-this-version` now means only
+  gravitational deflection.
+- Every `CalcPosition` and `HousesResult` has a new key, `ayanamsa`, and
+  every `ChartResult` one, `sidereal`, null in the tropical zodiac. Code that
+  compares a whole rc.16 result needs them; no tropical value changes.
+
+Migration: expect the new keys, null in the tropical zodiac. A sidereal
+longitude that came from `siderealLongitude()` or `siderealChart()` in rc.16
+is the same number from calc in rc.17 with calc's other defaults: to the bit,
+but where a linear ayanamsa moved (above), by as much as it moved.
+
+### Corrections
+
+- rc.14's, rc.15's and rc.16's entries call each an unreleased candidate. They
+  were published on npm afterwards: rc.14 and rc.15 on 2026-09-30, rc.16 on
+  2026-10-01, and on 2026-10-05 `latest` was rc.15 and `next` rc.16
+  (`docs/evidence/rc17-20261005/npm-view.txt`).
+
 ## 0.1.1-rc.16 — unreleased candidate
 
 rc.16 brings six pieces of work onto rc.15 (main at `93ebae9`, the merge of

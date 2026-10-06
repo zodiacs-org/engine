@@ -195,8 +195,9 @@ iso3166.tab, which is in the public domain.
 Star positions and motions
 --------------------------
 
-@zodiacs/engine/vedic carries 22 published values for the objects of four
-star-based ayanamsas, in dist/vedic.js. Twenty of them were obtained through
+@zodiacs/engine/vedic and @zodiacs/engine/calc carry 22 published values for
+the objects of four star-based ayanamsas, in a shared chunk under dist/ that
+dist/vedic.js and dist/calc.js import. Twenty of them were obtained through
 the VizieR catalogue access tool (DOI 10.26093/cds/vizier) and the SIMBAD
 database (M. Wenger et al. 2000, A&AS 143, 9) of the CDS, Strasbourg
 Astronomical Observatory, France:

@@ -118,6 +118,12 @@ starts at 120°; the Sun is in house 10 and Saturn in house 6. For every other
 system each cusp is the chart's cusp less the ayanamsa: the sidereal longitude
 of the same point on the ecliptic.
 
+`@zodiacs/engine/calc` gives the same sidereal longitudes, to the bit, in its
+uniform vocabulary: `calc`, `houses`, `events` and `chart` take
+`zodiac: { sidereal }` with any of the ayanamsas below or a caller's, and
+return plain numbers with bounds and a receipt ([calc.md](calc.md),
+*The sidereal zodiac*).
+
 ## Ayanamsas
 
 `AYANAMSAS` holds the nine built-in definitions. Each has a `source` field
@@ -227,9 +233,16 @@ apparent longitude of date minus `true` is exactly the anchor longitude.
 The catalogue matters more than the computation. Gaia EDR3's values for
 ζ Psc and δ Cnc move True Revati and True Pushya by −0.22″ to +0.25″ over
 1800–2200 (zero near 2000); Gaia has no usable astrometry for Spica. The engine agrees with ERFA's astrometry on the
-same catalogue values within 0.001″ at instants more than 5° from the Sun,
-and with Swiss Ephemeris within 0.0044″. That shows the computations agree on
-shared inputs, not that either is that accurate.
+same catalogue values within 0.001″ in the 164 comparisons of the first
+evidence, 41 instants for each star and none within 17° of the Sun, and within
+0.0013″ in the calc entry's 306,850 comparisons, every year from 1800 to 2199,
+with the star 2° or more from the Sun (`docs/evidence/calc-sidereal-2026-10-05/`),
+and with Swiss Ephemeris within 0.0044″. Nearer the Sun the two part further:
+by up to 0.0048″ from 0.3° to 2°, and by up to 0.058″ within 0.3°, where the
+star is on or beside the Sun's disc. There the deflection of the star's light
+grows so fast as its angle from the Sun falls that the small difference
+between the two programs' positions of the Earth grows with it. That shows the
+computations agree on shared inputs, not that either is that accurate.
 
 ### User-defined ayanamsas
 

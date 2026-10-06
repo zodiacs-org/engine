@@ -1,0 +1,92 @@
+{
+ "generator": "docs/evidence/calc-sidereal-2026-10-05/tools/differences.ts",
+ "units": "largest |engine − ERFA| of the mean ayanamsa, arcseconds, and of its rate, arcseconds a day; jd in TT",
+ "nearSunDegrees": 2,
+ "atSunDegrees": 0.3,
+ "bands": {
+  "epochOrLinear": {
+   "comparisons": 3513,
+   "position": {
+    "arcsec": 4.526555130723864e-7,
+    "name": "caller: epoch 2378496.5, value -180, model engine",
+    "jd": 2471632.5625,
+    "elongation": null
+   },
+   "rate": {
+    "arcsec": 1.5246596173079663e-7,
+    "name": "caller: epoch 2378496.5, value -359.9, rate 3599.999734″/yr",
+    "jd": 2379402.789,
+    "elongation": null
+   }
+  },
+  "star": {
+   "comparisons": 5458,
+   "position": {
+    "arcsec": 0.0012274823973257298,
+    "name": "true-chitra",
+    "jd": 2523788.75512672,
+    "elongation": 2.365895592924934,
+    "year": 2197
+   },
+   "rate": {
+    "arcsec": 0.00038430700293798885,
+    "name": "true-chitra",
+    "jd": 2387914.60110583,
+    "elongation": 2.041423151954253,
+    "year": 1825
+   }
+  },
+  "starNearSun": {
+   "comparisons": 3921,
+   "position": {
+    "arcsec": 0.004712318074950872,
+    "name": "true-revati",
+    "jd": 2523233.97339708,
+    "elongation": 0.30043297320360834,
+    "year": 2196
+   },
+   "rate": {
+    "arcsec": 0.02556703010128591,
+    "name": "true-pushya",
+    "jd": 2386375.97918558,
+    "elongation": 0.3007918301485638,
+    "year": 1821
+   }
+  },
+  "starAtSun": {
+   "comparisons": 25593,
+   "position": {
+    "arcsec": 0.05743847723209683,
+    "name": "true-pushya",
+    "jd": 2386376.32148726,
+    "elongation": 0.08022825800319966,
+    "year": 1821
+   },
+   "rate": {
+    "arcsec": 26.969801572804528,
+    "name": "true-pushya",
+    "jd": 2380166.89157308,
+    "elongation": 0.08025835117154775,
+    "year": 1804
+   }
+  }
+ },
+ "bounds": {
+  "epochOrLinear": {
+   "position": 4.6e-7,
+   "rate": 1.6e-7
+  },
+  "star": {
+   "position": 0.0013,
+   "rate": 0.00039
+  },
+  "starNearSun": {
+   "position": 0.0048,
+   "rate": 0.026
+  },
+  "starAtSun": {
+   "position": 0.058,
+   "rate": 27
+  }
+ }
+}

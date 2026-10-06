@@ -3,13 +3,13 @@ import { readFileSync } from "node:fs";
 import { AstroTime } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
-import { calc, events, houses } from "./calc.js";
+import { calc, chart, events, houses } from "./calc.js";
 import type { CalcPosition, CalcRequest } from "./calc.js";
 import { CALC_FRAMES, apply, frameMatrix, fromSpherical, transpose } from "./calc-frames.js";
 import type { Vec3 } from "./calc-frames.js";
 
 interface Case {
-  readonly function: "calc" | "houses" | "events";
+  readonly function: "calc" | "houses" | "events" | "chart";
   readonly request: unknown;
   readonly result: { readonly status: string; readonly receipt?: { readonly request: unknown } };
 }
@@ -17,18 +17,23 @@ interface Case {
 const { cases } = JSON.parse(readFileSync(new URL("./fixtures/calc-roundtrip.json", import.meta.url), "utf8")) as {
   cases: Case[];
 };
-const run = { calc, houses, events } as Record<Case["function"], (request: never) => unknown>;
+/** A function's result as JSON, as the fixture holds it: a chart's Dates as ISO strings. */
+const run = Object.fromEntries(
+  Object.entries({ calc, houses, events, chart }).map(([name, fn]) => [name, (request: never) => JSON.parse(JSON.stringify(fn(request)))])
+) as Record<Case["function"], (request: never) => unknown>;
 const ARCSEC = Math.PI / 648_000;
 const DEG = Math.PI / 180;
 
 /** The same, numbers to 10⁻¹² of their size; the engine's version, which a release changes, is not compared. */
 function expectSame(actual: unknown, expected: unknown, path = "result"): void {
+  const version = (where: string, key: string) =>
+    (where === "result.receipt.engine" && key === "version") || (where === "result.chart" && key === "engineVersion");
   if (typeof expected === "number" && typeof actual === "number") {
     expect(Math.abs(actual - expected), path).toBeLessThanOrEqual(1e-12 * Math.max(1, Math.abs(expected)));
   } else if (expected !== null && typeof expected === "object" && actual !== null && typeof actual === "object") {
     expect(Object.keys(actual).sort(), path).toEqual(Object.keys(expected).sort());
     for (const [key, value] of Object.entries(expected)) {
-      if (path === "result.receipt.engine" && key === "version") continue;
+      if (version(path, key)) continue;
       expectSame((actual as Record<string, unknown>)[key], value, `${path}.${key}`);
     }
   } else {
@@ -46,7 +51,15 @@ const positions = cases.filter(
 );
 
 describe("calc round-trip fixtures", () => {
-  it("cover every frame and center, the three corrections and the refusals", () => {
+  it("cover every function, both zodiacs and a caller's ayanamsa, every frame and center, the three corrections and the refusals", () => {
+    expect(new Set(cases.filter((entry) => entry.result.status === "ok").map((entry) => entry.function))).toEqual(
+      new Set(["calc", "houses", "events", "chart"])
+    );
+    const zodiacs = cases.map((entry) => (entry.request as { zodiac?: unknown }).zodiac ?? "tropical");
+    const kinds = zodiacs.map((zodiac) =>
+      zodiac === "tropical" ? "tropical" : typeof (zodiac as { sidereal: unknown }).sidereal === "string" ? "named" : "caller's"
+    );
+    expect(new Set(kinds)).toEqual(new Set(["tropical", "named", "caller's"]));
     const requests = positions.map((entry) => entry.result.receipt.request);
     expect(new Set(requests.map((request) => request.frame))).toEqual(new Set(CALC_FRAMES));
     const centers = requests.map((request) => (typeof request.center === "string" ? request.center : "topocentric"));
@@ -79,8 +92,9 @@ describe("calc round-trip fixtures", () => {
     }
   });
 
-  it("turn each cartesian position into every other frame as calc() gives it there", () => {
-    for (const { result } of positions.filter((entry) => entry.result.cartesian)) {
+  it("turn each tropical cartesian position into every other frame as calc() gives it there", () => {
+    // A sidereal vector is turned by the ayanamsa of its own ecliptic of date; calc-sidereal.test.ts compares those.
+    for (const { result } of positions.filter((entry) => entry.result.cartesian && entry.result.receipt.request.zodiac === "tropical")) {
       const request = result.receipt.request;
       const at = AstroTime.FromTerrestrialTime(result.receipt.instants[0]!.jdTt - 2_451_545);
       const { x, y, z } = result.cartesian!;

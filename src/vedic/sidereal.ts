@@ -50,10 +50,11 @@ export function requireSidereal(value: unknown): SiderealLongitude {
 }
 
 /**
- * Into [0, 360), leaving a value already there bit for bit unchanged (the
- * general normalizeLongitude adds 360 first, which can move it by an ulp).
+ * Internal: into [0, 360), leaving a value already there bit for bit
+ * unchanged (the general normalizeLongitude adds 360 first, which can move it
+ * by an ulp).
  */
-function wrap360(value: number): number {
+export function wrap360(value: number): number {
   if (value >= 0 && value < 360) return value;
   let r = value % 360;
   if (r < 0) r += 360;
@@ -135,6 +136,15 @@ export interface SiderealChart {
   readonly flags: readonly ChartFlag[];
 }
 
+/**
+ * Internal: whole-sign cusps from a sidereal ascendant, first house first: the
+ * sidereal signs from the ascendant's, each cusp exactly on a sign's start.
+ */
+export function wholeSignCusps(ascendant: number): number[] {
+  const first = Math.floor(ticksOf(ascendant) / SIGN_TICKS);
+  return Array.from({ length: 12 }, (_, k) => ((first + k) % 12) * 30);
+}
+
 /** Internal: the sidereal form of an already validated chart. */
 export function siderealChartOf(chart: Chart, definition: AyanamsaName | AyanamsaDefinition): SiderealChart {
   const input = chart.input;
@@ -152,15 +162,12 @@ export function siderealChartOf(chart: Chart, definition: AyanamsaName | Ayanams
   const houseSystem = chart.houses ? chart.houses.system : null;
   let cusps: SiderealLongitude[] | null = null;
   if (chart.houses && houseSystem === "whole" && ascendant) {
-    // The sidereal signs from the sidereal ascendant's, each cusp exactly on a sign's start.
-    const first = Math.floor(ticksOf(ascendant.lon) / SIGN_TICKS);
-    cusps = Array.from({ length: 12 }, (_, k) => {
-      const lon = ((first + k) % 12) * 30;
-      return make({
+    cusps = wholeSignCusps(ascendant.lon).map((lon) =>
+      make({
         frame: "sidereal", lon, ayanamsa: value.ayanamsa, trueAyanamsa: value.true,
         tropical: wrap360(lon + value.true), utc: utcInstantOf(value)
-      });
-    });
+      })
+    );
   } else if (chart.houses) {
     cusps = chart.houses.cusps.map(of);
   }

@@ -493,7 +493,7 @@ describe("houses, events and chart wrap the engine's own functions", () => {
 describe("typed refusals", () => {
   const time = "2000-01-01T00:00:00Z";
 
-  it("refuse the sidereal zodiac, named by ayanamsa, in this version", () => {
+  it("compute the sidereal zodiac, named by ayanamsa, in every function (calc-sidereal.test.ts holds the values)", () => {
     for (const ayanamsa of CALC_AYANAMSAS) {
       const zodiac = { sidereal: ayanamsa };
       for (const result of [
@@ -502,7 +502,7 @@ describe("typed refusals", () => {
         events({ kind: "longitude-crossing", body: "Sun", longitude: 0, from: time, to: "2000-02-01", zodiac }),
         chart({ time, zodiac })
       ]) {
-        expect(refused(result).reason).toBe("not-in-this-version");
+        expect(result.status).toBe("ok");
       }
     }
   });

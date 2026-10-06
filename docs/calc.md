@@ -1,8 +1,8 @@
 # `@zodiacs/engine/calc`
 
 One calculation API over the engine's positions, houses, longitude crossings
-and charts. It is a separate entry point, so the root entry
-(`@zodiacs/engine`) loads none of it.
+and charts, in the tropical or the sidereal zodiac. It is a separate entry
+point, so the root entry (`@zodiacs/engine`) loads none of it.
 
 ```ts
 import { calc, houses, events, chart } from "@zodiacs/engine/calc";
@@ -30,10 +30,10 @@ computed before it.
 
 | function | takes | gives |
 | --- | --- | --- |
-| `calc` | `{ body, time, frame?, center?, zodiac?, flags? }` | `{ lon, lat, dist, speeds, cartesian, bounds, receipt }` |
-| `houses` | `{ time, place, system?, zodiac? }` | angles, Vertex, East Point, ARMC, obliquity and the cusps, with `bounds` and a receipt, as `natalChart()` computes them |
+| `calc` | `{ body, time, frame?, center?, zodiac?, flags? }` | `{ lon, lat, dist, speeds, cartesian, ayanamsa, bounds, receipt }` |
+| `houses` | `{ time, place, system?, zodiac? }` | angles, Vertex, East Point, ARMC, obliquity and the cusps, with `ayanamsa`, `bounds` and a receipt, as `natalChart()` computes them |
 | `events` | `{ kind: "longitude-crossing", body, longitude, from, to, zodiac?, stepDays?, maxSamples? }` | every instant in (from, to] the body sits on the longitude, from the engine's crossing search |
-| `chart` | `{ time, place?, houseSystem?, timeKnown?, timeFlags?, zodiac? }` | the chart `natalChart()` gives, with a receipt |
+| `chart` | `{ time, place?, houseSystem?, timeKnown?, timeFlags?, zodiac? }` | the chart `natalChart()` gives, with its sidereal longitudes in the sidereal zodiac, and a receipt |
 
 Each returns `status: "ok"` or a typed refusal (below). Malformed input (an
 unknown body, frame or field, an invalid date, a latitude out of range) throws
@@ -62,13 +62,11 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
 - **`frame`**: one of eight, below. Default `"ecliptic-true-of-date"`.
 - **`center`**: `"geocentric"` (default), `"heliocentric"`, `"barycentric"`,
   or `{ topocentric: { latitude, longitude, height? } }`.
-- **`zodiac`**: `"tropical"` (default) or `{ sidereal: ayanamsa }` with one of
-  `lahiri`, `fagan-bradley`, `krishnamurti`, `raman`, `yukteswar`,
-  `true-chitra`, `true-revati`, `true-pushya` or `galactic-center`. The
-  sidereal zodiac is not in this entry in this version: every function
-  refuses it with `not-in-this-version`. These are the names of
-  `@zodiacs/engine/vedic`'s ayanamsas, which give sidereal longitudes there
-  ([vedic.md](vedic.md)).
+- **`zodiac`**: `"tropical"` (default) or `{ sidereal: ayanamsa }`, where
+  `ayanamsa` is one of `lahiri`, `fagan-bradley`, `krishnamurti`, `raman`,
+  `yukteswar`, `true-chitra`, `true-revati`, `true-pushya` or
+  `galactic-center`, the ayanamsas of `@zodiacs/engine/vedic`
+  ([vedic.md](vedic.md)), or a caller's own (see *The sidereal zodiac*).
 - **`flags`**: `correction` (`"apparent"`, `"astrometric"` or `"geometric"`,
   default apparent), `speeds` (default true), `cartesian` (default false),
   `units` (`"degrees"` or `"radians"`, default degrees) and `deflection`
@@ -126,6 +124,74 @@ nutation, which keeps five of the 77 terms: sampled every 0.1 day from 1800 to
 2200 it was up to 0.27″ from the full series in longitude and 0.087″ in
 obliquity, and its rate up to 0.079″ a day in longitude
 (`docs/evidence/calc-api`, diagnostic D4).
+
+## The sidereal zodiac
+
+`zodiac: { sidereal }` counts longitudes from the sidereal zero point of an
+ayanamsa, every function alike. A sidereal longitude is the longitude in the
+ecliptic of date less the ayanamsa: in `ecliptic-true-of-date` the true
+ayanamsa, the mean one plus the nutation in longitude Δψ, and in
+`ecliptic-mean-of-date` the mean one. Δψ cancels, so the two frames give the
+same sidereal longitude, within 10⁻⁶″. The other six frames are refused
+(`unsupported-combination`), because the ayanamsa is counted along the
+ecliptic of date from its equinox; Swiss Ephemeris's projections onto the
+ecliptic of an epoch or the solar system's plane (`SE_SIDBIT_ECL_T0`,
+`SE_SIDBIT_SSY_PLANE`) are not offered.
+
+- **`calc()`** subtracts the ayanamsa as `@zodiacs/engine/vedic`'s
+  `siderealLongitude()` does, at the instant on its own clock, so with every
+  other default it gives `siderealChart()`'s longitudes to the bit. Every
+  center is offered, and the nodes and Lilith. The latitude and the distance
+  are the tropical ones; a cartesian position and its velocity are turned
+  about the pole of the ecliptic with the longitude. The speed is the
+  sidereal longitude's, differenced as the tropical one is: the tropical
+  speed less the rate of the ayanamsa subtracted. A precessing definition's
+  mean ayanamsa grows by about 0.138″ a day; the true one adds the rate of
+  Δψ, so Lahiri's true ayanamsa moved by −0.016″ to 0.378″ a day in 2026.
+- **`houses()`** subtracts the true ayanamsa from the angles, the cusps, the
+  Vertex and the East Point. Whole-sign cusps, asked for or as the polar
+  fallback, start at the sidereal ascendant's sign, as `siderealChart()`'s
+  do. The ARMC and the obliquity are not zodiacal and do not change.
+- **`events()`** reads `longitude` as a sidereal longitude and searches the
+  body's longitude less the true ayanamsa at each instant it samples.
+- **`chart()`** keeps `chart`, `natalChart()`'s tropical chart, and adds
+  `sidereal`: the ayanamsa at the chart's instant, the bodies' sidereal
+  longitudes, the ascendant, the midheaven, the house system and the cusps,
+  each as `siderealChart()` gives it.
+
+All three give the ayanamsa in one shape, `ayanamsa`, in the result's
+angular unit: `{ name, mean, nutation, true, subtracted, bound }`. `mean` is
+counted along the mean ecliptic of date, `nutation` is the engine's Δψ (IAU
+2000B), and `true` is their sum, wrapped into (−180°, 180°]. `subtracted`
+says which was subtracted: `"true"` in `ecliptic-true-of-date`, which
+`houses()` and `chart()` always use, `"mean"` in `ecliptic-mean-of-date`.
+`bound` is the mean ayanamsa's (*Bounds*). Δψ cancels from a sidereal
+longitude, so that is the bound a sidereal result adds; `true` read on its
+own also differs from IAU 2000A's by the nutation model's difference, up to
+0.00394″ (*Frames*).
+
+A caller's ayanamsa is `@zodiacs/engine/vedic`'s `userAyanamsa` in JSON,
+`{ name?, epoch, value, rate?, model? }`, and the receipt records it with
+every default filled in:
+
+- `name`: a lowercase identifier of at most 64 characters that is not a
+  built-in name; `"user"` by default.
+- `epoch`: read as `time` is. `{ jd, scale: "TT" }` is Swiss Ephemeris's
+  `SE_SIDM_USER` epoch `t0`, and `{ jd, scale: "UT1" }` its epoch with
+  `SE_SIDBIT_USER_UT`; an ISO string is UTC on the time basis.
+- `value`: the mean ayanamsa at the epoch, degrees, from −360 to 360.
+- `rate`: arcseconds a Julian year, from −3600 to 3600. With it the
+  ayanamsa grows by that rate, as Raman's and Sri Yukteswar's do.
+- `model`: without a rate, the precession model `value` was computed with:
+  `"engine"` (IAU 2006, the default), which carries `value` from the epoch,
+  as `SE_SIDM_USER` does, or `"newcomb"` or `"iau1976"`, whose zodiac is held
+  where that model puts it at J2000.0, as the built-in definitions are.
+
+A caller's ayanamsa carried by precession from an epoch outside `CALC_SPAN`
+is refused `out-of-range`: the ayanamsas have been compared with ERFA only
+inside it. Swiss Ephemeris's named modes are not always this engine's
+definitions: its Krishnamurti, Raman, Sri Yukteswar, True Pushya and Galactic
+Center differ ([vedic.md](vedic.md), *Agreement with Swiss Ephemeris*).
 
 ## Centers and corrections
 
@@ -237,6 +303,55 @@ angles and 0.08″ for the cusps (`conformance/RESULTS.md`); `events()` gives th
 step divided by 2²⁴, as an estimate, to which the ephemeris's own error
 divided by the body's speed adds.
 
+In the sidereal zodiac each bound adds the ayanamsa's own: the largest
+difference of the engine's mean ayanamsa, and of its rate, from ERFA's
+construction of the same definition, rounded up to two significant figures,
+over 2,333,979 comparisons from 1800 to 2200
+(`docs/evidence/calc-sidereal-2026-10-05/`). They take every star definition
+in every year of the span, densely around its pass by the Sun and down to
+0.00001 day where either computation's cap on the deflection starts and stops
+applying, and callers' ayanamsas at the ends of what calc accepts. `ayanamsa.bound` gives it, and
+`bounds.position` and `bounds.speed` add it, in whole nanoarcseconds rounded
+up; a speed bound that is null stays null. A star definition's band is set by
+its star's angle from the Sun.
+
+| definitions | comparisons | ayanamsa | its rate |
+| --- | ---: | --- | --- |
+| epoch and linear, built-in and callers' | 134,833 | 4.6 × 10⁻⁷″ | 1.6 × 10⁻⁷″ a day |
+| star, 2° or more from the Sun | 306,850 | 0.0013″ | 0.00039″ a day |
+| star, 0.3° to 2° from the Sun | 238,364 | 0.0048″ | 0.026″ a day |
+| star, within 0.3° of the Sun | 1,653,932 | 0.058″ | 27″ a day |
+
+For an epoch or linear definition the rate's difference is rounding: for an
+epoch definition, the two programs' in their precession and the engine's in
+adding the value; for a linear one, the engine's alone, at most one and a
+half units in the last place of a value below 512° over the 0.002 day of the
+difference, 1.535 × 10⁻⁷″ a day. A search found a definition and instant
+within one per cent of that, and the comparison includes it. These are
+differences of the ayanamsa at the same two instants. A speed in calc adds
+rounding of its own: in each instant's Terrestrial Time, in the nutation the
+true ayanamsa adds, and in subtracting the ayanamsa from the longitude. For a
+linear ayanamsa at 3,600″ a year, within calc's span, that is at most about
+4.5 × 10⁻⁷″ a day, so the ayanamsa's rate in calc's speeds, the tropical
+speed less the sidereal, can be up to about 6 × 10⁻⁷″ a day from the
+definition's; the largest found is 3.5 × 10⁻⁷″ a day. No bound includes it;
+the smallest speed bound calc gives is 8.1 × 10⁻⁴″ a day.
+
+The engine and ERFA deflect a star's light by the Sun with the same formula,
+and both cap its denominator at the same small number, which only True
+Pushya's star reaches, within about 0.08° of the Sun's centre. Their Earth
+positions differ slightly, by an amount that changes from year to year, so
+they put the star at slightly different angles from the Sun. The deflection,
+and still more its rate, grows so fast as that angle falls that the
+difference grows with it, and where the cap starts and stops applying the two
+computations do so at instants a little apart: there their rates part by up
+to 27″ a day. How far apart they come changes from one pass to the next,
+which is why every year is compared. Within 0.3° the star is on or beside the
+Sun's disc, whose radius is about 0.27°. The bound says how far
+apart the two computations of the same definition are, not that such a star
+is seen. It is against this engine's definition, not another program's:
+definitions differ between programs by far more.
+
 ## Refusals
 
 A refusal is `{ status: "refused", reason, detail }`, the `status` and
@@ -244,9 +359,9 @@ A refusal is `{ status: "refused", reason, detail }`, the `status` and
 
 | `reason` | when | extra fields |
 | --- | --- | --- |
-| `not-in-this-version` | the sidereal zodiac; gravitational deflection | |
-| `unsupported-combination` | the Sun heliocentric; the Earth geocentric or topocentric; a node or Lilith with a center other than geocentric, or with `cartesian`; crossings of a body `positions()` does not give; a pinned ΔT for a crossing search | |
-| `out-of-range` | an instant whose UT1 or TT is outside `CALC_SPAN`, 1800-01-01T00:00Z up to 2200-01-01T00:00Z, where the positions have been compared with an independent ephemeris | `span` |
+| `not-in-this-version` | gravitational deflection | |
+| `unsupported-combination` | the Sun heliocentric; the Earth geocentric or topocentric; a node or Lilith with a center other than geocentric, or with `cartesian`; the sidereal zodiac in a frame other than the two ecliptics of date; crossings of a body `positions()` does not give; a pinned ΔT for a crossing search | |
+| `out-of-range` | an instant whose UT1 or TT is outside `CALC_SPAN`, 1800-01-01T00:00Z up to 2200-01-01T00:00Z, where the positions have been compared with an independent ephemeris; a caller's ayanamsa carried by precession from an epoch outside it | `span` |
 | `sample-budget` | a crossing search that needs more evaluations than `maxSamples` | `samples`, `maxSamples` |
 
 The checks run in that order. The span is checked on both time scales, so a
@@ -276,6 +391,9 @@ is no comparison to take one from.
 | id | meaning |
 | --- | --- |
 | `zodiac:tropical` | longitudes from the equinox of the frame |
+| `zodiac:sidereal` | longitudes from the ayanamsa's sidereal zero point: the longitude in the ecliptic of date less the true ayanamsa (true equinox) or the mean one (mean equinox) |
+| `ayanamsa:<name>` | a built-in ayanamsa, `ayanamsa:lahiri` to `ayanamsa:galactic-center`, as [vedic.md](vedic.md) defines it |
+| `ayanamsa:user-epoch`, `ayanamsa:user-linear` | a caller's ayanamsa, carried by precession or by a rate; the receipt's request holds it |
 | `frame:<frame>` | one of the eight frames above |
 | `center:geocentric`, `center:heliocentric`, `center:barycentric`, `center:topocentric` | the origin |
 | `correction:apparent`, `correction:astrometric`, `correction:geometric` | as above; `correction:not-applicable` for the nodes and Lilith |
@@ -320,7 +438,7 @@ uses no Swiss Ephemeris code, data or output.
 | `SEFLG_EQUATORIAL` | right ascension and declination | `frame: "equatorial-…"` | supported |
 | `SEFLG_XYZ` | cartesian coordinates | `flags.cartesian: true` (given beside `lon`, `lat`, `dist`) | supported |
 | `SEFLG_RADIANS` | radians | `flags.units: "radians"` | supported |
-| `SEFLG_SIDEREAL` (with `swe_set_sid_mode`) | sidereal zodiac | `zodiac: { sidereal: ayanamsa }` | typed in, refused: `not-in-this-version`; planned with the Vedic techniques |
+| `SEFLG_SIDEREAL` (with `swe_set_sid_mode`) | sidereal zodiac | `zodiac: { sidereal: ayanamsa }`, an ayanamsa by name, or `{ epoch, value, rate?, model? }` for `SE_SIDM_USER` | supported in the two ecliptics of date (see *The sidereal zodiac*); with `SEFLG_NONUT`, `frame: "ecliptic-mean-of-date"`; the projections `SE_SIDBIT_ECL_T0` and `SE_SIDBIT_SSY_PLANE` are not offered |
 | `SEFLG_TROPICAL` | tropical zodiac | `zodiac: "tropical"` | supported, the default |
 | `SEFLG_SWIEPH`, `SEFLG_JPLEPH`, `SEFLG_MOSEPH` | which ephemeris | none: one ephemeris, named in every receipt | not offered; a DE440 backend on the hosted API is planned |
 | `SEFLG_SPEED3` | speeds from three positions | none | not offered; speeds are analytic or central differences |

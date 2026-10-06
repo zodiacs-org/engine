@@ -283,7 +283,7 @@ export interface MoonPhase {
   waxing: boolean;
 }
 
-export const ENGINE_VERSION = "0.1.1-rc.16";
+export const ENGINE_VERSION = "0.1.1-rc.17";
 
 /**
  * The ephemeris underneath every position. The dependency is pinned to this

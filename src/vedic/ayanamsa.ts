@@ -198,11 +198,16 @@ export interface UserAyanamsaInput {
 
 const EPOCH_JD_LIMIT = 1e8; // days either side of 1970-01-01, the Date range
 
+/** Internal: a name a caller's ayanamsa may take: a lowercase identifier of at most 64 characters, not a built-in name. */
+export function isUserAyanamsaName(name: unknown): name is string {
+  return typeof name === "string" && /^[a-z][a-z0-9-]{0,63}$/.test(name) && !Object.hasOwn(AYANAMSAS, name);
+}
+
 /** A caller's ayanamsa, frozen. Refuses a built-in name, both `rate` and `model`, and out-of-range values. */
 export function userAyanamsa(input: UserAyanamsaInput): AyanamsaDefinition {
   if (!input || typeof input !== "object") throw new RangeError("userAyanamsa needs an input object.");
   const name = input.name ?? "user";
-  if (typeof name !== "string" || !/^[a-z][a-z0-9-]{0,63}$/.test(name) || Object.hasOwn(AYANAMSAS, name)) {
+  if (!isUserAyanamsaName(name)) {
     throw new RangeError("Ayanamsa name must be a new lowercase identifier of at most 64 characters.");
   }
   const epoch = input.epoch;
@@ -319,8 +324,11 @@ function bias(v: V3): V3 {
   return [x2, y1 - eta * z2, z2 + eta * y1];
 }
 
-/** Apparent geocentric direction of a catalogue star, EQJ axes. */
-function apparentStar(s: CatalogueStar, time: AstroTime): V3 {
+/**
+ * Apparent geocentric direction of a catalogue star, EQJ axes, and the star's
+ * angle from the Sun before the deflection and aberration, degrees.
+ */
+function apparentStar(s: CatalogueStar, time: AstroTime): { readonly direction: V3; readonly elongation: number } {
   const ra = s.ra * DEG;
   const dec = s.dec * DEG;
   const p0 = bias([Math.cos(dec) * Math.cos(ra), Math.cos(dec) * Math.sin(ra), Math.sin(dec)]);
@@ -344,28 +352,42 @@ function apparentStar(s: CatalogueStar, time: AstroTime): V3 {
   const em = Math.hypot(helio.x, helio.y, helio.z);
   const e: V3 = [helio.x / em, helio.y / em, helio.z / em];
   const pe = dot(p, e);
+  // The Sun is at −e from the Earth.
+  const elongation = Math.acos(Math.min(1, Math.max(-1, -pe))) / DEG;
   const w = SUN_SCHWARZSCHILD_AU / em / Math.max(1 + pe, 1e-6 / Math.max(em * em, 1));
   p = unit([p[0] + w * (e[0] - pe * p[0]), p[1] + w * (e[1] - pe * p[1]), p[2] + w * (e[2] - pe * p[2])]);
   // Annual aberration, relativistic: p√(1−v²) + (1 + p·v/(1 + √(1−v²)))v, normalised.
   const v: V3 = [bary.vx / C_AU_PER_DAY, bary.vy / C_AU_PER_DAY, bary.vz / C_AU_PER_DAY];
   const root = Math.sqrt(1 - dot(v, v));
   const k = 1 + dot(p, v) / (1 + root);
-  return unit([p[0] * root + k * v[0], p[1] * root + k * v[1], p[2] * root + k * v[2]]);
+  return { direction: unit([p[0] * root + k * v[0], p[1] * root + k * v[1], p[2] * root + k * v[2]]), elongation };
 }
 
-function meanAyanamsa(definition: AyanamsaDefinition, time: AstroTime, frame: EpochFrame | undefined): number {
+/** The mean ayanamsa, degrees, not yet wrapped; and for a star definition, the star's angle from the Sun. */
+function meanAyanamsa(
+  definition: AyanamsaDefinition,
+  time: AstroTime,
+  frame: EpochFrame | undefined
+): { readonly value: number; readonly elongation: number | null } {
   switch (definition.kind) {
     case "epoch": {
       // The mean equinox of date, as an EQJ direction, is the first row of its frame.
       const { frame: at, correction } = frame!;
       const [x, y, z] = eclipticFrame(time.tt).rows;
-      return definition.value + (correction - longitudeIn(at, x!, y!, z!)) / DEG;
+      return { value: definition.value + (correction - longitudeIn(at, x!, y!, z!)) / DEG, elongation: null };
     }
-    case "linear":
-      return definition.value + (definition.rate * (time.tt + J2000 - definition.epochTT)) / JULIAN_YEAR / 3600;
+    case "linear": {
+      // The value at J2000.0 less whole turns, plus the rate times TT days since J2000.0. Counted from
+      // an epoch far from the span, the value runs to hundreds of thousands of degrees, whose rounding a
+      // rate of 3,600″ a year turned into up to 2e-4″ a day; and a Julian date near 2.4 million, rebuilt
+      // from TT days, is held only to about 5e-10 day, which that rate turned into 2e-6″ a day.
+      const perDay = definition.rate / JULIAN_YEAR / 3600;
+      const atJ2000 = definition.value - perDay * (definition.epochTT - J2000);
+      return { value: atJ2000 - 360 * Math.round(atJ2000 / 360) + perDay * time.tt, elongation: null };
+    }
     case "star": {
-      const [x, y, z] = apparentStar(definition.star, time);
-      return longitudeIn(eclipticFrame(time.tt), x, y, z) / DEG - definition.longitude;
+      const { direction: [x, y, z], elongation } = apparentStar(definition.star, time);
+      return { value: longitudeIn(eclipticFrame(time.tt), x, y, z) / DEG - definition.longitude, elongation };
     }
   }
 }
@@ -374,6 +396,24 @@ function meanAyanamsa(definition: AyanamsaDefinition, time: AstroTime, frame: Ep
 function wrap(value: number): number {
   const r = value % 360;
   return r > 180 ? r - 360 : r <= -180 ? r + 360 : r;
+}
+
+/**
+ * Internal: a resolved definition's mean ayanamsa, the nutation in longitude
+ * and the true ayanamsa, degrees, at an astronomy-engine time, exactly as
+ * `ayanamsa` computes them; and for a star definition, the star's angle from
+ * the Sun, degrees, null otherwise. The calc entry subtracts them on its own
+ * clock, and takes the angle for the ayanamsa's bound.
+ */
+export function ayanamsaAt(
+  definition: AyanamsaDefinition,
+  time: AstroTime
+): { readonly mean: number; readonly nutation: number; readonly true: number; readonly elongation: number | null } {
+  const frame = definition.kind === "epoch" ? epochFrame(definition) : undefined;
+  const { value, elongation } = meanAyanamsa(definition, time, frame);
+  const mean = wrap(value);
+  const nutation = eclipticFrame(time.tt).tilt.dpsi / 3600;
+  return { mean, nutation, true: wrap(mean + nutation), elongation };
 }
 
 /** An ayanamsa at an instant; made only by `ayanamsa`. Degrees throughout. */
@@ -395,6 +435,11 @@ export interface AyanamsaValue {
   readonly true: number;
   /** "outside-reference-span" when the instant, or an epoch definition's epoch, is outside REFERENCE_SPAN. */
   readonly flags: readonly "outside-reference-span"[];
+}
+
+/** Internal: true for an epoch definition whose epoch is outside REFERENCE_SPAN. */
+export function outsideSpanEpoch(definition: AyanamsaDefinition): boolean {
+  return definition.kind === "epoch" && !(definition.epochTT >= SPAN_FROM_JD && definition.epochTT < SPAN_TO_JD);
 }
 
 /** Each value `ayanamsa` made, with the UTC instant of its time basis (ms). */
@@ -443,12 +488,11 @@ export function ayanamsa(
   if (scale !== undefined && !TIME_SCALE_NAMES.includes(scale as never)) {
     throw new RangeError('timeScale must be "utc", "ut1" or "tt".');
   }
-  const frame = resolved.kind === "epoch" ? epochFrame(resolved) : undefined;
-  const outside = outsideReferenceSpan(date)
-    || (resolved.kind === "epoch" && !(resolved.epochTT >= SPAN_FROM_JD && resolved.epochTT < SPAN_TO_JD));
+  // Built here, outside the clock, as before; ayanamsaAt finds it in the cache.
+  if (resolved.kind === "epoch") epochFrame(resolved);
+  const outside = outsideReferenceSpan(date) || outsideSpanEpoch(resolved);
   return onChartClock(date.getTime(), (scale ?? "utc") as TimeScaleName, pin, (time, basis) => {
-    const mean = wrap(meanAyanamsa(resolved, time, frame));
-    const nutation = eclipticFrame(time.tt).tilt.dpsi / 3600;
+    const { mean, nutation, true: trueValue } = ayanamsaAt(resolved, time);
     const { ut1MinusUtc, leapSeconds } = basis.timeScale;
     const value: AyanamsaValue = Object.freeze({
       ayanamsa: resolved.name,
@@ -462,7 +506,7 @@ export function ayanamsa(
       deltaT: Object.freeze({ ...basis.deltaT }),
       mean,
       nutation,
-      true: wrap(mean + nutation),
+      true: trueValue,
       flags: Object.freeze(outside ? ["outside-reference-span" as const] : [])
     });
     VALUES.set(value, basis.utcMs);

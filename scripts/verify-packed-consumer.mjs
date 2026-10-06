@@ -91,11 +91,18 @@ const gregorian: string | null = julianToGregorian("1917-10-25");
 const tzdbVersion: string = TZDB.version;
 void cause; void gregorian; void tzdbVersion;
 
-import { calc, houses, events, chart as calcChart, type CalcRequest, type CalcPosition, type CalcRefusal } from "@zodiacs/engine/calc";
+import { calc, houses, events, chart as calcChart, type CalcRequest, type CalcPosition, type CalcRefusal, type CalcUserAyanamsa, type CalcAyanamsaValue, type CalcSiderealChart } from "@zodiacs/engine/calc";
 const calcRequest: CalcRequest = {body: "Mars", time: {jd: 2451545, scale: "TT"}, frame: "equatorial-icrs", center: {topocentric: {latitude: 0, longitude: 0}}, flags: {correction: "astrometric", cartesian: true}};
 const calcResult: CalcPosition | CalcRefusal = calc(calcRequest);
 if (calcResult.status === "ok") { const replayed: CalcRequest = calcResult.receipt.request; void replayed; } else { const reason: string = calcResult.reason; void reason; }
-void houses; void events; void calcChart;
+const userAyanamsa: CalcUserAyanamsa = {epoch: {jd: 2451545, scale: "TT"}, value: 23.85};
+const siderealResult = calc({body: "Moon", time: "2000-02-29", zodiac: {sidereal: userAyanamsa}});
+if (siderealResult.status === "ok") { const subtracted: CalcAyanamsaValue | null = siderealResult.ayanamsa; void subtracted; }
+if (siderealResult.status === "ok" && siderealResult.ayanamsa) { const which: "true" | "mean" = siderealResult.ayanamsa.subtracted; const mean: number = siderealResult.ayanamsa.mean; const bound: number | null = siderealResult.ayanamsa.bound.value; void which; void mean; void bound; }
+const siderealChartResult = calcChart({time: "2000-02-29", zodiac: {sidereal: "lahiri"}});
+if (siderealChartResult.status === "ok") { const sidereal: CalcSiderealChart | null = siderealChartResult.sidereal; void sidereal; }
+if (siderealChartResult.status === "ok" && siderealChartResult.sidereal) { const chartAyanamsa: CalcAyanamsaValue = siderealChartResult.sidereal.ayanamsa; void chartAyanamsa; }
+void houses; void events;
 import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError, type BirthWindow, type WindowChange, type WindowUnresolved } from "@zodiacs/engine/window";
 const windowed: BirthWindow = birthWindow({start: "2000-02-29T11:50:00Z", end: "2000-02-29T12:10:00Z", latitude: 0, longitude: 180, houseSystem: "placidus", rounding: {recorded: "2000-02-29T12:00:00Z", minutes: 5}});
 const firstChanges: WindowChange[] = windowed.switches[0]?.changes ?? [];
@@ -221,6 +228,7 @@ assert.equal("ayanamsa" in root, false);
 assert.equal(positions("2000-02-29").length, 12);
 assert.equal(calc({body: "Moon", time: "2000-02-29"}).lon, positions("2000-02-29")[1].lon);
 assert.equal(calc({body: "Moon", time: "1700-01-01"}).reason, "out-of-range");
+assert.equal(calc({body: "Moon", time: "2000-02-29", zodiac: {sidereal: "lahiri"}}).lon, vedic.siderealLongitude(positions("2000-02-29")[1].lon, vedic.ayanamsa("lahiri", "2000-02-29")).lon);
 assert.equal(PROGRESSION_DAYS_PER_YEAR, 365.2422);
 assert.equal(progressedInstant("2019-12-31", "2020-12-30T05:48:46.080Z").toISOString(), "2020-01-01T00:00:00.000Z");
 assert.deepEqual(progressedBodies("2019-12-31", "2020-12-30T05:48:46.080Z"), positions("2020-01-01"));

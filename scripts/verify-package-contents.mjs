@@ -84,6 +84,9 @@ for (const file of files) {
 // (the techniques entry's gate G5) and ./timing's 120,000 (the houses entry's
 // gate B). Raising them does not make those gates pass; rc.16 records both
 // as failed (CHANGELOG.md).
+//
+// 0.1.1-rc.17 raises one, ./calc's, for the sidereal zodiac, after measuring
+// the graph it fits (docs/evidence/rc17-20261005/sizes.json).
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -103,8 +106,13 @@ const ENTRY_BUDGETS = {
   // rc.15's time basis, 34,449 of them beyond the core's graph; 7.69 per cent
   // of headroom. With the nutation, and its frames of date (src/equator.ts)
   // and topocentric observer on it, 113,904: 0.96 per cent, not raised
-  // (docs/evidence/rc16-20260930/sizes.json).
-  "./calc": 115_000,
+  // (docs/evidence/rc16-20260930/sizes.json). rc.17: 139,836, raised from
+  // 115,000 for the sidereal zodiac, which imports the Vedic entry's
+  // ayanamsas, with their star catalogue and apparent places, and its
+  // sidereal charts: 17,596 bytes in a chunk the two entries share and 8,336
+  // in calc.js (docs/evidence/rc17-20261005/sizes.json); 4.05 per cent of
+  // headroom.
+  "./calc": 145_500,
   "./crossings": 10_000, // rc.15: 9,410
   "./deltat": 5_500, // rc.15: 4,968
   // rc.15: 31,672, the zone histories not included (below). With ./techniques
@@ -141,7 +149,9 @@ const ENTRY_BUDGETS = {
   "./timing": 129_000,
   // rc.15: 114,106, the core's graph included; as carried, 116,779. rc.16:
   // 122,131, raised from 120,000 for the nutation in the ephemeris chunk
-  // (the ayanamsas now use its frame); 4.80 per cent of headroom.
+  // (the ayanamsas now use its frame); 4.80 per cent of headroom. rc.17:
+  // 123,639, its ayanamsas and sidereal charts now in a chunk it shares with
+  // ./calc; 3.52 per cent, not raised.
   "./vedic": 128_000,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
@@ -230,6 +240,10 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // the root's own graph, the nutation and 39 bytes of shared exports (above);
 // 868 (0.34) of manifest; and 78 (0.03) of the root's declarations. The cap
 // leaves 2.89 per cent (docs/evidence/rc16-20260930/sizes.json).
+//
+// rc.17 adds the sidereal zodiac to ./calc: 946,349 bytes in 70 files, 23,067
+// more than rc.16, and the cap, not raised, leaves 0.38 per cent
+// (docs/evidence/rc17-20261005/sizes.json).
 const TOTAL_CAP = 950_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 
@@ -259,6 +273,19 @@ for (const name of ["LICENSING.md", "README.md"]) {
   assert(prose(name).includes("shared chunk under `dist/`"), `${name} must say the ΔT values are in a shared chunk under dist/`);
   assert(prose(name).includes("`dist/deltat.js` re-exports"), `${name} must say that dist/deltat.js re-exports that chunk`);
 }
+// The star-based ayanamsas' 22 values, the same way: NOTICE and LICENSING.md
+// say they are in a shared chunk that dist/vedic.js and dist/calc.js import
+// (rc.16's said dist/vedic.js, where they were until calc loaded them too).
+// Spica's right ascension stands for them.
+const starHolders = files.filter((file) => file.endsWith(".js") && read(file).includes("201.29835228"));
+assert(starHolders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(starHolders[0]),
+  `the star values must be in exactly one shared chunk under dist/, as NOTICE says; found them in ${starHolders.join(", ") || "no file"}`);
+for (const entry of ["dist/vedic.js", "dist/calc.js"]) {
+  assert(read(entry).includes(`./${starHolders[0].slice("dist/".length)}`), `${entry} must import the chunk that holds the star values`);
+}
+assert(notice.includes("in a shared chunk under dist/ that dist/vedic.js and dist/calc.js import"), "NOTICE must say where the star values are");
+assert(prose("LICENSING.md").includes("shared chunk under `dist/` that `dist/vedic.js` and `dist/calc.js` import"),
+  "LICENSING.md must say where the star values are");
 assert(read("README.md").includes(LICENSE_EXPRESSION), "README.md must state the licence expression");
 // The shipped text refers to the separate earlier package without naming it.
 for (const file of files) {
