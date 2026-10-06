@@ -93,7 +93,8 @@ runs, so CI starts the check with node directly.
 | 0.1.1-rc.14 | `adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e` | 87,415 | 30 | `03db4bb602377896283775920519b26d1f19a890` | `b221534` | Candidate, merged |
 | 0.1.1-rc.15 | `24eeb597b0157598c0faa26bb615c0cb5dfaaeac0393d62c73fbd37c5da4d348` | 190,974 | 54 | `104bd5a56ee00356eecc75f15f0aa946f5a39f41` | `cbad72c` | Candidate, merged |
 | 0.1.1-rc.16 | `43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8` | 266,934 | 69 | `ddbbaa0b1d21e16834722f81e8708816849c6726` | `ef44477` | Candidate, merged |
-| 0.1.1-rc.17 | `9cd24c788863424ef614aaadec580db5a0dfc529303d385274db48a092a5299a` | 273,123 | 70 | `aae419c05b77455b9e8f03ca11ee273b446f7d02` | "Carry the packed 0.1.1-rc.17 tarball" | Candidate under review |
+| 0.1.1-rc.17 | `9cd24c788863424ef614aaadec580db5a0dfc529303d385274db48a092a5299a` | 273,123 | 70 | `aae419c05b77455b9e8f03ca11ee273b446f7d02` | `b080217` | Candidate, merged |
+| 1.0.0-rc.1 | `cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284` | 284,750 | 74 | `77a16c26889220f5481f41d16c4ca4e70a09250b` | "Carry the packed 1.0.0-rc.1 tarball" | Candidate under review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -213,3 +214,17 @@ commit's tree had passed: clean clones of that commit, each installed with
 the carried file is the Node 22.22.2 one. Under the owner's decision of
 2026-10-05 it is not to be published on npm; the next publication is the
 1.0 candidate. The record is in `docs/evidence/rc17-20261005/`.
+
+1.0.0-rc.1 is the first candidate for 1.0.0: from 1.0.0 the package follows
+Semantic Versioning under `docs/versioning.md`, and `api/` holds the public
+declarations that CI checks. It settles the API that three reviews read, with
+the breaking changes, deprecations and experimental parts its CHANGELOG
+entry lists, and `/calc` computes a caller's ayanamsa from any epoch in
+`EPHEMERIS_SPAN`. The archive is 284,750 bytes, 982,086 unpacked in 74 files,
+under the package cap of 1,000,000, raised from 950,000 with the owner's
+approval of 2026-10-06 (CHANGELOG.md). It was packed once, after the gates on
+its source commit's tree had passed: clean clones of that commit, each
+installed with `npm ci`, packed the same bytes on Node 22.22.2, 20.19.0 and
+24.21.0, and the carried file is the Node 22.22.2 one. It is not to be
+published on npm until the owner approves 1.0.0. The record is in
+`docs/evidence/1.0.0-rc.1-20261006/`.
