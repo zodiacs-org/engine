@@ -7,7 +7,7 @@ node:internal/errors:984
   const err = new Error(message);
               ^
 
-Error: Command failed: /tmp/claude-0/-home-user-site/25475091-052a-53d7-9cd4-cf04ce09dc68/scratchpad/tools/node-v20.19.0-linux-x64/bin/node <tmp>/zodiacs-engine-consumer-ayynWM/node_modules/typescript/bin/tsc -p tsconfig.json
+Error: Command failed: <bin>/node <tmp>/zodiacs-engine-consumer-ayynWM/node_modules/typescript/bin/tsc -p tsconfig.json
     at genericNodeError (node:internal/errors:984:15)
     at wrappedFn (node:internal/errors:538:14)
     at checkExecSyncError (node:child_process:891:11)

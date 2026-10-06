@@ -274,6 +274,15 @@ that commit and its SHA-256 receipt, added to `artifacts/` with an entry in
 candidate's evidence under `docs/evidence/`. The archive rules are in
 [artifacts/README.md](artifacts/README.md).
 
+Before the archive is packed, the candidate's tree passes every job of the
+three workflows (*Checks every change must pass*), the pack and the packed
+consumer included: pack the tree into a temporary directory and run
+`node scripts/verify-packed-consumer.mjs` on that archive with each Node
+version the job uses. Only the archive check waits for the commit that
+carries the archive, because it reads commits. An archive is packed once,
+so a check that first fails on the carrier needs a commit after it, as
+1.0.0-rc.1's packed consumer did (`docs/evidence/1.0.0-rc.1-20261006/`).
+
 A carried candidate is published to npm by the Release workflow,
 `.github/workflows/release.yml`. A maintainer runs it by hand from `main`
 (Actions, Release, Run workflow) with two inputs: `version`, the carried

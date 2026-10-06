@@ -1,0 +1,57 @@
+# GitHub's checks on e8030dc, the head of zodiacs-org/engine#30, read on 2026-10-06 from
+# GET /repos/zodiacs-org/engine/actions/runs?head_sha=e8030dcb9d3253425aaf75b76795b504bc51c14b (the workflow runs),
+# GET /repos/zodiacs-org/engine/actions/runs/<run>/jobs (their jobs) and
+# GET /repos/zodiacs-org/engine/commits/e8030dcb9d3253425aaf75b76795b504bc51c14b/check-runs (every check).
+
+## Workflow runs: workflow, run, attempt, event, conclusion
+Atlas	37446255160	1	pull_request	success
+CI	37446254968	1	pull_request	success
+CodeQL	37446255217	1	pull_request	success
+Conformance	37446254979	1	pull_request	success
+Python package	37446255104	1	pull_request	success
+
+## Jobs: workflow, run, job, conclusion
+Atlas	37446255160	Time atlas checks	success
+CI	37446254968	Engine (Node 20)	success
+CI	37446254968	Engine (Node 22)	success
+CI	37446254968	Engine (Node 24)	success
+CI	37446254968	Every carried archive rebuilds from its source commit	success
+CI	37446254968	Pack	success
+CI	37446254968	Packed consumer (Node 20.19.0)	success
+CI	37446254968	Packed consumer (Node 22)	success
+CI	37446254968	Packed consumer (Node 22.7.0)	success
+CI	37446254968	Packed consumer (Node 24)	success
+CodeQL	37446255217	Analyze (javascript-typescript)	success
+Conformance	37446254979	Conformance suite	success
+Conformance	37446254979	Conformance vectors rebuild from their sources	success
+Python package	37446255104	Python 3.10 / Node 20.19.0 / ubuntu-latest	success
+Python package	37446255104	Python 3.11 / Node 22.7.0 / ubuntu-latest	success
+Python package	37446255104	Python 3.11 / Node 24 / macos-latest	success
+Python package	37446255104	Python 3.11 / Node 24 / windows-latest	success
+Python package	37446255104	Python 3.12 / Node 22 / ubuntu-latest	success
+Python package	37446255104	Python 3.13 / Node 24 / ubuntu-latest	success
+Python package	37446255104	Python 3.14 / Node 24 / ubuntu-latest	success
+
+## Check runs: name, app, conclusion
+total: 21
+Analyze (javascript-typescript)	github-actions	success
+CodeQL	github-advanced-security	success
+Conformance suite	github-actions	success
+Conformance vectors rebuild from their sources	github-actions	success
+Engine (Node 20)	github-actions	success
+Engine (Node 22)	github-actions	success
+Engine (Node 24)	github-actions	success
+Every carried archive rebuilds from its source commit	github-actions	success
+Pack	github-actions	success
+Packed consumer (Node 20.19.0)	github-actions	success
+Packed consumer (Node 22)	github-actions	success
+Packed consumer (Node 22.7.0)	github-actions	success
+Packed consumer (Node 24)	github-actions	success
+Python 3.10 / Node 20.19.0 / ubuntu-latest	github-actions	success
+Python 3.11 / Node 22.7.0 / ubuntu-latest	github-actions	success
+Python 3.11 / Node 24 / macos-latest	github-actions	success
+Python 3.11 / Node 24 / windows-latest	github-actions	success
+Python 3.12 / Node 22 / ubuntu-latest	github-actions	success
+Python 3.13 / Node 24 / ubuntu-latest	github-actions	success
+Python 3.14 / Node 24 / ubuntu-latest	github-actions	success
+Time atlas checks	github-actions	success

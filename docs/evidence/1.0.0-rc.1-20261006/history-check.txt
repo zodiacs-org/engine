@@ -10,7 +10,7 @@ Labels searched (79 data patterns and 10 name patterns, kept outside the reposit
   person F
   person G
 
-Commits: 10, the last of them the index. For each, the lines it adds, the contents of the binary files it adds or changes, the paths it adds and its message:
+Commits: 11, the last of them the index. For each, the lines it adds, the contents of the binary files it adds or changes, the paths it adds and its message:
 - f0d66d5 Add the public API report, its CI check and the versioning policy
     binary files read: 0; paths added: 15
     birth data: none
@@ -38,11 +38,14 @@ Commits: 10, the last of them the index. For each, the lines it adds, the conten
 - 4b11350 Check the packed consumer against 1.0's window types
     binary files read: 0; paths added: 0
     birth data: none
-- (the index against HEAD: the commit being made)
+- e8030dc Record the gates on the 1.0.0-rc.1 carrier bb1736a
     binary files read: 0; paths added: 18
     birth data: none
+- (the index against HEAD: the commit being made)
+    binary files read: 0; paths added: 1
+    birth data: none
 
-The tree of 4b11350, 1190 files, gzip archives decompressed:
+The tree of e8030dc, 1208 files, gzip archives decompressed:
   birth data: none
 
 The published worked examples that CONTRIBUTING.md allows: the files of that tree that name each, and those that hold its birth data (cited: the file also holds every part of the citation):

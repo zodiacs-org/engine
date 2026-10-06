@@ -222,9 +222,12 @@ the breaking changes, deprecations and experimental parts its CHANGELOG
 entry lists, and `/calc` computes a caller's ayanamsa from any epoch in
 `EPHEMERIS_SPAN`. The archive is 284,750 bytes, 982,086 unpacked in 74 files,
 under the package cap of 1,000,000, raised from 950,000 with the owner's
-approval of 2026-10-06 (CHANGELOG.md). It was packed once, after the gates on
-its source commit's tree had passed: clean clones of that commit, each
-installed with `npm ci`, packed the same bytes on Node 22.22.2, 20.19.0 and
-24.21.0, and the carried file is the Node 22.22.2 one. It is not to be
-published on npm until the owner approves 1.0.0. The record is in
-`docs/evidence/1.0.0-rc.1-20261006/`.
+approval of 2026-10-06 (CHANGELOG.md). It was packed once, after CI's engine
+job, but its archive check, had passed on its source commit's tree: clean
+clones of that commit, each installed with `npm ci`, packed the same bytes
+on Node 22.22.2, 20.19.0 and 24.21.0, and the carried file is the Node
+22.22.2 one. CI's packed-consumer check, which had not run on that tree,
+failed on the carrier on its own TypeScript, which still declared rc.17's
+window types; `4b11350` corrected it without changing a packed file, and it
+passes on this archive. It is not to be published on npm until the owner
+approves 1.0.0. The record is in `docs/evidence/1.0.0-rc.1-20261006/`.

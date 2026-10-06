@@ -7,7 +7,7 @@ node:internal/errors:983
   const err = new Error(message);
               ^
 
-Error: Command failed: /opt/node22/bin/node <tmp>/zodiacs-engine-consumer-8dR5YI/node_modules/typescript/bin/tsc -p tsconfig.json
+Error: Command failed: <bin>/node <tmp>/zodiacs-engine-consumer-8dR5YI/node_modules/typescript/bin/tsc -p tsconfig.json
     at genericNodeError (node:internal/errors:983:15)
     at wrappedFn (node:internal/errors:537:14)
     at checkExecSyncError (node:child_process:916:11)
