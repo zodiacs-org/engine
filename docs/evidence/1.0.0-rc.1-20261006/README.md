@@ -24,8 +24,11 @@ on that base:
    version, the generated records that carry it, the CHANGELOG, the README,
    the package's raised cap and these checks (*The source commit*).
 
-The archive packed from the source commit, and the gates on the commit that
-carries it, follow in commits of their own.
+Three commits follow it: `bb1736a` carries the archive packed from it (*The
+archive*); `4b11350` brings the packed-consumer check's own TypeScript to
+1.0's window types, which it had kept from rc.17 and on which it failed on
+the carrier (*The gates on the carrier*); and the commit that brings this
+version of this file records the gates on those two.
 
 This directory records what the candidate as a whole was checked for. Every
 figure below is read from a file in this directory or in the one it names,
@@ -269,20 +272,26 @@ commit on this branch was checked with rc.16's two tools
 1. `../rc15-20260929/rebuilt/history-check.mjs`, unchanged, with rc.16's
    patterns and examples, which are kept outside the repository because they
    are the birth data it looks for. `history-check.txt` is its output on
-   `782b496..HEAD`, the six commits before the source commit, with the source
-   commit's changes staged: no birth data in any commit, in the staged
-   changes or in the tree of `f9428a2`, and the published examples' birth
-   data only in files that cite them. It was run again once every change of
-   the source commit, this file and that output included, was staged, and
-   gave the same output. rc.16's positive controls
+   `782b496..4b11350`, the nine commits up to the packed consumer's fix,
+   with the changes of the commit that brings this version of this file
+   staged: no birth data in any commit (the carried archive decompressed and
+   read), in the staged changes or in the tree of `4b11350`, and the
+   published examples' birth data only in files that cite them. It was run
+   again once every change of that commit, this file and that output
+   included, was staged, and gave the same output. The source commit held
+   the same check on the six commits before it and its own changes, and the
+   carrier on the seven before it and its own, with the same result. rc.16's
+   positive controls
    (`../rc16-20260930/history-check-control-first-cut.txt` and
    `history-check-control-recut.txt`) show the same patterns finding birth
    data in histories that held it.
 2. The broad review aid, run outside the repository because its output holds
    the lines it matches, listed every added line with a year from 1700 to
    2029 beside birth vocabulary or a capitalized pair of words, and every
-   such pair, commit by commit and for the staged changes: 20 lines, all in
-   the staged changes, each read. They hold the conformance notes'
+   such pair, commit by commit and for the staged changes: 20 lines in the
+   nine commits up to `4b11350` and the staged changes, all of them in the
+   source commit, each read, the same 20 that the source commit's run found
+   in its own staged changes. They hold the conformance notes'
    statistics, this record's own description of the aid and of the
    comparison's inputs, the names of tests in the suite's logs (the clock of
    a birthplace at each change of three zones' histories, named for the
@@ -367,9 +376,75 @@ also shows. rc.17's other six warnings named the receipt's conventions sets,
 which `./receipt` now declares as types of its own. The archive check reads
 commits, so it runs on the commit that carries the archive.
 
+## The archive
+
+`artifacts/zodiacs-engine-1.0.0-rc.1.tgz` is packed from the source commit
+`77a16c2` and carried by its child `bb1736a`: SHA-256
+`cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284`, 284,750
+bytes, 74 files, 982,086 bytes unpacked. It was packed once, after every gate
+on the tree had passed: clean clones of `77a16c2`, each installed with
+`npm ci`, built and packed the same bytes on Node 22.22.2 (npm 10.9.7),
+20.19.0 (npm 10.8.2) and 24.21.0 (npm 11.19.0), 74 files each time
+(`carrier/pack-source.log`, from `carrier/pack-source.sh`), and the carried
+file is the Node 22.22.2 one. The carrier's gates rebuild and repack its
+source, as CI does, to the same bytes. `artifacts/archives.json` records it
+with its source commit, its receipt
+`artifacts/zodiacs-engine-1.0.0-rc.1.sha256` names its digest, and
+`artifacts/README.md` lists it; rc.17's row there now names its carrier,
+`b080217`, and says it was merged.
+
+## The gates on the carrier
+
+`carrier/carrier-gates.sh` ran each job of the three workflows that build
+and check the package, `ci.yml`, `conformance.yml` and `atlas.yml`, on the
+carrier, `bb1736a`, in a clean clone of the repository with full history,
+with `TMPDIR` outside the clone and no `package.json` or `node_modules` at or
+above it (logs in `carrier/`):
+
+| Job | Node (npm) | Result | Log |
+| --- | --- | --- | --- |
+| engine: npm ci, typecheck, tests, build, export smoke, API check, package contents, pack dry run, archive check | 22.22.2 (10.9.7) | 3,824 tests passed, 1 skipped, in 85 files; the other steps pass; the archive check as below | `engine-v22.22.2.log` |
+| engine | 20.19.0 (10.8.2) | 3,823 passed, 2 skipped, in 85 files; the other steps pass | `engine-v20.19.0.log` |
+| engine | 24.21.0 (11.19.0) | 3,823 passed, 2 skipped, in 85 files; the other steps pass (npm warns that esbuild's two install scripts are not covered by `allowScripts`) | `engine-v24.21.0.log` |
+| archives: the archive check with `--rebuild-all` | 22.22.2 (10.9.7) | a rebuild of HEAD, and of each of the 13 recorded archives from its source commit, byte-identical to the recorded archive | `archives-v22.22.2.log` |
+| pack: npm ci, build, `npm pack --ignore-scripts` | 22.22.2 (10.9.7) | byte-identical to the carried archive (`cmp`) | `pack-v22.22.2.log` |
+| packed consumer, on the carried archive itself | 20.19.0 (10.8.2), 22.7.0 (10.8.2), 22.22.2 (10.9.7), 24.21.0 (11.19.0) | failed to compile its own TypeScript on each version: it assigned the window's switches and unresolved spans to mutable arrays and `WINDOW_VERIFICATION` to its rc.17 literal | `consumer-bb1736a-v*.log` |
+| conformance: npm ci, build, self-test, vectors, verdicts, `RESULTS.md` | 22.22.2 (10.9.7) | self-test 7 of 7; 500 vectors conform; 267 pass, 192 fail, 41 unsupported, 0 error, every verdict as committed; `RESULTS.md` and `results/summary.json` current | `conformance-v22.22.2.log` |
+| conformance generators | Python 3.11.15, pyerfa 2.0.1.5, numpy 2.4.6 | L1, L2 and L3 rebuilt from their sources (tzdata and tzcode 2025c downloaded from IANA, digests checked) byte-identical to the committed vectors | `generators-v22.22.2.log` |
+| atlas: checks and self-test, nothing installed | 22.22.2 (10.9.7) | all checks pass; self-test 26 of 26 | `atlas-v22.22.2.log` |
+
+The packed consumer's failure was its own: its TypeScript declared the
+window's results as rc.17 typed them, and 1.0.0-rc.1 makes them readonly and
+types `WINDOW_VERIFICATION` as a string, two changes the CHANGELOG lists.
+`4b11350` declares them as the CHANGELOG tells a caller to, and changes
+nothing else; `scripts/` is not packed, so the archive is the same. On
+`4b11350`:
+
+| Job | Node (npm) | Result | Log |
+| --- | --- | --- | --- |
+| packed consumer, on the carried archive itself | 20.19.0 (10.8.2), 22.7.0 (10.8.2), 22.22.2 (10.9.7), 24.21.0 (11.19.0) | all 33 sections and the types pass on each version, on the archive of SHA-256 `cf1417d4…` | `consumer-v*.log` |
+| engine, the archive check included | 22.22.2 (10.9.7) | 3,824 tests passed, 1 skipped, in 85 files; the other steps pass; the archive check finds the carried archive byte-identical to a rebuild of `4b11350`, across 157 commits | `engine-4b11350-v22.22.2.log` |
+
+In a clean clone the tests run before the build, as in CI, so the test in
+`scripts/root-isolation.test.mjs` that checks the checkout's own build is
+skipped (it ran on the tree before the source commit, where a build was
+present, *Gates on the tree*), and on 20.19.0 and 24.21.0 so is the tzdb
+2025c comparison.
+
+On each engine run the archive check found
+`artifacts/zodiacs-engine-1.0.0-rc.1.tgz` byte-identical to a rebuild of
+HEAD, and the 13 recorded archives (12 carried, 1 superseded) and their
+receipts holding only their recorded bytes across 156 commits, each bound to
+its source commit. With `--rebuild-all` each of the 13 was also rebuilt from
+its source commit on Node 22.22.2 and matched its recorded bytes, rc.11's
+superseded first packing and 1.0.0-rc.1's, from `77a16c2`, included. The
+packed consumer ran on the carried file, where CI's runs on the pack job's
+output; the pack job shows the two are the same bytes. The generators'
+Python was the system's, with the two libraries at the versions CI pins.
+
 ## What is not established
 
-- The values comparison covers the 6,290 calls it makes, not every input:
+- The values comparison covers the 6,411 calls it makes, not every input:
   it shows that the code each call reaches gives rc.17's values, and, by its
   last section, that each listed change of behaviour is real. A value that
   only an input outside the battery reaches is covered by the suite's own
@@ -380,6 +455,11 @@ commits, so it runs on the commit that carries the archive.
   proven.
 - `docs/versioning.md` is a policy, and 1.0.0-rc.1 promises nothing:
   anything in it may change before 1.0.0.
+- The carrier's gates ran on `bb1736a`, but the packed consumer's, which ran
+  on `4b11350`: on `bb1736a` its own TypeScript failed to compile, and
+  `4b11350` changes only that TypeScript (*The gates on the carrier*). The
+  source commit's record said 6,290 calls where its comparison made 6,411;
+  this version of this file corrects it.
 - The reviews are AI-assisted, not human approval.
 - 1.0.0-rc.1 is not to be published on npm: under the owner's delegated
   decision of 2026-10-05 the next publication is the 1.0 candidate, with the
@@ -421,3 +501,15 @@ astronomy-engine 2.1.19, which its `dist/` imports (a link to the
 checkout's). The history check's two input files are not committed, because
 they hold the birth data it looks for; the script's header gives their
 formats.
+
+The source commit packed from clean clones, and the carrier's gates, one job
+and one Node version per call, each in a clean clone of `<repository>`:
+
+```sh
+TMPDIR=<tmp> sh docs/evidence/1.0.0-rc.1-20261006/carrier/pack-source.sh <repository> <source commit> <node 22.22.2 bin> <node 20.19.0 bin> <node 24.21.0 bin>
+TMPDIR=<tmp> sh docs/evidence/1.0.0-rc.1-20261006/carrier/carrier-gates.sh <job> <repository> <carrier commit> <work directory> <directory of node and npm>
+```
+
+The jobs are `engine`, `archives`, `pack`, `consumer`, `conformance`, `atlas`
+and `generators` (with `PYTHON` naming a Python that has pyerfa 2.0.1.5 and
+numpy 2.4.6).

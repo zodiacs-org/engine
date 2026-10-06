@@ -1,0 +1,4 @@
+# Clean clones of 77a16c2, npm ci, npm run build, npm pack --ignore-scripts
+first: 77a16c2, node v22.22.2, npm 10.9.7: sha256 cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284, 284750 bytes, 74 files
+node20: 77a16c2, node v20.19.0, npm 10.8.2: sha256 cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284, 284750 bytes, 74 files
+node24: 77a16c2, node v24.21.0, npm 11.19.0: sha256 cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284, 284750 bytes, 74 files

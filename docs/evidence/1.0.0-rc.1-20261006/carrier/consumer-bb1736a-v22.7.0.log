@@ -1,0 +1,38 @@
+# sh carrier-gates.sh consumer at bb1736a in a clean full-history clone; Node v22.7.0, npm 10.8.2, git 2.43.0, 2026-10-06
+## the carried archive
+cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284  artifacts/zodiacs-engine-1.0.0-rc.1.tgz
+exit 0
+## node scripts/verify-packed-consumer.mjs
+node:internal/errors:983
+  const err = new Error(message);
+              ^
+
+Error: Command failed: /tmp/claude-0/-home-user-site/25475091-052a-53d7-9cd4-cf04ce09dc68/scratchpad/tools/node-v22.7.0-linux-x64/bin/node <tmp>/zodiacs-engine-consumer-ArwjS4/node_modules/typescript/bin/tsc -p tsconfig.json
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:890:11)
+    at execFileSync (node:child_process:926:15)
+    at run (file://<clone>/scripts/verify-packed-consumer.mjs:33:3)
+    at file://<clone>/scripts/verify-packed-consumer.mjs:194:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:262:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:482:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  status: 2,
+  signal: null,
+  output: [
+    null,
+    "consumer.ts(45,7): error TS4104: The type 'readonly WindowChange[]' is 'readonly' and cannot be assigned to the mutable type 'WindowChange[]'.\n" +
+      `consumer.ts(46,7): error TS2322: Type 'string' is not assignable to type '"sampled at one-second resolution"'.\n` +
+      "consumer.ts(47,7): error TS4104: The type 'readonly WindowUnresolved[]' is 'readonly' and cannot be assigned to the mutable type 'WindowUnresolved[]'.\n",
+    ''
+  ],
+  pid: 30062,
+  stdout: "consumer.ts(45,7): error TS4104: The type 'readonly WindowChange[]' is 'readonly' and cannot be assigned to the mutable type 'WindowChange[]'.\n" +
+    `consumer.ts(46,7): error TS2322: Type 'string' is not assignable to type '"sampled at one-second resolution"'.\n` +
+    "consumer.ts(47,7): error TS4104: The type 'readonly WindowUnresolved[]' is 'readonly' and cannot be assigned to the mutable type 'WindowUnresolved[]'.\n",
+  stderr: ''
+}
+
+Node.js v22.7.0
+exit 1
+
