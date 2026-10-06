@@ -14,17 +14,24 @@ side effects, and performs no network request from its core entry point. Its
 one runtime side effect is the ΔT it installs in astronomy-engine (see Time
 below).
 
-**Release candidate: 0.1.1-rc.17.** On 2026-10-05 npm carried 0.1.1-rc.14 to
-0.1.1-rc.16 of this package (`latest` 0.1.1-rc.15, `next` 0.1.1-rc.16); this
-candidate is not published there. Install the exact candidate tarball
-supplied with the review, retaining its SHA-256 receipt:
+**Release candidate: 1.0.0-rc.1**, the first candidate for 1.0.0. From
+1.0.0 the package follows Semantic Versioning:
+[docs/versioning.md](docs/versioning.md) says what is public, how a number
+may change, which records stay readable and how something public is
+deprecated, and `api/` holds each public entry point's declarations.
+On 2026-10-06 npm carried 0.1.1-rc.14 to 0.1.1-rc.16 of this package
+(`latest` 0.1.1-rc.15, `next` 0.1.1-rc.16); this candidate is not published
+there. Install the exact candidate tarball supplied with the review, retaining
+its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.17.tgz
+pnpm add ./zodiacs-engine-1.0.0-rc.1.tgz
 ```
 
 The package runs in browsers through a bundler, and in Node.js 20.19.0 or a
 later 20.x, or 22.7.0 or later (`"engines": { "node": "^20.19.0 || >=22.7.0" }`).
+Node.js 20 reached its end of life on 2026-04-30: the package is still tested
+there, but a 1.x minor release may drop it (docs/versioning.md, *Runtimes*).
 Its dependency, astronomy-engine 2.1.19, ships ES modules in a package that does
 not declare `"type": "module"`. Earlier Node versions load that file as
 CommonJS, so a plain Node import of this package fails there with "Named export
@@ -35,7 +42,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.17.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.0.0-rc.1.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -64,31 +71,40 @@ dependencies afresh with `npm ci` and takes nothing from the checkout's
 needs merge commits: a squash or rebase merge drops the source commits it
 checks against, and the check then fails.
 
-This candidate adds the sidereal zodiac to `@zodiacs/engine/calc`: its four
+This candidate settles the API for 1.0.0. Before the promise was made, three
+reviews read every public declaration of the twelve entry points; it acts on
+what they found, records the result in `api/`, which CI checks, and lists
+every breaking change, deprecation and experimental part in CHANGELOG.md with
+what a caller does about it. `@zodiacs/engine/calc` now computes a caller's
+ayanamsa carried by precession from any epoch in `EPHEMERIS_SPAN`, where rc.17
+refused one outside 1800 to 2200. Where both compute a value, it is rc.17's,
+to the bit, in a comparison of 6,411 calls across the twelve entry points.
+rc.17 added the sidereal zodiac to `@zodiacs/engine/calc`: its four
 functions take an ayanamsa of `@zodiacs/engine/vedic`, or a caller's own,
 and, with every other default, give the Vedic entry's sidereal longitudes to
-the bit; their bounds add the ayanamsa's (see Uniform calculation API). Every
-tropical value is rc.16's. rc.16 brought five opt-in entry points onto rc.15:
+the bit; their bounds add the ayanamsa's (see Uniform calculation API). rc.16
+brought five opt-in entry points onto rc.15:
 `@zodiacs/engine/calc`, one calculation API over eight frames, four centers
 and three corrections, with speeds, bounds and receipts; `/window`, birth-time
 window partitions; `/techniques`, returns, composite and Davison charts, the
 void-of-course Moon, aspect patterns, dignities and Moon signs; `/houses`,
 house positions of bodies with latitude, co-ascendants and cusp speeds; and
 `/sky`, rise, set, transit and planetary hours. `@zodiacs/engine/timing`
-gains planetary returns. The root imports none of them. The nutation is now
-the full IAU 2000B series, which the engine evaluates itself (see Nutation):
-every longitude moves from rc.15's by the change in Δψ, up to 0.2701″ from
-1800 to 2200, and the angles and cusps by the change in the sidereal time and
-the true obliquity, up to 0.8003″ over 9,697 synthetic charts at places up to
-60.17° N, and more toward the polar circle. Receipts gain a
-conventions set that names the nutation; rc.15's receipts stay readable. As
-in rc.15, a chart's instant is read on a time basis: from 1972 to 2027-10-02
-as UTC, with TT from the leap seconds and UT1 from IERS UT1 − UTC, and
-otherwise as UT1 with the ΔT model, or on UT1 or TT when `timeScale` says so
-(see Time). The ephemeris is still astronomy-engine 2.1.19. See CHANGELOG.md
-for the release history and `docs/evidence/rc17-20261005/` for this
-candidate's checks (rc.16's are in `docs/evidence/rc16-20260930/`). Site
-adoption is reviewed separately.
+gained planetary returns. The root imports none of them. rc.16 also made the
+nutation the full IAU 2000B series, which the engine evaluates itself (see
+Nutation): every longitude moved from rc.15's by the change in Δψ, up to
+0.2701″ from 1800 to 2200, and the angles and cusps by the change in the
+sidereal time and the true obliquity, up to 0.8003″ over 9,697 synthetic
+charts at places up to 60.17° N, and more toward the polar circle. Receipts
+gained a conventions set that names the nutation; rc.15's receipts stay
+readable. As in rc.15, a chart's instant is read on a time basis: from 1972
+to 2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS
+UT1 − UTC, and otherwise as UT1 with the ΔT model, or on UT1 or TT when
+`timeScale` says so (see Time). The ephemeris is still astronomy-engine
+2.1.19. See CHANGELOG.md for the release history and
+`docs/evidence/1.0.0-rc.1-20261006/` for this candidate's checks (rc.17's are
+in `docs/evidence/rc17-20261005/`, rc.16's in `docs/evidence/rc16-20260930/`).
+Site adoption is reviewed separately.
 
 ## Natal chart in 10 lines
 

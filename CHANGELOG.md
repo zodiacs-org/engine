@@ -1,5 +1,223 @@
 # Engine changelog
 
+## 1.0.0-rc.1 — unreleased candidate
+
+The first candidate for 1.0.0, on rc.17 (main at `782b496`, the merge of
+zodiacs-org/engine#26). 1.0 is a promise about the API rather than new
+calculations: from 1.0.0 the package follows Semantic Versioning, and
+`docs/versioning.md` says what that covers, how a number may change, which
+records stay readable and how something public is deprecated (twelve months'
+notice, removal only in a major release). Before the promise was made, three
+reviews read every public declaration of the twelve entry points for what
+should not be frozen as it stood; a fourth read the changes, and two more
+this candidate. It acts on what they found, and each change below says what
+a caller does about it. No calculated value moved: in a comparison of 6,411
+calls across the twelve entry points, each result that differs from rc.17's
+is one of the changes listed here. It is not to be published on npm until
+the owner approves 1.0.0. Checks: `docs/evidence/1.0.0-rc.1-20261006/`.
+
+- `api/` holds the public declarations of each of the twelve public entry
+  points as the build gives them, without comments, with the declarations
+  they refer to that the entry point does not export. `npm run api:check`
+  runs in CI after the build and fails, with a diff, when the build declares
+  anything else; `npm run api:report` rewrites the files, which are committed
+  with the change. The two release tags the policy gives a meaning to,
+  `@experimental` and `@deprecated`, are shown above the declarations, the
+  members and the exports under another name that carry them.
+- `docs/versioning.md`: the policy. What is public (the twelve entry points,
+  their declarations, documented behaviour and records), what a minor release
+  may add, the experimental tier, how numbers may change, which records the
+  codec reads, deprecation, and the Node.js lines supported.
+- Experimental in 1.0, outside the promise until a minor release takes the tag
+  away: `lunarMeanArguments`, `MEAN_LUNAR_INCLINATION`, `meanNodeLongitude`
+  and `meanApogee` (root); `houseSpeeds` and `HouseSpeeds` (`./houses`);
+  `davisonChart`, `davisonPlace` and their three types (`./techniques`);
+  `planetaryReturns`, its three types, `ReturnBody`, `RETURN_BODIES` and
+  `RETURN_STEP_DAYS` (`./timing`); `yoginiDasha`, `ashtottariDasha`,
+  `YOGINIS`, `ASHTOTTARI_YEARS` and `CycleOptions` (`./vedic`). Each
+  declaration's comment, and its guide, say what may change.
+- `./calc` computes a caller's ayanamsa carried by precession from an epoch
+  anywhere in `EPHEMERIS_SPAN`, 0001-04-30T12:00 to 3998-09-03T12:00 TT, the
+  owner's decision of 2026-10-06 on the site's finding F-80, where rc.17
+  refused one from an epoch outside 1800 to 2200. Its bound outside that
+  span comes from two new bands, measured against ERFA in 64,974 comparisons
+  (`docs/evidence/calc-epochs-2026-10-06/`): 0.0037″ and 1.3 × 10⁻⁷″ a day on
+  the engine's precession, which parts from ERFA's the further the epoch is
+  from J2000.0, and 1.8 × 10⁻⁵″ and 1.2 × 10⁻⁷″ a day on Newcomb's or IAU
+  1976's, held at J2000.0. An epoch beyond `EPHEMERIS_SPAN` is refused with a
+  new reason, `epoch-out-of-range`, whose `epochSpan` is `EPHEMERIS_SPAN`.
+- New names: `SIGN_SLUGS`, `ASPECT_POLICY_SCHEMA`, `CONFIGURED_ASPECTS_SCHEMA`
+  and `DELTA_T_IERS_MODEL` (root); `SIDEREAL_TIME_RATE`, and the types
+  `Angles` and `HouseSystem` (`./houses`); `ZoneHistoryNotLoadedError`
+  (`./geo`); `BIRTH_WINDOW_SCHEMA` (`./window`); `ReturnChart`
+  (`./techniques`); `AyanamsaFlag` (`./vedic`); the type `BodyName`
+  (`./crossings`); `CalcLocation` (`./calc`); `NatalConventionSet`,
+  `NatalCoverage` and the record types `NatalRecordedResult`,
+  `NatalBodyRecord`, `NatalAnglesRecord`, `NatalHousesRecord`,
+  `NatalAspectRecord`, `NatalDeltaTRecord` and `NatalTimeScaleRecord`
+  (`./receipt`).
+- `./receipt`: a natal record has its own types, the same shapes as rc.17's,
+  rather than the chart's. `createNatalEnvelope` copies the fields a record
+  holds and leaves out any other field of the chart's result, so that a field
+  a minor release adds to a chart does not change the records it writes; a
+  chart's `input` is still read strictly, because an input the receipt cannot
+  describe may have changed the numbers. The reader compares a record's ΔT
+  and time scale with this engine's own as a record holds them. A record
+  this candidate writes has the fields and the conventions of rc.17's, which
+  reads it, and it reads rc.17's.
+- `./geo`: before `prepareLocalTime` has loaded a zone's history, the
+  functions that need it, `./geo`'s and `./techniques`' `moonSignCandidates`,
+  throw a `ZoneHistoryNotLoadedError` (exported by `./geo`), an `Error` with
+  the same message as before, so that a caller can catch that case by its
+  class.
+- `./geo`: a Julian date late in 9999 that resolves into the Gregorian year
+  10000 gets its calendar note, `"new-style"`, which rc.17 left out: it
+  compared the dates as text, where a five-digit year sorts first.
+- `./sky`: a refused `planetaryHours` day carries `reason: "sample-budget"`,
+  as a refused `skyEventsOn` does.
+- `./crossings`: the two functions take a body name type of the caller's own,
+  `BodyLongitudeAt<B>`, with `BodyName` the default. The root's
+  `findLongitudeCrossings` and `searchLongitudeCrossings` take a window's ends
+  as any `DateInput`, as the root's other functions do; the crossings entry
+  itself still takes Dates, which keeps it within its size budget.
+- `./calc`: `CALC_AYANAMSAS` is taken from `./vedic`'s `AYANAMSAS`, in its
+  order, so that the two cannot drift; `CalcAyanamsa`, `CalcAyanamsaModel` and
+  `CalcScale` are `./vedic`'s `AyanamsaName` and `AyanamsaPrecessionModel` and
+  the root's `TimeScaleName`.
+- Documentation of what the reviews found unclear: `BirthInput.utc`,
+  `ChartInput.utc` and `AyanamsaValue.utc` (the instant on the scale
+  `timeScale` names; the names are kept because receipts record them),
+  `AngleInput`'s units, the ΔT segment `"fallback"` (written by rc.15's first
+  cut only, kept so that its records stay readable), `DeltaTTable` (its shape
+  is the model's; a model of another shape would be a new export),
+  `EPHEMERIS_SPAN.timeScale` (a label, like `fromTT`), `offsetAt` (the host
+  Intl's answer, a cross-check on `zoneOffsetAt`), the two place types
+  (`Observer` on WGS84, `CalcPlace` on the IERS 2003 ellipsoid), the identity
+  of `./vedic`'s values (a copy through JSON or `structuredClone` is refused,
+  although the types carry no brand), the three tables of sign rulers (one
+  each in `./techniques`, `./timing` and `./vedic`, now kept equal by a test),
+  and which return finder to use.
+- Sizes: the package is 982,086 bytes unpacked in 74 files, 35,737 more
+  than rc.17's 946,349 in 70: 1,828 bytes (5.12 per cent of the growth) of
+  the root's JavaScript, the reviews' checks and frozen tables; 4,607
+  (12.89) of JavaScript that only the opt-in entry points load; 13,515
+  (37.82) of declarations, most of it the documentation of the 1.0 API;
+  15,683 (43.88) of documents, this entry above all; and 104 (0.29) of
+  manifest. The owner approved raising the cap from 950,000 to 1,000,000 on
+  2026-10-06, which leaves 1.82 per cent of headroom. Every entry is within
+  its budget; `./geo`'s was raised from 35,000 to 35,500 with the same
+  approval, for `ZoneHistoryNotLoadedError` and `calendarNote`'s checks, and
+  its graph is 35,375 bytes, the tightest of all. The next are `./calc`,
+  144,694 of 145,500; `./crossings`, 9,942 of 10,000; and `./vedic`, 127,184
+  of 128,000.
+
+Breaking changes, each with what to do:
+
+- `./calc`: a Julian date's scale is `"utc"`, `"ut1"` or `"tt"`, the root's
+  `TimeScaleName`; `"UTC"`, `"UT1"` and `"TT"` throw a RangeError that says
+  so. Write the scale in lower case. (`./calc` came in rc.16, which is on npm
+  under `next`.)
+- `./calc`: `houses()` takes `houseSystem`, as `chart()` and `natalChart()`
+  do, and its receipt records `houseSystem`; `system` throws. Rename the
+  field. A result's `requested` and `system` keep their names.
+- `./calc`: a receipt's schema is `zodiacs.calc-receipt.v1`, where rc.16 and
+  rc.17 wrote `zodiacs.calc-receipt.draft-v1` with requests in their own
+  vocabulary; a stored rc.16 or rc.17 request needs the two renames above
+  before it is passed back.
+- `./calc`: a caller's ayanamsa from an epoch outside 1800 to 2200 but inside
+  `EPHEMERIS_SPAN`, refused `out-of-range` in rc.17, is computed; beyond it,
+  it is refused `epoch-out-of-range`, a new member of `CalcRefusal["reason"]`.
+  Handle the new reason; `out-of-range` now means an instant only.
+- Options a function does not name now throw a RangeError instead of being
+  ignored, so that a misspelling such as `timescale` is not a silently
+  different answer: `ayanamsa`, `userAyanamsa`'s input and its `epoch`,
+  `declareSiderealLongitude`'s declaration, the four dasha functions and the
+  crossing searches' options. They also refuse what the techniques and timing
+  entries already refused: options that are not a plain object (`null`, an
+  array, a string, an instance of a class), an inherited key and a getter.
+  Check the names, and pass a plain object or nothing. An option set to
+  `undefined` still counts as absent, and the options types now say so
+  (`| undefined`).
+- `userAyanamsa` refuses a bare-number `epoch`, which it read as epoch
+  milliseconds although a Julian date was the likelier meaning. Pass
+  `{ julianDateTT }`, a `Date` or an ISO string.
+- `davisonPlace` refuses a place outside latitudes −90 to 90 and longitudes
+  −180 to 180 (rc.17 averaged it as given) and a convention it does not name
+  (rc.17 used the great-circle midpoint). `calendarNote` refuses a date that
+  is not a valid Gregorian YYYY-MM-DD, a calendar other than `"gregorian"`
+  and `"julian"`, and a country that is not a nonempty string, which rc.17
+  answered for.
+- `deltaT` and `deltaTAt` throw a RangeError for a UT that is not a finite
+  number. rc.17 returned NaN for NaN and ±Infinity (`deltaTAt` a record with
+  NaN seconds) and read anything else as a number, `null` as 0 and `"1"` as
+  1. Pass a finite number.
+- The exported tables are frozen, and their declarations readonly:
+  `ASPECTS` and its entries, `ASPECT_TYPES`, `SIGNS` and its entries,
+  `SIGN_NAMES` (now the same array as `SIGN_SLUGS`), `ELEMENTS`,
+  `MODALITIES`, `HOUSE_SYSTEMS`, `POLAR_UNDEFINED_HOUSE_SYSTEMS`, `LOTS`,
+  `CALC_BODIES`, `CALC_AYANAMSAS` and `CALC_FRAMES`; `signForLongitude`
+  returns, and `matchAspect`'s `definition` is, one of the frozen entries.
+  Code that changed one throws in strict mode; copy it first. `ASPECT_BODIES`,
+  a Set, cannot be frozen: it is now typed `ReadonlySet`, and the engine no
+  longer reads it, so changing it changes nothing the engine computes.
+- Types only: `ENGINE_VERSION`, `EPHEMERIS.version`, `TZDB.version` and
+  `TZDB.sha256` are typed `string`, `WINDOW_VERIFICATION` `string`, and
+  `MAX_WINDOW_MS`, `WindowBudgetError.limit` and the techniques' search
+  constants (`SOLAR_RETURN_*`, `LUNAR_RETURN_*`, `MOON_SIGN_MAX_SPAN_DAYS`,
+  `VOID_OF_COURSE_MAX_DAYS`) `number`, so that a release can change them; the
+  values are rc.17's. `CALC_FRAMES` is `readonly CalcFrame[]`. The birth
+  window's result types and the sky's options are readonly. `vimshottariAt`'s
+  `levels` is `1 | 2 | 3 | 4 | 5`. `NatalEnvelope["result"]` is
+  `NatalRecordedResult`, and `NATAL_RECEIPT_CONVENTION_SETS` is
+  `readonly NatalConventionSet[]`, newest first: take a set by its content,
+  not by an index other than 0. `NatalReceipt.conventions` and `.coverage`
+  are `NatalConventionSet` and `NatalCoverage`, records of strings, where
+  rc.17 typed each set's literal values: compare them as strings.
+  `NatalZoneTransition.cause` is `./geo`'s `TransitionCause`, the same three
+  names. `AspectDefinition` and `SignDefinition` have readonly members, as do
+  the inputs `CrossingSearchOptions`, `BirthWindowInput`, `WindowRounding` and
+  `PlanetaryReturnOptions`: build such an object whole, or copy it, rather
+  than assign to its fields. `houses()` and `chart()` take a `CalcLocation`,
+  with no height, where rc.17 declared a `CalcPlace` whose height they
+  refused.
+
+Deprecated, each kept working at least until twelve months after 1.0.0 and
+removed only in a major release:
+
+- `SIGN_NAMES`: it holds slugs (`"aries"`), not names. Use `SIGN_SLUGS`.
+- `ConfiguredAspectMotion`: use `AspectMotion`, the same type.
+- `PLACIDUS_POLAR_FALLBACK`: Koch falls back too. Use `POLAR_FALLBACK`.
+- `DECLINATION_ORB` and `DECLINATION_ORB_LUMINARY`: use
+  `DEFAULT_DECLINATION_ORB_POLICY.orb` and `.luminaryOrb`, the same values.
+- `SIDEREAL_RATE` (`./houses`): use `SIDEREAL_TIME_RATE`, the same value.
+- `PlanetaryReturn` (`./techniques`): use `ReturnChart`, the same type;
+  `./timing`'s `PlanetaryReturn` is another one.
+
+Considered and left as they are: calc's `status: "ok"` (calc's own word for a
+computed request, beside `CalcRefusal`); calc is not experimental;
+`EPHEMERIS_SPAN.timeScale` stays `"TT"`; no brand types in 1.x; the three
+return finders stay, and the guides say which to use.
+
+Migration: write calc's time scales in lower case and `houses()`'s
+`houseSystem`, in a stored calc request too before it is passed back; handle
+`epoch-out-of-range`; check option names and pass plain objects; give
+`userAyanamsa` an epoch that is not a bare number; give `davisonPlace` places
+in range, `calendarNote` a valid date, a named calendar and a country, and
+`deltaT` a finite number; copy any exported table before changing it, and do
+not change `ASPECT_BODIES` to change what the engine computes; and move off
+the seven deprecated names when convenient.
+
+### Corrections
+
+- `docs/time.md` called the flags `dst-gap` and `dst-fold` deprecated. They
+  are permanent: stored receipts carry them and no other name replaces them.
+- `docs/timing-hellenistic.md`, *Limits*, described failures far from the
+  present that cannot happen since rc.14 refuses instants outside
+  `EPHEMERIS_SPAN`.
+- Three of rc.17's doc comments named a package where TypeScript reads a
+  tag, which cut editors' hovers short; package names in comments are now in
+  backticks.
+
 ## 0.1.1-rc.17 — unreleased candidate
 
 rc.17 adds the sidereal zodiac to the calc entry (`@zodiacs/engine/calc`), on

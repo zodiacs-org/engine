@@ -105,7 +105,8 @@ The tests and their fixtures, none of which is packed, contain:
   such as `src/timing/fixtures/planetary-returns-horizons.json`;
 - values computed with ERFA (BSD 3-Clause) through pyerfa 2.0.1.5, such as
   `src/fixtures/nutation-erfa.json`, the ayanamsas and rates of
-  `src/fixtures/ayanamsa-rates.json` and `src/fixtures/ayanamsa-rates-dense.json`,
+  `src/fixtures/ayanamsa-rates.json`, `src/fixtures/ayanamsa-rates-dense.json`
+  and `src/fixtures/ayanamsa-epochs.json`,
   and the Vedic and angle references:
   numbers ERFA returned, not its code or tables, none of which is copied;
 - US Naval Observatory tables from its Astronomical Applications API, the
@@ -377,8 +378,9 @@ Since 0.1.1-rc.17 it also carries the star values of *Timing and Vedic
 values*, in the chunk it shares with `./vedic`. Its ayanamsa bounds
 (`AYANAMSA_BOUNDS` in `src/calc-ayanamsa.ts`) are measurements too: the
 largest differences of the engine's ayanamsas from ERFA's construction of the
-same definitions (`docs/evidence/calc-sidereal-2026-10-05/`), not values
-taken from ERFA.
+same definitions (`docs/evidence/calc-sidereal-2026-10-05/` and, for a
+caller's epoch outside 1800 to 2200, `docs/evidence/calc-epochs-2026-10-06/`),
+not values taken from ERFA.
 
 ## Techniques tables
 

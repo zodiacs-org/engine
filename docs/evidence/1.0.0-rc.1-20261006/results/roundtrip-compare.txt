@@ -1,0 +1,4 @@
+# 37 cases in rc.17's fixture, 38 in this one; cases numbered from 0
+case 29: differs at 14 path(s), /result/status, /result/reason, /result/detail, /result/span, /result/body, /result/frame, ...; rc.17 refused out-of-range, now ok; calc {"body":"Mars","time":"2000-01-01T00:00:00Z","zodiac":{"sidereal":{"epoch":{"jd":2000000.5,"scale":"tt"},"value":18}}}
+case 37: new, calc {"body":"Mars","time":"2000-01-01T00:00:00Z","zodiac":{"sidereal":{"epoch":{"jd":1000000.5,"scale":"tt"},"value":18}}} -> refused epoch-out-of-range
+36 of rc.17's 37 cases the same in this vocabulary
