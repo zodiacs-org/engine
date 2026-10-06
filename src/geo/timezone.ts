@@ -3,7 +3,7 @@ import type { NatalLocalResolution } from "../receipt.js";
 import { validateBirthSettings } from "../birth-input.js";
 import { civilDateOf, julianDayNumber, parseCalendarDate } from "../civil-calendar.js";
 import type { CalendarName } from "../civil-calendar.js";
-import { calendarNote } from "./calendar.js";
+import { noteFor } from "./calendar.js";
 import type { CalendarNote } from "./calendar.js";
 import { TZDB, laterCause, loadHistory, loadedHistory, transitionAt, typeIndexAt } from "./zone-history.js";
 import type { TransitionCause, ZoneHistory } from "./zone-history.js";
@@ -349,7 +349,7 @@ export function resolveLocalToUtc(
     localMeanTime,
     zone,
     intlOffsetMinutes: shipped ? offsetAt(timeZone, chosen.utcMs) : null,
-    calendarNote: country === undefined ? null : calendarNote(gregorianDate, calendar, country),
+    calendarNote: country === undefined ? null : noteFor(gregorianDate, calendar, country),
     localResolution: {
       date: gregorianDate,
       time,

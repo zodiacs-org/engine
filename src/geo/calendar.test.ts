@@ -302,6 +302,17 @@ describe("the birthplace country's calendar note", () => {
     expect(calendarNote("1918-03-01", "gregorian", "Russia")).toBeNull();
     expect(calendarNote("1850-06-01", "gregorian", "Britain (UK)")).toBeNull();
     expect(calendarNote("1850-06-01", "gregorian", "GB")).toBeNull();
+    // From 1.0.0 a malformed date or calendar is refused, not answered.
+    for (const date of ["1918-02-30", "1918-2-14", "garbage", "", "1918-02-14T00:00Z", 19180214 as unknown as string]) {
+      expect(() => calendarNote(date, "gregorian", "RU"), String(date)).toThrow(RangeError);
+    }
+    expect(() => calendarNote("1918-02-14", "Julian" as never, "RU")).toThrow(RangeError);
+    expect(() => calendarNote("1918-02-14", "klingon" as never, "GB")).toThrow(RangeError);
+    // A Julian date late in 9999 resolves to the Gregorian year 10000, which the
+    // check above would refuse; resolving it still gives its note.
+    const late = resolveLocalBirth({ date: "9999-12-31", time: "12:00", timeZone: "Etc/GMT", calendar: "julian", country: "GB", latitude: 51.5, longitude: -0.1 });
+    expect(late.resolution.date).toBe("10000-03-13");
+    expect(() => calendarNote(late.resolution.date, "julian", "GB")).toThrow(RangeError);
   });
 
   it("notes an Old Style date that falls after the country took the New Style", () => {

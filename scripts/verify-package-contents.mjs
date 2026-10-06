@@ -117,8 +117,10 @@ const ENTRY_BUDGETS = {
   "./deltat": 5_500, // rc.15: 4,968
   // rc.15: 31,672, the zone histories not included (below). With ./techniques
   // 32,136: the local-time code moves to a chunk the two entries share, and
-  // geo.js re-exports it.
-  "./geo": 35_000,
+  // geo.js re-exports it. 1.0.0-rc.1: 35,232, with ZoneHistoryNotLoadedError
+  // and calendarNote's input checks from the API review; raised from 35,000 to
+  // 35,500 with the owner's approval of 2026-10-06.
+  "./geo": 35_500,
   // Unreleased (feature-houses-extra): 13,606, one file that imports no other
   // module, the root's included, so that its graph cannot grow with the core
   // (docs/evidence/houses-extra-2026-09-29/).
