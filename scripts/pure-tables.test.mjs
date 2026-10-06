@@ -476,9 +476,10 @@ export const WRAPPED = /*#__PURE__*/ lockWrapped();
 
   it("takes what a freeze may reach for a value that exists before the call unless it is made where it is written", () => {
     // The marks the list leaves out freeze only what is made where it is written: LOCAL_FRESH, CONST_OF_NEW,
-    // LITERAL_BY_NAME, PASSED_ROWS, THIS_DEFAULT_GIVEN, GENERATED (whose body does not run when it is called), KEYS,
-    // LET_NEW, SHORTHAND_NEW, SPREAD_NEW, COPIES, FROZEN_LITERALS, SORTED, INDEXED, KEYS_GIVEN and SPLIT_GIVEN. LET_ASSIGNED's
-    // is left as it is because a function reached through a `let` that is assigned is not read.
+    // LITERAL_BY_NAME, PASSED_ROWS, THIS_DEFAULT_GIVEN, KEYS, LET_NEW, SHORTHAND_NEW, SPREAD_NEW, COPIES, FROZEN_LITERALS,
+    // SORTED, INDEXED, KEYS_GIVEN and SPLIT_GIVEN. LET_ASSIGNED's is left as it is because a function reached through a
+    // `let` that is assigned is not read. GENERATED's generator does not run here, but a generator's body is taken to run
+    // where it is called, since what calls it may run it.
     expect(atLines(`
 const STATE = { a: 1 };
 const ROWS = [{ r: 1 }];
@@ -662,6 +663,7 @@ export const LATE = /*#__PURE__*/ outerLate();
       "105 THIS_CALLBACK: a mark on a call that may freeze a value that exists before it: callThis(() => Object.freeze(ROWS))",
       "106 THIS_DEFAULT: a mark on a call that may freeze a value that exists before it: lockThisDefault()",
       "108 MEMO: a mark on a call that may freeze a value that exists before it: viaMemo()",
+      "109 GENERATED: a mark on a call that may freeze a value that exists before it: generate()",
       "110 LOCAL_MARKS: a call that may freeze a value that exists before it: localMarks()",
       "111 KEY_ASSIGNED: a mark on a call that may freeze a value that exists before it: viaKeyAssigned()",
       "113 COUNTED: a mark on a call that may freeze a value that exists before it: viaCounted()",
@@ -701,9 +703,261 @@ export const LATE = /*#__PURE__*/ outerLate();
     ]);
   });
 
-  it("takes for a table what a function given by name, a const bound to one, a tagged template or a parameter's default makes, but not a generator's body", () => {
+  it("counts what code puts into a value, a generator's body, a class's static parts, a default that a given argument may leave to apply, and recursion", () => {
+    // The marks the list leaves out freeze only what is made where it is written: FILLED_NEW, PUSHED_NEW, COUNTED,
+    // SHALLOW_FILLED, ASSIGNED_NEW, DEFAULT_GIVEN, CONDITIONAL_GIVEN, OR_GIVEN, COMMA_GIVEN, LITERAL_GIVEN, MUTUAL_NEW,
+    // LOCAL_DEEP, SELF_LOOKUP, ARRAY_KEYS, OWN_LENGTH and OBJECT_KEYS. MODULE_LET_ASSIGNED's is left as it is because a function reached through a
+    // `let` that is assigned is not read. AND_GIVEN's is refused although it freezes a new object, since `&&` may give
+    // `undefined`, and DEFINED's since Object.defineProperty is not judged.
+    expect(atLines(`
+const STATE = { a: 1 };
+const ROWS = [{ a: 1 }];
+const INDEX = /*#__PURE__*/ new Map([[STATE, 1]]);
+function deepFreeze(value: any): any { for (const inner of Object.values(value)) if (typeof inner === "object" && inner !== null) deepFreeze(inner); return Object.freeze(value); }
+function lock(value: object = STATE) { return Object.freeze(value); }
+function viaFilled() { const index: Record<string, object> = {}; for (const row of ROWS) index[String(row.a)] = row; return deepFreeze(index); }
+function viaFilledNew() { const index: Record<string, object> = {}; for (const key of ["a", "b"]) index[key] = { key }; return deepFreeze(index); }
+function viaBox() { const box: { v?: object } = {}; box.v = STATE; return Object.freeze(box.v); }
+function viaPushed() { const rows: object[] = []; rows.push(...ROWS); rows.forEach((row) => Object.freeze(row)); return rows.length; }
+function viaPushedNew() { const rows: object[] = []; rows.push({ a: 1 }); for (const row of rows) Object.freeze(row); return 1; }
+function viaAssign() { const target = {}; Object.assign(target, { inner: STATE }); return deepFreeze(target); }
+function viaDefine() { const target = {}; Object.defineProperty(target, "inner", { value: { a: 1 } }); return deepFreeze(target); }
+function viaPart() { const held: { inner: object[] } = { inner: [] }; held.inner.push(STATE); return deepFreeze(held); }
+function viaPattern() { const box = { v: {} }; [box.v] = [STATE]; return deepFreeze(box); }
+function viaCounted() { const box = { n: 0 }; box.n += ROWS.length; box.n++; return deepFreeze(box); }
+function viaOrAssigned() { const box: { v?: object } = {}; box.v ||= STATE; return deepFreeze(box); }
+function viaLoopTargetPart() { const box: { v?: object } = {}; for (box.v of ROWS) void 0; return deepFreeze(box); }
+function viaSpliced() { const rows: object[] = []; rows.splice(0, 0, STATE); return deepFreeze(rows); }
+function viaShallowFilled() { const rows: object[] = []; rows.push(STATE); return Object.freeze(rows); }
+function viaAssignedNew() { const box: { v: object } = { v: STATE }; return Object.freeze(box.v = { a: 1 }); }
+function viaBoxedDeep() { const box: { v?: object } = {}; box.v = { inner: STATE }; return deepFreeze(box); }
+function fill(box: { v?: object }) { box.v = STATE; return deepFreeze(box); }
+function viaMaybe(flag: boolean) { return lock(flag ? { a: 1 } : undefined); }
+function viaOptions(options: { overrides?: object }) { return lock(options.overrides); }
+function viaUndefinedName() { const nothing = undefined; return lock(nothing); }
+function viaSpreadGiven(rest: object[]) { return lock(...(rest as [object])); }
+function* generate() { yield Object.freeze(STATE); }
+function viaGenerator() { return [...generate()].length; }
+function viaClassField() { class Held { static held = Object.freeze(STATE); } return Held; }
+function viaClassBlock() { const Held = class { static { Object.freeze(STATE); } }; return Held; }
+function viaClassDeep() { return deepFreeze({ Kind: class { static state = STATE; } }); }
+function viaDefaultFreeze(value = Object.freeze(STATE)) { return value; }
+function viaRecursion() { const lockDeep = (value: object, n: number): object => (n ? lockDeep(STATE, n - 1) : Object.freeze(value)); return lockDeep({}, 1); }
+function viaMutualNew() { const f = (n: number, value: object = { a: 1 }): object => { if (n) g(n - 1); return Object.freeze(value); }; const g = (n: number): object => f(n); return f(1, {}); }
+function viaMutualDefault() { const f = (n: number, value: object = STATE): object => { if (n) g(n - 1); return Object.freeze(value); }; const g = (n: number): object => f(n); return f(1, {}); }
+function viaMutual() { const f = (value: object, n: number): object => { if (n) g(n - 1); return Object.freeze(value); }; const g = (n: number): object => f(STATE, n); f({}, 0); return g(0); }
+function viaSelfLookup() { const walk = (table: object, n: number): object => (n ? walk(STATE, n - 1) : Object.freeze({ n })); return walk({}, 2); }
+function viaLocalDeep() { const deep = (value: any): any => { for (const key of Object.keys(value)) deep(value[key]); return Object.freeze(value); }; return deep({ a: { b: 1 } }); }
+function viaArrayKeys() { for (const key of [{ a: 1 }].keys()) Object.freeze(key); return 1; }
+function viaKeys() { for (const key of INDEX.keys()) Object.freeze(key); return 1; }
+function viaForEachKey() { new Map([[STATE, 1]]).forEach((value, key) => Object.freeze(key)); return 1; }
+function viaCommaConst() { const freezeIt = (0, Object.freeze); return freezeIt(STATE); }
+function viaInherited() { return Object.freeze([].constructor); }
+function viaInheritedMethod() { return Object.freeze([].map); }
+function viaIterator() { return Object.freeze([][Symbol.iterator]); }
+function viaOwnLength() { return Object.freeze({ length: { a: 1 } }.length); }
+function viaSpreadFrom() { return deepFreeze(Array.from(...([[1], () => STATE] as [number[], () => object]))); }
+function viaObjectKeys() { return deepFreeze(Object.keys(STATE)); }
+function callDefault(f: () => unknown, x = f()) { return x; }
+let lockAlias = lock;
+function shadowsAlias() { let lockAlias = 0; lockAlias = 1; return lockAlias; }
+let lockLet = lock;
+lockLet = (value: object) => value;
+const freezeIt = Object.freeze;
+export const FILLED = /*#__PURE__*/ viaFilled();
+export const FILLED_NEW = /*#__PURE__*/ viaFilledNew();
+export const BOX = /*#__PURE__*/ viaBox();
+export const PUSHED = /*#__PURE__*/ viaPushed();
+export const PUSHED_NEW = /*#__PURE__*/ viaPushedNew();
+export const ASSIGNED = /*#__PURE__*/ viaAssign();
+export const DEFINED = /*#__PURE__*/ viaDefine();
+export const PART = /*#__PURE__*/ viaPart();
+export const PATTERN = /*#__PURE__*/ viaPattern();
+export const COUNTED = /*#__PURE__*/ viaCounted();
+export const OR_ASSIGNED = /*#__PURE__*/ viaOrAssigned();
+export const LOOP_TARGET_PART = /*#__PURE__*/ viaLoopTargetPart();
+export const SPLICED = /*#__PURE__*/ viaSpliced();
+export const SHALLOW_FILLED = /*#__PURE__*/ viaShallowFilled();
+export const BOXED_DEEP = /*#__PURE__*/ viaBoxedDeep();
+export const ASSIGNED_NEW = /*#__PURE__*/ viaAssignedNew();
+export const FILLED_GIVEN = /*#__PURE__*/ fill({});
+export const MAYBE = /*#__PURE__*/ viaMaybe(false);
+export const OPTIONS = /*#__PURE__*/ viaOptions({});
+export const UNDEFINED_NAME = /*#__PURE__*/ viaUndefinedName();
+export const SPREAD_GIVEN = /*#__PURE__*/ viaSpreadGiven([{}]);
+export const DEFAULT_GIVEN = /*#__PURE__*/ lock({ a: 1 });
+export const CONDITIONAL_GIVEN = /*#__PURE__*/ lock(true ? { a: 1 } : { b: 2 });
+export const OR_GIVEN = /*#__PURE__*/ lock(null || { a: 1 });
+export const AND_GIVEN = /*#__PURE__*/ lock(true && { a: 1 });
+export const COMMA_UNDEFINED = /*#__PURE__*/ lock((0, undefined));
+export const COMMA_GIVEN = /*#__PURE__*/ lock((0, { a: 1 }));
+export const LITERAL_GIVEN = /*#__PURE__*/ lock(null as never);
+export const GENERATED = /*#__PURE__*/ viaGenerator();
+export const CLASS_FIELD = /*#__PURE__*/ viaClassField();
+export const CLASS_BLOCK = /*#__PURE__*/ viaClassBlock();
+export const CLASS_DEEP = /*#__PURE__*/ viaClassDeep();
+export const DEFAULT_FREEZE = /*#__PURE__*/ viaDefaultFreeze({});
+export const RECURSION = /*#__PURE__*/ viaRecursion();
+export const MUTUAL = /*#__PURE__*/ viaMutual();
+export const MUTUAL_NEW = /*#__PURE__*/ viaMutualNew();
+export const MUTUAL_DEFAULT = /*#__PURE__*/ viaMutualDefault();
+export const LOCAL_DEEP = /*#__PURE__*/ viaLocalDeep();
+export const SELF_LOOKUP = /*#__PURE__*/ viaSelfLookup();
+export const ARRAY_KEYS = /*#__PURE__*/ viaArrayKeys();
+export const KEYS = /*#__PURE__*/ viaKeys();
+export const FOR_EACH_KEY = /*#__PURE__*/ viaForEachKey();
+export const INHERITED = /*#__PURE__*/ viaInherited();
+export const INHERITED_METHOD = /*#__PURE__*/ viaInheritedMethod();
+export const ITERATOR = /*#__PURE__*/ viaIterator();
+export const OWN_LENGTH = /*#__PURE__*/ viaOwnLength();
+export const SPREAD_FROM = /*#__PURE__*/ viaSpreadFrom();
+export const OBJECT_KEYS = /*#__PURE__*/ viaObjectKeys();
+export const LET_ALIAS = /*#__PURE__*/ lockAlias(STATE);
+export const MODULE_LET_ASSIGNED = /*#__PURE__*/ lockLet(STATE);
+export const CALLED_IN_DEFAULT = /*#__PURE__*/ callDefault(() => Object.freeze(STATE));
+export const COMMA_ALIAS = /*#__PURE__*/ (0, freezeIt)(STATE);
+export const COMMA_CONST = /*#__PURE__*/ viaCommaConst();
+export const SHADOWED_ALIAS = shadowsAlias();
+export const COMMA_FREEZE = /*#__PURE__*/ (0, Object.freeze)(STATE);
+export const KEYED_FREEZE = /*#__PURE__*/ Object["freeze"](STATE);
+`)).toEqual([
+      "56 FILLED: a mark on a call that may freeze a value that exists before it: viaFilled()",
+      "58 BOX: a mark on a call that may freeze a value that exists before it: viaBox()",
+      "59 PUSHED: a mark on a call that may freeze a value that exists before it: viaPushed()",
+      "61 ASSIGNED: a mark on a call that may freeze a value that exists before it: viaAssign()",
+      "62 DEFINED: a mark on a call that may freeze a value that exists before it: viaDefine()",
+      "63 PART: a mark on a call that may freeze a value that exists before it: viaPart()",
+      "64 PATTERN: a mark on a call that may freeze a value that exists before it: viaPattern()",
+      "66 OR_ASSIGNED: a mark on a call that may freeze a value that exists before it: viaOrAssigned()",
+      "67 LOOP_TARGET_PART: a mark on a call that may freeze a value that exists before it: viaLoopTargetPart()",
+      "68 SPLICED: a mark on a call that may freeze a value that exists before it: viaSpliced()",
+      "70 BOXED_DEEP: a mark on a call that may freeze a value that exists before it: viaBoxedDeep()",
+      "72 FILLED_GIVEN: a mark on a call that may freeze a value that exists before it: fill({})",
+      "73 MAYBE: a mark on a call that may freeze a value that exists before it: viaMaybe(false)",
+      "74 OPTIONS: a mark on a call that may freeze a value that exists before it: viaOptions({})",
+      "75 UNDEFINED_NAME: a mark on a call that may freeze a value that exists before it: viaUndefinedName()",
+      "76 SPREAD_GIVEN: a mark on a call that may freeze a value that exists before it: viaSpreadGiven([{}])",
+      "78 CONDITIONAL_GIVEN: a conditional: true ? { a: 1 } : { b: 2 }",
+      "79 OR_GIVEN: the operator ||: null || { a: 1 }",
+      "80 AND_GIVEN: the operator &&: true && { a: 1 }",
+      "80 AND_GIVEN: a mark on a call that may freeze a value that exists before it: lock(true && { a: 1 })",
+      "81 COMMA_UNDEFINED: the operator ,: 0, undefined",
+      "81 COMMA_UNDEFINED: a mark on a call that may freeze a value that exists before it: lock((0, undefined))",
+      "82 COMMA_GIVEN: the operator ,: 0, { a: 1 }",
+      "84 GENERATED: a mark on a call that may freeze a value that exists before it: viaGenerator()",
+      "85 CLASS_FIELD: a mark on a call that may freeze a value that exists before it: viaClassField()",
+      "86 CLASS_BLOCK: a mark on a call that may freeze a value that exists before it: viaClassBlock()",
+      "87 CLASS_DEEP: a mark on a call that may freeze a value that exists before it: viaClassDeep()",
+      "88 DEFAULT_FREEZE: a mark on a call that may freeze a value that exists before it: viaDefaultFreeze({})",
+      "89 RECURSION: a mark on a call that may freeze a value that exists before it: viaRecursion()",
+      "90 MUTUAL: a mark on a call that may freeze a value that exists before it: viaMutual()",
+      "92 MUTUAL_DEFAULT: a mark on a call that may freeze a value that exists before it: viaMutualDefault()",
+      "96 KEYS: a mark on a call that may freeze a value that exists before it: viaKeys()",
+      "97 FOR_EACH_KEY: a mark on a call that may freeze a value that exists before it: viaForEachKey()",
+      "98 INHERITED: a mark on a call that may freeze a value that exists before it: viaInherited()",
+      "99 INHERITED_METHOD: a mark on a call that may freeze a value that exists before it: viaInheritedMethod()",
+      "100 ITERATOR: a mark on a call that may freeze a value that exists before it: viaIterator()",
+      "102 SPREAD_FROM: a mark on a call that may freeze a value that exists before it: viaSpreadFrom()",
+      "104 LET_ALIAS: a mark on a call that may freeze a value that exists before it: lockAlias(STATE)",
+      "106 CALLED_IN_DEFAULT: a mark on a call that may freeze a value that exists before it: callDefault(() => Object.freeze(STATE))",
+      "107 COMMA_ALIAS: the operator ,: 0, freezeIt",
+      "107 COMMA_ALIAS: a mark on a freeze of a value that may exist before it: (0, freezeIt)(STATE)",
+      "108 COMMA_CONST: a mark on a call that may freeze a value that exists before it: viaCommaConst()",
+      "110 COMMA_FREEZE: the operator ,: 0, Object.freeze",
+      "110 COMMA_FREEZE: a property read: Object.freeze",
+      "110 COMMA_FREEZE: a mark on a freeze of a value that may exist before it: (0, Object.freeze)(STATE)",
+      "111 KEYED_FREEZE: a property read: Object[\"freeze\"]",
+      "111 KEYED_FREEZE: a mark on a freeze of a value that may exist before it: Object[\"freeze\"](STATE)"
+    ]);
+  });
+
+  it("takes for a table what a generator, a class's static parts or a parameter's default make in a function, or a module's `let` names", () => {
+    // WALKED and VISITED pass a function to forEach that passes itself on, and make no table.
+    expect(atLines(`
+function* rows() { yield Object.freeze(["one"]); }
+function withClass() { class Held { static held = Object.freeze(["two"]); } return Held; }
+function withBlock() { return class { static { Object.freeze(["three"]); } }; }
+function withDefault(value = Object.freeze(["four"])) { return value; }
+function make() { return Object.freeze(["five"]); }
+let alias = make;
+const walk = (value: unknown): unknown => (Array.isArray(value) ? value.forEach(walk) : value);
+function viaLocalDefaultByName() { const one = (value = Object.freeze(["eight"])) => value; return [1].map(one); }
+function viaLocalDefault() { const one = (value = Object.freeze(["eleven"])) => value; return one(); }
+function viaLocalGenerator() { function* local() { yield Object.freeze(["twelve"]); } return [...local()]; }
+function viaWalk() { const visit = (value: unknown): void => { if (Array.isArray(value)) value.forEach(visit); }; visit([[1]]); return 1; }
+export const FROM_GENERATOR = Array.from(rows());
+export const CLASS_FIELD = withClass();
+export const CLASS_BLOCK = withBlock();
+export const DEFAULTED = withDefault();
+export const LET_ALIAS = alias();
+export const COMMA_FREEZE = (0, Object.freeze)(["six"]);
+export const KEYED_FREEZE = Object["freeze"](["seven"]);
+export const LOCAL_DEFAULT_BY_NAME = viaLocalDefaultByName();
+export const IN_PLACE_DEFAULT = ((value = Object.freeze(["nine"])) => value)();
+export const CALLBACK_DEFAULT = [1].map((value: number, index: number, all: number[], made = Object.freeze(["ten"])) => made);
+export const LOCAL_DEFAULT = viaLocalDefault();
+export const LOCAL_GENERATOR = viaLocalGenerator();
+export const WALKED = walk([[1]]);
+export const VISITED = viaWalk();
+`)).toEqual([
+      "13 FROM_GENERATOR: unmarked: Array.from(rows())",
+      "13 FROM_GENERATOR: unmarked: rows()",
+      "14 CLASS_FIELD: unmarked: withClass()",
+      "15 CLASS_BLOCK: unmarked: withBlock()",
+      "16 DEFAULTED: unmarked: withDefault()",
+      "17 LET_ALIAS: unmarked: alias()",
+      "18 COMMA_FREEZE: unmarked: (0, Object.freeze)([\"six\"])",
+      "18 COMMA_FREEZE: the operator ,: 0, Object.freeze",
+      "18 COMMA_FREEZE: a property read: Object.freeze",
+      "19 KEYED_FREEZE: unmarked: Object[\"freeze\"]([\"seven\"])",
+      "19 KEYED_FREEZE: a property read: Object[\"freeze\"]",
+      "20 LOCAL_DEFAULT_BY_NAME: unmarked: viaLocalDefaultByName()",
+      "21 IN_PLACE_DEFAULT: unmarked: ((value = Object.freeze([\"nine\"])) => value)()",
+      "22 CALLBACK_DEFAULT: unmarked: [1].map((value: number, index: number, all: number[], made = Object.freeze([\"ten",
+      "23 LOCAL_DEFAULT: unmarked: viaLocalDefault()",
+      "24 LOCAL_GENERATOR: unmarked: viaLocalGenerator()"
+    ]);
+  });
+
+  it("takes a function a `var` of its name, or an assignment, may replace for a value that may exist before the call", () => {
+    // TypeScript refuses both; DECLARED's function is made where it is declared.
+    expect(atLines(`
+const STATE = { a: 1 };
+function lockIt(value) { return Object.freeze(value); }
+function viaVar() { var held = STATE; function held() {} return Object.freeze(held); }
+function viaReassigned() { function held() {} held = STATE; return Object.freeze(held); }
+function viaDeclared() { function held() {} return Object.freeze(held); }
+var shadow = lockIt;
+function shadow() {}
+export const VAR = /*#__PURE__*/ viaVar();
+export const REASSIGNED = /*#__PURE__*/ viaReassigned();
+export const DECLARED = /*#__PURE__*/ viaDeclared();
+export const SHADOWED = /*#__PURE__*/ shadow(STATE);
+`, { fileName: "module.js" })).toEqual([
+      "9 VAR: a mark on a call that may freeze a value that exists before it: viaVar()",
+      "10 REASSIGNED: a mark on a call that may freeze a value that exists before it: viaReassigned()",
+      "12 SHADOWED: a mark on a call that may freeze a value that exists before it: shadow(STATE)"
+    ]);
+  });
+
+  it("reads a ring and a long chain of functions in a time that grows slowly with their length", () => {
+    // 44dea9e took about 8 s on the ring and 6 s on the chain: it asked of every argument of a call whether the call runs
+    // it, and each answer followed the chain again. The time is measured, since vitest cannot stop a test that does not
+    // yield before its timeout.
+    const ring = `const STATE = { a: 1 };\nfunction host() {\n${[...Array(80).keys()].map((i) =>
+      `  const l${i} = (v: object, k: number): object => (k ? l${(i + 1) % 80}(v, k - 1) : Object.freeze(v));`).join("\n")}\n  return l0({ a: 1 }, 3);\n}\nexport const T = /*#__PURE__*/ host();\n`;
+    const chain = `const STATE = { a: 1 };\nfunction host() {\n${[...Array(200).keys()].map((i) =>
+      `  const l${i} = (v: object): object => l${i + 1}(v);`).join("\n")}\n  const l200 = (v: object) => Object.freeze(v);\n  return l0({ a: 1 });\n}\nexport const T = /*#__PURE__*/ host();\n`;
+    const started = performance.now();
+    expect(found(ring)).toEqual([]);
+    expect(found(chain)).toEqual([]);
+    expect(performance.now() - started).toBeLessThan(2000);
+  });
+
+  it("takes for a table what a function given by name, a const bound to one, a tagged template, a parameter's default or a generator makes", () => {
     // HIDDEN calls a local, not the module's makeOne; RELAYED never calls its callback; KEPT_ONLY's keep returns the
-    // function it is given; a generator's body and forEach's second argument do not run. CHAIN's chainC is asked while
+    // function it is given; forEach's second argument does not run. A generator's body is taken to run where it is
+    // called, since what calls it may run it: LAZY's and GENERATORS' do not run here. CHAIN's chainC is asked while
     // chainA's answer is pending.
     expect(atLines(`
 function makeOne() { return Object.freeze(["one"]); }
@@ -750,11 +1004,13 @@ export const KEPT_ONLY = viaKept();
       "25 MEMO: unmarked: viaMemo()",
       "26 TAGGED: a tagged template: rows`a|b`",
       "27 DEFAULTED: unmarked: withDefault()",
+      "28 LAZY: unmarked: lazily()",
       "29 COMMA: unmarked: (0, () => Object.freeze([\"six\"]))()",
       "29 COMMA: the operator ,: 0, () => Object.freeze([\"six\"])",
       "30 FROZEN_BY_NAME: unmarked: [{}].map(Object.freeze)",
       "30 FROZEN_BY_NAME: a property read: Object.freeze",
       "32 THROUGH: unmarked: callThrough(() => Object.freeze([\"seven\"]))",
+      "34 GENERATORS: unmarked: [1].map(function* () { yield Object.freeze([\"nine\"]); })",
       "36 CHAIN: unmarked: makeChain()"
     ]);
   });
