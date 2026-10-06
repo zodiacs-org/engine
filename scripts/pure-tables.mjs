@@ -31,16 +31,16 @@
 //
 // A table is a variable a module declares at its top level, or its default
 // export, whose initializer, when the module loads, makes a table: calls
-// Object.freeze (or a name the module binds to it), calls or constructs a
-// function of the same module that makes one, or builds a Set or a Map from
-// data (`new Set([...])`; an empty one is the module's state, not a table),
-// itself or in a callback it runs. A function makes a table when its body
-// does any of these, with the functions it declares and calls, calls or
-// constructs in place, or passes to an array's iteration methods or to a
-// function, of the module or its own, that calls it. A function passed to any
-// other function, or in an object literal, is not taken to run; and neither
-// the functions of other modules, the constructors of classes, nor the
-// methods of objects are read.
+// Object.freeze (or a name bound to it), calls, constructs or tags a template
+// with a function of the same module that makes one, or builds a Set or a Map
+// from data (`new Set([...])`; an empty one is the module's state, not a
+// table), itself or in a function it runs. A function makes a table when its
+// body does any of these, with the functions it runs: those it declares and
+// calls, calls or constructs in place, or passes, written there or by name,
+// Object.freeze among them, to an array's iteration method or to a function
+// that calls it, and the default of a parameter it calls. A function passed
+// to any other function, or in an object literal, is not taken to run, nor is
+// a generator's body.
 //
 // A table is kept, too, by whatever else in its module is kept and reads it.
 // So the same rule holds for every other top-level declaration that reads a
@@ -61,33 +61,51 @@
 // is gone (its regular expression test also sets RegExp's legacy statics, as
 // any does). That is for a reader to check, not this script. What it does
 // check, in every module, is that no marked call may freeze a value that
-// exists before it, which a bundler that drops the call would leave unfrozen.
-// A freeze is given only a value made where it is written: a literal, a
-// function or class, what Object.create returns, a `new`, or what a method in
-// FRESH_METHODS returns. The last two are taken on trust: a constructor can
-// return an object that exists before it, and so can a method of one of those
-// names, whatever it is called on. A function that makes a table, of the
-// module or written in place, freezes no value of its module, and is given,
-// where it may freeze what it is given, only values made where they are
-// written throughout (freezeProfile). A callback that a marked call runs
-// freezes nothing older either: the elements an iteration method gives it are
-// older than the call unless what the method is called on is new throughout.
-// In a table, a call that breaks this is a breach marked or not, since no
-// mark mends it. Nor does a call whose value is discarded carry the mark. A
-// value is discarded when, through operators, conditionals, and array and
-// object literals, their keys and spreads among them, it reaches only a
-// statement of its own, `void`, the left of a comma, or a `for` loop's
-// initializer or update.
+// exists before it, which a bundler that drops the call would leave unfrozen:
+// not with a freeze of its own, nor in a function it calls or constructs, nor
+// in one it runs from what it is given. In a table, a call that breaks this
+// is a breach marked or not, since no mark mends it. Nor does a call whose
+// value is discarded carry the mark. A value is discarded when, through
+// operators, conditionals, and array and object literals, their keys and
+// spreads among them, it reaches only a statement of its own, `void`, the
+// left of a comma, or a `for` loop's initializer or update.
 //
-// To find what a function freezes, the check follows a name to where its
-// value comes from as written: its declaration's initializer, its default,
-// what its loop runs over, or, for a callback's parameter, what the iteration
-// method is called on. It does not follow a value a name is given later, by
-// assignment; it does not know a name a function declares for
-// Object.freeze, nor a function run through `call`, `apply` or `bind`, named
-// or written in place; and it takes two functions of one name, declared in
-// different blocks, for one. What any other call returns is taken to be older
-// than the call.
+// A value is new, so that a freeze of it freezes nothing older, only where the
+// check sees it made (originJudge): a literal, a function or class, or an
+// operator's or template's result; an array or object literal, and, where a
+// freeze may reach inside it, only one whose values are new in turn and that
+// has no getter or setter; a `new`, or what Object.create or a method named in
+// FRESH_METHODS returns, the last two on trust, since a constructor can return
+// an object that exists before it, and so can a method of one of those names,
+// whatever it is called on. Where a freeze may reach inside what one of these
+// returns, that holds what it copies: what Object.values, Object.entries,
+// Array.of, or Array.from without a function are given; the array, and what
+// they are given, of an array's slice, filter, concat and the others in
+// COPYING; strings or numbers, for keys and split; and what a map's function
+// returns, which may exist before the call. A part of a value, read from it or
+// destructured, is new only when the value is new throughout. A name is as new
+// as what it is bound to in the code that runs, when nothing assigns it: a
+// `const`'s or a `let`'s initializer; the elements of what a `for...of` loop
+// runs over; a `for...in` loop's key, a string; for a parameter of a function
+// given to an array's iteration method, written there or by name, an element of
+// what the method is called on, and its default; for one of a function written
+// in place and called there, its argument and its default; and for one of the
+// function whose call is judged, the argument, which the call must give new
+// throughout wherever the function may freeze it, and its default. Any other
+// name may hold a value that exists before the call: a `var`, a catch binding,
+// a parameter of a function passed to anything but an array's iteration method,
+// reduce's accumulator, a name of the module. So may what any other call
+// returns.
+//
+// The check reads a function where it is called, constructed or given by
+// name: a function of the module or one the code declares, or one a `const`,
+// or a `let` that nothing assigns, is bound to; and where it is written in
+// place, through wrappers and commas. It does not read a function of another
+// module, a class's constructor, an object's methods, a function run through
+// `call`, `apply` or `bind`, or one reached through a `var` or a `let` that
+// is assigned. It takes a method named as an array's iteration method to run
+// the function it is given, whatever it is called on, so it may ask for a
+// mark on a call of an object's own `map` that stores the function instead.
 //
 // UNMARKED_SOURCE names the modules the rule leaves out, those that only the
 // ./calc and ./vedic entries reach through their static imports, which the
@@ -126,6 +144,8 @@ export const FRESH_METHODS = new Set([
   "concat", "entries", "filter", "flat", "flatMap", "from", "fromEntries", "keys", "map", "of", "slice", "split",
   "toReversed", "toSorted", "toSpliced", "values", "with"
 ]);
+/** The methods of an array whose result holds what the array holds and what they are given: FRESH_METHODS but map and flatMap. */
+const COPYING = new Set(["concat", "entries", "filter", "flat", "slice", "toReversed", "toSorted", "toSpliced", "values", "with"]);
 const WRAPPERS = new Set([
   ts.SyntaxKind.ParenthesizedExpression, ts.SyntaxKind.AsExpression, ts.SyntaxKind.SatisfiesExpression,
   ts.SyntaxKind.TypeAssertionExpression, ts.SyntaxKind.NonNullExpression
@@ -168,48 +188,11 @@ const isScope = (node) =>
   isFunctionLike(node) || ts.isBlock(node) || ts.isModuleBlock(node) || ts.isCaseBlock(node) || ts.isForStatement(node) ||
   ts.isForInStatement(node) || ts.isForOfStatement(node) || ts.isCatchClause(node) || ts.isClassExpression(node) ||
   ts.isClassDeclaration(node) || ts.isEnumDeclaration(node);
-/** The name or other expression a property read starts from: `T` for `T.list[0]`. */
-const rootOf = (node) => {
-  node = unwrap(node);
-  return ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node) ? rootOf(node.expression) : node;
-};
-/**
- * Whether a value is made where it is written, so that freezing it freezes
- * nothing older: a literal, an array or object literal, a function or class,
- * a `new`, what a method in FRESH_METHODS returns, whatever it is called on,
- * or what Object.create returns.
- */
-const isFresh = (node) => {
-  node = unwrap(node);
-  if (isLiteral(node) || ts.isArrayLiteralExpression(node) || ts.isObjectLiteralExpression(node) || isFunction(node) ||
-    ts.isClassExpression(node) || ts.isNewExpression(node)) return true;
-  const callee = ts.isCallExpression(node) ? unwrap(node.expression) : null;
-  if (!callee || !ts.isPropertyAccessExpression(callee)) return false;
-  return FRESH_METHODS.has(callee.name.text) ||
-    (ts.isIdentifier(callee.expression) && callee.expression.text === "Object" && callee.name.text === "create");
-};
-/**
- * Whether a value and every value in it are made where they are written: a
- * literal, `undefined`, a function, or an array or object literal of such
- * values, whose keys are plain (isPlainKey) and which has no getter or
- * setter, since a getter may return what exists before it. A function that
- * makes a table may freeze what it is passed, and what that holds.
- */
-const isFreshThroughout = (node, context) => {
-  node = unwrap(node);
-  if (isLiteral(node) || isFunction(node) || (ts.isIdentifier(node) && node.text === "undefined")) return true;
-  if (ts.isArrayLiteralExpression(node)) {
-    return node.elements.every((element) => ts.isOmittedExpression(element) ||
-      (ts.isSpreadElement(element) ? ts.isArrayLiteralExpression(unwrap(element.expression)) && isFreshThroughout(element.expression, context)
-        : isFreshThroughout(element, context)));
-  }
-  if (ts.isObjectLiteralExpression(node)) {
-    return node.properties.every((property) =>
-      (ts.isMethodDeclaration(property) || ts.isPropertyAssignment(property)) &&
-      (!ts.isComputedPropertyName(property.name) || isPlainKey(property.name.expression, context)) &&
-      (ts.isMethodDeclaration(property) || isFreshThroughout(property.initializer, context)));
-  }
-  return false;
+/** Whether a call returns what is new, on trust: what Object.create, or a method named in FRESH_METHODS, returns. */
+const returnsNew = (node) => {
+  const callee = unwrap(node.expression);
+  return ts.isPropertyAccessExpression(callee) && (FRESH_METHODS.has(callee.name.text) ||
+    (ts.isIdentifier(callee.expression) && callee.expression.text === "Object" && callee.name.text === "create"));
 };
 
 /** Whether a call or `new` carries the mark: in its own leading comments or a wrapper's around it. */
@@ -264,73 +247,244 @@ function freezeAliases(statements) {
   return names;
 }
 
-/** Whether a call freezes: Object.freeze, or a name the module binds to it. */
-function isFreeze(node, context) {
-  if (!ts.isCallExpression(node)) return false;
-  const callee = unwrap(node.expression);
-  return isObjectFreeze(callee) || (ts.isIdentifier(callee) && context.aliases.has(callee.text));
+/** A function's parameters, but TypeScript's `this`, which no argument gives. */
+const parametersOf = (fn) => fn.parameters.filter((parameter) => !(ts.isIdentifier(parameter.name) && parameter.name.text === "this"));
+/** Whether a function's body runs when it is called, as a generator's does not. */
+const runsWhenCalled = (fn) => !fn.asteriskToken;
+/** A call, a `new` or a tagged template. */
+const isCallLike = (node) => ts.isCallExpression(node) || ts.isNewExpression(node) || ts.isTaggedTemplateExpression(node);
+/** What a call calls: its callee, through wrappers and the right of a comma. */
+const calleeOf = (node) => {
+  let callee = unwrap(ts.isTaggedTemplateExpression(node) ? node.tag : node.expression);
+  while (ts.isBinaryExpression(callee) && callee.operatorToken.kind === ts.SyntaxKind.CommaToken) callee = unwrap(callee.right);
+  return callee;
+};
+/** What a call gives the function it calls, in order: a tagged template gives its strings, then its substitutions. */
+const argumentsOf = (node) => (ts.isTaggedTemplateExpression(node)
+  ? [node.template, ...(ts.isTemplateExpression(node.template) ? node.template.templateSpans.map((span) => span.expression) : [])]
+  : [...(node.arguments ?? [])]);
+/** The call that calls a function written in place, through wrappers and the right of a comma, or null. */
+function callingInPlace(fn) {
+  let at = fn;
+  while (at.parent && (WRAPPERS.has(at.parent.kind) ||
+    (ts.isBinaryExpression(at.parent) && at.parent.operatorToken.kind === ts.SyntaxKind.CommaToken && at.parent.right === at))) at = at.parent;
+  const call = at.parent;
+  return call && isCallLike(call) && (ts.isTaggedTemplateExpression(call) ? call.tag : call.expression) === at ? call : null;
 }
 
-/** Whether a call or `new` makes a table by itself: a freeze, a Set or Map of data, a call or `new` of a function of the module that makes one. */
-function makesTableHere(node, context) {
-  if (isDataCollection(node) || isFreeze(node, context)) return true;
-  if (!ts.isCallExpression(node) && !ts.isNewExpression(node)) return false;
-  const callee = unwrap(node.expression);
-  return ts.isIdentifier(callee) && context.tableFunctions.has(callee.text);
+/** The binding elements on the way from a binding name to `name`, outer first: [] for the name itself, null if it does not declare it. */
+function pathTo(binding, name) {
+  if (ts.isIdentifier(binding)) return binding.text === name ? [] : null;
+  for (const element of binding.elements) {
+    if (ts.isOmittedExpression(element)) continue;
+    const inner = pathTo(element.name, name);
+    if (inner) return [element, ...inner];
+  }
+  return null;
 }
+/** The identifier a binding name declares `name` with. */
+const declaringIdentifier = (binding, path) => (path.length ? path[path.length - 1].name : binding);
+const kindOf = (list) => (list.flags & ts.NodeFlags.Const ? "const" : list.flags & ts.NodeFlags.Let ? "let" : "other");
 
-/** The functions code declares by name anywhere in it, outside the bodies of functions it holds: declarations and consts bound to functions. */
-function localFunctions(root) {
-  const found = new Map();
-  const visit = (node) => {
-    if (ts.isFunctionDeclaration(node) && node.name && node.body) found.set(node.name.text, node.body);
-    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
-      const value = unwrap(node.initializer);
-      if (isFunction(value)) found.set(node.name.text, value.body);
+/**
+ * What declares a name in a scope (scopeNames, below): `kind`, one of
+ * "parameter", "const", "let", "for-of", "for-in", "function", "enum" and
+ * "other" (a var, a catch binding, a class's or function's own name, a
+ * namespace); `id`, the identifier that declares it; and what the kind needs:
+ * a parameter's function, index (but `this`) and node, a variable's
+ * declaration, a loop's statement, a function's node, and `path`, the binding
+ * elements on the way to a destructured name.
+ */
+function declarationIn(scope, name) {
+  if (isFunctionLike(scope)) {
+    const parameters = parametersOf(scope);
+    for (let index = 0; index < parameters.length; index += 1) {
+      const path = pathTo(parameters[index].name, name);
+      if (path) return { kind: "parameter", fn: scope, index, parameter: parameters[index], path, id: declaringIdentifier(parameters[index].name, path) };
     }
-    if (isDeferred(node) && node !== root) return;
-    ts.forEachChild(node, visit);
-  };
-  visit(root);
+    // Its own name, in its body.
+    return { kind: "function", node: scope, id: scope.name };
+  }
+  if (ts.isEnumDeclaration(scope)) return { kind: "enum", id: scope };
+  if (ts.isCatchClause(scope) || ts.isClassExpression(scope) || ts.isClassDeclaration(scope)) return { kind: "other", id: scope };
+  if (ts.isForStatement(scope) || ts.isForInStatement(scope) || ts.isForOfStatement(scope)) {
+    for (const declaration of scope.initializer.declarations) {
+      const path = pathTo(declaration.name, name);
+      if (!path) continue;
+      const id = declaringIdentifier(declaration.name, path);
+      const kind = kindOf(scope.initializer);
+      if (ts.isForOfStatement(scope)) return { kind: kind === "other" ? "other" : "for-of", loop: scope, declaration, path, id, constant: kind === "const" };
+      if (ts.isForInStatement(scope)) return { kind: kind === "other" ? "other" : "for-in", loop: scope, declaration, path, id, constant: kind === "const" };
+      return { kind, declaration, path, id };
+    }
+  }
+  const statements = ts.isCaseBlock(scope) ? scope.clauses.flatMap((clause) => [...clause.statements]) : scope.statements ?? [];
+  for (const statement of statements) {
+    if (ts.isVariableStatement(statement) && (statement.declarationList.flags & ts.NodeFlags.BlockScoped)) {
+      for (const declaration of statement.declarationList.declarations) {
+        const path = pathTo(declaration.name, name);
+        if (path) return { kind: kindOf(statement.declarationList), declaration, path, id: declaringIdentifier(declaration.name, path) };
+      }
+    } else if (ts.isFunctionDeclaration(statement) && statement.name?.text === name) {
+      return { kind: "function", node: statement, id: statement.name };
+    } else if ((ts.isClassDeclaration(statement) || ts.isEnumDeclaration(statement) || ts.isModuleDeclaration(statement)) &&
+      statement.name && ts.isIdentifier(statement.name) && statement.name.text === name) {
+      return { kind: "other", id: statement.name };
+    }
+  }
+  return { kind: "other", id: scope };
+}
+
+const bindings = new WeakMap();
+/** Where a name read in code is declared (declarationIn, above), with the scope; null for a name of the module or a global. */
+function bindingOf(node) {
+  if (bindings.has(node)) return bindings.get(node);
+  let found = null;
+  for (let at = node.parent; at; at = at.parent) {
+    if (isScope(at) && scopeNames(at).has(node.text)) {
+      found = { scope: at, ...declarationIn(at, node.text) };
+      break;
+    }
+  }
+  bindings.set(node, found);
   return found;
 }
 
-/** Whether a local between a name and `outer`, `outer`'s own among them, hides it. */
-function hidden(node, outer) {
-  for (let at = node.parent; at && at !== outer; at = at.parent) if (isScope(at) && scopeNames(at).has(node.text)) return true;
-  return false;
+/** Whether a name a binding declares is assigned anywhere in its scope, in a function inside it too, or counted up or down. */
+function assignedIn(binding) {
+  let found = false;
+  const target = (node) => {
+    node = unwrap(node);
+    if (ts.isIdentifier(node)) {
+      if (bindingOf(node)?.id === binding.id) found = true;
+    } else if (ts.isArrayLiteralExpression(node)) {
+      for (const element of node.elements) target(ts.isSpreadElement(element) ? element.expression : element);
+    } else if (ts.isObjectLiteralExpression(node)) {
+      for (const property of node.properties) {
+        if (ts.isPropertyAssignment(property)) target(property.initializer);
+        else if (ts.isShorthandPropertyAssignment(property)) target(property.name);
+        else if (ts.isSpreadAssignment(property)) target(property.expression);
+      }
+    } else if (ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
+      target(node.left);
+    }
+  };
+  const visit = (node) => {
+    if (found) return;
+    if (ts.isBinaryExpression(node) && isAssignment(node.operatorToken.kind)) target(node.left);
+    else if ((ts.isPrefixUnaryExpression(node) || ts.isPostfixUnaryExpression(node)) &&
+      (node.operator === ts.SyntaxKind.PlusPlusToken || node.operator === ts.SyntaxKind.MinusMinusToken)) target(node.operand);
+    else if ((ts.isForInStatement(node) || ts.isForOfStatement(node)) && !ts.isVariableDeclarationList(node.initializer)) target(node.initializer);
+    ts.forEachChild(node, visit);
+  };
+  visit(binding.scope);
+  return found;
 }
+
+/** Whether a call freezes: Object.freeze, or a name bound to it, the module's (context.aliases) or one a function declares. */
+function isFreeze(node, context) {
+  return ts.isCallExpression(node) && isFreezeReference(node.expression, context);
+}
+/** Whether an expression is Object.freeze, or a name bound to it. */
+function isFreezeReference(node, context) {
+  node = unwrap(node);
+  if (isObjectFreeze(node)) return true;
+  if (!ts.isIdentifier(node)) return false;
+  const binding = bindingOf(node);
+  if (!binding) return context.aliases.has(node.text);
+  // A `let` first bound to it may still hold it when it is called.
+  if (binding.kind !== "const" && (binding.kind !== "let" || !binding.declaration.initializer)) return false;
+  const value = unwrap(binding.declaration.initializer);
+  if (!binding.path.length) return isObjectFreeze(value);
+  // `const { freeze } = Object`.
+  const element = binding.path[0];
+  const property = element.propertyName ?? element.name;
+  return binding.path.length === 1 && ts.isIdentifier(value) && value.text === "Object" && !bindingOf(value) &&
+    ts.isIdentifier(property) && property.text === "freeze";
+}
+
+/**
+ * The function an expression names: one written there; a function or a const
+ * bound to one that code around it declares; or one of the module, by its
+ * name or a const of the module bound to its name. Through wrappers and the
+ * right of a comma. Null for anything else, a function of another module
+ * among them.
+ */
+function functionOf(node, context, seen = new Set()) {
+  node = unwrap(node);
+  while (ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.CommaToken) node = unwrap(node.right);
+  if (isFunction(node)) return node;
+  if (!ts.isIdentifier(node) || seen.has(node.text)) return null;
+  seen.add(node.text);
+  const binding = bindingOf(node);
+  if (!binding) {
+    const body = context.functions.get(node.text);
+    if (body) return body.parent;
+    const value = context.constants.get(node.text);
+    return value ? functionOf(value, context, seen) : null;
+  }
+  if (binding.kind === "function") return binding.node.body ? binding.node : null;
+  if ((binding.kind === "const" || (binding.kind === "let" && !assignedIn(binding))) && !binding.path.length && binding.declaration.initializer) {
+    return functionOf(binding.declaration.initializer, context, seen);
+  }
+  return null;
+}
+/** The function a call calls, if it is one the check reads (functionOf). */
+const calledFunction = (node, context) => functionOf(ts.isTaggedTemplateExpression(node) ? node.tag : node.expression, context);
+
+/** Whether a call or `new` makes a table by itself: a freeze, a Set or Map of data, or a call, `new` or tagged template of a function of the module that makes one. */
+function makesTableHere(node, context) {
+  if (isDataCollection(node) || isFreeze(node, context)) return true;
+  if (!isCallLike(node)) return false;
+  const callee = calleeOf(node);
+  return ts.isIdentifier(callee) && !bindingOf(callee) && tableFunctionNamed(callee.text, context);
+}
+/** Whether a name of the module names a function of it that makes a table, directly or through a const bound to its name. */
+function tableFunctionNamed(name, context, seen = new Set()) {
+  if (context.tableFunctions.has(name)) return true;
+  const value = context.constants.get(name);
+  if (!value || seen.has(name)) return false;
+  seen.add(name);
+  const target = unwrap(value);
+  return ts.isIdentifier(target) && tableFunctionNamed(target.text, context, seen);
+}
+
+const PENDING = Symbol("pending");
+/**
+ * The answers of callsParameter, below. A "no" found while another answer
+ * was pending is provisional: it stands until an answer is "yes", which may
+ * overturn it, and is then asked again. Answers only turn from no to yes.
+ */
+const newMemo = () => ({ answers: new Map(), provisional: new Set(), pendingUsed: false });
 
 /**
  * Whether `test` holds for a node of the code that runs when `root` runs: its
  * own code, and the bodies of the functions it calls or constructs in place,
- * declares and calls by name, or passes to an array's iteration methods or to
- * a function, the module's or its own, that calls the parameter it is passed
- * as (callsParameter, below). A function it returns, stores, or passes to any
- * other function is not taken to run, nor are functions of other modules
- * read. `local` holds the functions the code around `root` declares; `asked`,
- * callsParameter's answers.
+ * those code around it declares and it calls by name (unless `named` is
+ * false), the default of a parameter it calls, when that is a function, and
+ * those it passes, written in place or by name, to an array's iteration
+ * method or to a function that calls them (callsArgument, below).
+ * A function it returns, stores, or passes to any other function is not
+ * taken to run, nor is a generator's body, nor are functions of other
+ * modules read.
  */
-function runs(root, context, test, local = new Map(), seen = new Set(), asked = new Map()) {
-  const functions = new Map([...local, ...localFunctions(root)]);
+function runs(root, context, test, { named = true } = {}, seen = new Set(), memo = newMemo()) {
   let found = false;
-  const run = (body) => {
-    if (found || seen.has(body)) return;
-    seen.add(body);
-    if (runs(body, context, test, functions, seen, asked)) found = true;
+  const run = (fn) => {
+    if (found || !fn || !fn.body || seen.has(fn) || !runsWhenCalled(fn)) return;
+    seen.add(fn);
+    if (runs(fn.body, context, test, { named }, seen, memo)) found = true;
   };
   const visit = (node) => {
     if (found || ts.isTypeNode(node)) return;
     if (isDeferred(node) && node !== root) {
+      if (!isFunction(node)) return;
+      if (callingInPlace(node)) return run(node);
       const outer = wrapped(node);
-      const parent = outer.parent;
-      if (!isFunction(node) || !parent || !(ts.isCallExpression(parent) || ts.isNewExpression(parent))) return;
-      const callee = unwrap(parent.expression);
-      const index = (parent.arguments ?? []).indexOf(outer);
-      if (parent.expression === outer ||
-        (index >= 0 && ts.isPropertyAccessExpression(callee) && ITERATING.has(callee.name.text)) ||
-        (index >= 0 && ts.isIdentifier(callee) && callsNamed(callee.text, index, context, functions, asked))) {
-        run(node.body);
+      const call = outer.parent;
+      if (call && (ts.isCallExpression(call) || ts.isNewExpression(call))) {
+        const index = (call.arguments ?? []).indexOf(outer);
+        if (index >= 0 && callsArgument(call, index, context, memo)) run(node);
       }
       return;
     }
@@ -338,9 +492,20 @@ function runs(root, context, test, local = new Map(), seen = new Set(), asked = 
       found = true;
       return;
     }
-    if (ts.isCallExpression(node) || ts.isNewExpression(node)) {
-      const callee = unwrap(node.expression);
-      if (ts.isIdentifier(callee) && functions.has(callee.text)) run(functions.get(callee.text));
+    if (isCallLike(node)) {
+      const callee = calleeOf(node);
+      if (named && ts.isIdentifier(callee) && bindingOf(callee)) run(functionOf(callee, context));
+      // A parameter's default runs where a call leaves the argument out.
+      const binding = ts.isIdentifier(callee) ? bindingOf(callee) : null;
+      if (binding?.kind === "parameter" && !binding.path.length && binding.parameter.initializer) run(functionOf(binding.parameter.initializer, context));
+      if (named && !ts.isTaggedTemplateExpression(node)) {
+        (node.arguments ?? []).forEach((argument, index) => {
+          const given = unwrap(argument);
+          if (isFunction(given) || !ts.isIdentifier(given) || !bindingOf(given)) return;
+          const fn = functionOf(given, context);
+          if (fn && callsArgument(node, index, context, memo)) run(fn);
+        });
+      }
       if (found) return;
     }
     ts.forEachChild(node, visit);
@@ -350,221 +515,409 @@ function runs(root, context, test, local = new Map(), seen = new Set(), asked = 
 }
 
 /**
- * Whether the function a name gives calls its parameter at `index`: a
- * function the code declares, read with the functions around it (`local`),
- * or else one of the module, read without them.
+ * Whether a call runs the function it is given at `index`: an array's
+ * iteration method, its callback (Array.from's second argument, any other's
+ * first), taken by the method's name whatever it is called on; or a function
+ * the check reads (functionOf) that calls the parameter there.
  */
-function callsNamed(name, index, context, local, asked) {
-  return local.has(name) ? callsParameter(local.get(name), index, context, local, asked)
-    : callsParameter(context.functions.get(name), index, context, new Map(), asked);
+function callsArgument(call, index, context, memo = newMemo()) {
+  const callee = calleeOf(call);
+  if (ts.isPropertyAccessExpression(callee) && ITERATING.has(callee.name.text)) return index === (callee.name.text === "from" ? 1 : 0);
+  return callsParameter(functionOf(callee, context), index, context, memo);
 }
 
 /**
- * Whether the function whose body is given calls its parameter at `index`
- * when it runs: calls or constructs it, or its `call` or `apply`, or passes
- * it to an array's iteration methods or to a function that calls it in turn.
- * A parameter it gathers with `...` or destructures is not taken to be
- * called. Each answer is kept in `asked`; one asked again while it is being
- * found, as a function that calls itself asks it, is no.
+ * Whether a function calls its parameter at `index` when it runs: calls or
+ * constructs it, or its `call` or `apply`, or passes it to a call that runs
+ * it (callsArgument). A parameter it gathers with `...` or destructures is
+ * not taken to be called. A question asked again while it is being answered,
+ * as a function that calls itself asks it, is answered no for the while, and
+ * a "no" that rests on such an answer is provisional (newMemo, above).
  */
-function callsParameter(body, index, context, local, asked) {
-  const fn = body?.parent;
-  const parameter = fn && isFunctionLike(fn) ? fn.parameters[index] : undefined;
+function callsParameter(fn, index, context, memo) {
+  if (!fn || !fn.body || !runsWhenCalled(fn)) return false;
+  const parameter = parametersOf(fn)[index];
   if (!parameter || parameter.dotDotDotToken || !ts.isIdentifier(parameter.name)) return false;
-  if (asked.has(parameter)) return asked.get(parameter);
-  asked.set(parameter, false);
-  const isParameter = (node) => ts.isIdentifier(node) && node.text === parameter.name.text && !hidden(node, fn);
-  const functions = new Map([...local, ...localFunctions(body)]);
-  const calls = runs(body, context, (node) => {
+  if (memo.answers.has(parameter)) {
+    const answer = memo.answers.get(parameter);
+    if (answer === PENDING || memo.provisional.has(parameter)) memo.pendingUsed = true;
+    return answer === true;
+  }
+  memo.answers.set(parameter, PENDING);
+  const usedBefore = memo.pendingUsed;
+  memo.pendingUsed = false;
+  const isParameter = (node) => ts.isIdentifier(node) && bindingOf(node)?.id === parameter.name;
+  const calls = runs(fn.body, context, (node) => {
     if (!ts.isCallExpression(node) && !ts.isNewExpression(node)) return false;
-    const callee = unwrap(node.expression);
+    const callee = calleeOf(node);
     if (isParameter(callee)) return true;
     if (ts.isPropertyAccessExpression(callee) && (callee.name.text === "call" || callee.name.text === "apply") &&
       isParameter(unwrap(callee.expression))) return true;
-    const given = (node.arguments ?? []).flatMap((argument, at) => (isParameter(unwrap(argument)) ? [at] : []));
-    if (!given.length) return false;
-    if (ts.isPropertyAccessExpression(callee)) return ITERATING.has(callee.name.text);
-    return ts.isIdentifier(callee) && given.some((at) => callsNamed(callee.text, at, context, functions, asked));
-  }, local, new Set(), asked);
-  asked.set(parameter, calls);
+    return (node.arguments ?? []).some((argument, at) => isParameter(unwrap(argument)) && callsArgument(node, at, context, memo));
+  }, {}, new Set(), memo);
+  memo.answers.set(parameter, calls);
+  if (calls) {
+    for (const overturned of memo.provisional) memo.answers.delete(overturned);
+    memo.provisional.clear();
+  } else if (memo.pendingUsed) {
+    memo.provisional.add(parameter);
+  }
+  memo.pendingUsed = usedBefore || (!calls && memo.pendingUsed);
   return calls;
 }
 
 /**
- * The callbacks a call or `new` runs, each with whether what it is given is
- * made where it is written: those it passes to an array's iteration method,
- * given the elements of what the method is called on (of Array.from's first
- * argument), new when that is new throughout; and those it passes to a
- * function of the module that calls them (callsParameter), given what that
- * function chooses.
+ * The functions a call or `new` runs from what it is given (callsArgument):
+ * each with its index among the arguments and, but for Object.freeze given
+ * itself (`freeze`), the function (functionOf) and whether it is written
+ * there (`inPlace`).
  */
 function callbacksRun(node, context) {
-  const callee = unwrap(node.expression);
-  const args = node.arguments ?? [];
+  if (ts.isTaggedTemplateExpression(node)) return [];
   const found = [];
-  args.forEach((argument, index) => {
-    const callback = unwrap(argument);
-    if (!isFunction(callback)) return;
-    if (ts.isPropertyAccessExpression(callee) && ITERATING.has(callee.name.text)) {
-      const elements = callee.name.text === "from" ? (index > 0 ? args[0] : undefined) : callee.expression;
-      found.push({ callback, fresh: Boolean(elements) && isFreshThroughout(elements, context) });
-    } else if (ts.isIdentifier(callee) && callsNamed(callee.text, index, context, new Map(), new Map())) {
-      found.push({ callback, fresh: false });
+  (node.arguments ?? []).forEach((argument, index) => {
+    if (ts.isSpreadElement(argument) || !callsArgument(node, index, context)) return;
+    if (isFreezeReference(argument, context)) {
+      found.push({ index, freeze: true });
+      return;
     }
+    const fn = functionOf(argument, context);
+    if (fn && runsWhenCalled(fn)) found.push({ index, fn, inPlace: isFunction(unwrap(argument)) });
   });
   return found;
 }
 
-/** Whether code makes a table when it runs (runs, above): a call that makes one by itself. */
-const runsTableMaking = (root, context) =>
-  runs(root, context, (node) => (ts.isCallExpression(node) || ts.isNewExpression(node)) && makesTableHere(node, context));
+/**
+ * Whether code makes a table when it runs (runs, above): a call that makes
+ * one by itself, or that runs, given by name, Object.freeze or a function
+ * that makes one.
+ */
+const runsTableMaking = (root, context) => runs(root, context, (node) => isCallLike(node) &&
+  (makesTableHere(node, context) || callbacksRun(node, context).some(({ freeze, fn, inPlace }) => freeze || (!inPlace && makesTableFunction(fn, context)))));
+/** Whether a function given by name makes a table when it runs: one of the module by its name, or one code declares. */
+function makesTableFunction(fn, context) {
+  for (const [name, body] of context.functions) if (body.parent === fn) return context.tableFunctions.has(name);
+  return runsTableMaking(fn.body, context);
+}
 
 /**
- * What a function may freeze as it runs, as a freeze there, or a call or
- * `new` of a function of the module given what that function freezes, is
- * given it: `module`, a value of its module, that is, a name that nothing in
- * the function declares, a property of one, or what a call returns that may
- * not be new (isFresh); `parameters`, the indices of the parameters it may
- * freeze, or a property of one (`rest`, the index of one gathered with
- * `...`); and `defaults`, those whose default is a value of the module, which
- * a call that leaves the argument out freezes. Each branch of a conditional,
- * `??`, `||`, `&&`, a comma or an assignment is read. A name the function
- * declares is followed to where its value comes from: a default, an argument
- * of a call in place, a variable's initializer, what a `for...of` loop runs
- * over, or what an array's iteration method is called on, for the parameters
- * of the callback it is passed. A value given a name later, by assignment, is
- * not followed.
+ * The part a parameter of a function written in place plays: given by the
+ * call that calls it in place ("argument", with the argument, if any); or,
+ * passed to an array's iteration method, an element of what the method is
+ * called on, or of Array.from's first argument ("element", with what it is
+ * an element of), an index ("index"), or that array itself ("array"); and
+ * "unknown" otherwise: reduce's accumulator, or a parameter of a function
+ * passed to any other function, or of one not written in place.
  */
-function freezeProfile(fn, context) {
-  const profile = {
-    module: false, parameters: new Set(), defaults: new Set(), rest: fn.parameters.findIndex((parameter) => parameter.dotDotDotToken)
+function roleOf(fn, index) {
+  const call = callingInPlace(fn);
+  if (call) {
+    const given = argumentsOf(call);
+    const spread = given.findIndex((argument) => ts.isSpreadElement(argument));
+    return spread >= 0 && index >= spread ? { kind: "unknown" } : { kind: "argument", node: given[index] };
+  }
+  const outer = wrapped(fn);
+  const parent = outer.parent;
+  if (!parent || !(ts.isCallExpression(parent) || ts.isNewExpression(parent))) return { kind: "unknown" };
+  return roleAt(parent, (parent.arguments ?? []).indexOf(outer), index);
+}
+/** The part the parameter at `index` of a function given at `at` to an array's iteration method plays (roleOf, above). */
+function roleAt(call, at, index) {
+  const callee = calleeOf(call);
+  if (!ts.isPropertyAccessExpression(callee) || !ITERATING.has(callee.name.text)) return { kind: "unknown" };
+  const method = callee.name.text;
+  const given = call.arguments ?? [];
+  if (method === "from") return at !== 1 ? { kind: "unknown" } : index === 0 ? { kind: "element", of: given[0] } : index === 1 ? { kind: "index" } : { kind: "unknown" };
+  if (at !== 0) return { kind: "unknown" };
+  const array = callee.expression;
+  if (method === "reduce" || method === "reduceRight") {
+    return index === 1 ? { kind: "element", of: array } : index === 2 ? { kind: "index" } : index === 3 ? { kind: "array", of: array } : { kind: "unknown" };
+  }
+  if (method === "sort" || method === "toSorted") return index <= 1 ? { kind: "element", of: array } : { kind: "unknown" };
+  return index === 0 ? { kind: "element", of: array } : index === 1 ? { kind: "index" } : index === 2 ? { kind: "array", of: array } : { kind: "unknown" };
+}
+
+/**
+ * Judges what a value may hold, as code that runs when `root` runs (null: a
+ * call outside any function the check follows) gives it to a freeze. It
+ * writes into `into`: `older`, that the value, or with `deep` anything in it,
+ * may exist before the call; `parameters`, the indices of `root`'s
+ * parameters it may come from; `defaults`, those whose default may exist
+ * before it, which a call that leaves the argument out gives.
+ *
+ * A value is made where it is written, and so not older, when it is a
+ * literal, a function or class, or an operator's or template's result; an
+ * array or object literal, with `deep` only when what it holds is new
+ * throughout and it has no getter or setter; a `new`, or what Object.create
+ * or a method named in FRESH_METHODS returns, with `deep` only a copy of what
+ * is new throughout in turn (judgeCall). A part of
+ * a value, a property or element read from it, or a name destructured from
+ * it, is new only when the value is new throughout. A name that nothing
+ * assigns is followed to its declaration in the code that runs: a `const`'s
+ * or `let`'s initializer; the elements of what a `for...of` loop runs over; a
+ * `for...in` loop's key; a parameter of `root`, to the argument, which the
+ * call must give new throughout where it may be frozen, and to its default; a
+ * parameter of a function written in place, to its part (roleOf, above) and
+ * its default; a function declared there, made when it runs. Every other
+ * name, a `var`, a catch binding, a name declared outside the code that runs,
+ * a name of the module, and any other call's value may exist before the call.
+ */
+function originJudge(root, context) {
+  const following = new Set();
+  const inRoot = (node) => {
+    for (let at = node; at; at = at.parent) if (at === root) return true;
+    return false;
   };
-  const sources = (scope, name) => {
-    const found = [];
-    const bind = (binding, from) => {
-      if (ts.isIdentifier(binding)) {
-        if (binding.text === name) found.push(...from.filter(Boolean));
-        return;
-      }
-      for (const element of binding.elements) if (!ts.isOmittedExpression(element)) bind(element.name, [element.initializer, ...from]);
-    };
-    if (isFunctionLike(scope)) {
-      const outer = wrapped(scope);
-      const parent = outer.parent;
-      const call = parent && (ts.isCallExpression(parent) || ts.isNewExpression(parent)) ? parent : null;
-      const callee = call ? unwrap(call.expression) : null;
-      const inPlace = call && call.expression === outer;
-      const elements = call && !inPlace && ts.isPropertyAccessExpression(callee) && ITERATING.has(callee.name.text)
-        ? (callee.name.text === "from" ? call.arguments[0] : callee.expression) : undefined;
-      scope.parameters.forEach((parameter, index) => {
-        bind(parameter.name, [parameter.initializer, elements, inPlace ? call.arguments?.[index] : undefined]);
-      });
-    } else if ((ts.isForStatement(scope) || ts.isForInStatement(scope) || ts.isForOfStatement(scope)) && scope.initializer &&
-      ts.isVariableDeclarationList(scope.initializer)) {
-      for (const declaration of scope.initializer.declarations) {
-        bind(declaration.name, [declaration.initializer, ts.isForOfStatement(scope) ? scope.expression : undefined]);
-      }
-    } else {
-      const visit = (node) => {
-        if (node !== scope && (isDeferred(node) || ts.isModuleDeclaration(node))) return;
-        if (ts.isVariableDeclaration(node)) bind(node.name, [node.initializer]);
-        ts.forEachChild(node, visit);
-      };
-      visit(scope);
-    }
-    return found;
-  };
-  // The defaults of the elements on the way to a name in a destructured parameter, which apply whether or not the argument is given.
-  const elementDefaults = (binding, name) => {
-    if (ts.isIdentifier(binding)) return binding.text === name ? [] : null;
-    for (const element of binding.elements) {
-      if (ts.isOmittedExpression(element)) continue;
-      const inner = elementDefaults(element.name, name);
-      if (inner) return [element.initializer, ...inner].filter(Boolean);
-    }
-    return null;
-  };
-  const followed = new Set();
-  const reach = (argument, into = profile) => {
-    const node = unwrap(argument);
+  const judge = (node, deep, into) => {
+    node = unwrap(node);
     if (ts.isConditionalExpression(node)) {
-      reach(node.whenTrue, into);
-      reach(node.whenFalse, into);
+      judge(node.whenTrue, deep, into);
+      judge(node.whenFalse, deep, into);
       return;
     }
     if (ts.isBinaryExpression(node)) {
       const operator = node.operatorToken.kind;
-      if (operator === ts.SyntaxKind.CommaToken) return reach(node.right, into);
+      if (operator === ts.SyntaxKind.CommaToken) return judge(node.right, deep, into);
       if (operator === ts.SyntaxKind.QuestionQuestionToken || operator === ts.SyntaxKind.BarBarToken ||
-        operator === ts.SyntaxKind.AmpersandAmpersandToken || isAssignment(operator)) {
-        reach(node.left, into);
-        reach(node.right, into);
+        operator === ts.SyntaxKind.AmpersandAmpersandToken || (isAssignment(operator) && operator !== ts.SyntaxKind.EqualsToken)) {
+        judge(node.left, deep, into);
+        judge(node.right, deep, into);
         return;
       }
-    }
-    const root = rootOf(node);
-    if (!ts.isIdentifier(root)) {
-      if (ts.isCallExpression(root) && !isFresh(root)) into.module = true;
+      if (operator === ts.SyntaxKind.EqualsToken) return judge(node.right, deep, into);
       return;
     }
-    const follow = (source, target) => {
-      if (followed.has(source)) return;
-      followed.add(source);
-      reach(source, target);
-    };
-    for (let at = root.parent; at && at !== fn.parent; at = at.parent) {
-      if (!isScope(at) || !scopeNames(at).has(root.text)) continue;
-      if (at !== fn) {
-        for (const source of sources(at, root.text)) follow(source, into);
+    if (isLiteral(node) || ts.isTemplateExpression(node) || ts.isPrefixUnaryExpression(node) || ts.isPostfixUnaryExpression(node) ||
+      ts.isTypeOfExpression(node) || ts.isVoidExpression(node) || ts.isDeleteExpression(node) || isFunction(node) ||
+      ts.isClassExpression(node)) return;
+    if (ts.isArrayLiteralExpression(node)) {
+      if (deep) for (const element of node.elements) if (!ts.isOmittedExpression(element)) judge(ts.isSpreadElement(element) ? element.expression : element, true, into);
+      return;
+    }
+    if (ts.isObjectLiteralExpression(node)) {
+      if (!deep) return;
+      for (const property of node.properties) {
+        if (ts.isPropertyAssignment(property)) judge(property.initializer, true, into);
+        else if (ts.isShorthandPropertyAssignment(property)) judge(property.name, true, into);
+        else if (ts.isSpreadAssignment(property)) judge(property.expression, true, into);
+        else if (!ts.isMethodDeclaration(property)) into.older = true;
+      }
+      return;
+    }
+    if (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) return judge(node.expression, true, into);
+    if (ts.isCallExpression(node)) return judgeCall(node, deep, into);
+    if (ts.isNewExpression(node)) {
+      if (deep) into.older = true;
+      return;
+    }
+    if (ts.isIdentifier(node)) return judgeName(node, deep, into);
+    into.older = true;
+  };
+  // What a copy holds is what it copies, on the trust FRESH_METHODS has: Object.values or entries, Array.from without a
+  // function, or of, of what they are given; an array's slice, filter, concat and the like, of it and what they are given.
+  // A string's split and keys hold strings and numbers. What a map's function returns is not followed.
+  const judgeCall = (node, deep, into) => {
+    if (!deep) {
+      if (!returnsNew(node)) into.older = true;
+      return;
+    }
+    const callee = unwrap(node.expression);
+    const given = node.arguments.map((argument) => (ts.isSpreadElement(argument) ? argument.expression : argument));
+    if (ts.isPropertyAccessExpression(callee)) {
+      const method = callee.name.text;
+      const target = unwrap(callee.expression);
+      const global = ts.isIdentifier(target) && !bindingOf(target) && !context.declared.has(target.text) ? target.text : null;
+      if (method === "keys" || method === "split") return;
+      if ((global === "Object" && (method === "values" || method === "entries" || method === "fromEntries")) ||
+        (global === "Array" && (method === "of" || (method === "from" && given.length < 2)))) {
+        for (const argument of given) judge(argument, true, into);
         return;
       }
-      // One of the function's own parameters: frozen where the call gives it, and its default where the call leaves it out.
-      const index = fn.parameters.findIndex((parameter) => elementDefaults(parameter.name, root.text) !== null);
-      if (index < 0) return;
+      if (!global && COPYING.has(method)) {
+        judge(callee.expression, true, into);
+        for (const argument of given) judge(argument, true, into);
+        return;
+      }
+    }
+    into.older = true;
+  };
+  const judgeName = (node, deep, into) => {
+    const binding = bindingOf(node);
+    if (!binding) {
+      if (node.text !== "undefined") into.older = true;
+      return;
+    }
+    if (!root || !inRoot(binding.scope)) {
+      into.older = true;
+      return;
+    }
+    const part = deep || (binding.path?.length ?? 0) > 0;
+    // The defaults of the elements on the way to a destructured name apply whatever the value.
+    for (const element of binding.path ?? []) if (element.initializer) judge(element.initializer, deep, into);
+    if (binding.kind === "enum") return;
+    // A function declared in the code that runs is made when it runs; the one that runs, read by its own name, is not.
+    if (binding.kind === "function") {
+      if (binding.node === root) into.older = true;
+      return;
+    }
+    if (following.has(binding.id) || (binding.kind !== "const" && assignedIn(binding))) {
+      into.older = true;
+      return;
+    }
+    following.add(binding.id);
+    if (binding.kind === "parameter") {
+      judgeParameter(binding, part, into);
+    } else if (binding.kind === "const" || binding.kind === "let") {
+      if (binding.declaration.initializer) judge(binding.declaration.initializer, part, into);
+    } else if (binding.kind === "for-of") {
+      judge(binding.loop.expression, true, into);
+    } else if (binding.kind !== "for-in") {
+      into.older = true;
+    }
+    following.delete(binding.id);
+  };
+  const judgeParameter = (binding, deep, into) => {
+    const { fn, index, parameter } = binding;
+    if (fn === root) {
       into.parameters.add(index);
-      for (const initializer of elementDefaults(fn.parameters[index].name, root.text)) follow(initializer, into);
-      const initializer = fn.parameters[index].initializer;
-      if (initializer && !followed.has(initializer)) {
-        const left = { module: false, parameters: new Set(), defaults: new Set() };
-        follow(initializer, left);
-        if (left.module) into.defaults.add(index);
+      if (parameter.initializer) {
+        const left = { older: false, parameters: new Set(), defaults: new Set() };
+        judge(parameter.initializer, deep, left);
+        if (left.older) into.defaults.add(index);
         for (const other of left.parameters) into.parameters.add(other);
       }
       return;
     }
-    into.module = true;
+    // A default applies where the part is left out or undefined.
+    if (parameter.initializer) judge(parameter.initializer, deep, into);
+    if (parameter.dotDotDotToken) {
+      into.older = true;
+      return;
+    }
+    const role = roleOf(fn, index);
+    if (role.kind === "argument") {
+      if (role.node) judge(role.node, deep, into);
+    } else if (role.kind === "element") {
+      judge(role.of, true, into);
+    } else if (role.kind === "array") {
+      judge(role.of, deep, into);
+    } else if (role.kind !== "index") {
+      into.older = true;
+    }
   };
+  return judge;
+}
+
+/** A blank judgement (originJudge, above). */
+const blank = () => ({ older: false, parameters: new Set(), defaults: new Set() });
+
+/**
+ * What a call's callee, a function the check reads, freezes of what the call
+ * gives it (freezeProfile, below), judged into `into` with `use`.
+ */
+function applyProfile(profile, given, use, into) {
+  if (profile.module || leftOut(profile, given)) into.older = true;
+  const spread = given.findIndex((argument) => ts.isSpreadElement(argument));
+  given.forEach((argument, index) => {
+    if (spread >= 0 && index >= spread) {
+      if (profile.parameters.size) into.older = true;
+    } else if (freezesAt(profile, index)) {
+      use(argument, true);
+    }
+  });
+}
+
+/**
+ * What the functions a call runs from what it is given (callbacksRun, above)
+ * freeze of their parameters, judged into `into` with `use`: an element, or
+ * the array, of what an iteration method is called on, new throughout; an
+ * index, a number; anything else, reduce's accumulator and the parameters of
+ * a function passed to any other function among them, may exist before it.
+ */
+function applyCallbacks(node, context, use, into, { inPlace = true } = {}) {
+  for (const callback of callbacksRun(node, context)) {
+    if (callback.freeze) {
+      const role = roleAt(node, callback.index, 0);
+      if (role.kind === "element") use(role.of, true);
+      else into.older = true;
+      continue;
+    }
+    if (!inPlace && callback.inPlace) continue;
+    const profile = profileOf(callback.fn, context);
+    if (profile.module || profile.defaults.size || profile.rest >= 0 && profile.parameters.has(profile.rest)) into.older = true;
+    for (const index of profile.parameters) {
+      const role = roleAt(node, callback.index, index);
+      if (role.kind === "element" || role.kind === "array") use(role.of, true);
+      else if (role.kind !== "index") into.older = true;
+    }
+  }
+}
+
+/**
+ * What a function freezes (freezeProfile, below): a table function of the
+ * module's from the module's own (tableFunctions), any other's found once
+ * for each state of those, in `context.found`.
+ */
+function profileOf(fn, context) {
+  for (const [name, body] of context.functions) if (body.parent === fn && context.profiles.has(name)) return context.profiles.get(name);
+  if (context.found.has(fn)) return context.found.get(fn);
+  if (context.profiling.has(fn)) return { module: false, parameters: new Set(), defaults: new Set(), rest: -1 };
+  context.profiling.add(fn);
+  try {
+    const profile = freezeProfile(fn, context);
+    context.found.set(fn, profile);
+    return profile;
+  } finally {
+    context.profiling.delete(fn);
+  }
+}
+
+/**
+ * What a function may freeze as it runs, judged by originJudge (above) with
+ * the function as its root: `module`, a value that may exist before the call;
+ * `parameters`, the indices of the parameters it may freeze, or a part of
+ * (`rest`, the index of one gathered with `...`); and `defaults`, those
+ * whose default may exist before it. It looks at every freeze the function
+ * runs, the functions written in place it runs among them (runs, above, but
+ * not those it calls by name), every call of a function it calls by name,
+ * given what that function freezes, and every function it gives a call that
+ * runs it by name.
+ */
+function freezeProfile(fn, context) {
+  const parameters = parametersOf(fn);
+  const profile = { module: false, parameters: new Set(), defaults: new Set(), rest: parameters.findIndex((parameter) => parameter.dotDotDotToken) };
+  if (!fn.body || !runsWhenCalled(fn)) return profile;
+  const judge = originJudge(fn, context);
+  const into = { older: false, parameters: profile.parameters, defaults: profile.defaults };
+  const use = (node, deep) => judge(node, deep, into);
   runs(fn.body, context, (node) => {
-    if (!ts.isCallExpression(node) && !ts.isNewExpression(node)) return false;
+    if (!isCallLike(node)) return false;
     if (isFreeze(node, context)) {
-      if (node.arguments.length > 0) reach(node.arguments[0]);
+      if (node.arguments.length) use(node.arguments[0], false);
       return false;
     }
-    const callee = unwrap(node.expression);
-    const inner = ts.isIdentifier(callee) && context.tableFunctions.has(callee.text) ? context.profiles.get(callee.text) : undefined;
-    if (inner) {
-      if (inner.module || leftOut(inner, node.arguments ?? [])) profile.module = true;
-      (node.arguments ?? []).forEach((argument, index) => {
-        if (freezesAt(inner, index)) reach(argument);
-      });
-    }
+    const callee = calledFunction(node, context);
+    if (callee && !callingInPlace(callee) && runsWhenCalled(callee)) applyProfile(profileOf(callee, context), argumentsOf(node), use, into);
+    applyCallbacks(node, context, use, into, { inPlace: false });
     return false;
-  });
+  }, { named: false });
+  profile.module = into.older;
   return profile;
 }
 
 /** Whether a function with the given profile (freezeProfile, above) may freeze its argument at `index`. */
 const freezesAt = (profile, index) =>
   profile.parameters.has(profile.rest >= 0 && index >= profile.rest ? profile.rest : index);
-/** Whether a call leaves out, or gives `undefined` for, an argument whose default, a value of the module, the function freezes. */
+/** Whether a call leaves out, or gives `undefined` for, an argument whose default, a value that may exist before it, the function freezes. */
 const leftOut = (profile, given) => [...profile.defaults].some((index) => {
   const argument = given[index] && unwrap(given[index]);
   return !argument || (ts.isIdentifier(argument) && argument.text === "undefined") || ts.isVoidExpression(argument);
 });
 
 /**
- * The module's own functions; those that make a table; and the profile of
- * each of these (freezeProfile, above). Each by name, to a fixed point.
+ * The module's own functions, but generators, and the consts it binds to a
+ * name; those of its functions that make a table; and the profile of each of
+ * these (freezeProfile, above). Each by name, to a fixed point.
  */
 function tableFunctions(statements, context) {
   for (const statement of statements) {
@@ -572,14 +925,16 @@ function tableFunctions(statements, context) {
     if (ts.isVariableStatement(statement)) {
       for (const declaration of statement.declarationList.declarations) {
         const value = declaration.initializer && unwrap(declaration.initializer);
-        if (ts.isIdentifier(declaration.name) && value && isFunction(value)) context.functions.set(declaration.name.text, value.body);
+        if (!ts.isIdentifier(declaration.name) || !value) continue;
+        if (isFunction(value)) context.functions.set(declaration.name.text, value.body);
+        else if (statement.declarationList.flags & ts.NodeFlags.Const) context.constants.set(declaration.name.text, declaration.initializer);
       }
     }
   }
   for (let grew = true; grew;) {
     grew = false;
     for (const [name, body] of context.functions) {
-      if (!context.tableFunctions.has(name) && runsTableMaking(body, context)) {
+      if (!context.tableFunctions.has(name) && runsWhenCalled(body.parent) && runsTableMaking(body, context)) {
         context.tableFunctions.add(name);
         grew = true;
       }
@@ -597,6 +952,7 @@ function tableFunctions(statements, context) {
           module: before.module || after.module, parameters: new Set([...before.parameters, ...after.parameters]),
           defaults: new Set([...before.defaults, ...after.defaults]), rest: after.rest
         });
+        context.found.clear();
         grew = true;
       }
     }
@@ -604,40 +960,27 @@ function tableFunctions(statements, context) {
 }
 
 /**
- * Whether a call or `new` itself may freeze a value that exists before it,
- * which a bundler that drops the call leaves unfrozen: a freeze of what is not
- * made where it is written (isFresh); and a call or `new` of a function that
- * makes a table, of the module or written in place, that freezes a value of
- * the module, or is given, where it may freeze what it is given, a value not
- * made where it is written throughout (isFreshThroughout).
- */
-function freezesExistingHere(node, context) {
-  if (!ts.isCallExpression(node) && !ts.isNewExpression(node)) return false;
-  if (isFreeze(node, context)) return node.arguments.length > 0 && !isFresh(node.arguments[0]);
-  const callee = unwrap(node.expression);
-  const profile = isFunction(callee) ? (runsTableMaking(callee.body, context) ? freezeProfile(callee, context) : undefined)
-    : ts.isIdentifier(callee) && context.tableFunctions.has(callee.text) ? context.profiles.get(callee.text) : undefined;
-  const given = node.arguments ?? [];
-  return Boolean(profile) && (profile.module || leftOut(profile, given) ||
-    given.some((argument, index) => freezesAt(profile, index) && !isFreshThroughout(argument, context)));
-}
-
-/**
- * Whether a call or `new` may freeze a value that exists before it: by
- * itself (freezesExistingHere, above), or in a callback it runs
- * (callbacksRun), there given what exists before the call unless it is new,
- * when the callback may still freeze its own parameters.
+ * Whether a call or `new` may freeze a value that exists before it, which a
+ * bundler that drops the call leaves unfrozen: a freeze of a value not made
+ * where it is written; a call of a function the check reads (functionOf,
+ * above) that freezes a value that may exist before it, or is given, where
+ * it may freeze what it is given, a value not new throughout; and a function
+ * the call runs from what it is given that does either (applyCallbacks).
+ * Judged as originJudge judges with no root: every name may exist before it.
  */
 function freezesExisting(node, context) {
-  if (freezesExistingHere(node, context)) return true;
   if (!ts.isCallExpression(node) && !ts.isNewExpression(node)) return false;
-  return callbacksRun(node, context).some(({ callback, fresh }) => runs(callback.body, context, (inner) => {
-    if (!freezesExistingHere(inner, context)) return false;
-    if (!fresh || !isFreeze(inner, context)) return true;
-    const frozen = unwrap(inner.arguments[0]);
-    return !(ts.isIdentifier(frozen) && !hidden(frozen, callback) &&
-      callback.parameters.some((parameter) => ts.isIdentifier(parameter.name) && parameter.name.text === frozen.text));
-  }));
+  const into = blank();
+  const judge = originJudge(null, context);
+  const use = (value, deep) => judge(value, deep, into);
+  if (isFreeze(node, context)) {
+    if (node.arguments.length) use(node.arguments[0], false);
+  } else {
+    const callee = calledFunction(node, context);
+    if (callee && runsWhenCalled(callee)) applyProfile(profileOf(callee, context), argumentsOf(node), use, into);
+  }
+  applyCallbacks(node, context, use, into);
+  return into.older;
 }
 
 /**
@@ -687,8 +1030,9 @@ function loadTime(initializer, context) {
     if (ts.isCallExpression(node) || ts.isNewExpression(node)) {
       if (!inCallee) calls.push(node);
       const callee = unwrap(node.expression);
-      if (makesTableHere(node, context) || (isFunction(callee) && runsTableMaking(callee.body, context)) ||
-        callbacksRun(node, context).some(({ callback }) => runsTableMaking(callback.body, context))) makes = true;
+      const inPlace = calledFunction(node, context);
+      if (makesTableHere(node, context) || (inPlace && callingInPlace(inPlace) && runsWhenCalled(inPlace) && runsTableMaking(inPlace.body, context)) ||
+        callbacksRun(node, context).some(({ freeze, fn }) => freeze || runsTableMaking(fn.body, context))) makes = true;
       if (!isFunction(callee)) visit(callee, true);
       for (const argument of node.arguments ?? []) visit(argument, false);
       return;
@@ -736,6 +1080,7 @@ function loadTime(initializer, context) {
     }
     if (ts.isTaggedTemplateExpression(node)) {
       problems.push({ node, what: "a tagged template" });
+      if (makesTableHere(node, context)) makes = true;
       visit(node.tag, true);
       if (ts.isTemplateExpression(node.template)) for (const span of node.template.templateSpans) visit(span.expression, false);
       return;
@@ -768,7 +1113,12 @@ function loadTime(initializer, context) {
  * initializer or a `catch` declares; a class's own name, inside it; and an
  * enum's members, inside it.
  */
+const scopes = new WeakMap();
 function scopeNames(node) {
+  if (!scopes.has(node)) scopes.set(node, namesOf(node));
+  return scopes.get(node);
+}
+function namesOf(node) {
   const names = new Set();
   const lexical = (statements) => {
     for (const statement of statements) {
@@ -810,8 +1160,8 @@ function scopeNames(node) {
   } else if (ts.isEnumDeclaration(node)) {
     // TypeScript binds a member named by a string, `"T"` or `["T"]`, by that name, as it does one named `T`.
     for (const member of node.members) {
-      const key = ts.isComputedPropertyName(member.name) ? member.name.expression : member.name;
-      if (ts.isIdentifier(key) || ts.isStringLiteralLike(key)) names.add(key.text);
+      if (ts.isIdentifier(member.name) || ts.isStringLiteralLike(member.name)) names.add(member.name.text);
+      else if (ts.isComputedPropertyName(member.name) && ts.isStringLiteralLike(member.name.expression)) names.add(member.name.expression.text);
     }
   }
   return names;
@@ -915,7 +1265,10 @@ function analyze(code, fileName, module) {
   }
   const contexts = new Map();
   for (const [name, statements] of byModule) {
-    const context = { aliases: freezeAliases(statements), functions: new Map(), tableFunctions: new Set(), profiles: new Map(), declared };
+    const context = {
+      aliases: freezeAliases(statements), functions: new Map(), constants: new Map(), tableFunctions: new Set(), profiles: new Map(),
+      profiling: new Set(), found: new Map(), declared
+    };
     tableFunctions(statements, context);
     contexts.set(name, context);
   }

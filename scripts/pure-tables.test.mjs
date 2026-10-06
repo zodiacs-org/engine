@@ -258,9 +258,9 @@ export const LOCAL_NEW = viaLocalNew();
 function made() { return Object.freeze([29]); }
 export const NEW_AT_LOAD = new made();
 export const MAPPED_AT_LOAD = [1, 2].map((value) => Object.freeze({ value }));
-export const BUILT_AT_LOAD = build(() => Object.freeze([30]));
+export const BUILT_AT_LOAD = buildWith(() => Object.freeze([30]));
 export const SETS_AT_LOAD = [["a"]].map((list) => new Set(list));
-function build(make: () => unknown) { return make(); }
+function buildWith(make: () => unknown) { return make(); }
 function recur(f: () => unknown, n: number): unknown { return n ? recur(f, n - 1) : f(); }
 function relay(f: () => unknown, n: number): unknown { return n ? relay(f, n - 1) : 0; }
 function viaRecur() { return recur(() => Object.freeze([31]), 2); }
@@ -300,7 +300,7 @@ export const RELAYED = viaRelay();
       "LOCAL_NEW: unmarked: viaLocalNew()",
       "NEW_AT_LOAD: unmarked: new made()",
       "MAPPED_AT_LOAD: unmarked: [1, 2].map((value) => Object.freeze({ value }))",
-      "BUILT_AT_LOAD: unmarked: build(() => Object.freeze([30]))",
+      "BUILT_AT_LOAD: unmarked: buildWith(() => Object.freeze([30]))",
       'SETS_AT_LOAD: unmarked: [["a"]].map((list) => new Set(list))',
       "RECURRED: unmarked: viaRecur()"
     ]);
@@ -343,8 +343,8 @@ export const FROZEN_MAP = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ RAW.signs.ma
 export const FROZEN_ASSIGN = /*#__PURE__*/ Object.freeze(Object.assign(RAW, { b: 2 }));
 export default /*#__PURE__*/ lockState();
 `)).toEqual([
+      // A computed key is no value a freeze reaches; the table keeps it all the same.
       "DEEP_KEYED: a computed key: [KEY]",
-      "DEEP_KEYED: a mark on a call that may freeze a value that exists before it: deepFreeze({ [KEY]: 1 })",
       "DEEP_RAW: a mark on a call that may freeze a value that exists before it: deepFreeze(RAW)",
       "DEEP_NAMED: a mark on a call that may freeze a value that exists before it: deepFreeze({ list: [RAW] })",
       "DEEP_SPREAD: a spread: ...RAW.signs",
@@ -464,7 +464,6 @@ export const WRAPPED = /*#__PURE__*/ lockWrapped();
       "51 SPREAD: a mark on a call that may freeze a value that exists before it: lock({ ...STATE })",
       "54 OTHER_KEY: a computed key: [STATE.a]",
       "54 OTHER_KEY: a property read: STATE.a",
-      "54 OTHER_KEY: a mark on a call that may freeze a value that exists before it: lock({ [STATE.a]: 1 })",
       // A method named create is no Object.create, nor known to return what is new.
       "64 POOLED: a mark on a freeze of a value that may exist before it: Object.freeze(/*#__PURE__*/ Pool.create())",
       "67 VIA_EACH: a mark on a call that may freeze a value that exists before it: eachRow(ROWS, (row) => Object.freeze(row))",
@@ -472,6 +471,291 @@ export const WRAPPED = /*#__PURE__*/ lockWrapped();
       "69 IN_PLACE_INSIDE: a mark on a call that may freeze a value that exists before it: lockInPlace()",
       "70 TWICE: a mark on a call that may freeze a value that exists before it: lockTwice()",
       "71 WRAPPED: a mark on a call that may freeze a value that exists before it: lockWrapped()"
+    ]);
+  });
+
+  it("takes what a freeze may reach for a value that exists before the call unless it is made where it is written", () => {
+    // The marks the list leaves out freeze only what is made where it is written: LOCAL_FRESH, CONST_OF_NEW,
+    // LITERAL_BY_NAME, PASSED_ROWS, THIS_DEFAULT_GIVEN, GENERATED (whose body does not run when it is called), KEYS,
+    // LET_NEW, SHORTHAND_NEW, SPREAD_NEW, COPIES, FROZEN_LITERALS, SORTED, INDEXED, KEYS_GIVEN and SPLIT_GIVEN. LET_ASSIGNED's
+    // is left as it is because a function reached through a `let` that is assigned is not read.
+    expect(atLines(`
+const STATE = { a: 1 };
+const ROWS = [{ r: 1 }];
+const TABLES = { one: { t: 1 } };
+function lockRow(row: object) { return Object.freeze(row); }
+function lockAny(value: object) { return Object.freeze(value); }
+function lockState() { return Object.freeze(STATE); }
+function each(f: (value: object) => unknown) { return f(STATE); }
+function call(f: () => unknown) { return f(); }
+function viaValues() { for (const value of Object.values(STATE)) Object.freeze(value); return 1; }
+function viaEntries() { for (const [, value] of Object.entries(TABLES)) Object.freeze(value); return 1; }
+function viaCopy() { ROWS.slice().forEach((row) => Object.freeze(row)); return 1; }
+function viaSpreadCopy() { for (const row of [...ROWS]) Object.freeze(row); return 1; }
+function viaIterator() { return Array.from(ROWS.values(), (row) => Object.freeze(row)); }
+function viaElement() { return Object.freeze([STATE][0]); }
+function viaCopiedElement() { return Object.freeze(ROWS.slice()[0]); }
+function viaProperty() { const held = { held: STATE }.held; return Object.freeze(held); }
+function viaDestructuredDefault({ inner }: { inner: object } = { inner: STATE }) { return Object.freeze(inner); }
+function viaArrayDefault([first]: object[] = [STATE]) { return Object.freeze(first); }
+function viaDestructuredLocal() { const { inner } = { inner: STATE }; return Object.freeze(inner); }
+function viaLocalFunction() { const freezeIt = (value: object) => Object.freeze(value); return freezeIt(STATE); }
+function viaLocalFresh() { const freezeIt = (value: object) => Object.freeze(value); return freezeIt({ a: 1 }); }
+function viaGivenCallback() { return each((value) => Object.freeze(value)); }
+function viaCatch() { try { throw STATE; } catch (error) { return Object.freeze(error as object); } }
+function viaVarLoop() { for (var row of ROWS) Object.freeze(row); return 1; }
+function viaReassigned(value: object) { value = STATE; return Object.freeze(value); }
+function viaLet() { let held = {}; held = STATE; return Object.freeze(held); }
+function viaConstOfNew() { const rows = [[1], [2]].map((row) => row); return Object.freeze(rows); }
+function viaNamedCallback() { return ROWS.map(lockRow); }
+function viaLocalCallback() { const lockOne = (row: object) => Object.freeze(row); return ROWS.map(lockOne); }
+function viaOwnFreeze() { const { freeze } = Object; return freeze(STATE); }
+function viaBlocks() { { const f = () => Object.freeze(ROWS); f(); } { const f = () => 0; return f(); } }
+const lockAlias = lockAny;
+function lockThis(this: void, value: object) { return Object.freeze(value); }
+function callThis(this: void, f: () => unknown) { return f(); }
+function lockThisDefault(this: void, value: object = STATE) { return Object.freeze(value); }
+function A(f: () => unknown, n: number): unknown { if (n > 0) B(f, n - 1); return f(); }
+function B(g: () => unknown, n: number): unknown { return A(g, n); }
+function viaMemo() { A(() => 0, 1); return B(() => Object.freeze(ROWS), 0); }
+function* generate() { yield Object.freeze(STATE); }
+function localMarks() { const lockIt = () => Object.freeze(STATE); const kept = /*#__PURE__*/ lockIt(); return kept; }
+function viaKeyAssigned() { for (let key in TABLES) { key = STATE as never; Object.freeze(key); } return 1; }
+function viaKeys() { for (const key in TABLES) Object.freeze(key); return 1; }
+function viaCounted() { let held: any = {}; held++; return Object.freeze(held); }
+function viaLetFreeze() { let freeze = Object.freeze; return freeze(STATE); }
+function viaConstFreeze() { const freeze = Object.freeze; return freeze(STATE); }
+function viaArrayAssigned() { let held: object = {}; [held] = [STATE]; return Object.freeze(held); }
+function viaObjectAssigned() { let held: object = {}; ({ held } = { held: STATE }); return Object.freeze(held); }
+function viaLoopTarget() { let held: object = {}; for (held of ROWS) void 0; return Object.freeze(held); }
+function viaLetNew() { let held = { a: 1 }; return Object.freeze(held); }
+function viaClosure() { const shared = {}; const lockShared = () => Object.freeze(shared); return lockShared(); }
+function viaSpreadInPlace() { return ((first: object, second: object) => Object.freeze(second))(...([{}, STATE] as [object, object])); }
+function viaAssignedProperty() { const box: { v: object } = { v: {} }; return Object.freeze(box.v = STATE); }
+function viaShorthandNew() { const inner = { a: 1 }; return lockAny({ inner }); }
+function viaSpreadNew() { const base = { a: 1 }; return lockAny({ ...base }); }
+function viaInnerDefault() { return [undefined].map((row: object = STATE) => Object.freeze(row)); }
+function lockTag(strings: TemplateStringsArray, value: object) { return Object.freeze(value); }
+function viaTag() { return lockTag\`\${STATE}\`; }
+function viaThisFreeze(this: unknown) { return Object.freeze(this as object); }
+function viaRestInPlace() { return ((...rest: object[]) => Object.freeze(rest))({ a: 1 }); }
+function lockSecond(first: object, second: object) { return Object.freeze(second); }
+function viaCopies() { [[1]].slice().forEach((row) => Object.freeze(row)); return 1; }
+function viaLetFreezeAssigned() { let freeze = Object.freeze; freeze = (value: object) => value; return freeze(STATE); }
+function viaLetAssigned() { let lock = lockAny; lock = (value: object) => value; return lock(STATE); }
+function lockSelf() { return Object.freeze(lockSelf); }
+function lockDeep(value: object, n: number): object { return n ? lockDeep(STATE, n - 1) : Object.freeze(value); }
+function outerLate() { Object.freeze([0]); const inner = () => late(STATE); return inner(); }
+function late(value: object) { return lockLate(value); }
+function lockLate(value: object) { return Object.freeze(value); }
+export const VALUES = /*#__PURE__*/ viaValues();
+export const ENTRIES = /*#__PURE__*/ viaEntries();
+export const COPY = /*#__PURE__*/ viaCopy();
+export const SPREAD_COPY = /*#__PURE__*/ viaSpreadCopy();
+export const ITERATOR = /*#__PURE__*/ viaIterator();
+export const ELEMENT = /*#__PURE__*/ viaElement();
+export const COPIED_ELEMENT = /*#__PURE__*/ viaCopiedElement();
+export const PROPERTY = /*#__PURE__*/ viaProperty();
+export const DESTRUCTURED_DEFAULT = /*#__PURE__*/ viaDestructuredDefault();
+export const ARRAY_DEFAULT = /*#__PURE__*/ viaArrayDefault();
+export const DESTRUCTURED_LOCAL = /*#__PURE__*/ viaDestructuredLocal();
+export const LOCAL_FUNCTION = /*#__PURE__*/ viaLocalFunction();
+export const LOCAL_FRESH = /*#__PURE__*/ viaLocalFresh();
+export const GIVEN_CALLBACK = /*#__PURE__*/ viaGivenCallback();
+export const CAUGHT = /*#__PURE__*/ viaCatch();
+export const VAR_LOOP = /*#__PURE__*/ viaVarLoop();
+export const REASSIGNED = /*#__PURE__*/ viaReassigned({});
+export const LET = /*#__PURE__*/ viaLet();
+export const CONST_OF_NEW = /*#__PURE__*/ viaConstOfNew();
+export const NAMED_CALLBACK = /*#__PURE__*/ viaNamedCallback();
+export const LOCAL_CALLBACK = /*#__PURE__*/ viaLocalCallback();
+export const OWN_FREEZE = /*#__PURE__*/ viaOwnFreeze();
+export const BLOCKS = /*#__PURE__*/ viaBlocks();
+export const MAPPED_BY_NAME = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ ROWS.map(lockRow));
+export const LITERAL_BY_NAME = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ [{ a: 1 }].map(lockRow));
+export const PASSED_ROWS = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ [{ a: 1 }, { a: 2 }].map((row) => lockRow(row)));
+export const CALLED_BY_NAME = /*#__PURE__*/ call(lockState);
+export const REDUCED = /*#__PURE__*/ [{}].reduce((sum) => Object.freeze(sum), STATE);
+export const DEFAULTED_ROW = /*#__PURE__*/ [undefined].map((row = STATE) => Object.freeze(row));
+export const FROM_HOLE = /*#__PURE__*/ Array.from([,], (row = STATE) => Object.freeze(row));
+export const COMMA = /*#__PURE__*/ (0, lockAny)(STATE);
+export const COMMA_IN_PLACE = /*#__PURE__*/ (0, () => Object.freeze(STATE))();
+export const ALIASED = /*#__PURE__*/ lockAlias(STATE);
+export const THIS_PARAMETER = /*#__PURE__*/ lockThis(STATE);
+export const THIS_NEW = /*#__PURE__*/ new (lockThis as any)(STATE);
+export const THIS_CALLBACK = /*#__PURE__*/ callThis(() => Object.freeze(ROWS));
+export const THIS_DEFAULT = /*#__PURE__*/ lockThisDefault();
+export const THIS_DEFAULT_GIVEN = /*#__PURE__*/ lockThisDefault({ a: 1 });
+export const MEMO = /*#__PURE__*/ viaMemo();
+export const GENERATED = /*#__PURE__*/ generate();
+export const LOCAL_MARKS = localMarks();
+export const KEY_ASSIGNED = /*#__PURE__*/ viaKeyAssigned();
+export const KEYS = /*#__PURE__*/ viaKeys();
+export const COUNTED = /*#__PURE__*/ viaCounted();
+export const LET_FREEZE = /*#__PURE__*/ viaLetFreeze();
+export const CONST_FREEZE = /*#__PURE__*/ viaConstFreeze();
+export const ARRAY_ASSIGNED = /*#__PURE__*/ viaArrayAssigned();
+export const OBJECT_ASSIGNED = /*#__PURE__*/ viaObjectAssigned();
+export const LOOP_TARGET = /*#__PURE__*/ viaLoopTarget();
+export const LET_NEW = /*#__PURE__*/ viaLetNew();
+export const CLOSURE = /*#__PURE__*/ viaClosure();
+export const SPREAD_IN_PLACE = /*#__PURE__*/ viaSpreadInPlace();
+export const ASSIGNED_PROPERTY = /*#__PURE__*/ viaAssignedProperty();
+export const SHORTHAND_NEW = /*#__PURE__*/ viaShorthandNew();
+export const SPREAD_NEW = /*#__PURE__*/ viaSpreadNew();
+export const INNER_DEFAULT = /*#__PURE__*/ viaInnerDefault();
+export const TAGGED = /*#__PURE__*/ viaTag();
+export const THIS_FROZEN = /*#__PURE__*/ viaThisFreeze();
+export const REST_IN_PLACE = /*#__PURE__*/ viaRestInPlace();
+export const SPREAD_ARGUMENTS = /*#__PURE__*/ lockSecond(...([{}, STATE] as [object, object]));
+export const NEW_GIVEN = /*#__PURE__*/ lockAny(new Map());
+export const COPIES = /*#__PURE__*/ viaCopies();
+export const FROZEN_ROWS = /*#__PURE__*/ ROWS.map(Object.freeze);
+export const FROZEN_LITERALS = /*#__PURE__*/ [{ a: 1 }].map(Object.freeze);
+export const SORTED = /*#__PURE__*/ [{ a: 1 }, { a: 2 }].sort((first, second) => (Object.freeze(second), 0));
+export const INDEXED = /*#__PURE__*/ ROWS.map((row, index) => Object.freeze(index));
+export const KEYS_GIVEN = /*#__PURE__*/ lockAny(Object.keys(STATE));
+export const SPLIT_GIVEN = /*#__PURE__*/ lockAny("a|b".split("|"));
+export const MAPPED_GIVEN = /*#__PURE__*/ lockAny([{ a: 1 }].map(() => STATE));
+export const FROM_MAPPED = /*#__PURE__*/ lockAny(Array.from([{ a: 1 }], () => STATE));
+export const LET_FREEZE_ASSIGNED = /*#__PURE__*/ viaLetFreezeAssigned();
+export const LET_ASSIGNED = /*#__PURE__*/ viaLetAssigned();
+export const SELF = /*#__PURE__*/ lockSelf();
+export const DEEP_RECURSION = /*#__PURE__*/ lockDeep({}, 1);
+export const LATE = /*#__PURE__*/ outerLate();
+`)).toEqual([
+      // A mark inside a function, of a function it declares.
+      "41 (no table): a mark on a call that may freeze a value that exists before it: lockIt()",
+      "70 VALUES: a mark on a call that may freeze a value that exists before it: viaValues()",
+      "71 ENTRIES: a mark on a call that may freeze a value that exists before it: viaEntries()",
+      "72 COPY: a mark on a call that may freeze a value that exists before it: viaCopy()",
+      "73 SPREAD_COPY: a mark on a call that may freeze a value that exists before it: viaSpreadCopy()",
+      "74 ITERATOR: a mark on a call that may freeze a value that exists before it: viaIterator()",
+      "75 ELEMENT: a mark on a call that may freeze a value that exists before it: viaElement()",
+      "76 COPIED_ELEMENT: a mark on a call that may freeze a value that exists before it: viaCopiedElement()",
+      "77 PROPERTY: a mark on a call that may freeze a value that exists before it: viaProperty()",
+      "78 DESTRUCTURED_DEFAULT: a mark on a call that may freeze a value that exists before it: viaDestructuredDefault()",
+      "79 ARRAY_DEFAULT: a mark on a call that may freeze a value that exists before it: viaArrayDefault()",
+      "80 DESTRUCTURED_LOCAL: a mark on a call that may freeze a value that exists before it: viaDestructuredLocal()",
+      "81 LOCAL_FUNCTION: a mark on a call that may freeze a value that exists before it: viaLocalFunction()",
+      "83 GIVEN_CALLBACK: a mark on a call that may freeze a value that exists before it: viaGivenCallback()",
+      "84 CAUGHT: a mark on a call that may freeze a value that exists before it: viaCatch()",
+      "85 VAR_LOOP: a mark on a call that may freeze a value that exists before it: viaVarLoop()",
+      "86 REASSIGNED: a mark on a call that may freeze a value that exists before it: viaReassigned({})",
+      "87 LET: a mark on a call that may freeze a value that exists before it: viaLet()",
+      "89 NAMED_CALLBACK: a mark on a call that may freeze a value that exists before it: viaNamedCallback()",
+      "90 LOCAL_CALLBACK: a mark on a call that may freeze a value that exists before it: viaLocalCallback()",
+      "91 OWN_FREEZE: a mark on a call that may freeze a value that exists before it: viaOwnFreeze()",
+      "92 BLOCKS: a mark on a call that may freeze a value that exists before it: viaBlocks()",
+      "93 MAPPED_BY_NAME: a mark on a call that may freeze a value that exists before it: ROWS.map(lockRow)",
+      "96 CALLED_BY_NAME: a mark on a call that may freeze a value that exists before it: call(lockState)",
+      "97 REDUCED: a mark on a call that may freeze a value that exists before it: [{}].reduce((sum) => Object.freeze(sum), STATE)",
+      "98 DEFAULTED_ROW: a mark on a call that may freeze a value that exists before it: [undefined].map((row = STATE) => Object.freeze(row))",
+      "99 FROM_HOLE: a mark on a call that may freeze a value that exists before it: Array.from([,], (row = STATE) => Object.freeze(row))",
+      "100 COMMA: the operator ,: 0, lockAny",
+      "100 COMMA: a mark on a call that may freeze a value that exists before it: (0, lockAny)(STATE)",
+      "101 COMMA_IN_PLACE: the operator ,: 0, () => Object.freeze(STATE)",
+      "101 COMMA_IN_PLACE: a mark on a call that may freeze a value that exists before it: (0, () => Object.freeze(STATE))()",
+      "102 ALIASED: a mark on a call that may freeze a value that exists before it: lockAlias(STATE)",
+      "103 THIS_PARAMETER: a mark on a call that may freeze a value that exists before it: lockThis(STATE)",
+      "104 THIS_NEW: a mark on a call that may freeze a value that exists before it: new (lockThis as any)(STATE)",
+      "105 THIS_CALLBACK: a mark on a call that may freeze a value that exists before it: callThis(() => Object.freeze(ROWS))",
+      "106 THIS_DEFAULT: a mark on a call that may freeze a value that exists before it: lockThisDefault()",
+      "108 MEMO: a mark on a call that may freeze a value that exists before it: viaMemo()",
+      "110 LOCAL_MARKS: a call that may freeze a value that exists before it: localMarks()",
+      "111 KEY_ASSIGNED: a mark on a call that may freeze a value that exists before it: viaKeyAssigned()",
+      "113 COUNTED: a mark on a call that may freeze a value that exists before it: viaCounted()",
+      "114 LET_FREEZE: a mark on a call that may freeze a value that exists before it: viaLetFreeze()",
+      "115 CONST_FREEZE: a mark on a call that may freeze a value that exists before it: viaConstFreeze()",
+      "116 ARRAY_ASSIGNED: a mark on a call that may freeze a value that exists before it: viaArrayAssigned()",
+      "117 OBJECT_ASSIGNED: a mark on a call that may freeze a value that exists before it: viaObjectAssigned()",
+      "118 LOOP_TARGET: a mark on a call that may freeze a value that exists before it: viaLoopTarget()",
+      // A function's own profile does not follow names declared around it: refused, though `shared` is new here.
+      "120 CLOSURE: a mark on a call that may freeze a value that exists before it: viaClosure()",
+      "121 SPREAD_IN_PLACE: a mark on a call that may freeze a value that exists before it: viaSpreadInPlace()",
+      "122 ASSIGNED_PROPERTY: a mark on a call that may freeze a value that exists before it: viaAssignedProperty()",
+      "125 INNER_DEFAULT: a mark on a call that may freeze a value that exists before it: viaInnerDefault()",
+      "126 TAGGED: a mark on a call that may freeze a value that exists before it: viaTag()",
+      "127 THIS_FROZEN: a mark on a call that may freeze a value that exists before it: viaThisFreeze()",
+      // A parameter gathered with `...` is not followed: refused, though what it gathers is new.
+      "128 REST_IN_PLACE: a mark on a call that may freeze a value that exists before it: viaRestInPlace()",
+      "129 SPREAD_ARGUMENTS: a spread: ...([{}, STATE] as [object, object])",
+      "129 SPREAD_ARGUMENTS: a mark on a call that may freeze a value that exists before it: lockSecond(...([{}, STATE] as [object, object]))",
+      "130 NEW_GIVEN: unmarked: new Map()",
+      // What a `new` holds is not known.
+      "130 NEW_GIVEN: a mark on a call that may freeze a value that exists before it: lockAny(new Map())",
+      "132 FROZEN_ROWS: a property read: Object.freeze",
+      "132 FROZEN_ROWS: a mark on a call that may freeze a value that exists before it: ROWS.map(Object.freeze)",
+      "133 FROZEN_LITERALS: a property read: Object.freeze",
+      "136 KEYS_GIVEN: unmarked: Object.keys(STATE)",
+      "137 SPLIT_GIVEN: unmarked: \"a|b\".split(\"|\")",
+      "138 MAPPED_GIVEN: unmarked: [{ a: 1 }].map(() => STATE)",
+      // What a map's function returns is not followed.
+      "138 MAPPED_GIVEN: a mark on a call that may freeze a value that exists before it: lockAny([{ a: 1 }].map(() => STATE))",
+      "139 FROM_MAPPED: unmarked: Array.from([{ a: 1 }], () => STATE)",
+      "139 FROM_MAPPED: a mark on a call that may freeze a value that exists before it: lockAny(Array.from([{ a: 1 }], () => STATE))",
+      "140 LET_FREEZE_ASSIGNED: a mark on a call that may freeze a value that exists before it: viaLetFreezeAssigned()",
+      "142 SELF: a mark on a call that may freeze a value that exists before it: lockSelf()",
+      "143 DEEP_RECURSION: a mark on a call that may freeze a value that exists before it: lockDeep({}, 1)",
+      "144 LATE: a mark on a call that may freeze a value that exists before it: outerLate()"
+    ]);
+  });
+
+  it("takes for a table what a function given by name, a const bound to one, a tagged template or a parameter's default makes, but not a generator's body", () => {
+    // HIDDEN calls a local, not the module's makeOne; RELAYED never calls its callback; KEPT_ONLY's keep returns the
+    // function it is given; a generator's body and forEach's second argument do not run. CHAIN's chainC is asked while
+    // chainA's answer is pending.
+    expect(atLines(`
+function makeOne() { return Object.freeze(["one"]); }
+function buildFrom(make: () => unknown) { return make(); }
+function viaLocalByName() { const one = () => Object.freeze(["two"]); return [1].map(one); }
+const makeAlias = makeOne;
+function first(f: () => unknown, n: number): unknown { if (n > 0) second(f, n - 1); return f(); }
+function second(g: () => unknown, n: number): unknown { return first(g, n); }
+function viaMemo() { first(() => 0, 1); return second(() => Object.freeze(["three"]), 0); }
+function rows(strings: TemplateStringsArray) { return Object.freeze(strings.raw[0].split("|")); }
+function withDefault(make = () => Object.freeze(["four"])) { return make(); }
+function* lazily() { yield Object.freeze(["five"]); }
+function chainA(f: () => unknown, n: number): unknown { if (n > 0) chainC(f); return f(); }
+function chainC(h: () => unknown): unknown { return chainB(h, 0); }
+function chainB(g: () => unknown, n: number): unknown { return chainA(g, n); }
+function makeChain() { chainA(() => 0, 1); return chainC(() => Object.freeze(["eleven"])); }
+function keep(f: () => unknown) { return f; }
+function viaKept() { const one = () => Object.freeze(["twelve"]); return keep(one); }
+function hiddenMaker() { const makeOne = () => 1; return makeOne(); }
+function callThrough(f: () => unknown) { const go = () => f(); return [1].map(go); }
+function relay(f: () => unknown, n: number): unknown { return n ? relay(f, n - 1) : 0; }
+export const BY_NAME = [1].map(makeOne);
+export const GIVEN_BY_NAME = buildFrom(makeOne);
+export const LOCAL_BY_NAME = viaLocalByName();
+export const ALIASED = makeAlias();
+export const MEMO = viaMemo();
+export const TAGGED = rows\`a|b\`;
+export const DEFAULTED = withDefault();
+export const LAZY = lazily();
+export const COMMA = (0, () => Object.freeze(["six"]))();
+export const FROZEN_BY_NAME = [{}].map(Object.freeze);
+export const HIDDEN = hiddenMaker();
+export const THROUGH = callThrough(() => Object.freeze(["seven"]));
+export const RELAYED = relay(() => Object.freeze(["eight"]), 2);
+export const GENERATORS = [1].map(function* () { yield Object.freeze(["nine"]); });
+export const THIS_ARGUMENT = [1].forEach(() => 0, () => Object.freeze(["ten"]));
+export const CHAIN = makeChain();
+export const KEPT_ONLY = viaKept();
+`)).toEqual([
+      "21 BY_NAME: unmarked: [1].map(makeOne)",
+      "22 GIVEN_BY_NAME: unmarked: buildFrom(makeOne)",
+      "23 LOCAL_BY_NAME: unmarked: viaLocalByName()",
+      "24 ALIASED: unmarked: makeAlias()",
+      "25 MEMO: unmarked: viaMemo()",
+      "26 TAGGED: a tagged template: rows`a|b`",
+      "27 DEFAULTED: unmarked: withDefault()",
+      "29 COMMA: unmarked: (0, () => Object.freeze([\"six\"]))()",
+      "29 COMMA: the operator ,: 0, () => Object.freeze([\"six\"])",
+      "30 FROZEN_BY_NAME: unmarked: [{}].map(Object.freeze)",
+      "30 FROZEN_BY_NAME: a property read: Object.freeze",
+      "32 THROUGH: unmarked: callThrough(() => Object.freeze([\"seven\"]))",
+      "36 CHAIN: unmarked: makeChain()"
     ]);
   });
 
@@ -492,6 +776,8 @@ export enum Members { T = 1, U = T * 2 }
 export enum Quoted { "T" = 1, U = T * 2 }
 export enum Computed { ["T"] = 1, U = T * 2 }
 export enum Templated { [\`T\`] = 1, U = T * 2 }
+// TypeScript reads T in a computed name it refuses, and binds no member by it.
+export enum ComputedName { [T] = 1 }
 export class Methods { static made = Array.of(1); T() { return 1; } }
 export class Impl implements T { static made = Array.of(1); }
 export class FromTable extends mixinOf(T) {}
@@ -509,6 +795,7 @@ function chosen(x: number) { switch (x) { case 1: function T() { return 1; } ret
 export const CHOSEN = chosen(1);
 export default class { static made = Array.of(1); read() { return T; } }
 `)).toEqual([
+      "(no table): a statement that reads T when its module loads: export enum ComputedName { [T] = 1 }",
       "FromTable: a class its module keeps, which reads T",
       "Tagged: a class its module keeps, which reads T",
       "Logged: a class its module keeps, which reads T",
