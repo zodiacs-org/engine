@@ -48,3 +48,19 @@ export const UT1_DATA = /*#__PURE__*/ Object.freeze({
   /** The prediction's formal error every 10 days after observedTo, and on its last day, µs. */
   predictedErrors: [108,934,2308,3408,4391,5301,6160,6979,7766,8526,9264,9982,10683,11369,12041,12701,13349,13986,14614,15233,15844,16447,17042,17630,18212,18788,19358,19922,20481,21035,21584,22128,22668,23203,23735,24262,24786,25306,25410]
 });
+
+// The bounds src/time-scale.ts compares instants with, written as numbers: a
+// value computed from a table when its module loads keeps the table in a
+// program that does not use it (scripts/pure-tables.mjs).
+/** UT1_DATA's first day, 0h UTC, ms. */
+export const UT1_FROM_MS = 63072000000;
+/** UT1_DATA's first finals2000A day, 0h UTC, ms. */
+export const UT1_FINALS_FROM_MS = 94780800000;
+/** UT1_DATA's last observed day, 0h UTC, ms. */
+export const UT1_OBSERVED_TO_MS = 1790208000000;
+/** UT1_DATA's last day, 0h UTC, ms. */
+export const UT1_TO_MS = 1822435200000;
+/** Knots of UT1_DATA's 3-day grid before its first finals2000A day: the grid runs from its second day. */
+export const UT1_GRID_BEFORE = 122;
+/** LEAP_SECOND_LIST's expiry, 0h UTC, ms. */
+export const LEAP_SECONDS_EXPIRE_MS = 1814140800000;

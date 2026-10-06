@@ -15,7 +15,16 @@
 //   above, and TT = UT1 + ΔT.
 import { DELTA_T_MODEL, deltaTAt } from "./deltat.js";
 import type { DeltaT } from "./deltat.js";
-import { LEAP_SECOND_LIST, UT1_DATA } from "./time-scale-data.js";
+import {
+  LEAP_SECOND_LIST,
+  LEAP_SECONDS_EXPIRE_MS,
+  UT1_DATA,
+  UT1_FINALS_FROM_MS,
+  UT1_FROM_MS,
+  UT1_GRID_BEFORE,
+  UT1_OBSERVED_TO_MS,
+  UT1_TO_MS
+} from "./time-scale-data.js";
 
 export { LEAP_SECOND_LIST, UT1_DATA };
 
@@ -73,14 +82,6 @@ const J2000_MS = Date.UTC(2000, 0, 1, 12);
 const MJD_UNIX = 40_587;
 /** 1972-01-01T00:00:00Z, the first day of the leap-second list. */
 export const LEAP_SECONDS_FROM = Date.UTC(1972, 0, 1);
-/** The first and last days (0h UTC) of the UT1 table, its first finals2000A day and its last observed day. */
-const TABLE_FROM = (UT1_DATA.from - MJD_UNIX) * DAY;
-const FINALS_FROM = (UT1_DATA.finalsFrom - MJD_UNIX) * DAY;
-const TABLE_TO = (UT1_DATA.to - MJD_UNIX) * DAY;
-const OBSERVED_TO = (UT1_DATA.observedTo - MJD_UNIX) * DAY;
-const EXPIRES = Date.parse(`${LEAP_SECOND_LIST.expires}T00:00:00Z`);
-/** Knots of the 3-day grid before the first finals2000A day: the grid runs from the table's second day. */
-const GRID_BEFORE = Math.floor((UT1_DATA.finalsFrom - UT1_DATA.from - 1) / UT1_DATA.step);
 /** The leap-second rule keeps |UT1 − UTC| below 0.9 s. */
 export const UT1_FALLBACK_BAND = 0.9;
 /** The generator's 90 characters: "#" to "~" without backslash and backquote. */
@@ -91,7 +92,7 @@ let knots: Float64Array | undefined;
 
 function decode(): Float64Array {
   const { packed, radix, first, slope } = UT1_DATA;
-  const count = GRID_BEFORE + Math.ceil((UT1_DATA.to - UT1_DATA.finalsFrom) / UT1_DATA.step) + 1;
+  const count = UT1_GRID_BEFORE + Math.ceil((UT1_DATA.to - UT1_DATA.finalsFrom) / UT1_DATA.step) + 1;
   const values = new Float64Array(count);
   values[0] = first;
   let step = slope;
@@ -137,15 +138,15 @@ function taiMinusUtcAtTai(taiMs: number): number {
 function ut1MinusTai(utcMs: number): number {
   knots ??= decode();
   // Days from the first finals2000A day, the grid's reference.
-  const days = (utcMs - FINALS_FROM) / DAY;
-  const gridFrom = -GRID_BEFORE * UT1_DATA.step;
+  const days = (utcMs - UT1_FINALS_FROM_MS) / DAY;
+  const gridFrom = -UT1_GRID_BEFORE * UT1_DATA.step;
   if (days < gridFrom) {
-    const fraction = (utcMs - TABLE_FROM) / DAY / (gridFrom - (UT1_DATA.from - UT1_DATA.finalsFrom));
+    const fraction = (utcMs - UT1_FROM_MS) / DAY / (gridFrom - (UT1_DATA.from - UT1_DATA.finalsFrom));
     return (UT1_DATA.head + fraction * (knots[0]! - UT1_DATA.head)) / 1000;
   }
   const last = knots.length - 1;
-  const k = Math.min(last - 1, GRID_BEFORE + Math.floor(days / UT1_DATA.step));
-  const start = (k - GRID_BEFORE) * UT1_DATA.step;
+  const k = Math.min(last - 1, UT1_GRID_BEFORE + Math.floor(days / UT1_DATA.step));
+  const start = (k - UT1_GRID_BEFORE) * UT1_DATA.step;
   const end = k + 1 === last ? UT1_DATA.to - UT1_DATA.finalsFrom : start + UT1_DATA.step;
   const fraction = (days - start) / (end - start);
   return (knots[k]! + fraction * (knots[k + 1]! - knots[k]!)) / 1000;
@@ -153,13 +154,13 @@ function ut1MinusTai(utcMs: number): number {
 
 /** The IERS formal error of UT1 − UTC near an instant, seconds, plus the table's own bound. */
 function ut1Sigma(utcMs: number): number {
-  if (utcMs < FINALS_FROM) return UT1_DATA.earlyError / 1e6 + UT1_DATA.bound;
-  if (utcMs <= OBSERVED_TO) {
+  if (utcMs < UT1_FINALS_FROM_MS) return UT1_DATA.earlyError / 1e6 + UT1_DATA.bound;
+  if (utcMs <= UT1_OBSERVED_TO_MS) {
     const year = new Date(utcMs).getUTCFullYear() - UT1_DATA.firstYear;
     const errors = UT1_DATA.observedErrors;
     return errors[Math.max(0, Math.min(errors.length - 1, year))]! / 1e6 + UT1_DATA.bound;
   }
-  const days = (utcMs - OBSERVED_TO) / DAY - 1;
+  const days = (utcMs - UT1_OBSERVED_TO_MS) / DAY - 1;
   const errors = UT1_DATA.predictedErrors;
   const k = Math.max(0, Math.min(errors.length - 2, Math.floor(days / 10)));
   const span = k + 1 === errors.length - 1 ? UT1_DATA.to - UT1_DATA.observedTo - 1 - 10 * k : 10;
@@ -178,13 +179,13 @@ function tableUt1MinusUtc(utcMs: number, taiMinusUtc: number): Ut1MinusUtc {
   return {
     seconds: ut1MinusTai(utcMs) + taiMinusUtc,
     sigma: ut1Sigma(utcMs),
-    source: utcMs <= OBSERVED_TO ? "observed" : "predicted"
+    source: utcMs <= UT1_OBSERVED_TO_MS ? "observed" : "predicted"
   };
 }
 
 /** UT1 − UTC at a UTC instant: from the table, or 0 within ±0.9 s outside it. */
 export function ut1MinusUtcAt(utcMs: number): Ut1MinusUtc {
-  if (utcMs < TABLE_FROM || utcMs > TABLE_TO) return fallback();
+  if (utcMs < UT1_FROM_MS || utcMs > UT1_TO_MS) return fallback();
   return tableUt1MinusUtc(utcMs, taiMinusUtcAt(utcMs));
 }
 
@@ -219,11 +220,11 @@ export function timeBasis(ms: number, scale: TimeScaleName = "utc", pin?: number
     return record(ms, ms + (ut1MinusUtc?.seconds ?? 0) * 1000, deltaT, "pinned", ut1MinusUtc, null);
   }
   const utc = scale === "tt" ? ms - modelDeltaT(ms).seconds * 1000 : ms;
-  if (utc < LEAP_SECONDS_FROM || utc > TABLE_TO) {
+  if (utc < LEAP_SECONDS_FROM || utc > UT1_TO_MS) {
     // Civil time read as UT1; for TT input, TT = UT1 + ΔT(UT1) by fixed-point steps.
     let ut1Ms = ms;
     if (scale === "tt") for (let round = 0; round < 4; round += 1) ut1Ms = ms - modelDeltaT(ut1Ms).seconds * 1000;
-    return record(ut1Ms, ut1Ms, modelDeltaT(ut1Ms), "delta-t", utc > TABLE_TO && scale !== "ut1" ? fallback() : null, null);
+    return record(ut1Ms, ut1Ms, modelDeltaT(ut1Ms), "delta-t", utc > UT1_TO_MS && scale !== "ut1" ? fallback() : null, null);
   }
   // TAI = UTC + (TAI − UTC), TT = TAI + 32.184 s, and UT1 = TAI + (UT1 − TAI),
   // which runs on through leap seconds. From TT or UT1 the TAI − UTC is the one
@@ -256,7 +257,7 @@ export function timeBasis(ms: number, scale: TimeScaleName = "utc", pin?: number
     },
     "iers",
     scale === "ut1" ? { ...ut1, seconds: (ut1Ms - utcMs) / 1000 } : ut1,
-    { taiMinusUtc, listed: utcMs < EXPIRES }
+    { taiMinusUtc, listed: utcMs < LEAP_SECONDS_EXPIRE_MS }
   );
 }
 

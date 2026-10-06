@@ -102,9 +102,14 @@ const MAX_ANGLE_MS = Math.floor((45 / SIDEREAL_RATE) * DAY);
 const BAND = 1e-9;
 /** Instants the search may evaluate before it gives up. */
 const MAX_EVALUATIONS = 2_000_000;
-/** The span a window must lie in, over which the bounds above were scanned. */
-const SPAN_FROM = Date.parse(REFERENCE_SPAN.from);
-const SPAN_TO = Date.parse(REFERENCE_SPAN.to);
+/**
+ * The span a window must lie in, over which the bounds above were scanned.
+ * This and the values below that read a table are marked, so that a bundler
+ * can leave them out, and the tables with them, of a program that loads this
+ * module but does not search (scripts/pure-tables.mjs).
+ */
+const SPAN_FROM = /*#__PURE__*/ (() => Date.parse(REFERENCE_SPAN.from))();
+const SPAN_TO = /*#__PURE__*/ (() => Date.parse(REFERENCE_SPAN.to))();
 /** Latitudes within this many degrees of a pole are refused. */
 const POLE_MARGIN = 1e-6;
 /**
@@ -136,7 +141,7 @@ const BODIES = [
 ] as const satisfies readonly BodyName[];
 const NORTH = 10;
 const SOUTH = 11;
-const RATES = BODIES.map((body) => WINDOW_RATE_BOUNDS[body]);
+const RATES = /*#__PURE__*/ BODIES.map((body) => WINDOW_RATE_BOUNDS[body]);
 /** Aspect pairs in natalChart's order: the first ten bodies, earlier body first. */
 const PAIRS: (readonly [number, number])[] = [];
 for (let first = 0; first < 10; first += 1) {
@@ -148,8 +153,8 @@ const orbEdges = (luminary: boolean) =>
     const width = luminary ? luminaryOrb : orb;
     return [angle - width, angle + width].filter((edge) => edge > 0 && edge < 180);
   });
-const ORB_EDGES = orbEdges(false);
-const LUMINARY_ORB_EDGES = orbEdges(true);
+const ORB_EDGES = /*#__PURE__*/ orbEdges(false);
+const LUMINARY_ORB_EDGES = /*#__PURE__*/ orbEdges(true);
 
 // Component ids: body signs, the two angle signs, body houses, aspect pairs,
 // and the house system actually used.
