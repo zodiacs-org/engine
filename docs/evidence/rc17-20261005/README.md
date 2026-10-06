@@ -18,17 +18,19 @@ seven commits on that base:
    directory: the version, the generated records that carry it, the
    CHANGELOG, the README and these checks (*The source commit*).
 
-Two commits follow it: `b080217` carries the archive packed from it (*The
-archive*), and the commit that brings this version of this file records the
-gates on that carrier (*The gates on the carrier*) and changes only this
-directory.
+Three commits follow it: `b080217` carries the archive packed from it (*The
+archive*); `8ab96de` records the gates on that carrier (*The gates on the
+carrier*); and the commit that brings this version of this file acts on a
+review of those two (*Reviews*), in this directory and in one sentence of
+`artifacts/README.md`.
 
 The feature's own checks, against the Vedic entry and against ERFA, are in
 `../calc-sidereal-2026-10-05/`; this directory records what the candidate as
 a whole was checked for. Every figure below is read from a file in this
 directory, in that one or in a test named beside it, but the reviews'
 findings (*Reviews*), which are their reports'. Local paths in the outputs
-are shortened to `<checkout>`, `<tmp>` and `<scratch>`.
+are shortened to `<checkout>`, `<tmp>` and `<scratch>`, and in the carrier's
+logs to `<clone>`.
 
 ## The source commit
 
@@ -61,15 +63,18 @@ are shortened to `<checkout>`, `<tmp>` and `<scratch>`.
 ## Reviews
 
 `18cb6b7` was reviewed, and each commit that answered a review was reviewed
-in turn: five reviews, AI-assisted, each in its own copy of the checkout. The
-first three were one reviewer's, each building on its last; the fourth and
-the fifth were a second and a third reviewer's, each given the commit and the
-findings it answers. A sixth, a fourth reviewer's, read this source commit's
-changes before they were committed. Every finding was acted on, by the next
-commit or, for the first review's release finding and the sixth review's, by
-this source commit. The commit messages of `0887541`, `8070095`, `2ecc43c`,
-`d36642e` and `8d8e837` summarize each review and what was done; the
-reviewers' probes are not in the repository.
+in turn: five reviews, AI-assisted, each in its own copy of the checkout.
+The first three were one reviewer's, each building on its last; the fourth
+and the fifth were a second and a third reviewer's, each given the commit
+and the findings it answers. A sixth, a fourth reviewer's, read this source
+commit's changes before they were committed. Every finding was acted on, by
+the next commit or, for the first review's release finding and the sixth
+review's, by this source commit. A seventh, a fifth reviewer's, read the
+carrier and the first record of its gates, `8ab96de`, after they were
+pushed; the commit that brings this version of this file acts on it. The
+commit messages of `0887541`, `8070095`, `2ecc43c`, `d36642e` and `8d8e837`
+summarize each review and what was done; the reviewers' probes are not in
+the repository.
 
 1. The review of `18cb6b7` found the sidereal arithmetic correct and two
    findings that blocked a merge:
@@ -153,6 +158,24 @@ reviewers' probes are not in the repository.
    without its qualifier; this record repeated the fixture's error, gave a
    third-review figure without its scope or source and claimed every figure
    came from a file; and wording. This commit corrects each.
+7. The review of `b080217` and `8ab96de` found nothing that blocked a merge,
+   and the archive, `archives.json`, the receipts, the logs and every figure
+   in this record as they were recorded. Three statements were wrong. This
+   record called the carrier's gates each of CI's jobs, where they are the
+   jobs of `ci.yml`, `conformance.yml` and `atlas.yml`, and a pull request to
+   `main` also runs the Python package's workflow and CodeQL (*GitHub
+   Actions*). `artifacts/README.md` said none of its archives is an npm
+   publication, where npm's tarballs of rc.14, rc.15 and rc.16 are those
+   bytes. And the history check's output was written before the record's
+   last edits were staged: it was run again on the final staged changes and
+   gave the same output, which the record did not say. Smaller: the packed
+   consumer's 33 sections are rc.16's, the sidereal zodiac one assertion
+   among them, where `8ab96de`'s message counted it a section; the history
+   check's header gave its range as `23660f5..HEAD`; a placeholder of the
+   logs was not listed; and a garbled sentence. The commit that brings this
+   version of this file corrects each, and runs the history check and the
+   review aid again on `23660f5..8ab96de` with its own changes staged (*Birth
+   data*).
 
 ## What did not change
 
@@ -218,13 +241,14 @@ commit on this branch was checked with rc.16's two tools
 1. `../rc15-20260929/rebuilt/history-check.mjs`, unchanged, with rc.16's
    patterns and examples, which are kept outside the repository because they
    are the birth data it looks for. `history-check.txt` is its output on
-   `23660f5..b080217`, the eight commits up to the carrier, with the changes
-   of the commit that brings this version of this file staged: no birth data
-   in any commit (the carried archive decompressed and read), in the staged
-   changes or in the carrier's tree, and the published examples' birth data
-   only in files that cite them. The source commit held the same check on
-   the six commits before it and its own changes, with the same result.
-   rc.16's positive controls
+   `23660f5..8ab96de`, the nine commits up to the first record of the
+   carrier's gates, with the changes of the commit that brings this version
+   of this file staged: no birth data in any commit (the carried archive
+   decompressed and read), in the staged changes or in the tree of
+   `8ab96de`, and the published examples' birth data only in files that cite
+   them. The source commit held the same check on the six commits before it
+   and its own changes, and `8ab96de` on the eight before it and its own,
+   with the same result. rc.16's positive controls
    (`../rc16-20260930/history-check-control-first-cut.txt` and
    `history-check-control-recut.txt`) show the same patterns finding birth
    data in histories that held it.
@@ -232,15 +256,16 @@ commit on this branch was checked with rc.16's two tools
    the lines it matches, listed every added line with a year from 1700 to
    2029 beside birth vocabulary or a capitalized pair of words, and every
    such pair, commit by commit and for the staged changes: 41 lines in the
-   eight commits up to the carrier and the staged changes, each read, the
-   same 41 that the source commit's run found in the six commits before it
-   and its own changes. They hold the stars' and the ayanamsas' names (True
-   Pushya, Sri Yukteswar), the comparison's years, the start of the Kali
-   Yuga, the conformance notes' statistics, the names of tests in the suite's
-   logs (a rule for circumpolar bodies named after its author, and two cities
-   named for their time zones), the published worked examples that
-   `history-check.txt` lists with their citations, and this record's own
-   description of the aid; no person's birth data.
+   nine commits up to `8ab96de` and the staged changes, each read, the same
+   41 that the source commit's run found in the six commits before it and
+   its own changes, and `8ab96de`'s in the eight before it and its own. They
+   hold the stars' and the ayanamsas' names (True Pushya, Sri Yukteswar),
+   the comparison's years, the start of the Kali Yuga, the conformance
+   notes' statistics, the names of tests in the suite's logs (a rule for
+   circumpolar bodies named after its author, and two cities named for their
+   time zones), the published worked examples that `history-check.txt` lists
+   with their citations, and this record's own description of the aid; no
+   person's birth data.
 
 No commit adds a person's birth data.
 
@@ -326,14 +351,15 @@ with its source commit, its receipt
 `artifacts/zodiacs-engine-0.1.1-rc.17.sha256` names its digest, and
 `artifacts/README.md` lists it; rc.16's row there now names its carrier,
 `ef44477`, and says it was merged, and rc.10's no longer calls it the site's
-current pin, which has been later candidates since and is rc.16 now.
+current pin: the site has pinned later candidates since, and pins rc.16 now.
 
 ## The gates on the carrier
 
-`carrier/carrier-gates.sh` ran each of CI's jobs on the carrier, `b080217`,
-in a clean clone of the repository with full history, with `TMPDIR` outside
-the clone and no `package.json` or `node_modules` at or above it. Every job
-passes (logs in `carrier/`):
+`carrier/carrier-gates.sh` ran each job of the three workflows that build
+and check the package, `ci.yml`, `conformance.yml` and `atlas.yml`, on the
+carrier, `b080217`, in a clean clone of the repository with full history,
+with `TMPDIR` outside the clone and no `package.json` or `node_modules` at or
+above it. Every job passes (logs in `carrier/`):
 
 | Job | Node (npm) | Result | Log |
 | --- | --- | --- | --- |
@@ -342,7 +368,7 @@ passes (logs in `carrier/`):
 | engine | 24.21.0 (11.19.0) | 3,789 passed, 2 skipped, in 80 files; the other steps pass (npm warns that esbuild's two install scripts are not covered by `allowScripts`) | `engine-v24.21.0.log` |
 | archives: the archive check with `--rebuild-all` | 22.22.2 (10.9.7) | a rebuild of HEAD, and of each of the 12 recorded archives from its source commit, byte-identical to the recorded archive | `archives-v22.22.2.log` |
 | pack: npm ci, build, `npm pack --ignore-scripts` | 22.22.2 (10.9.7) | byte-identical to the carried archive (`cmp`) | `pack-v22.22.2.log` |
-| packed consumer, on the carried archive itself | 20.19.0 (10.8.2), 22.7.0 (10.8.2), 22.22.2 (10.9.7), 24.21.0 (11.19.0) | all 33 sections and the types pass on each version, with the script's checks of the sidereal zodiac in `./calc` against the Vedic entry, on the archive of SHA-256 `9cd24c78…` | `consumer-v*.log` |
+| packed consumer, on the carried archive itself | 20.19.0 (10.8.2), 22.7.0 (10.8.2), 22.22.2 (10.9.7), 24.21.0 (11.19.0) | all 33 sections and the types pass on each version, on the archive of SHA-256 `9cd24c78…`; the sections are rc.16's, and rc.17's sidereal zodiac in `./calc` is one assertion among them, the sidereal Moon against the Vedic entry's, with the types of a caller's ayanamsa and a sidereal chart | `consumer-v*.log` |
 | conformance: npm ci, build, self-test, vectors, verdicts, `RESULTS.md` | 22.22.2 (10.9.7) | self-test 7 of 7; 500 vectors conform; 267 pass, 192 fail, 41 unsupported, 0 error, every verdict as committed; `RESULTS.md` and `results/summary.json` current | `conformance-v22.22.2.log` |
 | conformance generators | Python 3.11.15, pyerfa 2.0.1.5, numpy 2.4.6 | L1, L2 and L3 rebuilt from their sources (tzdata and tzcode 2025c downloaded from IANA, digests checked) byte-identical to the committed vectors | `generators-v22.22.2.log` |
 | atlas: checks and self-test, nothing installed | 22.22.2 (10.9.7) | all checks pass; self-test 26 of 26 | `atlas-v22.22.2.log` |
@@ -363,6 +389,19 @@ superseded first packing and rc.17's, from `aae419c`, included. The packed
 consumer ran on the carried file, where CI's runs on the pack job's output;
 the pack job shows the two are the same bytes. The generators' Python was
 the system's, with the two libraries at the versions CI pins.
+
+## GitHub Actions
+
+On the pull request, zodiacs-org/engine#26, GitHub Actions ran every workflow
+that runs on a pull request to `main` on its head, `8ab96de`, the carrier
+with the first version of this record: CI (run 37393765481), Conformance
+(37393764980), Atlas (37393765291), the Python package (37393767607) and
+CodeQL (37393765404). All 21 check runs passed. Two of those workflows are
+not among the carrier's gates: the Python package's seven jobs, which check
+the rc.14 archive the package bundles against `artifacts/` and run its tests
+on Python 3.10 to 3.14 on Linux, macOS and Windows, and CodeQL. On this tree
+`python/tools/verify_vendor.py` passes, and the package's 10 tests pass on
+Python 3.11.15, installed from its wheel.
 
 ## What is not established
 
@@ -392,7 +431,8 @@ the system's, with the two libraries at the versions CI pins.
 - No Swiss Ephemeris output was used for rc.17; its sidereal results were not
   compared with `swe_calc_ut` with `SEFLG_SIDEREAL`.
 - The reviews are AI-assisted, not human approval.
-- CI has not run this candidate on GitHub Actions; the same scripts ran here.
+- GitHub Actions ran the pull request's head, `8ab96de`, which adds this
+  record to the carrier, not the carrier alone (*GitHub Actions*, above).
 - rc.17 is not to be published on npm: under the owner's delegated decision
   of 2026-10-05 the next publication is the 1.0 candidate. Nothing here
   represents a publication, a merge or the site's adoption.

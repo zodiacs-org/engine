@@ -1,4 +1,4 @@
-# node history-check.mjs 23660f5..HEAD <patterns> <examples> --staged
+# node history-check.mjs 23660f5..8ab96de <patterns> <examples> --staged
 # 2026-10-06, git 2.43.0, Node v22.22.2
 
 Labels searched (79 data patterns and 10 name patterns, kept outside the repository):
@@ -10,7 +10,7 @@ Labels searched (79 data patterns and 10 name patterns, kept outside the reposit
   person F
   person G
 
-Commits: 9, the last of them the index. For each, the lines it adds, the contents of the binary files it adds or changes, the paths it adds and its message:
+Commits: 10, the last of them the index. For each, the lines it adds, the contents of the binary files it adds or changes, the paths it adds and its message:
 - 18cb6b7 Compute the sidereal zodiac in the calc entry
     binary files read: 0; paths added: 8
     birth data: none
@@ -35,11 +35,14 @@ Commits: 9, the last of them the index. For each, the lines it adds, the content
 - b080217 Carry the packed 0.1.1-rc.17 tarball
     binary files read: 1; paths added: 2
     birth data: none
-- (the index against HEAD: the commit being made)
+- 8ab96de Record the gates on the rc.17 carrier b080217
     binary files read: 0; paths added: 13
     birth data: none
+- (the index against HEAD: the commit being made)
+    binary files read: 0; paths added: 0
+    birth data: none
 
-The tree of b080217, 1124 files, gzip archives decompressed:
+The tree of 8ab96de, 1137 files, gzip archives decompressed:
   birth data: none
 
 The published worked examples that CONTRIBUTING.md allows: the files of that tree that name each, and those that hold its birth data (cited: the file also holds every part of the citation):

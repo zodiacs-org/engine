@@ -1,7 +1,9 @@
 # Carried archives
 
 Each `zodiacs-engine-<version>.tgz` here is the exact `npm pack` output of one
-candidate, with its SHA-256 receipt beside it. None is an npm publication.
+candidate, with its SHA-256 receipt beside it. Carrying an archive does not
+publish it; rc.14, rc.15 and rc.16 were later published to npm, and npm's
+tarballs of them are these bytes.
 Archives are immutable: once carried, an archive is never repacked, replaced or
 removed.
 
