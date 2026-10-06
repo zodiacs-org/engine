@@ -104,6 +104,8 @@
     "consumer:smoke": "node scripts/verify-packed-consumer.mjs",
     "package:contents": "node scripts/verify-package-contents.mjs",
     "archive:binding": "node scripts/verify-archive-binding.mjs",
+    "api:report": "node scripts/api-report.mjs",
+    "api:check": "node scripts/api-report.mjs --check",
     "pack:dry-run": "npm pack --dry-run",
     "prepack": "npm run build",
     "test": "vitest run",

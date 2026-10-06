@@ -47,6 +47,12 @@ jobs:
       - name: Export smoke
         run: npm run exports:smoke
 
+      # api/ holds each public entry point's declarations as the build gives
+      # them (docs/versioning.md). A change to the public API fails here until
+      # api/ is regenerated with npm run api:report and committed with it.
+      - name: Public API matches api/
+        run: npm run api:check
+
       - name: Package contents
         run: npm run package:contents
 
