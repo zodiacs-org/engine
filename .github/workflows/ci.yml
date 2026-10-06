@@ -137,7 +137,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Fetch the packed archive
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: packed-engine
           path: ${{ runner.temp }}/pack
