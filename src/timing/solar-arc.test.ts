@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  SIGN_NAMES,
+  SIGN_SLUGS,
   natalChart,
   normalizeLongitude,
   positions,
@@ -16,7 +16,7 @@ import {
 } from "../timing.js";
 
 /** Degrees and minutes within a sign, as a longitude. */
-const lon = (sign: ZodiacSign, degrees: number, minutes: number) => SIGN_NAMES.indexOf(sign) * 30 + degrees + minutes / 60;
+const lon = (sign: ZodiacSign, degrees: number, minutes: number) => SIGN_SLUGS.indexOf(sign) * 30 + degrees + minutes / 60;
 
 /** Signed a − b in arcminutes, across the 0/360 seam. */
 const arcmin = (a: number, b: number) => ((((a - b) % 360) + 540) % 360 - 180) * 60;
@@ -144,7 +144,7 @@ describe("solar arc directions: Saunders's worked examples", () => {
           const found = result.positions.find((position) => position.name === row)!;
           expect(Math.abs(arcmin(found.natal, natal))).toBeLessThan(1.5);
           expect(Math.abs(arcmin(found.directed, directed))).toBeLessThan(1.5);
-          expect(found.sign).toBe(SIGN_NAMES[Math.floor(directed / 30)]);
+          expect(found.sign).toBe(SIGN_SLUGS[Math.floor(directed / 30)]);
         }
       });
     });

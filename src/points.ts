@@ -22,6 +22,7 @@ const ARCSEC = 1 / 3600;
  * eq. 5.43, from Simon et al. (1994), referred to the mean ecliptic and
  * equinox of date.
  */
+/** @experimental The formula behind chartPoints; use chartPoints or @zodiacs/engine/calc for the points themselves. */
 export function lunarMeanArguments(centuries: number): { l: number; F: number; node: number } {
   const t = centuries;
   const l = 485868.249036 + t * (1717915923.2178 + t * (31.8792 + t * (0.051635 + t * -0.0002447)));
@@ -30,7 +31,10 @@ export function lunarMeanArguments(centuries: number): { l: number; F: number; n
   return { l: l * ARCSEC, F: F * ARCSEC, node: node * ARCSEC };
 }
 
-/** The Moon's mean orbital inclination to the ecliptic, 5°08′43.4″. */
+/**
+ * The Moon's mean orbital inclination to the ecliptic, 5°08′43.4″.
+ * @experimental A constant of chartPoints' formulas, exported with them.
+ */
 export const MEAN_LUNAR_INCLINATION = 5.1453964;
 
 /**
@@ -38,6 +42,7 @@ export const MEAN_LUNAR_INCLINATION = 5.1453964;
  * the nutation in longitude `nutation` (degrees) to refer it to the true
  * equinox of date like every other longitude the engine reports.
  */
+/** @experimental The formula behind chartPoints' mean node; use chartPoints or @zodiacs/engine/calc. */
 export function meanNodeLongitude(centuries: number, nutation: number): number {
   return normalizeLongitude(lunarMeanArguments(centuries).node + nutation);
 }
@@ -49,6 +54,7 @@ export function meanNodeLongitude(centuries: number, nutation: number): number {
  * the ecliptic, so it has a latitude of up to about 5°. The nutation in
  * longitude `nutation` (degrees) refers it to the true equinox of date.
  */
+/** @experimental The formula behind chartPoints' Black Moon Lilith; use chartPoints or @zodiacs/engine/calc. */
 export function meanApogee(centuries: number, nutation: number): { lon: number; lat: number } {
   const { l, F, node } = lunarMeanArguments(centuries);
   const u = (F - l + 180) * DEG;
@@ -80,7 +86,7 @@ export interface LotInputs {
 }
 
 /** The lots, in the order {@link hellenisticLots} returns them. */
-export const LOTS = [
+export const LOTS = Object.freeze([
   "Lot of Fortune",
   "Lot of Spirit",
   "Lot of Eros",
@@ -88,7 +94,7 @@ export const LOTS = [
   "Lot of Courage",
   "Lot of Victory",
   "Lot of Nemesis"
-] as const satisfies readonly PointName[];
+] as const) satisfies readonly PointName[];
 
 /**
  * The seven lots of Paulus Alexandrinus, *Introductory Matters* (378 CE),

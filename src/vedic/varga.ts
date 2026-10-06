@@ -7,7 +7,7 @@
 import { SIGN_TICKS, ticksOf } from "./grid.js";
 import { requireSidereal } from "./sidereal.js";
 import type { SiderealLongitude } from "./sidereal.js";
-import { SIGN_NAMES } from "../signs.js";
+import { SIGN_SLUGS } from "../signs.js";
 import type { ZodiacSign } from "../types.js";
 
 /** The sixteen vargas of BPHS 6.2–4. */
@@ -125,5 +125,5 @@ export function vargaOf(position: SiderealLongitude, varga: VargaName, scheme: V
     else sign = found.start!(s) + (varga === "D3" ? 4 * part : varga === "D4" ? 3 * part : part);
   }
   const signIndex = ((sign % 12) + 12) % 12;
-  return Object.freeze({ varga, scheme, part: part + 1, sign: SIGN_NAMES[signIndex]!, signIndex });
+  return Object.freeze({ varga, scheme, part: part + 1, sign: SIGN_SLUGS[signIndex]!, signIndex });
 }

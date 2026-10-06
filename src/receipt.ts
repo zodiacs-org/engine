@@ -1,5 +1,5 @@
 import { dateFrom } from "./date-input.js";
-import { ASPECTS, ASPECT_TYPES, ASPECT_BODIES, aspectMotion } from "./aspects.js";
+import { ASPECTS, ASPECT_TYPES, ASPECT_BODY_SET, aspectMotion } from "./aspects.js";
 import { SIGNS } from "./signs.js";
 import { parseReceiptJson } from "./receipt-json.js";
 import { DELTA_T_MODEL, DELTA_T_TABLE, deltaTAt } from "./deltat.js";
@@ -7,11 +7,19 @@ import { julianToGregorian, parseCalendarDate } from "./civil-calendar.js";
 import { outsideReferenceSpan } from "./reference-span.js";
 import { compareVersions, isVersion } from "./semver.js";
 import { DELTA_T_IERS_MODEL, TIME_SCALE_NAMES, UT1_DATA, timeBasis } from "./time-scale.js";
-import type { TimeScale, TimeScaleName } from "./time-scale.js";
+import type { TimeScaleName } from "./time-scale.js";
 import { EPHEMERIS } from "./types.js";
-import type { BirthInput, Chart, ChartFlag, HouseSystem } from "./types.js";
+import type { AspectType, BirthInput, BodyName, Chart, ChartFlag, HouseSystem, ZodiacSign } from "./types.js";
+import type { DeltaTSegment } from "./deltat.js";
+import type { TransitionCause } from "./geo/timezone.js";
 
-/** Zodiacs-owned draft vocabulary; not an industry interoperability standard. */
+/**
+ * The schema ids of the natal record, its receipt and its redacted diagnostic.
+ * Zodiacs-owned vocabulary, not an industry interoperability standard. The
+ * `draft-v1` in each is part of the id, kept byte for byte since 0.1.1-rc.3
+ * because stored records carry it: within an id, the conventions set a
+ * receipt names says which shape its fields have (docs/versioning.md).
+ */
 export const NATAL_ENVELOPE_SCHEMA = "zodiacs.natal-envelope.draft-v1";
 export const NATAL_RECEIPT_SCHEMA = "zodiacs.calculation-receipt.draft-v1";
 export const NATAL_DIAGNOSTIC_SCHEMA = "zodiacs.natal-diagnostic.draft-v1";
@@ -63,7 +71,7 @@ export interface NatalZoneTransition {
   at: string;
   offsetBeforeMinutes: number;
   offsetAfterMinutes: number;
-  cause: "dst" | "legal-change" | "date-line";
+  cause: TransitionCause;
 }
 
 /**
@@ -172,21 +180,26 @@ const CONVENTIONS = Object.freeze({
   moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration",
   nutation: "iau2000b;equation-of-equinoxes-with-two-complementary-terms"
 } as const);
-type ConventionSet =
-  | typeof CONVENTIONS
-  | typeof CONVENTIONS_RC15
-  | typeof CONVENTIONS_RC8
-  | typeof CONVENTIONS_RC7
-  | typeof CONVENTIONS_RC3;
-// Typed by name, so the declarations name each set instead of spelling it out again.
-/** Every conventions set a receipt may carry, the current one first. */
-export const NATAL_RECEIPT_CONVENTION_SETS: readonly [
-  typeof CONVENTIONS,
-  typeof CONVENTIONS_RC15,
-  typeof CONVENTIONS_RC8,
-  typeof CONVENTIONS_RC7,
-  typeof CONVENTIONS_RC3
-] = Object.freeze([CONVENTIONS, CONVENTIONS_RC15, CONVENTIONS_RC8, CONVENTIONS_RC7, CONVENTIONS_RC3] as const);
+/**
+ * A conventions set: what a receipt's numbers mean, as named ids, one for each
+ * part of the calculation (`zodiac`, `nutation`, `angles` and so on). A
+ * receipt carries exactly one of NATAL_RECEIPT_CONVENTION_SETS.
+ */
+export type NatalConventionSet = Readonly<Record<string, string>>;
+
+/**
+ * Every conventions set a receipt may carry, newest first: index 0 is the set
+ * this release writes, and the codec reads every set here. A minor release may
+ * add a set at the front, so take a set by its content, not by an index other
+ * than 0.
+ */
+export const NATAL_RECEIPT_CONVENTION_SETS: readonly NatalConventionSet[] = Object.freeze([
+  CONVENTIONS,
+  CONVENTIONS_RC15,
+  CONVENTIONS_RC8,
+  CONVENTIONS_RC7,
+  CONVENTIONS_RC3
+]);
 // The released versions that wrote each earlier set, with any build metadata:
 // exact lists, not ranges, so no other spelling passes them.
 const RC3_TO_RC6 = /^0\.1\.1-rc\.[3-6](?:\+[A-Za-z0-9.-]+)?$/;
@@ -211,6 +224,9 @@ const COVERAGE = Object.freeze({
   angleExclusions: "exact-geographic-poles-and-ecliptic-horizon-coincidence",
   inputSyntax: "not-an-astronomical-accuracy-guarantee"
 } as const);
+
+/** What a receipt says its numbers were checked against, as named statements. */
+export type NatalCoverage = Readonly<Record<string, string>>;
 
 export interface NatalReceipt {
   schema: typeof NATAL_RECEIPT_SCHEMA;
@@ -238,8 +254,77 @@ export interface NatalReceipt {
     ephemeris?: { name: "astronomy-engine"; version: string };
   };
   provenance: (NatalProvenanceClaims & { status: "claimed" }) | null;
-  conventions: ConventionSet;
-  coverage: typeof COVERAGE;
+  conventions: NatalConventionSet;
+  coverage: NatalCoverage;
+}
+
+/** A body as a natal record holds it. Its shape changes only with a new conventions set. */
+export interface NatalBodyRecord {
+  body: BodyName;
+  lon: number;
+  lat: number;
+  speed: number;
+  retrograde: boolean;
+  sign: ZodiacSign;
+  degree: number;
+}
+
+/** The four angles as a natal record holds them. */
+export interface NatalAnglesRecord {
+  asc: number;
+  mc: number;
+  dsc: number;
+  ic: number;
+}
+
+/** The houses as a natal record holds them: the system computed and twelve cusps, first house first. */
+export interface NatalHousesRecord {
+  system: HouseSystem;
+  cusps: number[];
+}
+
+/** An aspect as a natal record holds it. */
+export interface NatalAspectRecord {
+  a: BodyName;
+  b: BodyName;
+  type: AspectType;
+  orb: number;
+  applying: boolean;
+}
+
+/** ΔT as a natal record holds it, from the rc.8 conventions set on. */
+export interface NatalDeltaTRecord {
+  seconds: number;
+  sigma: number | null;
+  model: "zodiacs-deltat/1" | "iers-utc/1" | "pinned";
+  table: string | null;
+  tableDigest: string | null;
+  segment: DeltaTSegment;
+}
+
+/** How the instant became UT1 and TT, as a natal record holds it, from the time-basis conventions set on. */
+export interface NatalTimeScaleRecord {
+  input: TimeScaleName;
+  basis: "iers" | "delta-t" | "pinned";
+  ut1MinusUtc: { seconds: number; sigma: number; source: "observed" | "predicted" | "fallback" } | null;
+  leapSeconds: { taiMinusUtc: number; listed: boolean } | null;
+}
+
+/**
+ * The result a natal record holds: the chart's bodies, angles, houses and
+ * aspects, and from later conventions sets its ΔT and time scale. These are
+ * the record's own types, not the chart's: a chart may gain a field in a minor
+ * release, and the record keeps the fields its conventions set names.
+ */
+export interface NatalRecordedResult {
+  bodies: NatalBodyRecord[];
+  angles: NatalAnglesRecord | null;
+  houses: NatalHousesRecord | null;
+  aspects: NatalAspectRecord[];
+  /** From the rc.8 set on. */
+  deltaT?: NatalDeltaTRecord;
+  /** From the time-basis set on. */
+  timeScale?: NatalTimeScaleRecord;
 }
 
 export interface NatalEnvelope {
@@ -248,7 +333,7 @@ export interface NatalEnvelope {
   requiredFeatures: string[];
   receipt: NatalReceipt;
   /** `deltaT` from the rc.8 set on, `timeScale` from the time-basis set on. */
-  result: Pick<Chart, "bodies" | "angles" | "houses" | "aspects"> & Partial<Pick<Chart, "deltaT" | "timeScale">>;
+  result: NatalRecordedResult;
   extensions?: NatalJsonObject;
 }
 
@@ -309,6 +394,18 @@ const POLAR_UNDEFINED: readonly string[] = ["placidus", "koch"];
 const TURNING_WITH_ASCENDANT: readonly string[] = ["regiomontanus", "campanus", "topocentric"];
 const HOSTILE_KEYS = new Set(["__proto__", "prototype", "constructor"]);
 type RecordValue = Record<string, unknown>;
+
+// The fields a natal record holds, for the writer and the reader alike. A chart
+// may gain fields in a minor release; a record keeps these, and a new field
+// reaches a record only with a new conventions set.
+const BODY_RECORD = ["body", "lon", "lat", "speed", "retrograde", "sign", "degree"] as const;
+const ANGLES_RECORD = ["asc", "mc", "dsc", "ic"] as const;
+const HOUSES_RECORD = ["system", "cusps"] as const;
+const ASPECT_RECORD = ["a", "b", "type", "orb", "applying"] as const;
+const DELTA_T_RECORD = ["seconds", "sigma", "model", "table", "tableDigest", "segment"] as const;
+const TIME_SCALE_RECORD = ["input", "basis", "ut1MinusUtc", "leapSeconds"] as const;
+const UT1_RECORD = ["seconds", "sigma", "source"] as const;
+const LEAP_SECONDS_RECORD = ["taiMinusUtc", "listed"] as const;
 
 function fail(code: NatalEnvelopeErrorCode): never {
   throw new NatalEnvelopeError(code);
@@ -408,6 +505,26 @@ function fields(
   )
     fail("invalid_shape");
 }
+function list(value: unknown): unknown[] {
+  if (!Array.isArray(value)) fail("invalid_shape");
+  return value;
+}
+/** The named fields of a record, and no others; a missing one stays missing, for the reader to refuse. */
+function kept(value: unknown, keys: readonly string[]): RecordValue {
+  const from = record(value);
+  const out: RecordValue = {};
+  for (const key of keys) if (Object.hasOwn(from, key)) out[key] = from[key];
+  return out;
+}
+/** A chart's time scale as a record holds it. */
+function timeScaleKept(value: unknown): RecordValue {
+  const timeScale = kept(value, TIME_SCALE_RECORD);
+  if (timeScale.ut1MinusUtc !== null && timeScale.ut1MinusUtc !== undefined)
+    timeScale.ut1MinusUtc = kept(timeScale.ut1MinusUtc, UT1_RECORD);
+  if (timeScale.leapSeconds !== null && timeScale.leapSeconds !== undefined)
+    timeScale.leapSeconds = kept(timeScale.leapSeconds, LEAP_SECONDS_RECORD);
+  return timeScale;
+}
 function choice<T extends string>(value: unknown, choices: readonly T[]): T {
   if (typeof value !== "string" || !choices.includes(value as T)) fail("invalid_value");
   return value as T;
@@ -472,7 +589,7 @@ function fixedFields(value: unknown, expected: Record<string, string>): void {
     fail("unsupported_feature");
 }
 /** The conventions set a receipt carries, matched exactly, keys and values; any other set is unsupported. */
-function conventionSet(value: unknown): ConventionSet {
+function conventionSet(value: unknown): NatalConventionSet {
   const actual = record(value);
   const keys = Object.keys(actual);
   const match = NATAL_RECEIPT_CONVENTION_SETS.find(
@@ -517,7 +634,7 @@ const IERS_SEGMENTS = ["observed", "predicted", "fallback"] as const;
  */
 function validateDeltaT(value: unknown, instant: string, timeBasis: boolean): RecordValue {
   const deltaT = record(value);
-  fields(deltaT, ["seconds", "sigma", "model", "table", "tableDigest", "segment"]);
+  fields(deltaT, DELTA_T_RECORD);
   const seconds = number(deltaT.seconds, -1e10, 1e10);
   if (deltaT.model === "pinned") {
     if (
@@ -570,19 +687,19 @@ function same(actual: unknown, expected: unknown): boolean {
  */
 function validateTimeScale(value: unknown, deltaT: RecordValue, instant: string, scale: TimeScaleName): void {
   const timeScale = record(value);
-  fields(timeScale, ["input", "basis", "ut1MinusUtc", "leapSeconds"]);
+  fields(timeScale, TIME_SCALE_RECORD);
   const basis = choice(timeScale.basis, ["iers", "delta-t", "pinned"] as const);
   const { ut1MinusUtc, leapSeconds } = timeScale;
   if (ut1MinusUtc !== null) {
     const ut1 = record(ut1MinusUtc);
-    fields(ut1, ["seconds", "sigma", "source"]);
+    fields(ut1, UT1_RECORD);
     number(ut1.seconds, -1, 1);
     number(ut1.sigma, 0, 1);
     choice(ut1.source, IERS_SEGMENTS);
   }
   if (leapSeconds !== null) {
     const leap = record(leapSeconds);
-    fields(leap, ["taiMinusUtc", "listed"]);
+    fields(leap, LEAP_SECONDS_RECORD);
     if (!Number.isInteger(number(leap.taiMinusUtc, 10, 100))) fail("invalid_value");
     bool(leap.listed);
   }
@@ -596,7 +713,11 @@ function validateTimeScale(value: unknown, deltaT: RecordValue, instant: string,
     fail("inconsistent_result");
   if (deltaT.tableDigest === UT1_DATA.digest || deltaT.tableDigest === DELTA_T_TABLE.digest) {
     const expected = timeBasis(Date.parse(instant), scale);
-    if (!same(deltaT, expected.deltaT) || !same(timeScale, expected.timeScale)) fail("inconsistent_result");
+    if (
+      !same(deltaT, kept(expected.deltaT, DELTA_T_RECORD)) ||
+      !same(timeScale, timeScaleKept(expected.timeScale))
+    )
+      fail("inconsistent_result");
   }
 }
 
@@ -625,7 +746,7 @@ function validateResult(
   const speeds = new Map<string, number>();
   for (const item of result.bodies) {
     const body = record(item);
-    fields(body, ["body", "lon", "lat", "speed", "retrograde", "sign", "degree"]);
+    fields(body, BODY_RECORD);
     const name = choice(body.body, BODIES);
     if (names.has(name)) fail("invalid_value");
     names.add(name);
@@ -645,7 +766,7 @@ function validateResult(
   if ((result.angles === null) !== (result.houses === null)) fail("inconsistent_result");
   if (result.angles !== null) {
     const angles = record(result.angles);
-    fields(angles, ["asc", "mc", "dsc", "ic"]);
+    fields(angles, ANGLES_RECORD);
     for (const angle of Object.values(angles)) longitude(angle);
     if (
       !angularClose(angles.dsc as number, (angles.asc as number) + 180) ||
@@ -653,7 +774,7 @@ function validateResult(
     )
       fail("inconsistent_result");
     const houses = record(result.houses);
-    fields(houses, ["system", "cusps"]);
+    fields(houses, HOUSES_RECORD);
     const system = choice(houses.system, HOUSE_SYSTEMS);
     if (!Array.isArray(houses.cusps) || houses.cusps.length !== 12) fail("invalid_shape");
     const cusps = houses.cusps.map(longitude);
@@ -718,14 +839,14 @@ function validateResult(
   const pairs = new Set<string>();
   for (const item of result.aspects) {
     const aspect = record(item);
-    fields(aspect, ["a", "b", "type", "orb", "applying"]);
+    fields(aspect, ASPECT_RECORD);
     const a = choice(
       aspect.a,
-      BODIES.filter((body) => ASPECT_BODIES.has(body))
+      BODIES.filter((body) => ASPECT_BODY_SET.has(body))
     );
     const b = choice(
       aspect.b,
-      BODIES.filter((body) => ASPECT_BODIES.has(body))
+      BODIES.filter((body) => ASPECT_BODY_SET.has(body))
     );
     const key = [a, b].sort().join("/");
     if (a === b || pairs.has(key)) fail("inconsistent_result");
@@ -1101,6 +1222,12 @@ function checked(input: unknown): NatalEnvelope {
  * Capture a fresh full Chart, not a legacy summary. Checks declared consistency,
  * not ephemeris accuracy, historical timezone truth, origin, or authenticity.
  * Optional properties must be omitted rather than set to undefined.
+ *
+ * The record keeps the fields its conventions set names and leaves out any
+ * other field of the chart's result, so a field a later release adds to a
+ * chart does not change the records it writes. The chart's `input` is read
+ * strictly: an input field the receipt cannot describe is refused, because it
+ * may have changed the numbers.
  */
 export function createNatalEnvelope(
   chart: Chart,
@@ -1108,7 +1235,7 @@ export function createNatalEnvelope(
 ): NatalEnvelope {
   return guarded(() => {
     const source = record(cloneData(chart, true));
-    fields(source, [
+    const required = [
       "input",
       "bodies",
       "angles",
@@ -1118,7 +1245,8 @@ export function createNatalEnvelope(
       "deltaT",
       "timeScale",
       "engineVersion"
-    ]);
+    ];
+    if (required.some((key) => !Object.hasOwn(source, key))) fail("invalid_shape");
     const input = record(source.input);
     fields(
       input,
@@ -1174,13 +1302,14 @@ export function createNatalEnvelope(
         conventions: { ...CONVENTIONS },
         coverage: { ...COVERAGE }
       },
+      // The fields the record's conventions set names, and only those.
       result: {
-        bodies: source.bodies,
-        angles: source.angles,
-        houses: source.houses,
-        aspects: source.aspects,
-        deltaT: source.deltaT,
-        timeScale: source.timeScale
+        bodies: list(source.bodies).map((body) => kept(body, BODY_RECORD)),
+        angles: source.angles === null ? null : kept(source.angles, ANGLES_RECORD),
+        houses: houses === null ? null : kept(houses, HOUSES_RECORD),
+        aspects: list(source.aspects).map((aspect) => kept(aspect, ASPECT_RECORD)),
+        deltaT: kept(source.deltaT, DELTA_T_RECORD),
+        timeScale: timeScaleKept(source.timeScale)
       },
       ...(supplied.extensions === undefined ? {} : { extensions: supplied.extensions })
     };

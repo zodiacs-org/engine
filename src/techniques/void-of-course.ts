@@ -9,7 +9,7 @@
 import { findLongitudeCrossingsWith } from "../crossings.js";
 import { dateFrom } from "../date-input.js";
 import { bodyLongitude } from "../ephemeris.js";
-import { SIGN_NAMES } from "../signs.js";
+import { SIGN_SLUGS } from "../signs.js";
 import type { AspectType, DateInput, ZodiacSign } from "../types.js";
 import { DAY_MS, oneOf, readOptions } from "./shared.js";
 
@@ -80,8 +80,8 @@ export interface VoidOfCourseOptions {
   bodies?: VoidBodies | undefined;
 }
 
-/** The longest window the scans accept, days. */
-export const VOID_OF_COURSE_MAX_DAYS = 3660;
+/** The longest window the scans accept, days. A minor release may accept a longer one. */
+export const VOID_OF_COURSE_MAX_DAYS: number = 3660;
 
 const BODY_SETS: readonly VoidBodies[] = ["modern", "traditional"];
 
@@ -167,8 +167,8 @@ function windows(fromT: number, toT: number, bodies: readonly VoidBody[]): VoidO
         from: new Date((lastAspect ?? entered).at.getTime()),
         to: new Date(end),
         lastAspect: lastAspect && Object.freeze(lastAspect),
-        sign: SIGN_NAMES[entered.signIndex]!,
-        nextSign: SIGN_NAMES[leaving.signIndex]!
+        sign: SIGN_SLUGS[entered.signIndex]!,
+        nextSign: SIGN_SLUGS[leaving.signIndex]!
       })
     );
   }
@@ -177,7 +177,7 @@ function windows(fromT: number, toT: number, bodies: readonly VoidBody[]): VoidO
 
 /** Every entry of the apparent Moon into a sign in (from, to], in time order (6-hour steps). */
 export function moonIngresses(from: DateInput, to: DateInput): readonly MoonIngress[] {
-  return Object.freeze(ingresses(...span(from, to)).map((row) => Object.freeze({ at: row.at, sign: SIGN_NAMES[row.signIndex]! })));
+  return Object.freeze(ingresses(...span(from, to)).map((row) => Object.freeze({ at: row.at, sign: SIGN_SLUGS[row.signIndex]! })));
 }
 
 /** Every exact Ptolemaic aspect of the Moon to the chosen bodies in (from, to]: 3-hour samples, 26 bisections. */

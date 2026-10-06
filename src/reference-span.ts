@@ -24,6 +24,7 @@ export const REFERENCE_SPAN = Object.freeze({
  * always inside. Being inside is not an accuracy claim: see REFERENCE_SPAN.
  */
 export const EPHEMERIS_SPAN = Object.freeze({
+  /** The scale of the bounds, as a label, like `fromTT` and `toTT`: not a TimeScaleName, which is lowercase. */
   timeScale: "TT",
   /** Days of Terrestrial Time from J2000.0, 2000-01-01T12:00 TT, inclusive. */
   daysFromJ2000: Object.freeze({ from: -730000, to: 730000 } as const),

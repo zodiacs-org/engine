@@ -1,4 +1,4 @@
-import { ASPECT_BODIES, matchAspect } from "./aspects.js";
+import { ASPECT_BODY_SET, matchAspect } from "./aspects.js";
 import { signForLongitude } from "./signs.js";
 import type {
   AspectType,
@@ -13,8 +13,8 @@ export function findInterAspects(
   first: readonly MinimalBody[],
   second: readonly MinimalBody[]
 ): InterAspect[] {
-  const aBodies = first.filter((body) => ASPECT_BODIES.has(body.body));
-  const bBodies = second.filter((body) => ASPECT_BODIES.has(body.body));
+  const aBodies = first.filter((body) => ASPECT_BODY_SET.has(body.body));
+  const bBodies = second.filter((body) => ASPECT_BODY_SET.has(body.body));
   const aspects: InterAspect[] = [];
 
   for (const a of aBodies) {
@@ -42,7 +42,7 @@ export function elementBalance(bodies: readonly MinimalBody[]): Record<Element, 
     water: 0
   };
   for (const body of bodies) {
-    if (!ASPECT_BODIES.has(body.body)) continue;
+    if (!ASPECT_BODY_SET.has(body.body)) continue;
     balance[signForLongitude(body.lon).element] += 1;
   }
   return balance;
@@ -55,7 +55,7 @@ export function modalityBalance(bodies: readonly MinimalBody[]): Record<Modality
     mutable: 0
   };
   for (const body of bodies) {
-    if (!ASPECT_BODIES.has(body.body)) continue;
+    if (!ASPECT_BODY_SET.has(body.body)) continue;
     balance[signForLongitude(body.lon).modality] += 1;
   }
   return balance;

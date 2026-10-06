@@ -103,7 +103,13 @@ function validateInstant(utcMilliseconds: number): void {
   }
 }
 
-/** UTC offset for an IANA timezone at a UTC instant, from the host's Intl. */
+/**
+ * UTC offset for an IANA timezone at a UTC instant, minutes east, from the
+ * host's Intl: a cross-check on the host's time-zone data. zoneOffsetAt is the
+ * engine's own answer, the one its wall times use; the two agree from 1970
+ * where the host has tzdata 2025c, and before 1970 they can differ, because
+ * Intl does not carry the history this package ships.
+ */
 export function offsetAt(timeZone: string, utcMilliseconds: number): number {
   validateInstant(utcMilliseconds);
   const name = offsetFormatter(timeZone)
@@ -269,7 +275,7 @@ export function resolveLocalToUtc(
 
   const loaded = FIXED_ZONE.test(timeZone) ? null : loadedHistory(timeZone);
   // From 1970-01-02 on a wall time never reads before 1970.
-  if (loaded === undefined && wallMs < DAY) throw notLoaded();
+  if (loaded === undefined && wallMs < DAY) throw new ZoneHistoryNotLoadedError();
   const history = loaded ?? null;
   const zoneAt = zoneClock(timeZone, history);
   const place = longitude !== undefined && history ? birthplaceClock(history, wallMs, longitude, zoneAt) : null;
@@ -387,14 +393,24 @@ export function zoneOffsetAt(timeZone: string, utcMilliseconds: number): number 
   validateInstant(utcMilliseconds);
   offsetFormatter(timeZone);
   const loaded = FIXED_ZONE.test(timeZone) ? null : loadedHistory(timeZone);
-  if (loaded === undefined && utcMilliseconds < 0) throw notLoaded();
+  if (loaded === undefined && utcMilliseconds < 0) throw new ZoneHistoryNotLoadedError();
   return zoneClock(timeZone, loaded ?? null)(utcMilliseconds) / 60;
 }
 
-/** The shipped history answers before 1970 only once `prepareLocalTime` has loaded it. */
-function notLoaded(): Error {
-  return new Error("The zone's history before 1970 is not loaded: await prepareLocalTime(date, timeZone) first.");
+/**
+ * Thrown when an answer needs a zone's history before 1970 and
+ * `prepareLocalTime` has not loaded it. An Error, not a RangeError: the input
+ * is valid, and awaiting `prepareLocalTime(date, timeZone)` first answers it.
+ */
+export class ZoneHistoryNotLoadedError extends Error {
+  override readonly name = "ZoneHistoryNotLoadedError";
+
+  constructor() {
+    super("The zone's history before 1970 is not loaded: await prepareLocalTime(date, timeZone) first.");
+  }
 }
+
+
 
 const LOCAL_BIRTH_KEYS = [
   "date",

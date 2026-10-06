@@ -4,7 +4,7 @@ import { normalizeLongitude } from "./signs.js";
 const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
 
-export const HOUSE_SYSTEMS = [
+export const HOUSE_SYSTEMS = Object.freeze([
   "whole",
   "placidus",
   "porphyry",
@@ -18,14 +18,14 @@ export const HOUSE_SYSTEMS = [
   "alcabitius",
   "morinus",
   "meridian"
-] as const satisfies readonly HouseSystem[];
+] as const) satisfies readonly HouseSystem[];
 
 /**
  * The systems that are undefined inside the polar circle, |latitude| ≥ 90° − ε,
  * where part of the ecliptic never rises or sets: Placidus and Koch both divide
  * a semi-arc that no longer exists there.
  */
-export const POLAR_UNDEFINED_HOUSE_SYSTEMS = ["placidus", "koch"] as const satisfies readonly HouseSystem[];
+export const POLAR_UNDEFINED_HOUSE_SYSTEMS = Object.freeze(["placidus", "koch"] as const) satisfies readonly HouseSystem[];
 
 /**
  * The system Placidus and Koch fall back to where they are undefined. The chart
@@ -34,7 +34,10 @@ export const POLAR_UNDEFINED_HOUSE_SYSTEMS = ["placidus", "koch"] as const satis
  */
 export const POLAR_FALLBACK = "whole" as const satisfies HouseSystem;
 
-/** The system Placidus falls back to; the same as {@link POLAR_FALLBACK}. */
+/**
+ * The system Placidus falls back to; the same as {@link POLAR_FALLBACK}.
+ * @deprecated Koch falls back too; use POLAR_FALLBACK.
+ */
 export const PLACIDUS_POLAR_FALLBACK = POLAR_FALLBACK;
 
 /** Whether `system` is one that falls back inside the polar circle. */
@@ -105,12 +108,19 @@ function quadrantCusps(
   ].map(normalizeLongitude);
 }
 
+/**
+ * The inputs of the angles and cusps, as natalChart() computes them: the
+ * Greenwich apparent sidereal time and the true obliquity of date. A mean
+ * sidereal time or the mean obliquity gives other angles (docs/houses.md).
+ */
 export interface AngleInput {
   /** Greenwich apparent sidereal time, in hours. */
   gastHours: number;
+  /** Geodetic latitude, degrees north. */
   latitude: number;
   /** East-positive longitude, in degrees. */
   longitude: number;
+  /** The true obliquity of the ecliptic of date, degrees. */
   obliquity: number;
 }
 

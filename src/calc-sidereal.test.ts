@@ -46,11 +46,11 @@ const BODIES: CalcBody[] = [
 /** Callers' ayanamsas in calc's JSON, each with the userAyanamsa it stands for. */
 const USERS: { readonly calc: CalcUserAyanamsa; readonly vedic: AyanamsaDefinition }[] = [
   {
-    calc: { name: "user-engine", epoch: { jd: 2_433_282.5, scale: "TT" }, value: 23.15 },
+    calc: { name: "user-engine", epoch: { jd: 2_433_282.5, scale: "tt" }, value: 23.15 },
     vedic: userAyanamsa({ name: "user-engine", epoch: { julianDateTT: 2_433_282.5 }, value: 23.15 })
   },
   {
-    calc: { name: "user-newcomb", epoch: { jd: 2_415_020, scale: "TT" }, value: 22.46, model: "newcomb" },
+    calc: { name: "user-newcomb", epoch: { jd: 2_415_020, scale: "tt" }, value: 22.46, model: "newcomb" },
     vedic: userAyanamsa({ name: "user-newcomb", epoch: { julianDateTT: 2_415_020 }, value: 22.46, model: "newcomb" })
   },
   {
@@ -58,7 +58,7 @@ const USERS: { readonly calc: CalcUserAyanamsa; readonly vedic: AyanamsaDefiniti
     vedic: userAyanamsa({ epoch: "1956-03-21T00:00:00Z", value: 23.25, model: "iau1976" })
   },
   {
-    calc: { name: "user-linear", epoch: { jd: 2_451_545, scale: "TT" }, value: 23.9, rate: 50.29 },
+    calc: { name: "user-linear", epoch: { jd: 2_451_545, scale: "tt" }, value: 23.9, rate: 50.29 },
     vedic: userAyanamsa({ name: "user-linear", epoch: { julianDateTT: 2_451_545 }, value: 23.9, rate: 50.29 })
   }
 ];
@@ -197,8 +197,8 @@ describe("the sidereal zodiac in calc()", () => {
     // The epochs: 1900, the first and the last day a Date holds, and the start of the Kali Yuga.
     for (const epoch of [2_415_020, 2_440_587.5 - 1e8 + 1, 2_440_587.5 + 1e8 - 1, 588_465.5]) {
       for (const rate of [3600, -3600, 50.29]) {
-        const zodiac = { sidereal: { epoch: { jd: epoch, scale: "TT" }, value: 359.9, rate } } as const;
-        for (const time of [...INSTANTS.slice(1, -1), { jd: 2_488_128.123456789, scale: "UT1" } as const]) {
+        const zodiac = { sidereal: { epoch: { jd: epoch, scale: "tt" }, value: 359.9, rate } } as const;
+        for (const time of [...INSTANTS.slice(1, -1), { jd: 2_488_128.123456789, scale: "ut1" } as const]) {
           const frame = "ecliptic-mean-of-date" as const;
           const tropical = ok(calc({ body: "Sun", time, frame }));
           const sidereal = ok(calc({ body: "Sun", time, frame, zodiac }));
@@ -212,8 +212,8 @@ describe("the sidereal zodiac in calc()", () => {
       }
     }
     // The largest difference found, 3.45e-7″ a day, by a search over Julian dates in TT: the Sun on 1804-03-17.
-    const zodiac = { sidereal: { epoch: { jd: 2_489_029.689060211, scale: "TT" }, value: 125.61857699773054, rate: 3599.706139 } } as const;
-    const time = { jd: 2_380_033.0453590155, scale: "TT" } as const;
+    const zodiac = { sidereal: { epoch: { jd: 2_489_029.689060211, scale: "tt" }, value: 125.61857699773054, rate: 3599.706139 } } as const;
+    const time = { jd: 2_380_033.0453590155, scale: "tt" } as const;
     const frame = "ecliptic-mean-of-date" as const;
     const gap = (ok(calc({ body: "Sun", time, frame })).speeds!.lon - ok(calc({ body: "Sun", time, frame, zodiac })).speeds!.lon) - 3599.706139 / 365.25 / 3600;
     expect(Math.abs(gap) * 3600).toBeLessThan(5e-7);
@@ -221,10 +221,10 @@ describe("the sidereal zodiac in calc()", () => {
 
   it("keeps the longitude, speed and vector continuous where a caller's ayanamsa passes ±180°", () => {
     // 179.9999° at J2000.0 growing by a degree a year: it reaches 180° about 0.0365 day later.
-    const zodiac = { sidereal: { epoch: { jd: 2_451_545, scale: "TT" }, value: 179.9999, rate: 3600 } } as const;
+    const zodiac = { sidereal: { epoch: { jd: 2_451_545, scale: "tt" }, value: 179.9999, rate: 3600 } } as const;
     const definition = userAyanamsa({ epoch: { julianDateTT: 2_451_545 }, value: 179.9999, rate: 3600 });
     for (const minutes of [52, 52.5, 52.56, 53, 54]) {
-      const time = { jd: 2_451_545 + minutes / 1440, scale: "TT" } as const;
+      const time = { jd: 2_451_545 + minutes / 1440, scale: "tt" } as const;
       for (const body of ["Sun", "Mars"] as const) {
         const tropical = ok(calc({ body, time, flags: { cartesian: true } }));
         const sidereal = ok(calc({ body, time, zodiac, flags: { cartesian: true } }));
@@ -328,14 +328,14 @@ describe("the sidereal zodiac in calc()", () => {
 describe("a caller's ayanamsa", () => {
   it("records every default, and reads its epoch as an instant is read", () => {
     const iso = INSTANTS[3]!;
-    const plain = ok(calc({ body: "Sun", time: iso, zodiac: { sidereal: { epoch: { jd: 2_451_545, scale: "TT" }, value: 23.85 } } }));
+    const plain = ok(calc({ body: "Sun", time: iso, zodiac: { sidereal: { epoch: { jd: 2_451_545, scale: "tt" }, value: 23.85 } } }));
     expect(plain.receipt.request.zodiac).toEqual({
-      sidereal: { name: "user", epoch: { jd: 2_451_545, scale: "TT" }, value: 23.85, model: "engine" }
+      sidereal: { name: "user", epoch: { jd: 2_451_545, scale: "tt" }, value: 23.85, model: "engine" }
     });
     expect(plain.ayanamsa!.name).toBe("user");
     // UT1 and UTC epochs take their TT from the time basis, as userAyanamsa's ISO epoch does.
-    for (const epoch of [{ jd: 2_435_553.5, scale: "UT1" }, { jd: 2_435_553.5, scale: "UTC" }, { iso: "1956-03-21T00:00:00Z" }] as const) {
-      const scale = "scale" in epoch ? (epoch.scale === "UT1" ? "ut1" : "utc") : "utc";
+    for (const epoch of [{ jd: 2_435_553.5, scale: "ut1" }, { jd: 2_435_553.5, scale: "utc" }, { iso: "1956-03-21T00:00:00Z" }] as const) {
+      const scale = "scale" in epoch ? epoch.scale : "utc";
       const ms = "jd" in epoch ? J2000_MS + (epoch.jd - 2_451_545) * 86_400_000 : Date.parse(epoch.iso);
       const tt = 2_451_545 + timeBasis(ms, scale).ttDays;
       const definition = userAyanamsa({ epoch: { julianDateTT: tt }, value: 23.25, model: "iau1976" });
@@ -346,7 +346,7 @@ describe("a caller's ayanamsa", () => {
 
   it("stated as Lahiri's own epoch, value and model, is Lahiri to the bit", () => {
     const lahiri = AYANAMSAS.lahiri as AyanamsaDefinition & { epochTT: number; value: number; model: "iau1976" };
-    const user = { epoch: { jd: lahiri.epochTT, scale: "TT" }, value: lahiri.value, model: lahiri.model } as const;
+    const user = { epoch: { jd: lahiri.epochTT, scale: "tt" }, value: lahiri.value, model: lahiri.model } as const;
     for (const iso of INSTANTS) {
       for (const body of BODIES) {
         expect(ok(calc({ body, time: iso, zodiac: { sidereal: user } })).lon).toBe(ok(calc({ body, time: iso, zodiac: { sidereal: "lahiri" } })).lon);
@@ -355,19 +355,19 @@ describe("a caller's ayanamsa", () => {
   });
 
   it.each([
-    ["a built-in name", "zodiac.sidereal.name", { name: "lahiri", epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }],
-    ["a name in capitals", "zodiac.sidereal.name", { name: "Mine", epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }],
-    ["a name that is not a string", "zodiac.sidereal.name", { name: 7, epoch: { jd: 2_451_545, scale: "TT" }, value: 23 }],
-    ["both a rate and a model", "zodiac.sidereal takes a rate or a model, not both", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, rate: 50, model: "engine" }],
-    ["a value out of range", "zodiac.sidereal.value", { epoch: { jd: 2_451_545, scale: "TT" }, value: 361 }],
-    ["a rate out of range", "zodiac.sidereal.rate", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, rate: 3601 }],
-    ["an unknown model", "zodiac.sidereal.model", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, model: "iau2000" }],
+    ["a built-in name", "zodiac.sidereal.name", { name: "lahiri", epoch: { jd: 2_451_545, scale: "tt" }, value: 23 }],
+    ["a name in capitals", "zodiac.sidereal.name", { name: "Mine", epoch: { jd: 2_451_545, scale: "tt" }, value: 23 }],
+    ["a name that is not a string", "zodiac.sidereal.name", { name: 7, epoch: { jd: 2_451_545, scale: "tt" }, value: 23 }],
+    ["both a rate and a model", "zodiac.sidereal takes a rate or a model, not both", { epoch: { jd: 2_451_545, scale: "tt" }, value: 23, rate: 50, model: "engine" }],
+    ["a value out of range", "zodiac.sidereal.value", { epoch: { jd: 2_451_545, scale: "tt" }, value: 361 }],
+    ["a rate out of range", "zodiac.sidereal.rate", { epoch: { jd: 2_451_545, scale: "tt" }, value: 23, rate: 3601 }],
+    ["an unknown model", "zodiac.sidereal.model", { epoch: { jd: 2_451_545, scale: "tt" }, value: 23, model: "iau2000" }],
     ["no epoch", "zodiac.sidereal.epoch", { value: 23 }],
-    ["an unknown field", "zodiac.sidereal takes only name, epoch, value, rate, model", { epoch: { jd: 2_451_545, scale: "TT" }, value: 23, ayanamsa: "lahiri" }],
-    ["a TT epoch beyond any date", "zodiac.sidereal.epoch must be an instant in the range of a Date", { epoch: { jd: 1e300, scale: "TT" }, value: 23 }],
-    ["a UTC epoch beyond any date", "zodiac.sidereal.epoch must be an instant in the range of a Date", { epoch: { jd: 1e12, scale: "UTC" }, value: 23 }],
+    ["an unknown field", "zodiac.sidereal takes only name, epoch, value, rate, model", { epoch: { jd: 2_451_545, scale: "tt" }, value: 23, ayanamsa: "lahiri" }],
+    ["a TT epoch beyond any date", "zodiac.sidereal.epoch must be an instant in the range of a Date", { epoch: { jd: 1e300, scale: "tt" }, value: 23 }],
+    ["a UTC epoch beyond any date", "zodiac.sidereal.epoch must be an instant in the range of a Date", { epoch: { jd: 1e12, scale: "utc" }, value: 23 }],
     // In range on UT1, but past the end of the range on TT, where ΔT is days.
-    ["a UT1 epoch whose TT is beyond any date", "zodiac.sidereal.epoch must be an instant in the range of a Date", { epoch: { jd: 2_440_587.5 + 1e8 - 1, scale: "UT1" }, value: 23, rate: 50 }],
+    ["a UT1 epoch whose TT is beyond any date", "zodiac.sidereal.epoch must be an instant in the range of a Date", { epoch: { jd: 2_440_587.5 + 1e8 - 1, scale: "ut1" }, value: 23, rate: 50 }],
     ["an epoch without a scale", "zodiac.sidereal.epoch", { epoch: { jd: 2_451_545 }, value: 23 }]
   ])("is malformed with %s, and throws a RangeError that names %s", (_, field, sidereal) => {
     const request = () => calc({ body: "Sun", time: INSTANTS[3]!, zodiac: { sidereal } as never });
@@ -376,7 +376,7 @@ describe("a caller's ayanamsa", () => {
   });
 
   it("is refused out of range when it holds its value at an epoch outside the span; a rate is not", () => {
-    const old = { epoch: { jd: 2_000_000.5, scale: "TT" }, value: 18 } as const;
+    const old = { epoch: { jd: 2_000_000.5, scale: "tt" }, value: 18 } as const;
     const zodiac = { sidereal: old };
     const time = INSTANTS[3]!;
     for (const result of [
@@ -430,7 +430,7 @@ describe("the sidereal zodiac in houses()", () => {
           const natal = natalChart({ utc: iso, ...place, houseSystem: system });
           for (const { zodiac, definition } of ZODIACS.filter((_, k) => k % 3 === 0)) {
             const expected = siderealChart(natal, definition);
-            const result = ok(houses({ time: iso, place, system, zodiac })) as HousesResult;
+            const result = ok(houses({ time: iso, place, houseSystem: system, zodiac })) as HousesResult;
             expect(result.angles.asc, `${system} ${definition.name}`).toBe(expected.ascendant!.lon);
             expect(result.angles.mc).toBe(expected.midheaven!.lon);
             expect(result.system).toBe(expected.houseSystem);
@@ -444,8 +444,8 @@ describe("the sidereal zodiac in houses()", () => {
   it("turns the descendant, IC, Vertex and East Point with them, and leaves the ARMC and obliquity", () => {
     for (const iso of INSTANTS) {
       for (const { zodiac, definition } of ZODIACS) {
-        const tropical = ok(houses({ time: iso, place: PLACE, system: "koch" })) as HousesResult;
-        const sidereal = ok(houses({ time: iso, place: PLACE, system: "koch", zodiac })) as HousesResult;
+        const tropical = ok(houses({ time: iso, place: PLACE, houseSystem: "koch" })) as HousesResult;
+        const sidereal = ok(houses({ time: iso, place: PLACE, houseSystem: "koch", zodiac })) as HousesResult;
         const value = trueAt(definition, iso);
         const turn = (lon: number) => siderealLongitude(lon, value).lon;
         expect(sidereal.angles).toEqual({ asc: turn(tropical.angles.asc), mc: turn(tropical.angles.mc), dsc: turn(tropical.angles.dsc), ic: turn(tropical.angles.ic) });

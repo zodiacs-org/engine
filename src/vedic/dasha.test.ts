@@ -95,7 +95,12 @@ describe("Vimshottari", () => {
     });
     expect(vimshottariAt(moon, at, { levels: 2 })).toHaveLength(2);
     expect(() => vimshottariAt(moon, "2300-01-01")).toThrow(RangeError);
-    expect(() => vimshottariAt(moon, at, { levels: 6 })).toThrow(RangeError);
+    expect(() => vimshottariAt(moon, at, { levels: 6 } as never)).toThrow(RangeError);
+    expect(() => vimshottariAt(moon, at, { level: 2 } as never)).toThrow(/unknown option: level/);
+    expect(() => vimshottariDasha(moon, { yearlength: "savana" } as never)).toThrow(/unknown option: yearlength/);
+    expect(() => yoginiDasha(moon, { cycle: 2 } as never)).toThrow(/unknown option: cycle/);
+    expect(() => ashtottariDasha(moon, { levels: 2 } as never)).toThrow(/unknown option: levels/);
+    expect(vimshottariAt(moon, at, { levels: undefined, yearLength: undefined })).toEqual(chain);
   });
 
   it("finds each period from its own start and end: boundaries round-trip through the ISO strings", () => {

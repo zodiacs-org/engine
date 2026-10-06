@@ -9,7 +9,7 @@ every figure here are in
 [`evidence/houses-extra-2026-09-29/`](evidence/houses-extra-2026-09-29/README.md).
 
 ```ts
-import { coAscendants, housePosition, houseSpeeds, SIDEREAL_RATE } from "@zodiacs/engine/houses";
+import { coAscendants, housePosition, houseSpeeds, SIDEREAL_TIME_RATE } from "@zodiacs/engine/houses";
 import { planetaryReturns } from "@zodiacs/engine/timing";
 
 // The AngleInput that computeAngles and computeHouses take: Greenwich apparent
@@ -195,7 +195,7 @@ the largest difference for any of the four points is under 0.00000001″, on L
 `houseSpeeds(system, input)` returns the speeds of the twelve cusps
 `computeHouses` returns and of the four angles, in degrees per day. Each is
 the derivative with respect to the RAMC, found analytically, times
-`SIDEREAL_RATE`, 360.98564736629° of sidereal time per day of UT1, the rate
+`SIDEREAL_TIME_RATE`, 360.98564736629° of sidereal time per day of UT1, the rate
 of J. Meeus's expression for mean sidereal time [Meeus, eq. 12.4]. The
 latitude and the obliquity are held fixed, as Swiss Ephemeris's
 `swe_houses_armc_ex2` holds the obliquity it is given.

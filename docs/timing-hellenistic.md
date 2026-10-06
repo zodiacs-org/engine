@@ -377,13 +377,18 @@ of predictive validity. The positions underneath keep the engine's
 ephemeris and its reference span. Timing results are not part of the natal
 receipt.
 
-Far from the present astronomy-engine itself fails. About 23,000 years from
-2000 the TT day count is too coarse for its light-time solver's tolerance,
-and the solver can stop converging. In a sampled scan this first happened
-for a planet in the years 24,984 and −22,669, and for the Sun in 47,526 and
-−36,598 (astronomical numbering). astronomy-engine then throws a string,
-which `natalChart` passes on; the timing functions throw a `RangeError`
-("The ephemeris failed: …") instead.
+Positions are computed only inside `EPHEMERIS_SPAN`, Terrestrial Time
+0001-04-30 to 3998-09-03, the years astronomy-engine tabulates: an instant
+outside it throws a `RangeError`, from the timing functions as from
+`natalChart`. Before 0.1.1-rc.14 the engine went on far beyond, where
+astronomy-engine's light-time solver could stop converging (first, in a
+sampled scan, for a planet in the years 24,984 and −22,669) and threw a
+string.
+
+A search with a budget reports it in one of two ways. `planetaryReturns`
+returns `{ status: "refused", reason: "sample-budget" }` with no returns when
+its `maxSamples` is spent, as the crossing search does. `releasingPeriods`
+throws a `RangeError` for a window that holds more than 100,000 periods.
 
 The following are not implemented:
 

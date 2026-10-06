@@ -136,9 +136,9 @@ export interface ProfectionAt {
 /** Options for the dated profections. */
 export interface ProfectionOptions {
   /** The natal body, angle or chart point to profect; `"Ascendant"` by default. */
-  readonly point?: ChartLongitudeName;
+  readonly point?: ChartLongitudeName | undefined;
   /** `"solar"` by default. */
-  readonly months?: ProfectionMonthConvention;
+  readonly months?: ProfectionMonthConvention | undefined;
 }
 
 const CONVENTION_CACHE = /*#__PURE__*/ new Map<ProfectionMonthConvention, ProfectionConventions>();

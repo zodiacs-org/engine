@@ -28,20 +28,7 @@ export function bodyName(value: unknown, label: string): BodyName {
   throw new RangeError(`${label} must be a body name.`);
 }
 
-/** Copy an options object's own data properties, refusing unknown keys; undefined counts as absent. */
-export function readOptions(value: unknown, allowed: readonly string[], label: string): Readonly<Record<string, unknown>> {
-  const out: Record<string, unknown> = Object.create(null) as Record<string, unknown>;
-  if (value === undefined) return out;
-  const prototype: unknown = value !== null && typeof value === "object" && !Array.isArray(value) ? Object.getPrototypeOf(value) : undefined;
-  if (prototype !== Object.prototype && prototype !== null) throw new RangeError(`${label} must be a plain options object.`);
-  for (const key of Reflect.ownKeys(value as object)) {
-    const slot = Object.getOwnPropertyDescriptor(value, key);
-    if (typeof key !== "string" || !allowed.includes(key)) throw new RangeError(`${label} has an unknown option: ${String(key)}.`);
-    if (!slot || !("value" in slot) || !slot.enumerable) throw new RangeError(`${label} must contain only plain data properties.`);
-    if (slot.value !== undefined) out[key] = slot.value as unknown;
-  }
-  return out;
-}
+export { readOptions } from "../read-options.js";
 
 /** One of a fixed list of names, or the default when absent. */
 export function oneOf<T extends string>(value: unknown, allowed: readonly T[], fallback: T, label: string): T {

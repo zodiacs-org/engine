@@ -12,6 +12,7 @@ import type { AngleInput } from "./houses.js";
 import type { Angles, HouseSystem } from "./types.js";
 
 export type { AngleInput } from "./houses.js";
+export type { Angles, HouseSystem } from "./types.js";
 
 const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
@@ -21,7 +22,14 @@ const RAD = 180 / Math.PI;
  * 360.98564736629 (J. Meeus, Astronomical Algorithms, 2nd ed., eq. 12.4).
  * Speeds are derivatives with respect to the RAMC times this rate.
  */
-export const SIDEREAL_RATE = 360.98564736629;
+export const SIDEREAL_TIME_RATE = 360.98564736629;
+
+/**
+ * The rate of sidereal time, under its first name.
+ *
+ * @deprecated Use SIDEREAL_TIME_RATE, the same value: this name could be read as a rate of the sidereal zodiac.
+ */
+export const SIDEREAL_RATE = SIDEREAL_TIME_RATE;
 
 const SYSTEMS: readonly HouseSystem[] = [
   "whole",
@@ -57,7 +65,11 @@ export interface CoAscendants {
   polarAscendant: number;
 }
 
-/** Speeds in degrees per day, at the sidereal rate, with latitude and obliquity fixed. */
+/**
+ * Speeds in degrees per day, at the sidereal rate, with latitude and obliquity fixed.
+ *
+ * @experimental As houseSpeeds is.
+ */
 export interface HouseSpeeds {
   /** The system of the cusps: the one asked for, or whole sign where Placidus or Koch falls back. */
   system: HouseSystem;
@@ -482,12 +494,16 @@ function cuspRates(system: HouseSystem, place: Place, asc: number, ascRate: numb
 /**
  * The speeds of the cusps `computeHouses(system, input, …)` returns and of
  * the four angles, in degrees per day: each derivative with respect to the
- * RAMC, found analytically, times {@link SIDEREAL_RATE}, with the latitude
+ * RAMC, found analytically, times {@link SIDEREAL_TIME_RATE}, with the latitude
  * and the obliquity held fixed. Where Placidus or Koch falls back to whole
  * signs, the cusps are whole-sign cusps, whose speed is 0 except where the
  * ascendant changes sign. A speed is not defined at the instants where a cusp
  * jumps: whole-sign cusps at a change of sign, and every cusp that turns with
  * the ascendant inside the polar circle. Invalid input throws RangeError.
+ *
+ * @experimental What a speed is here (a derivative with the latitude and the
+ * obliquity held fixed, 0 for whole-sign cusps) differs from Swiss
+ * Ephemeris's for several systems, and may change in a minor release.
  */
 export function houseSpeeds(system: HouseSystem, input: AngleInput): HouseSpeeds {
   const name = systemOf(system);
@@ -496,7 +512,7 @@ export function houseSpeeds(system: HouseSystem, input: AngleInput): HouseSpeeds
   const ascRate = obliqueRate(place.ramc + 90, Math.tan(place.latitude * DEG), place.obliquity);
   const mcRate = obliqueRate(place.ramc, 0, place.obliquity);
   const rates = cuspRates(name, place, asc, ascRate, mcRate);
-  const perDay = (rate: number) => rate * SIDEREAL_RATE;
+  const perDay = (rate: number) => rate * SIDEREAL_TIME_RATE;
   const ascSpeed = perDay(ascRate);
   const mcSpeed = perDay(mcRate);
   return {

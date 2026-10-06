@@ -82,7 +82,7 @@ interface FirdariaConventions {
 type FirdariaLord = TraditionalPlanet | "North Node" | "South Node";
 
 interface FirdariaOptions {
-    readonly variant?: FirdariaVariant;
+    readonly variant?: FirdariaVariant | undefined;
 }
 
 interface FirdariaPeriod {
@@ -108,24 +108,27 @@ interface FirdariaTimeline {
 }
 
 interface FirdariaTimelineOptions extends FirdariaOptions {
-    readonly cycles?: number;
+    readonly cycles?: number | undefined;
 }
 
 type FirdariaVariant = "abu-mashar" | "bonatti";
 
 declare const PROFECTION_MONTH_CONVENTIONS: readonly ProfectionMonthConvention[];
 
+/** @experimental */
 interface PlanetaryReturn {
     readonly at: Date;
     readonly retrograde: boolean;
     readonly pass: number;
 }
 
+/** @experimental */
 interface PlanetaryReturnOptions {
-    stepDays?: number;
-    maxSamples?: number;
+    readonly stepDays?: number | undefined;
+    readonly maxSamples?: number | undefined;
 }
 
+/** @experimental */
 type PlanetaryReturns = {
     readonly status: "complete";
     readonly body: ReturnBody;
@@ -171,8 +174,8 @@ interface ProfectionMonth extends ProfectionSpan {
 type ProfectionMonthConvention = "solar" | "twelfths" | "thirteenths";
 
 interface ProfectionOptions {
-    readonly point?: ChartLongitudeName;
-    readonly months?: ProfectionMonthConvention;
+    readonly point?: ChartLongitudeName | undefined;
+    readonly months?: ProfectionMonthConvention | undefined;
 }
 
 interface ProfectionOrigin extends TimingOrigin {
@@ -210,8 +213,10 @@ declare const RELEASING_UNIT_DAYS: Readonly<Record<ReleasingYearConvention, read
 
 declare const RELEASING_YEAR_CONVENTIONS: readonly ReleasingYearConvention[];
 
+/** @experimental */
 declare const RETURN_BODIES: readonly ReturnBody[];
 
+/** @experimental */
 declare const RETURN_STEP_DAYS: Readonly<Record<ReturnBody, number>>;
 
 interface ReleasingAt {
@@ -231,7 +236,7 @@ interface ReleasingAt {
 }
 
 interface ReleasingAtOptions {
-    readonly years?: ReleasingYearConvention;
+    readonly years?: ReleasingYearConvention | undefined;
 }
 
 interface ReleasingConventions {
@@ -251,8 +256,8 @@ type ReleasingLevel = 1 | 2 | 3 | 4;
 type ReleasingLot = "Lot of Fortune" | "Lot of Spirit";
 
 interface ReleasingOptions {
-    readonly levels?: ReleasingLevel;
-    readonly years?: ReleasingYearConvention;
+    readonly levels?: ReleasingLevel | undefined;
+    readonly years?: ReleasingYearConvention | undefined;
 }
 
 interface ReleasingOrigin extends TimingOrigin {
@@ -285,6 +290,7 @@ interface ReleasingTimeline {
 
 type ReleasingYearConvention = "valens-360" | "julian-365.25";
 
+/** @experimental */
 type ReturnBody = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto";
 
 interface SolarArc {
@@ -332,6 +338,7 @@ declare function firdariaPeriods(sect: Sect, options?: FirdariaOptions): readonl
 
 declare function firdariaSequence(sect: Sect, options?: FirdariaOptions): readonly FirdariaLord[];
 
+/** @experimental */
 declare function planetaryReturns(natal: NatalSource, body: ReturnBody, from: DateInput, to: DateInput, options?: PlanetaryReturnOptions): PlanetaryReturns;
 
 declare function profectionAt(natal: NatalSource, date: DateInput, options?: ProfectionOptions): ProfectionAt;
@@ -354,7 +361,7 @@ declare function zodiacalReleasingAt(natal: NatalSource, lot: ReleasingLot, date
 ## Referenced, not exported here (23)
 
 ```ts
-// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles)
+// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
 interface Angles {
     asc: number;
     mc: number;
@@ -386,7 +393,7 @@ interface BirthInput {
     deltaT?: number;
 }
 
-// exported by @zodiacs/engine (BodyName)
+// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
 type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
 
 // exported by @zodiacs/engine (BodyPosition)
@@ -447,7 +454,7 @@ type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | 
 // exported by @zodiacs/engine (HouseNumber)
 type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem)
+// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
 type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
 
 // exported by @zodiacs/engine (Houses)

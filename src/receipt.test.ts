@@ -395,6 +395,48 @@ describe("Zodiacs draft natal receipt", () => {
     };
     expect(serializeNatalEnvelope(reversed)).toBe(encoded);
   });
+
+  it("records the fields its conventions set names and leaves out any other field of a chart's result", () => {
+    const expected = serializeNatalEnvelope(createNatalEnvelope(chart()));
+    const grown = chart();
+    expect(grown.aspects.length).toBeGreaterThan(0);
+    expect(grown.timeScale.ut1MinusUtc).not.toBeNull();
+    expect(grown.timeScale.leapSeconds).not.toBeNull();
+    // Fields a later release might add to a chart.
+    const add = (value: object, key: string, extra: unknown) => {
+      (value as Record<string, unknown>)[key] = extra;
+    };
+    add(grown, "declinations", [{ body: "Sun", declination: -23.4 }]);
+    add(grown.bodies[0]!, "distance", 0.98);
+    add(grown.angles!, "vertex", 1);
+    add(grown.houses!, "speeds", [1]);
+    add(grown.aspects[0]!, "exact", false);
+    add(grown.deltaT, "note", "x");
+    add(grown.timeScale, "tdbMinusTt", 0.001);
+    add(grown.timeScale.ut1MinusUtc!, "bulletin", "A");
+    add(grown.timeScale.leapSeconds!, "announced", "2000-07-01");
+    const captured = createNatalEnvelope(grown);
+    expect(serializeNatalEnvelope(captured)).toBe(expected);
+    expect(Object.keys(captured.result).sort()).toEqual(["angles", "aspects", "bodies", "deltaT", "houses", "timeScale"]);
+    expect(Object.keys(captured.result.bodies[0]!).sort()).toEqual(["body", "degree", "lat", "lon", "retrograde", "sign", "speed"]);
+    expect(Object.keys(captured.result.timeScale!.ut1MinusUtc!).sort()).toEqual(["seconds", "sigma", "source"]);
+    expect(parseNatalEnvelope(serializeNatalEnvelope(captured)).ok).toBe(true);
+  });
+
+  it("refuses a chart whose input has a field the receipt cannot describe, or that lacks a field the record holds", () => {
+    const optioned = chart();
+    (optioned.input as unknown as Record<string, unknown>).ayanamsa = "lahiri";
+    errorFrom(() => createNatalEnvelope(optioned), "invalid_shape");
+    const partial: Partial<Chart> = chart();
+    delete partial.deltaT;
+    errorFrom(() => createNatalEnvelope(partial as Chart), "invalid_shape");
+    const bodyless = chart();
+    delete (bodyless.bodies[3] as Partial<Chart["bodies"][number]>).degree;
+    errorFrom(() => createNatalEnvelope(bodyless), "invalid_shape");
+    const unlisted = chart();
+    (unlisted as unknown as Record<string, unknown>).aspects = { 0: unlisted.aspects[0] };
+    errorFrom(() => createNatalEnvelope(unlisted), "invalid_shape");
+  });
 });
 
 describe("hostile or inconsistent natal envelopes", () => {

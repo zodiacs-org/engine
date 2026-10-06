@@ -90,7 +90,12 @@ engine makes a `SiderealLongitude` only in these ways:
   the value will be used for a dasha.
 
 A copied object, a bare number or a look-alike object is rejected with a
-`RangeError`.
+`RangeError`. The engine knows the values it made by identity, not by shape:
+a `SiderealLongitude`, an `AyanamsaValue`, an ayanamsa definition or a
+`DashaPeriod` that has been through JSON, `structuredClone`, `postMessage` or
+another copy of the package is refused, although its type still checks, since
+these types carry no brand. To bring a sidereal longitude back, pass its `lon`
+to `declareSiderealLongitude` with its label and instant.
 
 ## Sidereal charts
 
@@ -466,7 +471,11 @@ These all throw a `RangeError`:
 - a definition or value the engine did not make;
 - a non-finite or out-of-range number, including a ΔT pin over 1e10 s and a
   user epoch no `Date` can hold;
-- an unparseable date;
+- an unparseable date, and a bare-number `epoch` for `userAyanamsa`, which
+  could be a Julian date or epoch milliseconds (pass `{ julianDateTT }`, a
+  `Date` or an ISO string);
+- an option or input key a function does not name, such as `timescale` for
+  `timeScale`;
 - a dasha Moon without an instant;
 - `levels` outside 1–5 or `cycles` outside 1–10;
 - an instant outside the Vimshottari cycle.

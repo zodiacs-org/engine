@@ -16,6 +16,7 @@ import { VIMSHOTTARI_LORDS, VIMSHOTTARI_YEARS, nakshatraOf } from "./nakshatra.j
 import { requireSidereal } from "./sidereal.js";
 import type { SiderealLongitude } from "./sidereal.js";
 import { dateFrom } from "../date-input.js";
+import { readOptions } from "../read-options.js";
 import type { DateInput } from "../types.js";
 
 /** The dasha systems implemented. */
@@ -35,13 +36,21 @@ export const DASHA_LEVELS = Object.freeze([
 /** A level's name. */
 export type DashaLevelName = (typeof DASHA_LEVELS)[number];
 
-/** Yogini dasha (BPHS 46.195–199): yogini, planet, years. */
+/**
+ * Yogini dasha (BPHS 46.195–199): yogini, planet, years.
+ *
+ * @experimental As yoginiDasha is.
+ */
 export const YOGINIS = Object.freeze([
   ["Mangala", "Moon", 1], ["Pingala", "Sun", 2], ["Dhanya", "Jupiter", 3], ["Bhramari", "Mars", 4],
   ["Bhadrika", "Mercury", 5], ["Ulka", "Saturn", 6], ["Siddha", "Venus", 7], ["Sankata", "Rahu", 8]
 ].map(([name, planet, years]) => Object.freeze({ name: name as string, planet: planet as string, years: years as number })));
 
-/** Ashtottari lords in order, with their years (BPHS 46.17–20). */
+/**
+ * Ashtottari lords in order, with their years (BPHS 46.17–20).
+ *
+ * @experimental As ashtottariDasha is.
+ */
 export const ASHTOTTARI_YEARS = Object.freeze({
   Sun: 6, Moon: 15, Mars: 8, Mercury: 17, Saturn: 10, Jupiter: 19, Rahu: 12, Venus: 21
 } as const);
@@ -67,10 +76,10 @@ export interface DashaPeriod {
   readonly years: number;
 }
 
-/** Options for the dasha functions. */
+/** Options for the dasha functions. A key a function does not name is refused with a RangeError. */
 export interface DashaOptions {
   /** "julian" (365.25 days, the default), "tropical" (365.2422) or "savana" (360). */
-  readonly yearLength?: DashaYearLength;
+  readonly yearLength?: DashaYearLength | undefined;
 }
 
 /** A dasha system's result, frozen. */
@@ -97,12 +106,12 @@ const CONTEXT = new WeakMap<object, Context>();
 
 const iso = (ms: number): string => new Date(Math.round(ms)).toISOString();
 
-function yearDaysOf(options: DashaOptions | undefined): [DashaYearLength, number] {
-  const name = options?.yearLength ?? "julian";
+function yearDaysOf(read: Readonly<Record<string, unknown>>): [DashaYearLength, number] {
+  const name = read.yearLength ?? "julian";
   if (typeof name !== "string" || !Object.hasOwn(DASHA_YEAR_DAYS, name)) {
     throw new RangeError("yearLength must be julian, tropical or savana.");
   }
-  return [name, DASHA_YEAR_DAYS[name]];
+  return [name as DashaYearLength, DASHA_YEAR_DAYS[name as DashaYearLength]];
 }
 
 function moonAndBirth(moon: SiderealLongitude): { moon: SiderealLongitude; birthMs: number } {
@@ -160,7 +169,7 @@ const vimYears = (index: number): number => VIMSHOTTARI_YEARS[VIMSHOTTARI_LORDS[
  * starts before birth. `moon` must carry its instant.
  */
 export function vimshottariDasha(moon: SiderealLongitude, options?: DashaOptions): DashaResult {
-  const [yearLength, yearDays] = yearDaysOf(options);
+  const [yearLength, yearDays] = yearDaysOf(readOptions(options, ["yearLength"], "vimshottariDasha options"));
   const { moon: checked, birthMs } = moonAndBirth(moon);
   const { index, elapsed } = nakshatraOf(checked);
   const first = index % 9;
@@ -191,7 +200,7 @@ export function dashaSubperiods(period: DashaPeriod): readonly DashaPeriod[] {
 /** Options for vimshottariAt. */
 export interface DashaAtOptions extends DashaOptions {
   /** How many levels to descend, 1 (mahadasha) to 5 (prana); default 5. */
-  readonly levels?: number;
+  readonly levels?: 1 | 2 | 3 | 4 | 5 | undefined;
 }
 
 /**
@@ -200,10 +209,12 @@ export interface DashaAtOptions extends DashaOptions {
  * `start` finds it. Outside the 120 years, a RangeError.
  */
 export function vimshottariAt(moon: SiderealLongitude, at: DateInput, options?: DashaAtOptions): readonly DashaPeriod[] {
-  const levels = integer(options?.levels ?? 5, 1, 5, "levels");
+  const read = readOptions(options, ["yearLength", "levels"], "vimshottariAt options");
+  const levels = integer(read.levels ?? 5, 1, 5, "levels");
   const when = dateFrom(at, "at").getTime();
   const chain: DashaPeriod[] = [];
-  let periods: readonly DashaPeriod[] = vimshottariDasha(moon, options).mahadashas;
+  const yearLength = read.yearLength as DashaYearLength | undefined;
+  let periods: readonly DashaPeriod[] = vimshottariDasha(moon, yearLength === undefined ? undefined : { yearLength }).mahadashas;
   for (let level = 1; level <= levels; level += 1) {
     const found = periods.find((p) => Math.round(p.startMs) <= when && when < Math.round(p.endMs));
     if (!found) throw new RangeError("at is outside the 120-year Vimshottari cycle of this Moon.");
@@ -213,19 +224,27 @@ export function vimshottariAt(moon: SiderealLongitude, at: DateInput, options?: 
   return Object.freeze(chain);
 }
 
-/** Options for yoginiDasha and ashtottariDasha. */
+/**
+ * Options for yoginiDasha and ashtottariDasha.
+ *
+ * @experimental As those functions are.
+ */
 export interface CycleOptions extends DashaOptions {
   /** Complete cycles of mahadashas to list, 1 to 10; default 1. */
-  readonly cycles?: number;
+  readonly cycles?: number | undefined;
 }
 
 /**
  * Yogini mahadashas (BPHS 46.195–199): the nakshatra's number plus 3,
  * remainder by 8, gives the yogini at birth; 36 years a cycle.
+ *
+ * @experimental Mahadashas only, so far: the result may change in a minor
+ * release that adds the sub-periods.
  */
 export function yoginiDasha(moon: SiderealLongitude, options?: CycleOptions): DashaResult {
-  const [yearLength, yearDays] = yearDaysOf(options);
-  const cycles = integer(options?.cycles ?? 1, 1, 10, "cycles");
+  const read = readOptions(options, ["yearLength", "cycles"], "dasha cycle options");
+  const [yearLength, yearDays] = yearDaysOf(read);
+  const cycles = integer(read.cycles ?? 1, 1, 10, "cycles");
   const { moon: checked, birthMs } = moonAndBirth(moon);
   const { index, elapsed } = nakshatraOf(checked);
   const first = (index + 3) % 8;
@@ -249,10 +268,14 @@ const GROUP_SIZES = [4, 3, 4, 3, 4, 3, 4, 3];
  * Ashtottari mahadashas (BPHS 46.17–22): 28 nakshatras with Abhijit, from
  * Ardra in groups of 4, 3, 4, 3, …, each an equal share of its lord's years;
  * 108 years a cycle. When it applies (46.17–23) is for the caller to decide.
+ *
+ * @experimental Mahadashas only, so far, and traditions group the nakshatras
+ * differently: the result may change in a minor release.
  */
 export function ashtottariDasha(moon: SiderealLongitude, options?: CycleOptions): DashaResult {
-  const [yearLength, yearDays] = yearDaysOf(options);
-  const cycles = integer(options?.cycles ?? 1, 1, 10, "cycles");
+  const read = readOptions(options, ["yearLength", "cycles"], "dasha cycle options");
+  const [yearLength, yearDays] = yearDaysOf(read);
+  const cycles = integer(read.cycles ?? 1, 1, 10, "cycles");
   const { moon: checked, birthMs } = moonAndBirth(moon);
   const ticks = ticksOf(checked.lon);
   const standard = Math.floor(ticks / NAKSHATRA_TICKS);

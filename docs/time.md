@@ -329,13 +329,16 @@ The six probes of the audit's time-5 finding resolve as follows (tests in
 
 - A wall time before 1970-01-02 needs `await prepareLocalTime(date, timeZone)`
   first; without it `resolveLocalToUtc`, `resolveLocalBirth` and
-  `resolveBirth` throw an `Error` naming `prepareLocalTime`.
+  `resolveBirth` throw an `Error` naming `prepareLocalTime`. From 1.0.0 it is a
+  `ZoneHistoryNotLoadedError`, which `@zodiacs/engine/geo` exports, so that a
+  caller can catch it by its class.
 - `lmt` now means that a local mean time clock read the wall time. It used to
   mean an offset with seconds, which flagged legal times such as Madras time
   and missed LMT in whole minutes such as Guam's.
-- **Deprecated:** the names `dst-gap` and `dst-fold`. They are kept, and now
-  mean a gap or fold of any cause; read `jump.cause` for the cause. Renaming
-  them would take a new receipt conventions set.
+- The names `dst-gap` and `dst-fold` now mean a gap or fold of any cause;
+  read `jump.cause` for the cause. They are permanent: stored receipts carry
+  them, and no other name replaces them, so they are not deprecated (this
+  note called them deprecated before 1.0.0).
 - New: `LocalTimeOptions`, `prepareLocalTime`, `resolveLocalBirth` (the core
   input with its resolution and the receipt's `reference`), `zoneOffsetAt`
   (the zone's own offset, minutes; before 1970 it throws, as

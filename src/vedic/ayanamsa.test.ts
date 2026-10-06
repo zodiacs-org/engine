@@ -159,6 +159,10 @@ describe("ayanamsa definitions", () => {
     expect(ayanamsa("true-revati", "2001-01-01T00:00:00Z").deltaT.model).toBe("iers-utc/1");
     expect(ayanamsa("true-revati", "1950-01-01T00:00:00Z").deltaT.model).toBe("zodiacs-deltat/1");
     expect(() => ayanamsa("lahiri", "2001-01-01", { timeScale: "tai" as never })).toThrow(RangeError);
+    // A misspelt option is refused, not ignored: "timescale" would otherwise read the instant as UTC.
+    expect(() => ayanamsa("lahiri", "2001-01-01", { timescale: "tt" } as never)).toThrow(/unknown option: timescale/);
+    expect(() => ayanamsa("lahiri", "2001-01-01", Object.create({ deltaT: 60 }) as never)).toThrow(RangeError);
+    expect(ayanamsa("lahiri", "2001-01-01", { deltaT: undefined, timeScale: undefined }).true).toBe(ayanamsa("lahiri", "2001-01-01").true);
     expect(() => ayanamsa("lahiri", "2001-01-01", { timeScale: null as never })).toThrow(RangeError);
     expect(Object.isFrozen(pinned) && Object.isFrozen(pinned.deltaT) && Object.isFrozen(pinned.flags)).toBe(true);
     expect(Object.isFrozen(pinned.timeScale) && Object.isFrozen(pinned.timeScale.ut1MinusUtc)).toBe(true);
@@ -250,6 +254,14 @@ describe("user ayanamsas", () => {
     expect(() => userAyanamsa({ epoch: { julianDateTT: -1e8 }, value: 1 })).toThrow(RangeError);
     expect(() => userAyanamsa({ epoch: { julianDateTT: 2_440_587.5 + 1e8 + 1 }, value: 1 })).toThrow(RangeError);
     expect(userAyanamsa({ epoch: { julianDateTT: 2_440_587.5 - 1e8 }, value: 1 }).kind).toBe("epoch");
+    // A bare number could be a Julian date or epoch milliseconds: before 1.0.0
+    // it was read as milliseconds, so a Julian date gave an epoch in 1970.
+    expect(() => userAyanamsa({ epoch: 2_451_545 as never, value: 1 })).toThrow(/bare number/);
+    // A misspelt key is refused rather than ignored.
+    expect(() => userAyanamsa({ epoch: "2000-01-01", value: 1, modle: "newcomb" } as never)).toThrow(/unknown option: modle/);
+    expect(() => userAyanamsa({ epoch: { julianDateTT: 2_451_545, scale: "ut1" } as never, value: 1 })).toThrow(/unknown option: scale/);
+    // An explicit undefined is an absent option.
+    expect(userAyanamsa({ name: undefined, epoch: "2000-01-01", value: 1, rate: undefined, model: undefined }).kind).toBe("epoch");
   });
 });
 

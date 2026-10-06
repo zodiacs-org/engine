@@ -27,12 +27,12 @@ export type Polarity = "day" | "night";
 export type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 export interface SignDefinition {
-  slug: ZodiacSign;
-  name: string;
-  element: Element;
-  modality: Modality;
-  polarity: Polarity;
-  naturalHouse: HouseNumber;
+  readonly slug: ZodiacSign;
+  readonly name: string;
+  readonly element: Element;
+  readonly modality: Modality;
+  readonly polarity: Polarity;
+  readonly naturalHouse: HouseNumber;
 }
 
 export type BodyName =
@@ -76,7 +76,11 @@ export type ChartFlag =
  * when starting from a local wall time and IANA timezone.
  */
 export interface BirthInput {
-  /** The instant, on the scale `timeScale` names. */
+  /**
+   * The instant, on the scale `timeScale` names: UTC by default, and UT1 or
+   * TT when `timeScale` says so. The field keeps its name on every scale,
+   * because receipts record it under that name (docs/time.md).
+   */
   utc: DateInput;
   /** "utc" (default), "ut1" or "tt" (docs/time.md). */
   timeScale?: TimeScaleName;
@@ -99,6 +103,7 @@ export interface BirthInput {
 }
 
 export interface ChartInput {
+  /** The instant as given, on the scale `timeScale` names (UTC when it is absent), as BirthInput.utc. */
   utc: Date;
   /** Present when the instant is not UTC. */
   timeScale?: Exclude<TimeScaleName, "utc">;
@@ -283,10 +288,11 @@ export interface MoonPhase {
   waxing: boolean;
 }
 
-export const ENGINE_VERSION = "0.1.1-rc.17";
+/** This package's version, as package.json names it. A string: it changes with every release. */
+export const ENGINE_VERSION: string = "0.1.1-rc.17";
 
 /**
  * The ephemeris underneath every position. The dependency is pinned to this
  * exact version, so receipts can name it without asking the caller.
  */
-export const EPHEMERIS = Object.freeze({ name: "astronomy-engine", version: "2.1.19" } as const);
+export const EPHEMERIS = Object.freeze({ name: "astronomy-engine" as const, version: "2.1.19" as string });

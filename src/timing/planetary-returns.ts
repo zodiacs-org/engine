@@ -15,9 +15,22 @@ import type { DateInput } from "../types.js";
 import { guarded, readOptions, timingFlags } from "./shared.js";
 import type { TimingFlag } from "./shared.js";
 
-/** The bodies a return can be asked for. */
+/**
+ * The bodies a return can be asked for.
+ *
+ * @experimental Added in 0.1.1-rc.16: how returns
+ * are grouped into passes, and the searches' steps, may change in a minor
+ * release.
+ */
 export type ReturnBody = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto";
 
+/**
+ * The bodies a return can be asked for, in the order of ReturnBody.
+ *
+ * @experimental Added in 0.1.1-rc.16: how returns
+ * are grouped into passes, and the searches' steps, may change in a minor
+ * release.
+ */
 export const RETURN_BODIES: readonly ReturnBody[] = Object.freeze([
   "Sun",
   "Moon",
@@ -36,6 +49,10 @@ export const RETURN_BODIES: readonly ReturnBody[] = Object.freeze([
  * shorter than the shortest time between two stations from 1800 to 2200
  * (19.75 days for Mercury, 40.75 for Venus, 59.75 for Mars, longer for the
  * others), and one step moves the Moon at most 15.4°.
+ *
+ * @experimental Added in 0.1.1-rc.16: how returns
+ * are grouped into passes, and the searches' steps, may change in a minor
+ * release.
  */
 export const RETURN_STEP_DAYS: Readonly<Record<ReturnBody, number>> = Object.freeze({
   Sun: 5,
@@ -50,7 +67,13 @@ export const RETURN_STEP_DAYS: Readonly<Record<ReturnBody, number>> = Object.fre
   Pluto: 5
 });
 
-/** One return: an instant in the window at which the body is on its natal longitude. */
+/**
+ * One return: an instant in the window at which the body is on its natal longitude.
+ *
+ * @experimental Added in 0.1.1-rc.16: how returns
+ * are grouped into passes, and the searches' steps, may change in a minor
+ * release.
+ */
 export interface PlanetaryReturn {
   readonly at: Date;
   /** True when the body was moving backward through the degree. */
@@ -63,10 +86,16 @@ export interface PlanetaryReturn {
   readonly pass: number;
 }
 
-/** `stepDays` (default {@link RETURN_STEP_DAYS}) and `maxSamples`, a budget of longitude evaluations. */
+/**
+ * `stepDays` (default {@link RETURN_STEP_DAYS}) and `maxSamples`, a budget of longitude evaluations.
+ *
+ * @experimental Added in 0.1.1-rc.16: how returns
+ * are grouped into passes, and the searches' steps, may change in a minor
+ * release.
+ */
 export interface PlanetaryReturnOptions {
-  stepDays?: number;
-  maxSamples?: number;
+  readonly stepDays?: number | undefined;
+  readonly maxSamples?: number | undefined;
 }
 
 /**
@@ -74,6 +103,10 @@ export interface PlanetaryReturnOptions {
  * found, or `"refused"` with none when the budget ran out. Both carry the
  * body, its natal longitude (the chart's, degrees in [0, 360)), the window,
  * the longitude evaluations made (`samples`) and the result's flags.
+ *
+ * @experimental Added in 0.1.1-rc.16: how returns
+ * are grouped into passes, and the searches' steps, may change in a minor
+ * release.
  */
 export type PlanetaryReturns =
   | {
@@ -106,6 +139,10 @@ export type PlanetaryReturns =
  * search assumes smooth motion with at most one station in two steps; within
  * that it finds a pair of returns around a station that falls between two
  * samples. Invalid input throws RangeError. Frozen.
+ *
+ * @experimental Added in 0.1.1-rc.16: how returns
+ * are grouped into passes, and the searches' steps, may change in a minor
+ * release.
  */
 export function planetaryReturns(
   natal: NatalSource,

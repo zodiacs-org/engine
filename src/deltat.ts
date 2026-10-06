@@ -31,6 +31,14 @@
  * docs/platform/evidence/deltat-2026-09-25/ in the Zodiacs site repository.
  */
 
+/**
+ * Where a ΔT came from: one of the model's segments above; "pinned", a
+ * caller's pin; or, on the IERS basis ("iers-utc/1", docs/time.md), the source
+ * of its UT1 − UTC, "observed" or "predicted". "fallback" is the IERS basis
+ * with UT1 − UTC taken as 0 ± 0.9 s past the table's ends, which rc.15's first
+ * cut recorded and receipts from it carry; later releases do not give it, and
+ * keep it so those records stay readable.
+ */
 export type DeltaTSegment =
   | "long-term"
   | "reconstructed"
@@ -53,7 +61,14 @@ export interface DeltaT {
   segment: DeltaTSegment;
 }
 
-/** The part of the model refreshed from IERS. It changes only with an engine release. */
+/**
+ * The part of the model refreshed from IERS. It changes only with an engine
+ * release. Its shape is the model's, "zodiacs-deltat/1": yearly knots to the
+ * last observed day, then four to the last predicted one, with `from` a year
+ * and the two ends MJDs. A refresh keeps that shape; a model that needs
+ * another would be a new model, with a new name and its own export beside
+ * this one. Each ΔT names the table it came from (`table`, `tableDigest`).
+ */
 export interface DeltaTTable {
   /** Date of the last observed IERS day (YYYY-MM-DD). */
   readonly version: string;
@@ -211,8 +226,15 @@ function sigma(t: number): number {
   return v;
 }
 
-/** ΔT at astronomy-engine's UT (days since J2000.0), with its band and the part of the model that answered. */
+/**
+ * ΔT of the model alone at astronomy-engine's UT, days since 2000-01-01T12:00
+ * on UT1 (not epoch milliseconds), with its band and the part of the model
+ * that answered. A chart from 1972 to the end of the IERS UT1 table uses IERS
+ * instead (`iers-utc/1`; docs/time.md), so its ΔT can differ from this.
+ * RangeError for a non-finite input.
+ */
 export function deltaTAt(ut: number): DeltaT {
+  if (!Number.isFinite(ut)) throw new RangeError("deltaTAt takes a finite UT: days since 2000-01-01T12:00 on UT1.");
   const t = 2000 + ut / 365.25;
   if (!X) init();
   return {
@@ -234,8 +256,13 @@ export function deltaTAt(ut: number): DeltaT {
   };
 }
 
-/** For astronomy-engine's SetDeltaTFunction: UT days in, seconds out. Allocation-free. */
+/**
+ * For astronomy-engine's SetDeltaTFunction: UT days since 2000-01-01T12:00
+ * in, the model's seconds out. Allocation-free. RangeError for a non-finite
+ * input.
+ */
 export function deltaT(ut: number): number {
+  if (!Number.isFinite(ut)) throw new RangeError("deltaT takes a finite UT: days since 2000-01-01T12:00 on UT1.");
   if (!X) init();
   return seconds(2000 + ut / 365.25);
 }

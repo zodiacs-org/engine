@@ -90,7 +90,7 @@ describe("receipt conventions", () => {
   });
 
   it("names what the positions are corrected for", () => {
-    const [current] = NATAL_RECEIPT_CONVENTION_SETS;
+    const current = NATAL_RECEIPT_CONVENTION_SETS[0]!;
     expect(current.planetPositions).toBe("aberrated-geocentric-ecliptic-of-date;no-deflection");
     // From 0.1.1-rc.16 the Moon is astronomy-engine's GeoMoon turned by the
     // engine's own frame and nutation (src/receipt-nutation.test.ts).
@@ -106,11 +106,11 @@ describe("receipt conventions", () => {
 
   it("refuses a mixed conventions set, and an old set from a newer engine", () => {
     const hybrid = edit(rc6, (e) => {
-      e.receipt.conventions.speed = NATAL_RECEIPT_CONVENTION_SETS[0].speed;
+      e.receipt.conventions.speed = NATAL_RECEIPT_CONVENTION_SETS[0]!.speed;
     });
     expect(parseNatalEnvelope(hybrid)).toMatchObject({ ok: false, code: "unsupported_feature" });
     const trueObliquity = edit(rc6, (e) => {
-      e.receipt.conventions.angles = NATAL_RECEIPT_CONVENTION_SETS[0].angles;
+      e.receipt.conventions.angles = NATAL_RECEIPT_CONVENTION_SETS[0]!.angles;
     });
     expect(parseNatalEnvelope(trueObliquity)).toMatchObject({
       ok: false,

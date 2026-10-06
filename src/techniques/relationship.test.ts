@@ -120,6 +120,17 @@ describe("Davison charts", () => {
     expect(davisonChart(FIRST, SECOND, { place: "great-circle" }).location).toEqual(davisonPlace(FIRST, SECOND, "great-circle"));
   });
 
+  it("refuses a place out of range and a convention it does not name, rather than answer for them", () => {
+    const here = { latitude: 10, longitude: 20 };
+    for (const place of [{ latitude: 91, longitude: 0 }, { latitude: 0, longitude: 181 }, { latitude: Number.NaN, longitude: 0 }, { latitude: 0 }, null]) {
+      expect(() => davisonPlace(place as never, here), JSON.stringify(place)).toThrow(RangeError);
+      expect(() => davisonPlace(here, place as never), JSON.stringify(place)).toThrow(RangeError);
+    }
+    // Before 1.0.0 any other word gave the great-circle midpoint.
+    expect(() => davisonPlace(here, here, "great_circle" as never)).toThrow(RangeError);
+    expect(davisonPlace(here, here, undefined)).toEqual(here);
+  });
+
   it("refuses unknown options", () => {
     expect(() => davisonChart(FIRST, SECOND, { place: "arithmetic" as never })).toThrow(RangeError);
     expect(() => davisonChart(FIRST, SECOND, { orb: 1 } as never)).toThrow(RangeError);

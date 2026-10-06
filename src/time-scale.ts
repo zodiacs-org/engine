@@ -23,7 +23,11 @@ export { LEAP_SECOND_LIST, UT1_DATA };
 export type TimeScaleName = "utc" | "ut1" | "tt";
 export const TIME_SCALE_NAMES: readonly TimeScaleName[] = Object.freeze(["utc", "ut1", "tt"]);
 
-/** The ΔT model name for a value derived from leap seconds and IERS UT1 − UTC. */
+/**
+ * The ΔT model name for a value derived from leap seconds and IERS UT1 − UTC:
+ * a chart's from 1972 to the end of the IERS UT1 table. DELTA_T_MODEL names
+ * the model used at every other instant.
+ */
 export const DELTA_T_IERS_MODEL = "iers-utc/1";
 
 /** UT1 − UTC as used: IERS observed or predicted, or 0 within 0.9 s outside the table. */

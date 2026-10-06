@@ -122,7 +122,7 @@
     "body": "Moon",
     "time": {
      "jd": 2451545.25,
-     "scale": "TT",
+     "scale": "tt",
      "deltaT": 64
     },
     "frame": "equatorial-icrs",
@@ -179,7 +179,7 @@
       "body": "Moon",
       "time": {
        "jd": 2451545.25,
-       "scale": "TT",
+       "scale": "tt",
        "deltaT": 64
       },
       "frame": "equatorial-icrs",
@@ -605,7 +605,7 @@
     "body": "Saturn",
     "time": {
      "jd": 2400000.5,
-     "scale": "UTC"
+     "scale": "utc"
     },
     "center": "heliocentric",
     "frame": "equatorial-mean-of-date",
@@ -663,7 +663,7 @@
       "body": "Saturn",
       "time": {
        "jd": 2400000.5,
-       "scale": "UTC"
+       "scale": "utc"
       },
       "frame": "equatorial-mean-of-date",
       "center": "heliocentric",
@@ -848,7 +848,7 @@
     "body": "Pluto",
     "time": {
      "jd": 2469807.5,
-     "scale": "TT"
+     "scale": "tt"
     },
     "frame": "equatorial-j2000",
     "flags": {
@@ -905,7 +905,7 @@
       "body": "Pluto",
       "time": {
        "jd": 2469807.5,
-       "scale": "TT"
+       "scale": "tt"
       },
       "frame": "equatorial-j2000",
       "center": "geocentric",
@@ -1890,7 +1890,7 @@
     "body": "Mars",
     "time": {
      "jd": 2524594.5,
-     "scale": "TT"
+     "scale": "tt"
     }
    },
    "result": {
@@ -1911,7 +1911,7 @@
      "latitude": 40,
      "longitude": -3
     },
-    "system": "placidus"
+    "houseSystem": "placidus"
    },
    "result": {
     "status": "ok",
@@ -1967,7 +1967,7 @@
        "latitude": 40,
        "longitude": -3
       },
-      "system": "placidus",
+      "houseSystem": "placidus",
       "zodiac": "tropical"
      },
      "instants": [
@@ -2174,7 +2174,7 @@
       "name": "fixture-user",
       "epoch": {
        "jd": 2433282.5,
-       "scale": "TT"
+       "scale": "tt"
       },
       "value": 23.15
      }
@@ -2252,7 +2252,7 @@
         "name": "fixture-user",
         "epoch": {
          "jd": 2433282.5,
-         "scale": "TT"
+         "scale": "tt"
         },
         "value": 23.15,
         "model": "engine"
@@ -2443,7 +2443,7 @@
     "body": "Venus",
     "time": {
      "jd": 2460000.5,
-     "scale": "UT1"
+     "scale": "ut1"
     },
     "zodiac": {
      "sidereal": {
@@ -2510,7 +2510,7 @@
       "body": "Venus",
       "time": {
        "jd": 2460000.5,
-       "scale": "UT1"
+       "scale": "ut1"
       },
       "frame": "ecliptic-true-of-date",
       "center": "geocentric",
@@ -2613,7 +2613,7 @@
      "sidereal": {
       "epoch": {
        "jd": 2000000.5,
-       "scale": "TT"
+       "scale": "tt"
       },
       "value": 18
      }
@@ -2637,10 +2637,10 @@
      "latitude": 13,
      "longitude": 80
     },
-    "system": "whole",
     "zodiac": {
      "sidereal": "krishnamurti"
-    }
+    },
+    "houseSystem": "whole"
    },
    "result": {
     "status": "ok",
@@ -2708,7 +2708,7 @@
        "latitude": 13,
        "longitude": 80
       },
-      "system": "whole",
+      "houseSystem": "whole",
       "zodiac": {
        "sidereal": "krishnamurti"
       }
@@ -2765,10 +2765,10 @@
      "latitude": -36.8,
      "longitude": 174.7
     },
-    "system": "placidus",
     "zodiac": {
      "sidereal": "galactic-center"
-    }
+    },
+    "houseSystem": "placidus"
    },
    "result": {
     "status": "ok",
@@ -2836,7 +2836,7 @@
        "latitude": -36.8,
        "longitude": 174.7
       },
-      "system": "placidus",
+      "houseSystem": "placidus",
       "zodiac": {
        "sidereal": "galactic-center"
       }

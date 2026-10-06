@@ -201,7 +201,7 @@ for (const aspect of today.aspects) {
 ### Uniform calculation API
 
 `@zodiacs/engine/calc` offers `calc`, `houses`, `events` and `chart` with one
-vocabulary: instants as ISO strings, Dates or `{ jd, scale: "UTC" | "UT1" | "TT" }`
+vocabulary: instants as ISO strings, Dates or `{ jd, scale: "utc" | "ut1" | "tt" }`
 on the engine's time basis, as `positions()` reads them;
 eight frames (the ecliptic or the equator; true or mean of date, J2000.0 or
 the ICRS); geocentric, heliocentric, barycentric and topocentric centers;

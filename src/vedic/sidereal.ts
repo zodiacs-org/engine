@@ -13,7 +13,9 @@ import type { BodyName, Chart, ChartFlag, DateInput, HouseSystem } from "../type
 
 /**
  * A sidereal longitude of date, frozen. Only siderealLongitude,
- * declareSiderealLongitude and siderealChart make one; copies are refused.
+ * declareSiderealLongitude and siderealChart make one; copies are refused,
+ * including one through JSON or structuredClone, although the type has no
+ * brand to say so (docs/vedic.md, *Frames*).
  */
 export interface SiderealLongitude {
   readonly frame: "sidereal";
@@ -89,7 +91,7 @@ export interface SiderealDeclaration {
   /** A label for the zodiac the value is in: nonempty, trimmed, at most 80 characters. */
   readonly ayanamsa: string;
   /** Its instant, needed only by the dasha functions. */
-  readonly at?: DateInput;
+  readonly at?: DateInput | undefined;
 }
 
 /**

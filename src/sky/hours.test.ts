@@ -145,5 +145,6 @@ describe("planetary hours: consistency with the rise/set function", () => {
     expect(() => planetaryHours({ latitude: 0, longitude: 0 }, "2024-01-01", { refraction: "standard", other: 1 } as never)).toThrow(RangeError);
     const refused = planetaryHours({ latitude: 0, longitude: 0 }, "2024-01-01", { maxSamples: 10 });
     expect(refused.status).toBe("refused");
+    expect(refused.status === "refused" && refused.reason).toBe("sample-budget");
   });
 });

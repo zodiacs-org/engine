@@ -6,7 +6,7 @@
 import { chartDeclinations, chartPoints, resolvedChart, utcOf } from "../api.js";
 import type { NatalSource } from "../api.js";
 import { outsideReferenceSpan } from "../reference-span.js";
-import { SIGN_NAMES, normalizeLongitude, signIndexForLongitude } from "../signs.js";
+import { SIGN_SLUGS, normalizeLongitude, signIndexForLongitude } from "../signs.js";
 import type { BodyName, Chart, ChartPoints, HouseNumber, PointName, ZodiacSign } from "../types.js";
 
 /** The four angles of a chart with a birth time and place. */
@@ -48,36 +48,7 @@ export const DAY_MS = 86_400_000;
 /** The largest magnitude of an ECMAScript Date's epoch-millisecond value. */
 export const MAX_DATE_MS = 8_640_000_000_000_000;
 
-/**
- * Copy an options argument's own data properties, refusing anything but a
- * plain object of the named keys. `undefined` values count as absent.
- */
-export function readOptions(
-  value: unknown,
-  allowed: readonly string[],
-  label: string
-): Readonly<Record<string, unknown>> {
-  const out: Record<string, unknown> = Object.create(null) as Record<string, unknown>;
-  if (value === undefined) return out;
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw new RangeError(`${label} must be an options object.`);
-  }
-  const prototype: unknown = Object.getPrototypeOf(value);
-  if (prototype !== Object.prototype && prototype !== null) {
-    throw new RangeError(`${label} must be a plain options object.`);
-  }
-  for (const key of Reflect.ownKeys(value)) {
-    if (typeof key !== "string" || !allowed.includes(key)) {
-      throw new RangeError(`${label} has an unknown option: ${String(key)}.`);
-    }
-    const slot = Object.getOwnPropertyDescriptor(value, key);
-    if (!slot || !("value" in slot) || !slot.enumerable) {
-      throw new RangeError(`${label} must contain only plain data properties.`);
-    }
-    if (slot.value !== undefined) out[key] = slot.value as unknown;
-  }
-  return out;
-}
+export { readOptions } from "../read-options.js";
 
 /** One of a fixed list of names, or the default when absent. */
 export function oneOf<T extends string>(
@@ -105,7 +76,7 @@ export function integerIn(value: unknown, minimum: number, maximum: number, labe
  */
 export function startSign(value: unknown, label: string): { index: number; lon: number | null } {
   if (typeof value === "string") {
-    const index = (SIGN_NAMES as readonly string[]).indexOf(value);
+    const index = (SIGN_SLUGS as readonly string[]).indexOf(value);
     if (index >= 0) return { index, lon: null };
   } else if (typeof value === "number" && Number.isFinite(value)) {
     const lon = normalizeLongitude(value);
@@ -124,7 +95,7 @@ export function originOf<P extends ChartLongitudeName | null, L extends number |
 }
 
 export function signAt(index: number): ZodiacSign {
-  const sign = SIGN_NAMES[((index % 12) + 12) % 12];
+  const sign = SIGN_SLUGS[((index % 12) + 12) % 12];
   if (sign === undefined) throw new RangeError("Could not resolve zodiac sign.");
   return sign;
 }

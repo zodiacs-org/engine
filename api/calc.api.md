@@ -19,24 +19,15 @@ declare const CALC_AYANAMSAS: readonly CalcAyanamsa[];
 
 declare const CALC_BODIES: readonly CalcBody[];
 
-declare const CALC_FRAMES: readonly [
-    "ecliptic-true-of-date",
-    "ecliptic-mean-of-date",
-    "ecliptic-j2000",
-    "ecliptic-icrs",
-    "equatorial-true-of-date",
-    "equatorial-mean-of-date",
-    "equatorial-j2000",
-    "equatorial-icrs"
-];
+declare const CALC_FRAMES: readonly CalcFrame[];
 
 declare const CALC_RECEIPT_SCHEMA = "zodiacs.calc-receipt.draft-v1";
 
 declare const CALC_SPAN: CalcSpan;
 
-type CalcAyanamsa = "lahiri" | "fagan-bradley" | "krishnamurti" | "raman" | "yukteswar" | "true-chitra" | "true-revati" | "true-pushya" | "galactic-center";
+type CalcAyanamsa = AyanamsaName;
 
-type CalcAyanamsaModel = "engine" | "newcomb" | "iau1976";
+type CalcAyanamsaModel = AyanamsaPrecessionModel;
 
 interface CalcAyanamsaValue {
     readonly name: string;
@@ -165,7 +156,7 @@ interface CalcRequest {
     readonly flags?: CalcFlags;
 }
 
-type CalcScale = "UTC" | "UT1" | "TT";
+type CalcScale = TimeScaleName;
 
 interface CalcSiderealChart {
     readonly ayanamsa: CalcAyanamsaValue;
@@ -271,7 +262,7 @@ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "v
 interface HousesRequest {
     readonly time: CalcTime;
     readonly place: CalcPlace;
-    readonly system?: HouseSystem;
+    readonly houseSystem?: HouseSystem;
     readonly zodiac?: CalcZodiac;
 }
 
@@ -310,7 +301,7 @@ declare function events(request: EventsRequest): EventsResult | CalcRefusal;
 declare function houses(request: HousesRequest): HousesResult | CalcRefusal;
 ```
 
-## Referenced, not exported here (11)
+## Referenced, not exported here (13)
 
 ```ts
 // exported by @zodiacs/engine (Aspect)
@@ -325,7 +316,13 @@ interface Aspect {
 // exported by @zodiacs/engine (AspectType)
 type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
 
-// exported by @zodiacs/engine (BodyName)
+// exported by @zodiacs/engine/vedic (AyanamsaName)
+type AyanamsaName = "lahiri" | "fagan-bradley" | "krishnamurti" | "raman" | "yukteswar" | "true-chitra" | "true-revati" | "true-pushya" | "galactic-center";
+
+// exported by @zodiacs/engine/vedic (AyanamsaPrecessionModel)
+type AyanamsaPrecessionModel = "engine" | "newcomb" | "iau1976";
+
+// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
 type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
 
 // exported by @zodiacs/engine (BodyPosition)

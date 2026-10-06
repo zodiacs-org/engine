@@ -27,7 +27,15 @@ type PlanetaryDay = (PlanetaryDayBase & {
     readonly nextSunrise: Date;
     readonly hours: readonly PlanetaryHour[];
 }) | (PlanetaryDayBase & {
-    readonly status: "no-sunrise" | "no-sunset" | "no-next-sunrise" | "refused";
+    readonly status: "no-sunrise" | "no-sunset" | "no-next-sunrise";
+    readonly sunrise: null;
+    readonly sunset: null;
+    readonly nextSunrise: null;
+    readonly hours: readonly [
+    ];
+}) | (PlanetaryDayBase & {
+    readonly status: "refused";
+    readonly reason: "sample-budget";
     readonly sunrise: null;
     readonly sunset: null;
     readonly nextSunrise: null;
@@ -108,7 +116,7 @@ declare function skyEventsOn(body: SkyBody, observer: Observer, date: string, op
 ## Referenced, not exported here (4)
 
 ```ts
-// exported by @zodiacs/engine (BodyName)
+// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
 type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
 
 // exported by @zodiacs/engine (DateInput)

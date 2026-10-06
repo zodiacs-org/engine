@@ -1,30 +1,31 @@
 import type { Aspect, AspectType, BodyPosition } from "./types.js";
 
 export interface AspectDefinition {
-  type: AspectType;
-  angle: number;
-  orb: number;
-  luminaryOrb: number;
+  readonly type: AspectType;
+  readonly angle: number;
+  readonly orb: number;
+  readonly luminaryOrb: number;
 }
 
-export const ASPECT_TYPES = [
+export const ASPECT_TYPES = Object.freeze([
   "conjunction",
   "sextile",
   "square",
   "trine",
   "opposition"
-] as const satisfies readonly AspectType[];
+] as const) satisfies readonly AspectType[];
 
-export const ASPECTS = [
-  { type: "conjunction", angle: 0, orb: 8, luminaryOrb: 10 },
-  { type: "sextile", angle: 60, orb: 4, luminaryOrb: 5 },
-  { type: "square", angle: 90, orb: 7, luminaryOrb: 8 },
-  { type: "trine", angle: 120, orb: 7, luminaryOrb: 8 },
-  { type: "opposition", angle: 180, orb: 8, luminaryOrb: 10 }
-] as const satisfies readonly AspectDefinition[];
+/** The five major aspects and their orbs, frozen: matchAspect returns these objects themselves. */
+export const ASPECTS = Object.freeze([
+  Object.freeze({ type: "conjunction", angle: 0, orb: 8, luminaryOrb: 10 } as const),
+  Object.freeze({ type: "sextile", angle: 60, orb: 4, luminaryOrb: 5 } as const),
+  Object.freeze({ type: "square", angle: 90, orb: 7, luminaryOrb: 8 } as const),
+  Object.freeze({ type: "trine", angle: 120, orb: 7, luminaryOrb: 8 } as const),
+  Object.freeze({ type: "opposition", angle: 180, orb: 8, luminaryOrb: 10 } as const)
+] as const) satisfies readonly AspectDefinition[];
 
 const LUMINARIES = new Set(["Sun", "Moon"]);
-export const ASPECT_BODIES = new Set([
+const ASPECT_BODY_NAMES = Object.freeze([
   "Sun",
   "Moon",
   "Mercury",
@@ -35,7 +36,18 @@ export const ASPECT_BODIES = new Set([
   "Uranus",
   "Neptune",
   "Pluto"
-]);
+] as const);
+
+/** Internal: the bodies aspects are found between. The engine reads this set and never ASPECT_BODIES. */
+export const ASPECT_BODY_SET: ReadonlySet<string> = new Set(ASPECT_BODY_NAMES);
+
+/**
+ * The bodies `findAspects`, `findInterAspects`, `elementBalance` and
+ * `modalityBalance` take into account: the Sun to Pluto, without the nodes.
+ * A copy for reading; the engine keeps its own, so changing this set changes
+ * nothing it computes.
+ */
+export const ASPECT_BODIES: ReadonlySet<string> = new Set(ASPECT_BODY_NAMES);
 
 /** Whether an aspect's orb is shrinking, growing, or neither, at an instant. */
 export type AspectMotion = "applying" | "separating" | "stationary";
@@ -96,7 +108,7 @@ export function matchAspect(
 }
 
 export function findAspects(bodies: readonly BodyPosition[]): Aspect[] {
-  const candidates = bodies.filter((body) => ASPECT_BODIES.has(body.body));
+  const candidates = bodies.filter((body) => ASPECT_BODY_SET.has(body.body));
   const aspects: Aspect[] = [];
 
   for (let first = 0; first < candidates.length; first += 1) {
