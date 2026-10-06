@@ -60,7 +60,7 @@ describe("the conventions set of this engine", () => {
     expect(rc15.moonPosition).toBe("astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration");
     const envelope = current();
     expect(envelope.receipt.conventions).toEqual(set);
-    expect(envelope.receipt.engine.version).toBe("0.1.1-rc.16");
+    expect(envelope.receipt.engine.version).toBe("0.1.1-rc.17");
     expect(verdict(envelope)).toBe("ok");
   });
 

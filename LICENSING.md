@@ -317,15 +317,17 @@ remains.
 
 `@zodiacs/engine/timing` and `@zodiacs/engine/vedic` carry the period
 lengths, rulers and sequences of the techniques they implement, from the
-classical texts that `docs/timing-hellenistic.md` and `docs/vedic.md` cite,
-and, for the four star-based ayanamsas, single published values for four
+classical texts that `docs/timing-hellenistic.md` and `docs/vedic.md` cite.
+For the four star-based ayanamsas, `@zodiacs/engine/vedic` and, since
+0.1.1-rc.17, `@zodiacs/engine/calc` carry single published values for four
 objects: position, proper motion, parallax and radial velocity from the
 Hipparcos new reduction (F. van Leeuwen 2007, VizieR I/311), SIMBAD,
 Gontcharov 2006 (VizieR III/252) and Famaey et al. 2005 (VizieR
 J/A+A/430/165), and for Sgr A* a SIMBAD position with Reid and Brunthaler's
 (2004) proper motion. `docs/vedic.md` cites each; no catalogue file or table
-is redistributed, only 22 values in `src/vedic/ayanamsa.ts`, built into
-`dist/vedic.js`: position, proper motion, parallax and radial velocity for
+is redistributed, only 22 values in `src/vedic/ayanamsa.ts`, built into a
+shared chunk under `dist/` that `dist/vedic.js` and `dist/calc.js` import:
+position, proper motion, parallax and radial velocity for
 the three stars, and position and proper motion for Sgr A*. `NOTICE` carries
 their attribution.
 
@@ -370,6 +372,13 @@ positions, scanned daily from 1800 to 2200 and compared with Horizons's
 barycentre at 88 instants (`docs/evidence/calc-api/`). No value of a JPL
 ephemeris, and no coefficient fitted to one, is in the package; the Horizons
 responses are in that evidence directory, which is not packed.
+
+Since 0.1.1-rc.17 it also carries the star values of *Timing and Vedic
+values*, in the chunk it shares with `./vedic`. Its ayanamsa bounds
+(`AYANAMSA_BOUNDS` in `src/calc-ayanamsa.ts`) are measurements too: the
+largest differences of the engine's ayanamsas from ERFA's construction of the
+same definitions (`docs/evidence/calc-sidereal-2026-10-05/`), not values
+taken from ERFA.
 
 ## Techniques tables
 

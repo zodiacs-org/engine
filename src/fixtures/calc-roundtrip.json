@@ -107,7 +107,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -228,7 +228,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -348,7 +348,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -486,7 +486,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -590,7 +590,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -710,7 +710,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -833,7 +833,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -957,7 +957,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1063,7 +1063,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1182,7 +1182,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1315,7 +1315,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1429,7 +1429,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1539,7 +1539,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1660,7 +1660,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1791,7 +1791,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2011,7 +2011,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2136,7 +2136,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2305,7 +2305,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2428,7 +2428,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2579,7 +2579,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2748,7 +2748,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2880,7 +2880,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3015,7 +3015,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3271,7 +3271,7 @@
        "listed": true
       }
      },
-     "engineVersion": "0.1.1-rc.16"
+     "engineVersion": "0.1.1-rc.17"
     },
     "sidereal": null,
     "receipt": {
@@ -3341,7 +3341,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3607,7 +3607,7 @@
        "listed": true
       }
      },
-     "engineVersion": "0.1.1-rc.16"
+     "engineVersion": "0.1.1-rc.17"
     },
     "sidereal": null,
     "receipt": {
@@ -3670,7 +3670,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3929,7 +3929,7 @@
        "listed": true
       }
      },
-     "engineVersion": "0.1.1-rc.16"
+     "engineVersion": "0.1.1-rc.17"
     },
     "sidereal": {
      "ayanamsa": {
@@ -4083,7 +4083,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "0.1.1-rc.16",
+      "version": "0.1.1-rc.17",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"

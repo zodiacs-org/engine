@@ -1,0 +1,20 @@
+# node tools/linear-change.mjs <rc.16 package> <8d8e837 build>; Node v22.22.2, 2026-10-05
+# <rc.16 package>: artifacts/zodiacs-engine-0.1.1-rc.16.tgz (SHA-256 43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8) unpacked
+# 116 instants, mean and true
+lahiri: 0 (identical)
+fagan-bradley: 0 (identical)
+krishnamurti: 0 (identical)
+raman: 1.42e-14°
+yukteswar: 1.07e-14°
+true-chitra: 0 (identical)
+true-revati: 0 (identical)
+true-pushya: 0 (identical)
+galactic-center: 0 (identical)
+a caller's linear ayanamsa from JD -97559411.5 (TT), 24 definitions: 7.21e-11°
+a caller's linear ayanamsa from JD 102440586.5 (TT), 24 definitions: 8.62e-11°
+a caller's linear ayanamsa from JD 588465.5 (TT), 24 definitions: 1.56e-12°
+a caller's linear ayanamsa from JD 2415020 (TT), 24 definitions: 6.82e-13°
+a caller's linear ayanamsa from JD 2451545 (TT), 24 definitions: 6.39e-13°
+a caller's linear ayanamsa from JD 2378496.5 (TT), 24 definitions: 6.82e-13°
+a caller's linear ayanamsa from JD 2524592.5 (TT), 24 definitions: 6.82e-13°
+callers' linear ayanamsas, largest: 8.62e-11°

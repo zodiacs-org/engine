@@ -1,0 +1,58 @@
+# node history-check.mjs 23660f5..HEAD <patterns> <examples> --staged
+# 2026-10-06, git 2.43.0, Node v22.22.2
+
+Labels searched (79 data patterns and 10 name patterns, kept outside the repository):
+  person A
+  person B
+  person C
+  person D
+  person E
+  person F
+  person G
+
+Commits: 7, the last of them the index. For each, the lines it adds, the contents of the binary files it adds or changes, the paths it adds and its message:
+- 18cb6b7 Compute the sidereal zodiac in the calc entry
+    binary files read: 0; paths added: 8
+    birth data: none
+- 0887541 Act on the sidereal review: dense near-Sun bounds, one ayanamsa shape
+    binary files read: 0; paths added: 2
+    birth data: none
+- 8070095 Act on the second sidereal review: every year near the Sun, far epochs
+    binary files read: 0; paths added: 1
+    birth data: none
+- 2ecc43c Act on the third sidereal review: the rate's rounding floor, the engine's own cap
+    binary files read: 0; paths added: 1
+    birth data: none
+- d36642e Act on the fourth sidereal review: ERFA's cap at its least margin, the floor's reach
+    binary files read: 0; paths added: 0
+    birth data: none
+- 8d8e837 Act on the fifth sidereal review: ERFA's margin at the engine's crossings, calc's speed rounding
+    binary files read: 0; paths added: 1
+    birth data: none
+- (the index against HEAD: the commit being made)
+    binary files read: 0; paths added: 17
+    birth data: none
+
+The tree of 8d8e837, 1105 files, gzip archives decompressed:
+  birth data: none
+
+The published worked examples that CONTRIBUTING.md allows: the files of that tree that name each, and those that hold its birth data (cited: the file also holds every part of the citation):
+- Christopher Reeve: Hamish Saunders, Solar Arc Directions (1996), p. 3
+    named in 18 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, docs/timing-hellenistic.md, scripts/module-resolution-smoke.mjs, scripts/verify-packed-consumer.mjs, src/timing/firdaria.test.ts, src/timing/profections.test.ts, src/timing/releasing.test.ts, src/timing/solar-arc.test.ts
+    birth data in 1 files:
+      src/timing/profections.test.ts (cited)
+- Coretta Scott King: Hamish Saunders, Solar Arc Directions (1996), p. 4
+    named in 14 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/timing/firdaria.test.ts, src/timing/releasing.test.ts, src/timing/solar-arc.test.ts
+    birth data in 0 files:
+- Princess Diana: Hamish Saunders, Solar Arc Directions (1996), p. 5
+    named in 12 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/timing/solar-arc.test.ts
+    birth data in 0 files:
+- Charlie Chaplin: Juan Estadella, Predictive Astrology, 3rd ed. (2019), pp. 84-85
+    named in 13 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/progressions.test.ts, src/timing/solar-arc.test.ts
+    birth data in 1 files:
+      docs/evidence/rc12-20260928/sources.md (cited)
+- The native of Vettius Valens, Anthologies IV.9, tr. Mark T. Riley (2010), pp. 75-76
+    named in 24 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, docs/evidence/houses-extra-2026-09-29/full-tests.log, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/fix-full-tests.log, docs/evidence/rc15-20260929/full-tests.log, docs/evidence/rc15-20260929/rebuilt/full-tests-v20.19.0.log, docs/evidence/rc15-20260929/rebuilt/full-tests-v22.22.2.log, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/full-tests-v20.19.0.log, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/techniques-2026-09-29/gates.log, docs/evidence/timing-hellenistic-2026-09-28/README.md, docs/timing-hellenistic.md, scripts/module-resolution-smoke.mjs, src/timing/profections.test.ts, src/timing/profections.ts, src/timing/releasing.test.ts, src/timing/releasing.ts
+    birth data in 0 files:
+
+Birth data found: 0 lines added in the commits, 0 lines in the tree.

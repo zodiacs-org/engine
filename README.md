@@ -14,13 +14,13 @@ side effects, and performs no network request from its core entry point. Its
 one runtime side effect is the ΔT it installs in astronomy-engine (see Time
 below).
 
-**Release candidate: 0.1.1-rc.16.** Public npm lookups for this package returned
-404 on 2026-09-26. The expansion release remains held for review and operator
-publication authority. Install the exact candidate tarball supplied with the
-review, retaining its SHA-256 receipt:
+**Release candidate: 0.1.1-rc.17.** On 2026-10-05 npm carried 0.1.1-rc.14 to
+0.1.1-rc.16 of this package (`latest` 0.1.1-rc.15, `next` 0.1.1-rc.16); this
+candidate is not published there. Install the exact candidate tarball
+supplied with the review, retaining its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-0.1.1-rc.16.tgz
+pnpm add ./zodiacs-engine-0.1.1-rc.17.tgz
 ```
 
 The package runs in browsers through a bundler, and in Node.js 20.19.0 or a
@@ -35,7 +35,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.16.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-0.1.1-rc.17.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -64,7 +64,11 @@ dependencies afresh with `npm ci` and takes nothing from the checkout's
 needs merge commits: a squash or rebase merge drops the source commits it
 checks against, and the check then fails.
 
-This candidate brings five opt-in entry points onto rc.15:
+This candidate adds the sidereal zodiac to `@zodiacs/engine/calc`: its four
+functions take an ayanamsa of `@zodiacs/engine/vedic`, or a caller's own,
+and, with every other default, give the Vedic entry's sidereal longitudes to
+the bit; their bounds add the ayanamsa's (see Uniform calculation API). Every
+tropical value is rc.16's. rc.16 brought five opt-in entry points onto rc.15:
 `@zodiacs/engine/calc`, one calculation API over eight frames, four centers
 and three corrections, with speeds, bounds and receipts; `/window`, birth-time
 window partitions; `/techniques`, returns, composite and Davison charts, the
@@ -82,8 +86,9 @@ in rc.15, a chart's instant is read on a time basis: from 1972 to 2027-10-02
 as UTC, with TT from the leap seconds and UT1 from IERS UT1 − UTC, and
 otherwise as UT1 with the ΔT model, or on UT1 or TT when `timeScale` says so
 (see Time). The ephemeris is still astronomy-engine 2.1.19. See CHANGELOG.md
-for the release history and `docs/evidence/rc16-20260930/` for this
-candidate's checks. Site adoption is reviewed separately.
+for the release history and `docs/evidence/rc17-20261005/` for this
+candidate's checks (rc.16's are in `docs/evidence/rc16-20260930/`). Site
+adoption is reviewed separately.
 
 ## Natal chart in 10 lines
 
@@ -199,14 +204,19 @@ for (const aspect of today.aspects) {
 vocabulary: instants as ISO strings, Dates or `{ jd, scale: "UTC" | "UT1" | "TT" }`
 on the engine's time basis, as `positions()` reads them;
 eight frames (the ecliptic or the equator; true or mean of date, J2000.0 or
-the ICRS); geocentric, heliocentric, barycentric and topocentric centers; and
-apparent, astrometric or geometric positions with distances and speeds.
+the ICRS); geocentric, heliocentric, barycentric and topocentric centers;
+apparent, astrometric or geometric positions with distances and speeds; and
+the tropical or the sidereal zodiac, with any ayanamsa of
+`@zodiacs/engine/vedic` or a caller's own (Swiss Ephemeris's `SE_SIDM_USER`).
 Results carry bounds and a receipt of convention ids. A measured bound is the
 largest difference from JPL Horizons on 32 instants from 1802 to 2188: a
-sample maximum, not a limit. An estimated bound names what it rests on. What
-this version does not compute comes back as a typed refusal, such as the
-sidereal zodiac, or an instant whose UT1 or TT is outside 1800 to 2200: there
-calc has no comparison to take a bound from, while the root entry's functions
+sample maximum, not a limit. In the sidereal zodiac a bound adds the
+ayanamsa's: the largest difference of its mean, and of its rate, from ERFA's
+construction of the same definition, over every year from 1800 to 2199. An
+estimated bound names what it rests on. What this version does not compute
+comes back as a typed refusal, such as gravitational deflection, or an
+instant whose UT1 or TT is outside 1800 to 2200: there calc has no
+comparison to take a bound from, while the root entry's functions
 still compute such an instant and flag it `outside-reference-span`. With
 every default, `calc({ body, time })` is the position `positions()` gives, to
 the bit. The root entry loads none of it. The reference, with the Swiss Ephemeris flag
