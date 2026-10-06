@@ -23,7 +23,7 @@ jobs:
       # version (and with it ICU and tzdata) is pinned to the one the
       # committed results were made with.
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: 22.22.2
           cache: npm
