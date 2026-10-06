@@ -105,9 +105,9 @@ if (siderealChartResult.status === "ok" && siderealChartResult.sidereal) { const
 void houses; void events;
 import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError, type BirthWindow, type WindowChange, type WindowUnresolved } from "@zodiacs/engine/window";
 const windowed: BirthWindow = birthWindow({start: "2000-02-29T11:50:00Z", end: "2000-02-29T12:10:00Z", latitude: 0, longitude: 180, houseSystem: "placidus", rounding: {recorded: "2000-02-29T12:00:00Z", minutes: 5}});
-const firstChanges: WindowChange[] = windowed.switches[0]?.changes ?? [];
-const label: "sampled at one-second resolution" = WINDOW_VERIFICATION;
-const open: WindowUnresolved[] = windowed.unresolved;
+const firstChanges: readonly WindowChange[] = windowed.switches[0]?.changes ?? [];
+const label: string = WINDOW_VERIFICATION;
+const open: readonly WindowUnresolved[] = windowed.unresolved;
 const budget: Error = new WindowBudgetError();
 void firstChanges; void label; void open; void budget;
 const degreePerDay = (_body: string, date: Date) => (date.getTime() / 86_400_000) % 360;
