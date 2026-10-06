@@ -1,9 +1,15 @@
 import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "./crossings.js";
 import type { CrossingSearchOptions, CrossingSearchResult, LongitudeCrossing } from "./crossings.js";
+import { dateFrom } from "./date-input.js";
 import { SPEED_STEP_DAYS, bodyLongitude, longitudeSpeed } from "./ephemeris.js";
-import type { BodyName } from "./types.js";
+import type { BodyName, DateInput } from "./types.js";
 
 const DAY = 86_400_000;
+
+/** A window's end as the root reads any instant; the crossings entry takes Dates. */
+function windowEnd(value: DateInput, end: "start" | "end"): Date {
+  return dateFrom(value, `Crossing window ${end}`);
+}
 
 function validMilliseconds(date: Date, label: string): number {
   if (!(date instanceof Date)) throw new RangeError(`${label} must be a valid Date.`);
@@ -39,11 +45,11 @@ export interface SaturnReturnResult {
 export function findLongitudeCrossings(
   body: BodyName,
   targetLongitude: number,
-  from: Date,
-  to: Date,
+  from: DateInput,
+  to: DateInput,
   stepDays = 5
 ): LongitudeCrossing[] {
-  return findLongitudeCrossingsWith(bodyLongitude, body, targetLongitude, from, to, stepDays);
+  return findLongitudeCrossingsWith(bodyLongitude, body, targetLongitude, windowEnd(from, "start"), windowEnd(to, "end"), stepDays);
 }
 
 /**
@@ -55,11 +61,11 @@ export function findLongitudeCrossings(
 export function searchLongitudeCrossings(
   body: BodyName,
   targetLongitude: number,
-  from: Date,
-  to: Date,
+  from: DateInput,
+  to: DateInput,
   options?: CrossingSearchOptions
 ): CrossingSearchResult {
-  return searchLongitudeCrossingsWith(bodyLongitude, body, targetLongitude, from, to, options);
+  return searchLongitudeCrossingsWith(bodyLongitude, body, targetLongitude, windowEnd(from, "start"), windowEnd(to, "end"), options);
 }
 
 export function groupIntoSeasons(

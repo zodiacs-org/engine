@@ -60,7 +60,8 @@ interface PlanetaryDayBase {
  * clock's midnight falls next to sunrise. `"no-sunset"`: the Sun rose but did
  * not set within three days of the date's start, as polar day begins.
  * `"no-next-sunrise"`: it rose and set but did not rise again within those
- * three days, as polar night begins. `"refused"`: the sample budget ran out.
+ * three days, as polar night begins. `"refused"`: the sample budget ran out,
+ * with `reason: "sample-budget"` as a refused skyEventsOn() gives it.
  */
 export type PlanetaryDay =
   | (PlanetaryDayBase & {
@@ -71,7 +72,15 @@ export type PlanetaryDay =
       readonly hours: readonly PlanetaryHour[];
     })
   | (PlanetaryDayBase & {
-      readonly status: "no-sunrise" | "no-sunset" | "no-next-sunrise" | "refused";
+      readonly status: "no-sunrise" | "no-sunset" | "no-next-sunrise";
+      readonly sunrise: null;
+      readonly sunset: null;
+      readonly nextSunrise: null;
+      readonly hours: readonly [];
+    })
+  | (PlanetaryDayBase & {
+      readonly status: "refused";
+      readonly reason: "sample-budget";
       readonly sunrise: null;
       readonly sunset: null;
       readonly nextSunrise: null;
@@ -103,7 +112,9 @@ function dayOf(site: Readonly<Required<Observer>>, input: Record<string, unknown
   const search = searchEvents("Sun", site, conventions, startMs, startMs + SPAN_DAYS * DAY_MS, budgetOf(input.maxSamples), false);
   const base = { date: isoDate(midnightMs), utcOffsetMinutes: offset, weekday, ruler, conventions, samples: search.samples };
   const empty = { sunrise: null, sunset: null, nextSunrise: null, hours: Object.freeze([]) as readonly [] };
-  if (search.status === "refused") return Object.freeze({ ...base, flags: Object.freeze([]), status: "refused", ...empty });
+  if (search.status === "refused") {
+    return Object.freeze({ ...base, flags: Object.freeze([]), status: "refused", reason: "sample-budget", ...empty });
+  }
   const rise = search.events.find((event) => event.kind === "rise" && event.at.getTime() < startMs + DAY_MS);
   const set = rise && search.events.find((event) => event.kind === "set" && event.at > rise.at);
   const next = set && search.events.find((event) => event.kind === "rise" && event.at > set.at);

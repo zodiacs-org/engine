@@ -10,10 +10,15 @@ import { NAKSHATRAS, VIMSHOTTARI_LORDS, VIMSHOTTARI_YEARS } from "./nakshatra.js
 import type { NakshatraName, VimshottariLord } from "./nakshatra.js";
 import { requireSidereal } from "./sidereal.js";
 import type { SiderealLongitude } from "./sidereal.js";
-import { SIGN_NAMES } from "../signs.js";
+import { SIGN_SLUGS } from "../signs.js";
 import type { ZodiacSign } from "../types.js";
 
-/** Traditional sign rulers, Aries to Pisces (BPHS 4, Santhanam 1984). */
+/**
+ * Traditional sign rulers, Aries to Pisces (BPHS 4, Santhanam 1984): the same
+ * rulers as `@zodiacs/engine/techniques`'s DOMICILE_RULERS and
+ * `@zodiacs/engine/timing`'s TRADITIONAL_RULERS. Each entry point carries its
+ * own copy, so that none imports another; a test keeps the three equal.
+ */
 export const SIGN_LORDS = Object.freeze([
   "Mars", "Venus", "Mercury", "Moon", "Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Saturn", "Jupiter"
 ] as const);
@@ -55,7 +60,7 @@ const SEGMENTS: readonly Segment[] = (() => {
         const to = Math.min(end, (Math.floor(from / SIGN_TICKS) + 1) * SIGN_TICKS);
         const sign = Math.floor(from / SIGN_TICKS);
         out.push({
-          number: out.length + 1, sign: SIGN_NAMES[sign]!, signLord: SIGN_LORDS[sign]!,
+          number: out.length + 1, sign: SIGN_SLUGS[sign]!, signLord: SIGN_LORDS[sign]!,
           star: NAKSHATRAS[n]!, starLord: VIMSHOTTARI_LORDS[n % 9]!, subLord: VIMSHOTTARI_LORDS[lord]!,
           start: from / TICKS_PER_DEGREE, end: to / TICKS_PER_DEGREE,
           startTicks: from, endTicks: to, subTicks: at, lord

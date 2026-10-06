@@ -8,7 +8,7 @@
  */
 import type { NatalSource } from "../api.js";
 import { dateFrom } from "../date-input.js";
-import { SIGN_NAMES } from "../signs.js";
+import { SIGN_SLUGS } from "../signs.js";
 import type { DateInput, ZodiacSign } from "../types.js";
 import { TRADITIONAL_RULERS } from "./rulers.js";
 import type { TraditionalPlanet } from "./rulers.js";
@@ -86,7 +86,7 @@ const LEVEL4_UNIT_MS: Readonly<Record<ReleasingYearConvention, number>> = /*#__P
 });
 /** Level-4 units in one unit of each level. */
 const LEVEL_SCALE: Readonly<Record<ReleasingLevel, number>> = /*#__PURE__*/ Object.freeze({ 1: 1728, 2: 144, 3: 12, 4: 1 });
-const MINOR: readonly number[] = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ SIGN_NAMES.map((sign) => VALENS_MINOR_YEARS[sign]));
+const MINOR: readonly number[] = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ SIGN_SLUGS.map((sign) => VALENS_MINOR_YEARS[sign]));
 /** The most periods one call may return. */
 const MAX_PERIODS = 100_000;
 
@@ -154,15 +154,15 @@ export interface ReleasingAt {
 /** Options for {@link releasingPeriods} and {@link zodiacalReleasing}. */
 export interface ReleasingOptions {
   /** The deepest level, 1 to 4; 2 by default. */
-  readonly levels?: ReleasingLevel;
+  readonly levels?: ReleasingLevel | undefined;
   /** `"valens-360"` by default. */
-  readonly years?: ReleasingYearConvention;
+  readonly years?: ReleasingYearConvention | undefined;
 }
 
 /** Options for {@link releasingAt} and {@link zodiacalReleasingAt}. */
 export interface ReleasingAtOptions {
   /** `"valens-360"` by default. */
-  readonly years?: ReleasingYearConvention;
+  readonly years?: ReleasingYearConvention | undefined;
 }
 
 interface Span {

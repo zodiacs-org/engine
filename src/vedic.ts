@@ -6,6 +6,7 @@ export { siderealChart } from "./vedic/chart.js";
 export { AYANAMSAS, ayanamsa, userAyanamsa } from "./vedic/ayanamsa.js";
 export type {
   AyanamsaDefinition,
+  AyanamsaFlag,
   AyanamsaName,
   AyanamsaOptions,
   AyanamsaPrecessionModel,

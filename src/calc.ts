@@ -15,7 +15,7 @@ import { bodyLongitude, computeChart, gastHours, onChartClock } from "./ephemeri
 import { assertDerivedFlags, snapshotFlags, timeFlags, validateBirthSettings } from "./birth-input.js";
 import { MEASURED, MEASURED_BASIS } from "./calc-bounds.js";
 import {
-  CALC_FRAMES,
+  CALC_FRAMES as FRAMES,
   apply,
   frameMatrix,
   fromSpherical,
@@ -35,18 +35,17 @@ import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
 import { computeAngles, computeHouses, eastPointOf, isPolarUndefinedHouseSystem, ramcOf, vertexOf } from "./houses.js";
 import { tilt } from "./nutation.js";
 import { meanApogee, meanNodeLongitude } from "./points.js";
-import { REFERENCE_SPAN } from "./reference-span.js";
+import { EPHEMERIS_SPAN, REFERENCE_SPAN } from "./reference-span.js";
 import { normalizeLongitude } from "./signs.js";
-import { elapsedDays, timeBasis } from "./time-scale.js";
+import { TIME_SCALE_NAMES, elapsedDays, timeBasis } from "./time-scale.js";
 import type { TimeBasis, TimeScale, TimeScaleName } from "./time-scale.js";
 import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
 import type { Angles, BodyName, Chart, ChartFlag, ChartInput, HouseSystem } from "./types.js";
-import { AYANAMSA_BASIS, addBounds, ayanamsaBound } from "./calc-ayanamsa.js";
-import { AYANAMSAS, ayanamsaAt, isUserAyanamsaName, outsideSpanEpoch, userAyanamsa } from "./vedic/ayanamsa.js";
-import type { AyanamsaDefinition } from "./vedic/ayanamsa.js";
+import { addBounds, ayanamsaBound } from "./calc-ayanamsa.js";
+import { AYANAMSAS, ayanamsaAt, isUserAyanamsaName, userAyanamsa } from "./vedic/ayanamsa.js";
+import type { AyanamsaDefinition, AyanamsaName, AyanamsaPrecessionModel } from "./vedic/ayanamsa.js";
 import { siderealChartOf, wholeSignCusps, wrap360 } from "./vedic/sidereal.js";
 
-export { CALC_FRAMES };
 export type { Angles, CalcCorrection, CalcFrame, Chart, ChartFlag, DeltaT, HouseSystem, TimeScale };
 
 /** The Sun, Moon, Earth and planets, the true and mean lunar nodes, and Black Moon Lilith (the mean apogee). */
@@ -71,12 +70,15 @@ export type CalcBody =
 const PLANETS = ["Sun", "Moon", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"];
 const POINTS = ["North Node", "South Node", "Mean Node", "Mean South Node", "Black Moon Lilith"] as const;
 type Point = (typeof POINTS)[number];
-export const CALC_BODIES = [...PLANETS, ...POINTS] as readonly CalcBody[];
+export const CALC_BODIES = Object.freeze([...PLANETS, ...POINTS]) as readonly CalcBody[];
 /** positions() gives these; events() searches them. */
 const CHART_BODIES = CALC_BODIES.filter((body) => body !== "Earth" && !/^Mean|Lilith/.test(body));
 
-/** The time scale of a Julian date: UTC, UT1 or TT, the root entry's `timeScale` values. */
-export type CalcScale = "UTC" | "UT1" | "TT";
+/** The time scale of a Julian date: "utc", "ut1" or "tt", the root entry's TimeScaleName. */
+export type CalcScale = TimeScaleName;
+
+/** The frames calc() gives a position in. */
+export const CALC_FRAMES: readonly CalcFrame[] = Object.freeze([...FRAMES]);
 
 /**
  * An instant: an ISO 8601 string or a Date, read as UTC on the engine's time
@@ -91,54 +93,48 @@ export type CalcTime =
   | { readonly iso: string; readonly deltaT?: number }
   | { readonly jd: number; readonly scale: CalcScale; readonly deltaT?: number };
 
-/** Geodetic latitude and east longitude, degrees; `height` in metres, 0 by default (topocentric only). */
-export interface CalcPlace {
+/**
+ * Geodetic latitude and east longitude, degrees: the place `houses()` and
+ * `chart()` take, which has no height.
+ */
+export interface CalcLocation {
   readonly latitude: number;
   readonly longitude: number;
+}
+
+/**
+ * Geodetic latitude and east longitude, degrees; `height` in metres above the
+ * IERS 2003 ellipsoid, from −12,000 to 100,000, 0 by default: a topocentric
+ * center. `@zodiacs/engine/sky`'s Observer has the same fields on WGS84, with
+ * heights from −10,000 m.
+ */
+export interface CalcPlace extends CalcLocation {
   readonly height?: number;
 }
 
 export type CalcCenter = "geocentric" | "heliocentric" | "barycentric" | { readonly topocentric: CalcPlace };
 
-/** The built-in ayanamsas, by name: those of @zodiacs/engine/vedic, whose guide (docs/vedic.md) defines each. */
-export type CalcAyanamsa =
-  | "lahiri"
-  | "fagan-bradley"
-  | "krishnamurti"
-  | "raman"
-  | "yukteswar"
-  | "true-chitra"
-  | "true-revati"
-  | "true-pushya"
-  | "galactic-center";
+/** The built-in ayanamsas, by name: `@zodiacs/engine/vedic`'s AyanamsaName, whose guide (docs/vedic.md) defines each. */
+export type CalcAyanamsa = AyanamsaName;
 
-export const CALC_AYANAMSAS = [
-  "lahiri",
-  "fagan-bradley",
-  "krishnamurti",
-  "raman",
-  "yukteswar",
-  "true-chitra",
-  "true-revati",
-  "true-pushya",
-  "galactic-center"
-] as readonly CalcAyanamsa[];
+/** The built-in ayanamsas' names, in the order of `@zodiacs/engine/vedic`'s AYANAMSAS, from which they are taken. */
+export const CALC_AYANAMSAS = Object.freeze(Object.keys(AYANAMSAS)) as readonly CalcAyanamsa[];
 
-/** The precession model a caller's ayanamsa was computed with: the engine's IAU 2006, Newcomb's (Kinoshita 1975) or IAU 1976. */
-export type CalcAyanamsaModel = "engine" | "newcomb" | "iau1976";
+/** The precession model a caller's ayanamsa was computed with: the engine's IAU 2006, Newcomb's (Kinoshita 1975) or IAU 1976; `@zodiacs/engine/vedic`'s AyanamsaPrecessionModel. */
+export type CalcAyanamsaModel = AyanamsaPrecessionModel;
 
 /**
  * A caller's ayanamsa, the counterpart of Swiss Ephemeris's SE_SIDM_USER: the
  * mean ayanamsa `value` at `epoch`, carried from there by precession in
- * `model`, or by a fixed `rate`. It is @zodiacs/engine/vedic's userAyanamsa
- * in JSON, and is read the same way.
+ * `model`, or by a fixed `rate`. It defines what `@zodiacs/engine/vedic`'s
+ * userAyanamsa defines, with its epoch given as any instant in a request is.
  */
 export interface CalcUserAyanamsa {
   /** A lowercase identifier of at most 64 characters that is not a built-in name; default "user". */
   readonly name?: string;
   /**
-   * When `value` holds, read as `time` is: `{ jd, scale: "TT" }` is
-   * SE_SIDM_USER's TT epoch, and `{ jd, scale: "UT1" }` its UT epoch
+   * When `value` holds, read as `time` is: `{ jd, scale: "tt" }` is
+   * SE_SIDM_USER's TT epoch, and `{ jd, scale: "ut1" }` its UT epoch
    * (SE_SIDBIT_USER_UT), whose TT comes from the time basis.
    */
   readonly epoch: CalcTime;
@@ -218,7 +214,13 @@ export interface CalcInstant {
   readonly timeScale: TimeScale;
 }
 
-export const CALC_RECEIPT_SCHEMA = "zodiacs.calc-receipt.draft-v1";
+/**
+ * The schema id of a calc receipt. Candidates before 1.0.0 wrote
+ * "zodiacs.calc-receipt.draft-v1", whose requests name a Julian date's scale
+ * in capitals and houses()'s house system as `system`; from 1.0.0 the id is
+ * this one, and its requests are 1.0's.
+ */
+export const CALC_RECEIPT_SCHEMA = "zodiacs.calc-receipt.v1";
 
 export interface CalcReceipt<Request> {
   readonly schema: typeof CALC_RECEIPT_SCHEMA;
@@ -282,17 +284,22 @@ export interface CalcPosition {
   readonly receipt: CalcReceipt<CalcRequest>;
 }
 
-/** Why a request was not computed; the crossing search uses the same `status` and `reason` words. */
+/**
+ * Why a request was not computed. A refused search in `@zodiacs/engine/crossings`
+ * and `@zodiacs/engine/sky` carries the same `status: "refused"`, and for a
+ * spent budget the same `reason: "sample-budget"`.
+ */
 export type CalcRefusal = {
   readonly status: "refused";
   readonly detail: string;
 } & (
   | { readonly reason: "unsupported-combination" | "not-in-this-version" }
   | { readonly reason: "out-of-range"; readonly span: CalcSpan }
+  | { readonly reason: "epoch-out-of-range"; readonly epochSpan: typeof EPHEMERIS_SPAN }
   | { readonly reason: "sample-budget"; readonly samples: number; readonly maxSamples: number }
 );
 
-/** From an ISO instant up to, not including, another. */
+/** From an instant up to, not including, another: ISO 8601 UTC to the millisecond, as Date.prototype.toISOString gives them. */
 export interface CalcSpan {
   readonly from: string;
   readonly to: string;
@@ -356,8 +363,6 @@ interface TimeInput {
   readonly civil: boolean;
 }
 
-const SCALES: Readonly<Record<CalcScale, TimeScaleName>> = { UTC: "utc", UT1: "ut1", TT: "tt" };
-
 function readTime(value: unknown, label: string): TimeInput {
   const iso = (text: string | Date) => {
     try {
@@ -382,8 +387,11 @@ function readTime(value: unknown, label: string): TimeInput {
   }
   const jd = time.jd;
   if (typeof jd !== "number" || !Number.isFinite(jd)) throw new RangeError(`${label}.jd must be a finite Julian date.`);
-  const scale = oneOf(time.scale, ["UTC", "UT1", "TT"] as const, `${label}.scale`);
-  return { record: { jd, scale, ...pinned }, ms: J2000_MS + (jd - J2000_JD) * DAY_MS, scale: SCALES[scale], pin, civil: false };
+  if (typeof time.scale === "string" && (TIME_SCALE_NAMES as readonly string[]).includes(time.scale.toLowerCase()) && !(TIME_SCALE_NAMES as readonly string[]).includes(time.scale)) {
+    throw new RangeError(`${label}.scale must be one of ${TIME_SCALE_NAMES.join(", ")}: lowercase since 1.0.0.`);
+  }
+  const scale = oneOf(time.scale, TIME_SCALE_NAMES, `${label}.scale`);
+  return { record: { jd, scale, ...pinned }, ms: J2000_MS + (jd - J2000_JD) * DAY_MS, scale, pin, civil: false };
 }
 
 function readPlace(value: unknown, label: string, withHeight = false): Required<CalcPlace> {
@@ -428,7 +436,7 @@ function epochTT(epoch: TimeInput, label: string): number {
   const record = epoch.record;
   const message = `${label} must be an instant in the range of a Date.`;
   let jd: number;
-  if ("jd" in record && record.scale === "TT") {
+  if ("jd" in record && record.scale === "tt") {
     jd = record.jd;
   } else {
     // The time basis reads any instant a Date holds.
@@ -474,14 +482,24 @@ function readZodiac(value: unknown): Zodiac {
   return { record: { sidereal: user }, definition, ids: ["zodiac:sidereal", `ayanamsa:user-${definition.kind}`] };
 }
 
-/** Out of range for an epoch definition whose epoch is outside the span, where the ayanamsas have been compared. */
+/** TT days from J2000.0 of an epoch definition's epoch inside EPHEMERIS_SPAN, the ends included. */
+const insideEphemerisSpan = (definition: AyanamsaDefinition): boolean =>
+  definition.kind !== "epoch" ||
+  (definition.epochTT - J2000_JD >= EPHEMERIS_SPAN.daysFromJ2000.from && definition.epochTT - J2000_JD <= EPHEMERIS_SPAN.daysFromJ2000.to);
+
+/**
+ * Refused for an epoch definition whose epoch is outside EPHEMERIS_SPAN, the
+ * years the engine's precession has been compared with ERFA's for it. From
+ * 1800 to 2200 its bound is the span's; outside, the wider one the epoch's
+ * band gives (calc-ayanamsa.ts).
+ */
 function epochRefusal(zodiac: Zodiac): CalcRefusal | null {
-  return zodiac.definition && outsideSpanEpoch(zodiac.definition)
+  return zodiac.definition && !insideEphemerisSpan(zodiac.definition)
     ? {
         status: "refused",
-        reason: "out-of-range",
-        detail: `The ayanamsa's epoch is outside ${CALC_SPAN.from} to ${CALC_SPAN.to}, where the ayanamsas have been compared with ERFA.`,
-        span: CALC_SPAN
+        reason: "epoch-out-of-range",
+        detail: `The ayanamsa's epoch is outside ${EPHEMERIS_SPAN.fromTT} to ${EPHEMERIS_SPAN.toTT} TT (EPHEMERIS_SPAN), where the precession that carries it has been compared with ERFA's.`,
+        epochSpan: EPHEMERIS_SPAN
       }
     : null;
 }
@@ -509,14 +527,14 @@ function ayanamsaValue(definition: AyanamsaDefinition, value: AyanamsaAt, subtra
     nutation: value.nutation * k,
     true: value.true * k,
     subtracted,
-    bound: { value: ayanamsaBound(definition, value.elongation).position, unit: "arcsec", label: "measured", basis: AYANAMSA_BASIS }
+    bound: { value: ayanamsaBound(definition, value.elongation).position, unit: "arcsec", label: "measured", basis: ayanamsaBound(definition, value.elongation).basis }
   };
 }
 
 /** A bound with the ayanamsa's added, or the bound itself in the tropical zodiac. */
-function withAyanamsa(b: CalcBound, add: number | null): CalcBound {
+function withAyanamsa(b: CalcBound, add: { readonly value: number; readonly basis: string } | null): CalcBound {
   if (add === null || b.value === null) return b;
-  return { ...b, value: addBounds(b.value, add), basis: `${b.basis}; plus the ayanamsa's, ${add} ${b.unit}: ${AYANAMSA_BASIS}` };
+  return { ...b, value: addBounds(b.value, add.value), basis: `${b.basis}; plus the ayanamsa's, ${add.value} ${b.unit}: ${add.basis}` };
 }
 
 /**
@@ -664,7 +682,7 @@ interface SiderealRow extends Row {
 /**
  * `evaluate` in the sidereal zodiac: the longitude less the true ayanamsa in
  * the true ecliptic of date, or the mean one in the mean ecliptic of date,
- * subtracted as @zodiacs/engine/vedic's siderealLongitude subtracts it; the
+ * subtracted as `@zodiacs/engine/vedic`'s siderealLongitude subtracts it; the
  * vector turned with it. The longitude a speed differences is turned too, so
  * a speed is the sidereal longitude's.
  */
@@ -856,10 +874,10 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
           : null,
       ayanamsa: sidereal && ayanamsaValue(definition!, sidereal, frame === "ecliptic-true-of-date" ? "true" : "mean", k),
       bounds: {
-        position: withAyanamsa(bound(row?.[0], "arcsec", estimated), added && added.position),
+        position: withAyanamsa(bound(row?.[0], "arcsec", estimated), added && { value: added.position, basis: added.basis }),
         distance: point ? null : bound(row?.[1], "relative", estimated),
         speed: method && {
-          ...withAyanamsa(bound(row?.[2], "arcsec/day", estimated), added && added.rate),
+          ...withAyanamsa(bound(row?.[2], "arcsec/day", estimated), added && { value: added.rate, basis: added.basis }),
           method,
           stepDays: analytic ? null : step
         }
@@ -878,9 +896,9 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
 
 export interface HousesRequest {
   readonly time: CalcTime;
-  readonly place: CalcPlace;
-  /** Default "whole", as in natalChart(). */
-  readonly system?: HouseSystem;
+  readonly place: CalcLocation;
+  /** Default "whole", as in natalChart() and chart(). */
+  readonly houseSystem?: HouseSystem;
   readonly zodiac?: CalcZodiac;
 }
 
@@ -913,10 +931,10 @@ export interface HousesResult {
 
 /** The angles, the Vertex, the East Point and the cusps for an instant and a place, as natalChart() computes them. */
 export function houses(request: HousesRequest): HousesResult | CalcRefusal {
-  const asked = fields(request, "houses request", ["time", "place", "system", "zodiac"]);
+  const asked = fields(request, "houses request", ["time", "place", "houseSystem", "zodiac"]);
   const time = readTime(asked.time, "time");
   const { latitude, longitude } = readPlace(asked.place, "place");
-  const system = validateBirthSettings({ houseSystem: asked.system as HouseSystem }).houseSystem ?? "whole";
+  const system = validateBirthSettings({ houseSystem: asked.houseSystem as HouseSystem }).houseSystem ?? "whole";
   const zodiac = readZodiac(asked.zodiac);
   const refusal = epochRefusal(zodiac);
   if (refusal) return refusal;
@@ -936,7 +954,8 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
         ? tropical
         : { asc: zodiacal(tropical.asc), mc: zodiacal(tropical.mc), dsc: zodiacal(tropical.dsc), ic: zodiacal(tropical.ic) };
     const cusps = value === null ? computed.cusps : computed.system === "whole" ? wholeSignCusps(angles.asc) : computed.cusps.map(zodiacal);
-    const added = definition && value && ayanamsaBound(definition, value.elongation).position;
+    const bounded = definition && value && ayanamsaBound(definition, value.elongation);
+    const added = bounded && { value: bounded.position, basis: bounded.basis };
     // Conformance suite 0.1.0, level L2, for this engine: conformance/RESULTS.md.
     const basis = (what: string) =>
       `largest difference over the conformance suite's L2 ${what}, whose arbiter is ERFA with each system's definition`;
@@ -961,7 +980,7 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
         cusps: withAyanamsa({ value: 0.08, unit: "arcsec", label: "measured", basis: basis("cusp vectors, thirteen systems") }, added)
       },
       receipt: receipt(
-        { time: time.record, place: { latitude, longitude }, system, zodiac: zodiac.record },
+        { time: time.record, place: { latitude, longitude }, houseSystem: system, zodiac: zodiac.record },
         [instant(used)],
         [
           ...zodiac.ids,
@@ -1097,7 +1116,7 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
 export interface ChartRequest {
   readonly time: CalcTime;
   /** Without a place there are no angles or houses. */
-  readonly place?: CalcPlace;
+  readonly place?: CalcLocation;
   /** Default "whole". */
   readonly houseSystem?: HouseSystem;
   /** False: `time` is a reference instant, with no angles or houses. Default true. */
@@ -1111,7 +1130,7 @@ export interface ChartResult {
   readonly status: "ok";
   /** The chart natalChart() gives for the same instant (to the millisecond), place, settings and ΔT: tropical. */
   readonly chart: Chart;
-  /** In the sidereal zodiac, the chart's longitudes as @zodiacs/engine/vedic's siderealChart() gives them; null in the tropical zodiac. */
+  /** In the sidereal zodiac, the chart's longitudes as `@zodiacs/engine/vedic`'s siderealChart() gives them; null in the tropical zodiac. */
   readonly sidereal: CalcSiderealChart | null;
   readonly receipt: CalcReceipt<ChartRequest>;
 }

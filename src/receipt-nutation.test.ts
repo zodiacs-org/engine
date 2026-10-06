@@ -50,7 +50,8 @@ function current(): NatalEnvelope {
 
 describe("the conventions set of this engine", () => {
   it("is rc.15's with the nutation named and the Moon's source", () => {
-    const [set, rc15] = NATAL_RECEIPT_CONVENTION_SETS;
+    const set = NATAL_RECEIPT_CONVENTION_SETS[0]!;
+    const rc15 = NATAL_RECEIPT_CONVENTION_SETS[1]!;
     expect(set).toEqual({
       ...rc15,
       moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration",
@@ -60,7 +61,7 @@ describe("the conventions set of this engine", () => {
     expect(rc15.moonPosition).toBe("astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration");
     const envelope = current();
     expect(envelope.receipt.conventions).toEqual(set);
-    expect(envelope.receipt.engine.version).toBe("0.1.1-rc.17");
+    expect(envelope.receipt.engine.version).toBe("1.0.0-rc.1");
     expect(verdict(envelope)).toBe("ok");
   });
 
@@ -68,7 +69,7 @@ describe("the conventions set of this engine", () => {
     const envelope = current();
     expect(verdict(envelope, (copy) => delete copy.receipt.conventions.nutation)).toBe("unsupported_feature");
     expect(verdict(envelope, (copy) => (copy.receipt.conventions.nutation = "iau2000b-five-terms"))).toBe("unsupported_feature");
-    expect(verdict(envelope, (copy) => (copy.receipt.conventions.moonPosition = NATAL_RECEIPT_CONVENTION_SETS[1].moonPosition))).toBe(
+    expect(verdict(envelope, (copy) => (copy.receipt.conventions.moonPosition = NATAL_RECEIPT_CONVENTION_SETS[1]!.moonPosition))).toBe(
       "unsupported_feature"
     );
   });

@@ -25,6 +25,7 @@ export {
 export type {
   LunarReturn,
   PlanetaryReturn,
+  ReturnChart,
   ReturnOptions,
   SolarReturn,
   SolarReturnOptions,

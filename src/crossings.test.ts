@@ -10,6 +10,7 @@ import {
   type BodyLongitudeAt,
   type CrossingSearchOptions
 } from "./crossings.js";
+import { findLongitudeCrossings, searchLongitudeCrossings } from "./returns.js";
 
 const DAY = 86_400_000;
 const normalize = (value: number) => ((value % 360) + 360) % 360;
@@ -321,6 +322,20 @@ describe("input errors", () => {
     }
   );
 
+  it("rejects an option it does not name, and options that are not plain data, before any sample", () => {
+    expect(() =>
+      searchLongitudeCrossingsWith(longitudeAt, "Sun", 0, start, end, { stepdays: 1 } as unknown as CrossingSearchOptions)
+    ).toThrowError(/unknown option: stepdays/u);
+    // As the engine's shared options reader refuses them: an inherited key, a getter, an instance of a class.
+    const inherited = Object.create({ stepdays: 1 }) as CrossingSearchOptions;
+    const getter = Object.defineProperty({}, "stepDays", { enumerable: true, get: () => 1 }) as CrossingSearchOptions;
+    class Options { stepDays = 1; }
+    for (const options of [inherited, getter, new Options(), [] as unknown as CrossingSearchOptions]) {
+      expect(() => searchLongitudeCrossingsWith(longitudeAt, "Sun", 0, start, end, options)).toThrowError(RangeError);
+    }
+    expect(calls).toEqual([]);
+  });
+
   it("rejects options that are not an object", () => {
     expect(() =>
       searchLongitudeCrossingsWith(
@@ -363,5 +378,23 @@ describe("input errors", () => {
       ["Jupiter", 5 * DAY],
       ["Jupiter", 10 * DAY]
     ]);
+  });
+});
+
+describe("a window's ends", () => {
+  it("are Dates in this entry, and any DateInput in the root's crossing functions, with one answer", () => {
+    const longitudeAt = byDay((day) => 30 * day);
+    expect(() => findLongitudeCrossingsWith(longitudeAt, "Sun", 45, "1970-01-01" as unknown as Date, new Date(3 * DAY))).toThrow(/valid Date/u);
+    const asDates = findLongitudeCrossings("Sun", 281, new Date(Date.UTC(2024, 0, 1)), new Date(Date.UTC(2024, 0, 4)));
+    expect(asDates).toHaveLength(1);
+    expect(findLongitudeCrossings("Sun", 281, "2024-01-01T00:00:00Z", Date.UTC(2024, 0, 4))).toEqual(asDates);
+    const searched = searchLongitudeCrossings("Sun", 281, "2024-01-01", "2024-01-04", { maxSamples: 1000 });
+    expect(searched.status === "complete" && searched.crossings).toEqual(asDates);
+    expect(() => findLongitudeCrossings("Sun", 281, "2024-01-01T00:00", "2024-01-04")).toThrow(RangeError);
+  });
+
+  it("take a body name of the caller's own, typed by the longitude function", () => {
+    const longitudeAt: BodyLongitudeAt<"Chiron"> = (_body, date) => normalize((30 * date.getTime()) / DAY);
+    expect(findLongitudeCrossingsWith(longitudeAt, "Chiron", 45, new Date(0), new Date(3 * DAY))).toHaveLength(1);
   });
 });

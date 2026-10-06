@@ -25,6 +25,8 @@ export {
 export type { AspectDefinition, AspectMotion } from "./aspects.js";
 
 export {
+  ASPECT_POLICY_SCHEMA,
+  CONFIGURED_ASPECTS_SCHEMA,
   CONFIGURED_ASPECT_ANGLES,
   DEFAULT_ASPECT_POLICY,
   createAspectPolicy,
@@ -110,6 +112,7 @@ export {
 export type { LotInputs } from "./points.js";
 
 export { DELTA_T_MODEL, DELTA_T_TABLE, deltaT, deltaTAt } from "./deltat.js";
+export { DELTA_T_IERS_MODEL } from "./time-scale.js";
 export type { DeltaT, DeltaTSegment, DeltaTTable } from "./deltat.js";
 
 export { EPHEMERIS_SPAN, REFERENCE_SPAN, outsideReferenceSpan } from "./reference-span.js";
@@ -134,6 +137,7 @@ export {
   MODALITIES,
   SIGNS,
   SIGN_NAMES,
+  SIGN_SLUGS,
   degreeInSign,
   normalizeLongitude,
   signForLongitude,

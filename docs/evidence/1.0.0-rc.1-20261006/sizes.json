@@ -1,0 +1,392 @@
+{
+ "0.1.1-rc.17": {
+  "version": "0.1.1-rc.17",
+  "entries": {
+   ".": {
+    "files": 11,
+    "bytes": 103537,
+    "gzip": 34822,
+    "beyondCore": 0,
+    "beyondCoreGzip": 0,
+    "budget": 108500,
+    "headroomPercent": 4.79
+   },
+   "./calc": {
+    "files": 11,
+    "bytes": 139836,
+    "gzip": 45927,
+    "beyondCore": 61686,
+    "beyondCoreGzip": 19116,
+    "budget": 145500,
+    "headroomPercent": 4.05
+   },
+   "./crossings": {
+    "files": 2,
+    "bytes": 9410,
+    "gzip": 2768,
+    "beyondCore": 173,
+    "beyondCoreGzip": 106,
+    "budget": 10000,
+    "headroomPercent": 6.26
+   },
+   "./deltat": {
+    "files": 2,
+    "bytes": 4968,
+    "gzip": 1944,
+    "beyondCore": 161,
+    "beyondCoreGzip": 101,
+    "budget": 5500,
+    "headroomPercent": 10.7
+   },
+   "./geo": {
+    "files": 4,
+    "bytes": 34659,
+    "gzip": 12953,
+    "beyondCore": 31730,
+    "beyondCoreGzip": 11858,
+    "budget": 35000,
+    "headroomPercent": 0.98
+   },
+   "./houses": {
+    "files": 1,
+    "bytes": 13606,
+    "gzip": 3503,
+    "beyondCore": 13606,
+    "beyondCoreGzip": 3503,
+    "budget": 15000,
+    "headroomPercent": 10.24
+   },
+   "./internal": {
+    "files": 6,
+    "bytes": 64830,
+    "gzip": 22568,
+    "beyondCore": 305,
+    "beyondCoreGzip": 160,
+    "budget": 68000,
+    "headroomPercent": 4.88
+   },
+   "./internal/math": {
+    "files": 3,
+    "bytes": 18165,
+    "gzip": 4928,
+    "beyondCore": 1325,
+    "beyondCoreGzip": 446,
+    "budget": 20000,
+    "headroomPercent": 10.1
+   },
+   "./receipt": {
+    "files": 6,
+    "bytes": 66580,
+    "gzip": 22373,
+    "beyondCore": 41969,
+    "beyondCoreGzip": 11893,
+    "budget": 70000,
+    "headroomPercent": 5.13
+   },
+   "./sky": {
+    "files": 10,
+    "bytes": 92109,
+    "gzip": 31255,
+    "beyondCore": 16888,
+    "beyondCoreGzip": 5539,
+    "budget": 97000,
+    "headroomPercent": 5.31
+   },
+   "./techniques": {
+    "files": 12,
+    "bytes": 152472,
+    "gzip": 50304,
+    "beyondCore": 62610,
+    "beyondCoreGzip": 20014,
+    "budget": 160000,
+    "headroomPercent": 4.93
+   },
+   "./timing": {
+    "files": 12,
+    "bytes": 123039,
+    "gzip": 39471,
+    "beyondCore": 32505,
+    "beyondCoreGzip": 8850,
+    "budget": 129000,
+    "headroomPercent": 4.84
+   },
+   "./vedic": {
+    "files": 11,
+    "bytes": 123639,
+    "gzip": 41511,
+    "beyondCore": 33777,
+    "beyondCoreGzip": 11221,
+    "budget": 128000,
+    "headroomPercent": 3.52
+   },
+   "./window": {
+    "files": 8,
+    "bytes": 102590,
+    "gzip": 34118,
+    "beyondCore": 33677,
+    "beyondCoreGzip": 9969,
+    "budget": 105000,
+    "headroomPercent": 2.34
+   }
+  },
+  "coreByModule": {
+   "(exports)": 4041,
+   "(imports)": 3483,
+   "src/api.ts": 6666,
+   "src/aspects.ts": 2503,
+   "src/birth-input.ts": 2841,
+   "src/body-label.ts": 415,
+   "src/configured-aspects.ts": 9124,
+   "src/crossings.ts": 9164,
+   "src/date-input.ts": 1436,
+   "src/declination.ts": 7647,
+   "src/deltat.ts": 4740,
+   "src/ephemeris.ts": 9818,
+   "src/exact.ts": 2203,
+   "src/frame.ts": 2110,
+   "src/houses.ts": 11059,
+   "src/nutation.ts": 4146,
+   "src/points.ts": 2327,
+   "src/progressions.ts": 485,
+   "src/reference-span.ts": 652,
+   "src/returns.ts": 2123,
+   "src/signs.ts": 2320,
+   "src/synastry.ts": 1892,
+   "src/time-scale-data.ts": 5710,
+   "src/time-scale.ts": 6499,
+   "src/types.ts": 133
+  },
+  "package": {
+   "files": 70,
+   "total": 946349,
+   "cap": 950000,
+   "headroomPercent": 0.38,
+   "split": {
+    "rootJs": 103537,
+    "optInJs": 282876,
+    "zoneHistories": 189144,
+    "rootDeclarations": 57092,
+    "otherDeclarations": 121098,
+    "documents": 188861,
+    "manifest": 3741
+   },
+   "zoneHistories": {
+    "files": 16,
+    "budget": 200000,
+    "headroomPercent": 5.73
+   }
+  }
+ },
+ "1.0.0-rc.1": {
+  "version": "1.0.0-rc.1",
+  "entries": {
+   ".": {
+    "files": 11,
+    "bytes": 105365,
+    "gzip": 35327,
+    "beyondCore": 0,
+    "beyondCoreGzip": 0,
+    "budget": 108500,
+    "headroomPercent": 2.97
+   },
+   "./calc": {
+    "files": 12,
+    "bytes": 144694,
+    "gzip": 47419,
+    "beyondCore": 65122,
+    "beyondCoreGzip": 20198,
+    "budget": 145500,
+    "headroomPercent": 0.55
+   },
+   "./crossings": {
+    "files": 2,
+    "bytes": 9942,
+    "gzip": 2964,
+    "beyondCore": 173,
+    "beyondCoreGzip": 106,
+    "budget": 10000,
+    "headroomPercent": 0.58
+   },
+   "./deltat": {
+    "files": 2,
+    "bytes": 5200,
+    "gzip": 2028,
+    "beyondCore": 161,
+    "beyondCoreGzip": 101,
+    "budget": 5500,
+    "headroomPercent": 5.76
+   },
+   "./geo": {
+    "files": 4,
+    "bytes": 35375,
+    "gzip": 13081,
+    "beyondCore": 32446,
+    "beyondCoreGzip": 11986,
+    "budget": 35500,
+    "headroomPercent": 0.35
+   },
+   "./houses": {
+    "files": 1,
+    "bytes": 13678,
+    "gzip": 3521,
+    "beyondCore": 13678,
+    "beyondCoreGzip": 3521,
+    "budget": 15000,
+    "headroomPercent": 9.66
+   },
+   "./internal": {
+    "files": 6,
+    "bytes": 65720,
+    "gzip": 22782,
+    "beyondCore": 305,
+    "beyondCoreGzip": 160,
+    "budget": 68000,
+    "headroomPercent": 3.46
+   },
+   "./internal/math": {
+    "files": 3,
+    "bytes": 18695,
+    "gzip": 4989,
+    "beyondCore": 1325,
+    "beyondCoreGzip": 445,
+    "budget": 20000,
+    "headroomPercent": 6.98
+   },
+   "./receipt": {
+    "files": 6,
+    "bytes": 68825,
+    "gzip": 22869,
+    "beyondCore": 43369,
+    "beyondCoreGzip": 12196,
+    "budget": 70000,
+    "headroomPercent": 1.7
+   },
+   "./sky": {
+    "files": 10,
+    "bytes": 93566,
+    "gzip": 31664,
+    "beyondCore": 16923,
+    "beyondCoreGzip": 5538,
+    "budget": 97000,
+    "headroomPercent": 3.67
+   },
+   "./techniques": {
+    "files": 13,
+    "bytes": 155046,
+    "gzip": 51127,
+    "beyondCore": 63589,
+    "beyondCoreGzip": 20378,
+    "budget": 160000,
+    "headroomPercent": 3.19
+   },
+   "./timing": {
+    "files": 13,
+    "bytes": 124737,
+    "gzip": 40182,
+    "beyondCore": 32608,
+    "beyondCoreGzip": 9102,
+    "budget": 129000,
+    "headroomPercent": 3.41
+   },
+   "./vedic": {
+    "files": 12,
+    "bytes": 127184,
+    "gzip": 42698,
+    "beyondCore": 35727,
+    "beyondCoreGzip": 11949,
+    "budget": 128000,
+    "headroomPercent": 0.64
+   },
+   "./window": {
+    "files": 8,
+    "bytes": 103559,
+    "gzip": 34368,
+    "beyondCore": 33756,
+    "beyondCoreGzip": 10005,
+    "budget": 105000,
+    "headroomPercent": 1.39
+   }
+  },
+  "coreByModule": {
+   "(exports)": 4163,
+   "(imports)": 3521,
+   "src/api.ts": 6666,
+   "src/aspects.ts": 2702,
+   "src/birth-input.ts": 2841,
+   "src/body-label.ts": 415,
+   "src/configured-aspects.ts": 9232,
+   "src/crossings.ts": 9696,
+   "src/date-input.ts": 1436,
+   "src/declination.ts": 7647,
+   "src/deltat.ts": 4972,
+   "src/ephemeris.ts": 9818,
+   "src/exact.ts": 2203,
+   "src/frame.ts": 2110,
+   "src/houses.ts": 11089,
+   "src/nutation.ts": 4146,
+   "src/points.ts": 2342,
+   "src/progressions.ts": 485,
+   "src/reference-span.ts": 765,
+   "src/returns.ts": 2286,
+   "src/signs.ts": 2589,
+   "src/synastry.ts": 1900,
+   "src/time-scale-data.ts": 5710,
+   "src/time-scale.ts": 6499,
+   "src/types.ts": 132
+  },
+  "package": {
+   "files": 74,
+   "total": 982086,
+   "cap": 1000000,
+   "headroomPercent": 1.82,
+   "split": {
+    "rootJs": 105365,
+    "optInJs": 287483,
+    "zoneHistories": 189144,
+    "rootDeclarations": 61782,
+    "otherDeclarations": 129923,
+    "documents": 204544,
+    "manifest": 3845
+   },
+   "zoneHistories": {
+    "files": 16,
+    "budget": 200000,
+    "headroomPercent": 5.73
+   },
+   "growthFrom": {
+    "label": "0.1.1-rc.17",
+    "bytes": 35737,
+    "split": {
+     "rootJs": {
+      "bytes": 1828,
+      "percentOfGrowth": 5.12
+     },
+     "optInJs": {
+      "bytes": 4607,
+      "percentOfGrowth": 12.89
+     },
+     "zoneHistories": {
+      "bytes": 0,
+      "percentOfGrowth": 0
+     },
+     "rootDeclarations": {
+      "bytes": 4690,
+      "percentOfGrowth": 13.12
+     },
+     "otherDeclarations": {
+      "bytes": 8825,
+      "percentOfGrowth": 24.69
+     },
+     "documents": {
+      "bytes": 15683,
+      "percentOfGrowth": 43.88
+     },
+     "manifest": {
+      "bytes": 104,
+      "percentOfGrowth": 0.29
+     }
+    }
+   }
+  }
+ }
+}

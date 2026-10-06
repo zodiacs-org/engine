@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { bodyLongitude } from "../ephemeris.js";
-import { SIGN_NAMES } from "../signs.js";
+import { SIGN_SLUGS } from "../signs.js";
 import {
   VOID_BODIES,
   VOID_OF_COURSE_CONVENTION,
@@ -43,8 +43,8 @@ describe("the void-of-course Moon", () => {
     expect(ingresses.length).toBeGreaterThan(15);
     ingresses.forEach((ingress, index) => {
       const lon = bodyLongitude("Moon", ingress.at);
-      expect(Math.abs(signed(SIGN_NAMES.indexOf(ingress.sign) * 30, lon))).toBeLessThan(1e-6);
-      if (index > 0) expect(SIGN_NAMES.indexOf(ingress.sign)).toBe((SIGN_NAMES.indexOf(ingresses[index - 1]!.sign) + 1) % 12);
+      expect(Math.abs(signed(SIGN_SLUGS.indexOf(ingress.sign) * 30, lon))).toBeLessThan(1e-6);
+      if (index > 0) expect(SIGN_SLUGS.indexOf(ingress.sign)).toBe((SIGN_SLUGS.indexOf(ingresses[index - 1]!.sign) + 1) % 12);
     });
   });
 
@@ -90,7 +90,7 @@ describe("the void-of-course Moon", () => {
     windows.forEach((window, index) => {
       expect(window.to.getTime()).toBe(ending[index]!.at.getTime());
       expect(window.nextSign).toBe(ending[index]!.sign);
-      expect(SIGN_NAMES.indexOf(window.sign)).toBe((SIGN_NAMES.indexOf(window.nextSign) + 11) % 12);
+      expect(SIGN_SLUGS.indexOf(window.sign)).toBe((SIGN_SLUGS.indexOf(window.nextSign) + 11) % 12);
       expect(window.from.getTime()).toBeLessThan(window.to.getTime());
       if (window.lastAspect) {
         expect(window.from.getTime()).toBe(window.lastAspect.at.getTime());

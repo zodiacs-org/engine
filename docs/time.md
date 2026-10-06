@@ -215,11 +215,17 @@ is refused rather than ignored).
   `iso3166.tab`): adds `calendarNote`, from the country's row of
   `GREGORIAN_ADOPTION`: `"old-style"` when a date given as Gregorian falls
   before the row's first New Style day (it was probably written Old Style),
-  and `"new-style"` when a Julian date falls on or after it. The note never
-  changes the resolution. A country the table does not date gets no note.
+  and `"new-style"` when a Julian date falls on or after it, a Julian date
+  late in 9999 that resolves into the Gregorian year 10000 among them. The
+  note never changes the resolution. A country the table does not date gets
+  no note.
 
 `julianToGregorian` and `gregorianToJulian` convert YYYY-MM-DD strings for
-years 0000–9999; `gregorianAdoption(country)` returns a row of the table.
+years 0000–9999; `gregorianAdoption(country)` returns a row of the table;
+`calendarNote(gregorianDate, calendar, country)` gives the note for a
+resolved date. From 1.0 `calendarNote` throws a `RangeError` for a date that
+is not a valid Gregorian YYYY-MM-DD, a calendar other than `"gregorian"` and
+`"julian"`, and a country that is not a nonempty string.
 
 **The adoption table** has 18 rows, from three public-domain sources that
 `GREGORIAN_ADOPTION_SOURCES` names:
@@ -329,13 +335,16 @@ The six probes of the audit's time-5 finding resolve as follows (tests in
 
 - A wall time before 1970-01-02 needs `await prepareLocalTime(date, timeZone)`
   first; without it `resolveLocalToUtc`, `resolveLocalBirth` and
-  `resolveBirth` throw an `Error` naming `prepareLocalTime`.
+  `resolveBirth` throw an `Error` naming `prepareLocalTime`. From 1.0.0 it is a
+  `ZoneHistoryNotLoadedError`, which `@zodiacs/engine/geo` exports, so that a
+  caller can catch it by its class.
 - `lmt` now means that a local mean time clock read the wall time. It used to
   mean an offset with seconds, which flagged legal times such as Madras time
   and missed LMT in whole minutes such as Guam's.
-- **Deprecated:** the names `dst-gap` and `dst-fold`. They are kept, and now
-  mean a gap or fold of any cause; read `jump.cause` for the cause. Renaming
-  them would take a new receipt conventions set.
+- The names `dst-gap` and `dst-fold` now mean a gap or fold of any cause;
+  read `jump.cause` for the cause. They are permanent: stored receipts carry
+  them, and no other name replaces them, so they are not deprecated (this
+  note called them deprecated before 1.0.0).
 - New: `LocalTimeOptions`, `prepareLocalTime`, `resolveLocalBirth` (the core
   input with its resolution and the receipt's `reference`), `zoneOffsetAt`
   (the zone's own offset, minutes; before 1970 it throws, as

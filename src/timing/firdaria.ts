@@ -129,13 +129,13 @@ export interface FirdariaAt {
 /** Options for the firdaria functions. */
 export interface FirdariaOptions {
   /** Where the nodes fall by night; `"abu-mashar"` by default. */
-  readonly variant?: FirdariaVariant;
+  readonly variant?: FirdariaVariant | undefined;
 }
 
 /** Options for {@link firdaria}. */
 export interface FirdariaTimelineOptions extends FirdariaOptions {
   /** 75-year cycles to date, 1 to 4; 1 by default. */
-  readonly cycles?: number;
+  readonly cycles?: number | undefined;
 }
 
 function checkedSect(value: unknown): Sect {

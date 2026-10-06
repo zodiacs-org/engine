@@ -10,8 +10,18 @@
 import { checkedBodyLabel } from "./body-label.js";
 import { absolute, compareExact, exactSign, exactSum, roundedValue, signOf } from "./exact.js";
 import type { ExactSum } from "./exact.js";
+import type { AspectMotion } from "./aspects.js";
 
-export type ConfiguredAspectMotion = "applying" | "separating" | "stationary";
+/** The schema of an AspectPolicy. */
+export const ASPECT_POLICY_SCHEMA = "zodiacs.aspect-policy.v1" as const;
+/** The schema of a ConfiguredAspectResult. */
+export const CONFIGURED_ASPECTS_SCHEMA = "zodiacs.configured-aspects.v1" as const;
+
+/**
+ * An aspect's motion: AspectMotion under another name.
+ * @deprecated Use AspectMotion.
+ */
+export type ConfiguredAspectMotion = AspectMotion;
 
 /** Degrees of orb, including the boundary, for each instantaneous motion. */
 export interface AspectOrbLimits {
@@ -66,7 +76,7 @@ export interface AspectPolicyInput {
 }
 
 export interface AspectPolicy {
-  readonly schema: "zodiacs.aspect-policy.v1";
+  readonly schema: typeof ASPECT_POLICY_SCHEMA;
   readonly aspects: readonly ResolvedAspectRule[];
   readonly bodies: readonly string[];
   readonly bodyOrbs: Readonly<Record<string, AspectOrbLimits>>;
@@ -102,13 +112,13 @@ export interface ConfiguredAspect {
   /** |separation − angle|, decided exactly and reported rounded to the nearest double. */
   readonly orb: number;
   readonly maximumOrb: number;
-  readonly motion: ConfiguredAspectMotion;
+  readonly motion: AspectMotion;
   readonly applying: boolean;
 }
 
 /** Policy is calculation context, not an authenticated receipt or a physical accuracy bound. */
 export interface ConfiguredAspectResult {
-  readonly schema: "zodiacs.configured-aspects.v1";
+  readonly schema: typeof CONFIGURED_ASPECTS_SCHEMA;
   readonly policy: AspectPolicy;
   readonly aspects: readonly ConfiguredAspect[];
 }
@@ -218,7 +228,7 @@ export function createAspectPolicy(input: AspectPolicyInput = {}): AspectPolicy 
   const stationaryRelativeSpeed = options.stationaryRelativeSpeed === undefined ? 1e-9
     : numberIn(options.stationaryRelativeSpeed, 0, Number.MAX_VALUE, "Stationary relative speed");
   const policy: AspectPolicy = Object.freeze({
-    schema: "zodiacs.aspect-policy.v1", aspects: Object.freeze(aspects), bodies: Object.freeze(bodies),
+    schema: ASPECT_POLICY_SCHEMA, aspects: Object.freeze(aspects), bodies: Object.freeze(bodies),
     bodyOrbs: Object.freeze(bodyOrbs), stationaryRelativeSpeed, conventions: CONVENTIONS
   });
   POLICIES.add(policy);
@@ -261,7 +271,7 @@ function distanceRateSign(signed: ExactSum, distance: ExactSum, relative: -1 | 1
   return signOf(signed) * relative > 0 ? 1 : -1;
 }
 
-function motionOf(deviation: ExactSum, rate: -1 | 1 | null): ConfiguredAspectMotion {
+function motionOf(deviation: ExactSum, rate: -1 | 1 | null): AspectMotion {
   if (rate === null) return "stationary";
   const deviationSign = signOf(deviation);
   if (deviationSign === 0) return "separating";
@@ -302,7 +312,7 @@ export function findConfiguredAspects(positions: readonly AspectPosition[], poli
       const relative = relativeSpeedSign(a.speed, b.speed, policy.stationaryRelativeSpeed);
       const rate = relative === 0 ? null : distanceRateSign(signed, distance, relative);
       const luminary = a.body === "Sun" || a.body === "Moon" || b.body === "Sun" || b.body === "Moon";
-      let best: { definition: ResolvedAspectRule; exactOrb: ExactSum; maximumOrb: number; motion: ConfiguredAspectMotion } | null = null;
+      let best: { definition: ResolvedAspectRule; exactOrb: ExactSum; maximumOrb: number; motion: AspectMotion } | null = null;
       for (const definition of policy.aspects) {
         const deviation = exactSum(distance, -definition.angle);
         const exactOrb = absolute(deviation);
@@ -322,5 +332,5 @@ export function findConfiguredAspects(positions: readonly AspectPosition[], poli
   }
   // Array sort is stable: equal exact orbs keep input pair order.
   found.sort((x, y) => compareExact(x.exactOrb, y.exactOrb));
-  return Object.freeze({ schema:"zodiacs.configured-aspects.v1", policy, aspects:Object.freeze(found.map(entry => entry.aspect)) });
+  return Object.freeze({ schema: CONFIGURED_ASPECTS_SCHEMA, policy, aspects:Object.freeze(found.map(entry => entry.aspect)) });
 }

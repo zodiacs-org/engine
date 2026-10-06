@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  SIGN_NAMES,
+  SIGN_SLUGS,
   chartPoints,
   type ZodiacSign
 } from "../index.js";
@@ -133,7 +133,7 @@ describe("zodiacal releasing: Valens's worked examples", () => {
     // "In a similar manner, if we find the vital sector beginning with Cancer,
     // Leo, Virgo, Capricorn, or Aquarius ... beginning with the sign in
     // opposition": only periods longer than 211 months loosen.
-    const loosening = SIGN_NAMES.filter((sign) => {
+    const loosening = SIGN_SLUGS.filter((sign) => {
       const all = releasingPeriods(sign, BIRTH, BIRTH, afterDays(VALENS_MINOR_YEARS[sign] * 360 - 1), { levels: 2 }).periods;
       return all.some((period) => period.loosingOfTheBond);
     });
@@ -358,7 +358,7 @@ describe("zodiacal releasing invariants", () => {
       { levels: 4, spanDays: 400 }
     ];
     for (let trial = 0; trial < 90; trial += 1) {
-      const sign = SIGN_NAMES[Math.floor(next() * 12)]!;
+      const sign = SIGN_SLUGS[Math.floor(next() * 12)]!;
       const years = RELEASING_YEAR_CONVENTIONS[trial % 2]!;
       const unit = RELEASING_UNIT_DAYS[years];
       const { levels, spanDays } = shapes[trial % 3]!;
@@ -386,13 +386,13 @@ describe("zodiacal releasing invariants", () => {
             expect(length).toBeLessThanOrEqual(child.units * unit[child.level - 1]! + 1e-9);
           }
           if (index === 0) return;
-          const previous = SIGN_NAMES.indexOf(children[index - 1]!.sign);
+          const previous = SIGN_SLUGS.indexOf(children[index - 1]!.sign);
           if (child.loosingOfTheBond) {
             loosened += 1;
             expect(index).toBe(12);
-            expect(child.sign).toBe(SIGN_NAMES[(SIGN_NAMES.indexOf(parent.sign) + 6) % 12]);
+            expect(child.sign).toBe(SIGN_SLUGS[(SIGN_SLUGS.indexOf(parent.sign) + 6) % 12]);
           } else {
-            expect(child.sign).toBe(SIGN_NAMES[(previous + 1) % 12]);
+            expect(child.sign).toBe(SIGN_SLUGS[(previous + 1) % 12]);
           }
         });
         // A parent loosens exactly when it outlasts one round of 211 sub-units.
@@ -415,7 +415,7 @@ describe("zodiacal releasing invariants", () => {
       const { periods } = releasingPeriods("libra", BIRTH, BIRTH, afterDays(212 * unit), { levels: 1, years });
       expect(periods).toHaveLength(13);
       periods.forEach((period, index) => {
-        expect(period.sign).toBe(SIGN_NAMES[(6 + index) % 12]);
+        expect(period.sign).toBe(SIGN_SLUGS[(6 + index) % 12]);
         expect(period.loosingOfTheBond || period.truncated).toBe(false);
         if (index > 0) expect(period.start).toEqual(periods[index - 1]!.end);
       });
@@ -426,7 +426,7 @@ describe("zodiacal releasing invariants", () => {
   it("find the same four periods at an instant as in any window around it", () => {
     const next = random(7);
     for (let trial = 0; trial < 40; trial += 1) {
-      const sign = SIGN_NAMES[trial % 12]!;
+      const sign = SIGN_SLUGS[trial % 12]!;
       const years: ReleasingYearConvention = trial % 3 === 0 ? "julian-365.25" : "valens-360";
       const at = afterDays(next() * 90 * 365);
       const found = releasingAt(sign, BIRTH, at, { years });

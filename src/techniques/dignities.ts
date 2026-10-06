@@ -19,7 +19,7 @@
  * dignityFor, dignitiesFor and hasClassicalDignities are ported from the
  * Zodiacs.org site (src/lib/dignities.ts).
  */
-import { SIGN_NAMES, SIGNS, normalizeLongitude, signIndexForLongitude } from "../signs.js";
+import { SIGN_SLUGS, SIGNS, normalizeLongitude, signIndexForLongitude } from "../signs.js";
 import type { BodyName, Element, Sect, ZodiacSign } from "../types.js";
 import { bodyName, finiteDegrees, oneOf, readOptions } from "./shared.js";
 
@@ -37,7 +37,12 @@ export const CLASSICAL_PLANETS: readonly ClassicalPlanet[] = /*#__PURE__*/ Objec
   "Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"
 ]);
 
-/** Each sign's domicile ruler (Tetrabiblos I.17). */
+/**
+ * Each sign's domicile ruler (Tetrabiblos I.17): the same rulers as
+ * `@zodiacs/engine/timing`'s TRADITIONAL_RULERS and `@zodiacs/engine/vedic`'s
+ * SIGN_LORDS. Each entry point carries its own copy, so that none imports
+ * another; a test keeps the three equal.
+ */
 export const DOMICILE_RULERS: Readonly<Record<ZodiacSign, ClassicalPlanet>> = /*#__PURE__*/ Object.freeze({
   aries: "Mars", taurus: "Venus", gemini: "Mercury", cancer: "Moon", leo: "Sun", virgo: "Mercury",
   libra: "Venus", scorpio: "Mars", sagittarius: "Jupiter", capricorn: "Saturn", aquarius: "Saturn", pisces: "Jupiter"
@@ -58,7 +63,7 @@ export const TRIPLICITY_LORDS: Readonly<Record<Element, { readonly day: Classica
   });
 
 const terms = (...rows: [ClassicalPlanet, number][][]) =>
-  Object.freeze(Object.fromEntries(SIGN_NAMES.map((sign, index) => [sign, Object.freeze(rows[index]!.map((row) => Object.freeze(row)))])));
+  Object.freeze(Object.fromEntries(SIGN_SLUGS.map((sign, index) => [sign, Object.freeze(rows[index]!.map((row) => Object.freeze(row)))])));
 
 /** The Egyptian terms (Tetrabiblos I.20): each sign's five lords, with the degree each term ends at. */
 export const EGYPTIAN_TERMS = /*#__PURE__*/ terms(
@@ -81,11 +86,11 @@ export const CHALDEAN_FACES: readonly ClassicalPlanet[] = /*#__PURE__*/ Object.f
   Array.from({ length: 36 }, (_, index) => (["Mars", "Sun", "Venus", "Mercury", "Moon", "Saturn", "Jupiter"] as const)[index % 7]!)
 );
 
-const opposite = (sign: ZodiacSign): ZodiacSign => SIGN_NAMES[(SIGN_NAMES.indexOf(sign) + 6) % 12]!;
+const opposite = (sign: ZodiacSign): ZodiacSign => SIGN_SLUGS[(SIGN_SLUGS.indexOf(sign) + 6) % 12]!;
 const isClassical = (body: BodyName): body is ClassicalPlanet => (CLASSICAL_PLANETS as readonly string[]).includes(body);
 
 function signName(value: unknown): ZodiacSign {
-  if (typeof value === "string" && (SIGN_NAMES as readonly string[]).includes(value)) return value as ZodiacSign;
+  if (typeof value === "string" && (SIGN_SLUGS as readonly string[]).includes(value)) return value as ZodiacSign;
   throw new RangeError("sign must be a lowercase zodiac sign name.");
 }
 
@@ -138,7 +143,7 @@ export interface DignityRulers {
 export function dignityRulersAt(longitude: number): DignityRulers {
   const lon = normalizeLongitude(finiteDegrees(longitude, "longitude"));
   const index = signIndexForLongitude(lon);
-  const sign = SIGN_NAMES[index]!;
+  const sign = SIGN_SLUGS[index]!;
   // Never below 0 where a longitude just under a sign's end divides to its index.
   const degree = Math.max(0, lon - index * 30);
   const row = EGYPTIAN_TERMS[sign];

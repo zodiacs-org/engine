@@ -1,0 +1,479 @@
+# values.mjs: 6411 calls in values-rc17.jsonl, 6417 in values-rc1.jsonl
+6411 calls in both, under 347 labels; results the same in 6372, of which 0 with keys in another order; 39 differ.
+Arguments differing after the calc entry's renames: 0.
+Only in the second (6): const engine.ASPECT_POLICY_SCHEMA #1, const engine.CONFIGURED_ASPECTS_SCHEMA #1, const engine.DELTA_T_IERS_MODEL #1, const engine.SIGN_SLUGS #1, const houses.SIDEREAL_TIME_RATE #1, const window.BIRTH_WINDOW_SCHEMA #1
+
+## Results that differ (39)
+- calc.calc user ayanamsa #7: 14 path(s)
+  /value/status: "refused" -> "ok"
+  /value/reason: "out-of-range" -> absent
+  /value/detail: "The ayanamsa's epoch is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the ayanamsas have been compared with ERFA." -> absent
+  /value/span: {"from":"1800-01-01T00:00:00.000Z","to":"2200-01-01T00:00:00.000Z"} -> absent
+  ... 10 more
+- calc.calc user ayanamsa #8: 14 path(s)
+  /value/status: "refused" -> "ok"
+  /value/reason: "out-of-range" -> absent
+  /value/detail: "The ayanamsa's epoch is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the ayanamsas have been compared with ERFA." -> absent
+  /value/span: {"from":"1800-01-01T00:00:00.000Z","to":"2200-01-01T00:00:00.000Z"} -> absent
+  ... 10 more
+- calc.calc user ayanamsa #9: 14 path(s)
+  /value/status: "refused" -> "ok"
+  /value/reason: "out-of-range" -> absent
+  /value/detail: "The ayanamsa's epoch is outside 1800-01-01T00:00:00.000Z to 2200-01-01T00:00:00.000Z, where the ayanamsas have been compared with ERFA." -> absent
+  /value/span: {"from":"1800-01-01T00:00:00.000Z","to":"2200-01-01T00:00:00.000Z"} -> absent
+  ... 10 more
+- techniques.moonSignCandidates longitude #1: 1 path(s)
+  /threw: "Error" -> "ZoneHistoryNotLoadedError"
+- techniques.moonSignCandidates longitude #2: 1 path(s)
+  /threw: "Error" -> "ZoneHistoryNotLoadedError"
+- changed: calc scale in capitals #1: 3 path(s)
+  /value: {"status":"ok","body":"Sun","frame":"ecliptic-true-of-date","lon":280.36801507618105,"lat":0.0000011203564794938887,"dist":0.9833138280412812,"speeds":{"lon"... -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "time.scale must be one of utc, ut1, tt: lowercase since 1.0.0."
+- changed: calc houses system #1: 3 path(s)
+  /value: {"status":"ok","requested":"koch","system":"koch","cusps":[136.40243575001494,160.8205598155564,185.41633439042357,209.93323394624713,261.29907765849896,291.... -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "houses request takes only time, place, houseSystem, zodiac."
+- changed: deltaT not finite #1: 3 path(s)
+  /value: "NaN" -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "deltaT takes a finite UT: days since 2000-01-01T12:00 on UT1."
+- changed: deltaTAt not finite #1: 3 path(s)
+  /value: {"seconds":"NaN","sigma":"Infinity","model":"zodiacs-deltat/1","table":"2026-09-24","tableDigest":"6371988c510a1c6c","segment":"extrapolated"} -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "deltaTAt takes a finite UT: days since 2000-01-01T12:00 on UT1."
+- changed: davisonPlace latitude #1: 3 path(s)
+  /value: {"latitude":52.5,"longitude":15} -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "first needs a latitude from -90 to 90 and a longitude from -180 to 180 degrees."
+- changed: davisonPlace convention #1: 3 path(s)
+  /value: {"latitude":7.52831985539658,"longitude":14.971186461809907} -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "convention must be one of \"coordinates\", \"great-circle\"."
+- changed: calendarNote date #1: 3 path(s)
+  /value: {"kind":"old-style","adoption":{"code":"GB","country":"Britain (UK)","region":"Great Britain","firstGregorian":"1752-09-14","lastJulian":"1752-09-02","source... -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "gregorianDate must be a valid Gregorian date, YYYY-MM-DD."
+- changed: calendarNote calendar #1: 3 path(s)
+  /value: {"kind":"old-style","adoption":{"code":"GB","country":"Britain (UK)","region":"Great Britain","firstGregorian":"1752-09-14","lastJulian":"1752-09-02","source... -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "calendar must be \"gregorian\" or \"julian\"."
+- changed: ayanamsa unknown option #1: 3 path(s)
+  /value: {"ayanamsa":"lahiri","utc":"2017-07-15T06:18:42.000Z","timeScale":{"input":"utc","basis":"iers","ut1MinusUtc":{"seconds":0.35524567129629503,"sigma":0.000818... -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "ayanamsa options has an unknown option: timescale."
+- changed: userAyanamsa bare epoch #1: 3 path(s)
+  /value: {"kind":"epoch","name":"user","label":"user: user","source":"caller-defined","epochTT":2440587.5288394107,"value":23.25,"model":"engine"} -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "epoch must be { julianDateTT }, a Date or an ISO 8601 string: a bare number could be a Julian date or epoch milliseconds."
+- changed: userAyanamsa unknown option #1: 3 path(s)
+  /value: {"kind":"epoch","name":"user","label":"user: user","source":"caller-defined","epochTT":2418419.1527925422,"value":23.25,"model":"engine"} -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "userAyanamsa input has an unknown option: modle."
+- changed: vimshottariDasha unknown option #1: 3 path(s)
+  /value: {"system":"vimshottari","yearLength":"julian","yearDays":365.25,"birth":"2017-07-15T06:18:42.000Z","moon":99.30044792852078,"ayanamsa":"lahiri","balance":{"l... -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "vimshottariDasha options has an unknown option: yearlength."
+- changed: declareSiderealLongitude unknown key #1: 3 path(s)
+  /value: {"frame":"sidereal","lon":100,"ayanamsa":"lahiri","trueAyanamsa":null,"tropical":null,"utc":null} -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "declaration has an unknown option: when."
+- changed: crossing search unknown option #1: 3 path(s)
+  /value: {"status":"complete","crossings":[{"at":"1982-01-18T08:26:50.484Z","retrograde":false}],"samples":105} -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "Crossing search options has an unknown option: stepdays."
+- changed: planetaryHours sample budget #1: 1 path(s)
+  /value/reason: absent -> "sample-budget"
+- changed: root crossing window, string ends #1: 3 path(s)
+  /threw: "RangeError" -> absent
+  /message: "Crossing window start must be a valid Date." -> absent
+  /value: absent -> [{"at":"2054-06-21T02:47:26.589Z","retrograde":false}]
+- changed: root crossing window, number ends #1: 3 path(s)
+  /threw: "RangeError" -> absent
+  /message: "Crossing window start must be a valid Date." -> absent
+  /value: absent -> {"status":"complete","crossings":[{"at":"2054-06-21T02:47:26.589Z","retrograde":false}],"samples":105}
+- changed: calendarNote country #1: 3 path(s)
+  /value: null -> absent
+  /threw: absent -> "RangeError"
+  /message: absent -> "country must be a nonempty string."
+- changed: a Julian date that resolves past 9999 #1: 1 path(s)
+  /value: null -> {"kind":"new-style","adoption":{"code":"GB","country":"Britain (UK)","region":"Great Britain","firstGregorian":"1752-09-14","lastJulian":"1752-09-02","source...
+- changed: signForLongitude frozen #1: 1 path(s)
+  /value: false -> true
+- changed: matchAspect definition frozen #1: 1 path(s)
+  /value: false -> true
+- changed: ASPECTS frozen #1: 1 path(s)
+  /value: false -> true
+- changed: ASPECT_TYPES frozen #1: 1 path(s)
+  /value: false -> true
+- changed: SIGNS frozen #1: 1 path(s)
+  /value: false -> true
+- changed: SIGN_NAMES frozen #1: 1 path(s)
+  /value: false -> true
+- changed: ELEMENTS frozen #1: 1 path(s)
+  /value: false -> true
+- changed: MODALITIES frozen #1: 1 path(s)
+  /value: false -> true
+- changed: HOUSE_SYSTEMS frozen #1: 1 path(s)
+  /value: false -> true
+- changed: POLAR_UNDEFINED_HOUSE_SYSTEMS frozen #1: 1 path(s)
+  /value: false -> true
+- changed: LOTS frozen #1: 1 path(s)
+  /value: false -> true
+- changed: CALC_BODIES frozen #1: 1 path(s)
+  /value: false -> true
+- changed: CALC_AYANAMSAS frozen #1: 1 path(s)
+  /value: false -> true
+- changed: CALC_FRAMES frozen #1: 1 path(s)
+  /value: false -> true
+- changed: ASPECT_BODIES not read #1: 1 path(s)
+  /value/1: 9 -> 11
+
+## Calls compared, by label
+calc.calc: 768
+calc.calc center: 48
+calc.calc far: 4
+calc.calc linear ayanamsa: 3
+calc.calc radians: 1
+calc.calc sidereal: 72
+calc.calc user ayanamsa: 9
+calc.chart: 6
+calc.chart no time: 1
+calc.chart sidereal: 6
+calc.events: 5
+calc.events sample budget: 1
+calc.events sidereal: 5
+calc.events steps: 1
+calc.houses: 78
+calc.houses sidereal: 6
+changed: a Julian date that resolves past 9999: 1
+changed: ASPECT_BODIES not read: 1
+changed: ASPECT_TYPES frozen: 1
+changed: ASPECTS frozen: 1
+changed: ayanamsa unknown option: 1
+changed: calc houses system: 1
+changed: calc scale in capitals: 1
+changed: CALC_AYANAMSAS frozen: 1
+changed: CALC_BODIES frozen: 1
+changed: CALC_FRAMES frozen: 1
+changed: calendarNote calendar: 1
+changed: calendarNote country: 1
+changed: calendarNote date: 1
+changed: crossing search unknown option: 1
+changed: davisonPlace convention: 1
+changed: davisonPlace latitude: 1
+changed: declareSiderealLongitude unknown key: 1
+changed: deltaT not finite: 1
+changed: deltaTAt not finite: 1
+changed: ELEMENTS frozen: 1
+changed: HOUSE_SYSTEMS frozen: 1
+changed: LOTS frozen: 1
+changed: matchAspect definition frozen: 1
+changed: MODALITIES frozen: 1
+changed: planetaryHours sample budget: 1
+changed: POLAR_UNDEFINED_HOUSE_SYSTEMS frozen: 1
+changed: root crossing window, number ends: 1
+changed: root crossing window, string ends: 1
+changed: SIGN_NAMES frozen: 1
+changed: signForLongitude frozen: 1
+changed: SIGNS frozen: 1
+changed: userAyanamsa bare epoch: 1
+changed: userAyanamsa unknown option: 1
+changed: vimshottariDasha unknown option: 1
+const calc.CALC_AYANAMSAS: 1
+const calc.CALC_BODIES: 1
+const calc.CALC_FRAMES: 1
+const calc.CALC_RECEIPT_SCHEMA: 1
+const calc.CALC_SPAN: 1
+const deltat.DELTA_T_MODEL: 1
+const deltat.DELTA_T_TABLE: 1
+const engine.ASPECT_BODIES: 1
+const engine.ASPECT_TYPES: 1
+const engine.ASPECTS: 1
+const engine.CONFIGURED_ASPECT_ANGLES: 1
+const engine.DECLINATION_ORB: 1
+const engine.DECLINATION_ORB_LUMINARY: 1
+const engine.DEFAULT_ASPECT_POLICY: 1
+const engine.DEFAULT_DECLINATION_ORB_POLICY: 1
+const engine.DELTA_T_MODEL: 1
+const engine.DELTA_T_TABLE: 1
+const engine.ELEMENTS: 1
+const engine.ENGINE_VERSION: 1
+const engine.EPHEMERIS: 1
+const engine.EPHEMERIS_SPAN: 1
+const engine.HOUSE_SYSTEMS: 1
+const engine.LOTS: 1
+const engine.MEAN_LUNAR_INCLINATION: 1
+const engine.MODALITIES: 1
+const engine.PLACIDUS_POLAR_FALLBACK: 1
+const engine.POLAR_FALLBACK: 1
+const engine.POLAR_UNDEFINED_HOUSE_SYSTEMS: 1
+const engine.PROGRESSION_DAYS_PER_YEAR: 1
+const engine.RA_POLE_TOLERANCE: 1
+const engine.REFERENCE_SPAN: 1
+const engine.SIGN_NAMES: 1
+const engine.SIGNS: 1
+const engine.STATIONARY_RELATIVE_SPEED: 1
+const engine.SUN_BOUND_LATITUDE: 1
+const geo.GREGORIAN_ADOPTION: 1
+const geo.GREGORIAN_ADOPTION_SOURCES: 1
+const geo.TZDB: 1
+const houses.SIDEREAL_RATE: 1
+const receipt.NATAL_DIAGNOSTIC_SCHEMA: 1
+const receipt.NATAL_ENVELOPE_LIMITS: 1
+const receipt.NATAL_ENVELOPE_SCHEMA: 1
+const receipt.NATAL_RECEIPT_CONVENTION_SETS: 1
+const receipt.NATAL_RECEIPT_SCHEMA: 1
+const sky.CHALDEAN_ORDER: 1
+const sky.PLANETARY_DAY_RULERS: 1
+const sky.SKY_RADII_KM: 1
+const sky.STANDARD_REFRACTION_ARCMIN: 1
+const techniques.CHALDEAN_FACES: 1
+const techniques.CLASSICAL_PLANETS: 1
+const techniques.DOMICILE_RULERS: 1
+const techniques.EGYPTIAN_TERMS: 1
+const techniques.EVERY_ZONE_OFFSETS: 1
+const techniques.EXALTATIONS: 1
+const techniques.LUNAR_RETURN_HORIZON_DAYS: 1
+const techniques.LUNAR_RETURN_STEP_DAYS: 1
+const techniques.MOON_SIGN_MAX_SPAN_DAYS: 1
+const techniques.PATTERN_BODIES: 1
+const techniques.SOLAR_RETURN_LOOKBACK_DAYS: 1
+const techniques.SOLAR_RETURN_STEP_DAYS: 1
+const techniques.SOLAR_RETURN_WINDOW_DAYS: 1
+const techniques.TRIPLICITY_LORDS: 1
+const techniques.VOID_BODIES: 1
+const techniques.VOID_OF_COURSE_CONVENTION: 1
+const techniques.VOID_OF_COURSE_MAX_DAYS: 1
+const timing.CHALDEAN_ORDER: 1
+const timing.DEFAULT_FIRDARIA_VARIANT: 1
+const timing.DEFAULT_PROFECTION_MONTHS: 1
+const timing.DEFAULT_RELEASING_YEARS: 1
+const timing.FIRDARIA_CYCLE_YEARS: 1
+const timing.FIRDARIA_VARIANTS: 1
+const timing.FIRDARIA_YEARS: 1
+const timing.PROFECTION_MONTH_CONVENTIONS: 1
+const timing.RELEASING_CYCLE_UNITS: 1
+const timing.RELEASING_UNIT_DAYS: 1
+const timing.RELEASING_YEAR_CONVENTIONS: 1
+const timing.RETURN_BODIES: 1
+const timing.RETURN_STEP_DAYS: 1
+const timing.TRADITIONAL_RULERS: 1
+const timing.VALENS_MINOR_YEARS: 1
+const vedic.ASHTOTTARI_YEARS: 1
+const vedic.AYANAMSAS: 1
+const vedic.DASHA_LEVELS: 1
+const vedic.DASHA_YEAR_DAYS: 1
+const vedic.KP_SUBS: 1
+const vedic.NAKSHATRAS: 1
+const vedic.SIGN_LORDS: 1
+const vedic.VARGAS: 1
+const vedic.VIMSHOTTARI_LORDS: 1
+const vedic.VIMSHOTTARI_YEARS: 1
+const vedic.YOGINIS: 1
+const window.MAX_WINDOW_MS: 1
+const window.WINDOW_RATE_BOUNDS: 1
+const window.WINDOW_VERIFICATION: 1
+crossings.findLongitudeCrossingsWith: 6
+crossings.searchLongitudeCrossingsWith: 6
+crossings.searchLongitudeCrossingsWith budget: 6
+deltat.deltaT: 130
+deltat.deltaTAt: 130
+engine.alcabitiusCusps: 24
+engine.antiscion: 24
+engine.aspectMotion: 24
+engine.campanusCusps: 24
+engine.chartDeclinations: 15
+engine.chartPoints: 15
+engine.computeAngles: 24
+engine.computeHouses: 312
+engine.contraAntiscion: 24
+engine.createAspectPolicy: 1
+engine.declinationOf: 24
+engine.declinationOrb: 24
+engine.declinationOrb policy: 1
+engine.declinationsForBodies: 1
+engine.declinationsForBodies policy: 1
+engine.degreeInSign: 24
+engine.deltaT: 40
+engine.deltaTAt: 40
+engine.eastPointOf: 24
+engine.eclipticToEquatorial: 24
+engine.elementBalance: 15
+engine.equalCusps: 24
+engine.equalMcCusps: 24
+engine.findAspects: 15
+engine.findConfiguredAspects: 15
+engine.findConfiguredAspects narrow: 15
+engine.findDeclinationAspects: 1
+engine.findDeclinationAspects policy: 1
+engine.findInterAspects: 15
+engine.findLongitudeCrossings: 15
+engine.findLongitudeCrossings step: 1
+engine.groupIntoSeasons: 15
+engine.hellenisticLots: 1
+engine.hellenisticLots night: 1
+engine.houseOf: 24
+engine.isPolarUndefinedHouseSystem: 13
+engine.kochCusps: 24
+engine.lunarMeanArguments: 24
+engine.matchAspect: 24
+engine.meanApogee: 24
+engine.meanNodeLongitude: 24
+engine.meanObliquity: 24
+engine.meridianCusps: 24
+engine.midpoint: 24
+engine.modalityBalance: 15
+engine.moonPhase: 12
+engine.morinusCusps: 24
+engine.natalChart: 408
+engine.natalChart deltaT: 12
+engine.natalChart far: 4
+engine.natalChart no time: 12
+engine.natalChart tt: 12
+engine.natalChart ut1: 12
+engine.normalizeLongitude: 24
+engine.outsideReferenceSpan: 12
+engine.placidusCusps: 24
+engine.porphyryCusps: 24
+engine.positions: 12
+engine.positions far: 4
+engine.progressedBodies: 15
+engine.progressedInstant: 15
+engine.ramcOf: 24
+engine.regiomontanusCusps: 24
+engine.saturnReturn: 15
+engine.searchLongitudeCrossings: 15
+engine.searchLongitudeCrossings budget: 1
+engine.sectOf: 24
+engine.separation: 24
+engine.signForLongitude: 24
+engine.signIndexForLongitude: 24
+engine.summarizePair: 15
+engine.summarizePair top: 1
+engine.synastry: 15
+engine.topocentricCusps: 24
+engine.transits: 15
+engine.vehlowCusps: 24
+engine.vertexOf: 24
+engine.wholeSignCusps: 24
+geo.calendarNote: 50
+geo.calendarNote julian: 50
+geo.gregorianAdoption: 10
+geo.gregorianToJulian: 6
+geo.julianToGregorian: 6
+geo.offsetAt: 96
+geo.prepareLocalTime: 41
+geo.resolveBirth: 96
+geo.resolveLocalBirth: 96
+geo.resolveLocalBirth dst: 6
+geo.resolveLocalToUtc: 96
+geo.resolveLocalToUtc dst: 6
+geo.resolveLocalToUtc julian: 1
+geo.zoneOffsetAt: 96
+houses.coAscendants: 18
+houses.housePosition: 234
+houses.houseSpeeds: 234
+receipt.createNatalEnvelope: 18
+receipt.createNatalEnvelope context: 1
+receipt.createNatalEnvelope contexts: 11
+receipt.envelopes: 1
+receipt.envelopes all: 1
+receipt.natalReplayInput: 18
+receipt.parseNatalEnvelope: 18
+receipt.parseNatalEnvelope context: 1
+receipt.parseNatalEnvelope contexts: 11
+receipt.redactNatalEnvelope: 18
+receipt.serializeNatalEnvelope: 18
+receipt.serializeNatalEnvelope context: 1
+receipt.serializeNatalEnvelope contexts: 11
+sky.planetaryHourAt: 12
+sky.planetaryHours: 12
+sky.planetaryHours solstice: 8
+sky.skyEvents: 48
+sky.skyEvents budget: 1
+sky.skyEventsOn: 48
+sky.skyEventsOn budget: 1
+sky.skyEventsOn solstice: 8
+techniques.aspectPatterns: 18
+techniques.chartAspectPatterns: 18
+techniques.compositeAspects: 18
+techniques.compositeChart: 18
+techniques.compositeMidpoints: 18
+techniques.davisonChart: 18
+techniques.davisonPlace: 18
+techniques.davisonPlace default: 18
+techniques.davisonPlace great circle: 18
+techniques.dignitiesFor: 108
+techniques.dignityFor: 108
+techniques.dignityRulersAt: 47
+techniques.essentialDignities: 141
+techniques.hasClassicalDignities: 9
+techniques.lunarReturn: 18
+techniques.lunarReturn options: 1
+techniques.lunarReturnInstant: 18
+techniques.moonAspects: 7
+techniques.moonAspects traditional: 1
+techniques.moonIngresses: 7
+techniques.moonSignCandidates: 7
+techniques.moonSignCandidates longitude: 7
+techniques.moonSignsBetween: 7
+techniques.mostRecentSolarReturnInstant: 18
+techniques.mutualReceptions: 18
+techniques.mutualReceptions options: 1
+techniques.patternContainment: 18
+techniques.solarReturn: 18
+techniques.solarReturn most recent: 18
+techniques.solarReturnInstant: 18
+techniques.voidOfCourseAt: 7
+techniques.voidOfCourseAt far: 4
+techniques.voidOfCourseAt traditional: 7
+techniques.voidOfCourseWindows: 7
+techniques.voidOfCourseWindows traditional: 1
+timing.annualProfection: 6
+timing.annualProfection number: 6
+timing.directLongitudes: 1
+timing.firdaria: 18
+timing.firdariaAt: 18
+timing.firdariaPeriods: 2
+timing.firdariaSequence: 2
+timing.planetaryReturns: 18
+timing.planetaryReturns budget: 1
+timing.planetaryReturns options: 1
+timing.profectionAt: 18
+timing.profectionYear: 18
+timing.releasingAt: 18
+timing.releasingPeriods: 18
+timing.solarArc: 18
+timing.solarArcDirections: 18
+timing.zodiacalReleasing: 18
+timing.zodiacalReleasingAt: 18
+vedic.ashtottariDasha: 12
+vedic.ashtottariDasha year: 3
+vedic.ayanamsa: 108
+vedic.ayanamsa deltaT: 12
+vedic.ayanamsa far: 4
+vedic.ayanamsa linear: 8
+vedic.ayanamsa tt: 12
+vedic.ayanamsa user: 8
+vedic.dashaSubperiods: 12
+vedic.declareSiderealLongitude: 12
+vedic.kpLordsOf: 12
+vedic.nakshatraOf: 12
+vedic.nakshatraOf declared: 12
+vedic.siderealChart: 12
+vedic.siderealChart birth: 12
+vedic.siderealChart user ayanamsa: 1
+vedic.siderealLongitude: 12
+vedic.userAyanamsa: 4
+vedic.userAyanamsa linear: 4
+vedic.vargaOf: 192
+vedic.vargaOf cyclic: 24
+vedic.vimshottariAt: 12
+vedic.vimshottariAt year: 3
+vedic.vimshottariDasha: 12
+vedic.yoginiDasha: 12
+vedic.yoginiDasha year: 3
+window.birthWindow: 6
+window.birthWindow range: 6
+window.birthWindow rounding: 6

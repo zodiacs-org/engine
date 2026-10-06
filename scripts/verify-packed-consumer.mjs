@@ -92,10 +92,10 @@ const tzdbVersion: string = TZDB.version;
 void cause; void gregorian; void tzdbVersion;
 
 import { calc, houses, events, chart as calcChart, type CalcRequest, type CalcPosition, type CalcRefusal, type CalcUserAyanamsa, type CalcAyanamsaValue, type CalcSiderealChart } from "@zodiacs/engine/calc";
-const calcRequest: CalcRequest = {body: "Mars", time: {jd: 2451545, scale: "TT"}, frame: "equatorial-icrs", center: {topocentric: {latitude: 0, longitude: 0}}, flags: {correction: "astrometric", cartesian: true}};
+const calcRequest: CalcRequest = {body: "Mars", time: {jd: 2451545, scale: "tt"}, frame: "equatorial-icrs", center: {topocentric: {latitude: 0, longitude: 0}}, flags: {correction: "astrometric", cartesian: true}};
 const calcResult: CalcPosition | CalcRefusal = calc(calcRequest);
 if (calcResult.status === "ok") { const replayed: CalcRequest = calcResult.receipt.request; void replayed; } else { const reason: string = calcResult.reason; void reason; }
-const userAyanamsa: CalcUserAyanamsa = {epoch: {jd: 2451545, scale: "TT"}, value: 23.85};
+const userAyanamsa: CalcUserAyanamsa = {epoch: {jd: 2451545, scale: "tt"}, value: 23.85};
 const siderealResult = calc({body: "Moon", time: "2000-02-29", zodiac: {sidereal: userAyanamsa}});
 if (siderealResult.status === "ok") { const subtracted: CalcAyanamsaValue | null = siderealResult.ayanamsa; void subtracted; }
 if (siderealResult.status === "ok" && siderealResult.ayanamsa) { const which: "true" | "mean" = siderealResult.ayanamsa.subtracted; const mean: number = siderealResult.ayanamsa.mean; const bound: number | null = siderealResult.ayanamsa.bound.value; void which; void mean; void bound; }
@@ -105,9 +105,9 @@ if (siderealChartResult.status === "ok" && siderealChartResult.sidereal) { const
 void houses; void events;
 import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError, type BirthWindow, type WindowChange, type WindowUnresolved } from "@zodiacs/engine/window";
 const windowed: BirthWindow = birthWindow({start: "2000-02-29T11:50:00Z", end: "2000-02-29T12:10:00Z", latitude: 0, longitude: 180, houseSystem: "placidus", rounding: {recorded: "2000-02-29T12:00:00Z", minutes: 5}});
-const firstChanges: WindowChange[] = windowed.switches[0]?.changes ?? [];
-const label: "sampled at one-second resolution" = WINDOW_VERIFICATION;
-const open: WindowUnresolved[] = windowed.unresolved;
+const firstChanges: readonly WindowChange[] = windowed.switches[0]?.changes ?? [];
+const label: string = WINDOW_VERIFICATION;
+const open: readonly WindowUnresolved[] = windowed.unresolved;
 const budget: Error = new WindowBudgetError();
 void firstChanges; void label; void open; void budget;
 const degreePerDay = (_body: string, date: Date) => (date.getTime() / 86_400_000) % 360;

@@ -13,6 +13,7 @@ import { BaryState, Body, HelioVector } from "astronomy-engine";
 import type { AstroTime } from "astronomy-engine";
 
 import { dateFrom } from "../date-input.js";
+import { readOptions } from "../read-options.js";
 import type { DeltaT } from "../deltat.js";
 import { onChartClock } from "../ephemeris.js";
 import { eclipticFrame, meanEcliptic } from "../frame.js";
@@ -181,19 +182,24 @@ function requireFinite(value: unknown, low: number, high: number, label: string)
 /** Input to userAyanamsa. */
 export interface UserAyanamsaInput {
   /** Lowercase identifier, at most 64 characters, not a built-in name; default "user". */
-  readonly name?: string;
-  /** When `value` holds: a TT Julian date within the Date range, or a UTC instant, read on the engine's time basis. */
-  readonly epoch: DateInput | { readonly julianDateTT: number };
+  readonly name?: string | undefined;
+  /**
+   * When `value` holds: `{ julianDateTT }`, a TT Julian date within the Date
+   * range, or a UTC instant as a Date or an ISO 8601 string, read on the
+   * engine's time basis. A bare number is refused: it could be a Julian date
+   * or epoch milliseconds.
+   */
+  readonly epoch: Date | string | { readonly julianDateTT: number };
   /** The mean ayanamsa at `epoch` as `model` computes it, degrees, in [−360, 360]. */
   readonly value: number;
   /** Arcseconds per Julian year, in [−3600, 3600]: a linear ayanamsa. */
-  readonly rate?: number;
+  readonly rate?: number | undefined;
   /**
    * Without `rate`: the model `value` was computed with, default "engine"
    * (`value` then holds at `epoch`); an older model's zodiac is held at
    * J2000.0, as for the built-ins.
    */
-  readonly model?: AyanamsaPrecessionModel;
+  readonly model?: AyanamsaPrecessionModel | undefined;
 }
 
 const EPOCH_JD_LIMIT = 1e8; // days either side of 1970-01-01, the Date range
@@ -203,28 +209,36 @@ export function isUserAyanamsaName(name: unknown): name is string {
   return typeof name === "string" && /^[a-z][a-z0-9-]{0,63}$/.test(name) && !Object.hasOwn(AYANAMSAS, name);
 }
 
-/** A caller's ayanamsa, frozen. Refuses a built-in name, both `rate` and `model`, and out-of-range values. */
+/**
+ * A caller's ayanamsa, frozen. Refuses a key not named in UserAyanamsaInput, a
+ * built-in name, a bare-number epoch, both `rate` and `model`, and
+ * out-of-range values.
+ */
 export function userAyanamsa(input: UserAyanamsaInput): AyanamsaDefinition {
   if (!input || typeof input !== "object") throw new RangeError("userAyanamsa needs an input object.");
-  const name = input.name ?? "user";
+  const read = readOptions(input, ["name", "epoch", "value", "rate", "model"], "userAyanamsa input");
+  const name = read.name ?? "user";
   if (!isUserAyanamsaName(name)) {
     throw new RangeError("Ayanamsa name must be a new lowercase identifier of at most 64 characters.");
   }
-  const epoch = input.epoch;
+  const epoch = read.epoch;
   let epochTT: number;
-  if (epoch && typeof epoch === "object" && !(epoch instanceof Date)) {
-    epochTT = requireFinite(epoch.julianDateTT, UNIX_JD - EPOCH_JD_LIMIT, UNIX_JD + EPOCH_JD_LIMIT, "epoch.julianDateTT");
+  if (typeof epoch === "number") {
+    throw new RangeError("epoch must be { julianDateTT }, a Date or an ISO 8601 string: a bare number could be a Julian date or epoch milliseconds.");
+  } else if (epoch && typeof epoch === "object" && !(epoch instanceof Date)) {
+    const julian = readOptions(epoch, ["julianDateTT"], "epoch");
+    epochTT = requireFinite(julian.julianDateTT, UNIX_JD - EPOCH_JD_LIMIT, UNIX_JD + EPOCH_JD_LIMIT, "epoch.julianDateTT");
   } else {
     const at = dateFrom(epoch as DateInput, "epoch");
     epochTT = J2000 + timeBasis(at.getTime(), "utc").ttDays;
   }
-  const value = requireFinite(input.value, -360, 360, "value");
+  const value = requireFinite(read.value, -360, 360, "value");
   const common = { name, label: `user: ${name}`, source: "caller-defined", epochTT, value };
-  if (input.rate !== undefined) {
-    if (input.model !== undefined) throw new RangeError("Give either a rate or a precession model, not both.");
-    return registered({ kind: "linear", ...common, rate: requireFinite(input.rate, -3600, 3600, "rate") });
+  if (read.rate !== undefined) {
+    if (read.model !== undefined) throw new RangeError("Give either a rate or a precession model, not both.");
+    return registered({ kind: "linear", ...common, rate: requireFinite(read.rate, -3600, 3600, "rate") });
   }
-  const model = input.model ?? "engine";
+  const model = read.model ?? "engine";
   if (model !== "engine" && model !== "newcomb" && model !== "iau1976") {
     throw new RangeError("model must be engine, newcomb or iau1976.");
   }
@@ -420,7 +434,12 @@ export function ayanamsaAt(
 export interface AyanamsaValue {
   /** The definition's name. */
   readonly ayanamsa: string;
-  /** The instant as given, ISO 8601, on the scale `timeScale.input` names (UTC unless the options say otherwise). */
+  /**
+   * The instant as given, ISO 8601, on the scale `timeScale.input` names (UTC
+   * unless the options say otherwise), named as ChartInput.utc is: on UT1 or
+   * TT input it is that reading, with a Z. A SiderealLongitude made from this
+   * value has the UTC instant of the time basis in its own `utc`.
+   */
   readonly utc: string;
   /** How the instant became UT1 and TT, as a chart's `timeScale` (docs/time.md). */
   readonly timeScale: TimeScale;
@@ -434,8 +453,15 @@ export interface AyanamsaValue {
   /** mean + nutation: subtract it from the engine's tropical longitudes. */
   readonly true: number;
   /** "outside-reference-span" when the instant, or an epoch definition's epoch, is outside REFERENCE_SPAN. */
-  readonly flags: readonly "outside-reference-span"[];
+  readonly flags: readonly AyanamsaFlag[];
 }
+
+/**
+ * A flag on an ayanamsa's value. A minor release may add one, as for a
+ * chart's flags, so code that switches on a flag should handle one it does
+ * not know.
+ */
+export type AyanamsaFlag = "outside-reference-span";
 
 /** Internal: true for an epoch definition whose epoch is outside REFERENCE_SPAN. */
 export function outsideSpanEpoch(definition: AyanamsaDefinition): boolean {
@@ -461,12 +487,12 @@ export function utcInstantOf(value: AyanamsaValue): string {
   return new Date(Math.round(ms)).toISOString();
 }
 
-/** Options for ayanamsa. */
+/** Options for ayanamsa. A key not named here is refused with a RangeError. */
 export interface AyanamsaOptions {
   /** A fixed ΔT (TT − UT1) in seconds, as BirthInput.deltaT; the engine's time basis when absent. */
-  readonly deltaT?: number;
+  readonly deltaT?: number | undefined;
   /** The scale the instant is on, as BirthInput.timeScale: "utc" (default), "ut1" or "tt". */
-  readonly timeScale?: TimeScaleName;
+  readonly timeScale?: TimeScaleName | undefined;
 }
 
 /**
@@ -478,13 +504,14 @@ export interface AyanamsaOptions {
 export function ayanamsa(
   definition: AyanamsaName | AyanamsaDefinition,
   at: DateInput,
-  options: AyanamsaOptions = {}
+  options?: AyanamsaOptions
 ): AyanamsaValue {
   const resolved = definitionOf(definition);
   const date = dateFrom(at, "at");
-  const pin = options?.deltaT;
+  const read = readOptions(options, ["deltaT", "timeScale"], "ayanamsa options");
+  const pin = read.deltaT as number | undefined;
   if (pin !== undefined) requireFinite(pin, -1e10, 1e10, "deltaT");
-  const scale: unknown = options?.timeScale;
+  const scale: unknown = read.timeScale;
   if (scale !== undefined && !TIME_SCALE_NAMES.includes(scale as never)) {
     throw new RangeError('timeScale must be "utc", "ut1" or "tt".');
   }

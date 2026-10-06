@@ -7,6 +7,7 @@ export type {
 } from "./geo/geonames.js";
 
 export {
+  ZoneHistoryNotLoadedError,
   offsetAt,
   prepareLocalTime,
   resolveBirth,

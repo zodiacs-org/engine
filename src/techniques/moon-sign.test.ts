@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest";
 import { bodyLongitude } from "../ephemeris.js";
 import { loadHistory, loadedHistory } from "../geo/zone-history.js";
 import { prepareLocalTime, resolveLocalToUtc } from "../geo/timezone.js";
-import { SIGN_NAMES, signIndexForLongitude } from "../signs.js";
+import { SIGN_SLUGS, signIndexForLongitude } from "../signs.js";
 import { SHARD_LOADERS } from "../tzdb/tzdb-2025c.js";
 import { EVERY_ZONE_OFFSETS, MOON_SIGN_MAX_SPAN_DAYS, moonSignCandidates, moonSignsBetween } from "./moon-sign.js";
 
 const HOUR = 3_600_000;
-const moonSign = (ms: number) => SIGN_NAMES[signIndexForLongitude(bodyLongitude("Moon", new Date(ms)))]!;
+const moonSign = (ms: number) => SIGN_SLUGS[signIndexForLongitude(bodyLongitude("Moon", new Date(ms)))]!;
 
 // First, before any test below loads the zone histories.
 describe("a date before 1970", () => {

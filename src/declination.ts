@@ -8,9 +8,15 @@ import type { ExactSum } from "./exact.js";
 const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
 
-/** Site-compatible maximum orb, in degrees, for a pair without Sun or Moon. */
+/**
+ * Site-compatible maximum orb, in degrees, for a pair without Sun or Moon.
+ * @deprecated The same value as DEFAULT_DECLINATION_ORB_POLICY.orb; use that.
+ */
 export const DECLINATION_ORB = 1;
-/** Site-compatible maximum orb when either identifier is exactly Sun or Moon. */
+/**
+ * Site-compatible maximum orb when either identifier is exactly Sun or Moon.
+ * @deprecated The same value as DEFAULT_DECLINATION_ORB_POLICY.luminaryOrb; use that.
+ */
 export const DECLINATION_ORB_LUMINARY = 1.5;
 
 export interface DeclinationOrbPolicy {
@@ -121,7 +127,7 @@ export interface Declinations {
 }
 
 export interface ChartDeclinations extends Declinations {
-  /** Observation instant, retaining the engine's UTC-label/UT1 convention. */
+  /** The chart's instant as given, ISO 8601, on the scale its `input.timeScale` names, as ChartInput.utc. */
   utc: string;
   /** The evaluated provider Delta-T used to obtain true obliquity. */
   deltaT: DeltaT;

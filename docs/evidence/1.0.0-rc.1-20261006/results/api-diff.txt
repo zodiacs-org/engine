@@ -1,0 +1,1631 @@
+--- 0.1.1-rc.17/calc.api.md
++++ 1.0.0-rc.1/calc.api.md
+@@ -5,7 +5,7 @@
+ `npm run api:check` fails when the build declares anything else. Within a
+ major version these declarations change only as `docs/versioning.md` allows.
+ 
+-## Exported (44)
++## Exported (45)
+ 
+ ```ts
+ interface Angles {
+@@ -19,24 +19,15 @@
+ 
+ declare const CALC_BODIES: readonly CalcBody[];
+ 
+-declare const CALC_FRAMES: readonly [
+-    "ecliptic-true-of-date",
+-    "ecliptic-mean-of-date",
+-    "ecliptic-j2000",
+-    "ecliptic-icrs",
+-    "equatorial-true-of-date",
+-    "equatorial-mean-of-date",
+-    "equatorial-j2000",
+-    "equatorial-icrs"
+-];
++declare const CALC_FRAMES: readonly CalcFrame[];
+ 
+-declare const CALC_RECEIPT_SCHEMA = "zodiacs.calc-receipt.draft-v1";
++declare const CALC_RECEIPT_SCHEMA = "zodiacs.calc-receipt.v1";
+ 
+ declare const CALC_SPAN: CalcSpan;
+ 
+-type CalcAyanamsa = "lahiri" | "fagan-bradley" | "krishnamurti" | "raman" | "yukteswar" | "true-chitra" | "true-revati" | "true-pushya" | "galactic-center";
++type CalcAyanamsa = AyanamsaName;
+ 
+-type CalcAyanamsaModel = "engine" | "newcomb" | "iau1976";
++type CalcAyanamsaModel = AyanamsaPrecessionModel;
+ 
+ interface CalcAyanamsaValue {
+     readonly name: string;
+@@ -96,9 +87,12 @@
+     readonly timeScale: TimeScale;
+ }
+ 
+-interface CalcPlace {
++interface CalcLocation {
+     readonly latitude: number;
+     readonly longitude: number;
++}
++
++interface CalcPlace extends CalcLocation {
+     readonly height?: number;
+ }
+ 
+@@ -151,6 +145,9 @@
+     readonly reason: "out-of-range";
+     readonly span: CalcSpan;
+ } | {
++    readonly reason: "epoch-out-of-range";
++    readonly epochSpan: typeof EPHEMERIS_SPAN;
++} | {
+     readonly reason: "sample-budget";
+     readonly samples: number;
+     readonly maxSamples: number;
+@@ -165,7 +162,7 @@
+     readonly flags?: CalcFlags;
+ }
+ 
+-type CalcScale = "UTC" | "UT1" | "TT";
++type CalcScale = TimeScaleName;
+ 
+ interface CalcSiderealChart {
+     readonly ayanamsa: CalcAyanamsaValue;
+@@ -221,7 +218,7 @@
+ 
+ interface ChartRequest {
+     readonly time: CalcTime;
+-    readonly place?: CalcPlace;
++    readonly place?: CalcLocation;
+     readonly houseSystem?: HouseSystem;
+     readonly timeKnown?: boolean;
+     readonly timeFlags?: readonly ChartFlag[];
+@@ -270,8 +267,8 @@
+ 
+ interface HousesRequest {
+     readonly time: CalcTime;
+-    readonly place: CalcPlace;
+-    readonly system?: HouseSystem;
++    readonly place: CalcLocation;
++    readonly houseSystem?: HouseSystem;
+     readonly zodiac?: CalcZodiac;
+ }
+ 
+@@ -310,7 +307,7 @@
+ declare function houses(request: HousesRequest): HousesResult | CalcRefusal;
+ ```
+ 
+-## Referenced, not exported here (11)
++## Referenced, not exported here (14)
+ 
+ ```ts
+ // exported by @zodiacs/engine (Aspect)
+@@ -325,7 +322,13 @@
+ // exported by @zodiacs/engine (AspectType)
+ type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
+ 
+-// exported by @zodiacs/engine (BodyName)
++// exported by @zodiacs/engine/vedic (AyanamsaName)
++type AyanamsaName = "lahiri" | "fagan-bradley" | "krishnamurti" | "raman" | "yukteswar" | "true-chitra" | "true-revati" | "true-pushya" | "galactic-center";
++
++// exported by @zodiacs/engine/vedic (AyanamsaPrecessionModel)
++type AyanamsaPrecessionModel = "engine" | "newcomb" | "iau1976";
++
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+ // exported by @zodiacs/engine (BodyPosition)
+@@ -354,6 +357,17 @@
+ // exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment)
+ type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
+ 
++// exported by @zodiacs/engine (EPHEMERIS_SPAN)
++declare const EPHEMERIS_SPAN: Readonly<{
++    readonly timeScale: "TT";
++    readonly daysFromJ2000: Readonly<{
++        readonly from: -730000;
++        readonly to: 730000;
++    }>;
++    readonly fromTT: "0001-04-30T12:00:00";
++    readonly toTT: "3998-09-03T12:00:00";
++}>;
++
+ // exported by @zodiacs/engine (Houses)
+ interface Houses {
+     system: HouseSystem;
+--- 0.1.1-rc.17/crossings.api.md
++++ 1.0.0-rc.1/crossings.api.md
+@@ -5,14 +5,16 @@
+ `npm run api:check` fails when the build declares anything else. Within a
+ major version these declarations change only as `docs/versioning.md` allows.
+ 
+-## Exported (6)
++## Exported (7)
+ 
+ ```ts
+-type BodyLongitudeAt = (body: BodyName, date: Date) => number;
++type BodyLongitudeAt<B extends string = BodyName> = (body: B, date: Date) => number;
++
++type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+ interface CrossingSearchOptions {
+-    stepDays?: number;
+-    maxSamples?: number;
++    readonly stepDays?: number | undefined;
++    readonly maxSamples?: number | undefined;
+ }
+ 
+ type CrossingSearchResult = {
+@@ -33,14 +35,7 @@
+     retrograde: boolean;
+ }
+ 
+-declare function findLongitudeCrossingsWith(longitudeAt: BodyLongitudeAt, body: BodyName, targetLongitude: number, from: Date, to: Date, stepDays?: number): LongitudeCrossing[];
+-
+-declare function searchLongitudeCrossingsWith(longitudeAt: BodyLongitudeAt, body: BodyName, targetLongitude: number, from: Date, to: Date, options?: CrossingSearchOptions): CrossingSearchResult;
+-```
++declare function findLongitudeCrossingsWith<B extends string = BodyName>(longitudeAt: BodyLongitudeAt<B>, body: B, targetLongitude: number, from: Date, to: Date, stepDays?: number): LongitudeCrossing[];
+ 
+-## Referenced, not exported here (1)
+-
+-```ts
+-// exported by @zodiacs/engine (BodyName)
+-type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
++declare function searchLongitudeCrossingsWith<B extends string = BodyName>(longitudeAt: BodyLongitudeAt<B>, body: B, targetLongitude: number, from: Date, to: Date, options?: CrossingSearchOptions): CrossingSearchResult;
+ ```
+# deltat.api.md: no difference
+--- 0.1.1-rc.17/engine.api.md
++++ 1.0.0-rc.1/engine.api.md
+@@ -5,43 +5,45 @@
+ `npm run api:check` fails when the build declares anything else. Within a
+ major version these declarations change only as `docs/versioning.md` allows.
+ 
+-## Exported (160)
++## Exported (164)
+ 
+ ```ts
+ declare const ASPECTS: readonly [
+-    {
++    Readonly<{
+         readonly type: "conjunction";
+         readonly angle: 0;
+         readonly orb: 8;
+         readonly luminaryOrb: 10;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly type: "sextile";
+         readonly angle: 60;
+         readonly orb: 4;
+         readonly luminaryOrb: 5;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly type: "square";
+         readonly angle: 90;
+         readonly orb: 7;
+         readonly luminaryOrb: 8;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly type: "trine";
+         readonly angle: 120;
+         readonly orb: 7;
+         readonly luminaryOrb: 8;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly type: "opposition";
+         readonly angle: 180;
+         readonly orb: 8;
+         readonly luminaryOrb: 10;
+-    }
++    }>
+ ];
+ 
+-declare const ASPECT_BODIES: Set<string>;
++declare const ASPECT_BODIES: ReadonlySet<string>;
++
++declare const ASPECT_POLICY_SCHEMA: "zodiacs.aspect-policy.v1";
+ 
+ declare const ASPECT_TYPES: readonly [
+     "conjunction",
+@@ -74,10 +76,10 @@
+ }
+ 
+ interface AspectDefinition {
+-    type: AspectType;
+-    angle: number;
+-    orb: number;
+-    luminaryOrb: number;
++    readonly type: AspectType;
++    readonly angle: number;
++    readonly orb: number;
++    readonly luminaryOrb: number;
+ }
+ 
+ type AspectMotion = "applying" | "separating" | "stationary";
+@@ -91,7 +93,7 @@
+ }
+ 
+ interface AspectPolicy {
+-    readonly schema: "zodiacs.aspect-policy.v1";
++    readonly schema: typeof ASPECT_POLICY_SCHEMA;
+     readonly aspects: readonly ResolvedAspectRule[];
+     readonly bodies: readonly string[];
+     readonly bodyOrbs: Readonly<Record<string, AspectOrbLimits>>;
+@@ -140,7 +142,7 @@
+     deltaT?: number;
+ }
+ 
+-type BodyLongitudeAt = (body: BodyName, date: Date) => number;
++type BodyLongitudeAt<B extends string = BodyName> = (body: B, date: Date) => number;
+ 
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+@@ -154,6 +156,8 @@
+     degree: number;
+ }
+ 
++declare const CONFIGURED_ASPECTS_SCHEMA: "zodiacs.configured-aspects.v1";
++
+ declare const CONFIGURED_ASPECT_ANGLES: Readonly<{
+     readonly conjunction: 0;
+     readonly semisextile: 30;
+@@ -210,21 +214,22 @@
+     readonly angle: number;
+     readonly orb: number;
+     readonly maximumOrb: number;
+-    readonly motion: ConfiguredAspectMotion;
++    readonly motion: AspectMotion;
+     readonly applying: boolean;
+ }
+ 
+-type ConfiguredAspectMotion = "applying" | "separating" | "stationary";
++/** @deprecated */
++type ConfiguredAspectMotion = AspectMotion;
+ 
+ interface ConfiguredAspectResult {
+-    readonly schema: "zodiacs.configured-aspects.v1";
++    readonly schema: typeof CONFIGURED_ASPECTS_SCHEMA;
+     readonly policy: AspectPolicy;
+     readonly aspects: readonly ConfiguredAspect[];
+ }
+ 
+ interface CrossingSearchOptions {
+-    stepDays?: number;
+-    maxSamples?: number;
++    readonly stepDays?: number | undefined;
++    readonly maxSamples?: number | undefined;
+ }
+ 
+ type CrossingSearchResult = {
+@@ -240,14 +245,18 @@
+     ];
+ };
+ 
++/** @deprecated */
+ declare const DECLINATION_ORB = 1;
+ 
++/** @deprecated */
+ declare const DECLINATION_ORB_LUMINARY = 1.5;
+ 
+ declare const DEFAULT_ASPECT_POLICY: AspectPolicy;
+ 
+ declare const DEFAULT_DECLINATION_ORB_POLICY: Readonly<DeclinationOrbPolicy>;
+ 
++declare const DELTA_T_IERS_MODEL = "iers-utc/1";
++
+ declare const DELTA_T_MODEL = "zodiacs-deltat/1";
+ 
+ declare const DELTA_T_TABLE: DeltaTTable;
+@@ -319,11 +328,11 @@
+     "water"
+ ];
+ 
+-declare const ENGINE_VERSION = "0.1.1-rc.17";
++declare const ENGINE_VERSION: string;
+ 
+ declare const EPHEMERIS: Readonly<{
+-    readonly name: "astronomy-engine";
+-    readonly version: "2.1.19";
++    name: "astronomy-engine";
++    version: string;
+ }>;
+ 
+ declare const EPHEMERIS_SPAN: Readonly<{
+@@ -409,6 +418,7 @@
+     saturn: number;
+ }
+ 
++/** @experimental */
+ declare const MEAN_LUNAR_INCLINATION = 5.1453964;
+ 
+ declare const MODALITIES: readonly [
+@@ -436,6 +446,7 @@
+ 
+ type NatalSource = Chart | BirthInput;
+ 
++/** @deprecated */
+ declare const PLACIDUS_POLAR_FALLBACK: "whole";
+ 
+ declare const POLAR_FALLBACK: "whole";
+@@ -498,106 +509,109 @@
+ }
+ 
+ declare const SIGNS: readonly [
+-    {
++    Readonly<{
+         readonly slug: "aries";
+         readonly name: "Aries";
+         readonly element: "fire";
+         readonly modality: "cardinal";
+         readonly polarity: "day";
+         readonly naturalHouse: 1;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly slug: "taurus";
+         readonly name: "Taurus";
+         readonly element: "earth";
+         readonly modality: "fixed";
+         readonly polarity: "night";
+         readonly naturalHouse: 2;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly slug: "gemini";
+         readonly name: "Gemini";
+         readonly element: "air";
+         readonly modality: "mutable";
+         readonly polarity: "day";
+         readonly naturalHouse: 3;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly slug: "cancer";
+         readonly name: "Cancer";
+         readonly element: "water";
+         readonly modality: "cardinal";
+         readonly polarity: "night";
+         readonly naturalHouse: 4;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly slug: "leo";
+         readonly name: "Leo";
+         readonly element: "fire";
+         readonly modality: "fixed";
+         readonly polarity: "day";
+         readonly naturalHouse: 5;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly slug: "virgo";
+         readonly name: "Virgo";
+         readonly element: "earth";
+         readonly modality: "mutable";
+         readonly polarity: "night";
+         readonly naturalHouse: 6;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly slug: "libra";
+         readonly name: "Libra";
+         readonly element: "air";
+         readonly modality: "cardinal";
+         readonly polarity: "day";
+         readonly naturalHouse: 7;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly slug: "scorpio";
+         readonly name: "Scorpio";
+         readonly element: "water";
+         readonly modality: "fixed";
+         readonly polarity: "night";
+         readonly naturalHouse: 8;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly slug: "sagittarius";
+         readonly name: "Sagittarius";
+         readonly element: "fire";
+         readonly modality: "mutable";
+         readonly polarity: "day";
+         readonly naturalHouse: 9;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly slug: "capricorn";
+         readonly name: "Capricorn";
+         readonly element: "earth";
+         readonly modality: "cardinal";
+         readonly polarity: "night";
+         readonly naturalHouse: 10;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly slug: "aquarius";
+         readonly name: "Aquarius";
+         readonly element: "air";
+         readonly modality: "fixed";
+         readonly polarity: "day";
+         readonly naturalHouse: 11;
+-    },
+-    {
++    }>,
++    Readonly<{
+         readonly slug: "pisces";
+         readonly name: "Pisces";
+         readonly element: "water";
+         readonly modality: "mutable";
+         readonly polarity: "night";
+         readonly naturalHouse: 12;
+-    }
++    }>
+ ];
+ 
++/** @deprecated */
+ declare const SIGN_NAMES: readonly ZodiacSign[];
+ 
++declare const SIGN_SLUGS: readonly ZodiacSign[];
++
+ declare const STATIONARY_RELATIVE_SPEED = 1e-9;
+ 
+ declare const SUN_BOUND_LATITUDE = 0.001;
+@@ -613,12 +627,12 @@
+ type Sect = "day" | "night";
+ 
+ interface SignDefinition {
+-    slug: ZodiacSign;
+-    name: string;
+-    element: Element;
+-    modality: Modality;
+-    polarity: Polarity;
+-    naturalHouse: HouseNumber;
++    readonly slug: ZodiacSign;
++    readonly name: string;
++    readonly element: Element;
++    readonly modality: Modality;
++    readonly polarity: Polarity;
++    readonly naturalHouse: HouseNumber;
+ }
+ 
+ interface SynastryResult extends PairSummary {
+@@ -710,9 +724,9 @@
+ 
+ declare function findInterAspects(first: readonly MinimalBody[], second: readonly MinimalBody[]): InterAspect[];
+ 
+-declare function findLongitudeCrossings(body: BodyName, targetLongitude: number, from: Date, to: Date, stepDays?: number): LongitudeCrossing[];
++declare function findLongitudeCrossings(body: BodyName, targetLongitude: number, from: DateInput, to: DateInput, stepDays?: number): LongitudeCrossing[];
+ 
+-declare function findLongitudeCrossingsWith(longitudeAt: BodyLongitudeAt, body: BodyName, targetLongitude: number, from: Date, to: Date, stepDays?: number): LongitudeCrossing[];
++declare function findLongitudeCrossingsWith<B extends string = BodyName>(longitudeAt: BodyLongitudeAt<B>, body: B, targetLongitude: number, from: Date, to: Date, stepDays?: number): LongitudeCrossing[];
+ 
+ declare function groupIntoSeasons(crossings: readonly LongitudeCrossing[], gapDays?: number): ReturnSeason[];
+ 
+@@ -727,6 +741,7 @@
+ 
+ declare function kochCusps(input: AngleInput, angles: Angles): number[] | null;
+ 
++/** @experimental */
+ declare function lunarMeanArguments(centuries: number): {
+     l: number;
+     F: number;
+@@ -738,11 +753,13 @@
+     orb: number;
+ } | null;
+ 
++/** @experimental */
+ declare function meanApogee(centuries: number, nutation: number): {
+     lon: number;
+     lat: number;
+ };
+ 
++/** @experimental */
+ declare function meanNodeLongitude(centuries: number, nutation: number): number;
+ 
+ declare function meanObliquity(julianCenturies: number): number;
+@@ -779,9 +796,9 @@
+ 
+ declare function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult;
+ 
+-declare function searchLongitudeCrossings(body: BodyName, targetLongitude: number, from: Date, to: Date, options?: CrossingSearchOptions): CrossingSearchResult;
++declare function searchLongitudeCrossings(body: BodyName, targetLongitude: number, from: DateInput, to: DateInput, options?: CrossingSearchOptions): CrossingSearchResult;
+ 
+-declare function searchLongitudeCrossingsWith(longitudeAt: BodyLongitudeAt, body: BodyName, targetLongitude: number, from: Date, to: Date, options?: CrossingSearchOptions): CrossingSearchResult;
++declare function searchLongitudeCrossingsWith<B extends string = BodyName>(longitudeAt: BodyLongitudeAt<B>, body: B, targetLongitude: number, from: Date, to: Date, options?: CrossingSearchOptions): CrossingSearchResult;
+ 
+ declare function sectOf(ascendant: number, sun: number): Sect;
+ 
+--- 0.1.1-rc.17/geo.api.md
++++ 1.0.0-rc.1/geo.api.md
+@@ -5,7 +5,7 @@
+ `npm run api:check` fails when the build declares anything else. Within a
+ major version these declarations change only as `docs/versioning.md` allows.
+ 
+-## Exported (28)
++## Exported (29)
+ 
+ ```ts
+ type CalendarName = "gregorian" | "julian";
+@@ -112,13 +112,18 @@
+ }
+ 
+ declare const TZDB: Readonly<{
+-    readonly version: "2025c";
+-    readonly sha256: "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957";
+-    readonly form: "main+backzone";
++    version: string;
++    sha256: string;
++    form: "main+backzone";
+ }>;
+ 
+ type TransitionCause = "dst" | "legal-change" | "date-line";
+ 
++declare class ZoneHistoryNotLoadedError extends Error {
++    readonly name = "ZoneHistoryNotLoadedError";
++    constructor();
++}
++
+ interface ZoneTransition {
+     at: string;
+     offsetBeforeMinutes: number;
+@@ -170,7 +175,7 @@
+ // exported by @zodiacs/engine (DateInput)
+ type DateInput = Date | string | number;
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+ // exported by @zodiacs/engine/receipt (NatalLocalResolution)
+@@ -201,7 +206,7 @@
+     at: string;
+     offsetBeforeMinutes: number;
+     offsetAfterMinutes: number;
+-    cause: "dst" | "legal-change" | "date-line";
++    cause: TransitionCause;
+ }
+ 
+ // exported by @zodiacs/engine (TimeScaleName)
+--- 0.1.1-rc.17/houses.api.md
++++ 1.0.0-rc.1/houses.api.md
+@@ -5,7 +5,7 @@
+ `npm run api:check` fails when the build declares anything else. Within a
+ major version these declarations change only as `docs/versioning.md` allows.
+ 
+-## Exported (8)
++## Exported (11)
+ 
+ ```ts
+ interface AngleInput {
+@@ -15,6 +15,13 @@
+     obliquity: number;
+ }
+ 
++interface Angles {
++    asc: number;
++    mc: number;
++    dsc: number;
++    ic: number;
++}
++
+ interface CoAscendants {
+     equatorialAscendant: number;
+     kochCoAscendant: number;
+@@ -27,6 +34,7 @@
+     lat?: number;
+ }
+ 
++/** @experimental */
+ interface HouseSpeeds {
+     system: HouseSystem;
+     fellBack: boolean;
+@@ -34,26 +42,17 @@
+     angles: Angles;
+ }
+ 
++type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
++
++/** @deprecated */
+ declare const SIDEREAL_RATE = 360.98564736629;
+ 
++declare const SIDEREAL_TIME_RATE = 360.98564736629;
++
+ declare function coAscendants(input: AngleInput): CoAscendants;
+ 
+ declare function housePosition(system: HouseSystem, input: AngleInput, body: EclipticPosition): number | null;
+ 
++/** @experimental */
+ declare function houseSpeeds(system: HouseSystem, input: AngleInput): HouseSpeeds;
+ ```
+-
+-## Referenced, not exported here (2)
+-
+-```ts
+-// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles)
+-interface Angles {
+-    asc: number;
+-    mc: number;
+-    dsc: number;
+-    ic: number;
+-}
+-
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem)
+-type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+-```
+--- 0.1.1-rc.17/receipt.api.md
++++ 1.0.0-rc.1/receipt.api.md
+@@ -5,7 +5,7 @@
+ `npm run api:check` fails when the build declares anything else. Within a
+ major version these declarations change only as `docs/versioning.md` allows.
+ 
+-## Exported (23)
++## Exported (32)
+ 
+ ```ts
+ declare const NATAL_DIAGNOSTIC_SCHEMA = "zodiacs.natal-diagnostic.draft-v1";
+@@ -18,16 +18,48 @@
+ 
+ declare const NATAL_ENVELOPE_SCHEMA = "zodiacs.natal-envelope.draft-v1";
+ 
+-declare const NATAL_RECEIPT_CONVENTION_SETS: readonly [
+-    typeof CONVENTIONS,
+-    typeof CONVENTIONS_RC15,
+-    typeof CONVENTIONS_RC8,
+-    typeof CONVENTIONS_RC7,
+-    typeof CONVENTIONS_RC3
+-];
++declare const NATAL_RECEIPT_CONVENTION_SETS: readonly NatalConventionSet[];
+ 
+ declare const NATAL_RECEIPT_SCHEMA = "zodiacs.calculation-receipt.draft-v1";
+ 
++interface NatalAnglesRecord {
++    asc: number;
++    mc: number;
++    dsc: number;
++    ic: number;
++}
++
++interface NatalAspectRecord {
++    a: BodyName;
++    b: BodyName;
++    type: AspectType;
++    orb: number;
++    applying: boolean;
++}
++
++interface NatalBodyRecord {
++    body: BodyName;
++    lon: number;
++    lat: number;
++    speed: number;
++    retrograde: boolean;
++    sign: ZodiacSign;
++    degree: number;
++}
++
++type NatalConventionSet = Readonly<Record<string, string>>;
++
++type NatalCoverage = Readonly<Record<string, string>>;
++
++interface NatalDeltaTRecord {
++    seconds: number;
++    sigma: number | null;
++    model: "zodiacs-deltat/1" | "iers-utc/1" | "pinned";
++    table: string | null;
++    tableDigest: string | null;
++    segment: DeltaTSegment;
++}
++
+ interface NatalDiagnostic {
+     schema: typeof NATAL_DIAGNOSTIC_SCHEMA;
+     status: "redacted-not-anonymous";
+@@ -41,7 +73,7 @@
+     schema: typeof NATAL_ENVELOPE_SCHEMA;
+     requiredFeatures: string[];
+     receipt: NatalReceipt;
+-    result: Pick<Chart, "bodies" | "angles" | "houses" | "aspects"> & Partial<Pick<Chart, "deltaT" | "timeScale">>;
++    result: NatalRecordedResult;
+     extensions?: NatalJsonObject;
+ }
+ 
+@@ -68,6 +100,11 @@
+     code: NatalEnvelopeErrorCode;
+ };
+ 
++interface NatalHousesRecord {
++    system: HouseSystem;
++    cusps: number[];
++}
++
+ interface NatalJsonObject {
+     [key: string]: NatalJsonValue;
+ }
+@@ -149,17 +186,40 @@
+     provenance: (NatalProvenanceClaims & {
+         status: "claimed";
+     }) | null;
+-    conventions: ConventionSet;
+-    coverage: typeof COVERAGE;
++    conventions: NatalConventionSet;
++    coverage: NatalCoverage;
++}
++
++interface NatalRecordedResult {
++    bodies: NatalBodyRecord[];
++    angles: NatalAnglesRecord | null;
++    houses: NatalHousesRecord | null;
++    aspects: NatalAspectRecord[];
++    deltaT?: NatalDeltaTRecord;
++    timeScale?: NatalTimeScaleRecord;
+ }
+ 
+ type NatalReference = "supplied-instant" | "utc-noon" | "local-noon";
+ 
++interface NatalTimeScaleRecord {
++    input: TimeScaleName;
++    basis: "iers" | "delta-t" | "pinned";
++    ut1MinusUtc: {
++        seconds: number;
++        sigma: number;
++        source: "observed" | "predicted" | "fallback";
++    } | null;
++    leapSeconds: {
++        taiMinusUtc: number;
++        listed: boolean;
++    } | null;
++}
++
+ interface NatalZoneTransition {
+     at: string;
+     offsetBeforeMinutes: number;
+     offsetAfterMinutes: number;
+-    cause: "dst" | "legal-change" | "date-line";
++    cause: TransitionCause;
+ }
+ 
+ declare function createNatalEnvelope(chart: Chart, context?: NatalEnvelopeContext): NatalEnvelope;
+@@ -173,10 +233,10 @@
+ declare function serializeNatalEnvelope(envelope: NatalEnvelope): string;
+ ```
+ 
+-## Referenced, not exported here (26)
++## Referenced, not exported here (20)
+ 
+ ```ts
+-// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles)
++// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
+ interface Angles {
+     asc: number;
+     mc: number;
+@@ -208,7 +268,7 @@
+     deltaT?: number;
+ }
+ 
+-// exported by @zodiacs/engine (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+ // exported by @zodiacs/engine (BodyPosition)
+@@ -222,87 +282,6 @@
+     degree: number;
+ }
+ 
+-// not exported by any entry point
+-declare const CONVENTIONS: Readonly<{
+-    readonly moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration";
+-    readonly nutation: "iau2000b;equation-of-equinoxes-with-two-complementary-terms";
+-    readonly deltaT: "tt-minus-ut1;value-in-result";
+-    readonly timeScale: "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result";
+-    readonly localTime: "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record";
+-    readonly planetPositions: "aberrated-geocentric-ecliptic-of-date;no-deflection";
+-    readonly angles: "gast-and-true-obliquity";
+-    readonly speed: "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day";
+-    readonly aspects: "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate";
+-    readonly calendar: "proleptic-gregorian";
+-    readonly zodiac: "tropical";
+-    readonly moonNodes: "instantaneous-geocentric-moon-orbit-plane";
+-    readonly longitudeUnit: "degrees-[0,360)";
+-}>;
+-
+-// not exported by any entry point
+-declare const CONVENTIONS_RC15: Readonly<{
+-    readonly deltaT: "tt-minus-ut1;value-in-result";
+-    readonly timeScale: "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result";
+-    readonly localTime: "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record";
+-    readonly planetPositions: "aberrated-geocentric-ecliptic-of-date;no-deflection";
+-    readonly moonPosition: "astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration";
+-    readonly angles: "gast-and-true-obliquity";
+-    readonly speed: "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day";
+-    readonly aspects: "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate";
+-    readonly calendar: "proleptic-gregorian";
+-    readonly zodiac: "tropical";
+-    readonly moonNodes: "instantaneous-geocentric-moon-orbit-plane";
+-    readonly longitudeUnit: "degrees-[0,360)";
+-}>;
+-
+-// not exported by any entry point
+-declare const CONVENTIONS_RC3: Readonly<{
+-    readonly calendar: "proleptic-gregorian";
+-    readonly zodiac: "tropical";
+-    readonly planetPositions: "apparent-geocentric-ecliptic-of-date";
+-    readonly moonPosition: "astronomy-engine-ecliptic-geo-moon";
+-    readonly moonNodes: "instantaneous-geocentric-moon-orbit-plane";
+-    readonly angles: "gast-and-mean-obliquity";
+-    readonly longitudeUnit: "degrees-[0,360)";
+-    readonly speed: "degrees-per-day;central-difference-plus-minus-0.25-day";
+-    readonly aspects: "major-aspects;sun-moon-eight-planets;no-nodes";
+-}>;
+-
+-// not exported by any entry point
+-declare const CONVENTIONS_RC7: Readonly<{
+-    readonly angles: "gast-and-true-obliquity";
+-    readonly speed: "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day";
+-    readonly aspects: "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate";
+-    readonly calendar: "proleptic-gregorian";
+-    readonly zodiac: "tropical";
+-    readonly planetPositions: "apparent-geocentric-ecliptic-of-date";
+-    readonly moonPosition: "astronomy-engine-ecliptic-geo-moon";
+-    readonly moonNodes: "instantaneous-geocentric-moon-orbit-plane";
+-    readonly longitudeUnit: "degrees-[0,360)";
+-}>;
+-
+-// not exported by any entry point
+-declare const CONVENTIONS_RC8: Readonly<{
+-    readonly planetPositions: "aberrated-geocentric-ecliptic-of-date;no-deflection";
+-    readonly moonPosition: "astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration";
+-    readonly deltaT: "tt-minus-ut1;ut1-read-as-utc;value-in-result";
+-    readonly angles: "gast-and-true-obliquity";
+-    readonly speed: "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day";
+-    readonly aspects: "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate";
+-    readonly calendar: "proleptic-gregorian";
+-    readonly zodiac: "tropical";
+-    readonly moonNodes: "instantaneous-geocentric-moon-orbit-plane";
+-    readonly longitudeUnit: "degrees-[0,360)";
+-}>;
+-
+-// not exported by any entry point
+-declare const COVERAGE: Readonly<{
+-    readonly assessment: "finite-reference-cases-only";
+-    readonly broadDateRange: "not-certified";
+-    readonly angleExclusions: "exact-geographic-poles-and-ecliptic-horizon-coincidence";
+-    readonly inputSyntax: "not-an-astronomical-accuracy-guarantee";
+-}>;
+-
+ // exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
+ interface Chart {
+     input: ChartInput;
+@@ -331,9 +310,6 @@
+     flags?: readonly ChartFlag[];
+ }
+ 
+-// not exported by any entry point
+-type ConventionSet = typeof CONVENTIONS | typeof CONVENTIONS_RC15 | typeof CONVENTIONS_RC8 | typeof CONVENTIONS_RC7 | typeof CONVENTIONS_RC3;
+-
+ // exported by @zodiacs/engine (DateInput)
+ type DateInput = Date | string | number;
+ 
+@@ -350,7 +326,7 @@
+ // exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment)
+ type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+ // exported by @zodiacs/engine (Houses)
+@@ -376,6 +352,9 @@
+ // exported by @zodiacs/engine (TimeScaleName)
+ type TimeScaleName = "utc" | "ut1" | "tt";
+ 
++// exported by @zodiacs/engine/geo (TransitionCause)
++type TransitionCause = "dst" | "legal-change" | "date-line";
++
+ // exported by @zodiacs/engine (Ut1MinusUtc)
+ interface Ut1MinusUtc {
+     seconds: number;
+--- 0.1.1-rc.17/sky.api.md
++++ 1.0.0-rc.1/sky.api.md
+@@ -27,7 +27,15 @@
+     readonly nextSunrise: Date;
+     readonly hours: readonly PlanetaryHour[];
+ }) | (PlanetaryDayBase & {
+-    readonly status: "no-sunrise" | "no-sunset" | "no-next-sunrise" | "refused";
++    readonly status: "no-sunrise" | "no-sunset" | "no-next-sunrise";
++    readonly sunrise: null;
++    readonly sunset: null;
++    readonly nextSunrise: null;
++    readonly hours: readonly [
++    ];
++}) | (PlanetaryDayBase & {
++    readonly status: "refused";
++    readonly reason: "sample-budget";
+     readonly sunrise: null;
+     readonly sunset: null;
+     readonly nextSunrise: null;
+@@ -61,7 +69,7 @@
+ }
+ 
+ interface SkyDayOptions extends SkyOptions {
+-    utcOffsetMinutes?: number;
++    readonly utcOffsetMinutes?: number | undefined;
+ }
+ 
+ interface SkyEvent {
+@@ -86,9 +94,9 @@
+ type SkyFlag = "never-rises" | "never-sets" | "outside-reference-span";
+ 
+ interface SkyOptions {
+-    limb?: Limb;
+-    refraction?: Refraction;
+-    maxSamples?: number;
++    readonly limb?: Limb | undefined;
++    readonly refraction?: Refraction | undefined;
++    readonly maxSamples?: number | undefined;
+ }
+ 
+ type TraditionalPlanet = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn";
+@@ -108,7 +116,7 @@
+ ## Referenced, not exported here (4)
+ 
+ ```ts
+-// exported by @zodiacs/engine (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+ // exported by @zodiacs/engine (DateInput)
+--- 0.1.1-rc.17/techniques.api.md
++++ 1.0.0-rc.1/techniques.api.md
+@@ -5,7 +5,7 @@
+ `npm run api:check` fails when the build declares anything else. Within a
+ major version these declarations change only as `docs/versioning.md` allows.
+ 
+-## Exported (82)
++## Exported (83)
+ 
+ ```ts
+ interface AspectPattern {
+@@ -56,6 +56,7 @@
+ 
+ declare const DOMICILE_RULERS: Readonly<Record<ZodiacSign, ClassicalPlanet>>;
+ 
++/** @experimental */
+ interface DavisonChart {
+     readonly instant: Date;
+     readonly location: GeoPlace | null;
+@@ -64,11 +65,13 @@
+     readonly flags: readonly TechniqueFlag[];
+ }
+ 
++/** @experimental */
+ interface DavisonOptions {
+     place?: DavisonPlaceConvention | undefined;
+     houseSystem?: HouseSystem | undefined;
+ }
+ 
++/** @experimental */
+ type DavisonPlaceConvention = "coordinates" | "great-circle";
+ 
+ type Debility = "detriment" | "fall";
+@@ -115,15 +118,15 @@
+     readonly longitude: number;
+ }
+ 
+-declare const LUNAR_RETURN_HORIZON_DAYS = 40;
++declare const LUNAR_RETURN_HORIZON_DAYS: number;
+ 
+-declare const LUNAR_RETURN_STEP_DAYS = 0.25;
++declare const LUNAR_RETURN_STEP_DAYS: number;
+ 
+-interface LunarReturn extends PlanetaryReturn {
++interface LunarReturn extends ReturnChart {
+     readonly body: "Moon";
+ }
+ 
+-declare const MOON_SIGN_MAX_SPAN_DAYS = 20;
++declare const MOON_SIGN_MAX_SPAN_DAYS: number;
+ 
+ interface MoonAspect {
+     readonly at: Date;
+@@ -214,7 +217,15 @@
+     readonly peregrine: boolean;
+ }
+ 
+-interface PlanetaryReturn {
++/** @deprecated */
++type PlanetaryReturn = ReturnChart;
++
++interface ReceptionOptions {
++    dignities?: readonly EssentialDignity[] | undefined;
++    sect?: Sect | undefined;
++}
++
++interface ReturnChart {
+     readonly body: "Sun" | "Moon";
+     readonly natalLongitude: number;
+     readonly instant: Date;
+@@ -223,25 +234,20 @@
+     readonly flags: readonly TechniqueFlag[];
+ }
+ 
+-interface ReceptionOptions {
+-    dignities?: readonly EssentialDignity[] | undefined;
+-    sect?: Sect | undefined;
+-}
+-
+ interface ReturnOptions {
+     location?: GeoPlace | null | undefined;
+     houseSystem?: HouseSystem | undefined;
+ }
+ 
+-declare const SOLAR_RETURN_LOOKBACK_DAYS = 370;
++declare const SOLAR_RETURN_LOOKBACK_DAYS: number;
+ 
+-declare const SOLAR_RETURN_STEP_DAYS = 1;
++declare const SOLAR_RETURN_STEP_DAYS: number;
+ 
+-declare const SOLAR_RETURN_WINDOW_DAYS = 200;
++declare const SOLAR_RETURN_WINDOW_DAYS: number;
+ 
+ type SignDignity = "domicile" | "exaltation" | "detriment" | "fall";
+ 
+-interface SolarReturn extends PlanetaryReturn {
++interface SolarReturn extends ReturnChart {
+     readonly body: "Sun";
+     readonly selection: SolarReturnSelection;
+ }
+@@ -275,7 +281,7 @@
+     source: "Lilly, Christian Astrology (1647), p. 112";
+ }>;
+ 
+-declare const VOID_OF_COURSE_MAX_DAYS = 3660;
++declare const VOID_OF_COURSE_MAX_DAYS: number;
+ 
+ type VoidBodies = "modern" | "traditional";
+ 
+@@ -316,8 +322,10 @@
+     lon: number;
+ }[]): readonly CompositePosition[];
+ 
++/** @experimental */
+ declare function davisonChart(first: NatalSource, second: NatalSource, options?: DavisonOptions): DavisonChart;
+ 
++/** @experimental */
+ declare function davisonPlace(first: GeoPlace, second: GeoPlace, convention?: DavisonPlaceConvention): GeoPlace;
+ 
+ declare function dignitiesFor(planet: BodyName, sign: ZodiacSign): readonly SignDignity[];
+@@ -363,7 +371,7 @@
+ ## Referenced, not exported here (22)
+ 
+ ```ts
+-// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles)
++// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
+ interface Angles {
+     asc: number;
+     mc: number;
+@@ -395,7 +403,7 @@
+     deltaT?: number;
+ }
+ 
+-// exported by @zodiacs/engine (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+ // exported by @zodiacs/engine (BodyPosition)
+@@ -456,7 +464,7 @@
+ // exported by @zodiacs/engine (Element)
+ type Element = "fire" | "earth" | "air" | "water";
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+ // exported by @zodiacs/engine (Houses)
+--- 0.1.1-rc.17/timing.api.md
++++ 1.0.0-rc.1/timing.api.md
+@@ -82,7 +82,7 @@
+ type FirdariaLord = TraditionalPlanet | "North Node" | "South Node";
+ 
+ interface FirdariaOptions {
+-    readonly variant?: FirdariaVariant;
++    readonly variant?: FirdariaVariant | undefined;
+ }
+ 
+ interface FirdariaPeriod {
+@@ -108,24 +108,27 @@
+ }
+ 
+ interface FirdariaTimelineOptions extends FirdariaOptions {
+-    readonly cycles?: number;
++    readonly cycles?: number | undefined;
+ }
+ 
+ type FirdariaVariant = "abu-mashar" | "bonatti";
+ 
+ declare const PROFECTION_MONTH_CONVENTIONS: readonly ProfectionMonthConvention[];
+ 
++/** @experimental */
+ interface PlanetaryReturn {
+     readonly at: Date;
+     readonly retrograde: boolean;
+     readonly pass: number;
+ }
+ 
++/** @experimental */
+ interface PlanetaryReturnOptions {
+-    stepDays?: number;
+-    maxSamples?: number;
++    readonly stepDays?: number | undefined;
++    readonly maxSamples?: number | undefined;
+ }
+ 
++/** @experimental */
+ type PlanetaryReturns = {
+     readonly status: "complete";
+     readonly body: ReturnBody;
+@@ -171,8 +174,8 @@
+ type ProfectionMonthConvention = "solar" | "twelfths" | "thirteenths";
+ 
+ interface ProfectionOptions {
+-    readonly point?: ChartLongitudeName;
+-    readonly months?: ProfectionMonthConvention;
++    readonly point?: ChartLongitudeName | undefined;
++    readonly months?: ProfectionMonthConvention | undefined;
+ }
+ 
+ interface ProfectionOrigin extends TimingOrigin {
+@@ -210,8 +213,10 @@
+ 
+ declare const RELEASING_YEAR_CONVENTIONS: readonly ReleasingYearConvention[];
+ 
++/** @experimental */
+ declare const RETURN_BODIES: readonly ReturnBody[];
+ 
++/** @experimental */
+ declare const RETURN_STEP_DAYS: Readonly<Record<ReturnBody, number>>;
+ 
+ interface ReleasingAt {
+@@ -231,7 +236,7 @@
+ }
+ 
+ interface ReleasingAtOptions {
+-    readonly years?: ReleasingYearConvention;
++    readonly years?: ReleasingYearConvention | undefined;
+ }
+ 
+ interface ReleasingConventions {
+@@ -251,8 +256,8 @@
+ type ReleasingLot = "Lot of Fortune" | "Lot of Spirit";
+ 
+ interface ReleasingOptions {
+-    readonly levels?: ReleasingLevel;
+-    readonly years?: ReleasingYearConvention;
++    readonly levels?: ReleasingLevel | undefined;
++    readonly years?: ReleasingYearConvention | undefined;
+ }
+ 
+ interface ReleasingOrigin extends TimingOrigin {
+@@ -285,6 +290,7 @@
+ 
+ type ReleasingYearConvention = "valens-360" | "julian-365.25";
+ 
++/** @experimental */
+ type ReturnBody = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto";
+ 
+ interface SolarArc {
+@@ -332,6 +338,7 @@
+ 
+ declare function firdariaSequence(sect: Sect, options?: FirdariaOptions): readonly FirdariaLord[];
+ 
++/** @experimental */
+ declare function planetaryReturns(natal: NatalSource, body: ReturnBody, from: DateInput, to: DateInput, options?: PlanetaryReturnOptions): PlanetaryReturns;
+ 
+ declare function profectionAt(natal: NatalSource, date: DateInput, options?: ProfectionOptions): ProfectionAt;
+@@ -354,7 +361,7 @@
+ ## Referenced, not exported here (23)
+ 
+ ```ts
+-// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles)
++// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
+ interface Angles {
+     asc: number;
+     mc: number;
+@@ -386,7 +393,7 @@
+     deltaT?: number;
+ }
+ 
+-// exported by @zodiacs/engine (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+ // exported by @zodiacs/engine (BodyPosition)
+@@ -447,7 +454,7 @@
+ // exported by @zodiacs/engine (HouseNumber)
+ type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+ // exported by @zodiacs/engine (Houses)
+--- 0.1.1-rc.17/vedic.api.md
++++ 1.0.0-rc.1/vedic.api.md
+@@ -5,9 +5,10 @@
+ `npm run api:check` fails when the build declares anything else. Within a
+ major version these declarations change only as `docs/versioning.md` allows.
+ 
+-## Exported (56)
++## Exported (57)
+ 
+ ```ts
++/** @experimental */
+ declare const ASHTOTTARI_YEARS: Readonly<{
+     readonly Sun: 6;
+     readonly Moon: 15;
+@@ -23,11 +24,13 @@
+ 
+ type AyanamsaDefinition = EpochAyanamsa | LinearAyanamsa | StarAyanamsa;
+ 
++type AyanamsaFlag = "outside-reference-span";
++
+ type AyanamsaName = "lahiri" | "fagan-bradley" | "krishnamurti" | "raman" | "yukteswar" | "true-chitra" | "true-revati" | "true-pushya" | "galactic-center";
+ 
+ interface AyanamsaOptions {
+-    readonly deltaT?: number;
+-    readonly timeScale?: TimeScaleName;
++    readonly deltaT?: number | undefined;
++    readonly timeScale?: TimeScaleName | undefined;
+ }
+ 
+ type AyanamsaPrecessionModel = "engine" | "newcomb" | "iau1976";
+@@ -41,7 +44,7 @@
+     readonly mean: number;
+     readonly nutation: number;
+     readonly true: number;
+-    readonly flags: readonly "outside-reference-span"[];
++    readonly flags: readonly AyanamsaFlag[];
+ }
+ 
+ interface CatalogueStar {
+@@ -55,8 +58,9 @@
+     readonly radialVelocity: number;
+ }
+ 
++/** @experimental */
+ interface CycleOptions extends DashaOptions {
+-    readonly cycles?: number;
++    readonly cycles?: number | undefined;
+ }
+ 
+ declare const DASHA_LEVELS: readonly [
+@@ -70,13 +74,13 @@
+ declare const DASHA_YEAR_DAYS: Readonly<Record<DashaYearLength, number>>;
+ 
+ interface DashaAtOptions extends DashaOptions {
+-    readonly levels?: number;
++    readonly levels?: 1 | 2 | 3 | 4 | 5 | undefined;
+ }
+ 
+ type DashaLevelName = (typeof DASHA_LEVELS)[number];
+ 
+ interface DashaOptions {
+-    readonly yearLength?: DashaYearLength;
++    readonly yearLength?: DashaYearLength | undefined;
+ }
+ 
+ interface DashaPeriod {
+@@ -220,7 +224,7 @@
+ 
+ interface SiderealDeclaration {
+     readonly ayanamsa: string;
+-    readonly at?: DateInput;
++    readonly at?: DateInput | undefined;
+ }
+ 
+ interface SiderealLongitude {
+@@ -241,13 +245,13 @@
+ }
+ 
+ interface UserAyanamsaInput {
+-    readonly name?: string;
+-    readonly epoch: DateInput | {
++    readonly name?: string | undefined;
++    readonly epoch: Date | string | {
+         readonly julianDateTT: number;
+     };
+     readonly value: number;
+-    readonly rate?: number;
+-    readonly model?: AyanamsaPrecessionModel;
++    readonly rate?: number | undefined;
++    readonly model?: AyanamsaPrecessionModel | undefined;
+ }
+ 
+ declare const VARGAS: readonly VargaDefinition[];
+@@ -289,12 +293,14 @@
+ 
+ type VimshottariLord = (typeof VIMSHOTTARI_LORDS)[number];
+ 
++/** @experimental */
+ declare const YOGINIS: readonly Readonly<{
+     name: string;
+     planet: string;
+     years: number;
+ }>[];
+ 
++/** @experimental */
+ declare function ashtottariDasha(moon: SiderealLongitude, options?: CycleOptions): DashaResult;
+ 
+ declare function ayanamsa(definition: AyanamsaName | AyanamsaDefinition, at: DateInput, options?: AyanamsaOptions): AyanamsaValue;
+@@ -319,13 +325,14 @@
+ 
+ declare function vimshottariDasha(moon: SiderealLongitude, options?: DashaOptions): DashaResult;
+ 
++/** @experimental */
+ declare function yoginiDasha(moon: SiderealLongitude, options?: CycleOptions): DashaResult;
+ ```
+ 
+ ## Referenced, not exported here (20)
+ 
+ ```ts
+-// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles)
++// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
+ interface Angles {
+     asc: number;
+     mc: number;
+@@ -357,7 +364,7 @@
+     deltaT?: number;
+ }
+ 
+-// exported by @zodiacs/engine (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+ // exported by @zodiacs/engine (BodyPosition)
+@@ -422,7 +429,7 @@
+ // exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment)
+ type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+ // exported by @zodiacs/engine (Houses)
+--- 0.1.1-rc.17/window.api.md
++++ 1.0.0-rc.1/window.api.md
+@@ -5,124 +5,126 @@
+ `npm run api:check` fails when the build declares anything else. Within a
+ major version these declarations change only as `docs/versioning.md` allows.
+ 
+-## Exported (15)
++## Exported (16)
+ 
+ ```ts
++declare const BIRTH_WINDOW_SCHEMA = "zodiacs.birth-window.v1";
++
+ interface BirthWindow {
+-    schema: "zodiacs.birth-window.v1";
+-    verification: typeof WINDOW_VERIFICATION;
+-    start: Date;
+-    end: Date;
+-    latitude: number;
+-    longitude: number;
+-    houseSystem: HouseSystem;
+-    rounding: {
+-        recorded: Date;
+-        minutes: number;
+-        mode: "nearest" | "down";
+-        start: Date;
+-        end: Date;
++    readonly schema: typeof BIRTH_WINDOW_SCHEMA;
++    readonly verification: string;
++    readonly start: Date;
++    readonly end: Date;
++    readonly latitude: number;
++    readonly longitude: number;
++    readonly houseSystem: HouseSystem;
++    readonly rounding: {
++        readonly recorded: Date;
++        readonly minutes: number;
++        readonly mode: "nearest" | "down";
++        readonly start: Date;
++        readonly end: Date;
+     } | null;
+-    cells: BirthWindowCell[];
+-    switches: BirthWindowSwitch[];
+-    unresolved: WindowUnresolved[];
+-    flags: BirthWindowFlag[];
+-    engineVersion: string;
++    readonly cells: readonly BirthWindowCell[];
++    readonly switches: readonly BirthWindowSwitch[];
++    readonly unresolved: readonly WindowUnresolved[];
++    readonly flags: readonly BirthWindowFlag[];
++    readonly engineVersion: string;
+ }
+ 
+ interface BirthWindowCell {
+-    start: Date;
+-    end: Date;
+-    milliseconds: number;
+-    share: number;
+-    roundedShare?: number;
+-    features: WindowFeatures;
++    readonly start: Date;
++    readonly end: Date;
++    readonly milliseconds: number;
++    readonly share: number;
++    readonly roundedShare?: number;
++    readonly features: WindowFeatures;
+ }
+ 
+ type BirthWindowFlag = "polar-fallback" | "bound-exceeded" | "node-unresolved";
+ 
+ interface BirthWindowInput {
+-    start?: DateInput;
+-    end?: DateInput;
+-    at?: DateInput;
+-    minutes?: number;
+-    latitude: number;
+-    longitude: number;
+-    houseSystem?: HouseSystem;
+-    rounding?: WindowRounding;
++    readonly start?: DateInput;
++    readonly end?: DateInput;
++    readonly at?: DateInput;
++    readonly minutes?: number;
++    readonly latitude: number;
++    readonly longitude: number;
++    readonly houseSystem?: HouseSystem;
++    readonly rounding?: WindowRounding;
+ }
+ 
+ interface BirthWindowSwitch {
+-    at: Date;
+-    changes: WindowChange[];
++    readonly at: Date;
++    readonly changes: readonly WindowChange[];
+ }
+ 
+-declare const MAX_WINDOW_MS = 172800000;
++declare const MAX_WINDOW_MS: number;
+ 
+ declare const WINDOW_RATE_BOUNDS: Readonly<Record<BodyName, number>>;
+ 
+-declare const WINDOW_VERIFICATION = "sampled at one-second resolution";
++declare const WINDOW_VERIFICATION: string;
+ 
+ interface WindowAspect {
+-    a: BodyName;
+-    b: BodyName;
+-    type: AspectType;
++    readonly a: BodyName;
++    readonly b: BodyName;
++    readonly type: AspectType;
+ }
+ 
+ declare class WindowBudgetError extends Error {
+     readonly name = "WindowBudgetError";
+-    readonly limit = 2000000;
++    readonly limit: number;
+     constructor();
+ }
+ 
+ type WindowChange = {
+-    feature: "sign";
+-    body: BodyName;
+-    from: ZodiacSign | null;
+-    to: ZodiacSign | null;
++    readonly feature: "sign";
++    readonly body: BodyName;
++    readonly from: ZodiacSign | null;
++    readonly to: ZodiacSign | null;
+ } | {
+-    feature: "ascendant" | "midheaven";
+-    from: ZodiacSign;
+-    to: ZodiacSign;
++    readonly feature: "ascendant" | "midheaven";
++    readonly from: ZodiacSign;
++    readonly to: ZodiacSign;
+ } | {
+-    feature: "house";
+-    body: BodyName;
+-    from: HouseNumber | null;
+-    to: HouseNumber | null;
++    readonly feature: "house";
++    readonly body: BodyName;
++    readonly from: HouseNumber | null;
++    readonly to: HouseNumber | null;
+ } | {
+-    feature: "aspect";
+-    a: BodyName;
+-    b: BodyName;
+-    from: AspectType | null;
+-    to: AspectType | null;
++    readonly feature: "aspect";
++    readonly a: BodyName;
++    readonly b: BodyName;
++    readonly from: AspectType | null;
++    readonly to: AspectType | null;
+ } | {
+-    feature: "house-system";
+-    from: HouseSystem;
+-    to: HouseSystem;
++    readonly feature: "house-system";
++    readonly from: HouseSystem;
++    readonly to: HouseSystem;
+ };
+ 
+ interface WindowFeatures {
+-    signs: Record<BodyName, ZodiacSign | null>;
+-    ascendant: ZodiacSign;
+-    midheaven: ZodiacSign;
+-    houses: Record<BodyName, HouseNumber | null>;
+-    aspects: WindowAspect[];
+-    houseSystem: HouseSystem;
++    readonly signs: Readonly<Record<BodyName, ZodiacSign | null>>;
++    readonly ascendant: ZodiacSign;
++    readonly midheaven: ZodiacSign;
++    readonly houses: Readonly<Record<BodyName, HouseNumber | null>>;
++    readonly aspects: readonly WindowAspect[];
++    readonly houseSystem: HouseSystem;
+ }
+ 
+ interface WindowRounding {
+-    recorded: DateInput;
+-    minutes: number;
+-    mode?: "nearest" | "down";
++    readonly recorded: DateInput;
++    readonly minutes: number;
++    readonly mode?: "nearest" | "down";
+ }
+ 
+ interface WindowUnresolved {
+-    start: Date;
+-    end: Date;
+-    milliseconds: number;
+-    features: {
+-        feature: "sign" | "house";
+-        body: "North Node" | "South Node";
++    readonly start: Date;
++    readonly end: Date;
++    readonly milliseconds: number;
++    readonly features: readonly {
++        readonly feature: "sign" | "house";
++        readonly body: "North Node" | "South Node";
+     }[];
+ }
+ 
+@@ -135,7 +137,7 @@
+ // exported by @zodiacs/engine (AspectType)
+ type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
+ 
+-// exported by @zodiacs/engine (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+ // exported by @zodiacs/engine (DateInput)
+@@ -144,7 +146,7 @@
+ // exported by @zodiacs/engine (HouseNumber)
+ type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+ // exported by @zodiacs/engine (ZodiacSign)

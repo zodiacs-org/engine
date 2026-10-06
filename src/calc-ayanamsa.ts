@@ -17,6 +17,7 @@
  * definition's bound grows as its star nears the Sun, where the deflection of
  * the star's light, and its rate, change fastest.
  */
+import { outsideSpanEpoch } from "./vedic/ayanamsa.js";
 import type { AyanamsaDefinition } from "./vedic/ayanamsa.js";
 
 /** The star's angle from the Sun, degrees, within which a star definition takes its near-Sun bound. */
@@ -32,6 +33,17 @@ export const AYANAMSA_BOUNDS = {
    * A linear one's rate rounds by up to 1.5 units of 2⁻⁴⁴° in 0.002 day; calc's speeds add their own (docs/calc.md).
    */
   epochOrLinear: { position: 4.6e-7, rate: 1.6e-7 },
+  /**
+   * Callers' epoch definitions on the engine's precession (IAU 2006) whose epoch is outside the span but inside
+   * EPHEMERIS_SPAN, beyond which calc refuses them: the engine's precession and ERFA's part the further the
+   * epoch is from J2000.0, most at the span's ends; 21,658 comparisons (docs/evidence/calc-epochs-2026-10-06).
+   */
+  epochOutsideSpan: { position: 0.0037, rate: 1.3e-7 },
+  /**
+   * The same on Newcomb's or IAU 1976's precession, whose zodiac is held where that model puts it at J2000.0, so
+   * that most of the precession's difference from ERFA's cancels; 43,316 comparisons.
+   */
+  olderEpochOutsideSpan: { position: 1.8e-5, rate: 1.2e-7 },
   /** Star definitions, the star 2° or more from the Sun: 306,850 comparisons. */
   star: { position: 0.0013, rate: 0.00039 },
   /** Star definitions, the star 0.3° to 2° from the Sun: 238,364 comparisons. */
@@ -45,19 +57,28 @@ export type AyanamsaBand = keyof typeof AYANAMSA_BOUNDS;
 export const AYANAMSA_BASIS =
   "largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05";
 
+/** The basis of the band for epochs outside the span. */
+export const AYANAMSA_EPOCH_BASIS =
+  "largest difference of the mean ayanamsa from ERFA's construction of the same definition, for epochs from 0001 to 3998 outside 1800 to 2200; docs/evidence/calc-epochs-2026-10-06";
+
 /** A definition's band at an instant, given the star's angle from the Sun (null for epoch and linear definitions). */
 export function ayanamsaBand(definition: AyanamsaDefinition, elongation: number | null): AyanamsaBand {
+  if (definition.kind === "epoch" && outsideSpanEpoch(definition)) {
+    return definition.model === "engine" ? "epochOutsideSpan" : "olderEpochOutsideSpan";
+  }
   if (definition.kind !== "star") return "epochOrLinear";
   if (elongation === null || elongation < AT_SUN_DEGREES) return "starAtSun";
   return elongation < NEAR_SUN_DEGREES ? "starNearSun" : "star";
 }
 
-/** The bound for a definition at an instant, given the star's angle from the Sun (null for epoch and linear definitions). */
+/** The bound for a definition at an instant, given the star's angle from the Sun (null for epoch and linear definitions), and its basis. */
 export function ayanamsaBound(
   definition: AyanamsaDefinition,
   elongation: number | null
-): { readonly position: number; readonly rate: number } {
-  return AYANAMSA_BOUNDS[ayanamsaBand(definition, elongation)];
+): { readonly position: number; readonly rate: number; readonly basis: string } {
+  const band = ayanamsaBand(definition, elongation);
+  const outside = band === "epochOutsideSpan" || band === "olderEpochOutsideSpan";
+  return { ...AYANAMSA_BOUNDS[band], basis: outside ? AYANAMSA_EPOCH_BASIS : AYANAMSA_BASIS };
 }
 
 /**

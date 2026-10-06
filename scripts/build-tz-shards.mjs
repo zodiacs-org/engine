@@ -516,12 +516,15 @@ export async function buildShards(root) {
     `tzdb-${TZDB_VERSION}.ts`,
     `${header("the release's identity, its loaders and its causes from 1970")}import type { ZoneShardBucket } from "../geo/zone-history.js";
 
-/** The pinned tzdb release: its version, archive digest and the form its histories were compiled from. */
-export const TZDB = Object.freeze({
+/**
+ * The pinned tzdb release: its version, archive digest and the form its histories were compiled from. The
+ * version and digest are typed as strings, because a release that updates the time-zone data changes them.
+ */
+export const TZDB: Readonly<{ version: string; sha256: string; form: "main+backzone" }> = Object.freeze({
   version: "${TZDB_VERSION}",
   sha256: "${TZDB_SHA256}",
   form: "main+backzone"
-} as const);
+});
 
 /** The ${BUCKETS} shard loaders, by FNV-1a hash of the lower-cased name modulo ${BUCKETS}. */
 export const SHARD_LOADERS: readonly (() => Promise<{ default: ZoneShardBucket }>)[] = [

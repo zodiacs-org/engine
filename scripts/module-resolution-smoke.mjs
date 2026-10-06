@@ -183,11 +183,12 @@ assert.deepEqual(techniques.EGYPTIAN_TERMS.aries, [["Jupiter", 6], ["Venus", 12]
 assert.equal(techniques.VOID_OF_COURSE_CONVENTION.name, "last-exact-ptolemaic-aspect-to-sign-exit");
 
 // House positions, co-ascendants and speeds are their own entry, absent from the root.
-assert.deepEqual(Object.keys(houses).sort(), ["SIDEREAL_RATE", "coAscendants", "housePosition", "houseSpeeds"]);
+assert.deepEqual(Object.keys(houses).sort(), ["SIDEREAL_RATE", "SIDEREAL_TIME_RATE", "coAscendants", "housePosition", "houseSpeeds"]);
 for (const name of Object.keys(houses)) {
   assert.equal(name in engine, false, `houses leaked into root: ${name}`);
 }
-assert.equal(houses.SIDEREAL_RATE, 360.98564736629);
+assert.equal(houses.SIDEREAL_TIME_RATE, 360.98564736629);
+assert.equal(houses.SIDEREAL_RATE, houses.SIDEREAL_TIME_RATE);
 {
   const input = { gastHours: 0.5, latitude: 55, longitude: 0, obliquity: 23.4392911 };
   const angles = engine.computeAngles(input);

@@ -9,7 +9,7 @@ import { calc, houses, events, chart } from "@zodiacs/engine/calc";
 
 const mars = calc({
   body: "Mars",
-  time: { jd: 2461306.5, scale: "TT" },
+  time: { jd: 2461306.5, scale: "tt" },
   frame: "equatorial-true-of-date",
   center: "geocentric",
   flags: { correction: "apparent", cartesian: true }
@@ -31,13 +31,15 @@ computed before it.
 | function | takes | gives |
 | --- | --- | --- |
 | `calc` | `{ body, time, frame?, center?, zodiac?, flags? }` | `{ lon, lat, dist, speeds, cartesian, ayanamsa, bounds, receipt }` |
-| `houses` | `{ time, place, system?, zodiac? }` | angles, Vertex, East Point, ARMC, obliquity and the cusps, with `ayanamsa`, `bounds` and a receipt, as `natalChart()` computes them |
+| `houses` | `{ time, place, houseSystem?, zodiac? }` | angles, Vertex, East Point, ARMC, obliquity and the cusps, with `ayanamsa`, `bounds` and a receipt, as `natalChart()` computes them |
 | `events` | `{ kind: "longitude-crossing", body, longitude, from, to, zodiac?, stepDays?, maxSamples? }` | every instant in (from, to] the body sits on the longitude, from the engine's crossing search |
 | `chart` | `{ time, place?, houseSystem?, timeKnown?, timeFlags?, zodiac? }` | the chart `natalChart()` gives, with its sidereal longitudes in the sidereal zodiac, and a receipt |
 
 Each returns `status: "ok"` or a typed refusal (below). Malformed input (an
 unknown body, frame or field, an invalid date, a latitude out of range) throws
-`RangeError`, as everywhere in the engine.
+`RangeError`. `houses()` and `chart()` take a place without a height
+(`CalcLocation`), and refuse one; a topocentric center takes a height
+(`CalcPlace`).
 
 ## The input vocabulary
 
@@ -47,7 +49,8 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
   (2027-10-02), TT = UTC + (TAI − UTC) + 32.184 s from the IERS leap-second
   list, and UT1 = UTC + (UT1 − UTC) from IERS; before and after, civil time
   is read as UT1 and TT comes from the ΔT model (`zodiacs-deltat/1`). Or
-  `{ jd, scale: "UTC" | "UT1" | "TT" }`, a Julian date on a named time scale,
+  `{ jd, scale: "utc" | "ut1" | "tt" }`, a Julian date on a named time scale
+  (the root entry's `TimeScaleName`; before 1.0.0 the names were in capitals),
   read on the same basis, or `{ iso }`. Any of the object forms takes
   `deltaT`, a fixed ΔT = TT − UT1 in seconds, in place of the basis's: UT1
   still comes from the instant, and TT = UT1 + ΔT. The receipt records the
@@ -176,8 +179,8 @@ every default filled in:
 
 - `name`: a lowercase identifier of at most 64 characters that is not a
   built-in name; `"user"` by default.
-- `epoch`: read as `time` is. `{ jd, scale: "TT" }` is Swiss Ephemeris's
-  `SE_SIDM_USER` epoch `t0`, and `{ jd, scale: "UT1" }` its epoch with
+- `epoch`: read as `time` is. `{ jd, scale: "tt" }` is Swiss Ephemeris's
+  `SE_SIDM_USER` epoch `t0`, and `{ jd, scale: "ut1" }` its epoch with
   `SE_SIDBIT_USER_UT`; an ISO string is UTC on the time basis.
 - `value`: the mean ayanamsa at the epoch, degrees, from −360 to 360.
 - `rate`: arcseconds a Julian year, from −3600 to 3600. With it the
@@ -187,9 +190,19 @@ every default filled in:
   as `SE_SIDM_USER` does, or `"newcomb"` or `"iau1976"`, whose zodiac is held
   where that model puts it at J2000.0, as the built-in definitions are.
 
-A caller's ayanamsa carried by precession from an epoch outside `CALC_SPAN`
-is refused `out-of-range`: the ayanamsas have been compared with ERFA only
-inside it. Swiss Ephemeris's named modes are not always this engine's
+A caller's ayanamsa carried by precession is computed from an epoch whose TT
+is anywhere in `EPHEMERIS_SPAN`, 0001-04-30T12:00 to 3998-09-03T12:00 TT,
+the years astronomy-engine tabulates, and refused `epoch-out-of-range` from
+one outside it. Outside `CALC_SPAN` the engine's precession and ERFA's part
+further, the further the epoch is from J2000.0, and the ayanamsa's bound is
+wider (see Bounds). Beyond `EPHEMERIS_SPAN`, where nothing else the engine
+computes reaches, they go on parting: 0.0051″ from an epoch a century before
+it, 0.35″ from JD 1,000,000, 10.6″ from JD 0.5 and 139° from the first day a
+`Date` holds (`docs/evidence/calc-epochs-2026-10-06/`). Before 1.0.0-rc.1
+calc refused an epoch outside `CALC_SPAN` itself. A linear ayanamsa is
+computed from any epoch whose TT a `Date` can hold: one given on UTC or UT1
+within about 2,800 days of a `Date`'s last day throws a `RangeError`, its TT
+being later still. Swiss Ephemeris's named modes are not always this engine's
 definitions: its Krishnamurti, Raman, Sri Yukteswar, True Pushya and Galactic
 Center differ ([vedic.md](vedic.md), *Agreement with Swiss Ephemeris*).
 
@@ -310,17 +323,31 @@ over 2,333,979 comparisons from 1800 to 2200
 (`docs/evidence/calc-sidereal-2026-10-05/`). They take every star definition
 in every year of the span, densely around its pass by the Sun and down to
 0.00001 day where either computation's cap on the deflection starts and stops
-applying, and callers' ayanamsas at the ends of what calc accepts. `ayanamsa.bound` gives it, and
+applying, and callers' ayanamsas at the ends of what calc accepts; and for
+a caller's epoch outside 1800 to 2200, 64,974 more, with epochs every 20 years
+across `EPHEMERIS_SPAN` (`docs/evidence/calc-epochs-2026-10-06/`). `ayanamsa.bound` gives it, and
 `bounds.position` and `bounds.speed` add it, in whole nanoarcseconds rounded
 up; a speed bound that is null stays null. A star definition's band is set by
 its star's angle from the Sun.
 
 | definitions | comparisons | ayanamsa | its rate |
 | --- | ---: | --- | --- |
-| epoch and linear, built-in and callers' | 134,833 | 4.6 × 10⁻⁷″ | 1.6 × 10⁻⁷″ a day |
+| linear, from any epoch; and by precession, built-in and callers', from an epoch from 1800 to 2200 | 134,833 | 4.6 × 10⁻⁷″ | 1.6 × 10⁻⁷″ a day |
+| a caller's epoch outside 1800 to 2200, on the engine's precession | 21,658 | 0.0037″ | 1.3 × 10⁻⁷″ a day |
+| a caller's epoch outside 1800 to 2200, on Newcomb's or IAU 1976's | 43,316 | 1.8 × 10⁻⁵″ | 1.2 × 10⁻⁷″ a day |
 | star, 2° or more from the Sun | 306,850 | 0.0013″ | 0.00039″ a day |
 | star, 0.3° to 2° from the Sun | 238,364 | 0.0048″ | 0.026″ a day |
 | star, within 0.3° of the Sun | 1,653,932 | 0.058″ | 27″ a day |
+
+An epoch's 1800 to 2200 is read on TT, from 1800-01-01T00:00 TT up to
+2200-01-01T00:00 TT, the second excluded, as `CALC_SPAN`'s is. An epoch
+outside 1800 to 2200 is not an instant: calc still computes only
+instants inside `CALC_SPAN`, and the comparison takes them across it. On the
+engine's precession the difference grows with the epoch's distance from
+J2000.0, to 0.0037″ from the first epoch of `EPHEMERIS_SPAN` at an instant in
+1800; on Newcomb's or IAU 1976's precession, whose zodiac is held at J2000.0,
+most of the engine's difference from ERFA cancels, and what is left is up to
+1.8 × 10⁻⁵″.
 
 For an epoch or linear definition the rate's difference is rounding: for an
 epoch definition, the two programs' in their precession and the engine's in
@@ -361,10 +388,13 @@ A refusal is `{ status: "refused", reason, detail }`, the `status` and
 | --- | --- | --- |
 | `not-in-this-version` | gravitational deflection | |
 | `unsupported-combination` | the Sun heliocentric; the Earth geocentric or topocentric; a node or Lilith with a center other than geocentric, or with `cartesian`; the sidereal zodiac in a frame other than the two ecliptics of date; crossings of a body `positions()` does not give; a pinned ΔT for a crossing search | |
-| `out-of-range` | an instant whose UT1 or TT is outside `CALC_SPAN`, 1800-01-01T00:00Z up to 2200-01-01T00:00Z, where the positions have been compared with an independent ephemeris; a caller's ayanamsa carried by precession from an epoch outside it | `span` |
+| `epoch-out-of-range` | a caller's ayanamsa carried by precession from an epoch whose TT is outside `EPHEMERIS_SPAN`, 0001-04-30T12:00 to 3998-09-03T12:00 TT (the span includes its ends) | `epochSpan`, the root's `EPHEMERIS_SPAN` |
+| `out-of-range` | an instant whose UT1 or TT is outside `CALC_SPAN`, 1800-01-01T00:00Z up to 2200-01-01T00:00Z, where the positions have been compared with an independent ephemeris | `span` |
 | `sample-budget` | a crossing search that needs more evaluations than `maxSamples` | `samples`, `maxSamples` |
 
-The checks run in that order. The span is checked on both time scales, so a
+The checks run in that order: a request with both an epoch outside
+`EPHEMERIS_SPAN` and an instant outside `CALC_SPAN` is refused for its epoch.
+The span is checked on both time scales, so a
 ΔT pin cannot move the ephemeris outside it, and with the engine's ΔT the
 last instant computed is about 2199-12-31T23:57:53Z (UTC, read as UT1 there). `positions()` and
 `natalChart()` still compute outside the span, with the
@@ -446,7 +476,7 @@ uses no Swiss Ephemeris code, data or output.
 | `SEFLG_CENTER_BODY` | a planet's centre, not its system barycentre | none | not offered; Mars to Pluto were compared with system barycentres (see Bodies) |
 
 `swe_calc_ut` takes a UT1 Julian date and `swe_calc` a TT one; here they are
-`{ jd, scale: "UT1" }` and `{ jd, scale: "TT" }`. `swe_set_delta_t_userdef(dt)` is the `deltaT` pin, but `dt`
+`{ jd, scale: "ut1" }` and `{ jd, scale: "tt" }`. `swe_set_delta_t_userdef(dt)` is the `deltaT` pin, but `dt`
 is in days and `deltaT` in seconds: `deltaT` = 86,400 × `dt`. Its bodies
 map to `CalcBody` as `SE_SUN` to `SE_PLUTO` by name, `SE_EARTH` to `"Earth"`,
 `SE_TRUE_NODE` to `"North Node"`, `SE_MEAN_NODE` to `"Mean Node"` and

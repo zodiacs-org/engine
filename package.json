@@ -1,6 +1,6 @@
 {
   "name": "@zodiacs/engine",
-  "version": "0.1.1-rc.17",
+  "version": "1.0.0-rc.1",
   "description": "Browser-first astrology calculations used by Zodiacs.org: tropical charts; one calculation API with bounds and receipts in ./calc; birth-time windows in ./window; returns, relationship charts, the void-of-course Moon, patterns and dignities in ./techniques; house positions and cusp speeds in ./houses; rise, set, transit and planetary hours in ./sky; Hellenistic timing techniques and planetary returns in ./timing; and the sidereal zodiac and Jyotish techniques in ./vedic.",
   "license": "MIT AND CC-BY-4.0",
   "keywords": [
@@ -104,6 +104,8 @@
     "consumer:smoke": "node scripts/verify-packed-consumer.mjs",
     "package:contents": "node scripts/verify-package-contents.mjs",
     "archive:binding": "node scripts/verify-archive-binding.mjs",
+    "api:report": "node scripts/api-report.mjs",
+    "api:check": "node scripts/api-report.mjs --check",
     "pack:dry-run": "npm pack --dry-run",
     "prepack": "npm run build",
     "test": "vitest run",

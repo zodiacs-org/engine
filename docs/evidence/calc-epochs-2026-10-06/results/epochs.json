@@ -1,0 +1,134 @@
+{
+ "generator": "docs/evidence/calc-epochs-2026-10-06/tools/epoch_reference.py",
+ "erfa": "pyerfa 2.0.1.5",
+ "units": "differences in arcseconds and arcseconds a day; epochs and instants as TT Julian dates",
+ "comparisons": 73185,
+ "bands": {
+  "engine/inside": {
+   "comparisons": 2737,
+   "position": {
+    "largest": 4.51355390396202e-07,
+    "row": [
+     "engine",
+     -180,
+     2473445,
+     2378496.502
+    ]
+   },
+   "rate": {
+    "largest": 9.86801589674242e-08,
+    "row": [
+     "engine",
+     -359.9,
+     2378545,
+     2488069.252
+    ]
+   }
+  },
+  "engine/outside": {
+   "comparisons": 21658,
+   "position": {
+    "largest": 0.0036744907730508203,
+    "row": [
+     "engine",
+     23.85,
+     1721545,
+     2378496.502
+    ]
+   },
+   "rate": {
+    "largest": 1.223270173374982e-07,
+    "row": [
+     "engine",
+     -359.9,
+     1765345,
+     2396758.627
+    ]
+   }
+  },
+  "iau1976/inside": {
+   "comparisons": 2737,
+   "position": {
+    "largest": 4.2855208448600024e-07,
+    "row": [
+     "iau1976",
+     -359.9,
+     2524545,
+     2378496.502
+    ]
+   },
+   "rate": {
+    "largest": 9.333687847034017e-08,
+    "row": [
+     "iau1976",
+     -359.9,
+     2451545,
+     2460676.0645
+    ]
+   }
+  },
+  "iau1976/outside": {
+   "comparisons": 21658,
+   "position": {
+    "largest": 1.705912791294395e-05,
+    "row": [
+     "iau1976",
+     -180,
+     3181545,
+     2378496.502
+    ]
+   },
+   "rate": {
+    "largest": 1.1550580819228455e-07,
+    "row": [
+     "iau1976",
+     -359.9,
+     2896845,
+     2478938.1895
+    ]
+   }
+  },
+  "newcomb/inside": {
+   "comparisons": 2737,
+   "position": {
+    "largest": 4.2855117499129847e-07,
+    "row": [
+     "newcomb",
+     -359.9,
+     2524545,
+     2378496.502
+    ]
+   },
+   "rate": {
+    "largest": 9.86801589674242e-08,
+    "row": [
+     "newcomb",
+     -359.9,
+     2407745,
+     2488069.252
+    ]
+   }
+  },
+  "newcomb/outside": {
+   "comparisons": 21658,
+   "position": {
+    "largest": 1.7059136098396266e-05,
+    "row": [
+     "newcomb",
+     -180,
+     3181545,
+     2378496.502
+    ]
+   },
+   "rate": {
+    "largest": 1.1141308270515636e-07,
+    "row": [
+     "newcomb",
+     -359.9,
+     3028245,
+     2451545.002
+    ]
+   }
+  }
+ }
+}

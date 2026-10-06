@@ -1,0 +1,47 @@
+# sh carrier-gates.sh generators at bb1736a in a clean full-history clone; Node v22.22.2, npm 10.9.7, git 2.43.0, 2026-10-06
+## the Python and its libraries
+3.11.15 pyerfa 2.0.1.5 numpy 2.4.6
+exit 0
+## L1 positions
+wrote vectors/L1-positions.json: 240 vectors, sha256 853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c
+printed TT against the TLIST value: at most 0.461 ms
+frame-term self-check: largest disagreement 0.000048 arcsec at D2
+Mars: body centre minus barycentre at most 0.0000 arcsec in longitude (1851-03-14), 0.0000 arcsec in latitude; 0.0000 arcsec in longitude within 1962-01-20..2026-12-18
+Jupiter: body centre minus barycentre at most 0.0583 arcsec in longitude (1897-01-09), 0.0029 arcsec in latitude; 0.0421 arcsec in longitude within 1962-01-20..2026-12-18
+Saturn: body centre minus barycentre at most 0.0414 arcsec in longitude (1999-08-11), 0.0230 arcsec in latitude; 0.0414 arcsec in longitude within 1962-01-20..2026-12-18
+Uranus: body centre minus barycentre at most 0.6714 arcsec in longitude (2148-12-30), 0.0104 arcsec in latitude; 0.0529 arcsec in longitude within 1962-01-20..2026-12-18
+Neptune: body centre minus barycentre at most 0.1087 arcsec in longitude (2125-02-11), 0.0047 arcsec in latitude; 0.0094 arcsec in longitude within 1962-01-20..2026-12-18
+Pluto: body centre minus barycentre at most 0.0752 arcsec in longitude (2012-05-21), 0.0835 arcsec in latitude; 0.0752 arcsec in longitude within 1962-01-20..2026-12-18
+exit 0
+## L2 houses and angles
+wrote vectors/L2-houses-angles.json (150 vectors) sha256 5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0
+exit 0
+## L3 time and calendars
+sources/l3: pinned digests match
+tz release 2025c:
+  fetching https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz
+  tzdata2025c.tar.gz: sha256 4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957 (matches sources/l3/tzdata.json)
+  tzdata: 32 file digests match
+  fetching https://data.iana.org/time-zones/releases/tzcode2025c.tar.gz
+  tzcode2025c.tar.gz: sha256 697ebe6625444aef5080f58e49d03424bbb52e08bf483d3ddb5acf10cbd15740 (matches sources/l3/tzdata.json)
+  tzcode: 41 file digests match
+  zic (tzcode) 2025c; zdump (tzcode) 2025c; awk: /usr/bin/awk
+  compiled 598 TZif files; tzdata.zi and main.zi compile to identical bytes
+  compiled tree digest 98ba2bd3eb549fced32814888318d478c96eb65d5fa5b482ee1d89ebb298bcc5 (as recorded in tzdata.json for zic 2025c)
+  no data line has fractional seconds; 33 #STDOFF comments each round (half to even) to their data line
+  backzone caveat quotes found verbatim in Makefile and theory.html
+  zic rounding probe: -4:56:01.6 -> -17762, -0:36:44.68 -> -2205, 0:29:45.5 -> 1786, 0:29:44.5 -> 1784, 0:29:45.51 -> 1786
+  divergence list: 98 zones, 77 eligible, 20 taken; dropped as links ['America/Kralendijk', 'America/Lower_Princes', 'America/Coral_Harbour', 'America/Marigot', 'America/St_Barthelemy', 'Arctic/Longyearbyen']; without a pre-1970 sample 11; '-00' ['Indian/Kerguelen', 'Antarctica/Syowa', 'Antarctica/McMurdo', 'Antarctica/DumontDUrville']
+  zone vectors: 45 (5 ambiguous, 4 nonexistent, 36 ok); three readers agree on all; 20 of the 20 divergence cases differ from tzdb's default build
+leap seconds:
+  28 lines, SHA-1 line verified, expires 2026-06-28
+  delta-t: 15 observed IERS rows, largest formal error 0.0007116 s
+calendar:
+  25 to-jdn and 10 from-jdn vectors; all algorithms agree
+  dense julian: {"days": 3652866, "jdnNonNegative": 3547674, "richardsRoundTripFailures": 0, "stepFailures": 0, "anchorFailures": 0, "secondFailuresJdnNonNegative": 0, "secondFailuresJdnNegative": 103791}
+  dense gregorian: {"days": 3652790, "jdnNonNegative": 3547638, "richardsRoundTripFailures": 0, "stepFailures": 0, "anchorFailures": 0, "secondFailuresJdnNonNegative": 0, "secondFailuresJdnNegative": 63983, "meeusFloorFailures": 0, "meeusTruncFailuresJdnNonNegative": 13141}
+wrote <clone>/conformance/vectors/L3-time-calendars.json (sha256 434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8)
+exit 0
+## git diff --exit-code -- conformance/vectors
+exit 0
+

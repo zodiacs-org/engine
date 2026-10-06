@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  SIGN_NAMES,
+  SIGN_SLUGS,
   chartPoints,
   natalChart,
   normalizeLongitude,
@@ -92,7 +92,7 @@ describe("annual profections: worked examples, published and invented", () => {
     expect([0, 1, 2, 3].map((age) => [annualProfection("cancer", age).sign, annualProfection("cancer", age).ruler]))
       .toEqual([["cancer", "Moon"], ["leo", "Sun"], ["virgo", "Mercury"], ["libra", "Venus"]]);
     for (const age of [12, 24, 36, 48, 60]) expect(annualProfection("cancer", age)).toMatchObject({ sign: "cancer", house: 1 });
-    for (const from of SIGN_NAMES) {
+    for (const from of SIGN_SLUGS) {
       expect(annualProfection(from, 18).house).toBe(7);
       expect(annualProfection(from, 21).house).toBe(10);
     }
@@ -154,7 +154,7 @@ describe("dated profections", () => {
     expect(year.months).toHaveLength(12);
     year.months.forEach((month, index) => {
       expect(separation(sunAt(month.start), natalSun + 30 * index)).toBeLessThan(1e-5);
-      expect(month.sign).toBe(SIGN_NAMES[(SIGN_NAMES.indexOf("aquarius") + index) % 12]);
+      expect(month.sign).toBe(SIGN_SLUGS[(SIGN_SLUGS.indexOf("aquarius") + index) % 12]);
       const days = (month.end.getTime() - month.start.getTime()) / DAY;
       expect(days).toBeGreaterThan(29.3);
       expect(days).toBeLessThan(31.6);
@@ -206,7 +206,7 @@ describe("dated profections", () => {
     const at = "1995-05-26T06:02:46Z";
     for (const [point, longitude] of [["Moon", moon.lon], ["Lot of Fortune", lot.lon], ["Midheaven", chart.angles!.mc]] as const) {
       const result = profectionAt(chart, at, { point });
-      expect(result.origin).toEqual({ point, lon: normalizeLongitude(longitude), sign: SIGN_NAMES[Math.floor(normalizeLongitude(longitude) / 30)] });
+      expect(result.origin).toEqual({ point, lon: normalizeLongitude(longitude), sign: SIGN_SLUGS[Math.floor(normalizeLongitude(longitude) / 30)] });
       expect(result.year).toMatchObject({ age: 42, house: 7, sign: annualProfection(longitude, 42).sign });
     }
   });
@@ -238,7 +238,7 @@ describe("profection invariants", () => {
         expect(annualProfection(from, age + 12).sign).toBe(result.sign);
         expect(result.house).toBe((age % 12) + 1);
         expect(result.ruler).toBe(TRADITIONAL_RULERS[result.sign]);
-        expect(SIGN_NAMES.indexOf(result.sign)).toBe((Math.floor(from / 30) + age) % 12);
+        expect(SIGN_SLUGS.indexOf(result.sign)).toBe((Math.floor(from / 30) + age) % 12);
       }
     }
   });

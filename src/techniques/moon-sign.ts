@@ -9,7 +9,7 @@
 import { dateFrom } from "../date-input.js";
 import { bodyLongitude } from "../ephemeris.js";
 import { resolveLocalToUtc } from "../geo/timezone.js";
-import { SIGN_NAMES, signIndexForLongitude } from "../signs.js";
+import { SIGN_SLUGS, signIndexForLongitude } from "../signs.js";
 import type { DateInput, ZodiacSign } from "../types.js";
 import { DAY_MS, readOptions, techniqueFlags } from "./shared.js";
 import type { TechniqueFlag } from "./shared.js";
@@ -23,8 +23,8 @@ const HOUR_MS = 3_600_000;
  */
 export const EVERY_ZONE_OFFSETS = /*#__PURE__*/ Object.freeze({ earliestHours: 14, latestHours: -12 } as const);
 
-/** The longest span `moonSignsBetween` accepts, days. */
-export const MOON_SIGN_MAX_SPAN_DAYS = 20;
+/** The longest span `moonSignsBetween` accepts, days. A minor release may accept a longer one. */
+export const MOON_SIGN_MAX_SPAN_DAYS: number = 20;
 
 export interface MoonSignCandidates {
   /** YYYY-MM-DD, Gregorian. */
@@ -52,7 +52,7 @@ function signsOver(fromT: number, toT: number): ZodiacSign[] {
   const first = signIndexForLongitude(bodyLongitude("Moon", new Date(fromT)));
   const last = signIndexForLongitude(bodyLongitude("Moon", new Date(toT)));
   const count = (last - first + 12) % 12;
-  return Array.from({ length: count + 1 }, (_, step) => SIGN_NAMES[(first + step) % 12]!);
+  return Array.from({ length: count + 1 }, (_, step) => SIGN_SLUGS[(first + step) % 12]!);
 }
 
 /** Every sign the apparent Moon is in during [from, to], at most 20 days, in order. */
@@ -85,7 +85,8 @@ function isoDate(year: number, month: number, day: number): string {
  * The Moon signs possible over a civil date with an unknown birth time. With
  * `timeZone`, from local midnight to local midnight, read as
  * `resolveLocalToUtc` (`@zodiacs/engine/geo`) reads them; before 1970, await
- * its `prepareLocalTime` first. Without, in every time zone: `sign` is set
+ * its `prepareLocalTime` first, or it throws geo's ZoneHistoryNotLoadedError,
+ * an Error and not a RangeError. Without, in every time zone: `sign` is set
  * only when the Moon held it the whole date everywhere.
  */
 export function moonSignCandidates(date: string, options?: MoonSignOptions): MoonSignCandidates {

@@ -9,6 +9,8 @@
  */
 import type { BodyName } from "./types.js";
 
+export type { BodyName } from "./types.js";
+
 const DAY = 86_400_000;
 /** Bisection steps per crossing: the time is known to the step / 2^24. */
 const REFINE_STEPS = 24;
@@ -27,16 +29,17 @@ export interface LongitudeCrossing {
 }
 
 /** A longitude source: the ecliptic longitude of `body` at `date`, in degrees. */
-export type BodyLongitudeAt = (body: BodyName, date: Date) => number;
+export type BodyLongitudeAt<B extends string = BodyName> = (body: B, date: Date) => number;
 
+/** A key not named here is refused with a RangeError. */
 export interface CrossingSearchOptions {
   /** Days between coarse samples. Defaults to 5. */
-  stepDays?: number;
+  readonly stepDays?: number | undefined;
   /**
    * The most longitude evaluations the search may make, refinements
    * included: a positive integer, or `Infinity`. Defaults to no limit.
    */
-  maxSamples?: number;
+  readonly maxSamples?: number | undefined;
 }
 
 /**
@@ -311,9 +314,9 @@ function solve(
   return crossings;
 }
 
-function run(
-  longitudeAt: BodyLongitudeAt,
-  body: BodyName,
+function run<B extends string>(
+  longitudeAt: BodyLongitudeAt<B>,
+  body: B,
   targetLongitude: number,
   window: Window,
   maxSamples: number
@@ -376,9 +379,9 @@ function run(
  * {@link searchLongitudeCrossingsWith} bounds it. Throws RangeError for an
  * invalid window, target or step, and for a non-finite longitude.
  */
-export function findLongitudeCrossingsWith(
-  longitudeAt: BodyLongitudeAt,
-  body: BodyName,
+export function findLongitudeCrossingsWith<B extends string = BodyName>(
+  longitudeAt: BodyLongitudeAt<B>,
+  body: B,
   targetLongitude: number,
   from: Date,
   to: Date,
@@ -397,16 +400,25 @@ export function findLongitudeCrossingsWith(
  * refinement would pass it; either way it returns a typed refusal with no
  * crossings rather than throwing. Invalid input still throws RangeError.
  */
-export function searchLongitudeCrossingsWith(
-  longitudeAt: BodyLongitudeAt,
-  body: BodyName,
+export function searchLongitudeCrossingsWith<B extends string = BodyName>(
+  longitudeAt: BodyLongitudeAt<B>,
+  body: B,
   targetLongitude: number,
   from: Date,
   to: Date,
   options: CrossingSearchOptions = {}
 ): CrossingSearchResult {
-  if (options === null || typeof options !== "object") {
-    throw new RangeError("Crossing search options must be an object.");
+  // The rules of the engine's shared options reader, written out here because
+  // this entry carries no module of the others: a plain object of the two
+  // named keys, as own data properties.
+  const prototype: unknown = options !== null && typeof options === "object" ? Object.getPrototypeOf(options) : undefined;
+  if (prototype !== Object.prototype && prototype !== null) {
+    throw new RangeError("Crossing search options must be a plain options object.");
+  }
+  for (const key of Reflect.ownKeys(options)) {
+    if (key !== "stepDays" && key !== "maxSamples") throw new RangeError(`Crossing search options has an unknown option: ${String(key)}.`);
+    const slot = Object.getOwnPropertyDescriptor(options, key);
+    if (!slot || !("value" in slot) || !slot.enumerable) throw new RangeError("Crossing search options must contain only plain data properties.");
   }
   const stepDays = options.stepDays === undefined ? 5 : options.stepDays;
   const window = validWindow(targetLongitude, from, to, stepDays);

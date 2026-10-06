@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SIGN_NAMES } from "../signs.js";
+import { SIGN_SLUGS } from "../signs.js";
 import { TRADITIONAL_RULERS } from "../timing/rulers.js";
 import {
   CHALDEAN_FACES,
@@ -64,7 +64,7 @@ const TETRABIBLOS_EXALTATIONS = {
 
 describe("the tables against their sources", () => {
   it("holds the Egyptian terms of Tetrabiblos I.20", () => {
-    for (const sign of SIGN_NAMES) {
+    for (const sign of SIGN_SLUGS) {
       let end = 0;
       const ends = TETRABIBLOS_EGYPTIAN_TERMS[sign]!.map(([planet, length]) => [planet, (end += length)]);
       expect(EGYPTIAN_TERMS[sign], sign).toEqual(ends);
@@ -73,7 +73,7 @@ describe("the tables against their sources", () => {
 
   it("gives each planet terms adding up to 57 (Saturn), 79 (Jupiter), 66 (Mars), 82 (Venus) and 76 (Mercury) degrees, 360 in all", () => {
     const totals: Record<string, number> = {};
-    for (const sign of SIGN_NAMES) {
+    for (const sign of SIGN_SLUGS) {
       let from = 0;
       for (const [planet, end] of EGYPTIAN_TERMS[sign]) {
         totals[planet] = (totals[planet] ?? 0) + end - from;

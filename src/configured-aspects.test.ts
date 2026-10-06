@@ -55,15 +55,15 @@ describe("policy resolution and ownership", () => {
     expect(() => { (configured.aspects[0]!.orb as {applying:number}).applying=99; }).toThrow();
   });
 
-  it("does not share or consult the legacy mutable ASPECTS definitions", () => {
+  it("does not share the ASPECTS definitions, which are frozen from 1.0.0", () => {
+    // That the policy does not consult them either, whatever they hold, is
+    // src/configured-aspects-isolation.test.ts: they can no longer be changed here.
     const legacy = ASPECTS[0] as unknown as {orb:number};
-    const saved = legacy.orb;
-    try {
-      legacy.orb=0;
-      const configured=createAspectPolicy();
-      expect(configured.aspects[0]?.orb.applying).toBe(8);
-      expect(findConfiguredAspects([position("Mars",0),position("Saturn",5)],configured).aspects).toHaveLength(1);
-    } finally { legacy.orb=saved; }
+    expect(()=>{legacy.orb=0;}).toThrow(TypeError);
+    const configured=createAspectPolicy();
+    expect(configured.aspects[0]?.orb.applying).toBe(8);
+    expect(configured.aspects[0]).not.toBe(ASPECTS[0]);
+    expect(findConfiguredAspects([position("Mars",0),position("Saturn",5)],configured).aspects).toHaveLength(1);
   });
 
   it("supports empty explicit selections and exact case-sensitive labels", () => {

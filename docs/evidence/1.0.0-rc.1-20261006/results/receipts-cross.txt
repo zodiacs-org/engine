@@ -1,0 +1,109 @@
+# 30 envelopes written by 0.1.1-rc.17, read by 1.0.0-rc.1
+envelope 0: accepted; the same record as the writer's own codec reads
+envelope 1: accepted; the same record as the writer's own codec reads
+envelope 2: accepted; the same record as the writer's own codec reads
+envelope 3: accepted; the same record as the writer's own codec reads
+envelope 4: accepted; the same record as the writer's own codec reads
+envelope 5: accepted; the same record as the writer's own codec reads
+envelope 6: accepted; the same record as the writer's own codec reads
+envelope 7: accepted; the same record as the writer's own codec reads
+envelope 8: accepted; the same record as the writer's own codec reads
+envelope 9: accepted; the same record as the writer's own codec reads
+envelope 10: accepted; the same record as the writer's own codec reads
+envelope 11: accepted; the same record as the writer's own codec reads
+envelope 12: accepted; the same record as the writer's own codec reads
+envelope 13: accepted; the same record as the writer's own codec reads
+envelope 14: accepted; the same record as the writer's own codec reads
+envelope 15: accepted; the same record as the writer's own codec reads
+envelope 16: accepted; the same record as the writer's own codec reads
+envelope 17: accepted; the same record as the writer's own codec reads
+envelope 18: accepted; the same record as the writer's own codec reads
+envelope 19: accepted; the same record as the writer's own codec reads
+envelope 20: accepted; the same record as the writer's own codec reads
+envelope 21: accepted; the same record as the writer's own codec reads
+envelope 22: accepted; the same record as the writer's own codec reads
+envelope 23: accepted; the same record as the writer's own codec reads
+envelope 24: accepted; the same record as the writer's own codec reads
+envelope 25: accepted; the same record as the writer's own codec reads
+envelope 26: accepted; the same record as the writer's own codec reads
+envelope 27: accepted; the same record as the writer's own codec reads
+envelope 28: accepted; the same record as the writer's own codec reads
+envelope 29: accepted; the same record as the writer's own codec reads
+30 of 30 accepted
+
+# 30 envelopes written by 1.0.0-rc.1, read by 0.1.1-rc.17
+envelope 0: accepted; the same record as the writer's own codec reads
+envelope 1: accepted; the same record as the writer's own codec reads
+envelope 2: accepted; the same record as the writer's own codec reads
+envelope 3: accepted; the same record as the writer's own codec reads
+envelope 4: accepted; the same record as the writer's own codec reads
+envelope 5: accepted; the same record as the writer's own codec reads
+envelope 6: accepted; the same record as the writer's own codec reads
+envelope 7: accepted; the same record as the writer's own codec reads
+envelope 8: accepted; the same record as the writer's own codec reads
+envelope 9: accepted; the same record as the writer's own codec reads
+envelope 10: accepted; the same record as the writer's own codec reads
+envelope 11: accepted; the same record as the writer's own codec reads
+envelope 12: accepted; the same record as the writer's own codec reads
+envelope 13: accepted; the same record as the writer's own codec reads
+envelope 14: accepted; the same record as the writer's own codec reads
+envelope 15: accepted; the same record as the writer's own codec reads
+envelope 16: accepted; the same record as the writer's own codec reads
+envelope 17: accepted; the same record as the writer's own codec reads
+envelope 18: accepted; the same record as the writer's own codec reads
+envelope 19: accepted; the same record as the writer's own codec reads
+envelope 20: accepted; the same record as the writer's own codec reads
+envelope 21: accepted; the same record as the writer's own codec reads
+envelope 22: accepted; the same record as the writer's own codec reads
+envelope 23: accepted; the same record as the writer's own codec reads
+envelope 24: accepted; the same record as the writer's own codec reads
+envelope 25: accepted; the same record as the writer's own codec reads
+envelope 26: accepted; the same record as the writer's own codec reads
+envelope 27: accepted; the same record as the writer's own codec reads
+envelope 28: accepted; the same record as the writer's own codec reads
+envelope 29: accepted; the same record as the writer's own codec reads
+30 of 30 accepted
+
+# 30 envelopes written by 0.1.1-rc.17, read by 1.0.0-rc.1, each that names Placidus changed to Porphyry
+envelope 0: refused, inconsistent_result
+envelope 1: refused, inconsistent_result
+envelope 2: refused, inconsistent_result
+envelope 3: refused, inconsistent_result
+envelope 4: refused, inconsistent_result
+envelope 5: refused, inconsistent_result
+envelope 6: refused, inconsistent_result
+envelope 7: refused, inconsistent_result
+envelope 8: refused, inconsistent_result
+envelope 9: refused, inconsistent_result
+envelope 10: refused, inconsistent_result
+envelope 11: refused, inconsistent_result
+envelope 12: refused, inconsistent_result
+envelope 13: refused, inconsistent_result
+envelope 14: refused, inconsistent_result
+envelope 15: refused, inconsistent_result
+envelope 16: refused, inconsistent_result
+envelope 17: refused, inconsistent_result
+envelope 24: refused, inconsistent_result
+19 of 19 tampered envelopes refused
+
+# 30 envelopes written by 1.0.0-rc.1, read by 0.1.1-rc.17, each that names Placidus changed to Porphyry
+envelope 0: refused, inconsistent_result
+envelope 1: refused, inconsistent_result
+envelope 2: refused, inconsistent_result
+envelope 3: refused, inconsistent_result
+envelope 4: refused, inconsistent_result
+envelope 5: refused, inconsistent_result
+envelope 6: refused, inconsistent_result
+envelope 7: refused, inconsistent_result
+envelope 8: refused, inconsistent_result
+envelope 9: refused, inconsistent_result
+envelope 10: refused, inconsistent_result
+envelope 11: refused, inconsistent_result
+envelope 12: refused, inconsistent_result
+envelope 13: refused, inconsistent_result
+envelope 14: refused, inconsistent_result
+envelope 15: refused, inconsistent_result
+envelope 16: refused, inconsistent_result
+envelope 17: refused, inconsistent_result
+envelope 24: refused, inconsistent_result
+19 of 19 tampered envelopes refused

@@ -13,7 +13,7 @@ import { computeAngles, computeHouses, houseOf, isPolarUndefinedHouseSystem } fr
 import type { AngleInput } from "./houses.js";
 import { tilt } from "./nutation.js";
 import { REFERENCE_SPAN } from "./reference-span.js";
-import { SIGN_NAMES, normalizeLongitude, signIndexForLongitude } from "./signs.js";
+import { SIGN_SLUGS, normalizeLongitude, signIndexForLongitude } from "./signs.js";
 import { elapsedDays, timeBasis } from "./time-scale.js";
 import type {
   AspectType,
@@ -42,11 +42,14 @@ const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
 const J2000 = Date.UTC(2000, 0, 1, 12);
 
-/** How far this release's switch instants have been checked. */
-export const WINDOW_VERIFICATION = "sampled at one-second resolution";
+/** The schema id of a birth window. */
+export const BIRTH_WINDOW_SCHEMA = "zodiacs.birth-window.v1";
 
-/** The longest window accepted: 48 hours, in milliseconds. */
-export const MAX_WINDOW_MS = 172_800_000;
+/** How far this release's switch instants have been checked; a later release may check them further and say so here. */
+export const WINDOW_VERIFICATION: string = "sampled at one-second resolution";
+
+/** The longest window accepted: 48 hours, in milliseconds. A minor release may accept a longer one. */
+export const MAX_WINDOW_MS: number = 172_800_000;
 
 /**
  * Upper bounds on each body's longitude rate, degrees per day: twice the
@@ -175,15 +178,15 @@ const SENSITIVE_RAMC: Partial<Record<HouseSystem, readonly [north: number[], sou
 /** A rounding model: the true instant is uniform over the rounding unit of the record. */
 export interface WindowRounding {
   /** The recorded time, resolved to an instant. */
-  recorded: DateInput;
+  readonly recorded: DateInput;
   /** The rounding unit, in minutes. */
-  minutes: number;
+  readonly minutes: number;
   /**
    * "nearest" (the default): the record is the nearest multiple of the unit,
    * so the true instant lies within half a unit of it. "down": the record is
    * the start of its unit, as a clock read without rounding up.
    */
-  mode?: "nearest" | "down";
+  readonly mode?: "nearest" | "down";
 }
 
 /**
@@ -193,80 +196,86 @@ export interface WindowRounding {
  */
 export interface BirthWindowInput {
   /** The first instant of the window. */
-  start?: DateInput;
+  readonly start?: DateInput;
   /** The end of the window, which it does not include. */
-  end?: DateInput;
-  at?: DateInput;
+  readonly end?: DateInput;
+  readonly at?: DateInput;
   /** Minutes either side of `at`, to the nearest millisecond. */
-  minutes?: number;
-  latitude: number;
-  longitude: number;
+  readonly minutes?: number;
+  readonly latitude: number;
+  readonly longitude: number;
   /** Defaults to "whole", as for natalChart. */
-  houseSystem?: HouseSystem;
+  readonly houseSystem?: HouseSystem;
   /** A second prior for the cells' shares; its unit must lie inside the window. */
-  rounding?: WindowRounding;
+  readonly rounding?: WindowRounding;
 }
 
 export interface WindowAspect {
-  a: BodyName;
-  b: BodyName;
-  type: AspectType;
+  readonly a: BodyName;
+  readonly b: BodyName;
+  readonly type: AspectType;
 }
 
 /** The discrete features of the chart, as natalChart would give them, throughout a cell. */
 export interface WindowFeatures {
   /** Each body's sign; null for the nodes inside an unresolved interval. */
-  signs: Record<BodyName, ZodiacSign | null>;
-  ascendant: ZodiacSign;
-  midheaven: ZodiacSign;
+  readonly signs: Readonly<Record<BodyName, ZodiacSign | null>>;
+  readonly ascendant: ZodiacSign;
+  readonly midheaven: ZodiacSign;
   /**
    * Each body's house, as houseOf gives it from the chart's cusps; null for
    * the nodes inside an unresolved interval where the houses are whole signs.
    */
-  houses: Record<BodyName, HouseNumber | null>;
+  readonly houses: Readonly<Record<BodyName, HouseNumber | null>>;
   /** The aspects in orb, in natalChart's pair order. */
-  aspects: WindowAspect[];
+  readonly aspects: readonly WindowAspect[];
   /** The house system used: the requested one, or "whole" where Placidus or Koch falls back. */
-  houseSystem: HouseSystem;
+  readonly houseSystem: HouseSystem;
 }
 
 export interface BirthWindowCell {
   /** First instant of the cell. */
-  start: Date;
+  readonly start: Date;
   /** End of the cell, which it does not include. */
-  end: Date;
-  milliseconds: number;
+  readonly end: Date;
+  readonly milliseconds: number;
   /** Share of the window under a uniform prior. */
-  share: number;
+  readonly share: number;
   /** Share under the rounding model, when one was given. */
-  roundedShare?: number;
-  features: WindowFeatures;
+  readonly roundedShare?: number;
+  readonly features: WindowFeatures;
 }
 
 /** A change to or from null opens or closes an unresolved interval; it is not a crossing. */
 export type WindowChange =
-  | { feature: "sign"; body: BodyName; from: ZodiacSign | null; to: ZodiacSign | null }
-  | { feature: "ascendant" | "midheaven"; from: ZodiacSign; to: ZodiacSign }
-  | { feature: "house"; body: BodyName; from: HouseNumber | null; to: HouseNumber | null }
-  | { feature: "aspect"; a: BodyName; b: BodyName; from: AspectType | null; to: AspectType | null }
-  | { feature: "house-system"; from: HouseSystem; to: HouseSystem };
+  | { readonly feature: "sign"; readonly body: BodyName; readonly from: ZodiacSign | null; readonly to: ZodiacSign | null }
+  | { readonly feature: "ascendant" | "midheaven"; readonly from: ZodiacSign; readonly to: ZodiacSign }
+  | { readonly feature: "house"; readonly body: BodyName; readonly from: HouseNumber | null; readonly to: HouseNumber | null }
+  | {
+      readonly feature: "aspect";
+      readonly a: BodyName;
+      readonly b: BodyName;
+      readonly from: AspectType | null;
+      readonly to: AspectType | null;
+    }
+  | { readonly feature: "house-system"; readonly from: HouseSystem; readonly to: HouseSystem };
 
 export interface BirthWindowSwitch {
   /**
    * The first millisecond with the new features: the engine's value at the
    * millisecond before differs, so the crossing lies in (at − 1 ms, at].
    */
-  at: Date;
-  changes: WindowChange[];
+  readonly at: Date;
+  readonly changes: readonly WindowChange[];
 }
 
 /** Where the node's jitter would outlast the budget: these features are null in every cell of [start, end). */
 export interface WindowUnresolved {
-  start: Date;
+  readonly start: Date;
   /** The first instant at which they are resolved again. */
-  end: Date;
-  milliseconds: number;
-  features: { feature: "sign" | "house"; body: "North Node" | "South Node" }[];
+  readonly end: Date;
+  readonly milliseconds: number;
+  readonly features: readonly { readonly feature: "sign" | "house"; readonly body: "North Node" | "South Node" }[];
 }
 
 export type BirthWindowFlag =
@@ -277,31 +286,37 @@ export type BirthWindowFlag =
   | "node-unresolved";
 
 export interface BirthWindow {
-  schema: "zodiacs.birth-window.v1";
+  readonly schema: typeof BIRTH_WINDOW_SCHEMA;
   /** How far the switch instants have been checked: dense one-second sampling, not proof. */
-  verification: typeof WINDOW_VERIFICATION;
-  start: Date;
-  end: Date;
-  latitude: number;
-  longitude: number;
+  readonly verification: string;
+  readonly start: Date;
+  readonly end: Date;
+  readonly latitude: number;
+  readonly longitude: number;
   /** The requested house system. */
-  houseSystem: HouseSystem;
-  rounding: { recorded: Date; minutes: number; mode: "nearest" | "down"; start: Date; end: Date } | null;
+  readonly houseSystem: HouseSystem;
+  readonly rounding: {
+    readonly recorded: Date;
+    readonly minutes: number;
+    readonly mode: "nearest" | "down";
+    readonly start: Date;
+    readonly end: Date;
+  } | null;
   /** Cells in time order; they tile [start, end). */
-  cells: BirthWindowCell[];
+  readonly cells: readonly BirthWindowCell[];
   /** Switches in time order, one per cell boundary. */
-  switches: BirthWindowSwitch[];
+  readonly switches: readonly BirthWindowSwitch[];
   /** Intervals left unresolved, in time order; empty unless `node-unresolved` is flagged. */
-  unresolved: WindowUnresolved[];
-  flags: BirthWindowFlag[];
-  engineVersion: string;
+  readonly unresolved: readonly WindowUnresolved[];
+  readonly flags: readonly BirthWindowFlag[];
+  readonly engineVersion: string;
 }
 
 /** Thrown when a window needs more evaluated instants than the search allows. An Error, not a RangeError. */
 export class WindowBudgetError extends Error {
   override readonly name = "WindowBudgetError";
-  /** The instants the search allows. */
-  readonly limit = MAX_EVALUATIONS;
+  /** The instants the search allows; a later release may allow more. */
+  readonly limit: number = MAX_EVALUATIONS;
 
   constructor() {
     super(
@@ -1057,7 +1072,7 @@ function features(values: readonly number[], system: HouseSystem): WindowFeature
   BODIES.forEach((body, index) => {
     const sign = values[index]!;
     const house = values[HOUSE + index]!;
-    signs[body] = sign === UNRESOLVED ? null : SIGN_NAMES[sign]!;
+    signs[body] = sign === UNRESOLVED ? null : SIGN_SLUGS[sign]!;
     houses[body] = house === UNRESOLVED ? null : (house as HouseNumber);
   });
   const aspects: WindowAspect[] = [];
@@ -1067,8 +1082,8 @@ function features(values: readonly number[], system: HouseSystem): WindowFeature
   });
   return {
     signs,
-    ascendant: SIGN_NAMES[values[ASC]!]!,
-    midheaven: SIGN_NAMES[values[MC]!]!,
+    ascendant: SIGN_SLUGS[values[ASC]!]!,
+    midheaven: SIGN_SLUGS[values[MC]!]!,
     houses,
     aspects,
     houseSystem: values[SYSTEM] === 1 ? "whole" : system
@@ -1076,11 +1091,11 @@ function features(values: readonly number[], system: HouseSystem): WindowFeature
 }
 
 function change(id: number, from: number, to: number, system: HouseSystem): WindowChange {
-  const sign = (value: number) => (value === UNRESOLVED ? null : SIGN_NAMES[value]!);
+  const sign = (value: number) => (value === UNRESOLVED ? null : SIGN_SLUGS[value]!);
   const house = (value: number) => (value === UNRESOLVED ? null : (value as HouseNumber));
   if (id < ASC) return { feature: "sign", body: BODIES[id]!, from: sign(from), to: sign(to) };
   if (id === ASC || id === MC) {
-    return { feature: id === ASC ? "ascendant" : "midheaven", from: SIGN_NAMES[from]!, to: SIGN_NAMES[to]! };
+    return { feature: id === ASC ? "ascendant" : "midheaven", from: SIGN_SLUGS[from]!, to: SIGN_SLUGS[to]! };
   }
   if (id < ASPECT) return { feature: "house", body: BODIES[id - HOUSE]!, from: house(from), to: house(to) };
   if (id < SYSTEM) {
@@ -1193,18 +1208,15 @@ export function birthWindow(input: BirthWindowInput): BirthWindow {
   let fallback = values[SYSTEM] === 1;
   const close = (cellEnd: number) => {
     const milliseconds = cellEnd - cellStart;
-    const cell: BirthWindowCell = {
+    const overlap = support && Math.max(0, Math.min(cellEnd, support[1]!) - Math.max(cellStart, support[0]!));
+    cells.push({
       start: new Date(cellStart),
       end: new Date(cellEnd),
       milliseconds,
       share: milliseconds / length,
-      features: features(values, system)
-    };
-    if (support) {
-      const overlap = Math.max(0, Math.min(cellEnd, support[1]!) - Math.max(cellStart, support[0]!));
-      cell.roundedShare = overlap / (support[1]! - support[0]!);
-    }
-    cells.push(cell);
+      features: features(values, system),
+      ...(support ? { roundedShare: overlap! / (support[1]! - support[0]!) } : {})
+    });
     cellStart = cellEnd;
   };
   for (let index = 0; index < changes.length; ) {
@@ -1231,7 +1243,7 @@ export function birthWindow(input: BirthWindowInput): BirthWindow {
   if (sky.violations > 0) flags.push("bound-exceeded");
   if (unresolved.length > 0) flags.push("node-unresolved");
   return {
-    schema: "zodiacs.birth-window.v1",
+    schema: BIRTH_WINDOW_SCHEMA,
     verification: WINDOW_VERIFICATION,
     start: new Date(start),
     end: new Date(end),

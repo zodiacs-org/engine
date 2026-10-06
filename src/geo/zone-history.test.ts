@@ -144,6 +144,12 @@ describe("loading the shipped history", () => {
     ask();
     expect(answers.slice(1)).toEqual([answers[0], 60, 60]);
     expect(() => fresh.zoneOffsetAt("Europe/Luxembourg", Date.UTC(1938, 5, 15))).toThrow("prepareLocalTime");
+    // A class to catch it by, since an error's message is not part of the API.
+    expect(() => fresh.zoneOffsetAt("Europe/Luxembourg", Date.UTC(1938, 5, 15))).toThrow(fresh.ZoneHistoryNotLoadedError);
+    expect(() => fresh.resolveLocalToUtc("1938-06-15", "12:00", "Europe/Luxembourg")).toThrow(fresh.ZoneHistoryNotLoadedError);
+    expect(new fresh.ZoneHistoryNotLoadedError()).toBeInstanceOf(Error);
+    expect(new fresh.ZoneHistoryNotLoadedError()).not.toBeInstanceOf(RangeError);
+    expect(new fresh.ZoneHistoryNotLoadedError().name).toBe("ZoneHistoryNotLoadedError");
     vi.resetModules();
   });
 

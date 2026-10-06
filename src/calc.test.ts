@@ -91,7 +91,7 @@ describe("calc with every default is the engine's own position", () => {
     const tt = "1990-06-15T12:30:00Z";
     const onTt = natalChart({ utc: tt, timeScale: "tt", timeKnown: false });
     for (const row of onTt.bodies) {
-      const result = ok(calc({ body: row.body, time: { jd: 2_440_587.5 + Date.parse(tt) / 86_400_000, scale: "TT" } }));
+      const result = ok(calc({ body: row.body, time: { jd: 2_440_587.5 + Date.parse(tt) / 86_400_000, scale: "tt" } }));
       expect(Math.abs(result.lon - row.lon) * 3600).toBeLessThan(1e-4);
     }
   });
@@ -105,35 +105,35 @@ describe("time vocabulary", () => {
   it("reads a UTC Julian date as the same instant as an ISO string", () => {
     for (const body of ["Sun", "Moon", "Mercury", "Pluto", "North Node", "Black Moon Lilith"] as const) {
       const a = ok(calc({ body, time: iso }));
-      const b = ok(calc({ body, time: { jd: jdUt, scale: "UTC" } }));
+      const b = ok(calc({ body, time: { jd: jdUt, scale: "utc" } }));
       expect(Math.abs(a.lon - b.lon) * 3600).toBeLessThan(1e-4);
       expect(Math.abs(a.speeds!.lon - b.speeds!.lon) * 3600).toBeLessThan(1e-3);
     }
   });
 
   it("reads a UT1 Julian date as UT1, UT1 − UTC away from the same UTC date", () => {
-    const utc = ok(calc({ body: "Moon", time: { jd: jdUt, scale: "UTC" } }));
+    const utc = ok(calc({ body: "Moon", time: { jd: jdUt, scale: "utc" } }));
     const [used] = utc.receipt.instants;
     const offset = used!.timeScale.ut1MinusUtc!.seconds;
     expect(Math.abs(offset)).toBeGreaterThan(0);
     expect(Math.abs(used!.jdUt1 - jdUt - offset / 86_400) * 86_400).toBeLessThan(1e-5);
-    const ut1 = ok(calc({ body: "Moon", time: { jd: used!.jdUt1, scale: "UT1" } }));
+    const ut1 = ok(calc({ body: "Moon", time: { jd: used!.jdUt1, scale: "ut1" } }));
     expect(Math.abs(ut1.lon - utc.lon) * 3600).toBeLessThan(1e-4);
     expect(Math.abs(ut1.receipt.instants[0]!.jdTt - used!.jdTt) * 86_400).toBeLessThan(1e-5);
   });
 
   it("reads a TT Julian date through ΔT, the model's or a pin", () => {
     const tt = 2460409.265;
-    const modelled = ok(calc({ body: "Moon", time: { jd: tt, scale: "TT" } }));
+    const modelled = ok(calc({ body: "Moon", time: { jd: tt, scale: "tt" } }));
     const [used] = modelled.receipt.instants;
     expect(Math.abs(used!.jdTt - tt) * 86_400).toBeLessThan(1e-6);
     // A Julian date near 2.46e6 holds time to about 4e-10 of a day.
     expect(Math.abs(used!.jdTt - used!.jdUt1 - used!.deltaT.seconds / 86_400)).toBeLessThan(1e-9);
-    const again = ok(calc({ body: "Moon", time: { jd: used!.jdUt1, scale: "UT1" } }));
+    const again = ok(calc({ body: "Moon", time: { jd: used!.jdUt1, scale: "ut1" } }));
     expect(Math.abs(again.lon - modelled.lon) * 3600).toBeLessThan(1e-4);
 
-    const pinned = ok(calc({ body: "Moon", time: { jd: tt, scale: "TT", deltaT: 50 } }));
-    const same = ok(calc({ body: "Moon", time: { jd: tt - 50 / 86_400, scale: "UT1", deltaT: 50 } }));
+    const pinned = ok(calc({ body: "Moon", time: { jd: tt, scale: "tt", deltaT: 50 } }));
+    const same = ok(calc({ body: "Moon", time: { jd: tt - 50 / 86_400, scale: "ut1", deltaT: 50 } }));
     expect(Math.abs(pinned.lon - same.lon) * 3600).toBeLessThan(1e-4);
     expect(pinned.receipt.instants[0]!.deltaT).toEqual({
       seconds: 50,
@@ -149,9 +149,9 @@ describe("time vocabulary", () => {
   it("converts every TT Julian date, even where astronomy-engine's own conversion cycles", () => {
     // At TT = J2000.0 - 65536 days, on the engine's ΔT, AstroTime.FromTerrestrialTime alternates between two doubles forever.
     const jd = 2_451_545 - 65_536;
-    const result = ok(calc({ body: "Sun", time: { jd, scale: "TT" } }));
+    const result = ok(calc({ body: "Sun", time: { jd, scale: "tt" } }));
     expect(Math.abs(result.receipt.instants[0]!.jdTt - jd) * 86_400).toBeLessThan(1e-6);
-    expect(houses({ time: { jd, scale: "TT" }, place: { latitude: 0, longitude: 0 } }).status).toBe("ok");
+    expect(houses({ time: { jd, scale: "tt" }, place: { latitude: 0, longitude: 0 } }).status).toBe("ok");
   });
 
   it("leaves the engine's ΔT model installed after a pinned call, whatever its outcome", () => {
@@ -168,11 +168,11 @@ describe("time vocabulary", () => {
 describe("receipts", () => {
   const requests: CalcRequest[] = [
     { body: "Mars", time: "2024-04-08T18:21:30+02:00" },
-    { body: "Moon", time: { jd: 2451545.25, scale: "TT", deltaT: 64 }, frame: "equatorial-icrs", flags: { cartesian: true } },
+    { body: "Moon", time: { jd: 2451545.25, scale: "tt", deltaT: 64 }, frame: "equatorial-icrs", flags: { cartesian: true } },
     { body: "Earth", time: new Date("1901-02-03T04:05:06Z"), center: "barycentric", frame: "ecliptic-j2000", flags: { correction: "astrometric", units: "radians" } },
     { body: "Venus", time: { iso: "2150-06-30" }, center: { topocentric: { latitude: -33.9, longitude: 18.4, height: 25 } }, frame: "equatorial-true-of-date", flags: { speeds: false } },
     { body: "Black Moon Lilith", time: "1850-01-01", frame: "ecliptic-mean-of-date", flags: { correction: "geometric" } },
-    { body: "Saturn", time: { jd: 2400000.5, scale: "UTC" }, center: "heliocentric", frame: "equatorial-mean-of-date", flags: { correction: "geometric", cartesian: true } }
+    { body: "Saturn", time: { jd: 2400000.5, scale: "utc" }, center: "heliocentric", frame: "equatorial-mean-of-date", flags: { correction: "geometric", cartesian: true } }
   ];
 
   it.each(requests.map((request) => [JSON.stringify(request), request] as const))("replay %s", (_, request) => {
@@ -239,7 +239,7 @@ describe("frames", () => {
     const bias = angle(xyzOf(frames["equatorial-j2000"]), xyzOf(frames["equatorial-icrs"]));
     expect(bias).toBeGreaterThan(0.005);
     expect(bias).toBeLessThan(0.0232);
-    const epoch = { jd: 2451545, scale: "TT" as const };
+    const epoch = { jd: 2451545, scale: "tt" as const };
     const mean = ok(calc({ body: "Saturn", time: epoch, frame: "equatorial-mean-of-date" }));
     const j2000 = ok(calc({ body: "Saturn", time: epoch, frame: "equatorial-j2000" }));
     expect(angle(direction(mean), direction(j2000))).toBeLessThan(1e-6);
@@ -275,7 +275,7 @@ describe("frames", () => {
 });
 
 describe("speeds", () => {
-  const time = { jd: 2461000.5, scale: "TT" as const };
+  const time = { jd: 2461000.5, scale: "tt" as const };
 
   it("are analytic for geometric positions on fixed axes, and agree with a central difference", () => {
     for (const body of ["Mercury", "Mars", "Pluto", "Sun", "Earth"] as const) {
@@ -401,7 +401,7 @@ describe("houses, events and chart wrap the engine's own functions", () => {
     for (const houseSystem of HOUSE_SYSTEMS) {
       for (const latitude of [0, 51.5, -33.9, 70]) {
         const place = { latitude, longitude: -71.1 };
-        const result = houses({ time: utc, place, system: houseSystem });
+        const result = houses({ time: utc, place, houseSystem });
         if (result.status !== "ok") throw new Error("refused");
         const natal = natalChart({ utc, ...place, houseSystem });
         expect(result.angles).toEqual(natal.angles);
@@ -534,14 +534,14 @@ describe("typed refusals", () => {
       "1799-12-31T23:59:59.999Z",
       CALC_SPAN.to,
       "2199-12-31T23:59:59Z", // TT 126 s later, in 2200
-      { jd: 2378496.4, scale: "UTC" },
-      { jd: first, scale: "TT" }, // UT1 18.7 s earlier, in 1799
-      { jd: last, scale: "TT" },
-      { jd: last + 2 / 1440, scale: "TT" }, // UT1 still in 2199
-      { jd: first + 30 / 86_400, scale: "UT1", deltaT: -60 }, // TT in 1799
-      { jd: 1e300, scale: "TT" },
-      { jd: -1e300, scale: "UTC" },
-      { jd: 2451545, scale: "TT", deltaT: 1e10 },
+      { jd: 2378496.4, scale: "utc" },
+      { jd: first, scale: "tt" }, // UT1 18.7 s earlier, in 1799
+      { jd: last, scale: "tt" },
+      { jd: last + 2 / 1440, scale: "tt" }, // UT1 still in 2199
+      { jd: first + 30 / 86_400, scale: "ut1", deltaT: -60 }, // TT in 1799
+      { jd: 1e300, scale: "tt" },
+      { jd: -1e300, scale: "utc" },
+      { jd: 2451545, scale: "tt", deltaT: 1e10 },
       { iso: "2199-06-01T00:00:00Z", deltaT: 1e10 }, // TT in 2516
       { iso: "1800-06-01T00:00:00Z", deltaT: -1e10 }
     ] as const;
@@ -549,11 +549,11 @@ describe("typed refusals", () => {
       const result = refused(calc({ body: "Moon", time: t }));
       expect(result).toMatchObject({ reason: "out-of-range", span: { from: CALC_SPAN.from, to: CALC_SPAN.to } });
     }
-    for (const t of [CALC_SPAN.from, "2199-12-31T23:57:00Z", { jd: first + 30 / 86_400, scale: "TT" }, { jd: last - 1 / 86_400, scale: "TT" }] as const) {
+    for (const t of [CALC_SPAN.from, "2199-12-31T23:57:00Z", { jd: first + 30 / 86_400, scale: "tt" }, { jd: last - 1 / 86_400, scale: "tt" }] as const) {
       ok(calc({ body: "Moon", time: t }));
     }
     expect(refused(houses({ time: { iso: "2199-06-01T00:00:00Z", deltaT: 1e10 }, place: { latitude: 0, longitude: 0 } })).reason).toBe("out-of-range");
-    expect(refused(chart({ time: { jd: last, scale: "TT" } })).reason).toBe("out-of-range");
+    expect(refused(chart({ time: { jd: last, scale: "tt" } })).reason).toBe("out-of-range");
     expect(refused(houses({ time: "1700-01-01", place: { latitude: 0, longitude: 0 } })).reason).toBe("out-of-range");
     expect(refused(chart({ time: "2300-01-01" })).reason).toBe("out-of-range");
     expect(refused(events({ kind: "longitude-crossing", body: "Sun", longitude: 0, from: "2199-06-01", to: "2200-06-01" })).reason).toBe("out-of-range");
@@ -583,9 +583,10 @@ describe("malformed input throws RangeError", () => {
     ["a local time without an offset", { body: "Sun", time: "2000-01-01T12:00" }],
     ["a Julian date without a scale", { body: "Sun", time: { jd: 2451545 } }],
     ["an unknown time scale", { body: "Sun", time: { jd: 2451545, scale: "UT" } }],
-    ["a time scale in lower case", { body: "Sun", time: { jd: 2451545, scale: "utc" } }],
-    ["a non-finite Julian date", { body: "Sun", time: { jd: Number.NaN, scale: "TT" } }],
-    ["both iso and jd", { body: "Sun", time: { iso: time, jd: 2451545, scale: "TT" } }],
+    ["a time scale in upper case, as before 1.0.0", { body: "Sun", time: { jd: 2451545, scale: "UTC" } }],
+    ["TT in upper case", { body: "Sun", time: { jd: 2451545, scale: "TT" } }],
+    ["a non-finite Julian date", { body: "Sun", time: { jd: Number.NaN, scale: "tt" } }],
+    ["both iso and jd", { body: "Sun", time: { iso: time, jd: 2451545, scale: "tt" } }],
     ["a non-finite ΔT", { body: "Sun", time: { iso: time, deltaT: Number.POSITIVE_INFINITY } }],
     ["a latitude out of range", { body: "Moon", time, center: { topocentric: { latitude: 91, longitude: 0 } } }],
     ["a height out of range", { body: "Moon", time, center: { topocentric: { latitude: 0, longitude: 0, height: 1e6 } } }],
@@ -595,7 +596,9 @@ describe("malformed input throws RangeError", () => {
   });
 
   it("in houses, events and chart too", () => {
-    expect(() => houses({ time, place: { latitude: 0, longitude: 0 }, system: "koch-2" as never })).toThrow(RangeError);
+    expect(() => houses({ time, place: { latitude: 0, longitude: 0 }, houseSystem: "koch-2" as never })).toThrow(RangeError);
+    // The field is houseSystem, as in chart() and natalChart(), from 1.0.0.
+    expect(() => houses({ time, place: { latitude: 0, longitude: 0 }, system: "koch" } as never)).toThrow(/takes only time, place, houseSystem, zodiac/);
     expect(() => houses({ time, place: { latitude: 0 } as never })).toThrow(RangeError);
     const window = { kind: "longitude-crossing", body: "Sun", longitude: 0, from: time, to: "2000-02-01" } as const;
     expect(() => events({ ...window, kind: "station" as never })).toThrow(RangeError);

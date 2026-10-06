@@ -45,6 +45,7 @@ list and a workflow disagree, the workflow is right.
   npm test
   npm run build
   npm run exports:smoke      # every entry point resolves and exports what it should
+  npm run api:check          # the public declarations match api/ (docs/versioning.md)
   npm run package:contents   # the packed files, each entry point's size budget and the total cap
   npm run pack:dry-run
   node scripts/verify-archive-binding.mjs
@@ -272,6 +273,15 @@ that commit and its SHA-256 receipt, added to `artifacts/` with an entry in
 `artifacts/archives.json` and a row in `artifacts/README.md`; and the
 candidate's evidence under `docs/evidence/`. The archive rules are in
 [artifacts/README.md](artifacts/README.md).
+
+Before the archive is packed, the candidate's tree passes every job of the
+three workflows (*Checks every change must pass*), the pack and the packed
+consumer included: pack the tree into a temporary directory and run
+`node scripts/verify-packed-consumer.mjs` on that archive with each Node
+version the job uses. Only the archive check waits for the commit that
+carries the archive, because it reads commits. An archive is packed once,
+so a check that first fails on the carrier needs a commit after it, as
+1.0.0-rc.1's packed consumer did (`docs/evidence/1.0.0-rc.1-20261006/`).
 
 A carried candidate is published to npm by the Release workflow,
 `.github/workflows/release.yml`. A maintainer runs it by hand from `main`

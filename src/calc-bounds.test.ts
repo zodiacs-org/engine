@@ -123,7 +123,7 @@ describe("the barycentric Sun's bounds", () => {
   const scanned = horizons("bary-NONE-10-scan.txt");
   const checks = [
     ...review.map((row) => ({ ...row, time: "2130-03-05T00:00:00Z" as const })),
-    ...[...horizons("bary-NONE-10.txt"), ...scanned].map((row) => ({ ...row, time: { jd: row.jd, scale: "TT" as const } }))
+    ...[...horizons("bary-NONE-10.txt"), ...scanned].map((row) => ({ ...row, time: { jd: row.jd, scale: "tt" as const } }))
   ];
 
   it("come from the barycentre's error, and cover the difference from Horizons at 2130-03-05 and where a daily scan finds it worst", () => {

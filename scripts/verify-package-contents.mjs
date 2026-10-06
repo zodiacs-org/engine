@@ -87,6 +87,10 @@ for (const file of files) {
 //
 // 0.1.1-rc.17 raises one, ./calc's, for the sidereal zodiac, after measuring
 // the graph it fits (docs/evidence/rc17-20261005/sizes.json).
+//
+// 1.0.0-rc.1 raises one, ./geo's, for ZoneHistoryNotLoadedError and
+// calendarNote's checks, with the owner's approval of 2026-10-06, after
+// measuring the graph it fits (docs/evidence/1.0.0-rc.1-20261006/sizes.json).
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -111,14 +115,20 @@ const ENTRY_BUDGETS = {
   // ayanamsas, with their star catalogue and apparent places, and its
   // sidereal charts: 17,596 bytes in a chunk the two entries share and 8,336
   // in calc.js (docs/evidence/rc17-20261005/sizes.json); 4.05 per cent of
-  // headroom.
+  // headroom. 1.0.0-rc.1: 144,694, with the reviews' checks and a caller's
+  // epochs across EPHEMERIS_SPAN; 0.55 per cent, not raised
+  // (docs/evidence/1.0.0-rc.1-20261006/sizes.json).
   "./calc": 145_500,
-  "./crossings": 10_000, // rc.15: 9,410
+  // rc.15: 9,410. 1.0.0-rc.1: 9,942, its options read as the shared reader
+  // reads them; 0.58 per cent, not raised.
+  "./crossings": 10_000,
   "./deltat": 5_500, // rc.15: 4,968
   // rc.15: 31,672, the zone histories not included (below). With ./techniques
   // 32,136: the local-time code moves to a chunk the two entries share, and
-  // geo.js re-exports it.
-  "./geo": 35_000,
+  // geo.js re-exports it. 1.0.0-rc.1: 35,375, with ZoneHistoryNotLoadedError
+  // and calendarNote's input checks from the API review; raised from 35,000 to
+  // 35,500 with the owner's approval of 2026-10-06; 0.35 per cent of headroom.
+  "./geo": 35_500,
   // Unreleased (feature-houses-extra): 13,606, one file that imports no other
   // module, the root's included, so that its graph cannot grow with the core
   // (docs/evidence/houses-extra-2026-09-29/).
@@ -151,7 +161,8 @@ const ENTRY_BUDGETS = {
   // 122,131, raised from 120,000 for the nutation in the ephemeris chunk
   // (the ayanamsas now use its frame); 4.80 per cent of headroom. rc.17:
   // 123,639, its ayanamsas and sidereal charts now in a chunk it shares with
-  // ./calc; 3.52 per cent, not raised.
+  // ./calc; 3.52 per cent, not raised. 1.0.0-rc.1: 127,184, its options and
+  // inputs read strictly; 0.64 per cent, not raised.
   "./vedic": 128_000,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
@@ -244,7 +255,12 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // rc.17 adds the sidereal zodiac to ./calc: 946,349 bytes in 70 files, 23,067
 // more than rc.16, and the cap, not raised, leaves 0.38 per cent
 // (docs/evidence/rc17-20261005/sizes.json).
-const TOTAL_CAP = 950_000;
+//
+// 1.0.0-rc.1: 982,086 bytes in 74 files, 35,737 more than rc.17. Raised from
+// 950,000 to 1,000,000 with the owner's approval of 2026-10-06, for the
+// documentation the 1.0 API carries in its declarations, the reviews' fixes
+// and the 1.0 changelog (CHANGELOG.md, 1.0.0-rc.1, Sizes).
+const TOTAL_CAP = 1_000_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 
 // The licence expression covers the code (MIT) and the ΔT values (CC BY 4.0),

@@ -66,7 +66,7 @@ describe("calc round-trip fixtures", () => {
     expect(new Set(centers)).toEqual(new Set(["geocentric", "heliocentric", "barycentric", "topocentric"]));
     expect(new Set(requests.map((request) => request.flags!.correction))).toEqual(new Set(["apparent", "astrometric", "geometric"]));
     const reasons = cases.flatMap((entry) => ("reason" in entry.result ? [entry.result.reason] : []));
-    expect(new Set(reasons)).toEqual(new Set(["not-in-this-version", "unsupported-combination", "out-of-range", "sample-budget"]));
+    expect(new Set(reasons)).toEqual(new Set(["not-in-this-version", "unsupported-combination", "out-of-range", "epoch-out-of-range", "sample-budget"]));
   });
 
   it.each(cases.map((entry, index) => [index, entry.function, entry] as const))(

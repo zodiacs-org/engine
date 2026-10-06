@@ -9,7 +9,7 @@ every figure here are in
 [`evidence/houses-extra-2026-09-29/`](evidence/houses-extra-2026-09-29/README.md).
 
 ```ts
-import { coAscendants, housePosition, houseSpeeds, SIDEREAL_RATE } from "@zodiacs/engine/houses";
+import { coAscendants, housePosition, houseSpeeds, SIDEREAL_TIME_RATE } from "@zodiacs/engine/houses";
 import { planetaryReturns } from "@zodiacs/engine/timing";
 
 // The AngleInput that computeAngles and computeHouses take: Greenwich apparent
@@ -192,10 +192,16 @@ the largest difference for any of the four points is under 0.00000001″, on L
 
 ## Speeds of the cusps and the angles
 
+`houseSpeeds` and `HouseSpeeds` are experimental from 1.0
+([versioning.md](versioning.md)): what a speed is here, a derivative with the
+latitude and the obliquity held fixed and 0 for whole-sign cusps, differs from
+Swiss Ephemeris's for several systems (below), and a minor release may change
+it.
+
 `houseSpeeds(system, input)` returns the speeds of the twelve cusps
 `computeHouses` returns and of the four angles, in degrees per day. Each is
 the derivative with respect to the RAMC, found analytically, times
-`SIDEREAL_RATE`, 360.98564736629° of sidereal time per day of UT1, the rate
+`SIDEREAL_TIME_RATE`, 360.98564736629° of sidereal time per day of UT1, the rate
 of J. Meeus's expression for mean sidereal time [Meeus, eq. 12.4]. The
 latitude and the obliquity are held fixed, as Swiss Ephemeris's
 `swe_houses_armc_ex2` holds the obliquity it is given.
@@ -244,6 +250,11 @@ difference of Swiss's own cusps in exactly those values, compared value by
 value, and in no other: there they are not the derivatives of its cusps.
 
 ## Planetary returns
+
+`planetaryReturns`, its types, `ReturnBody`, `RETURN_BODIES` and
+`RETURN_STEP_DAYS` are experimental from 1.0 ([versioning.md](versioning.md)):
+they came in 0.1.1-rc.16, and how returns are grouped into passes, and the
+searches' steps, may change in a minor release.
 
 `planetaryReturns(natal, body, from, to, options?)` in
 `@zodiacs/engine/timing` returns every instant in (from, to] at which `body`

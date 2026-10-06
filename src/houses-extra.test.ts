@@ -11,7 +11,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { SIDEREAL_RATE, coAscendants, housePosition, houseSpeeds } from "./houses-extra.js";
+import { SIDEREAL_RATE, SIDEREAL_TIME_RATE, coAscendants, housePosition, houseSpeeds } from "./houses-extra.js";
 import { HOUSE_SYSTEMS, computeAngles, computeHouses, eastPointOf } from "./houses.js";
 import type { AngleInput } from "./houses.js";
 import type { HouseSystem } from "./types.js";
@@ -83,6 +83,13 @@ const POLAR_GRID = [-80, -72, 70, 78, 85].flatMap((latitude) =>
 const BODIES = [-17, -5.2, 3.1, 11.3].flatMap((lat) =>
   Array.from({ length: 9 }, (_, index) => ({ lon: index * 40 + 13.7, lat }))
 );
+
+describe("the rate of sidereal time", () => {
+  it("is Meeus's, and SIDEREAL_RATE, deprecated, is the same value", () => {
+    expect(SIDEREAL_TIME_RATE).toBe(360.98564736629);
+    expect(SIDEREAL_RATE).toBe(SIDEREAL_TIME_RATE);
+  });
+});
 
 describe("the entry's angles are the root's", () => {
   it("computes the same ascendant and midheaven, bit for bit", () => {
@@ -437,7 +444,7 @@ describe("speeds", () => {
   /** Richardson's extrapolation of central differences at h and h/2, in degrees per day. */
   const richardson = (at: (ramc: number) => number, ramc: number, h = 1e-3) => {
     const central = (step: number) => gap(at(ramc + step), at(ramc - step)) / (2 * step);
-    return ((4 * central(h / 2) - central(h)) / 3) * SIDEREAL_RATE;
+    return ((4 * central(h / 2) - central(h)) / 3) * SIDEREAL_TIME_RATE;
   };
 
   it("agree with a central difference of the root's own cusps and angles", () => {
@@ -468,11 +475,11 @@ describe("speeds", () => {
   });
 
   it("carries the midheaven at the sidereal rate on average: its speed integrates to 360° a sidereal day", () => {
-    // ∫ dMC/dθ dθ over a turn of RAMC is 360°; in time, a sidereal day of 360/SIDEREAL_RATE days.
+    // ∫ dMC/dθ dθ over a turn of RAMC is 360°; in time, a sidereal day of 360/SIDEREAL_TIME_RATE days.
     let sum = 0;
     const steps = 3600;
     for (let step = 0; step < steps; step += 1) {
-      sum += houseSpeeds("equal", input((step + 0.5) * (360 / steps), 45)).angles.mc * (360 / steps / SIDEREAL_RATE);
+      sum += houseSpeeds("equal", input((step + 0.5) * (360 / steps), 45)).angles.mc * (360 / steps / SIDEREAL_TIME_RATE);
     }
     expect(sum).toBeCloseTo(360, 9);
   });

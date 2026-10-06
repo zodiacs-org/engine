@@ -20,16 +20,18 @@ import type { Chart, DateInput, HouseSystem } from "../types.js";
 import { DAY_MS, dateAt, finiteDegrees, oneOf, placeOf, readOptions, techniqueFlags } from "./shared.js";
 import type { GeoPlace, TechniqueFlag } from "./shared.js";
 
+// The searches' parameters. A minor release may tune them, within what each
+// search promises to find, so they are typed as numbers.
 /** Half-width of the solar return search around its date, days. */
-export const SOLAR_RETURN_WINDOW_DAYS = 200;
+export const SOLAR_RETURN_WINDOW_DAYS: number = 200;
 /** How far back `mostRecentSolarReturnInstant` searches, days. */
-export const SOLAR_RETURN_LOOKBACK_DAYS = 370;
+export const SOLAR_RETURN_LOOKBACK_DAYS: number = 370;
 /** Coarse step of the solar return search, days. */
-export const SOLAR_RETURN_STEP_DAYS = 1;
+export const SOLAR_RETURN_STEP_DAYS: number = 1;
 /** How far the lunar return search runs, days. */
-export const LUNAR_RETURN_HORIZON_DAYS = 40;
+export const LUNAR_RETURN_HORIZON_DAYS: number = 40;
 /** Coarse step of the lunar return search, days. */
-export const LUNAR_RETURN_STEP_DAYS = 0.25;
+export const LUNAR_RETURN_STEP_DAYS: number = 0.25;
 
 /** The solar return nearest the date, or the latest at or before it. */
 export type SolarReturnSelection = "nearest" | "most-recent";
@@ -46,7 +48,8 @@ export interface SolarReturnOptions extends ReturnOptions {
   selection?: SolarReturnSelection | undefined;
 }
 
-export interface PlanetaryReturn {
+/** A solar or lunar return: the instant the body is back on its natal longitude, and the chart then. */
+export interface ReturnChart {
   readonly body: "Sun" | "Moon";
   /** The body's longitude in the natal chart, degrees. */
   readonly natalLongitude: number;
@@ -59,12 +62,19 @@ export interface PlanetaryReturn {
   readonly flags: readonly TechniqueFlag[];
 }
 
-export interface SolarReturn extends PlanetaryReturn {
+/**
+ * A solar or lunar return, under its first name.
+ *
+ * @deprecated Use ReturnChart, the same type: `@zodiacs/engine/timing`'s PlanetaryReturn is another one.
+ */
+export type PlanetaryReturn = ReturnChart;
+
+export interface SolarReturn extends ReturnChart {
   readonly body: "Sun";
   readonly selection: SolarReturnSelection;
 }
 
-export interface LunarReturn extends PlanetaryReturn {
+export interface LunarReturn extends ReturnChart {
   readonly body: "Moon";
 }
 
