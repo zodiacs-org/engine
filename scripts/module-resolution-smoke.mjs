@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 
-import { assertNoBreaches, checkBuild } from "./pure-tables.mjs";
+import { UNMARKED_SOURCE, assertNoBreaches, checkBuild } from "./pure-tables.mjs";
 import { checkRootIsolation, staticGraph } from "./root-isolation.mjs";
 
 const engine = await import("@zodiacs/engine");
@@ -385,6 +385,18 @@ for (const reading of [root.sources, root.held, root.marked]) {
 // (scripts/pure-tables.mjs), module by module as the markers above attribute
 // its code.
 assertNoBreaches(checkBuild({ files: builtFiles, read: readBuilt }), "dist/");
+// The check leaves out the modules UNMARKED_SOURCE names because only ./calc
+// and ./vedic load them: no other entry point's static graph, read both ways,
+// holds one.
+const exportsMap = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).exports;
+for (const [subpath, target] of Object.entries(exportsMap)) {
+  if (subpath === "./calc" || subpath === "./vedic") continue;
+  const entry = /^\.\/dist\/([a-z-]+)\.js$/u.exec(target.import)[1];
+  const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
+  for (const source of new Set([...graph.sources, ...graph.held, ...graph.marked])) {
+    assert(!UNMARKED_SOURCE.test(source), `${subpath} reaches ${source}, which the table check leaves out because only ./calc and ./vedic load it`);
+  }
+}
 for (const [entry, own] of [
   ["timing", /^src\/timing\//u],
   ["vedic", /^src\/vedic\//u],

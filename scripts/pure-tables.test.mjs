@@ -8,7 +8,9 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-import { UNMARKED_SOURCE, checkBuild, checkSource, tables, unmarkedTables } from "./pure-tables.mjs";
+import {
+  FRESH_METHODS, GLOBALS, ITERATING, UNMARKED_SOURCE, WELL_KNOWN_SYMBOLS, checkBuild, checkSource, tables, unmarkedTables
+} from "./pure-tables.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const found = (code, options) => unmarkedTables(code, options).map(({ name, call }) => `${name ?? "(no table)"}: ${call}`);
@@ -32,6 +34,11 @@ export const ASSERTED = (/*#__PURE__*/ Object.freeze([1]))!;
 export const CAST = <readonly number[]>/*#__PURE__*/ Object.freeze([1]);
 export const SHORT = /*#__PURE__*/ Object.freeze({ SIGNS, TEXT });
 export const CLASSES = /*#__PURE__*/ Object.freeze([class extends Error { static kind = "row"; ["literal"]() { return SIGNS; } static {} }]);
+enum Kind { A }
+namespace Space { export const a = 1; }
+import Alias = Space.a;
+export const NAMED = /*#__PURE__*/ Object.freeze([Kind, Space, Alias]);
+export const SYMBOL_KEYS = /*#__PURE__*/ Object.freeze([{ [Symbol.iterator]: 1 }, class { static [Symbol.hasInstance]() { return false; } }]);
 export default /*#__PURE__*/ Object.freeze({ SIGNS, ["literal key"]: 1, method() { return SIGNS; }, get size() { return 2; } });
 `)).toEqual([]);
   });
@@ -100,6 +107,12 @@ export const STATIC_BLOCK = /*#__PURE__*/ Object.freeze([class { static { BASE.a
 export const STATIC_CALL = /*#__PURE__*/ Object.freeze([class { static all = Array.from(LIST); }]);
 export const UNDECLARED = /*#__PURE__*/ Object.freeze(["x", someGlobal]);
 export const SHORTHAND = /*#__PURE__*/ Object.freeze({ someOtherGlobal });
+declare const ambientGlobal: string;
+function tagged<V>(value: V, context: unknown) { return value; }
+export const AMBIENT = /*#__PURE__*/ Object.freeze(["x", ambientGlobal]);
+export const PROCESS = /*#__PURE__*/ Object.freeze([process]);
+export const DECORATED = /*#__PURE__*/ Object.freeze([@tagged class {}]);
+export const ODD_KEY = /*#__PURE__*/ Object.freeze({ [Symbol.notWellKnown]: 1 });
 export const { x } = /*#__PURE__*/ Object.freeze({ x: 1 });
 `)).toEqual([
       "SPREAD: a spread: ...BASE",
@@ -127,8 +140,18 @@ export const { x } = /*#__PURE__*/ Object.freeze({ x: 1 });
       "STATIC_CALL: unmarked: Array.from(LIST)",
       "UNDECLARED: a name the module does not declare: someGlobal",
       "SHORTHAND: a name the module does not declare: someOtherGlobal",
+      "AMBIENT: a name the module does not declare: ambientGlobal",
+      "PROCESS: a name the module does not declare: process",
+      "DECORATED: a decorator: @tagged",
+      "ODD_KEY: a computed key: [Symbol.notWellKnown]",
+      "ODD_KEY: a property read: Symbol.notWellKnown",
       "{ x }: a destructuring declaration"
     ]);
+    // A Symbol the module declares is not the global one, nor its keys well-known symbols.
+    expect(found(`
+const Symbol = { iterator: "k" };
+export const OWN_SYMBOL = /*#__PURE__*/ Object.freeze({ [Symbol.iterator]: 1 });
+`)).toEqual(["OWN_SYMBOL: a computed key: [Symbol.iterator]", "OWN_SYMBOL: a property read: Symbol.iterator"]);
   });
 
   it("takes for a table what a function of the module makes, run when it loads, and a Set or Map of data", () => {
@@ -179,6 +202,38 @@ export const STATE = new Map<string, number>();
 export const MARKED = /*#__PURE__*/ make();
 export const MARKED_PLACED = /*#__PURE__*/ (() => Object.freeze({ ...MADE }))();
 export const LIB = Math.freeze([1]);
+const handlers: (() => unknown)[] = [];
+function register(handler: () => unknown) { handlers.push(handler); return handlers.length; }
+function viaRegister() { return register(() => Object.freeze([15])); }
+function invokeCall(f: () => unknown) { return f.call(null); }
+function viaCall() { return invokeCall(() => Object.freeze([16])); }
+function passOn(f: () => unknown) { return apply(f); }
+function viaPassOn() { return passOn(() => Object.freeze([17])); }
+function iterate(f: (value: number) => unknown) { return [1].map(f); }
+function viaIterate() { return iterate((value) => Object.freeze([value])); }
+function rest(...fs: (() => unknown)[]) { return fs.map((f) => f()); }
+function viaRest() { return rest(() => Object.freeze([18])); }
+function viaNew() { return new (function () { Object.freeze([19]); })(); }
+function viaRecursion() {
+  function ping(n: number): unknown { return n > 0 ? pong(n - 1) : Object.freeze([20]); }
+  function pong(n: number): unknown { return ping(n); }
+  return ping(2);
+}
+function viaOuterLocal() { const freezeIt = () => Object.freeze([21]); return [1].map(() => freezeIt()); }
+function describe(f: () => unknown) { return f.toString(); }
+function viaDescribe() { return describe(() => Object.freeze([22])); }
+function shadow(f: () => unknown) { return [() => 1].map((f) => f()); }
+function viaShadow() { return shadow(() => Object.freeze([23])); }
+export const OUTER_LOCAL = viaOuterLocal();
+export const DESCRIBED = viaDescribe();
+export const SHADOWED_CALL = viaShadow();
+export const REGISTERED = viaRegister();
+export const CALLED = viaCall();
+export const PASSED_ON = viaPassOn();
+export const ITERATED = viaIterate();
+export const RESTED = viaRest();
+export const CONSTRUCTED = viaNew();
+export const RECURSIVE = viaRecursion();
 `)).toEqual([
       "MADE: unmarked: make()",
       "BUILT: unmarked: build(1)",
@@ -197,7 +252,104 @@ export const LIB = Math.freeze([1]);
       "EITHER: unmarked: Object.freeze([8])",
       "EITHER: the operator ||: PLAIN || Object.freeze([8])",
       'SET: unmarked: new Set(["a"])',
-      'MAP: unmarked: new Map([["a", 1]])'
+      'MAP: unmarked: new Map([["a", 1]])',
+      "OUTER_LOCAL: unmarked: viaOuterLocal()",
+      "CALLED: unmarked: viaCall()",
+      "PASSED_ON: unmarked: viaPassOn()",
+      "ITERATED: unmarked: viaIterate()",
+      "CONSTRUCTED: unmarked: viaNew()",
+      "RECURSIVE: unmarked: viaRecursion()"
+    ]);
+  });
+
+  it("holds a call of a function of the module that makes a table to a freeze's rule: it freezes only values made where they are written", () => {
+    expect(found(`
+const STATE = { a: 1 };
+const RAW = { signs: ["aries"] };
+function deepFreeze<V extends object>(value: V): V {
+  for (const inner of Object.values(value)) if (typeof inner === "object" && inner !== null) deepFreeze(inner);
+  return Object.freeze(value);
+}
+function lockState() { return Object.freeze(STATE); }
+function lockEither(flag: boolean) { return Object.freeze(flag ? STATE : {}); }
+function lockAgain(value: object) { return Object.freeze(value); }
+function lockVia() { return lockAgain(STATE); }
+// Object.assign returns its first argument, here a new object; the rule takes any call but those of FRESH_METHODS for one that may not be.
+function lockAssigned() { return Object.freeze(Object.assign({}, STATE)); }
+function lockMapped() { return Object.freeze(RAW.signs.map((sign) => sign)); }
+function lockDefault(value?: object) { return Object.freeze(value ?? STATE); }
+// lockOuter makes a table by itself, before lockInner is found to freeze STATE.
+function lockOuter() { Object.freeze([1]); return lockInner(); }
+function lockInner() { return Object.freeze(STATE); }
+const KEY = "k";
+export const DEEP = /*#__PURE__*/ deepFreeze({ list: [1, "a", null, undefined, ...[2]], method() { return 1; }, handler: () => 1 });
+export const DEEP_KEYED = /*#__PURE__*/ deepFreeze({ [KEY]: 1 });
+export const DEEP_RAW = /*#__PURE__*/ deepFreeze(RAW);
+export const DEEP_NAMED = /*#__PURE__*/ deepFreeze({ list: [RAW] });
+export const DEEP_SPREAD = /*#__PURE__*/ deepFreeze([...RAW.signs]);
+export const UNMARKED_RAW = deepFreeze(RAW);
+export const LOCKED = /*#__PURE__*/ lockState();
+export const EITHER = /*#__PURE__*/ lockEither(true);
+export const VIA = /*#__PURE__*/ lockVia();
+export const ASSIGNED = /*#__PURE__*/ lockAssigned();
+export const MAPPED = /*#__PURE__*/ lockMapped();
+export const DEFAULTED = /*#__PURE__*/ lockDefault();
+export const OUTER = /*#__PURE__*/ lockOuter();
+export const FROZEN_MAP = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ RAW.signs.map((sign) => sign));
+export const FROZEN_ASSIGN = /*#__PURE__*/ Object.freeze(Object.assign(RAW, { b: 2 }));
+`)).toEqual([
+      "DEEP_KEYED: a computed key: [KEY]",
+      "(no table): a mark on a call that freezes a value that exists before it: deepFreeze({ [KEY]: 1 })",
+      "(no table): a mark on a call that freezes a value that exists before it: deepFreeze(RAW)",
+      "(no table): a mark on a call that freezes a value that exists before it: deepFreeze({ list: [RAW] })",
+      "DEEP_SPREAD: a spread: ...RAW.signs",
+      "DEEP_SPREAD: a property read: RAW.signs",
+      "(no table): a mark on a call that freezes a value that exists before it: deepFreeze([...RAW.signs])",
+      "UNMARKED_RAW: a call that freezes a value that exists before it: deepFreeze(RAW)",
+      "(no table): a mark on a call that freezes a value that exists before it: lockState()",
+      "(no table): a mark on a call that freezes a value that exists before it: lockEither(true)",
+      "(no table): a mark on a call that freezes a value that exists before it: lockVia()",
+      "(no table): a mark on a call that freezes a value that exists before it: lockAssigned()",
+      "(no table): a mark on a call that freezes a value that exists before it: lockDefault()",
+      "(no table): a mark on a call that freezes a value that exists before it: lockOuter()",
+      "FROZEN_ASSIGN: unmarked: Object.assign(RAW, { b: 2 })",
+      "(no table): a mark on a freeze of a value that exists before it: Object.freeze(Object.assign(RAW, { b: 2 }))"
+    ]);
+  });
+
+  it("reads a name only where no local of that name hides it, as each scope declares its names", () => {
+    expect(found(`
+const T = /*#__PURE__*/ Object.freeze({ from: 1 });
+function mixinOf(base: unknown) { return class {}; }
+function tag<V>(value: V, context: unknown) { return value; }
+try { void 0; } catch (T) { console.log(T); }
+for (const T of [1]) console.log(T);
+for (let T = 0; T < 1; T += 1) console.log(T);
+for (const [T] of [[1]]) console.log(T);
+for (const { T } of [{ T: 1 }]) console.log(T);
+T: for (;;) { if (Math.random()) continue T; break T; }
+function pick(x: number) { switch (x) { case 1: const T = x; return T; default: return 0; } }
+export const PICKED = pick(1);
+export enum Members { T = 1, U = T * 2 }
+export class Methods { static made = Array.of(1); T() { return 1; } }
+export class Impl implements T { static made = Array.of(1); }
+export class FromTable extends mixinOf(T) {}
+@tag export class Tagged { read() { return T; } }
+export class Logged { @tag read() { return T; } }
+export class Parameters { constructor(@tag value: unknown) { void T; } }
+const meta = /*#__PURE__*/ Object.freeze([1]);
+console.log(import.meta.url);
+var VT = /*#__PURE__*/ Object.freeze(["v"]);
+{ var VT: readonly string[]; console.log(VT); }
+{ { var VT: readonly string[]; } console.log(VT); }
+`)).toEqual([
+      "FromTable: a class its module keeps, which reads T",
+      "Tagged: a class its module keeps, which reads T",
+      "Logged: a class its module keeps, which reads T",
+      "Parameters: a class its module keeps, which reads T",
+      // A var in a block is the module's own, the table.
+      "(no table): a statement that reads VT when its module loads: { var VT: readonly string[]; console.log(VT); }",
+      "(no table): a statement that reads VT when its module loads: { { var VT: readonly string[]; } console.log(VT); }"
     ]);
   });
 
@@ -360,7 +512,7 @@ const ok = TABLE.length > 0;
 const { freeze } = Object;
 class Holder { constructor(readonly row: object) {} }
 /*#__PURE__*/ Object.freeze(TABLE);
-export function f(row: object, use: (value: unknown) => void) {
+export function f(row: object, use: (value: unknown) => void, rows: object[]) {
   /*#__PURE__*/ Object.freeze(row);
   void /*#__PURE__*/ g(row);
   (/*#__PURE__*/ g(row)) as unknown;
@@ -384,9 +536,16 @@ export function f(row: object, use: (value: unknown) => void) {
   const last = (row, /*#__PURE__*/ g(row));
   const unused = /*#__PURE__*/ Object.freeze(row);
   const aliased = /*#__PURE__*/ freeze(row);
+  const fresh = [/*#__PURE__*/ Object.freeze(new Holder(row)), /*#__PURE__*/ Object.freeze(() => row), /*#__PURE__*/ Object.freeze(class {}),
+    /*#__PURE__*/ Object.freeze("x"), /*#__PURE__*/ Object.freeze(rows.map((each) => each)), /*#__PURE__*/ g({ a: [1] })];
+  [.../*#__PURE__*/ g(row)];
+  ({ .../*#__PURE__*/ g(row) });
+  ({ [/*#__PURE__*/ g(row)]: 1 });
+  ({ [/*#__PURE__*/ g(row)]() { return 1; } });
+  const held = /*#__PURE__*/ g([row]);
   use(/*#__PURE__*/ g(row));
   (row as { x?: unknown }).x = /*#__PURE__*/ g(row);
-  return [kept, last, aliased, ok ? /*#__PURE__*/ g(row) : null, (/*#__PURE__*/ g(row), row), /*#__PURE__*/ Object.freeze({ row })];
+  return [kept, last, aliased, fresh, held, ok ? /*#__PURE__*/ g(row) : null, (/*#__PURE__*/ g(row), row), /*#__PURE__*/ Object.freeze({ row })];
 }
 export function g(row: object) { return /*#__PURE__*/ Object.freeze(row); }
 `)).toEqual([
@@ -397,8 +556,14 @@ export function g(row: object) { return /*#__PURE__*/ Object.freeze(row); }
       "(no table): a mark on a discarded value: new Holder(row)",
       "(no table): a mark on a discarded value: g(row)",
       "(no table): a mark on a discarded value: g(row)",
+      // g freezes what it is passed: a bundler that drops a marked g(row) whose value is used leaves row unfrozen too.
+      "(no table): a mark on a call that freezes a value that exists before it: g(row)",
+      "(no table): a mark on a call that freezes a value that exists before it: g(row)",
       "(no table): a mark on a freeze of a value that exists before it: Object.freeze(row)",
       "(no table): a mark on a freeze of a value that exists before it: freeze(row)",
+      ...Array(4).fill("(no table): a mark on a discarded value: g(row)"),
+      "(no table): a mark on a call that freezes a value that exists before it: g([row])",
+      ...Array(3).fill("(no table): a mark on a call that freezes a value that exists before it: g(row)"),
       "(no table): a mark on a discarded value: g(row)",
       "(no table): a mark on a freeze of a value that exists before it: Object.freeze(row)"
     ]);
@@ -450,6 +615,14 @@ describe("checkBuild", () => {
         'export * as all from "./chunk-A.js";',
         ""
       ].join("\n"),
+      "dist/normalized.js": [
+        'import { SIGN_SLUGS } from "./sub/../chunk-A.js";',
+        "",
+        "// src/normalized.ts",
+        "var NORMALIZED_FIRST = SIGN_SLUGS[0];",
+        "export { NORMALIZED_FIRST };",
+        ""
+      ].join("\n"),
       "dist/reader.js": [
         'import { all } from "./index.js";',
         "",
@@ -468,6 +641,7 @@ describe("checkBuild", () => {
       "dist/index.js:5 COUNT, which reads SIGN_SLUGS (SLUGS): a property read: SIGN_SLUGS.length",
       "dist/index.js:6 FIRST, which reads engine (BEFORE, ELEMENTS, SLUGS, SYSTEMS): a property read: engine.SIGN_SLUGS[0]",
       "dist/index.js:6 FIRST, which reads engine (BEFORE, ELEMENTS, SLUGS, SYSTEMS): a property read: engine.SIGN_SLUGS",
+      "dist/normalized.js:4 NORMALIZED_FIRST, which reads SIGN_SLUGS (SLUGS): a property read: SIGN_SLUGS[0]",
       "dist/reader.js:4 LAST, which reads all (BEFORE, ELEMENTS, SLUGS, SYSTEMS): unmarked: all.SIGN_SLUGS.at(-1)"
     ]);
   });
@@ -497,9 +671,23 @@ describe("checkSource", () => {
         "export const EXEMPT_FIRST = A[0];",
         ""
       ].join("\n"));
+      write("src/anonymous.ts", 'import { SLUGS } from "./signs.js";\nexport default function () { return SLUGS; }\n');
+      write("src/named.ts", 'import { SLUGS } from "./signs.js";\nexport default function named() { return SLUGS; }\n');
+      write("src/types.ts", 'export type { SLUGS as TYPED } from "./signs.js";\nexport { type SLUGS as TYPED_TOO } from "./signs.js";\n');
+      write("src/defaults.reader.ts", [
+        'import anonymous from "./anonymous.js";',
+        'import namedDefault from "./named.js";',
+        'import { TYPED, TYPED_TOO } from "./types.js";',
+        "export const ANONYMOUS = anonymous();",
+        "export const NAMED_DEFAULT = namedDefault();",
+        "export const TYPED_COUNT = TYPED.length + TYPED_TOO.length;",
+        ""
+      ].join("\n"));
       write("src/signs.test.ts", "export const C = Object.freeze([1]);\n");
       write("src/signs.d.ts", "export const D = Object.freeze([1]);\n");
       expect(checkSource(tree).map(({ file, line, name, call }) => `${file}:${line} ${name ?? "(no table)"}: ${call}`)).toEqual([
+        "src/defaults.reader.ts:4 ANONYMOUS, which reads anonymous (SLUGS): unmarked: anonymous()",
+        "src/defaults.reader.ts:5 NAMED_DEFAULT, which reads namedDefault (SLUGS): unmarked: namedDefault()",
         "src/reader.ts:5 FIRST, which reads SIGN_SLUGS (SLUGS): a property read: SIGN_SLUGS[0]",
         "src/reader.ts:7 LAST, which reads SLUGS: a property read: SLUGS[0]",
         "src/reader.ts:8 COUNT, which reads signs (B, SLUGS): a property read: signs.SLUGS.length",
@@ -511,6 +699,27 @@ describe("checkSource", () => {
     } finally {
       rmSync(tree, { recursive: true, force: true });
     }
+  });
+});
+
+describe("the lists the rule rests on", () => {
+  it("are what docs/evidence/1.0.0-rc.2-20261006/tools/globals-probe.mjs finds the bundlers leave out, and what the language defines", () => {
+    expect([...GLOBALS]).toEqual([
+      "Array", "BigInt", "Boolean", "Date", "Error", "Float64Array", "Infinity", "JSON", "Map", "Math", "NaN", "Number", "Object",
+      "RangeError", "RegExp", "Set", "String", "Symbol", "TypeError", "WeakMap", "WeakSet", "undefined"
+    ]);
+    expect([...WELL_KNOWN_SYMBOLS]).toEqual([
+      "asyncDispose", "asyncIterator", "dispose", "hasInstance", "isConcatSpreadable", "iterator", "match", "matchAll", "replace",
+      "search", "species", "split", "toPrimitive", "toStringTag", "unscopables"
+    ]);
+    expect([...ITERATING]).toEqual([
+      "every", "filter", "find", "findIndex", "findLast", "findLastIndex", "flatMap", "forEach", "from", "map", "reduce",
+      "reduceRight", "some", "sort", "toSorted"
+    ]);
+    expect([...FRESH_METHODS]).toEqual([
+      "concat", "entries", "filter", "flat", "flatMap", "from", "fromEntries", "keys", "map", "of", "slice", "split",
+      "toReversed", "toSorted", "toSpliced", "values", "with"
+    ]);
   });
 });
 

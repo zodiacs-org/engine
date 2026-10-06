@@ -71,7 +71,7 @@ import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith, type Crossing
 import { annualProfection, firdaria, profectionAt, solarArc, zodiacalReleasingAt, type ProfectionAt, type TimingFlag, type TimingOrigin } from "@zodiacs/engine/timing";
 import { siderealChart, nakshatraOf, type SiderealChart, type NakshatraPosition } from "@zodiacs/engine/vedic";
 import { ayanamsa, type AyanamsaValue } from "@zodiacs/engine/vedic";
-import { housePosition, coAscendants, houseSpeeds, SIDEREAL_TIME_RATE, type AngleInput, type CoAscendants, type EclipticPosition, type HouseSpeeds } from "@zodiacs/engine/houses";
+import { housePosition, coAscendants, houseSpeeds, SIDEREAL_TIME_RATE, SIDEREAL_RATE, type AngleInput, type CoAscendants, type EclipticPosition, type HouseSpeeds } from "@zodiacs/engine/houses";
 import { planetaryReturns, type PlanetaryReturns } from "@zodiacs/engine/timing";
 import { prepareLocalTime, resolveLocalToUtc, julianToGregorian, TZDB, type LocalTimeResolution, type ZoneTransition, type TransitionCause, type CalendarName } from "@zodiacs/engine/geo";
 import { type TimeScale, type TimeScaleName, type LeapSeconds, type Ut1MinusUtc } from "@zodiacs/engine";
@@ -159,6 +159,8 @@ const cuspSpeeds: HouseSpeeds = houseSpeeds("koch", houseInput);
 const jupiterReturns: PlanetaryReturns = planetaryReturns(chart, "Jupiter", "2030-01-01", "2031-01-01");
 if (jupiterReturns.status === "complete") { const pass: number | undefined = jupiterReturns.returns[0]?.pass; void pass; }
 void housePlace; void coAscendantPoints; void cuspSpeeds; const siderealTimeRate: number = SIDEREAL_TIME_RATE; void siderealTimeRate;
+// The deprecated name stays exported, with its type, until 2.0.
+const siderealRate: number = SIDEREAL_RATE; void siderealRate;
 import { solarReturn, lunarReturn, davisonChart, compositeChart, voidOfCourseAt, essentialDignities, dignityFor, moonSignsBetween, type SolarReturn, type LunarReturn, type DavisonChart, type CompositeChart, type VoidOfCourseStatus, type VoidOfCourseWindow, type PlanetDignities, type SignDignity } from "@zodiacs/engine/techniques";
 const solarReturned: SolarReturn = solarReturn(chart, "2010-03-01");
 const lunarReturned: LunarReturn = lunarReturn(chart, "2010-03-01", {location: {latitude: 0, longitude: 180}});
@@ -531,14 +533,23 @@ const noon = Date.parse("2024-06-21T12:00:00Z");
 assert.equal(sky.planetaryHourAt(greenwich, noon).hour.ruler, day.hours.find((hour) => hour.start.getTime() <= noon && noon < hour.end.getTime()).ruler);
 assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-21T00:00:00Z", "2024-06-22T00:00:00Z"), RangeError);
 // What else 1.0 adds (the zone history above throws its ZoneHistoryNotLoadedError):
-// calc's refusal of an ayanamsa epoch beyond EPHEMERIS_SPAN; the frozen tables;
-// and SIDEREAL_TIME_RATE, of which the deprecated SIDEREAL_RATE is the same number.
+// calc's ayanamsa epochs anywhere in EPHEMERIS_SPAN, which rc.17 refused outside
+// 1800 to 2200, and its refusal beyond; the frozen tables, and the lookups that
+// return their entries; and SIDEREAL_TIME_RATE, of which the deprecated
+// SIDEREAL_RATE is the same number.
 {
   const calcEntry = await import("@zodiacs/engine/calc");
+  const earlyEpoch = calcEntry.calc({body: "Moon", time: "2000-02-29", zodiac: {sidereal: {epoch: {jd: 2086302.5, scale: "tt"}, value: 10.5}}});
+  assert.equal(earlyEpoch.status, "ok");
   const farEpoch = calcEntry.calc({body: "Moon", time: "2000-02-29", zodiac: {sidereal: {epoch: {jd: 0.5, scale: "tt"}, value: 23.85}}});
   assert.equal(farEpoch.status, "refused");
   assert.equal(farEpoch.reason, "epoch-out-of-range");
   const rootEntry = await import("@zodiacs/engine");
+  assert.equal(farEpoch.epochSpan, rootEntry.EPHEMERIS_SPAN);
+  const aries = rootEntry.signForLongitude(15);
+  assert(aries === rootEntry.SIGNS[0] && Object.isFrozen(aries));
+  const trine = rootEntry.matchAspect("Sun", 0, "Mars", 120)?.definition;
+  assert(rootEntry.ASPECTS.includes(trine) && Object.isFrozen(trine));
   // An export that is missing reads as undefined, which Object.isFrozen calls frozen.
   for (const name of ["SIGNS", "ASPECTS", "ASPECT_TYPES", "SIGN_SLUGS", "SIGN_NAMES", "ELEMENTS", "MODALITIES", "HOUSE_SYSTEMS", "POLAR_UNDEFINED_HOUSE_SYSTEMS", "LOTS"]) {
     assert(Array.isArray(rootEntry[name]) && Object.isFrozen(rootEntry[name]), name);
