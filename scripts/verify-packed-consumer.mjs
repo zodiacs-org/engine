@@ -71,7 +71,7 @@ import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith, type Crossing
 import { annualProfection, firdaria, profectionAt, solarArc, zodiacalReleasingAt, type ProfectionAt, type TimingFlag, type TimingOrigin } from "@zodiacs/engine/timing";
 import { siderealChart, nakshatraOf, type SiderealChart, type NakshatraPosition } from "@zodiacs/engine/vedic";
 import { ayanamsa, type AyanamsaValue } from "@zodiacs/engine/vedic";
-import { housePosition, coAscendants, houseSpeeds, SIDEREAL_RATE, type AngleInput, type CoAscendants, type EclipticPosition, type HouseSpeeds } from "@zodiacs/engine/houses";
+import { housePosition, coAscendants, houseSpeeds, SIDEREAL_TIME_RATE, type AngleInput, type CoAscendants, type EclipticPosition, type HouseSpeeds } from "@zodiacs/engine/houses";
 import { planetaryReturns, type PlanetaryReturns } from "@zodiacs/engine/timing";
 import { prepareLocalTime, resolveLocalToUtc, julianToGregorian, TZDB, type LocalTimeResolution, type ZoneTransition, type TransitionCause, type CalendarName } from "@zodiacs/engine/geo";
 import { type TimeScale, type TimeScaleName, type LeapSeconds, type Ut1MinusUtc } from "@zodiacs/engine";
@@ -158,7 +158,7 @@ const coAscendantPoints: CoAscendants = coAscendants(houseInput);
 const cuspSpeeds: HouseSpeeds = houseSpeeds("koch", houseInput);
 const jupiterReturns: PlanetaryReturns = planetaryReturns(chart, "Jupiter", "2030-01-01", "2031-01-01");
 if (jupiterReturns.status === "complete") { const pass: number | undefined = jupiterReturns.returns[0]?.pass; void pass; }
-void housePlace; void coAscendantPoints; void cuspSpeeds; void SIDEREAL_RATE;
+void housePlace; void coAscendantPoints; void cuspSpeeds; const siderealTimeRate: number = SIDEREAL_TIME_RATE; void siderealTimeRate;
 import { solarReturn, lunarReturn, davisonChart, compositeChart, voidOfCourseAt, essentialDignities, dignityFor, moonSignsBetween, type SolarReturn, type LunarReturn, type DavisonChart, type CompositeChart, type VoidOfCourseStatus, type VoidOfCourseWindow, type PlanetDignities, type SignDignity } from "@zodiacs/engine/techniques";
 const solarReturned: SolarReturn = solarReturn(chart, "2010-03-01");
 const lunarReturned: LunarReturn = lunarReturn(chart, "2010-03-01", {location: {latitude: 0, longitude: 180}});
@@ -200,7 +200,7 @@ import { natalChart, positions, transits, synastry, moonPhase, progressedInstant
 import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, declinationsForBodies, findDeclinationAspects } from "@zodiacs/engine";
 import { EPHEMERIS_SPAN, SUN_BOUND_LATITUDE } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
-import { prepareLocalTime, resolveLocalToUtc, julianToGregorian, TZDB } from "@zodiacs/engine/geo";
+import { prepareLocalTime, resolveLocalToUtc, julianToGregorian, TZDB, ZoneHistoryNotLoadedError } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
 import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "@zodiacs/engine/crossings";
 import { annualProfection, firdariaPeriods, releasingAt, solarArc } from "@zodiacs/engine/timing";
@@ -439,7 +439,7 @@ assert.deepEqual(vedic.siderealChart(ttChart, "lahiri").ayanamsaValue.timeScale,
 assert.throws(() => natalChart({utc: "1990-06-15T12:30:00Z", timeScale: "tai"}), RangeError);
 // Wall times before 1970 read the packed tzdb 2025c history, loaded lazily.
 assert.equal(TZDB.version, "2025c");
-assert.throws(() => resolveLocalToUtc("1947-07-01", "12:00", "Europe/Stockholm"), /prepareLocalTime/);
+assert.throws(() => resolveLocalToUtc("1947-07-01", "12:00", "Europe/Stockholm"), (error) => error instanceof ZoneHistoryNotLoadedError && /prepareLocalTime/.test(error.message));
 await prepareLocalTime("1947-07-01", "Europe/Stockholm");
 const stockholm = resolveLocalToUtc("1947-07-01", "12:00", "Europe/Stockholm");
 assert.equal(stockholm.offsetMinutes, 60);
@@ -530,7 +530,27 @@ assert(sunrise.altitude < -sky.STANDARD_REFRACTION_ARCMIN / 60 && sunrise.altitu
 const noon = Date.parse("2024-06-21T12:00:00Z");
 assert.equal(sky.planetaryHourAt(greenwich, noon).hour.ruler, day.hours.find((hour) => hour.start.getTime() <= noon && noon < hour.end.getTime()).ruler);
 assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-21T00:00:00Z", "2024-06-22T00:00:00Z"), RangeError);
-console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed"}));
+// What else 1.0 adds (the zone history above throws its ZoneHistoryNotLoadedError):
+// calc's refusal of an ayanamsa epoch beyond EPHEMERIS_SPAN; the frozen tables;
+// and SIDEREAL_TIME_RATE, of which the deprecated SIDEREAL_RATE is the same number.
+{
+  const calcEntry = await import("@zodiacs/engine/calc");
+  const farEpoch = calcEntry.calc({body: "Moon", time: "2000-02-29", zodiac: {sidereal: {epoch: {jd: 0.5, scale: "tt"}, value: 23.85}}});
+  assert.equal(farEpoch.status, "refused");
+  assert.equal(farEpoch.reason, "epoch-out-of-range");
+  const rootEntry = await import("@zodiacs/engine");
+  // An export that is missing reads as undefined, which Object.isFrozen calls frozen.
+  for (const name of ["SIGNS", "ASPECTS", "ASPECT_TYPES", "SIGN_SLUGS", "SIGN_NAMES", "ELEMENTS", "MODALITIES", "HOUSE_SYSTEMS", "POLAR_UNDEFINED_HOUSE_SYSTEMS", "LOTS"]) {
+    assert(Array.isArray(rootEntry[name]) && Object.isFrozen(rootEntry[name]), name);
+  }
+  assert(rootEntry.SIGNS.every(Object.isFrozen) && rootEntry.ASPECTS.every(Object.isFrozen));
+  assert.equal(rootEntry.SIGN_NAMES, rootEntry.SIGN_SLUGS);
+  for (const name of ["CALC_BODIES", "CALC_AYANAMSAS", "CALC_FRAMES"]) assert(Array.isArray(calcEntry[name]) && Object.isFrozen(calcEntry[name]), name);
+  const housesEntry = await import("@zodiacs/engine/houses");
+  assert.equal(typeof housesEntry.SIDEREAL_TIME_RATE, "number");
+  assert.equal(housesEntry.SIDEREAL_RATE, housesEntry.SIDEREAL_TIME_RATE);
+}
+console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());
