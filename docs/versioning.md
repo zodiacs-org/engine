@@ -19,20 +19,29 @@ the release it leads to.
   each string union (body names, flags, refusal reasons, frames, house
   systems) and the value of each constant its declaration fixes, except the
   constants that name a release or the data it carries, which change with
-  them: `ENGINE_VERSION`, `EPHEMERIS`, `DELTA_T_TABLE` and the like. `api/` holds
+  them (`ENGINE_VERSION`, `EPHEMERIS`, `DELTA_T_TABLE` and the like), and the
+  tables that list a union's members (`HOUSE_SYSTEMS`, `CALC_BODIES`,
+  `AYANAMSAS` and the like), which gain a member when a minor release adds it
+  to the union (below). `api/` holds
   them, one file per entry point, written from the built declarations by
   `scripts/api-report.mjs`. CI rebuilds the files and fails when they differ
   (`npm run api:check`), so no change to them reaches `main` unseen; a change
   is committed with the regenerated file and a CHANGELOG entry.
 - **Documented behaviour.** What the README and `docs/` say a function does
   with its input: what it computes, under which conventions, which input it
-  refuses and how. A malformed input throws a `RangeError` (or, where an
-  entry point names one, its own error class: `./receipt`'s
-  `NatalEnvelopeError`); a well-formed request the engine does not compute
-  returns a typed refusal where the entry point has them (`./calc`'s
-  `CalcRefusal`, a crossing search's `refused`), or throws a named error
-  where it says so (`./geo`'s `ZoneHistoryNotLoadedError`, `./window`'s
-  `WindowBudgetError`). Which of these a given input meets is public.
+  refuses and how. A value of the declared type that a function refuses (an
+  unknown body, a date that does not exist, a latitude out of range) throws
+  a `RangeError` (or, where an entry point names one, its own error class:
+  `./receipt`'s `NatalEnvelopeError`); a well-formed request the engine does
+  not compute returns a typed refusal where the entry point has them
+  (`./calc`'s `CalcRefusal`, a crossing search's `refused`), or throws a
+  named error where it says so (`./geo`'s `ZoneHistoryNotLoadedError`,
+  `./window`'s `WindowBudgetError`). Which of these such an input meets is
+  public. A value of a type the declaration does not allow (`null` for an
+  array, a string for a number) is outside the promise: some functions throw
+  a `TypeError` for it or return `NaN`, and a later release may refuse it
+  with a `RangeError` instead. `./geo`'s GeoNames client rejects with a
+  `TypeError` for data it cannot read and an `Error` for a failed request.
 - **Records.** What a receipt or envelope holds, and which records the
   `./receipt` codec reads (below).
 
@@ -49,7 +58,8 @@ ISO 8601 string, as its declaration says, and the two do not change places
 within a major version: records and the results built to be stored or
 compared (`./receipt`'s envelopes, `./calc`'s results, `./vedic`'s values and
 dasha periods, a chart's declinations, a zone's transitions) give strings,
-and the rest `Date`s. Some values are accepted only as the engine made them, such as
+and the rest `Date`s, the root `Chart` that `./calc`'s `chart()` carries
+among them. Some values are accepted only as the engine made them, such as
 `./vedic`'s `SiderealLongitude` and the root's aspect policies: a copy, even
 through JSON, is refused, although the types do not say so.
 
@@ -104,12 +114,14 @@ new rule beside the old one.
 
 ## Records
 
-The receipt codec reads every record a 1.x release writes, and every record
-that 1.0.0 reads: from the first receipts of 0.1.1-rc.3, each under the
-conventions its engine recorded. A minor release may start to write a new set
-of conventions or a new schema version only if every 1.x release from then on
-reads both; it never stops reading a set or a version that an earlier 1.x
-release wrote.
+Each 1.x release's receipt codec reads every record that it and every
+earlier 1.x release writes, and every record that 1.0.0 reads: from the first
+receipts of 0.1.1-rc.3, each under the conventions its engine recorded. A
+minor release may start to write a new set of conventions or a new schema
+version; every later 1.x release reads both, and an earlier one refuses the
+new record, as it refuses any it does not know (`unsupported_feature`,
+`unsupported_version`). No 1.x release stops reading a set or a version that
+an earlier 1.x release wrote.
 
 A schema id is a permanent, opaque name. `NATAL_ENVELOPE_SCHEMA`,
 `NATAL_RECEIPT_SCHEMA` and `NATAL_DIAGNOSTIC_SCHEMA` keep the `draft-v1` they
@@ -123,9 +135,9 @@ for a different shape.
 
 The other ids name values the engine makes and does not read back:
 `./calc`'s `CALC_RECEIPT_SCHEMA` (a receipt's `request` can be passed back to
-repeat a calculation, but no codec parses a calc receipt; candidates before
-1.0.0 wrote `zodiacs.calc-receipt.draft-v1`, with requests in their own
-vocabulary, and 1.0.0 writes `zodiacs.calc-receipt.v1`),
+repeat a calculation, but no codec parses a calc receipt; 0.1.1-rc.16 and
+0.1.1-rc.17 wrote `zodiacs.calc-receipt.draft-v1`, with requests in their own
+vocabulary, and from 1.0.0-rc.1 the entry writes `zodiacs.calc-receipt.v1`),
 `ASPECT_POLICY_SCHEMA` and `CONFIGURED_ASPECTS_SCHEMA` (a policy is accepted
 only as `createAspectPolicy` made it) and `./window`'s `BIRTH_WINDOW_SCHEMA`.
 Their shapes are their declarations', under the rules above, and their ids
@@ -151,5 +163,8 @@ The package supports the Node.js release lines that its `engines` field
 names, while Node.js maintains them, and runs in browsers through a bundler.
 Dropping a line after Node.js ends its maintenance is a minor release,
 announced in the CHANGELOG; dropping one that Node.js still maintains waits
-for a major release. The one dependency, astronomy-engine, is pinned to an
-exact version, and a release that moves it says what moved with it.
+for a major release. Node.js 20, which the `engines` field names, reached
+its end of life on 2026-04-30, so this promise does not cover it: the package
+runs and is tested on 20.19.0, and a 1.x minor release may drop the line. The
+one dependency, astronomy-engine, is pinned to an exact version, and a
+release that moves it says what moved with it.

@@ -37,7 +37,9 @@ computed before it.
 
 Each returns `status: "ok"` or a typed refusal (below). Malformed input (an
 unknown body, frame or field, an invalid date, a latitude out of range) throws
-`RangeError`, as everywhere in the engine.
+`RangeError`. `houses()` and `chart()` take a place without a height
+(`CalcLocation`), and refuse one; a topocentric center takes a height
+(`CalcPlace`).
 
 ## The input vocabulary
 
@@ -197,8 +199,10 @@ wider (see Bounds). Beyond `EPHEMERIS_SPAN`, where nothing else the engine
 computes reaches, they go on parting: 0.0051″ from an epoch a century before
 it, 0.35″ from JD 1,000,000, 10.6″ from JD 0.5 and 139° from the first day a
 `Date` holds (`docs/evidence/calc-epochs-2026-10-06/`). Before 1.0.0-rc.1
-calc refused an epoch outside `CALC_SPAN` itself. A linear
-ayanamsa is computed from any epoch a `Date` holds. Swiss Ephemeris's named modes are not always this engine's
+calc refused an epoch outside `CALC_SPAN` itself. A linear ayanamsa is
+computed from any epoch whose TT a `Date` can hold: one given on UTC or UT1
+within about 2,800 days of a `Date`'s last day throws a `RangeError`, its TT
+being later still. Swiss Ephemeris's named modes are not always this engine's
 definitions: its Krishnamurti, Raman, Sri Yukteswar, True Pushya and Galactic
 Center differ ([vedic.md](vedic.md), *Agreement with Swiss Ephemeris*).
 
@@ -328,14 +332,16 @@ its star's angle from the Sun.
 
 | definitions | comparisons | ayanamsa | its rate |
 | --- | ---: | --- | --- |
-| epoch and linear, built-in and callers', an epoch from 1800 to 2200 | 134,833 | 4.6 × 10⁻⁷″ | 1.6 × 10⁻⁷″ a day |
+| linear, from any epoch; and by precession, built-in and callers', from an epoch from 1800 to 2200 | 134,833 | 4.6 × 10⁻⁷″ | 1.6 × 10⁻⁷″ a day |
 | a caller's epoch outside 1800 to 2200, on the engine's precession | 21,658 | 0.0037″ | 1.3 × 10⁻⁷″ a day |
 | a caller's epoch outside 1800 to 2200, on Newcomb's or IAU 1976's | 43,316 | 1.8 × 10⁻⁵″ | 1.2 × 10⁻⁷″ a day |
 | star, 2° or more from the Sun | 306,850 | 0.0013″ | 0.00039″ a day |
 | star, 0.3° to 2° from the Sun | 238,364 | 0.0048″ | 0.026″ a day |
 | star, within 0.3° of the Sun | 1,653,932 | 0.058″ | 27″ a day |
 
-An epoch outside 1800 to 2200 is not an instant: calc still computes only
+An epoch's 1800 to 2200 is read on TT, from 1800-01-01T00:00 TT up to
+2200-01-01T00:00 TT, the second excluded, as `CALC_SPAN`'s is. An epoch
+outside 1800 to 2200 is not an instant: calc still computes only
 instants inside `CALC_SPAN`, and the comparison takes them across it. On the
 engine's precession the difference grows with the epoch's distance from
 J2000.0, to 0.0037″ from the first epoch of `EPHEMERIS_SPAN` at an instant in
@@ -382,11 +388,13 @@ A refusal is `{ status: "refused", reason, detail }`, the `status` and
 | --- | --- | --- |
 | `not-in-this-version` | gravitational deflection | |
 | `unsupported-combination` | the Sun heliocentric; the Earth geocentric or topocentric; a node or Lilith with a center other than geocentric, or with `cartesian`; the sidereal zodiac in a frame other than the two ecliptics of date; crossings of a body `positions()` does not give; a pinned ΔT for a crossing search | |
+| `epoch-out-of-range` | a caller's ayanamsa carried by precession from an epoch whose TT is outside `EPHEMERIS_SPAN`, 0001-04-30T12:00 to 3998-09-03T12:00 TT (the span includes its ends) | `epochSpan`, the root's `EPHEMERIS_SPAN` |
 | `out-of-range` | an instant whose UT1 or TT is outside `CALC_SPAN`, 1800-01-01T00:00Z up to 2200-01-01T00:00Z, where the positions have been compared with an independent ephemeris | `span` |
-| `epoch-out-of-range` | a caller's ayanamsa carried by precession from an epoch whose TT is outside `EPHEMERIS_SPAN`, 0001-04-30T12:00 to 3998-09-03T12:00 TT, the ends included | `epochSpan`, the root's `EPHEMERIS_SPAN` |
 | `sample-budget` | a crossing search that needs more evaluations than `maxSamples` | `samples`, `maxSamples` |
 
-The checks run in that order. The span is checked on both time scales, so a
+The checks run in that order: a request with both an epoch outside
+`EPHEMERIS_SPAN` and an instant outside `CALC_SPAN` is refused for its epoch.
+The span is checked on both time scales, so a
 ΔT pin cannot move the ephemeris outside it, and with the engine's ΔT the
 last instant computed is about 2199-12-31T23:57:53Z (UTC, read as UT1 there). `positions()` and
 `natalChart()` still compute outside the span, with the

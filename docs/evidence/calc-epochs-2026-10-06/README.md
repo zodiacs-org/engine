@@ -38,7 +38,7 @@ step of calc's speeds.
   asked for, the TT Julian date calc's receipt says it used, and the mean.
   Its 73,185 rows (10,142,706 bytes, SHA-256
   `f3b3950dc1aa2ebb387ea902f63d07361883ca095b874ce05bc35229b06ac0cb`) are
-  not committed: they rebuild in 16 seconds, byte for byte the same.
+  not committed: they rebuild in about 20 seconds, byte for byte the same.
 - `tools/epoch_reference.py` builds ERFA's side with pyerfa 2.0.1.5, from
   the Vedic evidence's reference construction
   (`../vedic-2026-09-28/tools/reference_values.py`, `equinox_longitude`:

@@ -98,12 +98,15 @@ export interface CalendarNote {
 
 /**
  * The note for a Gregorian date (as resolved, YYYY-MM-DD) written in
- * `calendar`, or null. A date that is not a valid Gregorian YYYY-MM-DD, or a
- * calendar other than "gregorian" and "julian", throws a RangeError.
+ * `calendar`, or null; null too for a country the table does not date. A date
+ * that is not a valid Gregorian YYYY-MM-DD, a calendar other than "gregorian"
+ * and "julian", or a country that is not a nonempty string throws a
+ * RangeError.
  */
 export function calendarNote(gregorianDate: string, calendar: CalendarName, country: string): CalendarNote | null {
   if (!parseCalendarDate(gregorianDate, "gregorian")) throw new RangeError("gregorianDate must be a valid Gregorian date, YYYY-MM-DD.");
   if (calendar !== "gregorian" && calendar !== "julian") throw new RangeError('calendar must be "gregorian" or "julian".');
+  if (typeof country !== "string" || !country.trim()) throw new RangeError("country must be a nonempty string.");
   return noteFor(gregorianDate, calendar, country);
 }
 
@@ -112,6 +115,7 @@ export function noteFor(gregorianDate: string, calendar: CalendarName, country: 
   const adoption = gregorianAdoption(country);
   if (!adoption) return null;
   const julian = calendar === "julian";
-  if (gregorianDate >= adoption.firstGregorian) return julian ? { kind: "new-style", adoption } : null;
+  // A year past 9999 has five digits, and its date sorts as text before every adoption's.
+  if (gregorianDate.length > 10 || gregorianDate >= adoption.firstGregorian) return julian ? { kind: "new-style", adoption } : null;
   return julian ? null : { kind: "old-style", adoption };
 }

@@ -3,8 +3,8 @@
 // flags, at three instants in 1800 to 2200. Writes JSON to stdout:
 //
 //   npm run build
-//   node docs/evidence/calc-epochs-2026-10-06/tools/far_epochs.mjs > results/far-engine.json
-//   python3 docs/evidence/calc-epochs-2026-10-06/tools/epoch_reference.py results/far-engine.json --far > results/far-epochs.json
+//   node docs/evidence/calc-epochs-2026-10-06/tools/far_epochs.mjs > docs/evidence/calc-epochs-2026-10-06/results/far-engine.json
+//   python3 docs/evidence/calc-epochs-2026-10-06/tools/epoch_reference.py docs/evidence/calc-epochs-2026-10-06/results/far-engine.json --far > docs/evidence/calc-epochs-2026-10-06/results/far-epochs.json
 import { ayanamsa, userAyanamsa } from "../../../../dist/vedic.js";
 
 const J2000 = 2_451_545;

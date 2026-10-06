@@ -215,11 +215,17 @@ is refused rather than ignored).
   `iso3166.tab`): adds `calendarNote`, from the country's row of
   `GREGORIAN_ADOPTION`: `"old-style"` when a date given as Gregorian falls
   before the row's first New Style day (it was probably written Old Style),
-  and `"new-style"` when a Julian date falls on or after it. The note never
-  changes the resolution. A country the table does not date gets no note.
+  and `"new-style"` when a Julian date falls on or after it, a Julian date
+  late in 9999 that resolves into the Gregorian year 10000 among them. The
+  note never changes the resolution. A country the table does not date gets
+  no note.
 
 `julianToGregorian` and `gregorianToJulian` convert YYYY-MM-DD strings for
-years 0000–9999; `gregorianAdoption(country)` returns a row of the table.
+years 0000–9999; `gregorianAdoption(country)` returns a row of the table;
+`calendarNote(gregorianDate, calendar, country)` gives the note for a
+resolved date. From 1.0 `calendarNote` throws a `RangeError` for a date that
+is not a valid Gregorian YYYY-MM-DD, a calendar other than `"gregorian"` and
+`"julian"`, and a country that is not a nonempty string.
 
 **The adoption table** has 18 rows, from three public-domain sources that
 `GREGORIAN_ADOPTION_SOURCES` names:

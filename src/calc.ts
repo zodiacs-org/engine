@@ -94,14 +94,21 @@ export type CalcTime =
   | { readonly jd: number; readonly scale: CalcScale; readonly deltaT?: number };
 
 /**
- * Geodetic latitude and east longitude, degrees; `height` in metres above the
- * IERS 2003 ellipsoid, from −12,000 to 100,000, 0 by default (topocentric
- * only). `@zodiacs/engine/sky`'s Observer has the same fields on WGS84, with
- * heights from −10,000 m.
+ * Geodetic latitude and east longitude, degrees: the place `houses()` and
+ * `chart()` take, which has no height.
  */
-export interface CalcPlace {
+export interface CalcLocation {
   readonly latitude: number;
   readonly longitude: number;
+}
+
+/**
+ * Geodetic latitude and east longitude, degrees; `height` in metres above the
+ * IERS 2003 ellipsoid, from −12,000 to 100,000, 0 by default: a topocentric
+ * center. `@zodiacs/engine/sky`'s Observer has the same fields on WGS84, with
+ * heights from −10,000 m.
+ */
+export interface CalcPlace extends CalcLocation {
   readonly height?: number;
 }
 
@@ -889,7 +896,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
 
 export interface HousesRequest {
   readonly time: CalcTime;
-  readonly place: CalcPlace;
+  readonly place: CalcLocation;
   /** Default "whole", as in natalChart() and chart(). */
   readonly houseSystem?: HouseSystem;
   readonly zodiac?: CalcZodiac;
@@ -1109,7 +1116,7 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
 export interface ChartRequest {
   readonly time: CalcTime;
   /** Without a place there are no angles or houses. */
-  readonly place?: CalcPlace;
+  readonly place?: CalcLocation;
   /** Default "whole". */
   readonly houseSystem?: HouseSystem;
   /** False: `time` is a reference instant, with no angles or houses. Default true. */

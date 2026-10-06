@@ -438,6 +438,26 @@ describe("refusals in the sidereal zodiac", () => {
     expect(refused(calc({ body: "Mars", time: "2300-01-01", zodiac })).reason).toBe("out-of-range");
   });
 
+  it("check a caller's epoch after the combinations and before the instant's span, in all four functions", () => {
+    // An instant outside CALC_SPAN and an epoch beyond EPHEMERIS_SPAN: the epoch is refused.
+    const far = { sidereal: { epoch: { jd: 1_000_000.5, scale: "tt" }, value: 18 } } as const;
+    const late = "2300-01-01T00:00:00Z";
+    for (const result of [
+      calc({ body: "Mars", time: late, zodiac: far }),
+      houses({ time: late, place: PLACE, zodiac: far }),
+      events({ kind: "longitude-crossing", body: "Mars", longitude: 0, from: late, to: "2301-01-01T00:00:00Z", zodiac: far }),
+      chart({ time: late, place: PLACE, zodiac: far })
+    ]) {
+      expect(refused(result).reason).toBe("epoch-out-of-range");
+    }
+    // A combination calc does not offer is refused before the epoch.
+    expect(refused(calc({ body: "Mars", time: late, frame: "equatorial-j2000", zodiac: far })).reason).toBe("unsupported-combination");
+    expect(refused(calc({ body: "Mars", time: late, zodiac: far, flags: { deflection: true } })).reason).toBe("not-in-this-version");
+    expect(refused(events({ kind: "longitude-crossing", body: "Earth", longitude: 0, from: late, to: "2301-01-01T00:00:00Z", zodiac: far })).reason).toBe(
+      "unsupported-combination"
+    );
+  });
+
   it("throw RangeError for an unknown ayanamsa, as for any malformed field", () => {
     for (const sidereal of ["lahiri-1940", "", 7, null, undefined]) {
       expect(() => calc({ body: "Sun", time, zodiac: { sidereal } as never })).toThrow(RangeError);

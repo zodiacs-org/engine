@@ -149,10 +149,10 @@ minor release.
   and the longitude halfway along the shorter arc between the two
   longitudes. For longitudes exactly 180° apart it takes the one 90° east of
   the first. `place: "great-circle"`: the point halfway along the great
-  circle between the two places; antipodal places are refused, and so, from
-  1.0, are a place outside latitudes −90 to 90 or longitudes −180 to 180 and
-  a convention not named. The two readings differ when the places are far
-  apart.
+  circle between the two places; antipodal places are refused. The two
+  readings differ when the places are far apart. From 1.0 either refuses a
+  place outside latitudes −90 to 90 or longitudes −180 to 180, and
+  `davisonPlace` a convention it does not name.
 - **The chart**: `davisonChart(first, second, { place, houseSystem })` casts
   it with the first chart's house system unless another is named. Its time is
   known only when both birth times are, and it has angles and houses only when

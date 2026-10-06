@@ -48,6 +48,48 @@ function releaseTags(...nodes) {
     .filter((name) => RELEASE_TAGS.includes(name)))].sort();
 }
 
+/** Marks the comments prepare() adds, so that strip() can tell them from the source's. */
+const TAG_MARK = "@@release-tag@@";
+
+/**
+ * The printed text without the comments the printer still takes from the
+ * source beside a node's tokens (a union's bars, a list's commas), which the
+ * nodes' own flags cannot suppress; the release tags prepare() added stay, as
+ * `/** @tag *\/`.
+ */
+function strip(text) {
+  const scanner = ts.createScanner(ts.ScriptTarget.Latest, false, ts.LanguageVariant.Standard, text);
+  const cuts = [];
+  // The open braces, each a block's or a template literal's placeholder, whose
+  // close is followed by template text, which may hold "//" or "/*".
+  const braces = [];
+  for (let kind = scanner.scan(); kind !== ts.SyntaxKind.EndOfFileToken; kind = scanner.scan()) {
+    if (kind === ts.SyntaxKind.TemplateHead) braces.push("template");
+    else if (kind === ts.SyntaxKind.OpenBraceToken) braces.push("brace");
+    else if (kind === ts.SyntaxKind.CloseBraceToken && braces.pop() === "template") {
+      if (scanner.reScanTemplateToken(false) === ts.SyntaxKind.TemplateMiddle) braces.push("template");
+    }
+    if (kind !== ts.SyntaxKind.SingleLineCommentTrivia && kind !== ts.SyntaxKind.MultiLineCommentTrivia) continue;
+    const comment = scanner.getTokenText();
+    const tag = new RegExp(`^/\\*${TAG_MARK}(\\w+)${TAG_MARK}\\*/$`, "u").exec(comment);
+    cuts.push({ start: scanner.getTokenStart(), end: scanner.getTokenEnd(), with: tag ? `/** @${tag[1]} */` : null });
+  }
+  let out = text;
+  for (const cut of cuts.reverse()) {
+    if (cut.with !== null) {
+      out = out.slice(0, cut.start) + cut.with + out.slice(cut.end);
+      continue;
+    }
+    // A comment and the space after it, or, at a line's end, the space before it; a line left empty goes.
+    let start = cut.start;
+    let end = cut.end;
+    if (out[end] === " ") end += 1;
+    else while (start > 0 && out[start - 1] === " ") start -= 1;
+    out = out.slice(0, start) + out.slice(end);
+  }
+  return out.replace(/\n[ \t]*(?=\n)/gu, "");
+}
+
 /** Nodes whose source comments are already suppressed and members' tags already attached. */
 const prepared = new WeakSet();
 
@@ -60,9 +102,11 @@ function prepare(node) {
   prepared.add(node);
   const visit = (each, top) => {
     ts.setEmitFlags(each, ts.EmitFlags.NoComments);
-    // Members only: a variable's declaration list and declaration take their tags from the statement, above.
-    if (!top && (ts.isTypeElement(each) || ts.isClassElement(each) || ts.isEnumMember(each))) {
-      for (const name of releaseTags(each)) ts.addSyntheticLeadingComment(each, ts.SyntaxKind.MultiLineCommentTrivia, `* @${name} `, true);
+    // Members, and a namespace's declarations; a variable's declaration list and
+    // declaration take their tags from the statement, above.
+    const member = ts.isTypeElement(each) || ts.isClassElement(each) || ts.isEnumMember(each) || (ts.isStatement(each) && ts.isModuleBlock(each.parent));
+    if (!top && member) {
+      for (const name of releaseTags(each)) ts.addSyntheticLeadingComment(each, ts.SyntaxKind.MultiLineCommentTrivia, `${TAG_MARK}${name}${TAG_MARK}`, true);
     }
     ts.forEachChild(each, (child) => visit(child, false));
   };
@@ -75,7 +119,7 @@ function print(node) {
     ? node.parent.parent
     : node;
   prepare(target);
-  let text = printer.printNode(ts.EmitHint.Unspecified, target, target.getSourceFile());
+  let text = strip(printer.printNode(ts.EmitHint.Unspecified, target, target.getSourceFile()));
   if (ts.isVariableDeclaration(target)) text = `declare const ${text};`;
   const tags = ts.isVariableDeclaration(node) ? releaseTags(node, node.parent.parent) : releaseTags(node);
   const head = tags.map((name) => `/** @${name} */\n`).join("");

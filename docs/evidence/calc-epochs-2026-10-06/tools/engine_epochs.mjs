@@ -9,8 +9,8 @@
 //
 // Run from the engine's root. Every number is written as JavaScript prints a
 // double, which reads back as the same double, so the reference tool compares
-// the engine's own binary values. The rows (about 11 MB) are not committed:
-// they rebuild in about a minute, the same on every run.
+// the engine's own binary values. The rows (10,142,706 bytes) are not
+// committed: they rebuild in about 20 seconds, the same on every run.
 import { calc } from "../../../../dist/calc.js";
 
 const J2000 = 2_451_545;

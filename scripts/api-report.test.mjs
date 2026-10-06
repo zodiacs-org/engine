@@ -165,6 +165,35 @@ describe("the API report", () => {
     expect(alias).toContain("// exported as plus @deprecated\ndeclare function add(");
   });
 
+  it("leaves out comments the source keeps between a declaration's tokens, and keeps a namespace member's tags", () => {
+    const files = {
+      ...BASE,
+      "index.d.ts": `type U = /* first */ "a" | /* second */ "b";
+declare function f(/* inline */ a: number, b?: string /* after b */): void;
+declare enum E {
+    A = 0,// a
+    /* b */ B = 1
+}
+type T = \`https://\${string}//x\` /* gone */ | \`a/*b*/c\`;
+declare namespace N {
+    /** Gone. @deprecated Use another. */
+    const old: number;
+    /** @experimental */
+    function fresh(): void;
+}
+export { type U, f, E, type T, N };
+`
+    };
+    const report = buildApiReports(makePackage(files)).get("engine.api.md");
+    expect(report).toContain('type U = "a" | "b";');
+    expect(report).toContain("declare function f(a: number, b?: string): void;");
+    expect(report).toContain("declare enum E {\n    A = 0,\n    B = 1\n}");
+    // Template text that looks like a comment is the type's, and stays.
+    expect(report).toContain("type T = `https://${string}//x` | `a/*b*/c`;");
+    expect(report).toContain("declare namespace N {\n    /** @deprecated */\n    const old: number;\n    /** @experimental */\n    function fresh(): void;\n}");
+    expect(report).not.toMatch(/first|second|inline|after b|\/\/ a|\/\* b|gone|Gone/u);
+  });
+
   it("follows a type written as import(\"…\")", () => {
     const files = {
       ...BASE,
