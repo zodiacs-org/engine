@@ -114,6 +114,9 @@ export const PROCESS = /*#__PURE__*/ Object.freeze([process]);
 export const DECORATED = /*#__PURE__*/ Object.freeze([@tagged class {}]);
 export const ODD_KEY = /*#__PURE__*/ Object.freeze({ [Symbol.notWellKnown]: 1 });
 export const { x } = /*#__PURE__*/ Object.freeze({ x: 1 });
+const Other = { iterator: "k" };
+export const OTHER_OBJECT_KEY = /*#__PURE__*/ Object.freeze({ [Other.iterator]: 1 });
+export const GLOBAL_OBJECT_KEY = /*#__PURE__*/ Object.freeze({ [Math.iterator]: 1 });
 `)).toEqual([
       "SPREAD: a spread: ...BASE",
       "SPREAD_LITERAL: a spread: ...{ a: 1 }",
@@ -145,7 +148,11 @@ export const { x } = /*#__PURE__*/ Object.freeze({ x: 1 });
       "DECORATED: a decorator: @tagged",
       "ODD_KEY: a computed key: [Symbol.notWellKnown]",
       "ODD_KEY: a property read: Symbol.notWellKnown",
-      "{ x }: a destructuring declaration"
+      "{ x }: a destructuring declaration",
+      "OTHER_OBJECT_KEY: a computed key: [Other.iterator]",
+      "OTHER_OBJECT_KEY: a property read: Other.iterator",
+      "GLOBAL_OBJECT_KEY: a computed key: [Math.iterator]",
+      "GLOBAL_OBJECT_KEY: a property read: Math.iterator"
     ]);
     // A Symbol the module declares is not the global one, nor its keys well-known symbols.
     expect(found(`
@@ -234,6 +241,32 @@ export const ITERATED = viaIterate();
 export const RESTED = viaRest();
 export const CONSTRUCTED = viaNew();
 export const RECURSIVE = viaRecursion();
+function construct(F: new () => unknown) { return new F(); }
+function viaConstruct() { return construct(function () { Object.freeze([24]); } as unknown as new () => unknown); }
+function second(first: number, f: () => unknown) { return first ? f() : 0; }
+function viaSecond() { return second(1, () => Object.freeze([25])); }
+function viaLocalPassOn() { const run = (f: () => unknown) => f(); return run(() => Object.freeze([26])); }
+function viaWrapped() { return apply((() => Object.freeze([27])) as () => unknown); }
+function viaWrappedMap() { return [1].map(((value: number) => Object.freeze([value])) as (value: number) => unknown); }
+function viaLocalNew() { function Make() { Object.freeze([28]); } return new (Make as unknown as new () => object)(); }
+export const CONSTRUCTED_PARAMETER = viaConstruct();
+export const SECOND_PARAMETER = viaSecond();
+export const LOCAL_PASSED_ON = viaLocalPassOn();
+export const WRAPPED = viaWrapped();
+export const WRAPPED_MAP = viaWrappedMap();
+export const LOCAL_NEW = viaLocalNew();
+function made() { return Object.freeze([29]); }
+export const NEW_AT_LOAD = new made();
+export const MAPPED_AT_LOAD = [1, 2].map((value) => Object.freeze({ value }));
+export const BUILT_AT_LOAD = build(() => Object.freeze([30]));
+export const SETS_AT_LOAD = [["a"]].map((list) => new Set(list));
+function build(make: () => unknown) { return make(); }
+function recur(f: () => unknown, n: number): unknown { return n ? recur(f, n - 1) : f(); }
+function relay(f: () => unknown, n: number): unknown { return n ? relay(f, n - 1) : 0; }
+function viaRecur() { return recur(() => Object.freeze([31]), 2); }
+function viaRelay() { return relay(() => Object.freeze([32]), 2); }
+export const RECURRED = viaRecur();
+export const RELAYED = viaRelay();
 `)).toEqual([
       "MADE: unmarked: make()",
       "BUILT: unmarked: build(1)",
@@ -258,7 +291,18 @@ export const RECURSIVE = viaRecursion();
       "PASSED_ON: unmarked: viaPassOn()",
       "ITERATED: unmarked: viaIterate()",
       "CONSTRUCTED: unmarked: viaNew()",
-      "RECURSIVE: unmarked: viaRecursion()"
+      "RECURSIVE: unmarked: viaRecursion()",
+      "CONSTRUCTED_PARAMETER: unmarked: viaConstruct()",
+      "SECOND_PARAMETER: unmarked: viaSecond()",
+      "LOCAL_PASSED_ON: unmarked: viaLocalPassOn()",
+      "WRAPPED: unmarked: viaWrapped()",
+      "WRAPPED_MAP: unmarked: viaWrappedMap()",
+      "LOCAL_NEW: unmarked: viaLocalNew()",
+      "NEW_AT_LOAD: unmarked: new made()",
+      "MAPPED_AT_LOAD: unmarked: [1, 2].map((value) => Object.freeze({ value }))",
+      "BUILT_AT_LOAD: unmarked: build(() => Object.freeze([30]))",
+      'SETS_AT_LOAD: unmarked: [["a"]].map((list) => new Set(list))',
+      "RECURRED: unmarked: viaRecur()"
     ]);
   });
 
@@ -297,23 +341,137 @@ export const DEFAULTED = /*#__PURE__*/ lockDefault();
 export const OUTER = /*#__PURE__*/ lockOuter();
 export const FROZEN_MAP = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ RAW.signs.map((sign) => sign));
 export const FROZEN_ASSIGN = /*#__PURE__*/ Object.freeze(Object.assign(RAW, { b: 2 }));
+export default /*#__PURE__*/ lockState();
 `)).toEqual([
       "DEEP_KEYED: a computed key: [KEY]",
-      "(no table): a mark on a call that freezes a value that exists before it: deepFreeze({ [KEY]: 1 })",
-      "(no table): a mark on a call that freezes a value that exists before it: deepFreeze(RAW)",
-      "(no table): a mark on a call that freezes a value that exists before it: deepFreeze({ list: [RAW] })",
+      "DEEP_KEYED: a mark on a call that may freeze a value that exists before it: deepFreeze({ [KEY]: 1 })",
+      "DEEP_RAW: a mark on a call that may freeze a value that exists before it: deepFreeze(RAW)",
+      "DEEP_NAMED: a mark on a call that may freeze a value that exists before it: deepFreeze({ list: [RAW] })",
       "DEEP_SPREAD: a spread: ...RAW.signs",
       "DEEP_SPREAD: a property read: RAW.signs",
-      "(no table): a mark on a call that freezes a value that exists before it: deepFreeze([...RAW.signs])",
-      "UNMARKED_RAW: a call that freezes a value that exists before it: deepFreeze(RAW)",
-      "(no table): a mark on a call that freezes a value that exists before it: lockState()",
-      "(no table): a mark on a call that freezes a value that exists before it: lockEither(true)",
-      "(no table): a mark on a call that freezes a value that exists before it: lockVia()",
-      "(no table): a mark on a call that freezes a value that exists before it: lockAssigned()",
-      "(no table): a mark on a call that freezes a value that exists before it: lockDefault()",
-      "(no table): a mark on a call that freezes a value that exists before it: lockOuter()",
+      "DEEP_SPREAD: a mark on a call that may freeze a value that exists before it: deepFreeze([...RAW.signs])",
+      "UNMARKED_RAW: a call that may freeze a value that exists before it: deepFreeze(RAW)",
+      "LOCKED: a mark on a call that may freeze a value that exists before it: lockState()",
+      "EITHER: a mark on a call that may freeze a value that exists before it: lockEither(true)",
+      "VIA: a mark on a call that may freeze a value that exists before it: lockVia()",
+      "ASSIGNED: a mark on a call that may freeze a value that exists before it: lockAssigned()",
+      "DEFAULTED: a mark on a call that may freeze a value that exists before it: lockDefault()",
+      "OUTER: a mark on a call that may freeze a value that exists before it: lockOuter()",
       "FROZEN_ASSIGN: unmarked: Object.assign(RAW, { b: 2 })",
-      "(no table): a mark on a freeze of a value that exists before it: Object.freeze(Object.assign(RAW, { b: 2 }))"
+      "FROZEN_ASSIGN: a mark on a freeze of a value that may exist before it: Object.freeze(Object.assign(RAW, { b: 2 }))",
+      "default: a mark on a call that may freeze a value that exists before it: lockState()"
+    ]);
+  });
+
+  it("follows what a call freezes into functions in place, defaults, callbacks and the names a function declares", () => {
+    expect(atLines(`
+const STATE = { a: 1 };
+const ROWS = [{ r: 1 }];
+function lock(value: object = STATE) { return Object.freeze(value); }
+function each(f: () => unknown) { return f(); }
+function lockRows() { each(() => 0); return each(() => Object.freeze(ROWS)); }
+function helper(g: () => unknown) { return g(); }
+function applyIt(f: () => unknown) { return helper(f); }
+function withLocalHelper() { const helper = (x: unknown) => x; void helper; return applyIt(() => Object.freeze(ROWS)); }
+function lockAlias() { const alias = STATE; return Object.freeze(alias); }
+function lockLoop() { for (const row of ROWS) Object.freeze(row); return 1; }
+function lockEach() { ROWS.forEach((row) => Object.freeze(row)); return 1; }
+function lockAssigned() { let held: object; return Object.freeze(held = STATE); }
+function lockAnd(flag: boolean) { return Object.freeze(flag && STATE); }
+function lockComma() { return Object.freeze((0, STATE)); }
+function lockOr(value?: object) { return Object.freeze(value || STATE); }
+function lockNullish() { return Object.freeze(STATE ?? {}); }
+function lockRow() { return Object.freeze(ROWS[0]); }
+function lockElement({ inner = STATE }: { inner?: object } = {}) { return Object.freeze(inner); }
+function shape(value: { a: number }) { return Object.freeze({ a: value.a }); }
+function lockAll(...rows: object[]) { return rows.map((row) => Object.freeze(row)); }
+function lockCalled(make: () => object) { return Object.freeze(make()); }
+export const IN_PLACE = /*#__PURE__*/ (() => Object.freeze(STATE))();
+export const IN_PLACE_GIVEN = /*#__PURE__*/ ((value: object) => Object.freeze(value))(STATE);
+export const IN_PLACE_NEW = /*#__PURE__*/ ((value: object) => Object.freeze(value))({ a: 1 });
+export const DEFAULTED = /*#__PURE__*/ lock();
+export const DEFAULT_GIVEN = /*#__PURE__*/ lock({ a: 1 });
+export const DEFAULT_UNDEFINED = /*#__PURE__*/ lock(undefined);
+export const CONSTRUCTED = /*#__PURE__*/ new lock(STATE);
+export const MAPPED = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ ROWS.map((row) => Object.freeze(row)));
+export const LITERAL_ROWS = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ [[1], [2]].map((row) => Object.freeze(row)));
+export const FROM_ROWS = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ Array.from(ROWS, (row) => Object.freeze(row)));
+export const SECOND = /*#__PURE__*/ lockRows();
+export const LOCAL_HELPER = /*#__PURE__*/ withLocalHelper();
+export const ALIAS = /*#__PURE__*/ lockAlias();
+export const LOOP = /*#__PURE__*/ lockLoop();
+export const EACH = /*#__PURE__*/ lockEach();
+export const ASSIGNED = /*#__PURE__*/ lockAssigned();
+export const AND = /*#__PURE__*/ lockAnd(true);
+export const COMMA = /*#__PURE__*/ lockComma();
+export const OR = /*#__PURE__*/ lockOr();
+export const NULLISH = /*#__PURE__*/ lockNullish();
+export const ROW = /*#__PURE__*/ lockRow();
+export const ELEMENT = /*#__PURE__*/ lockElement({});
+export const SHAPED = /*#__PURE__*/ shape(STATE);
+export const ALL = /*#__PURE__*/ lockAll({ a: 1 }, [2]);
+export const ALL_STATE = /*#__PURE__*/ lockAll({ a: 1 }, STATE);
+export const CALLED = /*#__PURE__*/ lockCalled(() => ({ a: 1 }));
+export const GETTER = /*#__PURE__*/ lock({ get a() { return STATE; } });
+export const SHORTHAND = /*#__PURE__*/ lock({ STATE });
+export const SPREAD = /*#__PURE__*/ lock({ ...STATE });
+export const HOLES = /*#__PURE__*/ lock([1, , 2]);
+export const SYMBOL_KEY = /*#__PURE__*/ lock({ [Symbol.iterator]: 1 });
+export const OTHER_KEY = /*#__PURE__*/ lock({ [STATE.a]: 1 });
+const Pool = { item: { a: 1 }, create() { return this.item; } };
+function eachRow(rows: object[], f: (row: object) => unknown) { return rows.map(f); }
+function lockDefaultVia() { return lock(); }
+function lockInPlace() { return ((value: object) => Object.freeze(value))(STATE); }
+function second(first: unknown, f: () => unknown) { return f(); }
+function relayTwice(f: () => unknown) { return second(f, f); }
+function relayWrapped(f: () => unknown) { return each((f)); }
+function lockTwice() { return relayTwice(() => Object.freeze(ROWS)); }
+function lockWrapped() { return relayWrapped(() => Object.freeze(ROWS)); }
+export const POOLED = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ Pool.create());
+export const CREATED = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ Object.create(null));
+export const LITERAL_FROM = /*#__PURE__*/ Object.freeze(/*#__PURE__*/ Array.from([[1], [2]], (row) => Object.freeze(row)));
+export const VIA_EACH = /*#__PURE__*/ eachRow(ROWS, (row) => Object.freeze(row));
+export const VIA_DEFAULT = /*#__PURE__*/ lockDefaultVia();
+export const IN_PLACE_INSIDE = /*#__PURE__*/ lockInPlace();
+export const TWICE = /*#__PURE__*/ lockTwice();
+export const WRAPPED = /*#__PURE__*/ lockWrapped();
+`)).toEqual([
+      "23 IN_PLACE: a mark on a call that may freeze a value that exists before it: (() => Object.freeze(STATE))()",
+      "24 IN_PLACE_GIVEN: a mark on a call that may freeze a value that exists before it: ((value: object) => Object.freeze(value))(STATE)",
+      "26 DEFAULTED: a mark on a call that may freeze a value that exists before it: lock()",
+      "28 DEFAULT_UNDEFINED: a mark on a call that may freeze a value that exists before it: lock(undefined)",
+      "29 CONSTRUCTED: a mark on a call that may freeze a value that exists before it: new lock(STATE)",
+      "30 MAPPED: a mark on a call that may freeze a value that exists before it: ROWS.map((row) => Object.freeze(row))",
+      "32 FROM_ROWS: a mark on a call that may freeze a value that exists before it: Array.from(ROWS, (row) => Object.freeze(row))",
+      "33 SECOND: a mark on a call that may freeze a value that exists before it: lockRows()",
+      "34 LOCAL_HELPER: a mark on a call that may freeze a value that exists before it: withLocalHelper()",
+      "35 ALIAS: a mark on a call that may freeze a value that exists before it: lockAlias()",
+      "36 LOOP: a mark on a call that may freeze a value that exists before it: lockLoop()",
+      "37 EACH: a mark on a call that may freeze a value that exists before it: lockEach()",
+      "38 ASSIGNED: a mark on a call that may freeze a value that exists before it: lockAssigned()",
+      "39 AND: a mark on a call that may freeze a value that exists before it: lockAnd(true)",
+      "40 COMMA: a mark on a call that may freeze a value that exists before it: lockComma()",
+      "41 OR: a mark on a call that may freeze a value that exists before it: lockOr()",
+      "42 NULLISH: a mark on a call that may freeze a value that exists before it: lockNullish()",
+      "43 ROW: a mark on a call that may freeze a value that exists before it: lockRow()",
+      "44 ELEMENT: a mark on a call that may freeze a value that exists before it: lockElement({})",
+      "47 ALL_STATE: a mark on a call that may freeze a value that exists before it: lockAll({ a: 1 }, STATE)",
+      // What a call returns is not known to be new, a callback's among them.
+      "48 CALLED: a mark on a call that may freeze a value that exists before it: lockCalled(() => ({ a: 1 }))",
+      "49 GETTER: a mark on a call that may freeze a value that exists before it: lock({ get a() { return STATE; } })",
+      "50 SHORTHAND: a mark on a call that may freeze a value that exists before it: lock({ STATE })",
+      "51 SPREAD: a spread: ...STATE",
+      "51 SPREAD: a mark on a call that may freeze a value that exists before it: lock({ ...STATE })",
+      "54 OTHER_KEY: a computed key: [STATE.a]",
+      "54 OTHER_KEY: a property read: STATE.a",
+      "54 OTHER_KEY: a mark on a call that may freeze a value that exists before it: lock({ [STATE.a]: 1 })",
+      // A method named create is no Object.create, nor known to return what is new.
+      "64 POOLED: a mark on a freeze of a value that may exist before it: Object.freeze(/*#__PURE__*/ Pool.create())",
+      "67 VIA_EACH: a mark on a call that may freeze a value that exists before it: eachRow(ROWS, (row) => Object.freeze(row))",
+      "68 VIA_DEFAULT: a mark on a call that may freeze a value that exists before it: lockDefaultVia()",
+      "69 IN_PLACE_INSIDE: a mark on a call that may freeze a value that exists before it: lockInPlace()",
+      "70 TWICE: a mark on a call that may freeze a value that exists before it: lockTwice()",
+      "71 WRAPPED: a mark on a call that may freeze a value that exists before it: lockWrapped()"
     ]);
   });
 
@@ -331,6 +489,9 @@ T: for (;;) { if (Math.random()) continue T; break T; }
 function pick(x: number) { switch (x) { case 1: const T = x; return T; default: return 0; } }
 export const PICKED = pick(1);
 export enum Members { T = 1, U = T * 2 }
+export enum Quoted { "T" = 1, U = T * 2 }
+export enum Computed { ["T"] = 1, U = T * 2 }
+export enum Templated { [\`T\`] = 1, U = T * 2 }
 export class Methods { static made = Array.of(1); T() { return 1; } }
 export class Impl implements T { static made = Array.of(1); }
 export class FromTable extends mixinOf(T) {}
@@ -342,6 +503,11 @@ console.log(import.meta.url);
 var VT = /*#__PURE__*/ Object.freeze(["v"]);
 { var VT: readonly string[]; console.log(VT); }
 { { var VT: readonly string[]; } console.log(VT); }
+for (var VT: readonly string[]; ;) { console.log(VT); break; }
+for (var VT in { k: 1 }) { console.log(VT); }
+function chosen(x: number) { switch (x) { case 1: function T() { return 1; } return T(); default: return 0; } }
+export const CHOSEN = chosen(1);
+export default class { static made = Array.of(1); read() { return T; } }
 `)).toEqual([
       "FromTable: a class its module keeps, which reads T",
       "Tagged: a class its module keeps, which reads T",
@@ -349,7 +515,10 @@ var VT = /*#__PURE__*/ Object.freeze(["v"]);
       "Parameters: a class its module keeps, which reads T",
       // A var in a block is the module's own, the table.
       "(no table): a statement that reads VT when its module loads: { var VT: readonly string[]; console.log(VT); }",
-      "(no table): a statement that reads VT when its module loads: { { var VT: readonly string[]; } console.log(VT); }"
+      "(no table): a statement that reads VT when its module loads: { { var VT: readonly string[]; } console.log(VT); }",
+      "(no table): a statement that reads VT when its module loads: for (var VT: readonly string[]; ;) { console.log(VT); break; }",
+      "(no table): a statement that reads VT when its module loads: for (var VT in { k: 1 }) { console.log(VT); }",
+      "default: a class its module keeps, which reads T"
     ]);
   });
 
@@ -501,11 +670,11 @@ export enum Sized { A = T.from }
     const code = "const T = Object.freeze([1]);\nconst N = T.length;\n/*#__PURE__*/ Object.freeze(T);\nexport const frozen = (row: object) => /*#__PURE__*/ Object.freeze(row);\n";
     expect(found(code, { exempt: () => true })).toEqual([
       "(no table): a mark on a discarded value: Object.freeze(T)",
-      "(no table): a mark on a freeze of a value that exists before it: Object.freeze(row)"
+      "(no table): a mark on a freeze of a value that may exist before it: Object.freeze(row)"
     ]);
   });
 
-  it("names a mark on a call whose value is discarded, or on a freeze of a value that exists before it", () => {
+  it("names a mark on a call whose value is discarded, or on a freeze of a value that may exist before it", () => {
     expect(found(`
 const TABLE = [1, 2];
 const ok = TABLE.length > 0;
@@ -542,10 +711,12 @@ export function f(row: object, use: (value: unknown) => void, rows: object[]) {
   ({ .../*#__PURE__*/ g(row) });
   ({ [/*#__PURE__*/ g(row)]: 1 });
   ({ [/*#__PURE__*/ g(row)]() { return 1; } });
+  ({ get [/*#__PURE__*/ g(row)]() { return 1; }, set [/*#__PURE__*/ g(row)](value: number) { void value; } });
+  const nothing = /*#__PURE__*/ Object.freeze();
   const held = /*#__PURE__*/ g([row]);
   use(/*#__PURE__*/ g(row));
   (row as { x?: unknown }).x = /*#__PURE__*/ g(row);
-  return [kept, last, aliased, fresh, held, ok ? /*#__PURE__*/ g(row) : null, (/*#__PURE__*/ g(row), row), /*#__PURE__*/ Object.freeze({ row })];
+  return [kept, last, aliased, fresh, held, nothing, ok ? /*#__PURE__*/ g(row) : null, (/*#__PURE__*/ g(row), row), /*#__PURE__*/ Object.freeze({ row })];
 }
 export function g(row: object) { return /*#__PURE__*/ Object.freeze(row); }
 `)).toEqual([
@@ -557,15 +728,15 @@ export function g(row: object) { return /*#__PURE__*/ Object.freeze(row); }
       "(no table): a mark on a discarded value: g(row)",
       "(no table): a mark on a discarded value: g(row)",
       // g freezes what it is passed: a bundler that drops a marked g(row) whose value is used leaves row unfrozen too.
-      "(no table): a mark on a call that freezes a value that exists before it: g(row)",
-      "(no table): a mark on a call that freezes a value that exists before it: g(row)",
-      "(no table): a mark on a freeze of a value that exists before it: Object.freeze(row)",
-      "(no table): a mark on a freeze of a value that exists before it: freeze(row)",
-      ...Array(4).fill("(no table): a mark on a discarded value: g(row)"),
-      "(no table): a mark on a call that freezes a value that exists before it: g([row])",
-      ...Array(3).fill("(no table): a mark on a call that freezes a value that exists before it: g(row)"),
+      "(no table): a mark on a call that may freeze a value that exists before it: g(row)",
+      "(no table): a mark on a call that may freeze a value that exists before it: g(row)",
+      "(no table): a mark on a freeze of a value that may exist before it: Object.freeze(row)",
+      "(no table): a mark on a freeze of a value that may exist before it: freeze(row)",
+      ...Array(6).fill("(no table): a mark on a discarded value: g(row)"),
+      "(no table): a mark on a call that may freeze a value that exists before it: g([row])",
+      ...Array(3).fill("(no table): a mark on a call that may freeze a value that exists before it: g(row)"),
       "(no table): a mark on a discarded value: g(row)",
-      "(no table): a mark on a freeze of a value that exists before it: Object.freeze(row)"
+      "(no table): a mark on a freeze of a value that may exist before it: Object.freeze(row)"
     ]);
   });
 });

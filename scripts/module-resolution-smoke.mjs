@@ -386,15 +386,15 @@ for (const reading of [root.sources, root.held, root.marked]) {
 // its code.
 assertNoBreaches(checkBuild({ files: builtFiles, read: readBuilt }), "dist/");
 // The check leaves out the modules UNMARKED_SOURCE names because only ./calc
-// and ./vedic load them: no other entry point's static graph, read both ways,
-// holds one.
+// and ./vedic reach them through their static imports: no other entry point's
+// static graph, read both ways, holds one. (A dynamic import is not read.)
 const exportsMap = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).exports;
 for (const [subpath, target] of Object.entries(exportsMap)) {
   if (subpath === "./calc" || subpath === "./vedic") continue;
   const entry = /^\.\/dist\/([a-z-]+)\.js$/u.exec(target.import)[1];
   const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
   for (const source of new Set([...graph.sources, ...graph.held, ...graph.marked])) {
-    assert(!UNMARKED_SOURCE.test(source), `${subpath} reaches ${source}, which the table check leaves out because only ./calc and ./vedic load it`);
+    assert(!UNMARKED_SOURCE.test(source), `${subpath} reaches ${source}, which the table check leaves out because only ./calc and ./vedic reach it`);
   }
 }
 for (const [entry, own] of [

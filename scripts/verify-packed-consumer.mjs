@@ -545,7 +545,7 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.equal(farEpoch.status, "refused");
   assert.equal(farEpoch.reason, "epoch-out-of-range");
   const rootEntry = await import("@zodiacs/engine");
-  assert.equal(farEpoch.epochSpan, rootEntry.EPHEMERIS_SPAN);
+  assert(rootEntry.EPHEMERIS_SPAN !== undefined && farEpoch.epochSpan === rootEntry.EPHEMERIS_SPAN);
   const aries = rootEntry.signForLongitude(15);
   assert(aries === rootEntry.SIGNS[0] && Object.isFrozen(aries));
   const trine = rootEntry.matchAspect("Sun", 0, "Mars", 120)?.definition;
