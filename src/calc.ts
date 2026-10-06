@@ -35,14 +35,14 @@ import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
 import { computeAngles, computeHouses, eastPointOf, isPolarUndefinedHouseSystem, ramcOf, vertexOf } from "./houses.js";
 import { tilt } from "./nutation.js";
 import { meanApogee, meanNodeLongitude } from "./points.js";
-import { REFERENCE_SPAN } from "./reference-span.js";
+import { EPHEMERIS_SPAN, REFERENCE_SPAN } from "./reference-span.js";
 import { normalizeLongitude } from "./signs.js";
 import { TIME_SCALE_NAMES, elapsedDays, timeBasis } from "./time-scale.js";
 import type { TimeBasis, TimeScale, TimeScaleName } from "./time-scale.js";
 import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
 import type { Angles, BodyName, Chart, ChartFlag, ChartInput, HouseSystem } from "./types.js";
-import { AYANAMSA_BASIS, addBounds, ayanamsaBound } from "./calc-ayanamsa.js";
-import { AYANAMSAS, ayanamsaAt, isUserAyanamsaName, outsideSpanEpoch, userAyanamsa } from "./vedic/ayanamsa.js";
+import { addBounds, ayanamsaBound } from "./calc-ayanamsa.js";
+import { AYANAMSAS, ayanamsaAt, isUserAyanamsaName, userAyanamsa } from "./vedic/ayanamsa.js";
 import type { AyanamsaDefinition, AyanamsaName, AyanamsaPrecessionModel } from "./vedic/ayanamsa.js";
 import { siderealChartOf, wholeSignCusps, wrap360 } from "./vedic/sidereal.js";
 
@@ -282,6 +282,7 @@ export type CalcRefusal = {
 } & (
   | { readonly reason: "unsupported-combination" | "not-in-this-version" }
   | { readonly reason: "out-of-range"; readonly span: CalcSpan }
+  | { readonly reason: "epoch-out-of-range"; readonly epochSpan: typeof EPHEMERIS_SPAN }
   | { readonly reason: "sample-budget"; readonly samples: number; readonly maxSamples: number }
 );
 
@@ -468,14 +469,24 @@ function readZodiac(value: unknown): Zodiac {
   return { record: { sidereal: user }, definition, ids: ["zodiac:sidereal", `ayanamsa:user-${definition.kind}`] };
 }
 
-/** Out of range for an epoch definition whose epoch is outside the span, where the ayanamsas have been compared. */
+/** TT days from J2000.0 of an epoch definition's epoch inside EPHEMERIS_SPAN, the ends included. */
+const insideEphemerisSpan = (definition: AyanamsaDefinition): boolean =>
+  definition.kind !== "epoch" ||
+  (definition.epochTT - J2000_JD >= EPHEMERIS_SPAN.daysFromJ2000.from && definition.epochTT - J2000_JD <= EPHEMERIS_SPAN.daysFromJ2000.to);
+
+/**
+ * Refused for an epoch definition whose epoch is outside EPHEMERIS_SPAN, the
+ * years the engine's precession has been compared with ERFA's for it. From
+ * 1800 to 2200 its bound is the span's; outside, the wider one the epoch's
+ * band gives (calc-ayanamsa.ts).
+ */
 function epochRefusal(zodiac: Zodiac): CalcRefusal | null {
-  return zodiac.definition && outsideSpanEpoch(zodiac.definition)
+  return zodiac.definition && !insideEphemerisSpan(zodiac.definition)
     ? {
         status: "refused",
-        reason: "out-of-range",
-        detail: `The ayanamsa's epoch is outside ${CALC_SPAN.from} to ${CALC_SPAN.to}, where the ayanamsas have been compared with ERFA.`,
-        span: CALC_SPAN
+        reason: "epoch-out-of-range",
+        detail: `The ayanamsa's epoch is outside ${EPHEMERIS_SPAN.fromTT} to ${EPHEMERIS_SPAN.toTT} TT (EPHEMERIS_SPAN), where the precession that carries it has been compared with ERFA's.`,
+        epochSpan: EPHEMERIS_SPAN
       }
     : null;
 }
@@ -503,14 +514,14 @@ function ayanamsaValue(definition: AyanamsaDefinition, value: AyanamsaAt, subtra
     nutation: value.nutation * k,
     true: value.true * k,
     subtracted,
-    bound: { value: ayanamsaBound(definition, value.elongation).position, unit: "arcsec", label: "measured", basis: AYANAMSA_BASIS }
+    bound: { value: ayanamsaBound(definition, value.elongation).position, unit: "arcsec", label: "measured", basis: ayanamsaBound(definition, value.elongation).basis }
   };
 }
 
 /** A bound with the ayanamsa's added, or the bound itself in the tropical zodiac. */
-function withAyanamsa(b: CalcBound, add: number | null): CalcBound {
+function withAyanamsa(b: CalcBound, add: { readonly value: number; readonly basis: string } | null): CalcBound {
   if (add === null || b.value === null) return b;
-  return { ...b, value: addBounds(b.value, add), basis: `${b.basis}; plus the ayanamsa's, ${add} ${b.unit}: ${AYANAMSA_BASIS}` };
+  return { ...b, value: addBounds(b.value, add.value), basis: `${b.basis}; plus the ayanamsa's, ${add.value} ${b.unit}: ${add.basis}` };
 }
 
 /**
@@ -850,10 +861,10 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
           : null,
       ayanamsa: sidereal && ayanamsaValue(definition!, sidereal, frame === "ecliptic-true-of-date" ? "true" : "mean", k),
       bounds: {
-        position: withAyanamsa(bound(row?.[0], "arcsec", estimated), added && added.position),
+        position: withAyanamsa(bound(row?.[0], "arcsec", estimated), added && { value: added.position, basis: added.basis }),
         distance: point ? null : bound(row?.[1], "relative", estimated),
         speed: method && {
-          ...withAyanamsa(bound(row?.[2], "arcsec/day", estimated), added && added.rate),
+          ...withAyanamsa(bound(row?.[2], "arcsec/day", estimated), added && { value: added.rate, basis: added.basis }),
           method,
           stepDays: analytic ? null : step
         }
@@ -930,7 +941,8 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
         ? tropical
         : { asc: zodiacal(tropical.asc), mc: zodiacal(tropical.mc), dsc: zodiacal(tropical.dsc), ic: zodiacal(tropical.ic) };
     const cusps = value === null ? computed.cusps : computed.system === "whole" ? wholeSignCusps(angles.asc) : computed.cusps.map(zodiacal);
-    const added = definition && value && ayanamsaBound(definition, value.elongation).position;
+    const bounded = definition && value && ayanamsaBound(definition, value.elongation);
+    const added = bounded && { value: bounded.position, basis: bounded.basis };
     // Conformance suite 0.1.0, level L2, for this engine: conformance/RESULTS.md.
     const basis = (what: string) =>
       `largest difference over the conformance suite's L2 ${what}, whose arbiter is ERFA with each system's definition`;

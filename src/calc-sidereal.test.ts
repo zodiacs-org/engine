@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { AstroTime } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
-import { AYANAMSA_BASIS, AYANAMSA_BOUNDS, addBounds, ayanamsaBand, ayanamsaBound } from "./calc-ayanamsa.js";
+import { AYANAMSA_BASIS, AYANAMSA_BOUNDS, AYANAMSA_EPOCH_BASIS, addBounds, ayanamsaBand, ayanamsaBound } from "./calc-ayanamsa.js";
 import { CALC_AYANAMSAS, CALC_FRAMES, calc, chart, events, houses } from "./calc.js";
 import type {
   CalcAyanamsa,
@@ -16,6 +16,7 @@ import type {
   HousesResult
 } from "./calc.js";
 import { HOUSE_SYSTEMS } from "./houses.js";
+import { EPHEMERIS_SPAN } from "./reference-span.js";
 import { natalChart } from "./index.js";
 import { timeBasis } from "./time-scale.js";
 import type { HouseSystem } from "./types.js";
@@ -307,6 +308,15 @@ describe("the sidereal zodiac in calc()", () => {
     for (const definition of [AYANAMSAS.lahiri, AYANAMSAS.raman, USERS[0]!.vedic, USERS[3]!.vedic]) {
       expect(ayanamsaBand(definition, null)).toBe("epochOrLinear");
     }
+    // A caller's epoch: in the span from 1800-01-01, out of it from 2200-01-01, on TT; on the engine's
+    // precession or on an older one held at J2000.0. A linear definition keeps its band from any epoch.
+    const epoch = (julianDateTT: number, model: "engine" | "newcomb" | "iau1976") => userAyanamsa({ epoch: { julianDateTT }, value: 23, model });
+    expect(ayanamsaBand(epoch(2_378_496.5, "engine"), null)).toBe("epochOrLinear");
+    expect(ayanamsaBand(epoch(2_378_496.5 - 1e-6, "engine"), null)).toBe("epochOutsideSpan");
+    expect(ayanamsaBand(epoch(2_524_593.5 - 1e-6, "newcomb"), null)).toBe("epochOrLinear");
+    expect(ayanamsaBand(epoch(2_524_593.5, "newcomb"), null)).toBe("olderEpochOutsideSpan");
+    expect(ayanamsaBand(epoch(1_721_545, "iau1976"), null)).toBe("olderEpochOutsideSpan");
+    expect(ayanamsaBand(userAyanamsa({ epoch: { julianDateTT: 1_000_000 }, value: 23, rate: 50 }), null)).toBe("epochOrLinear");
   });
 
   it("names the zodiac and the ayanamsa in the receipt, and repeats itself from it", () => {
@@ -375,20 +385,36 @@ describe("a caller's ayanamsa", () => {
     expect(request).toThrow(field);
   });
 
-  it("is refused out of range when it holds its value at an epoch outside the span; a rate is not", () => {
-    const old = { epoch: { jd: 2_000_000.5, scale: "tt" }, value: 18 } as const;
-    const zodiac = { sidereal: old };
+  it("is computed from an epoch anywhere in EPHEMERIS_SPAN, with a wider bound outside 1800 to 2200, and refused beyond", () => {
     const time = INSTANTS[3]!;
-    for (const result of [
-      calc({ body: "Sun", time, zodiac }),
-      houses({ time, place: PLACE, zodiac }),
-      events({ kind: "longitude-crossing", body: "Sun", longitude: 0, from: time, to: "2000-02-01", zodiac }),
-      chart({ time, zodiac })
-    ]) {
-      expect(refused(result)).toMatchObject({ reason: "out-of-range" });
-      expect(refused(result).detail).toContain("epoch");
+    const everyFunction = (sidereal: CalcUserAyanamsa) => {
+      const zodiac = { sidereal };
+      return [
+        calc({ body: "Sun", time, zodiac }),
+        houses({ time, place: PLACE, zodiac }),
+        events({ kind: "longitude-crossing", body: "Sun", longitude: 0, from: time, to: "2000-02-01", zodiac }),
+        chart({ time, zodiac })
+      ];
+    };
+    // From 763: refused out of range in rc.17, computed from 1.0.0-rc.1 (FINDINGS F-80, the owner's decision).
+    const old = { epoch: { jd: 2_000_000.5, scale: "tt" }, value: 18 } as const;
+    for (const result of everyFunction(old)) ok(result);
+    const engine = ok(calc({ body: "Sun", time, zodiac: { sidereal: old } }));
+    expect(engine.ayanamsa!.bound).toMatchObject({ value: AYANAMSA_BOUNDS.epochOutsideSpan.position, basis: AYANAMSA_EPOCH_BASIS });
+    const newcomb = ok(calc({ body: "Sun", time, zodiac: { sidereal: { ...old, model: "newcomb" } } }));
+    expect(newcomb.ayanamsa!.bound.value).toBe(AYANAMSA_BOUNDS.olderEpochOutsideSpan.position);
+    expect(newcomb.bounds.position.basis).toContain("docs/evidence/calc-epochs-2026-10-06");
+    // EPHEMERIS_SPAN's ends are in it; a day beyond either is not, nor anything else a Date holds.
+    for (const jd of [2_451_545 - 730_000, 2_451_545 + 730_000]) ok(calc({ body: "Sun", time, zodiac: { sidereal: { epoch: { jd, scale: "tt" }, value: 18 } } }));
+    for (const jd of [2_451_545 - 730_001, 2_451_545 + 730_001, 0, 1e8]) {
+      for (const result of everyFunction({ epoch: { jd, scale: "tt" }, value: 18 })) {
+        expect(refused(result)).toMatchObject({ reason: "epoch-out-of-range", epochSpan: EPHEMERIS_SPAN });
+        expect(refused(result).detail).toContain("epoch");
+      }
     }
+    // A rate carries its ayanamsa from any epoch a Date reaches, as before.
     ok(calc({ body: "Sun", time, zodiac: { sidereal: { ...old, rate: 50 } } }));
+    ok(calc({ body: "Sun", time, zodiac: { sidereal: { epoch: { jd: 1e6, scale: "tt" }, value: 18, rate: 50 } } }));
     ok(calc({ body: "Sun", time, zodiac: { sidereal: "raman" } })); // its epoch is in 397
   });
 });
@@ -713,6 +739,61 @@ describe("the ayanamsa's bounds", () => {
     expect(addBounds(519, 0.058)).toBe(519.058);
     expect(addBounds(1.1, 27)).toBe(28.1);
     expect(addBounds(1.1, 1.6e-7)).toBe(1.10000016);
+  });
+});
+
+describe("the bounds of a caller's ayanamsa from an epoch outside 1800 to 2200", () => {
+  /**
+   * ERFA's mean ayanamsas at the rows that
+   * docs/evidence/calc-epochs-2026-10-06/tools/epoch_reference.py keeps from
+   * its 73,185 comparisons: each precession model's largest differences for
+   * epochs outside the span, and the corners of EPHEMERIS_SPAN's epochs and
+   * the span's instants. Each row keeps the Julian date asked for and the TT
+   * instants calc used for it and 0.001 day either side, so that this repeats
+   * the comparison exactly.
+   */
+  interface Row {
+    readonly model: "engine" | "newcomb" | "iau1976";
+    readonly value: number;
+    readonly epoch: number;
+    readonly jd: number;
+    readonly jdTt: readonly [number, number, number];
+    readonly mean: number;
+    readonly rate: number;
+  }
+  const { rows } = JSON.parse(readFileSync(new URL("./fixtures/ayanamsa-epochs.json", import.meta.url), "utf8")) as { rows: Row[] };
+  const turn = (degrees: number) => degrees - 360 * Math.round(degrees / 360);
+  const up2 = (x: number) => {
+    const unit = 10 ** (Math.floor(Math.log10(x)) - 1);
+    return Number((Math.ceil(x / unit) * unit).toPrecision(2));
+  };
+
+  it("are each model's largest differences from ERFA, rounded up to two significant figures", () => {
+    const largest = { epochOutsideSpan: [0, 0], olderEpochOutsideSpan: [0, 0] };
+    for (const row of rows) {
+      const sidereal = { epoch: { jd: row.epoch, scale: "tt" }, value: row.value, model: row.model } as const;
+      const at = (jd: number) => ok(calc({ body: "Sun", time: { jd, scale: "tt" }, zodiac: { sidereal }, flags: { speeds: false } }));
+      const [now, plus, minus] = [at(row.jd), at(row.jd + 0.001), at(row.jd - 0.001)];
+      const used = [now, plus, minus].map((result) => result.receipt.instants[0]!.jdTt);
+      expect(used).toEqual(row.jdTt);
+      const band = row.model === "engine" ? "epochOutsideSpan" : "olderEpochOutsideSpan";
+      expect(now.ayanamsa!.bound.value).toBe(AYANAMSA_BOUNDS[band].position);
+      const rate = turn(plus.ayanamsa!.mean - minus.ayanamsa!.mean) / (used[1]! - used[2]!);
+      largest[band] = [
+        Math.max(largest[band][0]!, Math.abs(turn(now.ayanamsa!.mean - row.mean)) * 3600),
+        Math.max(largest[band][1]!, Math.abs(rate - row.rate) * 3600)
+      ];
+    }
+    expect(rows.length).toBe(17);
+    for (const band of ["epochOutsideSpan", "olderEpochOutsideSpan"] as const) {
+      expect(largest[band][0]).toBeLessThanOrEqual(AYANAMSA_BOUNDS[band].position);
+      expect(largest[band][1]).toBeLessThanOrEqual(AYANAMSA_BOUNDS[band].rate);
+      expect(up2(largest[band][0]!)).toBe(AYANAMSA_BOUNDS[band].position);
+      expect(up2(largest[band][1]!)).toBe(AYANAMSA_BOUNDS[band].rate);
+    }
+    // The engine's precession parts from ERFA's most at EPHEMERIS_SPAN's first epoch; Newcomb's and IAU 1976's
+    // differences are those of the engine's own precession less what holding them at J2000.0 cancels.
+    expect(AYANAMSA_BOUNDS.epochOutsideSpan.position / AYANAMSA_BOUNDS.olderEpochOutsideSpan.position).toBeGreaterThan(100);
   });
 });
 

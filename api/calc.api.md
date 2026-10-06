@@ -142,6 +142,9 @@ type CalcRefusal = {
     readonly reason: "out-of-range";
     readonly span: CalcSpan;
 } | {
+    readonly reason: "epoch-out-of-range";
+    readonly epochSpan: typeof EPHEMERIS_SPAN;
+} | {
     readonly reason: "sample-budget";
     readonly samples: number;
     readonly maxSamples: number;
@@ -301,7 +304,7 @@ declare function events(request: EventsRequest): EventsResult | CalcRefusal;
 declare function houses(request: HousesRequest): HousesResult | CalcRefusal;
 ```
 
-## Referenced, not exported here (13)
+## Referenced, not exported here (14)
 
 ```ts
 // exported by @zodiacs/engine (Aspect)
@@ -350,6 +353,17 @@ interface ChartInput {
 
 // exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment)
 type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
+
+// exported by @zodiacs/engine (EPHEMERIS_SPAN)
+declare const EPHEMERIS_SPAN: Readonly<{
+    readonly timeScale: "TT";
+    readonly daysFromJ2000: Readonly<{
+        readonly from: -730000;
+        readonly to: 730000;
+    }>;
+    readonly fromTT: "0001-04-30T12:00:00";
+    readonly toTT: "3998-09-03T12:00:00";
+}>;
 
 // exported by @zodiacs/engine (Houses)
 interface Houses {
