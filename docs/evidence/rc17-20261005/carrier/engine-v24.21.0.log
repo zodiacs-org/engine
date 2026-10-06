@@ -1,0 +1,115 @@
+# sh carrier-gates.sh engine at b080217 in a clean full-history clone; Node v24.21.0, npm 11.19.0, git 2.43.0, 2026-10-06
+## npm ci
+added 110 packages in 2s
+npm warn install-scripts 2 packages have install scripts not yet covered by allowScripts:
+npm warn install-scripts   esbuild@0.27.7 (postinstall: node install.js)
+npm warn install-scripts   esbuild@0.21.5 (postinstall: node install.js)
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+exit 0
+## npm run typecheck
+exit 0
+## npm test
+ Test Files  80 passed (80)
+      Tests  3789 passed | 2 skipped (3791)
+exit 0
+## npm run build
+exit 0
+## npm run exports:smoke
+@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, the core graph (24 source modules in the build's module list, 23 marked in 11 files) reaches no module of an opt-in entry and no zone history, and the geo entry loads its 16 shards lazily
+exit 0
+## npm run package:contents
+@zodiacs/engine package contents passed (70 files, 946349 bytes unpacked of 950000; import graphs: . 103537 of 108500, ./calc 139836 of 145500 (61686 beyond the core's), ./crossings 9410 of 10000 (173 beyond the core's), ./deltat 4968 of 5500 (161 beyond the core's), ./geo 34659 of 35000 (31730 beyond the core's), ./houses 13606 of 15000 (13606 beyond the core's), ./internal 64830 of 68000 (305 beyond the core's), ./internal/math 18165 of 20000 (1325 beyond the core's), ./receipt 66580 of 70000 (41969 beyond the core's), ./sky 92109 of 97000 (16888 beyond the core's), ./techniques 152472 of 160000 (62610 beyond the core's), ./timing 123039 of 129000 (32505 beyond the core's), ./vedic 123639 of 128000 (33777 beyond the core's), ./window 102590 of 105000 (33677 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
+exit 0
+## npm run pack:dry-run
+npm notice
+npm notice package: @zodiacs/engine@0.1.1-rc.17
+npm notice Tarball Contents
+npm notice 91.6kB CHANGELOG.md
+npm notice 1.1kB LICENSE
+npm notice 26.1kB LICENSING.md
+npm notice 10.1kB NOTICE
+npm notice 60.0kB README.md
+npm notice 10.8kB dist/api-TtUFlQCD.d.ts
+npm notice 17.1kB dist/calc.d.ts
+npm notice 42.8kB dist/calc.js
+npm notice 508B dist/chunk-A3U2ZS2W.js
+npm notice 9.2kB dist/chunk-AECKV73C.js
+npm notice 1.5kB dist/chunk-CPALRSPC.js
+npm notice 11.7kB dist/chunk-FM4X65ZW.js
+npm notice 2.4kB dist/chunk-KFTJMMG7.js
+npm notice 13.1kB dist/chunk-KHBLFXFG.js
+npm notice 23.3kB dist/chunk-N4B5JNMA.js
+npm notice 4.8kB dist/chunk-ONBZ4HK7.js
+npm notice 2.9kB dist/chunk-PFGUCNOK.js
+npm notice 17.6kB dist/chunk-TCGFZEEE.js
+npm notice 5.3kB dist/chunk-UN4D3463.js
+npm notice 29.8kB dist/chunk-V6YOLO64.js
+npm notice 1.3kB dist/chunk-XSW5I4PC.js
+npm notice 672B dist/chunk-Y2DYAGYV.js
+npm notice 11.6kB dist/chunk-ZSJNUC7J.js
+npm notice 4.4kB dist/crossings.d.ts
+npm notice 173B dist/crossings.js
+npm notice 3.9kB dist/deltat.d.ts
+npm notice 161B dist/deltat.js
+npm notice 8.6kB dist/geo.d.ts
+npm notice 6.0kB dist/geo.js
+npm notice 7.3kB dist/houses-CoxZMwTU.d.ts
+npm notice 4.2kB dist/houses-extra.d.ts
+npm notice 13.6kB dist/houses-extra.js
+npm notice 16.4kB dist/index.d.ts
+npm notice 13.0kB dist/index.js
+npm notice 5.2kB dist/internal-math-Djl6R41i.d.ts
+npm notice 1.1kB dist/internal-math.d.ts
+npm notice 1.3kB dist/internal-math.js
+npm notice 522B dist/internal.d.ts
+npm notice 305B dist/internal.js
+npm notice 12.9kB dist/receipt.d.ts
+npm notice 39.6kB dist/receipt.js
+npm notice 615B dist/rulers-pzxBN3QJ.d.ts
+npm notice 7.3kB dist/sky.d.ts
+npm notice 15.1kB dist/sky.js
+npm notice 20.2kB dist/techniques.d.ts
+npm notice 36.9kB dist/techniques.js
+npm notice 22.6kB dist/timing.d.ts
+npm notice 32.0kB dist/timing.js
+npm notice 8.9kB dist/types-vG8m42rf.d.ts
+npm notice 11.6kB dist/tzdb-2025c-00-6GVG6RYL.js
+npm notice 10.9kB dist/tzdb-2025c-01-CEYMG3LE.js
+npm notice 16.7kB dist/tzdb-2025c-02-NWQJCVUU.js
+npm notice 8.7kB dist/tzdb-2025c-03-PLHP6VH4.js
+npm notice 12.1kB dist/tzdb-2025c-04-MEKUJA6M.js
+npm notice 12.7kB dist/tzdb-2025c-05-3K5YKZBL.js
+npm notice 10.5kB dist/tzdb-2025c-06-L2VV5XJV.js
+npm notice 15.5kB dist/tzdb-2025c-07-H3GLGJGY.js
+npm notice 12.4kB dist/tzdb-2025c-08-DA7QQIGD.js
+npm notice 10.3kB dist/tzdb-2025c-09-MTXIO3QL.js
+npm notice 9.2kB dist/tzdb-2025c-10-ASL4UW5C.js
+npm notice 14.2kB dist/tzdb-2025c-11-EQEOANYB.js
+npm notice 12.2kB dist/tzdb-2025c-12-NKCCXJ5G.js
+npm notice 10.2kB dist/tzdb-2025c-13-DYTF3UC7.js
+npm notice 10.2kB dist/tzdb-2025c-14-C25H45R5.js
+npm notice 11.5kB dist/tzdb-2025c-15-7OYYZWRY.js
+npm notice 18.9kB dist/vedic.d.ts
+npm notice 16.2kB dist/vedic.js
+npm notice 7.0kB dist/window.d.ts
+npm notice 33.7kB dist/window.js
+npm notice 3.7kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 0.1.1-rc.17
+npm notice filename: zodiacs-engine-0.1.1-rc.17.tgz
+npm notice package size: 273.1 kB
+npm notice unpacked size: 946.3 kB
+npm notice shasum: 3bddbc20abce896defb0eabbdb867e4623e9bbfd
+npm notice integrity: sha512-ZxoS87sjcZaQh[...]kD/0sgP7KhCzw==
+npm notice total files: 70
+npm notice
+zodiacs-engine-0.1.1-rc.17.tgz
+exit 0
+## node scripts/verify-archive-binding.mjs
+Running the check in a new Node process without NODE_OPTIONS=--max-old-space-size=8192.
+artifacts/zodiacs-engine-0.1.1-rc.17.tgz is byte-identical to a rebuild of HEAD (b080217c1b5b) on Node v24.21.0: sha256 9cd24c788863424ef614aaadec580db5a0dfc529303d385274db48a092a5299a, 273123 bytes.
+12 recorded archives (11 carried, 1 superseded) and their receipts hold only their recorded bytes across 145 commits, and each is bound to its source commit.
+exit 0
+

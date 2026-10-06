@@ -14,9 +14,14 @@ seven commits on that base:
 5. `d36642e`, *Act on the fourth sidereal review*, and
 6. `8d8e837`, *Act on the fifth sidereal review*: the reviews of `18cb6b7`
    and their fixes (*Reviews*, below);
-7. the source commit of this candidate, which this directory comes with: the
-   version, the generated records that carry it, the CHANGELOG, the README
-   and these checks (*The source commit*).
+7. `aae419c`, the source commit of this candidate, which brought this
+   directory: the version, the generated records that carry it, the
+   CHANGELOG, the README and these checks (*The source commit*).
+
+Two commits follow it: `b080217` carries the archive packed from it (*The
+archive*), and the commit that brings this version of this file records the
+gates on that carrier (*The gates on the carrier*) and changes only this
+directory.
 
 The feature's own checks, against the Vedic entry and against ERFA, are in
 `../calc-sidereal-2026-10-05/`; this directory records what the candidate as
@@ -213,24 +218,29 @@ commit on this branch was checked with rc.16's two tools
 1. `../rc15-20260929/rebuilt/history-check.mjs`, unchanged, with rc.16's
    patterns and examples, which are kept outside the repository because they
    are the birth data it looks for. `history-check.txt` is its output on
-   `23660f5..HEAD`, the six commits before the source commit, with the
-   source commit's changes staged: no birth data in any commit, in the staged
-   changes or in the tree of `8d8e837`, and the published examples appear
-   only in files that cite them. rc.16's positive controls
+   `23660f5..b080217`, the eight commits up to the carrier, with the changes
+   of the commit that brings this version of this file staged: no birth data
+   in any commit (the carried archive decompressed and read), in the staged
+   changes or in the carrier's tree, and the published examples' birth data
+   only in files that cite them. The source commit held the same check on
+   the six commits before it and its own changes, with the same result.
+   rc.16's positive controls
    (`../rc16-20260930/history-check-control-first-cut.txt` and
    `history-check-control-recut.txt`) show the same patterns finding birth
    data in histories that held it.
 2. The broad review aid, run outside the repository because its output holds
    the lines it matches, listed every added line with a year from 1700 to
    2029 beside birth vocabulary or a capitalized pair of words, and every
-   such pair, commit by commit and for the staged changes: 41 lines in six
-   commits and the staged changes, each read. They hold the stars' and the
-   ayanamsas' names (True Pushya, Sri Yukteswar), the comparison's years, the
-   start of the Kali Yuga, the conformance notes' statistics, the names of
-   tests in the suite's logs (a rule for circumpolar bodies named after its
-   author, and two cities named for their time zones), the published worked
-   examples that `history-check.txt` lists with their citations, and this
-   record's own description of the aid; no person's birth data.
+   such pair, commit by commit and for the staged changes: 41 lines in the
+   eight commits up to the carrier and the staged changes, each read, the
+   same 41 that the source commit's run found in the six commits before it
+   and its own changes. They hold the stars' and the ayanamsas' names (True
+   Pushya, Sri Yukteswar), the comparison's years, the start of the Kali
+   Yuga, the conformance notes' statistics, the names of tests in the suite's
+   logs (a rule for circumpolar bodies named after its author, and two cities
+   named for their time zones), the published worked examples that
+   `history-check.txt` lists with their citations, and this record's own
+   description of the aid; no person's birth data.
 
 No commit adds a person's birth data.
 
@@ -302,26 +312,57 @@ on the carrier (below).
 
 ## The archive
 
-The archive is packed once, after every gate on the tree has passed, from
-the source commit itself: clean clones of it, each installed with `npm ci`,
-built and packed on Node 22.22.2, 20.19.0 and 24.21.0
-(`carrier/pack-source.sh`), must give the same bytes, and the Node 22.22.2
-one is carried by the source commit's child, with its SHA-256 receipt, an
-entry in `artifacts/archives.json` naming the source commit, and a row in
-`artifacts/README.md`. Its digest, size and file count are recorded there,
-and here by the commit that records the carrier's gates.
+`artifacts/zodiacs-engine-0.1.1-rc.17.tgz` is packed from the source commit
+`aae419c` and carried by its child `b080217`: SHA-256
+`9cd24c788863424ef614aaadec580db5a0dfc529303d385274db48a092a5299a`, 273,123
+bytes, 70 files, 946,349 bytes unpacked. It was packed once, after every
+gate on the tree had passed: clean clones of `aae419c`, each installed with
+`npm ci`, built and packed the same bytes on Node 22.22.2 (npm 10.9.7),
+20.19.0 (npm 10.8.2) and 24.21.0 (npm 11.19.0), 70 files each time
+(`carrier/pack-source.log`, from `carrier/pack-source.sh`), and the carried
+file is the Node 22.22.2 one. The carrier's gates rebuild and repack its
+source, as CI does, to the same bytes. `artifacts/archives.json` records it
+with its source commit, its receipt
+`artifacts/zodiacs-engine-0.1.1-rc.17.sha256` names its digest, and
+`artifacts/README.md` lists it; rc.16's row there now names its carrier,
+`ef44477`, and says it was merged, and rc.10's no longer calls it the site's
+current pin, which has been later candidates since and is rc.16 now.
 
 ## The gates on the carrier
 
-`carrier/carrier-gates.sh` runs each of CI's jobs on the carrier in a clean
-clone of the repository with full history, with `TMPDIR` outside the clone
-and no `package.json` or `node_modules` at or above it: the engine job on
-Node 20.19.0, 22.22.2 and 24.21.0, the archive check with `--rebuild-all`,
-the pack compared with the carried archive, the packed consumer on Node
-20.19.0, 22.7.0, 22.22.2 and 24.21.0 (on the carried archive itself), the
-conformance job, the conformance generators and the atlas. The commit after
-the carrier records their logs in `carrier/`, and changes only this
-directory.
+`carrier/carrier-gates.sh` ran each of CI's jobs on the carrier, `b080217`,
+in a clean clone of the repository with full history, with `TMPDIR` outside
+the clone and no `package.json` or `node_modules` at or above it. Every job
+passes (logs in `carrier/`):
+
+| Job | Node (npm) | Result | Log |
+| --- | --- | --- | --- |
+| engine: npm ci, typecheck, tests, build, export smoke, package contents, pack dry run, archive check | 22.22.2 (10.9.7) | 3,790 tests passed, 1 skipped, in 80 files; the other steps pass; the archive check as below | `engine-v22.22.2.log` |
+| engine | 20.19.0 (10.8.2) | 3,789 passed, 2 skipped, in 80 files; the other steps pass | `engine-v20.19.0.log` |
+| engine | 24.21.0 (11.19.0) | 3,789 passed, 2 skipped, in 80 files; the other steps pass (npm warns that esbuild's two install scripts are not covered by `allowScripts`) | `engine-v24.21.0.log` |
+| archives: the archive check with `--rebuild-all` | 22.22.2 (10.9.7) | a rebuild of HEAD, and of each of the 12 recorded archives from its source commit, byte-identical to the recorded archive | `archives-v22.22.2.log` |
+| pack: npm ci, build, `npm pack --ignore-scripts` | 22.22.2 (10.9.7) | byte-identical to the carried archive (`cmp`) | `pack-v22.22.2.log` |
+| packed consumer, on the carried archive itself | 20.19.0 (10.8.2), 22.7.0 (10.8.2), 22.22.2 (10.9.7), 24.21.0 (11.19.0) | all 33 sections and the types pass on each version, with the script's checks of the sidereal zodiac in `./calc` against the Vedic entry, on the archive of SHA-256 `9cd24c78…` | `consumer-v*.log` |
+| conformance: npm ci, build, self-test, vectors, verdicts, `RESULTS.md` | 22.22.2 (10.9.7) | self-test 7 of 7; 500 vectors conform; 267 pass, 192 fail, 41 unsupported, 0 error, every verdict as committed; `RESULTS.md` and `results/summary.json` current | `conformance-v22.22.2.log` |
+| conformance generators | Python 3.11.15, pyerfa 2.0.1.5, numpy 2.4.6 | L1, L2 and L3 rebuilt from their sources (tzdata and tzcode 2025c downloaded from IANA, digests checked) byte-identical to the committed vectors | `generators-v22.22.2.log` |
+| atlas: checks and self-test, nothing installed | 22.22.2 (10.9.7) | all checks pass; self-test 26 of 26 | `atlas-v22.22.2.log` |
+
+In a clean clone the tests run before the build, as in CI, so the test in
+`scripts/root-isolation.test.mjs` that checks the checkout's own build is
+skipped (it ran on the tree before the source commit, where a build was
+present, *Gates on the tree*), and on 20.19.0 and 24.21.0 so is the tzdb
+2025c comparison.
+
+On each engine run the archive check found
+`artifacts/zodiacs-engine-0.1.1-rc.17.tgz` byte-identical to a rebuild of
+HEAD, and the 12 recorded archives (11 carried, 1 superseded) and their
+receipts holding only their recorded bytes across 145 commits, each bound to
+its source commit. With `--rebuild-all` each of the 12 was also rebuilt from
+its source commit on Node 22.22.2 and matched its recorded bytes, rc.11's
+superseded first packing and rc.17's, from `aae419c`, included. The packed
+consumer ran on the carried file, where CI's runs on the pack job's output;
+the pack job shows the two are the same bytes. The generators' Python was
+the system's, with the two libraries at the versions CI pins.
 
 ## What is not established
 
@@ -379,9 +420,9 @@ TMPDIR=<tmp> sh docs/evidence/rc17-20261005/gates.sh "$PWD" <directory of node a
 `scripts/verify-package-contents.mjs` from `ddbbaa0` beside its `dist/` for
 `sizes.mjs` to read its budgets, and, for `linear-change.mjs`, a
 `node_modules` beside it that holds astronomy-engine 2.1.19, which its
-`dist/vedic.js` imports (a link to the checkout's). The history check's two input files are not
-committed, because they hold the birth data it looks for; the script's header
-gives their formats.
+`dist/vedic.js` imports (a link to the checkout's). The history check's two
+input files are not committed, because they hold the birth data it looks for;
+the script's header gives their formats.
 
 The source commit packed from clean clones, and the carrier's gates, one job
 and one Node version per call, each in a clean clone of `<repository>`:
