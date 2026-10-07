@@ -478,11 +478,67 @@ ran the conformance job's self-test, vector validation, verdict check and
 report check and the atlas job's check and self-test. All passed. The
 archive check reads commits, so it runs on the commits themselves.
 
+## The archive
+
+`artifacts/zodiacs-engine-1.0.0-rc.2.tgz` is packed from the source commit
+`7fa964d` and carried by its child `e790362`: SHA-256
+`4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002`, 287,011
+bytes, 74 files, 989,528 bytes unpacked, the bytes `tree-jobs.sh` packed
+from the tree before the source commit (*Gates on the tree*). Clean clones
+of `7fa964d`, each installed with `npm ci`, built and packed the same bytes
+on Node 22.22.2 (npm 10.9.7), 20.19.0 (npm 10.8.2) and 24.21.0 (npm 11.19.0),
+74 files each time, and the carried file is the Node 22.22.2 one.
+`carrier/pack-source.log` is the standard output of `carrier/pack-source.sh`:
+a line for each packing. The archive check, which reads commits, ran on the
+carrier (*The gates on the carrier*). `artifacts/archives.json` records the
+archive with its source commit, its receipt
+`artifacts/zodiacs-engine-1.0.0-rc.2.sha256` names its digest, and
+`artifacts/README.md` lists it; 1.0.0-rc.1's row there now names its
+carrier, `bb1736a`, and says it was merged.
+
+## The gates on the carrier
+
+`carrier/carrier-gates.sh` ran each job of the three workflows that build
+and check the package, `ci.yml`, `conformance.yml` and `atlas.yml`, on the
+carrier, `e790362`, in a clean clone of the repository with full history,
+with `TMPDIR` outside the clone and no `package.json` or `node_modules` at or
+above it, and without `NODE_OPTIONS` (logs in `carrier/`):
+
+| Job | Node (npm) | Result | Log |
+| --- | --- | --- | --- |
+| engine: npm ci, typecheck, tests, build, export smoke, API check, package contents, pack dry run, archive check | 22.22.2 (10.9.7) | 3,852 tests passed, 1 skipped, in 86 files; the other steps pass; the archive check as below | `engine-e790362-v22.22.2.log` |
+| engine | 20.19.0 (10.8.2) | 3,851 passed, 2 skipped, in 86 files; the other steps pass | `engine-e790362-v20.19.0.log` |
+| engine | 24.21.0 (11.19.0) | 3,851 passed, 2 skipped, in 86 files; the other steps pass (npm warns that esbuild's two install scripts are not covered by `allowScripts`) | `engine-e790362-v24.21.0.log` |
+| archives: the archive check with `--rebuild-all` | 22.22.2 (10.9.7) | a rebuild of HEAD, and of each of the 14 recorded archives from its source commit, byte-identical to the recorded archive | `archives-e790362-v22.22.2.log` |
+| pack: npm ci, build, `npm pack --ignore-scripts` | 22.22.2 (10.9.7) | byte-identical to the carried archive (`cmp`) | `pack-e790362-v22.22.2.log` |
+| packed consumer, on the carried archive itself | 20.19.0 (10.8.2), 22.7.0 (10.8.2), 22.22.2 (10.9.7), 24.21.0 (11.19.0) | all 34 sections and the types pass on each version, on the archive of SHA-256 `4cd834b2…` | `consumer-e790362-v*.log` |
+| conformance: npm ci, build, self-test, vectors, verdicts, `RESULTS.md` | 22.22.2 (10.9.7) | self-test 7 of 7; 500 vectors conform; 267 pass, 192 fail, 41 unsupported, 0 error, every verdict as committed; `RESULTS.md` and `results/summary.json` current | `conformance-e790362-v22.22.2.log` |
+| conformance generators | Python 3.11.15, pyerfa 2.0.1.5, numpy 2.4.6 | L1, L2 and L3 rebuilt from their sources (tzdata and tzcode 2025c downloaded from IANA, digests checked) byte-identical to the committed vectors | `generators-e790362-v22.22.2.log` |
+| atlas: checks and self-test, nothing installed | 22.22.2 (10.9.7) | all checks pass; self-test 26 of 26 | `atlas-e790362-v22.22.2.log` |
+
+In a clean clone the tests run before the build, as in CI, so the test in
+`scripts/root-isolation.test.mjs` that checks the checkout's own build is
+skipped (it ran on the tree before the source commit, where a build was
+present, *Gates on the tree*), and on 20.19.0 and 24.21.0 so is the tzdb
+2025c comparison. On each engine run the archive check found
+`artifacts/zodiacs-engine-1.0.0-rc.2.tgz` byte-identical to a rebuild of
+HEAD, and the 14 recorded archives (13 carried, 1 superseded) and their
+receipts holding only their recorded bytes across 176 commits, each bound to
+its source commit. With `--rebuild-all` each of the 14 was also rebuilt from
+its source commit on Node 22.22.2 and matched its recorded bytes, rc.11's
+superseded first packing and 1.0.0-rc.2's, from `7fa964d`, included. The
+packed consumer ran on the carried file, where CI's runs on the pack job's
+output; the pack job shows the two are the same bytes.
+
 ## Birth data
 
 `history-check.txt` is the output of the search for people's birth data that
-must not be published, run on the fifteen commits and the tree with patterns
-kept outside the repository. It found none.
+must not be published, run on the seventeen commits up to the record of the
+carrier's gates, with that record's changes staged, the carried archive
+decompressed and read, and on the tree, with patterns kept outside the
+repository. It found none. The same search found none on the source commit,
+run on the fifteen commits with its changes staged, or on the carrier, run
+on the sixteen with its own.
 
 ## Reviews
 
