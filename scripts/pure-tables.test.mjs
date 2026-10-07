@@ -1241,6 +1241,52 @@ export const DEFAULTED = make();
       "6 LISTED: the operator =: list = makeList",
       "7 DEFAULTED: a call that may freeze a value that exists before it: make()"
     ]);
+    // VAR_TWICE's and VAR_LOOPED's names are given a value by a `var` twice, or declared in a loop's head, so they may
+    // hold anything when they are called. VAR_ONCE's, VAR_KEPT's, VAR_BLOCK's and VAR_SPACED's are given one,
+    // Object.freeze: VAR_ONCE's second `var` gives it none, and the others' second declarations are another function's,
+    // a block's and a namespace's own names. IN_PLACE's, GIVEN's and DECORATED_ASSIGNED's functions call their
+    // parameter through what `=` assigns, and MADE_IN_PLACE's makes a table through it.
+    expect(atLines(`
+const STATE = { a: 1 };
+function deepFreeze<T>(value: T): T { if (typeof value === "object" && value !== null) for (const inner of Object.values(value)) deepFreeze(inner); return Object.freeze(value); }
+function runWith(callback: (value: object) => object): object { return callback(STATE); }
+function lockState(value: any, context: unknown): any { Object.freeze(STATE); return value; }
+var ran: <T>(value: T) => T = function <T>(callback: T): T { if (typeof callback === "function") callback(); return callback; };
+export const VAR_TWICE = /*#__PURE__*/ ran(() => { Object.freeze(STATE); });
+var ran: <T>(value: T) => T = Object.freeze;
+var looped: <T>(value: T) => T = Object.freeze;
+for (var looped of [deepFreeze]);
+export const VAR_LOOPED = /*#__PURE__*/ looped({ inner: STATE });
+var once: <T>(value: T) => T = Object.freeze;
+var once: <T>(value: T) => T;
+export const VAR_ONCE = /*#__PURE__*/ once({ a: 1 });
+var kept: <T>(value: T) => T = Object.freeze;
+function shadow() { var kept = 1; return kept; }
+export const VAR_KEPT = /*#__PURE__*/ kept({ a: 1 });
+var single: <T>(value: T) => T = Object.freeze;
+{ const single = 1; void single; }
+export const VAR_BLOCK = /*#__PURE__*/ single({ a: 1 });
+var spaced: <T>(value: T) => T = Object.freeze;
+namespace Inner { export var spaced = 1; }
+export const VAR_SPACED = /*#__PURE__*/ spaced({ a: 1 });
+function applyInPlace(f: (value: object) => object) { let x: () => object; return (x = () => f(STATE))(); }
+function applyGiven(f: (value: object) => object) { let x: (value: object) => object; return runWith((x = f)); }
+function decorateAssigned(decorate: (value: any, context: any) => any) { let x: any; @(x = decorate) class Held {} return Held; }
+function makeInPlace() { let x: () => readonly string[]; return (x = () => Object.freeze(["seven"]))(); }
+export const IN_PLACE = /*#__PURE__*/ applyInPlace(Object.freeze);
+export const GIVEN = /*#__PURE__*/ applyGiven(Object.freeze);
+export const DECORATED_ASSIGNED = /*#__PURE__*/ decorateAssigned(lockState);
+export const MADE_IN_PLACE = makeInPlace();
+`)).toEqual([
+      "7 VAR_TWICE: a mark on a freeze of a value that may exist before it: ran(() => { Object.freeze(STATE); })",
+      "11 VAR_LOOPED: a mark on a freeze of a value that may exist before it: looped({ inner: STATE })",
+      "28 IN_PLACE: a property read: Object.freeze",
+      "28 IN_PLACE: a mark on a call that may freeze a value that exists before it: applyInPlace(Object.freeze)",
+      "29 GIVEN: a property read: Object.freeze",
+      "29 GIVEN: a mark on a call that may freeze a value that exists before it: applyGiven(Object.freeze)",
+      "30 DECORATED_ASSIGNED: a mark on a call that may freeze a value that exists before it: decorateAssigned(lockState)",
+      "31 MADE_IN_PLACE: unmarked: makeInPlace()"
+    ]);
   });
 
   it("takes a function's name that a `var` of it may replace, or an assignment does, and a module's own `undefined`, for values that may exist before the call", () => {
@@ -1252,7 +1298,8 @@ export const DEFAULTED = make();
     // where it is written. FREEZE_AND's callee, `Object.freeze && lockState`, is lockState. COMMA_DECORATOR's decorator
     // is its parameter, and TWICE's call runs the second of its function's two declarations of lock. ALIAS_CYCLE's g
     // and h are bound to each other, so its call throws before it calls f; the check takes f, Object.freeze, to be
-    // called with STATE. COMMA_CALL's and COMMA_ARGUMENT's f is called through a comma: with `call`, and by runWith.
+    // called with STATE. COMMA_CALL's and COMMA_ARGUMENT's f is called through a comma: with `call`, and by runWith;
+    // LEFT_OF_COMMA's function written in place is not called, but keepIt.
     expect(atLines(`
 const STATE = { a: 1 };
 const undefined = { a: 1 };
@@ -1272,6 +1319,8 @@ function viaCycle(flag) { const a = flag ? b : Object.freeze; const b = flag ? a
 function viaAliasCycle(f) { const g = h; const h = g; g(STATE); return f(STATE); }
 function runWith(callback) { return callback(STATE); }
 function viaCommaCall(f) { return (0, f).call(null, STATE); }
+function viaAssignedCall(f) { let x; return (x = f).call(null, STATE); }
+function viaLeftOfComma() { return ((() => Object.freeze(STATE)), keepIt)({ a: 1 }); }
 function viaCommaArgument(f) { return runWith((0, f)); }
 const LOOP_A = false ? LOOP_B : Object.freeze;
 const LOOP_B = false ? LOOP_A : keepIt;
@@ -1289,22 +1338,26 @@ export const LOOPED = /*#__PURE__*/ LOOP_B(["x"]);
 export const ALIAS_CYCLE = /*#__PURE__*/ viaAliasCycle(Object.freeze);
 export const COMMA_CALL = /*#__PURE__*/ viaCommaCall(Object.freeze);
 export const COMMA_ARGUMENT = /*#__PURE__*/ viaCommaArgument(Object.freeze);
+export const ASSIGNED_CALL = /*#__PURE__*/ viaAssignedCall(Object.freeze);
+export const LEFT_OF_COMMA = /*#__PURE__*/ viaLeftOfComma();
 `, { fileName: "module.js" })).toEqual([
-      "23 VAR: a mark on a call that may freeze a value that exists before it: viaVar()",
-      "24 REASSIGNED: a mark on a call that may freeze a value that exists before it: viaReassigned()",
-      "26 UNSET_VAR: a mark on a call that may freeze a value that exists before it: viaUnsetVar()",
-      "27 LOOP_VAR: a mark on a call that may freeze a value that exists before it: viaLoopVar()",
-      "28 UNDEFINED: a mark on a call that may freeze a value that exists before it: viaUndefined()",
-      "29 FREEZE_AND: a mark on a call that may freeze a value that exists before it: viaFreezeAnd()",
-      "30 COMMA_DECORATOR: a mark on a call that may freeze a value that exists before it: viaCommaDecorator(lockState)",
-      "31 TWICE: a mark on a call that may freeze a value that exists before it: viaTwice()",
-      "32 CYCLE: a mark on a call that may freeze a value that exists before it: viaCycle(true)",
-      "34 ALIAS_CYCLE: a property read: Object.freeze",
-      "34 ALIAS_CYCLE: a mark on a call that may freeze a value that exists before it: viaAliasCycle(Object.freeze)",
-      "35 COMMA_CALL: a property read: Object.freeze",
-      "35 COMMA_CALL: a mark on a call that may freeze a value that exists before it: viaCommaCall(Object.freeze)",
-      "36 COMMA_ARGUMENT: a property read: Object.freeze",
-      "36 COMMA_ARGUMENT: a mark on a call that may freeze a value that exists before it: viaCommaArgument(Object.freeze)"
+      "25 VAR: a mark on a call that may freeze a value that exists before it: viaVar()",
+      "26 REASSIGNED: a mark on a call that may freeze a value that exists before it: viaReassigned()",
+      "28 UNSET_VAR: a mark on a call that may freeze a value that exists before it: viaUnsetVar()",
+      "29 LOOP_VAR: a mark on a call that may freeze a value that exists before it: viaLoopVar()",
+      "30 UNDEFINED: a mark on a call that may freeze a value that exists before it: viaUndefined()",
+      "31 FREEZE_AND: a mark on a call that may freeze a value that exists before it: viaFreezeAnd()",
+      "32 COMMA_DECORATOR: a mark on a call that may freeze a value that exists before it: viaCommaDecorator(lockState)",
+      "33 TWICE: a mark on a call that may freeze a value that exists before it: viaTwice()",
+      "34 CYCLE: a mark on a call that may freeze a value that exists before it: viaCycle(true)",
+      "36 ALIAS_CYCLE: a property read: Object.freeze",
+      "36 ALIAS_CYCLE: a mark on a call that may freeze a value that exists before it: viaAliasCycle(Object.freeze)",
+      "37 COMMA_CALL: a property read: Object.freeze",
+      "37 COMMA_CALL: a mark on a call that may freeze a value that exists before it: viaCommaCall(Object.freeze)",
+      "38 COMMA_ARGUMENT: a property read: Object.freeze",
+      "38 COMMA_ARGUMENT: a mark on a call that may freeze a value that exists before it: viaCommaArgument(Object.freeze)",
+      "39 ASSIGNED_CALL: a property read: Object.freeze",
+      "39 ASSIGNED_CALL: a mark on a call that may freeze a value that exists before it: viaAssignedCall(Object.freeze)"
     ]);
   });
 

@@ -128,15 +128,17 @@
 // one the code declares, the last declaration of its name with a body where
 // there are several, as an overloaded function has, or a `const`, or a `let`
 // that nothing assigns, is bound to; one of the module, declared or bound to a
-// name where the module declares it, though its code may assign the name
-// another later, or one a name of the module that nothing assigns is bound to;
-// and one written in place, through wrappers, commas and what `=` assigns. It
-// reads a function that calls itself until what it is found to freeze holds,
-// and takes one that calls a function that calls it to freeze any argument it
-// gives that function. Where a call's callee, or a callback, may be
-// Object.freeze or something else, it reads what else it may be as it reads a
-// callee, what such a function runs of what the call gives it among it, and
-// takes anything else, a name of the module or a `let` that the code assigns
+// name where the module declares it, the last declaration where `var`s declare
+// the name more than once, though its code may assign the name another later,
+// or one a name of the module that nothing assigns is bound to; and one
+// written in place, through wrappers, commas and what `=` assigns. It reads a
+// function that calls itself until what it is found to freeze holds, and takes
+// one that calls a function that calls it to freeze any argument it gives that
+// function. Where a call's callee, or a callback, may be Object.freeze or
+// something else, it reads what else it may be as it reads a callee, what such
+// a function runs of what the call gives it among it, and takes anything else,
+// a name of the module that the code assigns, or that a `var` gives a value
+// more than once or declares in a loop's head, a `let` that the code assigns
 // and a parameter among it, for one that may freeze a value that exists before
 // the call. It does not read every form of code. Among those it does not read:
 // a function of another module, a class's constructor, an object's methods, a
@@ -144,23 +146,25 @@
 // in an array or an object, one reached through a local `var` or a `let` that
 // is assigned, one a conditional or an operator chooses, but beside
 // Object.freeze as a call's callee or a callback, a local function declaration
-// that an assignment or a `var` of its name replaces, one passed to any
-// function but an array's iteration method or one it reads, a string's replace
-// among them, and one an iteration method gives the function it calls as
-// `this`; Object.freeze reached through another name for Object, such as
-// `globalThis.Object`, or as the default of a name destructured at the top of
-// a module, by a `var` or in a catch clause; a write into a value through
-// another name that holds it, through what a function returns, or by a
-// function the value is given to; and, where a key is not written as a name or
-// a string, whether a property read reads an inherited part. So it may ask for
-// a mark on a call that does more than it reads, and then accept the mark: it
-// takes a method named as an array's iteration method to run the function it
-// is given, whatever it is called on, so it asks for one on a call of an
-// object's own `map` that stores the function instead; and it asks for one on
-// a call of a function that makes a table and gives a function that freezes a
-// value of the module to one it does not read, as a decorator may give its
-// context's `addInitializer`. Code some hundreds of calls deep may exhaust the
-// stack it runs on.
+// that an assignment or a `var` of its name replaces, a function of the module
+// that a later `var` of its name replaces, one passed to any function but an
+// array's iteration method or one it reads, a string's replace among them, or
+// to one it reads that runs it through a parameter it gathers with `...` or
+// destructures, or through `arguments`, and one an iteration method gives the
+// function it calls as `this`; Object.freeze reached through another name for
+// Object, such as `globalThis.Object`, or as the default of a name
+// destructured at the top of a module, by a `var` or in a catch clause; a
+// write into a value through another name that holds it, through what a
+// function returns, or by a function the value is given to; and, where a key
+// is not written as a name or a string, whether a property read reads an
+// inherited part. So it may ask for a mark on a call that does more than it
+// reads, and then accept the mark: it takes a method named as an array's
+// iteration method to run the function it is given, whatever it is called on,
+// so it asks for one on a call of an object's own `map` that stores the
+// function instead; and it asks for one on a call of a function that makes a
+// table and gives a function that freezes a value of the module to one it does
+// not read, as a decorator may give its context's `addInitializer`. Code some
+// hundreds of calls deep may exhaust the stack it runs on.
 //
 // UNMARKED_SOURCE names the modules the rule leaves out, those that only the
 // ./calc and ./vedic entries reach through their static imports, which the
@@ -380,11 +384,11 @@ const calleeOf = (node) => throughAssignment(rightmost(ts.isTaggedTemplateExpres
 const argumentsOf = (node) => (ts.isTaggedTemplateExpression(node)
   ? [node.template, ...(ts.isTemplateExpression(node.template) ? node.template.templateSpans.map((span) => span.expression) : [])]
   : [...(node.arguments ?? [])]);
-/** The call that calls a function written in place, through wrappers and the right of a comma, or null. */
+/** The call that calls a function written in place, through wrappers, the right of a comma and what `=` assigns, or null. */
 function callingInPlace(fn) {
   let at = fn;
-  while (at.parent && (WRAPPERS.has(at.parent.kind) ||
-    (ts.isBinaryExpression(at.parent) && at.parent.operatorToken.kind === ts.SyntaxKind.CommaToken && at.parent.right === at))) at = at.parent;
+  while (at.parent && (WRAPPERS.has(at.parent.kind) || (ts.isBinaryExpression(at.parent) && at.parent.right === at &&
+    (at.parent.operatorToken.kind === ts.SyntaxKind.CommaToken || at.parent.operatorToken.kind === ts.SyntaxKind.EqualsToken)))) at = at.parent;
   const call = at.parent;
   return call && isCallLike(call) && (ts.isTaggedTemplateExpression(call) ? call.tag : call.expression) === at ? call : null;
 }
@@ -514,11 +518,14 @@ function eachWrite(root, write) {
 }
 
 /** Whether a name a binding declares is assigned anywhere in its scope, in a function inside it too, or counted up or down. */
+const assignments = new WeakMap();
 function assignedIn(binding) {
+  if (assignments.has(binding.id)) return assignments.get(binding.id);
   let found = false;
   eachWrite(binding.scope, (node) => {
     if (ts.isIdentifier(node) && bindingOf(node)?.id === binding.id) found = true;
   });
+  assignments.set(binding.id, found);
   return found;
 }
 
@@ -855,13 +862,13 @@ function callsParameter(fn, index, context, memo) {
   };
   const calls = runs(fn, context, (node) => {
     // A decorator that names it calls it when its class is defined.
-    if (node.parent && ts.isDecorator(node.parent) && isParameter(rightmost(node))) return true;
+    if (node.parent && ts.isDecorator(node.parent) && isParameter(throughAssignment(rightmost(node)))) return true;
     if (!ts.isCallExpression(node) && !ts.isNewExpression(node)) return false;
     const callee = calleeOf(node);
     if (isParameter(callee)) return true;
     if (ts.isPropertyAccessExpression(callee) && (callee.name.text === "call" || callee.name.text === "apply") &&
-      isParameter(rightmost(callee.expression))) return true;
-    return (node.arguments ?? []).some((argument, at) => isParameter(rightmost(argument)) && callsArgument(node, at, context, memo));
+      isParameter(throughAssignment(rightmost(callee.expression)))) return true;
+    return (node.arguments ?? []).some((argument, at) => isParameter(throughAssignment(rightmost(argument))) && callsArgument(node, at, context, memo));
   }, {}, new Set(), memo);
   memo.answers.set(parameter, calls);
   if (calls) {
@@ -1364,6 +1371,23 @@ function tableFunctions(statements, context) {
   for (const statement of statements) eachWrite(statement, (node) => {
     if (ts.isIdentifier(node) && !bindingOf(node)) assigned.add(node.text);
   });
+  // A `var` of the module that the code that runs when the module loads gives a value more than once, or declares in a
+  // loop's head, is assigned too.
+  const given = new Map();
+  const countVars = (node) => {
+    if (isDeferred(node) || ts.isModuleDeclaration(node)) return;
+    if (ts.isVariableDeclarationList(node) && !(node.flags & ts.NodeFlags.BlockScoped)) {
+      const inLoopHead = ts.isForInStatement(node.parent) || ts.isForOfStatement(node.parent);
+      for (const declaration of node.declarations) {
+        const names = new Set();
+        bindNames(declaration.name, names);
+        for (const name of names) given.set(name, (given.get(name) ?? 0) + (inLoopHead ? 2 : declaration.initializer ? 1 : 0));
+      }
+    }
+    ts.forEachChild(node, countVars);
+  };
+  for (const statement of statements) countVars(statement);
+  for (const [name, count] of given) if (count > 1) assigned.add(name);
   for (const statement of statements) {
     if (ts.isFunctionDeclaration(statement) && statement.name && statement.body) {
       context.functions.set(statement.name.text, statement.body);
