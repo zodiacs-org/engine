@@ -753,7 +753,7 @@ function viaKeys() { for (const key of INDEX.keys()) Object.freeze(key); return 
 function viaForEachKey() { new Map([[STATE, 1]]).forEach((value, key) => Object.freeze(key)); return 1; }
 function viaCommaConst() { const freezeIt = (0, Object.freeze); return freezeIt(STATE); }
 function viaInherited() { return Object.freeze([].constructor); }
-function viaInheritedMethod() { return Object.freeze([].map); }
+function viaInheritedMethod() { return Object.freeze([].push); }
 function viaIterator() { return Object.freeze([][Symbol.iterator]); }
 function viaOwnLength() { return Object.freeze({ length: { a: 1 } }.length); }
 function viaSpreadFrom() { return deepFreeze(Array.from(...([[1], () => STATE] as [number[], () => object]))); }
@@ -919,24 +919,150 @@ export const VISITED = viaWalk();
     ]);
   });
 
-  it("takes a function a `var` of its name, or an assignment, may replace for a value that may exist before the call", () => {
-    // TypeScript refuses both; DECLARED's function is made where it is declared.
+  it("reads destructured inherited parts, writes into what a call or a conditional gives, decorators given by name and a freeze a conditional chooses", () => {
+    // The marks the list leaves out freeze only what is made where it is written: OWN_KEY, ARRAY_NAME, REST_NAME,
+    // GROUPS_NEW, GROUPS_DEEP_NEW, KEY_ONLY, CHOSEN_TARGET_NEW, CHOSEN_ASSIGN_NEW, ASSIGNED_NEW and KEPT_DECORATOR. RETURNED's and HELD's are left as they are because a function a call returns, or
+    // one held in an array, is not read. PAIR's two marks pin a profile that rests on an unfinished one, which is not kept: kept, it
+    // would let g(1) through. THIS_ARG pins that a parameter of a function an iteration method is given but not to call, the
+    // `this` of the function it calls, may hold a value that exists before the call.
     expect(atLines(`
 const STATE = { a: 1 };
+const ROWS = [{ a: 1 }, { a: 2 }];
+function deepFreeze(value: any): any { for (const inner of Object.values(value)) if (typeof inner === "object" && inner !== null) deepFreeze(inner); return Object.freeze(value); }
+function lockState(value: unknown, context: unknown) { Object.freeze(STATE); return value; }
+function keep(value: unknown, context: unknown) { return value; }
+function lockAny(value: object) { return Object.freeze(value); }
+function noop(value: object) { return value; }
+function viaPair() {
+  const f = (n: number): number => { if (n) { Object.freeze(STATE); g(n - 1); } return 1; };
+  const g = (n: number): number => (n ? f(n) : 0);
+  const a = /*#__PURE__*/ f(0);
+  const b = /*#__PURE__*/ g(1);
+  return a + b;
+}
+function viaConstructor() { const { constructor } = []; return Object.freeze(constructor); }
+function viaToString() { const { toString: method } = {}; return Object.freeze(method); }
+function viaOwnKey() { const { inner } = { inner: { a: 1 } }; return Object.freeze(inner); }
+function viaArrayName() { const [toString] = [{ a: 1 }]; return Object.freeze(toString); }
+function viaRestName() { const { ...toString } = { a: 1 }; return Object.freeze(toString); }
+function viaComputedKey() { const { ["constructor"]: made } = []; return Object.freeze(made); }
+function viaCallbackKey() { [[]].forEach(({ constructor }) => Object.freeze(constructor)); return 1; }
+function viaLoopKey() { for (const { hasOwnProperty } of [{}]) Object.freeze(hasOwnProperty); return 1; }
+function viaGroups() { const groups: object[][] = [[]]; for (const row of ROWS) { if (row.a > 1) groups.push([]); groups.at(-1)!.push(row); } return deepFreeze(groups); }
+function viaGroupsNew() { const groups: object[][] = [[]]; for (const key of ["a", "b"]) groups.at(-1)!.push({ key }); return Object.freeze(groups); }
+function viaGroupsDeepNew() { const groups: object[][] = [[]]; for (const key of ["a", "b"]) groups.at(-1)!.push({ key }); return deepFreeze(groups); }
+function viaKeyOnly() { const box: Record<string, object> = {}; const other: Record<string, object> = {}; other[String(Object.keys(box).length)] = STATE; return deepFreeze(box); }
+function viaChosen(flag: boolean) { const a: object[] = []; const b: object[] = []; (flag ? a : b).push(STATE); return deepFreeze([a, b]); }
+function viaChosenTarget(flag: boolean) { const a: { v?: object } = {}; const b: { v?: object } = {}; (flag ? a : b).v = STATE; return deepFreeze([a, b]); }
+function viaChosenTargetNew(flag: boolean) { const a: { v?: object } = {}; const b: { v?: object } = {}; (flag ? a : b).v = { k: 1 }; return deepFreeze([a, b]); }
+function viaChosenAssignNew(flag: boolean) { const a = {}; const b = {}; Object.assign(flag ? a : b, { inner: { k: 1 } }); return deepFreeze([a, b]); }
+function viaChosenAssign(flag: boolean) { const a = {}; const b = {}; Object.assign(flag ? a : b, { inner: STATE }); return deepFreeze([a, b]); }
+function viaAssignedNew() { const target = {}; Object.assign(target, { inner: { a: 1 } }); return deepFreeze(target); }
+function viaNext() { return Object.freeze([].values().next); }
+function viaChosenFreeze(flag: boolean) { return (flag ? Object.freeze : (value: object) => value)(STATE); }
+function viaChosenCallback(flag: boolean) { return ROWS.map(flag ? Object.freeze : (row) => row); }
+function viaChosenLate(flag: boolean) { return ROWS.map(flag ? (row) => row : Object.freeze); }
+function viaAndCallback() { ROWS.forEach(noop && Object.freeze); return 1; }
+function viaOrCallback() { ROWS.forEach(Object.freeze || noop); return 1; }
+function viaDecorated() { @lockState class Held {} return Held; }
+function viaKeptDecorator() { @keep class Held {} return Held; }
+function viaReturned() { const makeLocker = () => lockAny; return makeLocker()(STATE); }
+function viaHeld() { return [lockAny][0](STATE); }
+function viaThisArg() { const acc: object[] = []; [{ a: 1 }].forEach(function (this: (row: object) => void) { this(STATE); }, function (row: object) { acc.push(row); }); return deepFreeze(acc); }
+export const PAIR = viaPair();
+export const CONSTRUCTOR = /*#__PURE__*/ viaConstructor();
+export const TO_STRING = /*#__PURE__*/ viaToString();
+export const OWN_KEY = /*#__PURE__*/ viaOwnKey();
+export const ARRAY_NAME = /*#__PURE__*/ viaArrayName();
+export const REST_NAME = /*#__PURE__*/ viaRestName();
+export const COMPUTED_KEY = /*#__PURE__*/ viaComputedKey();
+export const CALLBACK_KEY = /*#__PURE__*/ viaCallbackKey();
+export const LOOP_KEY = /*#__PURE__*/ viaLoopKey();
+export const GROUPS = /*#__PURE__*/ viaGroups();
+export const GROUPS_NEW = /*#__PURE__*/ viaGroupsNew();
+export const GROUPS_DEEP_NEW = /*#__PURE__*/ viaGroupsDeepNew();
+export const KEY_ONLY = /*#__PURE__*/ viaKeyOnly();
+export const CHOSEN = /*#__PURE__*/ viaChosen(true);
+export const CHOSEN_TARGET = /*#__PURE__*/ viaChosenTarget(true);
+export const CHOSEN_TARGET_NEW = /*#__PURE__*/ viaChosenTargetNew(true);
+export const CHOSEN_ASSIGN_NEW = /*#__PURE__*/ viaChosenAssignNew(true);
+export const CHOSEN_ASSIGN = /*#__PURE__*/ viaChosenAssign(true);
+export const ASSIGNED_NEW = /*#__PURE__*/ viaAssignedNew();
+export const NEXT = /*#__PURE__*/ viaNext();
+export const CHOSEN_FREEZE = /*#__PURE__*/ viaChosenFreeze(true);
+export const CHOSEN_CALLBACK = /*#__PURE__*/ viaChosenCallback(true);
+export const CHOSEN_LATE = /*#__PURE__*/ viaChosenLate(true);
+export const AND_CALLBACK = /*#__PURE__*/ viaAndCallback();
+export const OR_CALLBACK = /*#__PURE__*/ viaOrCallback();
+export const DECORATED = /*#__PURE__*/ viaDecorated();
+export const KEPT_DECORATOR = /*#__PURE__*/ viaKeptDecorator();
+export const RETURNED = /*#__PURE__*/ viaReturned();
+export const HELD = /*#__PURE__*/ viaHeld();
+export const THIS_ARG = /*#__PURE__*/ viaThisArg();
+`)).toEqual([
+      "12 (no table): a mark on a call that may freeze a value that exists before it: f(0)",
+      "13 (no table): a mark on a call that may freeze a value that exists before it: g(1)",
+      "45 PAIR: a call that may freeze a value that exists before it: viaPair()",
+      "46 CONSTRUCTOR: a mark on a call that may freeze a value that exists before it: viaConstructor()",
+      "47 TO_STRING: a mark on a call that may freeze a value that exists before it: viaToString()",
+      "51 COMPUTED_KEY: a mark on a call that may freeze a value that exists before it: viaComputedKey()",
+      "52 CALLBACK_KEY: a mark on a call that may freeze a value that exists before it: viaCallbackKey()",
+      "53 LOOP_KEY: a mark on a call that may freeze a value that exists before it: viaLoopKey()",
+      "54 GROUPS: a mark on a call that may freeze a value that exists before it: viaGroups()",
+      "58 CHOSEN: a mark on a call that may freeze a value that exists before it: viaChosen(true)",
+      "59 CHOSEN_TARGET: a mark on a call that may freeze a value that exists before it: viaChosenTarget(true)",
+      "62 CHOSEN_ASSIGN: a mark on a call that may freeze a value that exists before it: viaChosenAssign(true)",
+      "64 NEXT: a mark on a call that may freeze a value that exists before it: viaNext()",
+      "65 CHOSEN_FREEZE: a mark on a call that may freeze a value that exists before it: viaChosenFreeze(true)",
+      "66 CHOSEN_CALLBACK: a mark on a call that may freeze a value that exists before it: viaChosenCallback(true)",
+      "67 CHOSEN_LATE: a mark on a call that may freeze a value that exists before it: viaChosenLate(true)",
+      "68 AND_CALLBACK: a mark on a call that may freeze a value that exists before it: viaAndCallback()",
+      "69 OR_CALLBACK: a mark on a call that may freeze a value that exists before it: viaOrCallback()",
+      "70 DECORATED: a mark on a call that may freeze a value that exists before it: viaDecorated()",
+      "74 THIS_ARG: a mark on a call that may freeze a value that exists before it: viaThisArg()"
+    ]);
+    expect(atLines(`
+function makeTable(value: unknown, context: unknown) { Object.freeze(["one"]); return value; }
+function withDecorated() { @makeTable class Held {} return Held; }
+function chosen(flag: boolean) { return (flag ? Object.freeze : (value: string[]) => value)(["two"]); }
+export const DECORATED = withDecorated();
+export const CHOSEN = chosen(true);
+export const CHOSEN_HERE = (true ? Object.freeze : (value: string[]) => value)(["three"]);
+`)).toEqual([
+      "5 DECORATED: unmarked: withDecorated()",
+      "6 CHOSEN: unmarked: chosen(true)",
+      "7 CHOSEN_HERE: unmarked: (true ? Object.freeze : (value: string[]) => value)([\"three\"])",
+      "7 CHOSEN_HERE: a conditional: true ? Object.freeze : (value: string[]) => value",
+      "7 CHOSEN_HERE: a property read: Object.freeze"
+    ]);
+  });
+
+  it("takes a function's name that a `var` of it may replace, or an assignment does, and a module's own `undefined`, for values that may exist before the call", () => {
+    // TypeScript refuses all of these. DECLARED's function is made where it is declared. UNSET_VAR's and LOOP_VAR's
+    // calls read the function, which a `var` given no value, or never given one, leaves in place. A `var` of a
+    // function's name at the top of a module is an error in a module.
+    expect(atLines(`
+const STATE = { a: 1 };
+const undefined = { a: 1 };
 function lockIt(value) { return Object.freeze(value); }
 function viaVar() { var held = STATE; function held() {} return Object.freeze(held); }
 function viaReassigned() { function held() {} held = STATE; return Object.freeze(held); }
 function viaDeclared() { function held() {} return Object.freeze(held); }
-var shadow = lockIt;
-function shadow() {}
+function viaUnsetVar() { var lock; function lock(value) { return Object.freeze(value); } return lock(STATE); }
+function viaLoopVar() { for (var lock of []) void lock; function lock(value) { return Object.freeze(value); } return lock(STATE); }
+function viaUndefined() { return Object.freeze(undefined); }
 export const VAR = /*#__PURE__*/ viaVar();
 export const REASSIGNED = /*#__PURE__*/ viaReassigned();
 export const DECLARED = /*#__PURE__*/ viaDeclared();
-export const SHADOWED = /*#__PURE__*/ shadow(STATE);
+export const UNSET_VAR = /*#__PURE__*/ viaUnsetVar();
+export const LOOP_VAR = /*#__PURE__*/ viaLoopVar();
+export const UNDEFINED = /*#__PURE__*/ viaUndefined();
 `, { fileName: "module.js" })).toEqual([
-      "9 VAR: a mark on a call that may freeze a value that exists before it: viaVar()",
-      "10 REASSIGNED: a mark on a call that may freeze a value that exists before it: viaReassigned()",
-      "12 SHADOWED: a mark on a call that may freeze a value that exists before it: shadow(STATE)"
+      "11 VAR: a mark on a call that may freeze a value that exists before it: viaVar()",
+      "12 REASSIGNED: a mark on a call that may freeze a value that exists before it: viaReassigned()",
+      "14 UNSET_VAR: a mark on a call that may freeze a value that exists before it: viaUnsetVar()",
+      "15 LOOP_VAR: a mark on a call that may freeze a value that exists before it: viaLoopVar()",
+      "16 UNDEFINED: a mark on a call that may freeze a value that exists before it: viaUndefined()"
     ]);
   });
 
