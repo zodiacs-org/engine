@@ -32,14 +32,16 @@
 // A table is a variable a module declares at its top level, or its default
 // export, whose initializer, when the module loads, makes a table: calls
 // Object.freeze (or what may give it, as `flag ? Object.freeze : keep` does,
-// or a name bound to either), calls, constructs or tags a template with a
-// function of the same module that makes one, or builds a Set or a Map from
-// data (`new Set([...])`; an empty one is the module's state, not a table),
-// itself or in a function it runs. A function makes a table when its code does
-// any of these, its parameters' defaults and the parts of a class in it that
-// run when the class is defined among it, with the functions it runs: those it
-// declares and calls, calls or constructs in place, or passes, written there
-// or by name, Object.freeze among them, to an array's iteration method or to a
+// or a name bound to either, or, in a function, a parameter or a name a
+// parameter, a const, a `let` or a loop destructures that may hold either as
+// its default), calls, constructs or tags a template with a function of the
+// same module that makes one, or builds a Set or a Map from data
+// (`new Set([...])`; an empty one is the module's state, not a table), itself
+// or in a function it runs. A function makes a table when its code does any of
+// these, its parameters' defaults and the parts of a class in it that run when
+// the class is defined among it, with the functions it runs: those it declares
+// and calls, calls or constructs in place, or passes, written there or by
+// name, Object.freeze among them, to an array's iteration method or to a
 // function that calls it, the default of a parameter it calls, and one a
 // decorator names. A generator's body is taken to run where the generator is
 // called, since what calls it may run it. A function passed to any other
@@ -123,37 +125,42 @@
 // call returns.
 //
 // The check reads a function where it is called, constructed or given by name:
-// one the code declares, the declaration with a body where it is overloaded,
-// or a `const`, or a `let` that nothing assigns, is bound to; one of the
-// module, declared or bound to a name where the module declares it, though its
-// code may assign the name another later, or one a name of the module that
-// nothing assigns is bound to; and one written in place, through wrappers and
-// commas. It reads a function that calls itself until what it is found to
-// freeze holds, and takes one that calls a function that calls it to freeze
-// any argument it gives that function. Where a callee or a callback may be
-// Object.freeze or something else, it reads what else it may be too, and takes
-// anything but a function it reads for one that may freeze a value that exists
-// before the call. It does not read every form of code. Among those it does
-// not read: a function of another module, a class's constructor, an object's
-// methods, a function run through `call`, `apply` or `bind`, one a call
-// returns, one held in an array or an object, one reached through a local
-// `var` or a `let` that is assigned, one a conditional chooses, unless the
-// other may be Object.freeze, a local function declaration that an assignment
-// or a `var` of its name replaces, one passed to any function but an array's
-// iteration method or one it reads, a string's replace among them, and one an
-// iteration method gives the function it calls as `this`; Object.freeze
-// reached through another name for Object, such as `globalThis.Object`; a
-// write into a value through another name that holds it, through what a
-// function returns, or by a function the value is given to; and, where a key
-// is not written as a name or a string, whether a property read reads an
-// inherited part. So it may ask for a mark on a call that does more than it
-// reads, and then accept the mark: it takes a method named as an array's
-// iteration method to run the function it is given, whatever it is called on,
-// so it asks for one on a call of an object's own `map` that stores the
-// function instead; and it asks for one on a call of a function that makes a
-// table and gives a function that freezes a value of the module to one it does
-// not read, as a decorator may give its context's `addInitializer`. Code some
-// hundreds of calls deep may exhaust the stack it runs on.
+// one the code declares, the last declaration of its name with a body where
+// there are several, as an overloaded function has, or a `const`, or a `let`
+// that nothing assigns, is bound to; one of the module, declared or bound to a
+// name where the module declares it, though its code may assign the name
+// another later, or one a name of the module that nothing assigns is bound to;
+// and one written in place, through wrappers, commas and what `=` assigns. It
+// reads a function that calls itself until what it is found to freeze holds,
+// and takes one that calls a function that calls it to freeze any argument it
+// gives that function. Where a call's callee, or a callback, may be
+// Object.freeze or something else, it reads what else it may be as it reads a
+// callee, what such a function runs of what the call gives it among it, and
+// takes anything else, a name of the module or a `let` that the code assigns
+// and a parameter among it, for one that may freeze a value that exists before
+// the call. It does not read every form of code. Among those it does not read:
+// a function of another module, a class's constructor, an object's methods, a
+// function run through `call`, `apply` or `bind`, one a call returns, one held
+// in an array or an object, one reached through a local `var` or a `let` that
+// is assigned, one a conditional or an operator chooses, but beside
+// Object.freeze as a call's callee or a callback, a local function declaration
+// that an assignment or a `var` of its name replaces, one passed to any
+// function but an array's iteration method or one it reads, a string's replace
+// among them, and one an iteration method gives the function it calls as
+// `this`; Object.freeze reached through another name for Object, such as
+// `globalThis.Object`, or as the default of a name destructured at the top of
+// a module, by a `var` or in a catch clause; a write into a value through
+// another name that holds it, through what a function returns, or by a
+// function the value is given to; and, where a key is not written as a name or
+// a string, whether a property read reads an inherited part. So it may ask for
+// a mark on a call that does more than it reads, and then accept the mark: it
+// takes a method named as an array's iteration method to run the function it
+// is given, whatever it is called on, so it asks for one on a call of an
+// object's own `map` that stores the function instead; and it asks for one on
+// a call of a function that makes a table and gives a function that freezes a
+// value of the module to one it does not read, as a decorator may give its
+// context's `addInitializer`. Code some hundreds of calls deep may exhaust the
+// stack it runs on.
 //
 // UNMARKED_SOURCE names the modules the rule leaves out, those that only the
 // ./calc and ./vedic entries reach through their static imports, which the
@@ -362,8 +369,13 @@ function freezeAliases(statements) {
 const parametersOf = (fn) => fn.parameters.filter((parameter) => !(ts.isIdentifier(parameter.name) && parameter.name.text === "this"));
 /** A call, a `new` or a tagged template. */
 const isCallLike = (node) => ts.isCallExpression(node) || ts.isNewExpression(node) || ts.isTaggedTemplateExpression(node);
-/** What a call calls: its callee, through wrappers and the right of a comma. */
-const calleeOf = (node) => rightmost(ts.isTaggedTemplateExpression(node) ? node.tag : node.expression);
+/** What an assignment `a = b` gives, b, through wrappers and commas, to the end of a chain of them; any other expression itself. */
+const throughAssignment = (node) => {
+  while (ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) node = rightmost(node.right);
+  return node;
+};
+/** What a call calls: its callee, through wrappers, the right of a comma and what `=` assigns. */
+const calleeOf = (node) => throughAssignment(rightmost(ts.isTaggedTemplateExpression(node) ? node.tag : node.expression));
 /** What a call gives the function it calls, in order: a tagged template gives its strings, then its substitutions. */
 const argumentsOf = (node) => (ts.isTaggedTemplateExpression(node)
   ? [node.template, ...(ts.isTemplateExpression(node.template) ? node.template.templateSpans.map((span) => span.expression) : [])]
@@ -431,9 +443,8 @@ function declarationIn(scope, name) {
         if (path) return { kind: kindOf(statement.declarationList), declaration, path, id: declaringIdentifier(declaration.name, path) };
       }
     } else if (ts.isFunctionDeclaration(statement) && statement.name?.text === name) {
-      // An overloaded function is the declaration with a body.
-      const declaration = statement.body ? statement
-        : statements.find((other) => ts.isFunctionDeclaration(other) && other.name?.text === name && other.body) ?? statement;
+      // The function is the last declaration of the name with a body: an overloaded one's, or, in JavaScript, the last of several.
+      const declaration = statements.filter((other) => ts.isFunctionDeclaration(other) && other.name?.text === name && other.body).pop() ?? statement;
       return { kind: "function", node: declaration, id: declaration.name };
     } else if ((ts.isClassDeclaration(statement) || ts.isEnumDeclaration(statement) || ts.isModuleDeclaration(statement)) &&
       statement.name && ts.isIdentifier(statement.name) && statement.name.text === name) {
@@ -582,7 +593,9 @@ const CHOOSING = new Set([ts.SyntaxKind.BarBarToken, ts.SyntaxKind.AmpersandAmpe
  * Whether an expression is, or may be, Object.freeze, or a name bound to it,
  * through wrappers and the right of a comma: either value of a conditional,
  * of `||`, `&&` or `??`, or of `||=`, `&&=` or `??=`, and what `=` assigns,
- * among them, and what a const, or a `let` first, is bound to.
+ * among them; what a const, or a `let` first, is bound to, as
+ * `const { freeze } = Object` binds freeze; and the default of a parameter,
+ * or of a name a parameter, a const, a `let` or a loop destructures.
  */
 function isFreezeReference(node, context, seen = new Set()) {
   node = rightmost(node);
@@ -596,24 +609,32 @@ function isFreezeReference(node, context, seen = new Set()) {
   if (!ts.isIdentifier(node)) return false;
   const binding = bindingOf(node);
   if (!binding) return context.aliases.has(node.text);
-  // A `let` first bound to it may still hold it when it is called.
-  if (binding.kind !== "const" && (binding.kind !== "let" || !binding.declaration.initializer)) return false;
   if (seen.has(binding.id)) return false;
   seen.add(binding.id);
+  // A destructured name, or a parameter, may hold its default.
+  const last = binding.path?.length ? binding.path[binding.path.length - 1] : null;
+  if (last?.initializer && isFreezeReference(last.initializer, context, seen)) return true;
+  if (binding.kind === "parameter") return !last && Boolean(binding.parameter.initializer) && isFreezeReference(binding.parameter.initializer, context, seen);
+  // A `let` first bound to it may still hold it when it is called.
+  if (binding.kind !== "const" && (binding.kind !== "let" || !binding.declaration.initializer)) return false;
+  if (!binding.path.length) return isFreezeReference(binding.declaration.initializer, context, seen);
+  return isObjectsFreeze(binding);
+}
+/** Whether a destructured name is first bound to Object.freeze, as `const { freeze } = Object`'s is. */
+function isObjectsFreeze(binding) {
+  if ((binding.kind !== "const" && binding.kind !== "let") || binding.path.length !== 1 || !binding.declaration.initializer) return false;
   const value = unwrap(binding.declaration.initializer);
-  if (!binding.path.length) return isFreezeReference(value, context, seen);
-  // `const { freeze } = Object`.
-  const element = binding.path[0];
-  const property = element.propertyName ?? element.name;
-  return binding.path.length === 1 && ts.isIdentifier(value) && value.text === "Object" && !bindingOf(value) &&
-    ts.isIdentifier(property) && property.text === "freeze";
+  const property = binding.path[0].propertyName ?? binding.path[0].name;
+  return ts.isIdentifier(value) && value.text === "Object" && !bindingOf(value) && ts.isIdentifier(property) && property.text === "freeze";
 }
 
 /**
  * What else an expression that may be Object.freeze (isFreezeReference,
  * above) may be: the values of a conditional, a `||`, `&&` or `??`, or an
  * assignment, that are not Object.freeze, through names bound to them as
- * isFreezeReference follows them; none where it can only be Object.freeze.
+ * isFreezeReference follows them; and the name itself, for a name of the
+ * module or a `let` that the code assigns, a parameter or a destructured
+ * name, which may hold anything. None where it can only be Object.freeze.
  */
 function besidesFreeze(node, context, seen = new Set()) {
   node = rightmost(node);
@@ -626,19 +647,20 @@ function besidesFreeze(node, context, seen = new Set()) {
   if (!ts.isIdentifier(node)) return [node];
   const binding = bindingOf(node);
   if (!binding) {
-    const value = context.constants.get(node.text);
-    if (value && !seen.has(node.text)) {
-      seen.add(node.text);
-      return besidesFreeze(value, context, seen);
-    }
+    const value = context.values.get(node.text);
+    const others = value && !seen.has(node.text) ? (seen.add(node.text), besidesFreeze(value, context, seen)) : [];
+    if (context.assigned.has(node.text)) return [...others, node];
+    if (value) return others;
     return context.aliases.has(node.text) ? [] : [node];
   }
-  if ((binding.kind === "const" || binding.kind === "let") && binding.declaration.initializer && !binding.path.length) {
-    if (seen.has(binding.id)) return [];
-    seen.add(binding.id);
-    return besidesFreeze(binding.declaration.initializer, context, seen);
+  if (seen.has(binding.id)) return [];
+  seen.add(binding.id);
+  if (binding.path?.length) return isObjectsFreeze(binding) && !(binding.kind === "let" && assignedIn(binding)) ? [] : [node];
+  if ((binding.kind === "const" || binding.kind === "let") && binding.declaration.initializer) {
+    const others = besidesFreeze(binding.declaration.initializer, context, seen);
+    return binding.kind === "let" && assignedIn(binding) ? [...others, node] : others;
   }
-  return isFreezeReference(node, context) ? [] : [node];
+  return [node];
 }
 /**
  * What a call whose callee may be Object.freeze (isFreeze) does besides, with
@@ -658,11 +680,12 @@ function applyBesidesFreeze(node, context, use, into) {
  * The function an expression names: one written there; a function that code
  * around it declares, or a const, or a `let` that nothing assigns, bound to
  * one; or one of the module, by its name or a name of the module bound to it
- * (tableFunctions, below). Through wrappers and the right of a comma. Null
- * for anything else, a function of another module among them.
+ * (tableFunctions, below). Through wrappers, the right of a comma and what
+ * `=` assigns. Null for anything else, a function of another module among
+ * them.
  */
 function functionOf(node, context, seen = new Set()) {
-  node = rightmost(node);
+  node = throughAssignment(rightmost(node));
   if (isFunction(node)) return node;
   if (!ts.isIdentifier(node) || seen.has(node.text)) return null;
   seen.add(node.text);
@@ -782,12 +805,21 @@ function runs(root, context, test, { named = true } = {}, seen = new Set(), memo
 /**
  * Whether a call runs the function it is given at `index`: an array's
  * iteration method, its callback (Array.from's second argument, any other's
- * first), taken by the method's name whatever it is called on; or a function
- * the check reads (functionOf) that calls the parameter there.
+ * first), taken by the method's name whatever it is called on; a function
+ * the check reads (functionOf) that calls the parameter there; and, where a
+ * call's callee may be Object.freeze, what else it may be (besidesFreeze).
  */
 function callsArgument(call, index, context, memo = newMemo()) {
   const callee = calleeOf(call);
   if (ts.isPropertyAccessExpression(callee) && ITERATING.has(callee.name.text)) return index === (callee.name.text === "from" ? 1 : 0);
+  // Object.freeze runs nothing it is given; what else a call's callee that may be it may be may, and one the check does not
+  // read is taken to.
+  if (ts.isCallExpression(call) && isFreezeReference(callee, context)) {
+    return besidesFreeze(callee, context).some((other) => {
+      const fn = functionOf(other, context);
+      return !fn || callsParameter(fn, index, context, memo);
+    });
+  }
   return callsParameter(functionOf(callee, context), index, context, memo);
 }
 
@@ -811,16 +843,25 @@ function callsParameter(fn, index, context, memo) {
   memo.answers.set(parameter, PENDING);
   const usedBefore = memo.pendingUsed;
   memo.pendingUsed = false;
-  const isParameter = (node) => ts.isIdentifier(node) && bindingOf(node)?.id === parameter.name;
+  // The parameter, or a const, or a `let` that nothing assigns, bound to it.
+  const isParameter = (node, seen = new Set()) => {
+    const binding = ts.isIdentifier(node) ? bindingOf(node) : null;
+    if (!binding) return false;
+    if (binding.id === parameter.name) return true;
+    if ((binding.kind !== "const" && (binding.kind !== "let" || assignedIn(binding))) || binding.path.length ||
+      !binding.declaration.initializer || seen.has(binding.id)) return false;
+    seen.add(binding.id);
+    return isParameter(throughAssignment(rightmost(binding.declaration.initializer)), seen);
+  };
   const calls = runs(fn, context, (node) => {
     // A decorator that names it calls it when its class is defined.
-    if (node.parent && ts.isDecorator(node.parent) && isParameter(unwrap(node))) return true;
+    if (node.parent && ts.isDecorator(node.parent) && isParameter(rightmost(node))) return true;
     if (!ts.isCallExpression(node) && !ts.isNewExpression(node)) return false;
     const callee = calleeOf(node);
     if (isParameter(callee)) return true;
     if (ts.isPropertyAccessExpression(callee) && (callee.name.text === "call" || callee.name.text === "apply") &&
-      isParameter(unwrap(callee.expression))) return true;
-    return (node.arguments ?? []).some((argument, at) => isParameter(unwrap(argument)) && callsArgument(node, at, context, memo));
+      isParameter(rightmost(callee.expression))) return true;
+    return (node.arguments ?? []).some((argument, at) => isParameter(rightmost(argument)) && callsArgument(node, at, context, memo));
   }, {}, new Set(), memo);
   memo.answers.set(parameter, calls);
   if (calls) {
@@ -1270,10 +1311,10 @@ function freezeProfile(fn, context) {
     if (isFreeze(node, context)) {
       if (node.arguments.length) use(node.arguments[0], false);
       applyBesidesFreeze(node, context, use, into);
-      return false;
+    } else {
+      const callee = calledFunction(node, context);
+      if (callee && !callingInPlace(callee)) applyProfile(profileOf(callee, context), argumentsOf(node), use, into);
     }
-    const callee = calledFunction(node, context);
-    if (callee && !callingInPlace(callee)) applyProfile(profileOf(callee, context), argumentsOf(node), use, into);
     applyCallbacks(node, context, use, into, { inPlace: false });
     return false;
   }, { named: false });
@@ -1319,7 +1360,7 @@ const leftOut = (profile, given) => [...profile.defaults].some((index) => !given
  * of each of these (freezeProfile, above). Each by name, to a fixed point.
  */
 function tableFunctions(statements, context) {
-  const assigned = new Set();
+  const { assigned } = context;
   for (const statement of statements) eachWrite(statement, (node) => {
     if (ts.isIdentifier(node) && !bindingOf(node)) assigned.add(node.text);
   });
@@ -1331,6 +1372,7 @@ function tableFunctions(statements, context) {
       for (const declaration of statement.declarationList.declarations) {
         const value = declaration.initializer && unwrap(declaration.initializer);
         if (!ts.isIdentifier(declaration.name) || !value) continue;
+        context.values.set(declaration.name.text, declaration.initializer);
         if (isFunction(value)) context.functions.set(declaration.name.text, value.body);
         else if ((statement.declarationList.flags & ts.NodeFlags.Const) || !assigned.has(declaration.name.text)) {
           context.constants.set(declaration.name.text, declaration.initializer);
@@ -1491,7 +1533,7 @@ function loadTime(initializer, context) {
     if (ts.isClassExpression(node)) {
       // A class's body runs when it is constructed, but for the parts that run when it is defined.
       for (const part of classLoadParts(node)) {
-        if (part.kind === "decorator" && partMakesTable(part, context)) makes = true;
+        if ((part.kind === "decorator" || part.kind === "block") && partMakesTable(part, context)) makes = true;
         if (part.kind === "block") problems.push({ node: part.node.parent, what: "a static block" });
         else if (part.kind === "decorator") problems.push({ node: part.node.parent, what: "a decorator" });
         else if (part.kind === "name" && !isPlainKey(part.node, context)) problems.push({ node: part.node.parent, what: "a computed key" });
@@ -1697,7 +1739,8 @@ function analyze(code, fileName, module) {
   const contexts = new Map();
   for (const [name, statements] of byModule) {
     const context = {
-      aliases: freezeAliases(statements), functions: new Map(), constants: new Map(), tableFunctions: new Set(), profiles: new Map(),
+      aliases: freezeAliases(statements), functions: new Map(), constants: new Map(), values: new Map(), assigned: new Set(),
+      tableFunctions: new Set(), profiles: new Map(),
       stack: [], low: Infinity, found: new Map(), declared
     };
     tableFunctions(statements, context);

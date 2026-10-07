@@ -1145,12 +1145,114 @@ export const DEEP_CHOICE = /*#__PURE__*/ (true ? Object.freeze : deepFreeze)({ i
     ]);
   });
 
+  it("reads what else a callee that may be Object.freeze may be when its name is assigned or it runs what it is given, Object.freeze as a default, what `=` assigns, a parameter a const holds, and a class expression's static block", () => {
+    // lock and lockPure, names of the module that its code assigns, and ASSIGNED_LOCAL's and LET_OBJECT_ASSIGNED's
+    // `let`s may hold anything when they are called; so may a parameter whose default is Object.freeze, whatever the
+    // call gives it. The check refuses ASSIGNED_PURE's, DEFAULT_NEW's and DESTRUCTURED_NEW's marks so, though as
+    // written their calls freeze only what is made where it is written. LET_OBJECT's `let` holds Object.freeze.
+    // LOCAL_KEEP's, LET_KEEP's and KEEP_CALLBACK's callees are Object.freeze or keep, which freezes nothing and calls
+    // nothing; OWN_FREEZE_NEW's freezes a new object; OBJECT_KEYS's keys and LOCAL_OBJECT's freeze are not
+    // Object.freeze. ASSIGNED_CHAIN's callee is lockAny, through two assignments, and WRAPPED_ALIAS's g is its
+    // parameter.
+    expect(atLines(`
+const STATE = { a: 1 };
+function deepFreeze(value: any): any { for (const inner of Object.values(value)) if (typeof inner === "object" && inner !== null) deepFreeze(inner); return Object.freeze(value); }
+function keep<T>(value: T): T { return value; }
+function lockAny(value: object): object { Object.freeze(STATE); return value; }
+function runIt(callback: () => void): any { callback(); return 1; }
+let lock: <T>(value: T) => T = Math.PI > 3 ? deepFreeze : Object.freeze;
+export function setLock(next: <T>(value: T) => T) { lock = next; }
+function viaAssignedModule() { return lock({ inner: STATE }); }
+function viaAssignedLocal(flag: boolean) { let chosen: (value: object) => object = Object.freeze; if (!flag) chosen = lockAny; return chosen({ a: 1 }); }
+function viaRunner(flag: boolean) { return (flag ? Object.freeze : runIt)(() => { Object.freeze(STATE); }); }
+function viaRunnerName(flag: boolean) { function freezeState() { Object.freeze(STATE); } const chosen = flag ? Object.freeze : runIt; return chosen(freezeState); }
+function viaDefault(chosen: <T>(value: T) => T = Object.freeze) { return chosen(STATE); }
+function viaDefaultChoice(chosen = Math.PI > 3 ? Object.freeze : keep) { return chosen(STATE); }
+function viaDestructuredDefault({ chosen = Object.freeze }: { chosen?: <T>(value: T) => T } = {}) { return chosen(STATE); }
+function viaAssignedCallee() { let chosen: (value: object) => object; return (chosen = lockAny)({ a: 1 }); }
+function apply(f: (value: object) => object) { const g = f; return g(STATE); }
+let lockPure: <T>(value: T) => T = Object.freeze;
+export function setLockPure(next: <T>(value: T) => T) { lockPure = next; }
+function viaAssignedPure() { return lockPure({ a: 1 }); }
+function viaDefaultNew(chosen: <T>(value: T) => T = Object.freeze) { return chosen({ a: 1 }); }
+function viaDestructuredNew({ chosen = Object.freeze }: { chosen?: <T>(value: T) => T } = {}) { return chosen({ a: 1 }); }
+function viaLetObject() { let { freeze } = Object; return freeze(STATE); }
+function viaLetObjectAssigned(flag: boolean) { let { freeze: lock }: { freeze: (value: object) => object } = Object; if (flag) lock = lockAny; return lock({ a: 1 }); }
+function viaLocalKeep(flag: boolean) { const lock = flag ? Object.freeze : keep; return lock({ a: 1 }); }
+function viaLetKeep(flag: boolean) { let lock = flag ? Object.freeze : keep; return lock({ a: 1 }); }
+function viaKeepCallback(flag: boolean) { return (flag ? Object.freeze : keep)(() => { Object.freeze(STATE); }); }
+function viaOwnFreezeNew() { const { freeze } = Object; return freeze({ a: 1 }); }
+function viaObjectKeys() { const { keys } = Object; return keys(STATE); }
+function viaLocalObject() { const Object = { freeze: <T>(value: T): T => value }; const { freeze } = Object; return freeze(STATE); }
+function viaAssignedChain() { let first: (value: object) => object; let second: (value: object) => object; return (first = (second = lockAny))({ a: 1 }); }
+function applyWrapped(f: (value: object) => object) { const g = (f); return g(STATE); }
+export const ASSIGNED_MODULE = /*#__PURE__*/ viaAssignedModule();
+export const ASSIGNED_LOCAL = /*#__PURE__*/ viaAssignedLocal(false);
+export const RUNNER = /*#__PURE__*/ viaRunner(false);
+export const RUNNER_NAME = /*#__PURE__*/ viaRunnerName(false);
+export const DEFAULT = /*#__PURE__*/ viaDefault();
+export const DEFAULT_CHOICE = /*#__PURE__*/ viaDefaultChoice();
+export const DESTRUCTURED_DEFAULT = /*#__PURE__*/ viaDestructuredDefault();
+export const ASSIGNED_CALLEE = /*#__PURE__*/ viaAssignedCallee();
+export const ALIASED_PARAMETER = /*#__PURE__*/ apply(Object.freeze);
+export const ASSIGNED_PURE = /*#__PURE__*/ viaAssignedPure();
+export const DEFAULT_NEW = /*#__PURE__*/ viaDefaultNew();
+export const DESTRUCTURED_NEW = /*#__PURE__*/ viaDestructuredNew();
+export const LET_OBJECT = /*#__PURE__*/ viaLetObject();
+export const LET_OBJECT_ASSIGNED = /*#__PURE__*/ viaLetObjectAssigned(true);
+export const LOCAL_KEEP = /*#__PURE__*/ viaLocalKeep(true);
+export const LET_KEEP = /*#__PURE__*/ viaLetKeep(true);
+export const KEEP_CALLBACK = /*#__PURE__*/ viaKeepCallback(false);
+export const OWN_FREEZE_NEW = /*#__PURE__*/ viaOwnFreezeNew();
+export const OBJECT_KEYS = /*#__PURE__*/ viaObjectKeys();
+export const LOCAL_OBJECT = /*#__PURE__*/ viaLocalObject();
+export const ASSIGNED_CHAIN = /*#__PURE__*/ viaAssignedChain();
+export const WRAPPED_ALIAS = /*#__PURE__*/ applyWrapped(Object.freeze);
+`)).toEqual([
+      "33 ASSIGNED_MODULE: a mark on a call that may freeze a value that exists before it: viaAssignedModule()",
+      "34 ASSIGNED_LOCAL: a mark on a call that may freeze a value that exists before it: viaAssignedLocal(false)",
+      "35 RUNNER: a mark on a call that may freeze a value that exists before it: viaRunner(false)",
+      "36 RUNNER_NAME: a mark on a call that may freeze a value that exists before it: viaRunnerName(false)",
+      "37 DEFAULT: a mark on a call that may freeze a value that exists before it: viaDefault()",
+      "38 DEFAULT_CHOICE: a mark on a call that may freeze a value that exists before it: viaDefaultChoice()",
+      "39 DESTRUCTURED_DEFAULT: a mark on a call that may freeze a value that exists before it: viaDestructuredDefault()",
+      "40 ASSIGNED_CALLEE: a mark on a call that may freeze a value that exists before it: viaAssignedCallee()",
+      "41 ALIASED_PARAMETER: a property read: Object.freeze",
+      "41 ALIASED_PARAMETER: a mark on a call that may freeze a value that exists before it: apply(Object.freeze)",
+      "42 ASSIGNED_PURE: a mark on a call that may freeze a value that exists before it: viaAssignedPure()",
+      "43 DEFAULT_NEW: a mark on a call that may freeze a value that exists before it: viaDefaultNew()",
+      "44 DESTRUCTURED_NEW: a mark on a call that may freeze a value that exists before it: viaDestructuredNew()",
+      "45 LET_OBJECT: a mark on a call that may freeze a value that exists before it: viaLetObject()",
+      "46 LET_OBJECT_ASSIGNED: a mark on a call that may freeze a value that exists before it: viaLetObjectAssigned(true)",
+      "53 ASSIGNED_CHAIN: a mark on a call that may freeze a value that exists before it: viaAssignedChain()",
+      "54 WRAPPED_ALIAS: a property read: Object.freeze",
+      "54 WRAPPED_ALIAS: a mark on a call that may freeze a value that exists before it: applyWrapped(Object.freeze)"
+    ]);
+    expect(atLines(`
+let list: () => readonly string[];
+function makeList() { return Object.freeze(["five"]); }
+function make(chosen: <T>(value: T) => T = Object.freeze) { return chosen(["six"]); }
+export const HELD_BLOCK = class { static held: readonly string[]; static { this.held = Object.freeze(["four"]); } };
+export const LISTED = (list = makeList)();
+export const DEFAULTED = make();
+`)).toEqual([
+      "5 HELD_BLOCK: a static block: static { this.held = Object.freeze([\"four\"]); }",
+      "6 LISTED: unmarked: (list = makeList)()",
+      "6 LISTED: the operator =: list = makeList",
+      "7 DEFAULTED: a call that may freeze a value that exists before it: make()"
+    ]);
+  });
+
   it("takes a function's name that a `var` of it may replace, or an assignment does, and a module's own `undefined`, for values that may exist before the call", () => {
     // TypeScript refuses all of these. DECLARED's function is made where it is declared. UNSET_VAR's and LOOP_VAR's
     // calls read the function, which a `var` given no value, or never given one, leaves in place. A `var` of a
     // function's name at the top of a module is an error in a module. CYCLE's and LOOPED's names are bound to each
-    // other: CYCLE's may be Object.freeze, and LOOPED's mark freezes only what is made where it is written.
-    // FREEZE_AND's callee, `Object.freeze && lockState`, is lockState.
+    // other. The check takes CYCLE's for one that may be Object.freeze and refuses its mark, though its call freezes
+    // nothing: given true it throws first, and given false it calls keepIt. LOOPED's mark freezes only what is made
+    // where it is written. FREEZE_AND's callee, `Object.freeze && lockState`, is lockState. COMMA_DECORATOR's decorator
+    // is its parameter, and TWICE's call runs the second of its function's two declarations of lock. ALIAS_CYCLE's g
+    // and h are bound to each other, so its call throws before it calls f; the check takes f, Object.freeze, to be
+    // called with STATE. COMMA_CALL's and COMMA_ARGUMENT's f is called through a comma: with `call`, and by runWith.
     expect(atLines(`
 const STATE = { a: 1 };
 const undefined = { a: 1 };
@@ -1164,7 +1266,13 @@ function viaUndefined() { return Object.freeze(undefined); }
 function keepIt(value) { return value; }
 function lockState(value) { Object.freeze(STATE); return value; }
 function viaFreezeAnd() { return (Object.freeze && lockState)({ a: 1 }); }
+function viaCommaDecorator(decorate) { @(0, decorate) class Held {} return Held; }
+function viaTwice() { function lock(value) { return value; } function lock(value) { return Object.freeze(value); } return lock(STATE); }
 function viaCycle(flag) { const a = flag ? b : Object.freeze; const b = flag ? a : keepIt; return b(STATE); }
+function viaAliasCycle(f) { const g = h; const h = g; g(STATE); return f(STATE); }
+function runWith(callback) { return callback(STATE); }
+function viaCommaCall(f) { return (0, f).call(null, STATE); }
+function viaCommaArgument(f) { return runWith((0, f)); }
 const LOOP_A = false ? LOOP_B : Object.freeze;
 const LOOP_B = false ? LOOP_A : keepIt;
 export const VAR = /*#__PURE__*/ viaVar();
@@ -1174,16 +1282,29 @@ export const UNSET_VAR = /*#__PURE__*/ viaUnsetVar();
 export const LOOP_VAR = /*#__PURE__*/ viaLoopVar();
 export const UNDEFINED = /*#__PURE__*/ viaUndefined();
 export const FREEZE_AND = /*#__PURE__*/ viaFreezeAnd();
+export const COMMA_DECORATOR = /*#__PURE__*/ viaCommaDecorator(lockState);
+export const TWICE = /*#__PURE__*/ viaTwice();
 export const CYCLE = /*#__PURE__*/ viaCycle(true);
 export const LOOPED = /*#__PURE__*/ LOOP_B(["x"]);
+export const ALIAS_CYCLE = /*#__PURE__*/ viaAliasCycle(Object.freeze);
+export const COMMA_CALL = /*#__PURE__*/ viaCommaCall(Object.freeze);
+export const COMMA_ARGUMENT = /*#__PURE__*/ viaCommaArgument(Object.freeze);
 `, { fileName: "module.js" })).toEqual([
-      "17 VAR: a mark on a call that may freeze a value that exists before it: viaVar()",
-      "18 REASSIGNED: a mark on a call that may freeze a value that exists before it: viaReassigned()",
-      "20 UNSET_VAR: a mark on a call that may freeze a value that exists before it: viaUnsetVar()",
-      "21 LOOP_VAR: a mark on a call that may freeze a value that exists before it: viaLoopVar()",
-      "22 UNDEFINED: a mark on a call that may freeze a value that exists before it: viaUndefined()",
-      "23 FREEZE_AND: a mark on a call that may freeze a value that exists before it: viaFreezeAnd()",
-      "24 CYCLE: a mark on a call that may freeze a value that exists before it: viaCycle(true)"
+      "23 VAR: a mark on a call that may freeze a value that exists before it: viaVar()",
+      "24 REASSIGNED: a mark on a call that may freeze a value that exists before it: viaReassigned()",
+      "26 UNSET_VAR: a mark on a call that may freeze a value that exists before it: viaUnsetVar()",
+      "27 LOOP_VAR: a mark on a call that may freeze a value that exists before it: viaLoopVar()",
+      "28 UNDEFINED: a mark on a call that may freeze a value that exists before it: viaUndefined()",
+      "29 FREEZE_AND: a mark on a call that may freeze a value that exists before it: viaFreezeAnd()",
+      "30 COMMA_DECORATOR: a mark on a call that may freeze a value that exists before it: viaCommaDecorator(lockState)",
+      "31 TWICE: a mark on a call that may freeze a value that exists before it: viaTwice()",
+      "32 CYCLE: a mark on a call that may freeze a value that exists before it: viaCycle(true)",
+      "34 ALIAS_CYCLE: a property read: Object.freeze",
+      "34 ALIAS_CYCLE: a mark on a call that may freeze a value that exists before it: viaAliasCycle(Object.freeze)",
+      "35 COMMA_CALL: a property read: Object.freeze",
+      "35 COMMA_CALL: a mark on a call that may freeze a value that exists before it: viaCommaCall(Object.freeze)",
+      "36 COMMA_ARGUMENT: a property read: Object.freeze",
+      "36 COMMA_ARGUMENT: a mark on a call that may freeze a value that exists before it: viaCommaArgument(Object.freeze)"
     ]);
   });
 
