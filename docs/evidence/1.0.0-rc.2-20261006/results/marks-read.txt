@@ -1,0 +1,111 @@
+# node tools/marks-read.mjs <checkout>: each marked call of src/ but tests, read by hand: where it is, what it calls, and what it freezes or makes. 110 calls, of 109 marks: the mark before ROWS.split("\n").map(...) in src/geo/calendar.ts stands before two calls. A freeze does not reach what the value it freezes holds. 2026-10-06
+src/aspects.ts:10  Object.freeze: freezes the array literal written there
+src/aspects.ts:19  Object.freeze: freezes the array literal written there
+src/aspects.ts:20  Object.freeze: freezes the object literal written there
+src/aspects.ts:21  Object.freeze: freezes the object literal written there
+src/aspects.ts:22  Object.freeze: freezes the object literal written there
+src/aspects.ts:23  Object.freeze: freezes the object literal written there
+src/aspects.ts:24  Object.freeze: freezes the object literal written there
+src/aspects.ts:27  new Set: makes a Set of what it is given
+src/aspects.ts:28  Object.freeze: freezes the array literal written there
+src/aspects.ts:42  new Set: makes a Set of what it is given
+src/aspects.ts:50  new Set: makes a Set of what it is given
+src/configured-aspects.ts:37  Object.freeze: freezes the object literal written there
+src/configured-aspects.ts:135  Object.freeze: freezes the object literal written there
+src/configured-aspects.ts:239  createAspectPolicy: copies what it is given into objects and arrays it makes (dataObject, dataArray); freezes the arrays map makes of those, an object literal for each rule, the object literals orbLimits returns, bodyOrbs, which Object.create(null) makes, and the policy; adds the policy to the module's WeakSet POLICIES; and, testing each rule's type with a regular expression, sets RegExp's legacy statics
+src/declination.ts:29  Object.freeze: freezes the object literal written there
+src/deltat.ts:94  Object.freeze: freezes the object literal written there
+src/deltat.ts:100  Object.freeze: freezes the array literal written there
+src/geo/calendar.ts:13  Object.freeze: freezes the object literal written there
+src/geo/calendar.ts:72  Object.freeze: freezes the array the map below makes
+src/geo/calendar.ts:73  map: its callback, given the strings split makes, freezes the object literal it returns and the array a map of a string's characters makes; civilDateOf, format, julianDayNumber and parseCalendarDate, of src/civil-calendar.ts, freeze nothing, and parseCalendarDate's exec sets RegExp's legacy statics
+src/geo/calendar.ts:73  split: makes an array of strings
+src/houses.ts:7  Object.freeze: freezes the array literal written there
+src/houses.ts:28  Object.freeze: freezes the array literal written there
+src/points.ts:95  Object.freeze: freezes the array literal written there
+src/receipt.ts:26  Object.freeze: freezes the object literal written there
+src/receipt.ts:39  new Set: makes a Set of what it is given
+src/receipt.ts:128  Object.freeze: freezes the object literal written there
+src/receipt.ts:140  (in place): freezes the object literal it writes, which a spread fills with CONVENTIONS_RC3's properties; a freeze does not reach what the object holds
+src/receipt.ts:152  (in place): the same, with CONVENTIONS_RC7's
+src/receipt.ts:165  (in place): the same, with CONVENTIONS_RC8's
+src/receipt.ts:178  (in place): the same, with CONVENTIONS_RC15's
+src/receipt.ts:196  Object.freeze: freezes the array literal written there
+src/receipt.ts:221  Object.freeze: freezes the object literal written there
+src/receipt.ts:395  new Set: makes a Set of what it is given
+src/reference-span.ts:7  Object.freeze: freezes the object literal written there
+src/reference-span.ts:26  Object.freeze: freezes the object literal written there
+src/reference-span.ts:30  Object.freeze: freezes the object literal written there
+src/signs.ts:3  Object.freeze: freezes the array literal written there
+src/signs.ts:4  Object.freeze: freezes the array literal written there
+src/signs.ts:7  Object.freeze: freezes the array literal written there
+src/signs.ts:8  Object.freeze: freezes the object literal written there
+src/signs.ts:16  Object.freeze: freezes the object literal written there
+src/signs.ts:24  Object.freeze: freezes the object literal written there
+src/signs.ts:32  Object.freeze: freezes the object literal written there
+src/signs.ts:40  Object.freeze: freezes the object literal written there
+src/signs.ts:48  Object.freeze: freezes the object literal written there
+src/signs.ts:56  Object.freeze: freezes the object literal written there
+src/signs.ts:64  Object.freeze: freezes the object literal written there
+src/signs.ts:72  Object.freeze: freezes the object literal written there
+src/signs.ts:80  Object.freeze: freezes the object literal written there
+src/signs.ts:88  Object.freeze: freezes the object literal written there
+src/signs.ts:96  Object.freeze: freezes the object literal written there
+src/signs.ts:107  Object.freeze: freezes the array the map makes
+src/signs.ts:107  map: its callback returns a string
+src/sky/hours.ts:23  Object.freeze: freezes the array literal written there
+src/sky/riseset.ts:103  Object.freeze: freezes the object literal written there
+src/techniques/aspect-patterns.ts:14  Object.freeze: freezes the array literal written there
+src/techniques/aspect-patterns.ts:78  new Set: makes a Set of what it is given
+src/techniques/dignities.ts:36  Object.freeze: freezes the array literal written there
+src/techniques/dignities.ts:46  Object.freeze: freezes the object literal written there
+src/techniques/dignities.ts:52  Object.freeze: freezes the object literal written there
+src/techniques/dignities.ts:58  Object.freeze: freezes the object literal written there
+src/techniques/dignities.ts:59  Object.freeze: freezes the object literal written there
+src/techniques/dignities.ts:60  Object.freeze: freezes the object literal written there
+src/techniques/dignities.ts:61  Object.freeze: freezes the object literal written there
+src/techniques/dignities.ts:62  Object.freeze: freezes the object literal written there
+src/techniques/dignities.ts:69  terms: freezes each row of the array literals the call writes, the arrays map makes of them, and the object Object.fromEntries makes
+src/techniques/dignities.ts:85  Object.freeze: freezes the array Array.from makes
+src/techniques/dignities.ts:86  Array.from: its callback returns a string
+src/techniques/moon-sign.ts:24  Object.freeze: freezes the object literal written there
+src/techniques/void-of-course.ts:22  Object.freeze: freezes the object literal written there
+src/techniques/void-of-course.ts:23  Object.freeze: freezes the array literal written there
+src/techniques/void-of-course.ts:24  Object.freeze: freezes the array literal written there
+src/techniques/void-of-course.ts:34  Object.freeze: freezes the object literal written there
+src/techniques/void-of-course.ts:36  Object.freeze: freezes the array literal written there
+src/time-scale-data.ts:6  Object.freeze: freezes the object literal written there
+src/time-scale-data.ts:13  Object.freeze: freezes the array the map makes
+src/time-scale-data.ts:13  map: called on an array literal of array literals written there, its callback freezes each of those
+src/time-scale-data.ts:23  Object.freeze: freezes the object literal written there
+src/time-scale.ts:33  Object.freeze: freezes the array literal written there
+src/timing/firdaria.ts:31  Object.freeze: freezes the array literal written there
+src/timing/firdaria.ts:37  Object.freeze: freezes the object literal written there
+src/timing/firdaria.ts:52  Object.freeze: freezes the array literal written there
+src/timing/firdaria.ts:55  Object.freeze: freezes the object literal written there
+src/timing/firdaria.ts:56  Object.freeze: freezes the array literal written there
+src/timing/firdaria.ts:59  Object.freeze: freezes the array literal written there
+src/timing/planetary-returns.ts:34  Object.freeze: freezes the array literal written there
+src/timing/planetary-returns.ts:57  Object.freeze: freezes the object literal written there
+src/timing/profections.ts:42  Object.freeze: freezes the array literal written there
+src/timing/profections.ts:144  new Map: makes a Map
+src/timing/releasing.ts:32  Object.freeze: freezes the object literal written there
+src/timing/releasing.ts:64  Object.freeze: freezes the array literal written there
+src/timing/releasing.ts:77  Object.freeze: freezes the object literal written there
+src/timing/releasing.ts:78  Object.freeze: freezes the array literal written there
+src/timing/releasing.ts:79  Object.freeze: freezes the array literal written there
+src/timing/releasing.ts:86  Object.freeze: freezes the object literal written there
+src/timing/releasing.ts:91  Object.freeze: freezes the object literal written there
+src/timing/releasing.ts:92  Object.freeze: freezes the array the map makes
+src/timing/releasing.ts:92  map: its callback returns a number
+src/timing/releasing.ts:190  new Map: makes a Map
+src/timing/rulers.ts:15  Object.freeze: freezes the object literal written there
+src/timing/rulers.ts:31  Object.freeze: freezes the array literal written there
+src/types.ts:298  Object.freeze: freezes the object literal written there
+src/tzdb/tzdb-2025c.ts:8  Object.freeze: freezes the object literal written there
+src/window.ts:60  Object.freeze: freezes the object literal written there
+src/window.ts:111  (in place): returns Date.parse of a string, a number
+src/window.ts:112  (in place): the same
+src/window.ts:144  map: its callback returns a number
+src/window.ts:156  orbEdges: flatMap and filter make arrays of numbers
+src/window.ts:157  orbEdges: the same

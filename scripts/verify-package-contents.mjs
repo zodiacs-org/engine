@@ -91,6 +91,14 @@ for (const file of files) {
 // 1.0.0-rc.1 raises one, ./geo's, for ZoneHistoryNotLoadedError and
 // calendarNote's checks, with the owner's approval of 2026-10-06, after
 // measuring the graph it fits (docs/evidence/1.0.0-rc.1-20261006/sizes.json).
+//
+// 1.0.0-rc.2 raises none. What lets a bundler leave out a table
+// (scripts/pure-tables.mjs), marks of 16 bytes each and six functions called
+// in place, grows each graph by what it loads of it, less 105 bytes where it
+// loads the time scale, whose bounds are now written as numbers: the root's
+// by 615 bytes. The tables that only ./calc and ./vedic load are not marked,
+// because their marks would put those two entries over their budgets
+// (docs/evidence/1.0.0-rc.2-20261006/sizes.json).
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -117,7 +125,8 @@ const ENTRY_BUDGETS = {
   // in calc.js (docs/evidence/rc17-20261005/sizes.json); 4.05 per cent of
   // headroom. 1.0.0-rc.1: 144,694, with the reviews' checks and a caller's
   // epochs across EPHEMERIS_SPAN; 0.55 per cent, not raised
-  // (docs/evidence/1.0.0-rc.1-20261006/sizes.json).
+  // (docs/evidence/1.0.0-rc.1-20261006/sizes.json). 1.0.0-rc.2: 145,261, with
+  // the core's marks; 0.16 per cent, not raised.
   "./calc": 145_500,
   // rc.15: 9,410. 1.0.0-rc.1: 9,942, its options read as the shared reader
   // reads them; 0.58 per cent, not raised.
@@ -128,6 +137,7 @@ const ENTRY_BUDGETS = {
   // geo.js re-exports it. 1.0.0-rc.1: 35,375, with ZoneHistoryNotLoadedError
   // and calendarNote's input checks from the API review; raised from 35,000 to
   // 35,500 with the owner's approval of 2026-10-06; 0.35 per cent of headroom.
+  // 1.0.0-rc.2: 35,439, with the marks; 0.17 per cent, not raised.
   "./geo": 35_500,
   // Unreleased (feature-houses-extra): 13,606, one file that imports no other
   // module, the root's included, so that its graph cannot grow with the core
@@ -162,7 +172,8 @@ const ENTRY_BUDGETS = {
   // (the ayanamsas now use its frame); 4.80 per cent of headroom. rc.17:
   // 123,639, its ayanamsas and sidereal charts now in a chunk it shares with
   // ./calc; 3.52 per cent, not raised. 1.0.0-rc.1: 127,184, its options and
-  // inputs read strictly; 0.64 per cent, not raised.
+  // inputs read strictly; 0.64 per cent, not raised. 1.0.0-rc.2: 127,751,
+  // with the core's marks; 0.19 per cent, not raised.
   "./vedic": 128_000,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,

@@ -1,6 +1,6 @@
 {
   "name": "@zodiacs/engine",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "description": "Browser-first astrology calculations used by Zodiacs.org: tropical charts; one calculation API with bounds and receipts in ./calc; birth-time windows in ./window; returns, relationship charts, the void-of-course Moon, patterns and dignities in ./techniques; house positions and cusp speeds in ./houses; rise, set, transit and planetary hours in ./sky; Hellenistic timing techniques and planetary returns in ./timing; and the sidereal zodiac and Jyotish techniques in ./vedic.",
   "license": "MIT AND CC-BY-4.0",
   "keywords": [

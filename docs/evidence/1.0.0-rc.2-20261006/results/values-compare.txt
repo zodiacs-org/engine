@@ -1,0 +1,4 @@
+# node ../1.0.0-rc.1-20261006/tools/values.mjs <package> > <run>.jsonl, unchanged, in its own process for each package; then cmp; Node v22.22.2, 2026-10-07
+1.0.0-rc.1, artifacts/zodiacs-engine-1.0.0-rc.1.tgz (SHA-256 cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284), unpacked: 6417 lines, SHA-256 63bd60bf409932dbe3ecca622130c827532e2298000e4aeeaa1c517c42865980
+1.0.0-rc.2, this tree's build: 6417 lines, SHA-256 63bd60bf409932dbe3ecca622130c827532e2298000e4aeeaa1c517c42865980
+cmp: the two runs are the same bytes

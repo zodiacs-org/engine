@@ -1,0 +1,43 @@
+# node tools/bundler-probe.mjs <checkout> <Rolldown package> <Vite package> <Rollup package>; Node v22.22.2, 2026-10-07
+esbuild 0.27.7, Rolldown 1.1.4, Vite 8.1.3, Rollup 4.63.4
+Tables kept by a program that imports only used():
+  esbuild: A, D, G, H, J, L, P, R, S, T, U, V, X, Y, Z, AA, AB, AC
+  esbuild, minified: A, D, G, H, J, L, P, R, S, T, U, X, Y, Z, AB, AC
+  Rolldown: A, D, G, H, P, R, S, T, U, Z, AB, AC
+  Rolldown, minified: A, D, G, H, P, R, S, T, U, Z, AB, AC
+  Vite: A, D, G, H, P, R, S, T, U, Z, AB, AC
+  Rollup: A, H, J, P, S, X, Z, AB
+    A, the freeze marked, its map not
+    B, the freeze and its map marked
+    C, the freeze and a map over a split marked
+    D, the outer freeze marked, an entry's not
+    E, the outer freeze and the entry's marked
+    F, a freeze of Object.keys, both marked
+    G, a freeze unmarked
+    H, the freeze marked, its Array.from not
+    I, a map over a literal and its freezes marked
+    J, a marked freeze of a spread of a table
+    K, the same built in a function called in place, the call marked
+    L, a marked freeze of a quotient
+    M, a value a function of the module freezes, the call marked
+    N, a Set of data, marked
+    O, a Set of data, unmarked
+    P, a Set of a table's entries, unmarked
+    Q, a Set of a table's entries, marked
+    R, a table frozen by a statement of its own
+    S, a table frozen by an if statement
+    T, a frozen static field
+    U, a freeze in a static block
+    V, a marked freeze of a spread of an object literal
+    W, a marked freeze of a spread of an array literal
+    X, a marked freeze of a property read
+    Y, a marked freeze of a template with a substitution
+    Z, a marked table and a value read from it when the module loads
+    AA, a marked call that spreads an array literal into its arguments
+    AB, a freeze of a map over an array imported from outside, neither marked, the callback reading nothing
+    AC, the same over an array of the module
+Whether a table is still frozen after a marked freeze whose value is discarded:
+  after &&, `ok && /*#__PURE__*/ Object.freeze(TABLE);`: esbuild: not frozen; esbuild, minified: not frozen; Rolldown: not frozen; Rolldown, minified: not frozen; Vite: not frozen; Rollup: not frozen
+  in a conditional, `ok ? /*#__PURE__*/ Object.freeze(TABLE) : null;`: esbuild: not frozen; esbuild, minified: not frozen; Rolldown: not frozen; Rolldown, minified: not frozen; Vite: not frozen; Rollup: not frozen
+  on the right of a comma, `(0, /*#__PURE__*/ Object.freeze(TABLE));`: esbuild: not frozen; esbuild, minified: not frozen; Rolldown: not frozen; Rolldown, minified: not frozen; Vite: not frozen; Rollup: not frozen
+  in a for loop's update, `for (let i = 0; i < 1; i += 1, /*#__PURE__*/ Object.freeze(TABLE));`: esbuild: frozen; esbuild, minified: frozen; Rolldown: not frozen; Rolldown, minified: not frozen; Vite: not frozen; Rollup: not frozen

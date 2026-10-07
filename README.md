@@ -14,8 +14,9 @@ side effects, and performs no network request from its core entry point. Its
 one runtime side effect is the ΔT it installs in astronomy-engine (see Time
 below).
 
-**Release candidate: 1.0.0-rc.1**, the first candidate for 1.0.0. From
-1.0.0 the package follows Semantic Versioning:
+**Release candidate: 1.0.0-rc.2**, the second candidate for 1.0.0, which
+lets a bundler leave out the tables a program does not read (CHANGELOG.md).
+From 1.0.0 the package follows Semantic Versioning:
 [docs/versioning.md](docs/versioning.md) says what is public, how a number
 may change, which records stay readable and how something public is
 deprecated, and `api/` holds each public entry point's declarations.
@@ -25,7 +26,7 @@ there. Install the exact candidate tarball supplied with the review, retaining
 its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-1.0.0-rc.1.tgz
+pnpm add ./zodiacs-engine-1.0.0-rc.2.tgz
 ```
 
 The package runs in browsers through a bundler, and in Node.js 20.19.0 or a
@@ -42,7 +43,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.0.0-rc.1.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.0.0-rc.2.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -102,8 +103,9 @@ to 2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS
 UT1 − UTC, and otherwise as UT1 with the ΔT model, or on UT1 or TT when
 `timeScale` says so (see Time). The ephemeris is still astronomy-engine
 2.1.19. See CHANGELOG.md for the release history and
-`docs/evidence/1.0.0-rc.1-20261006/` for this candidate's checks (rc.17's are
-in `docs/evidence/rc17-20261005/`, rc.16's in `docs/evidence/rc16-20260930/`).
+`docs/evidence/1.0.0-rc.2-20261006/` for this candidate's checks (1.0.0-rc.1's
+are in `docs/evidence/1.0.0-rc.1-20261006/`, rc.17's in
+`docs/evidence/rc17-20261005/`, rc.16's in `docs/evidence/rc16-20260930/`).
 Site adoption is reviewed separately.
 
 ## Natal chart in 10 lines

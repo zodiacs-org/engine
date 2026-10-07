@@ -1,0 +1,25 @@
+# node tools/bundles.mjs <checkout> rc.17=<artifacts/zodiacs-engine-0.1.1-rc.17.tgz, unpacked> 1.0.0-rc.1=<artifacts/zodiacs-engine-1.0.0-rc.1.tgz, unpacked> c586dc4=<the build of c586dc4> 1.0.0-rc.2=<checkout>; Node v22.22.2, esbuild 0.27.7, 2026-10-07
+{"program":"normalizeLongitude (root)","package":"rc.17","version":"0.1.1-rc.17","bytes":8650,"gzip":3936,"freezeCalls":11,"held":["createAspectPolicy"]}
+{"program":"normalizeLongitude (root)","package":"1.0.0-rc.1","version":"1.0.0-rc.1","bytes":9659,"gzip":4169,"freezeCalls":36,"held":["ELEMENTS","MODALITIES","createAspectPolicy"]}
+{"program":"normalizeLongitude (root)","package":"c586dc4","version":"1.0.0-rc.1","bytes":130,"gzip":137,"freezeCalls":0,"held":[]}
+{"program":"normalizeLongitude (root)","package":"1.0.0-rc.2","version":"1.0.0-rc.2","bytes":130,"gzip":137,"freezeCalls":0,"held":[]}
+{"program":"signForLongitude (root)","package":"rc.17","version":"0.1.1-rc.17","bytes":8798,"gzip":3996,"freezeCalls":11,"held":["createAspectPolicy"]}
+{"program":"signForLongitude (root)","package":"1.0.0-rc.1","version":"1.0.0-rc.1","bytes":9807,"gzip":4229,"freezeCalls":36,"held":["ELEMENTS","MODALITIES","createAspectPolicy"]}
+{"program":"signForLongitude (root)","package":"c586dc4","version":"1.0.0-rc.1","bytes":1629,"gzip":507,"freezeCalls":13,"held":[]}
+{"program":"signForLongitude (root)","package":"1.0.0-rc.2","version":"1.0.0-rc.2","bytes":1629,"gzip":507,"freezeCalls":13,"held":[]}
+{"program":"natalChart (root)","package":"rc.17","version":"0.1.1-rc.17","bytes":79751,"gzip":36736,"freezeCalls":21,"held":["createAspectPolicy","UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"natalChart (root)","package":"1.0.0-rc.1","version":"1.0.0-rc.1","bytes":80800,"gzip":37000,"freezeCalls":48,"held":["ELEMENTS","MODALITIES","createAspectPolicy","UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"natalChart (root)","package":"c586dc4","version":"1.0.0-rc.1","bytes":76259,"gzip":35133,"freezeCalls":30,"held":["UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"natalChart (root)","package":"1.0.0-rc.2","version":"1.0.0-rc.2","bytes":76165,"gzip":35132,"freezeCalls":30,"held":["UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"computeChart (./internal)","package":"rc.17","version":"0.1.1-rc.17","bytes":71803,"gzip":33522,"freezeCalls":12,"held":["UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"computeChart (./internal)","package":"1.0.0-rc.1","version":"1.0.0-rc.1","bytes":72865,"gzip":33786,"freezeCalls":39,"held":["ELEMENTS","MODALITIES","UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"computeChart (./internal)","package":"c586dc4","version":"1.0.0-rc.1","bytes":72085,"gzip":33487,"freezeCalls":28,"held":["UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"computeChart (./internal)","package":"1.0.0-rc.2","version":"1.0.0-rc.2","bytes":71991,"gzip":33478,"freezeCalls":28,"held":["UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"createNatalEnvelope (./receipt)","package":"rc.17","version":"0.1.1-rc.17","bytes":33677,"gzip":14912,"freezeCalls":19,"held":["UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"createNatalEnvelope (./receipt)","package":"1.0.0-rc.1","version":"1.0.0-rc.1","bytes":34784,"gzip":15204,"freezeCalls":43,"held":["ELEMENTS","MODALITIES","UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"createNatalEnvelope (./receipt)","package":"c586dc4","version":"1.0.0-rc.1","bytes":34416,"gzip":15074,"freezeCalls":37,"held":["UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"createNatalEnvelope (./receipt)","package":"1.0.0-rc.2","version":"1.0.0-rc.2","bytes":34325,"gzip":15080,"freezeCalls":37,"held":["UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"outsideReferenceSpan (root)","package":"rc.17","version":"0.1.1-rc.17","bytes":12873,"gzip":7412,"freezeCalls":18,"held":["createAspectPolicy","UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"outsideReferenceSpan (root)","package":"1.0.0-rc.1","version":"1.0.0-rc.1","bytes":13024,"gzip":7475,"freezeCalls":19,"held":["createAspectPolicy","UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"outsideReferenceSpan (root)","package":"c586dc4","version":"1.0.0-rc.1","bytes":5321,"gzip":3501,"freezeCalls":4,"held":["UT1_DATA","LEAP_SECOND_LIST"]}
+{"program":"outsideReferenceSpan (root)","package":"1.0.0-rc.2","version":"1.0.0-rc.2","bytes":231,"gzip":180,"freezeCalls":0,"held":[]}

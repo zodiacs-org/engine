@@ -1,0 +1,82 @@
+# node history-check.mjs c6b5490..HEAD <patterns> <examples> --staged
+# 2026-10-07, git 2.43.0, Node v22.22.2
+
+Labels searched (79 data patterns and 10 name patterns, kept outside the repository):
+  person A
+  person B
+  person C
+  person D
+  person E
+  person F
+  person G
+
+Commits: 15, the last of them the index. For each, the lines it adds, the contents of the binary files it adds or changes, the paths it adds and its message:
+- ebdc499 Let bundlers leave out the frozen tables a program does not read
+    binary files read: 0; paths added: 2
+    birth data: none
+- a077768 Act on the review of ebdc499
+    binary files read: 0; paths added: 0
+    birth data: none
+- c586dc4 Keep RELEASING_UNIT_DAYS's documentation as 1.0.0-rc.1's
+    binary files read: 0; paths added: 0
+    birth data: none
+- 09fb9ef Act on the second review of the table check
+    binary files read: 0; paths added: 0
+    birth data: none
+- b94836c Check 1.0's additions in the packed consumer
+    binary files read: 0; paths added: 0
+    birth data: none
+- b82c2bd Act on the third review of the table check
+    binary files read: 0; paths added: 0
+    birth data: none
+- 710ab8a Act on the fourth review of the table check
+    binary files read: 0; paths added: 0
+    birth data: none
+- 2a14665 Act on the fifth review of the table check
+    binary files read: 0; paths added: 0
+    birth data: none
+- 44dea9e Act on the sixth review of the table check
+    binary files read: 0; paths added: 0
+    birth data: none
+- 9890acd Act on the seventh review of the table check
+    binary files read: 0; paths added: 0
+    birth data: none
+- a195873 Act on the eighth review of the table check
+    binary files read: 0; paths added: 0
+    birth data: none
+- 5a872a3 Act on the ninth review of the table check
+    binary files read: 0; paths added: 0
+    birth data: none
+- 6da2de4 Act on the tenth review of the table check
+    binary files read: 0; paths added: 0
+    birth data: none
+- ff8f116 Act on the eleventh review of the table check
+    binary files read: 0; paths added: 0
+    birth data: none
+- (the index against HEAD: the commit being made)
+    binary files read: 0; paths added: 36
+    birth data: none
+
+The tree of ff8f116, 1211 files, gzip archives decompressed:
+  birth data: none
+
+The published worked examples that CONTRIBUTING.md allows: the files of that tree that name each, and those that hold its birth data (cited: the file also holds every part of the citation):
+- Christopher Reeve: Hamish Saunders, Solar Arc Directions (1996), p. 3
+    named in 22 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, artifacts/zodiacs-engine-0.1.1-rc.17.tgz, artifacts/zodiacs-engine-1.0.0-rc.1.tgz, docs/evidence/1.0.0-rc.1-20261006/history-check.txt, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/rc17-20261005/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, docs/timing-hellenistic.md, scripts/module-resolution-smoke.mjs, scripts/verify-packed-consumer.mjs, src/timing/firdaria.test.ts, src/timing/profections.test.ts, src/timing/releasing.test.ts, src/timing/solar-arc.test.ts
+    birth data in 1 files:
+      src/timing/profections.test.ts (cited)
+- Coretta Scott King: Hamish Saunders, Solar Arc Directions (1996), p. 4
+    named in 18 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, artifacts/zodiacs-engine-0.1.1-rc.17.tgz, artifacts/zodiacs-engine-1.0.0-rc.1.tgz, docs/evidence/1.0.0-rc.1-20261006/history-check.txt, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/rc17-20261005/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/timing/firdaria.test.ts, src/timing/releasing.test.ts, src/timing/solar-arc.test.ts
+    birth data in 0 files:
+- Princess Diana: Hamish Saunders, Solar Arc Directions (1996), p. 5
+    named in 16 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, artifacts/zodiacs-engine-0.1.1-rc.17.tgz, artifacts/zodiacs-engine-1.0.0-rc.1.tgz, docs/evidence/1.0.0-rc.1-20261006/history-check.txt, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/rc17-20261005/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/timing/solar-arc.test.ts
+    birth data in 0 files:
+- Charlie Chaplin: Juan Estadella, Predictive Astrology, 3rd ed. (2019), pp. 84-85
+    named in 17 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, artifacts/zodiacs-engine-0.1.1-rc.17.tgz, artifacts/zodiacs-engine-1.0.0-rc.1.tgz, docs/evidence/1.0.0-rc.1-20261006/history-check.txt, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/rc17-20261005/history-check.txt, docs/evidence/timing-hellenistic-2026-09-28/README.md, src/progressions.test.ts, src/timing/solar-arc.test.ts
+    birth data in 1 files:
+      docs/evidence/rc12-20260928/sources.md (cited)
+- The native of Vettius Valens, Anthologies IV.9, tr. Mark T. Riley (2010), pp. 75-76
+    named in 28 files: CHANGELOG.md, artifacts/zodiacs-engine-0.1.1-rc.15.tgz, artifacts/zodiacs-engine-0.1.1-rc.16.tgz, artifacts/zodiacs-engine-0.1.1-rc.17.tgz, artifacts/zodiacs-engine-1.0.0-rc.1.tgz, docs/evidence/1.0.0-rc.1-20261006/history-check.txt, docs/evidence/houses-extra-2026-09-29/full-tests.log, docs/evidence/rc15-20260929/README.md, docs/evidence/rc15-20260929/fix-full-tests.log, docs/evidence/rc15-20260929/full-tests.log, docs/evidence/rc15-20260929/rebuilt/full-tests-v20.19.0.log, docs/evidence/rc15-20260929/rebuilt/full-tests-v22.22.2.log, docs/evidence/rc15-20260929/rebuilt/history-check-control.txt, docs/evidence/rc15-20260929/rebuilt/history-check.txt, docs/evidence/rc16-20260930/README.md, docs/evidence/rc16-20260930/full-tests-v20.19.0.log, docs/evidence/rc16-20260930/history-check-control-first-cut.txt, docs/evidence/rc16-20260930/history-check-control-recut.txt, docs/evidence/rc16-20260930/history-check.txt, docs/evidence/rc17-20261005/history-check.txt, docs/evidence/techniques-2026-09-29/gates.log, docs/evidence/timing-hellenistic-2026-09-28/README.md, docs/timing-hellenistic.md, scripts/module-resolution-smoke.mjs, src/timing/profections.test.ts, src/timing/profections.ts, src/timing/releasing.test.ts, src/timing/releasing.ts
+    birth data in 0 files:
+
+Birth data found: 0 lines added in the commits, 0 lines in the tree.
