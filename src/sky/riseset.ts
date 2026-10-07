@@ -100,7 +100,7 @@ const STEP_DAYS = 1 / 24;
 /** Refraction at the horizon, arcminutes (USNO, Rise, Set, and Twilight Definitions). */
 export const STANDARD_REFRACTION_ARCMIN = 34;
 /** Radii for the semi-diameter, km: the Sun's (959.64″ at 1 au), the Moon's IAU mean radius. */
-export const SKY_RADII_KM = Object.freeze({ Sun: 696_000, Moon: 1_737.4 });
+export const SKY_RADII_KM = /*#__PURE__*/ Object.freeze({ Sun: 696_000, Moon: 1_737.4 });
 const KM_PER_AU = 149_597_870.7;
 /** WGS84: equatorial radius (km) and flattening. */
 const WGS84_A = 6_378.137;

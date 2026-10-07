@@ -1,0 +1,172 @@
+# node tools/check-gaps-probe.mjs <checkout> <Rollup package> <Rolldown package>; Node v22.22.2, 2026-10-07
+esbuild 0.27.7, Rollup 4.63.4, Rolldown 1.1.4
+Bundles that keep the table in a program that imports only a function beside the form:
+  third review: a class with a computed method name that is not a literal, whose method reads the table: esbuild; esbuild, minified
+  third review: a value read from a default export through a default import: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: a value read from a table through a namespace import: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: a value read from a table through `export * as`: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: a TypeScript namespace that reads the table: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: a freeze of the table in a function declared in a block under an if, and called there: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: a name the module does not declare: esbuild; esbuild, minified; Rollup
+  fourth review: a decorator on a method of a class whose method reads the table: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  fourth review: a decorator on a class whose method reads the table: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  fourth review: a decorated class in the table: esbuild; esbuild, minified
+  fourth review: a global the module declares with `declare`, named in the table: esbuild; esbuild, minified; Rollup
+  fourth review: a var in a block of the module, the table's own, read there: Rollup; Rolldown; Rolldown, minified
+  fourth review: an anonymous default function that reads the table, called when an importing module loads: esbuild; esbuild, minified
+  fifth review: a var of a `for` statement at the module's top level, the table's own, read in the loop: Rollup; Rolldown; Rolldown, minified
+  fifth review: a function of the module that makes a table, called through `new`: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  fifth review: the second of two callbacks a function of the module passes to the same function, which makes the table: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a table made in the callback of an unmarked `map` when the module loads: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  fifth review: a table made in a callback that a function of the module calls, when the module loads: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  fifth review: a Set of data built in a callback when the module loads: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a table made, when the module loads, by a function of the module given by name to map: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  sixth review: a table made by a function of the module given by name to a function of the module that calls it: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  sixth review: a function of the module that maps a function it declares, given by name, that makes a table: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  sixth review: a function written in place that makes a table, called through a comma: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  sixth review: a const of the module bound to a function of the module that makes a table: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  sixth review: two functions that pass a callback to each other, the later question settled no by an earlier one: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a table made by a tagged template of a function of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a table made by a parameter's default function, called in the body: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review, still not read: a table made by a callback in an object literal that a function of the module calls: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  fifth review, still not read: a class of the module whose constructor makes a table, constructed when the module loads: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  ninth review: a table made by the decorator, given by name, of a class at the module's top level: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  ninth review: a table made by the decorator, given by name, of a class expression a top-level const holds: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  ninth review: a table made by a call of a module const bound to `true ? Object.freeze : keep`: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  ninth review: a table made by a local overloaded function, called when the module loads: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  tenth review: a table made by a static block of a class expression a top-level const holds: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  tenth review: a table made by a function of the module that calls its parameter, whose default is Object.freeze, the argument left out: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review: a table made by a call of `(lock = makeList)`, makeList a function of the module that makes one: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  tenth review: a table made by the second of two local function declarations of one name, the one that runs: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review, still not read: a table made by a `new` of what `Math.PI > 4 ? Object.freeze : Maker` gives, Maker making one: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  this record, still not read: a table made by a call of a name destructured at the top of the module, whose default is Object.freeze: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eleventh review: a table made by a function written in place and called through what `=` assigns it, in a function the table's initializer calls: esbuild; esbuild, minified; Rolldown; Rolldown, minified
+  eleventh review, still not read: a table made by the first of two `var`s of a name of the module, called between them: esbuild; esbuild, minified; Rollup; Rolldown, minified
+Bundles whose program prints otherwise than the program as written, which prints the table when its module loads:
+  fourth review: a var in a block of the module, the table's own, read there, as written (table-marker | 1): esbuild (undefined | 1); esbuild, minified (undefined | 1)
+  fifth review: a var of a `for` statement at the module's top level, the table's own, read in the loop, as written (table-marker | 1): esbuild (undefined | 1); esbuild, minified (undefined | 1)
+Bundles whose program finds the object unfrozen after a marked call in each position of a function it runs:
+  third review: !, `!/*#__PURE__*/ Object.freeze(row);`: esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: typeof, `typeof /*#__PURE__*/ Object.freeze(row);`: esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: an array literal, `[/*#__PURE__*/ Object.freeze(row)];`: esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: an object literal, `({ a: /*#__PURE__*/ Object.freeze(row) });`: esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: a comparison, `/*#__PURE__*/ Object.freeze(row) === row;`: esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: the left of `&& 0`, `/*#__PURE__*/ Object.freeze(row) && 0;`: esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: a conditional's condition, `/*#__PURE__*/ Object.freeze(row) ? 1 : 2;`: esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  third review: a binding that is not read, `const unused = /*#__PURE__*/ Object.freeze(row);`: Rollup; Rolldown; Rolldown, minified
+  fourth review: a binding that is not read, of a function that freezes what it is given, `const unused = /*#__PURE__*/ lock(row);`: Rollup; Rolldown; Rolldown, minified
+  fourth review: a binding that is not read, of a function that freezes what it is given, throughout, `const unused = /*#__PURE__*/ lockAll(row);`: Rollup; Rolldown; Rolldown, minified
+  fourth review: a binding that is not read, of a freeze of Object.assign(row, ...), `const unused = /*#__PURE__*/ Object.freeze(Object.assign(row, {}));`: Rolldown; Rolldown, minified
+  fourth review: a computed key of an object that is discarded, `({ [/*#__PURE__*/ lockKey(row)]: 1 });`: Rollup; Rolldown; Rolldown, minified
+  fourth review: a spread in an array that is discarded, `[.../*#__PURE__*/ lockList(row)];`: Rollup
+  fourth review: a spread in an object that is discarded, `({ .../*#__PURE__*/ lockKey(row) });`: Rollup
+Bundles whose program finds the module's value unfrozen after a marked call when the module loads:
+  fourth review: a marked call of a function that freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fourth review: a marked call of a function that freezes, throughout, a value the module gives it: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked call of a function written in place that freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked call of a function of the module that freezes its parameter, whose default is a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked `map` whose callback freezes the rows of an array of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked call of a function of the module whose second callback to the same function freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: the same through a function that passes the callback on, called by one with a local function of the name of the function it passes it to: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked call of a function of the module that freezes a value of the module through a local name: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked call of a function of the module that freezes the rows of an array of the module in a `for-of` loop: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked call of a function of the module that freezes the rows of an array of the module in a `forEach` callback: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked call of a function of the module that freezes a value of the module through an assignment: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked `new` of a function of the module that freezes its argument: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked deep freeze of an object literal with a getter that returns a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review, still not read: a marked `new` of a class of the module whose constructor freezes its argument: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review, still not read: a marked freeze of what a method named `with` of an object of the module returns, the object itself: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review, still not read: a marked call of a method of an object of the module that freezes its argument: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review, still not read: a marked call, through `call`, of a function written in place that freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked call of a function of the module that freezes a value of the module through its own name for Object.freeze: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: a marked call of a function of the module whose two blocks each declare `f`, the first of which, called, freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked call of a function that freezes the values of Object.values of a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked call of a function that freezes an element of a new array that holds a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked call of a function whose destructured parameter's default holds a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked call of a function that gives a value of the module to a function it declares, which freezes it: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked call of a function whose callback, given a value of the module by a function of the module, freezes it: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked call of a function that freezes a catch binding holding a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked reduce whose callback freezes the accumulator, a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked map over [undefined] whose callback's default is a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked map over an array of the module with a function of the module, given by name, that freezes its element: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked map over an array of the module with Object.freeze itself: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked call, through a comma, of a function of the module that freezes its argument: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked call of a const bound to a function of the module that freezes its argument: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review: a marked call of a function that freezes the rows of an array of the module in a for (var ... of) loop: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review, still not read: a marked call of a function that calls, through a let it assigns, a function of the module that freezes its argument: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that deep-freezes a new object it fills with rows of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that freezes a property of a new object, assigned a value of the module first: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that pushes the rows of an array of the module into a new array and freezes its elements: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that puts a value of the module into the new object it is given, then deep-freezes it: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that gives `flag ? {...} : undefined` to one whose default, a value of the module, it freezes: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that gives a property that is not there to one whose default, a value of the module, it freezes: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function with a local function that calls itself with a value of the module, and freezes its parameter: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function with two local functions that call each other, one with a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that spreads a generator that freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked deep freeze, which walks functions too, of an object literal holding a class whose static field is a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function whose local class freezes a value of the module in a static field: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that freezes the keys of a Map of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function whose Map's forEach callback freezes its second parameter, the key: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of `(0, Object.freeze)` on a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that freezes a value of the module through `Object["freeze"]`: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that freezes a function declaration it has assigned a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that freezes a `var` bound to a value of the module, of the name of a function it declares: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a `let` of the module, never assigned, bound to a function of the module that freezes its argument: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that deep-freezes `Array.from(...[[1], () => STATE])`: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function whose parameter's default freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review: a marked call of a function that freezes what an array literal inherits, `[].constructor`: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review, still not read: a marked call of a function that calls, through a local var, a function of the module that freezes its argument: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review, still not read: a marked call of a function of another module that freezes its argument: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review, still not read: a marked freeze of a `new` of a function of the module that returns a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review, still not read: a marked replace whose callback freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review, still not read: a marked call of a function that deep-freezes a new object it fills through another name: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  seventh review, still not read: a marked call of a function that freezes an inherited part read with a key not written as a literal: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review: a marked call of a function that calls a local function declaration a `var` of its name, never given a value, shares: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review: a marked call of a function that deep-freezes groups it builds with `groups.at(-1).push(row)` from rows of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review: a marked call of a function that deep-freezes two new arrays, one of which `(flag ? a : b).push(STATE)` fills: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review: a marked call of a function that freezes `[].values().next`, the built-in next of every array iterator: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review: a marked call of a function that calls `(flag ? Object.freeze : (v) => v)` on a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review: a marked call of a function that defines a class with a decorator, given by name, that freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review: two local functions, one freezing a value of the module and calling the other, which calls it; marked calls of the first, then of the second: Rollup; Rolldown; Rolldown, minified
+  eighth review: a marked call of a function that freezes `constructor` destructured from an array literal, the global Array: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review: a marked call of a function that freezes a module const named `undefined`: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review, still not read: a marked call of a function that calls the function another function of the module returns: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review, still not read: a marked call of a function that calls `globalThis.Object.freeze` on a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review, still not read: a marked call of a function that calls a local function declaration it has assigned a function that freezes: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review, still not read: a marked call of a function that calls a local function declaration a `var` of its name, given a function that freezes, replaces: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review, still not read: a marked call of a `let` of the module bound to a function and assigned one that freezes: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review, still not read: a marked call of a function that calls a function of the module read from an array literal: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review, still not read: a marked call of a function that calls a function a conditional chooses, one that freezes: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eighth review, still not read: a marked call of a function that deep-freezes a new object a function of the module, given it, fills with a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  this record, still not read: a marked call of a function that calls, through `this`, the function an iteration method is given as the `this` of the function it calls, one that freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  ninth review: a marked call of a function that decorates a class with its parameter, given a function of the module that freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  ninth review: a marked call of a function that calls a local const bound to `flag ? Object.freeze : keep` on a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  ninth review: a marked call of a function that calls `(lock = Object.freeze)` on a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  ninth review: a marked call of a function that calls a local overloaded function that freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  ninth review: a marked call of a function that freezes `[Symbol.iterator]` destructured from an array literal, Array.prototype.values: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  ninth review: a marked call of a function that freezes a class expression whose decorator returns a class of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  ninth review: a marked call of a function that calls `(flag ? Object.freeze : deepFreeze)`, given false, on a new object holding a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  ninth review, still not read: a marked call of a function that deep-freezes groups it fills, rows of the module, through a local function that returns the last: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  ninth review, still not read: a marked call of a function whose class decorator makes a table and gives `addInitializer` a function that freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review: a marked call of a module `let` bound to `Math.PI > 3 ? deepFreeze : Object.freeze`, which an exported function may assign, on a new object holding a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review: a marked call of a function that calls `(flag ? Object.freeze : runIt)`, given false, with a function that freezes a value of the module, which runIt calls: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review: a marked call of a function that calls its parameter, whose default is Object.freeze, on a value of the module, the argument left out: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review: a marked call of a function that decorates a class with `(0, deco)`, deco its parameter, given a function that freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review: a marked call of a function with two local declarations of `lock`, the second of which, the one that runs, freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review: a marked call of a function that calls `(lock = lockState)` on a new object, lockState freezing a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review: a marked call of a function that calls a const bound to its parameter on a value of the module, given Object.freeze: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review, still not read: a marked call of a function that constructs `new (flag ? Object.freeze : Locker)()`, given false, Locker freezing a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review, still not read: a marked call of a function that tags a template with `(flag ? Object.freeze : lockTag)`, given false, lockTag freezing a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  this record, still not read: a marked call of a function that calls, on a value of the module, a name a `var` destructures, whose default is Object.freeze: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  this record, still not read: a marked call of a function that calls, on a value of the module, a name a catch clause destructures, whose default is Object.freeze: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  tenth review, still not read: a marked call of a function that gives forEach, over an array holding a function that freezes a value of the module, `Object.freeze && runIt`, which calls what it is given: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eleventh review: a marked call of a `var` of the module, between it and a second `var` of its name bound to Object.freeze, of a function that runs what it is given, given one that freezes a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eleventh review: a marked call of a `var` of the module bound to Object.freeze and declared again in a loop's head over deepFreeze, on a new object holding a value of the module: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eleventh review: a marked call of a function that calls a function written in place, through what `=` assigns it, that calls its parameter on a value of the module, given Object.freeze: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eleventh review: a marked call of a function that gives its parameter, through what `=` assigns, to one that calls it on a value of the module, given Object.freeze: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eleventh review, still not read: a marked call of a function that calls `(flag ? Object.freeze : runRest)`, given false, with a function that freezes a value of the module, runRest running what it gathers with `...`: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  eleventh review, still not read: a marked call of a function that calls `(flag ? Object.freeze : runArguments)`, given false, with a function that freezes a value of the module, runArguments running `arguments[0]`: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+Bundles whose program finds no callback stored after a marked call when the module loads:
+  fourth review: a marked call of a function of the module that gives a callback to one that passes it to one that stores it: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  fifth review: the same through a function that passes the callback on, called by one with a local function of the name of the function it passes it to: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified
+  sixth review, still not read: a method named map of an object of the module, which stores the function it is given: esbuild; esbuild, minified; Rollup; Rolldown; Rolldown, minified

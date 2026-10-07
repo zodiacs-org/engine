@@ -1,0 +1,43 @@
+# node tools/globals-probe.mjs <checkout> <Rollup package> <Rolldown package>; Node v22.22.2, 2026-10-07
+esbuild 0.27.7, Rollup 4.63.4, Rolldown 1.1.4
+Bundles that keep `export const T = /*#__PURE__*/ Object.freeze([marker, NAME])` in a program that imports only a function beside it:
+  Array: none
+  BigInt: none
+  Boolean: none
+  Date: none
+  Error: none
+  Float64Array: none
+  Infinity: none
+  JSON: none
+  Map: none
+  Math: none
+  NaN: none
+  Number: none
+  Object: none
+  RangeError: none
+  RegExp: none
+  Set: none
+  String: none
+  Symbol: none
+  TypeError: none
+  WeakMap: none
+  WeakSet: none
+  undefined: none
+  someGlobal: esbuild; esbuild, minified; Rollup
+Bundles that keep a table with the key `[Symbol.NAME]`, and one that a class beside it, with a method of that key, reads:
+  Symbol.asyncDispose: table: none | class: none
+  Symbol.asyncIterator: table: none | class: none
+  Symbol.dispose: table: none | class: none
+  Symbol.hasInstance: table: none | class: none
+  Symbol.isConcatSpreadable: table: none | class: none
+  Symbol.iterator: table: none | class: none
+  Symbol.match: table: none | class: none
+  Symbol.matchAll: table: none | class: none
+  Symbol.replace: table: none | class: none
+  Symbol.search: table: none | class: none
+  Symbol.species: table: none | class: none
+  Symbol.split: table: none | class: none
+  Symbol.toPrimitive: table: none | class: none
+  Symbol.toStringTag: table: none | class: none
+  Symbol.unscopables: table: none | class: none
+  Symbol.notWellKnown: table: esbuild; esbuild, minified | class: esbuild; esbuild, minified

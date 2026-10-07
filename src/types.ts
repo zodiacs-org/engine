@@ -289,10 +289,10 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "1.0.0-rc.1";
+export const ENGINE_VERSION: string = "1.0.0-rc.2";
 
 /**
  * The ephemeris underneath every position. The dependency is pinned to this
  * exact version, so receipts can name it without asking the caller.
  */
-export const EPHEMERIS = Object.freeze({ name: "astronomy-engine" as const, version: "2.1.19" as string });
+export const EPHEMERIS = /*#__PURE__*/ Object.freeze({ name: "astronomy-engine" as const, version: "2.1.19" as string });

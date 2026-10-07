@@ -20,8 +20,8 @@ export type VoidBody = "Sun" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Satur
 export type VoidBodies = "modern" | "traditional";
 
 export const VOID_BODIES: Readonly<Record<VoidBodies, readonly VoidBody[]>> = /*#__PURE__*/ Object.freeze({
-  modern: Object.freeze(["Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"] as const),
-  traditional: Object.freeze(["Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"] as const)
+  modern: /*#__PURE__*/ Object.freeze(["Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"] as const),
+  traditional: /*#__PURE__*/ Object.freeze(["Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"] as const)
 });
 
 /**
@@ -33,7 +33,7 @@ export const VOID_BODIES: Readonly<Record<VoidBodies, readonly VoidBody[]>> = /*
  */
 export const VOID_OF_COURSE_CONVENTION = /*#__PURE__*/ Object.freeze({
   name: "last-exact-ptolemaic-aspect-to-sign-exit",
-  aspects: Object.freeze(["conjunction", "sextile", "square", "trine", "opposition"] as const),
+  aspects: /*#__PURE__*/ Object.freeze(["conjunction", "sextile", "square", "trine", "opposition"] as const),
   defaultBodies: "modern" as VoidBodies,
   source: "Lilly, Christian Astrology (1647), p. 112"
 });

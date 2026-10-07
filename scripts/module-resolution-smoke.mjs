@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 
+import { UNMARKED_SOURCE, assertNoBreaches, checkBuild } from "./pure-tables.mjs";
 import { checkRootIsolation, staticGraph } from "./root-isolation.mjs";
 
 const engine = await import("@zodiacs/engine");
@@ -379,6 +380,23 @@ const root = checkRootIsolation({ metafile, files: builtFiles, read: readBuilt }
 for (const reading of [root.sources, root.held, root.marked]) {
   assert(reading.includes("src/api.ts") && reading.includes("src/ephemeris.ts"), "the build no longer lists or marks its modules' sources");
 }
+
+// The build keeps what lets a bundler leave out a table nothing reads
+// (scripts/pure-tables.mjs), module by module as the markers above attribute
+// its code.
+assertNoBreaches(checkBuild({ files: builtFiles, read: readBuilt }), "dist/");
+// The check leaves out the modules UNMARKED_SOURCE names because only ./calc
+// and ./vedic reach them through their static imports: no other entry point's
+// static graph, read both ways, holds one. (A dynamic import is not read.)
+const exportsMap = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).exports;
+for (const [subpath, target] of Object.entries(exportsMap)) {
+  if (subpath === "./calc" || subpath === "./vedic") continue;
+  const entry = /^\.\/dist\/([a-z-]+)\.js$/u.exec(target.import)[1];
+  const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
+  for (const source of new Set([...graph.sources, ...graph.held, ...graph.marked])) {
+    assert(!UNMARKED_SOURCE.test(source), `${subpath} reaches ${source}, which the table check leaves out because only ./calc and ./vedic reach it`);
+  }
+}
 for (const [entry, own] of [
   ["timing", /^src\/timing\//u],
   ["vedic", /^src\/vedic\//u],
@@ -412,5 +430,5 @@ console.log(
   "@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, " +
     `the core graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
     `${root.outputs.length} files) reaches no module of an opt-in entry and no zone history, ` +
-    "and the geo entry loads its 16 shards lazily"
+    "the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic"
 );

@@ -10,7 +10,7 @@
     "name": "zodiacs-engine",
     "version": "0.2.0",
     "engine": "@zodiacs/engine",
-    "engineVersion": "1.0.0-rc.1",
+    "engineVersion": "1.0.0-rc.2",
     "configuration": {
       "ephemeris": "astronomy-engine 2.1.19",
       "deltaTModel": "zodiacs-deltat/1",

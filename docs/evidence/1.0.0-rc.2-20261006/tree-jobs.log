@@ -1,0 +1,544 @@
+# sh tree-jobs.sh on the tree before the source commit, without NODE_OPTIONS, 2026-10-07
+## npm run build (Node v22.22.2)
+exit 0
+## npm pack --ignore-scripts (Node v22.22.2)
+npm notice
+npm notice package: @zodiacs/engine@1.0.0-rc.2
+npm notice Tarball Contents
+npm notice 111.9kB CHANGELOG.md
+npm notice 1.1kB LICENSE
+npm notice 26.2kB LICENSING.md
+npm notice 10.1kB NOTICE
+npm notice 61.5kB README.md
+npm notice 11.0kB dist/api-WbxJ4Wj-.d.ts
+npm notice 6.4kB dist/ayanamsa--YQ46fET.d.ts
+npm notice 18.2kB dist/calc.d.ts
+npm notice 44.7kB dist/calc.js
+npm notice 989B dist/chunk-47ERTK5X.js
+npm notice 508B dist/chunk-A3U2ZS2W.js
+npm notice 13.2kB dist/chunk-B5LKF437.js
+npm notice 5.1kB dist/chunk-BHJXUY67.js
+npm notice 29.8kB dist/chunk-BXBMGXAW.js
+npm notice 1.5kB dist/chunk-CPALRSPC.js
+npm notice 11.9kB dist/chunk-G3G4OHEP.js
+npm notice 672B dist/chunk-HRQO5EVB.js
+npm notice 2.4kB dist/chunk-KFTJMMG7.js
+npm notice 18.1kB dist/chunk-L6GKYN5B.js
+npm notice 2.9kB dist/chunk-PFGUCNOK.js
+npm notice 11.6kB dist/chunk-QJBGSY2B.js
+npm notice 9.8kB dist/chunk-TSS2SZWQ.js
+npm notice 1.3kB dist/chunk-XGK2AD4T.js
+npm notice 24.1kB dist/chunk-YIITY7Q7.js
+npm notice 6.2kB dist/chunk-ZX3QENKK.js
+npm notice 4.6kB dist/crossings.d.ts
+npm notice 173B dist/crossings.js
+npm notice 5.1kB dist/deltat.d.ts
+npm notice 161B dist/deltat.js
+npm notice 9.4kB dist/geo.d.ts
+npm notice 6.0kB dist/geo.js
+npm notice 7.7kB dist/houses-CFERsAlK.d.ts
+npm notice 4.7kB dist/houses-extra.d.ts
+npm notice 13.7kB dist/houses-extra.js
+npm notice 15.5kB dist/index.d.ts
+npm notice 13.3kB dist/index.js
+npm notice 6.2kB dist/internal-math-DJJ8BYex.d.ts
+npm notice 1.1kB dist/internal-math.d.ts
+npm notice 1.3kB dist/internal-math.js
+npm notice 522B dist/internal.d.ts
+npm notice 305B dist/internal.js
+npm notice 909B dist/receipt.d.ts
+npm notice 41.1kB dist/receipt.js
+npm notice 2.0kB dist/reference-span-CILpclrz.d.ts
+npm notice 835B dist/rulers-Dla6h_Sm.d.ts
+npm notice 8.0kB dist/sky.d.ts
+npm notice 15.1kB dist/sky.js
+npm notice 22.1kB dist/techniques.d.ts
+npm notice 36.3kB dist/techniques.js
+npm notice 23.8kB dist/timing.d.ts
+npm notice 31.2kB dist/timing.js
+npm notice 9.6kB dist/types-B-yb_tGL.d.ts
+npm notice 11.6kB dist/tzdb-2025c-00-6GVG6RYL.js
+npm notice 10.9kB dist/tzdb-2025c-01-CEYMG3LE.js
+npm notice 16.7kB dist/tzdb-2025c-02-NWQJCVUU.js
+npm notice 8.7kB dist/tzdb-2025c-03-PLHP6VH4.js
+npm notice 12.1kB dist/tzdb-2025c-04-MEKUJA6M.js
+npm notice 12.7kB dist/tzdb-2025c-05-3K5YKZBL.js
+npm notice 10.5kB dist/tzdb-2025c-06-L2VV5XJV.js
+npm notice 15.5kB dist/tzdb-2025c-07-H3GLGJGY.js
+npm notice 12.4kB dist/tzdb-2025c-08-DA7QQIGD.js
+npm notice 10.3kB dist/tzdb-2025c-09-MTXIO3QL.js
+npm notice 9.2kB dist/tzdb-2025c-10-ASL4UW5C.js
+npm notice 14.2kB dist/tzdb-2025c-11-EQEOANYB.js
+npm notice 12.2kB dist/tzdb-2025c-12-NKCCXJ5G.js
+npm notice 10.2kB dist/tzdb-2025c-13-DYTF3UC7.js
+npm notice 10.2kB dist/tzdb-2025c-14-C25H45R5.js
+npm notice 11.5kB dist/tzdb-2025c-15-7OYYZWRY.js
+npm notice 14.9kB dist/vedic.d.ts
+npm notice 16.6kB dist/vedic.js
+npm notice 8.0kB dist/window.d.ts
+npm notice 33.9kB dist/window.js
+npm notice 11.1kB dist/zone-history-ghdyO0Sc.d.ts
+npm notice 3.8kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 1.0.0-rc.2
+npm notice filename: zodiacs-engine-1.0.0-rc.2.tgz
+npm notice package size: 287.0 kB
+npm notice unpacked size: 989.5 kB
+npm notice shasum: 1d0becd37175ae8ca8004e79a0a6787ebc6aa501
+npm notice integrity: sha512-uuKxv7dDVQUWy[...]JWJ/1atNsST1Q==
+npm notice total files: 74
+npm notice
+zodiacs-engine-1.0.0-rc.2.tgz
+exit 0
+## the pack (Node v22.22.2)
+4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002  zodiacs-engine-1.0.0-rc.2.tgz
+287011 bytes
+exit 0
+## node scripts/verify-packed-consumer.mjs <the pack> (Node v20.19.0)
+{
+  "version": "1.0.0-rc.2",
+  "birthWindow": "passed",
+  "techniques": "passed",
+  "sky": "passed",
+  "houses": "passed",
+  "planetaryReturns": "passed",
+  "timeBasis": "passed",
+  "zoneHistory": "passed",
+  "timing": "passed",
+  "configuredAspects": "passed",
+  "exactAspectBoundaries": "passed",
+  "chartDeclinations": "passed",
+  "sunConvention": "passed",
+  "boundMargin": "passed",
+  "exactSeparation": "passed",
+  "ephemerisSpan": "passed",
+  "metadata": "passed",
+  "bodyLabels": "passed",
+  "ephemerisRangeErrors": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "oneZeroAdditions": "passed",
+  "artifact": "<scratch>/pack/zodiacs-engine-1.0.0-rc.2.tgz",
+  "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002",
+  "runtime": "v20.19.0",
+  "typescript": "5.9.3",
+  "typeRoots": "none (types: [])",
+  "directory": "<tmp>/zodiacs-engine-consumer-u3cx4N",
+  "types": "passed",
+  "directoryRemoved": true
+}
+exit 0
+## node scripts/verify-packed-consumer.mjs <the pack> (Node v22.7.0)
+{
+  "version": "1.0.0-rc.2",
+  "birthWindow": "passed",
+  "techniques": "passed",
+  "sky": "passed",
+  "houses": "passed",
+  "planetaryReturns": "passed",
+  "timeBasis": "passed",
+  "zoneHistory": "passed",
+  "timing": "passed",
+  "configuredAspects": "passed",
+  "exactAspectBoundaries": "passed",
+  "chartDeclinations": "passed",
+  "sunConvention": "passed",
+  "boundMargin": "passed",
+  "exactSeparation": "passed",
+  "ephemerisSpan": "passed",
+  "metadata": "passed",
+  "bodyLabels": "passed",
+  "ephemerisRangeErrors": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "oneZeroAdditions": "passed",
+  "artifact": "<scratch>/pack/zodiacs-engine-1.0.0-rc.2.tgz",
+  "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002",
+  "runtime": "v22.7.0",
+  "typescript": "5.9.3",
+  "typeRoots": "none (types: [])",
+  "directory": "<tmp>/zodiacs-engine-consumer-yNJ6AH",
+  "types": "passed",
+  "directoryRemoved": true
+}
+exit 0
+## node scripts/verify-packed-consumer.mjs <the pack> (Node v22.22.2)
+{
+  "version": "1.0.0-rc.2",
+  "birthWindow": "passed",
+  "techniques": "passed",
+  "sky": "passed",
+  "houses": "passed",
+  "planetaryReturns": "passed",
+  "timeBasis": "passed",
+  "zoneHistory": "passed",
+  "timing": "passed",
+  "configuredAspects": "passed",
+  "exactAspectBoundaries": "passed",
+  "chartDeclinations": "passed",
+  "sunConvention": "passed",
+  "boundMargin": "passed",
+  "exactSeparation": "passed",
+  "ephemerisSpan": "passed",
+  "metadata": "passed",
+  "bodyLabels": "passed",
+  "ephemerisRangeErrors": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "oneZeroAdditions": "passed",
+  "artifact": "<scratch>/pack/zodiacs-engine-1.0.0-rc.2.tgz",
+  "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002",
+  "runtime": "v22.22.2",
+  "typescript": "5.9.3",
+  "typeRoots": "none (types: [])",
+  "directory": "<tmp>/zodiacs-engine-consumer-rvJdyF",
+  "types": "passed",
+  "directoryRemoved": true
+}
+exit 0
+## node scripts/verify-packed-consumer.mjs <the pack> (Node v24.21.0)
+{
+  "version": "1.0.0-rc.2",
+  "birthWindow": "passed",
+  "techniques": "passed",
+  "sky": "passed",
+  "houses": "passed",
+  "planetaryReturns": "passed",
+  "timeBasis": "passed",
+  "zoneHistory": "passed",
+  "timing": "passed",
+  "configuredAspects": "passed",
+  "exactAspectBoundaries": "passed",
+  "chartDeclinations": "passed",
+  "sunConvention": "passed",
+  "boundMargin": "passed",
+  "exactSeparation": "passed",
+  "ephemerisSpan": "passed",
+  "metadata": "passed",
+  "bodyLabels": "passed",
+  "ephemerisRangeErrors": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "oneZeroAdditions": "passed",
+  "artifact": "<scratch>/pack/zodiacs-engine-1.0.0-rc.2.tgz",
+  "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002",
+  "runtime": "v24.21.0",
+  "typescript": "5.9.3",
+  "typeRoots": "none (types: [])",
+  "directory": "<tmp>/zodiacs-engine-consumer-Al7ff7",
+  "types": "passed",
+  "directoryRemoved": true
+}
+exit 0
+## node --test conformance/harness/selftest.mjs (Node v22.22.2)
+TAP version 13
+# Subtest: longitudes compare on the circle, in the rule unit
+ok 1 - longitudes compare on the circle, in the rule unit
+  ---
+  duration_ms: 1.120652
+  type: 'test'
+  ...
+# Subtest: arrays compare element by element and report the worst residual
+ok 2 - arrays compare element by element and report the worst residual
+  ---
+  duration_ms: 0.269559
+  type: 'test'
+  ...
+# Subtest: exact fields, missing fields and non-numbers fail
+ok 3 - exact fields, missing fields and non-numbers fail
+  ---
+  duration_ms: 0.454945
+  type: 'test'
+  ...
+# Subtest: validation accepts a conforming file and names each problem in a bad one
+ok 4 - validation accepts a conforming file and names each problem in a bad one
+  ---
+  duration_ms: 3.104524
+  type: 'test'
+  ...
+# Subtest: the committed vector files conform to SPEC.md
+ok 5 - the committed vector files conform to SPEC.md
+  ---
+  duration_ms: 33.68524
+  type: 'test'
+  ...
+# Subtest: the protocol: a handshake, then one response per request, in order
+ok 6 - the protocol: a handshake, then one response per request, in order
+  ---
+  duration_ms: 56.962985
+  type: 'test'
+  ...
+# Subtest: the protocol: a missing handshake or an answer out of order is refused
+ok 7 - the protocol: a missing handshake or an answer out of order is refused
+  ---
+  duration_ms: 112.609417
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 288.389484
+exit 0
+## node conformance/harness/validate.mjs --expect-total 500 (Node v22.22.2)
+L1 Positions: 240 vectors, 1 arbiter(s), sha256 853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c
+  position.apparent.ecliptic-true-of-date: 240
+L2 Houses and angles: 150 vectors, 5 arbiter(s), sha256 5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0
+  angles.asc-mc: 60
+  angles.vertex-east-point: 10
+  houses.cusps: 80
+L3 Time and calendars: 110 vectors, 5 arbiter(s), sha256 434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8
+  time.zone-offset: 45
+  time.local-mean-time: 5
+  time.tt-minus-utc: 10
+  time.delta-t: 15
+  calendar.to-jdn: 25
+  calendar.from-jdn: 10
+conformance: 500 vectors conform to SPEC.md
+exit 0
+## node conformance/harness/run.mjs --check (Node v22.22.2)
+zodiacs-engine 1.0.0-rc.2: 267 pass, 192 fail, 41 unsupported, 0 error (of 500)
+  L1: 48 pass, 192 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+exit 0
+## node conformance/harness/report.mjs --check (Node v22.22.2)
+conformance: RESULTS.md and results/summary.json are current
+exit 0
+## node atlas/tools/check.mjs (Node v22.22.2)
+atlas 0.1.0: 21 places, 14 jurisdictions, 59 rules, 66 citations
+  rules by flag: documented 27, inferred 26, uncertain 6
+  citations by type: decree 5, law 9, ministerial-decision 1, municipal-notice 1, newspaper-report 45, parliamentary-debate 3, railway-notice 2
+  excerpts taken from: page-image 66
+  excerpts checked against (citations): ocr matches 24, ocr partial 5, page-image matches 16, search-service matches 29, search-service partial 8
+  258 boundaries and 2735 round trips checked
+  tzdb comparison current, every difference matched by exactly one explanation
+atlas: all checks passed
+exit 0
+## node --test atlas/tools/selftest.mjs (Node v22.22.2)
+TAP version 13
+# Subtest: local mean time is 240 s per degree east, to the millisecond
+ok 1 - local mean time is 240 s per degree east, to the millisecond
+  ---
+  duration_ms: 1.752341
+  type: 'test'
+  ...
+# Subtest: boundaries resolve on the clock their reckoning names
+ok 2 - boundaries resolve on the clock their reckoning names
+  ---
+  duration_ms: 2.4897
+  type: 'test'
+  ...
+# Subtest: an ordinary reading resolves to one instant
+ok 3 - an ordinary reading resolves to one instant
+  ---
+  duration_ms: 1.284084
+  type: 'test'
+  ...
+# Subtest: local mean time differs by place
+ok 4 - local mean time differs by place
+  ---
+  duration_ms: 0.921696
+  type: 'test'
+  ...
+# Subtest: a place read by longitude must lie in a covered département and inside its area
+ok 5 - a place read by longitude must lie in a covered département and inside its area
+  ---
+  duration_ms: 0.678467
+  type: 'test'
+  ...
+# Subtest: --utc is always UTC, with or without Z, whatever the host time zone
+ok 6 - --utc is always UTC, with or without Z, whatever the host time zone
+  ---
+  duration_ms: 152.984985
+  type: 'test'
+  ...
+# Subtest: --utc reports the same instant fields as --local, uncertainty included
+ok 7 - --utc reports the same instant fields as --local, uncertainty included
+  ---
+  duration_ms: 1.20786
+  type: 'test'
+  ...
+# Subtest: the resolver refuses out-of-range times, a malformed longitude and an unknown clock
+ok 8 - the resolver refuses out-of-range times, a malformed longitude and an unknown clock
+  ---
+  duration_ms: 441.850848
+  type: 'test'
+  ...
+# Subtest: the resolver refuses unknown, valueless, repeated and conflicting options
+ok 9 - the resolver refuses unknown, valueless, repeated and conflicting options
+  ---
+  duration_ms: 663.222582
+  type: 'test'
+  ...
+# Subtest: a clock the jurisdiction does not keep is reported as such, not as out of coverage
+ok 10 - a clock the jurisdiction does not keep is reported as such, not as out of coverage
+  ---
+  duration_ms: 1.378284
+  type: 'test'
+  ...
+# Subtest: a skipped reading is nonexistent and taken on the earlier clock
+ok 11 - a skipped reading is nonexistent and taken on the earlier clock
+  ---
+  duration_ms: 1.09635
+  type: 'test'
+  ...
+# Subtest: a repeated reading is ambiguous, earliest first
+ok 12 - a repeated reading is ambiguous, earliest first
+  ---
+  duration_ms: 0.611462
+  type: 'test'
+  ...
+# Subtest: readings outside the window are out of coverage
+ok 13 - readings outside the window are out of coverage
+  ---
+  duration_ms: 0.611448
+  type: 'test'
+  ...
+# Subtest: readings near a boundary the sources do not fix exactly are flagged uncertain
+ok 14 - readings near a boundary the sources do not fix exactly are flagged uncertain
+  ---
+  duration_ms: 0.863155
+  type: 'test'
+  ...
+# Subtest: a local reading inside the span of an imprecise change, read on either clock, is uncertain
+ok 15 - a local reading inside the span of an imprecise change, read on either clock, is uncertain
+  ---
+  duration_ms: 1.052956
+  type: 'test'
+  ...
+# Subtest: UTC -> local -> UTC round trips at every millisecond near a change
+ok 16 - UTC -> local -> UTC round trips at every millisecond near a change
+  ---
+  duration_ms: 0.684969
+  type: 'test'
+  ...
+# Subtest: each tzdb difference must match exactly one explanation, on its values
+ok 17 - each tzdb difference must match exactly one explanation, on its values
+  ---
+  duration_ms: 1.349259
+  type: 'test'
+  ...
+# Subtest: a missing tzdb extract fails the check instead of skipping it
+ok 18 - a missing tzdb extract fails the check instead of skipping it
+  ---
+  duration_ms: 0.548988
+  type: 'test'
+  ...
+# Subtest: the checks pass on the fixture and count their round trips
+ok 19 - the checks pass on the fixture and count their round trips
+  ---
+  duration_ms: 11.707358
+  type: 'test'
+  ...
+# Subtest: the checks catch a gap between rules
+ok 20 - the checks catch a gap between rules
+  ---
+  duration_ms: 3.598864
+  type: 'test'
+  ...
+# Subtest: the checks hold excerpts to 40 words and want a record of how each was checked
+ok 21 - the checks hold excerpts to 40 words and want a record of how each was checked
+  ---
+  duration_ms: 2.890975
+  type: 'test'
+  ...
+# Subtest: the checks catch a département listed twice for reading by longitude
+ok 22 - the checks catch a département listed twice for reading by longitude
+  ---
+  duration_ms: 2.252176
+  type: 'test'
+  ...
+# Subtest: the citations an exclusion names must exist, and count as cited
+ok 23 - the citations an exclusion names must exist, and count as cited
+  ---
+  duration_ms: 10.364842
+  type: 'test'
+  ...
+# Subtest: the checks catch a missing citation, excerpt or retrieval date
+ok 24 - the checks catch a missing citation, excerpt or retrieval date
+  ---
+  duration_ms: 2.67248
+  type: 'test'
+  ...
+# Subtest: the checks catch a rule without citations and an unused citation
+ok 25 - the checks catch a rule without citations and an unused citation
+  ---
+  duration_ms: 1.611364
+  type: 'test'
+  ...
+# Subtest: the schema validator reports types, patterns and unknown properties
+ok 26 - the schema validator reports types, patterns and unknown properties
+  ---
+  duration_ms: 0.925578
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1419.461426
+exit 0
+

@@ -10,7 +10,7 @@ export { gregorianToJulian, julianToGregorian } from "../civil-calendar.js";
 export type GregorianAdoptionSource = "tzdb" | "grotefend-1891" | "grotefend-1898";
 
 /** The adoption table's sources, all in the public domain. */
-export const GREGORIAN_ADOPTION_SOURCES: Readonly<Record<GregorianAdoptionSource, string>> = Object.freeze({
+export const GREGORIAN_ADOPTION_SOURCES: Readonly<Record<GregorianAdoptionSource, string>> = /*#__PURE__*/ Object.freeze({
   tzdb: "IANA tzdata 2025c, file calendars, quoting H. Grotefend, Taschenbuch der Zeitrechnung, ed. O. Grotefend (1941), pp. 26-28",
   "grotefend-1891": "H. Grotefend, Zeitrechnung des deutschen Mittelalters und der Neuzeit, vol. 1 (1891), pp. 133-134",
   "grotefend-1898": "H. Grotefend, Taschenbuch der Zeitrechnung des deutschen Mittelalters und der Neuzeit (1898), pp. 23-24"
@@ -69,8 +69,8 @@ SE|Sweden|-|1753-03-01|t18|From 1 March 1700 to 30 February 1712 Swedish dates a
 const SOURCE_KEYS: Readonly<Record<string, GregorianAdoptionSource>> = { t: "tzdb", 1: "grotefend-1891", 8: "grotefend-1898" };
 
 /** The adoption table, one row per country, sorted by code; docs/time.md describes it. */
-export const GREGORIAN_ADOPTION: readonly Readonly<GregorianAdoption>[] = Object.freeze(
-  ROWS.split("\n").map((line) => {
+export const GREGORIAN_ADOPTION: readonly Readonly<GregorianAdoption>[] = /*#__PURE__*/ Object.freeze(
+  /*#__PURE__*/ ROWS.split("\n").map((line) => {
     const [code, country, region, firstGregorian, sources, note] = line.split("|") as [string, string, string, string, string, string];
     const day = julianDayNumber(parseCalendarDate(firstGregorian, "gregorian")!, "gregorian");
     return Object.freeze({

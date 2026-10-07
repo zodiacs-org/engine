@@ -94,7 +94,8 @@ runs, so CI starts the check with node directly.
 | 0.1.1-rc.15 | `24eeb597b0157598c0faa26bb615c0cb5dfaaeac0393d62c73fbd37c5da4d348` | 190,974 | 54 | `104bd5a56ee00356eecc75f15f0aa946f5a39f41` | `cbad72c` | Candidate, merged |
 | 0.1.1-rc.16 | `43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8` | 266,934 | 69 | `ddbbaa0b1d21e16834722f81e8708816849c6726` | `ef44477` | Candidate, merged |
 | 0.1.1-rc.17 | `9cd24c788863424ef614aaadec580db5a0dfc529303d385274db48a092a5299a` | 273,123 | 70 | `aae419c05b77455b9e8f03ca11ee273b446f7d02` | `b080217` | Candidate, merged |
-| 1.0.0-rc.1 | `cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284` | 284,750 | 74 | `77a16c26889220f5481f41d16c4ca4e70a09250b` | "Carry the packed 1.0.0-rc.1 tarball" | Candidate under review |
+| 1.0.0-rc.1 | `cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284` | 284,750 | 74 | `77a16c26889220f5481f41d16c4ca4e70a09250b` | `bb1736a` | Candidate, merged |
+| 1.0.0-rc.2 | `4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002` | 287,011 | 74 | `7fa964d2a77d09dbb819b5733b36e303fc7fc513` | "Carry the packed 1.0.0-rc.2 tarball" | Candidate under review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -231,3 +232,15 @@ failed on the carrier on its own TypeScript, which still declared rc.17's
 window types; `4b11350` corrected it without changing a packed file, and it
 passes on this archive. It is not to be published on npm until the owner
 approves 1.0.0. The record is in `docs/evidence/1.0.0-rc.1-20261006/`.
+
+1.0.0-rc.2 is the second candidate for 1.0.0. It changes no API and no value
+of 1.0.0-rc.1: it lets a bundler leave out the frozen tables a program does
+not read, which 1.0.0-rc.1 made it keep, and a check in the tests and in the
+export smoke test asks for each table in a form the bundlers can leave out.
+The archive is 287,011 bytes, 989,528 unpacked in 74 files, under the package
+cap of 1,000,000. It was packed once, after CI's jobs, but the archive
+check, which reads commits, had passed on its source commit's tree: clean
+clones of that commit, each installed with `npm ci`, packed the same bytes
+on Node 22.22.2, 20.19.0 and 24.21.0, and the carried file is the Node
+22.22.2 one. It is not to be published on npm until the owner approves
+1.0.0. The record is in `docs/evidence/1.0.0-rc.2-20261006/`.

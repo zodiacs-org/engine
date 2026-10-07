@@ -5,7 +5,7 @@ import type { ZoneShardBucket } from "../geo/zone-history.js";
  * The pinned tzdb release: its version, archive digest and the form its histories were compiled from. The
  * version and digest are typed as strings, because a release that updates the time-zone data changes them.
  */
-export const TZDB: Readonly<{ version: string; sha256: string; form: "main+backzone" }> = Object.freeze({
+export const TZDB: Readonly<{ version: string; sha256: string; form: "main+backzone" }> = /*#__PURE__*/ Object.freeze({
   version: "2025c",
   sha256: "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957",
   form: "main+backzone"

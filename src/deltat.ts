@@ -91,13 +91,13 @@ export interface DeltaTTable {
 export const DELTA_T_MODEL = "zodiacs-deltat/1";
 
 /** This release's table: IERS files of 2026-09-24. Frozen. */
-export const DELTA_T_TABLE: DeltaTTable = Object.freeze({
+export const DELTA_T_TABLE: DeltaTTable = /*#__PURE__*/ Object.freeze({
   version: "2026-09-24",
   digest: "6371988c510a1c6c",
   from: 1941,
   observedTo: 61307,
   predictedTo: 61680,
-  knots: Object.freeze([
+  knots: /*#__PURE__*/ Object.freeze([
     2482, 48, 47, 50, 49, 51, 50, 48, 45, 45, 42, 40, 39, 36, 35, 28, 33, 49, 50, 48, 43, 42, 47, 56, 71, 80,
     89, 87, 90, 98, 99, 106, 114, 111, 100, 98, 106, 101, 106, 95, 84, 79, 79, 83, 55, 53, 45, 50, 48, 56,
     71, 74, 81, 86, 81, 84, 66, 68, 50, 36, 26, 21, 17, 10, 12, 16, 30, 31, 32, 29, 25, 28, 31, 37, 36, 46,

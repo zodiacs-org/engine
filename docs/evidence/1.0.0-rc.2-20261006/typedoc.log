@@ -1,0 +1,6 @@
+# npx typedoc --options typedoc.json --out <scratch>/typedoc-out, on the tree before the source commit, without NODE_OPTIONS; Node v22.22.2, 2026-10-07
+[info] Loaded plugin <checkout>/scripts/typedoc-canonical.mjs
+[warning] PlanetaryDayBase, defined in @zodiacs/engine/src/sky/hours.ts, is referenced by sky.PlanetaryDay but not included in the documentation
+[warning] SkyWindow, defined in @zodiacs/engine/src/sky/riseset.ts, is referenced by sky.SkyEvents but not included in the documentation
+[info] html generated at <scratch>/typedoc-out
+[warning] Found 0 errors and 2 warnings

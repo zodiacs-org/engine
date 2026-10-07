@@ -1,5 +1,92 @@
 # Engine changelog
 
+## 1.0.0-rc.2 — unreleased candidate
+
+The second candidate for 1.0.0, on 1.0.0-rc.1 (main at `c6b5490`, the merge
+of zodiacs-org/engine#30). It changes no API and no value: it lets a bundler
+leave out the tables a program does not read, and it adds to 1.0.0-rc.1's
+migration the step a TypeScript caller takes. 1.0.0-rc.1 froze the exported
+tables where they are declared, and a bundler keeps such a freeze, and the
+other calls a table is built with, in a program that never reads the table,
+because a call might have effects: on zodiacs.org that put the chart
+bundle's engine chunks over their size budget. It is not to be published on
+npm until the owner approves 1.0.0. Checks:
+`docs/evidence/1.0.0-rc.2-20261006/`.
+
+- Each call a table's declaration makes when its module loads is marked
+  `/*#__PURE__*/`: the freeze, the freezes of its entries, the `map`,
+  `Array.from` or `Object.keys` that builds it, and a `Set` or `Map` built
+  from data. Nothing else in a table is what a bundler takes for an effect:
+  the receipt's convention sets built with a spread of the set before are
+  built in a function called in place, and `RELEASING_UNIT_DAYS`' quotients
+  are written as numbers, the same doubles. A program that reads a table
+  gets it as before; one that does not no longer carries it. Bundled alone
+  with esbuild, Rollup or Rolldown, each of the 66 such tables in the build
+  is left out of a program that reads nothing; 1.0.0-rc.1 kept 43 of them
+  under esbuild, 11 under Rollup and 42 under Rolldown. In programs that
+  each load one entry point and read nothing, 1.0.0-rc.1 kept 43, 20 and 42
+  of them, and this candidate keeps three, which modules only `./calc` and
+  `./vedic` load read (below).
+- Nothing else a module does when it loads reads a table, but in the
+  modules that only `./calc` and `./vedic` load (below). `src/time-scale.ts`
+  computed six bounds from `UT1_DATA` and `LEAP_SECOND_LIST` when it loaded,
+  which kept both tables in every program that loaded the chunk they share
+  with `REFERENCE_SPAN`; the generator now writes the six into
+  `src/time-scale-data.ts` as numbers, the same values. The five values
+  `./window` computes from tables when it loads are marked. Bundled with
+  esbuild and minified, a program that calls only `outsideReferenceSpan` is
+  180 bytes gzipped, where it was 7,475 on 1.0.0-rc.1.
+- `DEFAULT_ASPECT_POLICY = createAspectPolicy()`, which the root builds when
+  it loads, is marked too, so a bundler leaves the policy, and the code that
+  builds it, out of a program that does not read it. Bundled with esbuild
+  and minified, a program that calls only `normalizeLongitude` is 137 bytes
+  gzipped, where it was 4,169 on 1.0.0-rc.1 and 3,936 on rc.17, and one
+  that calls `natalChart` 35,132, where it was 37,000 and 36,736.
+- `CHALDEAN_FACES` (`./techniques`) was marked, but not the `Array.from`
+  that builds it, so bundlers kept it; it is marked now.
+- The tables that only `./calc` and `./vedic` load are as 1.0.0-rc.1 had
+  them, and so is what those modules read of the others when they load: a
+  program that loads either entry carries `REFERENCE_SPAN`, and one that
+  loads `./vedic` `SIGNS` and `SIGN_SLUGS`, whether it reads them or not.
+  Their marks, 16 bytes each in the built files, would add at least 288
+  bytes to `./calc`'s graph and 432 to `./vedic`'s, which have 239 and 249
+  left, and a budget is raised only with the owner's approval.
+  `UNMARKED_SOURCE` in `scripts/pure-tables.mjs` names their modules.
+- `scripts/pure-tables.mjs` states the rule and checks it: its tests run it
+  on the source, and the export smoke test on the build, module by module.
+  It holds to the rule whatever reads a table when its module loads, its
+  own module's or one it imports, by name, as a default or through a
+  namespace. It refuses a freeze outside a table's declaration; a mark on a
+  call whose value is discarded, which a bundler would drop with its
+  effect; and a mark on a call it finds may freeze a value that exists
+  before it, which a bundler would leave unfrozen, with a freeze of its
+  own, in a function it calls or constructs, or in one it runs. It does not
+  read every form of code, so it is an aid to reading a mark, not a proof;
+  the release's record reads each mark in `src/` by hand. The export smoke
+  test also checks that no entry point but `./calc` and `./vedic` reaches
+  the modules it leaves out through its static imports. The generated
+  `src/time-scale-data.ts` and `src/tzdb/tzdb-2025c.ts` carry the marks
+  from their generators.
+- 1.0.0-rc.1's migration, below, gains its step for TypeScript: declare
+  what you keep of the constants its *Types only* bullet lists as their
+  `string` or `number`, and of a birth window's result as readonly. The
+  packed-consumer check, which failed on 1.0.0-rc.1's archive until its own
+  TypeScript was so declared, now also exercises 1.0's additions:
+  `ZoneHistoryNotLoadedError` by its class, `./calc`'s epochs inside
+  `EPHEMERIS_SPAN` and its `epoch-out-of-range` refusal beyond, the frozen
+  tables and the lookups that return their entries, and
+  `SIDEREAL_TIME_RATE`.
+- Sizes: each entry's graph grows by what it loads of the marks and the
+  functions called in place, less 105 bytes where it loads the time scale,
+  whose six bounds are now numbers: from none (`./crossings`, `./houses`)
+  to 759 bytes (`./techniques`); the root's is 105,980 bytes, 615 more. No
+  budget is raised. The tightest are `./crossings`, 9,942 of 10,000;
+  `./geo`, 35,439 of 35,500; `./calc`, 145,261 of 145,500; and `./vedic`,
+  127,751 of 128,000.
+- No value moved: 1.0.0-rc.1's battery of 6,417 calls over the twelve entry
+  points prints the same bytes on both candidates, every declaration file
+  is 1.0.0-rc.1's, and the conformance results are 1.0.0-rc.1's.
+
 ## 1.0.0-rc.1 — unreleased candidate
 
 The first candidate for 1.0.0, on rc.17 (main at `782b496`, the merge of
@@ -204,8 +291,13 @@ Migration: write calc's time scales in lower case and `houses()`'s
 `userAyanamsa` an epoch that is not a bare number; give `davisonPlace` places
 in range, `calendarNote` a valid date, a named calendar and a country, and
 `deltaT` a finite number; copy any exported table before changing it, and do
-not change `ASPECT_BODIES` to change what the engine computes; and move off
-the seven deprecated names when convenient.
+not change `ASPECT_BODIES` to change what the engine computes; in
+TypeScript, declare what you keep of a constant the *Types only* bullet lists
+(`ENGINE_VERSION`, `TZDB.version`, `WINDOW_VERIFICATION`, `MAX_WINDOW_MS` and
+the others) as its `string` or `number`, not rc.17's literal, and what you
+keep of a birth window's result as readonly (`readonly WindowChange[]`,
+`readonly WindowUnresolved[]`); and move off the seven deprecated names when
+convenient.
 
 ### Corrections
 

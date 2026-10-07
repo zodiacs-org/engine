@@ -3,14 +3,14 @@
 // and IERS finals2000A.all (Bulletin A), Last-Modified 2026-09-24T17:37:44Z (sha256 cc80680ec05c91b65e7d02c6068fe0d44dd0998dc880551975092d2d14aa8e18). Do not edit.
 
 /** The IERS leap-second list: MJD of each change and TAI − UTC from it. */
-export const LEAP_SECOND_LIST = Object.freeze({
+export const LEAP_SECOND_LIST = /*#__PURE__*/ Object.freeze({
   source: "IERS leap-seconds.list, retrieved 2026-09-29",
   sha256: "db5a895f16853b03bfc865e8d68f9fc8710ef1740e3400c701cd46a5bbbc3433",
   /** The list's last update. */
   updated: "2026-07-06",
   /** The list's expiry: after it the last value is carried, not known. */
   expires: "2027-06-28",
-  changes: Object.freeze([[41317,10],[41499,11],[41683,12],[42048,13],[42413,14],[42778,15],[43144,16],[43509,17],[43874,18],[44239,19],[44786,20],[45151,21],[45516,22],[46247,23],[47161,24],[47892,25],[48257,26],[48804,27],[49169,28],[49534,29],[50083,30],[50630,31],[51179,32],[53736,33],[54832,34],[56109,35],[57204,36],[57754,37]].map((change) => Object.freeze(change) as readonly [number, number]))
+  changes: /*#__PURE__*/ Object.freeze(/*#__PURE__*/ [[41317,10],[41499,11],[41683,12],[42048,13],[42413,14],[42778,15],[43144,16],[43509,17],[43874,18],[44239,19],[44786,20],[45151,21],[45516,22],[46247,23],[47161,24],[47892,25],[48257,26],[48804,27],[49169,28],[49534,29],[50083,30],[50630,31],[51179,32],[53736,33],[54832,34],[56109,35],[57204,36],[57754,37]].map((change) => Object.freeze(change) as readonly [number, number]))
 });
 
 /**
@@ -20,7 +20,7 @@ export const LEAP_SECOND_LIST = Object.freeze({
  * finals2000A rows from the next day, packed as second differences, and one
  * on the last day.
  */
-export const UT1_DATA = Object.freeze({
+export const UT1_DATA = /*#__PURE__*/ Object.freeze({
   version: "2026-09-24",
   source: "IERS finals2000A.all (Bulletin A), Last-Modified 2026-09-24T17:37:44Z",
   sha256: "cc80680ec05c91b65e7d02c6068fe0d44dd0998dc880551975092d2d14aa8e18",
@@ -48,3 +48,19 @@ export const UT1_DATA = Object.freeze({
   /** The prediction's formal error every 10 days after observedTo, and on its last day, µs. */
   predictedErrors: [108,934,2308,3408,4391,5301,6160,6979,7766,8526,9264,9982,10683,11369,12041,12701,13349,13986,14614,15233,15844,16447,17042,17630,18212,18788,19358,19922,20481,21035,21584,22128,22668,23203,23735,24262,24786,25306,25410]
 });
+
+// The bounds src/time-scale.ts compares instants with, written as numbers: a
+// value computed from a table when its module loads keeps the table in a
+// program that does not use it (scripts/pure-tables.mjs).
+/** UT1_DATA's first day, 0h UTC, ms. */
+export const UT1_FROM_MS = 63072000000;
+/** UT1_DATA's first finals2000A day, 0h UTC, ms. */
+export const UT1_FINALS_FROM_MS = 94780800000;
+/** UT1_DATA's last observed day, 0h UTC, ms. */
+export const UT1_OBSERVED_TO_MS = 1790208000000;
+/** UT1_DATA's last day, 0h UTC, ms. */
+export const UT1_TO_MS = 1822435200000;
+/** Knots of UT1_DATA's 3-day grid before its first finals2000A day: the grid runs from its second day. */
+export const UT1_GRID_BEFORE = 122;
+/** LEAP_SECOND_LIST's expiry, 0h UTC, ms. */
+export const LEAP_SECONDS_EXPIRE_MS = 1814140800000;

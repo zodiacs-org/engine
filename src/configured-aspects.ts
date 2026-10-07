@@ -34,7 +34,7 @@ export interface AspectOrbLimits {
 export type AspectOrbInput = number | AspectOrbLimits;
 
 /** Names fix angles only: there is no universally prescribed orb for a minor aspect. */
-export const CONFIGURED_ASPECT_ANGLES = Object.freeze({
+export const CONFIGURED_ASPECT_ANGLES = /*#__PURE__*/ Object.freeze({
   conjunction: 0,
   semisextile: 30,
   semisquare: 45,
@@ -132,7 +132,7 @@ const DEFAULT_RULES: readonly AspectRuleInput[] = [
   { type: "opposition", orb: 8, luminaryOrb: 10 }
 ];
 const POLICIES = new WeakSet<object>();
-const CONVENTIONS: AspectPolicy["conventions"] = Object.freeze({
+const CONVENTIONS: AspectPolicy["conventions"] = /*#__PURE__*/ Object.freeze({
   coordinates: "ecliptic-longitude-degrees-[0,360)",
   speed: "longitude-degrees-per-day;same-time-basis",
   motion: "instantaneous-orb-rate;right-derivative-at-circular-corners;exact-separating-unless-stationary",
@@ -236,7 +236,7 @@ export function createAspectPolicy(input: AspectPolicyInput = {}): AspectPolicy 
 }
 
 /** Independent immutable copy of the historical five-aspect/ten-body defaults. */
-export const DEFAULT_ASPECT_POLICY: AspectPolicy = createAspectPolicy();
+export const DEFAULT_ASPECT_POLICY: AspectPolicy = /*#__PURE__*/ createAspectPolicy();
 
 /**
  * a − b, exactly, folded into (−180, 180]. Validated longitudes lie in

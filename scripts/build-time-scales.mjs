@@ -86,7 +86,9 @@ const ALPHABET = Array.from({ length: 92 }, (_, index) => String.fromCharCode(35
 
 const sha256 = (data) => createHash("sha256").update(data).digest("hex");
 const mjdOfNtp = (ntp) => ntp / 86400 + 15020;
-const isoOfMjd = (mjd) => new Date((mjd - 40587) * 86_400_000).toISOString().slice(0, 10);
+/** A Modified Julian Date's 0h UTC as a JavaScript time, ms. */
+const msOfMjd = (mjd) => (mjd - 40587) * 86_400_000;
+const isoOfMjd = (mjd) => new Date(msOfMjd(mjd)).toISOString().slice(0, 10);
 
 /** The list's leap seconds, update and expiry, after checking its own SHA-1 line. */
 export function parseLeapSeconds(text) {
@@ -293,14 +295,14 @@ export function render({ list, table, digest }) {
 // and ${table.source} (sha256 ${table.sha256}). Do not edit.
 
 /** The IERS leap-second list: MJD of each change and TAI − UTC from it. */
-export const LEAP_SECOND_LIST = Object.freeze({
+export const LEAP_SECOND_LIST = /*#__PURE__*/ Object.freeze({
   source: ${q(list.source)},
   sha256: ${q(list.sha256)},
   /** The list's last update. */
   updated: ${q(list.updated)},
   /** The list's expiry: after it the last value is carried, not known. */
   expires: ${q(list.expires)},
-  changes: Object.freeze(${q(list.changes)}.map((change) => Object.freeze(change) as readonly [number, number]))
+  changes: /*#__PURE__*/ Object.freeze(/*#__PURE__*/ ${q(list.changes)}.map((change) => Object.freeze(change) as readonly [number, number]))
 });
 
 /**
@@ -310,7 +312,7 @@ export const LEAP_SECOND_LIST = Object.freeze({
  * finals2000A rows from the next day, packed as second differences, and one
  * on the last day.
  */
-export const UT1_DATA = Object.freeze({
+export const UT1_DATA = /*#__PURE__*/ Object.freeze({
   version: ${q(table.version)},
   source: ${q(table.source)},
   sha256: ${q(table.sha256)},
@@ -338,6 +340,22 @@ export const UT1_DATA = Object.freeze({
   /** The prediction's formal error every 10 days after observedTo, and on its last day, µs. */
   predictedErrors: ${q(table.predictedErrors)}
 });
+
+// The bounds src/time-scale.ts compares instants with, written as numbers: a
+// value computed from a table when its module loads keeps the table in a
+// program that does not use it (scripts/pure-tables.mjs).
+/** UT1_DATA's first day, 0h UTC, ms. */
+export const UT1_FROM_MS = ${msOfMjd(table.from)};
+/** UT1_DATA's first finals2000A day, 0h UTC, ms. */
+export const UT1_FINALS_FROM_MS = ${msOfMjd(table.finalsFrom)};
+/** UT1_DATA's last observed day, 0h UTC, ms. */
+export const UT1_OBSERVED_TO_MS = ${msOfMjd(table.observedTo)};
+/** UT1_DATA's last day, 0h UTC, ms. */
+export const UT1_TO_MS = ${msOfMjd(table.to)};
+/** Knots of UT1_DATA's ${table.step}-day grid before its first finals2000A day: the grid runs from its second day. */
+export const UT1_GRID_BEFORE = ${Math.floor((table.finalsFrom - table.from - 1) / table.step)};
+/** LEAP_SECOND_LIST's expiry, 0h UTC, ms. */
+export const LEAP_SECONDS_EXPIRE_MS = ${Date.parse(`${list.expires}T00:00:00Z`)};
 `;
 }
 

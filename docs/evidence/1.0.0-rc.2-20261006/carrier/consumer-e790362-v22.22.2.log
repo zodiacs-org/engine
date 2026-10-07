@@ -1,0 +1,52 @@
+# sh carrier-gates.sh consumer at e790362 in a clean full-history clone, without NODE_OPTIONS; Node v22.22.2, npm 10.9.7, git 2.43.0, 2026-10-07
+## the carried archive
+4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002  artifacts/zodiacs-engine-1.0.0-rc.2.tgz
+exit 0
+## node scripts/verify-packed-consumer.mjs
+{
+  "version": "1.0.0-rc.2",
+  "birthWindow": "passed",
+  "techniques": "passed",
+  "sky": "passed",
+  "houses": "passed",
+  "planetaryReturns": "passed",
+  "timeBasis": "passed",
+  "zoneHistory": "passed",
+  "timing": "passed",
+  "configuredAspects": "passed",
+  "exactAspectBoundaries": "passed",
+  "chartDeclinations": "passed",
+  "sunConvention": "passed",
+  "boundMargin": "passed",
+  "exactSeparation": "passed",
+  "ephemerisSpan": "passed",
+  "metadata": "passed",
+  "bodyLabels": "passed",
+  "ephemerisRangeErrors": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "oneZeroAdditions": "passed",
+  "artifact": "<clone>/artifacts/zodiacs-engine-1.0.0-rc.2.tgz",
+  "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002",
+  "runtime": "v22.22.2",
+  "typescript": "5.9.3",
+  "typeRoots": "none (types: [])",
+  "directory": "<tmp>/zodiacs-engine-consumer-xsVTGY",
+  "types": "passed",
+  "directoryRemoved": true
+}
+exit 0
+

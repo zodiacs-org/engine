@@ -26,7 +26,7 @@ export interface DeclinationOrbPolicy {
   luminaryOrb: number;
 }
 
-export const DEFAULT_DECLINATION_ORB_POLICY: Readonly<DeclinationOrbPolicy> = Object.freeze({
+export const DEFAULT_DECLINATION_ORB_POLICY: Readonly<DeclinationOrbPolicy> = /*#__PURE__*/ Object.freeze({
   orb: DECLINATION_ORB,
   luminaryOrb: DECLINATION_ORB_LUMINARY
 });

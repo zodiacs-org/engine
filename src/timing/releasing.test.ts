@@ -440,7 +440,8 @@ describe("zodiacal releasing invariants", () => {
   it("scale every level by 365.25/360 in the Julian convention", () => {
     const julian = releasingAt("aries", BIRTH, BIRTH, { years: "julian-365.25" }).periods;
     julian.forEach((period, index) => expect(period.endDays).toBeCloseTo(15 * RELEASING_UNIT_DAYS["julian-365.25"][index]!, 9));
-    expect(RELEASING_UNIT_DAYS["julian-365.25"][0]).toBe(365.25);
+    // The numbers RELEASING_UNIT_DAYS writes are the doubles these divisions give.
+    expect(RELEASING_UNIT_DAYS["julian-365.25"]).toEqual([365.25, 365.25 / 12, 365.25 / 144, 365.25 / 1728]);
     const loosing = releasingPeriods("aquarius", BIRTH, BIRTH, afterDays(30 * 366), { levels: 2, years: "julian-365.25" }).periods
       .find((period) => period.loosingOfTheBond)!;
     expect(loosing).toMatchObject({ sign: "leo" });

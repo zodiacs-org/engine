@@ -56,10 +56,10 @@ export const EXALTATIONS: Readonly<Record<ClassicalPlanet, ZodiacSign>> = /*#__P
 /** The Dorothean triplicity lords (Dorotheus I.1.3). */
 export const TRIPLICITY_LORDS: Readonly<Record<Element, { readonly day: ClassicalPlanet; readonly night: ClassicalPlanet; readonly participating: ClassicalPlanet }>> =
   /*#__PURE__*/ Object.freeze({
-    fire: Object.freeze({ day: "Sun", night: "Jupiter", participating: "Saturn" } as const),
-    earth: Object.freeze({ day: "Venus", night: "Moon", participating: "Mars" } as const),
-    air: Object.freeze({ day: "Saturn", night: "Mercury", participating: "Jupiter" } as const),
-    water: Object.freeze({ day: "Venus", night: "Mars", participating: "Moon" } as const)
+    fire: /*#__PURE__*/ Object.freeze({ day: "Sun", night: "Jupiter", participating: "Saturn" } as const),
+    earth: /*#__PURE__*/ Object.freeze({ day: "Venus", night: "Moon", participating: "Mars" } as const),
+    air: /*#__PURE__*/ Object.freeze({ day: "Saturn", night: "Mercury", participating: "Jupiter" } as const),
+    water: /*#__PURE__*/ Object.freeze({ day: "Venus", night: "Mars", participating: "Moon" } as const)
   });
 
 const terms = (...rows: [ClassicalPlanet, number][][]) =>
@@ -83,7 +83,7 @@ export const EGYPTIAN_TERMS = /*#__PURE__*/ terms(
 
 /** The Chaldean faces: the lord of each ten degrees from 0° Aries, 36 in all (al-Bīrūnī §451). */
 export const CHALDEAN_FACES: readonly ClassicalPlanet[] = /*#__PURE__*/ Object.freeze(
-  Array.from({ length: 36 }, (_, index) => (["Mars", "Sun", "Venus", "Mercury", "Moon", "Saturn", "Jupiter"] as const)[index % 7]!)
+  /*#__PURE__*/ Array.from({ length: 36 }, (_, index) => (["Mars", "Sun", "Venus", "Mercury", "Moon", "Saturn", "Jupiter"] as const)[index % 7]!)
 );
 
 const opposite = (sign: ZodiacSign): ZodiacSign => SIGN_SLUGS[(SIGN_SLUGS.indexOf(sign) + 6) % 12]!;

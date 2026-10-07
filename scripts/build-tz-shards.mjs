@@ -520,7 +520,7 @@ export async function buildShards(root) {
  * The pinned tzdb release: its version, archive digest and the form its histories were compiled from. The
  * version and digest are typed as strings, because a release that updates the time-zone data changes them.
  */
-export const TZDB: Readonly<{ version: string; sha256: string; form: "main+backzone" }> = Object.freeze({
+export const TZDB: Readonly<{ version: string; sha256: string; form: "main+backzone" }> = /*#__PURE__*/ Object.freeze({
   version: "${TZDB_VERSION}",
   sha256: "${TZDB_SHA256}",
   form: "main+backzone"
