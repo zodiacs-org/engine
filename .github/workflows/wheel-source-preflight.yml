@@ -1,0 +1,24 @@
+name: Wheel source preflight
+on:
+  push:
+    branches: ['codex/accessible-wheel-preparation']
+    paths: ['tools/wheel/**', '.github/workflows/wheel-source-preflight.yml']
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        node: ['22.22.2', '24']
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Source geometry, input, text, SVG and import boundaries
+        run: node --test tools/wheel/selftest.mjs
