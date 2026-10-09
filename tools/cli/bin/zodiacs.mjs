@@ -109,7 +109,18 @@ export function render(record, format) {
   if (format === 'text') return lines.join('\n') + '\n';
   if (format !== 'svg') throw new CliError('invalid-format');
   // Portable text receipt, not a natal wheel. Metadata holds the full record.
-  const summary = lines.filter((line) => !line.startsWith('Receipt: '));
+  const summary = lines.filter((line) => !line.startsWith('Receipt: ')).flatMap((line) => {
+    const output = [];
+    let rest = line;
+    while (rest.length > 80) {
+      const space = rest.lastIndexOf(' ', 80);
+      const end = space > 0 ? space : 80;
+      output.push(rest.slice(0, end));
+      rest = rest.slice(end).trimStart();
+    }
+    output.push(rest);
+    return output;
+  });
   const height = 64 + summary.length * 28;
   return '<svg xmlns="http://www.w3.org/2000/svg" width="960" height="' + height
     + '" viewBox="0 0 960 ' + height + '">'
