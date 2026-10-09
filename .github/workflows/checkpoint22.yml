@@ -1,0 +1,73 @@
+name: Checkpoint 22 packed API
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/evidence/checkpoint22-rc2-20261009/**'
+      - '.github/workflows/checkpoint22.yml'
+permissions:
+  contents: read
+jobs:
+  checkpoint22:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Check declarations, fault sensitivity, receipts, options and epoch refusals
+        env:
+          TMPDIR: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          archive="$GITHUB_WORKSPACE/artifacts/zodiacs-engine-1.0.0-rc.2.tgz"
+          node --input-type=module - "$archive" <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const bytes = readFileSync(process.argv[2]);
+          if (bytes.length !== 287011 || createHash('sha256').update(bytes).digest('hex') !== '4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002') throw new Error('Candidate archive mismatch');
+          NODE
+          checkpoint_consumer=$(mktemp -d "$RUNNER_TEMP/checkpoint22.XXXXXX")
+          trap 'rm -rf "$checkpoint_consumer"' EXIT
+          cp -R "$GITHUB_WORKSPACE/docs/evidence/checkpoint22-rc2-20261009/tools" "$checkpoint_consumer/tools"
+          printf '{"private":true,"type":"module"}\n' > "$checkpoint_consumer/package.json"
+          npm install --prefix "$checkpoint_consumer" --ignore-scripts --no-audit --no-fund "$archive"
+          mkdir -p "$checkpoint_consumer/node_modules/@types"
+          ln -s "$GITHUB_WORKSPACE/node_modules/typescript" "$checkpoint_consumer/node_modules/typescript"
+          ln -s "$GITHUB_WORKSPACE/node_modules/@types/node" "$checkpoint_consumer/node_modules/@types/node"
+          ln -s "$GITHUB_WORKSPACE/node_modules/undici-types" "$checkpoint_consumer/node_modules/undici-types"
+          mkdir -p "$GITHUB_WORKSPACE/docs/evidence/checkpoint22-rc2-20261009/results"
+          cd "$checkpoint_consumer"
+          node node_modules/typescript/bin/tsc --noEmit --strict --module nodenext --moduleResolution nodenext --target es2022 --types node tools/calc-types-cover-vedic.ts
+          node tools/plant-type-faults.mjs > "$GITHUB_WORKSPACE/docs/evidence/checkpoint22-rc2-20261009/results/calc-types-faults.json"
+          node tools/replay-calc-roundtrip.mjs "$GITHUB_WORKSPACE/src/fixtures/calc-roundtrip.json" > "$GITHUB_WORKSPACE/docs/evidence/checkpoint22-rc2-20261009/results/calc-roundtrip-replay.json"
+          node tools/sweep-sidereal-options.mjs > "$GITHUB_WORKSPACE/docs/evidence/checkpoint22-rc2-20261009/results/sidereal-options-sweep.json"
+          node tools/check-epoch-refusals.mjs > "$GITHUB_WORKSPACE/docs/evidence/checkpoint22-rc2-20261009/results/epoch-refusals.json"
+      - name: Export review records
+        run: |
+          node --input-type=module <<'NODE'
+          import { readdirSync, readFileSync } from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const root = 'docs/evidence/checkpoint22-rc2-20261009/results';
+          for (const file of readdirSync(root).sort()) {
+            if (!/^(calc-types-faults|calc-roundtrip-replay|sidereal-options-sweep|epoch-refusals)\.json$/.test(file)) throw new Error('Unexpected record');
+            const bytes = readFileSync(root + '/' + file);
+            console.log('PROGRAMME_FILE ' + JSON.stringify({
+              path: root + '/' + file,
+              sha256: createHash('sha256').update(bytes).digest('hex'),
+              size: bytes.length, base64: bytes.toString('base64')
+            }));
+          }
+          NODE
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: checkpoint22-${{ github.sha }}
+          path: docs/evidence/checkpoint22-rc2-20261009/results/
+          if-no-files-found: warn
+          retention-days: 90
