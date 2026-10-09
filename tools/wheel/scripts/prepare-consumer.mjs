@@ -27,7 +27,7 @@ try{
  assert.equal(testCount,8,'Source selftest count changed');
  const info=JSON.parse(node([npmCli,'pack','--ignore-scripts','--json','--pack-destination',packed],root,true));
  assert.equal(info.length,1);
- assert.deepEqual(info[0].files.map(f=>f.path).sort(),['LICENSE','README.md','dom.d.ts','dom.mjs','index.d.ts','index.mjs','package.json']);
+ assert.deepEqual(info[0].files.map(f=>f.path).sort(),['LICENSE','README.md','dom.d.mts','dom.mjs','index.d.mts','index.mjs','package.json']);
  const archive=resolve(packed,info[0].filename),engineArchive=resolve(repo,'artifacts/zodiacs-engine-1.0.0-rc.2.tgz');
  const engineBytes=await readFile(engineArchive);
  assert.equal(engineBytes.length,287011);assert.equal(createHash('sha256').update(engineBytes).digest('hex'),'4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002');
