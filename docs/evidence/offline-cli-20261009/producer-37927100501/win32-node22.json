@@ -1,0 +1,1038 @@
+{
+  "schema": "zodiacs.offline-cli-consumer.v1",
+  "producer": {
+    "source": "94b0fc984c00d9a274a9ba24107176f72bd2b718",
+    "run": "37927100501",
+    "node": "v22.22.2",
+    "os": "win32",
+    "architecture": "x64"
+  },
+  "privatePackage": true,
+  "publication": "not-performed",
+  "checks": [
+    {
+      "name": "symlinked package entry runs on every platform",
+      "passed": true
+    },
+    {
+      "name": "installed zodiacs command launches through offline npm exec",
+      "passed": true
+    },
+    {
+      "name": "chart uses installed engine with no network",
+      "passed": true
+    },
+    {
+      "name": "chart receipt replays",
+      "passed": true
+    },
+    {
+      "name": "chart changed number refuses verification",
+      "passed": true
+    },
+    {
+      "name": "chart text keeps receipt",
+      "passed": true
+    },
+    {
+      "name": "chart SVG contains full escaped receipt",
+      "passed": true
+    },
+    {
+      "name": "positions uses installed engine with no network",
+      "passed": true
+    },
+    {
+      "name": "positions receipt replays",
+      "passed": true
+    },
+    {
+      "name": "positions changed number refuses verification",
+      "passed": true
+    },
+    {
+      "name": "positions text keeps receipt",
+      "passed": true
+    },
+    {
+      "name": "positions SVG contains full escaped receipt",
+      "passed": true
+    },
+    {
+      "name": "events uses installed engine with no network",
+      "passed": true
+    },
+    {
+      "name": "events receipt replays",
+      "passed": true
+    },
+    {
+      "name": "events changed number refuses verification",
+      "passed": true
+    },
+    {
+      "name": "events text keeps receipt",
+      "passed": true
+    },
+    {
+      "name": "events SVG contains full escaped receipt",
+      "passed": true
+    },
+    {
+      "name": "equatorial text names its coordinates and units",
+      "passed": true
+    },
+    {
+      "name": "required offline guard blocks a deliberate network call",
+      "passed": true
+    },
+    {
+      "name": "file input with spaces works",
+      "passed": true
+    },
+    {
+      "name": "invalid input never leaks input in stderr",
+      "passed": true
+    },
+    {
+      "name": "oversize input is refused",
+      "passed": true
+    },
+    {
+      "name": "unsupported physics is a typed nonzero result",
+      "passed": true
+    },
+    {
+      "name": "unknown option is refused without echo",
+      "passed": true
+    },
+    {
+      "name": "position request count is bounded",
+      "passed": true
+    },
+    {
+      "name": "event budget is bounded",
+      "passed": true
+    },
+    {
+      "name": "unknown record version is refused",
+      "passed": true
+    },
+    {
+      "name": "conformance computes every original vector offline",
+      "passed": true
+    },
+    {
+      "name": "tampered installed suite fails without a value leak",
+      "passed": true
+    }
+  ],
+  "conformance": {
+    "summary": {
+      "total": {
+        "count": 500,
+        "pass": 267,
+        "fail": 192,
+        "unsupported": 41,
+        "error": 0
+      },
+      "byLevel": {
+        "L1": {
+          "count": 240,
+          "pass": 48,
+          "fail": 192,
+          "unsupported": 0,
+          "error": 0
+        },
+        "L2": {
+          "count": 150,
+          "pass": 150,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0
+        },
+        "L3": {
+          "count": 110,
+          "pass": 69,
+          "fail": 0,
+          "unsupported": 41,
+          "error": 0
+        }
+      },
+      "byKind": {
+        "position.apparent.ecliptic-true-of-date": {
+          "count": 240,
+          "pass": 48,
+          "fail": 192,
+          "unsupported": 0,
+          "error": 0,
+          "residuals": {
+            "lon": {
+              "unit": "arcsec",
+              "n": 240,
+              "median": 2.0834337,
+              "p95": 12.0434774,
+              "max": 18.7744819
+            },
+            "lat": {
+              "unit": "arcsec",
+              "n": 240,
+              "median": 1.1869337,
+              "p95": 10.6010939,
+              "max": 19.0281186
+            }
+          }
+        },
+        "angles.asc-mc": {
+          "count": 60,
+          "pass": 60,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0,
+          "residuals": {
+            "asc": {
+              "unit": "arcsec",
+              "n": 60,
+              "median": 0.00339286018,
+              "p95": 0.00579574655,
+              "max": 0.0189601719
+            },
+            "mc": {
+              "unit": "arcsec",
+              "n": 60,
+              "median": 0.00438274993,
+              "p95": 0.00643026337,
+              "max": 0.0081454935
+            }
+          }
+        },
+        "angles.vertex-east-point": {
+          "count": 10,
+          "pass": 10,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0,
+          "residuals": {
+            "vertex": {
+              "unit": "arcsec",
+              "n": 10,
+              "median": 0.00289897902,
+              "p95": 0.013370956,
+              "max": 0.013370956
+            },
+            "east_point": {
+              "unit": "arcsec",
+              "n": 10,
+              "median": 0.00346328309,
+              "p95": 0.00679320316,
+              "max": 0.00679320316
+            }
+          }
+        },
+        "houses.cusps": {
+          "count": 80,
+          "pass": 80,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0,
+          "residuals": {
+            "cusps": {
+              "unit": "arcsec",
+              "n": 70,
+              "median": 0.00389697157,
+              "p95": 0.00933804084,
+              "max": 0.0711573788
+            }
+          }
+        },
+        "time.zone-offset": {
+          "count": 45,
+          "pass": 45,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0
+        },
+        "time.local-mean-time": {
+          "count": 5,
+          "pass": 0,
+          "fail": 0,
+          "unsupported": 5,
+          "error": 0
+        },
+        "time.tt-minus-utc": {
+          "count": 10,
+          "pass": 9,
+          "fail": 0,
+          "unsupported": 1,
+          "error": 0,
+          "residuals": {
+            "tt_minus_utc_s": {
+              "unit": "s",
+              "n": 9,
+              "median": 0,
+              "p95": 2.03450554e-8,
+              "max": 2.03450554e-8
+            }
+          }
+        },
+        "time.delta-t": {
+          "count": 15,
+          "pass": 15,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0,
+          "residuals": {
+            "delta_t_s": {
+              "unit": "s",
+              "n": 15,
+              "median": 0.0001318,
+              "p95": 0.000505451953,
+              "max": 0.000505451953
+            }
+          }
+        },
+        "calendar.to-jdn": {
+          "count": 25,
+          "pass": 0,
+          "fail": 0,
+          "unsupported": 25,
+          "error": 0
+        },
+        "calendar.from-jdn": {
+          "count": 10,
+          "pass": 0,
+          "fail": 0,
+          "unsupported": 10,
+          "error": 0
+        }
+      },
+      "byTag": {
+        "backzone-history": {
+          "count": 20,
+          "pass": 20,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0
+        }
+      }
+    },
+    "vectors": {
+      "vectors/L1-positions.json": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",
+      "vectors/L2-houses-angles.json": "5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0",
+      "vectors/L3-time-calendars.json": "434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8"
+    },
+    "baselineRuntime": "22.22.2",
+    "differencesFromPinnedBaseline": [],
+    "comparison": "All runtimes match the original adapter on this installed archive; Node 22.22.2 also matches the committed baseline.",
+    "verdictsSha256": "38c7cfa7644072c5aeaef1fe1d5533ca2b4055001b1d982aa63182d39f4add94"
+  },
+  "limitations": [
+    "Source/packed regression and interoperability checks, not a new accuracy claim",
+    "Failed and unsupported independent conformance tolerances remain unchanged",
+    "SVG is a text receipt, not a natal wheel; no registry publication or private clearance"
+  ],
+  "checkoutBytes": {
+    "schema": "zodiacs.cli-checkout-bytes.v1",
+    "checkedFiles": 67,
+    "method": "Only tracked tools/cli/, conformance/ and root LICENSE, restored from HEAD Git blobs without text conversion",
+    "changed": [
+      {
+        "path": "LICENSE",
+        "beforeSha256": "b2ab25e41bcbeae93f38b2fb4e0325d486f8f1b793cfb770c99fc553446c3d24",
+        "committedSha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df",
+        "beforeBytes": 1089,
+        "committedBytes": 1068
+      },
+      {
+        "path": "conformance/DISCREPANCIES.md",
+        "beforeSha256": "7905d83c68319a20859845b7ebb60ff8b6c1f44710ff97c96ab4bc8797a99ab9",
+        "committedSha256": "6f207115302f2dde303d08d215b9df2e6d1f229b4981a4880a953d1ba86dfefe",
+        "beforeBytes": 3867,
+        "committedBytes": 3821
+      },
+      {
+        "path": "conformance/LICENSE",
+        "beforeSha256": "f4e7f373b9b996950337e8d41a4a2939c2d90b7725e9baf3d5084a22717ad328",
+        "committedSha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+        "beforeBytes": 7169,
+        "committedBytes": 7048
+      },
+      {
+        "path": "conformance/README.md",
+        "beforeSha256": "543983f40395af0e88534bf79cfe4ab70ad01fb653c01d737bfa1cbf1d856b4e",
+        "committedSha256": "0342f0d3c34c37e091003bcf3789d7c2df32923787b9692a9ff0a0892585fcdb",
+        "beforeBytes": 4934,
+        "committedBytes": 4829
+      },
+      {
+        "path": "conformance/RESULTS.md",
+        "beforeSha256": "0df5a014eefae45ac9505abf0f32064f305645ba313ad4342c7ae1ee280f9276",
+        "committedSha256": "fa29429785047fae820f3cc722903f1b8ea451425a11b4ebf3b78c2728e55ad9",
+        "beforeBytes": 7769,
+        "committedBytes": 7672
+      },
+      {
+        "path": "conformance/SPEC.md",
+        "beforeSha256": "80fc49748fb66d5bb26a9f8831629d0c69e2fecc3953f8b9327b350c4895a243",
+        "committedSha256": "dc3eea537d9b1f741dfab0fae64939e095ef08db66cb72f34878bde99df7a3df",
+        "beforeBytes": 8048,
+        "committedBytes": 7876
+      },
+      {
+        "path": "conformance/adapters/pyswisseph.py",
+        "beforeSha256": "204ee28dabddd0ffb73fbdce621318dd1353fc9454cd1946015ac329039867f4",
+        "committedSha256": "278e146f5c576493622d71dfd957bf88c988aa16730cd910fd73003961912542",
+        "beforeBytes": 6095,
+        "committedBytes": 5942
+      },
+      {
+        "path": "conformance/adapters/zodiacs-engine.mjs",
+        "beforeSha256": "be1bc5d76b96cf28887c689b8d8643b4448392caeaf682f97870a27e981f55c8",
+        "committedSha256": "9f5fc9d5e919b0cf3fd5a93ca138f255749cc1cc220b5acf001e439776cdd182",
+        "beforeBytes": 8124,
+        "committedBytes": 7957
+      },
+      {
+        "path": "conformance/arbiters/l1/README.md",
+        "beforeSha256": "0ec44f6e0c6e8290517b5ba4a9bb49cd96ba2f1c710f8652d6336e0edefb1800",
+        "committedSha256": "d260191936b4f81192bd1fcaa27f77e2a8a5d09a932d97e5895805e9b5ad5fe4",
+        "beforeBytes": 2512,
+        "committedBytes": 2477
+      },
+      {
+        "path": "conformance/arbiters/l1/build.py",
+        "beforeSha256": "4bae8673a0c89eb9cb664997e0653944d274af2f4350c5e5d7713c64943abae3",
+        "committedSha256": "414d52f415964d2eecdefbb1065e74b98d59496e24b3962b5786a654e7eedb07",
+        "beforeBytes": 23422,
+        "committedBytes": 23010
+      },
+      {
+        "path": "conformance/arbiters/l1/validate.py",
+        "beforeSha256": "34a32147d0ff2ec60c45b623bf3aa48d535ebe7c1c129d1e3a77bcb1fd31428a",
+        "committedSha256": "ef4c157e47c5186ebdcd603b7dfbfbbee857c3e408df22cf591e11df36877635",
+        "beforeBytes": 15467,
+        "committedBytes": 15163
+      },
+      {
+        "path": "conformance/arbiters/l1/validation.json",
+        "beforeSha256": "40fdb58af4230126be2d96fb807e759febf8cb91cf69add7211be6b7c3dc8d4e",
+        "committedSha256": "0b74f5cd79ae7dc952f8d1d1c48255f7f7cf6ddbe8d58b72640901926e57223c",
+        "beforeBytes": 10219,
+        "committedBytes": 9857
+      },
+      {
+        "path": "conformance/arbiters/l2/README.md",
+        "beforeSha256": "bc85263fd86ae002dc89f18ef9285ef6195cc6e1b94cbb1d755379c6f3bd4773",
+        "committedSha256": "b39555c95753a8ba1685844f4363c2cb34b6f3d51fdb34da1989fbc02715c9f4",
+        "beforeBytes": 21040,
+        "committedBytes": 20691
+      },
+      {
+        "path": "conformance/arbiters/l2/build.py",
+        "beforeSha256": "b234b6114843b651f7b6fc7db66e2980b46f4d9178cfd6287af1a38de39545f9",
+        "committedSha256": "2a6a866ba9d74fc41e5504816ea8ccd8c6fa8b04ce8c816c0fbc127f70da83d3",
+        "beforeBytes": 98536,
+        "committedBytes": 96585
+      },
+      {
+        "path": "conformance/arbiters/l2/check_swiss.py",
+        "beforeSha256": "0ab4ad4a8a16335149a6d9acdfa5799ac6e023c9bf5fba7cc34dcb8ebfa476a0",
+        "committedSha256": "0d6ae1f9f7908ca449b9ba7459671dbcdb659fea59aa3de0070f4d97bc0ace66",
+        "beforeBytes": 12831,
+        "committedBytes": 12579
+      },
+      {
+        "path": "conformance/arbiters/l2/swiss-check.json",
+        "beforeSha256": "5e2fef943373f904ca5d970e899bf848514e0cef773df636bd8ee2dffe13e917",
+        "committedSha256": "49a25ca8c150ce8fc2b281ca51ca2842036ee2a7e9816ad94d37513544a6fb89",
+        "beforeBytes": 25329,
+        "committedBytes": 24358
+      },
+      {
+        "path": "conformance/arbiters/l3/README.md",
+        "beforeSha256": "c3fcad577921c8ed2585971e1671ca77b4b6db64a158b2da4ce6287fcc4dd5fa",
+        "committedSha256": "fd929f57d20b29e73f66d1f08509a6a786a367ff09b8ecc88d03208288b61bd3",
+        "beforeBytes": 20546,
+        "committedBytes": 20206
+      },
+      {
+        "path": "conformance/arbiters/l3/build.py",
+        "beforeSha256": "fb62db74e9d6efc370f30a87c85c9b7e0e32233d6318cdc8bb181d33698fafb0",
+        "committedSha256": "676feb063a9f12ae03a214794f51b1d0d2576455ff311adc5c4abc2953ba6668",
+        "beforeBytes": 81603,
+        "committedBytes": 79990
+      },
+      {
+        "path": "conformance/arbiters/l3/check_swiss.py",
+        "beforeSha256": "20a75ff529921d4c4bf900acf44fa4bb753f6baf2e94796738eb26c92fd8c295",
+        "committedSha256": "67f1d5eaca1e516afff7d5b4066479c3cdcd68ed9bfa602e53d420f7f16baa0e",
+        "beforeBytes": 5144,
+        "committedBytes": 5029
+      },
+      {
+        "path": "conformance/harness/lib.mjs",
+        "beforeSha256": "57c44781d70218dab89cbde1c60f9f7f8457a928e670565a33ab33a1d4de6266",
+        "committedSha256": "2766a71368bedad479637c9c37ef9e8d7132a15acf8eace3f99934dff7d7a7f3",
+        "beforeBytes": 16661,
+        "committedBytes": 16326
+      },
+      {
+        "path": "conformance/harness/report.mjs",
+        "beforeSha256": "22b455e5d4ce95aaf356576c29d3da9646cdd4e2193a8c4b1b56ada97873930a",
+        "committedSha256": "eaee1842693bca0c51d88a9656a396d12b72cef4b71b2eae49cd237f2e2c1db7",
+        "beforeBytes": 7119,
+        "committedBytes": 6976
+      },
+      {
+        "path": "conformance/harness/run.mjs",
+        "beforeSha256": "193f8f055bc6eb761169c1022d55592b3afae1812ed9cf9d659c2363b8ad9ebb",
+        "committedSha256": "f7a60719627ea41d3565b74df026610001f65f0831783b1c5a6edb2aac9f1351",
+        "beforeBytes": 4003,
+        "committedBytes": 3919
+      },
+      {
+        "path": "conformance/harness/selftest.mjs",
+        "beforeSha256": "007f95063350d69e0db01499cd8d55af6d2820f9b11f89dc8de1daef9190aa15",
+        "committedSha256": "038ea5fa34e5d58f956abccaaa19c7b44b07405ef3128845ee8924841191c22b",
+        "beforeBytes": 6211,
+        "committedBytes": 6104
+      },
+      {
+        "path": "conformance/harness/validate.mjs",
+        "beforeSha256": "491917eb289ca1668efee0e8e6cb5de2524e9e871bf848b0f267241d9645f90e",
+        "committedSha256": "f0a097b5367c1d56ab5d446a5aaccd814aaad40f3d85a4cbe9e38bedb9660c01",
+        "beforeBytes": 1769,
+        "committedBytes": 1730
+      },
+      {
+        "path": "conformance/results/pyswisseph.json",
+        "beforeSha256": "388d8ec472cad067d14b5817b4024486b5b6e1a9ee0da57f9eb7634324452a83",
+        "committedSha256": "383fe5b03e1529f20c8e071c80cb69141051dc019b868c8bcdf0222190baa7c0",
+        "beforeBytes": 69504,
+        "committedBytes": 65739
+      },
+      {
+        "path": "conformance/results/pyswisseph.notes.md",
+        "beforeSha256": "2c3f8e63d9de203b36c63ca59f92c0a6d5121e0c00308453a488345936b589bb",
+        "committedSha256": "df930c6e088f1277e51961a7d9fcda853e1889dbb3540e9fe4256f25f037ea84",
+        "beforeBytes": 952,
+        "committedBytes": 946
+      },
+      {
+        "path": "conformance/results/summary.json",
+        "beforeSha256": "505c9927b323a0f0b76d7d59c1793e6746140b321be682f6fb765095f0fb9d00",
+        "committedSha256": "4d4b5b7d492227eaede152e0031a589edafa70e7ed0d17f45f113fdf79b1035c",
+        "beforeBytes": 38208,
+        "committedBytes": 37626
+      },
+      {
+        "path": "conformance/results/zodiacs-engine.json",
+        "beforeSha256": "3723d58af9899942a7b5342b1b8230deee75614a835250be5c1c9f10e2a26098",
+        "committedSha256": "2a02e7e4d7acb9283b3f8447998387841350568e5d368b2621f16c0f78558d2d",
+        "beforeBytes": 109466,
+        "committedBytes": 104014
+      },
+      {
+        "path": "conformance/results/zodiacs-engine.notes.md",
+        "beforeSha256": "f517a79bcd868516c68c1cd0a5af8f88b49b41f96fb1886e1c342283d0161cb2",
+        "committedSha256": "db58f6d603555a3c4f5a5ef4ad825ae0d1ad22161e13d4bbb4506ab330059b05",
+        "beforeBytes": 1699,
+        "committedBytes": 1695
+      },
+      {
+        "path": "conformance/sources/horizons-24/Jupiter.txt",
+        "beforeSha256": "a6b95e6a2d0b97c2cd9ded4e7c1fcb6fb5837565413d6c08b1b3792fe65d7564",
+        "committedSha256": "7f4044c6d3a0bf8a45d7e5383f77ef47022ea8f49b084c47adbb70684e4c8253",
+        "beforeBytes": 6844,
+        "committedBytes": 6716
+      },
+      {
+        "path": "conformance/sources/horizons-24/JupiterBary.txt",
+        "beforeSha256": "af6f5b13805f023f954ea0bdb8fbb216c26ead41e35ae3ab1df20dbc22ce2583",
+        "committedSha256": "1eaec268c5f6cbb68fff2b06bfcb0b125ed7650a2ac37b328177103068caf25b",
+        "beforeBytes": 6780,
+        "committedBytes": 6652
+      },
+      {
+        "path": "conformance/sources/horizons-24/Mars.txt",
+        "beforeSha256": "2e9a7937997ee9da40b90815e9844ab57e81cbc45e73596281e05564cdf7310d",
+        "committedSha256": "e44a9e5aa513e73b05d27315e767513a5fa63640b42edd1bf3d5a8a6ea798482",
+        "beforeBytes": 6829,
+        "committedBytes": 6701
+      },
+      {
+        "path": "conformance/sources/horizons-24/MarsBary.txt",
+        "beforeSha256": "745970d58b60804945976731e25fc5603fa46818f11117c42ba9ba85a199d0d6",
+        "committedSha256": "a22aa46e939879c7bfb927b798a25055b0210ba77bff1bbaeb9465960d8f3157",
+        "beforeBytes": 6780,
+        "committedBytes": 6652
+      },
+      {
+        "path": "conformance/sources/horizons-24/Mercury.txt",
+        "beforeSha256": "7c6eca70fb7594abc06bee144f7b70137d109c3c7dc63a2c7477fe5bd9534f66",
+        "committedSha256": "366b52eb9d27ff836164c1f2f0efcf3147554366bafcaf2ea6056297138ebcf5",
+        "beforeBytes": 6828,
+        "committedBytes": 6700
+      },
+      {
+        "path": "conformance/sources/horizons-24/Moon.txt",
+        "beforeSha256": "32b14977044a97c09bbcf59f4527290f139c129e479a312f7e959847a7e217df",
+        "committedSha256": "078502783f45570643fab9780b12eec41bc8a8ccbecb0f398dcc8a81fd674d8c",
+        "beforeBytes": 6830,
+        "committedBytes": 6702
+      },
+      {
+        "path": "conformance/sources/horizons-24/Neptune.txt",
+        "beforeSha256": "165d161331f64734ac87d11da21f60eca54bb72d38f0f79c56fe0e9cf13a654e",
+        "committedSha256": "d6277d34e935763557841004f01208118f7ac2f605ad88dbbe5c519a1dc7c508",
+        "beforeBytes": 6852,
+        "committedBytes": 6724
+      },
+      {
+        "path": "conformance/sources/horizons-24/NeptuneBary.txt",
+        "beforeSha256": "b649db388e951c8fdb1e9a7315340e0d0870f5d4f4056fb10c5a02235f0478fd",
+        "committedSha256": "0e6939df35c1b623c51b1a4f2fd294bfb70679faac420f1bc94ce27035a05c02",
+        "beforeBytes": 6780,
+        "committedBytes": 6652
+      },
+      {
+        "path": "conformance/sources/horizons-24/Pluto.txt",
+        "beforeSha256": "183b1307be7ca364b0a4110db1b8275ee4903abc21e7f229ba3612e24960a3af",
+        "committedSha256": "0426b865e367ce6a864d33aa327366a2257da4c7b451a1093b4d9d3a4257859b",
+        "beforeBytes": 6844,
+        "committedBytes": 6716
+      },
+      {
+        "path": "conformance/sources/horizons-24/PlutoBary.txt",
+        "beforeSha256": "d1772ab48f3ad8304104629747bbaf67dd01989b502bfe4759c9405c71767bae",
+        "committedSha256": "8f05e7e2f9ed78a7a67a932945d819f216babe1248a5f8469637305a3d303ce7",
+        "beforeBytes": 6780,
+        "committedBytes": 6652
+      },
+      {
+        "path": "conformance/sources/horizons-24/Saturn.txt",
+        "beforeSha256": "d31bc193a7908dd764834b268d929fda98da2079d42b4baf8efd2e45ff79520e",
+        "committedSha256": "c91fa3690d542d78f0132c052cb8e52031d08ccbab5872f48b210a1c0b59c40e",
+        "beforeBytes": 6830,
+        "committedBytes": 6702
+      },
+      {
+        "path": "conformance/sources/horizons-24/SaturnBary.txt",
+        "beforeSha256": "ebe98d2cc0d4de36b8385e022c860d8b300d535fdf8932a5082a9f64c35d5860",
+        "committedSha256": "db838e950198d1cd53da818cd880d7b29b119b6420cdad17de3d0ec25379aa76",
+        "beforeBytes": 6780,
+        "committedBytes": 6652
+      },
+      {
+        "path": "conformance/sources/horizons-24/Sun.txt",
+        "beforeSha256": "686e2329c57780405916c22d97f5e45103d4025f7f7b81bd0ff58ff4148b4fd4",
+        "committedSha256": "9396249e39c56cea6be986469b54f61955b8d302b343caeea0853eae0735a8bc",
+        "beforeBytes": 6828,
+        "committedBytes": 6700
+      },
+      {
+        "path": "conformance/sources/horizons-24/Uranus.txt",
+        "beforeSha256": "30c5f0ab738091ceb455cb2fbb658683d1790074af6c3144a3eeaf62110979f5",
+        "committedSha256": "87937649bca052a4182deb72d7e6efc4104eaf181a54a6de1ab710950b2c2a9e",
+        "beforeBytes": 6836,
+        "committedBytes": 6708
+      },
+      {
+        "path": "conformance/sources/horizons-24/UranusBary.txt",
+        "beforeSha256": "da264ea6e10cfae7a8e04d528b2dd181523d20b86fd8bfc5410c3d3178336f8d",
+        "committedSha256": "af6c5ec16a53af784d618c361b88984ab09565c36fd57db607a0060c20686456",
+        "beforeBytes": 6780,
+        "committedBytes": 6652
+      },
+      {
+        "path": "conformance/sources/horizons-24/Venus.txt",
+        "beforeSha256": "6ea146f83cfbeb7853f6a0d45b8af19734608b64a18e907df6844b4f883a95a5",
+        "committedSha256": "9286abd667436c6f57e1a713816c8283c2113e630e8184f97080fd9792ea7a72",
+        "beforeBytes": 6828,
+        "committedBytes": 6700
+      },
+      {
+        "path": "conformance/sources/horizons-24/corpus-tt.json",
+        "beforeSha256": "388eba55606710e5a48c6bcc5997a8d33112073ebbf5571e6d33fa03e23366d7",
+        "committedSha256": "a31df4c952f778f398f5c8ea888c8d29300ac317bcb984de1e520078a09733a7",
+        "beforeBytes": 4134,
+        "committedBytes": 3962
+      },
+      {
+        "path": "conformance/sources/horizons-24/frame-offsets.json",
+        "beforeSha256": "2007a4df214fbf7cd03ec2f6dd0e811e695a448d726a40b14fc896e7f8c5e8ce",
+        "committedSha256": "c35b92f36dffe055891f8b097f095a66133a33e96f6d101986e44e65515e287e",
+        "beforeBytes": 7661,
+        "committedBytes": 7392
+      },
+      {
+        "path": "conformance/sources/l2/Leap_Second.dat",
+        "beforeSha256": "8ec0e8c35b1808bcabf96af693398280738a47f2529eaf607a1484dfdea21b03",
+        "committedSha256": "6cb6f5d4b819f2e568e25db4b0b26d89dedf031fdffb18bc94d40f4e94e268d7",
+        "beforeBytes": 1393,
+        "committedBytes": 1352
+      },
+      {
+        "path": "conformance/sources/l2/iers-finals2000A-ut1.csv",
+        "beforeSha256": "fc9b158901d6f68c4ddd9787916155bbb4f220effd8aa0078acd229ed0d37aec",
+        "committedSha256": "c698117a9c11524196e51a71493776e3287223b9ee75582548392dec8d45f669",
+        "beforeBytes": 809981,
+        "committedBytes": 789990
+      },
+      {
+        "path": "conformance/sources/l3/iers-finals2000A-ut1.csv",
+        "beforeSha256": "fc9b158901d6f68c4ddd9787916155bbb4f220effd8aa0078acd229ed0d37aec",
+        "committedSha256": "c698117a9c11524196e51a71493776e3287223b9ee75582548392dec8d45f669",
+        "beforeBytes": 809981,
+        "committedBytes": 789990
+      },
+      {
+        "path": "conformance/sources/l3/leap-seconds.list",
+        "beforeSha256": "22bbd1e994b743fcfdc4b818b0c4088b6eb54281b4c49d9542b37b4b0a415daa",
+        "committedSha256": "f060924e3a76ee4e464f6664035b7beae834155dd93a81c50e922f94dfdb1d20",
+        "beforeBytes": 5185,
+        "committedBytes": 5065
+      },
+      {
+        "path": "conformance/sources/l3/tzdata.json",
+        "beforeSha256": "ac292120f86533b01db6f3f7f21bc1ac53fcc828bfa0dcbfaac3a1c82babb628",
+        "committedSha256": "f6b6fd03b9efd1c38afb716d37195a4e3777057fb74922119b74218d94795d69",
+        "beforeBytes": 16932,
+        "committedBytes": 16436
+      },
+      {
+        "path": "conformance/sources/l3/tzdb-divergence-98.json",
+        "beforeSha256": "98060fc1bfb7da1d69c38b12297b3f0d536463dc4094609782b843cf5b701f42",
+        "committedSha256": "d3258be9118494fba3cff97dea1a954f13f7c084249494674f5eaed7b816ee3e",
+        "beforeBytes": 42849,
+        "committedBytes": 40711
+      },
+      {
+        "path": "conformance/vectors/L1-positions.json",
+        "beforeSha256": "46d4ee8b213b43e5e8bfee1564343daddee28fa744d976d30894376145c2447e",
+        "committedSha256": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",
+        "beforeBytes": 157469,
+        "committedBytes": 151378
+      },
+      {
+        "path": "conformance/vectors/L2-houses-angles.json",
+        "beforeSha256": "939b77a2450a2dbcdc855782840c2f3e7b6820c42097f40ac32a3f882d9c56fd",
+        "committedSha256": "5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0",
+        "beforeBytes": 129127,
+        "committedBytes": 124335
+      },
+      {
+        "path": "conformance/vectors/L3-time-calendars.json",
+        "beforeSha256": "04970b81fcfdf6f824f0587e7c97428b915e91f33a3f3fd7d8f0ea023091f2a0",
+        "committedSha256": "434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8",
+        "beforeBytes": 67853,
+        "committedBytes": 65408
+      },
+      {
+        "path": "tools/cli/.gitignore",
+        "beforeSha256": "decb1d42f1897d885acbf6cc66f2d50c0f2d3425c893b7e36e00648bbe5efaa6",
+        "committedSha256": "f116d50126f99245ba8d527478a88dd7b4e95feca3cf283d561587ffdea7aad9",
+        "beforeBytes": 69,
+        "committedBytes": 64
+      },
+      {
+        "path": "tools/cli/LICENSING.md",
+        "beforeSha256": "45f3293f083faf0b9fc0f76a53c5abf5c498ba0fa002f0d594689d0284738ee7",
+        "committedSha256": "dc52f3ff95250010d6a2b63ea7cb034040008101596f9671e122b5101e955ce0",
+        "beforeBytes": 874,
+        "committedBytes": 867
+      },
+      {
+        "path": "tools/cli/README.md",
+        "beforeSha256": "e290dbaa1e3a930ef1a6025294b1c481d5b6caa4352a7c35632ace4935bc0452",
+        "committedSha256": "baa0dbb9ef0b45dfcf9553a26754b7d86ae7c01a8e546ffd27a7fb774801899b",
+        "beforeBytes": 4975,
+        "committedBytes": 4935
+      },
+      {
+        "path": "tools/cli/bin/conformance.mjs",
+        "beforeSha256": "97d5af6e142c4bfac2a3a9b7ab0706020876dee2994d7bdc5ad030d644d5bb95",
+        "committedSha256": "9fbcf09e35bae4d56eb3eb3740dc9c6aba0d1f98b1147534064ca1218c5c76e2",
+        "beforeBytes": 4854,
+        "committedBytes": 4756
+      },
+      {
+        "path": "tools/cli/bin/zodiacs.mjs",
+        "beforeSha256": "c63633fa36a2c55dab62d2a0155f97e231d2ec00219596bfdbeac5bc77724cdd",
+        "committedSha256": "505a3279ec189d7d189daaa8f1e859dea3930c04b01fe46db2d3139c72fcd766",
+        "beforeBytes": 9070,
+        "committedBytes": 8880
+      },
+      {
+        "path": "tools/cli/package.json",
+        "beforeSha256": "16838f13e3e30e1edcc62616f00b258f68a4e82e194fb829f0f1f857b6b37400",
+        "committedSha256": "c91f223d7094c9bb741a400282bb7732bdd6c33ca33b1bba8fd04a33199bbab2",
+        "beforeBytes": 648,
+        "committedBytes": 620
+      },
+      {
+        "path": "tools/cli/scripts/build-conformance.mjs",
+        "beforeSha256": "b0a13504f0e2dc4756970811893f29ad36b3440e117bf9a0399d0be647cf03d3",
+        "committedSha256": "69b4420b29870e2d7a2675884e8399d765044ba762c3ccbe4bd05945201d52e1",
+        "beforeBytes": 2240,
+        "committedBytes": 2195
+      },
+      {
+        "path": "tools/cli/scripts/no-network.mjs",
+        "beforeSha256": "a56a768606d581797bb298d907435a6e462c2284083253cdeda650f541f788cb",
+        "committedSha256": "65c6a444316e1ae30a28ab94f4b1466f0b2c92029650178297a0b6bd85d62bc2",
+        "beforeBytes": 508,
+        "committedBytes": 493
+      },
+      {
+        "path": "tools/cli/scripts/prepare-consumer.mjs",
+        "beforeSha256": "2884381cf45564b2d7d656fd12cff328f3afdd5fa620729e6f06d95d2dd8459e",
+        "committedSha256": "8d694d66b3a85ea1712d15369eeeffb98f68b8ce1abad4d524d7b71d211dd45c",
+        "beforeBytes": 3852,
+        "committedBytes": 3782
+      },
+      {
+        "path": "tools/cli/scripts/preserve-checkout-bytes.mjs",
+        "beforeSha256": "a8bb6a3fe464d6cb278827da79170cf7cb2de35de6a679dc5f89b5c06241eda3",
+        "committedSha256": "e77fabd27ce84e41150d180a60086df9f677aade0730e60af367779e960077f0",
+        "beforeBytes": 1980,
+        "committedBytes": 1946
+      },
+      {
+        "path": "tools/cli/scripts/verify-consumer.mjs",
+        "beforeSha256": "c341609c337a6b4a38e50512fb410602c7ebd4afeb2bad4fa8f1939244051d68",
+        "committedSha256": "3611aae12d22ac2cf3f90dbaf60ef22314aafd93c1edc8f2aee01bba6abd847e",
+        "beforeBytes": 12236,
+        "committedBytes": 12019
+      }
+    ]
+  },
+  "package": {
+    "name": "@zodiacs/cli",
+    "version": "0.0.0",
+    "bytes": 584399,
+    "sha256": "467d2f4f06fe3ade6e9fb12f390b3f1ae40fe9eeb97421bbb84a9f79f59e8fa7",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1068,
+        "mode": 420
+      },
+      {
+        "path": "LICENSING.md",
+        "size": 867,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 4935,
+        "mode": 420
+      },
+      {
+        "path": "bin/conformance.mjs",
+        "size": 4756,
+        "mode": 420
+      },
+      {
+        "path": "bin/zodiacs.mjs",
+        "size": 8880,
+        "mode": 420
+      },
+      {
+        "path": "conformance/adapters/zodiacs-engine.mjs",
+        "size": 7957,
+        "mode": 420
+      },
+      {
+        "path": "conformance/arbiters/l1/build.py",
+        "size": 23010,
+        "mode": 420
+      },
+      {
+        "path": "conformance/arbiters/l2/build.py",
+        "size": 96585,
+        "mode": 420
+      },
+      {
+        "path": "conformance/arbiters/l3/build.py",
+        "size": 79990,
+        "mode": 420
+      },
+      {
+        "path": "conformance/DISCREPANCIES.md",
+        "size": 3821,
+        "mode": 420
+      },
+      {
+        "path": "conformance/harness/lib.mjs",
+        "size": 16326,
+        "mode": 420
+      },
+      {
+        "path": "conformance/LICENSE",
+        "size": 7048,
+        "mode": 420
+      },
+      {
+        "path": "conformance/manifest.json",
+        "size": 3800,
+        "mode": 420
+      },
+      {
+        "path": "conformance/README.md",
+        "size": 4829,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/corpus-tt.json",
+        "size": 3962,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/frame-offsets.json",
+        "size": 7392,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Jupiter.txt",
+        "size": 6716,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/JupiterBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Mars.txt",
+        "size": 6701,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/MarsBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Mercury.txt",
+        "size": 6700,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Moon.txt",
+        "size": 6702,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Neptune.txt",
+        "size": 6724,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/NeptuneBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Pluto.txt",
+        "size": 6716,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/PlutoBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Saturn.txt",
+        "size": 6702,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/SaturnBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Sun.txt",
+        "size": 6700,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Uranus.txt",
+        "size": 6708,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/UranusBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Venus.txt",
+        "size": 6700,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l2/iers-finals2000A-ut1.csv",
+        "size": 789990,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l2/Leap_Second.dat",
+        "size": 1352,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l3/iers-finals2000A-ut1.csv",
+        "size": 789990,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l3/leap-seconds.list",
+        "size": 5065,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l3/tzdata.json",
+        "size": 16436,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l3/tzdb-divergence-98.json",
+        "size": 40711,
+        "mode": 420
+      },
+      {
+        "path": "conformance/SPEC.md",
+        "size": 7876,
+        "mode": 420
+      },
+      {
+        "path": "conformance/vectors/L1-positions.json",
+        "size": 151378,
+        "mode": 420
+      },
+      {
+        "path": "conformance/vectors/L2-houses-angles.json",
+        "size": 124335,
+        "mode": 420
+      },
+      {
+        "path": "conformance/vectors/L3-time-calendars.json",
+        "size": 65408,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 620,
+        "mode": 420
+      }
+    ]
+  },
+  "engineArchive": {
+    "version": "1.0.0-rc.2",
+    "bytes": 287011,
+    "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002"
+  }
+}

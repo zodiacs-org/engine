@@ -39,3 +39,17 @@ These six byte/hash-verified final reports are retained under `producer-37926452
 - `linux-node24.json`: 13682 bytes, SHA-256 `06c2b06c462cef8802f5a3a96867174a35a5d2899f3d4eec316a558939f725ee`, job 113806445198
 
 The next consumer revision additionally invokes the actual installed `zodiacs --help` command through offline npm exec with the network-denial guard. Earlier 28-check reports do not cover that npm launcher. New exports are stored under producer-run directories to preserve each source-bound result. The evidence paths now trigger the complete consumer workflow for final carriers. Fresh producer and final full checks remain required before merge. No publication, P3.7 acceptance, private clearance or engine archive/version change occurs.
+
+## Actual installed-launcher producer
+
+Head `d4dc8c6c68b67df415d8c02eed6b3c005c96f922`, integration `94b0fc984c00d9a274a9ba24107176f72bd2b718`, tree `86ef5a77830179fb6be1a4339808188b0a676314`, [37927100501](https://github.com/zodiacs-org/engine/actions/runs/37927100501), passed **29 actual checks on all six platform/runtime combinations**, including the installed `zodiacs --help` command through offline npm exec under network denial. All original CI 37927100326 (nine jobs), Conformance 37927100272, Atlas 37927100346, Python package 37927100284 and CodeQL 37927100406 gates passed. Integration parents bind the producer to unchanged main and the named head.
+
+The unchanged package identities and all 500 conformance verdicts match the first portable producer. Node 24 has zero differences from the committed baseline in these runs. Six final exports are byte/hash verified and retained, alongside the prior 28-check records:
+- `producer-37927100501/linux-node22.json`: 13793 bytes, SHA-256 `334ddfd5d4a3e2044023c24f840c0c42fb8251ed8d254d9f58f09abb6a4ba4b7`, job 113808558322
+- `producer-37927100501/darwin-node24.json`: 13796 bytes, SHA-256 `73c42168e4a22514da91de876b18257be8513045f81bab20148a28c29a8bb74c`, job 113808558567
+- `producer-37927100501/linux-node24.json`: 13793 bytes, SHA-256 `e2d6b81079fb72a2937585afd0bfccb40e9c4bb623e79db19dc5ed6014561afa`, job 113808558609
+- `producer-37927100501/win32-node24.json`: 35259 bytes, SHA-256 `0dbfa3c480a5c4eb9265366e57767e88460fbe9c95e26ebab647cc9bce3ba9f6`, job 113808558630
+- `producer-37927100501/darwin-node22.json`: 13796 bytes, SHA-256 `8c2a379a04fdee31b779c6c9628fe9504baa911d0fdc7a220c8cffd41297e68e`, job 113808558712
+- `producer-37927100501/win32-node22.json`: 35259 bytes, SHA-256 `b1c7c7fbfb9e5cd372d600a590f1b18dbbfe0565b1528afa995fbd134c7d235c`, job 113808558776
+
+This records-only final carrier still requires fresh complete engine and six-consumer verification before merge. Its executable/package code, original vectors/tolerances and carried engine archive remain unchanged. Final consumer outputs must reproduce the same checks, conformance verdict digest and platform package identity; producer identity and checkout before-byte diagnostics are separately recorded. Stable release, private clearance, registry installation/publication and P3.7 acceptance remain unfinished.
