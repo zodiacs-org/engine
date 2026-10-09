@@ -69,7 +69,10 @@ node --test clients/typescript/checks/client.mjs
 The read-only client workflow runs these on Node 20, 22 and 24. It checks
 all seven source-contract examples, HTTP errors, cancellation, timeout,
 real native-fetch body timeout and the generated request vocabulary.
-Results are pending until that workflow runs on this source. The unchanged
+Source-bound actual reports and producer identities are in `evidence/`.
+The workflow also packs and installs the private client in a fresh temporary
+consumer, compiling public request types and running transport checks against
+its installed declarations and JavaScript. Final-carrier checks remain separate. The unchanged
 engine, archive-rebuild, conformance and atlas gates remain required.
 
 Contract material and generated declarations are derived from Zodiacs'
