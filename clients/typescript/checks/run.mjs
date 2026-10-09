@@ -7,7 +7,7 @@ const inputs = ["src/index.ts", "src/contract.ts", "contracts/openapi.json", "sc
 const sources = {};
 for (const path of inputs) sources[path] = createHash("sha256").update(await readFile(new URL(path, root))).digest("hex");
 const event = process.env.GITHUB_EVENT_PATH ? JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, "utf8")) : null;
-const run = spawnSync(process.execPath, ["--test", fileURLToPath(new URL("client.mjs", import.meta.url))], { encoding: "utf8", timeout: 60000, maxBuffer: 2 * 1024 * 1024 });
+const run = spawnSync(process.execPath, ["--test", "--test-reporter=tap", fileURLToPath(new URL("client.mjs", import.meta.url))], { encoding: "utf8", timeout: 60000, maxBuffer: 2 * 1024 * 1024 });
 process.stdout.write(run.stdout || "");
 process.stderr.write(run.stderr || "");
 if (run.error) throw run.error;

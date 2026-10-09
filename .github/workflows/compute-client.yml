@@ -32,3 +32,6 @@ jobs:
         run: npx --no-install tsc -p clients/typescript/tsconfig.json
       - name: Check source fixtures, transport failures, aborts and native body timeout
         run: node clients/typescript/checks/run.mjs
+
+      - name: Install and check the private packed client in a fresh consumer
+        run: node clients/typescript/checks/consumer.mjs
