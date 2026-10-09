@@ -21,7 +21,7 @@ function node(args,cwd=repo,capture=false){
  return r.stdout;
 }
 try{
- const selftestLog=node(['--test',resolve(root,'selftest.mjs')],repo,true);
+ const selftestLog=node(['--test','--test-reporter=tap',resolve(root,'selftest.mjs')],repo,true);
  process.stdout.write(selftestLog);
  const testCount=Number(selftestLog.match(/^# tests (\d+)$/m)?.[1]);
  assert.equal(testCount,8,'Source selftest count changed');

@@ -1,0 +1,15 @@
+{
+  "schema": "zodiacs.wheel-source-preflight.v1",
+  "producer": {
+    "source": "9df23cffb28860bfcd66b67adcae4e4f0be93176",
+    "run": 37936598171,
+    "job": 113840087735,
+    "runtime": "source (24)"
+  },
+  "tests": 8,
+  "passed": 8,
+  "failed": 0,
+  "limitations": [
+    "Node source selftests only; clean consumer, installed types, browser accessibility and original engine gates have not yet executed on this source."
+  ]
+}
