@@ -1,0 +1,85 @@
+{
+  "schema": "zodiacs.private-solar-term-consumer.v1",
+  "producer": {
+    "source": "5925a13b1d75cfd1bc8fb28f1cc3aca95753c575",
+    "run": "37961737402",
+    "node": "v22.22.2"
+  },
+  "pack": {
+    "bytes": 4537,
+    "sha256": "b86c2928f7ab3d2622fca376bc61d116b04adfc1689cc8fa409adc304fd3bea8",
+    "files": [
+      "LICENSE",
+      "README.md",
+      "index.d.mts",
+      "index.mjs",
+      "package.json"
+    ]
+  },
+  "carriedArchiveSha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002",
+  "linearControls": [
+    {
+      "year": 1,
+      "terms": 24,
+      "samples": 4992,
+      "maxErrorMs": 9,
+      "budgetRefusesWhole": true
+    },
+    {
+      "year": 99,
+      "terms": 24,
+      "samples": 4992,
+      "maxErrorMs": 9,
+      "budgetRefusesWhole": true
+    },
+    {
+      "year": 1850,
+      "terms": 24,
+      "samples": 4992,
+      "maxErrorMs": 9,
+      "budgetRefusesWhole": true
+    },
+    {
+      "year": 2000,
+      "terms": 24,
+      "samples": 4992,
+      "maxErrorMs": 3,
+      "budgetRefusesWhole": true
+    },
+    {
+      "year": 2026,
+      "terms": 24,
+      "samples": 4992,
+      "maxErrorMs": 8,
+      "budgetRefusesWhole": true
+    },
+    {
+      "year": 2049,
+      "terms": 24,
+      "samples": 4992,
+      "maxErrorMs": 8,
+      "budgetRefusesWhole": true
+    },
+    {
+      "year": 9998,
+      "terms": 24,
+      "samples": 4992,
+      "maxErrorMs": 8,
+      "budgetRefusesWhole": true
+    }
+  ],
+  "typeChecks": {
+    "compiler": "5.8.3",
+    "lib": "ES2022 only; no DOM",
+    "strict": true,
+    "installedExports": true,
+    "negativeControls": 7
+  },
+  "accuracy": "unvalidated",
+  "completeness": "unproven",
+  "publication": "private; no registry publication",
+  "limitations": [
+    "Installed private pack and independent linear arithmetic only.",
+    "No actual solar ephemeris, independent astronomical comparison or full repository suite was run by this script."
+  ]
+}
