@@ -34,6 +34,10 @@ for (const path of [...paths].sort()) {
   await writeFile(target, bytes);
   files[path] = createHash('sha256').update(bytes).digest('hex');
 }
+const { readSuite, validateLevel } = await import('../conformance/harness/lib.mjs');
+if (readSuite(targetRoot).some((level) => validateLevel(level, targetRoot).length)) {
+  throw new Error('Original suite validation failed before private packing');
+}
 await writeFile(resolve(targetRoot, 'manifest.json'), JSON.stringify({
   schema: 'zodiacs.cli-conformance-files.v1', vectorCount, files,
 }, null, 2) + '\n');

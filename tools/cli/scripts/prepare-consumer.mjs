@@ -50,6 +50,7 @@ node([resolve(packageRoot, 'scripts/verify-consumer.mjs'), consumer,
 const reportPath = resolve(consumer, 'cli-consumer-report.json');
 const report = JSON.parse(await readFile(reportPath, 'utf8'));
 const bytes = await readFile(archive);
+report.checkoutBytes = JSON.parse(await readFile(resolve(repo, 'cli-checkout-byte-receipt.json'), 'utf8'));
 report.package = {
   name: '@zodiacs/cli', version: '0.0.0', bytes: bytes.length,
   sha256: createHash('sha256').update(bytes).digest('hex'),

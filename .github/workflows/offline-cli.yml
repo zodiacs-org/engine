@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: Preserve committed suite bytes across platforms
-        run: git -c core.autocrlf=false checkout --force HEAD -- tools/cli conformance LICENSE
+        run: node tools/cli/scripts/preserve-checkout-bytes.mjs
       - name: Pack privately and install outside the checkout
         run: node tools/cli/scripts/prepare-consumer.mjs
       - name: Upload actual consumer report
