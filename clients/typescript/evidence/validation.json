@@ -1,0 +1,49 @@
+{
+  "schema": "zodiacs.compute-client-preparation.v1",
+  "head": "eddfb59534f8aaa1bd6c08afc3511b55f099b3cd",
+  "checkout": "0b998ad2c881c408fb2845e56f4563cf76d52118",
+  "run": 37898833698,
+  "results": [
+    {
+      "path": "clients/typescript/evidence/node-22.json",
+      "bytes": 6229,
+      "sha256": "2ccbbe6ea6d3b6c06d355797216e448cec171bd5e66d05858fc8fa8f988aa2fd",
+      "jobId": 113716374939
+    },
+    {
+      "path": "clients/typescript/evidence/consumer-node-22.json",
+      "bytes": 6308,
+      "sha256": "981a6967d72ad083e98f9cace5ac7669c4be796ad25be72e60fcbfdaebb7cc75",
+      "jobId": 113716374939
+    },
+    {
+      "path": "clients/typescript/evidence/node-24.json",
+      "bytes": 6229,
+      "sha256": "0336cb6db205c1e55edcc0bba08d53ad2a3be9eef9064ef7bea5a1d949fb6133",
+      "jobId": 113716374942
+    },
+    {
+      "path": "clients/typescript/evidence/consumer-node-24.json",
+      "bytes": 6311,
+      "sha256": "52a245ab30ab474b8db5ad21c69e569b33d8fdd6d24bedae715a083d5d98367b",
+      "jobId": 113716374942
+    },
+    {
+      "path": "clients/typescript/evidence/node-20.json",
+      "bytes": 5815,
+      "sha256": "19049df58e7fea3a8b02d77f30865871a10ffab733a6963c5605320d8bc3d36a",
+      "jobId": 113716375182
+    },
+    {
+      "path": "clients/typescript/evidence/consumer-node-20.json",
+      "bytes": 5895,
+      "sha256": "986acf6f8300f5a392da23912f429c2842a680133fe9dfcc2f4183a30d2ba036",
+      "jobId": 113716375182
+    }
+  ],
+  "limitations": [
+    "Reports belong to their explicit producer. Final evidence carrier requires the complete unchanged core CI and client matrix.",
+    "The private temporary packs are not release archives and no package is published.",
+    "Private release searches are unavailable and have not run."
+  ]
+}

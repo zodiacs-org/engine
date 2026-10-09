@@ -1,0 +1,28 @@
+{
+  "name": "@zodiacs/compute-client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Private preparation of a typed HTTP client for the Zodiacs Compute API",
+  "license": "MIT AND CC-BY-4.0",
+  "engines": {
+    "node": "^20.19.0 || >=22.7.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "NOTICE.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.checks.json --noEmit",
+    "test": "node --test checks/client.mjs",
+    "contract:check": "node scripts/generate-contract.mjs --check"
+  }
+}

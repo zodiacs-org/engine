@@ -1,0 +1,37 @@
+name: Compute client preparation
+on:
+  pull_request:
+    paths:
+      - 'clients/typescript/**'
+      - '.github/workflows/compute-client.yml'
+permissions:
+  contents: read
+jobs:
+  client:
+    name: Compute client (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20', '22', '24']
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - name: Verify digest and generated structural contract
+        run: node clients/typescript/scripts/generate-contract.mjs --check
+      - name: Compile positive and negative public request contracts
+        run: npx --no-install tsc -p clients/typescript/tsconfig.checks.json --noEmit
+      - name: Build the isolated private client
+        run: npx --no-install tsc -p clients/typescript/tsconfig.json
+      - name: Check source fixtures, transport failures, aborts and native body timeout
+        run: node clients/typescript/checks/run.mjs
+
+      - name: Install and check the private packed client in a fresh consumer
+        run: node clients/typescript/checks/consumer.mjs

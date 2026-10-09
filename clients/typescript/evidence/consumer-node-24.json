@@ -1,0 +1,60 @@
+{
+  "schema": "zodiacs.compute-client-consumer.v1",
+  "node": "v24.21.0",
+  "producer": {
+    "run": "37898833698",
+    "job": "client",
+    "checkout": "0b998ad2c881c408fb2845e56f4563cf76d52118",
+    "pullRequestHead": "eddfb59534f8aaa1bd6c08afc3511b55f099b3cd"
+  },
+  "package": {
+    "name": "@zodiacs/compute-client",
+    "version": "0.0.0",
+    "private": true,
+    "sha256": "5f686995426934f6f689451ba8306d48e149ebee7463e038ccb329beb736ab81",
+    "bytes": 8227,
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1068
+      },
+      {
+        "path": "NOTICE.md",
+        "size": 765
+      },
+      {
+        "path": "README.md",
+        "size": 3484
+      },
+      {
+        "path": "dist/contract.d.ts",
+        "size": 22989
+      },
+      {
+        "path": "dist/contract.js",
+        "size": 376
+      },
+      {
+        "path": "dist/index.d.ts",
+        "size": 2062
+      },
+      {
+        "path": "dist/index.js",
+        "size": 4914
+      },
+      {
+        "path": "package.json",
+        "size": 675
+      }
+    ]
+  },
+  "compiler": "5.9.3",
+  "contractSha256": "2e8f3f45c4de8476724e48cafccc7582e9486ad12f2ea90e8b7153e33198dec2",
+  "consumerTypeChecksExit": 0,
+  "consumerRuntimeChecksExit": 0,
+  "tap": "TAP version 13\n# Subtest: chart: POST-only body and complete public contract envelope\nok 1 - chart: POST-only body and complete public contract envelope\n  ---\n  duration_ms: 5.776824\n  type: 'test'\n  ...\n# Subtest: positions: POST-only body and complete public contract envelope\nok 2 - positions: POST-only body and complete public contract envelope\n  ---\n  duration_ms: 1.715338\n  type: 'test'\n  ...\n# Subtest: houses: POST-only body and complete public contract envelope\nok 3 - houses: POST-only body and complete public contract envelope\n  ---\n  duration_ms: 0.534811\n  type: 'test'\n  ...\n# Subtest: events: POST-only body and complete public contract envelope\nok 4 - events: POST-only body and complete public contract envelope\n  ---\n  duration_ms: 0.522487\n  type: 'test'\n  ...\n# Subtest: time: POST-only body and complete public contract envelope\nok 5 - time: POST-only body and complete public contract envelope\n  ---\n  duration_ms: 0.654804\n  type: 'test'\n  ...\n# Subtest: sky-fact: POST-only body and complete public contract envelope\nok 6 - sky-fact: POST-only body and complete public contract envelope\n  ---\n  duration_ms: 0.728723\n  type: 'test'\n  ...\n# Subtest: elections: POST-only body and complete public contract envelope\nok 7 - elections: POST-only body and complete public contract envelope\n  ---\n  duration_ms: 0.662259\n  type: 'test'\n  ...\n# Subtest: all convenience methods use the matching endpoint\nok 8 - all convenience methods use the matching endpoint\n  ---\n  duration_ms: 2.728573\n  type: 'test'\n  ...\n# Subtest: preserves HTTP 400 and Retry-After without retrying\nok 9 - preserves HTTP 400 and Retry-After without retrying\n  ---\n  duration_ms: 1.028023\n  type: 'test'\n  ...\n# Subtest: preserves HTTP 413 and Retry-After without retrying\nok 10 - preserves HTTP 413 and Retry-After without retrying\n  ---\n  duration_ms: 0.531935\n  type: 'test'\n  ...\n# Subtest: preserves HTTP 422 and Retry-After without retrying\nok 11 - preserves HTTP 422 and Retry-After without retrying\n  ---\n  duration_ms: 0.305091\n  type: 'test'\n  ...\n# Subtest: preserves HTTP 429 and Retry-After without retrying\nok 12 - preserves HTTP 429 and Retry-After without retrying\n  ---\n  duration_ms: 0.293178\n  type: 'test'\n  ...\n# Subtest: preserves HTTP 503 and Retry-After without retrying\nok 13 - preserves HTTP 503 and Retry-After without retrying\n  ---\n  duration_ms: 0.265327\n  type: 'test'\n  ...\n# Subtest: preserves an HTTP failure's non-JSON body separately from its message\nok 14 - preserves an HTTP failure's non-JSON body separately from its message\n  ---\n  duration_ms: 0.393746\n  type: 'test'\n  ...\n# Subtest: rejects a malformed successful envelope\nok 15 - rejects a malformed successful envelope\n  ---\n  duration_ms: 0.348241\n  type: 'test'\n  ...\n# Subtest: rejects a malformed successful envelope\nok 16 - rejects a malformed successful envelope\n  ---\n  duration_ms: 0.305872\n  type: 'test'\n  ...\n# Subtest: rejects a malformed successful envelope\nok 17 - rejects a malformed successful envelope\n  ---\n  duration_ms: 0.437568\n  type: 'test'\n  ...\n# Subtest: rejects a non-JSON success with a fixed protocol error\nok 18 - rejects a non-JSON success with a fixed protocol error\n  ---\n  duration_ms: 0.414706\n  type: 'test'\n  ...\n# Subtest: caller cancellation reaches an active fetch\nok 19 - caller cancellation reaches an active fetch\n  ---\n  duration_ms: 0.449972\n  type: 'test'\n  ...\n# Subtest: already-aborted calls never send a request\nok 20 - already-aborted calls never send a request\n  ---\n  duration_ms: 0.282719\n  type: 'test'\n  ...\n# Subtest: finite timeout aborts an active fetch\nok 21 - finite timeout aborts an active fetch\n  ---\n  duration_ms: 20.796233\n  type: 'test'\n  ...\n# Subtest: real native fetch timeout covers response-body reading\nok 22 - real native fetch timeout covers response-body reading\n  ---\n  duration_ms: 109.320231\n  type: 'test'\n  ...\n# Subtest: rejects credentials, URL paths and non-HTTP origins\nok 23 - rejects credentials, URL paths and non-HTTP origins\n  ---\n  duration_ms: 0.501097\n  type: 'test'\n  ...\n# Subtest: rejects unbounded or invalid timeouts\nok 24 - rejects unbounded or invalid timeouts\n  ---\n  duration_ms: 0.240129\n  type: 'test'\n  ...\n# Subtest: rejects unknown endpoints before transport\nok 25 - rejects unknown endpoints before transport\n  ---\n  duration_ms: 0.162995\n  type: 'test'\n  ...\n# Subtest: cancellation during request serialization sends no request\nok 26 - cancellation during request serialization sends no request\n  ---\n  duration_ms: 0.290514\n  type: 'test'\n  ...\n1..26\n# tests 26\n# suites 0\n# pass 26\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 245.295315\n",
+  "limitations": [
+    "Private temporary pack/install, not a carried engine archive or registry publication; contract and transport evidence, not independent numerical accuracy or private scan clearance."
+  ],
+  "temporaryConsumerRemoved": true
+}
