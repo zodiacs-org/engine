@@ -48,6 +48,7 @@ jobs:
           node tools/replay-calc-roundtrip.mjs "$GITHUB_WORKSPACE/src/fixtures/calc-roundtrip.json" > "$GITHUB_WORKSPACE/docs/evidence/checkpoint22-rc2-20261009/results/calc-roundtrip-replay.json"
           node tools/sweep-sidereal-options.mjs > "$GITHUB_WORKSPACE/docs/evidence/checkpoint22-rc2-20261009/results/sidereal-options-sweep.json"
           node tools/check-epoch-refusals.mjs > "$GITHUB_WORKSPACE/docs/evidence/checkpoint22-rc2-20261009/results/epoch-refusals.json"
+          git -C "$GITHUB_WORKSPACE" diff --exit-code -- "docs/evidence/checkpoint22-rc2-20261009/results"
       - name: Export review records
         run: |
           node --input-type=module <<'NODE'

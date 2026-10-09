@@ -1,0 +1,904 @@
+{
+ "schema": "zodiacs.calc-sidereal-sweep.v1",
+ "engine": "1.0.0-rc.2",
+ "instant": "2026-03-20T12:00:00Z",
+ "place": {
+  "latitude": 40,
+  "longitude": -3.7
+ },
+ "houseSystem": "placidus",
+ "what": "Each of calc(), houses(), events() and chart() with each built-in ayanamsa and a caller's ayanamsa in twelve forms. calc() is compared with siderealChart() body by body, and in ecliptic-mean-of-date with ecliptic-true-of-date; houses() and chart() with siderealChart()'s angles, cusps and bodies, exact equality; events() by calc()'s sidereal longitude at each instant it finds. /vedic has no UT1 epoch, so the plain UT1 form is run without a comparison.",
+ "zodiacs": 21,
+ "rows": [
+  {
+   "zodiac": "lahiri",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "lahiri",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.0006787638994865119,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.0012518135008576792,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "fagan-bradley",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "fagan-bradley",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00007397848094115034,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.003819064386334503,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "krishnamurti",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "krishnamurti",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00041509820221108384,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.005348207969291252,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "raman",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "raman",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.0003219133759557735,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.003709637985593872,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "yukteswar",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "yukteswar",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.0007390976406895788,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.004498018597587361,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "true-chitra",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "true-chitra",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.0009797544407774694,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.0002569356183812488,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "true-revati",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "true-revati",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00017361999198328704,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.012344769584160531,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "true-pushya",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "true-pushya",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.0009351461812912021,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.010627137544361176,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "galactic-center",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "galactic-center",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00011766956049541477,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.014656920848210575,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: TT epoch, the engine precession",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "user",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00012309774319874123,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.013338842018129071,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: TT epoch 1900, Newcomb precession",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "user",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.0006835515705461148,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.0027520845378603553,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: TT epoch 1900, IAU 1976 precession",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "user",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00022485151021101046,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.004671919350585085,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: TT epoch 1900, the engine precession",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "user",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.0003328483217046596,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.005612196173387929,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: TT epoch, a linear rate",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "user",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.000857669238030212,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.0053706766266259365,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: UTC epoch as an ISO string",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "user",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00022537660697707906,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.013441120881907409,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: UTC epoch as a Date",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "user",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00022537660697707906,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.013441120881907409,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: UTC epoch as { iso }",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "user",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00022537660697707906,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.013441120881907409,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: UTC epoch as a Julian date",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "user",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00022537660697707906,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.013441120881907409,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: UT1 epoch with a pinned ΔT",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "user",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00022508356778416783,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.013440827842714498,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: a name",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 12,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true,
+    "sameAsVedic": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "synthetic-test",
+    "sameAsVedic": true
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00012309774319874123,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.013338842018129071,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  },
+  {
+   "zodiac": "caller's: UT1 epoch (SE_SIDBIT_USER_UT)",
+   "calc": {
+    "ok": 15,
+    "comparedWithVedic": 0,
+    "differing": 0,
+    "trueAndMeanOfDateWorstArcsec": 0
+   },
+   "houses": {
+    "ok": true
+   },
+   "chart": {
+    "ok": true,
+    "ayanamsa": "user"
+   },
+   "events": {
+    "Sun": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.00022481017367681488,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    },
+    "Moon": {
+     "found": 1,
+     "worstArcsecFromTarget": 0.013440554448607145,
+     "timingBound": {
+      "value": 0.02574920654296875,
+      "unit": "s",
+      "label": "estimated",
+      "basis": "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it, and in the sidereal zodiac the ayanamsa's"
+     }
+    }
+   }
+  }
+ ],
+ "span": {
+  "calcSpan": {
+   "from": "1800-01-01T00:00:00.000Z",
+   "to": "2200-01-01T00:00:00.000Z"
+  },
+  "instantOutside": {
+   "at": "1700-06-01T12:00:00Z",
+   "calc": {
+    "calc": "out-of-range",
+    "houses": "out-of-range",
+    "events": "out-of-range",
+    "chart": "out-of-range"
+   },
+   "vedic": {
+    "mean": 19.6750746407198,
+    "flags": [
+     "outside-reference-span"
+    ]
+   }
+  },
+  "callerEpochEarly": {
+   "definition": "mean ayanamsa 0° at TT Julian date 1824800.5 (284 CE), carried by precession",
+   "at": "2026-03-20T12:00:00Z",
+   "calc": {
+    "calc": "ok",
+    "houses": "ok",
+    "events": "ok",
+    "chart": "ok"
+   },
+   "vedic": {
+    "mean": 24.24613517582304,
+    "flags": [
+     "outside-reference-span"
+    ]
+   }
+  },
+  "callerEpochEarlyLinear": {
+   "definition": "the same epoch and value with a rate of 50.3″ a year",
+   "at": "2026-03-20T12:00:00Z",
+   "calc": {
+    "calc": "ok",
+    "houses": "ok",
+    "events": "ok",
+    "chart": "ok"
+   },
+   "vedic": {
+    "mean": 24.341676850161424,
+    "flags": []
+   }
+  }
+ },
+ "failures": []
+}

@@ -22,9 +22,27 @@ recorded in the site programme: a precession-carried caller epoch inside
 `epoch-out-of-range` refusal. The early epoch that rc.17 refused is
 therefore expected to compute in this candidate.
 
-Results are initially Actions artifacts. Commit the actual successful
-records before linking them as programme acceptance evidence. This
-preparation does not grant acceptance or clear stable publication.
+## Observed result
+
+[Checkpoint run 37889579009](https://github.com/zodiacs-org/engine/actions/runs/37889579009),
+job 113687217114, passed at tool source
+`832ecb5f84eabf8b98c61a8990416e28e1cbca7d`. The committed
+`results/` records were recovered from that job's structured export and
+verified against its SHA-256 and byte count:
+
+- declaration control compiled, and every one of 21 faults was refused at
+  its named assertion;
+- 38 synthetic fixture cases and 27 receipt requests replayed with no
+  mismatch and zero relative difference;
+- all 21 sidereal definitions computed in the four functions, with no
+  sweep failure;
+- 72 inclusive-end checks computed and 72 beyond-end checks returned the
+  typed epoch refusal, across three models, three scales and four functions.
+
+These counts are enforced by the committed tools and recorded in their
+outputs. The full engine CI, conformance, atlas and Python suites remain
+required on the final evidence commit. This evidence does not grant
+programme acceptance or clear stable publication.
 
 Private birth-data search inputs from the previous executor are
 unavailable here. No new private search was run. The affected release

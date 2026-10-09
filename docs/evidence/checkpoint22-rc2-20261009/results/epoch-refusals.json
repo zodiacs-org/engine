@@ -1,0 +1,24 @@
+{
+  "schema": "zodiacs.calc-epoch-refusals.v1",
+  "engine": "1.0.0-rc.2",
+  "epochSpan": {
+    "timeScale": "TT",
+    "daysFromJ2000": {
+      "from": -730000,
+      "to": 730000
+    },
+    "fromTT": "0001-04-30T12:00:00",
+    "toTT": "3998-09-03T12:00:00"
+  },
+  "scales": [
+    "tt",
+    "ut1",
+    "utc"
+  ],
+  "deltaT": 0,
+  "counts": {
+    "inclusive": 72,
+    "beyond": 72
+  },
+  "failures": []
+}
