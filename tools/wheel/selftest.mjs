@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {createWheel,fromNatalChart,validateWheelData,describeWheel,renderWheelSvg} from './index.mjs';
+import {fromNatalChart,validateWheelData,describeWheel,renderWheelSvg} from './index.mjs';
+import {createWheel} from './dom.mjs';
 const sample = () => ({zodiac:'tropical',bodies:[{body:'Sun',lon:0,retrograde:false},{body:'Moon',lon:90,retrograde:false},{body:'Mars',lon:359.9999999,retrograde:true}],angles:{asc:0,mc:270,dsc:180,ic:90},houses:{system:'whole',cusps:Array.from({length:12},(_,i)=>i*30)},aspects:[{a:'Sun',b:'Moon',type:'square',orb:0,applying:false}],flags:[],engineVersion:'synthetic'});
 test('cardinal points use known independent wheel geometry and supplied ascendant',()=>{
  const svg=renderWheelSvg(sample(),{idPrefix:'geometry'});

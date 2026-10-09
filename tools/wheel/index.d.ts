@@ -30,4 +30,3 @@ export function fromNatalChart(chart: NatalChartDisplay): WheelData;
 export function validateWheelData(data: WheelData): WheelData;
 export function describeWheel(data: WheelData): WheelDescription;
 export function renderWheelSvg(data: WheelData, options: { idPrefix: string; title?: string }): string;
-export function createWheel(data: WheelData, options: { document: Document; title?: string }): HTMLElement;

@@ -40,12 +40,14 @@ const browserReports=[];
 if(process.env.WHEEL_BROWSER==='1'){
  const {chromium,firefox,webkit}=await import(pathToFileURL(resolve(consumer,'node_modules/playwright-core/index.mjs')));
  const moduleBytes=await readFile(resolve(consumer,'node_modules/@zodiacs/wheel/index.mjs'));
+ const domModuleBytes=await readFile(resolve(consumer,'node_modules/@zodiacs/wheel/dom.mjs'));
  const axe=await readFile(resolve(consumer,'node_modules/axe-core/axe.min.js'),'utf8');
  const payload=JSON.stringify({model,unknown}).replaceAll('<','\\u003c');
- const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="icon" href="data:,"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wheel consumer review</title></head><body><main><h1>Wheel consumer review</h1><script type="module">import {createWheel} from "/index.mjs";const p='+payload+';document.querySelector("main").append(createWheel(p.model,{document,title:"Synthetic timed chart"}),createWheel(p.unknown,{document,title:"Synthetic untimed chart"}));window.reviewReady=true;</script></main></body></html>';
+ const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="icon" href="data:,"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wheel consumer review</title></head><body><main><h1>Wheel consumer review</h1><script type="module">import {createWheel} from "/dom.mjs";const p='+payload+';document.querySelector("main").append(createWheel(p.model,{document,title:"Synthetic timed chart"}),createWheel(p.unknown,{document,title:"Synthetic untimed chart"}));window.reviewReady=true;</script></main></body></html>';
  const server=createServer((req,res)=>{
   if(req.url==='/'){res.setHeader('content-type','text/html');res.end(html);}
   else if(req.url==='/index.mjs'){res.setHeader('content-type','text/javascript');res.end(moduleBytes);}
+  else if(req.url==='/dom.mjs'){res.setHeader('content-type','text/javascript');res.end(domModuleBytes);}
   else{res.statusCode=404;res.end();}
  });
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
@@ -87,15 +89,20 @@ if(process.env.WHEEL_BROWSER==='1'){
     const last=page.locator('figure').last();
     assert.equal(await last.locator('table caption').filter({hasText:'House cusps'}).count(),0);
     assert.equal(await last.locator('svg text').filter({hasText:'ASC'}).count(),0);pass('untimed wheel has no angle or house decoration');
-    assert.equal(await page.evaluate(()=>{const ids=[...document.querySelectorAll('[id]')].map(n=>n.id);return new Set(ids).size===ids.length;}),true);pass('mounted accessible-name and status IDs are unique');
-    const a11y=await page.evaluate(async()=>await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa']}}));
-    assert.deepEqual(a11y.violations.map(v=>({id:v.id,nodes:v.nodes.length})),[]);pass('automated WCAG A/AA checks report no violation');
-    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true);pass('mobile and desktop views do not overflow horizontally');
     await page.evaluate(async()=>{
-      const {createWheel}=await import('/index.mjs');
+      const {createWheel}=await import('/dom.mjs');
+      const data={zodiac:'tropical',bodies:[{body:'A'.repeat(100),lon:0,retrograde:false},{body:'B'.repeat(100),lon:90,retrograde:false}],angles:{asc:0,mc:270,dsc:180,ic:90},houses:{system:'H'.repeat(64),cusps:Array.from({length:12},(_,i)=>i*30)},aspects:[{a:'A'.repeat(100),b:'B'.repeat(100),type:'square',orb:0,applying:false}],flags:['F'.repeat(64)],engineVersion:'V'.repeat(64)};
+      document.querySelector('main').append(createWheel(data,{document,title:'T'.repeat(160)}));
+    });
+    await page.evaluate(async()=>{
+      const {createWheel}=await import('/dom.mjs');
       const data={zodiac:'tropical',bodies:[{body:'</desc><script>window.wheelXss=true</script>',lon:0,retrograde:false}],angles:null,houses:null,aspects:[],flags:[]};
       document.querySelector('main').append(createWheel(data,{document,title:'<img src=x onerror="window.wheelXss=true">'}));
     });
+    assert.equal(await page.evaluate(()=>{const ids=[...document.querySelectorAll('[id]')].map(n=>n.id);return new Set(ids).size===ids.length;}),true);pass('mounted accessible-name and status IDs are unique');
+    const a11y=await page.evaluate(async()=>await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa']}}));
+    assert.deepEqual(a11y.violations.map(v=>({id:v.id,nodes:v.nodes.length})),[]);pass('automated WCAG A/AA checks report no violation');
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true);pass('maximum valid labels and caller markup do not overflow horizontally');
     assert.equal(await page.evaluate(()=>window.wheelXss),undefined);
     assert.equal(await page.locator('figure').last().locator('script,img').count(),0);pass('caller labels and title cannot create script or image elements');
     assert.equal(requests.length,initialRequests);assert.deepEqual(errors,[]);pass('all interactions work offline without further requests or page errors');

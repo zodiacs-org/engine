@@ -13,12 +13,18 @@
     ".": {
       "types": "./index.d.ts",
       "import": "./index.mjs"
+    },
+    "./dom": {
+      "types": "./dom.d.ts",
+      "import": "./dom.mjs"
     }
   },
   "files": [
     "index.mjs",
     "index.d.ts",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "dom.mjs",
+    "dom.d.ts"
   ]
 }

@@ -27,7 +27,7 @@ try{
  assert.equal(testCount,8,'Source selftest count changed');
  const info=JSON.parse(node([npmCli,'pack','--ignore-scripts','--json','--pack-destination',packed],root,true));
  assert.equal(info.length,1);
- assert.deepEqual(info[0].files.map(f=>f.path).sort(),['LICENSE','README.md','index.d.ts','index.mjs','package.json']);
+ assert.deepEqual(info[0].files.map(f=>f.path).sort(),['LICENSE','README.md','dom.d.ts','dom.mjs','index.d.ts','index.mjs','package.json']);
  const archive=resolve(packed,info[0].filename),engineArchive=resolve(repo,'artifacts/zodiacs-engine-1.0.0-rc.2.tgz');
  const engineBytes=await readFile(engineArchive);
  assert.equal(engineBytes.length,287011);assert.equal(createHash('sha256').update(engineBytes).digest('hex'),'4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002');
@@ -37,7 +37,8 @@ try{
  node([npmCli,'install','--ignore-scripts','--no-audit','--no-fund','--save-exact',...deps],consumer);
  await writeFile(resolve(consumer,'typecheck.ts'),[
  'import {natalChart} from "@zodiacs/engine";',
- 'import {fromNatalChart,createWheel,describeWheel,renderWheelSvg,type WheelData} from "@zodiacs/wheel";',
+ 'import {fromNatalChart,describeWheel,renderWheelSvg,type WheelData} from "@zodiacs/wheel";',
+ 'import {createWheel} from "@zodiacs/wheel/dom";',
  'const model:WheelData=fromNatalChart(natalChart({utc:"2000-01-01T12:00:00Z",latitude:0,longitude:0}));',
  'const svg:string=renderWheelSvg(model,{idPrefix:"example"});',
  'const figure:HTMLElement=createWheel(model,{document});',
@@ -52,13 +53,24 @@ try{
  'const wrong:WheelData={zodiac:"tropical",bodies:[{body:"Sun",lon:0,retrograde:"yes"}]};',
  ].join('\n')+'\n');
  node([resolve(consumer,'node_modules/typescript/bin/tsc'),'--noEmit','--strict','--module','NodeNext','--moduleResolution','NodeNext','--target','ES2022','--lib','ES2022,DOM','typecheck.ts'],consumer);
+ await writeFile(resolve(consumer,'server-typecheck.ts'),[
+ 'import {describeWheel,validateWheelData,renderWheelSvg,type WheelData} from "@zodiacs/wheel";',
+ 'const data:WheelData={zodiac:"tropical",bodies:[{body:"Sun",lon:0,retrograde:false}],engineVersion:"synthetic"};',
+ 'const svg:string=renderWheelSvg(validateWheelData(data),{idPrefix:"server"});',
+ 'describeWheel(data).summary satisfies string;',
+ '// @ts-expect-error the DOM factory has a separate browser entry point',
+ 'import {createWheel} from "@zodiacs/wheel";',
+ '// @ts-expect-error missing SVG identifier is refused',
+ 'renderWheelSvg(data,{});',
+ ].join('\n')+'\n');
+ node([resolve(consumer,'node_modules/typescript/bin/tsc'),'--noEmit','--strict','--module','NodeNext','--moduleResolution','NodeNext','--target','ES2022','--lib','ES2022','server-typecheck.ts'],consumer);
  if(process.env.WHEEL_BROWSER==='1')node([resolve(consumer,'node_modules/playwright-core/cli.js'),'install','--with-deps','chromium','firefox','webkit'],consumer);
  node([resolve(root,'scripts/verify-consumer.mjs'),consumer]);
  const report=JSON.parse(await readFile(resolve(consumer,'wheel-consumer-report.json'),'utf8'));
  const bytes=await readFile(archive);
  report.package={name:'@zodiacs/wheel',version:'0.0.0',private:true,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),files:info[0].files.map(({path,size,mode})=>({path,size,mode}))};
  report.engineArchive={version:'1.0.0-rc.2',bytes:engineBytes.length,sha256:createHash('sha256').update(engineBytes).digest('hex')};
- report.sourceSelftestsPassed=testCount;report.strictInstalledTypecheck=true;
+ report.sourceSelftestsPassed=testCount;report.strictInstalledTypecheck=true;report.strictInstalledTypechecks={serverLibs:['ES2022'],browserLibs:['ES2022','DOM']};
  const content=JSON.stringify(report,null,2)+'\n';
  await writeFile(resolve(repo,'wheel-consumer-report.json'),content);
  console.log('PROGRAMME_FILE_FINAL '+JSON.stringify({path:'docs/evidence/accessible-wheel-20261009/producer-'+process.env.GITHUB_RUN_ID+'/node'+process.versions.node.split('.')[0]+'.json',size:Buffer.byteLength(content),sha256:createHash('sha256').update(content).digest('hex'),base64:Buffer.from(content).toString('base64')}));

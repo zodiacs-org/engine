@@ -19,7 +19,8 @@ verification. It does not certify the accuracy of caller data.
 
 ```js
 import { natalChart } from '@zodiacs/engine';
-import { fromNatalChart, createWheel, renderWheelSvg } from '@zodiacs/wheel';
+import { fromNatalChart, renderWheelSvg } from '@zodiacs/wheel';
+import { createWheel } from '@zodiacs/wheel/dom';
 
 const data = fromNatalChart(natalChart({
   utc: '2000-01-01T12:00:00Z', latitude: 0, longitude: 0, houseSystem: 'whole',
@@ -32,7 +33,9 @@ const svg = renderWheelSvg(data, { idPrefix: 'standalone-example' });
 
 Supply a unique safe `idPrefix` for each standalone SVG in a document.
 The DOM renderer allocates unique IDs and returns a detached figure. Importing
-the module or creating an SVG needs no DOM. It makes no network request,
+the root module or creating an SVG needs no DOM. Its TypeScript declarations
+require only ES2022 libraries. The separate `@zodiacs/wheel/dom` entry contains
+the browser factory and its DOM declarations. It makes no network request,
 reads no storage or URL and has no import-time DOM effect. The natal adapter
 copies display fields and omits input time/place. Displayed longitudes and
 chart metadata can still be personal information; callers control where they
@@ -60,7 +63,9 @@ Set `WHEEL_BROWSER=1` to run the installed-package consumer in Chromium,
 Firefox and WebKit at mobile/desktop widths, including offline keyboard
 operation, malicious-label checks and automated WCAG A/AA checks.
 The script packs outside the checkout, verifies the exact package file list,
-installs fresh consumers and runs a strict installed TypeScript check.
+installs fresh consumers and runs strict installed TypeScript checks with
+ES2022 alone for the root and ES2022/DOM for the browser entry. Maximum-length
+labels are included before mobile overflow and automated accessibility checks.
 The workflow preserves actual results. No runtime/accuracy/accessibility
 pass is asserted until that workflow executes. Automated accessibility and
 keyboard checks do not replace human assistive-technology review.
