@@ -40,7 +40,7 @@ if(process.env.WHEEL_BROWSER==='1'){
  const moduleBytes=await readFile(resolve(consumer,'node_modules/@zodiacs/wheel/index.mjs'));
  const axe=await readFile(resolve(consumer,'node_modules/axe-core/axe.min.js'),'utf8');
  const payload=JSON.stringify({model,unknown}).replaceAll('<','\\u003c');
- const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wheel consumer review</title></head><body><main><h1>Wheel consumer review</h1><script type="module">import {createWheel} from "/index.mjs";const p='+payload+';document.querySelector("main").append(createWheel(p.model,{document,title:"Synthetic timed chart"}),createWheel(p.unknown,{document,title:"Synthetic untimed chart"}));window.reviewReady=true;</script></main></body></html>';
+ const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="icon" href="data:,"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wheel consumer review</title></head><body><main><h1>Wheel consumer review</h1><script type="module">import {createWheel} from "/index.mjs";const p='+payload+';document.querySelector("main").append(createWheel(p.model,{document,title:"Synthetic timed chart"}),createWheel(p.unknown,{document,title:"Synthetic untimed chart"}));window.reviewReady=true;</script></main></body></html>';
  const server=createServer((req,res)=>{
   if(req.url==='/'){res.setHeader('content-type','text/html');res.end(html);}
   else if(req.url==='/index.mjs'){res.setHeader('content-type','text/javascript');res.end(moduleBytes);}

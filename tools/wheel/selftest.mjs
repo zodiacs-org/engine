@@ -31,6 +31,7 @@ test('model validation rejects malformed, duplicate, unbounded and contradictory
  m=>{m.bodies=Array(65).fill(m.bodies[0]);},m=>{m.houses.cusps.pop();},m=>{m.angles.asc=Infinity;},
  m=>{m.aspects[0].a='missing';},m=>{m.aspects[0].orb=-1;},m=>{m.aspects[0].type='invented';},
  m=>{m.aspects=Array(1001).fill(m.aspects[0]);},m=>{m.flags=Array(65).fill('flag');},
+ m=>{m.bodies[0].body='\ud800';},m=>{m.bodies[0].body='\ufffe';},m=>{m.bodies[0].body='bad\u0000label';},
  ];
  for(const mutate of bad){const m=sample();mutate(m);assert.throws(()=>validateWheelData(m));}
 });

@@ -4,7 +4,7 @@ const NS = 'http://www.w3.org/2000/svg';
 let sequence = 0;
 const escapeXml = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
 function text(value, name, max = 100) {
-  if (typeof value !== 'string' || !value.trim() || value.length > max || /[\u0000-\u001f\u007f]/.test(value)) throw new TypeError('Invalid ' + name);
+  if (typeof value !== 'string' || !value.trim() || value.length > max || /[\u0000-\u001f\u007f\ufffe\uffff\ud800-\udfff]/u.test(value)) throw new TypeError('Invalid ' + name);
   return value;
 }
 function longitude(value) {
