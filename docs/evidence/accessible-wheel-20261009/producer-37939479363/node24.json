@@ -1,0 +1,67 @@
+{
+  "schema": "zodiacs.wheel-consumer.v1",
+  "producer": {
+    "source": "9c975f860308bf3e97c21bd6a079389871cd1fe4",
+    "head": "a0bb90790e2eb9fce3eeb7ad7909788049dbe361",
+    "run": "37939479363",
+    "node": "v24.21.0",
+    "platform": "linux"
+  },
+  "engineVersion": "1.0.0-rc.2",
+  "checks": [
+    "actual carried-engine natal chart display fields are preserved",
+    "full text includes every actual body, cusp, angle and aspect",
+    "adapter and SVG omit original instant and coordinates",
+    "actual untimed engine result displays no invented angles or houses",
+    "standalone SVG is deterministic for the same model and prefix"
+  ],
+  "checkCount": 5,
+  "browsers": [],
+  "modelSha256": "453b16595bdbd2066abec8c64f03879f836a8f908c6e19267b3436ea5f7b8bfe",
+  "svgSha256": "196cb2b9e16df8b8f790410fc4ef2c235276c229edf6ff4a1ec04e283e8a7426",
+  "limitations": [
+    "Display and keyboard/shape checks, not independent astronomical accuracy.",
+    "Private package is not published or programme acceptance."
+  ],
+  "package": {
+    "name": "@zodiacs/wheel",
+    "version": "0.0.0",
+    "private": true,
+    "bytes": 7416,
+    "sha256": "820f20d258b953b1a9463889c35b40a1f7a71a62bc76a650a862a55b44ef4c1b",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1068,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 3696,
+        "mode": 420
+      },
+      {
+        "path": "index.d.ts",
+        "size": 1535,
+        "mode": 420
+      },
+      {
+        "path": "index.mjs",
+        "size": 11684,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 456,
+        "mode": 420
+      }
+    ]
+  },
+  "engineArchive": {
+    "version": "1.0.0-rc.2",
+    "bytes": 287011,
+    "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002"
+  },
+  "sourceSelftestsPassed": 8,
+  "strictInstalledTypecheck": true
+}
