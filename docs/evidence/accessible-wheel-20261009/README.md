@@ -64,3 +64,13 @@ Both packs are 7846 bytes, SHA-256 90cffc4456965d19700ebe4dff5229bab96e749ffb461
 ## House-sector review correction
 
 The earlier renderer placed each house number at its cusp longitude, on the boundary line. The changed renderer places the number halfway along the forward angular span to the next cusp, including the 360-degree crossing, while retaining the original cusp positions and structured descriptions. Source geometry checks use independent known coordinates for a 0-to-30-degree sector and a 350-to-10-degree crossing. This changed SVG/package identity still requires fresh source, installed consumers, full original engine gates and review. Earlier package/SVG digests remain historical and are not claimed for the sector-label change.
+
+## Control descriptions and sparse-input corrections
+
+Review on `12285a088514f6d0ff72ca41145eb6c188901f6d` found that every button referenced the currently selected body's live region. That could give an unselected body a contradictory accessible description when reached with a virtual cursor or programmatic focus. Each control now retains its own complete name/pressed state while the selected status is an independent live region. The installed browser drive moves focus without changing selection and rejects any control description that conflicts with its own name; the existing activation/live-status checks remain.
+
+Validation also refuses sparse body/cusp/aspect/flag arrays, which JavaScript's original array-map callbacks could skip. The existing malformed-input source test covers these four cases; ordinary dense display inputs and source-test count remain unchanged. These changes require fresh complete consumers, original full engine gates and review. No prior consumer result is claimed for the new behavior.
+
+## Actual sector-label producer
+
+[Consumer 37943461856](https://github.com/zodiacs-org/engine/actions/runs/37943461856) tested head `12285a088514f6d0ff72ca41145eb6c188901f6d`, integration `c9ef9061a775f5574e4fd47bbaa49226550648ed`. Both runtimes pass the eight source tests including independent house-sector and wrap geometry, both strict installed type configurations, and the full-text/SVG version controls. Node 22.22.2 passes 101 installed/browser checks; Node 24.21.0 passes five. The matching private packs are 7907 bytes, SHA-256 471f9be8d4a0bd4bff5e1ec57a3a3faa7cbc2d05e3b92e398735a8c2d379e5b2; SVG SHA-256 45e410573a2c284e4e017dd5cb13e11f296619d6d1d855213a1a348d59d02bb4. The exact seven-file lists and selected reports are retained in `producer-37943461856/`. Complete original engine workflows pass on this producer. This is historical evidence for sector labeling; it does not assert passing new independent-status/sparse-array behavior.

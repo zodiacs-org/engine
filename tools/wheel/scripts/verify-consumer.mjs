@@ -68,7 +68,17 @@ if(process.env.WHEEL_BROWSER==='1'){
     const local=[];
     const pass=(label)=>{local.push(label);checks.push(name+' '+width+': '+label);};
     assert.equal(await page.locator('figure').count(),2);pass('two detached wheels mount independently');
-    assert.equal(await page.locator('figure').first().getByRole('button').count(),model.bodies.length);pass('every body has a named keyboard control');
+    const bodyControls=page.locator('figure').first().getByRole('button');
+    assert.equal(await bodyControls.count(),model.bodies.length);
+    // Programmatic focus leaves selection unchanged: other buttons must not
+    // inherit the selected body's description.
+    await bodyControls.last().focus();
+    const descriptions=await bodyControls.evaluateAll(buttons=>buttons.map(button=>({
+      name:button.textContent,
+      description:(button.getAttribute('aria-describedby')??'').split(/\s+/).filter(Boolean).map(id=>document.getElementById(id)?.textContent??'').join(' '),
+    })));
+    assert.ok(descriptions.every(item=>!item.description||item.description.startsWith(item.name)));
+    pass('every body control has its own name without a conflicting description');
     assert.equal(await page.locator('figure').first().locator('table').count(),model.aspects.length?3:2);pass('structured angles, houses and aspects remain visible');
     const first=page.locator('figure').first(),buttons=first.getByRole('button');
     await buttons.first().focus();await page.keyboard.press('ArrowRight');

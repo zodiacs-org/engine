@@ -1,0 +1,86 @@
+{
+  "schema": "zodiacs.wheel-consumer.v1",
+  "producer": {
+    "source": "c9ef9061a775f5574e4fd47bbaa49226550648ed",
+    "head": "12285a088514f6d0ff72ca41145eb6c188901f6d",
+    "run": "37943461856",
+    "node": "v24.21.0",
+    "platform": "linux"
+  },
+  "engineVersion": "1.0.0-rc.2",
+  "checks": [
+    "actual carried-engine natal chart display fields are preserved",
+    "full text and SVG preserve version and every actual display field",
+    "adapter and SVG omit original instant and coordinates",
+    "actual untimed engine result displays no invented angles or houses",
+    "standalone SVG is deterministic for the same model and prefix"
+  ],
+  "checkCount": 5,
+  "browsers": [],
+  "modelSha256": "453b16595bdbd2066abec8c64f03879f836a8f908c6e19267b3436ea5f7b8bfe",
+  "svgSha256": "45e410573a2c284e4e017dd5cb13e11f296619d6d1d855213a1a348d59d02bb4",
+  "limitations": [
+    "Display and keyboard/shape checks, not independent astronomical accuracy.",
+    "Private package is not published or programme acceptance."
+  ],
+  "package": {
+    "name": "@zodiacs/wheel",
+    "version": "0.0.0",
+    "private": true,
+    "bytes": 7907,
+    "sha256": "471f9be8d4a0bd4bff5e1ec57a3a3faa7cbc2d05e3b92e398735a8c2d379e5b2",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1068,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 4053,
+        "mode": 420
+      },
+      {
+        "path": "dom.d.mts",
+        "size": 238,
+        "mode": 420
+      },
+      {
+        "path": "dom.mjs",
+        "size": 4165,
+        "mode": 420
+      },
+      {
+        "path": "index.d.mts",
+        "size": 1427,
+        "mode": 420
+      },
+      {
+        "path": "index.mjs",
+        "size": 7974,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 570,
+        "mode": 420
+      }
+    ]
+  },
+  "engineArchive": {
+    "version": "1.0.0-rc.2",
+    "bytes": 287011,
+    "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002"
+  },
+  "sourceSelftestsPassed": 8,
+  "strictInstalledTypecheck": true,
+  "strictInstalledTypechecks": {
+    "serverLibs": [
+      "ES2022"
+    ],
+    "browserLibs": [
+      "ES2022",
+      "DOM"
+    ]
+  }
+}

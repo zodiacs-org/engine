@@ -27,7 +27,6 @@ export function createWheel(data, {document: doc, title = 'Chart wheel'} = {}) {
   };
   d.bodies.forEach((b,i)=>{
     const li=el('li'),button=el('button',b.description);button.type='button'; button.style.minHeight='44px';button.style.margin='4px';button.style.padding='8px 12px';button.style.font='inherit';button.style.boxSizing='border-box';button.style.maxWidth='calc(100% - 8px)';
-    button.setAttribute('aria-describedby',selected.id);
     button.addEventListener('click',()=>select(i,false));
     button.addEventListener('keydown',event=>{
       let next;

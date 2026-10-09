@@ -37,7 +37,7 @@ export function validateWheelData(data) {
   else if (data.zodiac && typeof data.zodiac === 'object' && Object.keys(data.zodiac).length === 1 && 'sidereal' in data.zodiac) zodiac = {sidereal: text(data.zodiac.sidereal,'ayanamsa',64)};
   else throw new TypeError('Explicit zodiac required');
   if (!Array.isArray(data.bodies) || data.bodies.length < 1 || data.bodies.length > 64) throw new TypeError('Invalid bodies');
-  const bodies = data.bodies.map(b => {
+  const bodies = Array.from(data.bodies, b => {
     if (!b || typeof b.retrograde !== 'boolean') throw new TypeError('Invalid body');
     return {body:text(b.body,'body'),lon:longitude(b.lon),retrograde:b.retrograde};
   });
@@ -49,17 +49,17 @@ export function validateWheelData(data) {
   }
   if (data.houses != null) {
     if (!angles || !Array.isArray(data.houses.cusps) || data.houses.cusps.length !== 12) throw new TypeError('Invalid houses');
-    houses = {system:text(data.houses.system,'house system',64),cusps:data.houses.cusps.map(longitude)};
+    houses = {system:text(data.houses.system,'house system',64),cusps:Array.from(data.houses.cusps,longitude)};
   }
   const aspectsInput = data.aspects ?? [];
   if (!Array.isArray(aspectsInput) || aspectsInput.length > 1000) throw new TypeError('Invalid aspects');
-  const aspects = aspectsInput.map(a => {
+  const aspects = Array.from(aspectsInput, a => {
     if (!a || !names.has(a.a) || !names.has(a.b) || a.a === a.b || !ASPECTS.has(a.type) || !Number.isFinite(a.orb) || a.orb < 0 || a.orb > 180 || typeof a.applying !== 'boolean') throw new TypeError('Invalid aspect');
     return {a:a.a,b:a.b,type:a.type,orb:a.orb,applying:a.applying};
   });
   const flagsInput = data.flags ?? [];
   if (!Array.isArray(flagsInput) || flagsInput.length > 64) throw new TypeError('Invalid flags');
-  const flags = [...new Set(flagsInput.map(f => text(f,'flag',64)))];
+  const flags = [...new Set(Array.from(flagsInput,f => text(f,'flag',64)))];
   if (flags.includes('no-time') && (angles || houses)) throw new TypeError('Untimed chart cannot display angles or houses');
   const engineVersion = data.engineVersion == null ? null : text(data.engineVersion,'engine version',64);
   return {zodiac,bodies,angles,houses,aspects,flags,engineVersion};
