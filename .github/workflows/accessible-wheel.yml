@@ -1,0 +1,51 @@
+name: Accessible wheel consumer
+on:
+  pull_request:
+    paths:
+      - 'tools/wheel/**'
+      - 'artifacts/zodiacs-engine-1.0.0-rc.2.tgz'
+      - '.github/workflows/accessible-wheel.yml'
+      - 'docs/evidence/accessible-wheel-20261009/**'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/wheel/**'
+      - 'artifacts/zodiacs-engine-1.0.0-rc.2.tgz'
+      - '.github/workflows/accessible-wheel.yml'
+      - 'docs/evidence/accessible-wheel-20261009/**'
+permissions:
+  contents: read
+jobs:
+  consumer:
+    name: Wheel Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        node: ['22.22.2', '24']
+    env:
+      WHEEL_BROWSER: ${{ matrix.node == '22.22.2' && '1' || '0' }}
+      PROGRAMME_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/wheel/
+            /artifacts/zodiacs-engine-1.0.0-rc.2.tgz
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Pack privately; verify clean consumer and keyboard interactions
+        run: node tools/wheel/scripts/prepare-consumer.mjs
+      - name: Retain actual report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: wheel-node${{ matrix.node }}
+          path: wheel-consumer-report.json
+          if-no-files-found: warn
+          retention-days: 90

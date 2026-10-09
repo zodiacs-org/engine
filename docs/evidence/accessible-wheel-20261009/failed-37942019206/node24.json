@@ -1,0 +1,32 @@
+{
+  "schema": "zodiacs.wheel-consumer-failure.v1",
+  "head": "0d8051cb63b84a6ba4bf0ace6ac40d22bf08442f",
+  "run": 37942019206,
+  "job": 113858538029,
+  "node": "24",
+  "conclusion": "failure",
+  "sourceSelftests": {
+    "tests": 8,
+    "passed": 8,
+    "failed": 0
+  },
+  "stage": "installed browser declaration typecheck",
+  "browserChecks": "not reached",
+  "serverOnlyTypecheck": "not reached",
+  "error": {
+    "code": "TS7016",
+    "module": "./index.mjs",
+    "declaration": "node_modules/@zodiacs/wheel/dom.d.ts",
+    "message": "Could not find a declaration file for module './index.mjs'."
+  },
+  "originalLogSha256": "2680f99c33fb3943e79405b4c9f3d9a79dcc731633d1c64cfa5cf5ce4654135f",
+  "selectedLogLines": [
+    "2026-10-09T14:09:18.5956187Z [command]/usr/bin/git log -1 --format=%H",
+    "2026-10-09T14:09:21.8874422Z # tests 8",
+    "2026-10-09T14:09:21.8874815Z # pass 8",
+    "2026-10-09T14:09:21.8875005Z # fail 0",
+    "2026-10-09T14:09:26.1283505Z ##[error]node_modules/@zodiacs/wheel/dom.d.ts(1,30): error TS7016: Could not find a declaration file for module './index.mjs'. '/tmp/zodiacs-wheel-review-qcMHLJ/consumer/node_modules/@zodiacs/wheel/index.mjs' implicitly has an 'any' type.",
+    "2026-10-09T14:09:26.1615134Z ##[error]Process completed with exit code 1."
+  ],
+  "disposition": "Use matching .d.mts declarations for the .mjs root/browser entries and retain all strict installed type and browser gates; do not rerun failed source unchanged."
+}

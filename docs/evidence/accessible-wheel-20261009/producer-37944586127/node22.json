@@ -1,0 +1,291 @@
+{
+  "schema": "zodiacs.wheel-consumer.v1",
+  "producer": {
+    "source": "6de77eee232e1e9abb1fca08f2b13c2e6b267344",
+    "head": "8751bb39bd778135ecd6da59b3f6ef9094e8f324",
+    "run": "37944586127",
+    "node": "v22.22.2",
+    "platform": "linux"
+  },
+  "engineVersion": "1.0.0-rc.2",
+  "checks": [
+    "actual carried-engine natal chart display fields are preserved",
+    "full text and SVG preserve version and every actual display field",
+    "adapter and SVG omit original instant and coordinates",
+    "actual untimed engine result displays no invented angles or houses",
+    "standalone SVG is deterministic for the same model and prefix",
+    "chromium 360: two detached wheels mount independently",
+    "chromium 360: every body control has its own name without a conflicting description",
+    "chromium 360: structured angles, houses and aspects remain visible",
+    "chromium 360: arrow key selects and focuses the next body",
+    "chromium 360: End reaches last body",
+    "chromium 360: arrow navigation wraps",
+    "chromium 360: Home and reverse wrap work",
+    "chromium 360: native activation has a live text result",
+    "chromium 360: one body control is in the Tab sequence",
+    "chromium 360: Tab leaves the body controls without a trap",
+    "chromium 360: untimed wheel has no angle or house decoration",
+    "chromium 360: mounted accessible-name and status IDs are unique",
+    "chromium 360: automated WCAG A/AA checks report no violation",
+    "chromium 360: maximum valid labels and caller markup do not overflow horizontally",
+    "chromium 360: caller labels and title cannot create script or image elements",
+    "chromium 360: all interactions work offline without further requests or page errors",
+    "chromium 1280: two detached wheels mount independently",
+    "chromium 1280: every body control has its own name without a conflicting description",
+    "chromium 1280: structured angles, houses and aspects remain visible",
+    "chromium 1280: arrow key selects and focuses the next body",
+    "chromium 1280: End reaches last body",
+    "chromium 1280: arrow navigation wraps",
+    "chromium 1280: Home and reverse wrap work",
+    "chromium 1280: native activation has a live text result",
+    "chromium 1280: one body control is in the Tab sequence",
+    "chromium 1280: Tab leaves the body controls without a trap",
+    "chromium 1280: untimed wheel has no angle or house decoration",
+    "chromium 1280: mounted accessible-name and status IDs are unique",
+    "chromium 1280: automated WCAG A/AA checks report no violation",
+    "chromium 1280: maximum valid labels and caller markup do not overflow horizontally",
+    "chromium 1280: caller labels and title cannot create script or image elements",
+    "chromium 1280: all interactions work offline without further requests or page errors",
+    "firefox 360: two detached wheels mount independently",
+    "firefox 360: every body control has its own name without a conflicting description",
+    "firefox 360: structured angles, houses and aspects remain visible",
+    "firefox 360: arrow key selects and focuses the next body",
+    "firefox 360: End reaches last body",
+    "firefox 360: arrow navigation wraps",
+    "firefox 360: Home and reverse wrap work",
+    "firefox 360: native activation has a live text result",
+    "firefox 360: one body control is in the Tab sequence",
+    "firefox 360: Tab leaves the body controls without a trap",
+    "firefox 360: untimed wheel has no angle or house decoration",
+    "firefox 360: mounted accessible-name and status IDs are unique",
+    "firefox 360: automated WCAG A/AA checks report no violation",
+    "firefox 360: maximum valid labels and caller markup do not overflow horizontally",
+    "firefox 360: caller labels and title cannot create script or image elements",
+    "firefox 360: all interactions work offline without further requests or page errors",
+    "firefox 1280: two detached wheels mount independently",
+    "firefox 1280: every body control has its own name without a conflicting description",
+    "firefox 1280: structured angles, houses and aspects remain visible",
+    "firefox 1280: arrow key selects and focuses the next body",
+    "firefox 1280: End reaches last body",
+    "firefox 1280: arrow navigation wraps",
+    "firefox 1280: Home and reverse wrap work",
+    "firefox 1280: native activation has a live text result",
+    "firefox 1280: one body control is in the Tab sequence",
+    "firefox 1280: Tab leaves the body controls without a trap",
+    "firefox 1280: untimed wheel has no angle or house decoration",
+    "firefox 1280: mounted accessible-name and status IDs are unique",
+    "firefox 1280: automated WCAG A/AA checks report no violation",
+    "firefox 1280: maximum valid labels and caller markup do not overflow horizontally",
+    "firefox 1280: caller labels and title cannot create script or image elements",
+    "firefox 1280: all interactions work offline without further requests or page errors",
+    "webkit 360: two detached wheels mount independently",
+    "webkit 360: every body control has its own name without a conflicting description",
+    "webkit 360: structured angles, houses and aspects remain visible",
+    "webkit 360: arrow key selects and focuses the next body",
+    "webkit 360: End reaches last body",
+    "webkit 360: arrow navigation wraps",
+    "webkit 360: Home and reverse wrap work",
+    "webkit 360: native activation has a live text result",
+    "webkit 360: one body control is in the Tab sequence",
+    "webkit 360: Tab leaves the body controls without a trap",
+    "webkit 360: untimed wheel has no angle or house decoration",
+    "webkit 360: mounted accessible-name and status IDs are unique",
+    "webkit 360: automated WCAG A/AA checks report no violation",
+    "webkit 360: maximum valid labels and caller markup do not overflow horizontally",
+    "webkit 360: caller labels and title cannot create script or image elements",
+    "webkit 360: all interactions work offline without further requests or page errors",
+    "webkit 1280: two detached wheels mount independently",
+    "webkit 1280: every body control has its own name without a conflicting description",
+    "webkit 1280: structured angles, houses and aspects remain visible",
+    "webkit 1280: arrow key selects and focuses the next body",
+    "webkit 1280: End reaches last body",
+    "webkit 1280: arrow navigation wraps",
+    "webkit 1280: Home and reverse wrap work",
+    "webkit 1280: native activation has a live text result",
+    "webkit 1280: one body control is in the Tab sequence",
+    "webkit 1280: Tab leaves the body controls without a trap",
+    "webkit 1280: untimed wheel has no angle or house decoration",
+    "webkit 1280: mounted accessible-name and status IDs are unique",
+    "webkit 1280: automated WCAG A/AA checks report no violation",
+    "webkit 1280: maximum valid labels and caller markup do not overflow horizontally",
+    "webkit 1280: caller labels and title cannot create script or image elements",
+    "webkit 1280: all interactions work offline without further requests or page errors"
+  ],
+  "checkCount": 101,
+  "browsers": [
+    {
+      "browser": "chromium",
+      "version": "149.0.7827.55",
+      "viewport": 360,
+      "checks": 16,
+      "automatedAccessibility": {
+        "violations": 0,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa"
+        ]
+      },
+      "limitations": [
+        "Automated checks and keyboard tests do not substitute for human assistive-technology review."
+      ]
+    },
+    {
+      "browser": "chromium",
+      "version": "149.0.7827.55",
+      "viewport": 1280,
+      "checks": 16,
+      "automatedAccessibility": {
+        "violations": 0,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa"
+        ]
+      },
+      "limitations": [
+        "Automated checks and keyboard tests do not substitute for human assistive-technology review."
+      ]
+    },
+    {
+      "browser": "firefox",
+      "version": "151.0",
+      "viewport": 360,
+      "checks": 16,
+      "automatedAccessibility": {
+        "violations": 0,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa"
+        ]
+      },
+      "limitations": [
+        "Automated checks and keyboard tests do not substitute for human assistive-technology review."
+      ]
+    },
+    {
+      "browser": "firefox",
+      "version": "151.0",
+      "viewport": 1280,
+      "checks": 16,
+      "automatedAccessibility": {
+        "violations": 0,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa"
+        ]
+      },
+      "limitations": [
+        "Automated checks and keyboard tests do not substitute for human assistive-technology review."
+      ]
+    },
+    {
+      "browser": "webkit",
+      "version": "26.5",
+      "viewport": 360,
+      "checks": 16,
+      "automatedAccessibility": {
+        "violations": 0,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa"
+        ]
+      },
+      "limitations": [
+        "Automated checks and keyboard tests do not substitute for human assistive-technology review."
+      ]
+    },
+    {
+      "browser": "webkit",
+      "version": "26.5",
+      "viewport": 1280,
+      "checks": 16,
+      "automatedAccessibility": {
+        "violations": 0,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa"
+        ]
+      },
+      "limitations": [
+        "Automated checks and keyboard tests do not substitute for human assistive-technology review."
+      ]
+    }
+  ],
+  "modelSha256": "453b16595bdbd2066abec8c64f03879f836a8f908c6e19267b3436ea5f7b8bfe",
+  "svgSha256": "45e410573a2c284e4e017dd5cb13e11f296619d6d1d855213a1a348d59d02bb4",
+  "limitations": [
+    "Display and keyboard/shape checks, not independent astronomical accuracy.",
+    "Private package is not published or programme acceptance."
+  ],
+  "package": {
+    "name": "@zodiacs/wheel",
+    "version": "0.0.0",
+    "private": true,
+    "bytes": 7904,
+    "sha256": "54f80b18d8811193d76e12ae2a9c8bea376f91a9f0c98af7d0fb10cc2ac5c29b",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1068,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 4053,
+        "mode": 420
+      },
+      {
+        "path": "dom.d.mts",
+        "size": 238,
+        "mode": 420
+      },
+      {
+        "path": "dom.mjs",
+        "size": 4108,
+        "mode": 420
+      },
+      {
+        "path": "index.d.mts",
+        "size": 1427,
+        "mode": 420
+      },
+      {
+        "path": "index.mjs",
+        "size": 8004,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 570,
+        "mode": 420
+      }
+    ]
+  },
+  "engineArchive": {
+    "version": "1.0.0-rc.2",
+    "bytes": 287011,
+    "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002"
+  },
+  "sourceSelftestsPassed": 8,
+  "strictInstalledTypecheck": true,
+  "strictInstalledTypechecks": {
+    "serverLibs": [
+      "ES2022"
+    ],
+    "browserLibs": [
+      "ES2022",
+      "DOM"
+    ]
+  }
+}
