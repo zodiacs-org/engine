@@ -17,8 +17,10 @@ check('actual carried-engine natal chart display fields are preserved',()=>{
  assert.deepEqual(model.houses,chart.houses);assert.deepEqual(model.angles,chart.angles);
  assert.deepEqual(model.aspects,chart.aspects.map(a=>({a:a.a,b:a.b,type:a.type,orb:a.orb,applying:a.applying})));
 });
-check('full text includes every actual body, cusp, angle and aspect',()=>{
+check('full text and SVG preserve version and every actual display field',()=>{
  const d=wheel.describeWheel(model);
+ assert.ok(d.summary.includes('Engine '+chart.engineVersion+'.'));
+ assert.ok(wheel.renderWheelSvg(model,{idPrefix:'version'}).includes('Engine '+chart.engineVersion+'.'));
  assert.equal(d.bodies.length,chart.bodies.length);assert.equal(d.houses.length,12);assert.equal(d.angles.length,4);assert.equal(d.aspects.length,chart.aspects.length);
  for(const row of [...d.bodies,...d.houses,...d.angles,...d.aspects]) assert.ok(d.summary.includes(row.description));
 });

@@ -16,12 +16,10 @@ input boundaries, escaped SVG/safe identifiers, copied display fields and
 DOM-free import/standalone SVG. The invalid Unicode/XML label cases also pass.
 Selected source-bound records are retained in `source-preflight-37936598171/`.
 
-The private packing/installed-type consumer and Chromium/Firefox/WebKit
-keyboard, offline, malicious-label and automated accessibility checks are
-prepared, but have not executed. Original full engine CI, conformance, atlas,
-Python and CodeQL remain required before merge. Browser/runtime support,
-clean-consumer checks and overall accessibility are not inferred from this
-source preflight. Automated checks do not replace human assistive-technology
+The source preflight alone did not establish private packing/installed types,
+browser/runtime support or overall accessibility. The later installed consumer
+results are recorded below. Original full engine CI, conformance, Atlas,
+Python and CodeQL remain required on the final changed source before merge. Automated checks do not replace human assistive-technology
 review. This is preparation for P3.1d, not accepted weight, npm publication or
 stable/private clearance. All carried core archives remain unchanged.
 
@@ -31,4 +29,10 @@ stable/private clearance. All carried core archives remain unchanged.
 
 Keyboard navigation/native activation/live text, independent timed/untimed figures, full tables, unique IDs, no horizontal overflow, XML escaping and offline interactions passed. Automated WCAG A/AA checks reported zero violations in each browser/width. These checks do not substitute for human assistive-technology review, independent astronomy, or programme publication acceptance.
 
-The unchanged original [CI 37939479209](https://github.com/zodiacs-org/engine/actions/runs/37939479209) passed all nine jobs; Atlas 37939479242, Conformance 37939479152, Python package 37939479236 and CodeQL 37939479134 also passed. This evidence-only commit still requires the final exact-head full suite and review before merge. No release archive or registry publication was created.
+The unchanged original [CI 37939479209](https://github.com/zodiacs-org/engine/actions/runs/37939479209) passed; Atlas 37939479242, Conformance 37939479152, Python package 37939479236 and CodeQL 37939479134 also passed. This evidence-only commit still requires the final exact-head full suite and review before merge. No release archive or registry publication was created.
+
+## Review corrections
+
+Review on head `9b6be46afc232acc8fb14a6bd51cb07c45025745` identified that the standalone SVG's complete description omitted the supplied engine version although the DOM caption preserved it. The changed summary now includes that version when supplied, so both SVG export and DOM retain it. Source/installed-consumer controls check supplied and absent versions, XML escaping and the actual carried engine version. These changed tests still need execution on the new source; prior package/SVG hashes describe their original producer only.
+
+The numeric original-CI job-count claim is removed. Linked CI results are retained as historical workflow observations, without a documentation count that lacks committed enforcing output. No source change affects the core or any carried archive. A fresh complete required suite and review remain required on this corrected source.

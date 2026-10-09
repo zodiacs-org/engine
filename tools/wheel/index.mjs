@@ -72,7 +72,7 @@ export function describeWheel(data) {
   const houses = model.houses ? model.houses.cusps.map((lon,i) => ({house:i+1,lon,description:'House ' + (i+1) + ': ' + degreeLabel(lon)})) : [];
   const aspects = model.aspects.map(a => ({...a,description:a.a + ' ' + a.type + ' ' + a.b + ', orb ' + a.orb.toFixed(6) + ' degrees, ' + (a.applying ? 'applying' : 'not applying')}));
   const angles = model.angles ? Object.entries(model.angles).map(([name,lon]) => ({name,lon,description:name.toUpperCase() + ': ' + degreeLabel(lon)})) : [];
-  const summary = [zodiac + '.', model.houses ? 'House system: ' + model.houses.system + '.' : 'No houses.', model.angles ? 'Ascendant is at the left of the wheel.' : 'No angles; Aries zero is at the left of the wheel.', ...bodies.map(b=>b.description + '.'), ...angles.map(a=>a.description + '.'), ...houses.map(h=>h.description + '.'), ...aspects.map(a=>a.description + '.'), ...model.flags.map(f=>'Flag: ' + f + '.')].join(' ');
+  const summary = [zodiac + '.', ...(model.engineVersion ? ['Engine ' + model.engineVersion + '.'] : []), model.houses ? 'House system: ' + model.houses.system + '.' : 'No houses.', model.angles ? 'Ascendant is at the left of the wheel.' : 'No angles; Aries zero is at the left of the wheel.', ...bodies.map(b=>b.description + '.'), ...angles.map(a=>a.description + '.'), ...houses.map(h=>h.description + '.'), ...aspects.map(a=>a.description + '.'), ...model.flags.map(f=>'Flag: ' + f + '.')].join(' ');
   return {model,zodiac,bodies,houses,angles,aspects,summary};
 }
 function point(lon,r,origin) {

@@ -13,6 +13,8 @@ test('every supplied position, house, angle, aspect and flag has a text counterp
  const m=sample();m.flags=['polar-fallback'];const d=describeWheel(m);
  assert.equal(d.bodies.length,3);assert.equal(d.houses.length,12);assert.equal(d.angles.length,4);assert.equal(d.aspects.length,1);
  assert.match(d.bodies[2].description,/29\.999999 degrees Pisces, retrograde/);
+ assert.match(d.summary,/Engine synthetic\./);assert.match(renderWheelSvg(m,{idPrefix:'version'}),/Engine synthetic\./);
+ const noVersion=sample();delete noVersion.engineVersion;assert.ok(!describeWheel(noVersion).summary.includes('Engine '));
  assert.match(d.summary,/polar-fallback/);assert.match(d.summary,/orb 0\.000000 degrees, not applying/);
 });
 test('untimed model has no invented houses or angles',()=>{
@@ -36,9 +38,9 @@ test('model validation rejects malformed, duplicate, unbounded and contradictory
  for(const mutate of bad){const m=sample();mutate(m);assert.throws(()=>validateWheelData(m));}
 });
 test('SVG text is escaped and unsafe or missing id prefixes are refused',()=>{
- const m=sample();m.bodies[0].body='</desc><script>alert(1)</script>';m.aspects=[];
+ const m=sample();m.bodies[0].body='</desc><script>alert(1)</script>';m.aspects=[];m.engineVersion='<version&label>';
  const svg=renderWheelSvg(m,{idPrefix:'escaped',title:'<img onerror="bad"> &'});
- assert.ok(!svg.includes('<script>'));assert.match(svg,/&lt;script&gt;/);assert.match(svg,/role="img"/);assert.match(svg,/aria-labelledby="escaped-title escaped-desc"/);
+ assert.match(svg,/Engine &lt;version&amp;label&gt;\./);assert.ok(!svg.includes('<script>'));assert.match(svg,/&lt;script&gt;/);assert.match(svg,/role="img"/);assert.match(svg,/aria-labelledby="escaped-title escaped-desc"/);
  for(const idPrefix of [undefined,'x" onload="bad','1bad','a'.repeat(65)]) assert.throws(()=>renderWheelSvg(m,{idPrefix}));
 });
 test('natal adapter copies display data and omits time and coordinates',()=>{
