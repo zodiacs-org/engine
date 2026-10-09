@@ -1,0 +1,41 @@
+name: Offline CLI consumer
+on:
+  pull_request:
+    paths:
+      - 'tools/cli/**'
+      - '.github/workflows/offline-cli.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/cli/**'
+      - '.github/workflows/offline-cli.yml'
+permissions:
+  contents: read
+jobs:
+  consumer:
+    name: CLI ${{ matrix.os }} Node ${{ matrix.node }}
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: ['22.22.2', '24']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Preserve committed suite bytes across platforms
+        run: git -c core.autocrlf=false checkout --force HEAD -- tools/cli conformance LICENSE
+      - name: Pack privately and install outside the checkout
+        run: node tools/cli/scripts/prepare-consumer.mjs
+      - name: Upload actual consumer report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-${{ runner.os }}-node${{ matrix.node }}
+          path: cli-consumer-report.json
+          if-no-files-found: warn
+          retention-days: 90
