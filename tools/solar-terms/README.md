@@ -6,7 +6,7 @@ Pass an explicitly versioned engine to `createSolarTermScanner`, then call the r
 
 The aggregate sample budget applies across every search. A budget refusal, missing/additional term or non-distinct timestamp returns no partial term inventory. Invalid provider accounting, backward crossings or out-of-window timestamps throw. Input years, option data properties and the finite budget are validated before calling the longitude source.
 
-Every computed result explicitly states `accuracy.status: "unvalidated"` and `completeness.status: "unproven"`. Solver arithmetic checks do not establish astronomical accuracy or the programme's independent event gate. Actual ephemeris execution, independent astronomical comparison, sources for calendar definitions, Node/packed typing and full repository gates are still required.
+Every computed result explicitly states `accuracy.status: "unvalidated"` and `completeness.status: "unproven"`. Solver arithmetic checks do not establish astronomical accuracy or the programme's independent event gate. Node 22/24 source and offline installed-package tests passed eight protocol cases and 168 exact linear-Sun crossing controls per runtime. The installed exports and strict TypeScript 5.8.3 declaration checks passed with ES2022-only libraries and seven negative controls. Retained producer receipts under `docs/evidence/solar-terms-20261009/` bind these results to their source. Actual ephemeris execution, independent astronomical comparison, normative calendar definitions and the full repository gates remain outstanding.
 
 This prototype changes no core packed file, archive, package version or scientific tolerance. It does not implement Four Pillars, location-based hour conventions, day-boundary conventions or a public release.
 
