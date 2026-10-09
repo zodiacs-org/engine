@@ -1,0 +1,19 @@
+{
+  "schema": "zodiacs.compute-client-contract.v1",
+  "sourceUrl": "https://zodiacs.org/api/v1/openapi.json",
+  "sourceRepository": "zodiacs-org/site",
+  "productionCommit": "e9a21981eeeb99b34f44b1a2325d80160dcf0fb0",
+  "productionDeployment": "dpl_7cRJfgBFaS4m6F2YVVGFn1ujYz1G",
+  "sourceBytes": 369938,
+  "sourceSha256": "0e851883d89977ce12e16a02c7f2c8efbec4cc9b08ff64035a35b850fdca2a9e",
+  "verificationRun": 37895777038,
+  "verificationJob": 113706678168,
+  "subsetSha256": "2e8f3f45c4de8476724e48cafccc7582e9486ad12f2ea90e8b7153e33198dec2",
+  "transformation": "Keep the seven POST paths and all components reachable through their JSON Pointer references; preserve source info, servers, examples and licence.",
+  "license": "CC-BY-4.0",
+  "limitations": [
+    "This is a derived contract subset, not the original full document.",
+    "Examples are public synthetic service contract fixtures, not numerical accuracy arbiters.",
+    "The package is private preparation; no publication, engine release, programme acceptance or private scan is claimed."
+  ]
+}
