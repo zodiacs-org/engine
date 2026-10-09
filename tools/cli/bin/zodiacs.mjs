@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 import { chart, calc, events } from '@zodiacs/engine/calc';
 import { ENGINE_VERSION } from '@zodiacs/engine';
-import { runConformance } from './conformance.mjs';
+import { runConformance, ConformanceError } from './conformance.mjs';
 
 const SCHEMA = 'zodiacs.cli-result.v1';
 const MAX_INPUT = 1_048_576;
@@ -182,7 +182,7 @@ export async function main(args = process.argv.slice(2)) {
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   try { process.exitCode = await main(); }
   catch (error) {
-    const code = error instanceof CliError ? error.code : 'calculation-failed';
+    const code = error instanceof CliError || error instanceof ConformanceError ? error.code : 'calculation-failed';
     // Engine errors can echo inputs. Keep stderr fixed and value-free.
     process.stderr.write('zodiacs: ' + code + '\n');
     process.exitCode = code === 'verification-mismatch' ? 1 : 2;

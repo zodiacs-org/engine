@@ -140,6 +140,8 @@ check('unknown record version is refused', () => {
   assert.equal(run('verify', record).status, 2);
 });
 const full = run('conformance', undefined);
+assert.equal(full.status, 1, 'conformance exit: ' + full.stderr);
+assert.notEqual(full.stdout, '', 'conformance must report the original verdicts');
 const conformance = JSON.parse(full.stdout).result;
 check('conformance computes every original vector offline', () => {
   assert.equal(full.status, 1); assert.equal(full.stderr, '');
@@ -175,7 +177,7 @@ check('tampered installed suite fails without a value leak', () => {
     writeFileSync(path, Buffer.concat([original, Buffer.from(' ')]));
     const result = run('conformance', undefined);
     assert.equal(result.status, 2); assert.equal(result.stdout, '');
-    assert.equal(result.stderr, 'zodiacs: calculation-failed\n');
+    assert.equal(result.stderr, 'zodiacs: conformance-bundle-integrity\n');
   } finally { writeFileSync(path, original); }
 });
 const report = {
