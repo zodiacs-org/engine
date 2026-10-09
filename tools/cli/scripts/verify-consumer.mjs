@@ -34,6 +34,7 @@ const syntheticChart = {
 const positionRequests = [
   { body: 'Sun', time: '2000-01-01T12:00:00Z' },
   { body: 'Moon', time: { jd: 2451545, scale: 'tt' }, flags: { units: 'radians' } },
+  { body: 'Sun', time: '2000-01-01T12:00:00Z', frame: 'equatorial-icrs' },
 ];
 const crossing = {
   kind: 'longitude-crossing', body: 'Sun', longitude: 0,
@@ -81,6 +82,11 @@ for (const [command, request, expected] of [
     assert.doesNotMatch(result.stdout, /<script/i);
   });
 }
+check('equatorial text names its coordinates and units', () => {
+  const result = run('positions', positionRequests[2], 'text');
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /right ascension, .*declination \(degrees\).*equatorial-icrs/);
+});
 check('required offline guard blocks a deliberate network call', () => {
   const result = spawnSync(process.execPath, ['--import', pathToFileURL(guard).href,
     '--input-type=module', '-e',
