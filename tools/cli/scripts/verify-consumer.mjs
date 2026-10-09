@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, symlinkSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
@@ -17,8 +17,8 @@ const { calc, chart, events } = await import(pathToFileURL(resolve(cwd, 'node_mo
 const normalized = (value) => JSON.parse(JSON.stringify(value));
 const tests = [];
 function check(name, fn) { fn(); tests.push({ name, passed: true }); }
-function run(command, input, format = 'json', args = []) {
-  const child = spawnSync(process.execPath, [cli, command, '--format', format, ...args], {
+function run(command, input, format = 'json', args = [], entry = cli) {
+  const child = spawnSync(process.execPath, [entry, command, '--format', format, ...args], {
     cwd, encoding: 'utf8', input: input === undefined ? undefined : JSON.stringify(input),
     timeout: 180_000,
     env: { ...process.env, NODE_OPTIONS: '--import=' + pathToFileURL(guard).href },
@@ -40,12 +40,21 @@ const crossing = {
   kind: 'longitude-crossing', body: 'Sun', longitude: 0,
   from: '2000-03-01T00:00:00Z', to: '2000-04-01T00:00:00Z', maxSamples: 20_000,
 };
+check('symlinked package entry runs on every platform', () => {
+  const alias = resolve(cwd, 'linked cli');
+  symlinkSync(packageRoot, alias, process.platform === 'win32' ? 'junction' : 'dir');
+  const result = run('positions', positionRequests[0], 'json', [], resolve(alias, 'bin/zodiacs.mjs'));
+  assert.equal(result.status, 0); assert.equal(result.stderr, '');
+  assert.deepEqual(JSON.parse(result.stdout).result, [normalized(calc(positionRequests[0]))]);
+});
 for (const [command, request, expected] of [
   ['chart', syntheticChart, normalized(chart(syntheticChart))],
   ['positions', positionRequests, normalized(positionRequests.map(calc))],
   ['events', crossing, normalized(events(crossing))],
 ]) {
   const output = run(command, request);
+  assert.equal(output.status, 0, command + ': ' + output.stderr);
+  assert.notEqual(output.stdout, '', command + ' must emit its result');
   const record = JSON.parse(output.stdout);
   check(command + ' uses installed engine with no network', () => {
     assert.equal(output.status, 0);

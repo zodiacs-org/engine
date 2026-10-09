@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-import { createReadStream } from 'node:fs';
-import { resolve } from 'node:path';
+import { createReadStream, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 import { chart, calc, events } from '@zodiacs/engine/calc';
@@ -180,7 +179,7 @@ export async function main(args = process.argv.slice(2)) {
   }
   return command !== 'verify' && refused(result) ? 1 : 0;
 }
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   try { process.exitCode = await main(); }
   catch (error) {
     const code = error instanceof CliError ? error.code : 'calculation-failed';
