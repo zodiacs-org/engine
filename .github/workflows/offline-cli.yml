@@ -3,12 +3,18 @@ on:
   pull_request:
     paths:
       - 'tools/cli/**'
+      - 'conformance/**'
+      - 'LICENSE'
+      - 'artifacts/zodiacs-engine-1.0.0-rc.2.tgz'
       - '.github/workflows/offline-cli.yml'
       - 'docs/evidence/offline-cli-20261009/**'
   push:
     branches: [main]
     paths:
       - 'tools/cli/**'
+      - 'conformance/**'
+      - 'LICENSE'
+      - 'artifacts/zodiacs-engine-1.0.0-rc.2.tgz'
       - '.github/workflows/offline-cli.yml'
       - 'docs/evidence/offline-cli-20261009/**'
 permissions:
