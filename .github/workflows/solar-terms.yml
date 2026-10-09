@@ -1,0 +1,39 @@
+name: Private solar-term source and arithmetic
+on:
+  pull_request:
+    paths: ['tools/solar-terms/**', 'docs/evidence/solar-terms-20261009/**', '.github/workflows/solar-terms.yml']
+  push:
+    branches: [main, codex/solar-terms-preparation]
+    paths: ['tools/solar-terms/**', 'docs/evidence/solar-terms-20261009/**', '.github/workflows/solar-terms.yml']
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        node: ['22.22.2', '24']
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/solar-terms/
+            /artifacts/zodiacs-engine-1.0.0-rc.2.tgz
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Source protocol and finite-budget controls
+        run: node --test tools/solar-terms/selftest.mjs
+      - name: Offline installed private pack and independent linear crossing arithmetic
+        run: node tools/solar-terms/scripts/prepare-consumer.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: private-solar-node${{ matrix.node }}
+          path: solar-term-consumer-report.json
+          retention-days: 90

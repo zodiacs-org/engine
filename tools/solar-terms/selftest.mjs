@@ -17,7 +17,7 @@ test('calendar-year inventory retains independently defined angles and UTC insta
   const engine=linearEngine(year),result=createSolarTermScanner(engine)(year);
   assert.equal(result.status,'computed');assert.equal(result.terms.length,360/15);
   assert.deepEqual(result.terms.map(t=>t.longitude).sort((a,b)=>a-b),Array.from({length:360/15},(_,i)=>i*15));
-  assert.equal(result.samples,3*(360/15));assert.equal(result.accuracy.status,'unvalidated');assert.equal(result.completeness.status,'unproven');
+  assert.equal(result.samples,3*(360/15));assert.equal(result.maxSamples,12000);assert.equal(result.accuracy.status,'unvalidated');assert.equal(result.completeness.status,'unproven');
   for(const term of result.terms)assert.equal(term.at,engine.searchLongitudeCrossings('Sun',term.longitude,new Date(result.window.from),new Date(result.window.to),{stepDays:2,maxSamples:1000}).crossings[0].at.toISOString());
   assert.ok(result.terms.every((t,i)=>i===0||Date.parse(t.at)>Date.parse(result.terms[i-1].at)));
  }
@@ -52,7 +52,7 @@ test('year and plain option validation happen before any source call',()=>{
  const scan=createSolarTermScanner(engine);
  for(const year of [0,-1,9999,2026.1,NaN,Infinity,'2026'])assert.throws(()=>scan(year),RangeError);
  const accessor=Object.defineProperty({},'maxSamples',{enumerable:true,get(){accessors++;return 10;}});
- for(const options of [null,[],new Date(),{maxSamples:null},{maxSamples:0},{maxSamples:Infinity},{unknown:1},{[Symbol('unsupported')]:1},accessor])assert.throws(()=>scan(2026,options),RangeError);
+ for(const options of [null,[],new Date(),{maxSamples:null},{maxSamples:0},{maxSamples:Infinity},{maxSamples:1000001},{unknown:1},{[Symbol('unsupported')]:1},accessor])assert.throws(()=>scan(2026,options),RangeError);
  assert.equal(calls,0);assert.equal(accessors,0);
 });
 test('malformed provider accounting and coordinates are refused as protocol errors',()=>{
