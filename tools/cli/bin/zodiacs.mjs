@@ -87,8 +87,11 @@ function linesFor(record) {
   }
   const rowLine = (row) => row.status === 'refused'
     ? 'Refused: ' + row.reason
-    : row.body + ': ' + row.lon.toFixed(6) + ' longitude, ' + row.lat.toFixed(6)
-      + ' latitude (' + (row.receipt.request.flags?.units ?? 'degrees') + ')';
+    : row.body + ': ' + row.lon.toFixed(6)
+      + (row.frame.startsWith('equatorial-') ? ' right ascension, ' : ' longitude, ')
+      + row.lat.toFixed(6)
+      + (row.frame.startsWith('equatorial-') ? ' declination (' : ' latitude (')
+      + (row.receipt.request.flags?.units ?? 'degrees') + ') · ' + row.frame;
   if (record.command === 'positions') {
     return [heading, ...result.map(rowLine),
       ...result.filter((r) => r.status === 'ok').map((r) => 'Receipt: ' + JSON.stringify(r.receipt))];
