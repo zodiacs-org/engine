@@ -7,6 +7,9 @@ test('cardinal points use known independent wheel geometry and supplied ascendan
  const svg=renderWheelSvg(sample(),{idPrefix:'geometry'});
  assert.match(svg,/data-body-index="0" cx="110.000000" cy="300.000000"/);
  assert.match(svg,/data-body-index="1" cx="300.000000" cy="497.000000"/);
+ assert.match(svg,/<text x="184.088901" y="331.058285" dominant-baseline="middle">1<\/text>/);
+ const wrapped=sample();wrapped.houses.cusps=[350,10,40,70,100,130,160,190,220,250,280,310];
+ assert.match(renderWheelSvg(wrapped,{idPrefix:'wrapped'}),/<text x="180.000000" y="300.000000" dominant-baseline="middle">1<\/text>/);
  const shifted=sample();shifted.angles.asc=90;
  assert.match(renderWheelSvg(shifted,{idPrefix:'shifted'}),/data-body-index="1" cx="103.000000" cy="300.000000"/);
 });

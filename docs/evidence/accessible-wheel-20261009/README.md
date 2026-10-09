@@ -54,3 +54,13 @@ The DOM figure allows long words to wrap, bounds button width including margins,
 At head `0d8051cb63b84a6ba4bf0ace6ac40d22bf08442f`, [consumer 37942019206](https://github.com/zodiacs-org/engine/actions/runs/37942019206), Node 22.22.2 (113858538229) and Node 24 (113858538029) each passed eight source tests, then failed the installed browser declaration check with TS7016: `dom.d.ts` imported `./index.mjs`, which TypeScript NodeNext could not associate with the differently suffixed `index.d.ts`. Server-only type and browser/runtime checks were not reached. Selected original errors and log digests are retained in `failed-37942019206/`.
 
 The declarations now use matching `index.d.mts`/`dom.d.mts` names, referenced explicitly by the corresponding package exports; the package file-list check changes accordingly. Both strict installed type configurations and all original source, version, browser/width, long-label, keyboard, XML and offline checks remain required. The failed source is not rerun unchanged, and no passing new declaration/browser result is inferred.
+
+## Actual DOM-free types and maximum-label checks
+
+[Consumer 37942608941](https://github.com/zodiacs-org/engine/actions/runs/37942608941) on head `92545036d1cc2cbf5b69b8ac3592fde08cca39a0`, integration `02df16b2bdb8e699635b30fe67f1998e8b1c738a`, passes the corrected declaration resolution. Both Node 22.22.2 and Node 24.21.0 pass strict installed ES2022-only root declarations and ES2022/DOM browser declarations, all eight source tests, and the actual SVG-version controls. Node 22 passes 101 checks, including all six browser/width combinations after mounting maximum permitted labels and escaped caller markup before unique-ID, automated accessibility and overflow assertions. Node 24 passes five installed runtime checks. Selected reports are retained in `producer-37942608941/`.
+
+Both packs are 7846 bytes, SHA-256 90cffc4456965d19700ebe4dff5229bab96e749ffb4610944148a5610fb1f221, with the exact seven-file list retained in those outputs. The root/browser split introduces no runtime dependency or import-time DOM access.
+
+## House-sector review correction
+
+The earlier renderer placed each house number at its cusp longitude, on the boundary line. The changed renderer places the number halfway along the forward angular span to the next cusp, including the 360-degree crossing, while retaining the original cusp positions and structured descriptions. Source geometry checks use independent known coordinates for a 0-to-30-degree sector and a 350-to-10-degree crossing. This changed SVG/package identity still requires fresh source, installed consumers, full original engine gates and review. Earlier package/SVG digests remain historical and are not claimed for the sector-label change.

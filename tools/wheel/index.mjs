@@ -95,7 +95,12 @@ export function renderWheelSvg(data, {idPrefix, title = 'Chart wheel'} = {}) {
   for (const a of d.model.aspects) out.push(line(point(byName.get(a.a),160,origin),point(byName.get(a.b),160,origin),'stroke-opacity=".35"'));
   out.push('</g><g aria-hidden="true" fill="currentColor" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14">');
   for(let i=0;i<12;i++) out.push('<text '+attrs(point(i*30+15,244,origin))+' dominant-baseline="middle">'+SIGNS[i]+'</text>');
-  for (const h of d.houses) out.push('<text '+attrs(point(h.lon,120,origin))+' dominant-baseline="middle">'+h.house+'</text>');
+  for (const [i,h] of d.houses.entries()) {
+    const next=d.model.houses.cusps[(i+1)%d.houses.length];
+    const span=(next-h.lon+360)%360;
+    const middle=(h.lon+span/2)%360;
+    out.push('<text '+attrs(point(middle,120,origin))+' dominant-baseline="middle">'+h.house+'</text>');
+  }
   d.model.bodies.forEach((b,i)=>{
     const p=point(b.lon,190+(i%4)*7,origin);
     out.push('<circle data-body-index="'+i+'" cx="'+p.x.toFixed(6)+'" cy="'+p.y.toFixed(6)+'" r="5" fill="currentColor" stroke="currentColor" stroke-width="1"/>');
