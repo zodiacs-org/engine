@@ -53,14 +53,14 @@ jobs:
       - name: Build private wheel and sdist; install in a fresh outside-checkout consumer
         env:
           PROGRAMME_HEAD: ${{ github.event.pull_request.head.sha }}
-        run: python clients/python/scripts/verify-consumer.py
+        run: SOURCE_DATE_EPOCH=$(git log -1 --format=%ct) python clients/python/scripts/verify-consumer.py
       - name: Export actual runner reports for review
         run: |
           node --input-type=module <<'NODE'
           import { readFileSync, readdirSync } from 'node:fs';
           import { createHash } from 'node:crypto';
           const root = 'clients/python/evidence';
-          for (const file of readdirSync(root).filter(name=>name.endsWith('.json') && name.startsWith('python-')).sort()) {
+          for (const file of readdirSync(root).filter(name=>name.endsWith('.json') && name.startsWith('python-${{ matrix.python }}-')).sort()) {
             const path = root+'/'+file;const bytes=readFileSync(path);
             console.log('PROGRAMME_FILE '+JSON.stringify({path,size:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),base64:bytes.toString('base64')}));
           }

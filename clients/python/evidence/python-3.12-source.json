@@ -1,0 +1,21 @@
+{
+  "schema": "zodiacs.python-compute-client-check.v1",
+  "source": "afc04002191afd97e57ed143c29dd686cdcf8eba",
+  "checkout": "6fe37df31b93424c7c1f01eed184180262978f66",
+  "run": "37906475374",
+  "mode": "source",
+  "python": "3.12.15",
+  "httpx": "0.28.1",
+  "modulePath": "/home/runner/work/engine/engine/clients/python/src/zodiacs_compute/__init__.py",
+  "tests": 17,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0,
+  "endpointFixtures": 7,
+  "httpFailureFixtures": 9,
+  "fixtureSourceSha256": "2e8f3f45c4de8476724e48cafccc7582e9486ad12f2ea90e8b7153e33198dec2",
+  "limitations": [
+    "Contract regression and transport behavior; not independent astronomical accuracy",
+    "Synthetic loopback and mock requests only; no live birth data or retries"
+  ]
+}
