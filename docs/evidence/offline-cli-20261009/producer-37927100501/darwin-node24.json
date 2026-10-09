@@ -1,0 +1,568 @@
+{
+  "schema": "zodiacs.offline-cli-consumer.v1",
+  "producer": {
+    "source": "94b0fc984c00d9a274a9ba24107176f72bd2b718",
+    "run": "37927100501",
+    "node": "v24.20.0",
+    "os": "darwin",
+    "architecture": "arm64"
+  },
+  "privatePackage": true,
+  "publication": "not-performed",
+  "checks": [
+    {
+      "name": "symlinked package entry runs on every platform",
+      "passed": true
+    },
+    {
+      "name": "installed zodiacs command launches through offline npm exec",
+      "passed": true
+    },
+    {
+      "name": "chart uses installed engine with no network",
+      "passed": true
+    },
+    {
+      "name": "chart receipt replays",
+      "passed": true
+    },
+    {
+      "name": "chart changed number refuses verification",
+      "passed": true
+    },
+    {
+      "name": "chart text keeps receipt",
+      "passed": true
+    },
+    {
+      "name": "chart SVG contains full escaped receipt",
+      "passed": true
+    },
+    {
+      "name": "positions uses installed engine with no network",
+      "passed": true
+    },
+    {
+      "name": "positions receipt replays",
+      "passed": true
+    },
+    {
+      "name": "positions changed number refuses verification",
+      "passed": true
+    },
+    {
+      "name": "positions text keeps receipt",
+      "passed": true
+    },
+    {
+      "name": "positions SVG contains full escaped receipt",
+      "passed": true
+    },
+    {
+      "name": "events uses installed engine with no network",
+      "passed": true
+    },
+    {
+      "name": "events receipt replays",
+      "passed": true
+    },
+    {
+      "name": "events changed number refuses verification",
+      "passed": true
+    },
+    {
+      "name": "events text keeps receipt",
+      "passed": true
+    },
+    {
+      "name": "events SVG contains full escaped receipt",
+      "passed": true
+    },
+    {
+      "name": "equatorial text names its coordinates and units",
+      "passed": true
+    },
+    {
+      "name": "required offline guard blocks a deliberate network call",
+      "passed": true
+    },
+    {
+      "name": "file input with spaces works",
+      "passed": true
+    },
+    {
+      "name": "invalid input never leaks input in stderr",
+      "passed": true
+    },
+    {
+      "name": "oversize input is refused",
+      "passed": true
+    },
+    {
+      "name": "unsupported physics is a typed nonzero result",
+      "passed": true
+    },
+    {
+      "name": "unknown option is refused without echo",
+      "passed": true
+    },
+    {
+      "name": "position request count is bounded",
+      "passed": true
+    },
+    {
+      "name": "event budget is bounded",
+      "passed": true
+    },
+    {
+      "name": "unknown record version is refused",
+      "passed": true
+    },
+    {
+      "name": "conformance computes every original vector offline",
+      "passed": true
+    },
+    {
+      "name": "tampered installed suite fails without a value leak",
+      "passed": true
+    }
+  ],
+  "conformance": {
+    "summary": {
+      "total": {
+        "count": 500,
+        "pass": 267,
+        "fail": 192,
+        "unsupported": 41,
+        "error": 0
+      },
+      "byLevel": {
+        "L1": {
+          "count": 240,
+          "pass": 48,
+          "fail": 192,
+          "unsupported": 0,
+          "error": 0
+        },
+        "L2": {
+          "count": 150,
+          "pass": 150,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0
+        },
+        "L3": {
+          "count": 110,
+          "pass": 69,
+          "fail": 0,
+          "unsupported": 41,
+          "error": 0
+        }
+      },
+      "byKind": {
+        "position.apparent.ecliptic-true-of-date": {
+          "count": 240,
+          "pass": 48,
+          "fail": 192,
+          "unsupported": 0,
+          "error": 0,
+          "residuals": {
+            "lon": {
+              "unit": "arcsec",
+              "n": 240,
+              "median": 2.0834337,
+              "p95": 12.0434774,
+              "max": 18.7744819
+            },
+            "lat": {
+              "unit": "arcsec",
+              "n": 240,
+              "median": 1.1869337,
+              "p95": 10.6010939,
+              "max": 19.0281186
+            }
+          }
+        },
+        "angles.asc-mc": {
+          "count": 60,
+          "pass": 60,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0,
+          "residuals": {
+            "asc": {
+              "unit": "arcsec",
+              "n": 60,
+              "median": 0.00339286018,
+              "p95": 0.00579574655,
+              "max": 0.0189601719
+            },
+            "mc": {
+              "unit": "arcsec",
+              "n": 60,
+              "median": 0.00438274993,
+              "p95": 0.00643026337,
+              "max": 0.0081454935
+            }
+          }
+        },
+        "angles.vertex-east-point": {
+          "count": 10,
+          "pass": 10,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0,
+          "residuals": {
+            "vertex": {
+              "unit": "arcsec",
+              "n": 10,
+              "median": 0.00289897902,
+              "p95": 0.013370956,
+              "max": 0.013370956
+            },
+            "east_point": {
+              "unit": "arcsec",
+              "n": 10,
+              "median": 0.00346328309,
+              "p95": 0.00679320316,
+              "max": 0.00679320316
+            }
+          }
+        },
+        "houses.cusps": {
+          "count": 80,
+          "pass": 80,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0,
+          "residuals": {
+            "cusps": {
+              "unit": "arcsec",
+              "n": 70,
+              "median": 0.00389697157,
+              "p95": 0.00933804084,
+              "max": 0.0711573788
+            }
+          }
+        },
+        "time.zone-offset": {
+          "count": 45,
+          "pass": 45,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0
+        },
+        "time.local-mean-time": {
+          "count": 5,
+          "pass": 0,
+          "fail": 0,
+          "unsupported": 5,
+          "error": 0
+        },
+        "time.tt-minus-utc": {
+          "count": 10,
+          "pass": 9,
+          "fail": 0,
+          "unsupported": 1,
+          "error": 0,
+          "residuals": {
+            "tt_minus_utc_s": {
+              "unit": "s",
+              "n": 9,
+              "median": 0,
+              "p95": 2.03450554e-8,
+              "max": 2.03450554e-8
+            }
+          }
+        },
+        "time.delta-t": {
+          "count": 15,
+          "pass": 15,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0,
+          "residuals": {
+            "delta_t_s": {
+              "unit": "s",
+              "n": 15,
+              "median": 0.0001318,
+              "p95": 0.000505451953,
+              "max": 0.000505451953
+            }
+          }
+        },
+        "calendar.to-jdn": {
+          "count": 25,
+          "pass": 0,
+          "fail": 0,
+          "unsupported": 25,
+          "error": 0
+        },
+        "calendar.from-jdn": {
+          "count": 10,
+          "pass": 0,
+          "fail": 0,
+          "unsupported": 10,
+          "error": 0
+        }
+      },
+      "byTag": {
+        "backzone-history": {
+          "count": 20,
+          "pass": 20,
+          "fail": 0,
+          "unsupported": 0,
+          "error": 0
+        }
+      }
+    },
+    "vectors": {
+      "vectors/L1-positions.json": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",
+      "vectors/L2-houses-angles.json": "5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0",
+      "vectors/L3-time-calendars.json": "434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8"
+    },
+    "baselineRuntime": "22.22.2",
+    "differencesFromPinnedBaseline": [],
+    "comparison": "All runtimes match the original adapter on this installed archive; Node 22.22.2 also matches the committed baseline.",
+    "verdictsSha256": "38c7cfa7644072c5aeaef1fe1d5533ca2b4055001b1d982aa63182d39f4add94"
+  },
+  "limitations": [
+    "Source/packed regression and interoperability checks, not a new accuracy claim",
+    "Failed and unsupported independent conformance tolerances remain unchanged",
+    "SVG is a text receipt, not a natal wheel; no registry publication or private clearance"
+  ],
+  "checkoutBytes": {
+    "schema": "zodiacs.cli-checkout-bytes.v1",
+    "checkedFiles": 67,
+    "method": "Only tracked tools/cli/, conformance/ and root LICENSE, restored from HEAD Git blobs without text conversion",
+    "changed": []
+  },
+  "package": {
+    "name": "@zodiacs/cli",
+    "version": "0.0.0",
+    "bytes": 584409,
+    "sha256": "8421fb700bbe632d6f9fe6295c92c44423d662fa874704f627ff5acbb4debb8a",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1068,
+        "mode": 420
+      },
+      {
+        "path": "LICENSING.md",
+        "size": 867,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 4935,
+        "mode": 420
+      },
+      {
+        "path": "bin/conformance.mjs",
+        "size": 4756,
+        "mode": 420
+      },
+      {
+        "path": "bin/zodiacs.mjs",
+        "size": 8880,
+        "mode": 493
+      },
+      {
+        "path": "conformance/adapters/zodiacs-engine.mjs",
+        "size": 7957,
+        "mode": 420
+      },
+      {
+        "path": "conformance/arbiters/l1/build.py",
+        "size": 23010,
+        "mode": 420
+      },
+      {
+        "path": "conformance/arbiters/l2/build.py",
+        "size": 96585,
+        "mode": 420
+      },
+      {
+        "path": "conformance/arbiters/l3/build.py",
+        "size": 79990,
+        "mode": 420
+      },
+      {
+        "path": "conformance/DISCREPANCIES.md",
+        "size": 3821,
+        "mode": 420
+      },
+      {
+        "path": "conformance/harness/lib.mjs",
+        "size": 16326,
+        "mode": 420
+      },
+      {
+        "path": "conformance/LICENSE",
+        "size": 7048,
+        "mode": 420
+      },
+      {
+        "path": "conformance/manifest.json",
+        "size": 3800,
+        "mode": 420
+      },
+      {
+        "path": "conformance/README.md",
+        "size": 4829,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/corpus-tt.json",
+        "size": 3962,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/frame-offsets.json",
+        "size": 7392,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Jupiter.txt",
+        "size": 6716,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/JupiterBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Mars.txt",
+        "size": 6701,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/MarsBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Mercury.txt",
+        "size": 6700,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Moon.txt",
+        "size": 6702,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Neptune.txt",
+        "size": 6724,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/NeptuneBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Pluto.txt",
+        "size": 6716,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/PlutoBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Saturn.txt",
+        "size": 6702,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/SaturnBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Sun.txt",
+        "size": 6700,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Uranus.txt",
+        "size": 6708,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/UranusBary.txt",
+        "size": 6652,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/horizons-24/Venus.txt",
+        "size": 6700,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l2/iers-finals2000A-ut1.csv",
+        "size": 789990,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l2/Leap_Second.dat",
+        "size": 1352,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l3/iers-finals2000A-ut1.csv",
+        "size": 789990,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l3/leap-seconds.list",
+        "size": 5065,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l3/tzdata.json",
+        "size": 16436,
+        "mode": 420
+      },
+      {
+        "path": "conformance/sources/l3/tzdb-divergence-98.json",
+        "size": 40711,
+        "mode": 420
+      },
+      {
+        "path": "conformance/SPEC.md",
+        "size": 7876,
+        "mode": 420
+      },
+      {
+        "path": "conformance/vectors/L1-positions.json",
+        "size": 151378,
+        "mode": 420
+      },
+      {
+        "path": "conformance/vectors/L2-houses-angles.json",
+        "size": 124335,
+        "mode": 420
+      },
+      {
+        "path": "conformance/vectors/L3-time-calendars.json",
+        "size": 65408,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 620,
+        "mode": 420
+      }
+    ]
+  },
+  "engineArchive": {
+    "version": "1.0.0-rc.2",
+    "bytes": 287011,
+    "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002"
+  }
+}
