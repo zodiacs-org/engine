@@ -1,0 +1,160 @@
+{
+  "schema": "zodiacs.python-compute-client-evidence.v1",
+  "producer": {
+    "head": "afc04002191afd97e57ed143c29dd686cdcf8eba",
+    "pythonRun": 37906475374,
+    "typescriptRun": 37906475288,
+    "coreRun": 37906475219
+  },
+  "checks": [
+    {
+      "job": 113741041460,
+      "python": "3.12.15",
+      "source": {
+        "positive": "pass",
+        "negativeControls": 8,
+        "negative": "all refused"
+      },
+      "installed": {
+        "positive": "pass",
+        "negativeControls": 8,
+        "negative": "all refused"
+      }
+    },
+    {
+      "job": 113741041735,
+      "python": "3.14.8",
+      "source": {
+        "positive": "pass",
+        "negativeControls": 8,
+        "negative": "all refused"
+      },
+      "installed": {
+        "positive": "pass",
+        "negativeControls": 8,
+        "negative": "all refused"
+      }
+    },
+    {
+      "job": 113741041887,
+      "python": "3.11.17",
+      "source": {
+        "positive": "pass",
+        "negativeControls": 8,
+        "negative": "all refused"
+      },
+      "installed": {
+        "positive": "pass",
+        "negativeControls": 8,
+        "negative": "all refused"
+      }
+    },
+    {
+      "job": 113741041916,
+      "python": "3.13.16",
+      "source": {
+        "positive": "pass",
+        "negativeControls": 8,
+        "negative": "all refused"
+      },
+      "installed": {
+        "positive": "pass",
+        "negativeControls": 8,
+        "negative": "all refused"
+      }
+    }
+  ],
+  "records": [
+    {
+      "path": "clients/python/evidence/python-3.12-consumer.json",
+      "bytes": 2177,
+      "sha256": "3ee16e37d736edb875a9612048edfe1da2a2e163d84e7888b725287114ac269a",
+      "job": 113741041460
+    },
+    {
+      "path": "clients/python/evidence/python-3.12-source.json",
+      "bytes": 758,
+      "sha256": "3d9cc6b7b411839cff0cd1a960b8cf52b5b1db77fc4df42f2ec632e8ea6fcd28",
+      "job": 113741041460
+    },
+    {
+      "path": "clients/python/evidence/python-3.14-consumer.json",
+      "bytes": 2176,
+      "sha256": "280c143ca50c7514625e469101664b59ec4d621146be722093f462207c2e2ae7",
+      "job": 113741041735
+    },
+    {
+      "path": "clients/python/evidence/python-3.14-source.json",
+      "bytes": 757,
+      "sha256": "67db1d9638043cdd5b6214ffd5d0d0bf96268a8874ba6009af7ac6751c447d19",
+      "job": 113741041735
+    },
+    {
+      "path": "clients/python/evidence/python-3.11-consumer.json",
+      "bytes": 2177,
+      "sha256": "d20e7c98c4363e5bab193a3cce2f3a3ea1d0516664497c5bc8628acf0b5aabfd",
+      "job": 113741041887
+    },
+    {
+      "path": "clients/python/evidence/python-3.11-source.json",
+      "bytes": 758,
+      "sha256": "5987df9ac5908ee4e2b30f96ff446bd05101eab6c678d099e1f9e2f58e5f0a00",
+      "job": 113741041887
+    },
+    {
+      "path": "clients/python/evidence/python-3.13-consumer.json",
+      "bytes": 2177,
+      "sha256": "068cf9c0ac9bb3cd9d1ffd0f414709cb432c73b164b6304579df68dfb1a5bdef",
+      "job": 113741041916
+    },
+    {
+      "path": "clients/python/evidence/python-3.13-source.json",
+      "bytes": 758,
+      "sha256": "72f7594983fc2f5c4837f84c53abcd6fa40572a53276cb5635e71cb48fa8dbb1",
+      "job": 113741041916
+    },
+    {
+      "path": "clients/typescript/evidence/node-24.json",
+      "bytes": 6229,
+      "sha256": "42c632a142b685aa3df2b76c22afbddadb1f36b1a4b173157c845ee1b0abbb11",
+      "job": 113741041096
+    },
+    {
+      "path": "clients/typescript/evidence/consumer-node-24.json",
+      "bytes": 6309,
+      "sha256": "413be1d9b5cba0fc1e1b41e256ae44b48156c81bccdcab678a5b563e036a6f20",
+      "job": 113741041096
+    },
+    {
+      "path": "clients/typescript/evidence/node-20.json",
+      "bytes": 5814,
+      "sha256": "e50b6cb29cab67758cfbfd57eda9292f1bc4db8e197e1c74463cee49fc79464f",
+      "job": 113741041246
+    },
+    {
+      "path": "clients/typescript/evidence/consumer-node-20.json",
+      "bytes": 5893,
+      "sha256": "0f8ff073bc62a44b1a49e9b3af628dc2117f91ce75057a69f24737620ab4e515",
+      "job": 113741041246
+    },
+    {
+      "path": "clients/typescript/evidence/node-22.json",
+      "bytes": 6227,
+      "sha256": "cd60d20f2dfe75df0f7282625450e3cb1b995fa12624ccf4323e158e2838864c",
+      "job": 113741041331
+    },
+    {
+      "path": "clients/typescript/evidence/consumer-node-22.json",
+      "bytes": 6308,
+      "sha256": "dcfb5f562621a60958f52c0a9e45615cb3d390422b4596bca329986a392181b5",
+      "job": 113741041331
+    }
+  ],
+  "limits": [
+    "Actual first producer records; final carrier needs its own complete gates",
+    "Private client packs only; no core archive or registry publication",
+    "The first private wheels retain their differing build timestamps and individual hashes",
+    "Final workflow exports only its own Python matrix's two reports and pins SOURCE_DATE_EPOCH to checkout commit time",
+    "No private scan or accuracy claim"
+  ]
+}

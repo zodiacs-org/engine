@@ -19,3 +19,12 @@ async function responseTypes() {
   return version;
 }
 void responseTypes;
+
+client.skyFact({ kind: "sign", body: "Moon", sign: "aries", instant: "2000-01-01T12:00:00Z" });
+client.skyFact({ kind: "retrograde", body: "Mercury", date: "2000-01-01", zone: "Europe/Paris" });
+// @ts-expect-error An instant cannot also select a local date.
+client.skyFact({ kind: "sign", body: "Moon", sign: "aries", instant: "2000-01-01T12:00:00Z", date: "2000-01-01" });
+// @ts-expect-error An instant cannot select a local zone.
+client.skyFact({ kind: "retrograde", body: "Mercury", instant: "2000-01-01T12:00:00Z", zone: "Europe/Paris" });
+// @ts-expect-error Sign facts require an instant or a date.
+client.skyFact({ kind: "sign", body: "Moon", sign: "aries" });

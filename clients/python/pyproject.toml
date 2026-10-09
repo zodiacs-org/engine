@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools==80.9.0", "wheel==0.45.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zodiacs-compute-client"
+version = "0.0.0"
+description = "Private preparation of typed clients for the hosted Zodiacs Compute API"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT AND CC-BY-4.0"}
+classifiers = ["Private :: Do Not Upload"]
+dependencies = ["httpx==0.28.1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+zodiacs_compute = ["py.typed"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+
+[tool.setuptools]
+license-files = ["LICENSE", "NOTICE.md"]

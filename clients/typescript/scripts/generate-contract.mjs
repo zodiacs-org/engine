@@ -14,6 +14,29 @@ function contractTypes(document) {
     }
     if (Object.hasOwn(s, "const")) return JSON.stringify(s.const);
     if (s.enum) return s.enum.map(value => JSON.stringify(value)).join(" | ");
+    // Object alternatives retain their property types and omit forbidden fields.
+    // JSON Schema's "not required X" is an exclusion, not an untyped branch.
+    if (s.oneOf && s.properties && s.oneOf.every(item => Array.isArray(item.required)
+      && Object.keys(item).every(key => key === "required" || key === "not"))) {
+      const exclusive = s.oneOf.every(item => !item.not)
+        ? new Set(s.oneOf.flatMap(item => item.required)) : new Set();
+      function forbidden(rule) {
+        if (!rule) return [];
+        if (rule.required?.length === 1) return rule.required;
+        if (rule.anyOf?.every(item => item.required?.length === 1 && Object.keys(item).length === 1)) return rule.anyOf.flatMap(item => item.required);
+        throw new Error("Unsupported negative object alternative");
+      }
+      return "(" + s.oneOf.map(item => {
+        const base = { ...s }; delete base.oneOf;
+        const selected = new Set(item.required);
+        const absent = new Set([...exclusive].filter(key => !selected.has(key)).concat(forbidden(item.not)));
+        base.properties = Object.fromEntries(Object.entries(s.properties).filter(([key]) => !absent.has(key)));
+        base.required = [...new Set([...(s.required || []), ...selected])];
+        const omitted = [...absent].map(key => JSON.stringify(key) + "?: never");
+        const object = typeOf(base);
+        return omitted.length ? "(" + object + ") & { " + omitted.join("; ") + " }" : object;
+      }).join(" | ") + ")";
+    }
     const alternatives = s.oneOf || s.anyOf || s.allOf;
     if (alternatives) {
       const base = { ...s };

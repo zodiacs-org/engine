@@ -1,0 +1,57 @@
+{
+  "schema": "zodiacs.python-compute-client-check.v1",
+  "source": "afc04002191afd97e57ed143c29dd686cdcf8eba",
+  "checkout": "6fe37df31b93424c7c1f01eed184180262978f66",
+  "run": "37906475374",
+  "mode": "fresh-wheel",
+  "python": "3.12.15",
+  "httpx": "0.28.1",
+  "modulePath": "/home/runner/work/_temp/zodiacs-python-consumer-06z6868t/venv/lib/python3.12/site-packages/zodiacs_compute/__init__.py",
+  "tests": 17,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0,
+  "endpointFixtures": 7,
+  "httpFailureFixtures": 9,
+  "fixtureSourceSha256": "2e8f3f45c4de8476724e48cafccc7582e9486ad12f2ea90e8b7153e33198dec2",
+  "limitations": [
+    "Contract regression and transport behavior; not independent astronomical accuracy",
+    "Synthetic loopback and mock requests only; no live birth data or retries"
+  ],
+  "wheel": {
+    "file": "zodiacs_compute_client-0.0.0-py3-none-any.whl",
+    "bytes": 11322,
+    "sha256": "3ffa5e969330455ad87ca18c922ece8579d3cf6b657a999a4f6e06284b82d150",
+    "members": [
+      "zodiacs_compute/__init__.py",
+      "zodiacs_compute/client.py",
+      "zodiacs_compute/contract.py",
+      "zodiacs_compute/py.typed",
+      "zodiacs_compute_client-0.0.0.dist-info/licenses/LICENSE",
+      "zodiacs_compute_client-0.0.0.dist-info/licenses/NOTICE.md",
+      "zodiacs_compute_client-0.0.0.dist-info/METADATA",
+      "zodiacs_compute_client-0.0.0.dist-info/WHEEL",
+      "zodiacs_compute_client-0.0.0.dist-info/top_level.txt",
+      "zodiacs_compute_client-0.0.0.dist-info/RECORD"
+    ]
+  },
+  "sdist": {
+    "file": "zodiacs_compute_client-0.0.0.tar.gz",
+    "bytes": 12257,
+    "sha256": "cbcd39fc8a3cc27ecb741ebd1d0d156b480f57738f00adcf7a1cbc85eda56e4c"
+  },
+  "dependencies": [
+    "anyio==4.15.1",
+    "certifi==2026.7.22",
+    "h11==0.16.0",
+    "httpcore==1.0.9",
+    "httpx==0.28.1",
+    "idna==3.20",
+    "librt==0.16.0",
+    "mypy==1.19.1",
+    "mypy_extensions==1.1.0",
+    "pathspec==1.1.1",
+    "typing_extensions==4.16.0",
+    "zodiacs-compute-client @ file:///home/runner/work/_temp/zodiacs-python-consumer-06z6868t/dist/zodiacs_compute_client-0.0.0-py3-none-any.whl#sha256=3ffa5e969330455ad87ca18c922ece8579d3cf6b657a999a4f6e06284b82d150"
+  ]
+}
