@@ -4,11 +4,13 @@ on:
     paths:
       - 'tools/cli/**'
       - '.github/workflows/offline-cli.yml'
+      - 'docs/evidence/offline-cli-20261009/**'
   push:
     branches: [main]
     paths:
       - 'tools/cli/**'
       - '.github/workflows/offline-cli.yml'
+      - 'docs/evidence/offline-cli-20261009/**'
 permissions:
   contents: read
 jobs:

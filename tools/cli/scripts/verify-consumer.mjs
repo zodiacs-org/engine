@@ -11,6 +11,7 @@ const cli = resolve(packageRoot, 'bin/zodiacs.mjs');
 const guard = resolve(process.argv[3]);
 const baseline = JSON.parse(readFileSync(process.argv[4], 'utf8'));
 const sourceAdapter = resolve(process.argv[5]);
+const npmCli = resolve(process.argv[7]);
 const { readSuite, judge } = await import(pathToFileURL(resolve(process.argv[6])));
 const vectors = readSuite().flatMap((level) => level.file.vectors);
 const { calc, chart, events } = await import(pathToFileURL(resolve(cwd, 'node_modules/@zodiacs/engine/dist/calc.js')));
@@ -46,6 +47,16 @@ check('symlinked package entry runs on every platform', () => {
   const result = run('positions', positionRequests[0], 'json', [], resolve(alias, 'bin/zodiacs.mjs'));
   assert.equal(result.status, 0); assert.equal(result.stderr, '');
   assert.deepEqual(JSON.parse(result.stdout).result, [normalized(calc(positionRequests[0]))]);
+});
+check('installed zodiacs command launches through offline npm exec', () => {
+  const result = spawnSync(process.execPath, [npmCli, 'exec', '--offline', '--no', '--', 'zodiacs', '--help'], {
+    cwd, encoding: 'utf8', timeout: 30_000, maxBuffer: 1024 * 1024, windowsHide: true,
+    env: { ...process.env, NODE_OPTIONS: '--import=' + pathToFileURL(guard).href },
+  });
+  assert.ifError(result.error); assert.equal(result.status, 0, 'installed command must launch');
+  assert.match(result.stdout, /^zodiacs <chart\|positions\|events\|verify\|conformance>/);
+  assert.match(result.stdout, /Computations run offline/);
+  assert.equal(result.stderr, '');
 });
 for (const [command, request, expected] of [
   ['chart', syntheticChart, normalized(chart(syntheticChart))],
@@ -199,7 +210,7 @@ const report = {
 writeFileSync(resolve(cwd, 'cli-consumer-report.json'), JSON.stringify(report, null, 2) + '\n');
 console.log('CLI consumer: ' + tests.length + ' checks passed; conformance ' + JSON.stringify(conformance.summary.total));
 console.log('PROGRAMME_FILE ' + JSON.stringify({
-  path: 'docs/evidence/offline-cli-20261009/' + process.platform + '-node' + process.versions.node.split('.')[0] + '.json',
+  path: 'docs/evidence/offline-cli-20261009/producer-' + (process.env.GITHUB_RUN_ID ?? 'local') + '/' + process.platform + '-node' + process.versions.node.split('.')[0] + '.json',
   size: Buffer.byteLength(JSON.stringify(report, null, 2) + '\n'),
   sha256: createHash('sha256').update(JSON.stringify(report, null, 2) + '\n').digest('hex'),
   base64: Buffer.from(JSON.stringify(report, null, 2) + '\n').toString('base64'),

@@ -46,7 +46,7 @@ node([npmCli, 'install', '--ignore-scripts', '--no-audit', '--no-fund', '--save-
   engineArchive, archive], consumer);
 node([resolve(packageRoot, 'scripts/verify-consumer.mjs'), consumer,
   resolve(packageRoot, 'scripts/no-network.mjs'), resolve(repo, 'conformance/results/zodiacs-engine.json'),
-  resolve(repo, 'conformance/adapters/zodiacs-engine.mjs'), resolve(repo, 'conformance/harness/lib.mjs')]);
+  resolve(repo, 'conformance/adapters/zodiacs-engine.mjs'), resolve(repo, 'conformance/harness/lib.mjs'), npmCli]);
 const reportPath = resolve(consumer, 'cli-consumer-report.json');
 const report = JSON.parse(await readFile(reportPath, 'utf8'));
 const bytes = await readFile(archive);
@@ -64,7 +64,7 @@ const content = JSON.stringify(report, null, 2) + '\n';
 const destination = resolve(repo, 'cli-consumer-report.json');
 await writeFile(destination, content);
 console.log('PROGRAMME_FILE_FINAL ' + JSON.stringify({
-  path: 'docs/evidence/offline-cli-20261009/' + process.platform + '-node' + process.versions.node.split('.')[0] + '.json',
+  path: 'docs/evidence/offline-cli-20261009/producer-' + (process.env.GITHUB_RUN_ID ?? 'local') + '/' + process.platform + '-node' + process.versions.node.split('.')[0] + '.json',
   size: Buffer.byteLength(content), sha256: createHash('sha256').update(content).digest('hex'),
   base64: Buffer.from(content).toString('base64'),
 }));

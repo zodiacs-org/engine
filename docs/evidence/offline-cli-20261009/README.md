@@ -19,3 +19,23 @@ Source `30ea757847ebef2230c5e3da60d472a78cb92807`, [37925889438](https://github.
 The preparation workflow's previous `git checkout --force` with an inline autocrlf setting can leave already-checked-out files untouched. Since the original validators require the cited inputs' exact hashes, the corrected preparation explicitly reads only tracked `tools/cli/`, `conformance/` and root `LICENSE` Git blobs at HEAD and writes any differing bytes without text conversion. It records changed path/byte/hash metadata and verifies all selected bytes; it never traverses the engine evidence tree. The bundle build also runs the original suite validation before private packing. The source-checkout receipt in each final consumer report will identify whether line-ending conversion occurred. This targets a byte-preparation hypothesis; the observed receipt is required before attributing the failure to it. No arbiter inputs, expected values, tolerance or original validator is edited.
 
 Windows Node 24 job 113804599220 in the same run also failed with `conformance-suite-invalid`. Both Windows failures are retained. All nine original CI jobs, both original conformance jobs, atlas, Python package and CodeQL jobs passed on that source; this does not override either failed CLI consumer.
+
+## Actual first complete portable producer
+
+Source head `9fe28bfca863bf687e64ac636c17e0382dbca9be`, integration `7ac083684841db3a3fcc825301e4e26e2c1049d4`, tree `4206bc23d40e30c55b3917d477c29025138fe240`, [37926452863](https://github.com/zodiacs-org/engine/actions/runs/37926452863), passed **28 actual consumer checks on all six platform/runtime combinations**. Full CI 37926452862 (nine jobs), Conformance 37926452868 (two jobs), Atlas 37926592186, Python package 37926452859 and CodeQL 37926452860 passed. Integration parents are unchanged main `d8aa5f057b18e7d573e4cf002fd48d7c0ef1cd7b` and the named head.
+
+The Windows before/after receipt shows all 67 selected checkout files changed. All eighteen cited L1 inputs regain their original vector-declared hashes after restoration. Linux/macOS files already match Git. This directly establishes checkout byte conversion in this producer and verifies the exact-byte correction; previous failed runs lack their own before-byte receipts.
+
+All six runs report **500 vectors: 267 pass / 192 fail / 41 unsupported / 0 errors**, matching the separately executed original adapter and committed Node 22.22.2 baseline. Node 24 also has zero differences from that baseline in these runs. These are actual regression/interoperability passes, not full independent accuracy acceptance. The command still exits 1 for the retained failed/unsupported tolerances.
+
+Both POSIX private packs are 584409 bytes, SHA-256 `8421fb700bbe632d6f9fe6295c92c44423d662fa874704f627ff5acbb4debb8a`; Windows packs are 584399 bytes, `467d2f4f06fe3ade6e9fb12f390b3f1ae40fe9eeb97421bbb84a9f79f59e8fa7`. All 43 listed files have the same paths and sizes; the listed executable mode is 0755 on POSIX and 0644 on Windows. Byte-identical cross-platform archives are not claimed. The installed engine remains the unchanged 287011-byte carried rc.2 archive.
+
+These six byte/hash-verified final reports are retained under `producer-37926452863/`; payload bytes are unchanged from the producer exports:
+- `win32-node24.json`: 35148 bytes, SHA-256 `51d5f8ff45ab55d6ab91285866d48b2ac330f11c199a48f4eb3266d91997db28`, job 113806444744
+- `darwin-node24.json`: 13685 bytes, SHA-256 `e25aeb8a0049f4dc73f1d81fe96b873909f45d7f9770d7688e18e08c37ad7a4a`, job 113806445107
+- `win32-node22.json`: 35148 bytes, SHA-256 `6781687a7b98866e40cdb83e410adf370e69820220639ed958271703f615be4f`, job 113806445122
+- `darwin-node22.json`: 13685 bytes, SHA-256 `e0830e31881d20003f8f85a9762241cc3947b899b86fbc171ed9923577add1b0`, job 113806445165
+- `linux-node22.json`: 13682 bytes, SHA-256 `0e006399da8c163dbbf36f6dcf34b0c129eb1b1c6a299eccebf7ca384a2c990d`, job 113806445197
+- `linux-node24.json`: 13682 bytes, SHA-256 `06c2b06c462cef8802f5a3a96867174a35a5d2899f3d4eec316a558939f725ee`, job 113806445198
+
+The next consumer revision additionally invokes the actual installed `zodiacs --help` command through offline npm exec with the network-denial guard. Earlier 28-check reports do not cover that npm launcher. New exports are stored under producer-run directories to preserve each source-bound result. The evidence paths now trigger the complete consumer workflow for final carriers. Fresh producer and final full checks remain required before merge. No publication, P3.7 acceptance, private clearance or engine archive/version change occurs.
