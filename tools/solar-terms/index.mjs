@@ -14,8 +14,12 @@ export const SOLAR_TERMS = Object.freeze([
  [330,'Yushui','Rain water'],[345,'Jingzhe','Awakening of insects'],
 ].map(([longitude,pinyin,name])=>Object.freeze({longitude,pinyin,name,kind:longitude%30===15?'jie':'zhongqi'})));
 const dateOfYear=year=>{const date=new Date(0);date.setUTCFullYear(year,0,1);date.setUTCHours(0,0,0,0);return date;};
+function longitudeSourceIdentity(engine) {
+ if(!engine||typeof engine.searchLongitudeCrossings!=='function'||typeof engine.ENGINE_VERSION!=='string'||engine.ENGINE_VERSION.trim()===''||typeof engine.EPHEMERIS!=='string'||engine.EPHEMERIS.trim()==='')throw new TypeError('Supply an explicitly versioned longitude engine');
+ return {engine:engine.ENGINE_VERSION,ephemeris:engine.EPHEMERIS};
+}
 export function createSolarTermScanner(engine) {
- if(!engine||typeof engine.searchLongitudeCrossings!=='function'||typeof engine.ENGINE_VERSION!=='string'||typeof engine.EPHEMERIS!=='string')throw new TypeError('Supply an explicitly versioned longitude engine');
+ longitudeSourceIdentity(engine);
  return function solarTermsForYear(year,options={}) {
   if(!Number.isInteger(year)||year<1||year>9998)throw new RangeError('Gregorian year must be an integer from 1 to 9998');
   const prototype=options!==null&&typeof options==='object'?Object.getPrototypeOf(options):undefined;
@@ -27,9 +31,10 @@ export function createSolarTermScanner(engine) {
   const value=Object.getOwnPropertyDescriptor(options,'maxSamples')?.value;
   const maxSamples=value===undefined?12000:value;
   if(!Number.isInteger(maxSamples)||maxSamples<1||maxSamples>1000000)throw new RangeError('maxSamples must be an integer from 1 to 1000000');
+  const source=longitudeSourceIdentity(engine);
   const start=dateOfYear(year),end=dateOfYear(year+1),from=start.getTime(),to=end.getTime();
   let samples=0;const terms=[];
-  const base={schema:'zodiacs.solar-terms.alpha.v1',year,window:{from:start.toISOString(),to:end.toISOString(),interval:'(from,to]',clock:'UTC calendar; supplied engine time conversion'},source:{engine:engine.ENGINE_VERSION,ephemeris:engine.EPHEMERIS},accuracy:{status:'unvalidated',independentEventSeconds:null},completeness:{status:'unproven',method:'supplied coarse longitude crossing solver'}};
+  const base={schema:'zodiacs.solar-terms.alpha.v1',year,window:{from:start.toISOString(),to:end.toISOString(),interval:'(from,to]',clock:'UTC calendar; supplied engine time conversion'},source,accuracy:{status:'unvalidated',independentEventSeconds:null},completeness:{status:'unproven',method:'supplied coarse longitude crossing solver'}};
   for(const term of SOLAR_TERMS){
    const remaining=maxSamples-samples;
    if(remaining===0)return {...base,status:'refused',reason:'sample-budget',samples,maxSamples,terms:[]};

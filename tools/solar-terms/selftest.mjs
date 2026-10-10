@@ -76,3 +76,20 @@ test('one source cannot mutate the calendar window used by later searches',()=>{
  }};
  assert.equal(createSolarTermScanner(engine)(2026).status,'computed');
 });
+test('empty source identities fail before invoking a provider and are rechecked for every inventory',()=>{
+ const base=linearEngine(2026);let calls=0;
+ const engine={...base,searchLongitudeCrossings(...args){calls++;return base.searchLongitudeCrossings(...args);}};
+ for(const field of ['ENGINE_VERSION','EPHEMERIS']){
+  for(const value of ['', ' ', '\t\n', '\u00a0', null, undefined, 42]){
+   assert.throws(()=>createSolarTermScanner({...engine,[field]:value}),TypeError);
+  }
+  const scan=createSolarTermScanner(engine),original=engine[field];
+  engine[field]=' ';
+  assert.throws(()=>scan(2026),TypeError);
+  assert.equal(calls,0);
+  engine[field]=original;
+ }
+ const result=createSolarTermScanner(engine)(2026);
+ assert.equal(result.status,'computed');assert.equal(calls,24);
+ assert.deepEqual(result.source,{engine:base.ENGINE_VERSION,ephemeris:base.EPHEMERIS});
+});
