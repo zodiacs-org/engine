@@ -34,12 +34,19 @@ command('npm',['install','--ignore-scripts','--no-audit','--no-fund','--save-exa
 const typed=`import {createSolarTermScanner,SOLAR_TERMS,type LongitudeEngine,type SolarTermResult} from '@zodiacs/solar-terms';
 const provider: LongitudeEngine = {ENGINE_VERSION:'synthetic',EPHEMERIS:'independent linear control',
  searchLongitudeCrossings: (_body,_longitude,_from,_to,_options)=>({status:'complete',samples:1,crossings:[]})};
+const structuredProvider={...provider,EPHEMERIS:Object.freeze({name:'synthetic linear oracle',version:'1'})};
+const structuredScan=createSolarTermScanner(structuredProvider);
+void structuredScan;
 const scan=createSolarTermScanner(provider);
 const result: SolarTermResult=scan(2026,{maxSamples:12000});
 const certainty:'unvalidated'=result.accuracy.status;
 const reference:null=result.accuracy.independentEventSeconds;
 if(result.status==='computed'){const when:string=result.terms[0].at;void when;}
 else {const empty:[]=result.terms;void empty;}
+// @ts-expect-error Structured ephemeris requires a version.
+createSolarTermScanner({...provider,EPHEMERIS:{name:'oracle'}});
+// @ts-expect-error Structured ephemeris version is a string.
+createSolarTermScanner({...provider,EPHEMERIS:{name:'oracle',version:1}});
 // @ts-expect-error The Sun provider body cannot silently change.
 provider.searchLongitudeCrossings('Moon',0,new Date(),new Date(),{stepDays:2,maxSamples:100});
 // @ts-expect-error Explicit provider required.
@@ -59,7 +66,7 @@ void certainty;void reference;void validated;
 writeFileSync(resolve(consumer,'consumer.mts'),typed);
 const tsc=resolve(compiler,'node_modules/typescript/bin/tsc');
 command(process.execPath,[tsc,'--noEmit','--strict','--target','ES2022','--module','NodeNext','--moduleResolution','NodeNext','--lib','ES2022','consumer.mts'],consumer);
-const typeChecks={compiler:'5.8.3',lib:'ES2022 only; no DOM',strict:true,installedExports:true,negativeControls:7};
+const typeChecks={compiler:'5.8.3',lib:'ES2022 only; no DOM',strict:true,installedExports:true,negativeControls:9,structuredIdentityType:true};
 const yearDate=year=>{const d=new Date(0);d.setUTCFullYear(year,0,1);d.setUTCHours(0,0,0,0);return d;};
 const rows=[];
 for(const year of [1,99,1850,2000,2026,2049,9998]){
@@ -67,20 +74,25 @@ for(const year of [1,99,1850,2000,2026,2049,9998]){
  const longitude=(_body,date)=>(280+(date.getTime()-from)*360/span)%360;
  const engine={ENGINE_VERSION:'carried-rc.2 crossing algorithm',EPHEMERIS:'independently exact linear Sun oracle; no ephemeris',
    searchLongitudeCrossings:(body,target,a,b,options)=>original.searchLongitudeCrossingsWith(longitude,body,target,a,b,options)};
- const result=createSolarTermScanner(engine)(year);
+ const structuredEngine={...engine,EPHEMERIS:Object.freeze({name:'independently exact linear Sun oracle; no ephemeris',version:'1'})};
+ const result=createSolarTermScanner(structuredEngine)(year);
+ const legacy=createSolarTermScanner(engine)(year);
+ assert.deepEqual(result.terms,legacy.terms);
+ assert.equal(result.source.ephemeris,'independently exact linear Sun oracle; no ephemeris@1');
+ assert.equal(legacy.source.ephemeris,engine.EPHEMERIS);
  assert.equal(result.status,'computed');assert.equal(result.terms.length,24);
  assert.equal(result.accuracy.status,'unvalidated');assert.equal(result.completeness.status,'unproven');
  assert.ok(result.samples<=result.maxSamples);
  const errors=result.terms.map(term=>Math.abs(Date.parse(term.at)-Math.trunc(from+((term.longitude-280+360)%360)*span/360)));
  const maxErrorMs=Math.max(...errors);assert.ok(maxErrorMs<=12,'Independent linear crossing arithmetic exceeds its quantized bisection bound');
- const refused=createSolarTermScanner(engine)(year,{maxSamples:100});
+ const refused=createSolarTermScanner(structuredEngine)(year,{maxSamples:100});
  assert.equal(refused.status,'refused');assert.equal(refused.reason,'sample-budget');assert.deepEqual(refused.terms,[]);
  rows.push({year,terms:result.terms.length,samples:result.samples,maxErrorMs,budgetRefusesWhole:true});
 }
 const source=command('git',['rev-parse','HEAD'],root).trim();
 const report={schema:'zodiacs.private-solar-term-consumer.v1',producer:{source,run:process.env.GITHUB_RUN_ID,node:process.version},
  pack:{bytes:readFileSync(tar).length,sha256:hash(readFileSync(tar)),files:packed[0].files.map(f=>f.path).sort()},
- carriedArchiveSha256:hash(readFileSync(archive)),linearControls:rows,typeChecks,
+ carriedArchiveSha256:hash(readFileSync(archive)),linearControls:rows,typeChecks,ephemerisIdentityShapes:{string:true,structured:true,normalization:'name@version',pairedInventories:rows.length},
  accuracy:'unvalidated',completeness:'unproven',publication:'private; no registry publication',
  limitations:['Installed private pack and independent linear arithmetic only.','No actual solar ephemeris, independent astronomical comparison or full repository suite was run by this script.']};
 writeFileSync(resolve(root,'solar-term-consumer-report.json'),JSON.stringify(report,null,2)+'\n');

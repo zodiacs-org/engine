@@ -6,7 +6,7 @@ export interface SolarTermDefinition {
 }
 export interface LongitudeEngine {
  readonly ENGINE_VERSION: string;
- readonly EPHEMERIS: string;
+ readonly EPHEMERIS: string | {readonly name: string; readonly version: string};
  searchLongitudeCrossings(body: 'Sun', longitude: number, from: Date, to: Date,
   options: {stepDays: number; maxSamples: number}):
   | {status: 'complete'; samples: number; crossings: {at: Date; retrograde: boolean}[]}

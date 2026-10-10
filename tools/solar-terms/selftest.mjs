@@ -93,3 +93,32 @@ test('empty source identities fail before invoking a provider and are rechecked 
  assert.equal(result.status,'computed');assert.equal(calls,24);
  assert.deepEqual(result.source,{engine:base.ENGINE_VERSION,ephemeris:base.EPHEMERIS});
 });
+
+test('frozen name/version ephemeris records normalize to an immutable receipt string',()=>{
+ const base=linearEngine(2026);
+ const ephemeris=Object.freeze({name:'independent linear Sun oracle',version:'1'});
+ const result=createSolarTermScanner({...base,EPHEMERIS:ephemeris})(2026);
+ assert.equal(result.status,'computed');
+ assert.deepEqual(result.source,{engine:base.ENGINE_VERSION,ephemeris:'independent linear Sun oracle@1'});
+ assert.equal(typeof result.source.ephemeris,'string');
+ assert.ok(Object.isFrozen(ephemeris));
+});
+test('malformed structured identities and later mutations are refused before source calls',()=>{
+ const base=linearEngine(2026);let calls=0,accessors=0;
+ const engine={...base,searchLongitudeCrossings(...args){calls++;return base.searchLongitudeCrossings(...args);}};
+ const accessor=Object.defineProperty({version:'1'},'name',{enumerable:true,get(){accessors++;return 'oracle';}});
+ const malformed=[[],{},new Date(),{name:'oracle'},{version:'1'},{name:'',version:'1'},{name:'oracle',version:' '},{name:42,version:'1'},{name:'oracle',version:42},{name:'oracle',version:'1',extra:true},accessor,Object.create({name:'oracle',version:'1'})];
+ for(const EPHEMERIS of malformed)assert.throws(()=>createSolarTermScanner({...engine,EPHEMERIS}),TypeError);
+ assert.equal(calls,0);assert.equal(accessors,0);
+ const identity={name:'independent linear Sun oracle',version:'1'};
+ engine.EPHEMERIS=identity;
+ const scan=createSolarTermScanner(engine);
+ identity.version=' ';
+ assert.throws(()=>scan(2026),TypeError);
+ assert.equal(calls,0);
+ identity.version='2';
+ const result=scan(2026);
+ assert.equal(result.source.ephemeris,'independent linear Sun oracle@2');
+ identity.version='3';
+ assert.equal(result.source.ephemeris,'independent linear Sun oracle@2');
+});

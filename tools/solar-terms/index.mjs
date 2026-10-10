@@ -14,9 +14,23 @@ export const SOLAR_TERMS = Object.freeze([
  [330,'Yushui','Rain water'],[345,'Jingzhe','Awakening of insects'],
 ].map(([longitude,pinyin,name])=>Object.freeze({longitude,pinyin,name,kind:longitude%30===15?'jie':'zhongqi'})));
 const dateOfYear=year=>{const date=new Date(0);date.setUTCFullYear(year,0,1);date.setUTCHours(0,0,0,0);return date;};
+function nonemptyIdentity(value) {
+ return typeof value==='string'&&value.trim()!=='';
+}
+function ephemerisIdentity(value) {
+ if(nonemptyIdentity(value))return value;
+ if(value===null||typeof value!=='object')throw new TypeError('Supply an explicitly versioned ephemeris');
+ const prototype=Object.getPrototypeOf(value);
+ if(prototype!==Object.prototype&&prototype!==null)throw new TypeError('Ephemeris identity must be a plain name/version record');
+ const keys=Reflect.ownKeys(value);
+ if(keys.length!==2||!keys.includes('name')||!keys.includes('version'))throw new TypeError('Ephemeris identity needs name and version');
+ const name=Object.getOwnPropertyDescriptor(value,'name'),version=Object.getOwnPropertyDescriptor(value,'version');
+ if(!name||!version||!('value' in name)||!('value' in version)||!name.enumerable||!version.enumerable||!nonemptyIdentity(name.value)||!nonemptyIdentity(version.value))throw new TypeError('Ephemeris identity needs nonempty data strings');
+ return name.value+'@'+version.value;
+}
 function longitudeSourceIdentity(engine) {
- if(!engine||typeof engine.searchLongitudeCrossings!=='function'||typeof engine.ENGINE_VERSION!=='string'||engine.ENGINE_VERSION.trim()===''||typeof engine.EPHEMERIS!=='string'||engine.EPHEMERIS.trim()==='')throw new TypeError('Supply an explicitly versioned longitude engine');
- return {engine:engine.ENGINE_VERSION,ephemeris:engine.EPHEMERIS};
+ if(!engine||typeof engine.searchLongitudeCrossings!=='function'||!nonemptyIdentity(engine.ENGINE_VERSION))throw new TypeError('Supply an explicitly versioned longitude engine');
+ return {engine:engine.ENGINE_VERSION,ephemeris:ephemerisIdentity(engine.EPHEMERIS)};
 }
 export function createSolarTermScanner(engine) {
  longitudeSourceIdentity(engine);

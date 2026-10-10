@@ -1,0 +1,18 @@
+{
+  "schema": "zodiacs.private-solar-review-correction.v1",
+  "pr": 38,
+  "reviewedHead": "1fe17e588a3f92754d1f921cb0630dfedadb3280",
+  "finding": {
+    "id": 4237522805,
+    "priority": "P2",
+    "path": "tools/solar-terms/index.d.mts",
+    "problem": "String-only EPHEMERIS contract does not accept the carried engine's frozen name/version identity."
+  },
+  "correction": "Accept and normalize a plain own name/version data record, preserve string compatibility, reject malformed/accessor identities and recheck before each inventory.",
+  "validation": "Pending fresh source, installed consumer, full required suites and review on the corrected source.",
+  "scope": "Only private tools/solar-terms and evidence; core packed files/archive/version/scientific tolerances are unchanged.",
+  "limits": [
+    "Synthetic provider identity-shape compatibility is not actual ephemeris execution or independent solar-term accuracy.",
+    "The consumer still extracts/evaluates only the two previously declared packed crossing modules."
+  ]
+}
