@@ -41,6 +41,8 @@ const scan=createSolarTermScanner(provider);
 const result: SolarTermResult=scan(2026,{maxSamples:12000});
 const certainty:'unvalidated'=result.accuracy.status;
 const reference:null=result.accuracy.independentEventSeconds;
+if(result.source.ephemerisIdentity.kind==='string'){const value:string=result.source.ephemerisIdentity.value;void value;}
+else{const name:string=result.source.ephemerisIdentity.name;const version:string=result.source.ephemerisIdentity.version;void name;void version;}
 if(result.status==='computed'){const when:string=result.terms[0].at;void when;}
 else {const empty:[]=result.terms;void empty;}
 // @ts-expect-error Structured ephemeris requires a version.
@@ -108,7 +110,16 @@ for(const after of [{name:'a@b',version:'c'},'a@b%40c']){
  assert.throws(()=>createSolarTermScanner(provider)(identityYear),{name:'TypeError',message:'Longitude-source identity changed during the inventory'});
  assert.equal(calls,1);
 }
-const identityCollisionControls={distinctEncodedReceipts:encodedReceipts.length,delimiterMutationRefused:true,shapeMutationRefused:true};
+const structuredReceipt=createSolarTermScanner(identityProvider)(identityYear);
+const stringReceipt=createSolarTermScanner({...identityProvider,EPHEMERIS:'a@b%40c'})(identityYear);
+assert.equal(structuredReceipt.source.ephemeris,stringReceipt.source.ephemeris);
+assert.notDeepEqual(JSON.parse(JSON.stringify(structuredReceipt.source)),JSON.parse(JSON.stringify(stringReceipt.source)));
+assert.deepEqual(structuredReceipt.source.ephemerisIdentity,{kind:'record',name:'a',version:'b@c'});
+assert.deepEqual(stringReceipt.source.ephemerisIdentity,{kind:'string',value:'a@b%40c'});
+const refusedReceipt=createSolarTermScanner(identityProvider)(identityYear,{maxSamples:100});
+assert.equal(refusedReceipt.status,'refused');
+assert.deepEqual(refusedReceipt.source.ephemerisIdentity,structuredReceipt.source.ephemerisIdentity);
+const identityCollisionControls={distinctEncodedReceipts:encodedReceipts.length,delimiterMutationRefused:true,shapeMutationRefused:true,storedReceiptShapesDistinct:true,refusalRetainsIdentityShape:true};
 const source=command('git',['rev-parse','HEAD'],root).trim();
 const report={schema:'zodiacs.private-solar-term-consumer.v1',producer:{source,run:process.env.GITHUB_RUN_ID,node:process.version},
  pack:{bytes:readFileSync(tar).length,sha256:hash(readFileSync(tar)),files:packed[0].files.map(f=>f.path).sort()},

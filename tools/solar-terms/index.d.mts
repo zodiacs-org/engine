@@ -12,11 +12,14 @@ export interface LongitudeEngine {
   | {status: 'complete'; samples: number; crossings: {at: Date; retrograde: boolean}[]}
   | {status: 'refused'; reason: 'sample-budget'; samples: number; crossings: []};
 }
+export type EphemerisSourceIdentity =
+ | {readonly kind: 'string'; readonly value: string}
+ | {readonly kind: 'record'; readonly name: string; readonly version: string};
 interface SolarTermResultBase {
  schema: 'zodiacs.solar-terms.alpha.v1';
  year: number;
  window: {from: string; to: string; interval: '(from,to]'; clock: string};
- source: {engine: string; ephemeris: string};
+ source: {engine: string; ephemeris: string; ephemerisIdentity: EphemerisSourceIdentity};
  accuracy: {status: 'unvalidated'; independentEventSeconds: null};
  completeness: {status: 'unproven'; method: string};
  samples: number;

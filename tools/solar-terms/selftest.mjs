@@ -91,7 +91,7 @@ test('empty source identities fail before invoking a provider and are rechecked 
  }
  const result=createSolarTermScanner(engine)(2026);
  assert.equal(result.status,'computed');assert.equal(calls,24);
- assert.deepEqual(result.source,{engine:base.ENGINE_VERSION,ephemeris:base.EPHEMERIS});
+ assert.deepEqual(result.source,{engine:base.ENGINE_VERSION,ephemeris:base.EPHEMERIS,ephemerisIdentity:{kind:'string',value:base.EPHEMERIS}});
 });
 
 test('frozen name/version ephemeris records normalize to an immutable receipt string',()=>{
@@ -99,7 +99,7 @@ test('frozen name/version ephemeris records normalize to an immutable receipt st
  const ephemeris=Object.freeze({name:'independent linear Sun oracle',version:'1'});
  const result=createSolarTermScanner({...base,EPHEMERIS:ephemeris})(2026);
  assert.equal(result.status,'computed');
- assert.deepEqual(result.source,{engine:base.ENGINE_VERSION,ephemeris:'independent linear Sun oracle@1'});
+ assert.deepEqual(result.source,{engine:base.ENGINE_VERSION,ephemeris:'independent linear Sun oracle@1',ephemerisIdentity:{kind:'record',name:'independent linear Sun oracle',version:'1'}});
  assert.equal(typeof result.source.ephemeris,'string');
  assert.ok(Object.isFrozen(ephemeris));
 });
@@ -178,4 +178,20 @@ test('structured identity receipts escape delimiters and in-scan comparisons ret
   assert.throws(()=>createSolarTermScanner(engine)(2026),{name:'TypeError',message:'Longitude-source identity changed during the inventory'});
   assert.equal(calls,1);
  }
+});
+
+test('stored source receipts distinguish identity shapes and snapshot every original field',()=>{
+ const base=linearEngine(2026),record={name:'a',version:'b@c'};
+ const structured=createSolarTermScanner({...base,EPHEMERIS:record})(2026);
+ const legacy=createSolarTermScanner({...base,EPHEMERIS:'a@b%40c'})(2026);
+ assert.equal(structured.source.ephemeris,legacy.source.ephemeris);
+ assert.notDeepEqual(JSON.parse(JSON.stringify(structured.source)),JSON.parse(JSON.stringify(legacy.source)));
+ assert.deepEqual(structured.source.ephemerisIdentity,{kind:'record',name:'a',version:'b@c'});
+ assert.deepEqual(legacy.source.ephemerisIdentity,{kind:'string',value:'a@b%40c'});
+ record.name='changed';record.version='changed';
+ assert.deepEqual(structured.source.ephemerisIdentity,{kind:'record',name:'a',version:'b@c'});
+ assert.notEqual(structured.source.ephemerisIdentity,record);
+ const refused=createSolarTermScanner({...base,EPHEMERIS:{name:'a',version:'b@c'}})(2026,{maxSamples:6});
+ assert.equal(refused.status,'refused');
+ assert.deepEqual(refused.source.ephemerisIdentity,structured.source.ephemerisIdentity);
 });

@@ -18,7 +18,7 @@ function nonemptyIdentity(value) {
  return typeof value==='string'&&value.trim()!=='';
 }
 function ephemerisIdentity(value) {
- if(nonemptyIdentity(value))return {receipt:value,fingerprint:JSON.stringify(['string',value])};
+ if(nonemptyIdentity(value))return {receipt:value,identity:{kind:'string',value},fingerprint:JSON.stringify(['string',value])};
  if(value===null||typeof value!=='object')throw new TypeError('Supply an explicitly versioned ephemeris');
  const prototype=Object.getPrototypeOf(value);
  if(prototype!==Object.prototype&&prototype!==null)throw new TypeError('Ephemeris identity must be a plain name/version record');
@@ -27,14 +27,14 @@ function ephemerisIdentity(value) {
  const name=Object.getOwnPropertyDescriptor(value,'name'),version=Object.getOwnPropertyDescriptor(value,'version');
  if(!name||!version||!('value' in name)||!('value' in version)||!name.enumerable||!version.enumerable||!nonemptyIdentity(name.value)||!nonemptyIdentity(version.value))throw new TypeError('Ephemeris identity needs nonempty data strings');
  const escape=field=>field.replaceAll('%','%25').replaceAll('@','%40');
- return {receipt:escape(name.value)+'@'+escape(version.value),fingerprint:JSON.stringify(['record',name.value,version.value])};
+ return {receipt:escape(name.value)+'@'+escape(version.value),identity:{kind:'record',name:name.value,version:version.value},fingerprint:JSON.stringify(['record',name.value,version.value])};
 }
 function longitudeSourceIdentity(engine) {
  if(!engine||typeof engine.searchLongitudeCrossings!=='function')throw new TypeError('Supply an explicitly versioned longitude engine');
  const version=engine.ENGINE_VERSION;
  if(!nonemptyIdentity(version))throw new TypeError('Supply an explicitly versioned longitude engine');
  const ephemeris=ephemerisIdentity(engine.EPHEMERIS);
- return {engine:version,ephemeris:ephemeris.receipt,fingerprint:ephemeris.fingerprint};
+ return {engine:version,ephemeris:ephemeris.receipt,ephemerisIdentity:ephemeris.identity,fingerprint:ephemeris.fingerprint};
 }
 export function createSolarTermScanner(engine) {
  longitudeSourceIdentity(engine);
@@ -50,7 +50,7 @@ export function createSolarTermScanner(engine) {
   const maxSamples=value===undefined?12000:value;
   if(!Number.isInteger(maxSamples)||maxSamples<1||maxSamples>1000000)throw new RangeError('maxSamples must be an integer from 1 to 1000000');
   const identity=longitudeSourceIdentity(engine);
-  const source={engine:identity.engine,ephemeris:identity.ephemeris};
+  const source={engine:identity.engine,ephemeris:identity.ephemeris,ephemerisIdentity:identity.ephemerisIdentity};
   const ensureSourceUnchanged=()=>{
    const current=longitudeSourceIdentity(engine);
    if(current.engine!==identity.engine||current.fingerprint!==identity.fingerprint)throw new TypeError('Longitude-source identity changed during the inventory');
