@@ -1,0 +1,213 @@
+{
+  "schema": "zodiacs.private-solar-source-identities-validation.v1",
+  "source": "80be3f97a69414db52b58007ad04891869b5eb2f",
+  "run": 38043491707,
+  "observedFrom": "Decoded original workflow job logs; artifact digests below are GitHub metadata, not an independent ZIP re-extraction.",
+  "jobs": [
+    {
+      "id": 114188252793,
+      "node": "v22.22.2",
+      "conclusion": "success",
+      "sourceTests": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "consumer": {
+        "schema": "zodiacs.private-solar-term-consumer.v1",
+        "producer": {
+          "source": "80be3f97a69414db52b58007ad04891869b5eb2f",
+          "run": "38043491707",
+          "node": "v22.22.2"
+        },
+        "pack": {
+          "bytes": 4645,
+          "sha256": "9c8678d7c5b14b6cc73573667a675bd740f618982a1782f26e8bf4377ad15f8f",
+          "files": [
+            "LICENSE",
+            "README.md",
+            "index.d.mts",
+            "index.mjs",
+            "package.json"
+          ]
+        },
+        "carriedArchiveSha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002",
+        "linearControls": [
+          {
+            "year": 1,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 9,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 99,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 9,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 1850,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 9,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 2000,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 3,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 2026,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 8,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 2049,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 8,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 9998,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 8,
+            "budgetRefusesWhole": true
+          }
+        ],
+        "typeChecks": {
+          "compiler": "5.8.3",
+          "lib": "ES2022 only; no DOM",
+          "strict": true,
+          "installedExports": true,
+          "negativeControls": 7
+        },
+        "accuracy": "unvalidated",
+        "completeness": "unproven",
+        "publication": "private; no registry publication",
+        "limitations": [
+          "Installed private pack and independent linear arithmetic only.",
+          "No actual solar ephemeris, independent astronomical comparison or full repository suite was run by this script."
+        ]
+      },
+      "artifact": {
+        "id": 11666820444,
+        "bytes": 874,
+        "sha256": "d3219cf80c9bfb47982b571ec6f0667086b3a8a231aa42c6cc6f4c4a3162429d"
+      }
+    },
+    {
+      "id": 114188252878,
+      "node": "v24.21.0",
+      "conclusion": "success",
+      "sourceTests": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "consumer": {
+        "schema": "zodiacs.private-solar-term-consumer.v1",
+        "producer": {
+          "source": "80be3f97a69414db52b58007ad04891869b5eb2f",
+          "run": "38043491707",
+          "node": "v24.21.0"
+        },
+        "pack": {
+          "bytes": 4645,
+          "sha256": "9c8678d7c5b14b6cc73573667a675bd740f618982a1782f26e8bf4377ad15f8f",
+          "files": [
+            "LICENSE",
+            "README.md",
+            "index.d.mts",
+            "index.mjs",
+            "package.json"
+          ]
+        },
+        "carriedArchiveSha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002",
+        "linearControls": [
+          {
+            "year": 1,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 9,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 99,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 9,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 1850,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 9,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 2000,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 3,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 2026,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 8,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 2049,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 8,
+            "budgetRefusesWhole": true
+          },
+          {
+            "year": 9998,
+            "terms": 24,
+            "samples": 4992,
+            "maxErrorMs": 8,
+            "budgetRefusesWhole": true
+          }
+        ],
+        "typeChecks": {
+          "compiler": "5.8.3",
+          "lib": "ES2022 only; no DOM",
+          "strict": true,
+          "installedExports": true,
+          "negativeControls": 7
+        },
+        "accuracy": "unvalidated",
+        "completeness": "unproven",
+        "publication": "private; no registry publication",
+        "limitations": [
+          "Installed private pack and independent linear arithmetic only.",
+          "No actual solar ephemeris, independent astronomical comparison or full repository suite was run by this script."
+        ]
+      },
+      "artifact": {
+        "id": 11666129916,
+        "bytes": 874,
+        "sha256": "6db22bb814dca5685d2f2598264ba43f7df0bc478f4e59a90b2d17f87bd38d18"
+      }
+    }
+  ],
+  "correction": "Reject empty/whitespace version or ephemeris identities at construction and before each inventory; refusal occurs before any provider call.",
+  "limitations": [
+    "Private consumer source/protocol, installed pack/types and independent linear arithmetic only.",
+    "No actual ephemeris, normative calendar-frame validation, scientific accuracy/completeness, full repository suite, merge, acceptance or publication."
+  ]
+}
