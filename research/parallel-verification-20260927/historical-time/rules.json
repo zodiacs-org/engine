@@ -1,0 +1,469 @@
+{
+  "schema_version": 1,
+  "dataset_version": "2026-09-27.1",
+  "description": "Five bounded legal time-rule records, with source-checked conditional civil-clock models. Research seed, not a geographical time atlas.",
+  "generated_on": "2026-09-27",
+  "source_review": "Official text and critical PDF pages read; interpretations and fixtures still require independent historical review before production.",
+  "encoding": {
+    "calendar": "proleptic Gregorian for these covered dates",
+    "reference_timestamp": "YYYY-MM-DDTHH:MM:SS, timezone deliberately absent; governed by each rule's GMT_civil_arithmetic scale",
+    "offset_sign": "local civil label minus reference label, in seconds",
+    "interval_convention": "offset_after is in force at the exact transition; before side is strictly less",
+    "unsupported": "No leap seconds, fractional seconds, geographic lookup, record-calendar conversion, birth-time probabilities, UT1/TT conversion or current-law completeness."
+  },
+  "sources": [
+    {
+      "id": "us-1918",
+      "title": "Act of March 19, 1918, chapter 24",
+      "publisher": "U.S. Government Publishing Office, GovInfo",
+      "url": "https://www.govinfo.gov/link/statute/40/450",
+      "locator": "40 Stat. 450–451; sections 1–4, especially section 3 on printed page 451 (PDF page 2)",
+      "retrieval": {
+        "started_at": "2026-09-27T15:10:15.772Z",
+        "completed_at": "2026-09-27T15:10:23.714Z",
+        "method": "official PDF text plus visual inspection of statute page"
+      },
+      "excerpt": "at two o’clock antemeridian of the last Sunday in March",
+      "excerpt_locator": "Section 3, page 451",
+      "source_kind": "official_primary_statute_scan"
+    },
+    {
+      "id": "us-1942",
+      "title": "Act of January 20, 1942, chapter 7 (Public Law 403)",
+      "publisher": "U.S. Government Publishing Office, GovInfo",
+      "url": "https://www.govinfo.gov/content/pkg/STATUTE-56/pdf/STATUTE-56-Pg9.pdf",
+      "locator": "56 Stat. 9; first paragraph, section 2, approval line (PDF page 1)",
+      "retrieval": {
+        "started_at": "2026-09-27T15:10:15.772Z",
+        "completed_at": "2026-09-27T15:10:23.714Z",
+        "method": "official PDF text plus visual inspection of statute page"
+      },
+      "excerpt": "the twentieth day after the date of enactment",
+      "excerpt_locator": "First paragraph, page 9",
+      "source_kind": "official_primary_statute_scan"
+    },
+    {
+      "id": "us-1945",
+      "title": "Act of September 25, 1945, chapter 388 (Public Law 187)",
+      "publisher": "U.S. Government Publishing Office, GovInfo",
+      "url": "https://www.govinfo.gov/content/pkg/STATUTE-59/pdf/STATUTE-59-Pg537.pdf",
+      "locator": "59 Stat. 537; chapter 388, operative paragraph and approval line (PDF page 1)",
+      "retrieval": {
+        "started_at": "2026-09-27T15:10:15.772Z",
+        "completed_at": "2026-09-27T15:10:23.714Z",
+        "method": "official PDF text plus visual inspection of statute page"
+      },
+      "excerpt": "at 2 o’clock antemeridian on Sunday, September 30, 1945",
+      "excerpt_locator": "Chapter 388, page 537",
+      "source_kind": "official_primary_statute_scan"
+    },
+    {
+      "id": "us-1966",
+      "title": "Uniform Time Act of 1966 (Public Law 89-387)",
+      "publisher": "U.S. Government Publishing Office, GovInfo",
+      "url": "https://www.govinfo.gov/content/pkg/STATUTE-80/pdf/STATUTE-80-Pg107.pdf",
+      "locator": "80 Stat. 107–109; sections 3(a), 4(a), 6 and approval line (PDF pages 1–3)",
+      "retrieval": {
+        "started_at": "2026-09-27T15:10:45.261Z",
+        "completed_at": "2026-09-27T15:10:47.854Z",
+        "method": "official PDF text plus visual inspection of statute page"
+      },
+      "excerpt": "This Act shall take effect on April 1, 1967",
+      "excerpt_locator": "Section 6, page 108",
+      "source_kind": "official_primary_statute_scan"
+    },
+    {
+      "id": "uk-2002",
+      "title": "The Summer Time Order 2002, SI 2002/262, as made",
+      "publisher": "The National Archives, legislation.gov.uk",
+      "url": "https://www.legislation.gov.uk/uksi/2002/262/pdfs/uksi_20020262_en.pdf",
+      "locator": "Article 1(1)–(2), article 2(2)(b), printed page 1 (PDF page 1)",
+      "retrieval": {
+        "started_at": "2026-09-27T15:10:15.772Z",
+        "completed_at": "2026-09-27T15:10:23.714Z",
+        "method": "official PDF text plus visual inspection of statute page"
+      },
+      "excerpt": "at one o’clock, Greenwich mean time",
+      "excerpt_locator": "Article 2(2)(b), page 1",
+      "source_kind": "official_primary_statutory_instrument"
+    },
+    {
+      "id": "uk-1972",
+      "title": "Summer Time Act 1972, chapter 6, as enacted",
+      "publisher": "The National Archives, legislation.gov.uk",
+      "url": "https://www.legislation.gov.uk/ukpga/1972/6/pdfs/ukpga_19720006_en.pdf",
+      "locator": "Section 1(1), printed page 1; section 4(1), printed page 2",
+      "retrieval": {
+        "started_at": "2026-09-27T15:10:45.261Z",
+        "completed_at": "2026-09-27T15:10:47.854Z",
+        "method": "official PDF text plus visual inspection of statute page"
+      },
+      "excerpt": "one hour in advance of Greenwich mean time",
+      "excerpt_locator": "Section 1(1), page 1",
+      "source_kind": "official_primary_statute_scan"
+    }
+  ],
+  "rules": [
+    {
+      "id": "us-1918-season",
+      "title": "1918 federal seasonal rule, conditional 75°W example",
+      "status": "source_checked_conditional_model",
+      "production_eligible": false,
+      "instrument_date": "1918-03-19",
+      "instrument_date_kind": "approved",
+      "law_commencement_date": null,
+      "first_modelled_clock_change_date": "1918-03-31",
+      "reviewed_years": [
+        1918
+      ],
+      "source_ids": [
+        "us-1918"
+      ],
+      "applicability": "Named legal regime only. No city, geographical boundary, birth-record or actual clock-observance inference is permitted.",
+      "reference_time_scale": "GMT_civil_arithmetic",
+      "reference_time_note": "Offset arithmetic only. Historical outputs are not physical UTC timestamps or UT1/TT conversions; no leap-second or subsecond claim.",
+      "configured_standard_offset_seconds": -18000,
+      "configured_standard_offset_basis": "Conditional 75 degrees west meridian example; not a location assignment.",
+      "interpretation": "Section 3 advances legal standard time by one hour on March's last Sunday and retards it on October's last Sunday. Each 02:00 boundary is interpreted on the then-prevailing zone clock. Section 1 supplies the meridian; section 4 names the zone. Calendar dates are computed, not printed in the statute.",
+      "uncertainties": [
+        "Zone boundaries require the relevant Interstate Commerce Commission orders.",
+        "The statute alone does not prove how an individual institution recorded a birth.",
+        "Only 1918 is covered here; repeal, local continuation and later years are outside this record."
+      ],
+      "transitions": [
+        {
+          "name": "start",
+          "date_rule": {
+            "kind": "last_weekday_of_month",
+            "month": 3,
+            "weekday_iso": 7
+          },
+          "clock_basis": "wall_before",
+          "clock_label": "02:00:00",
+          "offset_before_seconds": -18000,
+          "offset_after_seconds": -14400
+        },
+        {
+          "name": "end",
+          "date_rule": {
+            "kind": "last_weekday_of_month",
+            "month": 10,
+            "weekday_iso": 7
+          },
+          "clock_basis": "wall_before",
+          "clock_label": "02:00:00",
+          "offset_before_seconds": -14400,
+          "offset_after_seconds": -18000
+        }
+      ]
+    },
+    {
+      "id": "us-1942-war-start",
+      "title": "1942 wartime advance, conditional 75°W example",
+      "status": "source_checked_conditional_model",
+      "production_eligible": false,
+      "instrument_date": "1942-01-20",
+      "instrument_date_kind": "approved",
+      "law_commencement_date": null,
+      "first_modelled_clock_change_date": "1942-02-09",
+      "reviewed_years": [
+        1942
+      ],
+      "source_ids": [
+        "us-1942",
+        "us-1918"
+      ],
+      "applicability": "Named legal regime only. No city, geographical boundary, birth-record or actual clock-observance inference is permitted.",
+      "reference_time_scale": "GMT_civil_arithmetic",
+      "reference_time_note": "Offset arithmetic only. Historical outputs are not physical UTC timestamps or UT1/TT conversions; no leap-second or subsecond claim.",
+      "configured_standard_offset_seconds": -18000,
+      "configured_standard_offset_basis": "Conditional 75 degrees west meridian example; not a location assignment.",
+      "interpretation": "The first paragraph advances legal standard time by one hour at 02:00 on the twentieth day after approval. Excluding the enactment day gives February 9. The before-clock is modelled as unadvanced standard time.",
+      "uncertainties": [
+        "A locality already using an advanced clock may not undergo this assumed before-to-after transition.",
+        "No city observance evidence is supplied.",
+        "The original section 2 sunset is superseded for the 1945 end by the separately sourced 1945 record."
+      ],
+      "transitions": [
+        {
+          "name": "start",
+          "date_rule": {
+            "kind": "days_after_instrument",
+            "days": 20
+          },
+          "clock_basis": "wall_before",
+          "clock_label": "02:00:00",
+          "offset_before_seconds": -18000,
+          "offset_after_seconds": -14400
+        }
+      ]
+    },
+    {
+      "id": "us-1945-war-end",
+      "title": "1945 wartime termination, conditional 75°W example",
+      "status": "source_checked_conditional_model",
+      "production_eligible": false,
+      "instrument_date": "1945-09-25",
+      "instrument_date_kind": "approved",
+      "law_commencement_date": null,
+      "first_modelled_clock_change_date": "1945-09-30",
+      "reviewed_years": [
+        1945
+      ],
+      "source_ids": [
+        "us-1945",
+        "us-1942",
+        "us-1918"
+      ],
+      "applicability": "Named legal regime only. No city, geographical boundary, birth-record or actual clock-observance inference is permitted.",
+      "reference_time_scale": "GMT_civil_arithmetic",
+      "reference_time_note": "Offset arithmetic only. Historical outputs are not physical UTC timestamps or UT1/TT conversions; no leap-second or subsecond claim.",
+      "configured_standard_offset_seconds": -18000,
+      "configured_standard_offset_basis": "Conditional 75 degrees west meridian example; not a location assignment.",
+      "interpretation": "The 1945 Act explicitly overrides the 1942 termination provision and returns legal zone time to its meridian basis. The 02:00 label is interpreted on the then-prevailing advanced legal standard clock, producing a repeated hour.",
+      "uncertainties": [
+        "This records the federal transition; subsequent local continuation or re-adoption of daylight time is not resolved.",
+        "A particular birth register may use a different stated convention."
+      ],
+      "transitions": [
+        {
+          "name": "end",
+          "date_rule": {
+            "kind": "fixed_date",
+            "month": 9,
+            "day": 30
+          },
+          "clock_basis": "wall_before",
+          "clock_label": "02:00:00",
+          "offset_before_seconds": -14400,
+          "offset_after_seconds": -18000
+        }
+      ]
+    },
+    {
+      "id": "us-1967-season",
+      "title": "Uniform Time Act first general year, conditional 75°W example",
+      "status": "source_checked_conditional_model",
+      "production_eligible": false,
+      "instrument_date": "1966-04-13",
+      "instrument_date_kind": "approved",
+      "law_commencement_date": "1967-04-01",
+      "first_modelled_clock_change_date": "1967-04-30",
+      "reviewed_years": [
+        1967
+      ],
+      "source_ids": [
+        "us-1966"
+      ],
+      "applicability": "Named legal regime only. No city, geographical boundary, birth-record or actual clock-observance inference is permitted.",
+      "reference_time_scale": "GMT_civil_arithmetic",
+      "reference_time_note": "Offset arithmetic only. Historical outputs are not physical UTC timestamps or UT1/TT conversions; no leap-second or subsecond claim.",
+      "configured_standard_offset_seconds": -18000,
+      "configured_standard_offset_basis": "Conditional 75 degrees west meridian example; not a location assignment.",
+      "interpretation": "Section 3(a) specifies April's and October's last Sundays at 02:00 and makes advanced time the legal standard during the interval. Section 6 gives April 1, 1967 as general commencement, with a separate conditional rule for places observing daylight time in 1966. The model assumes no state exemption.",
+      "uncertainties": [
+        "The Act allows a whole-state exemption; applicability needs state-level evidence.",
+        "1966's conditional exception is documented but not encoded as a tested rule.",
+        "This record does not apply the 1967 recurrence to later years, emergency legislation or later amendments."
+      ],
+      "transitions": [
+        {
+          "name": "start",
+          "date_rule": {
+            "kind": "last_weekday_of_month",
+            "month": 4,
+            "weekday_iso": 7
+          },
+          "clock_basis": "wall_before",
+          "clock_label": "02:00:00",
+          "offset_before_seconds": -18000,
+          "offset_after_seconds": -14400
+        },
+        {
+          "name": "end",
+          "date_rule": {
+            "kind": "last_weekday_of_month",
+            "month": 10,
+            "weekday_iso": 7
+          },
+          "clock_basis": "wall_before",
+          "clock_label": "02:00:00",
+          "offset_before_seconds": -14400,
+          "offset_after_seconds": -18000
+        }
+      ]
+    },
+    {
+      "id": "uk-2002-season",
+      "title": "UK summer-time order first year",
+      "status": "source_checked_conditional_model",
+      "production_eligible": false,
+      "instrument_date": "2002-02-12",
+      "instrument_date_kind": "made",
+      "law_commencement_date": "2002-03-11",
+      "first_modelled_clock_change_date": "2002-03-31",
+      "reviewed_years": [
+        2002
+      ],
+      "source_ids": [
+        "uk-2002",
+        "uk-1972"
+      ],
+      "applicability": "Named legal regime only. No city, geographical boundary, birth-record or actual clock-observance inference is permitted.",
+      "reference_time_scale": "GMT_civil_arithmetic",
+      "reference_time_note": "Offset arithmetic only. Historical outputs are not physical UTC timestamps or UT1/TT conversions; no leap-second or subsecond claim.",
+      "configured_standard_offset_seconds": 0,
+      "configured_standard_offset_basis": "GMT reference for the UK statutory model.",
+      "interpretation": "The Order takes effect March 11 and replaces the annual period with the last Sundays of March and October at 01:00 GMT. The Act supplies the one-hour advance. These transition times are in GMT, not the pre-transition local clock. Article 1(2) covers Great Britain and Northern Ireland.",
+      "uncertainties": [
+        "Do not infer that dependencies or overseas territories share this rule.",
+        "Only 2002 is reviewed here; this file is not a current-law service.",
+        "Civil GMT offsets are encoded; no UT1-versus-UTC subsecond equivalence is asserted."
+      ],
+      "transitions": [
+        {
+          "name": "start",
+          "date_rule": {
+            "kind": "last_weekday_of_month",
+            "month": 3,
+            "weekday_iso": 7
+          },
+          "clock_basis": "reference_GMT",
+          "clock_label": "01:00:00",
+          "offset_before_seconds": 0,
+          "offset_after_seconds": 3600
+        },
+        {
+          "name": "end",
+          "date_rule": {
+            "kind": "last_weekday_of_month",
+            "month": 10,
+            "weekday_iso": 7
+          },
+          "clock_basis": "reference_GMT",
+          "clock_label": "01:00:00",
+          "offset_before_seconds": 3600,
+          "offset_after_seconds": 0
+        }
+      ]
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "us-1918-season-start",
+      "rule_id": "us-1918-season",
+      "year": 1918,
+      "transition": "start",
+      "expected_reference_instant": "1918-03-31T07:00:00",
+      "expected_local_one_second_before": "1918-03-31T01:59:59",
+      "expected_local_at_transition": "1918-03-31T03:00:00",
+      "wall_label_to_resolve": "1918-03-31T02:30:00",
+      "expected_reference_candidates": [],
+      "expected_wall_status": "gap",
+      "expected_values_origin": "Agent-authored legal interpretation and civil arithmetic, fixed before running the validator; not engine or tzdb output. No human historical review has occurred."
+    },
+    {
+      "id": "us-1918-season-end",
+      "rule_id": "us-1918-season",
+      "year": 1918,
+      "transition": "end",
+      "expected_reference_instant": "1918-10-27T06:00:00",
+      "expected_local_one_second_before": "1918-10-27T01:59:59",
+      "expected_local_at_transition": "1918-10-27T01:00:00",
+      "wall_label_to_resolve": "1918-10-27T01:30:00",
+      "expected_reference_candidates": [
+        "1918-10-27T05:30:00",
+        "1918-10-27T06:30:00"
+      ],
+      "expected_wall_status": "fold",
+      "expected_values_origin": "Agent-authored legal interpretation and civil arithmetic, fixed before running the validator; not engine or tzdb output. No human historical review has occurred."
+    },
+    {
+      "id": "us-1942-war-start-start",
+      "rule_id": "us-1942-war-start",
+      "year": 1942,
+      "transition": "start",
+      "expected_reference_instant": "1942-02-09T07:00:00",
+      "expected_local_one_second_before": "1942-02-09T01:59:59",
+      "expected_local_at_transition": "1942-02-09T03:00:00",
+      "wall_label_to_resolve": "1942-02-09T02:30:00",
+      "expected_reference_candidates": [],
+      "expected_wall_status": "gap",
+      "expected_values_origin": "Agent-authored legal interpretation and civil arithmetic, fixed before running the validator; not engine or tzdb output. No human historical review has occurred."
+    },
+    {
+      "id": "us-1945-war-end-end",
+      "rule_id": "us-1945-war-end",
+      "year": 1945,
+      "transition": "end",
+      "expected_reference_instant": "1945-09-30T06:00:00",
+      "expected_local_one_second_before": "1945-09-30T01:59:59",
+      "expected_local_at_transition": "1945-09-30T01:00:00",
+      "wall_label_to_resolve": "1945-09-30T01:30:00",
+      "expected_reference_candidates": [
+        "1945-09-30T05:30:00",
+        "1945-09-30T06:30:00"
+      ],
+      "expected_wall_status": "fold",
+      "expected_values_origin": "Agent-authored legal interpretation and civil arithmetic, fixed before running the validator; not engine or tzdb output. No human historical review has occurred."
+    },
+    {
+      "id": "us-1967-season-start",
+      "rule_id": "us-1967-season",
+      "year": 1967,
+      "transition": "start",
+      "expected_reference_instant": "1967-04-30T07:00:00",
+      "expected_local_one_second_before": "1967-04-30T01:59:59",
+      "expected_local_at_transition": "1967-04-30T03:00:00",
+      "wall_label_to_resolve": "1967-04-30T02:30:00",
+      "expected_reference_candidates": [],
+      "expected_wall_status": "gap",
+      "expected_values_origin": "Agent-authored legal interpretation and civil arithmetic, fixed before running the validator; not engine or tzdb output. No human historical review has occurred."
+    },
+    {
+      "id": "us-1967-season-end",
+      "rule_id": "us-1967-season",
+      "year": 1967,
+      "transition": "end",
+      "expected_reference_instant": "1967-10-29T06:00:00",
+      "expected_local_one_second_before": "1967-10-29T01:59:59",
+      "expected_local_at_transition": "1967-10-29T01:00:00",
+      "wall_label_to_resolve": "1967-10-29T01:30:00",
+      "expected_reference_candidates": [
+        "1967-10-29T05:30:00",
+        "1967-10-29T06:30:00"
+      ],
+      "expected_wall_status": "fold",
+      "expected_values_origin": "Agent-authored legal interpretation and civil arithmetic, fixed before running the validator; not engine or tzdb output. No human historical review has occurred."
+    },
+    {
+      "id": "uk-2002-season-start",
+      "rule_id": "uk-2002-season",
+      "year": 2002,
+      "transition": "start",
+      "expected_reference_instant": "2002-03-31T01:00:00",
+      "expected_local_one_second_before": "2002-03-31T00:59:59",
+      "expected_local_at_transition": "2002-03-31T02:00:00",
+      "wall_label_to_resolve": "2002-03-31T01:30:00",
+      "expected_reference_candidates": [],
+      "expected_wall_status": "gap",
+      "expected_values_origin": "Agent-authored legal interpretation and civil arithmetic, fixed before running the validator; not engine or tzdb output. No human historical review has occurred."
+    },
+    {
+      "id": "uk-2002-season-end",
+      "rule_id": "uk-2002-season",
+      "year": 2002,
+      "transition": "end",
+      "expected_reference_instant": "2002-10-27T01:00:00",
+      "expected_local_one_second_before": "2002-10-27T01:59:59",
+      "expected_local_at_transition": "2002-10-27T01:00:00",
+      "wall_label_to_resolve": "2002-10-27T01:30:00",
+      "expected_reference_candidates": [
+        "2002-10-27T00:30:00",
+        "2002-10-27T01:30:00"
+      ],
+      "expected_wall_status": "fold",
+      "expected_values_origin": "Agent-authored legal interpretation and civil arithmetic, fixed before running the validator; not engine or tzdb output. No human historical review has occurred."
+    }
+  ]
+}

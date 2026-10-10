@@ -1,0 +1,198 @@
+{
+  "schemaVersion": "zodiacs.birth-window.acceptance/0.1",
+  "purpose": "Synthetic analytic and structural acceptance oracles; no invented real astronomical signs. Only executable-preview cases are run by tests/verify.mjs. Remaining cases constrain future implementations.",
+  "cases": [
+    {
+      "id": "SIGN-01",
+      "scope": "executable-preview",
+      "domain": "t in [0,10] seconds; lambda=10+t/100 degrees; step=1s",
+      "oracle": "analytic function stays strictly inside Aries",
+      "expected": "observed-constant=aries; no certificate or probability",
+      "failurePrevented": "Equal finite samples must not imply certified continuum constancy."
+    },
+    {
+      "id": "SIGN-02",
+      "scope": "executable-preview",
+      "domain": "t in [0,10]; lambda=29+t/5; step=1s",
+      "oracle": "exact crossing 30 degrees at t=5",
+      "expected": "variable with aries and taurus; second sign owns exact t=5",
+      "failurePrevented": "Missing equality or inventing transition precision."
+    },
+    {
+      "id": "SIGN-03",
+      "scope": "executable-preview",
+      "domain": "t in [0,10]; lambda=359+t/5 modulo 360",
+      "oracle": "exact wrap at t=5",
+      "expected": "variable with pisces and aries",
+      "failurePrevented": "Linear min/max error at 0/360 wrap."
+    },
+    {
+      "id": "END-01",
+      "scope": "executable-preview",
+      "domain": "t in [0,10); lambda=29+t/10; maxStep=1s",
+      "oracle": "first Taurus point is excluded at t=10",
+      "expected": "observed-constant=aries; final evaluated lattice instant t=9.999",
+      "failurePrevented": "Including the excluded final boundary."
+    },
+    {
+      "id": "END-02",
+      "scope": "executable-preview",
+      "domain": "t in [0,10]; lambda=29+t/10",
+      "oracle": "t=10 is included and exactly 30 degrees",
+      "expected": "variable=aries,taurus",
+      "failurePrevented": "Dropping a zero-measure endpoint that changes a universal conclusion."
+    },
+    {
+      "id": "MISS-01",
+      "scope": "executable-preview",
+      "domain": "t in [0,10]; lambda=29+2*exp(-((t-5.5)/0.05)^2); grid=1s",
+      "oracle": "lambda(5.5)=31, but integer-second samples are <30",
+      "expected": "observed-constant=aries; complete=false",
+      "failurePrevented": "A rapid between-sample excursion defeats dense-looking finite evidence."
+    },
+    {
+      "id": "TAN-01",
+      "scope": "executable-preview",
+      "domain": "t in [0,10]; lambda=30-(t-5.5)^2/100; grid=1s",
+      "oracle": "a Taurus value exists only at tangency t=5.5",
+      "expected": "observed-constant=aries; complete=false",
+      "failurePrevented": "Sign-change-only root searches miss a point contact."
+    },
+    {
+      "id": "ABSENT-01",
+      "scope": "executable-preview",
+      "domain": "location absent; body sign and Ascendant requested",
+      "oracle": "body longitude defined; chart.angles and houses null",
+      "expected": "body observed-constant; angle unavailable",
+      "failurePrevented": "Noon placeholder or invented Ascendant for unknown location."
+    },
+    {
+      "id": "FALLBACK-01",
+      "scope": "executable-preview",
+      "domain": "requested placidus; synthetic chart returns whole",
+      "oracle": "requested and returned systems differ",
+      "expected": "body-house unavailable; issue names substitution",
+      "failurePrevented": "Whole-sign fallback mislabeled as Placidus."
+    },
+    {
+      "id": "UNION-01",
+      "scope": "executable-preview",
+      "domain": "intervals [0,10] and [5,15], one-second grid",
+      "oracle": "unique integer seconds 0..15",
+      "expected": "16 samples, not 22; no probabilities",
+      "failurePrevented": "Double-counting overlap."
+    },
+    {
+      "id": "BUDGET-01",
+      "scope": "executable-preview",
+      "domain": "11 required samples; budget 5",
+      "oracle": "preflight count exceeds limit",
+      "expected": "RangeError before engine evaluation",
+      "failurePrevented": "Silent undersampling or truncated result."
+    },
+    {
+      "id": "DELTA-01",
+      "scope": "executable-preview",
+      "domain": "deltaT pinned to 80 seconds",
+      "oracle": "synthetic adapter asserts natalChart input.deltaT===80",
+      "expected": "same pinned value received at every instant",
+      "failurePrevented": "Passing through positions() which cannot receive pinned deltaT."
+    },
+    {
+      "id": "ASPECT-01",
+      "scope": "executable-preview",
+      "domain": "Sun longitude 0, Moon 54+t; trine target 60 orb 2, t in [0,10]",
+      "oracle": "true iff t in [4,8], inclusive",
+      "expected": "variable=false,true; equality included",
+      "failurePrevented": "Implicit/default aspect-orb semantics."
+    },
+    {
+      "id": "FAIL-01",
+      "scope": "executable-preview",
+      "domain": "synthetic ephemeris throws at t=5",
+      "oracle": "one required sample cannot be evaluated",
+      "expected": "observed values retained; issue recorded; complete=false; finiteDomainEvaluated=false",
+      "failurePrevented": "Silently dropping a failing sample."
+    },
+    {
+      "id": "FOLD-01",
+      "scope": "normalizer-contract",
+      "domain": "synthetic clock offset +02 before UTC 2000-01-01T00:00Z, +01 from transition; local [01:15,01:45)",
+      "oracle": "invert each constant-offset segment",
+      "expected": "UTC [1999-12-31T23:15Z,23:45Z) union [2000-01-01T00:15Z,00:45Z); 3600s duration; no implicit 50/50 branch prior",
+      "failurePrevented": "Joining endpoints into a continuous interval or dropping later fold."
+    },
+    {
+      "id": "GAP-01",
+      "scope": "normalizer-contract",
+      "domain": "synthetic clock offset +01 before UTC 2000-01-01T01:00Z, +02 afterward; local [01:30,03:30)",
+      "oracle": "clock jumps from 01:59:59.999 to 03:00",
+      "expected": "reject by default; exclude-and-report maps UTC [00:30,01:30), reports missing local [02:00,03:00); original domain incomplete",
+      "failurePrevented": "Silently shifting nonexistent local time."
+    },
+    {
+      "id": "ROUND-01",
+      "scope": "normalizer-contract",
+      "domain": "record 12:00 rounded to nearest 5 minutes, ties toward later mark",
+      "oracle": "preimage of explicit rounding function",
+      "expected": "support [11:57:30,12:02:30); prior remains none unless supplied",
+      "failurePrevented": "Treating rounding support as uniform birth-time probability."
+    },
+    {
+      "id": "LMT-01",
+      "scope": "historical-clock-contract",
+      "domain": "synthetic LMT hypothesis at east longitude 75 degrees vs fixed-zone offset +06:00; wall noon",
+      "oracle": "LMT offset=longitude*240 seconds=+05:00",
+      "expected": "two conditional instants 07:00Z and 06:00Z; neither hypothesis asserted historically true",
+      "failurePrevented": "Substituting zone-reference meridian for birthplace without evidence."
+    },
+    {
+      "id": "LOC-01",
+      "scope": "multidimensional-contract",
+      "domain": "time fixed; longitude box crosses antimeridian from 179.5 to -179.5; latitude fixed",
+      "oracle": "union [179.5,180] and [-180,-179.5] with endpoint convention",
+      "expected": "one-degree region represented; center/corners do not certify interior",
+      "failurePrevented": "Treating antimeridian box as a 359-degree region."
+    },
+    {
+      "id": "DT-01",
+      "scope": "multidimensional-contract",
+      "domain": "synthetic f(dt)=30-(dt-50)^2/100 with dt in [49,51] seconds",
+      "oracle": "both endpoints Aries, center Taurus",
+      "expected": "variable; endpoint-only sampling must not certify constant",
+      "failurePrevented": "Hidden model-uncertainty change."
+    },
+    {
+      "id": "MODEL-01",
+      "scope": "convention-contract",
+      "domain": "same input domain; two declared house models return different house numbers",
+      "oracle": "functions f_A=1, f_B=2",
+      "expected": "each model conditional constant under a proper proof; cross-model sensitive; no weighted pooled claim",
+      "failurePrevented": "Averaging competing house conventions."
+    },
+    {
+      "id": "CERT-01",
+      "scope": "certificate-contract",
+      "domain": "claimed certificate partitions [0,10] as [0,5) union (5,10]",
+      "oracle": "point t=5 absent",
+      "expected": "checker rejects complete=true",
+      "failurePrevented": "A measure-zero coverage hole invalidates universal proof."
+    },
+    {
+      "id": "CAL-01",
+      "scope": "normalizer-contract",
+      "domain": "calendar julian or local 23:59:60 in current profile",
+      "oracle": "unsupported by inspected rc10 local public interface and Date profile",
+      "expected": "explicit unresolved/reject; no normalization into Gregorian or next minute",
+      "failurePrevented": "Silent calendar/timescale conversion."
+    },
+    {
+      "id": "PRIOR-01",
+      "scope": "probability-contract",
+      "domain": "known feature partition with unresolved duration 2 out of 10 seconds; caller-declared uniform UTC measure",
+      "oracle": "resolved mass=0.8, unresolved mass=0.2",
+      "expected": "probability intervals retain unknown mass; no renormalization over known 8 seconds",
+      "failurePrevented": "Discarding unresolved probability mass."
+    }
+  ]
+}

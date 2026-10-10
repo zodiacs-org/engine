@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Zodiacs isolated reproduction observations",
+  "type": "object",
+  "required": ["schemaVersion", "startedAt", "completedAt", "runtime", "engine", "scope", "observations"],
+  "properties": {
+    "schemaVersion": {"const": "zodiacs-parallel-reproductions/1"},
+    "startedAt": {"type": "string", "format": "date-time"},
+    "completedAt": {"type": "string", "format": "date-time"},
+    "runtime": {"type": "object", "required": ["node", "platform", "arch"]},
+    "engine": {"type": "object", "required": ["entry", "packageName", "packageVersion", "runtimeVersion", "sourceRefStatus", "ephemeris", "distributionFileManifestSha256", "artifactFiles"]},
+    "illuminationReference": {"type": ["object", "null"]},
+    "scope": {"type": "object", "required": ["productionWrites", "internetRequests", "finiteCasesOnly", "numericalCertification", "existingReleaseGatesChanged"]},
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "status", "severity", "expected", "actual", "interpretation"],
+        "properties": {
+          "id": {"type": "string"},
+          "category": {"enum": ["contract-gap", "documented-scope-clarification", "control"]},
+          "status": {"enum": ["reproduced", "not-reproduced", "measured", "blocked", "passed", "failed"]},
+          "severity": {"type": "string"},
+          "expected": {"type": "string"},
+          "actual": {"type": "object"},
+          "interpretation": {"type": "string"},
+          "sources": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}

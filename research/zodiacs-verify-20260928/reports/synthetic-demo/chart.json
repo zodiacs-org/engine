@@ -1,0 +1,49 @@
+{
+  "context": {
+    "effectiveHouseSystem": null,
+    "latitude": null,
+    "longitude": null,
+    "requestedHouseSystem": "whole",
+    "timeKnowledge": "exact",
+    "utc": "2000-01-01T12:00:00.000Z"
+  },
+  "facts": [
+    {
+      "entity": "Sun",
+      "id": "longitude:Sun",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 15
+    },
+    {
+      "entity": "Sun",
+      "id": "sign:Sun",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Aries"
+    }
+  ],
+  "model": {
+    "artifact": {
+      "digest": "sha256:fada2b50b573ed6cb0cd9b3dce02170b17262b9b2b63ee4380413380a691b044",
+      "scope": "analytic demonstration, not astronomical data"
+    },
+    "conventions": {
+      "corrections": "none",
+      "deltaT": "not applicable",
+      "frame": "synthetic-longitude",
+      "origin": "synthetic",
+      "timeScale": "UTC-like synthetic time",
+      "zodiac": "tropical"
+    },
+    "engine": "synthetic-linear-demonstration",
+    "engineVersion": "1"
+  },
+  "schema": "zodiacs.verify.chart.v1",
+  "subjectId": "synthetic-demo-person",
+  "warnings": [
+    "SYNTHETIC: These placements are invented analytic fixtures, not a real chart."
+  ],
+  "id": "sha256:88f14ef85a72f7949c2d644c2ecafa420b9dfe9d34489927d79a48c47718c304"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "frozenBeforeFirstTargetExecution": true,
+  "frozenAt": "2026-09-27T15:14:12.044898+00:00",
+  "fixturesSha256": "a019cf153983e8f0ed22f49b821c090143bcf37e6508ef88778bc2cafa39bb7b",
+  "gatesSha256": "31345e17318d9dc2e1abb79c0807344e3f4360fa5dd4712ee3f6339e9fd3362e",
+  "note": "No target angles were observed before freezing these independent expectations and research gates."
+}

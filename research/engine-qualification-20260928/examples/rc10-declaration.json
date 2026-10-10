@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "artifactDigest": "4691195c5e4b192c45638378270514bc99ce3f2a168d82d5cd3c472b9aeef599",
+  "comparisonProfile": "geocentric-tropical-true-of-date-pinned-clock-v1",
+  "referenceSelection": {
+    "origin": "Earth geocenter (500@399); geocentric vectors",
+    "inputFrame": "JPL ICRF equatorial vectors, treated as ICRS/GCRS-aligned directions for the orientation transform",
+    "outputFrame": "true tropical ecliptic/equinox of date via ERFA IAU2006/2000A with frame bias (trueOfDateICRS)",
+    "observationClock": "ISO Z labels are synthetic UT1; TT=encoded UT1+69 seconds at every epoch; not physical historical/future UTC",
+    "requestedReferenceTimeScale": "TT; returned raw tables must explicitly identify JDTT; Horizons handles TT/TDB internally",
+    "corrections": "Moon: instantaneous geometric NONE; all other selected bodies: JPL LT+S light-time and stellar aberration; no gravitational light bending",
+    "targetCenters": "Sun/Moon/Mercury/Venus body centers; Mars through Pluto planetary-system barycenters",
+    "angleUnits": "degrees, longitude[0,360), latitude[-90,90]",
+    "comparisonMeaning": "reference-normalized residuals under stated conventions; not a causal decomposition or proof of physical accuracy"
+  },
+  "implementation": {
+    "origin": "geocentric",
+    "zodiac": "tropical",
+    "frame": "true-ecliptic-equinox-of-date",
+    "clock": "encoded-UT1-plus-pinned-deltaT",
+    "moonCorrection": "geometric",
+    "planetCorrection": "astronomy-engine 2.1.19 first-order apparent approximation, with retarded heliocentric target and Earth",
+    "axes": "astronomy-engine EQJ/FK5 approximation; not an exact ICRF assertion",
+    "centers": "approximate provider coefficients; physical-center guarantee not established",
+    "rotationModel": "astronomy-engine 2.1.19 precession and truncated nutation"
+  },
+  "knownDifferences": [
+    "Planet correction differs from standard JPL LT+S.",
+    "Approximate orientation differs from independent ERFA trueOfDateICRS.",
+    "Outer-planet reference uses system barycenters; provider coefficients do not establish exact center equivalence."
+  ],
+  "review": {
+    "reviewer": "Codex research source review of the frozen rc.10 artifact",
+    "source": "research/accuracy-audit-20260928/source-review/SOURCE-REVIEW.md",
+    "notes": "This declares the previously examined source conventions for a baseline self-comparison. It is not candidate approval, publisher authentication, Swiss equivalence or a certified accuracy statement."
+  }
+}
