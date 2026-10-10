@@ -46,21 +46,28 @@ export function createSolarTermScanner(engine) {
   const maxSamples=value===undefined?12000:value;
   if(!Number.isInteger(maxSamples)||maxSamples<1||maxSamples>1000000)throw new RangeError('maxSamples must be an integer from 1 to 1000000');
   const source=longitudeSourceIdentity(engine);
+  const ensureSourceUnchanged=()=>{
+   const current=longitudeSourceIdentity(engine);
+   if(current.engine!==source.engine||current.ephemeris!==source.ephemeris)throw new TypeError('Longitude-source identity changed during the inventory');
+  };
+  const finish=result=>{ensureSourceUnchanged();return result;};
   const start=dateOfYear(year),end=dateOfYear(year+1),from=start.getTime(),to=end.getTime();
   let samples=0;const terms=[];
   const base={schema:'zodiacs.solar-terms.alpha.v1',year,window:{from:start.toISOString(),to:end.toISOString(),interval:'(from,to]',clock:'UTC calendar; supplied engine time conversion'},source,accuracy:{status:'unvalidated',independentEventSeconds:null},completeness:{status:'unproven',method:'supplied coarse longitude crossing solver'}};
   for(const term of SOLAR_TERMS){
    const remaining=maxSamples-samples;
-   if(remaining===0)return {...base,status:'refused',reason:'sample-budget',samples,maxSamples,terms:[]};
+   if(remaining===0)return finish({...base,status:'refused',reason:'sample-budget',samples,maxSamples,terms:[]});
+   ensureSourceUnchanged();
    const result=engine.searchLongitudeCrossings('Sun',term.longitude,new Date(from),new Date(to),{stepDays:2,maxSamples:remaining});
+   ensureSourceUnchanged();
    if(!result||!Number.isInteger(result.samples)||result.samples<0||result.samples>remaining)throw new TypeError('Invalid longitude-source sample accounting');
    samples+=result.samples;
    if(result.status==='refused'){
     if(result.reason!=='sample-budget'||!Array.isArray(result.crossings)||result.crossings.length!==0)throw new TypeError('Invalid longitude-source refusal');
-    return {...base,status:'refused',reason:'sample-budget',samples,maxSamples,terms:[]};
+    return finish({...base,status:'refused',reason:'sample-budget',samples,maxSamples,terms:[]});
    }
    if(result.status!=='complete'||!Array.isArray(result.crossings))throw new TypeError('Invalid longitude-source status');
-   if(result.crossings.length!==1)return {...base,status:'refused',reason:'unexpected-solar-crossing-count',longitude:term.longitude,samples,maxSamples,terms:[]};
+   if(result.crossings.length!==1)return finish({...base,status:'refused',reason:'unexpected-solar-crossing-count',longitude:term.longitude,samples,maxSamples,terms:[]});
    const crossing=result.crossings[0];
    if(!(crossing.at instanceof Date)||!Number.isFinite(Date.prototype.getTime.call(crossing.at))||crossing.retrograde!==false)throw new TypeError('Invalid forward solar crossing');
    const time=Date.prototype.getTime.call(crossing.at);
@@ -68,7 +75,7 @@ export function createSolarTermScanner(engine) {
    terms.push({...term,at:new Date(time).toISOString()});
   }
   terms.sort((a,b)=>Date.parse(a.at)-Date.parse(b.at));
-  if(terms.some((term,index)=>index>0&&Date.parse(term.at)<=Date.parse(terms[index-1].at)))return {...base,status:'refused',reason:'non-distinct-solar-crossings',samples,maxSamples,terms:[]};
-  return {...base,status:'computed',samples,maxSamples,terms};
+  if(terms.some((term,index)=>index>0&&Date.parse(term.at)<=Date.parse(terms[index-1].at)))return finish({...base,status:'refused',reason:'non-distinct-solar-crossings',samples,maxSamples,terms:[]});
+  return finish({...base,status:'computed',samples,maxSamples,terms});
  };
 }

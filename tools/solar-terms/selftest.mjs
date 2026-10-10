@@ -122,3 +122,40 @@ test('malformed structured identities and later mutations are refused before sou
  identity.version='3';
  assert.equal(result.source.ephemeris,'independent linear Sun oracle@2');
 });
+
+test('source changes during a provider call abort without a stale or partial inventory',()=>{
+ for(const call of [1,12,24])for(const mutation of ['engine','string','structured']){
+  const base=linearEngine(2026);let calls=0;
+  const engine={...base,EPHEMERIS:mutation==='structured'?{name:'oracle',version:'1'}:base.EPHEMERIS,
+   searchLongitudeCrossings(...args){
+    calls++;const result=base.searchLongitudeCrossings(...args);
+    if(calls===call){
+     if(mutation==='engine')engine.ENGINE_VERSION='changed-source';
+     else if(mutation==='string')engine.EPHEMERIS='changed-ephemeris';
+     else engine.EPHEMERIS.version='2';
+    }
+    return result;
+   }};
+  assert.throws(()=>createSolarTermScanner(engine)(2026),{name:'TypeError',message:'Longitude-source identity changed during the inventory'});
+  assert.equal(calls,call);
+ }
+});
+test('identity changes cannot escape through provider refusal or result accessors',()=>{
+ const base=linearEngine(2026);
+ for(const response of ['refusal','missing','accessor','invalid']){
+  let calls=0;
+  const engine={...base,searchLongitudeCrossings(...args){
+   calls++;const result=base.searchLongitudeCrossings(...args);
+   if(response==='accessor'){
+    const crossing=result.crossings[0],at=crossing.at;
+    Object.defineProperty(crossing,'at',{get(){engine.ENGINE_VERSION='changed-source';return at;}});
+    return result;
+   }
+   engine.EPHEMERIS=response==='invalid'?{name:'oracle',version:' '}: 'changed-ephemeris';
+   return response==='refusal'?{status:'refused',reason:'sample-budget',samples:1,crossings:[]}:
+    response==='missing'?{status:'complete',samples:1,crossings:[]}:result;
+  }};
+  assert.throws(()=>createSolarTermScanner(engine)(2026),TypeError);
+  assert.equal(calls,1);
+ }
+});
