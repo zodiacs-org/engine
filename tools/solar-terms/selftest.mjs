@@ -195,3 +195,36 @@ test('stored source receipts distinguish identity shapes and snapshot every orig
  assert.equal(refused.status,'refused');
  assert.deepEqual(refused.source.ephemerisIdentity,structured.source.ephemerisIdentity);
 });
+
+test('validated sample counts are read once and cannot turn negative during accumulation',()=>{
+ const base=linearEngine(2026);let calls=0,reads=0;
+ const engine={...base,searchLongitudeCrossings(...args){
+  calls++;const result=base.searchLongitudeCrossings(...args);let localReads=0;
+  Object.defineProperty(result,'samples',{get(){reads++;localReads++;return localReads<=3?3:-1;}});
+  return result;
+ }};
+ const result=createSolarTermScanner(engine)(2026,{maxSamples:3});
+ assert.equal(result.status,'refused');assert.equal(result.reason,'sample-budget');
+ assert.equal(result.samples,3);assert.deepEqual(result.terms,[]);
+ assert.equal(calls,1);assert.equal(reads,1);
+});
+test('provider status, crossings and intrinsic crossing times use one captured value',()=>{
+ const base=linearEngine(2026),counts={samples:0,status:0,crossings:0,at:0,retrograde:0};
+ const engine={...base,searchLongitudeCrossings(...args){
+  const original=base.searchLongitudeCrossings(...args),date=original.crossings[0].at,local={};
+  const read=(key,value,poison)=>{counts[key]++;local[key]=(local[key]||0)+1;return local[key]===1?value:poison;};
+  const crossing={
+   get at(){return read('at',date,new Date(NaN));},
+   get retrograde(){const value=read('retrograde',false,true);date.setTime(NaN);return value;}
+  };
+  return {
+   get samples(){return read('samples',3,-1);},
+   get status(){return read('status','complete','invalid');},
+   get crossings(){return read('crossings',[crossing],[]);}
+  };
+ }};
+ const result=createSolarTermScanner(engine)(2026,{maxSamples:72});
+ assert.equal(result.status,'computed');assert.equal(result.samples,72);assert.equal(result.terms.length,24);
+ assert.deepEqual(counts,{samples:24,status:24,crossings:24,at:24,retrograde:24});
+ for(const term of result.terms)assert.equal(term.at,base.searchLongitudeCrossings('Sun',term.longitude,new Date(result.window.from),new Date(result.window.to),{stepDays:2,maxSamples:3}).crossings[0].at.toISOString());
+});

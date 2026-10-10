@@ -65,17 +65,23 @@ export function createSolarTermScanner(engine) {
    ensureSourceUnchanged();
    const result=engine.searchLongitudeCrossings('Sun',term.longitude,new Date(from),new Date(to),{stepDays:2,maxSamples:remaining});
    ensureSourceUnchanged();
-   if(!result||!Number.isInteger(result.samples)||result.samples<0||result.samples>remaining)throw new TypeError('Invalid longitude-source sample accounting');
-   samples+=result.samples;
-   if(result.status==='refused'){
-    if(result.reason!=='sample-budget'||!Array.isArray(result.crossings)||result.crossings.length!==0)throw new TypeError('Invalid longitude-source refusal');
+   if(!result)throw new TypeError('Invalid longitude-source sample accounting');
+   const sampleCount=result.samples;
+   if(!Number.isInteger(sampleCount)||sampleCount<0||sampleCount>remaining)throw new TypeError('Invalid longitude-source sample accounting');
+   const resultStatus=result.status,crossings=result.crossings;
+   const crossingCount=Array.isArray(crossings)?crossings.length:null;
+   samples+=sampleCount;
+   if(resultStatus==='refused'){
+    const reason=result.reason;
+    if(reason!=='sample-budget'||crossingCount!==0)throw new TypeError('Invalid longitude-source refusal');
     return finish({...base,status:'refused',reason:'sample-budget',samples,maxSamples,terms:[]});
    }
-   if(result.status!=='complete'||!Array.isArray(result.crossings))throw new TypeError('Invalid longitude-source status');
-   if(result.crossings.length!==1)return finish({...base,status:'refused',reason:'unexpected-solar-crossing-count',longitude:term.longitude,samples,maxSamples,terms:[]});
-   const crossing=result.crossings[0];
-   if(!(crossing.at instanceof Date)||!Number.isFinite(Date.prototype.getTime.call(crossing.at))||crossing.retrograde!==false)throw new TypeError('Invalid forward solar crossing');
-   const time=Date.prototype.getTime.call(crossing.at);
+   if(resultStatus!=='complete'||crossingCount===null)throw new TypeError('Invalid longitude-source status');
+   if(crossingCount!==1)return finish({...base,status:'refused',reason:'unexpected-solar-crossing-count',longitude:term.longitude,samples,maxSamples,terms:[]});
+   const crossing=crossings[0],at=crossing?.at;
+   if(!(at instanceof Date))throw new TypeError('Invalid forward solar crossing');
+   const time=Date.prototype.getTime.call(at),retrograde=crossing?.retrograde;
+   if(!Number.isFinite(time)||retrograde!==false)throw new TypeError('Invalid forward solar crossing');
    if(time<=from||time>to)throw new TypeError('Solar crossing lies outside the named interval');
    terms.push({...term,at:new Date(time).toISOString()});
   }

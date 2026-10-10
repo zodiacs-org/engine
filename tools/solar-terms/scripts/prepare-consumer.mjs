@@ -120,10 +120,21 @@ const refusedReceipt=createSolarTermScanner(identityProvider)(identityYear,{maxS
 assert.equal(refusedReceipt.status,'refused');
 assert.deepEqual(refusedReceipt.source.ephemerisIdentity,structuredReceipt.source.ephemerisIdentity);
 const identityCollisionControls={distinctEncodedReceipts:encodedReceipts.length,delimiterMutationRefused:true,shapeMutationRefused:true,storedReceiptShapesDistinct:true,refusalRetainsIdentityShape:true};
+let changingSampleReads=0,changingSampleCalls=0;
+const changingSampleProvider={...identityProvider,searchLongitudeCrossings(...args){
+ changingSampleCalls++;const result={...identityProvider.searchLongitudeCrossings(...args)};let reads=0;
+ Object.defineProperty(result,'samples',{get(){changingSampleReads++;reads++;return reads<=3?100:-1;}});
+ return result;
+}};
+const sampleSnapshot=createSolarTermScanner(changingSampleProvider)(identityYear,{maxSamples:100});
+assert.equal(sampleSnapshot.status,'refused');assert.equal(sampleSnapshot.samples,100);assert.deepEqual(sampleSnapshot.terms,[]);
+assert.equal(changingSampleCalls,1);assert.equal(changingSampleReads,1);
+const providerSnapshotControls={sampleReadOnce:true,wholeBudgetRefusal:true,nonnegativeAccountedSamples:true};
+
 const source=command('git',['rev-parse','HEAD'],root).trim();
 const report={schema:'zodiacs.private-solar-term-consumer.v1',producer:{source,run:process.env.GITHUB_RUN_ID,node:process.version},
  pack:{bytes:readFileSync(tar).length,sha256:hash(readFileSync(tar)),files:packed[0].files.map(f=>f.path).sort()},
- carriedArchiveSha256:hash(readFileSync(archive)),linearControls:rows,typeChecks,ephemerisIdentityShapes:{string:true,structured:true,normalization:'escape % and @ within fields, then join with @',pairedInventories:rows.length,collisionControls:identityCollisionControls},
+ carriedArchiveSha256:hash(readFileSync(archive)),linearControls:rows,typeChecks,providerSnapshotControls,ephemerisIdentityShapes:{string:true,structured:true,normalization:'escape % and @ within fields, then join with @',pairedInventories:rows.length,collisionControls:identityCollisionControls},
  accuracy:'unvalidated',completeness:'unproven',publication:'private; no registry publication',
  limitations:['Installed private pack and independent linear arithmetic only.','No actual solar ephemeris, independent astronomical comparison or full repository suite was run by this script.']};
 writeFileSync(resolve(root,'solar-term-consumer-report.json'),JSON.stringify(report,null,2)+'\n');
