@@ -1,0 +1,35 @@
+{
+  "schema": "zodiacs.solar-term-definition-review.v1",
+  "reviewedAt": "2026-10-09",
+  "sources": [
+    {
+      "url": "https://www.hko.gov.hk/en/gts/time/24solarterms.htm",
+      "publisher": "Hong Kong Observatory",
+      "observed": "The source defines equal fifteen-degree Sun-longitude steps beginning at the vernal equinox, with alternating major and minor terms.",
+      "supports": "catalog angles and alternate term classification",
+      "doesNotEstablish": "Carried-engine coordinate conventions or second-level event accuracy."
+    },
+    {
+      "url": "https://std.samr.gov.cn/gb/search/gbDetailed?id=71F772D817FDD3A7E05397BE0A0AB82A",
+      "publisher": "National standard information public service platform",
+      "observed": "GB/T 33661-2017 is current; the official registry identifies Purple Mountain Observatory as the drafting organization and continued validity after the 2023 review.",
+      "supports": "existence and status of the primary Chinese-calendar standard",
+      "doesNotEstablish": "The normative text's coordinate/time requirements have not been read."
+    }
+  ],
+  "unresolved": [
+    "Read the normative apparent-geocentric longitude and clock definitions from an accessible primary text.",
+    "Check the carried engine's frame and time conversions against those definitions.",
+    "Run source/packed Node consumers and independent astronomical event comparisons.",
+    "Retain the unchanged independent event threshold and report any failures."
+  ],
+  "accuracy": "unvalidated",
+  "completeness": "unproven",
+  "publication": "private prototype prepared in memory only",
+  "sourceIndependence": {
+    "carriedEngine": "astronomy-engine/2.1.19",
+    "evidence": "package.json and src/api.ts on engine403eb8735280fa0b5fb96e88d5734057f45b1c75",
+    "conclusion": "Calling the same Astronomy Engine dependency cannot establish independent ephemeris accuracy.",
+    "required": "Independent astronomical/time reference and published frame/clock definitions."
+  }
+}

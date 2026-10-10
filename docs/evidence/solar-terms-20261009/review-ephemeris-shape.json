@@ -1,0 +1,65 @@
+{
+  "schema": "zodiacs.private-solar-review-correction.v1",
+  "pr": 38,
+  "reviewedHead": "1fe17e588a3f92754d1f921cb0630dfedadb3280",
+  "finding": {
+    "id": 4237522805,
+    "priority": "P2",
+    "path": "tools/solar-terms/index.d.mts",
+    "problem": "String-only EPHEMERIS contract does not accept the carried engine's frozen name/version identity."
+  },
+  "correction": "Accept and normalize a plain own name/version data record, preserve string compatibility, reject malformed/accessor identities and recheck before each inventory.",
+  "validation": {
+    "asOf": "2026-10-10T12:02:04Z",
+    "correctedSource": "e47c214593579c19d5de87aa4ad833e0b97b76bb",
+    "sourceRun": 38050192231,
+    "sourceControlsPerRuntime": 11,
+    "typeNegativeControlsPerRuntime": 9,
+    "privatePackBytes": 5302,
+    "privatePackSha256": "c628760fec5dd526528d094d962b6e6db5f04e7580657708a5aa90179c2b1161",
+    "requiredSourceRuns": [
+      {
+        "id": 38050194778,
+        "name": "Atlas",
+        "conclusion": "success",
+        "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+      },
+      {
+        "id": 38050194767,
+        "name": "Private solar-term source and arithmetic",
+        "conclusion": "success",
+        "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+      },
+      {
+        "id": 38050194752,
+        "name": "Python package",
+        "conclusion": "success",
+        "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+      },
+      {
+        "id": 38050194787,
+        "name": "CodeQL",
+        "conclusion": "success",
+        "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+      },
+      {
+        "id": 38050194748,
+        "name": "Conformance",
+        "conclusion": "success",
+        "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+      },
+      {
+        "id": 38050194749,
+        "name": "CI",
+        "conclusion": "success",
+        "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+      }
+    ],
+    "remaining": "Fresh final evidence-carrier checks and review, then merge and complete post-merge checks."
+  },
+  "scope": "Only private tools/solar-terms and evidence; core packed files/archive/version/scientific tolerances are unchanged.",
+  "limits": [
+    "Synthetic provider identity-shape compatibility is not actual ephemeris execution or independent solar-term accuracy.",
+    "The consumer still extracts/evaluates only the two previously declared packed crossing modules."
+  ]
+}

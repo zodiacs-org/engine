@@ -1,0 +1,29 @@
+# Private solar-term prototype
+
+`@zodiacs/solar-terms@0.0.0` composes a supplied engine's forward Sun-longitude searches into a Gregorian-year inventory of the twenty-four solar terms. It is private preparation; it is not exported from the carried engine package or published in a registry.
+
+Pass an explicitly versioned engine with a nonempty version and ephemeris identity to `createSolarTermScanner`, then call the returned `solarTermsForYear`. The output includes each term's tropical longitude, conventional label, jie/zhongqi class and UTC timestamp. The named window is open at January 1 and closed at the next January 1, matching the supplied crossing solver. Terms are sorted chronologically.
+
+The aggregate sample budget applies across every search. A budget refusal, missing/additional term or non-distinct timestamp returns no partial term inventory. Invalid provider accounting, backward crossings or out-of-window timestamps throw. Source identifiers are checked when creating the scanner and again before each inventory, before any provider call. Input years, option data properties and the finite budget are validated before calling the longitude source.
+
+Every computed result explicitly states `accuracy.status: "unvalidated"` and `completeness.status: "unproven"`. Solver arithmetic checks do not establish astronomical accuracy or the programme's independent event gate. The earlier retained Node 22/24 source and offline installed-package tests passed eight protocol cases and 168 exact linear-Sun crossing controls per runtime. The installed exports and strict TypeScript 5.8.3 declaration checks passed with ES2022-only libraries and seven negative controls. Retained producer receipts under `docs/evidence/solar-terms-20261009/` bind these results to their source. Actual ephemeris execution, independent astronomical comparison, normative calendar definitions and the full repository gates remain outstanding.
+
+This prototype changes no core packed file, archive, package version or scientific tolerance. It does not implement Four Pillars, location-based hour conventions, day-boundary conventions or a public release.
+
+The angle catalogue and alternating major/minor classification are checked against the [Hong Kong Observatory's solar-term explanation](https://www.hko.gov.hk/en/gts/time/24solarterms.htm). The [official GB/T 33661-2017 registry entry](https://std.samr.gov.cn/gb/search/gbDetailed?id=71F772D817FDD3A7E05397BE0A0AB82A) identifies the Chinese-calendar standard; its normative coordinate/time text remains unread. `docs/evidence/solar-terms-20261009/definition-review.json` records these limits. The carried engine uses Astronomy Engine, so another call to that dependency would not establish independent ephemeris accuracy.
+
+## Ephemeris identity integration
+
+The carried engine exports its ephemeris identity as a frozen `{name, version}` record. The scanner accepts that shape and the existing string form. Structured records require plain own enumerable name/version data strings and normalize to the receipt string `name@version`, escaping each field's `%` as `%25` and `@` as `%40`; malformed records and accessor fields are refused before a provider call. The identity is rechecked before each inventory, and results retain a string snapshot.
+
+[Review on the original head](https://github.com/zodiacs-org/engine/pull/38#discussion_r4237522805) found the earlier string-only declaration/guard incompatible with that shape despite passing synthetic string-provider checks. New source and installed-consumer controls cover both shapes, frozen structured identities, malformed fields, late mutations and strict declaration rejection. Those controls use explicitly synthetic linear providers; they do not import/evaluate the ephemeris or claim astronomical accuracy. The actual revised source must pass fresh workflow and review gates; older source/pack results remain historical.
+
+## Identity stability within an inventory
+
+The source identity is checked immediately after every provider call and again before returning an inventory or refusal. A changed or invalid engine/ephemeris identity throws a protocol `TypeError` and returns no inventory. This prevents a mutable provider from attributing a mixed-source result to the initial receipt. Changes between separate inventories remain supported and are captured in the new inventory's receipt. Mutation controls cover the first, middle and last provider calls, string and structured ephemeris identities, engine versions, provider refusals and result accessors; their execution remains pending for this revised source.
+
+Structured source identity checks retain the name and version separately in a private shape-tagged fingerprint. String and record identities are distinguished even when their visible receipt strings match. Escaped receipts preserve delimiter-containing fields without collisions; ordinary carried name/version receipts keep their existing spelling. Computed and refused results also retain a public `source.ephemerisIdentity` snapshot: `{kind:'string', value}` or `{kind:'record', name, version}`. This preserves identity shape and every original field in stored receipts, while the private fingerprint stays internal. The legacy `source.ephemeris` string remains a display label; use the tagged identity for source attribution.
+
+## Provider result snapshots
+
+The scanner reads each provider result's sample count, status and crossing collection once, and validates and accumulates the captured count. Crossing timestamps are captured with the intrinsic Date time reader before other crossing fields are read. Changing getters cannot substitute an unchecked count or timestamp later in the calculation. Provider accounting remains the explicitly supplied source's accounting; these checks do not prove astronomical accuracy or certify an untrusted provider's sample claims.

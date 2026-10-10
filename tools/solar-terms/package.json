@@ -1,0 +1,27 @@
+{
+  "name": "@zodiacs/solar-terms",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "license": "MIT",
+  "description": "Private solar-term prototype with explicit supplied engine, aggregate sample budget and unvalidated accuracy",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.mts",
+      "import": "./index.mjs"
+    }
+  },
+  "files": [
+    "index.mjs",
+    "index.d.mts",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test selftest.mjs"
+  }
+}
