@@ -1,0 +1,241 @@
+﻿2026-10-10T11:57:09.7460131Z Current runner version: '2.337.0'
+2026-10-10T11:57:09.7479190Z ##[group]Runner Image Provisioner
+2026-10-10T11:57:09.7479769Z Hosted Compute Agent
+2026-10-10T11:57:09.7480203Z Version: 20261002.596
+2026-10-10T11:57:09.7480647Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-10T11:57:09.7481103Z Build Date: 2026-10-02T22:28:27Z
+2026-10-10T11:57:09.7481585Z Worker ID: {e116c886-bc8a-4eed-a423-d7bff35da803}
+2026-10-10T11:57:09.7482046Z Region: centralus
+2026-10-10T11:57:09.7482410Z Cloud: Azure
+2026-10-10T11:57:09.7482787Z ##[endgroup]
+2026-10-10T11:57:09.7483577Z ##[group]Operating System
+2026-10-10T11:57:09.7483994Z Ubuntu
+2026-10-10T11:57:09.7484318Z 24.04.5
+2026-10-10T11:57:09.7484647Z LTS
+2026-10-10T11:57:09.7485054Z ##[endgroup]
+2026-10-10T11:57:09.7485417Z ##[group]Runner Image
+2026-10-10T11:57:09.7485824Z Image: ubuntu-24.04
+2026-10-10T11:57:09.7486256Z Version: 20261004.327.1
+2026-10-10T11:57:09.7487616Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-10T11:57:09.7488630Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-10T11:57:09.7489270Z ##[endgroup]
+2026-10-10T11:57:09.7489955Z ##[group]GITHUB_TOKEN Permissions
+2026-10-10T11:57:09.7491295Z Contents: read
+2026-10-10T11:57:09.7491640Z Metadata: read
+2026-10-10T11:57:09.7491961Z ##[endgroup]
+2026-10-10T11:57:09.7493416Z Secret source: Actions
+2026-10-10T11:57:09.7493997Z Cache mode: write
+2026-10-10T11:57:09.7494486Z Prepare workflow directory
+2026-10-10T11:57:09.7708027Z Prepare all required actions
+2026-10-10T11:57:09.7750227Z Getting action download info
+2026-10-10T11:57:10.0013780Z Download action repository 'actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-10-10T11:57:10.0826731Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-10T11:57:10.1755773Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-10T11:57:10.3619691Z Complete job name: source (24)
+2026-10-10T11:57:10.4092913Z ##[group]Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+2026-10-10T11:57:10.4093441Z with:
+2026-10-10T11:57:10.4093692Z   persist-credentials: false
+2026-10-10T11:57:10.4093990Z   sparse-checkout-cone-mode: false
+2026-10-10T11:57:10.4094419Z   sparse-checkout: /tools/solar-terms/
+/artifacts/zodiacs-engine-1.0.0-rc.2.tgz
+
+2026-10-10T11:57:10.4094864Z   repository: zodiacs-org/engine
+2026-10-10T11:57:10.4097032Z   token: ***
+2026-10-10T11:57:10.4097270Z   ssh-strict: true
+2026-10-10T11:57:10.4097516Z   ssh-user: git
+2026-10-10T11:57:10.4097786Z   clean: true
+2026-10-10T11:57:10.4098024Z   fetch-depth: 1
+2026-10-10T11:57:10.4098397Z   fetch-tags: false
+2026-10-10T11:57:10.4098652Z   show-progress: true
+2026-10-10T11:57:10.4098906Z   lfs: false
+2026-10-10T11:57:10.4099140Z   submodules: false
+2026-10-10T11:57:10.4099413Z   set-safe-directory: true
+2026-10-10T11:57:10.4099699Z   allow-unsafe-pr-checkout: false
+2026-10-10T11:57:10.4100069Z ##[endgroup]
+2026-10-10T11:57:10.4769678Z Syncing repository: zodiacs-org/engine
+2026-10-10T11:57:10.4771294Z ##[group]Getting Git version info
+2026-10-10T11:57:10.4771750Z Working directory is '/home/runner/work/engine/engine'
+2026-10-10T11:57:10.4772330Z [command]/usr/bin/git version
+2026-10-10T11:57:10.4842503Z git version 2.55.0
+2026-10-10T11:57:10.4858697Z ##[endgroup]
+2026-10-10T11:57:10.4872178Z Temporarily overriding HOME='/home/runner/work/_temp/3fe349b4-e4bc-4b13-b97b-3585673d259e' before making global git config changes
+2026-10-10T11:57:10.4873404Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-10T11:57:10.4875947Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/engine/engine
+2026-10-10T11:57:10.4923614Z Deleting the contents of '/home/runner/work/engine/engine'
+2026-10-10T11:57:10.4927196Z ##[group]Determining repository object format
+2026-10-10T11:57:10.4928731Z ##[endgroup]
+2026-10-10T11:57:10.4929576Z ##[group]Initializing the repository
+2026-10-10T11:57:10.4932080Z [command]/usr/bin/git init /home/runner/work/engine/engine
+2026-10-10T11:57:10.5031915Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-10T11:57:10.5043675Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-10T11:57:10.5044727Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-10T11:57:10.5045391Z hint: call:
+2026-10-10T11:57:10.5045737Z hint:
+2026-10-10T11:57:10.5046339Z hint: 	git config --global init.defaultBranch <name>
+2026-10-10T11:57:10.5046876Z hint:
+2026-10-10T11:57:10.5047248Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-10T11:57:10.5047857Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-10T11:57:10.5048524Z hint:
+2026-10-10T11:57:10.5048920Z hint: 	git branch -m <name>
+2026-10-10T11:57:10.5049351Z hint:
+2026-10-10T11:57:10.5050083Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-10T11:57:10.5050906Z Initialized empty Git repository in /home/runner/work/engine/engine/.git/
+2026-10-10T11:57:10.5052120Z [command]/usr/bin/git remote add origin https://github.com/zodiacs-org/engine
+2026-10-10T11:57:10.5103116Z ##[endgroup]
+2026-10-10T11:57:10.5103833Z ##[group]Disabling automatic garbage collection
+2026-10-10T11:57:10.5106908Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-10T11:57:10.5141868Z ##[endgroup]
+2026-10-10T11:57:10.5142693Z ##[group]Setting up auth
+2026-10-10T11:57:10.5143146Z Removing SSH command configuration
+2026-10-10T11:57:10.5148797Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-10T11:57:10.5191009Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-10T11:57:10.5485119Z Removing HTTP extra header
+2026-10-10T11:57:10.5491215Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-10T11:57:10.5521530Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-10T11:57:10.5700419Z Removing includeIf entries pointing to credentials config files
+2026-10-10T11:57:10.5707301Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-10T11:57:10.5739420Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-10T11:57:10.5927499Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-10T11:57:10.5964161Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/engine/engine/.git.path /home/runner/work/_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:10.5995147Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/engine/engine/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:10.6028578Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:10.6057087Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:10.6089600Z ##[endgroup]
+2026-10-10T11:57:10.6090239Z ##[group]Fetching the repository
+2026-10-10T11:57:10.6096635Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --filter=blob:none --depth=1 origin +e47c214593579c19d5de87aa4ad833e0b97b76bb:refs/remotes/origin/codex/solar-terms-preparation
+2026-10-10T11:57:10.9444126Z From https://github.com/zodiacs-org/engine
+2026-10-10T11:57:10.9445244Z  * [new ref]         e47c214593579c19d5de87aa4ad833e0b97b76bb -> origin/codex/solar-terms-preparation
+2026-10-10T11:57:10.9453646Z [command]/usr/bin/git branch --list --remote origin/codex/solar-terms-preparation
+2026-10-10T11:57:10.9479751Z   origin/codex/solar-terms-preparation
+2026-10-10T11:57:10.9486204Z [command]/usr/bin/git rev-parse refs/remotes/origin/codex/solar-terms-preparation
+2026-10-10T11:57:10.9507276Z e47c214593579c19d5de87aa4ad833e0b97b76bb
+2026-10-10T11:57:10.9511026Z ##[endgroup]
+2026-10-10T11:57:10.9511605Z ##[group]Determining the checkout info
+2026-10-10T11:57:10.9512370Z ##[endgroup]
+2026-10-10T11:57:10.9512810Z ##[group]Setting up sparse checkout
+2026-10-10T11:57:10.9514324Z [command]/usr/bin/git config core.sparseCheckout true
+2026-10-10T11:57:10.9542548Z [command]/usr/bin/git rev-parse --git-path info/sparse-checkout
+2026-10-10T11:57:10.9561995Z .git/info/sparse-checkout
+2026-10-10T11:57:10.9567964Z ##[endgroup]
+2026-10-10T11:57:10.9568877Z ##[group]Checking out the ref
+2026-10-10T11:57:10.9571861Z [command]/usr/bin/git checkout --progress --force -B codex/solar-terms-preparation refs/remotes/origin/codex/solar-terms-preparation
+2026-10-10T11:57:11.5298386Z Switched to a new branch 'codex/solar-terms-preparation'
+2026-10-10T11:57:11.5300719Z branch 'codex/solar-terms-preparation' set up to track 'origin/codex/solar-terms-preparation'.
+2026-10-10T11:57:11.5306713Z ##[endgroup]
+2026-10-10T11:57:11.5345079Z [command]/usr/bin/git log -1 --format=%H
+2026-10-10T11:57:11.5367220Z e47c214593579c19d5de87aa4ad833e0b97b76bb
+2026-10-10T11:57:11.5374530Z ##[group]Removing auth
+2026-10-10T11:57:11.5375176Z Removing SSH command configuration
+2026-10-10T11:57:11.5376523Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-10T11:57:11.5406926Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-10T11:57:11.5583992Z Removing HTTP extra header
+2026-10-10T11:57:11.5586816Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-10T11:57:11.5615039Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-10T11:57:11.5781612Z Removing includeIf entries pointing to credentials config files
+2026-10-10T11:57:11.5784195Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-10T11:57:11.5809167Z includeif.gitdir:/home/runner/work/engine/engine/.git.path
+2026-10-10T11:57:11.5810925Z includeif.gitdir:/home/runner/work/engine/engine/.git/worktrees/*.path
+2026-10-10T11:57:11.5812300Z includeif.gitdir:/github/workspace/.git.path
+2026-10-10T11:57:11.5813597Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-10T11:57:11.5816768Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/engine/engine/.git.path
+2026-10-10T11:57:11.5836975Z /home/runner/work/_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:11.5844973Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/engine/engine/.git.path /home/runner/work/_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:11.5897817Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/engine/engine/.git/worktrees/*.path
+2026-10-10T11:57:11.5917813Z /home/runner/work/_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:11.5925062Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/engine/engine/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:11.5955140Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-10T11:57:11.5977935Z /github/runner_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:11.5984696Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:11.6013233Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-10T11:57:11.6035784Z /github/runner_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:11.6041789Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config
+2026-10-10T11:57:11.6070224Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-10T11:57:11.6240190Z Removing credentials config '/home/runner/work/_temp/git-credentials-78b7df19-ca16-45b5-b32f-3d5f3b143e87.config'
+2026-10-10T11:57:11.6247324Z ##[endgroup]
+2026-10-10T11:57:11.6571570Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-10T11:57:11.6572607Z with:
+2026-10-10T11:57:11.6573165Z   node-version: 24
+2026-10-10T11:57:11.6573748Z   always-auth: false
+2026-10-10T11:57:11.6574356Z   check-latest: false
+2026-10-10T11:57:11.6580275Z   token: ***
+2026-10-10T11:57:11.6580828Z ##[endgroup]
+2026-10-10T11:57:11.7511745Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-10T11:57:11.7516142Z (node:2191) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-10T11:57:11.7518923Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-10T11:57:11.7521210Z ##[group]Environment details
+2026-10-10T11:57:12.0478412Z node: v24.21.0
+2026-10-10T11:57:12.0478673Z npm: 11.19.0
+2026-10-10T11:57:12.0478839Z yarn: 1.22.22
+2026-10-10T11:57:12.0479773Z ##[endgroup]
+2026-10-10T11:57:12.0587416Z ##[group]Run node --test tools/solar-terms/selftest.mjs
+2026-10-10T11:57:12.0587753Z [36;1mnode --test tools/solar-terms/selftest.mjs[0m
+2026-10-10T11:57:12.0823733Z shell: /usr/bin/bash -e {0}
+2026-10-10T11:57:12.0823929Z ##[endgroup]
+2026-10-10T11:57:12.1607741Z ✔ calendar-year inventory retains independently defined angles and UTC instants (3.164681ms)
+2026-10-10T11:57:12.1608946Z ✔ catalog distinguishes the alternating jie and zhongqi longitudes (0.156384ms)
+2026-10-10T11:57:12.1609894Z ✔ one aggregate budget refuses atomically after earlier completed searches (0.132628ms)
+2026-10-10T11:57:12.1610612Z ✔ a source refusal discards every earlier term (0.121362ms)
+2026-10-10T11:57:12.1611230Z ✔ missing and duplicate crossings refuse the whole inventory (0.741902ms)
+2026-10-10T11:57:12.1611921Z ✔ year and plain option validation happen before any source call (0.38695ms)
+2026-10-10T11:57:12.1612644Z ✔ malformed provider accounting and coordinates are refused as protocol errors (0.208372ms)
+2026-10-10T11:57:12.1613068Z ✔ one source cannot mutate the calendar window used by later searches (0.12655ms)
+2026-10-10T11:57:12.1613525Z ✔ empty source identities fail before invoking a provider and are rechecked for every inventory (0.356064ms)
+2026-10-10T11:57:12.1614051Z ✔ frozen name/version ephemeris records normalize to an immutable receipt string (0.296364ms)
+2026-10-10T11:57:12.1614605Z ✔ malformed structured identities and later mutations are refused before source calls (0.339469ms)
+2026-10-10T11:57:12.1690353Z ℹ tests 11
+2026-10-10T11:57:12.1690600Z ℹ suites 0
+2026-10-10T11:57:12.1690890Z ℹ pass 11
+2026-10-10T11:57:12.1691027Z ℹ fail 0
+2026-10-10T11:57:12.1691155Z ℹ cancelled 0
+2026-10-10T11:57:12.1691289Z ℹ skipped 0
+2026-10-10T11:57:12.1691756Z ℹ todo 0
+2026-10-10T11:57:12.1691918Z ℹ duration_ms 53.810417
+2026-10-10T11:57:12.1766754Z ##[group]Run node tools/solar-terms/scripts/prepare-consumer.mjs
+2026-10-10T11:57:12.1767052Z [36;1mnode tools/solar-terms/scripts/prepare-consumer.mjs[0m
+2026-10-10T11:57:12.1821067Z shell: /usr/bin/bash -e {0}
+2026-10-10T11:57:12.1821261Z ##[endgroup]
+2026-10-10T11:57:13.9897394Z SOLAR_TERM_CONSUMER {"schema":"zodiacs.private-solar-term-consumer.v1","producer":{"source":"e47c214593579c19d5de87aa4ad833e0b97b76bb","run":"38050192231","node":"v24.21.0"},"pack":{"bytes":5302,"sha256":"c628760fec5dd526528d094d962b6e6db5f04e7580657708a5aa90179c2b1161","files":["LICENSE","README.md","index.d.mts","index.mjs","package.json"]},"carriedArchiveSha256":"4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002","linearControls":[{"year":1,"terms":24,"samples":4992,"maxErrorMs":9,"budgetRefusesWhole":true},{"year":99,"terms":24,"samples":4992,"maxErrorMs":9,"budgetRefusesWhole":true},{"year":1850,"terms":24,"samples":4992,"maxErrorMs":9,"budgetRefusesWhole":true},{"year":2000,"terms":24,"samples":4992,"maxErrorMs":3,"budgetRefusesWhole":true},{"year":2026,"terms":24,"samples":4992,"maxErrorMs":8,"budgetRefusesWhole":true},{"year":2049,"terms":24,"samples":4992,"maxErrorMs":8,"budgetRefusesWhole":true},{"year":9998,"terms":24,"samples":4992,"maxErrorMs":8,"budgetRefusesWhole":true}],"typeChecks":{"compiler":"5.8.3","lib":"ES2022 only; no DOM","strict":true,"installedExports":true,"negativeControls":9,"structuredIdentityType":true},"ephemerisIdentityShapes":{"string":true,"structured":true,"normalization":"name@version","pairedInventories":7},"accuracy":"unvalidated","completeness":"unproven","publication":"private; no registry publication","limitations":["Installed private pack and independent linear arithmetic only.","No actual solar ephemeris, independent astronomical comparison or full repository suite was run by this script."]}
+2026-10-10T11:57:14.0020543Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-10T11:57:14.0020798Z with:
+2026-10-10T11:57:14.0020935Z   name: private-solar-node24
+2026-10-10T11:57:14.0021094Z   path: solar-term-consumer-report.json
+2026-10-10T11:57:14.0021255Z   retention-days: 90
+2026-10-10T11:57:14.0021384Z   if-no-files-found: warn
+2026-10-10T11:57:14.0021518Z   compression-level: 6
+2026-10-10T11:57:14.0021643Z   overwrite: false
+2026-10-10T11:57:14.0021771Z   include-hidden-files: false
+2026-10-10T11:57:14.0021914Z ##[endgroup]
+2026-10-10T11:57:14.1144937Z (node:2298) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-10T11:57:14.1145413Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-10T11:57:14.1191515Z With the provided path, there will be 1 file uploaded
+2026-10-10T11:57:14.1229357Z Artifact name is valid!
+2026-10-10T11:57:14.1229869Z Root directory input is valid!
+2026-10-10T11:57:14.3857198Z Beginning upload of artifact content to blob storage
+2026-10-10T11:57:14.3993254Z (node:2298) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-10T11:57:14.5294673Z Uploaded bytes 942
+2026-10-10T11:57:14.5684408Z Finished uploading artifact content to blob storage!
+2026-10-10T11:57:14.5685309Z SHA256 digest of uploaded artifact zip is ac361abf5b3ab3097e67dc5378126f606ba8b6d388b4dea047e4185e28fd2dc7
+2026-10-10T11:57:14.5685842Z Finalizing artifact upload
+2026-10-10T11:57:14.7839222Z Artifact private-solar-node24.zip successfully finalized. Artifact ID 11669081819
+2026-10-10T11:57:14.7839963Z Artifact private-solar-node24 has been successfully uploaded! Final size is 942 bytes. Artifact ID is 11669081819
+2026-10-10T11:57:14.7842428Z Artifact download URL: https://github.com/zodiacs-org/engine/actions/runs/38050192231/artifacts/11669081819
+2026-10-10T11:57:14.7975823Z Post job cleanup.
+2026-10-10T11:57:14.8763994Z (node:2311) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-10T11:57:14.8764500Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-10T11:57:14.8958907Z Post job cleanup.
+2026-10-10T11:57:14.9543051Z [command]/usr/bin/git version
+2026-10-10T11:57:14.9578313Z git version 2.55.0
+2026-10-10T11:57:14.9607227Z Temporarily overriding HOME='/home/runner/work/_temp/733a1c7a-21c5-42b0-84b1-fe3e2b207c87' before making global git config changes
+2026-10-10T11:57:14.9607936Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-10T11:57:14.9611422Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/engine/engine
+2026-10-10T11:57:14.9642573Z Removing SSH command configuration
+2026-10-10T11:57:14.9648023Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-10T11:57:14.9682213Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-10T11:57:14.9891880Z Removing HTTP extra header
+2026-10-10T11:57:14.9896517Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-10T11:57:14.9942614Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-10T11:57:15.0167581Z Removing includeIf entries pointing to credentials config files
+2026-10-10T11:57:15.0199376Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-10T11:57:15.0221341Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-10T11:57:15.0542498Z Cleaning up orphan processes
+2026-10-10T11:57:15.0729443Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

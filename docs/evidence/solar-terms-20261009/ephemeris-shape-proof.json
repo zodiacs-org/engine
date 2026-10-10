@@ -1,0 +1,110 @@
+{
+  "schema": "zodiacs.private-solar-ephemeris-shape-proof.v1",
+  "source": "e47c214593579c19d5de87aa4ad833e0b97b76bb",
+  "run": 38050192231,
+  "sourceControlsPerRuntime": 11,
+  "typeNegativeControlsPerRuntime": 9,
+  "privatePack": {
+    "bytes": 5302,
+    "sha256": "c628760fec5dd526528d094d962b6e6db5f04e7580657708a5aa90179c2b1161",
+    "files": [
+      "LICENSE",
+      "README.md",
+      "index.d.mts",
+      "index.mjs",
+      "package.json"
+    ]
+  },
+  "runtimes": [
+    {
+      "node": "v22.22.2",
+      "job": 114207595173,
+      "counts": [
+        "2026-10-10T11:57:02.2033993Z # tests 11",
+        "2026-10-10T11:57:02.2035072Z # pass 11",
+        "2026-10-10T11:57:02.2035510Z # fail 0"
+      ],
+      "decodedLog": {
+        "bytes": 26525,
+        "sha256": "962e2343ac76536a67c0065dd91b781ef96beb0d0e106af59f46ddc499b08a3f",
+        "format": "Exact decoded GitHub job-log connector text"
+      },
+      "consumerReportMethod": "Exact compact SOLAR_TERM_CONSUMER JSON payload extracted from decoded native stdout; retained as JSON with a trailing newline. Not an extraction of the original pretty-printed artifact report."
+    },
+    {
+      "node": "v24.21.0",
+      "job": 114207595300,
+      "counts": [
+        "2026-10-10T11:57:12.1690353Z ℹ tests 11",
+        "2026-10-10T11:57:12.1690890Z ℹ pass 11",
+        "2026-10-10T11:57:12.1691027Z ℹ fail 0"
+      ],
+      "decodedLog": {
+        "bytes": 23008,
+        "sha256": "edf335ef54e6ef8d0baa8ea6f90d6ccb5b8a904fda4f40060f14e5230d3a3c4c",
+        "format": "Exact decoded GitHub job-log connector text"
+      },
+      "consumerReportMethod": "Exact compact SOLAR_TERM_CONSUMER JSON payload extracted from decoded native stdout; retained as JSON with a trailing newline. Not an extraction of the original pretty-printed artifact report."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11669081819,
+      "name": "private-solar-node24",
+      "bytes": 942,
+      "apiDigest": "sha256:ac361abf5b3ab3097e67dc5378126f606ba8b6d388b4dea047e4185e28fd2dc7"
+    },
+    {
+      "id": 11668683719,
+      "name": "private-solar-node22.22.2",
+      "bytes": 942,
+      "apiDigest": "sha256:8dea830d6bb1be1528e9f226188988815790ad5ff459eec4f09ec02bdbce1485"
+    }
+  ],
+  "artifactMethod": "GitHub API metadata identities only; no ZIP byte extraction or CRC verification is claimed.",
+  "coreArchive": {
+    "bytes": 287011,
+    "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002"
+  },
+  "scope": "Only private scanner and synthetic provider integration; no actual ephemeris execution or astronomical accuracy/completeness acceptance.",
+  "reviewFinding": 4237522805,
+  "publication": "none",
+  "requiredSourceRuns": [
+    {
+      "id": 38050194778,
+      "name": "Atlas",
+      "conclusion": "success",
+      "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+    },
+    {
+      "id": 38050194767,
+      "name": "Private solar-term source and arithmetic",
+      "conclusion": "success",
+      "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+    },
+    {
+      "id": 38050194752,
+      "name": "Python package",
+      "conclusion": "success",
+      "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+    },
+    {
+      "id": 38050194787,
+      "name": "CodeQL",
+      "conclusion": "success",
+      "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+    },
+    {
+      "id": 38050194748,
+      "name": "Conformance",
+      "conclusion": "success",
+      "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+    },
+    {
+      "id": 38050194749,
+      "name": "CI",
+      "conclusion": "success",
+      "head": "e47c214593579c19d5de87aa4ad833e0b97b76bb"
+    }
+  ]
+}
