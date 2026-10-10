@@ -289,7 +289,7 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "1.0.0-rc.2";
+export const ENGINE_VERSION: string = "1.0.0";
 
 /**
  * The ephemeris underneath every position. The dependency is pinned to this

@@ -99,6 +99,10 @@ for (const file of files) {
 // by 615 bytes. The tables that only ./calc and ./vedic load are not marked,
 // because their marks would put those two entries over their budgets
 // (docs/evidence/1.0.0-rc.2-20261006/sizes.json).
+//
+// 1.0.0 raises none. Its graphs are 1.0.0-rc.2's, less the five bytes of
+// "-rc.2" in each that loads the engine's version
+// (docs/evidence/1.0.0-20261011/sizes.json).
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -271,6 +275,10 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // 950,000 to 1,000,000 with the owner's approval of 2026-10-06, for the
 // documentation the 1.0 API carries in its declarations, the reviews' fixes
 // and the 1.0 changelog (CHANGELOG.md, 1.0.0-rc.1, Sizes).
+//
+// 1.0.0: 991,125 bytes in 74 files, 1,597 more than 1.0.0-rc.2's 989,528, for
+// its changelog entry and the README's release lines. The cap, not raised,
+// leaves 8,875 bytes (docs/evidence/1.0.0-20261011/sizes.json).
 const TOTAL_CAP = 1_000_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 

@@ -137,7 +137,7 @@ describe("a receipt written by 0.1.1-rc.14 (the rc.8 conventions set)", () => {
     // Replayed today, the chart's own receipt is of the current set, under this version.
     const today = createNatalEnvelope(chart);
     expect(today.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[0]);
-    expect(today.receipt.engine.version).toBe("1.0.0-rc.2");
+    expect(today.receipt.engine.version).toBe("1.0.0");
     expect(verdict(today)).toBe("ok");
   });
 

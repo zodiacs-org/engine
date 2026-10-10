@@ -1,0 +1,3 @@
+# each dist/*.js of this tree's build against the files of artifacts/zodiacs-engine-1.0.0-rc.2.tgz, unpacked, with chunk-XXXXXXXX.js names and the version string ("1.0.0", "1.0.0-rc.2") set aside; 2026-10-10
+46 files built, 46 carried; 46 built files equal a carried one
+files holding "1.0.0": chunk-OG4OYTJJ.js

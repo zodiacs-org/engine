@@ -14,20 +14,21 @@ side effects, and performs no network request from its core entry point. Its
 one runtime side effect is the ΔT it installs in astronomy-engine (see Time
 below).
 
-**Release candidate: 1.0.0-rc.2**, the second candidate for 1.0.0, which
-lets a bundler leave out the tables a program does not read (CHANGELOG.md).
-From 1.0.0 the package follows Semantic Versioning:
-[docs/versioning.md](docs/versioning.md) says what is public, how a number
-may change, which records stay readable and how something public is
+**1.0.0**, the first stable release: 1.0.0-rc.2 with the version changed,
+the same API and the same values (CHANGELOG.md). The package follows Semantic
+Versioning: [docs/versioning.md](docs/versioning.md) says what is public, how
+a number may change, which records stay readable and how something public is
 deprecated, and `api/` holds each public entry point's declarations.
-On 2026-10-06 npm carried 0.1.1-rc.14 to 0.1.1-rc.16 of this package
-(`latest` 0.1.1-rc.15, `next` 0.1.1-rc.16); this candidate is not published
-there. Install the exact candidate tarball supplied with the review, retaining
-its SHA-256 receipt:
 
 ```sh
-pnpm add ./zodiacs-engine-1.0.0-rc.2.tgz
+npm install @zodiacs/engine
 ```
+
+The Release workflow publishes the archive carried in `artifacts/` as it is,
+with provenance (CONTRIBUTING.md, *Releases*). Before 1.0.0 npm carried
+0.1.1-rc.14 to 0.1.1-rc.16. 0.1.1-rc.17, 1.0.0-rc.1 and 1.0.0-rc.2 were never
+published, so a caller moving from npm reads their CHANGELOG entries,
+1.0.0-rc.1's *Migration* first.
 
 The package runs in browsers through a bundler, and in Node.js 20.19.0 or a
 later 20.x, or 22.7.0 or later (`"engines": { "node": "^20.19.0 || >=22.7.0" }`).
@@ -43,7 +44,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.0.0-rc.2.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.0.0.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -72,9 +73,9 @@ dependencies afresh with `npm ci` and takes nothing from the checkout's
 needs merge commits: a squash or rebase merge drops the source commits it
 checks against, and the check then fails.
 
-This candidate settles the API for 1.0.0. Before the promise was made, three
-reviews read every public declaration of the twelve entry points; it acts on
-what they found, records the result in `api/`, which CI checks, and lists
+1.0.0-rc.1 settled the API for 1.0.0. Before the promise was made, three
+reviews read every public declaration of the twelve entry points; it acted on
+what they found, recorded the result in `api/`, which CI checks, and lists
 every breaking change, deprecation and experimental part in CHANGELOG.md with
 what a caller does about it. `@zodiacs/engine/calc` now computes a caller's
 ayanamsa carried by precession from any epoch in `EPHEMERIS_SPAN`, where rc.17
@@ -103,10 +104,10 @@ to 2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS
 UT1 − UTC, and otherwise as UT1 with the ΔT model, or on UT1 or TT when
 `timeScale` says so (see Time). The ephemeris is still astronomy-engine
 2.1.19. See CHANGELOG.md for the release history and
-`docs/evidence/1.0.0-rc.2-20261006/` for this candidate's checks (1.0.0-rc.1's
-are in `docs/evidence/1.0.0-rc.1-20261006/`, rc.17's in
-`docs/evidence/rc17-20261005/`, rc.16's in `docs/evidence/rc16-20260930/`).
-Site adoption is reviewed separately.
+`docs/evidence/1.0.0-20261011/` for this release's checks (1.0.0-rc.2's are in
+`docs/evidence/1.0.0-rc.2-20261006/`, 1.0.0-rc.1's in
+`docs/evidence/1.0.0-rc.1-20261006/`, rc.17's in
+`docs/evidence/rc17-20261005/`). Site adoption is reviewed separately.
 
 ## Natal chart in 10 lines
 
@@ -617,7 +618,7 @@ bracket, which cannot fail outside the polar circle; it never returns the last
 unconverged iterate. Near the polar limit a cusp carries the rounding of asin
 near ±1: up to 6.5e-7° one unit in the last place below it.
 
-See [CHANGELOG.md](CHANGELOG.md) for candidate changes. Reference coverage and
+See [CHANGELOG.md](CHANGELOG.md) for each release's changes. Reference coverage and
 known limits are recorded in the site [platform evidence ledger](https://github.com/zodiacs-org/site/blob/75ae549c6bcedba67ccce7d467e1b54af0c83070/docs/platform/EVIDENCE.md).
 The date parser's representable range is not a claim of astronomical accuracy
 across that range. Reference cases are finite; broader numerical scope review
@@ -769,8 +770,8 @@ against natalChart at every whole second, not proven. On 1,000 preregistered
 random windows (1800 to 2200, all thirteen systems, two thirds at 60° of
 latitude or more), all 24,188 sampled transitions were matched, none missed
 and none extra, and natalChart confirmed every switch at its millisecond
-(`docs/evidence/birth-window/RESULTS.md`); on this candidate's build, after
-the time basis and the nutation, again (`docs/evidence/birth-window/rc16/`).
+(`docs/evidence/birth-window/RESULTS.md`); on rc.16's build, after the time
+basis and the nutation, again (`docs/evidence/birth-window/rc16/`).
 
 In one thread, a 10-minute window takes about 2 ms, two hours about 20 ms and
 a whole day about 0.23 s (medians, Node.js 22; `timing.json`). A window over a

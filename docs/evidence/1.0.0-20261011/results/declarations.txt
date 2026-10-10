@@ -1,0 +1,2 @@
+# each dist/*.d.ts of this tree's build against the same file of artifacts/zodiacs-engine-1.0.0-rc.2.tgz, unpacked; 2026-10-10
+22 of 22 declaration files are 1.0.0-rc.2's byte for byte
