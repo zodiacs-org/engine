@@ -89,10 +89,30 @@ for(const year of [1,99,1850,2000,2026,2049,9998]){
  assert.equal(refused.status,'refused');assert.equal(refused.reason,'sample-budget');assert.deepEqual(refused.terms,[]);
  rows.push({year,terms:result.terms.length,samples:result.samples,maxErrorMs,budgetRefusesWhole:true});
 }
+const identityYear=2026,identityFrom=yearDate(identityYear).getTime(),identitySpan=yearDate(identityYear+1).getTime()-identityFrom;
+const identityLongitude=(_body,date)=>(280+(date.getTime()-identityFrom)*360/identitySpan)%360;
+const identityProvider={ENGINE_VERSION:'carried-rc.2 crossing algorithm',EPHEMERIS:{name:'a',version:'b@c'},
+ searchLongitudeCrossings:(body,target,a,b,options)=>original.searchLongitudeCrossingsWith(identityLongitude,body,target,a,b,options)};
+const encodedReceipts=[];
+for(const [name,version] of [['a','b@c'],['a@b','c'],['a','b%40c'],['a%40b','c'],['a%','b@c'],['a','%b@c']]){
+ const result=createSolarTermScanner({...identityProvider,EPHEMERIS:Object.freeze({name,version})})(identityYear);
+ assert.equal(result.status,'computed');assert.equal(result.terms.length,24);
+ encodedReceipts.push(result.source.ephemeris);
+}
+assert.equal(new Set(encodedReceipts).size,6);
+for(const after of [{name:'a@b',version:'c'},'a@b%40c']){
+ let calls=0;
+ const provider={...identityProvider,EPHEMERIS:{name:'a',version:'b@c'},searchLongitudeCrossings(...args){
+  calls++;const result=identityProvider.searchLongitudeCrossings(...args);provider.EPHEMERIS=after;return result;
+ }};
+ assert.throws(()=>createSolarTermScanner(provider)(identityYear),{name:'TypeError',message:'Longitude-source identity changed during the inventory'});
+ assert.equal(calls,1);
+}
+const identityCollisionControls={distinctEncodedReceipts:encodedReceipts.length,delimiterMutationRefused:true,shapeMutationRefused:true};
 const source=command('git',['rev-parse','HEAD'],root).trim();
 const report={schema:'zodiacs.private-solar-term-consumer.v1',producer:{source,run:process.env.GITHUB_RUN_ID,node:process.version},
  pack:{bytes:readFileSync(tar).length,sha256:hash(readFileSync(tar)),files:packed[0].files.map(f=>f.path).sort()},
- carriedArchiveSha256:hash(readFileSync(archive)),linearControls:rows,typeChecks,ephemerisIdentityShapes:{string:true,structured:true,normalization:'name@version',pairedInventories:rows.length},
+ carriedArchiveSha256:hash(readFileSync(archive)),linearControls:rows,typeChecks,ephemerisIdentityShapes:{string:true,structured:true,normalization:'escape % and @ within fields, then join with @',pairedInventories:rows.length,collisionControls:identityCollisionControls},
  accuracy:'unvalidated',completeness:'unproven',publication:'private; no registry publication',
  limitations:['Installed private pack and independent linear arithmetic only.','No actual solar ephemeris, independent astronomical comparison or full repository suite was run by this script.']};
 writeFileSync(resolve(root,'solar-term-consumer-report.json'),JSON.stringify(report,null,2)+'\n');

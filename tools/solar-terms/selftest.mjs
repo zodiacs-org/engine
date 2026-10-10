@@ -159,3 +159,23 @@ test('identity changes cannot escape through provider refusal or result accessor
   assert.equal(calls,1);
  }
 });
+
+test('structured identity receipts escape delimiters and in-scan comparisons retain shape and fields',()=>{
+ const base=linearEngine(2026);
+ const receipts=new Set();
+ for(const [name,version] of [['a','b@c'],['a@b','c'],['a','b%40c'],['a%40b','c'],['a%','b@c'],['a','%b@c']]){
+  const result=createSolarTermScanner({...base,EPHEMERIS:{name,version}})(2026);
+  assert.equal(result.status,'computed');
+  const parts=result.source.ephemeris.split('@');assert.equal(parts.length,2);
+  const decode=part=>part.replaceAll('%40','@').replaceAll('%25','%');
+  assert.deepEqual(parts.map(decode),[name,version]);
+  receipts.add(result.source.ephemeris);
+ }
+ assert.equal(receipts.size,6);
+ for(const after of [{name:'a@b',version:'c'},'a@b%40c']){
+  let calls=0;
+  const engine={...base,EPHEMERIS:{name:'a',version:'b@c'},searchLongitudeCrossings(...args){calls++;const result=base.searchLongitudeCrossings(...args);engine.EPHEMERIS=after;return result;}};
+  assert.throws(()=>createSolarTermScanner(engine)(2026),{name:'TypeError',message:'Longitude-source identity changed during the inventory'});
+  assert.equal(calls,1);
+ }
+});
