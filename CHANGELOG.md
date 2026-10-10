@@ -1,5 +1,32 @@
 # Engine changelog
 
+## 1.0.0 — 2026-10-11
+
+The first stable release: 1.0.0-rc.2 with the version changed. From this
+release the package follows Semantic Versioning as docs/versioning.md
+describes, and `api/` records the public declarations of the twelve entry
+points. Checks: `docs/evidence/1.0.0-20261011/`.
+
+- Before this release npm carried 0.1.1-rc.14 to 0.1.1-rc.16 (`latest`
+  0.1.1-rc.15, `next` 0.1.1-rc.16). 0.1.1-rc.17, 1.0.0-rc.1 and 1.0.0-rc.2
+  were never published, so a caller moving from npm reads their entries
+  below; 1.0.0-rc.1's *Migration* lists each breaking change and
+  deprecation with what a caller does about it.
+- No API and no value changes from 1.0.0-rc.2. Every declaration file of the
+  build is 1.0.0-rc.2's byte for byte, and 1.0.0-rc.1's battery of 6,417
+  calls over the twelve entry points prints the same bytes on 1.0.0-rc.2's
+  archive and on this build, run on one machine, with the version written
+  as a placeholder. The 500 conformance verdicts are 1.0.0-rc.2's: 267 pass,
+  192 fail, 41 unsupported, none in error.
+- A value can differ between processor architectures in its last bits: on
+  arm64 (Apple M4, Node 22.22.2) 4 of the 3,853 tests fail, where x86-64,
+  which CI runs, passes them all. Two replay a calc request whose longitude
+  speed differs by 1.4e-11 against a pin of 1e-12; two compare returns and
+  void-of-course windows with the site's code exactly, where every instant
+  agrees and a chart's digest, or an aspect's angle by 5e-14°, does not. A
+  comparison of values "to the bit" in these notes is between runs on one
+  platform.
+
 ## 1.0.0-rc.2 — unreleased candidate
 
 The second candidate for 1.0.0, on 1.0.0-rc.1 (main at `c6b5490`, the merge
