@@ -201,12 +201,18 @@ CI runs every job again on this commit and on the carrier.
 ## Publishing
 
 zodiacs-org/engine#39 was merged with a merge commit, `f8992a4`, at
-2026-10-11T13:49:42Z, and all 27 check runs on it passed.
+2026-10-11T13:49:42Z. All 29 check runs on that commit passed: the 27 of
+the workflows a push to main starts, and the Release workflow's two jobs
+([`publication/merge-check-runs.json`](publication/merge-check-runs.json),
+read after the release).
 `.github/workflows/release.yml` was then run from main with `version` 1.0.0
 and `tag` set to `latest` (the input defaults to `next`): run 38144970198
 ([`publication/release-run.json`](publication/release-run.json)). Its verify
-job matched the archive to its entry and receipt and rebuilt every carried
-archive from its source commit; its publish job uploaded
+job matched the archive to its entry and receipt, rebuilt the 1.0.0 archive
+from that commit byte for byte (on Node 24.21.0), and found the 15 recorded
+archives and their receipts holding only their recorded bytes across the
+history, each bound to its source commit; it does not pass `--rebuild-all`,
+so it rebuilt no other archive. Its publish job uploaded
 `artifacts/zodiacs-engine-1.0.0.tgz` with trusted publishing and provenance
 (job logs `publication/release-run-38144970198-*.log`). npm records the
 publication at 2026-10-11T13:54:56Z
