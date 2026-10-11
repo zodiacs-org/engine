@@ -1,0 +1,101 @@
+{
+ "runtime": {
+  "engine": "V8",
+  "node": "v20.19.0",
+  "platform": "darwin",
+  "arch": "arm64"
+ },
+ "roundTrip": {
+  "cases": 38,
+  "threw": 0,
+  "numbersDiffering": 3,
+  "overPin": 1,
+  "largest": 1.4210854715202004e-11,
+  "differences": [
+   {
+    "path": "case 25 (calc).speeds.lon",
+    "committed": -0.06130560184658407,
+    "here": -0.06130560183237321,
+    "abs": 1.4210854715202004e-11,
+    "ulps": 2048000,
+    "overPin": true
+   },
+   {
+    "path": "case 25 (calc).speeds.lat",
+    "committed": -0.0023546375975680434,
+    "here": -0.002354637597123954,
+    "abs": 4.440892098500626e-13,
+    "ulps": 1024000,
+    "overPin": false
+   },
+   {
+    "path": "case 25 (calc).cartesian.vz",
+    "committed": 0.00003523018626827579,
+    "here": 0.00003523018632378694,
+    "abs": 5.551115123125783e-14,
+    "ulps": 8192000,
+    "overPin": false
+   }
+  ]
+ },
+ "returns": [
+  {
+   "corpus": "R-SI",
+   "cases": 300,
+   "disagreements": 0,
+   "chartsWithSameInstant": 0
+  },
+  {
+   "corpus": "R-SM",
+   "cases": 300,
+   "disagreements": 0,
+   "chartsWithSameInstant": 0
+  },
+  {
+   "corpus": "R-SC",
+   "cases": 60,
+   "disagreements": 22,
+   "chartsWithSameInstant": 22
+  },
+  {
+   "corpus": "R-LI",
+   "cases": 300,
+   "disagreements": 0,
+   "chartsWithSameInstant": 0
+  },
+  {
+   "corpus": "R-LC",
+   "cases": 60,
+   "disagreements": 20,
+   "chartsWithSameInstant": 20
+  },
+  {
+   "corpus": "R-E",
+   "cases": 40,
+   "disagreements": 35,
+   "chartsWithSameInstant": 0
+  }
+ ],
+ "voidOfCourse": [
+  {
+   "corpus": "V-W",
+   "cases": 20,
+   "disagreements": 1,
+   "numbers": [
+    {
+     "path": "case 4[2][2][3]",
+     "site": 116.90834966148014,
+     "package": 116.90834966148009,
+     "abs": 5.684341886080802e-14,
+     "ulps": 4
+    }
+   ]
+  },
+  {
+   "corpus": "V-S",
+   "cases": 40,
+   "disagreements": 0,
+   "numbers": []
+  }
+ ]
+}

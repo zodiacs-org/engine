@@ -95,7 +95,8 @@ runs, so CI starts the check with node directly.
 | 0.1.1-rc.16 | `43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8` | 266,934 | 69 | `ddbbaa0b1d21e16834722f81e8708816849c6726` | `ef44477` | Candidate, merged |
 | 0.1.1-rc.17 | `9cd24c788863424ef614aaadec580db5a0dfc529303d385274db48a092a5299a` | 273,123 | 70 | `aae419c05b77455b9e8f03ca11ee273b446f7d02` | `b080217` | Candidate, merged |
 | 1.0.0-rc.1 | `cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284` | 284,750 | 74 | `77a16c26889220f5481f41d16c4ca4e70a09250b` | `bb1736a` | Candidate, merged |
-| 1.0.0-rc.2 | `4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002` | 287,011 | 74 | `7fa964d2a77d09dbb819b5733b36e303fc7fc513` | "Carry the packed 1.0.0-rc.2 tarball" | Candidate under review |
+| 1.0.0-rc.2 | `4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002` | 287,011 | 74 | `7fa964d2a77d09dbb819b5733b36e303fc7fc513` | `e790362` | Candidate, merged |
+| 1.0.0 | `c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6` | 288,063 | 74 | `ca2c8cefbaa1a9d6f5f78ee86713e813633942ca` | "Carry the packed 1.0.0 tarball" | Release, under review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -244,3 +245,17 @@ clones of that commit, each installed with `npm ci`, packed the same bytes
 on Node 22.22.2, 20.19.0 and 24.21.0, and the carried file is the Node
 22.22.2 one. It is not to be published on npm until the owner approves
 1.0.0. The record is in `docs/evidence/1.0.0-rc.2-20261006/`.
+
+1.0.0 is the first stable release: 1.0.0-rc.2 with the version changed. It
+changes no API and no value of 1.0.0-rc.2; its CHANGELOG entry says what a
+caller moving from npm's 0.1.1-rc.15 or rc.16 reads, and how results depend
+on the JavaScript engine, its version and the processor. The archive is
+288,063 bytes, 991,915 unpacked in 74 files, under the package cap of
+1,000,000. It was packed once, from clean clones of its source commit, each
+installed with `npm ci`, which packed the same bytes on Node 22.22.2, 20.19.0
+and 24.21.0; the carried file is the Node 22.22.2 one. It was carried after
+every CI job had passed on the source commit (run 38119791641 and its
+companion workflows) and an independent review of the version commit had
+been acted on. The owner approved publishing it to
+npm's `latest` once its gates pass (2026-10-11). The record is in
+`docs/evidence/1.0.0-20261011/`.

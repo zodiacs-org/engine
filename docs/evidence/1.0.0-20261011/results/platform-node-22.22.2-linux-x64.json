@@ -1,0 +1,68 @@
+{
+ "runtime": {
+  "engine": "V8",
+  "node": "v22.22.2",
+  "platform": "linux",
+  "arch": "x64"
+ },
+ "roundTrip": {
+  "cases": 38,
+  "threw": 0,
+  "numbersDiffering": 0,
+  "overPin": 0,
+  "largest": 0,
+  "differences": []
+ },
+ "returns": [
+  {
+   "corpus": "R-SI",
+   "cases": 300,
+   "disagreements": 0,
+   "chartsWithSameInstant": 0
+  },
+  {
+   "corpus": "R-SM",
+   "cases": 300,
+   "disagreements": 0,
+   "chartsWithSameInstant": 0
+  },
+  {
+   "corpus": "R-SC",
+   "cases": 60,
+   "disagreements": 0,
+   "chartsWithSameInstant": 0
+  },
+  {
+   "corpus": "R-LI",
+   "cases": 300,
+   "disagreements": 0,
+   "chartsWithSameInstant": 0
+  },
+  {
+   "corpus": "R-LC",
+   "cases": 60,
+   "disagreements": 0,
+   "chartsWithSameInstant": 0
+  },
+  {
+   "corpus": "R-E",
+   "cases": 40,
+   "disagreements": 35,
+   "chartsWithSameInstant": 0
+  }
+ ],
+ "voidOfCourse": [
+  {
+   "corpus": "V-W",
+   "cases": 20,
+   "disagreements": 0,
+   "numbers": []
+  },
+  {
+   "corpus": "V-S",
+   "cases": 40,
+   "disagreements": 0,
+   "numbers": []
+  }
+ ]
+}

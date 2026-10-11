@@ -1,0 +1,510 @@
+# TMPDIR=<tmp> npm test, Node v22.22.2
+
+> @zodiacs/engine@1.0.0 test
+> vitest run
+
+
+ RUN  v2.1.9 <checkout>
+
+ ❯ scripts/pure-tables.test.mjs (28 tests | 1 failed) 48899ms
+   ✓ unmarkedTables > accepts tables made of literals, names, functions and marked calls 2503ms
+   ✓ unmarkedTables > names what a bundler keeps although every call is marked 555ms
+   ✓ unmarkedTables > takes for a table what a function of the module makes, run when it loads, and a Set or Map of data 2547ms
+   ✓ unmarkedTables > follows what a call freezes into functions in place, defaults, callbacks and the names a function declares 481ms
+   ✓ unmarkedTables > takes what a freeze may reach for a value that exists before the call unless it is made where it is written 882ms
+   ✓ unmarkedTables > counts what code puts into a value, a generator's body, a class's static parts, a default that a given argument may leave to apply, and recursion 521ms
+   ✓ unmarkedTables > reads destructured inherited parts, writes into what a call or a conditional gives, decorators given by name and a freeze a conditional chooses 421ms
+   ✓ unmarkedTables > reads what else a callee that may be Object.freeze may be when its name is assigned or it runs what it is given, Object.freeze as a default, what `=` assigns, a parameter a const holds, and a class expression's static block 382ms
+   × unmarkedTables > reads a ring and a long chain of functions in a time that grows slowly with their length 9307ms
+     → expected 8474.541329 to be less than 2000
+   ✓ this checkout > has no table in src/ that a bundler cannot leave out but those, nothing that keeps one, and no misplaced mark 29512ms
+ ✓ src/calc.test.ts (78 tests) 10749ms
+   ✓ calc with every default is the engine's own position > equals positions() to the bit at 1800-01-01T00:00:00Z 1236ms
+   ✓ calc with every default is the engine's own position > equals positions() to the bit at 1851-03-14T04:37:00Z 497ms
+   ✓ calc with every default is the engine's own position > equals positions() to the bit at 1969-07-20T20:17:00Z 1430ms
+   ✓ calc with every default is the engine's own position > equals positions() to the bit at 2000-01-01T12:00:00Z 967ms
+   ✓ calc with every default is the engine's own position > equals positions() to the bit at 2016-12-31T23:59:30Z 1217ms
+   ✓ calc with every default is the engine's own position > equals positions() to the bit at 2024-04-08T18:21:30.250Z 356ms
+   ✓ calc with every default is the engine's own position > equals positions() to the bit at 2199-12-31T23:57:00Z 701ms
+   ✓ houses, events and chart wrap the engine's own functions > houses() gives natalChart()'s angles and cusps and chartPoints()'s Vertex and East Point 1198ms
+   ✓ houses, events and chart wrap the engine's own functions > events() gives searchLongitudeCrossings()'s crossings 465ms
+   ✓ houses, events and chart wrap the engine's own functions > chart() gives natalChart()'s chart 418ms
+ ✓ src/calc-sidereal.test.ts (65 tests) 97676ms
+   ✓ the sidereal zodiac in calc() > gives siderealLongitude()'s longitude to the bit, for every body and ayanamsa, at 1800-01-01T00:00:00Z 2507ms
+   ✓ the sidereal zodiac in calc() > gives siderealLongitude()'s longitude to the bit, for every body and ayanamsa, at 1851-03-14T04:37:00Z 3390ms
+   ✓ the sidereal zodiac in calc() > gives siderealLongitude()'s longitude to the bit, for every body and ayanamsa, at 1969-07-20T20:17:00Z 3363ms
+   ✓ the sidereal zodiac in calc() > gives siderealLongitude()'s longitude to the bit, for every body and ayanamsa, at 2000-01-01T12:00:00Z 1833ms
+   ✓ the sidereal zodiac in calc() > gives siderealLongitude()'s longitude to the bit, for every body and ayanamsa, at 2016-12-31T23:59:30Z 2548ms
+   ✓ the sidereal zodiac in calc() > gives siderealLongitude()'s longitude to the bit, for every body and ayanamsa, at 2024-04-08T18:21:30.250Z 4892ms
+   ✓ the sidereal zodiac in calc() > gives siderealLongitude()'s longitude to the bit, for every body and ayanamsa, at 2199-12-31T23:57:00Z 3494ms
+   ✓ the sidereal zodiac in calc() > gives siderealChart()'s bodies to the bit at 1800-01-01T00:00:00Z 1295ms
+   ✓ the sidereal zodiac in calc() > gives siderealChart()'s bodies to the bit at 1851-03-14T04:37:00Z 1147ms
+   ✓ the sidereal zodiac in calc() > gives siderealChart()'s bodies to the bit at 1969-07-20T20:17:00Z 743ms
+   ✓ the sidereal zodiac in calc() > gives siderealChart()'s bodies to the bit at 2000-01-01T12:00:00Z 699ms
+   ✓ the sidereal zodiac in calc() > gives siderealChart()'s bodies to the bit at 2016-12-31T23:59:30Z 2582ms
+   ✓ the sidereal zodiac in calc() > gives siderealChart()'s bodies to the bit at 2024-04-08T18:21:30.250Z 598ms
+   ✓ the sidereal zodiac in calc() > gives siderealChart()'s bodies to the bit at 2199-12-31T23:57:00Z 833ms
+   ✓ the sidereal zodiac in calc() > counts the same longitude in the mean ecliptic of date, less the mean ayanamsa 5371ms
+   ✓ the sidereal zodiac in calc() > turns the cartesian position and velocity with the longitude 1310ms
+   ✓ the sidereal zodiac in calc() > gives the sidereal longitude's speed: the tropical speed less the ayanamsa's rate, over the TT that elapsed 3488ms
+   ✓ the sidereal zodiac in calc() > takes a linear ayanamsa's rate from its definition to within 5 × 10⁻⁷″ a day, from any epoch, at instants on any clock 1691ms
+   ✓ the sidereal zodiac in calc() > keeps the longitude, speed and vector continuous where a caller's ayanamsa passes ±180° 624ms
+   ✓ the sidereal zodiac in calc() > adds the ayanamsa's bounds to the position's and the speed's, and leaves the distance's 3617ms
+   ✓ the sidereal zodiac in calc() > names the zodiac and the ayanamsa in the receipt, and repeats itself from it 1189ms
+   ✓ a caller's ayanamsa > stated as Lahiri's own epoch, value and model, is Lahiri to the bit 997ms
+   ✓ the sidereal zodiac in houses() > gives siderealChart()'s ascendant, midheaven and cusps to the bit, for every system 11560ms
+   ✓ the sidereal zodiac in houses() > turns the descendant, IC, Vertex and East Point with them, and leaves the ARMC and obliquity 2402ms
+   ✓ the sidereal zodiac in events() > finds every crossing of Sun at sidereal 0° (lahiri) that a dense scan finds 1136ms
+   ✓ the sidereal zodiac in events() > finds every crossing of Moon at sidereal 106° (true-pushya) that a dense scan finds 1159ms
+   ✓ the sidereal zodiac in events() > finds every crossing of Mercury at sidereal 215° (fagan-bradley) that a dense scan finds 2719ms
+   ✓ the sidereal zodiac in events() > finds every crossing of Mars at sidereal 15° (galactic-center) that a dense scan finds 3833ms
+   ✓ the sidereal zodiac in events() > finds a retrograde planet's crossings in both directions 324ms
+   ✓ the sidereal zodiac in events() > finds the crossings a dense scan finds with a caller's ayanamsa (user-engine) 588ms
+   ✓ the sidereal zodiac in events() > finds the crossings a dense scan finds with a caller's ayanamsa (user-newcomb) 334ms
+   ✓ the sidereal zodiac in events() > finds the crossings a dense scan finds with a caller's ayanamsa (user) 393ms
+   ✓ the sidereal zodiac in events() > finds the crossings a dense scan finds with a caller's ayanamsa (user-linear) 384ms
+   ✓ the sidereal zodiac in chart() > adds siderealChart()'s longitudes beside natalChart()'s chart 22913ms
+ ✓ src/timing/releasing.test.ts (18 tests) 11164ms
+   ✓ zodiacal releasing from a chart's lots > starts from chartPoints' lot, which matches the published Fortune 784ms
+   ✓ zodiacal releasing invariants > tile every period exactly with its sub-periods, loosening at most once and only after a full round 6111ms
+   ✓ zodiacal releasing invariants > run level 1 on through the signs without loosening, a full round taking 211 years 623ms
+   ✓ zodiacal releasing refusals and ownership > refuse unknown starts, lots, conventions, levels, options and windows 3017ms
+ ✓ src/time-scale.test.ts (103 tests) 12138ms
+   ✓ an instant inside a leap second, given on TT or UT1 > gives the reviewers' TT and UT1 readings of one instant in the 2016 leap second the same sky 610ms
+   ✓ UT1 − UTC from IERS: EOP 20 C04 in 1972, finals2000A.all of 2026-09-24 from 1973-01-02 > reproduces every daily IERS value, observed and predicted, within the table's stated bound 6290ms
+   ✓ UT1 − UTC from IERS: EOP 20 C04 in 1972, finals2000A.all of 2026-09-24 from 1973-01-02 > puts the UTC of UT1 and TT input on the IERS basis at most 0.148 s past the table's last day 353ms
+   ✓ the time basis of a chart > scans Saturn returns from a TT birth on UTC 2797ms
+ ✓ src/receipt.test.ts (38 tests) 14071ms
+   ✓ Zodiacs draft natal receipt > preserves a fresh full result and requested Placidus across a polar fallback replay 3211ms
+   ✓ Zodiacs draft natal receipt > does not infer noon or a known time for an unknown 08:30 reference 323ms
+   ✓ hostile or inconsistent natal envelopes > rejects invalid enum, geometry, precision and flag/result consistency 452ms
+   ✓ hostile or inconsistent natal envelopes > rejects prototype keys, cycles, oversized UTF8 and excessively deep/node-heavy data 2348ms
+   ✓ hostile or inconsistent natal envelopes > rejects duplicate and escaped-equivalent members before last-wins JSON semantics can erase required features 444ms
+ ✓ src/houses-extra.test.ts (23 tests) 123051ms
+   ✓ the entry's angles are the root's > computes the same ascendant and midheaven, bit for bit 359ms
+   ✓ the entry's angles are the root's > puts the root's cusps at whole house positions, for every system, in and out of the polar circle 17501ms
+   ✓ the entry's angles are the root's > orders ecliptic points between the cusps: positions rise with longitude, once round 6601ms
+   ✓ the entry's angles are the root's > gives whole sign, Equal, Vehlow, Equal from the midheaven, Porphyry and Morinus by longitude alone 16685ms
+   ✓ house circles through a body off the ecliptic > Campanus: the circle through the north point and the prime vertical at the body's position holds the body 6030ms
+   ✓ house circles through a body off the ecliptic > Regiomontanus: the circle through the north point and the equator at the body's position holds the body 3653ms
+   ✓ house circles through a body off the ecliptic > Meridian and Alcabitius: hour circles, so the body's right ascension alone decides 2301ms
+   ✓ house circles through a body off the ecliptic > Placidus: the fraction of the body's own semi-arc, from its diurnal circle searched numerically 1973ms
+   ✓ house circles through a body off the ecliptic > Koch: the body is on the horizon of the sidereal time its position names, within the house circles 6702ms
+   ✓ house circles through a body off the ecliptic > Topocentric: the body is on the circle of its position, a horizon of pole height atan(s tan φ) 1314ms
+   ✓ where a system defines no position > Koch has none outside its house circles, and none where the midheaven never rises 879ms
+   ✓ where a system defines no position > Topocentric has none where no circle of the quadrant passes through a body that never rises or sets 3074ms
+   ✓ where a system defines no position > Placidus follows Otto Ludwig for circumpolar bodies: 10th to 12th house east, 7th to 9th west 26063ms
+   ✓ speeds > agree with a central difference of the root's own cusps and angles 16939ms
+   ✓ speeds > falls back with Placidus and Koch inside the polar circle, as computeHouses does 704ms
+   ✓ speeds > differentiates the cusps of every other system inside the polar circle, away from their jumps 11604ms
+ ✓ src/aspect-exactness.test.ts (8 tests) 42700ms
+   ✓ configured aspects under exact binary semantics > agree with the exact rational oracle on a decimal grid, wrapped and unwrapped, in both row orders 12302ms
+   ✓ configured aspects under exact binary semantics > agree with the oracle with several bodies, rules, caps and luminaries 5114ms
+   ✓ configured aspects under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 10597ms
+   ✓ configured aspects under exact binary semantics > uses a faithful rc.11 copy: away from boundaries its decisions match the oracle 7668ms
+   ✓ declination parallels under exact binary semantics > agree with the exact rational oracle on decimal and rotated declinations 3361ms
+   ✓ declination parallels under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 3183ms
+ ✓ src/vedic/ayanamsa.test.ts (24 tests) 9412ms
+   ✓ ayanamsa definitions > put the star-anchored zodiacs where ERFA's astrometry puts the star, away from the Sun 523ms
+   ✓ ayanamsa definitions > consistency: true is mean plus the engine's own nutation, on the engine's clock 4304ms
+   ✓ ayanamsa definitions > return siderealChart under ±1e10 s ΔT pins 2738ms
+ ✓ src/geo/calendar.test.ts (30 tests) 16211ms
+   ✓ Julian and Gregorian calendar dates > agrees, day by day from 1500 to 2199, with two counters walked from the 1582 changeover 7500ms
+   ✓ an Old Style birth > gives the same chart in Petrograd as typing its Gregorian date, 1917-11-07 3162ms
+   ✓ an Old Style birth > records the calendar as written in a receipt that validates 610ms
+   ✓ an Old Style birth > refuses a date that does not exist in the calendar chosen for it, and a calendar it does not know 586ms
+   ✓ the Gregorian adoption table > gives each row's date as each of its sources does, and records a source that differs 1309ms
+   ✓ the Gregorian adoption table > names a region wherever the sources date the country's regions apart 486ms
+   ✓ the birthplace country's calendar note > is silent when the calendar matches the country's 952ms
+ ✓ src/receipt-time-basis.test.ts (52 tests) 9567ms
+   ✓ a receipt written by 0.1.1-rc.13 (the rc.8 conventions set) > replays as a UTC request; today's basis moves the result by well under an arcsecond 555ms
+   ✓ a receipt of the current conventions set > refuses the result's basis removed 1115ms
+   ✓ a receipt of the current conventions set > refuses another input scale 558ms
+   ✓ a receipt of the current conventions set > refuses another basis 362ms
+   ✓ a receipt of the current conventions set > is refused under an engine version before the set, which 0.1.1-rc.16 released 586ms
+   ✓ a receipt of the current conventions set > records a pinned ΔT as the pinned basis 1174ms
+   ✓ a local resolution in rc.14's shape, under the current set > is accepted by createNatalEnvelope, as rc.14 accepted it, and parses back unchanged 680ms
+ ✓ src/declination.test.ts (25 tests) 8756ms
+   ✓ chart-clock declination derivation > records observation/Delta-T and uses the true obliquity on the chart's pinned clock 775ms
+   ✓ chart-clock declination derivation > preserves chart numerics and existing natal receipt bytes 814ms
+   ✓ the Sun and the out-of-bounds limit > does not flag the chart's Sun at the June solstice 801ms
+   ✓ the Sun and the out-of-bounds limit > does not flag the chart's Sun at the December solstice 346ms
+   ✓ the Sun and the out-of-bounds limit > does not flag the chart's Sun at 2591-06-20T20:25:27.709Z, whatever its latitude 398ms
+   ✓ longitude separation of declination aspects > agrees with exact rational arithmetic on longitudes of any size 4301ms
+ ✓ src/timing/profections.test.ts (16 tests) 11296ms
+   ✓ dated profections > turn at the solar return: invented untimed births, days either side of a birthday 1409ms
+   ✓ dated profections > begin each year when the Sun returns to its natal longitude (al-Bīrūnī §§522–524) 409ms
+   ✓ dated profections > solar months begin each time the Sun gains another 30° on its natal place (a consistency check) 335ms
+   ✓ dated profections > profect any natal body, angle or chart point 330ms
+   ✓ dated profections > place a date in the same year and month profectionYear lists 4938ms
+   ✓ profection invariants > repeat every twelve years and name the traditional ruler (Valens IV.11: 'every 12 years') 2199ms
+   ✓ profection invariants > tile each year with contiguous months under every convention 993ms
+ ✓ src/configured-aspects.test.ts (52 tests) 7857ms
+   ✓ legacy compatibility > preserves default matches and motion on real charts, with exactly bounded configured orbs 4850ms
+   ✓ legacy compatibility > preserves defaults across seeded geometry, retrogrades, wrap and equal speeds 2326ms
+ ✓ src/geo/birthplace.test.ts (44 tests) 21835ms
+   ✓ birthplace local mean time > Buffalo 1870 uses the birthplace's mean time 553ms
+   ✓ birthplace local mean time > produces portable receipts that validate, the mean time recorded 999ms
+ ✓ src/house-systems.test.ts (1903 tests) 11170ms
+   ✓ house systems inside the polar circle > falls back from Koch as from Placidus, and flags it 503ms
+   ✓ house systems inside the polar circle > turns Regiomontanus, Campanus and Topocentric cusps with the ascendant 484ms
+   ✓ house systems inside the polar circle > keeps the midheaven on Alcabitius's 10th cusp and computes every other system 2074ms
+   ✓ house-system receipts > records, reads and replays equal 425ms
+ ✓ src/crossings.test.ts (53 tests) 3840ms
+   ✓ sample budget > has no limit unless one is given 768ms
+   ✓ sample budget > stops at the budget when refinements would pass it, and returns no partial result 372ms
+   ✓ input errors > rejects an option it does not name, and options that are not plain data, before any sample 787ms
+   ✓ a window's ends > are Dates in this entry, and any DateInput in the root's crossing functions, with one answer 537ms
+ ✓ src/input-flags.test.ts (66 tests) 3216ms
+   ✓ public birth flag boundary > does not coerce flag members or invoke array member getters/iterators 527ms
+   ✓ civil birth settings meet the public core boundary > rejects explicit null time instead of substituting noon 569ms
+ ✓ src/geo/zone-history.test.ts (24 tests) 3162ms
+   ✓ the audit's 98-zone divergence list > reproduces every segment before 1970 but six, which the reference got otherwise 497ms
+ ✓ src/vedic/dasha.test.ts (17 tests) 33219ms
+   ✓ Vimshottari > finds each period from its own start and end: boundaries round-trip through the ISO strings 23813ms
+   ✓ dashas of a chart given on TT or UT1 > start from the chart's UTC instant, as the timing entry does 7385ms
+   ✓ dashas of a chart given on TT or UT1 > before 1972 too, where UT1 is read as the civil instant and TT is UT1 + ΔT 1362ms
+ ✓ src/window.test.ts (58 tests) 720719ms
+   ✓ birthWindow against natalChart > mid-latitude Placidus: every cell and switch 14041ms
+   ✓ birthWindow against natalChart > Koch just inside the polar circle: every cell and switch 11305ms
+   ✓ birthWindow against natalChart > Regiomontanus in the south polar region: every cell and switch 12432ms
+   ✓ birthWindow against natalChart > Porphyry at 78°: every cell and switch 7693ms
+   ✓ birthWindow against natalChart > Alcabitius near the pole: every cell and switch 7625ms
+   ✓ birthWindow against natalChart > Campanus near the pole: every cell and switch 7101ms
+   ✓ birthWindow against natalChart > Topocentric at 69°: every cell and switch 12066ms
+   ✓ birthWindow against natalChart > Meridian on the equator: every cell and switch 5907ms
+   ✓ birthWindow against natalChart > Morinus: every cell and switch 7215ms
+   ✓ birthWindow against natalChart > a whole day in six systems, at five-minute samples and every switch 73972ms
+   ✓ close and simultaneous switches > two features switching within one second of each other, and two at the same millisecond 1103ms
+   ✓ close and simultaneous switches > fourteen features switching at the same millisecond 631ms
+   ✓ stations near a sign boundary > a station just inside a boundary: Uranus turns 0.0017° short of Leo 51716ms
+   ✓ stations near a sign boundary > a station just past a boundary: Mercury enters Aquarius by 0.0034° and returns 47815ms
+   ✓ stations near a sign boundary > the polar ascendant turning 0.001° inside Scorpio's end jumps once 6652ms
+   ✓ stations near a sign boundary > the polar ascendant turning 0.001° past it crosses, jumps and recrosses 6908ms
+   ✓ Placidus and Koch at the polar circle > switches between the requested system and its whole-sign fallback where the obliquity crosses 90° − |φ| 19016ms
+   ✓ Placidus and Koch at the polar circle > stays on the fallback inside the polar circle 4792ms
+   ✓ the true node's jitter > reports, and natalChart confirms, each change of a jittering node's house 33191ms
+   ✓ Placidus just below the polar limit > keeps Placidus through the review's reproduction, where the iteration alone fell back 63604ms
+   ✓ the ΔT model's seam > agrees with natalChart at every millisecond across the Moon's and the node's steps 47261ms
+   ✓ the ΔT model's seam > steps the Sun at the same millisecond, not one light time later, and agrees with natalChart there 31394ms
+   ✓ the steps of the time basis > reports a switch at the leap second of 2016-12-31, where the angles step, and agrees with natalChart around it 59083ms
+   ✓ the steps of the time basis > reports a switch at 1972-01-01, where the leap seconds begin, where the angles step, and agrees with natalChart around it 65710ms
+   ✓ the steps of the time basis > reports a switch at the end of the IERS table, where the angles step, and agrees with natalChart around it 33664ms
+   ✓ sign ingresses of the true node > resolves every flicker of a fast ingress, where natalChart confirms each 75646ms
+   ✓ sign ingresses of the true node > leaves a slow ingress unresolved, and flags it, rather than run out of budget 11005ms
+   ✓ shares > tile the window, with uniform shares that sum to one 332ms
+   ✓ results > are labelled as sampled, not proven, and repeat exactly 642ms
+ ✓ src/geo/geonames-schema.test.ts (67 tests) 1317ms
+ ✓ src/timing/solar-arc.test.ts (16 tests) 8890ms
+   ✓ solar arc directions: Saunders's worked examples > Christopher Reeve > computes the published true solar arc 1545ms
+   ✓ solar arc directions: Saunders's worked examples > Christopher Reeve > directs the engine's own chart to the published positions within 1.5′ 473ms
+   ✓ solar arc invariants > is the progressed Sun minus the natal Sun 3630ms
+   ✓ solar arcs and a chart's own clock > direct a chart's natal longitudes by an arc read as UTC on the engine's time basis 410ms
+   ✓ solar arc refusals and ownership > returns frozen results and normalizes directed longitudes 1581ms
+ ✓ src/timing/firdaria.test.ts (12 tests) 12189ms
+   ✓ firdaria invariants > begin a night sequence with the Moon and a day sequence with the Sun, per the chart's sect 2897ms
+   ✓ firdaria invariants > date whole ages at the solar returns and fractional ages linearly within their year 5509ms
+   ✓ firdaria invariants > place boundary instants in the period that begins there, and nodes without a sub-period 1825ms
+   ✓ firdaria invariants > begin again after 75 years 926ms
+   ✓ firdaria refusals and ownership > return frozen results 487ms
+ ✓ src/timing/planetary-returns.test.ts (36 tests) 98194ms
+   ✓ returns against JPL Horizons (gate R, R1 to R3) > 'Sun': every return, in order and direction, within τ of Horizons's instant 302ms
+   ✓ returns against JPL Horizons (gate R, R1 to R3) > 'Pluto': every return, in order and direction, within τ of Horizons's instant 436ms
+   ✓ the completeness verdict (gate R, R1 and R4) > is refused, with no returns, when the budget is smaller than the coarse scan 319ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Sun': the same returns as a fine plain scan over the fixture's window 9061ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Moon': the same returns as a fine plain scan over the fixture's window 8228ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Mercury': the same returns as a fine plain scan over the fixture's window 1365ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Venus': the same returns as a fine plain scan over the fixture's window 1853ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Mars': the same returns as a fine plain scan over the fixture's window 4383ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Jupiter': the same returns as a fine plain scan over the fixture's window 5958ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Saturn': the same returns as a fine plain scan over the fixture's window 8210ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Uranus': the same returns as a fine plain scan over the fixture's window 6968ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Neptune': the same returns as a fine plain scan over the fixture's window 8935ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Pluto': the same returns as a fine plain scan over the fixture's window 36382ms
+   ✓ consistency with a plain scan of the engine's own longitudes > Jupiter: both returns around a station, from 1e-3° to 1e-6° inside it, and none outside 312ms
+   ✓ consistency with a plain scan of the engine's own longitudes > Saturn: both returns around a station, from 1e-3° to 1e-6° inside it, and none outside 395ms
+   ✓ consistency with a plain scan of the engine's own longitudes > Uranus: both returns around a station, from 1e-3° to 1e-6° inside it, and none outside 358ms
+   ✓ consistency with a plain scan of the engine's own longitudes > Pluto: both returns around a station, from 1e-3° to 1e-6° inside it, and none outside 1553ms
+ ✓ src/crossings-ephemeris.test.ts (11 tests) 83651ms
+   ✓ the audit's s2 cases, with the site's answers > finds no crossing at the February 2026 Mercury station when the station longitude is the audit's 409ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2100 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 11800ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2400 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 7746ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2600 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 3428ms
+   ✓ the audit's s2 cases, with the site's answers > matches an hourly scan of the 2,600-day Moon window, crossing by crossing 25850ms
+   ✓ the audit's s2 cases, with the site's answers > returns Saturn's crossings of 0° from 1900 to 2100 at a 5-day step, and a daily scan agrees 27502ms
+   ✓ grazing crossing pairs on the ephemeris > keeps all three first-return passes for a natal Saturn 0.002° below the 2019 station 4432ms
+   ✓ grazing crossing pairs on the ephemeris > returns both Jupiter passes for targets up to 0.005° below the station, at every scan phase 1566ms
+   ✓ grazing crossing pairs on the ephemeris > leaves ordinary windows with the same answers and no extra probe 476ms
+ ✓ src/geo/birthplace-clock.test.ts (28 tests) 88579ms
+   ✓ the birthplace clock at the end of its local mean time era > America/New_York: Buffalo 3512ms
+   ✓ the birthplace clock at the end of its local mean time era > America/New_York: Hartford 5374ms
+   ✓ the birthplace clock at the end of its local mean time era > America/New_York: New York 5296ms
+   ✓ the birthplace clock at the end of its local mean time era > America/Chicago: Omaha 5196ms
+   ✓ the birthplace clock at the end of its local mean time era > Europe/Paris: Brest 2406ms
+   ✓ the birthplace clock at the end of its local mean time era > Europe/Paris: Strasbourg 1569ms
+   ✓ the birthplace clock at the end of its local mean time era > Europe/Dublin: Galway 1660ms
+   ✓ the birthplace clock at the end of its local mean time era > Europe/London: Norwich 1981ms
+   ✓ the birthplace clock at the end of its local mean time era > Europe/Oslo: Bergen 1251ms
+   ✓ the birthplace clock at the end of its local mean time era > America/Toronto: Montreal 1717ms
+   ✓ the birthplace clock at the end of its local mean time era > America/Toronto: Thunder Bay 1424ms
+   ✓ the birthplace clock at the end of its local mean time era > Asia/Kolkata: Mumbai 881ms
+   ✓ the birthplace clock at the end of its local mean time era > America/Mexico_City: Merida 1325ms
+   ✓ the birthplace clock at the end of its local mean time era > America/Sitka: Sitka 1176ms
+   ✓ the birthplace clock at the end of its local mean time era > Africa/Maseru: Butha-Buthe 1096ms
+   ✓ the birthplace clock at the end of its local mean time era > Africa/Ouagadougou: Aribinda 1048ms
+   ✓ the birthplace clock at the end of its local mean time era > Africa/Ouagadougou: Bobo-Dioulasso 902ms
+   ✓ the birthplace clock at the end of its local mean time era > Asia/Muscat: Muscat 706ms
+   ✓ the birthplace clock at the end of its local mean time era > Africa/Mbabane: Manzini 730ms
+   ✓ the birthplace clock at the end of its local mean time era > Asia/Seoul: Andong 1342ms
+   ✓ the birthplace clock at the end of its local mean time era > Africa/Cairo: Armant 1068ms
+   ✓ the birthplace clock at each change of its shipped history before 1970 > America/New_York: New York 6612ms
+   ✓ the birthplace clock at each change of its shipped history before 1970 > Europe/Amsterdam: Amsterdam 4016ms
+   ✓ the birthplace clock at each change of its shipped history before 1970 > Atlantic/Reykjavik: Reykjavik 5452ms
+   ✓ the birthplace clock on its zone's own meridian > matches the zone clock at every such era end 16622ms
+ ✓ src/techniques/dignities.test.ts (18 tests) 697ms
+ ✓ src/vedic/jyotish.test.ts (14 tests) 4607ms
+   ✓ the exact tick grid > floors lon × 7560 exactly, including doubles an ulp either side of a boundary 1571ms
+   ✓ KP subs > start each star with its own lord and each sub with its own lord 957ms
+   ✓ vargas (BPHS ch. 6) > list sixteen vargas and refuse unknown names and unimplemented variants 341ms
+   ✓ frame safety > validates declarations and keeps an in-range longitude bit for bit 813ms
+ ✓ src/calc-bounds.test.ts (6 tests) 99312ms
+   ✓ the measured bounds > give a topocentric body not compared its geocentric bound, as an estimate 651ms
+   ✓ the barycentric Sun's bounds > come from the barycentre's error, and cover the difference from Horizons at 2130-03-05 and where a daily scan finds it worst 465ms
+   ✓ the barycentric Sun's bounds > rest on the barycentre's error, which a daily scan of 1800 to 2200 against the full Newtonian barycentre and Horizons bear out 97767ms
+ ✓ src/placidus-limit.test.ts (3 tests) 64191ms
+   ✓ the Placidus limit against the ERFA arbiter (brief v1 rule 1h) > computes Placidus exactly where the arbiter's limit allows it 12438ms
+   ✓ Placidus just below the polar limit > keeps Placidus at every millisecond of the review's reproduction, where the iteration alone fell back 30922ms
+   ✓ Placidus just below the polar limit > solves every cusp within 1e-6° of the limit, at the sidereal times where the iteration alone fails 20799ms
+ ✓ src/timing/shared.test.ts (7 tests) 22833ms
+   ✓ timing checks that need no chart > know every name a chart can profect before computing it 4249ms
+   ✓ timing flags > mark results that read the ephemeris outside the reference span 3960ms
+   ✓ timing flags > mark results that depend on a sect the Sun's altitude contradicts: two polar charts 4696ms
+   ✓ timing flags > mark the sect exactly when the Sun's altitude, found another way, disagrees with it 9740ms
+ ✓ src/engine.test.ts (24 tests) 5720ms
+   ✓ public composition APIs > computes transit and synastry summaries 647ms
+   ✓ public composition APIs > finds the known 1990 Saturn return triple pass 3812ms
+ ✓ src/progressions.test.ts (21 tests) 8366ms
+   ✓ secondary progression instant > accepts equivalent Date, epoch-millisecond, UTC and offset inputs 933ms
+   ✓ secondary progression instant > rejects invalid birthUtc inputs in both APIs 866ms
+   ✓ secondary progressed positions > checks a constructed mapping against the existing independent JPL component fixture 3193ms
+   ✓ secondary progressed positions > returns the exact ordinary positions row set, including speeds and true nodes, for 1888-02-11T00:00:00Z 1027ms
+ ✓ src/nutation.test.ts (10 tests) 2013ms
+   ✓ the IAU 2000B series as NOVAS C 3.1 gives it > sums to what iau2000b's own loop gives with its own numbers, within 1e-14″ from 1800 to 2200 1231ms
+ ✓ src/techniques/returns.test.ts (81 tests) 16019ms
+   ✓ solar returns against USNO season times > '1850-03-20T23:02:00Z': the Sun at +0° 1013ms
+   ✓ returns against the JPL Horizons positions of the L1 vectors > 'L1-POS-0002' ('Moon') 616ms
+   ✓ solar return instants > picks the return nearest the date, and the latest at or before it 390ms
+   ✓ solarReturn > casts the chart for the return at the natal place by default 3603ms
+   ✓ solarReturn > casts elsewhere, without a place, and with another house system 744ms
+   ✓ solarReturn > flags returns searched outside 1800–2200 2364ms
+   ✓ solarReturn > refuses unknown options and invalid values 315ms
+ ✓ src/geo/flags.test.ts (47 tests) 3410ms
+   ✓ time-5's six flag probes > Guam 1890: local mean time in whole minutes 767ms
+   ✓ time-5's six flag probes > Apia 2011-12-30: Samoa skipped the day across the date line 365ms
+ ✓ src/speed.test.ts (23 tests) 12112ms
+   ✓ longitude speeds > are the derivative of the reported longitude to 0.01″ a day 3560ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 2026-07-26T19:57:16.990Z 1550ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 2026-07-26T19:57:29.612Z 1504ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 2026-07-26T19:57:49.612Z 1899ms
+   ✓ natal Saturn direction in the return scan > agrees with the chart at 1990-02-01T12:00:00Z 2805ms
+ ✓ src/points.test.ts (14 tests) 4282ms
+   ✓ chartPoints > returns the node, Lilith, the Vertex, the East Point and the lots with a time and place 3246ms
+   ✓ chartPoints > gives the same points for the chart and for the birth it came from 422ms
+ ✓ scripts/root-isolation.test.mjs (9 tests | 1 skipped) 438ms
+ ✓ src/techniques/aspect-patterns.test.ts (23 tests) 1359ms
+   ✓ chartAspectPatterns > reads a chart's own bodies and aspects 709ms
+ ✓ src/sky/hours.test.ts (8 tests) 3337ms
+   ✓ planetary hours: worked examples > Chaucer, Astrolabe II.12: a Saturday, 13 March (Julian 1389), at Oxford 630ms
+   ✓ planetary hours: worked examples > Heindel (1919), pp. 155–156: latitude 40, a Thursday in December, Mars from 1:32 to 2:18 P.M. 455ms
+   ✓ planetary hours: worked examples > Cassius Dio 37.19: counting the hours from Saturn, each day's first hour falls to its own planet 652ms
+   ✓ planetary hours: consistency with the rise/set function > divides sunrise to sunset and sunset to the next sunrise into twelve equal parts 641ms
+   ✓ planetary hours: consistency with the rise/set function > reports polar days and nights, and dates without a sunrise, instead of hours 436ms
+ ✓ src/deltat-chart.test.ts (11 tests) 1418ms
+   ✓ ΔT in receipts > replays a pinned chart with its pin, and a modelled one without 418ms
+ ✓ scripts/api-report.test.mjs (12 tests) 444954ms
+   ✓ the API report > writes one file for each public entry point and none for the internal ones 22617ms
+   ✓ the API report > gives the exported declarations without comments, sorted by name, and what they refer to 22303ms
+   ✓ the API report > names the entry points that do export a referenced declaration, and an export under another name 27955ms
+   ✓ the API report > changes when the API changes 123908ms
+   ✓ the API report > does not change when only a comment or the order of declarations changes 82336ms
+   ✓ the API report > keeps the two release tags, and only them, from the comments 27841ms
+   ✓ the API report > keeps a release tag on a member, and on an export under another name 71510ms
+   ✓ the API report > leaves out comments the source keeps between a declaration's tokens, and keeps a namespace member's tags 16221ms
+   ✓ the API report > follows a type written as import("…") 34798ms
+   ✓ the API report > refuses declarations that do not compile 15083ms
+ ✓ src/window-ranges.test.ts (7 tests) 72580ms
+   ✓ range primitives > encloses cos and sin over any interval 688ms
+   ✓ oblique longitude ranges > contains, and closely bounds, the ascendant and the circle cusps 68004ms
+   ✓ oblique longitude ranges > widens for an obliquity that moves within dEps 669ms
+   ✓ Morinus ranges > contains every value over the interval 2978ms
+ ✓ src/techniques/relationship.test.ts (12 tests) 18934ms
+   ✓ composite midpoints (the site's cases) > uses the shorter arc and keeps the first list's order for shared bodies 349ms
+   ✓ composite charts > is the midpoint of each body of two charts, with no angles 4175ms
+   ✓ Davison charts > is cast for the mean instant and the mean place 753ms
+   ✓ Davison charts > rounds an odd millisecond down 1626ms
+   ✓ Davison charts > has no angles unless both births have a place, and no known time unless both do 1409ms
+   ✓ Davison charts > offers the great-circle midpoint, checked against a second formula 7902ms
+   ✓ Davison charts > refuses a place out of range and a convention it does not name, rather than answer for them 1927ms
+ ✓ src/geo/geonames.test.ts (10 tests) 421ms
+ ✓ src/techniques/moon-sign.test.ts (13 tests) 8335ms
+   ✓ a date before 1970 > is read on the shipped history, once prepared 3726ms
+   ✓ the span of a date in every time zone > holds every shipped offset but those kept across the date line before 1868 2780ms
+   ✓ the sign held the whole date in every time zone > is named only when every hour of the span has it 1166ms
+   ✓ the signs over a date in a time zone (the site's cases) > keeps both London candidates on 1990-01-01, one in Los Angeles, one in London on 1990-01-02 384ms
+ ✓ src/deltat.test.ts (12 tests) 1417ms
+   ✓ zodiacs-deltat/1 > represents Table S15 of Stephenson, Morrison & Hohenkerk (2016) within 0.02 s from −720 to 1941 352ms
+   ✓ zodiacs-deltat/1 > gives σ after the last observed day by the years since it, continuous and never decreasing 554ms
+   ✓ zodiacs-deltat/1 > is quick enough to run inside every ephemeris call 314ms
+ ✓ src/receipt-nutation.test.ts (6 tests) 3917ms
+   ✓ the conventions set of this engine > is rc.15's with the nutation named and the Moon's source 2511ms
+   ✓ the conventions set of this engine > is accepted from 0.1.1-rc.16 on, in SemVer order, and refused before 801ms
+ ✓ src/porphyry.test.ts (14 tests) 1401ms
+ ✓ src/replay-time-basis.test.ts (3 tests) 1354ms
+   ✓ an rc.14 receipt of 1973, when UT1 − UTC was +0.80 s > is the carried archive's, under the rc.8 set 501ms
+   ✓ an rc.14 receipt of 1973, when UT1 − UTC was +0.80 s > replays as the UTC request it records, 11″ of ascendant away and across the sign's edge 751ms
+ ✓ src/public-input.test.ts (78 tests) 3883ms
+   ✓ public resolved-instant inputs > uses the same rejection contract in moonPhase 732ms
+   ✓ public resolved-instant inputs > uses the same rejection contract in transits instant 1807ms
+ ✓ src/sky/riseset.test.ts (8 tests) 1792ms
+   ✓ skyEvents > finds the day's rise, set and transits in time order, with their geometry 349ms
+   ✓ skyEvents > returns the events of [from, to), the same instants from any window 737ms
+ ✓ src/techniques/void-of-course.test.ts (8 tests) 25232ms
+   ✓ the void-of-course Moon > misses no aspect: a sweep every 30 minutes finds a reported one in every crossing 21787ms
+   ✓ the void-of-course Moon > starts traditional voids no later than modern ones 1618ms
+   ✓ the void-of-course Moon > answers whether the Moon is void at an instant, consistently with the windows 1351ms
+ ✓ src/calc-fixtures.test.ts (68 tests) 2817ms
+ ✓ src/aspects.test.ts (12 tests) 304278ms
+   ✓ aspectMotion > agrees with linear motion on 400,000 seeded pairs 1208ms
+   ✓ findAspects applying flags against the engine's own motion > match the sign of the orb's rate, measured over ±1 s, every 30 minutes in the first quarter of 2024 302896ms
+ ✓ src/returns-bounds.test.ts (19 tests) 5058ms
+   ✓ longitude crossing searches, with and without a budget > stops at the budget when refinements pass it, and has no budget of its own 4410ms
+ ✓ src/geo.test.ts (40 tests) 7847ms
+   ✓ timezone resolution > requires an explicit nonempty timezone string instead of using the host zone: undefined 2335ms
+   ✓ timezone resolution > rejects a nonstring local date or time: undefined 4176ms
+ ✓ scripts/verify-release-archive.test.mjs (10 tests) 344328ms
+   ✓ verify-release-archive > passes an archive that matches its one carried entry and its receipt 7225ms
+   ✓ verify-release-archive > refuses a version without a carried entry 13210ms
+   ✓ verify-release-archive > refuses two carried entries for one version 7066ms
+   ✓ verify-release-archive > refuses an entry that names another file, size or digest 17659ms
+   ✓ verify-release-archive > refuses an archive whose bytes changed 6770ms
+   ✓ verify-release-archive > refuses a receipt that is not the entry's digest, two spaces, the file name and a newline 54448ms
+   ✓ verify-release-archive > refuses versions that are not strict 86215ms
+   ✓ verify-release-archive > refuses symbolic links in place of the archive or of artifacts/ 19804ms
+   ✓ verify-release-archive > refuses a manifest that is not JSON 9406ms
+   ✓ verify-release-archive > passes every archive carried in this repository 122286ms
+ ✓ src/receipt-conventions.test.ts (6 tests) 1894ms
+   ✓ receipt conventions > still reads an rc.6 receipt and replays it 521ms
+   ✓ receipt conventions > records the current conventions, and judges applying by them 976ms
+ ✓ src/semver.test.ts (22 tests) 8769ms
+   ✓ the receipt codec's version gates > answer as the old gates did on every plain 0.1.1-rc.N, with or without build metadata 8021ms
+ ✓ src/reference-span.test.ts (7 tests) 3302ms
+   ✓ reference span (rule 1e) > flags a chart in 2300 and one in 900, and none inside the span 2152ms
+   ✓ reference span (rule 1e) > carries the flag through a receipt, which checks it against the instant 620ms
+ ✓ src/receipt-json.test.ts (88 tests) 555ms
+ ✓ src/exact.test.ts (5 tests) 55289ms
+   ✓ exact sums of binary64 terms > round once to the nearest double, ties to even, and give the exact sign 53506ms
+   ✓ exact sums of binary64 terms > decides signs of sums beyond the overflow-safe range with integers 1466ms
+ ✓ src/equator.test.ts (2 tests) 353ms
+ ✓ src/houses-regression.test.ts (6 tests) 3425ms
+   ✓ shared rising intersection > satisfies the horizon and rising-direction geometry in both hemispheres 1841ms
+   ✓ shared rising intersection > anchors public natal whole houses after correction 988ms
+   ✓ shared rising intersection > anchors public natal placidus houses after correction 485ms
+ ✓ src/geo/timezone-precision.test.ts (17 tests) 2164ms
+   ✓ second-precise local minute matching > retains the actual 1914-01-01 gap in America/Manaus through the public receipt codec 834ms
+ ✓ src/returns-crossings.test.ts (16 tests) 288ms
+ ✓ src/ephemeris-span.test.ts (6 tests) 1873ms
+   ✓ the ephemeris span > evaluates instants just inside either end on the model ΔT clock 784ms
+   ✓ the ephemeris span > applies to every calculation that evaluates the ephemeris 782ms
+ ✓ src/receipt-versions.test.ts (13 tests) 5455ms
+   ✓ the engine version of a receipt, in SemVer 2.0.0 order > answers as before on every plain 0.1.1-rc.N from 0 to 40, with or without build metadata 3985ms
+   ✓ the engine version of a receipt, in SemVer 2.0.0 order > accepts the current set under versions at or after 0.1.1-rc.16 698ms
+ ✓ src/public-tables.test.ts (5 tests) 854ms
+   ✓ the tables the entry points export > keep the aspect bodies the engine reads apart from the public set, which a caller can still mutate 644ms
+ ✓ src/techniques/site-parity.test.ts (6 tests) 169256ms
+   ✓ parity with the site's code > returns: every instant and chart of R-SI, R-SM, R-SC, R-LI and R-LC 94770ms
+   ✓ parity with the site's code > composite midpoints and aspects 3065ms
+   ✓ parity with the site's code > void-of-course windows and status 57121ms
+   ✓ parity with the site's code > aspect patterns and their containment 3945ms
+   ✓ parity with the site's code > Moon signs over a date 10318ms
+ ✓ src/vedic/boundaries.test.ts (21 tests) 784ms
+   ✓ boundary fixtures from the texts > places KP subs (1–249) and sub-sub lords exactly at and around every sub-sub and sign boundary 379ms
+ ✓ src/body-label.test.ts (15 tests) 420ms
+ ✓ scripts/build-tz-shards.test.mjs (3 tests) 143ms
+ ✓ src/angles-erfa.test.ts (12 tests) 1395ms
+   ✓ the angles against the ERFA arbiter (brief v1 rule 1b) > 1950-03-21T18:00:00Z at -66° 507ms
+ ✓ src/ephemeris-errors.test.ts (6 tests) 1232ms
+   ✓ ephemeris failures surface as RangeError > positions wraps a thrown string in a RangeError that keeps it as the cause 804ms
+ ✓ src/receipt-growth.test.ts (3 tests) 1138ms
+   ✓ a record written when a chart's time basis has grown > keeps the recorded fields and reads back (utc 2001-12-21T09:00:00Z) 743ms
+ ✓ scripts/build-time-scales.test.mjs (3 tests) 17305ms
+   ✓ scripts/build-time-scales.mjs > rebuilds src/time-scale-data.ts byte for byte from its committed sources 13552ms
+   ✓ scripts/build-time-scales.mjs > joins C04's 1972 to finals2000A.all on a knot, with the table's bound over both 2525ms
+   ✓ scripts/build-time-scales.mjs > refuses rows that leave a gap before finals2000A.all, and a list whose own hash fails 1126ms
+ ✓ src/timing/solar-years.test.ts (1 test) 35006ms
+   ✓ solar-return years > stay within hours of the mean tropical year, far inside the three days the solver searches 34989ms
+ ✓ src/sky/published.test.ts (1 test) 4583ms
+   ✓ rise, set and transit against the US Naval Observatory > falls within 30 s of USNO's minute (UT) for the Sun and the Moon at three places 4499ms
+ ✓ src/configured-aspects-isolation.test.ts (1 test) 70ms
+ ✓ src/sign-rulers.test.ts (1 test) 93ms
+ ✓ scripts/verify-archive-binding.test.mjs (23 tests) 2950687ms
+   ✓ archive binding check > passes a clean history and skips the rebuild until the version's archive exists 9325ms
+   ✓ archive binding check > sees a rewrite on a side branch hidden by merge simplification 10231ms
+   ✓ archive binding check > sees an archive carried and removed on a merged side branch 11503ms
+   ✓ archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 43650ms
+   ✓ archive binding check > refuses a rewritten manifest that whitelists replaced bytes 11121ms
+   ✓ archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 22874ms
+   ✓ archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 9810ms
+   ✓ archive binding check > reads HEAD from git objects, never the working tree 20880ms
+   ✓ archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 242186ms
+   ✓ archive binding check > checks the receipt of every version, not only the current one 9070ms
+   ✓ archive binding check > binds each archive to its recorded source commit 12542ms
+   ✓ archive binding check > refuses an archive carried by a commit that does not follow its source commit 8719ms
+   ✓ archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata 28908ms
+   ✓ archive binding check > refuses numeric identifiers above 2^53 - 1, where npm's semver.eq takes two versions for one 48314ms
+   ✓ archive binding check > refuses names that a case-insensitive or normalizing file system takes for one: variants of artifacts/, or two archives in it 71687ms
+   ✓ archive binding check > rebuilds with its own npm ci, whatever the checkout's node_modules holds 1432816ms
+   ✓ archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH 167270ms
+   ✓ archive binding check > never runs a git that npm run puts on PATH from the checkout 380900ms
+   ✓ archive binding check > keeps code that an .npmrc names for NODE_OPTIONS out of the check and its rebuilds 115051ms
+   ✓ archive binding check > refuses a TMPDIR inside the checkout, or with a node_modules or package.json above it 96248ms
+   ✓ archive binding check > runs no hook from the checkout's .git 165165ms
+   ✓ archive binding check > ignores replace refs and grafts in the checkout's .git 15089ms
+   ✓ archive binding check > refuses an archive without a manifest entry, and a shallow checkout 14650ms
+ ✓ src/geo/roundtrip.test.ts (18 tests) 733723ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 1 of 12 78291ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 2 of 12 131875ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 3 of 12 61897ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 4 of 12 60554ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 5 of 12 61311ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 6 of 12 60358ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 7 of 12 52304ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 8 of 12 58201ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 9 of 12 55282ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 10 of 12 42123ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 11 of 12 33446ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 12 of 12 31772ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > finds and round-trips America/Boa_Vista's offset of under a week, 2000-10-08T04:00:00Z to 2000-10-15T03:00:00Z 377ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > finds and round-trips America/Noronha's offset of under a week, 2000-10-08T02:00:00Z to 2000-10-15T01:00:00Z 402ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > finds and round-trips Brazil/DeNoronha's offset of under a week, 2000-10-08T02:00:00Z to 2000-10-15T01:00:00Z 377ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > finds and round-trips America/Recife's offset of under a week, 2000-10-08T03:00:00Z to 2000-10-15T02:00:00Z 384ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/pure-tables.test.mjs > unmarkedTables > reads a ring and a long chain of functions in a time that grows slowly with their length
+AssertionError: expected 8474.541329 to be less than 2000
+ ❯ scripts/pure-tables.test.mjs:1378:41
+    1376|     expect(found(chain)).toEqual([]);
+    1377|     expect(found(destructured)).toEqual([]);
+    1378|     expect(performance.now() - started).toBeLessThan(2000);
+       |                                         ^
+    1379|   });
+    1380| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed | 85 passed (86)
+      Tests  1 failed | 3851 passed | 1 skipped (3853)
+   Start at  22:45:35
+   Duration  3069.11s (transform 93.00s, setup 0ms, collect 331.92s, tests 7012.25s, environment 643ms, prepare 172.56s)
+
+exit 1

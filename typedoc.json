@@ -3,7 +3,7 @@
   "entryPoints": ["src/index.ts", "src/calc.ts", "src/crossings.ts", "src/deltat.ts", "src/geo.ts", "src/houses-extra.ts", "src/receipt.ts", "src/sky.ts", "src/techniques.ts", "src/timing.ts", "src/vedic.ts", "src/window.ts"],
   "entryPointStrategy": "resolve",
   "out": "docs/engine-api",
-  "name": "@zodiacs/engine 1.0.0-rc.2",
+  "name": "@zodiacs/engine 1.0.0",
   "readme": "README.md",
   "tsconfig": "tsconfig.json",
   "lang": "en",
