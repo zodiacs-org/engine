@@ -200,9 +200,40 @@ CI runs every job again on this commit and on the carrier.
 
 ## Publishing
 
-`.github/workflows/release.yml` is run from main after the merge, with
-`version` 1.0.0 and `tag` set to `latest`: the input defaults to `next`. npm's
-`next` then still names 0.1.1-rc.16, older than `latest`; moving or removing
+zodiacs-org/engine#39 was merged with a merge commit, `f8992a4`, at
+2026-10-11T13:49:42Z, and all 27 check runs on it passed.
+`.github/workflows/release.yml` was then run from main with `version` 1.0.0
+and `tag` set to `latest` (the input defaults to `next`): run 38144970198
+([`publication/release-run.json`](publication/release-run.json)). Its verify
+job matched the archive to its entry and receipt and rebuilt every carried
+archive from its source commit; its publish job uploaded
+`artifacts/zodiacs-engine-1.0.0.tgz` with trusted publishing and provenance
+(job logs `publication/release-run-38144970198-*.log`). npm records the
+publication at 2026-10-11T13:54:56Z
+([`publication/registry.json`](publication/registry.json)).
+
+`tools/verify-npm-publication.mjs` then checked what npm serves
+([`publication/npm-publication.json`](publication/npm-publication.json),
+2026-10-11T13:59:15Z):
+
+- `latest` names 1.0.0.
+- The tarball npm serves is the carried archive byte for byte (SHA-256
+  `c4d3754d…b0f6`, 288,063 bytes), and npm's sha512 integrity is its digest.
+- `npm audit signatures`, in a clean consumer that installed the version,
+  verified the registry signatures and the attestation.
+- `natalChart` and `ENGINE_VERSION`, imported from the published package,
+  report 1.0.0 and the same Sun longitude in Node 26.4.0 and, through an
+  `npm:` specifier, in Deno 2.9.0. Deno refuses npm versions younger than its
+  minimum dependency age, so the probe turns that check off.
+- The repository's packed-consumer check passes on the tarball npm serves.
+
+The provenance statement ([`publication/attestations.json`](publication/attestations.json),
+Sigstore log index 3208435349) names this repository,
+`.github/workflows/release.yml` at `refs/heads/main`, commit
+`f8992a4c1dfedd9e69c0783e2c185e22580460f7` and run 38144970198, and its
+subject's sha512 is the carried archive's.
+
+npm's `next` still names 0.1.1-rc.16, older than `latest`; moving or removing
 that tag needs the owner's npm login, since the workflow only publishes.
 
 ## Birth data
@@ -276,7 +307,5 @@ passed on `38d3185`.
 
 ## What is not established
 
-- 1.0.0 is not published by anything here; the Release workflow publishes it
-  from main after the merge.
 - No browser engine but JavaScriptCore's shell was run, and no Firefox.
 - The conformance generators ran in CI only.

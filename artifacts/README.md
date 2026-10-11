@@ -2,8 +2,8 @@
 
 Each `zodiacs-engine-<version>.tgz` here is the exact `npm pack` output of one
 candidate, with its SHA-256 receipt beside it. Carrying an archive does not
-publish it; rc.14, rc.15 and rc.16 were later published to npm, and npm's
-tarballs of them are these bytes.
+publish it; rc.14, rc.15, rc.16 and 1.0.0 were later published to npm, and
+npm's tarballs of them are these bytes.
 Archives are immutable: once carried, an archive is never repacked, replaced or
 removed.
 
@@ -96,7 +96,7 @@ runs, so CI starts the check with node directly.
 | 0.1.1-rc.17 | `9cd24c788863424ef614aaadec580db5a0dfc529303d385274db48a092a5299a` | 273,123 | 70 | `aae419c05b77455b9e8f03ca11ee273b446f7d02` | `b080217` | Candidate, merged |
 | 1.0.0-rc.1 | `cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284` | 284,750 | 74 | `77a16c26889220f5481f41d16c4ca4e70a09250b` | `bb1736a` | Candidate, merged |
 | 1.0.0-rc.2 | `4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002` | 287,011 | 74 | `7fa964d2a77d09dbb819b5733b36e303fc7fc513` | `e790362` | Candidate, merged |
-| 1.0.0 | `c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6` | 288,063 | 74 | `ca2c8cefbaa1a9d6f5f78ee86713e813633942ca` | "Carry the packed 1.0.0 tarball" | Release, under review |
+| 1.0.0 | `c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6` | 288,063 | 74 | `ca2c8cefbaa1a9d6f5f78ee86713e813633942ca` | `38d3185` | Release, merged; on npm as `latest` |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -257,5 +257,6 @@ and 24.21.0; the carried file is the Node 22.22.2 one. It was carried after
 every CI job had passed on the source commit (run 38119791641 and its
 companion workflows) and an independent review of the version commit had
 been acted on. The owner approved publishing it to
-npm's `latest` once its gates pass (2026-10-11). The record is in
-`docs/evidence/1.0.0-20261011/`.
+npm's `latest` once its gates passed (2026-10-11); the Release workflow
+published it from main at `f8992a4` (run 38144970198), and npm's tarball is
+this file. The record is in `docs/evidence/1.0.0-20261011/`.

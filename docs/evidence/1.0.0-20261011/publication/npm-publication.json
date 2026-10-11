@@ -1,0 +1,73 @@
+{
+  "schema": "zodiacs.npm-publication-check.v1",
+  "checkedAt": "2026-10-11T13:59:15.683Z",
+  "version": "1.0.0",
+  "ok": true,
+  "checks": {
+    "registry": {
+      "version": "1.0.0",
+      "tarball": "https://registry.npmjs.org/@zodiacs/engine/-/engine-1.0.0.tgz",
+      "integrity": "sha512-npoQ6scEH1Ozdix4H8juvsXqpYIMypmCU3CRSvYJ7cI8vDX2A9tPDSDaasqDSt9niPgQoW/y93vRWw62m/Kj7A==",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@zodiacs%2fengine@1.0.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "distTags": {
+        "latest": "1.0.0",
+        "next": "0.1.1-rc.16"
+      }
+    },
+    "tarball": {
+      "carriedSha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "servedSha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "carriedBytes": 288063,
+      "servedBytes": 288063,
+      "identical": true,
+      "integrityMatches": true
+    },
+    "signatures": {
+      "exitCode": 0,
+      "output": [
+        "audited 2 packages in 0s",
+        "",
+        "2 packages have verified registry signatures",
+        "",
+        "1 package has a verified attestation",
+        "(use --json --include-attestations to view attestation details)"
+      ]
+    },
+    "node": {
+      "version": "v26.4.0",
+      "output": {
+        "version": "1.0.0",
+        "sun": 84.14928002220142
+      }
+    },
+    "deno": {
+      "version": "deno 2.9.0 (stable, release, aarch64-apple-darwin)",
+      "args": [
+        "run",
+        "--quiet",
+        "--minimum-dependency-age=0",
+        "--allow-read",
+        "--allow-env",
+        "--allow-net=registry.npmjs.org"
+      ],
+      "output": {
+        "version": "1.0.0",
+        "sun": 84.14928002220142
+      }
+    },
+    "packedConsumer": {
+      "exitCode": 0,
+      "tail": [
+        "  \"directory\": \"<scratch>/npm-verify/tmp/zodiacs-engine-consumer-oV1flA\",",
+        "  \"types\": \"passed\",",
+        "  \"directoryRemoved\": true",
+        "}"
+      ]
+    }
+  }
+}
