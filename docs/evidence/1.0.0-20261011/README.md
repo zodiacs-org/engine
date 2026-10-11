@@ -9,10 +9,14 @@ for byte, and so did a run on this machine (Node 22.22.2, 2026-10-10).
 1. `3a4b8a6`, the version commit: the version, the generated records that
    carry it, the CHANGELOG entry, the README's release lines, the size notes,
    and its checks, kept in `version-commit-3a4b8a6/` and below.
-2. The source commit of this release, which brings this version of this file.
-   It acts on the independent review of `3a4b8a6` (*Reviews*): the CHANGELOG
-   entry's paragraph on platforms and its path for callers on npm's
-   0.1.1-rc.15, the README's line for them, and this record.
+2. `ca2c8ce`, the source commit of this release. It acts on the independent
+   review of `3a4b8a6` (*Reviews*): the CHANGELOG entry's paragraph on
+   platforms and its path for callers on npm's 0.1.1-rc.15, the README's line
+   for them, and this record.
+
+Two commits follow it: `38d3185` carries the archive packed from it (*The
+archive*), and the commit that brings this version of this file records the
+gates on the carrier and the search for birth data.
 
 The owner approved cutting 1.0.0 and publishing it under npm's `latest` once
 every gate, review and private search passes (2026-10-11, recorded in the
@@ -213,12 +217,66 @@ owner has ruled must never be opened or read, in every commit, the index, the
 tree and any archive member of that name, and says so; nothing here covers
 that file. A positive control, kept outside the repository with the patterns,
 found every one of the 89 patterns under all seven labels, read gzip and tar
-contents, and left the excluded path unread. The final search, on the commits
-up to the record, is recorded with the record commit.
+contents, and left the excluded path unread.
+
+`history-check.txt` is the same search run on the 55 commits from 1.0.0-rc.2's
+carrier to the carrier `38d3185`, with this record's changes staged, the
+carried archives decompressed and read, and on the tree of `38d3185`.
+
+## The archive
+
+`artifacts/zodiacs-engine-1.0.0.tgz` is packed from the source commit
+`ca2c8ce` and carried by its child `38d3185`: SHA-256
+`c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6`, 288,063
+bytes, 74 files, 991,915 bytes unpacked, the bytes `tree-jobs.sh` packed from
+the tree before the source commit. Clean clones of `ca2c8ce`, each installed
+with `npm ci`, built and packed the same bytes on Node 22.22.2 (npm 10.9.7),
+20.19.0 (npm 10.8.2) and 24.21.0 (npm 11.19.0), 74 files each time, and the
+carried file is the Node 22.22.2 one (`carrier/pack-source.sh`, 1.0.0-rc.2's
+with `shasum`, `wc` and `awk` in place of `sha256sum` and `stat -c`). It was
+carried after every CI job had passed on `ca2c8ce`
+([run 38119791641](https://github.com/zodiacs-org/engine/actions/runs/38119791641)
+and its companion workflows). `artifacts/archives.json` records the archive
+with its source commit, its receipt `artifacts/zodiacs-engine-1.0.0.sha256`
+names its digest, and `artifacts/README.md` lists it; 1.0.0-rc.2's row there
+now names its carrier, `e790362`, and says it was merged.
+
+## The gates on the carrier
+
+`carrier/carrier-gates.sh`, 1.0.0-rc.2's for 1.0.0's archive and with
+`shasum` in place of `sha256sum`, ran each job of the three workflows that
+build and check the package on the carrier, `38d3185`, in a clean clone of
+the repository with full history, with `TMPDIR` outside the clone and no
+`package.json` or `node_modules` at or above it, and without `NODE_OPTIONS`
+(logs in `carrier/`), on darwin-arm64:
+
+| Job | Node (npm) | Result | Log |
+| --- | --- | --- | --- |
+| engine: npm ci, typecheck, tests, build, export smoke, API check, package contents, pack dry run, archive check | 22.22.2 (10.9.7) | 3,848 tests passed, 1 skipped, 4 failed (*Platforms*); the other steps pass; the archive check as below | `engine-38d3185-v22.22.2.log` |
+| engine | 20.19.0 (10.8.2) | 3,847 passed, 2 skipped, 4 failed; the other steps pass | `engine-38d3185-v20.19.0.log` |
+| engine | 24.21.0 (11.19.0) | 3,847 passed, 2 skipped, 4 failed; the other steps pass | `engine-38d3185-v24.21.0.log` |
+| archives: the archive check with `--rebuild-all` | 22.22.2 (10.9.7) | a rebuild of HEAD, and of each of the 15 recorded archives from its source commit, byte-identical to the recorded archive | `archives-38d3185-v22.22.2.log` |
+| pack: npm ci, build, `npm pack --ignore-scripts` | 22.22.2 (10.9.7) | byte-identical to the carried archive (`cmp`) | `pack-38d3185-v22.22.2.log` |
+| packed consumer, on the carried archive itself | 20.19.0 (10.8.2), 22.7.0 (10.8.2), 22.22.2 (10.9.7), 24.21.0 (11.19.0) | all 34 sections and the types pass on each version, on the archive of SHA-256 `c4d3754d…` | `consumer-38d3185-v*.log` |
+| conformance: npm ci, build, self-test, vectors, verdicts, `RESULTS.md` | 22.22.2 (10.9.7) | 267 pass, 192 fail, 41 unsupported, 0 error, every verdict as committed; `RESULTS.md` and `results/summary.json` current | `conformance-38d3185-v22.22.2.log` |
+| atlas: checks and self-test, nothing installed | 22.22.2 (10.9.7) | all checks and the self-test pass | `atlas-38d3185-v22.22.2.log` |
+
+In a clean clone the tests run before the build, as in CI, so the test that
+reads the checkout's own build is skipped, and on 20.19.0 and 24.21.0 so is
+the tzdb 2025c comparison. On each engine run the archive check found
+`artifacts/zodiacs-engine-1.0.0.tgz` byte-identical to a rebuild of HEAD on
+that Node version, and the 15 recorded archives (14 carried, 1 superseded)
+and their receipts holding only their recorded bytes across 231 commits, each
+bound to its source commit. The conformance generators were not run here;
+this machine has no Python 3.11 with the pinned pyerfa and numpy. CI ran them
+on the carrier, with every other job of the three workflows on x86-64:
+[CI run 38121238462](https://github.com/zodiacs-org/engine/actions/runs/38121238462),
+Conformance, Atlas, Python package, CodeQL and Offline CLI consumer all
+passed on `38d3185`.
 
 ## What is not established
 
-- The archive is packed once, from this commit, and its gates run on the
-  carrier; both are recorded with the record commit.
-- 1.0.0 is not published by anything here.
+- 1.0.0 is not published by anything here; the Release workflow publishes it
+  from main after the merge.
 - No browser engine but JavaScriptCore's shell was run, and no Firefox.
+- The conformance generators ran in CI only.
