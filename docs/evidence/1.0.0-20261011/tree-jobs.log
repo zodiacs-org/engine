@@ -1,11 +1,11 @@
-# sh tree-jobs.sh on the tree before the source commit, without NODE_OPTIONS, 2026-10-10
+# sh tree-jobs.sh on the tree before the source commit, without NODE_OPTIONS, 2026-10-11
 ## npm run build (Node v22.22.2)
 exit 0
 ## npm pack --ignore-scripts (Node v22.22.2)
 npm notice
 npm notice package: @zodiacs/engine@1.0.0
 npm notice Tarball Contents
-npm notice 113.5kB CHANGELOG.md
+npm notice 114.2kB CHANGELOG.md
 npm notice 1.1kB LICENSE
 npm notice 26.2kB LICENSING.md
 npm notice 10.1kB NOTICE
@@ -83,17 +83,17 @@ npm notice Tarball Details
 npm notice name: @zodiacs/engine
 npm notice version: 1.0.0
 npm notice filename: zodiacs-engine-1.0.0.tgz
-npm notice package size: 287.7 kB
-npm notice unpacked size: 991.1 kB
-npm notice shasum: 93a3391f98496fbbc5aa5e61f61e1a7c9bf182e3
-npm notice integrity: sha512-3+ZXLTSPpV5Bh[...]TWx7XZcsaE3OQ==
+npm notice package size: 288.1 kB
+npm notice unpacked size: 991.9 kB
+npm notice shasum: 72b7a0266f59a25a21f4c72f6a50f41e5784dc27
+npm notice integrity: sha512-npoQ6scEH1Ozd[...]3vRWw62m/Kj7A==
 npm notice total files: 74
 npm notice
 zodiacs-engine-1.0.0.tgz
 exit 0
 ## the pack (Node v22.22.2)
-96a004f64cc45ce88255e384e61a59a52839271985bb1b0dc8d75fc4f52502f7  zodiacs-engine-1.0.0.tgz
-  287712 zodiacs-engine-1.0.0.tgz
+c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6  zodiacs-engine-1.0.0.tgz
+  288063 zodiacs-engine-1.0.0.tgz
 exit 0
 ## node scripts/verify-packed-consumer.mjs <the pack> (Node v20.19.0)
 {
@@ -133,11 +133,11 @@ exit 0
   "civilSettingsBeforeIntl": "passed",
   "oneZeroAdditions": "passed",
   "artifact": "<scratch>/pack/zodiacs-engine-1.0.0.tgz",
-  "sha256": "96a004f64cc45ce88255e384e61a59a52839271985bb1b0dc8d75fc4f52502f7",
+  "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
   "runtime": "v20.19.0",
   "typescript": "5.9.3",
   "typeRoots": "none (types: [])",
-  "directory": "<tmp>/zodiacs-engine-consumer-RfVqZV",
+  "directory": "<tmp>/zodiacs-engine-consumer-JhmIkd",
   "types": "passed",
   "directoryRemoved": true
 }
@@ -180,11 +180,11 @@ exit 0
   "civilSettingsBeforeIntl": "passed",
   "oneZeroAdditions": "passed",
   "artifact": "<scratch>/pack/zodiacs-engine-1.0.0.tgz",
-  "sha256": "96a004f64cc45ce88255e384e61a59a52839271985bb1b0dc8d75fc4f52502f7",
+  "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
   "runtime": "v22.7.0",
   "typescript": "5.9.3",
   "typeRoots": "none (types: [])",
-  "directory": "<tmp>/zodiacs-engine-consumer-QxoNA3",
+  "directory": "<tmp>/zodiacs-engine-consumer-bBYQtM",
   "types": "passed",
   "directoryRemoved": true
 }
@@ -227,11 +227,11 @@ exit 0
   "civilSettingsBeforeIntl": "passed",
   "oneZeroAdditions": "passed",
   "artifact": "<scratch>/pack/zodiacs-engine-1.0.0.tgz",
-  "sha256": "96a004f64cc45ce88255e384e61a59a52839271985bb1b0dc8d75fc4f52502f7",
+  "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
   "runtime": "v22.22.2",
   "typescript": "5.9.3",
   "typeRoots": "none (types: [])",
-  "directory": "<tmp>/zodiacs-engine-consumer-2j9SYJ",
+  "directory": "<tmp>/zodiacs-engine-consumer-Hlb0YE",
   "types": "passed",
   "directoryRemoved": true
 }
@@ -274,11 +274,11 @@ exit 0
   "civilSettingsBeforeIntl": "passed",
   "oneZeroAdditions": "passed",
   "artifact": "<scratch>/pack/zodiacs-engine-1.0.0.tgz",
-  "sha256": "96a004f64cc45ce88255e384e61a59a52839271985bb1b0dc8d75fc4f52502f7",
+  "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
   "runtime": "v24.21.0",
   "typescript": "5.9.3",
   "typeRoots": "none (types: [])",
-  "directory": "<tmp>/zodiacs-engine-consumer-Uk22jY",
+  "directory": "<tmp>/zodiacs-engine-consumer-mmnS7E",
   "types": "passed",
   "directoryRemoved": true
 }
@@ -288,43 +288,43 @@ TAP version 13
 # Subtest: longitudes compare on the circle, in the rule unit
 ok 1 - longitudes compare on the circle, in the rule unit
   ---
-  duration_ms: 0.719667
+  duration_ms: 0.36575
   type: 'test'
   ...
 # Subtest: arrays compare element by element and report the worst residual
 ok 2 - arrays compare element by element and report the worst residual
   ---
-  duration_ms: 0.246167
+  duration_ms: 0.095958
   type: 'test'
   ...
 # Subtest: exact fields, missing fields and non-numbers fail
 ok 3 - exact fields, missing fields and non-numbers fail
   ---
-  duration_ms: 0.200042
+  duration_ms: 0.143291
   type: 'test'
   ...
 # Subtest: validation accepts a conforming file and names each problem in a bad one
 ok 4 - validation accepts a conforming file and names each problem in a bad one
   ---
-  duration_ms: 1.504709
+  duration_ms: 1.757375
   type: 'test'
   ...
 # Subtest: the committed vector files conform to SPEC.md
 ok 5 - the committed vector files conform to SPEC.md
   ---
-  duration_ms: 11.505667
+  duration_ms: 9.910833
   type: 'test'
   ...
 # Subtest: the protocol: a handshake, then one response per request, in order
 ok 6 - the protocol: a handshake, then one response per request, in order
   ---
-  duration_ms: 39.249625
+  duration_ms: 31.002875
   type: 'test'
   ...
 # Subtest: the protocol: a missing handshake or an answer out of order is refused
 ok 7 - the protocol: a missing handshake or an answer out of order is refused
   ---
-  duration_ms: 93.838458
+  duration_ms: 72.894375
   type: 'test'
   ...
 1..7
@@ -335,7 +335,7 @@ ok 7 - the protocol: a missing handshake or an answer out of order is refused
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 194.733959
+# duration_ms 154.500292
 exit 0
 ## node conformance/harness/validate.mjs --expect-total 500 (Node v22.22.2)
 L1 Positions: 240 vectors, 1 arbiter(s), sha256 853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c
@@ -378,157 +378,157 @@ TAP version 13
 # Subtest: local mean time is 240 s per degree east, to the millisecond
 ok 1 - local mean time is 240 s per degree east, to the millisecond
   ---
-  duration_ms: 0.645125
+  duration_ms: 0.582458
   type: 'test'
   ...
 # Subtest: boundaries resolve on the clock their reckoning names
 ok 2 - boundaries resolve on the clock their reckoning names
   ---
-  duration_ms: 1.632083
+  duration_ms: 1.511833
   type: 'test'
   ...
 # Subtest: an ordinary reading resolves to one instant
 ok 3 - an ordinary reading resolves to one instant
   ---
-  duration_ms: 0.962208
+  duration_ms: 0.868
   type: 'test'
   ...
 # Subtest: local mean time differs by place
 ok 4 - local mean time differs by place
   ---
-  duration_ms: 0.482084
+  duration_ms: 0.435959
   type: 'test'
   ...
 # Subtest: a place read by longitude must lie in a covered département and inside its area
 ok 5 - a place read by longitude must lie in a covered département and inside its area
   ---
-  duration_ms: 0.336791
+  duration_ms: 0.301375
   type: 'test'
   ...
 # Subtest: --utc is always UTC, with or without Z, whatever the host time zone
 ok 6 - --utc is always UTC, with or without Z, whatever the host time zone
   ---
-  duration_ms: 90.813417
+  duration_ms: 86.246625
   type: 'test'
   ...
 # Subtest: --utc reports the same instant fields as --local, uncertainty included
 ok 7 - --utc reports the same instant fields as --local, uncertainty included
   ---
-  duration_ms: 0.975291
+  duration_ms: 0.555125
   type: 'test'
   ...
 # Subtest: the resolver refuses out-of-range times, a malformed longitude and an unknown clock
 ok 8 - the resolver refuses out-of-range times, a malformed longitude and an unknown clock
   ---
-  duration_ms: 252.536125
+  duration_ms: 246.695625
   type: 'test'
   ...
 # Subtest: the resolver refuses unknown, valueless, repeated and conflicting options
 ok 9 - the resolver refuses unknown, valueless, repeated and conflicting options
   ---
-  duration_ms: 361.550292
+  duration_ms: 334.419792
   type: 'test'
   ...
 # Subtest: a clock the jurisdiction does not keep is reported as such, not as out of coverage
 ok 10 - a clock the jurisdiction does not keep is reported as such, not as out of coverage
   ---
-  duration_ms: 0.518041
+  duration_ms: 0.471042
   type: 'test'
   ...
 # Subtest: a skipped reading is nonexistent and taken on the earlier clock
 ok 11 - a skipped reading is nonexistent and taken on the earlier clock
   ---
-  duration_ms: 0.303875
+  duration_ms: 0.28925
   type: 'test'
   ...
 # Subtest: a repeated reading is ambiguous, earliest first
 ok 12 - a repeated reading is ambiguous, earliest first
   ---
-  duration_ms: 0.149416
+  duration_ms: 0.143833
   type: 'test'
   ...
 # Subtest: readings outside the window are out of coverage
 ok 13 - readings outside the window are out of coverage
   ---
-  duration_ms: 0.144834
+  duration_ms: 0.147458
   type: 'test'
   ...
 # Subtest: readings near a boundary the sources do not fix exactly are flagged uncertain
 ok 14 - readings near a boundary the sources do not fix exactly are flagged uncertain
   ---
-  duration_ms: 0.15575
+  duration_ms: 0.152625
   type: 'test'
   ...
 # Subtest: a local reading inside the span of an imprecise change, read on either clock, is uncertain
 ok 15 - a local reading inside the span of an imprecise change, read on either clock, is uncertain
   ---
-  duration_ms: 0.235084
+  duration_ms: 0.223375
   type: 'test'
   ...
 # Subtest: UTC -> local -> UTC round trips at every millisecond near a change
 ok 16 - UTC -> local -> UTC round trips at every millisecond near a change
   ---
-  duration_ms: 0.169958
+  duration_ms: 0.155167
   type: 'test'
   ...
 # Subtest: each tzdb difference must match exactly one explanation, on its values
 ok 17 - each tzdb difference must match exactly one explanation, on its values
   ---
-  duration_ms: 0.362792
+  duration_ms: 0.34775
   type: 'test'
   ...
 # Subtest: a missing tzdb extract fails the check instead of skipping it
 ok 18 - a missing tzdb extract fails the check instead of skipping it
   ---
-  duration_ms: 0.149458
+  duration_ms: 0.151375
   type: 'test'
   ...
 # Subtest: the checks pass on the fixture and count their round trips
 ok 19 - the checks pass on the fixture and count their round trips
   ---
-  duration_ms: 2.78075
+  duration_ms: 2.796292
   type: 'test'
   ...
 # Subtest: the checks catch a gap between rules
 ok 20 - the checks catch a gap between rules
   ---
-  duration_ms: 1.031917
+  duration_ms: 0.805583
   type: 'test'
   ...
 # Subtest: the checks hold excerpts to 40 words and want a record of how each was checked
 ok 21 - the checks hold excerpts to 40 words and want a record of how each was checked
   ---
-  duration_ms: 0.845292
+  duration_ms: 0.855333
   type: 'test'
   ...
 # Subtest: the checks catch a département listed twice for reading by longitude
 ok 22 - the checks catch a département listed twice for reading by longitude
   ---
-  duration_ms: 0.497208
+  duration_ms: 0.421583
   type: 'test'
   ...
 # Subtest: the citations an exclusion names must exist, and count as cited
 ok 23 - the citations an exclusion names must exist, and count as cited
   ---
-  duration_ms: 2.444416
+  duration_ms: 2.1755
   type: 'test'
   ...
 # Subtest: the checks catch a missing citation, excerpt or retrieval date
 ok 24 - the checks catch a missing citation, excerpt or retrieval date
   ---
-  duration_ms: 0.480417
+  duration_ms: 0.428875
   type: 'test'
   ...
 # Subtest: the checks catch a rule without citations and an unused citation
 ok 25 - the checks catch a rule without citations and an unused citation
   ---
-  duration_ms: 0.369167
+  duration_ms: 0.3695
   type: 'test'
   ...
 # Subtest: the schema validator reports types, patterns and unknown properties
 ok 26 - the schema validator reports types, patterns and unknown properties
   ---
-  duration_ms: 0.20575
+  duration_ms: 0.192833
   type: 'test'
   ...
 1..26
@@ -539,6 +539,6 @@ ok 26 - the schema validator reports types, patterns and unknown properties
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 773.762833
+# duration_ms 726.090291
 exit 0
 

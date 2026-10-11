@@ -28,7 +28,8 @@ The Release workflow publishes the archive carried in `artifacts/` as it is,
 with provenance (CONTRIBUTING.md, *Releases*). Before 1.0.0 npm carried
 0.1.1-rc.14 to 0.1.1-rc.16. 0.1.1-rc.17, 1.0.0-rc.1 and 1.0.0-rc.2 were never
 published, so a caller moving from npm reads their CHANGELOG entries,
-1.0.0-rc.1's *Migration* first.
+1.0.0-rc.1's *Migration* first, and a caller on 0.1.1-rc.15, npm's `latest`
+until 1.0.0, reads 0.1.1-rc.16's too.
 
 The package runs in browsers through a bundler, and in Node.js 20.19.0 or a
 later 20.x, or 22.7.0 or later (`"engines": { "node": "^20.19.0 || >=22.7.0" }`).

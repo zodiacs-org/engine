@@ -1,0 +1,1032 @@
+{
+ "runtime": {
+  "engine": "JavaScriptCore (macOS jsc shell)"
+ },
+ "roundTrip": {
+  "cases": 38,
+  "threw": 0,
+  "numbersDiffering": 118,
+  "overPin": 24,
+  "largest": 3.5632297112897504e-9,
+  "differences": [
+   {
+    "path": "case 0 (calc).lat",
+    "committed": -1.244304782474929,
+    "here": -1.2443047824749276,
+    "abs": 1.3322676295501878e-15,
+    "ulps": 6,
+    "overPin": false
+   },
+   {
+    "path": "case 0 (calc).speeds.lat",
+    "committed": -0.0024177860022955855,
+    "here": -0.002417786002406608,
+    "abs": 1.1102230246251565e-13,
+    "ulps": 256000,
+    "overPin": false
+   },
+   {
+    "path": "case 1 (calc).lat",
+    "committed": -11.809492505137174,
+    "here": -11.809492505137172,
+    "abs": 1.7763568394002505e-15,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 1 (calc).dist",
+    "committed": 0.0026945530645223915,
+    "here": 0.002694553064522391,
+    "abs": 4.336808689942018e-19,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 1 (calc).cartesian.y",
+    "committed": -0.0018764223083445413,
+    "here": -0.001876422308344541,
+    "abs": 2.168404344971009e-19,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 1 (calc).cartesian.z",
+    "committed": -0.0005514624429024326,
+    "here": -0.0005514624429024325,
+    "abs": 1.0842021724855044e-19,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 1 (calc).cartesian.vx",
+    "committed": 0.00039379648832690677,
+    "here": 0.0003937964883270152,
+    "abs": 1.0842021724855044e-16,
+    "ulps": 2000,
+    "overPin": false
+   },
+   {
+    "path": "case 2 (calc).speeds.lat",
+    "committed": -0.000002812279383191909,
+    "here": -0.000002812279383207047,
+    "abs": 1.5138172833328856e-17,
+    "ulps": 35744,
+    "overPin": false
+   },
+   {
+    "path": "case 2 (calc).speeds.dist",
+    "committed": 0.0000726200312106684,
+    "here": 0.00007262003126617955,
+    "abs": 5.551115123125783e-14,
+    "ulps": 4096000,
+    "overPin": false
+   },
+   {
+    "path": "case 3 (calc).lat",
+    "committed": 22.00071375765135,
+    "here": 22.000713757651358,
+    "abs": 7.105427357601002e-15,
+    "ulps": 2,
+    "overPin": false
+   },
+   {
+    "path": "case 3 (calc).cartesian.x",
+    "committed": 0.3477034884179995,
+    "here": 0.3477034884179996,
+    "abs": 1.1102230246251565e-16,
+    "ulps": 2,
+    "overPin": false
+   },
+   {
+    "path": "case 3 (calc).cartesian.z",
+    "committed": 0.5889850994954869,
+    "here": 0.5889850994954872,
+    "abs": 2.220446049250313e-16,
+    "ulps": 2,
+    "overPin": false
+   },
+   {
+    "path": "case 3 (calc).cartesian.vx",
+    "committed": -0.03177161159068076,
+    "here": -0.031771611590708515,
+    "abs": 2.7755575615628914e-14,
+    "ulps": 4000,
+    "overPin": false
+   },
+   {
+    "path": "case 3 (calc).receipt.instants.0.deltaT.seconds",
+    "committed": 96.28118626170394,
+    "here": 96.28118626170392,
+    "abs": 1.4210854715202004e-14,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 4 (calc).speeds.lat",
+    "committed": -0.010209013954209922,
+    "here": -0.01020901395221152,
+    "abs": 1.9984014443252818e-12,
+    "ulps": 1152000,
+    "overPin": true
+   },
+   {
+    "path": "case 5 (calc).speeds.lon",
+    "committed": 0.03812456645846396,
+    "here": 0.03812456648688567,
+    "abs": 2.8421709430404007e-11,
+    "ulps": 4096000,
+    "overPin": true
+   },
+   {
+    "path": "case 5 (calc).cartesian.vx",
+    "committed": -0.004820668594973654,
+    "here": -0.004820668595417743,
+    "abs": 4.440892098500626e-13,
+    "ulps": 512000,
+    "overPin": false
+   },
+   {
+    "path": "case 5 (calc).cartesian.vz",
+    "committed": -0.0010860278394364542,
+    "here": -0.0010860278392144096,
+    "abs": 2.220446049250313e-13,
+    "ulps": 1024000,
+    "overPin": false
+   },
+   {
+    "path": "case 6 (calc).lon",
+    "committed": 67.26318124551551,
+    "here": 67.26318124551545,
+    "abs": 5.684341886080802e-14,
+    "ulps": 4,
+    "overPin": false
+   },
+   {
+    "path": "case 6 (calc).dist",
+    "committed": 5.984932635636135,
+    "here": 5.9849326356361345,
+    "abs": 8.881784197001252e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 6 (calc).cartesian.x",
+    "committed": 2.3130684903804886,
+    "here": 2.313068490380488,
+    "abs": 4.440892098500626e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 6 (calc).cartesian.y",
+    "committed": 5.519602575563668,
+    "here": 5.519602575563667,
+    "abs": 8.881784197001252e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 6 (calc).cartesian.z",
+    "committed": -0.05585892715000941,
+    "here": -0.055858927150009396,
+    "abs": 1.3877787807814457e-17,
+    "ulps": 2,
+    "overPin": false
+   },
+   {
+    "path": "case 8 (calc).lon",
+    "committed": 231.2079718653262,
+    "here": 231.20797186658274,
+    "abs": 1.2565521956275916e-9,
+    "ulps": 44211,
+    "overPin": true
+   },
+   {
+    "path": "case 8 (calc).lat",
+    "committed": -18.666602265921203,
+    "here": -18.666602266227468,
+    "abs": 3.06265235394676e-10,
+    "ulps": 86206,
+    "overPin": true
+   },
+   {
+    "path": "case 8 (calc).speeds.lon",
+    "committed": -0.23114718277588508,
+    "here": -0.2311471863391148,
+    "abs": 3.5632297112897504e-9,
+    "ulps": 128378880,
+    "overPin": true
+   },
+   {
+    "path": "case 8 (calc).speeds.lat",
+    "committed": 0.05632755245400034,
+    "here": 0.056327553323711754,
+    "abs": 8.697114139977202e-10,
+    "ulps": 125338624,
+    "overPin": true
+   },
+   {
+    "path": "case 9 (calc).lat",
+    "committed": 0.34065697821776064,
+    "here": 0.3406569782177607,
+    "abs": 5.551115123125783e-17,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 9 (calc).cartesian.vx",
+    "committed": -0.026671226857108432,
+    "here": -0.026671226857136188,
+    "abs": 2.7755575615628914e-14,
+    "ulps": 8000,
+    "overPin": false
+   },
+   {
+    "path": "case 9 (calc).cartesian.vy",
+    "committed": 0.020010053674940353,
+    "here": 0.020010053674912598,
+    "abs": 2.7755575615628914e-14,
+    "ulps": 8000,
+    "overPin": false
+   },
+   {
+    "path": "case 9 (calc).cartesian.vz",
+    "committed": 0.0040586766258666985,
+    "here": 0.004058676625866482,
+    "abs": 2.1684043449710089e-16,
+    "ulps": 250,
+    "overPin": false
+   },
+   {
+    "path": "case 10 (calc).lon",
+    "committed": 280.0991978108896,
+    "here": 280.09919781088956,
+    "abs": 5.684341886080802e-14,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 10 (calc).lat",
+    "committed": -0.0020350195502362714,
+    "here": -0.002035019550236272,
+    "abs": 4.336808689942018e-19,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 10 (calc).dist",
+    "committed": 0.9833430298216823,
+    "here": 0.9833430298216822,
+    "abs": 1.1102230246251565e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 10 (calc).speeds.dist",
+    "committed": 0.000010731464494817544,
+    "here": 0.000010731464383795242,
+    "abs": 1.1102230246251565e-13,
+    "ulps": 65536000,
+    "overPin": false
+   },
+   {
+    "path": "case 10 (calc).cartesian.vx",
+    "committed": 0.017034149892555805,
+    "here": 0.017034149892514172,
+    "abs": 4.163336342344337e-14,
+    "ulps": 12000,
+    "overPin": false
+   },
+   {
+    "path": "case 10 (calc).cartesian.vy",
+    "committed": 0.003023096874499309,
+    "here": 0.003023096874721354,
+    "abs": 2.220446049250313e-13,
+    "ulps": 512000,
+    "overPin": false
+   },
+   {
+    "path": "case 10 (calc).cartesian.vz",
+    "committed": 0.00002619658634461108,
+    "here": 0.000026196586344617856,
+    "abs": 6.776263578034403e-18,
+    "ulps": 2000,
+    "overPin": false
+   },
+   {
+    "path": "case 13 (calc).dist",
+    "committed": 29.230361313011116,
+    "here": 29.23036131301112,
+    "abs": 3.552713678800501e-15,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 13 (calc).speeds.dist",
+    "committed": 0.013036863848014946,
+    "here": 0.013036863846238589,
+    "abs": 1.7763568394002505e-12,
+    "ulps": 1024000,
+    "overPin": true
+   },
+   {
+    "path": "case 13 (calc).cartesian.x",
+    "committed": 29.122187180850474,
+    "here": 29.12218718085048,
+    "abs": 7.105427357601002e-15,
+    "ulps": 2,
+    "overPin": false
+   },
+   {
+    "path": "case 13 (calc).cartesian.y",
+    "committed": -2.4268505184451166,
+    "here": -2.426850518445117,
+    "abs": 4.440892098500626e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 13 (calc).cartesian.z",
+    "committed": -0.6501021872044023,
+    "here": -0.6501021872044024,
+    "abs": 1.1102230246251565e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 13 (calc).cartesian.vx",
+    "committed": 0.01231270805313045,
+    "here": 0.012312708051354093,
+    "abs": 1.7763568394002505e-12,
+    "ulps": 1024000,
+    "overPin": true
+   },
+   {
+    "path": "case 13 (calc).cartesian.vy",
+    "committed": -0.0092536612805727,
+    "here": -0.009253661280350656,
+    "abs": 2.220446049250313e-13,
+    "ulps": 128000,
+    "overPin": false
+   },
+   {
+    "path": "case 13 (calc).cartesian.vz",
+    "committed": -0.00006460430568289155,
+    "here": -0.0000646043056273804,
+    "abs": 5.551115123125783e-14,
+    "ulps": 4096000,
+    "overPin": false
+   },
+   {
+    "path": "case 13 (calc).receipt.instants.0.deltaT.seconds",
+    "committed": 118.2214841265093,
+    "here": 118.22148412650928,
+    "abs": 1.4210854715202004e-14,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 14 (calc).lat",
+    "committed": 5.231366335062896,
+    "here": 5.231366335062897,
+    "abs": 8.881784197001252e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 14 (calc).dist",
+    "committed": 0.0026800028065764652,
+    "here": 0.002680002806576465,
+    "abs": 4.336808689942018e-19,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 14 (calc).speeds.dist",
+    "committed": 0.0000220273514040404,
+    "here": 0.00002202735140382356,
+    "abs": 2.1684043449710089e-16,
+    "ulps": 64000,
+    "overPin": false
+   },
+   {
+    "path": "case 25 (calc).lat",
+    "committed": 2.730449761932382,
+    "here": 2.7304497619323844,
+    "abs": 2.220446049250313e-15,
+    "ulps": 5,
+    "overPin": false
+   },
+   {
+    "path": "case 25 (calc).speeds.lon",
+    "committed": -0.06130560184658407,
+    "here": -0.06130560183237321,
+    "abs": 1.4210854715202004e-11,
+    "ulps": 2048000,
+    "overPin": true
+   },
+   {
+    "path": "case 25 (calc).speeds.lat",
+    "committed": -0.0023546375975680434,
+    "here": -0.002354637597790088,
+    "abs": 2.220446049250313e-13,
+    "ulps": 512000,
+    "overPin": false
+   },
+   {
+    "path": "case 25 (calc).speeds.dist",
+    "committed": 0.008300858666210331,
+    "here": 0.008300858665322153,
+    "abs": 8.881784197001252e-13,
+    "ulps": 512000,
+    "overPin": false
+   },
+   {
+    "path": "case 25 (calc).cartesian.x",
+    "committed": -8.678286857987642,
+    "here": -8.678286857987644,
+    "abs": 1.7763568394002505e-15,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 25 (calc).cartesian.y",
+    "committed": 1.2285307208868184,
+    "here": 1.228530720886818,
+    "abs": 4.440892098500626e-16,
+    "ulps": 2,
+    "overPin": false
+   },
+   {
+    "path": "case 25 (calc).cartesian.z",
+    "committed": 0.41800662264923194,
+    "here": 0.4180066226492323,
+    "abs": 3.3306690738754696e-16,
+    "ulps": 6,
+    "overPin": false
+   },
+   {
+    "path": "case 25 (calc).cartesian.vx",
+    "committed": -0.006912081481402765,
+    "here": -0.0069120814796264085,
+    "abs": 1.7763568394002505e-12,
+    "ulps": 2048000,
+    "overPin": true
+   },
+   {
+    "path": "case 25 (calc).cartesian.vy",
+    "committed": 0.010450220196078774,
+    "here": 0.01045022019585673,
+    "abs": 2.220446049250313e-13,
+    "ulps": 128000,
+    "overPin": false
+   },
+   {
+    "path": "case 25 (calc).cartesian.vz",
+    "committed": 0.00003523018626827579,
+    "here": 0.000035230186157253485,
+    "abs": 1.1102230246251565e-13,
+    "ulps": 16384000,
+    "overPin": false
+   },
+   {
+    "path": "case 26 (calc).receipt.instants.0.deltaT.seconds",
+    "committed": 74.65106215320853,
+    "here": 74.65106215320851,
+    "abs": 1.4210854715202004e-14,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 27 (calc).speeds.lat",
+    "committed": 0.0007066559042853944,
+    "here": 0.0007066559042844256,
+    "abs": 9.688430613330468e-16,
+    "ulps": 8936,
+    "overPin": false
+   },
+   {
+    "path": "case 29 (calc).lat",
+    "committed": -1.0743096684077655,
+    "here": -1.0743096684077653,
+    "abs": 2.220446049250313e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 29 (calc).speeds.dist",
+    "committed": 0.005421201390021224,
+    "here": 0.0054212013901322464,
+    "abs": 1.1102230246251565e-13,
+    "ulps": 128000,
+    "overPin": false
+   },
+   {
+    "path": "case 31 (houses).receipt.instants.0.deltaT.seconds",
+    "committed": 89.21635329211125,
+    "here": 89.21635329211124,
+    "abs": 1.4210854715202004e-14,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.0.lat",
+    "committed": -0.000011117709912775589,
+    "here": -0.00001111770991277559,
+    "abs": 1.6940658945086007e-21,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.4.lat",
+    "committed": 2.3381478744906863,
+    "here": 2.3381478744906867,
+    "abs": 4.440892098500626e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.5.lon",
+    "committed": 127.89964129946475,
+    "here": 127.8996412994648,
+    "abs": 5.684341886080802e-14,
+    "ulps": 4,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.5.degree",
+    "committed": 7.899641299464747,
+    "here": 7.899641299464804,
+    "abs": 5.684341886080802e-14,
+    "ulps": 64,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.6.lat",
+    "committed": -0.18294558762658597,
+    "here": -0.182945587626586,
+    "abs": 2.7755575615628914e-17,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.7.lat",
+    "committed": -0.3279391359243826,
+    "here": -0.3279391359243827,
+    "abs": 5.551115123125783e-17,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.10.lon",
+    "committed": 297.9452479262924,
+    "here": 297.9452479266587,
+    "abs": 3.6629899113904685e-10,
+    "ulps": 6444,
+    "overPin": true
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.10.speed",
+    "committed": -0.03638443356578591,
+    "here": -0.036384433565672225,
+    "abs": 1.1368683772161603e-13,
+    "ulps": 16384,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.10.degree",
+    "committed": 27.94524792629238,
+    "here": 27.94524792665868,
+    "abs": 3.6629899113904685e-10,
+    "ulps": 103104,
+    "overPin": true
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.11.lon",
+    "committed": 117.94524792629238,
+    "here": 117.94524792665868,
+    "abs": 3.6629899113904685e-10,
+    "ulps": 25776,
+    "overPin": true
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.11.speed",
+    "committed": -0.03638443356578591,
+    "here": -0.036384433565672225,
+    "abs": 1.1368683772161603e-13,
+    "ulps": 16384,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.bodies.11.degree",
+    "committed": 27.94524792629238,
+    "here": 27.94524792665868,
+    "abs": 3.6629899113904685e-10,
+    "ulps": 103104,
+    "overPin": true
+   },
+   {
+    "path": "case 33 (chart).chart.angles.asc",
+    "committed": 257.52650548006653,
+    "here": 257.5265054800666,
+    "abs": 5.684341886080802e-14,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.angles.dsc",
+    "committed": 77.52650548006653,
+    "here": 77.52650548006659,
+    "abs": 5.684341886080802e-14,
+    "ulps": 4,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.houses.cusps.6",
+    "committed": 77.52650548006653,
+    "here": 77.52650548006659,
+    "abs": 5.684341886080802e-14,
+    "ulps": 4,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.aspects.2.orb",
+    "committed": 3.4559354706599947,
+    "here": 3.4559354706600516,
+    "abs": 5.684341886080802e-14,
+    "ulps": 128,
+    "overPin": false
+   },
+   {
+    "path": "case 33 (chart).chart.aspects.7.orb",
+    "committed": 5.914891012909152,
+    "here": 5.914891012909038,
+    "abs": 1.1368683772161603e-13,
+    "ulps": 128,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.0.lat",
+    "committed": 0.000030244894327725405,
+    "here": 0.00003024489432772541,
+    "abs": 3.3881317890172014e-21,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.1.lat",
+    "committed": 0.6317703262751287,
+    "here": 0.6317703262751289,
+    "abs": 1.1102230246251565e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.5.lat",
+    "committed": 0.8574203733909405,
+    "here": 0.8574203733909406,
+    "abs": 1.1102230246251565e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.6.lat",
+    "committed": 2.0775891489148313,
+    "here": 2.077589148914829,
+    "abs": 2.220446049250313e-15,
+    "ulps": 5,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.7.lon",
+    "committed": 20.357583915181863,
+    "here": 20.357583915181806,
+    "abs": 5.684341886080802e-14,
+    "ulps": 16,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.7.degree",
+    "committed": 20.357583915181863,
+    "here": 20.357583915181806,
+    "abs": 5.684341886080802e-14,
+    "ulps": 16,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.8.lat",
+    "committed": -0.7917697973955828,
+    "here": -0.791769797395583,
+    "abs": 1.1102230246251565e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.9.lat",
+    "committed": 1.9828897060668758,
+    "here": 1.9828897060668753,
+    "abs": 4.440892098500626e-16,
+    "ulps": 2,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.10.lon",
+    "committed": 184.42260783299915,
+    "here": 184.42260783302046,
+    "abs": 2.1316282072803006e-11,
+    "ulps": 750,
+    "overPin": true
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.10.degree",
+    "committed": 4.42260783299912,
+    "here": 4.422607833020493,
+    "abs": 2.1373125491663814e-11,
+    "ulps": 24064,
+    "overPin": true
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.11.lon",
+    "committed": 4.42260783299912,
+    "here": 4.422607833020493,
+    "abs": 2.1373125491663814e-11,
+    "ulps": 24064,
+    "overPin": true
+   },
+   {
+    "path": "case 34 (chart).chart.bodies.11.degree",
+    "committed": 4.42260783299912,
+    "here": 4.422607833020493,
+    "abs": 2.1373125491663814e-11,
+    "ulps": 24064,
+    "overPin": true
+   },
+   {
+    "path": "case 34 (chart).chart.aspects.5.orb",
+    "committed": 2.437164682431103,
+    "here": 2.4371646824311597,
+    "abs": 5.684341886080802e-14,
+    "ulps": 128,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.aspects.8.orb",
+    "committed": 5.046873022449631,
+    "here": 5.046873022449688,
+    "abs": 5.684341886080802e-14,
+    "ulps": 64,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.aspects.9.orb",
+    "committed": 5.286403558463235,
+    "here": 5.286403558463178,
+    "abs": 5.684341886080802e-14,
+    "ulps": 64,
+    "overPin": false
+   },
+   {
+    "path": "case 34 (chart).chart.aspects.13.orb",
+    "committed": 6.116281839630403,
+    "here": 6.116281839630346,
+    "abs": 5.684341886080802e-14,
+    "ulps": 64,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.0.lat",
+    "committed": -0.000011117709912775589,
+    "here": -0.00001111770991277559,
+    "abs": 1.6940658945086007e-21,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.4.lat",
+    "committed": 2.3381478744906863,
+    "here": 2.3381478744906867,
+    "abs": 4.440892098500626e-16,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.5.lon",
+    "committed": 127.89964129946475,
+    "here": 127.8996412994648,
+    "abs": 5.684341886080802e-14,
+    "ulps": 4,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.5.degree",
+    "committed": 7.899641299464747,
+    "here": 7.899641299464804,
+    "abs": 5.684341886080802e-14,
+    "ulps": 64,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.6.lat",
+    "committed": -0.18294558762658597,
+    "here": -0.182945587626586,
+    "abs": 2.7755575615628914e-17,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.7.lat",
+    "committed": -0.3279391359243826,
+    "here": -0.3279391359243827,
+    "abs": 5.551115123125783e-17,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.10.lon",
+    "committed": 297.9452479262924,
+    "here": 297.9452479266587,
+    "abs": 3.6629899113904685e-10,
+    "ulps": 6444,
+    "overPin": true
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.10.speed",
+    "committed": -0.03638443356578591,
+    "here": -0.036384433565672225,
+    "abs": 1.1368683772161603e-13,
+    "ulps": 16384,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.10.degree",
+    "committed": 27.94524792629238,
+    "here": 27.94524792665868,
+    "abs": 3.6629899113904685e-10,
+    "ulps": 103104,
+    "overPin": true
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.11.lon",
+    "committed": 117.94524792629238,
+    "here": 117.94524792665868,
+    "abs": 3.6629899113904685e-10,
+    "ulps": 25776,
+    "overPin": true
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.11.speed",
+    "committed": -0.03638443356578591,
+    "here": -0.036384433565672225,
+    "abs": 1.1368683772161603e-13,
+    "ulps": 16384,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.bodies.11.degree",
+    "committed": 27.94524792629238,
+    "here": 27.94524792665868,
+    "abs": 3.6629899113904685e-10,
+    "ulps": 103104,
+    "overPin": true
+   },
+   {
+    "path": "case 35 (chart).chart.angles.asc",
+    "committed": 257.52650548006653,
+    "here": 257.5265054800666,
+    "abs": 5.684341886080802e-14,
+    "ulps": 1,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.angles.dsc",
+    "committed": 77.52650548006653,
+    "here": 77.52650548006659,
+    "abs": 5.684341886080802e-14,
+    "ulps": 4,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.aspects.2.orb",
+    "committed": 3.4559354706599947,
+    "here": 3.4559354706600516,
+    "abs": 5.684341886080802e-14,
+    "ulps": 128,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).chart.aspects.7.orb",
+    "committed": 5.914891012909152,
+    "here": 5.914891012909038,
+    "abs": 1.1368683772161603e-13,
+    "ulps": 128,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).sidereal.bodies.5.lon",
+    "committed": 105.607303686035,
+    "here": 105.60730368603505,
+    "abs": 5.684341886080802e-14,
+    "ulps": 4,
+    "overPin": false
+   },
+   {
+    "path": "case 35 (chart).sidereal.bodies.10.lon",
+    "committed": 275.6529103128626,
+    "here": 275.6529103132289,
+    "abs": 3.6629899113904685e-10,
+    "ulps": 6444,
+    "overPin": true
+   },
+   {
+    "path": "case 35 (chart).sidereal.bodies.11.lon",
+    "committed": 95.65291031286263,
+    "here": 95.65291031322893,
+    "abs": 3.6629899113904685e-10,
+    "ulps": 25776,
+    "overPin": true
+   },
+   {
+    "path": "case 35 (chart).sidereal.ascendant",
+    "committed": 235.23416786663677,
+    "here": 235.23416786663682,
+    "abs": 5.684341886080802e-14,
+    "ulps": 2,
+    "overPin": false
+   }
+  ]
+ },
+ "returns": [
+  {
+   "corpus": "R-SI",
+   "cases": 300,
+   "disagreements": 0,
+   "chartsWithSameInstant": 0
+  },
+  {
+   "corpus": "R-SM",
+   "cases": 300,
+   "disagreements": 0,
+   "chartsWithSameInstant": 0
+  },
+  {
+   "corpus": "R-SC",
+   "cases": 60,
+   "disagreements": 60,
+   "chartsWithSameInstant": 60
+  },
+  {
+   "corpus": "R-LI",
+   "cases": 300,
+   "disagreements": 0,
+   "chartsWithSameInstant": 0
+  },
+  {
+   "corpus": "R-LC",
+   "cases": 60,
+   "disagreements": 60,
+   "chartsWithSameInstant": 60
+  },
+  {
+   "corpus": "R-E",
+   "cases": 40,
+   "disagreements": 35,
+   "chartsWithSameInstant": 0
+  }
+ ],
+ "voidOfCourse": [
+  {
+   "corpus": "V-W",
+   "cases": 20,
+   "disagreements": 3,
+   "numbers": [
+    {
+     "path": "case 4[2][2][3]",
+     "site": 116.90834966148014,
+     "package": 116.90834966148009,
+     "abs": 5.684341886080802e-14,
+     "ulps": 4
+    },
+    {
+     "path": "case 16[3][2][3]",
+     "site": 297.3944101761363,
+     "package": 297.3944101761364,
+     "abs": 5.684341886080802e-14,
+     "ulps": 1
+    },
+    {
+     "path": "case 19[3][2][3]",
+     "site": 356.15016205710845,
+     "package": 356.1501620571084,
+     "abs": 5.684341886080802e-14,
+     "ulps": 1
+    }
+   ]
+  },
+  {
+   "corpus": "V-S",
+   "cases": 40,
+   "disagreements": 0,
+   "numbers": []
+  }
+ ]
+}

@@ -10,22 +10,31 @@ points. Checks: `docs/evidence/1.0.0-20261011/`.
 - Before this release npm carried 0.1.1-rc.14 to 0.1.1-rc.16 (`latest`
   0.1.1-rc.15, `next` 0.1.1-rc.16). 0.1.1-rc.17, 1.0.0-rc.1 and 1.0.0-rc.2
   were never published, so a caller moving from npm reads their entries
-  below; 1.0.0-rc.1's *Migration* lists each breaking change and
-  deprecation with what a caller does about it.
+  below: 1.0.0-rc.1's *Migration* lists each breaking change and deprecation
+  from rc.17 with what a caller does about it. A caller on 0.1.1-rc.15 reads
+  0.1.1-rc.16's entry too, which has its own breaking changes and
+  *Migration*, and one on rc.14 rc.15's as well.
 - No API and no value changes from 1.0.0-rc.2. Every declaration file of the
   build is 1.0.0-rc.2's byte for byte, and 1.0.0-rc.1's battery of 6,417
   calls over the twelve entry points prints the same bytes on 1.0.0-rc.2's
   archive and on this build, run on one machine, with the version written
   as a placeholder. The 500 conformance verdicts are 1.0.0-rc.2's: 267 pass,
   192 fail, 41 unsupported, none in error.
-- A value can differ between processor architectures in its last bits: on
-  arm64 (Apple M4, Node 22.22.2) 4 of the 3,853 tests fail, where x86-64,
-  which CI runs, passes them all. Two replay a calc request whose longitude
-  speed differs by 1.4e-11 against a pin of 1e-12; two compare returns and
-  void-of-course windows with the site's code exactly, where every instant
-  agrees and a chart's digest, or an aspect's angle by 5e-14°, does not. A
-  comparison of values "to the bit" in these notes is between runs on one
-  platform.
+- Results depend on the JavaScript engine, its version and the processor, by
+  amounts far below any bound this package publishes. The tests' exact pins
+  are x86-64 V8's, as CI runs, where none fails. On arm64 (an Apple M4, Node
+  20, 22 and 24) 4 of the 3,853 tests fail: one calc round-trip case, which
+  two tests replay, has a longitude speed 1.42e-11° a day from the pinned
+  one, against the test's 1e-12; and the site-parity checks find 42 of 120
+  return charts and 1 of 60 void-of-course windows not equal, every instant
+  agreeing (a Moon longitude by 5.69e-14°). Over 1.0.0-rc.1's 6,417 calls the
+  largest arm64 difference is 1.31e-8° in a true node's longitude and
+  2.17e-8° a day in its speed; Node 24.17.0 differs from Node 22.22.2 on
+  x86-64 by at most 1.14e-13. In JavaScriptCore the calc round trip differs
+  by up to 1.26e-9° in a longitude and 3.56e-9° a day in a speed. One
+  conformance residual rounds differently in its ninth decimal on arm64; no
+  verdict changes. A comparison "to the bit" in these notes is between runs
+  on one runtime and processor.
 
 ## 1.0.0-rc.2 — unreleased candidate
 

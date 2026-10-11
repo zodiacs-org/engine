@@ -276,9 +276,9 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // documentation the 1.0 API carries in its declarations, the reviews' fixes
 // and the 1.0 changelog (CHANGELOG.md, 1.0.0-rc.1, Sizes).
 //
-// 1.0.0: 991,125 bytes in 74 files, 1,597 more than 1.0.0-rc.2's 989,528, for
+// 1.0.0: 991,915 bytes in 74 files, 2,387 more than 1.0.0-rc.2's 989,528, for
 // its changelog entry and the README's release lines. The cap, not raised,
-// leaves 8,875 bytes (docs/evidence/1.0.0-20261011/sizes.json).
+// leaves 8,085 bytes (docs/evidence/1.0.0-20261011/sizes.json).
 const TOTAL_CAP = 1_000_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 

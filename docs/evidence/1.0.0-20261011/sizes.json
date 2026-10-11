@@ -336,16 +336,16 @@
   },
   "package": {
    "files": 74,
-   "total": 991125,
+   "total": 991915,
    "cap": 1000000,
-   "headroomPercent": 0.89,
+   "headroomPercent": 0.81,
    "split": {
     "rootJs": 105975,
     "optInJs": 288027,
     "zoneHistories": 189144,
     "rootDeclarations": 61782,
     "otherDeclarations": 129923,
-    "documents": 212434,
+    "documents": 213224,
     "manifest": 3840
    },
    "zoneHistories": {
@@ -355,11 +355,11 @@
    },
    "growthFrom": {
     "label": "1.0.0-rc.2",
-    "bytes": 1597,
+    "bytes": 2387,
     "split": {
      "rootJs": {
       "bytes": -5,
-      "percentOfGrowth": -0.31
+      "percentOfGrowth": -0.21
      },
      "optInJs": {
       "bytes": 0,
@@ -378,12 +378,12 @@
       "percentOfGrowth": 0
      },
      "documents": {
-      "bytes": 1607,
-      "percentOfGrowth": 100.63
+      "bytes": 2397,
+      "percentOfGrowth": 100.42
      },
      "manifest": {
       "bytes": -5,
-      "percentOfGrowth": -0.31
+      "percentOfGrowth": -0.21
      }
     }
    }
