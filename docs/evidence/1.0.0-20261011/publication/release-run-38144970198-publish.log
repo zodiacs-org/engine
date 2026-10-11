@@ -1,0 +1,354 @@
+﻿2026-10-11T13:53:51.7295698Z Current runner version: '2.337.0'
+2026-10-11T13:53:51.7319029Z ##[group]Runner Image Provisioner
+2026-10-11T13:53:51.7319774Z Hosted Compute Agent
+2026-10-11T13:53:51.7320321Z Version: 20261002.596
+2026-10-11T13:53:51.7320868Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-11T13:53:51.7321474Z Build Date: 2026-10-02T22:28:27Z
+2026-10-11T13:53:51.7322117Z Worker ID: {2d54cc78-af49-446f-ab56-7712a54a0420}
+2026-10-11T13:53:51.7322977Z Region: westus3
+2026-10-11T13:53:51.7323514Z Cloud: Azure
+2026-10-11T13:53:51.7323984Z ##[endgroup]
+2026-10-11T13:53:51.7325120Z ##[group]Operating System
+2026-10-11T13:53:51.7325683Z Ubuntu
+2026-10-11T13:53:51.7326149Z 24.04.5
+2026-10-11T13:53:51.7326563Z LTS
+2026-10-11T13:53:51.7327054Z ##[endgroup]
+2026-10-11T13:53:51.7327527Z ##[group]Runner Image
+2026-10-11T13:53:51.7328115Z Image: ubuntu-24.04
+2026-10-11T13:53:51.7328624Z Version: 20261004.327.1
+2026-10-11T13:53:51.7330048Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-11T13:53:51.7331342Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-11T13:53:51.7332191Z ##[endgroup]
+2026-10-11T13:53:51.7333339Z ##[group]GITHUB_TOKEN Permissions
+2026-10-11T13:53:51.7335210Z Contents: read
+2026-10-11T13:53:51.7335719Z Metadata: read
+2026-10-11T13:53:51.7336171Z ##[endgroup]
+2026-10-11T13:53:51.7338016Z Secret source: Actions
+2026-10-11T13:53:51.7338793Z Cache mode: write
+2026-10-11T13:53:51.7339626Z Prepare workflow directory
+2026-10-11T13:53:51.8267339Z Prepare all required actions
+2026-10-11T13:53:51.8309350Z Getting action download info
+2026-10-11T13:53:52.1035497Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-11T13:53:52.6135556Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-10-11T13:53:52.9021305Z Complete job name: Publish to npm
+2026-10-11T13:53:52.9545009Z ##[group]Run if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+2026-10-11T13:53:52.9545748Z [36;1mif [[ "$GITHUB_REF" != "refs/heads/main" ]]; then[0m
+2026-10-11T13:53:52.9546345Z [36;1m  echo "::error::Run the release workflow from main."[0m
+2026-10-11T13:53:52.9546848Z [36;1m  exit 1[0m
+2026-10-11T13:53:52.9547221Z [36;1mfi[0m
+2026-10-11T13:53:52.9547788Z [36;1mif [[ ! "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then[0m
+2026-10-11T13:53:52.9548749Z [36;1m  echo "::error::version must be a semantic version without a v prefix or build metadata, such as 0.1.1-rc.14."[0m
+2026-10-11T13:53:52.9549556Z [36;1m  exit 1[0m
+2026-10-11T13:53:52.9549906Z [36;1mfi[0m
+2026-10-11T13:53:52.9550282Z [36;1mif [[ ! "$TAG" =~ ^[a-z][a-z0-9-]*$ ]]; then[0m
+2026-10-11T13:53:52.9551124Z [36;1m  echo "::error::tag must start with a lower-case letter and hold only lower-case letters, digits and hyphens, such as next."[0m
+2026-10-11T13:53:52.9551992Z [36;1m  exit 1[0m
+2026-10-11T13:53:52.9552350Z [36;1mfi[0m
+2026-10-11T13:53:53.0160182Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-11T13:53:53.0161033Z env:
+2026-10-11T13:53:53.0161388Z   VERSION: 1.0.0
+2026-10-11T13:53:53.0161739Z   TAG: latest
+2026-10-11T13:53:53.0162097Z ##[endgroup]
+2026-10-11T13:53:53.0469682Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-11T13:53:53.0470320Z with:
+2026-10-11T13:53:53.0470666Z   persist-credentials: false
+2026-10-11T13:53:53.0471090Z   repository: zodiacs-org/engine
+2026-10-11T13:53:53.0474346Z   token: ***
+2026-10-11T13:53:53.0474690Z   ssh-strict: true
+2026-10-11T13:53:53.0475039Z   ssh-user: git
+2026-10-11T13:53:53.0475371Z   clean: true
+2026-10-11T13:53:53.0475722Z   sparse-checkout-cone-mode: true
+2026-10-11T13:53:53.0476146Z   fetch-depth: 1
+2026-10-11T13:53:53.0476512Z   fetch-tags: false
+2026-10-11T13:53:53.0476854Z   show-progress: true
+2026-10-11T13:53:53.0477432Z   lfs: false
+2026-10-11T13:53:53.0477762Z   submodules: false
+2026-10-11T13:53:53.0478106Z   set-safe-directory: true
+2026-10-11T13:53:53.0478497Z   allow-unsafe-pr-checkout: false
+2026-10-11T13:53:53.0478889Z env:
+2026-10-11T13:53:53.0479203Z   VERSION: 1.0.0
+2026-10-11T13:53:53.0479568Z   TAG: latest
+2026-10-11T13:53:53.0479892Z ##[endgroup]
+2026-10-11T13:53:53.1263120Z Syncing repository: zodiacs-org/engine
+2026-10-11T13:53:53.1265280Z ##[group]Getting Git version info
+2026-10-11T13:53:53.1266109Z Working directory is '/home/runner/work/engine/engine'
+2026-10-11T13:53:53.1267398Z [command]/usr/bin/git version
+2026-10-11T13:53:53.1305228Z git version 2.55.0
+2026-10-11T13:53:53.1322621Z ##[endgroup]
+2026-10-11T13:53:53.1331670Z Temporarily overriding HOME='/home/runner/work/_temp/51b429c3-f36b-4d75-b8d0-b2fe03b5d82f' before making global git config changes
+2026-10-11T13:53:53.1333693Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-11T13:53:53.1337193Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/engine/engine
+2026-10-11T13:53:53.1383750Z Deleting the contents of '/home/runner/work/engine/engine'
+2026-10-11T13:53:53.1387172Z ##[group]Determining repository object format
+2026-10-11T13:53:53.1388574Z ##[endgroup]
+2026-10-11T13:53:53.1389521Z ##[group]Initializing the repository
+2026-10-11T13:53:53.1393660Z [command]/usr/bin/git init /home/runner/work/engine/engine
+2026-10-11T13:53:53.1500713Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-11T13:53:53.1502336Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-11T13:53:53.1503935Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-11T13:53:53.1505038Z hint: call:
+2026-10-11T13:53:53.1505689Z hint:
+2026-10-11T13:53:53.1506643Z hint: 	git config --global init.defaultBranch <name>
+2026-10-11T13:53:53.1507837Z hint:
+2026-10-11T13:53:53.1508723Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-11T13:53:53.1510141Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-11T13:53:53.1511293Z hint:
+2026-10-11T13:53:53.1512013Z hint: 	git branch -m <name>
+2026-10-11T13:53:53.1512897Z hint:
+2026-10-11T13:53:53.1513909Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-11T13:53:53.1515579Z Initialized empty Git repository in /home/runner/work/engine/engine/.git/
+2026-10-11T13:53:53.1518411Z [command]/usr/bin/git remote add origin https://github.com/zodiacs-org/engine
+2026-10-11T13:53:53.2022347Z ##[endgroup]
+2026-10-11T13:53:53.2023551Z ##[group]Disabling automatic garbage collection
+2026-10-11T13:53:53.2024428Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-11T13:53:53.2239758Z ##[endgroup]
+2026-10-11T13:53:53.2240725Z ##[group]Setting up auth
+2026-10-11T13:53:53.2241427Z Removing SSH command configuration
+2026-10-11T13:53:53.2245818Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-11T13:53:53.2280775Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-11T13:53:53.2698230Z Removing HTTP extra header
+2026-10-11T13:53:53.2703989Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-11T13:53:53.2737243Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-11T13:53:53.2930615Z Removing includeIf entries pointing to credentials config files
+2026-10-11T13:53:53.2934926Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-11T13:53:53.2974102Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-11T13:53:53.3176121Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-6780c081-885d-4916-b2b1-3192ae8960f0.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-11T13:53:53.3213538Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/engine/engine/.git.path /home/runner/work/_temp/git-credentials-6780c081-885d-4916-b2b1-3192ae8960f0.config
+2026-10-11T13:53:53.3246074Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/engine/engine/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-6780c081-885d-4916-b2b1-3192ae8960f0.config
+2026-10-11T13:53:53.3281328Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-6780c081-885d-4916-b2b1-3192ae8960f0.config
+2026-10-11T13:53:53.3313780Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-6780c081-885d-4916-b2b1-3192ae8960f0.config
+2026-10-11T13:53:53.3341975Z ##[endgroup]
+2026-10-11T13:53:53.3342581Z ##[group]Fetching the repository
+2026-10-11T13:53:53.3347401Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f8992a4c1dfedd9e69c0783e2c185e22580460f7:refs/remotes/origin/main
+2026-10-11T13:53:54.9389376Z From https://github.com/zodiacs-org/engine
+2026-10-11T13:53:54.9391647Z  * [new ref]         f8992a4c1dfedd9e69c0783e2c185e22580460f7 -> origin/main
+2026-10-11T13:53:54.9398494Z [command]/usr/bin/git branch --list --remote origin/main
+2026-10-11T13:53:54.9428110Z   origin/main
+2026-10-11T13:53:54.9437281Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-10-11T13:53:54.9463886Z f8992a4c1dfedd9e69c0783e2c185e22580460f7
+2026-10-11T13:53:54.9473791Z ##[endgroup]
+2026-10-11T13:53:54.9475492Z ##[group]Determining the checkout info
+2026-10-11T13:53:54.9477144Z ##[endgroup]
+2026-10-11T13:53:54.9487924Z [command]/usr/bin/git sparse-checkout disable
+2026-10-11T13:53:54.9537004Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-11T13:53:54.9568726Z ##[group]Checking out the ref
+2026-10-11T13:53:54.9571131Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-11T13:53:55.0616431Z Switched to a new branch 'main'
+2026-10-11T13:53:55.0626052Z branch 'main' set up to track 'origin/main'.
+2026-10-11T13:53:55.0630215Z ##[endgroup]
+2026-10-11T13:53:55.0677965Z [command]/usr/bin/git log -1 --format=%H
+2026-10-11T13:53:55.0703921Z f8992a4c1dfedd9e69c0783e2c185e22580460f7
+2026-10-11T13:53:55.0713854Z ##[group]Removing auth
+2026-10-11T13:53:55.0714101Z Removing SSH command configuration
+2026-10-11T13:53:55.0715840Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-11T13:53:55.0747416Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-11T13:53:55.0942566Z Removing HTTP extra header
+2026-10-11T13:53:55.0945919Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-11T13:53:55.0977132Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-11T13:53:55.1205209Z Removing includeIf entries pointing to credentials config files
+2026-10-11T13:53:55.1205923Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-11T13:53:55.1234340Z includeif.gitdir:/home/runner/work/engine/engine/.git.path
+2026-10-11T13:53:55.1234958Z includeif.gitdir:/home/runner/work/engine/engine/.git/worktrees/*.path
+2026-10-11T13:53:55.1235344Z includeif.gitdir:/github/workspace/.git.path
+2026-10-11T13:53:55.1235688Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-11T13:53:55.1241439Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/engine/engine/.git.path
+2026-10-11T13:53:55.1265209Z /home/runner/work/_temp/git-credentials-6780c081-885d-4916-b2b1-3192ae8960f0.config
+2026-10-11T13:53:55.1272853Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/engine/engine/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-6780c081\-885d\-4916\-b2b1\-3192ae8960f0\.config
+2026-10-11T13:53:55.1305345Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/engine/engine/.git/worktrees/*.path
+2026-10-11T13:53:55.1331029Z /home/runner/work/_temp/git-credentials-6780c081-885d-4916-b2b1-3192ae8960f0.config
+2026-10-11T13:53:55.1337271Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/engine/engine/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-6780c081\-885d\-4916\-b2b1\-3192ae8960f0\.config
+2026-10-11T13:53:55.1368815Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-11T13:53:55.1447640Z /github/runner_temp/git-credentials-6780c081-885d-4916-b2b1-3192ae8960f0.config
+2026-10-11T13:53:55.1450162Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-6780c081\-885d\-4916\-b2b1\-3192ae8960f0\.config
+2026-10-11T13:53:55.1467925Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-11T13:53:55.1493724Z /github/runner_temp/git-credentials-6780c081-885d-4916-b2b1-3192ae8960f0.config
+2026-10-11T13:53:55.1499572Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-6780c081\-885d\-4916\-b2b1\-3192ae8960f0\.config
+2026-10-11T13:53:55.1535775Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-11T13:53:55.1731565Z Removing credentials config '/home/runner/work/_temp/git-credentials-6780c081-885d-4916-b2b1-3192ae8960f0.config'
+2026-10-11T13:53:55.1739965Z ##[endgroup]
+2026-10-11T13:53:55.1974383Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-10-11T13:53:55.1974721Z with:
+2026-10-11T13:53:55.1974895Z   node-version: 24
+2026-10-11T13:53:55.1975094Z   package-manager-cache: false
+2026-10-11T13:53:55.1975314Z   check-latest: false
+2026-10-11T13:53:55.1977169Z   token: ***
+2026-10-11T13:53:55.1977345Z env:
+2026-10-11T13:53:55.1977515Z   VERSION: 1.0.0
+2026-10-11T13:53:55.1977689Z   TAG: latest
+2026-10-11T13:53:55.1977860Z ##[endgroup]
+2026-10-11T13:53:55.2976963Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-11T13:53:55.2979721Z ##[group]Environment details
+2026-10-11T13:53:55.6267862Z node: v24.21.0
+2026-10-11T13:53:55.6268216Z npm: 11.19.0
+2026-10-11T13:53:55.6268465Z yarn: 1.22.22
+2026-10-11T13:53:55.6269462Z ##[endgroup]
+2026-10-11T13:53:55.6366827Z ##[group]Run npm_version=$(npm --version)
+2026-10-11T13:53:55.6367128Z [36;1mnpm_version=$(npm --version)[0m
+2026-10-11T13:53:55.6367359Z [36;1mnode_version=$(node --version)[0m
+2026-10-11T13:53:55.6367573Z [36;1mnode_version=${node_version#v}[0m
+2026-10-11T13:53:55.6367822Z [36;1mecho "Node.js $node_version, npm $npm_version"[0m
+2026-10-11T13:53:55.6368196Z [36;1mif [[ "$(printf '%s\n' 11.5.1 "$npm_version" | sort -V | head -n 1)" != "11.5.1" ]]; then[0m
+2026-10-11T13:53:55.6368602Z [36;1m  echo "::error::Trusted publishing needs npm 11.5.1 or later."[0m
+2026-10-11T13:53:55.6368878Z [36;1m  exit 1[0m
+2026-10-11T13:53:55.6369040Z [36;1mfi[0m
+2026-10-11T13:53:55.6369311Z [36;1mif [[ "$(printf '%s\n' 22.14.0 "$node_version" | sort -V | head -n 1)" != "22.14.0" ]]; then[0m
+2026-10-11T13:53:55.6369703Z [36;1m  echo "::error::Trusted publishing needs Node.js 22.14.0 or later."[0m
+2026-10-11T13:53:55.6369983Z [36;1m  exit 1[0m
+2026-10-11T13:53:55.6370197Z [36;1mfi[0m
+2026-10-11T13:53:55.6438233Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-11T13:53:55.6438663Z env:
+2026-10-11T13:53:55.6438837Z   VERSION: 1.0.0
+2026-10-11T13:53:55.6439008Z   TAG: latest
+2026-10-11T13:53:55.6439171Z ##[endgroup]
+2026-10-11T13:53:55.7201050Z Node.js 24.21.0, npm 11.19.0
+2026-10-11T13:53:55.7263688Z ##[group]Run node scripts/verify-release-archive.mjs "$VERSION"
+2026-10-11T13:53:55.7264063Z [36;1mnode scripts/verify-release-archive.mjs "$VERSION"[0m
+2026-10-11T13:53:55.7322449Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-11T13:53:55.7322853Z env:
+2026-10-11T13:53:55.7323014Z   VERSION: 1.0.0
+2026-10-11T13:53:55.7323181Z   TAG: latest
+2026-10-11T13:53:55.7323339Z ##[endgroup]
+2026-10-11T13:53:55.7688593Z release archive: artifacts/zodiacs-engine-1.0.0.tgz, 288063 bytes, SHA-256 c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6, matches its carried entry and receipt
+2026-10-11T13:53:55.7765368Z ##[group]Run if npm view "@zodiacs/engine@$VERSION" version --json > view.json; then
+2026-10-11T13:53:55.7765875Z [36;1mif npm view "@zodiacs/engine@$VERSION" version --json > view.json; then[0m
+2026-10-11T13:53:55.7766280Z [36;1m  echo "::error::This version is already on npm. A version is published once."[0m
+2026-10-11T13:53:55.7766591Z [36;1m  exit 1[0m
+2026-10-11T13:53:55.7766756Z [36;1mfi[0m
+2026-10-11T13:53:55.7767194Z [36;1mcode=$(node -e 'try { console.log(JSON.parse(require("node:fs").readFileSync("view.json", "utf8")).error.code) } catch { console.log("unreadable") }')[0m
+2026-10-11T13:53:55.7767698Z [36;1mif [[ "$code" != "E404" ]]; then[0m
+2026-10-11T13:53:55.7767939Z [36;1m  echo "npm view answered: $code"[0m
+2026-10-11T13:53:55.7768265Z [36;1m  echo "::error::npm view failed, so whether this version is on npm is unknown."[0m
+2026-10-11T13:53:55.7768576Z [36;1m  exit 1[0m
+2026-10-11T13:53:55.7768739Z [36;1mfi[0m
+2026-10-11T13:53:55.7768971Z [36;1mecho "@zodiacs/engine@$VERSION is not on npm."[0m
+2026-10-11T13:53:55.7830008Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-11T13:53:55.7830299Z env:
+2026-10-11T13:53:55.7830464Z   VERSION: 1.0.0
+2026-10-11T13:53:55.7830629Z   TAG: latest
+2026-10-11T13:53:55.7830794Z ##[endgroup]
+2026-10-11T13:53:56.4524833Z npm error code E404
+2026-10-11T13:53:56.4525497Z npm error 404 No match found for version 1.0.0
+2026-10-11T13:53:56.4525907Z npm error 404
+2026-10-11T13:53:56.4532454Z npm error 404  The requested resource '@zodiacs/engine@1.0.0' could not be found or you do not have permission to access it.
+2026-10-11T13:53:56.4533193Z npm error 404
+2026-10-11T13:53:56.4533457Z npm error 404 Note that you can also install from a
+2026-10-11T13:53:56.4533799Z npm error 404 tarball, folder, http url, or git url.
+2026-10-11T13:53:56.4542355Z npm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-10-11T13_53_55_833Z-debug-0.log
+2026-10-11T13:53:56.5004365Z @zodiacs/engine@1.0.0 is not on npm.
+2026-10-11T13:53:56.5042953Z ##[group]Run npm publish "$GITHUB_WORKSPACE/artifacts/zodiacs-engine-$VERSION.tgz" --access public --tag "$TAG" --provenance
+2026-10-11T13:53:56.5043673Z [36;1mnpm publish "$GITHUB_WORKSPACE/artifacts/zodiacs-engine-$VERSION.tgz" --access public --tag "$TAG" --provenance[0m
+2026-10-11T13:53:56.5099998Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-11T13:53:56.5100275Z env:
+2026-10-11T13:53:56.5100437Z   VERSION: 1.0.0
+2026-10-11T13:53:56.5100607Z   TAG: latest
+2026-10-11T13:53:56.5100770Z ##[endgroup]
+2026-10-11T13:53:56.9520097Z npm notice
+2026-10-11T13:53:56.9522834Z npm notice 📦  @zodiacs/engine@1.0.0
+2026-10-11T13:53:56.9523387Z npm notice Tarball Contents
+2026-10-11T13:53:56.9535212Z npm notice 114.2kB CHANGELOG.md
+2026-10-11T13:53:56.9535677Z npm notice 1.1kB LICENSE
+2026-10-11T13:53:56.9536134Z npm notice 26.2kB LICENSING.md
+2026-10-11T13:53:56.9536535Z npm notice 10.1kB NOTICE
+2026-10-11T13:53:56.9536909Z npm notice 61.6kB README.md
+2026-10-11T13:53:56.9537567Z npm notice 11.0kB dist/api-WbxJ4Wj-.d.ts
+2026-10-11T13:53:56.9538093Z npm notice 6.4kB dist/ayanamsa--YQ46fET.d.ts
+2026-10-11T13:53:56.9538849Z npm notice 18.2kB dist/calc.d.ts
+2026-10-11T13:53:56.9540300Z npm notice 44.7kB dist/calc.js
+2026-10-11T13:53:56.9540707Z npm notice 1.3kB dist/chunk-7TRLIFFI.js
+2026-10-11T13:53:56.9541115Z npm notice 989B dist/chunk-47ERTK5X.js
+2026-10-11T13:53:56.9541480Z npm notice 508B dist/chunk-A3U2ZS2W.js
+2026-10-11T13:53:56.9541963Z npm notice 13.2kB dist/chunk-B5LKF437.js
+2026-10-11T13:53:56.9542446Z npm notice 5.1kB dist/chunk-BHJXUY67.js
+2026-10-11T13:53:56.9543023Z npm notice 672B dist/chunk-CHSYDKBL.js
+2026-10-11T13:53:56.9543440Z npm notice 1.5kB dist/chunk-CPALRSPC.js
+2026-10-11T13:53:56.9543842Z npm notice 11.6kB dist/chunk-DMGHYCDI.js
+2026-10-11T13:53:56.9544328Z npm notice 11.9kB dist/chunk-FTX3JDJA.js
+2026-10-11T13:53:56.9544884Z npm notice 2.4kB dist/chunk-KFTJMMG7.js
+2026-10-11T13:53:56.9545261Z npm notice 6.2kB dist/chunk-OG4OYTJJ.js
+2026-10-11T13:53:56.9545757Z npm notice 2.9kB dist/chunk-PFGUCNOK.js
+2026-10-11T13:53:56.9546238Z npm notice 29.8kB dist/chunk-SRXBTP5H.js
+2026-10-11T13:53:56.9546719Z npm notice 9.8kB dist/chunk-TSS2SZWQ.js
+2026-10-11T13:53:56.9547191Z npm notice 18.1kB dist/chunk-WS3TDSP3.js
+2026-10-11T13:53:56.9547673Z npm notice 24.1kB dist/chunk-YIITY7Q7.js
+2026-10-11T13:53:56.9548141Z npm notice 4.6kB dist/crossings.d.ts
+2026-10-11T13:53:56.9548605Z npm notice 173B dist/crossings.js
+2026-10-11T13:53:56.9549034Z npm notice 5.1kB dist/deltat.d.ts
+2026-10-11T13:53:56.9549882Z npm notice 161B dist/deltat.js
+2026-10-11T13:53:56.9550537Z npm notice 9.4kB dist/geo.d.ts
+2026-10-11T13:53:56.9551092Z npm notice 6.0kB dist/geo.js
+2026-10-11T13:53:56.9551504Z npm notice 7.7kB dist/houses-CFERsAlK.d.ts
+2026-10-11T13:53:56.9551949Z npm notice 4.7kB dist/houses-extra.d.ts
+2026-10-11T13:53:56.9552357Z npm notice 13.7kB dist/houses-extra.js
+2026-10-11T13:53:56.9552960Z npm notice 15.5kB dist/index.d.ts
+2026-10-11T13:53:56.9553361Z npm notice 13.3kB dist/index.js
+2026-10-11T13:53:56.9553787Z npm notice 6.2kB dist/internal-math-DJJ8BYex.d.ts
+2026-10-11T13:53:56.9554257Z npm notice 1.1kB dist/internal-math.d.ts
+2026-10-11T13:53:56.9554664Z npm notice 1.3kB dist/internal-math.js
+2026-10-11T13:53:56.9555048Z npm notice 522B dist/internal.d.ts
+2026-10-11T13:53:56.9555422Z npm notice 305B dist/internal.js
+2026-10-11T13:53:56.9555798Z npm notice 909B dist/receipt.d.ts
+2026-10-11T13:53:56.9556185Z npm notice 41.1kB dist/receipt.js
+2026-10-11T13:53:56.9556619Z npm notice 2.0kB dist/reference-span-CILpclrz.d.ts
+2026-10-11T13:53:56.9557090Z npm notice 835B dist/rulers-Dla6h_Sm.d.ts
+2026-10-11T13:53:56.9557500Z npm notice 8.0kB dist/sky.d.ts
+2026-10-11T13:53:56.9557840Z npm notice 15.1kB dist/sky.js
+2026-10-11T13:53:56.9558193Z npm notice 22.1kB dist/techniques.d.ts
+2026-10-11T13:53:56.9558629Z npm notice 36.3kB dist/techniques.js
+2026-10-11T13:53:56.9559023Z npm notice 23.8kB dist/timing.d.ts
+2026-10-11T13:53:56.9559400Z npm notice 31.2kB dist/timing.js
+2026-10-11T13:53:56.9560076Z npm notice 9.6kB dist/types-B-yb_tGL.d.ts
+2026-10-11T13:53:56.9560560Z npm notice 11.6kB dist/tzdb-2025c-00-6GVG6RYL.js
+2026-10-11T13:53:56.9561020Z npm notice 10.9kB dist/tzdb-2025c-01-CEYMG3LE.js
+2026-10-11T13:53:56.9561468Z npm notice 16.7kB dist/tzdb-2025c-02-NWQJCVUU.js
+2026-10-11T13:53:56.9563176Z npm notice 8.7kB dist/tzdb-2025c-03-PLHP6VH4.js
+2026-10-11T13:53:56.9563720Z npm notice 12.1kB dist/tzdb-2025c-04-MEKUJA6M.js
+2026-10-11T13:53:56.9564188Z npm notice 12.7kB dist/tzdb-2025c-05-3K5YKZBL.js
+2026-10-11T13:53:56.9564621Z npm notice 10.5kB dist/tzdb-2025c-06-L2VV5XJV.js
+2026-10-11T13:53:56.9565083Z npm notice 15.5kB dist/tzdb-2025c-07-H3GLGJGY.js
+2026-10-11T13:53:56.9565542Z npm notice 12.4kB dist/tzdb-2025c-08-DA7QQIGD.js
+2026-10-11T13:53:56.9566007Z npm notice 10.3kB dist/tzdb-2025c-09-MTXIO3QL.js
+2026-10-11T13:53:56.9566559Z npm notice 9.2kB dist/tzdb-2025c-10-ASL4UW5C.js
+2026-10-11T13:53:56.9567075Z npm notice 14.2kB dist/tzdb-2025c-11-EQEOANYB.js
+2026-10-11T13:53:56.9567586Z npm notice 12.2kB dist/tzdb-2025c-12-NKCCXJ5G.js
+2026-10-11T13:53:56.9568077Z npm notice 10.2kB dist/tzdb-2025c-13-DYTF3UC7.js
+2026-10-11T13:53:56.9568789Z npm notice 10.2kB dist/tzdb-2025c-14-C25H45R5.js
+2026-10-11T13:53:56.9569245Z npm notice 11.5kB dist/tzdb-2025c-15-7OYYZWRY.js
+2026-10-11T13:53:56.9569670Z npm notice 14.9kB dist/vedic.d.ts
+2026-10-11T13:53:56.9570045Z npm notice 16.6kB dist/vedic.js
+2026-10-11T13:53:56.9570422Z npm notice 8.0kB dist/window.d.ts
+2026-10-11T13:53:56.9570792Z npm notice 33.9kB dist/window.js
+2026-10-11T13:53:56.9571250Z npm notice 11.1kB dist/zone-history-ghdyO0Sc.d.ts
+2026-10-11T13:53:56.9571688Z npm notice 3.8kB package.json
+2026-10-11T13:53:56.9572024Z npm notice Tarball Details
+2026-10-11T13:53:56.9572415Z npm notice name: @zodiacs/engine
+2026-10-11T13:53:56.9572936Z npm notice version: 1.0.0
+2026-10-11T13:53:56.9573381Z npm notice filename: zodiacs-engine-1.0.0.tgz
+2026-10-11T13:53:56.9573824Z npm notice package size: 288.1 kB
+2026-10-11T13:53:56.9574232Z npm notice unpacked size: 991.9 kB
+2026-10-11T13:53:56.9574740Z npm notice shasum: 72b7a0266f59a25a21f4c72f6a50f41e5784dc27
+2026-10-11T13:53:56.9575368Z npm notice integrity: sha512-npoQ6scEH1Ozd[...]3vRWw62m/Kj7A==
+2026-10-11T13:53:56.9575831Z npm notice total files: 74
+2026-10-11T13:53:56.9576137Z npm notice
+2026-10-11T13:53:58.2438514Z npm notice npm tokens that bypass 2FA are being restricted for account changes and direct publishing. Learn how to prepare: https://gh.io/npm-gat-bypass2fa-deprecation
+2026-10-11T13:53:58.4472435Z npm notice Publishing to https://registry.npmjs.org/ with tag latest and public access
+2026-10-11T13:53:59.4194540Z npm notice publish Signed provenance statement with source and build information from GitHub Actions
+2026-10-11T13:53:59.4195714Z npm notice publish Provenance statement published to transparency log: https://search.sigstore.dev/?logIndex=3208435349
+2026-10-11T13:54:01.3031169Z npm notice Your package is being processed and may take a few minutes to become available.
+2026-10-11T13:54:01.3033599Z + @zodiacs/engine@1.0.0
+2026-10-11T13:54:01.3289163Z Post job cleanup.
+2026-10-11T13:54:01.4372197Z Post job cleanup.
+2026-10-11T13:54:01.5072759Z [command]/usr/bin/git version
+2026-10-11T13:54:01.5109901Z git version 2.55.0
+2026-10-11T13:54:01.5145055Z Temporarily overriding HOME='/home/runner/work/_temp/cc91964b-09e5-48e8-ac33-930210170e70' before making global git config changes
+2026-10-11T13:54:01.5146230Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-11T13:54:01.5148956Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/engine/engine
+2026-10-11T13:54:01.5178816Z Removing SSH command configuration
+2026-10-11T13:54:01.5184594Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-11T13:54:01.5215259Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-11T13:54:01.5428712Z Removing HTTP extra header
+2026-10-11T13:54:01.5429576Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-11T13:54:01.5461184Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-11T13:54:01.5671706Z Removing includeIf entries pointing to credentials config files
+2026-10-11T13:54:01.5677257Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-11T13:54:01.5712192Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-11T13:54:01.6055294Z Cleaning up orphan processes
