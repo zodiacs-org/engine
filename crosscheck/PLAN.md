@@ -15,7 +15,7 @@ operations. All authored and generated files stay inside crosscheck/.
 - [x] M6 Connect the user-installed external Swiss instrument through the permitted conformance adapter, retaining only verdicts, flags and aggregates.
 - [x] M7 Implement bounded-memory sharding, atomic checkpoints and resume with configuration and build identity checks.
 - [x] M8 Generate deterministic markdown and CSV aggregate reports with exact commands, build identities, coverage and exclusions.
-- [ ] M9 Run a real bounded synthetic sample and commit its aggregate report under reports/; report unavailable references explicitly.
+- [x] M9 Run a real bounded synthetic sample and commit its aggregate report under reports/; report unavailable references explicitly.
 - [ ] M10 Validate shard coverage, interrupted resume, report reproduction, retention, file size and npm exclusion; document million-chart campaigns.
 
 Completion means the milestone's tests pass, not that future milestones are

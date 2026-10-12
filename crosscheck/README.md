@@ -6,8 +6,9 @@ streaming statistics, kernel acquisition, inertial JPL reduction and
 validated true-of-date frame and relativistic correction implementations are
 implemented, along with aggregate-only Swiss position integration, a
 checkpointed sharded runner and deterministic aggregate report tooling.
-Campaign integration and the measured engine error report are still pending. No accuracy or throughput
-claim is made by this scaffold.
+A bounded engine campaign and its measured aggregate error report are now
+[available](reports/bounded-sample.md). Million-chart execution remains
+unmeasured.
 
 The planned JPL comparison uses public DE440/DE441 kernels downloaded from
 NAIF/JPL at runtime into runtime/cache/. Kernels will be stored in bounded
@@ -453,5 +454,49 @@ large campaigns into one runtime file.
 
 The report tests use invented arithmetic and missing-reference verdicts.
 They establish rendering, retention and reproduction behavior, not physical
-accuracy. The real bounded engine campaign and committed measured error
-report remain the next milestone.
+accuracy. The bounded engine campaign is described below.
+
+
+## Bounded engine measurement
+
+[The measured report](reports/bounded-sample.md) and its
+[CSV](reports/bounded-sample.csv) compare random synthetic natal charts with
+DE440s, using exact Sun, Moon, Mercury and Venus centers. The
+[JSON receipt](reports/bounded-sample.json) records the actual completed
+count, configured TT sampling interval, seed, thresholds, engine build and
+executable tooling digests, reference digests and exclusions. Residuals
+include the named correction and frame model differences. This sample is
+not a certification of accuracy or a bound on unsampled dates.
+
+Use the recorded Node runtime, the isolated build and verified cached
+DE440s and ERFA sources. Run from the repository root:
+
+```sh
+node crosscheck/tools/build.mjs
+node crosscheck/tools/sample.mjs
+node crosscheck/tools/sample.mjs --check
+```
+
+The sample command has a fixed bounded configuration in tools/sample.mjs.
+It interprets synthetic ISO timestamps as TT via timeScale: 'tt', rather
+than testing civil UTC conversion. The runner checkpoints each shard under
+runtime/m9-sample/ and resumes only with matching identities. The command
+handles SIGINT and SIGTERM between cases. Reference reads are local and
+verified; no external process is used by this bounded evaluator.
+
+The first invocation creates the aggregate report and refuses existing
+report files. Use --check for reproduction. To independently recalculate
+instead of reading completed checkpoints, remove runtime/m9-sample/ after
+confirming no writer is running, then run the --check command. Keep the
+recorded build, tooling and reference identities unchanged. A different
+runtime or implementation needs a separately named measurement, not a
+replacement of this report. Reports remain reproducible from completed
+checkpoints after a clean build with the same recorded runtime and inputs.
+
+Swiss is explicitly unavailable in this measurement because no external
+user installation was supplied. The bounded command does not discover or
+install Swiss. Other planet centers, houses, nodes, angles and speeds are
+unsupported here, as the report states. DE441 was not run in this sample;
+its acquisition and inertial reduction remain available through the kernel
+and reduction libraries. Later campaign configuration must keep each
+reference and convention separate.
