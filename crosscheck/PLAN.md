@@ -12,7 +12,7 @@ operations. All authored and generated files stay inside crosscheck/.
 - [x] M5a Implement geometric SPK type 2/3 evaluation and explicit center-chain composition with independent polynomial tests.
 - [x] M5b Implement independent inertial JPL reduction with explicit TT/TDB, exact centers, converged light-time and SPICE stellar aberration; validate against public JPL references.
 - [x] M5c Add independently validated true-of-date frame rotation and relativistic aberration/solar deflection modes before natal-chart comparisons.
-- [ ] M6 Connect the user-installed external Swiss instrument through the permitted conformance adapter, retaining only verdicts, flags and aggregates.
+- [x] M6 Connect the user-installed external Swiss instrument through the permitted conformance adapter, retaining only verdicts, flags and aggregates.
 - [ ] M7 Implement bounded-memory sharding, atomic checkpoints and resume with configuration and build identity checks.
 - [ ] M8 Generate deterministic markdown and CSV aggregate reports with exact commands, build identities, coverage and exclusions.
 - [ ] M9 Run a real bounded synthetic sample and commit its aggregate report under reports/; report unavailable references explicitly.

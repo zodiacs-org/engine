@@ -5,3 +5,4 @@ Complete M4: add bounded public DE440/DE441 kernel acquisition, pinned transport
 Complete M5a: split physical validation into M5b; add independent geometric SPK type 2/3 evaluation, exact center chains and polynomial/structural tests.
 Complete M5b: add independently tested inertial JPL time/light-time/stellar reduction, acquire verified DE440s, publish reproducible bounded Horizons aggregate validation, and leave true-of-date/relativistic modes explicit in M5c.
 Complete M5c: add explicit IAU2006/2000B true-of-date frames and relativistic/single-Sun correction modes, validate against pinned runtime ERFA with reproducible aggregate reports, and document model limitations.
+Complete M6: connect the unchanged permitted external Swiss position adapter with installation path checks, aggregate-only residuals, explicit fallback verdicts, bounded transport and invented protocol tests; live Swiss binding unavailable.

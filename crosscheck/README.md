@@ -4,8 +4,8 @@ An isolated comparison harness for @zodiacs/engine. Development follows
 [PLAN.md](PLAN.md). The scope, safeguards, isolated build, synthetic sampler,
 streaming statistics, kernel acquisition, inertial JPL reduction and
 validated true-of-date frame and relativistic correction implementations are
-implemented; the Swiss integration, runner and
-measured error report are still pending. No accuracy or throughput
+implemented, along with aggregate-only Swiss position integration. The runner
+and measured engine error report are still pending. No accuracy or throughput
 claim is made by this scaffold.
 
 The planned JPL comparison uses public DE440/DE441 kernels downloaded from
@@ -316,3 +316,38 @@ The independent reference functions are ERFA's
 [ld](https://github.com/liberfa/erfa/blob/v2.0.1/src/ld.c), read for this
 implementation. Their published checks, analytic constructions, rotation
 invariants and pipeline ordering are tested without engine or Swiss values.
+
+
+## External Swiss position instrument
+
+lib/swiss.mjs opens the unchanged permitted conformance adapter using a
+user-provided Python executable in unbuffered mode. Supply an explicit
+external ephemeris directory to openSwiss({ python, ephemerisPath }). The
+library checks the real paths of that directory and the binding origin
+before the adapter imports Swiss. It does not install software or download
+Swiss files. Missing Python, a missing binding or an invalid handshake fails
+with a fixed diagnostic; raw stderr and adapter errors are discarded.
+
+The returned instrument exposes identity, comparePosition and close.
+comparePosition accepts body, jdTT, actual: { lon, lat } and toleranceArcsec.
+TT must already be resolved by the caller. Actual coordinates are degrees
+in the apparent geocentric true ecliptic and equinox of date. The adapter's
+Swiss apparent convention includes its own deflection model; agreement with
+an engine without deflection is a convention comparison, not an independent
+accuracy verdict. Positions are currently the only integrated request kind;
+houses, angles, nodes and time comparisons remain unsupported here.
+
+The instrument accepts one request at a time. Each response becomes only a
+pass/fail verdict, returned flags and mergeable longitude/latitude residual
+statistics in arcseconds. Requests answered by a backend other than SWIEPH
+become fallback verdicts with flags and no residual statistics. Errors and
+unsupported results retain only their verdict. Raw values and free-form
+messages never leave the transport. No per-case output is written to disk.
+Malformed, oversized or stalled responses terminate the instrument. The
+identity records adapter and binding digests, version labels and the
+adapter's external ephemeris file digests for later resume checks.
+
+Tests in tests/swiss.test.mjs use invented protocol peers, independent
+arithmetic and refusal cases. They never run Swiss and establish transport
+and retention behavior only. A live Swiss measurement requires the user's
+external installation and remains part of the later bounded campaign.

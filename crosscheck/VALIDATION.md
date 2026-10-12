@@ -260,3 +260,22 @@ contents gate remains blocked by missing root dist/calc.d.ts; the user's
 folder-only constraint prohibits creating dist/. No root build, release,
 Swiss invocation or git metadata write was performed. Only crosscheck/
 files changed.
+
+
+## M6 external Swiss transport
+
+Validation command (Node v22.23.3):
+
+```sh
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm --prefix crosscheck test
+node crosscheck/tools/check.mjs
+```
+
+The Swiss tests use invented process peers, never Swiss-derived values.
+They exercise angular residual arithmetic, retention, fallback flags,
+external path refusal, missing executables, malformed or oversized output,
+timeouts, exited processes and concurrent-request refusal. The full suite
+also checks npm exclusion through a dry-run with lifecycle scripts disabled.
+All checks passed. Python's importlib.util.find_spec('swisseph') returned no
+binding in this environment; no live Swiss comparison was run and no Swiss
+accuracy or agreement claim is supported by this session.
