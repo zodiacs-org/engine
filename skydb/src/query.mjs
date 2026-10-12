@@ -95,19 +95,7 @@ export async function openDatabase(directory, options = {}) {
     const result = queue.then(async () => {
       let tile = cache.get(descriptor.index);
       if (!tile) {
-        tile = await verifyStoredTile(directory, descriptor);
-        if (JSON.stringify(tile.positions.metadata.bodies) !== JSON.stringify(config.bodies)) throw new Error('Tile bodies mismatch');
-        let previous = -Infinity;
-        for (const event of tile.events) {
-          if (!event || !Number.isSafeInteger(event.atMs) || event.atMs < descriptor.startMs ||
-              event.atMs >= descriptor.endMs || event.atMs < previous ||
-              !['aspect', 'ingress', 'station', 'lunation'].includes(event.kind) ||
-              !Array.isArray(event.bodies) || !event.bodies.length ||
-              event.bodies.some(body => !config.bodies.includes(body)) || !Number.isFinite(event.residual)) {
-            throw new Error('Invalid event record');
-          }
-          previous = event.atMs;
-        }
+        tile = await verifyStoredTile(directory, descriptor, config);
       }
       cache.delete(descriptor.index);
       cache.set(descriptor.index, tile);

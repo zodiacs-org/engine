@@ -1,6 +1,6 @@
 # Sky database plan
 
-Status: in progress. All project changes stay in skydb/. The engine package,
+Status: implementation complete. All project changes stay in skydb/. The engine package,
 carried archives and release settings stay unchanged. The pull request stays draft.
 
 The generator targets the half-open interval from 1800-01-01T00:00:00Z to
@@ -20,7 +20,7 @@ engine data attribution accompanies the generated sample.
 - [x] M7 Add a bounded-cache query library, interpolation, event queries and integrity validation. Test wraparound, seams and tile boundaries.
 - [x] M8 Add strict command-line tools, verification and reproducible small sample tiles with attribution. Test end-to-end use.
 - [x] M9 Add benchmark and agreement scripts with committed outputs and measured scope. Run them on Node 22.
-- [ ] M10 Harden failure cases, document operations and limitations, run project and applicable repository checks, complete the plan and draft PR checklist.
+- [x] M10 Harden failure cases, document operations and limitations, run project and applicable repository checks, complete the plan and draft PR checklist.
 
 ## Validation
 
@@ -143,3 +143,39 @@ The npm dry-run file list excludes skydb/. The repository package contents
 check fails on missing dist/calc.d.ts; the task prohibits rebuilding dist/.
 Folder isolation, file-size, documentation-character and whitespace checks pass.
 This session completes M9 only; operations and final hardening remain M10.
+
+
+## Final hardening validation
+
+M10 makes resume, query loads and whole-database verification share event schema,
+root-bracket, selected-body and sample-cadence checks. Store reads are bounded
+before parsing. [test/hardening.test.mjs](test/hardening.test.mjs) rejects invalid
+root definitions, duplicates, altered format versions, missing cadence samples,
+reordered bodies and oversized files, including content with matching receipts.
+The full project suite passes on Node 22.23.3; its output is committed in
+[docs/evidence/m10-tests.txt](docs/evidence/m10-tests.txt). The agreement and
+performance scripts were rerun after hardening; agreement output remains
+byte-identical and performance-output.json records the new scoped run.
+[OPERATIONS.md](OPERATIONS.md) documents trial runs, monitoring, cancellation,
+resume, stale locks, backups, immutable queries and limitations.
+
+The atlas checker and self-tests pass. Conformance harness self-tests, vector
+validation with the repository's expected total and report freshness checks pass.
+The project checker passes folder isolation, candidate file-size limits, absence
+of em dash in documentation, whitespace and exclusion from npm's dry-run file
+list. The repository package contents check fails because dist/calc.d.ts is
+absent. Engine typecheck and unit checks lack installed root development tools;
+root installation and checks that rebuild, pack or require dist/ were excluded
+under the task's explicit folder and engine-build constraints. The full archive
+binding/rebuild and packed-consumer gates remain harness/CI work. No engine,
+archive, release or root configuration changed. This session completes M10.
+
+## Draft pull request checklist
+
+- [x] Generator, query library, format, tests, attributed small sample and scoped benchmark outputs are present.
+- [x] Full dataset, dependencies, caches and temporary databases stay ignored.
+- [x] Direct-engine agreement is distinguished from independent accuracy; sampled event completeness and interpolation limits are documented.
+- [x] All local project and applicable read-only repository checks are recorded above, including unavailable gates.
+- [x] Changes stay inside skydb/ and the engine npm file list excludes them.
+- [x] Session summary appended to CHANGES.txt for the harness.
+- [x] Git commits, pushes and draft PR updates are left to the harness; merging and release actions remain excluded.

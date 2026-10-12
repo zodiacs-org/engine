@@ -7,8 +7,8 @@ export async function verifyDatabase(directory) {
   const database = await openDatabase(directory, { cacheTiles: 1 });
   let tiles = 0, samples = 0, events = 0;
   for (const descriptor of planPositionTiles(database.config)) {
-    const tile = await verifyStoredTile(directory, descriptor);
-    // Query loading also validates body membership and event ownership/order.
+    const tile = await verifyStoredTile(directory, descriptor, database.config);
+    // Exercise the public streaming query while counting validated events.
     for await (const event of database.events(descriptor.startMs, descriptor.endMs)) events++;
     tiles++;
     samples += tile.positions.samples.length;

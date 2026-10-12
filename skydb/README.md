@@ -4,8 +4,9 @@ This private Node project consumes the repository's carried engine archive by
 relative file dependency. It does not build or alter the engine package.
 Configuration, direct position sampling and a compressed position tile codec
 and lazy position and event generation are implemented. Resumable persistence
-and position and event queries are implemented. Remaining work is tracked in
-[PLAN.md](PLAN.md).
+and position and event queries are implemented. Benchmarks and validation are
+recorded in [PLAN.md](PLAN.md); recovery and run guidance are in
+[OPERATIONS.md](OPERATIONS.md).
 
 Use a Node runtime in the series required by [package.json](package.json), with
 its matching npm on PATH. From the repository root:
@@ -134,8 +135,9 @@ checks, not astronomical accuracy guarantees or full-coverage error bounds.
 SHA-256 receipts and a checkpoint. Use a directory under ignored `generated/`
 for real runs. The same configuration resumes an interrupted run, verifies its
 published tiles and skips their computation. It returns the directory and tile
-count. `verifyStoredTile(directory, descriptor)` checks receipt digests and
-position support endpoints, then returns decoded data. This integrity check is
+count. `verifyStoredTile(directory, descriptor)` checks receipt digests, event schema and root brackets, and
+position support endpoints, then returns decoded data. Passing configuration
+also checks the selected bodies and position cadence. This integrity check is
 not an astronomical accuracy check or proof of event completeness.
 
 An exclusive `.lock` prevents concurrent writers. Exceptions and cancellation

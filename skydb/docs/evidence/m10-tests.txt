@@ -1,0 +1,260 @@
+
+> test
+> node --test test/*.test.mjs
+
+TAP version 13
+# Subtest: measurement maxima retain the actual worst instant and reject invalid errors
+ok 1 - measurement maxima retain the actual worst instant and reject invalid errors
+  ---
+  duration_ms: 1.372062
+  type: 'test'
+  ...
+# Subtest: committed benchmark evidence pins runtime, scope, finite measurements and engine identity
+ok 2 - committed benchmark evidence pins runtime, scope, finite measurements and engine identity
+  ---
+  duration_ms: 7.753139
+  type: 'test'
+  ...
+# Subtest: archive pin matches carried bytes and rejects corruption
+ok 3 - archive pin matches carried bytes and rejects corruption
+  ---
+  duration_ms: 12.883528
+  type: 'test'
+  ...
+# Subtest: Node runtime gate excludes unsupported series and early Node 22
+ok 4 - Node runtime gate excludes unsupported series and early Node 22
+  ---
+  duration_ms: 0.400525
+  type: 'test'
+  ...
+# Subtest: defaults and custom configuration have immutable copied body lists
+ok 5 - defaults and custom configuration have immutable copied body lists
+  ---
+  duration_ms: 0.81857
+  type: 'test'
+  ...
+# Subtest: configuration rejects malformed values and unsupported conventions
+ok 6 - configuration rejects malformed values and unsupported conventions
+  ---
+  duration_ms: 0.568281
+  type: 'test'
+  ...
+# Subtest: isolated consumer samples agree exactly with direct engine calls
+ok 7 - isolated consumer samples agree exactly with direct engine calls
+  ---
+  duration_ms: 141.022804
+  type: 'test'
+  ...
+# Subtest: strict arguments reject guessing, unknown options and missing values
+ok 8 - strict arguments reject guessing, unknown options and missing values
+  ---
+  duration_ms: 1.186297
+  type: 'test'
+  ...
+# Subtest: sample exactly reproduces persisted bytes and agrees with direct engine samples
+ok 9 - sample exactly reproduces persisted bytes and agrees with direct engine samples
+  ---
+  duration_ms: 454.654704
+  type: 'test'
+  ...
+# Subtest: CLI end-to-end generation, resume, verification, queries and corrupt tile failure
+ok 10 - CLI end-to-end generation, resume, verification, queries and corrupt tile failure
+  ---
+  duration_ms: 233.528537
+  type: 'test'
+  ...
+# Subtest: executable reports errors with nonzero exit and JSON verification output
+ok 11 - executable reports errors with nonzero exit and JSON verification output
+  ---
+  duration_ms: 128.760847
+  type: 'test'
+  ...
+# Subtest: root refinement bounds, endpoint roots and bad inputs
+ok 12 - root refinement bounds, endpoint roots and bad inputs
+  ---
+  duration_ms: 1.501103
+  type: 'test'
+  ...
+# Subtest: synthetic wraparound, all major aspects, stations and lunations
+ok 13 - synthetic wraparound, all major aspects, stations and lunations
+  ---
+  duration_ms: 12.028655
+  type: 'test'
+  ...
+# Subtest: half-open ownership, branch cut and input validation
+ok 14 - half-open ownership, branch cut and input validation
+  ---
+  duration_ms: 0.505889
+  type: 'test'
+  ...
+# Subtest: direct engine residuals for a synthetic calendar window include every event kind
+ok 15 - direct engine residuals for a synthetic calendar window include every event kind
+  ---
+  duration_ms: 1416.420704
+  type: 'test'
+  ...
+# Subtest: clock jumps are never root brackets
+ok 16 - clock jumps are never root brackets
+  ---
+  duration_ms: 181.202211
+  type: 'test'
+  ...
+# Subtest: retrograde repeats, sampled touches and exact tile-start roots
+ok 17 - retrograde repeats, sampled touches and exact tile-start roots
+  ---
+  duration_ms: 0.624064
+  type: 'test'
+  ...
+# Subtest: planner is lazy, contiguous, clips partial tiles and rejects oversized sampling
+ok 18 - planner is lazy, contiguous, clips partial tiles and rejects oversized sampling
+  ---
+  duration_ms: 2.454297
+  type: 'test'
+  ...
+# Subtest: boundary list matches clock regime changes in the pinned engine
+ok 19 - boundary list matches clock regime changes in the pinned engine
+  ---
+  duration_ms: 156.098631
+  type: 'test'
+  ...
+# Subtest: all generated and decoded rows agree exactly with direct positions
+ok 20 - all generated and decoded rows agree exactly with direct positions
+  ---
+  duration_ms: 565.434931
+  type: 'test'
+  ...
+# Subtest: seams at tile edges and one-millisecond tiles keep the correct side
+ok 21 - seams at tile edges and one-millisecond tiles keep the correct side
+  ---
+  duration_ms: 14.453641
+  type: 'test'
+  ...
+# Subtest: default body set and cadence produce shared smooth endpoints and a clipped final sample
+ok 22 - default body set and cadence produce shared smooth endpoints and a clipped final sample
+  ---
+  duration_ms: 33.022765
+  type: 'test'
+  ...
+# Subtest: persisted event schema rejects invalid roots, definitions and duplicates
+ok 23 - persisted event schema rejects invalid roots, definitions and duplicates
+  ---
+  duration_ms: 1.701385
+  type: 'test'
+  ...
+# Subtest: resume, queries and verification reject malformed content even with matching checksums
+ok 24 - resume, queries and verification reject malformed content even with matching checksums
+  ---
+  duration_ms: 304.931082
+  type: 'test'
+  ...
+# Subtest: oversized store files fail before JSON or tile decoding
+ok 25 - oversized store files fail before JSON or tile decoding
+  ---
+  duration_ms: 38.335579
+  type: 'test'
+  ...
+# Subtest: constant-space descriptor lookup agrees with lazy planner across full coverage and seams
+ok 26 - constant-space descriptor lookup agrees with lazy planner across full coverage and seams
+  ---
+  duration_ms: 1561.720555
+  type: 'test'
+  ...
+# Subtest: circular interpolation forward, retrograde, exact samples, single sample and ambiguity
+ok 27 - circular interpolation forward, retrograde, exact samples, single sample and ambiguity
+  ---
+  duration_ms: 0.777355
+  type: 'test'
+  ...
+# Subtest: stored exact and interpolated positions, half-open boundaries and concurrent LRU bound
+ok 28 - stored exact and interpolated positions, half-open boundaries and concurrent LRU bound
+  ---
+  duration_ms: 143.1242
+  type: 'test'
+  ...
+# Subtest: clock seams and global coverage endpoints return separate direct samples
+ok 29 - clock seams and global coverage endpoints return separate direct samples
+  ---
+  duration_ms: 223.357739
+  type: 'test'
+  ...
+# Subtest: event queries stream sorted records with range, kind and body filters, independent results
+ok 30 - event queries stream sorted records with range, kind and body filters, independent results
+  ---
+  duration_ms: 287.848637
+  type: 'test'
+  ...
+# Subtest: invalid manifests, incomplete checkpoints, bad options and missing or corrupt tiles reject
+ok 31 - invalid manifests, incomplete checkpoints, bad options and missing or corrupt tiles reject
+  ---
+  duration_ms: 29.307654
+  type: 'test'
+  ...
+# Subtest: published tile recovery and checkpoint recovery equal uninterrupted generation
+ok 32 - published tile recovery and checkpoint recovery equal uninterrupted generation
+  ---
+  duration_ms: 386.630227
+  type: 'test'
+  ...
+# Subtest: exclusive lock, abort, stale staging and configuration mismatch
+ok 33 - exclusive lock, abort, stale staging and configuration mismatch
+  ---
+  duration_ms: 61.30542
+  type: 'test'
+  ...
+# Subtest: rejects corrupt, missing and invalid checkpoint data without overwriting tiles
+ok 34 - rejects corrupt, missing and invalid checkpoint data without overwriting tiles
+  ---
+  duration_ms: 166.152195
+  type: 'test'
+  ...
+# Subtest: concurrent generation is rejected while progress callback holds the lock
+ok 35 - concurrent generation is rejected while progress callback holds the lock
+  ---
+  duration_ms: 58.040272
+  type: 'test'
+  ...
+# Subtest: binary envelope layout and lossless round trip with wrap, retrograde and signed zero
+ok 36 - binary envelope layout and lossless round trip with wrap, retrograde and signed zero
+  ---
+  duration_ms: 10.455621
+  type: 'test'
+  ...
+# Subtest: round trips coverage edges and every supported body
+ok 37 - round trips coverage edges and every supported body
+  ---
+  duration_ms: 2.078794
+  type: 'test'
+  ...
+# Subtest: rejects malformed encoder inputs before serialization
+ok 38 - rejects malformed encoder inputs before serialization
+  ---
+  duration_ms: 8.615806
+  type: 'test'
+  ...
+# Subtest: rejects header corruption, truncation, trailing bytes and unsupported versions
+ok 39 - rejects header corruption, truncation, trailing bytes and unsupported versions
+  ---
+  duration_ms: 7.087998
+  type: 'test'
+  ...
+# Subtest: rejects structurally invalid payloads even with matching SHA-256
+ok 40 - rejects structurally invalid payloads even with matching SHA-256
+  ---
+  duration_ms: 3.141489
+  type: 'test'
+  ...
+# Subtest: decompression output is bounded independently of compressed size
+ok 41 - decompression output is bounded independently of compressed size
+  ---
+  duration_ms: 5.13703
+  type: 'test'
+  ...
+1..41
+# tests 41
+# suites 0
+# pass 41
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2333.781966

@@ -1,4 +1,4 @@
-import { mkdir, open, readFile, rename, rm, stat } from 'node:fs/promises';
+import { mkdir, open, rename, rm, stat } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { gzipSync, gunzipSync } from 'node:zlib';
@@ -7,6 +7,7 @@ import { ENGINE_IDENTITY } from './identity.mjs';
 import { planPositionTiles, generatePositionTiles } from './generate.mjs';
 import { generateEventTiles, EVENT_SCAN_MAX_MS } from './events.mjs';
 import { decodePositionTile } from './tile.mjs';
+import { validateEvents } from './validate-events.mjs';
 
 export const STORE_LIMIT = 1_500_000;
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -16,10 +17,18 @@ async function exists(path) {
   try { await stat(path); return true; } catch (error) { if (error.code === 'ENOENT') return false; throw error; }
 }
 async function boundedRead(path) {
-  if ((await stat(path)).size > STORE_LIMIT) throw new Error('Store file exceeds size limit');
-  const bytes = await readFile(path);
-  if (bytes.length > STORE_LIMIT) throw new Error('Store file exceeds size limit');
-  return bytes;
+  const handle = await open(path, 'r');
+  try {
+    const bytes = Buffer.alloc(STORE_LIMIT + 1);
+    let length = 0;
+    while (length < bytes.length) {
+      const result = await handle.read(bytes, length, bytes.length - length, null);
+      if (!result.bytesRead) break;
+      length += result.bytesRead;
+    }
+    if (length > STORE_LIMIT) throw new Error('Store file exceeds size limit');
+    return bytes.subarray(0, length);
+  } finally { await handle.close(); }
 }
 async function write(path, bytes) {
   if (bytes.length > STORE_LIMIT) throw new Error('Store file exceeds size limit');
@@ -34,7 +43,7 @@ async function atomicJson(path, value) {
 }
 
 /** Verify a committed tile against its receipt in the distributed manifest. */
-export async function verifyStoredTile(directory, descriptor) {
+export async function verifyStoredTile(directory, descriptor, config) {
   const folder = join(directory, name(descriptor.index));
   const receipt = JSON.parse(await boundedRead(join(folder, 'receipt.json')));
   if (receipt.version !== 1 || JSON.stringify(receipt.descriptor) !== JSON.stringify(descriptor) ||
@@ -52,8 +61,19 @@ export async function verifyStoredTile(directory, descriptor) {
   const events = JSON.parse(gunzipSync(files['events.json.gz'], { maxOutputLength: STORE_LIMIT }));
   if (positions.metadata.startMs !== descriptor.startMs || positions.metadata.endMs !== descriptor.endMs ||
       positions.samples[0].atMs !== descriptor.startMs || positions.samples.at(-1).atMs !== descriptor.lastSampleMs ||
-      JSON.stringify(events.descriptor) !== JSON.stringify(descriptor) || !Array.isArray(events.events)) {
+      events.version !== 1 || JSON.stringify(events.descriptor) !== JSON.stringify(descriptor) || !Array.isArray(events.events)) {
     throw new Error('Tile content mismatch');
+  }
+  validateEvents(events.events, descriptor, positions.metadata.bodies);
+  if (config) {
+    if (JSON.stringify(positions.metadata.bodies) !== JSON.stringify(config.bodies)) throw new Error('Tile bodies mismatch');
+    let atMs = descriptor.startMs;
+    for (const sample of positions.samples) {
+      if (sample.atMs !== atMs) throw new Error('Tile sample cadence mismatch');
+      atMs = Math.min(atMs + config.stepMs, descriptor.lastSampleMs);
+    }
+    const expectedCount = Math.ceil((descriptor.lastSampleMs - descriptor.startMs) / config.stepMs) + 1;
+    if (positions.samples.length !== expectedCount) throw new Error('Tile sample cadence mismatch');
   }
   return { receipt, positions, events: events.events };
 }
@@ -93,8 +113,7 @@ export async function generateDatabase(directory, input = {}, { signal, onProgre
       const folder = join(directory, name(descriptor.index));
       if (descriptor.index < nextIndex && !await exists(folder)) throw new Error('Checkpoint tile missing');
       if (await exists(folder)) {
-        const verified = await verifyStoredTile(directory, descriptor);
-        if (JSON.stringify(verified.positions.metadata.bodies) !== JSON.stringify(config.bodies)) throw new Error('Tile bodies mismatch');
+        await verifyStoredTile(directory, descriptor, config);
       } else {
         const staging = join(directory, '.tile.tmp');
         await rm(staging, { recursive: true, force: true });

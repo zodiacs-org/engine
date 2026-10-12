@@ -36,10 +36,10 @@
   },
   "method": "Sequential calls, no timed warmup, engine loaded before timing; first pass has empty application cache, OS cache uncontrolled; warm pass reuses decoded tiles; generation includes positions, events and persistence",
   "results": {
-    "generationMs": 245.14847600000002,
-    "verifiedResumeMs": 5.335758999999996,
+    "generationMs": 264.669127,
+    "verifiedResumeMs": 9.674484000000007,
     "verification": {
-      "elapsedMs": 5.849418000000014,
+      "elapsedMs": 7.984394000000009,
       "tiles": 2,
       "samples": 50,
       "events": 6,
@@ -63,16 +63,16 @@
         ]
       }
     },
-    "openMs": 0.4514829999999961,
+    "openMs": 0.8376220000000103,
     "positionQueries": {
       "count": 200,
       "schedule": "start + (index * 7919000) modulo range duration",
-      "firstPassMs": 18.928023999999994,
-      "warmPassMs": 2.8861569999999688,
-      "directEngineMs": 118.88888199999997
+      "firstPassMs": 6.8535420000000045,
+      "warmPassMs": 2.7943500000000085,
+      "directEngineMs": 128.86501099999998
     },
     "eventQuery": {
-      "elapsedMs": 0.30464299999999866,
+      "elapsedMs": 0.30240499999996473,
       "count": 6
     },
     "storage": {
