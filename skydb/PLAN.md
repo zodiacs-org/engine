@@ -19,7 +19,7 @@ engine data attribution accompanies the generated sample.
 - [x] M6 Add resumable generation, atomic writes, locking, checkpoints and SHA-256 manifests. Test interruption and recovery.
 - [x] M7 Add a bounded-cache query library, interpolation, event queries and integrity validation. Test wraparound, seams and tile boundaries.
 - [x] M8 Add strict command-line tools, verification and reproducible small sample tiles with attribution. Test end-to-end use.
-- [ ] M9 Add benchmark and agreement scripts with committed outputs and measured scope. Run them on Node 22.
+- [x] M9 Add benchmark and agreement scripts with committed outputs and measured scope. Run them on Node 22.
 - [ ] M10 Harden failure cases, document operations and limitations, run project and applicable repository checks, complete the plan and draft PR checklist.
 
 ## Validation
@@ -125,3 +125,21 @@ The npm dry-run file list excludes skydb/. The repository package contents
 check fails on missing dist/calc.d.ts; rebuilding dist/ remains forbidden by
 the task. Folder isolation, file-size, documentation-character and whitespace
 checks pass. Benchmark work remains M9.
+
+
+## Benchmark validation
+
+M9 adds reproducible scoped agreement and performance scripts with committed
+JSON outputs in [benchmarks/](benchmarks/README.md). Both ran on Node 22.23.3.
+Agreement compares decoded support samples exactly with direct engine calls and
+records per-body interpolation maxima at interior fractions in short synthetic
+windows across centuries, every pinned clock seam and the coverage end.
+Performance records fresh generation, verified resume, verification, opening,
+queries and storage on its explicit small workload. Neither report supplies
+independent astronomical accuracy, event completeness or full-dataset estimates.
+The full project suite passes, including evidence shape and maximum selection
+checks in [test/benchmarks.test.mjs](test/benchmarks.test.mjs).
+The npm dry-run file list excludes skydb/. The repository package contents
+check fails on missing dist/calc.d.ts; the task prohibits rebuilding dist/.
+Folder isolation, file-size, documentation-character and whitespace checks pass.
+This session completes M9 only; operations and final hardening remain M10.

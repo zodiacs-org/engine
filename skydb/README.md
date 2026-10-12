@@ -189,7 +189,9 @@ against the planner over target coverage, synthetic circular arithmetic, direct
 sample agreement at seams and boundaries, and interpolation agreement at the
 midpoint of its synthetic window beginning 2001-01-01. Its test thresholds apply
 only to that midpoint and measure consumer agreement, not astronomical accuracy.
-Benchmark evidence and broader interpolation measurements remain planned.
+Scoped benchmark evidence and interpolation measurements are described in
+[benchmarks/README.md](benchmarks/README.md). Their recorded windows do not
+establish a full-span bound.
 
 The command-line entry is `node skydb/scripts/skydb.mjs`. Each command emits
 JSON lines to stdout; errors go to stderr with a failing exit status. Arguments

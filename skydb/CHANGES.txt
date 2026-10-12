@@ -5,3 +5,4 @@ Implement sampled aspect, ingress, station and lunation detection with direct ro
 Implement resumable atomic position/event persistence with exclusive locking, configuration-bound checkpoints, distributed SHA-256 manifests and recovery tests.
 skydb: Implement bounded-cache integrity-checked queries, circular position interpolation and streaming event filters with seam, boundary and corruption tests.
 Implement strict SkyDB CLI commands, whole-database verification and reproducible attributed sample tiles with end-to-end and direct engine agreement tests.
+Add scoped reproducible SkyDB performance and direct-engine interpolation agreement benchmarks with committed Node 22 outputs and evidence tests.
