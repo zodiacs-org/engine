@@ -2,8 +2,9 @@
 
 An isolated comparison harness for @zodiacs/engine. Development follows
 [PLAN.md](PLAN.md). The scope, safeguards, isolated build, synthetic sampler,
-streaming statistics, kernel acquisition and inertial JPL reduction are
-implemented; true-of-date reduction, the runner and
+streaming statistics, kernel acquisition, inertial JPL reduction and
+validated true-of-date frame and relativistic correction implementations are
+implemented; the Swiss integration, runner and
 measured error report are still pending. No accuracy or throughput
 claim is made by this scaffold.
 
@@ -42,7 +43,10 @@ and remains a separately installed, test-time instrument. This separation
 is a repository retention policy, not a claim that external use waives Swiss
 licence obligations. Users must comply with the licence applicable to their
 installation and use. See the repository's [licensing audit](../LICENSING.md).
-The harness's authored code follows the repository's MIT licence.
+The harness's authored code follows the repository's MIT licence. Adapted
+ERFA formulas, constants and published test expectations retain the BSD
+terms in [ERFA-NOTICE.txt](ERFA-NOTICE.txt). Runtime ERFA sources retain their
+own notices and never enter the engine package.
 
 Run the current safeguards without installing dependencies:
 
@@ -193,7 +197,8 @@ and tdbSeconds. The epoch is TDB seconds past J2000. It returns geometric
 J2000 Cartesian position in km and velocity in km/s. It does not accept UTC
 or TT, apply light-time, aberration or deflection, or rotate to the ecliptic.
 Physical inertial reduction and public JPL validation are in lib/reduction.mjs.
-True-of-date rotations and relativistic modes remain in milestone M5c.
+True-of-date rotations and relativistic modes are separate modules described
+below; this geometric evaluator performs neither.
 
 Type 2 velocity is the differentiated position polynomial divided by the
 record radius. Type 3 velocity comes from its separately stored coefficients.
@@ -230,9 +235,8 @@ This truncated geocentric model omits short-period terms. UTC is not accepted
 as TT; resolving chart input time is a later integration step. Correction
 semantics follow [NAIF aberration documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/abcorr.html),
 "Reception case" (read 2026-10-13). No NAIF or ERFA implementation is copied.
-Solar deflection, relativistic aberration, topocentric observations and
-true-of-date rotations are not implemented here. M5c must complete the
-required frame and correction modes before a natal-chart campaign.
+Solar deflection, relativistic aberration and true-of-date rotations are
+implemented separately below. Topocentric observations remain unsupported.
 
 Run the bounded independent reference validation after kernel acquisition:
 
@@ -257,3 +261,58 @@ runtime. A missing or invalid kernel is an error, never a passing skip.
 inertial modes against public JPL output. It evaluates no engine charts.
 The synthetic campaign, engine error report and Swiss integration remain
 later milestones. No public kernel bytes or per-case positions are committed.
+
+## True-of-date frames and relativistic modes
+
+lib/frames.mjs implements Fukushima-Williams IAU 2006 frame bias and
+precession with unadjusted IAU 2000B abridged nutation. Callers choose
+true-equator-equinox-date or true-ecliptic-equinox-date and provide TT days
+since J2000 explicitly. The ecliptic rotation uses true obliquity. This is
+the specified composite model, not IAU 2000A, observed pole offsets or a
+nutation series with the IAU 2006 secular adjustment. The model's accepted
+TT domain is enforced by tests/frames-apparent.test.mjs; implementation
+comparison over that domain is recorded in
+[the frame report](reports/frame-validation.md). No model accuracy outside
+the measured span is claimed.
+
+The nutation coefficients are read from digest-pinned ERFA source acquired
+into ignored runtime/erfa-source/. They are independent of the engine's
+nutation table. lib/erfa-catalog.json pins public ERFA inputs and lib/erfa.mjs
+verifies them before use. Acquisition and validation require network access
+on first use and a C compiler named cc. No download occurs at import time.
+
+```sh
+node crosscheck/tools/validate-frames.mjs
+node crosscheck/tools/validate-frames.mjs --check
+```
+
+The validator compiles the runtime ERFA reference with the committed C
+protocol driver, then compares synthetic frame matrices, aberration and
+solar deflection. It retains only aggregate markdown, CSV and JSON under
+reports/. The JSON records commands, source/tooling hashes, compiler,
+selection, span, units and acceptance limits. Reproduction requires the
+recorded Node and compiler environment. Shared published constants and
+coefficients make this an implementation check, not a physical model
+accuracy measurement or an engine chart error report.
+
+lib/apparent.mjs exposes geocentric CN+REL and CN+REL+SUN modes separately
+from the inertial SPICE modes. CN+REL uses converged reception light-time
+and Lorentz aberration including the ERFA solar-potential term. CN+REL+SUN
+adds finite-target solar deflection before aberration, using the Sun's
+reception position and the ERFA near-Sun denominator limiter. Solar
+self-deflection is refused. The static Sun geometry is an explicit
+approximation, not moving-body or multi-body ray integration. It has not
+been validated end to end against JPL apparent coordinates. Campaigns must
+name this convention and keep deflection-enabled comparisons separate.
+
+The pipeline requires both TT frame time and TDB kernel time; callers must
+resolve and record the conversion. It returns a direction and convention
+metadata, without implying a corrected range or velocity. ICRF output is
+available without frame rotation. Other centers and topocentric frames fail.
+The independent reference functions are ERFA's
+[pfw06](https://github.com/liberfa/erfa/blob/v2.0.1/src/pfw06.c),
+[nut00b](https://github.com/liberfa/erfa/blob/v2.0.1/src/nut00b.c),
+[ab](https://github.com/liberfa/erfa/blob/v2.0.1/src/ab.c) and
+[ld](https://github.com/liberfa/erfa/blob/v2.0.1/src/ld.c), read for this
+implementation. Their published checks, analytic constructions, rotation
+invariants and pipeline ordering are tested without engine or Swiss values.

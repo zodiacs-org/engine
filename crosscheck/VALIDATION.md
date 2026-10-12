@@ -219,3 +219,44 @@ root dist/calc.d.ts is absent; the folder-only constraint prohibits a root
 build. Root engine tests and release gates were not run. No Swiss dependency
 was installed or invoked. Only crosscheck files changed, and git metadata was
 not written. M5c, the runner and the actual chart error report remain pending.
+
+# M5c validation
+
+Executed on Node v22.23.3 with the same external executable as M2:
+
+```sh
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node --test crosscheck/tests/*.test.mjs
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/validate-frames.mjs
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/validate-frames.mjs --check
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/validate-jpl.mjs --check
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/check.mjs
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm_config_cache="$PWD/crosscheck/runtime/npm-cache" npm run package:contents
+```
+
+The crosscheck suite passes, including published ERFA pfw06, fw2m, ab and
+ldsun checks, independently constructed zero-series offsets, determinant,
+inverse rotation and ecliptic pole checks, analytic Lorentz aberration,
+near-Sun limiter, invalid conventions and correction ordering. Those tests
+do not depend on a local ERFA compiler or downloaded sources.
+
+The bounded reference validation passes and reproduces exactly with --check.
+The actual case count, TT span, component counts, limits and residuals are
+in reports/frame-validation.json, with markdown and CSV aggregates. Runtime
+reference sources were downloaded from public ERFA URLs, hashed against the
+committed catalog and compiled with the recorded compiler. The published
+nut00b check also passes against the downloaded coefficient table. The
+source coefficients are shared published model data; these comparisons
+validate implementation agreement, not the physical model's accuracy.
+
+The frame is explicitly IAU 2006 bias/precession with unadjusted IAU 2000B
+nutation. The solar mode uses static reception-Sun geometry and ERFA's
+limiter; end-to-end JPL apparent-coordinate validation remains absent. The
+historical inertial JPL report still reproduces without changes. The Swiss
+integration, sharded runner and bounded engine chart campaign remain pending.
+
+File safeguards and the suite's npm exclusion check pass. All local files,
+including ignored runtime data, are below MAX_FILE_BYTES. The full package
+contents gate remains blocked by missing root dist/calc.d.ts; the user's
+folder-only constraint prohibits creating dist/. No root build, release,
+Swiss invocation or git metadata write was performed. Only crosscheck/
+files changed.
