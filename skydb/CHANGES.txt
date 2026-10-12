@@ -3,3 +3,4 @@ Implement versioned lossless compressed position tile codec, document binary lay
 Generate lazy position tiles with bounded sampling, time-basis splits and exact decoded agreement against direct engine calls.
 Implement sampled aspect, ingress, station and lunation detection with direct root refinement, clock splits and synthetic and engine-residual tests.
 Implement resumable atomic position/event persistence with exclusive locking, configuration-bound checkpoints, distributed SHA-256 manifests and recovery tests.
+skydb: Implement bounded-cache integrity-checked queries, circular position interpolation and streaming event filters with seam, boundary and corruption tests.

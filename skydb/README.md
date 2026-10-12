@@ -3,8 +3,9 @@
 This private Node project consumes the repository's carried engine archive by
 relative file dependency. It does not build or alter the engine package.
 Configuration, direct position sampling and a compressed position tile codec
-and lazy position and event generation are implemented. Resumable persistence is implemented. Queries remain
-planned in [PLAN.md](PLAN.md).
+and lazy position and event generation are implemented. Resumable persistence
+and position and event queries are implemented. Remaining work is tracked in
+[PLAN.md](PLAN.md).
 
 Use a Node runtime in the series required by [package.json](package.json), with
 its matching npm on PATH. From the repository root:
@@ -85,7 +86,7 @@ This establishes serialization and sampling agreement only.
 `generateEventTiles(config)` in [src/events.mjs](src/events.mjs) yields the
 position planner's descriptors with an `events` array instead of position
 bytes. It uses the same selected bodies, clock splits and half-open ownership.
-Event persistence and encoding are deferred to the persistence milestone.
+The store persists and compresses these event records.
 `scanEvents(descriptor, config, sample)` exposes the same scan with an injected
 sampler for synthetic tests. Descriptors crossing a known clock jump are rejected.
 
@@ -152,3 +153,40 @@ rename. Directory entries are not fsynced, so power-loss durability is not
 promised. Use a private trusted local directory; hostile filesystem mutation,
 symlink races and network filesystem locking are outside this contract.
 The distributed manifest and event layout are documented in [FORMAT.md](FORMAT.md).
+
+
+`openDatabase(directory, { cacheTiles })` in [src/query.mjs](src/query.mjs)
+opens a completed database and returns `config`, `positions(atMs)`,
+`events(startMs, endMs, { kind, body })` and `cacheInfo()`. Query times are integer
+UTC epoch milliseconds. Position coverage and event ranges are half-open;
+out-of-range requests throw rather than extrapolate. Event queries are async
+iterators, ordered by stored timestamp, with optional exact kind and body
+filters. They return stored events and inherit the scan's completeness limits.
+
+Opening validates the pinned manifest, configuration and completed checkpoint.
+Each tile is checksum-verified on its first load or after eviction. The cache
+retains only the configured number of decoded tiles, evicting the least recently
+used entry; disk loads are serialized even with concurrent callers. Tile lookup
+uses arithmetic and the pinned clock boundaries without loading a full-coverage
+index. Returned rows, events and cache diagnostics are independent copies.
+Callers should consume event iterators incrementally to bound their own memory.
+
+Position queries return `{ atMs, rows }`. Exact stored samples retain their
+binary values. Between samples, latitude and reported longitude speed are
+interpolated linearly; longitude follows the shortest circular arc, including
+retrograde motion and wraparound. Exactly antipodal support longitudes are
+rejected as ambiguous. Speed is interpolated from stored engine speeds, not
+computed as the derivative of the interpolated longitude. No interpolation
+crosses a clock discontinuity or extends past recorded support. Coarse cadence
+can alias a longitude path or hide a turn; this library supplies no error bound.
+
+Use a completed immutable database in a trusted local directory. Checksums
+establish agreement with local receipts, not authenticity if receipts and tiles
+are replaced together. Cached tiles do not detect subsequent disk mutation;
+reopen the database to recheck files. Missing, corrupt and incomplete data fail
+explicitly. [test/query.test.mjs](test/query.test.mjs) checks descriptor lookup
+against the planner over target coverage, synthetic circular arithmetic, direct
+sample agreement at seams and boundaries, and interpolation agreement at the
+midpoint of its synthetic window beginning 2001-01-01. Its test thresholds apply
+only to that midpoint and measure consumer agreement, not astronomical accuracy.
+Benchmark evidence and broader interpolation measurements remain planned.
