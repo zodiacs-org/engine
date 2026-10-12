@@ -1,1 +1,2 @@
 Complete M1: bootstrap isolated TypeScript events project, search contracts, bounded root refinement and analytic/package-isolation tests.
+Complete M2: add relative-source engine adapter, explicit clocks and coordinates, strict windows, shared evaluation budgets and cancellation, with local build and integration tests.

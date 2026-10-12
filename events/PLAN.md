@@ -7,7 +7,7 @@ its outcome in `CHANGES.txt`, and stops. Analytic tests check numerical methods;
 astronomical accuracy claims require independent references with provenance.
 
 - [x] M1 Bootstrap a private TypeScript project, shared search contracts and a bounded bracketed root refiner with analytic tests.
-- [ ] M2 Add a relative-source engine adapter, explicit clock and coordinate conventions, strict window validation and evaluation budgets.
+- [x] M2 Add a relative-source engine adapter, explicit clock and coordinate conventions, strict window validation and evaluation budgets.
 - [ ] M3 Implement longitude crossings and sign ingresses, including wrap handling, directions and window boundaries.
 - [ ] M4 Implement moving-to-fixed natal aspects and moving-to-moving aspects, returning every exact pass under an explicit aspect policy.
 - [ ] M5 Implement stations and retrograde intervals with sign filters, including intervals clipped by the search window.

@@ -9,6 +9,7 @@ export interface SearchWindow {
 }
 
 export interface SearchOptions {
+  /** Adapter requests, including failed requests; internal engine samples are not separate units. */
   readonly maxEvaluations: number;
   readonly signal?: AbortSignal;
 }
