@@ -3,7 +3,7 @@
 This private Node project consumes the repository's carried engine archive by
 relative file dependency. It does not build or alter the engine package.
 Configuration, direct position sampling and a compressed position tile codec
-and lazy position and event generation are implemented. Persistence and queries remain
+and lazy position and event generation are implemented. Resumable persistence is implemented. Queries remain
 planned in [PLAN.md](PLAN.md).
 
 Use a Node runtime in the series required by [package.json](package.json), with
@@ -127,3 +127,28 @@ plateaus, ownership and clock splits. Its direct comparison covers the synthetic
 window beginning 2001-01-01 for forty days, checking residual agreement and
 adjacent-millisecond brackets. Test residual thresholds are consumer agreement
 checks, not astronomical accuracy guarantees or full-coverage error bounds.
+
+`generateDatabase(directory, config, options)` in
+[src/store.mjs](src/store.mjs) persists positions and compressed events, with
+SHA-256 receipts and a checkpoint. Use a directory under ignored `generated/`
+for real runs. The same configuration resumes an interrupted run, verifies its
+published tiles and skips their computation. It returns the directory and tile
+count. `verifyStoredTile(directory, descriptor)` checks receipt digests and
+position support endpoints, then returns decoded data. This integrity check is
+not an astronomical accuracy check or proof of event completeness.
+
+An exclusive `.lock` prevents concurrent writers. Exceptions and cancellation
+release it; process termination may leave it behind. Remove a stale lock only
+after independently confirming its writer has stopped. The lock records a PID
+and start time for diagnosis; it is never automatically stolen. `options.signal`
+is checked between tiles and before publication. `options.onProgress` is awaited
+after tile publication and checkpoint updates; callbacks may interrupt a run.
+Engine sampling within a tile remains synchronous.
+
+Files are flushed before publication; a same-filesystem directory rename makes
+the position/event pair visible together, and checkpoint replacement is atomic.
+This supports process interruption recovery on local filesystems with atomic
+rename. Directory entries are not fsynced, so power-loss durability is not
+promised. Use a private trusted local directory; hostile filesystem mutation,
+symlink races and network filesystem locking are outside this contract.
+The distributed manifest and event layout are documented in [FORMAT.md](FORMAT.md).

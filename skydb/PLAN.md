@@ -16,7 +16,7 @@ engine data attribution accompanies the generated sample.
 - [x] M3 Implement and document a versioned compressed binary tile codec with corruption tests.
 - [x] M4 Generate position tiles with longitude, latitude, speed and time-basis boundaries. Test direct-call agreement.
 - [x] M5 Detect exact major aspects, sign ingresses, longitude stations and new/full lunations. Test synthetic roots and direct residuals.
-- [ ] M6 Add resumable generation, atomic writes, locking, checkpoints and SHA-256 manifests. Test interruption and recovery.
+- [x] M6 Add resumable generation, atomic writes, locking, checkpoints and SHA-256 manifests. Test interruption and recovery.
 - [ ] M7 Add a bounded-cache query library, interpolation, event queries and integrity validation. Test wraparound, seams and tile boundaries.
 - [ ] M8 Add strict command-line tools, verification and reproducible small sample tiles with attribution. Test end-to-end use.
 - [ ] M9 Add benchmark and agreement scripts with committed outputs and measured scope. Run them on Node 22.
@@ -78,3 +78,16 @@ The npm dry-run file list excludes skydb/. The repository package contents
 check remains blocked by missing dist/calc.d.ts, and the task prohibits rebuilding
 dist/. Folder isolation, file-size, documentation-character and whitespace
 checks pass. Event persistence remains M6 work. This session completes M5 only.
+
+## Persistence validation
+
+M6 adds atomic position/event directory publication, exclusive writer locking,
+configuration-bound checkpoints and distributed SHA-256 tile receipts.
+The project suite passes on Node 22.23.3, including interruption recovery,
+unchanged completed resume, stale staging cleanup, checksum rejection and
+concurrent-writer rejection in [test/store.test.mjs](test/store.test.mjs).
+Resume verifies completed tiles before skipping computation. Process interruption
+recovery is supported; power-loss durability and hostile filesystem mutation
+are outside the documented contract. This session completes M6 only.
+The npm dry-run file list excludes skydb/. Repository checks needing dist/
+remain excluded by the task's explicit engine-build prohibition.

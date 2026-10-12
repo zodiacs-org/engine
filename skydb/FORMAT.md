@@ -87,3 +87,28 @@ an authenticated signature: anyone changing a tile can recompute it. The
 planned external manifest will record SHA-256 of each complete compressed
 file, including its envelope. Generated datasets and temporary tiles belong
 in the ignored `generated/` folder; no full dataset is committed.
+
+## Persistent dataset and events
+
+[src/store.mjs](src/store.mjs) stores a distributed checksum manifest.
+`manifest.json` records the normalized configuration, pinned archive digest and
+format versions. Each sequential `tile-NNNNNNNN/receipt.json` records its planner
+descriptor and the byte length and SHA-256 of `positions.sky` and `events.json.gz`.
+This avoids a single manifest growing with the entire dataset. Tile receipts
+and the root manifest together describe the dataset. Checksums detect corruption;
+they do not authenticate the producer. Completion is recorded separately.
+
+The event file is gzip-compressed UTF-8 JSON with `version: 1`, `descriptor` and
+`events`. Records retain the event generator's fields and ordering. JSON does
+not preserve signed zero; positions retain their binary representation. Stored
+and decoded event JSON and each store file are bounded by `STORE_LIMIT` in
+[src/store.mjs](src/store.mjs); shorten tile duration if events exceed it.
+[test/store.test.mjs](test/store.test.mjs) enforces persistence agreement,
+interruption recovery, exclusive locking and rejection of corrupt stored bytes.
+
+`checkpoint.json` contains its version, root manifest SHA-256, next tile index
+and completion flag. Resume verifies all previously published receipts and files
+before skipping their computation. A tile published before its checkpoint is
+recovered by verification. Missing checkpointed tiles and mismatched configuration
+are errors, rather than silently regenerated data. Unpublished staging data is
+removed before generating the next missing tile.
