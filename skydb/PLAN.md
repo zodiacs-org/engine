@@ -18,7 +18,7 @@ engine data attribution accompanies the generated sample.
 - [x] M5 Detect exact major aspects, sign ingresses, longitude stations and new/full lunations. Test synthetic roots and direct residuals.
 - [x] M6 Add resumable generation, atomic writes, locking, checkpoints and SHA-256 manifests. Test interruption and recovery.
 - [x] M7 Add a bounded-cache query library, interpolation, event queries and integrity validation. Test wraparound, seams and tile boundaries.
-- [ ] M8 Add strict command-line tools, verification and reproducible small sample tiles with attribution. Test end-to-end use.
+- [x] M8 Add strict command-line tools, verification and reproducible small sample tiles with attribution. Test end-to-end use.
 - [ ] M9 Add benchmark and agreement scripts with committed outputs and measured scope. Run them on Node 22.
 - [ ] M10 Harden failure cases, document operations and limitations, run project and applicable repository checks, complete the plan and draft PR checklist.
 
@@ -106,3 +106,22 @@ bound is claimed. This session completes M7 only.
 The npm dry-run file list excludes skydb/. The repository package contents
 check fails on missing dist/calc.d.ts; rebuilding dist/ is forbidden by the task.
 Folder isolation, file-size, documentation-character and whitespace checks pass.
+
+
+## Command-line and sample validation
+
+M8 adds strict generation, verification, position and streaming event commands,
+plus whole-database verification and a reproducible attributed sample.
+The full project suite passes on Node 22.23.3, including strict argument errors,
+executable exit behavior, generation/resume, event queries and corruption failure
+in [test/cli.test.mjs](test/cli.test.mjs). That test regenerates the committed
+sample byte for byte and compares every stored position sample to a direct
+engine call over the synthetic range in [samples/config.json](samples/config.json).
+This measures consumer agreement, not independent astronomical accuracy.
+Sample data carries attribution and upstream notices. CLI generation is limited
+to a child of ignored generated/; the fixed sample script is the explicit
+small-data exception. This session completes M8 only.
+The npm dry-run file list excludes skydb/. The repository package contents
+check fails on missing dist/calc.d.ts; rebuilding dist/ remains forbidden by
+the task. Folder isolation, file-size, documentation-character and whitespace
+checks pass. Benchmark work remains M9.

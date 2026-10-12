@@ -4,3 +4,4 @@ Generate lazy position tiles with bounded sampling, time-basis splits and exact 
 Implement sampled aspect, ingress, station and lunation detection with direct root refinement, clock splits and synthetic and engine-residual tests.
 Implement resumable atomic position/event persistence with exclusive locking, configuration-bound checkpoints, distributed SHA-256 manifests and recovery tests.
 skydb: Implement bounded-cache integrity-checked queries, circular position interpolation and streaming event filters with seam, boundary and corruption tests.
+Implement strict SkyDB CLI commands, whole-database verification and reproducible attributed sample tiles with end-to-end and direct engine agreement tests.

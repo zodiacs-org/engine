@@ -46,8 +46,8 @@ not independent evidence of astronomical accuracy or interpolation error.
 
 Project code and documentation use the repository MIT licence. The installed
 engine is MIT AND CC-BY-4.0; retain its LICENSE, LICENSING.md and NOTICE when
-redistributing it. Generated data attribution will be recorded with the sample
-tiles when that milestone is implemented. Full generated data belongs in the
+redistributing it. Generated sample attribution is recorded in
+[samples/ATTRIBUTION.md](samples/ATTRIBUTION.md). Full generated data belongs in the
 ignored `generated/` folder and must not be committed.
 
 The lossless position codec is [src/tile.mjs](src/tile.mjs).
@@ -190,3 +190,30 @@ sample agreement at seams and boundaries, and interpolation agreement at the
 midpoint of its synthetic window beginning 2001-01-01. Its test thresholds apply
 only to that midpoint and measure consumer agreement, not astronomical accuracy.
 Benchmark evidence and broader interpolation measurements remain planned.
+
+The command-line entry is `node skydb/scripts/skydb.mjs`. Each command emits
+JSON lines to stdout; errors go to stderr with a failing exit status. Arguments
+are strict: unknown and duplicate options, missing values and noninteger query
+times are rejected. Commands are:
+
+```sh
+node skydb/scripts/skydb.mjs generate --directory skydb/generated/example --config skydb/samples/config.json
+node skydb/scripts/skydb.mjs verify --directory skydb/generated/example
+node skydb/scripts/skydb.mjs positions --directory skydb/generated/example --at 978307200000
+node skydb/scripts/skydb.mjs events --directory skydb/generated/example --start 978307200000 --end 978480000000 --kind ingress --body Moon
+```
+
+Generation requires an explicit JSON configuration file and a directory beneath
+`skydb/generated/`. It uses the store's resume and locking rules. The filesystem
+must be trusted, including parent directories; path containment is lexical and
+does not defend against symlinks. Queries and verification accept existing local
+databases. Event output is streamed. Verification walks every planned tile,
+checks digests, decoded positions and event ownership/order, and emits a summary.
+It requires a completed checkpoint and does not compare to an independent arbiter.
+
+The committed [sample](samples/ATTRIBUTION.md) is reproduced by
+`node skydb/scripts/sample.mjs`. Its configuration is separate from the full
+coverage defaults. [test/cli.test.mjs](test/cli.test.mjs) verifies deterministic
+regeneration, direct sample agreement and end-to-end command use, including
+checksum rejection. Retain the sample attribution and upstream licensing notices
+when copying these tiles. Full generation output remains ignored.
