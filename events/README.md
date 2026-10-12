@@ -5,8 +5,9 @@ An isolated, private TypeScript project for event searches built on the parent
 remaining features are tracked in [PLAN.md](PLAN.md).
 
 The current implementation exposes a bracketed scalar root refiner, shared
-search contracts, an evaluation context and a longitude adapter. Astronomical
-searches, the DSL and the HTTP API are planned; they are not yet implemented.
+search contracts, an evaluation context, a longitude adapter, longitude
+crossing searches and tropical sign ingresses. Aspects, stations, eclipses,
+void-of-course periods, the DSL and the HTTP API remain planned.
 The adapter consumes the parent source through relative imports. The local
 build bundles those imports under `events/build/`.
 
@@ -130,3 +131,52 @@ independent astronomical accuracy evidence.
 The workbench pins the same ephemeris version as the parent. Installation and
 compilation use only local dependencies and output. Source reads from `../src/`
 do not add this project to the parent package or change its import graph.
+
+## Longitude crossings and sign ingresses
+
+`searchLongitudeCrossings(context, body, targetDegrees, options)` searches one
+longitude in degrees in `[0, 360)`. `searchSignIngresses(context, body, options)`
+searches all tropical sign boundaries in one scan. Both use the engine adapter
+by default. They return the shared complete/refused result; each event records
+the clock, target longitude, body, direction, numerical root bracket and
+residual in degrees. Ingresses add `fromSign` and `toSign`, with sign ownership
+reversed for retrograde motion. Events sort by time, then longitude.
+
+Options require an integer `stepMs` sampling interval. `direction` accepts
+`direct`, `retrograde` or `both` (the default). Samples include the start and
+end; events belong to `(start, end]`. Exact zeros at shared sample boundaries
+are returned once. A stationary constant longitude emits no events. A sampled
+touch followed by a reversal or plateau is suppressed; at the window end an
+exact boundary contact uses its incoming direction because no outgoing sample
+is available. A stationary touch is not a sign change.
+
+Within each cell the endpoints are unwrapped by the shortest angular arc.
+Completeness requires continuous, strictly monotonic longitude within each
+cell, with travel less than a half turn. These are caller assumptions, not
+facts certified by the scanner. A station inside a cell can hide two passes;
+an entire turn can alias to no motion. An exactly half-turn endpoint separation
+throws because its direction is ambiguous. Other violations cannot generally
+be detected from endpoints. `complete` means the requested scan finished,
+conditional on these assumptions; it does not prove astronomical completeness.
+Reducing the step helps resolve motion but supplies no proof. Station-aware
+search policy is still needed before the long-span public query API is wired.
+
+Each detected bracket is refined to integer milliseconds using the shared
+refiner. The bracket width is at most one millisecond, enforced by the analytic
+fractional-root test in [longitude.test.ts](test/longitude.test.ts). An estimate
+that rounds to a cell's open start instead uses its right bracket endpoint.
+The residual belongs to the reported estimate. This is numerical resolution,
+not a physical timing tolerance. No close events are merged by a time threshold.
+
+Scanning and refinement charge the same evaluation context. Exhaustion or
+cancellation discards all events found so far. Invalid options, ambiguous cells,
+invalid provider samples and parent engine refusals propagate as errors.
+A custom `LongitudeProvider` must share the context and charge each sample;
+it is intended for analytic tests or another explicitly defined longitude
+source. Its coordinates and continuity are the caller's responsibility.
+
+[longitude.test.ts](test/longitude.test.ts) checks synthetic linear motion,
+wraps, resolved reversals, window ownership, sign transitions, fractional
+roots, cancellation and budget exhaustion. It also demonstrates the hidden
+paired-root limitation. The default-adapter test checks integration only and
+does not pin an astronomical date. Independent date evidence remains M6.

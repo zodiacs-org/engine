@@ -4,3 +4,5 @@ export type { Clock, SearchWindow, SearchOptions, SearchResult } from "./types.j
 export { EvaluationContext, SearchInterrupted, validateWindow } from './context.js';
 export { EngineAdapter, EngineRefused, EVENT_BODIES, COORDINATES } from './engine.js';
 export type { EventBody, LongitudeSample } from './engine.js';
+export { searchLongitudeCrossings, searchSignIngresses, SIGNS } from './longitude.js';
+export type { LongitudeScanOptions, LongitudeCrossing, CrossingDirection, SignIngress, Sign, LongitudeProvider } from './longitude.js';

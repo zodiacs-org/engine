@@ -56,3 +56,32 @@ No independent astronomical accuracy measurement was made. Independent date
 fixtures remain scheduled for M6 and M8. The request budget counts adapter
 calls, including calls requesting the parent's speed calculation, rather than
 internal ephemeris operations. Cancellation cannot preempt synchronous work.
+
+## M3
+
+Runtime: Node.js 22.22.2, selected through `npm exec --package node@22.22.2`,
+with a writable npm cache under `/tmp`. An earlier run on the default Node
+runtime also passed, but the milestone was verified again on the required
+runtime. Only `events/` files were edited and local bundles remain gitignored.
+
+Passed:
+
+- `npm run typecheck --prefix events`
+- `npm test --prefix events`, covering analytic crossings, wraps, direct and
+  retrograde sign transitions, multiple boundaries per cell, exact window
+  ownership, resolved reversals, fractional-root enclosure, sampled touches,
+  shared evaluation budgets, cancellation and parent package isolation.
+- `git diff --check`
+- Size and documentation character checks on nonignored event files.
+
+The analytic paired-root test demonstrates that a station inside one cell can
+hide both passes, then checks that finer cells recover them. Completion is
+conditional on the documented monotonicity, continuity and short-arc
+assumptions. Station-aware completeness remains future work. Endpoint contacts
+at the search end use the incoming direction. The default adapter test is an
+integration check, not independent astronomical date evidence; that remains M6.
+
+`npm run package:contents` was attempted with a writable npm cache; it fails
+because the parent checkout has no `dist/calc.d.ts`, as in prior milestones.
+No parent build or archive pack was run. The npm dry-run isolation test passes.
+Full engine/release gates are not claimed.
