@@ -3,7 +3,7 @@ import { mkdtemp, mkdir, writeFile, symlink, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
-import { checkFiles, MAX_FILE_BYTES } from '../tools/check.mjs';
+import { checkFiles, checkLocalSizes, MAX_FILE_BYTES } from '../tools/check.mjs';
 
 test('rejects unsafe publishable files and skips runtime', async () => {
   const runtime = new URL('../runtime/', import.meta.url);
@@ -23,6 +23,10 @@ test('rejects unsafe publishable files and skips runtime', async () => {
     for (const name of ['bad.txt', 'de440.bsp', 'large.csv', 'link']) {
       assert(errors.some(error => error.startsWith(`${name}:`)));
     }
+    await writeFile(join(root, 'runtime', 'oversized.chunk'), Buffer.alloc(MAX_FILE_BYTES));
+    const localErrors = await checkLocalSizes(root);
+    assert.equal(localErrors.length, 3);
+    assert(localErrors.some(error => error.startsWith('runtime/oversized.chunk:')));
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 

@@ -500,3 +500,98 @@ unsupported here, as the report states. DE441 was not run in this sample;
 its acquisition and inertial reduction remain available through the kernel
 and reduction libraries. Later campaign configuration must keep each
 reference and convention separate.
+
+## Campaign operations
+
+`tools/campaign.mjs` supplies a production driver over the tested shard runner.
+Its specification contains only a public synthetic seed, requested count,
+shard count, campaign name and cached kernel name. It fixes the TT sampling
+interval and correction conventions in its source; the report records them.
+The accepted kernels are DE440s, DE440 and the positive-date DE441 part.
+Acquire the chosen kernel with `tools/kernels.mjs` first. Missing exact centers
+or coverage fail execution; planet barycenters never replace exact centers.
+Full DE440 or DE441 acquisition and campaign measurements have not been run
+here. The driver compares the same exact centers as the bounded sample.
+
+After the isolated build and runtime ERFA acquisition described above, an
+example requesting a million-scale campaign is:
+
+```sh
+cat > crosscheck/runtime/million.json <<'JSON'
+{"name":"million-tt","kernel":"de440s","seed":"synthetic-million-v1","total":2000000,"shards":4}
+JSON
+node crosscheck/tools/campaign.mjs crosscheck/runtime/million.json all 0
+node crosscheck/tools/campaign.mjs crosscheck/runtime/million.json all
+node crosscheck/tools/campaign.mjs crosscheck/runtime/million.json report
+node crosscheck/tools/campaign.mjs crosscheck/runtime/million.json check
+```
+
+This is a requested workload, not a completed measurement. The lazy budget
+check in `tests/operations.test.mjs` exercises this requested count while
+processing only a bounded prefix with invented arithmetic. No million-chart
+throughput or memory benchmark has been performed. Kernel reads rehash chunks
+and may dominate execution time; estimate resource use from a small campaign
+before allocating a long run. Charts are generated one at a time and discarded.
+
+`all` processes shards serially. Instead, assign each shard index to a separate
+process with the same specification and external installation selectors. For
+example, replace `all` with `0`, `1`, `2` and `3` for the specification above.
+Each process owns only its shard lock and checkpoint. Stop all workers before
+rendering a report. Never run two workers for the same shard. Shard count is
+capped in `validateSpec` to keep collected checkpoint bundles below the file
+limit; aggregate output size is also checked before writing.
+
+The optional trailing case budget applies per selected shard per invocation.
+SIGINT or SIGTERM stops after the in-flight comparison, saves aggregates and
+releases the lock. Repeat the same command to resume. An exception repeats
+uncheckpointed work and discards raw diagnostics. After an uncatchable kill,
+confirm the worker is gone before removing its abandoned `.lock` directory.
+Never repair checkpoint JSON by hand. A changed source, executable harness,
+build, kernel, seed, shard configuration or Swiss identity refuses resume;
+use a new campaign name instead. Completed runs are idempotent. A report
+requires every shard to exist and be complete and refuses existing output.
+`check` reproduces existing report bytes using the verified checkpoints.
+To check fresh numerical reproduction, preserve the old runtime campaign
+folder elsewhere under runtime/, run all shards again, and use `check`.
+
+To enable Swiss, the user must separately install pyswisseph and its ephemeris
+files outside this checkout. Set `CROSSCHECK_PYTHON` to that installation's
+Python executable and `SE_EPHE_PATH` to its external data directory for every
+run and report invocation. The harness installs nothing. An explicitly
+configured but unavailable instrument fails rather than silently turning off
+Swiss. Without these selectors, reports identify Swiss as unavailable.
+Per-body `Swiss.*.lon` and `.lat` channels compare the exact centers used in
+the JPL campaign via the unchanged permitted adapter. Only SWIEPH returned
+flags contribute residuals; fallback, error and unsupported verdicts have no
+numerical statistics. The legacy `Swiss.positions` channel stays unsupported
+and must not be counted as an additional measurement. Binding, adapter and
+ephemeris hashes and reported versions bind resume to the installation.
+Only aggregates leave the transport; no raw stdout or instrument errors are
+saved. Swiss expectations in the operational tests are invented arithmetic,
+not Swiss reference values. No live Swiss installation was available here.
+
+[The driver smoke report](reports/driver-smoke.md), its
+[CSV](reports/driver-smoke.csv) and [receipt](reports/driver-smoke.json) record
+a real budget-stop/resume run and a fresh numerical rerun that reproduced
+all report bytes. The receipt contains the exact spec, span, commands,
+threshold, actual counts, build and reference digests, and exclusions. These
+are bounded measurements only. Run final retention and local-size checks
+once workers and tests have stopped:
+
+```sh
+node crosscheck/tools/check.mjs --all-sizes
+```
+
+The usual checker covers publishable files. `--all-sizes` additionally visits
+ignored cache, build and dependency files and rejects local symlinks or files
+at the size boundary, as tested in `tests/safeguards.test.mjs`. It does not
+identify secrets or prove provenance. The npm exclusion dry-run in that test
+uses lifecycle scripts disabled and produces no archive.
+
+Historical reports retain the executable tooling identities that actually
+produced them. Later executable edits intentionally invalidate their checkpoint
+resume identities. For fresh reproduction of the original bounded sample,
+use its M9 source commit from git history with the recorded Node executable
+and public input digests; do not replace its receipt with a new build's.
+Rendering its retained aggregate bundle with `tools/report.mjs ... --check`
+checks artifact reproduction only, not fresh instrument execution.

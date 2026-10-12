@@ -33,8 +33,27 @@ export async function checkFiles(root) {
   return errors;
 }
 
+// Run after test workers finish, since their transient refusal fixtures include symlinks.
+export async function checkLocalSizes(root) {
+  const errors = [];
+  async function visit(directory) {
+    for (const name of (await readdir(directory)).sort()) {
+      const path = join(directory, name), info = await lstat(path), label = relative(root, path);
+      if (info.isSymbolicLink()) errors.push(`${label}: local symbolic link forbidden`);
+      else if (info.isDirectory()) await visit(path);
+      else if (!info.isFile() || info.size >= MAX_FILE_BYTES) errors.push(`${label}: local file type or size invalid`);
+    }
+  }
+  await visit(root);
+  return errors;
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const errors = await checkFiles(fileURLToPath(new URL('../', import.meta.url)));
+  const args = process.argv.slice(2);
+  if (args.length && (args.length !== 1 || args[0] !== '--all-sizes')) throw Error('Usage: check.mjs [--all-sizes]');
+  const root = fileURLToPath(new URL('../', import.meta.url));
+  const errors = await checkFiles(root);
+  if (args.length) errors.push(...await checkLocalSizes(root));
   if (errors.length) {
     console.error(errors.join('\n'));
     process.exitCode = 1;

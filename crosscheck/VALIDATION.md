@@ -313,3 +313,66 @@ The full package-content gate still fails because root dist/calc.d.ts is
 absent. The folder-only constraint prohibits a root build; no packed file,
 archive or engine source changed. The repository diff check passes. No git
 metadata write, release command or external Swiss installation was performed.
+
+## M10 operational validation
+
+Executed with the external Node v22.23.3 executable used in M2. Every command
+below used PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH:
+
+```sh
+npm --prefix crosscheck test
+node crosscheck/tools/build.mjs
+node crosscheck/tools/campaign.mjs crosscheck/runtime/m10-driver-smoke.json all 1
+node crosscheck/tools/campaign.mjs crosscheck/runtime/m10-driver-smoke.json all
+node crosscheck/tools/campaign.mjs crosscheck/runtime/m10-driver-smoke.json report
+mv crosscheck/runtime/campaigns/driver-smoke crosscheck/runtime/campaigns/driver-smoke-validated-first
+node crosscheck/tools/campaign.mjs crosscheck/runtime/m10-driver-smoke.json all
+node crosscheck/tools/campaign.mjs crosscheck/runtime/m10-driver-smoke.json check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/check.mjs --all-sizes
+npm_config_cache="$PWD/crosscheck/runtime/npm-cache" npm run package:contents
+git diff --check
+```
+
+The smoke specification was authored into ignored runtime storage before
+execution:
+
+```json
+{"name":"driver-smoke","kernel":"de440s","seed":"crosscheck-m10-driver-v1","total":8,"shards":3}
+```
+
+The full crosscheck suite passes. tests/operations.test.mjs exercises an
+interrupted distributed arithmetic run, aborted continuation, exact case-index
+coverage, completed-run idempotence, fresh report byte equality, tooling
+identity refusal, million-scale requested count with bounded actual work,
+Swiss per-axis aggregate retention and fallback handling, strict specifications
+and runtime input path/JSON/size refusal. These tests use invented arithmetic
+and establish operational behavior rather than physical accuracy. The
+safeguard boundary test additionally enforces checks of ignored local files.
+
+The actual DE440s driver smoke run stopped at its per-shard budget, resumed,
+and produced reports/driver-smoke.md, .csv and .json. A fresh campaign folder
+then evaluated all cases again and exactly reproduced these artifacts. The
+report receipt states the completed count, configured TT sampling span,
+public seed, specification, commands, units, screening threshold, build,
+source/output/dependency digests, Node executable identity, reference digests,
+correction conventions and exclusions. It is a bounded measurement only.
+No million-chart physical campaign, DE441 campaign, house/node/angle accuracy
+check or live Swiss comparison was performed. No Swiss binding or ephemeris
+was installed. The driver can explicitly enable a user-provided external
+Swiss installation; its integration test supplies invented aggregates only.
+
+The original bounded report also reproduces from its retained M9 aggregate
+bundle without editing its committed receipt. That check validates rendering,
+not fresh instrument execution. Executable changes intentionally change the
+runner identity and prevent resuming historical checkpoints with new code;
+a fresh M9 numerical reproduction requires its historical tooling commit.
+
+The project retention check and full local file-size scan pass, including
+ignored kernel chunks, source build and installed dependencies. npm's dry-run
+exclusion test passes with lifecycle scripts disabled. The full root package
+contents gate still fails because dist/calc.d.ts is absent; the user's
+folder-only constraint forbids creating root dist/. No root source, packed
+input, root dependency manifest, immutable archive or git metadata changed.
+No release workflow, publish operation or git write was run. The diff check
+passes. M10 is complete, and this session stops here as required by PLAN.md.
