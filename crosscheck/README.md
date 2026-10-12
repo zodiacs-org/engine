@@ -4,8 +4,8 @@ An isolated comparison harness for @zodiacs/engine. Development follows
 [PLAN.md](PLAN.md). The scope, safeguards, isolated build, synthetic sampler,
 streaming statistics, kernel acquisition, inertial JPL reduction and
 validated true-of-date frame and relativistic correction implementations are
-implemented, along with aggregate-only Swiss position integration. The runner
-and measured engine error report are still pending. No accuracy or throughput
+implemented, along with aggregate-only Swiss position integration. A checkpointed sharded runner is implemented; campaign integration
+and the measured engine error report are still pending. No accuracy or throughput
 claim is made by this scaffold.
 
 The planned JPL comparison uses public DE440/DE441 kernels downloaded from
@@ -119,7 +119,7 @@ The generated utc field is an ISO representation of a millisecond input,
 not a claim of historical UTC coverage or a TT/TDB conversion.
 
 shardIndices yields indices lazily by residue class. It does not allocate
-charts or provide checkpoints yet. The sampler does not accept personal
+charts; checkpoint orchestration is provided by lib/runner.mjs. The sampler does not accept personal
 records. A seed is public campaign configuration and must not contain secrets.
 
 lib/statistics.mjs accepts finite signed residuals in caller-declared units
@@ -351,3 +351,56 @@ Tests in tests/swiss.test.mjs use invented protocol peers, independent
 arithmetic and refusal cases. They never run Swiss and establish transport
 and retention behavior only. A live Swiss measurement requires the user's
 external installation and remains part of the later bounded campaign.
+
+## Shards and checkpoints
+
+lib/runner.mjs now provides runShard and mergeShards. Each shard walks its
+residue class lazily and evaluates one synthetic chart at a time. The caller
+supplies named comparison channels with fixed tolerances and explicit
+conventions. An evaluator returns one aggregate observation per compared
+channel, or an error, unsupported or fallback verdict. It must not return
+raw positions. Swiss lon and lat aggregates belong in separate channels.
+Channel names and flag cardinality are bounded; memory and checkpoint size
+do not grow with chart count. This is a runner implementation property,
+not a throughput measurement.
+
+The campaign digest covers the sampling configuration, total, shard count,
+channels, conventions, engine build identity, executable tooling identity
+and reference identities. Use verifyBuild and runnerToolingIdentity before
+opening a campaign, and verify kernel receipts and the Swiss identity with
+the corresponding reference loaders. Identity inputs must describe verified
+local content, rather than labels chosen by the caller. References and build
+files must stay unchanged during a run. Resume rejects a different campaign
+digest and validates progress and aggregate fields. The library does not
+provide reference discovery or chart convention matching; the campaign
+integration and report tools are later milestones.
+
+Checkpoint directories must be under ignored runtime/. Each shard has an
+exclusive lock directory. Writes sync a temporary file, atomically rename
+it over the checkpoint and sync the parent directory. A failed comparison
+stops the shard with a sanitized error; work since the last saved checkpoint
+is repeated on resume. An AbortSignal stops between cases and saves progress;
+maxCases can bound a session without changing campaign identity. Callers
+must connect their signal handlers and supply a bounded evaluator timeout.
+A killed process can leave a lock: after confirming that its writer has
+stopped, remove that shard's .lock directory before resuming. Locks are never
+stolen automatically. An abandoned .tmp file is discarded under the lock.
+These guarantees assume a local filesystem supporting atomic rename and
+file/directory sync, without concurrent hostile filesystem mutation.
+
+mergeShards requires every shard, rejects duplicates and incomplete coverage
+by default, and merges in ascending shard order for reproducible arithmetic.
+Partial aggregation requires an explicit requireComplete: false option.
+No timestamps, raw diagnostic messages or chart records enter checkpoints.
+The checkpoint is a local progress record, not an authenticated receipt.
+
+Run the independent invented-arithmetic runner checks on Node 22:
+
+```sh
+node --test crosscheck/tests/runner.test.mjs
+```
+
+The tests cover interrupted continuation, exact index coverage, deterministic
+merging, exception rollback, aborted and empty shards, bounded session work,
+identity mismatches, invalid retention fields, symlink refusal and locks.
+They measure no physical positions or engine accuracy.
