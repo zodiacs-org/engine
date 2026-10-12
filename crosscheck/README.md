@@ -4,8 +4,9 @@ An isolated comparison harness for @zodiacs/engine. Development follows
 [PLAN.md](PLAN.md). The scope, safeguards, isolated build, synthetic sampler,
 streaming statistics, kernel acquisition, inertial JPL reduction and
 validated true-of-date frame and relativistic correction implementations are
-implemented, along with aggregate-only Swiss position integration. A checkpointed sharded runner is implemented; campaign integration
-and the measured engine error report are still pending. No accuracy or throughput
+implemented, along with aggregate-only Swiss position integration, a
+checkpointed sharded runner and deterministic aggregate report tooling.
+Campaign integration and the measured engine error report are still pending. No accuracy or throughput
 claim is made by this scaffold.
 
 The planned JPL comparison uses public DE440/DE441 kernels downloaded from
@@ -404,3 +405,53 @@ The tests cover interrupted continuation, exact index coverage, deterministic
 merging, exception rollback, aborted and empty shards, bounded session work,
 identity mismatches, invalid retention fields, symlink refusal and locks.
 They measure no physical positions or engine accuracy.
+
+## Campaign aggregate reports
+
+lib/report.mjs renders validated campaign receipts and all shard checkpoints
+into deterministic markdown, CSV and a JSON reproducibility receipt. It
+recomputes the campaign identity, validates checkpoints and merges in shard
+order. Only aggregate statistics and verdicts enter reports. Empty channels
+have unavailable measurements; error, unsupported and fallback outcomes never
+count as residual observations. Returned flags have aggregate counts.
+
+The receipt preserves the exact execution command as an argument vector,
+engine and executable tooling digests, reference identities, conventions,
+seed, tolerances, units and runtime. It records completed indices as the first
+and last index and stride of each shard's completed prefix. The sampling span
+is the configured half-open epoch-millisecond interval, explicitly distinct
+from observed extrema or continuous physical coverage. A sample maximum does
+not establish a bound beyond the comparisons made.
+
+A campaign integration supplies a local bundle under runtime/ with exactly
+campaign, states and metadata fields. campaign and states are the runShard
+receipts; metadata has title, command (argument array), runtime (node,
+platform, arch), units (one string per channel), and a nonempty exclusions
+array. Metadata must describe the actual run and reference limitations. These
+fields are caller declarations, not independently authenticated provenance;
+never place diagnostics, personal records, positions or secrets in them or
+reference identity fields. Capture verified build and reference identities at
+execution, not from a later rebuild.
+
+Render a new report and check its exact reproduction with the same bundle:
+
+```sh
+node crosscheck/tools/report.mjs crosscheck/runtime/campaign/report-bundle.json campaign-name
+node crosscheck/tools/report.mjs crosscheck/runtime/campaign/report-bundle.json campaign-name --check
+```
+
+The CLI creates reports/campaign-name.md, .csv and .json and refuses to
+overwrite existing reports. Reproduction checks read existing artifacts and
+write nothing. Input paths must stay inside runtime/ and output names stay
+inside reports/; symbolic links and oversized files are refused. Incomplete
+shards are rejected unless --allow-partial is explicit; partial artifacts
+state the actual completed count and retain precise prefix coverage. All
+shards must still be present, including untouched shards with empty aggregates.
+The library lets an integration stream checkpoints into an in-memory bundle;
+the CLI bundle itself must fit the file limit. Do not concatenate arbitrarily
+large campaigns into one runtime file.
+
+The report tests use invented arithmetic and missing-reference verdicts.
+They establish rendering, retention and reproduction behavior, not physical
+accuracy. The real bounded engine campaign and committed measured error
+report remain the next milestone.

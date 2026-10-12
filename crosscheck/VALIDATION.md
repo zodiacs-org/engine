@@ -279,3 +279,37 @@ also checks npm exclusion through a dry-run with lifecycle scripts disabled.
 All checks passed. Python's importlib.util.find_spec('swisseph') returned no
 binding in this environment; no live Swiss comparison was run and no Swiss
 accuracy or agreement claim is supported by this session.
+
+## M8 aggregate report generation
+
+Executed on Node v22.23.3 with the external executable used in M2:
+
+```sh
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm --prefix crosscheck test
+node crosscheck/tools/check.mjs
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm_config_cache="$PWD/crosscheck/runtime/npm-cache" npm run package:contents
+git diff --check
+```
+
+The full crosscheck suite and file safeguards pass, including the npm dry-run
+exclusion test. tests/report.test.mjs independently checks invented residual
+counts, mean, mean absolute error, RMS, maxima, exclusions and returned flag
+counts. It checks deterministic rendering with reordered shards, exact command
+argument preservation, CSV escaping, unavailable empty statistics, explicit
+partial coverage, corrupt campaign and aggregate refusal, required units and
+exclusions, output file limits, reproduction, overwrite refusal and path and
+symlink constraints. All test-generated report files are removed afterward;
+local bundles and logs remain only in ignored runtime/.
+
+Reports carry the verified campaign digest and its recorded build and
+reference identities. The renderer validates their structural consistency;
+it does not authenticate caller-supplied metadata or rerun instruments.
+Sampling intervals are labelled as configured distributions rather than
+observed extrema. No JPL or Swiss measurement was made in this session and
+no engine accuracy claim or measured chart error report is added. The bounded
+physical campaign remains M9.
+
+The full package-content gate still fails because root dist/calc.d.ts is
+absent. The folder-only constraint prohibits a root build; no packed file,
+archive or engine source changed. The repository diff check passes. No git
+metadata write, release command or external Swiss installation was performed.
