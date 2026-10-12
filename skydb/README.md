@@ -3,7 +3,7 @@
 This private Node project consumes the repository's carried engine archive by
 relative file dependency. It does not build or alter the engine package.
 Configuration, direct position sampling and a compressed position tile codec
-and lazy tile generation are implemented. Events, persistence and queries remain
+and lazy position and event generation are implemented. Persistence and queries remain
 planned in [PLAN.md](PLAN.md).
 
 Use a Node runtime in the series required by [package.json](package.json), with
@@ -81,3 +81,49 @@ starts at the following millisecond. Future leap seconds are not forecast.
 sides, tile edges, partial tiles, coverage endpoints and decoded positions
 against direct calls over its synthetic short windows and cadence example.
 This establishes serialization and sampling agreement only.
+
+`generateEventTiles(config)` in [src/events.mjs](src/events.mjs) yields the
+position planner's descriptors with an `events` array instead of position
+bytes. It uses the same selected bodies, clock splits and half-open ownership.
+Event persistence and encoding are deferred to the persistence milestone.
+`scanEvents(descriptor, config, sample)` exposes the same scan with an injected
+sampler for synthetic tests. Descriptors crossing a known clock jump are rejected.
+
+Major aspects are conjunction, sextile, square, trine and opposition. Both
+oriented branches of sextile, square and trine are searched. Body pairs use the
+canonical body order, regardless of input order. Ingress targets
+are tropical sign boundaries, including the longitude wrap. Stations are zeros
+of the engine's reported longitude speed, which is its finite-difference speed,
+not an analytic velocity. Lunations are Sun-Moon longitude conjunctions and
+oppositions, labelled new and full; they also appear as aspect records. These
+are longitude definitions, not extrema of illuminated fraction. A body omitted
+from configuration contributes no events, including lunations when a luminary
+is omitted.
+
+Each record includes `kind`, `bodies`, `atMs`, `bracket`, `residual`, `unit` and
+`direction`. Angular events include an oriented `target`; aspects also include
+an unsigned `angle`, and lunations a `phase`. Residuals are signed angular
+errors in degrees or station speeds in degrees per day, evaluated directly at
+`atMs`. Direction describes the scalar change over the scan interval that
+found the root. At an exactly sampled touch it describes that interval's
+approach, rather than asserting a crossing. Constant-zero sampled plateaus
+are skipped. Duplicate roots at shared scan samples are removed per descriptor.
+
+The scan uses the position cadence, capped at one hour, brackets scalar sign
+changes and exactly sampled zeros, rejects the angular branch cut, then bisects
+with direct calls until the bracket is exact or spans adjacent integer
+milliseconds. The endpoint with the smaller absolute residual is reported,
+with ties assigned to the earlier instant. This is an approximation to an
+exact event; its timestamp and residual retain millisecond and engine numerical
+limits. Ownership uses the reported timestamp. Clock jumps themselves are not
+reported as smooth roots.
+
+This is a sampled search, with no completeness proof over the full coverage.
+Multiple roots within a scan interval and tangencies between samples can be
+missed. Reduce cadence for finer searches; refinement precision does not remove
+sampling limitations. Tests in [test/events.test.mjs](test/events.test.mjs)
+check synthetic roots, aspect branches, wraparound, retrograde repeats, touches,
+plateaus, ownership and clock splits. Its direct comparison covers the synthetic
+window beginning 2001-01-01 for forty days, checking residual agreement and
+adjacent-millisecond brackets. Test residual thresholds are consumer agreement
+checks, not astronomical accuracy guarantees or full-coverage error bounds.

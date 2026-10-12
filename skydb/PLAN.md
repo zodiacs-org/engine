@@ -15,7 +15,7 @@ engine data attribution accompanies the generated sample.
 - [x] M2 Bootstrap an isolated Node 22 engine consumer with verified archive identity and configuration tests.
 - [x] M3 Implement and document a versioned compressed binary tile codec with corruption tests.
 - [x] M4 Generate position tiles with longitude, latitude, speed and time-basis boundaries. Test direct-call agreement.
-- [ ] M5 Detect exact major aspects, sign ingresses, longitude stations and new/full lunations. Test synthetic roots and direct residuals.
+- [x] M5 Detect exact major aspects, sign ingresses, longitude stations and new/full lunations. Test synthetic roots and direct residuals.
 - [ ] M6 Add resumable generation, atomic writes, locking, checkpoints and SHA-256 manifests. Test interruption and recovery.
 - [ ] M7 Add a bounded-cache query library, interpolation, event queries and integrity validation. Test wraparound, seams and tile boundaries.
 - [ ] M8 Add strict command-line tools, verification and reproducible small sample tiles with attribution. Test end-to-end use.
@@ -64,3 +64,17 @@ excludes skydb/. The repository package contents check remains blocked by
 missing dist/calc.d.ts; the task prohibits rebuilding dist/. Folder isolation,
 file-size, documentation-character and whitespace checks pass. Persistence,
 checkpointing and manifests remain M6 work. This session completes M4 only.
+
+## Event detection validation
+
+M5 adds lazy event scans for major aspects, sign ingresses, longitude-speed
+stations and new/full longitude lunations, refined by direct engine calls.
+The project suite passes on Node 22.23.3, including synthetic roots, retrograde
+repeats, wraparound, sampled touches, ownership and time-basis splits in
+[test/events.test.mjs](test/events.test.mjs). That test also checks direct
+residuals over its synthetic calendar window. Sampling limitations are documented;
+this is not a full-coverage completeness or astronomical accuracy claim.
+The npm dry-run file list excludes skydb/. The repository package contents
+check remains blocked by missing dist/calc.d.ts, and the task prohibits rebuilding
+dist/. Folder isolation, file-size, documentation-character and whitespace
+checks pass. Event persistence remains M6 work. This session completes M5 only.
