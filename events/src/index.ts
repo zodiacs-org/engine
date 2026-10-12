@@ -6,3 +6,5 @@ export { EngineAdapter, EngineRefused, EVENT_BODIES, COORDINATES } from './engin
 export type { EventBody, LongitudeSample } from './engine.js';
 export { searchLongitudeCrossings, searchSignIngresses, SIGNS } from './longitude.js';
 export type { LongitudeScanOptions, LongitudeCrossing, CrossingDirection, SignIngress, Sign, LongitudeProvider } from './longitude.js';
+export { searchExactAspects } from './aspects.js';
+export type { ExactAspectRule, ExactAspectPolicy, AspectTarget, ExactAspect } from './aspects.js';

@@ -85,3 +85,28 @@ integration check, not independent astronomical date evidence; that remains M6.
 because the parent checkout has no `dist/calc.d.ts`, as in prior milestones.
 No parent build or archive pack was run. The npm dry-run isolation test passes.
 Full engine/release gates are not claimed.
+
+## M4
+
+Runtime: Node.js 22.22.2, selected through `npm exec --package node@22.22.2`,
+with an npm cache under `/tmp`. Only `events/` was edited.
+
+Passed:
+
+- `npm run typecheck --prefix events`
+- `npm test --prefix events`, including analytic aspect branches, moving-pair
+  relative motion, repeat passes through a resolved reversal, custom policies,
+  window ownership, fractional brackets, sampled touches, validation, shared
+  budget refusal, cancellation and package file-list isolation.
+- `git diff --check`
+- File-size and documentation character checks on nonignored event files.
+
+Default-adapter aspect tests establish integration only. Independent JPL
+Horizons event dates remain M6. Completion retains the longitude scanner's
+conditional sampling assumptions; relative stations can hide paired contacts.
+Fixed natal inputs here are synthetic longitudes, with no personal birth data.
+
+`npm run package:contents` was attempted and fails because this checkout lacks
+`dist/calc.d.ts`, as in earlier milestones. The parent npm dry-run isolation
+assertion passes. No parent build or archive packing was performed, and full
+engine/release gates are not claimed.

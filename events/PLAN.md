@@ -9,7 +9,7 @@ astronomical accuracy claims require independent references with provenance.
 - [x] M1 Bootstrap a private TypeScript project, shared search contracts and a bounded bracketed root refiner with analytic tests.
 - [x] M2 Add a relative-source engine adapter, explicit clock and coordinate conventions, strict window validation and evaluation budgets.
 - [x] M3 Implement longitude crossings and sign ingresses, including wrap handling, directions and window boundaries.
-- [ ] M4 Implement moving-to-fixed natal aspects and moving-to-moving aspects, returning every exact pass under an explicit aspect policy.
+- [x] M4 Implement moving-to-fixed natal aspects and moving-to-moving aspects, returning every exact pass under an explicit aspect policy.
 - [ ] M5 Implement stations and retrograde intervals with sign filters, including intervals clipped by the search window.
 - [ ] M6 Add a reproducible JPL Horizons reference acquisition tool, provenance and independent date tests for aspects, ingresses and stations.
 - [ ] M7 Implement solar and lunar eclipse searches with explicit event definitions and time scales.

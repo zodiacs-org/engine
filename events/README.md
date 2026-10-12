@@ -6,7 +6,7 @@ remaining features are tracked in [PLAN.md](PLAN.md).
 
 The current implementation exposes a bracketed scalar root refiner, shared
 search contracts, an evaluation context, a longitude adapter, longitude
-crossing searches and tropical sign ingresses. Aspects, stations, eclipses,
+crossing searches, tropical sign ingresses and exact aspects. Stations, eclipses,
 void-of-course periods, the DSL and the HTTP API remain planned.
 The adapter consumes the parent source through relative imports. The local
 build bundles those imports under `events/build/`.
@@ -180,3 +180,42 @@ wraps, resolved reversals, window ownership, sign transitions, fractional
 roots, cancellation and budget exhaustion. It also demonstrates the hidden
 paired-root limitation. The default-adapter test checks integration only and
 does not pin an astronomical date. Independent date evidence remains M6.
+
+## Exact aspects
+
+`searchExactAspects(context, body, target, policy, options)` searches a moving
+body against a fixed natal longitude (`{ kind: 'fixed', longitude }`) or
+another moving body (`{ kind: 'moving', body }`). Supply a nonempty explicit
+policy, for example `{ aspects: [{ id: 'square', angleDegrees: 90 }] }`.
+The angle domain and square branches are enforced by
+[aspects.test.ts](test/aspects.test.ts) over synthetic linear motion and a
+resolved retrograde loop. Identifiers and angles must each be unique.
+Custom angles are allowed; there are no implicit major aspects, orbs or
+closest-aspect selection. Same-body moving pairs are rejected because their
+relative longitude is identically constant.
+
+Relative longitude is the moving longitude minus the target longitude,
+normalized onto the circle. A fixed target must already use the adapter's
+coordinate conventions; this function does not calculate a natal chart or
+accept birth data. Every unsigned aspect searches both orientations, except
+conjunction and opposition, whose orientations coincide. Events retain the
+policy rule, target, relative-longitude branch, clock, bracket and residual.
+They sort by time, branch and rule identifier. All detected passes survive;
+there is no time-threshold deduplication across different contacts.
+
+The scan options and ownership rules are those of longitude crossings.
+`direction` describes increasing or decreasing relative longitude, rather
+than either body's individual direct or retrograde motion. Completeness
+requires monotonic, continuous relative motion within every cell and travel
+shorter than a half turn. Individually monotonic bodies can still have a
+relative station. Hidden paired roots and unsampled stationary touches remain
+possible; sampled touches are suppressed as in the crossing scanner. These
+are crossing searches, not a general detector of tangential exact contacts.
+
+Each branch scans separately, without caching. Fixed-target samples charge
+one provider request; moving pairs charge a request for each body, including
+refinement requests. All branches share the context and budget; any refusal
+discards every contact from earlier branches. Input policy and target values
+are snapshotted before scanning. Invalid provider coordinates and computation
+errors propagate. Tests check analytic aspects and default-adapter integration;
+no independent astronomical timing claim is made before M6.
