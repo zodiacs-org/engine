@@ -15,7 +15,7 @@ astronomical accuracy claims require independent references with provenance.
 - [x] M7 Implement solar and lunar eclipse searches with explicit event definitions and time scales.
 - [x] M8 Add published NASA eclipse catalog fixtures, attribution and independent eclipse date tests.
 - [x] M9 Implement void-of-course Moon intervals under a documented body and aspect policy, including boundary tests.
-- [ ] M10 Implement a bounded query DSL parser with typed syntax errors and grammar documentation for next/all searches and filters.
+- [x] M10 Implement a bounded query DSL parser with typed syntax errors and grammar documentation for next/all searches and filters.
 - [ ] M11 Wire the programmatic search API and DSL execution, including next-event horizons, cancellation and complete/refused results.
 - [ ] M12 Add a small HTTP API with validated requests, bounded work, structured errors and integration tests.
 - [ ] M13 Exercise long-span searches, reconcile independent references, document limitations and examples, and verify repository/package isolation.

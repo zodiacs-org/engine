@@ -415,3 +415,8 @@ fractional contact enclosures, unresolved tails, validation and refusals.
 Its default-adapter check establishes integration only. No independent
 void-of-course date accuracy measurement is claimed here; the existing JPL
 and NASA fixtures cover only the events documented in their reference guides.
+
+The local query parser is available as `parseQuery`, with typed
+`QuerySyntaxError` failures. [QUERY.md](QUERY.md) documents its grammar,
+explicit ranges and filters. It returns syntax only; DSL execution follows
+in the next milestone.

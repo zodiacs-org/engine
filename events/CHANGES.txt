@@ -7,3 +7,4 @@ Complete M6: acquire reproducible independent JPL Horizons TT event references w
 Complete M7: add bounded spherical-model solar and lunar shadow-axis eclipse searches, explicit radii and clocks, classification and boundary policies, analytic tests and parent adapter integration.
 Complete M8: add reproducible attributed NASA eclipse catalog fixtures, hashed provenance, offline parser checks and independent TT eclipse date and coarse-class tests with documented model limits.
 Complete M9: add bounded sign-based void-of-course Moon intervals with explicit body/aspect policies, clipped starts, unresolved tails, shared refusals, analytic boundary tests and documentation.
+Complete M10: add bounded typed event-query parser, strict dates and filters, symbolic natal targets, grammar documentation and parser tests; typecheck and events suite pass.

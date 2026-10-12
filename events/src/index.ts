@@ -14,3 +14,5 @@ export { searchEclipses, eclipseGeometry, EclipseEngineAdapter } from './eclipse
 export type { EclipseKind, EclipseModel, EclipseVector, EclipseVectors, EclipseProvider, EclipseOptions, EclipseGeometry, EclipseEvent } from './eclipses.js';
 export { searchVoidOfCourseMoon } from './void.js';
 export type { VoidOfCoursePolicy, VoidOfCourseOptions, VoidOfCourseInterval, UnresolvedMoonSegment, VoidOfCourseResult } from './void.js';
+export { parseQuery, QuerySyntaxError, QUERY_LIMITS, QUERY_ASPECTS } from './query.js';
+export type { EventQuery, QueryEvent, QueryAspect } from './query.js';
