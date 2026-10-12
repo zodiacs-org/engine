@@ -173,3 +173,42 @@ working directory and changed nothing; it was corrected before final checks.
 The parent package-content gate remains unavailable without the absent parent
 build output recorded in M1. No parent build was run and no full release gates
 are claimed. No archive, packed source, package version or git metadata changed.
+
+## M7
+
+Runtime: Node.js 22.22.2, selected with `npm exec --cache
+/tmp/events-npm-cache --package node@22.22.2`. Only `events/` was edited.
+
+Passed:
+
+- Local TypeScript typecheck and the full event test suite on that runtime.
+- Analytic similar-triangle shadow geometry, exact and fractional minima,
+  solar central/partial and lunar total/partial/penumbral classification,
+  opposite-phase rejection, strict grazing exclusion, boundary guards,
+  duplicate suppression, flat geometry, coarse/fine sampling, budget refusal,
+  cancellation, invalid data and parent adapter clock delegation.
+- Parent npm dry-run file-list isolation, `git diff --check`, authored-file
+  size and documentation character checks.
+
+The parent `npm run package:contents` check was attempted and fails because
+`dist/calc.d.ts` is absent, as in earlier sessions. No parent build or archive
+pack was run. Full engine/release gates are not claimed.
+
+The first test run found a test budget large enough to finish the analytic
+scan; the budget test now forces exhaustion after a contact was found.
+The coarse-sampling test originally expected no returned minima, but a coarse
+cell can alias several stationary points; it now checks the demonstrated
+missed-count limitation against a finer analytic scan. An edit command used
+repository-relative paths from the event directory, changed nothing, and was
+rerun from the repository root. Final typecheck and tests passed.
+
+Eclipse times are roots of a finite-difference derivative of squared shadow-axis
+distance, under an explicit spherical model using parent apparent vectors.
+Boundary guards require padding for a requested full search window. Completion
+is conditional on continuous geometry and resolved slope zeros per scan cell.
+Solar types are central or partial; total/annular/hybrid distinctions, local
+visibility, contact times and atmospheric shadow enlargement remain outside
+this implementation. NASA's linked glossary supplies the event definition;
+no NASA catalog dates were copied in this milestone. Analytic tests establish
+numerical behavior and parent comparisons establish delegation only.
+Independent NASA catalog fixtures and date validation remain M8.

@@ -10,3 +10,5 @@ export { searchExactAspects } from './aspects.js';
 export type { ExactAspectRule, ExactAspectPolicy, AspectTarget, ExactAspect } from './aspects.js';
 export { searchStations, searchRetrogradeIntervals } from './stations.js';
 export type { MotionProvider, StationOptions, RetrogradeOptions, Station, RetrogradeInterval } from './stations.js';
+export { searchEclipses, eclipseGeometry, EclipseEngineAdapter } from './eclipses.js';
+export type { EclipseKind, EclipseModel, EclipseVector, EclipseVectors, EclipseProvider, EclipseOptions, EclipseGeometry, EclipseEvent } from './eclipses.js';

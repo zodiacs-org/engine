@@ -7,7 +7,8 @@ remaining features are tracked in [PLAN.md](PLAN.md).
 The current implementation exposes a bracketed scalar root refiner, shared
 search contracts, an evaluation context, a longitude adapter, longitude
 crossing searches, tropical sign ingresses, exact aspects, stations and retrograde
-intervals. Eclipses, void-of-course periods, the DSL and the HTTP API remain planned.
+intervals, and spherical-model solar and lunar eclipses. Void-of-course
+periods, the DSL and the HTTP API remain planned.
 The adapter consumes the parent source through relative imports. The local
 build bundles those imports under `events/build/`.
 
@@ -286,3 +287,70 @@ in [references/README.md](references/README.md). Normal tests reproduce the
 reference reduction offline before comparing searches with those dates. Python
 is required for these checks. Live acquisition uses only the independent JPL
 service and writes into the ignored `generated/` folder.
+
+## Eclipse searches
+
+`searchEclipses(context, kind, model, options)` accepts `solar` or `lunar`,
+explicit spherical radii (`sunRadiusAu`, `moonRadiusAu`, `earthRadiusAu`) in
+astronomical units, and integer `stepMs` and `derivativeStepMs`. The Sun must
+have the largest radius. No physical radii or atmospheric correction are
+silently selected. A custom `EclipseProvider` supplies Sun and Moon Cartesian
+vectors in the same geocentric frame and units, charging the shared context.
+`EclipseEngineAdapter` uses the parent calculation API's apparent geocentric
+true-of-date ecliptic vectors. The Moon inherits the parent's geometric lunar
+series convention. Each vector request charges a budget unit; a Sun/Moon pair
+charges both requests. The declared clock is forwarded as in `EngineAdapter`.
+
+The event definition follows the closest-shadow-axis concept described by
+Fred Espenak in NASA's [eclipse glossary](https://eclipse.gsfc.nasa.gov/help/SEglossary.html):
+solar events minimize the distance of Earth's center from the Sun-Moon shadow
+axis; lunar events minimize the distance of the Moon's center from the axis
+opposite the geocentric Sun. The implementation models spherical bodies and
+straight shadow cones by similar triangles. It evaluates penumbral and umbral
+radii at the target center's projection onto the axis. Shadows pointing away
+from the target are discarded. An event requires strict overlap between the
+penumbra and the target disk; a grazing equality is excluded.
+
+Solar classifications are `central` when the axis crosses the spherical Earth
+and `partial` otherwise. They do not distinguish total, annular or hybrid
+solar eclipses. Lunar classifications are `total` when the whole Moon disk
+fits inside the positive umbra, `partial` when that umbra overlaps the disk,
+and `penumbral` otherwise. These are classifications at the returned minimum,
+not classifications over all instants of the eclipse. Solar surface visibility,
+contact times, paths, magnitudes, Earth's oblateness and atmospheric lunar
+shadow enlargement are not calculated. Near grazing boundaries this simplified
+model can disagree with published eclipse catalogs.
+
+The search brackets negative-to-nonnegative changes of a finite-difference
+slope of squared axis distance, then refines the slope zero with `refineRoot`.
+`derivativeStepMs` is the central-difference half-width. The residual has units
+of squared astronomical units per millisecond. The numerical enclosure is at
+most one millisecond, enforced by the analytic fractional-minimum test in
+[eclipses.test.ts](test/eclipses.test.ts). It encloses the finite-difference
+zero, not necessarily the true derivative zero or a physically exact time.
+Increasing the derivative step changes this definition; very small steps can
+expose floating-point noise. UTC time-basis discontinuities can invalidate
+continuity, so TT is preferable for catalog comparison.
+
+A minimum needs samples on both sides. Searches return events only in
+`(startMs + derivativeStepMs, endMs - derivativeStepMs]`; the boundary guards
+remain unconfirmed and are omitted. To search a desired `(start, end]`, pad
+both window endpoints by the derivative step and filter returned events to
+the desired window. Padding samples must remain inside parent coverage.
+Endpoint derivatives used for scanning are one-sided. Exact interior sampled
+zeros are returned once when approached from a negative slope. Flat plateaus
+produce no event.
+
+Completion assumes continuous geometry and a finite-difference slope with at
+most one isolated sign-changing zero per scan cell. A large step can hide
+multiple minima, as demonstrated by the coarse/fine analytic test. No automatic
+scan policy or proof of astronomical completeness is supplied. Finished scans
+are `complete` only under these assumptions and the boundary-guard definition.
+Cancellation or budget exhaustion discards all events; malformed vectors,
+nonfinite arithmetic and parent refusals propagate as computation errors.
+The model and step values are snapshotted before scanning.
+
+The tests use independently calculated analytic geometry and synthetic motion
+for the numerical method, and same-parent comparisons for adapter delegation.
+They establish no astronomical eclipse-date accuracy. Published NASA catalog
+fixtures and independent date comparisons remain the next milestone.
