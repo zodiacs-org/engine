@@ -59,8 +59,8 @@ the start and closed at the end. This window ownership is separate from the
 root refiner's inclusive bracket. Completed results may have no events;
 budget or cancellation refusals contain no partial event list.
 
-Astronomical tests will use independently acquired JPL Horizons results and
-published NASA eclipse catalogs. Reference fixtures must name their source,
+Astronomical date tests use independently acquired JPL Horizons results.
+Published NASA eclipse catalog tests remain planned. Reference fixtures must name their source,
 frame, clock, retrieval method and redistribution terms. Analytic numerical
 tests are not astronomical accuracy evidence. Natal examples and tests use
 synthetic data. No Swiss Ephemeris material or expectations are used.
@@ -179,7 +179,8 @@ source. Its coordinates and continuity are the caller's responsibility.
 wraps, resolved reversals, window ownership, sign transitions, fractional
 roots, cancellation and budget exhaustion. It also demonstrates the hidden
 paired-root limitation. The default-adapter test checks integration only and
-does not pin an astronomical date. Independent date evidence remains M6.
+does not pin an astronomical date. Independent date checks and their limited coverage are recorded in
+[references/README.md](references/README.md).
 
 ## Exact aspects
 
@@ -218,7 +219,8 @@ refinement requests. All branches share the context and budget; any refusal
 discards every contact from earlier branches. Input policy and target values
 are snapshotted before scanning. Invalid provider coordinates and computation
 errors propagate. Tests check analytic aspects and default-adapter integration;
-no independent astronomical timing claim is made before M6.
+the independent date checks and their limited coverage are recorded in
+[references/README.md](references/README.md).
 
 
 ## Stations and retrograde intervals
@@ -273,4 +275,14 @@ assumptions. Reducing `stepMs` helps resolve motion but does not certify it.
 Stations, ingresses and partition samples share the request budget. Any budget
 or cancellation refusal discards all interval results; invalid samples and
 engine refusals propagate. The default adapter tests establish integration only.
-Independent astronomical station dates and tolerances remain M6.
+Independent Venus station date checks and their declared thresholds are in
+[references/README.md](references/README.md).
+
+## Independent date checks
+
+The committed Horizons references, acquisition command, interpolation methods,
+TT labels, frame differences, attribution and comparison scope are documented
+in [references/README.md](references/README.md). Normal tests reproduce the
+reference reduction offline before comparing searches with those dates. Python
+is required for these checks. Live acquisition uses only the independent JPL
+service and writes into the ignored `generated/` folder.

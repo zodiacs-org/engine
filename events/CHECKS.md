@@ -144,3 +144,32 @@ stations. A final-window zero is unconfirmed and leaves an interval clipped.
 The sign filter uses positive-duration overlap and preserves the full interval.
 Analytic tests establish numerical behavior, and adapter tests establish
 integration only. Independent JPL Horizons dates remain M6.
+
+## M6
+
+Runtime: Node.js 22.22.2, selected through `npm exec --cache
+/tmp/events-npm-cache --package node@22.22.2`. Reference acquisition and offline
+reduction use Python's standard library. Only `events/` was edited.
+
+Passed:
+
+- Local TypeScript typecheck and the full event test suite on that runtime.
+- Offline Horizons request, digest, convention, coverage and date reproduction.
+- Independent TT date comparisons for the declared Sun ingress, synthetic
+  Mars square, Mars-Sun opposition and Venus stations in `references/cases.json`.
+- Analytic reducer and malformed-response/provenance-tampering tests.
+- Parent npm dry-run file-list isolation, `git diff --check`, authored-file size
+  and documentation character checks.
+
+Horizons live acquisition was run successfully. Reviewed small responses are
+committed in `references/horizons.json`; live regenerated output and test logs
+are ignored under `generated/`. The references and their time/frame differences,
+acceptance thresholds, interpolation and attribution are in
+`references/README.md`. They establish only the declared date comparisons.
+
+The default npm cache was read-only; Node selection succeeded after directing
+its cache to `/tmp`. A metadata-edit command initially ran from the wrong
+working directory and changed nothing; it was corrected before final checks.
+The parent package-content gate remains unavailable without the absent parent
+build output recorded in M1. No parent build was run and no full release gates
+are claimed. No archive, packed source, package version or git metadata changed.
