@@ -1,8 +1,8 @@
 # Crosscheck
 
 An isolated comparison harness for @zodiacs/engine. Development follows
-[PLAN.md](PLAN.md). The scope, safeguards, isolated build, synthetic sampler
-and streaming statistics are implemented; the runner and
+[PLAN.md](PLAN.md). The scope, safeguards, isolated build, synthetic sampler,
+streaming statistics and kernel acquisition are implemented; the runner and
 measured error report are still pending. No accuracy or throughput
 claim is made by this scaffold.
 
@@ -132,3 +132,50 @@ rounding; deterministic report reproduction will require a fixed merge order.
 The tests in tests/sampling-statistics.test.mjs check arithmetic independently
 of engine outputs and exercise shard recombination and JSON continuation.
 They establish tooling behavior, not ephemeris accuracy or campaign throughput.
+
+## Public kernel cache
+
+Acquire a catalogued kernel with Node 22:
+
+```sh
+node crosscheck/tools/kernels.mjs de440s.bsp
+node crosscheck/tools/kernels.mjs de440.bsp
+node crosscheck/tools/kernels.mjs de441_part-1.bsp
+node crosscheck/tools/kernels.mjs de441_part-2.bsp
+```
+
+The catalog and MD5 transport checks are from NAIF's
+[public checksum list](https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/aa_checksums.txt)
+(read 2026-10-13). Acquisition uses HTTPS, refuses redirects and encoded or
+partial responses, and streams into a temporary directory under runtime/cache/.
+Only a verified download with readable SPK descriptors is promoted to its
+cache directory. Interrupted downloads are removed when the process handles
+the error; a killed process may leave an ignored .download directory, which
+can be removed before retrying. Download continuation is not implemented.
+Acquire DE441 parts separately and check the actual required coverage.
+
+Every chunk is capped by CHUNK_BYTES in lib/kernels.mjs, below the file limit;
+tests/kernels.test.mjs enforces stream reconstruction and the chunk boundary.
+The receipt records source URL, retrieval time, whole-file MD5 and SHA-256,
+chunk SHA-256 digests, byte size and parsed segment descriptors. MD5 detects
+transport corruption and does not authenticate the publisher. An optional
+EXPECTED_SHA256 argument pins a previously trusted whole-file digest. On reuse,
+openKernel rechecks every chunk and both whole-file digests, parses coverage
+again, and refuses a changed receipt or requested digest. Cache metadata is a
+local record, not a signature. Cache writes assume no concurrent hostile
+filesystem mutation; acquisition of the same kernel should have one writer.
+
+Descriptor interpretation follows NAIF's
+[DAF specification](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/daf.html)
+and [SPK specification](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/spk.html).
+Coverage uses TDB seconds past J2000 and retains target, center, frame,
+segment type and array addresses. requireCoverage checks an inclusive span
+for an exact target/center/frame combination of supported Chebyshev segment
+types, including contiguous segments and rejecting gaps. It does not infer
+planet centers from barycenters or convert UTC to TDB. Tests use invented
+binary descriptors, not astronomical or Swiss fixtures. Coefficient evaluation,
+center-chain composition and physical reference validation belong to M5.
+
+The attempted public acquisition in this session failed at network connection
+setup. No real kernel coverage or astronomical accuracy was measured. See
+[VALIDATION.md](VALIDATION.md) for the exact command and checks.

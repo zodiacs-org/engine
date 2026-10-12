@@ -99,3 +99,38 @@ Statistics retain only aggregates. Arithmetic tests use invented residuals,
 not engine or Swiss expected values. No reference instrument was invoked and
 no astronomical sample was run. This milestone establishes reproducible
 inputs and aggregate arithmetic; kernel acquisition is the next milestone.
+
+# M4 validation
+
+Executed on Node v22.23.3 using the external executable from M2:
+
+```sh
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm --prefix crosscheck test
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/check.mjs
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/kernels.mjs de440s.bsp
+```
+
+The full suite and file safeguards pass. kernels.test.mjs independently
+constructs invented DAF descriptors in both IEEE byte orders, checks exact
+coverage boundaries, target/center/frame mismatches, contiguous spans and
+gaps, unsupported segment types, malformed summary chains, invalid addresses
+and encodings. Streaming tests reconstruct invented bytes across chunk
+boundaries, check hashes independently, enforce CHUNK_BYTES and exercise
+interruptions. Failed HTTP responses, encoded responses and wrong digests
+leave no staging files. Cache destinations outside runtime are refused.
+The npm exclusion test still passes without a root build.
+
+The real DE440s acquisition failed with UND_ERR_CONNECT_TIMEOUT connecting
+to naif.jpl.nasa.gov. A separate curl HEAD request also failed during TLS
+setup. The checksum list and format documents were fetched and read through
+the browsing tool. No kernel bytes or coefficients were committed or used
+in comparisons. Successful public acquisition and real-cache reopen remain
+unverified in this environment; the implemented acquisition is covered by
+transport and structural unit tests, not a live-network success claim.
+The bounded chart comparison and aggregate error report remain M9 work.
+No Swiss instrument was run. Only crosscheck files changed.
+
+The full package-content check was also rerun with the M3 command and still
+fails because dist/calc.d.ts is absent. No root build was performed under the
+folder-only constraint. git diff --check passes; status shows only crosscheck
+changes. Existing invalid cache and symbolic-link refusal tests also pass.
