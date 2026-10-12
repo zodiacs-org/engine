@@ -14,7 +14,7 @@ engine data attribution accompanies the generated sample.
 - [x] M1 Record scope, constraints, validation and ordered milestones. Validate the plan and commit it.
 - [x] M2 Bootstrap an isolated Node 22 engine consumer with verified archive identity and configuration tests.
 - [x] M3 Implement and document a versioned compressed binary tile codec with corruption tests.
-- [ ] M4 Generate position tiles with longitude, latitude, speed and time-basis boundaries. Test direct-call agreement.
+- [x] M4 Generate position tiles with longitude, latitude, speed and time-basis boundaries. Test direct-call agreement.
 - [ ] M5 Detect exact major aspects, sign ingresses, longitude stations and new/full lunations. Test synthetic roots and direct residuals.
 - [ ] M6 Add resumable generation, atomic writes, locking, checkpoints and SHA-256 manifests. Test interruption and recovery.
 - [ ] M7 Add a bounded-cache query library, interpolation, event queries and integrity validation. Test wraparound, seams and tile boundaries.
@@ -53,3 +53,14 @@ The npm dry-run file list excludes skydb/. The repository package contents
 check still cannot pass because dist/calc.d.ts is absent; rebuilding dist/
 is outside the authorized scope. File-size, documentation-character and
 whitespace checks pass. No archive or packed source was changed.
+
+## Position generation validation
+
+M4 completes lazy in-memory position generation with clipped tiles, shared
+smooth endpoints and separate support samples on each side of time-basis jumps.
+The project suite passes on Node 22.23.3, including direct-call agreement in
+[test/generate.test.mjs](test/generate.test.mjs). The npm dry-run file list
+excludes skydb/. The repository package contents check remains blocked by
+missing dist/calc.d.ts; the task prohibits rebuilding dist/. Folder isolation,
+file-size, documentation-character and whitespace checks pass. Persistence,
+checkpointing and manifests remain M6 work. This session completes M4 only.

@@ -1,2 +1,3 @@
 Bootstrap isolated Node 22 skydb consumer with verified engine archive, locked dependencies, strict configuration and direct-call tests.
 Implement versioned lossless compressed position tile codec, document binary layout and validate corruption and bounded decoding.
+Generate lazy position tiles with bounded sampling, time-basis splits and exact decoded agreement against direct engine calls.
