@@ -134,3 +134,35 @@ The full package-content check was also rerun with the M3 command and still
 fails because dist/calc.d.ts is absent. No root build was performed under the
 folder-only constraint. git diff --check passes; status shows only crosscheck
 changes. Existing invalid cache and symbolic-link refusal tests also pass.
+
+# M5a validation
+
+The original M5 has been split into geometric coefficient evaluation (M5a)
+and physical reduction with public reference validation (M5b). This session
+completes M5a only. Executed with the external Node v22.23.3 executable:
+
+```sh
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm --prefix crosscheck test
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/check.mjs
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm_config_cache="$PWD/crosscheck/runtime/npm-cache" npm run package:contents
+```
+
+The full crosscheck suite and file safeguards pass, including npm exclusion.
+The package-content gate still fails because root dist/calc.d.ts is absent;
+no root build was performed under the folder-only constraint.
+
+The SPK tests independently expand an invented cubic and its derivative,
+evaluate invented records in both byte orders, distinguish differentiated
+velocity from stored velocity, and exercise record joins and final endpoints.
+They check center addition and subtraction, missing exact target IDs, kernel
+priority, cyclic center chains, unsupported frames and types, malformed
+record directories, nonfinite coefficients and truncated reads. The numerical
+comparison in the test is an arithmetic rounding allowance, not a physical
+accuracy tolerance. No coefficients, fixtures or expectations come from Swiss.
+
+The NAIF public SPK specification's type 2 and type 3 sections were retrieved
+through search after a direct page request timed out. Implementation is
+independently authored from the documented layout. No kernel acquisition or
+astronomical comparison was performed in this session. TT/TDB conversion,
+physical corrections, frame reduction and independent public JPL numerical
+validation remain unchecked in M5b; no chart error report exists yet.

@@ -2,3 +2,4 @@ Complete M1: record crosscheck scope and Swiss licensing/retention policy, norma
 Complete M2: add locked isolated Node 22 engine builds with verified source/dependency/output fingerprints, tamper tests, and cwd-independent safeguards.
 Complete M3: add deterministic indexed synthetic sampling, lazy shard indices and aggregate-only mergeable statistics with independent arithmetic, rejection and JSON continuation tests.
 Complete M4: add bounded public DE440/DE441 kernel acquisition, pinned transport checks and SHA-256 receipts, SPK coverage checks and refusal tests; document live network failure.
+Complete M5a: split physical validation into M5b; add independent geometric SPK type 2/3 evaluation, exact center chains and polynomial/structural tests.

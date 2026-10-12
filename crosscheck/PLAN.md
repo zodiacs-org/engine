@@ -9,7 +9,8 @@ operations. All authored and generated files stay inside crosscheck/.
 - [x] M2 Establish isolated Node 22 tooling and an engine build inside the ignored runtime folder; fingerprint source, dependencies and output.
 - [x] M3 Implement index-addressable deterministic synthetic sampling and mergeable streaming statistics, with independent arithmetic tests.
 - [x] M4 Acquire public DE440/DE441 kernels at runtime with source receipts, digest verification, coverage checks and bounded cache chunks.
-- [ ] M5 Implement an independent JPL reduction with explicit TT/TDB, frames, centers and corrections; validate against public JPL references.
+- [x] M5a Implement geometric SPK type 2/3 evaluation and explicit center-chain composition with independent polynomial tests.
+- [ ] M5b Implement an independent JPL reduction with explicit TT/TDB, frames, centers and corrections; validate against public JPL references.
 - [ ] M6 Connect the user-installed external Swiss instrument through the permitted conformance adapter, retaining only verdicts, flags and aggregates.
 - [ ] M7 Implement bounded-memory sharding, atomic checkpoints and resume with configuration and build identity checks.
 - [ ] M8 Generate deterministic markdown and CSV aggregate reports with exact commands, build identities, coverage and exclusions.

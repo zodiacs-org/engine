@@ -179,3 +179,28 @@ center-chain composition and physical reference validation belong to M5.
 The attempted public acquisition in this session failed at network connection
 setup. No real kernel coverage or astronomical accuracy was measured. See
 [VALIDATION.md](VALIDATION.md) for the exact command and checks.
+
+## Geometric SPK evaluation
+
+lib/spk.mjs evaluates cached SPK Chebyshev segments using the layouts in
+NAIF's [SPK Required Reading](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/spk.html),
+sections "Type 2" and "Type 3". createSpkReader accepts opened kernels from
+lib/kernels.mjs and a request with explicit target and center NAIF identifiers
+and tdbSeconds. The epoch is TDB seconds past J2000. It returns geometric
+J2000 Cartesian position in km and velocity in km/s. It does not accept UTC
+or TT, apply light-time, aberration or deflection, or rotate to the ecliptic.
+Those operations and public JPL validation remain in milestone M5b.
+
+Type 2 velocity is the differentiated position polynomial divided by the
+record radius. Type 3 velocity comes from its separately stored coefficients.
+Center chains terminate at the solar-system barycenter. Later supplied
+kernels and later segments have priority; an unsupported selected segment
+fails rather than falling back. Missing planet-center data fails even when
+system-barycenter data exists. Cycles, missing coverage, unsupported frames,
+malformed directories and nonfinite coefficients are refused.
+
+The evaluator reads one logical record at a time through the verified chunk
+reader. The chunk reader currently reads and hashes chunks on each access;
+this establishes bounded storage rather than campaign throughput. Arithmetic
+and structural tests in tests/spk.test.mjs use invented data only. There is
+no measured JPL accuracy claim and no completed chart error report yet.
