@@ -1,0 +1,1 @@
+Complete M1: bootstrap isolated TypeScript events project, search contracts, bounded root refinement and analytic/package-isolation tests.
