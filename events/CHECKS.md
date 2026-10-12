@@ -212,3 +212,43 @@ this implementation. NASA's linked glossary supplies the event definition;
 no NASA catalog dates were copied in this milestone. Analytic tests establish
 numerical behavior and parent comparisons establish delegation only.
 Independent NASA catalog fixtures and date validation remain M8.
+
+## M8
+
+Runtime: Node.js 22.22.2, selected with `npm exec --cache
+/tmp/events-npm-cache --package node@22.22.2`. Acquisition and offline reference
+verification use Python's standard library. Only `events/` was edited.
+
+Passed:
+
+- Local TypeScript typecheck and the full event test suite on that runtime.
+- Independent NASA catalog TT greatest-eclipse dates and supported coarse
+  classifications over exactly the selection in `references/nasa-cases.json`.
+- Offline row digests, source URLs, selection matching and date reproduction;
+  independent parser epoch arithmetic, malformed dates, missing and duplicate
+  rows, linked HTML extraction and provenance-tampering tests.
+- Complete downloaded catalog/key page hashes and selected-row reproduction
+  using `nasa.py --verify --source-dir` against the live acquisition.
+- Parent npm dry-run file-list isolation, `git diff --check`, authored-file
+  size and documentation character checks.
+
+NASA's catalog and key pages were fetched and read. Their data reproduction
+permission requires the acknowledgment retained in the fixture and
+`references/NASA.md`. The reviewed small fixture contains catalog row excerpts
+and parsed source numbers; full pages, candidate output and test logs remain
+ignored under `generated/`. The acquisition first encountered legacy non-UTF-8
+punctuation in a catalog key; Latin-1 decoding preserves those bytes and leaves
+selected ASCII fields unchanged. Acquisition and all checks then passed.
+
+The comparison threshold and model choices were recorded before running the
+engine comparisons. These sparse date checks establish neither astronomical
+completeness nor physical accuracy outside the selected dates. Solar
+classification is checked only at the API's central/partial level, with no
+claim to distinguish total, annular or hybrid. The NASA catalog's TD labels
+are compared directly on TT without subtracting its Delta T values. Limits,
+source locators and reproduction commands are in `references/NASA.md`.
+
+The parent `npm run package:contents` check was attempted and fails because
+`dist/calc.d.ts` is absent, as in earlier sessions. No parent build or archive
+pack was run. Full engine/release gates are not claimed. No git metadata,
+packed source, package version or artifact changed.

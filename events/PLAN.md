@@ -13,7 +13,7 @@ astronomical accuracy claims require independent references with provenance.
 - [x] M5 Implement stations and retrograde intervals with sign filters, including intervals clipped by the search window.
 - [x] M6 Add a reproducible JPL Horizons reference acquisition tool, provenance and independent date tests for aspects, ingresses and stations.
 - [x] M7 Implement solar and lunar eclipse searches with explicit event definitions and time scales.
-- [ ] M8 Add published NASA eclipse catalog fixtures, attribution and independent eclipse date tests.
+- [x] M8 Add published NASA eclipse catalog fixtures, attribution and independent eclipse date tests.
 - [ ] M9 Implement void-of-course Moon intervals under a documented body and aspect policy, including boundary tests.
 - [ ] M10 Implement a bounded query DSL parser with typed syntax errors and grammar documentation for next/all searches and filters.
 - [ ] M11 Wire the programmatic search API and DSL execution, including next-event horizons, cancellation and complete/refused results.

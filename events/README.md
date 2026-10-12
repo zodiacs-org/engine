@@ -61,7 +61,8 @@ root refiner's inclusive bracket. Completed results may have no events;
 budget or cancellation refusals contain no partial event list.
 
 Astronomical date tests use independently acquired JPL Horizons results.
-Published NASA eclipse catalog tests remain planned. Reference fixtures must name their source,
+Published NASA eclipse catalog date tests are documented in
+[references/NASA.md](references/NASA.md). Reference fixtures must name their source,
 frame, clock, retrieval method and redistribution terms. Analytic numerical
 tests are not astronomical accuracy evidence. Natal examples and tests use
 synthetic data. No Swiss Ephemeris material or expectations are used.
@@ -352,5 +353,7 @@ The model and step values are snapshotted before scanning.
 
 The tests use independently calculated analytic geometry and synthetic motion
 for the numerical method, and same-parent comparisons for adapter delegation.
-They establish no astronomical eclipse-date accuracy. Published NASA catalog
-fixtures and independent date comparisons remain the next milestone.
+Independent NASA catalog date and coarse-class comparisons are now enforced
+by [nasa.test.ts](test/nasa.test.ts), with acquisition, attribution, clocks and
+comparison limits documented in [references/NASA.md](references/NASA.md).
+The analytic and adapter tests themselves establish no astronomical accuracy.

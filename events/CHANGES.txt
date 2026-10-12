@@ -5,3 +5,4 @@ Complete M4: add exact fixed-natal and moving-pair aspect searches with explicit
 Complete M5: add bounded station searches and clipped retrograde intervals with sign-overlap filtering, shared refusal handling, analytic tests and documented sampling limits.
 Complete M6: acquire reproducible independent JPL Horizons TT event references with hashed provenance, offline reduction checks, ingress/aspect/station date tests and documented comparison limits.
 Complete M7: add bounded spherical-model solar and lunar shadow-axis eclipse searches, explicit radii and clocks, classification and boundary policies, analytic tests and parent adapter integration.
+Complete M8: add reproducible attributed NASA eclipse catalog fixtures, hashed provenance, offline parser checks and independent TT eclipse date and coarse-class tests with documented model limits.
