@@ -2,7 +2,8 @@
 
 An isolated comparison harness for @zodiacs/engine. Development follows
 [PLAN.md](PLAN.md). The scope, safeguards, isolated build, synthetic sampler,
-streaming statistics and kernel acquisition are implemented; the runner and
+streaming statistics, kernel acquisition and inertial JPL reduction are
+implemented; true-of-date reduction, the runner and
 measured error report are still pending. No accuracy or throughput
 claim is made by this scaffold.
 
@@ -174,11 +175,13 @@ for an exact target/center/frame combination of supported Chebyshev segment
 types, including contiguous segments and rejecting gaps. It does not infer
 planet centers from barycenters or convert UTC to TDB. Tests use invented
 binary descriptors, not astronomical or Swiss fixtures. Coefficient evaluation,
-center-chain composition and physical reference validation belong to M5.
+center-chain composition and inertial physical reference validation are
+implemented in the reduction modules described below.
 
-The attempted public acquisition in this session failed at network connection
-setup. No real kernel coverage or astronomical accuracy was measured. See
-[VALIDATION.md](VALIDATION.md) for the exact command and checks.
+The M4 acquisition attempt failed during connection setup. M5b retried
+successfully, opened the verified DE440s cache and evaluated selected public
+reference positions. See [VALIDATION.md](VALIDATION.md) and
+[the reference report](reports/jpl-reduction.md) for commands and limitations.
 
 ## Geometric SPK evaluation
 
@@ -189,7 +192,8 @@ lib/kernels.mjs and a request with explicit target and center NAIF identifiers
 and tdbSeconds. The epoch is TDB seconds past J2000. It returns geometric
 J2000 Cartesian position in km and velocity in km/s. It does not accept UTC
 or TT, apply light-time, aberration or deflection, or rotate to the ecliptic.
-Those operations and public JPL validation remain in milestone M5b.
+Physical inertial reduction and public JPL validation are in lib/reduction.mjs.
+True-of-date rotations and relativistic modes remain in milestone M5c.
 
 Type 2 velocity is the differentiated position polynomial divided by the
 record radius. Type 3 velocity comes from its separately stored coefficients.
@@ -203,4 +207,53 @@ The evaluator reads one logical record at a time through the verified chunk
 reader. The chunk reader currently reads and hashes chunks on each access;
 this establishes bounded storage rather than campaign throughput. Arithmetic
 and structural tests in tests/spk.test.mjs use invented data only. There is
-no measured JPL accuracy claim and no completed chart error report yet.
+no engine accuracy claim and no completed chart error report yet.
+
+
+## Inertial physical reduction
+
+lib/reduction.mjs accepts explicit NAIF target and center identifiers, TDB
+seconds since J2000 and an explicit NONE, CN or CN+S correction. Results are
+ICRF Cartesian positions in km and directions, with correction metadata.
+It fixes the observer at reception and iterates the target at emission.
+CN+S applies SPICE's Newtonian stellar rotation using the observer's
+barycentric velocity. It does not return corrected velocities. Unsupported
+frames or modes fail; planetary centers never substitute for barycenters.
+The Moon may use NONE to match an uncorrected geocentric convention.
+
+TT inputs can be converted with ttToTdb, using the implicit periodic model
+from NAIF's [time documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/time.html),
+"The Relationship between TT and TDB", and the constants in
+[naif0012.tls](https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls),
+equations (4) through (6) and DELTET/K, EB and M (read 2026-10-13).
+This truncated geocentric model omits short-period terms. UTC is not accepted
+as TT; resolving chart input time is a later integration step. Correction
+semantics follow [NAIF aberration documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/abcorr.html),
+"Reception case" (read 2026-10-13). No NAIF or ERFA implementation is copied.
+Solar deflection, relativistic aberration, topocentric observations and
+true-of-date rotations are not implemented here. M5c must complete the
+required frame and correction modes before a natal-chart campaign.
+
+Run the bounded independent reference validation after kernel acquisition:
+
+```sh
+node crosscheck/tools/validate-jpl.mjs
+node crosscheck/tools/validate-jpl.mjs --check
+```
+
+It reads public Horizons responses already committed under
+../docs/evidence/calc-api/horizons/, checks their conventions, and evaluates
+a deterministic bounded selection within DE440s coverage. The exact selection,
+TT span, acceptance limits, compared counts, exclusions, source hashes and
+reduction tooling hashes are recorded in reports/jpl-reduction.json. Limits
+are fixed in lib/horizons.mjs before evaluation and tested by
+tests/horizons.test.mjs. They are reference validation checks, not engine
+accuracy bounds. The report includes DE440 versus Horizons DE441 differences
+and CN versus Horizons LT semantics. It writes aggregate markdown, CSV and
+JSON only, and --check requires exact reproduction on the recorded Node
+runtime. A missing or invalid kernel is an error, never a passing skip.
+
+[The reference report](reports/jpl-reduction.md) validates this reduction's
+inertial modes against public JPL output. It evaluates no engine charts.
+The synthetic campaign, engine error report and Swiss integration remain
+later milestones. No public kernel bytes or per-case positions are committed.

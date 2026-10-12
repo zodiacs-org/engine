@@ -10,7 +10,8 @@ operations. All authored and generated files stay inside crosscheck/.
 - [x] M3 Implement index-addressable deterministic synthetic sampling and mergeable streaming statistics, with independent arithmetic tests.
 - [x] M4 Acquire public DE440/DE441 kernels at runtime with source receipts, digest verification, coverage checks and bounded cache chunks.
 - [x] M5a Implement geometric SPK type 2/3 evaluation and explicit center-chain composition with independent polynomial tests.
-- [ ] M5b Implement an independent JPL reduction with explicit TT/TDB, frames, centers and corrections; validate against public JPL references.
+- [x] M5b Implement independent inertial JPL reduction with explicit TT/TDB, exact centers, converged light-time and SPICE stellar aberration; validate against public JPL references.
+- [ ] M5c Add independently validated true-of-date frame rotation and relativistic aberration/solar deflection modes before natal-chart comparisons.
 - [ ] M6 Connect the user-installed external Swiss instrument through the permitted conformance adapter, retaining only verdicts, flags and aggregates.
 - [ ] M7 Implement bounded-memory sharding, atomic checkpoints and resume with configuration and build identity checks.
 - [ ] M8 Generate deterministic markdown and CSV aggregate reports with exact commands, build identities, coverage and exclusions.
@@ -23,3 +24,8 @@ measurement claim. Only actual completed comparisons support error reports.
 Kernels must be chunked so every local file stays below the user's file limit.
 Swiss software and data must reside outside the checkout, even in ignored
 folders. No source or expected value comes from Swiss Ephemeris.
+
+M5b is scoped to ICRF position reduction and SPICE correction semantics.
+The original physical-reduction milestone also needs true-of-date rotation
+and relativistic modes for chart conventions; those remain explicit in M5c.
+Passing inertial validation does not complete that prerequisite.

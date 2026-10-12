@@ -166,3 +166,56 @@ independently authored from the documented layout. No kernel acquisition or
 astronomical comparison was performed in this session. TT/TDB conversion,
 physical corrections, frame reduction and independent public JPL numerical
 validation remain unchecked in M5b; no chart error report exists yet.
+
+
+# M5b validation
+
+The original physical reduction milestone is split again: M5b completes
+inertial ICRF position reduction with SPICE correction semantics; M5c remains
+unchecked for independently validated true-of-date frames and relativistic
+modes required before a natal-chart campaign. This is an explicit scope split,
+not acceptance of missing frame or correction validation.
+
+Executed on Node v22.23.3 using the external executable from M2:
+
+```sh
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/kernels.mjs de440s.bsp
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm --prefix crosscheck test
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/validate-jpl.mjs
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/validate-jpl.mjs --check
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/check.mjs
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm_config_cache="$PWD/crosscheck/runtime/npm-cache" npm run package:contents
+```
+
+Public DE440s acquisition succeeded this time. The catalog MD5 and the
+SHA-256 recorded by the independent conformance validation agree with the
+local receipt. The kernel remains only in ignored bounded cache chunks.
+Opening it again for validation and report reproduction reverified chunks,
+whole-file digests and coverage descriptors.
+
+The full crosscheck suite passes. reduction.test.mjs checks the implicit NAIF
+TT/TDB equation, an analytically selected anomaly, the exact light-time
+solution for an invented linearly moving target, reception-fixed observer,
+analytic stellar rotation, preserved range, unit/frame/mode refusal, invalid
+ranges and nonconvergence. These are arithmetic checks, not physical accuracy
+evidence. horizons.test.mjs checks retained public response conventions,
+malformed and nonfinite rows, increasing epochs, selection, coverage margin
+and fixed validation limits. No expected value comes from the engine or Swiss.
+
+The bounded numerical validation evaluates 150 selected positions against
+JPL Horizons DE441 responses, with zero failed acceptance checks. The exact
+TT span, counts, selection, exclusions, limits, public input hashes, kernel
+identity and reduction tooling hashes are in reports/jpl-reduction.json;
+reports/jpl-reduction.md and reports/jpl-reduction.csv give aggregates.
+This measures the reduction against the selected reference output only,
+including DE440 versus DE441 and correction/model differences. It evaluates
+no engine chart and establishes no engine error bound. Exact report
+reproduction passes with --check on the same Node executable.
+
+The file safeguards and npm dry-run exclusion pass. A separate scan of all
+crosscheck files, including ignored cache and runtime folders, finds every
+file below MAX_FILE_BYTES. The full package-content gate still fails because
+root dist/calc.d.ts is absent; the folder-only constraint prohibits a root
+build. Root engine tests and release gates were not run. No Swiss dependency
+was installed or invoked. Only crosscheck files changed, and git metadata was
+not written. M5c, the runner and the actual chart error report remain pending.
