@@ -1,0 +1,3 @@
+Complete M1: record crosscheck scope and Swiss licensing/retention policy, normalize the harness-managed milestone plan, and add tested file safeguards and npm exclusion checks.
+Complete M2: add locked isolated Node 22 engine builds with verified source/dependency/output fingerprints, tamper tests, and cwd-independent safeguards.
+Complete M3: add deterministic indexed synthetic sampling, lazy shard indices and aggregate-only mergeable statistics with independent arithmetic, rejection and JSON continuation tests.
