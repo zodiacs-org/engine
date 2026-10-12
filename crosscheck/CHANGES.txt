@@ -7,3 +7,4 @@ Complete M5b: add independently tested inertial JPL time/light-time/stellar redu
 Complete M5c: add explicit IAU2006/2000B true-of-date frames and relativistic/single-Sun correction modes, validate against pinned runtime ERFA with reproducible aggregate reports, and document model limitations.
 Complete M6: connect the unchanged permitted external Swiss position adapter with installation path checks, aggregate-only residuals, explicit fallback verdicts, bounded transport and invented protocol tests; live Swiss binding unavailable.
 Complete M7: add aggregate-only lazy shard execution, atomic locked checkpoints, identity-checked resume, deterministic shard merging and interrupted-run safeguards; Node 22 crosscheck suite passes.
+Complete M8: add deterministic aggregate markdown, CSV and JSON reports with campaign identities, commands, coverage, exclusions, partial-run labeling, reproduction and retention safeguards; Node 22 crosscheck suite passes.

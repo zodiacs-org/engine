@@ -279,3 +279,32 @@ also checks npm exclusion through a dry-run with lifecycle scripts disabled.
 All checks passed. Python's importlib.util.find_spec('swisseph') returned no
 binding in this environment; no live Swiss comparison was run and no Swiss
 accuracy or agreement claim is supported by this session.
+
+## M8 aggregate report tooling
+
+Executed with the external Node v22.23.3 executable used in earlier milestones:
+
+```sh
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm --prefix crosscheck test
+node crosscheck/tools/check.mjs
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm_config_cache="$PWD/crosscheck/runtime/npm-cache" npm run package:contents
+git diff --check
+```
+
+The crosscheck suite passes, including the npm dry-run exclusion check.
+Report tests use invented residuals and protocol-independent verdicts. They
+check independently counted means, RMS and maxima, fixed shard merge order,
+exact prefix coverage, null statistics for missing references, CSV quoting,
+explicit partial-run refusal and labeling, campaign tampering, extra raw
+fields, metadata completeness, byte-for-byte reproduction, overwrite refusal,
+path and symlink safeguards, and the report output size limit. Temporary test
+reports are removed; generated runtime bundles stay ignored.
+
+The full package-content gate still fails because root dist/calc.d.ts is
+absent. No root build was run under the folder-only constraint. File safeguards
+and git diff --check pass. Only crosscheck files changed. No Swiss instrument
+was installed or invoked, no kernel was downloaded, and no physical campaign
+or accuracy claim was produced in this milestone. The real bounded comparison
+and committed aggregate error report remain M9. The report command and
+reference labels are caller declarations; checkpoint validation does not
+provide independent provenance authentication.
