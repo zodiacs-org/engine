@@ -12,3 +12,5 @@ export { searchStations, searchRetrogradeIntervals } from './stations.js';
 export type { MotionProvider, StationOptions, RetrogradeOptions, Station, RetrogradeInterval } from './stations.js';
 export { searchEclipses, eclipseGeometry, EclipseEngineAdapter } from './eclipses.js';
 export type { EclipseKind, EclipseModel, EclipseVector, EclipseVectors, EclipseProvider, EclipseOptions, EclipseGeometry, EclipseEvent } from './eclipses.js';
+export { searchVoidOfCourseMoon } from './void.js';
+export type { VoidOfCoursePolicy, VoidOfCourseOptions, VoidOfCourseInterval, UnresolvedMoonSegment, VoidOfCourseResult } from './void.js';

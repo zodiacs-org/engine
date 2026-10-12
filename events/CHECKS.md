@@ -252,3 +252,38 @@ The parent `npm run package:contents` check was attempted and fails because
 `dist/calc.d.ts` is absent, as in earlier sessions. No parent build or archive
 pack was run. Full engine/release gates are not claimed. No git metadata,
 packed source, package version or artifact changed.
+
+
+## M9
+
+Runtime: Node.js 22.22.2, selected with `npm exec --cache
+/tmp/events-npm-cache --package node@22.22.2`. Only `events/` was edited.
+
+Passed:
+
+- Local TypeScript typecheck and the full event test suite on that runtime.
+- Analytic last-contact selection across bodies and signed aspect branches,
+  contact-free signs, clipped starts, entry/exit ownership, wrap, fractional
+  contact enclosures, unresolved tails, strict validation, reverse-ingress
+  rejection, shared budget refusal, cancellation and policy snapshots.
+- Default-adapter integration, parent npm dry-run file-list isolation,
+  `git diff --check`, authored-file size and documentation character checks.
+
+The new policy-mutation test initially expected the first simultaneous contact
+in the deterministic ordering. The implementation retains the last contact;
+its expectation now follows that documented representative ordering. The final
+suite passed. Shared aspect policy validation was extracted locally so the
+composite search validates and snapshots its policy before sampling.
+
+A trailing sign without an observed exit is explicitly unresolved. A leading
+contact-free segment with a known exit is clipped to the window. Contacts at
+entry or exit do not count as interior contacts. Completion inherits the
+existing scanners' conditional sampling assumptions and integer root ordering;
+no independent void-of-course date accuracy or completeness claim is made.
+Existing independent JPL and NASA checks remain passing over their documented
+selections.
+
+The parent `npm run package:contents` check was attempted and fails because
+`dist/calc.d.ts` is absent, as in earlier sessions. No parent build or archive
+pack was run. Full engine/release gates are not claimed. No git metadata,
+packed source, package version or artifact changed.

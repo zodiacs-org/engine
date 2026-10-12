@@ -26,6 +26,26 @@ function validLongitude(x: number): void {
   if (!Number.isFinite(x) || x < 0 || x >= 360) throw new RangeError('Invalid target or provider longitude.');
 }
 
+/** Shared validation and immutable snapshot for composite searches. */
+export function snapshotAspectRules(policy: ExactAspectPolicy): readonly ExactAspectRule[] {
+  if (!policy || Object.keys(policy).some(key => key !== 'aspects') ||
+      !Array.isArray(policy.aspects) || policy.aspects.length === 0) {
+    throw new TypeError('An explicit nonempty aspect policy is required.');
+  }
+  const ids = new Set<string>();
+  const angles = new Set<number>();
+  return policy.aspects.map(rule => {
+    if (!rule || Object.keys(rule).some(key => !['id', 'angleDegrees'].includes(key)) ||
+        typeof rule.id !== 'string' || !/^[A-Za-z][A-Za-z0-9_-]{0,79}$/.test(rule.id) ||
+        !Number.isFinite(rule.angleDegrees) || rule.angleDegrees < 0 || rule.angleDegrees > 180 ||
+        ids.has(rule.id) || angles.has(rule.angleDegrees)) {
+      throw new RangeError('Aspect rules require unique ids and unique finite angles in [0, 180].');
+    }
+    ids.add(rule.id); angles.add(rule.angleDegrees);
+    return Object.freeze({ id: rule.id, angleDegrees: rule.angleDegrees });
+  });
+}
+
 /** Exact contacts only: no orb, applying/separating allowance or closest-aspect selection. */
 export function searchExactAspects(context: EvaluationContext, body: EventBody,
   target: AspectTarget, policy: ExactAspectPolicy, options: LongitudeScanOptions,
@@ -45,22 +65,7 @@ export function searchExactAspects(context: EvaluationContext, body: EventBody,
     }
     frozenTarget = Object.freeze({ kind: 'moving', body: target.body });
   }
-  if (!policy || Object.keys(policy).some(key => key !== 'aspects') ||
-      !Array.isArray(policy.aspects) || policy.aspects.length === 0) {
-    throw new TypeError('An explicit nonempty aspect policy is required.');
-  }
-  const ids = new Set<string>();
-  const angles = new Set<number>();
-  const rules = policy.aspects.map(rule => {
-    if (!rule || Object.keys(rule).some(key => !['id', 'angleDegrees'].includes(key)) ||
-        typeof rule.id !== 'string' || !/^[A-Za-z][A-Za-z0-9_-]{0,79}$/.test(rule.id) ||
-        !Number.isFinite(rule.angleDegrees) || rule.angleDegrees < 0 || rule.angleDegrees > 180 ||
-        ids.has(rule.id) || angles.has(rule.angleDegrees)) {
-      throw new RangeError('Aspect rules require unique ids and unique finite angles in [0, 180].');
-    }
-    ids.add(rule.id); angles.add(rule.angleDegrees);
-    return Object.freeze({ id: rule.id, angleDegrees: rule.angleDegrees });
-  });
+  const rules = snapshotAspectRules(policy);
   if (provider.context !== context) throw new TypeError('Provider must share the search context.');
   // Validate scan options even before a cancelled search, with no sampling.
   if (!options || Object.keys(options).some(key => !['stepMs', 'direction'].includes(key)) ||

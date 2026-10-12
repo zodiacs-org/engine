@@ -7,8 +7,8 @@ remaining features are tracked in [PLAN.md](PLAN.md).
 The current implementation exposes a bracketed scalar root refiner, shared
 search contracts, an evaluation context, a longitude adapter, longitude
 crossing searches, tropical sign ingresses, exact aspects, stations and retrograde
-intervals, and spherical-model solar and lunar eclipses. Void-of-course
-periods, the DSL and the HTTP API remain planned.
+intervals, spherical-model solar and lunar eclipses, and sign-based
+void-of-course Moon intervals. The DSL and the HTTP API remain planned.
 The adapter consumes the parent source through relative imports. The local
 build bundles those imports under `events/build/`.
 
@@ -357,3 +357,61 @@ Independent NASA catalog date and coarse-class comparisons are now enforced
 by [nasa.test.ts](test/nasa.test.ts), with acquisition, attribution, clocks and
 comparison limits documented in [references/NASA.md](references/NASA.md).
 The analytic and adapter tests themselves establish no astronomical accuracy.
+
+
+## Void-of-course Moon
+
+`searchVoidOfCourseMoon(context, policy, { stepMs }, provider?)` searches under
+an explicit `{ bodies, aspects }` policy. Bodies must be unique supported
+non-Moon bodies; aspect rules have the same validation as exact aspects.
+There is no default classical or modern body selection, orb, or sign filter.
+Coordinates and clocks are those of the engine adapter.
+
+For this API, the Moon is void of course after its last exact moving-to-moving
+contact strictly inside a tropical sign and before its next direct sign
+ingress. If there is no contact in a complete sign residence, the entire
+residence is returned. This is an explicit computational convention, with no
+claim that every historical definition uses it. Tangential contacts suppressed
+by the exact-crossing scanner do not count. Relative direction is unrestricted;
+no separate applying-orb test is made.
+
+Intervals carry `startMs`, `endMs`, `sign`, `clock`, `clippedStart` and
+`lastContact`. Contact and ingress root estimates delimit the duration; the
+contact instant and ingress instant are its boundaries. A contact exactly at
+sign entry or exit does not count as a contact inside either sign. Ties use the
+reported integer estimates, with no physical uncertainty allowance. Contacts
+whose enclosures overlap an ingress can therefore be assigned incorrectly at
+that numerical resolution. Simultaneous last contacts choose a deterministic
+representative by target body, aspect id and relative branch.
+
+A leading segment with a known exit can be returned from the window start if
+no later contact occurs before that exit. `clippedStart` then means the actual
+start may precede the window, and `lastContact` is null. A full sign residence
+without contacts has a null last contact and is not clipped. A contact exactly
+at the window start is excluded by the shared window convention and leaves a
+leading interval clipped. Returned spans always have positive duration.
+
+A trailing sign segment without an observed ingress is listed in `unresolved`
+with reason `next-ingress-outside-window`, rather than guessed from the last
+contact found so far. Search completion means the requested scan finished;
+inspect `unresolved` before treating an empty event list as an absence of void
+periods. Extend the context window through the next ingress to resolve it.
+There is no sampling outside the context window or hidden lookahead. An ingress
+at the window end resolves that sign and leaves no trailing unresolved span.
+
+All ingress scans, selected-body aspect scans, refinements and initial-sign
+samples share the evaluation budget and cancellation context. Refusals discard
+both interval and unresolved output. Invalid inputs and provider failures
+propagate. The policy is snapshotted before sampling.
+
+The search assumes continuous direct Moon motion and inherits the ingress
+scanner's monotonic short-arc cell assumptions and the aspect scanner's
+relative-motion assumptions. Observed retrograde Moon ingresses reject the
+search; hidden reversals and contacts remain undetectable from coarse samples.
+A `complete` result does not certify physical or astronomical completeness.
+[void.test.ts](test/void.test.ts) checks analytic last-contact selection,
+multiple bodies, signed aspect branches, wrap, clipping, entry/exit ownership,
+fractional contact enclosures, unresolved tails, validation and refusals.
+Its default-adapter check establishes integration only. No independent
+void-of-course date accuracy measurement is claimed here; the existing JPL
+and NASA fixtures cover only the events documented in their reference guides.
