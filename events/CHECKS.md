@@ -110,3 +110,37 @@ Fixed natal inputs here are synthetic longitudes, with no personal birth data.
 `dist/calc.d.ts`, as in earlier milestones. The parent npm dry-run isolation
 assertion passes. No parent build or archive packing was performed, and full
 engine/release gates are not claimed.
+
+
+## M5
+
+Runtime: Node.js 22.22.2, selected through `npm exec --package node@22.22.2`,
+with an npm cache under `/tmp`. Only `events/` was edited; bundles are local
+and gitignored.
+
+Passed:
+
+- Local TypeScript typecheck and the full event test suite on the stated runtime.
+- Analytic station classification, fractional root enclosure, sampled touches,
+  plateau rejection, initial and final zero handling, clipped intervals,
+  positive-duration sign overlap, wrap partitioning, repeated intervals,
+  negative epochs, a mutually consistent analytic longitude/speed example,
+  hidden paired stations, shared budget refusal, cancellation and validation.
+- Default adapter integration and the parent npm file-list isolation assertion.
+- `git diff --check`, file-size and documentation character checks.
+
+The parent `npm run package:contents` check was attempted and fails because
+`dist/calc.d.ts` is absent, as in earlier sessions. No parent build or archive
+pack was performed. Full engine/release gates are not claimed.
+
+A command initially used repository-relative edit paths from the event folder;
+those edits failed without changing files and were rerun from the repository
+root. The final typecheck and test suite passed after the intended additions.
+
+Station completion assumes continuous speed with isolated, resolved zeros and
+at most one sign-changing zero per scan cell. Sign spans inherit the ingress
+scanner's additional monotonic short-arc assumptions, including cells near
+stations. A final-window zero is unconfirmed and leaves an interval clipped.
+The sign filter uses positive-duration overlap and preserves the full interval.
+Analytic tests establish numerical behavior, and adapter tests establish
+integration only. Independent JPL Horizons dates remain M6.

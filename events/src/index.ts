@@ -8,3 +8,5 @@ export { searchLongitudeCrossings, searchSignIngresses, SIGNS } from './longitud
 export type { LongitudeScanOptions, LongitudeCrossing, CrossingDirection, SignIngress, Sign, LongitudeProvider } from './longitude.js';
 export { searchExactAspects } from './aspects.js';
 export type { ExactAspectRule, ExactAspectPolicy, AspectTarget, ExactAspect } from './aspects.js';
+export { searchStations, searchRetrogradeIntervals } from './stations.js';
+export type { MotionProvider, StationOptions, RetrogradeOptions, Station, RetrogradeInterval } from './stations.js';

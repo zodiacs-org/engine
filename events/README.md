@@ -6,8 +6,8 @@ remaining features are tracked in [PLAN.md](PLAN.md).
 
 The current implementation exposes a bracketed scalar root refiner, shared
 search contracts, an evaluation context, a longitude adapter, longitude
-crossing searches, tropical sign ingresses and exact aspects. Stations, eclipses,
-void-of-course periods, the DSL and the HTTP API remain planned.
+crossing searches, tropical sign ingresses, exact aspects, stations and retrograde
+intervals. Eclipses, void-of-course periods, the DSL and the HTTP API remain planned.
 The adapter consumes the parent source through relative imports. The local
 build bundles those imports under `events/build/`.
 
@@ -219,3 +219,58 @@ discards every contact from earlier branches. Input policy and target values
 are snapshotted before scanning. Invalid provider coordinates and computation
 errors propagate. Tests check analytic aspects and default-adapter integration;
 no independent astronomical timing claim is made before M6.
+
+
+## Stations and retrograde intervals
+
+`searchStations(context, body, { stepMs })` finds sign-changing zeros of
+apparent geocentric tropical longitude speed. A station's `direction` is its
+outgoing motion, `retrograde` or `direct`. It carries its longitude, clock,
+numerical bracket and speed residual in degrees per day. With the default
+adapter this is a root of the parent's finite-difference speed, not an analytic
+instantaneous derivative. A custom `MotionProvider` must charge the same
+context, provide finite speed and longitude, and define mutually consistent
+motion on the declared clock.
+
+Sampled zeros are confirmed by nonzero speed on both sides. Same-sign touches
+are suppressed; consecutive zero-speed samples reject as an unresolved plateau.
+A zero at the window start is excluded from station results, and a zero at the
+end is unconfirmed because no outgoing sample is available. Nonzero sign-change
+brackets are refined with the shared root refiner. The fractional analytic root
+in [stations.test.ts](test/stations.test.ts) enforces the millisecond enclosure
+and checks that the speed residual belongs to the returned estimate.
+
+`searchRetrogradeIntervals(context, body, { stepMs, sign? })` returns spans of
+negative speed intersecting the window, including intervals already underway
+at its start or still underway at its end. `clippedStart` and `clippedEnd`
+mean the corresponding station was not confirmed inside the window; a zero
+at the window end remains clipped. At a start-window zero, the next nonzero
+sample establishes the initial motion under the cell assumptions below.
+The intervals have positive duration. Their numeric endpoints delimit motion
+segments; isolated zero-speed instants do not have duration and are not treated
+as separate retrograde intervals.
+
+Each interval retains its full window-clipped extent and a chronological
+`signSpans` partition from tropical ingresses. The optional sign filter selects
+an interval if any positive-duration span overlaps that sign. It does not
+require the retrograde station to occur in the sign or trim the interval to the
+sign. Thus a future query for Venus retrogrades in Leo means intervals
+intersecting Leo. A boundary touch alone does not match. At an exact sign
+boundary, the following retrograde segment owns the lower sign, including the
+wrap from Aries to Pisces. Analytic overlap and wrap tests in
+[stations.test.ts](test/stations.test.ts) enforce this convention.
+
+Station scanning requires continuous speed with at most one sign-changing
+zero in each cell, and isolated sampled zeros whose neighboring samples resolve
+their motion. Sign partitioning separately inherits the longitude scanner's
+continuous, monotonic, short-arc cell assumptions. A station cell can violate
+that longitude assumption, so sign spans can miss paired ingresses near a
+station. No completeness proof or automatic adaptive subdivision is supplied.
+The paired-station test demonstrates a coarse scan missing both stations and
+a finer scan recovering them. `complete` remains conditional on these sampling
+assumptions. Reducing `stepMs` helps resolve motion but does not certify it.
+
+Stations, ingresses and partition samples share the request budget. Any budget
+or cancellation refusal discards all interval results; invalid samples and
+engine refusals propagate. The default adapter tests establish integration only.
+Independent astronomical station dates and tolerances remain M6.
