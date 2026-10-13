@@ -1,0 +1,186 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "original-meaning-seed-v1",
+  "entries": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "seed-sun-aries",
+      "language": "en",
+      "tradition": "western-tropical",
+      "factor": { "kind": "placement", "body": "Sun", "sign": "aries" },
+      "meaning": {
+        "summary": "As a symbolic prompt, the Sun in Aries invites reflection on taking the first step. Consider where acting on your own initiative helps, and where leaving room for another person's pace makes that initiative more useful.",
+        "themes": ["initiative", "pace", "self-direction"],
+        "epistemicStatus": "symbolic-interpretation"
+      },
+      "provenance": {
+        "kind": "authored",
+        "authors": ["OpenAI Codex (AI assistant)"],
+        "note": "Original prose composed individually for this seed set with AI assistance, outside the generator pipeline. No external interpretation text was copied; no human review is asserted."
+      },
+      "license": { "spdxId": "MIT", "attribution": "Zodiacs interpretation evals seed contributors; AI-assisted authoring by OpenAI Codex." }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "seed-moon-taurus",
+      "language": "en",
+      "tradition": "western-tropical",
+      "factor": { "kind": "placement", "body": "Moon", "sign": "taurus" },
+      "meaning": {
+        "summary": "The Moon in Taurus can frame a reflection on what makes daily life feel steady. Notice which familiar comforts support you and which routines you keep only because changing them would be inconvenient.",
+        "themes": ["steadiness", "comfort", "routine"],
+        "epistemicStatus": "symbolic-interpretation"
+      },
+      "provenance": {
+        "kind": "authored",
+        "authors": ["OpenAI Codex (AI assistant)"],
+        "note": "Original prose composed individually for this seed set with AI assistance, outside the generator pipeline. No external interpretation text was copied; no human review is asserted."
+      },
+      "license": { "spdxId": "MIT", "attribution": "Zodiacs interpretation evals seed contributors; AI-assisted authoring by OpenAI Codex." }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "seed-sun-square-moon",
+      "language": "en",
+      "tradition": "western-tropical",
+      "factor": { "kind": "aspect", "a": "Sun", "b": "Moon", "aspect": "square", "policy": "natal-major-defaults" },
+      "meaning": {
+        "summary": "A Sun-Moon square offers a symbolic way to consider friction between a chosen direction and a need for comfort. Naming both needs may help you explore an adjustment without deciding that either one must be wrong.",
+        "themes": ["competing needs", "adjustment", "self-reflection"],
+        "epistemicStatus": "symbolic-interpretation"
+      },
+      "provenance": {
+        "kind": "authored",
+        "authors": ["OpenAI Codex (AI assistant)"],
+        "note": "Original prose composed individually for this seed set with AI assistance, outside the generator pipeline. No external interpretation text was copied; no human review is asserted."
+      },
+      "license": { "spdxId": "MIT", "attribution": "Zodiacs interpretation evals seed contributors; AI-assisted authoring by OpenAI Codex." }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "seed-venus-trine-mars",
+      "language": "en",
+      "tradition": "western-tropical",
+      "factor": { "kind": "aspect", "a": "Venus", "b": "Mars", "aspect": "trine", "policy": "natal-major-defaults" },
+      "meaning": {
+        "summary": "A Venus-Mars trine can be used as a prompt about bringing preferences into action. Reflect on an activity where enjoyment helps you begin, while remembering that ease alone does not establish another person's agreement or interest.",
+        "themes": ["enjoyment", "action", "cooperation"],
+        "epistemicStatus": "symbolic-interpretation"
+      },
+      "provenance": {
+        "kind": "authored",
+        "authors": ["OpenAI Codex (AI assistant)"],
+        "note": "Original prose composed individually for this seed set with AI assistance, outside the generator pipeline. No external interpretation text was copied; no human review is asserted."
+      },
+      "license": { "spdxId": "MIT", "attribution": "Zodiacs interpretation evals seed contributors; AI-assisted authoring by OpenAI Codex." }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "seed-moon-house-four-whole",
+      "language": "en",
+      "tradition": "western-tropical",
+      "factor": { "kind": "house", "body": "Moon", "house": 4, "houseSystem": "whole" },
+      "meaning": {
+        "summary": "With the Moon placed in the fourth whole-sign house, a symbolic reading can focus on the habits that make a private space feel like home. This invites reflection on belonging without assuming a particular childhood or family arrangement.",
+        "themes": ["home", "belonging", "private routines"],
+        "epistemicStatus": "symbolic-interpretation"
+      },
+      "provenance": {
+        "kind": "authored",
+        "authors": ["OpenAI Codex (AI assistant)"],
+        "note": "Original prose composed individually for this seed set with AI assistance, outside the generator pipeline. No external interpretation text was copied; no human review is asserted."
+      },
+      "license": { "spdxId": "MIT", "attribution": "Zodiacs interpretation evals seed contributors; AI-assisted authoring by OpenAI Codex." }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "seed-saturn-house-ten-placidus",
+      "language": "en",
+      "tradition": "western-tropical",
+      "factor": { "kind": "house", "body": "Saturn", "house": 10, "houseSystem": "placidus" },
+      "meaning": {
+        "summary": "Saturn in the tenth Placidus house can frame a reflection on responsibilities that are visible to others. Consider which commitments deserve sustained effort and which expectations need clearer limits; this placement does not promise or rule out career success.",
+        "themes": ["responsibility", "public role", "limits"],
+        "epistemicStatus": "symbolic-interpretation"
+      },
+      "provenance": {
+        "kind": "authored",
+        "authors": ["OpenAI Codex (AI assistant)"],
+        "note": "Original prose composed individually for this seed set with AI assistance, outside the generator pipeline. No external interpretation text was copied; no human review is asserted."
+      },
+      "license": { "spdxId": "MIT", "attribution": "Zodiacs interpretation evals seed contributors; AI-assisted authoring by OpenAI Codex." }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "seed-mercury-virgo-domicile",
+      "language": "en",
+      "tradition": "western-tropical",
+      "factor": { "kind": "dignity", "body": "Mercury", "sign": "virgo", "dignity": "domicile", "system": "classical-sign" },
+      "meaning": {
+        "summary": "Mercury's domicile in Virgo provides a symbolic image of working with familiar tools for sorting and explaining. Use it to reflect on how a practical distinction can clarify a task, without treating the dignity label as a measurement of intelligence.",
+        "themes": ["discernment", "explanation", "practical tools"],
+        "epistemicStatus": "symbolic-interpretation"
+      },
+      "provenance": {
+        "kind": "authored",
+        "authors": ["OpenAI Codex (AI assistant)"],
+        "note": "Original prose composed individually for this seed set with AI assistance, outside the generator pipeline. No external interpretation text was copied; no human review is asserted."
+      },
+      "license": { "spdxId": "MIT", "attribution": "Zodiacs interpretation evals seed contributors; AI-assisted authoring by OpenAI Codex." }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "seed-mercury-virgo-exaltation",
+      "language": "en",
+      "tradition": "western-tropical",
+      "factor": { "kind": "dignity", "body": "Mercury", "sign": "virgo", "dignity": "exaltation", "system": "classical-sign" },
+      "meaning": {
+        "summary": "Mercury's exaltation in Virgo can prompt a reflection on the value placed on careful analysis. Ask when precision serves the task and when repeated refinement delays sharing something useful. The label does not establish exceptional ability.",
+        "themes": ["precision", "refinement", "usefulness"],
+        "epistemicStatus": "symbolic-interpretation"
+      },
+      "provenance": {
+        "kind": "authored",
+        "authors": ["OpenAI Codex (AI assistant)"],
+        "note": "Original prose composed individually for this seed set with AI assistance, outside the generator pipeline. No external interpretation text was copied; no human review is asserted."
+      },
+      "license": { "spdxId": "MIT", "attribution": "Zodiacs interpretation evals seed contributors; AI-assisted authoring by OpenAI Codex." }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "seed-venus-scorpio-detriment",
+      "language": "en",
+      "tradition": "western-tropical",
+      "factor": { "kind": "dignity", "body": "Venus", "sign": "scorpio", "dignity": "detriment", "system": "classical-sign" },
+      "meaning": {
+        "summary": "Venus in detriment in Scorpio can be read symbolically as a question about expressing affection when trust feels important. Explore how to state a preference and respect a boundary. Detriment is a traditional classification, not a verdict on a person's worth or relationships.",
+        "themes": ["trust", "affection", "boundaries"],
+        "epistemicStatus": "symbolic-interpretation"
+      },
+      "provenance": {
+        "kind": "authored",
+        "authors": ["OpenAI Codex (AI assistant)"],
+        "note": "Original prose composed individually for this seed set with AI assistance, outside the generator pipeline. No external interpretation text was copied; no human review is asserted."
+      },
+      "license": { "spdxId": "MIT", "attribution": "Zodiacs interpretation evals seed contributors; AI-assisted authoring by OpenAI Codex." }
+    },
+    {
+      "schemaVersion": "1.0.0",
+      "id": "seed-mars-cancer-fall",
+      "language": "en",
+      "tradition": "western-tropical",
+      "factor": { "kind": "dignity", "body": "Mars", "sign": "cancer", "dignity": "fall", "system": "classical-sign" },
+      "meaning": {
+        "summary": "Mars in fall in Cancer can frame a symbolic reflection on acting when something familiar needs protection. Consider whether a direct request would communicate that concern more clearly. Fall does not predict conflict or measure a person's courage.",
+        "themes": ["protection", "direct requests", "response"],
+        "epistemicStatus": "symbolic-interpretation"
+      },
+      "provenance": {
+        "kind": "authored",
+        "authors": ["OpenAI Codex (AI assistant)"],
+        "note": "Original prose composed individually for this seed set with AI assistance, outside the generator pipeline. No external interpretation text was copied; no human review is asserted."
+      },
+      "license": { "spdxId": "MIT", "attribution": "Zodiacs interpretation evals seed contributors; AI-assisted authoring by OpenAI Codex." }
+    }
+  ]
+}

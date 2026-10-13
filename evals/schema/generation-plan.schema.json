@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zodiacs:evals:generation-plan:1.0.0",
+  "title": "Interpretation generation plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "seed", "license", "targets"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "id": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/id" },
+    "seed": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+    "license": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/properties/license" },
+    "targets": {
+      "type": "array", "minItems": 1, "maxItems": 255,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "factor", "sourceEntryIds"],
+        "properties": {
+          "id": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/id" },
+          "factor": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/properties/factor" },
+          "sourceEntryIds": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/generatedProvenance/properties/sourceEntryIds" }
+        }
+      }
+    }
+  }
+}

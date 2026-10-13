@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zodiacs:evals:meaning-dataset:1.0.0",
+  "title": "Chart-factor meaning dataset",
+  "description": "A bounded collection of meaning entries. ID uniqueness, provenance references, cycles and seed coverage are checked by the local dataset validator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "entries"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "id": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/id" },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0" }
+    }
+  }
+}
