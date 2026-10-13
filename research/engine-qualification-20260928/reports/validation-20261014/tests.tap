@@ -1,0 +1,292 @@
+TAP version 13
+# Subtest: public API metadata and deduplicated chart timings are returned without a parent import
+ok 1 - public API metadata and deduplicated chart timings are returned without a parent import
+  ---
+  duration_ms: 59.64612
+  type: 'test'
+  ...
+# Subtest: successful rows survive other chart and per-body failures with the complete denominator
+ok 2 - successful rows survive other chart and per-body failures with the complete denominator
+  ---
+  duration_ms: 46.413325
+  type: 'test'
+  ...
+# Subtest: missing and duplicate body rows are errors, never silently omitted
+ok 3 - missing and duplicate body rows are errors, never silently omitted
+  ---
+  duration_ms: 94.984907
+  type: 'test'
+  ...
+# Subtest: ignored pin, changed instant, and mutated call input cannot pass clock validation
+ok 4 - ignored pin, changed instant, and mutated call input cannot pass clock validation
+  ---
+  duration_ms: 180.257809
+  type: 'test'
+  ...
+# Subtest: infinite candidate import is terminated by wall timeout
+ok 5 - infinite candidate import is terminated by wall timeout
+  ---
+  duration_ms: 156.411998
+  type: 'test'
+  ...
+# Subtest: crash and malformed stdout fail closed
+ok 6 - crash and malformed stdout fail closed
+  ---
+  duration_ms: 98.574732
+  type: 'test'
+  ...
+# Subtest: a crash after the first chart preserves earlier results but fills every missing row
+ok 7 - a crash after the first chart preserves earlier results but fills every missing row
+  ---
+  duration_ms: 49.810497
+  type: 'test'
+  ...
+# Subtest: aggregate output cap and stderr cap terminate noisy candidates
+ok 8 - aggregate output cap and stderr cap terminate noisy candidates
+  ---
+  duration_ms: 160.141906
+  type: 'test'
+  ...
+# Subtest: child environment strips Node injection and unrelated parent secrets
+ok 9 - child environment strips Node injection and unrelated parent secrets
+  ---
+  duration_ms: 163.270757
+  type: 'test'
+  ...
+# Subtest: geometry-ignoring pins fail the clock probe despite plausible metadata
+ok 10 - geometry-ignoring pins fail the clock probe despite plausible metadata
+  ---
+  duration_ms: 82.255393
+  type: 'test'
+  ...
+# Subtest: finite clock, unknown-time and repeat probes accept a consistent synthetic API
+ok 11 - finite clock, unknown-time and repeat probes accept a consistent synthetic API
+  ---
+  duration_ms: 91.32068
+  type: 'test'
+  ...
+# Subtest: JSON-cloned probes with reordered object keys preserve the frozen definitions
+ok 12 - JSON-cloned probes with reordered object keys preserve the frozen definitions
+  ---
+  duration_ms: 130.374904
+  type: 'test'
+  ...
+# Subtest: malformed API metadata fails protocol and retains missing result errors
+ok 13 - malformed API metadata fails protocol and retains missing result errors
+  ---
+  duration_ms: 101.217945
+  type: 'test'
+  ...
+# Subtest: limits, case IDs and probe definitions are validated before candidate execution
+ok 14 - limits, case IDs and probe definitions are validated before candidate execution
+  ---
+  duration_ms: 0.859456
+  type: 'test'
+  ...
+# Subtest: reference contract is byte-pinned and explicitly identifies known regression data
+ok 15 - reference contract is byte-pinned and explicitly identifies known regression data
+  ---
+  duration_ms: 5.753554
+  type: 'test'
+  ...
+# Subtest: 210 normalized rows retain the committed epochs, correction choices and centers
+ok 16 - 210 normalized rows retain the committed epochs, correction choices and centers
+  ---
+  duration_ms: 46.286518
+  type: 'test'
+  ...
+# Subtest: reference loader works with relocated authenticated inputs without changing identity
+ok 17 - reference loader works with relocated authenticated inputs without changing identity
+  ---
+  duration_ms: 49.049831
+  type: 'test'
+  ...
+# Subtest: missing raw response is rejected instead of reusing derived coordinates alone
+ok 18 - missing raw response is rejected instead of reusing derived coordinates alone
+  ---
+  duration_ms: 10.016366
+  type: 'test'
+  ...
+# Subtest: raw response, receipt correction and target changes are caught by authenticated bytes
+ok 19 - raw response, receipt correction and target changes are caught by authenticated bytes
+  ---
+  duration_ms: 24.144474
+  type: 'test'
+  ...
+# Subtest: missing, duplicated or epoch-shifted derived vectors cannot silently alter the test set
+ok 20 - missing, duplicated or epoch-shifted derived vectors cannot silently alter the test set
+  ---
+  duration_ms: 41.401763
+  type: 'test'
+  ...
+# Subtest: matrix replacement and altered epoch selection are rejected before normalization
+ok 21 - matrix replacement and altered epoch selection are rejected before normalization
+  ---
+  duration_ms: 10.746481
+  type: 'test'
+  ...
+# Subtest: analytic vector quadrants preserve circular longitude and signed latitude
+ok 22 - analytic vector quadrants preserve circular longitude and signed latitude
+  ---
+  duration_ms: 0.396197
+  type: 'test'
+  ...
+# Subtest: malformed matrices, reflections, nonfinite and zero vectors fail numerical validation
+ok 23 - malformed matrices, reflections, nonfinite and zero vectors fail numerical validation
+  ---
+  duration_ms: 0.410509
+  type: 'test'
+  ...
+# Subtest: reviewer: canonical digests reject sparse/decorated arrays and never invoke accessors
+ok 24 - reviewer: canonical digests reject sparse/decorated arrays and never invoke accessors
+  ---
+  duration_ms: 1.013318
+  type: 'test'
+  ...
+# Subtest: reviewer: whole-installation identity is relocatable and does not execute package code
+ok 25 - reviewer: whole-installation identity is relocatable and does not execute package code
+  ---
+  duration_ms: 17.593608
+  type: 'test'
+  ...
+# Subtest: reviewer: transitive dependency resolution follows each package and records shadowed versions
+ok 26 - reviewer: transitive dependency resolution follows each package and records shadowed versions
+  ---
+  duration_ms: 13.753123
+  type: 'test'
+  ...
+# Subtest: reviewer: changing dependency data changes identity even when all version labels stay fixed
+ok 27 - reviewer: changing dependency data changes identity even when all version labels stay fixed
+  ---
+  duration_ms: 6.793686
+  type: 'test'
+  ...
+# Subtest: reviewer: missing runtime, optional and peer dependencies fail closed
+ok 28 - reviewer: missing runtime, optional and peer dependencies fail closed
+  ---
+  duration_ms: 10.259918
+  type: 'test'
+  ...
+# Subtest: reviewer: dependency resolution outside the standalone tree is refused
+ok 29 - reviewer: dependency resolution outside the standalone tree is refused
+  ---
+  duration_ms: 2.403015
+  type: 'test'
+  ...
+# Subtest: reviewer: internal symlinks are refused even when linked content is unchanged
+ok 30 - reviewer: internal symlinks are refused even when linked content is unchanged
+  ---
+  duration_ms: 1.938394
+  type: 'test'
+  ...
+# Subtest: reviewer: output isolation resolves forbidden-root aliases before creating a directory
+ok 31 - reviewer: output isolation resolves forbidden-root aliases before creating a directory
+  ---
+  duration_ms: 1.657693
+  type: 'test'
+  ...
+# Subtest: reviewer: passing every synthetic gate still cannot qualify an adapter or authorize release
+ok 32 - reviewer: passing every synthetic gate still cannot qualify an adapter or authorize release
+  ---
+  duration_ms: 8.448162
+  type: 'test'
+  ...
+# Subtest: reviewer: preserving an export name does not conceal a removed required function
+ok 33 - reviewer: preserving an export name does not conceal a removed required function
+  ---
+  duration_ms: 6.677504
+  type: 'test'
+  ...
+# Subtest: reviewer: identical inaccurate candidates pass nonregression but fail the absolute residual target
+ok 34 - reviewer: identical inaccurate candidates pass nonregression but fail the absolute residual target
+  ---
+  duration_ms: 5.897348
+  type: 'test'
+  ...
+# Subtest: reviewer: broad improvement cannot hide a single per-case regression
+ok 35 - reviewer: broad improvement cannot hide a single per-case regression
+  ---
+  duration_ms: 8.992763
+  type: 'test'
+  ...
+# Subtest: reviewer: omitted, duplicate, unknown, failed or nonfinite candidate rows never shrink the acceptance denominator
+ok 36 - reviewer: omitted, duplicate, unknown, failed or nonfinite candidate rows never shrink the acceptance denominator
+  ---
+  duration_ms: 30.307301
+  type: 'test'
+  ...
+# Subtest: reviewer: baseline failure prevents a relative claim even when candidate target residuals are zero
+ok 37 - reviewer: baseline failure prevents a relative claim even when candidate target residuals are zero
+  ---
+  duration_ms: 3.933347
+  type: 'test'
+  ...
+# Subtest: reviewer: observation metadata cannot be substituted beneath a valid case ID
+ok 38 - reviewer: observation metadata cannot be substituted beneath a valid case ID
+  ---
+  duration_ms: 11.048162
+  type: 'test'
+  ...
+# Subtest: reviewer: incomplete timing cannot establish the runtime budget
+ok 39 - reviewer: incomplete timing cannot establish the runtime budget
+  ---
+  duration_ms: 4.783442
+  type: 'test'
+  ...
+# Subtest: reviewer: numerical identity excludes timing variation and row arrival order
+ok 40 - reviewer: numerical identity excludes timing variation and row arrival order
+  ---
+  duration_ms: 8.10248
+  type: 'test'
+  ...
+# Subtest: reviewer: a relaxed post-evaluation threshold is refused rather than silently accepted
+ok 41 - reviewer: a relaxed post-evaluation threshold is refused rather than silently accepted
+  ---
+  duration_ms: 0.520655
+  type: 'test'
+  ...
+# Subtest: runner: declaration templates cannot become approval by omission
+ok 42 - runner: declaration templates cannot become approval by omission
+  ---
+  duration_ms: 28.813124
+  type: 'test'
+  ...
+# Subtest: runner: real frozen self-comparison remains unqualified and fails the one-arcsecond target
+ok 43 - runner: real frozen self-comparison remains unqualified and fails the one-arcsecond target
+  ---
+  duration_ms: 552.150335
+  type: 'test'
+  ...
+# Subtest: runner: wrong plan digest blocks before any target executes
+ok 44 - runner: wrong plan digest blocks before any target executes
+  ---
+  duration_ms: 42.957447
+  type: 'test'
+  ...
+# Subtest: runner: same-version bytes changed after plan creation are blocked before execution
+ok 45 - runner: same-version bytes changed after plan creation are blocked before execution
+  ---
+  duration_ms: 169.897191
+  type: 'test'
+  ...
+# Subtest: runner: a deliberately shifted trusted candidate fails per-case nonregression
+ok 46 - runner: a deliberately shifted trusted candidate fails per-case nonregression
+  ---
+  duration_ms: 976.76693
+  type: 'test'
+  ...
+# Subtest: runner: CLI inspect and plan commands do not invoke a candidate module
+ok 47 - runner: CLI inspect and plan commands do not invoke a candidate module
+  ---
+  duration_ms: 448.154708
+  type: 'test'
+  ...
+1..47
+# tests 47
+# suites 0
+# pass 47
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2319.98744

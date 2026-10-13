@@ -42,8 +42,12 @@ No mismatched installation is automatically accepted.
 
 The original `reports/validation-20260928/` evidence is retained unchanged
 and binds to the original digest. It is historical evidence, not evidence
-of a fresh run with this preparation baseline. A new full qualification run
-must use a fresh output directory and the updated declaration.
+of a fresh run with this preparation baseline. The fresh full run in
+[`reports/validation-20261014/`](../reports/validation-20261014/VALIDATION.json)
+uses the updated declaration and passes all 47 tests with zero skips.
+Its preparation log records this replacement inventory check. Exact
+reproduction steps are in the research package's README. Further runs must
+use a fresh output directory.
 
 To reproduce preparation from this research package with Node 22.22.2 and
 its bundled npm 10.9.7 on `PATH` and Python 3.12 or newer:

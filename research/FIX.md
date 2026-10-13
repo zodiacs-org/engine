@@ -1,3 +1,3 @@
 - [x] F1 Provide deterministic standalone rc.10 preparation with dependencies inside the extracted package and exact inventory metadata/lockfile bytes, preserving every integrity check.
-- [ ] F2 Rerun the full qualification suite from a fresh documented setup, retain the evidence, and document exact reproduction steps.
+- [x] F2 Rerun the full qualification suite from a fresh documented setup, retain the evidence, and document exact reproduction steps.
 - [ ] F3 Label the docs as historical rc.10 research rather than current-main qualification and clarify that JPL data is not blanket MIT licensed.

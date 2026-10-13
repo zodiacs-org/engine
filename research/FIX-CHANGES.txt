@@ -1,1 +1,2 @@
 Fix historical rc.10 standalone preparation with a documented source-lock replacement baseline and full inventory verification.
+Record fresh historical rc.10 qualification evidence with 47/47 tests, zero skips, exact reproduction steps, and root test discovery isolation.

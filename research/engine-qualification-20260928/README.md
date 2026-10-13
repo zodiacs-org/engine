@@ -72,6 +72,55 @@ The numerical digest excludes run timestamps and performance timing while bindin
 
 ## Validation and limitations
 
+To reproduce the fresh historical rc.10 validation, start at the engine
+checkout root with Node 22.22.2 and its bundled npm 10.9.7 on `PATH`, and
+Python 3.12 or newer. The retained run used Python 3.13.5. Use the carried
+archive and the reviewed preparation lock; no root build is needed.
+
+```sh
+validation_work=$(mktemp -d /tmp/zodiacs-rc10-validation.XXXXXX)
+python3 research/accuracy-audit-20260928/bootstrap.py \
+  --tarball artifacts/zodiacs-engine-0.1.1-rc.10.tgz \
+  --runtime "$validation_work/runtime" > "$validation_work/preparation.log" 2>&1
+
+# Install a copy of root tooling outside the checkout solely to check discovery.
+mkdir "$validation_work/root-tooling"
+cp package.json package-lock.json "$validation_work/root-tooling/"
+npm ci --prefix "$validation_work/root-tooling" --ignore-scripts --no-audit --no-fund
+PATH="$validation_work/root-tooling/node_modules/.bin:$PATH" \
+  npm test -- --passWithNoTests research > "$validation_work/root-discovery.log" 2>&1
+
+cd research/engine-qualification-20260928
+# This directory must not already exist. Choose another name for a repeat run.
+node scripts/record-validation.mjs \
+  --engine "$validation_work/runtime/package/dist/index.js" \
+  --out reports/validation-local
+cp "$validation_work/preparation.log" "$validation_work/root-discovery.log" reports/validation-local/
+{
+  node --version
+  npm --version
+  python3 --version
+} > reports/validation-local/environment.txt
+```
+
+Check each command's exit status before continuing. Preparation checks the
+whole installation without importing engine code. The recording command
+sets `ZODIACS_ENGINE_PATH` for all tests and refuses a failure or integration
+skip. It also records repeated self-comparison, a synthetic one-degree Sun
+regression, and refusal of a post-plan mutation. Root discovery must report
+`No test files found`; `--passWithNoTests` allows that expected empty selection
+to exit successfully. The root tooling copy is only for this discovery check,
+not the installation used by qualification.
+
+Fresh evidence is in [reports/validation-20261014/VALIDATION.json](reports/validation-20261014/VALIDATION.json):
+47 tests passed, zero failed and zero skipped. `preparation.log` records the
+verified replacement installation digest; `tests.tap`, `environment.txt` and
+`root-discovery.log` retain the test, runtime and discovery output. The two
+self-comparisons have the same numerical digest. The known residual target
+still fails for 168 of 210 rows, so this is successful software validation,
+not a newly qualified engine or an accuracy improvement. Timings, timestamps,
+temporary paths and plan/report hashes may differ between runs.
+
 ```sh
 # Synthetic transport/reference/evaluator controls; real-engine cases skip without the variable.
 npm test
@@ -86,7 +135,7 @@ node scripts/record-validation.mjs \
   --out /absolute/runs/qualification-validation
 ```
 
-Standalone suites use `*.node-test.mjs` to avoid the engine root's Vitest discovery. Recorded evidence is under `reports/validation-20260928/`; the full run has zero integration skips. The degraded candidate is deliberately synthetic and is never represented as an Opus build.
+Standalone suites use `*.node-test.mjs` to avoid the engine root's Vitest discovery. The original `reports/validation-20260928/` evidence is retained unchanged and binds to the original handoff installation, not the reviewed preparation baseline used in the fresh run above. The degraded candidate is deliberately synthetic and is never represented as an Opus build.
 
 The runner measures positions under the current public natal-chart interface. It does not qualify event solvers, all house systems, historical civil-time resolution, birth-time uncertainty bounds, browser/mobile runtimes, arbitrary provider adapters, or predictive interpretations. Reference corrections, axes and target centers remain separately declared. Future fresh holdout acquisition is still needed for stronger generalization evidence.
 
