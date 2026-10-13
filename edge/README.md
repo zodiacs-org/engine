@@ -22,7 +22,9 @@ differs. The [local benchmark runner](docs/benchmarks.md) measures chart,
 houses and transit-scan workloads with recorded provenance. The
 [performance gate](docs/performance-gate.md) verifies comparable evidence and
 fails when a workload exceeds a configurable regression threshold. A measured
-WASM experiment and final CI wiring remain in [PLAN.md](PLAN.md).
+[WASM experiment](docs/wasm.md) retains an isolated compilation path and its
+measurements; its end-to-end acceptance rule failed, so normal bundles keep
+JavaScript. Final CI wiring remains in [PLAN.md](PLAN.md).
 
 The foundation's commands, observed results and the missing-root-build
 limitation are recorded in [M1 validation](docs/evidence/m1-validation.md).
@@ -43,6 +45,8 @@ Benchmark checks and the initial local Node baseline are recorded in
 [M8 and M9 validation](docs/evidence/m8-m9-validation.md).
 Performance gate checks and a comparison with the original baseline are
 recorded in [M10 validation](docs/evidence/m10-validation.md).
+Kernel profiling and the WASM experiment are recorded in
+[M11 validation](docs/evidence/m11-validation.md).
 
 ## Run the foundation
 

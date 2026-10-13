@@ -19,7 +19,7 @@ single session summary to `CHANGES.txt`. The harness owns all git mutations.
 - [x] M8 Add chart, houses and transit-scan micro-benchmarks with warmup, repeated samples, consumed results, workload identity and machine/runtime/build provenance; keep raw runs in ignored folders.
 - [x] M9 Capture and commit compact baseline evidence from the benchmark runner, documenting its host, runtime, sample protocol and limits; keep raw generated data ignored.
 - [x] M10 Add a CI-ready performance gate with a configurable regression threshold, comparable-baseline validation and tests for regressions, malformed data and missing workloads.
-- [ ] M11 Profile numeric kernels and evaluate an isolated WASM compilation path against JavaScript with identical synthetic workloads; record compilation and call overhead, exact-result checks and measured benefits or rejection. Enable a WASM option only if it measurably helps.
+- [x] M11 Profile numeric kernels and evaluate an isolated WASM compilation path against JavaScript with identical synthetic workloads; record compilation and call overhead, exact-result checks and measured benefits or rejection. Enable a WASM option only if it measurably helps.
 - [ ] M12 Document reproducible setup, runtime support and failures, benchmark refresh rules, WASM findings and CI wiring examples entirely under edge; run the complete edge checks and verify package isolation.
 
 ## Validation policy
@@ -41,3 +41,6 @@ in [docs/evidence/m8-m9-validation.md](docs/evidence/m8-m9-validation.md).
 
 M10 validation and the retained live gate regression are recorded in
 [docs/evidence/m10-validation.md](docs/evidence/m10-validation.md).
+
+M11 profiling, exact checks, measured WASM rejection and validation are recorded
+in [docs/evidence/m11-validation.md](docs/evidence/m11-validation.md).

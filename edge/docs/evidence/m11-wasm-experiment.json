@@ -1,0 +1,1786 @@
+{
+  "schema": "edge-wasm-experiment/1",
+  "startedAt": "2026-10-13T10:55:57.720Z",
+  "completedAt": "2026-10-13T10:56:11.014Z",
+  "protocol": {
+    "schema": "edge-wasm-protocol/1",
+    "rounds": 3,
+    "samples": 15,
+    "warmupBatches": 5,
+    "iterations": {
+      "chart": 16,
+      "houses": 512,
+      "transit-scan": 32,
+      "kernel": 256,
+      "identity": 100000
+    },
+    "order": [
+      "kernel",
+      "identity",
+      "chart",
+      "houses",
+      "transit-scan"
+    ],
+    "clock": "process.hrtime.bigint",
+    "unit": "ms/workload-invocation",
+    "pairedOrder": "alternate javascript/wasm then wasm/javascript; invert the first pair each round",
+    "timed": "synchronous workload call plus checksum consumption; exact checks outside timers",
+    "gc": "automatic; no forced collection",
+    "acceptance": {
+      "minimumImprovementPercent": 10,
+      "maximumControlRegressionPercent": 10,
+      "rule": "every round: chart and transit-scan improve by at least 10 percent; houses regresses at most 10 percent; all exact checks pass"
+    }
+  },
+  "provenance": {
+    "machine": {
+      "label": "local-linux-x64",
+      "platform": "linux",
+      "arch": "x64",
+      "release": "6.12.94+",
+      "cpuModels": [
+        "Intel(R) Xeon(R) Processor"
+      ],
+      "logicalCpuCount": 8,
+      "availableParallelism": 8
+    },
+    "runtime": {
+      "name": "node",
+      "node": "22.23.3",
+      "v8": "12.4.254.21-node.57"
+    },
+    "sources": [
+      {
+        "path": "node_modules/assemblyscript/package.json",
+        "bytes": 1681,
+        "sha256": "4c6e97de6da52cdf9d8e76bc00710d32e20a203939ca18d15097af4430016759"
+      },
+      {
+        "path": "node_modules/astronomy-engine/esm/astronomy.js",
+        "bytes": 412025,
+        "sha256": "068f1445ed0c636c94818fe6d20d7d125120e605e0bab9fc4675c3d531be5ad7"
+      },
+      {
+        "path": "node_modules/binaryen/package.json",
+        "bytes": 1396,
+        "sha256": "4a53fb318cfed155b8e30d2f39ca65e6247b2d4e3a11ba7b77c091d116030b34"
+      },
+      {
+        "path": "node_modules/long/package.json",
+        "bytes": 1493,
+        "sha256": "982e554a35d140981c7962fbba77855563e5890de200f8dc0a249135e4d9acb8"
+      },
+      {
+        "path": "package-lock.json",
+        "bytes": 46278,
+        "sha256": "fceddd5b17fbcfcb9ccbd5f543cdc4ff54471313695872517b1c1f0ce7ebef3c"
+      },
+      {
+        "path": "package.json",
+        "bytes": 1165,
+        "sha256": "57a73a33a1ee555a918001829cf2889f06c52be8ea1e523b99733256b7a99959"
+      },
+      {
+        "path": "scripts/benchmark-core.mjs",
+        "bytes": 4159,
+        "sha256": "8469097fafb79d55cab56365e5dbc7bde359a75dc199b12c38b5717eb4b41a74"
+      },
+      {
+        "path": "scripts/benchmark-workloads.mjs",
+        "bytes": 2533,
+        "sha256": "9fb81fc75daa7b2554986847fa7d733b995dd81c01c38640d72d49a857d88d26"
+      },
+      {
+        "path": "scripts/build-support.mjs",
+        "bytes": 2129,
+        "sha256": "be6212996da8658581d0eaeb664023580500ce4c92d8690c16f0c5abde2929c6"
+      },
+      {
+        "path": "scripts/build-wasm.mjs",
+        "bytes": 5859,
+        "sha256": "2d733e3ab5984c4c15a94b6b76654e34307ec9b4031cef6a64fe9f4d3541f49b"
+      },
+      {
+        "path": "scripts/evaluate-wasm.mjs",
+        "bytes": 12159,
+        "sha256": "cb2a3aff9f26df09c6003e338903a7294848229742e03711a46054ea9e6fa5f5"
+      },
+      {
+        "path": "src/exact.ts",
+        "bytes": 10332,
+        "sha256": "d3c8db867a5fc55051ca9d70177f90efe5408ef93ea7060b2d601b7a598cc974"
+      },
+      {
+        "path": "src/workloads.ts",
+        "bytes": 2724,
+        "sha256": "cd6ad2a37b7eee43eede2a6b5183ececd810c8216c69fdd5e3e19c5fc6bcb5c8"
+      },
+      {
+        "path": "tsconfig.json",
+        "bytes": 479,
+        "sha256": "c0dc6bb4d2c4d15d63a7c4243835a445777b7f45ca2aaeace39cd30ac9c4037d"
+      },
+      {
+        "path": "wasm/adapter.mjs",
+        "bytes": 1738,
+        "sha256": "e3754ee0b3fa5f89a3bb014fe9799c4ae59e9ea33b72cd8f53e51d7d2c4db527"
+      },
+      {
+        "path": "wasm/nutation.ts",
+        "bytes": 2301,
+        "sha256": "ae4eb89b8923c1f814818e4dc95b9431d70c89446d0ce910a3b4fa80a2a282a7"
+      },
+      {
+        "path": "../package.json",
+        "bytes": 3840,
+        "sha256": "3cb7206ba19ee61b271fff43686516b758b5fe3483c2061f1282bd95bacff7f2"
+      },
+      {
+        "path": "../src/api.ts",
+        "bytes": 10860,
+        "sha256": "3b597fc7c7e2b828470546862d4484b086a8090bb578eb0785880a9d692ef516"
+      },
+      {
+        "path": "../src/aspects.ts",
+        "bytes": 4920,
+        "sha256": "5cfbf1ffe3889f1c038b798d5bd74674de17bd9f0571adb4be08141cdd49f740"
+      },
+      {
+        "path": "../src/birth-input.ts",
+        "bytes": 3806,
+        "sha256": "9303df6556f84faf72e4c799f04d00692015dfade4f3c4e26d8d797f01f35928"
+      },
+      {
+        "path": "../src/body-label.ts",
+        "bytes": 1168,
+        "sha256": "bce12273949cd9810f4ab00c0f05c1aba14cf4ee46533ca3aba0588525006b1e"
+      },
+      {
+        "path": "../src/configured-aspects.ts",
+        "bytes": 16160,
+        "sha256": "c56349ba454e7cb3005f25eb3b740dd063cfeb3b9115e0d11512d8989ff19be4"
+      },
+      {
+        "path": "../src/crossings.ts",
+        "bytes": 17301,
+        "sha256": "4d33898d572d453de7c70d076b60018068854739f865080959cb800e4542d182"
+      },
+      {
+        "path": "../src/date-input.ts",
+        "bytes": 2014,
+        "sha256": "f9db8865bf143d6334eb93d9618f50aa6a81ba32273b0a103d2a83e3c8014675"
+      },
+      {
+        "path": "../src/declination.ts",
+        "bytes": 15894,
+        "sha256": "a7476e6e4c9af69c0eceaab499feacb8540c4975e5f65813c8cb4485b102ec61"
+      },
+      {
+        "path": "../src/deltat.ts",
+        "bytes": 10438,
+        "sha256": "2ce7e227bdf0e75bc2401793b8b09ed4113d80d8845376fbec7d0129c12f8b27"
+      },
+      {
+        "path": "../src/ephemeris.ts",
+        "bytes": 16367,
+        "sha256": "b530dbd0463b886fe1b8e99a095dc9cf9ef0cf614b6854e78ad206a27913cc7e"
+      },
+      {
+        "path": "../src/exact.ts",
+        "bytes": 4372,
+        "sha256": "f89a335657aa1139370511d315abcf8d6080ab857e0a37d249faf9de6a5eb25e"
+      },
+      {
+        "path": "../src/frame.ts",
+        "bytes": 4393,
+        "sha256": "98d0bee44839b23d3ec64dac470e31ab8e366c6907d325a4259f8f37285a7c50"
+      },
+      {
+        "path": "../src/houses.ts",
+        "bytes": 19663,
+        "sha256": "e97ea80f5f225fadf0bfcb051f0afcce820678f31ff1013cc0ebce3035cc8ceb"
+      },
+      {
+        "path": "../src/index.ts",
+        "bytes": 3747,
+        "sha256": "a7b8430da0e398e27743eb9ed7bfe8976e370e5fca002dc728308f5b98134644"
+      },
+      {
+        "path": "../src/nutation.ts",
+        "bytes": 8359,
+        "sha256": "c11af594d4e8ad64e0a7ff1097505063c70812d2da84e14a6c0280d4841e62b0"
+      },
+      {
+        "path": "../src/points.ts",
+        "bytes": 6583,
+        "sha256": "707e59ecdca3874e7c2830c2f7630628dd83b4ae13a97957ec3c623d5ebdf838"
+      },
+      {
+        "path": "../src/progressions.ts",
+        "bytes": 1986,
+        "sha256": "5d92c812e26d7a3fc3859260f20801a851b1b0ec01862ec47a953e956f36dcd0"
+      },
+      {
+        "path": "../src/reference-span.ts",
+        "bytes": 2068,
+        "sha256": "5bce5a05494448a5740027c078527ab4fb7b0c02f71ff83465c01fd085a4d996"
+      },
+      {
+        "path": "../src/returns.ts",
+        "bytes": 4306,
+        "sha256": "a6d4246f25e8f27ef25165d249a47fb88c1fd8214f5217aa0333a6debfada263"
+      },
+      {
+        "path": "../src/signs.ts",
+        "bytes": 3607,
+        "sha256": "c8d16ee8bb05a0eb0b41dd6d5912bd43f9c6a93d6dee857cb4530e1dc8a4a590"
+      },
+      {
+        "path": "../src/synastry.ts",
+        "bytes": 2469,
+        "sha256": "5671b43c9647a7164d171d9113ae4ab375b7f2a18cba53fac481e4c7a0522d29"
+      },
+      {
+        "path": "../src/time-scale-data.ts",
+        "bytes": 7338,
+        "sha256": "44c6b80db298e55a050b59cb75975ba2059abb775b16b849022ee5a5849280a0"
+      },
+      {
+        "path": "../src/time-scale.ts",
+        "bytes": 12443,
+        "sha256": "6358ab9f119f55e367b7a8cb601c0ed2a6fa0a1b083a8e48b2aa59cd96c7b9d6"
+      },
+      {
+        "path": "../src/types.ts",
+        "bytes": 8021,
+        "sha256": "36df3203e30792faff1ad5671e26ff5c03789c3dd6adee7d9ec357e2335b2353"
+      }
+    ],
+    "sourceDigest": "8c58949a7f3d25de738529246f6adbb8d1071ce266af4a5060c7841609604c79",
+    "builds": [
+      {
+        "kind": "javascript",
+        "engineVersion": "1.0.0",
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "toolchain": {
+          "node": "v22.23.3",
+          "esbuild": "0.27.7"
+        },
+        "bytes": 142990,
+        "sha256": "0b8c3ff42c98c8608de26bd2a8cc2855c28141d624ebdc21a1ff959adcbb833e"
+      },
+      {
+        "kind": "wasm",
+        "engineVersion": "1.0.0",
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "toolchain": {
+          "node": "v22.23.3",
+          "esbuild": "0.27.7"
+        },
+        "bytes": 143693,
+        "sha256": "c5d8603c4e873888d7b420b3eced3b73a5a1cf9801d2627230fbd12339f01e48"
+      }
+    ]
+  },
+  "compilation": {
+    "name": "assemblyscript",
+    "version": "0.28.9",
+    "args": [
+      "wasm/nutation.ts",
+      "--outFile",
+      ".generated/wasm/nutation.wasm",
+      "--optimizeLevel",
+      "3",
+      "--shrinkLevel",
+      "0",
+      "--runtime",
+      "stub",
+      "--initialMemory",
+      "1",
+      "--maximumMemory",
+      "1"
+    ],
+    "elapsedNs": 793814327,
+    "outputBytes": 742,
+    "outputSha256": "544ce740e5da56fa7035b79fd4396e3907391de239caced9190515efd894dd93"
+  },
+  "startup": {
+    "validationModuleCompileNs": 126058,
+    "samples": [
+      {
+        "moduleCompileNs": 53032,
+        "instantiateAndTablesNs": 651427
+      },
+      {
+        "moduleCompileNs": 21380,
+        "instantiateAndTablesNs": 132080
+      },
+      {
+        "moduleCompileNs": 8222,
+        "instantiateAndTablesNs": 64622
+      },
+      {
+        "moduleCompileNs": 3416,
+        "instantiateAndTablesNs": 63730
+      },
+      {
+        "moduleCompileNs": 3125,
+        "instantiateAndTablesNs": 61729
+      },
+      {
+        "moduleCompileNs": 2896,
+        "instantiateAndTablesNs": 61475
+      },
+      {
+        "moduleCompileNs": 3931,
+        "instantiateAndTablesNs": 58258
+      },
+      {
+        "moduleCompileNs": 4697,
+        "instantiateAndTablesNs": 106458
+      },
+      {
+        "moduleCompileNs": 6437,
+        "instantiateAndTablesNs": 67500
+      },
+      {
+        "moduleCompileNs": 5590,
+        "instantiateAndTablesNs": 63428
+      },
+      {
+        "moduleCompileNs": 4039,
+        "instantiateAndTablesNs": 64642
+      }
+    ],
+    "method": "validationModuleCompileNs is the first observed Module construction after WebAssembly.validate; samples are cached repeats; instantiation includes copying tables"
+  },
+  "exact": {
+    "kernel": {
+      "comparisons": 16784,
+      "outputFields": [
+        "dpsi",
+        "deps",
+        "om"
+      ],
+      "grid": {
+        "fromCenturiesTT": -2,
+        "toCenturiesTT": 2,
+        "intervals": 4000,
+        "terms": [
+          0,
+          1,
+          5,
+          77
+        ]
+      },
+      "supplementalCenturiesTT": [
+        "-20",
+        "-2",
+        "-1",
+        "-0",
+        "0",
+        "Number.MIN_VALUE",
+        "-Number.MIN_VALUE",
+        "1",
+        "2",
+        "20"
+      ],
+      "supplementalTerms": "every integer from 0 through 77",
+      "expectedBinary64Sha256": "871f1d7a68998f5f83cb56df76ab3f5cb13e4f2922d1bfe52acbbdd1b86ed498",
+      "equal": true
+    },
+    "workloads": {
+      "equal": true,
+      "sha256": "d88ccb3e93309cdf3e3f761d46c3660a280f60c56966bdc45d4ba17671643370"
+    },
+    "memory": {
+      "initialBytes": 65536,
+      "finalBytes": 65536
+    }
+  },
+  "workloadSet": {
+    "kernel": {
+      "centuriesTT": [
+        -2,
+        -1.9365079365079365,
+        -1.873015873015873,
+        -1.8095238095238095,
+        -1.746031746031746,
+        -1.6825396825396826,
+        -1.619047619047619,
+        -1.5555555555555556,
+        -1.492063492063492,
+        -1.4285714285714286,
+        -1.3650793650793651,
+        -1.3015873015873016,
+        -1.2380952380952381,
+        -1.1746031746031746,
+        -1.1111111111111112,
+        -1.0476190476190477,
+        -0.9841269841269842,
+        -0.9206349206349207,
+        -0.8571428571428572,
+        -0.7936507936507937,
+        -0.7301587301587302,
+        -0.6666666666666667,
+        -0.6031746031746033,
+        -0.5396825396825398,
+        -0.4761904761904763,
+        -0.4126984126984128,
+        -0.3492063492063493,
+        -0.2857142857142858,
+        -0.22222222222222232,
+        -0.15873015873015883,
+        -0.09523809523809534,
+        -0.031746031746031855,
+        0.03174603174603163,
+        0.09523809523809534,
+        0.1587301587301586,
+        0.22222222222222232,
+        0.2857142857142856,
+        0.3492063492063493,
+        0.41269841269841256,
+        0.4761904761904763,
+        0.5396825396825395,
+        0.6031746031746033,
+        0.6666666666666665,
+        0.7301587301587302,
+        0.7936507936507935,
+        0.8571428571428572,
+        0.9206349206349205,
+        0.9841269841269842,
+        1.0476190476190474,
+        1.1111111111111112,
+        1.1746031746031744,
+        1.2380952380952381,
+        1.3015873015873014,
+        1.3650793650793651,
+        1.4285714285714284,
+        1.492063492063492,
+        1.5555555555555554,
+        1.619047619047619,
+        1.6825396825396823,
+        1.746031746031746,
+        1.8095238095238093,
+        1.873015873015873,
+        1.9365079365079363,
+        2
+      ],
+      "terms": 77
+    },
+    "identity": "constant scalar round-trip plus checksum loop; JS may inline this lower-bound control",
+    "engine": [
+      {
+        "id": "chart",
+        "inputs": [
+          {
+            "id": "whole-utc",
+            "input": {
+              "utc": "2000-03-20T12:34:56Z",
+              "latitude": 35.25,
+              "longitude": -110.75,
+              "houseSystem": "whole"
+            }
+          },
+          {
+            "id": "southern-placidus",
+            "input": {
+              "utc": "1987-08-14T03:21:00Z",
+              "latitude": -33.5,
+              "longitude": 151.25,
+              "houseSystem": "placidus"
+            }
+          },
+          {
+            "id": "polar-koch",
+            "input": {
+              "utc": "2024-12-03T07:08:09Z",
+              "latitude": 78,
+              "longitude": 16,
+              "houseSystem": "koch"
+            }
+          },
+          {
+            "id": "untimed",
+            "input": {
+              "utc": "2001-02-03T08:30:00Z",
+              "timeKnown": false
+            }
+          }
+        ],
+        "unit": "one chartWorkload call, including every CHART_CASES input"
+      },
+      {
+        "id": "houses",
+        "inputs": {
+          "cases": [
+            {
+              "id": "north",
+              "input": {
+                "gastHours": 8.25,
+                "latitude": 35.25,
+                "longitude": -110.75,
+                "obliquity": 23.44
+              }
+            },
+            {
+              "id": "south",
+              "input": {
+                "gastHours": 19.5,
+                "latitude": -33.5,
+                "longitude": 151.25,
+                "obliquity": 23.44
+              }
+            },
+            {
+              "id": "polar",
+              "input": {
+                "gastHours": 2.5,
+                "latitude": 78,
+                "longitude": 16,
+                "obliquity": 23.44
+              }
+            }
+          ],
+          "systems": [
+            "whole",
+            "placidus",
+            "porphyry",
+            "equal",
+            "equal-mc",
+            "vehlow",
+            "koch",
+            "regiomontanus",
+            "campanus",
+            "topocentric",
+            "alcabitius",
+            "morinus",
+            "meridian"
+          ]
+        },
+        "unit": "one housesWorkload call, including every HOUSE_CASES and HOUSE_SYSTEMS pair"
+      },
+      {
+        "id": "transit-scan",
+        "inputs": {
+          "body": "Sun",
+          "longitude": 0,
+          "from": "2000-03-01T00:00:00Z",
+          "to": "2000-04-01T00:00:00Z",
+          "options": {
+            "stepDays": 1,
+            "maxSamples": 1024
+          }
+        },
+        "unit": "one transitScanWorkload call over the complete TRANSIT_CASE interval"
+      }
+    ]
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "results": [
+        {
+          "id": "kernel",
+          "iterations": 256,
+          "checksum": 4951.470719626716,
+          "warmupNs": {
+            "javascript": [
+              31439873,
+              28754631,
+              26813364,
+              26954562,
+              28497503
+            ],
+            "wasm": [
+              16330891,
+              16028989,
+              15104851,
+              15299208,
+              15589714
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              27724266,
+              28083970,
+              25864884,
+              27202942,
+              27512607,
+              28007000,
+              28805907,
+              26761735,
+              28000093,
+              26908951,
+              27165877,
+              27555834,
+              26739574,
+              27421048,
+              27179214
+            ],
+            "wasm": [
+              15850447,
+              15615786,
+              15304056,
+              14696358,
+              15841949,
+              16407654,
+              15301839,
+              15391302,
+              16507744,
+              15017892,
+              15765538,
+              16192904,
+              14823752,
+              15221254,
+              15270825
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.101034703125,
+            "medianMs": 0.10711346875,
+            "p95Ms": 0.11252307421875,
+            "maxMs": 0.11252307421875,
+            "madMs": 0.0020003789062500027
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.0574076484375,
+            "medianMs": 0.0601222734375,
+            "p95Ms": 0.064483375,
+            "maxMs": 0.064483375,
+            "madMs": 0.0014618593749999992
+          }
+        },
+        {
+          "id": "identity",
+          "iterations": 100000,
+          "checksum": 12500,
+          "warmupNs": {
+            "javascript": [
+              2650268,
+              1061287,
+              1010322,
+              1073281,
+              989293
+            ],
+            "wasm": [
+              3097653,
+              1579277,
+              1481300,
+              1750600,
+              1538088
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              1144680,
+              1053527,
+              1038682,
+              982128,
+              1025990,
+              980787,
+              1003893,
+              1051611,
+              1407102,
+              968948,
+              1023653,
+              1174545,
+              998399,
+              1012700,
+              1019596
+            ],
+            "wasm": [
+              1581391,
+              1507119,
+              1591908,
+              1731023,
+              1505211,
+              1505304,
+              1500715,
+              1505269,
+              1860130,
+              1509493,
+              1474677,
+              1456175,
+              1550508,
+              1663453,
+              1543509
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.00000968948,
+            "medianMs": 0.00001023653,
+            "p95Ms": 0.000014071020000000001,
+            "maxMs": 0.000014071020000000001,
+            "madMs": 2.795800000000001e-7
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.00001456175,
+            "medianMs": 0.00001509493,
+            "p95Ms": 0.000018601299999999998,
+            "maxMs": 0.000018601299999999998,
+            "madMs": 3.4816000000000007e-7
+          }
+        },
+        {
+          "id": "chart",
+          "iterations": 16,
+          "checksum": 145069.62222260053,
+          "warmupNs": {
+            "javascript": [
+              65998478,
+              50507807,
+              45736005,
+              44863409,
+              40645986
+            ],
+            "wasm": [
+              60689007,
+              67998445,
+              48326431,
+              41729983,
+              38729946
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              38710270,
+              39521135,
+              41090186,
+              48733351,
+              38651558,
+              36128234,
+              35882321,
+              39760849,
+              38789182,
+              36459537,
+              37869167,
+              38639820,
+              36934955,
+              38533091,
+              39432487
+            ],
+            "wasm": [
+              37654928,
+              37386015,
+              36021286,
+              36068282,
+              51432442,
+              37460463,
+              34663248,
+              35167842,
+              35434956,
+              34825582,
+              36445852,
+              36625041,
+              40754169,
+              36699884,
+              37641239
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 2.2426450625,
+            "medianMs": 2.415722375,
+            "p95Ms": 3.0458344375,
+            "maxMs": 3.0458344375,
+            "madMs": 0.054348562499999975
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 2.166453,
+            "medianMs": 2.2890650625,
+            "p95Ms": 3.214527625,
+            "maxMs": 3.214527625,
+            "madMs": 0.06351237499999973
+          }
+        },
+        {
+          "id": "houses",
+          "iterations": 512,
+          "checksum": 47685492.41523996,
+          "warmupNs": {
+            "javascript": [
+              47993718,
+              47310696,
+              36813899,
+              36148454,
+              46501037
+            ],
+            "wasm": [
+              46772580,
+              42687074,
+              36695783,
+              35755570,
+              38308056
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              35893888,
+              37047296,
+              36817296,
+              36877754,
+              36550569,
+              36829841,
+              61062369,
+              37211843,
+              37202546,
+              36705162,
+              35953664,
+              36485035,
+              35998254,
+              59712126,
+              38403265
+            ],
+            "wasm": [
+              36028654,
+              37307028,
+              37487584,
+              37503314,
+              37172614,
+              37766910,
+              39056789,
+              37285502,
+              37462567,
+              36729868,
+              37232190,
+              37636832,
+              36958822,
+              37229885,
+              36436621
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.07010525,
+            "medianMs": 0.071933283203125,
+            "p95Ms": 0.119262439453125,
+            "maxMs": 0.119262439453125,
+            "madMs": 0.0007279394531249928
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.07036846484375,
+            "medianMs": 0.07282324609375,
+            "p95Ms": 0.076282791015625,
+            "maxMs": 0.076282791015625,
+            "madMs": 0.00042541406250000413
+          }
+        },
+        {
+          "id": "transit-scan",
+          "iterations": 32,
+          "checksum": 30513208636.384007,
+          "warmupNs": {
+            "javascript": [
+              16830708,
+              15839939,
+              15472855,
+              15462196,
+              15233887
+            ],
+            "wasm": [
+              14746305,
+              13748389,
+              13584368,
+              14073409,
+              14101296
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              14931439,
+              15590167,
+              14571261,
+              14545776,
+              14558453,
+              14437323,
+              14445340,
+              13879946,
+              13931273,
+              14084024,
+              13553666,
+              14832435,
+              13748410,
+              13793689,
+              13904363
+            ],
+            "wasm": [
+              13838528,
+              14217292,
+              13538877,
+              13313174,
+              12919296,
+              12638920,
+              13066822,
+              12611337,
+              13038953,
+              12752239,
+              12607972,
+              28392770,
+              12616513,
+              12734511,
+              13006194
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.4235520625,
+            "medianMs": 0.45116634375,
+            "p95Ms": 0.48719271875,
+            "maxMs": 0.48719271875,
+            "madMs": 0.015441125
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.393999125,
+            "medianMs": 0.4064435625,
+            "p95Ms": 0.8872740625,
+            "maxMs": 0.8872740625,
+            "madMs": 0.011477312500000003
+          }
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "results": [
+        {
+          "id": "kernel",
+          "iterations": 256,
+          "checksum": 4951.470719626716,
+          "warmupNs": {
+            "javascript": [
+              26609873,
+              26528946,
+              26670334,
+              26239401,
+              26351650
+            ],
+            "wasm": [
+              15082553,
+              15251174,
+              14867378,
+              14859823,
+              15312863
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              27326688,
+              27221657,
+              30099001,
+              26756361,
+              26107116,
+              25653096,
+              26932923,
+              26854132,
+              26052734,
+              26118679,
+              26650076,
+              27141619,
+              27536909,
+              26244717,
+              25201273
+            ],
+            "wasm": [
+              16227974,
+              15257406,
+              15261919,
+              14864031,
+              14392012,
+              15184486,
+              15474719,
+              14770125,
+              14970076,
+              15181805,
+              14664630,
+              15664455,
+              15201889,
+              14780468,
+              14181561
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.09844247265625,
+            "medianMs": 0.10451703515625,
+            "p95Ms": 0.11757422265625,
+            "maxMs": 0.11757422265625,
+            "madMs": 0.0022278398437500097
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.05539672265625,
+            "medianMs": 0.05930392578125,
+            "p95Ms": 0.0633905234375,
+            "maxMs": 0.0633905234375,
+            "madMs": 0.0012413046875
+          }
+        },
+        {
+          "id": "identity",
+          "iterations": 100000,
+          "checksum": 12500,
+          "warmupNs": {
+            "javascript": [
+              1000315,
+              868407,
+              1032506,
+              1034584,
+              1010309
+            ],
+            "wasm": [
+              1823065,
+              1446445,
+              1453401,
+              1567091,
+              1341339
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              942864,
+              1049362,
+              1028487,
+              1163538,
+              1062520,
+              1009218,
+              1036040,
+              950206,
+              996823,
+              1021405,
+              1079419,
+              1092769,
+              1019149,
+              938346,
+              1115217
+            ],
+            "wasm": [
+              1358836,
+              1468306,
+              1435844,
+              1396317,
+              1418292,
+              1440611,
+              1902890,
+              1409979,
+              1369798,
+              1493038,
+              1377181,
+              1443063,
+              1286190,
+              1288236,
+              1483962
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.00000938346,
+            "medianMs": 0.00001028487,
+            "p95Ms": 0.000011635379999999999,
+            "maxMs": 0.000011635379999999999,
+            "madMs": 3.403299999999995e-7
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.0000128619,
+            "medianMs": 0.000014182919999999999,
+            "p95Ms": 0.0000190289,
+            "maxMs": 0.0000190289,
+            "madMs": 4.849400000000005e-7
+          }
+        },
+        {
+          "id": "chart",
+          "iterations": 16,
+          "checksum": 145069.62222260053,
+          "warmupNs": {
+            "javascript": [
+              40449595,
+              36838677,
+              35833192,
+              36605380,
+              35635119
+            ],
+            "wasm": [
+              43740670,
+              33862518,
+              33920483,
+              35652655,
+              35821523
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              37199156,
+              37192461,
+              41409580,
+              36083650,
+              37757868,
+              36117510,
+              35020602,
+              33548598,
+              36756800,
+              34958312,
+              35844971,
+              36418479,
+              34386421,
+              33738962,
+              35691494
+            ],
+            "wasm": [
+              35265180,
+              36679500,
+              35797304,
+              34505828,
+              34517400,
+              34226735,
+              33921290,
+              34723385,
+              35068822,
+              35908081,
+              34229405,
+              35246363,
+              33439140,
+              32675923,
+              33370565
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 2.096787375,
+            "medianMs": 2.255228125,
+            "p95Ms": 2.58809875,
+            "maxMs": 2.58809875,
+            "madMs": 0.06930068750000018
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 2.0422451875,
+            "medianMs": 2.1573375,
+            "p95Ms": 2.29246875,
+            "maxMs": 2.29246875,
+            "madMs": 0.045560187500000016
+          }
+        },
+        {
+          "id": "houses",
+          "iterations": 512,
+          "checksum": 47685492.41523996,
+          "warmupNs": {
+            "javascript": [
+              34109027,
+              32628891,
+              34994429,
+              35145127,
+              33722401
+            ],
+            "wasm": [
+              34617698,
+              33716472,
+              34024568,
+              35363693,
+              33946934
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              34324675,
+              35392769,
+              34300337,
+              34313414,
+              36380265,
+              36301878,
+              34867095,
+              35641000,
+              36528311,
+              36228933,
+              36807454,
+              36648493,
+              35023357,
+              36128539,
+              37028626
+            ],
+            "wasm": [
+              34357240,
+              35756286,
+              34336989,
+              35009564,
+              36303921,
+              35598654,
+              34959733,
+              36596914,
+              36490711,
+              35553068,
+              36092840,
+              35656635,
+              34802420,
+              37598994,
+              37290726
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.066992845703125,
+            "medianMs": 0.070563552734375,
+            "p95Ms": 0.07232153515625,
+            "maxMs": 0.07232153515625,
+            "madMs": 0.001326005859374993
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.067064431640625,
+            "medianMs": 0.069641865234375,
+            "p95Ms": 0.07343553515625,
+            "maxMs": 0.07343553515625,
+            "madMs": 0.0013611367187500029
+          }
+        },
+        {
+          "id": "transit-scan",
+          "iterations": 32,
+          "checksum": 30513208636.384007,
+          "warmupNs": {
+            "javascript": [
+              14268450,
+              13882831,
+              13740230,
+              14679848,
+              14171364
+            ],
+            "wasm": [
+              13242156,
+              12782482,
+              12879404,
+              13414680,
+              12506993
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              13903037,
+              14222676,
+              13840677,
+              13064665,
+              12675610,
+              13449307,
+              11802310,
+              11715455,
+              12641914,
+              12481731,
+              12677055,
+              12473208,
+              12437974,
+              12235065,
+              12849758
+            ],
+            "wasm": [
+              12921393,
+              12826093,
+              13174647,
+              12104609,
+              12102553,
+              11493739,
+              11046595,
+              10666270,
+              11287541,
+              11397153,
+              11337558,
+              11562474,
+              11269219,
+              11203855,
+              11044438
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.36610796875,
+            "medianMs": 0.3961128125,
+            "p95Ms": 0.444458625,
+            "maxMs": 0.444458625,
+            "madMs": 0.01215796874999997
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.3333209375,
+            "medianMs": 0.35616103125,
+            "p95Ms": 0.41170771875,
+            "maxMs": 0.41170771875,
+            "madMs": 0.010954937499999984
+          }
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "results": [
+        {
+          "id": "kernel",
+          "iterations": 256,
+          "checksum": 4951.470719626716,
+          "warmupNs": {
+            "javascript": [
+              24938647,
+              25973835,
+              27693221,
+              27467903,
+              26297153
+            ],
+            "wasm": [
+              14480315,
+              15115509,
+              15316175,
+              15462494,
+              14777563
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              25981102,
+              26463702,
+              26902074,
+              27129218,
+              27631040,
+              30346698,
+              27077338,
+              41197994,
+              28658573,
+              28032436,
+              26678677,
+              26137929,
+              27405400,
+              27378559,
+              26106215
+            ],
+            "wasm": [
+              14651648,
+              14677028,
+              15305000,
+              15565626,
+              19812778,
+              21455668,
+              22333271,
+              22989260,
+              15270285,
+              15004824,
+              14548761,
+              13907478,
+              15532011,
+              15202348,
+              14412754
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.1014886796875,
+            "medianMs": 0.1059735078125,
+            "p95Ms": 0.1609296640625,
+            "maxMs": 0.1609296640625,
+            "madMs": 0.002599671875000001
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.0543260859375,
+            "medianMs": 0.05964955078125,
+            "p95Ms": 0.089801796875,
+            "maxMs": 0.089801796875,
+            "madMs": 0.0024165507812499987
+          }
+        },
+        {
+          "id": "identity",
+          "iterations": 100000,
+          "checksum": 12500,
+          "warmupNs": {
+            "javascript": [
+              970778,
+              936211,
+              1023407,
+              1061637,
+              1000075
+            ],
+            "wasm": [
+              1274296,
+              1392792,
+              1377044,
+              1831210,
+              1444900
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              949952,
+              1147305,
+              1033790,
+              869233,
+              964507,
+              940265,
+              1121048,
+              1060853,
+              1050602,
+              1007137,
+              1017225,
+              879361,
+              857111,
+              886783,
+              988539
+            ],
+            "wasm": [
+              1321116,
+              1513827,
+              1554047,
+              1393986,
+              1436909,
+              1368772,
+              1530786,
+              1336850,
+              1768186,
+              1462331,
+              1505444,
+              1359164,
+              1393507,
+              1307001,
+              1458225
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.000008571109999999999,
+            "medianMs": 0.00000988539,
+            "p95Ms": 0.00001147305,
+            "maxMs": 0.00001147305,
+            "madMs": 6.206299999999992e-7
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.00001307001,
+            "medianMs": 0.00001436909,
+            "p95Ms": 0.00001768186,
+            "maxMs": 0.00001768186,
+            "madMs": 7.691799999999996e-7
+          }
+        },
+        {
+          "id": "chart",
+          "iterations": 16,
+          "checksum": 145069.62222260053,
+          "warmupNs": {
+            "javascript": [
+              39916150,
+              38099764,
+              36003891,
+              37093329,
+              36073238
+            ],
+            "wasm": [
+              39506394,
+              37908346,
+              34084086,
+              33933050,
+              34970672
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              34576776,
+              37389015,
+              38091865,
+              33701465,
+              35004019,
+              36946863,
+              35709814,
+              34111053,
+              34981139,
+              35705073,
+              34898330,
+              36399466,
+              35931702,
+              35099779,
+              35109896
+            ],
+            "wasm": [
+              33337172,
+              34218242,
+              36401573,
+              34327063,
+              33528073,
+              33501384,
+              32814784,
+              33618077,
+              34842334,
+              34113817,
+              33199062,
+              33422695,
+              34847372,
+              33695734,
+              34115485
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 2.1063415625,
+            "medianMs": 2.1943685,
+            "p95Ms": 2.3807415625,
+            "maxMs": 2.3807415625,
+            "madMs": 0.03749487500000015
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 2.050924,
+            "medianMs": 2.105983375,
+            "p95Ms": 2.2750983125,
+            "maxMs": 2.2750983125,
+            "madMs": 0.026234437499999874
+          }
+        },
+        {
+          "id": "houses",
+          "iterations": 512,
+          "checksum": 47685492.41523996,
+          "warmupNs": {
+            "javascript": [
+              35116582,
+              33416816,
+              32930672,
+              35835914,
+              35485759
+            ],
+            "wasm": [
+              35578993,
+              34577910,
+              33722071,
+              33942420,
+              34973950
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              34120101,
+              35550326,
+              36055496,
+              33417555,
+              33186677,
+              36146155,
+              35481357,
+              34034372,
+              35458682,
+              33682715,
+              33981768,
+              35513870,
+              35504235,
+              33756847,
+              34588494
+            ],
+            "wasm": [
+              34810504,
+              33994154,
+              36003333,
+              34059307,
+              34903889,
+              36186656,
+              34232574,
+              34953806,
+              41687243,
+              38263164,
+              34151524,
+              35193353,
+              35285434,
+              34534225,
+              35746919
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.064817728515625,
+            "medianMs": 0.06755565234375,
+            "p95Ms": 0.070597958984375,
+            "maxMs": 0.070597958984375,
+            "madMs": 0.0017690996093749911
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.06639483203125,
+            "medianMs": 0.06826915234375,
+            "p95Ms": 0.081420396484375,
+            "maxMs": 0.081420396484375,
+            "madMs": 0.0015490488281249964
+          }
+        },
+        {
+          "id": "transit-scan",
+          "iterations": 32,
+          "checksum": 30513208636.384007,
+          "warmupNs": {
+            "javascript": [
+              14518638,
+              13921530,
+              13689263,
+              13241354,
+              13274240
+            ],
+            "wasm": [
+              13334241,
+              12994647,
+              12399686,
+              12182442,
+              12124827
+            ]
+          },
+          "samplesNs": {
+            "javascript": [
+              13573875,
+              12491160,
+              12848387,
+              13197731,
+              12894538,
+              12188305,
+              12326610,
+              12264246,
+              12215635,
+              12153667,
+              11937729,
+              12444611,
+              12529921,
+              12542545,
+              12361156
+            ],
+            "wasm": [
+              12123657,
+              11362520,
+              35145917,
+              12774468,
+              11720742,
+              11373398,
+              10859511,
+              10948776,
+              11067069,
+              11011637,
+              10774514,
+              11248038,
+              11333444,
+              11320097,
+              11058029
+            ]
+          },
+          "javascript": {
+            "sampleCount": 15,
+            "minMs": 0.37305403125,
+            "medianMs": 0.38889409375,
+            "p95Ms": 0.42418359375,
+            "maxMs": 0.42418359375,
+            "madMs": 0.007155499999999981
+          },
+          "wasm": {
+            "sampleCount": 15,
+            "minMs": 0.3367035625,
+            "medianMs": 0.35375303125,
+            "p95Ms": 1.09830990625,
+            "maxMs": 1.09830990625,
+            "madMs": 0.009639375000000006
+          }
+        }
+      ]
+    }
+  ],
+  "decision": {
+    "status": "rejected",
+    "productionEnabled": false,
+    "exact": true,
+    "checks": [
+      {
+        "round": 1,
+        "id": "chart",
+        "javascriptMedianMs": 2.415722375,
+        "wasmMedianMs": 2.2890650625,
+        "ratio": 0.9475695908558202,
+        "requiredMaximumRatio": 0.9,
+        "passes": false
+      },
+      {
+        "round": 1,
+        "id": "houses",
+        "javascriptMedianMs": 0.071933283203125,
+        "wasmMedianMs": 0.07282324609375,
+        "ratio": 1.0123720599282522,
+        "requiredMaximumRatio": 1.1,
+        "passes": true
+      },
+      {
+        "round": 1,
+        "id": "transit-scan",
+        "javascriptMedianMs": 0.45116634375,
+        "wasmMedianMs": 0.4064435625,
+        "ratio": 0.9008729665464991,
+        "requiredMaximumRatio": 0.9,
+        "passes": false
+      },
+      {
+        "round": 2,
+        "id": "chart",
+        "javascriptMedianMs": 2.255228125,
+        "wasmMedianMs": 2.1573375,
+        "ratio": 0.9565939144183031,
+        "requiredMaximumRatio": 0.9,
+        "passes": false
+      },
+      {
+        "round": 2,
+        "id": "houses",
+        "javascriptMedianMs": 0.070563552734375,
+        "wasmMedianMs": 0.069641865234375,
+        "ratio": 0.9869381930999203,
+        "requiredMaximumRatio": 1.1,
+        "passes": true
+      },
+      {
+        "round": 2,
+        "id": "transit-scan",
+        "javascriptMedianMs": 0.3961128125,
+        "wasmMedianMs": 0.35616103125,
+        "ratio": 0.8991403963990686,
+        "requiredMaximumRatio": 0.9,
+        "passes": true
+      },
+      {
+        "round": 3,
+        "id": "chart",
+        "javascriptMedianMs": 2.1943685,
+        "wasmMedianMs": 2.105983375,
+        "ratio": 0.9597218402469777,
+        "requiredMaximumRatio": 0.9,
+        "passes": false
+      },
+      {
+        "round": 3,
+        "id": "houses",
+        "javascriptMedianMs": 0.06755565234375,
+        "wasmMedianMs": 0.06826915234375,
+        "ratio": 1.010561662499674,
+        "requiredMaximumRatio": 1.1,
+        "passes": true
+      },
+      {
+        "round": 3,
+        "id": "transit-scan",
+        "javascriptMedianMs": 0.38889409375,
+        "wasmMedianMs": 0.35375303125,
+        "ratio": 0.909638477249309,
+        "requiredMaximumRatio": 0.9,
+        "passes": false
+      }
+    ],
+    "scope": "Node on this host and these synthetic cases only; other runtimes are unmeasured"
+  }
+}
