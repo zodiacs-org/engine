@@ -210,6 +210,38 @@ export function compactBaseline(entries) {
   };
 }
 
+// Compact records retain all samples, so validate them without trusting their
+// stored summaries. This accepts historical evidence without reading today's
+// source tree or requiring the ignored raw files to still exist.
+export function validateBenchmarkBaseline(baseline) {
+  object(baseline, "Compact benchmark");
+  assert.equal(baseline.schema, "edge-benchmark-baseline/1", "Unknown compact benchmark schema.");
+  assert(Array.isArray(baseline.runs), "Compact benchmark runs must be an array.");
+  const { protocol, provenance, workloadSet, exactResultSha256 } = baseline;
+  const entries = baseline.runs.map((run) => {
+    object(run, "Compact run");
+    assert(Array.isArray(run.results), "Compact run results must be an array.");
+    return {
+      rawSha256: run.rawSha256,
+      report: {
+        schema: "edge-benchmark-run/1", startedAt: run.startedAt, completedAt: run.completedAt,
+        protocol, provenance, workloadSet, exactResultSha256,
+        results: run.results.map((result) => {
+          object(result, "Compact result");
+          assert(Array.isArray(result.samples), "Compact samples must be an array.");
+          return {
+            id: result.id, iterationsPerSample: result.iterationsPerSample,
+            warmup: result.warmup, summary: result.summary,
+            samples: result.samples.map((elapsedNs) => ({ elapsedNs, checksum: result.checksum }))
+          };
+        })
+      }
+    };
+  });
+  assert.deepEqual(baseline, compactBaseline(entries), "Compact benchmark does not match its retained runs.");
+  return baseline;
+}
+
 export async function readRawBenchmark(path) {
   const root = resolve(edgeRoot, "results");
   const absolute = resolve(path);

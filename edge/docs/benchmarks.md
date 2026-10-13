@@ -128,4 +128,7 @@ refresh a baseline automatically because a candidate is slower. Preserve old
 evidence, record the refresh reason, and repeat the complete predefined run
 set after a host, runtime, workload or protocol change. Do not select only
 the fastest run or treat these host-specific numbers as portable guarantees.
-The performance regression gate and its CI wiring are subsequent milestones.
+The [performance gate](performance-gate.md) compares a fresh compact candidate
+with a reviewed baseline and fails on incompatible evidence or regressions.
+Its guide gives the shell sequence and exit statuses for CI; final workflow
+wiring remains in M12.

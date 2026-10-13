@@ -19,8 +19,10 @@ Deno and Bun runs differ from Node; they do not establish numerical parity.
 The [web runtime checker](docs/web-smoke.md) executes local workerd and a real
 Chromium page. Its recorded workerd run matches Node exactly, while Chrome
 differs. The [local benchmark runner](docs/benchmarks.md) measures chart,
-houses and transit-scan workloads with recorded provenance. A performance
-gate and measured WASM experiment remain in [PLAN.md](PLAN.md).
+houses and transit-scan workloads with recorded provenance. The
+[performance gate](docs/performance-gate.md) verifies comparable evidence and
+fails when a workload exceeds a configurable regression threshold. A measured
+WASM experiment and final CI wiring remain in [PLAN.md](PLAN.md).
 
 The foundation's commands, observed results and the missing-root-build
 limitation are recorded in [M1 validation](docs/evidence/m1-validation.md).
@@ -39,6 +41,8 @@ Local Workers and browser checks are recorded in
 [M7 validation](docs/evidence/m7-validation.md).
 Benchmark checks and the initial local Node baseline are recorded in
 [M8 and M9 validation](docs/evidence/m8-m9-validation.md).
+Performance gate checks and a comparison with the original baseline are
+recorded in [M10 validation](docs/evidence/m10-validation.md).
 
 ## Run the foundation
 

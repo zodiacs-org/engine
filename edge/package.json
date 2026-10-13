@@ -15,6 +15,7 @@
     "smoke:web": "node scripts/smoke-web.mjs",
     "benchmark": "node scripts/benchmark.mjs",
     "benchmark:baseline": "node scripts/benchmark-baseline.mjs",
+    "benchmark:gate": "node scripts/benchmark-gate.mjs",
     "test": "node --test tests/*.check.mjs",
     "typecheck": "tsc --project tsconfig.json",
     "check:isolation": "node scripts/check-isolation.mjs"
