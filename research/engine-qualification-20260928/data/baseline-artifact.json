@@ -158,8 +158,8 @@
       "bytes": 1078
     },
     "package-lock.json": {
-      "sha256": "5b2bbf2ea0d12b71a15f3f59dc9aa07088e6e1823e66c214119d1f4ada55ce0d",
-      "bytes": 89081
+      "sha256": "0ab582863d9a06943350114d7ce9b8e65698d1bd8f73dc9f9465bb069e6218f9",
+      "bytes": 89083
     },
     "package.json": {
       "sha256": "e2ff18b132f2a01cfea37ed4b8c3f827a1d5c238d26654bb481d44168a9afc4e",
@@ -186,7 +186,7 @@
       "runtimeDependencies": {}
     }
   ],
-  "installedBytes": 2134989,
+  "installedBytes": 2134991,
   "fileCount": 40,
-  "digest": "4691195c5e4b192c45638378270514bc99ce3f2a168d82d5cd3c472b9aeef599"
+  "digest": "8108b3d05d2a29b89eda9ddb499e4c5600b48f188ed1e076270f1edbe30cdfee"
 }

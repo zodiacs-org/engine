@@ -1,4 +1,4 @@
-# Engine candidate qualification — research runner
+# Engine candidate qualification: research runner
 
 Compare a new trusted local engine installation with the frozen rc.10 baseline, using the existing independently reconstructed JPL regression references. The runner records artifact identity, API and behavioral differences, all-case position residuals, per-coordinate regressions, Node timings, and installed size. It emits JSON and Markdown evidence for a subsequent adapter review.
 
@@ -10,7 +10,7 @@ The retained 210 rows cover 10 bodies at 21 already examined epochs. They are kn
 
 - Node 20 or newer. This private package has no install-time dependencies.
 - Keep the sibling `research/accuracy-audit-20260928/` directory from the preceding research handoff. Its 26 consumed reference files are hash-pinned and checked offline; raw JPL CSV is reconstructed before projection through the retained independent ERFA matrices.
-- Prepare the exact frozen standalone `@zodiacs/engine 0.1.1-rc.10` installation used in that handoff, including its installed `astronomy-engine 2.1.19` dependency. `data/baseline-artifact.json` records its complete identity. The earlier `accuracy-audit-20260928/bootstrap.py` can prepare that runtime; see its README for the bootstrap command. Inventory mismatches fail instead of being silently adopted.
+- Prepare the standalone historical `@zodiacs/engine 0.1.1-rc.10` installation with `accuracy-audit-20260928/bootstrap.py`; see its README for the bootstrap command. Use Node 22.22.2 with its bundled npm 10.9.7 and Python 3.12 or newer for preparation. The bootstrap installs `astronomy-engine 2.1.19` inside the extracted package using the supplied source-commit lockfile, then checks the complete installation against `data/baseline-artifact.json`. [The replacement baseline review](preparation/REVIEW.md) documents the explicit lockfile-only identity change from the original handoff. Every other inventoried byte and dependency resolution remains pinned. Inventory mismatches fail instead of being silently adopted.
 - Stage the candidate as a separate standalone installed package with `dist/index.js`, `package.json`, and its runtime dependencies beneath the package root. The runner does not install dependencies or build a candidate. It rejects symlinks, missing declared runtime/optional/peer dependencies, and dependencies resolved from outside that root. Some import-only resolution layouts are unsupported and must be adapted and reviewed explicitly.
 - Execute trusted local code only. A child process bounds wall time, V8 **old-space** and output bytes. It is not an OS security sandbox, and it does not cap total RSS or prevent hostile filesystem/network access. Pre/post hashes detect lasting changes, not transient or malicious behavior.
 
@@ -28,7 +28,7 @@ node src/cli.mjs inspect \
 
 2. Review the candidate source and fill `declaration-template.json`. It binds the declaration to the inspected bytes. Every null field must be completed. Record the actual origin, zodiac, frame, clock, correction algorithm, axes, physical centers, rotation model, known differences and review source. `referenceSelection` chooses the comparison reference; it does **not** assert exact equivalence to that reference. The supported profile requires geocentric tropical true-of-date coordinates, the encoded-UT1/pinned-DeltaT benchmark clock, and a geometric Moon. Other profiles need an explicitly reviewed extension rather than a guessed conversion.
 
-`examples/rc10-declaration.json` is only for a self-comparison of the exact frozen baseline. Do not copy its implementation assertions onto a new provider without inspecting it. There is no general-purpose automatic declaration or trust promotion.
+`examples/rc10-declaration.json` is only for a self-comparison of the reviewed preparation baseline. Do not copy its implementation assertions onto a new provider without inspecting it. There is no general-purpose automatic declaration or trust promotion.
 
 3. Freeze the plan before running either target:
 

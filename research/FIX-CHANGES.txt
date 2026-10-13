@@ -1,0 +1,1 @@
+Fix historical rc.10 standalone preparation with a documented source-lock replacement baseline and full inventory verification.

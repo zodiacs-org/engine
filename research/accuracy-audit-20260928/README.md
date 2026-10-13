@@ -26,7 +26,7 @@ The earlier date set is reused deliberately for investigation. It is not a new b
 
 ## Run offline
 
-The scripts require Node.js and Python. The ordinary runner uses only built-in modules; regenerating the rotation fixture separately requires the pinned PyERFA environment described in `rotation/README.md`. The safe archive bootstrap requires Python 3.12 or newer and npm access for its pinned dependency.
+The scripts require Node.js and Python. The ordinary runner uses only built-in modules; regenerating the rotation fixture separately requires the pinned PyERFA environment described in `rotation/README.md`. For the safe archive bootstrap use Node 22.22.2 with its bundled npm 10.9.7, Python 3.12 or newer, npm access for its pinned dependency, and the sibling `engine-qualification-20260928/` directory, which supplies the reviewed preparation lockfile and complete installation check.
 
 From this research directory in an engine checkout:
 
@@ -35,7 +35,7 @@ python3 bootstrap.py --tarball ../../artifacts/zodiacs-engine-0.1.1-rc.10.tgz --
 node run-audit.mjs --engine .runtime/package/dist/index.js --out run-output/audit-001
 ```
 
-For a standalone copy, provide an absolute archive path or omit `--tarball` to download the exact commit-pinned archive. Alternatively point `--engine` at the isolated rc.10 runtime created by the earlier handoff. The runner rejects a changed distribution or dependency, reconstructs vector references offline, and requires fresh output. Its source-specific assumptions must be reviewed before adapting it to another provider or release; the earlier general verification toolkit remains available for successor candidates.
+For a standalone copy, provide an absolute archive path or omit `--tarball` to download the exact commit-pinned archive. Choose a new or empty runtime directory. The bootstrap preserves the archive's package metadata and installs only its locked runtime dependency beneath `.runtime/package/node_modules`, with lifecycle scripts disabled. It checks the entire prepared installation before reporting success. The [replacement baseline review](../engine-qualification-20260928/preparation/REVIEW.md) records why the source-commit lockfile replaces the unavailable original handoff lockfile; engine and dependency bytes are unchanged. Existing runtime directories are never overwritten. The runner rejects a changed distribution or dependency, reconstructs vector references offline, and requires fresh output. Its source-specific assumptions must be reviewed before adapting it to another provider or release; the earlier general verification toolkit remains available for successor candidates.
 
 Recorded results are under `results/rc10/`. `report.json` contains individual observations, while `summary.json` records successful execution. The runner makes no network calls and edits no engine files. Acquisition is a separate explicit operation documented under `reference/`.
 

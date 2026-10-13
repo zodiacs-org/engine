@@ -1,7 +1,7 @@
 import { assert, equal, exactKeys } from './common.mjs';
 
 export const COMPARISON_PROFILE = 'geocentric-tropical-true-of-date-pinned-clock-v1';
-export const FROZEN_BASELINE_DIGEST = '4691195c5e4b192c45638378270514bc99ce3f2a168d82d5cd3c472b9aeef599';
+export const FROZEN_BASELINE_DIGEST = '8108b3d05d2a29b89eda9ddb499e4c5600b48f188ed1e076270f1edbe30cdfee';
 const IMPLEMENTATION_FIELDS = ['origin','zodiac','frame','clock','moonCorrection','planetCorrection','axes','centers','rotationModel'];
 function text(value, label) { assert(typeof value === 'string' && value.trim().length > 0 && value.length <= 4096, label + ' requires a nonempty declaration'); }
 export function validateDeclaration(declaration, artifact, references) {
