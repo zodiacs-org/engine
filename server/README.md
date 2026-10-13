@@ -4,8 +4,8 @@ This private package is a self-hosted HTTP adapter for the engine in this
 checkout. It serves natal charts, transit snapshots, synastry, solar/lunar
 returns, moon phase and houses with engine receipts, health and readiness,
 API-key authentication, per-key rate limits, bounded JSON validation, JSON
-logging and process lifecycle. OpenAPI and Docker deployment are tracked in
-[PLAN.md](PLAN.md).
+logging, generated OpenAPI and process lifecycle. Docker deployment is tracked
+in [PLAN.md](PLAN.md).
 
 ## Run from a checkout
 
@@ -46,22 +46,71 @@ readiness after startup has computed a synthetic natal chart and created its
 receipt using the actual engine. Neither route needs credentials. Shutdown
 marks the server unready and closes its listener on SIGINT or SIGTERM.
 
-Successful JSON responses have `data`, `engine`, `receipts` and `requestId`.
+Successful calculation and probe responses have `data`, `engine`, `receipts`
+and `requestId`. `GET /openapi.json` returns the specification itself.
 Errors replace `data` with an `error` containing a stable `code` and a generic
 `message`. Authenticated requests to unknown routes return `not_found`.
-Unauthenticated requests outside the public probes return `unauthorized`.
+Unauthenticated requests outside the public probes and discovery route return
+`unauthorized`.
 Malformed HTTP or URLs can be rejected before authentication.
 The engine identity comes from its own exported version and ephemeris
-constants. Infrastructure requests
-produce no calculation receipt, so their `receipts` list is empty. The startup
+constants. Probe and error responses produce no calculation receipt, so their
+`receipts` list is empty. The startup
 probe's chart is not returned as a receipt for a health request.
 
-Responses have a server-generated `x-request-id` matching the JSON body and
-disable caching. The server does not trust a caller's request ID. Request logs
-record the method, matched route template, HTTP status and elapsed milliseconds;
+Responses have a server-generated `x-request-id`, matching the JSON body when
+it has an envelope, and disable caching. The server does not trust a caller's
+request ID. Request logs record the method, matched route template, HTTP status
+and elapsed milliseconds;
 unmatched paths are recorded as `unmatched`. They omit raw URLs, query strings,
 headers, bodies and raw errors. Route, error and logging behavior is covered
 by `test/app.vitest.ts`.
+
+## API discovery
+
+```sh
+curl --fail http://127.0.0.1:3000/openapi.json
+```
+
+`GET /openapi.json` is public and unmetered, including with a supplied API
+key or an exhausted bucket. It returns an
+[OpenAPI 3.1.1 document](https://spec.openapis.org/oas/v3.1.1.html)
+with JSON Schema 2020-12 contracts. It has no outer response envelope;
+the request ID remains in the response header. Query parameters and bodies
+are refused. Other methods and similar paths remain protected.
+
+The document is generated once per app from the registered routes and their
+actual request schemas. Each route supplies its operation description,
+synthetic examples, result schema and receipt scopes. Adding an application
+route without documentation fails app construction. There is no generated
+specification file to keep in sync or commit. Relative server URLs refer to
+the serving origin; Host and forwarded headers never enter the document.
+
+Clients can discover Bearer authentication, input types and units, required
+fields, defaults, error envelopes, response headers and engine receipt
+shapes. `x-json-limits` states the parser bounds, `x-rate-limit` states this
+process's configured bucket capacity and refill rate, and `x-time-coverage`
+contains the engine's exported spans with their meaning. The per-operation
+`x-query-schema` preserves the strict empty query contract, and
+`x-receipt-scopes` identifies each receipt's JSON pointer and kind. These
+extensions are descriptive; generic OpenAPI clients may ignore them.
+
+Calendar validity, time-basis coverage, flag consistency and other engine
+rules still run after schema validation. A schema-valid request may therefore
+return `invalid_request`. Response schemas describe transport shape; the
+engine's receipt codec supplies full semantic validation of natal envelopes.
+Read the scope descriptions before treating a chart receipt as coverage of
+derived transit, synastry, return or moon-phase fields. Response schemas are
+documentation only and never filter or round engine output.
+
+[test/openapi.vitest.ts](test/openapi.vitest.ts) validates the document with
+Swagger Parser and its schemas with AJV, checks request-schema agreement,
+executes every synthetic example, and validates response shapes, receipt
+scopes, configured limits, errors and privacy. The tests cover nullable and
+polar charts, independent clocks and pinned delta T too.
+[test/process.vitest.ts](test/process.vitest.ts) checks discovery and a
+documented calculation through the built listener. These are HTTP contract
+checks, not independent astronomical accuracy evidence.
 
 ## API keys
 
@@ -72,7 +121,7 @@ before the listener starts; restart the process after changing them. A
 malformed, empty, duplicate or oversized configuration, an unreadable file,
 or conflicting sources makes startup fail with a generic JSON log that
 contains no supplied value or path. With neither source configured, probes
-remain available and every protected request is denied.
+and discovery remain available and every protected request is denied.
 
 Use random keys generated by a cryptographic generator. The accepted format
 is a case-sensitive string of 32 to 256 ASCII letters, digits, underscores
@@ -478,9 +527,10 @@ Each configured key gets a token bucket shared across protected routes. The
 bucket starts full, spends one token per authenticated request and refills
 continuously using elapsed monotonic time, capped at its capacity. Invalid
 bodies, schema failures and unknown routes spend a token too. Unauthenticated
-requests and public probes do not use a bucket; sending credentials to a
-public probe does not change that. Exhausted requests are refused before
-body parsing or calculation, and a refusal does not spend another token.
+requests, public probes and API discovery do not use a bucket; sending
+credentials to a public route does not change that. Exhausted requests are
+refused before body parsing or calculation, and a refusal does not spend
+another token.
 
 `RATE_LIMIT_CAPACITY` defaults to 60 tokens and
 `RATE_LIMIT_REFILL_PER_SECOND` to 1 token per second. Both accept decimal

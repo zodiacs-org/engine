@@ -16,7 +16,7 @@ single session summary to `CHANGES.txt`. The harness owns all git writes.
 - [x] M5 Add transit and synastry REST routes, with engine receipts for each contributing chart and explicit receipt scope; test successful and invalid requests.
 - [x] M6 Add bounded solar and lunar return REST requests through the engine's return functions; preserve their charts and receipts and test calculation failures and limits.
 - [x] M7 Add moon-phase and houses REST routes through public engine APIs; attach applicable engine receipts with explicit scope and test every route and refusal.
-- [ ] M8 Generate and serve an OpenAPI 3.1 document from route schemas, including authentication, limits, receipts, errors and synthetic examples; test schema and route agreement.
+- [x] M8 Generate and serve an OpenAPI 3.1 document from route schemas, including authentication, limits, receipts, errors and synthetic examples; test schema and route agreement.
 - [ ] M9 Harden lifecycle and resource limits across the completed API, including shutdown, readiness, logging privacy and calculation work limits; run the full server integration suite.
 - [ ] M10 Add a Dockerfile and self-hosting instructions with environment/file key setup, health checks, persistent configuration and required engine licence notices; exercise the container when tooling permits.
 - [ ] M11 Add an autocannon or k6 harness and commit small throughput and p50/p95 latency evidence from this machine, with commands, runtime, workload, build identity and limitations; keep raw generated output ignored.
@@ -119,5 +119,20 @@ limits, sanitized failures and trace-log privacy. Synthetic documentation
 examples pass through the built listener. These are integration checks,
 not independent accuracy evidence. An independent source review found no
 actionable issues. The root package contents gate still reports missing
+`dist/calc.d.ts`; no root build was generated. All changes remain in
+`server/`, within the file-size rule and without em dashes in docs.
+
+M8 validation: server typecheck, full Vitest suite, build and package-exclusion
+check passed using Node 22.22.2. The public, unmetered discovery route serves
+a deterministic OpenAPI document generated from registered request schemas,
+with Bearer security, configured parser and bucket limits, engine time spans,
+error envelopes, response schemas and explicit receipt scopes. Swagger Parser
+validates the document and AJV validates schemas and HTTP examples. Tests
+exercise every synthetic example, conditional input validation, nullable and
+polar charts, clocks and pins, receipt parsing, errors, query refusal, route
+agreement, credential privacy and the built listener. Response schemas never
+filter engine output. These are HTTP integration checks, not independent
+accuracy evidence. An independent review found no actionable issues.
+The root package contents gate still reports missing
 `dist/calc.d.ts`; no root build was generated. All changes remain in
 `server/`, within the file-size rule and without em dashes in docs.

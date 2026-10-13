@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { routeDocs } from "./route-docs.js";
 import { moonPhase } from "../../src/index.js";
 import type { MoonPhase } from "../../src/index.js";
 import { calculateNatal } from "./natal.js";
@@ -24,7 +25,7 @@ export const moonPhaseRequestSchema = {
 } as const;
 
 export function registerMoonPhaseRoute(app: FastifyInstance): void {
-  app.post<{ Body: MoonPhaseRequest }>("/v1/moon-phase", { schema: moonPhaseRequestSchema }, async (request) => {
+  app.post<{ Body: MoonPhaseRequest }>("/v1/moon-phase", { schema: moonPhaseRequestSchema, config: { openapi: routeDocs.moon } }, async (request) => {
     const { at } = request.body;
     const sky = calculateNatal({ utc: at });
     let result: MoonPhase;

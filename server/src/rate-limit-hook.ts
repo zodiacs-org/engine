@@ -7,7 +7,7 @@ export function registerRateLimiting(app: FastifyInstance, options: RateLimitOpt
   const buckets = new TokenBuckets(options, now);
   const capacity = options.capacity;
   app.addHook("onRequest", async (request, reply) => {
-    // Auth leaves the identity null only on public probes. Rejected auth never
+    // Auth leaves the identity null only on public GET routes. Rejected auth never
     // reaches this hook. Bucket storage is thus bounded by configured keys.
     if (request.apiKeyId === null) return;
     const result = buckets.consume(request.apiKeyId);

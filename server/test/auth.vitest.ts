@@ -110,7 +110,7 @@ describe('default route authentication', () => {
     expect(handler).not.toHaveBeenCalled();
   });
 
-  it('leaves only exact GET probes public, including while unready', async () => {
+  it('leaves exact GET probes and discovery public, including while unready', async () => {
     const app = buildApp({ logger: false, readiness: () => false });
     apps.push(app);
     for (const [url, status] of [['/healthz', 200], ['/readyz', 503]] as const) {
@@ -118,7 +118,8 @@ describe('default route authentication', () => {
       expect(response.statusCode).toBe(status);
       expect(response.headers).not.toHaveProperty('www-authenticate');
     }
-    for (const url of ['/healthz/', '/readyz/extra', '/HEALTHZ', '/openapi.json', '/v1/unknown']) {
+    expect((await app.inject('/openapi.json')).statusCode).toBe(200);
+    for (const url of ['/healthz/', '/readyz/extra', '/HEALTHZ', '/openapi.json/', '/v1/unknown']) {
       expectUnauthorized(await app.inject({ method: 'GET', url }));
     }
     for (const method of ['POST', 'OPTIONS', 'DELETE'] as const) {

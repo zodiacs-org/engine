@@ -5,3 +5,4 @@ Complete server M4: add the authenticated natal chart route with strict birth-in
 Complete server M5: add authenticated transit and synastry routes with scoped engine chart receipts, independent clocks, strict validation, documented receipt coverage and passing route, replay, privacy and listener tests.
 Complete server M6: add bounded solar and lunar return routes with scoped engine chart receipts, relocation and clock handling, strict validation, documented limits and passing route, replay, privacy and listener tests.
 Complete server M7: add moon-phase and houses routes with scoped engine receipts, native houses receipt replay, strict validation, documented time coverage and passing route, clock, privacy and listener tests.
+Complete server M8: generate public OpenAPI discovery from route schemas with authentication, configured limits, engine receipts, errors and synthetic examples, and validate schema agreement, privacy and built-listener behavior.

@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { routeDocs } from "./route-docs.js";
 import { transits } from "../../src/index.js";
 import type { TransitResult } from "../../src/index.js";
 import { birthInputSchema, calculateNatal } from "./natal.js";
@@ -28,7 +29,7 @@ export const transitsRequestSchema = {
 } as const;
 
 export function registerTransitsRoute(app: FastifyInstance): void {
-  app.post<{ Body: TransitsRequest }>("/v1/transits", { schema: transitsRequestSchema }, async (request) => {
+  app.post<{ Body: TransitsRequest }>("/v1/transits", { schema: transitsRequestSchema, config: { openapi: routeDocs.transits } }, async (request) => {
     const { natal, at } = request.body;
     const birth = calculateNatal(natal);
     // The transit API returns positions without a receipt. A location-free

@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { routeDocs } from "./route-docs.js";
 import { synastry } from "../../src/index.js";
 import type { SynastryResult } from "../../src/index.js";
 import { birthInputSchema, calculateNatal } from "./natal.js";
@@ -22,7 +23,7 @@ export const synastryRequestSchema = {
 } as const;
 
 export function registerSynastryRoute(app: FastifyInstance): void {
-  app.post<{ Body: SynastryRequest }>("/v1/synastry", { schema: synastryRequestSchema }, async (request) => {
+  app.post<{ Body: SynastryRequest }>("/v1/synastry", { schema: synastryRequestSchema, config: { openapi: routeDocs.synastry } }, async (request) => {
     const a = calculateNatal(request.body.a);
     const b = calculateNatal(request.body.b);
     let result: SynastryResult;

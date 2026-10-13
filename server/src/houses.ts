@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { routeDocs } from "./route-docs.js";
 import { houses } from "../../src/calc.js";
 import type { CalcTime, HousesRequest, HousesResult, CalcRefusal } from "../../src/calc.js";
 import { birthInputSchema } from "./natal.js";
@@ -51,7 +52,7 @@ export const housesRequestSchema = {
 } as const;
 
 export function registerHousesRoute(app: FastifyInstance): void {
-  app.post<{ Body: HousesHttpRequest }>("/v1/houses", { schema: housesRequestSchema }, async (request) => {
+  app.post<{ Body: HousesHttpRequest }>("/v1/houses", { schema: housesRequestSchema, config: { openapi: routeDocs.houses } }, async (request) => {
     let result: HousesResult | CalcRefusal;
     try {
       result = houses(request.body);

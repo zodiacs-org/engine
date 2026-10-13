@@ -15,6 +15,8 @@ import { registerSynastryRoute } from "./synastry.js";
 import { registerReturnRoutes } from "./returns.js";
 import { registerMoonPhaseRoute } from "./moon-phase.js";
 import { registerHousesRoute } from "./houses.js";
+import { registerOpenApi } from "./openapi.js";
+import { routeDocs } from "./route-docs.js";
 
 export interface AppOptions {
   logger?: FastifyServerOptions["logger"];
@@ -131,8 +133,9 @@ export function buildApp(options: AppOptions = {}) {
     return reply.code(500).send(failure(request.id, "internal_error", "Internal server error."));
   });
 
-  app.get("/healthz", async (request) => success(request.id, { status: "ok" }));
-  app.get("/readyz", async (request, reply) => {
+  const sealOpenApi = registerOpenApi(app, options.rateLimit);
+  app.get("/healthz", { config: { openapi: routeDocs.health } }, async (request) => success(request.id, { status: "ok" }));
+  app.get("/readyz", { config: { openapi: routeDocs.ready } }, async (request, reply) => {
     if (!ready || (options.readiness && !options.readiness())) {
       return reply.code(503).send(failure(request.id, "not_ready", "Server is not ready."));
     }
@@ -144,5 +147,6 @@ export function buildApp(options: AppOptions = {}) {
   registerReturnRoutes(app);
   registerMoonPhaseRoute(app);
   registerHousesRoute(app);
+  sealOpenApi();
   return app;
 }

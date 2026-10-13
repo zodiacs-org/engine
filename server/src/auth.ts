@@ -9,12 +9,17 @@ declare module "fastify" {
   }
 }
 
+/** Exact public GET routes, shared with the discovery document's security. */
+export function isPublicRoute(method: string, route: string | undefined): boolean {
+  return method === "GET" && (route === "/healthz" || route === "/readyz" || route === "/openapi.json");
+}
+
 /** Default protection applies to future routes and to the not-found handler. */
 export function registerAuthentication(app: FastifyInstance, apiKeys: ApiKeyStore): void {
   app.decorateRequest("apiKeyId", null);
   app.addHook("onRequest", async (request, reply) => {
     const route = request.routeOptions.url;
-    if (request.method === "GET" && (route === "/healthz" || route === "/readyz")) return;
+    if (isPublicRoute(request.method, route)) return;
 
     // Node may discard duplicate Authorization headers. Count the original
     // fields before trusting the normalized header, including case variants.

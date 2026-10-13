@@ -144,6 +144,103 @@ afterEach(async () => {
 });
 
 describe('built server process', () => {
+  it('serves a public OpenAPI document without configured keys while keeping calculations protected', async () => {
+    const canary = randomUUID();
+    const server = launch({ LOG_LEVEL: 'trace' });
+    const address = await started(server);
+    const response = await fetch(new URL('/openapi.json', address), { signal: AbortSignal.timeout(5000) });
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-type')).toContain('application/json');
+    expect(response.headers.get('cache-control')).toBe('no-store');
+    expect(response.headers.get('x-content-type-options')).toBe('nosniff');
+    expect(response.headers.get('x-request-id')).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+    for (const header of ['x-ratelimit-limit', 'x-ratelimit-remaining', 'retry-after']) {
+      expect(response.headers.get(header)).toBeNull();
+    }
+    const document = await response.json() as Record<string, unknown>;
+    expect(document.openapi).toBe('3.1.1');
+    expect(document).toHaveProperty('components.schemas');
+    for (const envelopeField of ['requestId', 'data', 'error', 'receipts']) expect(document).not.toHaveProperty(envelopeField);
+    const paths = document.paths as Record<string, unknown>;
+    expect(Object.keys(paths).sort()).toEqual([
+      '/healthz', '/openapi.json', '/readyz', '/v1/houses', '/v1/moon-phase', '/v1/natal',
+      '/v1/returns/lunar', '/v1/returns/solar', '/v1/synastry', '/v1/transits',
+    ]);
+    const hostile = await fetch(new URL('/openapi.json', address), {
+      headers: {
+        host: `${canary}.example`, authorization: `Bearer ${canary}`,
+        'x-forwarded-host': `${canary}.example`, 'x-forwarded-proto': canary, 'x-request-id': canary,
+      },
+      signal: AbortSignal.timeout(5000),
+    });
+    expect(hostile.status).toBe(200);
+    expect(await hostile.json()).toEqual(document);
+    expect(hostile.headers.get('x-request-id')).not.toBe(response.headers.get('x-request-id'));
+    expect(hostile.headers.get('x-request-id')).not.toBe(canary);
+    const query = await fetch(new URL(`/openapi.json?private=${canary}`, address), { signal: AbortSignal.timeout(5000) });
+    expect(query.status).toBe(400);
+    expect(await query.json()).toMatchObject({ receipts: [], error: { code: 'invalid_request', message: 'Request is invalid.' } });
+    for (const path of Object.keys(paths).filter((path) => path.startsWith('/v1/'))) {
+      const protectedResponse = await fetch(new URL(path, address), {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}', signal: AbortSignal.timeout(5000),
+      });
+      expect(protectedResponse.status).toBe(401);
+      expect(await protectedResponse.json()).toMatchObject({ receipts: [], error: { code: 'unauthorized' } });
+    }
+    for (const method of ['HEAD', 'POST', 'OPTIONS']) {
+      const unsupported = await fetch(new URL('/openapi.json', address), { method, signal: AbortSignal.timeout(5000) });
+      expect(unsupported.status).toBe(401);
+      await unsupported.arrayBuffer();
+    }
+    server.child.kill('SIGTERM');
+    expect(await bounded(server.exited)).toEqual({ code: 0, signal: null });
+    expect(server.stderr).toBe('');
+    expect(JSON.stringify(document) + server.stdout + server.stderr).not.toContain(canary);
+    expect(jsonLines(server.stdout).filter((record) => record.event === 'request_completed' && record.route === '/openapi.json')
+      .map((record) => record.statusCode)).toEqual([200, 200, 400]);
+  });
+
+  it('keeps OpenAPI unmetered for valid keys and executes its synthetic natal example through the built listener', async () => {
+    const key = randomBytes(32).toString('base64url');
+    const server = launch({ API_KEYS: JSON.stringify([key]), RATE_LIMIT_CAPACITY: '1', RATE_LIMIT_REFILL_PER_SECOND: '1', LOG_LEVEL: 'trace' });
+    const address = await started(server);
+    const getDocument = async () => {
+      const response = await fetch(new URL('/openapi.json', address), {
+        headers: { authorization: `Bearer ${key}` }, signal: AbortSignal.timeout(5000),
+      });
+      expect(response.status).toBe(200);
+      for (const header of ['x-ratelimit-limit', 'x-ratelimit-remaining', 'retry-after']) {
+        expect(response.headers.get(header)).toBeNull();
+      }
+      return response.json() as Promise<{
+        paths: { '/v1/natal': { post: { requestBody: { content: { 'application/json': { examples: { synthetic: { value: Record<string, unknown> } } } } } } } };
+      }>;
+    };
+    const document = await getDocument();
+    expect(await getDocument()).toEqual(document);
+    const input = document.paths['/v1/natal'].post.requestBody.content['application/json'].examples.synthetic.value;
+    const calculate = () => fetch(new URL('/v1/natal', address), {
+      method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+      body: JSON.stringify(input), signal: AbortSignal.timeout(5000),
+    });
+    const response = await calculate();
+    expect(response.status).toBe(200);
+    expect(response.headers.get('x-ratelimit-limit')).toBe('1');
+    expect(response.headers.get('x-ratelimit-remaining')).toBe('0');
+    const body = await response.json() as { receipts: { scope: string; envelope: unknown }[] };
+    expect(body.receipts).toHaveLength(1);
+    expect(body.receipts[0]!.scope).toBe('/data');
+    expect(parseNatalEnvelope(JSON.stringify(body.receipts[0]!.envelope)).ok).toBe(true);
+    expect(await getDocument()).toEqual(document);
+    const limited = await calculate();
+    expect(limited.status).toBe(429);
+    expect(await limited.json()).toMatchObject({ receipts: [], error: { code: 'rate_limited' } });
+    server.child.kill('SIGTERM');
+    expect(await bounded(server.exited)).toEqual({ code: 0, signal: null });
+    expect(server.stderr).toBe('');
+    expect(JSON.stringify(document) + JSON.stringify(body) + server.stdout + server.stderr).not.toContain(key);
+  });
+
   it('serves an authenticated natal chart and its receipt through the built listener without logging birth details', async () => {
     const key = randomBytes(32).toString('base64url');
     const server = launch({ API_KEYS: JSON.stringify([key]), LOG_LEVEL: 'trace' });

@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { routeDocs } from "./route-docs.js";
 import { lunarReturn, solarReturn } from "../../src/techniques.js";
 import type { LunarReturn, ReturnOptions, SolarReturn, SolarReturnSelection } from "../../src/techniques.js";
 import { createNatalEnvelope } from "../../src/receipt.js";
@@ -81,7 +82,7 @@ function returnOptions(input: ReturnRequest): ReturnOptions {
 }
 
 export function registerReturnRoutes(app: FastifyInstance): void {
-  app.post<{ Body: SolarReturnRequest }>("/v1/returns/solar", { schema: solarReturnRequestSchema }, async (request) => {
+  app.post<{ Body: SolarReturnRequest }>("/v1/returns/solar", { schema: solarReturnRequestSchema, config: { openapi: routeDocs.solar } }, async (request) => {
     const input = request.body;
     const options = returnOptions(input);
     const natal = calculateNatal(input.natal);
@@ -99,7 +100,7 @@ export function registerReturnRoutes(app: FastifyInstance): void {
     return response(request.id, natal, result);
   });
 
-  app.post<{ Body: LunarReturnRequest }>("/v1/returns/lunar", { schema: lunarReturnRequestSchema }, async (request) => {
+  app.post<{ Body: LunarReturnRequest }>("/v1/returns/lunar", { schema: lunarReturnRequestSchema, config: { openapi: routeDocs.lunar } }, async (request) => {
     const input = request.body;
     const options = returnOptions(input);
     const natal = calculateNatal(input.natal);

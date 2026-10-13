@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { routeDocs } from "./route-docs.js";
 import { HOUSE_SYSTEMS, natalChart } from "../../src/index.js";
 import type { BirthInput, Chart, ChartFlag } from "../../src/index.js";
 import { createNatalEnvelope } from "../../src/receipt.js";
@@ -74,7 +75,7 @@ export function calculateNatal(input: NatalRequest) {
 }
 
 export function registerNatalRoute(app: FastifyInstance): void {
-  app.post<{ Body: NatalRequest }>("/v1/natal", { schema: natalRequestSchema }, async (request) => {
+  app.post<{ Body: NatalRequest }>("/v1/natal", { schema: natalRequestSchema, config: { openapi: routeDocs.natal } }, async (request) => {
     const { chart, envelope } = calculateNatal(request.body);
     return success(request.id, chart, [{ scope: "/data", envelope }]);
   });
