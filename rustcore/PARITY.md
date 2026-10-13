@@ -828,7 +828,8 @@ acceptance rules. It is not exhaustive over all dates, coordinates, arbitrary
 custom policies or near-singular geometries. Full natal-chart assembly,
 receipts, local timezone resolution and the engine's other opt-in APIs are
 outside this wrapper's scope. The civil Julian Day Number helpers do not apply
-astronomical time scales. No performance baseline is claimed at this milestone.
+astronomical time scales. Performance measurements are recorded separately in
+[BENCHMARKS.md](BENCHMARKS.md) and do not change these compatibility limits.
 
 ## Reproducing the parity report
 
@@ -901,7 +902,7 @@ parent engine runtime imports and astronomy-engine. This is a loading and API
 smoke test, not the full numerical corpus on every browser engine. The complete
 Vitest numerical suites run on Node; other browser engines remain unmeasured.
 
-Each later numeric milestone must add its quantity, units, reference, tested
+Each future numeric change must add its quantity, units, reference, tested
 span and acceptance rule here. Exact decisions, flags and ordering require
 exact comparisons; any nonzero numeric tolerance must have a specific reason
 and a test that enforces it. Use arcseconds for angular coordinate errors,

@@ -14,7 +14,10 @@ Legacy and configured aspect matching run in Rust, including exact binary64
 orb decisions, motion classification, custom rules and stable result ordering.
 The TypeScript wrapper retains the implemented engine helpers' synchronous
 signatures after explicit initialization and exposes intermediate planetary and
-lunar kernels. [PLAN.md](PLAN.md) tracks progress and the remaining benchmark work.
+lunar kernels. This workspace provides the numeric helpers, with callers
+assembling their own results; it does not expose `natalChart`, receipts,
+timezone resolution or the engine's other high-level APIs.
+[PLAN.md](PLAN.md) records the completed milestones.
 
 ## Setup and checks
 
@@ -82,17 +85,85 @@ run, missing measurement records, or sources changed during the test run.
 The summary and Vitest's raw report remain ignored. Acceptance limits live in
 the tests and [PARITY.md](PARITY.md); observed maxima do not set those limits.
 
+## Benchmarks
+
+From this directory, run:
+
+```sh
+npm run bench
+npm run bench:check
+```
+
+`bench` runs the native Criterion suite and the Node WASM-versus-TypeScript
+suite sequentially, then writes a local summary. `bench:native` and
+`bench:node` run the suites separately. Raw measurements and local build
+outputs stay ignored. Criterion is a development dependency of the native
+crate; it is not part of its library runtime or the WASM build.
+
+[BENCHMARKS.md](BENCHMARKS.md) describes the workloads, timing boundaries,
+reproduction commands and limits. The committed
+[baseline](docs/evidence/benchmark-baseline.json) records the measured
+numbers and machine/toolchain description. Those results describe synthetic
+workloads on that machine and build. They do not establish astronomical
+accuracy or performance on another runtime, processor or workload.
+
 ## TypeScript use
 
-After `npm run build:wasm`, a Node TypeScript caller can use:
+After `npm run build:wasm`, save this example as `generated/example.ts`.
+The instant and location are invented. It uses the UTC time basis consistently
+for positions and house geometry:
 
 ```ts
 import { readFileSync } from "node:fs";
-import { initRustCore, normalizeLongitude } from "./ts/index.js";
+import {
+  initRustCore, dateFrom, positions, timeBasis, gastHours, tilt,
+  computeAngles, computeHouses, houseOf,
+  createAspectPolicy, findConfiguredAspects
+} from "../ts/index.js";
 
-initRustCore(readFileSync(new URL("./pkg/zodiacs_rustcore_bg.wasm", import.meta.url)));
-const longitude = normalizeLongitude(-15);
+initRustCore(readFileSync(new URL("../pkg/zodiacs_rustcore_bg.wasm", import.meta.url)));
+const date = dateFrom("2001-02-03T04:05:06.789Z", "date");
+const bodies = positions(date);
+const basis = timeBasis(date.getTime());
+// The retained AstroTime signature reads only UT1 and TT day fields.
+const clock = { ut: basis.ut1Days, tt: basis.ttDays } as Parameters<typeof gastHours>[0];
+const geometry = {
+  gastHours: gastHours(clock),
+  latitude: 25,
+  longitude: -35,
+  obliquity: tilt(basis.ttDays).tobl
+};
+const angles = computeAngles(geometry);
+const houses = computeHouses("placidus", geometry, angles);
+const membership = bodies.map(row => ({
+  body: row.body,
+  house: houseOf(row.lon, houses.houses.cusps)
+}));
+const policy = createAspectPolicy({
+  aspects: [
+    { type: "conjunction", orb: 8 },
+    { type: "square", orb: 7 },
+    { type: "quincunx", orb: 2 }
+  ]
+});
+const analysis = findConfiguredAspects(bodies, policy);
+
+console.log({ bodies, basis, angles, houses, membership, aspects: analysis.aspects });
 ```
+
+Compile and run it from this directory using the installed bundler:
+
+```sh
+node_modules/.bin/esbuild generated/example.ts --bundle --platform=node --format=esm --outfile=generated/example.mjs
+node generated/example.mjs
+```
+
+This assembles a caller-owned result, not the engine's `Chart` type. For a
+different input scale or pinned Delta T, use `positionsOn(date, scale, pin)`
+and `timeBasis(date.getTime(), scale, pin)` together. Low-level geometry does
+not validate a location as a public birth input does. Resolve local wall
+times before using these helpers; [PARITY.md](PARITY.md) records their
+boundary behavior and compatibility limits.
 
 The wrapper also exports `signIndexForLongitude`, `signForLongitude`,
 `degreeInSign`, the frozen sign tables, `separation`, `wrap360`, `signedDelta`,
@@ -269,6 +340,21 @@ equality against the local engine across the synthetic corpus described in
 
 ## Native use
 
+Within a Rust workspace member that depends on `zodiacs-rustcore` by path,
+the same synthetic instant can be evaluated directly:
+
+```rust
+use zodiacs_rustcore::{date_input::date_from_iso, ephemeris};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let ms = date_from_iso("2001-02-03T04:05:06.789Z")?;
+    for row in ephemeris::positions(ms)? {
+        println!("{}: {} degrees, {} degrees/day", row.body.name(), row.lon, row.speed);
+    }
+    Ok(())
+}
+```
+
 The workspace member `crates/core` exposes `normalize_longitude(f64)` and the
 `angles`, `signs`, `date_input`, `calendar`, `deltat`, `time_scales`,
 `nutation`, `frame`, `equator`, `houses`, `planets`, `pluto`, `moon`, `lunar`, `ephemeris`,
@@ -364,8 +450,9 @@ reported value once, with ties to even. Its `exact_sign` handles finite inputs
 of any magnitude using integer limbs when a floating sum could overflow.
 Expansion-building operations require finite terms with no overflowing partial
 sum, as documented on those functions. The aspect matcher enforces these
-preconditions through policy and position validation. No new dependency or
-unsafe code is used.
+preconditions through policy and position validation. The native core has no
+runtime dependency and forbids unsafe code. Criterion is used only by its
+development benchmark target.
 
 ## Parity and provenance
 
@@ -376,7 +463,8 @@ with additional parser boundary cases; the exact corpus is in
 [date-input.parity.ts](tests/date-input.parity.ts) and
 [civil-calendar.parity.ts](tests/civil-calendar.parity.ts). These compare
 implementations and do not establish astronomical accuracy. All inputs are
-synthetic. Benchmarks and performance claims wait for the benchmark milestone.
+synthetic. [BENCHMARKS.md](BENCHMARKS.md) separately records performance
+measurement scope and the committed baseline.
 The complete pipeline tests evaluate positions independently in each runtime
 before house membership and aspect matching. They retain exact shared-input
 checks and explicitly bound upstream rounding near discrete boundaries; they

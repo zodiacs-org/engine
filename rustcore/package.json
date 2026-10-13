@@ -13,7 +13,7 @@
     "build:native": "node scripts/run.mjs build:native",
     "build:wasm": "node scripts/run.mjs build:wasm",
     "test": "npm run test:generator && npm run test:native && npm run build:wasm && npm run typecheck && npm run test:parity && npm run test:browser",
-    "test:generator": "node --test scripts/time-data.check.mjs scripts/planet-data.check.mjs scripts/moon-data.check.mjs scripts/pluto-data.check.mjs scripts/wasm-build.check.mjs scripts/parity-report.check.mjs",
+    "test:generator": "node --test scripts/time-data.check.mjs scripts/planet-data.check.mjs scripts/moon-data.check.mjs scripts/pluto-data.check.mjs scripts/wasm-build.check.mjs scripts/parity-report.check.mjs scripts/benchmark-report.check.mjs",
     "test:native": "node scripts/run.mjs test:native",
     "test:parity": "vitest run --config vitest.config.ts",
     "test:parity:report": "node scripts/parity-report.mjs",
@@ -21,7 +21,12 @@
     "lint:rust": "node scripts/run.mjs lint:rust",
     "check:isolation": "node scripts/check-isolation.mjs",
     "setup:browser": "node scripts/browser.mjs --install",
-    "test:browser": "node scripts/browser.mjs"
+    "test:browser": "node scripts/browser.mjs",
+    "bench": "node scripts/benchmark.mjs all",
+    "bench:native": "node scripts/benchmark.mjs native",
+    "bench:node": "node scripts/benchmark.mjs node",
+    "bench:smoke": "node scripts/benchmark.mjs smoke",
+    "bench:check": "node scripts/benchmark.mjs check"
   },
   "devDependencies": {
     "@types/node": "22.19.19",

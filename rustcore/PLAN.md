@@ -21,7 +21,7 @@ The external harness owns commits, pushes and the draft pull request.
 - [x] M10 Port legacy and configured aspects, exact binary64 expansion arithmetic, policy validation, minor/custom aspect sets, orb boundaries, motion classification and deterministic result ordering.
 - [x] M11 Complete WASM bindings and synchronous TypeScript function signatures for positions, time/coordinate helpers, houses and aspects after explicit initialization. Preserve result shapes and error behavior; add a browser loading smoke test and signature checks against relative engine imports.
 - [x] M12 Complete the Vitest parity corpus over synthetic dates from 1800 through 2200, polar latitudes, all house systems and aspect sets. Enforce bit equality where possible and quantity-specific tolerances otherwise; explain every deviation and coverage limit in `PARITY.md`.
-- [ ] M13 Add Criterion native and Node WASM-versus-TypeScript benchmarks, commit baseline summaries and machine/toolchain descriptions, and finish usage/provenance docs. Keep raw generated benchmark/parity data ignored and check file sizes and package isolation.
+- [x] M13 Add Criterion native and Node WASM-versus-TypeScript benchmarks, commit baseline summaries and machine/toolchain descriptions, and finish usage/provenance docs. Keep raw generated benchmark/parity data ignored and check file sizes and package isolation.
 
 ## Acceptance rules
 

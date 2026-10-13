@@ -1,16 +1,20 @@
 # Numeric core provenance
 
-This port reads the checked-out engine, without fetching or consulting an
-external ephemeris. Its code translates [deltat.ts](../src/deltat.ts) and
-[time-scale.ts](../src/time-scale.ts), under the repository's
-[MIT License](../LICENSE). [NOTICE](NOTICE) retains the time data attribution.
+This port reads the checked-out engine and its pinned astronomy-engine
+dependency, without fetching or consulting an external ephemeris. Its native
+kernels translate planetary positions, angles and house cusps, aspects, and
+the time and coordinate helpers described below, under the repository's
+[MIT License](../LICENSE) and the dependency's retained MIT notice.
+[NOTICE](NOTICE) retains the code and data attribution.
 The local Cargo and npm manifests use `MIT AND CC-BY-4.0` because the built
 libraries contain the Delta T values. The root package remains unchanged.
 
 ## Reproducible translation
 
 [generate-time-data.mjs](scripts/generate-time-data.mjs) pins the SHA-256 of
-`src/deltat.ts` and `src/time-scale-data.ts`. It rejects a changed input before
+`src/deltat.ts` and `src/time-scale-data.ts`. Their time calculations translate
+[deltat.ts](../src/deltat.ts) and [time-scale.ts](../src/time-scale.ts).
+The generator rejects a changed input before
 parsing. It extracts literal tables without evaluating TypeScript, checks
 the Delta T and UT1 tables' own digests, and decodes packed UT1 differences with exact
 integer arithmetic. It does not regenerate or edit the parent engine's inputs.
@@ -34,7 +38,7 @@ updating the generator's pins.
 The provenance is inherited from the read local [LICENSING.md](../LICENSING.md),
 [NOTICE](../NOTICE), [src/deltat.ts](../src/deltat.ts) and the header and metadata
 of [src/time-scale-data.ts](../src/time-scale-data.ts). The following links
-identify those recorded sources; this milestone makes no new external-source
+identify those recorded sources; this port makes no new external-source
 verification claim.
 
 | Data | Source and treatment | Terms recorded by the parent repository |
@@ -222,5 +226,33 @@ partial-sums form described for Python's `math.fsum`. This port reads the
 engine implementation, not third-party source code. Its overflow-safe sign
 fallback replaces JavaScript BigInt with safe unsigned integer limbs and is
 checked against a separate integer-bit oracle in the native tests.
-No additional ephemeris, coefficient data, dependency or accuracy reference
-is introduced. All comparison inputs are synthetic.
+This translation introduces no additional ephemeris, coefficient data or
+accuracy reference. All comparison inputs are synthetic.
+
+## Build and measurement dependencies
+
+[Cargo.lock](Cargo.lock) and [package-lock.json](package-lock.json) record the
+local build and development dependencies. The native core has no runtime
+dependency; its source forbids unsafe code. The WASM adapter uses the pinned
+wasm-bindgen and js-sys dependencies. The TypeScript runtime imports this
+workspace's implementation, generated metadata and WASM glue; relative engine
+imports are types only. Its browser bundle is checked by
+[browser.mjs](scripts/browser.mjs) to exclude the engine's runtime and
+astronomy-engine. The separately installed astronomy-engine dependency supplies
+digest-checked build inputs and the parity/benchmark reference.
+
+Criterion is a development dependency used by the native benchmark target.
+It does not enter the core library or WASM runtime. Node benchmarking executes
+the same synthetic workload definitions through the port's public wrapper and
+the checked-out TypeScript functions. The workload definitions, timing scope,
+cache treatment and reproduction commands are recorded in
+[BENCHMARKS.md](BENCHMARKS.md). The committed
+[benchmark baseline](docs/evidence/benchmark-baseline.json) records its machine,
+toolchain and source/build identities alongside the measured summaries.
+Raw measurements and generated data stay in ignored folders.
+
+Parity establishes compatibility on the tested inputs; benchmarks measure
+performance for their stated build, machine and workload. Neither is an
+independent astronomical accuracy check. This project performs no Swiss
+Ephemeris or JPL comparison, imports no output from those instruments, and
+uses no personal birth records.
