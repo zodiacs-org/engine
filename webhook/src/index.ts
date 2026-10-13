@@ -27,3 +27,7 @@ export type {
 } from "./event-search-types.js";
 export { ScanWorker, ScanWorkerError } from "./scan-worker.js";
 export type { ScanPolicy, ScanRequest, ScanResult, ScanPageRequest, ScanPageResult } from "./scan-types.js";
+export { HttpsTransport, TransportError, TRANSPORT_LIMITS } from "./transport.js";
+export type {
+  TransportPolicy, TransportDependencies, TransportRequest, TransportResult, ResolvedAddress
+} from "./transport.js";

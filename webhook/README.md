@@ -3,9 +3,10 @@
 This private workbench is being built according to [PLAN.md](PLAN.md). The
 implemented milestones cover subscription validation, SQLite storage,
 encrypted signing-key custody, payload signing with receiver verification,
-local event searches and custom DSL queries with engine receipts, and bounded
-discovery into a durable outbox. It does not yet run a service or deliver requests. Later milestones add
-delivery, lifecycle management and a control API.
+local event searches and custom DSL queries with engine receipts, bounded
+discovery into a durable outbox, and an HTTPS transport for signed requests.
+It does not yet run a service or drain the outbox. Later milestones add the
+delivery worker, lifecycle management and a control API.
 The code and documentation here use the repository's [MIT license](../LICENSE).
 
 Use Node from the release line accepted by
@@ -27,7 +28,10 @@ No root dependency installation or engine build is needed. The project installs
 the parent's exact ephemeris dependency locally. TypeScript paths and the Vitest
 resolver direct relative engine-source imports to that local dependency. Other
 runners must provide equivalent resolution; a production build comes later.
-The test suite uses invented inputs and performs no network requests.
+The test suite uses invented inputs. Network tests use mocked DNS and local
+loopback receivers only, with no external requests. TLS tests require the
+`openssl` executable and generate their certificates and keys at runtime in
+an ignored cache directory, removing those files immediately after loading.
 
 `check:package-isolation` runs the parent npm inventory with `--dry-run` and
 `--ignore-scripts` and rejects any selected `webhook/` file. It does not create
@@ -67,7 +71,7 @@ fragments (including an empty fragment), raw whitespace, control characters,
 backslashes and port zero are rejected. Query strings are allowed. The result
 is normalized with `URL.href`. Syntax acceptance does not establish that the
 host is a permitted network destination; even IP literals are accepted at this
-stage. The transport milestone will enforce address policy at connection time.
+stage. The HTTPS transport enforces address policy at connection time.
 
 Windows require explicit UTC timestamps with date, hours, minutes and seconds,
 optionally followed by fractional milliseconds, and a trailing `Z`. Local
@@ -574,3 +578,91 @@ schedules and confirms that delivered events retain their bytes and state.
 binding, migration from the earlier schema, reopen persistence and rollback
 after injected SQLite failures. These establish local discovery and storage
 behavior, not physical event accuracy or at-least-once HTTP delivery.
+
+## Signed HTTPS transport
+
+`HttpsTransport` in [src/transport.ts](src/transport.ts) sends a single request.
+Construct it with explicit `deadlineMs`, `maxResponseBytes`,
+`maxResponseHeaderBytes` and `maxAddresses`. Settings are copied and must be
+positive integers within `TRANSPORT_LIMITS`. These service policy caps are
+enforced by the constructor tests in [transport.test.ts](test/transport.test.ts),
+which also test response boundaries against synthetic streams and local HTTP:
+
+| Setting | Maximum | Unit |
+| --- | ---: | --- |
+| `deadlineMs` | 60000 | Milliseconds for the whole attempt |
+| `maxResponseBytes` | 65536 | Encoded response body bytes |
+| `maxResponseHeaderBytes` | 16384 | Response header bytes, including trailers |
+| `maxAddresses` | 64 | Addresses returned by a resolution |
+
+Call `send({ callbackUrl, body, headers, signal })` with the delivery's saved
+callback URL, its exact payload bytes and headers from `SigningKeyVault.sign`.
+Use the retained idempotency key and a fresh timestamp for each attempt.
+`signal` is optional. The transport copies the body and signature header values
+before asynchronous work, validates their syntax, and forwards only the
+protocol's signature headers plus its own Host, content type, length and
+connection headers. It does not reserialize JSON or authenticate a supplied
+digest. Key selection and signing belong to the caller; never accept these
+headers from an untrusted control request. Invalid local input throws
+`TransportError` with a fixed message.
+
+Every attempt resolves the original hostname afresh through the OS resolver,
+without a transport DNS cache. Empty or excessive answers are refused, as is
+an answer containing any disallowed address, even alongside a public address.
+IP literals undergo the same address check without DNS. The service then
+selects the first validated address and connects directly to it. It performs
+no fallback connection within an attempt. A later attempt can resolve again.
+No connection pool, proxy environment setting or second name lookup changes
+that pin. The original URL determines Host, path and query; TLS authenticates
+the original DNS name or IP certificate SAN, with certificate-chain validation
+enabled. The socket peer must match the selected address before any request
+headers or body are flushed. The OS's mapped spelling of an IPv4 peer is
+accepted only when it denotes that exact pin.
+
+[src/destination.ts](src/destination.ts) defines a deliberately conservative
+policy informed by the IANA [IPv4](https://www.iana.org/assignments/iana-ipv4-special-registry/)
+and [IPv6](https://www.iana.org/assignments/iana-ipv6-special-registry/) special-purpose
+registries, read for this milestone. It rejects local, private, shared,
+documentation, multicast and reserved addresses. It also rejects special-purpose
+blocks with globally reachable exceptions, mapped or translated destinations,
+tunnel ranges, zone identifiers and IPv6 outside the policy's global-unicast
+range. The publicly numbered [Azure host virtual endpoint](https://learn.microsoft.com/en-us/azure/virtual-network/what-is-ip-address-168-63-129-16)
+is explicitly refused. [destination.test.ts](test/destination.test.ts) checks
+these blocks, boundary addresses and numeric peer equivalence without connecting
+to them. This fixed policy does not auto-update from a registry and cannot
+prove how a deployment routes public addresses. Use an egress boundary that
+keeps public destinations separate from local infrastructure.
+
+Redirect statuses are returned as HTTP failures without following Location.
+The whole-attempt deadline covers DNS, TCP, TLS, sending and reading the
+response; it does not reset when data arrives. On expiration or cancellation,
+the transport destroys request and response streams and ignores late results.
+Node's OS lookup cannot be interrupted in flight, so the deadline releases
+the caller and discards its result while that underlying operation finishes.
+Timers depend on the Node event loop remaining responsive.
+
+Response bodies are discarded as encoded chunks, never decompressed, parsed,
+saved or logged. An excessive Content-Length, body, header block or combined
+header/trailer size refuses acknowledgement, as do protocol errors and a
+truncated response. Header accounting uses UTF-8 field names and values plus
+separator overhead; Node independently enforces its wire parser header limit.
+Outcomes expose
+only `http` with a status, `timeout`, `network-error`, `destination-rejected`
+or `cancelled`. DNS failures, TLS errors and receiver content never enter the
+outcome. Only a fully received bounded successful response can acknowledge
+delivery. A timeout or interrupted response can still follow a receiver side
+effect, so a future delivery worker must retain the same idempotency key.
+The transport performs no retry, lease or SQLite state transition; those
+belong to the next milestone.
+
+[transport.test.ts](test/transport.test.ts) uses mocked DNS and a loopback HTTP
+receiver seam to check signed bytes, destination pins, redirect refusal,
+response limits, whole-attempt deadlines and cancellation. Its HTTP seam
+simulates the TLS state and is trusted test code. [transport-tls.test.ts](test/transport-tls.test.ts)
+uses a loopback TLS receiver with runtime-generated keys, certificates and IP
+SANs to check successful identity validation, wrong names, untrusted chains,
+peer mismatches and a stalled handshake. The production path uses Node's
+[HTTPS client](https://nodejs.org/download/release/latest-jod/docs/api/https.html)
+and [IP SAN checker](https://nodejs.org/download/release/latest-jod/docs/api/crypto.html#x509checkipip).
+Test seams are constructor dependencies, never subscription settings; the
+production constructor defaults enforce HTTPS with no trust override.

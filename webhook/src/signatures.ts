@@ -85,7 +85,8 @@ export function signWebhook(options: SignWebhookOptions): WebhookSignatureHeader
   }
 }
 
-function readHeaders(input: unknown): WebhookSignatureHeaders | null {
+/** Shared syntax validation; this does not authenticate the digest. */
+export function parseSignatureHeaders(input: unknown): WebhookSignatureHeaders | null {
   if (typeof input !== 'object' || input === null || Array.isArray(input)) return null;
   const names = new Set([
     'x-webhook-key-id', 'x-webhook-timestamp', 'x-webhook-signature', 'idempotency-key',
@@ -105,6 +106,7 @@ function readHeaders(input: unknown): WebhookSignatureHeaders | null {
   const idempotencyKey = selected['idempotency-key'];
   if (!validIdentifier(keyId, KEY_ID) || !validIdentifier(idempotencyKey, IDEMPOTENCY_KEY)
     || typeof timestamp !== 'string' || !TIMESTAMP.test(timestamp)
+    || !isUnixSeconds(Number(timestamp))
     || typeof signature !== 'string' || !SIGNATURE.test(signature)) return null;
   return {
     'x-webhook-key-id': keyId,
@@ -122,7 +124,7 @@ export function verifyWebhook(options: VerifyWebhookOptions): boolean {
       ? DEFAULT_SIGNATURE_TOLERANCE_SECONDS : options.toleranceSeconds;
     if (!validBytes(body, secret) || !validIdentifier(expectedKeyId, KEY_ID)
       || !isUnixSeconds(now) || !isUnixSeconds(tolerance)) return false;
-    const parsed = readHeaders(headers);
+    const parsed = parseSignatureHeaders(headers);
     if (!parsed || parsed['x-webhook-key-id'] !== expectedKeyId) return false;
     const timestamp = Number(parsed['x-webhook-timestamp']);
     if (!isUnixSeconds(timestamp) || Math.abs(now - timestamp) > tolerance) return false;

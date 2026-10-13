@@ -55,7 +55,8 @@ function text(input: unknown, maxBytes: number, field: string): string {
   return input;
 }
 
-function callbackUrl(input: unknown): string {
+/** Syntax only. The delivery boundary must also validate resolved addresses. */
+export function parseCallbackUrl(input: unknown): string {
   const field = "callbackUrl";
   const value = text(input, SUBSCRIPTION_LIMITS.callbackUrlBytes, field);
   if (!/^https:\/\//i.test(value) || /[\s\u0000-\u001f\u007f\\#]/u.test(value)) invalid(field);
@@ -193,7 +194,7 @@ function subscription(input: unknown, validateCustom: boolean): SubscriptionSpec
   const enabled = Object.hasOwn(value, "enabled") ? value.enabled : true;
   if (typeof enabled !== "boolean") invalid("enabled");
   return Object.freeze({
-    callbackUrl: callbackUrl(value.callbackUrl),
+    callbackUrl: parseCallbackUrl(value.callbackUrl),
     secretRef: secretRef(value.secretRef),
     filter: eventFilter(value.filter, validateCustom),
     window: parseScheduleWindow(value.window),
