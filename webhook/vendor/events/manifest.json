@@ -4,7 +4,24 @@
   "commit": "7d6fb88d03b3896ee1e5496ed99961015d291d3c",
   "transformation": {
     "from": "'../../src/calc.js'",
-    "to": "'../../../../src/calc.js'"
+    "to": "'../../../../src/calc.js'",
+    "executorContext": {
+      "file": "src/search.ts",
+      "replacements": [
+        {
+          "from": "  providers: QueryProviders = {}): QueryExecutionResult {",
+          "to": "  providers: QueryProviders = {},\n  // Trusted webhook adapter supplies its bounded context after schedule intersection.\n  executionContext?: EvaluationContext): QueryExecutionResult {"
+        },
+        {
+          "from": "  const window = validateWindow(query.range !== null ? { ...query.range, clock } : options.horizon!);",
+          "to": "  const window = executionContext?.window ?? validateWindow(query.range !== null ? { ...query.range, clock } : options.horizon!);"
+        },
+        {
+          "from": "  const context = new EvaluationContext(window, { maxEvaluations: options.maxEvaluations,",
+          "to": "  const context = executionContext ?? new EvaluationContext(window, { maxEvaluations: options.maxEvaluations,"
+        }
+      ]
+    }
   },
   "files": [
     {
@@ -38,10 +55,22 @@
       "localSha256": "e8d2b8129f45c4676f3d61a76fc0a7b56a9f50acaa992e359b61231f0ee13fe4"
     },
     {
+      "source": "events/src/query.ts",
+      "file": "src/query.ts",
+      "upstreamSha256": "a94c3d9dc0c1d76bc070da0e70221cb1fbd1590ec3a4abc36c07d03ee9fc0897",
+      "localSha256": "a94c3d9dc0c1d76bc070da0e70221cb1fbd1590ec3a4abc36c07d03ee9fc0897"
+    },
+    {
       "source": "events/src/root.ts",
       "file": "src/root.ts",
       "upstreamSha256": "4b9ab104568a44601ada9a34f374162a6c9a04a323dde6691335f0f59dfd4256",
       "localSha256": "4b9ab104568a44601ada9a34f374162a6c9a04a323dde6691335f0f59dfd4256"
+    },
+    {
+      "source": "events/src/search.ts",
+      "file": "src/search.ts",
+      "upstreamSha256": "068b9983954e503bd2c3f07e901cc7b284230640bb9151a608da1111dd6967b6",
+      "localSha256": "6fb5c8cdda0ed2a42c2903cf156a409c90b748772e10c136ae73892284ee8fae"
     },
     {
       "source": "events/src/stations.ts",
@@ -54,6 +83,12 @@
       "file": "src/types.ts",
       "upstreamSha256": "e568af57b36d414c7c95234783edda06680ebed6be2ee6139fc109e533eb33ae",
       "localSha256": "e568af57b36d414c7c95234783edda06680ebed6be2ee6139fc109e533eb33ae"
+    },
+    {
+      "source": "events/src/void.ts",
+      "file": "src/void.ts",
+      "upstreamSha256": "679409d67caeb4677676ef8b56bb4c29ca7e8ba85ee184d54380e8fcd3ede8be",
+      "localSha256": "679409d67caeb4677676ef8b56bb4c29ca7e8ba85ee184d54380e8fcd3ede8be"
     }
   ]
 }

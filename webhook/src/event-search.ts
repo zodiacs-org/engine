@@ -10,6 +10,8 @@ import { searchStations } from "../vendor/events/src/stations.js";
 import type { SearchResult } from "../vendor/events/src/types.js";
 import { parseEventFilter, parseScheduleWindow } from "./subscription.js";
 import type { EventBody } from "./types.js";
+import { CUSTOM_QUERY_SCHEMA, parseCustomQuery, requiresEclipse } from "./custom-query.js";
+import { searchCustom } from "./custom-search.js";
 import type {
   DiscoveredEvent, EventDefinition, EventSearchDependencies, EventSearchMetadata,
   EventSearchRequest, EventSearchResult
@@ -70,7 +72,7 @@ function options(input: EventSearchRequest): { search: EventSearchMetadata; sign
     throw new TypeError("Event search signal must be an AbortSignal.");
   }
   let eclipse: EventSearchMetadata["eclipse"] = null;
-  if (filter.kind === "eclipse") {
+  if (requiresEclipse(filter)) {
     const config = record(value.eclipse, ["model", "derivativeStepMs"]);
     const model = record(config.model, ["sunRadiusAu", "moonRadiusAu", "earthRadiusAu"]);
     const { sunRadiusAu, moonRadiusAu, earthRadiusAu } = model;
@@ -84,18 +86,27 @@ function options(input: EventSearchRequest): { search: EventSearchMetadata; sign
       derivativeStepMs: positiveInteger(config.derivativeStepMs)
     };
   } else if (Object.hasOwn(value, "eclipse")) {
-    throw new TypeError("Eclipse options require an eclipse filter.");
+    throw new TypeError("Eclipse options require a built-in or custom eclipse filter.");
+  }
+  let custom: EventSearchMetadata["custom"];
+  if (filter.kind === "custom") {
+    const query = parseCustomQuery(filter.expression);
+    const start = Math.max(Date.parse(window.start), query.range.startMs);
+    const end = Math.min(Date.parse(window.end), query.range.endMs);
+    custom = { schema: CUSTOM_QUERY_SCHEMA, query, intervals: "refused",
+      effectiveWindow: start < end ? { start: new Date(start).toISOString(), end: new Date(end).toISOString() } : null };
   }
   // The fixed grid gives the same interior root brackets for repeated and partitioned scans.
   // A full cell beyond each edge confirms sampled touches and outgoing station motion.
   const padding = stepMs + (eclipse?.derivativeStepMs ?? 0);
-  const startMs = Math.floor((Date.parse(window.start) - padding) / stepMs) * stepMs;
-  const endMs = Math.ceil((Date.parse(window.end) + padding) / stepMs) * stepMs;
+  const owned = custom?.effectiveWindow ?? window;
+  const startMs = Math.floor((Date.parse(owned.start) - padding) / stepMs) * stepMs;
+  const endMs = Math.ceil((Date.parse(owned.end) + padding) / stepMs) * stepMs;
   const search: EventSearchMetadata = snapshot({
     schema: "zodiacs.webhook-search.v1", source: EVENT_SEARCH_SOURCE, filter, window,
     scanWindow: { startMs, endMs, clock: "utc" }, stepMs, gridOriginMs: 0, maxEvaluations,
     eclipse, ownership: "[start,end)", coordinates: COORDINATES,
-    completeness: "conditional-on-sampling-assumptions"
+    completeness: "conditional-on-sampling-assumptions", ...(custom ? { custom } : {})
   });
   return { search, ...(value.signal instanceof AbortSignal ? { signal: value.signal } : {}) };
 }
@@ -125,10 +136,13 @@ export function searchEvents(input: EventSearchRequest, dependencies: EventSearc
     snapshot({ status: "refused", reason, events: [], search, evaluations: context.evaluations });
   try {
     context.checkpoint();
-    if (filter.kind === "custom") return refused("unsupported-filter");
+    if (search.custom?.effectiveWindow === null) {
+      return snapshot({ status: "complete", events: [], search, evaluations: 0 });
+    }
     // Search inputs use UTC labels. Known steps of the engine's clock violate the
     // scanners' continuity assumptions. Include the speed stencil for stations.
-    const speedGuard = filter.kind === "station" ? SPEED_HALF_WIDTH_MS : 0;
+    const station = filter.kind === "station" || search.custom?.query.event.kind === "station";
+    const speedGuard = station ? SPEED_HALF_WIDTH_MS : 0;
     if (!Number.isNaN(elapsedDays(
       timeBasis(context.window.startMs - speedGuard, "utc"),
       timeBasis(context.window.endMs + speedGuard, "utc"), Number.NaN
@@ -138,6 +152,9 @@ export function searchEvents(input: EventSearchRequest, dependencies: EventSearc
     let definitions: readonly EventDefinition[];
     let bodies: readonly EventBody[];
     switch (filter.kind) {
+      case "custom":
+        ({ definitions, bodies } = searchCustom(search.custom!.query, search, context, dependencies));
+        break;
       case "aspect-exact":
         definitions = completed(searchExactAspects(context, filter.bodies[0],
           { kind: "moving", body: filter.bodies[1] },
@@ -167,7 +184,8 @@ export function searchEvents(input: EventSearchRequest, dependencies: EventSearc
         break;
       }
     }
-    const start = Date.parse(window.start), end = Date.parse(window.end);
+    const owned = search.custom?.effectiveWindow ?? window;
+    const start = Date.parse(owned.start), end = Date.parse(owned.end);
     const calculate = dependencies.calculate ?? calc;
     const events: DiscoveredEvent[] = [];
     for (const definition of definitions) {
@@ -177,7 +195,7 @@ export function searchEvents(input: EventSearchRequest, dependencies: EventSearc
         const position = calculate({ body, time: at,
           center: COORDINATES.center, frame: COORDINATES.frame, zodiac: COORDINATES.zodiac,
           flags: { correction: COORDINATES.correction, units: COORDINATES.units,
-            speeds: filter.kind === "station", cartesian: filter.kind === "eclipse" }
+            speeds: station, cartesian: search.eclipse !== null }
         });
         if (position.status === "refused") throw new EngineRefused(position);
         return position;

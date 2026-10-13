@@ -6,6 +6,7 @@ import type { SignIngress } from "../vendor/events/src/longitude.js";
 import type { MotionProvider, Station } from "../vendor/events/src/stations.js";
 import type { SearchWindow } from "../vendor/events/src/types.js";
 import type { EventFilter, ScheduleWindow } from "./types.js";
+import type { CustomQuery, CUSTOM_QUERY_SCHEMA } from "./custom-query.js";
 
 export interface EventSearchRequest {
   readonly filter: EventFilter;
@@ -15,7 +16,7 @@ export interface EventSearchRequest {
   /** Includes search samples and calculations capturing the emitted events' receipts. */
   readonly maxEvaluations: number;
   readonly signal?: AbortSignal;
-  /** Required for eclipse filters. No implicit physical radii or derivative step. */
+  /** Required for built-in and custom eclipse filters. No implicit model. */
   readonly eclipse?: { readonly model: EclipseModel; readonly derivativeStepMs: number };
 }
 
@@ -29,7 +30,7 @@ export interface EventSearchDependencies {
 export type EventDefinition = ExactAspect | SignIngress | Station | EclipseEvent;
 
 export interface DiscoveredEvent {
-  readonly kind: Exclude<EventFilter["kind"], "custom">;
+  readonly kind: EventFilter["kind"];
   readonly at: string;
   readonly atMs: number;
   /** Original search definition, numerical bracket, residual and motion/model fields. */
@@ -54,6 +55,12 @@ export interface EventSearchMetadata {
     readonly zodiac: "tropical"; readonly correction: "apparent"; readonly units: "degrees";
   };
   readonly completeness: "conditional-on-sampling-assumptions";
+  readonly custom?: {
+    readonly schema: typeof CUSTOM_QUERY_SCHEMA;
+    readonly query: CustomQuery;
+    readonly effectiveWindow: ScheduleWindow | null;
+    readonly intervals: "refused";
+  };
 }
 
 interface SearchEnvelope {

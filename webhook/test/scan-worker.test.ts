@@ -205,12 +205,12 @@ describe('refusal and failure atomicity', () => {
       .scanSubscription('sub-1', request)).toMatchObject({ status: 'committed', inserted: 1 });
   });
 
-  it('returns unsupported custom filters without pinning policy or moving the cursor', () => {
-    create('sub-1', { filter: { kind: 'custom', expression: 'synthetic event expression' } });
-    expect(new ScanWorker(store, policy).scanSubscription('sub-1', request)).toMatchObject({
-      status: 'refused', reason: 'unsupported-filter', evaluations: 0,
-    });
-    untouched();
+  it('rejects unsupported custom subscriptions before creating a cursor', () => {
+    expect(() => create('sub-1', { filter: { kind: 'custom', expression: 'synthetic event expression' } }))
+      .toThrow('Invalid subscription field: filter.expression.');
+    expect(store.getSubscription('sub-1')).toBeUndefined();
+    expect(store.getCursor('sub-1')).toBeUndefined();
+    expect(store.listDeliveries()).toEqual([]);
   });
 
   it('discards completed calculations if cancelled before commit', () => {
@@ -308,13 +308,18 @@ describe('concurrent discovery and bounded pages', () => {
   });
 
   it('advances pagination past refused subscriptions and limits every subscription to one slice', () => {
-    create('sub-a', { filter: { kind: 'custom', expression: 'synthetic expression' } });
+    create('sub-a', { filter: { kind: 'station', body: 'Mercury', direction: 'any' } });
     create('sub-b');
     create('sub-c', { enabled: false });
-    const worker = new ScanWorker(store, policy, syntheticSearch());
+    const worker = new ScanWorker(store, policy, input => input.filter.kind === 'station'
+      ? searchEvents(input, {
+        motion: context => ({ context, sample: () => {
+          while (true) context.evaluate(() => 0);
+        } })
+      }) : syntheticSearch()(input));
     const first = worker.scanPage({ ...request, limit: 2 });
     expect(first).toMatchObject({ lastId: 'sub-b', exhausted: false,
-      results: [{ subscriptionId: 'sub-a', status: 'refused', reason: 'unsupported-filter' },
+      results: [{ subscriptionId: 'sub-a', status: 'refused', reason: 'evaluation-budget' },
         { subscriptionId: 'sub-b', status: 'committed', inserted: 0 }] });
     expect(store.getCursor('sub-a')!.nextAt).toBe(BASE);
     expect(store.getCursor('sub-b')!.nextAt).toBe(BASE + 5000);

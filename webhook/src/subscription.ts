@@ -2,6 +2,7 @@ import {
   EVENT_BODIES, ZODIAC_SIGNS,
   type Direction, type EventBody, type EventFilter, type ScheduleWindow, type SubscriptionSpec
 } from "./types.js";
+import { parseCustomQuery } from "./custom-query.js";
 
 export const SUBSCRIPTION_LIMITS = Object.freeze({
   callbackUrlBytes: 2048,
@@ -134,7 +135,7 @@ function bodies(input: unknown): readonly [EventBody, EventBody] {
   return Object.freeze([a, b]);
 }
 
-export function parseEventFilter(input: unknown): EventFilter {
+function eventFilter(input: unknown, validateCustom: boolean): EventFilter {
   const value = object(input, ["kind", "bodies", "angle", "body", "sign", "direction", "type", "expression"], "filter");
   switch (value.kind) {
     case "aspect-exact": {
@@ -173,6 +174,9 @@ export function parseEventFilter(input: unknown): EventFilter {
       if (expression.trim() === "" || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/u.test(expression)) {
         invalid("filter.expression");
       }
+      if (validateCustom) {
+        try { parseCustomQuery(expression); } catch { invalid("filter.expression"); }
+      }
       return Object.freeze({ kind: value.kind, expression });
     }
     default:
@@ -180,16 +184,31 @@ export function parseEventFilter(input: unknown): EventFilter {
   }
 }
 
-/** Syntax validation only: no DNS, HTTP, key lookup, DSL execution or ephemeris calls. */
-export function parseSubscription(input: unknown): SubscriptionSpec {
+export function parseEventFilter(input: unknown): EventFilter {
+  return eventFilter(input, true);
+}
+
+function subscription(input: unknown, validateCustom: boolean): SubscriptionSpec {
   const value = object(input, ["callbackUrl", "secretRef", "filter", "window", "enabled"], "subscription");
   const enabled = Object.hasOwn(value, "enabled") ? value.enabled : true;
   if (typeof enabled !== "boolean") invalid("enabled");
   return Object.freeze({
     callbackUrl: callbackUrl(value.callbackUrl),
     secretRef: secretRef(value.secretRef),
-    filter: parseEventFilter(value.filter),
+    filter: eventFilter(value.filter, validateCustom),
     window: parseScheduleWindow(value.window),
     enabled
   });
+}
+
+/** Includes DSL semantics, without DNS, HTTP, key lookup, execution or ephemeris calls. */
+export function parseSubscription(input: unknown): SubscriptionSpec {
+  return subscription(input, true);
+}
+
+/** Storage-only compatibility: pre-DSL drafts remain inspectable and replaceable.
+ * Never use this to authorize creation, updates or execution of custom filters.
+ */
+export function parseStoredSubscription(input: unknown): SubscriptionSpec {
+  return subscription(input, false);
 }

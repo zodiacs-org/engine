@@ -1,10 +1,10 @@
 # Outbound astrology webhooks
 
 This private workbench is being built according to [PLAN.md](PLAN.md). The
-implemented milestones cover subscription syntax validation, SQLite storage,
+implemented milestones cover subscription validation, SQLite storage,
 encrypted signing-key custody, payload signing with receiver verification,
-local event searches with engine receipts, and bounded discovery into a durable
-outbox. It does not yet run a service or deliver requests. Later milestones add
+local event searches and custom DSL queries with engine receipts, and bounded
+discovery into a durable outbox. It does not yet run a service or deliver requests. Later milestones add
 delivery, lifecycle management and a control API.
 The code and documentation here use the repository's [MIT license](../LICENSE).
 
@@ -90,17 +90,15 @@ boundary, not a sandbox for executable same-process proxies.
 | `ingress` | `body`; `sign`, the lowercase destination sign | `direction`: `any`, `direct` or `retrograde`; defaults to `any` |
 | `station` | `body`, a planet other than Sun or Moon | `direction`: motion after the station; defaults to `any` |
 | `eclipse` | `type`: `solar`, `lunar` or `any` | None |
-| `custom` | `expression`, nonblank bounded text | None |
+| `custom` | `expression`, a bounded supported events DSL query | None |
 
 Supported names are the Sun, Moon and planets listed in `EVENT_BODIES` in
 [src/types.ts](src/types.ts); nodes and arbitrary points are excluded. Sign
 names come from `ZODIAC_SIGNS`. Filters are case-sensitive.
 
-Custom expressions are preserved as text, not parsed or executed in this
-milestone. The planned integration uses the existing events DSL's supported
-grammar, not JavaScript evaluation. Search semantics must be validated before
-custom subscriptions can be activated. Eclipses use the event provider's
-documented geocentric definitions; a subscription does not imply visibility
+Custom expressions are preserved as text and validated with the pinned events
+DSL parser. The supported semantics are described below. Eclipses use the
+event provider's documented geocentric definitions; a subscription does not imply visibility
 at a location.
 
 ## Validation limits and evidence
@@ -119,6 +117,7 @@ against synthetic input, including UTF-8 lengths and invalid calendar dates.
 
 Ill-formed UTF-16 is rejected before UTF-8 encoding can change the text. Custom
 expressions allow tabs and line endings, but not other C0 controls or DEL.
+Their tokens must also match the supported DSL grammar.
 
 Validation failures throw `SubscriptionValidationError`, whose `code` is
 `invalid-subscription`. Its `field` and message use fixed field names without
@@ -187,6 +186,12 @@ calls; the subscription parser remains the public JSON validation boundary.
 Storage errors have fixed codes without SQL or caller data in their messages.
 Invalid subscription specifications retain `SubscriptionValidationError` and
 its fixed field name; storage-specific validation uses `StorageError`.
+
+Custom drafts saved before DSL validation remain readable, replaceable and
+deletable. Storage reads retain the earlier text validation for these records;
+creation and updates require supported query semantics. A worker refuses an
+unsupported legacy expression with `unsupported-filter`, leaving its cursor,
+outbox and policy unchanged. Other subscriptions in the page can proceed.
 
 [storage.test.ts](test/storage.test.ts) checks repository behavior against
 synthetic records: reopen persistence, cursor conflicts, payload identity,
@@ -300,13 +305,13 @@ filter and UTC window synchronously, without storage or network access. Pass
 `filter`, `window`, `stepMs` and `maxEvaluations`. Use `parseEventFilter` and
 `parseScheduleWindow` for standalone validation; `searchEvents` also revalidates
 them. There is no default scan step or evaluation budget. These are operating
-choices, not physical error bounds. Custom filters currently return
-`unsupported-filter`; DSL integration belongs to the later milestone.
+choices, not physical error bounds. Custom filters use the supported DSL
+semantics described below.
 
 The local search modules are pinned from `origin/infra/events` by full commit
 and checksums in [vendor/events/manifest.json](vendor/events/manifest.json).
-[PROVENANCE.md](vendor/events/PROVENANCE.md) describes the import-path rewrite
-and reproducible offline check. `npm test` verifies that snapshot first. Only
+[PROVENANCE.md](vendor/events/PROVENANCE.md) describes the import-path rewrite,
+executor context seam and reproducible offline check. `npm test` verifies that snapshot first. Only
 local calculation modules are included; no event HTTP service is required.
 The parent engine remains a relative source dependency of this checkout.
 
@@ -381,6 +386,74 @@ checks the real relative-source engine over the synthetic schedule windows in
 that file, equality of captured results with direct engine calls, version and
 clock preservation, and known clock-step refusals. These are integration and
 regression checks, with no new independent astronomical accuracy claim.
+
+## Custom event queries
+
+`parseSubscription` and `parseEventFilter` validate custom expressions using the
+parser pinned in [vendor/events/PROVENANCE.md](vendor/events/PROVENANCE.md).
+Queries are data, with no JavaScript evaluation. Supported forms include:
+
+```text
+all Mars square Sun from 2000-01-01 to 2000-02-01
+all Mercury ingresses into Taurus from 2000-01-01 to 2000-02-01
+all Mercury stations retrograde from 2000-01-01 to 2000-02-01 clock utc
+all solar eclipses from 2000-01-01 to 2000-02-01
+```
+
+These are synthetic query examples, not predictions. Named aspects are
+conjunction, sextile, square, trine and opposition. An ingress may omit
+`into <sign>` to select every destination sign; a station may omit its outgoing
+direction. Lunar eclipses are also supported. Body, sign and grammar tokens
+are case insensitive, while the original expression text is retained. The
+parser also accepts increasing year ranges; its final named year is included
+in full. Explicit date ranges end at midnight on the `to` date, exclusively.
+
+Every subscription query must use `all` and an explicit range. An omitted
+clock means UTC; explicit UT1 and TT clocks are rejected. `next` is rejected
+because selecting a first event separately in each worker slice would change
+its meaning when the schedule is partitioned. Natal targets have no supported
+input contract here. Sun and Moon station queries are rejected, consistently
+with built-in station filters. Unrecognized or unsupported expressions fail
+with `SubscriptionValidationError` on `filter.expression`, without echoing
+their contents. The parser's token cap is enforced in addition to the byte
+limit; [custom-query.test.ts](test/custom-query.test.ts) exercises both bounds.
+
+Retrograde and void-of-course expressions produce intervals in the upstream
+executor. This service rejects those expressions before calculation. It does
+not turn a clipped interval boundary into an exact event, issue a notification
+for each scan slice, or advance the cursor on an unresolved interval result.
+Supporting intervals needs a separate transition and persistence contract.
+
+For a supported query, the adapter intersects the DSL range with the requested
+`[start, end)` window. An empty intersection completes without calculations.
+A nonempty intersection receives the same fixed-grid padding as built-in
+filters. Padding may sample outside both ranges to establish roots, but only
+points inside the intersection are emitted. Search metadata adds `custom`,
+with the parsed query, effective window and interval policy. Broad expression
+ranges therefore do not force the worker to rescan that whole range.
+
+The pinned executor runs on that padded window through a documented shared
+context seam. Search and receipt capture consume the same budget and
+cancellation signal. All results are discarded on refusal, including a budget
+exhausted while capturing receipts. Eclipse expressions require the explicit
+model and derivative step used by built-in eclipses; the worker passes them
+from its policy. Clock continuity checks apply to custom searches too.
+
+Each emitted event has `kind: "custom"`, its original point definition and
+full engine calculation results. The raw expression and its range stay in
+subscription/search metadata, outside the immutable event payload. A custom
+policy marker distinguishes these payloads from built-in filters; switching
+between the two on a pinned subscription requires a new subscription. Changes
+to a custom query's spelling or range do not alone create new occurrence
+identities. A rediscovered point must still have identical payload bytes.
+
+[custom-query.test.ts](test/custom-query.test.ts) checks parser restrictions,
+range intersection, boundary ownership, receipt preservation, cancellation
+and shared budgets with analytic motion and synthetic geometry. Its real
+engine comparison checks integration, not independent physical accuracy.
+[custom-worker.test.ts](test/custom-worker.test.ts) checks SQLite discovery,
+restart, repartitioning, rescan identity, legacy drafts and refusal rollback.
+The existing search accuracy limitations also apply to custom queries.
 
 ## Bounded discovery worker
 

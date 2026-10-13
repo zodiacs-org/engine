@@ -8,10 +8,28 @@ const commit = "7d6fb88d03b3896ee1e5496ed99961015d291d3c";
 const repository = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const vendor = join(repository, "webhook/vendor/events");
 const modules = [
-  "aspects.ts", "context.ts", "eclipses.ts", "engine.ts", "longitude.ts", "root.ts", "stations.ts", "types.ts"
+  "aspects.ts", "context.ts", "eclipses.ts", "engine.ts", "longitude.ts", "query.ts", "root.ts", "search.ts",
+  "stations.ts", "types.ts", "void.ts"
 ];
 const originalImport = "'../../src/calc.js'";
 const localImport = "'../../../../src/calc.js'";
+// Reversible trusted-context seam; parser validation and search dispatch stay intact.
+const executorContextRewrites = [
+  {
+    from: "  providers: QueryProviders = {}): QueryExecutionResult {",
+    to: "  providers: QueryProviders = {},\n" +
+      "  // Trusted webhook adapter supplies its bounded context after schedule intersection.\n" +
+      "  executionContext?: EvaluationContext): QueryExecutionResult {"
+  },
+  {
+    from: "  const window = validateWindow(query.range !== null ? { ...query.range, clock } : options.horizon!);",
+    to: "  const window = executionContext?.window ?? validateWindow(query.range !== null ? { ...query.range, clock } : options.horizon!);"
+  },
+  {
+    from: "  const context = new EvaluationContext(window, { maxEvaluations: options.maxEvaluations,",
+    to: "  const context = executionContext ?? new EvaluationContext(window, { maxEvaluations: options.maxEvaluations,"
+  }
+];
 const maxBytes = 2_000_000;
 const manifestPath = join(vendor, "manifest.json");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -27,11 +45,22 @@ function transform(source, name, reverse = false) {
   const from = reverse ? localImport : originalImport;
   const to = reverse ? originalImport : localImport;
   const expected = name === "engine.ts" ? 2 : name === "eclipses.ts" ? 1 : 0;
-  const value = source.toString("utf8");
+  let value = source.toString("utf8");
   if (!Buffer.from(value).equals(source) || value.split(from).length - 1 !== expected || value.includes(to)) {
     throw new Error(`Unexpected source imports or encoding: ${name}`);
   }
-  return Buffer.from(value.replaceAll(from, to));
+  value = value.replaceAll(from, to);
+  if (name === "search.ts") {
+    for (const rewrite of executorContextRewrites) {
+      const oldText = reverse ? rewrite.to : rewrite.from;
+      const newText = reverse ? rewrite.from : rewrite.to;
+      if (value.split(oldText).length - 1 !== 1 || value.includes(newText)) {
+        throw new Error(`Unexpected executor context seam: ${name}`);
+      }
+      value = value.replace(oldText, newText);
+    }
+  }
+  return Buffer.from(value);
 }
 
 function entry(name, upstream, local) {
@@ -48,7 +77,10 @@ function manifest(files) {
     schema: "zodiacs-webhook-events-vendor/1",
     repository: "https://github.com/zodiacs-org/engine",
     commit,
-    transformation: { from: originalImport, to: localImport },
+    transformation: {
+      from: originalImport, to: localImport,
+      executorContext: { file: "src/search.ts", replacements: executorContextRewrites }
+    },
     files
   };
 }
@@ -60,7 +92,7 @@ function check() {
     const local = regularFile(join(vendor, "src", name));
     return entry(name, transform(local, name, true), local);
   });
-  // Reversing the only permitted rewrite reconstructs each upstream byte stream.
+  // Reversing the permitted rewrites reconstructs each upstream byte stream.
   // This check needs no git executable, repository objects or network access.
   const expected = Buffer.from(encode(manifest(entries)));
   if (!regularFile(manifestPath).equals(expected)) throw new Error("Vendored source does not match its pinned manifest.");

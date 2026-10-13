@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import type { DatabaseSync, SQLInputValue, SQLOutputValue } from "node:sqlite";
 import { openDatabase } from "./storage-db.js";
-import { parseSubscription, SubscriptionValidationError } from "./subscription.js";
+import { parseStoredSubscription, parseSubscription, SubscriptionValidationError } from "./subscription.js";
 import type {
   AttemptDisposition, AttemptInput, AttemptResult, DeadLetterReason, NewEvent, Page,
   ScanCommit, ScanCursor, StoredAttempt, StoredDeadLetter, StoredDelivery,
@@ -79,7 +79,7 @@ function result(input: AttemptResult): AttemptResult {
 function subscriptionRow(row: Row): StoredSubscription {
   return Object.freeze({
     id: row.id as string, revision: row.revision as number,
-    spec: parseSubscription(JSON.parse(row.spec_json as string)),
+    spec: parseStoredSubscription(JSON.parse(row.spec_json as string)),
     createdAt: row.created_at as number, updatedAt: row.updated_at as number,
     deletedAt: row.deleted_at as number | null
   });

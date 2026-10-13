@@ -374,9 +374,9 @@ describe('receipt preservation and complete/refused envelopes', () => {
     expect(source).not.toHaveBeenCalled();
   });
 
-  it('reports unsupported custom filters explicitly before the DSL milestone', () => {
-    expect(searchEvents(request({ kind: 'custom', expression: 'next Mars square Sun' })))
-      .toMatchObject({ status: 'refused', reason: 'unsupported-filter', events: [], evaluations: 0 });
+  it('rejects unsupported custom query semantics before execution', () => {
+    expect(() => searchEvents(request({ kind: 'custom', expression: 'next Mars square Sun' })))
+      .toThrow('Invalid subscription field: filter.expression.');
   });
 });
 

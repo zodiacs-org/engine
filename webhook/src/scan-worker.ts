@@ -3,6 +3,7 @@ import type { DiscoveredEvent, EventSearchRequest, EventSearchResult } from "./e
 import { createOccurrence, digest, occurrencePolicy, stableJson } from "./occurrence.js";
 import { StorageError, STORAGE_LIMITS, WebhookStore } from "./storage.js";
 import type { ScanPageRequest, ScanPageResult, ScanPolicy, ScanRequest, ScanResult } from "./scan-types.js";
+import { customQueryMatches, parseCustomQuery, requiresEclipse } from "./custom-query.js";
 
 export class ScanWorkerError extends Error {
   constructor(readonly code: "invalid-options" | "invalid-search-result" | "search-failed") {
@@ -33,6 +34,7 @@ function eventMatches(event: DiscoveredEvent, request: EventSearchRequest): bool
       !Array.isArray(event.positions) || event.positions.length === 0 ||
       event.positions.some(position => position.status !== "ok" || !position.receipt)) return false;
   switch (filter.kind) {
+    case "custom": return customQueryMatches(parseCustomQuery(filter.expression), definition);
     case "ingress": return definition.kind === "sign-ingress" && definition.body === filter.body &&
       definition.toSign.toLowerCase() === filter.sign && (filter.direction === "any" || definition.direction === filter.direction);
     case "station": return definition.kind === "station" && definition.body === filter.body &&
@@ -106,10 +108,13 @@ export class ScanWorker {
     const refused = (reason: Extract<ScanResult, { status: "refused" }>["reason"], evaluations = 0): ScanResult =>
       ({ ...context, status: "refused", reason, evaluations });
     if (signal?.aborted) return refused("cancelled");
+    if (subscription.spec.filter.kind === "custom") {
+      try { parseCustomQuery(subscription.spec.filter.expression); } catch { return refused("unsupported-filter"); }
+    }
     const request: EventSearchRequest = {
       filter: subscription.spec.filter, window, stepMs: this.#policy.stepMs,
       maxEvaluations: this.#policy.maxEvaluations, ...(signal ? { signal } : {}),
-      ...(subscription.spec.filter.kind === "eclipse" && this.#policy.eclipse ? { eclipse: this.#policy.eclipse } : {})
+      ...(requiresEclipse(subscription.spec.filter) && this.#policy.eclipse ? { eclipse: this.#policy.eclipse } : {})
     };
     let metadata;
     try { metadata = describeEventSearch(request); } catch { invalid(); }

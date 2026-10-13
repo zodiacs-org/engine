@@ -63,8 +63,8 @@ describe('subscription specification', () => {
     [{ kind: 'eclipse', type: 'solar' }, { kind: 'eclipse', type: 'solar' }],
     [{ kind: 'eclipse', type: 'lunar' }, { kind: 'eclipse', type: 'lunar' }],
     [{ kind: 'eclipse', type: 'any' }, { kind: 'eclipse', type: 'any' }],
-    [{ kind: 'custom', expression: ' \tnext Mars square Sun\r\n' },
-      { kind: 'custom', expression: ' \tnext Mars square Sun\r\n' }],
+    [{ kind: 'custom', expression: ' \tall Mars square Sun from 2000-01-01 to 2000-02-01\r\n' },
+      { kind: 'custom', expression: ' \tall Mars square Sun from 2000-01-01 to 2000-02-01\r\n' }],
   ])('accepts and snapshots the supported filter %#', (filter, expected) => {
     expect(parseSubscription(input(filter)).filter).toEqual(expected);
   });
@@ -309,14 +309,13 @@ describe('filter validation', () => {
 
   it('bounds custom expressions by UTF-8 bytes and preserves their text', () => {
     expect(SUBSCRIPTION_LIMITS.expressionBytes).toBe(4096);
-    const expression = 'é'.repeat(SUBSCRIPTION_LIMITS.expressionBytes / 2);
+    const query = 'all Mars square Sun from 2000-01-01 to 2000-02-01';
+    const expression = query.padEnd(SUBSCRIPTION_LIMITS.expressionBytes, ' ');
     expect(Buffer.byteLength(expression)).toBe(SUBSCRIPTION_LIMITS.expressionBytes);
     expect(parseSubscription(input({ kind: 'custom', expression })).filter).toEqual({ kind: 'custom', expression });
     invalid(input({ kind: 'custom', expression: expression + 'é' }));
-    const plain = 'x'.repeat(SUBSCRIPTION_LIMITS.expressionBytes);
-    expect(parseSubscription(input({ kind: 'custom', expression: plain })).filter)
-      .toEqual({ kind: 'custom', expression: plain });
-    invalid(input({ kind: 'custom', expression: plain + 'x' }));
+    invalid(input({ kind: 'custom', expression: expression + ' ' }));
+    invalid(input({ kind: 'custom', expression: 'é'.repeat(SUBSCRIPTION_LIMITS.expressionBytes / 2 + 1) }));
   });
 
   it('rejects expression control characters except tab and line endings', () => {
@@ -397,11 +396,11 @@ describe('untrusted record boundaries', () => {
     },
   );
 
-  it('preserves valid surrogate pairs in custom expressions and normalizes them in URLs', () => {
+  it('rejects unsupported DSL tokens with valid surrogate pairs and normalizes them in URLs', () => {
     const expression = 'next \ud83c\udf19 event';
     const callbackUrl = 'https://callbacks.example/\ud83c\udf19';
-    const parsed = parseSubscription({ ...input({ kind: 'custom', expression }), callbackUrl });
-    expect(parsed.filter).toEqual({ kind: 'custom', expression });
+    invalid(input({ kind: 'custom', expression }));
+    const parsed = parseSubscription({ ...input(), callbackUrl });
     expect(parsed.callbackUrl).toBe('https://callbacks.example/%F0%9F%8C%99');
   });
 

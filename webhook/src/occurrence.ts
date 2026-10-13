@@ -27,7 +27,8 @@ export function occurrencePolicy(search: EventSearchMetadata) {
     engine: { name: "@zodiacs/engine", version: ENGINE_VERSION, ephemeris: EPHEMERIS },
     runtime: { node: process.versions.node, v8: process.versions.v8, arch: process.arch, platform: process.platform },
     stepMs: search.stepMs, gridOriginMs: search.gridOriginMs, eclipse: search.eclipse,
-    ownership: search.ownership, coordinates: search.coordinates, completeness: search.completeness
+    ownership: search.ownership, coordinates: search.coordinates, completeness: search.completeness,
+    ...(search.custom ? { custom: { schema: search.custom.schema, mode: "all", intervals: search.custom.intervals } } : {})
   };
 }
 
