@@ -10,3 +10,12 @@ export type {
   Page, ScanCommit, ScanCursor, StoredAttempt, StoredDeadLetter, StoredDelivery,
   StoredEvent, StoredSubscription
 } from "./storage-types.js";
+export { SigningKeyVault, SecretError, VAULT_KEY_BYTES } from "./secrets.js";
+export type { SecretErrorCode, SigningKeyMetadata, VaultSignInput } from "./secrets.js";
+export {
+  signWebhook, verifyWebhook, WEBHOOK_SECRET_BYTES, MAX_WEBHOOK_BODY_BYTES,
+  DEFAULT_SIGNATURE_TOLERANCE_SECONDS
+} from "./signatures.js";
+export type {
+  ReceivedWebhookHeaders, SignWebhookOptions, VerifyWebhookOptions, WebhookSignatureHeaders
+} from "./signatures.js";
