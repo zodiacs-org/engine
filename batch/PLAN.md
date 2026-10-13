@@ -14,7 +14,7 @@ initial session complete M1 only; later sessions complete one or two milestones.
 - [x] M2 Implement deterministic, lazy work-item expansion and serial engine execution for charts, sampled transit grids and directed synastry matrices. Test ordering, range boundaries, resume cursors and parity with direct engine calls.
 - [x] M3 Define the asynchronous queue backend contract and implement the in-memory queue with atomic claims, lease tokens, status and progress snapshots. Run a reusable backend contract suite including competing claims.
 - [x] M4 Implement the default SQLite backend with migrations, transactions, durable job definitions, leases and result checkpoints. Run the backend contract suite against independent connections and reopen tests.
-- [ ] M5 Add the worker_threads pool and scheduler with bounded dispatch, worker replacement, progress updates and graceful shutdown. Test parallel work, worker failure and shutdown during active work.
+- [x] M5 Add the worker_threads pool and scheduler with bounded dispatch, worker replacement, progress updates and graceful shutdown. Test parallel work, worker failure and shutdown during active work.
 - [ ] M6 Add bounded retries, retry delays, terminal failure and idempotency keys with payload conflict detection. Test duplicate submissions, stale lease fencing and retry exhaustion on both backends.
 - [ ] M7 Complete crash recovery and resumable jobs with atomic result/checkpoint commits and expired-lease recovery. Use child processes killed at controlled persistence boundaries to prove resumed output has no lost or duplicate rows.
 - [ ] M8 Stream result rows as NDJSON with stable cursors, backpressure and disconnect handling. Test partial reads, reconnects, escaping and large workloads without collecting all output in memory.
@@ -86,6 +86,31 @@ file, excluding the mainline releases affected by the upstream WAL-reset bug;
 `test/sqlite-queue.test.ts` enforces the boundary and checks that refused opens
 create no files. `README.md` links the upstream explanation. Process-kill
 recovery tests and throughput measurements remain later milestones.
+
+The root `npm run package:contents`, using the batch npm cache, stopped because
+`dist/calc.d.ts` is absent. An npm pack dry run with `--ignore-scripts --json`
+confirmed that no `batch/` file is included. All changes stay inside `batch/`,
+all tracked and new batch files are below the file-size limit, and batch
+documentation contains no em dashes. No root build, archive creation or git
+write was performed.
+
+## M5 session checks
+
+`npm run typecheck`, `npm test` and `npm run build` passed from `batch/` on
+Node 22.23.3. Real worker tests cover charts, transit grids and directed
+synastry parity with serial execution, pool saturation, worker replacement,
+abort isolation, malformed responses and closure. Deterministic scheduler
+tests cover bounded out-of-order buffering, ordered progress, prefix
+resumption, renewal while computation or commits wait, graceful shutdown
+during claims and active work, error cleanup and stale lease fencing. The
+final-commit race test keeps a completed result when a delayed renewal loses
+its lease. The built default pool and scheduler also complete synthetic jobs
+through both queue backends in plain Node.
+
+The build writes the worker entry beside the main entry under ignored
+`.generated/` paths. Execution failures stop and release unfinished work;
+bounded retries and terminal failure records remain M6. Process-kill recovery
+and throughput measurements remain later milestones.
 
 The root `npm run package:contents`, using the batch npm cache, stopped because
 `dist/calc.d.ts` is absent. An npm pack dry run with `--ignore-scripts --json`

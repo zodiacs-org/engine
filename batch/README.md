@@ -3,9 +3,9 @@
 This private project is the batch service under development for this engine
 checkout. The completed work is checked off in [PLAN.md](PLAN.md). The current
 implementation validates job definitions, expands work lazily, executes it
-serially through the engine and provides in-memory and SQLite queues. Workers,
-process-crash recovery checks, NDJSON streaming, HTTP, CLI and scaling measurements
-are later milestones.
+through the engine, provides in-memory and SQLite queues, and schedules work
+on a thread pool. Process-crash recovery checks, NDJSON streaming, HTTP, CLI
+and scaling measurements are later milestones.
 
 All project files stay here. The engine source, npm package and carried archives
 are unchanged. Code and documentation in this folder use the repository's
@@ -33,15 +33,18 @@ Keep committed benchmark evidence compact and link it to its runner.
 The contracts use the engine's public birth vocabulary, and the execution
 bridge imports its public source entry by a relative path. The batch build
 bundles that source with the pinned `astronomy-engine` dependency from this
-directory into `.generated/index.js`. It does not run the engine build. Vitest
-and TypeScript resolve the same dependency from this installation. An unbundled
-root source import cannot find dependencies installed only here.
+directory into `.generated/index.js` and `.generated/worker-entry.js`. Keep
+these generated entries together when running the default worker pool. The
+build does not run the engine build. Vitest and TypeScript resolve the same
+dependency from this installation. An unbundled root source import cannot
+find dependencies installed only here.
 
 [test/build.test.ts](test/build.test.ts) builds from the checkout root and runs
 the resulting entry in plain Node with invented chart input. It submits,
-claims, computes, commits and reads that job through both backends, checking the runtime import,
-result shape and engine version without requiring root dependencies or engine
-build output.
+claims, computes, commits and reads that job through both backends, then runs
+parallel chart jobs through the scheduler and compares their rows with serial
+execution. It checks runtime imports, result shape and engine version without
+requiring root dependencies or engine build output.
 
 The repository's `npm run package:contents` check requires an existing engine
 `dist/`. If it is absent, record the missing prerequisite; do not run the root
@@ -234,8 +237,8 @@ await queue.close();
 
 The example's lease duration is a caller choice, not a computation-time
 guarantee. A scheduler must renew before the deadline while computing work.
-The synchronous serial executor blocks its calling thread; the planned worker
-pool will let the scheduler renew leases while calculations run elsewhere.
+The synchronous serial executor blocks its calling thread; the worker pool
+lets the scheduler renew leases while calculations run elsewhere.
 
 | Operation | Behavior |
 | --- | --- |
@@ -274,8 +277,8 @@ progress. Batches must start at the current cursor, stay within the workload,
 and match each expanded work item's kind, index and routing fields. A malformed
 row rejects the entire batch. With a current lease, replaying an already
 committed batch is a cursor conflict; read progress before resuming. After
-completion, the former lease is lost. The planned pool can compute concurrently
-and buffer a bounded window of results until their predecessors are ready.
+completion, the former lease is lost. The scheduler computes concurrently
+and buffers a bounded window of results until their predecessors are ready.
 
 Commit validates JSON data shape and routing, not the truth of the calculated
 values. Results come from trusted execution code. It rejects accessors,
@@ -395,3 +398,83 @@ milestone. They do not simulate power loss or establish throughput.
 The test-only bridge [test/native-sqlite.mjs](test/native-sqlite.mjs) lets the
 existing Vitest loader access the real SQLite builtin. The production bundle
 keeps its ordinary `node:sqlite` import; the plain Node smoke test exercises it.
+
+## Worker pool and scheduler
+
+`WorkerPool` in [src/worker-pool.ts](src/worker-pool.ts) computes work items
+using Node's [worker_threads](https://github.com/nodejs/node/blob/v22.23.3/doc/api/worker_threads.md).
+Each thread loads its own engine instance. Threads start on demand and remain
+available for subsequent calls. `run(item, signal)` accepts an item from
+`workItemAt` or `workItems` and returns its JSON result row. The optional abort
+signal terminates the thread assigned to that call. Request IDs and routing
+fields are checked before returning a worker response.
+
+`size` sets the pool's `capacity`. At capacity, `run` rejects with
+`WorkerPoolError` code `busy`; there is no unbounded waiting queue. A failed,
+exited or aborted worker is replaced on a later dispatch, after it terminates.
+Its unsuccessful calculation is not automatically resubmitted. Worker and
+transport failures use code `worker-failed`, aborted calls use `aborted`, and
+calls after `close()` use `closed`. Engine failures retain `WorkExecutionError`
+with the work kind and index. Diagnostics omit raw worker errors and abort
+reasons. `close()` is idempotent, rejects unfinished calls and waits for thread
+termination. Idle threads do not keep an otherwise finished process alive.
+An optional `workerUrl` is trusted executable code, intended for tests and
+specialized executors; it is not job input.
+
+`Scheduler(queue, options)` in [src/scheduler.ts](src/scheduler.ts) owns a
+pool and coordinates its results with a `QueueBackend`. `run()` polls until
+stopped or failed; repeated calls return the same promise. Each scheduler
+claims a job, seeks to its committed cursor, and computes that job's rows
+in parallel before claiming another job. Multiple schedulers can share a
+backend. Queue state and lease tokens stay in the scheduler thread; workers
+receive only the current work item.
+
+The scheduler limits dispatched but uncommitted rows to pool capacity. Later
+results wait for earlier ones inside that same window. It commits rows in
+order and reports progress through `queue.getJob(id)`; in-flight calculations
+and buffered results never advance progress. Each row is committed separately
+through the queue's bounded validation and atomic checkpoint operation.
+
+Options are `workers`, `owner`, `leaseMs`, `heartbeatMs` and `pollMs`. Durations
+are positive integer milliseconds; heartbeat must be shorter than the lease.
+Defaults and timer/worker limits are exported as `SCHEDULER_DEFAULTS`.
+Configuration validation is checked in
+[test/scheduler.test.ts](test/scheduler.test.ts). Omitting heartbeat uses a
+fraction of the chosen lease duration. Owner defaults to a generated
+identifier. A dedicated `TaskPool` may be injected as `pool` instead of
+`workers`; its capacity bounds dispatch, its runs must settle when aborted,
+and the scheduler closes it when finished.
+
+Renewals continue while calculations or asynchronous commits are pending,
+without overlapping other renewals. Backend time decides lease validity.
+Lease loss aborts outstanding work, discards uncommitted results and resumes
+claiming after the polling delay. Stale tokens cannot advance progress.
+Renewal is not a deadline guarantee: an overloaded event loop or blocking
+SQLite operation can delay it. Choose a lease that allows for those delays.
+
+`stop()` stops claiming and dispatching new work, drains accepted calculations,
+commits their contiguous results, releases an unfinished job, then closes the
+pool. Call it from the embedding application's shutdown handler and await its
+promise. It also wakes an idle poll immediately. Calling it before `run()`
+performs no claim. Graceful shutdown waits for active work and backend calls;
+it has no forced-shutdown deadline. The scheduler never closes the queue, so
+the caller can read final progress and results before closing its handle.
+
+An execution failure stops this scheduler with `SchedulerError` code
+`execution-failed`; a backend failure uses `queue-failed`. Outstanding work is
+aborted, uncommitted results are discarded, and release of the unfinished
+lease is attempted. A failed release can leave a lease until expiry. The
+already committed prefix remains available. `stop()` propagates the same run
+failure. Bounded retries, retry delays and terminal failure records remain
+the next milestone; this version stops on failure instead of looping over a
+poisoned job. A stopped or failed scheduler is not restartable; create a
+new instance for another run.
+
+[test/worker-pool.test.ts](test/worker-pool.test.ts) uses real threads for engine
+parity, parallel dispatch, replacement, aborts, protocol failures and closure.
+[test/scheduler.test.ts](test/scheduler.test.ts) controls task completion and
+backend time to check bounded buffering, prefix commits, renewal, fencing and
+shutdown races. [test/build.test.ts](test/build.test.ts) runs the built default
+pool and scheduler against both queue backends in plain Node. These checks
+use synthetic inputs and establish wrapper behavior, not astronomical
+accuracy, process-crash durability or scaling performance.
