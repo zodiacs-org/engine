@@ -1,0 +1,1 @@
+M2: Scaffold isolated zodiacs-astro package with pinned official SDK dependencies, local carried engine, TypeScript build and passing Vitest integration/isolation checks on Node 22.22.2.
