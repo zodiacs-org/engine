@@ -1,12 +1,11 @@
 # Offline geocode workbench
 
 This private project is being developed separately from `@zodiacs/engine`.
-It will provide offline place lookup, IANA civil-time resolution, a CLI and
-an optional HTTP service. [PLAN.md](PLAN.md) tracks implementation. The
-current milestone provides the place-data contract, an attributed GeoNames
-sample, an offline index builder, pure in-memory place lookup, a composed
-API for atlas-first civil-time resolution, the `geocode` CLI and an optional
-local HTTP service with bounded rate and resource limits.
+It provides offline place lookup, atlas-first civil-time resolution, a CLI
+and an optional HTTP service with bounded rate and resource limits.
+[PLAN.md](PLAN.md) tracks implementation. Start with the
+[operations guide](OPERATIONS.md) for sample setup, engine handoff, service
+use, attribution and privacy. The API and provider contracts are below.
 
 ## Development
 
@@ -282,6 +281,67 @@ atlas resolver, including civil coverage edges, uncertain changes and
 gap/fold outcomes. These are composition regressions, not independent
 historical accuracy evidence. [evidence/M5.md](evidence/M5.md) records the
 checks and their limits.
+
+## Prepare input for the engine
+
+The runnable [engine input example](examples/engine-input.ts) loads a local
+index and the existing atlas and resolves invented requests. From `geocode/`,
+using a sample index built as described below:
+
+```sh
+node examples/run.mjs generated/sample
+```
+
+It prints a JSON array. Each entry keeps the complete `geocode` answer beside
+its `handoff`. `prepareEngineInput` is an example application policy, separate
+from the library API. A `ready` handoff contains the existing engine's
+`BirthInput` type; a `needs-review` handoff contains a reason and no engine
+input. The example does not calculate a chart or write results to disk.
+
+This policy requires a selected place, an explicit clock time, an `ok`
+time result and, for atlas readings, a `documented` uncertainty flag. It
+requires review for gaps and folds even when the provider records its own
+chosen interpretation. Inferred or uncertain atlas readings also require
+review, with their citations and reasons available in the retained answer.
+This is a conservative example, not an assertion that tzdb's `ok` status
+authenticates historical facts or the source's place assignment.
+
+For a ready atlas result, use its resolved instant and its atlas coordinates.
+Resolving the comparison zone again would discard atlas precedence.
+For a ready IANA result, copy its native UTC Date and flags and the selected
+place's coordinates. The example chooses whole-sign houses explicitly and
+sets the time as known. Elevation remains in the place answer; `BirthInput`
+has no elevation field. Native provider metadata and atlas citations stay
+alongside the input instead of being forced into an IANA receipt shape.
+No historical offset is recomputed by the example.
+
+An application with the engine installed can pass that input to its existing
+chart API:
+
+```ts
+import { natalChart } from "@zodiacs/engine";
+import { prepareEngineInput } from "./geocode/examples/engine-input.js";
+
+// result is a GeocodeResult from the application's explicit lookup and time request.
+const handoff = prepareEngineInput(result);
+if (handoff.status === "ready") {
+  const chart = natalChart(handoff.engineInput);
+  // Keep result with chart for place attribution and time-provider provenance.
+  console.log(chart);
+}
+```
+
+That consumer imports the installed engine; the source-checkout example uses
+a relative type import and the existing source geo adapter and needs no root
+build or ephemeris dependency installation. It stops at preparing the engine
+input. The engine retains its own time basis, calculation limits and chart
+math, described in the [root README](../README.md).
+[tests/engine-example.test.ts](tests/engine-example.test.ts) exercises the
+example with the sample, compares IANA handoff with the existing engine geo
+API, verifies atlas coordinates and unresolved outcomes, and runs the launcher
+from another working directory with Node network APIs blocked. These checks
+establish integration behavior, not astronomical or historical accuracy.
+[evidence/M11.md](evidence/M11.md) records this session's validation.
 
 ## Command-line lookup and time resolution
 
