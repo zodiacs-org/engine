@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 import re
 import runpy
-import shutil
+from publish_directory import publish_directory
 
 
 helpers = runpy.run_path(str(Path(__file__).with_name("select-sample.py")))
@@ -24,15 +24,14 @@ def download(output, archive, source_dir=None):
     if not re.fullmatch(r"(?:cities(?:500|1000|5000|15000)|[A-Z]{2})\.zip", archive):
         raise ValueError("Expected a GeoNames city extract or country archive filename")
     # A new directory only. Never erase an existing source snapshot.
-    output.mkdir(parents=True, exist_ok=False)
-    try:
+    with publish_directory(output) as staging:
         inputs = []
         for source, target in [(archive, "places"), ("countryInfo.txt", "countries.tsv"),
                                ("admin1CodesASCII.txt", "admin1.tsv")]:
             raw, receipt = fetch(source, source_dir)
             receipt["path"] = target
             if source == archive:
-                parts = output / target
+                parts = staging / target
                 parts.mkdir()
                 # Byte chunks concatenate exactly to the extracted member, even
                 # when a UTF-8 character or line crosses a part boundary.
@@ -41,7 +40,7 @@ def download(output, archive, source_dir=None):
             else:
                 if len(raw) >= FILE_LIMIT:
                     raise ValueError("Metadata file exceeds repository file limit")
-                (output / target).write_bytes(raw)
+                (staging / target).write_bytes(raw)
             inputs.append(receipt)
         receipt = {
             "schemaVersion": 1,
@@ -53,11 +52,8 @@ def download(output, archive, source_dir=None):
         encoded = (json.dumps(receipt, indent=2) + "\n").encode("utf-8")
         if len(encoded) >= FILE_LIMIT:
             raise ValueError("Source receipt exceeds file limit")
-        (output / "sources.json").write_bytes(encoded)
-        print("Downloaded GeoNames source parts and sources.json into " + str(output))
-    except BaseException:
-        shutil.rmtree(output)
-        raise
+        (staging / "sources.json").write_bytes(encoded)
+    print("Downloaded GeoNames source parts and sources.json into " + str(output))
 
 
 if __name__ == "__main__":

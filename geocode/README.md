@@ -182,6 +182,11 @@ shard only establishes uniqueness within that shard. Digests bind the files
 to the supplied manifest; they do not authenticate the manifest or place facts.
 The factory retains the supplied records and a normalized name index in
 memory. It is not an on-disk search engine for an arbitrary full dump.
+Manifest directories must contain exactly the manifest and its contiguous,
+ordered shards. Unlisted files, mixed provenance, missing or corrupt shards,
+and a manifest changed during loading are errors. Keep published directories
+immutable and use a trusted parent directory. These checks bind a returned
+snapshot to the supplied manifest; they do not authenticate its author.
 
 ## Composed place and civil-time requests
 
@@ -306,8 +311,8 @@ URLs or silently substitutes a sample index. A standalone shard is accepted
 as a standalone dataset, so use the complete build directory for ambiguity
 checks across all its shards. The loader reads the selected dataset into
 memory; it does not search shards on disk or authenticate geographic facts.
-Keep an index static while using it. Stronger publication and resource
-hardening remain in M10.
+Keep an index static while loading it. New builds are staged and published
+only after completion, as described below.
 
 `lookup` takes a quoted city query, optional `--country` and `--region`
 filters, and an optional `--limit`. Its result is the library lookup result
@@ -625,17 +630,42 @@ Identical input bytes, source filenames, source URLs and shard settings yield
 identical output bytes, independent of parent directory paths and clock time.
 Source filenames are retained in provenance, so renaming an input changes
 the output. Inputs are hashed again during
-parsing to detect changes during a build. Memory holds label maps, seen IDs
-and a shard, rather than the full place dump. Failed builds remove only their
-newly created output directory; existing directories are refused.
+parsing to detect changes during a build. Source descriptors must be regular
+files, and final-component symlinks are refused. Memory holds label maps,
+seen IDs and a shard, rather than the full place dump.
+
+Both acquisition and index building stage their files beside the requested
+destination, then publish the completed directory by rename. The destination
+must not exist, including as an empty directory or dangling symlink.
+A sibling `.<name>.build-lock` excludes cooperating writers, and staging
+uses a unique `.<name>.building-` directory. Ordinary failures remove only
+the operation's own staging and lock; a later explicit retry is allowed.
+An abruptly killed process can leave those siblings, while the requested
+destination remains absent. After confirming the writer has stopped, remove
+its abandoned staging directory and lock, or choose a new destination.
+Never remove an active writer's lock. Keep outputs in ignored `downloads/`
+and `generated/`, including their temporary siblings.
+
+Publication assumes a trusted parent and local filesystem rename semantics.
+The lock coordinates these tools; it cannot exclude unrelated filesystem
+writers. Publication is not a power-loss durability guarantee and performs
+no fsync. Do not edit a published directory in place. Build under a new name,
+validate it, then start a new library or service instance with that index.
+The service holds a snapshot and does not reload it automatically.
 
 `src/build-index.ts` exports Node-only `buildGeoNamesIndex` separately from
 the pure library entry. Its command compiles into ignored `.cache/tools/`.
 Byte limits and validation are exercised by
 [tests/build-index.test.ts](tests/build-index.test.ts). The local loader
-checks manifest/shard consistency; broader hostile-input hardening and
-stronger publication guarantees remain later milestones. Consuming an
-incomplete directory is not supported.
+checks manifest/shard consistency and detected file changes during bounded
+reads. The acquisition command rejects duplicate, unsupported or oversized
+archive members and relies on the ZIP reader's integrity checks. It reads
+only the expected member into memory; it never extracts archive paths to
+disk. [tests/load-index.test.ts](tests/load-index.test.ts) and
+[tests/build-commands.test.ts](tests/build-commands.test.ts) cover corrupt
+indexes, generation mismatches, partial writes, malformed local archives
+and process termination with synthetic inputs.
+[evidence/M10.md](evidence/M10.md) records the checks and their limits.
 
 To check or deliberately refresh the committed sample:
 

@@ -1,8 +1,9 @@
 import { createHash } from "node:crypto";
-import { createReadStream } from "node:fs";
-import { lstat, mkdir, readdir, rm, writeFile } from "node:fs/promises";
+import { constants } from "node:fs";
+import { lstat, open, readdir, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { parsePlaceDataset } from "./dataset.js";
+import { publishDirectory } from "./publish-directory.js";
 import type { DatasetProvenance, PlaceRecord, SourceFile } from "./types.js";
 
 export const INDEX_FILE_LIMIT = 2_000_000;
@@ -119,7 +120,7 @@ async function sourceReceipt(input: GeoNamesInput, role: string): Promise<Source
 async function* sourceChunks(path: string): AsyncGenerator<Buffer> {
   const stat = await lstat(path);
   if (stat.isFile()) {
-    for await (const chunk of createReadStream(path, { highWaterMark: 65_536 })) yield chunk as Buffer;
+    yield* fileChunks(path);
     return;
   }
   if (!stat.isDirectory()) invalid("source", "expected a regular file or parts directory");
@@ -131,7 +132,29 @@ async function* sourceChunks(path: string): AsyncGenerator<Buffer> {
     }
     const part = join(path, entry.name);
     if ((await lstat(part)).size >= INDEX_FILE_LIMIT) invalid("source", "source part exceeds file byte limit");
-    for await (const chunk of createReadStream(part, { highWaterMark: 65_536 })) yield chunk as Buffer;
+    yield* fileChunks(part, INDEX_FILE_LIMIT);
+  }
+}
+
+async function* fileChunks(path: string, limit = Infinity): AsyncGenerator<Buffer> {
+  const file = await open(path, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+  try {
+    const before = await file.stat();
+    if (!before.isFile() || before.size >= limit) invalid("source", "expected a bounded regular file");
+    let used = 0;
+    while (true) {
+      const bytes = Buffer.allocUnsafe(65_536);
+      const { bytesRead } = await file.read(bytes, 0, bytes.length, null);
+      if (bytesRead === 0) break;
+      used += bytesRead;
+      if (used > before.size || used >= limit) invalid("source", "source size changed during read");
+      yield bytes.subarray(0, bytesRead);
+    }
+    const after = await file.stat();
+    if (used !== before.size || after.size !== before.size || after.mtimeMs !== before.mtimeMs
+        || after.ctimeMs !== before.ctimeMs) invalid("source", "source changed during read");
+  } finally {
+    await file.close();
   }
 }
 
@@ -254,8 +277,7 @@ export async function buildGeoNamesIndex(options: BuildIndexOptions): Promise<In
   const transformations: Transformations = { trimmedLabels: 0, omittedAliases: 0, duplicateAliases: 0 };
   const countryNames = await countries(options.countries, sources[1]!, transformations);
   const regionNames = await regions(options.admin1, sources[2]!, transformations);
-  await mkdir(options.outputDirectory); // Never reuse, clear or overwrite an existing directory.
-  try {
+  return publishDirectory(options.outputDirectory, async (staging) => {
     const shards: Array<IndexManifest["shards"][number]> = [];
     const seen = new Set<string>();
     const prefix = `{"schemaVersion":1,"provenance":${JSON.stringify(provenance)},"places":[`;
@@ -268,7 +290,7 @@ export async function buildGeoNamesIndex(options: BuildIndexOptions): Promise<In
       if (!encoded.length) return;
       const content = prefix + encoded.join(",") + suffix;
       const file = `places-${String(shards.length).padStart(6, "0")}.json`;
-      await writeFile(join(options.outputDirectory, file), content, { flag: "wx" });
+      await writeFile(join(staging, file), content, { flag: "wx" });
       shards.push({ file, sha256: createHash("sha256").update(content).digest("hex"), bytes, count: encoded.length });
       encoded = [];
       bytes = overhead;
@@ -291,10 +313,7 @@ export async function buildGeoNamesIndex(options: BuildIndexOptions): Promise<In
     const manifest: IndexManifest = { schemaVersion: 1, format: "geocode-index", provenance, count, transformations, shards };
     const content = `${JSON.stringify(manifest, null, 2)}\n`;
     if (Buffer.byteLength(content) >= INDEX_FILE_LIMIT) throw new RangeError("Index manifest exceeds file byte limit.");
-    await writeFile(join(options.outputDirectory, "manifest.json"), content, { flag: "wx" });
+    await writeFile(join(staging, "manifest.json"), content, { flag: "wx" });
     return manifest;
-  } catch (error) {
-    await rm(options.outputDirectory, { recursive: true, force: true });
-    throw error;
-  }
+  });
 }

@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import fsPromises from "node:fs/promises";
-import { access, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
+import { access, mkdir, mkdtemp, readFile, readdir, rename, rm, symlink, writeFile } from "node:fs/promises";
 import { syncBuiltinESMExports } from "node:module";
 import { basename, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -339,6 +339,105 @@ describe("segmented source directories", () => {
 });
 
 describe("bounded index publication", () => {
+  it("refuses a source swapped for a symlink between inspection and opening", async () => {
+    const options = await fixture();
+    const original = fsPromises.open;
+    const spy = vi.spyOn(fsPromises, "open").mockImplementation(async (file, flags, mode) => {
+      if (file === options.places.path) {
+        const moved = `${options.places.path}.original`;
+        await rename(options.places.path, moved);
+        await symlink(moved, options.places.path);
+      }
+      return original(file, flags, mode);
+    });
+    syncBuiltinESMExports();
+    try {
+      await rejectsAndCleans(options);
+    } finally {
+      spy.mockRestore();
+      syncBuiltinESMExports();
+    }
+  });
+
+  it("keeps the destination absent until every shard and the manifest have been written", async () => {
+    const options = { ...await fixture({ places: Array.from({ length: 5 }, (_, i) => placeRow({ 0: String(900000000000001 + i) })).join("\n") }), maxShardBytes: 2200 };
+    const original = fsPromises.writeFile;
+    const stages: string[] = [];
+    const spy = vi.spyOn(fsPromises, "writeFile").mockImplementation(async (file, data, settings) => {
+      await expect(access(options.outputDirectory)).rejects.toThrow();
+      stages.push(String(file));
+      return original(file, data, settings);
+    });
+    syncBuiltinESMExports();
+    try {
+      const manifest = await buildGeoNamesIndex(options);
+      expect(stages).toHaveLength(manifest.shards.length + 1);
+      expect(basename(stages.at(-1)!)).toBe("manifest.json");
+      expect(await records(manifest, options.outputDirectory)).toHaveLength(5);
+      expect((await readdir(directory)).filter((file) => file.startsWith(".index."))).toEqual([]);
+    } finally {
+      spy.mockRestore();
+      syncBuiltinESMExports();
+    }
+  });
+
+  it.each(["shard", "manifest"] as const)("cleans staging and its lock after a partial %s write", async (kind) => {
+    const options = await fixture();
+    const original = fsPromises.writeFile;
+    const spy = vi.spyOn(fsPromises, "writeFile").mockImplementation(async (file, data, settings) => {
+      if ((basename(String(file)) === "manifest.json") === (kind === "manifest")) {
+        await original(file, "{interrupted", settings);
+        throw new Error("Manufactured disk-write failure");
+      }
+      return original(file, data, settings);
+    });
+    syncBuiltinESMExports();
+    try {
+      await rejectsAndCleans(options);
+      expect((await readdir(directory)).filter((file) => file.startsWith(".index."))).toEqual([]);
+    } finally {
+      spy.mockRestore();
+      syncBuiltinESMExports();
+    }
+    expect(await buildGeoNamesIndex(options)).toMatchObject({ count: 1 });
+  });
+
+  it("cleans staging if final rename fails and permits a later explicit retry", async () => {
+    const options = await fixture();
+    const spy = vi.spyOn(fsPromises, "rename").mockRejectedValue(new Error("Manufactured rename failure"));
+    syncBuiltinESMExports();
+    try {
+      await rejectsAndCleans(options);
+      expect((await readdir(directory)).filter((file) => file.startsWith(".index."))).toEqual([]);
+    } finally {
+      spy.mockRestore();
+      syncBuiltinESMExports();
+    }
+    expect(await buildGeoNamesIndex(options)).toMatchObject({ count: 1 });
+  });
+
+  it("excludes concurrent builders and preserves an output that appears during staging", async () => {
+    const options = await fixture();
+    const original = fsPromises.writeFile;
+    const spy = vi.spyOn(fsPromises, "writeFile").mockImplementation(async (file, data, settings) => {
+      if (basename(String(file)) === "manifest.json") {
+        await expect(buildGeoNamesIndex(options)).rejects.toThrow();
+        expect(await readdir(join(directory, ".index.build-lock"))).toEqual([]);
+        await mkdir(options.outputDirectory); // Even an empty intervening directory must survive.
+      }
+      return original(file, data, settings);
+    });
+    syncBuiltinESMExports();
+    try {
+      await expect(buildGeoNamesIndex(options)).rejects.toThrow(/must not exist/);
+      expect(await readdir(options.outputDirectory)).toEqual([]);
+      expect((await readdir(directory)).filter((file) => file.startsWith(".index."))).toEqual([]);
+    } finally {
+      spy.mockRestore();
+      syncBuiltinESMExports();
+    }
+  });
+
   it("exports the repository file limit and the default shard budget", () => {
     expect(INDEX_FILE_LIMIT).toBe(2_000_000);
     expect(DEFAULT_SHARD_BYTES).toBe(1_000_000);
@@ -429,19 +528,18 @@ describe("bounded index publication", () => {
     const rows = Array.from({ length: 15 }, (_, index) => placeRow({ 0: String(900000000000001 + index) }));
     const options = { ...await fixture({ places: rows.join("\n") }), maxShardBytes: 2200 };
     const changed = `${rows.join("\n")}\n${placeRow({ 0: "900000000000099", 6: "H", 7: "STM" })}\n`;
-    const originalMkdir = fsPromises.mkdir;
-    const mkdirSpy = vi.spyOn(fsPromises, "mkdir").mockImplementation(async (path, settings) => {
-      const result = await originalMkdir(path, settings);
-      // The builder creates its new output directory after hashing its inputs,
-      // immediately before its second pass over the place source.
-      if (path === options.outputDirectory) await writeFile(options.places.path, changed);
+    const originalMkdtemp = fsPromises.mkdtemp;
+    const mkdirSpy = vi.spyOn(fsPromises, "mkdtemp").mockImplementation(async (path, settings) => {
+      const result = await originalMkdtemp(path, settings);
+      // Staging begins after hashing, immediately before parsing the place source.
+      await writeFile(options.places.path, changed);
       return result;
     });
     const writeSpy = vi.spyOn(fsPromises, "writeFile");
     syncBuiltinESMExports();
     try {
       await expect(buildGeoNamesIndex(options)).rejects.toThrow(/source changed during build/i);
-      const emitted = writeSpy.mock.calls.filter(([file]) => String(file).startsWith(join(options.outputDirectory, "places-")));
+      const emitted = writeSpy.mock.calls.filter(([file]) => String(file).includes(".index.building-") && basename(String(file)).startsWith("places-"));
       expect(emitted.length).toBeGreaterThan(1);
       await expect(access(options.outputDirectory)).rejects.toThrow();
     } finally {

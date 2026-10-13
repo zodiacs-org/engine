@@ -14,6 +14,7 @@ import io
 import json
 from pathlib import Path
 import sys
+import stat
 import urllib.request
 import zipfile
 
@@ -106,9 +107,15 @@ def fetch(file, source_dir=None):
             members = [item for item in archive.infolist() if item.filename == member]
             if len(members) != 1 or members[0].file_size > INPUT_LIMIT:
                 raise ValueError(f"Invalid or oversized archive member: {member}")
+            info = members[0]
+            kind = stat.S_IFMT(info.external_attr >> 16)
+            if (info.orig_filename != member or info.is_dir()
+                    or kind not in (0, stat.S_IFREG) or info.flag_bits & 1
+                    or info.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED)):
+                raise ValueError(f"Unsupported archive member: {member}")
             with archive.open(members[0]) as source:
                 raw = source.read(INPUT_LIMIT + 1)
-            if len(raw) > INPUT_LIMIT:
+            if len(raw) > INPUT_LIMIT or len(raw) != info.file_size:
                 raise ValueError(f"Oversized decompressed input: {member}")
         metadata.update({
             "archiveMember": member,

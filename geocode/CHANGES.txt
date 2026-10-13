@@ -7,3 +7,4 @@ geocode: complete M6 with offline lookup and timezone CLI, validated local index
 geocode: complete M7 with optional loopback HTTP lookup and timezone service, bounded inputs, private structured errors, preserved atlas precedence, explicit lifecycle and launcher checks
 geocode: complete M8 with bounded per-client token buckets, monotonic refill, work and connection overload limits, explicit proxy trust, safe cleanup and controlled-clock HTTP and launcher checks
 geocode: complete M9 with independently rebuilt IANA timezone evidence, historical and polar boundary checks, explicit Longyearbyen build differences, atlas disagreement precedence and missing host zone tests
+geocode: complete M10 with staged index and source publication, cooperative writer locks, bounded receipt and source reads, strict generation consistency, malformed archive rejection and interrupted-build regressions

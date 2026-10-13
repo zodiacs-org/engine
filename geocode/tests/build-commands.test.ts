@@ -1,10 +1,12 @@
-import { spawnSync } from "node:child_process";
+import { fork, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { access, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { once } from "node:events";
+import { access, mkdir, mkdtemp, readFile, readdir, rename, rm, symlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { parsePlaceDataset } from "../src/dataset.js";
+import { IndexLoadError, loadPlaceIndex } from "../src/load-index.js";
 import type { IndexManifest } from "../src/build-index.js";
 import type { PlaceRecord } from "../src/types.js";
 
@@ -95,6 +97,119 @@ afterAll(async () => {
 });
 
 describe("offline data acquisition and build commands", () => {
+  it("leaves no published index after process termination during staging", async () => {
+    const parent = await directory();
+    const output = join(parent, "killed-index");
+    const child = fork(buildCommand, ["--sample", "--out", output], {
+      cwd: project, silent: true, execPath: process.execPath,
+      execArgv: ["--import", join(project, "tests", "fixtures", "pause-build.mjs")]
+    });
+    try {
+      const message = once(child, "message", { signal: AbortSignal.timeout(10_000) });
+      const earlyExit = once(child, "exit").then(() => { throw new Error("Builder exited before staging"); });
+      const [received] = await Promise.race([message, earlyExit]);
+      expect((received as { stagedShard: string }).stagedShard).toContain(".killed-index.building-");
+      await expect(loadPlaceIndex(output)).rejects.toThrow(IndexLoadError);
+      const exit = once(child, "exit");
+      child.kill("SIGKILL");
+      expect((await exit)[1]).toBe("SIGKILL");
+      await expect(access(output)).rejects.toThrow();
+      expect((await readdir(parent)).filter((name) => name.startsWith(".killed-index."))).toHaveLength(2);
+      // An abandoned lock needs explicit recovery; a retry cannot delete it.
+      expect(run(process.execPath, [buildCommand, "--sample", "--out", output]).status).toBe(1);
+      expect((await readdir(parent)).filter((name) => name.startsWith(".killed-index."))).toHaveLength(2);
+    } finally {
+      if (child.exitCode === null && child.signalCode === null) {
+        const exit = once(child, "exit");
+        child.kill("SIGKILL");
+        await exit;
+      }
+    }
+  }, 15_000);
+
+  it.each(["duplicate", "symlink", "nul-name", "encrypted", "unsupported-compression", "oversized", "crc", "truncated"])("rejects a malformed local archive: %s", async (kind) => {
+    const parent = await directory();
+    const sources = await sourceArchive(parent, syntheticPlaces(1));
+    succeeds("python3", ["-c", [
+      "import io, struct, sys, zipfile",
+      "path, kind = sys.argv[1:]",
+      "if kind == 'truncated':",
+      "    open(path, 'wb').write(b'PK\\x03\\x04broken')",
+      "else:",
+      "    data = io.BytesIO()",
+      "    with zipfile.ZipFile(data, 'w') as archive:",
+      "        info = zipfile.ZipInfo('cities15000.txt' if kind != 'nul-name' else 'cities15000.txtxsuffix')",
+      "        if kind == 'symlink':",
+      "            info.create_system = 3",
+      "            info.external_attr = 0o120777 << 16",
+      "        if kind == 'unsupported-compression': info.compress_type = zipfile.ZIP_BZIP2",
+      "        archive.writestr(info, b'synthetic')",
+      "        if kind == 'duplicate': archive.writestr('cities15000.txt', b'other')",
+      "    raw = bytearray(data.getvalue())",
+      "    central = raw.index(b'PK\\x01\\x02')",
+      "    if kind == 'oversized': struct.pack_into('<I', raw, central + 24, 64_000_001)",
+      "    if kind == 'crc': struct.pack_into('<I', raw, central + 16, 0)",
+      "    if kind == 'encrypted':",
+      "        struct.pack_into('<H', raw, 6, 1)",
+      "        struct.pack_into('<H', raw, central + 8, 1)",
+      // ZipInfo strips NUL while writing, so insert one in both filename fields.
+      "    if kind == 'nul-name':",
+      "        raw[30 + len('cities15000.txt')] = 0",
+      "        raw[central + 46 + len('cities15000.txt')] = 0",
+      "    open(path, 'wb').write(raw)"
+    ].join("\n"), join(sources, "cities15000.zip"), kind]);
+    const output = join(parent, "downloaded");
+    const result = download(sources, output);
+    expect(result.status).not.toBe(0);
+    await expect(access(output)).rejects.toThrow();
+    expect((await readdir(parent)).filter((name) => name.startsWith(".downloaded."))).toEqual([]);
+  });
+
+  it("stages acquisition and cleans it after a failed metadata write", async () => {
+    const parent = await directory();
+    const sources = await sourceArchive(parent, syntheticPlaces(1));
+    const output = join(parent, "downloaded");
+    const result = run("python3", ["-c", [
+      "import pathlib, runpy, sys",
+      "script, sources, output = sys.argv[1:]",
+      "sys.path.insert(0, str(pathlib.Path(script).resolve().parent))",
+      "tool = runpy.run_path(script)",
+      "original = pathlib.Path.write_bytes",
+      "def fail(path, raw):",
+      "    assert not pathlib.Path(output).exists(), 'output visible before completion'",
+      "    if path.name == 'countries.tsv':",
+      "        original(path, b'partial')",
+      "        raise OSError('manufactured disk failure')",
+      "    return original(path, raw)",
+      "pathlib.Path.write_bytes = fail",
+      "tool['download'](pathlib.Path(output), 'cities15000.zip', pathlib.Path(sources))"
+    ].join("\n"), "scripts/download-inputs.py", sources, output]);
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain("manufactured disk failure");
+    await expect(access(output)).rejects.toThrow();
+    expect((await readdir(parent)).filter((name) => name.startsWith(".downloaded."))).toEqual([]);
+    expect(download(sources, output).status).toBe(0);
+  });
+
+  it.each(["duplicate-role", "wrong-license", "symlink", "invalid-utf8"])("rejects a damaged download receipt: %s", async (kind) => {
+    const parent = await directory();
+    const sources = await sourceArchive(parent, syntheticPlaces(1));
+    const downloaded = join(parent, "downloaded");
+    expect(download(sources, downloaded).status).toBe(0);
+    const path = join(downloaded, "sources.json");
+    const receipt = JSON.parse(await readFile(path, "utf8"));
+    if (kind === "duplicate-role") receipt.inputs[1] = receipt.inputs[0];
+    if (kind === "wrong-license") receipt.license = "unsupported";
+    if (kind === "invalid-utf8") await writeFile(path, Buffer.from([0xff]));
+    else if (kind === "symlink") {
+      await rename(path, join(parent, "receipt.json"));
+      await symlink(join(parent, "receipt.json"), path);
+    } else await writeFile(path, JSON.stringify(receipt));
+    const output = join(parent, "index");
+    expect(run(process.execPath, [buildCommand, "--downloaded", downloaded, "--out", output]).status).toBe(1);
+    await expect(access(output)).rejects.toThrow();
+  });
+
   it("preserves archived source bytes across small parts and builds those parts through the CLI", async () => {
     const parent = await directory();
     const raw = syntheticPlaces(2500);

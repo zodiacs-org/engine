@@ -5,6 +5,7 @@ coverage/
 generated/
 downloads/
 *.tsbuildinfo
+__pycache__/
 
 # Only deliberately selected, attributed samples belong in data/.
 # Full source dumps and all generated indexes belong in the folders above.

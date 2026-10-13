@@ -142,6 +142,76 @@ describe("complete local place indexes", () => {
 });
 
 describe("manifest and shard integrity", () => {
+  it.each(["unlisted-shard", "directory", "out-of-order", "missing-number", "truncated-shard"])("refuses incomplete publication: %s", async (kind) => {
+    const built = await fixture([dataset(), dataset([place("other-harbour")])]);
+    if (kind === "unlisted-shard") await writeJson(join(built.path, "places-000002.json"), dataset());
+    if (kind === "directory") await mkdir(join(built.path, "partial-build"));
+    if (kind === "out-of-order") {
+      built.manifest.shards.reverse();
+      await writeJson(built.manifestPath, built.manifest);
+    }
+    if (kind === "missing-number") {
+      built.manifest.shards.splice(0, 1);
+      built.manifest.count = 1;
+      await writeJson(built.manifestPath, built.manifest);
+    }
+    if (kind === "truncated-shard") await writeFile(join(built.path, "places-000001.json"), "{partial");
+    await expect(loadPlaceIndex(built.path)).rejects.toThrow(IndexLoadError);
+    await expect(loadPlaceIndex(built.manifestPath)).rejects.toThrow(IndexLoadError);
+  });
+
+  it("rejects a foreign generation's shard with the same IDs and unchanged provenance", async () => {
+    const built = await fixture();
+    await writeJson(join(built.path, built.manifest.shards[0]!.file), dataset([{ ...place(), latitude: 13.5 }]));
+    await expect(loadPlaceIndex(built.path)).rejects.toThrow(IndexLoadError);
+  });
+
+  it("rejects a manifest replacement during shard loading instead of returning a partial snapshot", async () => {
+    const built = await fixture();
+    const original = fsPromises.open;
+    const spy = vi.spyOn(fsPromises, "open").mockImplementation(async (file, flags, mode) => {
+      if (String(file).endsWith("places-000000.json")) {
+        await writeJson(built.manifestPath, { ...built.manifest, transformations: {
+          ...built.manifest.transformations, trimmedLabels: 1
+        } });
+      }
+      return original(file, flags, mode);
+    });
+    syncBuiltinESMExports();
+    try {
+      await expect(loadPlaceIndex(built.path)).rejects.toThrow(IndexLoadError);
+    } finally {
+      spy.mockRestore();
+      syncBuiltinESMExports();
+    }
+    expect(await loadPlaceIndex(built.path)).toEqual(dataset());
+  });
+
+  it.each(["grows", "shrinks"])("rejects a file that %s after the descriptor size check", async (kind) => {
+    const built = await fixture();
+    const path = join(built.path, built.manifest.shards[0]!.file);
+    const changed = kind === "grows" ? Buffer.concat([await readFile(path), Buffer.from(" ")]) : Buffer.from("{short");
+    const original = fsPromises.open;
+    const spy = vi.spyOn(fsPromises, "open").mockImplementation(async (file, flags, mode) => {
+      const handle = await original(file, flags, mode);
+      if (file === path) {
+        const read = handle.read.bind(handle);
+        handle.read = (async (...args: Parameters<typeof read>) => {
+          await writeFile(path, changed);
+          return read(...args);
+        }) as typeof handle.read;
+      }
+      return handle;
+    });
+    syncBuiltinESMExports();
+    try {
+      await expect(loadPlaceIndex(built.path)).rejects.toThrow(IndexLoadError);
+    } finally {
+      spy.mockRestore();
+      syncBuiltinESMExports();
+    }
+  });
+
   it.each([
     { schemaVersion: 2 }, { format: "other-format" }, { count: 2 }, { count: "1" },
     { count: -1 }, { transformations: { trimmedLabels: -1, omittedAliases: 0, duplicateAliases: 0 } },

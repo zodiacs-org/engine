@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
-import { constants } from "node:fs";
-import { lstat, open } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { lstat, readdir } from "node:fs/promises";
+import { basename, dirname, join } from "node:path";
 import { INDEX_FILE_LIMIT } from "./build-index.js";
 import type { IndexManifest } from "./build-index.js";
+import { readIndexBytes as readBytes } from "./index-file.js";
 import { parsePlaceDataset } from "./dataset.js";
 import type { PlaceDataset, PlaceRecord } from "./types.js";
 
@@ -44,14 +44,11 @@ function manifest(value: unknown): IndexManifest {
     duplicateAliases: count(changes.duplicateAliases)
   };
   if (!Array.isArray(row.shards)) invalid();
-  const names = new Set<string>();
   let total = 0;
-  const shards = row.shards.map((entry: unknown) => {
+  const shards = row.shards.map((entry: unknown, index: number) => {
     const shard = object(entry, ["file", "sha256", "bytes", "count"]);
     // Match builder filenames only, excluding paths, drive letters and URLs.
-    if (typeof shard.file !== "string" || !/^places-[0-9]{6}\.json$/u.test(shard.file)
-        || names.has(shard.file)) invalid();
-    names.add(shard.file);
+    if (typeof shard.file !== "string" || shard.file !== `places-${String(index).padStart(6, "0")}.json`) invalid();
     if (typeof shard.sha256 !== "string" || !/^[a-f0-9]{64}$/u.test(shard.sha256)) invalid();
     const bytes = count(shard.bytes);
     const rows = count(shard.count);
@@ -62,29 +59,6 @@ function manifest(value: unknown): IndexManifest {
   });
   if (count(row.count) !== total) invalid();
   return { schemaVersion: 1, format: "geocode-index", provenance, count: total, transformations, shards };
-}
-
-async function readBytes(path: string): Promise<Buffer> {
-  const before = await lstat(path);
-  if (!before.isFile() || before.size >= INDEX_FILE_LIMIT) invalid();
-  // Refuse final-component symlinks and avoid blocking on special files.
-  const file = await open(path, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
-  try {
-    const stat = await file.stat();
-    if (!stat.isFile() || stat.size >= INDEX_FILE_LIMIT) invalid();
-    // One extra byte detects growth without permitting an unbounded read.
-    const bytes = Buffer.allocUnsafe(stat.size + 1);
-    let used = 0;
-    while (used < bytes.length) {
-      const result = await file.read(bytes, used, bytes.length - used, null);
-      if (result.bytesRead === 0) break;
-      used += result.bytesRead;
-    }
-    if (used !== stat.size) invalid();
-    return bytes.subarray(0, used);
-  } finally {
-    await file.close();
-  }
 }
 
 function json(bytes: Buffer): unknown {
@@ -98,16 +72,27 @@ export async function loadPlaceIndex(path: string): Promise<PlaceDataset> {
     const stat = await lstat(path);
     if (!stat.isFile() && !stat.isDirectory()) invalid();
     const input = stat.isDirectory() ? join(path, "manifest.json") : path;
-    const value = json(await readBytes(input));
+    const manifestBytes = await readBytes(input);
+    const value = json(manifestBytes);
     if (value === null || typeof value !== "object" || !Object.hasOwn(value, "format")) {
       return parsePlaceDataset(value);
     }
     const metadata = manifest(value);
+    const folder = dirname(input);
+    const folderBefore = await lstat(folder);
+    if (!folderBefore.isDirectory()) invalid();
+    const expectedFiles = [basename(input), ...metadata.shards.map((shard) => shard.file)].sort();
+    async function checkFiles(): Promise<void> {
+      const entries = await readdir(folder, { withFileTypes: true });
+      if (entries.some((entry) => !entry.isFile())
+          || JSON.stringify(entries.map((entry) => entry.name).sort()) !== JSON.stringify(expectedFiles)) invalid();
+    }
+    await checkFiles();
     const expectedProvenance = JSON.stringify(metadata.provenance);
     const places: PlaceRecord[] = [];
     const ids = new Set<string>();
     for (const shard of metadata.shards) {
-      const bytes = await readBytes(join(dirname(input), shard.file));
+      const bytes = await readBytes(join(folder, shard.file));
       if (bytes.length !== shard.bytes || createHash("sha256").update(bytes).digest("hex") !== shard.sha256) invalid();
       const dataset = parsePlaceDataset(json(bytes));
       if (dataset.places.length !== shard.count || JSON.stringify(dataset.provenance) !== expectedProvenance) invalid();
@@ -117,6 +102,13 @@ export async function loadPlaceIndex(path: string): Promise<PlaceDataset> {
         places.push(place);
       }
     }
+    // A load is all-or-nothing. Do not return a snapshot if publication changed
+    // while we were reading it. Published directories should remain immutable.
+    await checkFiles();
+    if (!(await readBytes(input)).equals(manifestBytes)) invalid();
+    const folderAfter = await lstat(folder);
+    if (folderAfter.dev !== folderBefore.dev || folderAfter.ino !== folderBefore.ino
+        || folderAfter.mtimeMs !== folderBefore.mtimeMs || folderAfter.ctimeMs !== folderBefore.ctimeMs) invalid();
     return Object.freeze({ schemaVersion: 1, provenance: metadata.provenance, places: Object.freeze(places) });
   } catch {
     throw new IndexLoadError();

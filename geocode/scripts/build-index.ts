@@ -1,7 +1,25 @@
-import { mkdir, readFile } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { buildGeoNamesIndex } from "../src/build-index.js";
+import { readIndexBytes } from "../src/index-file.js";
+
+async function receiptFile(path: string) {
+  const bytes = await readIndexBytes(path);
+  return JSON.parse(new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(bytes));
+}
+
+function downloadReceipt(value: unknown): { inputs: Array<Record<string, unknown>> } {
+  if (value === null || typeof value !== "object") throw new TypeError("Invalid download receipt.");
+  const receipt = value as Record<string, unknown>;
+  if (receipt.schemaVersion !== 1 || receipt.dataset !== "geonames" || receipt.license !== "CC-BY-4.0"
+      || !Array.isArray(receipt.inputs) || receipt.inputs.length !== 3) throw new TypeError("Invalid download receipt.");
+  const paths = new Set(["places", "countries.tsv", "admin1.tsv"]);
+  for (const item of receipt.inputs) {
+    if (item === null || typeof item !== "object" || !paths.delete(item.path)) throw new TypeError("Invalid download receipt inputs.");
+  }
+  return { inputs: receipt.inputs };
+}
 
 function requiredDigest(value: unknown): string {
   if (typeof value !== "string" || !/^[a-f0-9]{64}$/u.test(value)) {
@@ -30,12 +48,12 @@ try {
       throw new TypeError("--sample and --downloaded accept only --out.");
     }
     // Receipts for the committed subset pin the bytes used by this convenience command.
-    const sample = values.sample ? JSON.parse(await readFile("data/sample-receipt.json", "utf8")) : null;
-    const downloaded = values.downloaded ? JSON.parse(await readFile(resolve(values.downloaded, "sources.json"), "utf8")) : null;
+    const sample = values.sample ? await receiptFile("data/sample-receipt.json") : null;
+    const downloaded = values.downloaded ? downloadReceipt(await receiptFile(resolve(values.downloaded, "sources.json"))) : null;
     function input(role: "places" | "countries" | "admin1", fallbackUrl?: string) {
       if (downloaded) {
         const local = role === "places" ? "places" : `${role}.tsv`;
-        const receipt = downloaded.inputs.find((item: { path: string }) => item.path === local);
+        const receipt = downloaded.inputs.find((item) => item.path === local);
         if (!receipt) throw new TypeError("Download receipt is missing an input.");
         if (typeof receipt.url !== "string") throw new TypeError("Input receipt requires a source URL.");
         if (role === "places" && (typeof receipt.archiveMember !== "string" || !receipt.archiveMember)) {

@@ -19,7 +19,7 @@ coverage outside that slice, without reimplementing either resolver.
 - [x] M7 Add an optional small HTTP server over the same library with lookup and timezone routes, bounded inputs, structured errors, loopback defaults and explicit startup and shutdown. Test request handling on ephemeral ports.
 - [x] M8 Add bounded per-client rate limiting, monotonic refill timing, overload handling and configurable proxy trust. Verify limits, recovery, concurrent clients and cleanup with a controlled clock.
 - [x] M9 Expand independent timezone evidence for historical DST gaps/folds, date-line jumps, old offsets and polar places outside the atlas slice. Test that atlas rules take precedence where they differ from tzdb. Record reference versions and sources, and test behavior when the host timezone database lacks an identifier.
-- [ ] M10 Harden index loading and rebuilding against corrupt or mixed generations, partial writes, oversized rows and malformed source archives. Test atomic publication and interrupted builds using local synthetic sources.
+- [x] M10 Harden index loading and rebuilding against corrupt or mixed generations, partial writes, oversized rows and malformed source archives. Test atomic publication and interrupted builds using local synthetic sources.
 - [ ] M11 Add an engine integration example using synthetic input and document API, CLI and service operation, data rebuilds, attribution, timezone limitations and privacy. Ensure examples run and every quantitative claim points to committed evidence.
 - [ ] M12 Run the complete geocode checks, review library import side effects and offline operation, verify package exclusion and file sizes, and record final acceptance evidence and remaining limitations.
 
