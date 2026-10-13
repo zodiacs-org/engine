@@ -1,1 +1,2 @@
 F1: Add bounded socket-IP admission throttling before authentication and public routes, with tested 429 responses and root test isolation.
+F2: Document alert 37's startup-only onReady false-positive reasoning, retain the readiness barrier, and verify server checks and root test isolation.

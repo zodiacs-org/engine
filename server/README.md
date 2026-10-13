@@ -715,6 +715,8 @@ isolation and process deadlines. Its callers own their runner's lifecycle.
 
 ## Development and isolation
 
+CodeQL startup-hook triage is recorded in [SECURITY.md](SECURITY.md).
+
 ```sh
 npm run typecheck
 npm test

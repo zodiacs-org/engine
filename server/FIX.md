@@ -1,3 +1,3 @@
 - [x] F1 Close CodeQL alert 42's admission gap with bounded client throttling before authentication and public routes; test HTTP 429 responses and confirm root test discovery excludes server tests.
-- [ ] F2 Document CodeQL alert 37's startup-only callback triage in server docs; restructure only if harmless and clearer.
+- [x] F2 Document CodeQL alert 37's startup-only callback triage in server docs; restructure only if harmless and clearer.
 - [ ] F3 Document CodeQL alert 39's high-entropy API-key assumption and enforce rejection or generation of sufficiently long keys.
