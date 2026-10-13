@@ -1,5 +1,6 @@
 //! WebAssembly bindings for the native numeric kernels.
 
+mod ephemeris;
 mod frame;
 mod moon;
 mod planets;

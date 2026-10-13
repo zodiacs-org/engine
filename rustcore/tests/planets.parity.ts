@@ -110,7 +110,9 @@ describe("solar and planetary series through WASM", () => {
       "__wbindgen_is_null", "__wbindgen_number_get", "__wbindgen_debug_string",
       "__wbindgen_throw", "__wbindgen_init_externref_table",
       "__wbg_get_67b2ba62fc30de12", "__wbg_new_405e22f390576ce2",
-      "__wbg_new_1ab78df5e132f715", "__wbg_set_bb8cecf6a62b9f46"
+      "__wbg_new_1ab78df5e132f715", "__wbg_set_bb8cecf6a62b9f46",
+      // Complete position rows allocate and populate an ordinary JS array.
+      "__wbg_new_78feb108b6472713", "__wbg_push_737cfc8c1432c2c6"
     ]);
     for (const imported of WebAssembly.Module.imports(new WebAssembly.Module(wasmBytes))) {
       expect(imported.module).toBe("wbg");
@@ -295,7 +297,7 @@ describe("solar and planetary series through WASM", () => {
 
   it("rejects unsupported bodies, nonfinite or non-number clocks, and nonboolean correction choices", () => {
     const clock = { ut: 0, tt: 0, deltaT: 0 };
-    const invalidBodies: unknown[] = ["Moon", "Pluto", "EMB", "SSB", "Star1", "earth", "", null, 0, {}, Symbol("body")];
+    const invalidBodies: unknown[] = ["Moon", "EMB", "SSB", "Star1", "earth", "", null, 0, {}, Symbol("body")];
     for (const input of invalidBodies) {
       const body = input as SeriesBody;
       expect(() => rust.helioVector(body, 0)).toThrow(RangeError);

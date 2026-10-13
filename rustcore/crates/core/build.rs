@@ -6,6 +6,7 @@ fn main() {
         root.join("scripts/generate-time-data.mjs"),
         root.join("scripts/generate-planet-data.mjs"),
         root.join("scripts/generate-moon-data.mjs"),
+        root.join("scripts/generate-pluto-data.mjs"),
         root.join("../src/deltat.ts"),
         root.join("../src/time-scale-data.ts"),
         root.join("node_modules/astronomy-engine/esm/astronomy.js"),
@@ -21,6 +22,7 @@ fn main() {
         "generate-time-data.mjs",
         "generate-planet-data.mjs",
         "generate-moon-data.mjs",
+        "generate-pluto-data.mjs",
     ] {
         let status = Command::new("node")
             .arg(root.join("scripts").join(generator))

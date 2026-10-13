@@ -106,8 +106,8 @@ Cargo writes `planet_data.rs` to its ignored `OUT_DIR` under `target/`.
 The generated table contains Mercury, Venus, Earth, Mars, Jupiter, Saturn,
 Uranus and Neptune in source order. The Sun's heliocentric vector is zero;
 its geocentric calculation uses the Earth series. This milestone does not
-include the source's Moon or Pluto tables. Lunar coefficients are generated
-separately as described below. Generated data are not committed.
+include the source's Moon or Pluto tables. Lunar coefficients and Pluto
+states are generated separately as described below. Generated data are not committed.
 
 The native formulas translate the same installed source's VSOP evaluation,
 spherical-to-rectangular conversion, fixed equatorial rotation, light-time
@@ -154,3 +154,31 @@ on the mean ecliptic and adds the engine's nutation in longitude.
 algorithms and tables and records the historical algorithm attribution
 stated by the local dependency. This is a translation of those local
 sources, not an external-source audit or an independent accuracy comparison.
+
+## Pluto and complete positions
+
+[generate-pluto-data.mjs](scripts/generate-pluto-data.mjs) reads the same
+installed astronomy-engine source and uses the planetary generator's complete
+source digest, dependency version, licence and lockfile checks. It parses only
+the literal `PlutoStateTable`, integration dimensions and gravitational
+constants for the Sun and giant planets. The output retains every source
+binary64 value and writes to Cargo's ignored `OUT_DIR` as `pluto_data.rs`.
+[pluto-data.check.mjs](scripts/pluto-data.check.mjs) verifies all values, table
+spacing, dimensions, malformed-input rejection and deterministic output.
+
+[pluto.rs](crates/core/src/pluto.rs) translates the dependency's major-body
+barycentric conversion, gravity update, forward/reverse segment integration,
+fade mixing and interpolation. The adjacent light-time extension uses the
+source's one-way integration step and is bounded; it does not implement the
+unbounded distant extrapolation. Coefficients and source states are not
+modified or fitted. [NOTICE](NOTICE) extends the retained MIT attribution to
+these algorithms and tables. No additional ephemeris source is consulted.
+
+[ephemeris.rs](crates/core/src/ephemeris.rs) translates complete position
+assembly, sample clocks, longitude differences and annotations from the local
+`src/ephemeris.ts`, with span metadata from `src/reference-span.ts`. Their
+digests are already enforced by [moon.parity.ts](tests/moon.parity.ts).
+Public DateInput validation mirrors `src/api.ts`'s `positions` using the
+existing date parser port. The wrapper imports reference types only; all
+numeric evaluation and complete row assembly run in Rust. The comparison
+tests import the local engine as the compatibility reference.

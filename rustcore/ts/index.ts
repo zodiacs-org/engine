@@ -1,5 +1,5 @@
 import * as wasm from "../pkg/zodiacs_rustcore.js";
-import type { DateInput, SignDefinition } from "../../src/types.js";
+import type { BodyName, BodyPosition, DateInput, SignDefinition } from "../../src/types.js";
 import type { CalendarName, CivilDate } from "../../src/civil-calendar.js";
 import { SIGNS } from "./sign-data.js";
 import type { DeltaT, DeltaTTable, DeltaTSegment } from "../../src/deltat.js";
@@ -11,7 +11,7 @@ import type { AstroTime } from "astronomy-engine";
 import { NUTATION_TERMS } from "./nutation-data.js";
 
 export { ELEMENTS, MODALITIES, SIGNS, SIGN_SLUGS, SIGN_NAMES } from "./sign-data.js";
-export type { DateInput, SignDefinition, CalendarName, CivilDate };
+export type { BodyName, BodyPosition, DateInput, SignDefinition, CalendarName, CivilDate };
 export type { DeltaT, DeltaTTable, DeltaTSegment, TimeBasis, TimeScale, TimeScaleName, Ut1MinusUtc, LeapSeconds };
 export type { Tilt, EclipticFrame, Rows };
 export { ARGUMENTS, MULTIPLIERS, OFFSETS, NUTATION_TERMS } from "./nutation-data.js";
@@ -270,9 +270,9 @@ export function turn(m: Rows, x: number, y: number, z: number): [number, number,
   return vector(wasm.turn(Float64Array.from(m), x, y, z));
 }
 
-/** Bodies implemented by the solar and planetary series milestone. */
+/** Heliocentric series bodies, plus the integrated Pluto model. */
 export type SeriesBody = "Sun" | "Mercury" | "Venus" | "Earth" | "Mars" |
-  "Jupiter" | "Saturn" | "Uranus" | "Neptune";
+  "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto";
 
 /** J2000 day clocks with a fixed TT - UT1 in seconds for light-time samples. */
 export interface PlanetClock {
@@ -293,7 +293,7 @@ export interface BackdatedPlanetVector extends PlanetVector { ut: number; tt: nu
 function seriesBody(body: SeriesBody): void {
   switch (body) {
     case "Sun": case "Mercury": case "Venus": case "Earth": case "Mars":
-    case "Jupiter": case "Saturn": case "Uranus": case "Neptune": return;
+    case "Jupiter": case "Saturn": case "Uranus": case "Neptune": case "Pluto": return;
     default: throw new RangeError("Body is not supported by the planetary series kernel.");
   }
 }
@@ -318,7 +318,7 @@ function planetVector(fields: Float64Array): PlanetVector {
   return { x: fields[0]!, y: fields[1]!, z: fields[2]! };
 }
 
-/** Low-level series helper; complete engine positions are a later milestone. */
+/** Low-level heliocentric helper, in AU on the J2000 mean equator. */
 export function helioVector(body: SeriesBody, ttDays: number): PlanetVector {
   ready();
   seriesBody(body);
@@ -422,4 +422,80 @@ export function lunarLongitudeSpeed(
   ready();
   const ms = lunarDateInput(body, date, scale, pin);
   return wasm.lunarLongitudeSpeed(body, ms, scale, pin);
+}
+
+/** Reference coverage metadata, matching src/reference-span.ts. */
+export const REFERENCE_SPAN = Object.freeze({
+  from: "1800-01-01T00:00:00.000Z", to: "2200-01-01T00:00:00.000Z"
+} as const);
+
+export const EPHEMERIS_SPAN = Object.freeze({
+  timeScale: "TT",
+  daysFromJ2000: Object.freeze({ from: -730000, to: 730000 } as const),
+  fromTT: "0001-04-30T12:00:00", toTT: "3998-09-03T12:00:00"
+} as const);
+
+export const SPEED_STEP_DAYS = 0.001;
+export const NODE_SPEED_STEP_DAYS = 0.25;
+
+/** Coverage is a half-open timestamp comparison, not a calculation refusal. */
+export function outsideReferenceSpan(utc: Date): boolean {
+  ready();
+  return wasm.outsideReferenceSpan(Date.prototype.getTime.call(utc));
+}
+
+/** Same Date-only signature as the engine's internal position assembler. */
+export function computeBodies(date: Date): BodyPosition[] {
+  ready();
+  return wasm.positionsOn(date.getTime(), "utc", undefined) as BodyPosition[];
+}
+
+/** Apparent geocentric tropical positions, with the public engine signature. */
+export function positions(date: DateInput): BodyPosition[] {
+  return computeBodies(dateFrom(date, "date"));
+}
+
+function positionClock(scale: TimeScaleName, pin?: number): void {
+  if (scale !== "utc" && scale !== "ut1" && scale !== "tt") {
+    throw new RangeError("Time scale must be utc, ut1 or tt.");
+  }
+  if (pin !== undefined && (!Number.isFinite(pin) || Math.abs(pin) > 1e10)) {
+    throw new RangeError("Delta T must be finite seconds with an absolute value at most 1e10.");
+  }
+}
+
+/** The same rows on an explicit chart clock, without assembling houses/aspects. */
+export function positionsOn(date: DateInput, scale: TimeScaleName = "utc", pin?: number): BodyPosition[] {
+  const ms = dateFrom(date, "date").getTime();
+  positionClock(scale, pin);
+  return wasm.positionsOn(ms, scale, pin) as BodyPosition[];
+}
+
+/** Same Date-only signature as src/ephemeris.ts, in true-ecliptic degrees. */
+export function bodyLongitude(body: BodyName, date: Date): number {
+  ready();
+  const ms = date.getTime();
+  positionBody(body, ms, false);
+  return wasm.bodyLongitudeOn(body, ms, "utc", undefined);
+}
+
+/** Same Date-only signature as src/ephemeris.ts, in degrees per elapsed day. */
+export function longitudeSpeed(body: BodyName, date: Date): number {
+  ready();
+  const ms = date.getTime();
+  positionBody(body, ms, true);
+  return wasm.longitudeSpeedOn(body, ms, "utc", undefined);
+}
+
+function positionBody(body: BodyName, ms: number, speed: boolean): void {
+  switch (body) {
+    case "Sun": case "Moon": case "Mercury": case "Venus": case "Mars":
+    case "Jupiter": case "Saturn": case "Uranus": case "Neptune": case "Pluto":
+    case "North Node": case "South Node": return;
+    default:
+      // longitudeOn checks its sample's time before finding the body. Keep
+      // that error order, then format in JS to preserve UTF-16 error text.
+      wasm.validateEphemerisBodyTime(ms, speed);
+      throw new RangeError(`Unknown body: ${body}`);
+  }
 }

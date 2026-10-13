@@ -6,12 +6,14 @@ pub mod angles;
 pub mod calendar;
 pub mod date_input;
 pub mod deltat;
+pub mod ephemeris;
 pub mod equator;
 pub mod frame;
 pub mod lunar;
 pub mod moon;
 pub mod nutation;
 pub mod planets;
+pub mod pluto;
 pub mod signs;
 pub mod time_scales;
 

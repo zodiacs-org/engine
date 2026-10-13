@@ -5,11 +5,12 @@ library and WebAssembly module implement angular arithmetic, sign annotations,
 resolved-instant date validation, Julian/Gregorian civil-calendar helpers,
 the Delta T model, the UTC/UT1/TT time basis, nutation, precession,
 frame rotations, obliquity, apparent sidereal time, solar and planetary
-series through Neptune with light time and aberration, and the Moon and
-true lunar nodes with longitude finite differences.
+series and Pluto integration with light time and aberration, and the Moon and
+true lunar nodes with longitude finite differences. It assembles complete
+position rows with signs, degrees in signs, speeds and retrograde flags.
 The TypeScript wrapper retains the implemented engine helpers' signatures after
 explicit initialization and exposes intermediate planetary and lunar kernels.
-Complete position rows, Pluto, houses and aspect matching remain in
+Houses and aspect matching remain in
 [PLAN.md](PLAN.md).
 
 ## Setup and checks
@@ -33,10 +34,10 @@ npm run check:isolation
 CLI version from `Cargo.toml` under `.tools/wasm-bindgen/`. The CLI and crate must agree.
 Build and test scripts use locked dependencies. `npm test` runs Cargo unit
 tests, builds WASM, checks TypeScript signatures and runs the Vitest parity
-suite, including checks of the time, planetary and lunar data generators. Native release builds are
+suite, including checks of the time, planetary, lunar and Pluto data generators. Native release builds are
 a separate `build:native` step. Cargo also needs Node on PATH: its build script
 generates time tables from digest-checked local engine sources and planetary
-and lunar coefficients from the pinned dependency installed by this directory's `npm ci`.
+and lunar coefficients and Pluto states from the pinned dependency installed by this directory's `npm ci`.
 Generation uses Node's built-in modules with no network requests. This crate
 builds within this repository.
 
@@ -103,7 +104,7 @@ Rust. Exported nutation tables and cached frames are immutable snapshots;
 mutation and cache identity differences are recorded in [PARITY.md](PARITY.md).
 
 The intermediate planetary API exports `helioVector(body, ttDays)` and
-`helioState(body, ttDays)`, for the Sun and Mercury through Neptune, including
+`helioState(body, ttDays)`, for the Sun and Mercury through Pluto, including
 Earth. Vectors are in AU on the mean equator and equinox of J2000; state
 velocities are in AU per TT day. `geoVector(body, clock, aberration)` and
 `backdatePosition(observer, target, clock, aberration)` solve light time, with
@@ -115,12 +116,27 @@ returns the emission `ut` and `tt`. These helpers return plain records,
 without astronomy-engine objects or runtime calls into that dependency.
 Their tests are in [planets.parity.ts](tests/planets.parity.ts).
 
-These planetary kernels accept finite clocks and only the implemented bodies.
-They do not yet expose `positions`, speeds in longitude, coverage flags or
-the engine's ephemeris-span validation. Do not substitute them for the
-complete public engine API. Pluto needs a separate algorithm in
-the next milestone. [PARITY.md](PARITY.md) states the current bounds
-for comparisons with the pinned implementation.
+These intermediate kernels accept finite clocks and only the implemented
+bodies. Pluto's heliocentric helpers additionally require TT inside
+`EPHEMERIS_SPAN`. [PARITY.md](PARITY.md) states their bounds and the
+deliberate refusal of the dependency's distant extrapolation path.
+
+`positions(date)` has the engine's public signature: a Date, epoch-millisecond
+number or resolved ISO input produces ordinary mutable `BodyPosition` rows.
+All coordinate calculation, row assembly, speeds, sign selection and degree
+arithmetic run in Rust. `computeBodies(date)`, `bodyLongitude(body, date)` and
+`longitudeSpeed(body, date)` expose the matching Date-only internal signatures.
+`positionsOn(date, scale?, pin?)` is an additional port helper that computes
+those rows on an explicit chart clock without assembling houses or aspects.
+
+`REFERENCE_SPAN`, `EPHEMERIS_SPAN` and `outsideReferenceSpan(date)` mirror the
+engine's metadata and coverage check. Positions outside reference coverage
+still compute; positions beyond the ephemeris TT span refuse. Every outer
+speed sample is checked. The rows carry no coverage flag, as in the engine.
+The complete-row corpus, boundary decisions and angular/speed allowances are
+enforced by [positions.parity.ts](tests/positions.parity.ts) and documented in
+[PARITY.md](PARITY.md). Near a sign boundary or station, allowed numeric
+roundoff can change discrete sign or retrograde metadata.
 
 The lunar API exports `geoMoon(ttDays)` for a geocentric J2000 vector in AU,
 `geoMoonState(clock)` for its position and finite-difference velocity in
@@ -138,8 +154,8 @@ scale and optional Delta T seconds. They resolve each sample's time basis
 in Rust and enforce the engine's TT span on each evaluation. Longitude is
 in degrees and speed is in degrees per elapsed day. Their default UTC
 forms match the lunar subset of `bodyLongitude` and `longitudeSpeed` in
-the engine's ephemeris module. The separate names make their limited body
-scope explicit until the complete position API is implemented.
+the engine's ephemeris module. The separate names keep these lunar-only helpers
+available alongside the complete position API.
 The tests and quantity-specific rounding allowances are in
 [moon.parity.ts](tests/moon.parity.ts) and [PARITY.md](PARITY.md).
 
@@ -156,7 +172,7 @@ The browser integration test belongs to the wrapper milestone in the plan.
 
 The workspace member `crates/core` exposes `normalize_longitude(f64)` and the
 `angles`, `signs`, `date_input`, `calendar`, `deltat`, `time_scales`,
-`nutation`, `frame`, `equator`, `planets`, `moon` and `lunar` modules. Fallible angular functions
+`nutation`, `frame`, `equator`, `planets`, `pluto`, `moon`, `lunar` and `ephemeris` modules. Fallible angular functions
 return `Result<_, LongitudeError>`; the unchecked angular helpers propagate NaN
 as the reference does. Date parsers return `Result<f64, DateError>` with epoch
 milliseconds. Calendar string parsers and conversions return `Option`, and
@@ -183,14 +199,31 @@ on UT1 and precession/nutation on TT. `frame::ecliptic_of_date` returns
 rejection; a zero vector retains a NaN latitude. Native frame operations have
 no shared mutable cache. `equator::FrameKind` selects the mean or true frame.
 
-`planets::Planet` selects the Sun or a series body. `helio_vector` returns
+`planets::Planet` selects the Sun, a series body or Pluto. `helio_vector` returns
 Cartesian coordinates; `helio_state` returns `HelioState { pos, vel }`.
 Those native functions take unchecked TT days, so validate time at the caller's
 boundary. `backdate_position` returns `BackdatedPosition { vector, ut, tt }`;
 `geo_vector` returns only the vector. Both take explicit UT1 and TT day values,
 a fixed Delta T in seconds, and a boolean aberration switch. They return
 `Result` for invalid clocks or a failed light-time solution. These functions
-have no global time model, callback into JavaScript or mutable shared cache.
+have no global time model or callback into JavaScript. Pluto reuses integrated
+segments in a thread-local cache; query order does not affect their values.
+
+`pluto::helio_state(tt)` is the checked Pluto-only entry. It rejects TT outside
+the source table, while the light-time path allows a bounded adjacent step for
+an observation at the table's edge. The generic unchecked `planets` heliocentric
+helpers return NaN for Pluto beyond that internal allowance. The WASM boundary
+checks the public table span. The native tests and [pluto.parity.ts](tests/pluto.parity.ts)
+exercise those distinctions. Pluto's returned state velocity follows the
+reference interpolation; it is not the derivative of its mixed position.
+
+`ephemeris::positions(ms)` and `positions_on(ms, scale, pin)` return
+`Vec<BodyPosition>` on UTC or an explicit clock. `body_longitude` and
+`longitude_speed` have explicit-clock variants `longitude_at` and
+`longitude_speed_on`. Select bodies with `ephemeris::Body`, separate from
+the intermediate `planets::Planet` enum. Native input milliseconds and pins
+are caller-validated; the wrapper handles the public DateInput boundary.
+`check_ephemeris_span` checks TT and `outside_reference_span` checks coverage.
 
 `moon::calc_moon` returns mean-ecliptic spherical coordinates in radians
 and distance in AU; `moon::geo_moon` returns its J2000 Cartesian vector.

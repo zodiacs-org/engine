@@ -18,6 +18,7 @@ fn planet(body: &str) -> Result<Planet, JsValue> {
         "Saturn" => Ok(Planet::Saturn),
         "Uranus" => Ok(Planet::Uranus),
         "Neptune" => Ok(Planet::Neptune),
+        "Pluto" => Ok(Planet::Pluto),
         _ => Err(range_error(
             "Body is not supported by the planetary series kernel.",
         )),
@@ -38,6 +39,10 @@ fn finite_tt(tt: f64) -> Result<(), JsValue> {
 pub fn helio_vector(body: &str, tt: f64) -> Result<Box<[f64]>, JsValue> {
     let body = planet(body)?;
     finite_tt(tt)?;
+    if body == Planet::Pluto {
+        zodiacs_rustcore::pluto::validate_table_tt(tt)
+            .map_err(|error| range_error(&error.to_string()))?;
+    }
     Ok(Box::new(planets::helio_vector(body, tt)))
 }
 
@@ -45,6 +50,10 @@ pub fn helio_vector(body: &str, tt: f64) -> Result<Box<[f64]>, JsValue> {
 pub fn helio_state(body: &str, tt: f64) -> Result<Box<[f64]>, JsValue> {
     let body = planet(body)?;
     finite_tt(tt)?;
+    if body == Planet::Pluto {
+        zodiacs_rustcore::pluto::validate_table_tt(tt)
+            .map_err(|error| range_error(&error.to_string()))?;
+    }
     let value = planets::helio_state(body, tt);
     Ok(Box::new([
         value.pos[0],

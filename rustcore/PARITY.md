@@ -6,7 +6,8 @@ and `src/civil-calendar.ts`, plus `src/deltat.ts`, `src/time-scale.ts`,
 `src/nutation.ts`, `src/frame.ts`, `src/equator.ts`, `meanObliquity` in
 `src/houses.ts` and `gastHours` in `src/ephemeris.ts`, plus the installed,
 pinned astronomy-engine series, lunar state and light-time functions used
-by the engine, and the lunar branches of `src/ephemeris.ts`.
+by the engine, Pluto's integration and complete position assembly in
+`src/ephemeris.ts`, plus `positions` in `src/api.ts` and the span metadata.
 The parity tests import those sources directly
 and execute the release WASM built from `crates/wasm` and `crates/core`.
 Passing means compatibility on the tested inputs, not independent astronomical
@@ -53,11 +54,24 @@ for this port.
 | True north/south node longitude speed | Absolute difference at most 0.02 arcseconds/day | `tests/moon.parity.ts`, against the engine's central difference |
 | Lunar state midpoint and derivative on identical supplied sample vectors; South Node offset on the port's North Node longitude | Identical binary64 bits; tolerance 0 for this arithmetic | `tests/moon.parity.ts`, short-difference reconstruction and node normalization |
 | Lunar TT span acceptance and outer speed-sample refusal | Exact accepted/refused outcomes and reference span error message | `tests/moon.parity.ts`, pinned TT endpoint and outside probes |
+| Pluto heliocentric, geocentric and backdated Cartesian components | Absolute difference at most 2e-12 AU per component | `tests/pluto.parity.ts`, against the pinned dependency's vector/state functions |
+| Pluto Cartesian state velocity | Absolute difference at most 2e-14 AU/day per component | `tests/pluto.parity.ts`, against `HelioState` |
+| Pluto true-ecliptic longitude and latitude | Circular longitude and absolute latitude difference at most 1e-7 arcseconds | `tests/pluto.parity.ts`, vectors transformed by the reference frame |
+| Pluto emission clocks | Absolute difference at most 2e-6 seconds for the date corpus; at most 2e-5 seconds for separate full-table endpoint probes | `tests/pluto.parity.ts`, against `BackdatePosition` |
+| Complete position-row longitude and latitude, Sun through Pluto | Circular longitude and absolute latitude difference at most 1e-7 arcseconds | `tests/positions.parity.ts`, against `positions`, `computeBodies` and `computeChart(...).bodies` |
+| Complete position-row true-node longitude; node latitude | Circular difference at most 0.005 arcseconds; latitude exact positive zero | `tests/positions.parity.ts` |
+| Complete row and standalone longitude speeds | Absolute difference at most 1e-4 arcseconds/day for Sun, Moon and planets; 0.02 arcseconds/day for nodes | `tests/positions.parity.ts`, against engine rows and `longitudeSpeed` |
+| Complete row degree in sign | Circular difference modulo 30 degrees under the body's longitude allowance; bit-exact arithmetic on that implementation's own longitude | `tests/positions.parity.ts`, sign-boundary caveat below |
+| Body identifiers, row/field order, north/south speed sharing and node opposition | Exact fields or binary64 bits; freshly allocated mutable rows | `tests/positions.parity.ts` |
+| Cross-runtime sign and retrograde flags | Exact unless the reference lies within the stated longitude/speed allowance of its boundary; numeric limits always enforced and differences recorded | `tests/positions.parity.ts`, monthly/seeded dates and selected crossings/stations |
+| Complete-position date validation, reference/span metadata and span acceptance | Exact fields, accepted/refused outcomes and error class/message | `tests/positions.parity.ts`; span endpoint probes check acceptance only |
+| Invalid standalone body inputs | Matching error class/message and time-before-body validation order, without passing non-strings to WASM | `tests/body-boundary.parity.ts` |
 | Native arithmetic, signs, date validation and calendars | Exact regression expectations and calendar round trips | Unit tests in `crates/core/src/{lib,angles,signs,date_input,calendar}.rs` |
 | Native time model and clock conversion | Table knot checks, segment/uncertainty boundaries, finite synthetic scan, leap seconds and pins | Unit tests in `crates/core/src/{deltat,time_scales}.rs` |
 | Native frame kernels | Series-prefix algebra, clock separation, right-handed rotations, matrix order, inverse rotations, vector scale and nonfinite behavior | Unit tests in `crates/core/src/{nutation,frame,equator}.rs` |
 | Native solar and planetary kernels | Series algebra and derivatives, vector/state consistency, correction geometry, clock reconstruction and bounded solver behavior | Unit tests in `crates/core/src/planets.rs` |
 | Native lunar kernels | Harmonic recurrence, spherical/vector rotation round trip, state-clock reconstruction, angular-momentum orientation, circular difference endpoints and time-basis seams | Unit tests in `crates/core/src/{moon,lunar}.rs` |
+| Native Pluto and complete positions | Gravity arithmetic, segment/interpolation knots, cache/thread repeatability, table-span guards, clock reconstruction, body order and metadata, outer speed-sample checks | Unit tests in `crates/core/src/{pluto,ephemeris,planets}.rs` |
 | Loading | Explicit initialization, retry after invalid WASM syntax, reuse on repeated initialization | `tests/loader.parity.ts` |
 
 ## Corpus
@@ -172,6 +186,27 @@ complete event search or agreement on the exact instant of each crossing.
 Separate cases test invalid wrapper inputs and reference span endpoints;
 span-edge cases compare acceptance, not numeric parity outside the corpus.
 The corpus generation, offsets and tolerances are enforced by that test.
+
+`tests/pluto.parity.ts` compares monthly and seeded dates from the start of
+1800 through the end of 2200, J2000, and every integration knot within that
+span with adjacent representable TT doubles and interval midpoints. The knot
+spacing and segment boundaries are read from the digest-pinned source, not
+from a copied output fixture. It exercises both correction modes, Pluto as
+observer and target, segment handoffs during backdating, UTC/UT1/TT and pins,
+all time-basis boundaries, split clocks and exact repeatability. Full-table
+endpoint probes additionally compare Cartesian state and retarded samples;
+they do not extend angular acceptance claims to the entire table interval.
+
+`tests/positions.parity.ts` compares complete rows on monthly and seeded
+synthetic dates over that same calendar span. It also compares the standalone
+longitude and speed functions, public DateInput forms and invalid inputs,
+every leap-second boundary, the model seam and IERS endpoints with neighboring
+milliseconds, all input scales, and zero, signed and nonzero pins. Explicit
+clock rows are compared with `computeChart` bodies with no time/location
+houses. TS-selected sign changes and stations for the Sun, Mercury, Pluto and
+North Node receive nearby millisecond probes. Wider ephemeris endpoints test
+acceptance/error parity only. `tests/body-boundary.parity.ts` checks unknown
+body labels and runtime input types, including time-before-body refusal order.
 
 ## Rounding and deviations
 
@@ -348,10 +383,10 @@ Finite inconsistent initial UT1/TT/Delta T clocks are accepted to preserve the
 reference's initial-time versus `AddDays` behavior. The native heliocentric
 functions are unchecked arithmetic helpers; validate their TT at the caller.
 The wrapper returns plain records and RangeError for refused inputs or failed
-solves. It does not yet provide public date validation, reference flags,
-ephemeris-span checks or all-body position assembly; those are later
-milestones. These planetary-series exports accept only their listed bodies;
-the Moon uses the separate lunar exports, and Pluto still fails explicitly.
+solves. These intermediate exports accept only their listed bodies, now
+including Pluto; the Moon uses the separate lunar exports. The complete
+`positions` API below supplies public date validation, span checking and row
+assembly. Like the reference positions API, its rows carry no coverage flags.
 Other observer-target coincidences can make angular
 coordinates ill-conditioned; the angular limits here apply to the tested
 nonzero heliocentric and Earth-centered corpus only.
@@ -385,7 +420,7 @@ changes to TT when the reference's time-basis piece changes. A South Node
 longitude is the normalized North Node plus 180 degrees; its standalone
 speed is independently differenced, as `longitudeSpeed` does, so it need
 not have identical bits to the North Node speed. Complete position rows
-will copy the North Node speed to both rows, matching `computeBodies`.
+copy the North Node speed to both rows, matching `computeBodies`.
 
 Near a node station, allowed speed roundoff can change the sign of a
 nearly zero speed. The parity tests require identical signs outside the
@@ -393,8 +428,8 @@ documented speed allowance and enforce the numeric limit everywhere.
 Near a longitude wrap, a small circular difference can put the two values
 on opposite sides of zero. This milestone does not claim exact node motion
 or sign-boundary decisions in those neighborhoods. It preserves the source
-algorithm's jitter rather than smoothing it. Full row/flag parity remains
-subject to the later position and corpus milestones.
+algorithm's jitter rather than smoothing it. Complete-row metadata follows
+the boundary rules below; exhaustive event agreement is not claimed.
 
 To report measured maxima and near-boundary disagreements for the current
 runtime, run `RUSTCORE_PARITY_REPORT=1 npm run test:parity -- tests/moon.parity.ts`
@@ -411,10 +446,66 @@ native epoch-millisecond helpers expect caller-validated inputs. The current
 tests use Node 22.22.2 and the pinned Rust toolchain; other runtimes have not
 been checked for these tolerances.
 
+Pluto preserves the pinned dependency's barycentric major-body calculation,
+ordered gravity sums, forward and backward segment integrations, fade mixing,
+constant-acceleration interval estimates and heliocentric conversion. The
+state table and mass constants are extracted without changing their binary64
+values. Its square roots and underlying planetary trigonometry can differ
+across runtimes, with rounding propagated through integration; this motivates
+the AU and AU/day limits. The interpolated state velocity is the reference's
+own blend, not the derivative of the blended position. Public longitude
+speeds remain separate finite differences of the reported longitude.
+
+Integrated segments are computed lazily and retained in a thread-local Rust
+cache, unlike the dependency's module-global cache. Tests enforce exact
+repeatability, query-order independence and native cross-thread agreement.
+There is no shared mutable Delta T function or JavaScript numerical callback.
+Pluto's wrapper heliocentric helpers and any light-time observation involving
+Pluto must be within the source table. Internal retarded samples may extend
+one day beyond the table, using the source's single adjacent integration
+step. This allowance is enforced by native tests, and endpoint light-time
+parity tests exercise it. Beyond that, the port refuses instead of running the
+dependency's unbounded distant-date crawl. Generic native `planets` raw
+heliocentric helpers are unchecked and return NaN beyond the internal allowance;
+`pluto::helio_state` checks the table span explicitly. These intermediate API
+guards are intentional deviations. Complete positions preserve the engine's
+outer TT span refusal before reaching any such distant calculation.
+
+The separate endpoint emission-time allowance accounts for the larger
+binary64 day spacing at the table extrema. It is not an increased allowance
+for ordinary dates or a claim of physical accuracy at those endpoints.
+
+Complete positions preserve the reference's body order and sample order,
+fresh time bases for each outer speed sample, frozen inner Delta T, inclusive
+TT span and half-open reference coverage. Normalization, sign selection,
+degree arithmetic, retrograde comparison and node speed copying are bit-exact
+when given identical numeric inputs. Cross-runtime longitude and speed errors
+use the explicit per-body limits above. A sign boundary can put degrees in
+sign near opposite ends of the interval, so that comparison uses circular
+distance modulo the sign width. A station can change the sign of a nearly
+zero speed. Exact sign/retrograde parity is required whenever the reference's
+distance from the boundary exceeds the relevant numeric allowance; inside
+it, numeric bounds are still mandatory and differences are recorded.
+The tests always check metadata against each port's own values with no
+tolerance. These documented conditional decisions are not a promise of
+identical crossing milliseconds or all chart flags near a threshold.
+
+`positions` preserves the engine's public DateInput validation and returns
+mutable rows. `computeBodies`, `bodyLongitude` and `longitudeSpeed` preserve
+their Date-only internal signatures. Unknown body values are checked before
+WASM string conversion, after the reference's date/sample check, with error
+text formatted in JavaScript to preserve UTF-16 labels. `positionsOn` is an
+additional explicit-clock helper, compared with the bodies of `computeChart`;
+it validates its scale and pin at the wrapper boundary. Full natal charts,
+house fallbacks and aspect flags remain later milestones.
+
+Run `RUSTCORE_PARITY_REPORT=1 npm run test:parity -- tests/pluto.parity.ts tests/positions.parity.ts`
+to report current-run maxima and recorded near-boundary metadata differences.
+Reports do not adjust acceptance limits, and no measured speedup is claimed.
+
 ## Remaining coverage
 
-Pluto and complete position rows remain planned work, alongside house
-parity over synthetic dates from 1800 through
+Remaining work includes house parity over synthetic dates from 1800 through
 2200, polar latitudes, every house system and legacy/configured/minor/custom
 aspect sets. Cusps, house membership and aspect matching are not implemented
 or compared yet. The civil Julian Day Number helpers do not apply

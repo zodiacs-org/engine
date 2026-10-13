@@ -1,4 +1,4 @@
-//! Heliocentric VSOP vectors and light-travel correction for the Sun and planets.
+//! Heliocentric vectors and light-travel correction for the Sun and planets.
 //!
 //! Translated from astronomy-engine 2.1.19, esm/astronomy.js: VsopFormula,
 //! VsopDeriv, VsopRotate, CalcVsop, CalcVsopPosVel, CorrectLightTravel,
@@ -19,7 +19,7 @@ pub const C_AUDAY: f64 = 173.1446326846693;
 const DAYS_PER_MILLENNIUM: f64 = 365250.0;
 const TWO_PI: f64 = 2.0 * std::f64::consts::PI;
 
-/// Bodies implemented by this milestone. The Moon and Pluto are separate ports.
+/// Heliocentric solar and planetary bodies. The Moon has its own module.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Planet {
     Sun,
@@ -31,12 +31,13 @@ pub enum Planet {
     Saturn,
     Uranus,
     Neptune,
+    Pluto,
 }
 
 impl Planet {
     fn model(self) -> Option<&'static [&'static [&'static [[f64; 3]]]]> {
         let index = match self {
-            Self::Sun => return None,
+            Self::Sun | Self::Pluto => return None,
             Self::Mercury => 0,
             Self::Venus => 1,
             Self::Earth => 2,
@@ -50,7 +51,8 @@ impl Planet {
     }
 }
 
-/// Position in AU and analytic velocity in AU/day, on the J2000 mean equator.
+/// Position in AU and velocity in AU/day, on the J2000 mean equator.
+/// VSOP velocities are analytic; Pluto velocities are separately integrated.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct HelioState {
     pub pos: [f64; 3],
@@ -69,6 +71,7 @@ pub struct BackdatedPosition {
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum PlanetError {
     InvalidClock,
+    OutsidePlutoSpan,
     NonFiniteVector,
     TooDistant,
     NonConvergent { delta_days: f64 },
@@ -78,6 +81,9 @@ impl fmt::Display for PlanetError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::InvalidClock => formatter.write_str("Planet clocks must be finite."),
+            Self::OutsidePlutoSpan => {
+                formatter.write_str("Pluto TT is outside the tabulated ephemeris span.")
+            }
             Self::NonFiniteVector => formatter.write_str("Planet vector must be finite."),
             Self::TooDistant => {
                 formatter.write_str("Object is too distant for light-travel solver.")
@@ -151,7 +157,12 @@ fn vsop_sphere_to_rect(lon: f64, lat: f64, radius: f64) -> [f64; 3] {
 ///
 /// This low-level series evaluator does not validate TT or an ephemeris span.
 /// Callers must validate clocks before use; nonfinite values can produce NaN.
+/// Pluto permits only its table and the adjacent light-time interval; outside
+/// that range this unchecked helper returns NaNs rather than crawling.
 pub fn helio_vector(body: Planet, tt: f64) -> [f64; 3] {
+    if body == Planet::Pluto {
+        return helio_state(body, tt).pos;
+    }
     let Some(model) = body.model() else {
         return [0.0; 3];
     };
@@ -162,10 +173,16 @@ pub fn helio_vector(body: Planet, tt: f64) -> [f64; 3] {
     vsop_rotate(vsop_sphere_to_rect(lon, lat, rad))
 }
 
-/// Heliocentric position and analytic velocity, at TT days since J2000.
+/// Heliocentric position and velocity, at TT days since J2000.
 ///
 /// Like [`helio_vector`], this series evaluator expects a validated TT clock.
 pub fn helio_state(body: Planet, tt: f64) -> HelioState {
+    if body == Planet::Pluto {
+        return crate::pluto::helio_state_for_light_time(tt).unwrap_or(HelioState {
+            pos: [f64::NAN; 3],
+            vel: [f64::NAN; 3],
+        });
+    }
     let Some(model) = body.model() else {
         return HelioState {
             pos: [0.0; 3],
@@ -264,6 +281,9 @@ pub fn backdate_position(
     aberration: bool,
 ) -> Result<BackdatedPosition, PlanetError> {
     validate_clock(ut, tt, delta_t_seconds)?;
+    if observer == Planet::Pluto || target == Planet::Pluto {
+        crate::pluto::validate_table_tt(tt).map_err(|_| PlanetError::OutsidePlutoSpan)?;
+    }
     let observer_pos = if aberration {
         [0.0; 3]
     } else {
@@ -305,7 +325,7 @@ pub fn geo_vector(
 mod tests {
     use super::*;
 
-    const PLANETS: [Planet; 9] = [
+    const PLANETS: [Planet; 10] = [
         Planet::Sun,
         Planet::Mercury,
         Planet::Venus,
@@ -315,6 +335,7 @@ mod tests {
         Planet::Saturn,
         Planet::Uranus,
         Planet::Neptune,
+        Planet::Pluto,
     ];
 
     #[test]
@@ -376,6 +397,12 @@ mod tests {
                 let later = helio_vector(body, tt + 0.001);
                 for axis in 0..3 {
                     assert_eq!(position[axis].to_bits(), state.pos[axis].to_bits());
+                    // Pluto blends independently integrated positions and
+                    // velocities. Its velocity is not the derivative of the
+                    // fade-mixed position; that analytic invariant is VSOP-only.
+                    if body == Planet::Pluto {
+                        continue;
+                    }
                     let numeric_velocity = (later[axis] - earlier[axis]) / 0.002;
                     assert!(
                         (state.vel[axis] - numeric_velocity).abs() < 2.0e-9,
@@ -492,6 +519,30 @@ mod tests {
         });
         assert_eq!(calls, 10);
         assert_eq!(result, Err(PlanetError::NonConvergent { delta_days: 0.5 }));
+    }
+
+    #[test]
+    fn pluto_observation_span_does_not_reject_retarded_endpoint_samples() {
+        for tt in [-730000.0, 730000.0] {
+            let value = backdate_position(Planet::Earth, Planet::Pluto, tt, tt, 0.0, true).unwrap();
+            assert!(value.tt < tt);
+            assert!(value.vector.iter().all(|axis| axis.is_finite()));
+        }
+        for tt in [-730000.0000001, 730000.0000001] {
+            for (observer, target) in [
+                (Planet::Earth, Planet::Pluto),
+                (Planet::Pluto, Planet::Earth),
+            ] {
+                assert_eq!(
+                    backdate_position(observer, target, tt, tt, 0.0, true),
+                    Err(PlanetError::OutsidePlutoSpan)
+                );
+            }
+            assert_eq!(
+                geo_vector(Planet::Pluto, tt, tt, 0.0, false),
+                Err(PlanetError::OutsidePlutoSpan)
+            );
+        }
     }
 
     #[test]

@@ -146,3 +146,17 @@ local MIT dependency; it does not copy those works or fetch another source.
 The true-node construction and longitude-speed orchestration translate this
 repository's src/ephemeris.ts under its MIT License (../LICENSE), using
 the same instantaneous orbit plane, nutation and finite-difference steps.
+
+Pluto integration and position assembly
+--------------------------------------
+
+The Rust Pluto code translates major_bodies_t, GravFromState, GravSim,
+GetSegment, CalcPluto and the bounded adjacent CalcPlutoOneWay step from
+the same local astronomy-engine 2.1.19 source. Generated pluto_data.rs
+retains its PlutoStateTable and solar/giant-planet gravitational constants
+without fitting or adjustment. The full Don Cross copyright and MIT
+permission and warranty text above applies to this code and data.
+
+Complete position assembly and reference/span checks translate this
+repository's src/ephemeris.ts and src/reference-span.ts under its MIT License
+(../LICENSE). Their sign annotations reuse the existing src/signs.ts port.
