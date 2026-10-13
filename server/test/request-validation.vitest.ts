@@ -15,7 +15,7 @@ function createApp(options: Parameters<typeof buildApp>[0] = {}) {
   const app = buildApp({ logger: false, apiKeys: new ApiKeyStore([key]), ...options });
   apps.push(app);
   const handler = vi.fn(async (request: FastifyRequest) => success(request.id, request.body));
-  // Only the tests expose this route. Production calculation schemas follow in M4.
+  // Test-only schemas exercise validation independently of calculations.
   app.post('/v1/json', handler);
   app.post('/v1/validated', {
     schema: {

@@ -12,7 +12,7 @@ single session summary to `CHANGES.txt`. The harness owns all git writes.
 - [x] M1 Bootstrap a private TypeScript server package, reproducible local build and Vitest setup; add health/readiness routes, safe JSON response/error envelopes, structured logs and process lifecycle tests.
 - [x] M2 Load API keys from environment or an ignored local file, fail closed for calculation routes, and test authentication and secret redaction without committed credentials.
 - [x] M3 Add per-key token buckets, bounded JSON request validation and consistent HTTP errors; test refill, exhaustion, key isolation and invalid requests.
-- [ ] M4 Add the natal chart REST route using the engine directly, preserving full output and the engine's natal receipts; test coordinates, unknown time, flags and invalid input.
+- [x] M4 Add the natal chart REST route using the engine directly, preserving full output and the engine's natal receipts; test coordinates, unknown time, flags and invalid input.
 - [ ] M5 Add transit and synastry REST routes, with engine receipts for each contributing chart and explicit receipt scope; test successful and invalid requests.
 - [ ] M6 Add bounded solar and lunar return REST requests through the engine's return functions; preserve their charts and receipts and test calculation failures and limits.
 - [ ] M7 Add moon-phase and houses REST routes through public engine APIs; attach applicable engine receipts with explicit scope and test every route and refusal.
@@ -64,3 +64,16 @@ refill, duplicate content headers and chunked body overflow. An independent
 review found no actionable issues. The root package contents gate still
 reports missing `dist/calc.d.ts`; no root build was generated. All changes
 remain in `server/`, within the file-size rule and without em dashes in docs.
+
+M4 validation: server typecheck, full Vitest suite, build and package-exclusion
+check passed using Node 22.23.3. The natal route returns the complete engine
+chart and a scoped, unchanged natal envelope. Injection and built-listener
+tests cover direct-engine transport parity, receipt parsing and replay,
+house systems, polar fallback, unknown time, missing coordinates, source
+spelling, time scales, pinned delta T, canonical flags, strict validation,
+authentication, rate limits and logging privacy. Timed exact poles are
+refused before calculation; codec refusals for extreme near-pole geometry
+return receipt_unavailable without a partial chart. These tests check engine
+integration, not independent astronomical accuracy. The root package contents
+gate still reports missing `dist/calc.d.ts`; no root build was generated.
+All changes remain in `server/`.

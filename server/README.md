@@ -1,10 +1,10 @@
 # Engine HTTP server
 
 This private package is a self-hosted HTTP adapter for the engine in this
-checkout. The current milestone implements health, readiness, API-key
-authentication, per-key rate limits, bounded JSON validation, JSON logging
-and process lifecycle. Calculation routes, OpenAPI and Docker deployment
-are tracked in [PLAN.md](PLAN.md).
+checkout. It serves natal charts with engine receipts, health and readiness,
+API-key authentication, per-key rate limits, bounded JSON validation, JSON
+logging and process lifecycle. The remaining calculation routes, OpenAPI and
+Docker deployment are tracked in [PLAN.md](PLAN.md).
 
 ## Run from a checkout
 
@@ -112,8 +112,83 @@ requests receive HTTP 401 with the usual error envelope and a Bearer
 Route protection and absence of credentials in logs and responses are
 checked through injection in `test/auth.vitest.ts` and through a real
 listener in `test/process.vitest.ts`, including duplicate headers and trace
-logging. Calculation routes will be added in later milestones; authenticated
-requests to their proposed paths currently receive HTTP 404.
+logging. `POST /v1/natal` is available; other calculation routes remain in
+the plan.
+
+## Natal charts
+
+`POST /v1/natal` accepts the engine's birth input as a JSON object. Send an
+Authorization Bearer header and `Content-Type: application/json`. For
+example, this invented input is exercised by `test/process.vitest.ts`:
+
+```json
+{
+  "utc": "2004-02-29T08:30:00+02:00",
+  "latitude": 48.25,
+  "longitude": -3.75,
+  "houseSystem": "placidus"
+}
+```
+
+Only `utc` is required. It accepts a resolved ISO date-time with an explicit
+offset, an ISO calendar date, or a finite epoch-millisecond number. Strings
+are limited to 40 characters. The engine validates actual calendar dates,
+offsets and ephemeris coverage; local date-times without an offset, calendar
+rollovers and instants outside its supported ephemeris span are refused.
+Date-only strings denote midnight on the selected scale. Numeric inputs
+follow the engine's JavaScript Date conversion, including truncation to
+whole milliseconds. Resolve local times before calling the server.
+
+Latitude is degrees north in [-90, 90] and longitude is degrees east in
+[-180, 180]; supply both or neither. Timed charts at exactly either
+geographic pole are refused because the natal receipt cannot represent
+that geometry. Coordinates at the poles remain accepted with
+`timeKnown: false`. `houseSystem` accepts the engine's `HOUSE_SYSTEMS` values
+and defaults to `whole`. Requested Placidus or Koch houses may fall back
+to whole sign at polar latitudes; the chart flags and receipt retain that
+fact and distinguish the requested system from the computed one.
+
+`timeKnown` defaults to true. False suppresses angles and houses, retains
+the supplied reference instant and adds the engine's `no-time` flag. It
+does not infer noon. Missing coordinates also omit angles and houses, with
+the receipt identifying the reason. `timeScale` accepts `utc`, `ut1` or
+`tt` and defaults to `utc`; the `utc` field keeps its name on every scale.
+Optional `deltaT` pins TT minus UT1 in seconds, within [-1e10, 1e10].
+
+Optional `flags` accepts at most 64 entries chosen from `dst-gap`,
+`dst-fold`, `lmt`, `no-time`, `polar-fallback` and
+`outside-reference-span`. The engine collapses duplicates and requires
+derived flag echoes to agree with the calculation. `dst-gap`, `dst-fold`
+and `lmt` are caller assertions; the server does not resolve or verify
+their local-time history. Contradictory flags are refused. Unknown body
+fields, query parameters, null settings and coerced values such as a string
+latitude are refused too. [src/natal.ts](src/natal.ts) holds the request
+schema; `test/natal.vitest.ts` enforces these limits and behaviors.
+
+The response's `data` is the complete `natalChart` result: canonical input,
+bodies, angles, houses, aspects, flags, time basis, delta T and engine
+version. Dates serialize as ISO strings and numerical values are not
+rounded. The response's `receipts` list contains an object with
+`scope: "/data"` and `envelope`, the complete, unchanged output of the
+engine's `createNatalEnvelope`. Scope is a server label pointing to the
+chart in this response. It is not part of the engine receipt. The envelope
+can be passed to `parseNatalEnvelope` and `natalReplayInput` from the
+engine's receipt entry. The original ISO input spelling is captured in
+`receipt.sourceInstant`; numeric inputs have no source spelling.
+
+Receipts describe conventions and coverage; they are not signed
+attestations. The engine may compute a chart outside its independently
+checked reference span and flag it `outside-reference-span`. Preserve and
+read those flags and the receipt's coverage statements. Full-output and
+receipt comparisons in `test/natal.vitest.ts` verify transport and replay
+against direct calls to this same engine, not astronomical accuracy.
+
+If the engine's receipt codec refuses a computed chart, the server returns
+HTTP 422 with `receipt_unavailable`, empty receipts and no partial chart.
+This can occur for extreme near-pole house geometry; a synthetic case is
+covered in `test/natal.vitest.ts`. Unexpected failures return the sanitized
+HTTP 500 envelope. Both successful and failed calculations spend a rate-limit
+token. Birth inputs, chart output and receipts are omitted from logs.
 
 ## Rate limits
 
@@ -167,24 +242,25 @@ chunked byte overflow and duplicate headers on the actual listener.
 Routes validate their declared JSON schemas without coercing types,
 discarding unknown properties or inserting defaults. Required-body and
 schema behavior is exercised with test-only routes in
-`test/request-validation.vitest.ts`; calculation schemas arrive with their
-routes in the next milestones. Parser and schema errors expose no input
-values or validation internals in responses or logs.
+`test/request-validation.vitest.ts` and the natal route in
+`test/natal.vitest.ts`. Parser, schema and engine input errors expose no
+input values or validation internals in responses or logs.
 
 | HTTP status | Error code | Meaning |
 | --- | --- | --- |
-| 400 | `invalid_request` | Malformed JSON or headers, invalid body structure or route schema. |
+| 400 | `invalid_request` | Malformed JSON or headers, invalid route input, or an instant the engine cannot compute. |
 | 401 | `unauthorized` | Missing or invalid API-key authentication. |
 | 404 | `not_found` | Authenticated request to an unavailable route or method. |
 | 413 | `body_too_large` | JSON body exceeds the byte cap. |
 | 415 | `unsupported_media_type` | Missing or unsupported content type, charset or encoding. |
+| 422 | `receipt_unavailable` | The engine's codec refused a calculation receipt; no chart is returned. |
 | 429 | `rate_limited` | This key has no request token available. |
 | 500 | `internal_error` | Unexpected server failure. |
 | 503 | `not_ready` | Readiness check failed. |
 
 The table describes ordinary request handling, as checked in
-`test/app.vitest.ts`, `test/auth.vitest.ts`, `test/request-validation.vitest.ts`
-and `test/rate-limit.vitest.ts`. Raw HTTP parser and router failures can
+`test/app.vitest.ts`, `test/auth.vitest.ts`, `test/request-validation.vitest.ts`,
+`test/natal.vitest.ts` and `test/rate-limit.vitest.ts`. Raw HTTP parser and router failures can
 occur earlier. Authentication precedes rate limiting, which precedes JSON
 validation, so a rejected request reports the first applicable error.
 

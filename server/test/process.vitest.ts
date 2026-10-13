@@ -5,6 +5,8 @@ import { connect, createServer } from 'node:net';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
+import { natalChart } from '../../src/index.js';
+import { createNatalEnvelope, parseNatalEnvelope } from '../../src/receipt.js';
 
 const serverDirectory = fileURLToPath(new URL('..', import.meta.url));
 type Exit = { code: number | null; signal: NodeJS.Signals | null };
@@ -140,6 +142,54 @@ afterEach(async () => {
 });
 
 describe('built server process', () => {
+  it('serves an authenticated natal chart and its receipt through the built listener without logging birth details', async () => {
+    const key = randomBytes(32).toString('base64url');
+    const server = launch({ API_KEYS: JSON.stringify([key]), LOG_LEVEL: 'trace' });
+    const address = await started(server);
+    const input = {
+      utc: '2004-02-29T08:30:00+02:00', latitude: 48.25, longitude: -3.75,
+      houseSystem: 'placidus' as const,
+    };
+    const chart = natalChart(input);
+    const envelope = createNatalEnvelope(chart, { sourceInstant: input.utc });
+    const response = await fetch(new URL('/v1/natal', address), {
+      method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+      body: JSON.stringify(input), signal: AbortSignal.timeout(5000),
+    });
+    expect(response.status).toBe(200);
+    const body = await response.json() as Record<string, unknown>;
+    expect(body).toEqual({
+      requestId: response.headers.get('x-request-id'),
+      engine: expect.objectContaining({ name: '@zodiacs/engine', version: chart.engineVersion }),
+      data: JSON.parse(JSON.stringify(chart)),
+      receipts: [{ scope: '/data', envelope }],
+    });
+    expect(parseNatalEnvelope(JSON.stringify(envelope)).ok).toBe(true);
+    expect(response.headers.get('cache-control')).toBe('no-store');
+    expect(response.headers.get('x-ratelimit-limit')).toBe('60');
+    expect(response.headers.get('x-ratelimit-remaining')).toBe('59');
+    const invalid = await fetch(new URL('/v1/natal', address), {
+      method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ utc: '2004-02-30T08:30:00+02:00' }), signal: AbortSignal.timeout(5000),
+    });
+    expect(invalid.status).toBe(400);
+    expect(await invalid.json()).toMatchObject({
+      receipts: [], error: { code: 'invalid_request', message: 'Request is invalid.' },
+    });
+    server.child.kill('SIGTERM');
+    expect(await bounded(server.exited)).toEqual({ code: 0, signal: null });
+    expect(server.stderr).toBe('');
+    const logs = server.stdout + server.stderr;
+    for (const value of [key, input.utc, chart.input.utc.toISOString(), '"latitude"', '"longitude"', '"bodies"', '"receipt"', '2004-02-30']) {
+      expect(logs).not.toContain(value);
+    }
+    expect(JSON.stringify(body)).not.toContain(key);
+    expect(jsonLines(server.stdout).filter((record) => record.event === 'request_completed')
+      .map(({ route, statusCode }) => ({ route, statusCode }))).toEqual([
+      { route: '/v1/natal', statusCode: 200 }, { route: '/v1/natal', statusCode: 400 },
+    ]);
+  });
+
   it.each(['SIGTERM', 'SIGINT'] as const)('serves probes and shuts down cleanly on %s', async (signal) => {
     const server = launch();
     const address = await started(server);

@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import Fastify, { LogController } from "fastify";
 import type { FastifyError, FastifyReply, FastifyServerOptions } from "fastify";
+import { NatalEnvelopeError } from "../../src/receipt.js";
 import { verifyEngine } from "./engine.js";
 import { failure, success } from "./responses.js";
 import { ApiKeyStore } from "./api-keys.js";
@@ -8,6 +9,7 @@ import { registerAuthentication } from "./auth.js";
 import { registerRateLimiting } from "./rate-limit-hook.js";
 import type { RateLimitOptions } from "./rate-limit.js";
 import { JSON_LIMITS, registerRequestValidation, RequestValidationError } from "./request-validation.js";
+import { registerNatalRoute } from "./natal.js";
 
 export interface AppOptions {
   logger?: FastifyServerOptions["logger"];
@@ -104,6 +106,9 @@ export function buildApp(options: AppOptions = {}) {
   app.setErrorHandler<FastifyError>((error, request, reply) => {
     // Never log raw errors: parser errors and upstream messages can contain
     // headers, body fragments, birth details or other caller-controlled data.
+    if (error instanceof NatalEnvelopeError) {
+      return reply.code(422).send(failure(request.id, "receipt_unavailable", "The engine could not produce a receipt for this calculation."));
+    }
     if (error instanceof RequestValidationError) {
       const status = error.kind === "unsupported_media_type" ? 415 : 400;
       return reply.code(status).send(failure(request.id, error.kind, error.message));
@@ -128,5 +133,6 @@ export function buildApp(options: AppOptions = {}) {
     }
     return success(request.id, { status: "ready" });
   });
+  registerNatalRoute(app);
   return app;
 }
