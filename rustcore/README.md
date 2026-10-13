@@ -14,7 +14,7 @@ Legacy and configured aspect matching run in Rust, including exact binary64
 orb decisions, motion classification, custom rules and stable result ordering.
 The TypeScript wrapper retains the implemented engine helpers' synchronous
 signatures after explicit initialization and exposes intermediate planetary and
-lunar kernels. [PLAN.md](PLAN.md) tracks the remaining parity and benchmark work.
+lunar kernels. [PLAN.md](PLAN.md) tracks progress and the remaining benchmark work.
 
 ## Setup and checks
 
@@ -72,6 +72,15 @@ The browser smoke test bundles the wrapper and checks that its runtime graph
 contains only this workspace's implementation and generated files. Relative
 imports from the engine are types only; neither the TypeScript ephemeris nor
 astronomy-engine enters that browser bundle.
+
+To rebuild WASM, check types and run the complete numerical corpus with an
+auditable local summary, use `npm run test:parity:report` on Node 22.
+It writes `generated/parity-report.json` with test coverage, numerical maxima,
+boundary deviations, runtime details and SHA-256 identities for the reference,
+port, tests and built module. It refuses a filtered, skipped, failed or empty
+run, missing measurement records, or sources changed during the test run.
+The summary and Vitest's raw report remain ignored. Acceptance limits live in
+the tests and [PARITY.md](PARITY.md); observed maxima do not set those limits.
 
 ## TypeScript use
 
@@ -368,6 +377,13 @@ with additional parser boundary cases; the exact corpus is in
 [civil-calendar.parity.ts](tests/civil-calendar.parity.ts). These compare
 implementations and do not establish astronomical accuracy. All inputs are
 synthetic. Benchmarks and performance claims wait for the benchmark milestone.
+The complete pipeline tests evaluate positions independently in each runtime
+before house membership and aspect matching. They retain exact shared-input
+checks and explicitly bound upstream rounding near discrete boundaries; they
+do not promise identical event times. All supported cusp systems, named aspect
+angles and representative custom policies are covered, with finite near-singular
+house geometry checked separately from ordinary cases. The limits and excluded
+singularities are recorded in [PARITY.md](PARITY.md).
 
 The port's code is MIT under the repository's [LICENSE](../LICENSE).
 The kernels translate [src/signs.ts](../src/signs.ts), the arithmetic helpers

@@ -9,3 +9,4 @@ M8: Port chart angles, seven house cusp systems and house membership to Rust/WAS
 M9: Complete all house systems in Rust/WASM with Placidus and Koch polar fallbacks, preserved convergence and cusp ordering, native geometry tests, synthetic parity coverage and documented tolerance limits.
 M10: Complete review and verification of legacy/configured Rust/WASM aspects, add maximum-capacity policy, label and result parity coverage, and document exact arithmetic compatibility.
 M11: Complete synchronous wrapper contracts with exact signature checks, compatible WASM build validation and retry, browser loading smoke tests, preserved metadata types, and Date-error and calendar-result boundary fixes.
+M12: Complete synthetic position-to-house and aspect parity over 1800-2200, bound finite near-singular geometry and threshold deviations, and add reproducible reports with source/build identities and coverage checks.
