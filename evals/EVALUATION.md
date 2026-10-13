@@ -75,6 +75,21 @@ inputs, not grounds for discarding a structurally valid reading.
 Without `--extract`, supplied claims are preserved exactly, including an empty
 list. A missing reading file does not select the mock.
 
+For an actual model reading, preserve its exact returned text. Use generated
+provenance with the real `backend`, `model`, `promptVersion`, `inputDigest` and
+`reviewStatus: "unreviewed"`. The digest must identify the recorded invocation
+input using a documented encoding; do not invent it or substitute a digest of
+the reading. Keep the non-secret invocation record under ignored `scratch/`.
+If required provenance was not captured, obtain it before creating the envelope.
+Only attach the schema's MIT label to original prose you have the right to
+license that way. Metadata validation does not establish those rights.
+
+Declare the conventions actually supplied to or stated by the reading. Use
+`unspecified` when they are unknown; copying the engine's conventions onto an
+unrelated reading would hide disagreement. The generator backend in
+[BACKENDS.md](BACKENDS.md) creates factor meanings; this CLI makes no LLM call
+to obtain readings.
+
 ## Extract claims from supplied prose
 
 To opt into the conservative offline parser, provide a reading envelope with
@@ -104,6 +119,124 @@ path with optional trailing `--extract`, or `--mock`. The modes cannot be
 combined. Extraction requires a supplied reading and cannot run on the mock.
 Additional, repeated, reordered or unknown options are rejected. `--help` is
 accepted by itself.
+
+For a complete example, first create the invented case above. Then run this
+from the repository root to save original inline demonstration prose with its
+metadata. The opposing assertions intentionally exercise contradiction handling;
+they are not a captured model benchmark:
+
+```sh
+node --input-type=module <<'JS'
+import { writeFile } from "node:fs/promises";
+const reading = {
+  schemaVersion: "1.0.0",
+  id: "supplied-prose-example",
+  caseId: "synthetic-evaluation-example",
+  synthetic: true,
+  language: "en",
+  text: [
+    "At the supplied instant, Sun is in Aries.",
+    "At the supplied instant, Sun is not in Aries.",
+    "This symbol invites reflection on how you begin a task."
+  ].join("\n\n"),
+  offsetUnit: "utf16-code-unit",
+  conventions: {
+    zodiac: "tropical", houseSystem: "whole",
+    aspectPolicy: "natal-major-defaults", dignitySystem: "classical-sign"
+  },
+  provenance: {
+    kind: "authored",
+    authors: ["OpenAI Codex (AI assistant)"],
+    note: "Original inline documentation example composed with AI assistance; no human review is asserted."
+  },
+  extraction: {
+    method: "none", producer: "documentation-example",
+    version: "example-v1", coverage: "unverified"
+  },
+  claims: [],
+  license: {
+    spdxId: "MIT",
+    attribution: "Original documentation prose with AI-assisted authoring by OpenAI Codex."
+  }
+};
+await writeFile("evals/scratch/reading.json", JSON.stringify(reading, null, 2), { flag: "wx" });
+JS
+node evals/bin/validate-reading.mjs evals/scratch/reading.json
+node evals/bin/evaluate-reading.mjs evals/scratch/case.json --reading evals/scratch/reading.json --extract > evals/scratch/evaluation-summary.json
+```
+
+The setup refuses to replace an existing `reading.json`. Rerun just the
+validation and evaluation commands with saved inputs to check repeatability.
+The summary file is an ignored local convenience; the complete report uses the
+writer's content-addressed path and no-overwrite rules.
+
+The parser requires an explicit supported time prefix for reference-instant
+assessment. Bare `Sun is in Aries` has `temporalScope: "unspecified"` and remains
+unassessed even when the chart's time is known. Do not add a prefix to an existing
+LLM reading to improve its score. If you annotate claims manually, retain the
+exact original text and quote context, record the actual extraction method, and
+justify its scope without consulting the expected chart result. Inspect the
+unresolved reflection sentence as well: the parser cannot establish that unknown
+wording is purely interpretive. Its coverage remains unverified.
+
+These example forms and their limitations are exercised by
+[extraction.checks.mjs](tests/extraction.checks.mjs),
+[extraction-evaluation.checks.mjs](tests/extraction-evaluation.checks.mjs) and
+[scoring.checks.mjs](tests/scoring.checks.mjs).
+
+## Inspect a saved report
+
+After the preceding command, open the path returned in the JSON summary from
+the repository root. This prints the overall and category metrics alongside
+each original quote and its eligibility, verdict and evidence:
+
+```sh
+node --input-type=module <<'JS'
+import { readFile } from "node:fs/promises";
+const summary = JSON.parse(await readFile("evals/scratch/evaluation-summary.json", "utf8"));
+const { workflow, score } = JSON.parse(await readFile(summary.report, "utf8"));
+const units = new Map(score.units.map((unit) => [unit.id, unit]));
+console.log(JSON.stringify({
+  mode: workflow.mode,
+  extraction: workflow.extraction,
+  overall: score.overall,
+  categories: score.categories,
+  diagnostics: score.diagnostics,
+  claims: score.occurrences.map((occurrence) => {
+    const claim = score.reading.claims[occurrence.index];
+    const unit = units.get(occurrence.unitId);
+    return {
+      id: claim.id, status: claim.status, quote: claim.span.quote,
+      unresolvedReason: claim.reason ?? null,
+      eligibility: unit?.eligibility ?? null,
+      verdict: unit?.verdict ?? null,
+      evidence: unit?.evidence ?? null,
+      coverage: unit?.coverage ?? null,
+      contradictionIds: unit?.contradictionIds ?? []
+    };
+  }),
+  contradictions: score.contradictions,
+  limits: score.limits
+}, null, 2));
+JS
+```
+
+Read eligibility before judging an unassessed claim. Check the declared and
+reference conventions, temporal scope and house availability reasons. Follow
+evidence pointers relative to `score.reference`, as [SCORING.md](SCORING.md#report-and-evidence-links)
+describes. A membership verdict can stay correct while a contradictory assertion
+withholds its coverage credit. Unresolved prose has no scoring unit and earns no
+factual credit. Neither an undefined metric (`null`) nor a successful CLI exit
+means that the reading is correct.
+
+When comparing model readings, keep the synthetic cases, rubric, conventions
+and extraction procedure fixed and record all attempted runs, including failures.
+Review extraction against the original text independently of chart membership.
+The CLI produces a report per case, without a batch leaderboard or pass threshold.
+If you aggregate elsewhere, sum each metric's counts before dividing, preserve
+the refusal count, and retain category results and unresolved occurrences. The
+[rubric](RUBRIC.md#counts-rates-and-coverage) defines these denominators; averaging
+the reported per-reading rates can change their meaning.
 
 ## Reports and exit status
 

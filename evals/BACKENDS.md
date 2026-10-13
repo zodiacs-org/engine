@@ -1,6 +1,6 @@
 # Generation backend contract
 
-The M5 client in [lib/generation-backend.mjs](lib/generation-backend.mjs) is a
+The client in [lib/generation-backend.mjs](lib/generation-backend.mjs) is a
 bounded text transport. It keeps backend selection, request identity and failures
 consistent for the [interpretation generator](GENERATION.md). It does not parse a model's JSON, claim that a
 response follows its prompt, assign a license, or assemble a meaning entry.
@@ -137,26 +137,64 @@ honor the supplied signal. There is no streaming API in this contract.
 
 Registration is programmatic. There is no dynamic import, executable-path
 option, environment discovery or credential configuration in the client.
+The generation CLI selects only the built-in mock. Use the JavaScript API for a
+custom adapter. This complete example runs from the repository root after the
+eval-local installation and writes no files:
 
-```js
+```sh
+node --input-type=module <<'JS'
+import { readFile } from "node:fs/promises";
+import { generateInterpretations } from "./evals/lib/generate-interpretations.mjs";
+
 const adapter = {
   id: "local-adapter",
-  model: "local-model",
+  model: "original-inline-template",
   version: "adapter-v1",
   mode: "offline",
   async generate(request, { signal, maxOutputBytes }) {
-    // Call a caller-owned model here, honoring the signal and output budget.
+    // Replace this original template with a caller-owned model when ready.
+    // This stub ignores request content and measures no model quality.
     signal.throwIfAborted();
-    return { text: "Original inline adapter output.", finishReason: "stop" };
+    const text = JSON.stringify({
+      summary: "Original local example: use this symbol to reflect on how you begin a task.",
+      themes: ["reflection"],
+      epistemicStatus: "symbolic-interpretation"
+    });
+    if (Buffer.byteLength(text, "utf8") > maxOutputBytes) throw new Error("Output budget exceeded.");
+    return { text, finishReason: "stop" };
   }
 };
 
-const client = createGenerationClient({
-  backend: "local-adapter",
+const sources = JSON.parse(await readFile("evals/data/seed.json", "utf8"));
+const plan = {
+  schemaVersion: "1.0.0", id: "local-adapter-example", seed: 0,
+  license: { spdxId: "MIT", attribution: "Original example authored with AI assistance by OpenAI Codex." },
+  targets: [{
+    id: "local-adapter-sun-aries",
+    factor: { kind: "placement", body: "Sun", sign: "aries" },
+    sourceEntryIds: ["seed-sun-aries"]
+  }]
+};
+const result = await generateInterpretations(sources, plan, {
+  backend: adapter.id,
   adapters: [adapter],
   limits: { maxCalls: 1 }
 });
+console.log(JSON.stringify(result.dataset.entries.at(-1), null, 2));
+JS
 ```
+
+The generator parses `text` as a meaning object with exactly `summary`, `themes`
+and `epistemicStatus`. A plain prose response can pass the transport but fails
+generation. Return no entry metadata, factor, license or provenance from the
+adapter; the generator supplies and validates those fields. The
+[generation tests](tests/generator.checks.mjs) enforce this boundary and generated
+origin. To save a completed result, pass it to `writeGeneration` as shown in
+[GENERATION.md](GENERATION.md#plan-and-generation-contract).
+
+For text transport without interpretation assembly, register the same adapter
+with `createGenerationClient({ backend: adapter.id, adapters: [adapter] })` and
+call `client.generate(request)`. The full request contract is documented above.
 
 An adapter has exactly `id`, `model`, `version`, `mode` and `generate`.
 The id is a lowercase slug; model and version are bounded, nonblank labels.
@@ -176,6 +214,16 @@ out of requests, labels, generated text, registration objects and files. The
 client does not inspect environment values, log requests, persist credentials or
 write output. A future provider adapter is responsible for its own secret
 handling and bounded transport; no paid service is needed for these tests.
+
+Before connecting a model, exercise the adapter with original local stub
+responses for success, malformed JSON, refusal, truncation, excess bytes and
+cancellation. The [backend checks](tests/generation-backend.checks.mjs),
+[integration checks](tests/generation-backend-integration.checks.mjs) and
+[adversarial generation checks](tests/generation-adversarial.checks.mjs) provide
+examples. Check that errors do not echo requests or provider details and that
+failure does not silently select the mock. Record truthful adapter and model
+versions; the manifest does not hash custom adapter code, so retain that code
+and any non-secret model configuration separately when reproducing a run.
 
 Failures use `GenerationError` with a fixed message and one of these codes:
 `invalid-options`, `invalid-backend`, `invalid-request`, `input-limit`,

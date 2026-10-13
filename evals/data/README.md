@@ -1,6 +1,6 @@
 # Original meaning seed
 
-`seed.json` is the authored input for the planned generator pipeline. Its prose
+`seed.json` is the authored input for the [generator pipeline](../GENERATION.md). Its prose
 was composed individually by OpenAI Codex during repository development, without
 copying an external interpretation source. The `authored` provenance branch
 records direct seed authoring outside that pipeline; it does not mean a human
@@ -25,16 +25,41 @@ predicting events. A seed meaning is neither a factual scoring expectation nor
 evidence for an interpretation's validity. An evaluator must obtain chart facts
 from the engine, under recorded conventions, separately from this prose.
 
-To review or extend the seed, read each meaning against its exact factor and
-convention, confirm that its wording is original, record its actual authorship
-and rights, and keep the claim explicitly symbolic. Do not import a text whose
-license or provenance is uncertain. Assign a distinct id to each entry, preserve
-both of Mercury's supported dignity labels, and run:
+To review or extend the seed:
+
+1. Read the exact factor tuple, including its house system, aspect policy or
+   dignity system. Check classifications against the local engine's declared
+   definitions separately from judging the prose. Preserve each applicable
+   dignity label; a missing label does not establish peregrine status.
+2. Read the meaning for originality, relevance to that factor and explicitly
+   symbolic scope. Avoid deterministic personality claims and predictions.
+   Do not import external interpretation text or uncertain rights metadata.
+3. Record actual authorship, AI assistance and any human review accurately in
+   the authored provenance note. Preserve attribution and confirm that the
+   contribution can carry the existing MIT label. A validator cannot do that
+   review. Do not copy the current seed's authorship wording onto another
+   contributor's work.
+4. Give a new original entry a distinct id, retaining the schema's language and
+   tradition. Check for the same canonical factor elsewhere, including reversed
+   aspect pairs. Preserve required category and sign-dignity coverage. Keep this
+   committed set small; generated variants remain ignored.
+5. For an intentional seed change, update the seed-specific expectations in
+   [dataset.checks.mjs](../tests/dataset.checks.mjs) to describe the actual set.
+   Those tests pin its current size and AI authorship wording; the general seed
+   validator checks authored provenance and coverage without authenticating them.
+   Retain the malformed-input and provenance checks, then run:
 
 ```sh
 npm --prefix evals run validate:seed
 npm --prefix evals test
 ```
+
+Pipeline entries keep `generated` provenance even after editing or review and
+are never promoted to the committed seed by changing that label. The current
+generated-entry schema permits only `reviewStatus: "unreviewed"`; it has no
+reviewed state. Keep any local review record separately under ignored `scratch/`,
+identifying the entry and exact dataset digest, reviewer and findings. Such a
+record does not change schema acceptance or grant rights to the text.
 
 `tests/dataset.checks.mjs` enforces this seed's authored metadata, category
 coverage and size. Seed mode also rejects duplicate factors, including reversed

@@ -25,7 +25,7 @@ astronomical accuracy or the validity of personality or predictive claims.
 - [x] M9 Add an offline reading evaluation CLI that combines synthetic cases, engine facts, supplied or mock readings and machine-readable reports.
 - [x] M10 Add a conservative prose claim extractor and tests for negation, ambiguity, duplicate claims and omitted facts; expose extraction limits in reports.
 - [x] M11 Add adversarial and end-to-end tests covering malformed model output, invented factors, unavailable birth time, conflicting conventions and output limits.
-- [ ] M12 Document reproducible local workflows, backend extension, seed review and result interpretation; run the complete eval suite and package-isolation checks.
+- [x] M12 Document reproducible local workflows, backend extension, seed review and result interpretation; run the complete eval suite and package-isolation checks.
 
 M1 acceptance: the schema requires typed factors, interpretation scope,
 provenance and license metadata; tests reject malformed and incomplete entries;
@@ -252,3 +252,23 @@ recall or independent astronomical accuracy. The root
 `npm run package:contents` gate was attempted with an eval-local npm cache and
 failed on missing `dist/calc.d.ts`; no prohibited root build was run. All changes
 remain under `evals/`. M12 is next.
+
+M12 acceptance: the project guide links complete local workflows for seed review,
+meaning generation, adapter registration, supplied-prose evaluation and report
+inspection. Runnable examples use original prose, truthful provenance, explicit
+conventions and ignored files. The backend example returns a valid meaning
+object; generation validation follows the returned digest path. Documentation
+explains repeatability, extraction exclusions, separate metric denominators,
+generated-origin preservation and the distinction between workflow checks and
+model performance. No implementation, seed, schema or scoring policy changed.
+
+M12 validation: a clean offline `npm ci --prefix evals --ignore-scripts`,
+`npm --prefix evals test`, and `npm --prefix evals run validate:seed` passed on
+Node 22.23.3. Literal documentation examples for generation, dataset validation,
+custom adapter registration, mock evaluation, supplied-prose extraction and
+report inspection ran successfully; repeated generation and evaluation reused
+their existing output. The complete suite's package-exclusion and project-
+isolation checks passed. The root `npm run package:contents` gate was attempted
+with an eval-local npm cache and failed on missing `dist/calc.d.ts`; no prohibited
+root build was run. Generated outputs stay ignored and all session changes
+remain under `evals/`. All planned milestones are complete.

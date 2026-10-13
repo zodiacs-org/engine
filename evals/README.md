@@ -40,6 +40,61 @@ disabled and offline mode enabled. They verify that `evals/` is excluded even in
 a checkout without `dist/`. This is a package-exclusion check; the repository's
 full `package:contents` gate additionally requires an existing engine build.
 
+For a repeat installation with the dependency cache already populated, add
+`--offline` to the installation command. A cache miss requires obtaining the
+locked dependencies before working offline; no model service is involved.
+Keep the lockfile and use the same Node runtime when comparing repeated runs.
+
+## Reproduce a workflow
+
+Run the commands above first, then follow the relevant guide from the repository
+root. The commands using `npm --prefix evals run` resolve input paths from
+`evals/`; direct `node evals/bin/...` commands resolve them from the current
+directory.
+
+| Task | Runnable guide | Output to inspect |
+| --- | --- | --- |
+| Review the original seed | [Seed review](data/README.md) | Entry factors, symbolic meanings, authorship and attribution |
+| Generate meaning variants offline | [Generation example](GENERATION.md#run-the-cli) | `dataset.json` and `manifest.json` in the returned digest directory |
+| Register a caller-owned backend | [Adapter example](BACKENDS.md#supplying-an-adapter) | Validated meanings with generated provenance |
+| Check the evaluation plumbing | [Mock evaluation](EVALUATION.md#run-a-mock-evaluation) | A report explicitly labeled `mock` |
+| Score supplied prose | [Complete reading example](EVALUATION.md#extract-claims-from-supplied-prose) | Original text, parser diagnostics and engine-backed claim evidence |
+| Understand the results | [Report inspection](EVALUATION.md#inspect-a-saved-report) and [rubric](RUBRIC.md) | Counts, denominators, exclusions, contradictions and coverage |
+
+Meaning generation and reading evaluation are separate workflows. Generated
+symbolic meanings are not factual scoring expectations. The evaluation CLI
+accepts a supplied reading envelope or renders its engine-derived mock; it does
+not call a reading-generation LLM. Obtain any model reading separately under
+recorded conventions and preserve its actual origin when importing it.
+
+For a reproducibility check, keep the inputs unchanged and rerun the generation
+or evaluation command. Matching outputs are reused without replacement. Retain
+the returned manifest or report together with the inputs in the ignored project
+directories. Compare input, implementation, rubric, engine-bundle and runtime
+identities before comparing scores from different runs. Restart after source
+changes. A custom backend's model label and random seed do not guarantee the same
+response bytes; [GENERATION.md](GENERATION.md#prompt-and-reproducibility) describes
+which inputs and outputs are hashed.
+
+The complete local acceptance commands are `npm --prefix evals test` and
+`npm --prefix evals run validate:seed`. The suite includes package exclusion,
+file-size and documentation-character checks, schema and seed contracts,
+generation, extraction, scoring and adversarial CLI cases. The
+[adversarial guide](ADVERSARIAL.md) identifies their scope. These commands do not
+replace the root CI gates or measure a real model's performance.
+
+To attempt the root package inventory gate with an eval-local npm cache:
+
+```sh
+npm --cache evals/.cache/npm --offline run package:contents
+```
+
+If the checkout has no engine build, this gate fails on missing `dist/` files.
+Report that limitation separately from the passing eval isolation check. This
+project's work must not build or populate root `dist/` to satisfy it.
+
+## Validate an entry
+
 To check a locally authored entry saved under the ignored scratch directory:
 
 ```sh
@@ -104,8 +159,11 @@ under its `$id` before loading the dataset schema.
 
 ```sh
 node evals/bin/validate-dataset.mjs --seed evals/data/seed.json
-node evals/bin/validate-dataset.mjs evals/generated/dataset.json
 ```
+
+For generated variants, use `dataset.json` inside the digest directory returned
+by the generator and omit `--seed`. The [generation example](GENERATION.md#run-the-cli)
+shows how to capture that path and validate the output without guessing it.
 
 The library exports `validateDataset(value, { seed: false })` from
 `lib/validate-dataset.mjs`. It checks entry structure and semantics, unique entry

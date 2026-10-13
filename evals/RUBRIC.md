@@ -7,7 +7,8 @@ records the vocabulary, decision tables, identities, counters and formulas for
 the scorer to consume. It is an authored policy, not generated evaluation data.
 
 The [reading scorer](SCORING.md) implements claim comparison and evidence
-reports; evaluation commands remain a later milestone.
+reports; the [evaluation CLI](EVALUATION.md) combines it with supplied readings,
+optional prose extraction and report persistence.
 [rubric.checks.mjs](tests/rubric.checks.mjs) checks compatibility with the
 existing contracts and the arithmetic below.
 [scoring.checks.mjs](tests/scoring.checks.mjs) exercises the implemented rules

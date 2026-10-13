@@ -28,10 +28,11 @@ await writeFile("evals/scratch/meaning-plan.json", JSON.stringify({
   }]
 }, null, 2), { flag: "wx" });
 JS
-node evals/bin/generate-interpretations.mjs evals/data/seed.json evals/scratch/meaning-plan.json
+node evals/bin/generate-interpretations.mjs evals/data/seed.json evals/scratch/meaning-plan.json > evals/scratch/generation-summary.json
 ```
 
-The command prints `{ "directory": "evals/generated/<digest>", "reused": false }`.
+The command's JSON summary is saved in the ignored scratch directory. It has
+the form `{ "directory": "evals/generated/<digest>", "reused": false }`.
 The directory contains `dataset.json` and `manifest.json`. Its path is relative
 to the repository root regardless of the working directory; input paths are
 relative to the working directory. The CLI supports an explicit `--backend mock`
@@ -39,10 +40,24 @@ after its input paths. It does not load adapter modules or inspect environment
 variables for a provider. `npm --prefix evals run generate -- <sources> <plan>`
 is equivalent, with input paths relative to `evals/`.
 
-Rerunning identical inputs on the same implementation and runtime reuses a run
-only when both existing files match byte for byte. It does not overwrite files.
-Validate the resulting dataset using `node evals/bin/validate-dataset.mjs` and
-its path. This is a general dataset, not an authored seed, so omit `--seed`.
+Read the summary and validate the returned dataset from the repository root:
+
+```sh
+node --input-type=module <<'JS'
+import { execFileSync } from "node:child_process";
+import { readFile } from "node:fs/promises";
+const { directory } = JSON.parse(await readFile("evals/scratch/generation-summary.json", "utf8"));
+execFileSync(process.execPath, ["evals/bin/validate-dataset.mjs", `${directory}/dataset.json`], {
+  stdio: "inherit"
+});
+JS
+```
+
+Rerun the generation command with the saved plan to check reuse. The input setup
+uses `flag: "wx"` and refuses to replace an existing plan; it need not run again.
+Identical inputs on the same implementation and runtime reuse a run only when
+both existing output files match byte for byte. They are never overwritten.
+This is a general dataset, not an authored seed, so validation omits `--seed`.
 The example factor has no personal birth data. The
 [CLI tests](tests/generator-cli.checks.mjs) exercise this plan shape, offline
 generation, byte-identical reuse and dataset validation.
