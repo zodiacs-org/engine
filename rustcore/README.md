@@ -12,9 +12,9 @@ It also computes chart angles and every supported house system, including
 Placidus and Koch polar fallbacks, and house membership from supplied cusps.
 Legacy and configured aspect matching run in Rust, including exact binary64
 orb decisions, motion classification, custom rules and stable result ordering.
-The TypeScript wrapper retains the implemented engine helpers' signatures after
-explicit initialization and exposes intermediate planetary and lunar kernels.
-The remaining integration work is in [PLAN.md](PLAN.md).
+The TypeScript wrapper retains the implemented engine helpers' synchronous
+signatures after explicit initialization and exposes intermediate planetary and
+lunar kernels. [PLAN.md](PLAN.md) tracks the remaining parity and benchmark work.
 
 ## Setup and checks
 
@@ -27,6 +27,7 @@ From this directory:
 ```sh
 npm ci
 npm run setup:wasm
+npm run setup:browser
 npm run build
 npm test
 npm run lint:rust
@@ -37,7 +38,12 @@ npm run check:isolation
 CLI version from `Cargo.toml` under `.tools/wasm-bindgen/`. The CLI and crate must agree.
 Build and test scripts use locked dependencies. `npm test` runs Cargo unit
 tests, builds WASM, checks TypeScript signatures and runs the Vitest parity
-suite, including checks of the time, planetary, lunar and Pluto data generators. Native release builds are
+suite and a Chromium loading smoke test, including checks of the time,
+planetary, lunar and Pluto data generators and the WASM build identity.
+`setup:browser` downloads the pinned Playwright Chromium into `.cache/`.
+Alternatively, set `RUSTCORE_BROWSER_EXECUTABLE` to an installed Chrome or
+Chromium executable. `npm run test:browser` runs the browser check separately
+after a WASM build. Native release builds are
 a separate `build:native` step. Cargo also needs Node on PATH: its build script
 generates time tables from digest-checked local engine sources and planetary
 and lunar coefficients and Pluto states from the pinned dependency installed by this directory's `npm ci`.
@@ -54,11 +60,18 @@ with `CARGO_HOME` set to this directory's `.cache/cargo`, `RUSTUP_HOME` set to
 dependencies or build its `dist/` for this project.
 
 The build uses wasm-bindgen's `web` output so the same module can be explicitly
-initialized with bytes in Node or a browser. The local reference dependency is
+initialized with bytes in Node or a browser. It appends a build identity to the
+WASM and writes the expected identity to `generated/wasm-build.ts`; keep that
+generated metadata, glue and binary together. The local reference dependency is
 the engine's exact astronomy-engine version; Vitest resolves relative engine
 sources to it without a root install. Tests use the `.parity.ts` suffix and this
 directory's explicit Vitest configuration, so the root suite does not discover
 tests requiring an unbuilt WASM module.
+
+The browser smoke test bundles the wrapper and checks that its runtime graph
+contains only this workspace's implementation and generated files. Relative
+imports from the engine are types only; neither the TypeScript ephemeris nor
+astronomy-engine enters that browser bundle.
 
 ## TypeScript use
 
@@ -195,13 +208,32 @@ The tests and quantity-specific rounding allowances are in
 [moon.parity.ts](tests/moon.parity.ts) and [PARITY.md](PARITY.md).
 
 For a browser, supply this build's WASM as an ArrayBuffer obtained from your own
-asset loader, or as a compiled `WebAssembly.Module`. The wrapper makes no network requests and
-does not initialize WASM at import time. Initialization is synchronous and
-repeated successful calls reuse the instance. Calls before initialization throw.
-Invalid WASM syntax does not mark the wrapper ready, so loading can be retried.
-Recovery from a valid but incompatible module requires reloading the wrapper
-and generated glue; always pair the generated glue with its matching WASM file.
-The browser integration test belongs to the wrapper milestone in the plan.
+asset loader, a byte view, or a compiled `WebAssembly.Module`:
+
+```ts
+import { initRustCore, positions } from "./ts/index.js";
+
+const response = await fetch(new URL("./pkg/zodiacs_rustcore_bg.wasm", import.meta.url));
+if (!response.ok) throw new Error("Could not load Rust core WASM.");
+initRustCore(await response.arrayBuffer());
+const bodies = positions("2001-03-21T06:00:00Z");
+```
+
+The asset request belongs to the caller. The wrapper makes no network requests
+and does not initialize WASM at import time. Initialization is synchronous;
+after success, later initialization calls keep the same instance. Calculations
+before initialization throw. Invalid syntax raises `WebAssembly.CompileError`;
+a missing or mismatched build identity raises `TypeError` before the generated
+glue receives the module. Both failures allow retry with the matching artifact.
+Build identity detects accidental artifact mixing; it does not authenticate
+untrusted executable code. Each worker or separately loaded wrapper instance
+needs its own initialization.
+
+[browser.smoke.ts](tests/browser.smoke.ts) exercises both byte and compiled
+module loading in a real browser, then runs synchronous positions, time,
+coordinate, house and aspect calls. [signatures.ts](tests/signatures.ts) checks
+the mirrored function parameters, result types and metadata declarations
+against relative engine imports during `npm run typecheck`.
 
 `aspectMotion`, `matchAspect`, `findAspects` and `findInterAspects` expose the
 legacy engine signatures and floating-point behavior. `matchAspect` returns

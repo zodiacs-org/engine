@@ -38,8 +38,8 @@ test("generated Rust and TypeScript data are deterministic and retain provenance
 
 test("metadata translation preserves literal values and freezes the build snapshot", async () => {
   const data = readTimeInputs();
-  // Erase the two generated TS type assertions only, then load the output.
-  const javascript = tsTimeData(data).replace(" as const", "").replace(" as readonly [number, number]", "");
+  // Erase the generated TS type assertions only, then load the output.
+  const javascript = tsTimeData(data).replaceAll(" as const", "").replace(" as readonly [number, number]", "");
   const metadata = await import(`data:text/javascript;base64,${Buffer.from(javascript).toString("base64")}`);
   assert.deepEqual(metadata.DELTA_T_TABLE, data.table);
   assert.deepEqual(metadata.LEAP_SECOND_LIST, data.leapList);

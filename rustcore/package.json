@@ -4,23 +4,29 @@
   "private": true,
   "type": "module",
   "license": "MIT AND CC-BY-4.0",
-  "engines": { "node": ">=22.7.0 <23" },
+  "engines": {
+    "node": ">=22.7.0 <23"
+  },
   "scripts": {
     "setup:wasm": "node scripts/run.mjs setup:wasm",
     "build": "npm run build:native && npm run build:wasm",
     "build:native": "node scripts/run.mjs build:native",
     "build:wasm": "node scripts/run.mjs build:wasm",
-    "test": "npm run test:generator && npm run test:native && npm run build:wasm && npm run typecheck && npm run test:parity",
-    "test:generator": "node --test scripts/time-data.check.mjs scripts/planet-data.check.mjs scripts/moon-data.check.mjs scripts/pluto-data.check.mjs",
+    "test": "npm run test:generator && npm run test:native && npm run build:wasm && npm run typecheck && npm run test:parity && npm run test:browser",
+    "test:generator": "node --test scripts/time-data.check.mjs scripts/planet-data.check.mjs scripts/moon-data.check.mjs scripts/pluto-data.check.mjs scripts/wasm-build.check.mjs",
     "test:native": "node scripts/run.mjs test:native",
     "test:parity": "vitest run --config vitest.config.ts",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "lint:rust": "node scripts/run.mjs lint:rust",
-    "check:isolation": "node scripts/check-isolation.mjs"
+    "check:isolation": "node scripts/check-isolation.mjs",
+    "setup:browser": "node scripts/browser.mjs --install",
+    "test:browser": "node scripts/browser.mjs"
   },
   "devDependencies": {
     "@types/node": "22.19.19",
     "astronomy-engine": "2.1.19",
+    "esbuild": "0.21.5",
+    "playwright": "1.58.2",
     "typescript": "5.9.3",
     "vitest": "2.1.9"
   }

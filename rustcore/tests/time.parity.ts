@@ -150,7 +150,7 @@ describe("Delta T and time bases through WASM", () => {
     for (const key of ["TIME_SCALE_NAMES", "LEAP_SECOND_LIST", "UT1_DATA"] as const)
       compareFrozenMetadata(rust[key], reference[key], key);
     for (const key of ["observedErrors", "predictedErrors"] as const) {
-      expect(() => { (rust.UT1_DATA[key] as number[])[0] = 0; }).toThrow(TypeError);
+      expect(() => { (rust.UT1_DATA[key] as unknown as number[])[0] = 0; }).toThrow(TypeError);
     }
   });
 

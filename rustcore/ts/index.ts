@@ -138,7 +138,9 @@ export function julianDayNumber(date: CivilDate, calendar: CalendarName): number
 
 export function civilDateOf(jdn: number, calendar: CalendarName): CivilDate {
   ready();
-  return civilDate(wasm.civilDateOf(jdn, calendar === "julian"));
+  const fields = wasm.civilDateOf(jdn, calendar === "julian");
+  // Unlike parseCalendarDate, the reference assembles this record day first.
+  return { day: fields[2]!, month: fields[1]!, year: fields[0]! };
 }
 
 /** String formatting stays in JS so its Number-to-string rules are unchanged. */
@@ -582,7 +584,19 @@ export function outsideReferenceSpan(utc: Date): boolean {
 /** Same Date-only signature as the engine's internal position assembler. */
 export function computeBodies(date: Date): BodyPosition[] {
   ready();
-  return wasm.positionsOn(date.getTime(), "utc", undefined) as BodyPosition[];
+  return wasm.positionsOn(ephemerisMilliseconds(date), "utc", undefined) as BodyPosition[];
+}
+
+function ephemerisMilliseconds(date: Date): number {
+  // The internal engine entry points invoke Date.getTime inside evaluated().
+  // Keep its non-Error conversion and cause when a Date overrides that method.
+  // Public positions uses dateFrom first, which reads the built-in Date value.
+  try {
+    return date.getTime();
+  } catch (thrown) {
+    if (thrown instanceof Error) throw thrown;
+    throw new RangeError(`The ephemeris could not evaluate this instant: ${String(thrown)}`, { cause: thrown });
+  }
 }
 
 /** Apparent geocentric tropical positions, with the public engine signature. */
@@ -609,7 +623,7 @@ export function positionsOn(date: DateInput, scale: TimeScaleName = "utc", pin?:
 /** Same Date-only signature as src/ephemeris.ts, in true-ecliptic degrees. */
 export function bodyLongitude(body: BodyName, date: Date): number {
   ready();
-  const ms = date.getTime();
+  const ms = ephemerisMilliseconds(date);
   positionBody(body, ms, false);
   return wasm.bodyLongitudeOn(body, ms, "utc", undefined);
 }
@@ -617,7 +631,7 @@ export function bodyLongitude(body: BodyName, date: Date): number {
 /** Same Date-only signature as src/ephemeris.ts, in degrees per elapsed day. */
 export function longitudeSpeed(body: BodyName, date: Date): number {
   ready();
-  const ms = date.getTime();
+  const ms = ephemerisMilliseconds(date);
   positionBody(body, ms, true);
   return wasm.longitudeSpeedOn(body, ms, "utc", undefined);
 }

@@ -739,11 +739,56 @@ The aspect numeric paths are implemented; chart-level integration remains.
 The civil Julian Day Number helpers do not apply
 astronomical time scales. No performance baseline is claimed at this milestone.
 
-Initialization requires the matching generated WASM artifact. A valid module
-with incompatible exports can leave the current wasm-bindgen singleton unusable
-after a failed initialization; recovery then needs fresh wrapper and glue
-instances. The retry test covers invalid WASM syntax only. Compatible-module
-validation and browser integration remain part of the wrapper milestone.
+## Wrapper signatures and initialization
+
+[signatures.ts](tests/signatures.ts), included by the TypeScript check, compares
+the implemented engine functions' parameter tuples and return types in both
+directions with relative source imports. It classifies the port's additional
+kernel and explicit-clock helpers separately. It also checks public type and
+metadata shapes. This is a numeric-core wrapper, not a replacement for the
+entire engine package or its chart, receipt, timezone and technique APIs.
+
+[api-boundary.parity.ts](tests/api-boundary.parity.ts) compares the JavaScript
+boundary: synchronous return shapes, property order, null and optional fields,
+mutable result allocation, policy identity and reference error behavior.
+Those checks use synthetic inputs and complement the numeric suites' units
+and tolerances above. The earlier deliberate freezing and unchecked-input
+scope limits still apply.
+
+The internal Date-only ephemeris helpers invoke `getTime` as the reference
+does: an Error from a method override passes through by identity, and a
+non-Error throw becomes the reference's RangeError with its original cause.
+Public `positions`, `dateFrom` and `outsideReferenceSpan` instead read the
+intrinsic Date timestamp. Rust calls do not install or restore the TypeScript
+dependency's global Delta T function; another caller's astronomy-engine clock
+remains unchanged. This is an intentional isolation difference from the
+TypeScript ephemeris, whose calls restore its own model.
+
+Initialization requires the matching generated WASM artifact. The build adds
+a custom section containing an identity derived from the generated binary and
+glue, and writes that expected identity into ignored generated wrapper metadata.
+The wrapper checks it before the generated singleton receives the module.
+Invalid syntax raises `WebAssembly.CompileError`; a missing or mismatched
+identity raises `TypeError`. Either rejection leaves initialization available
+for retry. Once initialization succeeds, subsequent calls reuse the instance.
+The identity detects accidental build mixing, not hostile code modification.
+Callers still supply the trusted artifact they intend to execute.
+
+[loader.parity.ts](tests/loader.parity.ts) covers pre-initialization failures,
+retry, compiled modules, ArrayBuffers, and byte views with offsets and lengths.
+[wasm-build.check.mjs](scripts/wasm-build.check.mjs) checks deterministic build
+identity, glue changes, retained module exports/imports and duplicate-section
+rejection. Metadata and aspect policy creation are available before loading;
+numeric calls require initialization. Importing the wrapper does not compile
+or instantiate WASM and does not request assets.
+
+[browser.smoke.ts](tests/browser.smoke.ts), run by
+[browser.mjs](scripts/browser.mjs), loads the bundled wrapper in Chromium using
+explicit bytes and a compiled module in separate pages. It checks synchronous
+calculations and browser error objects. The bundler's input graph check excludes
+parent engine runtime imports and astronomy-engine. This is a loading and API
+smoke test, not the full numerical corpus on every browser engine. The complete
+Vitest numerical suites run on Node; other browser engines remain unmeasured.
 
 Each later numeric milestone must add its quantity, units, reference, tested
 span and acceptance rule here. Exact decisions, flags and ordering require

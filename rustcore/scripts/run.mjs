@@ -1,7 +1,8 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { delimiter, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { bindWasmBuild } from "./wasm-build.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const cargoHome = join(root, ".cache", "cargo");
@@ -60,6 +61,12 @@ switch (process.argv[2]) {
     cargo(["build", "--locked", "--release", "--target", "wasm32-unknown-unknown", "-p", "zodiacs-rustcore-wasm"]);
     run(cli, [join(root, "target", "wasm32-unknown-unknown", "release", "zodiacs_rustcore_wasm.wasm"),
       "--target", "web", "--out-dir", join(root, "pkg"), "--out-name", "zodiacs_rustcore"]);
+    {
+      const wasmFile = join(root, "pkg", "zodiacs_rustcore_bg.wasm");
+      const bound = bindWasmBuild(readFileSync(wasmFile), readFileSync(join(root, "pkg", "zodiacs_rustcore.js")));
+      writeFileSync(wasmFile, bound.bytes);
+      writeFileSync(join(root, "generated", "wasm-build.ts"), bound.source);
+    }
     break;
   case "test:native":
     cargo(["test", "--locked", "--workspace"]);

@@ -25,7 +25,7 @@ export const ASPECTS = Object.freeze([
   Object.freeze({ type: "square", angle: 90, orb: 7, luminaryOrb: 8 } as const),
   Object.freeze({ type: "trine", angle: 120, orb: 7, luminaryOrb: 8 } as const),
   Object.freeze({ type: "opposition", angle: 180, orb: 8, luminaryOrb: 10 } as const)
-]) satisfies readonly AspectDefinition[];
+] as const) satisfies readonly AspectDefinition[];
 const PHYSICAL_BODIES = Object.freeze([
   "Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"
 ] as const);

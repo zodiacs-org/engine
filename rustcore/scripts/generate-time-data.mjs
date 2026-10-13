@@ -121,10 +121,10 @@ export const LEAP_SECONDS_FROM = 63072000000;
 export const UT1_FALLBACK_BAND = 0.9;
 const table = ${JSON.stringify(table)};
 export const DELTA_T_TABLE = Object.freeze({ ...table, knots: Object.freeze(table.knots) });
-const leapList = ${JSON.stringify(leapList)};
+const leapList = ${JSON.stringify(leapList)} as const;
 export const LEAP_SECOND_LIST = Object.freeze({ ...leapList,
   changes: Object.freeze(leapList.changes.map(change => Object.freeze(change) as readonly [number, number])) });
-const ut1Data = ${JSON.stringify(ut1Data)};
+const ut1Data = ${JSON.stringify(ut1Data)} as const;
 export const UT1_DATA = Object.freeze({ ...ut1Data,
   observedErrors: Object.freeze(ut1Data.observedErrors),
   predictedErrors: Object.freeze(ut1Data.predictedErrors) });
