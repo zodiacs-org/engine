@@ -9,7 +9,9 @@ explicit custom backend selection and reproducible manifests. The versioned
 [factual rubric](RUBRIC.md) defines the rules implemented by the deterministic
 [reading scorer](SCORING.md). An [offline evaluation command](EVALUATION.md)
 combines a synthetic case with supplied claims or a deterministic mock reading
-and saves a complete report under ignored `reports/`.
+and saves a complete report under ignored `reports/`. An opt-in
+[conservative prose extractor](EXTRACTION.md) recognizes explicit factual
+sentences while retaining unsupported wording and extraction limits.
 
 Interpretation text is symbolic prose. The factual score compares a
 reading's assertions with computations from the local `@zodiacs/engine` under
@@ -276,7 +278,8 @@ annotated readings. Empty text and empty claim lists are accepted for
 omission handling. Neither acceptance nor an empty list implies perfect factual
 correctness. The [factual rubric](RUBRIC.md) defines scoring denominators and
 eligibility. The validation command returns no score; scoring is a separate
-library call. Extraction audits remain a later milestone.
+library call. The optional [prose extractor](EXTRACTION.md) produces claims under
+a restricted grammar; its output still requires an extraction audit.
 
 ```sh
 node evals/bin/validate-reading.mjs evals/scratch/reading.json
@@ -306,12 +309,16 @@ To evaluate a synthetic case with the offline mock, or with a supplied reading:
 ```sh
 node evals/bin/evaluate-reading.mjs evals/scratch/case.json --mock
 node evals/bin/evaluate-reading.mjs evals/scratch/case.json --reading evals/scratch/reading.json
+node evals/bin/evaluate-reading.mjs evals/scratch/case.json --reading evals/scratch/reading.json --extract
 ```
 
 The command saves a complete report under ignored `reports/` and prints a JSON
 summary. [EVALUATION.md](EVALUATION.md) gives an invented case example, the
 library API, report format, input limits and exit behavior. Supplied readings
-already contain quoted claims; prose extraction remains a later milestone.
+normally contain quoted claims. `--extract` instead requires an unannotated
+reading envelope with extraction method `none` and an empty claim list, and
+records parser diagnostics in the report. Unsupported wording remains unresolved;
+successful parsing does not establish faithful or complete extraction.
 The mock renders engine factors to check the workflow and does not measure
 model performance.
 

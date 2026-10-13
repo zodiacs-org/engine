@@ -68,7 +68,7 @@ async function success(result, mode) {
   assert.equal(result.stderr, "");
   const summary = JSON.parse(result.stdout);
   assert.deepEqual(Object.keys(summary).sort(), [
-    "diagnostics", "digest", "limits", "mode", "overall", "report", "reused"
+    "diagnostics", "digest", "extraction", "limits", "mode", "overall", "report", "reused"
   ]);
   assert.match(summary.report, /^evals\/reports\/[a-f0-9]{64}\.json$/);
   const path = join(repository, summary.report);
@@ -95,6 +95,8 @@ async function success(result, mode) {
   assert.deepEqual(summary.overall, report.score.overall);
   assert.deepEqual(summary.diagnostics, report.score.diagnostics);
   assert.deepEqual(summary.limits, report.score.limits);
+  assert.equal(summary.extraction, null);
+  assert.equal(report.workflow.extraction, null);
   return { summary, report, bytes, path };
 }
 

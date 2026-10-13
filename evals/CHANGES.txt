@@ -7,3 +7,4 @@ M6: add validated interpretation generation with versioned prompts, closed sourc
 M7: add a versioned factual scoring rubric and machine-readable policy with explicit eligibility, coverage, contradiction and abstention rules, defined denominators, and offline contract tests.
 M8: add deterministic engine-backed reading scoring with categorical evidence, duplicate and contradiction handling, explicit coverage and rate denominators, bounded immutable reports, documentation and offline tests.
 M9: add an offline reading evaluation CLI with supplied or labeled mock readings, complete engine-backed scores, bounded reproducible reports without overwrite, workflow documentation and offline integration tests.
+M10: add conservative offline prose claim extraction, negation and context guards, opt-in evaluation and CLI integration, explicit extraction diagnostics and limits, documentation and adversarial contract tests.

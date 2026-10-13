@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { computeChartFacts, validateSyntheticChart } from "./chart-facts.mjs";
+import { extractReadingClaims } from "./extract-reading-claims.mjs";
 import { canonicalJson, freezeData, sha256 } from "./generator-data.mjs";
 import { SCORING_REPORT_BYTES, ScoringError, scoreReading } from "./score-reading.mjs";
 import { validateReading } from "./validate-reading.mjs";
@@ -9,7 +10,7 @@ const rubric = JSON.parse(read("../rubrics/factual-v1.json"));
 const implementation = freezeData({
   id: "offline-reading-evaluation", version: "1.0.0",
   digest: sha256(JSON.stringify([
-    "./evaluate-reading.mjs", "./generator-data.mjs", "./validate-reading.mjs",
+    "./evaluate-reading.mjs", "./extract-reading-claims.mjs", "./generator-data.mjs", "./validate-reading.mjs",
     "../schema/reading.schema.json", "../schema/factual-claim.schema.json",
     "../schema/meaning-entry.schema.json"
   ].map((path) => [path, read(path)])))
@@ -25,6 +26,7 @@ const messages = {
   "reference-failed": "Local engine reference computation failed.",
   "reference-contract": "Local engine reference does not satisfy the evaluation contract.",
   "mock-failed": "Offline mock reading construction failed.",
+  "extraction-failed": "Supplied reading claim extraction failed.",
   "scoring-failed": "Reading scoring failed.",
   "output-limit": "Evaluation report exceeds its output limits."
 };
@@ -49,13 +51,15 @@ function optionsFor(value) {
       ![Object.prototype, null].includes(Object.getPrototypeOf(value))) refuse("invalid-options");
   const descriptors = Object.getOwnPropertyDescriptors(value);
   if (Reflect.ownKeys(descriptors).some((key) => typeof key !== "string" ||
-      !["reading", "rubricId", "rubricVersion"].includes(key) ||
+      !["reading", "extract", "rubricId", "rubricVersion"].includes(key) ||
       !Object.hasOwn(descriptors[key], "value") || !descriptors[key].enumerable)) refuse("invalid-options");
+  const extract = Object.hasOwn(descriptors, "extract") ? descriptors.extract.value : false;
+  if (typeof extract !== "boolean" || (extract && !Object.hasOwn(descriptors, "reading"))) refuse("invalid-options");
   const scoring = capture(Object.fromEntries(["rubricId", "rubricVersion"]
     .filter((key) => Object.hasOwn(descriptors, key)).map((key) => [key, descriptors[key].value])), "invalid-options");
   if ((Object.hasOwn(scoring, "rubricId") && scoring.rubricId !== rubric.id) ||
       (Object.hasOwn(scoring, "rubricVersion") && scoring.rubricVersion !== rubric.version)) refuse("unsupported-rubric");
-  return { scoring, supplied: Object.hasOwn(descriptors, "reading"),
+  return { scoring, extract, supplied: Object.hasOwn(descriptors, "reading"),
     reading: Object.hasOwn(descriptors, "reading") ? capture(descriptors.reading.value, "invalid-reading") : null };
 }
 
@@ -111,7 +115,8 @@ function mockFor(syntheticCase, reference) {
   return { reading, metadata: { id: "engine-fact-reading-mock", version: "1.0.0", inputDigest, referenceDigest } };
 }
 
-/** Evaluate one invented chart with a supplied extraction or an offline fixture.
+/** Evaluate one invented chart with a supplied reading or an offline fixture.
+ * Supplied unannotated prose can opt into conservative claim extraction.
  * This API writes nothing and selects no model/provider from the environment.
  */
 export async function evaluateReading(caseValue, options = {}) {
@@ -120,9 +125,13 @@ export async function evaluateReading(caseValue, options = {}) {
   if (!validateSyntheticChart(syntheticCase).valid) refuse("invalid-case");
   let reading = selection.reading;
   let mock = null;
+  let extraction = null;
   if (selection.supplied) {
     if (!validateReading(reading).valid) refuse("invalid-reading");
     if (reading.caseId !== syntheticCase.id) refuse("case-mismatch");
+    if (selection.extract) {
+      try { ({ reading, extraction } = extractReadingClaims(reading)); } catch { refuse("extraction-failed"); }
+    }
   } else {
     let reference;
     try { reference = await computeChartFacts(syntheticCase); } catch { refuse("reference-failed"); }
@@ -137,7 +146,7 @@ export async function evaluateReading(caseValue, options = {}) {
   if (mock && mock.referenceDigest !== score.identity.referenceDigest) refuse("reference-contract");
   const result = {
     schemaVersion: "1.0.0", status: "completed",
-    workflow: { ...implementation, mode: selection.supplied ? "supplied" : "mock", mock }, score
+    workflow: { ...implementation, mode: selection.supplied ? "supplied" : "mock", mock, extraction }, score
   };
   // The final envelope, not just the nested score, must fit a canonical report
   // file with its trailing newline. Do not silently drop evidence to make it fit.

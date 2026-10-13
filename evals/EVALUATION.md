@@ -1,9 +1,10 @@
 # Offline reading evaluation
 
 The evaluation command compares a supplied reading extraction with facts computed
-by the local engine, or creates a deterministic mock reading to exercise the
-workflow. It evaluates one synthetic case per run and saves a machine-readable
-report under ignored `reports/`. The [factual rubric](RUBRIC.md) and
+by the local engine, optionally extracts claims from an unannotated reading, or
+creates a deterministic mock reading to exercise the workflow. It evaluates one
+synthetic case per run and saves a machine-readable report under ignored
+`reports/`. The [factual rubric](RUBRIC.md) and
 [scorer](SCORING.md) define the judgments and their denominators.
 
 The scores measure agreement with the local engine under recorded conventions.
@@ -71,11 +72,38 @@ scorer preserves the complete reading in its report. A reading can contain
 incorrect, conflicting, ambiguous or unsupported assertions. These are scoring
 inputs, not grounds for discarding a structurally valid reading.
 
+Without `--extract`, supplied claims are preserved exactly, including an empty
+list. A missing reading file does not select the mock.
+
+## Extract claims from supplied prose
+
+To opt into the conservative offline parser, provide a reading envelope with
+`extraction.method: "none"` and an empty `claims` list, then run:
+
+```sh
+node evals/bin/evaluate-reading.mjs evals/scratch/case.json --reading evals/scratch/reading.json --extract
+```
+
+The reading still requires its synthetic case id, original text, declared
+conventions, provenance and license. Extraction preserves those fields and adds
+quoted claims with parser metadata. It rejects an already annotated reading
+rather than replacing its claims. The scorer receives the extracted reading
+and computes its own complete local reference; the parser has no reference facts
+and cannot fill omitted assertions from the chart.
+
+Extraction recognizes a bounded grammar of explicit assertions. Unsupported
+wording and ambiguous context remain unresolved. It does not establish that
+every factual assertion was found or that every extraction is faithful. Read the
+extraction diagnostics and limits with the scores; both the parser and scorer
+continue to label extraction coverage `unverified`. The grammar, quote spans,
+paragraph handling and refusal limits are described in
+[EXTRACTION.md](EXTRACTION.md).
+
 The command accepts a case path followed by either `--reading` and a reading
-path, or `--mock`. The two modes cannot be combined. It rejects additional or
-unknown options. `--help` is accepted by itself. There is no prose extraction in
-this command: supplied readings already contain claims, whose extraction
-coverage remains `unverified`. A missing reading file does not select the mock.
+path with optional trailing `--extract`, or `--mock`. The modes cannot be
+combined. Extraction requires a supplied reading and cannot run on the mock.
+Additional, repeated, reordered or unknown options are rejected. `--help` is
+accepted by itself.
 
 ## Reports and exit status
 
@@ -87,6 +115,7 @@ On success, standard output contains a compact JSON summary:
 | `reused` | Whether an existing report had exactly the expected bytes. |
 | `digest` | SHA-256 identity of the persisted report bytes. |
 | `mode` | `mock` or `supplied`. |
+| `extraction` | Full parser identity, diagnostic counts and limits when `--extract` ran; otherwise `null`. |
 | `overall`, `diagnostics`, `limits` | The scorer's totals, occurrence diagnostics and limits. |
 
 The report is a complete envelope with `schemaVersion`, `status`, `workflow`
@@ -97,9 +126,12 @@ totals, overall metrics and provenance. See [SCORING.md](SCORING.md) for the
 meaning of those fields. Evidence pointers remain relative to `score.reference`.
 
 `workflow` records id `offline-reading-evaluation`, its version and implementation
-digest, the selected `mode` and mock metadata when applicable. Supplied mode has
-`mock: null`. These identities describe local implementation bytes and input
-values; they do not authenticate an imported report or identify a signed release.
+digest, the selected `mode`, mock metadata when applicable, and the parser report
+in `extraction` when requested. Supplied mode has `mock: null`; evaluations
+without extraction have `extraction: null`. The workflow digest includes the
+extractor and its local schema dependencies. These identities describe local
+implementation bytes and input values; they do not authenticate an imported
+report or identify a signed release.
 Results include no wall-clock timestamp or temporary path. Repeatability checks
 cover fresh processes and working directories on the same runtime, not
 bitwise agreement across runtimes or architectures.
@@ -113,7 +145,7 @@ assessment because facts are unavailable or conventions differ.
 | Exit status | Meaning |
 | --- | --- |
 | `0` | Evaluation completed and its report was saved or reused; also successful help. Incorrect claims can appear in a completed evaluation. |
-| `1` | Input validation, engine computation or scoring failed, or the complete report exceeded its output limit. |
+| `1` | Input validation, extraction, engine computation or scoring failed, or the complete report exceeded its output limit. |
 | `2` | Usage, input-file reading or report persistence failed. |
 
 Failures print fixed diagnostic text without echoing supplied paths, reading
@@ -149,11 +181,17 @@ import { evaluateReading } from "./evals/lib/evaluate-reading.mjs";
 
 const mockEvaluation = await evaluateReading(syntheticCase);
 const suppliedEvaluation = await evaluateReading(syntheticCase, { reading });
+const extractedEvaluation = await evaluateReading(syntheticCase, { reading: unannotatedReading, extract: true });
 ```
 
-The optional object accepts only `reading`, `rubricId` and `rubricVersion`.
+The optional object accepts only `reading`, `extract`, `rubricId` and
+`rubricVersion`.
 Omitting `reading` selects the mock; explicitly supplying `undefined` or `null`
-is invalid. Rubric selection follows the scorer's supported id and version.
+is invalid. `extract` must be a boolean when supplied; `true` requires a supplied
+unannotated reading, and `false` is the default behavior. Extraction contract or
+budget failures produce the fixed `EvaluationError` code `extraction-failed`,
+without echoing text or raw parser errors. Rubric selection follows the scorer's
+supported id and version.
 The library captures and validates inputs and returns an immutable envelope. It
 does not save a report by itself. A caller cannot provide reference facts or
 override scoring policy.
@@ -179,3 +217,7 @@ general prose parser. The meaning-generation backend is a separate workflow.
 mock provenance, supplied reading preservation, availability and convention
 handling, reproducible identity and refusal behavior. These are local engine
 consistency tests, not independent accuracy or interpretation-quality evidence.
+
+[extraction-evaluation.checks.mjs](tests/extraction-evaluation.checks.mjs) checks
+the opt-in parser integration, metadata preservation, unresolved and omitted
+assertions, convention and availability limits, and CLI reports.

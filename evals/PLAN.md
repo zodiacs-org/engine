@@ -23,7 +23,7 @@ astronomical accuracy or the validity of personality or predictive claims.
 - [x] M7 Write a versioned scoring rubric for factual correctness, coverage, contradictions and abstentions, separating interpretive quality from computable facts.
 - [x] M8 Implement deterministic placement, aspect, house and dignity scoring with per-claim evidence, category totals and explicit denominators.
 - [x] M9 Add an offline reading evaluation CLI that combines synthetic cases, engine facts, supplied or mock readings and machine-readable reports.
-- [ ] M10 Add a conservative prose claim extractor and tests for negation, ambiguity, duplicate claims and omitted facts; expose extraction limits in reports.
+- [x] M10 Add a conservative prose claim extractor and tests for negation, ambiguity, duplicate claims and omitted facts; expose extraction limits in reports.
 - [ ] M11 Add adversarial and end-to-end tests covering malformed model output, invented factors, unavailable birth time, conflicting conventions and output limits.
 - [ ] M12 Document reproducible local workflows, backend extension, seed review and result interpretation; run the complete eval suite and package-isolation checks.
 
@@ -210,3 +210,26 @@ quality or independent astronomical accuracy evidence. Package exclusion and
 project isolation passed. The root `npm run package:contents` gate was attempted
 with an eval-local npm cache and failed on missing `dist/calc.d.ts`; no prohibited
 root build was run. All changes remain under `evals/`. M10 is next.
+
+M10 acceptance: `extractReadingClaims` parses a bounded English grammar from
+unannotated reading envelopes without consulting chart facts. It retains exact
+quoted spans, original metadata, duplicate assertions, explicit negation,
+uncertainty and temporal scope, while keeping unsupported wording unresolved.
+Paragraph and document guards withhold claims affected by recognized quotation,
+code, hypothetical or refutation context. Immutable extraction reports record
+identity, digests, reason counts, character accounting and unverified coverage.
+The evaluation API and CLI expose opt-in extraction and retain those limits in
+saved reports and summaries. `EXTRACTION.md` documents the grammar and its
+discourse limitations. No generated reading corpus is committed.
+
+M10 validation: `npm --prefix evals test` and
+`npm --prefix evals run validate:seed` passed on Node 22.23.3. Parser and
+integration tests cover supported and incorrect assertions, full-factor and
+local negation, ambiguity, duplicate and reversed aspects, omitted facts,
+convention conflicts, unavailable houses, scope and quotation guards, Unicode
+spans, bounded refusals, immutable snapshots and offline repeatability. These
+tests establish grammar behavior and local engine consistency, not extraction
+recall, model quality or independent astronomical accuracy. Package exclusion
+and project isolation passed. The root `npm run package:contents` gate was
+attempted with an eval-local npm cache and failed on missing `dist/calc.d.ts`;
+no prohibited root build was run. All changes remain under `evals/`. M11 is next.
