@@ -19,7 +19,7 @@ single session summary to `CHANGES.txt`. The harness owns all git writes.
 - [x] M8 Generate and serve an OpenAPI 3.1 document from route schemas, including authentication, limits, receipts, errors and synthetic examples; test schema and route agreement.
 - [x] M9 Harden lifecycle and resource limits across the completed API, including shutdown, readiness, logging privacy and calculation work limits; run the full server integration suite.
 - [x] M10 Add a Dockerfile and self-hosting instructions with environment/file key setup, health checks, persistent configuration and required engine licence notices; exercise the container when tooling permits.
-- [ ] M11 Add an autocannon or k6 harness and commit small throughput and p50/p95 latency evidence from this machine, with commands, runtime, workload, build identity and limitations; keep raw generated output ignored.
+- [x] M11 Add an autocannon or k6 harness and commit small throughput and p50/p95 latency evidence from this machine, with commands, runtime, workload, build identity and limitations; keep raw generated output ignored.
 - [ ] M12 Review all route, auth, rate-limit, OpenAPI and deployment tests; finish operator/client documentation and record final validation and remaining limitations.
 
 The initial HTTP paths are `/healthz` and `/readyz`; calculation routes will
@@ -174,3 +174,27 @@ resource limits, shutdown and attribution. The root package contents gate
 still reports missing `dist/calc.d.ts`; no root build was generated. All
 changes remain in `server/`, within the file-size rule and without em dashes
 in docs.
+
+M11 validation: server typecheck, full Vitest suite, build and package-exclusion
+check passed using Node 22.23.3. The autocannon harness rebuilds the isolated
+server, generates temporary connection keys, checks each response's engine and
+receipt scope, separates warmups and measurements, and records monotonic
+throughput timing, observed p50/p95 histograms, response accounting, runtime,
+visible machine limits and source/bundle hashes. Tests cover actual route
+receipts, percentile rank, failed and incomplete measurements, distinct
+connection keys, credential omission, report identity and process cleanup on
+interruption using isolated test builds. Independent reviews found and helped
+correct minimum-runtime and receipt-check issues before the final run.
+The complete repeated matrix passed with no HTTP, transport or receipt-check
+failures; its report is in `docs/evidence/load-local.json`, with instructions
+and limitations in `LOAD-TESTING.md`. Every recorded input and bundle hash was
+verified against the final workspace. Earlier rejected attempts are retained
+separately: one stopped at a between-phase check with insufficient diagnostics
+to identify its cause, and another exhausted a shared key's bucket. The final
+harness uses distinct connection keys with unchanged per-key limits and records
+monotonic and wall durations separately. Generated context and per-trial output
+remain ignored. These are local HTTP measurements, not deployment capacity or
+astronomical accuracy guarantees. The root package contents gate still reports
+missing `dist/calc.d.ts`; no root build was generated. All changes remain in
+`server/`, within the file-size rule and without em dashes in docs. M12 remains
+unchecked for the next session.

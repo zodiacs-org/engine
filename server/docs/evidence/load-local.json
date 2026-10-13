@@ -1,0 +1,2237 @@
+{
+  "schema": "zodiacs-http-load/1",
+  "passed": true,
+  "generatedAt": "2026-10-13T11:39:36.625Z",
+  "command": [
+    "node",
+    "server/scripts/load.mjs",
+    "--duration",
+    "10",
+    "--warmup",
+    "2",
+    "--connections",
+    "1,4",
+    "--repetitions",
+    "2"
+  ],
+  "options": {
+    "duration": 10,
+    "warmup": 2,
+    "connections": [
+      1,
+      4
+    ],
+    "repetitions": 2,
+    "routes": [
+      "natal",
+      "transits",
+      "synastry",
+      "solar",
+      "lunar",
+      "moon-phase",
+      "houses"
+    ]
+  },
+  "engine": {
+    "name": "@zodiacs/engine",
+    "version": "1.0.0",
+    "ephemeris": {
+      "name": "astronomy-engine",
+      "version": "2.1.19"
+    }
+  },
+  "build": {
+    "algorithm": "sha256",
+    "inputsDigest": "44cf0f62f2a74b14d24701adfc2c05e4c9516fac5fc554189126687243f40553",
+    "inputs": [
+      {
+        "path": "server/package-lock.json",
+        "sha256": "64e90440e4711e8965af8bc9564dfc9a2bd484f4840e9e54679fc1567bdf836d"
+      },
+      {
+        "path": "server/package.json",
+        "sha256": "5eaaf4950cf892c71f9c14a80d590e86d57c7d6a7e656398a2fb6131e20d1295"
+      },
+      {
+        "path": "server/scripts/build.mjs",
+        "sha256": "f507a3c685f7698cfa9ef708bb092c4af8e38b9f899b99e8e6bb4386c080205b"
+      },
+      {
+        "path": "server/scripts/load-support.mjs",
+        "sha256": "69e6e551dd024d03acbcf15809b8ca9a9fb1030aab9cb415e0bef279998fb23d"
+      },
+      {
+        "path": "server/scripts/load.mjs",
+        "sha256": "507dd51c663be67eb09cf7f798feaab0f6c6597e19d0b9964276ee805fb88f4e"
+      },
+      {
+        "path": "server/src/api-keys.ts",
+        "sha256": "bb6bf5ea8d5aeed1e88df40a56953b4be1a497005406607606e1f67861b84f89"
+      },
+      {
+        "path": "server/src/app.ts",
+        "sha256": "fb6de6aa6a2c7608c062193e61fe60d3a6e8f1c9a227b3ef088bcfa5a3f77d0e"
+      },
+      {
+        "path": "server/src/auth.ts",
+        "sha256": "51a50ab4d6dc5457a3254e97d9e09d17c17d5dd55d6a870efe890b8d4a06160c"
+      },
+      {
+        "path": "server/src/calculation-pool.ts",
+        "sha256": "0e0e2db0ad6cb2feb2a97237c3a2a329d0a58284a4c319cfb268463c270d50dd"
+      },
+      {
+        "path": "server/src/calculation-worker.ts",
+        "sha256": "24ba579f532e06b05008e4b32c6656d89327a768ff762a13cd7529d0d8f5d26c"
+      },
+      {
+        "path": "server/src/calculations.ts",
+        "sha256": "1fa9732017419dc5142af91595a9ef042287861af2da7470482481bda465a605"
+      },
+      {
+        "path": "server/src/config.ts",
+        "sha256": "bd1fdb14726b3bd272117260ebb0032f97c56af6d212499c804597f42c5d3bdd"
+      },
+      {
+        "path": "server/src/engine.ts",
+        "sha256": "ba62e12ce55a19bbfb042dca4fc64e473e96727319d21afcb9653cd99c35a16e"
+      },
+      {
+        "path": "server/src/houses.ts",
+        "sha256": "7db7804f1bb15dfb350ed96b35ae2c5ee050f22f46f026f34ba0f285ffd3d404"
+      },
+      {
+        "path": "server/src/main.ts",
+        "sha256": "0ea75c9bc4e438bbbe8b700788021cee640a4acf8b9d24ec86ad6b4adf866e59"
+      },
+      {
+        "path": "server/src/moon-phase.ts",
+        "sha256": "98c4c2f04e934837e1f20592141e5c05e0cda625a2e18c24deed32cee9f0ef33"
+      },
+      {
+        "path": "server/src/natal.ts",
+        "sha256": "5fee6c60b4b97caa9b7f39c9dfa4110143079fa77deb55efffb004be068d0388"
+      },
+      {
+        "path": "server/src/openapi-schemas.ts",
+        "sha256": "4108977f59057dc64cfb67c810e717694f6a480edac0cd3ac541c22d3fffb0c5"
+      },
+      {
+        "path": "server/src/openapi.ts",
+        "sha256": "fac8e7ab7f466cec689e4bda3a984f04145e9e2a51bbb5b7060732de79807b49"
+      },
+      {
+        "path": "server/src/rate-limit-hook.ts",
+        "sha256": "44d7ec8383d4366696476f457ff8696e62bfc4f842c21b62b29862ad59098fd4"
+      },
+      {
+        "path": "server/src/rate-limit.ts",
+        "sha256": "d3a2678dd82a9be8b7929c62d71c7c1cdb3de7731456e3497c2681f197a3a516"
+      },
+      {
+        "path": "server/src/request-validation.ts",
+        "sha256": "fe8c7cfe1e8917093a19c52d878959cb64e4442cf32cd1cddd59e4b29a6f744b"
+      },
+      {
+        "path": "server/src/resource-limits.ts",
+        "sha256": "26ecf8ef3c29484188c9d3af5768f668ab0ce2fb930eb97b49dff25b6348dbdb"
+      },
+      {
+        "path": "server/src/responses.ts",
+        "sha256": "f40442a1cdaa7b3482a4cc49d850a91c0f46efdeba1d851cd03c30bcfb39e9e8"
+      },
+      {
+        "path": "server/src/returns.ts",
+        "sha256": "f9bbd89e1ce0fc4b5365299e62a48d8960f10e2bdb311395879c8470e58486c8"
+      },
+      {
+        "path": "server/src/route-docs.ts",
+        "sha256": "eee495e64676a50d39de3a5f9a065a69d3674057b04aa41c1ddec29f0b321858"
+      },
+      {
+        "path": "server/src/synastry.ts",
+        "sha256": "d40270f09d7466cc2a663cccfe7f1c071807cf772745cb32b4cbd00a341ad555"
+      },
+      {
+        "path": "server/src/transits.ts",
+        "sha256": "17ef709b87896d8d9388d905771ad87a05c80606d100889424ac1ee04e5b7de1"
+      },
+      {
+        "path": "src/api.ts",
+        "sha256": "3b597fc7c7e2b828470546862d4484b086a8090bb578eb0785880a9d692ef516"
+      },
+      {
+        "path": "src/aspects.ts",
+        "sha256": "5cfbf1ffe3889f1c038b798d5bd74674de17bd9f0571adb4be08141cdd49f740"
+      },
+      {
+        "path": "src/birth-input.ts",
+        "sha256": "9303df6556f84faf72e4c799f04d00692015dfade4f3c4e26d8d797f01f35928"
+      },
+      {
+        "path": "src/body-label.ts",
+        "sha256": "bce12273949cd9810f4ab00c0f05c1aba14cf4ee46533ca3aba0588525006b1e"
+      },
+      {
+        "path": "src/calc-ayanamsa.ts",
+        "sha256": "45680a9665db54a68f4c9529eaadb541f633eb38542e12a9b067d76247161565"
+      },
+      {
+        "path": "src/calc-bounds.ts",
+        "sha256": "6911d6e1eb1daa7fb02f2f4b0746e0cd9a42579b3ed8c72e424200cfe15ac49c"
+      },
+      {
+        "path": "src/calc-frames.ts",
+        "sha256": "cefe7b46ccb64dfcc7c3eb008af3cca6202237d119b1f9f4e25e6e5919fcecca"
+      },
+      {
+        "path": "src/calc-reduce.ts",
+        "sha256": "8d0c4763f701aa1972470aedc24cd138ba93b1589375f9ba5b855aa890b10f33"
+      },
+      {
+        "path": "src/calc.ts",
+        "sha256": "95ac80e297393a06adfa213a0aa9c342e02ec41abeaefd1b9f497c376ac35180"
+      },
+      {
+        "path": "src/civil-calendar.ts",
+        "sha256": "822ae1f6f0a34a8330da2bdafcfa5cdd421c424d4eb2bd65c0fec7834c7a99d8"
+      },
+      {
+        "path": "src/configured-aspects.ts",
+        "sha256": "c56349ba454e7cb3005f25eb3b740dd063cfeb3b9115e0d11512d8989ff19be4"
+      },
+      {
+        "path": "src/crossings.ts",
+        "sha256": "4d33898d572d453de7c70d076b60018068854739f865080959cb800e4542d182"
+      },
+      {
+        "path": "src/date-input.ts",
+        "sha256": "f9db8865bf143d6334eb93d9618f50aa6a81ba32273b0a103d2a83e3c8014675"
+      },
+      {
+        "path": "src/declination.ts",
+        "sha256": "a7476e6e4c9af69c0eceaab499feacb8540c4975e5f65813c8cb4485b102ec61"
+      },
+      {
+        "path": "src/deltat.ts",
+        "sha256": "2ce7e227bdf0e75bc2401793b8b09ed4113d80d8845376fbec7d0129c12f8b27"
+      },
+      {
+        "path": "src/ephemeris.ts",
+        "sha256": "b530dbd0463b886fe1b8e99a095dc9cf9ef0cf614b6854e78ad206a27913cc7e"
+      },
+      {
+        "path": "src/equator.ts",
+        "sha256": "1789e14344ef83839aea20624d16bb3def70d41e574f412faec87b89e6a79ef7"
+      },
+      {
+        "path": "src/exact.ts",
+        "sha256": "f89a335657aa1139370511d315abcf8d6080ab857e0a37d249faf9de6a5eb25e"
+      },
+      {
+        "path": "src/frame.ts",
+        "sha256": "98d0bee44839b23d3ec64dac470e31ab8e366c6907d325a4259f8f37285a7c50"
+      },
+      {
+        "path": "src/geo/calendar.ts",
+        "sha256": "d23ca3e83ddd2529345d616c43cb65f79910254d4eb1df90b9e41d98c49ab7ff"
+      },
+      {
+        "path": "src/geo/timezone.ts",
+        "sha256": "18190ad17d00d093ebc7d997f579c3c4bac98215c05e291aec7ec68a2d246ee3"
+      },
+      {
+        "path": "src/geo/zone-history.ts",
+        "sha256": "a3060a8076b5267870077ad2db54711366739ee89c63cc95c70baa6d197b0248"
+      },
+      {
+        "path": "src/houses.ts",
+        "sha256": "e97ea80f5f225fadf0bfcb051f0afcce820678f31ff1013cc0ebce3035cc8ceb"
+      },
+      {
+        "path": "src/index.ts",
+        "sha256": "a7b8430da0e398e27743eb9ed7bfe8976e370e5fca002dc728308f5b98134644"
+      },
+      {
+        "path": "src/nutation.ts",
+        "sha256": "c11af594d4e8ad64e0a7ff1097505063c70812d2da84e14a6c0280d4841e62b0"
+      },
+      {
+        "path": "src/points.ts",
+        "sha256": "707e59ecdca3874e7c2830c2f7630628dd83b4ae13a97957ec3c623d5ebdf838"
+      },
+      {
+        "path": "src/progressions.ts",
+        "sha256": "5d92c812e26d7a3fc3859260f20801a851b1b0ec01862ec47a953e956f36dcd0"
+      },
+      {
+        "path": "src/read-options.ts",
+        "sha256": "86d68d8992dd38d3e90474b7e6ffe6528c5c75b85ee66b0e12a00cad988ddcfa"
+      },
+      {
+        "path": "src/receipt-json.ts",
+        "sha256": "da5627224b593769eea8f1d434815ad34f422f44e1ef38a6687f86d8ccf8dd5c"
+      },
+      {
+        "path": "src/receipt.ts",
+        "sha256": "3bf65ac45388d13ddddf53e2b37466c7b4c435007bbde5f93c132198a2c1be62"
+      },
+      {
+        "path": "src/reference-span.ts",
+        "sha256": "5bce5a05494448a5740027c078527ab4fb7b0c02f71ff83465c01fd085a4d996"
+      },
+      {
+        "path": "src/returns.ts",
+        "sha256": "a6d4246f25e8f27ef25165d249a47fb88c1fd8214f5217aa0333a6debfada263"
+      },
+      {
+        "path": "src/semver.ts",
+        "sha256": "540570a37143abf182501b8883d36e322a3507b04f1cf7e99f5d71efd17cdd81"
+      },
+      {
+        "path": "src/signs.ts",
+        "sha256": "c8d16ee8bb05a0eb0b41dd6d5912bd43f9c6a93d6dee857cb4530e1dc8a4a590"
+      },
+      {
+        "path": "src/synastry.ts",
+        "sha256": "5671b43c9647a7164d171d9113ae4ab375b7f2a18cba53fac481e4c7a0522d29"
+      },
+      {
+        "path": "src/techniques.ts",
+        "sha256": "7c3786b0ed3ff19d7d21ddb462295932212064710dd1a53a5d38c03107eeb4f9"
+      },
+      {
+        "path": "src/techniques/aspect-patterns.ts",
+        "sha256": "422a3d891e7245781beee02f742f306daf08302f8e654a6ae27b4ce9789ecbe8"
+      },
+      {
+        "path": "src/techniques/dignities.ts",
+        "sha256": "d0fd0c1400e408a5d9ee9af54cfcced3c0b310f38ab99f27323a37d7091ec64e"
+      },
+      {
+        "path": "src/techniques/moon-sign.ts",
+        "sha256": "789ce009534eac6ce2c629d595dfe6fbc0d2310c01d8e290da2dabc135f83331"
+      },
+      {
+        "path": "src/techniques/relationship.ts",
+        "sha256": "e40d4ef50db695063d6c0931303e2d542f066695837ad826a6207056bd66158b"
+      },
+      {
+        "path": "src/techniques/returns.ts",
+        "sha256": "0ff05288efff1021ab2cd93004e5fc3e89243a0443cdff7887616489eb616140"
+      },
+      {
+        "path": "src/techniques/shared.ts",
+        "sha256": "ed53a58b2ac437777ffe3c59c44f2d912b626a0f644ec2755bf5dd12afcb5bb9"
+      },
+      {
+        "path": "src/techniques/void-of-course.ts",
+        "sha256": "8ad32ed382b70120709c3e182a5117443af1f0e29dcd231f8db69d0f405e7623"
+      },
+      {
+        "path": "src/time-scale-data.ts",
+        "sha256": "44c6b80db298e55a050b59cb75975ba2059abb775b16b849022ee5a5849280a0"
+      },
+      {
+        "path": "src/time-scale.ts",
+        "sha256": "6358ab9f119f55e367b7a8cb601c0ed2a6fa0a1b083a8e48b2aa59cd96c7b9d6"
+      },
+      {
+        "path": "src/types.ts",
+        "sha256": "36df3203e30792faff1ad5671e26ff5c03789c3dd6adee7d9ec357e2335b2353"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-00.ts",
+        "sha256": "19d3cfa6daa865f1e50516ba7050e6f9c419aa981009b102ccaef90a285a9d29"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-01.ts",
+        "sha256": "9c454a26007f996114ab2461dd4126cdc678c0d9c534cd7e552d783559ad7714"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-02.ts",
+        "sha256": "c2cb640f817013adedfcafd6a5a5ba84835f1143f343399488c5ad94c77ce3b6"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-03.ts",
+        "sha256": "52811aba7d40bd8a09b7cd4fb70a475009ffb667b2c29165b3c7eae63d80693d"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-04.ts",
+        "sha256": "badada76b2e60507d4b25b0f5dbed08428583fee6943e414cb8e782696ff009b"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-05.ts",
+        "sha256": "f4ec4e6243cf04a6b137384192c46b4db17a9eadb0cd99edf572256924e8c462"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-06.ts",
+        "sha256": "0649c2102cf348678dae535841f86eda26e1aed4f73476ab8e7d666dcc7fecde"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-07.ts",
+        "sha256": "c41f454c34d23def14bc9d2ec036660dfa638632b923572c22ab59efa78d94fc"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-08.ts",
+        "sha256": "c36fcb32cb10485a3560d571f9713887ba369a72f575ea3f87c38e53d909ea4f"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-09.ts",
+        "sha256": "e8304ca332f4bbf494c4942bcc3859d537f36571a4f2f19698fb0e77266865f8"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-10.ts",
+        "sha256": "36ce42fce0310f82d205f07f5aa7369b7212a7b0d936aba52fcd297da762c2d9"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-11.ts",
+        "sha256": "54b213b7f868d6e427884d87b36e6ae7d86dda8ca1c0f5a48734d6fb900393ff"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-12.ts",
+        "sha256": "904c7dbfb73474cce676c48bd258726b7b8b03054336d4ba8daedd2b6c2990d8"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-13.ts",
+        "sha256": "97418bf99bfa4917f09ab08aea032ca13860859fbd832780a6cdf56678517a0c"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-14.ts",
+        "sha256": "b1f5ee3f89072223f450d6a483650466db1237adca1ec8b70ed8707e1611c353"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c-15.ts",
+        "sha256": "db32592f35e50f415e9400e55eb0cc9b54aa5937a1312e080c897b6135f34324"
+      },
+      {
+        "path": "src/tzdb/tzdb-2025c.ts",
+        "sha256": "68e4c054a053655e846062eebe41e5ee8f4e198dcbb2a145611a087e1b88b2df"
+      },
+      {
+        "path": "src/vedic/ayanamsa.ts",
+        "sha256": "25163563938d80ffa8f15070370b8c196a37c98db47aa83456885872b7e0cd09"
+      },
+      {
+        "path": "src/vedic/grid.ts",
+        "sha256": "a84b2ecf329462d493ec3570581faea9082a0eb0561d0c2a29abc375edcea676"
+      },
+      {
+        "path": "src/vedic/sidereal.ts",
+        "sha256": "bceb910e5fe7c83e427287e10fc46714ed6ff874050e3228769b9d7f7ac16cbf"
+      }
+    ],
+    "bundles": [
+      {
+        "path": "server/build/main.js",
+        "bytes": 215316,
+        "sha256": "7b7381d950e74f0cebfeb26114f7d92da1209118a92820303e5017d94b2b9684"
+      },
+      {
+        "path": "server/build/calculation-worker.js",
+        "bytes": 160897,
+        "sha256": "6e364da76a80cefbc58a2d61163290a30f4a177af26407f49d835ab7bacab313"
+      }
+    ],
+    "packages": {
+      "autocannon": "8.0.0",
+      "fastify": "5.12.5",
+      "astronomy-engine": "2.1.19",
+      "esbuild": "0.28.2"
+    }
+  },
+  "machine": {
+    "platform": "linux",
+    "release": "6.12.94+",
+    "arch": "x64",
+    "node": "v22.23.3",
+    "v8": "12.4.254.21-node.57",
+    "cpuModels": [
+      "Intel(R) Xeon(R) Processor"
+    ],
+    "logicalCpus": 8,
+    "availableParallelism": 8,
+    "hostMemoryBytes": 16791158784,
+    "loadAverage": [
+      1.26,
+      4.18,
+      6.77
+    ],
+    "cgroupV2": [
+      {
+        "ancestor": 0,
+        "cpu.max": "max 100000",
+        "cpu.stat": "usage_usec 63217184661\nuser_usec 51532064050\nsystem_usec 11685120611\nnice_usec 11122346027\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0",
+        "memory.max": "max",
+        "cpuset.cpus.effective": "0-7"
+      },
+      {
+        "ancestor": 1,
+        "cpu.max": null,
+        "cpu.stat": "usage_usec 68674217433\nuser_usec 51147049614\nsystem_usec 17527167819\nnice_usec 11122346027\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0",
+        "memory.max": null,
+        "cpuset.cpus.effective": "0-7"
+      }
+    ]
+  },
+  "machineAfter": {
+    "loadAverage": [
+      3.66,
+      3.36,
+      5.56
+    ],
+    "cgroupV2": [
+      {
+        "ancestor": 0,
+        "cpu.max": "max 100000",
+        "cpu.stat": "usage_usec 64104244364\nuser_usec 52313129643\nsystem_usec 11791114720\nnice_usec 11176791037\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0",
+        "memory.max": "max",
+        "cpuset.cpus.effective": "0-7"
+      },
+      {
+        "ancestor": 1,
+        "cpu.max": null,
+        "cpu.stat": "usage_usec 69613495578\nuser_usec 51923373702\nsystem_usec 17690121876\nnice_usec 11176791037\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0",
+        "memory.max": null,
+        "cpuset.cpus.effective": "0-7"
+      }
+    ]
+  },
+  "configuration": {
+    "rateLimit": {
+      "capacity": 10000,
+      "refillPerSecond": 10000,
+      "costPerAuthenticatedRequest": 1,
+      "description": "Per-key token bucket shared across protected routes, initially full, refilled using monotonic elapsed time. Invalid authenticated requests consume tokens. Rate-limit rejections do not consume a token. Public GET routes are unmetered even with credentials. Buckets reset on restart; replicas have independent allowances. These values describe this process configuration."
+    },
+    "resources": {
+      "maxConnections": 128,
+      "requestTimeoutMs": 30000,
+      "shutdownTimeoutMs": 10000,
+      "calculationTimeoutMs": 5000,
+      "calculationQueueSize": 8,
+      "headerBytes": 16384,
+      "headersTimeoutMs": 10000,
+      "timeoutCheckIntervalMs": 1000,
+      "keepAliveTimeoutMs": 5000,
+      "description": "The executable runs one calculation worker, with a bounded FIFO queue shared across keys. The calculation deadline includes queue wait and ends at the worker result, excluding JSON transfer. Admission follows authentication, rate limiting and validation. A full queue returns server_busy; recovery or shutdown returns not_ready; an expired calculation returns calculation_timeout with no partial result. Worker loss returns calculation_failed and rejects queued jobs as not_ready. Saturation alone does not fail readiness. Timed out active work terminates the worker before replacement. Deadlines are enforced by the HTTP event loop, subject to scheduling delay. The socket cap drops excess TCP connections without an HTTP response. Header timeout is the smaller of headersTimeoutMs and requestTimeoutMs; request timeout and socket inactivity timeout both use requestTimeoutMs. The shutdown deadline can end connections before their own deadlines."
+    },
+    "logLevel": "info",
+    "timeZone": "UTC",
+    "locale": "C",
+    "logSink": "child stdout pipe continuously drained and discarded",
+    "workers": 1,
+    "keys": 4,
+    "keyAssignment": "one distinct key per concurrent connection; the same pool remains configured across all trials"
+  },
+  "methodology": {
+    "transport": "HTTP/1.1 loopback keep-alive; client and server are separate processes on this machine",
+    "load": "closed loop, fixed connections, pipelining 1, no target arrival rate; uncorrected observed latency",
+    "latency": "autocannon full-response events in ms, ceil to ns, Node HDR histogram with 3 significant digits; p50 and p95 queried directly",
+    "throughput": "completed HTTP 200 responses divided by monotonic elapsed seconds from performance.now around the autocannon invocation through its completion callback, including client setup and aggregation",
+    "clocks": "durationSeconds is monotonic; requestedDurationSeconds is the configured target; autocannonDurationSeconds is its wall-clock duration rounded to 0.01s; start/finish timestamps are wall clock",
+    "cutoff": "autocannon destroys in-flight requests at the time limit; sent minus completed are excluded from latency",
+    "verification": "every full body parsed and checked for engine identity, receipt scopes and minimal receipt shape; no independent accuracy claim",
+    "order": "repetition, then workload order, then connection order; a separate warmup precedes each measurement",
+    "barriers": "after each warmup and measurement, await an unmeasured calculation on the same FIFO to finish earlier-admitted jobs"
+  },
+  "limitations": [
+    "Shared host; CPU model and visible limits do not establish exclusive resources or hidden ancestor limits.",
+    "Client JSON checks and log draining consume this machine too; no remote client, TLS, reverse proxy or container is measured.",
+    "One repeated synthetic input per route; no mix, varied dates, long soak, overload capacity or astronomical accuracy claim.",
+    "Buckets are raised for throughput measurement; production defaults impose lower per-key allowances.",
+    "Closed-loop results and unfinished tails do not represent latency under a fixed external arrival rate.",
+    "No general service-level objective or production sizing guarantee follows from these runs."
+  ],
+  "workloads": [
+    {
+      "name": "natal",
+      "path": "/v1/natal",
+      "body": {
+        "utc": "2001-02-03T04:05:06.789Z",
+        "latitude": 23.45,
+        "longitude": -67.89
+      },
+      "scopes": [
+        "/data"
+      ]
+    },
+    {
+      "name": "transits",
+      "path": "/v1/transits",
+      "body": {
+        "natal": {
+          "utc": "2001-02-03T04:05:06.789Z",
+          "latitude": 23.45,
+          "longitude": -67.89
+        },
+        "at": "2024-06-07T08:09:10+02:00"
+      },
+      "scopes": [
+        "/data/natal",
+        "/data/sky"
+      ]
+    },
+    {
+      "name": "synastry",
+      "path": "/v1/synastry",
+      "body": {
+        "a": {
+          "utc": "2001-02-03T04:05:06.789Z",
+          "latitude": 23.45,
+          "longitude": -67.89
+        },
+        "b": {
+          "utc": "2003-07-08T09:10:11Z",
+          "timeKnown": false
+        }
+      },
+      "scopes": [
+        "/data/a",
+        "/data/b"
+      ]
+    },
+    {
+      "name": "solar",
+      "path": "/v1/returns/solar",
+      "body": {
+        "natal": {
+          "utc": "2001-02-03T04:05:06.789Z",
+          "latitude": 23.45,
+          "longitude": -67.89
+        },
+        "at": "2024-06-07T08:09:10+02:00",
+        "selection": "most-recent",
+        "location": null
+      },
+      "scopes": [
+        "/data/natal",
+        "/data/chart"
+      ]
+    },
+    {
+      "name": "lunar",
+      "path": "/v1/returns/lunar",
+      "body": {
+        "natal": {
+          "utc": "2001-02-03T04:05:06.789Z",
+          "latitude": 23.45,
+          "longitude": -67.89
+        },
+        "after": "2024-06-07T08:09:10+02:00",
+        "location": null
+      },
+      "scopes": [
+        "/data/natal",
+        "/data/chart"
+      ]
+    },
+    {
+      "name": "moon-phase",
+      "path": "/v1/moon-phase",
+      "body": {
+        "at": "2024-06-07T08:09:10+02:00"
+      },
+      "scopes": [
+        "/data/sky"
+      ]
+    },
+    {
+      "name": "houses",
+      "path": "/v1/houses",
+      "body": {
+        "time": {
+          "iso": "2004-02-29T08:30:00+02:00",
+          "deltaT": 70
+        },
+        "place": {
+          "latitude": 48.25,
+          "longitude": -3.75
+        },
+        "houseSystem": "placidus"
+      },
+      "scopes": [
+        "/data"
+      ]
+    }
+  ],
+  "preflight": [
+    {
+      "name": "natal",
+      "status": 200,
+      "responseBytes": 10155
+    },
+    {
+      "name": "transits",
+      "status": 200,
+      "responseBytes": 25215
+    },
+    {
+      "name": "synastry",
+      "status": 200,
+      "responseBytes": 23111
+    },
+    {
+      "name": "solar",
+      "status": 200,
+      "responseBytes": 19133
+    },
+    {
+      "name": "lunar",
+      "status": 200,
+      "responseBytes": 18902
+    },
+    {
+      "name": "moon-phase",
+      "status": 200,
+      "responseBytes": 9120
+    },
+    {
+      "name": "houses",
+      "status": 200,
+      "responseBytes": 3121
+    }
+  ],
+  "runs": [
+    {
+      "workload": "natal",
+      "repetition": 1,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:33:51.733Z",
+        "finishedAt": "2026-10-13T11:33:53.738Z",
+        "durationSeconds": 2.014467121,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2.01,
+        "sent": 731,
+        "completed": 730,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 362.3787116652573,
+        "statusCounts": {
+          "200": 730
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 730,
+          "p50": 2.494463,
+          "p95": 3.446783,
+          "max": 25.411583
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:33:53.752Z",
+        "finishedAt": "2026-10-13T11:34:03.756Z",
+        "durationSeconds": 10.008553925,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 4255,
+        "completed": 4254,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 425.0364270280934,
+        "statusCounts": {
+          "200": 4254
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 4254,
+          "p50": 2.193407,
+          "p95": 3.010559,
+          "max": 56.983551
+        }
+      }
+    },
+    {
+      "workload": "natal",
+      "repetition": 1,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:34:03.767Z",
+        "finishedAt": "2026-10-13T11:34:05.768Z",
+        "durationSeconds": 2.00516273,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 1235,
+        "completed": 1231,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 613.9152606332356,
+        "statusCounts": {
+          "200": 1231
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1231,
+          "p50": 6.225919,
+          "p95": 8.470527,
+          "max": 10.067967
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:34:05.776Z",
+        "finishedAt": "2026-10-13T11:34:15.779Z",
+        "durationSeconds": 10.006207278999998,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 5669,
+        "completed": 5665,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 566.1485757834661,
+        "statusCounts": {
+          "200": 5665
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 5665,
+          "p50": 6.496255,
+          "p95": 9.887743,
+          "max": 43.417599
+        }
+      }
+    },
+    {
+      "workload": "transits",
+      "repetition": 1,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:34:15.789Z",
+        "finishedAt": "2026-10-13T11:34:17.789Z",
+        "durationSeconds": 2.0033604449999984,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 424,
+        "completed": 423,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 211.14522903540723,
+        "statusCounts": {
+          "200": 423
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 423,
+          "p50": 4.571135,
+          "p95": 6.021119,
+          "max": 9.371647
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:34:17.799Z",
+        "finishedAt": "2026-10-13T11:34:27.803Z",
+        "durationSeconds": 10.007324637999998,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 2095,
+        "completed": 2094,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 209.24673434182642,
+        "statusCounts": {
+          "200": 2094
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 2094,
+          "p50": 4.456447,
+          "p95": 6.139903,
+          "max": 67.305471
+        }
+      }
+    },
+    {
+      "workload": "transits",
+      "repetition": 1,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:34:27.814Z",
+        "finishedAt": "2026-10-13T11:34:29.816Z",
+        "durationSeconds": 2.0053785500000014,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 474,
+        "completed": 470,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 234.36971538366143,
+        "statusCounts": {
+          "200": 470
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 470,
+          "p50": 15.507455,
+          "p95": 22.937599,
+          "max": 32.686079
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:34:29.838Z",
+        "finishedAt": "2026-10-13T11:34:39.841Z",
+        "durationSeconds": 10.005066249000004,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 2528,
+        "completed": 2524,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 252.27219262563816,
+        "statusCounts": {
+          "200": 2524
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 2524,
+          "p50": 15.048703,
+          "p95": 20.463615,
+          "max": 54.820863
+        }
+      }
+    },
+    {
+      "workload": "synastry",
+      "repetition": 1,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:34:39.857Z",
+        "finishedAt": "2026-10-13T11:34:41.858Z",
+        "durationSeconds": 2.0032775330000003,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 520,
+        "completed": 519,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 259.0754358547483,
+        "statusCounts": {
+          "200": 519
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 519,
+          "p50": 3.698687,
+          "p95": 4.894719,
+          "max": 6.201343
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:34:41.866Z",
+        "finishedAt": "2026-10-13T11:34:52.866Z",
+        "durationSeconds": 11.004167592999998,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 11,
+        "sent": 2627,
+        "completed": 2626,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 238.6368598812016,
+        "statusCounts": {
+          "200": 2626
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 2626,
+          "p50": 3.844095,
+          "p95": 5.730303,
+          "max": 53.149695
+        }
+      }
+    },
+    {
+      "workload": "synastry",
+      "repetition": 1,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:34:52.878Z",
+        "finishedAt": "2026-10-13T11:34:54.879Z",
+        "durationSeconds": 2.004179609999999,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 609,
+        "completed": 605,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 301.8691523361024,
+        "statusCounts": {
+          "200": 605
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 605,
+          "p50": 12.312575,
+          "p95": 17.940479,
+          "max": 19.152895
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:34:54.894Z",
+        "finishedAt": "2026-10-13T11:35:05.894Z",
+        "durationSeconds": 11.004309921000008,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 11,
+        "sent": 3412,
+        "completed": 3408,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 309.6968391899218,
+        "statusCounts": {
+          "200": 3408
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 3408,
+          "p50": 12.394495,
+          "p95": 16.646143,
+          "max": 41.451519
+        }
+      }
+    },
+    {
+      "workload": "solar",
+      "repetition": 1,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:35:05.908Z",
+        "finishedAt": "2026-10-13T11:35:07.910Z",
+        "durationSeconds": 2.0028685739999927,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 256,
+        "completed": 255,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 127.31739032218742,
+        "statusCounts": {
+          "200": 255
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 255,
+          "p50": 7.401471,
+          "p95": 10.747903,
+          "max": 11.984895
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:35:07.922Z",
+        "finishedAt": "2026-10-13T11:35:17.926Z",
+        "durationSeconds": 10.006344113999992,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 1248,
+        "completed": 1247,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 124.62093905558453,
+        "statusCounts": {
+          "200": 1247
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1247,
+          "p50": 7.454719,
+          "p95": 10.657791,
+          "max": 58.556415
+        }
+      }
+    },
+    {
+      "workload": "solar",
+      "repetition": 1,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:35:17.943Z",
+        "finishedAt": "2026-10-13T11:35:19.945Z",
+        "durationSeconds": 2.0053422890000077,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 282,
+        "completed": 278,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 138.6297000392031,
+        "statusCounts": {
+          "200": 278
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 278,
+          "p50": 27.721727,
+          "p95": 34.373631,
+          "max": 58.949631
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:35:19.975Z",
+        "finishedAt": "2026-10-13T11:35:29.982Z",
+        "durationSeconds": 10.010568440999997,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10.01,
+        "sent": 1366,
+        "completed": 1362,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 136.0562097974073,
+        "statusCounts": {
+          "200": 1362
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1362,
+          "p50": 27.836415,
+          "p95": 38.240255,
+          "max": 53.215231
+        }
+      }
+    },
+    {
+      "workload": "lunar",
+      "repetition": 1,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:35:30.011Z",
+        "finishedAt": "2026-10-13T11:35:32.012Z",
+        "durationSeconds": 2.0031377610000054,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 285,
+        "completed": 284,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 141.77756793832376,
+        "statusCounts": {
+          "200": 284
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 284,
+          "p50": 6.504447,
+          "p95": 8.962047,
+          "max": 49.020927
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:35:32.024Z",
+        "finishedAt": "2026-10-13T11:35:42.027Z",
+        "durationSeconds": 10.006474688000003,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 1504,
+        "completed": 1503,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 150.20274840673235,
+        "statusCounts": {
+          "200": 1503
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1503,
+          "p50": 6.385663,
+          "p95": 8.757247,
+          "max": 15.556607
+        }
+      }
+    },
+    {
+      "workload": "lunar",
+      "repetition": 1,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:35:42.042Z",
+        "finishedAt": "2026-10-13T11:35:44.044Z",
+        "durationSeconds": 2.0055506900000037,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 315,
+        "completed": 311,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 155.06962828249402,
+        "statusCounts": {
+          "200": 311
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 311,
+          "p50": 23.674879,
+          "p95": 33.341439,
+          "max": 73.793535
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:35:44.074Z",
+        "finishedAt": "2026-10-13T11:35:55.076Z",
+        "durationSeconds": 11.004952187999995,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 11,
+        "sent": 1894,
+        "completed": 1890,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 171.7408642684419,
+        "statusCounts": {
+          "200": 1890
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1890,
+          "p50": 22.691839,
+          "p95": 29.261823,
+          "max": 38.764543
+        }
+      }
+    },
+    {
+      "workload": "moon-phase",
+      "repetition": 1,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:35:55.100Z",
+        "finishedAt": "2026-10-13T11:35:57.101Z",
+        "durationSeconds": 2.0028731439999974,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 966,
+        "completed": 965,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 481.8078483357013,
+        "statusCounts": {
+          "200": 965
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 965,
+          "p50": 1.965055,
+          "p95": 2.777087,
+          "max": 4.313087
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:35:57.108Z",
+        "finishedAt": "2026-10-13T11:36:07.110Z",
+        "durationSeconds": 10.005066615000004,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 5080,
+        "completed": 5079,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 507.6427969390385,
+        "statusCounts": {
+          "200": 5079
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 5079,
+          "p50": 1.862655,
+          "p95": 2.588671,
+          "max": 30.408703
+        }
+      }
+    },
+    {
+      "workload": "moon-phase",
+      "repetition": 1,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:36:07.118Z",
+        "finishedAt": "2026-10-13T11:36:09.119Z",
+        "durationSeconds": 2.003386631000001,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 1298,
+        "completed": 1294,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 645.9062768897949,
+        "statusCounts": {
+          "200": 1294
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1294,
+          "p50": 5.648383,
+          "p95": 8.495103,
+          "max": 48.791551
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:36:09.127Z",
+        "finishedAt": "2026-10-13T11:36:19.129Z",
+        "durationSeconds": 10.004886767999997,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 6790,
+        "completed": 6786,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 678.2685458974504,
+        "statusCounts": {
+          "200": 6786
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 6786,
+          "p50": 5.693439,
+          "p95": 7.753727,
+          "max": 28.114943
+        }
+      }
+    },
+    {
+      "workload": "houses",
+      "repetition": 1,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:36:19.137Z",
+        "finishedAt": "2026-10-13T11:36:21.137Z",
+        "durationSeconds": 2.002626149999996,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 10518,
+        "completed": 10517,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 5251.60424974977,
+        "statusCounts": {
+          "200": 10517
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 10517,
+          "p50": 0.158591,
+          "p95": 0.333055,
+          "max": 8.773631
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:36:21.141Z",
+        "finishedAt": "2026-10-13T11:36:32.142Z",
+        "durationSeconds": 11.003864398000005,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 11,
+        "sent": 58026,
+        "completed": 58025,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 5273.147496305595,
+        "statusCounts": {
+          "200": 58025
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 58025,
+          "p50": 0.157439,
+          "p95": 0.308991,
+          "max": 42.041343
+        }
+      }
+    },
+    {
+      "workload": "houses",
+      "repetition": 1,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:36:32.149Z",
+        "finishedAt": "2026-10-13T11:36:34.150Z",
+        "durationSeconds": 2.003116206000006,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 21773,
+        "completed": 21769,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 10867.567210925923,
+        "statusCounts": {
+          "200": 21769
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 21769,
+          "p50": 0.313087,
+          "p95": 0.637439,
+          "max": 12.623871
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:36:34.155Z",
+        "finishedAt": "2026-10-13T11:36:44.156Z",
+        "durationSeconds": 10.003956636000018,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 103192,
+        "completed": 103188,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 10314.71884121028,
+        "statusCounts": {
+          "200": 103188
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 103188,
+          "p50": 0.323839,
+          "p95": 0.649727,
+          "max": 13.287423
+        }
+      }
+    },
+    {
+      "workload": "natal",
+      "repetition": 2,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:36:44.160Z",
+        "finishedAt": "2026-10-13T11:36:46.161Z",
+        "durationSeconds": 2.0029375690000015,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 938,
+        "completed": 937,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 467.81288368753906,
+        "statusCounts": {
+          "200": 937
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 937,
+          "p50": 2.050047,
+          "p95": 2.785279,
+          "max": 5.869567
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:36:46.168Z",
+        "finishedAt": "2026-10-13T11:36:56.172Z",
+        "durationSeconds": 10.005493855000008,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 4806,
+        "completed": 4805,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 480.2361652142553,
+        "statusCounts": {
+          "200": 4805
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 4805,
+          "p50": 2.017279,
+          "p95": 2.699263,
+          "max": 37.584895
+        }
+      }
+    },
+    {
+      "workload": "natal",
+      "repetition": 2,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:36:56.178Z",
+        "finishedAt": "2026-10-13T11:36:58.179Z",
+        "durationSeconds": 2.0032031290000014,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 1163,
+        "completed": 1159,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 578.5733774180817,
+        "statusCounts": {
+          "200": 1159
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1159,
+          "p50": 6.488063,
+          "p95": 9.617407,
+          "max": 11.894783
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:36:58.188Z",
+        "finishedAt": "2026-10-13T11:37:09.190Z",
+        "durationSeconds": 11.004548083000001,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 11,
+        "sent": 6376,
+        "completed": 6372,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 579.0333189459698,
+        "statusCounts": {
+          "200": 6372
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 6372,
+          "p50": 6.434815,
+          "p95": 9.437183,
+          "max": 41.189375
+        }
+      }
+    },
+    {
+      "workload": "transits",
+      "repetition": 2,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:37:09.198Z",
+        "finishedAt": "2026-10-13T11:37:11.199Z",
+        "durationSeconds": 2.0038916540000065,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 393,
+        "completed": 392,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 195.61935857037045,
+        "statusCounts": {
+          "200": 392
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 392,
+          "p50": 4.747263,
+          "p95": 7.102463,
+          "max": 14.270463
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:37:11.208Z",
+        "finishedAt": "2026-10-13T11:37:21.211Z",
+        "durationSeconds": 10.005744389,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 2250,
+        "completed": 2249,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 224.7708828612971,
+        "statusCounts": {
+          "200": 2249
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 2249,
+          "p50": 4.276223,
+          "p95": 5.656575,
+          "max": 17.317887
+        }
+      }
+    },
+    {
+      "workload": "transits",
+      "repetition": 2,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:37:21.220Z",
+        "finishedAt": "2026-10-13T11:37:23.222Z",
+        "durationSeconds": 2.0048883209999766,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 534,
+        "completed": 530,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 264.3538766965595,
+        "statusCounts": {
+          "200": 530
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 530,
+          "p50": 14.606335,
+          "p95": 17.989631,
+          "max": 24.428543
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:37:23.239Z",
+        "finishedAt": "2026-10-13T11:37:33.242Z",
+        "durationSeconds": 10.006939299999997,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 2630,
+        "completed": 2626,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 262.4179003464127,
+        "statusCounts": {
+          "200": 2626
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 2626,
+          "p50": 14.581759,
+          "p95": 21.299199,
+          "max": 46.366719
+        }
+      }
+    },
+    {
+      "workload": "synastry",
+      "repetition": 2,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:37:33.258Z",
+        "finishedAt": "2026-10-13T11:37:35.259Z",
+        "durationSeconds": 2.0034141499999967,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 524,
+        "completed": 523,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 261.0543606273325,
+        "statusCounts": {
+          "200": 523
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 523,
+          "p50": 3.680255,
+          "p95": 4.952063,
+          "max": 8.327167
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:37:35.268Z",
+        "finishedAt": "2026-10-13T11:37:45.270Z",
+        "durationSeconds": 10.004403733000014,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 2537,
+        "completed": 2536,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 253.48837048977543,
+        "statusCounts": {
+          "200": 2536
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 2536,
+          "p50": 3.692543,
+          "p95": 5.201919,
+          "max": 35.291135
+        }
+      }
+    },
+    {
+      "workload": "synastry",
+      "repetition": 2,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:37:45.279Z",
+        "finishedAt": "2026-10-13T11:37:47.280Z",
+        "durationSeconds": 2.004190619000001,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 602,
+        "completed": 598,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 298.37481242097346,
+        "statusCounts": {
+          "200": 598
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 598,
+          "p50": 12.746751,
+          "p95": 16.793599,
+          "max": 20.414463
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:37:47.296Z",
+        "finishedAt": "2026-10-13T11:37:57.301Z",
+        "durationSeconds": 10.007006152000017,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10.01,
+        "sent": 3211,
+        "completed": 3207,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 320.47547001448015,
+        "statusCounts": {
+          "200": 3207
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 3207,
+          "p50": 12.083199,
+          "p95": 15.859711,
+          "max": 21.741567
+        }
+      }
+    },
+    {
+      "workload": "solar",
+      "repetition": 2,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:37:57.317Z",
+        "finishedAt": "2026-10-13T11:37:59.317Z",
+        "durationSeconds": 2.001869489000004,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 267,
+        "completed": 266,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 132.8757950813643,
+        "statusCounts": {
+          "200": 266
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 266,
+          "p50": 7.081983,
+          "p95": 9.936895,
+          "max": 41.746431
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:37:59.330Z",
+        "finishedAt": "2026-10-13T11:38:10.331Z",
+        "durationSeconds": 11.003887448000023,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 11,
+        "sent": 1525,
+        "completed": 1524,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 138.49650927472817,
+        "statusCounts": {
+          "200": 1524
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1524,
+          "p50": 7.049215,
+          "p95": 8.519679,
+          "max": 15.474687
+        }
+      }
+    },
+    {
+      "workload": "solar",
+      "repetition": 2,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:38:10.344Z",
+        "finishedAt": "2026-10-13T11:38:12.347Z",
+        "durationSeconds": 2.0048759940000016,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 306,
+        "completed": 302,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 150.63275778841,
+        "statusCounts": {
+          "200": 302
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 302,
+          "p50": 25.739263,
+          "p95": 28.393471,
+          "max": 65.175551
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:38:12.375Z",
+        "finishedAt": "2026-10-13T11:38:22.380Z",
+        "durationSeconds": 10.007623217999994,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10.01,
+        "sent": 1480,
+        "completed": 1476,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 147.48756701243755,
+        "statusCounts": {
+          "200": 1476
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1476,
+          "p50": 26.165247,
+          "p95": 32.653311,
+          "max": 75.038719
+        }
+      }
+    },
+    {
+      "workload": "lunar",
+      "repetition": 2,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:38:22.414Z",
+        "finishedAt": "2026-10-13T11:38:24.414Z",
+        "durationSeconds": 2.00239710500004,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 318,
+        "completed": 317,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 158.31025684587857,
+        "statusCounts": {
+          "200": 317
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 317,
+          "p50": 6.238207,
+          "p95": 7.323647,
+          "max": 9.420799
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:38:24.429Z",
+        "finishedAt": "2026-10-13T11:38:34.432Z",
+        "durationSeconds": 10.00607196999999,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 1550,
+        "completed": 1549,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 154.806002259846,
+        "statusCounts": {
+          "200": 1549
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1549,
+          "p50": 6.225919,
+          "p95": 8.085503,
+          "max": 42.172415
+        }
+      }
+    },
+    {
+      "workload": "lunar",
+      "repetition": 2,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:38:34.445Z",
+        "finishedAt": "2026-10-13T11:38:36.447Z",
+        "durationSeconds": 2.004372414999991,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 350,
+        "completed": 346,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 172.62261115282888,
+        "statusCounts": {
+          "200": 346
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 346,
+          "p50": 22.511615,
+          "p95": 28.065791,
+          "max": 37.191679
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:38:36.478Z",
+        "finishedAt": "2026-10-13T11:38:46.481Z",
+        "durationSeconds": 10.004933755000005,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 1670,
+        "completed": 1666,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 166.51784417537098,
+        "statusCounts": {
+          "200": 1666
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1666,
+          "p50": 22.151167,
+          "p95": 34.013183,
+          "max": 57.049087
+        }
+      }
+    },
+    {
+      "workload": "moon-phase",
+      "repetition": 2,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:38:46.518Z",
+        "finishedAt": "2026-10-13T11:38:48.520Z",
+        "durationSeconds": 2.004329616000003,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 962,
+        "completed": 961,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 479.46205670395017,
+        "statusCounts": {
+          "200": 961
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 961,
+          "p50": 1.959935,
+          "p95": 2.854911,
+          "max": 3.434495
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:38:48.526Z",
+        "finishedAt": "2026-10-13T11:38:58.530Z",
+        "durationSeconds": 10.006027062000008,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 4942,
+        "completed": 4941,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 493.8023822426472,
+        "statusCounts": {
+          "200": 4941
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 4941,
+          "p50": 1.894399,
+          "p95": 2.725887,
+          "max": 44.957695
+        }
+      }
+    },
+    {
+      "workload": "moon-phase",
+      "repetition": 2,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:38:58.537Z",
+        "finishedAt": "2026-10-13T11:39:00.538Z",
+        "durationSeconds": 2.0036912620000074,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 1301,
+        "completed": 1297,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 647.3053132474035,
+        "statusCounts": {
+          "200": 1297
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 1297,
+          "p50": 5.971967,
+          "p95": 7.991295,
+          "max": 18.661375
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:39:00.546Z",
+        "finishedAt": "2026-10-13T11:39:10.549Z",
+        "durationSeconds": 10.005959844999946,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 10,
+        "sent": 6182,
+        "completed": 6178,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 617.4320200862282,
+        "statusCounts": {
+          "200": 6178
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 6178,
+          "p50": 5.832703,
+          "p95": 9.027583,
+          "max": 53.477375
+        }
+      }
+    },
+    {
+      "workload": "houses",
+      "repetition": 2,
+      "connections": 1,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:39:10.558Z",
+        "finishedAt": "2026-10-13T11:39:12.559Z",
+        "durationSeconds": 2.004989480999997,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 8969,
+        "completed": 8968,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 4472.841421356073,
+        "statusCounts": {
+          "200": 8968
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 8968,
+          "p50": 0.167551,
+          "p95": 0.404735,
+          "max": 23.642111
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:39:12.566Z",
+        "finishedAt": "2026-10-13T11:39:23.566Z",
+        "durationSeconds": 11.004719169000047,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 11,
+        "sent": 50599,
+        "completed": 50598,
+        "unfinishedAtStop": 1,
+        "successfulResponsesPerSecond": 4597.845635400947,
+        "statusCounts": {
+          "200": 50598
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 50598,
+          "p50": 0.178687,
+          "p95": 0.374527,
+          "max": 80.281599
+        }
+      }
+    },
+    {
+      "workload": "houses",
+      "repetition": 2,
+      "connections": 4,
+      "warmup": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:39:23.573Z",
+        "finishedAt": "2026-10-13T11:39:25.574Z",
+        "durationSeconds": 2.004137673000048,
+        "requestedDurationSeconds": 2,
+        "autocannonDurationSeconds": 2,
+        "sent": 15039,
+        "completed": 15035,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 7501.979630717534,
+        "statusCounts": {
+          "200": 15035
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 15035,
+          "p50": 0.416511,
+          "p95": 1.086463,
+          "max": 56.983551
+        }
+      },
+      "measurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:39:25.579Z",
+        "finishedAt": "2026-10-13T11:39:36.580Z",
+        "durationSeconds": 11.004678657000012,
+        "requestedDurationSeconds": 10,
+        "autocannonDurationSeconds": 11,
+        "sent": 89848,
+        "completed": 89844,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 8164.163879774059,
+        "statusCounts": {
+          "200": 89844
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 89844,
+          "p50": 0.403455,
+          "p95": 0.890879,
+          "max": 85.262335
+        }
+      }
+    }
+  ]
+}

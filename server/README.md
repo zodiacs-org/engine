@@ -7,6 +7,8 @@ API-key authentication, per-key rate limits, bounded JSON validation, JSON
 logging, generated OpenAPI and process lifecycle. See
 [DEPLOYMENT.md](DEPLOYMENT.md) for Docker, credential mounts, probes,
 reverse proxies, shutdown and deployment validation.
+See [LOAD-TESTING.md](LOAD-TESTING.md) for the local autocannon harness,
+measured throughput and latency evidence, and the limits of those measurements.
 
 ## Run from a checkout
 
