@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
-import * as fsPromises from "node:fs/promises";
+import fsPromises from "node:fs/promises";
 import { access, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
+import { syncBuiltinESMExports } from "node:module";
 import { basename, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -306,11 +307,15 @@ describe("segmented source directories", () => {
       if (file === part) Object.defineProperty(stat, "size", { value: INDEX_FILE_LIMIT });
       return stat;
     });
+    // Native ESM namespace properties cannot be spied on. Update the named
+    // builtin imports after patching the mutable default export instead.
+    syncBuiltinESMExports();
     try {
       await expect(buildGeoNamesIndex({ ...options, places: { ...options.places, path } })).rejects.toThrow(/source part exceeds file byte limit/i);
       await expect(access(options.outputDirectory)).rejects.toThrow();
     } finally {
       lstatSpy.mockRestore();
+      syncBuiltinESMExports();
     }
   });
 
@@ -418,6 +423,32 @@ describe("bounded index publication", () => {
     const options = await fixture();
     options[kind] = { ...options[kind], expectedSha256: "0".repeat(64) };
     await rejectsAndCleans(options);
+  });
+
+  it("rejects source changes between hashing and parsing and cleans already emitted shards", async () => {
+    const rows = Array.from({ length: 15 }, (_, index) => placeRow({ 0: String(900000000000001 + index) }));
+    const options = { ...await fixture({ places: rows.join("\n") }), maxShardBytes: 2200 };
+    const changed = `${rows.join("\n")}\n${placeRow({ 0: "900000000000099", 6: "H", 7: "STM" })}\n`;
+    const originalMkdir = fsPromises.mkdir;
+    const mkdirSpy = vi.spyOn(fsPromises, "mkdir").mockImplementation(async (path, settings) => {
+      const result = await originalMkdir(path, settings);
+      // The builder creates its new output directory after hashing its inputs,
+      // immediately before its second pass over the place source.
+      if (path === options.outputDirectory) await writeFile(options.places.path, changed);
+      return result;
+    });
+    const writeSpy = vi.spyOn(fsPromises, "writeFile");
+    syncBuiltinESMExports();
+    try {
+      await expect(buildGeoNamesIndex(options)).rejects.toThrow(/source changed during build/i);
+      const emitted = writeSpy.mock.calls.filter(([file]) => String(file).startsWith(join(options.outputDirectory, "places-")));
+      expect(emitted.length).toBeGreaterThan(1);
+      await expect(access(options.outputDirectory)).rejects.toThrow();
+    } finally {
+      writeSpy.mockRestore();
+      mkdirSpy.mockRestore();
+      syncBuiltinESMExports();
+    }
   });
 });
 

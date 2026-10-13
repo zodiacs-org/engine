@@ -2,10 +2,10 @@
 
 Code, documentation and invented fixtures authored in this folder are MIT,
 under the repository's [LICENSE](../LICENSE). This folder is outside the
-engine's npm package. Its manifest is private and currently declares MIT
-because this milestone contains no third-party place data.
+engine's npm package. Its private manifest declares `MIT AND CC-BY-4.0`
+because this folder also contains the GeoNames sample described below.
 
-## Planned GeoNames data
+## GeoNames sample and generated indexes
 
 The official [GeoNames dump readme](https://download.geonames.org/export/dump/readme.txt),
 read for this milestone, identifies its downloadable extracts as Creative
@@ -15,23 +15,39 @@ use with credit to GeoNames. The
 [license text](https://creativecommons.org/licenses/by/4.0/)
 sets the attribution requirements.
 
-The sample and rebuilt indexes must retain attribution to GeoNames, a source
-link, a link to the license, and a description of the changes made by the
-builder. Source files must be named with their URLs and SHA-256 digests. The
-future sample will have its own source receipt and NOTICE; neither its data
-nor an attribution for unselected records is fabricated in this milestone.
+The committed sample contains selected complete rows from `cities15000.zip`,
+`NZ.zip`, `AQ.zip`, `admin1CodesASCII.txt` and `countryInfo.txt`. The rows
+were selected and sorted without editing their field values or line endings.
+[data/sample-receipt.json](data/sample-receipt.json) records the source URLs,
+retrieval times, archive and member digests, selected keys, output digests and
+the digest of the source's licensing statement. The selector can check the
+local sample offline or compare its rows with the pinned upstream inputs;
+see [README.md](README.md#build-a-local-place-index).
 
-Expected attribution for derived place records:
+The sample and rebuilt indexes retain attribution to GeoNames, source links,
+a license link and a description of the changes. [NOTICE](NOTICE) accompanies
+the sample. Each generated shard and its manifest carry the builder's source
+receipts and attribution. The builder selects populated places, joins country
+and region labels, trims label edges, omits empty or control-bearing aliases,
+deduplicates and sorts aliases, and encodes the selected fields as JSON.
+Its manifest records these label and alias transformations. It preserves
+source coordinates, timezone spelling, and separate elevation and DEM fields.
+Neither the builder nor the sample selector computes a timezone offset.
+
+Attribution for derived place records includes:
 
 > Contains geographical data from GeoNames (https://www.geonames.org/),
 > licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
 > Records selected and transformed into this project's index format.
 
 The data license applies to derived place records independently of the MIT
-license for the builder and library. A `license` field that passes schema
-validation is a recorded claim, not independent verification of permission
-or attribution completeness. The next milestone must review the actual
-downloaded source and update this record and the local manifest as needed.
+license for the builder and library. Redistributed samples and indexes must
+keep their attribution and description of changes. Full source downloads and
+generated indexes stay in ignored folders. A `license` field that passes
+schema validation is a recorded claim, not independent verification of
+permission or attribution completeness. The tests in
+[tests/sample.test.ts](tests/sample.test.ts) check the local receipts and
+field preservation, not the accuracy of upstream geographic facts.
 
 ## Timezone source
 

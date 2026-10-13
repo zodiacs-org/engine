@@ -163,8 +163,10 @@ feature checks before exclusion. Unused country metadata is not interpreted.
 
 Each shard is a complete `PlaceDataset`. `manifest.json` lists row counts,
 byte sizes and SHA-256 hashes, and is written last. Rows retain source order.
-Identical input bytes and shard settings yield identical output bytes,
-independent of local paths and clock time. Inputs are hashed again during
+Identical input bytes, source filenames, source URLs and shard settings yield
+identical output bytes, independent of parent directory paths and clock time.
+Source filenames are retained in provenance, so renaming an input changes
+the output. Inputs are hashed again during
 parsing to detect changes during a build. Memory holds label maps, seen IDs
 and a shard, rather than the full place dump. Failed builds remove only their
 newly created output directory; existing directories are refused.
