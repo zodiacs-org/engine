@@ -1,15 +1,15 @@
 # Calendar workbench
 
 This private TypeScript project exports astrology event records as iCalendar
-text and searches for tropical sign ingresses, natal transit exacts, stations
-and solar/lunar eclipses through the existing events package, plus explicit
+text and searches for tropical sign ingresses, natal transit exacts, stations,
+solar/lunar eclipses and void-of-course Moon intervals through the existing events package, plus explicit
 progressed synastry schedules. It imports the parent engine sources without
 building or changing the parent npm package. The implemented scope is M1
-through M7 in [PLAN.md](PLAN.md):
+through M8 in [PLAN.md](PLAN.md):
 UTC and timezone serialization, validation, stable event identities and ingress
 schedules, plus natal transit and synastry analysis for explicitly synthetic
-charts, and receipt-bearing station and eclipse schedules.
-Other schedule searches, streaming, the CLI and the HTTP feed
+charts, and receipt-bearing station, eclipse and void-of-course schedules.
+Streaming, the CLI and the HTTP feed
 endpoint remain planned milestones.
 
 Use Node satisfying `engines` in [package.json](package.json). From this folder:
@@ -700,6 +700,100 @@ date-line change, Kathmandu's offset change, Paris's seconds-valued historical
 offset, and Dublin's and Casablanca's seasonal rules. All use invented event
 receipts and round-trip with `ical.js`, resolving the embedded VTIMEZONE.
 
+## Void-of-course Moon schedules
+
+`searchVoidOfCourseSchedule` calls the pinned events package's
+`searchVoidOfCourseMoon` directly. Supply `namespace`, `startUtc`, `endUtc`,
+`clock: "utc"`, `stepMs`, `maxEvaluations`, an optional `signal`, and an
+explicit `policy: { bodies, aspects }`. Bodies are unique supported Sun and
+planet identifiers, excluding the Moon. Aspect rules have unique IDs and
+unique unsigned angles in degrees; custom angles are supported. No body set,
+aspect set, orb allowance or traditional definition is inferred.
+
+```ts
+import { searchVoidOfCourseSchedule, serializeCalendar } from "./src/index.ts";
+import { voidRequest, revisionUtc } from "./test/fixtures/synthetic-void-of-course.ts";
+
+const result = searchVoidOfCourseSchedule(voidRequest);
+if (result.status === "refused") throw new Error(result.reason);
+if (result.events.length > 0) {
+  const ics = serializeCalendar(result.events, { dtstamp: revisionUtc });
+}
+```
+
+The example's invented February 2026 range and explicit Sun/Venus policy
+are exercised by `test/void-of-course.calendar-test.ts` and its small golden
+`test/fixtures/synthetic-void-of-course.ics`. The golden is an engine
+regression record, not independent evidence of astronomical accuracy.
+
+The convention is sign-based: a void interval begins at the Moon's last
+exact contact with the selected bodies before its sign exit and ends at
+that exit. If the policy has no exact contact during the sign, the interval
+begins at sign entry. The upstream API excludes contacts exactly at sign
+entry or exit from that sign's last-contact selection. Simultaneous contacts
+use the upstream deterministic body/rule ordering. Retrograde Moon sign
+motion is rejected by the upstream search. This convention does not cover
+every historical definition of void-of-course.
+
+The requested display range is `[startUtc, endUtc)`. Any interval overlapping
+it is exported with its **full** start and exclusive end, without clipping.
+An interval ending exactly at the requested start or beginning exactly at
+the requested end is excluded. DTSTART can precede the requested range and
+DTEND can follow it. Timezone coverage must contain those full endpoints.
+`test/void-of-course-boundary.calendar-test.ts` exercises these rules with
+analytic invented motion; the engine-backed golden spans both display edges.
+
+Each interval is owned by its UTC sign-exit day. The adapter delegates
+fixed-day searches with four UTC days of padding on each side and enumerates
+exit days through four days after the display end. These finite padding
+choices are enforced by the boundary tests over their invented February
+2026 windows; they are work settings, not a guarantee about lunar motion.
+The step must divide a UTC day. A source occurrence key combines the fixed
+exit day and the interval ordinal within that day's same-sign series,
+assigned before display filtering. The UID also includes the sign, selected
+bodies, numeric angle set, coordinate conventions and sampling/boundary
+policy. Request bounds, budgets, rule labels, policy order and display
+timezone do not change it. Repeated exits within one day remain distinct.
+Overlapping or adjacent requests can return the same full interval; deduplicate
+by UID when joining their results. Receipts and UIDs are stable under the
+tested overlapping windows, without promising stability across engine or
+search revisions.
+
+`receipt.utc` and `endUtc` retain the full UTC boundaries. Top-level
+`aspect` and `orbDegrees` are null because the event is an interval. Ordered
+`bodies` lists the Moon followed by the canonical selected body set.
+`source.event` retains the original interval, sign, clipped flag and last
+exact contact, including its aspect, moving target, root bracket and signed
+angular residual. `source.lastContactOrbDegrees` is that contact's absolute
+angular residual, or null when no contact exists. `source.boundaries` states
+whether the start is a contact or sign entry and that the end is exclusive.
+`source.calculations` preserves full Moon `calc` receipts at both boundaries
+and the target body's receipt at the last contact when present. Search
+provenance, policy, coordinate conventions and UTC/UT1/TT time bases remain
+attached. `X-ZODIACS-END-UTC` preserves the exact end alongside DTEND.
+
+Upstream unresolved padding tails are expected and discarded when they
+cannot affect the requested coverage. If a displayed day's next sign exit
+is unresolved, or a relevant interval has a clipped upstream start, the
+adapter returns `status: "refused"`, `reason: "unresolved-interval"`, an
+empty event list and `unresolved` diagnostics with the source windows and
+boundary reason. It never calls an unresolved tail an empty successful
+schedule or fabricates a missing boundary. Earlier collected intervals are
+discarded too. Padding, all upstream scans and boundary/target receipt
+calculations share the total evaluation budget. Budget exhaustion,
+cancellation and typed engine refusal likewise return no partial events.
+Unexpected failures throw. Searches remain synchronous with cooperative
+cancellation and collect the result in memory.
+
+`complete` means the prescribed scans finished under the upstream
+continuity, monotonic-cell and short-arc assumptions. It is not proof that
+every physical event was found. Paired crossings, nearly simultaneous
+aspect/ingress brackets and time-basis jumps retain the upstream limitations.
+Fixed padding can cause refusal near calculation coverage edges or when a
+boundary lies beyond the halo. Integration tests compare delegation and
+receipts with the parent APIs and parse UTC and TZID feeds with `ical.js`;
+they supply no independent astronomical void-period reference dates.
+
 ## Fixtures and scope
 
 Fixtures under `test/fixtures/` use synthetic data. The serializer-only
@@ -711,6 +805,9 @@ regression record, not independent accuracy evidence. The synastry golden uses t
 The station/eclipse golden uses the invented windows and spherical model in
 `test/fixtures/synthetic-stations-eclipses.ts` and the parent calculations
 through the pinned event searches, also only as a regression record.
+The void-of-course golden uses the invented range and explicit policy in
+`test/fixtures/synthetic-void-of-course.ts` through those same parent and
+pinned search APIs, with the same regression-only scope.
 Golden text fixes the wire format, while parser checks verify dates, text and receipt preservation.
 All future chart examples and fixtures must also be synthetic.
 

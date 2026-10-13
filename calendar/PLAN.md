@@ -13,7 +13,7 @@ to `CHANGES.txt`, and stops.
 - [x] M5 Export personal natal transit exacts using engine natal charts and the events package's moving-to-fixed aspect search; retain aspect policy, residual orb, chart identity and calculation receipts.
 - [x] M6 Define and implement synastry exact exports for two explicitly synthetic charts using engine APIs; distinguish static natal aspects from any explicitly selected moving-chart convention, with documented event timing.
 - [x] M7 Export stations and solar/lunar eclipses through existing event searches; preserve event definitions, directions, geometry, time conventions and source limitations.
-- [ ] M8 Export void-of-course Moon intervals through existing event APIs, with explicit body/aspect policy, interval boundaries and unresolved-result handling.
+- [x] M8 Export void-of-course Moon intervals through existing event APIs, with explicit body/aspect policy, interval boundaries and unresolved-result handling.
 - [ ] M9 Add async streaming over bounded search windows with backpressure, cancellation, deterministic ordering and boundary deduplication; verify chunked and unchunked output agree.
 - [ ] M10 Add the CLI for validated synthetic chart/range/query inputs, event selection, UTC or TZID output, stdout/files, useful failures and reproducible generation timestamps.
 - [ ] M11 Add a small HTTP feed endpoint with streaming, configured synthetic schedules, stable feed URLs, conditional requests, bounded work and disconnect cancellation.

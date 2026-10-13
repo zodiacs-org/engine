@@ -6,6 +6,8 @@ export { searchIngressSchedule } from "./ingresses.js";
 export type { IngressScheduleRequest, IngressScheduleResult } from "./ingresses.js";
 export { searchStationSchedule } from "./stations.js";
 export type { StationScheduleRequest, StationScheduleResult } from "./stations.js";
+export { searchVoidOfCourseSchedule } from "./void-of-course.js";
+export type { VoidOfCourseScheduleRequest, VoidOfCourseScheduleResult, UnresolvedVoidOfCourseBoundary } from "./void-of-course.js";
 export { searchEclipseSchedule } from "./eclipses.js";
 export type { EclipseScheduleRequest, EclipseScheduleResult, EclipseKind, EclipseModel } from "./eclipses.js";
 export { searchNatalTransitSchedule } from "./natal-transits.js";
