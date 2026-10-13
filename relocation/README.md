@@ -460,6 +460,124 @@ cells. They are not authentic receipts or independent astronomical references.
 The function performs no file or network operations; save large outputs only
 in ignored generated directories.
 
+## Great-circle paths and angular crossings
+
+`planGreatCircle({ from, to, stepDegrees, maxSamples })` constructs a shortest
+arc on a unit sphere using geographic latitude and east-positive longitude.
+It is spherical geometry, not an ellipsoidal route or a time progression.
+Both endpoints are copied and retained. Samples traverse from `from` to `to`
+in increasing `distanceDegrees`, the angular distance from the start, with
+`fraction` giving the share of the whole arc. The final interval may be shorter
+than `stepDegrees`. Coincident places, including seam aliases and different
+longitude labels at the same pole, have one start sample and no direction.
+
+Antipodal endpoints have no unique shortest arc and throw `RangeError`;
+split the request into separate legs through an explicit waypoint. Directions
+within `GREAT_CIRCLE_DIRECTION_TOLERANCE` of that numerical ambiguity also
+reject. An interior pole on a meridional arc is inserted even between coarse
+rows. Its longitude is a conventional label, not a physical direction.
+Poles break display polylines and remain explicit path samples. Endpoint poles
+retain their submitted labels. Nearby polar points are otherwise supported.
+
+`maxSamples` is required and capped by `MAX_PATH_SAMPLES`. The planner reserves
+inclusive endpoints and any inserted pole before allocating samples. Excess
+work throws `GreatCircleBudgetError` with `requiredSamples` and `maxSamples`;
+an extremely small step can produce an infinite required count in that error
+diagnostic. Invalid coordinates, steps, limits and unresolved numerical
+directions throw `RangeError`. `test/great-circle.vitest.ts` enforces these
+limits and checks distance against a separate haversine calculation and arc
+membership against Cartesian plane projections over its synthetic geographic
+cases. These tests establish geometry and regressions, not planetary accuracy.
+
+Path polylines split at the antimeridian using the existing lat/lon
+interpolation convention. Sample vertices reference path sample indices;
+seam vertices identify both samples and the interpolation fraction. Straight
+links and interpolated seam latitudes approximate the sampled spherical arc.
+They have no engine receipt and need not lie exactly on that arc. The planner
+performs no engine, file or network operations. Its conventions are recorded
+in `GREAT_CIRCLE_CONVENTIONS`.
+
+`planPathCrossings({ from, to, stepDegrees, bodies?, lines?, maxEvaluations,
+maxRefinements, coordinateTolerance, residualTolerance })` plans the same arc
+and reserves coarse observer samples plus fresh body calculations before
+reading the natal source. It reserves pole rows conservatively, although
+undefined poles make no houses call. The separate path sample cap includes
+refinement observers. A birth input may additionally require a source chart
+calculation. Body and line selections follow `sampleAngles` and
+`gridCrossings`; lines default to ASC, DSC, MC and IC.
+
+`maxEvaluations` bounds actual position and observer calls under
+`MAX_ANGLE_EVALUATIONS`; excess coarse work throws `AngularBudgetError`.
+`maxRefinements` bounds probes per body, line and coarse interval under
+`MAX_PATH_REFINEMENTS`. Cached probes count toward that interval's refinement
+limit but consume no new engine work. The coordinate tolerance is the final
+bracket width in angular degrees along the arc. The residual tolerance is the
+sampled altitude or requested meridian residual in degrees. Both tolerances
+must be finite and positive. Bounds, validation and budgets are enforced by
+`test/path-crossings.vitest.ts` over its synthetic planning and refinement
+cases. They control numerical work, not physical location accuracy.
+
+`pathCrossings(source, options)` returns `zodiacs.relocation-path-crossings.v1`
+with the plan, angular `sampling`, `observerDistances`, `intervalResults`,
+`unresolvedIntervals`, `crossings` and path `polylines`. Coarse observers appear
+first in arc order; refinement observers follow in evaluation order.
+`observerDistances` uses those same global indices. Captured planetary
+directions are held fixed at the natal instant. Every nonpolar observer has
+a fresh engine houses result and receipt; every selected planetary direction
+has its full engine calc result and receipt. Source forms, clocks, delta-T
+pins, house requests and receipt scope follow `sampleAngles`.
+
+Each interval result identifies its coarse interval, body, kind and position
+index. Its `initialBracket` and final `bracket` retain observer indices, arc
+distances, angular residuals and continuous plane projections. Horizon
+projection is the local up component of the planetary direction. Meridian
+projection is cosine(latitude) times sine(hour angle); it stays continuous
+across the opposite meridian where a wrapped angular residual jumps.
+These projections are derived geometry, not extra engine outputs.
+
+The scalar projection of a fixed plane along a shortest great circle is a
+sinusoid. A noncoincident arc shorter than a half turn cannot hide a pair of
+interior plane crossings. Sign-changing intervals are bisected on that
+projection, evaluating every new nonpolar midpoint through engine houses.
+The final sampled observer selects MC versus IC, or rising ASC versus setting
+DSC. A stationary horizon observer is retained as `tangent` for both selected
+horizon branches; that label describes Earth rotation with the direction
+fixed, not movement along the path. A numerically coincident path has no
+isolated root and stays unresolved rather than emitting an arbitrary crossing.
+
+An admitted crossing meets both requested tolerances and references a sampled
+observer, its arc distance and fraction, the body's position index, measured
+residual and horizon motion. Exact sampled angular roots have collapsed
+brackets. Shared coarse endpoint roots are deduplicated by body, kind and
+observer index. Both endpoints are included. Results follow selected body,
+line and interval order; they are not globally sorted by arc distance.
+Midpoint observers are reused across branches and bodies when their arc
+distance matches. A zero-length path has no intervals or isolated crossings.
+
+Undefined celestial meridians, pole-adjacent intervals, numerical coincidence,
+uncertain endpoint signs, depleted evaluation budgets, refinement limits and
+coordinate stagnation retain explicit unresolved metadata. Pole samples have
+no unique observer meridian and no engine houses receipt; adjoining intervals
+are left unresolved even if an unsampled horizon root could lie there. No
+crossing at a pole is invented. Refinement also stops when the interpolated
+geographic point repeats a bracket endpoint at floating-point precision.
+Successful earlier roots and all sampled receipts survive a work-limit stop.
+Unknown time or any typed engine refusal instead discards all partial output,
+including a refusal during refinement, and returns `status: "refused"`.
+
+The returned polylines describe the path through coarse and refinement
+observers, in arc order, with global observer provenance and breaks at poles.
+They are not planetary angular-line segments. Interpolated seam vertices have
+no additional receipt. `status: "ok"` means bounded sampling succeeded; the
+verification label is `bounded-great-circle-brackets;sampled-engine-residuals`.
+Residuals are measured against the installed engine and do not propagate its
+astronomical uncertainty. Engine parity, receipt replay, separate Cartesian
+projections, branch selection, reversal, seams, polar fallback, exact endpoints,
+clock replay and failure behavior are tested in `test/path-crossings.vitest.ts`
+over synthetic births. Artificial direction injections exercise singular
+topology and are not authentic receipts or astronomical references.
+The library writes no generated files and makes no network requests.
+
 Code and documentation here use the repository's MIT license. The engine is
 distributed under MIT AND CC-BY-4.0; retain its LICENSE, LICENSING.md and
 NOTICE when redistributing it or its attributed data. Generated grids and

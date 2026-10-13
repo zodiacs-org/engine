@@ -13,7 +13,7 @@ line to `CHANGES.txt`. The harness handles git writes and draft PRs.
 - [x] M5 Generate bounded MC and IC polylines with sampled metadata and engine receipt references.
 - [x] M6 Generate ASC and DSC horizon polylines, including circumpolar gaps, tangencies and polar cases, without fabricating positions.
 - [x] M7 Extract grid crossings with bounded refinement, structured brackets, residuals and unresolved-cell metadata.
-- [ ] M8 Sample great-circle paths and find angular crossings along them, with antipodal and antimeridian handling.
+- [x] M8 Sample great-circle paths and find angular crossings along them, with antipodal and antimeridian handling.
 - [ ] M9 Add optional local-space azimuth lines using engine observer angles and bounded spherical geometry.
 - [ ] M10 Implement the offline `relocation chart`, `relocation lines` and `relocation grid` CLI with validated JSON input and structured output.
 - [ ] M11 Commit small generated golden polyline regression fixtures, their generator and synthetic integration tests; keep large generated outputs ignored.
@@ -152,26 +152,52 @@ Root `npm run package:contents` still fails because `dist/calc.d.ts` is absent;
 no root build was run under the rule forbidding writes to `dist/`. Engine CI
 gates requiring a root build remain deferred. No engine or packed files changed.
 
-M7 adds `planGridCrossings` and `gridCrossings` for angular roots on unique
-bounded grid edges. Coarse work is reserved before source capture; bisection
-spends a shared remaining evaluation budget under per-edge refinement limits.
-Every coarse and refined observer retains an engine houses receipt, and every
-body retains its fresh equatorial calculation receipt. Initial and final
-endpoint pairs expose unwrapped coordinates, observer references and measured
-residuals. Crossing admission requires both coordinate and residual tolerances.
-Adjacent cells share edge crossings; exact endpoint roots deduplicate by
-observer. Unambiguous cell pairs form separate polylines with global sample
-and seam provenance. Tangencies, hidden horizon pairs, ambiguous or unbracketed
-cells, undefined directions, wide edges, coincident endpoints, resource limits
-and coordinate stagnation remain explicit unresolved metadata. Evaluation
-exhaustion preserves successful samples; typed engine refusals discard partial
-geometry. Documentation states receipt scope and sampled topology limits.
+M7 adds `planGridCrossings` and `gridCrossings` for engine-backed angular grid
+sampling, unique edge extraction and bounded bisection. Coarse work is reserved
+before source capture; refinement spends a shared evaluation budget and a
+per-edge cap. Every admitted root references a sampled engine observer and
+position receipt, with initial and final bracket endpoints and residuals.
+Adjacent cells share edge roots. Unambiguous cell pairs produce seam-split
+segments with global observer provenance. Hidden horizon pairs, stationary
+roots, ambiguous cells, undefined directions, wide and coincident edges,
+budget exhaustion and precision limits retain explicit unresolved metadata.
+Successful partial brackets survive budget exhaustion; engine refusals discard
+all geometry. Documentation explains tolerances, geometric exclusions and the
+limits of sampled cell connections.
 
 Validation: relocation typecheck and the full Vitest suite passed on Node
-22.22.2. `test/grid-crossings.vitest.ts` covers receipt replay, Cartesian
-projections, brackets and residuals, shared edges, endpoint roots, antimeridian
-geometry, polar fallback, hidden pairs, ambiguous cells, clocks, source
-ownership, budgets, precision and refusals. Root package dry-run exclusion,
+22.22.2. `test/grid-crossings.vitest.ts` checks receipt replay, Cartesian
+meridian and horizon projections, residual and bracket acceptance, shared
+edges, antimeridian provenance, polar fallback, source ownership, clocks,
+resource limits and refusals. Synthetic injections cover hidden horizon pairs,
+stationary directions, exact endpoints and ambiguous cell topology. Root
+package dry-run exclusion, archive SHA-256, file-size, documentation punctuation
+and diff-scope checks passed. Root `npm run package:contents` still fails
+because `dist/calc.d.ts` is absent; no root build was run under the rule
+forbidding writes to `dist/`. Engine CI gates requiring that build remain
+deferred. No engine or packed files changed.
+
+M8 adds `planGreatCircle`, `planPathCrossings` and `pathCrossings` for bounded
+shortest spherical arcs and engine-backed angular intersections. Geographic
+samples retain arc distances and fractions, inclusive endpoints, inserted
+meridional poles and seam provenance. Antipodal and numerically ambiguous
+directions reject without choosing an arbitrary route. Continuous horizon
+and meridian plane projections guide bounded bisection; every new nonpolar
+midpoint has a fresh engine houses receipt. Crossings retain global observer
+and position references, sampled residuals and initial/final arc brackets.
+Shared endpoints and midpoint observers are reused. Undefined poles,
+celestial meridians, coincident paths, uncertain endpoint signs, work limits
+and coordinate stagnation retain explicit unresolved metadata. Successful
+partial results survive exhausted budgets; engine refusals discard all output.
+Documentation states spherical route, interpolation and receipt limitations.
+
+Validation: relocation typecheck and the full Vitest suite passed on Node
+22.22.2. `test/great-circle.vitest.ts` checks separate haversine distances,
+Cartesian arc planes, seams, poles, antipodal ambiguity, endpoint ownership
+and planning limits. `test/path-crossings.vitest.ts` checks engine receipt
+replay, all angular branches, separate Cartesian projections, arc brackets,
+shared endpoints, cached refinement, reversal, polar fallback, clock replay,
+budgets and refusals using synthetic births. Root package dry-run exclusion,
 archive SHA-256, file-size, documentation punctuation and diff-scope checks
 passed. Root `npm run package:contents` still fails because `dist/calc.d.ts`
 is absent; no root build was run under the rule forbidding writes to `dist/`.

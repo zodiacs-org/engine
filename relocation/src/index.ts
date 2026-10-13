@@ -21,3 +21,10 @@ export { gridCrossings, planGridCrossings, MAX_GRID_REFINEMENTS,
 export type { CrossingBracket, CrossingBracketEnd, GridCrossing, GridCrossingCell,
   GridCrossingOptions, GridCrossingPlan, GridCrossingsResult, GridEdge, GridEdgeIssue,
   GridEdgeResult } from "./grid-crossings.js";
+export { GREAT_CIRCLE_CONVENTIONS, GREAT_CIRCLE_DIRECTION_TOLERANCE, GreatCircleBudgetError,
+  MAX_PATH_SAMPLES, planGreatCircle } from "./great-circle.js";
+export type { GreatCircleOptions, GreatCirclePlan, GreatCircleSample } from "./great-circle.js";
+export { MAX_PATH_REFINEMENTS, pathCrossings, planPathCrossings,
+  RELOCATION_PATH_CROSSINGS_SCHEMA } from "./path-crossings.js";
+export type { PathBracket, PathBracketEnd, PathCrossing, PathCrossingOptions, PathCrossingPlan,
+  PathCrossingsResult, PathIntervalIssue, PathIntervalResult } from "./path-crossings.js";
