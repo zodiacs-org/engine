@@ -111,7 +111,13 @@ describe("optional service launcher", () => {
     [], ["--index"], ["--index", "PRIVATE", "--port", "1e1"],
     ["--index", "PRIVATE", "--port", "65536"], ["--index", "https://PRIVATE/index"],
     ["--index", "PRIVATE", "--index", "PRIVATE"], ["--index", "PRIVATE", "--unknown"],
-    ["--help", "--index", "PRIVATE"], ["--index", "PRIVATE", "positional"]
+    ["--help", "--index", "PRIVATE"], ["--index", "PRIVATE", "positional"],
+    ...["--burst", "--max-clients", "--max-concurrent", "--max-connections", "--idle-client-ms", "--cleanup-interval-ms"]
+      .flatMap((flag) => ["0", "1.5", "1e2", "100000000"].map((value) => ["--index", "PRIVATE", flag, value])),
+    ...["0", "0.0001", "Infinity", "1e2", "1000001"].map((value) => ["--index", "PRIVATE", "--refill-per-second", value]),
+    ...["*", "localhost", "127.0.0.0/8", "127.0.0.1,", "127.0.0.1:80", "fe80::1%eth0"]
+      .map((value) => ["--index", "PRIVATE", "--trusted-proxies", value]),
+    ["--index", "PRIVATE", "--burst", "1", "--burst", "2"]
   ].map((args) => ({ args })))("refuses malformed launcher arguments %# privately", ({ args }) => {
     const result = spawnSync(process.execPath, [command, ...args], { encoding: "utf8", cwd: temporary });
     expect(result.status).toBe(1);
@@ -130,7 +136,10 @@ describe("optional service launcher", () => {
   });
 
   it.each(["SIGTERM", "SIGINT"] as const)("starts explicitly on loopback and stops on %s", async (signal) => {
-    const child = spawn(process.execPath, [command, "--index", indexDirectory], {
+    const child = spawn(process.execPath, [command, "--index", indexDirectory,
+      "--burst", "1", "--refill-per-second", "0.001", "--max-clients", "2", "--max-concurrent", "1",
+      "--max-connections", "4", "--idle-client-ms", "1000", "--cleanup-interval-ms", "100",
+      "--trusted-proxies", "::ffff:127.0.0.1"], {
       cwd: temporary, stdio: ["ignore", "pipe", "pipe"], env: { ...process.env, TZ: "Pacific/Auckland" }
     });
     children.push(child);
@@ -153,6 +162,13 @@ describe("optional service launcher", () => {
     const response = await fetch(`http://127.0.0.1:${address.port}/lookup?query=Brest&country=FR`);
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ...geocoder.lookup("Brest", { country: "FR" }), provenance: geocoder.provenance });
+    const limited = await fetch(`http://127.0.0.1:${address.port}/lookup?query=Brest`);
+    expect(limited.status).toBe(429);
+    expect(limited.headers.get("Retry-After")).toBe("1000");
+    expect(await limited.json()).toHaveProperty("error.code", "rate-limited");
+    const other = await fetch(`http://127.0.0.1:${address.port}/lookup?query=Brest`, { headers: { "X-Forwarded-For": "192.0.2.1" } });
+    expect(other.status).toBe(200);
+    await other.json();
     const exited = once(child, "exit");
     child.kill(signal);
     expect(await exited).toEqual([0, null]);

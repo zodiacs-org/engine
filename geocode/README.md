@@ -6,7 +6,7 @@ an optional HTTP service. [PLAN.md](PLAN.md) tracks implementation. The
 current milestone provides the place-data contract, an attributed GeoNames
 sample, an offline index builder, pure in-memory place lookup, a composed
 API for atlas-first civil-time resolution, the `geocode` CLI and an optional
-local HTTP service. Per-client rate limiting remains the next milestone.
+local HTTP service with bounded rate and resource limits.
 
 ## Development
 
@@ -371,8 +371,71 @@ index and the repository atlas before listening. It performs no downloads
 and writes no request log or result file. It needs this checkout's `src/`
 and `atlas/`, plus this folder's locked dependencies, like the CLI.
 
-The current service is intended for local use. Per-client rate limiting,
-overload handling and proxy trust configuration remain M8 in [PLAN.md](PLAN.md).
+The service applies a token bucket per client IP across both routes. An
+admitted request consumes a token, including requests later rejected for
+malformed input, unknown routes or provider failures. Tokens refill from a
+monotonic clock and cannot exceed the burst capacity. Failed requests receive
+no token refund. There is no admission queue: excess active work or a full
+client table returns a structured rejection before body parsing or lookup.
+The limiter is local to this service instance, not shared across processes.
+Clients sharing an address share a bucket.
+
+| Launcher option | Programmatic option | Default and units |
+| --- | --- | --- |
+| `--burst` | `admission.capacity` | 60 requests |
+| `--refill-per-second` | `admission.refillPerSecond` | 1 token per second |
+| `--max-clients` | `admission.maxClients` | 4096 tracked addresses |
+| `--max-concurrent` | `admission.maxConcurrent` | 32 active requests |
+| `--max-connections` | `maxConnections` | 128 TCP connections |
+| `--idle-client-ms` | `admission.idleTimeoutMs` | 60000 milliseconds |
+| `--cleanup-interval-ms` | `admission.cleanupIntervalMs` | 10000 milliseconds |
+| `--trusted-proxies` | `trustedProxies` | Empty list; forwarding headers ignored |
+
+These defaults are enforced by [http-admission.test.ts](tests/http-admission.test.ts)
+and [http-limits.test.ts](tests/http-limits.test.ts). Numeric options must be
+positive and within the bounds validated in [http-admission.ts](src/http-admission.ts)
+and [http-server.ts](src/http-server.ts); all except refill rate are integers.
+Rate and resource limits always apply. Programmatic options use an
+`admission` object alongside `host`, `port`, `maxConnections` and
+`trustedProxies`. An optional trusted `admission.clock` function supplies
+monotonic milliseconds for controlled tests; normal operation uses Node's
+`performance.now()`. A backwards test clock is clamped rather than granting
+extra refill. Configuration is copied at construction.
+
+Active requests include body streaming, asynchronous provider work and
+response completion. A disconnected caller does not release its work slot
+until a running provider settles. Provider code cannot be cancelled by this
+transport. TCP admission also bounds sockets held before a request arrives.
+At the TCP connection bound, Node closes excess connections without an HTTP
+JSON answer. The service is intended to run as a standalone Node process;
+it does not configure cluster workers or transfer sockets to child processes.
+
+Periodic cleanup begins when the service listens and uses an unreferenced
+timer. An idle bucket is removed only after it is fully refilled and has no
+active requests, even when the configured idle duration is shorter than its
+refill duration. A full table rejects new identities instead of evicting an
+exhausted client and granting it a fresh burst. A bounded cleanup scan can
+also run when that table is full. Close clears the timer and address table.
+Addresses live only in memory; responses and aggregate controller diagnostics
+do not expose them. No request log is written.
+
+Proxy trust is opt-in. `--trusted-proxies` accepts a comma-separated list of
+exact IP literals; the library accepts that list as an array. It accepts no
+hostname, wildcard, CIDR range or trust-all switch. IPv6 spellings are
+canonicalized, and IPv4-mapped IPv6 shares the corresponding IPv4 identity.
+Configure only controlled proxies that overwrite or append the actual peer
+address to `X-Forwarded-For`. Direct access from an address listed as a proxy
+permits that peer to assert a client identity, so do not list client networks.
+
+From an untrusted socket peer, forwarding headers are ignored. From a
+trusted peer, a single `X-Forwarded-For` field is parsed as a bounded list
+of IP literals. The resolver walks from the nearest peer towards the caller
+and stops at the first untrusted address; client-supplied values before that
+hop cannot change its identity. Missing forwarding uses the socket address.
+Malformed or duplicate forwarded fields from a trusted proxy are rejected
+before admission, without echoing their contents. `Forwarded` and `X-Real-IP`
+are ignored. [http-client.test.ts](tests/http-client.test.ts) enforces these
+rules and the chain/configuration bounds, with synthetic address identities.
 
 | Route | Input | Normal response |
 | --- | --- | --- |
@@ -405,7 +468,10 @@ Application errors have `{ "error": { "code": "...", "message": "..." } }`:
 | 413 | `body-too-large` | JSON body exceeds the byte bound |
 | 414 | `url-too-large` | Request target exceeds the byte bound |
 | 415 | `unsupported-media-type` | Unsupported content type, charset or encoding |
+| 417 | `unsupported-expectation` | Unsupported HTTP `Expect` value |
+| 429 | `rate-limited` | Client token bucket is exhausted; includes `Retry-After` |
 | 500 | `resolution-error` | Operational failure, including a time-provider exception |
+| 503 | `overloaded` | Active work or tracked-client bound is full; includes `Retry-After` |
 
 The Node parser returns structured `invalid-http` errors for malformed HTTP
 or excessive headers when the connection is still writable. Incomplete or
@@ -413,6 +479,13 @@ aborted connections and transport timeouts may close without an application
 JSON response. Diagnostics never repeat submitted queries, dates, paths or
 raw provider exceptions. Provider exceptions never substitute a fallback
 answer, including when the exception is a `RangeError`.
+
+Rate-limit `Retry-After` is a positive integer number of seconds, rounded up
+to the next available token. Overload uses a short retry hint rather than
+promising when a provider or table entry will become available. Rejected
+admissions close the connection without draining an arbitrary request body.
+`Expect: 100-continue` requests pass admission before a continue response;
+rate and overload rejections send no continue response.
 
 The service bounds URL, header and JSON body bytes through `HTTP_LIMITS` in
 [src/http-server.ts](src/http-server.ts). Bodies are bounded during streaming,
@@ -450,7 +523,11 @@ listener lifecycle on ephemeral ports with invented records.
 [tests/http-service.test.ts](tests/http-service.test.ts) checks sample-based
 atlas/IANA transport fidelity and the launcher, including signals and help
 with network entry points blocked. [evidence/M7.md](evidence/M7.md) records
-the scope and checks. These are service regressions, not new geographic or
+the original transport scope. [tests/http-limits.test.ts](tests/http-limits.test.ts)
+checks rate and overload responses, proxy routing, body streaming, connection
+bounds, disconnected providers and timer lifecycle.
+[evidence/M8.md](evidence/M8.md) records admission checks and limitations.
+These are service regressions, not new geographic or
 historical accuracy evidence.
 
 ## Build a local place index

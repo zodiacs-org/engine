@@ -4,11 +4,21 @@ import type { AddressInfo } from "node:net";
 import { assertCivilDate, assertCivilTime } from "./civil-time.js";
 import type { Geocoder, GeocodeRequest } from "./geocoder.js";
 import type { LookupOptions } from "./lookup.js";
+import { createAdmissionController } from "./http-admission.js";
+import type { AdmissionOptions } from "./http-admission.js";
+import { createClientIdentifier } from "./http-client.js";
+
+export { ADMISSION_DEFAULTS } from "./http-admission.js";
+export type { AdmissionOptions } from "./http-admission.js";
 
 export interface HttpServerOptions {
   readonly host?: string;
   /** Zero requests an ephemeral port. */
   readonly port?: number;
+  readonly admission?: AdmissionOptions;
+  /** Exact IP literals. Forwarding headers are ignored by default. */
+  readonly trustedProxies?: readonly string[];
+  readonly maxConnections?: number;
 }
 
 export interface GeocodeHttpServer {
@@ -22,7 +32,7 @@ export interface GeocodeHttpServer {
 export const HTTP_LIMITS = Object.freeze({
   urlBytes: 4096, bodyBytes: 8192, headerBytes: 8192,
   headersTimeoutMs: 10_000, requestTimeoutMs: 15_000,
-  idleTimeoutMs: 10_000, shutdownTimeoutMs: 1000
+  idleTimeoutMs: 10_000, shutdownTimeoutMs: 1000, maxConnections: 128
 });
 
 class HttpError extends Error {
@@ -128,21 +138,49 @@ export function createGeocodeServer(geocoder: Geocoder, options: HttpServerOptio
   if (!geocoder || typeof geocoder.lookup !== "function" || typeof geocoder.resolve !== "function"
       || typeof geocoder.getById !== "function") throw new RangeError("Expected an explicit geocoder.");
   if (!options || typeof options !== "object" || Array.isArray(options)
-      || Object.keys(options).some((key) => !["host", "port"].includes(key))) {
-    throw new RangeError("Expected host and/or port options.");
+      || Object.keys(options).some((key) => !["host", "port", "admission", "trustedProxies", "maxConnections"].includes(key))
+      || ["admission", "trustedProxies"].some((key) => Object.hasOwn(options, key) && options[key as keyof HttpServerOptions] === undefined)) {
+    throw new RangeError("Invalid service options.");
   }
   const host = Object.hasOwn(options, "host") ? options.host : "127.0.0.1";
   const port = Object.hasOwn(options, "port") ? options.port : 0;
+  const maxConnections = Object.hasOwn(options, "maxConnections") ? options.maxConnections : HTTP_LIMITS.maxConnections;
   if (typeof host !== "string" || !host || host.trim() !== host || /[\p{Cc}\p{Cs}]/u.test(host)
-      || typeof port !== "number" || !Number.isInteger(port) || port < 0 || port > 65535) {
+      || typeof port !== "number" || !Number.isInteger(port) || port < 0 || port > 65535
+      || typeof maxConnections !== "number" || !Number.isInteger(maxConnections) || maxConnections < 1 || maxConnections > 100_000) {
     throw new RangeError("Expected a host and an integer TCP port, or zero for an ephemeral port.");
   }
   let state: "new" | "starting" | "listening" | "closed" = "new";
   let starting: Promise<Readonly<AddressInfo>> | undefined;
   let closing: Promise<void> | undefined;
+  let cleanup: ReturnType<typeof setInterval> | undefined;
+  const identify = createClientIdentifier(options.trustedProxies);
+  const admission = createAdmissionController(options.admission);
 
-  async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  async function handle(req: IncomingMessage, res: ServerResponse, expectContinue = false): Promise<void> {
+    let release: (() => void) | undefined;
+    let workDone = false;
+    let responseDone = false;
+    function completed(): void {
+      responseDone = true;
+      if (workDone) release?.();
+    }
+    res.once("finish", completed);
+    res.once("close", completed);
     try {
+      let client: string;
+      try { client = identify(req.socket.remoteAddress ?? "", req.rawHeaders); } catch { invalid(); }
+      const decision = admission.acquire(client);
+      if (decision.status !== "allowed") {
+        res.setHeader("Retry-After", decision.retryAfterSeconds);
+        throw decision.status === "rate-limited"
+          ? new HttpError(429, "rate-limited", "Request rate exceeds the client limit. Retry after the stated delay.")
+          : new HttpError(503, "overloaded", "The service admission limit is full. Retry later.");
+      }
+      release = decision.release;
+      if (req.headers.expect !== undefined && !expectContinue) {
+        throw new HttpError(417, "unsupported-expectation", "Request expectation is not supported.");
+      }
       const { path, params } = parseTarget(req);
       if (path !== "/lookup" && path !== "/tz") {
         throw new HttpError(404, "not-found", "No such service route.");
@@ -160,6 +198,7 @@ export function createGeocodeServer(geocoder: Geocoder, options: HttpServerOptio
         send(res, 200, { ...result, provenance: geocoder.provenance });
       } else {
         if ([...params].length) invalid();
+        if (expectContinue) res.writeContinue();
         const request = timeInput(await readJson(req), geocoder);
         const result = await geocoder.resolve(request);
         send(res, 200, result);
@@ -173,6 +212,11 @@ export function createGeocodeServer(geocoder: Geocoder, options: HttpServerOptio
         500, "resolution-error", "The service could not complete the request; no fallback answer was substituted."
       );
       send(res, failure.status, { error: { code: failure.code, message: failure.message } });
+    } finally {
+      // Hold the slot until both work and response complete. A disconnected
+      // caller cannot free a slot while its provider still runs.
+      workDone = true;
+      if (responseDone || res.destroyed) release?.();
     }
   }
 
@@ -180,6 +224,9 @@ export function createGeocodeServer(geocoder: Geocoder, options: HttpServerOptio
     maxHeaderSize: HTTP_LIMITS.headerBytes, headersTimeout: HTTP_LIMITS.headersTimeoutMs,
     requestTimeout: HTTP_LIMITS.requestTimeoutMs, connectionsCheckingInterval: 1000
   }, (req, res) => { void handle(req, res); });
+  server.maxConnections = maxConnections;
+  server.on("checkContinue", (req, res) => { void handle(req, res, true); });
+  server.on("checkExpectation", (req, res) => { void handle(req, res); });
   server.setTimeout(HTTP_LIMITS.idleTimeoutMs, (socket) => { socket.destroy(); });
   server.on("clientError", (error: Error & { code?: string }, socket) => {
     if (!socket.writable || socket.writableEnded || error.code === "ECONNRESET") { socket.destroy(); return; }
@@ -192,11 +239,13 @@ export function createGeocodeServer(geocoder: Geocoder, options: HttpServerOptio
     if (state !== "new") return Promise.reject(new Error("The service can only be started once."));
     state = "starting";
     starting = new Promise((resolve, reject) => {
-      function failed(error: Error): void { state = "closed"; reject(error); }
+      function failed(error: Error): void { state = "closed"; admission.close(); reject(error); }
       server.once("error", failed);
       server.listen({ host, port }, () => {
         server.removeListener("error", failed);
         state = "listening";
+        cleanup = setInterval(() => admission.sweep(), admission.cleanupIntervalMs);
+        cleanup.unref();
         resolve(Object.freeze({ ...(server.address() as AddressInfo) }));
       });
     });
@@ -206,6 +255,8 @@ export function createGeocodeServer(geocoder: Geocoder, options: HttpServerOptio
   function close(): Promise<void> {
     closing ??= (async () => {
       if (state === "starting") { try { await starting; } catch { return; } }
+      if (cleanup !== undefined) clearInterval(cleanup);
+      admission.close();
       if (state !== "listening") { state = "closed"; return; }
       state = "closed";
       await new Promise<void>((resolve, reject) => {
