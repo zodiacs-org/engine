@@ -14,7 +14,7 @@ runs its checks, ticks it here, appends a line to `CHANGES.txt`, and stops.
 - [x] M6 Connect custom event DSL filters to the existing events parser and executor, with bounded expressions, explicit schedule intersection and defined handling of interval results; test unsupported expressions and budget exhaustion.
 - [x] M7 Implement HTTPS POST transport with a mock HTTP receiver seam, public-address resolution checks, pinned connection addresses, redirect refusal, request deadlines and bounded response handling; make all tests local or mocked.
 - [x] M8 Add delivery leases, stable idempotency keys, exponential retries and SQLite dead-letter transitions; test ambiguous acknowledgements, crashes, concurrent workers and retry exhaustion for at-least-once delivery.
-- [ ] M9 Expose an authenticated control API for subscription CRUD, secret provisioning and redacted delivery-log inspection, with bounded requests, pagination and update/delete semantics; test it over loopback HTTP.
+- [x] M9 Expose an authenticated control API for subscription CRUD, secret provisioning and redacted delivery-log inspection, with bounded requests, pagination and update/delete semantics; test it over loopback HTTP.
 - [ ] M10 Add a replay CLI that inspects and requeues retained dead letters without changing payload bytes or occurrence identity; test dry runs, selection, audit records and repeated replay requests.
 - [ ] M11 Wire service configuration, worker lifecycle and graceful shutdown; add an end-to-end synthetic subscription test from event discovery through signed delivery, retries, restart and replay.
 - [ ] M12 Document runnable local examples, receiver verification, deployment configuration, retention and operational limits; run the webhook suite, check package isolation and record remaining search-accuracy limitations.
@@ -60,3 +60,11 @@ All tests use synthetic inputs and local or mocked network receivers. Bulk
 data, databases, caches and build output belong in ignored directories. New
 documentation uses plain text without em dash characters. Each claimed number
 must refer to committed tests or evidence with its actual scope.
+
+## Validation follow-up
+
+During M9 validation, the existing `storage-db.test.ts` case "serializes
+first-open migrations from independent processes" failed intermittently with
+the fixed database-open error. It then passed in a focused run and in the full
+webhook suite. M9 does not change database-opening or migration behavior.
+Investigate concurrent initialization when wiring service startup in M11.

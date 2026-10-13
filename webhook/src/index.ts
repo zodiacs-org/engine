@@ -10,7 +10,7 @@ export type { StorageErrorCode } from "./storage.js";
 export type {
   AttemptDisposition, AttemptInput, AttemptResult, DeadLetterReason, DeliveryStatus, NewEvent,
   Page, ScanCommit, ScanCursor, StoredAttempt, StoredDeadLetter, StoredDelivery,
-  StoredEvent, StoredSubscription
+  StoredEvent, StoredSubscription, StoredDeliveryLog
 } from "./storage-types.js";
 export { SigningKeyVault, SecretError, VAULT_KEY_BYTES } from "./secrets.js";
 export type { SecretErrorCode, SigningKeyMetadata, VaultSignInput } from "./secrets.js";
@@ -38,3 +38,5 @@ export type {
 export { DELIVERY_LIMITS } from "./delivery-policy.js";
 export type { DeliveryPolicy } from "./delivery-policy.js";
 export type { DeliveryClaim, DeliveryLease } from "./storage-types.js";
+export { createControlServer, CONTROL_DEFAULTS, CONTROL_LIMITS, ControlApiError } from "./control-api.js";
+export type { ControlApiOptions, ControlPolicy } from "./control-api.js";

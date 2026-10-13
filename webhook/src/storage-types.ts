@@ -56,6 +56,18 @@ export interface StoredDelivery {
   readonly updatedAt: number;
 }
 
+/** Fixed control-log projection. No payloads, destinations, keys, hashes or leases. */
+export interface StoredDeliveryLog {
+  readonly eventId: string;
+  readonly subscriptionId: string;
+  readonly subscriptionRevision: number;
+  readonly occurredAt: number;
+  readonly status: DeliveryStatus;
+  readonly availableAt: number;
+  readonly attemptCount: number;
+  readonly updatedAt: number;
+}
+
 export type AttemptResult =
   | { readonly kind: "http"; readonly status: number }
   | { readonly kind: "timeout" | "network-error" | "destination-rejected" | "cancelled" | "interrupted" | "signing-error" };

@@ -5,9 +5,9 @@ implemented milestones cover subscription validation, SQLite storage,
 encrypted signing-key custody, payload signing with receiver verification,
 local event searches and custom DSL queries with engine receipts, bounded
 discovery into a durable outbox, an HTTPS transport for signed requests, and a
-delivery worker with leases, retries and dead letters. Callers can drive scans
-and delivery attempts explicitly. Later milestones add the runnable service,
-lifecycle management, control API and replay CLI.
+delivery worker with leases, retries and dead letters, and an authenticated
+control API. Callers can drive scans and delivery attempts explicitly. Later
+milestones add the runnable service, lifecycle management and replay CLI.
 The code and documentation here use the repository's [MIT license](../LICENSE).
 
 Use Node from the release line accepted by
@@ -253,8 +253,8 @@ metadata only; `assertAvailable` also checks that a key decrypts. Every `sign`
 call repeats that check. An enabled subscription must pass
 `validateSubscription` before storage; disabled drafts may reference a missing
 key. `WebhookStore` itself remains a persistence boundary with no vault lookup.
-The future control API must use the validation method, and the future delivery
-worker must handle missing or revoked keys without sending unsigned requests.
+The control API uses the validation method, and the delivery worker handles
+missing or revoked keys without sending unsigned requests.
 
 `SecretError` carries a fixed code and message without paths, SQL, crypto errors
 or supplied key material. Malformed signing requests use `invalid-input`;
@@ -788,3 +788,140 @@ the retry's signature and stable bytes after store and vault reopening. Other
 local receiver cases cover retry exhaustion and destination revalidation. These
 tests establish local delivery behavior, not power-loss durability, physical
 event accuracy or the reliability of external receivers.
+
+## Authenticated control API
+
+`createControlServer` in [src/control-api.ts](src/control-api.ts) creates an
+unbound Node HTTP server from `{ store, vault, bearerToken, policy?, now? }`.
+The caller owns listening, shutdown and the store and vault lifetimes. Creating
+or closing the server does not start workers or close those databases. Service
+configuration and lifecycle wiring remain a later milestone.
+
+Supply a random admin token as runtime bytes, separately from both the vault
+wrapping key and receiver signing keys. Clients send its canonical base64url
+encoding as `Authorization: Bearer <runtime-token>`. The server copies the
+bytes, compares a correctly encoded candidate with `timingSafeEqual`, and
+clears its owned copy when the server closes. There is no token export or
+provisioning endpoint. Tokens, shared signing keys and authorization headers
+must stay out of files, shell arguments, proxy access logs and request tracing.
+The implementation does not log requests, bodies, headers or exception text.
+JavaScript strings and network buffers cannot be guaranteed erased.
+
+This is a single-admin API: the token grants access to all subscriptions and
+key administration. It has no tenant isolation, account authentication, token
+rotation endpoint or per-route roles. Bind to loopback or a private listener
+behind a TLS boundary with restricted access. The HTTP server itself does not
+terminate TLS; bearer tokens and key provisioning require protected transport.
+Tests use ephemeral loopback HTTP listeners and runtime-generated credentials.
+The outbound delivery transport continues to enforce HTTPS independently.
+
+Authentication precedes routing, body parsing and persistence access. Missing,
+wrong, duplicate or noncanonical credentials receive `unauthorized`. Query
+parameters and cookies cannot authenticate. Browser Origin headers are refused,
+with no CORS response. The API accepts programmatic callers only. Subscription
+creation validates syntax and signing-key recoverability without DNS or a test
+callback request; every delivery still validates its destination.
+
+All paths are literal, case-sensitive paths under `/v1`, with no trailing slash.
+Identifiers use the existing storage alphabet. Unknown parameters and repeated
+query parameter names are rejected. Requests that carry JSON require
+`Content-Type: application/json`, optionally with `charset=utf-8`. Invalid UTF-8,
+malformed JSON, compressed request bodies and Expect handshakes are refused.
+GET and DELETE requests must have empty bodies. Responses use JSON, no-store
+caching and connection close. HTTP parser failures can instead return an empty
+error response before application authentication.
+
+| Method and path | Input and behavior |
+| --- | --- |
+| `POST /v1/subscriptions` | A complete subscription specification. Returns the stored record, a generated identifier, Location and ETag. Creation has no request idempotency contract; inspect before retrying an uncertain creation. |
+| `GET /v1/subscriptions` | Lists live records with `after` and `limit` parameters. |
+| `GET /v1/subscriptions/<id>` | Returns the stored record and ETag, including a deletion tombstone. |
+| `PUT /v1/subscriptions/<id>` | Replaces the complete specification; requires its current ETag as If-Match. |
+| `DELETE /v1/subscriptions/<id>` | Saves a deletion tombstone; requires the current ETag as If-Match. |
+| `POST /v1/signing-keys` | `{ secretRef, secret }`, where secret is a caller-held random shared key encoded as canonical base64url. Returns reference and status only. |
+| `GET /v1/signing-keys/<ref>` | Inspects key metadata without exporting or decrypting the key. |
+| `DELETE /v1/signing-keys/<ref>` | Permanently revokes the reference. Repeated revocation returns its revoked metadata. |
+| `GET /v1/deliveries` | Lists redacted delivery records using `after` and `limit`. |
+| `GET /v1/deliveries/<eventId>` | Returns a redacted delivery record and its dead-letter metadata, if any. |
+| `GET /v1/deliveries/<eventId>/attempts` | Lists completed outcomes; `after` is an exclusive attempt number. |
+| `GET /v1/dead-letters` | Lists retained dead-letter metadata using `after` and `limit`. Requeue belongs to the replay milestone. |
+
+Stored subscription responses include `id`, `revision`, `spec`, creation and
+update times and `deletedAt`. The authenticated admin can inspect callback URLs
+and filter expressions through these records; they are not diagnostic logs.
+A signing-key reference remains opaque metadata. Actual key material is never
+included in subscription or key responses. Provisioning cannot overwrite or
+restore an existing reference. Rotation provisions a new reference before an
+update. An enabled subscription must have a recoverable available signing key;
+a disabled draft may refer to an unavailable key. Each delivery still checks
+availability at signing time, since later revocation can invalidate a key.
+
+ETags are quoted revision integers. Updates and deletion accept a single exact
+If-Match value; wildcards, lists and weak validators are refused. A missing
+precondition returns `revision-required`; a stale revision returns
+`revision-conflict` without writing. A valid replacement increments the
+revision and resets its discovery cursor to the new schedule start. Disabled
+and deleted subscriptions stop discovery. Deletion increments the revision,
+retains its tombstone for inspection, omits it from live listings and refuses
+later edits or repeated deletion. Saved events and delivery attempts remain
+intact. Queued deliveries keep their original callback URL and signing-key
+reference and can still be delivered after an edit, disable or deletion.
+
+List responses are `{ items, nextAfter }`. Continue by passing the non-null
+`nextAfter` as `after` with the same limit. A full final page returns its last
+identifier and needs an additional empty page to establish exhaustion. Pages
+are ordered by identifier, or attempt number, and do not form a snapshot
+across requests. Records inserted earlier in the order appear on a fresh pass.
+
+The delivery-log SQL selects only event and subscription identifiers,
+subscription revision, occurrence time, delivery status, availability,
+completed attempt count and update time. It never selects payload bytes,
+receipt contents, payload hashes, occurrence or idempotency keys, callback URLs,
+signing-key references or lease tokens. Detail responses add fixed dead-letter
+fields. Attempts contain only their identifiers, sequence numbers, start and
+finish times and the saved fixed outcome or HTTP status. Active reservations
+are not completed attempts. Inspection is read-only and does not recover,
+claim, acknowledge or replay work.
+
+Requests and listings have explicit policy limits in `CONTROL_DEFAULTS` and
+`CONTROL_LIMITS`. These are service input limits, not throughput or latency
+measurements. [control-api.test.ts](test/control-api.test.ts) enforces defaults,
+configuration caps, revision conflicts and pagination over synthetic records.
+[control-http.test.ts](test/control-http.test.ts) exercises body, target, header,
+response and timeout rejection against local sockets, including the exact
+configured body boundary.
+
+| Setting | Default | Configuration cap | Unit |
+| --- | ---: | ---: | --- |
+| `maxRequestBytes` | 16384 | 65536 | Encoded body bytes |
+| `maxHeaderBytes` | 8192 | 16384 | Node HTTP parser header bytes |
+| `requestTimeoutMs` | 5000 | 60000 | Milliseconds |
+| `defaultPageSize` | 25 | 100 | Records |
+| `maxPageSize` | 100 | 100 | Records |
+
+All settings must be positive safe integers, with default page size no greater
+than maximum page size. Request targets have a fixed limit of 4096 UTF-8 bytes;
+serialized responses have a fixed limit of 1048576 UTF-8 bytes. A response
+exceeding that limit returns `response-too-large`; retry a listing with a
+smaller page. The admin token and each provisioned signing key require exactly
+32 bytes, encoded canonically without padding. The constructor and provisioning
+boundary tests in the files above enforce these sizes with runtime randomness.
+
+The application deadline starts after headers and does not reset as body
+chunks arrive. It aborts incomplete reads and is checked again before routing.
+Node separately bounds incomplete headers and whole-request parsing with its
+parser deadlines and a configured connection-check interval. The event loop
+must remain responsive for timers to fire. Synchronous validation and SQLite
+writes cannot be interrupted or rolled back by a later network disconnect;
+once a request has entered its write, losing the response can leave a committed
+operation. Re-read the record before deciding how to retry. The server closes
+connections after responses and permits only the first request on a socket.
+
+Application errors return `{ error: { code, field? } }` with fixed values,
+without supplied URLs, expressions, keys, SQL, paths or arbitrary exceptions.
+Unavailable storage or vault internals return `service-unavailable`. Protocol
+parser errors omit diagnostic text. The tests cover authentication before
+storage, concurrent edits, key custody, revocation, connection reopening,
+redacted logs, stale revisions, malformed requests, timeouts and disconnects.
+These checks establish local control behavior, not protection of a compromised
+process, multi-tenant authorization or external receiver reliability.

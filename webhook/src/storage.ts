@@ -5,7 +5,7 @@ import { parseStoredSubscription, parseSubscription, SubscriptionValidationError
 import { deliveryDisposition, parseDeliveryPolicy, type DeliveryPolicy } from "./delivery-policy.js";
 import type {
   AttemptDisposition, AttemptInput, AttemptResult, DeadLetterReason, DeliveryClaim, NewEvent, Page,
-  ScanCommit, ScanCursor, StoredAttempt, StoredDeadLetter, StoredDelivery,
+  ScanCommit, ScanCursor, StoredAttempt, StoredDeadLetter, StoredDelivery, StoredDeliveryLog,
   StoredEvent, StoredSubscription
 } from "./storage-types.js";
 
@@ -114,6 +114,16 @@ function deadLetterRow(row: Row): StoredDeadLetter {
 
 const DELIVERY_SELECT = `SELECT d.*, e.idempotency_key FROM deliveries d
   JOIN events e ON e.id = d.event_id`;
+
+const DELIVERY_LOG_SELECT = `SELECT d.event_id, e.subscription_id, e.subscription_revision,
+  e.occurred_at, d.status, d.available_at, d.attempt_count, d.updated_at
+  FROM deliveries d JOIN events e ON e.id = d.event_id`;
+function deliveryLogRow(row: Row): StoredDeliveryLog {
+  return Object.freeze({ eventId: row.event_id as string, subscriptionId: row.subscription_id as string,
+    subscriptionRevision: row.subscription_revision as number, occurredAt: row.occurred_at as number,
+    status: row.status as StoredDeliveryLog["status"], availableAt: row.available_at as number,
+    attemptCount: row.attempt_count as number, updatedAt: row.updated_at as number });
+}
 
 /** Synchronous local SQLite repository. No network calls or background timers. */
 export class WebhookStore {
@@ -324,6 +334,22 @@ export class WebhookStore {
       const { after, limit } = page(input);
       return this.#all(`${DELIVERY_SELECT} WHERE d.event_id > ? ORDER BY d.event_id LIMIT ?`,
         after, limit).map(deliveryRow);
+    });
+  }
+
+  getDeliveryLog(eventId: string): StoredDeliveryLog | undefined {
+    return this.#run(() => {
+      identifier(eventId);
+      const row = this.#get(`${DELIVERY_LOG_SELECT} WHERE d.event_id = ?`, eventId);
+      return row && deliveryLogRow(row);
+    });
+  }
+
+  listDeliveryLogs(input?: Page): StoredDeliveryLog[] {
+    return this.#run(() => {
+      const { after, limit } = page(input);
+      return this.#all(`${DELIVERY_LOG_SELECT} WHERE d.event_id > ? ORDER BY d.event_id LIMIT ?`,
+        after, limit).map(deliveryLogRow);
     });
   }
 
