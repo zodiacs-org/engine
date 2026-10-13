@@ -1,0 +1,1 @@
+M1: Add isolated relocation project, engine-backed chart API and natal receipts; pass synthetic Vitest tests, Node 22 typecheck and package exclusion checks.
