@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": "..",
+    "outDir": "build",
+    "types": ["node"]
+  },
+  "include": ["src/replay-cli.ts"]
+}

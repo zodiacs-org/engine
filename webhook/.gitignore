@@ -1,0 +1,14 @@
+node_modules/
+.cache/
+build/
+coverage/
+var/
+.env
+.env.*
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.log
+*.tsbuildinfo
+
