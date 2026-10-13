@@ -1,0 +1,14 @@
+{
+  "name": "@zodiacs/skydb-tools",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=22.7.0 <23" },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "test": "node --test test/*.node-test.mjs"
+  },
+  "dependencies": {
+    "@zodiacs/engine": "file:../artifacts/zodiacs-engine-1.0.0.tgz"
+  }
+}
