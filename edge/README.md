@@ -18,7 +18,9 @@ executes Node, Deno and Bun and fails on any exact difference. The recorded
 Deno and Bun runs differ from Node; they do not establish numerical parity.
 The [web runtime checker](docs/web-smoke.md) executes local workerd and a real
 Chromium page. Its recorded workerd run matches Node exactly, while Chrome
-differs. Benchmarks and a measured WASM experiment remain in [PLAN.md](PLAN.md).
+differs. The [local benchmark runner](docs/benchmarks.md) measures chart,
+houses and transit-scan workloads with recorded provenance. A performance
+gate and measured WASM experiment remain in [PLAN.md](PLAN.md).
 
 The foundation's commands, observed results and the missing-root-build
 limitation are recorded in [M1 validation](docs/evidence/m1-validation.md).
@@ -35,6 +37,8 @@ Native exact comparisons and runner validation are recorded in
 [M6 validation](docs/evidence/m6-validation.md).
 Local Workers and browser checks are recorded in
 [M7 validation](docs/evidence/m7-validation.md).
+Benchmark checks and the initial local Node baseline are recorded in
+[M8 and M9 validation](docs/evidence/m8-m9-validation.md).
 
 ## Run the foundation
 
@@ -87,8 +91,8 @@ not substitute for that complete gate. Do not create or alter root build
 output for this project.
 
 Keep raw runs in `results/`, generated bundles in `.generated/` and downloaded
-tools in `.cache/`; all are ignored. Future baseline summaries and their
-measurement scripts will be committed under `docs/evidence/` within this
+tools in `.cache/`; all are ignored. Reviewed baseline summaries belong under
+`docs/evidence/`, with their measurement scripts under `scripts/` within this
 folder. Do not commit secrets, personal birth inputs or external ephemeris
 output.
 

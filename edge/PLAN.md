@@ -16,8 +16,8 @@ single session summary to `CHANGES.txt`. The harness owns all git mutations.
 - [x] M5 Implement an exact comparison protocol for full results, including dates and binary64 values, with mismatch paths and tests for differences JSON would hide.
 - [x] M6 Run Node, Deno and Bun smoke cases through that protocol; record runtime versions and fail required-runtime checks on missing tools, process errors or any unequal output.
 - [x] M7 Extend smoke checks to a local Workers runtime and a real browser ESM page; verify imports and handlers without network access during calculations and report exact parity failures honestly.
-- [ ] M8 Add chart, houses and transit-scan micro-benchmarks with warmup, repeated samples, consumed results, workload identity and machine/runtime/build provenance; keep raw runs in ignored folders.
-- [ ] M9 Capture and commit compact baseline evidence from the benchmark runner, documenting its host, runtime, sample protocol and limits; keep raw generated data ignored.
+- [x] M8 Add chart, houses and transit-scan micro-benchmarks with warmup, repeated samples, consumed results, workload identity and machine/runtime/build provenance; keep raw runs in ignored folders.
+- [x] M9 Capture and commit compact baseline evidence from the benchmark runner, documenting its host, runtime, sample protocol and limits; keep raw generated data ignored.
 - [ ] M10 Add a CI-ready performance gate with a configurable regression threshold, comparable-baseline validation and tests for regressions, malformed data and missing workloads.
 - [ ] M11 Profile numeric kernels and evaluate an isolated WASM compilation path against JavaScript with identical synthetic workloads; record compilation and call overhead, exact-result checks and measured benefits or rejection. Enable a WASM option only if it measurably helps.
 - [ ] M12 Document reproducible setup, runtime support and failures, benchmark refresh rules, WASM findings and CI wiring examples entirely under edge; run the complete edge checks and verify package isolation.
@@ -35,3 +35,6 @@ Every milestone must describe its actual validation. A runtime absent from the
 host is untested, never a pass. Baseline numbers require committed measurement
 scripts and compact evidence under `edge/docs/evidence/`. Tests and reports
 must not use external ephemeris comparisons. Documentation uses no em dashes.
+
+M8 and M9 validation, baseline scope and observed host variability are recorded
+in [docs/evidence/m8-m9-validation.md](docs/evidence/m8-m9-validation.md).

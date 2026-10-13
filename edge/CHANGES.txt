@@ -5,3 +5,4 @@ Complete M4: add Deno and Bun HTTP examples, shared adapter tests, native server
 Complete M5: add exact full-result transport with binary64 and Date preservation, mismatch paths, strict validation, workload integration and test evidence
 Complete M6: add required Node, Deno and Bun exact smoke checks, process failure tests and compact evidence recording native numerical mismatches
 Complete M7: add local workerd and real Chromium smoke checks, network and shutdown tests, and evidence of workerd parity and browser numerical mismatch
+Complete M8 and M9: add reproducible chart, houses and transit-scan benchmarks, validated Node baseline evidence, provenance checks and benchmark documentation
