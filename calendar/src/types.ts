@@ -92,4 +92,16 @@ export type IdentityBatch =
 export interface CalendarOptions {
   /** UTC revision instant supplied explicitly so export never reads the wall clock. */
   readonly dtstamp: string;
+  /** A bounded, immutable projection returned by createCalendarTimeZone. */
+  readonly timeZone?: CalendarTimeZone;
+}
+
+/** Public metadata; createCalendarTimeZone also retains a private offset snapshot. */
+export interface CalendarTimeZone {
+  readonly tzid: string;
+  /** Inclusive UTC bounds for all event endpoints, including interval ends. */
+  readonly startUtc: string;
+  readonly endUtc: string;
+  readonly tzdbVersion: string;
+  readonly dataForm: "rearguard";
 }

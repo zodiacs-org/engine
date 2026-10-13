@@ -3,8 +3,8 @@
 This private TypeScript project exports supplied astrology event records as
 iCalendar text. It imports the engine's identity from the parent source tree
 without building or changing the parent npm package. The implemented scope is
-M1 and M2 in [PLAN.md](PLAN.md): UTC serialization, validation and stable event
-identities. Event search adapters, timezones, streaming, the CLI and the HTTP
+M1 through M3 in [PLAN.md](PLAN.md): UTC and timezone serialization, validation
+and stable event identities. Event search adapters, streaming, the CLI and the HTTP
 feed endpoint remain planned milestones.
 
 Use Node satisfying `engines` in [package.json](package.json). From this folder:
@@ -173,6 +173,93 @@ An empty iterable is refused because [RFC 5545 section 3.6](https://www.rfc-edit
 requires a calendar component. Later CLI and HTTP milestones must explicitly
 handle an empty successful schedule as well as an upstream search refusal.
 
+## Timezone display
+
+Create a timezone projection before serializing and pass it as `timeZone`:
+
+```ts
+import { createCalendarTimeZone, serializeCalendar } from "./src/index.ts";
+
+const timeZone = createCalendarTimeZone(
+  "America/New_York",
+  "2026-03-08T06:59:59.000Z",
+  "2026-11-01T07:00:00.000Z"
+);
+const ics = serializeCalendar(events, {
+  dtstamp: "2026-01-01T00:00:00.000Z",
+  timeZone
+});
+```
+
+The dates above are the synthetic fixture's coverage in
+`test/fixtures/synthetic-timezone.ts`. Coverage bounds are inclusive and must
+contain every event start and interval end, including their milliseconds.
+They describe timezone availability, separate from a search's boundary policy.
+The factory returns frozen metadata backed by a private snapshot of offsets.
+Pass the factory result itself; a copied or JSON-deserialized object is refused.
+The projection can be reused for repeated exports within its coverage.
+
+Normal event dates become local `DTSTART;TZID=...` and `DTEND;TZID=...`.
+The calendar embeds a matching VTIMEZONE with an initial offset and explicit
+clock transitions over the coverage and boundary padding. Onsets use the
+offset before each transition, as
+[RFC 5545 section 3.6.5](https://www.rfc-editor.org/rfc/rfc5545.html#section-3.6.5)
+requires. These definitions cover the requested interval; they are not
+indefinite recurrence rules. DTSTAMP stays UTC. UID, the calculation receipt,
+and the exact UTC start/end X-properties remain unchanged.
+
+Each projected event also records `X-ZODIACS-TZID`, `X-ZODIACS-TZDB` and
+`X-ZODIACS-TZDB-FORM`, separately from the calculation receipt. Display uses
+the full timezone database bundled with the dependencies pinned in
+`package-lock.json`: js-joda's IANA tzdb `2026e`, in rearguard form. Its clock
+offsets come from that database, without host Intl sampling or a network
+request. This is separate from the engine's historical birth-time resolver;
+it does not replace a birthplace's local mean time or revise natal input.
+Future civil rules can change, so a database update requires review and new
+formatting checks. Display changes do not change event identities. The factory
+checks a pinned digest of the provider's data because reduced js-joda bundles
+share the full bundle's version label. Replacing that shared provider with a
+reduced bundle prevents new projections; existing snapshots retain their
+offsets. `test/timezone-provider.calendar-test.ts` enforces this behavior.
+
+The factory accepts coverage from `0100-01-04T00:00:00.000Z` through
+`2499-12-29T23:59:59.999Z`. The lower bound avoids calendar clients' handling
+of early years; the upper bound stays inside the dependency's compiled future
+transitions with space for padding. `test/timezone.calendar-test.ts` checks
+both bounds and rejects dates outside them. This is a serialization range,
+not evidence of historical or astronomical accuracy. Transition enumeration
+also has a work budget. The
+[js-joda timezone documentation](https://github.com/js-joda/js-joda/blob/main/packages/timezone/README.md#implementation-details)
+describes the source and coverage. Its rearguard form represents daylight
+saving as nonnegative. STANDARD/DAYLIGHT labels describe the offset at each
+emitted onset; changes of abbreviation or DST classification that leave the
+clock unchanged are not reconstructed.
+
+Some dates use UTC even with a requested timezone:
+
+- If either event endpoint is in a repeated wall-time interval, both endpoints
+  use UTC. The RFC's local form denotes the first occurrence, while calendar
+  clients can choose differently. Both occurrences are kept distinct this way.
+- If the projection, including its padding, contains an offset with seconds
+  below minute resolution or an offset outside the parser's supported range,
+  every event in that projection uses UTC and no VTIMEZONE is emitted. No offset
+  is rounded to make it fit a client.
+
+`X-ZODIACS-TIME-FALLBACK` gives the reason: `ambiguous-local-time`,
+`sub-minute-offset` or `offset-outside-client-range`. The requested zone and
+database metadata remain attached. Inputs are resolved UTC instants, so a
+spring gap is crossed without creating a nonexistent wall time. Interval
+ordering is checked in UTC before display conversion.
+
+`test/timezone.calendar-test.ts` and the small
+`test/fixtures/synthetic-timezone.ics` golden cover New York's spring and fall
+changes, Lord Howe's non-hour changes, fixed offsets, endpoint validation,
+milliseconds, and UID retention. `test/timezone-history.calendar-test.ts`
+compares the exported clocks and onsets with cited IANA definitions at Apia's
+date-line change, Kathmandu's offset change, Paris's seconds-valued historical
+offset, and Dublin's and Casablanca's seasonal rules. All use invented event
+receipts and round-trip with `ical.js`, resolving the embedded VTIMEZONE.
+
 ## Fixtures and scope
 
 Fixtures under `test/fixtures/` are small synthetic formatting examples. Their
@@ -186,3 +273,8 @@ The engine and its data retain the terms and attributions in
 [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE). `ical.js` is an
 unmodified, development-only parser dependency under MPL-2.0; its source and
 license remain in the installed dependency, not in calendar source files.
+`@js-joda/core` and `@js-joda/timezone` are unmodified runtime dependencies
+under BSD-3-Clause; retain their installed LICENSE files when redistributing
+them. Their timezone data derives from the public-domain IANA database.
+No dependency source or timezone database file is copied into this project's
+authored files; the golden fixtures contain only the clock changes they test.

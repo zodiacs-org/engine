@@ -2,6 +2,7 @@ import { label, validateReceipt } from "./validation.js";
 import { canonicalJson as json } from "./canonical-json.js";
 import { createEventIdentity, validateEventIdentity } from "./identity.js";
 import { escapeText, foldContentLine, utcDateTime } from "./content-line.js";
+import { eventDateLines, timeZoneLines } from "./timezone.js";
 import type { CalendarOptions, JsonValue, ScheduleEvent, ScheduleReceipt } from "./types.js";
 
 const SCHEMA = "zodiacs-calendar-receipt/1";
@@ -31,6 +32,7 @@ function aspectRecord(receipt: ScheduleReceipt): JsonValue {
 export function serializeCalendar(events: Iterable<ScheduleEvent>, options: CalendarOptions): string {
   const stamp = utcDateTime(options.dtstamp);
   const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Zodiacs//Calendar Workbench//EN", "CALSCALE:GREGORIAN"];
+  if (options.timeZone !== undefined) lines.push(...timeZoneLines(options.timeZone));
   const uids = new Set<string>();
   for (const event of events) {
     label(event.uid, "UID");
@@ -48,8 +50,13 @@ export function serializeCalendar(events: Iterable<ScheduleEvent>, options: Cale
       throw new RangeError("DTEND must follow DTSTART at calendar second resolution.");
     }
     const receipt = event.receipt;
-    lines.push("BEGIN:VEVENT", `UID:${escapeText(event.uid)}`, `DTSTAMP:${stamp}`, `DTSTART:${start}`);
-    if (end !== undefined) lines.push(`DTEND:${end}`);
+    lines.push("BEGIN:VEVENT", `UID:${escapeText(event.uid)}`, `DTSTAMP:${stamp}`);
+    if (options.timeZone === undefined) {
+      lines.push(`DTSTART:${start}`);
+      if (end !== undefined) lines.push(`DTEND:${end}`);
+    } else {
+      lines.push(...eventDateLines(options.timeZone, event.receipt.utc, event.endUtc));
+    }
     lines.push(
       `SUMMARY:${escapeText(event.summary)}`,
       "TRANSP:TRANSPARENT",

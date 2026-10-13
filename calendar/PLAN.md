@@ -8,7 +8,7 @@ to `CHANGES.txt`, and stops.
 
 - [x] M1 Bootstrap an isolated private TypeScript project and receipt-bearing event model; implement UTC iCalendar serialization with TEXT escaping, UTF-8 folding, small golden fixtures and independent parser round trips.
 - [x] M2 Define versioned event identities and stable UID generation; test regeneration, overlapping windows, changed labels, chart identities and nearby exact passes.
-- [ ] M3 Add timezone-aware DTSTART/DTEND with TZID and matching VTIMEZONE definitions; test daylight-saving folds, gaps and non-hour offsets while preserving exact UTC receipt instants.
+- [x] M3 Add timezone-aware DTSTART/DTEND with TZID and matching VTIMEZONE definitions; test daylight-saving folds, gaps and non-hour offsets while preserving exact UTC receipt instants.
 - [ ] M4 Integrate the existing events package through a relative-source adapter, with pinned read-only branch extraction into an ignored local cache if needed; validate ranges, UTC clocks, budgets and complete/refused results, and export ingresses.
 - [ ] M5 Export personal natal transit exacts using engine natal charts and the events package's moving-to-fixed aspect search; retain aspect policy, residual orb, chart identity and calculation receipts.
 - [ ] M6 Define and implement synastry exact exports for two explicitly synthetic charts using engine APIs; distinguish static natal aspects from any explicitly selected moving-chart convention, with documented event timing.
