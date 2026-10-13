@@ -1,0 +1,366 @@
+{
+  "campaign": {
+    "config": {
+      "channels": {
+        "JPL.Mercury.lat": 60,
+        "JPL.Mercury.lon": 60,
+        "JPL.Moon.lat": 60,
+        "JPL.Moon.lon": 60,
+        "JPL.Sun.lat": 60,
+        "JPL.Sun.lon": 60,
+        "JPL.Venus.lat": 60,
+        "JPL.Venus.lon": 60,
+        "JPL.housesNodesAngles": 60,
+        "JPL.otherBodies": 60,
+        "Swiss.positions": 60
+      },
+      "conventions": {
+        "Swiss": "unavailable",
+        "correction": "JPL Moon NONE; other exact centers CN+S; no deflection; NAIF periodic TT/TDB",
+        "frame": "IAU2006 precession/unadjusted IAU2000B true ecliptic/equinox of date",
+        "input": "synthetic TT; uniform sphere; random house systems",
+        "tolerance": "60 arcseconds screening only; engine minus reference; no accuracy bound"
+      },
+      "endMs": 2524608000000,
+      "seed": "crosscheck-m10-driver-v1",
+      "shards": 3,
+      "startMs": -631152000000,
+      "total": 8
+    },
+    "identities": {
+      "build": "5dfa45c707d282732253f73b2064c773f419c6548b8eefec48a86b70fa6239f8",
+      "references": {
+        "ERFA": {
+          "nutationSha256": "a5246d525e987eb587bbe786b2846160e01be85b5d12af573870b89235695f49"
+        },
+        "EngineBuild": {
+          "dependencySha256": "2dbbbbc51c24153b75d9683140572bd1d8352e671d0e617792349150e745143c",
+          "nodeExecutableSha256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+          "outputSha256": "5acff9549ca3f1b85e02d2f104811c10397a9e2baaa516b66db2dc46c459d2c2",
+          "sourceSha256": "749502dcde3ed7e762418e32b012ba864fdf17d8288a368a161a08d41f0b2635"
+        },
+        "JPL": {
+          "name": "de440s.bsp",
+          "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+          "source": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp"
+        },
+        "Swiss": {
+          "status": "unavailable"
+        }
+      },
+      "tooling": "d3218e69e85140c81479301b81a3ff8c4fd6ab0944d7aac6ebc65ebc33ec469e"
+    },
+    "sampler": "sha256-index-v1",
+    "schema": "crosscheck-campaign/1",
+    "sha256": "05cb78449c6481574b42406e8b027bb3e97e23ffe3426360f71d433a4828c550"
+  },
+  "channels": {
+    "JPL.Mercury.lat": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 2.3067150531094427,
+        "mean": 0.45773350337343643,
+        "meanAbs": 0.9476933978913138,
+        "n": 8,
+        "passed": 8,
+        "populationStdDev": 1.0789598835995369,
+        "rms": 1.1720385618774007
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 8,
+        "unsupported": 0
+      }
+    },
+    "JPL.Mercury.lon": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 4.479339221461487,
+        "mean": -2.0595344050605036,
+        "meanAbs": 2.3526012812737918,
+        "n": 8,
+        "passed": 8,
+        "populationStdDev": 1.7263456857843889,
+        "rms": 2.68736886051288
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 8,
+        "unsupported": 0
+      }
+    },
+    "JPL.Moon.lat": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 0.5859553849653754,
+        "mean": -0.06559845031615386,
+        "meanAbs": 0.2702099006211295,
+        "n": 8,
+        "passed": 8,
+        "populationStdDev": 0.32823227763494967,
+        "rms": 0.3347231464439046
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 8,
+        "unsupported": 0
+      }
+    },
+    "JPL.Moon.lon": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 2.490721894332637,
+        "mean": -1.0072029108087577,
+        "meanAbs": 1.2945953957867573,
+        "n": 8,
+        "passed": 8,
+        "populationStdDev": 1.1689893993882312,
+        "rms": 1.5430469595652918
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 8,
+        "unsupported": 0
+      }
+    },
+    "JPL.Sun.lat": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 0.7676641880050885,
+        "mean": 0.08617446270269487,
+        "meanAbs": 0.3285109876811959,
+        "n": 8,
+        "passed": 8,
+        "populationStdDev": 0.4017637439984205,
+        "rms": 0.410901623279498
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 8,
+        "unsupported": 0
+      }
+    },
+    "JPL.Sun.lon": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 0.8297287478399085,
+        "mean": 0.029663683656622197,
+        "meanAbs": 0.49193806606524504,
+        "n": 8,
+        "passed": 8,
+        "populationStdDev": 0.5177884034240203,
+        "rms": 0.5186374117323933
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 8,
+        "unsupported": 0
+      }
+    },
+    "JPL.Venus.lat": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 3.8029250281294225,
+        "mean": 0.6282079116512036,
+        "meanAbs": 1.5860954199763095,
+        "n": 8,
+        "passed": 8,
+        "populationStdDev": 1.8410244391929964,
+        "rms": 1.9452547817617756
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 8,
+        "unsupported": 0
+      }
+    },
+    "JPL.Venus.lon": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 3.7059549205537223,
+        "mean": 0.3877568605659576,
+        "meanAbs": 1.460684580176519,
+        "n": 8,
+        "passed": 8,
+        "populationStdDev": 1.748314171251688,
+        "rms": 1.7907980970269777
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 8,
+        "unsupported": 0
+      }
+    },
+    "JPL.housesNodesAngles": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": null,
+        "mean": null,
+        "meanAbs": null,
+        "n": 0,
+        "passed": 0,
+        "populationStdDev": null,
+        "rms": null
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 0,
+        "unsupported": 8
+      }
+    },
+    "JPL.otherBodies": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": null,
+        "mean": null,
+        "meanAbs": null,
+        "n": 0,
+        "passed": 0,
+        "populationStdDev": null,
+        "rms": null
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 0,
+        "unsupported": 8
+      }
+    },
+    "Swiss.positions": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": null,
+        "mean": null,
+        "meanAbs": null,
+        "n": 0,
+        "passed": 0,
+        "populationStdDev": null,
+        "rms": null
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 0,
+        "unsupported": 8
+      }
+    }
+  },
+  "complete": true,
+  "completed": 8,
+  "coverage": [
+    {
+      "completed": 3,
+      "firstIndex": 0,
+      "lastIndex": 6,
+      "shard": 0,
+      "stride": 3
+    },
+    {
+      "completed": 3,
+      "firstIndex": 1,
+      "lastIndex": 7,
+      "shard": 1,
+      "stride": 3
+    },
+    {
+      "completed": 2,
+      "firstIndex": 2,
+      "lastIndex": 5,
+      "shard": 2,
+      "stride": 3
+    }
+  ],
+  "metadata": {
+    "command": [
+      "node",
+      "crosscheck/tools/campaign.mjs",
+      "crosscheck/runtime/m10-driver-smoke.json",
+      "report"
+    ],
+    "exclusions": [
+      "Reproduction: node crosscheck/tools/campaign.mjs crosscheck/runtime/m10-driver-smoke.json all, then report. Specification: {\"name\":\"driver-smoke\",\"kernel\":\"de440s\",\"seed\":\"crosscheck-m10-driver-v1\",\"total\":8,\"shards\":3}. Preserve external Swiss environment selectors if enabled.",
+      "Only exact Sun/Moon/Mercury/Venus centers compared; no other planets, houses, nodes, angles, speeds or topocentric checks. No UTC/UT1 validation.",
+      "JPL residuals include model differences: CN+S Newtonian aberration, no deflection, periodic TT/TDB and unadjusted IAU2000B frames. Sampling interval is TT despite ISO Z labels.",
+      "Swiss.positions is the legacy unavailable channel; optional per-body Swiss channels carry actual measurements. Fallback/error/unsupported verdicts contain no residuals.",
+      "Sample maxima are not unsampled bounds; no throughput guarantee. Command records report invocation; reproduction command above runs all shards from scratch with identical inputs."
+    ],
+    "runtime": {
+      "arch": "x64",
+      "node": "v22.23.3",
+      "platform": "linux"
+    },
+    "title": "Synthetic TT chart campaign",
+    "units": {
+      "JPL.Mercury.lat": "arcseconds",
+      "JPL.Mercury.lon": "arcseconds",
+      "JPL.Moon.lat": "arcseconds",
+      "JPL.Moon.lon": "arcseconds",
+      "JPL.Sun.lat": "arcseconds",
+      "JPL.Sun.lon": "arcseconds",
+      "JPL.Venus.lat": "arcseconds",
+      "JPL.Venus.lon": "arcseconds",
+      "JPL.housesNodesAngles": "arcseconds",
+      "JPL.otherBodies": "arcseconds",
+      "Swiss.positions": "arcseconds"
+    }
+  },
+  "schema": "crosscheck-report/1",
+  "span": {
+    "endMsExclusive": 2524608000000,
+    "meaning": "Configured synthetic sampling interval, not continuous coverage or observed extrema",
+    "startMsInclusive": -631152000000
+  }
+}
