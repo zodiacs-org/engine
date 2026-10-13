@@ -1,1 +1,2 @@
 M1: Add isolated Rust/WASM workspace, pinned build tooling, TypeScript loader, exact longitude-normalization parity tests, scope documentation and package-isolation checks.
+M2: Port angular arithmetic, sign annotations, strict date validation and Julian/Gregorian helpers to Rust/WASM with matching TypeScript signatures, native tests and bit-level parity coverage.

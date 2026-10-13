@@ -2,6 +2,11 @@
 
 #![forbid(unsafe_code)]
 
+pub mod angles;
+pub mod calendar;
+pub mod date_input;
+pub mod signs;
+
 use std::fmt;
 
 /// A longitude that is not a finite binary64 value.

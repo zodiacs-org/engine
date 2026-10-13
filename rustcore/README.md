@@ -1,10 +1,11 @@
 # Rust numeric core
 
-An isolated, experimental port of this checkout's numeric engine. The current
-milestone builds a native Rust library and a real WebAssembly module and exposes
-`normalizeLongitude(lon: number): number` through a TypeScript wrapper.
-Planetary positions, houses, aspects and their supporting time/frame functions
-remain in [PLAN.md](PLAN.md). This is not a replacement for the engine yet.
+An isolated, experimental port of this checkout's numeric engine. The native
+library and WebAssembly module implement angular arithmetic, sign annotations,
+resolved-instant date validation and Julian/Gregorian civil-calendar helpers.
+The TypeScript wrapper retains the reference function signatures after explicit
+initialization. Planetary positions, houses, aspect matching, time scales and
+frame rotations remain in [PLAN.md](PLAN.md).
 
 ## Setup and checks
 
@@ -57,32 +58,59 @@ initRustCore(readFileSync(new URL("./pkg/zodiacs_rustcore_bg.wasm", import.meta.
 const longitude = normalizeLongitude(-15);
 ```
 
-For a browser, supply an ArrayBuffer obtained from your own asset loader, or a
-compiled `WebAssembly.Module`. The wrapper makes no network requests and
+The wrapper also exports `signIndexForLongitude`, `signForLongitude`,
+`degreeInSign`, the frozen sign tables, `separation`, `wrap360`, `signedDelta`,
+`advance`, `antiscion`, `contraAntiscion` and `midpoint`. `dateFrom(input, label)`
+returns a newly allocated Date after Rust validates and resolves the instant.
+`parseCalendarDate`, `julianDayNumber`, `civilDateOf`, `format`,
+`julianToGregorian` and `gregorianToJulian` mirror the civil-calendar module.
+Their reference files, tested inputs and edge behavior are in [PARITY.md](PARITY.md).
+
+For a browser, supply this build's WASM as an ArrayBuffer obtained from your own
+asset loader, or as a compiled `WebAssembly.Module`. The wrapper makes no network requests and
 does not initialize WASM at import time. Initialization is synchronous and
-repeated successful calls reuse the instance. Calls before initialization throw;
-invalid WASM bytes do not mark the wrapper ready, so loading can be retried.
+repeated successful calls reuse the instance. Calls before initialization throw.
+Invalid WASM syntax does not mark the wrapper ready, so loading can be retried.
+Recovery from a valid but incompatible module requires reloading the wrapper
+and generated glue; always pair the generated glue with its matching WASM file.
 The browser integration test belongs to the wrapper milestone in the plan.
 
 ## Native use
 
-The workspace member `crates/core` exposes `normalize_longitude(f64)` returning
-`Result<f64, LongitudeError>`. It rejects nonfinite inputs and preserves the
-TypeScript evaluation order. The WASM crate translates that error into the same
-JavaScript `RangeError` as the engine.
+The workspace member `crates/core` exposes `normalize_longitude(f64)` and the
+`angles`, `signs`, `date_input` and `calendar` modules. Fallible angular functions
+return `Result<_, LongitudeError>`; the unchecked angular helpers propagate NaN
+as the reference does. Date parsers return `Result<f64, DateError>` with epoch
+milliseconds. Calendar string parsers and conversions return `Option`, and
+`CivilDate` has numeric year, month and day fields.
+
+Native date validation parses ISO syntax and resolves Gregorian calendar fields
+and UTC offsets without calling JavaScript. The wrapper handles JavaScript input
+types, Date allocation, error labels and string formatting. Native `calendar::format`
+accepts finite integer civil fields within its documented range; the TypeScript
+`format` also preserves the reference's unchecked JavaScript string formatting.
 
 ## Parity and provenance
 
 [PARITY.md](PARITY.md) records current coverage and acceptance rules, enforced
-by [the parity tests](tests/normalize.parity.ts) and the native unit tests in
-[the core crate](crates/core/src/lib.rs). These compare implementations and do
-not establish astronomical accuracy. All inputs are synthetic. Benchmarks and
-performance claims wait for the benchmark milestone.
+by [the parity tests](tests/) and the native unit tests in
+[the core crate](crates/core/src/). Dates are compared from 1800 through 2200,
+with additional parser boundary cases; the exact corpus is in
+[date-input.parity.ts](tests/date-input.parity.ts) and
+[civil-calendar.parity.ts](tests/civil-calendar.parity.ts). These compare
+implementations and do not establish astronomical accuracy. All inputs are
+synthetic. Benchmarks and performance claims wait for the benchmark milestone.
 
 The port's code is MIT under the repository's [LICENSE](../LICENSE).
-`normalize_longitude` translates [src/signs.ts](../src/signs.ts), preserving
-its validation and expression order. No ephemeris coefficients or time tables
-are copied at this milestone. Future translations must retain their sources'
+The kernels translate [src/signs.ts](../src/signs.ts), the arithmetic helpers
+of [src/aspects.ts](../src/aspects.ts), [src/points.ts](../src/points.ts) and
+[src/window-ranges.ts](../src/window-ranges.ts),
+[src/date-input.ts](../src/date-input.ts) and
+[src/civil-calendar.ts](../src/civil-calendar.ts). Numeric operation order is
+preserved; ISO parsing uses equivalent integer calendar arithmetic. The local
+TypeScript sign table holds the reference's immutable labels, while Rust
+calculates the index and degree and provides native sign metadata. No ephemeris
+coefficients or time tables are copied yet. Future translations must retain their sources'
 notices and data terms, including the separate Delta T attribution described
 in [LICENSING.md](../LICENSING.md). Nothing here enters the root npm package;
 `check:isolation` checks npm's actual file listing without running prepack.
