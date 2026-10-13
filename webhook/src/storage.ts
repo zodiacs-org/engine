@@ -1,9 +1,10 @@
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import type { DatabaseSync, SQLInputValue, SQLOutputValue } from "node:sqlite";
 import { openDatabase } from "./storage-db.js";
 import { parseStoredSubscription, parseSubscription, SubscriptionValidationError } from "./subscription.js";
+import { deliveryDisposition, parseDeliveryPolicy, type DeliveryPolicy } from "./delivery-policy.js";
 import type {
-  AttemptDisposition, AttemptInput, AttemptResult, DeadLetterReason, NewEvent, Page,
+  AttemptDisposition, AttemptInput, AttemptResult, DeadLetterReason, DeliveryClaim, NewEvent, Page,
   ScanCommit, ScanCursor, StoredAttempt, StoredDeadLetter, StoredDelivery,
   StoredEvent, StoredSubscription
 } from "./storage-types.js";
@@ -71,6 +72,7 @@ function result(input: AttemptResult): AttemptResult {
       if (!Number.isInteger(input.status) || input.status < 100 || input.status > 599) fail("invalid-input");
       return Object.freeze({ kind: input.kind, status: input.status });
     case "timeout": case "network-error": case "destination-rejected":
+    case "cancelled": case "interrupted": case "signing-error":
       return Object.freeze({ kind: input.kind });
     default: return fail("invalid-input");
   }
@@ -113,7 +115,7 @@ function deadLetterRow(row: Row): StoredDeadLetter {
 const DELIVERY_SELECT = `SELECT d.*, e.idempotency_key FROM deliveries d
   JOIN events e ON e.id = d.event_id`;
 
-/** Synchronous local SQLite repository. No network calls or retry scheduling policy. */
+/** Synchronous local SQLite repository. No network calls or background timers. */
 export class WebhookStore {
   #db: DatabaseSync;
   #closed = false;
@@ -325,41 +327,118 @@ export class WebhookStore {
     });
   }
 
-  /** Persists a caller's policy decision atomically; does not acquire a delivery lease. */
+  /** Legacy unleased writes are refused after the delivery's first managed claim. */
   recordAttempt(input: AttemptInput, disposition: AttemptDisposition): StoredDelivery {
     return this.#transaction(() => {
-      if (!input || typeof input !== "object" || !disposition || typeof disposition !== "object") fail("invalid-input");
-      identifier(input.eventId); positive(input.number); time(input.startedAt); time(input.finishedAt);
-      const outcome = result(input.result);
-      const delivery = this.getDelivery(input.eventId);
-      if (!delivery) fail("not-found");
-      if (delivery.status !== "pending" || input.number !== delivery.attemptCount + 1) fail("conflict");
-      if (input.startedAt < delivery.availableAt || input.startedAt < delivery.updatedAt ||
-          input.finishedAt < input.startedAt) fail("invalid-input");
-      const success = outcome.kind === "http" && outcome.status >= 200 && outcome.status < 300;
-      if ((disposition.status === "delivered") !== success) fail("invalid-input");
-      let availableAt = delivery.availableAt;
-      switch (disposition.status) {
-        case "pending":
-          time(disposition.availableAt);
-          if (disposition.availableAt < input.finishedAt) fail("invalid-input");
-          availableAt = disposition.availableAt;
-          break;
-        case "delivered": break;
-        case "dead-letter":
-          if (!["attempts-exhausted", "destination-rejected", "operator"].includes(disposition.reason)) fail("invalid-input");
-          break;
-        default: fail("invalid-input");
+      if (!input || typeof input !== "object") fail("invalid-input");
+      identifier(input.eventId);
+      if (this.#get("SELECT 1 FROM delivery_policies WHERE event_id = ?", input.eventId)) fail("conflict");
+      return this.#recordAttempt(input, disposition);
+    });
+  }
+
+  #recordAttempt(input: AttemptInput, disposition: AttemptDisposition): StoredDelivery {
+    if (!input || typeof input !== "object" || !disposition || typeof disposition !== "object") fail("invalid-input");
+    identifier(input.eventId); positive(input.number); time(input.startedAt); time(input.finishedAt);
+    const outcome = result(input.result);
+    const delivery = this.getDelivery(input.eventId);
+    if (!delivery) fail("not-found");
+    if (delivery.status !== "pending" || input.number !== delivery.attemptCount + 1) fail("conflict");
+    if (input.startedAt < delivery.availableAt || input.startedAt < delivery.updatedAt ||
+        input.finishedAt < input.startedAt) fail("invalid-input");
+    const success = outcome.kind === "http" && outcome.status >= 200 && outcome.status < 300;
+    if ((disposition.status === "delivered") !== success) fail("invalid-input");
+    let availableAt = delivery.availableAt;
+    switch (disposition.status) {
+      case "pending":
+        time(disposition.availableAt);
+        if (disposition.availableAt < input.finishedAt) fail("invalid-input");
+        availableAt = disposition.availableAt;
+        break;
+      case "delivered": break;
+      case "dead-letter":
+        if (!["attempts-exhausted", "destination-rejected", "operator"].includes(disposition.reason)) fail("invalid-input");
+        break;
+      default: fail("invalid-input");
+    }
+    this.#write(`INSERT INTO attempts (event_id, number, started_at, finished_at, result_json)
+      VALUES (?, ?, ?, ?, ?)`, input.eventId, input.number, input.startedAt, input.finishedAt, JSON.stringify(outcome));
+    this.#write("UPDATE deliveries SET status = ?, available_at = ?, attempt_count = ?, updated_at = ? WHERE event_id = ?",
+      disposition.status, availableAt, input.number, input.finishedAt, input.eventId);
+    if (disposition.status === "dead-letter") {
+      this.#write("INSERT INTO dead_letters (event_id, attempt_number, reason, created_at) VALUES (?, ?, ?, ?)",
+        input.eventId, input.number, disposition.reason, input.finishedAt);
+    }
+    return this.getDelivery(input.eventId)!;
+  }
+
+  #deliveryPolicy(eventId: string): DeliveryPolicy {
+    const row = this.#get("SELECT policy_json FROM delivery_policies WHERE event_id = ?", eventId);
+    if (!row) fail("conflict");
+    return parseDeliveryPolicy(JSON.parse(row.policy_json as string) as DeliveryPolicy);
+  }
+
+  /** Claim or recover one due record under a short write transaction, never over HTTP. */
+  claimDelivery(now: number, inputPolicy: DeliveryPolicy): DeliveryClaim {
+    return this.#transaction(() => {
+      time(now);
+      let requested: DeliveryPolicy;
+      try { requested = parseDeliveryPolicy(inputPolicy); } catch { fail("invalid-input"); }
+      const row = this.#get(`${DELIVERY_SELECT}
+        LEFT JOIN delivery_leases l ON l.event_id = d.event_id
+        WHERE d.status = 'pending' AND d.available_at <= ? AND d.updated_at <= ?
+          AND (l.event_id IS NULL OR l.expires_at <= ?)
+        ORDER BY d.available_at, d.event_id LIMIT 1`, now, now, now);
+      if (!row) return { status: "idle" };
+      const delivery = deliveryRow(row);
+      if (!this.#get("SELECT 1 FROM delivery_policies WHERE event_id = ?", delivery.eventId)) {
+        this.#write("INSERT INTO delivery_policies (event_id, policy_json) VALUES (?, ?)",
+          delivery.eventId, JSON.stringify(requested));
       }
-      this.#write(`INSERT INTO attempts (event_id, number, started_at, finished_at, result_json)
-        VALUES (?, ?, ?, ?, ?)`, input.eventId, input.number, input.startedAt, input.finishedAt, JSON.stringify(outcome));
-      this.#write("UPDATE deliveries SET status = ?, available_at = ?, attempt_count = ?, updated_at = ? WHERE event_id = ?",
-        disposition.status, availableAt, input.number, input.finishedAt, input.eventId);
-      if (disposition.status === "dead-letter") {
-        this.#write("INSERT INTO dead_letters (event_id, attempt_number, reason, created_at) VALUES (?, ?, ?, ?)",
-          input.eventId, input.number, disposition.reason, input.finishedAt);
+      const policy = this.#deliveryPolicy(delivery.eventId);
+      const expired = this.#get("SELECT * FROM delivery_leases WHERE event_id = ?", delivery.eventId);
+      if (expired) {
+        // A crash can happen before send, during send, or after receiver acknowledgement.
+        // Recovery cannot distinguish these cases. Count it and preserve the identity.
+        const number = expired.number as number;
+        const finishedAt = expired.expires_at as number;
+        const outcome: AttemptResult = { kind: "interrupted" };
+        this.#write("DELETE FROM delivery_leases WHERE event_id = ?", delivery.eventId);
+        const updated = this.#recordAttempt({ eventId: delivery.eventId, number,
+          startedAt: expired.started_at as number, finishedAt, result: outcome },
+        deliveryDisposition(policy, number, outcome, finishedAt));
+        return { status: "recovered", delivery: updated };
       }
-      return this.getDelivery(input.eventId)!;
+      // Existing unleased history can already have consumed the requested budget.
+      if (delivery.attemptCount >= policy.maxAttempts) {
+        this.#write("UPDATE deliveries SET status = 'dead-letter', updated_at = ? WHERE event_id = ?", now, delivery.eventId);
+        this.#write("INSERT INTO dead_letters (event_id, attempt_number, reason, created_at) VALUES (?, ?, 'attempts-exhausted', ?)",
+          delivery.eventId, delivery.attemptCount, now);
+        return { status: "recovered", delivery: this.getDelivery(delivery.eventId)! };
+      }
+      const expiresAt = now + policy.leaseMs;
+      time(expiresAt);
+      const lease = Object.freeze({ eventId: delivery.eventId, token: randomUUID(),
+        number: delivery.attemptCount + 1, startedAt: now, expiresAt });
+      this.#write("INSERT INTO delivery_leases (event_id, token, number, started_at, expires_at) VALUES (?, ?, ?, ?, ?)",
+        lease.eventId, lease.token, lease.number, lease.startedAt, lease.expiresAt);
+      return { status: "claimed", lease, delivery, event: this.getEvent(delivery.eventId)! };
+    });
+  }
+
+  /** A stale or expired token cannot acknowledge, retry or dead-letter any attempt. */
+  finishDelivery(eventId: string, token: string, outcome: AttemptResult, finishedAt: number): StoredDelivery {
+    return this.#transaction(() => {
+      identifier(eventId); identifier(token); time(finishedAt);
+      const checked = result(outcome);
+      if (checked.kind === "interrupted") fail("invalid-input"); // Recovery owns this diagnostic.
+      const lease = this.#get("SELECT * FROM delivery_leases WHERE event_id = ? AND token = ?", eventId, token);
+      if (!lease || finishedAt >= (lease.expires_at as number)) fail("conflict");
+      const number = lease.number as number;
+      const policy = this.#deliveryPolicy(eventId);
+      this.#write("DELETE FROM delivery_leases WHERE event_id = ?", eventId);
+      return this.#recordAttempt({ eventId, number, startedAt: lease.started_at as number,
+        finishedAt, result: checked }, deliveryDisposition(policy, number, checked, finishedAt));
     });
   }
 

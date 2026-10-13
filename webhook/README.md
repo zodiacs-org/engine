@@ -4,9 +4,10 @@ This private workbench is being built according to [PLAN.md](PLAN.md). The
 implemented milestones cover subscription validation, SQLite storage,
 encrypted signing-key custody, payload signing with receiver verification,
 local event searches and custom DSL queries with engine receipts, bounded
-discovery into a durable outbox, and an HTTPS transport for signed requests.
-It does not yet run a service or drain the outbox. Later milestones add the
-delivery worker, lifecycle management and a control API.
+discovery into a durable outbox, an HTTPS transport for signed requests, and a
+delivery worker with leases, retries and dead letters. Callers can drive scans
+and delivery attempts explicitly. Later milestones add the runnable service,
+lifecycle management, control API and replay CLI.
 The code and documentation here use the repository's [MIT license](../LICENSE).
 
 Use Node from the release line accepted by
@@ -180,8 +181,9 @@ pending delivery to pending, delivered or dead-letter. Attempt numbers must be
 consecutive. Only a successful HTTP status can be recorded as delivered.
 Failed attempts carry a status code or a fixed failure kind; response bodies
 and arbitrary error strings are not retained. Dead letters reference a retained
-attempt and event. Retries, delivery leases and replay remain later milestones;
-the storage methods alone do not provide at-least-once delivery.
+attempt and event. This legacy method is refused once a delivery has a managed
+retry policy. The delivery worker uses the lease methods described below;
+replay remains a later milestone.
 
 Listings use bounded pages ordered by identifier (attempts by attempt number),
 with an exclusive continuation value. They are inspection methods, not an
@@ -299,8 +301,8 @@ Verification alone does not prevent replay within the timestamp tolerance.
 After verification, the receiver must durably deduplicate the authenticated
 idempotency key together with its expected sender or subscription context
 before applying side effects. Retries and operator replay will intentionally
-reuse that identity. The transport, delivery worker and replay command are
-later milestones; these functions do not claim at-least-once delivery yet.
+reuse that identity. Signature verification establishes authenticity of the
+signed bytes; it does not acknowledge delivery or make receiver effects atomic.
 
 ## Local event searches and receipts
 
@@ -564,7 +566,8 @@ delivery state, destination and key reference remain intact. Numerical detail
 changes under the same identity cause a transaction conflict. The worker never
 silently replaces a retained receipt. Updating the callback therefore does not
 reissue old events to the new destination. Delivery retries and operator replay
-will consume the saved bytes and idempotency key in their later milestones.
+consume the saved bytes and idempotency key. Operator replay will use the same
+identity in its later milestone.
 
 [scan-worker.test.ts](test/scan-worker.test.ts) exercises synthetic schedules
 through the real search adapter and SQLite, including partition boundaries,
@@ -651,9 +654,9 @@ only `http` with a status, `timeout`, `network-error`, `destination-rejected`
 or `cancelled`. DNS failures, TLS errors and receiver content never enter the
 outcome. Only a fully received bounded successful response can acknowledge
 delivery. A timeout or interrupted response can still follow a receiver side
-effect, so a future delivery worker must retain the same idempotency key.
+effect, so the delivery worker retains the same idempotency key.
 The transport performs no retry, lease or SQLite state transition; those
-belong to the next milestone.
+belong to the delivery worker and storage methods below.
 
 [transport.test.ts](test/transport.test.ts) uses mocked DNS and a loopback HTTP
 receiver seam to check signed bytes, destination pins, redirect refusal,
@@ -666,3 +669,122 @@ peer mismatches and a stalled handshake. The production path uses Node's
 and [IP SAN checker](https://nodejs.org/download/release/latest-jod/docs/api/crypto.html#x509checkipip).
 Test seams are constructor dependencies, never subscription settings; the
 production constructor defaults enforce HTTPS with no trust override.
+
+## Delivery leases, retries and dead letters
+
+`DeliveryWorker` in [src/delivery-worker.ts](src/delivery-worker.ts) joins the
+store, signing-key vault and HTTPS transport. Construct it with those objects
+and explicit `maxAttempts`, `baseDelayMs`, `maxDelayMs`, `leaseMs` and
+`deadlineMs`. The constructor copies the settings. A trusted optional clock
+function returns integer Unix milliseconds; production defaults to `Date.now`.
+The worker creates no polling timer. Call `deliverNext({ signal })` repeatedly
+from a bounded service loop. Cancellation is optional.
+
+Settings must be positive integers within these service policy caps. The
+boundary tests in [delivery-leases.test.ts](test/delivery-leases.test.ts) and
+[delivery-worker.test.ts](test/delivery-worker.test.ts) enforce them against
+synthetic delivery records; these are configuration limits, not timing or
+throughput measurements.
+
+| Setting | Maximum | Unit |
+| --- | ---: | --- |
+| `maxAttempts` | 100 | Reserved attempts, including interrupted attempts |
+| `baseDelayMs` | 86400000 | Milliseconds after the first failed attempt |
+| `maxDelayMs` | 604800000 | Milliseconds of retry delay |
+| `leaseMs` | 300000 | Milliseconds of exclusive attempt ownership |
+| `deadlineMs` | 60000 | Milliseconds for a local attempt |
+
+The maximum delay must be at least the base delay. A lease must allow an
+integer deadline strictly shorter than itself. The deadline covers signing
+elapsed time and transport waiting; synchronous signing and SQLite operations
+cannot be interrupted while they block the event loop. The HTTPS transport's
+own deadline may expire earlier. A retained shorter lease also shortens the
+worker deadline, leaving time before lease expiry for completion. Timers do
+not guarantee a wall-clock deadline if the event loop is paused.
+
+Each call either processes a single due record, recovers a single expired
+lease, returns `idle`, or returns `cancelled` before claiming. Due records are
+ordered by availability and event identifier. Active leases are skipped, so
+another due delivery can proceed. Future occurrences are never sent early.
+Subscription edits, disable and deletion stop or change discovery according to
+their existing contract; retained deliveries keep their original destination
+and signing-key reference and remain eligible.
+
+`WebhookStore.claimDelivery(now, policy)` claims a record in a short SQLite
+write transaction. The first claim stores an immutable retry policy, including
+the attempt budget, delays and lease duration. Later workers use that saved
+policy even when their own configuration differs. Existing completed attempt
+history counts toward the budget. Changing deployment settings cannot reset
+an already retained delivery's budget or delay. Database migration adds the
+lease and policy tables while preserving existing payloads and attempt logs;
+earlier deployed migration text is unchanged.
+
+The claim reserves an attempt number, start, expiry and random fencing token.
+It returns the saved event and delivery snapshot; no network operation runs
+inside the transaction. `finishDelivery(eventId, token, result, finishedAt)`
+atomically appends the redacted outcome, updates delivery state, removes the
+lease and, when necessary, inserts its dead letter. The completion must match
+the current token and finish before its expiry. A forged, expired or superseded
+token cannot alter the delivery. Tokens are internal worker state, never
+outbound headers, payload fields or control-response data.
+
+The worker signs the exact saved UTF-8 body with the saved idempotency key and
+a current attempt timestamp, then invokes the transport. It does not rerun the
+engine or reserialize a receipt. A fully received bounded HTTP response with
+status in the success class acknowledges delivery, including on the last
+permitted attempt. Every other HTTP status retries, including redirects,
+client errors and rate limits. Receiver headers and bodies do not select the
+retry schedule. The service does not follow redirects or honor Retry-After.
+
+For failed attempt number `n`, the delay is
+`min(maxDelayMs, baseDelayMs * 2 ** (n - 1))`, without jitter. Availability is
+the attempt finish plus that delay. Timeouts, network failures and cancellation
+are ambiguous failures and consume the same budget. A destination rejection
+goes directly to `destination-rejected` dead letters. Signing failures send
+nothing and produce only `signing-error`, with dead-letter reason `operator`;
+this includes an absent or revoked key and a vault failure. Resolve key custody
+before the future replay operation. Exhausting the saved budget produces
+`attempts-exhausted`. All dead letters retain the event, original bytes,
+destination, key reference, idempotency key and attempt history.
+
+If a process stops before saving completion, the next eligible claim records
+the expired reservation as `interrupted`, with its lease expiry as finish time.
+That reservation counts even when the process stopped before sending. Recovery
+uses the saved retry policy and commits before another call can claim a retry.
+A delayed recovery may find the retry already due; it still returns
+`recovered` without sending in that call. Repeated crashes therefore reach dead
+letters rather than silently resetting the budget. An uncertain storage commit
+does not cause an immediate resend; the exception reaches the caller and
+durable lease recovery decides the next step. Completion with a stale token
+returns `lease-lost` and leaves the current owner's state intact.
+
+This is at-least-once attempt delivery under a finite retry budget, with dead
+letters for operator action. A receiver may act and lose its acknowledgement,
+or a worker may stop after receiving an acknowledgement and before committing
+it. The retry intentionally has the same identity. The receiver must combine
+durable idempotency-key deduplication and its effects in its own transaction;
+signatures and SQLite leases do not provide exactly-once effects. A crash before
+send can exhaust reservations without any receiver acknowledgement. Delivery
+is not guaranteed when a destination stays unavailable, the budget is exhausted
+or the service stops polling.
+
+Leases use the deployment's wall clock and local SQLite storage. Maintain
+consistent clocks across workers. A forward jump or process pause can expire
+a still-running attempt; fencing protects database completion, while receiver
+deduplication handles overlapping side effects. A backward clock delays
+eligibility, and the worker clamps finish time to its start rather than writing
+decreasing attempt times. Runtime cancellation and deadlines abort the transport
+and discard late results. They cannot retract a receiver effect.
+
+[delivery-leases.test.ts](test/delivery-leases.test.ts) covers competing SQLite
+connections, reopening, expired and forged tokens, saved policies, exponential
+delay caps, repeated abandoned reservations, legacy history, migration and
+transaction rollback under injected failures.
+[delivery-worker.test.ts](test/delivery-worker.test.ts) covers concurrent
+workers, cancellation, deadlines, stale acknowledgements, signing and transport
+failures, and a real loopback HTTP receiver through the trusted transport seam.
+That receiver acts before dropping its first acknowledgement, then verifies
+the retry's signature and stable bytes after store and vault reopening. Other
+local receiver cases cover retry exhaustion and destination revalidation. These
+tests establish local delivery behavior, not power-loss durability, physical
+event accuracy or the reliability of external receivers.

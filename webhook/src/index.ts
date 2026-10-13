@@ -31,3 +31,10 @@ export { HttpsTransport, TransportError, TRANSPORT_LIMITS } from "./transport.js
 export type {
   TransportPolicy, TransportDependencies, TransportRequest, TransportResult, ResolvedAddress
 } from "./transport.js";
+export { DeliveryWorker, DeliveryWorkerError } from "./delivery-worker.js";
+export type {
+  DeliveryWorkerPolicy, DeliveryWorkerResult, DeliveryTransport, DeliverySigner
+} from "./delivery-worker.js";
+export { DELIVERY_LIMITS } from "./delivery-policy.js";
+export type { DeliveryPolicy } from "./delivery-policy.js";
+export type { DeliveryClaim, DeliveryLease } from "./storage-types.js";

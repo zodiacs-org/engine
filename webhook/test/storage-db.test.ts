@@ -108,6 +108,9 @@ describe("SQLite migrations", () => {
     "DROP TRIGGER events_no_update",
     "DROP TRIGGER scan_policies_no_update",
     "DROP TRIGGER scan_policies_no_delete",
+    "DROP TRIGGER delivery_policies_no_update",
+    "DROP TRIGGER delivery_policies_no_delete",
+    "DROP TRIGGER delivery_leases_no_update",
     "ALTER TABLE subscriptions ADD COLUMN unexpected TEXT",
   ])("rejects changed schema metadata without modifying it: %s", sql => {
     const path = databasePath();

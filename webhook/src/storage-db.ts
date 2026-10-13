@@ -6,7 +6,7 @@ import type { DatabaseSync as DatabaseHandle } from "node:sqlite";
 // during static import resolution, so use Node's resolver directly.
 const { DatabaseSync } = createRequire(import.meta.url)("node:sqlite") as typeof import("node:sqlite");
 
-export const STORAGE_SCHEMA_VERSION = 2;
+export const STORAGE_SCHEMA_VERSION = 3;
 export const STORAGE_BUSY_TIMEOUT_MS = 5_000;
 
 const ledgerSql = `CREATE TABLE schema_migrations (
@@ -90,6 +90,28 @@ CREATE TRIGGER scan_policies_no_update BEFORE UPDATE ON scan_policies
 BEGIN SELECT RAISE(ABORT, 'Scan policies are immutable.'); END;
 CREATE TRIGGER scan_policies_no_delete BEFORE DELETE ON scan_policies
 BEGIN SELECT RAISE(ABORT, 'Scan policies are immutable.'); END;
+`,
+}, {
+  version: 3,
+  sql: `
+CREATE TABLE delivery_policies (
+  event_id TEXT PRIMARY KEY NOT NULL REFERENCES deliveries(event_id),
+  policy_json TEXT NOT NULL CHECK (json_valid(policy_json) AND json_type(policy_json) = 'object')
+) STRICT;
+CREATE TABLE delivery_leases (
+  event_id TEXT PRIMARY KEY NOT NULL REFERENCES delivery_policies(event_id),
+  token TEXT NOT NULL UNIQUE CHECK (length(token) > 0),
+  number INTEGER NOT NULL CHECK (number > 0),
+  started_at INTEGER NOT NULL,
+  expires_at INTEGER NOT NULL CHECK (expires_at > started_at)
+) STRICT;
+CREATE INDEX delivery_leases_expiry ON delivery_leases(expires_at, event_id);
+CREATE TRIGGER delivery_policies_no_update BEFORE UPDATE ON delivery_policies
+BEGIN SELECT RAISE(ABORT, 'Delivery policies are immutable.'); END;
+CREATE TRIGGER delivery_policies_no_delete BEFORE DELETE ON delivery_policies
+BEGIN SELECT RAISE(ABORT, 'Delivery policies are immutable.'); END;
+CREATE TRIGGER delivery_leases_no_update BEFORE UPDATE ON delivery_leases
+BEGIN SELECT RAISE(ABORT, 'Delivery leases are immutable.'); END;
 `,
 }] as const;
 

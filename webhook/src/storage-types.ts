@@ -58,7 +58,7 @@ export interface StoredDelivery {
 
 export type AttemptResult =
   | { readonly kind: "http"; readonly status: number }
-  | { readonly kind: "timeout" | "network-error" | "destination-rejected" };
+  | { readonly kind: "timeout" | "network-error" | "destination-rejected" | "cancelled" | "interrupted" | "signing-error" };
 
 export interface AttemptInput {
   readonly eventId: string;
@@ -69,7 +69,7 @@ export interface AttemptInput {
 }
 export type StoredAttempt = AttemptInput;
 export type DeadLetterReason = "attempts-exhausted" | "destination-rejected" | "operator";
-/** The worker chooses retry policy later; storage only validates/persists this decision. */
+/** Legacy unleased disposition. Managed deliveries use their persisted retry policy. */
 export type AttemptDisposition =
   | { readonly status: "pending"; readonly availableAt: number }
   | { readonly status: "delivered" }
@@ -86,3 +86,18 @@ export interface Page {
   readonly afterId?: string;
   readonly limit?: number;
 }
+
+/** Internal fencing token. Never include it in control responses or delivery payloads. */
+export interface DeliveryLease {
+  readonly eventId: string;
+  readonly token: string;
+  readonly number: number;
+  readonly startedAt: number;
+  readonly expiresAt: number;
+}
+
+export type DeliveryClaim =
+  | { readonly status: "idle" }
+  | { readonly status: "recovered"; readonly delivery: StoredDelivery }
+  | { readonly status: "claimed"; readonly lease: DeliveryLease;
+      readonly delivery: StoredDelivery; readonly event: StoredEvent };

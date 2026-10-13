@@ -36,7 +36,9 @@ export interface TransportRequest {
   readonly headers: WebhookSignatureHeaders;
   readonly signal?: AbortSignal;
 }
-export type TransportResult = AttemptResult | { readonly kind: "cancelled" };
+export type TransportResult =
+  | Extract<AttemptResult, { readonly kind: "http" }>
+  | { readonly kind: "timeout" | "network-error" | "destination-rejected" | "cancelled" };
 
 export class TransportError extends Error {
   readonly code = "invalid-input";
