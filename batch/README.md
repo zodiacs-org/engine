@@ -6,7 +6,8 @@ implementation validates job definitions, expands work lazily, executes it
 through the engine, provides in-memory, SQLite and optional Redis queues with retries and
 idempotent submission, schedules work on a thread pool, and exposes job control
 and NDJSON results through a CLI and a small HTTP API. SQLite crash recovery is
-checked with controlled process kills. Scaling measurements remain a later milestone.
+checked with controlled process kills. A [worker scaling benchmark](#worker-scaling-benchmark)
+records measured small-job throughput on the development machine.
 
 All project files stay here. The engine source, npm package and carried archives
 are unchanged. Code and documentation in this folder use the repository's
@@ -1070,3 +1071,81 @@ following, interruption, bounded read-ahead, request deadlines and shutdown.
 [test/build.test.ts](test/build.test.ts) exercises the built HTTP export in plain
 Node on both backends. These checks establish interface and transport behavior;
 they do not measure throughput or astronomical accuracy.
+
+## Worker scaling benchmark
+
+[The measured table](docs/evidence/scaling-20261013.md) and its
+[full evidence](docs/evidence/scaling-20261013.json) describe this machine and
+source build. The table reports committed result rows per second against worker
+count for SQLite and memory. A row is a natal chart, a birth/sample transit
+snapshot, or a directed synastry pair. These are different units of work; compare
+worker counts within the same workload and backend.
+
+Run from `batch/` on its supported Node runtime:
+
+```sh
+node scripts/benchmark.mjs --profile smoke --output .generated/benchmark-smoke.json
+node scripts/benchmark.mjs --profile scaling --output .generated/benchmark-scaling.json
+```
+
+[The launcher](scripts/benchmark.mjs) rebuilds an isolated runner and worker entry
+from the current source, then writes JSON and a Markdown table next to each
+other under `.generated/`. It hashes the exact source inputs, installed
+computational dependency, build script, lockfile and generated bundles. The
+recorded git HEAD can predate a newly added runner; the content manifest identifies
+what was measured. Keep the compact JSON and table together when recording new
+evidence. Raw result rows are not exported or committed; temporary SQLite stores remain
+under `.generated/` and are removed after verification.
+
+The scaling profile in [benchmark/model.ts](benchmark/model.ts) uses worker
+counts 1, 2, 4 and 8, with three repetitions per backend and workload. Each
+sample processes sixteen fresh, bounded jobs. Charts use 32 invented births;
+transit grids use two invented births at sixteen daily UTC samples from
+2024-01-01 inclusive to 2024-01-17 exclusive; matrices use six invented people
+and all 30 directed, nonself pairs. The profile, definitions and counts are
+recorded in the evidence and checked in [test/benchmark.test.ts](test/benchmark.test.ts).
+Repeated jobs use the same synthetic inputs. Transit rows recompute their natal
+chart, and matrix rows recompute both charts, as the ordinary executor does.
+No benchmark-specific result cache or faster execution path is used.
+
+A fresh child process owns each sample's real pool. Before timing, each warmup
+round dispatches concurrently to every worker. Within a sample, workers remain
+alive while each job gets a fresh queue. The timer starts before submission and
+ends at the acknowledged final commit and file-size check. It includes input
+validation, scheduler creation, claims, calculation, thread transport, JSON
+conversion, ordered single-row commits and the SQLite file-size guard. The
+sample rate divides committed rows by the sum of these monotonic job intervals.
+It excludes build and process startup, pool warmup, opening and migrating the
+database, stopping the scheduler, reading and verifying results, closing and
+removing storage, and gaps between jobs. Warmup and whole-sample wall durations
+are recorded separately. The coordinator and storage are not warmed explicitly.
+
+The queue sizes keep each database and WAL below the file budget. This measures
+repeated small jobs, not a single job containing thousands of rows. In particular,
+SQLite revalidates its stored job definition on each row commit, so a large
+single-job definition may have different costs. Fresh stores and untimed pauses
+also differ from continuous service operation. Scheduler buffering remains
+bounded by worker count and commits stay ordered, so slow early rows and
+main-thread storage work can limit scaling. Database settings are the service's
+WAL and FULL synchronous defaults on the measured filesystem; this run does not
+benchmark Redis, HTTP, CLI transport, or host power-loss behavior.
+
+Every stored job is streamed after timing and checked for row count, contiguous
+cursors and a full NDJSON digest equal to serial execution on the same build.
+These are transport and execution parity checks, not independent astronomy
+accuracy evidence. Failure or unexpected retries invalidate a sample, and a
+failed repetition makes its group's throughput summary unavailable. Counters
+reflect acknowledged snapshots; a lost acknowledgement can leave storage ahead
+of those counters. Child-process failures mark their counters unavailable.
+The runner exits unsuccessfully if any sample fails and retains the failure
+records. Partial reports keep `complete: false`.
+
+Samples run sequentially, with worker and workload/backend order rotated between
+repetitions. Run without other intentional workloads for a new measurement.
+The evidence records Node, V8, SQLite, CPU model and logical count, affinity,
+available parallelism, and readable cgroup quotas, including exposed ancestors.
+Missing controls remain unknown. These observations do not prove exclusive CPU
+capacity or reveal hidden host limits. [test/benchmark-metadata.test.ts](test/benchmark-metadata.test.ts)
+checks parsing and visible-ancestor handling. The reported median and range
+cover only the recorded repetitions. More workers need not improve throughput;
+no speedup or performance threshold is enforced by the tests.

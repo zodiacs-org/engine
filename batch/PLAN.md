@@ -21,7 +21,7 @@ initial session complete M1 only; later sessions complete one or two milestones.
 - [x] M9 Add the small HTTP control API for submit, status, progress and streamed results, with bounded request bodies and clear errors. Test routes, idempotency conflicts and client disconnects over real local sockets.
 - [x] M10 Add the CLI for submission, worker/service operation, status and NDJSON export using the same service APIs. Test subprocess exit codes, stdout/stderr separation and restart with SQLite.
 - [x] M11 Add the optional Redis backend behind an injected client and explicit configuration. Run the backend contract suite with a stateful mock and test atomic operations and connection failures; document what the mock cannot establish.
-- [ ] M12 Commit the scaling benchmark runner and compact machine-specific evidence for throughput versus worker count using synthetic workloads. Record runtime, engine/source identity, CPU allocation, workload, elapsed time and failures; keep raw generated rows gitignored and every committed file below the file-size limit.
+- [x] M12 Commit the scaling benchmark runner and compact machine-specific evidence for throughput versus worker count using synthetic workloads. Record runtime, engine/source identity, CPU allocation, workload, elapsed time and failures; keep raw generated rows gitignored and every committed file below the file-size limit.
 - [ ] M13 Finish operating documentation, examples and an integrated reliability check covering all workloads, backends, interfaces and recovery. Verify batch isolation from npm packing, evidence links, documentation claims and repository constraints.
 
 Milestone checks run from this directory using its own test and typecheck
@@ -290,3 +290,40 @@ no `batch/` file is included. All changes stay inside `batch/`, all tracked and
 new batch files are below the file-size limit, and batch documentation contains
 no em dashes. No root build, archive creation or git write was performed.
 M12 remains the next milestone.
+
+## M12 session checks
+
+`npm run typecheck`, `npm test` and `npm run build` passed from `batch/` on
+Node 22.23.3. [scripts/benchmark.mjs](scripts/benchmark.mjs) builds an isolated
+runner and worker bundle, captures exact source and dependency hashes, and
+measures the real scheduler on memory and default SQLite. The scaling run's
+[compact JSON](docs/evidence/scaling-20261013.json) and
+[generated table](docs/evidence/scaling-20261013.md) retain all samples, runtime
+and CPU allocation observations, synthetic workloads, per-job elapsed times,
+failures, rates and observed file sizes. Every sample passed, and every stored
+NDJSON digest matched serial execution on this build. Source and bundle hashes,
+timing sums and throughput arithmetic were checked before retaining the evidence.
+
+The benchmark measures repeated bounded jobs with warmed workers. SQLite opens,
+verification, cleanup and pauses are outside the measured intervals; their
+sample wall time is recorded separately. This scope keeps runtime databases and
+WAL files below the file-size limit and does not establish throughput for a
+single large job or a continuously running service. The README describes the
+method and limitations. Raw output is retained only in ignored temporary stores;
+the committed evidence contains metadata and summaries, not result rows.
+
+[test/benchmark.test.ts](test/benchmark.test.ts) checks deterministic synthetic
+workloads and counts, serial digests, summary medians and matching baselines,
+failed-group suppression, actual worker execution on both backends, deliberate
+digest failure, file budgets, cleanup and invalid command options.
+[test/benchmark-metadata.test.ts](test/benchmark-metadata.test.ts) checks CPU
+quota and affinity parsing, cgroup mount resolution and visible ancestor limits.
+The full existing suite, including process-crash recovery, also passes. These
+checks establish benchmark and transport behavior, not astronomical accuracy.
+
+The root `npm run package:contents`, using the batch npm cache, stopped because
+`dist/calc.d.ts` is absent. A scripts-disabled npm pack dry run confirmed that
+no `batch/` file is included. All changes stay inside `batch/`, all tracked and
+new batch files are below the file-size limit, documentation contains no em
+dashes, and the new evidence links resolve. No root build, archive creation or
+git write was performed. M13 remains the next milestone.
