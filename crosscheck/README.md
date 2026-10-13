@@ -10,8 +10,8 @@ A bounded engine campaign and its measured aggregate error report are now
 [available](reports/bounded-sample.md). Million-chart execution remains
 unmeasured.
 
-The planned JPL comparison uses public DE440/DE441 kernels downloaded from
-NAIF/JPL at runtime into runtime/cache/. Kernels will be stored in bounded
+The JPL comparison uses public DE440/DE441 kernels downloaded from
+NAIF/JPL at runtime into runtime/cache/. Kernels are stored in bounded
 chunks, never committed. The independent reduction must name its time scale,
 reference frame, origin, light-time, aberration and deflection conventions.
 Planetary centers and system barycenters must not be silently interchanged.
@@ -223,7 +223,8 @@ The evaluator reads one logical record at a time through the verified chunk
 reader. The chunk reader currently reads and hashes chunks on each access;
 this establishes bounded storage rather than campaign throughput. Arithmetic
 and structural tests in tests/spk.node-test.mjs use invented data only. There is
-no engine accuracy claim and no completed chart error report yet.
+no engine accuracy claim from these tests. The completed chart comparison
+is recorded separately in [the bounded report](reports/bounded-sample.md).
 
 
 ## Inertial physical reduction
@@ -243,8 +244,9 @@ from NAIF's [time documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs
 [naif0012.tls](https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls),
 equations (4) through (6) and DELTET/K, EB and M (read 2026-10-13).
 This truncated geocentric model omits short-period terms. UTC is not accepted
-as TT; resolving chart input time is a later integration step. Correction
-semantics follow [NAIF aberration documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/abcorr.html),
+as TT; the bounded campaign supplies explicit TT inputs and does not test
+civil UTC conversion. Correction semantics follow
+[NAIF aberration documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/abcorr.html),
 "Reception case" (read 2026-10-13). No NAIF or ERFA implementation is copied.
 Solar deflection, relativistic aberration and true-of-date rotations are
 implemented separately below. Topocentric observations remain unsupported.
@@ -270,8 +272,9 @@ runtime. A missing or invalid kernel is an error, never a passing skip.
 
 [The reference report](reports/jpl-reduction.md) validates this reduction's
 inertial modes against public JPL output. It evaluates no engine charts.
-The synthetic campaign, engine error report and Swiss integration remain
-later milestones. No public kernel bytes or per-case positions are committed.
+The separate [bounded campaign report](reports/bounded-sample.md) measures
+engine charts. Swiss transport is implemented, but no live Swiss measurement
+was made. No public kernel bytes or per-case positions are committed.
 
 ## True-of-date frames and relativistic modes
 
@@ -361,7 +364,8 @@ adapter's external ephemeris file digests for later resume checks.
 Tests in tests/swiss.node-test.mjs use invented protocol peers, independent
 arithmetic and refusal cases. They never run Swiss and establish transport
 and retention behavior only. A live Swiss measurement requires the user's
-external installation and remains part of the later bounded campaign.
+external installation. Swiss is explicitly unavailable in the completed
+bounded campaign.
 
 ## Shards and checkpoints
 
@@ -383,8 +387,9 @@ the corresponding reference loaders. Identity inputs must describe verified
 local content, rather than labels chosen by the caller. References and build
 files must stay unchanged during a run. Resume rejects a different campaign
 digest and validates progress and aggregate fields. The library does not
-provide reference discovery or chart convention matching; the campaign
-integration and report tools are later milestones.
+provide reference discovery or chart convention matching; tools/sample.mjs
+and tools/campaign.mjs supply the implemented campaign integration, and
+tools/report.mjs supplies aggregate reporting.
 
 Checkpoint directories must be under ignored runtime/. Each shard has an
 exclusive lock directory. Writes sync a temporary file, atomically rename
@@ -499,8 +504,14 @@ instead of reading completed checkpoints, remove runtime/m9-sample/ after
 confirming no writer is running, then run the --check command. Keep the
 recorded build, tooling and reference identities unchanged. A different
 runtime or implementation needs a separately named measurement, not a
-replacement of this report. Reports remain reproducible from completed
-checkpoints after a clean build with the same recorded runtime and inputs.
+replacement of this report. Fresh execution requires the historical tooling
+and build identities recorded in its receipt; later harness changes invalidate
+those checkpoints. Render the retained aggregate bundle without rerunning
+instruments with:
+
+```sh
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+```
 
 Swiss is explicitly unavailable in this measurement because no external
 user installation was supplied. The bounded command does not discover or

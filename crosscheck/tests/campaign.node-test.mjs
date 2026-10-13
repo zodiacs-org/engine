@@ -1,6 +1,39 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { createEvaluator, CHANNELS, observation } from '../lib/campaign.mjs';
+import { campaignIdentity } from '../lib/runner.mjs';
+
+// Artifact consistency checks, not independent astronomical accuracy evidence.
+test('committed bounded campaign is complete and labels unavailable comparisons', async () => {
+  const report = JSON.parse(await readFile(new URL('../reports/bounded-sample.json', import.meta.url), 'utf8'));
+  assert.deepEqual(report.campaign, campaignIdentity(report.campaign.config, report.campaign.identities));
+  assert.equal(report.complete, true);
+  assert.equal(report.completed, 64);
+  assert.equal(report.campaign.config.total, report.completed);
+  const indices = report.coverage.flatMap(shard => Array.from({ length: shard.completed },
+    (_, i) => shard.firstIndex + i * shard.stride));
+  assert.deepEqual(indices.sort((a, b) => a - b), Array.from({ length: report.completed }, (_, i) => i));
+  assert.equal(report.campaign.identities.references.JPL.name, 'de440s.bsp');
+  assert.equal(report.campaign.identities.references.Swiss.status, 'unavailable');
+  assert.match(report.campaign.identities.references.Swiss.reason, /external installation/);
+  const measured = Object.entries(report.channels).filter(([, channel]) => channel.statistics.n > 0);
+  assert.equal(measured.length, 8);
+  for (const [name, channel] of measured) {
+    assert.match(name, /^JPL\.(Sun|Moon|Mercury|Venus)\.(lon|lat)$/);
+    assert.equal(channel.statistics.n, report.completed);
+    assert.equal(channel.verdicts.pass + channel.verdicts.fail, report.completed);
+  }
+  for (const name of ['Swiss.positions', 'JPL.otherBodies', 'JPL.housesNodesAngles']) {
+    assert.equal(report.channels[name].statistics.n, 0);
+    assert.equal(report.channels[name].statistics.maxAbs, null);
+    assert.equal(report.channels[name].verdicts.unsupported, report.completed);
+  }
+  const exclusions = report.metadata.exclusions.join('\n');
+  assert.match(exclusions, /Swiss unavailable/);
+  assert.match(exclusions, /no DE441 comparison/);
+  assert.match(exclusions, /Houses, nodes, angles, speeds and topocentric/);
+});
 
 test('screening arithmetic preserves signs and threshold equality', () => {
   assert.equal(observation(-60, 60).verdict, 'pass');

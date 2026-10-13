@@ -401,3 +401,48 @@ root lockfile, leaving root manifests and dependency installation unchanged.
 The root run failed on unresolved root astronomy-engine/TypeScript imports
 and the archive-check environment limitation described in the PR review.
 This verifies crosscheck discovery isolation, not a passing full root suite.
+
+## F3 bounded campaign review
+
+The M9 aggregate report is complete. A fresh evaluation on Node v22.22.2
+used its recorded seed, TT span, channels and shard configuration, the
+verified isolated engine build, digest-verified DE440s and pinned ERFA
+nutation terms. An ephemeral verification script called createEvaluator
+and runShard in a new runtime directory, merged the completed shards, and
+compared every channel's statistics, verdicts and flags with the committed
+JSON receipt. All aggregates matched exactly. The script also checked the
+engine source and output digests against the receipt. Its temporary
+checkpoints were removed; no raw positions were retained.
+
+This is a fresh numerical comparison with the historical measurement,
+not reproduction of its historical build or executable tooling identities.
+The retained M9 aggregate bundle separately reproduced all committed report
+bytes with tools/report.mjs --check. Neither check changes the reports or
+establishes an unsampled accuracy bound. Swiss remains explicitly unavailable;
+DE441, other planet centers, houses, nodes, angles, speeds and topocentric
+comparisons remain excluded.
+
+The README now describes the completed campaign and report tooling throughout
+and explains historical identity requirements. The added artifact consistency
+test enforces completed bounded coverage, measured channel counts and explicit
+unavailable comparisons; it is not an independent accuracy test.
+
+Executed with Node v22.22.2 on PATH:
+
+```sh
+npm --prefix crosscheck run check:syntax
+npm --prefix crosscheck test
+node crosscheck/tools/build.mjs --verify
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/check.mjs --all-sizes
+npm_config_cache=/tmp/crosscheck-f3-npm-cache npx --prefix /tmp/events-f1-root-check --no-install vitest list --filesOnly
+npm_config_cache=/tmp/crosscheck-f3-npm-cache npx --prefix /tmp/events-f1-root-check --no-install vitest run --reporter=dot
+git diff --check
+```
+
+Crosscheck syntax, tests, build verification, report rendering and file
+safeguards pass. Root Vitest's default discovery lists no crosscheck suites.
+Its dependencies come from an external installation matching the root
+lockfile. Root load errors for missing dependencies and the archive-check
+environment limitation remain outside this fix. No root files or git metadata
+were changed. F4 operational review remains unchecked.
