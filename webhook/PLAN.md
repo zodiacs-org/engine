@@ -17,7 +17,7 @@ runs its checks, ticks it here, appends a line to `CHANGES.txt`, and stops.
 - [x] M9 Expose an authenticated control API for subscription CRUD, secret provisioning and redacted delivery-log inspection, with bounded requests, pagination and update/delete semantics; test it over loopback HTTP.
 - [x] M10 Add a replay CLI that inspects and requeues retained dead letters without changing payload bytes or occurrence identity; test dry runs, selection, audit records and repeated replay requests.
 - [x] M11 Wire service configuration, worker lifecycle and graceful shutdown; add an end-to-end synthetic subscription test from event discovery through signed delivery, retries, restart and replay.
-- [ ] M12 Document runnable local examples, receiver verification, deployment configuration, retention and operational limits; run the webhook suite, check package isolation and record remaining search-accuracy limitations.
+- [x] M12 Document runnable local examples, receiver verification, deployment configuration, retention and operational limits; run the webhook suite, check package isolation and record remaining search-accuracy limitations.
 
 ## Integration decisions
 
@@ -75,3 +75,18 @@ database-opening experiments, and the full webhook suite passed on Node
 22.22.2 in this session. The prior intermittent failure did not recur, so its
 cause remains unresolved. Database migration and WAL initialization behavior
 is unchanged; retain this observation for operational-limit review in M12.
+
+M12 adds `OPERATIONS.md` and the compiled `examples/offline-demo.ts` walkthrough,
+exercised by `test/service-cli.test.ts`. The walkthrough provisions through the
+control API and verifies raw signed requests at a fixed loopback receiver,
+including a lost acknowledgement and a deduplicated retry. Its credentials
+exist only at runtime, and temporary state is removed. Production transport
+and worker behavior remain unchanged. The guide records indefinite retention,
+backup and recovery requirements, conditional search completeness, time-step
+refusals and the unresolved concurrent-start observation above.
+
+M12 validation passed on Node 22.22.2: project typecheck, full Vitest suite,
+service build, standalone compiled walkthrough, pinned events integrity and
+package-isolation inventory. The parent build and archive gates were not run
+in this session because its scope prohibits writing parent build output or
+packing archives. The local inventory confirms webhook file exclusion only.

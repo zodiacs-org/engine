@@ -1,6 +1,6 @@
 # Outbound astrology webhooks
 
-This private workbench is being built according to [PLAN.md](PLAN.md). The
+This private workbench implements the service described in [PLAN.md](PLAN.md). The
 implemented milestones cover subscription validation, SQLite storage,
 encrypted signing-key custody, payload signing with receiver verification,
 local event searches and custom DSL queries with engine receipts, bounded
@@ -9,6 +9,11 @@ delivery worker with leases, retries and dead letters, an authenticated
 control API, a local replay CLI, and a runnable service with polling and graceful
 shutdown. Callers can also drive scans and delivery attempts explicitly.
 The code and documentation here use the repository's [MIT license](../LICENSE).
+
+Start with [OPERATIONS.md](OPERATIONS.md) for a runnable offline walkthrough,
+deployment configuration, receiver integration, backup and retention guidance,
+and the remaining search and operational limitations. The sections below
+describe the contracts and their test evidence in detail.
 
 Use Node from the release line accepted by
 [check-runtime.mjs](scripts/check-runtime.mjs), matching this project's
@@ -795,8 +800,8 @@ event accuracy or the reliability of external receivers.
 `createControlServer` in [src/control-api.ts](src/control-api.ts) creates an
 unbound Node HTTP server from `{ store, vault, bearerToken, policy?, now? }`.
 The caller owns listening, shutdown and the store and vault lifetimes. Creating
-or closing the server does not start workers or close those databases. Service
-configuration and lifecycle wiring remain a later milestone.
+or closing the server does not start workers or close those databases.
+`startService` supplies the lifecycle wiring described under Runnable service.
 
 Supply a random admin token as runtime bytes, separately from both the vault
 wrapping key and receiver signing keys. Clients send its canonical base64url

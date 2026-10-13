@@ -1,4 +1,4 @@
 {
   "extends": "./tsconfig.replay.json",
-  "include": ["src/service-cli.ts", "src/replay-cli.ts"]
+  "include": ["src/service-cli.ts", "src/replay-cli.ts", "examples/**/*.ts"]
 }

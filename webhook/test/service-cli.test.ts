@@ -58,6 +58,14 @@ function environment(subdirectory: string) {
 }
 
 describe("compiled service command", () => {
+  it("runs the documented offline example with verified retry and one receiver effect", () => {
+    const output = execFileSync(process.execPath, ["--no-warnings",
+      join(buildDirectory, "webhook/examples/offline-demo.js")], {
+      cwd: project, env: { PATH: process.env.PATH }, timeout: 15_000, encoding: "utf8",
+    });
+    expect(JSON.parse(output)).toEqual({ status: "delivered", verifiedRequests: 2, receiverEffects: 1 });
+    expect(output).toBe('{"status":"delivered","verifiedRequests":2,"receiverEffects":1}\n');
+  }, 20_000);
   it("prints help and refuses command/configuration/credential errors without echoing input", async () => {
     expect((await child(["--help"]).exited).code).toBe(0);
     expect(await child(["--secret", "private-marker"]).exited).toMatchObject({ code: 2, stderr: '{"error":{"code":"invalid-command"}}\n' });
