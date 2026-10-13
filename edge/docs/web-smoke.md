@@ -138,5 +138,5 @@ check in separate steps. Configure Deno and Bun as described in their guide.
 Keep workflow configuration in the consuming repository; this project adds no
 root GitHub workflow. With the recorded matrix, strict runtime parity is a
 failing gate. Do not convert mismatches to success or claim support for an
-untested browser or deployed Workers version. Benchmark and performance-gate
-wiring belongs to the later milestones in [the plan](../PLAN.md).
+untested browser or deployed Workers version. The [CI guide](ci.md) gives the
+complete command sequence and separate benchmark and performance jobs.

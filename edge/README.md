@@ -24,7 +24,9 @@ houses and transit-scan workloads with recorded provenance. The
 fails when a workload exceeds a configurable regression threshold. A measured
 [WASM experiment](docs/wasm.md) retains an isolated compilation path and its
 measurements; its end-to-end acceptance rule failed, so normal bundles keep
-JavaScript. Final CI wiring remains in [PLAN.md](PLAN.md).
+JavaScript. [Setup and runtime status](docs/setup.md) describes the tested
+environment and what remains unsupported. [CI wiring](docs/ci.md) gives
+separate correctness, runtime and performance jobs with their failure rules.
 
 The foundation's commands, observed results and the missing-root-build
 limitation are recorded in [M1 validation](docs/evidence/m1-validation.md).
@@ -47,11 +49,14 @@ Performance gate checks and a comparison with the original baseline are
 recorded in [M10 validation](docs/evidence/m10-validation.md).
 Kernel profiling and the WASM experiment are recorded in
 [M11 validation](docs/evidence/m11-validation.md).
+The final checks and remaining failures are recorded in
+[M12 validation](docs/evidence/m12-validation.md).
 
-## Run the foundation
+## Install and check
 
-Use Node 22, as enforced by `scripts/build-support.mjs`. From the repository
-root:
+Use Node 22, as enforced by `scripts/build-support.mjs`, and npm 10 or later
+for the pinned AssemblyScript compiler. Provision the runtimes and browser
+as described in [setup](docs/setup.md). From the repository root:
 
 ```sh
 npm ci --prefix edge --cache "$PWD/edge/.cache/npm"
@@ -60,6 +65,12 @@ npm --prefix edge test
 npm --prefix edge run smoke:node
 npm --prefix edge run check:isolation
 ```
+
+The test command above skips real browser tests unless
+`EDGE_CHROMIUM_EXECUTABLE` names an installed browser. Run the commands in
+[CI wiring](docs/ci.md) for the full checks, including native HTTP servers,
+exact runtime comparisons and browser tests. An ordinary passing test run
+does not establish cross-runtime parity.
 
 No root install is needed. The local lockfile pins the toolchain, and the build
 checks its installed ephemeris against the root package's exact dependency.

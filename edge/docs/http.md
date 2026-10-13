@@ -16,7 +16,7 @@ separate library and test entries; the handler does not load either.
 
 ## Local use
 
-After the [local install](../README.md#run-the-foundation), use Node 22 from
+After the [local install](../README.md#install-and-check), use Node 22 from
 the repository root:
 
 ```sh
@@ -156,7 +156,7 @@ Success has HTTP status `200` and shape `{ "ok": true, "result": chart }`.
 The result contains every chart field as ordinary JSON, with Date values
 converted to ISO strings and undefined properties omitted. Numerical values
 are not explicitly rounded, but JSON loses signed zero; this format is not
-the exact binary64 parity protocol planned in M5.
+the [exact binary64 comparison protocol](exact.md).
 
 An error has shape
 `{ "ok": false, "error": { "code": "...", "message": "..." } }`.
@@ -198,7 +198,9 @@ claim. Node tests compare chart JSON to the same engine on invented inputs.
 The Deno/Bun native checks additionally exercise the listening servers.
 The [web runtime checker](web-smoke.md) exercises the handler in local workerd
 and checks full numerical results separately from HTTP JSON. Exact cross-runtime
-checks report mismatches in the recorded browser, Deno and Bun runs. CPU
-measurements remain a later milestone. [M3 validation](evidence/m3-validation.md),
+checks report mismatches in the recorded browser, Deno and Bun runs. The
+[benchmarks](benchmarks.md) measure synchronous computation on Node; they do
+not measure HTTP transport or edge CPU budgets.
+[M3 validation](evidence/m3-validation.md),
 [M4 validation](evidence/m4-validation.md) and
 [M7 validation](evidence/m7-validation.md) record what was run.

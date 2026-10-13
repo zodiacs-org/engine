@@ -8,3 +8,4 @@ Complete M7: add local workerd and real Chromium smoke checks, network and shutd
 Complete M8 and M9: add reproducible chart, houses and transit-scan benchmarks, validated Node baseline evidence, provenance checks and benchmark documentation
 Complete M10: add a configurable performance regression gate with exact threshold arithmetic, strict evidence comparability, CLI tests, usage documentation and retained live regression evidence
 Complete M11: profile numeric kernels, add an isolated exact nutation WASM compilation experiment, retain paired timing and rejection evidence, and verify edge tests and package exclusion
+Complete M12: document reproducible setup and CI wiring, validate the full edge suite and package isolation, and retain fresh runtime mismatches and performance-gate regression evidence

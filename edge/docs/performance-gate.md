@@ -68,8 +68,8 @@ failure statuses failing in CI. Run correctness and exact runtime smoke
 checks as separate required steps: a passing performance gate does not
 override a numerical mismatch. Keep the reviewed baseline and threshold
 under code review, and preserve candidate files and the report as CI
-artifacts even on failure. Final workflow wiring is tracked in M12; this
-milestone adds no GitHub workflow.
+artifacts even on failure. The [CI guide](ci.md) shows how to wire these steps
+without adding an active GitHub workflow to this project.
 
 ## Comparable evidence
 
