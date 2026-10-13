@@ -269,3 +269,85 @@ export function turn(m: Rows, x: number, y: number, z: number): [number, number,
   ready();
   return vector(wasm.turn(Float64Array.from(m), x, y, z));
 }
+
+/** Bodies implemented by the solar and planetary series milestone. */
+export type SeriesBody = "Sun" | "Mercury" | "Venus" | "Earth" | "Mars" |
+  "Jupiter" | "Saturn" | "Uranus" | "Neptune";
+
+/** J2000 day clocks with a fixed TT - UT1 in seconds for light-time samples. */
+export interface PlanetClock {
+  ut: number;
+  tt: number;
+  deltaT: number;
+}
+
+/** Cartesian position in AU, on the mean equator and equinox of J2000. */
+export interface PlanetVector { x: number; y: number; z: number }
+
+/** Cartesian velocity in AU per TT day, with its heliocentric position. */
+export interface PlanetState extends PlanetVector { vx: number; vy: number; vz: number }
+
+/** Emission clocks in J2000 days, attached to the backdated relative vector. */
+export interface BackdatedPlanetVector extends PlanetVector { ut: number; tt: number }
+
+function seriesBody(body: SeriesBody): void {
+  switch (body) {
+    case "Sun": case "Mercury": case "Venus": case "Earth": case "Mars":
+    case "Jupiter": case "Saturn": case "Uranus": case "Neptune": return;
+    default: throw new RangeError("Body is not supported by the planetary series kernel.");
+  }
+}
+
+function finitePlanetTt(tt: number): void {
+  if (!Number.isFinite(tt)) throw new RangeError("Planetary series require finite TT days since J2000.");
+}
+
+function planetClock(clock: PlanetClock, aberration: boolean): PlanetClock {
+  if (clock === null || typeof clock !== "object") {
+    throw new RangeError("Planetary light-time calculation requires a clock record.");
+  }
+  const { ut, tt, deltaT } = clock;
+  if (![ut, tt, deltaT].every(Number.isFinite)) {
+    throw new RangeError("Planetary light-time calculation requires finite UT1, TT and Delta T.");
+  }
+  if (typeof aberration !== "boolean") throw new RangeError("Aberration must be a boolean.");
+  return { ut, tt, deltaT };
+}
+
+function planetVector(fields: Float64Array): PlanetVector {
+  return { x: fields[0]!, y: fields[1]!, z: fields[2]! };
+}
+
+/** Low-level series helper; complete engine positions are a later milestone. */
+export function helioVector(body: SeriesBody, ttDays: number): PlanetVector {
+  ready();
+  seriesBody(body);
+  finitePlanetTt(ttDays);
+  return planetVector(wasm.helioVector(body, ttDays));
+}
+
+export function helioState(body: SeriesBody, ttDays: number): PlanetState {
+  ready();
+  seriesBody(body);
+  finitePlanetTt(ttDays);
+  const fields = wasm.helioState(body, ttDays);
+  return { ...planetVector(fields), vx: fields[3]!, vy: fields[4]!, vz: fields[5]! };
+}
+
+export function backdatePosition(
+  observer: SeriesBody, target: SeriesBody, clock: PlanetClock, aberration = true,
+): BackdatedPlanetVector {
+  ready();
+  seriesBody(observer);
+  seriesBody(target);
+  const { ut, tt, deltaT } = planetClock(clock, aberration);
+  const fields = wasm.backdatePosition(observer, target, ut, tt, deltaT, aberration);
+  return { ...planetVector(fields), ut: fields[3]!, tt: fields[4]! };
+}
+
+export function geoVector(body: SeriesBody, clock: PlanetClock, aberration = true): PlanetVector {
+  ready();
+  seriesBody(body);
+  const { ut, tt, deltaT } = planetClock(clock, aberration);
+  return planetVector(wasm.geoVector(body, ut, tt, deltaT, aberration));
+}

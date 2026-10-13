@@ -4,9 +4,11 @@ An isolated, experimental port of this checkout's numeric engine. The native
 library and WebAssembly module implement angular arithmetic, sign annotations,
 resolved-instant date validation, Julian/Gregorian civil-calendar helpers,
 the Delta T model, the UTC/UT1/TT time basis, nutation, precession,
-frame rotations, obliquity and apparent sidereal time.
-The TypeScript wrapper retains the reference function signatures after explicit
-initialization. Planetary positions, houses and aspect matching remain in
+frame rotations, obliquity, apparent sidereal time, and solar and planetary
+series through Neptune with light time and aberration.
+The TypeScript wrapper retains the implemented engine helpers' signatures after
+explicit initialization and exposes intermediate planetary kernels.
+Complete position rows, the Moon, Pluto, houses and aspect matching remain in
 [PLAN.md](PLAN.md).
 
 ## Setup and checks
@@ -30,10 +32,12 @@ npm run check:isolation
 CLI version from `Cargo.toml` under `.tools/wasm-bindgen/`. The CLI and crate must agree.
 Build and test scripts use locked dependencies. `npm test` runs Cargo unit
 tests, builds WASM, checks TypeScript signatures and runs the Vitest parity
-suite, including checks of the time data generator. Native release builds are
+suite, including checks of the time and planetary data generators. Native release builds are
 a separate `build:native` step. Cargo also needs Node on PATH: its build script
-generates time tables from digest-checked local engine sources, without npm
-dependencies or network requests. This crate builds within this repository.
+generates time tables from digest-checked local engine sources and planetary
+coefficients from the pinned dependency installed by this directory's `npm ci`.
+Generation uses Node's built-in modules with no network requests. This crate
+builds within this repository.
 
 All Cargo downloads and npm caches stay in `.cache/`; native and WASM compiler
 outputs stay in `target/`, and wasm-bindgen output stays in `pkg/`. These,
@@ -97,6 +101,26 @@ on a column vector and preserves its units. All numeric operations run in
 Rust. Exported nutation tables and cached frames are immutable snapshots;
 mutation and cache identity differences are recorded in [PARITY.md](PARITY.md).
 
+The intermediate planetary API exports `helioVector(body, ttDays)` and
+`helioState(body, ttDays)`, for the Sun and Mercury through Neptune, including
+Earth. Vectors are in AU on the mean equator and equinox of J2000; state
+velocities are in AU per TT day. `geoVector(body, clock, aberration)` and
+`backdatePosition(observer, target, clock, aberration)` solve light time, with
+aberration enabled by default. `clock` is `{ ut, tt, deltaT }`: days since
+J2000 on UT1 and TT, and the fixed Delta T in seconds for that sample.
+For a chart clock use `{ ut: basis.ut1Days, tt: basis.ttDays,
+deltaT: basis.deltaT.seconds }` from `timeBasis`. `backdatePosition` also
+returns the emission `ut` and `tt`. These helpers return plain records,
+without astronomy-engine objects or runtime calls into that dependency.
+Their tests are in [planets.parity.ts](tests/planets.parity.ts).
+
+These low-level kernels accept finite clocks and only the implemented bodies.
+They do not yet expose `positions`, speeds in longitude, coverage flags or
+the engine's ephemeris-span validation. Do not substitute them for the
+complete public engine API. The Moon and Pluto need separate algorithms in
+the following milestones. [PARITY.md](PARITY.md) states the current bounds
+for comparisons with the pinned implementation.
+
 For a browser, supply this build's WASM as an ArrayBuffer obtained from your own
 asset loader, or as a compiled `WebAssembly.Module`. The wrapper makes no network requests and
 does not initialize WASM at import time. Initialization is synchronous and
@@ -110,7 +134,7 @@ The browser integration test belongs to the wrapper milestone in the plan.
 
 The workspace member `crates/core` exposes `normalize_longitude(f64)` and the
 `angles`, `signs`, `date_input`, `calendar`, `deltat`, `time_scales`,
-`nutation`, `frame` and `equator` modules. Fallible angular functions
+`nutation`, `frame`, `equator` and `planets` modules. Fallible angular functions
 return `Result<_, LongitudeError>`; the unchecked angular helpers propagate NaN
 as the reference does. Date parsers return `Result<f64, DateError>` with epoch
 milliseconds. Calendar string parsers and conversions return `Option`, and
@@ -137,6 +161,15 @@ on UT1 and precession/nutation on TT. `frame::ecliptic_of_date` returns
 rejection; a zero vector retains a NaN latitude. Native frame operations have
 no shared mutable cache. `equator::FrameKind` selects the mean or true frame.
 
+`planets::Planet` selects the Sun or a series body. `helio_vector` returns
+Cartesian coordinates; `helio_state` returns `HelioState { pos, vel }`.
+Those native functions take unchecked TT days, so validate time at the caller's
+boundary. `backdate_position` returns `BackdatedPosition { vector, ut, tt }`;
+`geo_vector` returns only the vector. Both take explicit UT1 and TT day values,
+a fixed Delta T in seconds, and a boolean aberration switch. They return
+`Result` for invalid clocks or a failed light-time solution. These functions
+have no global time model, callback into JavaScript or mutable shared cache.
+
 ## Parity and provenance
 
 [PARITY.md](PARITY.md) records current coverage and acceptance rules, enforced
@@ -158,14 +191,16 @@ preserved; ISO parsing uses equivalent integer calendar arithmetic. The local
 TypeScript sign table holds the reference's immutable labels, while Rust
 calculates the index and degree and provides native sign metadata. The time
 tables are generated from pinned local sources, with the separate Delta T
-attribution in [NOTICE](NOTICE) and [PROVENANCE.md](PROVENANCE.md). No ephemeris
-position coefficients are copied yet. The nutation coefficients and frame
-algorithms retain the parent's NOVAS and astronomy-engine attribution in those
+attribution in [NOTICE](NOTICE) and [PROVENANCE.md](PROVENANCE.md). Planetary
+coefficients are generated from the digest-checked astronomy-engine source;
+the translated solar and planetary kernels retain its MIT notice.
+The nutation coefficients and frame algorithms retain the parent's NOVAS and
+astronomy-engine attribution in those
 same files. Future translations must retain their sources'
 notices and data terms. Nothing here enters the root npm package;
 `check:isolation` checks npm's actual file listing without running prepack.
 
 The root `npm run package:contents` gate was also attempted during the initial
-and subsequent time-basis and frame milestones. It stops at the missing `dist/calc.d.ts` because this checkout has
-no root build output. This workspace's isolation check passes independently;
+and subsequent numeric milestones. It stops at the missing `dist/calc.d.ts`
+because this checkout has no root build output. This workspace's isolation check passes independently;
 the root package gate still needs a built engine checkout in the normal CI.

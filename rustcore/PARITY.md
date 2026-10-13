@@ -4,11 +4,13 @@ References: the checked-out engine's `src/signs.ts`, angular helpers in
 `src/aspects.ts`, `src/points.ts` and `src/window-ranges.ts`, `src/date-input.ts`
 and `src/civil-calendar.ts`, plus `src/deltat.ts`, `src/time-scale.ts`,
 `src/nutation.ts`, `src/frame.ts`, `src/equator.ts`, `meanObliquity` in
-`src/houses.ts` and `gastHours` in `src/ephemeris.ts`.
+`src/houses.ts` and `gastHours` in `src/ephemeris.ts`, plus the installed,
+pinned astronomy-engine series and light-time functions used by the engine.
 The parity tests import those sources directly
 and execute the release WASM built from `crates/wasm` and `crates/core`.
 Passing means compatibility on the tested inputs, not independent astronomical
-accuracy. No external ephemeris is a reference for this port.
+accuracy. The engine and its pinned dependency are the only numeric references
+for this port.
 
 ## Current acceptance
 
@@ -37,9 +39,15 @@ accuracy. No external ephemeris is a reference for this port.
 | Rotation with independently computed matrices | Each component divided by max(1, sum of absolute input components) differs by at most 8e-15 | `tests/frame.parity.ts` |
 | True-ecliptic longitude and latitude on the general-vector corpus | Circular longitude and absolute latitude difference at most 1e-8 arcseconds; all reference latitudes below 89 degrees in magnitude | `tests/frame.parity.ts` |
 | Near-ecliptic-pole vectors constructed at latitude magnitudes 89.999 and 89.999999 degrees | Longitude difference at most 0.05 arcseconds and latitude difference at most 0.02 arcseconds, only for the separate corpus below | `tests/frame.parity.ts`, near-pole cases |
+| Sun and Mercury through Neptune, including Earth: heliocentric, geocentric and backdated Cartesian components | Absolute difference at most 2e-12 AU per component | `tests/planets.parity.ts`, against astronomy-engine `HelioVector`, `GeoVector`, `BackdatePosition` |
+| Heliocentric Cartesian velocities | Absolute difference at most 2e-14 AU per TT day per component | `tests/planets.parity.ts`, against astronomy-engine `HelioState` |
+| True-ecliptic longitude and latitude of nonzero heliocentric and geocentric vectors of implemented bodies | Circular longitude and absolute latitude difference at most 1e-7 arcseconds | `tests/planets.parity.ts`, against the pinned vectors transformed by `src/frame.ts` |
+| Backdated emission UT1 and TT | Absolute difference at most 2e-6 seconds, after subtracting J2000 day values | `tests/planets.parity.ts`, against astronomy-engine `BackdatePosition` on a fixed Delta T clock |
+| Sun heliocentric position/state, Earth geocentric position and coincident-body vectors on coherent clocks | Identical binary64 zero bits; tolerance 0 AU and 0 AU/day | `tests/planets.parity.ts` |
 | Native arithmetic, signs, date validation and calendars | Exact regression expectations and calendar round trips | Unit tests in `crates/core/src/{lib,angles,signs,date_input,calendar}.rs` |
 | Native time model and clock conversion | Table knot checks, segment/uncertainty boundaries, finite synthetic scan, leap seconds and pins | Unit tests in `crates/core/src/{deltat,time_scales}.rs` |
 | Native frame kernels | Series-prefix algebra, clock separation, right-handed rotations, matrix order, inverse rotations, vector scale and nonfinite behavior | Unit tests in `crates/core/src/{nutation,frame,equator}.rs` |
+| Native solar and planetary kernels | Series algebra and derivatives, vector/state consistency, correction geometry, clock reconstruction and bounded solver behavior | Unit tests in `crates/core/src/planets.rs` |
 | Loading | Explicit initialization, retry after invalid WASM syntax, reuse on repeated initialization | `tests/loader.parity.ts` |
 
 ## Corpus
@@ -109,6 +117,25 @@ subnormals and overflow with exact comparisons. Nonfinite clocks, zero vectors,
 invalid vectors and fractional/negative/NaN series counts check reference
 outcomes separately. Positive-infinite term counts are refused without running
 the nonterminating reference case.
+
+`tests/planets.parity.ts` compares astronomy-engine's Sun and VSOP bodies
+(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune) on monthly
+synthetic instants in every year from 1800 through 2200, the span endpoints,
+J2000 and a seeded timestamp corpus. It compares heliocentric position and
+analytic velocity, geocentric vectors with and without aberration, and both
+kinds of nonzero vector transformed to the true ecliptic of date. The
+geocentric path also compares the Rust time basis with the engine's.
+
+Separate cases visit the Delta T model seam, every leap-second change, the
+IERS series boundaries and leap-list expiry, at the boundary and adjacent
+milliseconds, on UTC, UT1 and TT, with and without signed and nonzero pins.
+They compare backdated vectors and emission clocks as well as geocentric
+vectors. Every implemented observer-target pair is compared at synthetic
+century dates from 1800 through 2200 in both correction modes. J2000-neighbor
+TT inputs, exact origin zeros, repeatability after intervening calls, split
+clocks and invalid wrapper inputs are exercised separately. The tests inspect
+WASM imports and install a throwing JavaScript Delta T callback to guard
+against numerical delegation to the reference dependency.
 
 ## Rounding and deviations
 
@@ -246,13 +273,59 @@ ordinary number-valued inputs and complete matrix/frame records; arbitrary
 objects, proxies, malformed records and invalid frame-kind strings are outside
 this low-level scope.
 
+The planetary port keeps astronomy-engine's ordered VSOP summation,
+per-polynomial-order longitude remainder, spherical-to-Cartesian projection,
+fixed J2000 rotation, and analytic derivatives. Generated coefficients use
+binary64 bit patterns, so Rust reads the exact doubles parsed from the pinned
+JavaScript literal; [planet-data.check.mjs](scripts/planet-data.check.mjs)
+enforces that translation and the pinned source identity. Cosine, sine and
+the light solver's vector norm can still round differently across runtimes.
+The AU, AU/day and angular allowances above apply to the resulting finite
+quantities on the stated corpus. They are compatibility thresholds, not
+physical accuracy estimates or guarantees outside those samples.
+
+Light time retains the reference's fixed-point loop, its strict convergence
+test and its one-light-day distance refusal. With aberration enabled it
+backdates both the observer and target; otherwise it keeps the observer at
+observation time. As `src/ephemeris.ts` does, each sample freezes its Delta T
+for the whole solve. The initial iteration uses the supplied TT, and each
+subsequent iteration computes `(observationUT1 - lightDays) + deltaT / 86400`.
+It does not simply subtract light time from the previous TT or recompute a
+changing UTC time basis. Returning the last evaluated vector, instead of
+reevaluating at the newly converged time, also follows the reference.
+
+The emission-time allowance accounts for binary64 day rounding in the norm
+and subsequent clock subtraction. It is separate from the solver's own
+convergence test. `backdatePosition` returns the vector's evaluated emission
+clock. `geoVector` returns vector components alone, with the observation
+clock already supplied by its caller. There is no mutable global Delta T
+function in the Rust implementation.
+
+The M5 planetary exports are intermediate kernels, not replacements for the
+engine's public `positions` signature or astronomy-engine's classes and broad
+body API. The wrapper requires finite numeric clocks, literal supported body
+names and a boolean correction switch. Unlike the reference's unchecked
+mutable AstroTime fields, nonfinite clock fields are explicitly refused;
+native light-time calculations also reject nonfinite vectors as soon as they
+are evaluated.
+Finite inconsistent initial UT1/TT/Delta T clocks are accepted to preserve the
+reference's initial-time versus `AddDays` behavior. The native heliocentric
+functions are unchecked arithmetic helpers; validate their TT at the caller.
+The wrapper returns plain records and RangeError for refused inputs or failed
+solves. It does not yet provide public date validation, reference flags,
+ephemeris-span checks or all-body position assembly; those are later
+milestones. Only the listed bodies are implemented, and calls for the Moon or
+Pluto fail explicitly. Other observer-target coincidences can make angular
+coordinates ill-conditioned; the angular limits here apply to the tested
+nonzero heliocentric and Earth-centered corpus only.
+
 ## Remaining coverage
 
-Planetary and house parity over synthetic dates from 1800 through 2200, polar
-latitudes, every house system and legacy/configured/minor/custom aspect sets
-remain planned work. Positions, speeds, cusps,
-house membership and aspect matching are not
-implemented or compared yet. The civil Julian Day Number helpers do not apply
+The Moon, Pluto and complete position rows with longitude speeds remain
+planned work, alongside house parity over synthetic dates from 1800 through
+2200, polar latitudes, every house system and legacy/configured/minor/custom
+aspect sets. Cusps, house membership and aspect matching are not implemented
+or compared yet. The civil Julian Day Number helpers do not apply
 astronomical time scales. No performance baseline is claimed at this milestone.
 
 Initialization requires the matching generated WASM artifact. A valid module

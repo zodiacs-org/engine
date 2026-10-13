@@ -13,7 +13,7 @@ The external harness owns commits, pushes and the draft pull request.
 - [x] M2 Port angular arithmetic, sign annotations, date validation and Julian date helpers with native tests and bit-level WASM comparisons on synthetic boundary inputs.
 - [x] M3 Port the Delta T model and UTC/UT1/TT time basis, preserving table provenance, licences, discontinuities and pinned overrides. Generate any Rust tables from checked source inputs into ignored build folders.
 - [x] M4 Port nutation, precession, frame rotations, obliquity and apparent sidereal time. Test the same numeric operation order and document explicit angular tolerances against the TypeScript functions.
-- [ ] M5 Port the pinned astronomy-engine solar and planetary series needed for geocentric vectors, light time and aberration to Rust. Preserve MIT attribution and coefficient provenance; no JavaScript callbacks in the Rust calculation path.
+- [x] M5 Port the pinned astronomy-engine solar and planetary series needed for geocentric vectors, light time and aberration to Rust. Preserve MIT attribution and coefficient provenance; no JavaScript callbacks in the Rust calculation path.
 - [ ] M6 Port the Moon position and state series, true lunar nodes and their finite differences. Compare synthetic instants and node wrap/station cases against the pinned TypeScript implementation.
 - [ ] M7 Port Pluto's required integration path and finish native planetary position assembly, longitude speeds, reference/span checks and sign metadata for every body returned by `positions`.
 - [ ] M8 Port angles, whole sign, equal, equal-MC, Vehlow, Porphyry, Meridian and Morinus cusps, plus `houseOf`, with northern, southern and polar synthetic cases.

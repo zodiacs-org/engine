@@ -114,7 +114,7 @@ pub fn ecliptic_of_date(x: f64, y: f64, z: f64, tt: f64) -> Result<EclipticAngle
 // sum of squares instead; this also preserves the JS zero/Infinity/NaN rules.
 // Math.hypot's approximation is runtime-dependent, so this is not a promise
 // of bit equality across JavaScript engines (see rustcore/PARITY.md).
-fn hypot3(x: f64, y: f64, z: f64) -> f64 {
+pub(crate) fn hypot3(x: f64, y: f64, z: f64) -> f64 {
     let terms = [x.abs(), y.abs(), z.abs()];
     if terms.iter().any(|value| value.is_infinite()) {
         return f64::INFINITY;

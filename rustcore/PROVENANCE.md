@@ -80,3 +80,45 @@ in the parent frame module. [NOTICE](NOTICE) retains the NOVAS citation and
 Don Cross's copyright with the full MIT permission and warranty text.
 This translation reads those local records and performs no new external-source
 audit, download or independent accuracy comparison.
+
+## Solar and planetary series
+
+The planetary milestone reads the installed MIT-licensed
+`astronomy-engine@2.1.19` dependency in this workspace. Its source is
+`rustcore/node_modules/astronomy-engine/esm/astronomy.js`, SHA-256
+`068f1445ed0c636c94818fe6d20d7d125120e605e0bab9fc4675c3d531be5ad7`.
+[generate-planet-data.mjs](scripts/generate-planet-data.mjs) checks that
+digest before extracting the `vsop` literal. It also checks the installed
+package name, exact version and MIT declaration, the parent and local
+manifest version pins, and both lockfiles' version and npm integrity fields.
+The dependency has not been upgraded or replaced.
+
+The generator quotes the literal's known body keys and parses it as JSON;
+it never imports or evaluates the JavaScript source. It verifies the body
+order, each coordinate's polynomial orders and term counts, and each term's
+finite amplitude, phase and frequency. It preserves the source's empty
+Earth latitude order. Decimal coefficients become JavaScript binary64 values
+and then explicit Rust `f64::from_bits` constants, so the conversion loses
+no bits and retains the term order. There is no coefficient fitting or
+additional rounding.
+
+Cargo writes `planet_data.rs` to its ignored `OUT_DIR` under `target/`.
+The generated table contains Mercury, Venus, Earth, Mars, Jupiter, Saturn,
+Uranus and Neptune in source order. The Sun's heliocentric vector is zero;
+its geocentric calculation uses the Earth series. This milestone does not
+copy the source's Moon or Pluto tables. Generated data are not committed.
+
+The native formulas translate the same installed source's VSOP evaluation,
+spherical-to-rectangular conversion, fixed equatorial rotation, light-time
+iteration and observer-motion aberration path. Coefficients and formulas
+inherit Don Cross's MIT licence; [NOTICE](NOTICE) retains the full copyright,
+permission and warranty text from the installed source header. The build
+contains native coefficients and Rust calculations, with no JavaScript
+callbacks in the planetary calculation path.
+
+[planet-data.check.mjs](scripts/planet-data.check.mjs) checks source and
+package-identity rejection, malformed-literal rejection, every table shape,
+deterministic output, every generated coefficient's binary64 value and the
+complete MIT permission and warranty text. These checks and the TS/WASM
+parity tests measure faithful translation of this local dependency. They
+make no new astronomical accuracy or external-source audit claim.

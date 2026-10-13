@@ -107,3 +107,22 @@ The mean obliquity and precession follow N. Capitaine, P. T. Wallace and
 J. Chapront (2003), "Expressions for IAU 2000 precession quantities,"
 Astronomy & Astrophysics 412, 567-586, adopted by IAU 2006 Resolution B1.
 No external tables or ephemeris output were fetched for this translation.
+
+Solar and planetary series
+-------------------------
+
+The Rust planetary code translates the VSOP evaluation, vector conversion,
+light-time and aberration algorithms of astronomy-engine 2.1.19. Its generated
+planet_data.rs retains the installed source's Mercury, Venus, Earth, Mars,
+Jupiter, Saturn, Uranus and Neptune series coefficients. The Sun's vector
+uses the Earth series. No coefficient is fitted or adjusted by this port.
+
+Source: astronomy-engine 2.1.19, esm/astronomy.js, the local pinned npm
+dependency. The source header identifies:
+https://github.com/cosinekitty/astronomy
+Copyright (c) 2019-2023 Don Cross <cosinekitty@gmail.com>
+
+The full MIT permission and warranty text reproduced above under "Frame
+rotations and sidereal time" also applies to these algorithms and tables.
+Retain that full notice when redistributing them. PROVENANCE.md records
+the source digest, package checks and conversion without changing values.

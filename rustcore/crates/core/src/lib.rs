@@ -9,6 +9,7 @@ pub mod deltat;
 pub mod equator;
 pub mod frame;
 pub mod nutation;
+pub mod planets;
 pub mod signs;
 pub mod time_scales;
 

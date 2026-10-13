@@ -1,6 +1,7 @@
 //! WebAssembly bindings for the native numeric kernels.
 
 mod frame;
+mod planets;
 mod time;
 
 use wasm_bindgen::prelude::*;
