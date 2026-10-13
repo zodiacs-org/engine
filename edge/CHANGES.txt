@@ -1,1 +1,2 @@
 edge: complete M1 with isolated Node reference tooling, synthetic workloads, smoke tests and package-exclusion validation
+Complete M2: add reproducible edge and browser ESM bundles with provenance, licence preservation and Node compatibility checks

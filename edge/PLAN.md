@@ -10,7 +10,7 @@ Complete the next unchecked milestone, run its checks, tick it and append a
 single session summary to `CHANGES.txt`. The harness owns all git mutations.
 
 - [x] M1 Create a private isolated toolchain, shared synthetic chart, houses and transit-scan workloads, a Node reference build and smoke tests. Verify dependencies match the engine and generated files stay local.
-- [ ] M2 Add reproducible esbuild configurations for Cloudflare Workers, Deno, Bun and browser ESM, with graph checks, file-size limits, source digests and preserved licence notices.
+- [x] M2 Add reproducible esbuild configurations for Cloudflare Workers, Deno, Bun and browser ESM, with graph checks, file-size limits, source digests and preserved licence notices.
 - [ ] M3 Add a Cloudflare module Worker example with bounded request validation, explicit calculation errors and local request/response tests.
 - [ ] M4 Add Deno and Bun HTTP examples using the shared request contract, plus runtime-specific launch instructions and handler tests.
 - [ ] M5 Implement an exact comparison protocol for full results, including dates and binary64 values, with mismatch paths and tests for differences JSON would hide.

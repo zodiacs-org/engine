@@ -7,6 +7,8 @@
     "node": "22.x"
   },
   "scripts": {
+    "build": "node scripts/build-bundles.mjs",
+    "build:report": "node scripts/build-report.mjs",
     "build:reference": "node scripts/build-reference.mjs",
     "smoke:node": "node scripts/smoke-node.mjs",
     "test": "node --test tests/*.check.mjs",

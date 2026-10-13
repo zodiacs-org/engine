@@ -1,25 +1,15 @@
 import assert from "node:assert/strict";
-import { mkdir, readFile, writeFile, copyFile } from "node:fs/promises";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { mkdir, writeFile, copyFile } from "node:fs/promises";
+import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
 import { build } from "esbuild";
+import { edgeRoot, repositoryRoot, readToolchain } from "./build-support.mjs";
 
-export const edgeRoot = fileURLToPath(new URL("../", import.meta.url));
-const repositoryRoot = fileURLToPath(new URL("../../", import.meta.url));
+export { edgeRoot, requireNode22 } from "./build-support.mjs";
 const generated = resolve(edgeRoot, ".generated/reference");
 
-export function requireNode22() {
-  assert.equal(process.versions.node.split(".")[0], "22", "Use Node 22 for the edge reference build and tests.");
-}
-
 export async function buildReference() {
-  requireNode22();
-  const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
-  const rootPackage = await readJson(resolve(repositoryRoot, "package.json"));
-  const localPackage = await readJson(resolve(edgeRoot, "package.json"));
-  const dependency = await readJson(resolve(edgeRoot, "node_modules/astronomy-engine/package.json"));
-  assert.equal(localPackage.devDependencies["astronomy-engine"], rootPackage.dependencies["astronomy-engine"], "Keep the engine's ephemeris pin.");
-  assert.equal(dependency.version, rootPackage.dependencies["astronomy-engine"], "Installed ephemeris differs from the engine's pin.");
+  const { alias } = await readToolchain();
 
   const outfile = resolve(generated, "workloads.mjs");
   const result = await build({
@@ -32,7 +22,7 @@ export async function buildReference() {
     target: "es2022",
     // Source files resolve through the edge installation even if the root has
     // no node_modules. Select the same ESM file as the package's import branch.
-    alias: { "astronomy-engine": resolve(edgeRoot, "node_modules/astronomy-engine", dependency.exports["."].import) },
+    alias,
     tsconfig: resolve(edgeRoot, "tsconfig.json"),
     minify: false,
     legalComments: "inline",
