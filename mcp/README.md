@@ -1,8 +1,8 @@
 # zodiacs-astro
 
-An MCP server under construction for the Zodiacs astrology engine. The current
-scaffold creates an unconnected server; tools and transport entry points follow
-in [PLAN.md](PLAN.md).
+An MCP server under construction for the Zodiacs astrology engine.
+`createServer()` creates an unconnected server with the implemented tools
+registered. Transport entry points follow in [PLAN.md](PLAN.md).
 
 ## Development
 
@@ -170,3 +170,24 @@ time basis.
 resource policy, refusal, validation and concrete output schemas with synthetic
 inputs. These are wrapper integration checks, not independent astronomical
 accuracy evidence. Registration remains the next milestone.
+
+## MCP registration
+
+`src/server.ts` registers `natal_chart`, `transits_at`, `transits_now`,
+`synastry`, `solar_return`, `lunar_return`, `moon_phase` and `event_search`.
+Each advertises its strict input schema and concrete output schema through
+`tools/list`. Tool annotations describe local read-only calculations.
+`createServer({ clock })` can inject the current-time clock for testing.
+
+Registration follows the official SDK's [tool API](https://github.com/modelcontextprotocol/typescript-sdk/blob/main/docs/servers/tools.md).
+The SDK validates inputs and outputs at the protocol boundary. Invalid arguments
+and engine calculation refusals return text with `isError: true`, without
+structured content or invented receipts. An unknown tool returns a JSON-RPC
+invalid-params error. Search budget refusal is a successful structured response
+whose search status is `refused`; agents must inspect that status.
+
+`test/server.test.ts` uses the official SDK client and linked in-memory
+transports to check discovery, schemas, every registered handler, receipt
+preservation, validation refinements and failure recovery. These checks
+establish protocol integration, not astronomical accuracy. Stdio and
+Streamable HTTP lifecycle tests remain planned in M10.

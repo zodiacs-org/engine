@@ -61,3 +61,11 @@ wrapper integration, not independent accuracy or search completeness.
 checkout lacks `dist/calc.d.ts`, as in the scaffold session. No parent build was
 run; build-dependent engine gates retain the limitation described above.
 `git diff --check` passed and session changes are confined to mcp/.
+
+M9 session: `npm run check` passed on Node 22.23.3, including typecheck,
+Vitest and the isolated build. `test/server.test.ts` checks SDK discovery,
+published input/output schemas, registered tool output and receipt preservation,
+clock injection, strict inputs and refinements, calculation errors, unknown
+tools, structured budget refusals and recovery after errors. The parent pack
+isolation test passed. Checks establish protocol integration, not independent
+accuracy. Parent build-dependent gates retain the scaffold limitation above.
