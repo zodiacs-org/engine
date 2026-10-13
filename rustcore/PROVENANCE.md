@@ -1,4 +1,4 @@
-# Time data provenance
+# Numeric core provenance
 
 This port reads the checked-out engine, without fetching or consulting an
 external ephemeris. Its code translates [deltat.ts](../src/deltat.ts) and
@@ -51,3 +51,32 @@ prediction metadata in the wrapper exports. Those records are source identity,
 not claims about new data or new precision. Its decoded Rust knots retain the
 engine's sampling and rounding; its uncertainty values are the engine's own.
 The inherited C04 licensing question is not resolved by translating the data.
+
+## Frame and nutation translation
+
+The frame milestone directly translates the checked-out files below. Their
+hashes are enforced by [frame.parity.ts](tests/frame.parity.ts); a source
+refresh needs review before those pins change. Only `meanObliquity` from
+the houses file and `gastHours` from the ephemeris file are translated here.
+
+| Local source | SHA-256 |
+| --- | --- |
+| `src/nutation.ts` | `c11af594d4e8ad64e0a7ff1097505063c70812d2da84e14a6c0280d4841e62b0` |
+| `src/frame.ts` | `98d0bee44839b23d3ec64dac470e31ab8e366c6907d325a4259f8f37285a7c50` |
+| `src/equator.ts` | `1789e14344ef83839aea20624d16bb3def70d41e574f412faec87b89e6a79ef7` |
+| `src/houses.ts` | `e97ea80f5f225fadf0bfcb051f0afcce820678f31ff1013cc0ebce3035cc8ceb` |
+| `src/ephemeris.ts` | `b530dbd0463b886fe1b8e99a095dc9cf9ef0cf614b6854e78ad206a27913cc7e` |
+
+Rust's `nutation.rs` carries the reference's coefficients, arguments,
+multiplier encoding and fixed offsets as literal constants. The parity test
+compares every value with the local TypeScript source, including the metadata
+copies in `ts/nutation-data.ts`. These are source data, not generated output.
+No coefficient was fitted to another ephemeris or adjusted for the Rust port.
+
+The provenance chain is the parent's `LICENSING.md` and `NOTICE`: the
+nutation data were transcribed from USNO NOVAS C, a US Government work;
+the precession is astronomy-engine's MIT-licensed implementation, reproduced
+in the parent frame module. [NOTICE](NOTICE) retains the NOVAS citation and
+Don Cross's copyright with the full MIT permission and warranty text.
+This translation reads those local records and performs no new external-source
+audit, download or independent accuracy comparison.

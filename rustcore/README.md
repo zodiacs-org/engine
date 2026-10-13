@@ -3,10 +3,11 @@
 An isolated, experimental port of this checkout's numeric engine. The native
 library and WebAssembly module implement angular arithmetic, sign annotations,
 resolved-instant date validation, Julian/Gregorian civil-calendar helpers,
-the Delta T model and the UTC/UT1/TT time basis.
+the Delta T model, the UTC/UT1/TT time basis, nutation, precession,
+frame rotations, obliquity and apparent sidereal time.
 The TypeScript wrapper retains the reference function signatures after explicit
-initialization. Planetary positions, houses, aspect matching and
-frame rotations remain in [PLAN.md](PLAN.md).
+initialization. Planetary positions, houses and aspect matching remain in
+[PLAN.md](PLAN.md).
 
 ## Setup and checks
 
@@ -79,6 +80,23 @@ handoffs and leap-second records. `taiMinusUtcAt`, `ut1MinusUtcAt` and
 Table metadata is exported as an immutable build snapshot; its source and
 licensing chain is in [PROVENANCE.md](PROVENANCE.md).
 
+`nutation(t, terms)` takes Julian centuries of TT from J2000 and an optional
+series prefix length, and returns nutation in arcseconds plus the node argument
+in radians. `tilt(tt)` takes TT days since J2000 and returns mean and true
+obliquity in degrees, with nutation and the equation of the equinoxes in
+arcseconds. `meanObliquity(t)` exposes the obliquity polynomial.
+`gastHours(time)` takes an astronomy-engine-compatible time object with `ut`
+and `tt` day fields and returns Greenwich apparent sidereal hours. Only those
+fields are read; the wrapper does not construct a time or change its Delta T.
+
+`eclipticFrame(tt)`, `meanEcliptic(frame, x, y, z)` and
+`eclipticOfDate(x, y, z, tt)` transform J2000 mean-equatorial vectors to the
+ecliptic of date. `eclipticRows(tt, kind)` and `equatorRows(tt, kind)` return
+row-major matrices for `"mean"` or `"true"` frames. `turn(rows, x, y, z)` acts
+on a column vector and preserves its units. All numeric operations run in
+Rust. Exported nutation tables and cached frames are immutable snapshots;
+mutation and cache identity differences are recorded in [PARITY.md](PARITY.md).
+
 For a browser, supply this build's WASM as an ArrayBuffer obtained from your own
 asset loader, or as a compiled `WebAssembly.Module`. The wrapper makes no network requests and
 does not initialize WASM at import time. Initialization is synchronous and
@@ -91,7 +109,8 @@ The browser integration test belongs to the wrapper milestone in the plan.
 ## Native use
 
 The workspace member `crates/core` exposes `normalize_longitude(f64)` and the
-`angles`, `signs`, `date_input`, `calendar`, `deltat` and `time_scales` modules. Fallible angular functions
+`angles`, `signs`, `date_input`, `calendar`, `deltat`, `time_scales`,
+`nutation`, `frame` and `equator` modules. Fallible angular functions
 return `Result<_, LongitudeError>`; the unchecked angular helpers propagate NaN
 as the reference does. Date parsers return `Result<f64, DateError>` with epoch
 milliseconds. Calendar string parsers and conversions return `Option`, and
@@ -109,6 +128,14 @@ an optional pin, and returns the same time record using Rust structs and
 options. `time_scales::elapsed_days` compares those records across seams.
 These low-level time helpers retain the reference's unchecked numeric behavior;
 date and public chart input validation remain separate boundaries.
+
+`nutation::nutation(t, terms)` accepts an integer prefix length; the separate
+`nutation_with_terms` preserves the TypeScript helper's floating-count edge
+behavior for the WASM boundary. `nutation::gast_hours(ut, tt)` keeps rotation
+on UT1 and precession/nutation on TT. `frame::ecliptic_of_date` returns
+`Result<EclipticAngles, LongitudeError>`, matching longitude normalization's
+rejection; a zero vector retains a NaN latitude. Native frame operations have
+no shared mutable cache. `equator::FrameKind` selects the mean or true frame.
 
 ## Parity and provenance
 
@@ -132,11 +159,13 @@ TypeScript sign table holds the reference's immutable labels, while Rust
 calculates the index and degree and provides native sign metadata. The time
 tables are generated from pinned local sources, with the separate Delta T
 attribution in [NOTICE](NOTICE) and [PROVENANCE.md](PROVENANCE.md). No ephemeris
-coefficients are copied yet. Future translations must retain their sources'
+position coefficients are copied yet. The nutation coefficients and frame
+algorithms retain the parent's NOVAS and astronomy-engine attribution in those
+same files. Future translations must retain their sources'
 notices and data terms. Nothing here enters the root npm package;
 `check:isolation` checks npm's actual file listing without running prepack.
 
 The root `npm run package:contents` gate was also attempted during the initial
-and time-basis milestones. It stops at the missing `dist/calc.d.ts` because this checkout has
+and subsequent time-basis and frame milestones. It stops at the missing `dist/calc.d.ts` because this checkout has
 no root build output. This workspace's isolation check passes independently;
 the root package gate still needs a built engine checkout in the normal CI.

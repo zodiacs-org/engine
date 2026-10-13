@@ -3,6 +3,9 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "paths": {
+      "astronomy-engine": ["./node_modules/astronomy-engine/astronomy.d.ts"]
+    },
     "lib": ["ES2022", "DOM"],
     "types": ["node"],
     "strict": true,

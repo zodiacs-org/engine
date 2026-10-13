@@ -1,3 +1,4 @@
 M1: Add isolated Rust/WASM workspace, pinned build tooling, TypeScript loader, exact longitude-normalization parity tests, scope documentation and package-isolation checks.
 M2: Port angular arithmetic, sign annotations, strict date validation and Julian/Gregorian helpers to Rust/WASM with matching TypeScript signatures, native tests and bit-level parity coverage.
 M3: Port Delta T and UTC/UT1/TT time bases to Rust/WASM with digest-checked generated tables, retained attribution, leap and pin parity tests, explicit math tolerances and immutable metadata snapshots.
+M4: Port nutation, precession, frame rotations, obliquity and apparent sidereal time to Rust/WASM with matching TypeScript signatures, native tests, synthetic parity coverage, explicit angular tolerances and retained source attribution.

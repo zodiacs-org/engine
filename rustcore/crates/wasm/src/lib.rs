@@ -1,5 +1,6 @@
 //! WebAssembly bindings for the native numeric kernels.
 
+mod frame;
 mod time;
 
 use wasm_bindgen::prelude::*;

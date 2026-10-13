@@ -6,6 +6,9 @@ pub mod angles;
 pub mod calendar;
 pub mod date_input;
 pub mod deltat;
+pub mod equator;
+pub mod frame;
+pub mod nutation;
 pub mod signs;
 pub mod time_scales;
 
