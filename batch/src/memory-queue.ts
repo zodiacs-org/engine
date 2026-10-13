@@ -2,15 +2,15 @@ import { randomUUID } from "node:crypto";
 import type { ResultRow } from "./execution.js";
 import type { ValidatedJob } from "./model.js";
 import {
-  leaseDeadline, prepareResultBatch, queueFields, queueIdentifier, queueInteger,
+  failureTransition, leaseDeadline, prepareResultBatch, prepareSubmission, queueFields, queueIdentifier, queueInteger,
   queueLeaseRef, queueOwner,
 } from "./queue-data.js";
 import { QUEUE_LIMITS, QueueError } from "./queue.js";
 import type {
   ClaimedJob, ClaimOptions, JobLease, JobSnapshot, JobStatus, LeaseRef,
   QueueBackend, ResultPage, ResultPageOptions,
+  JobFailure, RetryPolicy, SubmitOptions,
 } from "./queue.js";
-import { validateJob } from "./validation.js";
 
 export interface MemoryQueueOptions {
   /** Backend epoch-millisecond clock; inject a controlled clock in tests. */
@@ -22,8 +22,13 @@ interface StoredJob {
   readonly job: ValidatedJob;
   readonly createdAt: number;
   readonly rows: string[];
+  readonly encoded: string;
+  readonly retry: RetryPolicy;
   status: JobStatus;
   claimCount: number;
+  failureCount: number;
+  retryAt: number | null;
+  lastFailure: JobFailure | null;
   updatedAt: number;
   finishedAt: number | null;
   lease: JobLease | null;
@@ -37,6 +42,7 @@ interface StoredJob {
  */
 export class MemoryQueue implements QueueBackend {
   readonly #jobs = new Map<string, StoredJob>();
+  readonly #keys = new Map<string, string>();
   readonly #now: () => number;
   #closed = false;
 
@@ -61,6 +67,10 @@ export class MemoryQueue implements QueueBackend {
       completedTasks: record.rows.length,
       nextCursor: record.rows.length,
       claimCount: record.claimCount,
+      retry: { ...record.retry },
+      failureCount: record.failureCount,
+      retryAt: record.retryAt,
+      lastFailure: record.lastFailure ? { ...record.lastFailure } : null,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
       finishedAt: record.finishedAt,
@@ -77,18 +87,34 @@ export class MemoryQueue implements QueueBackend {
     return record;
   }
 
-  async submit(spec: unknown): Promise<JobSnapshot> {
+  async submit(spec: unknown, options: SubmitOptions = {}): Promise<JobSnapshot> {
     this.#open();
-    const job = validateJob(spec);
+    const { job, encoded, retry, idempotencyKey } = prepareSubmission(spec, options);
+    const existing = (): JobSnapshot | null => {
+      const previousId = idempotencyKey === null ? undefined : this.#keys.get(idempotencyKey);
+      if (previousId === undefined) return null;
+      const previous = this.#jobs.get(previousId)!;
+      if (previous.encoded !== encoded || previous.retry.maxAttempts !== retry.maxAttempts || previous.retry.delayMs !== retry.delayMs) {
+        throw new QueueError("idempotency-conflict");
+      }
+      return this.#snapshot(previous);
+    };
+    const replay = existing();
+    if (replay) return replay;
     const now = this.#time();
     this.#open();
+    // An injected clock is caller code; check again before reserving the key.
+    const afterClock = existing();
+    if (afterClock) return afterClock;
     let id = randomUUID();
     while (this.#jobs.has(id)) id = randomUUID();
     const record: StoredJob = {
       id, job, createdAt: now, updatedAt: now, finishedAt: null,
       status: "queued", claimCount: 0, lease: null, rows: [],
+      encoded, retry, failureCount: 0, retryAt: null, lastFailure: null,
     };
     this.#jobs.set(id, record);
+    if (idempotencyKey !== null) this.#keys.set(idempotencyKey, id);
     return this.#snapshot(record);
   }
 
@@ -106,12 +132,21 @@ export class MemoryQueue implements QueueBackend {
     const expiresAt = leaseDeadline(now, fields.leaseMs);
     this.#open();
     for (const record of this.#jobs.values()) {
-      if (record.status !== "queued" && !(record.status === "running" && record.lease && now >= record.lease.expiresAt)) continue;
+      if (record.status === "running" && record.lease && now >= record.lease.expiresAt) {
+        const at = record.lease.expiresAt;
+        Object.assign(record, failureTransition(record.failureCount, record.retry, "lease-expired", record.rows.length, at));
+        record.lease = null;
+        record.updatedAt = now;
+      }
+    }
+    for (const record of this.#jobs.values()) {
+      if (record.status !== "queued" || (record.retryAt !== null && now < record.retryAt)) continue;
       const claimCount = queueInteger(record.claimCount + 1, 1);
       const lease: JobLease = { jobId: record.id, token: randomUUID(), owner, expiresAt };
       record.lease = lease;
       record.status = "running";
       record.claimCount = claimCount;
+      record.retryAt = null;
       record.updatedAt = now;
       return { job: record.job, snapshot: this.#snapshot(record), lease: { ...lease } };
     }
@@ -161,6 +196,19 @@ export class MemoryQueue implements QueueBackend {
     const record = this.#active(ref, now);
     record.status = "queued";
     record.lease = null;
+    record.retryAt = null;
+    record.updatedAt = now;
+    return this.#snapshot(record);
+  }
+
+  async fail(lease: LeaseRef): Promise<JobSnapshot> {
+    this.#open();
+    const ref = queueLeaseRef(lease);
+    const now = this.#time();
+    this.#open();
+    const record = this.#active(ref, now);
+    Object.assign(record, failureTransition(record.failureCount, record.retry, "execution-failed", record.rows.length, now));
+    record.lease = null;
     record.updatedAt = now;
     return this.#snapshot(record);
   }
@@ -182,5 +230,6 @@ export class MemoryQueue implements QueueBackend {
   async close(): Promise<void> {
     this.#closed = true;
     this.#jobs.clear();
+    this.#keys.clear();
   }
 }

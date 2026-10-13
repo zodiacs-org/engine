@@ -22,7 +22,7 @@ it("builds the relative engine source and queues synthetic work on both backends
       });
       const observations = [];
       for (const queue of [new MemoryQueue(), new SqliteQueue(${JSON.stringify(`${scratch}/queue.sqlite`)})]) {
-        const submitted = await queue.submit(job.spec);
+        const submitted = await queue.submit(job.spec, { idempotencyKey: 'synthetic-build-key' });
         const claim = await queue.claim({ owner: "synthetic-build-worker", leaseMs: 60_000 });
         const status = await queue.commit(claim.lease, [...executeSerial(claim.job)]);
         const { rows } = await queue.readResults(submitted.id);
@@ -32,18 +32,24 @@ it("builds the relative engine source and queues synthetic work on both backends
             id: 'synthetic-parallel-' + i, birth: { utc: '2001-02-03T04:05:0' + i + 'Z' },
           })),
         });
+        // Schema-valid synthetic time outside the engine's supported span.
+        const poison = await queue.submit({
+          ...job.spec, births: [{ id: 'synthetic-unsupported', birth: { utc: '0000-01-01T00:00:00Z' } }],
+        }, { retry: { maxAttempts: 2, delayMs: 5 } });
         const parallel = await queue.submit(parallelJob.spec);
         const scheduler = new Scheduler(queue, { workers: 2 });
         const running = scheduler.run();
         const failure = running.then(() => null, error => error);
         try {
-          while ((await queue.getJob(parallel.id)).status !== 'completed') {
+          while ((await queue.getJob(parallel.id)).status !== 'completed' || (await queue.getJob(poison.id)).status !== 'failed') {
             await Promise.race([setTimeout(10), running]);
           }
         } finally { await scheduler.stop(); }
         if (await failure) throw await failure;
         const threaded = (await queue.readResults(parallel.id)).rows;
         const parallelMatchesSerial = JSON.stringify(threaded) === JSON.stringify([...executeSerial(parallelJob)]);
+        const poisoned = await queue.getJob(poison.id);
+        const replay = await queue.submit(job.spec, { idempotencyKey: 'synthetic-build-key' });
         await queue.close();
         observations.push({
           status: status.status,
@@ -54,6 +60,10 @@ it("builds the relative engine source and queues synthetic work on both backends
           utc: rows[0].value.input.utc,
           longitude: rows[0].value.bodies[0].lon,
           parallelMatchesSerial,
+          replayMatchesCompleted: JSON.stringify(replay) === JSON.stringify(status),
+          failedStatus: poisoned.status,
+          failedAttempts: poisoned.failureCount,
+          failedClaims: poisoned.claimCount,
         });
       }
       process.stdout.write(JSON.stringify(observations));
@@ -67,6 +77,10 @@ it("builds the relative engine source and queues synthetic work on both backends
       utc: "2001-02-03T04:05:06.000Z",
       longitude: expect.any(Number),
       parallelMatchesSerial: true,
+      replayMatchesCompleted: true,
+      failedStatus: "failed",
+      failedAttempts: 2,
+      failedClaims: 2,
     };
     expect(JSON.parse(output)).toEqual([expected, expected]);
   } finally { rmSync(scratch, { recursive: true, force: true }); }

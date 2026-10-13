@@ -1,11 +1,45 @@
 import { Buffer } from "node:buffer";
 import type { ResultRow } from "./execution.js";
 import type { ValidatedJob } from "./model.js";
-import { QUEUE_LIMITS, QueueError } from "./queue.js";
-import type { LeaseRef, QueueErrorCode } from "./queue.js";
+import { QUEUE_LIMITS, QueueError, RETRY_DEFAULTS } from "./queue.js";
+import type { JobFailure, LeaseRef, QueueErrorCode, RetryPolicy, SubmitOptions } from "./queue.js";
+import { validateJob } from "./validation.js";
 import { workItemAt } from "./work.js";
 
 type JsonData = null | boolean | number | string | JsonData[] | { [key: string]: JsonData };
+
+export function prepareSubmission(spec: unknown, options: SubmitOptions = {}): {
+  job: ValidatedJob; encoded: string; retry: RetryPolicy; idempotencyKey: string | null;
+} {
+  const job = validateJob(spec);
+  const fields = queueFields(options, ["idempotencyKey", "retry"]);
+  let idempotencyKey: string | null = null;
+  if ("idempotencyKey" in fields) {
+    const key = fields.idempotencyKey;
+    if (typeof key !== "string" || key.length > QUEUE_LIMITS.maxIdempotencyKeyLength
+      || /^[A-Za-z0-9][A-Za-z0-9._:-]*$/.exec(key)?.[0] !== key) throw new QueueError("invalid-argument");
+    idempotencyKey = key;
+  }
+  const policy = "retry" in fields ? queueFields(fields.retry, ["maxAttempts", "delayMs"]) : {};
+  const retry = {
+    maxAttempts: queueInteger("maxAttempts" in policy ? policy.maxAttempts : RETRY_DEFAULTS.maxAttempts, 1, QUEUE_LIMITS.maxAttempts),
+    delayMs: queueInteger("delayMs" in policy ? policy.delayMs : RETRY_DEFAULTS.delayMs, 0, QUEUE_LIMITS.maxRetryDelayMs),
+  };
+  return { job, encoded: JSON.stringify(job.spec), retry, idempotencyKey };
+}
+
+export function failureTransition(failureCount: number, retry: RetryPolicy, code: JobFailure["code"], cursor: number, at: number): {
+  status: "queued" | "failed"; failureCount: number; retryAt: number | null;
+  finishedAt: number | null; lastFailure: JobFailure;
+} {
+  const count = failureCount + 1;
+  const exhausted = count >= retry.maxAttempts;
+  return {
+    status: exhausted ? "failed" : "queued", failureCount: count,
+    retryAt: exhausted ? null : at + Math.min(retry.delayMs, Number.MAX_SAFE_INTEGER - at),
+    finishedAt: exhausted ? at : null, lastFailure: { code, at, cursor },
+  };
+}
 
 /** Capture primitive arguments before checking mutable state. Never run getters. */
 export function queueFields(value: unknown, allowed: readonly string[], code: QueueErrorCode = "invalid-argument"): Record<string, unknown> {

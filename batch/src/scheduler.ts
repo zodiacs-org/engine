@@ -156,6 +156,7 @@ export class Scheduler {
     let cursor = claimed.snapshot.nextCursor;
     let dispatched = cursor;
     let completed = false;
+    let executionFailed = false;
     let ended = false;
     let heartbeatError: { error: unknown } | undefined;
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -205,6 +206,10 @@ export class Scheduler {
       return false;
     } catch (error) {
       if (leaseLost(error)) return true;
+      if (error instanceof SchedulerError && error.code === "execution-failed") {
+        executionFailed = true;
+        return false;
+      }
       throw error;
     } finally {
       ended = true;
@@ -213,7 +218,13 @@ export class Scheduler {
       for (const entry of pending.values()) entry.controller.abort();
       await Promise.all([...pending.values()].map((entry) => entry.settled));
       if (!completed) {
-        try { await this.#queue.release(lease); }
+        // A failed attempt is persisted once after sibling calculations stop.
+        // Do not release again: it could erase a retry delay or an uncertain
+        // failure operation's outcome on an asynchronous backend.
+        try {
+          if (executionFailed) await this.#queue.fail(lease);
+          else await this.#queue.release(lease);
+        }
         catch (error) { if (!leaseLost(error)) throw new SchedulerError("queue-failed"); }
       }
     }

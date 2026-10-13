@@ -11,10 +11,11 @@ export { executeSerial, executeWorkItem, WorkExecutionError } from "./execution.
 export type {
   ChartsResultRow, JsonResult, ResultRow, SynastryResultRow, TransitResultRow,
 } from "./execution.js";
-export { QUEUE_LIMITS, QueueError } from "./queue.js";
+export { QUEUE_LIMITS, QueueError, RETRY_DEFAULTS } from "./queue.js";
 export type {
   ClaimedJob, ClaimOptions, JobLease, JobSnapshot, JobStatus, LeaseRef, LeaseStatus,
   QueueBackend, QueueErrorCode, ResultPage, ResultPageOptions,
+  JobFailure, RetryPolicy, SubmitOptions,
 } from "./queue.js";
 export { MemoryQueue } from "./memory-queue.js";
 export type { MemoryQueueOptions } from "./memory-queue.js";

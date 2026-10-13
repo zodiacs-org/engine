@@ -3,8 +3,9 @@
 This private project is the batch service under development for this engine
 checkout. The completed work is checked off in [PLAN.md](PLAN.md). The current
 implementation validates job definitions, expands work lazily, executes it
-through the engine, provides in-memory and SQLite queues, and schedules work
-on a thread pool. Process-crash recovery checks, NDJSON streaming, HTTP, CLI
+through the engine, provides in-memory and SQLite queues with retries and
+idempotent submission, and schedules work on a thread pool. Process-crash
+recovery checks, NDJSON streaming, HTTP, CLI
 and scaling measurements are later milestones.
 
 All project files stay here. The engine source, npm package and carried archives
@@ -196,7 +197,7 @@ with `code: "calculation-failed"`, `kind` and `index`. Its message is fixed
 apart from the work kind and row index; it carries no raw engine error or
 submitted birth value. A failed serial iterator ends at that row, without
 skipping it or computing subsequent rows. Resuming from the failed index
-attempts it again. Retry scheduling belongs to the queue milestones.
+attempts it again. The queue and scheduler below manage retry policy.
 
 [test/execution.test.ts](test/execution.test.ts) compares these JSON values
 with direct engine calls on synthetic charts, transit samples and directed
@@ -242,19 +243,21 @@ lets the scheduler renew leases while calculations run elsewhere.
 
 | Operation | Behavior |
 | --- | --- |
-| `submit(spec)` | Validates a definition with the default job limits, allocates a unique job ID and returns a queued snapshot. It does not expand work or compute astronomy. |
+| `submit(spec, options)` | Validates a definition and retry policy, then creates a job or returns the current snapshot for an equivalent idempotency key. It does not expand work or compute astronomy. |
 | `getJob(id)` | Returns a detached status snapshot, or null for an unknown ID. |
-| `claim({ owner, leaseMs })` | Atomically leases the earliest submitted eligible job. Skips live leases and completed jobs. Returns null when none is eligible. |
+| `claim({ owner, leaseMs })` | Records expired attempts and atomically leases the earliest submitted eligible job. Skips live leases, delayed retries and terminal jobs. Returns null when none is eligible. |
 | `renew(lease, leaseMs)` | Extends a current lease from backend time, without shortening its existing deadline. Returns the same token and new deadline. |
 | `commit(lease, rows)` | Stores a nonempty contiguous result batch and advances progress together. Its final row completes the job and revokes the lease. |
 | `release(lease)` | Requeues unfinished work, revokes the lease and keeps its committed prefix. |
+| `fail(lease)` | Records a calculation failure, revokes the lease and schedules a retry or marks the job failed. Keeps the committed prefix. |
 | `readResults(id, { cursor, limit })` | Returns an ordered page, its next cursor and the status observed with it, or null for an unknown ID. |
 | `close()` | Releases the handle's resources. Repeated close calls succeed; all other calls then reject. |
 
 Status snapshots contain the job ID and kind, `status`, `totalTasks`,
 `completedTasks`, `nextCursor`, `claimCount`, `createdAt`, `updatedAt`,
-`finishedAt` and `lease`. States are `queued`, `running` and `completed`.
-`finishedAt` is null until completion. `lease` is null when no scheduler owns
+`finishedAt`, `lease`, `retry`, `failureCount`, `retryAt` and `lastFailure`.
+States are `queued`, `running`, `completed` and `failed`.
+`finishedAt` is null until completion or terminal failure. `lease` is null when no scheduler owns
 the job; otherwise it contains only `owner` and `expiresAt`. Status never
 includes birth definitions or lease tokens. Claim responses additionally
 carry the frozen validated job and a lease containing `jobId` and `token`.
@@ -267,9 +270,10 @@ for tests. Deadlines use backend wall time, so wall-clock adjustments can
 affect lease timing. A lease is invalid when backend time is at or after
 `expiresAt`, even before another scheduler reclaims it. Every claim gets a
 fresh token, including a reclaim by the same owner. Only the current,
-unexpired token may renew, commit or release. Status reads do not change
+unexpired token may renew, commit, release or fail. Status reads do not change
 stored state: an expired job still reads as running with its past deadline
-until a claim reclaims it. Claims preserve committed results and their cursor.
+until a claim operation records that expiry. Claims preserve committed results
+and their cursor.
 
 `completedTasks` and `nextCursor` both describe the contiguous committed
 prefix. Scheduled work and results still held by a worker do not count as
@@ -302,7 +306,7 @@ data fields; accessors, unknown fields and explicit undefined fields are
 rejected. IDs and tokens must be bounded, nonempty strings. Invalid job
 definitions retain `JobValidationError`. Queue failures use
 `QueueError` with `invalid-argument`, `invalid-result`, `cursor-conflict`,
-`lease-lost` or `closed`. An unknown job's lease is lost. Diagnostics contain
+`lease-lost`, `idempotency-conflict` or `closed`. An unknown job's lease is lost. Diagnostics contain
 fixed descriptions without birth data, result values or tokens. These
 in-process APIs do not sandbox executable proxies or a supplied clock.
 
@@ -314,6 +318,59 @@ and snapshot isolation using synthetic workloads and a controlled clock.
 Its asynchronous fixture accepts separate handles to the same store for
 durable-backend tests. This is a state-transition check, not evidence
 of process-crash durability or scaling performance.
+
+## Retries and idempotent submission
+
+Submission options accept `retry: { maxAttempts, delayMs }` and an optional
+`idempotencyKey`. Omitted policy fields use `RETRY_DEFAULTS`; limits are
+`QUEUE_LIMITS.maxAttempts` and `QUEUE_LIMITS.maxRetryDelayMs` in
+[src/queue.ts](src/queue.ts). Attempts must be a positive integer and delay a
+nonnegative integer in milliseconds. The default delay is zero, so a failed
+job can be claimed immediately until its budget is exhausted. Supply a delay
+to leave time between failed attempts. The delay is fixed, without backoff
+or jitter. The policy is captured at submission and cannot be changed later.
+
+`failureCount` counts failed attempts across the whole job. An explicit
+`fail(lease)` records `execution-failed`; an expired lease records
+`lease-expired` when a claim operation next checks it. Concurrent row failures
+under the same lease consume the budget once. A graceful release consumes
+none, and committed progress does not reset the budget. Once the failure
+count reaches `maxAttempts`, the job becomes `failed` and cannot be claimed
+again. Otherwise it becomes `queued` until `retryAt`, inclusive. The scheduler
+may claim later eligible jobs while an earlier job waits for its retry.
+
+Retry timing uses backend time: explicit failure time plus the configured
+delay, or the expired lease's deadline plus that delay. Deadline arithmetic
+saturates at the largest safe integer timestamp. Expiry is counted once,
+even if many claim calls inspect the job. `lastFailure` contains only its
+fixed `code`, `at` timestamp and first uncommitted `cursor`; raw exceptions
+and worker messages are not stored. The failure record remains after a later
+successful attempt. `updatedAt` reflects when the state changed; an expired
+terminal attempt's `finishedAt` records its lease deadline. Result pages still
+return a failed job's committed prefix. Uncommitted calculations can be repeated.
+
+Keys are case-sensitive ASCII identifiers with the person-identifier character
+set and `QUEUE_LIMITS.maxIdempotencyKeyLength` bound. Keys are scoped to the
+whole backend store, retained for its lifetime, and omitted from snapshots.
+Repeated submission with the same key returns the original job's current
+snapshot, including after completion or failure. It never resets progress,
+delay or failure count. An unkeyed submission always creates a new job.
+
+Equality compares the full canonical job definition and effective retry
+policy. Property order, timestamp fractions and omitted birth/policy defaults
+normalize before comparison; input row order remains significant. Reusing a
+key with a different definition or policy throws `idempotency-conflict`.
+Validation precedes key lookup, so a malformed replay still rejects. Key
+reservation and job creation are atomic, including across SQLite connections.
+There is no key expiry or deletion API, and no tenant namespace is inferred.
+
+[test/retry-contract.ts](test/retry-contract.ts), run against both backends by
+[test/retries.test.ts](test/retries.test.ts), enforces policy defaults and
+bounds, canonical replay, conflicts, concurrent submissions, delayed claims,
+failure exhaustion, prefix preservation, lease fencing and expiry accounting.
+[test/sqlite-queue.test.ts](test/sqlite-queue.test.ts) adds persistence and
+migration checks. These tests establish queue behavior; controlled process
+kills remain a separate milestone.
 
 ## Default durable backend: SQLite
 
@@ -339,7 +396,8 @@ const queue = new SqliteQueue(".runtime/jobs.sqlite");
 ```
 
 Every handle opens its own connection. Handles on the same file share job
-definitions, insertion order, claim counts, leases, progress and result rows.
+definitions, insertion order, claim counts, retry state, idempotency bindings,
+leases, progress and result rows.
 Closing a handle preserves them and leaves other connections usable. Reopening
 revalidates stored definitions when claiming or preparing a result commit.
 Definitions stay compact; work items are expanded only when executing or
@@ -352,6 +410,9 @@ from another application's database; an ordered migration list advances its
 schema version in the same transaction. Unsupported versions, foreign markers
 and unowned nonempty databases are refused. The constructor rejects empty
 filenames and `:memory:`; use `MemoryQueue` for a disposable store.
+The retry migration preserves existing queued, running and completed jobs,
+their leases and result prefixes, and applies the default retry policy. It
+starts their failure count at zero because the earlier schema recorded none.
 
 Mutations acquire `BEGIN IMMEDIATE` before checking current state. Claim order
 uses the insertion sequence, independent of wall-clock adjustments. Commit
@@ -460,21 +521,29 @@ performs no claim. Graceful shutdown waits for active work and backend calls;
 it has no forced-shutdown deadline. The scheduler never closes the queue, so
 the caller can read final progress and results before closing its handle.
 
-An execution failure stops this scheduler with `SchedulerError` code
-`execution-failed`; a backend failure uses `queue-failed`. Outstanding work is
-aborted, uncommitted results are discarded, and release of the unfinished
-lease is attempted. A failed release can leave a lease until expiry. The
-already committed prefix remains available. `stop()` propagates the same run
-failure. Bounded retries, retry delays and terminal failure records remain
-the next milestone; this version stops on failure instead of looping over a
-poisoned job. A stopped or failed scheduler is not restartable; create a
-new instance for another run.
+An execution failure aborts outstanding sibling calculations, discards
+uncommitted results and records the failed attempt through `queue.fail`.
+The scheduler continues polling, retrying from the committed cursor according
+to the stored policy and serving other jobs after terminal failure. An actual
+calculation failure while draining for shutdown still counts; shutdown and
+its sibling aborts do not add failures of their own.
+
+A backend failure stops the scheduler with `SchedulerError` code `queue-failed`.
+For failed claims, renewals or commits it attempts to release any unfinished
+lease. If the failure-recording operation itself throws, its outcome may be
+uncertain, so the scheduler does not issue a release that could erase a
+recorded retry delay. A failed release or failure write can leave a lease until
+expiry. A pool-close error uses `execution-failed`. The committed prefix
+remains available, and `stop()` propagates the same run failure. A stopped or
+failed scheduler is not restartable; create a new instance for another run.
 
 [test/worker-pool.test.ts](test/worker-pool.test.ts) uses real threads for engine
 parity, parallel dispatch, replacement, aborts, protocol failures and closure.
 [test/scheduler.test.ts](test/scheduler.test.ts) controls task completion and
-backend time to check bounded buffering, prefix commits, renewal, fencing and
-shutdown races. [test/build.test.ts](test/build.test.ts) runs the built default
-pool and scheduler against both queue backends in plain Node. These checks
+backend time to check bounded buffering, prefix commits, renewal, fencing,
+retries, failure-write uncertainty and shutdown races.
+[test/build.test.ts](test/build.test.ts) runs the built default pool and
+scheduler against both queue backends in plain Node, including a synthetic
+input whose calculation fails and exhausts its retry budget. These checks
 use synthetic inputs and establish wrapper behavior, not astronomical
 accuracy, process-crash durability or scaling performance.

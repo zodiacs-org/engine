@@ -106,6 +106,7 @@ export function queueContract(name: string, create: QueueFixtureFactory): void {
         id: expect.any(String), kind: "charts", status: "queued", totalTasks: 3,
         completedTasks: 0, nextCursor: 0, claimCount: 0,
         createdAt: clock, updatedAt: clock, finishedAt: null, lease: null,
+        retry: { maxAttempts: 3, delayMs: 0 }, failureCount: 0, retryAt: null, lastFailure: null,
       });
       clock += 5;
       const claimed = required(await peer.claim(owner));

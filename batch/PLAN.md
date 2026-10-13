@@ -15,7 +15,7 @@ initial session complete M1 only; later sessions complete one or two milestones.
 - [x] M3 Define the asynchronous queue backend contract and implement the in-memory queue with atomic claims, lease tokens, status and progress snapshots. Run a reusable backend contract suite including competing claims.
 - [x] M4 Implement the default SQLite backend with migrations, transactions, durable job definitions, leases and result checkpoints. Run the backend contract suite against independent connections and reopen tests.
 - [x] M5 Add the worker_threads pool and scheduler with bounded dispatch, worker replacement, progress updates and graceful shutdown. Test parallel work, worker failure and shutdown during active work.
-- [ ] M6 Add bounded retries, retry delays, terminal failure and idempotency keys with payload conflict detection. Test duplicate submissions, stale lease fencing and retry exhaustion on both backends.
+- [x] M6 Add bounded retries, retry delays, terminal failure and idempotency keys with payload conflict detection. Test duplicate submissions, stale lease fencing and retry exhaustion on both backends.
 - [ ] M7 Complete crash recovery and resumable jobs with atomic result/checkpoint commits and expired-lease recovery. Use child processes killed at controlled persistence boundaries to prove resumed output has no lost or duplicate rows.
 - [ ] M8 Stream result rows as NDJSON with stable cursors, backpressure and disconnect handling. Test partial reads, reconnects, escaping and large workloads without collecting all output in memory.
 - [ ] M9 Add the small HTTP control API for submit, status, progress and streamed results, with bounded request bodies and clear errors. Test routes, idempotency conflicts and client disconnects over real local sockets.
@@ -111,6 +111,33 @@ The build writes the worker entry beside the main entry under ignored
 `.generated/` paths. Execution failures stop and release unfinished work;
 bounded retries and terminal failure records remain M6. Process-kill recovery
 and throughput measurements remain later milestones.
+
+The root `npm run package:contents`, using the batch npm cache, stopped because
+`dist/calc.d.ts` is absent. An npm pack dry run with `--ignore-scripts --json`
+confirmed that no `batch/` file is included. All changes stay inside `batch/`,
+all tracked and new batch files are below the file-size limit, and batch
+documentation contains no em dashes. No root build, archive creation or git
+write was performed.
+
+## M6 session checks
+
+`npm run typecheck`, `npm test` and `npm run build` passed from `batch/` on
+Node 22.23.3. The shared retry suite checks canonical keyed replay, conflicting
+and concurrent submissions, effective policy defaults and bounds, delayed
+eligibility, terminal exhaustion, committed-prefix preservation, stale failure
+reports, expiry accounting and detached snapshots on both backends. Failures
+are counted separately from claims so graceful release preserves the budget.
+
+SQLite tests cover persisted keys and retry state across reopen, migrations
+from the earlier schema with live leases and stored results, sequence
+preservation, foreign-key constraints, and rollback of failed migrations,
+submissions, failure transitions and expired-lease claims. Scheduler tests
+cover sibling cancellation, delayed resumption, continued service after a
+terminal failure, shutdown during retries and uncertain failure writes. The
+plain Node bundle test exhausts a synthetic calculation's retry budget with
+real workers and still completes other work through both backends. These
+checks establish state transitions and reopen behavior; controlled process
+termination remains M7.
 
 The root `npm run package:contents`, using the batch npm cache, stopped because
 `dist/calc.d.ts` is absent. An npm pack dry run with `--ignore-scripts --json`

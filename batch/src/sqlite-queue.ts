@@ -3,13 +3,13 @@ import { DatabaseSync } from "node:sqlite";
 import type { ResultRow } from "./execution.js";
 import type { ValidatedJob } from "./model.js";
 import {
-  leaseDeadline, prepareResultBatch, queueFields, queueIdentifier, queueInteger,
+  failureTransition, leaseDeadline, prepareResultBatch, prepareSubmission, queueFields, queueIdentifier, queueInteger,
   queueLeaseRef, queueOwner,
 } from "./queue-data.js";
 import { QUEUE_LIMITS, QueueError } from "./queue.js";
 import type {
-  ClaimedJob, ClaimOptions, JobLease, JobSnapshot, JobStatus, LeaseRef,
-  QueueBackend, ResultPage, ResultPageOptions,
+  ClaimedJob, ClaimOptions, JobFailure, JobLease, JobSnapshot, JobStatus, LeaseRef,
+  QueueBackend, ResultPage, ResultPageOptions, SubmitOptions,
 } from "./queue.js";
 import { migrateQueue } from "./sqlite-schema.js";
 import { validateJob } from "./validation.js";
@@ -38,10 +38,19 @@ interface StoredJob {
   lease_token: string | null;
   lease_owner: string | null;
   lease_expires_at: number | null;
+  retry_max_attempts: number;
+  retry_delay_ms: number;
+  failure_count: number;
+  retry_at: number | null;
+  last_failure_code: JobFailure["code"] | null;
+  last_failure_at: number | null;
+  last_failure_cursor: number | null;
 }
 
 const STATUS_COLUMNS = `id, kind, total_tasks, completed_tasks, status, claim_count,
-  created_at, updated_at, finished_at, lease_token, lease_owner, lease_expires_at`;
+  created_at, updated_at, finished_at, lease_token, lease_owner, lease_expires_at,
+  retry_max_attempts, retry_delay_ms, failure_count, retry_at, last_failure_code,
+  last_failure_at, last_failure_cursor`;
 
 function requireSqliteRuntime(): void {
   // Earlier releases have the multi-connection WAL-reset corruption bug:
@@ -70,6 +79,11 @@ function snapshot(record: StoredJob): JobSnapshot {
     id: record.id, kind: record.kind, status: record.status,
     totalTasks: record.total_tasks, completedTasks: record.completed_tasks,
     nextCursor: record.completed_tasks, claimCount: record.claim_count,
+    retry: { maxAttempts: record.retry_max_attempts, delayMs: record.retry_delay_ms },
+    failureCount: record.failure_count, retryAt: record.retry_at,
+    lastFailure: record.last_failure_code === null ? null : {
+      code: record.last_failure_code, at: record.last_failure_at!, cursor: record.last_failure_cursor!,
+    },
     createdAt: record.created_at, updatedAt: record.updated_at, finishedAt: record.finished_at,
     lease: record.lease_owner === null ? null : {
       owner: record.lease_owner, expiresAt: record.lease_expires_at!,
@@ -161,15 +175,35 @@ export class SqliteQueue implements QueueBackend {
     return record;
   }
 
-  async submit(spec: unknown): Promise<JobSnapshot> {
+  #failRecord(record: StoredJob, code: JobFailure["code"], at: number, now: number): void {
+    const next = failureTransition(record.failure_count,
+      { maxAttempts: record.retry_max_attempts, delayMs: record.retry_delay_ms }, code, record.completed_tasks, at);
+    this.#db.prepare(`UPDATE batch_jobs SET status = ?, failure_count = ?, retry_at = ?,
+      finished_at = ?, last_failure_code = ?, last_failure_at = ?, last_failure_cursor = ?,
+      lease_token = NULL, lease_owner = NULL, lease_expires_at = NULL, updated_at = ? WHERE id = ?`)
+      .run(next.status, next.failureCount, next.retryAt, next.finishedAt, next.lastFailure.code,
+        next.lastFailure.at, next.lastFailure.cursor, now, record.id);
+  }
+
+  async submit(spec: unknown, options: SubmitOptions = {}): Promise<JobSnapshot> {
     this.#open();
-    const job = validateJob(spec);
-    const encoded = JSON.stringify(job.spec);
+    const { job, encoded, retry, idempotencyKey } = prepareSubmission(spec, options);
     return this.#transaction("IMMEDIATE", () => {
+      if (idempotencyKey !== null) {
+        const existing = this.#db.prepare(`SELECT ${STATUS_COLUMNS}, spec_json FROM batch_jobs
+          WHERE idempotency_key = ?`).get(idempotencyKey) as unknown as (StoredJob & { spec_json: string }) | undefined;
+        if (existing) {
+          if (existing.spec_json !== encoded || existing.retry_max_attempts !== retry.maxAttempts
+            || existing.retry_delay_ms !== retry.delayMs) throw new QueueError("idempotency-conflict");
+          return snapshot(existing);
+        }
+      }
       const now = this.#time();
       const id = randomUUID();
-      this.#db.prepare(`INSERT INTO batch_jobs (id, spec_json, kind, total_tasks, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?)`).run(id, encoded, job.spec.kind, job.totalTasks, now, now);
+      this.#db.prepare(`INSERT INTO batch_jobs (id, spec_json, kind, total_tasks,
+        created_at, updated_at, idempotency_key, retry_max_attempts, retry_delay_ms)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+        .run(id, encoded, job.spec.kind, job.totalTasks, now, now, idempotencyKey, retry.maxAttempts, retry.delayMs);
       return snapshot(this.#record(id)!);
     });
   }
@@ -188,15 +222,18 @@ export class SqliteQueue implements QueueBackend {
     return this.#transaction("IMMEDIATE", () => {
       const now = this.#time();
       const expiresAt = leaseDeadline(now, leaseMs);
+      const expired = this.#db.prepare(`SELECT ${STATUS_COLUMNS} FROM batch_jobs
+        WHERE status = 'running' AND lease_expires_at <= ?`).all(now) as unknown as StoredJob[];
+      for (const record of expired) this.#failRecord(record, "lease-expired", record.lease_expires_at!, now);
       const record = this.#db.prepare(`SELECT ${STATUS_COLUMNS} FROM batch_jobs
-        WHERE status != 'completed' AND (status = 'queued' OR lease_expires_at <= ?)
+        WHERE status = 'queued' AND (retry_at IS NULL OR retry_at <= ?)
         ORDER BY sequence LIMIT 1`).get(now) as unknown as StoredJob | undefined;
       if (!record) return null;
       const job = this.#job(record.id);
       const count = queueInteger(record.claim_count + 1, 1);
       const lease: JobLease = { jobId: record.id, token: randomUUID(), owner, expiresAt };
       this.#db.prepare(`UPDATE batch_jobs SET status = 'running', claim_count = ?,
-        lease_token = ?, lease_owner = ?, lease_expires_at = ?, updated_at = ? WHERE id = ?`)
+        lease_token = ?, lease_owner = ?, lease_expires_at = ?, updated_at = ?, retry_at = NULL WHERE id = ?`)
         .run(count, lease.token, owner, expiresAt, now, record.id);
       return { job, snapshot: snapshot(this.#record(record.id)!), lease };
     });
@@ -249,7 +286,17 @@ export class SqliteQueue implements QueueBackend {
       const now = this.#time();
       this.#active(ref, now);
       this.#db.prepare(`UPDATE batch_jobs SET status = 'queued', lease_token = NULL,
-        lease_owner = NULL, lease_expires_at = NULL, updated_at = ? WHERE id = ?`).run(now, ref.jobId);
+        lease_owner = NULL, lease_expires_at = NULL, updated_at = ?, retry_at = NULL WHERE id = ?`).run(now, ref.jobId);
+      return snapshot(this.#record(ref.jobId)!);
+    });
+  }
+
+  async fail(lease: LeaseRef): Promise<JobSnapshot> {
+    this.#open();
+    const ref = queueLeaseRef(lease);
+    return this.#transaction("IMMEDIATE", () => {
+      const now = this.#time();
+      this.#failRecord(this.#active(ref, now), "execution-failed", now, now);
       return snapshot(this.#record(ref.jobId)!);
     });
   }

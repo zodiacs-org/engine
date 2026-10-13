@@ -1,7 +1,27 @@
 import type { ResultRow } from "./execution.js";
 import type { JobSpec, ValidatedJob } from "./model.js";
 
-export type JobStatus = "queued" | "running" | "completed";
+export type JobStatus = "queued" | "running" | "completed" | "failed";
+
+export interface RetryPolicy {
+  /** Failed attempts allowed, including expired leases; graceful releases are free. */
+  readonly maxAttempts: number;
+  readonly delayMs: number;
+}
+
+export const RETRY_DEFAULTS: RetryPolicy = Object.freeze({ maxAttempts: 3, delayMs: 0 });
+
+export interface SubmitOptions {
+  readonly idempotencyKey?: string;
+  readonly retry?: Partial<RetryPolicy>;
+}
+
+export interface JobFailure {
+  readonly code: "execution-failed" | "lease-expired";
+  readonly at: number;
+  /** First uncommitted row when the failure was recorded. */
+  readonly cursor: number;
+}
 
 /** Epoch milliseconds on the backend clock. Tokens are never in status views. */
 export interface LeaseStatus {
@@ -18,6 +38,10 @@ export interface JobSnapshot {
   readonly completedTasks: number;
   readonly nextCursor: number;
   readonly claimCount: number;
+  readonly retry: RetryPolicy;
+  readonly failureCount: number;
+  readonly retryAt: number | null;
+  readonly lastFailure: JobFailure | null;
   readonly createdAt: number;
   readonly updatedAt: number;
   readonly finishedAt: number | null;
@@ -63,11 +87,15 @@ export const QUEUE_LIMITS = Object.freeze({
   maxIdentifierLength: 128,
   maxResultDepth: 64,
   maxResultNodes: 100_000,
+  maxAttempts: 100,
+  maxRetryDelayMs: 86_400_000,
+  maxIdempotencyKeyLength: 128,
 });
 
 export type QueueErrorCode =
   | "invalid-argument" | "lease-lost" | "cursor-conflict" | "invalid-result" | "closed"
-  | "storage-busy" | "storage-failure" | "unsupported-schema" | "unsupported-runtime";
+  | "storage-busy" | "storage-failure" | "unsupported-schema" | "unsupported-runtime"
+  | "idempotency-conflict";
 
 const ERROR_MESSAGES: Record<QueueErrorCode, string> = {
   "invalid-argument": "Invalid queue argument.",
@@ -79,6 +107,7 @@ const ERROR_MESSAGES: Record<QueueErrorCode, string> = {
   "storage-failure": "The queue database operation failed.",
   "unsupported-schema": "The database is not a supported batch queue schema.",
   "unsupported-runtime": "The SQLite queue requires a runtime with a newer SQLite library.",
+  "idempotency-conflict": "The idempotency key is already bound to a different submission.",
 };
 
 /** Fixed diagnostics do not copy job data, lease tokens or result values. */
@@ -97,9 +126,10 @@ export class QueueError extends Error {
  * Returned data must be detached from storage, or deeply immutable.
  */
 export interface QueueBackend {
-  submit(spec: unknown): Promise<JobSnapshot>;
+  /** Keys bind the canonical definition and retry policy for the store's lifetime. */
+  submit(spec: unknown, options?: SubmitOptions): Promise<JobSnapshot>;
   getJob(jobId: string): Promise<JobSnapshot | null>;
-  /** Claim the earliest submitted eligible job; expired leases are eligible. */
+  /** Record expired attempts, then claim the earliest job whose delay has elapsed. */
   claim(options: ClaimOptions): Promise<ClaimedJob | null>;
   /** Never shorten an existing lease, and never revive an expired lease. */
   renew(lease: LeaseRef, leaseMs: number): Promise<JobLease>;
@@ -112,6 +142,8 @@ export interface QueueBackend {
   commit(lease: LeaseRef, rows: readonly ResultRow[]): Promise<JobSnapshot>;
   /** Requeue unfinished work without discarding the committed prefix. */
   release(lease: LeaseRef): Promise<JobSnapshot>;
+  /** Record an execution failure, revoke the lease, and retry or fail atomically. */
+  fail(lease: LeaseRef): Promise<JobSnapshot>;
   /** Read a bounded page from a cursor at or behind committed progress. */
   readResults(jobId: string, options?: ResultPageOptions): Promise<ResultPage | null>;
   /** Idempotent. All other operations reject on a closed handle. */

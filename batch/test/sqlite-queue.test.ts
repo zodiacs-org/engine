@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { executeSerial } from "../src/execution.js";
 import type { JobSpec, Person } from "../src/model.js";
-import { QueueError } from "../src/queue.js";
+import { QueueError, RETRY_DEFAULTS } from "../src/queue.js";
 import { SqliteQueue } from "../src/sqlite-queue.js";
 import { validateJob } from "../src/validation.js";
 import { queueContract } from "./queue-contract.js";
@@ -57,6 +57,44 @@ const workloads: readonly JobSpec[] = [
   { version: 1, kind: "synastry-matrix", people: people.slice(0, 2) },
 ];
 const rows = [...executeSerial(validateJob(charts))];
+
+// Original M4 schema, kept independent of the current migration definitions.
+// Rows in these tests are invented and assert persistence, not accuracy.
+function createVersionOne(db: DatabaseSync): void {
+  db.exec(`PRAGMA application_id = 1514291540;
+    PRAGMA user_version = 1;
+    CREATE TABLE batch_jobs (
+      sequence INTEGER PRIMARY KEY AUTOINCREMENT,
+      id TEXT NOT NULL UNIQUE,
+      spec_json TEXT NOT NULL CHECK (json_valid(spec_json)),
+      kind TEXT NOT NULL CHECK (kind IN ('charts', 'transit-grid', 'synastry-matrix')),
+      total_tasks INTEGER NOT NULL CHECK (total_tasks > 0),
+      completed_tasks INTEGER NOT NULL DEFAULT 0 CHECK (completed_tasks BETWEEN 0 AND total_tasks),
+      status TEXT NOT NULL DEFAULT 'queued' CHECK (status IN ('queued', 'running', 'completed')),
+      claim_count INTEGER NOT NULL DEFAULT 0 CHECK (claim_count >= 0),
+      created_at INTEGER NOT NULL CHECK (created_at >= 0),
+      updated_at INTEGER NOT NULL CHECK (updated_at >= 0),
+      finished_at INTEGER,
+      lease_token TEXT,
+      lease_owner TEXT,
+      lease_expires_at INTEGER,
+      CHECK (
+        (status = 'running' AND lease_token IS NOT NULL AND lease_owner IS NOT NULL AND lease_expires_at IS NOT NULL)
+        OR (status != 'running' AND lease_token IS NULL AND lease_owner IS NULL AND lease_expires_at IS NULL)
+      ),
+      CHECK (
+        (status = 'completed' AND completed_tasks = total_tasks AND finished_at IS NOT NULL)
+        OR (status != 'completed' AND completed_tasks < total_tasks AND finished_at IS NULL)
+      )
+    ) STRICT;
+    CREATE INDEX batch_jobs_eligible ON batch_jobs(sequence) WHERE status != 'completed';
+    CREATE TABLE batch_results (
+      job_id TEXT NOT NULL REFERENCES batch_jobs(id),
+      cursor INTEGER NOT NULL CHECK (cursor >= 0),
+      row_json TEXT NOT NULL CHECK (json_valid(row_json)),
+      PRIMARY KEY (job_id, cursor)
+    ) STRICT, WITHOUT ROWID;`);
+}
 
 describe("SQLite persistence and transaction boundaries", () => {
   let dir: string;
@@ -265,7 +303,7 @@ describe("SQLite persistence and transaction boundaries", () => {
       for (const operation of [
         () => queue.submit(charts), () => queue.claim(owner),
         () => queue.renew(claim.lease, 200), () => queue.commit(claim.lease, rows),
-        () => queue.release(claim.lease),
+        () => queue.release(claim.lease), () => queue.fail(claim.lease),
       ]) await expect(operation()).rejects.toMatchObject({ code: "storage-busy" });
       expect(await queue.getJob(first.id)).toEqual(claim.snapshot);
       expect(await queue.getJob(second.id)).toEqual(second);
@@ -301,7 +339,7 @@ describe("SQLite persistence and transaction boundaries", () => {
     const submitted = await first.submit(charts);
     for (let index = 0; index < 4; index++) expect(await open().getJob(submitted.id)).toEqual(submitted);
     const db = raw();
-    expect(db.prepare("PRAGMA user_version").get()).toMatchObject({ user_version: 1 });
+    expect(db.prepare("PRAGMA user_version").get()).toMatchObject({ user_version: 2 });
     expect(db.prepare("PRAGMA application_id").get()).toMatchObject({ application_id: 0x5A424154 });
     expect(db.prepare("PRAGMA journal_mode").get()).toMatchObject({ journal_mode: "wal" });
   });
@@ -317,11 +355,11 @@ describe("SQLite persistence and transaction boundaries", () => {
     } finally { db.exec("ROLLBACK"); }
     const submitted = await open().submit(charts);
     expect(await open().getJob(submitted.id)).toEqual(submitted);
-    expect(db.prepare("PRAGMA user_version").get()).toMatchObject({ user_version: 1 });
+    expect(db.prepare("PRAGMA user_version").get()).toMatchObject({ user_version: 2 });
   });
 
   it.each([
-    { version: 2, application: 0x5A424154 },
+    { version: 3, application: 0x5A424154 },
     { version: -1, application: 0x5A424154 },
     { version: 0, application: 0x5A424154 },
     { version: 0, application: 123 },
@@ -388,5 +426,228 @@ describe("SQLite persistence and transaction boundaries", () => {
     expect(await open().getJob(submitted.id)).toEqual(claim.snapshot);
     clock++;
     await expect(queue.release(claim.lease)).rejects.toMatchObject({ code: "lease-lost" });
+  });
+
+  it("retains keyed retries and committed prefixes after reopening and retains the key after success", async () => {
+    const options = { idempotencyKey: "synthetic-reopen", retry: { maxAttempts: 2, delayMs: 500 } };
+    const queue = open();
+    const submitted = await queue.submit(charts, options);
+    const claim = (await queue.claim(owner))!;
+    await queue.commit(claim.lease, rows.slice(0, 1));
+    clock++;
+    const failed = await queue.fail(claim.lease);
+    expect(failed).toMatchObject({
+      status: "queued", failureCount: 1, retryAt: clock + 500, nextCursor: 1,
+      lastFailure: { code: "execution-failed", at: clock, cursor: 1 }, lease: null,
+    });
+    await queue.close();
+    const reopened = open();
+    expect(await reopened.submit(charts, options)).toEqual(failed);
+    expect(await reopened.getJob(submitted.id)).toEqual(failed);
+    expect((await reopened.readResults(submitted.id))!.rows).toEqual(rows.slice(0, 1));
+    expect(await reopened.claim(owner)).toBeNull();
+    await expect(reopened.submit(charts, { ...options, retry: { maxAttempts: 3, delayMs: 500 } }))
+      .rejects.toMatchObject({ code: "idempotency-conflict" });
+    clock = failed.retryAt!;
+    const retry = (await reopened.claim(owner))!;
+    expect(retry.snapshot).toMatchObject({ id: submitted.id, nextCursor: 1, failureCount: 1, retryAt: null });
+    await expect(reopened.fail(claim.lease)).rejects.toMatchObject({ code: "lease-lost" });
+    const completed = await reopened.commit(retry.lease, rows.slice(1));
+    await reopened.close();
+    expect(await open().submit(charts, options)).toEqual(completed);
+    expect(completed).toMatchObject({ status: "completed", failureCount: 1, lastFailure: failed.lastFailure });
+    expect(raw().prepare("SELECT COUNT(*) AS count FROM batch_jobs").get()).toEqual({ count: 1 });
+  });
+
+  it("persists terminal failure and its key across reopen without removing prefix results", async () => {
+    const queue = open();
+    const options = { idempotencyKey: "synthetic-terminal", retry: { maxAttempts: 1 } };
+    const submitted = await queue.submit(charts, options);
+    const claim = (await queue.claim(owner))!;
+    await queue.commit(claim.lease, rows.slice(0, 1));
+    clock++;
+    const failed = await queue.fail(claim.lease);
+    expect(failed).toMatchObject({
+      status: "failed", failureCount: 1, nextCursor: 1, retryAt: null, finishedAt: clock,
+      lastFailure: { code: "execution-failed", at: clock, cursor: 1 }, lease: null,
+    });
+    await queue.close();
+    const reopened = open();
+    expect(await reopened.submit(charts, options)).toEqual(failed);
+    expect(await reopened.readResults(submitted.id)).toEqual({ rows: rows.slice(0, 1), nextCursor: 1, snapshot: failed });
+    await expect(reopened.submit(workloads[1], options)).rejects.toMatchObject({ code: "idempotency-conflict" });
+    clock += 1_000_000;
+    expect(await reopened.claim(owner)).toBeNull();
+    expect(await reopened.getJob(submitted.id)).toEqual(failed);
+  });
+
+  it("counts each expired lease once across reopen and dates retries from the expired deadline", async () => {
+    const queue = open();
+    const submitted = await queue.submit(charts, { retry: { maxAttempts: 2, delayMs: 500 } });
+    const claim = (await queue.claim(owner))!;
+    await queue.close();
+    clock = claim.lease.expiresAt + 400;
+    const reopened = open();
+    expect(await reopened.claim(owner)).toBeNull();
+    const failed = (await reopened.getJob(submitted.id))!;
+    expect(failed).toMatchObject({
+      status: "queued", failureCount: 1, updatedAt: clock,
+      retryAt: claim.lease.expiresAt + 500,
+      lastFailure: { code: "lease-expired", at: claim.lease.expiresAt, cursor: 0 },
+    });
+    await reopened.close();
+    const again = open();
+    expect(await again.claim(owner)).toBeNull();
+    expect(await again.getJob(submitted.id)).toEqual(failed);
+    clock = failed.retryAt!;
+    const retry = (await again.claim(owner))!;
+    await again.close();
+    clock = retry.lease.expiresAt + 1_000;
+    const final = open();
+    expect(await final.claim(owner)).toBeNull();
+    expect(await final.getJob(submitted.id)).toMatchObject({
+      status: "failed", failureCount: 2, retryAt: null,
+      updatedAt: clock, finishedAt: retry.lease.expiresAt,
+      lastFailure: { code: "lease-expired", at: retry.lease.expiresAt, cursor: 0 },
+    });
+    expect(await final.claim(owner)).toBeNull();
+    expect(await final.getJob(submitted.id)).toMatchObject({ failureCount: 2 });
+  });
+
+  it("rolls back a failed keyed insertion without reserving its key or sequence", async () => {
+    const queue = open();
+    const db = raw();
+    db.exec(`CREATE TRIGGER synthetic_failure AFTER INSERT ON batch_jobs
+      BEGIN SELECT RAISE(ABORT, 'SYNTHETIC_KEY_FAILURE'); END`);
+    const options = { idempotencyKey: "synthetic-insert-rollback" };
+    await expect(queue.submit(charts, options)).rejects.toMatchObject({ code: "storage-failure" });
+    expect(db.prepare("SELECT COUNT(*) AS count FROM batch_jobs").get()).toEqual({ count: 0 });
+    db.exec("DROP TRIGGER synthetic_failure");
+    const submitted = await open().submit(charts, options);
+    expect(await queue.submit(charts, options)).toEqual(submitted);
+    expect(db.prepare("SELECT sequence FROM batch_jobs").all()).toEqual([{ sequence: 1 }]);
+  });
+
+  it("rolls back a failed failure transition and leaves the current lease usable", async () => {
+    const queue = open();
+    const submitted = await queue.submit(charts, { retry: { maxAttempts: 1 } });
+    const claim = (await queue.claim(owner))!;
+    const prefix = await queue.commit(claim.lease, rows.slice(0, 1));
+    const db = raw();
+    db.exec(`CREATE TRIGGER synthetic_failure AFTER UPDATE ON batch_jobs
+      WHEN NEW.failure_count > OLD.failure_count
+      BEGIN SELECT RAISE(ABORT, 'SYNTHETIC_FAIL_FAILURE'); END`);
+    await expect(queue.fail(claim.lease)).rejects.toMatchObject({ code: "storage-failure" });
+    expect(await open().getJob(submitted.id)).toEqual(prefix);
+    expect((await queue.readResults(submitted.id))!.rows).toEqual(rows.slice(0, 1));
+    db.exec("DROP TRIGGER synthetic_failure");
+    expect(await queue.fail(claim.lease)).toMatchObject({ status: "failed", failureCount: 1, nextCursor: 1 });
+  });
+
+  it("rolls back all expired-lease transitions when the new claim fails", async () => {
+    const queue = open();
+    const first = await queue.submit(charts, { retry: { maxAttempts: 1 } });
+    const second = await queue.submit(charts);
+    const claim1 = (await queue.claim(owner))!;
+    const claim2 = (await queue.claim(owner))!;
+    const db = raw();
+    db.exec(`CREATE TRIGGER synthetic_failure AFTER UPDATE ON batch_jobs
+      WHEN NEW.claim_count > OLD.claim_count
+      BEGIN SELECT RAISE(ABORT, 'SYNTHETIC_CLAIM_FAILURE'); END`);
+    clock = claim1.lease.expiresAt;
+    await expect(queue.claim(owner)).rejects.toMatchObject({ code: "storage-failure" });
+    const peer = open();
+    expect(await peer.getJob(first.id)).toEqual(claim1.snapshot);
+    expect(await peer.getJob(second.id)).toEqual(claim2.snapshot);
+    db.exec("DROP TRIGGER synthetic_failure");
+    const resumed = (await peer.claim(owner))!;
+    expect(resumed.snapshot).toMatchObject({ id: second.id, failureCount: 1, claimCount: 2 });
+    expect(await queue.getJob(first.id)).toMatchObject({ status: "failed", failureCount: 1 });
+  });
+
+  it("migrates queued, running and completed jobs with leases, results, constraints and sequence intact", async () => {
+    let db = raw();
+    createVersionOne(db);
+    const insert = db.prepare(`INSERT INTO batch_jobs (sequence, id, spec_json, kind, total_tasks,
+      completed_tasks, status, claim_count, created_at, updated_at, finished_at,
+      lease_token, lease_owner, lease_expires_at) VALUES (?, ?, ?, 'charts', 3, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+    const encoded = JSON.stringify(validateJob(charts).spec);
+    insert.run(1, "synthetic-old-queued", encoded, 0, "queued", 0, clock, clock, null, null, null, null);
+    insert.run(2, "synthetic-old-running", encoded, 1, "running", 7, clock, clock, null,
+      "synthetic-old-token", owner.owner, clock + 100);
+    insert.run(3, "synthetic-old-completed", encoded, 3, "completed", 2, clock, clock, clock, null, null, null);
+    insert.run(40, "synthetic-old-deleted", encoded, 0, "queued", 0, clock, clock, null, null, null, null);
+    db.exec("DELETE FROM batch_jobs WHERE sequence = 40");
+    const insertRow = db.prepare("INSERT INTO batch_results VALUES (?, ?, ?)");
+    insertRow.run("synthetic-old-running", 0, JSON.stringify(rows[0]));
+    rows.forEach((row, cursor) => insertRow.run("synthetic-old-completed", cursor, JSON.stringify(row)));
+    const before = db.prepare("SELECT * FROM batch_jobs ORDER BY sequence").all();
+    db.close();
+    const queue = open();
+    db = raw();
+    const after = db.prepare("SELECT * FROM batch_jobs ORDER BY sequence").all();
+    expect(after).toEqual(before.map((record) => ({
+      ...record, idempotency_key: null, retry_max_attempts: RETRY_DEFAULTS.maxAttempts,
+      retry_delay_ms: RETRY_DEFAULTS.delayMs, failure_count: 0, retry_at: null,
+      last_failure_code: null, last_failure_at: null, last_failure_cursor: null,
+    })));
+    expect(db.prepare("PRAGMA user_version").get()).toEqual({ user_version: 2 });
+    expect(db.prepare("PRAGMA foreign_key_check").all()).toEqual([]);
+    expect(db.prepare("PRAGMA foreign_key_list(batch_results)").all()).toContainEqual(expect.objectContaining({ table: "batch_jobs" }));
+    expect(() => db.prepare("INSERT INTO batch_results VALUES ('synthetic-missing', 0, '{}')").run()).toThrow();
+    expect(() => db.exec("UPDATE batch_jobs SET retry_max_attempts = 0 WHERE sequence = 1")).toThrow();
+    expect(() => db.exec("UPDATE batch_jobs SET status = 'failed' WHERE sequence = 1")).toThrow();
+    expect(() => db.exec("UPDATE batch_jobs SET lease_token = NULL WHERE sequence = 2")).toThrow();
+    expect(() => db.exec("UPDATE batch_jobs SET status = 'completed' WHERE sequence = 1")).toThrow();
+    expect((await queue.readResults("synthetic-old-completed"))!.rows).toEqual(rows);
+    expect((await queue.readResults("synthetic-old-running"))!.rows).toEqual(rows.slice(0, 1));
+    const newest = await queue.submit(charts, { idempotencyKey: "synthetic-new-after-migration" });
+    expect(db.prepare("SELECT sequence FROM batch_jobs WHERE id = ?").get(newest.id)).toEqual({ sequence: 41 });
+    expect((await queue.claim(owner))!.snapshot.id).toBe("synthetic-old-queued");
+    expect((await queue.claim(owner))!.snapshot.id).toBe(newest.id);
+    expect(await queue.commit({ jobId: "synthetic-old-running", token: "synthetic-old-token" }, rows.slice(1)))
+      .toMatchObject({ status: "completed", claimCount: 7, failureCount: 0, retry: RETRY_DEFAULTS });
+    expect(await open().submit(charts, { idempotencyKey: "synthetic-new-after-migration" }))
+      .toMatchObject({ id: newest.id, status: "running" });
+  });
+
+  it("preserves the old sequence high-water mark when migrating an empty queue", async () => {
+    const db = raw();
+    createVersionOne(db);
+    db.prepare(`INSERT INTO batch_jobs (sequence, id, spec_json, kind, total_tasks, created_at, updated_at)
+      VALUES (40, 'synthetic-deleted', ?, 'charts', 3, ?, ?)`)
+      .run(JSON.stringify(validateJob(charts).spec), clock, clock);
+    db.exec("DELETE FROM batch_jobs");
+    await open().submit(charts);
+    expect(db.prepare("SELECT sequence FROM batch_jobs").all()).toEqual([{ sequence: 41 }]);
+  });
+
+  it("rolls back the entire migration when a late schema operation fails, then retries safely", async () => {
+    const db = raw();
+    createVersionOne(db);
+    db.prepare(`INSERT INTO batch_jobs (id, spec_json, kind, total_tasks, completed_tasks,
+      status, claim_count, created_at, updated_at, lease_token, lease_owner, lease_expires_at)
+      VALUES ('synthetic-migrate-rollback', ?, 'charts', 3, 1, 'running', 1, ?, ?, 'synthetic-token', ?, ?)`)
+      .run(JSON.stringify(validateJob(charts).spec), clock, clock, owner.owner, clock + 100);
+    db.prepare("INSERT INTO batch_results VALUES ('synthetic-migrate-rollback', 0, ?)").run(JSON.stringify(rows[0]));
+    // The final CREATE INDEX fails after both replacement tables were renamed.
+    db.exec(`CREATE TABLE synthetic_conflict (value INTEGER);
+      CREATE INDEX batch_jobs_expired ON synthetic_conflict(value)`);
+    const beforeSchema = db.prepare("SELECT name, sql FROM sqlite_schema ORDER BY name").all();
+    const beforeJobs = db.prepare("SELECT * FROM batch_jobs").all();
+    const beforeResults = db.prepare("SELECT * FROM batch_results").all();
+    const beforeSequence = db.prepare("SELECT * FROM sqlite_sequence").all();
+    expect(() => open()).toThrow(expect.objectContaining({ code: "storage-failure" }));
+    expect(db.prepare("PRAGMA user_version").get()).toEqual({ user_version: 1 });
+    expect(db.prepare("SELECT name, sql FROM sqlite_schema ORDER BY name").all()).toEqual(beforeSchema);
+    expect(db.prepare("SELECT * FROM batch_jobs").all()).toEqual(beforeJobs);
+    expect(db.prepare("SELECT * FROM batch_results").all()).toEqual(beforeResults);
+    expect(db.prepare("SELECT * FROM sqlite_sequence").all()).toEqual(beforeSequence);
+    db.exec("DROP TABLE synthetic_conflict");
+    const queue = open();
+    expect(db.prepare("PRAGMA user_version").get()).toEqual({ user_version: 2 });
+    expect((await queue.readResults("synthetic-migrate-rollback"))!.rows).toEqual(rows.slice(0, 1));
+    expect(await queue.commit({ jobId: "synthetic-migrate-rollback", token: "synthetic-token" }, rows.slice(1)))
+      .toMatchObject({ status: "completed" });
   });
 });

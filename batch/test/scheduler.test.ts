@@ -5,7 +5,7 @@ import { MemoryQueue } from "../src/memory-queue.js";
 import type { ChartsJob } from "../src/model.js";
 import { QueueError } from "../src/queue.js";
 import type { QueueBackend } from "../src/queue.js";
-import { Scheduler, SchedulerError } from "../src/scheduler.js";
+import { Scheduler } from "../src/scheduler.js";
 import type { SchedulerOptions, TaskPool } from "../src/scheduler.js";
 import { workItemAt } from "../src/work.js";
 import type { WorkItem } from "../src/work.js";
@@ -305,26 +305,39 @@ describe("scheduler shutdown", () => {
 });
 
 describe("scheduler failure cleanup and lease fencing", () => {
-  it("keeps committed progress, aborts siblings and releases on execution failure without a retry loop", async () => {
+  it("keeps the committed prefix, aborts siblings and resumes after the retry delay", async () => {
     const { queue, pool, scheduler } = fixture();
-    const job = await queue.submit(charts(4));
+    const job = await queue.submit(charts(4), { retry: { delayMs: 100 } });
+    const release = vi.spyOn(queue, "release");
     const running = run(scheduler);
     await flush();
     pool.complete(0);
     await flush();
     expect(pool.indices()).toEqual([0, 1, 2]);
     pool.fail(1);
-    await expect(running).rejects.toMatchObject({ name: "SchedulerError", code: "execution-failed" });
-    const error = await running.catch((error: unknown) => error);
-    expect(error).toBeInstanceOf(SchedulerError);
-    expect((error as Error).message).not.toContain("SYNTHETIC_PRIVATE_FAILURE");
-    expect((error as Error).cause).toBeUndefined();
+    await flush();
     expect(pool.calls[2]!.signal!.aborted).toBe(true);
-    expect(pool.close).toHaveBeenCalledTimes(1);
-    expect(await queue.getJob(job.id)).toMatchObject({ status: "queued", nextCursor: 1, claimCount: 1 });
+    expect(pool.close).not.toHaveBeenCalled();
+    expect(release).not.toHaveBeenCalled();
+    expect(await queue.getJob(job.id)).toMatchObject({
+      status: "queued", nextCursor: 1, claimCount: 1, failureCount: 1,
+      retryAt: Date.now() + 100, lastFailure: { code: "execution-failed", at: Date.now(), cursor: 1 },
+    });
+    expect(JSON.stringify(await queue.getJob(job.id))).not.toContain("SYNTHETIC_PRIVATE_FAILURE");
     expect((await queue.readResults(job.id))!.rows.map((row) => row.index)).toEqual([0]);
-    await vi.advanceTimersByTimeAsync(2_000);
+    await vi.advanceTimersByTimeAsync(99);
     expect(await queue.getJob(job.id)).toMatchObject({ claimCount: 1 });
+    await vi.advanceTimersByTimeAsync(1);
+    expect(pool.indices()).toEqual([0, 1, 2, 1, 2]);
+    pool.complete(1);
+    pool.complete(2);
+    await flush();
+    pool.complete(3);
+    await flush();
+    expect(await queue.getJob(job.id)).toMatchObject({ status: "completed", nextCursor: 4, failureCount: 1 });
+    expect((await queue.readResults(job.id))!.rows.map((row) => row.index)).toEqual([0, 1, 2, 3]);
+    await scheduler.stop();
+    await running;
     expect(vi.getTimerCount()).toBe(0);
   });
 
@@ -337,7 +350,7 @@ describe("scheduler failure cleanup and lease fencing", () => {
     pool.complete(0);
     await expect(running).rejects.toMatchObject({ name: "SchedulerError", code: "queue-failed" });
     expect(pool.calls[1]!.signal!.aborted).toBe(true);
-    expect(await queue.getJob(job.id)).toMatchObject({ status: "queued", nextCursor: 0, claimCount: 1 });
+    expect(await queue.getJob(job.id)).toMatchObject({ status: "queued", nextCursor: 0, claimCount: 1, failureCount: 0 });
     expect((await queue.readResults(job.id))!.rows).toEqual([]);
     expect(pool.close).toHaveBeenCalledTimes(1);
   });
@@ -482,13 +495,92 @@ describe("scheduler failure cleanup and lease fencing", () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
-  it("handles synchronous executor throws and still releases the job", async () => {
+  it("bounds synchronous execution failures and keeps serving after terminal failure", async () => {
     const { queue, pool, scheduler } = fixture();
-    const job = await queue.submit(charts(2));
-    vi.spyOn(pool, "run").mockImplementation(() => { throw new Error("SYNTHETIC_PRIVATE_FAILURE"); });
-    await expect(run(scheduler)).rejects.toMatchObject({ code: "execution-failed" });
-    expect(await queue.getJob(job.id)).toMatchObject({ status: "queued", nextCursor: 0 });
+    const job = await queue.submit(charts(2), { retry: { maxAttempts: 2 } });
+    const later = await queue.submit(charts(1, "synthetic-later"));
+    const original = pool.run.bind(pool);
+    const execute = vi.spyOn(pool, "run").mockImplementation((item, signal) => {
+      if (item.kind === "charts" && item.person.id.startsWith("synthetic-later")) return original(item, signal);
+      throw new Error("SYNTHETIC_PRIVATE_FAILURE");
+    });
+    const running = run(scheduler);
+    await flush();
+    expect(await queue.getJob(job.id)).toMatchObject({
+      status: "failed", nextCursor: 0, claimCount: 2, failureCount: 2,
+      finishedAt: Date.now(), lease: null, retryAt: null,
+    });
+    expect(execute).toHaveBeenCalledTimes(5);
+    pool.complete(0);
+    await flush();
+    expect(await queue.getJob(later.id)).toMatchObject({ status: "completed" });
+    await scheduler.stop();
+    await running;
     expect(pool.close).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps a delayed retry pending when stopped and serves another ready job", async () => {
+    const { queue, pool, scheduler } = fixture(1);
+    const first = await queue.submit(charts(2), { retry: { delayMs: 1_000 } });
+    const later = await queue.submit(charts(1, "synthetic-later"));
+    const running = run(scheduler);
+    await flush();
+    pool.fail(0);
+    await flush();
+    expect(await queue.getJob(later.id)).toMatchObject({ status: "running" });
+    pool.complete(0);
+    await flush();
+    const delayed = await queue.getJob(first.id);
+    await scheduler.stop();
+    await running;
+    expect(await queue.getJob(first.id)).toEqual(delayed);
+    expect(delayed).toMatchObject({ status: "queued", failureCount: 1, claimCount: 1, retryAt: Date.now() + 1_000 });
+    expect(await queue.getJob(later.id)).toMatchObject({ status: "completed", failureCount: 0 });
+  });
+
+  it.each([false, true])("stops after an uncertain fail operation without releasing again (committed=%s)", async (committed) => {
+    const { queue, pool, scheduler } = fixture(1);
+    const job = await queue.submit(charts(2), { retry: { delayMs: 100 } });
+    const original = queue.fail.bind(queue);
+    vi.spyOn(queue, "fail").mockImplementationOnce(async (lease) => {
+      if (committed) await original(lease);
+      throw new QueueError("storage-failure");
+    });
+    const release = vi.spyOn(queue, "release");
+    const running = run(scheduler);
+    await flush();
+    pool.fail(0);
+    await expect(running).rejects.toMatchObject({ code: "queue-failed" });
+    expect(release).not.toHaveBeenCalled();
+    expect(await queue.getJob(job.id)).toMatchObject({
+      status: committed ? "queued" : "running", failureCount: committed ? 1 : 0, claimCount: 1,
+    });
+    expect(pool.close).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not charge a replacement lease when an execution failure is reported late", async () => {
+    let clock = Date.now();
+    const { queue, pool, scheduler } = fixture(1, new MemoryQueue({ now: () => clock }));
+    const job = await queue.submit(charts(2));
+    const gate = deferred<void>();
+    const original = queue.fail.bind(queue);
+    const failure = vi.spyOn(queue, "fail").mockImplementationOnce(async (lease) => {
+      await gate.promise;
+      return original(lease);
+    });
+    const running = run(scheduler);
+    await flush();
+    pool.fail(0);
+    await flush();
+    expect(failure).toHaveBeenCalledTimes(1);
+    clock += 1_000;
+    const replacement = (await queue.claim({ owner: "synthetic-peer", leaseMs: 1_000 }))!;
+    gate.resolve();
+    await flush();
+    expect(await queue.getJob(job.id)).toEqual(replacement.snapshot);
+    expect(replacement.snapshot.failureCount).toBe(1);
+    await scheduler.stop();
+    await running;
   });
 
   it("closes the pool even if releasing the active job fails", async () => {
