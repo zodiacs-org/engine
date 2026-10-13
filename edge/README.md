@@ -13,9 +13,11 @@ bundles expose the engine's public root API. Optional engine entry points are
 not included. [Workers, Deno and Bun HTTP examples](docs/http.md) provide a
 bounded chart endpoint with shared Fetch request/response tests and a native
 Deno/Bun server check. The [exact comparison protocol](docs/exact.md) preserves
-full result types and number bits. Native cross-runtime parity checks, Workers
-and browser execution, benchmarks and a measured WASM experiment remain in
-[PLAN.md](PLAN.md).
+full result types and number bits. The [native runtime checker](docs/runtime-smoke.md)
+executes Node, Deno and Bun and fails on any exact difference. The recorded
+Deno and Bun runs differ from Node; they do not establish numerical parity.
+Workers and browser execution, benchmarks and a measured WASM experiment
+remain in [PLAN.md](PLAN.md).
 
 The foundation's commands, observed results and the missing-root-build
 limitation are recorded in [M1 validation](docs/evidence/m1-validation.md).
@@ -26,8 +28,10 @@ Worker validation is recorded in
 [M3 validation](docs/evidence/m3-validation.md).
 Deno/Bun validation and that milestone's build measurements are recorded in
 [M4 validation](docs/evidence/m4-validation.md).
-Exact protocol validation and the current build measurements are recorded in
+Exact protocol validation and that milestone's build measurements are recorded in
 [M5 validation](docs/evidence/m5-validation.md).
+Native exact comparisons and runner validation are recorded in
+[M6 validation](docs/evidence/m6-validation.md).
 
 ## Run the foundation
 
@@ -70,7 +74,7 @@ also repeat calculations after the other workloads to exercise shared
 ephemeris state. These are compatibility checks, not evidence of astronomical
 accuracy. It also checks repeatability of the exact encoded reports.
 `runExactSmokeCases()` preserves signed zero, Dates and all result fields for
-the later native runtime runners. See the [protocol](docs/exact.md).
+the native runtime runners. See the [protocol](docs/exact.md).
 
 `check:isolation` checks project file limits and documentation, then inspects
 the root package's dry-run file list with scripts disabled. It checks that
@@ -163,8 +167,11 @@ namespace and synthetic workload results with a separate Node source build.
 The comparison uses strict deep equality, with no rounding or tolerance.
 This establishes Node bundle compatibility for the cases in
 `src/workloads.ts`. The separate Deno/Bun server check tests HTTP behavior,
-not numerical parity. Workers and browser execution remain untested.
-Transcendental arithmetic can differ between runtimes.
+not numerical parity. `npm --prefix edge run smoke:runtimes` runs the complete
+exact transport in native Node, Deno and Bun; every selected runtime is
+required. See [runtime setup, reports and observed failures](docs/runtime-smoke.md).
+Workers and browser execution remain untested. Transcendental arithmetic can
+differ between runtimes.
 
 To regenerate the compact build evidence after reviewing a build change:
 

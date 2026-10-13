@@ -11,7 +11,7 @@ assert.equal(first.transitScan.status, "complete");
 assert(first.transitScan.crossings.length > 0, "Transit smoke must exercise a crossing.");
 console.log(JSON.stringify({
   status: "passed",
-  scope: "Node repeatability only; cross-runtime comparison is pending",
+  scope: "Node repeatability only; native parity is checked by smoke:runtimes",
   runtime: process.version,
   protocol: JSON.parse(exact)[0],
   engineVersion: first.engineVersion,

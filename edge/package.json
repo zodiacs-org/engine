@@ -11,6 +11,7 @@
     "build:report": "node scripts/build-report.mjs",
     "build:reference": "node scripts/build-reference.mjs",
     "smoke:node": "node scripts/smoke-node.mjs",
+    "smoke:runtimes": "node scripts/smoke-runtimes.mjs",
     "test": "node --test tests/*.check.mjs",
     "typecheck": "tsc --project tsconfig.json",
     "check:isolation": "node scripts/check-isolation.mjs"

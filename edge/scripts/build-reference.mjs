@@ -8,7 +8,7 @@ import { edgeRoot, repositoryRoot, readToolchain } from "./build-support.mjs";
 export { edgeRoot, requireNode22 } from "./build-support.mjs";
 const generated = resolve(edgeRoot, ".generated/reference");
 
-export async function buildReference() {
+export async function buildReference({ write = true } = {}) {
   const { alias } = await readToolchain();
 
   const outfile = resolve(generated, "workloads.mjs");
@@ -30,16 +30,23 @@ export async function buildReference() {
     write: false,
     logLevel: "silent"
   });
-  await mkdir(generated, { recursive: true });
+  assert.equal(result.warnings.length, 0, "Reference warnings require investigation.");
   for (const output of result.outputFiles) {
     assert(output.contents.byteLength < 2_000_000, "Reference output must remain below the project file limit.");
-    await writeFile(output.path, output.contents);
   }
-  await writeFile(resolve(generated, "metafile.json"), JSON.stringify(result.metafile, null, 2) + "\n");
-  for (const name of ["LICENSE", "LICENSING.md", "NOTICE"]) {
-    await copyFile(resolve(repositoryRoot, name), resolve(generated, name));
+  const bytes = Buffer.from(result.outputFiles[0].contents);
+  if (write) {
+    await mkdir(generated, { recursive: true });
+    for (const output of result.outputFiles) await writeFile(output.path, output.contents);
+    await writeFile(resolve(generated, "metafile.json"), JSON.stringify(result.metafile, null, 2) + "\n");
+    for (const name of ["LICENSE", "LICENSING.md", "NOTICE"]) {
+      await copyFile(resolve(repositoryRoot, name), resolve(generated, name));
+    }
   }
-  return { moduleUrl: pathToFileURL(outfile), metafile: result.metafile };
+  return {
+    moduleUrl: write ? pathToFileURL(outfile) : new URL(`data:text/javascript;base64,${bytes.toString("base64")}`),
+    bytes, metafile: result.metafile
+  };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {

@@ -3,3 +3,4 @@ Complete M2: add reproducible edge and browser ESM bundles with provenance, lice
 Complete M3: add a bounded Cloudflare Worker chart handler, explicit HTTP errors, Node request/response tests and build evidence
 Complete M4: add Deno and Bun HTTP examples, shared adapter tests, native server checks, launch instructions and validation evidence
 Complete M5: add exact full-result transport with binary64 and Date preservation, mismatch paths, strict validation, workload integration and test evidence
+Complete M6: add required Node, Deno and Bun exact smoke checks, process failure tests and compact evidence recording native numerical mismatches

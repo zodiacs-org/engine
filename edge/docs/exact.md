@@ -27,8 +27,9 @@ the engine library and chart endpoint do not.
 
 Both complete reports are validated before comparison. Malformed or unsupported
 data throws `ExactProtocolError`, a `TypeError` with a `path`. Identically
-malformed reports cannot pass. Process errors, runtime metadata and missing
-runtimes belong to the runners planned in M6 and M7.
+malformed reports cannot pass. The [native runner](runtime-smoke.md) handles
+process errors, runtime metadata and missing Node, Deno or Bun runtimes.
+Workers and browser runners remain in M7.
 
 Paths refer to original data, for example
 `$["charts"][0]["result"]["bodies"][0]["lon"]`. Keys use JSON escaping inside

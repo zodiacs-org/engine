@@ -14,7 +14,7 @@ single session summary to `CHANGES.txt`. The harness owns all git mutations.
 - [x] M3 Add a Cloudflare module Worker example with bounded request validation, explicit calculation errors and local request/response tests.
 - [x] M4 Add Deno and Bun HTTP examples using the shared request contract, plus runtime-specific launch instructions and handler tests.
 - [x] M5 Implement an exact comparison protocol for full results, including dates and binary64 values, with mismatch paths and tests for differences JSON would hide.
-- [ ] M6 Run Node, Deno and Bun smoke cases through that protocol; record runtime versions and fail required-runtime checks on missing tools, process errors or any unequal output.
+- [x] M6 Run Node, Deno and Bun smoke cases through that protocol; record runtime versions and fail required-runtime checks on missing tools, process errors or any unequal output.
 - [ ] M7 Extend smoke checks to a local Workers runtime and a real browser ESM page; verify imports and handlers without network access during calculations and report exact parity failures honestly.
 - [ ] M8 Add chart, houses and transit-scan micro-benchmarks with warmup, repeated samples, consumed results, workload identity and machine/runtime/build provenance; keep raw runs in ignored folders.
 - [ ] M9 Capture and commit compact baseline evidence from the benchmark runner, documenting its host, runtime, sample protocol and limits; keep raw generated data ignored.
