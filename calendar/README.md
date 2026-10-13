@@ -5,11 +5,11 @@ text and searches for tropical sign ingresses, natal transit exacts, stations,
 solar/lunar eclipses and void-of-course Moon intervals through the existing events package, plus explicit
 progressed synastry schedules. It imports the parent engine sources without
 building or changing the parent npm package. The implemented scope is M1
-through M8 in [PLAN.md](PLAN.md):
+through M9 in [PLAN.md](PLAN.md):
 UTC and timezone serialization, validation, stable event identities and ingress
 schedules, plus natal transit and synastry analysis for explicitly synthetic
-charts, and receipt-bearing station, eclipse and void-of-course schedules.
-Streaming, the CLI and the HTTP feed
+charts, and receipt-bearing station, eclipse and void-of-course schedules,
+with async streaming over bounded windows. The CLI and the HTTP feed
 endpoint remain planned milestones.
 
 Use Node satisfying `engines` in [package.json](package.json). From this folder:
@@ -793,6 +793,123 @@ Fixed padding can cause refusal near calculation coverage edges or when a
 boundary lies beyond the halo. Integration tests compare delegation and
 receipts with the parent APIs and parse UTC and TZID feeds with `ical.js`;
 they supply no independent astronomical void-period reference dates.
+
+## Streaming schedules and calendars
+
+`streamSchedule` accepts shared `startUtc`, `endUtc`, `maxEvaluations`,
+`windowDays`, `maxBufferedEvents`, optional `signal`, and a nonempty
+`schedules` array. Each selection supplies `kind` and the existing adapter's
+`request` fields, leaving range, budget and signal to the shared request.
+Supported kinds are `ingress`, `natal-transit`, `synastry-exact`, `station`,
+`eclipse` and `void-of-course`. Static synastry remains undated analysis.
+All selections are validated against the full range before search work starts.
+Inputs, including nested policies and synthetic charts, are detached when
+the stream is created; the original AbortSignal remains connected.
+
+```ts
+import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
+import { streamSchedule, streamCalendar } from "./src/index.ts";
+import { voidRequest, revisionUtc } from "./test/fixtures/synthetic-void-of-course.ts";
+
+const { startUtc, endUtc, maxEvaluations: _singleSearchBudget, ...request } = voidRequest;
+const events = streamSchedule({
+  startUtc, endUtc, maxEvaluations: 1_000_000,
+  windowDays: 1, maxBufferedEvents: 100,
+  schedules: [{ kind: "void-of-course", request }]
+});
+// output is a caller-owned Writable, such as a file in generated/.
+const feed = Readable.from(streamCalendar(events, { dtstamp: revisionUtc }), {
+  objectMode: false, highWaterMark: 1
+});
+await pipeline(feed, output);
+```
+
+These work settings and synthetic fixture inputs are exercised by
+`test/stream.calendar-test.ts`. `windowDays` is a positive integer duration
+in UTC days, measured from the requested start, with a cap enforced by
+`test/stream-control.calendar-test.ts`. The final window may be shorter.
+Windows can begin at non-midnight instants. Every window delegates to the
+existing synchronous schedule adapters, which retain their canonical-day
+ownership, fixed padding and search definitions. No crossing algorithm is
+implemented in the streaming layer. Choosing another window size changes
+padding overhead and evaluation consumption; it preserves the tested event
+records and UIDs. It can also change which window first exhausts a budget.
+
+The evaluation budget is shared across selections and windows, including
+chart construction, receipt calculations and repeated padding scans. A
+window is fully searched before any of its events leave the stream. Its
+records sort by receipt UTC, then by code-unit UID order, independent of
+locale and selection order. Identical records with the same UID collapse;
+conflicting records sharing a UID throw. Instantaneous events keep
+`(startUtc, endUtc]` ownership. Void intervals keep `[startUtc, endUtc)`
+overlap selection and their full endpoints. Only intervals still overlapping
+a later window retain duplicate records across windows. Intervals spanning
+several windows are emitted once; they are never clipped or split for display.
+
+`maxBufferedEvents` caps the sum of adapter records collected for a window,
+before duplicate removal, and the retained active interval records. The cap
+is checked as each adapter returns. An individual adapter still allocates
+its synchronous result before that check; its evaluation budget and bounded
+search window control that work. Streaming retains a current window and
+active intervals rather than accumulating the complete range. Timezone
+definitions are separately bounded by the timezone factory's work controls.
+Each encoded event is yielded as a complete string, so one unusually large
+receipt is still held in memory while it is encoded.
+
+Search begins only when the consumer calls `next()`. A paused consumer causes
+no further searches. Breaking iteration or returning the iterator stops
+future windows. The stream yields to the Node event loop between adapter
+calls and emitted events so timers and HTTP disconnect handlers can deliver
+cancellation. A synchronous adapter call must return or reach its cooperative
+checkpoint before cancellation can take effect; streaming does not put it
+in a worker. Pass the same `signal` to `streamCalendar` when cancellation
+must also stop already encoded wire chunks.
+
+A search refusal throws `ScheduleStreamError` with `reason`, cumulative
+`evaluations`, `emitted`, the current `window`, and the selection index when
+known. Its `cause` retains the adapter refusal, including unresolved interval
+diagnostics. A buffer refusal uses `reason: "buffer-budget"`. Earlier emitted
+windows cannot be recalled. The refused window emits nothing, and no later
+window is searched. Unexpected failures and invalid adapter records throw
+instead of becoming complete results. Manual `next()` iteration receives
+`ScheduleStreamSummary` as the generator's successful return value, with
+evaluation, emitted-event and completed-window counts. A complete schedule
+with no events returns that summary with an empty event stream.
+
+`streamCalendar` accepts an ordered sync or async event iterable and the
+serializer's options, plus optional `signal`. It uses the same escaping,
+folding, exact receipt properties and UTC/TZID representation as
+`serializeCalendar`. It reads the first event before emitting the calendar
+header, then yields the header, individual VEVENT strings, and the footer.
+It does not pull the next event while the consumer is paused on a wire chunk.
+Early return and failure close the upstream iterator. Empty input is refused
+with no output. A failure after output begins omits `END:VCALENDAR` and
+propagates to the consumer; callers must discard an incomplete artifact or
+terminate an already started HTTP response. File callers should stream to
+a temporary path and install it only after the pipeline succeeds.
+
+The streaming serializer requires UTC/UID ordering and globally unique source
+UIDs. It checks strict ordering, including duplicate UIDs at the same instant,
+without retaining a range-wide UID set. For arbitrary externally supplied
+records, the caller must establish global UID uniqueness before streaming.
+`streamSchedule` supplies the existing adapters' stable identities and
+deduplicates overlapping intervals and selections. `serializeCalendar`
+remains available for unordered small iterables with a full duplicate check.
+Timezone coverage must contain full interval endpoints, including those
+outside the display range; insufficient coverage fails serialization.
+
+`test/stream.calendar-test.ts` compares chunked and full-range records and
+wire bytes over the synthetic February, March and August fixture windows.
+It covers every schedule adapter, mixed ordering, exact split ownership,
+non-midnight windows, interval deduplication, the committed formatting
+golden, and independent UTC/TZID parser round trips. These are regression
+and plumbing checks, not astronomical accuracy or physical completeness
+evidence. `test/stream-control.calendar-test.ts` uses invented adapter
+results to check pull backpressure, early return, total budgets, buffer
+limits, cancellation, long-range iteration, conflict detection and refusal
+diagnostics. It checks that an interrupted calendar never receives a
+successful footer.
 
 ## Fixtures and scope
 

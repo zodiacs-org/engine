@@ -40,7 +40,7 @@ export interface SynastryScheduleRequest extends Omit<IngressScheduleRequest, "b
 }
 export type SynastryScheduleResult = IngressScheduleResult;
 
-function validate(input: SynastryScheduleRequest): SynastryScheduleRequest {
+export function validateSynastryScheduleRequest(input: SynastryScheduleRequest): SynastryScheduleRequest {
   if (!input || typeof input !== "object" || Array.isArray(input) ||
       Object.keys(input).some(key => ![
         "namespace", "first", "second", "firstBody", "secondBody", "convention", "policy",
@@ -145,7 +145,7 @@ function receiptEvent(event: ExactAspect, window: IdentityWindow, request: Synas
 
 /** Search first's secondary-progressed longitude against second's fixed natal longitude. */
 export function searchSynastrySchedule(input: SynastryScheduleRequest): SynastryScheduleResult {
-  const request = validate(input);
+  const request = validateSynastryScheduleRequest(input);
   let evaluations = 0;
   const events: ScheduleEvent[] = [];
   const refused = (reason: "evaluation-budget" | "cancelled" | "engine-refused"): SynastryScheduleResult =>

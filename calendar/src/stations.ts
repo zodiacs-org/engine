@@ -37,7 +37,7 @@ export type StationScheduleResult =
   | { readonly status: "refused"; readonly reason: "evaluation-budget" | "cancelled" | "engine-refused";
       readonly events: readonly []; readonly evaluations: number };
 
-function validate(input: StationScheduleRequest): StationScheduleRequest {
+export function validateStationScheduleRequest(input: StationScheduleRequest): StationScheduleRequest {
   if (!input || typeof input !== "object" || Array.isArray(input) ||
       Object.keys(input).some(key => ![
         "namespace", "body", "direction", "startUtc", "endUtc", "clock", "stepMs", "maxEvaluations", "signal"
@@ -121,7 +121,7 @@ function receiptEvent(event: Station, window: IdentityWindow,
  * upstream does. Complete means the chosen scan finished, not proven coverage.
  */
 export function searchStationSchedule(input: StationScheduleRequest): StationScheduleResult {
-  const request = validate(input);
+  const request = validateStationScheduleRequest(input);
   let evaluations = 0;
   const events: ScheduleEvent[] = [];
   const refused = (reason: "evaluation-budget" | "cancelled" | "engine-refused"): StationScheduleResult =>

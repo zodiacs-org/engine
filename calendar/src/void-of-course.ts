@@ -49,7 +49,7 @@ export type VoidOfCourseScheduleResult =
   | { readonly status: "refused"; readonly reason: "unresolved-interval"; readonly events: readonly [];
       readonly evaluations: number; readonly unresolved: readonly UnresolvedVoidOfCourseBoundary[] };
 
-function validate(input: VoidOfCourseScheduleRequest): VoidOfCourseScheduleRequest {
+export function validateVoidOfCourseScheduleRequest(input: VoidOfCourseScheduleRequest): VoidOfCourseScheduleRequest {
   if (!input || typeof input !== "object" || Array.isArray(input) ||
       Object.keys(input).some(key => ![
         "namespace", "startUtc", "endUtc", "clock", "policy", "stepMs", "maxEvaluations", "signal"
@@ -161,7 +161,7 @@ function receiptEvent(event: VoidOfCourseInterval, ordinal: number, window: Iden
 
 /** Full intervals intersecting the display range, delegated to the pinned search. */
 export function searchVoidOfCourseSchedule(input: VoidOfCourseScheduleRequest): VoidOfCourseScheduleResult {
-  const request = validate(input);
+  const request = validateVoidOfCourseScheduleRequest(input);
   const rangeStart = Date.parse(request.startUtc);
   const rangeEnd = Date.parse(request.endUtc);
   let evaluations = 0;

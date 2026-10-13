@@ -36,7 +36,7 @@ export type IngressScheduleResult =
   | { readonly status: "refused"; readonly reason: "evaluation-budget" | "cancelled" | "engine-refused";
       readonly events: readonly []; readonly evaluations: number };
 
-function validate(input: IngressScheduleRequest): IngressScheduleRequest {
+export function validateIngressScheduleRequest(input: IngressScheduleRequest): IngressScheduleRequest {
   if (!input || typeof input !== "object" || Array.isArray(input) ||
       Object.keys(input).some(key => ![
         "namespace", "body", "startUtc", "endUtc", "clock", "stepMs", "maxEvaluations", "signal"
@@ -118,7 +118,7 @@ function receiptEvent(event: SignIngress, window: IdentityWindow,
  * Complete means that the chosen scan finished, not proven astronomical coverage.
  */
 export function searchIngressSchedule(input: IngressScheduleRequest): IngressScheduleResult {
-  const request = validate(input);
+  const request = validateIngressScheduleRequest(input);
   let evaluations = 0;
   const events: ScheduleEvent[] = [];
   const refused = (reason: "evaluation-budget" | "cancelled" | "engine-refused"): IngressScheduleResult =>

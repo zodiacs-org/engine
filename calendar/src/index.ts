@@ -1,6 +1,10 @@
 export { currentEngineIdentity } from "./engine.js";
 export { escapeText, foldContentLine, utcDateTime } from "./content-line.js";
 export { serializeCalendar } from "./serialize.js";
+export { streamSchedule, streamCalendar, compareScheduleEvents, ScheduleStreamError } from "./stream.js";
+export type {
+  ScheduleSelection, ScheduleStreamRequest, ScheduleStreamSummary, ScheduleStreamFailure, CalendarStreamOptions
+} from "./stream.js";
 export { createCalendarTimeZone } from "./timezone.js";
 export { searchIngressSchedule } from "./ingresses.js";
 export type { IngressScheduleRequest, IngressScheduleResult } from "./ingresses.js";

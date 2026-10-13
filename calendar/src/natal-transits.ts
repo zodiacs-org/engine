@@ -40,7 +40,7 @@ function fields(value: unknown, allowed: readonly string[]): void {
   }
 }
 
-function validate(input: NatalTransitScheduleRequest): NatalTransitScheduleRequest {
+export function validateNatalTransitScheduleRequest(input: NatalTransitScheduleRequest): NatalTransitScheduleRequest {
   fields(input, ["namespace", "body", "natalBody", "natal", "policy", "startUtc", "endUtc",
     "clock", "stepMs", "maxEvaluations", "signal"]);
   const request = { ...input };
@@ -121,7 +121,7 @@ function receiptEvent(event: ExactAspect, window: IdentityWindow, request: Natal
 
 /** Delegate all exact contacts to the pinned search; no event solver lives here. */
 export function searchNatalTransitSchedule(input: NatalTransitScheduleRequest): NatalTransitScheduleResult {
-  const request = validate(input);
+  const request = validateNatalTransitScheduleRequest(input);
   let evaluations = 0;
   const events: ScheduleEvent[] = [];
   const refused = (reason: "evaluation-budget" | "cancelled" | "engine-refused"): NatalTransitScheduleResult =>

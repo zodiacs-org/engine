@@ -42,7 +42,7 @@ export type EclipseScheduleResult =
   | { readonly status: "refused"; readonly reason: "evaluation-budget" | "cancelled" | "engine-refused";
       readonly events: readonly []; readonly evaluations: number };
 
-function validate(input: EclipseScheduleRequest): EclipseScheduleRequest {
+export function validateEclipseScheduleRequest(input: EclipseScheduleRequest): EclipseScheduleRequest {
   if (!input || typeof input !== "object" || Array.isArray(input) ||
       Object.keys(input).some(key => ![
         "namespace", "kind", "startUtc", "endUtc", "clock", "stepMs", "derivativeStepMs",
@@ -124,7 +124,7 @@ function receiptEvent(event: EclipseEvent, window: IdentityWindow,
 
 /** Delegate to the pinned spherical-shadow search; no calendar-local event solver. */
 export function searchEclipseSchedule(input: EclipseScheduleRequest): EclipseScheduleResult {
-  const request = validate(input);
+  const request = validateEclipseScheduleRequest(input);
   let evaluations = 0;
   const events: ScheduleEvent[] = [];
   const refused = (reason: "evaluation-budget" | "cancelled" | "engine-refused"): EclipseScheduleResult =>
