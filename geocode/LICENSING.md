@@ -68,8 +68,20 @@ The engine's [licensing record](../LICENSING.md#geonames-and-timezone-data)
 documents its public-domain tzdb histories and its use of host Intl/ICU.
 The adapter retains the actual provider's metadata. Tests read selected
 independent IANA vectors from the existing CC0 conformance suite without
-copying or changing them. No additional timezone tables are copied here. GeoNames
-timezone offset summary tables will not be used to compute historical offsets.
+copying or changing them. The broader evidence tests also reuse that suite's
+independent arbiter to compile pinned IANA inputs and generate selected
+synthetic reference queries under ignored `generated/`. Downloaded release
+archives remain under ignored `downloads/`; compiled files remain under
+ignored `.cache/` and are removed after each run. No new timezone dataset is
+committed or used by the library. The verified release's LICENSE places its
+timezone data in the public domain. It identifies `date.c`, `newstrftime.3`
+and `strftime.c` as containing BSD material under BSD 3-Clause; the evidence
+tool compiles `strftime.c` as part of zdump. Those files retain their notices
+in the ignored source archives and temporary build tree and are not
+redistributed here. [evidence/M9.md](evidence/M9.md) describes
+these test-only references and a recorded difference between compilation
+recipes. GeoNames timezone offset summary tables are not used to compute
+historical offsets.
 
 No Swiss Ephemeris code, binaries, tables, fixtures or per-case output,
 proprietary atlases, paid geocoding APIs, or personal birth records are part

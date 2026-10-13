@@ -25,6 +25,14 @@ with `npm --cache .cache/npm`. No engine build or root dependency installation
 is required. The repository's root configuration and packed files are outside
 this project's write scope.
 
+The independent timezone evidence tests require Python with `zoneinfo`, a C
+compiler available as `cc`, and POSIX `awk`. Their tooling obtains the pinned
+IANA source archives on its first run and keeps them in ignored `downloads/`.
+Later runs rebuild the reference files from those local archives without
+network access. Generated references stay in ignored `generated/`, and compiled
+tools are temporary files under ignored `.cache/`. These are test requirements;
+the library and service use the existing engine and atlas resolvers.
+
 `npm run scope:check` also checks the candidate files for the repository's
 size limit and documentation punctuation rule and uses an npm dry run to
 check that `geocode/` stays out of the engine package. It does not run the
@@ -737,6 +745,23 @@ regressions, not independent evidence of historical accuracy.
 IANA conformance vectors directly, including half-hour and quarter-hour
 offsets and historical DST. The selected IDs, source and test results are
 recorded in [evidence/M4.md](evidence/M4.md). No broader accuracy claim is made.
+
+[tests/time-evidence.test.ts](tests/time-evidence.test.ts) extends the
+independent checks to minute readings around historical DST changes,
+non-hour jumps, skipped and repeated dates, old offsets, and assigned zones
+for polar settlements and stations. It checks atlas precedence against the
+atlas's existing tzdb disagreement record and simulates a host database
+missing a valid identifier. [evidence/M9.md](evidence/M9.md) names the pinned
+sources, reconstruction command, tested queries and limitations.
+
+The historical Longyearbyen query in that evidence exposes a difference
+between timezone build recipes: the engine preserves backzone's link to
+Oslo, while the conformance compiler's recipe shortens it to Berlin. The
+test records both independently computed answers and checks the engine
+against the source link's target. This is explicitly excluded from agreement
+with the conformance compiler's backzone recipe. Host data can also differ
+from the pinned reference release. Provider metadata must be retained when
+reproducing an answer.
 
 The composed API above requires explicit selection among ambiguous places.
 A civil date alone does not imply a birth time or a single offset for the
