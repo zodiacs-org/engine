@@ -1,3 +1,4 @@
 edge: complete M1 with isolated Node reference tooling, synthetic workloads, smoke tests and package-exclusion validation
 Complete M2: add reproducible edge and browser ESM bundles with provenance, licence preservation and Node compatibility checks
 Complete M3: add a bounded Cloudflare Worker chart handler, explicit HTTP errors, Node request/response tests and build evidence
+Complete M4: add Deno and Bun HTTP examples, shared adapter tests, native server checks, launch instructions and validation evidence

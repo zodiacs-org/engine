@@ -16,7 +16,9 @@ export function bundleConfig(target) {
     entryPoints: {
       engine: "src/engine.ts",
       workloads: "src/workloads.ts",
-      ...(target === "workers" ? { worker: "src/worker.ts" } : {})
+      ...(target === "workers" ? { worker: "src/worker.ts" } : {}),
+      ...(target === "deno" ? { deno: "src/deno.ts" } : {}),
+      ...(target === "bun" ? { bun: "src/bun.ts" } : {})
     },
     bundle: true,
     packages: "bundle",

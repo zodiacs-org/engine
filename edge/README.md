@@ -10,10 +10,10 @@ the dependency's notices. See [LICENSING.md](../LICENSING.md) and
 The lab provides a Node reference build, synthetic workloads and portable ESM
 library builds configured for Cloudflare Workers, Deno, Bun and browsers. The
 bundles expose the engine's public root API. Optional engine entry points are
-not included. A [Cloudflare module Worker example](docs/http.md) provides a
-bounded chart endpoint with local Fetch request/response tests. Deno and Bun
-HTTP examples, execution in the target runtimes, cross-runtime parity checks,
-benchmarks and a measured WASM experiment remain in
+not included. [Workers, Deno and Bun HTTP examples](docs/http.md) provide a
+bounded chart endpoint with shared Fetch request/response tests and a native
+Deno/Bun server check. Cross-runtime exact parity checks, Workers and browser
+execution, benchmarks and a measured WASM experiment remain in
 [PLAN.md](PLAN.md).
 
 The foundation's commands, observed results and the missing-root-build
@@ -21,8 +21,10 @@ limitation are recorded in [M1 validation](docs/evidence/m1-validation.md).
 Bundle checks and their scope are recorded in
 [M2 validation](docs/evidence/m2-validation.md), with reproducible
 [build measurements](docs/evidence/m2-build.json) from that milestone.
-Worker validation and the current build measurements are recorded in
+Worker validation is recorded in
 [M3 validation](docs/evidence/m3-validation.md).
+Deno/Bun validation and the current build measurements are recorded in
+[M4 validation](docs/evidence/m4-validation.md).
 
 ## Run the foundation
 
@@ -93,9 +95,9 @@ npm --prefix edge run build -- workers
 configurations use esbuild's neutral platform, with the target's export
 conditions; the browser configuration uses its browser platform. Every target
 emits ES2022 ESM, bundles its dependency, and leaves minification off. These
-are build configurations, not runtime version requirements. The Workers build
-also emits the HTTP handler described below. No host compatibility shims are
-installed. See esbuild's
+are build configurations, not runtime version requirements. The Workers, Deno
+and Bun builds also emit the HTTP handlers described below. No host
+compatibility shims are installed. See esbuild's
 [platform](https://esbuild.github.io/api/#platform) and
 [conditions](https://esbuild.github.io/api/#conditions) documentation.
 
@@ -106,6 +108,8 @@ Each build replaces its own ignored `.generated/<target>/` directory. It holds:
 | `engine.mjs` | Public root API re-exported by `src/engine.ts`. |
 | `workloads.mjs` | Synthetic cases and workload runners for compatibility checks. |
 | `worker.mjs` (Workers only) | Module Worker with a default Fetch handler for `POST /chart`. |
+| `deno.mjs` (Deno only) | Importable handler and a local server started by direct execution. |
+| `bun.mjs` (Bun only) | Importable handler and a local server started by direct execution. |
 | `metafile.json` | esbuild's input and output import graph. |
 | `manifest.json` | Build settings, tool versions, source digests, output sizes and digests. |
 | `LICENSE`, `LICENSING.md`, `NOTICE` | Unmodified engine licence and attribution records. |
@@ -154,20 +158,21 @@ notices, and imports every target in Node to compare its complete public API
 namespace and synthetic workload results with a separate Node source build.
 The comparison uses strict deep equality, with no rounding or tolerance.
 This establishes Node bundle compatibility for the cases in
-`src/workloads.ts`; execution in Workers, Deno, Bun and a browser remains
-untested. Transcendental arithmetic can differ between runtimes.
+`src/workloads.ts`. The separate Deno/Bun server check tests HTTP behavior,
+not numerical parity. Workers and browser execution remain untested.
+Transcendental arithmetic can differ between runtimes.
 
 To regenerate the compact build evidence after reviewing a build change:
 
 ```sh
-node edge/scripts/build-report.mjs > edge/docs/evidence/m3-build.json
+node edge/scripts/build-report.mjs > edge/docs/evidence/m4-build.json
 ```
 
 The report builds in memory, records exact bytes and digests, and does not
 measure performance. Keep older milestone evidence unchanged. Raw generated
 bundles and full manifests stay ignored.
 
-## Worker chart endpoint
+## Chart HTTP endpoints
 
 Build and test the Worker from the repository root with the local Node toolchain:
 
@@ -188,3 +193,11 @@ its launch tooling remain in M7 of the plan. HTTP JSON serialization is not
 the future exact comparison protocol: dates become strings and signed zero
 is lost. The handler has no storage or request logging, and every response
 asks caches not to store it.
+
+The Deno and Bun entries, `src/deno.ts` and `src/bun.ts`, export the same
+`handleRequest` function. Direct execution of their generated modules starts
+a loopback HTTP server; importing them does not start one. See
+[Deno and Bun launch instructions](docs/http.md#deno-and-bun) for commands and
+the native server check. Node tests exercise the shared contract through every
+adapter. The native checks cover HTTP transport and response structure without
+claiming exact cross-runtime results.

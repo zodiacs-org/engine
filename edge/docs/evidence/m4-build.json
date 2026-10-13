@@ -1,0 +1,195 @@
+{
+  "schema": "edge-bundle-report/1",
+  "scope": "Root API, synthetic workloads and Workers, Deno and Bun HTTP builds; this report measures builds only.",
+  "engineVersion": "1.0.0",
+  "ephemeris": {
+    "name": "astronomy-engine",
+    "version": "2.1.19"
+  },
+  "toolchain": {
+    "node": "v22.22.2",
+    "esbuild": "0.27.7"
+  },
+  "fileLimitExclusiveBytes": 2000000,
+  "builds": [
+    {
+      "target": "workers",
+      "sourceDigest": "c26ae547703022f139e8ba9b8e573808a79a481cd65b6e8ab7230b5b8a19210a",
+      "outputs": [
+        {
+          "path": "ASTRONOMY-LICENSE.txt",
+          "bytes": 1291,
+          "sha256": "31e913dcab32e6e5d0aa1b5f32ab350a6ab91b273f7f38d4de83b54ee644de41"
+        },
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "LICENSING.md",
+          "bytes": 26184,
+          "sha256": "0bb05bc7302dfcf9362cb294e9f738235cfa33892625a2376502c263485eb303"
+        },
+        {
+          "path": "NOTICE",
+          "bytes": 10121,
+          "sha256": "15b724304a7bebadaed4f6e01631314dab7b5b92b3b84dc3a59864fb6e555cce"
+        },
+        {
+          "path": "engine.mjs",
+          "bytes": 174490,
+          "sha256": "bcfa260de3a71ec72beaec7a2528d27bab86480c2f9c3f513ec4d5b509ffe297"
+        },
+        {
+          "path": "metafile.json",
+          "bytes": 19197,
+          "sha256": "af97896cfc919b9821c7d41970a375824c70e0d66a5d667caadedd8a76094323"
+        },
+        {
+          "path": "worker.mjs",
+          "bytes": 133582,
+          "sha256": "cffd7e22b7ff8d24056d1593d5ed30e94eb94b956f1fc85d83deafc3b8b33cad"
+        },
+        {
+          "path": "workloads.mjs",
+          "bytes": 138739,
+          "sha256": "0cf65553ed5fec887bc66dc24fc3f633fe4a40f448db3004eca642d074d146d9"
+        }
+      ]
+    },
+    {
+      "target": "deno",
+      "sourceDigest": "61a33cc93ea33ca7ef9ae61479f3193e0fceed708d2bcd8cdd12887f35bfd527",
+      "outputs": [
+        {
+          "path": "ASTRONOMY-LICENSE.txt",
+          "bytes": 1291,
+          "sha256": "31e913dcab32e6e5d0aa1b5f32ab350a6ab91b273f7f38d4de83b54ee644de41"
+        },
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "LICENSING.md",
+          "bytes": 26184,
+          "sha256": "0bb05bc7302dfcf9362cb294e9f738235cfa33892625a2376502c263485eb303"
+        },
+        {
+          "path": "NOTICE",
+          "bytes": 10121,
+          "sha256": "15b724304a7bebadaed4f6e01631314dab7b5b92b3b84dc3a59864fb6e555cce"
+        },
+        {
+          "path": "deno.mjs",
+          "bytes": 133707,
+          "sha256": "a6e6b80c480e4595668045e4eaef9d662fcc9751e7b5aa6e6001681546c0ae06"
+        },
+        {
+          "path": "engine.mjs",
+          "bytes": 174490,
+          "sha256": "bcfa260de3a71ec72beaec7a2528d27bab86480c2f9c3f513ec4d5b509ffe297"
+        },
+        {
+          "path": "metafile.json",
+          "bytes": 19187,
+          "sha256": "fe10f839d7971dd3ee118a826a3afe6a7cc50e69a30c0459befc37daf8ede60e"
+        },
+        {
+          "path": "workloads.mjs",
+          "bytes": 138739,
+          "sha256": "0cf65553ed5fec887bc66dc24fc3f633fe4a40f448db3004eca642d074d146d9"
+        }
+      ]
+    },
+    {
+      "target": "bun",
+      "sourceDigest": "cebed2840aae28d73ae705d4a523f2fc37ae4ff94e512702ac27d2785fa0af87",
+      "outputs": [
+        {
+          "path": "ASTRONOMY-LICENSE.txt",
+          "bytes": 1291,
+          "sha256": "31e913dcab32e6e5d0aa1b5f32ab350a6ab91b273f7f38d4de83b54ee644de41"
+        },
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "LICENSING.md",
+          "bytes": 26184,
+          "sha256": "0bb05bc7302dfcf9362cb294e9f738235cfa33892625a2376502c263485eb303"
+        },
+        {
+          "path": "NOTICE",
+          "bytes": 10121,
+          "sha256": "15b724304a7bebadaed4f6e01631314dab7b5b92b3b84dc3a59864fb6e555cce"
+        },
+        {
+          "path": "bun.mjs",
+          "bytes": 133684,
+          "sha256": "1f3d54e68573f74afa7988cce9b4f88decdcdaa84a0f435040e832789e4abb04"
+        },
+        {
+          "path": "engine.mjs",
+          "bytes": 174490,
+          "sha256": "bcfa260de3a71ec72beaec7a2528d27bab86480c2f9c3f513ec4d5b509ffe297"
+        },
+        {
+          "path": "metafile.json",
+          "bytes": 19180,
+          "sha256": "567e22cac47368f4e2f952ea91c5bcb13bc4f098c9aeb141ae45e7df2bc5929a"
+        },
+        {
+          "path": "workloads.mjs",
+          "bytes": 138739,
+          "sha256": "0cf65553ed5fec887bc66dc24fc3f633fe4a40f448db3004eca642d074d146d9"
+        }
+      ]
+    },
+    {
+      "target": "browser",
+      "sourceDigest": "c30171703ed8946a387d658b2f6c52c80a906e589cad5339d24601eb0691fa53",
+      "outputs": [
+        {
+          "path": "ASTRONOMY-LICENSE.txt",
+          "bytes": 1291,
+          "sha256": "31e913dcab32e6e5d0aa1b5f32ab350a6ab91b273f7f38d4de83b54ee644de41"
+        },
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "LICENSING.md",
+          "bytes": 26184,
+          "sha256": "0bb05bc7302dfcf9362cb294e9f738235cfa33892625a2376502c263485eb303"
+        },
+        {
+          "path": "NOTICE",
+          "bytes": 10121,
+          "sha256": "15b724304a7bebadaed4f6e01631314dab7b5b92b3b84dc3a59864fb6e555cce"
+        },
+        {
+          "path": "engine.mjs",
+          "bytes": 174490,
+          "sha256": "bcfa260de3a71ec72beaec7a2528d27bab86480c2f9c3f513ec4d5b509ffe297"
+        },
+        {
+          "path": "metafile.json",
+          "bytes": 17178,
+          "sha256": "48ff3df9219d88da31e67c9964d0c9564efcd0ce306f598fde4149014b02d56b"
+        },
+        {
+          "path": "workloads.mjs",
+          "bytes": 138739,
+          "sha256": "0cf65553ed5fec887bc66dc24fc3f633fe4a40f448db3004eca642d074d146d9"
+        }
+      ]
+    }
+  ]
+}

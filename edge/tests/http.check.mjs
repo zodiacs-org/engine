@@ -31,10 +31,23 @@ const { natalChart, HOUSE_SYSTEMS } = modules.engine;
 const { CHART_CASES } = modules.workloads;
 const workerBuild = await buildTarget("workers", { write: false });
 const worker = (await importBytes(workerBuild.files.get("worker.mjs"))).default;
+const handlers = [["Worker", worker.fetch]];
+for (const runtime of ["deno", "bun"]) {
+  const { files } = await buildTarget(runtime, { write: false });
+  const { handleRequest } = await importBytes(files.get(`${runtime}.mjs`));
+  handlers.push([runtime, handleRequest]);
+}
 const syntheticInput = { utc: "2000-03-20T12:34:56Z", latitude: 35.25, longitude: -110.75 };
 const syntheticJson = JSON.stringify(syntheticInput);
 const encode = (text) => new TextEncoder().encode(text);
 const jsonEquivalent = (value) => JSON.parse(JSON.stringify(value));
+
+function testHandlers(name, options, body) {
+  if (typeof options === "function") [options, body] = [{}, options];
+  for (const [runtime, handler] of handlers) {
+    test(`${runtime}: ${name}`, options, (t) => body(t, handler));
+  }
+}
 
 function request(body = syntheticJson, { path = "/chart", method = "POST", headers = {}, signal } = {}) {
   return new Request(`https://edge.example.invalid${path}`, {
@@ -89,7 +102,7 @@ test("HTTP limits and module Worker entry are explicit", () => {
   assert.equal(typeof worker.fetch, "function");
 });
 
-test("Worker returns full synthetic charts equal to direct Node calculation without fetching", async (t) => {
+testHandlers("returns full synthetic charts equal to direct Node calculation without fetching", async (t, handler) => {
   const outbound = t.mock.method(globalThis, "fetch", () => {
     throw new Error("Unexpected outbound request");
   });
@@ -102,7 +115,7 @@ test("Worker returns full synthetic charts equal to direct Node calculation with
     ...HOUSE_SYSTEMS.map((houseSystem) => ({ ...syntheticInput, houseSystem }))
   ];
   for (const input of cases) {
-    const response = await worker.fetch(request(JSON.stringify(input)));
+    const response = await handler(request(JSON.stringify(input)));
     assert.equal(response.status, 200);
     checkHeaders(response);
     assert.deepStrictEqual(await response.json(), { ok: true, result: jsonEquivalent(natalChart(input)) });
@@ -110,21 +123,38 @@ test("Worker returns full synthetic charts equal to direct Node calculation with
   assert.equal(outbound.mock.callCount(), 0);
 });
 
-test("routing refuses unknown paths, queries and unsupported methods", async () => {
+testHandlers("routing refuses unknown paths, queries and unsupported methods", async (_t, handler) => {
   for (const path of ["/", "/charts", "/chart/", "/%63hart"]) {
-    await checkError(await worker.fetch(request(syntheticJson, { path })), 404, "not-found");
+    await checkError(await handler(request(syntheticJson, { path })), 404, "not-found");
   }
-  await checkError(await worker.fetch(request(syntheticJson, { path: "/chart?utc=synthetic-private-value" })), 400, "invalid-request");
+  await checkError(await handler(request(syntheticJson, { path: "/chart?utc=synthetic-private-value" })), 400, "invalid-request");
   for (const method of ["GET", "PUT", "PATCH", "DELETE", "OPTIONS"]) {
-    const response = await worker.fetch(request(null, { method }));
+    const response = await handler(request(null, { method }));
     assert.equal(response.headers.get("Allow"), "POST");
     await checkError(response, 405, "method-not-allowed");
   }
-  const head = await worker.fetch(request(null, { method: "HEAD" }));
+  const head = await handler(request(null, { method: "HEAD" }));
   assert.equal(head.status, 405);
   assert.equal(head.headers.get("Allow"), "POST");
   checkHeaders(head);
   assert.equal(head.body, null);
+});
+
+testHandlers("validates request data through the production adapter", async (_t, handler) => {
+  const cases = [
+    [request("{"), 400, "invalid-json"],
+    [request("[]"), 400, "invalid-input"],
+    [request(JSON.stringify({ ...syntheticInput, extra: "synthetic-private-value" })), 400, "invalid-input"],
+    [request(JSON.stringify({ utc: syntheticInput.utc, latitude: 0 })), 400, "invalid-input"],
+    [request(syntheticJson, { headers: { "Content-Type": "text/plain" } }), 415, "unsupported-media-type"],
+    [request(syntheticJson, { headers: { "Content-Encoding": "gzip" } }), 415, "unsupported-content-encoding"],
+    [request(syntheticJson, { headers: { "Content-Length": "-1" } }), 400, "invalid-content-length"],
+    [request(syntheticJson.padEnd(4097, " ")), 413, "body-too-large"]
+  ];
+  for (const [input, status, code] of cases) {
+    const payload = await checkError(await handler(input), status, code);
+    assert.ok(!JSON.stringify(payload).includes("synthetic-private-value"));
+  }
 });
 
 test("media type accepts JSON and UTF-8 spellings and refuses other formats", async () => {
@@ -193,10 +223,10 @@ test("input validation accepts only the bounded BirthInput subset", async () => 
   assert.equal({}.syntheticPrivate, undefined);
 });
 
-test("the engine parses date strings and exposes a fixed rejection response", async () => {
+testHandlers("the engine parses date strings and exposes a fixed rejection response", async (_t, handler) => {
   let expected;
   for (const utc of ["synthetic-private-value", "2000-02-30", "2000-03-20T12:34:56", "9000-01-01"]) {
-    const payload = await checkError(await worker.fetch(request(JSON.stringify({ utc }))), 422, "calculation-rejected");
+    const payload = await checkError(await handler(request(JSON.stringify({ utc }))), 422, "calculation-rejected");
     if (expected) assert.deepEqual(payload, expected);
     expected = payload;
     assert.ok(!JSON.stringify(payload).includes(utc));
@@ -250,17 +280,17 @@ test("body bounds count UTF-8 bytes and stop reading oversized streams", async (
   assert.equal((await handler(request(stream))).status, 200, "A split UTF-8 code point must decode correctly");
 });
 
-test("body stream failures, reused bodies and locked bodies are safe errors", async () => {
+testHandlers("body stream failures, reused bodies and locked bodies are safe errors", async (_t, handler) => {
   const failing = new ReadableStream({ pull() { throw new Error("synthetic-private-stream-detail"); } });
-  const payload = await checkError(await worker.fetch(request(failing)), 400, "unreadable-body");
+  const payload = await checkError(await handler(request(failing)), 400, "unreadable-body");
   assert.ok(!JSON.stringify(payload).includes("synthetic-private-stream-detail"));
   const used = request();
   await used.text();
-  await checkError(await worker.fetch(used), 400, "unreadable-body");
+  await checkError(await handler(used), 400, "unreadable-body");
   const locked = request();
   const reader = locked.body.getReader();
   try {
-    await checkError(await worker.fetch(locked), 400, "unreadable-body");
+    await checkError(await handler(locked), 400, "unreadable-body");
   } finally {
     reader.releaseLock();
   }
@@ -292,7 +322,7 @@ test("the chunk limit accepts exactly the allowed number of chunks", async () =>
   assert.equal(state.reads, 4096);
 });
 
-test("failure responses do not wait for stream cancellation to settle", { timeout: 3000 }, async () => {
+testHandlers("failure responses do not wait for stream cancellation to settle", { timeout: 3000 }, async (_t, handler) => {
   let cancelled = false;
   const stream = new ReadableStream({
     pull(controller) { controller.enqueue(new Uint8Array(4097)); },
@@ -301,16 +331,16 @@ test("failure responses do not wait for stream cancellation to settle", { timeou
       return new Promise(() => {});
     }
   }, { highWaterMark: 0 });
-  await checkError(await worker.fetch(request(stream)), 413, "body-too-large");
+  await checkError(await handler(request(stream)), 413, "body-too-large");
   assert.equal(cancelled, true);
 });
 
-test("aborted requests are refused before or while reading the body", async () => {
+testHandlers("aborted requests are refused before or while reading the body", async (_t, handler) => {
   for (const abortBefore of [true, false]) {
     const controller = new AbortController();
     const { stream, state } = chunked([], { hang: true });
     if (abortBefore) controller.abort(new Error("synthetic-private-abort-detail"));
-    const pending = worker.fetch(request(stream, { signal: controller.signal }));
+    const pending = handler(request(stream, { signal: controller.signal }));
     if (!abortBefore) {
       await setImmediate();
       controller.abort(new Error("synthetic-private-abort-detail"));
@@ -321,11 +351,11 @@ test("aborted requests are refused before or while reading the body", async () =
   }
 });
 
-test("the body deadline cancels a stream after exactly five seconds", async (t) => {
+testHandlers("the body deadline cancels a stream after exactly five seconds", async (t, handler) => {
   t.mock.timers.enable({ apis: ["setTimeout"] });
   const { stream, state } = chunked([encode("{")], { hang: true });
   let settled = false;
-  const pending = worker.fetch(request(stream)).then((response) => { settled = true; return response; });
+  const pending = handler(request(stream)).then((response) => { settled = true; return response; });
   await setImmediate();
   t.mock.timers.tick(4999);
   await setImmediate();

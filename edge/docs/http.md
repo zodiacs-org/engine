@@ -1,11 +1,12 @@
-# Chart HTTP example
+# Chart HTTP examples
 
 `src/worker.ts` exports a default object with a `fetch(request)` method, the
 [Cloudflare module Worker Fetch handler](https://developers.cloudflare.com/workers/runtime-apis/handlers/fetch/)
 shape. It delegates to `src/http.ts`, which uses standard Fetch APIs and the
 engine's public root entry. It needs no environment bindings, Node polyfills
-or network requests to calculate a chart. The shared handler is available for
-the Deno and Bun examples planned in M4.
+or network requests to calculate a chart. `src/deno.ts` and `src/bun.ts`
+export that same handler as `handleRequest` and start local servers only when
+executed as the main module.
 
 The Workers build emits `.generated/workers/worker.mjs` as a self-contained
 module and records its source and output digests in the manifest. Keep the
@@ -40,9 +41,78 @@ JS
 
 The input is invented and is also a case in `src/workloads.ts`. This invokes
 the built handler locally without opening a socket or making an HTTP request.
-Local Workers runtime launch tooling and checks belong to M7; this milestone
-does not establish runtime execution or deployment. The entry to supply to
+Local Workers runtime launch tooling and checks belong to M7; this invocation
+does not establish Workers execution or deployment. The entry to supply to
 that tooling is `.generated/workers/worker.mjs`.
+
+## Deno and Bun
+
+Build the examples using the local Node toolchain, from the repository root:
+
+```sh
+npm --prefix edge run build -- deno
+npm --prefix edge run build -- bun
+```
+
+Run either server in the foreground. Stop it with Ctrl-C before starting the
+other, since both use `127.0.0.1:8787`:
+
+```sh
+DENO_DIR="$PWD/edge/.cache/deno" deno run \
+  --no-config --no-lock --no-npm --no-remote --no-prompt \
+  --allow-net=127.0.0.1:8787 edge/.generated/deno/deno.mjs
+```
+
+```sh
+bun --no-env-file --no-install edge/.generated/bun/bun.mjs
+```
+
+Deno starts with [Deno.serve](https://docs.deno.com/api/deno/http-server/).
+Its [run flags](https://docs.deno.com/runtime/reference/cli/run/) disable
+configuration discovery and remote/npm resolution, with network permission
+limited to the example's loopback address. The self-contained module needs
+no application file or environment permissions. Bun starts with
+[Bun.serve](https://bun.sh/docs/runtime/http/server); the launch command
+disables automatic environment-file loading and dependency installation.
+Neither example reads host or
+port from environment variables. Change the source and rebuild to choose
+another listening address. These are local examples, with no remote deployment
+or hosting setup included.
+
+From another terminal, send this invented input:
+
+```sh
+curl --fail-with-body http://127.0.0.1:8787/chart \
+  -H 'Content-Type: application/json' \
+  --data '{"utc":"2000-03-20T12:34:56Z","latitude":35.25,"longitude":-110.75,"houseSystem":"whole"}'
+```
+
+Both entries guard startup with `import.meta.main`; an application can import
+`handleRequest` from the generated module and pass it to its own listener.
+They use named exports so importing the Bun module cannot trigger its default
+Fetch-export serving convention. Runtime type declarations are local to the
+adapters and cover only the calls they use; they do not replace the host's
+full API types. The build emits `deno.mjs` and `bun.mjs` beside the same licence
+sidecars and manifest as the library entries.
+
+Use Node 22 for the native server checks, with Deno and Bun installed separately:
+
+```sh
+node edge/scripts/check-http-runtime.mjs deno
+node edge/scripts/check-http-runtime.mjs bun
+# Optional final argument selects an executable outside PATH.
+node edge/scripts/check-http-runtime.mjs deno "$PWD/edge/.cache/deno-tool/node_modules/.bin/deno"
+```
+
+Run these commands sequentially with the example port free. Each builds its
+target, checks that importing it does not start a server, launches the real
+entry, exercises synthetic HTTP requests and shuts down its child process.
+Missing tools, startup failures and failed checks are errors, never skipped
+passes. The report names the runtime and build digests. These checks validate
+response structure and HTTP behavior; they do not compare numerical results
+between runtimes. [M4 validation](evidence/m4-validation.md) records the
+versions and checks actually run. Workers and browser runtime checks remain
+in M7.
 
 ## Request
 
@@ -114,11 +184,17 @@ Routing checks path, then method, then query parameters before reading the
 body. HEAD responses have an empty body. All responses set
 `Content-Type: application/json; charset=utf-8`, `Cache-Control: no-store`
 and `X-Content-Type-Options: nosniff`. The endpoint has no CORS preflight route.
+This contract describes responses from the shared Fetch handler. A host HTTP
+server may reject malformed HTTP framing or a disconnected client before a
+Fetch request reaches the handler; those transport errors need not use this
+JSON error shape.
 
 The handler keeps no request log, cache or storage. Its limits constrain each
 request, not request frequency or aggregate CPU use; this example includes no
 authentication or rate limiting. Dates outside reference coverage may still
 compute and carry the engine's coverage flag. This adapter makes no accuracy
-claim. Node tests compare chart JSON to the same engine on invented inputs;
-Workers execution, cross-runtime parity and CPU measurements remain separate
-milestones. [M3 validation](evidence/m3-validation.md) records what was run.
+claim. Node tests compare chart JSON to the same engine on invented inputs.
+The Deno/Bun native checks additionally exercise the listening servers.
+Workers execution, exact cross-runtime parity and CPU measurements remain
+separate milestones. [M3 validation](evidence/m3-validation.md) and
+[M4 validation](evidence/m4-validation.md) record what was run.

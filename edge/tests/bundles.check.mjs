@@ -54,7 +54,9 @@ test("target configurations cover the requested runtimes", () => {
     assert.deepEqual(bundleConfig(target).entryPoints, {
       engine: "src/engine.ts",
       workloads: "src/workloads.ts",
-      ...(target === "workers" ? { worker: "src/worker.ts" } : {})
+      ...(target === "workers" ? { worker: "src/worker.ts" } : {}),
+      ...(target === "deno" ? { deno: "src/deno.ts" } : {}),
+      ...(target === "bun" ? { bun: "src/bun.ts" } : {})
     });
   }
 });
@@ -63,7 +65,8 @@ for (const target of Object.keys(TARGETS)) {
   test(`${target} emits a reproducible self-contained bundle with Node parity and provenance`, async () => {
     const { files, manifest, metafile } = await bundleFor(target);
     assert.ok(files instanceof Map);
-    const moduleNames = target === "workers" ? ["engine.mjs", "worker.mjs", "workloads.mjs"] : ["engine.mjs", "workloads.mjs"];
+    const handlerName = { workers: "worker", deno: "deno", bun: "bun" }[target];
+    const moduleNames = ["engine.mjs", "workloads.mjs", ...(handlerName ? [`${handlerName}.mjs`] : [])].sort();
     assert.deepEqual([...files.keys()].filter((path) => path.endsWith(".mjs")).sort(), moduleNames);
     assert.doesNotThrow(() => validateGraph(metafile));
     assert.deepEqual(JSON.parse(text(files.get("manifest.json"))), manifest);
@@ -103,14 +106,9 @@ for (const target of Object.keys(TARGETS)) {
       "scripts/build-bundles.mjs", "scripts/build-support.mjs",
       "node_modules/astronomy-engine/esm/astronomy.js"
     ]) assert.ok(sourcePaths.has(path), `Missing provenance: ${path}`);
-    if (target === "workers") {
-      for (const path of ["src/worker.ts", "src/http.ts"]) {
-        assert.ok(sourcePaths.has(path), `Missing Worker provenance: ${path}`);
-      }
-    } else {
-      for (const path of ["src/worker.ts", "src/http.ts"]) {
-        assert.ok(!sourcePaths.has(path), `Unexpected Worker source in ${target}: ${path}`);
-      }
+    assert.equal(sourcePaths.has("src/http.ts"), Boolean(handlerName), `HTTP source in ${target}`);
+    for (const name of ["worker", "deno", "bun"]) {
+      assert.equal(sourcePaths.has(`src/${name}.ts`), name === handlerName, `Adapter source in ${target}: ${name}`);
     }
 
     for (const name of ["LICENSE", "LICENSING.md", "NOTICE"]) {
