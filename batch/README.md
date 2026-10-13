@@ -1,13 +1,17 @@
 # Batch compute workspace
 
-This private project is the batch service under development for this engine
-checkout. The completed work is checked off in [PLAN.md](PLAN.md). The current
+This private project is the batch compute service for this engine checkout.
+The completed work is checked off in [PLAN.md](PLAN.md). The current
 implementation validates job definitions, expands work lazily, executes it
 through the engine, provides in-memory, SQLite and optional Redis queues with retries and
 idempotent submission, schedules work on a thread pool, and exposes job control
 and NDJSON results through a CLI and a small HTTP API. SQLite crash recovery is
 checked with controlled process kills. A [worker scaling benchmark](#worker-scaling-benchmark)
 records measured small-job throughput on the development machine.
+
+Start with the [operating guide](docs/operations.md) and its runnable synthetic
+examples. [Reliability checks](docs/reliability.md) maps the integrated check to
+its tests and states what those checks establish.
 
 All project files stay here. The engine source, npm package and carried archives
 are unchanged. Code and documentation in this folder use the repository's
@@ -21,9 +25,7 @@ Use Node 22 with the runtime range declared in [package.json](package.json):
 ```sh
 cd batch
 npm ci --ignore-scripts --cache .cache/npm
-npm run typecheck
-npm test
-npm run build
+npm run check
 ```
 
 Dependencies and the lockfile belong to this directory. Typechecking emits
@@ -31,6 +33,14 @@ nothing. Vitest runs only `test/` here and keeps its cache in `.cache/`.
 Generated code belongs in `.generated/`, runtime databases and exports in
 `.runtime/`, and raw benchmark output in `.generated/`; these paths are ignored.
 Keep committed benchmark evidence compact and link it to its runner.
+
+`npm run check` runs typechecking, the complete Vitest suite, the batch build,
+and [the repository audit](scripts/audit.mjs), stopping on a failed step.
+The audit checks local documentation/evidence links, source file sizes,
+documentation punctuation, generated-data exclusion, working-tree scope and a
+scripts-disabled npm packing dry run. It reads git metadata but never writes it.
+Individual checks remain available as `npm run typecheck`, `npm test` and
+`npm run build`. None invokes the root engine build or writes an archive.
 
 The contracts use the engine's public birth vocabulary, and the execution
 bridge imports its public source entry by a relative path. The batch build
@@ -1075,9 +1085,10 @@ they do not measure throughput or astronomical accuracy.
 ## Worker scaling benchmark
 
 [The measured table](docs/evidence/scaling-20261013.md) and its
-[full evidence](docs/evidence/scaling-20261013.json) describe this machine and
-source build. The table reports committed result rows per second against worker
-count for SQLite and memory. A row is a natal chart, a birth/sample transit
+[full evidence](docs/evidence/scaling-20261013.json) describe the recorded machine
+and source manifest. This is a historical measurement, not a measurement of
+later edits or another runtime. The table reports committed result rows per
+second against worker count for SQLite and memory. A row is a natal chart, a birth/sample transit
 snapshot, or a directed synastry pair. These are different units of work; compare
 worker counts within the same workload and backend.
 

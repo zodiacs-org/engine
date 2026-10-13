@@ -7,6 +7,7 @@
     "node": ">=22.22.2 <23"
   },
   "scripts": {
+    "check": "node scripts/check.mjs",
     "build": "node scripts/build.mjs",
     "typecheck": "tsc --project tsconfig.json --pretty false",
     "test": "vitest run --config vitest.config.ts"

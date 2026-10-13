@@ -10,3 +10,4 @@ batch: complete M9 with bounded HTTP job control, idempotent submission, resumab
 batch: complete M10 with bounded CLI submission, status, workers, HTTP service operation, resumable NDJSON exports and subprocess shutdown and SQLite restart tests
 batch: complete M11 with optional Redis queue, atomic Lua transitions, stateful mock contracts, connection recovery and worker HTTP streaming integration tests
 batch: complete M12 with reproducible worker scaling benchmark, synthetic SQLite and memory evidence, source and CPU metadata, failure checks and measurement documentation
+batch: complete M13 with operating guide, runnable examples, integrated and large-job reliability tests, evidence integrity checks and isolated check command

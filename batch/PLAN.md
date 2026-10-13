@@ -22,7 +22,7 @@ initial session complete M1 only; later sessions complete one or two milestones.
 - [x] M10 Add the CLI for submission, worker/service operation, status and NDJSON export using the same service APIs. Test subprocess exit codes, stdout/stderr separation and restart with SQLite.
 - [x] M11 Add the optional Redis backend behind an injected client and explicit configuration. Run the backend contract suite with a stateful mock and test atomic operations and connection failures; document what the mock cannot establish.
 - [x] M12 Commit the scaling benchmark runner and compact machine-specific evidence for throughput versus worker count using synthetic workloads. Record runtime, engine/source identity, CPU allocation, workload, elapsed time and failures; keep raw generated rows gitignored and every committed file below the file-size limit.
-- [ ] M13 Finish operating documentation, examples and an integrated reliability check covering all workloads, backends, interfaces and recovery. Verify batch isolation from npm packing, evidence links, documentation claims and repository constraints.
+- [x] M13 Finish operating documentation, examples and an integrated reliability check covering all workloads, backends, interfaces and recovery. Verify batch isolation from npm packing, evidence links, documentation claims and repository constraints.
 
 Milestone checks run from this directory using its own test and typecheck
 commands. Root checks that require unavailable engine build output are recorded
@@ -327,3 +327,44 @@ no `batch/` file is included. All changes stay inside `batch/`, all tracked and
 new batch files are below the file-size limit, documentation contains no em
 dashes, and the new evidence links resolve. No root build, archive creation or
 git write was performed. M13 remains the next milestone.
+
+## M13 session checks
+
+`npm run check` passed from `batch/` on Node 22.23.3: typechecking, the complete
+Vitest suite, the batch build and repository audit. The new
+[operating guide](docs/operations.md) covers installation, submission, workers,
+HTTP, cursor recovery, retries, shutdown, storage ownership and build identity.
+Committed [examples](examples/charts.json) cover every workload, and
+[test/examples.test.ts](test/examples.test.ts) runs their exact input through the
+built CLI and real workers, checking status, keyed replay and resumed exports.
+
+[test/reliability.test.ts](test/reliability.test.ts) runs mixed workloads through
+real workers and local HTTP sockets on memory, SQLite and mocked Redis. It
+checks a committed prefix, lease abandonment and expiry, persistent-handle
+reopening, stale-token fencing, an execution failure and retry, idempotency,
+following NDJSON and exact serial transport parity. Memory retains its original
+live queue; mocked Redis does not establish real server durability. Existing
+controlled SQLite process-kill and CLI restart tests also pass.
+
+[test/large-job.test.ts](test/large-job.test.ts) completes a single job of 2,000
+invented charts with bounded real-worker dispatch, contiguous streamed cursors,
+no failed attempts and incremental serial/NDJSON digest parity. It writes no
+export file and makes no throughput or heap claim. The queue retains its stored
+rows. [docs/reliability.md](docs/reliability.md) maps the checks to their scope
+and limitations.
+
+[test/evidence.test.ts](test/evidence.test.ts) verifies the historical scaling
+record's manifest digest, input hashes, complete sample matrix, interval sums,
+counts, throughput arithmetic and exact table rendering. The README now scopes
+those figures to the recorded source manifest. No old benchmark evidence was
+changed. [scripts/audit.mjs](scripts/audit.mjs) checks local links, source sizes,
+documentation punctuation, ignored-data boundaries, source symlinks, working-tree
+scope and npm exclusion. After review corrected dangling-link detection and
+test failure cleanup, typechecking, the affected tests and the audit passed again.
+
+The root `npm run package:contents`, using the batch npm cache, stopped because
+`dist/calc.d.ts` is absent. The scripts-disabled npm pack dry run passed exclusion
+of `batch/`; it is not a substitute for root size/export checks. All changes
+stay inside `batch/`, all tracked and new batch files are below the file-size
+limit, and documentation has no em dashes. No engine build, archive creation,
+release action or git write was performed. All planned milestones are complete.
