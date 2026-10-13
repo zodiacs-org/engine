@@ -94,7 +94,7 @@ function instant(input: unknown, field: string): string {
   return canonical;
 }
 
-function window(input: unknown): ScheduleWindow {
+export function parseScheduleWindow(input: unknown): ScheduleWindow {
   const value = object(input, ["start", "end"], "window");
   const start = instant(value.start, "window.start");
   const end = instant(value.end, "window.end");
@@ -134,7 +134,7 @@ function bodies(input: unknown): readonly [EventBody, EventBody] {
   return Object.freeze([a, b]);
 }
 
-function filter(input: unknown): EventFilter {
+export function parseEventFilter(input: unknown): EventFilter {
   const value = object(input, ["kind", "bodies", "angle", "body", "sign", "direction", "type", "expression"], "filter");
   switch (value.kind) {
     case "aspect-exact": {
@@ -188,8 +188,8 @@ export function parseSubscription(input: unknown): SubscriptionSpec {
   return Object.freeze({
     callbackUrl: callbackUrl(value.callbackUrl),
     secretRef: secretRef(value.secretRef),
-    filter: filter(value.filter),
-    window: window(value.window),
+    filter: parseEventFilter(value.filter),
+    window: parseScheduleWindow(value.window),
     enabled
   });
 }

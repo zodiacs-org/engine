@@ -9,7 +9,7 @@ runs its checks, ticks it here, appends a line to `CHANGES.txt`, and stops.
 - [x] M1 Bootstrap a private TypeScript/Vitest project and validate subscription contracts: HTTPS callback syntax, signing-key references, event filters and explicit UTC schedule windows, with rejection and boundary tests.
 - [x] M2 Add SQLite migrations and repositories for subscriptions, scan cursors, immutable event payloads, delivery attempts and dead letters; test durability, transactions and uniqueness after reopening.
 - [x] M3 Implement runtime secret provisioning and custody, HMAC payload signatures and receiver verification; keep raw keys out of subscription responses and logs, and test tampering, timestamp checks and key rotation.
-- [ ] M4 Integrate the relative-source engine and pinned read-only event-search interfaces for aspect exacts, ingresses, stations and eclipses; preserve engine receipts, event definitions, clock conventions and complete/refused results.
+- [x] M4 Integrate the relative-source engine and pinned read-only event-search interfaces for aspect exacts, ingresses, stations and eclipses; preserve engine receipts, event definitions, clock conventions and complete/refused results.
 - [ ] M5 Add bounded worker scans over schedule windows with durable cursors, stable occurrence identities and transactional outbox insertion; test adjacent windows, restarts, duplicate scans and search refusals.
 - [ ] M6 Connect custom event DSL filters to the existing events parser and executor, with bounded expressions, explicit schedule intersection and defined handling of interval results; test unsupported expressions and budget exhaustion.
 - [ ] M7 Implement HTTPS POST transport with a mock HTTP receiver seam, public-address resolution checks, pinned connection addresses, redirect refusal, request deadlines and bounded response handling; make all tests local or mocked.
@@ -23,9 +23,11 @@ runs its checks, ticks it here, appends a line to `CHANGES.txt`, and stops.
 
 `origin/infra/events` was inspected read-only at
 `7d6fb88d03b3896ee1e5496ed99961015d291d3c`. It exposes local search functions
-and a bounded DSL parser/executor under `events/`. Resolve its source from
-git objects into this project's own integration boundary when needed, recording
-provenance; do not depend on a mutable sibling worktree or its HTTP service.
+and a bounded DSL parser/executor under `events/`. M4 freezes the local search
+modules under `vendor/events/`, with original and transformed digests and an
+offline integrity check. Only relative engine import paths change. Resolve any
+additional DSL modules from those pinned git objects with the same provenance
+policy; do not depend on a mutable sibling worktree or its HTTP service.
 The engine itself is consumed through relative source imports without changing
 or rebuilding the root `dist/`. Event-search output does not include a full
 engine receipt, so the adapter must capture the engine's calculation receipt

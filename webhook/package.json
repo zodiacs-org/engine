@@ -7,15 +7,19 @@
     "node": ">=22.13.0 <23"
   },
   "scripts": {
-    "pretest": "node scripts/check-runtime.mjs",
+    "pretest": "node scripts/check-runtime.mjs && node scripts/sync-events-vendor.mjs --check",
     "test": "vitest run --config vitest.config.ts",
     "pretypecheck": "node scripts/check-runtime.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "check:package-isolation": "node scripts/check-package-isolation.mjs"
+    "check:package-isolation": "node scripts/check-package-isolation.mjs",
+    "check:events-source": "node scripts/sync-events-vendor.mjs --check"
   },
   "devDependencies": {
     "@types/node": "22.19.19",
     "typescript": "5.9.3",
     "vitest": "2.1.9"
+  },
+  "dependencies": {
+    "astronomy-engine": "2.1.19"
   }
 }

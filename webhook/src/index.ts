@@ -1,4 +1,6 @@
-export { parseSubscription, SubscriptionValidationError, SUBSCRIPTION_LIMITS } from "./subscription.js";
+export {
+  parseSubscription, parseEventFilter, parseScheduleWindow, SubscriptionValidationError, SUBSCRIPTION_LIMITS
+} from "./subscription.js";
 export { EVENT_BODIES, ZODIAC_SIGNS } from "./types.js";
 export type {
   Direction, EventBody, EventFilter, ScheduleWindow, StationBody, SubscriptionSpec, ZodiacSign
@@ -19,3 +21,7 @@ export {
 export type {
   ReceivedWebhookHeaders, SignWebhookOptions, VerifyWebhookOptions, WebhookSignatureHeaders
 } from "./signatures.js";
+export { searchEvents, EVENT_SEARCH_SOURCE } from "./event-search.js";
+export type {
+  DiscoveredEvent, EventDefinition, EventSearchRequest, EventSearchMetadata, EventSearchResult
+} from "./event-search-types.js";
