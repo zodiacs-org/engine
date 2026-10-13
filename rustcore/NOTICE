@@ -126,3 +126,23 @@ The full MIT permission and warranty text reproduced above under "Frame
 rotations and sidereal time" also applies to these algorithms and tables.
 Retain that full notice when redistributing them. PROVENANCE.md records
 the source digest, package checks and conversion without changing values.
+
+Lunar series and true nodes
+--------------------------
+
+The Rust Moon code translates CalcMoon, GeoMoon, GeoMoonState, the mean
+obliquity rotation and precession into J2000 from the same local
+astronomy-engine 2.1.19 source. Its generated moon_data.rs preserves the
+source's ordered solar perturbation and latitude terms without adjustment.
+The full Don Cross copyright and MIT permission and warranty text above
+applies to these algorithms and coefficients as well.
+
+The installed source describes its lunar algorithm as based on the Nautical
+Almanac Office's Improved Lunar Ephemeris (1954), derived from E. W. Brown's
+lunar theories, and adapted from the Turbo Pascal code in Astronomy on the
+Personal Computer by Montenbruck and Pfleger. This port translates only the
+local MIT dependency; it does not copy those works or fetch another source.
+
+The true-node construction and longitude-speed orchestration translate this
+repository's src/ephemeris.ts under its MIT License (../LICENSE), using
+the same instantaneous orbit plane, nutation and finite-difference steps.

@@ -351,3 +351,75 @@ export function geoVector(body: SeriesBody, clock: PlanetClock, aberration = tru
   const { ut, tt, deltaT } = planetClock(clock, aberration);
   return planetVector(wasm.geoVector(body, ut, tt, deltaT, aberration));
 }
+
+/** Bodies implemented by the lunar position and true-node milestone. */
+export type LunarBody = "Moon" | "North Node" | "South Node";
+
+/** Geocentric Moon in AU on the mean equator and equinox of J2000. */
+export function geoMoon(ttDays: number): PlanetVector {
+  ready();
+  if (!Number.isFinite(ttDays)) throw new RangeError("Lunar series require finite TT days since J2000.");
+  return planetVector(wasm.geoMoon(ttDays));
+}
+
+/** Geocentric Moon position in AU and finite-difference velocity in AU/day. */
+export function geoMoonState(clock: PlanetClock): PlanetState {
+  ready();
+  const { ut, tt, deltaT } = planetClock(clock, true);
+  const fields = wasm.geoMoonState(ut, tt, deltaT);
+  return { ...planetVector(fields), vx: fields[3]!, vy: fields[4]!, vz: fields[5]! };
+}
+
+/** Moon longitude and latitude in degrees on the true ecliptic of date. */
+export function moonOfDate(clock: PlanetClock): { lon: number; lat: number } {
+  ready();
+  const { ut, tt, deltaT } = planetClock(clock, true);
+  const fields = wasm.moonOfDate(ut, tt, deltaT);
+  return { lon: fields[0]!, lat: fields[1]! };
+}
+
+/** Osculating ascending lunar node, in degrees on the true ecliptic of date. */
+export function trueNodeLongitude(clock: PlanetClock): number {
+  ready();
+  const { ut, tt, deltaT } = planetClock(clock, true);
+  return wasm.trueNodeLongitude(ut, tt, deltaT);
+}
+
+function lunarDateInput(body: LunarBody, date: Date, scale: TimeScaleName, pin?: number): number {
+  switch (body) {
+    case "Moon": case "North Node": case "South Node": break;
+    default: throw new RangeError("Body is not supported by the lunar kernel.");
+  }
+  let ms = NaN;
+  try {
+    if (date instanceof Date) ms = Date.prototype.getTime.call(date);
+  } catch {
+    // A forged Date prototype has no internal Date value.
+  }
+  if (!Number.isFinite(ms)) throw new RangeError("Lunar calculation requires a valid Date.");
+  if (scale !== "utc" && scale !== "ut1" && scale !== "tt") {
+    throw new RangeError("Time scale must be utc, ut1 or tt.");
+  }
+  if (pin !== undefined && (!Number.isFinite(pin) || Math.abs(pin) > 1e10)) {
+    throw new RangeError("Delta T must be finite seconds with an absolute value at most 1e10.");
+  }
+  return ms;
+}
+
+/** Lunar longitude in degrees, using the engine's date and time-basis path. */
+export function lunarLongitude(
+  body: LunarBody, date: Date, scale: TimeScaleName = "utc", pin?: number,
+): number {
+  ready();
+  const ms = lunarDateInput(body, date, scale, pin);
+  return wasm.lunarLongitude(body, ms, scale, pin);
+}
+
+/** Lunar longitude speed in degrees/day, including time-basis seams. */
+export function lunarLongitudeSpeed(
+  body: LunarBody, date: Date, scale: TimeScaleName = "utc", pin?: number,
+): number {
+  ready();
+  const ms = lunarDateInput(body, date, scale, pin);
+  return wasm.lunarLongitudeSpeed(body, ms, scale, pin);
+}

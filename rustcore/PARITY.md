@@ -5,7 +5,8 @@ References: the checked-out engine's `src/signs.ts`, angular helpers in
 and `src/civil-calendar.ts`, plus `src/deltat.ts`, `src/time-scale.ts`,
 `src/nutation.ts`, `src/frame.ts`, `src/equator.ts`, `meanObliquity` in
 `src/houses.ts` and `gastHours` in `src/ephemeris.ts`, plus the installed,
-pinned astronomy-engine series and light-time functions used by the engine.
+pinned astronomy-engine series, lunar state and light-time functions used
+by the engine, and the lunar branches of `src/ephemeris.ts`.
 The parity tests import those sources directly
 and execute the release WASM built from `crates/wasm` and `crates/core`.
 Passing means compatibility on the tested inputs, not independent astronomical
@@ -44,10 +45,19 @@ for this port.
 | True-ecliptic longitude and latitude of nonzero heliocentric and geocentric vectors of implemented bodies | Circular longitude and absolute latitude difference at most 1e-7 arcseconds | `tests/planets.parity.ts`, against the pinned vectors transformed by `src/frame.ts` |
 | Backdated emission UT1 and TT | Absolute difference at most 2e-6 seconds, after subtracting J2000 day values | `tests/planets.parity.ts`, against astronomy-engine `BackdatePosition` on a fixed Delta T clock |
 | Sun heliocentric position/state, Earth geocentric position and coincident-body vectors on coherent clocks | Identical binary64 zero bits; tolerance 0 AU and 0 AU/day | `tests/planets.parity.ts` |
+| Moon EQJ Cartesian vector and state position | Absolute difference at most 2e-17 AU per component | `tests/moon.parity.ts`, against astronomy-engine `GeoMoon` and `GeoMoonState` |
+| Moon EQJ finite-difference velocity | Absolute difference at most 2e-12 AU/day per component | `tests/moon.parity.ts`, against astronomy-engine `GeoMoonState` |
+| Moon true-ecliptic longitude and latitude | Circular longitude and absolute latitude difference at most 1e-7 arcseconds | `tests/moon.parity.ts`, against `GeoMoon` transformed by `src/frame.ts`, and the engine's lunar longitude |
+| True north/south node longitude | Circular difference at most 0.005 arcseconds | `tests/moon.parity.ts`, against the engine's orbit-plane construction |
+| Moon longitude speed | Absolute difference at most 1e-4 arcseconds/day | `tests/moon.parity.ts`, against the engine's central difference |
+| True north/south node longitude speed | Absolute difference at most 0.02 arcseconds/day | `tests/moon.parity.ts`, against the engine's central difference |
+| Lunar state midpoint and derivative on identical supplied sample vectors; South Node offset on the port's North Node longitude | Identical binary64 bits; tolerance 0 for this arithmetic | `tests/moon.parity.ts`, short-difference reconstruction and node normalization |
+| Lunar TT span acceptance and outer speed-sample refusal | Exact accepted/refused outcomes and reference span error message | `tests/moon.parity.ts`, pinned TT endpoint and outside probes |
 | Native arithmetic, signs, date validation and calendars | Exact regression expectations and calendar round trips | Unit tests in `crates/core/src/{lib,angles,signs,date_input,calendar}.rs` |
 | Native time model and clock conversion | Table knot checks, segment/uncertainty boundaries, finite synthetic scan, leap seconds and pins | Unit tests in `crates/core/src/{deltat,time_scales}.rs` |
 | Native frame kernels | Series-prefix algebra, clock separation, right-handed rotations, matrix order, inverse rotations, vector scale and nonfinite behavior | Unit tests in `crates/core/src/{nutation,frame,equator}.rs` |
 | Native solar and planetary kernels | Series algebra and derivatives, vector/state consistency, correction geometry, clock reconstruction and bounded solver behavior | Unit tests in `crates/core/src/planets.rs` |
+| Native lunar kernels | Harmonic recurrence, spherical/vector rotation round trip, state-clock reconstruction, angular-momentum orientation, circular difference endpoints and time-basis seams | Unit tests in `crates/core/src/{moon,lunar}.rs` |
 | Loading | Explicit initialization, retry after invalid WASM syntax, reuse on repeated initialization | `tests/loader.parity.ts` |
 
 ## Corpus
@@ -136,6 +146,32 @@ TT inputs, exact origin zeros, repeatability after intervening calls, split
 clocks and invalid wrapper inputs are exercised separately. The tests inspect
 WASM imports and install a throwing JavaScript Delta T callback to guard
 against numerical delegation to the reference dependency.
+
+`tests/moon.parity.ts` compares monthly and seeded synthetic instants from
+the start of 1800 through the end of 2200, plus J2000. It covers the lunar
+EQJ vector, differenced state, true-ecliptic coordinates, both true nodes
+and their longitude speeds. UTC longitudes and speeds use the engine's
+exported `bodyLongitude` and `longitudeSpeed` directly. Scale-aware
+comparisons reproduce their private orchestration using original reference
+functions, with bit-level checks against those exports on UTC cases.
+
+The lunar suite visits the model seam, leap-second changes, IERS table and
+prediction boundaries and leap-list expiry, including adjacent milliseconds,
+UTC/UT1/TT inputs and signed/zero/nonzero pins. It also checks TT labels
+inside represented leap seconds. Split clocks and adjacent binary64 inputs
+exercise the distinction between the supplied TT and the TT reconstructed
+by the state samples. A throwing JavaScript Delta T callback checks that
+the WASM lunar calculations never delegate to the reference.
+
+Node wrap cases are selected by a TypeScript scan with 32-day steps from
+1800 through 2200. Station cases use daily samples in the first 90 days of
+each decade in that span. Detected brackets are narrowed to adjacent
+milliseconds and sampled at offsets through a day on either side. These
+are compatibility probes around the reference's noisy boundaries, not a
+complete event search or agreement on the exact instant of each crossing.
+Separate cases test invalid wrapper inputs and reference span endpoints;
+span-edge cases compare acceptance, not numeric parity outside the corpus.
+The corpus generation, offsets and tolerances are enforced by that test.
 
 ## Rounding and deviations
 
@@ -314,15 +350,71 @@ functions are unchecked arithmetic helpers; validate their TT at the caller.
 The wrapper returns plain records and RangeError for refused inputs or failed
 solves. It does not yet provide public date validation, reference flags,
 ephemeris-span checks or all-body position assembly; those are later
-milestones. Only the listed bodies are implemented, and calls for the Moon or
-Pluto fail explicitly. Other observer-target coincidences can make angular
+milestones. These planetary-series exports accept only their listed bodies;
+the Moon uses the separate lunar exports, and Pluto still fails explicitly.
+Other observer-target coincidences can make angular
 coordinates ill-conditioned; the angular limits here apply to the tested
 nonzero heliocentric and Earth-centered corpus only.
 
+The Moon port preserves the pinned dependency's ordered harmonic recurrence,
+solar perturbation and latitude summation, fractional-turn reduction and
+radius conversion. Its private Horner mean-obliquity polynomial and separate
+inverse-precession rotation follow `GeoMoon` exactly in arithmetic order.
+The engine's expanded obliquity polynomial and combined frame matrix are
+still used when turning that EQJ vector to the engine's ecliptic of date.
+Replacing the first rotation with a transpose of the combined matrix would
+change rounding before taking the state difference, so the two paths remain
+separate. Trigonometric functions can round differently in V8 and Rust/WASM,
+motivating the explicit AU and angular allowances above.
+
+`GeoMoonState` is preserved as a difference over plus/minus 1e-5 day,
+not replaced with an analytic derivative. Each sample reconstructs TT as
+`(ut +/- 1e-5) + deltaT / 86400`. Its position is the sample average.
+The node is formed from position crossed with velocity, projected onto
+the mean ecliptic, and rotated by nutation in longitude. Subtraction over
+the short state interval amplifies vector roundoff, and the shallow orbit
+inclination further amplifies errors in the node direction. This is why
+the node longitude has its own acceptance limit instead of sharing the
+Moon-position limit. These limits were fixed before the first lunar WASM
+comparison, with separate longitude-speed limits for errors at both samples.
+
+Moon speed uses plus/minus 0.001 day and node speed plus/minus 0.25 day,
+as `src/ephemeris.ts` does. Each outer sample resolves a fresh time basis
+and freezes its Delta T for the inner state difference. The elapsed interval
+changes to TT when the reference's time-basis piece changes. A South Node
+longitude is the normalized North Node plus 180 degrees; its standalone
+speed is independently differenced, as `longitudeSpeed` does, so it need
+not have identical bits to the North Node speed. Complete position rows
+will copy the North Node speed to both rows, matching `computeBodies`.
+
+Near a node station, allowed speed roundoff can change the sign of a
+nearly zero speed. The parity tests require identical signs outside the
+documented speed allowance and enforce the numeric limit everywhere.
+Near a longitude wrap, a small circular difference can put the two values
+on opposite sides of zero. This milestone does not claim exact node motion
+or sign-boundary decisions in those neighborhoods. It preserves the source
+algorithm's jitter rather than smoothing it. Full row/flag parity remains
+subject to the later position and corpus milestones.
+
+To report measured maxima and near-boundary disagreements for the current
+runtime, run `RUSTCORE_PARITY_REPORT=1 npm run test:parity -- tests/moon.parity.ts`
+from this workspace. That optional report does not change acceptance limits.
+
+The lunar exports are intermediate helpers with finite clock validation and
+plain result records, not astronomy-engine classes. Raw clock helpers do not
+enforce the ephemeris span; the Date-based longitude helpers do, on each
+outer sample. The dependency's internal short state samples remain unchecked
+against that span, matching the engine. The wrapper rejects invalid Dates,
+time-scale names and pins before WASM conversion; malformed object and
+getter/proxy behavior is outside this low-level compatibility scope. The
+native epoch-millisecond helpers expect caller-validated inputs. The current
+tests use Node 22.22.2 and the pinned Rust toolchain; other runtimes have not
+been checked for these tolerances.
+
 ## Remaining coverage
 
-The Moon, Pluto and complete position rows with longitude speeds remain
-planned work, alongside house parity over synthetic dates from 1800 through
+Pluto and complete position rows remain planned work, alongside house
+parity over synthetic dates from 1800 through
 2200, polar latitudes, every house system and legacy/configured/minor/custom
 aspect sets. Cusps, house membership and aspect matching are not implemented
 or compared yet. The civil Julian Day Number helpers do not apply

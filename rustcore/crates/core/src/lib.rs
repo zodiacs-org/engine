@@ -8,6 +8,8 @@ pub mod date_input;
 pub mod deltat;
 pub mod equator;
 pub mod frame;
+pub mod lunar;
+pub mod moon;
 pub mod nutation;
 pub mod planets;
 pub mod signs;

@@ -11,7 +11,7 @@
     "build:native": "node scripts/run.mjs build:native",
     "build:wasm": "node scripts/run.mjs build:wasm",
     "test": "npm run test:generator && npm run test:native && npm run build:wasm && npm run typecheck && npm run test:parity",
-    "test:generator": "node --test scripts/time-data.check.mjs scripts/planet-data.check.mjs",
+    "test:generator": "node --test scripts/time-data.check.mjs scripts/planet-data.check.mjs scripts/moon-data.check.mjs",
     "test:native": "node scripts/run.mjs test:native",
     "test:parity": "vitest run --config vitest.config.ts",
     "typecheck": "tsc --project tsconfig.json --noEmit",

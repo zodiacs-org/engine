@@ -4,11 +4,12 @@ An isolated, experimental port of this checkout's numeric engine. The native
 library and WebAssembly module implement angular arithmetic, sign annotations,
 resolved-instant date validation, Julian/Gregorian civil-calendar helpers,
 the Delta T model, the UTC/UT1/TT time basis, nutation, precession,
-frame rotations, obliquity, apparent sidereal time, and solar and planetary
-series through Neptune with light time and aberration.
+frame rotations, obliquity, apparent sidereal time, solar and planetary
+series through Neptune with light time and aberration, and the Moon and
+true lunar nodes with longitude finite differences.
 The TypeScript wrapper retains the implemented engine helpers' signatures after
-explicit initialization and exposes intermediate planetary kernels.
-Complete position rows, the Moon, Pluto, houses and aspect matching remain in
+explicit initialization and exposes intermediate planetary and lunar kernels.
+Complete position rows, Pluto, houses and aspect matching remain in
 [PLAN.md](PLAN.md).
 
 ## Setup and checks
@@ -32,10 +33,10 @@ npm run check:isolation
 CLI version from `Cargo.toml` under `.tools/wasm-bindgen/`. The CLI and crate must agree.
 Build and test scripts use locked dependencies. `npm test` runs Cargo unit
 tests, builds WASM, checks TypeScript signatures and runs the Vitest parity
-suite, including checks of the time and planetary data generators. Native release builds are
+suite, including checks of the time, planetary and lunar data generators. Native release builds are
 a separate `build:native` step. Cargo also needs Node on PATH: its build script
 generates time tables from digest-checked local engine sources and planetary
-coefficients from the pinned dependency installed by this directory's `npm ci`.
+and lunar coefficients from the pinned dependency installed by this directory's `npm ci`.
 Generation uses Node's built-in modules with no network requests. This crate
 builds within this repository.
 
@@ -114,12 +115,33 @@ returns the emission `ut` and `tt`. These helpers return plain records,
 without astronomy-engine objects or runtime calls into that dependency.
 Their tests are in [planets.parity.ts](tests/planets.parity.ts).
 
-These low-level kernels accept finite clocks and only the implemented bodies.
+These planetary kernels accept finite clocks and only the implemented bodies.
 They do not yet expose `positions`, speeds in longitude, coverage flags or
 the engine's ephemeris-span validation. Do not substitute them for the
-complete public engine API. The Moon and Pluto need separate algorithms in
-the following milestones. [PARITY.md](PARITY.md) states the current bounds
+complete public engine API. Pluto needs a separate algorithm in
+the next milestone. [PARITY.md](PARITY.md) states the current bounds
 for comparisons with the pinned implementation.
+
+The lunar API exports `geoMoon(ttDays)` for a geocentric J2000 vector in AU,
+`geoMoonState(clock)` for its position and finite-difference velocity in
+AU/day, `moonOfDate(clock)` for true-ecliptic longitude/latitude in degrees,
+and `trueNodeLongitude(clock)` for the ascending node in degrees. They use
+the same `PlanetClock` record as the planetary helpers and return plain
+records. The Moon retains the reference's uncorrected series and its
+separate mean-date to J2000 rotation. Its state position is the average of
+the two velocity samples, not a second evaluation at the center instant.
+
+`lunarLongitude(body, date, scale?, pin?)` and
+`lunarLongitudeSpeed(body, date, scale?, pin?)` accept `"Moon"`,
+`"North Node"` or `"South Node"`, a valid Date, an optional input time
+scale and optional Delta T seconds. They resolve each sample's time basis
+in Rust and enforce the engine's TT span on each evaluation. Longitude is
+in degrees and speed is in degrees per elapsed day. Their default UTC
+forms match the lunar subset of `bodyLongitude` and `longitudeSpeed` in
+the engine's ephemeris module. The separate names make their limited body
+scope explicit until the complete position API is implemented.
+The tests and quantity-specific rounding allowances are in
+[moon.parity.ts](tests/moon.parity.ts) and [PARITY.md](PARITY.md).
 
 For a browser, supply this build's WASM as an ArrayBuffer obtained from your own
 asset loader, or as a compiled `WebAssembly.Module`. The wrapper makes no network requests and
@@ -134,7 +156,7 @@ The browser integration test belongs to the wrapper milestone in the plan.
 
 The workspace member `crates/core` exposes `normalize_longitude(f64)` and the
 `angles`, `signs`, `date_input`, `calendar`, `deltat`, `time_scales`,
-`nutation`, `frame`, `equator` and `planets` modules. Fallible angular functions
+`nutation`, `frame`, `equator`, `planets`, `moon` and `lunar` modules. Fallible angular functions
 return `Result<_, LongitudeError>`; the unchecked angular helpers propagate NaN
 as the reference does. Date parsers return `Result<f64, DateError>` with epoch
 milliseconds. Calendar string parsers and conversions return `Option`, and
@@ -169,6 +191,18 @@ boundary. `backdate_position` returns `BackdatedPosition { vector, ut, tt }`;
 a fixed Delta T in seconds, and a boolean aberration switch. They return
 `Result` for invalid clocks or a failed light-time solution. These functions
 have no global time model, callback into JavaScript or mutable shared cache.
+
+`moon::calc_moon` returns mean-ecliptic spherical coordinates in radians
+and distance in AU; `moon::geo_moon` returns its J2000 Cartesian vector.
+Both take unchecked TT days. `moon::geo_moon_state` takes finite UT1, TT
+and fixed Delta T seconds, returning the same position/velocity struct as
+the planetary state helper, here relative to Earth. `lunar` exposes
+`moon_of_date`, `true_node_longitude`, `lunar_longitude` and
+`lunar_longitude_speed`. The last two select a `LunarBody` and take epoch
+milliseconds, a `TimeScaleName` and optional Delta T seconds. Their native
+input boundary expects validated milliseconds and a finite pin; Date type
+checks are the wrapper's responsibility. Neither lunar module has a shared
+mutable cache or a JavaScript callback.
 
 ## Parity and provenance
 

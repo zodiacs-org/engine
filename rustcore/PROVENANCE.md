@@ -106,7 +106,8 @@ Cargo writes `planet_data.rs` to its ignored `OUT_DIR` under `target/`.
 The generated table contains Mercury, Venus, Earth, Mars, Jupiter, Saturn,
 Uranus and Neptune in source order. The Sun's heliocentric vector is zero;
 its geocentric calculation uses the Earth series. This milestone does not
-copy the source's Moon or Pluto tables. Generated data are not committed.
+include the source's Moon or Pluto tables. Lunar coefficients are generated
+separately as described below. Generated data are not committed.
 
 The native formulas translate the same installed source's VSOP evaluation,
 spherical-to-rectangular conversion, fixed equatorial rotation, light-time
@@ -122,3 +123,34 @@ deterministic output, every generated coefficient's binary64 value and the
 complete MIT permission and warranty text. These checks and the TS/WASM
 parity tests measure faithful translation of this local dependency. They
 make no new astronomical accuracy or external-source audit claim.
+
+## Moon series and nodes
+
+[moon.rs](crates/core/src/moon.rs) translates `CalcMoon`, `GeoMoon` and
+`GeoMoonState` from the same digest-pinned installed astronomy-engine source
+named above. [generate-moon-data.mjs](scripts/generate-moon-data.mjs)
+extracts the ordered solar perturbation and latitude terms into Cargo's
+ignored `OUT_DIR`. Its source and dependency identity checks share the
+planetary generator's pinned input verification. Coefficients retain their
+JavaScript binary64 values as Rust bit patterns; integer harmonic indices
+keep their signs and order. [moon-data.check.mjs](scripts/moon-data.check.mjs)
+checks extraction and generated representation. No generated table is
+committed, and the parent engine's sources are untouched.
+
+The lunar position preserves the dependency's mean-obliquity Horner
+polynomial, separate ecliptic-to-equator rotation, and inverse precession
+into J2000. It deliberately retains these operations rather than transposing
+the engine's combined frame matrix, which changes floating-point rounding.
+The state retains the dependency's short position difference and midpoint.
+There is no analytic velocity substitution or coefficient adjustment.
+
+[lunar.rs](crates/core/src/lunar.rs) translates the Moon, true-node and
+longitude-difference branches of `src/ephemeris.ts`, with its source digest
+pinned in [moon.parity.ts](tests/moon.parity.ts). Its time basis and frame
+come from the earlier Rust ports. The node uses the state angular momentum
+on the mean ecliptic and adds the engine's nutation in longitude.
+
+[NOTICE](NOTICE) extends the retained Don Cross MIT notice to the lunar
+algorithms and tables and records the historical algorithm attribution
+stated by the local dependency. This is a translation of those local
+sources, not an external-source audit or an independent accuracy comparison.
