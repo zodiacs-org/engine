@@ -3,3 +3,4 @@ M2: Add versioned event identities, stable UIDs, canonical-day occurrence assign
 M3: Add bounded TZID/VTIMEZONE export with pinned timezone data, UTC fallbacks for ambiguous or unsupported offsets, and golden plus historical parser round-trip tests.
 M4: Pin and verify read-only events sources, export UTC ingress schedules with stable daily identities and full engine receipts, and test boundary padding, global budgets, cancellation and parser round trips.
 M5: Export synthetic natal transit exacts through the pinned aspect search with custom policies, stable chart identities, complete natal and moving receipts, bounded work, golden feeds and parser round-trip tests.
+M6: Add undated static synastry and explicit secondary-progressed-to-natal exact schedules for synthetic chart pairs, preserving both natal receipts, separate calculation clocks, stable UIDs and bounded work with golden and parser round-trip tests.

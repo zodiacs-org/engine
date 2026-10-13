@@ -1,6 +1,5 @@
 import { readFileSync } from "node:fs";
-import { natalChart, HOUSE_SYSTEMS } from "../../src/index.js";
-import type { BirthInput } from "../../src/index.js";
+import { natalChart } from "../../src/index.js";
 import { calc } from "../../src/calc.js";
 import { createNatalEnvelope } from "../../src/receipt.js";
 import type { NatalEnvelope } from "../../src/receipt.js";
@@ -13,6 +12,9 @@ import { canonicalJson } from "./canonical-json.js";
 import { utcDateTime } from "./content-line.js";
 import { canonicalIdentityWindows, identifyEventBatch } from "./identity.js";
 import { label } from "./validation.js";
+import { snapshotSyntheticNatal } from "./synthetic-natal.js";
+import type { SyntheticNatalInput } from "./synthetic-natal.js";
+export type { SyntheticNatalInput } from "./synthetic-natal.js";
 import type { IngressScheduleRequest, IngressScheduleResult } from "./ingresses.js";
 import type { IdentityWindow, JsonObject, JsonValue, ScheduleEvent, UnidentifiedEvent } from "./types.js";
 
@@ -21,15 +23,6 @@ const BOUNDARY_POLICY = "utc-day-plus-following-day/1";
 const source = JSON.parse(readFileSync(new URL("../events-source.json", import.meta.url), "utf8")) as {
   commit: string; engineTree: string;
 };
-
-/** Invented chart inputs only. The declaration does not verify their provenance. */
-export interface SyntheticNatalInput {
-  readonly id: string;
-  readonly synthetic: true;
-  readonly birth: Readonly<Omit<BirthInput, "utc" | "timeScale" | "flags"> & {
-    utc: string; timeScale: "utc";
-  }>;
-}
 
 export interface NatalTransitScheduleRequest extends IngressScheduleRequest {
   readonly natal: SyntheticNatalInput;
@@ -72,33 +65,9 @@ function validate(input: NatalTransitScheduleRequest): NatalTransitScheduleReque
   utcDateTime(new Date(lastDay + 2 * DAY_MS).toISOString());
 
   // Capture only plain JSON chart/policy data before engine calls or cancellation.
-  const natal = JSON.parse(canonicalJson(request.natal as unknown as JsonValue)) as SyntheticNatalInput;
-  fields(natal, ["id", "synthetic", "birth"]);
-  label(natal.id, "natal chart identity");
-  if (natal.synthetic !== true) throw new RangeError("An explicitly synthetic natal chart is required.");
-  fields(natal.birth, ["utc", "timeScale", "latitude", "longitude", "houseSystem", "timeKnown", "deltaT"]);
-  const birth = natal.birth;
-  utcDateTime(birth.utc);
-  if (birth.timeScale !== "utc") throw new RangeError("Natal birth inputs require an explicit UTC clock.");
-  if (birth.houseSystem !== undefined && !HOUSE_SYSTEMS.includes(birth.houseSystem)) {
-    throw new RangeError("Unsupported natal house system.");
-  }
-  if (birth.timeKnown !== undefined && typeof birth.timeKnown !== "boolean") {
-    throw new RangeError("Natal timeKnown must be boolean.");
-  }
-  if ((birth.latitude === undefined) !== (birth.longitude === undefined) ||
-      (birth.latitude !== undefined && (typeof birth.latitude !== "number" || !Number.isFinite(birth.latitude) ||
-        Math.abs(birth.latitude) > 90 || typeof birth.longitude !== "number" ||
-        !Number.isFinite(birth.longitude) || Math.abs(birth.longitude) > 180))) {
-    throw new RangeError("Natal coordinates must be a finite latitude/longitude pair.");
-  }
-  if (birth.deltaT !== undefined && (typeof birth.deltaT !== "number" ||
-      !Number.isFinite(birth.deltaT) || Math.abs(birth.deltaT) > 1e10)) {
-    throw new RangeError("Invalid natal Delta T in seconds.");
-  }
+  const natal = snapshotSyntheticNatal(request.natal);
   const policy = JSON.parse(canonicalJson(request.policy as unknown as JsonValue)) as ExactAspectPolicy;
-  return { ...request, natal: { ...natal, birth: { ...birth,
-    houseSystem: birth.houseSystem ?? "whole", timeKnown: birth.timeKnown ?? true } },
+  return { ...request, natal,
     policy: { aspects: snapshotAspectRules(policy) } };
 }
 

@@ -2,11 +2,13 @@
 
 This private TypeScript project exports astrology event records as iCalendar
 text and searches for tropical sign ingresses and natal transit exacts through
-the existing events package. It imports the parent engine sources without
+the existing events package, plus explicit progressed synastry schedules. It
+imports the parent engine sources without
 building or changing the parent npm package. The implemented scope is M1
-through M5 in [PLAN.md](PLAN.md):
+through M6 in [PLAN.md](PLAN.md):
 UTC and timezone serialization, validation, stable event identities and ingress
-schedules, plus natal transit schedules for explicitly synthetic charts.
+schedules, plus natal transit and synastry analysis for explicitly synthetic
+charts.
 Other schedule searches, streaming, the CLI and the HTTP feed
 endpoint remain planned milestones.
 
@@ -252,6 +254,117 @@ The integration tests verify engine delegation, stable overlapping requests,
 the natal Delta T pin and independent iCalendar parser round trips. No new
 event search algorithm is introduced here.
 
+## Synastry analysis and exact schedules
+
+`analyzeStaticSynastry({ first, second })` calls the parent engine's
+`natalChart` and `synastry` for two fixed synthetic natal inputs. It returns
+`convention: "static-natal/1"`, `timing: "undated"`, ordered participants
+with full natal envelopes, and the engine's major inter-chart `aspects`.
+`exactAspects` filters those rows to strictly zero engine-reported orb. A
+small positive orb remains outside that subset; this is a numerical
+classification under the engine's ordinary synastry policy, not physical
+accuracy evidence. Static analysis has no occurrence time and produces no
+VEVENT. Its input refuses date-range and moving-convention fields.
+`test/static-synastry.calendar-test.ts` compares the analysis and envelopes
+with the parent APIs for its declared invented births, including coincident
+and nearly coincident charts.
+
+For dated events, `searchSynastrySchedule` requires the explicit convention
+`"secondary-progressed-first-to-natal-second/1"`. `firstBody` belongs to the
+first chart, progressed to each calendar instant; `secondBody` stays at the
+second chart's natal longitude. Reversing the participants changes the
+calculation. Both participants require distinct durable IDs and the same
+synthetic input declaration and validation as natal transits. The same body
+may appear on both sides. Nodes and chart angles are outside this adapter's
+supported body set.
+
+```ts
+import { searchSynastrySchedule, serializeCalendar } from "./src/index.ts";
+import {
+  syntheticSynastryRequest, syntheticSynastryDtstamp
+} from "./test/fixtures/synthetic-synastry.ts";
+
+const result = searchSynastrySchedule(syntheticSynastryRequest);
+if (result.status === "refused") throw new Error(result.reason);
+if (result.events.length > 0) {
+  const ics = serializeCalendar(result.events, {
+    dtstamp: syntheticSynastryDtstamp
+  });
+}
+```
+
+This example uses the invented births, explicit conjunction policy and
+February 2026 range in `test/fixtures/synthetic-synastry.ts`, exercised by
+`test/synastry.calendar-test.ts` and its small golden feed
+`test/fixtures/synthetic-synastry.ics`. The second birth is deliberately
+chosen at a progressed epoch of the first to construct a contact. It tests
+export behavior, not an independently observed astronomical event.
+
+At every sample the adapter calls the engine's `progressedInstant` with the
+first birth UTC and the schedule UTC, then `calc` at that mapped instant.
+The mapping is the engine's elapsed-year secondary progression, with its
+`PROGRESSION_DAYS_PER_YEAR` convention. It also accepts the engine's signed
+extension for schedule instants before birth. These are elapsed UTC
+milliseconds, not local anniversaries. The resulting longitude is passed
+to the pinned events package's existing `searchExactAspects` provider
+interface. No event search is implemented in this project. The explicit
+angle policy supports custom angles and both oriented branches, as for
+natal transits; the engine's static synastry orb allowances do not apply.
+
+The schedule UTC is the VEVENT's start and the top-level receipt's `utc`.
+`source.progression` separately records that schedule instant, the first
+birth, the progressed calculation instant, the mapping constant and the
+integer-millisecond epoch convention. `source.calculation` is the full
+`calc` receipt at that progressed instant. `source.first.calculation` and
+`source.second.calculation` retain both natal envelopes, including their
+birth clocks and settings. The top-level ordered bodies and ordered chart
+IDs keep the progressed and fixed roles. `source.event` preserves the
+upstream bracket, branch, direction, fixed target and signed residual;
+`orbDegrees` is its absolute residual in degrees. The summary names both
+roles and the secondary progression.
+
+A natal Delta T pin is retained in its natal envelope. The second chart's
+pin affects its fixed target. Progressed calculations follow the ordinary
+engine clock at the mapped instant, as `progressedBodies` does; they do
+not carry the first chart's natal pin forward. Unknown natal times retain
+the explicit reference instant with `timeKnown: false`. No progressed
+houses, progressed angles, second-chart progression or ordinary sky
+transits are implied by this convention. Calculation coverage applies to
+the natal and progressed epochs; the schedule year alone does not establish
+coverage or accuracy. Receipts retain the engine's UTC/UT1 time basis.
+
+Progression maps to a JavaScript Date with integer milliseconds. This makes
+the sampled longitude a staircase in elapsed calendar time. The adapter
+requires `stepMs` to divide a UTC day and be at least 1,000 milliseconds of
+calendar time, checked in `test/synastry-boundary.calendar-test.ts`. Smaller
+steps can repeatedly sample an identical progressed epoch and make the
+upstream scanner suppress a contact as stationary. The minimum avoids that
+clock-level collapse; it does not establish astronomical completeness or
+remove numerical plateaus in computed positions. A returned exact contact
+is a numerical crossing estimate with its actual residual, not a claim of
+zero angular error or sub-millisecond event timing. Tangencies, paired roots
+inside a scan cell and time-basis jumps retain the upstream search limits.
+
+The adapter uses the ingress and natal transit boundary policy: fixed UTC
+days with following-day padding, ownership in `(startUtc, endUtc]`, then
+identity assignment before display clipping. UIDs include the convention,
+both ordered IDs, both normalized births, numeric angle set, branch,
+direction and sampling settings. Labels, rule order, display timezone,
+request bounds and budgets do not change UIDs. The existing day-ordinal
+limitations across engine and search revisions apply.
+
+Both natal creations, all upstream samples, padding and every owned
+progressed receipt calculation share the evaluation budget. A refusal or
+cancellation discards all collected events. A typed moving-engine refusal
+returns `reason: "engine-refused"`; invalid input, natal calculation errors
+and unexpected failures throw. Cancellation is cooperative between
+synchronous calls. The implementation collects events in memory until the
+streaming milestone. The boundary tests use analytic synthetic providers
+through the actual scanner to check ownership, overlap, repeated contacts,
+validation, budget exhaustion and cancellation. Integration tests compare
+real progression and search calls, retain both natal pins correctly, and
+round-trip UTC and TZID feeds with `ical.js`.
+
 ## Stable event identities
 
 `createEventIdentity` validates, detaches and deeply freezes an
@@ -466,8 +579,9 @@ Fixtures under `test/fixtures/` use synthetic data. The serializer-only
 fixtures use invented event instants and angular values. The natal transit
 golden is generated by the parent engine and pinned events search for the
 invented chart and range in `test/natal-transits.calendar-test.ts`; it is a
-regression record, not independent accuracy evidence. Golden text fixes the
-wire format, while parser checks verify dates, text and receipt preservation.
+regression record, not independent accuracy evidence. The synastry golden uses the constructed progressed contact in
+`test/fixtures/synthetic-synastry.ts` under the same regression-only scope.
+Golden text fixes the wire format, while parser checks verify dates, text and receipt preservation.
 All future chart examples and fixtures must also be synthetic.
 
 Code and documentation here use the repository's [MIT license](../LICENSE).
