@@ -16,7 +16,7 @@ astronomical accuracy or the validity of personality or predictive claims.
 
 - [x] M1 Establish an isolated offline Node project, a versioned JSON Schema for factor-to-meaning entries, a local validator, and schema contract tests.
 - [x] M2 Add a small original seed dataset covering placements, aspects, houses and sign dignities, with provenance, licensing and dataset-level integrity checks.
-- [ ] M3 Add a local engine adapter that computes synthetic chart facts, records conventions and version provenance, and handles unavailable houses and polar fallback.
+- [x] M3 Add a local engine adapter that computes synthetic chart facts, records conventions and version provenance, and handles unavailable houses and polar fallback.
 - [ ] M4 Define the reading and factual-claim schemas, preserving quoted spans and unsupported or ambiguous assertions without silently treating them as correct.
 - [ ] M5 Define a pluggable generation backend with a deterministic offline mock, explicit backend selection, bounded requests and no saved credentials.
 - [ ] M6 Implement the interpretation generator with versioned prompts, input/output validation, provenance, reproducible manifests and ignored output files.
@@ -56,3 +56,24 @@ Mercury's separate sign dignities, byte and entry limits, and input preservation
 The package-exclusion test passed. The root `npm run package:contents` gate was
 attempted again and failed on missing `dist/calc.d.ts`; no root build was run
 because this task prohibits modifying `dist/`. Changes remain under `evals/`.
+
+M3 acceptance: the synthetic-case schema and `computeChartFacts` adapter compute
+placement, natal aspect, cusp-house and classical sign-dignity factors through
+public local engine entry points. Results retain the supplied reference instant,
+missing-house reasons, requested and actual systems, polar fallback, all applicable
+sign-dignity labels, time basis and coverage flags. Immutable envelopes record
+engine, ephemeris, bundler and runtime versions with computation-bundle and
+adapter digests. The loader uses pinned eval-local dependencies and ignored
+temporary files, without writing root build output or making network requests.
+
+M3 validation: a clean offline `npm ci --prefix evals --ignore-scripts`,
+`npm --prefix evals test`, and `npm --prefix evals run validate:seed` passed on
+Node 22.23.3. Adapter and loader tests check public-API consistency, the house
+systems in the schema, polar fallback in either hemisphere, unavailable houses,
+Mercury's paired labels, time scales and pinned Delta T, rejected input, immutable
+metadata, JSON round trips and repeatability across processes and working
+directories. These are engine-consistency checks, not independent accuracy
+evidence. Package-exclusion and project-isolation tests passed. The root
+`npm run package:contents` gate was attempted and failed on missing
+`dist/calc.d.ts`; the prohibited root build was not run. All changes stay in
+`evals/`. M4 is next.

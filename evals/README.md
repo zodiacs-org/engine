@@ -1,10 +1,10 @@
 # Interpretation dataset and reading evaluations
 
 This directory is an independent local project for developing an interpretation
-dataset and evaluating chart readings. Its current implementation validates
-factor-to-meaning entries and datasets, including an original authored seed set.
-Generation backends, the engine fact adapter and the scoring harness are later
-milestones in [PLAN.md](PLAN.md).
+dataset and evaluating chart readings. It validates factor-to-meaning entries
+and datasets, includes an original authored seed set, and computes synthetic
+chart facts through the local engine. Generation backends and the scoring
+harness are later milestones in [PLAN.md](PLAN.md).
 
 Interpretation text is symbolic prose. The eventual factual score will compare a
 reading's assertions with computations from the local `@zodiacs/engine` under
@@ -22,8 +22,9 @@ npm --prefix evals run validate:seed
 node evals/bin/validate-entry.mjs --help
 ```
 
-Installation resolves the locked validator dependencies. Tests and validation
-then run offline; they require no LLM backend, API key or engine build. Tests use
+Installation resolves the locked validator, bundler and ephemeris dependencies.
+Tests and validation then run offline; they require no LLM backend, API key or
+root engine build. Tests use
 Node's built-in runner and filenames ending in `.checks.mjs`, so the root Vitest
 suite does not collect them.
 
@@ -64,7 +65,7 @@ The vocabulary follows the local engine's public types in `src/types.ts` and
 `src/techniques/dignities.ts`. A meaning requires a nonblank summary, distinct
 themes and `epistemicStatus: "symbolic-interpretation"`. A schema-valid dignity
 factor can still be factually wrong; astronomical and dignity computation belongs
-to the planned engine adapter, not schema validation. Mercury in Virgo can have
+to the engine adapter, not schema validation. Mercury in Virgo can have
 both domicile and exaltation, represented by separate factors.
 
 `provenance.kind: "authored"` requires named authors and an origin note. Record AI
@@ -113,7 +114,7 @@ within a language and tradition even when an aspect's bodies are reversed or
 JSON keys change order. Distinct house systems and distinct dignity labels remain
 separate factors. These checks do not authenticate authorship, verify rights,
 evaluate prose quality or calculate whether a dignity applies to a sign. Engine
-fact checking remains a later milestone.
+fact computation is separate from this dataset validation.
 
 The CLI uses the same report shape and exit codes as entry validation. Its input
 limit is 1 MiB of UTF-8 JSON, and a dataset allows up to 256 entries. These are
@@ -121,6 +122,90 @@ operational limits, enforced at their boundaries by
 [dataset tests](tests/dataset.checks.mjs) and
 [dataset CLI tests](tests/dataset-cli.checks.mjs). The dataset tests also enforce
 the committed seed's category coverage and attribution.
+
+## Local chart facts
+
+`computeChartFacts(value)` in [lib/chart-facts.mjs](lib/chart-facts.mjs) accepts a
+synthetic case and returns an immutable, JSON-serializable fact envelope. For
+example, from the repository root in a Node ES module:
+
+```js
+import { computeChartFacts } from "./evals/lib/chart-facts.mjs";
+
+const result = await computeChartFacts({
+  schemaVersion: "1.0.0",
+  id: "synthetic-example",
+  synthetic: true,
+  birth: { utc: "2003-05-17T08:13:00Z", latitude: 35, longitude: 12 }
+});
+console.log(result.facts, result.availability);
+```
+
+This invented input is exercised by the [adapter tests](tests/chart-facts.checks.mjs)
+and [loader tests](tests/local-engine.checks.mjs). The input contract is
+[synthetic-chart.schema.json](schema/synthetic-chart.schema.json).
+`validateSyntheticChart(value)` returns structural errors using the entry
+validator's report shape. Computation additionally rejects invalid calendar
+dates and instants the engine cannot evaluate. A structural rejection throws
+`TypeError` with an `errors` array; engine validation can throw `RangeError`.
+Neither path changes the input or coerces fields.
+
+Cases require a resolved date-time string with an explicit offset, paired
+coordinates when supplied, and `synthetic: true`. Exact geographic poles are
+excluded because their rising angles are degenerate. Unknown fields, supplied
+chart results, flag assertions and personal metadata are rejected. The marker
+records the caller's assertion of invented data; it cannot prove that assertion.
+The normalized `input` records the engine's defaults and selected time scale;
+`time.sourceInstant` preserves the submitted spelling. Non-UTC scales and pinned
+Delta T are retained with the engine's complete time-basis record.
+
+The flat `facts` array uses the meaning schema's factor vocabulary. `reference`
+holds the engine's body positions, natal aspects, angles, cusps and sign-dignity
+assessments, so later scoring can explain each factor. Numerical positions,
+cusps and aspect orbs are in degrees, speeds are degrees per day, and Delta T is
+in seconds, following the engine's public types. Facts preserve full returned
+precision. No interpretation text or model call is needed to compute them.
+
+The envelope makes availability and conventions explicit:
+
+- Placements and aspects describe the supplied instant. With `timeKnown: false`,
+  `availability.temporalScope` is `reference-instant`; the adapter makes no
+  whole-day certainty claim and does not move the instant to noon.
+- Houses are unavailable when time or coordinates are missing, with each reason
+  recorded. Available house factors use the actual computed system, while the
+  requested system and polar-fallback flag remain separate. Membership uses
+  `houseOf` on ecliptic longitude and the returned cusps.
+- Aspects are the engine's natal major-aspect results. Their eligible bodies,
+  angles, ordinary and luminary orbs, and motion threshold are recorded alongside
+  the policy id. Nodes are excluded by that policy.
+- Sign dignities use `dignitiesFor`, retaining every applicable label. A classical
+  body's empty label list means none of the supported sign dignities applies;
+  it does not establish peregrine status. Outer planets and nodes are listed as
+  unsupported. Triplicity, term, face and mutual reception are outside this
+  adapter's dignity scope.
+
+`conventions.natal` copies the engine's current public receipt conventions.
+`flags` and `coverage` preserve its reference-span warning; computed facts beyond
+that span are not a claim of verified astronomy. This adapter measures agreement
+with the local engine, including its limitations. It supplies no independent
+accuracy evidence and does not establish symbolic or predictive validity.
+
+The [loader](lib/local-engine.mjs) bundles public source entry points using the
+eval-local esbuild and the exact ephemeris version pinned by the root package.
+It refuses mismatched source, package or dependency version labels. A temporary
+module is written under ignored `.cache/`, loaded and removed; nothing is written
+to `dist/`. Dependencies are resolved locally and computation makes no network
+request. The loaded engine is cached for the process; restart after source edits.
+
+Provenance records the engine and installed ephemeris versions and licenses,
+runtime, bundler version, the digest of the executed computation bundle, and a
+digest of the adapter, loader and input schemas. These identify local bytes;
+they are not a release archive signature or a claim that the checkout matches a
+published package. No wall-clock timestamp or temporary path is included.
+The loader tests check repeatability across fresh processes and working
+directories on the same runtime; they do not promise bitwise agreement across
+runtimes or architectures. The adapter tests check consistency with public
+engine APIs, missing inputs, polar fallback and sign-dignity behavior.
 
 ## Files and licensing
 
@@ -131,7 +216,9 @@ rights; it does not establish authorship or permission to redistribute. No
 external interpretation prose is included. The committed data is the small seed
 set; tests use it and original inline examples. Pipeline output stays ignored.
 
-Ajv and its dependencies retain their own licenses in the local installation.
+Ajv, esbuild, astronomy-engine and their dependencies retain their own licenses
+in the local installation. Bundled engine code and data retain the engine's
+license and attribution requirements, including when used in ignored local files.
 This project's MIT metadata does not change the engine distribution's licensing
 or attribution requirements; see the repository's [licensing record](../LICENSING.md).
 
