@@ -75,6 +75,8 @@ for this port.
 | Placidus, Koch, Regiomontanus, Campanus, Topocentric and Alcabitius cusps on identical geometry and supplied axes | Circular difference at most 1e-8 arcseconds on the ordinary shared-input corpus below; Placidus copies supplied axes bit-for-bit | `tests/quadrant-houses.parity.ts` |
 | Those six cusp systems with independently resolved clocks, tilt and angles | Circular difference at most 1e-6 arcseconds on the monthly/seeded date corpus below, from 1800 through 2200 | `tests/quadrant-houses.parity.ts` |
 | Placidus/Koch cusps immediately below their polar cutoff, including difficult Placidus convergence | Circular difference at most 0.01 arcseconds on the separate adjacent-limit corpus below; exact fallback decisions on identical inputs | `tests/quadrant-houses.parity.ts`, cutoff and bisection cases |
+| Finite near-singular ascendants and derived cusps; Regiomontanus/Topocentric intermediate circles | Circular difference at most 0.01 arcseconds on the separate M12 corpus with projection norms at least 1e-7; MC/IC and Meridian/Morinus keep their ordinary shared-input limits | `tests/house-corpus.parity.ts`, finite geometry probes |
+| Independent position-to-house membership | Exact decisions outside the combined longitude/cusp margin and the whole-sign ascendant boundary; every own-input membership remains exact | `tests/house-corpus.parity.ts`, annual geometry grid and adjacent-cusp probes |
 | Regiomontanus/Topocentric intermediate cusps at their own circle singularities | Each returned cusp's circle-equation residual at most 2e-15, dimensionless; no cross-runtime longitude bound on these singular cusps | `tests/quadrant-houses.parity.ts`, separately constructed singular cases |
 | Near-singular ascendant geometry and geographic poles | Each own-axis unit-vector horizon residual at most 2e-15 and east projection at least -2e-15, dimensionless; no cross-runtime ascendant longitude bound | `tests/houses.parity.ts`, separate degeneracy checks |
 | House membership on identical longitude and cusp inputs | Exact house number or matching error class/message, including missing slots and early returns | `tests/houses.parity.ts`, cusp boundaries and degenerate arrays |
@@ -82,6 +84,8 @@ for this port.
 | Native arithmetic, signs, date validation and calendars | Exact regression expectations and calendar round trips | Unit tests in `crates/core/src/{lib,angles,signs,date_input,calendar}.rs` |
 | Legacy aspect definitions, matching, inter-chart results and motion on identical supplied inputs | Identical binary64 orb and copied longitude bits; tolerance 0 arcseconds; exact matching, flags and stable result order | `tests/aspects.parity.ts` |
 | Configured angles, orbs, allowances and speed thresholds on identical supplied inputs | Identical binary64 bits; tolerance 0 arcseconds and 0 arcseconds/day; exact eligibility, motion, rule selection and result order | `tests/configured-aspects.parity.ts` |
+| Aspect orbs after independent position calculations | Absolute difference at most the sum of both bodies' longitude allowances, in arcseconds; shared-input cross-replays remain bit-exact | `tests/aspect-corpus.parity.ts`, legacy, inter-date and configured pipelines |
+| Aspect eligibility, rule selection, motion and order after independent position calculations | Exact outside the specific upstream uncertainty margins described below; every difference must satisfy its causal boundary check | `tests/aspect-corpus.parity.ts`, annual and deliberately constructed boundary policies |
 | Aspect policy validation, labels, data slots, registry and frozen snapshots | Matching error class/message, values, key order, null prototypes, freeze behavior and policy identity | `tests/configured-aspects.parity.ts` |
 | Native exact expansions and overflow-safe signs | Exact rounding and sign compared with a separate integer-bit oracle, including subnormals and every finite exponent class | Unit tests in `crates/core/src/exact.rs` |
 | Native legacy/configured aspects and policy validation | Boundary inclusion, exact ties, circular-corner motion, extreme speeds, label/range checks and pair ordering | Unit tests in `crates/core/src/aspects.rs` |
@@ -293,6 +297,66 @@ these inputs actually reach bisection; native unit tests also exercise that
 branch directly. These are synthetic geometry inputs, not an extended date
 accuracy claim.
 
+### Complete pipeline corpus
+
+`tests/house-corpus.parity.ts` crosses an invented instant in every year from
+1800 through 2200, plus the calendar-span endpoints, with every supported
+house system and a latitude ladder in both hemispheres. The ladder includes
+the equator, polar regions, plus/minus 89.999999 degrees and the exact poles.
+Its longitude ladder covers both signs and the date line. UTC, UT1 and TT
+rotate through the geometry inputs with signed and nonzero pins. Time bases,
+tilt, sidereal time, angles and cusps are independently computed in Rust and
+TypeScript. Every angle and cusp on this date grid keeps the ordinary
+1e-6-arcsecond limit, including the grid's cases below the earlier ascendant
+conditioning threshold. Exact geographic-pole comparisons test the retained
+formula only; they do not establish a physically unique rising direction.
+
+Every decade and both endpoints additionally compute each runtime's own
+planetary positions, then compare membership using its own cusps. Shared
+fixed longitudes and adjacent-cusp values exercise boundary arithmetic.
+All membership comparisons replay the actual inputs through the reference's
+`houseOf` exactly. Independent membership decisions must match whenever the
+reference longitude is farther from every cusp than the sum of its body
+and cusp allowances; closer comparisons record any different decision.
+A whole-sign cusp shift is permitted only when the ascendant lies within
+its allowance of a sign boundary. The test enforces its date, system and
+membership coverage totals.
+
+Separate dated cutoff probes use the reference tilt at fifty-year steps
+and identical geometry/axes in both runtimes. They compare all systems on
+adjacent representable latitudes around each polar cutoff and nearby offsets;
+fallback decisions and error outcomes remain exact. Placidus and Koch keep
+the existing 0.01-arcsecond edge allowance. Other systems keep their ordinary
+shared-input bounds, with bit equality for arithmetic-only cusps.
+
+The new finite near-singular corpus uses obliquities 23.4, 23.43929111111111
+and 23.4271 degrees, both hemispheres, and latitude/RAMC offsets of 0.01,
+0.001, 0.0001 and 0.00001 degrees on both sides of the constructed tangency.
+Ascendant probes compute their own axes and every system's cusps. Separate
+Regiomontanus and Topocentric probes approach each system's near/far circle
+singularity with identical supplied axes. Before output comparison the test
+asserts projection norms at least 1e-7 and below 0.01, and confirms that some
+circle probes lie below the former 1e-6 conditioning threshold. These cases
+have an explicit 0.01-arcsecond limit, selected before their comparisons:
+inverse projection near a small norm amplifies the runtimes' trigonometric
+roundoff. MC/IC and Meridian/Morinus cusps retain their ordinary shared-input
+bounds. This does not relax the ordinary limits, nor cover every finite
+input near a singularity. Exact and adjacent singularities keep their earlier
+residual-only checks and have no asserted cross-runtime longitude bound.
+
+`tests/aspect-corpus.parity.ts` computes independent position rows on an
+invented instant in every year from 1800 through 2200 and both calendar-span
+endpoints. It tests the legacy matcher, legacy inter-date pairs, the configured
+default, major rules with motion-dependent and body-capped orbs, minor-only,
+all named angles together, and custom/aliased rules with caps. Input order
+alternates; the test requires matches under every policy and every named or
+custom angle. Adjacent-double probes separately exercise zero-orb decisions
+for each named angle and custom fractional angles, on shared rows from both
+ephemerides. Further policies place orb eligibility, relative-speed thresholds
+and competing-rule ties at boundaries derived from reference positions at
+century steps. These are synthetic policy inputs, not independently established
+astronomical event times.
+
 ## Rounding and deviations
 
 No finite numeric deviation is permitted for the basic angular arithmetic and
@@ -380,7 +444,8 @@ and pins are compared by outcome and numeric classification, with the existing
 NaN-payload exception. Time-scale names must be members of the declared union,
 and elapsed-day inputs must be ordinary TimeBasis records. Getter/proxy access
 order, invalid scale strings and malformed records are outside this low-level
-compatibility scope. The public chart validation boundary remains future work.
+compatibility scope. Full public chart validation is outside this numeric-core
+wrapper's scope.
 
 The frame port retains the reference's scalar multiplication and addition
 order, its full nutation series summed from smallest to largest term, and its
@@ -581,8 +646,9 @@ their Date-only internal signatures. Unknown body values are checked before
 WASM string conversion, after the reference's date/sample check, with error
 text formatted in JavaScript to preserve UTF-16 labels. `positionsOn` is an
 additional explicit-clock helper, compared with the bodies of `computeChart`;
-it validates its scale and pin at the wrapper boundary. Full natal charts
-and aspect flags remain later milestones.
+it validates its scale and pin at the wrapper boundary. The complete pipeline
+tests below compose these numeric functions; the wrapper does not expose a
+full natal-chart API.
 
 Run `RUSTCORE_PARITY_REPORT=1 npm run test:parity -- tests/pluto.parity.ts tests/positions.parity.ts`
 to report current-run maxima and recorded near-boundary metadata differences.
@@ -602,11 +668,12 @@ allowance on ordinary geometry does not extend to this singularity. At a
 geographic pole there is no physical rising direction, even when the formula
 returns a finite number. The separate degeneracy tests exercise retained
 formula behavior without claiming a physically unique ascendant at an exact
-singularity or geographic pole. Finite inputs below the conditioning threshold
-still compute, but currently have no cross-runtime ascendant or derived-cusp
-longitude bound; the horizon/east checks do not establish numeric agreement.
-Establishing explicit numeric acceptance for a broader near-singular corpus
-remains work for M12. Small angle differences can also move the
+singularity or geographic pole. The M12 finite near-singular corpus adds
+explicit longitude bounds for the listed offsets below the former conditioning
+threshold. Other untested finite inputs, including projection norms below
+1e-7, have no asserted cross-runtime ascendant or derived-cusp longitude bound;
+the horizon/east checks alone do not establish numeric agreement.
+Small angle differences can also move the
 ascendant across a sign boundary and change whole-sign cusps, or move a
 longitude across a cusp and change its house. Exact house-membership parity
 applies to identical supplied cusps and longitude; it does not establish
@@ -727,17 +794,61 @@ compatibility scope. Configured validation rejects ordinary accessor slots
 without invoking them, but is not a proxy sandbox. Independent Rust/TypeScript
 planetary evaluation can still place a longitude or speed on opposite sides of
 an aspect boundary under the previously documented upstream allowances.
-The complete pipeline corpus and treatment of those boundary cases belong to
-M12; shared-input exact parity does not establish identical event times.
+
+The M12 independent pipeline first enforces those longitude/speed allowances.
+It then cross-replays both independently computed row arrays through the
+configured matchers with exact fields, bits and ordering. The legacy pipeline
+also exactly replays the Rust rows through its reference matcher. Matching
+identical inputs always has zero tolerance. Only comparisons between separately
+computed inputs admit propagated uncertainty: a pair's distance/orb allowance
+is the sum of its two longitude allowances, in arcseconds; its relative-speed
+margin is the sum of its two speed allowances, in arcseconds/day.
+
+An eligibility or rule-choice difference must lie near the relevant effective
+orb limit, a motion-dependent limit that can straddle the orb, or a tie between
+the relevant rules. A motion difference requires proximity to the relative-speed
+threshold, an exact aspect angle or a circular corner. These margins use the
+reference's exact binary64 arithmetic. An ordering inversion between otherwise
+matching results requires a reported-orb gap within the sum of the two pairs'
+longitude allowances. Orb bounds apply throughout; there is no blanket exception
+for nodes. Negative controls reject missing interior matches, distant rule changes,
+motion flips away from their decision surfaces and distant order inversions.
+
+The optional report records all discrepancy counts and example input contexts
+by category. Deliberately boundary-selected policies can yield different matches
+or motion flags; nearly equal orbs can swap result order after independent
+ephemeris calculations. Those are upstream roundoff effects, demonstrated by
+the exact cross-replays. The pipeline does not claim identical aspect event
+milliseconds or discrete results throughout those uncertainty neighborhoods.
 
 ## Remaining coverage
 
-Remaining integration work includes complete chart assembly. M12 also needs
-numeric parity limits for finite near-singular inputs beyond the currently
-conditioned angle and cusp corpus and the explicitly bounded edge probes.
-The aspect numeric paths are implemented; chart-level integration remains.
-The civil Julian Day Number helpers do not apply
+The numeric-core parity corpus is complete for the stated samples and
+acceptance rules. It is not exhaustive over all dates, coordinates, arbitrary
+custom policies or near-singular geometries. Full natal-chart assembly,
+receipts, local timezone resolution and the engine's other opt-in APIs are
+outside this wrapper's scope. The civil Julian Day Number helpers do not apply
 astronomical time scales. No performance baseline is claimed at this milestone.
+
+## Reproducing the parity report
+
+Run `npm run test:parity:report` from `rustcore/` on Node 22. The script rebuilds
+the release WASM with the pinned Rust toolchain, checks TypeScript, and runs
+every discovered parity file. It writes the Vitest result and a combined
+`generated/parity-report.json`, both ignored. The summary includes the Node/V8
+runtime and machine description, toolchain manifest, file-level SHA-256 digests
+for the reference sources, port, tests, acceptance document, generated metadata,
+glue and WASM, and each emitting suite's maxima and boundary diagnostics.
+Digest snapshots before and after the test run must match.
+
+The report does not change acceptance or turn sample maxima into universal
+bounds. Every suite is represented by its passing test cases; suites with
+measurement hooks also emit numerical diagnostics. Missing or duplicate
+measurement records,
+missing test files, skipped/todo tests, failed or empty runs and inconsistent
+test totals refuse a passing summary. A new run removes any previous report
+before building so a failure cannot leave stale passing evidence at that path.
+`scripts/parity-report.check.mjs` enforces the report's rejection rules.
 
 ## Wrapper signatures and initialization
 
