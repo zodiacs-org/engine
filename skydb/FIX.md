@@ -1,0 +1,3 @@
+- [x] F1 Rename the Node test-runner suites so root Vitest ignores them, update SkyDB's test command and references, and verify root `npx vitest run --reporter=dot` discovers no SkyDB suites.
+- [ ] F2 Add `.github/workflows/skydb.yml` with a dedicated Node 22 job that installs SkyDB's own dependencies from its lockfile, without secrets, deployment or publishing.
+- [ ] F3 Configure the SkyDB job to run the project's applicable typecheck/build checks and all Node test-runner suites.

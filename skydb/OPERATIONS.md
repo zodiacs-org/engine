@@ -3,7 +3,7 @@
 Run setup and tests with the Node series required by package.json. Use the
 commands in README.md for a small trial before requesting full coverage.
 The CLI requires a configuration file: a file containing `{}` selects the
-coverage and cadence defaults enforced by test/bootstrap.test.mjs. Place it
+coverage and cadence defaults enforced by test/bootstrap.node-test.mjs. Place it
 inside generated/, then choose another child of generated/ as the output.
 The project supplies tools for full coverage; no full dataset has been generated
 or committed, and the scoped benchmarks do not predict its cost.

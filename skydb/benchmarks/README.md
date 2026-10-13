@@ -36,7 +36,7 @@ and checkpoint as well as compressed data. Timing varies with machine load.
 Read [performance-output.json](performance-output.json) for the workload and
 actual measurements; comparisons apply only to that run.
 
-[test/benchmarks.test.mjs](../test/benchmarks.test.mjs) checks report scope,
+[test/benchmarks.node-test.mjs](../test/benchmarks.node-test.mjs) checks report scope,
 identity and finite values, plus maximum selection. The agreement script itself
 enforces decoded sample equality when measurements are regenerated. Report tests
 do not assert stable timings or turn sampled errors into accuracy guarantees.

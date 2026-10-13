@@ -48,7 +48,7 @@ The position codec tests and the bootstrap suite pass on Node 22.23.3.
 The codec rejects malformed envelopes, corrupt payloads, unsupported versions,
 truncation, trailing compressed input and output exceeding the decoding bound.
 The wire layout and lossless synthetic-record agreement are enforced by
-[test/tile.test.mjs](test/tile.test.mjs). This session completes M3 only.
+[test/tile.node-test.mjs](test/tile.node-test.mjs). This session completes M3 only.
 The npm dry-run file list excludes skydb/. The repository package contents
 check still cannot pass because dist/calc.d.ts is absent; rebuilding dist/
 is outside the authorized scope. File-size, documentation-character and
@@ -59,7 +59,7 @@ whitespace checks pass. No archive or packed source was changed.
 M4 completes lazy in-memory position generation with clipped tiles, shared
 smooth endpoints and separate support samples on each side of time-basis jumps.
 The project suite passes on Node 22.23.3, including direct-call agreement in
-[test/generate.test.mjs](test/generate.test.mjs). The npm dry-run file list
+[test/generate.node-test.mjs](test/generate.node-test.mjs). The npm dry-run file list
 excludes skydb/. The repository package contents check remains blocked by
 missing dist/calc.d.ts; the task prohibits rebuilding dist/. Folder isolation,
 file-size, documentation-character and whitespace checks pass. Persistence,
@@ -71,7 +71,7 @@ M5 adds lazy event scans for major aspects, sign ingresses, longitude-speed
 stations and new/full longitude lunations, refined by direct engine calls.
 The project suite passes on Node 22.23.3, including synthetic roots, retrograde
 repeats, wraparound, sampled touches, ownership and time-basis splits in
-[test/events.test.mjs](test/events.test.mjs). That test also checks direct
+[test/events.node-test.mjs](test/events.node-test.mjs). That test also checks direct
 residuals over its synthetic calendar window. Sampling limitations are documented;
 this is not a full-coverage completeness or astronomical accuracy claim.
 The npm dry-run file list excludes skydb/. The repository package contents
@@ -85,7 +85,7 @@ M6 adds atomic position/event directory publication, exclusive writer locking,
 configuration-bound checkpoints and distributed SHA-256 tile receipts.
 The project suite passes on Node 22.23.3, including interruption recovery,
 unchanged completed resume, stale staging cleanup, checksum rejection and
-concurrent-writer rejection in [test/store.test.mjs](test/store.test.mjs).
+concurrent-writer rejection in [test/store.node-test.mjs](test/store.node-test.mjs).
 Resume verifies completed tiles before skipping computation. Process interruption
 recovery is supported; power-loss durability and hostile filesystem mutation
 are outside the documented contract. This session completes M6 only.
@@ -101,7 +101,7 @@ The full project suite passes on Node 22.23.3, including planner agreement over
 the target coverage, direct sample agreement at clock seams and coverage edges,
 synthetic wraparound and retrograde interpolation, concurrent cache bounds,
 consumer agreement at a synthetic midpoint, and incomplete/corrupt data rejection
-in [test/query.test.mjs](test/query.test.mjs). No full-span interpolation error
+in [test/query.node-test.mjs](test/query.node-test.mjs). No full-span interpolation error
 bound is claimed. This session completes M7 only.
 The npm dry-run file list excludes skydb/. The repository package contents
 check fails on missing dist/calc.d.ts; rebuilding dist/ is forbidden by the task.
@@ -114,7 +114,7 @@ M8 adds strict generation, verification, position and streaming event commands,
 plus whole-database verification and a reproducible attributed sample.
 The full project suite passes on Node 22.23.3, including strict argument errors,
 executable exit behavior, generation/resume, event queries and corruption failure
-in [test/cli.test.mjs](test/cli.test.mjs). That test regenerates the committed
+in [test/cli.node-test.mjs](test/cli.node-test.mjs). That test regenerates the committed
 sample byte for byte and compares every stored position sample to a direct
 engine call over the synthetic range in [samples/config.json](samples/config.json).
 This measures consumer agreement, not independent astronomical accuracy.
@@ -138,7 +138,7 @@ Performance records fresh generation, verified resume, verification, opening,
 queries and storage on its explicit small workload. Neither report supplies
 independent astronomical accuracy, event completeness or full-dataset estimates.
 The full project suite passes, including evidence shape and maximum selection
-checks in [test/benchmarks.test.mjs](test/benchmarks.test.mjs).
+checks in [test/benchmarks.node-test.mjs](test/benchmarks.node-test.mjs).
 The npm dry-run file list excludes skydb/. The repository package contents
 check fails on missing dist/calc.d.ts; the task prohibits rebuilding dist/.
 Folder isolation, file-size, documentation-character and whitespace checks pass.
@@ -149,7 +149,7 @@ This session completes M9 only; operations and final hardening remain M10.
 
 M10 makes resume, query loads and whole-database verification share event schema,
 root-bracket, selected-body and sample-cadence checks. Store reads are bounded
-before parsing. [test/hardening.test.mjs](test/hardening.test.mjs) rejects invalid
+before parsing. [test/hardening.node-test.mjs](test/hardening.node-test.mjs) rejects invalid
 root definitions, duplicates, altered format versions, missing cadence samples,
 reordered bodies and oversized files, including content with matching receipts.
 The full project suite passes on Node 22.23.3; its output is committed in

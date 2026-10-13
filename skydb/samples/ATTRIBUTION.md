@@ -25,7 +25,7 @@ These files describe upstream inputs and do not assert new permissions for them.
 Run `node skydb/scripts/sample.mjs` from the repository root to generate or
 verify/resume the fixed sample. Existing corrupt samples fail verification;
 regenerate in a clean directory rather than overwriting published tiles.
-[test/cli.test.mjs](../test/cli.test.mjs) regenerates in a temporary directory,
+[test/cli.node-test.mjs](../test/cli.node-test.mjs) regenerates in a temporary directory,
 checks every persisted byte and compares each decoded sample to direct engine
 calls. Reproduction is checked on the test runtime, not promised across all
 platforms or compression library versions. These are agreement checks, not

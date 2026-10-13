@@ -2,7 +2,7 @@
 
 The position tile codec is implemented in [src/tile.mjs](src/tile.mjs).
 Its layout, limits and round-trip behavior are enforced by
-[test/tile.test.mjs](test/tile.test.mjs) on synthetic records. This is a storage
+[test/tile.node-test.mjs](test/tile.node-test.mjs) on synthetic records. This is a storage
 format, with no astronomical accuracy claim. Events will use a separate format.
 
 ## Envelope
@@ -103,7 +103,7 @@ The event file is gzip-compressed UTF-8 JSON with `version: 1`, `descriptor` and
 not preserve signed zero; positions retain their binary representation. Stored
 and decoded event JSON and each store file are bounded by `STORE_LIMIT` in
 [src/store.mjs](src/store.mjs); shorten tile duration if events exceed it.
-[test/store.test.mjs](test/store.test.mjs) enforces persistence agreement,
+[test/store.node-test.mjs](test/store.node-test.mjs) enforces persistence agreement,
 interruption recovery, exclusive locking and rejection of corrupt stored bytes.
 
 `checkpoint.json` contains its version, root manifest SHA-256, next tile index

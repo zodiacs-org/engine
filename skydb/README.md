@@ -16,6 +16,9 @@ node skydb/scripts/setup.mjs
 npm --prefix skydb test
 ```
 
+The Node test-runner suites use `test/*.node-test.mjs`, which root Vitest
+discovery ignores. Run them with the project's own test command above.
+
 Setup verifies the archive against the fixed identity in
 [src/identity.mjs](src/identity.mjs) and the carried archive manifest before
 installing. Subsequent setup uses the committed lockfile with npm ci. Install
@@ -40,7 +43,7 @@ includes the luminaries and planets; true lunar nodes are excluded because
 their jitter requires a separate event and interpolation policy. Only UTC
 input is currently supported. Returned configuration and body lists are frozen.
 
-[test/bootstrap.test.mjs](test/bootstrap.test.mjs) enforces the defaults,
+[test/bootstrap.node-test.mjs](test/bootstrap.node-test.mjs) enforces the defaults,
 coverage endpoints, archive pin, invalid-input rejection and exact agreement
 with direct calls at its synthetic instants. This is consumer agreement,
 not independent evidence of astronomical accuracy or interpolation error.
@@ -53,7 +56,7 @@ ignored `generated/` folder and must not be committed.
 
 The lossless position codec is [src/tile.mjs](src/tile.mjs).
 [FORMAT.md](FORMAT.md) defines the envelope, records and validation rules.
-[test/tile.test.mjs](test/tile.test.mjs) checks serialization agreement on
+[test/tile.node-test.mjs](test/tile.node-test.mjs) checks serialization agreement on
 synthetic records and rejects corrupt or malformed tiles. These checks do not
 measure interpolation error or astronomical accuracy.
 
@@ -79,7 +82,7 @@ The boundary list is pinned to the carried engine's model handover, the
 public-domain IERS leap-second list carried by that engine, and its UT1 table
 end. The table's final timestamp is included by the engine, so the fallback
 starts at the following millisecond. Future leap seconds are not forecast.
-[test/generate.test.mjs](test/generate.test.mjs) checks the clock changes on both
+[test/generate.node-test.mjs](test/generate.node-test.mjs) checks the clock changes on both
 sides, tile edges, partial tiles, coverage endpoints and decoded positions
 against direct calls over its synthetic short windows and cadence example.
 This establishes serialization and sampling agreement only.
@@ -123,7 +126,7 @@ reported as smooth roots.
 This is a sampled search, with no completeness proof over the full coverage.
 Multiple roots within a scan interval and tangencies between samples can be
 missed. Reduce cadence for finer searches; refinement precision does not remove
-sampling limitations. Tests in [test/events.test.mjs](test/events.test.mjs)
+sampling limitations. Tests in [test/events.node-test.mjs](test/events.node-test.mjs)
 check synthetic roots, aspect branches, wraparound, retrograde repeats, touches,
 plateaus, ownership and clock splits. Its direct comparison covers the synthetic
 window beginning 2001-01-01 for forty days, checking residual agreement and
@@ -186,7 +189,7 @@ Use a completed immutable database in a trusted local directory. Checksums
 establish agreement with local receipts, not authenticity if receipts and tiles
 are replaced together. Cached tiles do not detect subsequent disk mutation;
 reopen the database to recheck files. Missing, corrupt and incomplete data fail
-explicitly. [test/query.test.mjs](test/query.test.mjs) checks descriptor lookup
+explicitly. [test/query.node-test.mjs](test/query.node-test.mjs) checks descriptor lookup
 against the planner over target coverage, synthetic circular arithmetic, direct
 sample agreement at seams and boundaries, and interpolation agreement at the
 midpoint of its synthetic window beginning 2001-01-01. Its test thresholds apply
@@ -217,7 +220,7 @@ It requires a completed checkpoint and does not compare to an independent arbite
 
 The committed [sample](samples/ATTRIBUTION.md) is reproduced by
 `node skydb/scripts/sample.mjs`. Its configuration is separate from the full
-coverage defaults. [test/cli.test.mjs](test/cli.test.mjs) verifies deterministic
+coverage defaults. [test/cli.node-test.mjs](test/cli.node-test.mjs) verifies deterministic
 regeneration, direct sample agreement and end-to-end command use, including
 checksum rejection. Retain the sample attribution and upstream licensing notices
 when copying these tiles. Full generation output remains ignored.
