@@ -82,3 +82,17 @@ clock injection, strict inputs and refinements, calculation errors, unknown
 tools, structured budget refusals and recovery after errors. The parent pack
 isolation test passed. Checks establish protocol integration, not independent
 accuracy. Parent build-dependent gates retain the scaffold limitation above.
+
+
+M11 session: `npm run check` passed on Node 22.23.3, including typecheck,
+Vitest and the isolated build. Existing tool, server, transport and parent pack
+isolation checks passed. README JSON snippets were parsed locally; whitespace,
+em-dash exclusion and document size checks passed. Client configuration was
+checked against the linked official Claude Desktop, Claude Code, Cursor and
+OpenAI documentation. The guide covers absolute executable paths, local HTTP,
+ChatGPT custom connection form values, gateway authentication and Host/Origin
+handling, privacy, receipt roles and citation limits. These checks establish
+local SDK protocol integration, not live GUI compatibility, hosted gateway
+operation, independent accuracy or predictive validity. Parent build-dependent
+gates retain the scaffold limitation above; no parent build was run. Session
+changes are confined to mcp/.

@@ -1,9 +1,9 @@
 # zodiacs-astro
 
-An MCP server under construction for the Zodiacs astrology engine.
+An MCP server for the Zodiacs astrology engine.
 `createServer()` creates an unconnected server with the implemented tools
 registered. The executable entry point supports stdio and local Streamable HTTP.
-Client configuration documentation follows in [PLAN.md](PLAN.md).
+Client configuration and receipt citation are documented below.
 
 ## Development
 
@@ -237,7 +237,7 @@ localhost guards validate Host and any supplied Origin before routing. There
 is no CORS support or built-in authentication. Remote access requires an
 authenticated HTTPS gateway that checks the public Host and Origin before
 forwarding with a permitted local host. Gateway configuration and client
-setup remain M11 work.
+setup are described below.
 
 The entry points follow the SDK's [Node adapter API](https://ts.sdk.modelcontextprotocol.io/v2/api/%40modelcontextprotocol/node/).
 `test/transports.test.ts` uses real child processes and loopback HTTP with
@@ -246,3 +246,214 @@ stdio, current HTTP and older stateless HTTP, validates returned receipt
 envelopes, and checks errors, recovery, body limits, independent clients,
 listener failures, EOF and signal shutdown. These tests establish transport
 integration, not independent astronomical accuracy.
+
+## Client configuration
+
+Install and build from `mcp/` before configuring a client:
+
+```sh
+npm ci
+npm run build
+```
+
+Use a Node runtime allowed by this project's `package.json`, rather than the
+parent engine's broader range. Replace `/absolute/path/to/node` with that
+executable and `/absolute/path/to/engine` with your checkout. Absolute paths
+avoid dependence on a GUI application's PATH or working directory. Windows
+paths need escaped backslashes in JSON. There is no published MCP package or
+required API key. The client launches the stdio process itself.
+
+### Claude Desktop
+
+Open Settings, Developer, Edit Config and merge this entry into the existing
+`mcpServers` object in `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "zodiacs-astro": {
+      "command": "/absolute/path/to/node",
+      "args": ["/absolute/path/to/engine/mcp/build/cli.js", "stdio"]
+    }
+  }
+}
+```
+
+Restart Claude Desktop and check discovery. The config lives under
+`~/Library/Application Support/Claude/` on macOS or `%APPDATA%\Claude\` on
+Windows. See the official [local-server guide](https://modelcontextprotocol.io/docs/develop/connect-local-servers)
+for config locations and stderr logs. Preserve other server entries.
+
+### Claude Code
+
+Register stdio, then inspect it in `/mcp` inside Claude Code:
+
+```sh
+claude mcp add --transport stdio --scope local zodiacs-astro -- /absolute/path/to/node /absolute/path/to/engine/mcp/build/cli.js stdio
+```
+
+Alternatively, start the HTTP executable separately and register its URL:
+
+```sh
+claude mcp add --transport http --scope local zodiacs-astro http://127.0.0.1:3000/mcp
+```
+
+Choose one registration for this name. The HTTP entry connects to an existing
+listener; it does not launch this server. The official
+[Claude Code MCP guide](https://code.claude.com/docs/en/mcp) explains scopes,
+registration and removal.
+
+### Cursor
+
+Merge this into `.cursor/mcp.json` in the engine checkout, or into
+`~/.cursor/mcp.json` for personal global use:
+
+```json
+{
+  "mcpServers": {
+    "zodiacs-astro": {
+      "type": "stdio",
+      "command": "/absolute/path/to/node",
+      "args": ["/absolute/path/to/engine/mcp/build/cli.js", "stdio"]
+    }
+  }
+}
+```
+
+For an already running local HTTP listener, use this instead:
+
+```json
+{
+  "mcpServers": {
+    "zodiacs-astro": {
+      "url": "http://127.0.0.1:3000/mcp"
+    }
+  }
+}
+```
+
+Check discovery in Cursor's MCP settings. See the official
+[Cursor MCP documentation](https://prod.cursor.com/docs/mcp) for configuration
+locations and tool controls. These are templates for your client; this project
+does not write configuration outside `mcp/`.
+
+### ChatGPT connectors and custom MCP servers
+
+For the public URL route, enter these values in the custom MCP connection form:
+
+```json
+{
+  "name": "zodiacs-astro",
+  "description": "Astrology calculations with native engine receipts",
+  "url": "https://astro.example.com/mcp"
+}
+```
+
+This is a form-value template, not a ChatGPT config file or live endpoint.
+Supply your own authenticated HTTPS gateway as described below. The current
+[official OpenAI connection guide](https://developers.openai.com/plugins/deploy/connect-chatgpt)
+directs users to ChatGPT Plugins, Add custom MCP server, then name, URL and
+authentication settings. Review discovery and install the resulting plugin.
+Account and workspace policies govern access; connector and app labels can
+vary with client version. Follow the linked guide for your account's UI.
+It also documents Secure MCP Tunnel for private connections; this project
+does not configure or test that service.
+
+The loopback URL cannot serve as a public ChatGPT endpoint. This server supplies
+no OAuth discovery, token validation or account integration. The gateway must
+implement the authentication flow supported by the chosen connection, including
+discovery when required. Choosing authentication in the form does not add it to
+the backend. Vitest exercises official SDK clients, not live client GUIs,
+ChatGPT connections or gateways.
+
+## Deployment boundary
+
+Keep the calculation listener on loopback. Place the HTTPS gateway on the same
+host or provide a private route to the listener. Route public `/mcp` to
+`http://127.0.0.1:3000/mcp`; the port example is checked by
+`test/transports.test.ts`.
+
+Authenticate and authorize requests before forwarding. Validate the public Host
+and any supplied Origin against a gateway allowlist, then set upstream Host to
+the permitted loopback authority. Backend localhost guards reject public Origin
+values too. If the gateway removes or maps Origin upstream, do so only after
+validating the original value. Forward MCP protocol and content negotiation
+headers and allow JSON or SSE responses without buffering away the stream.
+The stateless backend does not require sticky sessions.
+
+Apply gateway request limits, rate limits and bounded concurrency. Calculations
+are synchronous; the search sample budget is not a wall-clock timeout. A gateway
+timeout does not cancel a running calculation. Hard deadlines require external
+process supervision. Disable caching and avoid logging request bodies, result
+bodies or authorization headers: natal inputs and receipts contain birth details.
+TLS, authentication, OAuth, CORS, quotas, persistence and public routing belong
+to the deployment. An authorization header forwarded to the backend is not
+checked there.
+
+Tools calculate locally without fetching places or resolving civil wall times.
+Resolve local-time gaps, folds and historical rules before sending a birth
+instant. The server adds no database or profile store. Clients and gateways may
+retain messages independently. Review their settings before using private
+inputs. Repository examples and tests use synthetic data only.
+
+## Receipt citation for agents
+
+Read `structuredContent` with `schemaVersion: "zodiacs-astro/1"`. Text content
+contains the same JSON. Inspect errors and search status first: `isError: true`
+has no successful structured result or receipt. Search `status: "refused"`
+is a resource refusal, not evidence that no event exists.
+
+Select `receipts` entries by `role`, rather than array order. Each entry contains
+`{ role, envelope }`. The envelope separates `receipt` (request and conventions)
+from `result` (recorded chart values).
+
+| Tool | Receipt roles | Recorded calculations |
+| --- | --- | --- |
+| `natal_chart` | `natal` | Natal chart |
+| `transits_at`, `transits_now` | `natal`, `transit-sky` | Natal chart and sky at the transit instant |
+| `synastry` | `first-natal`, `second-natal` | Each natal chart independently |
+| `solar_return` | `natal`, `solar-return` | Natal and selected return charts |
+| `lunar_return` | `natal`, `lunar-return` | Natal and selected return charts |
+| `moon_phase` | `phase-sky` | Sky positions used for the phase |
+| `event_search` | `search-start`, `search-end`, `event-N` | Endpoint and found event charts |
+
+Identify the tool call in the conversation and receipt role, then cite the
+returned `envelope.receipt.engine.name`, `.engine.version`, `.engine.ephemeris`,
+`.instant`, `.timeScale`, `.conventions`, `.coverage` and `.resultFlags`.
+Inspect `.houses.requested` and `.houses.actual` when discussing houses.
+`envelope.result.deltaT` and `.timeScale` record the calculation time basis.
+Use actual returned fields, not inferred defaults or hardcoded engine versions.
+Retain complete JSON when a calculation record is needed, subject to privacy
+choices. Do not invent a public receipt URL or signature.
+
+For practice, send `natal_chart` these synthetic arguments, exercised by
+`test/natal.test.ts`:
+
+```json
+{
+  "birth": {
+    "utc": "2000-02-03T04:05:06.123+05:30",
+    "latitude": 12,
+    "longitude": 34
+  }
+}
+```
+
+Fill this citation pattern from the actual response:
+
+> Calculated with zodiacs-astro, tool natal_chart, receipt role natal,
+> [engine name and version], [ephemeris name and version], instant [instant]
+> on [timeScale], using [conventions], with coverage [coverage and resultFlags].
+
+A receipt preserves a structurally validated calculation claim. It does not
+prove authenticity, independent accuracy or predictive validity. Chart receipts
+do not attest inter-chart aspects, compatibility summaries, return selection,
+phase classification or search completeness. Cite those as tool results with
+their stated limitations. Do not turn aspect counts into a compatibility
+percentage or call a completed sampled scan exhaustive. Unknown birth time
+retains the supplied reference instant; do not infer noon or describe it as
+verified birth time. Avoid reproducing private birth details publicly.
+
+Client guidance was checked against the linked official pages during M11.
+[VALIDATION.md](VALIDATION.md) records local protocol evidence; live client
+setup and gateway verification remain deployment checks for the operator.
