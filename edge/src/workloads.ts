@@ -8,6 +8,7 @@ import {
   searchLongitudeCrossings
 } from "../../src/index.js";
 import type { AngleInput, BirthInput } from "../../src/index.js";
+import { serializeExact } from "./exact.js";
 
 export { HOUSE_SYSTEMS };
 
@@ -66,4 +67,9 @@ export function runSmokeCases() {
     houses: housesWorkload(),
     transitScan: transitScanWorkload()
   };
+}
+
+// Runtime runners must use this before any ordinary JSON serialization.
+export function runExactSmokeCases(): string {
+  return serializeExact(runSmokeCases());
 }

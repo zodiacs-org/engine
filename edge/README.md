@@ -12,8 +12,9 @@ library builds configured for Cloudflare Workers, Deno, Bun and browsers. The
 bundles expose the engine's public root API. Optional engine entry points are
 not included. [Workers, Deno and Bun HTTP examples](docs/http.md) provide a
 bounded chart endpoint with shared Fetch request/response tests and a native
-Deno/Bun server check. Cross-runtime exact parity checks, Workers and browser
-execution, benchmarks and a measured WASM experiment remain in
+Deno/Bun server check. The [exact comparison protocol](docs/exact.md) preserves
+full result types and number bits. Native cross-runtime parity checks, Workers
+and browser execution, benchmarks and a measured WASM experiment remain in
 [PLAN.md](PLAN.md).
 
 The foundation's commands, observed results and the missing-root-build
@@ -23,8 +24,10 @@ Bundle checks and their scope are recorded in
 [build measurements](docs/evidence/m2-build.json) from that milestone.
 Worker validation is recorded in
 [M3 validation](docs/evidence/m3-validation.md).
-Deno/Bun validation and the current build measurements are recorded in
+Deno/Bun validation and that milestone's build measurements are recorded in
 [M4 validation](docs/evidence/m4-validation.md).
+Exact protocol validation and the current build measurements are recorded in
+[M5 validation](docs/evidence/m5-validation.md).
 
 ## Run the foundation
 
@@ -65,8 +68,9 @@ would discover those and run this separate project in the engine's jobs.
 `smoke:node` checks repeatability within Node and prints a summary. The tests
 also repeat calculations after the other workloads to exercise shared
 ephemeris state. These are compatibility checks, not evidence of astronomical
-accuracy. Cross-runtime exact comparison, including a representation that
-preserves signed zero, belongs to the later parity milestones.
+accuracy. It also checks repeatability of the exact encoded reports.
+`runExactSmokeCases()` preserves signed zero, Dates and all result fields for
+the later native runtime runners. See the [protocol](docs/exact.md).
 
 `check:isolation` checks project file limits and documentation, then inspects
 the root package's dry-run file list with scripts disabled. It checks that
@@ -165,7 +169,7 @@ Transcendental arithmetic can differ between runtimes.
 To regenerate the compact build evidence after reviewing a build change:
 
 ```sh
-node edge/scripts/build-report.mjs > edge/docs/evidence/m4-build.json
+node edge/scripts/build-report.mjs > edge/docs/evidence/m5-build.json
 ```
 
 The report builds in memory, records exact bytes and digests, and does not
@@ -190,7 +194,7 @@ inputs, limits, status codes and a local invocation.
 
 These tests run Fetch requests in Node. Execution in a Workers runtime and
 its launch tooling remain in M7 of the plan. HTTP JSON serialization is not
-the future exact comparison protocol: dates become strings and signed zero
+the exact comparison protocol: dates become strings and signed zero
 is lost. The handler has no storage or request logging, and every response
 asks caches not to store it.
 

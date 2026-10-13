@@ -41,6 +41,7 @@ const reference = Object.fromEntries(await Promise.all(referenceBuild.outputFile
   await importBytes(file.contents)
 ])));
 const expectedWorkloads = reference.workloads.runSmokeCases();
+const expectedExactWorkloads = reference.workloads.runExactSmokeCases();
 const bundles = new Map();
 const bundleFor = (target) => {
   if (!bundles.has(target)) bundles.set(target, buildTarget(target, { write: false }));
@@ -101,7 +102,7 @@ for (const target of Object.keys(TARGETS)) {
     }
     const sourcePaths = new Set(manifest.sources.map(({ path }) => path));
     for (const path of [
-      "../src/index.ts", "src/workloads.ts", "src/engine.ts",
+      "../src/index.ts", "src/workloads.ts", "src/engine.ts", "src/exact.ts",
       "package-lock.json", "build.config.mjs", "tsconfig.json",
       "scripts/build-bundles.mjs", "scripts/build-support.mjs",
       "node_modules/astronomy-engine/esm/astronomy.js"
@@ -125,6 +126,7 @@ for (const target of Object.keys(TARGETS)) {
     assert.deepEqual(Object.keys(engine).sort(), Object.keys(reference.engine).sort(), "Root API exports were omitted or added");
     assert.deepEqual(Object.keys(workloads).sort(), Object.keys(reference.workloads).sort());
     assert.deepStrictEqual(workloads.runSmokeCases(), expectedWorkloads, "Bundle workload results differ under Node");
+    assert.equal(workloads.runExactSmokeCases(), expectedExactWorkloads, "Exact protocol report differs under Node");
     for (const { input } of reference.workloads.CHART_CASES) {
       assert.deepStrictEqual(engine.natalChart(input), reference.engine.natalChart(input));
     }
