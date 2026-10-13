@@ -356,3 +356,54 @@ or archive pack was run. Full engine/release gates are not claimed. Worker
 bundles and transient transport fixtures remain inside gitignored local build
 output; validation logs remain in the gitignored local cache. Git metadata,
 packed source, package version and artifacts were not changed.
+
+
+## M13
+
+Passed: local TypeScript typecheck and the full event suite on the runtime below,
+including the strengthened clipped-partition case.
+
+Runtime: Node.js 22.22.2, selected from the cached binary under
+`/tmp/events-npm-cache` through a command-local PATH. Only `events/` changed.
+
+Validation commands from the repository root:
+
+```sh
+npm run typecheck --prefix events
+npm test --prefix events
+node events/examples.mjs
+```
+
+The event suite includes the multi-century Venus search on TT from the start
+of 1900 through the end of 2100. `test/long-span.test.ts` checks daily unfiltered
+and half-day Leo-filtered results, chronological nonoverlap, continuous sign
+spans, independently scanned partitions and budget refusal. The partition
+edge is inside the selected JPL Venus retrograde interval, so adjoining clipped
+fragments must be joined before comparison. Integer-root agreement between
+scans is numerical consistency evidence, not independent physical accuracy or
+proof of exhaustive completeness. The selected JPL Venus station endpoints
+retain their unchanged comparison thresholds.
+
+`test/reference-api.test.ts` exercises whole-year DSL search windows around
+every existing selected Horizons and NASA reference date. It preserves their
+original thresholds and NASA coarse-class expectations. No new reference
+numbers or engine-derived expected dates were added. The offline acquisition
+and provenance reproduction tests remain part of the event suite.
+
+`examples.mjs` is exercised by the tests, using invented natal longitude,
+explicit clocks and event policies. The initial validation found invalid
+single-year shorthand in the new tests and examples; these now use explicit
+calendar endpoints. The example's broad void-of-course policy also exhausted
+its original caller budget; the example now supplies sufficient bounded work.
+The documentation removes obsolete future-milestone wording and states the
+current physical, sampling, boundary, transport and isolation limits.
+
+The parent npm dry-run file-list assertion passes and excludes `events/`.
+`git diff --check`, authored-file size, documentation character and events-only
+change checks pass. Logs and example output stay ignored under `generated/`;
+local bundles remain ignored under `build/`.
+
+The parent `npm run package:contents` was attempted with a writable cache and
+still fails because `dist/calc.d.ts` is absent. No parent build, archive packing,
+release gate or full engine CI success is claimed. No git metadata, packed
+source, parent package settings or carried archive was changed.

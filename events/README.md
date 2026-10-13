@@ -419,8 +419,8 @@ and NASA fixtures cover only the events documented in their reference guides.
 
 The local query parser is available as `parseQuery`, with typed
 `QuerySyntaxError` failures. [QUERY.md](QUERY.md) documents its grammar,
-explicit ranges and filters. It returns syntax only; DSL execution follows
-in the next milestone.
+explicit ranges and filters. It returns syntax only; `executeQuery` performs
+the search as described in [QUERY.md](QUERY.md).
 
 
 ## HTTP API
@@ -485,3 +485,49 @@ is limited through Node's old-generation resource limit, which is not a total
 process-memory bound. `workerUrl` is trusted local server configuration for
 bundled deployments and tests, never an HTTP option. Server owners can use
 Node's connection-close methods when shutting down active clients.
+
+
+## Worked queries and long searches
+
+After a local build, run `node events/examples.mjs` from the repository root.
+[examples.mjs](examples.mjs) executes synthetic natal aspects, Leo retrogrades,
+ingresses, stations, eclipses and an explicit void-of-course policy. Its output
+keeps the declared clock; TT coordinates must not be displayed as UTC instants
+without a separate time-scale conversion. The executable examples are checked
+by [isolation.test.ts](test/isolation.test.ts).
+
+For the requested multi-century search, use the local programmatic API:
+
+```js
+import { executeQuery } from './events/build/src/index.js';
+
+const result = executeQuery('all Venus retrogrades in Leo 1900-2100 clock tt', {
+  stepMs: 86400000,
+  maxEvaluations: 1000000
+});
+if (result.status === 'refused') throw new Error(result.reason);
+console.log(result.events);
+```
+
+The year shorthand ends at the start of the year after the final named year.
+Leo means positive-duration overlap with tropical Leo during retrograde motion;
+the returned interval includes its portions in other signs. This is neither a
+filter on the station sign alone nor a restriction to intervals entirely in Leo.
+The range clips already active intervals, with clipping flags preserved.
+
+[long-span.test.ts](test/long-span.test.ts) exercises this span on TT, compares
+whole-window and partitioned scans, and compares daily unfiltered intervals
+with half-day Leo-filtered intervals. It checks sign-span continuity, ordering,
+all-or-nothing budget refusal and the selected JPL Venus station dates with
+their original acceptance thresholds. Step agreement is a consistency check,
+not an independent proof of exhaustive event discovery or physical accuracy.
+The daily step and evaluation budget above are tested work settings, not
+universal defaults. Local searches can exceed the HTTP service's work caps;
+use a local process for this span. Splitting HTTP requests requires joining
+clipped retrograde fragments before sign filtering, since a sign overlap can
+occur only in the other fragment.
+
+See [LIMITATIONS.md](LIMITATIONS.md) for the evidence boundaries and operating
+limits. Full-year DSL comparisons against selected independent dates are in
+[reference-api.test.ts](test/reference-api.test.ts); they reuse the unchanged
+JPL and NASA references rather than generating expectations from this engine.

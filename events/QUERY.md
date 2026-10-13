@@ -131,7 +131,8 @@ modes. Syntax, configuration and unexpected computation errors throw; they
 are not empty completed searches. An optional `AbortSignal` is checked between
 synchronous evaluations. Cancellation cannot preempt a running calculation or
 process an abort from the same event loop while this synchronous call runs.
-The HTTP layer will need a separate scheduling policy for request cancellation.
+The HTTP layer runs each admitted search in a worker and terminates it on
+disconnect or deadline; see [README.md](README.md).
 
 Trusted custom providers can be supplied through the optional `QueryProviders`
 argument. Each factory receives the shared `EvaluationContext`, and providers

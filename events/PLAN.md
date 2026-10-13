@@ -18,7 +18,7 @@ astronomical accuracy claims require independent references with provenance.
 - [x] M10 Implement a bounded query DSL parser with typed syntax errors and grammar documentation for next/all searches and filters.
 - [x] M11 Wire the programmatic search API and DSL execution, including next-event horizons, cancellation and complete/refused results.
 - [x] M12 Add a small HTTP API with validated requests, bounded work, structured errors and integration tests.
-- [ ] M13 Exercise long-span searches, reconcile independent references, document limitations and examples, and verify repository/package isolation.
+- [x] M13 Exercise long-span searches, reconcile independent references, document limitations and examples, and verify repository/package isolation.
 
 ## Build order and evidence
 
