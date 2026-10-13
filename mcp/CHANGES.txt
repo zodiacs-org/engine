@@ -1,1 +1,2 @@
 M2: Scaffold isolated zodiacs-astro package with pinned official SDK dependencies, local carried engine, TypeScript build and passing Vitest integration/isolation checks on Node 22.22.2.
+M3: Add strict schemas for planned tools, JSON-safe structured results and validated native receipt serialization with passing contract, integration and isolation tests on Node 22.22.2.

@@ -5,7 +5,7 @@ Use synthetic examples and preserve native engine receipts without claiming pred
 
 - [x] M1 Record scope, milestones and repository constraints. Validate the plan for the harness.
 - [x] M2 Scaffold an isolated TypeScript package with locked SDK dependencies and test commands.
-- [ ] M3 Define validated inputs, structured outputs and receipt serialization.
+- [x] M3 Define validated inputs, structured outputs and receipt serialization.
 - [ ] M4 Implement and test natal charts.
 - [ ] M5 Implement and test transits at a date and now with an injectable clock.
 - [ ] M6 Implement and test synastry without invented compatibility scores.
