@@ -1,0 +1,316 @@
+{
+  "schema": "zodiacs-http-validation/1",
+  "generatedAt": "2026-10-13T12:46:12.298Z",
+  "runtime": {
+    "node": "v22.23.3",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "localChecksPassed": true,
+  "checks": [
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "server",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "server",
+        "run",
+        "test"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "server",
+        "run",
+        "build"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "server",
+        "run",
+        "check:package"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "loadEvidence": {
+    "path": "server/docs/evidence/load-local.json",
+    "sha256": "df2b11c4b1ea8bb8d1371d91d8f1b2d83567457105d2b422052c4cc2a0c3a730",
+    "inputsDigest": "44cf0f62f2a74b14d24701adfc2c05e4c9516fac5fc554189126687243f40553",
+    "inputsMatch": true,
+    "bundlesMatch": true
+  },
+  "inputs": [
+    {
+      "path": "server/CLIENTS.md",
+      "sha256": "c5cf8c4945e0ab78df70e5831a042bec10db121435f79659395dc202d285f69a"
+    },
+    {
+      "path": "server/DEPLOYMENT.md",
+      "sha256": "5136e8db432b0d252cc6ceb6d9e6d952a5410f9befc6ebbb8f3e270b316ee02a"
+    },
+    {
+      "path": "server/Dockerfile",
+      "sha256": "32322db6cfb9540e8e1828ac8f3f90ecc901e48aa748f35aa546f785fe326ef4"
+    },
+    {
+      "path": "server/Dockerfile.dockerignore",
+      "sha256": "052160edc9def4eed3665e7b52fde5f4906959582ae4b14d07ca2fc9e57584da"
+    },
+    {
+      "path": "server/LOAD-TESTING.md",
+      "sha256": "9c9a0c6d0a06ccb9aa7b6ac3c5cca6c732ca5cea13089f57f16224f1407ac689"
+    },
+    {
+      "path": "server/README.md",
+      "sha256": "87be59a731b2eccda7f52e65b7222f4f05cc8d158ee638063dcff6659c8dfb47"
+    },
+    {
+      "path": "server/VALIDATION.md",
+      "sha256": "2744cb4a3dd5b201ca351b97f59144c6eb75f7f1d44893ad6fdeaea2803dc2be"
+    },
+    {
+      "path": "server/package-lock.json",
+      "sha256": "64e90440e4711e8965af8bc9564dfc9a2bd484f4840e9e54679fc1567bdf836d"
+    },
+    {
+      "path": "server/package.json",
+      "sha256": "5eaaf4950cf892c71f9c14a80d590e86d57c7d6a7e656398a2fb6131e20d1295"
+    },
+    {
+      "path": "server/scripts/build.mjs",
+      "sha256": "f507a3c685f7698cfa9ef708bb092c4af8e38b9f899b99e8e6bb4386c080205b"
+    },
+    {
+      "path": "server/scripts/check-package.mjs",
+      "sha256": "c39d997bf067c1f9ebce3534f8559c49176a5c8084a0b059f6baae3a43134615"
+    },
+    {
+      "path": "server/scripts/healthcheck.mjs",
+      "sha256": "7d121a5980b31cd2930748be2c8d463a32f72d27ca72c8fbbf29975e16025d9c"
+    },
+    {
+      "path": "server/scripts/load-support.mjs",
+      "sha256": "69e6e551dd024d03acbcf15809b8ca9a9fb1030aab9cb415e0bef279998fb23d"
+    },
+    {
+      "path": "server/scripts/load.mjs",
+      "sha256": "507dd51c663be67eb09cf7f798feaab0f6c6597e19d0b9964276ee805fb88f4e"
+    },
+    {
+      "path": "server/scripts/test-container.mjs",
+      "sha256": "b97bc26fefb21012cd93d5b10b0cf36d5a15880a97bf659080ddffb3e13f2ca1"
+    },
+    {
+      "path": "server/scripts/validate.mjs",
+      "sha256": "e1620bee78fb1019a7c661ca7bc87f3fee3ee417d112b83f6dcb7097b9795002"
+    },
+    {
+      "path": "server/src/api-keys.ts",
+      "sha256": "bb6bf5ea8d5aeed1e88df40a56953b4be1a497005406607606e1f67861b84f89"
+    },
+    {
+      "path": "server/src/app.ts",
+      "sha256": "fb6de6aa6a2c7608c062193e61fe60d3a6e8f1c9a227b3ef088bcfa5a3f77d0e"
+    },
+    {
+      "path": "server/src/auth.ts",
+      "sha256": "51a50ab4d6dc5457a3254e97d9e09d17c17d5dd55d6a870efe890b8d4a06160c"
+    },
+    {
+      "path": "server/src/calculation-pool.ts",
+      "sha256": "0e0e2db0ad6cb2feb2a97237c3a2a329d0a58284a4c319cfb268463c270d50dd"
+    },
+    {
+      "path": "server/src/calculation-worker.ts",
+      "sha256": "24ba579f532e06b05008e4b32c6656d89327a768ff762a13cd7529d0d8f5d26c"
+    },
+    {
+      "path": "server/src/calculations.ts",
+      "sha256": "1fa9732017419dc5142af91595a9ef042287861af2da7470482481bda465a605"
+    },
+    {
+      "path": "server/src/config.ts",
+      "sha256": "bd1fdb14726b3bd272117260ebb0032f97c56af6d212499c804597f42c5d3bdd"
+    },
+    {
+      "path": "server/src/engine.ts",
+      "sha256": "ba62e12ce55a19bbfb042dca4fc64e473e96727319d21afcb9653cd99c35a16e"
+    },
+    {
+      "path": "server/src/houses.ts",
+      "sha256": "7db7804f1bb15dfb350ed96b35ae2c5ee050f22f46f026f34ba0f285ffd3d404"
+    },
+    {
+      "path": "server/src/main.ts",
+      "sha256": "0ea75c9bc4e438bbbe8b700788021cee640a4acf8b9d24ec86ad6b4adf866e59"
+    },
+    {
+      "path": "server/src/moon-phase.ts",
+      "sha256": "98c4c2f04e934837e1f20592141e5c05e0cda625a2e18c24deed32cee9f0ef33"
+    },
+    {
+      "path": "server/src/natal.ts",
+      "sha256": "5fee6c60b4b97caa9b7f39c9dfa4110143079fa77deb55efffb004be068d0388"
+    },
+    {
+      "path": "server/src/openapi-schemas.ts",
+      "sha256": "4108977f59057dc64cfb67c810e717694f6a480edac0cd3ac541c22d3fffb0c5"
+    },
+    {
+      "path": "server/src/openapi.ts",
+      "sha256": "fac8e7ab7f466cec689e4bda3a984f04145e9e2a51bbb5b7060732de79807b49"
+    },
+    {
+      "path": "server/src/rate-limit-hook.ts",
+      "sha256": "44d7ec8383d4366696476f457ff8696e62bfc4f842c21b62b29862ad59098fd4"
+    },
+    {
+      "path": "server/src/rate-limit.ts",
+      "sha256": "d3a2678dd82a9be8b7929c62d71c7c1cdb3de7731456e3497c2681f197a3a516"
+    },
+    {
+      "path": "server/src/request-validation.ts",
+      "sha256": "fe8c7cfe1e8917093a19c52d878959cb64e4442cf32cd1cddd59e4b29a6f744b"
+    },
+    {
+      "path": "server/src/resource-limits.ts",
+      "sha256": "26ecf8ef3c29484188c9d3af5768f668ab0ce2fb930eb97b49dff25b6348dbdb"
+    },
+    {
+      "path": "server/src/responses.ts",
+      "sha256": "f40442a1cdaa7b3482a4cc49d850a91c0f46efdeba1d851cd03c30bcfb39e9e8"
+    },
+    {
+      "path": "server/src/returns.ts",
+      "sha256": "f9bbd89e1ce0fc4b5365299e62a48d8960f10e2bdb311395879c8470e58486c8"
+    },
+    {
+      "path": "server/src/route-docs.ts",
+      "sha256": "eee495e64676a50d39de3a5f9a065a69d3674057b04aa41c1ddec29f0b321858"
+    },
+    {
+      "path": "server/src/synastry.ts",
+      "sha256": "d40270f09d7466cc2a663cccfe7f1c071807cf772745cb32b4cbd00a341ad555"
+    },
+    {
+      "path": "server/src/transits.ts",
+      "sha256": "17ef709b87896d8d9388d905771ad87a05c80606d100889424ac1ee04e5b7de1"
+    },
+    {
+      "path": "server/test/api-keys.vitest.ts",
+      "sha256": "c6c8e9b19bcc7076c3292062b5bad2b38ba4162a4ce00269971a7173c233a7ca"
+    },
+    {
+      "path": "server/test/app.vitest.ts",
+      "sha256": "6aa1dc45f55a167f2f07c25929cdec3828d1460c29f0f4b9c1dc3019c9a02884"
+    },
+    {
+      "path": "server/test/auth.vitest.ts",
+      "sha256": "0df2c673a5baea2d4bed931af4e5f5f9f44d2b744772a2d327e0d5ddd88d873a"
+    },
+    {
+      "path": "server/test/calculation-pool.vitest.ts",
+      "sha256": "fecdde5fbfe14f713ba8134b9009b2e34278232d778154f05b7092fe7a0060ba"
+    },
+    {
+      "path": "server/test/client-docs.vitest.ts",
+      "sha256": "18b1addc95918c4fefb02cf4fd5812445b1c00610e8fd777f0570b5b2143c91f"
+    },
+    {
+      "path": "server/test/comparisons.vitest.ts",
+      "sha256": "79c8b5d5f8870c554753cfa7c0b41caf23767a03bc977d04f208b02351372fa9"
+    },
+    {
+      "path": "server/test/config.vitest.ts",
+      "sha256": "ae0990825f0ac341cc3b1fba04a653e6508740e2556a4670907a6617950c1ed3"
+    },
+    {
+      "path": "server/test/fixtures/calculation-worker.mjs",
+      "sha256": "aac9ed1a3d6382683269b1681f1a78f974c74db78c0d5099eb953806aaf05aa5"
+    },
+    {
+      "path": "server/test/healthcheck.vitest.ts",
+      "sha256": "397f828582ec5663679d7a29ffe5d3ecd988859be27bf11652b2df4342148382"
+    },
+    {
+      "path": "server/test/houses.vitest.ts",
+      "sha256": "95dc054b55fee069d6e0525e4140adac7f3de67e3718c2a0d47293add9eb6d56"
+    },
+    {
+      "path": "server/test/lifecycle.vitest.ts",
+      "sha256": "92eb2d213b3ce47d3f468d1504c0eaa878e6b1118b584f61e8c3f4eec0bc3ada"
+    },
+    {
+      "path": "server/test/load-process.vitest.ts",
+      "sha256": "424e12f9165ee273d6432e0f0daafd74ad3835557f256dfb9dfade6cf595fe5e"
+    },
+    {
+      "path": "server/test/load.vitest.ts",
+      "sha256": "4fb04271049fa2c6cfd495387d4cf296c8fa9913611ade510fb9b2b5da112654"
+    },
+    {
+      "path": "server/test/moon-phase.vitest.ts",
+      "sha256": "446cfb72ca90a59f6aa5787308360e76571b9d5d26572c67c7884cb9797988ab"
+    },
+    {
+      "path": "server/test/natal.vitest.ts",
+      "sha256": "3be91df637fd3bd0766e0c94300983ab3c11ea7706f783ee83dd40b19c418e91"
+    },
+    {
+      "path": "server/test/openapi.vitest.ts",
+      "sha256": "fe67fb933b3bba32a18c25f7b20a62da59137583b7a35d05cbf425cc2f8c2f38"
+    },
+    {
+      "path": "server/test/process.vitest.ts",
+      "sha256": "d1d04dd52473f143ef3a20a799ed648e6013dbe0689bf1237fd498dec2066f9d"
+    },
+    {
+      "path": "server/test/rate-limit.vitest.ts",
+      "sha256": "a1dfccb32ee81fd746c9c0965a9b29bac5bbf577e7107934ad29799fcfcf2d02"
+    },
+    {
+      "path": "server/test/request-validation.vitest.ts",
+      "sha256": "9b1da348ca34dc93df6a7677f2bfd6217c958400603dbbfd040b432409d169d3"
+    },
+    {
+      "path": "server/test/returns.vitest.ts",
+      "sha256": "5193900a5c3138808278066cb6e92edb3fc59c975b72987d1d3c820335f4b551"
+    },
+    {
+      "path": "server/test/token-bucket.vitest.ts",
+      "sha256": "952de0e9e77fa70da42f6484813f7641de7bb6c9312a9e9ae00b002d95ed3182"
+    },
+    {
+      "path": "server/tsconfig.json",
+      "sha256": "c43ddf067bc26ad635a5b407e153f98a07e89cda971267d57a09f4fde3bf1d36"
+    },
+    {
+      "path": "server/vitest.config.ts",
+      "sha256": "66a2080f06fda9af623b126a984caf0ef56ab90897d66bff5f74af4f8645141f"
+    }
+  ],
+  "inputsDigest": "0c904732bc9ccb76236bfec994d07038183eb1e9eafcbe2968f557a6906d71ba",
+  "limitations": [
+    "Local checks do not execute Docker. Run npm --prefix server run test:container on a Docker host.",
+    "Root package, archive, conformance and atlas gates are separate; no root dist is built here.",
+    "Load identity verification rechecks retained measurements, not current machine performance.",
+    "Engine parity and receipt replay are integration checks, not independent astronomical accuracy evidence."
+  ]
+}
