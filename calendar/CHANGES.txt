@@ -1,0 +1,1 @@
+M1: Bootstrap the private calendar project and implement receipt-bearing UTC iCalendar serialization with Unicode folding, synthetic golden fixtures and independent parser round-trip tests.
