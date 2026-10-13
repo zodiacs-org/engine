@@ -16,7 +16,11 @@
     "prebuild:replay": "node scripts/check-runtime.mjs && node scripts/sync-events-vendor.mjs --check",
     "build:replay": "tsc -p tsconfig.replay.json",
     "prereplay": "node scripts/check-runtime.mjs",
-    "replay": "node build/webhook/src/replay-cli.js"
+    "replay": "node build/webhook/src/replay-cli.js",
+    "prebuild:service": "node scripts/check-runtime.mjs && node scripts/sync-events-vendor.mjs --check",
+    "build:service": "tsc -p tsconfig.service.json",
+    "prestart": "node scripts/check-runtime.mjs",
+    "start": "node build/webhook/src/service-cli.js"
   },
   "devDependencies": {
     "@types/node": "22.19.19",

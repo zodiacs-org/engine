@@ -6,9 +6,8 @@ encrypted signing-key custody, payload signing with receiver verification,
 local event searches and custom DSL queries with engine receipts, bounded
 discovery into a durable outbox, an HTTPS transport for signed requests, and a
 delivery worker with leases, retries and dead letters, an authenticated
-control API, and a local replay CLI. Callers can drive scans and delivery
-attempts explicitly. Later milestones add the runnable service and lifecycle
-management.
+control API, a local replay CLI, and a runnable service with polling and graceful
+shutdown. Callers can also drive scans and delivery attempts explicitly.
 The code and documentation here use the repository's [MIT license](../LICENSE).
 
 Use Node from the release line accepted by
@@ -29,8 +28,8 @@ The TypeScript check emits nothing. Vitest runs only this project's tests.
 No root dependency installation or engine build is needed. The project installs
 the parent's exact ephemeris dependency locally. TypeScript paths and the Vitest
 resolver direct relative engine-source imports to that local dependency. Other
-runners must provide equivalent resolution; a production service build comes
-later. The replay CLI has its own local build described below.
+runners must provide equivalent resolution. The service and replay CLI have
+local builds described below.
 The test suite uses invented inputs. Network tests use mocked DNS and local
 loopback receivers only, with no external requests. TLS tests require the
 `openssl` executable and generate their certificates and keys at runtime in
@@ -1029,3 +1028,77 @@ only to a loopback mock receiver, loses an acknowledgement, and replays after
 restart with the same body and deduplication identity. These tests establish
 local replay behavior, not exactly-once receiver effects or physical event
 accuracy.
+
+## Runnable service
+
+Build and run from this directory with the installed local dependencies:
+
+```sh
+npm run build:service
+npm start -- --help
+npm start
+```
+
+The build writes only the ignored `build/` tree and also builds the replay
+command. Supply `WEBHOOK_ADMIN_TOKEN` and `WEBHOOK_WRAPPING_KEY` through runtime
+environment custody before starting. Each is a random key encoded as canonical
+base64url, matching [service-config.test.ts](test/service-config.test.ts) and
+the existing control and vault contracts. Keep the wrapping key across
+restarts and back it up separately from the databases. Changing it prevents
+the vault from opening. The CLI removes its credential environment entries
+after decoding, copies bytes into the control server and vault, and erases
+its temporary buffers. It never prints credential values.
+
+`WEBHOOK_SETTINGS` optionally holds a bounded JSON policy object. Unknown
+fields and unknown `WEBHOOK_` environment names are rejected. Policy fields
+are `stateDirectory`, `host`, `port`, `pollIntervalMs`, `scanPageSize`,
+`deliveryBatchSize`, `lookAheadMs`, `shutdownGraceMs`, `scan`, `delivery`,
+`transport` and `control`. Nested policy fields correspond to the existing
+worker, transport and control contracts. Defaults and configuration caps
+are defined in [service-config.ts](src/service-config.ts), with boundary
+checks in [service-config.test.ts](test/service-config.test.ts). Durations
+and the lookahead use milliseconds. Eclipse discovery requires the explicit
+spherical model and derivative step in `scan.eclipse`; there is no inferred
+model. Policy changes can conflict with existing discovery pins, and queued
+deliveries keep their original retry policy.
+
+The control listener accepts loopback addresses only. Put an authenticated
+TLS boundary in front of it for remote administration. `stateDirectory` is
+relative to this project and defaults to the ignored `var/` directory. The
+service creates `service.sqlite` and the separate encrypted `signing.sqlite`
+there. New directories have owner-only access. Symlinked state directories,
+database files and SQLite sidecars are rejected before opening. Filesystem
+custody must prevent path replacement while the process runs; these checks
+are not a filesystem race sandbox.
+
+Startup opens and validates both databases, creates the control listener,
+then starts separate sequential discovery and delivery loops. Discovery
+walks bounded subscription pages, yields between subscriptions, and returns
+to the beginning after exhaustion. A refused or conflicting subscription
+does not block the others. Each subscription scan owns a bounded schedule
+slice up to the current time plus lookahead, while deliveries wait until the
+occurrence is due. Delivery polls make bounded batches, yielding between
+attempts. Transient loop exceptions emit fixed diagnostics and retry on a
+later poll; refusal diagnostics contain only fixed reason values. Reports
+omit callback URLs, expressions, payloads, paths and key material.
+
+The CLI prints readiness with the bound address to stdout. SIGINT or SIGTERM
+stops accepting control connections, cancels worker polling and the active
+delivery, drains active control requests, then closes the vault and store.
+Control sockets that outlast `shutdownGraceMs` are destroyed. A cancelled
+delivery is an ambiguous counted attempt under its saved retry policy.
+Synchronous engine searches and SQLite calls finish before the event loop
+can process shutdown; their evaluation and busy-wait bounds still apply.
+The grace setting bounds control draining once the event loop can run, not
+total process shutdown during synchronous calculations. Repeated stop calls
+share the same completion. A crash leaves leases for the next worker to
+recover; no in-memory queue replaces the outbox.
+
+[service.test.ts](test/service.test.ts) uses a synthetic schedule with the
+relative-source engine, a signed loopback receiver, lost acknowledgement,
+retry, restart, dead-letter inspection and local CLI replay. It also covers
+cancelled sends, control draining, partial sockets, startup cleanup,
+pagination and fixed diagnostics. [service-cli.test.ts](test/service-cli.test.ts)
+executes the compiled command for signal handling and concurrent store/vault
+startup. These establish local orchestration behavior and payload identity,
+not event-search accuracy or external receiver reliability.

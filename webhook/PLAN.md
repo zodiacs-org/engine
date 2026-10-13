@@ -16,7 +16,7 @@ runs its checks, ticks it here, appends a line to `CHANGES.txt`, and stops.
 - [x] M8 Add delivery leases, stable idempotency keys, exponential retries and SQLite dead-letter transitions; test ambiguous acknowledgements, crashes, concurrent workers and retry exhaustion for at-least-once delivery.
 - [x] M9 Expose an authenticated control API for subscription CRUD, secret provisioning and redacted delivery-log inspection, with bounded requests, pagination and update/delete semantics; test it over loopback HTTP.
 - [x] M10 Add a replay CLI that inspects and requeues retained dead letters without changing payload bytes or occurrence identity; test dry runs, selection, audit records and repeated replay requests.
-- [ ] M11 Wire service configuration, worker lifecycle and graceful shutdown; add an end-to-end synthetic subscription test from event discovery through signed delivery, retries, restart and replay.
+- [x] M11 Wire service configuration, worker lifecycle and graceful shutdown; add an end-to-end synthetic subscription test from event discovery through signed delivery, retries, restart and replay.
 - [ ] M12 Document runnable local examples, receiver verification, deployment configuration, retention and operational limits; run the webhook suite, check package isolation and record remaining search-accuracy limitations.
 
 ## Integration decisions
@@ -68,3 +68,10 @@ first-open migrations from independent processes" failed intermittently with
 the fixed database-open error. It then passed in a focused run and in the full
 webhook suite. M9 does not change database-opening or migration behavior.
 Investigate concurrent initialization when wiring service startup in M11.
+
+M11 adds concurrent first-open service and vault coverage through the compiled
+command in `test/service-cli.test.ts`. That check, synchronized independent
+database-opening experiments, and the full webhook suite passed on Node
+22.22.2 in this session. The prior intermittent failure did not recur, so its
+cause remains unresolved. Database migration and WAL initialization behavior
+is unchanged; retain this observation for operational-limit review in M12.

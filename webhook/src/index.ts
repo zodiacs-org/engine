@@ -40,3 +40,7 @@ export type { DeliveryPolicy } from "./delivery-policy.js";
 export type { DeliveryClaim, DeliveryLease } from "./storage-types.js";
 export { createControlServer, CONTROL_DEFAULTS, CONTROL_LIMITS, ControlApiError } from "./control-api.js";
 export type { ControlApiOptions, ControlPolicy } from "./control-api.js";
+export { parseServiceConfig, loadServiceEnvironment, SERVICE_DEFAULTS, SERVICE_LIMITS, ServiceError } from "./service-config.js";
+export type { ServiceConfig, ServiceCredentials } from "./service-config.js";
+export { startService } from "./service.js";
+export type { WebhookService, ServiceDependencies, ServiceNotice } from "./service.js";
