@@ -45,7 +45,7 @@ ZODIACS_ENGINE_PATH=/absolute/qualified/package/dist/index.js node --test tests/
 
 For this review, the installed entry was `/workspace/scratch/c1943cbff40d/parallel-runtime/package/dist/index.js`. Temporary tamper fixtures were deleted after testing; the original engine and production code were not modified. A missing installation skips the real-engine controls, so zero skipped tests is required to reproduce the full result above.
 
-## Final tool-session review — 2026-09-28
+## Final tool-session review: 2026-09-28
 
 The reviewer additionally read `src/tools.mjs`, its seven tests, the final contract and README, and `reports/VALIDATION.json`. All seven tool-session tests were independently rerun and passed. The final integration record reports **103 tests passed, zero failures and zero skips**, plus an actual rc.10 session smoke check showing that a computed fact is usable and cleared evidence is refused. That smoke check was recorded by the implementation owner; it is not an independent astronomical comparison.
 

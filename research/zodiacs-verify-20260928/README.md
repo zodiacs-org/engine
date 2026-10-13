@@ -1,4 +1,6 @@
-# Zodiacs Verify — working preview
+# Historical rc.10 research: Zodiacs Verify preview
+
+This preview's adapter and recorded engine results apply only to the frozen `@zodiacs/engine 0.1.1-rc.10` installation. They do not qualify current `main` or the current npm release.
 
 An isolated, dependency-free Node.js companion to the Zodiacs engine. It compares chart receipts, reports birth-window uncertainty, and checks structured AI claims against explicitly trusted evidence. This is a local SDK and CLI, with a protocol-neutral tool session. It is not a deployed service, published npm package, whole-prose fact checker, empirical validation of astrology, or a new ephemeris.
 

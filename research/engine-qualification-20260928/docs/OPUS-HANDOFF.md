@@ -1,6 +1,6 @@
-# Handoff for the continuing core-engine build
+# Historical rc.10 research handoff
 
-Continue the assigned position-provider work. This runner adds an isolated measurement/review tool and does not replace the core task or alter its existing release gates.
+This September 2026 handoff describes a comparison workflow against historical rc.10. It is not qualification of current `main` or the current npm release, and it does not assign or authorize new production work. The runner supplies research evidence; existing release gates remain separate.
 
 1. Read the earlier `accuracy-audit-20260928/NEXT-BUILD.md` and this package README. Preserve the frozen rc.10 installation for paired comparisons.
 2. Build and stage a new candidate in a separate standalone installed package, with all runtime dependencies beneath that root. Do not overwrite the baseline or another agent's worktree.

@@ -1,4 +1,6 @@
-# Independent engine verification and research handoff
+# Historical rc.10 research: independent engine verification
+
+These measurements evaluate the frozen `@zodiacs/engine 0.1.1-rc.10` artifact, not current `main` or the current npm release. Third-party references retain their own terms; the repository's MIT license does not relicense JPL responses. See [NOTICE.md](NOTICE.md).
 
 Completed parallel work for `zodiacs-org/engine`, frozen at `f5f33892a95cd0d6cd4a11a80e66f802b11bccfa` (`0.1.1-rc.10`). Everything is contained in this research directory. No production source, dependency manifest, release gate, site integration, or published archive is changed.
 

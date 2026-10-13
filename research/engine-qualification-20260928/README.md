@@ -1,10 +1,14 @@
-# Engine candidate qualification: research runner
+# Historical rc.10 research: candidate comparison runner
+
+This is historical `@zodiacs/engine 0.1.1-rc.10` research, not qualification of current `main` or the current npm release. Its measurements and installed-size figures apply only to the recorded standalone installations. Changes for this research remain under `research/`; merging must preserve the current production package.
 
 Compare a new trusted local engine installation with the frozen rc.10 baseline, using the existing independently reconstructed JPL regression references. The runner records artifact identity, API and behavioral differences, all-case position residuals, per-coordinate regressions, Node timings, and installed size. It emits JSON and Markdown evidence for a subsequent adapter review.
 
 **This does not qualify an adapter automatically.** Every result has `adapterQualified: false`, `adapterReviewRequired: true`, and `releaseAuthorized: false`. No engine source, Verify inventory, root package, workflow, release gate or production integration is changed.
 
 The retained 210 rows cover 10 bodies at 21 already examined epochs. They are known regression data, **not a new blind holdout**. The one-arcsecond residual target and the other budgets are explicitly research defaults. Meeting them would not certify a universal error bound, Swiss Ephemeris equivalence, or astrology's predictive validity.
+
+The repository's MIT license does not relicense the retained JPL responses. The [NASA Horizons catalogue](https://data.nasa.gov/dataset/horizons) specifies no dataset license; acquisition provenance is not a rights certification. See the reference [source notice](../accuracy-audit-20260928/NOTICE.md) for the separate JPL and ERFA/PyERFA terms and notices.
 
 ## Requirements
 
@@ -137,6 +141,6 @@ node scripts/record-validation.mjs \
 
 Standalone suites use `*.node-test.mjs` to avoid the engine root's Vitest discovery. The original `reports/validation-20260928/` evidence is retained unchanged and binds to the original handoff installation, not the reviewed preparation baseline used in the fresh run above. The degraded candidate is deliberately synthetic and is never represented as an Opus build.
 
-The runner measures positions under the current public natal-chart interface. It does not qualify event solvers, all house systems, historical civil-time resolution, birth-time uncertainty bounds, browser/mobile runtimes, arbitrary provider adapters, or predictive interpretations. Reference corrections, axes and target centers remain separately declared. Future fresh holdout acquisition is still needed for stronger generalization evidence.
+The runner measures positions under the historical rc.10 public natal-chart interface. It does not qualify event solvers, all house systems, historical civil-time resolution, birth-time uncertainty bounds, browser/mobile runtimes, arbitrary provider adapters, or predictive interpretations. Reference corrections, axes and target centers remain separately declared. Future fresh holdout acquisition is still needed for stronger generalization evidence.
 
 See `docs/OPUS-HANDOFF.md` for the next candidate, `docs/CONTRACT.md` for the frozen plan boundary, and `docs/REVIEW.md` for independent review.

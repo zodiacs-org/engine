@@ -1,4 +1,6 @@
-# Convention-aligned engine accuracy audit
+# Historical rc.10 research: convention-aligned accuracy audit
+
+This audit evaluates the frozen `@zodiacs/engine 0.1.1-rc.10` artifact, not current `main` or the current npm release. Results apply only to that historical installation. Third-party references retain their own terms; the repository's MIT license does not relicense JPL responses. See [NOTICE.md](NOTICE.md).
 
 This companion explains the earlier one-arcsecond discrepancies without modifying the engine. It freezes the same rc.10 runtime, acquires new independent JPL vectors, applies independently generated ERFA rotations, and decomposes each original comparison into signed coordinate terms.
 

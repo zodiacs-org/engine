@@ -15,7 +15,11 @@ supplied by any dependencies installed to rerun this work.
 
 - **JPL Horizons, NASA/JPL:** `toolkit/` and `events/` retain acquisition
   parameters, responses, digests and retrieval metadata for public ephemeris
-  queries. References were acquired independently of candidate output. Consult
+  queries. References were acquired independently of candidate output. The
+  [NASA Horizons catalogue](https://data.nasa.gov/dataset/horizons), checked
+  on 14 October 2026, specifies no dataset license. The repository's MIT
+  license does not cover these responses, and acquisition provenance is not a
+  rights certification. Consult
   the [Horizons API documentation](https://ssd-api.jpl.nasa.gov/doc/horizons.html)
   and [manual](https://ssd.jpl.nasa.gov/horizons/manual.html) for conventions and
   service/data limitations. These references are not an assertion that every
@@ -28,7 +32,11 @@ supplied by any dependencies installed to rerun this work.
   [obl06](https://github.com/liberfa/erfa/blob/v2.0.1/src/obl06.c),
   [nut06a](https://github.com/liberfa/erfa/blob/v2.0.1/src/nut06a.c), and
   [PyERFA controls](https://github.com/liberfa/pyerfa/blob/v2.0.1.5/erfa/tests/test_ufunc.py).
-  Keep the applicable upstream notices when redistributing upstream code.
+  The [ERFA 2.0.1 license](https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/LICENSE)
+  and [PyERFA 2.0.1.5 license](https://raw.githubusercontent.com/liberfa/pyerfa/v2.0.1.5/LICENSE.rst)
+  retain their separate redistribution terms. Retain applicable upstream
+  copyright notices, conditions and disclaimers when redistributing third-party
+  material.
   Neither IAU, SOFA, ERFA nor JPL endorses this kit.
 - **Astronomy Engine:** `reproductions/` compares Moon illumination through a
   separate geometric operation in the engine's existing 2.1.19 dependency.
