@@ -1,1 +1,2 @@
 batch: complete M1 with private TypeScript tooling, bounded JSON job validation and synthetic Vitest coverage
+batch: complete M2 with lazy resumable work expansion, serial engine execution, isolated bundling and synthetic parity tests

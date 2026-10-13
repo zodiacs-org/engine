@@ -2,9 +2,9 @@
 
 This private project is the batch service under development for this engine
 checkout. The completed work is checked off in [PLAN.md](PLAN.md). The current
-implementation validates job definitions and counts their result rows; it does
-not yet submit or execute jobs. Queue backends, workers, recovery, streaming,
-HTTP, CLI and scaling measurements are later milestones.
+implementation validates job definitions, expands work lazily and executes it
+serially through the engine. Queue backends, workers, crash recovery, NDJSON
+streaming, HTTP, CLI and scaling measurements are later milestones.
 
 All project files stay here. The engine source, npm package and carried archives
 are unchanged. Code and documentation in this folder use the repository's
@@ -20,6 +20,7 @@ cd batch
 npm ci --ignore-scripts --cache .cache/npm
 npm run typecheck
 npm test
+npm run build
 ```
 
 Dependencies and the lockfile belong to this directory. Typechecking emits
@@ -28,11 +29,17 @@ Generated code belongs in `.generated/`, runtime databases and exports in
 `.runtime/`, and raw benchmark output in `.generated/`; these paths are ignored.
 Keep committed benchmark evidence compact and link it to its runner.
 
-The contracts use a type-only relative import of the engine's public birth
-vocabulary. This requires no engine build or runtime dependency. For the engine
-execution milestone, bundle the relative engine source with dependencies
-resolved from this project's installation and write only to `.generated/`.
-An unbundled root source import cannot find dependencies installed only here.
+The contracts use the engine's public birth vocabulary, and the execution
+bridge imports its public source entry by a relative path. The batch build
+bundles that source with the pinned `astronomy-engine` dependency from this
+directory into `.generated/index.js`. It does not run the engine build. Vitest
+and TypeScript resolve the same dependency from this installation. An unbundled
+root source import cannot find dependencies installed only here.
+
+[test/build.test.ts](test/build.test.ts) builds from the checkout root and runs
+the resulting entry in plain Node with invented chart input. It verifies the
+runtime import, result shape and engine version without requiring root
+dependencies or engine build output.
 
 The repository's `npm run package:contents` check requires an existing engine
 `dist/`. If it is absent, record the missing prerequisite; do not run the root
@@ -81,7 +88,7 @@ step. The step is a positive safe integer in milliseconds, independent of
 calendar days or daylight saving. End must be later than start. A synastry
 matrix is directed: both `(a, b)` and `(b, a)` are included and self-pairs are
 excluded. The engine's labels and tie ordering depend on argument order.
-Enumeration will use input order, birth first then time for a grid and row
+Enumeration uses input order, birth first then time for a grid and row
 first then column for a matrix.
 
 Births accept only `utc`, paired `latitude` and `longitude` in degrees,
@@ -120,3 +127,73 @@ and throw their own errors. Use the JSON entry point for transport input.
 The synthetic cases in [test/validation.test.ts](test/validation.test.ts)
 enforce these schema rules, workload counts, default budgets and boundaries.
 They test the wrapper's behavior and make no astronomical accuracy claim.
+
+## Work items and serial execution
+
+`workItems(job, cursor)` returns a lazy iterator over a validated job.
+`workItemAt(job, index)` seeks directly to a row. A cursor is the zero-based
+index of the next row to process; the default is zero. Passing `totalTasks` to
+the iterator returns no rows. Direct lookup requires an index below
+`totalTasks`. Both reject negative, fractional, non-finite, unsafe or
+out-of-range indices at call time. They do not enumerate preceding rows when
+resuming. The job must be the frozen snapshot returned by `validateJob` or
+`parseJobJson`; after loading a persisted definition, validate it again.
+
+Work items contain `kind` and `index`, plus `person` for a chart, `person`,
+`sampleIndex` and `at` for a transit sample, or `a` and `b` for a directed
+synastry pair. Each item is frozen and references the validated job's frozen
+people. Grid and matrix index arithmetic uses integers, including when callers
+raise the task budget. [test/work.test.ts](test/work.test.ts) checks ordering,
+range edges, resume boundaries and seeking near the safe-integer limit without
+expanding the workload.
+
+`executeWorkItem(item)` computes a work item through `natalChart`, `transits`
+or `synastry`. `executeSerial(job, cursor)` yields those results in order,
+computing only when its caller pulls the next row. It runs synchronously in
+the calling thread. It retains no chart cache or completed result collection;
+each row calls the engine independently. The validated inputs remain in memory,
+and callers control whether to retain the yielded rows.
+
+After building, this example runs from `batch/` in an ES module and uses only
+invented data:
+
+```js
+import { executeSerial, validateJob } from "./.generated/index.js";
+
+const job = validateJob({
+  version: 1,
+  kind: "charts",
+  births: [{ id: "synthetic-a", birth: { utc: "2001-02-03T04:05:06Z" } }]
+});
+for (const row of executeSerial(job)) {
+  console.log(JSON.stringify(row));
+}
+```
+
+Result rows carry `version`, `kind`, `index`, `nextCursor` and `value`.
+`value` is the complete engine result in its JSON representation: dates are
+ISO strings, finite numbers use standard JSON serialization, and engine flags
+and metadata remain present. Transit results include their natal
+chart, and synastry results include both charts. Each row holds fresh JSON
+objects; changing one does not change the validated input or a later result.
+Chart rows also carry `personId`; transit rows carry `personId`, `sampleIndex`
+and `at`; synastry rows carry `aId` and `bId` in the engine's argument order.
+
+`nextCursor` names the row after a successful result. It is a proposed resume
+position, not a durable checkpoint: this milestone does not persist results or
+advance a queue. Use it for resumption only after retaining the corresponding
+result. With the same validated definition and engine/runtime, resuming there
+produces the remaining suffix. Do not reuse a cursor for a different job.
+
+An engine exception or non-finite numerical result throws `WorkExecutionError`
+with `code: "calculation-failed"`, `kind` and `index`. Its message is fixed
+apart from the work kind and row index; it carries no raw engine error or
+submitted birth value. A failed serial iterator ends at that row, without
+skipping it or computing subsequent rows. Resuming from the failed index
+attempts it again. Retry scheduling belongs to the queue milestones.
+
+[test/execution.test.ts](test/execution.test.ts) compares these JSON values
+with direct engine calls on synthetic charts, transit samples and directed
+pairs. It checks flags, incremental computation, every resume boundary in its
+test jobs, result isolation and failures. These are wrapper parity and
+regression checks, with no additional astronomical accuracy claim.

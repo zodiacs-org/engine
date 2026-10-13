@@ -11,7 +11,7 @@ session summary to `CHANGES.txt`. The harness handles all git writes. On this
 initial session complete M1 only; later sessions complete one or two milestones.
 
 - [x] M1 Establish the private TypeScript project, Vitest setup, versioned JSON job contracts, bounded validation and workload counts. Test valid synthetic jobs, malformed inputs and resource limits.
-- [ ] M2 Implement deterministic, lazy work-item expansion and serial engine execution for charts, sampled transit grids and directed synastry matrices. Test ordering, range boundaries, resume cursors and parity with direct engine calls.
+- [x] M2 Implement deterministic, lazy work-item expansion and serial engine execution for charts, sampled transit grids and directed synastry matrices. Test ordering, range boundaries, resume cursors and parity with direct engine calls.
 - [ ] M3 Define the asynchronous queue backend contract and implement the in-memory queue with atomic claims, lease tokens, status and progress snapshots. Run a reusable backend contract suite including competing claims.
 - [ ] M4 Implement the default SQLite backend with migrations, transactions, durable job definitions, leases and result checkpoints. Run the backend contract suite against independent connections and reopen tests.
 - [ ] M5 Add the worker_threads pool and scheduler with bounded dispatch, worker replacement, progress updates and graceful shutdown. Test parallel work, worker failure and shutdown during active work.
@@ -36,3 +36,18 @@ The root `npm run package:contents` was attempted and stopped because
 `dist/calc.d.ts` is absent; the checkout has no engine build output. An npm
 pack dry run with `--ignore-scripts --json` confirmed that no `batch/` file is
 included. No archive was written and no engine build was run.
+
+## M2 session checks
+
+`npm run typecheck`, `npm test` and `npm run build` passed from `batch/` on
+Node 22.23.3. The tests cover work ordering, direct cursor seeking, half-open
+transit ranges, serial engine JSON parity, lazy calculation, failure positions
+and plain Node execution of the generated bundle. The build writes only to
+the ignored `.generated/` directory and resolves the engine's pinned dependency
+from the batch installation.
+
+The root `npm run package:contents` stopped because `dist/calc.d.ts` is absent.
+An npm pack dry run with `--ignore-scripts --json` confirmed that no `batch/`
+file is included. All changes stay inside `batch/`, all tracked and new batch
+files are below the file-size limit, and batch documentation contains no em
+dashes. No root build, archive creation or git write was performed.
