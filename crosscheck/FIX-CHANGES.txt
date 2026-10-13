@@ -1,1 +1,2 @@
 F1: Isolate Node suites with .node-test.mjs names, update scripts and references; crosscheck tests, build verification and safeguards pass, and root Vitest discovers no crosscheck suites.
+F2: Add isolated Node 22 CI with locked dependencies, JavaScript syntax checks (no project typecheck script), build verification, 66 passing tests and safeguards; root Vitest selects no crosscheck suites.

@@ -83,11 +83,17 @@ only the locked crosscheck dependency, with lifecycle scripts disabled:
 
 ```sh
 npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache "$PWD/crosscheck/runtime/npm-cache"
+npm --prefix crosscheck run check:syntax
 npm --prefix crosscheck run build
 npm --prefix crosscheck run verify
 npm --prefix crosscheck test
 node crosscheck/tools/check.mjs
 ```
+
+[The Crosscheck workflow](../.github/workflows/crosscheck.yml) runs these
+checks on Node 22, installing only this project's lockfile dependencies.
+The JavaScript harness has no TypeScript typecheck script; `check:syntax`
+checks its libraries, tools and Node suites with `node --check`.
 
 The builder reads the engine's non-test TypeScript sources from ../src and
 emits JavaScript modules under runtime/build/, retaining relative imports.

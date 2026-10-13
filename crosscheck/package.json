@@ -4,6 +4,7 @@
   "type": "module",
   "engines": { "node": ">=22.13.0 <23" },
   "scripts": {
+    "check:syntax": "node tools/check-syntax.mjs",
     "build": "node tools/build.mjs",
     "verify": "node tools/build.mjs --verify",
     "test": "node --test tests/*.node-test.mjs",

@@ -1,4 +1,4 @@
 - [x] F1 Rename crosscheck Node test files so root Vitest discovery ignores them, update crosscheck test scripts and references, and verify root `npx vitest run --reporter=dot` selects none of them.
-- [ ] F2 Add `.github/workflows/crosscheck.yml` with a dedicated Node 22 job installing crosscheck's lockfile dependencies and running its typecheck, build, build verification, tests and safeguards.
+- [x] F2 Add `.github/workflows/crosscheck.yml` with a dedicated Node 22 job installing crosscheck's lockfile dependencies and running JavaScript syntax checks (the project has no typecheck script), build, build verification, tests and safeguards.
 - [ ] F3 Verify and fix any M9 gaps in the real bounded synthetic campaign and committed aggregate reports, label unavailable references explicitly, and ensure crosscheck's README no longer says the campaign is pending.
 - [ ] F4 Verify and fix any M10 gaps in shard coverage, interrupted resume, report reproduction, retention, file size and npm exclusion.
