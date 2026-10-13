@@ -1,1 +1,2 @@
 F1 Isolate events Node suites from root Vitest discovery, update build/test scripts and documentation links, and verify events checks and root discovery.
+F2/F3 Add dedicated Node 22 events CI with lockfile install, typecheck, build and Node tests; verify local checks and root Vitest isolation.

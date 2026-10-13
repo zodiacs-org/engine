@@ -1,3 +1,3 @@
 - [x] F1 Rename the events Node suites and update local build/test scripts so root Vitest ignores source and compiled tests; verify the events suites and root discovery.
-- [ ] F2 Add `.github/workflows/events.yml` with a dedicated Node 22 job that installs events dependencies from its own lockfile.
-- [ ] F3 Wire the events workflow to run this project's typecheck, build and all Node test-runner suites.
+- [x] F2 Add `.github/workflows/events.yml` with a dedicated Node 22 job that installs events dependencies from its own lockfile.
+- [x] F3 Wire the events workflow to run this project's typecheck, build and all Node test-runner suites.
