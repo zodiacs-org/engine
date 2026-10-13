@@ -9,6 +9,8 @@ pinned astronomy-engine series, lunar state and light-time functions used
 by the engine, Pluto's integration and complete position assembly in
 `src/ephemeris.ts`, plus `positions` in `src/api.ts` and the span metadata,
 and the angles, all supported cusp systems and `houseOf` in `src/houses.ts`.
+Aspect references are `src/aspects.ts`, `findInterAspects` in `src/synastry.ts`,
+`src/configured-aspects.ts`, `src/exact.ts` and `src/body-label.ts`.
 The parity tests import those sources directly
 and execute the release WASM built from `crates/wasm` and `crates/core`.
 Passing means compatibility on the tested inputs, not independent astronomical
@@ -78,6 +80,11 @@ for this port.
 | House membership on identical longitude and cusp inputs | Exact house number or matching error class/message, including missing slots and early returns | `tests/houses.parity.ts`, cusp boundaries and degenerate arrays |
 | Angles and cusp result shapes, system selection and polar fallback fields | Exact fields and key order, fresh mutable records and arrays; Placidus/Koch null and whole-sign fallback decisions match on identical inputs | `tests/houses.parity.ts` and `tests/quadrant-houses.parity.ts` |
 | Native arithmetic, signs, date validation and calendars | Exact regression expectations and calendar round trips | Unit tests in `crates/core/src/{lib,angles,signs,date_input,calendar}.rs` |
+| Legacy aspect definitions, matching, inter-chart results and motion on identical supplied inputs | Identical binary64 orb and copied longitude bits; tolerance 0 arcseconds; exact matching, flags and stable result order | `tests/aspects.parity.ts` |
+| Configured angles, orbs, allowances and speed thresholds on identical supplied inputs | Identical binary64 bits; tolerance 0 arcseconds and 0 arcseconds/day; exact eligibility, motion, rule selection and result order | `tests/configured-aspects.parity.ts` |
+| Aspect policy validation, labels, data slots, registry and frozen snapshots | Matching error class/message, values, key order, null prototypes, freeze behavior and policy identity | `tests/configured-aspects.parity.ts` |
+| Native exact expansions and overflow-safe signs | Exact rounding and sign compared with a separate integer-bit oracle, including subnormals and every finite exponent class | Unit tests in `crates/core/src/exact.rs` |
+| Native legacy/configured aspects and policy validation | Boundary inclusion, exact ties, circular-corner motion, extreme speeds, label/range checks and pair ordering | Unit tests in `crates/core/src/aspects.rs` |
 | Native time model and clock conversion | Table knot checks, segment/uncertainty boundaries, finite synthetic scan, leap seconds and pins | Unit tests in `crates/core/src/{deltat,time_scales}.rs` |
 | Native frame kernels | Series-prefix algebra, clock separation, right-handed rotations, matrix order, inverse rotations, vector scale and nonfinite behavior | Unit tests in `crates/core/src/{nutation,frame,equator}.rs` |
 | Native solar and planetary kernels | Series algebra and derivatives, vector/state consistency, correction geometry, clock reconstruction and bounded solver behavior | Unit tests in `crates/core/src/planets.rs` |
@@ -668,12 +675,59 @@ Run `RUSTCORE_PARITY_REPORT=1 npm run test:parity -- tests/houses.parity.ts test
 to print current-run angular maxima and conditioning/boundary counters. The
 optional report never changes the tests' acceptance limits.
 
+## Aspect decisions
+
+The aspect suites compare the same supplied binary64 rows in Rust/WASM and
+TypeScript. They do not recompute those rows independently and then assume
+identical aspect decisions. The annual synthetic date corpus runs from
+1800-01-01 through 2200-12-31, with a constructed instant in every year,
+using the local engine's `positions` as shared input. Separate seeded
+geometries and boundary cases exercise every named major/minor angle,
+custom angles, node selections, luminary replacements and motion-specific
+body caps. The exact dates, seeds and cases are committed in
+`tests/aspects.parity.ts` and `tests/configured-aspects.parity.ts`.
+
+There is no aspect rounding tolerance. Legacy matching retains the source's
+rounded separation and its stationary/circular-corner conventions. Configured
+matching carries exact nonoverlapping expansions through separation folding,
+deviation, eligibility, best-rule selection and stable sorting. Only a reported
+orb is rounded, once, to nearest with ties to even. Tests include unequal exact
+orbs that round to the same reported value and exact values just outside an
+inclusive allowance. Legacy and configured results intentionally disagree in
+some of these cases, exactly as their separate TypeScript references do.
+
+Configured speed classification evaluates the exact sign of threshold minus
+the speed difference. It never subtracts large speeds into infinity. The native
+fallback scales each finite binary64 into unsigned integer limbs, separately
+accumulates positive and negative terms, and compares the totals. This replaces
+the reference's BigInt representation without changing the decision. Native
+tests compare expansions and signs with an independently implemented integer
+bit-column oracle; they are arithmetic evidence, not astronomical evidence.
+
+The JavaScript boundary mirrors the policy factory and data-slot validation,
+including rejection of unknown fields, holes, accessor slots, invalid labels,
+duplicate labels and missing speeds on unselected rows. Policies and configured
+results retain deep freezing and local factory identity. Labels travel through
+reversible numeric indices, preserving exact UTF-16 identity, including lone
+surrogates and labels such as `__proto__`. Rust's native API uses valid Rust
+strings and checks their UTF-16 length and ECMAScript trim characters.
+
+Legacy helpers retain unchecked numeric behavior, including nonfinite values,
+duplicate rows and node exclusions. Their wrapper snapshots ordinary row fields
+before calling WASM; getter/proxy evaluation order is outside this low-level
+compatibility scope. Configured validation rejects ordinary accessor slots
+without invoking them, but is not a proxy sandbox. Independent Rust/TypeScript
+planetary evaluation can still place a longitude or speed on opposite sides of
+an aspect boundary under the previously documented upstream allowances.
+The complete pipeline corpus and treatment of those boundary cases belong to
+M12; shared-input exact parity does not establish identical event times.
+
 ## Remaining coverage
 
 Remaining integration work includes complete chart assembly. M12 also needs
 numeric parity limits for finite near-singular inputs beyond the currently
 conditioned angle and cusp corpus and the explicitly bounded edge probes.
-Legacy/configured/minor/custom aspect matching remains unimplemented.
+The aspect numeric paths are implemented; chart-level integration remains.
 The civil Julian Day Number helpers do not apply
 astronomical time scales. No performance baseline is claimed at this milestone.
 

@@ -3,11 +3,13 @@
 #![forbid(unsafe_code)]
 
 pub mod angles;
+pub mod aspects;
 pub mod calendar;
 pub mod date_input;
 pub mod deltat;
 pub mod ephemeris;
 pub mod equator;
+pub mod exact;
 pub mod frame;
 pub mod houses;
 pub mod lunar;

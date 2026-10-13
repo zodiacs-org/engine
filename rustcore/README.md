@@ -10,9 +10,11 @@ true lunar nodes with longitude finite differences. It assembles complete
 position rows with signs, degrees in signs, speeds and retrograde flags.
 It also computes chart angles and every supported house system, including
 Placidus and Koch polar fallbacks, and house membership from supplied cusps.
+Legacy and configured aspect matching run in Rust, including exact binary64
+orb decisions, motion classification, custom rules and stable result ordering.
 The TypeScript wrapper retains the implemented engine helpers' signatures after
 explicit initialization and exposes intermediate planetary and lunar kernels.
-Aspect matching and the remaining integration work are in [PLAN.md](PLAN.md).
+The remaining integration work is in [PLAN.md](PLAN.md).
 
 ## Setup and checks
 
@@ -201,11 +203,35 @@ Recovery from a valid but incompatible module requires reloading the wrapper
 and generated glue; always pair the generated glue with its matching WASM file.
 The browser integration test belongs to the wrapper milestone in the plan.
 
+`aspectMotion`, `matchAspect`, `findAspects` and `findInterAspects` expose the
+legacy engine signatures and floating-point behavior. `matchAspect` returns
+the matching frozen object from `ASPECTS`; the result arrays remain mutable.
+`ASPECT_TYPES`, `ASPECT_BODIES` and `STATIONARY_RELATIVE_SPEED` expose the
+reference metadata. Editing the public body set does not change matching.
+
+`createAspectPolicy(input?)`, `DEFAULT_ASPECT_POLICY` and
+`findConfiguredAspects(positions, policy)` mirror the configured API, with
+`CONFIGURED_ASPECT_ANGLES` for the named angles. Policies are immutable
+snapshots with a local factory registry; a deserialized policy must be
+recreated from its input fields. The factory and metadata work before WASM
+initialization. Matching requires initialization and returns deeply frozen
+results carrying the original policy object by identity.
+
+JavaScript validates ordinary data slots and allocates snapshots; Rust computes
+separation, exact orb eligibility, motion, rule selection and ordering. Body
+labels are transported through reversible indices so lone UTF-16 surrogates
+remain distinct. On identical numeric inputs, aspect fields have no rounding
+allowance: [aspects.parity.ts](tests/aspects.parity.ts) and
+[configured-aspects.parity.ts](tests/configured-aspects.parity.ts) enforce bit
+equality against the local engine across the synthetic corpus described in
+[PARITY.md](PARITY.md). This is compatibility evidence only.
+
 ## Native use
 
 The workspace member `crates/core` exposes `normalize_longitude(f64)` and the
 `angles`, `signs`, `date_input`, `calendar`, `deltat`, `time_scales`,
-`nutation`, `frame`, `equator`, `houses`, `planets`, `pluto`, `moon`, `lunar` and `ephemeris` modules. Fallible angular functions
+`nutation`, `frame`, `equator`, `houses`, `planets`, `pluto`, `moon`, `lunar`, `ephemeris`,
+`aspects` and `exact` modules. Fallible angular functions
 return `Result<_, LongitudeError>`; the unchecked angular helpers propagate NaN
 as the reference does. Date parsers return `Result<f64, DateError>` with epoch
 milliseconds. Calendar string parsers and conversions return `Option`, and
@@ -282,6 +308,23 @@ milliseconds, a `TimeScaleName` and optional Delta T seconds. Their native
 input boundary expects validated milliseconds and a finite pin; Date type
 checks are the wrapper's responsibility. Neither lunar module has a shared
 mutable cache or a JavaScript callback.
+
+`aspects::aspect_motion`, `match_aspect`, `find_aspects` and
+`find_inter_aspects` provide the legacy operations. Configured matching takes
+`AspectPosition` rows and an `AspectPolicy` made by `create_aspect_policy`.
+Use `AspectPolicyInput` with optional selections, `AspectRuleInput` for named
+or custom rules, and `AspectOrbInput::Uniform` or `ByMotion` for allowances.
+The factory validates ranges and identifiers and returns a policy with private
+fields and immutable getters. Native labels use Rust strings; JavaScript's
+lone-surrogate labels are represented only at the WASM boundary.
+
+The `exact` module carries nonoverlapping binary64 expansions and rounds a
+reported value once, with ties to even. Its `exact_sign` handles finite inputs
+of any magnitude using integer limbs when a floating sum could overflow.
+Expansion-building operations require finite terms with no overflowing partial
+sum, as documented on those functions. The aspect matcher enforces these
+preconditions through policy and position validation. No new dependency or
+unsafe code is used.
 
 ## Parity and provenance
 

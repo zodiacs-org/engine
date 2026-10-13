@@ -1,5 +1,6 @@
 //! WebAssembly bindings for the native numeric kernels.
 
+mod aspects;
 mod ephemeris;
 mod frame;
 mod houses;

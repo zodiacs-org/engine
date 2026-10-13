@@ -1,4 +1,7 @@
 import * as wasm from "../pkg/zodiacs_rustcore.js";
+import { ready } from "./runtime.js";
+export { initRustCore } from "./runtime.js";
+export * from "./aspects.js";
 import type { Angles, BodyName, BodyPosition, DateInput, HouseNumber, Houses, HouseSystem, SignDefinition } from "../../src/types.js";
 import type { AngleInput } from "../../src/houses.js";
 import type { CalendarName, CivilDate } from "../../src/civil-calendar.js";
@@ -33,18 +36,6 @@ export {
   DELTA_T_MODEL, DELTA_T_TABLE, DELTA_T_IERS_MODEL, TIME_SCALE_NAMES,
   LEAP_SECOND_LIST, UT1_DATA, LEAP_SECONDS_FROM, UT1_FALLBACK_BAND
 } from "../generated/time-data.js";
-
-let initialized = false;
-
-/** Supply the locally built WASM bytes or a compiled module before calculation. */
-export function initRustCore(module: BufferSource | WebAssembly.Module): void {
-  wasm.initSync({ module });
-  initialized = true;
-}
-
-function ready(): void {
-  if (!initialized) throw new Error("Call initRustCore with the WASM module before calculating.");
-}
 
 function finiteLongitude(lon: number): void {
   // Keep the JS boundary strict: wasm-bindgen would coerce null or strings.

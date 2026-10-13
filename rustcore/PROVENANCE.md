@@ -197,3 +197,30 @@ Placidus iteration and bisection, polar fallback and circle orientation,
 and the house-membership scan's short-circuit rules. It adds no coefficient table
 or externally sourced fixture. Tests compare the local TypeScript code on
 synthetic inputs only. No external ephemeris was consulted for this milestone.
+
+## Aspects and exact binary64 arithmetic
+
+[aspects.rs](crates/core/src/aspects.rs), [exact.rs](crates/core/src/exact.rs)
+and the JavaScript policy boundary translate the local MIT-licensed sources
+below. Their digests are enforced in [aspects.parity.ts](tests/aspects.parity.ts).
+Only `findInterAspects` is translated from `src/synastry.ts`; balance and pair
+summary helpers are outside this milestone.
+
+| Local source | SHA-256 |
+| --- | --- |
+| `src/aspects.ts` | `5cfbf1ffe3889f1c038b798d5bd74674de17bd9f0571adb4be08141cdd49f740` |
+| `src/configured-aspects.ts` | `c56349ba454e7cb3005f25eb3b740dd063cfeb3b9115e0d11512d8989ff19be4` |
+| `src/exact.ts` | `f89a335657aa1139370511d315abcf8d6080ab857e0a37d249faf9de6a5eb25e` |
+| `src/body-label.ts` | `bce12273949cd9810f4ab00c0f05c1aba14cf4ee46533ca3aba0588525006b1e` |
+| `src/synastry.ts` | `5671b43c9647a7164d171d9113ae4ab375b7f2a18cba53fac481e4c7a0522d29` |
+
+The exact-sum implementation retains the engine's nonoverlapping expansions
+and final half-even rounding. The parent [LICENSING.md](../LICENSING.md)
+attributes these published algorithms to J. R. Shewchuk, *Adaptive Precision
+Floating-Point Arithmetic and Fast Robust Geometric Predicates* (1997), in the
+partial-sums form described for Python's `math.fsum`. This port reads the
+engine implementation, not third-party source code. Its overflow-safe sign
+fallback replaces JavaScript BigInt with safe unsigned integer limbs and is
+checked against a separate integer-bit oracle in the native tests.
+No additional ephemeris, coefficient data, dependency or accuracy reference
+is introduced. All comparison inputs are synthetic.
