@@ -1,0 +1,277 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Zodiacs//Calendar Workbench//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:zcal-v1-b47a0831605bb76f96e867b54aec70c40fb4b011de00ceeee4976fe15fbdb57
+ c@calendar.zodiacs.org
+DTSTAMP:20260101T000000Z
+DTSTART:20260129T223142Z
+DTEND:20260201T000858Z
+SUMMARY:Void-of-course Moon in Cancer
+TRANSP:TRANSPARENT
+DESCRIPTION:{"aspect":null\,"bodies":["Moon"\,"Sun"\,"Venus"]\,"engine":{"e
+ phemeris":{"name":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiac
+ s/engine"\,"version":"1.0.0"}\,"eventType":"void-of-course"\,"orbDegrees":
+ null\,"schema":"zodiacs-calendar-receipt/1"\,"source":{"adapter":"calendar
+ -void-of-course/1"\,"boundaries":{"clipped":false\,"endExclusive":true\,"e
+ ndKind":"sign-exit"\,"endUtc":"2026-02-01T00:08:58.531Z"\,"startKind":"sig
+ n-entry"\,"startUtc":"2026-01-29T22:31:42.622Z"}\,"calculations":{"end":{"
+ conventions":["zodiac:tropical"\,"frame:ecliptic-true-of-date"\,"center:ge
+ ocentric"\,"correction:apparent"\,"moon:series-at-instant"\,"precession:ia
+ u2006"\,"nutation:iau2000b"\,"obliquity:iau2006"\,"ephemeris:astronomy-eng
+ ine@2.1.19"\,"deltat:time-basis"\,"time:tt-from-leap-seconds-and-ut1-from-
+ iers-1972-to-table-end\;delta-t-model-otherwise"]\,"engine":{"ephemeris":{
+ "name":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiacs/engine"\,
+ "version":"1.0.0"}\,"instants":[{"deltaT":{"model":"iers-utc/1"\,"seconds"
+ :69.11366870117187\,"segment":"observed"\,"sigma":0.000817\,"table":"2026-
+ 09-24"\,"tableDigest":"064d98b4a531053a"}\,"jdTt":2461072.5070337383\,"jdU
+ t1":2461072.506233812\,"timeScale":{"basis":"iers"\,"input":"utc"\,"leapSe
+ conds":{"listed":true\,"taiMinusUtc":37}\,"ut1MinusUtc":{"seconds":0.07033
+ 125566743337\,"sigma":0.000817\,"source":"observed"}}\,"utc":"2026-02-01T0
+ 0:08:58.531Z"}]\,"request":{"body":"Moon"\,"center":"geocentric"\,"flags":
+ {"cartesian":false\,"correction":"apparent"\,"deflection":false\,"speeds":
+ false\,"units":"degrees"}\,"frame":"ecliptic-true-of-date"\,"time":{"iso":
+ "2026-02-01T00:08:58.531Z"}\,"zodiac":"tropical"}\,"schema":"zodiacs.calc-
+ receipt.v1"}\,"lastContactTarget":null\,"start":{"conventions":["zodiac:tr
+ opical"\,"frame:ecliptic-true-of-date"\,"center:geocentric"\,"correction:a
+ pparent"\,"moon:series-at-instant"\,"precession:iau2006"\,"nutation:iau200
+ 0b"\,"obliquity:iau2006"\,"ephemeris:astronomy-engine@2.1.19"\,"deltat:tim
+ e-basis"\,"time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end\;
+ delta-t-model-otherwise"]\,"engine":{"ephemeris":{"name":"astronomy-engine
+ "\,"version":"2.1.19"}\,"name":"@zodiacs/engine"\,"version":"1.0.0"}\,"ins
+ tants":[{"deltaT":{"model":"iers-utc/1"\,"seconds":69.113\,"segment":"obse
+ rved"\,"sigma":0.000817\,"table":"2026-09-24"\,"tableDigest":"064d98b4a531
+ 053a"}\,"jdTt":2461070.4394884952\,"jdUt1":2461070.438688576\,"timeScale":
+ {"basis":"iers"\,"input":"utc"\,"leapSeconds":{"listed":true\,"taiMinusUtc
+ ":37}\,"ut1MinusUtc":{"seconds":0.07099999999999795\,"sigma":0.000817\,"so
+ urce":"observed"}}\,"utc":"2026-01-29T22:31:42.622Z"}]\,"request":{"body":
+ "Moon"\,"center":"geocentric"\,"flags":{"cartesian":false\,"correction":"a
+ pparent"\,"deflection":false\,"speeds":false\,"units":"degrees"}\,"frame":
+ "ecliptic-true-of-date"\,"time":{"iso":"2026-01-29T22:31:42.622Z"}\,"zodia
+ c":"tropical"}\,"schema":"zodiacs.calc-receipt.v1"}}\,"coordinates":{"cent
+ er":"geocentric"\,"correction":"apparent"\,"frame":"ecliptic-true-of-date"
+ \,"units":"degrees"\,"zodiac":"tropical"}\,"event":{"clippedStart":false\,
+ "clock":"utc"\,"endMs":1769904538531\,"kind":"void-of-course"\,"lastContac
+ t":null\,"sign":"Cancer"\,"startMs":1769725902622}\,"lastContactOrbDegrees
+ ":null\,"policy":{"aspects":[{"angleDegrees":0\,"id":"conjunction"}\,{"ang
+ leDegrees":60\,"id":"sextile"}\,{"angleDegrees":90\,"id":"square"}\,{"angl
+ eDegrees":120\,"id":"trine"}\,{"angleDegrees":180\,"id":"opposition"}]\,"b
+ odies":["Sun"\,"Venus"]}\,"search":{"boundaryPolicy":"full-interval\;utc-e
+ xit-day\;four-day-halo/1"\,"clock":"utc"\,"completeness":"scan-finished\;c
+ onditional-on-continuous-monotonic-short-arc-cells"\,"identityWindow":{"en
+ dUtc":"2026-02-02T00:00:00.000Z"\,"startUtc":"2026-02-01T00:00:00.000Z"}\,
+ "mode":"all"\,"stepMs":3600000\,"window":{"clock":"utc"\,"endMs":177033600
+ 0000\,"startMs":1769558400000}}\,"upstream":{"commit":"7d6fb88d03b3896ee1e
+ 5496ed99961015d291d3c"\,"engineTree":"0b30adb21b75522cd52a453499a76211fca8
+ b8cb"\,"entry":"events/src/void.ts#searchVoidOfCourseMoon"}}\,"utc":"2026-
+ 01-29T22:31:42.622Z"}
+X-ZODIACS-SCHEMA;VALUE=TEXT:zodiacs-calendar-receipt/1
+X-ZODIACS-UTC;VALUE=TEXT:2026-01-29T22:31:42.622Z
+X-ZODIACS-EVENT-TYPE;VALUE=TEXT:void-of-course
+X-ZODIACS-BODIES;VALUE=TEXT:["Moon"\,"Sun"\,"Venus"]
+X-ZODIACS-ASPECT;VALUE=TEXT:null
+X-ZODIACS-ORB-DEGREES;VALUE=TEXT:null
+X-ZODIACS-ENGINE;VALUE=TEXT:@zodiacs/engine@1.0.0
+X-ZODIACS-EPHEMERIS;VALUE=TEXT:astronomy-engine@2.1.19
+X-ZODIACS-IDENTITY;VALUE=TEXT:{"aspectAngleDegrees":null\,"bodies":["Moon"\
+ ,"Sun"\,"Venus"]\,"chartIds":[]\,"definition":{"id":"sign-last-exact-conta
+ ct-void-moon/1"\,"parameters":{"aspectAnglesDegrees":[0\,60\,90\,120\,180]
+ \,"boundaryPolicy":"full-interval\;utc-exit-day\;four-day-halo/1"\,"center
+ ":"geocentric"\,"clock":"utc"\,"correction":"apparent"\,"frame":"ecliptic-
+ true-of-date"\,"sign":"Cancer"\,"stepMs":3600000\,"units":"degrees"\,"zodi
+ ac":"tropical"}}\,"eventType":"void-of-course"\,"namespace":"synthetic-voi
+ d.calendar.invalid"\,"occurrence":{"key":"moon-sign-exit/1:2026-02-01T00:0
+ 0:00.000Z:0"\,"scheme":"source-key/1"}\,"schema":"zodiacs-calendar-event/1
+ "}
+X-ZODIACS-END-UTC;VALUE=TEXT:2026-02-01T00:08:58.531Z
+END:VEVENT
+BEGIN:VEVENT
+UID:zcal-v1-730cb680ace5a7ca95f874ab0212330164544ef23fa0bd4427a09b0594df6ca
+ 8@calendar.zodiacs.org
+DTSTAMP:20260101T000000Z
+DTSTART:20260202T095547Z
+DTEND:20260203T032115Z
+SUMMARY:Void-of-course Moon in Leo
+TRANSP:TRANSPARENT
+DESCRIPTION:{"aspect":null\,"bodies":["Moon"\,"Sun"\,"Venus"]\,"engine":{"e
+ phemeris":{"name":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiac
+ s/engine"\,"version":"1.0.0"}\,"eventType":"void-of-course"\,"orbDegrees":
+ null\,"schema":"zodiacs-calendar-receipt/1"\,"source":{"adapter":"calendar
+ -void-of-course/1"\,"boundaries":{"clipped":false\,"endExclusive":true\,"e
+ ndKind":"sign-exit"\,"endUtc":"2026-02-03T03:21:15.298Z"\,"startKind":"las
+ t-exact-contact"\,"startUtc":"2026-02-02T09:55:47.123Z"}\,"calculations":{
+ "end":{"conventions":["zodiac:tropical"\,"frame:ecliptic-true-of-date"\,"c
+ enter:geocentric"\,"correction:apparent"\,"moon:series-at-instant"\,"prece
+ ssion:iau2006"\,"nutation:iau2000b"\,"obliquity:iau2006"\,"ephemeris:astro
+ nomy-engine@2.1.19"\,"deltat:time-basis"\,"time:tt-from-leap-seconds-and-u
+ t1-from-iers-1972-to-table-end\;delta-t-model-otherwise"]\,"engine":{"ephe
+ meris":{"name":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiacs/e
+ ngine"\,"version":"1.0.0"}\,"instants":[{"deltaT":{"model":"iers-utc/1"\,"
+ seconds":69.1143798828125\,"segment":"observed"\,"sigma":0.000817\,"table"
+ :"2026-09-24"\,"tableDigest":"064d98b4a531053a"}\,"jdTt":2461074.640561134
+ \,"jdUt1":2461074.6397611992\,"timeScale":{"basis":"iers"\,"input":"utc"\,
+ "leapSeconds":{"listed":true\,"taiMinusUtc":37}\,"ut1MinusUtc":{"seconds":
+ 0.06962007986882668\,"sigma":0.000817\,"source":"observed"}}\,"utc":"2026-
+ 02-03T03:21:15.298Z"}]\,"request":{"body":"Moon"\,"center":"geocentric"\,"
+ flags":{"cartesian":false\,"correction":"apparent"\,"deflection":false\,"s
+ peeds":false\,"units":"degrees"}\,"frame":"ecliptic-true-of-date"\,"time":
+ {"iso":"2026-02-03T03:21:15.298Z"}\,"zodiac":"tropical"}\,"schema":"zodiac
+ s.calc-receipt.v1"}\,"lastContactTarget":{"conventions":["zodiac:tropical"
+ \,"frame:ecliptic-true-of-date"\,"center:geocentric"\,"correction:apparent
+ "\,"light-time:newtonian"\,"deflection:none"\,"aberration:backdated-observ
+ er"\,"precession:iau2006"\,"nutation:iau2000b"\,"obliquity:iau2006"\,"ephe
+ meris:astronomy-engine@2.1.19"\,"deltat:time-basis"\,"time:tt-from-leap-se
+ conds-and-ut1-from-iers-1972-to-table-end\;delta-t-model-otherwise"]\,"eng
+ ine":{"ephemeris":{"name":"astronomy-engine"\,"version":"2.1.19"}\,"name":
+ "@zodiacs/engine"\,"version":"1.0.0"}\,"instants":[{"deltaT":{"model":"ier
+ s-utc/1"\,"seconds":69.11413793945313\,"segment":"observed"\,"sigma":0.000
+ 817\,"table":"2026-09-24"\,"tableDigest":"064d98b4a531053a"}\,"jdTt":24610
+ 73.9145405903\,"jdUt1":2461073.913740658\,"timeScale":{"basis":"iers"\,"in
+ put":"utc"\,"leapSeconds":{"listed":true\,"taiMinusUtc":37}\,"ut1MinusUtc"
+ :{"seconds":0.06986208671682448\,"sigma":0.000817\,"source":"observed"}}\,
+ "utc":"2026-02-02T09:55:47.123Z"}]\,"request":{"body":"Venus"\,"center":"g
+ eocentric"\,"flags":{"cartesian":false\,"correction":"apparent"\,"deflecti
+ on":false\,"speeds":false\,"units":"degrees"}\,"frame":"ecliptic-true-of-d
+ ate"\,"time":{"iso":"2026-02-02T09:55:47.123Z"}\,"zodiac":"tropical"}\,"sc
+ hema":"zodiacs.calc-receipt.v1"}\,"start":{"conventions":["zodiac:tropical
+ "\,"frame:ecliptic-true-of-date"\,"center:geocentric"\,"correction:apparen
+ t"\,"moon:series-at-instant"\,"precession:iau2006"\,"nutation:iau2000b"\,"
+ obliquity:iau2006"\,"ephemeris:astronomy-engine@2.1.19"\,"deltat:time-basi
+ s"\,"time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end\;delta-
+ t-model-otherwise"]\,"engine":{"ephemeris":{"name":"astronomy-engine"\,"ve
+ rsion":"2.1.19"}\,"name":"@zodiacs/engine"\,"version":"1.0.0"}\,"instants"
+ :[{"deltaT":{"model":"iers-utc/1"\,"seconds":69.11413793945313\,"segment":
+ "observed"\,"sigma":0.000817\,"table":"2026-09-24"\,"tableDigest":"064d98b
+ 4a531053a"}\,"jdTt":2461073.9145405903\,"jdUt1":2461073.913740658\,"timeSc
+ ale":{"basis":"iers"\,"input":"utc"\,"leapSeconds":{"listed":true\,"taiMin
+ usUtc":37}\,"ut1MinusUtc":{"seconds":0.06986208671682448\,"sigma":0.000817
+ \,"source":"observed"}}\,"utc":"2026-02-02T09:55:47.123Z"}]\,"request":{"b
+ ody":"Moon"\,"center":"geocentric"\,"flags":{"cartesian":false\,"correctio
+ n":"apparent"\,"deflection":false\,"speeds":false\,"units":"degrees"}\,"fr
+ ame":"ecliptic-true-of-date"\,"time":{"iso":"2026-02-02T09:55:47.123Z"}\,"
+ zodiac":"tropical"}\,"schema":"zodiacs.calc-receipt.v1"}}\,"coordinates":{
+ "center":"geocentric"\,"correction":"apparent"\,"frame":"ecliptic-true-of-
+ date"\,"units":"degrees"\,"zodiac":"tropical"}\,"event":{"clippedStart":fa
+ lse\,"clock":"utc"\,"endMs":1770088875298\,"kind":"void-of-course"\,"lastC
+ ontact":{"aspect":{"angleDegrees":180\,"id":"opposition"}\,"atMs":17700261
+ 47123\,"body":"Moon"\,"bracket":[1770026147123\,1770026147124]\,"clock":"u
+ tc"\,"direction":"direct"\,"kind":"exact-aspect"\,"relativeLongitude":180\
+ ,"residualDegrees":-6.345567271637265e-8\,"target":{"body":"Venus"\,"kind"
+ :"moving"}}\,"sign":"Leo"\,"startMs":1770026147123}\,"lastContactOrbDegree
+ s":6.345567271637265e-8\,"policy":{"aspects":[{"angleDegrees":0\,"id":"con
+ junction"}\,{"angleDegrees":60\,"id":"sextile"}\,{"angleDegrees":90\,"id":
+ "square"}\,{"angleDegrees":120\,"id":"trine"}\,{"angleDegrees":180\,"id":"
+ opposition"}]\,"bodies":["Sun"\,"Venus"]}\,"search":{"boundaryPolicy":"ful
+ l-interval\;utc-exit-day\;four-day-halo/1"\,"clock":"utc"\,"completeness":
+ "scan-finished\;conditional-on-continuous-monotonic-short-arc-cells"\,"ide
+ ntityWindow":{"endUtc":"2026-02-04T00:00:00.000Z"\,"startUtc":"2026-02-03T
+ 00:00:00.000Z"}\,"mode":"all"\,"stepMs":3600000\,"window":{"clock":"utc"\,
+ "endMs":1770508800000\,"startMs":1769731200000}}\,"upstream":{"commit":"7d
+ 6fb88d03b3896ee1e5496ed99961015d291d3c"\,"engineTree":"0b30adb21b75522cd52
+ a453499a76211fca8b8cb"\,"entry":"events/src/void.ts#searchVoidOfCourseMoon
+ "}}\,"utc":"2026-02-02T09:55:47.123Z"}
+X-ZODIACS-SCHEMA;VALUE=TEXT:zodiacs-calendar-receipt/1
+X-ZODIACS-UTC;VALUE=TEXT:2026-02-02T09:55:47.123Z
+X-ZODIACS-EVENT-TYPE;VALUE=TEXT:void-of-course
+X-ZODIACS-BODIES;VALUE=TEXT:["Moon"\,"Sun"\,"Venus"]
+X-ZODIACS-ASPECT;VALUE=TEXT:null
+X-ZODIACS-ORB-DEGREES;VALUE=TEXT:null
+X-ZODIACS-ENGINE;VALUE=TEXT:@zodiacs/engine@1.0.0
+X-ZODIACS-EPHEMERIS;VALUE=TEXT:astronomy-engine@2.1.19
+X-ZODIACS-IDENTITY;VALUE=TEXT:{"aspectAngleDegrees":null\,"bodies":["Moon"\
+ ,"Sun"\,"Venus"]\,"chartIds":[]\,"definition":{"id":"sign-last-exact-conta
+ ct-void-moon/1"\,"parameters":{"aspectAnglesDegrees":[0\,60\,90\,120\,180]
+ \,"boundaryPolicy":"full-interval\;utc-exit-day\;four-day-halo/1"\,"center
+ ":"geocentric"\,"clock":"utc"\,"correction":"apparent"\,"frame":"ecliptic-
+ true-of-date"\,"sign":"Leo"\,"stepMs":3600000\,"units":"degrees"\,"zodiac"
+ :"tropical"}}\,"eventType":"void-of-course"\,"namespace":"synthetic-void.c
+ alendar.invalid"\,"occurrence":{"key":"moon-sign-exit/1:2026-02-03T00:00:0
+ 0.000Z:0"\,"scheme":"source-key/1"}\,"schema":"zodiacs-calendar-event/1"}
+X-ZODIACS-END-UTC;VALUE=TEXT:2026-02-03T03:21:15.298Z
+END:VEVENT
+BEGIN:VEVENT
+UID:zcal-v1-f7d3d7f9af32d82c4b69ad05b6b34d6d286497ff0bd3178236cc84edee9b777
+ c@calendar.zodiacs.org
+DTSTAMP:20260101T000000Z
+DTSTART:20260203T032115Z
+DTEND:20260205T093233Z
+SUMMARY:Void-of-course Moon in Virgo
+TRANSP:TRANSPARENT
+DESCRIPTION:{"aspect":null\,"bodies":["Moon"\,"Sun"\,"Venus"]\,"engine":{"e
+ phemeris":{"name":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiac
+ s/engine"\,"version":"1.0.0"}\,"eventType":"void-of-course"\,"orbDegrees":
+ null\,"schema":"zodiacs-calendar-receipt/1"\,"source":{"adapter":"calendar
+ -void-of-course/1"\,"boundaries":{"clipped":false\,"endExclusive":true\,"e
+ ndKind":"sign-exit"\,"endUtc":"2026-02-05T09:32:33.353Z"\,"startKind":"sig
+ n-entry"\,"startUtc":"2026-02-03T03:21:15.298Z"}\,"calculations":{"end":{"
+ conventions":["zodiac:tropical"\,"frame:ecliptic-true-of-date"\,"center:ge
+ ocentric"\,"correction:apparent"\,"moon:series-at-instant"\,"precession:ia
+ u2006"\,"nutation:iau2000b"\,"obliquity:iau2006"\,"ephemeris:astronomy-eng
+ ine@2.1.19"\,"deltat:time-basis"\,"time:tt-from-leap-seconds-and-ut1-from-
+ iers-1972-to-table-end\;delta-t-model-otherwise"]\,"engine":{"ephemeris":{
+ "name":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiacs/engine"\,
+ "version":"1.0.0"}\,"instants":[{"deltaT":{"model":"iers-utc/1"\,"seconds"
+ :69.11526513671875\,"segment":"observed"\,"sigma":0.000817\,"table":"2026-
+ 09-24"\,"tableDigest":"064d98b4a531053a"}\,"jdTt":2461076.898408993\,"jdUt
+ 1":2461076.897609048\,"timeScale":{"basis":"iers"\,"input":"utc"\,"leapSec
+ onds":{"listed":true\,"taiMinusUtc":37}\,"ut1MinusUtc":{"seconds":0.068734
+ 92783179103\,"sigma":0.000817\,"source":"observed"}}\,"utc":"2026-02-05T09
+ :32:33.353Z"}]\,"request":{"body":"Moon"\,"center":"geocentric"\,"flags":{
+ "cartesian":false\,"correction":"apparent"\,"deflection":false\,"speeds":f
+ alse\,"units":"degrees"}\,"frame":"ecliptic-true-of-date"\,"time":{"iso":"
+ 2026-02-05T09:32:33.353Z"}\,"zodiac":"tropical"}\,"schema":"zodiacs.calc-r
+ eceipt.v1"}\,"lastContactTarget":null\,"start":{"conventions":["zodiac:tro
+ pical"\,"frame:ecliptic-true-of-date"\,"center:geocentric"\,"correction:ap
+ parent"\,"moon:series-at-instant"\,"precession:iau2006"\,"nutation:iau2000
+ b"\,"obliquity:iau2006"\,"ephemeris:astronomy-engine@2.1.19"\,"deltat:time
+ -basis"\,"time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end\;d
+ elta-t-model-otherwise"]\,"engine":{"ephemeris":{"name":"astronomy-engine"
+ \,"version":"2.1.19"}\,"name":"@zodiacs/engine"\,"version":"1.0.0"}\,"inst
+ ants":[{"deltaT":{"model":"iers-utc/1"\,"seconds":69.1143798828125\,"segme
+ nt":"observed"\,"sigma":0.000817\,"table":"2026-09-24"\,"tableDigest":"064
+ d98b4a531053a"}\,"jdTt":2461074.640561134\,"jdUt1":2461074.6397611992\,"ti
+ meScale":{"basis":"iers"\,"input":"utc"\,"leapSeconds":{"listed":true\,"ta
+ iMinusUtc":37}\,"ut1MinusUtc":{"seconds":0.06962007986882668\,"sigma":0.00
+ 0817\,"source":"observed"}}\,"utc":"2026-02-03T03:21:15.298Z"}]\,"request"
+ :{"body":"Moon"\,"center":"geocentric"\,"flags":{"cartesian":false\,"corre
+ ction":"apparent"\,"deflection":false\,"speeds":false\,"units":"degrees"}\
+ ,"frame":"ecliptic-true-of-date"\,"time":{"iso":"2026-02-03T03:21:15.298Z"
+ }\,"zodiac":"tropical"}\,"schema":"zodiacs.calc-receipt.v1"}}\,"coordinate
+ s":{"center":"geocentric"\,"correction":"apparent"\,"frame":"ecliptic-true
+ -of-date"\,"units":"degrees"\,"zodiac":"tropical"}\,"event":{"clippedStart
+ ":false\,"clock":"utc"\,"endMs":1770283953353\,"kind":"void-of-course"\,"l
+ astContact":null\,"sign":"Virgo"\,"startMs":1770088875298}\,"lastContactOr
+ bDegrees":null\,"policy":{"aspects":[{"angleDegrees":0\,"id":"conjunction"
+ }\,{"angleDegrees":60\,"id":"sextile"}\,{"angleDegrees":90\,"id":"square"}
+ \,{"angleDegrees":120\,"id":"trine"}\,{"angleDegrees":180\,"id":"oppositio
+ n"}]\,"bodies":["Sun"\,"Venus"]}\,"search":{"boundaryPolicy":"full-interva
+ l\;utc-exit-day\;four-day-halo/1"\,"clock":"utc"\,"completeness":"scan-fin
+ ished\;conditional-on-continuous-monotonic-short-arc-cells"\,"identityWind
+ ow":{"endUtc":"2026-02-06T00:00:00.000Z"\,"startUtc":"2026-02-05T00:00:00.
+ 000Z"}\,"mode":"all"\,"stepMs":3600000\,"window":{"clock":"utc"\,"endMs":1
+ 770681600000\,"startMs":1769904000000}}\,"upstream":{"commit":"7d6fb88d03b
+ 3896ee1e5496ed99961015d291d3c"\,"engineTree":"0b30adb21b75522cd52a453499a7
+ 6211fca8b8cb"\,"entry":"events/src/void.ts#searchVoidOfCourseMoon"}}\,"utc
+ ":"2026-02-03T03:21:15.298Z"}
+X-ZODIACS-SCHEMA;VALUE=TEXT:zodiacs-calendar-receipt/1
+X-ZODIACS-UTC;VALUE=TEXT:2026-02-03T03:21:15.298Z
+X-ZODIACS-EVENT-TYPE;VALUE=TEXT:void-of-course
+X-ZODIACS-BODIES;VALUE=TEXT:["Moon"\,"Sun"\,"Venus"]
+X-ZODIACS-ASPECT;VALUE=TEXT:null
+X-ZODIACS-ORB-DEGREES;VALUE=TEXT:null
+X-ZODIACS-ENGINE;VALUE=TEXT:@zodiacs/engine@1.0.0
+X-ZODIACS-EPHEMERIS;VALUE=TEXT:astronomy-engine@2.1.19
+X-ZODIACS-IDENTITY;VALUE=TEXT:{"aspectAngleDegrees":null\,"bodies":["Moon"\
+ ,"Sun"\,"Venus"]\,"chartIds":[]\,"definition":{"id":"sign-last-exact-conta
+ ct-void-moon/1"\,"parameters":{"aspectAnglesDegrees":[0\,60\,90\,120\,180]
+ \,"boundaryPolicy":"full-interval\;utc-exit-day\;four-day-halo/1"\,"center
+ ":"geocentric"\,"clock":"utc"\,"correction":"apparent"\,"frame":"ecliptic-
+ true-of-date"\,"sign":"Virgo"\,"stepMs":3600000\,"units":"degrees"\,"zodia
+ c":"tropical"}}\,"eventType":"void-of-course"\,"namespace":"synthetic-void
+ .calendar.invalid"\,"occurrence":{"key":"moon-sign-exit/1:2026-02-05T00:00
+ :00.000Z:0"\,"scheme":"source-key/1"}\,"schema":"zodiacs-calendar-event/1"
+ }
+X-ZODIACS-END-UTC;VALUE=TEXT:2026-02-05T09:32:33.353Z
+END:VEVENT
+END:VCALENDAR

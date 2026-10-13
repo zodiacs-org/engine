@@ -1,0 +1,84 @@
+{
+  "schema": "zodiacs-calendar-streaming-evidence/1",
+  "scope": "Engine regression and bounded streaming/parser checks; no astronomical accuracy or heap bound claim.",
+  "runtime": {
+    "node": "22.22.2"
+  },
+  "engine": {
+    "name": "@zodiacs/engine",
+    "version": "1.0.0",
+    "ephemeris": {
+      "name": "astronomy-engine",
+      "version": "2.1.19"
+    }
+  },
+  "source": {
+    "eventsCommit": "7d6fb88d03b3896ee1e5496ed99961015d291d3c",
+    "engineTree": "0b30adb21b75522cd52a453499a76211fca8b8cb",
+    "calendarSourceSha256": "ea4b92222a4fe28e7bed18244a581a712b9a64b197001a28b0295863401d43eb"
+  },
+  "request": {
+    "startUtc": "2020-01-01T00:00:00.000Z",
+    "endUtc": "2030-01-01T00:00:00.000Z",
+    "maxEvaluations": 1000000,
+    "windowDays": 7,
+    "maxBufferedEvents": 8,
+    "schedules": [
+      {
+        "kind": "ingress",
+        "request": {
+          "namespace": "synthetic-evidence.calendar.invalid",
+          "clock": "utc",
+          "body": "Sun",
+          "stepMs": 21600000
+        }
+      },
+      {
+        "kind": "station",
+        "request": {
+          "namespace": "synthetic-evidence.calendar.invalid",
+          "clock": "utc",
+          "body": "Mercury",
+          "stepMs": 21600000
+        }
+      }
+    ]
+  },
+  "options": {
+    "dtstamp": "2020-01-01T00:00:00.000Z"
+  },
+  "runs": [
+    {
+      "windowDays": 7,
+      "status": "complete",
+      "evaluations": 75733,
+      "emitted": 183,
+      "windows": 522,
+      "types": {
+        "ingress": 120,
+        "station": 63
+      },
+      "parsedEvents": 183,
+      "wireBytes": 715754,
+      "largestChunkBytes": 3986,
+      "recordSha256": "92629321660d21965c13280118ee11d4a2db0307061db24dbad234e8d5e61384",
+      "wireSha256": "725a3762895c75d3bfa35f0a2499f1c8f65f876746418e331af314ba6963fce6"
+    },
+    {
+      "windowDays": 31,
+      "status": "complete",
+      "evaluations": 75733,
+      "emitted": 183,
+      "windows": 118,
+      "types": {
+        "ingress": 120,
+        "station": 63
+      },
+      "parsedEvents": 183,
+      "wireBytes": 715754,
+      "largestChunkBytes": 3986,
+      "recordSha256": "92629321660d21965c13280118ee11d4a2db0307061db24dbad234e8d5e61384",
+      "wireSha256": "725a3762895c75d3bfa35f0a2499f1c8f65f876746418e331af314ba6963fce6"
+    }
+  ]
+}

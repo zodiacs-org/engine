@@ -1,0 +1,152 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Zodiacs//Calendar Workbench//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:zcal-v1-1a15794bff60b97ad09f5b0520a23ab1e7a22e50b134da096a05c86d527ed9c
+ 0@calendar.zodiacs.org
+DTSTAMP:20260101T000000Z
+DTSTART:20260203T053736Z
+SUMMARY:Sun conjunction natal Sun
+TRANSP:TRANSPARENT
+DESCRIPTION:{"aspect":{"angleDegrees":0\,"name":"conjunction"}\,"bodies":["
+ Sun"\,"Sun"]\,"engine":{"ephemeris":{"name":"astronomy-engine"\,"version":
+ "2.1.19"}\,"name":"@zodiacs/engine"\,"version":"1.0.0"}\,"eventType":"nata
+ l-transit"\,"orbDegrees":2.5376607482030522e-9\,"schema":"zodiacs-calendar
+ -receipt/1"\,"source":{"adapter":"calendar-natal-transit/1"\,"calculation"
+ :{"conventions":["zodiac:tropical"\,"frame:ecliptic-true-of-date"\,"center
+ :geocentric"\,"correction:apparent"\,"light-time:newtonian"\,"deflection:n
+ one"\,"aberration:backdated-observer"\,"precession:iau2006"\,"nutation:iau
+ 2000b"\,"obliquity:iau2006"\,"ephemeris:astronomy-engine@2.1.19"\,"deltat:
+ time-basis"\,"time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-en
+ d\;delta-t-model-otherwise"]\,"engine":{"ephemeris":{"name":"astronomy-eng
+ ine"\,"version":"2.1.19"}\,"name":"@zodiacs/engine"\,"version":"1.0.0"}\,"
+ instants":[{"deltaT":{"model":"iers-utc/1"\,"seconds":69.11441137695313\,"
+ segment":"observed"\,"sigma":0.000817\,"table":"2026-09-24"\,"tableDigest"
+ :"064d98b4a531053a"}\,"jdTt":2461074.7352511226\,"jdUt1":2461074.734451187
+ 3\,"timeScale":{"basis":"iers"\,"input":"utc"\,"leapSeconds":{"listed":tru
+ e\,"taiMinusUtc":37}\,"ut1MinusUtc":{"seconds":0.06958851653935483\,"sigma
+ ":0.000817\,"source":"observed"}}\,"utc":"2026-02-03T05:37:36.513Z"}]\,"re
+ quest":{"body":"Sun"\,"center":"geocentric"\,"flags":{"cartesian":false\,"
+ correction":"apparent"\,"deflection":false\,"speeds":false\,"units":"degre
+ es"}\,"frame":"ecliptic-true-of-date"\,"time":{"iso":"2026-02-03T05:37:36.
+ 513Z"}\,"zodiac":"tropical"}\,"schema":"zodiacs.calc-receipt.v1"}\,"coordi
+ nates":{"center":"geocentric"\,"correction":"apparent"\,"frame":"ecliptic-
+ true-of-date"\,"units":"degrees"\,"zodiac":"tropical"}\,"event":{"aspect":
+ {"angleDegrees":0\,"id":"conjunction"}\,"atMs":1770097056513\,"body":"Sun"
+ \,"bracket":[1770097056512\,1770097056513]\,"clock":"utc"\,"direction":"di
+ rect"\,"kind":"exact-aspect"\,"relativeLongitude":0\,"residualDegrees":2.5
+ 376607482030522e-9\,"target":{"kind":"fixed"\,"longitude":314.391457420615
+ 5}}\,"natal":{"calculation":{"receipt":{"conventions":{"angles":"gast-and-
+ true-obliquity"\,"aspects":"major-aspects\;sun-moon-eight-planets\;no-node
+ s\;applying-instantaneous-orb-rate"\,"calendar":"proleptic-gregorian"\,"de
+ ltaT":"tt-minus-ut1\;value-in-result"\,"localTime":"tzdb-shards-before-197
+ 0\;host-intl-from-1970\;flags-from-transition-record"\,"longitudeUnit":"de
+ grees-[0\,360)"\,"moonNodes":"instantaneous-geocentric-moon-orbit-plane"\,
+ "moonPosition":"astronomy-engine-geo-moon\;no-light-time\;no-aberration"\,
+ "nutation":"iau2000b\;equation-of-equinoxes-with-two-complementary-terms"\
+ ,"planetPositions":"aberrated-geocentric-ecliptic-of-date\;no-deflection"\
+ ,"speed":"degrees-per-day\;central-difference-plus-minus-0.001-day\;nodes-
+ plus-minus-0.25-day"\,"timeScale":"tt-from-leap-seconds-and-ut1-from-iers-
+ 1972-to-table-end\;delta-t-model-otherwise\;in-result"\,"zodiac":"tropical
+ "}\,"coordinates":{"latitude":12.5\,"longitude":34.25}\,"coverage":{"angle
+ Exclusions":"exact-geographic-poles-and-ecliptic-horizon-coincidence"\,"as
+ sessment":"finite-reference-cases-only"\,"broadDateRange":"not-certified"\
+ ,"inputSyntax":"not-an-astronomical-accuracy-guarantee"}\,"engine":{"ephem
+ eris":{"name":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiacs/en
+ gine"\,"version":"1.0.0"}\,"houses":{"absenceReason":null\,"actual":"whole
+ "\,"requested":"whole"}\,"inputFlags":[]\,"instant":"2001-02-03T04:05:06.7
+ 89Z"\,"localResolution":null\,"provenance":null\,"reference":"supplied-ins
+ tant"\,"resultFlags":[]\,"schema":"zodiacs.calculation-receipt.draft-v1"\,
+ "sourceInstant":"2001-02-03T04:05:06.789Z"\,"timeKnown":true\,"timeScale":
+ "utc"}\,"requiredFeatures":[]\,"result":{"angles":{"asc":312.5750608405176
+ \,"dsc":132.5750608405176\,"ic":51.360062605647784\,"mc":231.3600626056477
+ 8}\,"aspects":[{"a":"Sun"\,"applying":true\,"b":"Pluto"\,"orb":0.373154096
+ 40933694\,"type":"sextile"}\,{"a":"Mars"\,"applying":true\,"b":"Saturn"\,"
+ orb":0.38639189484058534\,"type":"opposition"}\,{"a":"Mercury"\,"applying"
+ :true\,"b":"Jupiter"\,"orb":0.7017665163479023\,"type":"square"}\,{"a":"Ve
+ nus"\,"applying":true\,"b":"Jupiter"\,"orb":1.002388871650453\,"type":"sex
+ tile"}\,{"a":"Moon"\,"applying":true\,"b":"Neptune"\,"orb":2.4779528910287
+ 354\,"type":"trine"}\,{"a":"Moon"\,"applying":false\,"b":"Jupiter"\,"orb":
+ 2.7674740095027914\,"type":"conjunction"}\,{"a":"Mars"\,"applying":false\,
+ "b":"Uranus"\,"orb":3.308399346774763\,"type":"square"}\,{"a":"Moon"\,"app
+ lying":false\,"b":"Mercury"\,"orb":3.4692405258506938\,"type":"square"}\,{
+ "a":"Saturn"\,"applying":true\,"b":"Uranus"\,"orb":3.6947912416153486\,"ty
+ pe":"square"}\,{"a":"Moon"\,"applying":false\,"b":"Venus"\,"orb":3.7698628
+ 811532444\,"type":"sextile"}\,{"a":"Jupiter"\,"applying":false\,"b":"Neptu
+ ne"\,"orb":5.245426900531527\,"type":"trine"}\,{"a":"Sun"\,"applying":true
+ \,"b":"Uranus"\,"orb":6.055575616785461\,"type":"conjunction"}\,{"a":"Merc
+ ury"\,"applying":false\,"b":"Saturn"\,"orb":6.476889898840909\,"type":"squ
+ are"}\,{"a":"Venus"\,"applying":false\,"b":"Mars"\,"orb":6.562659438378887
+ \,"type":"trine"}\,{"a":"Mercury"\,"applying":true\,"b":"Mars"\,"orb":6.86
+ 3281793681438\,"type":"square"}\,{"a":"Jupiter"\,"applying":false\,"b":"Sa
+ turn"\,"orb":7.178656415188755\,"type":"conjunction"}\,{"a":"Mars"\,"apply
+ ing":true\,"b":"Jupiter"\,"orb":7.565048310029397\,"type":"opposition"}\,{
+ "a":"Sun"\,"applying":false\,"b":"Neptune"\,"orb":7.825549825878909\,"type
+ ":"conjunction"}\,{"a":"Moon"\,"applying":false\,"b":"Saturn"\,"orb":9.946
+ 130424691546\,"type":"conjunction"}]\,"bodies":[{"body":"Sun"\,"degree":14
+ .391457420615552\,"lat":0.000009308953898470675\,"lon":314.3914574206155\,
+ "retrograde":false\,"sign":"aquarius"\,"speed":1.0141753605523718}\,{"body
+ ":"Moon"\,"degree":4.087954703707851\,"lat":-3.4482291019474944\,"lon":64.
+ 08795470370785\,"retrograde":false\,"sign":"gemini"\,"speed":13.7668475888
+ 40392}\,{"body":"Mercury"\,"degree":0.6187141778571004\,"lat":1.6667088499
+ 513847\,"lon":330.61871417785716\,"retrograde":false\,"sign":"pisces"\,"sp
+ eed":0.16632354012813266}\,{"body":"Venus"\,"degree":0.31809182255460655\,
+ "lat":1.7418110386315315\,"lon":0.31809182255460655\,"retrograde":false\,"
+ sign":"aries"\,"speed":0.8599590954361247}\,{"body":"Mars"\,"degree":23.75
+ 543238417572\,"lat":1.107359410215026\,"lon":233.75543238417572\,"retrogra
+ de":false\,"sign":"scorpio"\,"speed":0.5452062612647524}\,{"body":"Jupiter
+ "\,"degree":1.3204806942050595\,"lat":-0.669300349394409\,"lon":61.3204806
+ 9420506\,"retrograde":false\,"sign":"gemini"\,"speed":0.03007450274594703}
+ \,{"body":"Saturn"\,"degree":24.141824279016305\,"lat":-2.0443345324592843
+ \,"lon":54.141824279016305\,"retrograde":false\,"sign":"taurus"\,"speed":0
+ .017316616805373997}\,{"body":"Uranus"\,"degree":20.447033037400956\,"lat"
+ :-0.6776846734874221\,"lon":320.44703303740096\,"retrograde":false\,"sign"
+ :"aquarius"\,"speed":0.05779498522429094}\,{"body":"Neptune"\,"degree":6.5
+ 65907594736586\,"lat":0.16592632619696\,"lon":306.5659075947366\,"retrogra
+ de":false\,"sign":"aquarius"\,"speed":0.03773266183770829}\,{"body":"Pluto
+ "\,"degree":14.764611517024832\,"lat":10.393649514771266\,"lon":254.764611
+ 51702483\,"retrograde":false\,"sign":"sagittarius"\,"speed":0.023339810169
+ 886732}\,{"body":"North Node"\,"degree":15.179706138986887\,"lat":0\,"lon"
+ :105.17970613898689\,"retrograde":false\,"sign":"cancer"\,"speed":0.023354
+ 7268202301}\,{"body":"South Node"\,"degree":15.17970613898683\,"lat":0\,"l
+ on":285.17970613898683\,"retrograde":false\,"sign":"capricorn"\,"speed":0.
+ 0233547268202301}]\,"deltaT":{"model":"iers-utc/1"\,"seconds":64.107723388
+ 67187\,"segment":"observed"\,"sigma":0.0008100000000000001\,"table":"2026-
+ 09-24"\,"tableDigest":"064d98b4a531053a"}\,"houses":{"cusps":[300\,330\,0\
+ ,30\,60\,90\,120\,150\,180\,210\,240\,270]\,"system":"whole"}\,"timeScale"
+ :{"basis":"iers"\,"input":"utc"\,"leapSeconds":{"listed":true\,"taiMinusUt
+ c":32}\,"ut1MinusUtc":{"seconds":0.07627659417824262\,"sigma":0.0008100000
+ 000000001\,"source":"observed"}}}\,"schema":"zodiacs.natal-envelope.draft-
+ v1"}\,"chartId":"synthetic-chart-a"\,"synthetic":true}\,"policy":{"aspects
+ ":[{"angleDegrees":0\,"id":"conjunction"}]}\,"search":{"boundaryPolicy":"u
+ tc-day-plus-following-day/1"\,"clock":"utc"\,"completeness":"scan-finished
+ \;conditional-on-continuous-monotonic-short-arc-cells"\,"identityWindow":{
+ "endUtc":"2026-02-04T00:00:00.000Z"\,"startUtc":"2026-02-03T00:00:00.000Z"
+ }\,"mode":"all"\,"stepMs":3600000\,"window":{"clock":"utc"\,"endMs":177024
+ 9600000\,"startMs":1770076800000}}\,"upstream":{"commit":"7d6fb88d03b3896e
+ e1e5496ed99961015d291d3c"\,"engineTree":"0b30adb21b75522cd52a453499a76211f
+ ca8b8cb"\,"entry":"events/src/aspects.ts#searchExactAspects"}}\,"utc":"202
+ 6-02-03T05:37:36.513Z"}
+X-ZODIACS-SCHEMA;VALUE=TEXT:zodiacs-calendar-receipt/1
+X-ZODIACS-UTC;VALUE=TEXT:2026-02-03T05:37:36.513Z
+X-ZODIACS-EVENT-TYPE;VALUE=TEXT:natal-transit
+X-ZODIACS-BODIES;VALUE=TEXT:["Sun"\,"Sun"]
+X-ZODIACS-ASPECT;VALUE=TEXT:{"angleDegrees":0\,"name":"conjunction"}
+X-ZODIACS-ORB-DEGREES;VALUE=TEXT:2.5376607482030522e-9
+X-ZODIACS-ENGINE;VALUE=TEXT:@zodiacs/engine@1.0.0
+X-ZODIACS-EPHEMERIS;VALUE=TEXT:astronomy-engine@2.1.19
+X-ZODIACS-IDENTITY;VALUE=TEXT:{"aspectAngleDegrees":0\,"bodies":["Sun"\,"Su
+ n"]\,"chartIds":["synthetic-chart-a"]\,"definition":{"id":"tropical-natal-
+ transit/1"\,"parameters":{"aspectAnglesDegrees":[0]\,"boundaryPolicy":"utc
+ -day-plus-following-day/1"\,"center":"geocentric"\,"clock":"utc"\,"correct
+ ion":"apparent"\,"direction":"direct"\,"frame":"ecliptic-true-of-date"\,"n
+ atalBirth":{"houseSystem":"whole"\,"latitude":12.5\,"longitude":34.25\,"ti
+ meKnown":true\,"timeScale":"utc"\,"utc":"2001-02-03T04:05:06.789Z"}\,"rela
+ tiveLongitude":0\,"stepMs":3600000\,"target":"fixed-natal-longitude"\,"uni
+ ts":"degrees"\,"zodiac":"tropical"}}\,"eventType":"natal-transit"\,"namesp
+ ace":"synthetic-natal-transit.calendar.invalid"\,"occurrence":{"ordinal":0
+ \,"scheme":"utc-day-ordinal/1"\,"startUtc":"2026-02-03T00:00:00.000Z"}\,"s
+ chema":"zodiacs-calendar-event/1"}
+END:VEVENT
+END:VCALENDAR
