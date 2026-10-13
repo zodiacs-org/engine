@@ -33,13 +33,61 @@ export interface ScheduleReceipt {
 }
 
 export interface ScheduleEvent {
-  /** A caller-supplied persistent identity until the UID factory is implemented. */
+  /** A persistent caller UID, or eventUid(identity) when identity is supplied. */
   readonly uid: string;
+  readonly identity?: EventIdentity;
   readonly summary: string;
   readonly receipt: ScheduleReceipt;
   /** Exclusive interval end in the same canonical UTC format as receipt.utc. */
   readonly endUtc?: string;
 }
+
+/** Semantic calculation settings, excluding presentation and search output. */
+export interface EventDefinition {
+  /** Adapter-owned versioned definition, for example "tropical-ingress/1". */
+  readonly id: string;
+  /** Include branch, direction, zodiac and other settings that define the event. */
+  readonly parameters: JsonObject;
+}
+
+export type EventOccurrence =
+  | { readonly scheme: "source-key/1"; readonly key: string }
+  | { readonly scheme: "utc-day-ordinal/1"; readonly startUtc: string; readonly ordinal: number };
+
+/** Stable identity claims supplied by an adapter, not inferred from a root estimate. */
+export interface EventIdentity {
+  readonly schema: "zodiacs-calendar-event/1";
+  /** A durable producer/feed scope; use a globally unique value owned by the caller. */
+  readonly namespace: string;
+  readonly eventType: ScheduleEventType;
+  readonly bodies: readonly string[];
+  /** Durable chart configuration IDs, in participant order, never display names. */
+  readonly chartIds: readonly string[];
+  /** The angle defines the aspect; its translated/display name does not. */
+  readonly aspectAngleDegrees: number | null;
+  readonly definition: EventDefinition;
+  readonly occurrence: EventOccurrence;
+}
+
+export interface IdentityWindow {
+  /** Canonical UTC day start, excluded, matching the upstream events convention. */
+  readonly startUtc: string;
+  /** Following UTC midnight, included. */
+  readonly endUtc: string;
+}
+
+export interface UnidentifiedEvent {
+  readonly summary: string;
+  readonly receipt: ScheduleReceipt;
+  readonly endUtc?: string;
+  readonly chartIds: readonly string[];
+  readonly definition: EventDefinition;
+}
+
+/** A complete result for the supplied fixed day, before any display filtering. */
+export type IdentityBatch =
+  | { readonly status: "complete"; readonly window: IdentityWindow; readonly events: readonly UnidentifiedEvent[] }
+  | { readonly status: "refused"; readonly window: IdentityWindow; readonly events: readonly [] };
 
 export interface CalendarOptions {
   /** UTC revision instant supplied explicitly so export never reads the wall clock. */
