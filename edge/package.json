@@ -12,6 +12,7 @@
     "build:reference": "node scripts/build-reference.mjs",
     "smoke:node": "node scripts/smoke-node.mjs",
     "smoke:runtimes": "node scripts/smoke-runtimes.mjs",
+    "smoke:web": "node scripts/smoke-web.mjs",
     "test": "node --test tests/*.check.mjs",
     "typecheck": "tsc --project tsconfig.json",
     "check:isolation": "node scripts/check-isolation.mjs"
@@ -19,6 +20,8 @@
   "devDependencies": {
     "astronomy-engine": "2.1.19",
     "esbuild": "0.27.7",
+    "miniflare": "4.20251011.0",
+    "playwright-core": "1.56.1",
     "typescript": "5.9.3"
   }
 }

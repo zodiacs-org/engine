@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, symlink } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 import { edgeRoot, requireNode22 } from "../scripts/build-support.mjs";
@@ -153,5 +153,31 @@ test("runtime process stops an active child on abort", { timeout: 10_000 }, asyn
     await assert.rejects(aborted, failsWith("interrupted"));
   } finally {
     clearTimeout(timer);
+  }
+});
+
+test("child temporary files stay under the requested ignored edge cache", async (t) => {
+  const cache = resolve(edgeRoot, ".cache");
+  await mkdir(cache, { recursive: true });
+  const directory = await mkdtemp(resolve(cache, "process-temp-check-"));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const before = process.env.TMPDIR;
+  const childDirectory = resolve(directory, "child");
+  const { stdout } = await runNode(`
+    import { tmpdir } from "node:os";
+    import { writeFileSync } from "node:fs";
+    import { resolve } from "node:path";
+    writeFileSync(resolve(tmpdir(), "marker.txt"), "child temporary file");
+    console.log(JSON.stringify([tmpdir(), process.env.TMP, process.env.TEMP]));
+  `, { tempDirectory: childDirectory });
+  assert.deepEqual(JSON.parse(stdout), [childDirectory, childDirectory, childDirectory]);
+  assert.equal(await readFile(resolve(childDirectory, "marker.txt"), "utf8"), "child temporary file");
+  assert.equal(process.env.TMPDIR, before, "Parent environment must be unchanged");
+  for (const tempDirectory of [cache, resolve(edgeRoot, ".generated/temp"), "/tmp/outside-edge"]) {
+    await assert.rejects(runNode("", { tempDirectory }), /must be below edge\/\.cache/);
+  }
+  if (process.platform !== "win32") {
+    await symlink(childDirectory, resolve(directory, "link"));
+    await assert.rejects(runNode("", { tempDirectory: resolve(directory, "link/new") }), /must not use symlinks/);
   }
 });

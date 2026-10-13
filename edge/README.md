@@ -16,8 +16,9 @@ Deno/Bun server check. The [exact comparison protocol](docs/exact.md) preserves
 full result types and number bits. The [native runtime checker](docs/runtime-smoke.md)
 executes Node, Deno and Bun and fails on any exact difference. The recorded
 Deno and Bun runs differ from Node; they do not establish numerical parity.
-Workers and browser execution, benchmarks and a measured WASM experiment
-remain in [PLAN.md](PLAN.md).
+The [web runtime checker](docs/web-smoke.md) executes local workerd and a real
+Chromium page. Its recorded workerd run matches Node exactly, while Chrome
+differs. Benchmarks and a measured WASM experiment remain in [PLAN.md](PLAN.md).
 
 The foundation's commands, observed results and the missing-root-build
 limitation are recorded in [M1 validation](docs/evidence/m1-validation.md).
@@ -32,6 +33,8 @@ Exact protocol validation and that milestone's build measurements are recorded i
 [M5 validation](docs/evidence/m5-validation.md).
 Native exact comparisons and runner validation are recorded in
 [M6 validation](docs/evidence/m6-validation.md).
+Local Workers and browser checks are recorded in
+[M7 validation](docs/evidence/m7-validation.md).
 
 ## Run the foundation
 
@@ -136,8 +139,9 @@ const syntheticChart = natalChart({
 });
 ```
 
-Serve ESM over HTTP with a JavaScript content type. Browser execution of this
-example has not yet been tested. Applications should import `engine.mjs`;
+Serve ESM over HTTP with a JavaScript content type. The
+[browser checker](docs/web-smoke.md) imports this module in Chromium and calls
+the chart API with the same synthetic input. Applications should import `engine.mjs`;
 `workloads.mjs` separately bundles the engine for testing, so importing both
 loads separate copies. Keep the licence and attribution files with any copy
 of the bundles. The private lab's MIT licence does not replace the engine's
@@ -170,17 +174,20 @@ This establishes Node bundle compatibility for the cases in
 not numerical parity. `npm --prefix edge run smoke:runtimes` runs the complete
 exact transport in native Node, Deno and Bun; every selected runtime is
 required. See [runtime setup, reports and observed failures](docs/runtime-smoke.md).
-Workers and browser execution remain untested. Transcendental arithmetic can
-differ between runtimes.
+`npm --prefix edge run smoke:web` checks local Workers and browser execution.
+See [its tested versions, reports and limits](docs/web-smoke.md).
+Transcendental arithmetic can differ between runtimes.
 
 To regenerate the compact build evidence after reviewing a build change:
 
 ```sh
-node edge/scripts/build-report.mjs > edge/docs/evidence/m5-build.json
+mkdir -p edge/results
+node edge/scripts/build-report.mjs > edge/results/build-report.json
 ```
 
 The report builds in memory, records exact bytes and digests, and does not
-measure performance. Keep older milestone evidence unchanged. Raw generated
+measure performance. Copy a reviewed compact report to a new milestone's
+evidence filename; keep older milestone evidence unchanged. Raw generated
 bundles and full manifests stay ignored.
 
 ## Chart HTTP endpoints
@@ -199,8 +206,9 @@ JSON chart request, validates its size and supported fields, and calls the
 unchanged engine synchronously. See the [request contract](docs/http.md) for
 inputs, limits, status codes and a local invocation.
 
-These tests run Fetch requests in Node. Execution in a Workers runtime and
-its launch tooling remain in M7 of the plan. HTTP JSON serialization is not
+These tests run Fetch requests in Node. The separate
+[web smoke command](docs/web-smoke.md) also executes the handler in local workerd.
+HTTP JSON serialization is not
 the exact comparison protocol: dates become strings and signed zero
 is lost. The handler has no storage or request logging, and every response
 asks caches not to store it.

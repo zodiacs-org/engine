@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
-import { mkdir } from "node:fs/promises";
-import { resolve } from "node:path";
+import { mkdir, realpath } from "node:fs/promises";
+import { isAbsolute, relative, resolve } from "node:path";
 import { edgeRoot } from "./build-support.mjs";
 
 export function runtimeEnvironment() {
@@ -19,7 +19,7 @@ function failure(code, message) {
 }
 
 export async function runRuntimeProcess(executable, args, {
-  input = "", timeoutMs = 30_000, outputLimit = 1_999_999, signal
+  input = "", timeoutMs = 30_000, outputLimit = 1_999_999, signal, tempDirectory
 } = {}) {
   if (!Number.isSafeInteger(timeoutMs) || timeoutMs <= 0
     || !Number.isSafeInteger(outputLimit) || outputLimit <= 0 || outputLimit >= 2_000_000) {
@@ -27,6 +27,30 @@ export async function runRuntimeProcess(executable, args, {
   }
   if (signal?.aborted) throw failure("interrupted", "Runtime process interrupted.");
   const env = runtimeEnvironment();
+  // Browser launchers create temporary profiles/artifacts through os.tmpdir().
+  // Keep those child-only writes in the project's ignored cache, without
+  // inheriting arbitrary environment overrides or changing the parent process.
+  if (tempDirectory !== undefined) {
+    const cache = resolve(edgeRoot, ".cache");
+    const path = resolve(tempDirectory);
+    const within = relative(cache, path);
+    if (!within || within.startsWith("..") || isAbsolute(within)) {
+      throw new TypeError("Runtime temporary directory must be below edge/.cache.");
+    }
+    // Check existing ancestors before mkdir, so a symlink cannot redirect writes.
+    let ancestor = path;
+    while (true) {
+      try {
+        if (await realpath(ancestor) !== ancestor) throw new TypeError("Runtime temporary directory must not use symlinks.");
+        break;
+      } catch (error) {
+        if (error.code !== "ENOENT") throw error;
+        ancestor = resolve(ancestor, "..");
+      }
+    }
+    await mkdir(path, { recursive: true });
+    env.TMPDIR = env.TMP = env.TEMP = path;
+  }
   await mkdir(env.DENO_DIR, { recursive: true });
   await mkdir(env.BUN_RUNTIME_TRANSPILER_CACHE_PATH, { recursive: true });
   return new Promise((fulfill, reject) => {

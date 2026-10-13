@@ -102,4 +102,5 @@ exercises runtime selection, framing, metadata and payload validation, exact
 mismatches, repeatability failure, missing tools and CLI exit status. These
 tests run with Node alone. Native Deno/Bun checks are the separate command
 above so a regular test run never implies those runtimes were available.
-Workers and browser execution remain in the next milestone.
+The separate [web smoke command](web-smoke.md) covers local Workers and
+browser execution. Run both commands for the full runtime matrix.

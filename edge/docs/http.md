@@ -41,9 +41,10 @@ JS
 
 The input is invented and is also a case in `src/workloads.ts`. This invokes
 the built handler locally without opening a socket or making an HTTP request.
-Local Workers runtime launch tooling and checks belong to M7; this invocation
-does not establish Workers execution or deployment. The entry to supply to
-that tooling is `.generated/workers/worker.mjs`.
+This Node invocation does not establish Workers execution or deployment.
+The separate [web runtime checker](web-smoke.md) executes the captured Worker
+bundle in local workerd and compares its responses with Node. The generated
+entry for other Workers tooling is `.generated/workers/worker.mjs`.
 
 ## Deno and Bun
 
@@ -111,8 +112,8 @@ Missing tools, startup failures and failed checks are errors, never skipped
 passes. The report names the runtime and build digests. These checks validate
 response structure and HTTP behavior; they do not compare numerical results
 between runtimes. [M4 validation](evidence/m4-validation.md) records the
-versions and checks actually run. Workers and browser runtime checks remain
-in M7.
+versions and checks actually run. [Web runtime checks](web-smoke.md) cover
+local Workers and browser execution separately.
 
 ## Request
 
@@ -195,6 +196,9 @@ authentication or rate limiting. Dates outside reference coverage may still
 compute and carry the engine's coverage flag. This adapter makes no accuracy
 claim. Node tests compare chart JSON to the same engine on invented inputs.
 The Deno/Bun native checks additionally exercise the listening servers.
-Workers execution, exact cross-runtime parity and CPU measurements remain
-separate milestones. [M3 validation](evidence/m3-validation.md) and
-[M4 validation](evidence/m4-validation.md) record what was run.
+The [web runtime checker](web-smoke.md) exercises the handler in local workerd
+and checks full numerical results separately from HTTP JSON. Exact cross-runtime
+checks report mismatches in the recorded browser, Deno and Bun runs. CPU
+measurements remain a later milestone. [M3 validation](evidence/m3-validation.md),
+[M4 validation](evidence/m4-validation.md) and
+[M7 validation](evidence/m7-validation.md) record what was run.
