@@ -5,12 +5,16 @@ text and searches for tropical sign ingresses, natal transit exacts, stations,
 solar/lunar eclipses and void-of-course Moon intervals through the existing events package, plus explicit
 progressed synastry schedules. It imports the parent engine sources without
 building or changing the parent npm package. The implemented scope is M1
-through M11 in [PLAN.md](PLAN.md):
+through M12 in [PLAN.md](PLAN.md):
 UTC and timezone serialization, validation, stable event identities and ingress
 schedules, plus natal transit and synastry analysis for explicitly synthetic
 charts, and receipt-bearing station, eclipse and void-of-course schedules,
 with async streaming over bounded windows, a command-line exporter and a
 local HTTP feed endpoint.
+
+For a complete mixed-feed example, verification commands and the measured
+streaming scope, see [the usage guide](docs/usage.md) and
+[local verification](docs/verification.md).
 
 Use Node satisfying `engines` in [package.json](package.json). From this folder:
 

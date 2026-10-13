@@ -17,7 +17,7 @@ to `CHANGES.txt`, and stops.
 - [x] M9 Add async streaming over bounded search windows with backpressure, cancellation, deterministic ordering and boundary deduplication; verify chunked and unchunked output agree.
 - [x] M10 Add the CLI for validated synthetic chart/range/query inputs, event selection, UTC or TZID output, stdout/files, useful failures and reproducible generation timestamps.
 - [x] M11 Add a small HTTP feed endpoint with streaming, configured synthetic schedules, stable feed URLs, conditional requests, bounded work and disconnect cancellation.
-- [ ] M12 Finish mixed-feed golden/round-trip integration checks, long-range streaming evidence, usage examples and source/package isolation checks; document limitations and local verification commands.
+- [x] M12 Finish mixed-feed golden/round-trip integration checks, long-range streaming evidence, usage examples and source/package isolation checks; document limitations and local verification commands.
 
 ## Design constraints
 
