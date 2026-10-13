@@ -24,7 +24,7 @@ astronomical accuracy or the validity of personality or predictive claims.
 - [x] M8 Implement deterministic placement, aspect, house and dignity scoring with per-claim evidence, category totals and explicit denominators.
 - [x] M9 Add an offline reading evaluation CLI that combines synthetic cases, engine facts, supplied or mock readings and machine-readable reports.
 - [x] M10 Add a conservative prose claim extractor and tests for negation, ambiguity, duplicate claims and omitted facts; expose extraction limits in reports.
-- [ ] M11 Add adversarial and end-to-end tests covering malformed model output, invented factors, unavailable birth time, conflicting conventions and output limits.
+- [x] M11 Add adversarial and end-to-end tests covering malformed model output, invented factors, unavailable birth time, conflicting conventions and output limits.
 - [ ] M12 Document reproducible local workflows, backend extension, seed review and result interpretation; run the complete eval suite and package-isolation checks.
 
 M1 acceptance: the schema requires typed factors, interpretation scope,
@@ -233,3 +233,22 @@ recall, model quality or independent astronomical accuracy. Package exclusion
 and project isolation passed. The root `npm run package:contents` gate was
 attempted with an eval-local npm cache and failed on missing `dist/calc.d.ts`;
 no prohibited root build was run. All changes remain under `evals/`. M11 is next.
+
+M11 acceptance: composed generation tests reject late malformed completions,
+metadata forgery, refusal, truncation, excess output and cancellation without
+returning accepted draft prefixes. Offline evaluation CLI tests inspect saved
+reports for invented factors, unavailable time, polar fallback, conflicting
+conventions, duplicates, contradictions and claim, quote and expanded-report
+limits. Exact input text, provenance, evidence links and explicit denominators
+remain visible. `ADVERSARIAL.md` records the checks and their limits; no generated
+corpus or report is committed and no production behavior changed.
+
+M11 validation: `npm --prefix evals test` and
+`npm --prefix evals run validate:seed` passed on Node 22.23.3, including the new
+generation and end-to-end tests, package exclusion and project isolation.
+Assertions use original inline prose and locally computed synthetic references;
+they do not establish model quality, prompt-injection resistance, extraction
+recall or independent astronomical accuracy. The root
+`npm run package:contents` gate was attempted with an eval-local npm cache and
+failed on missing `dist/calc.d.ts`; no prohibited root build was run. All changes
+remain under `evals/`. M12 is next.
