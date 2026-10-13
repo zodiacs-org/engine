@@ -1,5 +1,6 @@
 import { Buffer } from "node:buffer";
 import { createServer } from "node:http";
+import { isIP } from "node:net";
 import type { IncomingMessage, Server, ServerResponse } from "node:http";
 import type { Socket } from "node:net";
 import { pipeline } from "node:stream/promises";
@@ -27,7 +28,14 @@ export interface HttpControlOptions {
   readonly streamPollMs?: number;
   /** Active handlers, including uploads and following result streams. */
   readonly maxConcurrentRequests?: number;
+  /** Exact Host authorities. Omitted: loopback names at the socket's port. */
+  readonly allowedHosts?: readonly string[];
+  /** Exact HTTP(S) origins. Omitted: HTTP loopback origins at the socket's port. */
+  readonly allowedOrigins?: readonly string[];
 }
+
+type HandlerOptions = Required<Pick<HttpControlOptions,
+  "maxBodyBytes" | "requestTimeoutMs" | "streamPollMs" | "maxConcurrentRequests">>;
 
 export interface ControlServer {
   /** Not listening yet. The embedding application chooses the bind address. */
@@ -84,6 +92,58 @@ function singleHeader(request: IncomingMessage, name: string): string | undefine
   const values = request.headersDistinct[name];
   if (values && values.length !== 1) throw invalidRequest();
   return values?.[0];
+}
+
+// Parse literal authorities, never resolve DNS or normalize URL paths, userinfo,
+// percent escapes, alternative numeric IP forms or trailing dots into loopback.
+function authority(value: string, defaultPort = 80): string | undefined {
+  const match = /^(\[[0-9a-f:]+\]|[a-z0-9.-]+)(?::([1-9][0-9]{0,4}))?$/i.exec(value);
+  if (!match || match[0] !== value) return undefined;
+  const name = match[1]!.toLowerCase();
+  if (name.startsWith("[")) {
+    if (isIP(name.slice(1, -1)) !== 6) return undefined;
+  } else if (name.length > 253 || name.split(".").some(label =>
+    !/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label))) return undefined;
+  const port = match[2] === undefined ? defaultPort : Number(match[2]);
+  if (port > 65535) return undefined;
+  return `${name}:${port}`;
+}
+
+function origin(value: string): string | undefined {
+  const match = /^(https?):\/\/(.+)$/i.exec(value);
+  if (!match || match[0] !== value) return undefined;
+  const scheme = match[1]!.toLowerCase();
+  const host = authority(match[2]!, scheme === "https" ? 443 : 80);
+  return host === undefined ? undefined : `${scheme}://${host}`;
+}
+
+function allowlist(value: unknown, parse: (entry: string) => string | undefined): ReadonlySet<string> {
+  if (!Array.isArray(value) || value.length > HTTP_CONTROL_DEFAULTS.maxHeaderBytes) throw new QueueError("invalid-argument");
+  const captured = new Set<string>();
+  for (let index = 0; index < value.length; index++) {
+    const entry = Object.getOwnPropertyDescriptor(value, String(index));
+    if (!entry || !("value" in entry) || typeof entry.value !== "string"
+      || entry.value.length > HTTP_CONTROL_DEFAULTS.maxHeaderBytes) throw new QueueError("invalid-argument");
+    const parsed = parse(entry.value);
+    if (parsed === undefined) throw new QueueError("invalid-argument");
+    captured.add(parsed);
+  }
+  return captured;
+}
+
+function requestBoundary(request: IncomingMessage, hosts: ReadonlySet<string> | undefined,
+  origins: ReadonlySet<string> | undefined): void {
+  const rawHost = singleHeader(request, "host");
+  const rawOrigin = singleHeader(request, "origin");
+  const host = rawHost === undefined ? undefined : authority(rawHost);
+  const source = rawOrigin === undefined ? undefined : origin(rawOrigin);
+  if (host === undefined || (rawOrigin !== undefined && source === undefined)) throw invalidRequest();
+  const port = request.socket.localPort;
+  const local = new Set([`localhost:${port}`, `127.0.0.1:${port}`, `[::1]:${port}`]);
+  if (!(hosts ?? local).has(host)
+    || (source !== undefined && !(origins ?? new Set([...local].map(name => `http://${name}`))).has(source))) {
+    throw new HttpError(403, "forbidden", "The request host or origin is not allowed.");
+  }
 }
 
 function submissionHeaders(request: IncomingMessage, maxBytes: number): string | undefined {
@@ -179,7 +239,7 @@ function route(request: IncomingMessage): { id?: string; operation: string; quer
   return { id, operation: match[2] ?? "status", query };
 }
 
-async function handle(queue: QueueBackend, request: IncomingMessage, response: ServerResponse, options: Required<HttpControlOptions>, signal: AbortSignal): Promise<void> {
+async function handle(queue: QueueBackend, request: IncomingMessage, response: ServerResponse, options: HandlerOptions, signal: AbortSignal): Promise<void> {
   const target = route(request);
   const expected = target.operation === "submit" ? "POST" : "GET";
   if (request.method !== expected) {
@@ -248,8 +308,8 @@ async function handle(queue: QueueBackend, request: IncomingMessage, response: S
 
 /** Local control API. Does not start workers, listen, authenticate or own queue. */
 export function createControlServer(queue: QueueBackend, options: HttpControlOptions = {}): ControlServer {
-  const fields = queueFields(options, ["maxBodyBytes", "requestTimeoutMs", "streamPollMs", "maxConcurrentRequests"]);
-  const setting = (name: keyof HttpControlOptions, max: number): number =>
+  const fields = queueFields(options, ["maxBodyBytes", "requestTimeoutMs", "streamPollMs", "maxConcurrentRequests", "allowedHosts", "allowedOrigins"]);
+  const setting = (name: keyof HandlerOptions, max: number): number =>
     queueInteger(name in fields ? fields[name] : HTTP_CONTROL_DEFAULTS[name], 1, max);
   const captured = {
     maxBodyBytes: setting("maxBodyBytes", DEFAULT_LIMITS.maxInputBytes),
@@ -257,12 +317,15 @@ export function createControlServer(queue: QueueBackend, options: HttpControlOpt
     streamPollMs: setting("streamPollMs", RESULT_STREAM_DEFAULTS.maxPollMs),
     maxConcurrentRequests: setting("maxConcurrentRequests", Number.MAX_SAFE_INTEGER),
   };
+  const hosts = "allowedHosts" in fields ? allowlist(fields.allowedHosts, authority) : undefined;
+  const origins = "allowedOrigins" in fields ? allowlist(fields.allowedOrigins, origin) : undefined;
   const sockets = new Set<Socket>();
   const controllers = new Set<AbortController>();
   const tasks = new Set<Promise<void>>();
   let closing: Promise<void> | undefined;
   let closed = false;
   const server = createServer({ maxHeaderSize: HTTP_CONTROL_DEFAULTS.maxHeaderBytes }, (request, response) => {
+    try { requestBoundary(request, hosts, origins); } catch (error) { sendError(request, response, error); return; }
     if (closed || controllers.size >= captured.maxConcurrentRequests) { sendError(request, response, unavailable()); return; }
     const controller = new AbortController();
     controllers.add(controller);
@@ -289,6 +352,7 @@ export function createControlServer(queue: QueueBackend, options: HttpControlOpt
     if (closed) socket.destroy();
   });
   const expectation = (request: IncomingMessage, response: ServerResponse): void => {
+    try { requestBoundary(request, hosts, origins); } catch (error) { sendError(request, response, error); return; }
     sendError(request, response, new HttpError(417, "invalid-request", "HTTP expectations are not supported."));
   };
   server.on("checkContinue", expectation);

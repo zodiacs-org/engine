@@ -45,15 +45,16 @@ interface Reply {
 
 interface RequestOptions {
   method?: string;
-  headers?: OutgoingHttpHeaders;
+  headers?: OutgoingHttpHeaders | readonly string[];
   body?: string | Buffer;
   chunks?: readonly (string | Buffer)[];
+  setHost?: boolean;
 }
 
 function call(base: string, path: string, options: RequestOptions = {}): Promise<Reply> {
   return new Promise((resolve, reject) => {
     const req = request(`${base}${path}`, {
-      method: options.method ?? "GET", headers: options.headers, agent: false,
+      method: options.method ?? "GET", headers: options.headers, agent: false, setHost: options.setHost ?? true,
     }, (res) => {
       const chunks: Buffer[] = [];
       res.on("data", (chunk: Buffer) => chunks.push(chunk));
@@ -162,6 +163,126 @@ for (const backend of ["memory", "sqlite"] as const) {
         completedTasks: job.completedTasks, nextCursor: job.nextCursor,
       });
     }
+
+    it("rejects the rebinding probe and checks Host and Origin independently before submission", async () => {
+      const submit = vi.spyOn(queue, "submit");
+      const foreign = "review-attacker.example";
+      for (const headers of [
+        { host: foreign, origin: `http://${foreign}` },
+        { host: foreign, origin: base },
+        { host: foreign },
+        { origin: `http://${foreign}` },
+        { host: new URL(base).host, origin: `http://${foreign}` },
+        { host: foreign, "x-forwarded-host": new URL(base).host, "x-forwarded-proto": "http" },
+      ]) {
+        const reply = await call(base, "/v1/jobs", {
+          method: "POST", headers: { "content-type": "application/json", ...headers },
+          body: JSON.stringify({ job: charts }),
+        });
+        expectError(reply, 403, "forbidden");
+        expect(reply.text).not.toContain(foreign);
+      }
+      expect(submit).not.toHaveBeenCalled();
+      expect(await peer.claim(owner)).toBeNull();
+    });
+
+    it("allows loopback names with the listening port and absent or local Origin", async () => {
+      const port = new URL(base).port;
+      for (const name of ["localhost", "LOCALHOST", "127.0.0.1", "[::1]"]) {
+        for (const source of [undefined, `http://${name}:${port}`]) {
+          const reply = await call(base, "/v1/jobs", {
+            method: "POST", body: JSON.stringify({ job: charts }),
+            headers: { "content-type": "application/json", host: `${name}:${port}`,
+              ...(source === undefined ? {} : { origin: source }) },
+          });
+          expect(reply.status).toBe(202);
+        }
+      }
+    });
+
+    it("rejects other ports, loopback lookalikes and alternate IP spellings", async () => {
+      const port = new URL(base).port;
+      for (const host of ["localhost", "localhost:1", "127.0.0.1:1", "[::1]:1",
+        `localhost.attacker.example:${port}`, `127.1:${port}`, `2130706433:${port}`,
+        `127.0.0.2:${port}`, `0.0.0.0:${port}`, `[::ffff:7f00:1]:${port}`]) {
+        expectError(await call(base, "/v1/jobs", { headers: { host } }), 403, "forbidden");
+      }
+      for (const source of ["http://localhost", "http://localhost:1", `https://localhost:${port}`,
+        `http://localhost.attacker.example:${port}`, `http://127.1:${port}`]) {
+        expectError(await call(base, "/v1/jobs", { headers: { origin: source } }), 403, "forbidden");
+      }
+      expect(await peer.claim(owner)).toBeNull();
+    });
+
+    it("rejects missing, malformed and duplicate boundary headers", async () => {
+      // Node's wire parser can reject missing Host before the JSON handler.
+      expect((await call(base, "/v1/jobs", { setHost: false })).status).toBe(400);
+      expect((await call(base, "/v1/jobs", { setHost: false, headers: { host: "" } })).status).toBe(400);
+      for (const host of ["localhost.", "localhost:0", "localhost:65536", "localhost:01",
+        "user@localhost", "localhost/path", "localhost\\path", "local%68ost", "[::bogus]",
+        "localhost,127.0.0.1"]) {
+        expectError(await call(base, "/v1/jobs", { headers: { host } }), 400, "invalid-request");
+      }
+      for (const source of ["", "null", `${base}/`, `${base}/path`, `${base}?q=1`, `${base}#hash`,
+        `http://user@${new URL(base).host}`, `http://local%68ost:${new URL(base).port}`,
+        `${base} http://review-attacker.example`]) {
+        expectError(await call(base, "/v1/jobs", { headers: { origin: source } }), 400, "invalid-request");
+      }
+      for (const headers of [
+        ["Host", new URL(base).host, "Host", "review-attacker.example"],
+        ["Host", new URL(base).host, "Origin", base, "Origin", base],
+      ]) expectError(await call(base, "/v1/jobs", { headers }), 400, "invalid-request");
+      expect(await peer.claim(owner)).toBeNull();
+    });
+
+    it("protects status, progress and result reads before touching storage", async () => {
+      const job = snapshot(await post(base, { job: charts }));
+      const get = vi.spyOn(queue, "getJob");
+      const read = vi.spyOn(queue, "readResults");
+      for (const suffix of ["", "/progress", "/results?follow=true"]) {
+        for (const headers of [{ host: "review-attacker.example" }, { origin: "http://review-attacker.example" }]) {
+          expectError(await call(base, `/v1/jobs/${job.id}${suffix}`, { headers }), 403, "forbidden");
+        }
+      }
+      expect(get).not.toHaveBeenCalled();
+      expect(read).not.toHaveBeenCalled();
+      expect(await queue.getJob(job.id)).toEqual(job);
+    });
+
+    it("captures exact gateway allowlists without widening either default implicitly", async () => {
+      const allowedHosts = ["SYNTHETIC-GATEWAY.EXAMPLE:443"];
+      const allowedOrigins = ["https://synthetic-client.example"];
+      const gateway = await listen({ allowedHosts, allowedOrigins });
+      allowedHosts.push("review-attacker.example");
+      allowedOrigins.push("http://review-attacker.example");
+      const headers = { host: "synthetic-gateway.example:443", origin: "https://synthetic-client.example:443" };
+      const reply = await call(gateway, "/v1/jobs", {
+        method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify({ job: charts }),
+      });
+      expect(reply.status).toBe(202);
+      const job = snapshot(reply);
+      expect((await call(gateway, `/v1/jobs/${job.id}`, { headers })).status).toBe(200);
+      expect((await call(gateway, `/v1/jobs/${job.id}`, { headers: { host: headers.host } })).status).toBe(200);
+      for (const rejected of [
+        { host: "synthetic-gateway.example:444", origin: headers.origin },
+        { host: "review-attacker.example", origin: headers.origin },
+        { host: headers.host, origin: "http://review-attacker.example" },
+        { host: headers.host, origin: "https://synthetic-client.example:444" },
+        { host: new URL(gateway).host, origin: headers.origin },
+      ]) expectError(await call(gateway, `/v1/jobs/${job.id}`, { headers: rejected }), 403, "forbidden");
+      const hostOnly = await listen({ allowedHosts: [headers.host] });
+      expectError(await call(hostOnly, "/v1/jobs", { headers }), 403, "forbidden");
+      const originOnly = await listen({ allowedOrigins: [headers.origin] });
+      expectError(await call(originOnly, "/v1/jobs", { headers }), 403, "forbidden");
+    });
+
+    it("treats empty allowlists as deny lists", async () => {
+      const noHosts = await listen({ allowedHosts: [] });
+      expectError(await call(noHosts, "/v1/jobs"), 403, "forbidden");
+      const noOrigins = await listen({ allowedOrigins: [] });
+      expectError(await call(noOrigins, "/v1/jobs", { headers: { origin: noOrigins } }), 403, "forbidden");
+      expect((await post(noOrigins, { job: charts })).status).toBe(202);
+    });
 
     it.each(workloads.map((spec, index) => ({ spec, index })))
       ("submits $spec.kind and exposes exact committed status, progress and resumable NDJSON", async ({ spec, index }) => {
@@ -526,6 +647,13 @@ describe("HTTP control configuration", () => {
     { streamPollMs: 0 }, { streamPollMs: 2_147_483_648 },
     { maxConcurrentRequests: 0 }, { maxConcurrentRequests: 1.5 },
     { maxBodyBytes: "100" }, { streamPollMs: null }, { extra: true }, null,
+    { allowedHosts: "localhost" }, { allowedHosts: null }, { allowedHosts: ["*"] },
+    { allowedHosts: ["localhost:0"] }, { allowedHosts: ["localhost:65536"] },
+    { allowedHosts: ["http://localhost"] }, { allowedHosts: ["localhost."] },
+    { allowedHosts: ["localhost\n"] }, { allowedHosts: [undefined] }, { allowedHosts: Array(1) },
+    { allowedOrigins: "http://localhost" }, { allowedOrigins: ["*"] }, { allowedOrigins: ["null"] },
+    { allowedOrigins: ["http://localhost/"] }, { allowedOrigins: ["https://user@localhost"] },
+    { allowedOrigins: ["http://localhost\n"] }, { allowedOrigins: [1] },
   ].map((options) => ({ options })))("rejects invalid options $options before listening", async ({ options }) => {
     const queue = new MemoryQueue();
     try {

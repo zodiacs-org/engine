@@ -68,11 +68,21 @@ it("builds the relative engine source, queues and streams synthetic work on both
         const control = createControlServer(queue);
         await new Promise(resolve => control.server.listen(0, '127.0.0.1', resolve));
         let httpMatchesQueue;
+        let httpBoundaryRejects;
         try {
           const base = 'http://127.0.0.1:' + control.server.address().port + '/v1/jobs/' + parallel.id;
           const snapshot = await (await fetch(base)).json();
           const results = await (await fetch(base + '/results')).text();
           httpMatchesQueue = snapshot.job.status === 'completed' && results === streamed;
+          const forbidden = await fetch(base.slice(0, base.lastIndexOf('/')) , {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', host: 'review-attacker.example', origin: 'http://review-attacker.example' },
+            body: JSON.stringify({ job: job.spec }),
+          });
+          const forbiddenRead = await fetch(base + '/results', { headers: { origin: 'http://review-attacker.example' } });
+          httpBoundaryRejects = forbidden.status === 403 && forbiddenRead.status === 403
+            && (await forbidden.json()).error.code === 'forbidden'
+            && (await queue.claim({ owner: 'synthetic-boundary', leaseMs: 60000 })) === null;
         } finally { await control.close(); }
         await queue.close();
         observations.push({
@@ -87,6 +97,7 @@ it("builds the relative engine source, queues and streams synthetic work on both
           iteratorMatchesRows,
           streamMatchesSerial,
           httpMatchesQueue,
+          httpBoundaryRejects,
           replayMatchesCompleted: JSON.stringify(replay) === JSON.stringify(status),
           failedStatus: poisoned.status,
           failedAttempts: poisoned.failureCount,
@@ -107,6 +118,7 @@ it("builds the relative engine source, queues and streams synthetic work on both
       iteratorMatchesRows: true,
       streamMatchesSerial: true,
       httpMatchesQueue: true,
+      httpBoundaryRejects: true,
       replayMatchesCompleted: true,
       failedStatus: "failed",
       failedAttempts: 2,

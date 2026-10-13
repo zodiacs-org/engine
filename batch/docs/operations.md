@@ -123,6 +123,46 @@ the file. Read-only requests do not start workers or recover expired leases.
 process's HTTP API. See the [HTTP reference](../README.md#http-control-api) for
 routes, request budgets, errors and embedding with an injected backend.
 
+### HTTP gateway settings
+
+The HTTP server rejects foreign Host and Origin headers before any queue access.
+Defaults allow the literal loopback names `localhost`, `127.0.0.1` and `[::1]`
+at the listening port, and HTTP origins at those names and that port. Requests
+without Origin remain usable by local command-line clients. `--host` chooses
+the bind address; it does not widen these allowlists. The CLI keeps the default
+boundary checks when binding beyond loopback too.
+
+For intentional gateway access, embed the server and supply the exact authority
+the gateway forwards and the browser origin it accepts. For example, after
+building, with an open queue:
+
+```js
+import { createControlServer } from "./.generated/index.js";
+
+const control = createControlServer(queue, {
+  allowedHosts: ["synthetic-gateway.example:443"],
+  allowedOrigins: ["https://synthetic-client.example"],
+});
+await new Promise((resolve, reject) => {
+  control.server.once("error", reject);
+  control.server.listen(0, "127.0.0.1", resolve);
+});
+// Configure the authenticated gateway to forward to this listener and retain
+// the allowed Host and Origin. Run a Scheduler separately and close on shutdown.
+```
+
+Each list replaces its own default and is copied when the server is created.
+Use explicit ports when they differ from the scheme's standard port. No
+wildcards or URL paths are accepted. Forwarded-host headers are ignored.
+Keep the listener reachable only by the authenticated gateway and trusted local
+clients; if intentionally binding it to a nonlocal interface, restrict direct
+access at the network boundary. Allowlists do not provide authentication, TLS,
+tenant isolation or CORS response headers. A gateway must enforce its own
+authentication and browser-origin policy before forwarding traffic. For the
+CLI, a gateway can forward the listener's loopback Host, but must validate a
+browser's Origin itself before removing or rewriting that header. Never strip
+an unvalidated Origin to make a rejected request pass.
+
 ## Read and resume results
 
 `completedTasks` and `nextCursor` describe committed rows. Work in flight and

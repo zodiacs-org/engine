@@ -965,6 +965,31 @@ TLS or tenant isolation and is intended for trusted local clients. Bind it to
 loopback for local operation; exposing it elsewhere requires an authenticated
 access boundary provided by the operator.
 
+Before routing, reading a body or accessing the queue, the server checks both
+`Host` and `Origin`. The default Host allowlist contains exactly `localhost`,
+`127.0.0.1` and `[::1]`, with the port of the receiving socket. A missing port
+means the standard HTTP port, so it is rejected on a listener using another
+port. DNS is never consulted. Other loopback addresses, alternate numeric IP
+spellings, trailing dots and subdomains are not implicitly allowed. An absent
+Origin is accepted for clients such as curl; a present Origin must be an HTTP
+origin with one of those same names and the listening port. Foreign hosts or
+origins return `403`, independently of whether the other header is allowed.
+Missing Host, malformed values and duplicate boundary headers reject with
+`400`; Node's parser may reject them before the JSON handler runs.
+
+`allowedHosts` and `allowedOrigins` in `HttpControlOptions` replace their
+respective defaults with exact allowlists captured at server creation. Host
+entries are authorities such as `synthetic-gateway.example:443`; Origin entries
+are HTTP(S) origins such as `https://synthetic-client.example`. Name and scheme
+case are ignored; omitted ports mean the standard port for the scheme. Origins
+cannot contain credentials, paths, queries or fragments. Wildcards and the
+opaque `null` Origin are rejected. An empty Host list rejects all requests; an
+empty Origin list rejects every present Origin. Headers such as
+`X-Forwarded-Host` never bypass either check. These checks do not authenticate
+clients that can choose their headers and do not enable CORS. See the
+[gateway settings](docs/operations.md#http-gateway-settings) for intentional
+nonlocal access.
+
 After building, with an open queue, this starts an HTTP listener on a dynamically
 assigned loopback port. The application must call `close()` during shutdown:
 
@@ -1047,6 +1072,7 @@ diagnostics, submitted values and stack traces. JSON and NDJSON responses set
 | HTTP status | Error codes and cause |
 | --- | --- |
 | `400` | `invalid-request` for malformed route options or ambiguous headers; `invalid-json` for malformed JSON or UTF-8; `invalid-argument` for queue argument errors; `invalid-input` or `unsupported-version` for invalid jobs. |
+| `403` | `forbidden`, for a Host or present Origin outside its allowlist. |
 | `404` | `not-found`, for a missing route or job. |
 | `405` | `method-not-allowed`, with the accepted method in `Allow`. |
 | `408` | `request-timeout`, when a submission body misses its receive deadline. |
@@ -1070,7 +1096,7 @@ Node retains its header timeout. Rejected unread bodies close their connection.
 `streamPollMs` controls following-result polling in milliseconds.
 `maxConcurrentRequests` bounds active handlers, including uploads and result
 followers; overflow receives `503`. This is not a global socket or storage quota.
-All option values must be positive safe integers within the exported limits
+All numeric option values must be positive safe integers within the exported limits
 and the timer range enforced in the implementation.
 
 `close()` is idempotent and aborts HTTP consumers, closes sockets and waits for

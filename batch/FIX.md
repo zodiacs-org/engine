@@ -1,4 +1,4 @@
 - [x] F1 Rename or relocate batch tests so root Vitest discovery ignores them, update batch's test discovery and references, and verify root `npx vitest run --reporter=dot` lists none of them.
 - [x] F2 Add `.github/workflows/batch.yml` with a dedicated Node 22 job that installs batch dependencies from its lockfile and runs its typecheck, build and tests.
 - [x] F3 Correct batch's minimum Node runtime to 22.23.3 in its engines field, check script and docs, keeping the SQLite safety check.
-- [ ] F4 Protect the local HTTP interface against DNS rebinding with allowed loopback Host names/ports and a configurable Origin allowlist, with tests and explicit gateway documentation.
+- [x] F4 Protect the local HTTP interface against DNS rebinding with allowed loopback Host names/ports and a configurable Origin allowlist, with tests and explicit gateway documentation.
