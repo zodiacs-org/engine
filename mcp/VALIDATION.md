@@ -96,3 +96,22 @@ local SDK protocol integration, not live GUI compatibility, hosted gateway
 operation, independent accuracy or predictive validity. Parent build-dependent
 gates retain the scaffold limitation above; no parent build was run. Session
 changes are confined to mcp/.
+
+M12 session: a clean `npm ci --ignore-scripts` using the committed lockfile
+passed on Node 22.23.3. `node scripts/validate.mjs`, run from mcp/ with that
+runtime, passed typecheck, the complete Vitest suite and the isolated build.
+The reproducible script verifies the carried engine archive digest and lockfile
+source, the parent pack exclusion test, project file sizes, Markdown em-dash
+exclusion, README JSON snippets, whitespace and working tree scope. It hashes
+tracked parent files and existing parent dist files before and after the checks
+and requires the snapshots to match. Raw logs and Vitest JSON are written under
+the gitignored `.generated/` directory. The script's concise stdout is recorded
+in [evidence/m12-validation.txt](evidence/m12-validation.txt).
+
+The tested span is the synthetic fixture cases in `test/*.test.ts`, including
+every tool over stdio, current HTTP and older stateless HTTP, with discovery,
+native receipts, refusals, error recovery and lifecycle. These checks establish
+wrapper and protocol integration only. No live client GUI, public gateway or
+independent accuracy claim is made. Parent build-dependent gates retain the
+scaffold limitation above; no parent build was run. See
+[HANDOFF.md](HANDOFF.md) for the draft PR description and deployment limits.
