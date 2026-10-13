@@ -1,0 +1,1 @@
+F1: Isolate MCP tests from root Vitest discovery with *.mcp-test.ts names and explicit local config; MCP checks pass and root discovery excludes them.

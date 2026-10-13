@@ -4,8 +4,8 @@ Session checks used Node 22.22.2 through a local npm exec runtime.
 
 - `npm ci`: passed using the committed lockfile.
 - `npm run check`: typecheck, Vitest and build passed.
-- `test/scaffold.test.ts`: SDK handshake and synthetic natal receipt round-trip passed.
-- `test/isolation.test.ts`: parent engine dry-run pack manifest excludes `mcp/`.
+- `test/scaffold.mcp-test.ts`: SDK handshake and synthetic natal receipt round-trip passed.
+- `test/isolation.mcp-test.ts`: parent engine dry-run pack manifest excludes `mcp/`.
 - Dependency audit from `npm ci`: no reported vulnerabilities.
 - `git status --short`: changes confined to `mcp/`.
 
@@ -22,7 +22,7 @@ archives and parent dist were not changed. Parent build-dependent gates retain
 the scaffold limitation described above.
 
 M4 session: `npm run check` passed on Node 22.22.2, including typecheck,
-Vitest and the isolated build. `test/natal.test.ts` checks native chart and
+Vitest and the isolated build. `test/natal.mcp-test.ts` checks native chart and
 receipt preservation, replay, unknown time, absent coordinates, polar fallback,
 time scales, pinned delta-T, coverage flags, invalid requests, engine range
 errors and concrete output JSON Schema. The parent pack isolation test passed.
@@ -32,7 +32,7 @@ checks, not independent accuracy evidence. Parent build-dependent gates retain
 the scaffold limitation above.
 
 M6 session: `npm run check` passed on Node 22.23.3, including typecheck,
-Vitest and the isolated build. `test/synastry.test.ts` covers native pair
+Vitest and the isolated build. `test/synastry.mcp-test.ts` covers native pair
 summary and receipt preservation, replay, chart ordering, independent time
 settings and coverage flags, unknown time, missing coordinates, polar fallback,
 identical charts, invalid inputs, engine range failures and concrete JSON Schema.
@@ -41,7 +41,7 @@ not independent accuracy or predictive validity. Parent build-dependent gates
 retain the scaffold limitation above.
 
 M10 session: `npm run check` passed on Node 22.22.2, including typecheck,
-Vitest and the isolated build. `test/transports.test.ts` exercises every tool
+Vitest and the isolated build. `test/transports.mcp-test.ts` exercises every tool
 through official SDK clients over a real stdio child, current Streamable HTTP
 and older stateless HTTP. Checks cover native receipt validation, discovery,
 invalid-call recovery, concurrent clients, Host and Origin guards, routing,
@@ -54,7 +54,7 @@ the scaffold limitation above; no parent build was run. Session changes are
 confined to mcp/.
 
 M7 session: `npm run check` passed on Node 22.23.3, including typecheck,
-Vitest and the isolated build. `test/returns.test.ts` covers solar and lunar
+Vitest and the isolated build. `test/returns.mcp-test.ts` covers solar and lunar
 native result preservation, receipt replay, solar selections, strictly subsequent
 lunar selection, location defaults and relocation, omitted coordinates, null
 location, house overrides, polar fallback, independent natal time settings,
@@ -64,7 +64,7 @@ wrapper integration, not independent accuracy or search completeness. Parent
 build-dependent gates retain the scaffold limitation above.
 
 M8 session: `npm run check` passed on Node 22.23.3, including typecheck,
-Vitest and the isolated build. `test/events.test.ts` covers Moon phase and
+Vitest and the isolated build. `test/events.mcp-test.ts` covers Moon phase and
 search preservation, receipt replay, all supported bodies, direct and retrograde
 events, empty and maximum windows, default policy, coarse and refinement budget
 refusals, coverage flags, strict inputs, endpoint range failures and concrete
@@ -76,7 +76,7 @@ run; build-dependent engine gates retain the limitation described above.
 `git diff --check` passed and session changes are confined to mcp/.
 
 M9 session: `npm run check` passed on Node 22.23.3, including typecheck,
-Vitest and the isolated build. `test/server.test.ts` checks SDK discovery,
+Vitest and the isolated build. `test/server.mcp-test.ts` checks SDK discovery,
 published input/output schemas, registered tool output and receipt preservation,
 clock injection, strict inputs and refinements, calculation errors, unknown
 tools, structured budget refusals and recovery after errors. The parent pack
@@ -108,7 +108,7 @@ and requires the snapshots to match. Raw logs and Vitest JSON are written under
 the gitignored `.generated/` directory. The script's concise stdout is recorded
 in [evidence/m12-validation.txt](evidence/m12-validation.txt).
 
-The tested span is the synthetic fixture cases in `test/*.test.ts`, including
+The tested span is the synthetic fixture cases in `test/*.mcp-test.ts`, including
 every tool over stdio, current HTTP and older stateless HTTP, with discovery,
 native receipts, refusals, error recovery and lifecycle. These checks establish
 wrapper and protocol integration only. No live client GUI, public gateway or

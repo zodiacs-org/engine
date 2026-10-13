@@ -62,7 +62,7 @@ console.log(`Node ${process.versions.node}`);
 console.log(`Source baseline: ${git("rev-parse", "HEAD").trim()}`);
 console.log(`Engine archive SHA-256: ${archive.sha256}`);
 run("typecheck", ["node_modules/typescript/bin/tsc", "--noEmit"]);
-run("vitest", ["node_modules/vitest/vitest.mjs", "run", "--reporter=json", "--outputFile=.generated/vitest.json"]);
+run("vitest", ["node_modules/vitest/vitest.mjs", "run", "--config=vitest.config.ts", "--reporter=json", "--outputFile=.generated/vitest.json"]);
 const tests = JSON.parse(readFileSync(join(generated, "vitest.json"), "utf8"));
 assert.equal(tests.success, true);
 assert.equal(tests.numFailedTests, 0);
@@ -82,6 +82,6 @@ assert.deepEqual(snapshot(), before, "Parent files or dist changed during valida
 git("diff", "--check");
 console.log("Project file size, Markdown em-dash exclusion and JSON snippets: passed");
 console.log("Working tree scope, parent file/dist snapshot and whitespace: passed");
-console.log("Parent pack exclusion: passed in test/isolation.test.ts");
+console.log("Parent pack exclusion: passed in test/isolation.mcp-test.ts");
 console.log("Raw reports: mcp/.generated/ (gitignored)");
 console.log("Parent build-dependent gates: not run; parent dist must remain untouched");

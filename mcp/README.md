@@ -26,7 +26,8 @@ protocol tests. Generated build output, dependencies, caches and future generate
 data stay in gitignored directories inside `mcp/`.
 
 `npm run typecheck` checks source and tests. `npm test` runs only this project's
-Vitest tests. `npm run build` emits JavaScript and declarations into `mcp/build/`.
+Vitest tests, named `test/*.mcp-test.ts` so the parent runner ignores them.
+`npm run build` emits JavaScript and declarations into `mcp/build/`.
 The isolation test checks that the parent engine pack manifest excludes `mcp/`.
 The scaffold test checks SDK initialization and imports the engine and receipt
 entry point from the carried archive. It checks integration, not astronomical
@@ -43,7 +44,7 @@ time-scale and fixed delta-T options. They do not infer local time or substitute
 noon. Engine calculation still checks its supported ephemeris span.
 
 Event-search windows and sample budgets have server policy limits enforced by
-`test/contracts.test.ts`. These are resource limits, not completeness or accuracy
+`test/contracts.mcp-test.ts`. These are resource limits, not completeness or accuracy
 claims. The event-search sampling policy is described below.
 
 Structured responses carry a schema version, tool-specific data and named native
@@ -63,7 +64,7 @@ houses. Coordinates are optional; missing coordinates also leave angles and
 houses absent. Input validation and engine range errors propagate to the SDK
 protocol boundary.
 
-`test/natal.test.ts` checks wrapper integration and receipt replay using synthetic
+`test/natal.mcp-test.ts` checks wrapper integration and receipt replay using synthetic
 inputs. Comparisons with the native engine establish preservation, not independent
 astronomical accuracy.
 
@@ -82,7 +83,7 @@ uses the engine's default UTC time basis. The sky receipt covers the sky
 positions; it does not encode or attest the inter-chart aspect calculation.
 The wrapper preserves the engine's aspects without adding interpretation.
 
-`test/transits.test.ts` checks preservation against native engine calls,
+`test/transits.mcp-test.ts` checks preservation against native engine calls,
 receipt replay, independent coverage flags, captured clock behavior and failure
 paths using synthetic inputs. These are integration checks, not independent
 accuracy evidence.
@@ -98,7 +99,7 @@ scores, relationship predictions or advice. The wrapper adds no score.
 The `first-natal` and `second-natal` receipts preserve each chart's input
 instant, requested houses, time basis and coverage flags independently. They
 record the natal calculations; they do not encode or attest the pair summary.
-`test/synastry.test.ts` checks native result preservation, receipt replay,
+`test/synastry.mcp-test.ts` checks native result preservation, receipt replay,
 chart ordering, unknown time, absent coordinates, polar fallback, independent
 time settings, validation and output schemas with synthetic inputs. These are
 integration checks, not independent astronomical accuracy evidence.
@@ -122,7 +123,7 @@ flags are separate native fields.
 
 The `natal` and `solar-return` or `lunar-return` receipts record the natal and
 return chart calculations independently. They do not encode or attest the
-crossing search, its selection or its completeness. `test/returns.test.ts`
+crossing search, its selection or its completeness. `test/returns.mcp-test.ts`
 checks native output preservation, receipt replay, selection, location, unknown
 time, time settings, coverage, validation and engine refusals with synthetic
 inputs. These comparisons establish wrapper integration, not independent accuracy
@@ -148,9 +149,9 @@ its budget. Agents must distinguish refusal from a completed scan with no events
 
 The server uses a quarter-day coarse step and a default budget of 10,000
 longitude evaluations, including native refinement evaluations. These policy
-values are enforced in `test/events.test.ts` across the supported bodies in the
+values are enforced in `test/events.mcp-test.ts` across the supported bodies in the
 synthetic January 2026 window, and for empty, annual and refused scans.
-`test/contracts.test.ts` enforces the maximum window of 366 days and maximum
+`test/contracts.mcp-test.ts` enforces the maximum window of 366 days and maximum
 requested budget of 100,000 evaluations. The budget covers the crossing solver;
 endpoint and event chart receipt calculations are additional work. The native
 solver assumes smooth motion and can miss events, especially around jittering
@@ -167,7 +168,7 @@ must support chart calculation; unsupported instants fail even when the scan
 would otherwise use no samples. All calculations use the engine's default UTC
 time basis.
 
-`test/events.test.ts` checks native preservation, receipt replay, coverage,
+`test/events.mcp-test.ts` checks native preservation, receipt replay, coverage,
 resource policy, refusal, validation and concrete output schemas with synthetic
 inputs. These are wrapper integration checks, not independent astronomical
 accuracy evidence.
@@ -187,7 +188,7 @@ structured content or invented receipts. An unknown tool returns a JSON-RPC
 invalid-params error. Search budget refusal is a successful structured response
 whose search status is `refused`; agents must inspect that status.
 
-`test/server.test.ts` uses the official SDK client and linked in-memory
+`test/server.mcp-test.ts` uses the official SDK client and linked in-memory
 transports to check discovery, schemas, every registered handler, receipt
 preservation, validation refinements and failure recovery. These checks
 establish protocol integration, not astronomical accuracy.
@@ -214,7 +215,7 @@ For local Streamable HTTP:
 node build/cli.js http --port 3000
 ```
 
-The example port is checked by `test/transports.test.ts`. The endpoint is
+The example port is checked by `test/transports.mcp-test.ts`. The endpoint is
 `/mcp`, bound to IPv4 loopback. `startHttp({ port: 0 })` selects an available
 port for embedded use and returns `{ url, close }`. Closing is idempotent,
 stops new connections and closes active sockets, including unfinished bodies.
@@ -230,7 +231,7 @@ endpoint accepts the SDK's JSON and SSE response forms; it does not implement
 the separate legacy HTTP+SSE transport.
 
 The Node adapter and SDK handler limit POST bodies to 65,536 bytes before
-creating a calculation server. `test/transports.test.ts` checks requests at
+creating a calculation server. `test/transports.mcp-test.ts` checks requests at
 that boundary and just above it. This is a resource policy, not a chart-size
 or accuracy claim. HTTP responses use `Cache-Control: no-store`. The official
 localhost guards validate Host and any supplied Origin before routing. There
@@ -240,7 +241,7 @@ forwarding with a permitted local host. Gateway configuration and client
 setup are described below.
 
 The entry points follow the SDK's [Node adapter API](https://ts.sdk.modelcontextprotocol.io/v2/api/%40modelcontextprotocol/node/).
-`test/transports.test.ts` uses real child processes and loopback HTTP with
+`test/transports.mcp-test.ts` uses real child processes and loopback HTTP with
 official SDK clients. It exercises every tool with synthetic inputs over
 stdio, current HTTP and older stateless HTTP, validates returned receipt
 envelopes, and checks errors, recovery, body limits, independent clients,
@@ -371,7 +372,7 @@ ChatGPT connections or gateways.
 Keep the calculation listener on loopback. Place the HTTPS gateway on the same
 host or provide a private route to the listener. Route public `/mcp` to
 `http://127.0.0.1:3000/mcp`; the port example is checked by
-`test/transports.test.ts`.
+`test/transports.mcp-test.ts`.
 
 Authenticate and authorize requests before forwarding. Validate the public Host
 and any supplied Origin against a gateway allowlist, then set upstream Host to
@@ -427,7 +428,7 @@ Retain complete JSON when a calculation record is needed, subject to privacy
 choices. Do not invent a public receipt URL or signature.
 
 For practice, send `natal_chart` these synthetic arguments, exercised by
-`test/natal.test.ts`:
+`test/natal.mcp-test.ts`:
 
 ```json
 {
