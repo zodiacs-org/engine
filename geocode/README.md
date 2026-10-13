@@ -4,9 +4,9 @@ This private project is being developed separately from `@zodiacs/engine`.
 It will provide offline place lookup, IANA civil-time resolution, a CLI and
 an optional HTTP service. [PLAN.md](PLAN.md) tracks implementation. The
 current milestone provides the place-data contract, an attributed GeoNames
-sample, an offline index builder, pure in-memory place lookup and a composed
-API for atlas-first civil-time resolution. The `geocode` CLI and the service
-remain later milestones.
+sample, an offline index builder, pure in-memory place lookup, a composed
+API for atlas-first civil-time resolution and the `geocode` CLI. The HTTP
+service remains a later milestone.
 
 ## Development
 
@@ -76,8 +76,9 @@ precision and does not authenticate geographic facts.
 Source timezone identifiers receive a syntax check only. Actual IANA-provider
 support belongs to the timezone adapter, so loading a dataset does not
 depend on the host's zone-name support. Raw offset strings are not timezone
-identifiers. Source-file digests are provenance claims here; a future loader
-will verify the bytes against them.
+identifiers. Source-file digests are provenance claims here. The builder
+checks source bytes; the local index loader checks shard bytes against a
+manifest.
 
 [tests/dataset.test.ts](tests/dataset.test.ts) exercises these rules with
 invented places and malformed variants. These are contract and regression
@@ -165,11 +166,12 @@ duplicate names and polar settlements. These tests establish behavior on
 those inputs, not worldwide geographic completeness.
 
 This factory accepts an in-memory dataset, not a manifest path. To search a
-trusted local build as a whole, assemble its matching shards' `places` under
-their shared `schemaVersion` and `provenance` before constructing the index.
-Searching an individual shard only establishes uniqueness within that shard.
-The factory rejects duplicate IDs but does not verify shard digests or
-generation identity; a validated filesystem loader remains planned work.
+local build as a whole, use the separate Node-only `loadPlaceIndex` in
+`src/load-index.ts`, then pass the returned dataset to the factory. The loader
+checks every listed shard's bytes, digest, count and shared provenance before
+combining its records, and rejects duplicate IDs. Searching an individual
+shard only establishes uniqueness within that shard. Digests bind the files
+to the supplied manifest; they do not authenticate the manifest or place facts.
 The factory retains the supplied records and a normalized name index in
 memory. It is not an on-disk search engine for an arbitrary full dump.
 
@@ -268,6 +270,84 @@ gap/fold outcomes. These are composition regressions, not independent
 historical accuracy evidence. [evidence/M5.md](evidence/M5.md) records the
 checks and their limits.
 
+## Command-line lookup and time resolution
+
+Install this folder's locked dependencies as above and build a local sample
+index with `npm run index:build -- --sample --out generated/sample`. From
+`geocode/`, these invented queries use that index:
+
+```sh
+node bin/geocode.mjs --help
+node bin/geocode.mjs lookup "Springfield" --country US --index generated/sample
+node bin/geocode.mjs tz "Brest, France" --index generated/sample --date 1891-03-20 --time 12:00
+node bin/geocode.mjs tz --place-id geonames:3030300 --index generated/sample --date 1891-03-20
+```
+
+The private package's bin is named `geocode`; the source-checkout launcher
+above and `npm --silent run geocode -- ...` invoke the same command. It uses
+the scoped [tsx TypeScript loader](https://tsx.is/dev-api/ts-import) to import
+the existing source modules, with its disk cache disabled. It requires this
+repository checkout, including `atlas/` and `src/`. No engine build, generated
+JavaScript distribution or global installation is needed. Importing the pure
+library does not load this launcher or tsx.
+
+`--index` is mandatory. It accepts a builder output directory, an explicit
+manifest JSON path or a complete `PlaceDataset` JSON file. Relative paths
+are relative to the caller's working directory. The command never fetches
+URLs or silently substitutes a sample index. A standalone shard is accepted
+as a standalone dataset, so use the complete build directory for ambiguity
+checks across all its shards. The loader reads the selected dataset into
+memory; it does not search shards on disk or authenticate geographic facts.
+Keep an index static while using it. Stronger publication and resource
+hardening remain in M10.
+
+`lookup` takes a quoted city query, optional `--country` and `--region`
+filters, and an optional `--limit`. Its result is the library lookup result
+plus dataset `provenance`. `tz` takes the same selector and filters plus
+`--date` and optional `--time`, or an explicit `--place-id` instead of a
+query and filters. Choose an ID from the dataset when lookup is ambiguous.
+Limiting suggestions never selects the first match. All search limits and
+matching rules are those of the library above.
+
+The date and time formats are Gregorian `YYYY-MM-DD` and local `HH:MM`.
+Omitting `--time` returns the date-only library result with no offset or
+UTC instant. Timed answers preserve atlas precedence, citations and uncertainty,
+or the native IANA provider metadata and gap/fold policy. The serialized
+engine Date is an ISO string. The command does not offer an offset override
+or a flag that bypasses covered atlas rules.
+
+Normal outcomes are a single JSON document on stdout; `--json` is accepted
+and optional. Help is plain text. Errors are a JSON object with
+`error.code` and `error.message` on stderr, with stdout empty. Diagnostics
+do not repeat submitted query text, local paths or raw provider exceptions.
+Unknown, repeated and inapplicable options are refused. Options accept
+`--name value` and `--name=value`; use `--` before a query beginning with a
+hyphen. Command syntax, date, time and limit checks precede index loading;
+selector and filter validation uses the loaded index's lookup rules.
+
+| Exit status | Meaning |
+| --- | --- |
+| 0 | Help, a unique lookup, a selected date-only result, or time status `ok` |
+| 1 | Runtime startup, index loading or time-provider failure |
+| 2 | Invalid command or input |
+| 3 | No matching place or an unknown place ID |
+| 4 | Ambiguous place or a repeated/skipped local time |
+| 5 | Missing or unsupported timezone, or unavailable atlas clock |
+
+An atlas `ok` answer may still carry historical uncertainty; exit success
+does not establish certainty. Nonzero statuses for place or time outcomes
+still print the complete result on stdout. Input and operational failures
+use the error codes `invalid-input`, `index-error`, `resolution-error` or
+`runtime-error` on stderr. No request log or result file is written by the
+command.
+
+[tests/cli.test.ts](tests/cli.test.ts) checks this command contract in
+subprocesses with network entry points blocked, including the exit statuses,
+ambiguous names, date-only inputs, missing zones, atlas precedence and IANA
+gap/fold outcomes. [tests/load-index.test.ts](tests/load-index.test.ts) checks
+local loading and manifest/shard consistency. These are operational and
+integration regressions, not additional historical accuracy evidence.
+
 ## Build a local place index
 
 The place source is the GeoNames downloadable gazetteer. Its current
@@ -362,9 +442,10 @@ newly created output directory; existing directories are refused.
 `src/build-index.ts` exports Node-only `buildGeoNamesIndex` separately from
 the pure library entry. Its command compiles into ignored `.cache/tools/`.
 Byte limits and validation are exercised by
-[tests/build-index.test.ts](tests/build-index.test.ts). Validation of
-untrusted or mixed indexes and stronger publication guarantees remain later
-milestones; consuming an incomplete directory is not supported.
+[tests/build-index.test.ts](tests/build-index.test.ts). The local loader
+checks manifest/shard consistency; broader hostile-input hardening and
+stronger publication guarantees remain later milestones. Consuming an
+incomplete directory is not supported.
 
 To check or deliberately refresh the committed sample:
 

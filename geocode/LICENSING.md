@@ -5,6 +5,11 @@ under the repository's [LICENSE](../LICENSE). This folder is outside the
 engine's npm package. Its private manifest declares `MIT AND CC-BY-4.0`
 because this folder also contains the GeoNames sample described below.
 
+The source-checkout CLI uses the MIT-licensed `tsx` package from this folder's
+locked runtime dependencies. Dependency code and its license notices remain
+in the installed dependency tree; none is copied into authored sources or
+the engine package.
+
 ## GeoNames sample and generated indexes
 
 The official [GeoNames dump readme](https://download.geonames.org/export/dump/readme.txt),

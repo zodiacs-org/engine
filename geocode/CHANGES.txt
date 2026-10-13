@@ -3,3 +3,4 @@ geocode: complete M2 with corrected licensing, Node 22 builder regressions and r
 geocode: complete M3 with pure offline lookup, Unicode aliases, exact filters, deterministic ranking and ambiguity-preserving results
 geocode: complete M4 with atlas-first civil-time adapters, preserved historical provenance and uncertainty, IANA fallback and independent timezone checks
 geocode: complete M5 with composed lookup and civil-time API, explicit ambiguous-place selection, date-only outcomes and preserved atlas provenance
+geocode: complete M6 with offline lookup and timezone CLI, validated local index loading, stable JSON and exit statuses, atlas precedence and subprocess checks
