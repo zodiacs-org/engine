@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import type { CalculationRunner } from "./calculations.js";
 import { routeDocs } from "./route-docs.js";
 import { lunarReturn, solarReturn } from "../../src/techniques.js";
 import type { LunarReturn, ReturnOptions, SolarReturn, SolarReturnSelection } from "../../src/techniques.js";
@@ -81,37 +82,47 @@ function returnOptions(input: ReturnRequest): ReturnOptions {
   };
 }
 
-export function registerReturnRoutes(app: FastifyInstance): void {
+export function calculateSolarReturnResponse(input: SolarReturnRequest, requestId: string) {
+  const options = returnOptions(input);
+  const natal = calculateNatal(input.natal);
+  let result: SolarReturn;
+  try {
+    // The public engine owns the fixed search window, step and selection.
+    // No arbitrary range, step, batch or event-search input is accepted.
+    result = solarReturn(natal.chart, input.at, {
+      ...options, ...(input.selection === undefined ? {} : { selection: input.selection })
+    });
+  } catch (error) {
+    if (error instanceof RangeError) throw new RequestValidationError();
+    throw error;
+  }
+  return response(requestId, natal, result);
+}
+
+export function calculateLunarReturnResponse(input: LunarReturnRequest, requestId: string) {
+  const options = returnOptions(input);
+  const natal = calculateNatal(input.natal);
+  let result: LunarReturn;
+  try {
+    result = lunarReturn(natal.chart, input.after, options);
+  } catch (error) {
+    if (error instanceof RangeError) throw new RequestValidationError();
+    throw error;
+  }
+  return response(requestId, natal, result);
+}
+
+export function registerReturnRoutes(app: FastifyInstance, runner?: CalculationRunner): void {
   app.post<{ Body: SolarReturnRequest }>("/v1/returns/solar", { schema: solarReturnRequestSchema, config: { openapi: routeDocs.solar } }, async (request) => {
-    const input = request.body;
-    const options = returnOptions(input);
-    const natal = calculateNatal(input.natal);
-    let result: SolarReturn;
-    try {
-      // The public engine owns the fixed search window, step and selection.
-      // No arbitrary range, step, batch or event-search input is accepted.
-      result = solarReturn(natal.chart, input.at, {
-        ...options, ...(input.selection === undefined ? {} : { selection: input.selection })
-      });
-    } catch (error) {
-      if (error instanceof RangeError) throw new RequestValidationError();
-      throw error;
-    }
-    return response(request.id, natal, result);
+    return runner
+      ? runner.run("solar-return", request.body, request.id)
+      : calculateSolarReturnResponse(request.body, request.id);
   });
 
   app.post<{ Body: LunarReturnRequest }>("/v1/returns/lunar", { schema: lunarReturnRequestSchema, config: { openapi: routeDocs.lunar } }, async (request) => {
-    const input = request.body;
-    const options = returnOptions(input);
-    const natal = calculateNatal(input.natal);
-    let result: LunarReturn;
-    try {
-      result = lunarReturn(natal.chart, input.after, options);
-    } catch (error) {
-      if (error instanceof RangeError) throw new RequestValidationError();
-      throw error;
-    }
-    return response(request.id, natal, result);
+    return runner
+      ? runner.run("lunar-return", request.body, request.id)
+      : calculateLunarReturnResponse(request.body, request.id);
   });
 }
 

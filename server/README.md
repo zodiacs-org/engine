@@ -43,8 +43,11 @@ curl --fail http://127.0.0.1:3000/readyz
 
 `GET /healthz` reports that the HTTP handler is running. `GET /readyz` reports
 readiness after startup has computed a synthetic natal chart and created its
-receipt using the actual engine. Neither route needs credentials. Shutdown
-marks the server unready and closes its listener on SIGINT or SIGTERM.
+receipt using the actual engine, including in the calculation worker. Neither
+route needs credentials. Readiness becomes unavailable during worker recovery
+and shutdown. A busy worker remains ready; its bounded queue decides whether
+a calculation can be admitted. Shutdown marks the server unready and closes
+its listener on SIGINT or SIGTERM.
 
 Successful calculation and probe responses have `data`, `engine`, `receipts`
 and `requestId`. `GET /openapi.json` returns the specification itself.
@@ -89,7 +92,8 @@ the serving origin; Host and forwarded headers never enter the document.
 Clients can discover Bearer authentication, input types and units, required
 fields, defaults, error envelopes, response headers and engine receipt
 shapes. `x-json-limits` states the parser bounds, `x-rate-limit` states this
-process's configured bucket capacity and refill rate, and `x-time-coverage`
+process's configured bucket capacity and refill rate, `x-resource-limits`
+states socket, worker and shutdown limits, and `x-time-coverage`
 contains the engine's exported spans with their meaning. The per-operation
 `x-query-schema` preserves the strict empty query contract, and
 `x-receipt-scopes` identifies each receipt's JSON pointer and kind. These
@@ -155,8 +159,8 @@ in query parameters, bodies, cookies or alternate headers do not authenticate.
 The server does not load `.env` files automatically.
 
 All routes default to authentication, including future calculation routes
-and the not-found handler. Only exact `GET /healthz` and `GET /readyz` are
-public at this milestone. Authentication runs before body parsing. Rejected
+and the not-found handler. Only exact `GET /healthz`, `GET /readyz` and
+`GET /openapi.json` are public. Authentication runs before body parsing. Rejected
 requests receive HTTP 401 with the usual error envelope and a Bearer
 `WWW-Authenticate` challenge. Infrastructure errors carry empty receipts.
 Route protection and absence of credentials in logs and responses are
@@ -380,7 +384,8 @@ The engine owns these fixed search windows and coarse steps:
 and checks selected instants within these windows against direct engine
 calls. Requests cannot set ranges, step sizes, sample budgets, batches or
 arbitrary bodies. These bounds limit each search's extent, not its elapsed
-runtime; the calculation is synchronous. Unknown fields and query parameters
+runtime. The engine calculation runs synchronously inside the worker, with
+the server deadline described below. Unknown fields and query parameters
 are refused. The server does not implement a separate event search.
 
 The engine refuses a lunar return for an unknown birth time, a natal
@@ -591,15 +596,88 @@ responses or logs.
 | 422 | `receipt_unavailable` | The engine's codec refused a calculation receipt; no chart is returned. |
 | 429 | `rate_limited` | This key has no request token available. |
 | 500 | `internal_error` | Unexpected server failure. |
-| 503 | `not_ready` | Readiness check failed. |
+| 500 | `calculation_failed` | The calculation worker was lost; no partial result is returned. |
+| 503 | `not_ready` | Worker unavailable, readiness check failed, or server shutting down. |
+| 503 | `server_busy` | The shared calculation queue is full. |
+| 504 | `calculation_timeout` | The calculation deadline, including queue wait, expired. |
 
 The table describes ordinary request handling, as checked in
 `test/app.vitest.ts`, `test/auth.vitest.ts`, `test/request-validation.vitest.ts`,
 `test/natal.vitest.ts`, `test/comparisons.vitest.ts`, `test/returns.vitest.ts`,
 `test/moon-phase.vitest.ts`, `test/houses.vitest.ts` and
-`test/rate-limit.vitest.ts`. Raw HTTP parser and router failures can
+`test/rate-limit.vitest.ts`, `test/openapi.vitest.ts` and
+`test/lifecycle.vitest.ts`. Raw HTTP parser and router failures can
 occur earlier. Authentication precedes rate limiting, which precedes JSON
 validation, so a rejected request reports the first applicable error.
+
+## Resource limits and shutdown
+
+The executable runs calculations in a worker thread so engine work does not
+block the HTTP event loop. It admits one active calculation and a bounded
+FIFO queue shared across keys and routes. Authentication, token consumption
+and request validation happen before admission. Overload and invalid engine
+inputs still consume a request token. A full queue returns `server_busy`;
+clients should back off before retrying. The worker owns its engine state,
+including the engine's shared delta T setting. It calls the same public
+engine functions as the source integration tests.
+
+Configure these environment variables before starting the executable:
+
+| Variable | Default | Accepted range | Meaning |
+| --- | ---: | ---: | --- |
+| `MAX_CONNECTIONS` | 128 | 1 to 10000 | Maximum simultaneous TCP sockets, including incomplete requests and idle keepalive sockets. |
+| `REQUEST_TIMEOUT_MS` | 30000 | 100 to 120000 | Request receipt timeout and socket inactivity timeout, in milliseconds. |
+| `CALCULATION_TIMEOUT_MS` | 5000 | 100 to 30000 | Milliseconds from worker admission, including queue wait, until the worker result. |
+| `CALCULATION_QUEUE_SIZE` | 8 | 0 to 64 | Maximum waiting calculations, excluding the active calculation. Zero disables waiting. |
+| `SHUTDOWN_TIMEOUT_MS` | 10000 | 100 to 30000 | Milliseconds allowed for shutdown before the process exits with failure. |
+
+All values are decimal integers; configuration never disables a deadline.
+Defaults and boundaries are enforced by `test/config.vitest.ts`. The worker's
+queue, deadline, failure recovery and drain behavior are tested in
+`test/calculation-pool.vitest.ts`. Calculation timeouts are measured by the
+parent's monotonic clock. They exclude body receipt, validation, serialization
+and transfer of the HTTP response. Timer delivery and worker termination are
+subject to operating-system scheduling; this is not a real-time guarantee.
+An early HTTP disconnect does not cancel already admitted work, which remains
+bounded by its deadline.
+
+An active timeout terminates the worker. Its active request receives
+`calculation_timeout`; waiting requests receive `not_ready`. A worker crash
+uses `calculation_failed` for the active request. Both trigger one replacement
+attempt, with readiness unavailable until the replacement verifies the engine
+and its receipt. Only a successful calculation resets the replacement
+allowance. Failed replacement or another crash before that success leaves
+the service unready; restart the process. A queue-wait timeout removes that waiting request without returning
+a partial result. Saturation alone keeps readiness healthy so a transient
+burst does not trigger restart loops. Liveness and discovery use the HTTP
+thread. Socket limits and host resource exhaustion can still make them
+unreachable.
+
+HTTP headers are limited to 16384 bytes. Headers must arrive within the
+smaller of 10000 milliseconds and `REQUEST_TIMEOUT_MS`; the HTTP parser checks
+deadlines every 1000 milliseconds. Idle keepalive timeout is 5000 milliseconds.
+`test/openapi.vitest.ts` checks the configured timeouts, and
+`test/lifecycle.vitest.ts` exercises header overflow, stalled bodies and
+socket-cap recovery through a real listener. Socket-cap overflow and socket
+inactivity close the connection without promising a JSON response; parser
+rejections that can respond use the sanitized envelope. A reverse proxy may
+apply its own limits too.
+
+SIGINT and SIGTERM stop admission, mark readiness unavailable, close the
+listener and reject waiting calculations. The active calculation may finish
+within its existing deadline. A body that finishes arriving during shutdown
+is refused before calculation. Repeated signals share the same shutdown.
+The process deadline may close stalled connections before their own deadlines;
+operators should allow it to elapse before force-killing the process.
+`test/lifecycle.vitest.ts` covers active work, stalled uploads, repeated signals
+and the forced exit. Worker messages contain validated calculation inputs and
+server-generated request IDs, never HTTP headers or credentials. Workers
+receive an empty environment and no inherited preload flags; their output
+and raw failures are discarded. Logs contain fixed failure codes only.
+
+`buildApp()` is a test and embedding factory. Without an explicit calculation
+runner it executes the engine in process; use the executable for worker
+isolation and process deadlines. Its callers own their runner's lifecycle.
 
 ## Development and isolation
 
@@ -609,7 +687,7 @@ npm test
 npm run check:package
 ```
 
-The test script builds the CLI before Vitest checks both in-process HTTP
+The test script builds the server and worker before Vitest checks in-process HTTP
 requests and a real loopback listener. Tests use `*.vitest.ts` filenames and an
 explicit local include pattern so the root engine's default Vitest discovery
 does not pick them up. All example and probe instants are synthetic.

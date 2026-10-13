@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("..", import.meta.url));
 const result = await build({
   absWorkingDir: root,
-  entryPoints: ["src/main.ts"],
+  entryPoints: ["src/main.ts", "src/calculation-worker.ts"],
   outdir: "build",
   platform: "node",
   target: "node22",

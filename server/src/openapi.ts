@@ -7,6 +7,7 @@ import { JSON_LIMITS } from "./request-validation.js";
 import { DEFAULT_RATE_LIMIT, type RateLimitOptions } from "./rate-limit.js";
 import { responseSchemas } from "./openapi-schemas.js";
 import { routeDocs, type RouteDocumentation } from "./route-docs.js";
+import { DEFAULT_RESOURCE_LIMITS, HTTP_LIMITS, type ResourceLimits } from "./resource-limits.js";
 
 // The OpenAPI validator checks the generated document in tests. Its TypeScript
 // declarations omit JSON Schema 2020-12 keywords such as prefixItems and const.
@@ -32,6 +33,7 @@ const errors = {
   "429": ["rate_limited", "API key request limit exceeded."],
   "500": ["internal_error", "Internal server error."],
   "503": ["not_ready", "Server is not ready."],
+  "504": ["calculation_timeout", "Calculation deadline exceeded."],
   "431": ["invalid_request", "Request is invalid."]
 } as const;
 
@@ -45,8 +47,8 @@ function responseHeaders(protectedRoute: boolean): Record<string, Header> {
   return {
     ...headers,
     ...(protectedRoute ? {
-      "X-RateLimit-Limit": { description: "Bucket capacity; present after successful authentication.", schema: { type: "integer", minimum: 1 } },
-      "X-RateLimit-Remaining": { description: "Whole tokens remaining; present after successful authentication.", schema: { type: "integer", minimum: 0 } }
+      "X-RateLimit-Limit": { description: "Bucket capacity; present only when the request reaches rate limiting after authentication. Early parser, router and shutdown refusals may omit it.", schema: { type: "integer", minimum: 1 } },
+      "X-RateLimit-Remaining": { description: "Whole tokens remaining; present only when the request reaches rate limiting after authentication. Early parser, router and shutdown refusals may omit it.", schema: { type: "integer", minimum: 0 } }
     } satisfies Record<string, Header> : {})
   };
 }
@@ -56,7 +58,7 @@ function errorResponse(status: keyof typeof errors, protectedRoute: boolean): Re
   // Parser/router failures can happen before authentication and token buckets.
   const hasBucket = protectedRoute && !["401", "408", "414", "431"].includes(status);
   return {
-    description: `${code}: ${message} No partial result or calculation receipt is returned.`,
+    description: `${code}: ${message}${protectedRoute && status === "503" ? " server_busy means the calculation queue is full." : ""}${protectedRoute && status === "500" ? " calculation_failed means the worker was lost." : ""} No partial result or calculation receipt is returned.`,
     headers: {
       ...responseHeaders(hasBucket),
       ...(status === "401" ? { "WWW-Authenticate": { schema: { type: "string", const: 'Bearer realm="engine-api"' } } } : {}),
@@ -64,9 +66,15 @@ function errorResponse(status: keyof typeof errors, protectedRoute: boolean): Re
     },
     content: {
       "application/json": {
-        schema: object({ ...envelopeProperties, receipts: emptyReceipts, error: object({
-          code: { type: "string", const: code }, message: { type: "string", const: message }
-        }) })
+        schema: object({ ...envelopeProperties, receipts: emptyReceipts, error: {
+          oneOf: [
+            [code, message],
+            ...(protectedRoute && status === "503" ? [["server_busy", "Calculation capacity is full."]] : []),
+            ...(protectedRoute && status === "500" ? [["calculation_failed", "Calculation worker failed."]] : [])
+          ].map(([errorCode, errorMessage]) => object({
+            code: { type: "string", const: errorCode }, message: { type: "string", const: errorMessage }
+          }))
+        } })
       }
     }
   };
@@ -89,10 +97,9 @@ function successSchema(doc: RouteDocumentation): Schema {
 
 function operation(route: RouteOptions, doc: RouteDocumentation, method: string): Record<string, unknown> {
   const protectedRoute = !isPublicRoute(method, route.url);
-  const statuses: (keyof typeof errors)[] = ["400", "408", "414", "415", "431", "500"];
-  if (protectedRoute) statuses.push("401", "413", "429");
+  const statuses: (keyof typeof errors)[] = ["400", "408", "414", "415", "431", "500", "503"];
+  if (protectedRoute) statuses.push("401", "413", "429", "504");
   if (doc.receipts.some(({ kind }) => kind === "natal")) statuses.push("422");
-  if (doc.readiness) statuses.push("503");
   const responses: Record<string, Response> = {
     "200": {
       description: doc.rawDocument ? "Generated OpenAPI document." : "Complete result with engine identity and scoped receipts.",
@@ -122,7 +129,7 @@ function operation(route: RouteOptions, doc: RouteDocumentation, method: string)
 
 /** Register before application routes and seal after them. Only route schemas
  * supply request contracts; documentation schemas never serialize responses. */
-export function registerOpenApi(app: FastifyInstance, rateLimit: RateLimitOptions = DEFAULT_RATE_LIMIT): () => void {
+export function registerOpenApi(app: FastifyInstance, rateLimit: RateLimitOptions = DEFAULT_RATE_LIMIT, limits: ResourceLimits = DEFAULT_RESOURCE_LIMITS): () => void {
   const routes: RouteOptions[] = [];
   let sealed = false;
   let documentJson: string;
@@ -180,6 +187,10 @@ export function registerOpenApi(app: FastifyInstance, rateLimit: RateLimitOption
         responses: { NotFound: errorResponse("404", true) }
       },
       "x-engine": engineIdentity,
+      "x-resource-limits": {
+        ...limits, ...HTTP_LIMITS,
+        description: "The executable runs one calculation worker, with a bounded FIFO queue shared across keys. The calculation deadline includes queue wait and ends at the worker result, excluding JSON transfer. Admission follows authentication, rate limiting and validation. A full queue returns server_busy; recovery or shutdown returns not_ready; an expired calculation returns calculation_timeout with no partial result. Worker loss returns calculation_failed and rejects queued jobs as not_ready. Saturation alone does not fail readiness. Timed out active work terminates the worker before replacement. Deadlines are enforced by the HTTP event loop, subject to scheduling delay. The socket cap drops excess TCP connections without an HTTP response. Header timeout is the smaller of headersTimeoutMs and requestTimeoutMs; request timeout and socket inactivity timeout both use requestTimeoutMs. The shutdown deadline can end connections before their own deadlines."
+      },
       "x-time-coverage": {
         referenceSpan: REFERENCE_SPAN,
         ephemerisSpan: EPHEMERIS_SPAN,

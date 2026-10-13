@@ -1,11 +1,19 @@
 import { buildApp } from "./app.js";
 import { readConfig } from "./config.js";
 import { loadApiKeys } from "./api-keys.js";
+import { CalculationPool } from "./calculation-pool.js";
 
 async function main(): Promise<void> {
   const config = readConfig(process.env);
   const apiKeys = await loadApiKeys(process.env);
-  const app = buildApp({ logger: { level: config.logLevel }, apiKeys, rateLimit: config.rateLimit });
+  const calculations = new CalculationPool({
+    timeoutMs: config.limits.calculationTimeoutMs,
+    maxQueue: config.limits.calculationQueueSize
+  });
+  const app = buildApp({
+    logger: { level: config.logLevel }, apiKeys, rateLimit: config.rateLimit,
+    calculations, readiness: () => calculations.ready, limits: config.limits
+  });
   let stopping = false;
   const stop = async () => {
     if (stopping) return;
@@ -15,10 +23,12 @@ async function main(): Promise<void> {
     const timer = setTimeout(() => {
       app.log.error({ event: "shutdown_timeout" });
       process.exit(1);
-    }, 10_000);
+    }, config.limits.shutdownTimeoutMs);
     timer.unref();
     try {
-      await app.close();
+      // Stop admission in both layers; accepted active work may finish while
+      // queued calculations are refused. The process deadline covers slow HTTP.
+      await Promise.all([app.close(), calculations.close()]);
       app.log.info({ event: "server_stopped" });
     } finally {
       clearTimeout(timer);
@@ -35,13 +45,15 @@ async function main(): Promise<void> {
   process.on("SIGINT", onSignal);
   process.on("SIGTERM", onSignal);
   try {
+    await calculations.start();
+    if (stopping) return;
     const address = await app.listen({ host: config.host, port: config.port });
     app.log.info({ event: "server_started", address });
   } catch (error) {
     process.off("SIGINT", onSignal);
     process.off("SIGTERM", onSignal);
-    await app.close();
-    throw error;
+    await Promise.all([app.close(), calculations.close()]);
+    if (!stopping) throw error;
   }
 }
 

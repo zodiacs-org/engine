@@ -17,7 +17,7 @@ single session summary to `CHANGES.txt`. The harness owns all git writes.
 - [x] M6 Add bounded solar and lunar return REST requests through the engine's return functions; preserve their charts and receipts and test calculation failures and limits.
 - [x] M7 Add moon-phase and houses REST routes through public engine APIs; attach applicable engine receipts with explicit scope and test every route and refusal.
 - [x] M8 Generate and serve an OpenAPI 3.1 document from route schemas, including authentication, limits, receipts, errors and synthetic examples; test schema and route agreement.
-- [ ] M9 Harden lifecycle and resource limits across the completed API, including shutdown, readiness, logging privacy and calculation work limits; run the full server integration suite.
+- [x] M9 Harden lifecycle and resource limits across the completed API, including shutdown, readiness, logging privacy and calculation work limits; run the full server integration suite.
 - [ ] M10 Add a Dockerfile and self-hosting instructions with environment/file key setup, health checks, persistent configuration and required engine licence notices; exercise the container when tooling permits.
 - [ ] M11 Add an autocannon or k6 harness and commit small throughput and p50/p95 latency evidence from this machine, with commands, runtime, workload, build identity and limitations; keep raw generated output ignored.
 - [ ] M12 Review all route, auth, rate-limit, OpenAPI and deployment tests; finish operator/client documentation and record final validation and remaining limitations.
@@ -134,5 +134,22 @@ agreement, credential privacy and the built listener. Response schemas never
 filter engine output. These are HTTP integration checks, not independent
 accuracy evidence. An independent review found no actionable issues.
 The root package contents gate still reports missing
+`dist/calc.d.ts`; no root build was generated. All changes remain in
+`server/`, within the file-size rule and without em dashes in docs.
+
+M9 validation: server typecheck, full Vitest suite, build and package-exclusion
+check passed using Node 22.23.3. Production calculations run serially in an
+isolated worker with bounded waiting work, admission deadlines and bounded
+recovery. Tests preserve direct-engine results and receipts across every
+task, verify queue saturation, timeout and crash refusals, delayed result
+rejection, readiness, startup cancellation and shutdown draining, and check
+that worker environment, output and errors expose no credentials. Real
+listener tests cover connection-cap recovery, header overflow, trickled-body
+deadlines, bodies completed during shutdown, repeated signals and forced
+shutdown. OpenAPI and operator documentation describe configured limits and
+sanitized failures. Independent review findings about conditional rate headers
+and repeated idle-worker crashes were addressed and tested. These checks are
+HTTP and engine integration evidence, not independent astronomical accuracy
+or throughput evidence. The root package contents gate still reports missing
 `dist/calc.d.ts`; no root build was generated. All changes remain in
 `server/`, within the file-size rule and without em dashes in docs.

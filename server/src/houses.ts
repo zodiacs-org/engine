@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import type { CalculationRunner } from "./calculations.js";
 import { routeDocs } from "./route-docs.js";
 import { houses } from "../../src/calc.js";
 import type { CalcTime, HousesRequest, HousesResult, CalcRefusal } from "../../src/calc.js";
@@ -51,18 +52,24 @@ export const housesRequestSchema = {
   querystring: { type: "object", additionalProperties: false, properties: {} }
 } as const;
 
-export function registerHousesRoute(app: FastifyInstance): void {
+export function calculateHousesResponse(input: HousesHttpRequest, requestId: string) {
+  let result: HousesResult | CalcRefusal;
+  try {
+    result = houses(input);
+  } catch (error) {
+    if (error instanceof RangeError) throw new RequestValidationError();
+    throw error;
+  }
+  // Typed refusals carry no receipt and can contain engine diagnostic text.
+  // Use the same sanitized input error as other unsupported HTTP inputs.
+  if (result.status === "refused") throw new RequestValidationError();
+  return success(requestId, result, [{ scope: "/data", receipt: result.receipt }]);
+}
+
+export function registerHousesRoute(app: FastifyInstance, runner?: CalculationRunner): void {
   app.post<{ Body: HousesHttpRequest }>("/v1/houses", { schema: housesRequestSchema, config: { openapi: routeDocs.houses } }, async (request) => {
-    let result: HousesResult | CalcRefusal;
-    try {
-      result = houses(request.body);
-    } catch (error) {
-      if (error instanceof RangeError) throw new RequestValidationError();
-      throw error;
-    }
-    // Typed refusals carry no receipt and can contain engine diagnostic text.
-    // Use the same sanitized input error as other unsupported HTTP inputs.
-    if (result.status === "refused") throw new RequestValidationError();
-    return success(request.id, result, [{ scope: "/data", receipt: result.receipt }]);
+    return runner
+      ? runner.run("houses", request.body, request.id)
+      : calculateHousesResponse(request.body, request.id);
   });
 }

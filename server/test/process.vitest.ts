@@ -27,6 +27,7 @@ function launch(overrides: NodeJS.ProcessEnv = {}): RunningServer {
   delete inherited.API_KEYS_FILE;
   delete inherited.RATE_LIMIT_CAPACITY;
   delete inherited.RATE_LIMIT_REFILL_PER_SECOND;
+  for (const name of ['MAX_CONNECTIONS', 'REQUEST_TIMEOUT_MS', 'SHUTDOWN_TIMEOUT_MS', 'CALCULATION_TIMEOUT_MS', 'CALCULATION_QUEUE_SIZE']) delete inherited[name];
   const child = spawn(process.execPath, ['build/main.js'], {
     cwd: serverDirectory,
     env: { ...inherited, HOST: '127.0.0.1', PORT: '0', LOG_LEVEL: 'info', ...overrides },

@@ -15,6 +15,8 @@ import { JSON_LIMITS } from '../src/request-validation.js';
 import { DEFAULT_RATE_LIMIT } from '../src/rate-limit.js';
 import { registerOpenApi } from '../src/openapi.js';
 import { routeDocs } from '../src/route-docs.js';
+import { CalculationError, type CalculationErrorCode } from '../src/calculation-pool.js';
+import { DEFAULT_RESOURCE_LIMITS, HTTP_LIMITS } from '../src/resource-limits.js';
 
 type Schema = Record<string, unknown>;
 interface Operation {
@@ -37,6 +39,7 @@ interface Document {
   'x-rate-limit': typeof DEFAULT_RATE_LIMIT;
   'x-engine': unknown;
   'x-time-coverage': unknown;
+  'x-resource-limits': unknown;
 }
 
 const apps: FastifyInstance[] = [];
@@ -103,6 +106,51 @@ describe('generated OpenAPI contract', () => {
     expect(doc['x-json-limits']).toMatchObject(JSON_LIMITS);
     expect(doc['x-time-coverage']).toMatchObject({ referenceSpan: engine.REFERENCE_SPAN, ephemerisSpan: engine.EPHEMERIS_SPAN, housesSpan: CALC_SPAN });
     expect(doc['x-rate-limit']).toMatchObject(DEFAULT_RATE_LIMIT);
+    expect(doc['x-resource-limits']).toMatchObject({ ...DEFAULT_RESOURCE_LIMITS, ...HTTP_LIMITS });
+  });
+
+  it('discovers configured resource bounds without incorporating request state', async () => {
+    const limits = { ...DEFAULT_RESOURCE_LIMITS, maxConnections: 3, calculationTimeoutMs: 800, calculationQueueSize: 0 };
+    const app = createApp({ limits });
+    const doc = await document(app);
+    expect(doc['x-resource-limits']).toMatchObject({ ...limits, ...HTTP_LIMITS });
+    expect(app.server.maxConnections).toBe(3);
+    expect(app.server.headersTimeout).toBe(10000);
+    expect(app.server.requestTimeout).toBe(30000);
+    expect(app.server.timeout).toBe(30000);
+    expect(app.server.keepAliveTimeout).toBe(5000);
+  });
+
+  it.each([
+    ['server_busy', 503], ['not_ready', 503], ['calculation_timeout', 504],
+    ['calculation_failed', 500], ['internal_error', 500], ['invalid_request', 400], ['receipt_unavailable', 422],
+  ] satisfies [CalculationErrorCode, number][])('documents sanitized %s worker failures', async (code, status) => {
+    const run = vi.fn(async () => { throw new CalculationError(code); });
+    const app = createApp({ calculations: { run } });
+    const doc = await document(app);
+    const response = await app.inject({ method: 'POST', url: '/v1/natal', headers, payload: birth });
+    expect(response.statusCode).toBe(status);
+    expect(response.json()).toEqual({
+      requestId: response.headers['x-request-id'], engine: doc['x-engine'], receipts: [],
+      error: { code, message: new CalculationError(code).message },
+    });
+    expect(response.headers['cache-control']).toBe('no-store');
+    expect(response.headers['x-ratelimit-remaining']).toBe('59');
+    expect(run).toHaveBeenCalledExactlyOnceWith('natal', birth, response.headers['x-request-id']);
+    validator(doc).response('/v1/natal', status, response.json());
+  });
+
+  it('authenticates, meters and validates before admitting calculation work', async () => {
+    const run = vi.fn(async () => { throw new CalculationError('server_busy'); });
+    const app = createApp({ calculations: { run }, rateLimit: { capacity: 2, refillPerSecond: 1 }, monotonicNow: () => 0 });
+    expect((await app.inject({ method: 'POST', url: '/v1/natal', payload: birth })).statusCode).toBe(401);
+    expect((await app.inject({ method: 'POST', url: '/v1/natal', headers, payload: { ...birth, unexpected: true } })).statusCode).toBe(400);
+    expect(run).not.toHaveBeenCalled();
+    expect((await app.inject({ method: 'POST', url: '/v1/natal', headers, payload: birth })).statusCode).toBe(503);
+    expect((await app.inject({ method: 'POST', url: '/v1/natal', headers, payload: birth })).statusCode).toBe(429);
+    expect(run).toHaveBeenCalledTimes(1);
+    for (const url of ['/healthz', '/readyz', '/openapi.json']) expect((await app.inject(url)).statusCode).toBe(200);
+    expect(run).toHaveBeenCalledTimes(1);
   });
 
   it('requires documentation for every sealed application route and unique operation identities', async () => {

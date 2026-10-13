@@ -1,4 +1,5 @@
 import { DEFAULT_RATE_LIMIT, validateRateLimit, type RateLimitOptions } from "./rate-limit.js";
+import { DEFAULT_RESOURCE_LIMITS, resourceLimits, type ResourceLimits } from "./resource-limits.js";
 
 export const LOG_LEVELS = ["fatal", "error", "warn", "info", "debug", "trace", "silent"] as const;
 export type LogLevel = typeof LOG_LEVELS[number];
@@ -8,6 +9,7 @@ export interface ServerConfig {
   port: number;
   logLevel: LogLevel;
   rateLimit: RateLimitOptions;
+  limits: ResourceLimits;
 }
 
 export function readConfig(env: NodeJS.ProcessEnv): ServerConfig {
@@ -24,5 +26,17 @@ export function readConfig(env: NodeJS.ProcessEnv): ServerConfig {
   }
   const rateLimit = { capacity: Number(capacity), refillPerSecond: Number(refill) };
   validateRateLimit(rateLimit);
-  return { host, port: Number(portText), logLevel: logLevel as LogLevel, rateLimit };
+  const limitNames = {
+    maxConnections: "MAX_CONNECTIONS", requestTimeoutMs: "REQUEST_TIMEOUT_MS",
+    shutdownTimeoutMs: "SHUTDOWN_TIMEOUT_MS", calculationTimeoutMs: "CALCULATION_TIMEOUT_MS",
+    calculationQueueSize: "CALCULATION_QUEUE_SIZE"
+  } as const;
+  const values = { ...DEFAULT_RESOURCE_LIMITS };
+  for (const name of Object.keys(limitNames) as (keyof ResourceLimits)[]) {
+    const value = env[limitNames[name]];
+    if (value === undefined) continue;
+    if (!/^[0-9]{1,6}$/u.test(value)) throw new Error("Resource limits are invalid.");
+    values[name] = Number(value);
+  }
+  return { host, port: Number(portText), logLevel: logLevel as LogLevel, rateLimit, limits: resourceLimits(values) };
 }

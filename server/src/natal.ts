@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import type { CalculationRunner } from "./calculations.js";
 import { routeDocs } from "./route-docs.js";
 import { HOUSE_SYSTEMS, natalChart } from "../../src/index.js";
 import type { BirthInput, Chart, ChartFlag } from "../../src/index.js";
@@ -74,9 +75,15 @@ export function calculateNatal(input: NatalRequest) {
   return { chart, envelope };
 }
 
-export function registerNatalRoute(app: FastifyInstance): void {
+export function calculateNatalResponse(input: NatalRequest, requestId: string) {
+  const { chart, envelope } = calculateNatal(input);
+  return success(requestId, chart, [{ scope: "/data", envelope }]);
+}
+
+export function registerNatalRoute(app: FastifyInstance, runner?: CalculationRunner): void {
   app.post<{ Body: NatalRequest }>("/v1/natal", { schema: natalRequestSchema, config: { openapi: routeDocs.natal } }, async (request) => {
-    const { chart, envelope } = calculateNatal(request.body);
-    return success(request.id, chart, [{ scope: "/data", envelope }]);
+    return runner
+      ? runner.run("natal", request.body, request.id)
+      : calculateNatalResponse(request.body, request.id);
   });
 }

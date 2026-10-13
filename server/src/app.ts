@@ -17,6 +17,9 @@ import { registerMoonPhaseRoute } from "./moon-phase.js";
 import { registerHousesRoute } from "./houses.js";
 import { registerOpenApi } from "./openapi.js";
 import { routeDocs } from "./route-docs.js";
+import type { CalculationRunner } from "./calculations.js";
+import { CalculationError } from "./calculation-pool.js";
+import { HTTP_LIMITS, resourceLimits, type ResourceLimits } from "./resource-limits.js";
 
 export interface AppOptions {
   logger?: FastifyServerOptions["logger"];
@@ -24,6 +27,8 @@ export interface AppOptions {
   apiKeys?: ApiKeyStore;
   rateLimit?: RateLimitOptions;
   monotonicNow?: () => number;
+  calculations?: CalculationRunner;
+  limits?: ResourceLimits;
 }
 
 function responseHeaders(reply: FastifyReply, requestId: string): void {
@@ -35,6 +40,8 @@ function responseHeaders(reply: FastifyReply, requestId: string): void {
 /** Construct the app without opening a socket or installing process handlers. */
 export function buildApp(options: AppOptions = {}) {
   let ready = false;
+  let stopping = false;
+  const limits = resourceLimits(options.limits);
   const app = Fastify({
     logger: options.logger ?? { level: "info" },
     logController: new LogController({ disableRequestLogging: true }),
@@ -42,9 +49,16 @@ export function buildApp(options: AppOptions = {}) {
     genReqId: () => randomUUID(),
     exposeHeadRoutes: false,
     bodyLimit: JSON_LIMITS.bytes,
-    requestTimeout: 30_000,
-    connectionTimeout: 30_000,
-    keepAliveTimeout: 5_000,
+    http: {
+      maxHeaderSize: HTTP_LIMITS.headerBytes,
+      headersTimeout: Math.min(HTTP_LIMITS.headersTimeoutMs, limits.requestTimeoutMs),
+      connectionsCheckingInterval: HTTP_LIMITS.timeoutCheckIntervalMs
+    },
+    requestTimeout: limits.requestTimeoutMs,
+    connectionTimeout: limits.requestTimeoutMs,
+    keepAliveTimeout: HTTP_LIMITS.keepAliveTimeoutMs,
+    // Keep the normal response envelope when a keepalive request races close().
+    return503OnClosing: false,
     trustProxy: false,
     frameworkErrors(error, request, reply: FastifyReply) {
       // Router failures run before normal request hooks and error handlers.
@@ -84,19 +98,25 @@ export function buildApp(options: AppOptions = {}) {
     },
     ajv: { customOptions: { coerceTypes: false, removeAdditional: false, useDefaults: false, allErrors: false, ownProperties: true } }
   });
+  app.server.maxConnections = limits.maxConnections;
 
   app.addHook("onReady", async () => {
     verifyEngine();
     ready = true;
   });
-  app.addHook("preClose", async () => { ready = false; });
+  app.addHook("preClose", async () => { ready = false; stopping = true; });
 
   app.addHook("onRequest", async (request, reply) => {
     responseHeaders(reply, request.id);
+    if (stopping) return reply.code(503).send(failure(request.id, "not_ready", "Server is not ready."));
   });
   registerAuthentication(app, options.apiKeys ?? new ApiKeyStore());
   registerRateLimiting(app, options.rateLimit, options.monotonicNow);
   registerRequestValidation(app);
+  // A body admitted before shutdown may finish arriving while the app drains.
+  app.addHook("preHandler", async (request, reply) => {
+    if (stopping) return reply.code(503).send(failure(request.id, "not_ready", "Server is not ready."));
+  });
   app.addHook("onResponse", async (request, reply) => {
     request.log.info({
       event: "request_completed",
@@ -113,6 +133,14 @@ export function buildApp(options: AppOptions = {}) {
   app.setErrorHandler<FastifyError>((error, request, reply) => {
     // Never log raw errors: parser errors and upstream messages can contain
     // headers, body fragments, birth details or other caller-controlled data.
+    if (error instanceof CalculationError) {
+      const status = error.code === "invalid_request" ? 400
+        : error.code === "receipt_unavailable" ? 422
+        : error.code === "calculation_timeout" ? 504
+        : error.code === "internal_error" || error.code === "calculation_failed" ? 500 : 503;
+      if (status >= 500) request.log.warn({ event: "calculation_rejected", code: error.code });
+      return reply.code(status).send(failure(request.id, error.code, error.message));
+    }
     if (error instanceof NatalEnvelopeError) {
       return reply.code(422).send(failure(request.id, "receipt_unavailable", "The engine could not produce a receipt for this calculation."));
     }
@@ -133,7 +161,7 @@ export function buildApp(options: AppOptions = {}) {
     return reply.code(500).send(failure(request.id, "internal_error", "Internal server error."));
   });
 
-  const sealOpenApi = registerOpenApi(app, options.rateLimit);
+  const sealOpenApi = registerOpenApi(app, options.rateLimit, limits);
   app.get("/healthz", { config: { openapi: routeDocs.health } }, async (request) => success(request.id, { status: "ok" }));
   app.get("/readyz", { config: { openapi: routeDocs.ready } }, async (request, reply) => {
     if (!ready || (options.readiness && !options.readiness())) {
@@ -141,12 +169,12 @@ export function buildApp(options: AppOptions = {}) {
     }
     return success(request.id, { status: "ready" });
   });
-  registerNatalRoute(app);
-  registerTransitsRoute(app);
-  registerSynastryRoute(app);
-  registerReturnRoutes(app);
-  registerMoonPhaseRoute(app);
-  registerHousesRoute(app);
+  registerNatalRoute(app, options.calculations);
+  registerTransitsRoute(app, options.calculations);
+  registerSynastryRoute(app, options.calculations);
+  registerReturnRoutes(app, options.calculations);
+  registerMoonPhaseRoute(app, options.calculations);
+  registerHousesRoute(app, options.calculations);
   sealOpenApi();
   return app;
 }
