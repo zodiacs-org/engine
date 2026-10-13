@@ -5,12 +5,12 @@ text and searches for tropical sign ingresses, natal transit exacts, stations,
 solar/lunar eclipses and void-of-course Moon intervals through the existing events package, plus explicit
 progressed synastry schedules. It imports the parent engine sources without
 building or changing the parent npm package. The implemented scope is M1
-through M9 in [PLAN.md](PLAN.md):
+through M10 in [PLAN.md](PLAN.md):
 UTC and timezone serialization, validation, stable event identities and ingress
 schedules, plus natal transit and synastry analysis for explicitly synthetic
 charts, and receipt-bearing station, eclipse and void-of-course schedules,
-with async streaming over bounded windows. The CLI and the HTTP feed
-endpoint remain planned milestones.
+with async streaming over bounded windows and a command-line exporter.
+The HTTP feed endpoint remains a planned milestone.
 
 Use Node satisfying `engines` in [package.json](package.json). From this folder:
 
@@ -910,6 +910,93 @@ results to check pull backpressure, early return, total budgets, buffer
 limits, cancellation, long-range iteration, conflict detection and refusal
 diagnostics. It checks that an interrupted calendar never receives a
 successful footer.
+
+## Command-line export
+
+Run the launcher from this folder with the local dependencies installed:
+
+```sh
+node scripts/calendar.mjs --help
+node scripts/calendar.mjs --config examples/synthetic-void.json --utc
+node scripts/calendar.mjs --config examples/synthetic-void.json --output generated/synthetic-void.ics
+node scripts/calendar.mjs --config examples/synthetic-mixed.json --select ingress,natal-transit,synastry-exact
+node scripts/calendar.mjs --config examples/synthetic-void.json --tzid America/New_York --dtstamp 2026-01-02T00:00:00.000Z
+```
+
+These invented configurations and the revision override are exercised in
+`test/cli-config.calendar-test.ts` and `test/cli.calendar-test.ts`. The
+eclipse radii in the mixed example are explicit spherical regression settings
+from `test/fixtures/synthetic-stations-eclipses.ts`, not physical defaults.
+To search lunar eclipses, set that selection's request `kind` to `lunar`.
+Every event selection retains its adapter's definitions and limitations above.
+
+The JSON object requires `schema: "zodiacs-calendar-feed/1"`, `dtstamp`,
+and `schedule`. The schedule is the existing `streamSchedule` request:
+canonical UTC `startUtc` and `endUtc`, explicit `maxEvaluations`,
+`windowDays`, `maxBufferedEvents`, and `schedules`. Each selection has `kind`
+and `request` as described under Streaming schedules. Chart-bearing requests
+require explicit `synthetic: true`, durable chart IDs, and UTC birth inputs.
+That declaration is a caller assertion; the CLI cannot verify whether a
+birth was invented. There are no wall-clock timestamp defaults, implicit
+aspect policies, physical radius defaults, or new event-search algorithms.
+
+Optional `timeZone` contains `tzid`, `startUtc`, and `endUtc` for the timezone
+definition's coverage. Include the requested range and every full interval
+endpoint, including void periods extending past the requested range. The
+serializer refuses an endpoint outside coverage during streaming. The void
+example deliberately supplies a larger coverage window, exercised by the
+CLI parser round trip. Timezone conversion retains the existing historical
+offset and ambiguous-time UTC fallback behavior.
+
+`--config -` reads JSON from stdin. Omitting `--output`, or supplying
+`--output -`, writes only iCalendar bytes to stdout. Use the direct launcher
+for pipes: `npm run cli -- ...` also prints npm's script banners unless npm
+is run with `--silent`. Paths are relative to the invocation's working
+directory. The launcher also works with absolute paths from another working
+directory. It prepares and verifies the pinned read-only events source before
+loading the adapters. A private TypeScript loader uses the installed compiler,
+resolves relative source imports and pins the ephemeris import to the local
+dependency. It emits no build files and does not rebuild the parent package.
+Continue running `npm run typecheck`; runtime transpilation does not check types.
+
+`--select` includes all configured selections of the named kinds and refuses
+unsupported or absent kinds. `--start`, `--end`, and `--dtstamp` override the
+corresponding canonical UTC instants. `--utc` removes timezone output;
+`--tzid` changes the configured timezone ID while retaining its explicit
+endpoint coverage. It requires a configured timezone object. Both flags
+together are refused. Every configured selection is validated before work,
+even when excluded by `--select`, and unknown fields are refused.
+
+Configuration input is bounded to 1,048,576 UTF-8 bytes, enforced for files
+and stdin by `test/cli.calendar-test.ts`. File output is bounded to
+1,999,999 bytes; `test/cli-output.calendar-test.ts` checks the exact byte
+boundary and an overflowing multibyte chunk. Stdout retains streaming over
+large ranges. File output must be a new `.ics` file directly inside this
+project's gitignored `generated/` directory. Existing files and symlinks
+are refused. An export streams into a private temporary file, publishes it
+exclusively only after success, and removes staging on handled failures.
+Abrupt process termination can leave a hidden `.feed-` staging directory
+inside `generated/`; remove that local output before retrying. It never
+publishes a partially completed target file.
+
+The CLI reports failures on stderr. Exit statuses are enforced by the CLI
+tests: `0` for a complete nonempty feed, `1` for invalid input or an output
+failure, `2` for a search refusal or an empty selection result, `130` for
+cancellation, and `141` for a broken output pipe. SIGINT and SIGTERM both
+request cooperative cancellation. Cancellation reaches synchronous search
+calls at their existing checkpoints. Refusal diagnostics include the reason,
+cumulative evaluations, emitted event count, window, and selection index when
+available. Earlier stdout bytes cannot be recalled; a failed stream has no
+successful calendar footer. Consumers must check the exit status. The CLI
+preserves the library's refusal of empty calendars instead of presenting an
+empty search as a complete feed.
+
+`test/cli.calendar-test.ts` compares actual subprocess output with the
+committed synthetic void golden across file/stdin input and regeneration,
+parses TZID output with `ical.js`, exercises every adapter, and checks
+filesystem isolation, exclusive publication, diagnostics and disconnects.
+`test/cli-output.calendar-test.ts` uses invented wire chunks to exercise a
+late failure and the file byte cap without asserting astronomical results.
 
 ## Fixtures and scope
 

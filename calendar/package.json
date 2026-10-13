@@ -7,6 +7,7 @@
     "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
   },
   "scripts": {
+    "cli": "node scripts/calendar.mjs",
     "prepare:events": "node scripts/prepare-events.mjs",
     "pretypecheck": "npm run prepare:events",
     "typecheck": "tsc --noEmit",
