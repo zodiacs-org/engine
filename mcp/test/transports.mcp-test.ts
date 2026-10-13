@@ -185,6 +185,24 @@ describe("CLI lifecycle", () => {
     await expect(fetch(url!)).rejects.toThrow();
   });
 
+  it.each(["SIGINT", "SIGTERM"] as const)("exits cleanly on %s immediately when HTTP readiness is received", async (signal) => {
+    const process = child(["http", "--port", "0"]);
+    const exited = once(process, "exit");
+    let stdout = "";
+    let stderr = "";
+    let signaled = false;
+    process.stdout!.on("data", (chunk) => { stdout += String(chunk); });
+    process.stderr!.on("data", (chunk) => {
+      stderr += String(chunk);
+      if (!signaled && /zodiacs-astro: listening at http:\/\/127\.0\.0\.1:\d+\/mcp\n/.test(stderr)) {
+        signaled = process.kill(signal);
+      }
+    });
+    expect(await exited).toEqual([0, null]);
+    expect(signaled).toBe(true);
+    expect(stdout).toBe("");
+  });
+
   it.each(["SIGINT", "SIGTERM"] as const)("closes stdio on %s after initialization", async (signal) => {
     const process = child(["stdio"]);
     const ready = once(process.stdout!, "data");

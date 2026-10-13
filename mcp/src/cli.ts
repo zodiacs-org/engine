@@ -15,7 +15,6 @@ export async function main(args = process.argv.slice(2)) {
   const config = parseArguments(args);
   const onerror = () => { process.stderr.write("zodiacs-astro: transport error\n"); };
   const running = config.transport === "stdio" ? startStdio({ onerror }) : await startHttp({ ...config, onerror });
-  if ("url" in running && running.url instanceof URL) process.stderr.write(`zodiacs-astro: listening at ${running.url.href}\n`);
   let stopping = false;
   const stop = () => {
     if (stopping) return;
@@ -24,6 +23,7 @@ export async function main(args = process.argv.slice(2)) {
   };
   process.once("SIGINT", stop);
   process.once("SIGTERM", stop);
+  if ("url" in running && running.url instanceof URL) process.stderr.write(`zodiacs-astro: listening at ${running.url.href}\n`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
