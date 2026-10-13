@@ -28,3 +28,7 @@ export { MAX_PATH_REFINEMENTS, pathCrossings, planPathCrossings,
   RELOCATION_PATH_CROSSINGS_SCHEMA } from "./path-crossings.js";
 export type { PathBracket, PathBracketEnd, PathCrossing, PathCrossingOptions, PathCrossingPlan,
   PathCrossingsResult, PathIntervalIssue, PathIntervalResult } from "./path-crossings.js";
+export { localSpaceLines, planLocalSpaceLines, LOCAL_SPACE_CONVENTIONS,
+  RELOCATION_LOCAL_SPACE_SCHEMA } from "./local-space-lines.js";
+export type { LocalSpaceDirection, LocalSpaceLineOptions, LocalSpaceLinePlan, LocalSpaceLineSample,
+  LocalSpaceLinesResult, LocalSpacePolyline } from "./local-space-lines.js";

@@ -111,11 +111,12 @@ export function greatCircleArc(from: GeographicPoint, to: GeographicPoint) {
 }
 
 /** Internal display helper; exact poles break longitude continuity. */
-export function pathPolylines(samples: readonly { point: GeographicPoint; index: number }[]): PolylineVertex[][] {
+export function pathPolylines(samples: readonly { point: GeographicPoint; index: number }[],
+  halfTurnDirection?: "east" | "west"): PolylineVertex[][] {
   const result: PolylineVertex[][] = [];
   let run: { point: GeographicPoint; index: number }[] = [];
   const flush = () => {
-    result.push(...splitAntimeridian(run.map((sample) => sample.point)).map((segment) =>
+    result.push(...splitAntimeridian(run.map((sample) => sample.point), halfTurnDirection).map((segment) =>
       segment.map((vertex): PolylineVertex => ({ point: vertex.point, source: vertex.source.kind === "sample"
         ? { kind: "sample", index: run[vertex.source.index]!.index }
         : { ...vertex.source, fromIndex: run[vertex.source.fromIndex]!.index, toIndex: run[vertex.source.toIndex]!.index } }))));

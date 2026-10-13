@@ -14,7 +14,7 @@ line to `CHANGES.txt`. The harness handles git writes and draft PRs.
 - [x] M6 Generate ASC and DSC horizon polylines, including circumpolar gaps, tangencies and polar cases, without fabricating positions.
 - [x] M7 Extract grid crossings with bounded refinement, structured brackets, residuals and unresolved-cell metadata.
 - [x] M8 Sample great-circle paths and find angular crossings along them, with antipodal and antimeridian handling.
-- [ ] M9 Add optional local-space azimuth lines using engine observer angles and bounded spherical geometry.
+- [x] M9 Add optional local-space azimuth lines using engine observer angles and bounded spherical geometry.
 - [ ] M10 Implement the offline `relocation chart`, `relocation lines` and `relocation grid` CLI with validated JSON input and structured output.
 - [ ] M11 Commit small generated golden polyline regression fixtures, their generator and synthetic integration tests; keep large generated outputs ignored.
 - [ ] M12 Finish API and CLI documentation, receipt and numerical-limit explanations, end-to-end checks and package-isolation verification.
@@ -203,3 +203,30 @@ passed. Root `npm run package:contents` still fails because `dist/calc.d.ts`
 is absent; no root build was run under the rule forbidding writes to `dist/`.
 Engine CI gates requiring that build remain deferred. No engine or packed
 files changed.
+
+M9 adds `planLocalSpaceLines` and `localSpaceLines` for bounded forward and
+opposite spherical rays from an explicit observer. Fresh engine equatorial
+positions and observer axes define the origin bearing. All rays share the
+origin receipt; every additional nonpolar vertex has a fresh engine houses
+result and receipt. Samples retain angular distance, fraction, changing course,
+body azimuth, alignment residual and global observer indices. A defined bearing
+resolves antipodal endpoints. Exact meridional routes insert poles and break
+display geometry; pole origins and zenith/nadir bearings remain undefined
+without invented routes. Destination zenith/nadir samples retain the geographic
+route and a null diagnostic residual. Seam interpolation keeps explicit
+provenance and uses the known direction on exact half-world links. Planning
+reserves worst-case work before source capture. Unknown time and typed engine
+refusals discard partial output; numerical stagnation rejects explicitly.
+Documentation explains conventions, receipt scope, budgets and limitations.
+
+Validation: relocation typecheck and the full Vitest suite passed on Node
+22.22.2. `test/local-space-lines.vitest.ts` checks fresh engine receipt replay,
+separate haversine distances, inverse bearings and Cartesian arc planes, both
+directions, arbitrary origins, polar fallback, exact poles, zenith/nadir cases,
+celestial-pole directions, antipodal endpoints, seam provenance, source
+ownership, clocks, budgets, precision and refusals with synthetic births.
+Root package dry-run exclusion, archive SHA-256, file-size, documentation
+punctuation and diff-scope checks passed. Root `npm run package:contents`
+still fails because `dist/calc.d.ts` is absent; no root build was run under
+the rule forbidding writes to `dist/`. Engine CI gates requiring that build
+remain deferred. No engine or packed files changed.

@@ -45,7 +45,7 @@ calls, replay, polar fallback, antimeridian endpoints and input ownership.
 Koch requests, malformed records and the engine codec's import limits.
 They are regression checks, not independent accuracy evidence. Receipt
 labels describe the calculation and do not authenticate its physical accuracy.
-The remaining angular-line and CLI work is listed in `PLAN.md`.
+The remaining CLI and integration work is listed in `PLAN.md`.
 
 ## Bounds, geometry and chart grids
 
@@ -577,6 +577,90 @@ clock replay and failure behavior are tested in `test/path-crossings.vitest.ts`
 over synthetic births. Artificial direction injections exercise singular
 topology and are not authentic receipts or astronomical references.
 The library writes no generated files and makes no network requests.
+
+## Local-space azimuth lines
+
+`planLocalSpaceLines({ origin, lengthDegrees, stepDegrees, bodies?, directions?,
+maxEvaluations })` reserves spherical rays from an explicit geographic origin.
+The origin need not be the natal birthplace. Body selection follows
+`sampleAngles`; directions default to `"forward"` followed by `"opposite"`.
+An explicit direction array must be nonempty, unique and case-sensitive.
+Forward starts along the body's azimuth at the origin; opposite starts along
+the reverse bearing. Both rays keep their origin bearing and follow a great
+circle. Their compass course changes along the route.
+
+`lengthDegrees` is angular distance on a unit sphere, from zero through a
+half-turn. `stepDegrees` is positive angular distance, at most a quarter-turn.
+Both endpoints are included, with a shorter final interval when needed.
+Distances are degrees, not kilometers. Geographic latitude is used directly;
+these paths are not ellipsoidal geodesics. The origin bearing defines the
+route even when its final point is antipodal. A zero-length ray has only its
+origin and no new observer work. Limits, endpoint inclusion, haversine
+distances and separate inverse-bearing checks are enforced over synthetic
+cases by `test/local-space-lines.vitest.ts`.
+
+The planner copies coordinates and selections and reserves positions, a
+shared origin observer and every possible ray observer, conservatively
+including an extra interior pole per nonzero ray. `requiredEvaluations` is
+this worst-case work and `maximumObserverSamples` bounds retained observer
+metadata. Exact polar origins reserve only planetary positions, since no
+bearing can be chosen there. `maxEvaluations` is required and capped by
+`MAX_ANGLE_EVALUATIONS`; observer metadata also stays within `MAX_PATH_SAMPLES`.
+An excess plan throws `AngularBudgetError` before source capture or distance
+allocation. Invalid options and displacements lost at floating-point
+precision throw `RangeError`. `test/local-space-lines.vitest.ts` enforces
+planning, ownership, refusal and precision behavior. Capturing a raw birth
+may additionally calculate its source natal chart.
+
+`localSpaceLines(source, options)` returns `zodiacs.relocation-local-space.v1`
+with its `plan`, `conventions`, engine-backed `sampling` and `lines`. The source
+forms, clocks, delta-T pins and requested house systems follow `sampleAngles`.
+Fresh engine equatorial positions and the origin's engine observer axes
+determine the local geocentric azimuth, north through east, without refraction,
+parallax or limb corrections. Positions remain fixed at the natal instant;
+this is not a time progression. Imported chart positions are not used to
+choose a bearing. Every nonpolar ray sample receives a fresh engine houses
+result and receipt. All rays share the same receipt-bearing origin observer.
+Nearby polar observers retain the engine's house fallback.
+
+Each line records its `body`, `direction`, `positionIndex`,
+`originObserverIndex`, `originAzimuth`, initial `bearing`, `samples` and
+`polylines`. Samples carry `distanceDegrees`, `fraction`, global
+`observerIndex`, the route's forward `courseAzimuth`, the sampled engine-backed
+`bodyAzimuth` and a measured alignment `residual`. The residual folds azimuth
+minus course modulo a half-turn, so either orientation along the same local
+axis matches. It measures the installed engine's sampled alignment with the
+derived great-circle plane, not physical geographic error. The body bearing
+may reverse at a zenith or nadir; its undefined azimuth leaves a null residual
+while the already defined geographic route continues.
+
+An exact geographic-pole origin or a body at the origin's zenith or nadir
+produces an `undefined` line with its reason, null bearing and empty geometry.
+An undefined celestial-pole RA can still supply a defined local north or south
+bearing. Exactly meridional routes insert interior poles between coarse rows;
+pole samples are explicit undefined observers with no houses receipt. A pole
+at the endpoint is retained too. Poles break display polylines. Nearly
+meridional rays retain their computed coordinates without inventing a pole.
+
+Polyline sample vertices reference global observer indices. Seam vertices
+retain endpoint indices and an interpolation fraction, with no extra engine
+receipt. Exact half-world longitude links follow the known bearing direction.
+Straight links and seam interpolation approximate the geographic ray and need
+not lie on its great circle. Coarse steps can omit curvature, and azimuths
+become ill-conditioned near zeniths, nadirs and geographic poles. No location
+accuracy or completeness claim is made by the residuals or receipts.
+
+Unknown time and any typed engine refusal return `status: "refused"` with
+empty lines, positions and observers, including a refusal during destination
+sampling. All other undefined-direction cases remain explicit line or sample
+metadata under `status: "ok"`. `test/local-space-lines.vitest.ts` checks engine
+receipt replay, spherical plane membership, angular distances, changing
+courses, both directions, antimeridian provenance, both polar hemispheres,
+source ownership, clocks, resource budgets and failure behavior with synthetic
+births. Artificial direction injections exercise exact singularities and are
+not authentic receipts or astronomical references. Engine parity and residuals
+are regression checks. This optional library call writes no files and makes
+no network requests.
 
 Code and documentation here use the repository's MIT license. The engine is
 distributed under MIT AND CC-BY-4.0; retain its LICENSE, LICENSING.md and
