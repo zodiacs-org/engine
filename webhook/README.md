@@ -2,9 +2,10 @@
 
 This private workbench is being built according to [PLAN.md](PLAN.md). The
 implemented milestones cover subscription syntax validation, SQLite storage,
-encrypted signing-key custody, payload signing with receiver verification, and
-local event searches with engine receipts. It does not yet run a service or
-deliver requests. Later milestones add the workers and a control API.
+encrypted signing-key custody, payload signing with receiver verification,
+local event searches with engine receipts, and bounded discovery into a durable
+outbox. It does not yet run a service or deliver requests. Later milestones add
+delivery, lifecycle management and a control API.
 The code and documentation here use the repository's [MIT license](../LICENSE).
 
 Use Node from the release line accepted by
@@ -159,7 +160,7 @@ event payloads and pending deliveries and advances the cursor in one transaction
 The interval must stay inside the subscription schedule. Its caller must first
 establish that the search completed; storage cannot prove event completeness.
 The event adapter described below establishes conditional scan completion and
-captures engine receipts. The worker is not implemented yet.
+captures engine receipts. The discovery worker commits only completed scans.
 
 An occurrence key is unique within its subscription across revisions. Event
 identifiers and idempotency keys are globally unique. Repeated occurrences
@@ -168,8 +169,8 @@ instant and exact serialized payload agree. A mismatch rolls back the entire
 scan. This prevents a rescan from silently replacing the bytes to be signed.
 Payloads are stored as supplied, with their SHA-256, and must be JSON objects;
 storage does not validate their engine receipts. Future discoveries are queued
-no earlier than the occurrence instant. Event identities will be computed by
-the later worker milestone.
+no earlier than the occurrence instant. The discovery worker computes stable
+identities and serialized payloads as described below.
 
 `recordAttempt` atomically appends a fixed, redacted outcome and changes a
 pending delivery to pending, delivered or dead-letter. Attempt numbers must be
@@ -380,3 +381,123 @@ checks the real relative-source engine over the synthetic schedule windows in
 that file, equality of captured results with direct engine calls, version and
 clock preservation, and known clock-step refusals. These are integration and
 regression checks, with no new independent astronomical accuracy claim.
+
+## Bounded discovery worker
+
+`ScanWorker` in [src/scan-worker.ts](src/scan-worker.ts) connects the local
+search adapter to `WebhookStore`. Construct it with the store and explicit
+`maxWindowMs`, `stepMs` and `maxEvaluations`. Durations are integer milliseconds;
+the evaluation budget counts the same calculation requests as the adapter.
+All must be positive safe integers. Eclipse subscriptions also need the
+explicit `eclipse` model and derivative step described above. The worker
+snapshots its settings. It performs no HTTP and starts no background timer.
+
+Call `worker.scanSubscription(id, { now, through, signal })`, where `now` is
+the discovery time and `through` is an exclusive discovery horizon, both in
+integer Unix milliseconds. `signal` is optional. The worker owns the interval
+from the durable cursor to the earliest of the schedule end, the horizon, and
+the cursor plus `maxWindowMs`. It never skips backlog to catch up with `now`.
+A future horizon is allowed; delivery availability remains no earlier than
+the occurrence instant. The search adapter's padded samples may extend beyond
+that owned interval, and all of their evaluations count against the budget.
+
+Each call commits at most one slice. A completed empty scan advances its
+cursor too. Missing, disabled, deleted, exhausted and not-yet-due subscriptions
+return an `idle` reason without searching. A `committed` result gives the
+window, evaluation count, inserted and duplicate counts, and new cursor.
+Refusals, cancellation, excessive output and unexpected search failures leave
+the cursor and outbox unchanged. Refused searches keep their fixed reason;
+unexpected calculations throw `ScanWorkerError` with a fixed message. The
+worker does not automatically reduce the step, skip clock discontinuities or
+retry forever. An operator must resolve a refusal while preserving coverage.
+
+`scanPage({ now, through, limit, afterId, signal })` inspects a bounded page
+ordered by subscription identifier and attempts a slice for each subscription.
+Disabled and exhausted records count toward the page limit. Continue with the
+returned `lastId`, including when a subscription refuses, and begin a new pass
+without `afterId` once `exhausted` is true. A full final page requires a later
+empty page to establish exhaustion. New records inserted earlier in the order
+are seen on the next pass. Pagination is not a database snapshot. A thrown
+error stops that call; earlier successful subscription commits remain durable
+and a retry starts each subscription at its current cursor.
+
+The per-page calculation bound is the page limit times `maxEvaluations`, and
+each subscription's owned span is bounded by `maxWindowMs`. Pagination and
+outbox limits come from `STORAGE_LIMITS`. Oversized event batches and payloads
+are refused as a whole, never truncated while advancing a cursor. These are
+work limits, not wall-clock deadlines: search and SQLite work are synchronous.
+Cancellation is checked between calculations and again before commit.
+
+Calculations run outside a SQLite write transaction. Commit rechecks the
+subscription revision, enabled/deleted state, cursor and numerical policy in
+the transaction that writes events, deliveries and cursor progress. Competing
+scans or subscription edits return `conflict` instead of inserting stale work.
+Retry by reading current state through a new call. Storage failures propagate;
+no successful cursor advancement is reported for a failed transaction.
+
+## Occurrence identity and scan policy
+
+The first successful worker scan, including an empty scan, binds a policy
+fingerprint to the subscription in the same transaction as cursor progress.
+It includes the event-search source pin, parent engine and ephemeris versions,
+Node and V8 versions, platform and architecture, sampling step and grid,
+clock ownership, coordinates and any eclipse model
+and derivative step. The database keeps that pin across subscription edits,
+disable/enable cycles and restarts. A changed numerical policy returns
+`policy-conflict`; use a new subscription when deliberately adopting a new
+policy. Switching between eclipse and other filter kinds also changes that
+policy. Operating budgets, owned slice length, discovery horizon and filter
+selection are excluded, so a refused budget can be increased and a schedule
+can be repartitioned without changing occurrence identity.
+
+The SQLite migration preserves existing subscription data without guessing a
+policy for earlier untracked scans. A subscription without a pin may bind only
+when its current cursor is at its schedule start and it has no retained events.
+An edited draft qualifies. Retained legacy events require a new subscription;
+the worker does not reinterpret their provenance or rewrite their payloads.
+Once bound, even lower-level `commitScan` calls must supply the matching
+`policyKey`.
+
+An occurrence key hashes the numerical policy, UTC millisecond label and the
+event's identifying definition: bodies, aspect angle and directed branch,
+sign-boundary direction, outgoing station motion, or eclipse kind. Body order
+remains meaningful for aspects. A separate hash scopes the event identifier
+and idempotency key to the subscription. Scan partitions, retries and replay
+do not create new identities. These are computed-event identities under a
+fixed policy; they do not identify a physical event across different engines
+or numerical policies. Runtime labels do not fingerprint a processor or every
+loaded source byte. Preserve the deployed code and execution environment when
+resuming a database; the policy pin is a consistency check, not a claim of
+cross-machine numerical reproducibility.
+
+The outbound JSON object has schema `zodiacs.webhook-event.v1` and carries
+`id`, `occurrenceKey`, `idempotencyKey`, `subscriptionId`, `event` and `policy`.
+`event` preserves the complete discovered definition, bracket, residual,
+positions, bounds and engine receipts. Object keys are sorted for stable
+serialization and array order is preserved. Numbers use JavaScript's JSON
+encoding, with no decimal rounding added. Discovery
+timestamps, subscription revisions, destinations, key references, search
+windows and evaluation counts are not part of these payload bytes. Storage
+separately retains the revision, discovery time and original delivery snapshot.
+
+Changing a schedule, callback URL or signing-key reference resets the cursor
+under the existing subscription-update contract. Rediscovered occurrences
+deduplicate only if their full payloads still match; the original event,
+delivery state, destination and key reference remain intact. Numerical detail
+changes under the same identity cause a transaction conflict. The worker never
+silently replaces a retained receipt. Updating the callback therefore does not
+reissue old events to the new destination. Delivery retries and operator replay
+will consume the saved bytes and idempotency key in their later milestones.
+
+[scan-worker.test.ts](test/scan-worker.test.ts) exercises synthetic schedules
+through the real search adapter and SQLite, including partition boundaries,
+restart recovery, rescan deduplication, failures, racing connections and bounded
+pages. [occurrence.test.ts](test/occurrence.test.ts) checks deterministic JSON,
+identity scope and receipt preservation.
+[scan-engine.test.ts](test/scan-engine.test.ts) checks the built-in filters
+through the real relative-source engine, then repartitions the synthetic
+schedules and confirms that delivered events retain their bytes and state.
+[storage-scan-policy.test.ts](test/storage-scan-policy.test.ts) checks policy
+binding, migration from the earlier schema, reopen persistence and rollback
+after injected SQLite failures. These establish local discovery and storage
+behavior, not physical event accuracy or at-least-once HTTP delivery.

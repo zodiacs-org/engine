@@ -36,6 +36,8 @@ export interface StoredEvent extends NewEvent {
 export interface ScanCommit {
   readonly subscriptionId: string;
   readonly expectedRevision: number;
+  /** Bound on first use and required thereafter, including after subscription edits. */
+  readonly policyKey?: string;
   readonly from: number;
   readonly to: number;
   readonly now: number;

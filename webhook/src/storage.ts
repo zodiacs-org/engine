@@ -229,7 +229,19 @@ export class WebhookStore {
     });
   }
 
-  /** Caller supplies only a complete search. Storage cannot establish astronomical completeness. */
+  /** The scan policy persists for the subscription's lifetime, across revisions. */
+  getScanPolicy(subscriptionId: string): string | undefined {
+    return this.#run(() => {
+      identifier(subscriptionId);
+      return this.#get("SELECT policy_key FROM scan_policies WHERE subscription_id = ?", subscriptionId)
+        ?.policy_key as string | undefined;
+    });
+  }
+
+  /**
+   * Caller supplies only a complete search. Storage cannot establish astronomical completeness.
+   * A first policy key requires the current cursor at schedule start and no retained events.
+   */
   commitScan(input: ScanCommit): { inserted: number; duplicates: number; cursor: ScanCursor } {
     return this.#transaction(() => {
       if (!input || typeof input !== "object") fail("invalid-input");
@@ -241,6 +253,17 @@ export class WebhookStore {
           !Array.isArray(input.events) || input.events.length > STORAGE_LIMITS.eventsPerScan) fail("invalid-input");
       const cursor = this.getCursor(current.id);
       if (!cursor || cursor.revision !== current.revision || cursor.nextAt !== input.from) fail("conflict");
+      if (input.policyKey !== undefined) identifier(input.policyKey);
+      const policy = this.getScanPolicy(current.id);
+      if (policy !== undefined && input.policyKey !== policy) fail("conflict");
+      if (policy === undefined && input.policyKey !== undefined) {
+        // Legacy cursors or occurrences have no compatible policy provenance.
+        // Only an unscanned current window with no retained events may bind.
+        if (cursor.nextAt !== Date.parse(current.spec.window.start) ||
+            this.#get("SELECT 1 FROM events WHERE subscription_id = ? LIMIT 1", current.id)) fail("conflict");
+        this.#write("INSERT INTO scan_policies (subscription_id, policy_key) VALUES (?, ?)",
+          current.id, input.policyKey);
+      }
       let inserted = 0;
       let duplicates = 0;
       for (const candidate of input.events) {

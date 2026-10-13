@@ -72,7 +72,7 @@ afterEach(() => {
 });
 
 describe("SQLite migrations", () => {
-  it("persists a single migration and data unchanged across reopenings", () => {
+  it("persists migrations and data unchanged across reopenings", () => {
     const path = databasePath();
     const first = open(path);
     seedSubscription(first);
@@ -101,11 +101,13 @@ describe("SQLite migrations", () => {
   });
 
   it.each([
-    "PRAGMA user_version = 2",
+    `PRAGMA user_version = ${STORAGE_SCHEMA_VERSION + 1}`,
     "UPDATE schema_migrations SET checksum = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
     "DELETE FROM schema_migrations",
-    "INSERT INTO schema_migrations VALUES (2, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 0)",
+    `INSERT INTO schema_migrations VALUES (${STORAGE_SCHEMA_VERSION + 1}, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 0)`,
     "DROP TRIGGER events_no_update",
+    "DROP TRIGGER scan_policies_no_update",
+    "DROP TRIGGER scan_policies_no_delete",
     "ALTER TABLE subscriptions ADD COLUMN unexpected TEXT",
   ])("rejects changed schema metadata without modifying it: %s", sql => {
     const path = databasePath();

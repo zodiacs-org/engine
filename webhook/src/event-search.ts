@@ -105,6 +105,11 @@ function completed<T>(result: SearchResult<T>): readonly T[] {
   return result.events;
 }
 
+/** Validate and describe a scan without performing calculations or consuming a budget. */
+export function describeEventSearch(input: EventSearchRequest): EventSearchMetadata {
+  return options(input).search;
+}
+
 /**
  * Synchronous local search. Completion means the prescribed scan finished under the
  * pinned scanners' sampling assumptions, not a certified inventory of sky events.

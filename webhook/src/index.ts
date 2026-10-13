@@ -25,3 +25,5 @@ export { searchEvents, EVENT_SEARCH_SOURCE } from "./event-search.js";
 export type {
   DiscoveredEvent, EventDefinition, EventSearchRequest, EventSearchMetadata, EventSearchResult
 } from "./event-search-types.js";
+export { ScanWorker, ScanWorkerError } from "./scan-worker.js";
+export type { ScanPolicy, ScanRequest, ScanResult, ScanPageRequest, ScanPageResult } from "./scan-types.js";

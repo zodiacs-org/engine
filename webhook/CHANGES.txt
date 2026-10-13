@@ -2,3 +2,4 @@ webhook: complete M1 with an isolated TypeScript/Vitest project, strict subscrip
 webhook: complete M2 with SQLite migrations, transactional subscription and outbox storage, immutable payloads, attempts and dead letters, reopen and rollback tests, and storage documentation
 webhook: complete M3 with runtime key provisioning, an encrypted SQLite vault, immutable key rotation and revocation, HMAC signatures and receiver verification, tampering and custody tests, and protocol documentation
 webhook: complete M4 with pinned local event searches, full engine receipts, UTC window ownership, shared evaluation budgets and atomic refusals, and analytic and engine integration tests
+webhook: complete M5 with bounded discovery scans, durable policy pins and cursors, stable receipt payloads and occurrence identities, transactional outbox commits, and restart, rescan, refusal and concurrency tests

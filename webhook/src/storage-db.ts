@@ -6,7 +6,7 @@ import type { DatabaseSync as DatabaseHandle } from "node:sqlite";
 // during static import resolution, so use Node's resolver directly.
 const { DatabaseSync } = createRequire(import.meta.url)("node:sqlite") as typeof import("node:sqlite");
 
-export const STORAGE_SCHEMA_VERSION = 1;
+export const STORAGE_SCHEMA_VERSION = 2;
 export const STORAGE_BUSY_TIMEOUT_MS = 5_000;
 
 const ledgerSql = `CREATE TABLE schema_migrations (
@@ -78,6 +78,18 @@ CREATE TRIGGER attempts_no_update BEFORE UPDATE ON attempts
 BEGIN SELECT RAISE(ABORT, 'Attempt records are immutable.'); END;
 CREATE TRIGGER attempts_no_delete BEFORE DELETE ON attempts
 BEGIN SELECT RAISE(ABORT, 'Attempt records are immutable.'); END;
+`,
+}, {
+  version: 2,
+  sql: `
+CREATE TABLE scan_policies (
+  subscription_id TEXT PRIMARY KEY NOT NULL REFERENCES subscriptions(id),
+  policy_key TEXT NOT NULL CHECK (length(policy_key) > 0)
+) STRICT;
+CREATE TRIGGER scan_policies_no_update BEFORE UPDATE ON scan_policies
+BEGIN SELECT RAISE(ABORT, 'Scan policies are immutable.'); END;
+CREATE TRIGGER scan_policies_no_delete BEFORE DELETE ON scan_policies
+BEGIN SELECT RAISE(ABORT, 'Scan policies are immutable.'); END;
 `,
 }] as const;
 
