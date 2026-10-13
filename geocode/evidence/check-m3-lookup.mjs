@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { createPlaceLookup } from "../.cache/tools/src/index.js";
+import { createPlaceLookup } from "../.cache/tools/src/lookup.js";
 
 const directory = process.argv[2];
 assert(directory && process.argv.length === 3, "usage: node evidence/check-m3-lookup.mjs INDEX_DIRECTORY");
