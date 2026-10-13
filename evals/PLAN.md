@@ -20,7 +20,7 @@ astronomical accuracy or the validity of personality or predictive claims.
 - [x] M4 Define the reading and factual-claim schemas, preserving quoted spans and unsupported or ambiguous assertions without silently treating them as correct.
 - [x] M5 Define a pluggable generation backend with a deterministic offline mock, explicit backend selection, bounded requests and no saved credentials.
 - [x] M6 Implement the interpretation generator with versioned prompts, input/output validation, provenance, reproducible manifests and ignored output files.
-- [ ] M7 Write a versioned scoring rubric for factual correctness, coverage, contradictions and abstentions, separating interpretive quality from computable facts.
+- [x] M7 Write a versioned scoring rubric for factual correctness, coverage, contradictions and abstentions, separating interpretive quality from computable facts.
 - [ ] M8 Implement deterministic placement, aspect, house and dignity scoring with per-claim evidence, category totals and explicit denominators.
 - [ ] M9 Add an offline reading evaluation CLI that combines synthetic cases, engine facts, supplied or mock readings and machine-readable reports.
 - [ ] M10 Add a conservative prose claim extractor and tests for negation, ambiguity, duplicate claims and omitted facts; expose extraction limits in reports.
@@ -141,3 +141,22 @@ checks passed. With npm's cache redirected under `evals/`, the root
 `npm run package:contents` gate was attempted and failed on missing
 `dist/calc.d.ts`; no prohibited root build was run. All changes remain under
 `evals/`. M7 is next.
+
+M7 acceptance: `RUBRIC.md` and the authored `rubrics/factual-v1.json` policy
+define explicit eligibility, full-factor negation, canonical resolved units,
+duplicate handling, pairwise contradictions and positive-factor coverage.
+Correctness, coverage, contradiction and resolved-assessment rates retain their
+own counts and denominators, with null for undefined rates. Unsupported prose,
+ambiguity, abstentions and interpretations retain occurrence counts without
+factual credit. The rubric specifies convention and availability handling,
+required evidence and extraction limits. Scorer implementation remains M8 work.
+
+M7 validation: `npm --prefix evals test` and
+`npm --prefix evals run validate:seed` passed on Node 22.23.3. Rubric contract
+tests check current schema vocabulary, synthetic adapter compatibility, unknown
+time, actual polar fallback, identity rules, truth tables and hypothetical
+worked-example arithmetic. They do not claim to exercise a scoring harness or
+establish independent astronomical accuracy. Package exclusion and project
+isolation passed. The root `npm run package:contents` gate was attempted with
+an eval-local npm cache and failed on missing `dist/calc.d.ts`; no prohibited
+root build was run. All changes remain under `evals/`. M8 is next.

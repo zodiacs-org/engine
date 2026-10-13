@@ -5,8 +5,9 @@ dataset and evaluating chart readings. It validates factor-to-meaning entries
 and datasets, includes an original authored seed set, computes synthetic
 chart facts through the local engine, and validates readings with quoted claims.
 A bounded interpretation generator provides a deterministic offline mock,
-explicit custom backend selection and reproducible manifests. The scoring
-harness remains a later milestone in [PLAN.md](PLAN.md).
+explicit custom backend selection and reproducible manifests. The versioned
+[factual rubric](RUBRIC.md) defines scoring rules; the scoring harness remains a
+later milestone in [PLAN.md](PLAN.md).
 
 Interpretation text is symbolic prose. The eventual factual score will compare a
 reading's assertions with computations from the local `@zodiacs/engine` under
@@ -271,8 +272,9 @@ that a negation or hedge was extracted correctly, or that every assertion was
 extracted. `extraction.coverage` is always `unverified`, including for manually
 annotated readings. Empty text and empty claim lists are accepted for later
 omission handling. Neither acceptance nor an empty list implies perfect factual
-correctness. Scores, denominators and extraction audits belong to later
-milestones; this command returns no score.
+correctness. The [factual rubric](RUBRIC.md) defines scoring denominators and
+eligibility. Scoring and extraction audits remain later milestones; this command
+returns no score.
 
 ```sh
 node evals/bin/validate-reading.mjs evals/scratch/reading.json
