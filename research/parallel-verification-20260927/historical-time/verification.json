@@ -1,0 +1,15 @@
+{
+  "status": "pass",
+  "rules": 5,
+  "sources": 6,
+  "transition_fixtures": 8,
+  "meaning": "Local consistency and conditional civil-clock boundary checks only; not independent proof of historical local observance.",
+  "tested_at": "2026-09-27T15:15:56.072668+00:00",
+  "python_version": "3.12.14",
+  "unit_tests_run": 13,
+  "unit_test_failures": 0,
+  "unit_test_errors": 0,
+  "network_required": false,
+  "engine_changes": false,
+  "independent_agent_review": "REVIEW.md; code, arithmetic and scope only; no fresh source corroboration"
+}

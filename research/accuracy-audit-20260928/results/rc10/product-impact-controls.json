@@ -1,0 +1,65 @@
+{
+  "purpose": "Synthetic analytic tests of empirical sensitivity reporting; not ephemeris validation or timing bounds.",
+  "policy": {
+    "id": "sampled-longitude-linearization-v1",
+    "conventionStatus": "aligned-with-documented-model-differences",
+    "minimumAbsoluteRateArcsecPerSecond": 0.00001,
+    "maximumRelativeRateSpread": 0.1,
+    "maximumAbsoluteLongitudeDifferenceArcsecExclusive": 648000,
+    "relativeSpreadDenominator": "maximum of the two absolute rates",
+    "primaryRate": "longitudeRateArcsecPerSecond60s"
+  },
+  "passed": 10,
+  "checks": [
+    {
+      "id": "LINEAR-01",
+      "description": "Exact linear rate yields unsigned local equivalent time; two sampled rates are not a timing bound.",
+      "status": "passed"
+    },
+    {
+      "id": "DIRECTION-01",
+      "description": "Negative discrepancy/rates yield nonnegative sensitivity, not signed event correction.",
+      "status": "passed"
+    },
+    {
+      "id": "CIRCULAR-BRANCH-01",
+      "description": "A half-circle discrepancy is directionally ambiguous; larger discrepancies are outside the principal circular branch.",
+      "status": "passed"
+    },
+    {
+      "id": "STATION-01",
+      "description": "Zero, tiny and opposing rates are refused even with zero discrepancy.",
+      "status": "passed"
+    },
+    {
+      "id": "SPREAD-01",
+      "description": "The declared ten-percent gate is inclusive and rejects larger spread; denominator is max absolute rate.",
+      "status": "passed"
+    },
+    {
+      "id": "FINITE-01",
+      "description": "Nonfinite observations, malformed rates and arithmetic overflow fail closed.",
+      "status": "passed"
+    },
+    {
+      "id": "CONVENTIONS-01",
+      "description": "An unaligned or missing convention declaration blocks even numerically benign conversion.",
+      "status": "passed"
+    },
+    {
+      "id": "ZERO-AND-THRESHOLD-01",
+      "description": "Zero discrepancy at a permitted rate gives zero; exact minimum rate passes the declared heuristic.",
+      "status": "passed"
+    },
+    {
+      "id": "BOUNDARY-01",
+      "description": "A discrepancy above a near-cusp margin or on its endpoint proves no label change or interval guarantee.",
+      "status": "passed"
+    },
+    {
+      "id": "EXTRAPOLATION-01",
+      "description": "A formal 600-second ratio is retained and flagged beyond sampled ±300 seconds, with no postmeasurement gate change.",
+      "status": "passed"
+    }
+  ]
+}

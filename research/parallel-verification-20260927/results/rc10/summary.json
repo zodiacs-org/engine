@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-27T15:24:43.118Z",
+  "engineVersion": "0.1.1-rc.10",
+  "matchesFrozenDistribution": true,
+  "scope": "Research diagnostics and contract tests, separate from production release gates. A passed runner may retain explicitly classified API concerns.",
+  "tasks": [
+    {
+      "name": "reference-integrity-controls",
+      "status": "passed",
+      "exitCode": 0,
+      "durationMs": 177,
+      "error": null
+    },
+    {
+      "name": "position-comparisons",
+      "status": "passed",
+      "exitCode": 0,
+      "durationMs": 182,
+      "error": null
+    },
+    {
+      "name": "geometry-comparisons",
+      "status": "passed",
+      "exitCode": 0,
+      "durationMs": 520,
+      "error": null
+    },
+    {
+      "name": "event-integrity-controls",
+      "status": "passed",
+      "exitCode": 0,
+      "durationMs": 667,
+      "error": null
+    },
+    {
+      "name": "event-comparisons",
+      "status": "passed",
+      "exitCode": 0,
+      "durationMs": 223,
+      "error": null
+    },
+    {
+      "name": "focused-reproductions",
+      "status": "passed",
+      "exitCode": 0,
+      "durationMs": 452,
+      "error": null
+    },
+    {
+      "name": "uncertainty-contract",
+      "status": "passed",
+      "exitCode": 0,
+      "durationMs": 107,
+      "error": null
+    },
+    {
+      "name": "uncertainty-preview",
+      "status": "passed",
+      "exitCode": 0,
+      "durationMs": 1734,
+      "error": null
+    },
+    {
+      "name": "historical-data",
+      "status": "passed",
+      "exitCode": 0,
+      "durationMs": 30,
+      "error": null
+    },
+    {
+      "name": "historical-controls",
+      "status": "passed",
+      "exitCode": 0,
+      "durationMs": 42,
+      "error": null
+    }
+  ],
+  "failedTasks": 0
+}

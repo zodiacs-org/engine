@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-09-27T15:24:38.982Z",
+  "runtime": "v24.19.0",
+  "platform": "linux",
+  "arch": "x64",
+  "entryModuleSha256": "d3a2ef95bdff80c70c2edeb95b89569894eb58e235ffbbbd73035f08b81602c3",
+  "packageName": "@zodiacs/engine",
+  "packageVersion": "0.1.1-rc.10",
+  "tarballSha256": "a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c",
+  "matchesFrozenDistribution": true,
+  "baselineDependencyMatch": true,
+  "distributionFiles": {
+    "dist/chunk-35EQGGYX.js": "21d1603de4a067c2cd0d9404de00a9a1753386a6b8d27eef805c55aada120f68",
+    "dist/chunk-AECKV73C.js": "a812be9882c25f67c9fa8dfe19eb0d950a3867a7cdbede4c746c226ca760480c",
+    "dist/chunk-CPALRSPC.js": "9db1a3814ec9bd00a40d4bc295e348debd6108f62a322ed91d18610c81b9fb08",
+    "dist/chunk-FR5TX5ZG.js": "32992ee054cdb37c9e5548e5a4136f125dbf8da7857c5db8d3bbb530011bf9e1",
+    "dist/chunk-IYNERVXW.js": "2d297d94afc12e305da43c865415bbf9c4bf0cd4292936c7c10089c8d41beb84",
+    "dist/chunk-N4WHSUFK.js": "0404459e3bb1a10413c34397f7a269d11a2599227ee6aff18c60e3f091964740",
+    "dist/chunk-ONBZ4HK7.js": "50f11205373c177c728ea8c7d50d41b19ff80cd9921eb51c6e907a8045f93308",
+    "dist/chunk-PFGUCNOK.js": "6d9d38ab4606288700b0959e732a61dfa5b4cdc570be21d17b4ac9b9fe1c0eb4",
+    "dist/crossings.d.ts": "1552b52b24d15828e0df70a76c80a076ffc6df5da899af16ffe05234d0e9619f",
+    "dist/crossings.js": "bad1c9bcf76338a95d8c09d1019fb32a65f2d9622c611fd87f81a83392bd3f5f",
+    "dist/deltat.d.ts": "cf6e092131aa2c6f5a4a8893078503a35fe5e5ca4bdcb52741f07650a93a1b86",
+    "dist/deltat.js": "43b1503b6597e82ed6e920c18991703fe02be05856e6de0fc347e4abcf4c15e4",
+    "dist/geo.d.ts": "7a42344e57d435528d859d815e42e36945bfb7c12d5bec0140c669cbc7547654",
+    "dist/geo.js": "65b0af0d4c6823483ad321ab91a703889303a6e8051f171d2de8fc3df7e94d64",
+    "dist/index.d.ts": "f9340f719309315b2242c3fd71536d57a667dbb382afbfc18a38db9441851db5",
+    "dist/index.js": "d3a2ef95bdff80c70c2edeb95b89569894eb58e235ffbbbd73035f08b81602c3",
+    "dist/internal-math-BO56moyy.d.ts": "f365f81430d7fad2bbd7abe82090174ba91614915830096abc7cbdff895d83c0",
+    "dist/internal-math.d.ts": "37c2c9005e2acc172c4ae3454febb6e1dab212f072fd4c3edfe80b860b42d305",
+    "dist/internal-math.js": "5b9f2247f099f6fa2de0ecbe0b5ed730c6db5a630cd6e841b046c54f182d8d91",
+    "dist/internal.d.ts": "f040c4a44e1ec6d4d173d4614b02b7e3b19652070e8ab4fbd351497fc1060e8d",
+    "dist/internal.js": "09941e5ed9937f02d313609cf080e1cff76225aaea9f97def14a8a6d70382ce6",
+    "dist/receipt.d.ts": "c2c68b4ae5f19e6b628bb314f8c4700ed9a3836dd54a3e64f10c0925ba823fb3",
+    "dist/receipt.js": "ff7a6b2a8ce0d4be22225cb2752f33601bc7ebf9dde8aeedbf67a4bbf885de03",
+    "dist/types-BcilIdPk.d.ts": "339798ec71fd38bb4b2a24fc332c5d73e18b380c1f7b89e576022750f80cda4c",
+    "package.json": "e2ff18b132f2a01cfea37ed4b8c3f827a1d5c238d26654bb481d44168a9afc4e"
+  },
+  "dependencies": [
+    {
+      "name": "astronomy-engine",
+      "declared": "2.1.19",
+      "installedVersion": "2.1.19",
+      "files": {
+        "astronomy.browser.js": "a2cfab19cab1a15843e4c8cc7410b6cbaafd0907122a8698c25d63d00c2774e4",
+        "astronomy.browser.min.js": "f41139a87941ea017ab902b954c9389fa27ea72083d7fab4971756d7769d14e6",
+        "astronomy.d.ts": "fc5f1ede68dbebc32ce2f3f878cb3b261dc1bf8c16422451f0c4092c41fc871e",
+        "astronomy.js": "729c0ce37cc1a8096034a689039a5f04585ee8184177c638e8c74dec4fa3185a",
+        "astronomy.min.js": "6268029496ec7072e91a6ee3588dc645144dccc91ddbaa03b7f646fa0959da59",
+        "esm/astronomy.js": "068f1445ed0c636c94818fe6d20d7d125120e605e0bab9fc4675c3d531be5ad7",
+        "package.json": "d035702763839ae11f41600cf4b8210005672658dcb19cea4a09591078af4931",
+        "README.md": "73c2de22668374bafd2d238ef43bccd96017550d47ba05afaedd969a00490b1f"
+      }
+    }
+  ],
+  "provenance": "Source commit is established only for matching recorded candidate distribution; future candidate ancestry needs its own trusted artifact record."
+}

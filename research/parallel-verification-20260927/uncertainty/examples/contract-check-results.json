@@ -1,0 +1,158 @@
+{
+  "purpose": "Contract verification on independent synthetic analytic functions; not astronomical accuracy or certification.",
+  "checks": [
+    {
+      "id": "SIGN-01",
+      "status": "passed"
+    },
+    {
+      "id": "SIGN-02",
+      "status": "passed"
+    },
+    {
+      "id": "SIGN-03",
+      "status": "passed"
+    },
+    {
+      "id": "END-01",
+      "status": "passed"
+    },
+    {
+      "id": "END-02",
+      "status": "passed"
+    },
+    {
+      "id": "MISS-01",
+      "status": "passed"
+    },
+    {
+      "id": "TAN-01",
+      "status": "passed"
+    },
+    {
+      "id": "ABSENT-01",
+      "status": "passed"
+    },
+    {
+      "id": "FALLBACK-01",
+      "status": "passed"
+    },
+    {
+      "id": "UNION-01",
+      "status": "passed"
+    },
+    {
+      "id": "BUDGET-01",
+      "status": "passed"
+    },
+    {
+      "id": "DELTA-01",
+      "status": "passed"
+    },
+    {
+      "id": "ASPECT-01",
+      "status": "passed"
+    },
+    {
+      "id": "FAIL-01",
+      "status": "passed"
+    },
+    {
+      "id": "REJECT-INVALID-DOMAIN",
+      "status": "passed"
+    },
+    {
+      "id": "REJECT-CERTIFIED",
+      "status": "passed"
+    },
+    {
+      "id": "REJECT-LOCAL",
+      "status": "passed"
+    },
+    {
+      "id": "REJECT-PRIOR",
+      "status": "passed"
+    },
+    {
+      "id": "REJECT-BOX",
+      "status": "passed"
+    },
+    {
+      "id": "REJECT-UNKNOWN-MODEL",
+      "status": "passed"
+    },
+    {
+      "id": "REJECT-IGNORED-DELTA-T",
+      "status": "passed"
+    },
+    {
+      "id": "REJECT-NAN-HOUSE",
+      "status": "passed"
+    },
+    {
+      "id": "REJECT-BAD-SIGN",
+      "status": "passed"
+    },
+    {
+      "id": "REJECT-BAD-ANGLE",
+      "status": "passed"
+    },
+    {
+      "id": "ALLOW-UNKNOWN-COMMIT",
+      "status": "passed"
+    }
+  ],
+  "executableChecksPassed": 25,
+  "specifiedFutureCases": [
+    {
+      "id": "FOLD-01",
+      "status": "specified-not-implemented",
+      "scope": "normalizer-contract"
+    },
+    {
+      "id": "GAP-01",
+      "status": "specified-not-implemented",
+      "scope": "normalizer-contract"
+    },
+    {
+      "id": "ROUND-01",
+      "status": "specified-not-implemented",
+      "scope": "normalizer-contract"
+    },
+    {
+      "id": "LMT-01",
+      "status": "specified-not-implemented",
+      "scope": "historical-clock-contract"
+    },
+    {
+      "id": "LOC-01",
+      "status": "specified-not-implemented",
+      "scope": "multidimensional-contract"
+    },
+    {
+      "id": "DT-01",
+      "status": "specified-not-implemented",
+      "scope": "multidimensional-contract"
+    },
+    {
+      "id": "MODEL-01",
+      "status": "specified-not-implemented",
+      "scope": "convention-contract"
+    },
+    {
+      "id": "CERT-01",
+      "status": "specified-not-implemented",
+      "scope": "certificate-contract"
+    },
+    {
+      "id": "CAL-01",
+      "status": "specified-not-implemented",
+      "scope": "normalizer-contract"
+    },
+    {
+      "id": "PRIOR-01",
+      "status": "specified-not-implemented",
+      "scope": "probability-contract"
+    }
+  ]
+}

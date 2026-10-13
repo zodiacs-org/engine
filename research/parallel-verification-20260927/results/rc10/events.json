@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "protocol": "jpl-october-2026-lunations-v1",
+  "startedAtUtc": "2026-09-27T15:24:40.601Z",
+  "completedAtUtc": "2026-09-27T15:24:40.745Z",
+  "runner": {
+    "node": "v24.19.0",
+    "scriptSha256": "34ac2acd432ecaedfdf4e367d5cfa4224bd7f9cc7b5f84fc163d1f42fcf202e1"
+  },
+  "target": {
+    "package": "@zodiacs/engine",
+    "version": "0.1.1-rc.10",
+    "ephemeris": {
+      "name": "astronomy-engine",
+      "version": "2.1.19"
+    },
+    "engineEntrySha256": "d3a2ef95bdff80c70c2edeb95b89569894eb58e235ffbbbd73035f08b81602c3",
+    "functions": [
+      "natalChart({utc,timeKnown:false,deltaT:69})",
+      "findLongitudeCrossingsWith"
+    ]
+  },
+  "baseline": {
+    "name": "@zodiacs/engine",
+    "version": "0.1.1-rc.10",
+    "sourceCommitPrefix": "f5f33892",
+    "tarballSha256": "a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c",
+    "suppliedArchiveVerification": {
+      "status": "hashed supplied archive",
+      "sha256": "a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c",
+      "matchesFrozenBaseline": true,
+      "frozenBaselineEnforced": false,
+      "scope": "Verifies supplied archive identity; does not by itself establish that the imported runtime was extracted from it."
+    }
+  },
+  "clock": {
+    "inputClock": "synthetic UT1 represented with ISO Z labels; not physical UTC",
+    "deltaTSeconds": 69,
+    "referenceClock": "TT = synthetic UT1 + 69 seconds",
+    "calendar": "proleptic Gregorian"
+  },
+  "inputs": {
+    "protocolSha256": "596b0aca2d5077a65657699a91ec23bc4f3198768ae24e9880e94d8a5780a8d0",
+    "referencesSha256": "80eec554ca8bccfc25b6e369d396141e4592f986e4781ecae15f93c9d619c44b",
+    "rawResponseHashesVerified": 10,
+    "expectedRootsRederivedFromRawCsv": 2,
+    "diagnosticGateSeconds": 10
+  },
+  "cases": [
+    {
+      "id": "october-2026-new-moon",
+      "phase": "new",
+      "window": {
+        "from": "2026-10-01T00:00:00.000Z",
+        "to": "2026-10-16T00:00:00.000Z"
+      },
+      "targetAngleDegrees": 0,
+      "roots": [
+        {
+          "syntheticUt1": "2026-10-10T15:50:02.284Z",
+          "syntheticUt1UnixSeconds": 1791647402.284,
+          "retrograde": false
+        }
+      ],
+      "referenceSyntheticUt1": "2026-10-10T15:50:05.245Z",
+      "referenceTt": "2026-10-10T15:51:14.245Z",
+      "referenceSampleBracket": {
+        "lowerSeconds": 1791647405.0000234,
+        "upperSeconds": 1791647406.000018,
+        "lowerResidualDegrees": -0.000034200000072814873,
+        "upperResidualDegrees": 0.00010509999992791563,
+        "linearEstimateSeconds": 1791647405.2455354,
+        "localRateDegreesPerSecond": 0.00013930076387420488,
+        "widthSeconds": 0.9999945163726807,
+        "lowerSyntheticUt1": "2026-10-10T15:50:05.000Z",
+        "upperSyntheticUt1": "2026-10-10T15:50:06.000Z"
+      },
+      "expectedRootCount": 1,
+      "countMatched": true,
+      "targetMinusJplInterpolatedSeconds": -2.9615354537963867,
+      "absoluteDifferenceSeconds": 2.9615354537963867,
+      "worstEndpointDifferenceSeconds": 3.716017961502075,
+      "diagnosticGateSeconds": 10,
+      "gateRule": "Exactly one root, with absolute distance to BOTH endpoints of the JPL reference bracket <=10 seconds.",
+      "diagnosticPassed": true,
+      "longitudeCalls": 85,
+      "natalChartCalls": 85
+    },
+    {
+      "id": "october-2026-full-moon",
+      "phase": "full",
+      "window": {
+        "from": "2026-10-16T00:00:00.000Z",
+        "to": "2026-11-01T00:00:00.000Z"
+      },
+      "targetAngleDegrees": 180,
+      "roots": [
+        {
+          "syntheticUt1": "2026-10-26T04:11:45.154Z",
+          "syntheticUt1UnixSeconds": 1792987905.154,
+          "retrograde": false
+        }
+      ],
+      "referenceSyntheticUt1": "2026-10-26T04:11:48.954Z",
+      "referenceTt": "2026-10-26T04:12:57.954Z",
+      "referenceSampleBracket": {
+        "lowerSeconds": 1792987907.9999967,
+        "upperSeconds": 1792987908.9999912,
+        "lowerResidualDegrees": -0.0001477000000136286,
+        "upperResidualDegrees": 0.000007100000004811591,
+        "linearEstimateSeconds": 1792987908.954126,
+        "localRateDegreesPerSecond": 0.0001548008488886042,
+        "widthSeconds": 0.9999945163726807,
+        "lowerSyntheticUt1": "2026-10-26T04:11:47.999Z",
+        "upperSyntheticUt1": "2026-10-26T04:11:48.999Z"
+      },
+      "expectedRootCount": 1,
+      "countMatched": true,
+      "targetMinusJplInterpolatedSeconds": -3.80012583732605,
+      "absoluteDifferenceSeconds": 3.80012583732605,
+      "worstEndpointDifferenceSeconds": 3.8459911346435547,
+      "diagnosticGateSeconds": 10,
+      "gateRule": "Exactly one root, with absolute distance to BOTH endpoints of the JPL reference bracket <=10 seconds.",
+      "diagnosticPassed": true,
+      "longitudeCalls": 89,
+      "natalChartCalls": 89
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "total": 2,
+    "allDiagnosticPassed": true,
+    "maximumAbsoluteDifferenceSeconds": 3.80012583732605
+  },
+  "limitations": [
+    "Two ordinary lunations only. No station, ingress, eclipse-maximum, polar, boundary, multi-pass, catalog completeness or physical two-second guarantee is tested.",
+    "This exercises a custom elongation callback built from natalChart through the public crossing solver; it is not a native lunation catalog API.",
+    "The 10-second gate was chosen before target results and is a bounded diagnostic, not a package accuracy specification.",
+    "The fine reference bracket describes numerical sampling only; physical ephemeris uncertainty and convention differences are not bounded by it.",
+    "Synthetic UT1 with a fixed 69-second TT offset is used to remove model deltaT differences; the ISO Z labels are not claims of actual UTC phase times.",
+    "No estimate of event-search completeness over all bodies, all epochs or station/tangent configurations is made."
+  ]
+}

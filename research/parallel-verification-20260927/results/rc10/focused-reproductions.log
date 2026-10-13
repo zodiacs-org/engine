@@ -1,0 +1,21 @@
+{
+  "output": "/workspace/scratch/c1943cbff40d/parallel-work/results/rc10/reproductions.json",
+  "engine": "0.1.1-rc.10",
+  "observations": [
+    {
+      "id": "saturn-return-birth-clock",
+      "status": "reproduced",
+      "category": "contract-gap"
+    },
+    {
+      "id": "moon-illumination-approximation",
+      "status": "measured",
+      "category": "documented-scope-clarification"
+    },
+    {
+      "id": "public-boundary-controls",
+      "status": "passed",
+      "category": "control"
+    }
+  ]
+}

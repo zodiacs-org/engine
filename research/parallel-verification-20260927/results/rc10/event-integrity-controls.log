@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "scope": "Offline harness integrity controls; not additional astronomical validation",
+  "passed": 9,
+  "total": 9,
+  "controls": [
+    {
+      "control": "edited expected root",
+      "passed": true,
+      "expectedRejection": "Processed expected time was edited"
+    },
+    {
+      "control": "missing numeric expected root",
+      "passed": true,
+      "expectedRejection": "Processed expected time was edited"
+    },
+    {
+      "control": "missing numeric bracket",
+      "passed": true,
+      "expectedRejection": "Processed reference bracket was edited"
+    },
+    {
+      "control": "duplicate case",
+      "passed": true,
+      "expectedRejection": "Duplicate reference case ID"
+    },
+    {
+      "control": "edited ISO label",
+      "passed": true,
+      "expectedRejection": "Processed expected time was edited"
+    },
+    {
+      "control": "relaxed gate with updated protocol digest",
+      "passed": true,
+      "expectedRejection": "Protocol changed"
+    },
+    {
+      "control": "wrong numerical deltaT pin",
+      "passed": true,
+      "expectedRejection": "Target did not honor pinned deltaT"
+    },
+    {
+      "control": "out-of-range longitude",
+      "passed": true,
+      "expectedRejection": "exactly one Sun and Moon"
+    },
+    {
+      "control": "duplicate Moon",
+      "passed": true,
+      "expectedRejection": "exactly one Sun and Moon"
+    }
+  ]
+}

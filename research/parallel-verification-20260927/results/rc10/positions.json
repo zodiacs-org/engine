@@ -1,0 +1,2221 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-27T15:24:39.330Z",
+  "engineVersion": "0.1.1-rc.10",
+  "ephemeris": {
+    "name": "astronomy-engine",
+    "version": "2.1.19"
+  },
+  "runtime": "v24.19.0",
+  "casesSha256": "464a443edce57537947a0200435044703416c956cb0d9509240721a59e17dbe2",
+  "referenceSha256": "6d4f61e91069246d217da9b2a2f078703cecf991b85fe73f4f327789c60360e3",
+  "diagnosticToleranceArcsec": 60,
+  "aspirationalToleranceArcsec": 1,
+  "scope": "Finite differences from JPL quantity31 under explicitly different conventions; not absolute accuracy or a certified bound.",
+  "knownDifferences": [
+    "Engine has no solar gravitational light deflection; JPL observer apparent quantities do.",
+    "Engine Moon geometry carries neither light-time nor aberration correction; JPL observer quantities do.",
+    "JPL IAU76/80 ecliptic reduction differs from the engine rotation model.",
+    "Mars through Pluto references below are planetary-system barycenters, not guaranteed physical body centers.",
+    "UTC-looking input labels are synthetic UT1 with TT minus UT1 pinned to69 seconds; they are not claims of historical physical UTC."
+  ],
+  "summary": {
+    "cases": 210,
+    "diagnosticFailures": 0,
+    "aspirationalFailures": 168
+  },
+  "groups": [
+    {
+      "body": "Sun",
+      "cases": 21,
+      "maxLongitudeResidualArcsec": 1.363189326821157,
+      "p95LongitudeResidualArcsec": 1.1692352486534219,
+      "maxLatitudeResidualArcsec": 2.096407325508155,
+      "diagnosticFailures": 0,
+      "aspirationalFailures": 9
+    },
+    {
+      "body": "Moon",
+      "cases": 21,
+      "maxLongitudeResidualArcsec": 8.573557814543165,
+      "p95LongitudeResidualArcsec": 5.871458766068827,
+      "maxLatitudeResidualArcsec": 1.178143985115554,
+      "diagnosticFailures": 0,
+      "aspirationalFailures": 11
+    },
+    {
+      "body": "Mercury",
+      "cases": 21,
+      "maxLongitudeResidualArcsec": 7.94369721561452,
+      "p95LongitudeResidualArcsec": 5.206777591047285,
+      "maxLatitudeResidualArcsec": 8.169601974449847,
+      "diagnosticFailures": 0,
+      "aspirationalFailures": 20
+    },
+    {
+      "body": "Venus",
+      "cases": 21,
+      "maxLongitudeResidualArcsec": 14.210060466757568,
+      "p95LongitudeResidualArcsec": 6.459088362635157,
+      "maxLatitudeResidualArcsec": 5.9422473061768954,
+      "diagnosticFailures": 0,
+      "aspirationalFailures": 17
+    },
+    {
+      "body": "Mars",
+      "cases": 21,
+      "maxLongitudeResidualArcsec": 2.4065645200153085,
+      "p95LongitudeResidualArcsec": 2.3192993216071045,
+      "maxLatitudeResidualArcsec": 2.8746763073817405,
+      "diagnosticFailures": 0,
+      "aspirationalFailures": 10
+    },
+    {
+      "body": "Jupiter",
+      "cases": 21,
+      "maxLongitudeResidualArcsec": 6.983078011899124,
+      "p95LongitudeResidualArcsec": 5.610032676077026,
+      "maxLatitudeResidualArcsec": 9.201818412447338,
+      "diagnosticFailures": 0,
+      "aspirationalFailures": 20
+    },
+    {
+      "body": "Saturn",
+      "cases": 21,
+      "maxLongitudeResidualArcsec": 10.204493701212414,
+      "p95LongitudeResidualArcsec": 9.611255163008536,
+      "maxLatitudeResidualArcsec": 15.99911618437062,
+      "diagnosticFailures": 0,
+      "aspirationalFailures": 21
+    },
+    {
+      "body": "Uranus",
+      "cases": 21,
+      "maxLongitudeResidualArcsec": 11.050452515610232,
+      "p95LongitudeResidualArcsec": 7.524816253953759,
+      "maxLatitudeResidualArcsec": 16.085935168779475,
+      "diagnosticFailures": 0,
+      "aspirationalFailures": 20
+    },
+    {
+      "body": "Neptune",
+      "cases": 21,
+      "maxLongitudeResidualArcsec": 16.32439550739946,
+      "p95LongitudeResidualArcsec": 16.102980664663846,
+      "maxLatitudeResidualArcsec": 9.670314293424287,
+      "diagnosticFailures": 0,
+      "aspirationalFailures": 21
+    },
+    {
+      "body": "Pluto",
+      "cases": 21,
+      "maxLongitudeResidualArcsec": 28.534630640933756,
+      "p95LongitudeResidualArcsec": 18.818652339450637,
+      "maxLatitudeResidualArcsec": 7.636895933321597,
+      "diagnosticFailures": 0,
+      "aspirationalFailures": 19
+    }
+  ],
+  "rows": [
+    {
+      "id": "Sun-0",
+      "body": "Sun",
+      "utc": "1801-02-03T04:05:06.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 1.1010188202817517,
+      "latitudeResidualArcsec": -1.068083363987857,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Sun-1",
+      "body": "Sun",
+      "utc": "1827-08-19T13:21:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.40181819722420187,
+      "latitudeResidualArcsec": -1.3305226194094415,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Sun-2",
+      "body": "Sun",
+      "utc": "1853-11-07T23:10:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.32718623069740715,
+      "latitudeResidualArcsec": -0.5220525606329807,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-3",
+      "body": "Sun",
+      "utc": "1888-04-29T06:12:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.82857076909022,
+      "latitudeResidualArcsec": -0.7653746277309768,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-4",
+      "body": "Sun",
+      "utc": "1901-12-13T20:17:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.9656580658429448,
+      "latitudeResidualArcsec": -0.7305100189846233,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-5",
+      "body": "Sun",
+      "utc": "1929-10-24T12:00:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.5182895728466974,
+      "latitudeResidualArcsec": -1.2760171267575031,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Sun-6",
+      "body": "Sun",
+      "utc": "1957-10-04T19:28:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.974549891998322,
+      "latitudeResidualArcsec": -0.9393614301933831,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-7",
+      "body": "Sun",
+      "utc": "1972-06-30T15:16:17.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.08364099362552224,
+      "latitudeResidualArcsec": -0.4143597156129047,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-8",
+      "body": "Sun",
+      "utc": "1993-02-09T01:23:45.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.14518579992000014,
+      "latitudeResidualArcsec": 0.9378171241650709,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-9",
+      "body": "Sun",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.5996196671731013,
+      "latitudeResidualArcsec": -0.8531261423763361,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-10",
+      "body": "Sun",
+      "utc": "2012-06-05T22:10:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.42411278354848037,
+      "latitudeResidualArcsec": 0.11161791607774914,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-11",
+      "body": "Sun",
+      "utc": "2024-04-08T18:17:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.268142294135032,
+      "latitudeResidualArcsec": 0.41766943830394887,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-12",
+      "body": "Sun",
+      "utc": "2026-09-27T14:08:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -1.363189326821157,
+      "latitudeResidualArcsec": -0.3767742477943524,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Sun-13",
+      "body": "Sun",
+      "utc": "2026-12-21T03:04:05.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.2519365731586731,
+      "latitudeResidualArcsec": -0.6447618773347579,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-14",
+      "body": "Sun",
+      "utc": "2033-07-17T09:11:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.18449435065122088,
+      "latitudeResidualArcsec": 0.01568780379279907,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-15",
+      "body": "Sun",
+      "utc": "2051-03-14T15:09:26.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.7308532142360491,
+      "latitudeResidualArcsec": 0.3919711529479609,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Sun-16",
+      "body": "Sun",
+      "utc": "2078-09-22T21:37:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -1.0013036164309597,
+      "latitudeResidualArcsec": 0.9714985839283898,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Sun-17",
+      "body": "Sun",
+      "utc": "2100-02-28T23:59:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.9529388572445896,
+      "latitudeResidualArcsec": 1.6072659369493847,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Sun-18",
+      "body": "Sun",
+      "utc": "2137-05-11T10:20:30.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.25551940129844297,
+      "latitudeResidualArcsec": 1.8420228965465588,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Sun-19",
+      "body": "Sun",
+      "utc": "2164-01-30T07:08:09.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -1.1692352486534219,
+      "latitudeResidualArcsec": 2.096407325508155,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Sun-20",
+      "body": "Sun",
+      "utc": "2198-11-23T17:19:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.40848750036275305,
+      "latitudeResidualArcsec": 2.082155712998634,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Moon-0",
+      "body": "Moon",
+      "utc": "1801-02-03T04:05:06.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 8.573557814543165,
+      "latitudeResidualArcsec": 0.03787350793102995,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Moon-1",
+      "body": "Moon",
+      "utc": "1827-08-19T13:21:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 5.871458766068827,
+      "latitudeResidualArcsec": -0.17540781808165207,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Moon-2",
+      "body": "Moon",
+      "utc": "1853-11-07T23:10:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 5.16899759700209,
+      "latitudeResidualArcsec": 0.1234329564510972,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Moon-3",
+      "body": "Moon",
+      "utc": "1888-04-29T06:12:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 4.281911042926367,
+      "latitudeResidualArcsec": 0.384282139682135,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Moon-4",
+      "body": "Moon",
+      "utc": "1901-12-13T20:17:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 1.4959858225665812,
+      "latitudeResidualArcsec": 0.18939230465200296,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Moon-5",
+      "body": "Moon",
+      "utc": "1929-10-24T12:00:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 1.090333261527121,
+      "latitudeResidualArcsec": 0.17392157424964694,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Moon-6",
+      "body": "Moon",
+      "utc": "1957-10-04T19:28:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.613550730759016,
+      "latitudeResidualArcsec": 0.322616371387241,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Moon-7",
+      "body": "Moon",
+      "utc": "1972-06-30T15:16:17.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.7735148180472606,
+      "latitudeResidualArcsec": 0.3619513018696452,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Moon-8",
+      "body": "Moon",
+      "utc": "1993-02-09T01:23:45.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.6198919978032791,
+      "latitudeResidualArcsec": -0.47979263729054367,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Moon-9",
+      "body": "Moon",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.5471510471579677,
+      "latitudeResidualArcsec": 0.167432704580861,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Moon-10",
+      "body": "Moon",
+      "utc": "2012-06-05T22:10:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -1.3057382530860195,
+      "latitudeResidualArcsec": 0.23088433858546864,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Moon-11",
+      "body": "Moon",
+      "utc": "2024-04-08T18:17:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -2.3170826651039533,
+      "latitudeResidualArcsec": 0.2870469522649577,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Moon-12",
+      "body": "Moon",
+      "utc": "2026-09-27T14:08:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.05596120477093791,
+      "latitudeResidualArcsec": 0.3744049729016652,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Moon-13",
+      "body": "Moon",
+      "utc": "2026-12-21T03:04:05.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.3484389828827261,
+      "latitudeResidualArcsec": 0.045360289492535344,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Moon-14",
+      "body": "Moon",
+      "utc": "2033-07-17T09:11:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.38285201881080866,
+      "latitudeResidualArcsec": -0.5602586697684764,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Moon-15",
+      "body": "Moon",
+      "utc": "2051-03-14T15:09:26.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.12060820868100564,
+      "latitudeResidualArcsec": -0.6317492270105696,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Moon-16",
+      "body": "Moon",
+      "utc": "2078-09-22T21:37:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.10276558427904092,
+      "latitudeResidualArcsec": 0.23498791364282567,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Moon-17",
+      "body": "Moon",
+      "utc": "2100-02-28T23:59:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.08501704878653982,
+      "latitudeResidualArcsec": -0.4487981638771288,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Moon-18",
+      "body": "Moon",
+      "utc": "2137-05-11T10:20:30.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 1.1370274018190685,
+      "latitudeResidualArcsec": 1.0452376918102857,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Moon-19",
+      "body": "Moon",
+      "utc": "2164-01-30T07:08:09.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 1.7813431964441406,
+      "latitudeResidualArcsec": -1.178143985115554,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Moon-20",
+      "body": "Moon",
+      "utc": "2198-11-23T17:19:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 3.701678613833792,
+      "latitudeResidualArcsec": 0.7838665631851427,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-0",
+      "body": "Mercury",
+      "utc": "1801-02-03T04:05:06.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -2.9968679780722596,
+      "latitudeResidualArcsec": -4.299583934023321,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-1",
+      "body": "Mercury",
+      "utc": "1827-08-19T13:21:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.6082152102408145,
+      "latitudeResidualArcsec": 8.169601974449847,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-2",
+      "body": "Mercury",
+      "utc": "1853-11-07T23:10:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 2.0910895769247873,
+      "latitudeResidualArcsec": -0.3495096098026451,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-3",
+      "body": "Mercury",
+      "utc": "1888-04-29T06:12:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.9552200658617949,
+      "latitudeResidualArcsec": 3.5706491420531172,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-4",
+      "body": "Mercury",
+      "utc": "1901-12-13T20:17:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.20578173957801482,
+      "latitudeResidualArcsec": 1.2266297813679063,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-5",
+      "body": "Mercury",
+      "utc": "1929-10-24T12:00:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 3.961354184684751,
+      "latitudeResidualArcsec": -1.8658105925409174,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-6",
+      "body": "Mercury",
+      "utc": "1957-10-04T19:28:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 2.958930694421724,
+      "latitudeResidualArcsec": 0.47739674329614346,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-7",
+      "body": "Mercury",
+      "utc": "1972-06-30T15:16:17.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 1.2385846451252291,
+      "latitudeResidualArcsec": -1.283310992450204,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-8",
+      "body": "Mercury",
+      "utc": "1993-02-09T01:23:45.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -1.5597360651554482,
+      "latitudeResidualArcsec": -0.3387387462296054,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-9",
+      "body": "Mercury",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -1.266178097921511,
+      "latitudeResidualArcsec": -0.8925585285888271,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-10",
+      "body": "Mercury",
+      "utc": "2012-06-05T22:10:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.44594014671019977,
+      "latitudeResidualArcsec": 1.3366706656557703,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-11",
+      "body": "Mercury",
+      "utc": "2024-04-08T18:17:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -7.94369721561452,
+      "latitudeResidualArcsec": 1.6176014538185512,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-12",
+      "body": "Mercury",
+      "utc": "2026-09-27T14:08:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -1.5020720828943013,
+      "latitudeResidualArcsec": 0.6887822839077629,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-13",
+      "body": "Mercury",
+      "utc": "2026-12-21T03:04:05.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -2.912898221893556,
+      "latitudeResidualArcsec": -1.1937167601130838,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-14",
+      "body": "Mercury",
+      "utc": "2033-07-17T09:11:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 5.206777591047285,
+      "latitudeResidualArcsec": -3.270757645737987,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-15",
+      "body": "Mercury",
+      "utc": "2051-03-14T15:09:26.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.9674392816577893,
+      "latitudeResidualArcsec": 1.302740880929143,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-16",
+      "body": "Mercury",
+      "utc": "2078-09-22T21:37:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -1.8500977311305178,
+      "latitudeResidualArcsec": 0.941333489237195,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-17",
+      "body": "Mercury",
+      "utc": "2100-02-28T23:59:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.6292496887454035,
+      "latitudeResidualArcsec": 2.0067063674043206,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-18",
+      "body": "Mercury",
+      "utc": "2137-05-11T10:20:30.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 2.5054655005533277,
+      "latitudeResidualArcsec": -1.0601853532612893,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-19",
+      "body": "Mercury",
+      "utc": "2164-01-30T07:08:09.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -2.8823480060964357,
+      "latitudeResidualArcsec": -0.807434353119163,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mercury-20",
+      "body": "Mercury",
+      "utc": "2198-11-23T17:19:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.6814555487835605,
+      "latitudeResidualArcsec": -0.47843050434290824,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Venus-0",
+      "body": "Venus",
+      "utc": "1801-02-03T04:05:06.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 2.4221321497861936,
+      "latitudeResidualArcsec": -0.8603200896490248,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-1",
+      "body": "Venus",
+      "utc": "1827-08-19T13:21:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.133500407810061,
+      "latitudeResidualArcsec": -0.025667302345944165,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Venus-2",
+      "body": "Venus",
+      "utc": "1853-11-07T23:10:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.04533214978437172,
+      "latitudeResidualArcsec": 0.20913629936156752,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Venus-3",
+      "body": "Venus",
+      "utc": "1888-04-29T06:12:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.3505785582092358,
+      "latitudeResidualArcsec": -0.15099716065503088,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Venus-4",
+      "body": "Venus",
+      "utc": "1901-12-13T20:17:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.6636567869463761,
+      "latitudeResidualArcsec": -2.4661508370510177,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-5",
+      "body": "Venus",
+      "utc": "1929-10-24T12:00:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 2.293260919759632,
+      "latitudeResidualArcsec": -1.9551134392000513,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-6",
+      "body": "Venus",
+      "utc": "1957-10-04T19:28:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 1.4314852031930059,
+      "latitudeResidualArcsec": -1.1306342642621203,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-7",
+      "body": "Venus",
+      "utc": "1972-06-30T15:16:17.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 6.459088362635157,
+      "latitudeResidualArcsec": -5.9422473061768954,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-8",
+      "body": "Venus",
+      "utc": "1993-02-09T01:23:45.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.7727482299742405,
+      "latitudeResidualArcsec": 4.493462704097695,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-9",
+      "body": "Venus",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -1.9503072077895922,
+      "latitudeResidualArcsec": -1.2897663330466713,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-10",
+      "body": "Venus",
+      "utc": "2012-06-05T22:10:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 1.7138715341388888,
+      "latitudeResidualArcsec": -0.04240252613839646,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-11",
+      "body": "Venus",
+      "utc": "2024-04-08T18:17:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.6193893717409082,
+      "latitudeResidualArcsec": 1.1455057269977864,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-12",
+      "body": "Venus",
+      "utc": "2026-09-27T14:08:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -14.210060466757568,
+      "latitudeResidualArcsec": 1.957809718047443,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-13",
+      "body": "Venus",
+      "utc": "2026-12-21T03:04:05.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -1.193165161066645,
+      "latitudeResidualArcsec": -0.49189493556927033,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-14",
+      "body": "Venus",
+      "utc": "2033-07-17T09:11:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 1.6324281658398831,
+      "latitudeResidualArcsec": 0.2546678395509261,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-15",
+      "body": "Venus",
+      "utc": "2051-03-14T15:09:26.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 0.9657802030233142,
+      "latitudeResidualArcsec": -0.9504665123897471,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Venus-16",
+      "body": "Venus",
+      "utc": "2078-09-22T21:37:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -2.3143913464991783,
+      "latitudeResidualArcsec": -0.11676568378593544,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-17",
+      "body": "Venus",
+      "utc": "2100-02-28T23:59:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 3.055045082601282,
+      "latitudeResidualArcsec": 3.2230832636622964,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-18",
+      "body": "Venus",
+      "utc": "2137-05-11T10:20:30.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": 1.5594160598084272,
+      "latitudeResidualArcsec": -1.1406714891333714,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-19",
+      "body": "Venus",
+      "utc": "2164-01-30T07:08:09.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -0.5469517489927966,
+      "latitudeResidualArcsec": 1.3337464231979401,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Venus-20",
+      "body": "Venus",
+      "utc": "2198-11-23T17:19:00.000Z",
+      "referenceTarget": "body-center",
+      "longitudeResidualArcsec": -1.447490245118388,
+      "latitudeResidualArcsec": -0.6076767150947404,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mars-0",
+      "body": "Mars",
+      "utc": "1801-02-03T04:05:06.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.6457415604472772,
+      "latitudeResidualArcsec": -0.20155095443978865,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Mars-1",
+      "body": "Mars",
+      "utc": "1827-08-19T13:21:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.05588417434410076,
+      "latitudeResidualArcsec": -0.789395084146971,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Mars-2",
+      "body": "Mars",
+      "utc": "1853-11-07T23:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 2.4065645200153085,
+      "latitudeResidualArcsec": 0.22697949255974237,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mars-3",
+      "body": "Mars",
+      "utc": "1888-04-29T06:12:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 0.9162909263977781,
+      "latitudeResidualArcsec": 0.5915800641529856,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Mars-4",
+      "body": "Mars",
+      "utc": "1901-12-13T20:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.82953422963692,
+      "latitudeResidualArcsec": 0.07444797999438535,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mars-5",
+      "body": "Mars",
+      "utc": "1929-10-24T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 0.8484238793244003,
+      "latitudeResidualArcsec": 0.015065756795082375,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Mars-6",
+      "body": "Mars",
+      "utc": "1957-10-04T19:28:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.16128480101542664,
+      "latitudeResidualArcsec": 0.9358001324716092,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Mars-7",
+      "body": "Mars",
+      "utc": "1972-06-30T15:16:17.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.28025376032019267,
+      "latitudeResidualArcsec": -0.04948008212517507,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Mars-8",
+      "body": "Mars",
+      "utc": "1993-02-09T01:23:45.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.5959209837783419,
+      "latitudeResidualArcsec": 0.4417363631617377,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Mars-9",
+      "body": "Mars",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 2.1961426120469696,
+      "latitudeResidualArcsec": -1.1044299555120318,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mars-10",
+      "body": "Mars",
+      "utc": "2012-06-05T22:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.034459749553207,
+      "latitudeResidualArcsec": 0.7431470980078458,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mars-11",
+      "body": "Mars",
+      "utc": "2024-04-08T18:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 0.041105589025391964,
+      "latitudeResidualArcsec": 0.7751263422085763,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Mars-12",
+      "body": "Mars",
+      "utc": "2026-09-27T14:08:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.334115847999783,
+      "latitudeResidualArcsec": -2.420588366655263,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mars-13",
+      "body": "Mars",
+      "utc": "2026-12-21T03:04:05.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 0.3851161877719278,
+      "latitudeResidualArcsec": 0.6306224089421164,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Mars-14",
+      "body": "Mars",
+      "utc": "2033-07-17T09:11:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.1516568706392718,
+      "latitudeResidualArcsec": -0.0016526328817434432,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Mars-15",
+      "body": "Mars",
+      "utc": "2051-03-14T15:09:26.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.1021998136584443,
+      "latitudeResidualArcsec": -2.8746763073817405,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mars-16",
+      "body": "Mars",
+      "utc": "2078-09-22T21:37:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.089742491240031,
+      "latitudeResidualArcsec": -0.05289950111873054,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mars-17",
+      "body": "Mars",
+      "utc": "2100-02-28T23:59:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 2.3192993216071045,
+      "latitudeResidualArcsec": -2.3510180857119423,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mars-18",
+      "body": "Mars",
+      "utc": "2137-05-11T10:20:30.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.7342836885982251,
+      "latitudeResidualArcsec": 0.8601508063462493,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Mars-19",
+      "body": "Mars",
+      "utc": "2164-01-30T07:08:09.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.6213777483244485,
+      "latitudeResidualArcsec": -0.5782348601463205,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Mars-20",
+      "body": "Mars",
+      "utc": "2198-11-23T17:19:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.0592613569770037,
+      "latitudeResidualArcsec": 2.6625530473255887,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-0",
+      "body": "Jupiter",
+      "utc": "1801-02-03T04:05:06.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.42395839404889557,
+      "latitudeResidualArcsec": 1.688546201661767,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-1",
+      "body": "Jupiter",
+      "utc": "1827-08-19T13:21:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -3.5954789531842835,
+      "latitudeResidualArcsec": -1.7478877538654736,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-2",
+      "body": "Jupiter",
+      "utc": "1853-11-07T23:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.02356662362217321,
+      "latitudeResidualArcsec": 3.9584637940103473,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-3",
+      "body": "Jupiter",
+      "utc": "1888-04-29T06:12:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.6039306412949372,
+      "latitudeResidualArcsec": -9.201818412447338,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-4",
+      "body": "Jupiter",
+      "utc": "1901-12-13T20:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.0565200780547457,
+      "latitudeResidualArcsec": 2.9020029665615232,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-5",
+      "body": "Jupiter",
+      "utc": "1929-10-24T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -5.569712436590635,
+      "latitudeResidualArcsec": 6.649570347782596,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-6",
+      "body": "Jupiter",
+      "utc": "1957-10-04T19:28:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 4.700324366422137,
+      "latitudeResidualArcsec": 0.43548761031377836,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-7",
+      "body": "Jupiter",
+      "utc": "1972-06-30T15:16:17.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 5.610032676077026,
+      "latitudeResidualArcsec": 8.010511513299834,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-8",
+      "body": "Jupiter",
+      "utc": "1993-02-09T01:23:45.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -2.984762725463952,
+      "latitudeResidualArcsec": -0.6476014291215471,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-9",
+      "body": "Jupiter",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 4.055311972615527,
+      "latitudeResidualArcsec": 6.241682138829141,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-10",
+      "body": "Jupiter",
+      "utc": "2012-06-05T22:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.8640486288859393,
+      "latitudeResidualArcsec": -1.4612879272648094,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-11",
+      "body": "Jupiter",
+      "utc": "2024-04-08T18:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -3.520134840027822,
+      "latitudeResidualArcsec": -2.6214808501644704,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-12",
+      "body": "Jupiter",
+      "utc": "2026-09-27T14:08:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.9901971196304657,
+      "latitudeResidualArcsec": -1.5982254179651711,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-13",
+      "body": "Jupiter",
+      "utc": "2026-12-21T03:04:05.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.3875628571895504,
+      "latitudeResidualArcsec": -2.4097187623130623,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-14",
+      "body": "Jupiter",
+      "utc": "2033-07-17T09:11:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.9229766725402442,
+      "latitudeResidualArcsec": 4.057764776587458,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-15",
+      "body": "Jupiter",
+      "utc": "2051-03-14T15:09:26.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 2.9706147707202035,
+      "latitudeResidualArcsec": -4.342318735499262,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-16",
+      "body": "Jupiter",
+      "utc": "2078-09-22T21:37:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 6.983078011899124,
+      "latitudeResidualArcsec": 2.7178704770106865,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-17",
+      "body": "Jupiter",
+      "utc": "2100-02-28T23:59:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.36152740776742576,
+      "latitudeResidualArcsec": -0.3815798096447942,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Jupiter-18",
+      "body": "Jupiter",
+      "utc": "2137-05-11T10:20:30.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 5.094132645899663,
+      "latitudeResidualArcsec": 5.351262794785416,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-19",
+      "body": "Jupiter",
+      "utc": "2164-01-30T07:08:09.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -4.185152503032441,
+      "latitudeResidualArcsec": -4.412958975003134,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Jupiter-20",
+      "body": "Jupiter",
+      "utc": "2198-11-23T17:19:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.1283026190540113,
+      "latitudeResidualArcsec": -2.391426665525387,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-0",
+      "body": "Saturn",
+      "utc": "1801-02-03T04:05:06.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -6.36912888412553,
+      "latitudeResidualArcsec": 6.663438343987593,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-1",
+      "body": "Saturn",
+      "utc": "1827-08-19T13:21:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 4.099170429117294,
+      "latitudeResidualArcsec": 3.756765822845165,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-2",
+      "body": "Saturn",
+      "utc": "1853-11-07T23:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 3.9697383494967653,
+      "latitudeResidualArcsec": 3.5788665587562107,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-3",
+      "body": "Saturn",
+      "utc": "1888-04-29T06:12:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.7205752272275276,
+      "latitudeResidualArcsec": -9.126391766103392,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-4",
+      "body": "Saturn",
+      "utc": "1901-12-13T20:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -6.134352571098134,
+      "latitudeResidualArcsec": -1.3434907036428245,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-5",
+      "body": "Saturn",
+      "utc": "1929-10-24T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.329120701575448,
+      "latitudeResidualArcsec": 13.112017065652859,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-6",
+      "body": "Saturn",
+      "utc": "1957-10-04T19:28:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.48225789073512715,
+      "latitudeResidualArcsec": 4.396182328881615,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-7",
+      "body": "Saturn",
+      "utc": "1972-06-30T15:16:17.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.659707242015429,
+      "latitudeResidualArcsec": 12.905347468905859,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-8",
+      "body": "Saturn",
+      "utc": "1993-02-09T01:23:45.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.3933786083052837,
+      "latitudeResidualArcsec": -1.461160937003303,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-9",
+      "body": "Saturn",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.709452801878797,
+      "latitudeResidualArcsec": 0.16869537627126618,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-10",
+      "body": "Saturn",
+      "utc": "2012-06-05T22:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.024577694852269,
+      "latitudeResidualArcsec": -15.776271866384839,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-11",
+      "body": "Saturn",
+      "utc": "2024-04-08T18:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -5.348669638624415,
+      "latitudeResidualArcsec": -5.551745440859435,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-12",
+      "body": "Saturn",
+      "utc": "2026-09-27T14:08:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -10.204493701212414,
+      "latitudeResidualArcsec": 2.80352140372937,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-13",
+      "body": "Saturn",
+      "utc": "2026-12-21T03:04:05.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -9.611255163008536,
+      "latitudeResidualArcsec": 3.4464023769567476,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-14",
+      "body": "Saturn",
+      "utc": "2033-07-17T09:11:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -3.630074889770185,
+      "latitudeResidualArcsec": 11.492792000165597,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-15",
+      "body": "Saturn",
+      "utc": "2051-03-14T15:09:26.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -2.387986249777896,
+      "latitudeResidualArcsec": -6.76186525160829,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-16",
+      "body": "Saturn",
+      "utc": "2078-09-22T21:37:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.3481873564160196,
+      "latitudeResidualArcsec": -8.991473651073411,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-17",
+      "body": "Saturn",
+      "utc": "2100-02-28T23:59:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -4.784983433046364,
+      "latitudeResidualArcsec": 15.99911618437062,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-18",
+      "body": "Saturn",
+      "utc": "2137-05-11T10:20:30.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.8560983147381194,
+      "latitudeResidualArcsec": -11.374646190772964,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-19",
+      "body": "Saturn",
+      "utc": "2164-01-30T07:08:09.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 3.062214175133704,
+      "latitudeResidualArcsec": 4.9256342059780245,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Saturn-20",
+      "body": "Saturn",
+      "utc": "2198-11-23T17:19:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.11577394725463819,
+      "latitudeResidualArcsec": -6.56263718649539,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-0",
+      "body": "Uranus",
+      "utc": "1801-02-03T04:05:06.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -4.0894820950143185,
+      "latitudeResidualArcsec": -6.194733594294322,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-1",
+      "body": "Uranus",
+      "utc": "1827-08-19T13:21:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -6.009090724455746,
+      "latitudeResidualArcsec": -8.14713991380196,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-2",
+      "body": "Uranus",
+      "utc": "1853-11-07T23:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 3.027481927847475,
+      "latitudeResidualArcsec": 5.002383240835262,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-3",
+      "body": "Uranus",
+      "utc": "1888-04-29T06:12:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 0.20385175848787185,
+      "latitudeResidualArcsec": 0.5282626366378995,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Uranus-4",
+      "body": "Uranus",
+      "utc": "1901-12-13T20:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 2.2603657151194056,
+      "latitudeResidualArcsec": 3.681171965018659,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-5",
+      "body": "Uranus",
+      "utc": "1929-10-24T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -2.4595265222615126,
+      "latitudeResidualArcsec": 5.192419172061902,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-6",
+      "body": "Uranus",
+      "utc": "1957-10-04T19:28:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 3.191019729592881,
+      "latitudeResidualArcsec": 7.1884523961832425,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-7",
+      "body": "Uranus",
+      "utc": "1972-06-30T15:16:17.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -2.9180987614381593,
+      "latitudeResidualArcsec": 2.106550393332318,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-8",
+      "body": "Uranus",
+      "utc": "1993-02-09T01:23:45.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -6.916414991246711,
+      "latitudeResidualArcsec": -9.589319128638385,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-9",
+      "body": "Uranus",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -11.050452515610232,
+      "latitudeResidualArcsec": -4.812655830542223,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-10",
+      "body": "Uranus",
+      "utc": "2012-06-05T22:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -2.6372196125066694,
+      "latitudeResidualArcsec": 1.8335868656568888,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-11",
+      "body": "Uranus",
+      "utc": "2024-04-08T18:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.3546374375218875,
+      "latitudeResidualArcsec": 2.8588894615815263,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-12",
+      "body": "Uranus",
+      "utc": "2026-09-27T14:08:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.6016591381012404,
+      "latitudeResidualArcsec": 5.606362744711424,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-13",
+      "body": "Uranus",
+      "utc": "2026-12-21T03:04:05.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.47327267552645935,
+      "latitudeResidualArcsec": 6.005326737805183,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-14",
+      "body": "Uranus",
+      "utc": "2033-07-17T09:11:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -2.5516931236779783,
+      "latitudeResidualArcsec": 16.085935168779475,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-15",
+      "body": "Uranus",
+      "utc": "2051-03-14T15:09:26.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 2.9815650809723593,
+      "latitudeResidualArcsec": -1.8009498063725538,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-16",
+      "body": "Uranus",
+      "utc": "2078-09-22T21:37:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.4207703593456245,
+      "latitudeResidualArcsec": -8.437266837841939,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-17",
+      "body": "Uranus",
+      "utc": "2100-02-28T23:59:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 2.1817066828589304,
+      "latitudeResidualArcsec": -2.005386065879211,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-18",
+      "body": "Uranus",
+      "utc": "2137-05-11T10:20:30.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 7.524816253953759,
+      "latitudeResidualArcsec": -1.2416481053834971,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-19",
+      "body": "Uranus",
+      "utc": "2164-01-30T07:08:09.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 2.2471512019365036,
+      "latitudeResidualArcsec": -4.102474102837084,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Uranus-20",
+      "body": "Uranus",
+      "utc": "2198-11-23T17:19:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -3.2643114019720088,
+      "latitudeResidualArcsec": 7.790099198844014,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-0",
+      "body": "Neptune",
+      "utc": "1801-02-03T04:05:06.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -16.102980664663846,
+      "latitudeResidualArcsec": -0.15697418512559125,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-1",
+      "body": "Neptune",
+      "utc": "1827-08-19T13:21:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 10.934143040049094,
+      "latitudeResidualArcsec": 3.682231698911398,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-2",
+      "body": "Neptune",
+      "utc": "1853-11-07T23:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 14.682201871437428,
+      "latitudeResidualArcsec": 7.749211316812454,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-3",
+      "body": "Neptune",
+      "utc": "1888-04-29T06:12:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -3.714777906952804,
+      "latitudeResidualArcsec": -2.2212805920293732,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-4",
+      "body": "Neptune",
+      "utc": "1901-12-13T20:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 3.1747324217576534,
+      "latitudeResidualArcsec": -2.0173914831275397,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-5",
+      "body": "Neptune",
+      "utc": "1929-10-24T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 10.332753979309928,
+      "latitudeResidualArcsec": 6.4477511028489864,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-6",
+      "body": "Neptune",
+      "utc": "1957-10-04T19:28:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -10.342186748448512,
+      "latitudeResidualArcsec": 0.893915210089169,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-7",
+      "body": "Neptune",
+      "utc": "1972-06-30T15:16:17.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -15.186924639874633,
+      "latitudeResidualArcsec": -0.7453820206020367,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-8",
+      "body": "Neptune",
+      "utc": "1993-02-09T01:23:45.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.4322775418804667,
+      "latitudeResidualArcsec": 3.793313043893276,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-9",
+      "body": "Neptune",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 8.792211667787342,
+      "latitudeResidualArcsec": 7.722038273352516,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-10",
+      "body": "Neptune",
+      "utc": "2012-06-05T22:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 16.32439550739946,
+      "latitudeResidualArcsec": 9.318629458877714,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-11",
+      "body": "Neptune",
+      "utc": "2024-04-08T18:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 11.357359736757644,
+      "latitudeResidualArcsec": 9.401201497285694,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-12",
+      "body": "Neptune",
+      "utc": "2026-09-27T14:08:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 12.21876975187115,
+      "latitudeResidualArcsec": 9.670314293424287,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-13",
+      "body": "Neptune",
+      "utc": "2026-12-21T03:04:05.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 12.01772897675255,
+      "latitudeResidualArcsec": 9.29765330690353,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-14",
+      "body": "Neptune",
+      "utc": "2033-07-17T09:11:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 6.0913211027127545,
+      "latitudeResidualArcsec": 7.1058751333535675,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-15",
+      "body": "Neptune",
+      "utc": "2051-03-14T15:09:26.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -2.019261517443738,
+      "latitudeResidualArcsec": -0.9999293430398737,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-16",
+      "body": "Neptune",
+      "utc": "2078-09-22T21:37:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 10.469930734461741,
+      "latitudeResidualArcsec": -2.562310350951136,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-17",
+      "body": "Neptune",
+      "utc": "2100-02-28T23:59:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 15.340197198474925,
+      "latitudeResidualArcsec": 3.0213974456897663,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-18",
+      "body": "Neptune",
+      "utc": "2137-05-11T10:20:30.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -13.199249208446417,
+      "latitudeResidualArcsec": -2.772529356101927,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-19",
+      "body": "Neptune",
+      "utc": "2164-01-30T07:08:09.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -4.569962097320968,
+      "latitudeResidualArcsec": 5.65033380294413,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Neptune-20",
+      "body": "Neptune",
+      "utc": "2198-11-23T17:19:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 5.499032645457191,
+      "latitudeResidualArcsec": 9.499212627875586,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-0",
+      "body": "Pluto",
+      "utc": "1801-02-03T04:05:06.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 18.818652339450637,
+      "latitudeResidualArcsec": -3.5608975750967886,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-1",
+      "body": "Pluto",
+      "utc": "1827-08-19T13:21:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 12.142016369443809,
+      "latitudeResidualArcsec": -0.42180280338612874,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-2",
+      "body": "Pluto",
+      "utc": "1853-11-07T23:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 9.635462583128174,
+      "latitudeResidualArcsec": 0.8004395626954874,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-3",
+      "body": "Pluto",
+      "utc": "1888-04-29T06:12:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 4.5931770133393,
+      "latitudeResidualArcsec": 1.1417180698138907,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-4",
+      "body": "Pluto",
+      "utc": "1901-12-13T20:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 3.5663850447690493,
+      "latitudeResidualArcsec": 1.0811572982419193,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-5",
+      "body": "Pluto",
+      "utc": "1929-10-24T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.424368368634532,
+      "latitudeResidualArcsec": 0.23763241608325547,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-6",
+      "body": "Pluto",
+      "utc": "1957-10-04T19:28:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.5465185102584655,
+      "latitudeResidualArcsec": 0.1487218690279235,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-7",
+      "body": "Pluto",
+      "utc": "1972-06-30T15:16:17.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 2.627412588117295,
+      "latitudeResidualArcsec": 0.3403413458769933,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-8",
+      "body": "Pluto",
+      "utc": "1993-02-09T01:23:45.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": 1.9622562754193495,
+      "latitudeResidualArcsec": -0.18836553414658397,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-9",
+      "body": "Pluto",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.10455638607709261,
+      "latitudeResidualArcsec": -0.1019085285790311,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Pluto-10",
+      "body": "Pluto",
+      "utc": "2012-06-05T22:10:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -0.490859690353318,
+      "latitudeResidualArcsec": -0.0717475035814985,
+      "diagnosticPass": true,
+      "aspirationalPass": true
+    },
+    {
+      "id": "Pluto-11",
+      "body": "Pluto",
+      "utc": "2024-04-08T18:17:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.2529752440968878,
+      "latitudeResidualArcsec": 0.4162231313257436,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-12",
+      "body": "Pluto",
+      "utc": "2026-09-27T14:08:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.3539392872644385,
+      "latitudeResidualArcsec": 0.5392540341752294,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-13",
+      "body": "Pluto",
+      "utc": "2026-12-21T03:04:05.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -1.220912230655813,
+      "latitudeResidualArcsec": 0.5108220428539312,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-14",
+      "body": "Pluto",
+      "utc": "2033-07-17T09:11:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -2.484630593608017,
+      "latitudeResidualArcsec": 0.9263784860110036,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-15",
+      "body": "Pluto",
+      "utc": "2051-03-14T15:09:26.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -4.804349352934878,
+      "latitudeResidualArcsec": 1.3283376770438338,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-16",
+      "body": "Pluto",
+      "utc": "2078-09-22T21:37:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -6.0767668077915005,
+      "latitudeResidualArcsec": 0.47935227334363617,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-17",
+      "body": "Pluto",
+      "utc": "2100-02-28T23:59:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -7.994682863318303,
+      "latitudeResidualArcsec": -0.44627058123154484,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-18",
+      "body": "Pluto",
+      "utc": "2137-05-11T10:20:30.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -12.657104717072798,
+      "latitudeResidualArcsec": -2.4990628603944742,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-19",
+      "body": "Pluto",
+      "utc": "2164-01-30T07:08:09.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -17.419441525089496,
+      "latitudeResidualArcsec": -5.020297145101438,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    },
+    {
+      "id": "Pluto-20",
+      "body": "Pluto",
+      "utc": "2198-11-23T17:19:00.000Z",
+      "referenceTarget": "system-barycenter",
+      "longitudeResidualArcsec": -28.534630640933756,
+      "latitudeResidualArcsec": -7.636895933321597,
+      "diagnosticPass": true,
+      "aspirationalPass": false
+    }
+  ]
+}

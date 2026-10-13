@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-09-27",
+  "engineVersion": "0.1.1-rc.10",
+  "engineSourceCommit": "f5f33892a95cd0d6cd4a11a80e66f802b11bccfa",
+  "engineTarballSha256": "a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c",
+  "runtimeRoot": "/workspace/scratch/c1943cbff40d/parallel-runtime/package",
+  "dependencyVersion": "2.1.19",
+  "sourceHashes": [
+    {"path": "dist/index.js", "sha256": "d3a2ef95bdff80c70c2edeb95b89569894eb58e235ffbbbd73035f08b81602c3"},
+    {"path": "dist/chunk-35EQGGYX.js", "sha256": "21d1603de4a067c2cd0d9404de00a9a1753386a6b8d27eef805c55aada120f68"},
+    {"path": "node_modules/astronomy-engine/esm/astronomy.js", "sha256": "068f1445ed0c636c94818fe6d20d7d125120e605e0bab9fc4675c3d531be5ad7"},
+    {"path": "node_modules/astronomy-engine/package.json", "sha256": "d035702763839ae11f41600cf4b8210005672658dcb19cea4a09591078af4931"}
+  ],
+  "upstreamSources": {
+    "repository": "cosinekitty/astronomy",
+    "ref": "v2.1.19",
+    "paths": [
+      "generate/vsop/vsop87.txt",
+      "generate/generate.c",
+      "generate/codegen.c",
+      "generate/top2013/top2013.c",
+      "generate/novas_body.h",
+      "generate/novas/eph_manager.c",
+      "generate/gravsim/pluto_gravsim.h"
+    ],
+    "use": "Source lineage only; no new NASA numerical reference acquisition"
+  },
+  "newNumericalAccuracyResults": false,
+  "unresolved": [
+    "Physical-center versus planetary-system-barycenter identity of non-Earth planetary coefficients",
+    "Numerical attribution of the prior 168 of 210 one-arcsecond diagnostic mismatches",
+    "Exact subarcsecond alignment of each body's EQJ frame with ICRS"
+  ]
+}

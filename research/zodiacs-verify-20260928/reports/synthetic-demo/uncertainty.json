@@ -1,0 +1,1044 @@
+{
+  "assurance": "conditional-on-supplied-bounds",
+  "boundAssumptions": [
+    {
+      "absoluteErrorDeg": 1e-10,
+      "body": "Sun",
+      "domain": {
+        "from": "2000-01-01T12:00:00.000Z",
+        "to": "2000-01-01T12:10:00.000Z"
+      },
+      "id": "synthetic-bound:Sun",
+      "maxAbsRateDegPerDay": 0,
+      "modelDigest": "sha256:ecd68fc5266a56cbb4eaacb33487d870d56b774aac76c9ded46c5619e63daf04",
+      "source": {
+        "locator": "examples/demo.mjs",
+        "title": "Synthetic demo function"
+      }
+    },
+    {
+      "absoluteErrorDeg": 1e-10,
+      "body": "Moon",
+      "domain": {
+        "from": "2000-01-01T12:00:00.000Z",
+        "to": "2000-01-01T12:10:00.000Z"
+      },
+      "id": "synthetic-bound:Moon",
+      "maxAbsRateDegPerDay": 29,
+      "modelDigest": "sha256:ecd68fc5266a56cbb4eaacb33487d870d56b774aac76c9ded46c5619e63daf04",
+      "source": {
+        "locator": "examples/demo.mjs",
+        "title": "Synthetic demo function"
+      }
+    }
+  ],
+  "boundConsistency": {
+    "comparisons": 1640,
+    "maxComparisons": 100000,
+    "uncheckedBoundIds": []
+  },
+  "boundViolations": [],
+  "budget": {
+    "callsUsed": 41,
+    "exhausted": false,
+    "maxSamples": 129,
+    "resolutionMs": 1000
+  },
+  "complete": false,
+  "features": [
+    {
+      "body": "Sun",
+      "id": "sun-sign",
+      "kind": "sign"
+    },
+    {
+      "body": "Moon",
+      "id": "moon-sign",
+      "kind": "sign"
+    }
+  ],
+  "intervals": [
+    {
+      "from": "2000-01-01T12:00:00.000Z",
+      "to": "2000-01-01T12:10:00.000Z"
+    }
+  ],
+  "limits": {
+    "domain": "continuous model time over closed UTC intervals; sampling callback uses integer epoch milliseconds",
+    "maxBoundComparisons": 100000,
+    "maxFeatures": 64,
+    "maxIntervals": 32,
+    "maxSamples": 100000,
+    "maxSpanMs": 604800000
+  },
+  "model": {
+    "artifact": {
+      "digest": "sha256:fada2b50b573ed6cb0cd9b3dce02170b17262b9b2b63ee4380413380a691b044",
+      "scope": "analytic demonstration, not astronomical data"
+    },
+    "conventions": {
+      "corrections": "none",
+      "deltaT": "not applicable",
+      "frame": "synthetic-longitude",
+      "origin": "synthetic",
+      "timeScale": "UTC-like synthetic time",
+      "zodiac": "tropical"
+    },
+    "engine": "synthetic-linear-demonstration",
+    "engineVersion": "1"
+  },
+  "results": [
+    {
+      "boundIds": [
+        "synthetic-bound:Sun"
+      ],
+      "cells": [
+        {
+          "anchorUtc": "2000-01-01T12:01:15.000Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:00:00.000Z",
+          "reason": null,
+          "to": "2000-01-01T12:02:30.000Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:03:07.500Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:02:30.000Z",
+          "reason": null,
+          "to": "2000-01-01T12:03:45.000Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:03.750Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:03:45.000Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:22.500Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:31.875Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:22.500Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:41.250Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:45.937Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:41.250Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:50.625Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:52.968Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:50.625Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:55.312Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:56.484Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:55.312Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:57.656Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:58.242Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:57.656Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:58.828Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:59.121Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:58.828Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:59.414Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:59.707Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:59.414Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:00.000Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:00.292Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:00.000Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:00.585Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:00.878Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:00.585Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:01.171Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:01.757Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:01.171Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:02.343Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:03.515Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:02.343Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:04.687Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:07.031Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:04.687Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:09.375Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:14.062Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:09.375Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:18.750Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:28.125Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:18.750Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:37.500Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:56.250Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:37.500Z",
+          "reason": null,
+          "to": "2000-01-01T12:06:15.000Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:06:52.500Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:06:15.000Z",
+          "reason": null,
+          "to": "2000-01-01T12:07:30.000Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:08:45.000Z",
+          "boundIds": [
+            "synthetic-bound:Sun"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:07:30.000Z",
+          "reason": null,
+          "to": "2000-01-01T12:10:00.000Z",
+          "value": "Aries"
+        }
+      ],
+      "coverage": "bounded",
+      "featureId": "sun-sign",
+      "status": "stable",
+      "unresolvedRanges": [],
+      "values": [
+        "Aries"
+      ],
+      "witnesses": [
+        {
+          "utc": "2000-01-01T12:00:00.000Z",
+          "value": "Aries"
+        }
+      ]
+    },
+    {
+      "boundIds": [
+        "synthetic-bound:Moon"
+      ],
+      "cells": [
+        {
+          "anchorUtc": "2000-01-01T12:01:15.000Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:00:00.000Z",
+          "reason": null,
+          "to": "2000-01-01T12:02:30.000Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:03:07.500Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:02:30.000Z",
+          "reason": null,
+          "to": "2000-01-01T12:03:45.000Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:03.750Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:03:45.000Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:22.500Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:31.875Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:22.500Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:41.250Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:45.937Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:41.250Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:50.625Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:52.968Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:50.625Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:55.312Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:56.484Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:55.312Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:57.656Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:58.242Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:57.656Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:58.828Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:59.121Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:04:58.828Z",
+          "reason": null,
+          "to": "2000-01-01T12:04:59.414Z",
+          "value": "Aries"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:59.707Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:04:59.414Z",
+          "reason": "boundary-not-excluded",
+          "to": "2000-01-01T12:05:00.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:00.292Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:05:00.000Z",
+          "reason": "boundary-not-excluded",
+          "to": "2000-01-01T12:05:00.585Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:00.878Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:00.585Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:01.171Z",
+          "value": "Taurus"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:01.757Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:01.171Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:02.343Z",
+          "value": "Taurus"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:03.515Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:02.343Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:04.687Z",
+          "value": "Taurus"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:07.031Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:04.687Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:09.375Z",
+          "value": "Taurus"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:14.062Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:09.375Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:18.750Z",
+          "value": "Taurus"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:28.125Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:18.750Z",
+          "reason": null,
+          "to": "2000-01-01T12:05:37.500Z",
+          "value": "Taurus"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:56.250Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:05:37.500Z",
+          "reason": null,
+          "to": "2000-01-01T12:06:15.000Z",
+          "value": "Taurus"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:06:52.500Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:06:15.000Z",
+          "reason": null,
+          "to": "2000-01-01T12:07:30.000Z",
+          "value": "Taurus"
+        },
+        {
+          "anchorUtc": "2000-01-01T12:08:45.000Z",
+          "boundIds": [
+            "synthetic-bound:Moon"
+          ],
+          "classification": "bounded",
+          "from": "2000-01-01T12:07:30.000Z",
+          "reason": null,
+          "to": "2000-01-01T12:10:00.000Z",
+          "value": "Taurus"
+        }
+      ],
+      "coverage": "sampled",
+      "featureId": "moon-sign",
+      "status": "variable",
+      "unresolvedRanges": [
+        {
+          "from": "2000-01-01T12:04:59.414Z",
+          "to": "2000-01-01T12:05:00.585Z"
+        }
+      ],
+      "values": [
+        "Aries",
+        "Taurus"
+      ],
+      "witnesses": [
+        {
+          "utc": "2000-01-01T12:00:00.000Z",
+          "value": "Aries"
+        },
+        {
+          "utc": "2000-01-01T12:05:00.000Z",
+          "value": "Taurus"
+        }
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "longitudes": {
+        "Moon": 29.9,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.924999999999997,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:01:15.000Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.95,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:02:30.000Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.9625,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:03:07.500Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.974999999999998,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:03:45.000Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.98125,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:03.750Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.987499999999997,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:22.500Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.990624999999998,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:31.875Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.99375,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:41.250Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.99531233333333,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:45.937Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.996875,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:50.625Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.997656,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:52.968Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.99843733333333,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:55.312Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.998828,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:56.484Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.999218666666664,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:57.656Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.999413999999998,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:58.242Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.999609333333332,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:58.828Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.999706999999997,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:59.121Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.999804666666666,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:59.414Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 29.99990233333333,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:59.707Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:00.000Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.000097333333333,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:00.292Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.000194999999998,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:00.585Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.000292666666667,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:00.878Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.000390333333332,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:01.171Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.000585666666666,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:01.757Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.000781,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:02.343Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.001171666666664,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:03.515Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.001562333333332,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:04.687Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.002343666666665,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:07.031Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.003124999999997,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:09.375Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.004687333333333,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:14.062Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.006249999999998,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:18.750Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.009375,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:28.125Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.0125,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:37.500Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.018749999999997,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:56.250Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.025,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:06:15.000Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.037499999999998,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:06:52.500Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.049999999999997,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:07:30.000Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.075,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:08:45.000Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    },
+    {
+      "longitudes": {
+        "Moon": 30.099999999999998,
+        "Sun": 15
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:10:00.000Z",
+      "warnings": [
+        "SYNTHETIC analytic fixture"
+      ]
+    }
+  ],
+  "schema": "zodiacs.verify.uncertainty.v1",
+  "subjectId": "synthetic-demo-person",
+  "warnings": [
+    "Bounds are externally asserted and not independently verified. Stable means full conditional coverage under all referenced bounds.",
+    "Finite pairwise consistency is necessary, not proof that a supplied bound holds between samples. Incomplete consistency checks force dependent results unresolved.",
+    "Variable means different sampled values were observed; it does not enumerate all possible values or locate every transition.",
+    "No probabilities, physical ephemeris accuracy, astrological interpretation or event-time completeness are established."
+  ],
+  "id": "sha256:f45c5dbde1dd9ec9794f3d12400a258870bee430091c3baf1fefafe7dc1a9633"
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "protocol": "jpl-october-2026-lunations-v1",
+  "selection": "Fixed calendar windows and target angles chosen before calling the target engine. References are derived exclusively from fresh JPL Horizons output.",
+  "engine": {
+    "name": "@zodiacs/engine",
+    "version": "0.1.1-rc.10",
+    "sourceCommitPrefix": "f5f33892",
+    "tarballSha256": "a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c"
+  },
+  "clock": {
+    "inputClock": "synthetic UT1 represented with ISO Z labels; not physical UTC",
+    "deltaTSeconds": 69,
+    "referenceClock": "TT = synthetic UT1 + 69 seconds",
+    "calendar": "proleptic Gregorian"
+  },
+  "reference": {
+    "endpoint": "https://ssd.jpl.nasa.gov/api/horizons.api",
+    "ephemerisType": "OBSERVER",
+    "center": "500@399",
+    "sunCommand": "10",
+    "moonCommand": "301",
+    "quantity": "31",
+    "observable": "apparent geocentric ecliptic longitude of date (ObsEcLon)",
+    "coarseStepHours": 3,
+    "refinementHalfWindowSeconds": 1200,
+    "refinementStepSeconds": 60,
+    "finalSampleOffsetsSeconds": [-2, -1, 0, 1, 2],
+    "maximumAcceptedReferenceBracketSeconds": 1.01
+  },
+  "diagnosticGateSeconds": 10,
+  "engineStepDays": 0.25,
+  "cases": [
+    {
+      "id": "october-2026-new-moon",
+      "phase": "new",
+      "targetAngleDegrees": 0,
+      "from": "2026-10-01T00:00:00.000Z",
+      "to": "2026-10-16T00:00:00.000Z"
+    },
+    {
+      "id": "october-2026-full-moon",
+      "phase": "full",
+      "targetAngleDegrees": 180,
+      "from": "2026-10-16T00:00:00.000Z",
+      "to": "2026-11-01T00:00:00.000Z"
+    }
+  ],
+  "scope": "Two ordinary lunations only. No station, ingress, eclipse-maximum, polar, boundary, multi-pass, catalog completeness or physical two-second guarantee is tested."
+}

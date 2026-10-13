@@ -1,0 +1,414 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "zodiacs.birth-window.experimental/0.1"
+    },
+    "requestId": {
+      "type": "string"
+    },
+    "requestSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "engineVersion": {
+          "type": "string"
+        },
+        "assertedEngineCommit": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            }
+          ]
+        },
+        "moduleSha256": {
+          "type": "string"
+        },
+        "ephemeris": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "runtime": {
+          "type": "string"
+        },
+        "toolVersion": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "engineVersion",
+        "assertedEngineCommit",
+        "moduleSha256",
+        "ephemeris",
+        "runtime",
+        "toolVersion"
+      ],
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "finite-preview",
+            "certified"
+          ]
+        },
+        "domain": {
+          "type": "string"
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "finiteDomainEvaluated": {
+          "type": "boolean"
+        },
+        "sampleCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "chartEvaluations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxObservedGridGapMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "requestedMaxStepMs": {
+          "type": "number",
+          "minimum": 1
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "domain",
+        "complete",
+        "finiteDomainEvaluated",
+        "sampleCount",
+        "chartEvaluations",
+        "maxObservedGridGapMs",
+        "requestedMaxStepMs",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "featureId": {
+            "type": "string"
+          },
+          "houseSystem": {
+            "enum": [
+              "whole",
+              "placidus",
+              "porphyry",
+              "equal",
+              "equal-mc",
+              "vehlow",
+              "koch",
+              "regiomontanus",
+              "campanus",
+              "topocentric",
+              "alcabitius",
+              "morinus",
+              "meridian"
+            ]
+          },
+          "status": {
+            "enum": [
+              "certified-constant",
+              "observed-constant",
+              "variable",
+              "unresolved",
+              "unavailable"
+            ]
+          },
+          "complete": {
+            "type": "boolean"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "witnesses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "at": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                },
+                "value": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "boolean"
+                    }
+                  ]
+                },
+                "requestedHouseSystem": {
+                  "enum": [
+                    "whole",
+                    "placidus",
+                    "porphyry",
+                    "equal",
+                    "equal-mc",
+                    "vehlow",
+                    "koch",
+                    "regiomontanus",
+                    "campanus",
+                    "topocentric",
+                    "alcabitius",
+                    "morinus",
+                    "meridian"
+                  ]
+                },
+                "actualHouseSystem": {
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "whole",
+                        "placidus",
+                        "porphyry",
+                        "equal",
+                        "equal-mc",
+                        "vehlow",
+                        "koch",
+                        "regiomontanus",
+                        "campanus",
+                        "topocentric",
+                        "alcabitius",
+                        "morinus",
+                        "meridian"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "engineFlags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 0
+                },
+                "latitude": {
+                  "type": "number",
+                  "minimum": -90,
+                  "maximum": 90
+                },
+                "longitude": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180
+                }
+              },
+              "required": [
+                "at",
+                "value",
+                "requestedHouseSystem",
+                "actualHouseSystem",
+                "engineFlags"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "at": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "at",
+                "reason"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "probabilities": {
+            "type": "null"
+          },
+          "certificate": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "featureId",
+          "houseSystem",
+          "status",
+          "complete",
+          "values",
+          "witnesses",
+          "issues",
+          "probabilities",
+          "certificate"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "certified-constant"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "complete": {
+                  "const": true
+                },
+                "values": {
+                  "minItems": 1,
+                  "maxItems": 1
+                },
+                "certificate": {
+                  "type": "object"
+                },
+                "issues": {
+                  "maxItems": 0
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "observed-constant"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "complete": {
+                  "const": false
+                },
+                "values": {
+                  "minItems": 1,
+                  "maxItems": 1
+                },
+                "certificate": {
+                  "type": "null"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "variable"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "values": {
+                  "minItems": 2
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "unavailable",
+                    "unresolved"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "complete": {
+                  "const": false
+                },
+                "values": {
+                  "maxItems": 0
+                },
+                "issues": {
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 1
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "requestSha256",
+    "provenance",
+    "coverage",
+    "findings",
+    "warnings"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zodiacs:birth-window:experimental:0.1:result",
+  "title": "Experimental birth-window result"
+}

@@ -1,0 +1,18 @@
+test_civil_label_does_not_accept_utc_claim (test_validate.HistoricalRuleTests.test_civil_label_does_not_accept_utc_claim) ... ok
+test_dropped_transition_fails_validation (test_validate.HistoricalRuleTests.test_dropped_transition_fails_validation) ... ok
+test_enactment_day_is_not_wartime_clock_change (test_validate.HistoricalRuleTests.test_enactment_day_is_not_wartime_clock_change) ... ok
+test_fixed_source_derived_fixtures (test_validate.HistoricalRuleTests.test_fixed_source_derived_fixtures) ... ok
+test_fold_endpoints_are_half_open (test_validate.HistoricalRuleTests.test_fold_endpoints_are_half_open) ... ok
+test_gap_endpoints_are_half_open (test_validate.HistoricalRuleTests.test_gap_endpoints_are_half_open) ... ok
+test_missing_source_fails_validation (test_validate.HistoricalRuleTests.test_missing_source_fails_validation) ... ok
+test_outside_fixture_window_is_refused (test_validate.HistoricalRuleTests.test_outside_fixture_window_is_refused) ... ok
+test_research_record_cannot_silently_become_production (test_validate.HistoricalRuleTests.test_research_record_cannot_silently_become_production) ... ok
+test_rollback_window_clipping_cannot_create_false_gap (test_validate.HistoricalRuleTests.test_rollback_window_clipping_cannot_create_false_gap) ... ok
+test_swapped_expected_fold_candidates_fails (test_validate.HistoricalRuleTests.test_swapped_expected_fold_candidates_fails) ... ok
+test_unreviewed_year_is_refused (test_validate.HistoricalRuleTests.test_unreviewed_year_is_refused) ... ok
+test_wrong_clock_basis_is_detected (test_validate.HistoricalRuleTests.test_wrong_clock_basis_is_detected) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.004s
+
+OK

@@ -1,0 +1,48 @@
+{
+  "schema": "zodiacs.verify.claim-check.v1",
+  "allSupported": false,
+  "results": [
+    {
+      "claimId": "correct-sun",
+      "status": "supported",
+      "reasons": [
+        "Exact same-subject instant fact matches a valid, explicitly trusted receipt."
+      ]
+    },
+    {
+      "claimId": "invented-sun",
+      "status": "rejected",
+      "reasons": [
+        "Expected value does not exactly match the typed receipt fact; no tolerance was inferred."
+      ]
+    },
+    {
+      "claimId": "stable-sun",
+      "status": "supported",
+      "reasons": [
+        "Same-subject interval result is stable under the explicitly trusted report and all contributing bound assumptions."
+      ]
+    },
+    {
+      "claimId": "overconfident-moon",
+      "status": "rejected",
+      "reasons": [
+        "Witnesses differ, so this feature cannot support one stable interval value."
+      ]
+    },
+    {
+      "claimId": "reflection",
+      "status": "supported",
+      "reasons": [
+        "Rule provenance (editorial) and explicit same-subject dependencies are supported.",
+        "Support does not establish the scientific truth, predictive validity or semantic entailment of this interpretation text."
+      ]
+    }
+  ],
+  "limitations": [
+    "Supported fact and interval claims are conditional on explicitly trusted evidence and its documented model; seals establish integrity, not authenticity or astronomical correctness.",
+    "Supported interval conclusions are conditional on every explicitly trusted bound assumption; this checker does not independently establish the bounds.",
+    "Supported interpretations establish reviewed rule provenance and supported same-subject dependencies ONLY. They do not establish scientific truth, predictive validity or semantic entailment of the free text.",
+    "This checker does not read prose for hidden factual claims, infer tolerances, resolve birth records, or infer trust from an identifier or source title."
+  ]
+}
