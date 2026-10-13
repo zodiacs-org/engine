@@ -4,9 +4,9 @@ This private project is the batch service under development for this engine
 checkout. The completed work is checked off in [PLAN.md](PLAN.md). The current
 implementation validates job definitions, expands work lazily, executes it
 through the engine, provides in-memory and SQLite queues with retries and
-idempotent submission, and schedules work on a thread pool. SQLite crash
-recovery is checked with controlled process kills. NDJSON streaming, HTTP,
-CLI and scaling measurements are later milestones.
+idempotent submission, schedules work on a thread pool, and streams committed
+results as NDJSON. SQLite crash recovery is checked with controlled process
+kills. HTTP, CLI and scaling measurements are later milestones.
 
 All project files stay here. The engine source, npm package and carried archives
 are unchanged. Code and documentation in this folder use the repository's
@@ -613,3 +613,103 @@ simulate host power loss, hardware failure, filesystem corruption or a
 network filesystem, and serial parity is not independent astronomical
 accuracy evidence. The in-memory backend loses its state when its process
 exits and cannot provide this recovery behavior.
+
+## Streaming results as NDJSON
+
+`resultLines(queue, jobId, options)` in
+[src/result-stream.ts](src/result-stream.ts) is an async iterator of complete
+NDJSON lines. Each line is the stored result row serialized as JSON followed
+by a newline. It keeps the row's `version`, workload routing fields, `index`,
+`nextCursor` and `value`. Quotes, backslashes and control characters are JSON
+escaped; Unicode is preserved. There are no status, heartbeat or error records
+mixed into the result rows.
+
+The default finite export freezes its end at the committed cursor in the
+first atomic page read. Later commits belong to a later export. An empty
+committed prefix produces an empty export, even if the job is queued or
+running. Finishing a finite export does not establish that the job completed;
+read its status separately.
+
+With `follow: true`, the reader emits the existing prefix, then polls for new
+commits while the job is queued, running or waiting to retry. It stops after
+draining the committed prefix of a completed or terminally failed job. Failure
+does not erase that prefix or add a diagnostic line. A stalled job can leave a
+follower waiting indefinitely; its caller can abort the read. The reader does
+not start a scheduler, recover expired leases or advance job state.
+
+`cursor` is the next row to include and defaults to the start of the job.
+It must be a nonnegative safe integer at or behind committed progress. Save
+the job ID and a row's `nextCursor` together only after receiving, parsing and
+retaining the complete newline-ended row. On disconnect, discard any partial
+trailing line, including incomplete UTF-8, and reconnect from that saved
+cursor. Chunks from a byte stream need not align with lines or characters.
+A cursor supplied ahead of committed progress rejects instead of waiting for
+the job to reach it. Readers do not acknowledge or delete stored results.
+
+`pageSize` bounds fetched rows, and `pollMs` is the positive integer wait in
+milliseconds after reaching an active job's current prefix. Defaults and
+timer limits are exported as `RESULT_STREAM_DEFAULTS`; the page-size maximum
+is `QUEUE_LIMITS.maxPageRows`. Options are captured at creation and validated
+before any read. Queue reads are lazy, sequential and do not fetch a later
+page until the current page has been consumed. Periodic event-loop yields let
+timers and disconnect notifications run during an otherwise immediately ready
+export. The boundaries are enforced by
+[test/result-stream.test.ts](test/result-stream.test.ts).
+
+`createResultStream(queue, jobId, options)` exposes the same export as a Node
+Readable of UTF-8 bytes. It adds a bounded `highWaterMark` option; its default
+and upper bound are in `RESULT_STREAM_DEFAULTS`. Use Node's
+[`pipeline`](https://nodejs.org/docs/latest-v22.x/api/stream.html#streampipelinesource-transforms-destination-callback)
+to propagate destination backpressure and failures to the reader. For example,
+with an open queue, an existing `jobId`, and the ignored `.runtime/` directory
+already created, this writes a finite export after building:
+
+```js
+import { createWriteStream } from "node:fs";
+import { pipeline } from "node:stream/promises";
+import { createResultStream } from "./.generated/index.js";
+
+await pipeline(
+  createResultStream(queue, jobId),
+  createWriteStream(".runtime/results.ndjson", { flags: "wx" })
+);
+```
+
+The iterator holds a bounded page, not the whole export. The byte stream also
+buffers according to its high-water threshold, which a single row can exceed.
+Each stored row fits the queue's serialized batch byte limit. Larger page
+sizes can therefore retain much more JSON than the byte stream's buffer.
+Parsed objects, string encoding and the caller's destination have additional
+memory costs. The in-memory queue itself still retains all stored results;
+streaming cannot remove that storage cost. The large-workload test uses a lazy
+synthetic reader and a counting sink, checks bounded read-ahead while the sink
+stalls, and retains no complete export. It is not a heap or throughput benchmark.
+
+Both APIs accept an `AbortSignal`. An abort throws `ResultStreamError` with
+code `aborted`, without copying its reason. Destroying the Readable interrupts
+its pending page wait or poll timer and removes listeners. Breaking a
+`for await` over `resultLines` ends iteration; to interrupt a pending `next()`
+that is waiting for rows, abort its signal. Queue backends have no cancellation
+method, so an already-started asynchronous read can still finish after the
+reader stops; its result is discarded and a late rejection is handled.
+Synchronous SQLite reads and JSON encoding cannot be preempted mid-call.
+Disconnecting a consumer never closes the shared queue or changes a job's
+lease, retry state or progress.
+
+Unknown jobs reject with `ResultStreamError` code `not-found`. Broken page
+cursors, routing or serialized row bounds produce `invalid-page`. Queue errors
+retain their fixed codes; other backend exceptions become `read-failed` without
+raw diagnostics. An error after some rows have streamed ends the stream with
+those complete lines still usable. There is no automatic read retry. Backends
+must fulfill the queue contract, including detached bounded JSON; an injected
+backend is trusted executable code, not untrusted result input.
+
+[test/result-stream-queue.test.ts](test/result-stream-queue.test.ts) checks
+exact stored JSON for every workload on both backends, every cursor in its
+synthetic jobs, concurrent commits during finite exports, following retry and
+failure states, escaping, and resumption after SQLite reopen.
+[test/result-stream.test.ts](test/result-stream.test.ts) covers partial Unicode
+lines, backpressure, read failures, broken pages, abort during reads and polling,
+listener cleanup, and event-loop fairness. The
+[plain Node smoke test](test/build.test.ts) checks the built exports too.
+These checks establish transport behavior, not astronomical accuracy.

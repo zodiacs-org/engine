@@ -25,3 +25,7 @@ export { WorkerPool, WorkerPoolError } from "./worker-pool.js";
 export type { WorkerPoolOptions, WorkerPoolErrorCode } from "./worker-pool.js";
 export { Scheduler, SchedulerError, SCHEDULER_DEFAULTS } from "./scheduler.js";
 export type { SchedulerOptions, TaskPool } from "./scheduler.js";
+export { createResultStream, resultLines, ResultStreamError, RESULT_STREAM_DEFAULTS } from "./result-stream.js";
+export type {
+  ResultLinesOptions, ResultReader, ResultStreamOptions, ResultStreamErrorCode,
+} from "./result-stream.js";

@@ -5,3 +5,4 @@ batch: complete M4 with transactional SQLite persistence, schema migrations, run
 batch: complete M5 with bounded worker_threads scheduling, lease renewal, ordered progress, worker replacement and graceful shutdown tests
 batch: complete M6 with bounded retries, terminal failures, idempotent submission, durable migration and scheduler recovery tests
 batch: complete M7 with controlled SQLite process-kill recovery, exact worker resumption, retry and acknowledgement tests, and restart documentation
+batch: complete M8 with resumable NDJSON exports, bounded streaming, backpressure, disconnect cleanup and transport tests on both queue backends

@@ -17,7 +17,7 @@ initial session complete M1 only; later sessions complete one or two milestones.
 - [x] M5 Add the worker_threads pool and scheduler with bounded dispatch, worker replacement, progress updates and graceful shutdown. Test parallel work, worker failure and shutdown during active work.
 - [x] M6 Add bounded retries, retry delays, terminal failure and idempotency keys with payload conflict detection. Test duplicate submissions, stale lease fencing and retry exhaustion on both backends.
 - [x] M7 Complete crash recovery and resumable jobs with atomic result/checkpoint commits and expired-lease recovery. Use child processes killed at controlled persistence boundaries to prove resumed output has no lost or duplicate rows.
-- [ ] M8 Stream result rows as NDJSON with stable cursors, backpressure and disconnect handling. Test partial reads, reconnects, escaping and large workloads without collecting all output in memory.
+- [x] M8 Stream result rows as NDJSON with stable cursors, backpressure and disconnect handling. Test partial reads, reconnects, escaping and large workloads without collecting all output in memory.
 - [ ] M9 Add the small HTTP control API for submit, status, progress and streamed results, with bounded request bodies and clear errors. Test routes, idempotency conflicts and client disconnects over real local sockets.
 - [ ] M10 Add the CLI for submission, worker/service operation, status and NDJSON export using the same service APIs. Test subprocess exit codes, stdout/stderr separation and restart with SQLite.
 - [ ] M11 Add the optional Redis backend behind an injected client and explicit configuration. Run the backend contract suite with a stateful mock and test atomic operations and connection failures; document what the mock cannot establish.
@@ -164,6 +164,32 @@ they establish process-kill recovery at these boundaries, not host power-loss
 or astronomical accuracy. Existing transactions and leases passed without a
 production-code change. The README now documents restart steps, uncertain
 acknowledgements, repeated calculation and build consistency.
+
+The root `npm run package:contents`, using the batch npm cache, stopped because
+`dist/calc.d.ts` is absent. An npm pack dry run with `--ignore-scripts --json`
+confirmed that no `batch/` file is included. All changes stay inside `batch/`,
+all tracked and new batch files are below the file-size limit, and batch
+documentation contains no em dashes. No root build, archive creation or git
+write was performed.
+
+## M8 session checks
+
+`npm run typecheck`, `npm test` and `npm run build` passed from `batch/` on
+Node 22.23.3. The new result iterator and UTF-8 Readable stream support finite
+exports fixed at the first committed snapshot, explicit following through
+retry and terminal states, bounded paging, backpressure and aborts. Periodic
+event-loop yields keep immediately ready exports interruptible and allow
+scheduler timers to run. Disconnects do not change job state or close the queue.
+
+The streaming suites check all workloads on both backends, every cursor in
+their synthetic jobs, concurrent commits during finite exports, failed prefixes,
+escaping and Unicode, partial-line reconnects, SQLite reopen, read failures,
+broken page framing, pending-read cancellation and listener cleanup. A large
+lazy synthetic reader and counting sink check bounded read-ahead without
+collecting the full export. These are transport and retention-behavior checks,
+not heap measurements or throughput claims. The plain Node build smoke test
+checks both streaming exports, and the complete existing crash suite passes.
+The README documents cursor retention, stream ownership and memory bounds.
 
 The root `npm run package:contents`, using the batch npm cache, stopped because
 `dist/calc.d.ts` is absent. An npm pack dry run with `--ignore-scripts --json`
