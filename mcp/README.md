@@ -2,7 +2,8 @@
 
 An MCP server under construction for the Zodiacs astrology engine.
 `createServer()` creates an unconnected server with the implemented tools
-registered. Transport entry points follow in [PLAN.md](PLAN.md).
+registered. The executable entry point supports stdio and local Streamable HTTP.
+Client configuration documentation follows in [PLAN.md](PLAN.md).
 
 ## Development
 
@@ -35,7 +36,7 @@ The harness handles commits, pushes and draft PR updates after each session.
 
 ## Tool contracts
 
-`src/contracts.ts` defines strict inputs for the planned tools. Inputs take
+`src/contracts.ts` defines strict inputs for the implemented tools. Inputs take
 resolved ISO instants with an explicit UTC designator or offset. Birth inputs
 accept coordinates together, house settings, a known-time flag and the engine's
 time-scale and fixed delta-T options. They do not infer local time or substitute
@@ -59,8 +60,8 @@ provenance. The `natal` receipt preserves the original input instant spelling
 and the requested house system even when the engine uses polar fallback.
 Unknown time keeps the supplied reference instant and suppresses angles and
 houses. Coordinates are optional; missing coordinates also leave angles and
-houses absent. Input validation and engine range errors propagate to the future
-protocol boundary. Registration and transports remain planned milestones.
+houses absent. Input validation and engine range errors propagate to the SDK
+protocol boundary.
 
 `test/natal.test.ts` checks wrapper integration and receipt replay using synthetic
 inputs. Comparisons with the native engine establish preservation, not independent
@@ -84,7 +85,7 @@ The wrapper preserves the engine's aspects without adding interpretation.
 `test/transits.test.ts` checks preservation against native engine calls,
 receipt replay, independent coverage flags, captured clock behavior and failure
 paths using synthetic inputs. These are integration checks, not independent
-accuracy evidence. MCP registration remains a later milestone.
+accuracy evidence.
 
 The synastry handler in `src/tools/synastry.ts` accepts `{ first, second }`,
 each a birth input, and returns `data.synastry`. It preserves the native charts
@@ -125,7 +126,7 @@ crossing search, its selection or its completeness. `test/returns.test.ts`
 checks native output preservation, receipt replay, selection, location, unknown
 time, time settings, coverage, validation and engine refusals with synthetic
 inputs. These comparisons establish wrapper integration, not independent accuracy
-or predictive validity. MCP registration remains a later milestone.
+or predictive validity.
 
 
 The Moon phase handler in `src/tools/events.ts` accepts `{ at }` and returns
@@ -169,7 +170,7 @@ time basis.
 `test/events.test.ts` checks native preservation, receipt replay, coverage,
 resource policy, refusal, validation and concrete output schemas with synthetic
 inputs. These are wrapper integration checks, not independent astronomical
-accuracy evidence. Registration remains the next milestone.
+accuracy evidence.
 
 ## MCP registration
 
@@ -189,5 +190,59 @@ whose search status is `refused`; agents must inspect that status.
 `test/server.test.ts` uses the official SDK client and linked in-memory
 transports to check discovery, schemas, every registered handler, receipt
 preservation, validation refinements and failure recovery. These checks
-establish protocol integration, not astronomical accuracy. Stdio and
-Streamable HTTP lifecycle tests remain planned in M10.
+establish protocol integration, not astronomical accuracy.
+
+## Running transports
+
+Build from `mcp/`, then launch the compiled executable directly:
+
+```sh
+npm run build
+node build/cli.js stdio
+```
+
+Omitting the transport also selects stdio. The executable uses the SDK's
+`serveStdio` entry with a fresh server for the connection. Standard output
+contains only MCP messages. Transport diagnostics go to standard error and
+do not log tool arguments or results. Closing standard input ends the process;
+SIGINT and SIGTERM close the transport before exiting. Keep stdin open until
+responses have arrived.
+
+For local Streamable HTTP:
+
+```sh
+node build/cli.js http --port 3000
+```
+
+The example port is checked by `test/transports.test.ts`. The endpoint is
+`/mcp`, bound to IPv4 loopback. `startHttp({ port: 0 })` selects an available
+port for embedded use and returns `{ url, close }`. Closing is idempotent,
+stops new connections and closes active sockets, including unfinished bodies.
+Signals use the same close path. A calculation runs synchronously on the Node
+thread, so shutdown waits for that calculation to yield; this is not a hard
+execution deadline.
+
+The official SDK's `createMcpHandler` and Node adapter serve a fresh instance
+per HTTP request. Current protocol requests and older stateless Streamable HTTP
+requests are supported. No session identifier is issued or retained. Older
+session GET and DELETE operations return method-not-allowed responses. The
+endpoint accepts the SDK's JSON and SSE response forms; it does not implement
+the separate legacy HTTP+SSE transport.
+
+The Node adapter and SDK handler limit POST bodies to 65,536 bytes before
+creating a calculation server. `test/transports.test.ts` checks requests at
+that boundary and just above it. This is a resource policy, not a chart-size
+or accuracy claim. HTTP responses use `Cache-Control: no-store`. The official
+localhost guards validate Host and any supplied Origin before routing. There
+is no CORS support or built-in authentication. Remote access requires an
+authenticated HTTPS gateway that checks the public Host and Origin before
+forwarding with a permitted local host. Gateway configuration and client
+setup remain M11 work.
+
+The entry points follow the SDK's [Node adapter API](https://ts.sdk.modelcontextprotocol.io/v2/api/%40modelcontextprotocol/node/).
+`test/transports.test.ts` uses real child processes and loopback HTTP with
+official SDK clients. It exercises every tool with synthetic inputs over
+stdio, current HTTP and older stateless HTTP, validates returned receipt
+envelopes, and checks errors, recovery, body limits, independent clients,
+listener failures, EOF and signal shutdown. These tests establish transport
+integration, not independent astronomical accuracy.

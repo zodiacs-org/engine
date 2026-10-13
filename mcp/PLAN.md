@@ -12,7 +12,7 @@ Use synthetic examples and preserve native engine receipts without claiming pred
 - [x] M7 Implement and test solar and lunar returns.
 - [x] M8 Implement and test Moon phase and bounded event search.
 - [x] M9 Register MCP tools and verify discovery, schemas and protocol errors.
-- [ ] M10 Implement and test stdio and Streamable HTTP transports and lifecycle.
+- [x] M10 Implement and test stdio and Streamable HTTP transports and lifecycle.
 - [ ] M11 Document client configuration, deployment boundaries and receipt citation.
 - [ ] M12 Run integration and repository isolation checks, record evidence and prepare the draft PR handoff.
 

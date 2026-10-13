@@ -40,6 +40,19 @@ The parent pack isolation test passed. Comparisons establish wrapper integration
 not independent accuracy or predictive validity. Parent build-dependent gates
 retain the scaffold limitation above.
 
+M10 session: `npm run check` passed on Node 22.22.2, including typecheck,
+Vitest and the isolated build. `test/transports.test.ts` exercises every tool
+through official SDK clients over a real stdio child, current Streamable HTTP
+and older stateless HTTP. Checks cover native receipt validation, discovery,
+invalid-call recovery, concurrent clients, Host and Origin guards, routing,
+body limits, malformed requests, invalid ports, occupied listeners, idempotent
+close, unfinished request sockets, stdin EOF and SIGINT/SIGTERM shutdown.
+The CLI writes protocol messages only to stdout and diagnostics to stderr.
+The parent pack isolation test passed. Checks establish transport integration,
+not independent astronomical accuracy. Parent build-dependent gates retain
+the scaffold limitation above; no parent build was run. Session changes are
+confined to mcp/.
+
 M7 session: `npm run check` passed on Node 22.23.3, including typecheck,
 Vitest and the isolated build. `test/returns.test.ts` covers solar and lunar
 native result preservation, receipt replay, solar selections, strictly subsequent
