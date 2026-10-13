@@ -8,12 +8,11 @@ frame rotations, obliquity, apparent sidereal time, solar and planetary
 series and Pluto integration with light time and aberration, and the Moon and
 true lunar nodes with longitude finite differences. It assembles complete
 position rows with signs, degrees in signs, speeds and retrograde flags.
-It also computes chart angles, whole sign, equal, equal-MC, Vehlow, Porphyry,
-Meridian and Morinus cusps, and house membership from supplied cusps.
+It also computes chart angles and every supported house system, including
+Placidus and Koch polar fallbacks, and house membership from supplied cusps.
 The TypeScript wrapper retains the implemented engine helpers' signatures after
 explicit initialization and exposes intermediate planetary and lunar kernels.
-The other house systems and aspect matching remain in
-[PLAN.md](PLAN.md).
+Aspect matching and the remaining integration work are in [PLAN.md](PLAN.md).
 
 ## Setup and checks
 
@@ -107,16 +106,27 @@ the input; these low-level geometry functions do not resolve a Date themselves.
 
 `wholeSignCusps(ascendant)`, `equalCusps(angles)`, `equalMcCusps(angles)`,
 `vehlowCusps(angles)`, `porphyryCusps(angles)`, `meridianCusps(input)` and
-`morinusCusps(input)` return ordinary mutable cusp arrays. `computeHouses`
-has the reference signature and result shape, but currently accepts only
-`"whole"`, `"equal"`, `"equal-mc"`, `"vehlow"`, `"porphyry"`, `"meridian"`
-and `"morinus"`. Other known systems explicitly throw until their milestone
-is complete. These implemented systems return no fallback.
+`morinusCusps(input)` return ordinary mutable cusp arrays. The remaining
+helpers take `(input, angles)`: `placidusCusps`, `kochCusps`,
+`regiomontanusCusps`, `campanusCusps`, `topocentricCusps` and `alcabitiusCusps`.
+Placidus and Koch return `null` where their semi-arcs are undefined.
+`computeHouses(system, input, angles)` supports every name in the frozen
+`HOUSE_SYSTEMS` list, with the reference signature and result shape. For
+Placidus or Koch at the polar limit or beyond, it returns whole-sign houses
+with `fellBack: true` and `fallbackSystem: "whole"`. The other systems retain
+their requested names. `POLAR_UNDEFINED_HOUSE_SYSTEMS`, `POLAR_FALLBACK`, its
+deprecated alias `PLACIDUS_POLAR_FALLBACK`, and
+`isPolarUndefinedHouseSystem` expose the reference metadata.
+Placidus preserves the bounded iteration and bisection fallback. Circle-based
+systems preserve their polar orientation, including when the lower meridian
+becomes the tenth cusp. Numerical conditioning and the limits of cross-runtime
+parity are documented in [PARITY.md](PARITY.md).
 `houseOf(longitude, cusps)` preserves the engine's inclusive cusp start,
 exclusive end, first-match order, zero-width interval and missing-slot behavior.
 Numeric acceptance, singular configurations and boundary decisions are
-specified and tested in [PARITY.md](PARITY.md) and
-[houses.parity.ts](tests/houses.parity.ts).
+specified and tested in [PARITY.md](PARITY.md),
+[houses.parity.ts](tests/houses.parity.ts) and
+[quadrant-houses.parity.ts](tests/quadrant-houses.parity.ts).
 
 `eclipticFrame(tt)`, `meanEcliptic(frame, x, y, z)` and
 `eclipticOfDate(x, y, z, tt)` transform J2000 mean-equatorial vectors to the
@@ -252,8 +262,11 @@ are caller-validated; the wrapper handles the public DateInput boundary.
 above, using `gast_hours` for the Rust field name. The angle and cusp functions
 return `Result` with `LongitudeError` when their evaluated arithmetic reaches
 a nonfinite longitude. They do not eagerly reject unused fields.
-`houses::compute_houses` dispatches the implemented `HouseSystem` enum and
-returns a `ComputedHouses` record. `house_of` accepts a numeric slice;
+`houses::compute_houses` dispatches the complete `HouseSystem` enum and
+returns a `ComputedHouses` record with the computed system and fallback fields.
+`placidus_cusps` and `koch_cusps` return `Ok(None)` in their polar region;
+the other cusp helpers return a cusp array or an error. `house_of` accepts a
+numeric slice;
 `house_of_optional` accepts optional cusp values for JavaScript's missing slots.
 Both return the house number or `HouseError`, preserving length checking and
 early-return evaluation order. All house geometry runs in safe Rust.

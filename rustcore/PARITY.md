@@ -8,7 +8,7 @@ and `src/civil-calendar.ts`, plus `src/deltat.ts`, `src/time-scale.ts`,
 pinned astronomy-engine series, lunar state and light-time functions used
 by the engine, Pluto's integration and complete position assembly in
 `src/ephemeris.ts`, plus `positions` in `src/api.ts` and the span metadata,
-and the angles, implemented cusp systems and `houseOf` in `src/houses.ts`.
+and the angles, all supported cusp systems and `houseOf` in `src/houses.ts`.
 The parity tests import those sources directly
 and execute the release WASM built from `crates/wasm` and `crates/core`.
 Passing means compatibility on the tested inputs, not independent astronomical
@@ -69,17 +69,21 @@ for this port.
 | Invalid standalone body inputs | Matching error class/message and time-before-body validation order, without passing non-strings to WASM | `tests/body-boundary.parity.ts` |
 | RAMC and arithmetic-only cusps on identical supplied angles | Identical binary64 bits; tolerance 0 arcseconds | `tests/houses.parity.ts`, whole sign, equal, equal-MC, Vehlow and Porphyry |
 | Chart angles, Meridian and Morinus cusps on identical geometry inputs | Circular difference at most 1e-8 arcseconds on the conditioned shared-input corpus below | `tests/houses.parity.ts` |
-| Chart angles and non-whole-sign cusps with independently resolved time bases, sidereal time and tilt | Circular difference at most 1e-6 arcseconds on the conditioned date corpus below | `tests/houses.parity.ts`, dates from 1800 through 2200 |
+| Chart angles and equal, equal-MC, Vehlow, Porphyry, Meridian and Morinus cusps with independently resolved time bases, sidereal time and tilt | Circular difference at most 1e-6 arcseconds on the conditioned date corpus below | `tests/houses.parity.ts`, dates from 1800 through 2200 |
+| Placidus, Koch, Regiomontanus, Campanus, Topocentric and Alcabitius cusps on identical geometry and supplied axes | Circular difference at most 1e-8 arcseconds on the ordinary shared-input corpus below; Placidus copies supplied axes bit-for-bit | `tests/quadrant-houses.parity.ts` |
+| Those six cusp systems with independently resolved clocks, tilt and angles | Circular difference at most 1e-6 arcseconds on the monthly/seeded date corpus below, from 1800 through 2200 | `tests/quadrant-houses.parity.ts` |
+| Placidus/Koch cusps immediately below their polar cutoff, including difficult Placidus convergence | Circular difference at most 0.01 arcseconds on the separate adjacent-limit corpus below; exact fallback decisions on identical inputs | `tests/quadrant-houses.parity.ts`, cutoff and bisection cases |
+| Regiomontanus/Topocentric intermediate cusps at their own circle singularities | Each returned cusp's circle-equation residual at most 2e-15, dimensionless; no cross-runtime longitude bound on these singular cusps | `tests/quadrant-houses.parity.ts`, separately constructed singular cases |
 | Near-singular ascendant geometry and geographic poles | Each own-axis unit-vector horizon residual at most 2e-15 and east projection at least -2e-15, dimensionless; no cross-runtime ascendant longitude bound | `tests/houses.parity.ts`, separate degeneracy checks |
 | House membership on identical longitude and cusp inputs | Exact house number or matching error class/message, including missing slots and early returns | `tests/houses.parity.ts`, cusp boundaries and degenerate arrays |
-| Angles and cusp result shapes, implemented-system selection and fallback fields | Exact fields and key order, fresh mutable records and arrays; pending-system refusal below | `tests/houses.parity.ts` |
+| Angles and cusp result shapes, system selection and polar fallback fields | Exact fields and key order, fresh mutable records and arrays; Placidus/Koch null and whole-sign fallback decisions match on identical inputs | `tests/houses.parity.ts` and `tests/quadrant-houses.parity.ts` |
 | Native arithmetic, signs, date validation and calendars | Exact regression expectations and calendar round trips | Unit tests in `crates/core/src/{lib,angles,signs,date_input,calendar}.rs` |
 | Native time model and clock conversion | Table knot checks, segment/uncertainty boundaries, finite synthetic scan, leap seconds and pins | Unit tests in `crates/core/src/{deltat,time_scales}.rs` |
 | Native frame kernels | Series-prefix algebra, clock separation, right-handed rotations, matrix order, inverse rotations, vector scale and nonfinite behavior | Unit tests in `crates/core/src/{nutation,frame,equator}.rs` |
 | Native solar and planetary kernels | Series algebra and derivatives, vector/state consistency, correction geometry, clock reconstruction and bounded solver behavior | Unit tests in `crates/core/src/planets.rs` |
 | Native lunar kernels | Harmonic recurrence, spherical/vector rotation round trip, state-clock reconstruction, angular-momentum orientation, circular difference endpoints and time-basis seams | Unit tests in `crates/core/src/{moon,lunar}.rs` |
 | Native Pluto and complete positions | Gravity arithmetic, segment/interpolation knots, cache/thread repeatability, table-span guards, clock reconstruction, body order and metadata, outer speed-sample checks | Unit tests in `crates/core/src/{pluto,ephemeris,planets}.rs` |
-| Native angles and implemented house systems | Geometry, cusp arithmetic, dispatch, input evaluation and house-boundary rules | Unit tests in `crates/core/src/houses.rs` |
+| Native angles and all house systems | Geometry, cusp arithmetic, Placidus convergence and bisection, dispatch, polar fallbacks, input evaluation and house-boundary rules | Unit tests in `crates/core/src/houses.rs` |
 | Loading | Explicit initialization, retry after invalid WASM syntax, reuse on repeated initialization | `tests/loader.parity.ts` |
 
 ## Corpus
@@ -246,6 +250,41 @@ exact agreement away from the angular allowance around their cusp boundaries;
 whole-sign cusp selection requires exact agreement away from the ascendant's
 sign boundary. Each port's own arithmetic and membership decisions are always
 compared exactly on identical inputs.
+
+`tests/quadrant-houses.parity.ts` extends the comparison to Placidus, Koch,
+Regiomontanus, Campanus, Topocentric and Alcabitius. Its independent-clock
+corpus uses monthly dates in every year from 1800 through 2200, the span
+endpoints, J2000 and seeded dates, rotating UTC/UT1/TT and Delta T pins.
+Its independent-clock latitude ladder reaches 80 degrees in both hemispheres.
+The shared-input ladder also reaches 89.999999 degrees, with separate exact
+geographic-pole probes. RAMC in the shared grid advances by 7.5 degrees with
+a 0.125-degree offset from the quadrant seams; obliquities are 0, 23.4,
+23.43929111111111 and 45 degrees. The test names the full grids and seed.
+
+For the circle systems, every ordinary comparison asserts that the norm of
+each oblique projection, including the recomputed ascendant, is at least
+1e-6. With ascension `a`, pole height `p` and obliquity `e`, its arguments are
+`sin(a)` and `cos(a)*cos(e) - tan(p)*sin(e)`, with angles converted to radians.
+This guard identifies the tested geometry; it does not prove the tolerance
+for every input above that threshold. The angular bounds are enforced corpus
+contracts. Separate Regiomontanus/Topocentric inputs set a near or far pole
+height to `90 - obliquity`, in both hemispheres, and probe adjacent binary64
+latitudes and RAMCs. Only the non-singular intermediate cusps retain the
+ordinary longitude comparison. For each singular cusp the test checks
+`sin(longitude)*denominator - cos(longitude)*numerator` for both runtimes
+under the residual bound above. This does not establish longitude agreement.
+
+The polar-cutoff probes use adjacent binary64 latitudes around
+`abs(latitude) = 90 - obliquity`, with obliquities 0, 23.4,
+23.43929111111111, 45 and 90 degrees. The separate difficult Placidus corpus
+uses the double immediately below that limit, obliquities 23.4,
+23.43929111111111, 23.4392911 and 23.4271 degrees, both hemispheres, and
+RAMCs around 30, 90, 150, 210, 270 and 330 degrees. It probes adjacent
+doubles and offsets through 0.005 degrees on either side in 0.0001-degree
+steps. A diagnostic with the source's operation order asserts that some of
+these inputs actually reach bisection; native unit tests also exercise that
+branch directly. These are synthetic geometry inputs, not an extended date
+accuracy claim.
 
 ## Rounding and deviations
 
@@ -535,8 +574,8 @@ their Date-only internal signatures. Unknown body values are checked before
 WASM string conversion, after the reference's date/sample check, with error
 text formatted in JavaScript to preserve UTF-16 labels. `positionsOn` is an
 additional explicit-clock helper, compared with the bodies of `computeChart`;
-it validates its scale and pin at the wrapper boundary. Full natal charts,
-house fallbacks and aspect flags remain later milestones.
+it validates its scale and pin at the wrapper boundary. Full natal charts
+and aspect flags remain later milestones.
 
 Run `RUSTCORE_PARITY_REPORT=1 npm run test:parity -- tests/pluto.parity.ts tests/positions.parity.ts`
 to report current-run maxima and recorded near-boundary metadata differences.
@@ -578,24 +617,62 @@ getter/proxy access order and out-of-type objects are outside this low-level
 compatibility scope. Returned angle records and cusp arrays remain fresh,
 mutable JavaScript objects, with the source's key and element order.
 
-The M8 `computeHouses` signature accepts the reference's `HouseSystem` union,
-but its implementation currently covers only whole sign, equal, equal-MC,
-Vehlow, Porphyry, Meridian and Morinus. It explicitly throws `RangeError` for
-the other known systems until M9; it never silently substitutes a system.
-Unknown names retain the reference error message. The native enum lists only
-implemented systems. This temporary coverage difference is intentional and
-is enforced by the house tests. No polar fallback is implemented yet.
+`computeHouses` and the native `HouseSystem` enum cover every reference system.
+Placidus and Koch return null cusps when `abs(latitude) >= 90 - obliquity`;
+the dispatcher then returns whole-sign cusps with the actual system and
+fallback metadata. This comparison is exact on identical inputs and precedes
+the unused RAMC and cusp arithmetic. Unknown system names retain the reference
+error message. The wrapper's frozen system lists and fallback constants match
+the reference's types, values and ordering.
 
-Run `RUSTCORE_PARITY_REPORT=1 npm run test:parity -- tests/houses.parity.ts`
+The remaining quadrant systems preserve the source's trig evaluation order.
+V8 and Rust/WASM can round these functions differently. The ordinary shared
+and independent-clock allowances above keep the earlier house milestone's
+bounds. Placidus roundoff can also change which iteration first satisfies
+the stopping test, so these remain sample-enforced bounds rather than a
+proof for every convergent input. The adjacent-limit allowance is separate
+because the derivative of `asin` becomes unbounded as its argument approaches
+either endpoint.
+The reference itself documents rounding amplification in that region.
+The 0.01-arcsecond acceptance was chosen for the explicitly listed edge
+corpus before comparison and is not applied to ordinary inputs. It permits
+the roundoff of both implementations and its propagation through the cusp
+construction, not a changed stopping rule or last-unconverged-iterate result.
+The bit-exact polar comparison has no widened latitude threshold. On
+independent clocks, an obliquity difference can still change the cutoff
+decision when latitude is at that rounding boundary; the date corpus does
+not promise identical fallback flags at every such boundary.
+
+Placidus copies the supplied ascendant, midheaven, descendant and lower
+meridian as given, including their nonfinite and signed-zero behavior. The
+other new systems normalize their constructed quadrant cusps. Regiomontanus,
+Campanus and Topocentric recompute the oblique ascendant, ignoring the
+supplied ascendant, and retain the half-turn decision against the supplied
+midheaven. They do not force their tenth cusp back to that midheaven after
+a polar turn. Each result retains the source array order; no sorting or
+repair of winding is applied. The shared-grid tests compare winding with
+the reference rather than assuming every source sequence makes one forward
+revolution. `houseOf` therefore retains first-match behavior on these cusps.
+
+Koch leaves its inverse-sine argument unclamped, including a tested case
+where rounding makes it exceed one and the helper throws `RangeError`.
+Alcabitius clamps its inverse-cosine argument and can collapse intermediate
+cusps in polar geometry. Both retain the reference's NaN behavior, rather
+than hiding invalid arguments with Rust's NaN-ignoring minimum or maximum.
+Error parity is enforced on the listed boundary and nonfinite probes;
+floating-point proximity to an inverse-trig endpoint can change acceptance
+on other untested inputs. These are low-level geometry helpers and add no
+eager geographic-range or supplied-axis consistency validation.
+
+Run `RUSTCORE_PARITY_REPORT=1 npm run test:parity -- tests/houses.parity.ts tests/quadrant-houses.parity.ts`
 to print current-run angular maxima and conditioning/boundary counters. The
 optional report never changes the tests' acceptance limits.
 
 ## Remaining coverage
 
-Remaining house work includes Placidus, Koch, Regiomontanus, Campanus,
-Topocentric and Alcabitius, their polar fallbacks, and complete chart assembly.
-M12 also needs numeric parity limits for finite near-singular inputs beyond
-the currently conditioned angle and cusp corpus.
+Remaining integration work includes complete chart assembly. M12 also needs
+numeric parity limits for finite near-singular inputs beyond the currently
+conditioned angle and cusp corpus and the explicitly bounded edge probes.
 Legacy/configured/minor/custom aspect matching remains unimplemented.
 The civil Julian Day Number helpers do not apply
 astronomical time scales. No performance baseline is claimed at this milestone.

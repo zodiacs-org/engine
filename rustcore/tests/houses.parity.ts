@@ -367,7 +367,7 @@ describe("angles and implemented house systems through WASM", () => {
         reference.computeHouses(system, unusedInput, angles).houses.cusps, `${system} ignores AngleInput`);
   });
 
-  it("preserves numeric rejection and unknown-system messages while explicitly refusing pending systems", () => {
+  it("preserves numeric rejection and unknown-system messages", () => {
     const input = { gastHours: 5.25, longitude: -73.125, latitude: 80, obliquity: 23.4 };
     const angles = reference.computeAngles(input);
     for (const field of ["gastHours", "longitude", "latitude", "obliquity"] as const) {
@@ -385,9 +385,6 @@ describe("angles and implemented house systems through WASM", () => {
       expect(actual.ok).toBe(false);
       if (!actual.ok && !expected.ok) expectSameError(actual.error, expected.error, `system=${String(system)}`);
     }
-    for (const system of ["placidus", "koch", "regiomontanus", "campanus", "topocentric", "alcabitius"] as const)
-      expect(() => rust.computeHouses(system, input, angles))
-        .toThrow(new RangeError(`House system ${system} is not implemented in this Rust milestone.`));
   });
 });
 

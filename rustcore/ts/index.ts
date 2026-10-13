@@ -16,6 +16,18 @@ export type { BodyName, BodyPosition, DateInput, SignDefinition, CalendarName, C
 export type { DeltaT, DeltaTTable, DeltaTSegment, TimeBasis, TimeScale, TimeScaleName, Ut1MinusUtc, LeapSeconds };
 export type { Tilt, EclipticFrame, Rows };
 export type { AngleInput, Angles, HouseNumber, Houses, HouseSystem };
+export const HOUSE_SYSTEMS = Object.freeze([
+  "whole", "placidus", "porphyry", "equal", "equal-mc", "vehlow", "koch",
+  "regiomontanus", "campanus", "topocentric", "alcabitius", "morinus", "meridian"
+] as const) satisfies readonly HouseSystem[];
+export const POLAR_UNDEFINED_HOUSE_SYSTEMS = Object.freeze(["placidus", "koch"] as const) satisfies readonly HouseSystem[];
+export const POLAR_FALLBACK = "whole" as const satisfies HouseSystem;
+/** @deprecated Koch falls back too; use POLAR_FALLBACK. */
+export const PLACIDUS_POLAR_FALLBACK = POLAR_FALLBACK;
+
+export function isPolarUndefinedHouseSystem(system: HouseSystem): boolean {
+  return (POLAR_UNDEFINED_HOUSE_SYSTEMS as readonly HouseSystem[]).includes(system);
+}
 export { ARGUMENTS, MULTIPLIERS, OFFSETS, NUTATION_TERMS } from "./nutation-data.js";
 export {
   DELTA_T_MODEL, DELTA_T_TABLE, DELTA_T_IERS_MODEL, TIME_SCALE_NAMES,
@@ -272,12 +284,50 @@ export function morinusCusps(input: AngleInput): number[] {
   return Array.from(wasm.morinusCusps(input.gastHours, input.longitude, input.obliquity));
 }
 
-/** M8 dispatch: the remaining systems explicitly refuse until their port is complete. */
+export function placidusCusps(input: AngleInput, angles: Angles): number[] | null {
+  ready();
+  const cusps = wasm.placidusCusps(input.gastHours, input.latitude, input.longitude, input.obliquity,
+    angles.asc, angles.mc, angles.dsc, angles.ic);
+  return cusps === undefined ? null : Array.from(cusps);
+}
+
+export function kochCusps(input: AngleInput, angles: Angles): number[] | null {
+  ready();
+  const cusps = wasm.kochCusps(input.gastHours, input.latitude, input.longitude, input.obliquity,
+    angles.asc, angles.mc);
+  return cusps === undefined ? null : Array.from(cusps);
+}
+
+export function regiomontanusCusps(input: AngleInput, angles: Angles): number[] {
+  ready();
+  return Array.from(wasm.regiomontanusCusps(input.gastHours, input.latitude, input.longitude,
+    input.obliquity, angles.mc));
+}
+
+export function campanusCusps(input: AngleInput, angles: Angles): number[] {
+  ready();
+  return Array.from(wasm.campanusCusps(input.gastHours, input.latitude, input.longitude,
+    input.obliquity, angles.mc));
+}
+
+export function topocentricCusps(input: AngleInput, angles: Angles): number[] {
+  ready();
+  return Array.from(wasm.topocentricCusps(input.gastHours, input.latitude, input.longitude,
+    input.obliquity, angles.mc));
+}
+
+export function alcabitiusCusps(input: AngleInput, angles: Angles): number[] {
+  ready();
+  return Array.from(wasm.alcabitiusCusps(input.gastHours, input.latitude, input.longitude,
+    input.obliquity, angles.asc, angles.mc));
+}
+
+/** All cusp arithmetic and the polar decision run in Rust. */
 export function computeHouses(
   system: HouseSystem, input: AngleInput, angles: Angles,
 ): { houses: Houses; fellBack: boolean; fallbackSystem: HouseSystem | null } {
   ready();
-  let cusps: number[];
+  let cusps: number[] | null;
   switch (system) {
     case "whole": cusps = wholeSignCusps(angles.asc); break;
     case "equal": cusps = equalCusps(angles); break;
@@ -286,11 +336,18 @@ export function computeHouses(
     case "porphyry": cusps = porphyryCusps(angles); break;
     case "meridian": cusps = meridianCusps(input); break;
     case "morinus": cusps = morinusCusps(input); break;
-    case "placidus": case "koch": case "regiomontanus":
-    case "campanus": case "topocentric": case "alcabitius":
-      throw new RangeError(`House system ${system} is not implemented in this Rust milestone.`);
+    case "placidus": cusps = placidusCusps(input, angles); break;
+    case "koch": cusps = kochCusps(input, angles); break;
+    case "regiomontanus": cusps = regiomontanusCusps(input, angles); break;
+    case "campanus": cusps = campanusCusps(input, angles); break;
+    case "topocentric": cusps = topocentricCusps(input, angles); break;
+    case "alcabitius": cusps = alcabitiusCusps(input, angles); break;
     default: throw new RangeError(`Unknown house system ${String(system satisfies never)}.`);
   }
+  if (cusps === null) return {
+    houses: { system: POLAR_FALLBACK, cusps: wholeSignCusps(angles.asc) },
+    fellBack: true, fallbackSystem: POLAR_FALLBACK
+  };
   return { houses: { system, cusps }, fellBack: false, fallbackSystem: null };
 }
 

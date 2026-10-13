@@ -93,6 +93,112 @@ pub fn morinus_cusps(
     ))
 }
 
+#[wasm_bindgen(js_name = placidusCusps)]
+#[allow(clippy::too_many_arguments)] // Flat scalar ABI preserves all four supplied axes.
+pub fn placidus_cusps(
+    gast_hours: f64,
+    latitude: f64,
+    longitude: f64,
+    obliquity: f64,
+    asc: f64,
+    mc: f64,
+    dsc: f64,
+    ic: f64,
+) -> Result<Option<Box<[f64]>>, JsValue> {
+    houses::placidus_cusps(
+        &input(gast_hours, latitude, longitude, obliquity),
+        &angles(asc, mc, dsc, ic),
+    )
+    .map(|cusps| cusps.map(|values| Box::new(values) as Box<[f64]>))
+    .map_err(super::longitude_error)
+}
+
+#[wasm_bindgen(js_name = kochCusps)]
+pub fn koch_cusps(
+    gast_hours: f64,
+    latitude: f64,
+    longitude: f64,
+    obliquity: f64,
+    asc: f64,
+    mc: f64,
+) -> Result<Option<Box<[f64]>>, JsValue> {
+    houses::koch_cusps(
+        &input(gast_hours, latitude, longitude, obliquity),
+        &angles(asc, mc, 0.0, 0.0),
+    )
+    .map(|cusps| cusps.map(|values| Box::new(values) as Box<[f64]>))
+    .map_err(super::longitude_error)
+}
+
+#[wasm_bindgen(js_name = regiomontanusCusps)]
+pub fn regiomontanus_cusps(
+    gast_hours: f64,
+    latitude: f64,
+    longitude: f64,
+    obliquity: f64,
+    mc: f64,
+) -> Result<Box<[f64]>, JsValue> {
+    Ok(Box::new(
+        houses::regiomontanus_cusps(
+            &input(gast_hours, latitude, longitude, obliquity),
+            &angles(0.0, mc, 0.0, 0.0),
+        )
+        .map_err(super::longitude_error)?,
+    ))
+}
+
+#[wasm_bindgen(js_name = campanusCusps)]
+pub fn campanus_cusps(
+    gast_hours: f64,
+    latitude: f64,
+    longitude: f64,
+    obliquity: f64,
+    mc: f64,
+) -> Result<Box<[f64]>, JsValue> {
+    Ok(Box::new(
+        houses::campanus_cusps(
+            &input(gast_hours, latitude, longitude, obliquity),
+            &angles(0.0, mc, 0.0, 0.0),
+        )
+        .map_err(super::longitude_error)?,
+    ))
+}
+
+#[wasm_bindgen(js_name = topocentricCusps)]
+pub fn topocentric_cusps(
+    gast_hours: f64,
+    latitude: f64,
+    longitude: f64,
+    obliquity: f64,
+    mc: f64,
+) -> Result<Box<[f64]>, JsValue> {
+    Ok(Box::new(
+        houses::topocentric_cusps(
+            &input(gast_hours, latitude, longitude, obliquity),
+            &angles(0.0, mc, 0.0, 0.0),
+        )
+        .map_err(super::longitude_error)?,
+    ))
+}
+
+#[wasm_bindgen(js_name = alcabitiusCusps)]
+pub fn alcabitius_cusps(
+    gast_hours: f64,
+    latitude: f64,
+    longitude: f64,
+    obliquity: f64,
+    asc: f64,
+    mc: f64,
+) -> Result<Box<[f64]>, JsValue> {
+    Ok(Box::new(
+        houses::alcabitius_cusps(
+            &input(gast_hours, latitude, longitude, obliquity),
+            &angles(asc, mc, 0.0, 0.0),
+        )
+        .map_err(super::longitude_error)?,
+    ))
+}
+
 #[wasm_bindgen(js_name = houseOf)]
 pub fn house_of(longitude: f64, cusps: &[f64], present: u16) -> Result<u8, JsValue> {
     if cusps.len() != 12 {
