@@ -2,7 +2,7 @@
 
 The M5 client in [lib/generation-backend.mjs](lib/generation-backend.mjs) is a
 bounded text transport. It keeps backend selection, request identity and failures
-consistent for later generators. It does not parse a model's JSON, claim that a
+consistent for the [interpretation generator](GENERATION.md). It does not parse a model's JSON, claim that a
 response follows its prompt, assign a license, or assemble a meaning entry.
 
 ## Offline use

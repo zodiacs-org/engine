@@ -19,7 +19,7 @@ astronomical accuracy or the validity of personality or predictive claims.
 - [x] M3 Add a local engine adapter that computes synthetic chart facts, records conventions and version provenance, and handles unavailable houses and polar fallback.
 - [x] M4 Define the reading and factual-claim schemas, preserving quoted spans and unsupported or ambiguous assertions without silently treating them as correct.
 - [x] M5 Define a pluggable generation backend with a deterministic offline mock, explicit backend selection, bounded requests and no saved credentials.
-- [ ] M6 Implement the interpretation generator with versioned prompts, input/output validation, provenance, reproducible manifests and ignored output files.
+- [x] M6 Implement the interpretation generator with versioned prompts, input/output validation, provenance, reproducible manifests and ignored output files.
 - [ ] M7 Write a versioned scoring rubric for factual correctness, coverage, contradictions and abstentions, separating interpretive quality from computable facts.
 - [ ] M8 Implement deterministic placement, aspect, house and dignity scoring with per-claim evidence, category totals and explicit denominators.
 - [ ] M9 Add an offline reading evaluation CLI that combines synthetic cases, engine facts, supplied or mock readings and machine-readable reports.
@@ -118,3 +118,26 @@ property order. Package-exclusion and project-isolation tests passed. The root
 `npm run package:contents` gate was attempted and failed on missing
 `dist/calc.d.ts`; no prohibited root build was run. All changes remain under
 `evals/`. M6 is next.
+
+M6 acceptance: the interpretation generator validates and snapshots source
+datasets and generation plans before dispatch, uses a versioned original prompt,
+accepts only completed schema-valid meaning payloads, and assembles unreviewed
+entries with explicit caller-supplied licensing and closed source provenance.
+Manifests record canonical input and dataset digests, exact response digests,
+backend limits and local implementation identity. The offline CLI writes bounded
+dataset/manifest pairs into ignored content-addressed directories, reuses only
+identical bytes, and refuses conflicting or symlinked paths. `GENERATION.md`
+documents the workflow, adapter extension and reproducibility limits. No generated
+corpus is committed; scoring remains later work.
+
+M6 validation: `npm --prefix evals test` and
+`npm --prefix evals run validate:seed` passed on Node 22.23.3. Generator, file and
+CLI tests cover all seed factor kinds, source ancestry, manifest hashes, full
+preflight validation, malformed and incomplete model output, snapshot isolation,
+cancellation, aggregate output limits, repeatability across processes and working
+directories, byte-identical reuse, conflicts, symlinks, FIFOs, lock contention
+and cleanup after injected write failures. Package-exclusion and project-isolation
+checks passed. With npm's cache redirected under `evals/`, the root
+`npm run package:contents` gate was attempted and failed on missing
+`dist/calc.d.ts`; no prohibited root build was run. All changes remain under
+`evals/`. M7 is next.

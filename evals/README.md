@@ -4,9 +4,9 @@ This directory is an independent local project for developing an interpretation
 dataset and evaluating chart readings. It validates factor-to-meaning entries
 and datasets, includes an original authored seed set, computes synthetic
 chart facts through the local engine, and validates readings with quoted claims.
-A bounded text-generation client provides a deterministic offline mock and
-explicit custom backend selection. Dataset generation and the scoring harness
-are later milestones in [PLAN.md](PLAN.md).
+A bounded interpretation generator provides a deterministic offline mock,
+explicit custom backend selection and reproducible manifests. The scoring
+harness remains a later milestone in [PLAN.md](PLAN.md).
 
 Interpretation text is symbolic prose. The eventual factual score will compare a
 reading's assertions with computations from the local `@zodiacs/engine` under
@@ -299,9 +299,10 @@ generated dataset is included.
 
 [BACKENDS.md](BACKENDS.md) describes the versioned request and response contract,
 byte limits, call budget, cancellation, reproducible identity and extension API.
-The transport preserves raw text and completion reasons. Entry assembly,
-source references, licensing, prompt templates and output validation belong to
-the interpretation generator milestone.
+The transport preserves raw text and completion reasons. The
+[interpretation generator](GENERATION.md) adds versioned prompts, validates
+meaning responses, assembles entries with closed source references and records
+reproducible manifests. Its CLI writes completed runs under ignored `generated/`.
 
 ## Files and licensing
 
