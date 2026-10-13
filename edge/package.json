@@ -1,0 +1,21 @@
+{
+  "name": "@zodiacs/engine-edge-lab",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "build:reference": "node scripts/build-reference.mjs",
+    "smoke:node": "node scripts/smoke-node.mjs",
+    "test": "node --test tests/*.check.mjs",
+    "typecheck": "tsc --project tsconfig.json",
+    "check:isolation": "node scripts/check-isolation.mjs"
+  },
+  "devDependencies": {
+    "astronomy-engine": "2.1.19",
+    "esbuild": "0.27.7",
+    "typescript": "5.9.3"
+  }
+}
