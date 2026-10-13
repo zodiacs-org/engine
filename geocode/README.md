@@ -5,8 +5,8 @@ It will provide offline place lookup, IANA civil-time resolution, a CLI and
 an optional HTTP service. [PLAN.md](PLAN.md) tracks implementation. The
 current milestone provides the place-data contract, an attributed GeoNames
 sample, an offline index builder, pure in-memory place lookup, a composed
-API for atlas-first civil-time resolution and the `geocode` CLI. The HTTP
-service remains a later milestone.
+API for atlas-first civil-time resolution, the `geocode` CLI and an optional
+local HTTP service. Per-client rate limiting remains the next milestone.
 
 ## Development
 
@@ -347,6 +347,111 @@ ambiguous names, date-only inputs, missing zones, atlas precedence and IANA
 gap/fold outcomes. [tests/load-index.test.ts](tests/load-index.test.ts) checks
 local loading and manifest/shard consistency. These are operational and
 integration regressions, not additional historical accuracy evidence.
+
+## Optional local HTTP service
+
+The Node-only `src/http-server.ts` entry wraps an explicitly supplied
+`Geocoder`. It imports no place files and opens no listening socket until
+the caller invokes `start()`. It is separate from the pure library entry.
+For a source checkout, start the optional launcher from `geocode/` with a
+local index built as below:
+
+```sh
+node bin/server.mjs --help
+node bin/server.mjs --index generated/sample
+```
+
+The launcher defaults to IPv4 loopback and an ephemeral port. It writes a
+single JSON startup record with `status: "listening"` and the actual
+`address`, including its `port`. Optional `--host` and `--port` select the
+binding; `--port 0` requests an ephemeral port. Options may appear once,
+and an index is required. Startup errors are private JSON diagnostics on
+stderr with a nonzero exit status. The launcher loads the chosen offline
+index and the repository atlas before listening. It performs no downloads
+and writes no request log or result file. It needs this checkout's `src/`
+and `atlas/`, plus this folder's locked dependencies, like the CLI.
+
+The current service is intended for local use. Per-client rate limiting,
+overload handling and proxy trust configuration remain M8 in [PLAN.md](PLAN.md).
+
+| Route | Input | Normal response |
+| --- | --- | --- |
+| `GET /lookup` | URL parameters `query`, optional `country`, `region`, `limit` | Library lookup result with dataset `provenance` |
+| `POST /tz` | UTF-8 `application/json` body containing a `GeocodeRequest` | Complete composed `GeocodeResult` |
+
+The lookup route rejects repeated or unknown parameters and request bodies.
+The timezone route accepts no URL parameters. Its JSON body uses the same
+`query` with optional `filters`, or explicit `placeId`, plus required `date`
+and optional `time` as the library. Fields and filters are validated before
+time providers run. Only uncompressed JSON is accepted. Dates are Gregorian
+civil dates and times are local clock readings; omission of time keeps the
+date-only result without an offset or UTC instant.
+
+Every normal library outcome returns HTTP 200. Inspect its `status`, then
+`time.status` for a timed answer. No match, ambiguous names, truncated
+suggestions, skipped/repeated wall times and unavailable zones remain
+complete library outcomes. A successful HTTP response does not resolve an
+ambiguous place or establish historical certainty. Atlas answers preserve
+citations, rule versions and uncertainty; IANA answers retain the existing
+provider's policy and provenance. Native Dates serialize as ISO strings.
+
+Application errors have `{ "error": { "code": "...", "message": "..." } }`:
+
+| HTTP status | Error code | Meaning |
+| --- | --- | --- |
+| 400 | `invalid-input` | Malformed parameters, request fields, JSON or UTF-8 |
+| 404 | `not-found` | Unknown route |
+| 405 | `method-not-allowed` | Wrong method, with an `Allow` response header |
+| 413 | `body-too-large` | JSON body exceeds the byte bound |
+| 414 | `url-too-large` | Request target exceeds the byte bound |
+| 415 | `unsupported-media-type` | Unsupported content type, charset or encoding |
+| 500 | `resolution-error` | Operational failure, including a time-provider exception |
+
+The Node parser returns structured `invalid-http` errors for malformed HTTP
+or excessive headers when the connection is still writable. Incomplete or
+aborted connections and transport timeouts may close without an application
+JSON response. Diagnostics never repeat submitted queries, dates, paths or
+raw provider exceptions. Provider exceptions never substitute a fallback
+answer, including when the exception is a `RangeError`.
+
+The service bounds URL, header and JSON body bytes through `HTTP_LIMITS` in
+[src/http-server.ts](src/http-server.ts). Bodies are bounded during streaming,
+including chunked transfer. Rejected requests close the connection rather
+than drain arbitrary input. Requests and idle sockets have transport
+deadlines. JSON responses use `Cache-Control: no-store` and
+`X-Content-Type-Options: nosniff`; no CORS permission is added.
+
+Programmatic startup and shutdown are explicit:
+
+```ts
+import { createGeocoder } from "./src/index.js";
+import { loadAtlasTimeProvider } from "./src/atlas-time.js";
+import { loadPlaceIndex } from "./src/load-index.js";
+import { createGeocodeServer } from "./src/http-server.js";
+
+const dataset = await loadPlaceIndex("generated/sample");
+const geocoder = createGeocoder(dataset, loadAtlasTimeProvider());
+const service = createGeocodeServer(geocoder);
+const address = await service.start();
+console.log(address);
+// Once the caller is done serving requests:
+await service.close();
+```
+
+`start()` may be called once. `close()` is idempotent, stops accepting
+connections and drains active requests, then closes remaining connections
+at the shutdown bound. It also handles closing before or during startup.
+It cannot cancel arbitrary executable provider code already running.
+The launcher handles `SIGINT` and `SIGTERM` through this shutdown path.
+
+[tests/http-server.test.ts](tests/http-server.test.ts) enforces request
+validation, byte boundaries, structured diagnostics, library outcomes and
+listener lifecycle on ephemeral ports with invented records.
+[tests/http-service.test.ts](tests/http-service.test.ts) checks sample-based
+atlas/IANA transport fidelity and the launcher, including signals and help
+with network entry points blocked. [evidence/M7.md](evidence/M7.md) records
+the scope and checks. These are service regressions, not new geographic or
+historical accuracy evidence.
 
 ## Build a local place index
 
