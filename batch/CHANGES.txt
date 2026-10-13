@@ -8,3 +8,4 @@ batch: complete M7 with controlled SQLite process-kill recovery, exact worker re
 batch: complete M8 with resumable NDJSON exports, bounded streaming, backpressure, disconnect cleanup and transport tests on both queue backends
 batch: complete M9 with bounded HTTP job control, idempotent submission, resumable NDJSON, disconnect cleanup and real-socket tests on both queue backends
 batch: complete M10 with bounded CLI submission, status, workers, HTTP service operation, resumable NDJSON exports and subprocess shutdown and SQLite restart tests
+batch: complete M11 with optional Redis queue, atomic Lua transitions, stateful mock contracts, connection recovery and worker HTTP streaming integration tests

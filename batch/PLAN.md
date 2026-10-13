@@ -20,7 +20,7 @@ initial session complete M1 only; later sessions complete one or two milestones.
 - [x] M8 Stream result rows as NDJSON with stable cursors, backpressure and disconnect handling. Test partial reads, reconnects, escaping and large workloads without collecting all output in memory.
 - [x] M9 Add the small HTTP control API for submit, status, progress and streamed results, with bounded request bodies and clear errors. Test routes, idempotency conflicts and client disconnects over real local sockets.
 - [x] M10 Add the CLI for submission, worker/service operation, status and NDJSON export using the same service APIs. Test subprocess exit codes, stdout/stderr separation and restart with SQLite.
-- [ ] M11 Add the optional Redis backend behind an injected client and explicit configuration. Run the backend contract suite with a stateful mock and test atomic operations and connection failures; document what the mock cannot establish.
+- [x] M11 Add the optional Redis backend behind an injected client and explicit configuration. Run the backend contract suite with a stateful mock and test atomic operations and connection failures; document what the mock cannot establish.
 - [ ] M12 Commit the scaling benchmark runner and compact machine-specific evidence for throughput versus worker count using synthetic workloads. Record runtime, engine/source identity, CPU allocation, workload, elapsed time and failures; keep raw generated rows gitignored and every committed file below the file-size limit.
 - [ ] M13 Finish operating documentation, examples and an integrated reliability check covering all workloads, backends, interfaces and recovery. Verify batch isolation from npm packing, evidence links, documentation claims and repository constraints.
 
@@ -255,3 +255,38 @@ confirmed that no `batch/` file is included. All changes stay inside `batch/`,
 all tracked and new batch files are below the file-size limit, and batch
 documentation contains no em dashes. No root build, archive creation or git
 write was performed. M11 remains the next milestone.
+
+## M11 session checks
+
+`npm run typecheck`, `npm test` and `npm run build` passed from `batch/` on
+Node 22.23.3. The optional `RedisQueue` uses a caller-owned connected client
+and an explicit dedicated hash key. Its Lua script stages mutations before
+the final hash write, uses server time for lease fencing and retries, retains
+opaque definition/result JSON, and bounds its unfinished-job directory.
+The CLI retains SQLite as its default; applications can inject Redis into
+the existing scheduler, HTTP control and streaming APIs.
+
+[test/redis-queue.test.ts](test/redis-queue.test.ts) runs the unchanged queue
+and retry contracts through independent clients backed by a stateful mock.
+Additional tests cover lost acknowledgements, failures before execution,
+write-time lease and cursor races, independent closure, retained prefixes,
+exact numeric metadata, schema refusal, bounded paging, capacity and staged
+mutation failures. The test-only Fengari dependency executes the production
+Lua source; [test/redis-mock.test.ts](test/redis-mock.test.ts) checks the mock's
+command and failure behavior. Its Lua runtime and JSON bridge differ from
+Redis, and no live server, replication, persistence or failover guarantee is
+claimed. The README records client ownership and deployment assumptions.
+
+[test/redis-integration.test.ts](test/redis-integration.test.ts) uses real
+workers and local HTTP sockets with mocked Redis for every workload. It
+checks status, following NDJSON disconnect and cursor resumption, keyed replay,
+exact stored engine JSON and cleanup after a connection failure. Existing
+SQLite crash recovery and CLI tests also pass. These are state-transition and
+integration checks, not throughput or astronomical accuracy evidence.
+
+The root `npm run package:contents`, using the batch npm cache, stopped because
+`dist/calc.d.ts` is absent. A scripts-disabled npm pack dry run confirmed that
+no `batch/` file is included. All changes stay inside `batch/`, all tracked and
+new batch files are below the file-size limit, and batch documentation contains
+no em dashes. No root build, archive creation or git write was performed.
+M12 remains the next milestone.

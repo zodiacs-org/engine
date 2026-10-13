@@ -3,7 +3,7 @@
 This private project is the batch service under development for this engine
 checkout. The completed work is checked off in [PLAN.md](PLAN.md). The current
 implementation validates job definitions, expands work lazily, executes it
-through the engine, provides in-memory and SQLite queues with retries and
+through the engine, provides in-memory, SQLite and optional Redis queues with retries and
 idempotent submission, schedules work on a thread pool, and exposes job control
 and NDJSON results through a CLI and a small HTTP API. SQLite crash recovery is
 checked with controlled process kills. Scaling measurements remain a later milestone.
@@ -42,7 +42,7 @@ find dependencies installed only here.
 
 [test/build.test.ts](test/build.test.ts) builds from the checkout root and runs
 the resulting entry in plain Node with invented chart input. It submits,
-claims, computes, commits and reads that job through both backends, then runs
+claims, computes, commits and reads that job through memory and SQLite, then runs
 parallel chart jobs through the scheduler and compares their rows with serial
 execution. It checks runtime imports, result shape and engine version without
 requiring root dependencies or engine build output.
@@ -388,8 +388,8 @@ carry the frozen validated job and a lease containing `jobId` and `token`.
 `claimCount` counts granted leases, including explicit release/reclaim; it is
 not a failure count or retry policy.
 
-Timestamps and lease durations use safe integer milliseconds. The default
-backend clock is `Date.now`; `MemoryQueue({ now })` accepts a controlled clock
+Timestamps and lease durations use safe integer milliseconds. Memory and SQLite
+use `Date.now` by default; Redis uses server `TIME`. `MemoryQueue({ now })` accepts a controlled clock
 for tests. Deadlines use backend wall time, so wall-clock adjustments can
 affect lease timing. A lease is invalid when backend time is at or after
 `expiresAt`, even before another scheduler reclaims it. Every claim gets a
@@ -485,10 +485,11 @@ policy. Property order, timestamp fractions and omitted birth/policy defaults
 normalize before comparison; input row order remains significant. Reusing a
 key with a different definition or policy throws `idempotency-conflict`.
 Validation precedes key lookup, so a malformed replay still rejects. Key
-reservation and job creation are atomic, including across SQLite connections.
+reservation and job creation are atomic, including across SQLite connections
+and Redis handles sharing a dedicated key.
 There is no key expiry or deletion API, and no tenant namespace is inferred.
 
-[test/retry-contract.ts](test/retry-contract.ts), run against both backends by
+[test/retry-contract.ts](test/retry-contract.ts), run against memory and SQLite by
 [test/retries.test.ts](test/retries.test.ts), enforces policy defaults and
 bounds, canonical replay, conflicts, concurrent submissions, delayed claims,
 failure exhaustion, prefix preservation, lease fencing and expiry accounting.
@@ -584,6 +585,103 @@ throughput.
 The test-only bridge [test/native-sqlite.mjs](test/native-sqlite.mjs) lets the
 existing Vitest loader access the real SQLite builtin. The production bundle
 keeps its ordinary `node:sqlite` import; the plain Node smoke test exercises it.
+
+## Optional Redis backend
+
+`RedisQueue({ client, key })` in [src/redis-queue.ts](src/redis-queue.ts)
+implements the same queue contract through an explicitly injected, connected
+client. The key is required, has the identifier length limit in `QUEUE_LIMITS`,
+and accepts ASCII letters, digits, dots, underscores, colons and hyphens with a
+leading letter or digit. It names a dedicated Redis hash. Different keys are
+independent stores; all producers and schedulers for a store must use the same
+key and Redis database. SQLite remains the CLI default. Redis is a library
+option wired into `Scheduler`, `createControlServer` and result streaming by
+the application; the CLI does not create Redis connections.
+
+The client interface only needs `sendCommand(args)`, returning a promise for
+the decoded reply. With a caller-owned connected client that takes mutable
+command arrays, the wiring is:
+
+```js
+import { RedisQueue, Scheduler, createControlServer } from "./.generated/index.js";
+
+// connectedClient is supplied and configured by the host application.
+const queue = new RedisQueue({
+  client: { sendCommand: args => connectedClient.sendCommand([...args]) },
+  key: "synthetic-batch-jobs"
+});
+const scheduler = new Scheduler(queue);
+const control = createControlServer(queue);
+// The host owns listening, scheduler.run(), shutdown and connection cleanup.
+```
+
+No Redis client package, URL, credentials or automatic connection is supplied.
+Use a writable primary and configure command timeouts and disconnect rejection
+in the injected client. Disable command replay and offline queuing: an expired
+application request must not later create an unexpected submission or claim.
+The adapter issues `EVAL` with its constant script and parameter arguments;
+it performs no automatic retry. The client must return the script reply as a
+string and reject command errors. `close()` only prevents future calls on that
+queue handle. It neither cancels an already issued command nor closes the
+shared client or removes stored jobs. Close the connection after dependent
+schedulers and HTTP consumers have stopped.
+
+The script in [src/redis-script.ts](src/redis-script.ts) accesses only the
+explicitly supplied hash key. It retains definitions, status, idempotency
+bindings and individual result rows as separate fields. Definitions and rows
+stay as opaque JSON strings in Lua, preserving engine numbers and escaping.
+Metadata integers use an explicit encoder so large safe integers are not
+rounded by Lua CJSON's ordinary encoding precision. Each mutation prepares
+its response and all changed fields before a final `HSET`; result rows and
+the cursor are changed together. Commit first reads a live lease and its
+definition for TypeScript result validation, then fences the token, expiry and
+cursor again in the writing script. Reads return a snapshot and bounded row
+fields from the same script execution.
+
+Claims scan only unfinished job metadata in submission order, record expired
+attempts, and select the earliest eligible job. `REDIS_QUEUE_MAX_PENDING` in
+the script bounds the unfinished directory and the final command's argument
+count. At that capacity, a new submission returns `storage-busy`; replaying
+an existing idempotency key still succeeds. Completed or failed jobs leave
+the directory but retain their definitions, rows and key bindings. This is a
+job-count limit, independent of each job's task limit, not a bound on stored
+bytes. There is no retention, deletion, backup or memory quota service.
+
+Use a dedicated key without TTL or eviction, restrict other writers, and size
+server memory for retained results. Wrong key types and unsupported schemas
+are refused. Server script and transport errors become fixed `storage-failure`
+diagnostics without raw connection messages. A failure can arrive after a
+successful write: recover keyed submissions by repeating the same definition
+and key, and recover commits by reading status and the committed cursor.
+An unacknowledged claim keeps its lease until expiry; restarting a scheduler
+then follows the existing retry policy. Do not blindly repeat mutations after
+an uncertain acknowledgement.
+
+Redis serializes scripts and blocks other server activity while they run; its
+[scripting documentation](https://redis.io/docs/latest/develop/programmability/eval-intro/)
+describes this behavior. The adapter targets Redis 7 or later, where scripts
+use effects replication and may write after reading server `TIME`; it does
+not detect the server version. Validate it against the chosen deployment before use.
+Persistence, restart and failover durability depend on the deployment's
+[persistence configuration](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/).
+The SQLite process-kill evidence does not establish Redis durability.
+
+[test/redis-queue.test.ts](test/redis-queue.test.ts) runs the unchanged backend
+and retry contracts through independent mock clients and checks connection
+failures before commands and after successful writes. The stateful mock in
+[test/redis-mock.ts](test/redis-mock.ts) executes the actual production Lua
+script using the test-only Fengari interpreter and mocks Redis hash commands
+and server time. Its Lua runtime and CJSON bridge differ from Redis; it checks
+our script's state transitions, not Redis networking, ACLs, cluster routing,
+memory exhaustion, interpreter limits, replication, persistence or failover.
+No live Redis integration or Redis throughput claim is made.
+
+[test/redis-integration.test.ts](test/redis-integration.test.ts) connects the
+mock-backed queue to real calculation workers and local HTTP sockets for every
+workload. It checks committed progress, following-result disconnect and cursor
+resumption, keyed replay, exact stored JSON and worker cleanup after a rejected
+Redis command. These establish application wiring, without extending the
+mock's storage or deployment guarantees.
 
 ## Worker pool and scheduler
 
@@ -844,7 +942,7 @@ These checks establish transport behavior, not astronomical accuracy.
 returns `{ server, close }`. The Node HTTP server is initially unbound. The
 embedding application chooses its listening address and runs a `Scheduler`
 separately; requests never calculate charts, claim work or recover expired
-leases. Both queue backends use the same routes. This API has no authentication,
+leases. Queue backends use the same routes. This API has no authentication,
 TLS or tenant isolation and is intended for trusted local clients. Bind it to
 loopback for local operation; exposing it elsewhere requires an authenticated
 access boundary provided by the operator.
