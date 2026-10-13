@@ -8,7 +8,7 @@ Use synthetic examples and preserve native engine receipts without claiming pred
 - [x] M3 Define validated inputs, structured outputs and receipt serialization.
 - [x] M4 Implement and test natal charts.
 - [x] M5 Implement and test transits at a date and now with an injectable clock.
-- [ ] M6 Implement and test synastry without invented compatibility scores.
+- [x] M6 Implement and test synastry without invented compatibility scores.
 - [ ] M7 Implement and test solar and lunar returns.
 - [ ] M8 Implement and test Moon phase and bounded event search.
 - [ ] M9 Register MCP tools and verify discovery, schemas and protocol errors.

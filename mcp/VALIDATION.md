@@ -30,3 +30,12 @@ Replay supplies an empty input assertion list; tests allow that native metadata
 normalization while comparing all calculation results. These are integration
 checks, not independent accuracy evidence. Parent build-dependent gates retain
 the scaffold limitation above.
+
+M6 session: `npm run check` passed on Node 22.23.3, including typecheck,
+Vitest and the isolated build. `test/synastry.test.ts` covers native pair
+summary and receipt preservation, replay, chart ordering, independent time
+settings and coverage flags, unknown time, missing coordinates, polar fallback,
+identical charts, invalid inputs, engine range failures and concrete JSON Schema.
+The parent pack isolation test passed. Comparisons establish wrapper integration,
+not independent accuracy or predictive validity. Parent build-dependent gates
+retain the scaffold limitation above.

@@ -85,3 +85,19 @@ The wrapper preserves the engine's aspects without adding interpretation.
 receipt replay, independent coverage flags, captured clock behavior and failure
 paths using synthetic inputs. These are integration checks, not independent
 accuracy evidence. MCP registration remains a later milestone.
+
+The synastry handler in `src/tools/synastry.ts` accepts `{ first, second }`,
+each a birth input, and returns `data.synastry`. It preserves the native charts
+as `a` and `b`, inter-chart aspects, closest-aspect summary, aspect counts and
+element/modality balances. Aspect `a` and `aLon` belong to the first chart;
+`b` and `bLon` belong to the second. Longitudes and orbs use degrees. Native
+`easeful` and `charged` fields count aspect types; they are not compatibility
+scores, relationship predictions or advice. The wrapper adds no score.
+
+The `first-natal` and `second-natal` receipts preserve each chart's input
+instant, requested houses, time basis and coverage flags independently. They
+record the natal calculations; they do not encode or attest the pair summary.
+`test/synastry.test.ts` checks native result preservation, receipt replay,
+chart ordering, unknown time, absent coordinates, polar fallback, independent
+time settings, validation and output schemas with synthetic inputs. These are
+integration checks, not independent astronomical accuracy evidence.
