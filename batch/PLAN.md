@@ -83,7 +83,7 @@ stay under ignored `.generated/` paths.
 
 The SQLite constructor checks its runtime library version before opening a
 file, excluding the mainline releases affected by the upstream WAL-reset bug;
-`test/sqlite-queue.test.ts` enforces the boundary and checks that refused opens
+`test/sqlite-queue.batch-test.ts` enforces the boundary and checks that refused opens
 create no files. `README.md` links the upstream explanation. Process-kill
 recovery tests and throughput measurements remain later milestones.
 
@@ -235,7 +235,7 @@ from files or stdin, read status and progress, export resumable NDJSON, run
 SQLite workers, or start workers with the HTTP API on SQLite or explicit memory
 storage. They reuse the existing queue, scheduler, control and streaming APIs.
 
-[test/cli.test.ts](test/cli.test.ts) checks the built CLI in subprocesses with
+[test/cli.batch-test.ts](test/cli.batch-test.ts) checks the built CLI in subprocesses with
 synthetic jobs for all workloads. It covers canonical keyed replay and conflicts,
 argument and input boundaries, malformed UTF-8, default and explicit paths,
 fixed exit codes, stdout/stderr separation, finite and following exports, cursor
@@ -266,18 +266,18 @@ opaque definition/result JSON, and bounds its unfinished-job directory.
 The CLI retains SQLite as its default; applications can inject Redis into
 the existing scheduler, HTTP control and streaming APIs.
 
-[test/redis-queue.test.ts](test/redis-queue.test.ts) runs the unchanged queue
+[test/redis-queue.batch-test.ts](test/redis-queue.batch-test.ts) runs the unchanged queue
 and retry contracts through independent clients backed by a stateful mock.
 Additional tests cover lost acknowledgements, failures before execution,
 write-time lease and cursor races, independent closure, retained prefixes,
 exact numeric metadata, schema refusal, bounded paging, capacity and staged
 mutation failures. The test-only Fengari dependency executes the production
-Lua source; [test/redis-mock.test.ts](test/redis-mock.test.ts) checks the mock's
+Lua source; [test/redis-mock.batch-test.ts](test/redis-mock.batch-test.ts) checks the mock's
 command and failure behavior. Its Lua runtime and JSON bridge differ from
 Redis, and no live server, replication, persistence or failover guarantee is
 claimed. The README records client ownership and deployment assumptions.
 
-[test/redis-integration.test.ts](test/redis-integration.test.ts) uses real
+[test/redis-integration.batch-test.ts](test/redis-integration.batch-test.ts) uses real
 workers and local HTTP sockets with mocked Redis for every workload. It
 checks status, following NDJSON disconnect and cursor resumption, keyed replay,
 exact stored engine JSON and cleanup after a connection failure. Existing
@@ -312,11 +312,11 @@ single large job or a continuously running service. The README describes the
 method and limitations. Raw output is retained only in ignored temporary stores;
 the committed evidence contains metadata and summaries, not result rows.
 
-[test/benchmark.test.ts](test/benchmark.test.ts) checks deterministic synthetic
+[test/benchmark.batch-test.ts](test/benchmark.batch-test.ts) checks deterministic synthetic
 workloads and counts, serial digests, summary medians and matching baselines,
 failed-group suppression, actual worker execution on both backends, deliberate
 digest failure, file budgets, cleanup and invalid command options.
-[test/benchmark-metadata.test.ts](test/benchmark-metadata.test.ts) checks CPU
+[test/benchmark-metadata.batch-test.ts](test/benchmark-metadata.batch-test.ts) checks CPU
 quota and affinity parsing, cgroup mount resolution and visible ancestor limits.
 The full existing suite, including process-crash recovery, also passes. These
 checks establish benchmark and transport behavior, not astronomical accuracy.
@@ -335,10 +335,10 @@ Vitest suite, the batch build and repository audit. The new
 [operating guide](docs/operations.md) covers installation, submission, workers,
 HTTP, cursor recovery, retries, shutdown, storage ownership and build identity.
 Committed [examples](examples/charts.json) cover every workload, and
-[test/examples.test.ts](test/examples.test.ts) runs their exact input through the
+[test/examples.batch-test.ts](test/examples.batch-test.ts) runs their exact input through the
 built CLI and real workers, checking status, keyed replay and resumed exports.
 
-[test/reliability.test.ts](test/reliability.test.ts) runs mixed workloads through
+[test/reliability.batch-test.ts](test/reliability.batch-test.ts) runs mixed workloads through
 real workers and local HTTP sockets on memory, SQLite and mocked Redis. It
 checks a committed prefix, lease abandonment and expiry, persistent-handle
 reopening, stale-token fencing, an execution failure and retry, idempotency,
@@ -346,14 +346,14 @@ following NDJSON and exact serial transport parity. Memory retains its original
 live queue; mocked Redis does not establish real server durability. Existing
 controlled SQLite process-kill and CLI restart tests also pass.
 
-[test/large-job.test.ts](test/large-job.test.ts) completes a single job of 2,000
+[test/large-job.batch-test.ts](test/large-job.batch-test.ts) completes a single job of 2,000
 invented charts with bounded real-worker dispatch, contiguous streamed cursors,
 no failed attempts and incremental serial/NDJSON digest parity. It writes no
 export file and makes no throughput or heap claim. The queue retains its stored
 rows. [docs/reliability.md](docs/reliability.md) maps the checks to their scope
 and limitations.
 
-[test/evidence.test.ts](test/evidence.test.ts) verifies the historical scaling
+[test/evidence.batch-test.ts](test/evidence.batch-test.ts) verifies the historical scaling
 record's manifest digest, input hashes, complete sample matrix, interval sums,
 counts, throughput arithmetic and exact table rendering. The README now scopes
 those figures to the recorded source manifest. No old benchmark evidence was

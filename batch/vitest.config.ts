@@ -13,7 +13,8 @@ export default defineConfig({
     },
   },
   test: {
-    include: ["test/**/*.test.ts"],
+    // Keep these suites out of the root runner's default *.test.* discovery.
+    include: ["test/**/*.batch-test.ts"],
     pool: "forks",
     maxWorkers: 2,
     minWorkers: 1,

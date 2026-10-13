@@ -71,7 +71,7 @@ Use a different idempotency key for each different job. The schemas accept
 resolved UTC instants and a subset of engine birth settings; local clock
 resolution happens before submission. See
 [job definitions](../README.md#job-definitions) for accepted fields and limits.
-[examples.test.ts](../test/examples.test.ts) validates these exact files, submits
+[examples.batch-test.ts](../test/examples.batch-test.ts) validates these exact files, submits
 them through the built CLI, processes them with real workers, and checks status,
 key replay and resumed NDJSON against serial execution on the same build.
 
@@ -209,19 +209,19 @@ identity alongside each store outside the job payload. A queue does not pin or
 verify the computational build used by replacement workers. Mixing builds or
 runtime versions can therefore mix numerical results within a resumed job;
 matching a version label alone is insufficient. Keep a consistent build for a
-store's unfinished jobs. [build.test.ts](../test/build.test.ts) checks the built
+store's unfinished jobs. [build.batch-test.ts](../test/build.batch-test.ts) checks the built
 interfaces; it does not authenticate deployed artifacts.
 
-[crash-recovery.test.ts](../test/crash-recovery.test.ts) checks controlled SQLite
+[crash-recovery.batch-test.ts](../test/crash-recovery.batch-test.ts) checks controlled SQLite
 process kills at persistence boundaries and suffix resumption. It does not
 simulate host power loss or filesystem corruption.
-[cli.test.ts](../test/cli.test.ts) checks command exits, signals and restart;
-[http-control.test.ts](../test/http-control.test.ts) and
-[http-control-stream.test.ts](../test/http-control-stream.test.ts) check local
+[cli.batch-test.ts](../test/cli.batch-test.ts) checks command exits, signals and restart;
+[http-control.batch-test.ts](../test/http-control.batch-test.ts) and
+[http-control-stream.batch-test.ts](../test/http-control-stream.batch-test.ts) check local
 socket requests and disconnects.
-[result-stream.test.ts](../test/result-stream.test.ts) checks partial-line
+[result-stream.batch-test.ts](../test/result-stream.batch-test.ts) checks partial-line
 resumption and bounded reads. The
-[Redis integration tests](../test/redis-integration.test.ts) use a stateful mock,
+[Redis integration tests](../test/redis-integration.batch-test.ts) use a stateful mock,
 so they do not establish live Redis durability or failover behavior. These
 checks establish service and transport behavior. Astronomical accuracy remains
 the engine's independently documented scope.

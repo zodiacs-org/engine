@@ -21,17 +21,17 @@ astronomical accuracy evidence.
 
 | Check | Coverage |
 | --- | --- |
-| [Integrated reliability](../test/reliability.test.ts) | A mixed queue of charts, transit grids and directed synastry matrices through HTTP and real workers, on memory, SQLite and mocked Redis. A committed prefix survives an abandoned lease, handle reopening where supported, a worker calculation failure and a retry. Key replay/conflict, stale-token fencing, ordered following NDJSON, final status and suffix-only dispatch are checked together. |
-| [Large chart job](../test/large-job.test.ts) | A single job of 2,000 invented charts on memory with real workers, consumed as NDJSON with contiguous cursors and a digest compared with incremental serial output. This is a correctness check, not a throughput or heap measurement; the memory backend retains its stored rows. |
-| [Runnable examples](../test/examples.test.ts) | The committed JSON example for every workload passes validation, built CLI submission, worker execution, status, keyed replay and resumed export. |
-| [SQLite crash recovery](../test/crash-recovery.test.ts) | Child processes are killed at result-insert, checkpoint and transaction-commit boundaries, then reopened with real workers. Prefixes, dispatch cursors, lost acknowledgements, lease expiry and retry accounting are checked against serial output. |
-| [CLI](../test/cli.test.ts) | Command parsing and input bounds, exit codes, output separation, service startup, signals, interrupted exports and SQLite worker restart. SQLite and memory service modes are covered; the CLI does not expose Redis. |
-| [HTTP control](../test/http-control.test.ts) and [streaming](../test/http-control-stream.test.ts) | Real local sockets for routes, errors, input bounds, status, retries, backpressure, disconnects, upload deadlines and shutdown on memory and SQLite. |
-| [Redis contracts](../test/redis-queue.test.ts) and [integration](../test/redis-integration.test.ts) | Production Lua transitions run in a stateful mock through independent clients, including uncertain acknowledgements and connection failures, plus real workers and HTTP for every workload. |
+| [Integrated reliability](../test/reliability.batch-test.ts) | A mixed queue of charts, transit grids and directed synastry matrices through HTTP and real workers, on memory, SQLite and mocked Redis. A committed prefix survives an abandoned lease, handle reopening where supported, a worker calculation failure and a retry. Key replay/conflict, stale-token fencing, ordered following NDJSON, final status and suffix-only dispatch are checked together. |
+| [Large chart job](../test/large-job.batch-test.ts) | A single job of 2,000 invented charts on memory with real workers, consumed as NDJSON with contiguous cursors and a digest compared with incremental serial output. This is a correctness check, not a throughput or heap measurement; the memory backend retains its stored rows. |
+| [Runnable examples](../test/examples.batch-test.ts) | The committed JSON example for every workload passes validation, built CLI submission, worker execution, status, keyed replay and resumed export. |
+| [SQLite crash recovery](../test/crash-recovery.batch-test.ts) | Child processes are killed at result-insert, checkpoint and transaction-commit boundaries, then reopened with real workers. Prefixes, dispatch cursors, lost acknowledgements, lease expiry and retry accounting are checked against serial output. |
+| [CLI](../test/cli.batch-test.ts) | Command parsing and input bounds, exit codes, output separation, service startup, signals, interrupted exports and SQLite worker restart. SQLite and memory service modes are covered; the CLI does not expose Redis. |
+| [HTTP control](../test/http-control.batch-test.ts) and [streaming](../test/http-control-stream.batch-test.ts) | Real local sockets for routes, errors, input bounds, status, retries, backpressure, disconnects, upload deadlines and shutdown on memory and SQLite. |
+| [Redis contracts](../test/redis-queue.batch-test.ts) and [integration](../test/redis-integration.batch-test.ts) | Production Lua transitions run in a stateful mock through independent clients, including uncertain acknowledgements and connection failures, plus real workers and HTTP for every workload. |
 | [Queue contract](../test/queue-contract.ts) and [retry contract](../test/retry-contract.ts) | Backend suites enforce atomic claims, token fencing, progress snapshots, ordered commits, delays, exhaustion and idempotency. Backend test files supply their own fixtures. |
-| [Pool](../test/worker-pool.test.ts) and [scheduler](../test/scheduler.test.ts) | Worker replacement, aborts and capacity; bounded dispatch and ordered buffering, heartbeats, backend failures and shutdown races. |
-| [Result streams](../test/result-stream.test.ts) and [queue streams](../test/result-stream-queue.test.ts) | Finite snapshots, following, every cursor of small synthetic workloads, partial UTF-8/JSON lines, bounded read-ahead, cancellation and retained failed prefixes. |
-| [Build](../test/build.test.ts) | Generated entries load in plain Node and use the source engine and pinned computational dependency without requiring root dependencies or root build output. |
+| [Pool](../test/worker-pool.batch-test.ts) and [scheduler](../test/scheduler.batch-test.ts) | Worker replacement, aborts and capacity; bounded dispatch and ordered buffering, heartbeats, backend failures and shutdown races. |
+| [Result streams](../test/result-stream.batch-test.ts) and [queue streams](../test/result-stream-queue.batch-test.ts) | Finite snapshots, following, every cursor of small synthetic workloads, partial UTF-8/JSON lines, bounded read-ahead, cancellation and retained failed prefixes. |
+| [Build](../test/build.batch-test.ts) | Generated entries load in plain Node and use the source engine and pinned computational dependency without requiring root dependencies or root build output. |
 
 Memory reopening in the integrated check means keeping its original live object;
 it makes no persistence claim. Redis reopening reconnects to simulated server
@@ -45,16 +45,16 @@ or distributed storage. All astronomy input here is synthetic.
 
 The [recorded observation](evidence/scaling-20261013.md) links the machine facts,
 exact inputs and source/bundle hashes in its [JSON](evidence/scaling-20261013.json).
-[evidence.test.ts](../test/evidence.test.ts) checks the manifest digest, canonical
+[evidence.batch-test.ts](../test/evidence.batch-test.ts) checks the manifest digest, canonical
 input hashes, complete sample matrix, duration sums, result and failure counts,
 rate arithmetic, summary calculations and exact rendering of the table. This
 checks internal consistency of the retained record, not its authenticity or
 the performance of today's checkout. Source revisions and runtimes can differ
 from that record; do not relabel its rates as measurements of another build.
 
-[benchmark.test.ts](../test/benchmark.test.ts) executes the smoke profile with
+[benchmark.batch-test.ts](../test/benchmark.batch-test.ts) executes the smoke profile with
 real workers and fresh stores, verifies result digests and exercises deliberate
-verification failure. [benchmark-metadata.test.ts](../test/benchmark-metadata.test.ts)
+verification failure. [benchmark-metadata.batch-test.ts](../test/benchmark-metadata.batch-test.ts)
 checks CPU allocation parsing. The longer scaling profile is explicit:
 
 ```sh
@@ -73,7 +73,7 @@ It rejects files reaching the source file budget, tracked runtime data or build
 directories, source symlinks, and em dashes in documentation. It checks ordinary
 inline local Markdown links and heading fragments, including evidence links;
 it does not fetch external websites or prove prose claims automatically.
-[project-audit.test.ts](../test/project-audit.test.ts) exercises broken links,
+[project-audit.batch-test.ts](../test/project-audit.batch-test.ts) exercises broken links,
 escaping paths, missing fragments, generated files and the size boundary.
 
 The audit checks that current tracked modifications and nonignored new files

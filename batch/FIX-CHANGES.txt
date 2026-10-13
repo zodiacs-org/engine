@@ -1,0 +1,1 @@
+F1: Rename batch suites and update test discovery and documentation links; batch checks pass and root Vitest discovers no batch suites.

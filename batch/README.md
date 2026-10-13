@@ -29,7 +29,10 @@ npm run check
 ```
 
 Dependencies and the lockfile belong to this directory. Typechecking emits
-nothing. Vitest runs only `test/` here and keeps its cache in `.cache/`.
+nothing. Vitest runs only `test/**/*.batch-test.ts` here and keeps its cache in
+`.cache/`. This naming pattern keeps the batch suites out of the root engine's
+default Vitest discovery. The batch test commands load [vitest.config.ts](vitest.config.ts)
+to select these suites and resolve this project's dependencies.
 Generated code belongs in `.generated/`, runtime databases and exports in
 `.runtime/`, and raw benchmark output in `.generated/`; these paths are ignored.
 Keep committed benchmark evidence compact and link it to its runner.
@@ -51,7 +54,7 @@ default worker pool or CLI. The build does not run the engine build. Vitest and
 TypeScript resolve the same dependency from this installation. An unbundled root source import cannot
 find dependencies installed only here.
 
-[test/build.test.ts](test/build.test.ts) builds from the checkout root and runs
+[test/build.batch-test.ts](test/build.batch-test.ts) builds from the checkout root and runs
 the resulting entry in plain Node with invented chart input. It submits,
 claims, computes, commits and reads that job through memory and SQLite, then runs
 parallel chart jobs through the scheduler and compares their rows with serial
@@ -181,7 +184,7 @@ lost on exit.
 
 The command contract and exit mapping are implemented in
 [src/cli-options.ts](src/cli-options.ts) and [src/cli.ts](src/cli.ts).
-[test/cli.test.ts](test/cli.test.ts) exercises the built CLI through subprocesses,
+[test/cli.batch-test.ts](test/cli.batch-test.ts) exercises the built CLI through subprocesses,
 with synthetic workloads, separate stdout and stderr, argument and input
 validation, HTTP service operation and SQLite worker restart. These checks
 establish interface and recovery behavior, without a throughput or astronomical
@@ -265,7 +268,7 @@ birth values or JSON parser text.
 In-process proxies are executable caller code; their reflection traps may run
 and throw their own errors. Use the JSON entry point for transport input.
 
-The synthetic cases in [test/validation.test.ts](test/validation.test.ts)
+The synthetic cases in [test/validation.batch-test.ts](test/validation.batch-test.ts)
 enforce these schema rules, workload counts, default budgets and boundaries.
 They test the wrapper's behavior and make no astronomical accuracy claim.
 
@@ -284,7 +287,7 @@ Work items contain `kind` and `index`, plus `person` for a chart, `person`,
 `sampleIndex` and `at` for a transit sample, or `a` and `b` for a directed
 synastry pair. Each item is frozen and references the validated job's frozen
 people. Grid and matrix index arithmetic uses integers, including when callers
-raise the task budget. [test/work.test.ts](test/work.test.ts) checks ordering,
+raise the task budget. [test/work.batch-test.ts](test/work.batch-test.ts) checks ordering,
 range edges, resume boundaries and seeking near the safe-integer limit without
 expanding the workload.
 
@@ -334,7 +337,7 @@ submitted birth value. A failed serial iterator ends at that row, without
 skipping it or computing subsequent rows. Resuming from the failed index
 attempts it again. The queue and scheduler below manage retry policy.
 
-[test/execution.test.ts](test/execution.test.ts) compares these JSON values
+[test/execution.batch-test.ts](test/execution.batch-test.ts) compares these JSON values
 with direct engine calls on synthetic charts, transit samples and directed
 pairs. It checks flags, incremental computation, every resume boundary in its
 test jobs, result isolation and failures. These are wrapper parity and
@@ -446,7 +449,7 @@ fixed descriptions without birth data, result values or tokens. These
 in-process APIs do not sandbox executable proxies or a supplied clock.
 
 [test/queue-contract.ts](test/queue-contract.ts) is the reusable backend suite;
-[test/memory-queue.test.ts](test/memory-queue.test.ts) supplies its memory
+[test/memory-queue.batch-test.ts](test/memory-queue.batch-test.ts) supplies its memory
 fixture. It checks competing claims, expiry and renewal boundaries, stale
 tokens, prefix resumption, atomic result validation, completion, pagination
 and snapshot isolation using synthetic workloads and a controlled clock.
@@ -501,12 +504,12 @@ and Redis handles sharing a dedicated key.
 There is no key expiry or deletion API, and no tenant namespace is inferred.
 
 [test/retry-contract.ts](test/retry-contract.ts), run against memory and SQLite by
-[test/retries.test.ts](test/retries.test.ts), enforces policy defaults and
+[test/retries.batch-test.ts](test/retries.batch-test.ts), enforces policy defaults and
 bounds, canonical replay, conflicts, concurrent submissions, delayed claims,
 failure exhaustion, prefix preservation, lease fencing and expiry accounting.
-[test/sqlite-queue.test.ts](test/sqlite-queue.test.ts) adds persistence and
+[test/sqlite-queue.batch-test.ts](test/sqlite-queue.batch-test.ts) adds persistence and
 migration checks. These tests establish queue behavior; the separate
-[crash suite](test/crash-recovery.test.ts) exercises process kills.
+[crash suite](test/crash-recovery.batch-test.ts) exercises process kills.
 
 ## Default durable backend: SQLite
 
@@ -514,7 +517,7 @@ migration checks. These tests establish queue behavior; the separate
 implements the same contract using Node's built-in `node:sqlite` module. It
 needs no extra dependency. It requires SQLite at least
 `SQLITE_QUEUE_DEFAULTS.minimumSqliteVersion`, enforced before opening the file
-and tested in [test/sqlite-queue.test.ts](test/sqlite-queue.test.ts). This excludes
+and tested in [test/sqlite-queue.batch-test.ts](test/sqlite-queue.batch-test.ts). This excludes
 the releases affected by SQLite's
 [WAL-reset corruption bug](https://sqlite.org/wal.html#walresetbug). The general
 project Node range also covers the in-memory backend; SQLite needs a Node
@@ -583,13 +586,13 @@ filesystem paths and stored values. If a storage operation's outcome is
 uncertain, read the current job and cursor before attempting it again. No
 retention policy, disk quota, backup service or database repair is implemented.
 
-[test/sqlite-queue.test.ts](test/sqlite-queue.test.ts) runs the shared backend
+[test/sqlite-queue.batch-test.ts](test/sqlite-queue.batch-test.ts) runs the shared backend
 contract through independent connections. Its synthetic cases also check
 schema creation and refusal, lock contention, handle closure, clock boundaries,
 reopen with live or expired leases, stored definitions for each workload,
 prefix resumption, completed jobs and SQL failures during row inserts and
 checkpoint updates. Those tests establish reopen and transaction behavior;
-the separate [crash suite](test/crash-recovery.test.ts) exercises process
+the separate [crash suite](test/crash-recovery.batch-test.ts) exercises process
 termination and restart. Neither suite simulates power loss or establishes
 throughput.
 
@@ -677,7 +680,7 @@ Persistence, restart and failover durability depend on the deployment's
 [persistence configuration](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/).
 The SQLite process-kill evidence does not establish Redis durability.
 
-[test/redis-queue.test.ts](test/redis-queue.test.ts) runs the unchanged backend
+[test/redis-queue.batch-test.ts](test/redis-queue.batch-test.ts) runs the unchanged backend
 and retry contracts through independent mock clients and checks connection
 failures before commands and after successful writes. The stateful mock in
 [test/redis-mock.ts](test/redis-mock.ts) executes the actual production Lua
@@ -687,7 +690,7 @@ our script's state transitions, not Redis networking, ACLs, cluster routing,
 memory exhaustion, interpreter limits, replication, persistence or failover.
 No live Redis integration or Redis throughput claim is made.
 
-[test/redis-integration.test.ts](test/redis-integration.test.ts) connects the
+[test/redis-integration.batch-test.ts](test/redis-integration.batch-test.ts) connects the
 mock-backed queue to real calculation workers and local HTTP sockets for every
 workload. It checks committed progress, following-result disconnect and cursor
 resumption, keyed replay, exact stored JSON and worker cleanup after a rejected
@@ -734,7 +737,7 @@ Options are `workers`, `owner`, `leaseMs`, `heartbeatMs` and `pollMs`. Durations
 are positive integer milliseconds; heartbeat must be shorter than the lease.
 Defaults and timer/worker limits are exported as `SCHEDULER_DEFAULTS`.
 Configuration validation is checked in
-[test/scheduler.test.ts](test/scheduler.test.ts). Omitting heartbeat uses a
+[test/scheduler.batch-test.ts](test/scheduler.batch-test.ts). Omitting heartbeat uses a
 fraction of the chosen lease duration. Owner defaults to a generated
 identifier. A dedicated `TaskPool` may be injected as `pool` instead of
 `workers`; its capacity bounds dispatch, its runs must settle when aborted,
@@ -771,12 +774,12 @@ expiry. A pool-close error uses `execution-failed`. The committed prefix
 remains available, and `stop()` propagates the same run failure. A stopped or
 failed scheduler is not restartable; create a new instance for another run.
 
-[test/worker-pool.test.ts](test/worker-pool.test.ts) uses real threads for engine
+[test/worker-pool.batch-test.ts](test/worker-pool.batch-test.ts) uses real threads for engine
 parity, parallel dispatch, replacement, aborts, protocol failures and closure.
-[test/scheduler.test.ts](test/scheduler.test.ts) controls task completion and
+[test/scheduler.batch-test.ts](test/scheduler.batch-test.ts) controls task completion and
 backend time to check bounded buffering, prefix commits, renewal, fencing,
 retries, failure-write uncertainty and shutdown races.
-[test/build.test.ts](test/build.test.ts) runs the built default pool and
+[test/build.batch-test.ts](test/build.batch-test.ts) runs the built default pool and
 scheduler against both queue backends in plain Node, including a synthetic
 input whose calculation fails and exhausts its retry budget. These checks
 use synthetic inputs and establish wrapper behavior, not astronomical
@@ -820,7 +823,7 @@ workload and its restart. The queue persists the job definition and rows but
 does not pin or validate the executable build. Changing it mid-job can mix
 results from different builds in the stored prefix and resumed suffix.
 
-[test/crash-recovery.test.ts](test/crash-recovery.test.ts) builds an isolated
+[test/crash-recovery.batch-test.ts](test/crash-recovery.batch-test.ts) builds an isolated
 bundle and starts child processes using the real SQLite backend. Its
 [child fixture](test/fixtures/recovery-child.mjs) pauses native database calls
 after a result insert, after the checkpoint update, or after SQLite commits
@@ -887,7 +890,7 @@ before any read. Queue reads are lazy, sequential and do not fetch a later
 page until the current page has been consumed. Periodic event-loop yields let
 timers and disconnect notifications run during an otherwise immediately ready
 export. The boundaries are enforced by
-[test/result-stream.test.ts](test/result-stream.test.ts).
+[test/result-stream.batch-test.ts](test/result-stream.batch-test.ts).
 
 `createResultStream(queue, jobId, options)` exposes the same export as a Node
 Readable of UTF-8 bytes. It adds a bounded `highWaterMark` option; its default
@@ -937,14 +940,14 @@ those complete lines still usable. There is no automatic read retry. Backends
 must fulfill the queue contract, including detached bounded JSON; an injected
 backend is trusted executable code, not untrusted result input.
 
-[test/result-stream-queue.test.ts](test/result-stream-queue.test.ts) checks
+[test/result-stream-queue.batch-test.ts](test/result-stream-queue.batch-test.ts) checks
 exact stored JSON for every workload on both backends, every cursor in its
 synthetic jobs, concurrent commits during finite exports, following retry and
 failure states, escaping, and resumption after SQLite reopen.
-[test/result-stream.test.ts](test/result-stream.test.ts) covers partial Unicode
+[test/result-stream.batch-test.ts](test/result-stream.batch-test.ts) covers partial Unicode
 lines, backpressure, read failures, broken pages, abort during reads and polling,
 listener cleanup, and event-loop fairness. The
-[plain Node smoke test](test/build.test.ts) checks the built exports too.
+[plain Node smoke test](test/build.batch-test.ts) checks the built exports too.
 These checks establish transport behavior, not astronomical accuracy.
 
 ## HTTP control API
@@ -1074,11 +1077,11 @@ still settle after disconnect or shutdown; its late rejection is observed.
 Synchronous SQLite operations cannot be interrupted mid-call. Create a new
 control server to restart after closing it.
 
-[test/http-control.test.ts](test/http-control.test.ts) checks routes, validation,
+[test/http-control.batch-test.ts](test/http-control.batch-test.ts) checks routes, validation,
 idempotency and workload parity through local sockets on both queue backends.
-[test/http-control-stream.test.ts](test/http-control-stream.test.ts) checks
+[test/http-control-stream.batch-test.ts](test/http-control-stream.batch-test.ts) checks
 following, interruption, bounded read-ahead, request deadlines and shutdown.
-[test/build.test.ts](test/build.test.ts) exercises the built HTTP export in plain
+[test/build.batch-test.ts](test/build.batch-test.ts) exercises the built HTTP export in plain
 Node on both backends. These checks establish interface and transport behavior;
 they do not measure throughput or astronomical accuracy.
 
@@ -1114,7 +1117,7 @@ sample processes sixteen fresh, bounded jobs. Charts use 32 invented births;
 transit grids use two invented births at sixteen daily UTC samples from
 2024-01-01 inclusive to 2024-01-17 exclusive; matrices use six invented people
 and all 30 directed, nonself pairs. The profile, definitions and counts are
-recorded in the evidence and checked in [test/benchmark.test.ts](test/benchmark.test.ts).
+recorded in the evidence and checked in [test/benchmark.batch-test.ts](test/benchmark.batch-test.ts).
 Repeated jobs use the same synthetic inputs. Transit rows recompute their natal
 chart, and matrix rows recompute both charts, as the ordinary executor does.
 No benchmark-specific result cache or faster execution path is used.
@@ -1156,7 +1159,7 @@ repetitions. Run without other intentional workloads for a new measurement.
 The evidence records Node, V8, SQLite, CPU model and logical count, affinity,
 available parallelism, and readable cgroup quotas, including exposed ancestors.
 Missing controls remain unknown. These observations do not prove exclusive CPU
-capacity or reveal hidden host limits. [test/benchmark-metadata.test.ts](test/benchmark-metadata.test.ts)
+capacity or reveal hidden host limits. [test/benchmark-metadata.batch-test.ts](test/benchmark-metadata.batch-test.ts)
 checks parsing and visible-ancestor handling. The reported median and range
 cover only the recorded repetitions. More workers need not improve throughput;
 no speedup or performance threshold is enforced by the tests.
