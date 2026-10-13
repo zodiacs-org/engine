@@ -8,7 +8,7 @@ line to `CHANGES.txt`. The harness handles git writes and draft PRs.
 
 - [x] M1 Establish an isolated TypeScript project, engine-backed relocated charts, natal envelopes and synthetic Vitest tests.
 - [x] M2 Accept existing engine charts and natal envelopes as sources, preserve requested settings on replay, and test validation and polar fallback semantics.
-- [ ] M3 Add geographic bounds, longitude wrapping, antimeridian splitting and bounded grid sampling with explicit work budgets.
+- [x] M3 Add geographic bounds, longitude wrapping, antimeridian splitting and bounded grid sampling with explicit work budgets.
 - [ ] M4 Define angular-line conventions and add engine-backed planetary equatorial and observer-angle sampling with receipts and undefined-angle handling.
 - [ ] M5 Generate bounded MC and IC polylines with sampled metadata and engine receipt references.
 - [ ] M6 Generate ASC and DSC horizon polylines, including circumpolar gaps, tangencies and polar cases, without fabricating positions.
@@ -64,3 +64,23 @@ successive antimeridian relocations. Root `npm pack --dry-run --ignore-scripts
 build. File-size, documentation punctuation and diff-scope checks passed. Root
 CI gates that require installing/building the engine remain deferred under the
 session's isolation rule; no engine or packed files changed.
+
+M3 adds inclusive geographic bounds, finite longitude wrapping and point
+membership, plus antimeridian polyline splitting with sample indices and
+explicit interpolated seam provenance. Grid plans traverse wrapped bounds in
+eastward order, retain inclusive endpoints and refuse excess work before source
+capture or coordinate allocation. `sampleGrid` captures the source once and
+returns a fresh engine envelope per destination with replayed settings. Chart
+grids exclude exact poles and retain engine polar fallback and unknown-time
+behavior. Hard sample limits bound work; generated outputs remain ignored.
+
+Validation: relocation typecheck and all tests passed on Node 22.22.2.
+`test/geography.vitest.ts` checks bounds, seam aliases, interpolation, precision,
+ownership and polyline limits. `test/grid.vitest.ts` checks grid endpoints,
+resource preflight, engine evaluation counts, receipts, replay, polar fallback
+and subnormal coordinate spans. Root package dry-run exclusion, archive SHA-256,
+file-size, documentation punctuation and diff-scope checks passed. The root
+`npm run package:contents` was attempted with an isolated writable npm cache;
+it cannot pass because this checkout has no `dist/calc.d.ts`. No root build
+was run under the user's rule forbidding changes to `dist/`; engine CI gates
+requiring that build remain deferred. No engine or packed files changed.

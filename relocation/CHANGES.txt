@@ -1,2 +1,3 @@
 M1: Add isolated relocation project, engine-backed chart API and natal receipts; pass synthetic Vitest tests, Node 22 typecheck and package exclusion checks.
 M2: Accept engine charts and natal envelopes, preserve replay settings and polar house requests, validate source ownership and receipts, and pass Node 22 typecheck, Vitest and package exclusion checks.
+M3: Add geographic bounds, longitude wrapping, antimeridian geometry with seam provenance and budgeted engine chart grids; pass Node 22 typecheck, Vitest and package exclusion checks.

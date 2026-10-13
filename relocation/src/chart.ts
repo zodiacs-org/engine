@@ -43,7 +43,8 @@ function checkedDestination(destination: GeographicPoint): GeographicPoint {
   return { latitude, longitude };
 }
 
-function sourceEnvelope(source: RelocationSource): NatalEnvelope {
+/** Internal shared capture: grid sampling validates and snapshots its source once. */
+export function sourceEnvelope(source: RelocationSource): NatalEnvelope {
   if (source === null || typeof source !== "object" || Array.isArray(source)) {
     throw new RangeError("A relocation source requires a birth input, engine chart or natal envelope.");
   }
@@ -76,13 +77,15 @@ function sourceEnvelope(source: RelocationSource): NatalEnvelope {
 export function relocateChart(source: RelocationSource, destination: GeographicPoint): RelocatedChartResult {
   const point = checkedDestination(destination);
   const natal = sourceEnvelope(source);
+  return { schema: RELOCATION_CHART_SCHEMA, natal, relocated: relocatedEnvelope(natal, point) };
+}
+
+/** Internal replay of an already captured source; still validates each destination. */
+export function relocatedEnvelope(natal: NatalEnvelope, destination: GeographicPoint): NatalEnvelope {
+  const point = checkedDestination(destination);
   const relocated = natalChart({ ...natalReplayInput(natal), ...point });
   // Source birthplace resolution, artifact claims and extensions describe the
   // source. They must not be attributed to this new destination calculation.
   const context = { sourceInstant: natal.receipt.sourceInstant };
-  return {
-    schema: RELOCATION_CHART_SCHEMA,
-    natal,
-    relocated: createNatalEnvelope(relocated, context)
-  };
+  return createNatalEnvelope(relocated, context);
 }
