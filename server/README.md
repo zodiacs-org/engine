@@ -1,10 +1,10 @@
 # Engine HTTP server
 
 This private package is a self-hosted HTTP adapter for the engine in this
-checkout. It serves natal charts, transit snapshots and synastry with engine
-receipts, health and readiness, API-key authentication, per-key rate limits,
-bounded JSON validation, JSON
-logging and process lifecycle. The remaining calculation routes, OpenAPI and
+checkout. It serves natal charts, transit snapshots, synastry and solar/lunar
+returns with engine receipts, health and readiness, API-key authentication,
+per-key rate limits, bounded JSON validation, JSON logging and process
+lifecycle. The remaining calculation routes, OpenAPI and
 Docker deployment are tracked in [PLAN.md](PLAN.md).
 
 ## Run from a checkout
@@ -113,7 +113,7 @@ requests receive HTTP 401 with the usual error envelope and a Bearer
 Route protection and absence of credentials in logs and responses are
 checked through injection in `test/auth.vitest.ts` and through a real
 listener in `test/process.vitest.ts`, including duplicate headers and trace
-logging. `POST /v1/natal`, `POST /v1/transits` and `POST /v1/synastry` are
+logging. Natal, transit, synastry and solar/lunar return routes are
 available; other calculation routes remain in the plan.
 
 ## Natal charts
@@ -267,6 +267,102 @@ authentication, rate limits and error privacy. `test/process.vitest.ts`
 checks the routes through the built listener. These checks establish
 adapter behavior, not independent astronomical accuracy.
 
+## Solar and lunar returns
+
+`POST /v1/returns/solar` accepts a required `natal` birth input and `at`
+instant. Optional `selection` is `nearest` (the default) or `most-recent`.
+`POST /v1/returns/lunar` accepts required `natal` and `after` fields and
+finds the first lunar return strictly after that instant. Both routes call
+the public engine's return functions directly. For example, these synthetic
+requests are exercised through the built listener in `test/process.vitest.ts`:
+
+```json
+{
+  "natal": {
+    "utc": "2001-02-03T04:05:06.789Z",
+    "latitude": 23.45,
+    "longitude": -67.89
+  },
+  "at": "2024-06-07T08:09:10+02:00",
+  "selection": "most-recent",
+  "location": { "latitude": 45.25, "longitude": 12.5 },
+  "houseSystem": "placidus"
+}
+```
+
+```json
+{
+  "natal": {
+    "utc": "2001-02-03T04:05:06.789Z",
+    "latitude": 23.45,
+    "longitude": -67.89
+  },
+  "after": "2024-06-07T08:09:10+02:00",
+  "location": null
+}
+```
+
+`natal` has the same schema as `/v1/natal`. `at` and `after` accept the same
+string and epoch-millisecond forms as natal `utc`, but are always read as
+UTC on the engine's default time basis. The return search and chart use
+that basis even when the natal chart has a different `timeScale` or a pinned
+`deltaT`. The target longitude comes from the supplied natal chart's own
+calculation. Date-only search inputs mean midnight UTC.
+
+Both routes accept optional `location` and `houseSystem` fields. Omit
+`location` to inherit the natal coordinates, supply a latitude/longitude
+object to relocate the return chart, or use null to omit angles and houses.
+The return chart always has a known time, including when the solar return's
+natal chart has an unknown time. Exact geographic poles are refused as a
+return location, including an inherited pole from an untimed natal chart;
+an explicit null or valid relocation remains usable for that natal chart.
+The requested house system defaults to the natal chart's requested system.
+Polar fallback is preserved in the chart and its receipt.
+
+The engine owns these fixed search windows and coarse steps:
+
+| Request | Search window | Step in days |
+| --- | --- | ---: |
+| Solar `nearest` | 200 days either side of `at`; a tie selects the earlier return | 1 |
+| Solar `most-recent` | The 370 days before `at`, selecting the latest return at or before it | 1 |
+| Lunar | `(after, after + 40 days]`, selecting the first return | 0.25 |
+
+`test/returns.vitest.ts` enforces the public engine constants in this table
+and checks selected instants within these windows against direct engine
+calls. Requests cannot set ranges, step sizes, sample budgets, batches or
+arbitrary bodies. These bounds limit each search's extent, not its elapsed
+runtime; the calculation is synchronous. Unknown fields and query parameters
+are refused. The server does not implement a separate event search.
+
+The engine refuses a lunar return for an unknown birth time, a natal
+`dst-gap` or `dst-fold` assertion, or `after` preceding the birth's actual
+UTC instant. A solar return accepts an unknown birth time and uses its
+supplied reference instant. Invalid dates, unsupported ephemeris instants,
+search windows extending beyond ephemeris coverage and other engine input
+refusals return `invalid_request`. No partial calculation is returned.
+
+`data` preserves the complete return result: `body`, `natalLongitude`,
+`instant`, `chart`, `location`, technique `flags`, and solar `selection`.
+It adds `natal`, the contributing natal chart. Read both the technique flags
+and each chart's own flags: a search window can extend outside the reference
+span even when the selected return chart is inside it. Dates serialize as
+ISO strings and numbers keep their full engine precision.
+
+Receipts scoped to `/data/natal` and `/data/chart` are unchanged engine natal
+envelopes for those charts. The natal envelope retains its original string
+spelling. The return chart's `sourceInstant` is null because its instant was
+computed, not submitted; the caller's `at` or `after` is not its source
+instant. These envelopes do not cover the return search, its selection,
+`natalLongitude` or the technique flags. They are not an attestation of the
+return calculation as a whole. If either chart's receipt is refused, the
+response is `receipt_unavailable` with empty receipts and no partial data.
+
+Both routes share authentication, rate limits, validation and logging rules
+with the other calculations. `test/returns.vitest.ts` covers full transport
+parity and receipt replay, clocks, options, limits, refusals, authentication,
+rate limiting and privacy. These are integration checks against this engine,
+not independent astronomical accuracy evidence.
+
 ## Rate limits
 
 Each configured key gets a token bucket shared across protected routes. The
@@ -320,7 +416,8 @@ Routes validate their declared JSON schemas without coercing types,
 discarding unknown properties or inserting defaults. Required-body and
 schema behavior is exercised with test-only routes in
 `test/request-validation.vitest.ts` and the calculation routes in
-`test/natal.vitest.ts` and `test/comparisons.vitest.ts`. Parser, schema and
+`test/natal.vitest.ts`, `test/comparisons.vitest.ts` and
+`test/returns.vitest.ts`. Parser, schema and
 engine input errors expose no input values or validation internals in
 responses or logs.
 
@@ -338,7 +435,7 @@ responses or logs.
 
 The table describes ordinary request handling, as checked in
 `test/app.vitest.ts`, `test/auth.vitest.ts`, `test/request-validation.vitest.ts`,
-`test/natal.vitest.ts`, `test/comparisons.vitest.ts` and
+`test/natal.vitest.ts`, `test/comparisons.vitest.ts`, `test/returns.vitest.ts` and
 `test/rate-limit.vitest.ts`. Raw HTTP parser and router failures can
 occur earlier. Authentication precedes rate limiting, which precedes JSON
 validation, so a rejected request reports the first applicable error.

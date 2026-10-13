@@ -12,6 +12,7 @@ import { JSON_LIMITS, registerRequestValidation, RequestValidationError } from "
 import { registerNatalRoute } from "./natal.js";
 import { registerTransitsRoute } from "./transits.js";
 import { registerSynastryRoute } from "./synastry.js";
+import { registerReturnRoutes } from "./returns.js";
 
 export interface AppOptions {
   logger?: FastifyServerOptions["logger"];
@@ -138,5 +139,6 @@ export function buildApp(options: AppOptions = {}) {
   registerNatalRoute(app);
   registerTransitsRoute(app);
   registerSynastryRoute(app);
+  registerReturnRoutes(app);
   return app;
 }

@@ -14,7 +14,7 @@ single session summary to `CHANGES.txt`. The harness owns all git writes.
 - [x] M3 Add per-key token buckets, bounded JSON request validation and consistent HTTP errors; test refill, exhaustion, key isolation and invalid requests.
 - [x] M4 Add the natal chart REST route using the engine directly, preserving full output and the engine's natal receipts; test coordinates, unknown time, flags and invalid input.
 - [x] M5 Add transit and synastry REST routes, with engine receipts for each contributing chart and explicit receipt scope; test successful and invalid requests.
-- [ ] M6 Add bounded solar and lunar return REST requests through the engine's return functions; preserve their charts and receipts and test calculation failures and limits.
+- [x] M6 Add bounded solar and lunar return REST requests through the engine's return functions; preserve their charts and receipts and test calculation failures and limits.
 - [ ] M7 Add moon-phase and houses REST routes through public engine APIs; attach applicable engine receipts with explicit scope and test every route and refusal.
 - [ ] M8 Generate and serve an OpenAPI 3.1 document from route schemas, including authentication, limits, receipts, errors and synthetic examples; test schema and route agreement.
 - [ ] M9 Harden lifecycle and resource limits across the completed API, including shutdown, readiness, logging privacy and calculation work limits; run the full server integration suite.
@@ -92,3 +92,18 @@ independent review found no actionable issues. The root package contents gate
 still reports missing `dist/calc.d.ts`; no root build was generated. All
 changes remain in `server/`, within the file-size rule and without em dashes
 in docs.
+
+M6 validation: server typecheck, full Vitest suite, build and package-exclusion
+check passed using Node 22.22.2. Solar and lunar return routes call the public
+engine's fixed-window functions directly, preserve complete results and add
+the contributing natal chart with scoped, replayable engine chart receipts.
+Tests cover nearest and most-recent solar selection, strictly subsequent lunar
+returns, relocation and absent places, clocks and pins, polar fallback,
+inherited exact poles, reference and ephemeris boundaries, strict schemas,
+authentication, shared rate limits, receipt refusals, sanitized failures and
+trace-log privacy. Synthetic documentation examples pass through the built
+listener. These are integration checks, not independent accuracy evidence.
+An independent source review found no actionable issues. The root package
+contents gate still reports missing `dist/calc.d.ts`; no root build was
+generated. All changes remain in `server/`, within the file-size rule and
+without em dashes in docs.

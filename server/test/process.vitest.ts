@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
 import { ENGINE_VERSION, EPHEMERIS, natalChart, synastry, transits } from '../../src/index.js';
 import { createNatalEnvelope, parseNatalEnvelope } from '../../src/receipt.js';
+import { lunarReturn, solarReturn } from '../../src/techniques.js';
 
 const serverDirectory = fileURLToPath(new URL('..', import.meta.url));
 type Exit = { code: number | null; signal: NodeJS.Signals | null };
@@ -269,6 +270,84 @@ describe('built server process', () => {
       .map(({ route, statusCode }) => ({ route, statusCode }))).toEqual([
       { route: '/v1/transits', statusCode: 200 }, { route: '/v1/synastry', statusCode: 200 },
       { route: '/v1/transits', statusCode: 400 }, { route: '/v1/synastry', statusCode: 400 },
+    ]);
+  });
+
+  it('serves solar and lunar returns with scoped receipts through the built listener without exposing calculations in trace logs', async () => {
+    const key = randomBytes(32).toString('base64url');
+    const canary = randomUUID();
+    const server = launch({ API_KEYS: JSON.stringify([key]), LOG_LEVEL: 'trace' });
+    const address = await started(server);
+    // Synthetic examples match the documented return requests.
+    const input = { utc: '2001-02-03T04:05:06.789Z', latitude: 23.45, longitude: -67.89 };
+    const at = '2024-06-07T08:09:10+02:00';
+    const invalidDate = '2024-02-30T08:09:10+02:00';
+    const solarOptions = {
+      selection: 'most-recent' as const,
+      location: { latitude: 45.25, longitude: 12.5 },
+      houseSystem: 'placidus' as const,
+    };
+    const lunarOptions = { location: null };
+    const natal = natalChart(input);
+    const solar = solarReturn(natal, at, solarOptions);
+    const lunar = lunarReturn(natal, at, lunarOptions);
+    const natalReceipt = createNatalEnvelope(natal, { sourceInstant: input.utc });
+    const identity = { name: '@zodiacs/engine', version: ENGINE_VERSION, ephemeris: EPHEMERIS };
+    const request = (path: string, payload: unknown) => fetch(new URL(path, address), {
+      method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+      body: JSON.stringify(payload), signal: AbortSignal.timeout(5000),
+    });
+    let responseText = '';
+    for (const example of [
+      { path: '/v1/returns/solar', input: { natal: input, at, ...solarOptions }, result: solar },
+      { path: '/v1/returns/lunar', input: { natal: input, after: at, ...lunarOptions }, result: lunar },
+    ]) {
+      const response = await request(example.path, example.input);
+      expect(response.status).toBe(200);
+      const text = await response.text();
+      responseText += text;
+      const body = JSON.parse(text) as { receipts: { scope: string; envelope: unknown }[] };
+      const returnReceipt = createNatalEnvelope(example.result.chart);
+      expect(body).toEqual({
+        requestId: response.headers.get('x-request-id'), engine: identity,
+        data: JSON.parse(JSON.stringify({ ...example.result, natal })),
+        receipts: [{ scope: '/data/natal', envelope: natalReceipt }, { scope: '/data/chart', envelope: returnReceipt }],
+      });
+      expect(returnReceipt.receipt.sourceInstant).toBeNull();
+      for (const receipt of body.receipts) expect(parseNatalEnvelope(JSON.stringify(receipt.envelope)).ok).toBe(true);
+      expect(response.headers.get('cache-control')).toBe('no-store');
+      expect(response.headers.get('x-content-type-options')).toBe('nosniff');
+      expect(response.headers.get('x-ratelimit-limit')).toBe('60');
+    }
+    for (const example of [
+      { path: '/v1/returns/lunar', input: { natal: { ...input, timeKnown: false }, after: at } },
+      { path: '/v1/returns/solar', input: { natal: input, at: canary } },
+      { path: '/v1/returns/lunar', input: { natal: input, after: invalidDate } },
+    ]) {
+      const response = await request(example.path, example.input);
+      expect(response.status).toBe(400);
+      const text = await response.text();
+      responseText += text;
+      expect(JSON.parse(text)).toEqual({
+        requestId: response.headers.get('x-request-id'), engine: identity, receipts: [],
+        error: { code: 'invalid_request', message: 'Request is invalid.' },
+      });
+    }
+    server.child.kill('SIGTERM');
+    expect(await bounded(server.exited)).toEqual({ code: 0, signal: null });
+    expect(server.stderr).toBe('');
+    const logs = server.stdout + server.stderr;
+    for (const value of [
+      key, canary, input.utc, at, invalidDate, solar.instant.toISOString(), lunar.instant.toISOString(),
+      '"latitude"', '"longitude"', '"bodies"', '"receipts"', '"envelope"', '"natalLongitude"', 'sourceInstant',
+      String(natal.bodies[0]!.lon), String(solar.natalLongitude), String(lunar.natalLongitude),
+    ]) expect(logs).not.toContain(value);
+    for (const value of [key, canary, invalidDate]) expect(responseText).not.toContain(value);
+    expect(jsonLines(server.stdout).filter((record) => record.event === 'request_completed')
+      .map(({ route, statusCode }) => ({ route, statusCode }))).toEqual([
+      { route: '/v1/returns/solar', statusCode: 200 }, { route: '/v1/returns/lunar', statusCode: 200 },
+      { route: '/v1/returns/lunar', statusCode: 400 }, { route: '/v1/returns/solar', statusCode: 400 },
+      { route: '/v1/returns/lunar', statusCode: 400 },
     ]);
   });
 

@@ -3,3 +3,4 @@ Complete server M2: load bounded API-key configuration from environment or local
 Complete server M3: add configurable per-key token buckets, strict bounded UTF-8 JSON validation and sanitized HTTP errors, with deterministic, injection and real-listener tests.
 Complete server M4: add the authenticated natal chart route with strict birth-input validation, full engine output and scoped replayable receipts, sanitized receipt refusals, documentation and passing route and listener tests.
 Complete server M5: add authenticated transit and synastry routes with scoped engine chart receipts, independent clocks, strict validation, documented receipt coverage and passing route, replay, privacy and listener tests.
+Complete server M6: add bounded solar and lunar return routes with scoped engine chart receipts, relocation and clock handling, strict validation, documented limits and passing route, replay, privacy and listener tests.
