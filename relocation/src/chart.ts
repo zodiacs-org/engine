@@ -1,9 +1,18 @@
 import { natalChart } from "@zodiacs/engine";
-import type { BirthInput } from "@zodiacs/engine";
-import { createNatalEnvelope } from "@zodiacs/engine/receipt";
+import type { BirthInput, Chart } from "@zodiacs/engine";
+import {
+  createNatalEnvelope,
+  NatalEnvelopeError,
+  natalReplayInput,
+  parseNatalEnvelope,
+  serializeNatalEnvelope
+} from "@zodiacs/engine/receipt";
 import type { NatalEnvelope } from "@zodiacs/engine/receipt";
 
 export const RELOCATION_CHART_SCHEMA = "zodiacs.relocation-chart.v1";
+
+/** A resolved birth, a full engine Chart, or an engine natal envelope. */
+export type RelocationSource = BirthInput | Chart | NatalEnvelope;
 
 /** Geographic degrees, latitude north-positive and longitude east-positive. */
 export interface GeographicPoint {
@@ -34,20 +43,46 @@ function checkedDestination(destination: GeographicPoint): GeographicPoint {
   return { latitude, longitude };
 }
 
+function sourceEnvelope(source: RelocationSource): NatalEnvelope {
+  if (source === null || typeof source !== "object" || Array.isArray(source)) {
+    throw new RangeError("A relocation source requires a birth input, engine chart or natal envelope.");
+  }
+  // Route incomplete records through their own validator rather than quietly
+  // treating a malformed chart/envelope as a fresh birth request.
+  if (["schema", "receipt", "result", "requiredFeatures"].some((key) => key in source)) {
+    // The codec validates plain data, bounds its size and makes an owned copy.
+    // Do not use JSON.stringify on an unvalidated record or call its toJSON.
+    const decoded = parseNatalEnvelope(serializeNatalEnvelope(source as NatalEnvelope));
+    if (!decoded.ok) throw new NatalEnvelopeError(decoded.code);
+    return decoded.envelope;
+  }
+  if (["input", "bodies", "angles", "houses", "aspects", "engineVersion"].some((key) => key in source)) {
+    return createNatalEnvelope(source as Chart);
+  }
+  const birth = source as BirthInput;
+  const natal = natalChart(birth);
+  const context = typeof birth.utc === "string" ? { sourceInstant: birth.utc } : {};
+  return createNatalEnvelope(natal, context);
+}
+
 /**
  * Recompute a resolved birth at another geographic location. The instant,
  * time scale, pinned delta-T, time-known setting and requested house system
- * come from the engine's canonical natal input. No time-zone conversion is
- * performed. Unknown-time inputs retain absent angles and houses.
+ * come from the engine's receipt replay input. Existing source results and
+ * provenance are retained as claims, not authenticated or recomputed. The
+ * destination uses the installed engine and gets a fresh receipt. No time-zone
+ * conversion is performed. Unknown-time inputs retain absent angles and houses.
  */
-export function relocateChart(birth: BirthInput, destination: GeographicPoint): RelocatedChartResult {
+export function relocateChart(source: RelocationSource, destination: GeographicPoint): RelocatedChartResult {
   const point = checkedDestination(destination);
-  const natal = natalChart(birth);
-  const relocated = natalChart({ ...natal.input, ...point });
-  const context = typeof birth.utc === "string" ? { sourceInstant: birth.utc } : {};
+  const natal = sourceEnvelope(source);
+  const relocated = natalChart({ ...natalReplayInput(natal), ...point });
+  // Source birthplace resolution, artifact claims and extensions describe the
+  // source. They must not be attributed to this new destination calculation.
+  const context = { sourceInstant: natal.receipt.sourceInstant };
   return {
     schema: RELOCATION_CHART_SCHEMA,
-    natal: createNatalEnvelope(natal, context),
+    natal,
     relocated: createNatalEnvelope(relocated, context)
   };
 }

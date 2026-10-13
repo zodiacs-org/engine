@@ -7,7 +7,7 @@ unchecked milestone, runs its checks, updates this checklist and appends one
 line to `CHANGES.txt`. The harness handles git writes and draft PRs.
 
 - [x] M1 Establish an isolated TypeScript project, engine-backed relocated charts, natal envelopes and synthetic Vitest tests.
-- [ ] M2 Accept existing engine charts and natal envelopes as sources, preserve requested settings on replay, and test validation and polar fallback semantics.
+- [x] M2 Accept existing engine charts and natal envelopes as sources, preserve requested settings on replay, and test validation and polar fallback semantics.
 - [ ] M3 Add geographic bounds, longitude wrapping, antimeridian splitting and bounded grid sampling with explicit work budgets.
 - [ ] M4 Define angular-line conventions and add engine-backed planetary equatorial and observer-angle sampling with receipts and undefined-angle handling.
 - [ ] M5 Generate bounded MC and IC polylines with sampled metadata and engine receipt references.
@@ -47,3 +47,20 @@ relocation files without creating an archive or building the engine. The
 carried engine archive matched its SHA-256 receipt, and relocation file sizes
 and documentation punctuation were checked. Engine CI gates requiring a root
 install/build were not run; no engine files were changed.
+
+M2 adds `RelocationSource` for resolved births, full engine charts and decoded
+natal envelopes. Source records are validated and copied by the engine receipt
+API. Destination requests use `natalReplayInput`, preserving requested houses,
+time scale, pinned delta-T, time-known settings and input flags. Existing source
+results and context remain source claims; destination receipts describe a fresh
+installed-engine calculation without inheriting birthplace resolution or source
+artifact claims. Polar Placidus and Koch fallback is recalculated at each place.
+
+Validation: relocation `npm run typecheck` and `npm test` passed on Node 22.22.2.
+`test/source.vitest.ts` covers source snapshots, malformed and oversized records,
+codec rejection of executable/cyclic data, replay, unknown-time semantics and
+successive antimeridian relocations. Root `npm pack --dry-run --ignore-scripts
+--json` confirmed relocation remains excluded, without an archive or engine
+build. File-size, documentation punctuation and diff-scope checks passed. Root
+CI gates that require installing/building the engine remain deferred under the
+session's isolation rule; no engine or packed files changed.
