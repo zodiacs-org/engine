@@ -4,8 +4,8 @@ This private project is being developed separately from `@zodiacs/engine`.
 It will provide offline place lookup, IANA civil-time resolution, a CLI and
 an optional HTTP service. [PLAN.md](PLAN.md) tracks implementation. The
 current milestone provides the place-data contract, an attributed GeoNames
-sample and an offline index builder. Lookup, timezone resolution, the
-`geocode` CLI and the service are not implemented yet.
+sample, an offline index builder and pure in-memory place lookup. Timezone
+resolution, the `geocode` CLI and the service are not implemented yet.
 
 ## Development
 
@@ -32,8 +32,9 @@ an existing root build.
 
 ## Current library API
 
-`src/index.ts` exports `parsePlaceDataset`, `DatasetValidationError` and the
-TypeScript data types. Pass already parsed JSON to the validator:
+`src/index.ts` exports `parsePlaceDataset`, `DatasetValidationError`,
+`createPlaceLookup` and the TypeScript data and lookup types. Pass already
+parsed JSON to the validator:
 
 ```ts
 import { parsePlaceDataset } from "./src/index.js";
@@ -79,6 +80,90 @@ will verify the bytes against them.
 [tests/dataset.test.ts](tests/dataset.test.ts) exercises these rules with
 invented places and malformed variants. These are contract and regression
 checks, not measurements of real-world geographic or timezone accuracy.
+
+## Offline place lookup
+
+Pass a dataset to `createPlaceLookup` to validate and detach it, then reuse
+the returned index for synchronous queries. Construction and lookup perform
+no I/O and access no timezone provider. The index exposes its source
+`provenance` and place `size`. Results, matches and place records are frozen.
+
+```ts
+import { createPlaceLookup } from "./src/index.js";
+
+// jsonText contains a caller-loaded PlaceDataset. This is an invented query.
+const index = createPlaceLookup(JSON.parse(jsonText));
+const result = index.lookup("Springfield", { country: "US", region: "IL" });
+for (const { place, match } of result.candidates) {
+  console.log(place.id, place.name, place.latitude, place.longitude, match.kind);
+}
+console.log(result.status, result.total, result.truncated);
+```
+
+Queries start with a city name or alias. Accepted forms include `Paris`,
+`Paris France`, `Paris Ile-de-France France`, `Paris, France` and
+`Paris, Ile-de-France, France`. A comma after the city makes the next field
+an exact region or country qualifier; with both qualifiers, the region
+precedes the country. Without commas, every valid division into city and
+qualifiers is considered, together with the complete phrase as a city.
+Exact source names or aliases containing commas are also considered as whole
+names, with their comma positions preserved. This can return both a literal
+city name and a city with a region qualifier. Unknown qualifiers do not
+silently disappear. Malformed comma fields throw `RangeError` unless the
+whole input matches an actual comma-bearing source label.
+
+Search uses source names, `asciiName` and aliases. Matching normalizes Unicode
+compatibility forms and case, folds Latin accents, expands sharp s, unifies
+Greek sigma forms, removes apostrophes and treats other punctuation and
+spacing as separators. Non-Latin combining marks are retained. Display
+labels are returned unchanged. Transliteration comes only from source
+fields; there is no general transliterator or spelling correction.
+
+City matching accepts a whole normalized name or a prefix from its start.
+Country and region qualifiers must match a whole normalized name or source
+code. The explicit `country` and `region` options apply the same exact
+matching and intersect all query conditions. Region codes remain opaque:
+leading zeroes matter, and a region name or code can occur in several
+countries. Country names and codes come from the dataset, without extra
+country aliases. Explicit filter labels may contain commas; a country code
+or explicit filter avoids treating those commas as query delimiters.
+A country or region alone is not a request to list all its
+places; a matching city name is always required.
+
+Each place appears once, with its best matching label in `match.text` and
+the field (`name`, `asciiName` or `alias`) that supplied it. Whole-name
+matches rank before prefixes, then primary names before transliterations
+and aliases, then higher population before lower population with unknown
+population last. Normalized display name and source ID break remaining ties
+using JavaScript code-unit order, independent of input order and host locale.
+Equivalent labels on the same place choose the first by code-unit order.
+These rules order suggestions; they are not confidence estimates.
+
+`status` is `no-match`, `unique` or `ambiguous` across all matching places,
+including lower-ranked prefixes. `total` counts those matches before
+truncation. `limit` defaults to 10 and accepts integers from 1 through 100;
+`truncated` reports whether the returned list omits matches. A short list or
+a higher population never removes ambiguity. `unique` means unique only
+within the supplied dataset, whose sample or extract may omit other places.
+The API does not select a place on the caller's behalf.
+
+Empty or punctuation-only text returns `no-match`. Query and filter strings
+are limited to 512 UTF-16 code units and reject controls and lone surrogates.
+Invalid options throw `RangeError` without repeating submitted values.
+[tests/lookup.test.ts](tests/lookup.test.ts) enforces these limits and search
+semantics with invented records. [tests/sample.test.ts](tests/sample.test.ts)
+checks invented queries against the committed GeoNames sample, including
+duplicate names and polar settlements. These tests establish behavior on
+those inputs, not worldwide geographic completeness.
+
+This factory accepts an in-memory dataset, not a manifest path. To search a
+trusted local build as a whole, assemble its matching shards' `places` under
+their shared `schemaVersion` and `provenance` before constructing the index.
+Searching an individual shard only establishes uniqueness within that shard.
+The factory rejects duplicate IDs but does not verify shard digests or
+generation identity; a validated filesystem loader remains planned work.
+The factory retains the supplied records and a normalized name index in
+memory. It is not an on-disk search engine for an arbitrary full dump.
 
 ## Build a local place index
 

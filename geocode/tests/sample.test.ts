@@ -6,6 +6,8 @@ import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { buildGeoNamesIndex } from "../src/build-index.js";
 import { parsePlaceDataset } from "../src/dataset.js";
+import { createPlaceLookup } from "../src/index.js";
+import type { PlaceLookup } from "../src/index.js";
 import type { PlaceRecord } from "../src/types.js";
 
 interface SampleReceipt {
@@ -48,6 +50,7 @@ function nullableNumber(value: string): number | null {
 const rawPlaces = rows("geonames-sample.tsv");
 let temporaryDirectory: string;
 let builtPlaces: readonly PlaceRecord[];
+let lookup: PlaceLookup;
 
 beforeAll(async () => {
   await mkdir(join(project, ".tmp"), { recursive: true });
@@ -81,6 +84,56 @@ beforeAll(async () => {
   }
   expect(places).toHaveLength(manifest.count);
   builtPlaces = places;
+  lookup = createPlaceLookup({ schemaVersion: 1, provenance: manifest.provenance, places });
+});
+
+describe("offline lookup against the attributed sample", () => {
+  // Invented search requests, unrelated to any person's birth details. Expected
+  // names and IDs refer to the committed input rows, not geographic accuracy.
+  it.each([
+    ["Paris, Ile-de-France, France", "2988507"],
+    ["Brest Brittany FR", "3030300"],
+    ["Strasbourg, Grand Est", "2973783"],
+    ["New York, NY, United States", "5128581"],
+    ["Kathmandu NP", "1283240"],
+    ["Kolkata, West Bengal, IN", "1275004"],
+    ["Adelaide, 05, AU", "2078025"],
+    ["sa\u0303o paulo, br", "3448439"],
+    ["東京, JP", "1850147"],
+    ["Nairobi Kenya", "184745"],
+    ["Waitangi Chatham Islands New Zealand", "4032804"]
+  ])("finds %s without network or timezone resolution", (query, id) => {
+    const result = lookup.lookup(query);
+    expect(result.status).toBe("unique");
+    expect(result.candidates[0]?.place).toEqual(builtPlaces.find((place) => place.id === `geonames:${id}`));
+    expect(result.candidates[0]?.match.kind).toBe("exact");
+  });
+
+  it("retains Springfield ambiguity despite population ranking and a short page", () => {
+    const result = lookup.lookup("Springfield", { limit: 1 });
+    expect(result).toMatchObject({ status: "ambiguous", total: 3, truncated: true });
+    expect(result.candidates.map(({ place }) => place.id)).toEqual(["geonames:4409896"]);
+    expect(lookup.lookup("Springfield", { country: "US", region: "IL" })).toMatchObject({
+      status: "unique", candidates: [{ place: { id: "geonames:4250542" } }]
+    });
+    expect(lookup.lookup("Springfield, MA", { country: "United States" })).toMatchObject({
+      status: "unique", candidates: [{ place: { id: "geonames:4951788" } }]
+    });
+  });
+
+  it.each([
+    ["Longyearbyen, Svalbard, SJ", "2729907", "Arctic/Longyearbyen"],
+    ["McMurdo Station, AQ", "13664897", "Antarctica/McMurdo"]
+  ])("returns the supplied polar place and its zone assignment for %s", (query, id, timeZone) => {
+    expect(lookup.lookup(query)).toMatchObject({
+      status: "unique", candidates: [{ place: { id: `geonames:${id}`, timeZone } }]
+    });
+  });
+
+  it("does not substitute another place for unknown text or a contradictory country", () => {
+    expect(lookup.lookup("Invented Undiscovered Harbour").status).toBe("no-match");
+    expect(lookup.lookup("Paris, FR", { country: "US" }).status).toBe("no-match");
+  });
 });
 
 afterAll(async () => {

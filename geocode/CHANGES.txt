@@ -1,2 +1,3 @@
 geocode: establish isolated place-data validation, synthetic tests and an atlas-first implementation plan
 geocode: complete M2 with corrected licensing, Node 22 builder regressions and reproducible worldwide index evidence
+geocode: complete M3 with pure offline lookup, Unicode aliases, exact filters, deterministic ranking and ambiguity-preserving results
