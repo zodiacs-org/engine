@@ -96,7 +96,10 @@ export function auditRepository() {
     ...gitPaths(["ls-files", "-z", "--others", "--exclude-standard"]),
   ])];
   for (const path of changes) {
-    if (!path.startsWith("batch/")) report.errors.push(`Working tree change outside batch/: ${path}`);
+    // The dedicated CI workflow is the only permitted change outside batch/.
+    if (!path.startsWith("batch/") && path !== ".github/workflows/batch.yml") {
+      report.errors.push(`Working tree change outside batch/: ${path}`);
+    }
   }
   // --dry-run lists the current package without producing an archive;
   // --ignore-scripts is essential because the root prepack builds dist/.

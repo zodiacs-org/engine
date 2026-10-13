@@ -1,1 +1,2 @@
 F1: Rename batch suites and update test discovery and documentation links; batch checks pass and root Vitest discovers no batch suites.
+F2: Add isolated Node 22.23.3 batch CI using its lockfile and full check command; permit only that workflow in the scope audit, pass all batch checks, and confirm root Vitest discovers no batch suites.
