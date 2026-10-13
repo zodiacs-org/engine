@@ -1,16 +1,18 @@
 # Chart-reading factual rubric
 
 Rubric `chart-reading-factual`, version `1.0.0`, defines how the evaluation
-suite will compare extracted assertions with the local engine. The normative
+suite compares extracted assertions with the local engine. The normative
 rules are this document and [factual-v1.json](rubrics/factual-v1.json). The JSON
 records the vocabulary, decision tables, identities, counters and formulas for
 the scorer to consume. It is an authored policy, not generated evaluation data.
 
-M7 defines the rubric and its contract tests. Claim comparison, evidence reports
-and evaluation commands are later milestones; this document does not claim that
-a scorer is already available. [rubric.checks.mjs](tests/rubric.checks.mjs)
-checks compatibility with the existing contracts and the arithmetic below.
-Those checks are not an end-to-end evaluation of readings.
+The [reading scorer](SCORING.md) implements claim comparison and evidence
+reports; evaluation commands remain a later milestone.
+[rubric.checks.mjs](tests/rubric.checks.mjs) checks compatibility with the
+existing contracts and the arithmetic below.
+[scoring.checks.mjs](tests/scoring.checks.mjs) exercises the implemented rules
+against synthetic cases and original inline readings. These checks establish
+scoring behavior, not independent astronomical accuracy or extraction quality.
 
 The reference is `computeChartFacts` from [chart-facts.mjs](lib/chart-facts.mjs),
 computed for an invented case under its recorded conventions. Correctness means
@@ -276,7 +278,7 @@ inputs. C, I, R, X, K and F refer to the counter definitions above.
 
 ## Required evidence and limits
 
-The later scorer's report must retain per-occurrence and per-unit evidence:
+The scorer's report must retain per-occurrence and per-unit evidence:
 the original quote, span, status, normalized factor where present, eligibility
 reasons, membership verdict, reference factor or absence evidence, contradiction
 links and coverage decision. Positive evidence points to the matching factor

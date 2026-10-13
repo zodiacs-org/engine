@@ -6,12 +6,12 @@ and datasets, includes an original authored seed set, computes synthetic
 chart facts through the local engine, and validates readings with quoted claims.
 A bounded interpretation generator provides a deterministic offline mock,
 explicit custom backend selection and reproducible manifests. The versioned
-[factual rubric](RUBRIC.md) defines scoring rules; the scoring harness remains a
-later milestone in [PLAN.md](PLAN.md).
+[factual rubric](RUBRIC.md) defines the rules implemented by the deterministic
+[reading scorer](SCORING.md).
 
-Interpretation text is symbolic prose. The eventual factual score will compare a
+Interpretation text is symbolic prose. The factual score compares a
 reading's assertions with computations from the local `@zodiacs/engine` under
-recorded conventions. It will not measure independent astronomical accuracy,
+recorded conventions. It does not measure independent astronomical accuracy,
 personality truth or predictive validity.
 
 ## Run locally
@@ -164,7 +164,7 @@ Delta T are retained with the engine's complete time-basis record.
 
 The flat `facts` array uses the meaning schema's factor vocabulary. `reference`
 holds the engine's body positions, natal aspects, angles, cusps and sign-dignity
-assessments, so later scoring can explain each factor. Numerical positions,
+assessments, so scoring can explain each factor. Numerical positions,
 cusps and aspect orbs are in degrees, speeds are degrees per day, and Delta T is
 in seconds, following the engine's public types. Facts preserve full returned
 precision. No interpretation text or model call is needed to compute them.
@@ -215,7 +215,7 @@ engine APIs, missing inputs, polar fallback and sign-dignity behavior.
 [reading.schema.json](schema/reading.schema.json) retains a reading's unchanged
 `text`, its synthetic `caseId`, declared `conventions`, origin `provenance`,
 `license`, extraction metadata and quoted `claims`. Its case id is a reference
-for the later harness to resolve against a synthetic case; this validator does
+for the scorer to resolve against a synthetic case; this validator does
 not look up cases or compute chart facts. Reading provenance is separate from
 the method, producer and version that extracted its claims. Generated origin
 requires backend, model, prompt version and input digest, and stays unreviewed.
@@ -224,7 +224,7 @@ These labels record supplied claims about origin, not authenticated receipts.
 [factual-claim.schema.json](schema/factual-claim.schema.json) records each
 assertion's id, exact quote and status:
 
-| Status | Retained content | Meaning for later evaluation |
+| Status | Retained content | Meaning for evaluation |
 | --- | --- | --- |
 | `resolved` | Supported factor, polarity, certainty and temporal scope | Ready for comparison; no correctness verdict |
 | `ambiguous` | Quote and reason | No unique supported assertion was selected |
@@ -244,7 +244,7 @@ Unresolved records cannot contain a normalized factor or an asserted verdict.
 The reading's convention fields can explicitly say `unspecified`; sidereal or
 other conventions remain visible. Validation neither changes them to the
 engine's conventions nor rejects contradictions between the reading's context
-and individual factors. The later scorer must resolve convention mismatches
+and individual factors. The scorer resolves convention mismatches
 and reference availability before assigning a verdict. A structurally supported
 house assertion can still concern a chart whose houses are unavailable.
 
@@ -270,11 +270,11 @@ unique claim ids and that extraction method `none` has no claims.
 Validation cannot establish that a factor faithfully represents its quote,
 that a negation or hedge was extracted correctly, or that every assertion was
 extracted. `extraction.coverage` is always `unverified`, including for manually
-annotated readings. Empty text and empty claim lists are accepted for later
+annotated readings. Empty text and empty claim lists are accepted for
 omission handling. Neither acceptance nor an empty list implies perfect factual
 correctness. The [factual rubric](RUBRIC.md) defines scoring denominators and
-eligibility. Scoring and extraction audits remain later milestones; this command
-returns no score.
+eligibility. The validation command returns no score; scoring is a separate
+library call. Extraction audits remain a later milestone.
 
 ```sh
 node evals/bin/validate-reading.mjs evals/scratch/reading.json
@@ -288,6 +288,17 @@ up to 256 claims and 32,768 Unicode code points of text, with quotes up to 4,096
 code points. These operational limits and the span, uncertainty, provenance and
 preservation rules are checked by [the contract tests](tests/reading.checks.mjs).
 Original examples are inline in tests; no generated reading corpus is committed.
+
+## Score a reading
+
+Call `await scoreReading(syntheticCase, reading)` from
+[lib/score-reading.mjs](lib/score-reading.mjs) with a validated reading extraction
+and its synthetic case. The scorer validates both inputs, computes its own local
+reference, and returns a frozen report with per-claim evidence, contradictions,
+category and overall counts, and rates. It does not extract claims or call a
+model. [SCORING.md](SCORING.md) describes the API, report links, provenance,
+limits and errors. Evaluation commands remain a later milestone in
+[PLAN.md](PLAN.md).
 
 ## Generation backends
 

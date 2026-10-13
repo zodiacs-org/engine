@@ -21,7 +21,7 @@ astronomical accuracy or the validity of personality or predictive claims.
 - [x] M5 Define a pluggable generation backend with a deterministic offline mock, explicit backend selection, bounded requests and no saved credentials.
 - [x] M6 Implement the interpretation generator with versioned prompts, input/output validation, provenance, reproducible manifests and ignored output files.
 - [x] M7 Write a versioned scoring rubric for factual correctness, coverage, contradictions and abstentions, separating interpretive quality from computable facts.
-- [ ] M8 Implement deterministic placement, aspect, house and dignity scoring with per-claim evidence, category totals and explicit denominators.
+- [x] M8 Implement deterministic placement, aspect, house and dignity scoring with per-claim evidence, category totals and explicit denominators.
 - [ ] M9 Add an offline reading evaluation CLI that combines synthetic cases, engine facts, supplied or mock readings and machine-readable reports.
 - [ ] M10 Add a conservative prose claim extractor and tests for negation, ambiguity, duplicate claims and omitted facts; expose extraction limits in reports.
 - [ ] M11 Add adversarial and end-to-end tests covering malformed model output, invented factors, unavailable birth time, conflicting conventions and output limits.
@@ -160,3 +160,29 @@ establish independent astronomical accuracy. Package exclusion and project
 isolation passed. The root `npm run package:contents` gate was attempted with
 an eval-local npm cache and failed on missing `dist/calc.d.ts`; no prohibited
 root build was run. All changes remain under `evals/`. M8 is next.
+
+M8 acceptance: `scoreReading` computes its own complete local reference for a
+validated synthetic case and reading. The deterministic scorer applies the
+versioned rubric to placements, aspects, houses and sign dignities, preserving
+original occurrences while scoring unique resolved units. Immutable reports
+retain eligibility reasons, convention and availability diagnostics, categorical
+membership evidence, contradiction edges, coverage decisions and explicit
+category and overall denominators. Digests identify the inputs, complete
+reference, rubric bytes and implementation. Invalid requests and oversized
+reports are refused without scores. `SCORING.md` documents the API and evidence
+links; reading CLI integration remains M9 work.
+
+M8 validation: `npm --prefix evals test` and
+`npm --prefix evals run validate:seed` passed on Node 22.23.3. Scoring tests
+exercise the full membership truth table, complete and omitted coverage,
+duplicate and reversed-pair identity, pairwise contradictions, full-factor
+dignity negation, coexisting dignity labels, temporal and convention exclusions,
+unknown time, missing coordinates, polar fallback and reference-span warnings.
+Boundary tests cover input snapshots, immutable reports, provenance, canonical
+digests, fresh-process offline repeatability, unsupported factors, malformed
+inputs, supplied-reference rejection and input/output limits. These tests measure
+agreement with the local engine, not independent astronomical accuracy or
+extraction faithfulness. Package exclusion and project isolation passed. The root
+`npm run package:contents` gate was attempted with an eval-local npm cache and
+failed on missing `dist/calc.d.ts`; no prohibited root build was run. All changes
+remain under `evals/`. M9 is next.
