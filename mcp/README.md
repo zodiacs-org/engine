@@ -43,7 +43,7 @@ noon. Engine calculation still checks its supported ephemeris span.
 
 Event-search windows and sample budgets have server policy limits enforced by
 `test/contracts.test.ts`. These are resource limits, not completeness or accuracy
-claims. The event-search implementation will choose its sampling policy.
+claims. The event-search sampling policy is described below.
 
 Structured responses carry a schema version, tool-specific data and named native
 natal receipt envelopes. The engine codec validates each envelope. ISO dates and
@@ -126,3 +126,47 @@ checks native output preservation, receipt replay, selection, location, unknown
 time, time settings, coverage, validation and engine refusals with synthetic
 inputs. These comparisons establish wrapper integration, not independent accuracy
 or predictive validity. MCP registration remains a later milestone.
+
+
+The Moon phase handler in `src/tools/events.ts` accepts `{ at }` and returns
+`data.phase`, preserving the native elongation in degrees, elongation-based
+illuminated fraction, phase name and waxing flag. `data.sky` is the native
+coordinate-free chart at that instant. Its `phase-sky` receipt records the
+positions and time conventions used; it does not encode the derived phase
+classification or establish a photometric measurement.
+
+The event search handler accepts `{ body, longitude, from, to, maxSamples? }`
+and searches tropical geocentric longitude crossings in `(from, to]` using
+`searchLongitudeCrossings`. The target longitude uses degrees. The output
+preserves native ordered crossings, retrograde indicators, status and evaluation
+count. `data.request` retains the input instant spelling and `data.policy`
+records the applied step and budget. An empty window returns an empty completed
+scan. Budget exhaustion returns `status: "refused"`, `reason: "sample-budget"`
+and no crossings, including when the engine had found events before exhausting
+its budget. Agents must distinguish refusal from a completed scan with no events.
+
+The server uses a quarter-day coarse step and a default budget of 10,000
+longitude evaluations, including native refinement evaluations. These policy
+values are enforced in `test/events.test.ts` across the supported bodies in the
+synthetic January 2026 window, and for empty, annual and refused scans.
+`test/contracts.test.ts` enforces the maximum window of 366 days and maximum
+requested budget of 100,000 evaluations. The budget covers the crossing solver;
+endpoint and event chart receipt calculations are additional work. The native
+solver assumes smooth motion and can miss events, especially around jittering
+true lunar nodes. `complete` means the scan finished within budget, not that
+all possible crossings were proven found. The wrapper reports
+`completeness: "not-proven"` and adds no accuracy or predictive claim.
+
+`search-start` and `search-end` receipts record chart calculations at both
+endpoints even for empty or refused scans. Each found crossing has an `event-N`
+receipt, numbered in crossing order. These receipts retain the native coverage
+flags and time provenance for their respective instants. They do not encode or
+attest the search algorithm, event direction or completeness. Both endpoints
+must support chart calculation; unsupported instants fail even when the scan
+would otherwise use no samples. All calculations use the engine's default UTC
+time basis.
+
+`test/events.test.ts` checks native preservation, receipt replay, coverage,
+resource policy, refusal, validation and concrete output schemas with synthetic
+inputs. These are wrapper integration checks, not independent astronomical
+accuracy evidence. Registration remains the next milestone.
