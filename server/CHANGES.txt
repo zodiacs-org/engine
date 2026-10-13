@@ -1,2 +1,3 @@
 Complete server M1: add isolated TypeScript HTTP foundation, engine readiness checks, sanitized JSON logging and envelopes, and passing Vitest lifecycle tests.
 Complete server M2: load bounded API-key configuration from environment or local files, protect routes with Bearer authentication, and verify credential redaction and duplicate-header rejection.
+Complete server M3: add configurable per-key token buckets, strict bounded UTF-8 JSON validation and sanitized HTTP errors, with deterministic, injection and real-listener tests.

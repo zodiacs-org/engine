@@ -21,6 +21,8 @@ function launch(overrides: NodeJS.ProcessEnv = {}): RunningServer {
   const inherited = { ...process.env };
   delete inherited.API_KEYS;
   delete inherited.API_KEYS_FILE;
+  delete inherited.RATE_LIMIT_CAPACITY;
+  delete inherited.RATE_LIMIT_REFILL_PER_SECOND;
   const child = spawn(process.execPath, ['build/main.js'], {
     cwd: serverDirectory,
     env: { ...inherited, HOST: '127.0.0.1', PORT: '0', LOG_LEVEL: 'info', ...overrides },
@@ -267,6 +269,170 @@ describe('built server process', () => {
       expect(server.stdout + server.stderr).not.toContain(path);
     },
   );
+
+  it('applies configured per-key limits, exempts probes and refills in the built process', async () => {
+    const keys = [randomBytes(32).toString('base64url'), randomBytes(32).toString('base64url')];
+    const canary = randomUUID();
+    const server = launch({
+      API_KEYS: JSON.stringify(keys),
+      RATE_LIMIT_CAPACITY: '1',
+      RATE_LIMIT_REFILL_PER_SECOND: '1',
+      LOG_LEVEL: 'trace',
+    });
+    const address = await started(server);
+    let responseText = '';
+    const request = async (key: string) => {
+      const response = await fetch(new URL(`/v1/${canary}`, address), {
+        headers: { authorization: `Bearer ${key}` },
+        signal: AbortSignal.timeout(2000),
+      });
+      const text = await response.text();
+      responseText += text;
+      const body = JSON.parse(text) as Record<string, unknown>;
+      expect(body.engine).toMatchObject({ name: '@zodiacs/engine' });
+      expect(body.receipts).toEqual([]);
+      expect(response.headers.get('x-request-id')).toBe(body.requestId);
+      expect(response.headers.get('cache-control')).toBe('no-store');
+      expect(response.headers.get('x-ratelimit-limit')).toBe('1');
+      expect(response.headers.get('x-ratelimit-remaining')).toBe('0');
+      return { response, body };
+    };
+
+    const first = await request(keys[0]!);
+    expect(first.response.status).toBe(404);
+    expect(first.body.error).toMatchObject({ code: 'not_found' });
+    expect(first.response.headers.get('retry-after')).toBeNull();
+
+    const limited = await request(keys[0]!);
+    expect(limited.response.status).toBe(429);
+    expect(limited.body.error).toEqual({ code: 'rate_limited', message: 'API key request limit exceeded.' });
+    const retryAfter = limited.response.headers.get('retry-after');
+    expect(retryAfter).toMatch(/^[1-9][0-9]*$/);
+    expect(Number(retryAfter)).toBe(1);
+
+    const independent = await request(keys[1]!);
+    expect(independent.response.status).toBe(404);
+    expect(independent.body.error).toMatchObject({ code: 'not_found' });
+    for (const path of ['/healthz', '/readyz']) {
+      for (const authorization of [undefined, `Bearer ${keys[0]}`]) {
+        const response = await fetch(new URL(path, address), {
+          headers: authorization === undefined ? {} : { authorization },
+          signal: AbortSignal.timeout(2000),
+        });
+        expect(response.status).toBe(200);
+        expect(response.headers.get('x-ratelimit-limit')).toBeNull();
+        expect(response.headers.get('x-ratelimit-remaining')).toBeNull();
+        expect(response.headers.get('retry-after')).toBeNull();
+        responseText += await response.text();
+      }
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, Number(retryAfter) * 1000));
+    const refilled = await request(keys[0]!);
+    expect(refilled.response.status).toBe(404);
+    expect(refilled.body.error).toMatchObject({ code: 'not_found' });
+    expect(refilled.response.headers.get('retry-after')).toBeNull();
+    server.child.kill('SIGTERM');
+    expect(await bounded(server.exited)).toEqual({ code: 0, signal: null });
+    expect(server.stderr).toBe('');
+    for (const value of [...keys, canary]) expect(responseText + server.stdout + server.stderr).not.toContain(value);
+    const logs = jsonLines(server.stdout);
+    expect(logs.some((record) => record.event === 'request_completed' && record.statusCode === 429)).toBe(true);
+  });
+
+  it.each(['RATE_LIMIT_CAPACITY', 'RATE_LIMIT_REFILL_PER_SECOND'] as const)(
+    'sanitizes startup failure for invalid %s', async (field) => {
+      const canary = randomUUID();
+      const key = randomBytes(32).toString('base64url');
+      const server = launch({ [field]: canary, API_KEYS: JSON.stringify([key]), LOG_LEVEL: 'trace' });
+      expect(await bounded(server.exited)).toEqual({ code: 1, signal: null });
+      expect(server.stdout).toBe('');
+      expect(jsonLines(server.stderr)).toEqual([{ level: 'error', event: 'startup_failed' }]);
+      expect(server.stdout + server.stderr).not.toContain(canary);
+      expect(server.stdout + server.stderr).not.toContain(key);
+    },
+  );
+
+  it.each([
+    ['Content-Type', 'application/json'],
+    ['Content-Encoding', 'identity'],
+  ] as const)('rejects duplicate %s fields after authentication on raw HTTP requests', async (field, value) => {
+    const key = randomBytes(32).toString('base64url');
+    const server = launch({ API_KEYS: JSON.stringify([key]), LOG_LEVEL: 'trace' });
+    const address = new URL(await started(server));
+    let responses = '';
+    for (const authenticated of [false, true]) {
+      const fields = [
+        'POST /v1/unmatched HTTP/1.1',
+        'Host: localhost',
+        ...(authenticated ? [`Authorization: Bearer ${key}`] : []),
+        ...(field === 'Content-Type' ? [] : ['Content-Type: application/json']),
+        `${field}: ${value}`,
+        `${field.toLowerCase()}: ${value}`,
+        'Content-Length: 2',
+        'Connection: close',
+        '',
+        '{}',
+      ];
+      const raw = await rawRequest(address, fields.join('\r\n'));
+      responses += raw;
+      const separator = raw.indexOf('\r\n\r\n');
+      expect(separator).toBeGreaterThan(0);
+      const headers = raw.slice(0, separator).toLowerCase();
+      expect(headers).toMatch(authenticated ? /^http\/1\.1 400\b/ : /^http\/1\.1 401\b/);
+      expect(headers).toContain('cache-control: no-store');
+      const body = JSON.parse(raw.slice(separator + 4)) as Record<string, unknown>;
+      expect(body.error).toMatchObject({ code: authenticated ? 'invalid_request' : 'unauthorized' });
+      expect(body.engine).toMatchObject({ name: '@zodiacs/engine' });
+      expect(body.receipts).toEqual([]);
+      expect(headers).toContain(`x-request-id: ${String(body.requestId)}`);
+    }
+    server.child.kill('SIGTERM');
+    expect(await bounded(server.exited)).toEqual({ code: 0, signal: null });
+    expect(server.stderr).toBe('');
+    expect(responses + server.stdout + server.stderr).not.toContain(key);
+    expect(jsonLines(server.stdout).some((record) => record.event === 'request_completed' && record.statusCode === 400)).toBe(true);
+  });
+
+  it('bounds chunked JSON bodies without a Content-Length on the real listener', async () => {
+    const key = randomBytes(32).toString('base64url');
+    const canary = randomUUID();
+    const server = launch({ API_KEYS: JSON.stringify([key]), LOG_LEVEL: 'trace' });
+    const address = new URL(await started(server));
+    const payload = JSON.stringify({ value: canary + 'x'.repeat(65_536) });
+    const chunks = [payload.slice(0, 32_768), payload.slice(32_768)];
+    const raw = await rawRequest(address, [
+      'POST /v1/unmatched HTTP/1.1',
+      'Host: localhost',
+      `Authorization: Bearer ${key}`,
+      'Content-Type: application/json',
+      'Transfer-Encoding: chunked',
+      'Connection: close',
+      '',
+      ...chunks.flatMap((chunk) => [Buffer.byteLength(chunk).toString(16), chunk]),
+      '0',
+      '',
+      '',
+    ].join('\r\n'));
+    const separator = raw.indexOf('\r\n\r\n');
+    expect(separator).toBeGreaterThan(0);
+    const headers = raw.slice(0, separator).toLowerCase();
+    expect(headers).toMatch(/^http\/1\.1 413\b/);
+    expect(headers).toContain('cache-control: no-store');
+    const body = JSON.parse(raw.slice(separator + 4)) as Record<string, unknown>;
+    expect(body.error).toEqual({ code: 'body_too_large', message: 'Request body is too large.' });
+    expect(body.engine).toMatchObject({ name: '@zodiacs/engine' });
+    expect(body.receipts).toEqual([]);
+    expect(headers).toContain(`x-request-id: ${String(body.requestId)}`);
+    const health = await fetch(new URL('/healthz', address), { signal: AbortSignal.timeout(2000) });
+    expect(health.status).toBe(200);
+    await health.arrayBuffer();
+    server.child.kill('SIGTERM');
+    expect(await bounded(server.exited)).toEqual({ code: 0, signal: null });
+    expect(server.stderr).toBe('');
+    for (const value of [key, canary]) expect(raw + server.stdout + server.stderr).not.toContain(value);
+    expect(jsonLines(server.stdout).some((record) => record.event === 'request_completed' && record.statusCode === 413)).toBe(true);
+  });
 
   it.each(['same', 'different'] as const)('rejects duplicate mixed-case Authorization headers with %s values', async (values) => {
     const key = randomBytes(32).toString('base64url');

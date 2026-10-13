@@ -2,8 +2,9 @@
 
 This private package is a self-hosted HTTP adapter for the engine in this
 checkout. The current milestone implements health, readiness, API-key
-authentication, JSON logging and process lifecycle. Calculation routes, rate
-limits, OpenAPI and Docker deployment are tracked in [PLAN.md](PLAN.md).
+authentication, per-key rate limits, bounded JSON validation, JSON logging
+and process lifecycle. Calculation routes, OpenAPI and Docker deployment
+are tracked in [PLAN.md](PLAN.md).
 
 ## Run from a checkout
 
@@ -113,6 +114,79 @@ checked through injection in `test/auth.vitest.ts` and through a real
 listener in `test/process.vitest.ts`, including duplicate headers and trace
 logging. Calculation routes will be added in later milestones; authenticated
 requests to their proposed paths currently receive HTTP 404.
+
+## Rate limits
+
+Each configured key gets a token bucket shared across protected routes. The
+bucket starts full, spends one token per authenticated request and refills
+continuously using elapsed monotonic time, capped at its capacity. Invalid
+bodies, schema failures and unknown routes spend a token too. Unauthenticated
+requests and public probes do not use a bucket; sending credentials to a
+public probe does not change that. Exhausted requests are refused before
+body parsing or calculation, and a refusal does not spend another token.
+
+`RATE_LIMIT_CAPACITY` defaults to 60 tokens and
+`RATE_LIMIT_REFILL_PER_SECOND` to 1 token per second. Both accept decimal
+integers from 1 through 10,000; an invalid value fails startup with a generic
+log. These defaults and bounds are enforced in `test/config.vitest.ts` and
+`test/token-bucket.vitest.ts`. Buckets belong to the server process: restart
+resets them, and separate replicas have separate allowances. Bucket storage
+uses only authenticated, opaque key identities and is bounded by the loaded
+key set.
+
+Authenticated responses include `X-RateLimit-Limit` (bucket capacity) and
+`X-RateLimit-Remaining` (whole tokens left after that request). Exhaustion
+returns HTTP 429, `error.code: "rate_limited"`, and `Retry-After`, the wait
+until another token is available, rounded up to seconds. Another request
+using the same key can spend the refilled token first. The error has an empty
+receipts list. Header behavior, request ordering, concurrent exhaustion,
+refill and key isolation are checked in `test/rate-limit.vitest.ts` and
+through the built listener in `test/process.vitest.ts`.
+
+## JSON requests and errors
+
+Bodies must be UTF-8 JSON objects with `Content-Type: application/json`.
+An optional `charset=utf-8` parameter is accepted, including the quoted
+form; media type and charset comparisons ignore letter case. Other media
+types, charsets and parameters are refused. Compression is unsupported:
+omit `Content-Encoding` or use `identity`. Duplicate content-type or
+content-encoding header fields are refused. GET, HEAD and TRACE requests
+must have no body.
+
+The body cap is 65,536 bytes, including JSON punctuation and whitespace,
+whether the request supplies Content-Length or uses chunked encoding.
+JSON may contain at most 16 container levels and 4,096 values. The root
+object is the first level and the first value; arrays and objects count
+as containers and values, scalar values count as values, and property
+names do not count separately. Numeric overflow, invalid UTF-8, malformed
+JSON, scalar or array roots, and the property names `__proto__`,
+`constructor` and `prototype` at any level are refused. Boundary tests are
+in `test/request-validation.vitest.ts`; `test/process.vitest.ts` checks
+chunked byte overflow and duplicate headers on the actual listener.
+
+Routes validate their declared JSON schemas without coercing types,
+discarding unknown properties or inserting defaults. Required-body and
+schema behavior is exercised with test-only routes in
+`test/request-validation.vitest.ts`; calculation schemas arrive with their
+routes in the next milestones. Parser and schema errors expose no input
+values or validation internals in responses or logs.
+
+| HTTP status | Error code | Meaning |
+| --- | --- | --- |
+| 400 | `invalid_request` | Malformed JSON or headers, invalid body structure or route schema. |
+| 401 | `unauthorized` | Missing or invalid API-key authentication. |
+| 404 | `not_found` | Authenticated request to an unavailable route or method. |
+| 413 | `body_too_large` | JSON body exceeds the byte cap. |
+| 415 | `unsupported_media_type` | Missing or unsupported content type, charset or encoding. |
+| 429 | `rate_limited` | This key has no request token available. |
+| 500 | `internal_error` | Unexpected server failure. |
+| 503 | `not_ready` | Readiness check failed. |
+
+The table describes ordinary request handling, as checked in
+`test/app.vitest.ts`, `test/auth.vitest.ts`, `test/request-validation.vitest.ts`
+and `test/rate-limit.vitest.ts`. Raw HTTP parser and router failures can
+occur earlier. Authentication precedes rate limiting, which precedes JSON
+validation, so a rejected request reports the first applicable error.
 
 ## Development and isolation
 

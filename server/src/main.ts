@@ -5,7 +5,7 @@ import { loadApiKeys } from "./api-keys.js";
 async function main(): Promise<void> {
   const config = readConfig(process.env);
   const apiKeys = await loadApiKeys(process.env);
-  const app = buildApp({ logger: { level: config.logLevel }, apiKeys });
+  const app = buildApp({ logger: { level: config.logLevel }, apiKeys, rateLimit: config.rateLimit });
   let stopping = false;
   const stop = async () => {
     if (stopping) return;

@@ -5,11 +5,16 @@ import { verifyEngine } from "./engine.js";
 import { failure, success } from "./responses.js";
 import { ApiKeyStore } from "./api-keys.js";
 import { registerAuthentication } from "./auth.js";
+import { registerRateLimiting } from "./rate-limit-hook.js";
+import type { RateLimitOptions } from "./rate-limit.js";
+import { JSON_LIMITS, registerRequestValidation, RequestValidationError } from "./request-validation.js";
 
 export interface AppOptions {
   logger?: FastifyServerOptions["logger"];
   readiness?: () => boolean;
   apiKeys?: ApiKeyStore;
+  rateLimit?: RateLimitOptions;
+  monotonicNow?: () => number;
 }
 
 function responseHeaders(reply: FastifyReply, requestId: string): void {
@@ -27,7 +32,7 @@ export function buildApp(options: AppOptions = {}) {
     requestIdHeader: false,
     genReqId: () => randomUUID(),
     exposeHeadRoutes: false,
-    bodyLimit: 65_536,
+    bodyLimit: JSON_LIMITS.bytes,
     requestTimeout: 30_000,
     connectionTimeout: 30_000,
     keepAliveTimeout: 5_000,
@@ -68,7 +73,7 @@ export function buildApp(options: AppOptions = {}) {
         body
       ].join("\r\n"));
     },
-    ajv: { customOptions: { coerceTypes: false, removeAdditional: false, useDefaults: false } }
+    ajv: { customOptions: { coerceTypes: false, removeAdditional: false, useDefaults: false, allErrors: false, ownProperties: true } }
   });
 
   app.addHook("onReady", async () => {
@@ -81,6 +86,8 @@ export function buildApp(options: AppOptions = {}) {
     responseHeaders(reply, request.id);
   });
   registerAuthentication(app, options.apiKeys ?? new ApiKeyStore());
+  registerRateLimiting(app, options.rateLimit, options.monotonicNow);
+  registerRequestValidation(app);
   app.addHook("onResponse", async (request, reply) => {
     request.log.info({
       event: "request_completed",
@@ -97,11 +104,15 @@ export function buildApp(options: AppOptions = {}) {
   app.setErrorHandler<FastifyError>((error, request, reply) => {
     // Never log raw errors: parser errors and upstream messages can contain
     // headers, body fragments, birth details or other caller-controlled data.
+    if (error instanceof RequestValidationError) {
+      const status = error.kind === "unsupported_media_type" ? 415 : 400;
+      return reply.code(status).send(failure(request.id, error.kind, error.message));
+    }
     if (error.code === "FST_ERR_CTP_BODY_TOO_LARGE") {
       return reply.code(413).send(failure(request.id, "body_too_large", "Request body is too large."));
     }
     if (error.code === "FST_ERR_CTP_INVALID_MEDIA_TYPE") {
-      return reply.code(415).send(failure(request.id, "unsupported_media_type", "Content type is not supported."));
+      return reply.code(415).send(failure(request.id, "unsupported_media_type", "Content type or encoding is not supported."));
     }
     if (error.validation || error.code === "FST_ERR_CTP_INVALID_JSON_BODY" || error.code === "FST_ERR_CTP_EMPTY_JSON_BODY" || error.code === "FST_ERR_CTP_INVALID_CONTENT_LENGTH") {
       return reply.code(400).send(failure(request.id, "invalid_request", "Request is invalid."));

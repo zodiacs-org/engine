@@ -1,3 +1,5 @@
+import { DEFAULT_RATE_LIMIT, validateRateLimit, type RateLimitOptions } from "./rate-limit.js";
+
 export const LOG_LEVELS = ["fatal", "error", "warn", "info", "debug", "trace", "silent"] as const;
 export type LogLevel = typeof LOG_LEVELS[number];
 
@@ -5,6 +7,7 @@ export interface ServerConfig {
   host: string;
   port: number;
   logLevel: LogLevel;
+  rateLimit: RateLimitOptions;
 }
 
 export function readConfig(env: NodeJS.ProcessEnv): ServerConfig {
@@ -14,5 +17,12 @@ export function readConfig(env: NodeJS.ProcessEnv): ServerConfig {
   if (host.length === 0 || /\s/u.test(host)) throw new Error("HOST is invalid.");
   if (!/^\d{1,5}$/u.test(portText) || Number(portText) > 65535) throw new Error("PORT is invalid.");
   if (!LOG_LEVELS.some((level) => level === logLevel)) throw new Error("LOG_LEVEL is invalid.");
-  return { host, port: Number(portText), logLevel: logLevel as LogLevel };
+  const capacity = env.RATE_LIMIT_CAPACITY ?? String(DEFAULT_RATE_LIMIT.capacity);
+  const refill = env.RATE_LIMIT_REFILL_PER_SECOND ?? String(DEFAULT_RATE_LIMIT.refillPerSecond);
+  if (!/^[0-9]{1,5}$/u.test(capacity) || !/^[0-9]{1,5}$/u.test(refill)) {
+    throw new Error("Rate limit configuration is invalid.");
+  }
+  const rateLimit = { capacity: Number(capacity), refillPerSecond: Number(refill) };
+  validateRateLimit(rateLimit);
+  return { host, port: Number(portText), logLevel: logLevel as LogLevel, rateLimit };
 }
