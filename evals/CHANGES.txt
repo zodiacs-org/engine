@@ -1,1 +1,2 @@
 M1: add isolated factor-meaning schema, offline validator, provenance and license requirements, and contract, CLI and package-exclusion tests.
+M2: add original attributed seed meanings, dataset schema and integrity validator, seed validation CLI, documentation and offline contract tests.

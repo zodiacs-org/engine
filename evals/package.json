@@ -7,7 +7,9 @@
   "engines": { "node": "22.x" },
   "scripts": {
     "test": "node --test tests/*.checks.mjs",
-    "validate:entry": "node bin/validate-entry.mjs"
+    "validate:entry": "node bin/validate-entry.mjs",
+    "validate:dataset": "node bin/validate-dataset.mjs",
+    "validate:seed": "node bin/validate-dataset.mjs --seed data/seed.json"
   },
   "dependencies": { "ajv": "8.17.1" }
 }

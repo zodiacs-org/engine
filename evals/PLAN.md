@@ -15,7 +15,7 @@ Agreement with that reference measures reading consistency, not independent
 astronomical accuracy or the validity of personality or predictive claims.
 
 - [x] M1 Establish an isolated offline Node project, a versioned JSON Schema for factor-to-meaning entries, a local validator, and schema contract tests.
-- [ ] M2 Add a small original seed dataset covering placements, aspects, houses and sign dignities, with provenance, licensing and dataset-level integrity checks.
+- [x] M2 Add a small original seed dataset covering placements, aspects, houses and sign dignities, with provenance, licensing and dataset-level integrity checks.
 - [ ] M3 Add a local engine adapter that computes synthetic chart facts, records conventions and version provenance, and handles unavailable houses and polar fallback.
 - [ ] M4 Define the reading and factual-claim schemas, preserving quoted spans and unsupported or ambiguous assertions without silently treating them as correct.
 - [ ] M5 Define a pluggable generation backend with a deterministic offline mock, explicit backend selection, bounded requests and no saved credentials.
@@ -40,3 +40,19 @@ inventory with scripts disabled. The root `npm run package:contents` was also
 attempted and failed because this checkout has no `dist/calc.d.ts`; the engine
 was not built because this task prohibits changes to root build output. All
 session changes are under `evals/`.
+
+M2 acceptance: `data/seed.json` contains individually composed original meanings
+with explicit AI authorship, symbolic scope and MIT attribution. The dataset
+schema and CLI enforce entry validation, unique ids and closed, acyclic source
+references. Seed mode additionally checks authored provenance, factor coverage,
+all supported sign dignity labels and canonical factor uniqueness. General
+datasets permit sourced variants of the same factor. No generated corpus is
+committed, and the checks make no factual accuracy or human-review claim.
+
+M2 validation: `npm --prefix evals test` and `npm --prefix evals run validate:seed`
+passed on Node 22.23.3. Dataset and CLI tests cover invalid records, provenance
+cycles, forward references, reversed aspect pairs, separate house systems,
+Mercury's separate sign dignities, byte and entry limits, and input preservation.
+The package-exclusion test passed. The root `npm run package:contents` gate was
+attempted again and failed on missing `dist/calc.d.ts`; no root build was run
+because this task prohibits modifying `dist/`. Changes remain under `evals/`.
