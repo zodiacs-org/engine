@@ -446,3 +446,60 @@ Its dependencies come from an external installation matching the root
 lockfile. Root load errors for missing dependencies and the archive-check
 environment limitation remain outside this fix. No root files or git metadata
 were changed. F4 operational review remains unchecked.
+
+## F4 operational review
+
+M10's existing driver, retention rules and million-chart instructions are
+complete within their stated scope. Added operational tests interrupt an
+awaited comparison, then enforce saving that case, lock and temporary-file
+cleanup, exact case-index coverage after resume, and equality of fresh and
+resumed checkpoints and report bytes. An additional test completes a campaign
+with empty shards and checks their explicit null index coverage. These tests
+use invented arithmetic, not astronomical reference values.
+
+A fresh DE440s driver smoke verification used the committed driver-smoke
+receipt's seed, TT span, channels and shard configuration. An ephemeral
+runtime script verified engine source, output and dependency digests against
+the receipt, opened the digest-verified kernel and pinned ERFA terms, and
+called the production evaluator and executeCampaign. It stopped first at a
+per-shard budget, then via an abort during a completed comparison, resumed
+shards in reverse order and checked each index was evaluated exactly once.
+A separate fresh execution produced identical checkpoints and report bytes.
+Every merged statistic, verdict and flag matched reports/driver-smoke.json.
+Temporary verification checkpoints were removed; no positions were saved.
+
+This checks fresh numerical agreement with the historical measurement, not
+reproduction of its historical runtime and executable identities. Separately,
+the retained historical driver-smoke and bounded-sample aggregate bundles
+reproduced their committed JSON, markdown and CSV bytes without changing any
+report. Swiss remains explicitly unavailable. Million-chart execution and
+unsampled accuracy remain unmeasured, as the README states.
+
+Executed with Node v22.22.2 on PATH:
+
+```sh
+npm --prefix crosscheck run check:syntax
+npm --prefix crosscheck test
+node crosscheck/tools/build.mjs --verify
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/check.mjs --all-sizes
+npm_config_cache=/tmp/crosscheck-f4-npm-cache npm run package:contents
+npm_config_cache=/tmp/crosscheck-f4-npm-cache npx --prefix /tmp/events-f1-root-check --no-install vitest list --filesOnly
+npm_config_cache=/tmp/crosscheck-f4-npm-cache npx --prefix /tmp/events-f1-root-check --no-install vitest run --reporter=dot
+git diff --check
+```
+
+Syntax, all 69 Node tests, build verification, aggregate rendering and file
+safeguards pass. Existing runner, report and Swiss tests enforce aggregate-only
+retention and reject raw payloads; safeguards enforce file-size boundaries,
+ignored runtime paths and npm exclusion with a script-disabled dry-run.
+The local size scan includes ignored caches, build and dependencies.
+
+Root Vitest's default listing and completed run select no crosscheck suites.
+Its external tool installation matches the root lockfile; missing root
+dependencies and the archive-check environment limitation still fail the
+root run. The full package-content gate still fails on missing dist/calc.d.ts.
+No root build was run under the folder-only restriction. No packed inputs,
+archives, workflows or git metadata changed. All review checklist items are
+now complete.

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdir, mkdtemp, rm, readFile, writeFile, symlink } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, readFile, writeFile, symlink, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { executeCampaign, validateSpec, readRuntimeJson, withSwiss, swissChannels } from '../tools/campaign.mjs';
 import { observation, TARGETS } from '../lib/campaign.mjs';
@@ -49,6 +49,57 @@ test('million-case driver stops at per-shard budget without enumerating campaign
     } });
   assert.equal(result.complete, false); assert.deepEqual(seen, [3, 7]);
   assert.ok((await readFile(directory + '/shard-3.json')).length < MAX_FILE_BYTES);
+});
+test('in-flight interruption saves its case, releases the lock and resumes without duplicates', async t => {
+  const directory = await fixture(t), controller = new AbortController(), seen = [];
+  let enter, finish;
+  const entered = new Promise(resolve => { enter = resolve; });
+  const finished = new Promise(resolve => { finish = resolve; });
+  const evaluate = async chart => {
+    seen.push(chart.index);
+    if (chart.index === 0) { enter(); await finished; }
+    return { arithmetic: observation(chart.index % 5 - 2, 2) };
+  };
+  const args = { spec, config, identities, directory, evaluate };
+  const pending = executeCampaign({ ...args, shard: 0, signal: controller.signal });
+  await entered;
+  controller.abort(); finish();
+  assert.equal((await pending).complete, false);
+  assert.deepEqual(seen, [0]);
+  const saved = await readRuntimeJson(directory + '/shard-0.json');
+  assert.equal(saved.completed, 1);
+  assert.deepEqual((await readdir(directory)).sort(), ['shard-0.json']);
+  const resumed = await executeCampaign(args);
+  assert.equal(resumed.complete, true);
+  assert.deepEqual(seen.sort((a,b) => a-b), Array.from({ length: spec.total }, (_, i) => i));
+  const fresh = await executeCampaign({ ...args, directory: directory + '/fresh', evaluate: async chart =>
+    ({ arithmetic: observation(chart.index % 5 - 2, 2) }) });
+  const states = async dir => Promise.all(Array.from({ length: spec.shards }, (_, shard) =>
+    readRuntimeJson(`${dir}/shard-${shard}.json`)));
+  const actual = await states(directory), baseline = await states(directory + '/fresh');
+  assert.deepEqual(actual, baseline);
+  const metadata = { title: 'Invented in-flight interruption', command: ['node', 'invented'],
+    runtime: { node: process.version, platform: process.platform, arch: process.arch },
+    units: { arithmetic: 'invented units' }, exclusions: ['No astronomical reference used'] };
+  assert.deepEqual(renderReport({ campaign: resumed.campaign, states: actual, metadata }),
+    renderReport({ campaign: fresh.campaign, states: baseline, metadata }));
+  assert.deepEqual((await readdir(directory)).sort(), ['fresh', ...Array.from({ length: spec.shards }, (_, i) => `shard-${i}.json`)]);
+});
+test('driver reports complete coverage when some shards have no cases', async t => {
+  const directory = await fixture(t), seen = [], small = { ...spec, total: 2 };
+  const result = await executeCampaign({ spec: small, config: { ...config, total: small.total }, identities,
+    directory, evaluate: async chart => {
+      seen.push(chart.index); return { arithmetic: observation(0, 2) };
+    } });
+  assert.equal(result.complete, true); assert.deepEqual(seen, [0, 1]);
+  const states = await Promise.all(Array.from({ length: small.shards }, (_, i) => readRuntimeJson(`${directory}/shard-${i}.json`)));
+  const metadata = { title: 'Invented empty-shard coverage', command: ['node', 'invented'],
+    runtime: { node: process.version, platform: process.platform, arch: process.arch },
+    units: { arithmetic: 'invented units' }, exclusions: ['No astronomical reference used'] };
+  const report = JSON.parse(renderReport({ campaign: result.campaign, states, metadata }).json);
+  assert.equal(report.complete, true); assert.equal(report.completed, small.total);
+  assert.deepEqual(report.coverage.map(s => [s.completed, s.firstIndex, s.lastIndex]),
+    [[1, 0, 0], [1, 1, 1], [0, null, null], [0, null, null]]);
 });
 test('Swiss operational wrapper retains axis aggregates and excluded verdicts only', async () => {
   const natalChart = () => ({ bodies: Object.keys(TARGETS).map(body => ({ body, lon: 0, lat: 0 })) });
