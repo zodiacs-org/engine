@@ -17,7 +17,7 @@ astronomical accuracy or the validity of personality or predictive claims.
 - [x] M1 Establish an isolated offline Node project, a versioned JSON Schema for factor-to-meaning entries, a local validator, and schema contract tests.
 - [x] M2 Add a small original seed dataset covering placements, aspects, houses and sign dignities, with provenance, licensing and dataset-level integrity checks.
 - [x] M3 Add a local engine adapter that computes synthetic chart facts, records conventions and version provenance, and handles unavailable houses and polar fallback.
-- [ ] M4 Define the reading and factual-claim schemas, preserving quoted spans and unsupported or ambiguous assertions without silently treating them as correct.
+- [x] M4 Define the reading and factual-claim schemas, preserving quoted spans and unsupported or ambiguous assertions without silently treating them as correct.
 - [ ] M5 Define a pluggable generation backend with a deterministic offline mock, explicit backend selection, bounded requests and no saved credentials.
 - [ ] M6 Implement the interpretation generator with versioned prompts, input/output validation, provenance, reproducible manifests and ignored output files.
 - [ ] M7 Write a versioned scoring rubric for factual correctness, coverage, contradictions and abstentions, separating interpretive quality from computable facts.
@@ -77,3 +77,23 @@ evidence. Package-exclusion and project-isolation tests passed. The root
 `npm run package:contents` gate was attempted and failed on missing
 `dist/calc.d.ts`; the prohibited root build was not run. All changes stay in
 `evals/`. M4 is next.
+
+M4 acceptance: reading and factual-claim schemas retain original text, synthetic
+case identity, declared conventions, licensing and separate reading/extraction
+provenance. Resolved factors retain polarity, certainty and temporal scope;
+ambiguous, unsupported, abstained and interpretive assertions retain quotes and
+reasons without guessed factors or correctness verdicts. The offline validator
+checks exact UTF-16 spans, Unicode boundaries and unique claim ids while preserving
+duplicates, contradictions, different conventions and empty extractions. The
+bounded reading CLI validates without rewriting inputs or echoing their text.
+
+M4 validation: `npm --prefix evals test` and
+`npm --prefix evals run validate:seed` passed on Node 22.23.3. Reading contract
+and CLI tests cover local schema registration, every claim variant, negation,
+hedging, unsupported vocabulary, span integrity, Unicode and input-size
+boundaries, provenance, frozen inputs, JSON round trips and non-file rejection.
+Examples are original inline test assertions; no generated reading is committed.
+Package-exclusion and project-isolation tests passed. The root
+`npm run package:contents` gate was attempted and failed on missing
+`dist/calc.d.ts`; no prohibited root build was run. All changes remain under
+`evals/`. M5 is next.

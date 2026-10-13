@@ -1,3 +1,4 @@
 M1: add isolated factor-meaning schema, offline validator, provenance and license requirements, and contract, CLI and package-exclusion tests.
 M2: add original attributed seed meanings, dataset schema and integrity validator, seed validation CLI, documentation and offline contract tests.
 M3: add isolated local-engine chart facts with synthetic-case validation, recorded conventions and provenance, unavailable-house and polar-fallback handling, and offline adapter tests.
+M4: add reading and factual-claim schemas, exact quoted-span validation, explicit unresolved assertions, a bounded offline reading CLI, documentation and contract tests.

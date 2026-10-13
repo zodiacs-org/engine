@@ -2,9 +2,10 @@
 
 This directory is an independent local project for developing an interpretation
 dataset and evaluating chart readings. It validates factor-to-meaning entries
-and datasets, includes an original authored seed set, and computes synthetic
-chart facts through the local engine. Generation backends and the scoring
-harness are later milestones in [PLAN.md](PLAN.md).
+and datasets, includes an original authored seed set, computes synthetic
+chart facts through the local engine, and validates readings with quoted claims.
+Generation backends and the scoring harness are later milestones in
+[PLAN.md](PLAN.md).
 
 Interpretation text is symbolic prose. The eventual factual score will compare a
 reading's assertions with computations from the local `@zodiacs/engine` under
@@ -206,6 +207,84 @@ The loader tests check repeatability across fresh processes and working
 directories on the same runtime; they do not promise bitwise agreement across
 runtimes or architectures. The adapter tests check consistency with public
 engine APIs, missing inputs, polar fallback and sign-dignity behavior.
+
+## Reading and claim contracts
+
+[reading.schema.json](schema/reading.schema.json) retains a reading's unchanged
+`text`, its synthetic `caseId`, declared `conventions`, origin `provenance`,
+`license`, extraction metadata and quoted `claims`. Its case id is a reference
+for the later harness to resolve against a synthetic case; this validator does
+not look up cases or compute chart facts. Reading provenance is separate from
+the method, producer and version that extracted its claims. Generated origin
+requires backend, model, prompt version and input digest, and stays unreviewed.
+These labels record supplied claims about origin, not authenticated receipts.
+
+[factual-claim.schema.json](schema/factual-claim.schema.json) records each
+assertion's id, exact quote and status:
+
+| Status | Retained content | Meaning for later evaluation |
+| --- | --- | --- |
+| `resolved` | Supported factor, polarity, certainty and temporal scope | Ready for comparison; no correctness verdict |
+| `ambiguous` | Quote and reason | No unique supported assertion was selected |
+| `unsupported` | Quote and reason | Assertion is outside the vocabulary, convention scope or extractor's ability |
+| `abstained` | Quote and reason | Reading explicitly declines an assertion |
+| `interpretive` | Quote and reason | Symbolic prose outside computable factual correctness |
+
+Resolved factors reuse the meaning-entry vocabulary, including its explicit
+house system, aspect policy and dignity system. `polarity` is `affirmed` or
+`negated`; `certainty` is `unqualified`, `hedged` or `conditional`.
+`temporalScope` distinguishes `reference-instant`, `whole-day` and `unspecified`.
+Whole-day certainty cannot be inferred from the adapter's reference-instant
+facts. Unsupported bodies, aspects or dignity definitions stay in an unresolved
+quote with a reason. They must not be rewritten as a nearby supported factor.
+Unresolved records cannot contain a normalized factor or an asserted verdict.
+
+The reading's convention fields can explicitly say `unspecified`; sidereal or
+other conventions remain visible. Validation neither changes them to the
+engine's conventions nor rejects contradictions between the reading's context
+and individual factors. The later scorer must resolve convention mismatches
+and reference availability before assigning a verdict. A structurally supported
+house assertion can still concern a chart whose houses are unavailable.
+
+Every quote has a half-open `span` with `start`, `end` and `quote`.
+`offsetUnit: "utf16-code-unit"` means JavaScript string indexing, so
+`text.slice(start, end)` must exactly equal the quote. The validator rejects
+empty or out-of-range spans, boundaries splitting a surrogate pair, and text
+with unpaired surrogates. It preserves whitespace, line endings and Unicode
+normalization. Combining marks retain their original positions. Include the
+negation, hedge and other context needed to interpret the assertion in its
+quoted span. Claims may overlap, share a span, repeat a factor or contradict
+each other; their ids must differ. Their supplied order is retained.
+
+`validateReading(value)` and `validateClaim(claim, text)` in
+[lib/validate-reading.mjs](lib/validate-reading.mjs) return the same
+`{ valid, errors }` shape as entry validation. They check structure and quote
+integrity without changing input, applying defaults, coercing values, fetching
+references or evaluating text. Register the meaning-entry and factual-claim
+schemas locally before compiling the reading schema in another validator.
+The local validator additionally checks aspect-body distinctness, span integrity,
+unique claim ids and that extraction method `none` has no claims.
+
+Validation cannot establish that a factor faithfully represents its quote,
+that a negation or hedge was extracted correctly, or that every assertion was
+extracted. `extraction.coverage` is always `unverified`, including for manually
+annotated readings. Empty text and empty claim lists are accepted for later
+omission handling. Neither acceptance nor an empty list implies perfect factual
+correctness. Scores, denominators and extraction audits belong to later
+milestones; this command returns no score.
+
+```sh
+node evals/bin/validate-reading.mjs evals/scratch/reading.json
+```
+
+The CLI accepts a UTF-8 JSON file up to 1 MiB and never rewrites it. Exit codes
+are zero for structural acceptance, one for a rejected reading, and two for
+usage or file errors. [The CLI tests](tests/reading-cli.checks.mjs) enforce these
+boundaries and check diagnostics without echoing supplied text. Readings allow
+up to 256 claims and 32,768 Unicode code points of text, with quotes up to 4,096
+code points. These operational limits and the span, uncertainty, provenance and
+preservation rules are checked by [the contract tests](tests/reading.checks.mjs).
+Original examples are inline in tests; no generated reading corpus is committed.
 
 ## Files and licensing
 
