@@ -1,9 +1,11 @@
 import { buildApp } from "./app.js";
 import { readConfig } from "./config.js";
+import { loadApiKeys } from "./api-keys.js";
 
 async function main(): Promise<void> {
   const config = readConfig(process.env);
-  const app = buildApp({ logger: { level: config.logLevel } });
+  const apiKeys = await loadApiKeys(process.env);
+  const app = buildApp({ logger: { level: config.logLevel }, apiKeys });
   let stopping = false;
   const stop = async () => {
     if (stopping) return;

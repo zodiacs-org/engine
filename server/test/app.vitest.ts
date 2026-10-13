@@ -1,13 +1,16 @@
-import { randomUUID } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 import { Writable } from 'node:stream';
 import type { FastifyInstance } from 'fastify';
 import { afterEach, describe, expect, it } from 'vitest';
 import { buildApp } from '../src/app.js';
+import { ApiKeyStore } from '../src/api-keys.js';
 
 const apps: FastifyInstance[] = [];
+const key = randomBytes(32).toString('hex');
+const authorized = { authorization: `Bearer ${key}` };
 
 function createApp(options: Parameters<typeof buildApp>[0] = { logger: false }) {
-  const app = buildApp(options);
+  const app = buildApp({ apiKeys: new ApiKeyStore([key]), ...options });
   apps.push(app);
   return app;
 }
@@ -83,7 +86,7 @@ describe('error boundary', () => {
       : await app.inject({
         method: 'POST',
         url: '/payload',
-        headers: { 'content-type': 'application/json', 'content-length': '1' },
+        headers: { ...authorized, 'content-type': 'application/json', 'content-length': '1' },
         payload: JSON.stringify({ private: canary }),
       });
     expect(response.statusCode).toBe(400);
@@ -97,7 +100,7 @@ describe('error boundary', () => {
 
   it.each(['GET', 'POST', 'DELETE'] as const)('sanitizes unknown %s routes and methods', async (method) => {
     const canary = randomUUID();
-    const response = await createApp().inject({ method, url: `/${canary}?private=${canary}` });
+    const response = await createApp().inject({ method, url: `/${canary}?private=${canary}`, headers: authorized });
     expect(response.statusCode).toBe(404);
     expect(response.json().error).toEqual({ code: 'not_found', message: 'Route not found.' });
     expect(response.body).not.toContain(canary);
@@ -105,7 +108,7 @@ describe('error boundary', () => {
   });
 
   it('does not treat an unsupported method as a successful probe', async () => {
-    const response = await createApp().inject({ method: 'POST', url: '/healthz' });
+    const response = await createApp().inject({ method: 'POST', url: '/healthz', headers: authorized });
     expect(response.statusCode).toBe(404);
     expect(response.json().error.code).toBe('not_found');
   });
@@ -114,7 +117,7 @@ describe('error boundary', () => {
     const app = createApp();
     const canary = randomUUID();
     app.get('/failure', async () => { throw new Error(canary); });
-    const response = await app.inject('/failure');
+    const response = await app.inject({ url: '/failure', headers: authorized });
     expect(response.statusCode).toBe(500);
     expect(response.json().error).toEqual({ code: 'internal_error', message: 'Internal server error.' });
     expect(response.body).not.toContain(canary);
@@ -138,7 +141,7 @@ describe('error boundary', () => {
     const canary = randomUUID();
     const app = createApp();
     app.post('/payload', { bodyLimit: status === 413 ? 16 : 1024 }, async () => ({ accepted: true }));
-    const response = await app.inject({ method: 'POST', url: '/payload', headers: { 'content-type': contentType }, payload: payload(canary) });
+    const response = await app.inject({ method: 'POST', url: '/payload', headers: { ...authorized, 'content-type': contentType }, payload: payload(canary) });
     expect(response.statusCode).toBe(status);
     expect(response.json().error).toEqual({ code: expect.any(String), message: expect.any(String) });
     expect(Object.keys(response.json()).sort()).toEqual(['engine', 'error', 'receipts', 'requestId']);
@@ -165,13 +168,14 @@ describe('structured request logs', () => {
     app.get('/failure', async () => { throw new Error(canary); });
     const responses = [
       await app.inject({ url: `/healthz?private=${canary}`, headers: { authorization: canary, 'x-request-id': canary, 'x-forwarded-for': canary } }),
-      await app.inject(`/records/${canary}`),
-      await app.inject({ method: 'POST', url: `/${canary}?private=${canary}`, payload: { private: canary }, headers: { authorization: canary } }),
-      await app.inject('/failure'),
+      await app.inject({ url: `/records/${canary}`, headers: authorized }),
+      await app.inject({ method: 'POST', url: `/${canary}?private=${canary}`, payload: { private: canary }, headers: authorized }),
+      await app.inject({ url: '/failure', headers: authorized }),
     ];
     await app.close();
     const output = chunks.join('');
     expect(output).not.toContain(canary);
+    expect(output).not.toContain(key);
     const records = output.trim().split('\n').filter(Boolean).map((line) => JSON.parse(line) as Record<string, unknown>);
     const completed = records.filter((record) => record.event === 'request_completed');
     expect(completed).toHaveLength(4);

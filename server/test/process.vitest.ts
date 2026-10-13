@@ -1,6 +1,8 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
-import { randomUUID } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { connect, createServer } from 'node:net';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
 
@@ -13,11 +15,15 @@ type RunningServer = {
   exited: Promise<Exit>;
 };
 const processes: RunningServer[] = [];
+const temporaryDirectories: string[] = [];
 
 function launch(overrides: NodeJS.ProcessEnv = {}): RunningServer {
+  const inherited = { ...process.env };
+  delete inherited.API_KEYS;
+  delete inherited.API_KEYS_FILE;
   const child = spawn(process.execPath, ['build/main.js'], {
     cwd: serverDirectory,
-    env: { ...process.env, HOST: '127.0.0.1', PORT: '0', LOG_LEVEL: 'info', ...overrides },
+    env: { ...inherited, HOST: '127.0.0.1', PORT: '0', LOG_LEVEL: 'info', ...overrides },
     stdio: 'pipe',
   });
   const result: RunningServer = {
@@ -92,11 +98,43 @@ function jsonLines(output: string): Record<string, unknown>[] {
   return output.trim().split('\n').filter(Boolean).map((line) => JSON.parse(line) as Record<string, unknown>);
 }
 
+async function temporaryDirectory(): Promise<string> {
+  const cache = join(serverDirectory, '.cache');
+  await mkdir(cache, { recursive: true });
+  const directory = await mkdtemp(join(cache, 'process-auth-'));
+  temporaryDirectories.push(directory);
+  return directory;
+}
+
+async function rawRequest(address: URL, request: string): Promise<string> {
+  const socket = connect({ host: address.hostname, port: Number(address.port) });
+  let raw = '';
+  try {
+    await bounded(new Promise<void>((resolve, reject) => {
+      socket.setEncoding('utf8');
+      socket.once('error', reject);
+      socket.once('connect', () => socket.write(request));
+      socket.on('data', (chunk: string) => {
+        raw += chunk;
+        if (raw.length > 64 * 1024) reject(new Error('HTTP response exceeded its limit.'));
+      });
+      socket.once('end', resolve);
+    }), 2000);
+    return raw;
+  } finally {
+    socket.destroy();
+  }
+}
+
 afterEach(async () => {
-  await Promise.all(processes.splice(0).map(async (server) => {
-    if (server.child.exitCode === null && server.child.signalCode === null) server.child.kill('SIGKILL');
-    await bounded(server.exited);
-  }));
+  try {
+    await Promise.all(processes.splice(0).map(async (server) => {
+      if (server.child.exitCode === null && server.child.signalCode === null) server.child.kill('SIGKILL');
+      await bounded(server.exited);
+    }));
+  } finally {
+    await Promise.all(temporaryDirectories.splice(0).map((directory) => rm(directory, { recursive: true, force: true })));
+  }
 });
 
 describe('built server process', () => {
@@ -123,24 +161,8 @@ describe('built server process', () => {
     const canary = randomUUID();
     const server = launch({ LOG_LEVEL: 'trace' });
     const address = new URL(await started(server));
-    const socket = connect({ host: address.hostname, port: Number(address.port) });
-    let raw = '';
-    try {
-      await bounded(new Promise<void>((resolve, reject) => {
-        socket.setEncoding('utf8');
-        socket.once('error', reject);
-        socket.once('connect', () => {
-          socket.write(`GET / HTTP/1.1\r\nHost: localhost\r\nAuthorization: ${canary}\r\nBad Header: value\r\n\r\n`);
-        });
-        socket.on('data', (chunk: string) => {
-          raw += chunk;
-          if (raw.length > 64 * 1024) reject(new Error('Malformed request response exceeded its limit.'));
-        });
-        socket.once('end', resolve);
-      }), 2000);
-    } finally {
-      socket.destroy();
-    }
+    const raw = await rawRequest(address,
+      `GET / HTTP/1.1\r\nHost: localhost\r\nAuthorization: ${canary}\r\nBad Header: value\r\n\r\n`);
     const separator = raw.indexOf('\r\n\r\n');
     expect(separator).toBeGreaterThan(0);
     const headers = raw.slice(0, separator).toLowerCase();
@@ -161,13 +183,130 @@ describe('built server process', () => {
     expect(jsonLines(server.stdout).length).toBeGreaterThan(0);
   });
 
+  it('keeps protected requests closed when no keys are configured', async () => {
+    const server = launch();
+    const address = await started(server);
+    const key = randomBytes(32).toString('base64url');
+    for (const authorization of [undefined, `Bearer ${key}`]) {
+      const response = await fetch(new URL('/v1/unmatched', address), {
+        headers: authorization === undefined ? {} : { authorization },
+        signal: AbortSignal.timeout(2000),
+      });
+      expect(response.status).toBe(401);
+      expect(response.headers.get('www-authenticate')).toMatch(/^Bearer(?: |$)/);
+      const body = await response.json() as Record<string, unknown>;
+      expect(body.error).toMatchObject({ code: 'unauthorized' });
+      expect(body.engine).toMatchObject({ name: '@zodiacs/engine' });
+      expect(body.receipts).toEqual([]);
+    }
+  });
+
+  it.each(['environment', 'file'] as const)('loads %s keys in the built process without leaking them', async (source) => {
+    const keys = [randomBytes(32).toString('base64url'), randomBytes(32).toString('base64url')];
+    const unknownKey = randomBytes(32).toString('base64url');
+    const overrides: NodeJS.ProcessEnv = { LOG_LEVEL: 'trace' };
+    let path: string | undefined;
+    if (source === 'file') {
+      path = join(await temporaryDirectory(), `${randomUUID()}.json`);
+      await writeFile(path, JSON.stringify(keys), { mode: 0o600 });
+      overrides.API_KEYS_FILE = path;
+    } else {
+      overrides.API_KEYS = JSON.stringify(keys);
+    }
+    const server = launch(overrides);
+    const address = await started(server);
+    let responseText = '';
+    for (const authorization of [undefined, `Bearer ${unknownKey}`, `Bearer ${keys[0]}`, `bEaReR ${keys[1]}`]) {
+      const response = await fetch(new URL('/v1/unmatched', address), {
+        headers: authorization === undefined ? {} : { authorization },
+        signal: AbortSignal.timeout(2000),
+      });
+      const valid = authorization === `Bearer ${keys[0]}` || authorization === `bEaReR ${keys[1]}`;
+      expect(response.status).toBe(valid ? 404 : 401);
+      const text = await response.text();
+      responseText += text;
+      const body = JSON.parse(text) as Record<string, unknown>;
+      expect(body.error).toMatchObject({ code: valid ? 'not_found' : 'unauthorized' });
+      expect(body.engine).toMatchObject({ name: '@zodiacs/engine' });
+      expect(body.receipts).toEqual([]);
+    }
+    for (const probe of ['/healthz', '/readyz']) {
+      const response = await fetch(new URL(probe, address), { signal: AbortSignal.timeout(2000) });
+      expect(response.status).toBe(200);
+      await response.arrayBuffer();
+    }
+    server.child.kill('SIGTERM');
+    expect(await bounded(server.exited)).toEqual({ code: 0, signal: null });
+    expect(server.stderr).toBe('');
+    const output = responseText + server.stdout + server.stderr;
+    for (const key of [...keys, unknownKey]) expect(output).not.toContain(key);
+    if (path !== undefined) expect(output).not.toContain(path);
+    expect(jsonLines(server.stdout).some((record) => record.event === 'request_completed')).toBe(true);
+  });
+
+  it.each(['malformed environment', 'conflicting sources', 'missing file', 'malformed file'] as const)(
+    'sanitizes startup failure for %s credentials', async (failure) => {
+      const key = randomBytes(32).toString('base64url');
+      const path = join(await temporaryDirectory(), `${randomUUID()}.json`);
+      const overrides: NodeJS.ProcessEnv = { LOG_LEVEL: 'trace' };
+      if (failure === 'malformed environment') {
+        overrides.API_KEYS = `["${key}"`;
+      } else if (failure === 'conflicting sources') {
+        overrides.API_KEYS = JSON.stringify([key]);
+        overrides.API_KEYS_FILE = path;
+        await writeFile(path, JSON.stringify([key]), { mode: 0o600 });
+      } else {
+        overrides.API_KEYS_FILE = path;
+        if (failure === 'malformed file') await writeFile(path, `["${key}"`, { mode: 0o600 });
+      }
+      const server = launch(overrides);
+      expect(await bounded(server.exited)).toEqual({ code: 1, signal: null });
+      expect(server.stdout).toBe('');
+      expect(jsonLines(server.stderr)).toEqual([{ level: 'error', event: 'startup_failed' }]);
+      expect(server.stdout + server.stderr).not.toContain(key);
+      expect(server.stdout + server.stderr).not.toContain(path);
+    },
+  );
+
+  it.each(['same', 'different'] as const)('rejects duplicate mixed-case Authorization headers with %s values', async (values) => {
+    const key = randomBytes(32).toString('base64url');
+    const secondKey = values === 'same' ? key : randomBytes(32).toString('base64url');
+    const server = launch({ API_KEYS: JSON.stringify([key]), LOG_LEVEL: 'trace' });
+    const address = new URL(await started(server));
+    const raw = await rawRequest(address, [
+      'GET /v1/unmatched HTTP/1.1',
+      'Host: localhost',
+      `Authorization: Bearer ${key}`,
+      `aUtHoRiZaTiOn: Bearer ${secondKey}`,
+      'Connection: close',
+      '',
+      '',
+    ].join('\r\n'));
+    const separator = raw.indexOf('\r\n\r\n');
+    expect(separator).toBeGreaterThan(0);
+    const headers = raw.slice(0, separator).toLowerCase();
+    expect(headers).toMatch(/^http\/1\.1 401\b/);
+    expect(headers).toContain('www-authenticate: bearer');
+    expect(headers).toContain('cache-control: no-store');
+    const body = JSON.parse(raw.slice(separator + 4)) as Record<string, unknown>;
+    expect(body.error).toMatchObject({ code: 'unauthorized' });
+    expect(body.engine).toMatchObject({ name: '@zodiacs/engine' });
+    expect(body.receipts).toEqual([]);
+    expect(headers).toContain(`x-request-id: ${String(body.requestId)}`);
+    server.child.kill('SIGTERM');
+    expect(await bounded(server.exited)).toEqual({ code: 0, signal: null });
+    expect(server.stderr).toBe('');
+    for (const credential of [key, secondKey]) expect(raw + server.stdout + server.stderr).not.toContain(credential);
+    expect(jsonLines(server.stdout).some((record) => record.event === 'request_completed')).toBe(true);
+  });
+
   it('fails invalid configuration without echoing the supplied value', async () => {
     const canary = `${randomUUID()} ${randomUUID()}`;
-    const server = launch({ HOST: canary });
+    const server = launch({ HOST: canary, LOG_LEVEL: 'trace' });
     expect(await bounded(server.exited)).toEqual({ code: 1, signal: null });
     expect(server.stdout + server.stderr).not.toContain(canary);
-    expect(jsonLines(server.stderr)).toEqual([expect.objectContaining({ event: 'startup_failed' })]);
-    expect(server.stdout).not.toContain('server_started');
+    expect(jsonLines(server.stderr)).toEqual([{ level: 'error', event: 'startup_failed' }]);
+    expect(server.stdout).toBe('');
   });
 
   it('reports listener conflicts as sanitized startup failures', async () => {
@@ -179,10 +318,11 @@ describe('built server process', () => {
       });
       const address = occupied.address();
       if (address === null || typeof address === 'string') throw new Error('No reserved TCP port.');
-      const server = launch({ PORT: String(address.port) });
+      const server = launch({ PORT: String(address.port), LOG_LEVEL: 'trace' });
       expect(await bounded(server.exited)).toEqual({ code: 1, signal: null });
       const output = server.stdout + server.stderr;
-      expect(jsonLines(server.stderr)).toEqual([expect.objectContaining({ event: 'startup_failed' })]);
+      expect(jsonLines(server.stderr)).toEqual([{ level: 'error', event: 'startup_failed' }]);
+      expect(server.stdout).toBe('');
       expect(output).not.toContain('EADDRINUSE');
       expect(output).not.toContain('stack');
       expect(output).not.toContain('server_started');

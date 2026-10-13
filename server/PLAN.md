@@ -10,7 +10,7 @@ Complete the next unchecked milestone, run its checks, tick it and append a
 single session summary to `CHANGES.txt`. The harness owns all git writes.
 
 - [x] M1 Bootstrap a private TypeScript server package, reproducible local build and Vitest setup; add health/readiness routes, safe JSON response/error envelopes, structured logs and process lifecycle tests.
-- [ ] M2 Load API keys from environment or an ignored local file, fail closed for calculation routes, and test authentication and secret redaction without committed credentials.
+- [x] M2 Load API keys from environment or an ignored local file, fail closed for calculation routes, and test authentication and secret redaction without committed credentials.
 - [ ] M3 Add per-key token buckets, bounded JSON request validation and consistent HTTP errors; test refill, exhaustion, key isolation and invalid requests.
 - [ ] M4 Add the natal chart REST route using the engine directly, preserving full output and the engine's natal receipts; test coordinates, unknown time, flags and invalid input.
 - [ ] M5 Add transit and synastry REST routes, with engine receipts for each contributing chart and explicit receipt scope; test successful and invalid requests.
@@ -44,3 +44,12 @@ logging. The root `npm run package:contents` was attempted and failed because
 this checkout has no `dist/calc.d.ts`. No root build was generated because
 the task confines all writes to `server/`; the separate dry-run exclusion
 check passed. Root tracked files are unchanged.
+
+M2 validation: server typecheck, full Vitest suite, build and package-exclusion
+check passed using Node 22.23.3. Key configuration tests cover bounded
+environment/file loading, malformed values, duplicate keys and nonregular
+files. HTTP injection and built-process tests cover default route protection,
+public probes, duplicate Authorization headers and credential redaction at
+trace logging. Test credentials are generated at runtime and temporary files
+are removed. The root package contents gate still reports the missing
+`dist/calc.d.ts`; no root build was generated. All changes are in `server/`.

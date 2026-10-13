@@ -3,10 +3,13 @@ import Fastify, { LogController } from "fastify";
 import type { FastifyError, FastifyReply, FastifyServerOptions } from "fastify";
 import { verifyEngine } from "./engine.js";
 import { failure, success } from "./responses.js";
+import { ApiKeyStore } from "./api-keys.js";
+import { registerAuthentication } from "./auth.js";
 
 export interface AppOptions {
   logger?: FastifyServerOptions["logger"];
   readiness?: () => boolean;
+  apiKeys?: ApiKeyStore;
 }
 
 function responseHeaders(reply: FastifyReply, requestId: string): void {
@@ -77,6 +80,7 @@ export function buildApp(options: AppOptions = {}) {
   app.addHook("onRequest", async (request, reply) => {
     responseHeaders(reply, request.id);
   });
+  registerAuthentication(app, options.apiKeys ?? new ApiKeyStore());
   app.addHook("onResponse", async (request, reply) => {
     request.log.info({
       event: "request_completed",
