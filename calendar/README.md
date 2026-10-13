@@ -1,11 +1,13 @@
 # Calendar workbench
 
 This private TypeScript project exports astrology event records as iCalendar
-text and searches for tropical sign ingresses through the existing events
-package. It imports the parent engine sources without building or changing the
-parent npm package. The implemented scope is M1 through M4 in [PLAN.md](PLAN.md):
+text and searches for tropical sign ingresses and natal transit exacts through
+the existing events package. It imports the parent engine sources without
+building or changing the parent npm package. The implemented scope is M1
+through M5 in [PLAN.md](PLAN.md):
 UTC and timezone serialization, validation, stable event identities and ingress
-schedules. Other schedule searches, streaming, the CLI and the HTTP feed
+schedules, plus natal transit schedules for explicitly synthetic charts.
+Other schedule searches, streaming, the CLI and the HTTP feed
 endpoint remain planned milestones.
 
 Use Node satisfying `engines` in [package.json](package.json). From this folder:
@@ -68,8 +70,8 @@ exclusive interval end. Its receipt supplies:
 by relative import. It describes only calculations from this checkout; it must
 not relabel a result imported from another engine version. Serializer input
 is a calculation record supplied by the caller, not authenticated evidence.
-`searchIngressSchedule` connects upstream search results to this model; no
-event search is implemented here.
+`searchIngressSchedule` and `searchNatalTransitSchedule` connect upstream
+search results to this model; no event search is implemented here.
 
 ## Ingress schedules
 
@@ -147,6 +149,108 @@ touch suppression, partition stability, validation and work controls.
 parent APIs on its declared synthetic windows and round-trips UTC and TZID
 feeds through `ical.js`. These are integration and regression checks, not
 independent astronomical accuracy evidence.
+
+## Personal natal transit schedules
+
+```ts
+import { searchNatalTransitSchedule, serializeCalendar } from "./src/index.ts";
+
+const result = searchNatalTransitSchedule({
+  namespace: "synthetic-natal-transit.calendar.invalid",
+  body: "Sun", natalBody: "Sun", clock: "utc",
+  startUtc: "2026-02-01T00:00:00.000Z",
+  endUtc: "2026-02-06T00:00:00.000Z",
+  stepMs: 3_600_000, maxEvaluations: 100_000,
+  policy: { aspects: [{ id: "conjunction", angleDegrees: 0 }] },
+  natal: {
+    id: "synthetic-chart-a", synthetic: true,
+    birth: {
+      utc: "2001-02-03T04:05:06.789Z", timeScale: "utc",
+      latitude: 12.5, longitude: 34.25,
+      houseSystem: "whole", timeKnown: true
+    }
+  }
+});
+if (result.status === "refused") throw new Error(result.reason);
+if (result.events.length > 0) {
+  const ics = serializeCalendar(result.events, {
+    dtstamp: "2026-01-01T00:00:00.000Z"
+  });
+}
+```
+
+This invented chart, range and sampling policy are exercised in
+`test/natal-transits.calendar-test.ts`, including the golden feed
+`test/fixtures/synthetic-natal-transits.ics`. They are regression examples,
+not recommended accuracy settings or evidence of astronomical accuracy.
+
+The request names a moving `body` and a fixed `natalBody`, each from the
+pinned events package's supported Sun, Moon and planets. The bodies can be
+the same for a natal return. The adapter calls the parent `natalChart` once
+and takes the target longitude from that chart's body row. It calls the
+events package's `searchExactAspects` directly, with an explicit `policy`:
+each rule has a unique `id` and unique `angleDegrees`, in degrees from
+conjunction through opposition. Custom angles are supported. The rule ID
+is a caller-supplied label; the numeric angle defines the calculation.
+There are no inherited natal aspect orbs, in-orb intervals or
+applying/separating allowances. The top-level `orbDegrees` is the absolute
+angular residual of the returned exact-contact estimate.
+
+Only invented chart inputs are accepted by project policy. `synthetic: true`
+is required and is a caller declaration, not verification. `id` names a
+durable chart configuration. The birth input requires a canonical UTC
+instant and explicit `timeScale: "utc"`; TT, UT1, unresolved wall times,
+offset spellings and precomputed chart objects are refused. Optional birth
+settings are `latitude` and `longitude` together, `houseSystem`, `timeKnown`
+and a pinned `deltaT` in seconds. Unknown time retains the caller's exact
+reference instant and suppresses natal angles/houses according to the engine;
+the adapter does not infer noon. A natal Delta T pin applies to the natal
+chart alone. The moving body uses the engine's ordinary UTC time basis.
+
+Each event preserves the complete natal envelope from
+`createNatalEnvelope`, including chart bodies, requested/actual houses,
+flags, conventions, Delta T and time basis, under
+`receipt.source.natal.calculation`. The moving body's full `calc` receipt is
+`receipt.source.calculation`. The original search event preserves the fixed
+target longitude, aspect angle, oriented relative-longitude branch,
+direct/retrograde direction, numerical bracket and signed residual.
+`source.policy` preserves all requested labels and angles. The receipt's
+ordered bodies identify the moving body first and the natal body second.
+These records describe the calculation; they do not authenticate its origin.
+
+The same fixed UTC-day search, following-day padding, `(startUtc, endUtc]`
+ownership and all-occurrences identity assignment used for ingresses apply
+here. Non-conjunction/non-opposition rules search both oriented branches.
+The UID includes the durable chart ID, normalized birth settings, numeric
+aspect policy, branch, direction and sampling settings. Default birth
+settings normalize before identity assignment. Aspect labels, rule order,
+request bounds, budgets, receipt residuals and display timezone do not change
+UIDs; changing the numeric aspect set does. Computed natal longitude is
+retained in the receipt rather than hashed as a chart configuration. The
+day-ordinal scheme's limitations across engine/search revisions still apply.
+
+The evaluation budget includes natal creation, every upstream sample and
+each moving receipt calculation for every owned event before display
+filtering. Natal creation counts as one adapter request, even though the
+engine performs many calculations internally. Cancellation before work
+performs no natal calculation. Budgets and cancellation are cooperative,
+as for ingress schedules; any refusal discards all collected events.
+Moving-search engine refusals return `reason: "engine-refused"`. Invalid
+input, natal engine errors (including a birth outside its ephemeris span),
+and unexpected calculation errors throw. A completed empty result remains
+distinct from a refusal.
+
+This is a sampled longitude-crossing search. `complete` says that the scan
+finished, under the upstream continuity, monotonic-cell and short-arc
+assumptions. Tangential contacts, paired roots inside a cell and time-basis
+discontinuities need the upstream limitations described above. Following-day
+padding resolves sampled endpoint touches; it does not establish general
+completeness. `test/natal-transits-boundary.calendar-test.ts` uses analytic
+synthetic motion through the upstream scanner to exercise repeat contacts,
+branch separation, midnight ownership, clipping, validation and work controls.
+The integration tests verify engine delegation, stable overlapping requests,
+the natal Delta T pin and independent iCalendar parser round trips. No new
+event search algorithm is introduced here.
 
 ## Stable event identities
 
@@ -358,9 +462,11 @@ receipts and round-trip with `ical.js`, resolving the embedded VTIMEZONE.
 
 ## Fixtures and scope
 
-Fixtures under `test/fixtures/` are small synthetic formatting examples. Their
-event instants and angular values were invented for serializer tests; they
-are not astronomical predictions or accuracy evidence. Golden text fixes the
+Fixtures under `test/fixtures/` use synthetic data. The serializer-only
+fixtures use invented event instants and angular values. The natal transit
+golden is generated by the parent engine and pinned events search for the
+invented chart and range in `test/natal-transits.calendar-test.ts`; it is a
+regression record, not independent accuracy evidence. Golden text fixes the
 wire format, while parser checks verify dates, text and receipt preservation.
 All future chart examples and fixtures must also be synthetic.
 
@@ -373,4 +479,5 @@ license remain in the installed dependency, not in calendar source files.
 under BSD-3-Clause; retain their installed LICENSE files when redistributing
 them. Their timezone data derives from the public-domain IANA database.
 No dependency source or timezone database file is copied into this project's
-authored files; the golden fixtures contain only the clock changes they test.
+authored files. Embedded timezone definitions contain only the clock changes
+exercised by their tests.
