@@ -24,3 +24,17 @@ project. Modern place coordinates and timezone labels are not evidence of
 historical jurisdiction boundaries or historical civil-clock offsets.
 
 The sample selector and index builder are MIT, under ../LICENSE.
+
+Historical civil-time resolution
+
+Atlas-derived answers contain data from the Zodiacs.org historical time
+atlas, licensed CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
+https://github.com/zodiacs-org/engine/tree/main/atlas
+The result identifies the atlas version and release date,
+its GeoNames coordinate source, rule versions and primary-source citations.
+The adapter copies those result fields without changing their values.
+Retain that provenance with redistributed atlas-derived answers.
+The atlas resolver tools and this adapter are MIT.
+
+Other offsets use the engine's IANA tzdb histories and host Intl/ICU.
+See ../LICENSING.md, GeoNames and timezone data, and ../docs/time.md.

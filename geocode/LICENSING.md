@@ -51,16 +51,19 @@ field preservation, not the accuracy of upstream geographic facts.
 
 ## Timezone source
 
-The planned adapters reuse the existing atlas with precedence for its covered
+The adapters reuse the existing atlas with precedence for its covered
 places and dates, then the engine's IANA timezone handling elsewhere. Atlas
 data and documentation are CC BY 4.0; its tools are MIT, as recorded in
-[atlas/LICENSING.md](../atlas/LICENSING.md). Future results must retain its
-attribution, rule identifiers, citations and uncertainty. No atlas data or
-resolver code is copied here.
+[atlas/LICENSING.md](../atlas/LICENSING.md). Atlas results retain the manifest's
+version and license, atlas and GeoNames attribution, rule identifiers,
+citations and uncertainty. Retain that provenance when redistributing
+answers derived from the atlas. No atlas data or resolver code is copied here.
 
 The engine's [licensing record](../LICENSING.md#geonames-and-timezone-data)
 documents its public-domain tzdb histories and its use of host Intl/ICU.
-No additional timezone tables are copied here in this milestone. GeoNames
+The adapter retains the actual provider's metadata. Tests read selected
+independent IANA vectors from the existing CC0 conformance suite without
+copying or changing them. No additional timezone tables are copied here. GeoNames
 timezone offset summary tables will not be used to compute historical offsets.
 
 No Swiss Ephemeris code, binaries, tables, fixtures or per-case output,

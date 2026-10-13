@@ -4,8 +4,9 @@ This private project is being developed separately from `@zodiacs/engine`.
 It will provide offline place lookup, IANA civil-time resolution, a CLI and
 an optional HTTP service. [PLAN.md](PLAN.md) tracks implementation. The
 current milestone provides the place-data contract, an attributed GeoNames
-sample, an offline index builder and pure in-memory place lookup. Timezone
-resolution, the `geocode` CLI and the service are not implemented yet.
+sample, an offline index builder, pure in-memory place lookup and adapters
+for atlas-first civil-time resolution. Composing lookup and resolution into
+one request, the `geocode` CLI and the service remain later milestones.
 
 ## Development
 
@@ -33,7 +34,8 @@ an existing root build.
 ## Current library API
 
 `src/index.ts` exports `parsePlaceDataset`, `DatasetValidationError`,
-`createPlaceLookup` and the TypeScript data and lookup types. Pass already
+`createPlaceLookup`, `createTimeResolver` and the TypeScript data, lookup and
+time-resolution types. Pass already
 parsed JSON to the validator:
 
 ```ts
@@ -72,7 +74,7 @@ sea level, an unpopulated place or UTC. The validator preserves coordinate
 precision and does not authenticate geographic facts.
 
 Source timezone identifiers receive a syntax check only. Actual IANA-provider
-support belongs to the later timezone adapter, so loading a dataset does not
+support belongs to the timezone adapter, so loading a dataset does not
 depend on the host's zone-name support. Raw offset strings are not timezone
 identifiers. Source-file digests are provenance claims here; a future loader
 will verify the bytes against them.
@@ -277,23 +279,104 @@ text files. `--refresh` deliberately replaces the sample and receipt with a
 new daily snapshot; review and test that change before committing it.
 Selection preserves complete row bytes and sorts rows by source identifier.
 
-## Timezone design
+## Civil-time adapters
 
 The owner's scope note requires building on [the atlas](../atlas/README.md)
-and [the existing geo API](../api/geo.api.md). Civil-time conversion will use
-the atlas resolver first for covered places and dates, matched by source
-GeoNames ID, retaining its citations and uncertainty. Elsewhere it will use
-the engine's geo resolver and its IANA data. Both will be imported through
-relative paths, without copying their time math or modifying their source.
-The IANA adapter will omit the geo resolver's longitude option, which can
-otherwise substitute birthplace local mean time. Atlas local mean time stays
-the atlas resolver's own documented calculation.
+and [the existing geo API](../api/geo.api.md). `createTimeResolver` takes an
+explicit atlas provider. Load the repository atlas through the separate
+Node-only `loadAtlasTimeProvider` entry, then reuse the resolver:
 
-Results will retain provider/version metadata, expose skipped and repeated
-local times, and require callers to choose among ambiguous places. Covered
-atlas uncertainty must not trigger a silent substitution of tzdb results.
-A civil date alone does not imply a birth time or a single offset for the
-whole day.
+```ts
+import { createTimeResolver } from "./src/index.js";
+import { loadAtlasTimeProvider } from "./src/atlas-time.js";
+
+const timeResolver = createTimeResolver(loadAtlasTimeProvider());
+// selectedPlace is a validated PlaceRecord explicitly chosen by the caller.
+// dataset is its validated PlaceDataset. This civil-time request is invented.
+const result = await timeResolver.resolve({
+  place: selectedPlace,
+  dataset: dataset.provenance.dataset,
+  date: "1880-06-01",
+  time: "12:00"
+});
+console.log(result.provider, result.status, result.timeZone);
+```
+
+The factory performs no file or network I/O. Loading the default atlas is an
+explicit synchronous filesystem operation; importing either entry reads no
+atlas data. The default provider delegates to `atlas/tools/lib.mjs` through
+a small locally typed bridge. The engine adapter imports `src/geo.ts`
+through a relative source path. This remains a source-checkout API for
+TypeScript tooling; the existing builder compilation emits only its own
+tools and lookup modules into the ignored cache. No atlas or engine source
+is copied into this project, and no chart is computed.
+
+Requests require an explicit Gregorian `YYYY-MM-DD` and `HH:MM`. Invalid
+calendar dates are rejected using the engine's public calendar function.
+There is no default noon or midnight, seconds input, calendar inference or
+date-only resolution in this adapter. The place and dataset kind must come
+from the caller's validated dataset; their claims are not authenticated.
+
+For GeoNames records, the provider matches only `geonames:<id>` against the
+atlas's source IDs. It does not infer a jurisdiction from names, coordinates,
+country or proximity. The index retains only the first administrative
+division, so it does not supply the department required for the atlas's
+optional unlisted-place interface. Covered results use the atlas's own
+place and coordinates. The manifest's civil coverage boundaries are read
+from the atlas, and native resolution decides the result inside them.
+These boundaries are local clock readings, not UTC boundaries.
+
+Atlas results have `provider: "atlas"` and keep their native `resolution`,
+including all instants of a fold, the chosen interpretation of a skipped
+reading, fractional offsets in seconds east of Greenwich, rule IDs and
+versions, citation IDs and uncertainty reasons. `provenance` carries the
+manifest, the atlas place and the complete cited entries. Results are
+detached copies, so changing an answer cannot change later answers. Covered
+uncertainty, gaps, folds and clock refusals remain atlas answers. An atlas
+failure propagates instead of substituting tzdb.
+
+An atlas result's `timeZone` has `timeZoneRole: "comparison"`: it is the
+atlas's tzdb comparison label, not a historical zone-boundary claim. The
+atlas can describe a historical clock that the comparison zone does not.
+Its offsets remain authoritative for that covered request even when the
+modern place record has no zone or a different assignment.
+
+Outside coverage, for unmatched IDs, or for synthetic dataset records,
+results have `provider: "iana"`, `timeZoneRole: "source-assignment"` and
+`atlasFallback` explaining that routing. They use the place's supplied zone
+without replacing it with the atlas comparison zone. The adapter awaits
+`prepareLocalTime` and calls `resolveLocalToUtc`, without its longitude
+option, so birthplace mean time never replaces IANA offsets. Missing zones
+return `status: "unavailable"` with `reason: "missing-timezone"`; names
+unsupported by the host return `reason: "unsupported-timezone"`. Neither
+returns an offset. Other provider errors propagate, including shard-loading
+failures. The low-level `resolveIanaTime` helper in `src/iana-time.ts` accepts
+an explicit zone without atlas routing; ordinary place requests should use
+`createTimeResolver` to keep atlas precedence.
+
+Available IANA results retain the native engine `resolution`. `status` is
+`ok`, `ambiguous` for a fold, or `nonexistent` for a gap. The engine returns
+one chosen instant with its `localResolution.policy`: earlier for a fold,
+shift forward for a gap. The adapter does not manufacture other candidates.
+`resolution.zone` records the actual tzdb/Intl source, version and data
+form; `jump`, `transition`, flags and calendar metadata are preserved.
+The engine uses its pinned histories where available for older readings
+and host Intl elsewhere, including older spans lacking a pinned offset.
+Host zone support is required even when a pinned history supplies the offset.
+See the engine's [time guide](../docs/time.md) for its provider limits.
+
+[tests/atlas-time.test.ts](tests/atlas-time.test.ts) checks routing and
+preservation against the existing atlas resolver, including local coverage
+edges, uncertain changes and fractional-offset folds. Those are integration
+regressions, not independent evidence of historical accuracy.
+[tests/iana-time.test.ts](tests/iana-time.test.ts) reads the selected existing
+IANA conformance vectors directly, including half-hour and quarter-hour
+offsets and historical DST. The selected IDs, source and test results are
+recorded in [evidence/M4.md](evidence/M4.md). No broader accuracy claim is made.
+
+The later composed API will require explicit selection among ambiguous
+places. A civil date alone does not imply a birth time or a single offset
+for the whole day.
 
 A modern place-to-zone assignment is not a historical boundary atlas.
 IANA describes the limits of older histories and the distinction between
