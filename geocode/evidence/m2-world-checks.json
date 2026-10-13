@@ -1,0 +1,32 @@
+{
+  "node": "v22.23.3",
+  "check": "M2 locally produced city index: schema, receipts, counts, unique IDs, file limits and identical rebuild",
+  "manifestSha256": "66e10353a79dc8db4518a79b2e2e40620b07d8876b97a48898a40d7b46619196",
+  "sources": [
+    {
+      "file": "places",
+      "url": "https://download.geonames.org/export/dump/cities15000.zip#cities15000.txt",
+      "sha256": "94120f4fcd00272a344c3a11ea9f4e9b1c069a58b90a526236ec395266e1aedf"
+    },
+    {
+      "file": "countries.tsv",
+      "url": "https://download.geonames.org/export/dump/countryInfo.txt",
+      "sha256": "c5997ea659df5bcf42509eb937064d172b2a998bb873608603e8421d714a9974"
+    },
+    {
+      "file": "admin1.tsv",
+      "url": "https://download.geonames.org/export/dump/admin1CodesASCII.txt",
+      "sha256": "1da92a6323a5fec3176f3f743bf4cf4040fd56a876da55e46fbca23c863aa60a"
+    }
+  ],
+  "count": 34162,
+  "shards": 17,
+  "largestShardBytes": 999971,
+  "transformations": {
+    "trimmedLabels": 12,
+    "omittedAliases": 1,
+    "duplicateAliases": 12
+  },
+  "identicalRebuild": true,
+  "sourceAndOutputFilesBelowLimit": true
+}

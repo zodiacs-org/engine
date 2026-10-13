@@ -1,0 +1,22 @@
+
+> @zodiacs/engine@1.0.0 package:contents
+> node scripts/verify-package-contents.mjs
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: packed package is missing dist/calc.d.ts
+    at file:///workspace/codex-infra/wt-geocode/scripts/verify-package-contents.mjs:50:3
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.22.2

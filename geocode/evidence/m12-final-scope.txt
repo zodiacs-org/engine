@@ -1,0 +1,7 @@
+
+> @zodiacs/geocode-workbench@0.0.0 scope:check
+> node scripts/check-scope.mjs
+
+PASS: geocode candidate files are regular files below 2 MB; documentation has no em dashes.
+PASS: npm pack --dry-run --ignore-scripts excludes geocode/ from the engine package.
+Scope checks do not substitute for the root package's build and size-budget checks.

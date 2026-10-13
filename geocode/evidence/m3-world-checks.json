@@ -1,0 +1,98 @@
+{
+  "runtime": "v22.22.2",
+  "manifestSha256": "66e10353a79dc8db4518a79b2e2e40620b07d8876b97a48898a40d7b46619196",
+  "placeCount": 34162,
+  "verified": "local shard bytes, inclusion of source IDs, stable ordering and ambiguity under truncation",
+  "limitation": "Checks this local snapshot and synthetic queries only; not geographic accuracy or worldwide completeness.",
+  "queries": [
+    {
+      "query": "Paris, France",
+      "status": "ambiguous",
+      "total": 26,
+      "truncated": true,
+      "firstId": "geonames:2988507"
+    },
+    {
+      "query": "Springfield",
+      "options": {
+        "country": "US"
+      },
+      "status": "ambiguous",
+      "total": 9,
+      "truncated": true,
+      "firstId": "geonames:4409896"
+    },
+    {
+      "query": "Springfield, IL, US",
+      "status": "unique",
+      "total": 1,
+      "truncated": false,
+      "firstId": "geonames:4250542"
+    },
+    {
+      "query": "são paulo",
+      "options": {
+        "country": "BR"
+      },
+      "status": "ambiguous",
+      "total": 3,
+      "truncated": true,
+      "firstId": "geonames:3448439"
+    },
+    {
+      "query": "東京",
+      "options": {
+        "country": "JP"
+      },
+      "status": "unique",
+      "total": 1,
+      "truncated": false,
+      "firstId": "geonames:1850147"
+    },
+    {
+      "query": "Longyearbyen",
+      "status": "unique",
+      "total": 1,
+      "truncated": false,
+      "firstId": "geonames:2729907"
+    },
+    {
+      "query": "Mianzhu, Deyang, Sichuan",
+      "status": "unique",
+      "total": 1,
+      "truncated": false,
+      "firstId": "geonames:12492662"
+    },
+    {
+      "query": "Sant Pere, Santa Caterina i La Ribera",
+      "status": "unique",
+      "total": 1,
+      "truncated": false,
+      "firstId": "geonames:3119123"
+    },
+    {
+      "query": "Kralendijk",
+      "options": {
+        "country": "Bonaire, Saint Eustatius and Saba"
+      },
+      "status": "unique",
+      "total": 1,
+      "truncated": false,
+      "firstId": "geonames:3513563"
+    },
+    {
+      "query": "a",
+      "status": "ambiguous",
+      "total": 4497,
+      "truncated": true,
+      "firstId": "geonames:1279233"
+    },
+    {
+      "query": "Invented Undiscovered Harbour",
+      "status": "no-match",
+      "total": 0,
+      "truncated": false,
+      "firstId": null
+    }
+  ]
+}

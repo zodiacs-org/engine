@@ -1,0 +1,33 @@
+
+> @zodiacs/geocode-workbench@0.0.0 check
+> npm run typecheck && npm test && npm run scope:check
+
+
+> @zodiacs/geocode-workbench@0.0.0 typecheck
+> tsc -p tsconfig.json
+
+
+> @zodiacs/geocode-workbench@0.0.0 test
+> vitest run --config vitest.config.mjs
+
+
+ RUN  v2.1.9 /workspace/codex-infra/wt-geocode/geocode
+
+ ✓ tests/dataset.test.ts (111 tests) 41ms
+ ✓ tests/build-index.test.ts (99 tests) 328ms
+ ✓ tests/build-commands.test.ts (6 tests) 3939ms
+   ✓ offline data acquisition and build commands > preserves archived source bytes across small parts and builds those parts through the CLI 2665ms
+ ✓ tests/sample.test.ts (5 tests) 35ms
+
+ Test Files  4 passed (4)
+      Tests  221 passed (221)
+   Start at  21:49:24
+   Duration  4.59s (transform 144ms, setup 0ms, collect 220ms, tests 4.34s, environment 1ms, prepare 156ms)
+
+
+> @zodiacs/geocode-workbench@0.0.0 scope:check
+> node scripts/check-scope.mjs
+
+PASS: geocode candidate files are regular files below 2 MB; documentation has no em dashes.
+PASS: npm pack --dry-run --ignore-scripts excludes geocode/ from the engine package.
+Scope checks do not substitute for the root package's build and size-budget checks.
