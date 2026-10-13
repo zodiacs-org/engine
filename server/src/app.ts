@@ -13,6 +13,8 @@ import { registerNatalRoute } from "./natal.js";
 import { registerTransitsRoute } from "./transits.js";
 import { registerSynastryRoute } from "./synastry.js";
 import { registerReturnRoutes } from "./returns.js";
+import { registerMoonPhaseRoute } from "./moon-phase.js";
+import { registerHousesRoute } from "./houses.js";
 
 export interface AppOptions {
   logger?: FastifyServerOptions["logger"];
@@ -140,5 +142,7 @@ export function buildApp(options: AppOptions = {}) {
   registerTransitsRoute(app);
   registerSynastryRoute(app);
   registerReturnRoutes(app);
+  registerMoonPhaseRoute(app);
+  registerHousesRoute(app);
   return app;
 }

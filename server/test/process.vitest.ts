@@ -5,7 +5,8 @@ import { connect, createServer } from 'node:net';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
-import { ENGINE_VERSION, EPHEMERIS, natalChart, synastry, transits } from '../../src/index.js';
+import { ENGINE_VERSION, EPHEMERIS, moonPhase, natalChart, synastry, transits } from '../../src/index.js';
+import { houses } from '../../src/calc.js';
 import { createNatalEnvelope, parseNatalEnvelope } from '../../src/receipt.js';
 import { lunarReturn, solarReturn } from '../../src/techniques.js';
 
@@ -348,6 +349,98 @@ describe('built server process', () => {
       { route: '/v1/returns/solar', statusCode: 200 }, { route: '/v1/returns/lunar', statusCode: 200 },
       { route: '/v1/returns/lunar', statusCode: 400 }, { route: '/v1/returns/solar', statusCode: 400 },
       { route: '/v1/returns/lunar', statusCode: 400 },
+    ]);
+  });
+
+  it('serves moon phase and houses with their engine receipts through the built listener and keeps calculations out of trace logs', async () => {
+    const key = randomBytes(32).toString('base64url');
+    const canary = randomUUID();
+    const server = launch({ API_KEYS: JSON.stringify([key]), LOG_LEVEL: 'trace' });
+    const address = await started(server);
+    // Synthetic examples match the documented moon-phase and houses requests.
+    const at = '2024-06-07T08:09:10+02:00';
+    const houseInputs = [
+      {
+        time: { iso: '2004-02-29T08:30:00+02:00', deltaT: 70 },
+        place: { latitude: 48.25, longitude: -3.75 }, houseSystem: 'placidus' as const,
+      },
+      {
+        time: { jd: 2451545, scale: 'tt' as const, deltaT: 64 },
+        place: { latitude: 78.25, longitude: 15.5 }, houseSystem: 'placidus' as const,
+        zodiac: 'tropical' as const,
+      },
+    ];
+    const sky = natalChart({ utc: at });
+    const phase = moonPhase(at);
+    const envelope = createNatalEnvelope(sky, { sourceInstant: at });
+    const houseResults = houseInputs.map((input) => {
+      const result = houses(input);
+      if (result.status !== 'ok') throw new Error('Synthetic houses example was refused.');
+      return result;
+    });
+    const identity = { name: '@zodiacs/engine', version: ENGINE_VERSION, ephemeris: EPHEMERIS };
+    const request = (path: string, payload: unknown) => fetch(new URL(path, address), {
+      method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+      body: JSON.stringify(payload), signal: AbortSignal.timeout(5000),
+    });
+    let responseText = '';
+    for (const example of [
+      {
+        path: '/v1/moon-phase', input: { at }, data: { ...phase, sky },
+        receipts: [{ scope: '/data/sky', envelope }],
+      },
+      ...houseInputs.map((input, index) => ({
+        path: '/v1/houses', input, data: houseResults[index]!,
+        receipts: [{ scope: '/data', receipt: houseResults[index]!.receipt }],
+      })),
+    ]) {
+      const response = await request(example.path, example.input);
+      expect(response.status).toBe(200);
+      const text = await response.text();
+      responseText += text;
+      expect(JSON.parse(text)).toEqual({
+        requestId: response.headers.get('x-request-id'), engine: identity,
+        data: JSON.parse(JSON.stringify(example.data)),
+        receipts: JSON.parse(JSON.stringify(example.receipts)),
+      });
+      expect(response.headers.get('cache-control')).toBe('no-store');
+      expect(response.headers.get('x-content-type-options')).toBe('nosniff');
+      expect(response.headers.get('x-ratelimit-limit')).toBe('60');
+    }
+    expect(parseNatalEnvelope(JSON.stringify(envelope)).ok).toBe(true);
+    expect(houseResults[1]).toMatchObject({ requested: 'placidus', system: 'whole', flags: ['polar-fallback'] });
+    const outsideCalcSpan = '1700-01-01T00:00:00Z';
+    for (const example of [
+      { path: '/v1/moon-phase', input: { at: canary } },
+      { path: '/v1/houses', input: { ...houseInputs[0], time: canary } },
+      { path: '/v1/houses', input: { ...houseInputs[0], time: outsideCalcSpan } },
+    ]) {
+      const response = await request(example.path, example.input);
+      expect(response.status).toBe(400);
+      const text = await response.text();
+      responseText += text;
+      expect(JSON.parse(text)).toEqual({
+        requestId: response.headers.get('x-request-id'), engine: identity, receipts: [],
+        error: { code: 'invalid_request', message: 'Request is invalid.' },
+      });
+    }
+    server.child.kill('SIGTERM');
+    expect(await bounded(server.exited)).toEqual({ code: 0, signal: null });
+    expect(server.stderr).toBe('');
+    const logs = server.stdout + server.stderr;
+    for (const value of [
+      key, canary, at, houseInputs[0]!.time.iso!, outsideCalcSpan, sky.input.utc.toISOString(),
+      '2451545', 'sourceInstant', 'polar-fallback', 'out-of-range',
+      '"latitude"', '"longitude"', '"bodies"', '"receipts"', '"envelope"', '"bounds"', '"cusps"',
+      String(sky.bodies[0]!.lon), String(houseResults[0]!.angles.asc),
+    ]) expect(logs).not.toContain(value);
+    for (const value of [key, canary, outsideCalcSpan]) expect(responseText).not.toContain(value);
+    expect(jsonLines(server.stdout).filter((record) => record.event === 'request_completed')
+      .map(({ route, statusCode }) => ({ route, statusCode }))).toEqual([
+      { route: '/v1/moon-phase', statusCode: 200 },
+      { route: '/v1/houses', statusCode: 200 }, { route: '/v1/houses', statusCode: 200 },
+      { route: '/v1/moon-phase', statusCode: 400 },
+      { route: '/v1/houses', statusCode: 400 }, { route: '/v1/houses', statusCode: 400 },
     ]);
   });
 

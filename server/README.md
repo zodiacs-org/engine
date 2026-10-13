@@ -1,11 +1,11 @@
 # Engine HTTP server
 
 This private package is a self-hosted HTTP adapter for the engine in this
-checkout. It serves natal charts, transit snapshots, synastry and solar/lunar
-returns with engine receipts, health and readiness, API-key authentication,
-per-key rate limits, bounded JSON validation, JSON logging and process
-lifecycle. The remaining calculation routes, OpenAPI and
-Docker deployment are tracked in [PLAN.md](PLAN.md).
+checkout. It serves natal charts, transit snapshots, synastry, solar/lunar
+returns, moon phase and houses with engine receipts, health and readiness,
+API-key authentication, per-key rate limits, bounded JSON validation, JSON
+logging and process lifecycle. OpenAPI and Docker deployment are tracked in
+[PLAN.md](PLAN.md).
 
 ## Run from a checkout
 
@@ -113,8 +113,8 @@ requests receive HTTP 401 with the usual error envelope and a Bearer
 Route protection and absence of credentials in logs and responses are
 checked through injection in `test/auth.vitest.ts` and through a real
 listener in `test/process.vitest.ts`, including duplicate headers and trace
-logging. Natal, transit, synastry and solar/lunar return routes are
-available; other calculation routes remain in the plan.
+logging. Natal, transit, synastry, solar/lunar return, moon-phase and houses
+routes are available.
 
 ## Natal charts
 
@@ -363,6 +363,115 @@ parity and receipt replay, clocks, options, limits, refusals, authentication,
 rate limiting and privacy. These are integration checks against this engine,
 not independent astronomical accuracy evidence.
 
+## Moon phase
+
+`POST /v1/moon-phase` accepts a required `at` instant and calls the engine's
+`moonPhase` function. For example, this synthetic request is exercised by
+`test/process.vitest.ts`:
+
+```json
+{ "at": "2024-06-07T08:09:10+02:00" }
+```
+
+`at` accepts the same string or epoch-millisecond forms and limits as natal
+`utc`. It is always read as UTC on the engine's default time basis;
+date-only strings mean midnight UTC. Unknown fields and query parameters
+are refused. The endpoint takes no location, time-scale override or pinned
+delta T.
+
+`data` preserves every `moonPhase` field: `at`, `angle` in degrees,
+`illumination` as a fraction, `name` and `waxing`. It adds `sky`, a complete
+location-free natal chart computed for the same instant on that same basis.
+That chart supplies the bodies, coverage flags, delta T and time basis;
+it has a known time and no angles or houses. Dates serialize as ISO strings
+and numeric values retain the engine's full precision.
+
+The receipt has `scope: "/data/sky"` and `envelope`, the unchanged engine
+natal envelope for the sky chart. It retains the original `at` spelling
+in `receipt.sourceInstant` when supplied as a string; numeric input gives
+null. This envelope covers the contributing sky chart. The derived phase
+angle, illumination, name and waxing flag are outside that natal receipt.
+Read `data.sky.flags` for reference coverage. A receipt refusal returns
+`receipt_unavailable` without a partial result. `test/moon-phase.vitest.ts`
+checks full transport parity, receipt replay, coverage, validation and the
+shared authentication, rate-limit and privacy behavior.
+
+## Houses
+
+`POST /v1/houses` calls `houses` from the public `@zodiacs/engine/calc`
+entry. It requires `time` and `place`; `houseSystem` is optional and defaults
+to `whole`. These synthetic examples are exercised by
+`test/process.vitest.ts`:
+
+```json
+{
+  "time": { "iso": "2004-02-29T08:30:00+02:00", "deltaT": 70 },
+  "place": { "latitude": 48.25, "longitude": -3.75 },
+  "houseSystem": "placidus"
+}
+```
+
+```json
+{
+  "time": { "jd": 2451545, "scale": "tt", "deltaT": 64 },
+  "place": { "latitude": 78.25, "longitude": 15.5 },
+  "houseSystem": "placidus",
+  "zodiac": "tropical"
+}
+```
+
+`time` accepts an ISO string, `{ "iso": string }`, or a Julian-date object
+`{ "jd": number, "scale": "utc" | "ut1" | "tt" }`. ISO forms use UTC on
+the engine's time basis. Date-only strings mean midnight UTC; date-times
+need an explicit offset. A bare epoch-millisecond number is not accepted
+by this route. Object forms may include `deltaT`, TT minus UT1 in seconds,
+with the same bound as natal `deltaT`. ISO strings use the natal string
+length limit. The engine validates calendar dates, finite Julian dates
+and the resulting time basis.
+
+`place` requires finite latitude in degrees north and longitude in degrees
+east. It uses the natal coordinate bounds but refuses exact geographic
+poles. Heights and unknown fields are refused. `houseSystem` accepts the
+engine's `HOUSE_SYSTEMS` values. Placidus and Koch may fall back to whole
+sign at polar latitudes, preserved in the output and receipt. The optional
+`zodiac` must be `tropical`; allowing its explicit default also lets a
+client replay the normalized request from a returned receipt. Sidereal
+options, birth flags, `timeKnown`, imported receipts and query parameters
+are unsupported.
+
+This route uses the calc entry's `CALC_SPAN`: both the computed UT1 and TT
+must lie inside that span, with the upper endpoint excluded. Its accepted
+coverage is narrower than the natal route's ephemeris span. A delta T pin
+can move a time basis outside the span even when the submitted instant
+looks inside it. See [the engine calc reference](../docs/calc.md) for the
+time basis and typed refusals. `test/houses.vitest.ts` checks the actual
+span boundaries, pins, request limits and polar behavior.
+
+`data` is the complete successful calc result, including `status`,
+`requested`, `system`, `cusps`, `angles`, `vertex`, `eastPoint`, `armc`,
+`obliquity`, `flags`, `ayanamsa`, `bounds` and `receipt`. Cusps, angles,
+Vertex, East Point, ARMC and obliquity are in degrees and retain their
+full engine precision; `ayanamsa` is null for these tropical requests.
+The receipt records the normalized request, used time
+basis and convention identifiers. The engine's bounds and their stated
+measurement basis are preserved without changing their scope.
+
+The outer `receipts` list contains `{ "scope": "/data", "receipt": ... }`,
+where `receipt` is exactly `data.receipt`. This is the calc engine's native
+receipt, not a natal envelope, and is not input to `parseNatalEnvelope`.
+Its `request` can be submitted to `/v1/houses` to repeat the calculation
+with this engine. As with natal receipts, convention records are not signed
+attestations and replay depends on the engine and runtime used.
+
+Typed calc refusals and invalid inputs return HTTP 400 `invalid_request`
+with no data and an empty receipts list. Engine refusal details and supplied
+values are omitted from responses and logs. Moon phase and houses share
+authentication, the per-key bucket, JSON limits and sanitized errors with
+the other routes. `test/houses.vitest.ts` checks complete engine-output
+parity, native receipt replay and refusals; `test/process.vitest.ts` checks
+both routes and their privacy through the built listener. These comparisons
+verify the adapter against this engine, not independent astronomical accuracy.
+
 ## Rate limits
 
 Each configured key gets a token bucket shared across protected routes. The
@@ -416,8 +525,9 @@ Routes validate their declared JSON schemas without coercing types,
 discarding unknown properties or inserting defaults. Required-body and
 schema behavior is exercised with test-only routes in
 `test/request-validation.vitest.ts` and the calculation routes in
-`test/natal.vitest.ts`, `test/comparisons.vitest.ts` and
-`test/returns.vitest.ts`. Parser, schema and
+`test/natal.vitest.ts`, `test/comparisons.vitest.ts`,
+`test/returns.vitest.ts`, `test/moon-phase.vitest.ts` and
+`test/houses.vitest.ts`. Parser, schema and
 engine input errors expose no input values or validation internals in
 responses or logs.
 
@@ -435,7 +545,8 @@ responses or logs.
 
 The table describes ordinary request handling, as checked in
 `test/app.vitest.ts`, `test/auth.vitest.ts`, `test/request-validation.vitest.ts`,
-`test/natal.vitest.ts`, `test/comparisons.vitest.ts`, `test/returns.vitest.ts` and
+`test/natal.vitest.ts`, `test/comparisons.vitest.ts`, `test/returns.vitest.ts`,
+`test/moon-phase.vitest.ts`, `test/houses.vitest.ts` and
 `test/rate-limit.vitest.ts`. Raw HTTP parser and router failures can
 occur earlier. Authentication precedes rate limiting, which precedes JSON
 validation, so a rejected request reports the first applicable error.

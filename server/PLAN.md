@@ -15,7 +15,7 @@ single session summary to `CHANGES.txt`. The harness owns all git writes.
 - [x] M4 Add the natal chart REST route using the engine directly, preserving full output and the engine's natal receipts; test coordinates, unknown time, flags and invalid input.
 - [x] M5 Add transit and synastry REST routes, with engine receipts for each contributing chart and explicit receipt scope; test successful and invalid requests.
 - [x] M6 Add bounded solar and lunar return REST requests through the engine's return functions; preserve their charts and receipts and test calculation failures and limits.
-- [ ] M7 Add moon-phase and houses REST routes through public engine APIs; attach applicable engine receipts with explicit scope and test every route and refusal.
+- [x] M7 Add moon-phase and houses REST routes through public engine APIs; attach applicable engine receipts with explicit scope and test every route and refusal.
 - [ ] M8 Generate and serve an OpenAPI 3.1 document from route schemas, including authentication, limits, receipts, errors and synthetic examples; test schema and route agreement.
 - [ ] M9 Harden lifecycle and resource limits across the completed API, including shutdown, readiness, logging privacy and calculation work limits; run the full server integration suite.
 - [ ] M10 Add a Dockerfile and self-hosting instructions with environment/file key setup, health checks, persistent configuration and required engine licence notices; exercise the container when tooling permits.
@@ -107,3 +107,17 @@ An independent source review found no actionable issues. The root package
 contents gate still reports missing `dist/calc.d.ts`; no root build was
 generated. All changes remain in `server/`, within the file-size rule and
 without em dashes in docs.
+
+M7 validation: server typecheck, full Vitest suite, build and package-exclusion
+check passed using Node 22.23.3. Moon phase preserves the public engine result
+and adds a supporting sky chart with its scoped natal receipt. Houses calls
+the public calc API and preserves its full result and native receipt. Tests
+cover phase names, every house system, receipt replay, source spelling,
+ISO and Julian-date clocks, pins, polar fallback, exact-pole refusals, both
+UT1 and TT span boundaries, strict validation, authentication, shared rate
+limits, sanitized failures and trace-log privacy. Synthetic documentation
+examples pass through the built listener. These are integration checks,
+not independent accuracy evidence. An independent source review found no
+actionable issues. The root package contents gate still reports missing
+`dist/calc.d.ts`; no root build was generated. All changes remain in
+`server/`, within the file-size rule and without em dashes in docs.
