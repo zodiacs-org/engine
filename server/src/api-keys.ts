@@ -4,13 +4,16 @@ import { open } from 'node:fs/promises';
 
 const MAX_KEYS = 128;
 const MAX_CONFIG_BYTES = 65_536;
+// Unpadded base64url encoding of 32 random bytes. Length cannot prove entropy;
+// operators must use a cryptographic generator (see ../SECURITY.md, alert 39).
+const MIN_TOKEN_LENGTH = 43;
 
 function invalidConfig(): Error {
   return new Error('API key configuration is invalid.');
 }
 
 function validToken(value: unknown): value is string {
-  return typeof value === 'string' && value.length >= 32 && value.length <= 256
+  return typeof value === 'string' && value.length >= MIN_TOKEN_LENGTH && value.length <= 256
     && !/[^A-Za-z0-9_-]/u.test(value);
 }
 
@@ -30,6 +33,7 @@ export class ApiKeyStore {
     const entries: KeyEntry[] = [];
     for (const key of keys) {
       if (!validToken(key)) throw invalidConfig();
+      // Digest a high-entropy bearer key for comparison, not a user password.
       const digest = createHash('sha256').update(key).digest();
       if (entries.some((entry) => timingSafeEqual(entry.digest, digest))) throw invalidConfig();
       entries.push({ digest, principal: randomUUID() });

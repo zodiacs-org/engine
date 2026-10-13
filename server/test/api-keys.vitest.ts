@@ -54,13 +54,25 @@ describe('API key store', () => {
   });
 
   it('snapshots its inputs and accepts the token length boundaries', () => {
-    const minimum = key(32);
+    const minimum = randomBytes(32).toString('base64url');
+    expect(minimum).toHaveLength(43);
     const maximum = key(256);
     const keys = [minimum, maximum];
     const store = new ApiKeyStore(keys);
     keys.splice(0);
     expect(store.authenticate(minimum)).toBeDefined();
     expect(store.authenticate(maximum)).toBeDefined();
+  });
+
+  it('accepts hex encoding of a cryptographically generated key', () => {
+    const token = randomBytes(32).toString('hex');
+    expect(new ApiKeyStore([token]).authenticate(token)).toBeDefined();
+  });
+
+  it.each([1, 31, 32, 42])('rejects a %i-character key at configuration and authentication', (length) => {
+    const short = key(length);
+    expect(() => new ApiKeyStore([short])).toThrowError(new Error(CONFIG_ERROR));
+    expect(new ApiKeyStore([key()]).authenticate(short)).toBeUndefined();
   });
 
   it('rejects duplicates and invalid configured tokens without echoing values', () => {
@@ -114,7 +126,7 @@ describe('API key configuration', () => {
 
   it('rejects duplicates, oversized key lists and malformed tokens from either source', async () => {
     const token = key();
-    for (const keys of [[token, token], [key(31)], [key(257)], [`${token}\n`], Array.from({ length: 129 }, () => key())]) {
+    for (const keys of [[token, token], [key(31)], [key(32)], [key(42)], [key(257)], [`${token}\n`], Array.from({ length: 129 }, () => key())]) {
       const json = JSON.stringify(keys);
       await expect(loadApiKeys({ API_KEYS: json })).rejects.toThrowError(new Error(CONFIG_ERROR));
       await expect(loadApiKeys({ API_KEYS_FILE: await keyFile(json) })).rejects.toThrowError(new Error(CONFIG_ERROR));

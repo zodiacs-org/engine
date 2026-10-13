@@ -67,7 +67,7 @@ describe('default route authentication', () => {
 
   it.each([
     'missing', 'unknown', 'basic', 'empty', 'extra spaces', 'tab', 'comma',
-    'suffix', 'newline', 'oversize', 'array', 'duplicate',
+    'suffix', 'newline', 'short', 'oversize', 'array', 'duplicate',
   ])('denies %s credentials before validation or handler execution', async (kind) => {
     const key = newKey();
     const { app, handler } = createApp([key]);
@@ -81,6 +81,7 @@ describe('default route authentication', () => {
       comma: `Bearer ${key}, Bearer ${key}`,
       suffix: `Bearer ${key} extra`,
       newline: `Bearer ${key}\n`,
+      short: `Bearer ${randomBytes(31).toString('base64url')}`,
       oversize: `Bearer ${key.repeat(8)}`,
       array: [`Bearer ${key}`, `Bearer ${newKey()}`],
       duplicate: [`Bearer ${key}`, `Bearer ${key}`],

@@ -34,3 +34,41 @@ Existing checks in [test/app.vitest.ts](test/app.vitest.ts),
 shutdown admission and sanitized executable startup failures. This note
 records the reasoning for maintainer triage; it does not dismiss the alert
 or assert that a subsequent CodeQL scan has passed.
+
+## Alert 39: SHA-256 digest of a random API key
+
+[CodeQL alert 39](https://github.com/zodiacs-org/engine/security/code-scanning/39)
+points to SHA-256 in [src/api-keys.ts](src/api-keys.ts). The recommended
+disposition is **false positive**, conditional on the key provisioning
+requirement below. These digests identify cryptographically random bearer
+secrets for comparison. The server has no password registration or password
+verification path.
+
+Provision each key from at least 32 bytes produced by a cryptographic random
+generator, encoded as unpadded base64url or hex. The generation examples in
+[README.md](README.md#api-keys) and [DEPLOYMENT.md](DEPLOYMENT.md) use
+`randomBytes(32).toString('base64url')`. Under this assumption the input has
+256 bits of entropy, so password stretching is unnecessary for resisting
+offline guesses of the original secret from its digest. SHA-256 does not
+make a weak or predictable key safe.
+
+The shared token validator rejects strings shorter than 43 characters,
+the length of the documented base64url encoding, before hashing configured
+keys or presented credentials. This replaces the previous minimum of 32
+characters, which allowed shorter random material. Both environment and file
+configuration fail startup with sanitized errors for short keys. The server
+cannot infer entropy from a string's length or alphabet: operators must never
+use passwords, repeated characters, padded short secrets or other predictable
+strings, even when they pass validation. Replace existing shorter keys using
+the documented generator before restarting.
+
+The store retains only digests and opaque process-local identities and compares
+every configured digest using `timingSafeEqual`. Duplicate rejection, bounded
+configuration reads and fail-closed authentication remain in place.
+[test/api-keys.vitest.ts](test/api-keys.vitest.ts) checks encoding and length
+boundaries, short-key rejection through both configuration sources and digest
+privacy. [test/auth.vitest.ts](test/auth.vitest.ts) checks short credentials
+receive HTTP 401 before handler execution, and
+[test/process.vitest.ts](test/process.vitest.ts) checks sanitized startup
+failures for short keys in both sources. This note supplies a written reason
+for maintainer triage; it does not dismiss the alert or claim a passing scan.

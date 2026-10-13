@@ -648,13 +648,15 @@ describe('built server process', () => {
     expect(jsonLines(server.stdout).some((record) => record.event === 'request_completed')).toBe(true);
   });
 
-  it.each(['malformed environment', 'conflicting sources', 'missing file', 'malformed file'] as const)(
+  it.each(['malformed environment', 'short environment', 'conflicting sources', 'missing file', 'malformed file', 'short file'] as const)(
     'sanitizes startup failure for %s credentials', async (failure) => {
-      const key = randomBytes(32).toString('base64url');
+      const key = randomBytes(failure.startsWith('short') ? 31 : 32).toString('base64url');
       const path = join(await temporaryDirectory(), `${randomUUID()}.json`);
       const overrides: NodeJS.ProcessEnv = { LOG_LEVEL: 'trace' };
       if (failure === 'malformed environment') {
         overrides.API_KEYS = `["${key}"`;
+      } else if (failure === 'short environment') {
+        overrides.API_KEYS = JSON.stringify([key]);
       } else if (failure === 'conflicting sources') {
         overrides.API_KEYS = JSON.stringify([key]);
         overrides.API_KEYS_FILE = path;
@@ -662,6 +664,7 @@ describe('built server process', () => {
       } else {
         overrides.API_KEYS_FILE = path;
         if (failure === 'malformed file') await writeFile(path, `["${key}"`, { mode: 0o600 });
+        if (failure === 'short file') await writeFile(path, JSON.stringify([key]), { mode: 0o600 });
       }
       const server = launch(overrides);
       expect(await bounded(server.exited)).toEqual({ code: 1, signal: null });
