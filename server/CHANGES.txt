@@ -1,0 +1,1 @@
+Complete server M1: add isolated TypeScript HTTP foundation, engine readiness checks, sanitized JSON logging and envelopes, and passing Vitest lifecycle tests.
