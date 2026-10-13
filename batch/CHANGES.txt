@@ -1,0 +1,1 @@
+batch: complete M1 with private TypeScript tooling, bounded JSON job validation and synthetic Vitest coverage
