@@ -1,8 +1,8 @@
 # Event query grammar
 
 `parseQuery(text)` returns an immutable `EventQuery`. It only parses syntax;
-it does not search, read birth data or choose a horizon. Execution is the next
-milestone. Import it from the local `events/src/index.ts` entry.
+it does not search, read birth data or choose a horizon. `executeQuery`
+executes the parsed query under explicit search options. Import it from the local `events/src/index.ts` entry.
 
 ```text
 query     := (next | all) event [range] [clock scale]
@@ -66,3 +66,83 @@ enforces the limits, examples, canonical output, strict filters, date
 validation, duplicate rejection and error positions. These are parser
 contract tests, not astronomical accuracy evidence. Existing Horizons and NASA
 checks remain the independent date evidence for the underlying searches.
+
+## Executing queries
+
+`executeQuery(textOrQuery, options)` accepts DSL text or the immutable AST from
+`parseQuery`. Programmatic ASTs must have exactly the parser's shape and values,
+including date-range endpoints at Gregorian midnight. The existing lower-level
+search APIs support arbitrary integer-millisecond windows.
+
+```ts
+import { executeQuery } from './src/index.js';
+
+// Invented fixed Sun longitude, with no personal birth data.
+const result = executeQuery(
+  'next Mars square natal Sun from 2000-01-01 to 2001-01-01 clock tt',
+  { stepMs: 3600000, maxEvaluations: 10000, natalLongitudes: { Sun: 0 } }
+);
+
+const bounded = executeQuery('next Mercury stations direct', {
+  clock: 'tt',
+  horizon: {
+    startMs: Date.parse('2000-01-01T00:00:00Z'),
+    endMs: Date.parse('2001-01-01T00:00:00Z'),
+    clock: 'tt'
+  },
+  stepMs: 3600000,
+  maxEvaluations: 10000
+});
+```
+
+The steps and budgets in these examples are caller choices, not accuracy or
+completeness guarantees. The API requires a positive integer `stepMs` and
+`maxEvaluations`. A query clock or execution `clock` is mandatory, and conflicting
+clocks fail. A range-free `next` requires `horizon` with matching clock. An
+explicit query range cannot be overridden by a horizon. No current time,
+time-zone resolution, clock conversion or automatic horizon expansion occurs.
+
+Natal queries require `natalLongitudes` to supply the target body's fixed
+tropical longitude in degrees. Eclipse queries require `eclipse.model` with
+explicit spherical `sunRadiusAu`, `moonRadiusAu` and `earthRadiusAu`, and
+`eclipse.derivativeStepMs`; the geometry and boundary guards remain those of
+`searchEclipses`. Void-of-course queries retain their explicit DSL policy.
+
+The result includes the actual `window` and cumulative `evaluations`. On
+`status: 'complete'`, `all` returns the filtered events, and `next` returns
+only the earliest filtered event or interval in the supplied window. Both
+modes scan the entire window, sharing the underlying budget across all aspect
+branches and interval computations. There is no early-stop optimization.
+Completion has the underlying searches' sampling and boundary assumptions;
+it does not certify that a coarse scan found every physical event.
+
+Intervals already in progress at the start can be returned with `clippedStart`;
+`next` means the first intersecting interval, not necessarily a future onset.
+Retrograde intervals may also have `clippedEnd`, and sign filters preserve the
+whole interval with positive-duration sign overlap. Complete results include
+`unresolved`, retaining any Moon tail whose sign exit lies outside the window,
+even when `next` selects an earlier resolved interval. An empty event list with
+an unresolved tail does not establish the absence of a void-of-course period.
+
+`status: 'refused'` always has an empty event list. Reasons are
+`evaluation-budget`, `cancelled` and `engine-refused` (the parent's calculation
+coverage or policy refusal). Refusals discard earlier found events in both
+modes. Syntax, configuration and unexpected computation errors throw; they
+are not empty completed searches. An optional `AbortSignal` is checked between
+synchronous evaluations. Cancellation cannot preempt a running calculation or
+process an abort from the same event loop while this synchronous call runs.
+The HTTP layer will need a separate scheduling policy for request cancellation.
+
+Trusted custom providers can be supplied through the optional `QueryProviders`
+argument. Each factory receives the shared `EvaluationContext`, and providers
+must charge each request to that context. They are an integration/testing
+boundary, not untrusted input to the DSL or HTTP endpoint.
+
+[test/search.test.ts](test/search.test.ts) checks dispatch, filtered earliest
+selection, explicit horizons, clock conflicts, symbolic targets, clipped
+intervals, unresolved tails, malformed AST rejection and all-or-nothing
+refusals with analytic providers. Its synthetic natal square also uses the
+independent JPL date and predeclared tolerance from
+[references/horizons.json](references/horizons.json) over that fixture's window.
+The remaining Horizons and NASA date tests still exercise the underlying
+searches over their documented reference selections.

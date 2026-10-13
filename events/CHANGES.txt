@@ -8,3 +8,4 @@ Complete M7: add bounded spherical-model solar and lunar shadow-axis eclipse sea
 Complete M8: add reproducible attributed NASA eclipse catalog fixtures, hashed provenance, offline parser checks and independent TT eclipse date and coarse-class tests with documented model limits.
 Complete M9: add bounded sign-based void-of-course Moon intervals with explicit body/aspect policies, clipped starts, unresolved tails, shared refusals, analytic boundary tests and documentation.
 Complete M10: add bounded typed event-query parser, strict dates and filters, symbolic natal targets, grammar documentation and parser tests; typecheck and events suite pass.
+Complete M11: wire typed and DSL query execution across event searches with explicit next horizons, clocks, synthetic natal targets, shared cancellation/budgets, structured engine refusals, interval tails, documentation and independent JPL API date tests; Node 22 typecheck and events suite pass.

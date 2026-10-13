@@ -8,7 +8,8 @@ The current implementation exposes a bracketed scalar root refiner, shared
 search contracts, an evaluation context, a longitude adapter, longitude
 crossing searches, tropical sign ingresses, exact aspects, stations and retrograde
 intervals, spherical-model solar and lunar eclipses, and sign-based
-void-of-course Moon intervals. The DSL and the HTTP API remain planned.
+void-of-course Moon intervals, a typed query parser and DSL execution through
+`executeQuery`. The HTTP API remains planned.
 The adapter consumes the parent source through relative imports. The local
 build bundles those imports under `events/build/`.
 

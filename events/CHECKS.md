@@ -287,3 +287,39 @@ The parent `npm run package:contents` check was attempted and fails because
 `dist/calc.d.ts` is absent, as in earlier sessions. No parent build or archive
 pack was run. Full engine/release gates are not claimed. No git metadata,
 packed source, package version or artifact changed.
+
+
+## M11
+
+Runtime: Node.js 22.22.2, using the cached Node binary under the session's
+`/tmp/events-npm-cache`. Only `events/` was edited.
+
+Passed:
+
+- Local TypeScript typecheck and the full event test suite on that runtime.
+- Programmatic AST and DSL execution equivalence, all event-kind dispatch,
+  signed aspect ordering, entered-sign and station-direction filters, explicit
+  horizons and clocks, synthetic natal targets, interval clipping, unresolved
+  Moon tails, malformed AST rejection and structured parent coverage refusals.
+- Budget exhaustion and cancellation after an earlier event discard all output,
+  including in next mode; unrelated provider failures propagate.
+- Synthetic natal DSL date comparison with the existing hashed independent
+  Horizons fixture and its predeclared tolerance, plus the existing underlying
+  JPL and NASA date checks over their documented selections.
+- Parent npm dry-run file-list isolation, `git diff --check`, authored-file
+  size and documentation character checks.
+
+The default shell initially ran the checks on Node 20.19.2; they were repeated
+successfully on the required Node 22.22.2. The package-content attempt initially
+hit the read-only default npm cache. Repeating it with a writable cache reaches
+its existing failure: absent `dist/calc.d.ts`. No parent build or archive pack
+was run, and full engine/release gates are not claimed.
+
+Next queries scan their whole explicit horizon before selecting the earliest
+filtered event or intersecting interval. Completion retains the lower-level
+sampling and boundary assumptions; unresolved void-of-course tails are retained.
+Cancellation is cooperative between synchronous evaluations and cannot process
+same-event-loop request aborts during the call. HTTP scheduling remains M12.
+Programmatic AST ranges follow the parser's midnight date grammar; lower-level
+searches retain arbitrary millisecond windows. No new physical accuracy or
+completeness span is claimed.
