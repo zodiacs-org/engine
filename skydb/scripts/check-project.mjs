@@ -9,8 +9,10 @@ requireNode22();
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).split('\0').filter(Boolean);
 const changed = [...git(['diff', '--name-only', '-z', 'HEAD']), ...git(['ls-files', '--others', '--exclude-standard', '-z'])];
-assert.ok(changed.every(path => path.startsWith('skydb/')), 'Changes must stay in skydb/');
-const files = [...new Set(git(['ls-files', '--cached', '--others', '--exclude-standard', '-z', '--', 'skydb/']))];
+const workflow = '.github/workflows/skydb.yml';
+assert.ok(changed.every(path => path.startsWith('skydb/') || path === workflow),
+  'Changes must stay in skydb/ or .github/workflows/skydb.yml');
+const files = [...new Set(git(['ls-files', '--cached', '--others', '--exclude-standard', '-z', '--', 'skydb/', workflow]))];
 for (const path of files) {
   const info = await lstat(join(root, path));
   assert.ok(info.isFile(), `Candidate must be a regular file: ${path}`);
