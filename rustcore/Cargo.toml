@@ -6,7 +6,7 @@ resolver = "2"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.85.1"
-license = "MIT"
+license = "MIT AND CC-BY-4.0"
 publish = false
 
 [workspace.dependencies]

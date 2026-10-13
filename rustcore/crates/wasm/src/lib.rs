@@ -1,5 +1,7 @@
 //! WebAssembly bindings for the native numeric kernels.
 
+mod time;
+
 use wasm_bindgen::prelude::*;
 use zodiacs_rustcore::{angles, calendar, date_input, signs, LongitudeError};
 

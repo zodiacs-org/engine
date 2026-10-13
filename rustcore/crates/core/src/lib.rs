@@ -5,7 +5,14 @@
 pub mod angles;
 pub mod calendar;
 pub mod date_input;
+pub mod deltat;
 pub mod signs;
+pub mod time_scales;
+
+#[allow(dead_code)]
+mod time_data {
+    include!(concat!(env!("OUT_DIR"), "/time_data.rs"));
+}
 
 use std::fmt;
 

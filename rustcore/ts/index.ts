@@ -2,9 +2,16 @@ import * as wasm from "../pkg/zodiacs_rustcore.js";
 import type { DateInput, SignDefinition } from "../../src/types.js";
 import type { CalendarName, CivilDate } from "../../src/civil-calendar.js";
 import { SIGNS } from "./sign-data.js";
+import type { DeltaT, DeltaTTable, DeltaTSegment } from "../../src/deltat.js";
+import type { TimeBasis, TimeScale, TimeScaleName, Ut1MinusUtc, LeapSeconds } from "../../src/time-scale.js";
 
 export { ELEMENTS, MODALITIES, SIGNS, SIGN_SLUGS, SIGN_NAMES } from "./sign-data.js";
 export type { DateInput, SignDefinition, CalendarName, CivilDate };
+export type { DeltaT, DeltaTTable, DeltaTSegment, TimeBasis, TimeScale, TimeScaleName, Ut1MinusUtc, LeapSeconds };
+export {
+  DELTA_T_MODEL, DELTA_T_TABLE, DELTA_T_IERS_MODEL, TIME_SCALE_NAMES,
+  LEAP_SECOND_LIST, UT1_DATA, LEAP_SECONDS_FROM, UT1_FALLBACK_BAND
+} from "../generated/time-data.js";
 
 let initialized = false;
 
@@ -139,4 +146,36 @@ export function gregorianToJulian(value: string): string | null {
   ready();
   if (typeof value !== "string") return null;
   return wasm.gregorianToJulian(value) ?? null;
+}
+
+export function deltaT(ut: number): number {
+  ready();
+  if (!Number.isFinite(ut)) throw new RangeError("deltaT takes a finite UT: days since 2000-01-01T12:00 on UT1.");
+  return wasm.deltaT(ut);
+}
+
+export function deltaTAt(ut: number): DeltaT {
+  ready();
+  if (!Number.isFinite(ut)) throw new RangeError("deltaTAt takes a finite UT: days since 2000-01-01T12:00 on UT1.");
+  return wasm.deltaTAt(ut) as DeltaT;
+}
+
+export function taiMinusUtcAt(utcMs: number): number {
+  ready();
+  return wasm.taiMinusUtcAt(utcMs);
+}
+
+export function ut1MinusUtcAt(utcMs: number): Ut1MinusUtc {
+  ready();
+  return wasm.ut1MinusUtcAt(utcMs) as Ut1MinusUtc;
+}
+
+export function timeBasis(ms: number, scale: TimeScaleName = "utc", pin?: number): TimeBasis {
+  ready();
+  return wasm.timeBasis(ms, scale === "tt" ? 2 : scale === "ut1" ? 1 : 0, pin) as TimeBasis;
+}
+
+export function elapsedDays(before: TimeBasis, after: TimeBasis, days: number): number {
+  ready();
+  return wasm.elapsedDays(before, after, days);
 }

@@ -56,6 +56,7 @@ switch (process.argv[2]) {
     if (run(cli, ["--version"], true) !== `wasm-bindgen ${version}`) {
       throw new Error("The local wasm-bindgen CLI does not match Cargo.toml; run npm run setup:wasm.");
     }
+    run(process.execPath, [join(root, "scripts", "generate-time-data.mjs"), "--typescript"]);
     cargo(["build", "--locked", "--release", "--target", "wasm32-unknown-unknown", "-p", "zodiacs-rustcore-wasm"]);
     run(cli, [join(root, "target", "wasm32-unknown-unknown", "release", "zodiacs_rustcore_wasm.wasm"),
       "--target", "web", "--out-dir", join(root, "pkg"), "--out-name", "zodiacs_rustcore"]);

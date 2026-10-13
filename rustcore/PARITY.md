@@ -2,7 +2,8 @@
 
 References: the checked-out engine's `src/signs.ts`, angular helpers in
 `src/aspects.ts`, `src/points.ts` and `src/window-ranges.ts`, `src/date-input.ts`
-and `src/civil-calendar.ts`. The parity tests import those sources directly
+and `src/civil-calendar.ts`, plus `src/deltat.ts` and `src/time-scale.ts`.
+The parity tests import those sources directly
 and execute the release WASM built from `crates/wasm` and `crates/core`.
 Passing means compatibility on the tested inputs, not independent astronomical
 accuracy. No external ephemeris is a reference for this port.
@@ -19,7 +20,14 @@ accuracy. No external ephemeris is a reference for this port.
 | Date validation and allocation | Same accepted syntax, rejection class/message, Date cloning and intrinsic timestamp extraction | `tests/date-input.parity.ts` |
 | Julian Day Number, days; civil year/month/day fields | Identical binary64 bits for non-NaN fields; tolerance 0 days | `tests/civil-calendar.parity.ts` |
 | Civil calendar parsing, formatting and conversion | Exact objects, strings and null results | `tests/civil-calendar.parity.ts` |
+| Delta T model seconds in the spline, long-term and extrapolated branches | Absolute difference at most 1e-12 seconds on the tested corpus | `tests/time.parity.ts`, model comparisons |
+| Delta T model uncertainty in the forecast power branches | Absolute difference at most 1e-14 seconds when years since the last observed knot are greater than 0 and at most 10 | `tests/time.parity.ts`, model comparisons |
+| All other Delta T seconds and uncertainty, including table interpolation, IERS and pins | Identical binary64 bits; tolerance 0 seconds | `tests/time.parity.ts` |
+| UTC epoch milliseconds, UT1/TT days since J2000 and elapsed intervals | Identical binary64 bits; tolerance 0 seconds | `tests/time.parity.ts`, time-basis and elapsed-day comparisons |
+| Time provenance, leap counts, listed flags, basis/segment choices and metadata values | Exact fields; immutable wrapper metadata caveat below | `tests/time.parity.ts` |
+| Delta T input rejection | Same RangeError class and message, without JavaScript coercion | `tests/time.parity.ts` |
 | Native arithmetic, signs, date validation and calendars | Exact regression expectations and calendar round trips | Unit tests in `crates/core/src/{lib,angles,signs,date_input,calendar}.rs` |
+| Native time model and clock conversion | Table knot checks, segment/uncertainty boundaries, finite synthetic scan, leap seconds and pins | Unit tests in `crates/core/src/{deltat,time_scales}.rs` |
 | Loading | Explicit initialization, retry after invalid WASM syntax, reuse on repeated initialization | `tests/loader.parity.ts` |
 
 ## Corpus
@@ -49,9 +57,27 @@ floor division, and unchecked fractional/nonfinite numeric fields. The native
 calendar tests round-trip every day from 1800 through 2200 in both calendars.
 Every input is synthetic; no personal birth data or ephemeris fixture is used.
 
+`tests/time.parity.ts` compares the model and every input scale on a monthly
+and seeded synthetic corpus from the start of 1800 through the end of 2200.
+It also tests every spline, annual table, prediction and uncertainty knot,
+adjacent representable values and offsets on either side. Additional model
+cases exercise the ancient spline and long-term branch through year -5000,
+and a later extrapolation case in year 3998. These are branch probes, not
+coverage of that entire extended span or physical accuracy evidence.
+
+The same test visits every decoded UT1 grid knot, adjacent doubles, nearby
+millisecond timestamps and an interior point of each interval. It tests
+uncertainty-grid and year boundaries, all leap-second changes, TT and UT1
+inside each leap second, the leap list's expiry, and both ends of the IERS
+table. Pinned Delta T cases include negative values, signed zero, subnormals
+and nonfinite values. Mixed-scale and mixed-pin records exercise elapsed-day
+branch decisions. The table metadata is compared in full against the imported
+reference, including its source digests and expiry. The generator checks
+are in `scripts/time-data.check.mjs`; provenance is in [PROVENANCE.md](PROVENANCE.md).
+
 ## Rounding and deviations
 
-No finite numeric deviation is permitted for the implemented helpers.
+No finite numeric deviation is permitted for the angular and civil-date helpers.
 Rust retains the exact evaluation order `((lon % 360) + 360) % 360`, including
 its intermediate rounding. A value just below a full turn can round to zero
 after adding a turn. Very small magnitudes also round to positive zero. These
@@ -98,12 +124,50 @@ and days 1 through 31. Calendar conversions only call it within those civil
 field ranges and reject results outside the year range. The native tests
 enforce this distinction. All calendar arithmetic and conversions run in Rust.
 
+The Delta T spline uses exponentiation, and its long-term and extrapolation
+branches use sine, cosine and exponential functions. The forecast uncertainty
+uses fractional powers. Rust's native/WASM math implementation and V8's math
+implementation can round those functions differently despite preserving the
+surrounding arithmetic order. Only those model quantities receive the explicit
+second-valued limits in the table above. In particular, the spline allowance
+ends at model year 1941; annual/predicted knot interpolation stays exact through
+the last prediction. Forecast uncertainty outside its power branches stays
+exact. The tests choose allowances from the reference input and branch, never
+from whether a comparison failed. These limits are compatibility requirements
+on this corpus, not physical uncertainty bands or guarantees for untested dates
+and runtimes. They were checked on Node 22.22.2 with the pinned Rust toolchain.
+
+Time-basis UTC milliseconds and UT1/TT day values remain bit-exact on the
+tested corpus, including when their Delta T records need the model allowance.
+The model's seam at 1941, the reference's TT fixed-point iterations, its
+table-edge selection rules and leap-second timestamp convention are retained.
+The seam can change elapsed TT across samples; `elapsedDays` preserves that
+decision and leaves the supplied interval untouched within one piece.
+It does not repair the reference's clock conventions or smooth a discontinuity.
+
+Time metadata exported by the wrapper is an immutable build snapshot. Unlike
+the reference's shallowly frozen `UT1_DATA`, its nested `observedErrors` and
+`predictedErrors` arrays are frozen too. Mutating the reference arrays can
+change its uncertainty results; the port rejects that mutation and keeps its
+compiled, digest-checked tables. The initial metadata values match exactly.
+The test explicitly enforces this deviation rather than implying support for
+runtime table editing. All time calculations themselves run in Rust.
+
+The low-level time helpers accept number-valued inputs as in their declared
+signatures; Delta T additionally rejects all nonfinite and non-number inputs
+before WASM can coerce them. The time helpers' unchecked NaN/infinite inputs
+and pins are compared by outcome and numeric classification, with the existing
+NaN-payload exception. Time-scale names must be members of the declared union,
+and elapsed-day inputs must be ordinary TimeBasis records. Getter/proxy access
+order, invalid scale strings and malformed records are outside this low-level
+compatibility scope. The public chart validation boundary remains future work.
+
 ## Remaining coverage
 
 Planetary and house parity over synthetic dates from 1800 through 2200, polar
 latitudes, every house system and legacy/configured/minor/custom aspect sets
-remain planned work. Positions, speeds, Delta T and UTC/UT1/TT time scales,
-coordinate rotations, cusps, house membership and aspect matching are not
+remain planned work. Positions, speeds, coordinate rotations, cusps,
+house membership and aspect matching are not
 implemented or compared yet. The civil Julian Day Number helpers do not apply
 astronomical time scales. No performance baseline is claimed at this milestone.
 

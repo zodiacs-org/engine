@@ -1,0 +1,53 @@
+Rust numeric core notices
+=========================
+
+The Rust time code translates this repository's src/deltat.ts and
+src/time-scale.ts under the repository's MIT License (../LICENSE).
+Code remains MIT; builds containing the Delta T table also carry CC BY 4.0
+data. Retain this notice and PROVENANCE.md when redistributing those builds.
+
+Delta T (TT - UT1)
+-----------------
+
+The generated time_data.rs contains values of Table S15 and constants of
+equations (4.1) and (5.1) from:
+
+  Stephenson, F. R., Morrison, L. V. & Hohenkerk, C. Y. 2016, Measurement of
+  the Earth's rotation: 720 BC to AD 2015. Proc. R. Soc. A 472: 20160404.
+  https://doi.org/10.1098/rspa.2016.0404
+  Creative Commons Attribution 4.0 International (CC BY 4.0):
+  https://creativecommons.org/licenses/by/4.0/
+
+The source engine rounds the table values to hundredths of a second and
+rebuilds the authors' spline. This port preserves those rounded inputs,
+translates the spline evaluation to Rust and changes their representation
+to Rust binary64 constants. No further adjustment to the data is made.
+
+The later Delta T values come from the United States Naval Observatory
+(historic_deltat.data and tai-utc.dat, US Government works) and the
+International Earth Rotation and Reference Systems Service (IERS EOP 20 C04
+and Bulletin A, finals2000A.all; https://www.iers.org/).
+
+Leap seconds and UT1
+-------------------
+
+TAI - UTC comes from the IERS leap-second list at the Earth Orientation
+Centre, Paris Observatory:
+https://hpiers.obspm.fr/iers/bul/bulc/ntp/leap-seconds.list
+The source file's header states: "This file is in the public domain."
+
+UT1 values come from the IERS EOP 20 C04 series of the Earth Orientation
+Centre at Paris Observatory, https://hpiers.obspm.fr/iers/eop/eopc04/,
+and IERS finals2000A.all (Bulletin A) of the Rapid Service/Prediction Centre
+at the US Naval Observatory, https://maia.usno.navy.mil/.
+
+The Earth Orientation Centre supplies this technical note for C04:
+
+  Bizouard, C., Lambert, S., Gattano, C., Becker, O. & Richard, J.-Y. 2019,
+  The IERS EOP 14C04 solution for Earth orientation parameters consistent
+  with ITRF 2014. J. Geod. 93, 621-633.
+  https://doi.org/10.1007/s00190-018-1186-3
+
+The parent repository's LICENSING.md records the unresolved C04 terms.
+This port adds no licence assertion about that source. Source dates,
+digests, generation rules and attribution chain are in PROVENANCE.md.
