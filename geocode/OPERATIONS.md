@@ -176,4 +176,8 @@ and full project checks are recorded in [M11 evidence](evidence/M11.md).
 Run `node evidence/check-m11-operations.mjs` to rebuild a temporary sample,
 exercise the documented CLI commands and check the HTTP request fields on
 loopback. It uses no external service and removes its generated sample.
-Final project acceptance and import review remain the next plan milestone.
+The completed [final acceptance record](evidence/M12.md) documents the import
+and offline-operation review, package exclusion and remaining limitations.
+Run `node evidence/check-m12-imports.mjs` for the separate import-audit report.
+Root package budget and built-engine gates still require the repository's
+normal CI build, which this workbench task does not create.

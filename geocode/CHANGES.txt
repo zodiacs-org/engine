@@ -9,3 +9,4 @@ geocode: complete M8 with bounded per-client token buckets, monotonic refill, wo
 geocode: complete M9 with independently rebuilt IANA timezone evidence, historical and polar boundary checks, explicit Longyearbyen build differences, atlas disagreement precedence and missing host zone tests
 geocode: complete M10 with staged index and source publication, cooperative writer locks, bounded receipt and source reads, strict generation consistency, malformed archive rejection and interrupted-build regressions
 geocode: complete M11 with a runnable synthetic engine input handoff, atlas coordinate precedence and unresolved-case review, operations and privacy guidance, offline example tests and CLI/HTTP command evidence
+geocode: complete M12 with guarded import and offline-operation regressions, full geocode and atlas acceptance checks, package exclusion evidence and documented coverage and root-build limitations

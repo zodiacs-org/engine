@@ -38,6 +38,12 @@ check that `geocode/` stays out of the engine package. It does not run the
 engine build or replace the full root `package:contents` gate, which needs
 an existing root build.
 
+[Final acceptance evidence](evidence/M12.md) records the complete project
+checks, offline operation and import review, with remaining coverage and
+deployment limits. The import audit is also part of Vitest; run
+`node evidence/check-m12-imports.mjs` separately for its graph and guarded
+runtime report. It emits no engine build or distributable bundle.
+
 ## Current library API
 
 `src/index.ts` exports `parsePlaceDataset`, `DatasetValidationError`,

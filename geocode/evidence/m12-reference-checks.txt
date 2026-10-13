@@ -1,0 +1,11 @@
+GeoNames sample files match their receipt and selection.
+  tzdata2025c.tar.gz: sha256 4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957 (matches sources/l3/tzdata.json)
+  tzdata: 32 file digests match
+  tzcode2025c.tar.gz: sha256 697ebe6625444aef5080f58e49d03424bbb52e08bf483d3ddb5acf10cbd15740 (matches sources/l3/tzdata.json)
+  tzcode: 41 file digests match
+  compiled 598 TZif files; tzdata.zi and main.zi compile to identical bytes
+  compiled tree digest 98ba2bd3eb549fced32814888318d478c96eb65d5fa5b482ee1d89ebb298bcc5 (as recorded in tzdata.json for zic 2025c)
+  no data line has fractional seconds; 33 #STDOFF comments each round (half to even) to their data line
+  backzone caveat quotes found verbatim in Makefile and theory.html
+  zic rounding probe: -4:56:01.6 -> -17762, -0:36:44.68 -> -2205, 0:29:45.5 -> 1786, 0:29:44.5 -> 1784, 0:29:45.51 -> 1786
+PASS: timezone evidence rebuilds byte for byte
