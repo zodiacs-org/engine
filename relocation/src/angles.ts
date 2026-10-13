@@ -107,7 +107,8 @@ export class AngularBudgetError extends RangeError {
   }
 }
 
-function checkedBodies(value: readonly AngularBody[] | undefined): AngularBody[] {
+/** Internal shared body validation for bounded line planners. */
+export function checkedBodies(value: readonly AngularBody[] | undefined): AngularBody[] {
   if (value === undefined) return [...ANGULAR_BODIES];
   if (!Array.isArray(value) || value.length < 1 || value.length > ANGULAR_BODIES.length) {
     throw new RangeError("Angular bodies require a nonempty array of Sun, Moon or planet names.");
@@ -198,8 +199,19 @@ export function sampleAngles(source: RelocationSource, points: readonly Geograph
     positions.push({ body, rightAscension: raDefined ? engine.lon : null, declination: engine.lat,
       raUndefined: raDefined ? null : "celestial-pole", engine });
   }
-  const samples: AngularObserverSample[] = [];
-  for (const [index, point] of places.entries()) {
+  return sampleAdditionalAngles({ ...base, status: "ok", positions, samples: [] }, places);
+}
+
+/** Internal continuation with validated, budgeted points and captured engine directions. */
+export function sampleAdditionalAngles(prepared: Extract<AngularSamplingResult, { status: "ok" }>,
+  places: readonly GeographicPoint[]): AngularSamplingResult {
+  const { natal, time, positions } = prepared;
+  const evaluations = { ...prepared.evaluations };
+  const base: AngularResultBase = { schema: RELOCATION_ANGLES_SCHEMA, conventions: ANGULAR_CONVENTIONS,
+    natal, time, evaluations };
+  const samples: AngularObserverSample[] = [...prepared.samples];
+  for (const point of places) {
+    const index = samples.length;
     if (Math.abs(point.latitude) === 90) {
       samples.push({ index, point, status: "undefined", reason: "geographic-pole", engine: null, bodies: [] });
       continue;

@@ -10,7 +10,7 @@ line to `CHANGES.txt`. The harness handles git writes and draft PRs.
 - [x] M2 Accept existing engine charts and natal envelopes as sources, preserve requested settings on replay, and test validation and polar fallback semantics.
 - [x] M3 Add geographic bounds, longitude wrapping, antimeridian splitting and bounded grid sampling with explicit work budgets.
 - [x] M4 Define angular-line conventions and add engine-backed planetary equatorial and observer-angle sampling with receipts and undefined-angle handling.
-- [ ] M5 Generate bounded MC and IC polylines with sampled metadata and engine receipt references.
+- [x] M5 Generate bounded MC and IC polylines with sampled metadata and engine receipt references.
 - [ ] M6 Generate ASC and DSC horizon polylines, including circumpolar gaps, tangencies and polar cases, without fabricating positions.
 - [ ] M7 Extract grid crossings with bounded refinement, structured brackets, residuals and unresolved-cell metadata.
 - [ ] M8 Sample great-circle paths and find angular crossings along them, with antipodal and antimeridian handling.
@@ -103,5 +103,29 @@ directions, time scales, pinned delta-T, polar fallback, antimeridian aliases,
 work budgets and typed refusals. Root package dry-run exclusion, archive
 SHA-256, file-size, documentation punctuation and diff-scope checks passed.
 Root `npm run package:contents` still fails because `dist/calc.d.ts` is absent;
+no root build was run under the rule forbidding writes to `dist/`. Engine CI
+gates requiring a root build remain deferred. No engine or packed files changed.
+
+
+M5 adds `planMeridianLines` and `meridianLines` for bounded MC and IC geometry.
+The planner reserves worst-case engine work before source capture, with a
+separate cap on observer metadata. Fresh engine equatorial directions and a
+Greenwich observer receipt determine each meridian longitude. Every emitted
+nonpolar vertex has an engine houses receipt and a measured meridian residual;
+global sample indices link polyline vertices to that provenance. Inclusive
+longitude clipping skips outside observers. Exact geographic poles remain
+undefined metadata outside polylines; undefined celestial-pole RA produces no
+meridian. Engine refusals discard all partial geometry. A shared internal
+observer continuation reuses captured directions without repeating position
+calls. Documentation explains singleton and empty polar geometry, conservative
+budgets, receipt scope and numerical limitations.
+
+Validation: relocation typecheck and the full Vitest suite passed on Node
+22.22.2. `test/meridian-lines.vitest.ts` covers receipt replay, Cartesian
+meridian projections, residuals, both branches, clipping, seam aliases, polar
+fallback and undefined endpoints, clocks, source ownership, planning limits,
+precision and refusals. Root package dry-run exclusion, archive SHA-256,
+file-size, documentation punctuation and diff-scope checks passed. Root
+`npm run package:contents` still fails because `dist/calc.d.ts` is absent;
 no root build was run under the rule forbidding writes to `dist/`. Engine CI
 gates requiring a root build remain deferred. No engine or packed files changed.

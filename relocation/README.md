@@ -221,6 +221,68 @@ Work limits, exact call counts and refusal behavior are enforced in
 `test/angles.vitest.ts` over its synthetic cases. The sampler itself writes no
 generated files.
 
+## MC and IC polylines
+
+`planMeridianLines({ bounds, latitudeStep, bodies?, lines?, maxEvaluations })`
+plans upper and lower planetary meridians. Bounds use the same inclusive,
+eastward longitude convention as `geographicBounds`, including wrapped bounds
+and seam aliases. `latitudeStep` is a positive step in degrees; both latitude
+boundaries are included, with a shorter final interval when needed. Equal
+latitude boundaries produce a single sample. `bodies` follows `sampleAngles`;
+`lines` defaults to MC then IC and accepts a unique, nonempty selection of
+those names. Body and line order determine output order.
+
+The planner reserves a position call per body, an engine reference observer
+at the equator and Greenwich, and an observer call per possible nonpolar
+line vertex. `requiredEvaluations` is this conservative total before longitude
+clipping. Exceeding `maxEvaluations` throws `AngularBudgetError` before reading
+the source or allocating latitude arrays, even when clipping might reduce the
+actual work. Budgets and `maximumObserverSamples` are independently capped by
+`MAX_ANGLE_EVALUATIONS`; the latter includes reference and undefined pole
+samples. Invalid plans throw `RangeError`. Inclusive endpoints, limits,
+subnormal spans and floating-point step refusals are enforced in
+`test/meridian-lines.vitest.ts` over its synthetic planning cases.
+
+`meridianLines(source, options)` returns `zodiacs.relocation-meridians.v1` with
+the plan, `sampling` provenance and structured `lines`. It freshly computes
+each selected body through the engine once. MC longitude is right ascension
+minus the reference engine ARMC, wrapped to geographic degrees. IC is its
+opposite meridian. Each admitted nonpolar latitude is then evaluated through
+engine `houses()` with the source's replayed house request, time scale and
+delta-T setting. It reports the actual measured meridian residual, including
+floating-point roundoff. No refinement or physical line-location error bound
+is claimed. These are upper/lower meridians regardless of altitude.
+
+Every line contains its `body`, `kind`, `longitude`, `positionIndex`, `samples`
+and `polylines`. `positionIndex` addresses `sampling.positions`, retaining the
+full engine equatorial result and receipt. Each line sample's `observerIndex`
+addresses `sampling.samples`, retaining its engine observer result and receipt.
+Polyline vertices use the same global observer index in `source.index`; they
+are not line-local indices. `referenceObserverIndex` identifies the Greenwich
+observer used to construct the longitude, which remains provenance even when
+it lies outside the requested bounds. Each constant-longitude meridian uses
+one canonical seam spelling without seam interpolation or duplicate lines.
+
+Longitude clipping sets `status: "outside-bounds"` with empty samples and
+polylines, while preserving the derived longitude and position reference.
+Undefined celestial-pole RA sets `status: "undefined"`,
+`reason: "celestial-pole"` and a null longitude. Exact geographic pole rows
+retain undefined sample metadata, null residuals and no observer engine receipt;
+they are omitted from polylines. A plan sampling only poles can therefore have
+`status: "sampled"` lines with empty polylines. A single defined point is a
+singleton polyline. Unknown birth time or any typed engine refusal returns
+`status: "refused"`, empty lines and no partial positions or observer samples;
+the reason and underlying engine refusal remain in `sampling`.
+
+`test/meridian-lines.vitest.ts` checks receipt replay, sampled residuals,
+Cartesian meridian projections, both branches, inclusive clipping, antimeridian
+aliases, polar fallback, pole exclusions, source ownership, clocks and refusals
+using synthetic births. Engine comparisons are regression checks. Artificial
+direction injections exercise singular and seam branches and are not physical
+reference data. The engine receipts cover engine calculations; the library's
+derived longitudes and polylines keep the separate `ANGULAR_CONVENTIONS` in
+`sampling.conventions`. The function performs no file or network operations.
+
 Code and documentation here use the repository's MIT license. The engine is
 distributed under MIT AND CC-BY-4.0; retain its LICENSE, LICENSING.md and
 NOTICE when redistributing it or its attributed data. Generated grids and

@@ -10,3 +10,6 @@ export type { AngularBody, AngularLine, AngularObserverSample, AngularSamplingOp
   AngularSamplingResult, EquatorialSample, ObserverBodySample } from "./angles.js";
 export { ANGULAR_DIRECTION_TOLERANCE } from "./angular-geometry.js";
 export type { ObserverAngles } from "./angular-geometry.js";
+export { meridianLines, planMeridianLines, RELOCATION_MERIDIANS_SCHEMA } from "./meridian-lines.js";
+export type { MeridianKind, MeridianLineOptions, MeridianLinePlan, MeridianLineSample,
+  MeridianLinesResult, MeridianPolyline } from "./meridian-lines.js";

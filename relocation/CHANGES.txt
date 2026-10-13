@@ -2,3 +2,4 @@ M1: Add isolated relocation project, engine-backed chart API and natal receipts;
 M2: Accept engine charts and natal envelopes, preserve replay settings and polar house requests, validate source ownership and receipts, and pass Node 22 typecheck, Vitest and package exclusion checks.
 M3: Add geographic bounds, longitude wrapping, antimeridian geometry with seam provenance and budgeted engine chart grids; pass Node 22 typecheck, Vitest and package exclusion checks.
 M4: Define planetary angular conventions and add bounded engine equatorial and observer sampling with receipts, replayed clocks, residuals and singularity metadata; pass clean Node 22 install, typecheck, Vitest and package exclusion checks.
+M5: Add bounded engine-backed MC and IC polylines with receipt references, residuals, longitude clipping and undefined polar metadata; pass Node 22 typecheck, Vitest and package exclusion checks.
