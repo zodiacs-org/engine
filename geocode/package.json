@@ -4,11 +4,12 @@
   "private": true,
   "type": "module",
   "description": "Offline place lookup and IANA civil-time resolution, developed separately from the engine package.",
-  "license": "MIT",
+  "license": "MIT AND CC-BY-4.0",
   "engines": {
     "node": ">=22.7.0 <23"
   },
   "scripts": {
+    "index:build": "tsc -p tsconfig.tools.json && node .cache/tools/scripts/build-index.js",
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run --config vitest.config.mjs",
     "scope:check": "node scripts/check-scope.mjs",
