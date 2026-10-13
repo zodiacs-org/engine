@@ -1,0 +1,37 @@
+name: Batch
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  batch:
+    name: Batch (Node 22)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: batch
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22.23.3'
+          cache: npm
+          cache-dependency-path: batch/package-lock.json
+
+      - name: Install batch dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Typecheck, test, build and audit batch
+        run: npm run check

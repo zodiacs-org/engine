@@ -1,0 +1,13 @@
+batch: complete M1 with private TypeScript tooling, bounded JSON job validation and synthetic Vitest coverage
+batch: complete M2 with lazy resumable work expansion, serial engine execution, isolated bundling and synthetic parity tests
+batch: complete M3 with async queue contract, in-memory leases and atomic result checkpoints, reusable backend tests and queue documentation
+batch: complete M4 with transactional SQLite persistence, schema migrations, runtime guard, independent-connection contract and reopen tests
+batch: complete M5 with bounded worker_threads scheduling, lease renewal, ordered progress, worker replacement and graceful shutdown tests
+batch: complete M6 with bounded retries, terminal failures, idempotent submission, durable migration and scheduler recovery tests
+batch: complete M7 with controlled SQLite process-kill recovery, exact worker resumption, retry and acknowledgement tests, and restart documentation
+batch: complete M8 with resumable NDJSON exports, bounded streaming, backpressure, disconnect cleanup and transport tests on both queue backends
+batch: complete M9 with bounded HTTP job control, idempotent submission, resumable NDJSON, disconnect cleanup and real-socket tests on both queue backends
+batch: complete M10 with bounded CLI submission, status, workers, HTTP service operation, resumable NDJSON exports and subprocess shutdown and SQLite restart tests
+batch: complete M11 with optional Redis queue, atomic Lua transitions, stateful mock contracts, connection recovery and worker HTTP streaming integration tests
+batch: complete M12 with reproducible worker scaling benchmark, synthetic SQLite and memory evidence, source and CPU metadata, failure checks and measurement documentation
+batch: complete M13 with operating guide, runnable examples, integrated and large-job reliability tests, evidence integrity checks and isolated check command

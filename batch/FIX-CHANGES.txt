@@ -1,0 +1,4 @@
+F1: Rename batch suites and update test discovery and documentation links; batch checks pass and root Vitest discovers no batch suites.
+F2: Add isolated Node 22.23.3 batch CI using its lockfile and full check command; permit only that workflow in the scope audit, pass all batch checks, and confirm root Vitest discovers no batch suites.
+F3: Require Node >=22.23.3 <23 in batch manifest, lockfile, check runner and docs; retain SQLite safety checks, pass 932 tests and all batch checks, and confirm root Vitest discovers no batch suites.
+F4: Reject unallowed HTTP Host and Origin before queue access, capture configurable gateway allowlists and document deployment settings; pass all batch checks and 963 tests, and confirm root Vitest discovers no batch suites.
