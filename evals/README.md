@@ -4,8 +4,9 @@ This directory is an independent local project for developing an interpretation
 dataset and evaluating chart readings. It validates factor-to-meaning entries
 and datasets, includes an original authored seed set, computes synthetic
 chart facts through the local engine, and validates readings with quoted claims.
-Generation backends and the scoring harness are later milestones in
-[PLAN.md](PLAN.md).
+A bounded text-generation client provides a deterministic offline mock and
+explicit custom backend selection. Dataset generation and the scoring harness
+are later milestones in [PLAN.md](PLAN.md).
 
 Interpretation text is symbolic prose. The eventual factual score will compare a
 reading's assertions with computations from the local `@zodiacs/engine` under
@@ -285,6 +286,22 @@ up to 256 claims and 32,768 Unicode code points of text, with quotes up to 4,096
 code points. These operational limits and the span, uncertainty, provenance and
 preservation rules are checked by [the contract tests](tests/reading.checks.mjs).
 Original examples are inline in tests; no generated reading corpus is committed.
+
+## Generation backends
+
+`createGenerationClient()` in
+[lib/generation-backend.mjs](lib/generation-backend.mjs) selects the offline mock
+by default. The mock returns a marked symbolic meaning draft for workflow tests.
+It does not evaluate the prompt or model interpretation quality. Custom adapters
+must be registered and selected explicitly; there is no ambient provider
+selection, retry or fallback. No provider SDK, network adapter, credentials or
+generated dataset is included.
+
+[BACKENDS.md](BACKENDS.md) describes the versioned request and response contract,
+byte limits, call budget, cancellation, reproducible identity and extension API.
+The transport preserves raw text and completion reasons. Entry assembly,
+source references, licensing, prompt templates and output validation belong to
+the interpretation generator milestone.
 
 ## Files and licensing
 

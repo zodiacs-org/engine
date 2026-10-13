@@ -18,7 +18,7 @@ astronomical accuracy or the validity of personality or predictive claims.
 - [x] M2 Add a small original seed dataset covering placements, aspects, houses and sign dignities, with provenance, licensing and dataset-level integrity checks.
 - [x] M3 Add a local engine adapter that computes synthetic chart facts, records conventions and version provenance, and handles unavailable houses and polar fallback.
 - [x] M4 Define the reading and factual-claim schemas, preserving quoted spans and unsupported or ambiguous assertions without silently treating them as correct.
-- [ ] M5 Define a pluggable generation backend with a deterministic offline mock, explicit backend selection, bounded requests and no saved credentials.
+- [x] M5 Define a pluggable generation backend with a deterministic offline mock, explicit backend selection, bounded requests and no saved credentials.
 - [ ] M6 Implement the interpretation generator with versioned prompts, input/output validation, provenance, reproducible manifests and ignored output files.
 - [ ] M7 Write a versioned scoring rubric for factual correctness, coverage, contradictions and abstentions, separating interpretive quality from computable facts.
 - [ ] M8 Implement deterministic placement, aspect, house and dignity scoring with per-claim evidence, category totals and explicit denominators.
@@ -97,3 +97,24 @@ Package-exclusion and project-isolation tests passed. The root
 `npm run package:contents` gate was attempted and failed on missing
 `dist/calc.d.ts`; no prohibited root build was run. All changes remain under
 `evals/`. M5 is next.
+
+M5 acceptance: `createGenerationClient` supplies a deterministic offline mock
+and an explicit adapter registry with immutable metadata. Its versioned text
+contract bounds canonical request bytes, returned text bytes, elapsed waiting
+and calls per client. Requests and results retain exact text, completion reasons,
+prompt version and a canonical invocation digest. Cancellation closes the client;
+failures do not retry or fall back, and diagnostics retain no raw provider errors.
+The client reads no credentials and writes no files. `BACKENDS.md` documents the
+extension contract and trusted-adapter limits. Entry assembly and generation
+manifests remain M6 work; no generated corpus is committed.
+
+M5 validation: `npm --prefix evals test` and
+`npm --prefix evals run validate:seed` passed on Node 22.23.3. Backend contract
+and integration tests cover strict selection, immutable snapshots, canonical
+digests, UTF-8 boundaries, malformed output, refusals, call budgets, concurrent
+requests, cancellation, deadlines and late results. Fresh-process checks verify
+offline mock execution and reproducibility across working directories and request
+property order. Package-exclusion and project-isolation tests passed. The root
+`npm run package:contents` gate was attempted and failed on missing
+`dist/calc.d.ts`; no prohibited root build was run. All changes remain under
+`evals/`. M6 is next.
