@@ -1,0 +1,1 @@
+M1: Add isolated Rust/WASM workspace, pinned build tooling, TypeScript loader, exact longitude-normalization parity tests, scope documentation and package-isolation checks.
