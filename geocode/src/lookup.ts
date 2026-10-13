@@ -34,6 +34,8 @@ export interface PlaceLookup {
   readonly provenance: DatasetProvenance;
   readonly size: number;
   lookup(query: string, options?: LookupOptions): LookupResult;
+  /** Exact source ID, independent of search ranking and result limits. */
+  getById(placeId: string): PlaceRecord | undefined;
 }
 
 interface PreparedPlace {
@@ -152,6 +154,7 @@ function compareMatch(a: PlaceMatch, b: PlaceMatch): number {
 /** Build an in-memory search index from JSON-like data. No file or network I/O. */
 export function createPlaceLookup(value: unknown): PlaceLookup {
   const dataset = parsePlaceDataset(value);
+  const byId = new Map(dataset.places.map((place) => [place.id, place]));
   const postings = new Map<string, NameEntry[]>();
   const literalCommas = new Map<string, NameEntry[]>();
   const qualifiers = new Set<string>();
@@ -232,5 +235,11 @@ export function createPlaceLookup(value: unknown): PlaceLookup {
     });
   }
 
-  return Object.freeze({ provenance: dataset.provenance, size: dataset.places.length, lookup });
+  function getById(placeId: string): PlaceRecord | undefined {
+    const id = inputText(placeId, "place ID");
+    if (!id || id.trim() !== id) throw new RangeError("Invalid lookup place ID: expected nonempty trimmed text.");
+    return byId.get(id);
+  }
+
+  return Object.freeze({ provenance: dataset.provenance, size: dataset.places.length, lookup, getById });
 }

@@ -4,9 +4,9 @@ This private project is being developed separately from `@zodiacs/engine`.
 It will provide offline place lookup, IANA civil-time resolution, a CLI and
 an optional HTTP service. [PLAN.md](PLAN.md) tracks implementation. The
 current milestone provides the place-data contract, an attributed GeoNames
-sample, an offline index builder, pure in-memory place lookup and adapters
-for atlas-first civil-time resolution. Composing lookup and resolution into
-one request, the `geocode` CLI and the service remain later milestones.
+sample, an offline index builder, pure in-memory place lookup and a composed
+API for atlas-first civil-time resolution. The `geocode` CLI and the service
+remain later milestones.
 
 ## Development
 
@@ -34,8 +34,8 @@ an existing root build.
 ## Current library API
 
 `src/index.ts` exports `parsePlaceDataset`, `DatasetValidationError`,
-`createPlaceLookup`, `createTimeResolver` and the TypeScript data, lookup and
-time-resolution types. Pass already
+`createPlaceLookup`, `createTimeResolver`, `createGeocoder` and the TypeScript
+data, lookup and time-resolution types. Pass already
 parsed JSON to the validator:
 
 ```ts
@@ -149,6 +149,12 @@ a higher population never removes ambiguity. `unique` means unique only
 within the supplied dataset, whose sample or extract may omit other places.
 The API does not select a place on the caller's behalf.
 
+`getById(placeId)` retrieves a frozen record by its exact source ID, without
+search normalization, filters or result limits. An absent ID returns
+`undefined`. The ID must be nonempty trimmed text under the same text limit
+as queries. This retrieves the same validated snapshot as a lookup result;
+it does not load a record from another dataset or from the network.
+
 Empty or punctuation-only text returns `no-match`. Query and filter strings
 are limited to 512 UTF-16 code units and reject controls and lone surrogates.
 Invalid options throw `RangeError` without repeating submitted values.
@@ -166,6 +172,101 @@ The factory rejects duplicate IDs but does not verify shard digests or
 generation identity; a validated filesystem loader remains planned work.
 The factory retains the supplied records and a normalized name index in
 memory. It is not an on-disk search engine for an arbitrary full dump.
+
+## Composed place and civil-time requests
+
+`createGeocoder(dataset, atlasProvider)` validates and snapshots the dataset,
+then composes the existing lookup and time resolver. It exposes `lookup`,
+`getById`, `size` and `provenance`, plus an asynchronous `resolve` method.
+Construction performs no I/O. Load the repository atlas explicitly through
+the separate Node-only entry:
+
+```ts
+import { createGeocoder } from "./src/index.js";
+import { loadAtlasTimeProvider } from "./src/atlas-time.js";
+
+// jsonText contains the caller's local PlaceDataset. This query is invented.
+const geocoder = createGeocoder(JSON.parse(jsonText), loadAtlasTimeProvider());
+const result = await geocoder.resolve({
+  query: "Brest, France",
+  date: "1891-03-20",
+  time: "12:00"
+});
+if (result.status === "time-result") {
+  console.log(result.place, result.provenance);
+  console.log(result.time.provider, result.time.status);
+  if (result.time.provider === "atlas") {
+    console.log(result.time.resolution.instants, result.time.provenance);
+  }
+}
+```
+
+A request supplies either `query` with optional `filters` (the lookup's
+country, region and limit options), or `placeId`. Supplying both selectors
+is invalid. A unique text match is selected only within this dataset.
+Ambiguous text returns `ambiguous-place` with its lookup candidates and no
+time result, even when the result limit shows only one candidate. After the
+caller chooses a place, submit a separate request with its exact `placeId`.
+Direct selection can address any record in the same dataset, including one
+outside the suggestion list. It does not assert that an earlier query or
+its filters match that ID.
+
+All requests require a Gregorian civil `date`. An optional `time` is an
+explicit local clock reading in the same format as the time adapter below.
+A date-time string, UTC timestamp or `Date` object is not a civil date.
+Omitting `time` produces `input.kind: "date-only"`; supplying it produces
+`input.kind: "civil-time"`. Neither input is already a resolved instant.
+Explicit null or undefined fields, malformed dates or times, unknown fields
+and invalid filters reject with `RangeError`, including when no place matches.
+The request accepts JSON-like objects; it does not sandbox executable getters
+or proxies. The explicit atlas provider is trusted code.
+
+| `status` | Meaning |
+| --- | --- |
+| `no-match` | Text matched no place in this dataset. |
+| `ambiguous-place` | Text matched several places; the caller must select one. |
+| `unknown-place` | The explicit ID is absent from this dataset. |
+| `date-only` | A place is selected, but no clock time was supplied. |
+| `time-result` | A place is selected and the time provider answered; inspect `time.status`. |
+
+Every answer retains the civil `input` and dataset `provenance`. Text
+requests also retain the complete lookup metadata, including total matches
+and truncation; direct ID requests have `lookup: null`. A selected record
+is in `place`, with `selection: "unique-match"` or `"explicit-id"`.
+Unselected answers have null place, selection and time fields.
+
+Date-only answers keep `time: null`. They call no time provider, choose no
+midnight or noon, and assert no historical coverage or offset for the day.
+The selected record's `place.timeZone` is only the source's assignment and
+may be null or unsupported. Supplying an explicit clock time is necessary
+to check atlas coverage and resolve offsets, gaps, folds or unavailable
+zones. A date alone cannot establish that a whole civil day existed.
+
+For a timed request, `time` preserves the native `PlaceTimeResult` described
+below. `time-result` is not a success or certainty claim: `time.status` may
+be `ambiguous`, `nonexistent`, `unavailable` or `no-such-clock`, and even an
+atlas `ok` result may carry historical uncertainty. Read each atlas instant's
+uncertainty and citations. Covered uncertainties and refusals never trigger
+an IANA replacement. The source assignment on `place` remains distinct from
+an atlas comparison zone on `time`. Missing assignments outside atlas
+coverage remain unavailable with no offset or instant.
+
+The factory, outer results, civil inputs, place records and dataset provenance
+are frozen. Native time results are detached per-call snapshots; the engine's
+UTC value stays a `Date` and can be mutated without changing later answers.
+`JSON.stringify` naturally serializes that Date as an ISO string. Provider
+exceptions propagate without a fallback answer. The library performs no chart
+calculation and does not turn unresolved place or time choices into a chart
+input.
+
+[tests/geocoder.test.ts](tests/geocoder.test.ts) checks selection, validation,
+date-only requests and snapshot isolation with invented data.
+[tests/geocoder-atlas.test.ts](tests/geocoder-atlas.test.ts) builds the
+attributed sample offline and compares composed answers with the existing
+atlas resolver, including civil coverage edges, uncertain changes and
+gap/fold outcomes. These are composition regressions, not independent
+historical accuracy evidence. [evidence/M5.md](evidence/M5.md) records the
+checks and their limits.
 
 ## Build a local place index
 
@@ -374,9 +475,9 @@ IANA conformance vectors directly, including half-hour and quarter-hour
 offsets and historical DST. The selected IDs, source and test results are
 recorded in [evidence/M4.md](evidence/M4.md). No broader accuracy claim is made.
 
-The later composed API will require explicit selection among ambiguous
-places. A civil date alone does not imply a birth time or a single offset
-for the whole day.
+The composed API above requires explicit selection among ambiguous places.
+A civil date alone does not imply a birth time or a single offset for the
+whole day.
 
 A modern place-to-zone assignment is not a historical boundary atlas.
 IANA describes the limits of older histories and the distinction between
