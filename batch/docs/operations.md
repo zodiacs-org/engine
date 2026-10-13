@@ -15,7 +15,9 @@ npm ci --ignore-scripts --cache .cache/npm
 npm run check
 ```
 
-Use a Node runtime admitted by [package.json](../package.json). SQLite also
+Use Node 22.23.3 or later in the 22.x line, as declared in
+[package.json](../package.json) and checked by
+[runtime.batch-test.ts](../test/runtime.batch-test.ts). SQLite also
 requires the bundled library version accepted by
 `SQLITE_QUEUE_DEFAULTS.minimumSqliteVersion` in
 [sqlite-queue.ts](../src/sqlite-queue.ts); the constructor checks before opening

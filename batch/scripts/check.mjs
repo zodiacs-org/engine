@@ -4,8 +4,8 @@ import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const [major, minor, patch] = process.versions.node.split(".").map(Number);
-if (process.argv.length !== 2 || major !== 22 || minor < 22 || (minor === 22 && patch < 2)) {
-  process.stderr.write("Run npm run check on Node >=22.22.2 <23, without additional arguments.\n");
+if (process.argv.length !== 2 || major !== 22 || minor < 23 || (minor === 23 && patch < 3)) {
+  process.stderr.write("Run npm run check on Node >=22.23.3 <23, without additional arguments.\n");
   process.exitCode = 1;
 } else {
   // All subprocesses, including test fixtures and npm's read-only dry run,

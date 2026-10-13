@@ -20,7 +20,11 @@ its [licensing and attribution terms](../LICENSING.md).
 
 ## Development
 
-Use Node 22 with the runtime range declared in [package.json](package.json):
+Use Node 22.23.3 or later in the 22.x line, as declared in
+[package.json](package.json). The minimum runtime includes SQLite accepted by
+the queue's safety check. [runtime.batch-test.ts](test/runtime.batch-test.ts)
+checks the Node version boundary; [sqlite-queue.batch-test.ts](test/sqlite-queue.batch-test.ts)
+checks the SQLite version boundary.
 
 ```sh
 cd batch
@@ -571,7 +575,7 @@ database and its live `-wal` and `-shm` companion files together. See SQLite's
 
 The asynchronous interface does not make SQLite IO asynchronous. Opening,
 queries, commits and lock waits block the calling thread, as documented for
-Node's [DatabaseSync](https://github.com/nodejs/node/blob/v22.22.2/doc/api/sqlite.md).
+Node's [DatabaseSync](https://github.com/nodejs/node/blob/v22.23.3/doc/api/sqlite.md).
 `busyTimeoutMs` bounds the lock wait; its default and maximum are exported as
 `SQLITE_QUEUE_DEFAULTS`. Zero requests an immediate busy result. Choose lease
 durations that allow for lock waits and storage latency. The `now` option is
