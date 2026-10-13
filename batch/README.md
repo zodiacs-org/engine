@@ -3,8 +3,8 @@
 This private project is the batch service under development for this engine
 checkout. The completed work is checked off in [PLAN.md](PLAN.md). The current
 implementation validates job definitions, expands work lazily, executes it
-serially through the engine and provides an in-memory queue. Durable backends,
-workers, crash recovery, NDJSON streaming, HTTP, CLI and scaling measurements
+serially through the engine and provides in-memory and SQLite queues. Workers,
+process-crash recovery checks, NDJSON streaming, HTTP, CLI and scaling measurements
 are later milestones.
 
 All project files stay here. The engine source, npm package and carried archives
@@ -39,7 +39,7 @@ root source import cannot find dependencies installed only here.
 
 [test/build.test.ts](test/build.test.ts) builds from the checkout root and runs
 the resulting entry in plain Node with invented chart input. It submits,
-claims, computes, commits and reads that job, checking the runtime import,
+claims, computes, commits and reads that job through both backends, checking the runtime import,
 result shape and engine version without requiring root dependencies or engine
 build output.
 
@@ -207,8 +207,8 @@ regression checks, with no additional astronomical accuracy claim.
 `MemoryQueue` implements it in the calling process. Schedulers sharing an
 instance see the same jobs; separate instances and worker threads do not share
 its state. All results remain in memory until `close()`, which discards the
-queue. This backend cannot recover from a process exit. Durable storage and
-process-crash testing belong to the later milestones in [PLAN.md](PLAN.md).
+queue. This backend cannot recover from a process exit. Use the SQLite backend
+below for persistence. Process-crash testing remains in [PLAN.md](PLAN.md).
 
 This example runs from `batch/` after building, with invented data:
 
@@ -309,5 +309,89 @@ fixture. It checks competing claims, expiry and renewal boundaries, stale
 tokens, prefix resumption, atomic result validation, completion, pagination
 and snapshot isolation using synthetic workloads and a controlled clock.
 Its asynchronous fixture accepts separate handles to the same store for
-future durable-backend tests. This is a state-transition check, not evidence
+durable-backend tests. This is a state-transition check, not evidence
 of process-crash durability or scaling performance.
+
+## Default durable backend: SQLite
+
+`SqliteQueue(filename, options)` in [src/sqlite-queue.ts](src/sqlite-queue.ts)
+implements the same contract using Node's built-in `node:sqlite` module. It
+needs no extra dependency. It requires SQLite at least
+`SQLITE_QUEUE_DEFAULTS.minimumSqliteVersion`, enforced before opening the file
+and tested in [test/sqlite-queue.test.ts](test/sqlite-queue.test.ts). This excludes
+the releases affected by SQLite's
+[WAL-reset corruption bug](https://sqlite.org/wal.html#walresetbug). The general
+project Node range also covers the in-memory backend; SQLite needs a Node
+runtime whose bundled SQLite meets this additional requirement. Create the
+parent directory before opening a file;
+runtime files belong under the ignored `.runtime/` directory. For example,
+replace the queue construction in the synthetic example above with:
+
+```js
+import { mkdirSync } from "node:fs";
+import { SqliteQueue } from "./.generated/index.js";
+
+mkdirSync(".runtime", { recursive: true });
+const queue = new SqliteQueue(".runtime/jobs.sqlite");
+```
+
+Every handle opens its own connection. Handles on the same file share job
+definitions, insertion order, claim counts, leases, progress and result rows.
+Closing a handle preserves them and leaves other connections usable. Reopening
+revalidates stored definitions when claiming or preparing a result commit.
+Definitions stay compact; work items are expanded only when executing or
+checking result routing. Results live in a separate table indexed by job and
+cursor, and reads select only the requested page.
+
+Schema migrations in [src/sqlite-schema.ts](src/sqlite-schema.ts) run under an
+initialization write lock. An application marker distinguishes a queue file
+from another application's database; an ordered migration list advances its
+schema version in the same transaction. Unsupported versions, foreign markers
+and unowned nonempty databases are refused. The constructor rejects empty
+filenames and `:memory:`; use `MemoryQueue` for a disposable store.
+
+Mutations acquire `BEGIN IMMEDIATE` before checking current state. Claim order
+uses the insertion sequence, independent of wall-clock adjustments. Commit
+prepares and validates the result batch outside the write transaction, then
+checks the current token, expiry and cursor again after acquiring the lock.
+Result inserts and the progress update either commit together or roll back
+together. Result pages read metadata and rows inside the same read transaction.
+These boundaries follow SQLite's [transaction semantics](https://sqlite.org/lang_transaction.html).
+
+The connection uses WAL journaling, foreign-key enforcement and
+`synchronous=FULL`. FULL requests a WAL sync on each commit. SQLite WAL requires
+connections on the same host with a local filesystem that supports its locking
+and shared memory; use a different backend for distributed hosts. Keep the
+database and its live `-wal` and `-shm` companion files together. See SQLite's
+[WAL documentation](https://sqlite.org/wal.html) and
+[synchronous setting](https://sqlite.org/pragma.html#pragma_synchronous).
+
+The asynchronous interface does not make SQLite IO asynchronous. Opening,
+queries, commits and lock waits block the calling thread, as documented for
+Node's [DatabaseSync](https://github.com/nodejs/node/blob/v22.22.2/doc/api/sqlite.md).
+`busyTimeoutMs` bounds the lock wait; its default and maximum are exported as
+`SQLITE_QUEUE_DEFAULTS`. Zero requests an immediate busy result. Choose lease
+durations that allow for lock waits and storage latency. The `now` option is
+for controlled tests; production connections use the same host's `Date.now`.
+There is no implicit retry of a failed storage call.
+
+Besides the shared validation and lease errors, SQLite reports `storage-busy`
+for lock contention, `unsupported-schema` for refused schema markers, and
+`unsupported-runtime` for an unsupported SQLite library, with `storage-failure`
+for other database failures. Messages omit raw SQL diagnostics,
+filesystem paths and stored values. If a storage operation's outcome is
+uncertain, read the current job and cursor before attempting it again. No
+retention policy, disk quota, backup service or database repair is implemented.
+
+[test/sqlite-queue.test.ts](test/sqlite-queue.test.ts) runs the shared backend
+contract through independent connections. Its synthetic cases also check
+schema creation and refusal, lock contention, handle closure, clock boundaries,
+reopen with live or expired leases, stored definitions for each workload,
+prefix resumption, completed jobs and SQL failures during row inserts and
+checkpoint updates. Those tests establish reopen and transaction behavior;
+controlled process termination and restart belong to the crash-recovery
+milestone. They do not simulate power loss or establish throughput.
+
+The test-only bridge [test/native-sqlite.mjs](test/native-sqlite.mjs) lets the
+existing Vitest loader access the real SQLite builtin. The production bundle
+keeps its ordinary `node:sqlite` import; the plain Node smoke test exercises it.

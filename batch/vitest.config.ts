@@ -7,6 +7,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "astronomy-engine": fileURLToPath(import.meta.resolve("astronomy-engine")),
+      // Vitest's older loader strips the prefix from this newer builtin. The
+      // test bridge loads the real module through Node's native require.
+      "node:sqlite": fileURLToPath(new URL("./test/native-sqlite.mjs", import.meta.url)),
     },
   },
   test: {

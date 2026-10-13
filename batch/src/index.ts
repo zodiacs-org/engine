@@ -18,3 +18,5 @@ export type {
 } from "./queue.js";
 export { MemoryQueue } from "./memory-queue.js";
 export type { MemoryQueueOptions } from "./memory-queue.js";
+export { SqliteQueue, SQLITE_QUEUE_DEFAULTS } from "./sqlite-queue.js";
+export type { SqliteQueueOptions } from "./sqlite-queue.js";

@@ -13,7 +13,7 @@ initial session complete M1 only; later sessions complete one or two milestones.
 - [x] M1 Establish the private TypeScript project, Vitest setup, versioned JSON job contracts, bounded validation and workload counts. Test valid synthetic jobs, malformed inputs and resource limits.
 - [x] M2 Implement deterministic, lazy work-item expansion and serial engine execution for charts, sampled transit grids and directed synastry matrices. Test ordering, range boundaries, resume cursors and parity with direct engine calls.
 - [x] M3 Define the asynchronous queue backend contract and implement the in-memory queue with atomic claims, lease tokens, status and progress snapshots. Run a reusable backend contract suite including competing claims.
-- [ ] M4 Implement the default SQLite backend with migrations, transactions, durable job definitions, leases and result checkpoints. Run the backend contract suite against independent connections and reopen tests.
+- [x] M4 Implement the default SQLite backend with migrations, transactions, durable job definitions, leases and result checkpoints. Run the backend contract suite against independent connections and reopen tests.
 - [ ] M5 Add the worker_threads pool and scheduler with bounded dispatch, worker replacement, progress updates and graceful shutdown. Test parallel work, worker failure and shutdown during active work.
 - [ ] M6 Add bounded retries, retry delays, terminal failure and idempotency keys with payload conflict detection. Test duplicate submissions, stale lease fencing and retry exhaustion on both backends.
 - [ ] M7 Complete crash recovery and resumable jobs with atomic result/checkpoint commits and expired-lease recovery. Use child processes killed at controlled persistence boundaries to prove resumed output has no lost or duplicate rows.
@@ -68,3 +68,28 @@ An npm pack dry run with `--ignore-scripts --json` confirmed that no `batch/`
 file is included. All changes stay inside `batch/`, all tracked and new batch
 files are below the file-size limit, and batch documentation contains no em
 dashes. No root build, archive creation or git write was performed.
+
+## M4 session checks
+
+`npm run typecheck`, `npm test` and `npm run build` passed from `batch/` on
+Node 22.23.3. SQLite runs the shared backend contract with independent
+connections. Its additional tests cover schema migration and refusal, lock
+contention during initialization and writes, FIFO under a backward clock,
+reopen with canonical definitions for every workload, persisted leases and
+committed prefixes, completion, handle-local closure, and injected SQL failures
+during result insertion and checkpoint updates. The plain Node bundle test
+executes a synthetic job through both backends. All database scratch files
+stay under ignored `.generated/` paths.
+
+The SQLite constructor checks its runtime library version before opening a
+file, excluding the mainline releases affected by the upstream WAL-reset bug;
+`test/sqlite-queue.test.ts` enforces the boundary and checks that refused opens
+create no files. `README.md` links the upstream explanation. Process-kill
+recovery tests and throughput measurements remain later milestones.
+
+The root `npm run package:contents`, using the batch npm cache, stopped because
+`dist/calc.d.ts` is absent. An npm pack dry run with `--ignore-scripts --json`
+confirmed that no `batch/` file is included. All changes stay inside `batch/`,
+all tracked and new batch files are below the file-size limit, and batch
+documentation contains no em dashes. No root build, archive creation or git
+write was performed.

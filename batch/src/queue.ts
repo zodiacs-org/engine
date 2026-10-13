@@ -66,7 +66,8 @@ export const QUEUE_LIMITS = Object.freeze({
 });
 
 export type QueueErrorCode =
-  | "invalid-argument" | "lease-lost" | "cursor-conflict" | "invalid-result" | "closed";
+  | "invalid-argument" | "lease-lost" | "cursor-conflict" | "invalid-result" | "closed"
+  | "storage-busy" | "storage-failure" | "unsupported-schema" | "unsupported-runtime";
 
 const ERROR_MESSAGES: Record<QueueErrorCode, string> = {
   "invalid-argument": "Invalid queue argument.",
@@ -74,6 +75,10 @@ const ERROR_MESSAGES: Record<QueueErrorCode, string> = {
   "cursor-conflict": "Results must start at the current committed cursor.",
   "invalid-result": "Results must be bounded JSON rows matching the job's work items.",
   closed: "The queue handle is closed.",
+  "storage-busy": "The queue database is busy; retry the operation later.",
+  "storage-failure": "The queue database operation failed.",
+  "unsupported-schema": "The database is not a supported batch queue schema.",
+  "unsupported-runtime": "The SQLite queue requires a runtime with a newer SQLite library.",
 };
 
 /** Fixed diagnostics do not copy job data, lease tokens or result values. */
