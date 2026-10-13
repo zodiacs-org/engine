@@ -20,3 +20,13 @@ policy boundaries, native receipt preservation and rejection of lossy output.
 The existing engine pack isolation test passed. Engine sources, packed files,
 archives and parent dist were not changed. Parent build-dependent gates retain
 the scaffold limitation described above.
+
+M4 session: `npm run check` passed on Node 22.22.2, including typecheck,
+Vitest and the isolated build. `test/natal.test.ts` checks native chart and
+receipt preservation, replay, unknown time, absent coordinates, polar fallback,
+time scales, pinned delta-T, coverage flags, invalid requests, engine range
+errors and concrete output JSON Schema. The parent pack isolation test passed.
+Replay supplies an empty input assertion list; tests allow that native metadata
+normalization while comparing all calculation results. These are integration
+checks, not independent accuracy evidence. Parent build-dependent gates retain
+the scaffold limitation above.

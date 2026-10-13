@@ -51,3 +51,17 @@ full numerical precision survive JSON serialization; unsupported values fail
 instead of disappearing. Text content contains the same JSON as structured
 content. Tool-specific result schemas follow with each tool implementation.
 A receipt is a calculation record, not an authentication or accuracy certificate.
+
+The natal handler in `src/tools/natal.ts` accepts `{ birth }` and returns
+`data.chart` containing the native chart, with its date serialized as ISO text.
+Its concrete output schema describes bodies, aspects, houses, flags and time
+provenance. The `natal` receipt preserves the original input instant spelling
+and the requested house system even when the engine uses polar fallback.
+Unknown time keeps the supplied reference instant and suppresses angles and
+houses. Coordinates are optional; missing coordinates also leave angles and
+houses absent. Input validation and engine range errors propagate to the future
+protocol boundary. Registration and transports remain planned milestones.
+
+`test/natal.test.ts` checks wrapper integration and receipt replay using synthetic
+inputs. Comparisons with the native engine establish preservation, not independent
+astronomical accuracy.
