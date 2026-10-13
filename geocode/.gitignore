@@ -1,0 +1,10 @@
+node_modules/
+.cache/
+.tmp/
+coverage/
+generated/
+downloads/
+*.tsbuildinfo
+
+# Only deliberately selected, attributed samples belong in data/.
+# Full source dumps and all generated indexes belong in the folders above.

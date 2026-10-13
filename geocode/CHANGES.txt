@@ -1,0 +1,1 @@
+geocode: establish isolated place-data validation, synthetic tests and an atlas-first implementation plan
