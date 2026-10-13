@@ -1,0 +1,1 @@
+webhook: complete M1 with an isolated TypeScript/Vitest project, strict subscription validation, boundary tests, package exclusion check and implementation plan
