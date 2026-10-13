@@ -10,7 +10,7 @@ for (const target of Object.keys(TARGETS)) {
 const first = builds[0];
 console.log(JSON.stringify({
   schema: "edge-bundle-report/1",
-  scope: "Root API and synthetic workload builds only; target runtimes are untested.",
+  scope: "Root API, synthetic workloads and Worker handler builds; target runtimes are untested.",
   engineVersion: first.engineVersion,
   ephemeris: first.ephemeris,
   toolchain: first.toolchain,

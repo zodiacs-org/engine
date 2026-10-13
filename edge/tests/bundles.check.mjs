@@ -5,7 +5,7 @@ import { isAbsolute, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { build } from "esbuild";
-import { FILE_LIMIT, TARGETS } from "../build.config.mjs";
+import { bundleConfig, FILE_LIMIT, TARGETS } from "../build.config.mjs";
 import { buildTarget, validateFiles, validateGraph } from "../scripts/build-bundles.mjs";
 
 const edgeRoot = fileURLToPath(new URL("../", import.meta.url));
@@ -50,13 +50,21 @@ const bundleFor = (target) => {
 test("target configurations cover the requested runtimes", () => {
   assert.deepEqual(Object.keys(TARGETS).sort(), ["browser", "bun", "deno", "workers"]);
   assert.equal(FILE_LIMIT, 2_000_000);
+  for (const target of Object.keys(TARGETS)) {
+    assert.deepEqual(bundleConfig(target).entryPoints, {
+      engine: "src/engine.ts",
+      workloads: "src/workloads.ts",
+      ...(target === "workers" ? { worker: "src/worker.ts" } : {})
+    });
+  }
 });
 
 for (const target of Object.keys(TARGETS)) {
   test(`${target} emits a reproducible self-contained bundle with Node parity and provenance`, async () => {
     const { files, manifest, metafile } = await bundleFor(target);
     assert.ok(files instanceof Map);
-    assert.ok(files.has("engine.mjs") && files.has("workloads.mjs"));
+    const moduleNames = target === "workers" ? ["engine.mjs", "worker.mjs", "workloads.mjs"] : ["engine.mjs", "workloads.mjs"];
+    assert.deepEqual([...files.keys()].filter((path) => path.endsWith(".mjs")).sort(), moduleNames);
     assert.doesNotThrow(() => validateGraph(metafile));
     assert.deepEqual(JSON.parse(text(files.get("manifest.json"))), manifest);
     assert.deepEqual(JSON.parse(text(files.get("metafile.json"))), metafile);
@@ -95,13 +103,22 @@ for (const target of Object.keys(TARGETS)) {
       "scripts/build-bundles.mjs", "scripts/build-support.mjs",
       "node_modules/astronomy-engine/esm/astronomy.js"
     ]) assert.ok(sourcePaths.has(path), `Missing provenance: ${path}`);
+    if (target === "workers") {
+      for (const path of ["src/worker.ts", "src/http.ts"]) {
+        assert.ok(sourcePaths.has(path), `Missing Worker provenance: ${path}`);
+      }
+    } else {
+      for (const path of ["src/worker.ts", "src/http.ts"]) {
+        assert.ok(!sourcePaths.has(path), `Unexpected Worker source in ${target}: ${path}`);
+      }
+    }
 
     for (const name of ["LICENSE", "LICENSING.md", "NOTICE"]) {
       assert.deepEqual(Buffer.from(files.get(name)), await readFile(resolve(repositoryRoot, name)), name);
     }
     assert.ok(dependencyNotice.includes("Permission is hereby granted"));
     assert.equal(text(files.get("ASTRONOMY-LICENSE.txt")), dependencyNotice + "\n");
-    for (const name of ["engine.mjs", "workloads.mjs"]) {
+    for (const name of moduleNames) {
       assert.ok(text(files.get(name)).includes(dependencyNotice), `${name} must retain the full dependency MIT notice`);
     }
 
@@ -122,6 +139,32 @@ for (const target of Object.keys(TARGETS)) {
     assert.deepEqual(repeated.manifest, manifest);
   });
 }
+
+test("Worker module exposes a self-contained fetch handler with Node chart JSON parity", async () => {
+  const { files, metafile } = await bundleFor("workers");
+  const output = metafile.outputs[".generated/workers/worker.mjs"];
+  assert.ok(output, "Worker entry is missing from the build graph");
+  assert.deepEqual(output.imports, []);
+  assert.deepEqual(output.exports, ["default"]);
+  // Importing from a data URL also refuses unresolved relative imports.
+  const worker = await importBytes(files.get("worker.mjs"));
+  assert.deepEqual(Object.keys(worker), ["default"]);
+  assert.equal(typeof worker.default.fetch, "function");
+  for (const { id, input } of reference.workloads.CHART_CASES) {
+    const response = await worker.default.fetch(new Request("https://edge.invalid/chart", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(input)
+    }));
+    assert.ok(response instanceof Response, id);
+    assert.equal(response.status, 200, id);
+    assert.match(response.headers.get("content-type"), /^application\/json(?:;|$)/i, id);
+    assert.deepStrictEqual(await response.json(), {
+      ok: true,
+      result: JSON.parse(JSON.stringify(reference.engine.natalChart(input)))
+    }, `${id}: Worker chart JSON differs under Node`);
+  }
+});
 
 test("graph validation rejects incompatible or unexpectedly imported modules", async () => {
   const { metafile } = await bundleFor("workers");

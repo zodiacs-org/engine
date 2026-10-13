@@ -1,4 +1,4 @@
-// These describe portable library builds, not deployed runtime versions.
+// These describe portable builds, not deployed runtime versions.
 export const FILE_LIMIT = 2_000_000;
 
 export const TARGETS = Object.freeze({
@@ -13,7 +13,11 @@ export function bundleConfig(target) {
   return {
     ...TARGETS[target],
     conditions: [...TARGETS[target].conditions],
-    entryPoints: { engine: "src/engine.ts", workloads: "src/workloads.ts" },
+    entryPoints: {
+      engine: "src/engine.ts",
+      workloads: "src/workloads.ts",
+      ...(target === "workers" ? { worker: "src/worker.ts" } : {})
+    },
     bundle: true,
     packages: "bundle",
     format: "esm",

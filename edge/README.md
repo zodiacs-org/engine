@@ -10,15 +10,19 @@ the dependency's notices. See [LICENSING.md](../LICENSING.md) and
 The lab provides a Node reference build, synthetic workloads and portable ESM
 library builds configured for Cloudflare Workers, Deno, Bun and browsers. The
 bundles expose the engine's public root API. Optional engine entry points are
-not included. HTTP examples, execution in the target runtimes, cross-runtime
-parity checks, benchmarks and a measured WASM experiment remain in
+not included. A [Cloudflare module Worker example](docs/http.md) provides a
+bounded chart endpoint with local Fetch request/response tests. Deno and Bun
+HTTP examples, execution in the target runtimes, cross-runtime parity checks,
+benchmarks and a measured WASM experiment remain in
 [PLAN.md](PLAN.md).
 
 The foundation's commands, observed results and the missing-root-build
 limitation are recorded in [M1 validation](docs/evidence/m1-validation.md).
 Bundle checks and their scope are recorded in
 [M2 validation](docs/evidence/m2-validation.md), with reproducible
-[build measurements](docs/evidence/m2-build.json).
+[build measurements](docs/evidence/m2-build.json) from that milestone.
+Worker validation and the current build measurements are recorded in
+[M3 validation](docs/evidence/m3-validation.md).
 
 ## Run the foundation
 
@@ -89,8 +93,9 @@ npm --prefix edge run build -- workers
 configurations use esbuild's neutral platform, with the target's export
 conditions; the browser configuration uses its browser platform. Every target
 emits ES2022 ESM, bundles its dependency, and leaves minification off. These
-are library configurations, not runtime version requirements or deployable
-HTTP handlers. No host compatibility shims are installed. See esbuild's
+are build configurations, not runtime version requirements. The Workers build
+also emits the HTTP handler described below. No host compatibility shims are
+installed. See esbuild's
 [platform](https://esbuild.github.io/api/#platform) and
 [conditions](https://esbuild.github.io/api/#conditions) documentation.
 
@@ -100,6 +105,7 @@ Each build replaces its own ignored `.generated/<target>/` directory. It holds:
 | --- | --- |
 | `engine.mjs` | Public root API re-exported by `src/engine.ts`. |
 | `workloads.mjs` | Synthetic cases and workload runners for compatibility checks. |
+| `worker.mjs` (Workers only) | Module Worker with a default Fetch handler for `POST /chart`. |
 | `metafile.json` | esbuild's input and output import graph. |
 | `manifest.json` | Build settings, tool versions, source digests, output sizes and digests. |
 | `LICENSE`, `LICENSING.md`, `NOTICE` | Unmodified engine licence and attribution records. |
@@ -154,8 +160,31 @@ untested. Transcendental arithmetic can differ between runtimes.
 To regenerate the compact build evidence after reviewing a build change:
 
 ```sh
-node edge/scripts/build-report.mjs > edge/docs/evidence/m2-build.json
+node edge/scripts/build-report.mjs > edge/docs/evidence/m3-build.json
 ```
 
 The report builds in memory, records exact bytes and digests, and does not
-measure performance. Raw generated bundles and full manifests stay ignored.
+measure performance. Keep older milestone evidence unchanged. Raw generated
+bundles and full manifests stay ignored.
+
+## Worker chart endpoint
+
+Build and test the Worker from the repository root with the local Node toolchain:
+
+```sh
+npm --prefix edge run build -- workers
+node --test edge/tests/http.check.mjs
+```
+
+The source entry is `src/worker.ts`; its self-contained output is
+`.generated/workers/worker.mjs`. It exports a default object with a `fetch`
+method and needs no bindings. The shared handler in `src/http.ts` accepts a
+JSON chart request, validates its size and supported fields, and calls the
+unchanged engine synchronously. See the [request contract](docs/http.md) for
+inputs, limits, status codes and a local invocation.
+
+These tests run Fetch requests in Node. Execution in a Workers runtime and
+its launch tooling remain in M7 of the plan. HTTP JSON serialization is not
+the future exact comparison protocol: dates become strings and signed zero
+is lost. The handler has no storage or request logging, and every response
+asks caches not to store it.

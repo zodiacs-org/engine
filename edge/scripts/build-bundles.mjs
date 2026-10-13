@@ -96,7 +96,11 @@ export async function buildTarget(target, { write = true } = {}) {
     assert.equal(output.contents.byteLength, result.metafile.outputs[metaPath]?.bytes, `Output graph size mismatch: ${name}`);
     files.set(name, Buffer.from(output.contents));
   }
-  assert.deepEqual([...files.keys()].sort(), ["engine.mjs", "workloads.mjs"], "Unexpected bundle outputs.");
+  assert.deepEqual(
+    [...files.keys()].sort(),
+    Object.keys(config.entryPoints).map((name) => `${name}.mjs`).sort(),
+    "Unexpected bundle outputs."
+  );
   const dependencyText = await readFile(resolve(edgeRoot, EPHEMERIS_SOURCE), "utf8");
   const dependencyNotice = dependencyText.match(/^\/\*\*[\s\S]*?\*\//)?.[0];
   assert(dependencyNotice?.includes("MIT License") && dependencyNotice.includes("@preserve"), "Missing dependency licence.");
