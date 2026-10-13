@@ -4,9 +4,9 @@ This private project is the batch service under development for this engine
 checkout. The completed work is checked off in [PLAN.md](PLAN.md). The current
 implementation validates job definitions, expands work lazily, executes it
 through the engine, provides in-memory and SQLite queues with retries and
-idempotent submission, and schedules work on a thread pool. Process-crash
-recovery checks, NDJSON streaming, HTTP, CLI
-and scaling measurements are later milestones.
+idempotent submission, and schedules work on a thread pool. SQLite crash
+recovery is checked with controlled process kills. NDJSON streaming, HTTP,
+CLI and scaling measurements are later milestones.
 
 All project files stay here. The engine source, npm package and carried archives
 are unchanged. Code and documentation in this folder use the repository's
@@ -212,7 +212,7 @@ regression checks, with no additional astronomical accuracy claim.
 instance see the same jobs; separate instances and worker threads do not share
 its state. All results remain in memory until `close()`, which discards the
 queue. This backend cannot recover from a process exit. Use the SQLite backend
-below for persistence. Process-crash testing remains in [PLAN.md](PLAN.md).
+below for persistence and [Crash recovery](#crash-recovery) for process-kill tests.
 
 This example runs from `batch/` after building, with invented data:
 
@@ -369,8 +369,8 @@ There is no key expiry or deletion API, and no tenant namespace is inferred.
 bounds, canonical replay, conflicts, concurrent submissions, delayed claims,
 failure exhaustion, prefix preservation, lease fencing and expiry accounting.
 [test/sqlite-queue.test.ts](test/sqlite-queue.test.ts) adds persistence and
-migration checks. These tests establish queue behavior; controlled process
-kills remain a separate milestone.
+migration checks. These tests establish queue behavior; the separate
+[crash suite](test/crash-recovery.test.ts) exercises process kills.
 
 ## Default durable backend: SQLite
 
@@ -453,8 +453,9 @@ schema creation and refusal, lock contention, handle closure, clock boundaries,
 reopen with live or expired leases, stored definitions for each workload,
 prefix resumption, completed jobs and SQL failures during row inserts and
 checkpoint updates. Those tests establish reopen and transaction behavior;
-controlled process termination and restart belong to the crash-recovery
-milestone. They do not simulate power loss or establish throughput.
+the separate [crash suite](test/crash-recovery.test.ts) exercises process
+termination and restart. Neither suite simulates power loss or establishes
+throughput.
 
 The test-only bridge [test/native-sqlite.mjs](test/native-sqlite.mjs) lets the
 existing Vitest loader access the real SQLite builtin. The production bundle
@@ -547,3 +548,68 @@ scheduler against both queue backends in plain Node, including a synthetic
 input whose calculation fails and exhausts its retry budget. These checks
 use synthetic inputs and establish wrapper behavior, not astronomical
 accuracy, process-crash durability or scaling performance.
+
+## Crash recovery
+
+Reopen the same SQLite file and start a new `Scheduler` to resume unfinished
+jobs. Preserve the database and its WAL companions. No startup reset, result
+deletion or manual lease release is needed. An unexpired lease still belongs
+to its recorded owner even after that process dies. A status read can show
+that old running state until a scheduler's claim records the expiry. Once
+the deadline and any retry delay have passed, claims can resume work, subject
+to the stored attempt budget. Process termination itself does not write a
+failure record; lease expiry consumes the attempt when a claim observes it.
+
+Only committed rows count as progress. Each result batch and its cursor
+advance share a transaction. Interruption before that transaction commits
+leaves the previous prefix; interruption after commit preserves the new
+prefix even if the caller never received the acknowledgement. The final
+transaction also records completion and revokes the lease, so losing its
+acknowledgement cannot reopen a completed job or consume a retry. A fresh
+scheduler seeks to the persisted `nextCursor` and gives every replacement
+claim a new token. Old tokens cannot commit, renew, release or fail that job.
+
+Calculations may run again after a crash: values held by a worker or buffered
+by a scheduler are not saved until committed in order. Stored output is a
+contiguous prefix with a unique row per cursor; this does not promise that
+each calculation runs only once. Custom executors should not depend on
+external side effects happening once. A terminally failed job keeps its
+committed prefix but is not resumed automatically.
+
+When a submit acknowledgement is lost, resubmit the same canonical definition
+and retry policy with the same idempotency key to recover the original job.
+An unkeyed resubmission creates another job. After an uncertain commit outcome,
+read the job's cursor before choosing any rows to resubmit; replaying an
+already committed prefix under a still-current lease is a cursor conflict.
+
+Use the same engine source, dependencies and runtime for an interrupted
+workload and its restart. The queue persists the job definition and rows but
+does not pin or validate the executable build. Changing it mid-job can mix
+results from different builds in the stored prefix and resumed suffix.
+
+[test/crash-recovery.test.ts](test/crash-recovery.test.ts) builds an isolated
+bundle and starts child processes using the real SQLite backend. Its
+[child fixture](test/fixtures/recovery-child.mjs) pauses native database calls
+after a result insert, after the checkpoint update, or after SQLite commits
+but before the queue returns. The parent waits for a synchronous boundary
+report, sends `SIGKILL` while the connection and WAL remain open, and waits
+for process exit before reopening. The pause instrumentation exists only in
+the test child; no production failpoint or recovery bypass is exposed.
+
+For each supported workload, the tests interrupt both intermediate and final
+batches. They check the retained prefix, SQLite integrity and foreign keys,
+raw stored JSON and row cursors, then restart in a fresh process with real
+workers and compare paged output to uninterrupted serial execution on the
+same synthetic inputs. The restart must dispatch precisely the uncommitted
+suffix. Separate cases cover lost submission and claim acknowledgements,
+expiry accounting interrupted before commit, stale-token fencing, retry
+delay and exhaustion, and a killed scheduler with computed out-of-order
+results waiting behind a missing predecessor.
+
+The tests control backend time to check lease and retry boundaries without
+timing the kill against a wall-clock sleep. They establish process-crash
+behavior at those persistence boundaries on the test host. They do not
+simulate host power loss, hardware failure, filesystem corruption or a
+network filesystem, and serial parity is not independent astronomical
+accuracy evidence. The in-memory backend loses its state when its process
+exits and cannot provide this recovery behavior.

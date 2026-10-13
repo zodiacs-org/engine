@@ -16,7 +16,7 @@ initial session complete M1 only; later sessions complete one or two milestones.
 - [x] M4 Implement the default SQLite backend with migrations, transactions, durable job definitions, leases and result checkpoints. Run the backend contract suite against independent connections and reopen tests.
 - [x] M5 Add the worker_threads pool and scheduler with bounded dispatch, worker replacement, progress updates and graceful shutdown. Test parallel work, worker failure and shutdown during active work.
 - [x] M6 Add bounded retries, retry delays, terminal failure and idempotency keys with payload conflict detection. Test duplicate submissions, stale lease fencing and retry exhaustion on both backends.
-- [ ] M7 Complete crash recovery and resumable jobs with atomic result/checkpoint commits and expired-lease recovery. Use child processes killed at controlled persistence boundaries to prove resumed output has no lost or duplicate rows.
+- [x] M7 Complete crash recovery and resumable jobs with atomic result/checkpoint commits and expired-lease recovery. Use child processes killed at controlled persistence boundaries to prove resumed output has no lost or duplicate rows.
 - [ ] M8 Stream result rows as NDJSON with stable cursors, backpressure and disconnect handling. Test partial reads, reconnects, escaping and large workloads without collecting all output in memory.
 - [ ] M9 Add the small HTTP control API for submit, status, progress and streamed results, with bounded request bodies and clear errors. Test routes, idempotency conflicts and client disconnects over real local sockets.
 - [ ] M10 Add the CLI for submission, worker/service operation, status and NDJSON export using the same service APIs. Test subprocess exit codes, stdout/stderr separation and restart with SQLite.
@@ -138,6 +138,32 @@ plain Node bundle test exhausts a synthetic calculation's retry budget with
 real workers and still completes other work through both backends. These
 checks establish state transitions and reopen behavior; controlled process
 termination remains M7.
+
+The root `npm run package:contents`, using the batch npm cache, stopped because
+`dist/calc.d.ts` is absent. An npm pack dry run with `--ignore-scripts --json`
+confirmed that no `batch/` file is included. All changes stay inside `batch/`,
+all tracked and new batch files are below the file-size limit, and batch
+documentation contains no em dashes. No root build, archive creation or git
+write was performed.
+
+## M7 session checks
+
+`npm run typecheck`, `npm test` and `npm run build` passed from `batch/` on
+Node 22.23.3. The new crash suite kills child processes with open SQLite
+connections at native result-insert, checkpoint-update and commit boundaries.
+For each workload, it checks intermediate and final batches, then restarts
+with real workers and verifies exact stored JSON, contiguous cursors, paged
+output and dispatch of only the uncommitted suffix against serial execution.
+
+Additional cases check lost submission and claim acknowledgements, keyed
+replay, expiry accounting rolled back with an interrupted replacement claim,
+stale-token fencing, retry delays and terminal exhaustion. A real scheduler
+is also killed with a committed prefix and computed out-of-order results
+still buffered. The tests use synthetic inputs and controlled backend time;
+they establish process-kill recovery at these boundaries, not host power-loss
+or astronomical accuracy. Existing transactions and leases passed without a
+production-code change. The README now documents restart steps, uncertain
+acknowledgements, repeated calculation and build consistency.
 
 The root `npm run package:contents`, using the batch npm cache, stopped because
 `dist/calc.d.ts` is absent. An npm pack dry run with `--ignore-scripts --json`
