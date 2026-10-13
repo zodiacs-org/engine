@@ -7,3 +7,4 @@ M6: Port Moon series, finite-difference states, true lunar nodes and longitude s
 M7: Port Pluto integration and complete planetary position rows to Rust/WASM with checked state data, longitude speeds, span and input guards, exact metadata arithmetic, synthetic parity tests and documented rounding limits.
 M8: Port chart angles, seven house cusp systems and house membership to Rust/WASM with matching TypeScript helpers, exact boundary tests, polar geometry checks and explicit parity limits.
 M9: Complete all house systems in Rust/WASM with Placidus and Koch polar fallbacks, preserved convergence and cusp ordering, native geometry tests, synthetic parity coverage and documented tolerance limits.
+M10: Complete review and verification of legacy/configured Rust/WASM aspects, add maximum-capacity policy, label and result parity coverage, and document exact arithmetic compatibility.

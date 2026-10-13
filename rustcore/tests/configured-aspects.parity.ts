@@ -235,6 +235,38 @@ describe("configured aspect policies and exact Rust/WASM arithmetic", () => {
     compare(extra, custom(), "ordinary extra row data");
   });
 
+  it("transports maximum valid selections, rows, rules and caps without truncating identifiers", () => {
+    const labels = Array.from({ length: 256 }, (_, index) => `Selected ${index}`);
+    const configured = policies({
+      bodies: labels,
+      aspects: Array.from({ length: 64 }, (_, index) => ({
+        type: `rule-${index}`, angle: index === 63 ? 0 : 180, orb: 0
+      })),
+      bodyOrbs: Object.fromEntries(labels.map(label => [label, 0]))
+    });
+    // Neither set includes the reserved Sun/Moon labels. The final unselected
+    // row therefore travels as token 513, the highest valid transport index.
+    const rows = Array.from({ length: 256 }, (_, index) => position(`Unselected ${index}`, index));
+    expect(compare(rows, configured, "disjoint maximum label sets").aspects).toEqual([]);
+
+    // Keep row order distinct from policy order and require the final rule.
+    // This checks the returned labels and rule index at the accepted limits.
+    rows[254] = position(labels[255]!, 0);
+    rows[255] = position(labels[254]!, 0);
+    const found = compare(rows, configured, "last selected labels and rule").aspects;
+    expect(found).toHaveLength(1);
+    expect(found[0]).toEqual({ a: labels[255], b: labels[254], type: "rule-63",
+      angle: 0, orb: 0, maximumOrb: 0, motion: "stationary", applying: false });
+
+    // With every row selected, the output must retain every unordered pair
+    // and its input order even when every exact orb and allowance is zero.
+    const allSelected = labels.slice().reverse().map(label => position(label, 0));
+    const complete = compare(allSelected, configured, "maximum matching rows").aspects;
+    expect(complete).toHaveLength(256 * 255 / 2);
+    expect([complete[0]!.a, complete[0]!.b]).toEqual([labels[255], labels[254]]);
+    expect([complete.at(-1)!.a, complete.at(-1)!.b]).toEqual([labels[1], labels[0]]);
+  }, 30_000);
+
   it("compares all named aspects, custom sets and caps on seeded synthetic inputs", () => {
     const next = randomUint32(0x65786163);
     const names = [...reference.DEFAULT_ASPECT_POLICY.bodies, "North Node", "South Node"];

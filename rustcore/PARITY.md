@@ -712,6 +712,14 @@ reversible numeric indices, preserving exact UTF-16 identity, including lone
 surrogates and labels such as `__proto__`. Rust's native API uses valid Rust
 strings and checks their UTF-16 length and ECMAScript trim characters.
 
+The maximum-size case in `tests/configured-aspects.parity.ts` accepts 256
+selected labels, 256 supplied rows, 64 rules and 256 body caps. Disjoint
+selected and supplied labels exercise transport index 513 after the reserved
+Sun/Moon indices. An overlap case checks the final rule and reversed label
+order. With every row selected and coincident, the suite compares all 32,640
+pair results against TypeScript, including their bits, ordering and freezing.
+These tests enforce the accepted limits as well as the oversized rejections.
+
 Legacy helpers retain unchecked numeric behavior, including nonfinite values,
 duplicate rows and node exclusions. Their wrapper snapshots ordinary row fields
 before calling WASM; getter/proxy evaluation order is outside this low-level
