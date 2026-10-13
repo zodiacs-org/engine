@@ -7,7 +7,10 @@
     "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
   },
   "scripts": {
+    "prepare:events": "node scripts/prepare-events.mjs",
+    "pretypecheck": "npm run prepare:events",
     "typecheck": "tsc --noEmit",
+    "pretest": "npm run prepare:events",
     "test": "vitest run --config vitest.config.ts"
   },
   "devDependencies": {

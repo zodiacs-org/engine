@@ -1,16 +1,18 @@
 # Calendar workbench
 
-This private TypeScript project exports supplied astrology event records as
-iCalendar text. It imports the engine's identity from the parent source tree
-without building or changing the parent npm package. The implemented scope is
-M1 through M3 in [PLAN.md](PLAN.md): UTC and timezone serialization, validation
-and stable event identities. Event search adapters, streaming, the CLI and the HTTP
-feed endpoint remain planned milestones.
+This private TypeScript project exports astrology event records as iCalendar
+text and searches for tropical sign ingresses through the existing events
+package. It imports the parent engine sources without building or changing the
+parent npm package. The implemented scope is M1 through M4 in [PLAN.md](PLAN.md):
+UTC and timezone serialization, validation, stable event identities and ingress
+schedules. Other schedule searches, streaming, the CLI and the HTTP feed
+endpoint remain planned milestones.
 
 Use Node satisfying `engines` in [package.json](package.json). From this folder:
 
 ```sh
 npm ci --ignore-scripts
+npm run prepare:events
 npm run typecheck
 npm test
 ```
@@ -20,6 +22,24 @@ suffix `.calendar-test.ts`, selected by the local Vitest configuration, so the
 parent repository's default test scan does not need calendar dependencies.
 Keep generated feeds and other bulk output in `generated/` or `.cache/`, both
 gitignored. No calendar file belongs in the parent engine's packed contents.
+
+The test and typecheck commands also run source preparation. It reads the
+already available git objects pinned in [events-source.json](events-source.json),
+originally from `origin/infra/events`, into `.cache/events-source/`. It does not
+fetch, write git metadata, or change that branch. A source link keeps the
+upstream package's relative engine imports intact. Preparation verifies the
+source bytes, their recorded digests, and compatibility with the parent source
+tree and package metadata. Missing pinned git objects require a checkout that
+contains them; a different parent engine requires a reviewed pin update.
+
+`node scripts/prepare-events.mjs --check` verifies an existing cache without
+writing it. Missing files can be restored by preparation, while changed or
+unexpected files are refused. To recover from an edited cache, remove only
+`calendar/.cache/events-source/` and prepare it again. Direct library imports
+assume preparation has already succeeded. Source metadata records provenance;
+it does not authenticate files at runtime. A TypeScript runner or bundler must
+resolve `astronomy-engine` to this project's installed dependency, as the local
+Vitest configuration does, since the parent sources have no required install.
 
 ## Library input
 
@@ -48,9 +68,85 @@ exclusive interval end. Its receipt supplies:
 by relative import. It describes only calculations from this checkout; it must
 not relabel a result imported from another engine version. Serializer input
 is a calculation record supplied by the caller, not authenticated evidence.
-M4 will connect real upstream search results to this model. The existing
-events implementation is available read-only on `origin/infra/events`; no
+`searchIngressSchedule` connects upstream search results to this model; no
 event search is implemented here.
+
+## Ingress schedules
+
+```ts
+import { searchIngressSchedule, serializeCalendar } from "./src/index.ts";
+
+const result = searchIngressSchedule({
+  namespace: "synthetic-ingress.calendar.invalid",
+  body: "Sun",
+  startUtc: "2026-03-19T12:00:00.000Z",
+  endUtc: "2026-03-22T12:00:00.000Z",
+  clock: "utc",
+  stepMs: 3_600_000,
+  maxEvaluations: 10_000
+});
+if (result.status === "refused") throw new Error(result.reason);
+if (result.events.length > 0) {
+  const ics = serializeCalendar(result.events, {
+    dtstamp: "2026-01-01T00:00:00.000Z"
+  });
+}
+```
+
+This invented schedule window and these work settings are exercised in
+`test/ingresses.calendar-test.ts`; they are not default accuracy settings.
+Supported bodies are the Sun, Moon and planets named by the pinned events
+package. The request requires a positive canonical UTC range, an explicit
+`clock: "utc"`, a positive integer evaluation budget, and a sampling step in
+milliseconds that divides a UTC day. TT and UT1 input clocks are refused;
+their epoch labels cannot be emitted as UTC without a separate conversion.
+
+Results own `(startUtc, endUtc]`. The adapter executes the upstream DSL's
+`all` mode for each canonical UTC day, with a following day of padding so
+an exact boundary touch can be checked against its outgoing motion. Padding
+events are removed before identity assignment; requested-range filtering
+happens afterwards. The fixed sample grid and ownership policy keep UIDs and
+receipts consistent across overlapping requests and partitions at event
+instants. The step is part of the identity's search policy, so changing it
+changes UIDs. Request bounds and budgets are outside the identity. Padding
+can cause an engine refusal near its coverage boundary even if the displayed
+range lies inside that coverage.
+
+Each ingress carries the body, from/to signs, direction, target longitude,
+numerical bracket and signed angular residual returned by the search. The
+top-level orb is the absolute residual in degrees. An additional `calc`
+request at that instant supplies the full engine receipt, including its
+conventions, UTC, UT1 and TT, Delta T and time basis. Source metadata retains
+the pinned events commit and engine tree, coordinate conventions and padded
+query window. Searches use apparent geocentric tropical longitude in the
+true ecliptic and equinox of date, including the engine's own Moon convention.
+
+`complete` means the prescribed scan finished. It does not prove that every
+physical ingress was found: the upstream scanner assumes continuous,
+monotonic motion within each cell with travel shorter than a half turn.
+Paired crossings near a station can be missed. UTC time-basis transitions can
+break continuity. Outside the engine's observed time data, UTC input can be
+read as civil UT1 under its model; the retained calculation receipt says which
+basis was used. See the pinned package's
+[search limitations](https://github.com/zodiacs-org/engine/blob/7d6fb88d03b3896ee1e5496ed99961015d291d3c/events/LIMITATIONS.md).
+
+Budget units are adapter requests, not internal ephemeris operations or a
+wall-clock deadline. All days, padding and receipt calculations share the
+request's budget. A budget, cancellation or engine refusal returns an empty
+event list and a reason, discarding any earlier results. A completed empty
+schedule remains distinct and cannot be passed to the current serializer.
+Unexpected calculation failures throw. Cancellation via `signal` is
+cooperative between synchronous calls; a same-thread timer cannot interrupt
+a running search. This milestone collects the result in memory. Streaming
+and worker-based HTTP execution remain later milestones.
+
+`test/ingresses-boundary.calendar-test.ts` uses analytic synthetic motion
+through the actual events scanner to check midnight crossing ownership,
+touch suppression, partition stability, validation and work controls.
+`test/ingresses.calendar-test.ts` compares delegation and receipts with the
+parent APIs on its declared synthetic windows and round-trips UTC and TZID
+feeds through `ical.js`. These are integration and regression checks, not
+independent astronomical accuracy evidence.
 
 ## Stable event identities
 

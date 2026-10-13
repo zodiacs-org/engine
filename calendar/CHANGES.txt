@@ -1,3 +1,4 @@
 M1: Bootstrap the private calendar project and implement receipt-bearing UTC iCalendar serialization with Unicode folding, synthetic golden fixtures and independent parser round-trip tests.
 M2: Add versioned event identities, stable UIDs, canonical-day occurrence assignment, identity X-properties and synthetic golden and engine-backed overlap tests.
 M3: Add bounded TZID/VTIMEZONE export with pinned timezone data, UTC fallbacks for ambiguous or unsupported offsets, and golden plus historical parser round-trip tests.
+M4: Pin and verify read-only events sources, export UTC ingress schedules with stable daily identities and full engine receipts, and test boundary padding, global budgets, cancellation and parser round trips.
