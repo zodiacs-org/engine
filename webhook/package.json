@@ -12,7 +12,11 @@
     "pretypecheck": "node scripts/check-runtime.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "check:package-isolation": "node scripts/check-package-isolation.mjs",
-    "check:events-source": "node scripts/sync-events-vendor.mjs --check"
+    "check:events-source": "node scripts/sync-events-vendor.mjs --check",
+    "prebuild:replay": "node scripts/check-runtime.mjs && node scripts/sync-events-vendor.mjs --check",
+    "build:replay": "tsc -p tsconfig.replay.json",
+    "prereplay": "node scripts/check-runtime.mjs",
+    "replay": "node build/webhook/src/replay-cli.js"
   },
   "devDependencies": {
     "@types/node": "22.19.19",

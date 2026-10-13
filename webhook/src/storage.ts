@@ -6,7 +6,7 @@ import { deliveryDisposition, parseDeliveryPolicy, type DeliveryPolicy } from ".
 import type {
   AttemptDisposition, AttemptInput, AttemptResult, DeadLetterReason, DeliveryClaim, NewEvent, Page,
   ScanCommit, ScanCursor, StoredAttempt, StoredDeadLetter, StoredDelivery, StoredDeliveryLog,
-  StoredEvent, StoredSubscription
+  StoredEvent, StoredSubscription, ReplayRequest, ReplayResult, StoredReplay
 } from "./storage-types.js";
 
 export const STORAGE_LIMITS = Object.freeze({
@@ -17,7 +17,7 @@ export const STORAGE_LIMITS = Object.freeze({
   maxPageSize: 1000
 });
 
-export type StorageErrorCode = "invalid-input" | "not-found" | "conflict" | "closed" | "storage-failure";
+export type StorageErrorCode = "invalid-input" | "not-found" | "conflict" | "closed" | "read-only" | "storage-failure";
 
 /** Messages deliberately exclude SQL, payloads, destinations and caller values. */
 export class StorageError extends Error {
@@ -111,6 +111,11 @@ function deadLetterRow(row: Row): StoredDeadLetter {
   return Object.freeze({ eventId: row.event_id as string, attemptNumber: row.attempt_number as number,
     reason: row.reason as DeadLetterReason, createdAt: row.created_at as number });
 }
+function replayRow(row: Row): StoredReplay {
+  return Object.freeze({ requestId: row.request_id as string, eventId: row.event_id as string,
+    attemptNumber: row.attempt_number as number, reason: row.reason as DeadLetterReason,
+    deadLetterCreatedAt: row.dead_letter_created_at as number, requeuedAt: row.requeued_at as number });
+}
 
 const DELIVERY_SELECT = `SELECT d.*, e.idempotency_key FROM deliveries d
   JOIN events e ON e.id = d.event_id`;
@@ -129,10 +134,14 @@ function deliveryLogRow(row: Row): StoredDeliveryLog {
 export class WebhookStore {
   #db: DatabaseSync;
   #closed = false;
+  #readOnly: boolean;
 
-  constructor(path: string) {
+  constructor(path: string, options: { readonly readOnly?: boolean } = {}) {
     if (typeof path !== "string" || path.length === 0 || path.includes("\0")) fail("invalid-input");
-    try { this.#db = openDatabase(path); } catch { fail("storage-failure"); }
+    if (!options || typeof options !== "object"
+      || (options.readOnly !== undefined && typeof options.readOnly !== "boolean")) fail("invalid-input");
+    this.#readOnly = options.readOnly === true;
+    try { this.#db = openDatabase(path, { readOnly: this.#readOnly }); } catch { fail("storage-failure"); }
   }
 
   close(): void {
@@ -153,6 +162,7 @@ export class WebhookStore {
 
   #transaction<T>(operation: () => T): T {
     return this.#run(() => {
+      if (this.#readOnly) fail("read-only");
       this.#db.exec("BEGIN IMMEDIATE");
       try {
         const value = operation();
@@ -404,6 +414,12 @@ export class WebhookStore {
     return parseDeliveryPolicy(JSON.parse(row.policy_json as string) as DeliveryPolicy);
   }
 
+  #cycleAttempt(eventId: string, number: number): number {
+    const replay = this.#get(`SELECT attempt_number FROM replay_requests WHERE event_id = ?
+      ORDER BY attempt_number DESC LIMIT 1`, eventId);
+    return number - ((replay?.attempt_number as number | undefined) ?? 0);
+  }
+
   /** Claim or recover one due record under a short write transaction, never over HTTP. */
   claimDelivery(now: number, inputPolicy: DeliveryPolicy): DeliveryClaim {
     return this.#transaction(() => {
@@ -432,11 +448,11 @@ export class WebhookStore {
         this.#write("DELETE FROM delivery_leases WHERE event_id = ?", delivery.eventId);
         const updated = this.#recordAttempt({ eventId: delivery.eventId, number,
           startedAt: expired.started_at as number, finishedAt, result: outcome },
-        deliveryDisposition(policy, number, outcome, finishedAt));
+        deliveryDisposition(policy, this.#cycleAttempt(delivery.eventId, number), outcome, finishedAt));
         return { status: "recovered", delivery: updated };
       }
       // Existing unleased history can already have consumed the requested budget.
-      if (delivery.attemptCount >= policy.maxAttempts) {
+      if (this.#cycleAttempt(delivery.eventId, delivery.attemptCount) >= policy.maxAttempts) {
         this.#write("UPDATE deliveries SET status = 'dead-letter', updated_at = ? WHERE event_id = ?", now, delivery.eventId);
         this.#write("INSERT INTO dead_letters (event_id, attempt_number, reason, created_at) VALUES (?, ?, 'attempts-exhausted', ?)",
           delivery.eventId, delivery.attemptCount, now);
@@ -444,6 +460,7 @@ export class WebhookStore {
       }
       const expiresAt = now + policy.leaseMs;
       time(expiresAt);
+      if (delivery.attemptCount === Number.MAX_SAFE_INTEGER) fail("conflict");
       const lease = Object.freeze({ eventId: delivery.eventId, token: randomUUID(),
         number: delivery.attemptCount + 1, startedAt: now, expiresAt });
       this.#write("INSERT INTO delivery_leases (event_id, token, number, started_at, expires_at) VALUES (?, ?, ?, ?, ?)",
@@ -464,7 +481,8 @@ export class WebhookStore {
       const policy = this.#deliveryPolicy(eventId);
       this.#write("DELETE FROM delivery_leases WHERE event_id = ?", eventId);
       return this.#recordAttempt({ eventId, number, startedAt: lease.started_at as number,
-        finishedAt, result: checked }, deliveryDisposition(policy, number, checked, finishedAt));
+        finishedAt, result: checked },
+      deliveryDisposition(policy, this.#cycleAttempt(eventId, number), checked, finishedAt));
     });
   }
 
@@ -495,6 +513,57 @@ export class WebhookStore {
       const { after, limit } = page(input);
       return this.#all("SELECT * FROM dead_letters WHERE event_id > ? ORDER BY event_id LIMIT ?",
         after, limit).map(deadLetterRow);
+    });
+  }
+
+  /** Read-only preview. The write rechecks these preconditions within its transaction. */
+  previewReplay(input: ReplayRequest): ReplayResult {
+    return this.#run(() => {
+      if (!input || typeof input !== "object") fail("invalid-input");
+      identifier(input.requestId); identifier(input.eventId);
+      positive(input.expectedAttemptNumber); time(input.now);
+      const saved = this.#get("SELECT * FROM replay_requests WHERE request_id = ?", input.requestId);
+      if (saved) {
+        if (saved.event_id !== input.eventId || saved.attempt_number !== input.expectedAttemptNumber) fail("conflict");
+        return { repeated: true, replay: replayRow(saved) };
+      }
+      const delivery = this.getDeliveryLog(input.eventId);
+      if (!delivery) fail("not-found");
+      const deadLetter = this.getDeadLetter(input.eventId);
+      if (delivery.status !== "dead-letter" || !deadLetter
+        || deadLetter.attemptNumber !== input.expectedAttemptNumber
+        || delivery.attemptCount !== input.expectedAttemptNumber
+        || delivery.attemptCount === Number.MAX_SAFE_INTEGER
+        || this.#get("SELECT 1 FROM delivery_leases WHERE event_id = ?", input.eventId)) fail("conflict");
+      if (input.now < delivery.updatedAt || input.now < deadLetter.createdAt) fail("invalid-input");
+      return { repeated: false, replay: Object.freeze({ requestId: input.requestId, eventId: input.eventId,
+        attemptNumber: deadLetter.attemptNumber, reason: deadLetter.reason,
+        deadLetterCreatedAt: deadLetter.createdAt, requeuedAt: input.now }) };
+    });
+  }
+
+  /** Requeues only one retained failed cycle. Event bytes and lifetime attempts never change. */
+  replayDeadLetter(input: ReplayRequest): ReplayResult {
+    return this.#transaction(() => {
+      const preview = this.previewReplay(input);
+      if (preview.repeated) return preview;
+      const replay = preview.replay;
+      this.#write(`INSERT INTO replay_requests (request_id, event_id, attempt_number, reason,
+        dead_letter_created_at, requeued_at) VALUES (?, ?, ?, ?, ?, ?)`,
+      replay.requestId, replay.eventId, replay.attemptNumber, replay.reason, replay.deadLetterCreatedAt, replay.requeuedAt);
+      this.#write("DELETE FROM dead_letters WHERE event_id = ?", replay.eventId);
+      this.#write("UPDATE deliveries SET status = 'pending', available_at = ?, updated_at = ? WHERE event_id = ?",
+        replay.requeuedAt, replay.requeuedAt, replay.eventId);
+      return preview;
+    });
+  }
+
+  listReplays(eventId: string, input?: Page): StoredReplay[] {
+    return this.#run(() => {
+      identifier(eventId);
+      const { after, limit } = page(input);
+      return this.#all(`SELECT * FROM replay_requests WHERE event_id = ? AND request_id > ?
+        ORDER BY request_id LIMIT ?`, eventId, after, limit).map(replayRow);
     });
   }
 }

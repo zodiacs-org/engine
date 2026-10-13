@@ -5,9 +5,10 @@ implemented milestones cover subscription validation, SQLite storage,
 encrypted signing-key custody, payload signing with receiver verification,
 local event searches and custom DSL queries with engine receipts, bounded
 discovery into a durable outbox, an HTTPS transport for signed requests, and a
-delivery worker with leases, retries and dead letters, and an authenticated
-control API. Callers can drive scans and delivery attempts explicitly. Later
-milestones add the runnable service, lifecycle management and replay CLI.
+delivery worker with leases, retries and dead letters, an authenticated
+control API, and a local replay CLI. Callers can drive scans and delivery
+attempts explicitly. Later milestones add the runnable service and lifecycle
+management.
 The code and documentation here use the repository's [MIT license](../LICENSE).
 
 Use Node from the release line accepted by
@@ -28,7 +29,8 @@ The TypeScript check emits nothing. Vitest runs only this project's tests.
 No root dependency installation or engine build is needed. The project installs
 the parent's exact ephemeris dependency locally. TypeScript paths and the Vitest
 resolver direct relative engine-source imports to that local dependency. Other
-runners must provide equivalent resolution; a production build comes later.
+runners must provide equivalent resolution; a production service build comes
+later. The replay CLI has its own local build described below.
 The test suite uses invented inputs. Network tests use mocked DNS and local
 loopback receivers only, with no external requests. TLS tests require the
 `openssl` executable and generate their certificates and keys at runtime in
@@ -183,7 +185,7 @@ Failed attempts carry a status code or a fixed failure kind; response bodies
 and arbitrary error strings are not retained. Dead letters reference a retained
 attempt and event. This legacy method is refused once a delivery has a managed
 retry policy. The delivery worker uses the lease methods described below;
-replay remains a later milestone.
+operator replay uses the separate transaction described below.
 
 Listings use bounded pages ordered by identifier (attempts by attempt number),
 with an exclusive continuation value. They are inspection methods, not an
@@ -566,8 +568,7 @@ delivery state, destination and key reference remain intact. Numerical detail
 changes under the same identity cause a transaction conflict. The worker never
 silently replaces a retained receipt. Updating the callback therefore does not
 reissue old events to the new destination. Delivery retries and operator replay
-consume the saved bytes and idempotency key. Operator replay will use the same
-identity in its later milestone.
+consume the saved bytes and idempotency key.
 
 [scan-worker.test.ts](test/scan-worker.test.ts) exercises synthetic schedules
 through the real search adapter and SQLite, including partition boundaries,
@@ -688,7 +689,7 @@ throughput measurements.
 
 | Setting | Maximum | Unit |
 | --- | ---: | --- |
-| `maxAttempts` | 100 | Reserved attempts, including interrupted attempts |
+| `maxAttempts` | 100 | Reserved attempts per cycle, including interrupted attempts |
 | `baseDelayMs` | 86400000 | Milliseconds after the first failed attempt |
 | `maxDelayMs` | 604800000 | Milliseconds of retry delay |
 | `leaseMs` | 300000 | Milliseconds of exclusive attempt ownership |
@@ -714,8 +715,9 @@ and signing-key reference and remain eligible.
 write transaction. The first claim stores an immutable retry policy, including
 the attempt budget, delays and lease duration. Later workers use that saved
 policy even when their own configuration differs. Existing completed attempt
-history counts toward the budget. Changing deployment settings cannot reset
-an already retained delivery's budget or delay. Database migration adds the
+history counts toward the initial cycle's budget. Changing deployment settings
+cannot reset an already retained delivery's budget or delay. Explicit operator
+replay starts a new cycle under the same saved policy. Database migration adds the
 lease and policy tables while preserving existing payloads and attempt logs;
 earlier deployed migration text is unchanged.
 
@@ -736,14 +738,14 @@ permitted attempt. Every other HTTP status retries, including redirects,
 client errors and rate limits. Receiver headers and bodies do not select the
 retry schedule. The service does not follow redirects or honor Retry-After.
 
-For failed attempt number `n`, the delay is
+For failed attempt number `n` within the current cycle, the delay is
 `min(maxDelayMs, baseDelayMs * 2 ** (n - 1))`, without jitter. Availability is
 the attempt finish plus that delay. Timeouts, network failures and cancellation
 are ambiguous failures and consume the same budget. A destination rejection
 goes directly to `destination-rejected` dead letters. Signing failures send
 nothing and produce only `signing-error`, with dead-letter reason `operator`;
 this includes an absent or revoked key and a vault failure. Resolve key custody
-before the future replay operation. Exhausting the saved budget produces
+before replay. Exhausting the saved budget produces
 `attempts-exhausted`. All dead letters retain the event, original bytes,
 destination, key reference, idempotency key and attempt history.
 
@@ -844,7 +846,7 @@ error response before application authentication.
 | `GET /v1/deliveries` | Lists redacted delivery records using `after` and `limit`. |
 | `GET /v1/deliveries/<eventId>` | Returns a redacted delivery record and its dead-letter metadata, if any. |
 | `GET /v1/deliveries/<eventId>/attempts` | Lists completed outcomes; `after` is an exclusive attempt number. |
-| `GET /v1/dead-letters` | Lists retained dead-letter metadata using `after` and `limit`. Requeue belongs to the replay milestone. |
+| `GET /v1/dead-letters` | Lists current dead-letter metadata using `after` and `limit`. The local replay CLI requeues an explicitly selected record. |
 
 Stored subscription responses include `id`, `revision`, `spec`, creation and
 update times and `deletedAt`. The authenticated admin can inspect callback URLs
@@ -925,3 +927,105 @@ storage, concurrent edits, key custody, revocation, connection reopening,
 redacted logs, stale revisions, malformed requests, timeouts and disconnects.
 These checks establish local control behavior, not protection of a compromised
 process, multi-tenant authorization or external receiver reliability.
+
+## Local dead-letter replay
+
+Build the standalone CLI inside this project. TypeScript writes only the
+ignored `webhook/build/` tree, including relative engine dependencies; the
+parent `dist/` is not used or rebuilt. The compiled command requires the
+dependencies installed in `webhook/node_modules/`.
+
+```sh
+npm run build:replay
+npm run replay -- --help
+npm run replay -- list --db var/service.sqlite
+npm run replay -- inspect --db var/service.sqlite --event synthetic-event
+```
+
+These examples inspect an already populated local database with invented
+event identifiers, matching [replay-cli.test.ts](test/replay-cli.test.ts).
+No command creates subscriptions, discovers events or calls a receiver.
+The CLI requires an existing regular database file and rejects symlinks and
+missing paths. Use the service account's local filesystem permissions to
+authorize access. This command does not accept an admin bearer token, wrapping
+key or signing secret and does not open the signing-key vault.
+
+`list` returns current dead-letter metadata, ordered by event identifier.
+`inspect` returns a redacted delivery record and its current dead letter, or
+`null` if the delivery is pending or delivered. These outputs omit payload
+bytes, receipts, occurrence and idempotency keys, hashes, destination URLs,
+signing-key references and lease tokens. `history --event EVENT_ID` returns
+saved replay audit records for that event, ordered by request identifier.
+Both listings accept `--limit` and an exclusive `--after`; continue with the
+returned `nextAfter`. They use the same `STORAGE_LIMITS` page limits as the
+repository. Pages and previews do not reserve work or provide a snapshot
+across commands.
+
+Requeue requires an exact event identifier, the dead letter's `attemptNumber`
+from inspection, and an operator-chosen unique request identifier. It previews
+by default; `--dry-run` makes that choice explicit. This synthetic example
+uses the failed attempt enforced by the CLI tests:
+
+```sh
+npm run replay -- requeue --db var/service.sqlite --event synthetic-event --attempt 1 --request synthetic-replay-request --dry-run
+npm run replay -- requeue --db var/service.sqlite --event synthetic-event --attempt 1 --request synthetic-replay-request --apply
+npm run replay -- history --db var/service.sqlite --event synthetic-event
+```
+
+Choose a new request identifier for each deliberately replayed failed cycle.
+Retry the same command with the same request identifier after a lost response.
+Identifiers are metadata, never secrets. A successful repeat returns the
+original audit record with `repeated: true`, even after delivery, another
+failure or a later replay. It performs no additional requeue. Reusing that
+request identifier with another event or failed attempt conflicts. A fresh
+request naming a stale failed attempt conflicts too. Requeue never selects an
+entire listing implicitly.
+
+Inspection, history and dry runs open the current schema read-only and never
+migrate it or write service records. SQLite can still manage WAL sidecars;
+keep the database directory and its sidecars available. Read-only commands
+refuse older schemas. Open the database through the current writable service
+store to upgrade it first. An applied CLI command also opens a writable store
+and can apply pending migrations before checking replay eligibility. Existing
+migration text and checksums remain unchanged.
+
+Applying a fresh request rechecks the event's current failed attempt and
+delivery state inside a SQLite write transaction. The transaction appends an
+immutable audit record, removes the current dead-letter entry, and makes the
+retained delivery pending at the operation's Unix-millisecond timestamp. The
+audit preserves request and event identifiers, failed attempt, failure reason,
+dead-letter creation time and requeue time. A failure rolls back these changes
+together. Completed attempts, event bytes, engine receipts, occurrence and
+idempotency keys, destination and signing-key reference remain intact. A
+disabled or deleted subscription does not prevent replay of its retained
+delivery. Requeue refuses pending, leased and delivered records.
+
+Lifetime attempt numbers remain consecutive. Replay starts the retry budget
+and backoff from the beginning of a new cycle under the delivery's original
+immutable policy. A legacy delivery without a policy receives its policy
+when the worker first claims it. Crashes, cancellations, destination rejection
+and signing failures retain their normal handling. Replaying cannot restore
+a revoked key, change a destination, or bypass the transport's address checks.
+Resolve the cause of failure before applying replay.
+
+The CLI queues work for the delivery worker; it does not send synchronously.
+Later attempts sign the original bytes with a fresh timestamp and the original
+idempotency key. A receiver may have processed an earlier request whose
+acknowledgement was lost, so receiver deduplication remains necessary. There
+is no automatic replay, audit expiration or retained-event purge.
+
+The compiled command writes application JSON to stdout on success and fixed
+error JSON to stderr on failure. Runtime warnings may also appear on stderr.
+Its exit codes are success `0`, invalid command `2`, missing event `3`, stale
+or conflicting replay `4`, and unavailable database or runtime `1`.
+[replay-cli.test.ts](test/replay-cli.test.ts) exercises the actual compiled
+command with local databases, strict selection, dry runs, pagination,
+concurrent duplicate requests, audit inspection and redacted errors.
+[storage-replay.test.ts](test/storage-replay.test.ts) checks migration,
+read-only access, rollback, saved identities, monotonic attempt history,
+policy retention, cycle exhaustion and crash recovery. The replay case in
+[delivery-worker.test.ts](test/delivery-worker.test.ts) sends signed requests
+only to a loopback mock receiver, loses an acknowledgement, and replays after
+restart with the same body and deduplication identity. These tests establish
+local replay behavior, not exactly-once receiver effects or physical event
+accuracy.

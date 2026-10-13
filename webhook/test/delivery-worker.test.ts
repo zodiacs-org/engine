@@ -216,6 +216,45 @@ describe("delivery worker policy and lifecycle", () => {
 });
 
 describe("at-least-once delivery to a loopback receiver", () => {
+  it("delivers replay after a lost acknowledgement with unchanged signed bytes and identity", async () => {
+    fixture.enqueue();
+    const received: { body: string; key: string; timestamp: string }[] = [];
+    const effects = new Set<string>();
+    await receiver((request, response) => {
+      const chunks: Buffer[] = [];
+      request.on("data", (chunk: Buffer) => chunks.push(chunk));
+      request.on("end", () => {
+        const body = Buffer.concat(chunks);
+        expect(verifyWebhook({ body, secret: fixture.secret, headers: request.headers,
+          expectedKeyId: "runtime_key", now: Math.floor(now / 1000) })).toBe(true);
+        const key = request.headers["idempotency-key"] as string;
+        received.push({ body: body.toString("utf8"), key, timestamp: request.headers["x-webhook-timestamp"] as string });
+        effects.add(key);
+        if (received.length === 1) response.destroy();
+        else response.writeHead(204).end();
+      });
+    }, async dependencies => {
+      const transport = new HttpsTransport({ deadlineMs: 1000, maxResponseBytes: 128,
+        maxResponseHeaderBytes: 1024, maxAddresses: 4 }, dependencies);
+      expect(await worker(transport, { ...POLICY, maxAttempts: 1 }).deliverNext())
+        .toMatchObject({ status: "attempted", delivery: { status: "dead-letter", attemptCount: 1 } });
+      const event = fixture.store.getEvent(EVENT.id);
+      now += 10_000;
+      fixture.store.replayDeadLetter({ requestId: "synthetic-replay", eventId: EVENT.id, expectedAttemptNumber: 1, now });
+      const store = fixture.open(); const vault = fixture.openVault();
+      fixture.store.close(); fixture.vault.close();
+      const restarted = new DeliveryWorker(store, vault, transport, POLICY, () => now);
+      expect(await restarted.deliverNext()).toMatchObject({ status: "attempted", delivery: { status: "delivered", attemptCount: 2 } });
+      expect(store.getEvent(EVENT.id)).toEqual(event);
+      expect(store.listReplays(EVENT.id)).toHaveLength(1);
+      expect(store.listAttempts(EVENT.id).map(attempt => attempt.result)).toEqual([{ kind: "network-error" }, { kind: "http", status: 204 }]);
+    });
+    expect(received).toHaveLength(2);
+    expect(received.every(item => item.body === EVENT.payload && item.key === EVENT.idempotencyKey)).toBe(true);
+    expect(received[0]!.timestamp).not.toBe(received[1]!.timestamp);
+    expect(effects.size).toBe(1);
+  });
+
   it("retries a lost acknowledgement with identical signed bytes and deduplicable identity after restart", async () => {
     fixture.enqueue();
     const received: { body: Buffer; key: string; timestamp: string }[] = [];

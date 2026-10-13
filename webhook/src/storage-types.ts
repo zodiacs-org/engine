@@ -94,6 +94,29 @@ export interface StoredDeadLetter {
   readonly createdAt: number;
 }
 
+/** Identifies the exact failed cycle, not just the event's current state. */
+export interface ReplayRequest {
+  readonly requestId: string;
+  readonly eventId: string;
+  readonly expectedAttemptNumber: number;
+  readonly now: number;
+}
+
+/** Immutable audit record. No keys, destinations or payload contents. */
+export interface StoredReplay {
+  readonly requestId: string;
+  readonly eventId: string;
+  readonly attemptNumber: number;
+  readonly reason: DeadLetterReason;
+  readonly deadLetterCreatedAt: number;
+  readonly requeuedAt: number;
+}
+
+export interface ReplayResult {
+  readonly repeated: boolean;
+  readonly replay: StoredReplay;
+}
+
 export interface Page {
   readonly afterId?: string;
   readonly limit?: number;

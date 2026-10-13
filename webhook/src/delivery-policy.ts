@@ -26,7 +26,7 @@ export function parseDeliveryPolicy(input: DeliveryPolicy): DeliveryPolicy {
   } catch { throw new Error("Invalid webhook delivery policy."); }
 }
 
-/** attemptNumber includes expired leases and cancelled/unsigned attempts. */
+/** The cycle attempt number includes expired leases and cancelled/unsigned attempts. */
 export function deliveryDisposition(policy: DeliveryPolicy, attemptNumber: number,
   result: AttemptResult, finishedAt: number): AttemptDisposition {
   if (result.kind === "http" && result.status >= 200 && result.status < 300) return { status: "delivered" };

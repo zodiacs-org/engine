@@ -150,7 +150,8 @@ describe("exclusive durable delivery leases", () => {
     const event = fixture.store.getEvent(EVENT.id);
     const attempts = fixture.store.listAttempts(EVENT.id);
     fixture.store.close();
-    sql(`DROP TRIGGER delivery_policies_no_update; DROP TRIGGER delivery_policies_no_delete;
+    sql(`DROP TABLE replay_requests; DELETE FROM schema_migrations WHERE version = 4;
+      DROP TRIGGER delivery_policies_no_update; DROP TRIGGER delivery_policies_no_delete;
       DROP TRIGGER delivery_leases_no_update; DROP TABLE delivery_leases; DROP TABLE delivery_policies;
       DELETE FROM schema_migrations WHERE version = 3; PRAGMA user_version = 2;`);
     const source = readFileSync(new URL("../src/storage-db.ts", import.meta.url), "utf8");

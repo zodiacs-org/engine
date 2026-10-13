@@ -10,7 +10,7 @@ export type { StorageErrorCode } from "./storage.js";
 export type {
   AttemptDisposition, AttemptInput, AttemptResult, DeadLetterReason, DeliveryStatus, NewEvent,
   Page, ScanCommit, ScanCursor, StoredAttempt, StoredDeadLetter, StoredDelivery,
-  StoredEvent, StoredSubscription, StoredDeliveryLog
+  StoredEvent, StoredSubscription, StoredDeliveryLog, ReplayRequest, ReplayResult, StoredReplay
 } from "./storage-types.js";
 export { SigningKeyVault, SecretError, VAULT_KEY_BYTES } from "./secrets.js";
 export type { SecretErrorCode, SigningKeyMetadata, VaultSignInput } from "./secrets.js";

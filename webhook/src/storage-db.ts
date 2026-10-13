@@ -6,7 +6,7 @@ import type { DatabaseSync as DatabaseHandle } from "node:sqlite";
 // during static import resolution, so use Node's resolver directly.
 const { DatabaseSync } = createRequire(import.meta.url)("node:sqlite") as typeof import("node:sqlite");
 
-export const STORAGE_SCHEMA_VERSION = 3;
+export const STORAGE_SCHEMA_VERSION = 4;
 export const STORAGE_BUSY_TIMEOUT_MS = 5_000;
 
 const ledgerSql = `CREATE TABLE schema_migrations (
@@ -113,6 +113,24 @@ BEGIN SELECT RAISE(ABORT, 'Delivery policies are immutable.'); END;
 CREATE TRIGGER delivery_leases_no_update BEFORE UPDATE ON delivery_leases
 BEGIN SELECT RAISE(ABORT, 'Delivery leases are immutable.'); END;
 `,
+}, {
+  version: 4,
+  sql: `
+CREATE TABLE replay_requests (
+  request_id TEXT PRIMARY KEY NOT NULL CHECK (length(request_id) > 0),
+  event_id TEXT NOT NULL REFERENCES deliveries(event_id),
+  attempt_number INTEGER NOT NULL CHECK (attempt_number > 0),
+  reason TEXT NOT NULL CHECK (reason IN ('attempts-exhausted', 'destination-rejected', 'operator')),
+  dead_letter_created_at INTEGER NOT NULL,
+  requeued_at INTEGER NOT NULL CHECK (requeued_at >= dead_letter_created_at),
+  UNIQUE(event_id, attempt_number),
+  FOREIGN KEY(event_id, attempt_number) REFERENCES attempts(event_id, number)
+) STRICT;
+CREATE TRIGGER replay_requests_no_update BEFORE UPDATE ON replay_requests
+BEGIN SELECT RAISE(ABORT, 'Replay requests are immutable.'); END;
+CREATE TRIGGER replay_requests_no_delete BEFORE DELETE ON replay_requests
+BEGIN SELECT RAISE(ABORT, 'Replay requests are immutable.'); END;
+`,
 }] as const;
 
 function checksum(sql: string): string {
@@ -181,16 +199,32 @@ function migrate(db: DatabaseHandle): void {
 }
 
 /** Opens and validates a local database; the caller owns and closes the handle. */
-export function openDatabase(path: string): DatabaseHandle {
+export function openDatabase(path: string, options: { readonly readOnly?: boolean } = {}): DatabaseHandle {
   let db: DatabaseHandle | undefined;
   try {
     if (typeof path !== "string" || path.length === 0 || path.includes("\0")) {
       throw new Error("Invalid webhook database path.");
     }
-    db = new DatabaseSync(path, { enableForeignKeyConstraints: true, allowExtension: false });
+    db = new DatabaseSync(path, { enableForeignKeyConstraints: true, allowExtension: false,
+      readOnly: options.readOnly === true });
     db.exec(`PRAGMA busy_timeout = ${STORAGE_BUSY_TIMEOUT_MS}`);
     db.exec("PRAGMA foreign_keys = ON; PRAGMA recursive_triggers = ON;");
     db.exec("PRAGMA synchronous = FULL;");
+    if (options.readOnly === true) {
+      db.exec("PRAGMA query_only = ON; BEGIN;");
+      const schemas = expectedSchemas();
+      const ledger = db.prepare("SELECT version, checksum FROM schema_migrations ORDER BY version").all();
+      if (db.prepare("PRAGMA user_version").get()?.user_version !== STORAGE_SCHEMA_VERSION
+        || schemaSnapshot(db) !== schemas.get(STORAGE_SCHEMA_VERSION)
+        || ledger.length !== migrations.length
+        || ledger.some((row, index) => row.version !== migrations[index]?.version
+          || row.checksum !== checksum(migrations[index]!.sql))
+        || db.prepare("PRAGMA foreign_key_check").all().length !== 0) {
+        throw new Error("Invalid webhook database schema.");
+      }
+      db.exec("COMMIT");
+      return db;
+    }
     migrate(db);
     // journal_mode persists in the file. Set it only after accepting the schema.
     // If this fails, the completed migration remains valid for a later opening.
