@@ -5,8 +5,8 @@ checkout. The completed work is checked off in [PLAN.md](PLAN.md). The current
 implementation validates job definitions, expands work lazily, executes it
 through the engine, provides in-memory and SQLite queues with retries and
 idempotent submission, schedules work on a thread pool, and exposes job control
-and NDJSON results through a small HTTP API. SQLite crash recovery is checked
-with controlled process kills. CLI and scaling measurements are later milestones.
+and NDJSON results through a CLI and a small HTTP API. SQLite crash recovery is
+checked with controlled process kills. Scaling measurements remain a later milestone.
 
 All project files stay here. The engine source, npm package and carried archives
 are unchanged. Code and documentation in this folder use the repository's
@@ -34,10 +34,10 @@ Keep committed benchmark evidence compact and link it to its runner.
 The contracts use the engine's public birth vocabulary, and the execution
 bridge imports its public source entry by a relative path. The batch build
 bundles that source with the pinned `astronomy-engine` dependency from this
-directory into `.generated/index.js` and `.generated/worker-entry.js`. Keep
-these generated entries together when running the default worker pool. The
-build does not run the engine build. Vitest and TypeScript resolve the same
-dependency from this installation. An unbundled root source import cannot
+directory into `.generated/index.js`, `.generated/worker-entry.js` and
+`.generated/cli.js`. Keep these generated entries together when running the
+default worker pool or CLI. The build does not run the engine build. Vitest and
+TypeScript resolve the same dependency from this installation. An unbundled root source import cannot
 find dependencies installed only here.
 
 [test/build.test.ts](test/build.test.ts) builds from the checkout root and runs
@@ -51,6 +51,130 @@ The repository's `npm run package:contents` check requires an existing engine
 `dist/`. If it is absent, record the missing prerequisite; do not run the root
 build as part of this project. An npm pack dry run with scripts disabled can
 still confirm that `batch/` is excluded from the engine's package.
+
+## Command line operation
+
+Build first, then run `.generated/cli.js` with Node. The commands below run from
+`batch/`. They use `--no-warnings` to suppress Node runtime warning lines when
+reading stderr as JSON; without it, runtime warnings can accompany the CLI's
+own records. `node .generated/cli.js --help` prints the command reference.
+
+`submit`, `status` and `export` open SQLite directly. They do not send HTTP
+requests or start calculation workers. The default database is
+`batch/.runtime/queue.sqlite` for the standard build, independent of the caller's
+working directory. More precisely, it is `../.runtime/queue.sqlite` relative to
+the generated entry's directory. Moving the built entries changes that default.
+An explicit `--db PATH`, and a submission file path, resolve from the caller's
+working directory. Submission and service startup create missing database parent
+directories; status and export refuse a missing database without creating one.
+
+Submit a bare job definition, as described below, from a regular UTF-8 JSON file
+or from stdin using `-`. The CLI input is the job itself; the HTTP API uses its
+own submission envelope. This example uses invented data:
+
+```sh
+node --no-warnings .generated/cli.js submit - --idempotency-key synthetic-cli-example <<'JSON'
+{
+  "version": 1,
+  "kind": "charts",
+  "births": [{ "id": "synthetic-cli", "birth": { "utc": "2001-02-03T04:05:06Z" } }]
+}
+JSON
+```
+
+Submission prints `{ "job": snapshot }` to stdout. Save the returned job ID.
+An optional `--max-attempts N` and `--retry-delay-ms N` select the queue retry
+policy. Repeating a submission with the same `--idempotency-key`, canonical job
+and effective retry policy recovers its current snapshot; a different job or
+policy under that key fails. Neither filenames nor submitted values are copied
+into error diagnostics. Input is byte-bounded before JSON parsing and malformed
+UTF-8 rejects. Named pipes must be supplied through stdin rather than as files.
+
+Start a worker in another terminal, and replace `JOB_ID` in the read commands
+with the submission's returned ID:
+
+```sh
+node --no-warnings .generated/cli.js worker
+```
+
+```sh
+node --no-warnings .generated/cli.js status JOB_ID
+node --no-warnings .generated/cli.js export JOB_ID --follow > .runtime/results.ndjson
+```
+
+Every process must use the same database path. `status` prints
+`{ "job": snapshot }`, including committed progress and retry state.
+`export` writes only stored NDJSON rows to stdout and honors destination
+backpressure. Without `--follow`, it exports the committed prefix fixed by its
+first page read and can succeed with empty output for a queued job. With
+`--follow`, it waits for new commits until completion or terminal failure.
+`--cursor N` starts at a saved cursor at or behind committed progress;
+`--poll-ms N` controls following-result polling in milliseconds. Successful
+export does not mean successful calculation: check status separately.
+
+Retain each complete newline-ended result and its `nextCursor` together.
+Discard any incomplete trailing line after interruption and resume with the
+last retained cursor. Export never claims jobs or changes their progress.
+A broken output pipe is an operational failure, and a signal interrupts the
+reader and its polling. The database handle is closed after the reader stops.
+
+`serve` starts the worker scheduler and the [HTTP control API](#http-control-api)
+in the same process:
+
+```sh
+node --no-warnings .generated/cli.js serve
+```
+
+The default listening address is `127.0.0.1:3000`. `--host IP` accepts an IP
+literal, and `--port 0` asks the operating system for an available port. The
+readiness record reports the actual host and port. The API is intended for
+trusted local clients; see its access-boundary requirements below.
+`serve --memory` runs a disposable in-process queue, accessed through HTTP;
+separate CLI commands cannot access it. It cannot be combined with `--db`.
+
+Both `worker` and `serve` accept `--workers N`, `--lease-ms N` and `--poll-ms N`.
+These control worker capacity, renewed lease duration and idle queue polling;
+timer values are milliseconds. On `serve`, this polling option applies to the
+scheduler, while HTTP following streams retain the HTTP API's polling default.
+The scheduler and queue constants define the defaults and bounds. Options and
+values must be separate tokens; unknown, repeated or command-inappropriate
+options reject, as do noncanonical decimal integer values. Invalid arguments
+are rejected before opening storage or listening.
+
+Services write a JSON readiness line to stderr: `{ "event": "ready", "command":
+"worker" }`, with `host` and `port` also present for `serve`. Readiness means the
+scheduler has started and the HTTP socket, when requested, is listening;
+calculation threads are started lazily. Services leave stdout empty. Errors
+write `{ "error": { "code": "...", "message": "..." } }` to stderr, without
+raw storage errors, submitted values or stack traces.
+
+| Exit code | Meaning |
+| --- | --- |
+| `0` | Command completed, or a service shut down cleanly after SIGINT or SIGTERM. |
+| `1` | Operational failure, including input-file, storage, listener or output-pipe failure. |
+| `2` | Invalid command arguments, JSON input, job definition or queue arguments. |
+| `3` | Missing job or database for status or export. |
+| `4` | Idempotency key conflicts with a different submission. |
+| `130` | A one-shot command was interrupted by SIGINT. |
+| `143` | A one-shot command was interrupted by SIGTERM. |
+
+On SIGINT or SIGTERM, `serve` closes HTTP consumers, stops dispatch, drains and
+checkpoints active calculations, releases unfinished work, then closes the
+queue. `worker` follows the same scheduler and queue shutdown sequence.
+Operational shutdown failures still fail the command. Restart either command
+against the same SQLite file to continue queued work. After a crash or SIGKILL,
+a replacement scheduler waits for the old lease to expire and applies retry
+policy before resuming the committed prefix. See [Crash recovery](#crash-recovery)
+for acknowledgement ambiguity and build consistency. Memory service state is
+lost on exit.
+
+The command contract and exit mapping are implemented in
+[src/cli-options.ts](src/cli-options.ts) and [src/cli.ts](src/cli.ts).
+[test/cli.test.ts](test/cli.test.ts) exercises the built CLI through subprocesses,
+with synthetic workloads, separate stdout and stderr, argument and input
+validation, HTTP service operation and SQLite worker restart. These checks
+establish interface and recovery behavior, without a throughput or astronomical
+accuracy claim.
 
 ## Job definitions
 

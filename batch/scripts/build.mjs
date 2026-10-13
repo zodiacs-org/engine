@@ -16,7 +16,7 @@ if (isAbsolute(outputRelative) || outputRelative === ".." || outputRelative.star
 
 await build({
   absWorkingDir: projectRoot,
-  entryPoints: ["src/index.ts", "src/worker-entry.ts"],
+  entryPoints: ["src/index.ts", "src/worker-entry.ts", "src/cli.ts"],
   outdir,
   bundle: true,
   platform: "node",

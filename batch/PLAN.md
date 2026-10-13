@@ -19,7 +19,7 @@ initial session complete M1 only; later sessions complete one or two milestones.
 - [x] M7 Complete crash recovery and resumable jobs with atomic result/checkpoint commits and expired-lease recovery. Use child processes killed at controlled persistence boundaries to prove resumed output has no lost or duplicate rows.
 - [x] M8 Stream result rows as NDJSON with stable cursors, backpressure and disconnect handling. Test partial reads, reconnects, escaping and large workloads without collecting all output in memory.
 - [x] M9 Add the small HTTP control API for submit, status, progress and streamed results, with bounded request bodies and clear errors. Test routes, idempotency conflicts and client disconnects over real local sockets.
-- [ ] M10 Add the CLI for submission, worker/service operation, status and NDJSON export using the same service APIs. Test subprocess exit codes, stdout/stderr separation and restart with SQLite.
+- [x] M10 Add the CLI for submission, worker/service operation, status and NDJSON export using the same service APIs. Test subprocess exit codes, stdout/stderr separation and restart with SQLite.
 - [ ] M11 Add the optional Redis backend behind an injected client and explicit configuration. Run the backend contract suite with a stateful mock and test atomic operations and connection failures; document what the mock cannot establish.
 - [ ] M12 Commit the scaling benchmark runner and compact machine-specific evidence for throughput versus worker count using synthetic workloads. Record runtime, engine/source identity, CPU allocation, workload, elapsed time and failures; keep raw generated rows gitignored and every committed file below the file-size limit.
 - [ ] M13 Finish operating documentation, examples and an integrated reliability check covering all workloads, backends, interfaces and recovery. Verify batch isolation from npm packing, evidence links, documentation claims and repository constraints.
@@ -225,3 +225,33 @@ confirmed that no `batch/` file is included. All changes stay inside `batch/`,
 all tracked and new batch files are below the file-size limit, and batch
 documentation contains no em dashes. No root build, archive creation or git
 write was performed. M10 remains the next milestone.
+
+## M10 session checks
+
+`npm run typecheck`, `npm test` and `npm run build` passed from `batch/` on
+Node 22.23.3. The build now includes a CLI beside the worker entry under the
+ignored `.generated/` directory. Commands submit bounded UTF-8 job definitions
+from files or stdin, read status and progress, export resumable NDJSON, run
+SQLite workers, or start workers with the HTTP API on SQLite or explicit memory
+storage. They reuse the existing queue, scheduler, control and streaming APIs.
+
+[test/cli.test.ts](test/cli.test.ts) checks the built CLI in subprocesses with
+synthetic jobs for all workloads. It covers canonical keyed replay and conflicts,
+argument and input boundaries, malformed UTF-8, default and explicit paths,
+fixed exit codes, stdout/stderr separation, finite and following exports, cursor
+resumption, signals during input and output waits, and broken output pipes.
+Socket tests check memory service operation, SQLite sharing between CLI and
+HTTP, and failed-listener cleanup without claiming queued work. Worker tests
+interrupt active SQLite work with SIGTERM and SIGKILL, restart against the same
+file, and compare retained prefixes and resumed suffixes with serial execution.
+The full existing suite, including controlled persistence-boundary crash tests,
+also passes. These checks establish interface and recovery behavior, not scaling
+or astronomical accuracy.
+
+The README documents command ownership, output conventions, signals, retry and
+cursor recovery. The root `npm run package:contents`, using the batch npm cache,
+stopped because `dist/calc.d.ts` is absent. A scripts-disabled npm pack dry run
+confirmed that no `batch/` file is included. All changes stay inside `batch/`,
+all tracked and new batch files are below the file-size limit, and batch
+documentation contains no em dashes. No root build, archive creation or git
+write was performed. M11 remains the next milestone.
