@@ -7,6 +7,7 @@ package's dependencies or write root `dist/`. Keep the checkout's engine and
 server together when building. API contracts, receipt scopes and calculation
 limits are documented in [README.md](README.md) and the served
 `/openapi.json`.
+Client request, receipt and retry guidance is in [CLIENTS.md](CLIENTS.md).
 
 ## Run from a checkout
 
@@ -232,10 +233,12 @@ recovery behavior are exercised in
 
 ## Validation and distribution
 
+The final local check and coverage map are in [VALIDATION.md](VALIDATION.md),
+with retained validation evidence. Run the local gate after installing the
+locked dependencies, then run the separate container check on a Docker host:
+
 ```sh
-npm --prefix server run typecheck
-npm --prefix server test
-npm --prefix server run check:package
+node server/scripts/validate.mjs
 npm --prefix server run test:container
 ```
 

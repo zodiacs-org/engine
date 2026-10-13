@@ -5,10 +5,14 @@ checkout. It serves natal charts, transit snapshots, synastry, solar/lunar
 returns, moon phase and houses with engine receipts, health and readiness,
 API-key authentication, per-key rate limits, bounded JSON validation, JSON
 logging, generated OpenAPI and process lifecycle. See
+[CLIENTS.md](CLIENTS.md) for a tested request example, route selection,
+receipt handling and retry decisions. See
 [DEPLOYMENT.md](DEPLOYMENT.md) for Docker, credential mounts, probes,
 reverse proxies, shutdown and deployment validation.
 See [LOAD-TESTING.md](LOAD-TESTING.md) for the local autocannon harness,
 measured throughput and latency evidence, and the limits of those measurements.
+See [VALIDATION.md](VALIDATION.md) for the final check command, coverage map
+and outstanding deployment checks.
 
 ## Run from a checkout
 

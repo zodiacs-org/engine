@@ -216,6 +216,51 @@ describe('generated OpenAPI contract', () => {
     validator(doc).response('/v1/natal', 200, response.json());
   });
 
+  it('describes houses output and native receipts across every system and polar geometry', async () => {
+    const app = createApp();
+    const validate = validator(await document(app));
+    for (const houseSystem of engine.HOUSE_SYSTEMS) {
+      for (const latitude of [birth.latitude, 78.25]) {
+        const payload = {
+          time: { jd: 2451545, scale: 'tt', deltaT: 64 },
+          place: { latitude, longitude: birth.longitude },
+          houseSystem,
+        };
+        const response = await app.inject({ method: 'POST', url: '/v1/houses', headers, payload });
+        expect(response.statusCode, `${houseSystem} at ${latitude}`).toBe(200);
+        validate.response('/v1/houses', 200, response.json());
+      }
+    }
+  });
+
+  it('describes optional return settings, nullable locations and independent natal clocks', async () => {
+    const app = createApp();
+    const validate = validator(await document(app));
+    const at = '2024-06-07T08:09:10+02:00';
+    const cases = [
+      ['/v1/returns/solar', {
+        natal: { ...birth, latitude: 78.25, houseSystem: 'placidus' }, at,
+      }],
+      ['/v1/returns/solar', {
+        natal: { ...birth, timeKnown: false }, at, selection: 'nearest',
+        location: { latitude: -23.45, longitude: 67.89 }, houseSystem: 'equal-mc',
+      }],
+      ['/v1/returns/solar', {
+        natal: { utc: birth.utc, timeScale: 'tt', deltaT: 0 }, at, location: null,
+      }],
+      ['/v1/returns/lunar', {
+        natal: { ...birth, timeScale: 'ut1', deltaT: 123.456 }, after: at,
+        location: { latitude: -78.25, longitude: 67.89 }, houseSystem: 'koch',
+      }],
+      ['/v1/returns/lunar', { natal: { utc: birth.utc }, after: at }],
+    ] as const;
+    for (const [url, payload] of cases) {
+      const response = await app.inject({ method: 'POST', url, headers, payload });
+      expect(response.statusCode, JSON.stringify({ url, payload })).toBe(200);
+      validate.response(url, 200, response.json());
+    }
+  });
+
   it('keeps conditional request validation intact without coercing defaults or null', async () => {
     const app = createApp();
     const doc = await document(app);

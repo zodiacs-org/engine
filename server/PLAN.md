@@ -20,7 +20,7 @@ single session summary to `CHANGES.txt`. The harness owns all git writes.
 - [x] M9 Harden lifecycle and resource limits across the completed API, including shutdown, readiness, logging privacy and calculation work limits; run the full server integration suite.
 - [x] M10 Add a Dockerfile and self-hosting instructions with environment/file key setup, health checks, persistent configuration and required engine licence notices; exercise the container when tooling permits.
 - [x] M11 Add an autocannon or k6 harness and commit small throughput and p50/p95 latency evidence from this machine, with commands, runtime, workload, build identity and limitations; keep raw generated output ignored.
-- [ ] M12 Review all route, auth, rate-limit, OpenAPI and deployment tests; finish operator/client documentation and record final validation and remaining limitations.
+- [x] M12 Review all route, auth, rate-limit, OpenAPI and deployment tests; finish operator/client documentation and record final validation and remaining limitations.
 
 The initial HTTP paths are `/healthz` and `/readyz`; calculation routes will
 live under `/v1/`. Health and HTTP error responses identify the engine and
@@ -198,3 +198,22 @@ astronomical accuracy guarantees. The root package contents gate still reports
 missing `dist/calc.d.ts`; no root build was generated. All changes remain in
 `server/`, within the file-size rule and without em dashes in docs. M12 remains
 unchecked for the next session.
+
+M12 validation: completed the route, authentication, rate-limit, OpenAPI,
+worker, deployment and load-harness review with no runtime defects found.
+Finished the client guide and operator links, and added tests that execute
+the documented client against real listeners, including receipt preservation,
+safe error metadata, redirects, deadlines and non-JSON failures. Expanded
+OpenAPI response checks across house systems, polar geometry and optional
+return settings. The final local validation command passed server typecheck,
+the full Vitest suite, build and package exclusion on Node 22.23.3; its
+retained report is `docs/evidence/validation-local.json`. Every retained load
+input and rebuilt bundle hash still matches the measured build. The validation
+runner rejects changed inputs and incomplete load identity records. Coverage
+and limitations are recorded in `VALIDATION.md`. The Docker smoke command
+failed because the CLI is unavailable, and the root package contents command
+still fails on missing `dist/calc.d.ts`; no root build was generated. Actual
+container verification remains an operator check on a Docker host. These are
+HTTP integration checks, not independent accuracy evidence or a production
+capacity guarantee. All changes remain in `server/`, within the file-size
+rule and without em dashes in docs. All planned milestones are checked.
