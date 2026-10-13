@@ -13,7 +13,7 @@ it("builds the relative engine source, queues and streams synthetic work on both
   const scratch = mkdtempSync(fileURLToPath(new URL("../.generated/sqlite-build-", import.meta.url)));
   try {
     const output = execFileSync(process.execPath, ["--input-type=module", "--eval", `
-      import { validateJob, executeSerial, MemoryQueue, SqliteQueue, Scheduler, resultLines, createResultStream } from ${JSON.stringify(builtEntry)};
+      import { validateJob, executeSerial, MemoryQueue, SqliteQueue, Scheduler, resultLines, createResultStream, createControlServer } from ${JSON.stringify(builtEntry)};
       import { Writable } from 'node:stream';
       import { pipeline } from 'node:stream/promises';
       import { setTimeout } from 'node:timers/promises';
@@ -65,6 +65,15 @@ it("builds the relative engine source, queues and streams synthetic work on both
           && streamed === [...executeSerial(parallelJob)].map(row => JSON.stringify(row) + '\\n').join('');
         const poisoned = await queue.getJob(poison.id);
         const replay = await queue.submit(job.spec, { idempotencyKey: 'synthetic-build-key' });
+        const control = createControlServer(queue);
+        await new Promise(resolve => control.server.listen(0, '127.0.0.1', resolve));
+        let httpMatchesQueue;
+        try {
+          const base = 'http://127.0.0.1:' + control.server.address().port + '/v1/jobs/' + parallel.id;
+          const snapshot = await (await fetch(base)).json();
+          const results = await (await fetch(base + '/results')).text();
+          httpMatchesQueue = snapshot.job.status === 'completed' && results === streamed;
+        } finally { await control.close(); }
         await queue.close();
         observations.push({
           status: status.status,
@@ -77,6 +86,7 @@ it("builds the relative engine source, queues and streams synthetic work on both
           parallelMatchesSerial,
           iteratorMatchesRows,
           streamMatchesSerial,
+          httpMatchesQueue,
           replayMatchesCompleted: JSON.stringify(replay) === JSON.stringify(status),
           failedStatus: poisoned.status,
           failedAttempts: poisoned.failureCount,
@@ -96,6 +106,7 @@ it("builds the relative engine source, queues and streams synthetic work on both
       parallelMatchesSerial: true,
       iteratorMatchesRows: true,
       streamMatchesSerial: true,
+      httpMatchesQueue: true,
       replayMatchesCompleted: true,
       failedStatus: "failed",
       failedAttempts: 2,

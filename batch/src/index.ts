@@ -29,3 +29,5 @@ export { createResultStream, resultLines, ResultStreamError, RESULT_STREAM_DEFAU
 export type {
   ResultLinesOptions, ResultReader, ResultStreamOptions, ResultStreamErrorCode,
 } from "./result-stream.js";
+export { createControlServer, HTTP_CONTROL_DEFAULTS } from "./http-control.js";
+export type { ControlServer, HttpControlOptions } from "./http-control.js";

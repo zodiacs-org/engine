@@ -18,7 +18,7 @@ initial session complete M1 only; later sessions complete one or two milestones.
 - [x] M6 Add bounded retries, retry delays, terminal failure and idempotency keys with payload conflict detection. Test duplicate submissions, stale lease fencing and retry exhaustion on both backends.
 - [x] M7 Complete crash recovery and resumable jobs with atomic result/checkpoint commits and expired-lease recovery. Use child processes killed at controlled persistence boundaries to prove resumed output has no lost or duplicate rows.
 - [x] M8 Stream result rows as NDJSON with stable cursors, backpressure and disconnect handling. Test partial reads, reconnects, escaping and large workloads without collecting all output in memory.
-- [ ] M9 Add the small HTTP control API for submit, status, progress and streamed results, with bounded request bodies and clear errors. Test routes, idempotency conflicts and client disconnects over real local sockets.
+- [x] M9 Add the small HTTP control API for submit, status, progress and streamed results, with bounded request bodies and clear errors. Test routes, idempotency conflicts and client disconnects over real local sockets.
 - [ ] M10 Add the CLI for submission, worker/service operation, status and NDJSON export using the same service APIs. Test subprocess exit codes, stdout/stderr separation and restart with SQLite.
 - [ ] M11 Add the optional Redis backend behind an injected client and explicit configuration. Run the backend contract suite with a stateful mock and test atomic operations and connection failures; document what the mock cannot establish.
 - [ ] M12 Commit the scaling benchmark runner and compact machine-specific evidence for throughput versus worker count using synthetic workloads. Record runtime, engine/source identity, CPU allocation, workload, elapsed time and failures; keep raw generated rows gitignored and every committed file below the file-size limit.
@@ -197,3 +197,31 @@ confirmed that no `batch/` file is included. All changes stay inside `batch/`,
 all tracked and new batch files are below the file-size limit, and batch
 documentation contains no em dashes. No root build, archive creation or git
 write was performed.
+
+## M9 session checks
+
+`npm run typecheck`, `npm test` and `npm run build` passed from `batch/` on
+Node 22.23.3. The HTTP control server exposes submission, status, committed
+progress and resumable NDJSON routes over an injected queue. It enforces
+body byte limits before parsing, fatal UTF-8 decoding, a total upload deadline,
+strict route and header options, an active-handler budget and fixed error
+responses. Idempotency and retry policy use the existing queue contract.
+
+The socket route suite checks all workloads on memory and independent SQLite
+connections, exact stored result parity, canonical keyed replay, concurrent
+conflicts, validation and body boundaries, status transitions, retry exhaustion,
+and persisted resumption after reopen. The streaming socket suite checks
+finite snapshot boundaries, following from an empty prefix, interrupted output,
+partial Unicode-line reconnects, backpressure, disconnect during pending reads,
+late backend failures, upload deadlines and shutdown without closing the queue.
+The plain Node smoke test exercises the built HTTP export on both backends.
+The full existing suite, including controlled process-crash recovery, passes.
+These are interface and transport checks, not scaling or accuracy evidence.
+
+The README documents routes, errors, local deployment, ownership and cursor
+recovery. The root `npm run package:contents`, using the batch npm cache,
+stopped because `dist/calc.d.ts` is absent. A scripts-disabled npm pack dry run
+confirmed that no `batch/` file is included. All changes stay inside `batch/`,
+all tracked and new batch files are below the file-size limit, and batch
+documentation contains no em dashes. No root build, archive creation or git
+write was performed. M10 remains the next milestone.

@@ -4,9 +4,9 @@ This private project is the batch service under development for this engine
 checkout. The completed work is checked off in [PLAN.md](PLAN.md). The current
 implementation validates job definitions, expands work lazily, executes it
 through the engine, provides in-memory and SQLite queues with retries and
-idempotent submission, schedules work on a thread pool, and streams committed
-results as NDJSON. SQLite crash recovery is checked with controlled process
-kills. HTTP, CLI and scaling measurements are later milestones.
+idempotent submission, schedules work on a thread pool, and exposes job control
+and NDJSON results through a small HTTP API. SQLite crash recovery is checked
+with controlled process kills. CLI and scaling measurements are later milestones.
 
 All project files stay here. The engine source, npm package and carried archives
 are unchanged. Code and documentation in this folder use the repository's
@@ -713,3 +713,138 @@ lines, backpressure, read failures, broken pages, abort during reads and polling
 listener cleanup, and event-loop fairness. The
 [plain Node smoke test](test/build.test.ts) checks the built exports too.
 These checks establish transport behavior, not astronomical accuracy.
+
+## HTTP control API
+
+`createControlServer(queue, options)` in [src/http-control.ts](src/http-control.ts)
+returns `{ server, close }`. The Node HTTP server is initially unbound. The
+embedding application chooses its listening address and runs a `Scheduler`
+separately; requests never calculate charts, claim work or recover expired
+leases. Both queue backends use the same routes. This API has no authentication,
+TLS or tenant isolation and is intended for trusted local clients. Bind it to
+loopback for local operation; exposing it elsewhere requires an authenticated
+access boundary provided by the operator.
+
+After building, with an open queue, this starts an HTTP listener on a dynamically
+assigned loopback port. The application must call `close()` during shutdown:
+
+```js
+import { createControlServer } from "./.generated/index.js";
+
+const control = createControlServer(queue);
+await new Promise((resolve, reject) => {
+  control.server.once("error", reject);
+  control.server.listen(0, "127.0.0.1", resolve);
+});
+console.log(control.server.address());
+// Later, stop accepting HTTP requests and interrupt remaining HTTP consumers:
+// await control.close();
+// Stop your scheduler before closing the shared queue.
+```
+
+Paths are case-sensitive and have no trailing slash. Encode the returned job ID
+as a path segment. Unknown routes and unknown jobs return `404`; unsupported
+methods on a known route return `405` with an `Allow` header. There is no list,
+delete, claim or worker-administration route. Query parameters other
+than the ones listed below, or repeated parameters, return `400`.
+
+| Request | Success response |
+| --- | --- |
+| `POST /v1/jobs` | `202` JSON `{ "job": snapshot }`, with a relative `Location` header for the status route. |
+| `GET /v1/jobs/:id` | `200` JSON `{ "job": snapshot }`, including retry and lease status but no definition or lease token. |
+| `GET /v1/jobs/:id/progress` | `200` JSON with `id`, `status`, `totalTasks`, `completedTasks` and `nextCursor`. Only committed rows count. |
+| `GET /v1/jobs/:id/results?cursor=0&follow=false` | `200` UTF-8 `application/x-ndjson`, with the stored result rows and their cursors. |
+
+Submission requires `Content-Type: application/json`, optionally with
+`charset=utf-8`, and an uncompressed body. Its JSON envelope is
+`{ "job": <job definition>, "retry": <optional retry policy> }`. Unknown
+envelope fields reject. The job schemas and retry policy are the same as the
+in-process queue APIs. This request body uses invented birth data:
+
+```json
+{
+  "job": {
+    "version": 1,
+    "kind": "charts",
+    "births": [{ "id": "synthetic-http", "birth": { "utc": "2001-02-03T04:05:06Z" } }]
+  }
+}
+```
+
+Use the optional `Idempotency-Key` header for retryable submissions. A successful
+replay returns `202`, the same job ID and its current snapshot, even if it has
+already finished. The API does not claim that every successful request created
+a new job. A different canonical job or effective retry policy under the same
+key returns `409`. Invalid keys reject and repeated key headers are ambiguous
+requests. No key is generated implicitly. If a connection disappears after a
+submission reaches storage, the job may still be accepted; retry with the same
+key, job and policy to recover the acknowledgement.
+
+`cursor` defaults to the beginning and accepts canonical nonnegative decimal
+safe integers. It must not exceed committed progress, including with
+`follow=true`. `follow` accepts only `true` or `false` and defaults to `false`.
+A finite response freezes its endpoint at its initial atomic page read. An
+unfinished job with no committed rows returns an empty response. Following
+sends headers after that initial read, then streams and polls until completion
+or terminal failure. Empty active jobs can keep a following connection open.
+Finishing either kind of response does not prove the job succeeded: read its
+status. The queue is unchanged by reads and client disconnects.
+
+The HTTP adapter reuses the result stream's bounded paging and backpressure.
+It does not collect an export before sending it. Clients resume by saving each
+complete newline-ended row and its `nextCursor` together, discarding a partial
+trailing line on interruption, and reconnecting from the saved cursor. Errors
+before headers return JSON with the appropriate HTTP status. A storage or
+stream failure after headers destroys the response, so the client sees an
+incomplete HTTP transfer. No diagnostic or heartbeat lines are inserted into
+NDJSON. Complete rows received before the failure remain usable.
+
+Errors from application handlers have shape
+`{ "error": { "code": "...", "message": "..." } }`. Messages omit raw storage
+diagnostics, submitted values and stack traces. JSON and NDJSON responses set
+`Cache-Control: no-store` and `X-Content-Type-Options: nosniff`.
+
+| HTTP status | Error codes and cause |
+| --- | --- |
+| `400` | `invalid-request` for malformed route options or ambiguous headers; `invalid-json` for malformed JSON or UTF-8; `invalid-argument` for queue argument errors; `invalid-input` or `unsupported-version` for invalid jobs. |
+| `404` | `not-found`, for a missing route or job. |
+| `405` | `method-not-allowed`, with the accepted method in `Allow`. |
+| `408` | `request-timeout`, when a submission body misses its receive deadline. |
+| `409` | `idempotency-conflict`, for reuse with a different submission. |
+| `413` | `body-too-large` for the transport byte budget, or `limit-exceeded` for workload limits. |
+| `415` | `unsupported-media-type`, for unsupported media type, charset or content encoding. |
+| `417` | `invalid-request`, for HTTP expectations, including `100-continue`. |
+| `503` | `unavailable`, for an occupied handler budget, closed queue or busy storage. |
+| `500` | `internal-error`, for other backend or operation failures before headers. |
+
+Node's HTTP parser handles malformed wire framing and oversized headers before
+application routing, so those responses need not have this JSON shape.
+
+Options and defaults are exported as `HttpControlOptions` and
+`HTTP_CONTROL_DEFAULTS`. `maxBodyBytes` can lower, but cannot raise, the default
+job byte budget; it measures the whole envelope before decoding or JSON parsing.
+Both declared `Content-Length` and actual streamed bytes are checked. Compressed
+bodies are rejected. `requestTimeoutMs` is the total body receive deadline after
+headers, in milliseconds, rather than an idle timeout reset by each chunk.
+Node retains its header timeout. Rejected unread bodies close their connection.
+`streamPollMs` controls following-result polling in milliseconds.
+`maxConcurrentRequests` bounds active handlers, including uploads and result
+followers; overflow receives `503`. This is not a global socket or storage quota.
+All option values must be positive safe integers within the exported limits
+and the timer range enforced in the implementation.
+
+`close()` is idempotent and aborts HTTP consumers, closes sockets and waits for
+their handlers to settle. Use it instead of only `server.close()`, which can
+wait on active following streams. It does not cancel jobs, stop a scheduler or
+close a shared queue. An asynchronous backend operation already started may
+still settle after disconnect or shutdown; its late rejection is observed.
+Synchronous SQLite operations cannot be interrupted mid-call. Create a new
+control server to restart after closing it.
+
+[test/http-control.test.ts](test/http-control.test.ts) checks routes, validation,
+idempotency and workload parity through local sockets on both queue backends.
+[test/http-control-stream.test.ts](test/http-control-stream.test.ts) checks
+following, interruption, bounded read-ahead, request deadlines and shutdown.
+[test/build.test.ts](test/build.test.ts) exercises the built HTTP export in plain
+Node on both backends. These checks establish interface and transport behavior;
+they do not measure throughput or astronomical accuracy.
