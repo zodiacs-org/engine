@@ -18,7 +18,7 @@ single session summary to `CHANGES.txt`. The harness owns all git writes.
 - [x] M7 Add moon-phase and houses REST routes through public engine APIs; attach applicable engine receipts with explicit scope and test every route and refusal.
 - [x] M8 Generate and serve an OpenAPI 3.1 document from route schemas, including authentication, limits, receipts, errors and synthetic examples; test schema and route agreement.
 - [x] M9 Harden lifecycle and resource limits across the completed API, including shutdown, readiness, logging privacy and calculation work limits; run the full server integration suite.
-- [ ] M10 Add a Dockerfile and self-hosting instructions with environment/file key setup, health checks, persistent configuration and required engine licence notices; exercise the container when tooling permits.
+- [x] M10 Add a Dockerfile and self-hosting instructions with environment/file key setup, health checks, persistent configuration and required engine licence notices; exercise the container when tooling permits.
 - [ ] M11 Add an autocannon or k6 harness and commit small throughput and p50/p95 latency evidence from this machine, with commands, runtime, workload, build identity and limitations; keep raw generated output ignored.
 - [ ] M12 Review all route, auth, rate-limit, OpenAPI and deployment tests; finish operator/client documentation and record final validation and remaining limitations.
 
@@ -153,3 +153,24 @@ HTTP and engine integration evidence, not independent astronomical accuracy
 or throughput evidence. The root package contents gate still reports missing
 `dist/calc.d.ts`; no root build was generated. All changes remain in
 `server/`, within the file-size rule and without em dashes in docs.
+
+M10 validation: server typecheck, full Vitest suite, build and package-exclusion
+check passed using Node 22.23.3. Readiness helper tests cover real engine
+readiness, wildcard binding, credential omission, malformed and oversized
+responses, total response deadlines, unavailable listeners and silent failure.
+An independent review found and corrected a test helper that could mistake a
+killed probe process for success; its focused tests and typecheck passed again.
+The Dockerfile isolates build inputs, uses production dependencies and a
+nonroot runtime, and retains engine licence notices. An ignored context check
+using Moby's pattern matcher verified source inclusion and secret exclusion;
+the isolated build matched the checkout's runtime bundles byte for byte.
+A clean production dependency stage passed local readiness, authentication,
+natal receipt, healthcheck and graceful shutdown checks. These local checks
+do not verify an actual container. Docker is unavailable on this machine;
+the committed test:container harness reports that limitation as a failure
+and remains to be run on a Docker host. Self-hosting documentation covers key
+provisioning and rotation, mount permissions, probes, reverse proxies, logs,
+resource limits, shutdown and attribution. The root package contents gate
+still reports missing `dist/calc.d.ts`; no root build was generated. All
+changes remain in `server/`, within the file-size rule and without em dashes
+in docs.

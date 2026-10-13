@@ -4,8 +4,9 @@ This private package is a self-hosted HTTP adapter for the engine in this
 checkout. It serves natal charts, transit snapshots, synastry, solar/lunar
 returns, moon phase and houses with engine receipts, health and readiness,
 API-key authentication, per-key rate limits, bounded JSON validation, JSON
-logging, generated OpenAPI and process lifecycle. Docker deployment is tracked
-in [PLAN.md](PLAN.md).
+logging, generated OpenAPI and process lifecycle. See
+[DEPLOYMENT.md](DEPLOYMENT.md) for Docker, credential mounts, probes,
+reverse proxies, shutdown and deployment validation.
 
 ## Run from a checkout
 

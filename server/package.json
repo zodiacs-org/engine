@@ -11,6 +11,7 @@
     "start": "node build/main.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "npm run build && vitest run --config vitest.config.ts",
+    "test:container": "node scripts/test-container.mjs",
     "check:package": "node scripts/check-package.mjs"
   },
   "dependencies": {
