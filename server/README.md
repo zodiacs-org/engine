@@ -1,8 +1,9 @@
 # Engine HTTP server
 
 This private package is a self-hosted HTTP adapter for the engine in this
-checkout. It serves natal charts with engine receipts, health and readiness,
-API-key authentication, per-key rate limits, bounded JSON validation, JSON
+checkout. It serves natal charts, transit snapshots and synastry with engine
+receipts, health and readiness, API-key authentication, per-key rate limits,
+bounded JSON validation, JSON
 logging and process lifecycle. The remaining calculation routes, OpenAPI and
 Docker deployment are tracked in [PLAN.md](PLAN.md).
 
@@ -112,8 +113,8 @@ requests receive HTTP 401 with the usual error envelope and a Bearer
 Route protection and absence of credentials in logs and responses are
 checked through injection in `test/auth.vitest.ts` and through a real
 listener in `test/process.vitest.ts`, including duplicate headers and trace
-logging. `POST /v1/natal` is available; other calculation routes remain in
-the plan.
+logging. `POST /v1/natal`, `POST /v1/transits` and `POST /v1/synastry` are
+available; other calculation routes remain in the plan.
 
 ## Natal charts
 
@@ -190,6 +191,82 @@ covered in `test/natal.vitest.ts`. Unexpected failures return the sanitized
 HTTP 500 envelope. Both successful and failed calculations spend a rate-limit
 token. Birth inputs, chart output and receipts are omitted from logs.
 
+## Transit snapshots
+
+`POST /v1/transits` accepts `natal`, a birth input with the same fields and
+validation as `/v1/natal`, and `at`, the resolved instant for the moving sky.
+Both are required. For example, this synthetic request shape is exercised
+by `test/comparisons.vitest.ts`:
+
+```json
+{
+  "natal": {
+    "utc": "2001-02-03T04:05:06.789Z",
+    "latitude": 23.45,
+    "longitude": -67.89
+  },
+  "at": "2024-06-07T08:09:10+02:00"
+}
+```
+
+`at` accepts the same string or epoch-millisecond forms and limits as a
+natal `utc`. The engine reads it as UTC on its default time basis; date-only
+strings mean midnight UTC. The natal chart's `timeScale`, pinned `deltaT`,
+coordinates and house settings do not carry over to the moving sky. The
+route requires an explicit instant and calculates a snapshot, without a
+date range or event search. Unknown fields and query parameters are refused.
+
+`data` retains the complete `transits` result: `natal`, `at`, `positions`
+and `aspects`. It adds `sky`, a separate location-free engine natal chart
+at the transit instant, whose `bodies` equal `positions`. This supporting
+chart supplies the sky's flags, time basis and delta T. It has no houses
+or angles because no location was supplied; its time is known. Dates
+serialize as ISO strings and numbers keep their full engine precision.
+In the transit aspects, `a` is the moving body and `b` is the natal body.
+
+The receipts have scopes `/data/natal` and `/data/sky`. Each envelope is
+the unchanged result of the engine's natal receipt creator, with the
+corresponding original instant spelling when it was a string. They cover
+the named contributing charts only. The cross-chart `data.aspects` are
+computed directly by `transits` and are outside these natal receipts.
+No receipt certifies the transit analysis as a whole. Read `data.sky.flags`
+as well as `data.natal.flags` for reference coverage.
+
+## Synastry
+
+`POST /v1/synastry` accepts `a` and `b`, both birth inputs with the same
+fields and validation as `/v1/natal`. For example:
+
+```json
+{
+  "a": { "utc": "2001-02-03T04:05:06.789Z", "timeKnown": false },
+  "b": { "utc": "2003-04-05T06:07:08-03:00" }
+}
+```
+
+Each chart keeps its own time scale, delta T, coordinates, house settings
+and flags. The response's `data` is the complete engine `synastry` result:
+`a`, `b`, `aspects`, `top`, `counts`, `easeful`, `charged`, `elements` and
+`modalities`. Chart and aspect ordering follows the submitted `a` and `b`;
+the server does not reorder the pair or customize the engine's aspect
+policy. Unknown fields, precomputed charts, imported receipts and query
+parameters are refused.
+
+Receipts scoped to `/data/a` and `/data/b` cover the corresponding natal
+charts only. The inter-chart aspects, top-aspect selection, counts and
+balance summaries are direct engine output outside those natal receipts.
+The scope labels are server metadata, not engine-authored conventions.
+
+Both routes use the same authentication, per-key bucket, JSON limits and
+error envelopes as the natal route. Invalid input in either chart fails
+the whole request. A receipt refusal returns `receipt_unavailable` with
+no partial analysis or receipts. Birth inputs and calculation output stay
+out of logs. `test/comparisons.vitest.ts` checks direct-engine transport
+parity, receipt parsing and replay, independent clocks, flags, validation,
+authentication, rate limits and error privacy. `test/process.vitest.ts`
+checks the routes through the built listener. These checks establish
+adapter behavior, not independent astronomical accuracy.
+
 ## Rate limits
 
 Each configured key gets a token bucket shared across protected routes. The
@@ -242,9 +319,10 @@ chunked byte overflow and duplicate headers on the actual listener.
 Routes validate their declared JSON schemas without coercing types,
 discarding unknown properties or inserting defaults. Required-body and
 schema behavior is exercised with test-only routes in
-`test/request-validation.vitest.ts` and the natal route in
-`test/natal.vitest.ts`. Parser, schema and engine input errors expose no
-input values or validation internals in responses or logs.
+`test/request-validation.vitest.ts` and the calculation routes in
+`test/natal.vitest.ts` and `test/comparisons.vitest.ts`. Parser, schema and
+engine input errors expose no input values or validation internals in
+responses or logs.
 
 | HTTP status | Error code | Meaning |
 | --- | --- | --- |
@@ -260,7 +338,8 @@ input values or validation internals in responses or logs.
 
 The table describes ordinary request handling, as checked in
 `test/app.vitest.ts`, `test/auth.vitest.ts`, `test/request-validation.vitest.ts`,
-`test/natal.vitest.ts` and `test/rate-limit.vitest.ts`. Raw HTTP parser and router failures can
+`test/natal.vitest.ts`, `test/comparisons.vitest.ts` and
+`test/rate-limit.vitest.ts`. Raw HTTP parser and router failures can
 occur earlier. Authentication precedes rate limiting, which precedes JSON
 validation, so a rejected request reports the first applicable error.
 

@@ -10,6 +10,8 @@ import { registerRateLimiting } from "./rate-limit-hook.js";
 import type { RateLimitOptions } from "./rate-limit.js";
 import { JSON_LIMITS, registerRequestValidation, RequestValidationError } from "./request-validation.js";
 import { registerNatalRoute } from "./natal.js";
+import { registerTransitsRoute } from "./transits.js";
+import { registerSynastryRoute } from "./synastry.js";
 
 export interface AppOptions {
   logger?: FastifyServerOptions["logger"];
@@ -134,5 +136,7 @@ export function buildApp(options: AppOptions = {}) {
     return success(request.id, { status: "ready" });
   });
   registerNatalRoute(app);
+  registerTransitsRoute(app);
+  registerSynastryRoute(app);
   return app;
 }

@@ -5,7 +5,7 @@ import { connect, createServer } from 'node:net';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
-import { natalChart } from '../../src/index.js';
+import { ENGINE_VERSION, EPHEMERIS, natalChart, synastry, transits } from '../../src/index.js';
 import { createNatalEnvelope, parseNatalEnvelope } from '../../src/receipt.js';
 
 const serverDirectory = fileURLToPath(new URL('..', import.meta.url));
@@ -187,6 +187,88 @@ describe('built server process', () => {
     expect(jsonLines(server.stdout).filter((record) => record.event === 'request_completed')
       .map(({ route, statusCode }) => ({ route, statusCode }))).toEqual([
       { route: '/v1/natal', statusCode: 200 }, { route: '/v1/natal', statusCode: 400 },
+    ]);
+  });
+
+  it('serves transit and synastry results with scoped receipts through the built listener and keeps calculations out of trace logs', async () => {
+    const key = randomBytes(32).toString('base64url');
+    const canary = randomUUID();
+    const server = launch({ API_KEYS: JSON.stringify([key]), LOG_LEVEL: 'trace' });
+    const address = await started(server);
+    // Invented instants and coordinates. Each contributing chart uses its own
+    // requested clock; the moving sky always uses the engine's UTC default.
+    const first = {
+      utc: '2005-01-02T03:04:05+05:30', latitude: 23.45, longitude: -67.89,
+      houseSystem: 'placidus' as const, timeScale: 'tt' as const, deltaT: 70,
+    };
+    const second = { utc: '2007-08-09T10:11:12-03:30', timeKnown: false, deltaT: 123.456 };
+    const at = '2024-10-11T12:13:14+02:00';
+    const a = natalChart(first);
+    const b = natalChart(second);
+    const sky = natalChart({ utc: at });
+    const current = transits(a, at);
+    const pair = synastry(a, b);
+    const firstReceipt = createNatalEnvelope(a, { sourceInstant: first.utc });
+    const secondReceipt = createNatalEnvelope(b, { sourceInstant: second.utc });
+    const skyReceipt = createNatalEnvelope(sky, { sourceInstant: at });
+    const identity = { name: '@zodiacs/engine', version: ENGINE_VERSION, ephemeris: EPHEMERIS };
+    const request = (path: string, payload: unknown) => fetch(new URL(path, address), {
+      method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+      body: JSON.stringify(payload), signal: AbortSignal.timeout(5000),
+    });
+    let responseText = '';
+    for (const example of [
+      {
+        path: '/v1/transits', input: { natal: first, at }, data: { ...current, sky },
+        receipts: [{ scope: '/data/natal', envelope: firstReceipt }, { scope: '/data/sky', envelope: skyReceipt }],
+      },
+      {
+        path: '/v1/synastry', input: { a: first, b: second }, data: pair,
+        receipts: [{ scope: '/data/a', envelope: firstReceipt }, { scope: '/data/b', envelope: secondReceipt }],
+      },
+    ]) {
+      const response = await request(example.path, example.input);
+      expect(response.status).toBe(200);
+      const text = await response.text();
+      responseText += text;
+      const body = JSON.parse(text) as { receipts: { scope: string; envelope: unknown }[] };
+      expect(body).toEqual({
+        requestId: response.headers.get('x-request-id'), engine: identity,
+        data: JSON.parse(JSON.stringify(example.data)), receipts: example.receipts,
+      });
+      for (const receipt of body.receipts) expect(parseNatalEnvelope(JSON.stringify(receipt.envelope)).ok).toBe(true);
+      expect(response.headers.get('cache-control')).toBe('no-store');
+      expect(response.headers.get('x-content-type-options')).toBe('nosniff');
+      expect(response.headers.get('x-ratelimit-limit')).toBe('60');
+    }
+    expect(current.positions).toEqual(sky.bodies);
+    for (const example of [
+      { path: '/v1/transits', input: { natal: first, at: canary } },
+      { path: '/v1/synastry', input: { a: first, b: { ...second, utc: canary } } },
+    ]) {
+      const response = await request(example.path, example.input);
+      expect(response.status).toBe(400);
+      const text = await response.text();
+      responseText += text;
+      expect(JSON.parse(text)).toEqual({
+        requestId: response.headers.get('x-request-id'), engine: identity, receipts: [],
+        error: { code: 'invalid_request', message: 'Request is invalid.' },
+      });
+    }
+    server.child.kill('SIGTERM');
+    expect(await bounded(server.exited)).toEqual({ code: 0, signal: null });
+    expect(server.stderr).toBe('');
+    const logs = server.stdout + server.stderr;
+    for (const value of [
+      key, canary, first.utc, second.utc, at, a.input.utc.toISOString(), b.input.utc.toISOString(), sky.input.utc.toISOString(),
+      '"latitude"', '"longitude"', '"bodies"', '"aspects"', '"receipts"', '"envelope"', 'sourceInstant', 'resultFlags',
+      String(a.bodies[0]!.lon), String(b.bodies[0]!.lon), String(sky.bodies[0]!.lon),
+    ]) expect(logs).not.toContain(value);
+    for (const value of [key, canary]) expect(responseText).not.toContain(value);
+    expect(jsonLines(server.stdout).filter((record) => record.event === 'request_completed')
+      .map(({ route, statusCode }) => ({ route, statusCode }))).toEqual([
+      { route: '/v1/transits', statusCode: 200 }, { route: '/v1/synastry', statusCode: 200 },
+      { route: '/v1/transits', statusCode: 400 }, { route: '/v1/synastry', statusCode: 400 },
     ]);
   });
 
