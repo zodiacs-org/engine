@@ -22,7 +22,7 @@ astronomical accuracy or the validity of personality or predictive claims.
 - [x] M6 Implement the interpretation generator with versioned prompts, input/output validation, provenance, reproducible manifests and ignored output files.
 - [x] M7 Write a versioned scoring rubric for factual correctness, coverage, contradictions and abstentions, separating interpretive quality from computable facts.
 - [x] M8 Implement deterministic placement, aspect, house and dignity scoring with per-claim evidence, category totals and explicit denominators.
-- [ ] M9 Add an offline reading evaluation CLI that combines synthetic cases, engine facts, supplied or mock readings and machine-readable reports.
+- [x] M9 Add an offline reading evaluation CLI that combines synthetic cases, engine facts, supplied or mock readings and machine-readable reports.
 - [ ] M10 Add a conservative prose claim extractor and tests for negation, ambiguity, duplicate claims and omitted facts; expose extraction limits in reports.
 - [ ] M11 Add adversarial and end-to-end tests covering malformed model output, invented factors, unavailable birth time, conflicting conventions and output limits.
 - [ ] M12 Document reproducible local workflows, backend extension, seed review and result interpretation; run the complete eval suite and package-isolation checks.
@@ -186,3 +186,27 @@ extraction faithfulness. Package exclusion and project isolation passed. The roo
 `npm run package:contents` gate was attempted with an eval-local npm cache and
 failed on missing `dist/calc.d.ts`; no prohibited root build was run. All changes
 remain under `evals/`. M9 is next.
+
+M9 acceptance: `evaluateReading` and the offline evaluation CLI combine a
+validated synthetic case with a supplied reading or a labeled deterministic
+mock. Supplied readings retain their original claims and the complete scorer
+report; the mock renders local reference factors with explicit convention and
+availability handling, then the scorer recomputes its own reference. Immutable
+envelopes preserve input, reference, rubric and implementation identity. The CLI
+prints a machine-readable summary and publishes bounded canonical reports only
+under ignored `reports/`, reusing exact bytes and refusing conflicts without
+replacement. `EVALUATION.md` documents the workflow and mock limitations. No
+generated reading or report is committed; general prose extraction remains M10.
+
+M9 validation: `npm --prefix evals test` and
+`npm --prefix evals run validate:seed` passed on Node 22.23.3. Orchestration,
+CLI and persistence tests cover supplied incorrect and empty readings, duplicates,
+contradictions, convention exclusions, unavailable houses, polar fallback,
+mock provenance, immutable snapshots, reference-span warnings, report expansion
+limits, fresh-process repeatability, offline execution, input byte and UTF-8
+boundaries, symlinks, nonregular files, concurrent writers, no-clobber publication
+and staging cleanup. These are engine-consistency and workflow checks, not model
+quality or independent astronomical accuracy evidence. Package exclusion and
+project isolation passed. The root `npm run package:contents` gate was attempted
+with an eval-local npm cache and failed on missing `dist/calc.d.ts`; no prohibited
+root build was run. All changes remain under `evals/`. M10 is next.

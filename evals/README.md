@@ -7,7 +7,9 @@ chart facts through the local engine, and validates readings with quoted claims.
 A bounded interpretation generator provides a deterministic offline mock,
 explicit custom backend selection and reproducible manifests. The versioned
 [factual rubric](RUBRIC.md) defines the rules implemented by the deterministic
-[reading scorer](SCORING.md).
+[reading scorer](SCORING.md). An [offline evaluation command](EVALUATION.md)
+combines a synthetic case with supplied claims or a deterministic mock reading
+and saves a complete report under ignored `reports/`.
 
 Interpretation text is symbolic prose. The factual score compares a
 reading's assertions with computations from the local `@zodiacs/engine` under
@@ -297,8 +299,21 @@ and its synthetic case. The scorer validates both inputs, computes its own local
 reference, and returns a frozen report with per-claim evidence, contradictions,
 category and overall counts, and rates. It does not extract claims or call a
 model. [SCORING.md](SCORING.md) describes the API, report links, provenance,
-limits and errors. Evaluation commands remain a later milestone in
-[PLAN.md](PLAN.md).
+limits and errors.
+
+To evaluate a synthetic case with the offline mock, or with a supplied reading:
+
+```sh
+node evals/bin/evaluate-reading.mjs evals/scratch/case.json --mock
+node evals/bin/evaluate-reading.mjs evals/scratch/case.json --reading evals/scratch/reading.json
+```
+
+The command saves a complete report under ignored `reports/` and prints a JSON
+summary. [EVALUATION.md](EVALUATION.md) gives an invented case example, the
+library API, report format, input limits and exit behavior. Supplied readings
+already contain quoted claims; prose extraction remains a later milestone.
+The mock renders engine factors to check the workflow and does not measure
+model performance.
 
 ## Generation backends
 

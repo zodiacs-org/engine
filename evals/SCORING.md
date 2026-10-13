@@ -26,7 +26,9 @@ and [reading.schema.json](schema/reading.schema.json). Supply invented birth
 inputs only. The scorer validates both inputs and requires matching case ids.
 It computes its own reference with [computeChartFacts](lib/chart-facts.mjs),
 then checks its contract and factor inventory. There is no imported fact-list
-argument, extractor, model call or automatic file output. A CLI is still planned.
+argument, extractor, model call or automatic file output. The offline
+[evaluation CLI](EVALUATION.md) wraps this API with supplied or mock readings
+and report persistence.
 
 The optional final argument accepts only `rubricId` and `rubricVersion`.
 Omission selects `chart-reading-factual`, version `1.0.0`; explicit values must

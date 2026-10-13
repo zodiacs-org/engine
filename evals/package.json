@@ -13,7 +13,8 @@
     "validate:dataset": "node bin/validate-dataset.mjs",
     "validate:seed": "node bin/validate-dataset.mjs --seed data/seed.json",
     "validate:reading": "node bin/validate-reading.mjs",
-    "generate": "node bin/generate-interpretations.mjs"
+    "generate": "node bin/generate-interpretations.mjs",
+    "evaluate": "node bin/evaluate-reading.mjs"
   },
   "dependencies": {
     "ajv": "8.17.1",
