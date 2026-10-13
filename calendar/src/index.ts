@@ -1,4 +1,6 @@
 export { currentEngineIdentity } from "./engine.js";
+export { createFeedServer, feedPath, DEFAULT_HTTP_LIMITS, MAX_HTTP_CONFIG_BYTES } from "./http.js";
+export type { FeedServerLimits } from "./http.js";
 export { escapeText, foldContentLine, utcDateTime } from "./content-line.js";
 export { serializeCalendar } from "./serialize.js";
 export { streamSchedule, streamCalendar, compareScheduleEvents, ScheduleStreamError } from "./stream.js";

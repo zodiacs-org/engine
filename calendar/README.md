@@ -5,12 +5,12 @@ text and searches for tropical sign ingresses, natal transit exacts, stations,
 solar/lunar eclipses and void-of-course Moon intervals through the existing events package, plus explicit
 progressed synastry schedules. It imports the parent engine sources without
 building or changing the parent npm package. The implemented scope is M1
-through M10 in [PLAN.md](PLAN.md):
+through M11 in [PLAN.md](PLAN.md):
 UTC and timezone serialization, validation, stable event identities and ingress
 schedules, plus natal transit and synastry analysis for explicitly synthetic
 charts, and receipt-bearing station, eclipse and void-of-course schedules,
-with async streaming over bounded windows and a command-line exporter.
-The HTTP feed endpoint remains a planned milestone.
+with async streaming over bounded windows, a command-line exporter and a
+local HTTP feed endpoint.
 
 Use Node satisfying `engines` in [package.json](package.json). From this folder:
 
@@ -141,8 +141,8 @@ event list and a reason, discarding any earlier results. A completed empty
 schedule remains distinct and cannot be passed to the current serializer.
 Unexpected calculation failures throw. Cancellation via `signal` is
 cooperative between synchronous calls; a same-thread timer cannot interrupt
-a running search. This milestone collects the result in memory. Streaming
-and worker-based HTTP execution remain later milestones.
+a running search. This adapter collects its result in memory. `streamSchedule`
+collects bounded windows, and the HTTP endpoint runs it in disposable workers.
 
 `test/ingresses-boundary.calendar-test.ts` uses analytic synthetic motion
 through the actual events scanner to check midnight crossing ownership,
@@ -610,8 +610,8 @@ The content-line and serializer tests enforce these formatting rules and
 round-trip the result with the independent `ical.js` parser.
 
 An empty iterable is refused because [RFC 5545 section 3.6](https://www.rfc-editor.org/rfc/rfc5545.html#section-3.6)
-requires a calendar component. Later CLI and HTTP milestones must explicitly
-handle an empty successful schedule as well as an upstream search refusal.
+requires a calendar component. The CLI and HTTP endpoint report an empty
+successful search separately from an upstream refusal.
 
 ## Timezone display
 
@@ -997,6 +997,115 @@ parses TZID output with `ical.js`, exercises every adapter, and checks
 filesystem isolation, exclusive publication, diagnostics and disconnects.
 `test/cli-output.calendar-test.ts` uses invented wire chunks to exercise a
 late failure and the file byte cap without asserting astronomical results.
+
+## Local HTTP feeds
+
+From this folder, start the loopback server with the committed synthetic map:
+
+```sh
+node scripts/serve.mjs --config examples/synthetic-server.json --port 8080
+curl http://127.0.0.1:8080/feeds/synthetic-void.ics
+```
+
+The launcher accepts `--config`, `--port` and standalone `--help`. Its
+startup message reports the actual listening port, including when the
+operator requests an ephemeral port. The server example and launch command
+are exercised by `test/http-launcher.calendar-test.ts`; the port is a local
+example setting, not a deployed service. Stop with SIGINT or SIGTERM, which
+closes open sockets and terminates their feed workers. The launcher verifies
+the pinned source cache and uses the same TypeScript loader as the CLI.
+
+The map associates a durable feed ID with a complete
+`zodiacs-calendar-feed/1` configuration, the same schema the CLI accepts.
+For example, `synthetic-void` selects the configuration from the void CLI
+example. Library callers can use `createFeedServer({ id: configuration },
+limits)` and explicitly call `listen()`. `feedPath(id)` returns
+`/feeds/ID.ics`. IDs use ASCII letters, digits, underscore and hyphen,
+enforced by `test/http-control.calendar-test.ts`. Configurations are copied
+and every selection is validated before the server can accept work.
+All chart declarations must remain explicitly synthetic. Configuration,
+chart or date-range changes retain the named URL; existing event identity
+rules determine which UIDs stay the same.
+
+Clients cannot submit charts, date ranges, work budgets or filenames.
+Query parameters, encoded path spellings, request bodies and unsupported
+methods are refused. Known feed URLs accept GET and HEAD; unknown feed IDs
+return 404. The endpoint has no authentication or mutable schedule API.
+The launcher binds to loopback. Library callers choosing another binding
+are explicitly serving their configured synthetic data there.
+
+Each generation uses a disposable worker that calls `streamSchedule` and
+`streamCalendar` directly. The parent pulls the next wire chunk only after
+the current response write drains. It stores configuration and completion
+metadata, without retaining complete feeds or writing cache files. Existing
+per-window buffers, interval deduplication, receipt records and UTC/TZID
+rules are unchanged. Worker termination interrupts synchronous JavaScript
+searches on disconnect or deadline, including work between cooperative
+checkpoints. A worker keeps its capacity slot until termination finishes.
+Workers also isolate the ephemeris's module-wide time basis between requests.
+
+The default limits below are enforced in
+`test/http-control.calendar-test.ts`. Its invented transport chunks and
+worker lifecycle check byte accounting, UTF-8 boundaries, backpressure,
+capacity and deadline termination. HTTP integration checks use the declared
+synthetic February fixture ranges in `test/http.calendar-test.ts`.
+
+| Setting | Default |
+| --- | ---: |
+| Configuration UTF-8 bytes | 1,048,576 |
+| Configured feeds | 32 |
+| Concurrent generation workers | 2 |
+| Deadline per generation, including startup and slow response writes | 30,000 ms |
+| Adapter evaluations per feed request | 1,000,000 |
+| Buffered events per search window | 1,000 |
+| Schedule range | 3,660 UTC days |
+| Selections per feed | 32 |
+| Total response UTF-8 bytes, including footer | 8,000,000 |
+| Worker V8 old-generation heap | 128 MiB |
+
+`createFeedServer` accepts positive integer overrides for the work limits
+in `DEFAULT_HTTP_LIMITS`; the configuration byte cap stays fixed. An
+oversized configured range, budget, buffer or selection count rejects at
+startup. The worker heap limit bounds V8's old-generation heap, not total
+process memory, native allocations or response socket buffers. Deadline
+timing depends on the host scheduler and worker termination. These are work
+controls, not astronomical accuracy or latency guarantees.
+
+Every configured revision has a weak ETag. A completed feed qualifies for
+conditional GET/HEAD using `If-None-Match`, including weak comparison, lists
+and wildcard matching under [RFC 9110 section 13.1.2](https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.2).
+A match returns 304 with no body and no search. An unconfirmed feed must
+first finish generation, even for conditional requests or HEAD; a failed
+search never becomes a successful cache validation. HEAD discards generated
+wire chunks and returns the same feed metadata after success. Completed
+HEAD and conditional responses bypass occupied generation slots.
+
+The validator includes a private process revision and the captured
+configuration. It stays stable during that server instance and changes on
+restart, so a client re-downloads after code, engine, dependency or runtime
+changes. Feed URLs and event UIDs retain their existing stability across
+restarts. Run the server from prepared, unchanged sources and dependencies.
+DTSTAMP remains the configured calendar revision instant; it is not a
+verified HTTP modification date, so no Last-Modified validator is inferred
+and If-Modified-Since is ignored. Responses request private revalidation
+and no transformation. There is no response-body cache or compression.
+
+Early refusals and empty ranges return 422; worker failures return 500,
+capacity exhaustion returns 503 with Retry-After, deadline expiry returns
+504, and response byte overflow returns 413. The HTTP tests enforce these
+status mappings. Error bodies use fixed diagnostics without birth details,
+raw source errors or filesystem paths. After calendar bytes have been
+sent, a failure closes the response without a calendar footer instead of
+appending an error body. Clients must discard incomplete HTTP transfers.
+The footer is sent only together with worker-confirmed completion and final
+byte-limit validation.
+
+`test/http.calendar-test.ts` serves the committed void golden through real
+workers, checks UTC/TZID parser round trips, regeneration, conditionals,
+refusals and disconnect interruption. `test/http-control.calendar-test.ts`
+uses deterministic worker doubles to check late failures and transport
+lifecycle behavior independently of event search. These remain regression
+and plumbing checks, not independent astronomical accuracy evidence.
 
 ## Fixtures and scope
 
