@@ -122,6 +122,105 @@ endpoints, exact seam samples and floating-point seam cases are enforced in
 `test/geography.vitest.ts` over its synthetic geometry corpus. No generated
 grids are committed. Write large outputs under ignored `generated/`.
 
+## Planetary directions and angular-line conventions
+
+`sampleAngles(source, points, { bodies?, maxEvaluations })` samples a resolved
+source at a bounded array of geographic points. It accepts the same source
+forms as `relocateChart`. `bodies` defaults to `ANGULAR_BODIES`, the Sun, Moon
+and planets; an explicit selection must be nonempty and unique. Earth, nodes
+and other points are excluded. Names are case-sensitive. Invalid inputs throw
+`RangeError`, including sparse arrays, accessor entries and coordinates outside
+the geographic ranges. Frozen ordinary data is accepted.
+
+The result's `natal` keeps the validated source claims. Fresh positions come
+from `@zodiacs/engine/calc`, once per selected body, in the true equator and
+equinox of date, geocentric and apparent under the engine's conventions. The
+Moon retains the engine's series-at-instant convention. Full ecliptic latitude
+is retained by the engine's frame rotation. Imported source positions are not
+used for this calculation. Each entry in `positions` includes the full engine
+result and its unmodified receipt, with bounds, request, time basis and engine
+identity. `rightAscension` and `declination` are degrees.
+
+Every nonpolar observer gets an engine `houses()` result and receipt, including
+ARMC, true obliquity, angles, cusps and requested/actual house systems. The source
+house request is replayed even when the source fell back to whole-sign houses.
+Each observer body row's `positionIndex` identifies its shared position and
+receipt in `positions`; the observer's own receipt supplies its ARMC. Positions
+are shared because the chosen geocentric direction is independent of location.
+No destination chart or house cusp is constructed by the relocation library.
+
+`ANGULAR_CONVENTIONS` names the library geometry separately from engine receipt
+conventions. With H equal to ARMC minus right ascension, MC means the upper
+meridian at H = zero, and IC means the opposite meridian. These definitions
+do not require the planet to be above or below the horizon. ASC and DSC mean
+the body's center on the unrefracted horizon, on the eastern rising or western
+setting branch respectively. Rising and setting hold the geocentric body
+direction fixed and describe the effect of Earth's rotation. Actual planetary
+motion is not evaluated by this classification. These lines use the full
+planetary direction, rather than a conjunction of ecliptic longitude with a
+chart cusp. The library does not apply refraction, parallax, limb radius,
+observer height or terrain.
+
+Observer rows report local east, north and up unit-vector projections, altitude,
+azimuth from north through east, west-positive `hourAngle`, `horizonMotion` and
+signed `residuals`. Hour angles and meridian residuals use `[-180, 180)` degrees.
+MC and IC residuals are wrapped hour-angle offsets. ASC and DSC residuals are
+both altitude; `horizonMotion` distinguishes their branches. A stationary
+horizon direction needs separate tangency handling. A residual is a sampled
+quantity, not a crossing verdict, polyline or completeness guarantee.
+
+The east/north/up rotation is library geometry derived from engine direction
+and observer-axis receipts. The engine receipts do not include or authenticate
+that derived geometry. Projection checks in `test/angles.vitest.ts` use
+artificial directions with known geometry and a separate Cartesian dot product
+over its synthetic engine samples. Direct engine comparisons and receipt replay
+in that file are regression checks, not independent astronomical accuracy
+evidence. Engine bounds are retained on the underlying results; they are not
+propagated into an error bound on the library's residuals or line locations.
+
+Exact geographic poles produce `status: "undefined"` observer samples with
+`reason: "geographic-pole"`, no engine houses result and no body rows. Other
+points can still be sampled. At a numerical celestial pole, right ascension,
+hour angle and meridian residuals become null, with `raUndefined` explaining
+why. Altitude can remain defined. At zenith/nadir azimuth is null with
+`azimuthUndefined`. At ecliptic/horizon coincidence `eclipticAngles.asc` and
+`.dsc` are null and `ascendantUndefined` names the singularity; the raw engine
+houses result is retained as computation provenance. The planetary horizon
+projection is still meaningful there. `ANGULAR_DIRECTION_TOLERANCE` follows
+the engine's `RA_POLE_TOLERANCE` on unit-vector projections, also treating a
+numerically negligible east projection as stationary. This is a singularity
+convention, not an accuracy allowance. The singular cases and nearby defined
+cases are checked in `test/angles.vitest.ts` on artificial geometry and
+synthetic engine directions.
+
+Time scale and any delta-T pin come from source replay. UTC inputs keep an ISO
+request. UT1 and TT inputs are converted from the source's recorded
+millisecond instant to a Julian date on that same scale, because `/calc` accepts
+non-UTC clocks in that form. Julian-date representation introduces floating-point
+rounding, so angular results are a fresh sampling calculation, not a claim of
+bit-for-bit natal-chart parity on those clocks. The result's `time` is the actual
+request; each engine receipt records the UT1 and TT used. Replay checks cover
+all supported clocks, pinned and unpinned, in `test/angles.vitest.ts`.
+
+Unknown birth time returns `status: "refused", reason: "unknown-time"` without
+evaluating positions or houses; no angular map is inferred from a reference
+instant. The engine's `/calc` coverage limits apply independently of the chart
+API's wider range. A typed engine refusal is retained as `engineRefusal`, with
+`reason: "engine-refusal"` and empty positions/samples. No partial geometry is
+returned. Malformed sources still use the engine receipt validation errors.
+
+`maxEvaluations` is required and counts position calls plus a houses call for
+each nonpolar point. It is capped by `MAX_ANGLE_EVALUATIONS`; the point-array
+length has that same independent cap, including undefined poles. Budget
+preflight and coordinate validation happen before reading the source or calling
+the engine. Excess work throws `AngularBudgetError` with `requiredEvaluations`
+and `maxEvaluations`. A raw birth may additionally require a source chart
+calculation; existing charts and envelopes require none. `evaluations` records
+actual position and houses calls, including the call that returned a refusal.
+Work limits, exact call counts and refusal behavior are enforced in
+`test/angles.vitest.ts` over its synthetic cases. The sampler itself writes no
+generated files.
+
 Code and documentation here use the repository's MIT license. The engine is
 distributed under MIT AND CC-BY-4.0; retain its LICENSE, LICENSING.md and
 NOTICE when redistributing it or its attributed data. Generated grids and

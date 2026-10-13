@@ -9,7 +9,7 @@ line to `CHANGES.txt`. The harness handles git writes and draft PRs.
 - [x] M1 Establish an isolated TypeScript project, engine-backed relocated charts, natal envelopes and synthetic Vitest tests.
 - [x] M2 Accept existing engine charts and natal envelopes as sources, preserve requested settings on replay, and test validation and polar fallback semantics.
 - [x] M3 Add geographic bounds, longitude wrapping, antimeridian splitting and bounded grid sampling with explicit work budgets.
-- [ ] M4 Define angular-line conventions and add engine-backed planetary equatorial and observer-angle sampling with receipts and undefined-angle handling.
+- [x] M4 Define angular-line conventions and add engine-backed planetary equatorial and observer-angle sampling with receipts and undefined-angle handling.
 - [ ] M5 Generate bounded MC and IC polylines with sampled metadata and engine receipt references.
 - [ ] M6 Generate ASC and DSC horizon polylines, including circumpolar gaps, tangencies and polar cases, without fabricating positions.
 - [ ] M7 Extract grid crossings with bounded refinement, structured brackets, residuals and unresolved-cell metadata.
@@ -84,3 +84,24 @@ file-size, documentation punctuation and diff-scope checks passed. The root
 it cannot pass because this checkout has no `dist/calc.d.ts`. No root build
 was run under the user's rule forbidding changes to `dist/`; engine CI gates
 requiring that build remain deferred. No engine or packed files changed.
+
+M4 adds `sampleAngles`, bounded fresh planetary equatorial calculations and
+observer axes through the carried engine's public calc and houses APIs. Every
+position and nonpolar observer keeps its full engine result and receipt. Local
+altitude, azimuth, hour angle and angular residuals are derived spherical
+geometry with separately versioned conventions. ASC/DSC use the planetary
+horizon direction; MC/IC use the upper/lower meridian. Exact geographic poles,
+celestial-pole RA, zenith/nadir azimuth and ecliptic/horizon coincidence have
+explicit undefined metadata. Unknown time and engine refusals produce no
+partial geometry. Source replay preserves time scale, pins and house requests;
+non-UTC clocks disclose their Julian-date sampling request and rounding.
+
+Validation: clean relocation `npm ci --ignore-scripts`, typecheck and all
+Vitest tests passed on Node 22.22.2. `test/angles.vitest.ts` covers engine
+receipt replay, source ownership, synthetic spherical projections, singular
+directions, time scales, pinned delta-T, polar fallback, antimeridian aliases,
+work budgets and typed refusals. Root package dry-run exclusion, archive
+SHA-256, file-size, documentation punctuation and diff-scope checks passed.
+Root `npm run package:contents` still fails because `dist/calc.d.ts` is absent;
+no root build was run under the rule forbidding writes to `dist/`. Engine CI
+gates requiring a root build remain deferred. No engine or packed files changed.
