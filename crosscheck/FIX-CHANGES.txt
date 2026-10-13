@@ -1,0 +1,1 @@
+F1: Isolate Node suites with .node-test.mjs names, update scripts and references; crosscheck tests, build verification and safeguards pass, and root Vitest discovers no crosscheck suites.

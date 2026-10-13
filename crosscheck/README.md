@@ -53,9 +53,12 @@ own notices and never enter the engine package.
 Run the current safeguards without installing dependencies:
 
 ```sh
-node --test crosscheck/tests/safeguards.test.mjs
+node --test crosscheck/tests/safeguards.node-test.mjs
 node crosscheck/tools/check.mjs
 ```
+
+Crosscheck's Node test suites use `*.node-test.mjs` names so the root
+Vitest runner ignores them. `npm --prefix crosscheck test` runs these suites.
 
 The file checker inspects publishable project files, rejects symbolic links,
 known kernel/binary file names, oversized files and em dashes in documents.
@@ -136,7 +139,7 @@ half-turn. No physical accuracy tolerance is established by these helpers.
 Aggregate state can be JSON serialized and merged only with the same
 tolerance and the expected fields. Merge order can change floating-point
 rounding; deterministic report reproduction will require a fixed merge order.
-The tests in tests/sampling-statistics.test.mjs check arithmetic independently
+The tests in tests/sampling-statistics.node-test.mjs check arithmetic independently
 of engine outputs and exercise shard recombination and JSON continuation.
 They establish tooling behavior, not ephemeris accuracy or campaign throughput.
 
@@ -162,7 +165,7 @@ can be removed before retrying. Download continuation is not implemented.
 Acquire DE441 parts separately and check the actual required coverage.
 
 Every chunk is capped by CHUNK_BYTES in lib/kernels.mjs, below the file limit;
-tests/kernels.test.mjs enforces stream reconstruction and the chunk boundary.
+tests/kernels.node-test.mjs enforces stream reconstruction and the chunk boundary.
 The receipt records source URL, retrieval time, whole-file MD5 and SHA-256,
 chunk SHA-256 digests, byte size and parsed segment descriptors. MD5 detects
 transport corruption and does not authenticate the publisher. An optional
@@ -213,7 +216,7 @@ malformed directories and nonfinite coefficients are refused.
 The evaluator reads one logical record at a time through the verified chunk
 reader. The chunk reader currently reads and hashes chunks on each access;
 this establishes bounded storage rather than campaign throughput. Arithmetic
-and structural tests in tests/spk.test.mjs use invented data only. There is
+and structural tests in tests/spk.node-test.mjs use invented data only. There is
 no engine accuracy claim and no completed chart error report yet.
 
 
@@ -253,7 +256,7 @@ a deterministic bounded selection within DE440s coverage. The exact selection,
 TT span, acceptance limits, compared counts, exclusions, source hashes and
 reduction tooling hashes are recorded in reports/jpl-reduction.json. Limits
 are fixed in lib/horizons.mjs before evaluation and tested by
-tests/horizons.test.mjs. They are reference validation checks, not engine
+tests/horizons.node-test.mjs. They are reference validation checks, not engine
 accuracy bounds. The report includes DE440 versus Horizons DE441 differences
 and CN versus Horizons LT semantics. It writes aggregate markdown, CSV and
 JSON only, and --check requires exact reproduction on the recorded Node
@@ -272,7 +275,7 @@ true-equator-equinox-date or true-ecliptic-equinox-date and provide TT days
 since J2000 explicitly. The ecliptic rotation uses true obliquity. This is
 the specified composite model, not IAU 2000A, observed pole offsets or a
 nutation series with the IAU 2006 secular adjustment. The model's accepted
-TT domain is enforced by tests/frames-apparent.test.mjs; implementation
+TT domain is enforced by tests/frames-apparent.node-test.mjs; implementation
 comparison over that domain is recorded in
 [the frame report](reports/frame-validation.md). No model accuracy outside
 the measured span is claimed.
@@ -349,7 +352,7 @@ Malformed, oversized or stalled responses terminate the instrument. The
 identity records adapter and binding digests, version labels and the
 adapter's external ephemeris file digests for later resume checks.
 
-Tests in tests/swiss.test.mjs use invented protocol peers, independent
+Tests in tests/swiss.node-test.mjs use invented protocol peers, independent
 arithmetic and refusal cases. They never run Swiss and establish transport
 and retention behavior only. A live Swiss measurement requires the user's
 external installation and remains part of the later bounded campaign.
@@ -399,7 +402,7 @@ The checkpoint is a local progress record, not an authenticated receipt.
 Run the independent invented-arithmetic runner checks on Node 22:
 
 ```sh
-node --test crosscheck/tests/runner.test.mjs
+node --test crosscheck/tests/runner.node-test.mjs
 ```
 
 The tests cover interrupted continuation, exact index coverage, deterministic
@@ -527,7 +530,7 @@ node crosscheck/tools/campaign.mjs crosscheck/runtime/million.json check
 ```
 
 This is a requested workload, not a completed measurement. The lazy budget
-check in `tests/operations.test.mjs` exercises this requested count while
+check in `tests/operations.node-test.mjs` exercises this requested count while
 processing only a bounded prefix with invented arithmetic. No million-chart
 throughput or memory benchmark has been performed. Kernel reads rehash chunks
 and may dominate execution time; estimate resource use from a small campaign
@@ -584,7 +587,7 @@ node crosscheck/tools/check.mjs --all-sizes
 
 The usual checker covers publishable files. `--all-sizes` additionally visits
 ignored cache, build and dependency files and rejects local symlinks or files
-at the size boundary, as tested in `tests/safeguards.test.mjs`. It does not
+at the size boundary, as tested in `tests/safeguards.node-test.mjs`. It does not
 identify secrets or prove provenance. The npm exclusion dry-run in that test
 uses lifecycle scripts disabled and produces no archive.
 

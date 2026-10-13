@@ -3,7 +3,7 @@
 Executed in the source checkout on Node v20.19.2:
 
 ```sh
-node --test crosscheck/tests/safeguards.test.mjs
+node --test crosscheck/tests/safeguards.node-test.mjs
 node crosscheck/tools/check.mjs
 npm_config_cache="$PWD/crosscheck/runtime/npm-cache" npm run package:contents
 ```
@@ -38,7 +38,7 @@ node crosscheck/tools/check.mjs
 npm_config_cache="$PWD/crosscheck/runtime/npm-cache" npm run package:contents
 ```
 
-The test suite passes. build.test.mjs enforces runtime rejection, repeated
+The test suite passes. build.node-test.mjs enforces runtime rejection, repeated
 build identity, root and calc import smoke checks on an invented chart,
 changed file detection, dependency and output tampering rejection, receipt
 tampering rejection, symbolic-link rejection and the file-size boundary.
@@ -86,7 +86,7 @@ The crosscheck suite and file safeguards pass. The npm dry-run exclusion
 test passes. The full package-content gate fails because dist/calc.d.ts is
 absent, as in M2; no root build was run under the folder-only constraint.
 
-tests/sampling-statistics.test.mjs enforces indexed reproducibility, complete
+tests/sampling-statistics.node-test.mjs enforces indexed reproducibility, complete
 shard recombination, valid input domains, supported house identifiers,
 independent digest reduction including rejected time draws, lazy campaign
 indices, independent BigInt sums and variance, inclusive tolerance verdicts,
@@ -110,7 +110,7 @@ PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/check.mjs
 PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/kernels.mjs de440s.bsp
 ```
 
-The full suite and file safeguards pass. kernels.test.mjs independently
+The full suite and file safeguards pass. kernels.node-test.mjs independently
 constructs invented DAF descriptors in both IEEE byte orders, checks exact
 coverage boundaries, target/center/frame mismatches, contiguous spans and
 gaps, unsupported segment types, malformed summary chains, invalid addresses
@@ -193,12 +193,12 @@ local receipt. The kernel remains only in ignored bounded cache chunks.
 Opening it again for validation and report reproduction reverified chunks,
 whole-file digests and coverage descriptors.
 
-The full crosscheck suite passes. reduction.test.mjs checks the implicit NAIF
+The full crosscheck suite passes. reduction.node-test.mjs checks the implicit NAIF
 TT/TDB equation, an analytically selected anomaly, the exact light-time
 solution for an invented linearly moving target, reception-fixed observer,
 analytic stellar rotation, preserved range, unit/frame/mode refusal, invalid
 ranges and nonconvergence. These are arithmetic checks, not physical accuracy
-evidence. horizons.test.mjs checks retained public response conventions,
+evidence. horizons.node-test.mjs checks retained public response conventions,
 malformed and nonfinite rows, increasing epochs, selection, coverage margin
 and fixed validation limits. No expected value comes from the engine or Swiss.
 
@@ -225,7 +225,7 @@ not written. M5c, the runner and the actual chart error report remain pending.
 Executed on Node v22.23.3 with the same external executable as M2:
 
 ```sh
-PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node --test crosscheck/tests/*.test.mjs
+PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node --test crosscheck/tests/*.node-test.mjs
 PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/validate-frames.mjs
 PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/validate-frames.mjs --check
 PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH node crosscheck/tools/validate-jpl.mjs --check
@@ -292,7 +292,7 @@ git diff --check
 ```
 
 The full crosscheck suite and file safeguards pass, including the npm dry-run
-exclusion test. tests/report.test.mjs independently checks invented residual
+exclusion test. tests/report.node-test.mjs independently checks invented residual
 counts, mean, mean absolute error, RMS, maxima, exclusions and returned flag
 counts. It checks deterministic rendering with reordered shards, exact command
 argument preservation, CSV escaping, unavailable empty statistics, explicit
@@ -341,7 +341,7 @@ execution:
 {"name":"driver-smoke","kernel":"de440s","seed":"crosscheck-m10-driver-v1","total":8,"shards":3}
 ```
 
-The full crosscheck suite passes. tests/operations.test.mjs exercises an
+The full crosscheck suite passes. tests/operations.node-test.mjs exercises an
 interrupted distributed arithmetic run, aborted continuation, exact case-index
 coverage, completed-run idempotence, fresh report byte equality, tooling
 identity refusal, million-scale requested count with bounded actual work,
@@ -376,3 +376,28 @@ folder-only constraint forbids creating root dist/. No root source, packed
 input, root dependency manifest, immutable archive or git metadata changed.
 No release workflow, publish operation or git write was run. The diff check
 passes. M10 is complete, and this session stops here as required by PLAN.md.
+
+## F1 validation
+
+The Node suites now use `*.node-test.mjs`, and the crosscheck test script
+and documented test paths use that pattern. Test bodies are unchanged.
+Executed on Node v22.22.2:
+
+```sh
+npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache /tmp/crosscheck-f1-npm-cache
+npm --prefix crosscheck test
+npm --prefix crosscheck run verify
+npm --prefix crosscheck run check
+npm_config_cache=/tmp/crosscheck-f1-npm-cache npx --prefix /tmp/events-f1-root-check --no-install vitest list --filesOnly
+npm_config_cache=/tmp/crosscheck-f1-npm-cache npx --prefix /tmp/events-f1-root-check --no-install vitest run --reporter=dot
+git diff --check
+```
+
+Crosscheck's tests, build verification and file safeguards passed. The test
+suite includes the npm exclusion dry-run with lifecycle scripts disabled.
+Root Vitest's default listing and completed run selected no crosscheck test
+files. Vitest came from an external dependency installation matching the
+root lockfile, leaving root manifests and dependency installation unchanged.
+The root run failed on unresolved root astronomy-engine/TypeScript imports
+and the archive-check environment limitation described in the PR review.
+This verifies crosscheck discovery isolation, not a passing full root suite.
