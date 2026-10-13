@@ -2,9 +2,10 @@
 
 This private project is the batch service under development for this engine
 checkout. The completed work is checked off in [PLAN.md](PLAN.md). The current
-implementation validates job definitions, expands work lazily and executes it
-serially through the engine. Queue backends, workers, crash recovery, NDJSON
-streaming, HTTP, CLI and scaling measurements are later milestones.
+implementation validates job definitions, expands work lazily, executes it
+serially through the engine and provides an in-memory queue. Durable backends,
+workers, crash recovery, NDJSON streaming, HTTP, CLI and scaling measurements
+are later milestones.
 
 All project files stay here. The engine source, npm package and carried archives
 are unchanged. Code and documentation in this folder use the repository's
@@ -37,9 +38,10 @@ and TypeScript resolve the same dependency from this installation. An unbundled
 root source import cannot find dependencies installed only here.
 
 [test/build.test.ts](test/build.test.ts) builds from the checkout root and runs
-the resulting entry in plain Node with invented chart input. It verifies the
-runtime import, result shape and engine version without requiring root
-dependencies or engine build output.
+the resulting entry in plain Node with invented chart input. It submits,
+claims, computes, commits and reads that job, checking the runtime import,
+result shape and engine version without requiring root dependencies or engine
+build output.
 
 The repository's `npm run package:contents` check requires an existing engine
 `dist/`. If it is absent, record the missing prerequisite; do not run the root
@@ -179,11 +181,12 @@ objects; changing one does not change the validated input or a later result.
 Chart rows also carry `personId`; transit rows carry `personId`, `sampleIndex`
 and `at`; synastry rows carry `aId` and `bId` in the engine's argument order.
 
-`nextCursor` names the row after a successful result. It is a proposed resume
-position, not a durable checkpoint: this milestone does not persist results or
-advance a queue. Use it for resumption only after retaining the corresponding
-result. With the same validated definition and engine/runtime, resuming there
-produces the remaining suffix. Do not reuse a cursor for a different job.
+`nextCursor` names the row after a successful result. The serial executor does
+not persist results or advance a queue. Use it for resumption only after
+retaining the corresponding result, for example through the queue's `commit`
+operation below. With the same validated definition and engine/runtime,
+resuming there produces the remaining suffix. Do not reuse a cursor for a
+different job.
 
 An engine exception or non-finite numerical result throws `WorkExecutionError`
 with `code: "calculation-failed"`, `kind` and `index`. Its message is fixed
@@ -197,3 +200,114 @@ with direct engine calls on synthetic charts, transit samples and directed
 pairs. It checks flags, incremental computation, every resume boundary in its
 test jobs, result isolation and failures. These are wrapper parity and
 regression checks, with no additional astronomical accuracy claim.
+
+## Queue contract and in-memory backend
+
+[src/queue.ts](src/queue.ts) defines the asynchronous `QueueBackend` contract.
+`MemoryQueue` implements it in the calling process. Schedulers sharing an
+instance see the same jobs; separate instances and worker threads do not share
+its state. All results remain in memory until `close()`, which discards the
+queue. This backend cannot recover from a process exit. Durable storage and
+process-crash testing belong to the later milestones in [PLAN.md](PLAN.md).
+
+This example runs from `batch/` after building, with invented data:
+
+```js
+import { MemoryQueue, executeSerial } from "./.generated/index.js";
+
+const queue = new MemoryQueue();
+const submitted = await queue.submit({
+  version: 1,
+  kind: "charts",
+  births: [{ id: "synthetic-queue", birth: { utc: "2001-02-03T04:05:06Z" } }]
+});
+const claimed = await queue.claim({ owner: "local-worker", leaseMs: 60_000 });
+if (claimed) {
+  for (const row of executeSerial(claimed.job, claimed.snapshot.nextCursor)) {
+    await queue.commit(claimed.lease, [row]);
+  }
+}
+console.log(await queue.getJob(submitted.id));
+console.log(await queue.readResults(submitted.id));
+await queue.close();
+```
+
+The example's lease duration is a caller choice, not a computation-time
+guarantee. A scheduler must renew before the deadline while computing work.
+The synchronous serial executor blocks its calling thread; the planned worker
+pool will let the scheduler renew leases while calculations run elsewhere.
+
+| Operation | Behavior |
+| --- | --- |
+| `submit(spec)` | Validates a definition with the default job limits, allocates a unique job ID and returns a queued snapshot. It does not expand work or compute astronomy. |
+| `getJob(id)` | Returns a detached status snapshot, or null for an unknown ID. |
+| `claim({ owner, leaseMs })` | Atomically leases the earliest submitted eligible job. Skips live leases and completed jobs. Returns null when none is eligible. |
+| `renew(lease, leaseMs)` | Extends a current lease from backend time, without shortening its existing deadline. Returns the same token and new deadline. |
+| `commit(lease, rows)` | Stores a nonempty contiguous result batch and advances progress together. Its final row completes the job and revokes the lease. |
+| `release(lease)` | Requeues unfinished work, revokes the lease and keeps its committed prefix. |
+| `readResults(id, { cursor, limit })` | Returns an ordered page, its next cursor and the status observed with it, or null for an unknown ID. |
+| `close()` | Releases the handle's resources. Repeated close calls succeed; all other calls then reject. |
+
+Status snapshots contain the job ID and kind, `status`, `totalTasks`,
+`completedTasks`, `nextCursor`, `claimCount`, `createdAt`, `updatedAt`,
+`finishedAt` and `lease`. States are `queued`, `running` and `completed`.
+`finishedAt` is null until completion. `lease` is null when no scheduler owns
+the job; otherwise it contains only `owner` and `expiresAt`. Status never
+includes birth definitions or lease tokens. Claim responses additionally
+carry the frozen validated job and a lease containing `jobId` and `token`.
+`claimCount` counts granted leases, including explicit release/reclaim; it is
+not a failure count or retry policy.
+
+Timestamps and lease durations use safe integer milliseconds. The default
+backend clock is `Date.now`; `MemoryQueue({ now })` accepts a controlled clock
+for tests. Deadlines use backend wall time, so wall-clock adjustments can
+affect lease timing. A lease is invalid when backend time is at or after
+`expiresAt`, even before another scheduler reclaims it. Every claim gets a
+fresh token, including a reclaim by the same owner. Only the current,
+unexpired token may renew, commit or release. Status reads do not change
+stored state: an expired job still reads as running with its past deadline
+until a claim reclaims it. Claims preserve committed results and their cursor.
+
+`completedTasks` and `nextCursor` both describe the contiguous committed
+prefix. Scheduled work and results still held by a worker do not count as
+progress. Batches must start at the current cursor, stay within the workload,
+and match each expanded work item's kind, index and routing fields. A malformed
+row rejects the entire batch. With a current lease, replaying an already
+committed batch is a cursor conflict; read progress before resuming. After
+completion, the former lease is lost. The planned pool can compute concurrently
+and buffer a bounded window of results until their predecessors are ready.
+
+Commit validates JSON data shape and routing, not the truth of the calculated
+values. Results come from trusted execution code. It rejects accessors,
+functions, undefined values, sparse arrays, non-finite numbers, cycles and
+non-JSON objects, instead of letting JSON serialization silently alter them.
+`QUEUE_LIMITS` bounds batch rows, encoded UTF-8 bytes, traversal depth and
+node count, page rows, owner-label length and job-ID/token length. The byte budget sums the encoded
+rows without NDJSON delimiters. Owner labels use the same ASCII character set
+as person identifiers. Queue submission uses `validateJob`; a transport must
+enforce its input byte limit before parsing, as `parseJobJson` does.
+
+Result pages default to the start cursor and the configured maximum page
+length. Their cursor may be at or behind committed progress, never ahead of
+it. An empty page on an unfinished job means no rows are available yet.
+Pages and snapshots are detached; the job definition supplied by a claim is
+deeply frozen. Callers cannot mutate queue state through them. No retention,
+eviction or total-memory cap is provided by this development backend.
+
+Queue option objects and lease references must contain ordinary enumerable
+data fields; accessors, unknown fields and explicit undefined fields are
+rejected. IDs and tokens must be bounded, nonempty strings. Invalid job
+definitions retain `JobValidationError`. Queue failures use
+`QueueError` with `invalid-argument`, `invalid-result`, `cursor-conflict`,
+`lease-lost` or `closed`. An unknown job's lease is lost. Diagnostics contain
+fixed descriptions without birth data, result values or tokens. These
+in-process APIs do not sandbox executable proxies or a supplied clock.
+
+[test/queue-contract.ts](test/queue-contract.ts) is the reusable backend suite;
+[test/memory-queue.test.ts](test/memory-queue.test.ts) supplies its memory
+fixture. It checks competing claims, expiry and renewal boundaries, stale
+tokens, prefix resumption, atomic result validation, completion, pagination
+and snapshot isolation using synthetic workloads and a controlled clock.
+Its asynchronous fixture accepts separate handles to the same store for
+future durable-backend tests. This is a state-transition check, not evidence
+of process-crash durability or scaling performance.

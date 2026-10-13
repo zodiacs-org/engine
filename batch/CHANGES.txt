@@ -1,2 +1,3 @@
 batch: complete M1 with private TypeScript tooling, bounded JSON job validation and synthetic Vitest coverage
 batch: complete M2 with lazy resumable work expansion, serial engine execution, isolated bundling and synthetic parity tests
+batch: complete M3 with async queue contract, in-memory leases and atomic result checkpoints, reusable backend tests and queue documentation
