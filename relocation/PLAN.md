@@ -12,7 +12,7 @@ line to `CHANGES.txt`. The harness handles git writes and draft PRs.
 - [x] M4 Define angular-line conventions and add engine-backed planetary equatorial and observer-angle sampling with receipts and undefined-angle handling.
 - [x] M5 Generate bounded MC and IC polylines with sampled metadata and engine receipt references.
 - [x] M6 Generate ASC and DSC horizon polylines, including circumpolar gaps, tangencies and polar cases, without fabricating positions.
-- [ ] M7 Extract grid crossings with bounded refinement, structured brackets, residuals and unresolved-cell metadata.
+- [x] M7 Extract grid crossings with bounded refinement, structured brackets, residuals and unresolved-cell metadata.
 - [ ] M8 Sample great-circle paths and find angular crossings along them, with antipodal and antimeridian handling.
 - [ ] M9 Add optional local-space azimuth lines using engine observer angles and bounded spherical geometry.
 - [ ] M10 Implement the offline `relocation chart`, `relocation lines` and `relocation grid` CLI with validated JSON input and structured output.
@@ -151,3 +151,29 @@ SHA-256, file-size, documentation punctuation and diff-scope checks passed.
 Root `npm run package:contents` still fails because `dist/calc.d.ts` is absent;
 no root build was run under the rule forbidding writes to `dist/`. Engine CI
 gates requiring a root build remain deferred. No engine or packed files changed.
+
+M7 adds `planGridCrossings` and `gridCrossings` for angular roots on unique
+bounded grid edges. Coarse work is reserved before source capture; bisection
+spends a shared remaining evaluation budget under per-edge refinement limits.
+Every coarse and refined observer retains an engine houses receipt, and every
+body retains its fresh equatorial calculation receipt. Initial and final
+endpoint pairs expose unwrapped coordinates, observer references and measured
+residuals. Crossing admission requires both coordinate and residual tolerances.
+Adjacent cells share edge crossings; exact endpoint roots deduplicate by
+observer. Unambiguous cell pairs form separate polylines with global sample
+and seam provenance. Tangencies, hidden horizon pairs, ambiguous or unbracketed
+cells, undefined directions, wide edges, coincident endpoints, resource limits
+and coordinate stagnation remain explicit unresolved metadata. Evaluation
+exhaustion preserves successful samples; typed engine refusals discard partial
+geometry. Documentation states receipt scope and sampled topology limits.
+
+Validation: relocation typecheck and the full Vitest suite passed on Node
+22.22.2. `test/grid-crossings.vitest.ts` covers receipt replay, Cartesian
+projections, brackets and residuals, shared edges, endpoint roots, antimeridian
+geometry, polar fallback, hidden pairs, ambiguous cells, clocks, source
+ownership, budgets, precision and refusals. Root package dry-run exclusion,
+archive SHA-256, file-size, documentation punctuation and diff-scope checks
+passed. Root `npm run package:contents` still fails because `dist/calc.d.ts`
+is absent; no root build was run under the rule forbidding writes to `dist/`.
+Engine CI gates requiring that build remain deferred. No engine or packed
+files changed.

@@ -16,3 +16,8 @@ export type { MeridianKind, MeridianLineOptions, MeridianLinePlan, MeridianLineS
 export { horizonLines, planHorizonLines, RELOCATION_HORIZONS_SCHEMA } from "./horizon-lines.js";
 export type { HorizonKind, HorizonLineOptions, HorizonLinePlan, HorizonLineSample,
   HorizonLinesResult, HorizonPolyline } from "./horizon-lines.js";
+export { gridCrossings, planGridCrossings, MAX_GRID_REFINEMENTS,
+  RELOCATION_GRID_CROSSINGS_SCHEMA } from "./grid-crossings.js";
+export type { CrossingBracket, CrossingBracketEnd, GridCrossing, GridCrossingCell,
+  GridCrossingOptions, GridCrossingPlan, GridCrossingsResult, GridEdge, GridEdgeIssue,
+  GridEdgeResult } from "./grid-crossings.js";

@@ -360,6 +360,106 @@ Unknown time and typed engine refusals return empty lines and no partial
 positions or observer samples. Invalid options and over-budget plans throw
 before source capture. The function performs no file or network operations.
 
+## Grid crossings and cell geometry
+
+`planGridCrossings({ bounds, latitudeStep, longitudeStep, bodies?, lines?,
+maxEvaluations, maxRefinements, coordinateTolerance, residualTolerance })`
+plans angular sampling over the same inclusive, south-to-north and eastward
+axes as `planGrid`. Both steps and both tolerances are geographic or angular
+degrees as named. Exact geographic poles are excluded; nearby polar observers
+retain the engine's house fallback. Equal bounds can describe an edge-only
+grid or a single observer. `bodies` follows `sampleAngles`; `lines` defaults
+to ASC, DSC, MC and IC, in that order. Explicit selections are nonempty,
+unique and case-sensitive.
+
+`maxEvaluations` bounds all position and observer calls, including refinement,
+under `MAX_ANGLE_EVALUATIONS`. `requiredEvaluations` reserves the coarse grid
+and fresh positions before reading the source. Excess coarse work throws
+`AngularBudgetError`. The nested `grid.maxSamples` is the independent grid
+allocation cap. A raw birth may additionally require a source natal chart
+calculation. `maxRefinements` bounds bisection calls per candidate edge under
+`MAX_GRID_REFINEMENTS` and can be zero. Invalid options throw `RangeError`.
+Limits, endpoint inclusion, source preflight and malformed plans are enforced
+by `test/grid-crossings.vitest.ts` and the grid planner's existing tests.
+
+`gridCrossings(source, options)` returns `zodiacs.relocation-grid-crossings.v1`
+with its plan, engine-backed `sampling`, unique grid `edges`, `edgeResults`,
+`crossings`, `cells` and `unresolvedCells`. Coarse observers come first in
+row-major order; refinement observers follow in evaluation order. Every
+observer and every selected planetary direction keeps its engine result and
+receipt. Source replay, clocks, delta-T pins, house requests and receipt scope
+follow `sampleAngles`. No chart, cusp or planetary position is invented.
+
+Each edge connects adjacent coarse observers and records its axis, observer
+indices and increasing coordinates. Longitude coordinates stay unwrapped
+across the antimeridian. An edge result identifies its body, kind and position
+index, its initial endpoint pair, its final `bracket`, the refinement count
+and an optional crossing index. Bracket endpoints include observer indices,
+coordinates and residuals. A pair on a `no-crossing` or unresolved edge is
+diagnostic endpoint metadata and need not enclose a root.
+
+A sign change in a meridian residual is refined only when it crosses the
+requested meridian, rather than the residual's wrap on the opposite meridian.
+Horizon edges use altitude and classify the final observer as rising, setting
+or stationary. Each midpoint is evaluated through engine `houses()`; it has
+its own observer receipt. A crossing is admitted only when both the bracket
+width and the chosen sampled residual meet their requested tolerances.
+An exact endpoint root needs no refinement and has a collapsed bracket.
+Crossings shared by adjacent cells use the same edge result. Exact roots on
+several edges are deduplicated by body, kind and coarse observer index.
+Equivalent full-world seam observers retain their separate grid indices.
+
+Crossings keep `observerIndex`, `positionIndex`, the sampled point, residual
+and horizon motion. A stationary horizon root is labelled `tangent` for both
+requested horizon branches. It is retained as metadata without a cell
+connection. Tangencies with no endpoint sign change are not inferred as
+receipt-bearing crossings. Constant-latitude edges are screened for hidden
+horizon pairs around an interior upper or lower culmination using captured
+engine directions and derived spherical geometry. An unresolved screen
+creates no additional observer, sample or receipt.
+
+Cells record their south, east, north and west edge-result indices and unique
+crossing indices. An unambiguous pair forms a `sampled` cell with polylines.
+Each cell has its own segment; segments are not stitched into a global path.
+Vertices reference global observer indices. Antimeridian splitting retains
+global endpoint references and an interpolation fraction on seam vertices;
+those vertices have no additional engine receipt. A straight connection or
+interpolated seam need not lie exactly on an angular line between its samples.
+Edge-only and point grids have no cells, while still retaining any edge
+crossings and sampled observers.
+
+Cells are unresolved when an edge is unresolved, a stationary crossing or
+ambiguous number of boundary crossings prevents a connection, or no bracket
+and insufficient corner margins leave the interior unsettled. An empty cell
+requires corner residual magnitudes larger than a conservative displacement
+reach: longitude width for meridians, latitude height plus longitude width
+for the horizon. This exclusion uses fixed-direction spherical geometry and
+does not bound ephemeris error. Hidden edge pairs, undefined celestial
+meridians, coincident endpoint pairs, edges spanning a half-turn or more,
+evaluation exhaustion, refinement limits and floating-point coordinate
+stagnation have explicit reasons. Unresolved cells contain no polylines;
+their successful boundary crossings and all sampled provenance remain
+available. `unresolvedCells` is the corresponding subset of `cells`.
+
+`status: "ok"` means sampling returned successfully, not that the grid is
+complete. The verification label is
+`bounded-edge-brackets;sampled-cell-connections`. Tolerances control numerical
+refinement against the installed engine and are not physical accuracy bounds.
+A finite grid does not establish that all angular topology has been found.
+Use finer steps or more remaining evaluations to investigate unresolved
+regions. Budget exhaustion keeps successful samples and structured brackets;
+unknown time or any typed engine refusal instead returns `status: "refused"`
+and empty geometry, including after a refinement refusal.
+
+`test/grid-crossings.vitest.ts` checks synthetic real-engine receipt replay,
+Cartesian meridian and horizon projections, residual and bracket acceptance,
+shared edges, antimeridian provenance, polar fallback, clocks, resource limits
+and refusal behavior. Artificial direction and observer injections exercise
+endpoint roots, hidden horizon pairs, stationary directions and ambiguous
+cells. They are not authentic receipts or independent astronomical references.
+The function performs no file or network operations; save large outputs only
+in ignored generated directories.
+
 Code and documentation here use the repository's MIT license. The engine is
 distributed under MIT AND CC-BY-4.0; retain its LICENSE, LICENSING.md and
 NOTICE when redistributing it or its attributed data. Generated grids and
