@@ -9,7 +9,7 @@ search contracts, an evaluation context, a longitude adapter, longitude
 crossing searches, tropical sign ingresses, exact aspects, stations and retrograde
 intervals, spherical-model solar and lunar eclipses, and sign-based
 void-of-course Moon intervals, a typed query parser and DSL execution through
-`executeQuery`. The HTTP API remains planned.
+`executeQuery` and a bounded HTTP API through `createEventServer`.
 The adapter consumes the parent source through relative imports. The local
 build bundles those imports under `events/build/`.
 
@@ -421,3 +421,67 @@ The local query parser is available as `parseQuery`, with typed
 `QuerySyntaxError` failures. [QUERY.md](QUERY.md) documents its grammar,
 explicit ranges and filters. It returns syntax only; DSL execution follows
 in the next milestone.
+
+
+## HTTP API
+
+Build the local project before starting a server. The worker entry must remain
+beside the bundled index; copying only the index is insufficient.
+
+```sh
+npm run build --prefix events
+node --input-type=module -e 'import { createEventServer } from "./events/build/src/index.js"; createEventServer().listen(8080, "127.0.0.1")'
+```
+
+`createEventServer()` returns a Node HTTP server without listening at import or
+construction time. The example explicitly binds to loopback. There is no
+storage, authentication, CORS policy or request logging in this workbench.
+
+Send `POST /search` with `Content-Type: application/json` (optionally UTF-8
+charset), an uncompressed UTF-8 JSON body, and exactly `query` and `options`:
+
+```json
+{
+  "query": "next Mars square natal Sun from 2000-01-01 to 2000-02-01 clock tt",
+  "options": {
+    "stepMs": 3600000,
+    "maxEvaluations": 10000,
+    "natalLongitudes": { "Sun": 0 }
+  }
+}
+```
+
+The natal longitude is invented. The step and budget are caller choices, not
+accuracy guarantees. Options follow `executeQuery`, including explicit clocks,
+next horizons and eclipse models; HTTP accepts DSL strings only and rejects
+signals, providers and unknown options. Horizon coordinates are integer epoch
+milliseconds on their declared clock. Search results retain the programmatic
+window, evaluations, refusal reasons, interval clipping and unresolved tails.
+
+Completed searches and search refusals both return HTTP 200 with the existing
+`status` envelope. Transport and validation errors return `{ "error": {
+"code": "..." } }`: invalid JSON, request shapes and DSL use 400; unknown routes
+404; other methods 405; unsupported media types or compression 415; excessive
+request or response size 413; busy admission 503; deadline expiry 408; unexpected
+worker failure 500. DSL errors additionally carry `offset` and `syntaxCode`.
+Errors do not echo submitted text or internal exception messages. Responses
+are JSON with no-store caching and close the connection.
+
+Service caps are declared in `HTTP_LIMITS` in [http.ts](src/http.ts).
+[http.test.ts](test/http.test.ts) enforces request size, evaluation cap,
+admission and deadlines, using loopback integration tests. The same tests check
+the independently reduced JPL synthetic natal aspect fixture described in
+[references/README.md](references/README.md), over that fixture's own window
+and preregistered tolerance. No broader astronomical claim follows from HTTP.
+
+Admission includes reading the body. An admitted request runs its synchronous
+search in a dedicated worker, leaving the server thread responsive. A deadline
+covers body upload, worker startup and calculation. `deadlineMs` may lower the
+service deadline. Client disconnects and deadlines terminate workers and discard
+output; the admission slot remains occupied until termination settles. Busy
+requests are refused without a queue. The response size is checked before
+sending the complete result; it never returns a truncated list. Worker memory
+is limited through Node's old-generation resource limit, which is not a total
+process-memory bound. `workerUrl` is trusted local server configuration for
+bundled deployments and tests, never an HTTP option. Server owners can use
+Node's connection-close methods when shutting down active clients.

@@ -323,3 +323,36 @@ same-event-loop request aborts during the call. HTTP scheduling remains M12.
 Programmatic AST ranges follow the parser's midnight date grammar; lower-level
 searches retain arbitrary millisecond windows. No new physical accuracy or
 completeness span is claimed.
+
+
+## M12
+
+Runtime: Node.js 22.22.2, using the cached Node binary under
+`/tmp/events-npm-cache`. Only `events/` was edited.
+
+Passed:
+
+- Local TypeScript typecheck and the full event test suite on that runtime.
+- Loopback HTTP searches, complete and refused envelopes, explicit options,
+  malformed JSON and DSL, unknown fields, media types, route and method errors,
+  body and evaluation caps, busy admission, upload deadlines, worker deadlines,
+  disconnected uploads, oversized worker responses and private worker errors.
+- Independent JPL synthetic natal aspect date comparison using the existing
+  hashed fixture, its own window and preregistered tolerance. Existing JPL and
+  NASA underlying date checks remain passing over their documented selections.
+- Parent npm dry-run file-list isolation, diff whitespace checks, authored-file
+  size and documentation character checks.
+
+A sequential HTTP test exposed a race between sending a successful response and
+worker termination: an immediate subsequent request could see busy admission.
+Successful responses now wait for termination and slot release. Typecheck and
+all event tests pass after the correction. Worker cancellation discards output;
+no partial list is returned. Completion still depends on the search methods'
+existing sampling assumptions. No new physical accuracy span is claimed.
+
+The parent package-content check was attempted with a writable npm cache. It
+fails because `dist/calc.d.ts` is absent, as in prior sessions. No parent build
+or archive pack was run. Full engine/release gates are not claimed. Worker
+bundles and transient transport fixtures remain inside gitignored local build
+output; validation logs remain in the gitignored local cache. Git metadata,
+packed source, package version and artifacts were not changed.

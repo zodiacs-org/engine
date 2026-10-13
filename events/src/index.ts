@@ -18,3 +18,5 @@ export { parseQuery, QuerySyntaxError, QUERY_LIMITS, QUERY_ASPECTS } from './que
 export type { EventQuery, QueryEvent, QueryAspect } from './query.js';
 export { executeQuery } from './search.js';
 export type { ExecuteOptions, QueryProviders, QuerySearchEvent, QueryExecutionResult } from './search.js';
+export { createEventServer, HTTP_LIMITS } from './http.js';
+export type { HttpServerOptions } from './http.js';
