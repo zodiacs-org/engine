@@ -2,9 +2,9 @@
 
 This private workbench is being built according to [PLAN.md](PLAN.md). The
 implemented milestones cover subscription syntax validation, SQLite storage,
-encrypted signing-key custody and payload signing with receiver verification.
-It does not yet run a service, search the engine or deliver requests. Later
-milestones add those paths and a control API.
+encrypted signing-key custody, payload signing with receiver verification, and
+local event searches with engine receipts. It does not yet run a service or
+deliver requests. Later milestones add the workers and a control API.
 The code and documentation here use the repository's [MIT license](../LICENSE).
 
 Use Node from the release line accepted by
@@ -16,12 +16,16 @@ cd webhook
 npm ci --ignore-scripts --cache .cache/npm
 npm run typecheck
 npm test
+npm run check:events-source
 npm run check:package-isolation
 ```
 
 Dependencies, caches, build output, coverage and local state are ignored here.
 The TypeScript check emits nothing. Vitest runs only this project's tests.
-No root dependency installation or engine build is needed for this milestone.
+No root dependency installation or engine build is needed. The project installs
+the parent's exact ephemeris dependency locally. TypeScript paths and the Vitest
+resolver direct relative engine-source imports to that local dependency. Other
+runners must provide equivalent resolution; a production build comes later.
 The test suite uses invented inputs and performs no network requests.
 
 `check:package-isolation` runs the parent npm inventory with `--dry-run` and
@@ -94,7 +98,7 @@ names come from `ZODIAC_SIGNS`. Filters are case-sensitive.
 Custom expressions are preserved as text, not parsed or executed in this
 milestone. The planned integration uses the existing events DSL's supported
 grammar, not JavaScript evaluation. Search semantics must be validated before
-custom subscriptions can be activated. Eclipses will use the event provider's
+custom subscriptions can be activated. Eclipses use the event provider's
 documented geocentric definitions; a subscription does not imply visibility
 at a location.
 
@@ -154,7 +158,8 @@ occurrences inside the submitted `[from, to)` interval. It inserts immutable
 event payloads and pending deliveries and advances the cursor in one transaction.
 The interval must stay inside the subscription schedule. Its caller must first
 establish that the search completed; storage cannot prove event completeness.
-The worker and engine receipt adapter are not implemented yet.
+The event adapter described below establishes conditional scan completion and
+captures engine receipts. The worker is not implemented yet.
 
 An occurrence key is unique within its subscription across revisions. Event
 identifiers and idempotency keys are globally unique. Repeated occurrences
@@ -286,3 +291,92 @@ idempotency key together with its expected sender or subscription context
 before applying side effects. Retries and operator replay will intentionally
 reuse that identity. The transport, delivery worker and replay command are
 later milestones; these functions do not claim at-least-once delivery yet.
+
+## Local event searches and receipts
+
+`searchEvents` in [src/event-search.ts](src/event-search.ts) searches an explicit
+filter and UTC window synchronously, without storage or network access. Pass
+`filter`, `window`, `stepMs` and `maxEvaluations`. Use `parseEventFilter` and
+`parseScheduleWindow` for standalone validation; `searchEvents` also revalidates
+them. There is no default scan step or evaluation budget. These are operating
+choices, not physical error bounds. Custom filters currently return
+`unsupported-filter`; DSL integration belongs to the later milestone.
+
+The local search modules are pinned from `origin/infra/events` by full commit
+and checksums in [vendor/events/manifest.json](vendor/events/manifest.json).
+[PROVENANCE.md](vendor/events/PROVENANCE.md) describes the import-path rewrite
+and reproducible offline check. `npm test` verifies that snapshot first. Only
+local calculation modules are included; no event HTTP service is required.
+The parent engine remains a relative source dependency of this checkout.
+
+The search coordinates are apparent geocentric tropical longitudes on the true
+ecliptic of date, with the parent's geometric lunar-series convention retained.
+Each `DiscoveredEvent` carries an ISO UTC label, the original search definition
+including its bracket and residual, and the relevant bodies' complete
+`CalcPosition` results. Those results preserve bounds and full calculation
+receipts: normalized requests, engine and ephemeris versions, convention ids,
+UT1 and TT instants, the input clock, time basis and Delta T provenance. They
+are detached frozen data that survives JSON serialization. A calculation
+receipt records how a value was computed; it is not an authenticated statement
+of physical accuracy or a digest of every loaded source file.
+
+| Filter | Preserved event meaning |
+| --- | --- |
+| `aspect-exact` | Crossings of both orientations of the requested unsigned separation between moving bodies; conjunction and opposition have a single branch. Relative motion, branch, angle and body order remain in the definition. Tangential contacts are not generally found. |
+| `ingress` | A tropical sign-boundary crossing into the destination sign. Retrograde entry uses the upper boundary of that sign. The result retains both signs and the direction. |
+| `station` | A sign-changing zero of the engine's finite-difference longitude speed. Direction is the outgoing motion. The captured position includes speeds and their bounds. |
+| `eclipse` | A minimum of spherical shadow-axis distance with strict penumbral overlap. The definition retains geometry, radii and classification; positions include Sun and Moon Cartesian vectors. |
+
+For eclipses, also pass `eclipse: { model, derivativeStepMs }`. The model requires
+explicit `sunRadiusAu`, `moonRadiusAu` and `earthRadiusAu` in astronomical units;
+the Sun must have the largest radius. No physical radii or atmospheric
+enlargement are chosen implicitly. Solar classes are central or partial, with
+no total/annular/hybrid distinction. Lunar classes are total, partial or
+penumbral at the returned minimum. Paths, surface visibility, contact times,
+oblateness and atmospheric shadow effects are outside this model. The
+derivative step is its central-difference half-width in milliseconds and is
+part of the saved search policy.
+
+Subscription windows own `[start, end)`. The pinned searches use an open start
+and closed end, and some need confirmation beyond an edge. The adapter pads
+each side by a scan step, plus the eclipse derivative half-width for eclipses,
+and rounds outward to a fixed Unix-epoch sampling grid. It then keeps only
+events whose reported millisecond belongs to the requested window. This makes
+the grid independent of scan start and supplies surrounding samples for edge
+events. Search metadata retains both requested and padded windows, the step,
+model, budget and source pin. Padding costs evaluations and must also be within
+engine coverage. Keep the policy fixed when comparing overlapping scans.
+
+Known discontinuities of the engine's UTC time basis cause a
+`time-discontinuity` refusal. This check includes padding and, for stations,
+the engine's speed stencil, so a window near a discontinuity can also refuse.
+It uses the engine's time-basis implementation directly. The worker must not
+advance a cursor over such a refusal; handling events across those steps needs
+a separate policy. A UTC label outside the IERS coverage still retains the
+engine's documented civil-time-as-UT1 convention in its receipt.
+
+All discovery and receipt calculations share the evaluation budget. A unit is
+an adapter calculation request, including one that fails, not an internal
+ephemeris operation. Receipt capture can exhaust the budget after discovery.
+Solar and lunar searches for `type: "any"` also share that budget. Every
+refusal has an empty event list, including cancellation and `engine-refused`,
+which retains the parent's refusal object. Unexpected computation failures
+throw; they never become completed empty scans. Cancellation is cooperative
+between synchronous calculations, not a wall-clock deadline.
+
+`complete` means the prescribed scan and receipt capture finished under the
+sampling assumptions recorded as `conditional-on-sampling-assumptions`.
+Longitude and relative-longitude cells must be continuous and monotonic, with
+travel shorter than a half turn; station and eclipse scans require isolated
+sign-changing roots. Coarse cells can hide paired crossings or several extrema,
+and numerical enclosures do not measure astronomical accuracy. A completed
+empty result therefore is not proof that no physical event occurred.
+
+[event-search.test.ts](test/event-search.test.ts) tests analytic motion and
+invented geometry, including ownership at adjacent windows, grid stability,
+directions, refusal atomicity and budgets. Its injected sources test adapter
+behavior and are not sky predictions. [event-engine.test.ts](test/event-engine.test.ts)
+checks the real relative-source engine over the synthetic schedule windows in
+that file, equality of captured results with direct engine calls, version and
+clock preservation, and known clock-step refusals. These are integration and
+regression checks, with no new independent astronomical accuracy claim.
