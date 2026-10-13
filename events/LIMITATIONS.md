@@ -7,11 +7,11 @@ Choose the clock, search horizon, step, budget and any event policy explicitly.
 
 | Feature | Independent evidence | Limits |
 | --- | --- | --- |
-| Ingresses and aspects | JPL Horizons selected dates in `references/cases.json`, enforced by `test/horizons.test.ts` and `test/reference-api.test.ts` | Horizons and the parent differ in frame and corrections. Sparse date agreement does not establish a full search inventory. Natal targets are invented fixed longitudes. |
+| Ingresses and aspects | JPL Horizons selected dates in `references/cases.json`, enforced by `test/horizons.node-test.ts` and `test/reference-api.node-test.ts` | Horizons and the parent differ in frame and corrections. Sparse date agreement does not establish a full search inventory. Natal targets are invented fixed longitudes. |
 | Stations and retrogrades | Independently reduced JPL Venus station dates in the same fixture, also checked inside the long-span search | Horizons stations are interpolated extrema of sampled longitude, not instantaneous derivative catalog entries. Other interval dates have no independent comparison here. |
-| Eclipses | Selected NASA TT greatest-eclipse dates and coarse classes in `references/nasa-cases.json`, enforced by `test/nasa.test.ts` and `test/reference-api.test.ts` | Spherical shadow geometry omits oblateness and atmospheric enlargement. Solar types are central or partial; paths, local visibility, contact times, magnitudes and total/annular/hybrid distinctions are unavailable. |
-| Void-of-course Moon | Analytic boundary and policy tests in `test/void.test.ts` | No independent astronomical void-period date evidence. The chosen sign-based last-exact-contact convention is explicit, rather than a claim to cover every historical definition. |
-| Long-span Venus search | Partition, step and filter consistency in `test/long-span.test.ts`, plus the existing selected JPL dates | Agreement between computations from the same engine is not independent evidence of completeness or accuracy over the entire span. |
+| Eclipses | Selected NASA TT greatest-eclipse dates and coarse classes in `references/nasa-cases.json`, enforced by `test/nasa.node-test.ts` and `test/reference-api.node-test.ts` | Spherical shadow geometry omits oblateness and atmospheric enlargement. Solar types are central or partial; paths, local visibility, contact times, magnitudes and total/annular/hybrid distinctions are unavailable. |
+| Void-of-course Moon | Analytic boundary and policy tests in `test/void.node-test.ts` | No independent astronomical void-period date evidence. The chosen sign-based last-exact-contact convention is explicit, rather than a claim to cover every historical definition. |
+| Long-span Venus search | Partition, step and filter consistency in `test/long-span.node-test.ts`, plus the existing selected JPL dates | Agreement between computations from the same engine is not independent evidence of completeness or accuracy over the entire span. |
 
 The JPL acquisition, conventions, attribution, unchanged thresholds and measured
 reference windows are documented in [references/README.md](references/README.md).
@@ -68,7 +68,7 @@ Install and build only with the `events/` project commands. The workbench's
 relative-source imports are bundled locally, so its results depend on the
 parent source revision and pinned ephemeris dependency. Preserve those facts
 when saving output. Local build output, downloaded bulk data and test logs
-stay ignored. The parent npm dry-run assertion in `test/isolation.test.ts`
+stay ignored. The parent npm dry-run assertion in `test/isolation.node-test.ts`
 checks that this entire folder is excluded. The repository's engine CI does
 not invoke this project's tests; run the commands in [CHECKS.md](CHECKS.md)
 when reviewing changes here. Full engine and archive gates are separate.

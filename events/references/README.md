@@ -54,7 +54,7 @@ it is not a catalogued instantaneous derivative or an exact mathematical root.
 The engine's speed instead uses its own shorter finite difference.
 
 The ingress and aspect threshold is 10 minutes; the station threshold is
-20 minutes. Both are enforced in [horizons.test.ts](../test/horizons.test.ts)
+20 minutes. Both are enforced in [horizons.node-test.ts](../test/horizons.node-test.ts)
 using the unchanged thresholds in `cases.json`, over exactly the windows
 listed there: March 2023 for Sun ingress and a synthetic Mars square,
 December 2022 for Mars-Sun opposition, and July and September 2023 for Venus

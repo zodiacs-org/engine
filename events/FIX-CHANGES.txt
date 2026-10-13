@@ -1,0 +1,1 @@
+F1 Isolate events Node suites from root Vitest discovery, update build/test scripts and documentation links, and verify events checks and root discovery.

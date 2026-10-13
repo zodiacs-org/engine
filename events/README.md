@@ -23,6 +23,8 @@ npm test --prefix events
 
 Local compiler output is under `events/build/`; downloads, caches and bulk
 experiments belong in the gitignored `.cache/` or `generated/` folders.
+Node suites use `.node-test.ts` sources and `.node-test.js` bundles so the
+parent Vitest runner ignores both.
 
 ## Root refinement
 
@@ -40,7 +42,7 @@ The bracket includes both ends and must contain a sampled zero or a sign
 change of a continuous function. Bisection returns an evaluated endpoint and
 its residual, together with an enclosing bracket. `toleranceMs` controls the
 bracket width, not the residual or physical accuracy. Defaults and numerical
-behavior are enforced in [root.test.ts](test/root.test.ts) using analytic
+behavior are enforced in [root.node-test.ts](test/root.node-test.ts) using analytic
 linear and polynomial functions, across positive and negative epoch values.
 
 `maxEvaluations` includes endpoint evaluations and refinements. Exhaustion
@@ -88,7 +90,7 @@ const result = context.search(() => [engine.sample("Mars", context.window.endMs)
 
 These are synthetic reference instants, not birth data. This example evaluates
 one position; it does not search for an event. Tests in
-[engine.test.ts](test/engine.test.ts) cover the clock labels and delegation for
+[engine.node-test.ts](test/engine.node-test.ts) cover the clock labels and delegation for
 all supported bodies at the synthetic reference instant in that file.
 
 Coordinates are apparent geocentric tropical longitude in the true ecliptic
@@ -126,7 +128,7 @@ when completing a search, but cannot interrupt a synchronous engine call.
 
 `context.search()` converts budget exhaustion or cancellation into a refusal
 with an empty event list. Other errors propagate. Completed empty searches and
-refusals are distinct. [context.test.ts](test/context.test.ts) enforces these
+refusals are distinct. [context.node-test.ts](test/context.node-test.ts) enforces these
 control-flow and window rules with analytic callbacks. Adapter delegation tests
 use the same parent API and establish integration behavior only; they are not
 independent astronomical accuracy evidence.
@@ -166,7 +168,7 @@ search policy is still needed before the long-span public query API is wired.
 
 Each detected bracket is refined to integer milliseconds using the shared
 refiner. The bracket width is at most one millisecond, enforced by the analytic
-fractional-root test in [longitude.test.ts](test/longitude.test.ts). An estimate
+fractional-root test in [longitude.node-test.ts](test/longitude.node-test.ts). An estimate
 that rounds to a cell's open start instead uses its right bracket endpoint.
 The residual belongs to the reported estimate. This is numerical resolution,
 not a physical timing tolerance. No close events are merged by a time threshold.
@@ -178,7 +180,7 @@ A custom `LongitudeProvider` must share the context and charge each sample;
 it is intended for analytic tests or another explicitly defined longitude
 source. Its coordinates and continuity are the caller's responsibility.
 
-[longitude.test.ts](test/longitude.test.ts) checks synthetic linear motion,
+[longitude.node-test.ts](test/longitude.node-test.ts) checks synthetic linear motion,
 wraps, resolved reversals, window ownership, sign transitions, fractional
 roots, cancellation and budget exhaustion. It also demonstrates the hidden
 paired-root limitation. The default-adapter test checks integration only and
@@ -192,7 +194,7 @@ body against a fixed natal longitude (`{ kind: 'fixed', longitude }`) or
 another moving body (`{ kind: 'moving', body }`). Supply a nonempty explicit
 policy, for example `{ aspects: [{ id: 'square', angleDegrees: 90 }] }`.
 The angle domain and square branches are enforced by
-[aspects.test.ts](test/aspects.test.ts) over synthetic linear motion and a
+[aspects.node-test.ts](test/aspects.node-test.ts) over synthetic linear motion and a
 resolved retrograde loop. Identifiers and angles must each be unique.
 Custom angles are allowed; there are no implicit major aspects, orbs or
 closest-aspect selection. Same-body moving pairs are rejected because their
@@ -242,7 +244,7 @@ are suppressed; consecutive zero-speed samples reject as an unresolved plateau.
 A zero at the window start is excluded from station results, and a zero at the
 end is unconfirmed because no outgoing sample is available. Nonzero sign-change
 brackets are refined with the shared root refiner. The fractional analytic root
-in [stations.test.ts](test/stations.test.ts) enforces the millisecond enclosure
+in [stations.node-test.ts](test/stations.node-test.ts) enforces the millisecond enclosure
 and checks that the speed residual belongs to the returned estimate.
 
 `searchRetrogradeIntervals(context, body, { stepMs, sign? })` returns spans of
@@ -263,7 +265,7 @@ sign. Thus a future query for Venus retrogrades in Leo means intervals
 intersecting Leo. A boundary touch alone does not match. At an exact sign
 boundary, the following retrograde segment owns the lower sign, including the
 wrap from Aries to Pisces. Analytic overlap and wrap tests in
-[stations.test.ts](test/stations.test.ts) enforce this convention.
+[stations.node-test.ts](test/stations.node-test.ts) enforce this convention.
 
 Station scanning requires continuous speed with at most one sign-changing
 zero in each cell, and isolated sampled zeros whose neighboring samples resolve
@@ -328,7 +330,7 @@ slope of squared axis distance, then refines the slope zero with `refineRoot`.
 `derivativeStepMs` is the central-difference half-width. The residual has units
 of squared astronomical units per millisecond. The numerical enclosure is at
 most one millisecond, enforced by the analytic fractional-minimum test in
-[eclipses.test.ts](test/eclipses.test.ts). It encloses the finite-difference
+[eclipses.node-test.ts](test/eclipses.node-test.ts). It encloses the finite-difference
 zero, not necessarily the true derivative zero or a physically exact time.
 Increasing the derivative step changes this definition; very small steps can
 expose floating-point noise. UTC time-basis discontinuities can invalidate
@@ -355,7 +357,7 @@ The model and step values are snapshotted before scanning.
 The tests use independently calculated analytic geometry and synthetic motion
 for the numerical method, and same-parent comparisons for adapter delegation.
 Independent NASA catalog date and coarse-class comparisons are now enforced
-by [nasa.test.ts](test/nasa.test.ts), with acquisition, attribution, clocks and
+by [nasa.node-test.ts](test/nasa.node-test.ts), with acquisition, attribution, clocks and
 comparison limits documented in [references/NASA.md](references/NASA.md).
 The analytic and adapter tests themselves establish no astronomical accuracy.
 
@@ -410,7 +412,7 @@ scanner's monotonic short-arc cell assumptions and the aspect scanner's
 relative-motion assumptions. Observed retrograde Moon ingresses reject the
 search; hidden reversals and contacts remain undetectable from coarse samples.
 A `complete` result does not certify physical or astronomical completeness.
-[void.test.ts](test/void.test.ts) checks analytic last-contact selection,
+[void.node-test.ts](test/void.node-test.ts) checks analytic last-contact selection,
 multiple bodies, signed aspect branches, wrap, clipping, entry/exit ownership,
 fractional contact enclosures, unresolved tails, validation and refusals.
 Its default-adapter check establishes integration only. No independent
@@ -468,7 +470,7 @@ Errors do not echo submitted text or internal exception messages. Responses
 are JSON with no-store caching and close the connection.
 
 Service caps are declared in `HTTP_LIMITS` in [http.ts](src/http.ts).
-[http.test.ts](test/http.test.ts) enforces request size, evaluation cap,
+[http.node-test.ts](test/http.node-test.ts) enforces request size, evaluation cap,
 admission and deadlines, using loopback integration tests. The same tests check
 the independently reduced JPL synthetic natal aspect fixture described in
 [references/README.md](references/README.md), over that fixture's own window
@@ -494,7 +496,7 @@ After a local build, run `node events/examples.mjs` from the repository root.
 ingresses, stations, eclipses and an explicit void-of-course policy. Its output
 keeps the declared clock; TT coordinates must not be displayed as UTC instants
 without a separate time-scale conversion. The executable examples are checked
-by [isolation.test.ts](test/isolation.test.ts).
+by [isolation.node-test.ts](test/isolation.node-test.ts).
 
 For the requested multi-century search, use the local programmatic API:
 
@@ -515,7 +517,7 @@ the returned interval includes its portions in other signs. This is neither a
 filter on the station sign alone nor a restriction to intervals entirely in Leo.
 The range clips already active intervals, with clipping flags preserved.
 
-[long-span.test.ts](test/long-span.test.ts) exercises this span on TT, compares
+[long-span.node-test.ts](test/long-span.node-test.ts) exercises this span on TT, compares
 whole-window and partitioned scans, and compares daily unfiltered intervals
 with half-day Leo-filtered intervals. It checks sign-span continuity, ordering,
 all-or-nothing budget refusal and the selected JPL Venus station dates with
@@ -529,5 +531,5 @@ occur only in the other fragment.
 
 See [LIMITATIONS.md](LIMITATIONS.md) for the evidence boundaries and operating
 limits. Full-year DSL comparisons against selected independent dates are in
-[reference-api.test.ts](test/reference-api.test.ts); they reuse the unchanged
+[reference-api.node-test.ts](test/reference-api.node-test.ts); they reuse the unchanged
 JPL and NASA references rather than generating expectations from this engine.

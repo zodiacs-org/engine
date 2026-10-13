@@ -375,7 +375,7 @@ node events/examples.mjs
 ```
 
 The event suite includes the multi-century Venus search on TT from the start
-of 1900 through the end of 2100. `test/long-span.test.ts` checks daily unfiltered
+of 1900 through the end of 2100. `test/long-span.node-test.ts` checks daily unfiltered
 and half-day Leo-filtered results, chronological nonoverlap, continuous sign
 spans, independently scanned partitions and budget refusal. The partition
 edge is inside the selected JPL Venus retrograde interval, so adjoining clipped
@@ -384,7 +384,7 @@ scans is numerical consistency evidence, not independent physical accuracy or
 proof of exhaustive completeness. The selected JPL Venus station endpoints
 retain their unchanged comparison thresholds.
 
-`test/reference-api.test.ts` exercises whole-year DSL search windows around
+`test/reference-api.node-test.ts` exercises whole-year DSL search windows around
 every existing selected Horizons and NASA reference date. It preserves their
 original thresholds and NASA coarse-class expectations. No new reference
 numbers or engine-derived expected dates were added. The offline acquisition
@@ -407,3 +407,18 @@ The parent `npm run package:contents` was attempted with a writable cache and
 still fails because `dist/calc.d.ts` is absent. No parent build, archive packing,
 release gate or full engine CI success is claimed. No git metadata, packed
 source, parent package settings or carried archive was changed.
+
+## F1
+
+On Node.js 22.22.2, local typecheck and `npm test` pass after renaming the
+Node suites to `.node-test.ts` and updating build and test discovery. Local
+builds clear prior output so old `.test.js` bundles cannot remain discoverable.
+Documentation links follow the renamed suites; test contents are unchanged.
+
+In a temporary copy of the current worktree with the parent's locked
+dependencies installed, root `npx vitest run --reporter=dot` lists no events
+suites. A focused root run with the `events` filter reports no test files.
+The full root run still fails the archive-binding suite because this host
+has `/node_modules` above temporary directories and its supplied npm wrapper
+forces a read-only cache. The events tests pass using the bundled npm CLI
+directly with a writable cache. Full engine CI success is not claimed.

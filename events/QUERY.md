@@ -61,7 +61,7 @@ parseQuery('next void-of-course Moon with Sun , Mars aspects square , trine');
 zero-based UTF-16 code-unit position) and `expected`. Codes distinguish input
 type, input length, token count, syntax, invalid dates and invalid ranges.
 The exported `QUERY_LIMITS` bounds input before parsing. The grammar is flat
-and has no recursive production. [test/query.test.ts](test/query.test.ts)
+and has no recursive production. [test/query.node-test.ts](test/query.node-test.ts)
 enforces the limits, examples, canonical output, strict filters, date
 validation, duplicate rejection and error positions. These are parser
 contract tests, not astronomical accuracy evidence. Existing Horizons and NASA
@@ -139,7 +139,7 @@ argument. Each factory receives the shared `EvaluationContext`, and providers
 must charge each request to that context. They are an integration/testing
 boundary, not untrusted input to the DSL or HTTP endpoint.
 
-[test/search.test.ts](test/search.test.ts) checks dispatch, filtered earliest
+[test/search.node-test.ts](test/search.node-test.ts) checks dispatch, filtered earliest
 selection, explicit horizons, clock conflicts, symbolic targets, clipped
 intervals, unresolved tails, malformed AST rejection and all-or-nothing
 refusals with analytic providers. Its synthetic natal square also uses the

@@ -75,7 +75,7 @@ chosen radii in kilometers and conversion to au are explicit in the selection
 file. They are test inputs, not a claim to reproduce NASA's full physical model.
 
 The acceptance threshold is three minutes on TT, enforced by
-[nasa.test.ts](../test/nasa.test.ts) over exactly the selected dates from
+[nasa.node-test.ts](../test/nasa.node-test.ts) over exactly the selected dates from
 2017-08-21 through 2025-03-29. It allows model and ephemeris differences and
 catalog rounding; it is not a physical error bound. The scan uses hourly cells
 and a one-minute derivative step, also enforced by that test. Each comparison
