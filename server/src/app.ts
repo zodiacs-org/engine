@@ -6,6 +6,7 @@ import { verifyEngine } from "./engine.js";
 import { failure, success } from "./responses.js";
 import { ApiKeyStore } from "./api-keys.js";
 import { registerAuthentication } from "./auth.js";
+import { registerAdmissionLimiting } from "./admission-limit.js";
 import { registerRateLimiting } from "./rate-limit-hook.js";
 import type { RateLimitOptions } from "./rate-limit.js";
 import { JSON_LIMITS, registerRequestValidation, RequestValidationError } from "./request-validation.js";
@@ -110,6 +111,7 @@ export function buildApp(options: AppOptions = {}) {
     responseHeaders(reply, request.id);
     if (stopping) return reply.code(503).send(failure(request.id, "not_ready", "Server is not ready."));
   });
+  registerAdmissionLimiting(app, options.rateLimit, options.monotonicNow);
   registerAuthentication(app, options.apiKeys ?? new ApiKeyStore());
   registerRateLimiting(app, options.rateLimit, options.monotonicNow);
   registerRequestValidation(app);

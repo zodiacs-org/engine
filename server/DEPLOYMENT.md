@@ -161,9 +161,9 @@ curl --fail http://127.0.0.1:3000/openapi.json
 docker inspect --format '{{.State.Health.Status}}' engine-api
 ```
 
-Only the exact GET probe and discovery routes are public and unmetered. A
-probe that receives an API key is still unmetered. Avoid putting credentials
-in probe commands. The Docker healthcheck runs
+Only the exact GET probe and discovery routes are public. They do not spend
+per-key tokens, even with an API key, but client admission limits apply. Avoid
+putting credentials in probe commands. The Docker healthcheck runs
 [scripts/healthcheck.mjs](scripts/healthcheck.mjs) against readiness on the
 container's own listener. The probe has a bounded deadline, and Docker's
 healthcheck schedule is defined in [Dockerfile](Dockerfile). Helper behavior is checked by
@@ -189,12 +189,15 @@ browser access.
 Preserve the Authorization header and request content type. Disable proxy
 caching of calculations and errors; application responses already use
 `Cache-Control: no-store`. Apply proxy connection, body and request-rate limits
-as needed for the deployment. Authentication failures and public routes are
-not covered by per-key buckets. The application sets `trustProxy: false`;
-forwarded client-IP, protocol and host headers do not change authentication,
-bucket identity or OpenAPI URLs. Keys, not IP addresses, identify rate-limit
-buckets. Restrict access to the public discovery document at the proxy if the
-deployment should not expose API metadata.
+as needed for the deployment. The application throttles all requests reaching
+request hooks by socket peer IP before authentication, with a bounded client
+table, and applies per-key buckets after authentication. See
+[Rate limits](README.md#rate-limits) for the window and saturation policy.
+Clients behind a proxy share its admission allowance, including probes.
+The application sets `trustProxy: false`; forwarded client-IP, protocol and
+host headers do not change admission identity, authentication, per-key bucket
+identity or OpenAPI URLs. Restrict access to the public discovery document at
+the proxy if the deployment should not expose API metadata.
 
 ## Logs, resource limits and shutdown
 

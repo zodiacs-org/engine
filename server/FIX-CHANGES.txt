@@ -1,0 +1,1 @@
+F1: Add bounded socket-IP admission throttling before authentication and public routes, with tested 429 responses and root test isolation.

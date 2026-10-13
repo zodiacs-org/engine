@@ -106,7 +106,20 @@ describe('generated OpenAPI contract', () => {
     expect(doc['x-json-limits']).toMatchObject(JSON_LIMITS);
     expect(doc['x-time-coverage']).toMatchObject({ referenceSpan: engine.REFERENCE_SPAN, ephemerisSpan: engine.EPHEMERIS_SPAN, housesSpan: CALC_SPAN });
     expect(doc['x-rate-limit']).toMatchObject(DEFAULT_RATE_LIMIT);
+    expect(doc).toHaveProperty('x-admission-limit', expect.objectContaining({ capacity: 120, windowMs: 60_000, maxClients: 4_096 }));
     expect(doc['x-resource-limits']).toMatchObject({ ...DEFAULT_RESOURCE_LIMITS, ...HTTP_LIMITS });
+  });
+
+  it('documents admission refusals on public and protected routes', async () => {
+    const app = createApp({ monotonicNow: () => 0 });
+    const doc = await document(app);
+    for (let index = 1; index < 120; index++) expect((await app.inject('/healthz')).statusCode).toBe(200);
+    for (const path of ['/healthz', '/readyz', '/openapi.json', '/v1/natal']) {
+      const response = await app.inject({ url: path, method: path === '/v1/natal' ? 'POST' : 'GET' });
+      expect(response.statusCode).toBe(429);
+      expect(response.headers).not.toHaveProperty('x-ratelimit-limit');
+      validator(doc).response(path, 429, response.json(), path === '/v1/natal' ? 'post' : 'get');
+    }
   });
 
   it('discovers configured resource bounds without incorporating request state', async () => {

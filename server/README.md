@@ -82,8 +82,9 @@ by `test/app.vitest.ts`.
 curl --fail http://127.0.0.1:3000/openapi.json
 ```
 
-`GET /openapi.json` is public and unmetered, including with a supplied API
-key or an exhausted bucket. It returns an
+`GET /openapi.json` is public and does not spend per-key tokens, including
+with a supplied API key or an exhausted key bucket. Client admission limits
+apply. It returns an
 [OpenAPI 3.1.1 document](https://spec.openapis.org/oas/v3.1.1.html)
 with JSON Schema 2020-12 contracts. It has no outer response envelope;
 the request ID remains in the response header. Query parameters and bodies
@@ -535,11 +536,36 @@ verify the adapter against this engine, not independent astronomical accuracy.
 
 ## Rate limits
 
+Before authentication, all requests reaching the request hooks share a client
+admission allowance across routes, keyed by the socket peer IP. This includes
+missing or rejected authentication, public routes and authenticated requests.
+The fixed process-wide window lasts 60,000 milliseconds. Each client may send
+up to the largest of 120 requests, `RATE_LIMIT_CAPACITY`, and
+`RATE_LIMIT_REFILL_PER_SECOND * 60` per window. These defaults and scaling
+rules are enforced in `test/admission-limit.vitest.ts`. Raising per-key limits
+therefore also raises admission limits.
+
+The client table holds at most 4,096 IPs. When full, new clients receive HTTP
+429 without evicting existing clients. Counts and entries reset together when
+the next request begins a new window. There are no cleanup timers. An exhausted
+client receives the usual envelope with `rate_limited`, the message
+`Client request limit exceeded.`, and `Retry-After` rounded up to seconds until
+the next window. This response precedes authentication and body parsing and
+has no per-key rate headers. The same test checks exhaustion, bounded table
+saturation, recovery, concurrent requests and IP isolation.
+
+Forwarded headers cannot change admission identity. Clients behind the same
+proxy or NAT share an allowance, including healthchecks using that peer IP.
+Fixed windows can admit bursts on either side of a boundary. Restarts reset
+counts; replicas have separate allowances. HTTP parser and router failures
+that occur before request hooks remain subject to the existing socket and
+header bounds. Use proxy limits suited to the deployment as well.
+
 Each configured key gets a token bucket shared across protected routes. The
 bucket starts full, spends one token per authenticated request and refills
 continuously using elapsed monotonic time, capped at its capacity. Invalid
 bodies, schema failures and unknown routes spend a token too. Unauthenticated
-requests, public probes and API discovery do not use a bucket; sending
+requests, public probes and API discovery do not spend per-key tokens; sending
 credentials to a public route does not change that. Exhausted requests are
 refused before body parsing or calculation, and a refusal does not spend
 another token.
@@ -601,7 +627,7 @@ responses or logs.
 | 413 | `body_too_large` | JSON body exceeds the byte cap. |
 | 415 | `unsupported_media_type` | Missing or unsupported content type, charset or encoding. |
 | 422 | `receipt_unavailable` | The engine's codec refused a calculation receipt; no chart is returned. |
-| 429 | `rate_limited` | This key has no request token available. |
+| 429 | `rate_limited` | Client admission allowance exhausted, client table full, or this key has no request token available. |
 | 500 | `internal_error` | Unexpected server failure. |
 | 500 | `calculation_failed` | The calculation worker was lost; no partial result is returned. |
 | 503 | `not_ready` | Worker unavailable, readiness check failed, or server shutting down. |
@@ -614,8 +640,9 @@ The table describes ordinary request handling, as checked in
 `test/moon-phase.vitest.ts`, `test/houses.vitest.ts` and
 `test/rate-limit.vitest.ts`, `test/openapi.vitest.ts` and
 `test/lifecycle.vitest.ts`. Raw HTTP parser and router failures can
-occur earlier. Authentication precedes rate limiting, which precedes JSON
-validation, so a rejected request reports the first applicable error.
+occur earlier. Client admission throttling precedes authentication, per-key
+rate limiting and JSON validation, so a rejected request reports the first
+applicable error.
 
 ## Resource limits and shutdown
 

@@ -2,6 +2,7 @@ import type { FastifyInstance, RouteOptions } from "fastify";
 import { EPHEMERIS_SPAN, REFERENCE_SPAN } from "../../src/index.js";
 import { CALC_SPAN } from "../../src/calc.js";
 import { isPublicRoute } from "./auth.js";
+import { admissionLimits } from "./admission-limit.js";
 import { engineIdentity } from "./engine.js";
 import { JSON_LIMITS } from "./request-validation.js";
 import { DEFAULT_RATE_LIMIT, type RateLimitOptions } from "./rate-limit.js";
@@ -47,8 +48,8 @@ function responseHeaders(protectedRoute: boolean): Record<string, Header> {
   return {
     ...headers,
     ...(protectedRoute ? {
-      "X-RateLimit-Limit": { description: "Bucket capacity; present only when the request reaches rate limiting after authentication. Early parser, router and shutdown refusals may omit it.", schema: { type: "integer", minimum: 1 } },
-      "X-RateLimit-Remaining": { description: "Whole tokens remaining; present only when the request reaches rate limiting after authentication. Early parser, router and shutdown refusals may omit it.", schema: { type: "integer", minimum: 0 } }
+      "X-RateLimit-Limit": { description: "Bucket capacity; present only when the request reaches per-key rate limiting after authentication. Early parser, router, admission and shutdown refusals may omit it.", schema: { type: "integer", minimum: 1 } },
+      "X-RateLimit-Remaining": { description: "Whole tokens remaining; present only when the request reaches per-key rate limiting after authentication. Early parser, router, admission and shutdown refusals may omit it.", schema: { type: "integer", minimum: 0 } }
     } satisfies Record<string, Header> : {})
   };
 }
@@ -62,13 +63,14 @@ function errorResponse(status: keyof typeof errors, protectedRoute: boolean): Re
     headers: {
       ...responseHeaders(hasBucket),
       ...(status === "401" ? { "WWW-Authenticate": { schema: { type: "string", const: 'Bearer realm="engine-api"' } } } : {}),
-      ...(status === "429" ? { "Retry-After": { description: "Wait until a token is available, rounded up to seconds. Other requests can consume it first.", schema: { type: "integer", minimum: 1 } } } : {})
+      ...(status === "429" ? { "Retry-After": { description: "Wait until the client admission window resets or a per-key token is available, rounded up to seconds. Other requests can consume the allowance first.", schema: { type: "integer", minimum: 1 } } } : {})
     },
     content: {
       "application/json": {
         schema: object({ ...envelopeProperties, receipts: emptyReceipts, error: {
           oneOf: [
             [code, message],
+            ...(status === "429" ? [["rate_limited", "Client request limit exceeded."]] : []),
             ...(protectedRoute && status === "503" ? [["server_busy", "Calculation capacity is full."]] : []),
             ...(protectedRoute && status === "500" ? [["calculation_failed", "Calculation worker failed."]] : [])
           ].map(([errorCode, errorMessage]) => object({
@@ -97,8 +99,8 @@ function successSchema(doc: RouteDocumentation): Schema {
 
 function operation(route: RouteOptions, doc: RouteDocumentation, method: string): Record<string, unknown> {
   const protectedRoute = !isPublicRoute(method, route.url);
-  const statuses: (keyof typeof errors)[] = ["400", "408", "414", "415", "431", "500", "503"];
-  if (protectedRoute) statuses.push("401", "413", "429", "504");
+  const statuses: (keyof typeof errors)[] = ["400", "408", "414", "415", "429", "431", "500", "503"];
+  if (protectedRoute) statuses.push("401", "413", "504");
   if (doc.receipts.some(({ kind }) => kind === "natal")) statuses.push("422");
   const responses: Record<string, Response> = {
     "200": {
@@ -162,7 +164,7 @@ export function registerOpenApi(app: FastifyInstance, rateLimit: RateLimitOption
       jsonSchemaDialect: "https://json-schema.org/draft/2020-12/schema",
       info: {
         title: "Zodiacs Engine HTTP API", version: "0.0.0",
-        description: "Self-hosted HTTP adapter for this engine checkout. All examples are synthetic. Submit resolved instants; this API does not resolve local wall times. Schema acceptance is followed by engine calendar, coverage and flag checks. Receipts describe conventions and coverage, not signed authenticity. Authentication precedes token buckets, which precede JSON validation. Parser/router failures may occur earlier. Unknown protected paths or methods return unauthorized, rate_limited or not_found as applicable."
+        description: "Self-hosted HTTP adapter for this engine checkout. All examples are synthetic. Submit resolved instants; this API does not resolve local wall times. Schema acceptance is followed by engine calendar, coverage and flag checks. Receipts describe conventions and coverage, not signed authenticity. Client admission throttling precedes authentication, per-key token buckets and JSON validation. Parser/router failures may occur earlier. Unknown protected paths or methods return unauthorized, rate_limited or not_found as applicable."
       },
       servers: [{ url: "/", description: "This server; no request Host or forwarded header is copied into the document." }],
       paths,
@@ -201,9 +203,13 @@ export function registerOpenApi(app: FastifyInstance, rateLimit: RateLimitOption
         ...JSON_LIMITS,
         description: "UTF-8 bytes include punctuation and whitespace. Depth counts containers, root at one. Nodes count all values including containers, not property names. Numeric overflow, non-object roots, and __proto__/constructor/prototype keys are refused. Content-Type must be application/json with optional UTF-8 charset; compression is unsupported. GET requests must have no body."
       },
+      "x-admission-limit": {
+        ...admissionLimits(rateLimit),
+        description: "All requests reaching onRequest spend one allowance per socket peer IP before authentication. Fixed process-wide windows. New clients are refused when the bounded table is full; entries reset together at the next window. Forwarding headers are ignored. Restarts and replicas have independent allowances."
+      },
       "x-rate-limit": {
         ...rateLimit, costPerAuthenticatedRequest: 1,
-        description: "Per-key token bucket shared across protected routes, initially full, refilled using monotonic elapsed time. Invalid authenticated requests consume tokens. Rate-limit rejections do not consume a token. Public GET routes are unmetered even with credentials. Buckets reset on restart; replicas have independent allowances. These values describe this process configuration."
+        description: "Per-key token bucket shared across protected routes, initially full, refilled using monotonic elapsed time. Invalid authenticated requests consume tokens. Rate-limit rejections do not consume a token. Public GET routes do not spend per-key tokens, but all routes are subject to client admission throttling. Buckets reset on restart; replicas have independent allowances. These values describe this process configuration."
       }
     };
     // Serialize once. No request input or per-key state reaches the document,
