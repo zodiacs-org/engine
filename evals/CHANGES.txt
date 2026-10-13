@@ -1,0 +1,1 @@
+M1: add isolated factor-meaning schema, offline validator, provenance and license requirements, and contract, CLI and package-exclusion tests.

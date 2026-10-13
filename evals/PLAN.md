@@ -1,0 +1,42 @@
+# Interpretation dataset and reading evaluations
+
+Work proceeds through the unchecked milestones in order. Each session completes
+one or two milestones, runs their checks, marks them here, and appends a line to
+`CHANGES.txt`. The harness handles all git writes and draft pull requests.
+
+All project files stay under `evals/`. The engine source, packaged metadata,
+release archives and root build output stay unchanged. Generated datasets and
+reports belong in ignored directories. Examples use invented chart inputs only.
+Original interpretation prose is licensed explicitly; no external interpretation
+text or Swiss Ephemeris material is imported.
+
+The factual reference is the local engine under recorded chart conventions.
+Agreement with that reference measures reading consistency, not independent
+astronomical accuracy or the validity of personality or predictive claims.
+
+- [x] M1 Establish an isolated offline Node project, a versioned JSON Schema for factor-to-meaning entries, a local validator, and schema contract tests.
+- [ ] M2 Add a small original seed dataset covering placements, aspects, houses and sign dignities, with provenance, licensing and dataset-level integrity checks.
+- [ ] M3 Add a local engine adapter that computes synthetic chart facts, records conventions and version provenance, and handles unavailable houses and polar fallback.
+- [ ] M4 Define the reading and factual-claim schemas, preserving quoted spans and unsupported or ambiguous assertions without silently treating them as correct.
+- [ ] M5 Define a pluggable generation backend with a deterministic offline mock, explicit backend selection, bounded requests and no saved credentials.
+- [ ] M6 Implement the interpretation generator with versioned prompts, input/output validation, provenance, reproducible manifests and ignored output files.
+- [ ] M7 Write a versioned scoring rubric for factual correctness, coverage, contradictions and abstentions, separating interpretive quality from computable facts.
+- [ ] M8 Implement deterministic placement, aspect, house and dignity scoring with per-claim evidence, category totals and explicit denominators.
+- [ ] M9 Add an offline reading evaluation CLI that combines synthetic cases, engine facts, supplied or mock readings and machine-readable reports.
+- [ ] M10 Add a conservative prose claim extractor and tests for negation, ambiguity, duplicate claims and omitted facts; expose extraction limits in reports.
+- [ ] M11 Add adversarial and end-to-end tests covering malformed model output, invented factors, unavailable birth time, conflicting conventions and output limits.
+- [ ] M12 Document reproducible local workflows, backend extension, seed review and result interpretation; run the complete eval suite and package-isolation checks.
+
+M1 acceptance: the schema requires typed factors, interpretation scope,
+provenance and license metadata; tests reject malformed and incomplete entries;
+validation needs no model or network call after local dependencies are installed.
+Later milestones add dataset semantics and engine-backed scoring, with focused
+tests alongside each implementation. No generated interpretation corpus or model
+reading is committed.
+
+M1 validation: `npm --prefix evals test` passed using Node 22 after an offline
+`npm ci --prefix evals`. The tests verify package exclusion using npm's dry-run
+inventory with scripts disabled. The root `npm run package:contents` was also
+attempted and failed because this checkout has no `dist/calc.d.ts`; the engine
+was not built because this task prohibits changes to root build output. All
+session changes are under `evals/`.

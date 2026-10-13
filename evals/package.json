@@ -1,0 +1,13 @@
+{
+  "name": "@zodiacs/interpretation-evals",
+  "private": true,
+  "type": "module",
+  "description": "Offline interpretation dataset tooling and chart-reading evaluations.",
+  "license": "MIT",
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "test": "node --test tests/*.checks.mjs",
+    "validate:entry": "node bin/validate-entry.mjs"
+  },
+  "dependencies": { "ajv": "8.17.1" }
+}
