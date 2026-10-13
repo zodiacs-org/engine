@@ -74,6 +74,19 @@ describe("geographic bounds and longitude wrapping", () => {
 });
 
 describe("antimeridian geometry", () => {
+  it("allows explicit east or west arcs for exact half-world links only", () => {
+    const samples = [point(-70, -100), point(70, 80)];
+    expect(splitAntimeridian(samples, "east")).toEqual(splitAntimeridian(samples));
+    const west = splitAntimeridian(samples, "west");
+    expect(west).toHaveLength(2);
+    expect(west[0]!.at(-1)!.point.longitude).toBe(-180);
+    expect(west[1]![0]!.point.longitude).toBe(180);
+    expect(west[0]!.at(-1)!.source).toEqual({ kind: "seam", fromIndex: 0, toIndex: 1, fraction: 80 / 180 });
+    const short = [point(0, 170), point(10, -170)];
+    expect(splitAntimeridian(short, "west")).toEqual(splitAntimeridian(short, "east"));
+    expect(() => splitAntimeridian(samples, "north" as "east")).toThrow(RangeError);
+  });
+
   it("splits eastward links with explicit seam provenance", () => {
     const result = splitAntimeridian([point(10, 170), point(30, -170)]);
     expect(result).toEqual([

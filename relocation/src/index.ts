@@ -13,3 +13,6 @@ export type { ObserverAngles } from "./angular-geometry.js";
 export { meridianLines, planMeridianLines, RELOCATION_MERIDIANS_SCHEMA } from "./meridian-lines.js";
 export type { MeridianKind, MeridianLineOptions, MeridianLinePlan, MeridianLineSample,
   MeridianLinesResult, MeridianPolyline } from "./meridian-lines.js";
+export { horizonLines, planHorizonLines, RELOCATION_HORIZONS_SCHEMA } from "./horizon-lines.js";
+export type { HorizonKind, HorizonLineOptions, HorizonLinePlan, HorizonLineSample,
+  HorizonLinesResult, HorizonPolyline } from "./horizon-lines.js";

@@ -115,6 +115,9 @@ containing `fromIndex`, `toIndex` and the interpolation `fraction`. Those
 latitudes interpolate in lat/lon space and have no engine receipt. This helper
 does not calculate an angular crossing or a great-circle path. Exact seam
 samples may change spelling to keep their displayed segment continuous.
+An optional second argument, `"east"` or `"west"`, selects the longitude arc
+for exactly half-world links; shorter links keep their shortest arc. Direction
+selection and seam provenance are enforced in `test/geography.vitest.ts`.
 
 Polyline input is capped by `MAX_POLYLINE_POINTS`, currently 16,384; larger,
 sparse or invalid arrays throw `RangeError`. Seam interpolation, limits, polar
@@ -282,6 +285,80 @@ direction injections exercise singular and seam branches and are not physical
 reference data. The engine receipts cover engine calculations; the library's
 derived longitudes and polylines keep the separate `ANGULAR_CONVENTIONS` in
 `sampling.conventions`. The function performs no file or network operations.
+
+## ASC and DSC horizon polylines
+
+`planHorizonLines({ bounds, latitudeStep, bodies?, lines?, maxEvaluations })`
+uses the same bounds, body selection and inclusive latitude stepping as the
+meridian planner. `lines` defaults to ASC then DSC and accepts a nonempty,
+unique selection of those names. It reserves the reference observer, fresh
+positions and all possible row observers, including both tangent endpoints
+per branch even when no tangent lies inside the bounds. Pole rows are also
+reserved conservatively. `requiredEvaluations` includes these reservations;
+actual work may be lower. Limits, extra tangent reservations, invalid inputs
+and precision refusals are enforced by `test/horizon-lines.vitest.ts` over
+its synthetic planning cases. Planning happens before source capture.
+
+`horizonLines(source, options)` returns `zodiacs.relocation-horizons.v1` with
+the plan, angular `sampling` provenance, `referenceObserverIndex` and structured
+`lines`. It calls the engine for each selected body's geocentric true-of-date
+equatorial direction and for Greenwich ARMC. With latitude phi, declination
+delta and west-positive hour angle H, a fixed direction meets the horizon when
+`cos(H) = -tan(phi) * tan(delta)`. The negative hour-angle branch is ASC;
+the positive branch is DSC. Longitude is right ascension minus reference ARMC
+plus H. This uses the full planetary direction and the unrefracted body-center
+horizon defined in `ANGULAR_CONVENTIONS`, rather than a chart cusp conjunction.
+
+The latitude boundary of a circumpolar region is `90 - abs(declination)`
+degrees. Both signed limits are inserted when inside the requested latitude
+bounds, even between coarse rows. Existing rows at a limit are retained once
+with `origin: "tangent-limit"`. At an admitted limit ASC and DSC meet at a
+stationary tangent, recorded as `status: "tangent"`; it is not labelled as
+a rising or setting event. Latitude rows farther into a circumpolar region
+carry `status: "gap"` and `reason: "always-above"` or `"always-below"` for the
+fixed direction. Exact geographic poles carry `status: "undefined"` and
+`reason: "geographic-pole"`. They have no unique rising direction, including
+for an equatorial body. Numerical celestial-pole RA makes the entire line
+undefined with `reason: "celestial-pole"` and empty geometry. Synthetic
+direction injections exercise these cases in `test/horizon-lines.vitest.ts`;
+they are not authentic engine receipts or physical reference data.
+
+Each line retains `body`, `kind`, `positionIndex`, `samples` and `polylines`.
+A row contains its latitude, origin, status, reason, derived `point`,
+`observerIndex` and measured altitude `residual` in degrees. Every admitted
+nonpolar point, including a tangent, receives a fresh engine observer result
+and receipt through `houses()`. `positionIndex` addresses `sampling.positions`;
+`observerIndex` addresses `sampling.samples`. Gaps, undefined poles and clipped
+rows have null observer indices and residuals. A clipped row retains its
+derived point with `status: "outside-bounds"`; gaps and poles have null points.
+The reference observer remains provenance even outside the bounds.
+
+Polyline sample references use global observer indices. Gaps, poles and
+clipped rows break a run. A longitude link crossing an excluded arc also breaks
+the run, even when both endpoints are admitted. Antimeridian seam vertices
+have global `fromIndex` and `toIndex` references and an interpolation fraction;
+they interpolate in lat/lon space and have no additional engine receipt.
+At an exactly half-world link the known branch direction selects the longitude
+arc. A single admitted sample forms a singleton polyline. A line with only
+gaps or poles can be `sampled` with empty geometry. If all available horizon
+locations are clipped, the line is `outside-bounds`.
+
+These are sampled curves: straight links and interpolated seams need not lie
+exactly on the horizon, and clipping does not refine a longitude boundary.
+Coarse latitude steps can omit the shape between samples. Near tangencies,
+roundoff can collapse a numerically indistinguishable branch to its tangent;
+roundoff is clamped only within the analytic latitude range. Residuals report
+the engine-backed altitude at emitted vertices. They are not propagated
+physical error bounds or a completeness guarantee. Engine receipt replay,
+Cartesian horizon projections and branch selection are checked over the
+synthetic cases in `test/horizon-lines.vitest.ts`. Engine parity is regression
+evidence, not independent astronomical accuracy evidence.
+
+Source forms, time scales, pins and house requests follow `sampleAngles`.
+Polar fallback is computed by the engine at each admitted observer.
+Unknown time and typed engine refusals return empty lines and no partial
+positions or observer samples. Invalid options and over-budget plans throw
+before source capture. The function performs no file or network operations.
 
 Code and documentation here use the repository's MIT license. The engine is
 distributed under MIT AND CC-BY-4.0; retain its LICENSE, LICENSING.md and

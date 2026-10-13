@@ -11,7 +11,7 @@ line to `CHANGES.txt`. The harness handles git writes and draft PRs.
 - [x] M3 Add geographic bounds, longitude wrapping, antimeridian splitting and bounded grid sampling with explicit work budgets.
 - [x] M4 Define angular-line conventions and add engine-backed planetary equatorial and observer-angle sampling with receipts and undefined-angle handling.
 - [x] M5 Generate bounded MC and IC polylines with sampled metadata and engine receipt references.
-- [ ] M6 Generate ASC and DSC horizon polylines, including circumpolar gaps, tangencies and polar cases, without fabricating positions.
+- [x] M6 Generate ASC and DSC horizon polylines, including circumpolar gaps, tangencies and polar cases, without fabricating positions.
 - [ ] M7 Extract grid crossings with bounded refinement, structured brackets, residuals and unresolved-cell metadata.
 - [ ] M8 Sample great-circle paths and find angular crossings along them, with antipodal and antimeridian handling.
 - [ ] M9 Add optional local-space azimuth lines using engine observer angles and bounded spherical geometry.
@@ -106,7 +106,6 @@ Root `npm run package:contents` still fails because `dist/calc.d.ts` is absent;
 no root build was run under the rule forbidding writes to `dist/`. Engine CI
 gates requiring a root build remain deferred. No engine or packed files changed.
 
-
 M5 adds `planMeridianLines` and `meridianLines` for bounded MC and IC geometry.
 The planner reserves worst-case engine work before source capture, with a
 separate cap on observer metadata. Fresh engine equatorial directions and a
@@ -127,5 +126,28 @@ fallback and undefined endpoints, clocks, source ownership, planning limits,
 precision and refusals. Root package dry-run exclusion, archive SHA-256,
 file-size, documentation punctuation and diff-scope checks passed. Root
 `npm run package:contents` still fails because `dist/calc.d.ts` is absent;
+no root build was run under the rule forbidding writes to `dist/`. Engine CI
+gates requiring a root build remain deferred. No engine or packed files changed.
+
+M6 adds `planHorizonLines` and `horizonLines` for bounded ASC and DSC curves.
+Fresh engine equatorial directions and Greenwich ARMC define the unrefracted
+geocentric horizon. Analytic tangent endpoints are inserted between latitude
+rows and share stationary locations across branches. Circumpolar gaps and
+exact poles retain explicit metadata without invented observer receipts.
+Every admitted nonpolar vertex has a fresh engine houses receipt and altitude
+residual. Polylines break at clipped rows and excluded longitude arcs, and
+seam interpolation retains global observer references. Explicit half-world
+direction selection preserves the branch arc in coarse tangent-only geometry.
+Worst-case work is reserved before source capture. Typed engine refusals
+discard partial geometry. Documentation states sampling and clipping limits.
+
+Validation: relocation typecheck and the full Vitest suite passed on Node
+22.22.2. `test/horizon-lines.vitest.ts` checks receipt replay, Cartesian horizon
+projections, branch motion, tangent insertion, both polar hemispheres,
+circumpolar gaps, seam aliases and provenance, longitude clipping, clocks,
+pins, source ownership, budgets and refusals. `test/geography.vitest.ts` checks
+explicit half-world arc selection. Root package dry-run exclusion, archive
+SHA-256, file-size, documentation punctuation and diff-scope checks passed.
+Root `npm run package:contents` still fails because `dist/calc.d.ts` is absent;
 no root build was run under the rule forbidding writes to `dist/`. Engine CI
 gates requiring a root build remain deferred. No engine or packed files changed.

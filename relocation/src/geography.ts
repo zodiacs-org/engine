@@ -78,11 +78,15 @@ function geographicPoint(point: GeographicPoint): GeographicPoint {
 
 /**
  * Split a sampled polyline along shortest longitude links. An exactly half-world
- * link follows its submitted sign. Seam latitudes interpolate in lat/lon space,
+ * link follows its submitted sign unless halfTurnDirection selects its arc.
+ * Seam latitudes interpolate in lat/lon space,
  * not on a great circle, and have no engine receipt. Sample indices retain the
  * association with caller metadata. Exact seam samples may change seam spelling.
  */
-export function splitAntimeridian(points: readonly GeographicPoint[]): PolylineVertex[][] {
+export function splitAntimeridian(points: readonly GeographicPoint[], halfTurnDirection?: "east" | "west"): PolylineVertex[][] {
+  if (halfTurnDirection !== undefined && halfTurnDirection !== "east" && halfTurnDirection !== "west") {
+    throw new RangeError("Half-turn direction must be east or west.");
+  }
   if (!Array.isArray(points) || points.length > MAX_POLYLINE_POINTS) {
     throw new RangeError(`A polyline requires an array of at most ${MAX_POLYLINE_POINTS} points.`);
   }
@@ -102,6 +106,9 @@ export function splitAntimeridian(points: readonly GeographicPoint[]): PolylineV
     // nearly full-turn difference; the latter loses tiny seam distances.
     if (delta > 180) delta = -((previous.longitude + 180) + (180 - next.longitude));
     if (delta < -180) delta = (180 - previous.longitude) + (next.longitude + 180);
+    if (Math.abs(delta) === 180 && halfTurnDirection !== undefined) {
+      delta = halfTurnDirection === "east" ? 180 : -180;
+    }
     const longitude = Math.abs(next.longitude) === 180
       ? (delta > 0 ? 180 : delta < 0 ? -180 : last.point.longitude)
       : next.longitude;

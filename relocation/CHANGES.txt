@@ -3,3 +3,4 @@ M2: Accept engine charts and natal envelopes, preserve replay settings and polar
 M3: Add geographic bounds, longitude wrapping, antimeridian geometry with seam provenance and budgeted engine chart grids; pass Node 22 typecheck, Vitest and package exclusion checks.
 M4: Define planetary angular conventions and add bounded engine equatorial and observer sampling with receipts, replayed clocks, residuals and singularity metadata; pass clean Node 22 install, typecheck, Vitest and package exclusion checks.
 M5: Add bounded engine-backed MC and IC polylines with receipt references, residuals, longitude clipping and undefined polar metadata; pass Node 22 typecheck, Vitest and package exclusion checks.
+M6: Add bounded engine-backed ASC and DSC horizon polylines with tangent endpoints, circumpolar gaps, polar metadata and direction-aware seam provenance; pass Node 22 typecheck, Vitest and package exclusion checks.
