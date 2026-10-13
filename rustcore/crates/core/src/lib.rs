@@ -9,6 +9,7 @@ pub mod deltat;
 pub mod ephemeris;
 pub mod equator;
 pub mod frame;
+pub mod houses;
 pub mod lunar;
 pub mod moon;
 pub mod nutation;

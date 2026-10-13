@@ -2,6 +2,7 @@
 
 mod ephemeris;
 mod frame;
+mod houses;
 mod moon;
 mod planets;
 mod time;

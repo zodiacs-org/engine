@@ -1,5 +1,6 @@
 import * as wasm from "../pkg/zodiacs_rustcore.js";
-import type { BodyName, BodyPosition, DateInput, SignDefinition } from "../../src/types.js";
+import type { Angles, BodyName, BodyPosition, DateInput, HouseNumber, Houses, HouseSystem, SignDefinition } from "../../src/types.js";
+import type { AngleInput } from "../../src/houses.js";
 import type { CalendarName, CivilDate } from "../../src/civil-calendar.js";
 import { SIGNS } from "./sign-data.js";
 import type { DeltaT, DeltaTTable, DeltaTSegment } from "../../src/deltat.js";
@@ -14,6 +15,7 @@ export { ELEMENTS, MODALITIES, SIGNS, SIGN_SLUGS, SIGN_NAMES } from "./sign-data
 export type { BodyName, BodyPosition, DateInput, SignDefinition, CalendarName, CivilDate };
 export type { DeltaT, DeltaTTable, DeltaTSegment, TimeBasis, TimeScale, TimeScaleName, Ut1MinusUtc, LeapSeconds };
 export type { Tilt, EclipticFrame, Rows };
+export type { AngleInput, Angles, HouseNumber, Houses, HouseSystem };
 export { ARGUMENTS, MULTIPLIERS, OFFSETS, NUTATION_TERMS } from "./nutation-data.js";
 export {
   DELTA_T_MODEL, DELTA_T_TABLE, DELTA_T_IERS_MODEL, TIME_SCALE_NAMES,
@@ -220,6 +222,91 @@ export function meanObliquity(julianCenturies: number): number {
 export function gastHours(time: AstroTime): number {
   ready();
   return wasm.gastHours(time.ut, time.tt);
+}
+
+/** Local apparent sidereal angle in degrees, with the reference operation order. */
+export function ramcOf(input: Pick<AngleInput, "gastHours" | "longitude">): number {
+  ready();
+  return wasm.ramcOf(input.gastHours, input.longitude);
+}
+
+export function computeAngles(input: AngleInput): Angles {
+  ready();
+  const fields = wasm.computeAngles(input.gastHours, input.latitude, input.longitude, input.obliquity);
+  return { asc: fields[0]!, mc: fields[1]!, dsc: fields[2]!, ic: fields[3]! };
+}
+
+export function wholeSignCusps(ascendant: number): number[] {
+  ready();
+  finiteLongitude(ascendant);
+  return Array.from(wasm.wholeSignCusps(ascendant));
+}
+
+export function equalCusps(angles: Angles): number[] {
+  ready();
+  return Array.from(wasm.equalCusps(angles.asc));
+}
+
+export function equalMcCusps(angles: Angles): number[] {
+  ready();
+  return Array.from(wasm.equalMcCusps(angles.mc));
+}
+
+export function vehlowCusps(angles: Angles): number[] {
+  ready();
+  return Array.from(wasm.vehlowCusps(angles.asc));
+}
+
+export function porphyryCusps(angles: Angles): number[] {
+  ready();
+  return Array.from(wasm.porphyryCusps(angles.asc, angles.mc, angles.dsc, angles.ic));
+}
+
+export function meridianCusps(input: AngleInput): number[] {
+  ready();
+  return Array.from(wasm.meridianCusps(input.gastHours, input.longitude, input.obliquity));
+}
+
+export function morinusCusps(input: AngleInput): number[] {
+  ready();
+  return Array.from(wasm.morinusCusps(input.gastHours, input.longitude, input.obliquity));
+}
+
+/** M8 dispatch: the remaining systems explicitly refuse until their port is complete. */
+export function computeHouses(
+  system: HouseSystem, input: AngleInput, angles: Angles,
+): { houses: Houses; fellBack: boolean; fallbackSystem: HouseSystem | null } {
+  ready();
+  let cusps: number[];
+  switch (system) {
+    case "whole": cusps = wholeSignCusps(angles.asc); break;
+    case "equal": cusps = equalCusps(angles); break;
+    case "equal-mc": cusps = equalMcCusps(angles); break;
+    case "vehlow": cusps = vehlowCusps(angles); break;
+    case "porphyry": cusps = porphyryCusps(angles); break;
+    case "meridian": cusps = meridianCusps(input); break;
+    case "morinus": cusps = morinusCusps(input); break;
+    case "placidus": case "koch": case "regiomontanus":
+    case "campanus": case "topocentric": case "alcabitius":
+      throw new RangeError(`House system ${system} is not implemented in this Rust milestone.`);
+    default: throw new RangeError(`Unknown house system ${String(system satisfies never)}.`);
+  }
+  return { houses: { system, cusps }, fellBack: false, fallbackSystem: null };
+}
+
+export function houseOf(longitude: number, cusps: readonly number[]): HouseNumber {
+  ready();
+  if (cusps.length !== 12) throw new RangeError("House cusps must contain 12 longitudes.");
+  const fields = new Float64Array(12);
+  let present = 0;
+  for (let index = 0; index < 12; index++) {
+    const value = cusps[index];
+    if (value !== undefined) {
+      fields[index] = value;
+      present |= 1 << index;
+    }
+  }
+  return wasm.houseOf(longitude, fields, present) as HouseNumber;
 }
 
 let lastFrame: EclipticFrame | undefined;

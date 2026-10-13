@@ -5,3 +5,4 @@ M4: Port nutation, precession, frame rotations, obliquity and apparent sidereal 
 M5: Port pinned solar and planetary series through Neptune, analytic velocities, light time and aberration to Rust/WASM with checked coefficient generation, native and synthetic parity tests, explicit tolerances and preserved MIT provenance.
 M6: Port Moon series, finite-difference states, true lunar nodes and longitude speeds to Rust/WASM with checked coefficients, synthetic wrap/station parity, explicit rounding limits, native tests and retained provenance.
 M7: Port Pluto integration and complete planetary position rows to Rust/WASM with checked state data, longitude speeds, span and input guards, exact metadata arithmetic, synthetic parity tests and documented rounding limits.
+M8: Port chart angles, seven house cusp systems and house membership to Rust/WASM with matching TypeScript helpers, exact boundary tests, polar geometry checks and explicit parity limits.

@@ -56,8 +56,9 @@ The inherited C04 licensing question is not resolved by translating the data.
 
 The frame milestone directly translates the checked-out files below. Their
 hashes are enforced by [frame.parity.ts](tests/frame.parity.ts); a source
-refresh needs review before those pins change. Only `meanObliquity` from
-the houses file and `gastHours` from the ephemeris file are translated here.
+refresh needs review before those pins change. The frame milestone translated
+only `meanObliquity` from the houses file and `gastHours` from the ephemeris
+file; later translations are described below.
 
 | Local source | SHA-256 |
 | --- | --- |
@@ -182,3 +183,15 @@ Public DateInput validation mirrors `src/api.ts`'s `positions` using the
 existing date parser port. The wrapper imports reference types only; all
 numeric evaluation and complete row assembly run in Rust. The comparison
 tests import the local engine as the compatibility reference.
+
+## House geometry
+
+[houses.rs](crates/core/src/houses.rs) translates angles, whole sign, equal,
+equal-MC, Vehlow, Porphyry, Meridian and Morinus cusps and `houseOf` from
+the checked-out [src/houses.ts](../src/houses.ts), under the repository's
+[MIT License](../LICENSE). Its source digest is recorded in the frame table
+above and enforced again by [houses.parity.ts](tests/houses.parity.ts).
+The port retains scalar operation order, the eastern-horizon selection and
+the house-membership scan's short-circuit rules. It adds no coefficient table
+or externally sourced fixture. Tests compare the local TypeScript code on
+synthetic inputs only. No external ephemeris was consulted for this milestone.

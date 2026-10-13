@@ -16,7 +16,7 @@ The external harness owns commits, pushes and the draft pull request.
 - [x] M5 Port the pinned astronomy-engine solar and planetary series needed for geocentric vectors, light time and aberration to Rust. Preserve MIT attribution and coefficient provenance; no JavaScript callbacks in the Rust calculation path.
 - [x] M6 Port the Moon position and state series, true lunar nodes and their finite differences. Compare synthetic instants and node wrap/station cases against the pinned TypeScript implementation.
 - [x] M7 Port Pluto's required integration path and finish native planetary position assembly, longitude speeds, reference/span checks and sign metadata for every body returned by `positions`.
-- [ ] M8 Port angles, whole sign, equal, equal-MC, Vehlow, Porphyry, Meridian and Morinus cusps, plus `houseOf`, with northern, southern and polar synthetic cases.
+- [x] M8 Port angles, whole sign, equal, equal-MC, Vehlow, Porphyry, Meridian and Morinus cusps, plus `houseOf`, with northern, southern and polar synthetic cases.
 - [ ] M9 Port Placidus, Koch, Regiomontanus, Campanus, Topocentric and Alcabitius, preserving convergence rules, polar fallbacks and cusp ordering. Cover every supported house system.
 - [ ] M10 Port legacy and configured aspects, exact binary64 expansion arithmetic, policy validation, minor/custom aspect sets, orb boundaries, motion classification and deterministic result ordering.
 - [ ] M11 Complete WASM bindings and synchronous TypeScript function signatures for positions, time/coordinate helpers, houses and aspects after explicit initialization. Preserve result shapes and error behavior; add a browser loading smoke test and signature checks against relative engine imports.

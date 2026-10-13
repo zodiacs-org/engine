@@ -7,7 +7,8 @@ and `src/civil-calendar.ts`, plus `src/deltat.ts`, `src/time-scale.ts`,
 `src/houses.ts` and `gastHours` in `src/ephemeris.ts`, plus the installed,
 pinned astronomy-engine series, lunar state and light-time functions used
 by the engine, Pluto's integration and complete position assembly in
-`src/ephemeris.ts`, plus `positions` in `src/api.ts` and the span metadata.
+`src/ephemeris.ts`, plus `positions` in `src/api.ts` and the span metadata,
+and the angles, implemented cusp systems and `houseOf` in `src/houses.ts`.
 The parity tests import those sources directly
 and execute the release WASM built from `crates/wasm` and `crates/core`.
 Passing means compatibility on the tested inputs, not independent astronomical
@@ -66,12 +67,19 @@ for this port.
 | Cross-runtime sign and retrograde flags | Exact unless the reference lies within the stated longitude/speed allowance of its boundary; numeric limits always enforced and differences recorded | `tests/positions.parity.ts`, monthly/seeded dates and selected crossings/stations |
 | Complete-position date validation, reference/span metadata and span acceptance | Exact fields, accepted/refused outcomes and error class/message | `tests/positions.parity.ts`; span endpoint probes check acceptance only |
 | Invalid standalone body inputs | Matching error class/message and time-before-body validation order, without passing non-strings to WASM | `tests/body-boundary.parity.ts` |
+| RAMC and arithmetic-only cusps on identical supplied angles | Identical binary64 bits; tolerance 0 arcseconds | `tests/houses.parity.ts`, whole sign, equal, equal-MC, Vehlow and Porphyry |
+| Chart angles, Meridian and Morinus cusps on identical geometry inputs | Circular difference at most 1e-8 arcseconds on the conditioned shared-input corpus below | `tests/houses.parity.ts` |
+| Chart angles and non-whole-sign cusps with independently resolved time bases, sidereal time and tilt | Circular difference at most 1e-6 arcseconds on the conditioned date corpus below | `tests/houses.parity.ts`, dates from 1800 through 2200 |
+| Near-singular ascendant geometry and geographic poles | Each own-axis unit-vector horizon residual at most 2e-15 and east projection at least -2e-15, dimensionless; no cross-runtime ascendant longitude bound | `tests/houses.parity.ts`, separate degeneracy checks |
+| House membership on identical longitude and cusp inputs | Exact house number or matching error class/message, including missing slots and early returns | `tests/houses.parity.ts`, cusp boundaries and degenerate arrays |
+| Angles and cusp result shapes, implemented-system selection and fallback fields | Exact fields and key order, fresh mutable records and arrays; pending-system refusal below | `tests/houses.parity.ts` |
 | Native arithmetic, signs, date validation and calendars | Exact regression expectations and calendar round trips | Unit tests in `crates/core/src/{lib,angles,signs,date_input,calendar}.rs` |
 | Native time model and clock conversion | Table knot checks, segment/uncertainty boundaries, finite synthetic scan, leap seconds and pins | Unit tests in `crates/core/src/{deltat,time_scales}.rs` |
 | Native frame kernels | Series-prefix algebra, clock separation, right-handed rotations, matrix order, inverse rotations, vector scale and nonfinite behavior | Unit tests in `crates/core/src/{nutation,frame,equator}.rs` |
 | Native solar and planetary kernels | Series algebra and derivatives, vector/state consistency, correction geometry, clock reconstruction and bounded solver behavior | Unit tests in `crates/core/src/planets.rs` |
 | Native lunar kernels | Harmonic recurrence, spherical/vector rotation round trip, state-clock reconstruction, angular-momentum orientation, circular difference endpoints and time-basis seams | Unit tests in `crates/core/src/{moon,lunar}.rs` |
 | Native Pluto and complete positions | Gravity arithmetic, segment/interpolation knots, cache/thread repeatability, table-span guards, clock reconstruction, body order and metadata, outer speed-sample checks | Unit tests in `crates/core/src/{pluto,ephemeris,planets}.rs` |
+| Native angles and implemented house systems | Geometry, cusp arithmetic, dispatch, input evaluation and house-boundary rules | Unit tests in `crates/core/src/houses.rs` |
 | Loading | Explicit initialization, retry after invalid WASM syntax, reuse on repeated initialization | `tests/loader.parity.ts` |
 
 ## Corpus
@@ -207,6 +215,37 @@ houses. TS-selected sign changes and stations for the Sun, Mercury, Pluto and
 North Node receive nearby millisecond probes. Wider ephemeris endpoints test
 acceptance/error parity only. `tests/body-boundary.parity.ts` checks unknown
 body labels and runtime input types, including time-before-body refusal order.
+
+`tests/houses.parity.ts` compares angles and the implemented cusp systems on
+monthly synthetic instants in every year from 1800 through 2200 inclusive,
+the calendar span endpoints, J2000 and seeded instants. UTC, UT1 and TT rotate
+through the corpus, with signed and nonzero Delta T pins at deterministic
+intervals. Latitude and longitude ladders cover both hemispheres, polar
+regions and longitude wraps. The test defines the complete ladders, pins,
+seed and date formulas; they are not observations or birth records.
+
+A separate shared-input geometry grid crosses the latitude ladder with
+RAMC in 7.5-degree steps and obliquities of 0, 23.4, 23.43929111111111 and
+45 degrees. For the ordinary angular comparison, the norm of the ascendant's
+two `atan2` arguments must be at least 0.01, dimensionless, as computed from
+the input before comparing either output. With theta equal to RAMC, phi to
+latitude and eps to obliquity, the norm is
+`hypot(cos(theta), sin(theta)*cos(eps) + tan(phi)*sin(eps))`.
+Near-singular inputs use the separate own-horizon and east-projection checks; the midheaven and
+the latitude-independent cusps retain their angular comparisons. Exact and
+adjacent horizon-coincidence inputs and geographic poles have their own
+corpus. None of those cases extends the ordinary ascendant bound to a
+singularity.
+
+Shared arithmetic cusp tests include sign boundaries, adjacent doubles,
+binary64 extremes and deliberately inconsistent supplied axes. `houseOf`
+tests cover cusps and their adjacent representable values across wraps,
+unordered and repeated cusps, overflow, nonfinite values, sparse slots,
+invalid lengths and early-return behavior. End-to-end house decisions require
+exact agreement away from the angular allowance around their cusp boundaries;
+whole-sign cusp selection requires exact agreement away from the ascendant's
+sign boundary. Each port's own arithmetic and membership decisions are always
+compared exactly on identical inputs.
 
 ## Rounding and deviations
 
@@ -503,12 +542,62 @@ Run `RUSTCORE_PARITY_REPORT=1 npm run test:parity -- tests/pluto.parity.ts tests
 to report current-run maxima and recorded near-boundary metadata differences.
 Reports do not adjust acceptance limits, and no measured speedup is claimed.
 
+The house port preserves the source's arithmetic order and eastern-horizon
+branch, including the comparison of normalized ascendant minus midheaven
+with a half-turn. Whole sign, equal, equal-MC, Vehlow and Porphyry cusps
+contain only arithmetic on their supplied angles and require identical bits
+on identical inputs. Meridian, Morinus and the angles also use trigonometric
+functions, whose rounding can differ between V8 and Rust/WASM. Their numeric
+allowances are separate from the preceding time and frame allowances.
+
+An ascendant is ill-conditioned where the ecliptic nearly coincides with
+the horizon: both arguments of its `atan2` approach zero. A longitude
+allowance on ordinary geometry does not extend to this singularity. At a
+geographic pole there is no physical rising direction, even when the formula
+returns a finite number. The separate degeneracy tests exercise retained
+formula behavior without claiming a physically unique ascendant at an exact
+singularity or geographic pole. Finite inputs below the conditioning threshold
+still compute, but currently have no cross-runtime ascendant or derived-cusp
+longitude bound; the horizon/east checks do not establish numeric agreement.
+Establishing explicit numeric acceptance for a broader near-singular corpus
+remains work for M12. Small angle differences can also move the
+ascendant across a sign boundary and change whole-sign cusps, or move a
+longitude across a cusp and change its house. Exact house-membership parity
+applies to identical supplied cusps and longitude; it does not establish
+identical event times when the upstream angles differ.
+
+`houseOf` checks the array length before arithmetic and scans in input order.
+It skips edges whose start or end is undefined, computes the normalized span
+before the longitude's offset, and returns on the first matching interval.
+It retains the source's zero-width interval match, without adding sorting or
+global finite validation. An invalid value in an unvisited interval need not
+throw; a completely missing cusp array returns the source's final house even
+for a nonfinite longitude. Rust's optional-cusp helper and the WASM presence
+mask preserve these distinctions. The wrapper copies ordinary numeric arrays;
+getter/proxy access order and out-of-type objects are outside this low-level
+compatibility scope. Returned angle records and cusp arrays remain fresh,
+mutable JavaScript objects, with the source's key and element order.
+
+The M8 `computeHouses` signature accepts the reference's `HouseSystem` union,
+but its implementation currently covers only whole sign, equal, equal-MC,
+Vehlow, Porphyry, Meridian and Morinus. It explicitly throws `RangeError` for
+the other known systems until M9; it never silently substitutes a system.
+Unknown names retain the reference error message. The native enum lists only
+implemented systems. This temporary coverage difference is intentional and
+is enforced by the house tests. No polar fallback is implemented yet.
+
+Run `RUSTCORE_PARITY_REPORT=1 npm run test:parity -- tests/houses.parity.ts`
+to print current-run angular maxima and conditioning/boundary counters. The
+optional report never changes the tests' acceptance limits.
+
 ## Remaining coverage
 
-Remaining work includes house parity over synthetic dates from 1800 through
-2200, polar latitudes, every house system and legacy/configured/minor/custom
-aspect sets. Cusps, house membership and aspect matching are not implemented
-or compared yet. The civil Julian Day Number helpers do not apply
+Remaining house work includes Placidus, Koch, Regiomontanus, Campanus,
+Topocentric and Alcabitius, their polar fallbacks, and complete chart assembly.
+M12 also needs numeric parity limits for finite near-singular inputs beyond
+the currently conditioned angle and cusp corpus.
+Legacy/configured/minor/custom aspect matching remains unimplemented.
+The civil Julian Day Number helpers do not apply
 astronomical time scales. No performance baseline is claimed at this milestone.
 
 Initialization requires the matching generated WASM artifact. A valid module

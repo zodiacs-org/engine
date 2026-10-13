@@ -8,9 +8,11 @@ frame rotations, obliquity, apparent sidereal time, solar and planetary
 series and Pluto integration with light time and aberration, and the Moon and
 true lunar nodes with longitude finite differences. It assembles complete
 position rows with signs, degrees in signs, speeds and retrograde flags.
+It also computes chart angles, whole sign, equal, equal-MC, Vehlow, Porphyry,
+Meridian and Morinus cusps, and house membership from supplied cusps.
 The TypeScript wrapper retains the implemented engine helpers' signatures after
 explicit initialization and exposes intermediate planetary and lunar kernels.
-Houses and aspect matching remain in
+The other house systems and aspect matching remain in
 [PLAN.md](PLAN.md).
 
 ## Setup and checks
@@ -95,6 +97,27 @@ arcseconds. `meanObliquity(t)` exposes the obliquity polynomial.
 and `tt` day fields and returns Greenwich apparent sidereal hours. Only those
 fields are read; the wrapper does not construct a time or change its Delta T.
 
+`computeAngles(input)` takes `AngleInput`: apparent `gastHours`, geodetic
+`latitude` in degrees north, east-positive `longitude` in degrees, and true
+`obliquity` in degrees. It returns `{ asc, mc, dsc, ic }` in degrees and
+retains the engine's eastern-horizon selection at polar latitudes.
+`ramcOf(input)` exposes the local apparent sidereal angle.
+Use `gastHours` and `tilt(basis.ttDays).tobl` on the same time basis to supply
+the input; these low-level geometry functions do not resolve a Date themselves.
+
+`wholeSignCusps(ascendant)`, `equalCusps(angles)`, `equalMcCusps(angles)`,
+`vehlowCusps(angles)`, `porphyryCusps(angles)`, `meridianCusps(input)` and
+`morinusCusps(input)` return ordinary mutable cusp arrays. `computeHouses`
+has the reference signature and result shape, but currently accepts only
+`"whole"`, `"equal"`, `"equal-mc"`, `"vehlow"`, `"porphyry"`, `"meridian"`
+and `"morinus"`. Other known systems explicitly throw until their milestone
+is complete. These implemented systems return no fallback.
+`houseOf(longitude, cusps)` preserves the engine's inclusive cusp start,
+exclusive end, first-match order, zero-width interval and missing-slot behavior.
+Numeric acceptance, singular configurations and boundary decisions are
+specified and tested in [PARITY.md](PARITY.md) and
+[houses.parity.ts](tests/houses.parity.ts).
+
 `eclipticFrame(tt)`, `meanEcliptic(frame, x, y, z)` and
 `eclipticOfDate(x, y, z, tt)` transform J2000 mean-equatorial vectors to the
 ecliptic of date. `eclipticRows(tt, kind)` and `equatorRows(tt, kind)` return
@@ -172,7 +195,7 @@ The browser integration test belongs to the wrapper milestone in the plan.
 
 The workspace member `crates/core` exposes `normalize_longitude(f64)` and the
 `angles`, `signs`, `date_input`, `calendar`, `deltat`, `time_scales`,
-`nutation`, `frame`, `equator`, `planets`, `pluto`, `moon`, `lunar` and `ephemeris` modules. Fallible angular functions
+`nutation`, `frame`, `equator`, `houses`, `planets`, `pluto`, `moon`, `lunar` and `ephemeris` modules. Fallible angular functions
 return `Result<_, LongitudeError>`; the unchecked angular helpers propagate NaN
 as the reference does. Date parsers return `Result<f64, DateError>` with epoch
 milliseconds. Calendar string parsers and conversions return `Option`, and
@@ -225,6 +248,16 @@ the intermediate `planets::Planet` enum. Native input milliseconds and pins
 are caller-validated; the wrapper handles the public DateInput boundary.
 `check_ephemeris_span` checks TT and `outside_reference_span` checks coverage.
 
+`houses::AngleInput` and `houses::Angles` carry the geometry fields described
+above, using `gast_hours` for the Rust field name. The angle and cusp functions
+return `Result` with `LongitudeError` when their evaluated arithmetic reaches
+a nonfinite longitude. They do not eagerly reject unused fields.
+`houses::compute_houses` dispatches the implemented `HouseSystem` enum and
+returns a `ComputedHouses` record. `house_of` accepts a numeric slice;
+`house_of_optional` accepts optional cusp values for JavaScript's missing slots.
+Both return the house number or `HouseError`, preserving length checking and
+early-return evaluation order. All house geometry runs in safe Rust.
+
 `moon::calc_moon` returns mean-ecliptic spherical coordinates in radians
 and distance in AU; `moon::geo_moon` returns its J2000 Cartesian vector.
 Both take unchecked TT days. `moon::geo_moon_state` takes finite UT1, TT
@@ -266,6 +299,9 @@ astronomy-engine attribution in those
 same files. Future translations must retain their sources'
 notices and data terms. Nothing here enters the root npm package;
 `check:isolation` checks npm's actual file listing without running prepack.
+House geometry translates [src/houses.ts](../src/houses.ts) under the
+repository's MIT licence, with its source identity recorded in
+[PROVENANCE.md](PROVENANCE.md).
 
 The root `npm run package:contents` gate was also attempted during the initial
 and subsequent numeric milestones. It stops at the missing `dist/calc.d.ts`
