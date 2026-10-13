@@ -1,3 +1,4 @@
 M2: Scaffold isolated zodiacs-astro package with pinned official SDK dependencies, local carried engine, TypeScript build and passing Vitest integration/isolation checks on Node 22.22.2.
 M3: Add strict schemas for planned tools, JSON-safe structured results and validated native receipt serialization with passing contract, integration and isolation tests on Node 22.22.2.
 M4: Implement natal chart handler with concrete output schema, preserved native receipts and passing synthetic integration, replay, validation and isolation tests on Node 22.22.2.
+M5: Implement dated and current transits with an injectable clock, concrete output schema, natal and sky receipts, documentation and passing typecheck, Vitest integration/isolation tests and build on Node 22.23.3.

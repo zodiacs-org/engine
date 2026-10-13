@@ -65,3 +65,23 @@ protocol boundary. Registration and transports remain planned milestones.
 `test/natal.test.ts` checks wrapper integration and receipt replay using synthetic
 inputs. Comparisons with the native engine establish preservation, not independent
 astronomical accuracy.
+
+The transit handlers in `src/tools/transits.ts` accept `{ birth, at }` for
+`transitsAtTool` and `{ birth }` for `transitsNowTool`. The latter captures the
+current instant once and accepts an injected clock for deterministic tests.
+Both return `data.transit`, preserving the native natal chart, transit instant,
+positions and moving-to-natal aspects. Dates serialize as ISO text. Aspect
+`a` is the moving body and `b` is the natal body; longitudes and orbs use degrees.
+
+`data.sky` is a coordinate-free chart at the transit instant. Its native
+`transit-sky` receipt records the position conventions, time basis and reference
+coverage flags. The separate `natal` receipt retains the birth request. Natal
+time-scale and pinned delta-T options do not apply to the transit sky, which
+uses the engine's default UTC time basis. The sky receipt covers the sky
+positions; it does not encode or attest the inter-chart aspect calculation.
+The wrapper preserves the engine's aspects without adding interpretation.
+
+`test/transits.test.ts` checks preservation against native engine calls,
+receipt replay, independent coverage flags, captured clock behavior and failure
+paths using synthetic inputs. These are integration checks, not independent
+accuracy evidence. MCP registration remains a later milestone.
