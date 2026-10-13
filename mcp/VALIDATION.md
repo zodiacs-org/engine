@@ -39,3 +39,13 @@ identical charts, invalid inputs, engine range failures and concrete JSON Schema
 The parent pack isolation test passed. Comparisons establish wrapper integration,
 not independent accuracy or predictive validity. Parent build-dependent gates
 retain the scaffold limitation above.
+
+M7 session: `npm run check` passed on Node 22.23.3, including typecheck,
+Vitest and the isolated build. `test/returns.test.ts` covers solar and lunar
+native result preservation, receipt replay, solar selections, strictly subsequent
+lunar selection, location defaults and relocation, omitted coordinates, null
+location, house overrides, polar fallback, independent natal time settings,
+unknown time, coverage flags, concrete JSON Schema, invalid requests and engine
+range refusals. The parent pack isolation test passed. Comparisons establish
+wrapper integration, not independent accuracy or search completeness. Parent
+build-dependent gates retain the scaffold limitation above.

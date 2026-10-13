@@ -101,3 +101,28 @@ record the natal calculations; they do not encode or attest the pair summary.
 chart ordering, unknown time, absent coordinates, polar fallback, independent
 time settings, validation and output schemas with synthetic inputs. These are
 integration checks, not independent astronomical accuracy evidence.
+
+The return handlers in `src/tools/returns.ts` accept `{ birth, near }` for
+`solarReturnTool` and `{ birth, after }` for `lunarReturnTool`. Both return
+`data.return` with the native target longitude in degrees, selected instant,
+return chart, casting location and search coverage flags. Solar selection
+is `nearest` by default or `most-recent` at or before the anchor. Lunar selection
+is strictly after the anchor; the engine refuses unknown birth time and an
+anchor before birth. Solar returns accept the supplied reference instant even
+when birth time is unknown.
+
+The casting location defaults to the natal coordinates; `location: null`
+suppresses angles and houses, while explicit coordinates relocate the chart.
+The requested house system defaults to the natal setting and may be overridden.
+Native polar fallback and requested houses remain in the return chart receipt.
+The natal longitude retains its natal time settings; the search and return chart
+use the engine's default UTC time basis. Search coverage flags and chart coverage
+flags are separate native fields.
+
+The `natal` and `solar-return` or `lunar-return` receipts record the natal and
+return chart calculations independently. They do not encode or attest the
+crossing search, its selection or its completeness. `test/returns.test.ts`
+checks native output preservation, receipt replay, selection, location, unknown
+time, time settings, coverage, validation and engine refusals with synthetic
+inputs. These comparisons establish wrapper integration, not independent accuracy
+or predictive validity. MCP registration remains a later milestone.
