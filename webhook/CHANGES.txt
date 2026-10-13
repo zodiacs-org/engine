@@ -1,1 +1,2 @@
 webhook: complete M1 with an isolated TypeScript/Vitest project, strict subscription validation, boundary tests, package exclusion check and implementation plan
+webhook: complete M2 with SQLite migrations, transactional subscription and outbox storage, immutable payloads, attempts and dead letters, reopen and rollback tests, and storage documentation

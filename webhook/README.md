@@ -1,9 +1,9 @@
 # Outbound astrology webhooks
 
 This private workbench is being built according to [PLAN.md](PLAN.md). The
-implemented milestone is subscription syntax validation. It does not yet run
-a service, search the engine, resolve signing keys, store records or deliver
-requests. Later milestones add those paths and a subscription control API.
+implemented milestones cover subscription syntax validation and SQLite storage.
+It does not yet run a service, search the engine, resolve signing keys or
+deliver requests. Later milestones add those paths and a control API.
 The code and documentation here use the repository's [MIT license](../LICENSE).
 
 Use Node from the release line accepted by
@@ -119,3 +119,70 @@ Validation failures throw `SubscriptionValidationError`, whose `code` is
 echoing callback URLs, expressions or key references. The tests also check
 rejection without getter execution and that output freezing leaves the input
 mutable. These checks establish the local contract, not delivery guarantees.
+
+## Local SQLite storage
+
+`WebhookStore` in [src/storage.ts](src/storage.ts) opens a local database using
+Node's built-in [SQLite API](https://nodejs.org/download/release/v22.13.0/docs/api/sqlite.html).
+Pass an explicit file path in an ignored directory such as `webhook/var/`,
+creating its parent directory first. `:memory:` is available for ephemeral
+use. Call `close()` when finished. No runtime dependencies were added.
+Keep the database and its WAL sidecars private to the service account: callback
+URLs, expressions and payloads can be sensitive, and the database is not
+encrypted. The repository stores only key references; key custody comes later.
+
+Opening a database applies transactional migrations and validates the migration
+checksums, schema definitions and foreign keys. An unknown schema or changed
+ledger is refused. Connections enable foreign keys, WAL journaling for disk
+databases, full synchronous writes and a bounded busy timeout. Tests use local
+databases, including independent connections and close/reopen cycles; they do
+not establish durability on every filesystem or under hardware power loss.
+
+Subscription creation also creates its scan cursor at the schedule start.
+Updates require the expected revision, increment it and reset the cursor to
+the updated schedule's start. Deletion creates a tombstone and increments the
+revision; inspection retains the record, while subscription listings omit it.
+Disabled or deleted subscriptions cannot commit scans. Pending deliveries and
+historical records survive edits and deletion. Each queued delivery retains
+the callback URL and key reference captured when its event was inserted.
+Deletion therefore stops future discovery, but does not cancel queued work.
+
+`commitScan` accepts only the current subscription revision and cursor, with
+occurrences inside the submitted `[from, to)` interval. It inserts immutable
+event payloads and pending deliveries and advances the cursor in one transaction.
+The interval must stay inside the subscription schedule. Its caller must first
+establish that the search completed; storage cannot prove event completeness.
+The worker and engine receipt adapter are not implemented yet.
+
+An occurrence key is unique within its subscription across revisions. Event
+identifiers and idempotency keys are globally unique. Repeated occurrences
+retain the original record only when the event identifier, idempotency key,
+instant and exact serialized payload agree. A mismatch rolls back the entire
+scan. This prevents a rescan from silently replacing the bytes to be signed.
+Payloads are stored as supplied, with their SHA-256, and must be JSON objects;
+storage does not validate their engine receipts. Future discoveries are queued
+no earlier than the occurrence instant. Event identities will be computed by
+the later worker milestone.
+
+`recordAttempt` atomically appends a fixed, redacted outcome and changes a
+pending delivery to pending, delivered or dead-letter. Attempt numbers must be
+consecutive. Only a successful HTTP status can be recorded as delivered.
+Failed attempts carry a status code or a fixed failure kind; response bodies
+and arbitrary error strings are not retained. Dead letters reference a retained
+attempt and event. Retries, delivery leases and replay remain later milestones;
+the storage methods alone do not provide at-least-once delivery.
+
+Listings use bounded pages ordered by identifier (attempts by attempt number),
+with an exclusive continuation value. They are inspection methods, not an
+atomic worker claim or a snapshot across pages. Storage inputs are local typed
+calls; the subscription parser remains the public JSON validation boundary.
+Storage errors have fixed codes without SQL or caller data in their messages.
+Invalid subscription specifications retain `SubscriptionValidationError` and
+its fixed field name; storage-specific validation uses `StorageError`.
+
+[storage.test.ts](test/storage.test.ts) checks repository behavior against
+synthetic records: reopen persistence, cursor conflicts, payload identity,
+rollback, destination snapshots, attempt sequencing and dead-letter retention.
+[storage-db.test.ts](test/storage-db.test.ts) checks migrations, foreign keys
+and the SQL triggers that refuse event and attempt changes. These are storage
+regression tests, not astronomical accuracy evidence.

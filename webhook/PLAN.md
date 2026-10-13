@@ -7,7 +7,7 @@ draft pull requests. Each session completes the next unchecked milestone,
 runs its checks, ticks it here, appends a line to `CHANGES.txt`, and stops.
 
 - [x] M1 Bootstrap a private TypeScript/Vitest project and validate subscription contracts: HTTPS callback syntax, signing-key references, event filters and explicit UTC schedule windows, with rejection and boundary tests.
-- [ ] M2 Add SQLite migrations and repositories for subscriptions, scan cursors, immutable event payloads, delivery attempts and dead letters; test durability, transactions and uniqueness after reopening.
+- [x] M2 Add SQLite migrations and repositories for subscriptions, scan cursors, immutable event payloads, delivery attempts and dead letters; test durability, transactions and uniqueness after reopening.
 - [ ] M3 Implement runtime secret provisioning and custody, HMAC payload signatures and receiver verification; keep raw keys out of subscription responses and logs, and test tampering, timestamp checks and key rotation.
 - [ ] M4 Integrate the relative-source engine and pinned read-only event-search interfaces for aspect exacts, ingresses, stations and eclipses; preserve engine receipts, event definitions, clock conventions and complete/refused results.
 - [ ] M5 Add bounded worker scans over schedule windows with durable cursors, stable occurrence identities and transactional outbox insertion; test adjacent windows, restarts, duplicate scans and search refusals.
