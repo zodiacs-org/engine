@@ -1,14 +1,14 @@
 # Calendar workbench
 
 This private TypeScript project exports astrology event records as iCalendar
-text and searches for tropical sign ingresses and natal transit exacts through
-the existing events package, plus explicit progressed synastry schedules. It
-imports the parent engine sources without
+text and searches for tropical sign ingresses, natal transit exacts, stations
+and solar/lunar eclipses through the existing events package, plus explicit
+progressed synastry schedules. It imports the parent engine sources without
 building or changing the parent npm package. The implemented scope is M1
-through M6 in [PLAN.md](PLAN.md):
+through M7 in [PLAN.md](PLAN.md):
 UTC and timezone serialization, validation, stable event identities and ingress
 schedules, plus natal transit and synastry analysis for explicitly synthetic
-charts.
+charts, and receipt-bearing station and eclipse schedules.
 Other schedule searches, streaming, the CLI and the HTTP feed
 endpoint remain planned milestones.
 
@@ -72,8 +72,8 @@ exclusive interval end. Its receipt supplies:
 by relative import. It describes only calculations from this checkout; it must
 not relabel a result imported from another engine version. Serializer input
 is a calculation record supplied by the caller, not authenticated evidence.
-`searchIngressSchedule` and `searchNatalTransitSchedule` connect upstream
-search results to this model; no event search is implemented here.
+The schedule search adapters connect upstream search results to this model;
+no event search is implemented here.
 
 ## Ingress schedules
 
@@ -365,6 +365,133 @@ validation, budget exhaustion and cancellation. Integration tests compare
 real progression and search calls, retain both natal pins correctly, and
 round-trip UTC and TZID feeds with `ical.js`.
 
+## Station schedules
+
+`searchStationSchedule` searches a body's changes between direct and
+retrograde longitude motion. Its request has the same `namespace`, `body`,
+`startUtc`, `endUtc`, `clock: "utc"`, `stepMs`, `maxEvaluations` and optional
+`signal` fields as an ingress request. Optional `direction: "direct"` or
+`"retrograde"` selects the outgoing motion. Omit the field to retain both;
+explicit null or undefined is refused.
+
+The adapter calls the pinned DSL's `all` station search on each fixed UTC
+day, with a following day to establish outgoing motion at a sampled midnight
+zero. It assigns identities to the entire owned day before filtering by the
+request range or direction. The outgoing direction belongs to the event's
+identity; the request's direction filter does not. Computed longitude and
+speed residual are retained in receipts, outside the identity. The range
+owns `(startUtc, endUtc]`, as for ingress schedules.
+
+Stations are sign-changing zeros of the parent calculation API's
+finite-difference longitude speed in apparent geocentric tropical
+true-of-date coordinates. `receipt.source.event` keeps the station's
+longitude, outgoing direction, numerical bracket and signed
+`residualDegreesPerDay`. `source.calculation` keeps the full speed-enabled
+engine receipt, including time basis and speed convention;
+`source.result` keeps the calculated longitude in degrees and speed in
+degrees per day. The receipt's `aspect` and `orbDegrees` are null because a
+speed residual is not an angular orb.
+
+A zero-speed touch without a sign change is omitted. Consecutive zero-speed
+samples make the upstream search throw an unresolved-plateau error; the
+adapter does not treat that as an empty complete feed. Multiple reversals
+inside one cell can be missed. Completion assumes continuous speed with
+isolated sampled zeros and at most one sign-changing zero per cell. UTC
+time-basis discontinuities retain the upstream limitations.
+
+All padded searches and event receipt calculations share the evaluation
+budget, including events hidden by direction or range filtering. Any budget,
+cancellation or typed engine refusal discards all events. Unexpected
+calculation errors propagate. Tests in `test/stations.calendar-test.ts`
+compare delegation and receipts on their invented Mercury schedule in March
+2026 and round-trip UTC and TZID feeds. The analytic tests in
+`test/stations-boundary.calendar-test.ts` exercise midnight ownership,
+touches, plateaus, filtering, overlapping requests and work controls.
+
+## Solar and lunar eclipse schedules
+
+```ts
+import { searchEclipseSchedule, serializeCalendar } from "./src/index.ts";
+
+const result = searchEclipseSchedule({
+  namespace: "synthetic-eclipse.calendar.invalid", kind: "solar", clock: "utc",
+  startUtc: "2026-08-11T00:00:00.000Z", endUtc: "2026-08-14T00:00:00.000Z",
+  stepMs: 3_600_000, derivativeStepMs: 60_000, maxEvaluations: 100_000,
+  model: {
+    sunRadiusAu: 0.00465, moonRadiusAu: 0.0000116, earthRadiusAu: 0.0000426
+  }
+});
+if (result.status === "refused") throw new Error(result.reason);
+if (result.events.length > 0) {
+  const ics = serializeCalendar(result.events, {
+    dtstamp: "2026-01-01T00:00:00.000Z"
+  });
+}
+```
+
+The window, model and work settings above are explicit regression inputs from
+`test/fixtures/synthetic-stations-eclipses.ts`, exercised by
+`test/eclipses.calendar-test.ts`. They are not built-in physical radii or
+recommended accuracy settings. Select `kind: "lunar"` for lunar eclipses.
+The model requires positive finite spherical radii in astronomical units,
+with the Sun largest. It is validated and detached before any search work.
+
+The adapter calls the existing spherical shadow search. Its event instant
+is a minimum of squared shadow-axis distance as found by a finite-difference
+derivative: Earth's center from the Sun-Moon shadow axis for solar events,
+or the Moon's center from the axis opposite the geocentric Sun for lunar
+events. `derivativeStepMs` is the central-difference half-width, in integer
+milliseconds, positive and no greater than a UTC day. `stepMs` must divide
+a UTC day. The adapter pads each canonical day with both neighboring days,
+so the upstream derivative guards do not omit minima near the owned day's
+edges. Padding is fixed independently of the requested display range;
+events belong to `(startUtc, endUtc]` after whole-day identity assignment.
+Padding can reach outside engine coverage and cause refusal.
+
+`receipt.source.event` preserves the upstream definition, kind,
+classification, spherical model, numerical bracket, forward-shadow flag,
+axis distance, penumbral and umbral radii in au, and signed derivative
+residual in squared au per millisecond. `source.search` preserves the scan
+and derivative steps and padded window. `source.calculations.Sun` and
+`.Moon` each retain the complete parent `receipt` and the `cartesian`
+position in au at the event instant. These use the search's apparent
+geocentric true-of-date ecliptic frame; the Moon retains the parent's
+geometric lunar-series convention. The participating bodies include Earth,
+the geocentric origin and spherical target or shadow caster; no separate
+Earth position is calculated. `aspect` and `orbDegrees` are null.
+
+Solar classification is only `central` or `partial`. Lunar classification
+is `total`, `partial` or `penumbral`, evaluated at the returned minimum.
+There are no local visibility, path, contact-time, magnitude, or solar
+total/annular/hybrid results. The model omits oblateness and atmospheric
+shadow enlargement and excludes exact grazing equality. Near grazing
+boundaries its classification can differ from physical eclipse catalogs.
+The minimum and bracket describe this numerical model, not a physical timing
+error bound. A completed scan assumes continuous geometry and isolated
+slope zeros resolvable by the selected step; multiple minima inside a cell
+can be missed. Flat minima need not produce events. TT and UT1 request
+clocks are refused, and the original engine time basis remains in each UTC
+receipt. A UTC epoch label is never used to relabel a TT search result.
+
+UIDs include eclipse kind, radii, scan step, derivative step and boundary
+policy. Computed classification, geometry and residuals are outside the
+identity. Both vector calculations per sample and both final event receipt
+calculations share the budget across all days. Any budget, cancellation or
+engine refusal discards the collected output. Empty complete results remain
+distinct. Execution and cancellation are synchronous and cooperative, as
+for the other adapters.
+
+`test/eclipses.calendar-test.ts` compares solar and lunar delegation,
+geometry and full receipts on the invented August 2026 windows in the
+fixture module, with UTC/TZID parser round trips and stable overlapping
+requests. `test/eclipses-boundary.calendar-test.ts` supplies analytic vectors
+to the real upstream scanner to check minima near midnight, repeat passes,
+model validation, budget exhaustion and cancellation. The golden feed
+`test/fixtures/synthetic-stations-eclipses.ics` combines a station and both
+eclipse kinds; `test/stations-eclipses-golden.calendar-test.ts` enforces its
+bytes, line format and independently parsed receipts. These are regression
+and integration checks, not independent astronomical accuracy evidence.
+
 ## Stable event identities
 
 `createEventIdentity` validates, detaches and deeply freezes an
@@ -581,6 +708,9 @@ golden is generated by the parent engine and pinned events search for the
 invented chart and range in `test/natal-transits.calendar-test.ts`; it is a
 regression record, not independent accuracy evidence. The synastry golden uses the constructed progressed contact in
 `test/fixtures/synthetic-synastry.ts` under the same regression-only scope.
+The station/eclipse golden uses the invented windows and spherical model in
+`test/fixtures/synthetic-stations-eclipses.ts` and the parent calculations
+through the pinned event searches, also only as a regression record.
 Golden text fixes the wire format, while parser checks verify dates, text and receipt preservation.
 All future chart examples and fixtures must also be synthetic.
 
