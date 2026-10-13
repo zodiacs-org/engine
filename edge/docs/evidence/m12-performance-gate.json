@@ -1,0 +1,105 @@
+{
+  "schema": "edge-benchmark-gate/1",
+  "status": "regression",
+  "thresholdPercent": 10,
+  "statistic": "median of run medians",
+  "unit": "ms/workload-invocation",
+  "comparison": "strict increase beyond threshold; exact integer sample arithmetic",
+  "machine": {
+    "label": "local-linux-x64",
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.12.94+",
+    "cpuModels": [
+      "Intel(R) Xeon(R) Processor"
+    ],
+    "logicalCpuCount": 8,
+    "availableParallelism": 8,
+    "totalMemoryBytes": 16791158784,
+    "cgroupV2": {
+      "cpuMax": null,
+      "cpuset": "0-7",
+      "memoryMax": null
+    }
+  },
+  "runtime": {
+    "name": "node",
+    "node": "22.22.2",
+    "v8": "12.4.254.21-node.39",
+    "uv": "1.51.0",
+    "execArgv": [],
+    "nodeOptions": false
+  },
+  "runnerSourceDigest": "4b2cd3b0bbf7a3c4fccf1299e3054fbb43ef0037d102df8d31c6cf97262950c8",
+  "workloadSha256": "fa3f2f8d0bce3c02d4eff57d764eb7e61ea937e97cd1bf871e9f1e26f4e8253a",
+  "exactResultSha256": "d88ccb3e93309cdf3e3f761d46c3660a280f60c56966bdc45d4ba17671643370",
+  "baseline": {
+    "buildSourceDigest": "eda26979dab49e3ef1bfdb122ac338e3658befed5fcd82c32c772f7cd2322f22",
+    "workloadBundleSha256": "4ff4022924da3bde9b4d81d89cd7580c79679817ecc64b15fc9e52c37a02d6e9",
+    "runs": [
+      {
+        "startedAt": "2026-10-13T09:46:10.184Z",
+        "completedAt": "2026-10-13T09:46:12.951Z",
+        "rawSha256": "f9eb98d1919ea5320ae11e5eaa0ae0f160f11f5a108c7ba6baab33ec140606c5"
+      },
+      {
+        "startedAt": "2026-10-13T09:46:13.169Z",
+        "completedAt": "2026-10-13T09:46:15.166Z",
+        "rawSha256": "229f61dce0a52fdb502a73398ceea9edc0e33d754cdbd3896eb82faceda25da8"
+      },
+      {
+        "startedAt": "2026-10-13T09:46:15.391Z",
+        "completedAt": "2026-10-13T09:46:17.283Z",
+        "rawSha256": "702caf5c91214582f45c6a7acd7aca7a8eab3ce0b459d108d0e4931b574ba231"
+      }
+    ]
+  },
+  "candidate": {
+    "buildSourceDigest": "b3cb6301531b50d8dd9c8211b69ac5e7930a82985274a894766088afc03d15c2",
+    "workloadBundleSha256": "4ff4022924da3bde9b4d81d89cd7580c79679817ecc64b15fc9e52c37a02d6e9",
+    "runs": [
+      {
+        "startedAt": "2026-10-13T11:18:18.184Z",
+        "completedAt": "2026-10-13T11:18:21.873Z",
+        "rawSha256": "99af5a408e9bb4fe6184347706b3252c04797d631709d3f861139e67aa6c4fed"
+      },
+      {
+        "startedAt": "2026-10-13T11:18:22.363Z",
+        "completedAt": "2026-10-13T11:18:24.740Z",
+        "rawSha256": "0088084dde83684daf148310077ca164e55124e5fa00cdd55531b1af927321de"
+      },
+      {
+        "startedAt": "2026-10-13T11:18:25.116Z",
+        "completedAt": "2026-10-13T11:18:27.695Z",
+        "rawSha256": "da59c7607038061fbb349d8510db22c55e23380eee41504a63da7c0c2b7bceb8"
+      }
+    ]
+  },
+  "results": [
+    {
+      "id": "chart",
+      "baselineMedianMs": 2.3742640625,
+      "candidateMedianMs": 3.3613878125,
+      "changePercent": 41.57598834902131,
+      "status": "regression"
+    },
+    {
+      "id": "houses",
+      "baselineMedianMs": 0.0809991640625,
+      "candidateMedianMs": 0.06995948828125,
+      "changePercent": -13.6293700176111,
+      "status": "pass"
+    },
+    {
+      "id": "transit-scan",
+      "baselineMedianMs": 0.40549190625,
+      "candidateMedianMs": 0.415501125,
+      "changePercent": 2.4684139426025844,
+      "status": "pass"
+    }
+  ],
+  "inputSha256": {
+    "baseline": "dfad41598cd94681c5500f8a94631c46e7565100e91750574a81eea0f9165f5c",
+    "candidate": "d9cbae8d797556de7dfd5ce594a0987004d6c336fb19367908816819e0388539"
+  }
+}

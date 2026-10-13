@@ -1,0 +1,857 @@
+{
+  "schema": "edge-benchmark-baseline/1",
+  "protocol": {
+    "schema": "edge-benchmark-protocol/1",
+    "clock": "process.hrtime.bigint",
+    "unit": "ms/workload-invocation",
+    "warmupBatches": 5,
+    "samples": 15,
+    "iterations": {
+      "chart": 16,
+      "houses": 512,
+      "transit-scan": 32
+    },
+    "order": [
+      "chart",
+      "houses",
+      "transit-scan"
+    ],
+    "timed": "workload call plus checksum consumption",
+    "gc": "automatic; no forced collection"
+  },
+  "provenance": {
+    "machine": {
+      "label": "local-linux-x64",
+      "platform": "linux",
+      "arch": "x64",
+      "release": "6.12.94+",
+      "cpuModels": [
+        "Intel(R) Xeon(R) Processor"
+      ],
+      "logicalCpuCount": 8,
+      "availableParallelism": 8,
+      "totalMemoryBytes": 16791158784,
+      "cgroupV2": {
+        "cpuMax": null,
+        "cpuset": "0-7",
+        "memoryMax": null
+      }
+    },
+    "runtime": {
+      "name": "node",
+      "node": "22.22.2",
+      "v8": "12.4.254.21-node.39",
+      "uv": "1.51.0",
+      "execArgv": [],
+      "nodeOptions": false
+    },
+    "runner": {
+      "sourceDigest": "4b2cd3b0bbf7a3c4fccf1299e3054fbb43ef0037d102df8d31c6cf97262950c8",
+      "sources": [
+        {
+          "path": "scripts/benchmark-core.mjs",
+          "bytes": 4159,
+          "sha256": "8469097fafb79d55cab56365e5dbc7bde359a75dc199b12c38b5717eb4b41a74"
+        },
+        {
+          "path": "scripts/benchmark-workloads.mjs",
+          "bytes": 2533,
+          "sha256": "9fb81fc75daa7b2554986847fa7d733b995dd81c01c38640d72d49a857d88d26"
+        },
+        {
+          "path": "scripts/benchmark.mjs",
+          "bytes": 6217,
+          "sha256": "8da89dca4669abc53bab2553a2cb48959c52f12a1992e1803665cd743bdddc12"
+        }
+      ]
+    },
+    "build": {
+      "schema": "edge-build/1",
+      "target": "workers",
+      "engineVersion": "1.0.0",
+      "ephemeris": {
+        "name": "astronomy-engine",
+        "version": "2.1.19"
+      },
+      "toolchain": {
+        "node": "v22.22.2",
+        "esbuild": "0.27.7"
+      },
+      "config": {
+        "platform": "neutral",
+        "conditions": [
+          "workerd",
+          "worker",
+          "browser"
+        ],
+        "entryPoints": {
+          "engine": "src/engine.ts",
+          "workloads": "src/workloads.ts",
+          "worker": "src/worker.ts"
+        },
+        "bundle": true,
+        "packages": "bundle",
+        "format": "esm",
+        "target": "es2022",
+        "mainFields": [
+          "module",
+          "main"
+        ],
+        "outExtension": {
+          ".js": ".mjs"
+        },
+        "minify": false,
+        "treeShaking": true,
+        "splitting": false,
+        "sourcemap": false,
+        "charset": "utf8",
+        "legalComments": "inline",
+        "banner": {
+          "js": "/*! @zodiacs/engine: MIT AND CC-BY-4.0. Retain LICENSE, LICENSING.md, NOTICE and ASTRONOMY-LICENSE.txt beside this bundle. */"
+        },
+        "alias": {
+          "astronomy-engine": "node_modules/astronomy-engine/esm/astronomy.js"
+        },
+        "tsconfig": "tsconfig.json"
+      },
+      "sourceDigest": "eda26979dab49e3ef1bfdb122ac338e3658befed5fcd82c32c772f7cd2322f22",
+      "sources": [
+        {
+          "path": "../LICENSE",
+          "bytes": 1068,
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "../LICENSING.md",
+          "bytes": 26184,
+          "sha256": "0bb05bc7302dfcf9362cb294e9f738235cfa33892625a2376502c263485eb303"
+        },
+        {
+          "path": "../NOTICE",
+          "bytes": 10121,
+          "sha256": "15b724304a7bebadaed4f6e01631314dab7b5b92b3b84dc3a59864fb6e555cce"
+        },
+        {
+          "path": "../package.json",
+          "bytes": 3840,
+          "sha256": "3cb7206ba19ee61b271fff43686516b758b5fe3483c2061f1282bd95bacff7f2"
+        },
+        {
+          "path": "../scripts/root-isolation.mjs",
+          "bytes": 5639,
+          "sha256": "f4f337e197845ba1fa3b903d12940e6a2117af4f19311b778c14fa1be3162c50"
+        },
+        {
+          "path": "../src/api.ts",
+          "bytes": 10860,
+          "sha256": "3b597fc7c7e2b828470546862d4484b086a8090bb578eb0785880a9d692ef516"
+        },
+        {
+          "path": "../src/aspects.ts",
+          "bytes": 4920,
+          "sha256": "5cfbf1ffe3889f1c038b798d5bd74674de17bd9f0571adb4be08141cdd49f740"
+        },
+        {
+          "path": "../src/birth-input.ts",
+          "bytes": 3806,
+          "sha256": "9303df6556f84faf72e4c799f04d00692015dfade4f3c4e26d8d797f01f35928"
+        },
+        {
+          "path": "../src/body-label.ts",
+          "bytes": 1168,
+          "sha256": "bce12273949cd9810f4ab00c0f05c1aba14cf4ee46533ca3aba0588525006b1e"
+        },
+        {
+          "path": "../src/configured-aspects.ts",
+          "bytes": 16160,
+          "sha256": "c56349ba454e7cb3005f25eb3b740dd063cfeb3b9115e0d11512d8989ff19be4"
+        },
+        {
+          "path": "../src/crossings.ts",
+          "bytes": 17301,
+          "sha256": "4d33898d572d453de7c70d076b60018068854739f865080959cb800e4542d182"
+        },
+        {
+          "path": "../src/date-input.ts",
+          "bytes": 2014,
+          "sha256": "f9db8865bf143d6334eb93d9618f50aa6a81ba32273b0a103d2a83e3c8014675"
+        },
+        {
+          "path": "../src/declination.ts",
+          "bytes": 15894,
+          "sha256": "a7476e6e4c9af69c0eceaab499feacb8540c4975e5f65813c8cb4485b102ec61"
+        },
+        {
+          "path": "../src/deltat.ts",
+          "bytes": 10438,
+          "sha256": "2ce7e227bdf0e75bc2401793b8b09ed4113d80d8845376fbec7d0129c12f8b27"
+        },
+        {
+          "path": "../src/ephemeris.ts",
+          "bytes": 16367,
+          "sha256": "b530dbd0463b886fe1b8e99a095dc9cf9ef0cf614b6854e78ad206a27913cc7e"
+        },
+        {
+          "path": "../src/exact.ts",
+          "bytes": 4372,
+          "sha256": "f89a335657aa1139370511d315abcf8d6080ab857e0a37d249faf9de6a5eb25e"
+        },
+        {
+          "path": "../src/frame.ts",
+          "bytes": 4393,
+          "sha256": "98d0bee44839b23d3ec64dac470e31ab8e366c6907d325a4259f8f37285a7c50"
+        },
+        {
+          "path": "../src/houses.ts",
+          "bytes": 19663,
+          "sha256": "e97ea80f5f225fadf0bfcb051f0afcce820678f31ff1013cc0ebce3035cc8ceb"
+        },
+        {
+          "path": "../src/index.ts",
+          "bytes": 3747,
+          "sha256": "a7b8430da0e398e27743eb9ed7bfe8976e370e5fca002dc728308f5b98134644"
+        },
+        {
+          "path": "../src/nutation.ts",
+          "bytes": 8359,
+          "sha256": "c11af594d4e8ad64e0a7ff1097505063c70812d2da84e14a6c0280d4841e62b0"
+        },
+        {
+          "path": "../src/points.ts",
+          "bytes": 6583,
+          "sha256": "707e59ecdca3874e7c2830c2f7630628dd83b4ae13a97957ec3c623d5ebdf838"
+        },
+        {
+          "path": "../src/progressions.ts",
+          "bytes": 1986,
+          "sha256": "5d92c812e26d7a3fc3859260f20801a851b1b0ec01862ec47a953e956f36dcd0"
+        },
+        {
+          "path": "../src/reference-span.ts",
+          "bytes": 2068,
+          "sha256": "5bce5a05494448a5740027c078527ab4fb7b0c02f71ff83465c01fd085a4d996"
+        },
+        {
+          "path": "../src/returns.ts",
+          "bytes": 4306,
+          "sha256": "a6d4246f25e8f27ef25165d249a47fb88c1fd8214f5217aa0333a6debfada263"
+        },
+        {
+          "path": "../src/signs.ts",
+          "bytes": 3607,
+          "sha256": "c8d16ee8bb05a0eb0b41dd6d5912bd43f9c6a93d6dee857cb4530e1dc8a4a590"
+        },
+        {
+          "path": "../src/synastry.ts",
+          "bytes": 2469,
+          "sha256": "5671b43c9647a7164d171d9113ae4ab375b7f2a18cba53fac481e4c7a0522d29"
+        },
+        {
+          "path": "../src/time-scale-data.ts",
+          "bytes": 7338,
+          "sha256": "44c6b80db298e55a050b59cb75975ba2059abb775b16b849022ee5a5849280a0"
+        },
+        {
+          "path": "../src/time-scale.ts",
+          "bytes": 12443,
+          "sha256": "6358ab9f119f55e367b7a8cb601c0ed2a6fa0a1b083a8e48b2aa59cd96c7b9d6"
+        },
+        {
+          "path": "../src/types.ts",
+          "bytes": 8021,
+          "sha256": "36df3203e30792faff1ad5671e26ff5c03789c3dd6adee7d9ec357e2335b2353"
+        },
+        {
+          "path": "build.config.mjs",
+          "bytes": 1540,
+          "sha256": "e5b076e815c90a3458607bd5f75f4c32e22d68d3c0d4fdd0903e3282a6e0a3fc"
+        },
+        {
+          "path": "node_modules/astronomy-engine/esm/astronomy.js",
+          "bytes": 412025,
+          "sha256": "068f1445ed0c636c94818fe6d20d7d125120e605e0bab9fc4675c3d531be5ad7"
+        },
+        {
+          "path": "node_modules/astronomy-engine/package.json",
+          "bytes": 1078,
+          "sha256": "d035702763839ae11f41600cf4b8210005672658dcb19cea4a09591078af4931"
+        },
+        {
+          "path": "node_modules/esbuild/package.json",
+          "bytes": 1463,
+          "sha256": "9ce21c976ffbbb95001f460e9e8af7c6d719f748eb70441e617a14dd0b68a5b8"
+        },
+        {
+          "path": "package-lock.json",
+          "bytes": 44504,
+          "sha256": "e0026a1268cb94dc44329fada4b8cb2b67e5e6d0447e94ddb6d13771ad9f3900"
+        },
+        {
+          "path": "package.json",
+          "bytes": 913,
+          "sha256": "7d6feb93fe658bab5410284e63e68637c91b5575704218727c8318578f6beff8"
+        },
+        {
+          "path": "scripts/build-bundles.mjs",
+          "bytes": 7646,
+          "sha256": "4584bfd4b76e8a82667af2eaf7c7eb94877aacd43a51ce7003a869e8840ac2b6"
+        },
+        {
+          "path": "scripts/build-support.mjs",
+          "bytes": 2129,
+          "sha256": "be6212996da8658581d0eaeb664023580500ce4c92d8690c16f0c5abde2929c6"
+        },
+        {
+          "path": "src/engine.ts",
+          "bytes": 108,
+          "sha256": "977efe6d4cd6ef7b44517992f8d21e68bc2d385f5cbbe4b8e8a602000a3e185e"
+        },
+        {
+          "path": "src/exact.ts",
+          "bytes": 10332,
+          "sha256": "d3c8db867a5fc55051ca9d70177f90efe5408ef93ea7060b2d601b7a598cc974"
+        },
+        {
+          "path": "src/http.ts",
+          "bytes": 8157,
+          "sha256": "aa861c7f05ccba799685c9cea0ee1b30dfe3fd4451047e0909114fc3e2a0d84f"
+        },
+        {
+          "path": "src/worker.ts",
+          "bytes": 162,
+          "sha256": "e7313d383e7fbe8fdcffe47edf60f66787268f2804726ffdb83fea407be119f0"
+        },
+        {
+          "path": "src/workloads.ts",
+          "bytes": 2724,
+          "sha256": "cd6ad2a37b7eee43eede2a6b5183ececd810c8216c69fdd5e3e19c5fc6bcb5c8"
+        },
+        {
+          "path": "tsconfig.json",
+          "bytes": 479,
+          "sha256": "c0dc6bb4d2c4d15d63a7c4243835a445777b7f45ca2aaeace39cd30ac9c4037d"
+        }
+      ],
+      "outputs": [
+        {
+          "path": "ASTRONOMY-LICENSE.txt",
+          "bytes": 1291,
+          "sha256": "31e913dcab32e6e5d0aa1b5f32ab350a6ab91b273f7f38d4de83b54ee644de41"
+        },
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "LICENSING.md",
+          "bytes": 26184,
+          "sha256": "0bb05bc7302dfcf9362cb294e9f738235cfa33892625a2376502c263485eb303"
+        },
+        {
+          "path": "NOTICE",
+          "bytes": 10121,
+          "sha256": "15b724304a7bebadaed4f6e01631314dab7b5b92b3b84dc3a59864fb6e555cce"
+        },
+        {
+          "path": "engine.mjs",
+          "bytes": 174490,
+          "sha256": "bcfa260de3a71ec72beaec7a2528d27bab86480c2f9c3f513ec4d5b509ffe297"
+        },
+        {
+          "path": "metafile.json",
+          "bytes": 19518,
+          "sha256": "8bd7a3f68abcdc001f2a026444b47c765ae9544bc001509d8b7349129e170c29"
+        },
+        {
+          "path": "worker.mjs",
+          "bytes": 133582,
+          "sha256": "cffd7e22b7ff8d24056d1593d5ed30e94eb94b956f1fc85d83deafc3b8b33cad"
+        },
+        {
+          "path": "workloads.mjs",
+          "bytes": 143024,
+          "sha256": "4ff4022924da3bde9b4d81d89cd7580c79679817ecc64b15fc9e52c37a02d6e9"
+        }
+      ]
+    }
+  },
+  "workloadSet": {
+    "schema": "edge-benchmark-workloads/1",
+    "sha256": "fa3f2f8d0bce3c02d4eff57d764eb7e61ea937e97cd1bf871e9f1e26f4e8253a",
+    "definitions": [
+      {
+        "id": "chart",
+        "unit": "one chartWorkload call, including every CHART_CASES input",
+        "inputs": [
+          {
+            "id": "whole-utc",
+            "input": {
+              "utc": "2000-03-20T12:34:56Z",
+              "latitude": 35.25,
+              "longitude": -110.75,
+              "houseSystem": "whole"
+            }
+          },
+          {
+            "id": "southern-placidus",
+            "input": {
+              "utc": "1987-08-14T03:21:00Z",
+              "latitude": -33.5,
+              "longitude": 151.25,
+              "houseSystem": "placidus"
+            }
+          },
+          {
+            "id": "polar-koch",
+            "input": {
+              "utc": "2024-12-03T07:08:09Z",
+              "latitude": 78,
+              "longitude": 16,
+              "houseSystem": "koch"
+            }
+          },
+          {
+            "id": "untimed",
+            "input": {
+              "utc": "2001-02-03T08:30:00Z",
+              "timeKnown": false
+            }
+          }
+        ]
+      },
+      {
+        "id": "houses",
+        "unit": "one housesWorkload call, including every HOUSE_CASES and HOUSE_SYSTEMS pair",
+        "inputs": {
+          "cases": [
+            {
+              "id": "north",
+              "input": {
+                "gastHours": 8.25,
+                "latitude": 35.25,
+                "longitude": -110.75,
+                "obliquity": 23.44
+              }
+            },
+            {
+              "id": "south",
+              "input": {
+                "gastHours": 19.5,
+                "latitude": -33.5,
+                "longitude": 151.25,
+                "obliquity": 23.44
+              }
+            },
+            {
+              "id": "polar",
+              "input": {
+                "gastHours": 2.5,
+                "latitude": 78,
+                "longitude": 16,
+                "obliquity": 23.44
+              }
+            }
+          ],
+          "systems": [
+            "whole",
+            "placidus",
+            "porphyry",
+            "equal",
+            "equal-mc",
+            "vehlow",
+            "koch",
+            "regiomontanus",
+            "campanus",
+            "topocentric",
+            "alcabitius",
+            "morinus",
+            "meridian"
+          ]
+        }
+      },
+      {
+        "id": "transit-scan",
+        "unit": "one transitScanWorkload call over the complete TRANSIT_CASE interval",
+        "inputs": {
+          "body": "Sun",
+          "longitude": 0,
+          "from": "2000-03-01T00:00:00Z",
+          "to": "2000-04-01T00:00:00Z",
+          "options": {
+            "stepDays": 1,
+            "maxSamples": 1024
+          }
+        }
+      }
+    ]
+  },
+  "exactResultSha256": "d88ccb3e93309cdf3e3f761d46c3660a280f60c56966bdc45d4ba17671643370",
+  "runs": [
+    {
+      "startedAt": "2026-10-13T09:46:10.184Z",
+      "completedAt": "2026-10-13T09:46:12.951Z",
+      "rawSha256": "f9eb98d1919ea5320ae11e5eaa0ae0f160f11f5a108c7ba6baab33ec140606c5",
+      "results": [
+        {
+          "id": "chart",
+          "iterationsPerSample": 16,
+          "warmup": {
+            "batches": 5,
+            "iterations": 80,
+            "elapsedNs": 304730686,
+            "checksum": 725348.1111130026
+          },
+          "checksum": 145069.62222260053,
+          "samples": [
+            74834757,
+            64938036,
+            65151393,
+            65457858,
+            67424513,
+            63565426,
+            63532808,
+            63362737,
+            69112536,
+            62588014,
+            65978624,
+            66760639,
+            65437798,
+            63867805,
+            65069094
+          ],
+          "summary": {
+            "sampleCount": 15,
+            "minMs": 3.911750875,
+            "medianMs": 4.0719620625,
+            "p95Ms": 4.6771723125,
+            "maxMs": 4.6771723125,
+            "madMs": 0.09912293749999979
+          }
+        },
+        {
+          "id": "houses",
+          "iterationsPerSample": 512,
+          "warmup": {
+            "batches": 5,
+            "iterations": 2560,
+            "elapsedNs": 295127718,
+            "checksum": 238427462.0761998
+          },
+          "checksum": 47685492.41523996,
+          "samples": [
+            53699898,
+            52699965,
+            54416265,
+            56628902,
+            53918580,
+            51189229,
+            53943390,
+            54695739,
+            53817196,
+            52340865,
+            53271576,
+            54414007,
+            56083399,
+            52863356,
+            51452177
+          ],
+          "summary": {
+            "sampleCount": 15,
+            "minMs": 0.099978962890625,
+            "medianMs": 0.1051117109375,
+            "p95Ms": 0.11060332421875,
+            "maxMs": 0.11060332421875,
+            "madMs": 0.001715904296875001
+          }
+        },
+        {
+          "id": "transit-scan",
+          "iterationsPerSample": 32,
+          "warmup": {
+            "batches": 5,
+            "iterations": 160,
+            "elapsedNs": 129521290,
+            "checksum": 152566043181.92004
+          },
+          "checksum": 30513208636.384007,
+          "samples": [
+            23188685,
+            23396275,
+            21799907,
+            13977986,
+            13373962,
+            12330278,
+            11975631,
+            12472152,
+            11963306,
+            13061537,
+            12975741,
+            12550425,
+            12990400,
+            12822060,
+            12940850
+          ],
+          "summary": {
+            "sampleCount": 15,
+            "minMs": 0.3738533125,
+            "medianMs": 0.40549190625,
+            "p95Ms": 0.73113359375,
+            "maxMs": 0.73113359375,
+            "madMs": 0.015737156249999995
+          }
+        }
+      ]
+    },
+    {
+      "startedAt": "2026-10-13T09:46:13.169Z",
+      "completedAt": "2026-10-13T09:46:15.166Z",
+      "rawSha256": "229f61dce0a52fdb502a73398ceea9edc0e33d754cdbd3896eb82faceda25da8",
+      "results": [
+        {
+          "id": "chart",
+          "iterationsPerSample": 16,
+          "warmup": {
+            "batches": 5,
+            "iterations": 80,
+            "elapsedNs": 250223575,
+            "checksum": 725348.1111130026
+          },
+          "checksum": 145069.62222260053,
+          "samples": [
+            46146764,
+            40067644,
+            36619159,
+            37943325,
+            40558940,
+            37988225,
+            40716718,
+            36088310,
+            37742245,
+            38595126,
+            39259123,
+            38939097,
+            36925846,
+            36267309,
+            36646039
+          ],
+          "summary": {
+            "sampleCount": 15,
+            "minMs": 2.255519375,
+            "medianMs": 2.3742640625,
+            "p95Ms": 2.88417275,
+            "maxMs": 2.88417275,
+            "madMs": 0.08388662499999988
+          }
+        },
+        {
+          "id": "houses",
+          "iterationsPerSample": 512,
+          "warmup": {
+            "batches": 5,
+            "iterations": 2560,
+            "elapsedNs": 199454652,
+            "checksum": 238427462.0761998
+          },
+          "checksum": 47685492.41523996,
+          "samples": [
+            40155080,
+            46579014,
+            37011974,
+            44357735,
+            39748514,
+            41746089,
+            40069546,
+            39748536,
+            39982448,
+            41523963,
+            41471572,
+            47405448,
+            40283979,
+            43308256,
+            62365522
+          ],
+          "summary": {
+            "sampleCount": 15,
+            "minMs": 0.07228901171875,
+            "medianMs": 0.0809991640625,
+            "p95Ms": 0.12180766015625,
+            "maxMs": 0.12180766015625,
+            "madMs": 0.003365304687500001
+          }
+        },
+        {
+          "id": "transit-scan",
+          "iterationsPerSample": 32,
+          "warmup": {
+            "batches": 5,
+            "iterations": 160,
+            "elapsedNs": 82704314,
+            "checksum": 152566043181.92004
+          },
+          "checksum": 30513208636.384007,
+          "samples": [
+            13709631,
+            13277737,
+            15470793,
+            14947945,
+            14390158,
+            19815138,
+            14156012,
+            13773153,
+            19014939,
+            15509045,
+            12958455,
+            12723031,
+            12585860,
+            12521135,
+            14843167
+          ],
+          "summary": {
+            "sampleCount": 15,
+            "minMs": 0.39128546875,
+            "medianMs": 0.442375375,
+            "p95Ms": 0.6192230625,
+            "maxMs": 0.6192230625,
+            "madMs": 0.03742365624999999
+          }
+        }
+      ]
+    },
+    {
+      "startedAt": "2026-10-13T09:46:15.391Z",
+      "completedAt": "2026-10-13T09:46:17.283Z",
+      "rawSha256": "702caf5c91214582f45c6a7acd7aca7a8eab3ce0b459d108d0e4931b574ba231",
+      "results": [
+        {
+          "id": "chart",
+          "iterationsPerSample": 16,
+          "warmup": {
+            "batches": 5,
+            "iterations": 80,
+            "elapsedNs": 257000297,
+            "checksum": 725348.1111130026
+          },
+          "checksum": 145069.62222260053,
+          "samples": [
+            43728311,
+            40058645,
+            42365851,
+            37507072,
+            35068157,
+            36061600,
+            36872118,
+            37301045,
+            38800561,
+            38029723,
+            35320749,
+            38596946,
+            35598507,
+            36603606,
+            38524126
+          ],
+          "summary": {
+            "sampleCount": 15,
+            "minMs": 2.1917598125,
+            "medianMs": 2.344192,
+            "p95Ms": 2.7330194375,
+            "maxMs": 2.7330194375,
+            "madMs": 0.08084306250000006
+          }
+        },
+        {
+          "id": "houses",
+          "iterationsPerSample": 512,
+          "warmup": {
+            "batches": 5,
+            "iterations": 2560,
+            "elapsedNs": 225875973,
+            "checksum": 238427462.0761998
+          },
+          "checksum": 47685492.41523996,
+          "samples": [
+            41980463,
+            37736279,
+            43357950,
+            35254368,
+            34385940,
+            36391244,
+            48838741,
+            35593003,
+            33611284,
+            33818315,
+            34562490,
+            35765334,
+            37799556,
+            38218291,
+            33424375
+          ],
+          "summary": {
+            "sampleCount": 15,
+            "minMs": 0.065281982421875,
+            "medianMs": 0.06985416796875,
+            "p95Ms": 0.095388166015625,
+            "maxMs": 0.095388166015625,
+            "madMs": 0.0038495019531250008
+          }
+        },
+        {
+          "id": "transit-scan",
+          "iterationsPerSample": 32,
+          "warmup": {
+            "batches": 5,
+            "iterations": 160,
+            "elapsedNs": 67102355,
+            "checksum": 152566043181.92004
+          },
+          "checksum": 30513208636.384007,
+          "samples": [
+            12028579,
+            12297058,
+            12396687,
+            13394167,
+            13533844,
+            13904221,
+            13777859,
+            13485793,
+            13822790,
+            12944486,
+            12186163,
+            12361509,
+            13092044,
+            12137305,
+            12280688
+          ],
+          "summary": {
+            "sampleCount": 15,
+            "minMs": 0.37589309375,
+            "medianMs": 0.4045151875,
+            "p95Ms": 0.43450690625,
+            "maxMs": 0.43450690625,
+            "madMs": 0.02023212499999999
+          }
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": "chart",
+      "medianMs": 2.3742640625,
+      "minRunMedianMs": 2.344192,
+      "maxRunMedianMs": 4.0719620625
+    },
+    {
+      "id": "houses",
+      "medianMs": 0.0809991640625,
+      "minRunMedianMs": 0.06985416796875,
+      "maxRunMedianMs": 0.1051117109375
+    },
+    {
+      "id": "transit-scan",
+      "medianMs": 0.40549190625,
+      "minRunMedianMs": 0.4045151875,
+      "maxRunMedianMs": 0.442375375
+    }
+  ]
+}

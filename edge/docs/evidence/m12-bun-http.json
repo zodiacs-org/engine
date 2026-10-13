@@ -1,0 +1,52 @@
+{
+  "schema": "edge-http-runtime/1",
+  "passed": true,
+  "node": "v22.22.2",
+  "runtime": {
+    "name": "bun",
+    "version": "1.4.2",
+    "revision": "744846f844374847c902b5e7fd59b4342a51ef99"
+  },
+  "versionOutput": [
+    "1.4.2"
+  ],
+  "engineVersion": "1.0.0",
+  "sourceDigest": "14bc65f4afca53cc159bada2e0dc3ce4a6c688a2eb5ac1488ee457c838f02231",
+  "output": {
+    "path": "bun.mjs",
+    "bytes": 133684,
+    "sha256": "1f3d54e68573f74afa7988cce9b4f88decdcdaa84a0f435040e832789e4abb04"
+  },
+  "importWithoutListener": true,
+  "checkedCases": [
+    "whole",
+    "southern-placidus",
+    "unknown-time",
+    "polar-fallback",
+    "date-only",
+    "explicit-offset-ut1",
+    "tt",
+    "json-charset",
+    "chunked-valid",
+    "body-at-limit",
+    "unknown-route",
+    "wrong-method",
+    "head",
+    "query",
+    "media-type",
+    "encoding",
+    "malformed-json",
+    "malformed-utf8",
+    "missing-body",
+    "unknown-field",
+    "missing-coordinate",
+    "latitude-range",
+    "unsupported-house",
+    "invalid-date",
+    "outside-ephemeris",
+    "body-over-limit",
+    "chunked-over-limit",
+    "after-errors"
+  ],
+  "scope": "Native HTTP contract and JSON structure; no exact cross-runtime comparison."
+}

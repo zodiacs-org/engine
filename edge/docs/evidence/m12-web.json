@@ -1,0 +1,562 @@
+{
+  "schema": "edge-web-smoke/1",
+  "passed": false,
+  "requiredRuntimes": [
+    "node",
+    "workers",
+    "browser"
+  ],
+  "unselectedRuntimes": [],
+  "protocol": "edge-exact/1",
+  "engineVersion": "1.0.0",
+  "ephemeris": {
+    "name": "astronomy-engine",
+    "version": "2.1.19"
+  },
+  "toolchain": {
+    "node": "v22.22.2",
+    "esbuild": "0.27.7"
+  },
+  "runnerSources": [
+    {
+      "path": "scripts/smoke-web.mjs",
+      "bytes": 6739,
+      "sha256": "59a0b736f8def64444e5fac3e85dced1aacd08cfa52fe34bbf07afb9526afb8b"
+    },
+    {
+      "path": "scripts/smoke-runtimes.mjs",
+      "bytes": 8917,
+      "sha256": "851fee9fa1204dc560492a357d02b41c00b29fe61f8577a633f7ff1a79edd666"
+    },
+    {
+      "path": "scripts/runtime-process.mjs",
+      "bytes": 5080,
+      "sha256": "1a6d120f0034e3fb22831dc5807320e6cecd955938d9e56ebf27f710e9bdbb0b"
+    },
+    {
+      "path": "scripts/smoke-workers.mjs",
+      "bytes": 12141,
+      "sha256": "527c49fe2d3d6c58e76bf33090e0a0490a1ebc1674be20e1a333858458b02df7"
+    },
+    {
+      "path": "scripts/smoke-browser.mjs",
+      "bytes": 7426,
+      "sha256": "3dc7affc0bf4e0abdfdc869fa68d9caefdc8d3efc82a3f4c81096ed5e7359484"
+    },
+    {
+      "path": "scripts/browser-driver.mjs",
+      "bytes": 8745,
+      "sha256": "6227f86730f138f5872ee3aaff6e450810aec8d9c90cf4f57b87e14db47a4ba8"
+    },
+    {
+      "path": "scripts/build-reference.mjs",
+      "bytes": 2194,
+      "sha256": "6fe4710e9aeb10d37b8a4aa4811f503098503ebf2a78f50e370c63f92c353ee4"
+    },
+    {
+      "path": "src/exact.ts",
+      "bytes": 10332,
+      "sha256": "d3c8db867a5fc55051ca9d70177f90efe5408ef93ea7060b2d601b7a598cc974"
+    },
+    {
+      "path": "src/workloads.ts",
+      "bytes": 2724,
+      "sha256": "cd6ad2a37b7eee43eede2a6b5183ececd810c8216c69fdd5e3e19c5fc6bcb5c8"
+    }
+  ],
+  "reports": [
+    {
+      "name": "node",
+      "build": {
+        "target": "node-reference",
+        "output": {
+          "path": "workloads.mjs",
+          "bytes": 142897,
+          "sha256": "5b1b7312bf0001133af06c6b4d5d699cad30d2b57f7af64f8ff175885a490c9f"
+        }
+      },
+      "runtime": {
+        "name": "node",
+        "version": "22.22.2",
+        "v8": "12.4.254.21-node.39",
+        "platform": "linux",
+        "arch": "x64"
+      },
+      "result": {
+        "path": "exact-report",
+        "bytes": 62456,
+        "sha256": "d88ccb3e93309cdf3e3f761d46c3660a280f60c56966bdc45d4ba17671643370"
+      },
+      "stderr": "",
+      "stderrTruncated": false,
+      "repeatable": true,
+      "status": "passed",
+      "difference": null
+    },
+    {
+      "name": "workers",
+      "runtime": {
+        "name": "workers",
+        "version": "1.20251011.0",
+        "miniflare": "4.20251011.0",
+        "compatibilityDate": "2025-10-11",
+        "platform": "linux",
+        "arch": "x64"
+      },
+      "repeatable": true,
+      "imports": {
+        "engineExports": [
+          "ASPECTS",
+          "ASPECT_BODIES",
+          "ASPECT_POLICY_SCHEMA",
+          "ASPECT_TYPES",
+          "CONFIGURED_ASPECTS_SCHEMA",
+          "CONFIGURED_ASPECT_ANGLES",
+          "DECLINATION_ORB",
+          "DECLINATION_ORB_LUMINARY",
+          "DEFAULT_ASPECT_POLICY",
+          "DEFAULT_DECLINATION_ORB_POLICY",
+          "DELTA_T_IERS_MODEL",
+          "DELTA_T_MODEL",
+          "DELTA_T_TABLE",
+          "ELEMENTS",
+          "ENGINE_VERSION",
+          "EPHEMERIS",
+          "EPHEMERIS_SPAN",
+          "HOUSE_SYSTEMS",
+          "LOTS",
+          "MEAN_LUNAR_INCLINATION",
+          "MODALITIES",
+          "PLACIDUS_POLAR_FALLBACK",
+          "POLAR_FALLBACK",
+          "POLAR_UNDEFINED_HOUSE_SYSTEMS",
+          "PROGRESSION_DAYS_PER_YEAR",
+          "RA_POLE_TOLERANCE",
+          "REFERENCE_SPAN",
+          "SIGNS",
+          "SIGN_NAMES",
+          "SIGN_SLUGS",
+          "STATIONARY_RELATIVE_SPEED",
+          "SUN_BOUND_LATITUDE",
+          "alcabitiusCusps",
+          "antiscion",
+          "aspectMotion",
+          "campanusCusps",
+          "chartDeclinations",
+          "chartPoints",
+          "computeAngles",
+          "computeHouses",
+          "contraAntiscion",
+          "createAspectPolicy",
+          "declinationOf",
+          "declinationOrb",
+          "declinationsForBodies",
+          "degreeInSign",
+          "deltaT",
+          "deltaTAt",
+          "eastPointOf",
+          "eclipticToEquatorial",
+          "elementBalance",
+          "equalCusps",
+          "equalMcCusps",
+          "findAspects",
+          "findConfiguredAspects",
+          "findDeclinationAspects",
+          "findInterAspects",
+          "findLongitudeCrossings",
+          "findLongitudeCrossingsWith",
+          "groupIntoSeasons",
+          "hellenisticLots",
+          "houseOf",
+          "isPolarUndefinedHouseSystem",
+          "kochCusps",
+          "lunarMeanArguments",
+          "matchAspect",
+          "meanApogee",
+          "meanNodeLongitude",
+          "meanObliquity",
+          "meridianCusps",
+          "midpoint",
+          "modalityBalance",
+          "moonPhase",
+          "morinusCusps",
+          "natalChart",
+          "normalizeLongitude",
+          "outsideReferenceSpan",
+          "placidusCusps",
+          "porphyryCusps",
+          "positions",
+          "progressedBodies",
+          "progressedInstant",
+          "ramcOf",
+          "regiomontanusCusps",
+          "saturnReturn",
+          "searchLongitudeCrossings",
+          "searchLongitudeCrossingsWith",
+          "sectOf",
+          "separation",
+          "signForLongitude",
+          "signIndexForLongitude",
+          "summarizePair",
+          "synastry",
+          "topocentricCusps",
+          "transits",
+          "vehlowCusps",
+          "vertexOf",
+          "wholeSignCusps"
+        ],
+        "workloadExports": [
+          "CHART_CASES",
+          "HOUSE_CASES",
+          "HOUSE_SYSTEMS",
+          "TRANSIT_CASE",
+          "chartWorkload",
+          "housesWorkload",
+          "runExactSmokeCases",
+          "runSmokeCases",
+          "transitScanWorkload"
+        ],
+        "workerExports": [
+          "default"
+        ]
+      },
+      "network": {
+        "passed": true,
+        "guardInstalledBeforeImports": true,
+        "cfFetchDisabled": true,
+        "nativeDenyProbePassed": true,
+        "unexpectedRequests": 0,
+        "guardedRequests": 0
+      },
+      "handlers": {
+        "passed": true,
+        "exactToNode": true,
+        "cases": [
+          {
+            "id": "whole-utc",
+            "status": 200,
+            "exactToNode": true,
+            "body": {
+              "bytes": 3362,
+              "sha256": "6f4a6a852790967f2f0de0846f2a275f93619bb5ddf319fe837c5c0c57cbd487"
+            },
+            "difference": null
+          },
+          {
+            "id": "southern-placidus",
+            "status": 200,
+            "exactToNode": true,
+            "body": {
+              "bytes": 4611,
+              "sha256": "d07447f817d601342f89b9b8603cdff08a8648679e1dfffa8fb79fae55afba57"
+            },
+            "difference": null
+          },
+          {
+            "id": "polar-koch",
+            "status": 200,
+            "exactToNode": true,
+            "body": {
+              "bytes": 3789,
+              "sha256": "c8c21908ffb76b152d19615b3450bbf0d11af93fed20e932c7ddbb027be07a77"
+            },
+            "difference": null
+          },
+          {
+            "id": "untimed",
+            "status": 200,
+            "exactToNode": true,
+            "body": {
+              "bytes": 4053,
+              "sha256": "b7a06fd83c040f1bdabd74f6d992ed8202fe2e2420d52ceea7d1ba2313827a44"
+            },
+            "difference": null
+          },
+          {
+            "id": "wrong-route",
+            "status": 404,
+            "exactToNode": true,
+            "body": {
+              "bytes": 85,
+              "sha256": "166f08d596588f04e95a6b914953b65dfb3dea0fe59626df76f34d490c77d825"
+            },
+            "difference": null
+          },
+          {
+            "id": "wrong-method",
+            "status": 405,
+            "exactToNode": true,
+            "body": {
+              "bytes": 91,
+              "sha256": "4ecf55b8352ae0fc145b89e6653d93d8c79ad35ec9bab6a1f1076bfdd569e708"
+            },
+            "difference": null
+          },
+          {
+            "id": "head",
+            "status": 405,
+            "exactToNode": true,
+            "body": {
+              "bytes": 0,
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "difference": null
+          },
+          {
+            "id": "malformed-json",
+            "status": 400,
+            "exactToNode": true,
+            "body": {
+              "bytes": 82,
+              "sha256": "dd0e8629f26284012e94f524927cefb99a4de72eba1f4da6c0368c22ad496774"
+            },
+            "difference": null
+          },
+          {
+            "id": "invalid-input",
+            "status": 400,
+            "exactToNode": true,
+            "body": {
+              "bytes": 131,
+              "sha256": "8f4543c82fb3f19ce3bf83bb9fdf7ec0819e52b3906900c9ff20c9b45d3dee88"
+            },
+            "difference": null
+          },
+          {
+            "id": "invalid-date",
+            "status": 422,
+            "exactToNode": true,
+            "body": {
+              "bytes": 119,
+              "sha256": "eaa75cb8639c0c721a1cac5d1acc7cace7a6bcb8d682ab5712c6bd300bb4062a"
+            },
+            "difference": null
+          },
+          {
+            "id": "body-over-limit",
+            "status": 413,
+            "exactToNode": true,
+            "body": {
+              "bytes": 99,
+              "sha256": "283433cda1eb78fbdccc7f0c4da1d2718e60201a8693a412f6b066f217f7d57e"
+            },
+            "difference": null
+          }
+        ]
+      },
+      "stderr": "",
+      "stderrTruncated": false,
+      "build": {
+        "target": "workers",
+        "sourceDigest": "b3cb6301531b50d8dd9c8211b69ac5e7930a82985274a894766088afc03d15c2",
+        "outputs": [
+          {
+            "path": "engine.mjs",
+            "bytes": 174490,
+            "sha256": "bcfa260de3a71ec72beaec7a2528d27bab86480c2f9c3f513ec4d5b509ffe297"
+          },
+          {
+            "path": "worker.mjs",
+            "bytes": 133582,
+            "sha256": "cffd7e22b7ff8d24056d1593d5ed30e94eb94b956f1fc85d83deafc3b8b33cad"
+          },
+          {
+            "path": "workloads.mjs",
+            "bytes": 143024,
+            "sha256": "4ff4022924da3bde9b4d81d89cd7580c79679817ecc64b15fc9e52c37a02d6e9"
+          }
+        ]
+      },
+      "result": {
+        "path": "exact-report",
+        "bytes": 62456,
+        "sha256": "d88ccb3e93309cdf3e3f761d46c3660a280f60c56966bdc45d4ba17671643370"
+      },
+      "status": "passed",
+      "difference": null
+    },
+    {
+      "name": "browser",
+      "runtime": {
+        "name": "browser",
+        "browser": "chromium",
+        "version": "Chrome/154.0.8037.97",
+        "v8": "15.4.80.20",
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+        "platform": "Linux x86_64"
+      },
+      "repeatable": true,
+      "engineExports": [
+        "ASPECTS",
+        "ASPECT_BODIES",
+        "ASPECT_POLICY_SCHEMA",
+        "ASPECT_TYPES",
+        "CONFIGURED_ASPECTS_SCHEMA",
+        "CONFIGURED_ASPECT_ANGLES",
+        "DECLINATION_ORB",
+        "DECLINATION_ORB_LUMINARY",
+        "DEFAULT_ASPECT_POLICY",
+        "DEFAULT_DECLINATION_ORB_POLICY",
+        "DELTA_T_IERS_MODEL",
+        "DELTA_T_MODEL",
+        "DELTA_T_TABLE",
+        "ELEMENTS",
+        "ENGINE_VERSION",
+        "EPHEMERIS",
+        "EPHEMERIS_SPAN",
+        "HOUSE_SYSTEMS",
+        "LOTS",
+        "MEAN_LUNAR_INCLINATION",
+        "MODALITIES",
+        "PLACIDUS_POLAR_FALLBACK",
+        "POLAR_FALLBACK",
+        "POLAR_UNDEFINED_HOUSE_SYSTEMS",
+        "PROGRESSION_DAYS_PER_YEAR",
+        "RA_POLE_TOLERANCE",
+        "REFERENCE_SPAN",
+        "SIGNS",
+        "SIGN_NAMES",
+        "SIGN_SLUGS",
+        "STATIONARY_RELATIVE_SPEED",
+        "SUN_BOUND_LATITUDE",
+        "alcabitiusCusps",
+        "antiscion",
+        "aspectMotion",
+        "campanusCusps",
+        "chartDeclinations",
+        "chartPoints",
+        "computeAngles",
+        "computeHouses",
+        "contraAntiscion",
+        "createAspectPolicy",
+        "declinationOf",
+        "declinationOrb",
+        "declinationsForBodies",
+        "degreeInSign",
+        "deltaT",
+        "deltaTAt",
+        "eastPointOf",
+        "eclipticToEquatorial",
+        "elementBalance",
+        "equalCusps",
+        "equalMcCusps",
+        "findAspects",
+        "findConfiguredAspects",
+        "findDeclinationAspects",
+        "findInterAspects",
+        "findLongitudeCrossings",
+        "findLongitudeCrossingsWith",
+        "groupIntoSeasons",
+        "hellenisticLots",
+        "houseOf",
+        "isPolarUndefinedHouseSystem",
+        "kochCusps",
+        "lunarMeanArguments",
+        "matchAspect",
+        "meanApogee",
+        "meanNodeLongitude",
+        "meanObliquity",
+        "meridianCusps",
+        "midpoint",
+        "modalityBalance",
+        "moonPhase",
+        "morinusCusps",
+        "natalChart",
+        "normalizeLongitude",
+        "outsideReferenceSpan",
+        "placidusCusps",
+        "porphyryCusps",
+        "positions",
+        "progressedBodies",
+        "progressedInstant",
+        "ramcOf",
+        "regiomontanusCusps",
+        "saturnReturn",
+        "searchLongitudeCrossings",
+        "searchLongitudeCrossingsWith",
+        "sectOf",
+        "separation",
+        "signForLongitude",
+        "signIndexForLongitude",
+        "summarizePair",
+        "synastry",
+        "topocentricCusps",
+        "transits",
+        "vehlowCusps",
+        "vertexOf",
+        "wholeSignCusps"
+      ],
+      "engineChart": {
+        "matchesWorkload": true,
+        "case": "whole-utc"
+      },
+      "network": {
+        "passed": true,
+        "policy": "Allow each loopback bootstrap asset once; block page network APIs, service workers and all subsequent requests.",
+        "bootstrap": [
+          {
+            "method": "GET",
+            "path": "/"
+          },
+          {
+            "method": "GET",
+            "path": "/exact.mjs"
+          },
+          {
+            "method": "GET",
+            "path": "/engine.mjs"
+          },
+          {
+            "method": "GET",
+            "path": "/workloads.mjs"
+          }
+        ],
+        "importAttempts": 0,
+        "calculationAttempts": 0,
+        "negativeControl": {
+          "fetchDenied": true,
+          "resourceDenied": true,
+          "reachedServer": false
+        },
+        "scope": "Observed page imports and synchronous calculations; browser background services are outside this request monitor."
+      },
+      "toolchain": {
+        "playwright": "1.56.1"
+      },
+      "protocolBuild": {
+        "path": "exact.mjs",
+        "bytes": 9246,
+        "sha256": "f35885b466149de28d164b0143d2b9bcd2689686a3b67fc535fb278516991295"
+      },
+      "build": {
+        "target": "browser",
+        "sourceDigest": "6b17b6e089ddb0a6e50b3b8a93e822bc858ddf21a0b16351586ef69ac5f748b8",
+        "outputs": [
+          {
+            "path": "engine.mjs",
+            "bytes": 174490,
+            "sha256": "bcfa260de3a71ec72beaec7a2528d27bab86480c2f9c3f513ec4d5b509ffe297"
+          },
+          {
+            "path": "workloads.mjs",
+            "bytes": 143024,
+            "sha256": "4ff4022924da3bde9b4d81d89cd7580c79679817ecc64b15fc9e52c37a02d6e9"
+          }
+        ]
+      },
+      "result": {
+        "path": "exact-report",
+        "bytes": 62456,
+        "sha256": "dbacd6dcd143edce5463a84b92f1557fb2181d1b07ddb8c1b8b8da27a953674a"
+      },
+      "status": "mismatch",
+      "difference": {
+        "path": "$[\"charts\"][0][\"result\"][\"bodies\"][1][\"speed\"]",
+        "reason": "value",
+        "expected": "binary64:402afaac235bd1c0",
+        "actual": "binary64:402afaac235bf100"
+      }
+    }
+  ],
+  "scope": "Local workerd and Chromium imports, network checks and full synthetic results compared exactly to Node; runtime compatibility only."
+}
