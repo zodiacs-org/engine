@@ -6,8 +6,11 @@
   "license": "MIT",
   "description": "Isolated relocation and astrocartography workbench using the carried engine archive.",
   "engines": { "node": ">=22.7.0" },
+  "bin": { "relocation": "bin/relocation.mjs" },
   "scripts": {
-    "test": "vitest run",
+    "build": "tsc -p tsconfig.cli.json --pretty false",
+    "cli": "node bin/relocation.mjs",
+    "test": "npm run build && vitest run",
     "typecheck": "tsc -p tsconfig.json --pretty false"
   },
   "dependencies": {

@@ -15,7 +15,7 @@ line to `CHANGES.txt`. The harness handles git writes and draft PRs.
 - [x] M7 Extract grid crossings with bounded refinement, structured brackets, residuals and unresolved-cell metadata.
 - [x] M8 Sample great-circle paths and find angular crossings along them, with antipodal and antimeridian handling.
 - [x] M9 Add optional local-space azimuth lines using engine observer angles and bounded spherical geometry.
-- [ ] M10 Implement the offline `relocation chart`, `relocation lines` and `relocation grid` CLI with validated JSON input and structured output.
+- [x] M10 Implement the offline `relocation chart`, `relocation lines` and `relocation grid` CLI with validated JSON input and structured output.
 - [ ] M11 Commit small generated golden polyline regression fixtures, their generator and synthetic integration tests; keep large generated outputs ignored.
 - [ ] M12 Finish API and CLI documentation, receipt and numerical-limit explanations, end-to-end checks and package-isolation verification.
 
@@ -230,3 +230,30 @@ punctuation and diff-scope checks passed. Root `npm run package:contents`
 still fails because `dist/calc.d.ts` is absent; no root build was run under
 the rule forbidding writes to `dist/`. Engine CI gates requiring that build
 remain deferred. No engine or packed files changed.
+
+M10 adds the offline `relocation chart`, `relocation lines` and `relocation
+grid` launcher, an isolated CLI build, bounded UTF-8 JSON request parsing and
+explicit command modes. Angular requests combine meridian and horizon families
+under one conservative evaluation budget, capture a raw source once and discard
+earlier geometry on a family refusal. Path and local-space line modes and chart
+and crossing grid modes preserve full library geometry, brackets, unresolved
+metadata and engine receipts. Source births and engine envelopes are validated;
+unknown fields, duplicate keys, malformed UTF-8 and oversized or deeply nested
+requests reject. JSON stdout, error stderr, refusal exit codes, IO failures and
+unrepresentable budget counts have explicit behavior. Synthetic request files
+and CLI documentation show local-file and stdin use. The public library entry
+does not import CLI filesystem or process helpers.
+
+Validation: clean offline relocation `npm ci --ignore-scripts`, typecheck, CLI
+build and the full Vitest suite passed on Node 22.22.2.
+`test/cli-request.vitest.ts` checks dispatch parity, clock and pin preservation,
+aggregate preflight, source capture, family refusals, exact-pole metadata and
+JSON validation limits. `test/cli.vitest.ts` launches all command modes in real
+processes, tests the committed synthetic examples, engine-envelope replay,
+polar fallback, seam requests, budget exhaustion, stream limits, diagnostics
+and exit codes. Root package dry-run exclusion, archive SHA-256, file-size,
+documentation punctuation and diff-scope checks passed. Root
+`npm run package:contents` still fails because `dist/calc.d.ts` is absent;
+no root build was run under the rule forbidding writes to `dist/`.
+Engine CI gates requiring that build remain deferred. No engine or packed
+files changed.
