@@ -8,7 +8,7 @@ run its tests, tick it here and append a session summary to `CHANGES.txt`.
 - [x] M2 Select traditional cusp rulers for querent and quesited, Moon as co-significator and optional natural significators; explain shared rulers and preserve each role.
 - [x] M3 Define a sourced, toggleable rule policy and structured explanation records; implement early/late Ascendant, Saturn in the first/seventh and Moon Via Combusta considerations with boundary tests.
 - [x] M4 Add the traditional void-of-course consideration using the engine's existing scanner, with explicit sign-boundary semantics and scan limitations.
-- [ ] M5 Report essential dignities and directional/mutual receptions using the engine tables and APIs; add configurable sourced essential scores and hand-derived fixtures.
+- [x] M5 Report essential dignities and directional/mutual receptions using the engine tables and APIs; add configurable sourced essential scores and hand-derived fixtures.
 - [ ] M6 Add configurable accidental dignity scoring using engine houses, sect and speed helpers; expose each contribution and avoid counting the same condition twice.
 - [ ] M7 Classify significator aspects using the engine's aspects and exact arithmetic; search relative longitude with engine crossings for time-to-perfection, bounded horizons and explicit search status.
 - [ ] M8 Identify direct aspect perfection and sign changes or stations before perfection; reuse engine position/speed helpers and retain the ordered event evidence.

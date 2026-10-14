@@ -7,7 +7,8 @@ engine retains the data licenses and attribution described in
 [`../LICENSING.md`](../LICENSING.md) and [`../NOTICE`](../NOTICE).
 
 The library provides `cast`, `normalizeHoraryInput`, `selectSignificators`,
-`createRulePolicy` and `evaluateConsiderations`.
+`createRulePolicy`, `evaluateConsiderations`, `createEssentialPolicy` and
+`evaluateEssentialCondition`.
 Further analysis rules and the CLI are scheduled in [`PLAN.md`](PLAN.md).
 
 From the checkout, using Node as specified in this folder's `package.json`:
@@ -161,6 +162,59 @@ Tests distinguish independently worked calendar/angle fixtures from engine
 delegation checks. Neither the foundation nor its integration tests establish
 new astronomical accuracy or predictive validity. Traditional rule tests will
 name their source tradition and derivation as they are added.
+
+`evaluateEssentialCondition(result, policy)` reads an existing cast, selects
+the significators and reports essential condition once per physical planet,
+with every role retained. It delegates the dignities, debilities and peregrine
+flag to engine `essentialDignities`, using engine `sectOf` on the Ascendant
+and Sun longitudes. The result records those inputs and its sect convention.
+Sign annotations, latitude, speed and retrograde flags do not determine these
+essential conditions. This is a pure analysis of supplied geometry without
+ephemeris recalculation or chart authentication.
+
+```ts
+import { createEssentialPolicy, evaluateEssentialCondition } from "./src/index.js";
+
+const essentialPolicy = createEssentialPolicy({
+  weights: { peregrine: false },
+  receptionDignities: ["domicile", "exaltation"]
+});
+const condition = evaluateEssentialCondition(result, essentialPolicy);
+```
+
+The default weights are Lilly's own-position essential weights applied to the
+engine's tables. These use Egyptian terms, Dorothean sect triplicities and
+Chaldean faces, rather than reproducing every table in Lilly. Each condition
+includes the complete scoring-rule list with condition presence, configured
+weight, contribution, status, source and explanation. Set a weight to `false`
+to disable that scoring rule; a zero weight remains enabled. Signed finite
+custom weights carry `caller-override` provenance; totals that overflow are
+refused. Changing weights never changes the engine's dignity or peregrine
+facts. The score adds own-position contributions and permits peregrine and
+debility penalties together; it adds no reception bonus. Historical sources
+and this scoring choice are detailed in [`SOURCES.md`](SOURCES.md), with each
+default weight and fixture total enforced in `tests/essential.test.ts`.
+
+Directional reception explicitly names `host` and `guest`: the host holds
+a selected essential dignity at the guest's longitude. Every ordered pair
+of distinct selected planets is recorded, including absent reception.
+The default selects all essential dignities; choose a subset to disable
+the others, or an empty list to disable reception entirely. Mutual pairs
+come from engine `mutualReceptions` and retain the dignity labels in each
+direction, including mixed receptions. Neither hosting nor mutual reception
+requires an aspect in this analysis or establishes perfection or an outcome.
+Reception does not change a planet's own-position essential score or remove
+its peregrine flag. Shared significator roles never create self-reception.
+
+Essential policies and results are deeply frozen, JSON-friendly snapshots.
+Complete JSON-restored policies are revalidated. Required planet rows must
+be unique with canonical finite longitudes; the Sun is always required for
+sect even when it holds no significator role. Unselected rows are ignored.
+The existing significator-selection checks validate question settings and
+actual cusps. Edited sign labels do not override longitude. Boundary,
+ownership and malformed-input tests appear in `tests/essential.test.ts`;
+`tests/essential.integration.test.ts` checks engine delegation across house
+systems and fallback, without claiming independent ephemeris accuracy.
 
 `check:scope` checks commit-candidate file sizes, documentation punctuation,
 the pinned ephemeris dependency and folder exclusion using npm's dry-run file

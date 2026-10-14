@@ -254,3 +254,124 @@ invented question instant and checks forwarding and serialization without
 pinning engine numerical output. An invented cast near the lower ephemeris
 edge verifies that a valid chart instant can still fail when the scan requires
 earlier samples; failure must never be turned into a non-void observation.
+
+## Essential dignity and reception fixtures
+
+`essential.test.ts` uses the existing invented question instant and location
+as labels for schematic charts, without claiming that any modified positions
+are an ephemeris. All classical planets are declared as natural significators
+to exercise their condition; the normal house and Moon roles remain present.
+The first and second cusps remain Aries and Taurus. Longitude determines the
+sign even when the old schematic sign annotation remains unchanged.
+
+The independently read sources and table variants are listed in
+`../SOURCES.md`. The fixtures below use Ptolemy's domicile, exaltation and
+Egyptian term definitions, al-Biruni's sect triplicity and face definitions,
+and Lilly's own-position essential weights. Expected arrays and totals are
+literal hand derivations; they are not generated from engine tables or calls.
+At the default Ascendant 15, Sun 200 gives the normalized difference 185,
+in the day half-circle; Sun 100 gives difference 85, in the night half-circle.
+The modified planet in the condition matrix never overrides the Sun.
+
+| Planet and absolute longitude | Sect | Own dignities | Own debilities | Peregrine | Hand sum |
+| --- | --- | --- | --- | --- | --- |
+| Mercury 150 (Virgo 0) | day | domicile, exaltation, term | none | no | `5 + 4 + 2 = 11` |
+| Mercury 60 (Gemini 0) | night | domicile, triplicity, term | none | no | `5 + 3 + 2 = 10` |
+| Saturn 10 (Aries 10) | day | none | fall | yes | `-4 - 5 = -9` |
+| Saturn 25 (Aries 25) | day | term | fall | no | `2 - 4 = -2` |
+| Mars 35 (Taurus 5) | day | none | detriment | yes | `-5 - 5 = -10` |
+| Venus 150 (Virgo 0) | day | triplicity | fall | no | `3 - 4 = -1` |
+| Mercury 330 (Pisces 0) | day | none | detriment, fall | yes | `-5 - 4 - 5 = -14` |
+| Moon 40 (Taurus 10) | night | exaltation, triplicity, face | none | no | `4 + 3 + 1 = 8` |
+| Jupiter 10 (Aries 10) | night | triplicity | none | no | `3` |
+| Moon 215 (Scorpio 5) | night | none | fall | yes | `-4 - 5 = -9` |
+
+Virgo is Mercury's domicile and exaltation, with his Egyptian term
+`[0, 7)`; its first face is the Sun's and earth by day belongs to Venus.
+Gemini is Mercury's domicile, its first term `[0, 6)` his, and air by night
+belongs to him; its first face is Jupiter's. Aries is Saturn's fall and he
+does not hold its sect triplicity (Sun by day, Jupiter by night). Egyptian
+Aries term lengths `6, 6, 8, 5, 5` cumulate to ends `6, 12, 20, 25, 30`,
+so Saturn gains his own term at 25 and loses the peregrine penalty. Aries
+10 is Venus's term and the Sun's face, while Aries 25 is Venus's face.
+Taurus opposes Mars's domicile Scorpio: Mars 5 is in Venus's term and
+Mercury's face, with earth by day Venus. Virgo is Venus's fall, but its day
+triplicity gives her essential dignity. Pisces opposes Mercury's Virgo
+domicile/exaltation, and its first term is Venus's, first face Saturn's,
+and water by day Venus. The Moon in Taurus has exaltation; earth by night
+is hers and the second Taurus face `[10, 20)` is hers. Jupiter in Aries
+by night has fire triplicity only. The Moon's participating water lordship
+does not count in Scorpio; night belongs to Mars. Scorpio 5 is Mars's term
+and face, leaving the Moon peregrine and in fall.
+
+Term boundary tests place Venus just before 6, at 6, just before 12 and at
+12 in Aries. Her term `[6, 12)` includes its start and excludes its end.
+Face tests place Mars at 0, just below 10, at 10 and at 30: only `[0, 10)`
+is his Aries face; Taurus starts at 30 with Mercury's face. The binary
+offset `2^-40` supplies the adjacent lower value without a tolerance.
+
+Sect boundary tests hold Ascendant 15 and put the Sun at 15 (difference
+zero, night), just before 195 (difference just below 180, night), at 195
+(difference 180, day), just below 360 (difference just below 345, day),
+and at 0 (difference normalized from -15 to 345, day). Reception examples
+with Sun 40 and Ascendant 200 give difference normalized to 200 (day);
+Ascendant 15 gives difference 25 (night). Sun 300 and Ascendant 110 give
+difference 190 (day).
+
+The custom-weight Mercury fixture keeps his Virgo dignity list, changes
+domicile to 2.5, sets exaltation to enabled zero, and disables term, giving
+`2.5 + 0 + 0 = 2.5`. A negative caller domicile weight gives
+`-2.5 + 4 + 2 = 3.5`. Disabling only Saturn's peregrine penalty at Aries
+10 leaves his fall score `-4`. The overflow test makes both Mercury's
+domicile and exaltation weights the largest finite double; their sum is
+not finite and must be refused. These tests enforce configurable arithmetic,
+without attributing custom values to Lilly.
+
+Directional reception evaluates the host's dignity at the guest's position:
+
+- Mars 40 in Taurus and Venus 10 in Aries exchange domicile hosts. Mars
+  receives Venus in Aries; Venus receives Mars in Taurus. Domicile-only
+  selection produces a mutual pair. Mars's own detriment/peregrine sum is
+  `-10`; Venus is in her own Egyptian Aries term, giving `2 - 5 = -3`.
+  Reception changes neither score. Venus precedes Mars in the engine's
+  canonical physical-planet pair order.
+- Moving Mars to Leo 10 (130) keeps Venus hosted by Mars in Aries, but Mars
+  is hosted by the Sun in Leo, so Venus cannot receive him by domicile.
+  There is no mutual Venus/Mars pair.
+- Sun 300 in Aquarius and Saturn 10 in Aries have a mixed reception. At
+  Aries 10 the Sun holds exaltation, day fire triplicity and the second
+  face. At Aquarius 0 Saturn holds domicile and day air triplicity, but
+  neither term (Mercury) nor face (Venus). The pair retains those exact
+  dignity lists. Domicile-only selection removes the Sun's hosting side
+  and therefore the mutual pair.
+- Sun 40 in Taurus and Venus 10 in Aries exchange triplicity hosts by
+  day: earth belongs to Venus and fire to the Sun. By night those places
+  belong to the Moon and Jupiter; Sun/Venus mutual triplicity disappears.
+  Saturn's participating fire lordship never receives Venus under the
+  chart-sect-only convention.
+- Venus 23 in Aries and Mars 75 (Gemini 15) exchange Egyptian term hosts.
+  Aries `[20, 25)` belongs to Mars; Gemini `[12, 17)` to Venus, from term
+  lengths `6, 6, 5, 7, 6`. Moving Venus to 25 reaches Saturn's term and
+  removes the Mars-host direction. The interior placements also fit the
+  ordinal degrees in Lilly's printed reception-by-term example; they remain
+  invented geometry, without copying a historical question chart.
+
+Empty reception selection records disabled directional entries and no mutual
+pairs. Selecting only the Moon by putting the first cusp in Cancer, declaring
+the first house as quesited and the Moon as natural preserves all its roles
+in one condition record, without scoring it repeatedly or creating a pair
+with itself. The required Sun row remains only sect evidence in that case.
+
+Malformed-policy fixtures exercise unknown fields, invalid weight types,
+non-finite weights, unknown reception dignities and sparse lists; policy
+snapshots must contain every configured field. Geometric rejection fixtures
+remove or duplicate required Sun, Mars and Moon rows, or use noncanonical
+longitudes and missing angles. Unselected Mercury rows and unused speed/sign
+annotations do not change required input semantics. Ownership tests recursively
+check frozen output, JSON serialization and independence from later chart edits.
+
+`essential.integration.test.ts` uses the real engine at the invented question
+instant to verify delegation to `essentialDignities`, `mutualReceptions` and
+`sectOf`. The house-system and polar-fallback checks verify adapter metadata
+and use of the Ascendant rather than the first cusp. These are integration
+checks, not independent astronomical accuracy evidence.
