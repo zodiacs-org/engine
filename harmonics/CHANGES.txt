@@ -5,3 +5,4 @@ Implement M4: harmonic major-aspect patterns and containment through the engine 
 Implement M5: pure harmonic strength spectra through the engine matcher, configurable selections and weights, documented linear orb scoring with pair contributions, deterministic rankings and hand-derived Vitest checks.
 Implement M6: pure Uranian dial projections and circular distances, preserved zodiac longitudes and sectors, configurable seam contacts, deterministic ordering, documented arithmetic and synthetic Vitest checks.
 Implement M7: canonical planetary pictures and A+B-C sensitive points with configurable dial contacts, explicit doubled-member rules, frozen structured results, documented arithmetic and synthetic Vitest checks.
+Implement M8: midpoint trees through the engine midpoint helper with both endpoints, canonical antipodal ties, inclusive dial contacts, deterministic deduplication, preserved receipts and hand-derived Vitest checks.

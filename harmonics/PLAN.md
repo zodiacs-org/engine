@@ -12,7 +12,7 @@ unchecked milestone, runs its checks, marks it complete and appends a line to
 - [x] M5 Implement harmonic strength spectra with a documented deterministic scoring formula, configurable harmonic selection and weights, pair contributions and hand-derived ranking tests.
 - [x] M6 Implement Uranian dial projections for the requested 90, 45 and 22.5 degree circles, preserving full source longitudes and testing circular distances and seam contacts.
 - [x] M7 Implement canonical planetary pictures and A+B-C sensitive points with configurable contact orbs, explicit repeated-member rules and arithmetic tests.
-- [ ] M8 Implement midpoint-tree listings by calling `src/points.ts` midpoint helpers, covering both axes, antipodal ties, dial contacts, ordering and deduplication.
+- [x] M8 Implement midpoint-tree listings by calling `src/points.ts` midpoint helpers, covering both axes, antipodal ties, dial contacts, ordering and deduplication.
 - [ ] M9 Add the offline `harmonics chart` CLI with strict JSON input validation, synthetic fixture examples, structured JSON output and receipts for chart calls.
 - [ ] M10 Add `harmonics spectrum` and `harmonics dial` CLI commands, shared option parsing, configurable analysis settings and command integration tests.
 - [ ] M11 Document the library and CLI contracts, units, scoring choices, midpoint conventions, receipt scope and limitations; cite tests for numerical examples and keep all fixtures synthetic and small.
@@ -200,3 +200,33 @@ using Node 22.22.2 and a writable npm cache under `harmonics/.cache/`.
 The root `npm run package:contents` still fails at missing `dist/calc.d.ts`.
 No engine build, archive creation or git mutation was performed. The next
 session starts at M8.
+
+## M8 validation
+
+Added the pure `midpointTrees` API through the default entry. Each canonical
+distinct-label pair calls the engine's `src/points.ts` midpoint helper on
+normalized full zodiac sources. Both near and opposite endpoints retain their
+source longitudes and dial projections. Label order fixes antipodal ties.
+Center trees exclude self-member pairs, group matching endpoints into one
+row per formula, and preserve distinct formulas at coincident coordinates.
+Inclusive contacts check both rounded endpoints independently and sort by
+orb then pair labels. Results are frozen snapshots with structured labels.
+
+On Node 22.22.2, `npm run check` passed. Hand-derived synthetic expectations
+in `test/midpoint-trees.test.ts` cover all supported dials, source-before-fold
+geometry, both endpoints, exact and nearby antipodal ties, endpoint roundoff,
+seam and inclusive boundaries, canonical ordering and deduplication, empty
+trees, rejected inputs and receipt preservation. Helper-spy checks establish
+delegation; `test/pure-entry.test.ts` verifies that midpoint analysis through
+the default entry imports no chart API or ephemeris. `README.md` documents
+units, conventions, numerical examples and receipt scope with test references.
+These checks establish arithmetic and integration, not ephemeris accuracy
+or predictive validity.
+
+`git diff --check` passed. All changed and new files remain inside
+`harmonics/`, below the requested file size limit, with no em dash in
+documentation. The root `npm pack --dry-run --json --ignore-scripts` manifest
+excludes this project, using Node 22 and a writable npm cache inside
+`harmonics/.cache/`. The root `npm run package:contents` still fails at missing
+`dist/calc.d.ts`. No engine build, archive creation or git mutation was
+performed. The next session starts at M9.

@@ -2,8 +2,8 @@
 
 This private source project adds harmonic longitude transforms, configured
 harmonic aspects, strength spectra, supported aspect patterns, Uranian dial
-projections, planetary pictures and natal casting adapters to the engine
-checkout. See [PLAN.md](PLAN.md) for the remaining midpoint and CLI milestones.
+projections, planetary pictures, midpoint trees and natal casting adapters to
+the engine checkout. See [PLAN.md](PLAN.md) for the remaining CLI milestones.
 Code and documentation here are MIT under
 the repository's [LICENSE](../LICENSE). The engine's data attributions remain
 in [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE).
@@ -376,7 +376,7 @@ or subtraction can affect contacts near a boundary; projected equality does
 not prove an exact relation between the original input doubles. These
 contacts report dial proximity only, with no aspect type or motion claim.
 The library makes no astronomical or predictive validity claim for them.
-Planetary pictures are described below; midpoint trees are a later milestone.
+Planetary pictures and midpoint trees are described below.
 
 In the synthetic example, A projects to 89.75 degrees and B to 0.25.
 Their straight gap is 89.5, so the circular distance is `90 - 89.5 = 0.5`
@@ -446,8 +446,8 @@ C with D, or the two sides, without delimiter-joined expression ids that
 could collide with point names. Each picture is tested once: the sensitive
 point `left[0]+left[1]-right[0]` must be within `contactOrb` of the original
 target row `right[1]`, using `dialDistance`. It is a sum relation on this
-dial, not a test comparing midpoint coordinates. Midpoint trees will use
-the engine's midpoint helpers separately.
+dial, not a test comparing midpoint coordinates. The midpoint trees below
+use the engine's midpoint helper separately.
 
 `repeatedMembers` defaults to `"distinct"`: all four picture labels differ,
 and sensitive-point a, b and c differ. Setting it to `"doubled"` permits
@@ -505,6 +505,99 @@ natal envelope is unchanged. That envelope describes the source natal chart
 only; sensitive points and planetary pictures are outside its scope.
 [test/pure-entry.test.ts](test/pure-entry.test.ts) checks that this operation
 through the default entry loads no chart API or ephemeris.
+
+## Midpoint trees
+
+```ts
+import { midpointTrees } from "./src/index.js";
+
+const result = midpointTrees([
+  { body: "A", lon: 350 }, { body: "B", lon: 30 }, { body: "C", lon: 10 }
+], 90, { contactOrb: 0 });
+console.log(result.midpoints, result.trees);
+```
+
+`midpointTrees(sourcePoints, circle, options)` accepts the same supplied
+longitude rows, supported circles and inclusive `contactOrb` as `projectDial`.
+The default circle is 90 degrees and the default allowance is 1 longitude
+degree, without scaling. Invalid inputs or unsupported options throw
+`RangeError`. Unknown speeds are accepted. The function casts no chart and
+imports no ephemeris through the pure entry.
+
+Every unordered pair of distinct labels is evaluated once in UTF-16 lexical
+label order. The function calls `midpoint` from the engine's `src/points.ts`
+with the full normalized zodiac longitudes, before dial projection. The
+engine chooses the point halfway along the shorter arc. Each pair records
+`members`, `antipodal` and `axes`. The endpoint named `near` is the helper's
+result; `opposite` is its longitude plus 180 degrees, normalized by the
+engine's `src/signs.ts`. Each endpoint retains `kind`, full `sourceLon`,
+dial `lon` and source `sector`, with the same units as ordinary dial rows.
+Pair labels remain structured tuples, so names containing punctuation cannot
+collide through joined expression identifiers.
+
+When the engine's normalized forward arc equals 180 degrees, `antipodal` is
+true. The helper resolves that tie 90 degrees past its first argument. The
+canonical label order fixes that argument independently of input order.
+Both endpoints remain available: at an opposition neither is uniquely nearer.
+The tie flag describes the engine's binary64 arc calculation, without an
+epsilon or a claim about exact original input separation.
+
+The result's `dial` preserves the source projections and ordinary pair
+contacts. Its `midpoints` lists every pair, including pairs without a
+contacting center, sorted by member tuple. Its `trees` lists every source
+point as a `center`, sorted by label, including empty trees. Each tree's
+`contacts` contains midpoint pairs within the allowance of that center on
+the chosen dial. The two midpoint members and center must have distinct
+labels; self pairs and pairs containing the center are excluded. Distinct
+labels at coincident longitudes remain distinct formulas. Doubled members
+are not an option for these trees.
+
+Each tree contact refers to its frozen `midpoint` listing row, has an
+`axes` array of eligible endpoints as `{ axis, orb }`, and reports the
+smallest matched endpoint distance as `orb`. Endpoints retain near then
+opposite order. Contacts sort by increasing orb and then by member tuple.
+Centers refer to the original frozen dial rows, which retain input order
+within `dial.points`. All derived arrays and objects are frozen snapshots.
+No speed, latitude, aspect type or motion classification is assigned.
+
+Mathematically, the two endpoints fold to the same coordinate on every
+supported dial because each circle divides their separation. They share one
+tree contact row, with both eligible endpoints listed rather than duplicate
+rows. Ordinary binary64 normalization can make their projected coordinates
+differ at roundoff scale. Each endpoint is therefore tested separately with
+`dialDistance`, and only eligible endpoints appear in that contact. The
+arithmetic id is `binary64;inclusive;no-epsilon`, matching the dial API.
+A zero orb is equality under this arithmetic, not a statement about exact
+input doubles. The explicit endpoint-rounding case in
+[test/midpoint-trees.test.ts](test/midpoint-trees.test.ts) derives the difference
+from binary64 spacing and checks eligibility of each endpoint independently.
+
+In the invented example, A to B crosses zero by 40 degrees; halving that
+arc gives `350 + 20 = 370`, or 10 degrees. Its opposite is 190 degrees.
+Both project to 10 degrees on the 90-degree dial and contact C with zero
+orb, producing one tree row. The other pair midpoints are 0 degrees for
+A/C and 20 for B/C. These values and the absence of other zero-orb contacts
+over these exact rows are enforced in
+[test/midpoint-trees.test.ts](test/midpoint-trees.test.ts). The same test file
+covers all supported dials, antipodal ties, seam and inclusive boundaries,
+deduplication, ordering, distinct coincident formulas, snapshots and helper
+delegation. These tests establish arithmetic and integration, not ephemeris
+accuracy or predictive validity. A midpoint must be taken before folding:
+on the 90-degree dial, source points at 0 and 90 both project to zero but
+have a full-zodiac midpoint at 45, as a separate test there enforces. The
+pair-sum relations of planetary pictures are a separate analysis.
+
+Enumeration includes all distinct pairs and all eligible center contacts
+without truncation. Filter the supplied point selection when output volume
+matters. The pure result creates no receipt. For chart input retain
+`{ source, midpoints: midpointTrees(source.points, circle, options) }` alongside
+the result of `castChart`. The synthetic cast integration test in
+[test/midpoint-trees.test.ts](test/midpoint-trees.test.ts) includes unknown-speed
+angles and supplemental points and verifies that the source natal envelope
+is unchanged. Its receipt describes that original natal calculation;
+midpoints and tree contacts remain outside its scope.
+[test/pure-entry.test.ts](test/pure-entry.test.ts) exercises midpoint trees
+while rejecting chart API and ephemeris imports.
 
 ## Harmonic aspect patterns
 

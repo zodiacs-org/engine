@@ -2,6 +2,10 @@ export { DEFAULT_MAX_HARMONIC, harmonicChart } from "./harmonic-chart.js";
 export { DIAL_CIRCLES, dialDistance, projectDial } from "./dial.js";
 export type { DialCircle, DialContact, DialOptions, DialPoint, DialProjection } from "./dial.js";
 export { findPlanetaryPictures } from "./planetary-pictures.js";
+export { midpointTrees } from "./midpoint-trees.js";
+export type {
+  MidpointAxis, MidpointAxisContact, MidpointContact, MidpointPair, MidpointTree, MidpointTreeResult
+} from "./midpoint-trees.js";
 export type {
   PictureRepeatedMembers, PlanetaryPicture, PlanetaryPictureOptions,
   PlanetaryPictureResult, SensitivePoint
