@@ -11,7 +11,7 @@ commits and draft pull requests. Stop after the session's milestone is complete.
 
 - [x] M1 Create the isolated TypeScript project and exact reduction API with configurable master numbers, karmic-debt annotations, JSON-safe step receipts, original meanings, handwritten golden cases, and deterministic arithmetic properties.
 - [x] M2 Validate Gregorian birth dates without timezone conversion; implement life path and birthday with explicit component versus whole-date reduction conventions and receipts.
-- [ ] M3 Normalize Latin Unicode names with documented diacritic and ligature rules, per-character receipts, strict unsupported-character handling, and configurable Y-as-vowel classification.
+- [x] M3 Normalize Latin Unicode names with documented diacritic and ligature rules, per-character receipts, strict unsupported-character handling, and configurable Y-as-vowel classification.
 - [ ] M4 Add versioned explicit transliteration tables for Greek and Cyrillic, caller-supplied mappings for other scripts, normalization provenance, and unsupported-script tests. Document that transliteration is a convention, not a pronunciation inference.
 - [ ] M5 Implement Pythagorean and Chaldean letter tables, expression/destiny, soul urge, and personality; record selected system, original compounds, master policy, letter contributions, and reductions.
 - [ ] M6 Implement maturity, karmic lessons, and hidden passion, including tied frequencies and empty vowel/consonant selections, with receipts and original meanings.
@@ -96,3 +96,30 @@ and remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
 exclusion passed; the complete engine contents and size gate remains
 unverified. No root build was generated. Only `numerology/` changed.
 M3 is the next session's work.
+
+## M3 validation
+
+Added Latin name normalization with an authored, versioned ASCII mapping
+table, canonical diacritic handling, finite punctuation boundaries, explicit
+Y policies, and frozen per-character and expanded-letter receipts. The
+project README documents every mapping, accepted separators and marks,
+allocation bounds, rejection behavior, and classification conventions.
+
+Project `npm run typecheck` and `npm test` passed on Node 22.22.2.
+`test/names.test.mjs` checks handwritten synthetic fixtures in
+`test/fixtures/names.json`, a complete receipt, every explicit Latin table
+entry and its case forms, canonical equivalence, separator and mark ranges,
+strict unsupported-character rejection, allocation boundaries, immutability,
+and seeded independent expansions, classifications, conservation, receipt
+replay, and normalization idempotence. Existing date and reduction tests and
+engine package-exclusion and authored-file isolation tests also passed.
+The local runtime and test output remain in ignored `.cache/` paths.
+
+No overlapping numerology or name-normalization implementation was found
+outside this project in the available local and origin `main` and `infra/*`
+refs. This checks locally available refs, not unfetched remote changes.
+The root `npm run package:contents` was attempted with the local cache and
+remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
+exclusion passed; the complete engine contents and size gate remains
+unverified. No root build was generated. Only `numerology/` changed.
+M4 is the next session's work.

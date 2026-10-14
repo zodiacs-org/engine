@@ -1,2 +1,3 @@
 M1: Create isolated numerology TypeScript project with exact reduction receipts, master policies, karmic-debt annotations, original meanings, golden/property tests, and package-exclusion checks.
 M2: Add strict Gregorian civil dates, life path and birthday with explicit reduction conventions, source-located debt receipts, synthetic golden/property tests, and documentation.
+M3: Add Latin Unicode name normalization with explicit diacritic and ligature rules, configurable Y classification, per-character receipts, synthetic golden/property tests, and documentation.

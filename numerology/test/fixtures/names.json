@@ -1,0 +1,92 @@
+[
+  {
+    "id": "diacritics-ligatures-and-separators",
+    "input": "  Élva   Dœrn-Þyl  ",
+    "policy": "never",
+    "normalized": "ELVA DOERN THYL",
+    "letters": "ELVADOERNTHYL",
+    "vowels": "EAOE",
+    "consonants": "LVDRNTHYL"
+  },
+  {
+    "id": "decomposed-marks-and-expansions",
+    "input": "N\u0303o\u0308ra Ælß",
+    "policy": "never",
+    "normalized": "NORA AELSS",
+    "letters": "NORAAELSS",
+    "vowels": "OAAE",
+    "consonants": "NRLSS"
+  },
+  {
+    "id": "y-default-consonant",
+    "input": "Yrynn Mÿrr",
+    "policy": "never",
+    "normalized": "YRYNN MYRR",
+    "letters": "YRYNNMYRR",
+    "vowels": "",
+    "consonants": "YRYNNMYRR"
+  },
+  {
+    "id": "y-always-vowel",
+    "input": "Yrynn Mÿrr",
+    "policy": "always",
+    "normalized": "YRYNN MYRR",
+    "letters": "YRYNNMYRR",
+    "vowels": "YYY",
+    "consonants": "RNNMRR"
+  },
+  {
+    "id": "y-vowel-in-vowelless-tokens",
+    "input": "Yrynn Mÿrr",
+    "policy": "when-no-other-vowels",
+    "normalized": "YRYNN MYRR",
+    "letters": "YRYNNMYRR",
+    "vowels": "YYY",
+    "consonants": "RNNMRR"
+  },
+  {
+    "id": "y-conditional-sees-expanded-vowels",
+    "input": "Yæra Myrr",
+    "policy": "when-no-other-vowels",
+    "normalized": "YAERA MYRR",
+    "letters": "YAERAMYRR",
+    "vowels": "AEAY",
+    "consonants": "YRMRR"
+  },
+  {
+    "id": "typographic-ligatures",
+    "input": "ﬃra ﬄyn",
+    "policy": "never",
+    "normalized": "FFIRA FFLYN",
+    "letters": "FFIRAFFLYN",
+    "vowels": "IA",
+    "consonants": "FFRFFLYN"
+  },
+  {
+    "id": "explicit-latin-bases",
+    "input": "ıſø ŋŧđðħłƒ",
+    "policy": "never",
+    "normalized": "ISO NGTDDHLF",
+    "letters": "ISONGTDDHLF",
+    "vowels": "IO",
+    "consonants": "SNGTDDHLF"
+  },
+  {
+    "id": "canonical-decomposition-before-table",
+    "input": "ǼǿǺ",
+    "policy": "never",
+    "normalized": "AEOA",
+    "letters": "AEOA",
+    "vowels": "AEOA",
+    "consonants": ""
+  },
+  {
+    "id": "initial-periods-are-boundaries",
+    "input": "J.Y.",
+    "policy": "when-no-other-vowels",
+    "normalized": "J Y",
+    "letters": "JY",
+    "vowels": "Y",
+    "consonants": "J"
+  }
+]

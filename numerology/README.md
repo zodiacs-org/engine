@@ -3,7 +3,8 @@
 A private TypeScript library and planned JSON CLI, adjacent to
 `@zodiacs/engine` and isolated from its npm package. Code and documentation
 here use the repository's [MIT license](../LICENSE). This project currently
-implements integer reduction, civil-date validation, life path, and birthday.
+implements integer reduction, civil-date validation, life path, birthday,
+and Latin name normalization with vowel/consonant classification.
 [PLAN.md](PLAN.md) tracks the remaining name systems, cycles, transliteration,
 profiles, and CLI.
 
@@ -162,3 +163,143 @@ under both formulas and both master policies. They also test birthday on
 every possible day of a month, digital-root conservation, full result
 serialization, deep freezing, and identical outputs across host timezones.
 These controls test declared arithmetic, not predictive accuracy.
+
+## Latin names and vowel classification
+
+`normalizeName(name, { yAsVowel })` accepts a string containing supported
+Latin letters, attached diacritics, and the separators described below. It
+returns `normalized` (uppercase tokens separated by spaces), `letters`
+(all emitted letters in order), `vowels`, `consonants`, and a frozen,
+JSON-safe `receipt`. Name preprocessing produces letters for later numerical
+calculations. It does not assign letter values, reduce a number, or supply
+a personality interpretation. The Pythagorean and Chaldean letter tables
+are still planned in [PLAN.md](PLAN.md).
+
+```js
+import { normalizeName } from "./.build/index.js";
+
+// Invented spelling, with no identified person or birth details.
+const name = normalizeName("Yæra Myrr", { yAsVowel: "when-no-other-vowels" });
+console.log(name.normalized); // YAERA MYRR
+console.log(name.vowels);     // AEAY
+console.log(name.consonants); // YRMRR
+```
+
+The handwritten `y-conditional-sees-expanded-vowels` case in
+[names.json](test/fixtures/names.json) enforces this example.
+
+The Latin convention is `numerology-latin-ascii/1`, exported as
+`LATIN_NAME_TABLE_ID`. For each Latin letter, apply Unicode canonical
+decomposition (`NFD`), remove the declared combining diacritics, map the
+remaining base through the explicit table when needed, then uppercase ASCII
+letters. Each stage is recorded, even when its input and output are equal.
+Supported diacritics are U+0300 through U+036F, except U+034F (combining
+grapheme joiner). A separately supplied diacritic must follow a supported
+letter or another attached diacritic, within the same token. A leading mark
+or a mark immediately after a separator is rejected. Combining marks outside
+this range are rejected, including Cyrillic, Hebrew, and Arabic marks and
+variation selectors. Removing a declared mark does not infer its language.
+The attached-diacritics test in
+[names.test.mjs](test/names.test.mjs) covers the entire declared range.
+
+Canonical decomposition to an ASCII base is accepted, so examples include
+`é -> E`, `ñ -> N`, `ü -> U`, and `İ -> I`. Umlauts become their base letter;
+they do not become an added E. Canonically equivalent composed and decomposed
+spellings produce the same emitted letters and classifications, while their
+receipts preserve different source spellings. Canonical Latin aliases `K`
+and `Å` become K and A. These cases are checked by the canonical-equivalence
+and unsupported-characters tests. There is no compatibility normalization
+(`NFKD` or `NFKC`), so fullwidth, circled, and mathematical alphabet spellings
+are rejected rather than silently accepted.
+
+The complete explicit table, exported as frozen `LATIN_NAME_TABLE`, is an
+authored convention for this project. No external transliteration dataset or
+interpretive book text was copied. Mappings describe chosen spellings for
+symbolic arithmetic, not pronunciation or an official transliteration
+standard. Only the listed bases and Latin letters that canonically decompose
+to supported bases are accepted:
+
+| Sources after diacritic removal | ASCII output |
+| --- | --- |
+| Æ, æ | AE |
+| Œ, œ | OE |
+| ß, ẞ | SS |
+| Ø, ø | O |
+| Ł, ł | L |
+| Đ, đ, Ð, ð | D |
+| Þ, þ | TH |
+| Ħ, ħ | H |
+| ı | I |
+| Ŋ, ŋ | NG |
+| Ŧ, ŧ | T |
+| ſ | S |
+| Ƒ, ƒ | F |
+| ﬀ | FF |
+| ﬁ | FI |
+| ﬂ | FL |
+| ﬃ | FFI |
+| ﬄ | FFL |
+| ﬅ, ﬆ | ST |
+
+The handwritten-equivalences test pins every table entry and checks that
+each source's uppercase and lowercase form yields the same output. Multi-letter
+expansions contribute every emitted letter. A vowel introduced by a ligature
+is included when classifying Y in the token.
+
+Every Unicode `Space_Separator` character creates a token boundary. Accepted
+punctuation boundaries are the ASCII hyphen `-`, U+2010 and U+2011 hyphens,
+ASCII apostrophe `'`, U+2018 and U+2019 quotation marks, and ASCII period `.`.
+These do not contribute letters. Consecutive boundaries collapse, leading
+and trailing boundaries are omitted from `normalized`, and all original
+separator characters remain in the receipt. Apostrophes, hyphens, and periods
+are boundaries even inside a name: `J.Y.` becomes `J Y`. This boundary rule
+can affect contextual Y classification. The punctuation-and-spaces test
+checks all accepted boundaries. A name containing only separators is invalid.
+
+A, E, I, O, and U are vowels. Other emitted letters are consonants, subject
+to the caller's `yAsVowel` choice:
+
+| Policy | Y classification |
+| --- | --- |
+| `"never"` (default) | Every Y is a consonant. |
+| `"always"` | Every Y is a vowel. |
+| `"when-no-other-vowels"` | Every Y in a token is a vowel only if that entire token has no A, E, I, O, or U after normalization and expansion. |
+
+The conditional policy inspects the entire token, including letters after
+Y. It makes every Y in `Yrynn` a vowel and the Y in `Yæra` a consonant.
+These are declared mechanical choices, with no phonetic inference. Vowel
+or consonant selections may be empty for a valid name. Unknown option keys,
+unsupported policies, and explicit null values are rejected. Ordinary
+in-process option objects follow the same getter/proxy limitations as the
+reduction API.
+
+The receipt schema is `numerology-name-normalization/1`. It retains the
+original `input`, Latin table identifier, selected Y policy, canonical
+`tokens`, source `characters`, and emitted `letters`. Each character row
+records its original scalar, `sourceIndex` in UTF-16 code units, kind,
+output, and the chain of transformation steps. Separate attached marks
+produce empty output with their own step. Each letter row records its index,
+source character row index, index within a multi-letter expansion, token
+index, vowel/consonant kind, and classification reason. All indices begin at
+zero. The complete-receipt test pins the receipt for `é-Æy`; replay tests
+check source coverage, step chains, expansion locators, token boundaries,
+and classifications for handwritten and seeded cases. Receipts contain
+the original name and should be handled as caller data.
+
+Names are limited to 1024 original UTF-16 code units, including spaces and
+diacritics, before normalization. The allocation-bound test checks this
+boundary and expansion behavior. Unsupported Latin bases, non-Latin scripts,
+digits, symbols, emoji, malformed surrogates, controls (including tabs and
+line breaks), and invisible format characters throw `RangeError`; unsupported
+character errors name only the UTF-16 position. Non-string inputs and invalid
+option-object types throw `TypeError`. The unsupported-characters test checks
+these rejection categories. Greek, Cyrillic, and caller-supplied mappings
+remain the next milestone.
+
+The seeded name properties assemble expected letter sequences from
+handwritten spelling pairs, replay all receipts, verify vowel/consonant
+conservation, compare NFC and NFD spellings, and check normalization
+idempotence. Together with the fixtures these establish the declared
+normalization convention over their tested inputs, not linguistic
+completeness or predictive accuracy. All name processing uses local data
+and the runtime's Unicode normalization and property support.
