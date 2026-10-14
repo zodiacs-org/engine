@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": ".",
+    "outDir": ".cache/fixtures-build"
+  },
+  "include": ["scripts/**/*.ts", "src/**/*.ts"]
+}

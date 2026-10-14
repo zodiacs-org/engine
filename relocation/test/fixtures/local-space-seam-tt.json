@@ -1,0 +1,982 @@
+{
+  "schema": "zodiacs.relocation-golden.v1",
+  "id": "local-space-seam-tt",
+  "reference": "installed-carried-engine-regression;not-independent-accuracy",
+  "request": {
+    "id": "local-space-seam-tt",
+    "kind": "local-space",
+    "source": {
+      "utc": "2004-05-06T07:08:09.010Z",
+      "latitude": -80,
+      "longitude": 34,
+      "houseSystem": "koch",
+      "deltaT": 72.25,
+      "timeScale": "tt"
+    },
+    "options": {
+      "origin": {
+        "latitude": 75,
+        "longitude": 175
+      },
+      "lengthDegrees": 120,
+      "stepDegrees": 40,
+      "bodies": [
+        "Sun",
+        "Moon"
+      ],
+      "maxEvaluations": 64
+    }
+  },
+  "output": {
+    "schema": "zodiacs.relocation-local-space.v1",
+    "conventions": {
+      "id": "zodiacs.relocation-local-space-conventions.v1",
+      "bearing": "origin-geocentric-unrefracted-azimuth;north-through-east",
+      "surface": "unit-sphere;geographic-latitude;not-ellipsoidal-geodesic",
+      "route": "directed-great-circle;fixed-origin-bearing;inclusive-endpoints",
+      "opposite": "origin-bearing-plus-half-turn",
+      "distance": "angular-degrees;at-most-half-turn;not-kilometers",
+      "residual": "sampled-body-azimuth-minus-forward-course;axis-folded-to-[-90,90)",
+      "poles": "undefined-origin-bearing;insert-meridional-pole;break-display-geometry",
+      "seams": "lat-lon-interpolation;no-engine-receipt",
+      "receiptScope": "engine-positions-and-observers;bearings-and-routes-are-derived"
+    },
+    "plan": {
+      "origin": {
+        "latitude": 75,
+        "longitude": 175
+      },
+      "lengthDegrees": 120,
+      "stepDegrees": 40,
+      "bodies": [
+        "Sun",
+        "Moon"
+      ],
+      "directions": [
+        "forward",
+        "opposite"
+      ],
+      "distances": [
+        0,
+        40,
+        80,
+        120
+      ],
+      "maxEvaluations": 64,
+      "requiredEvaluations": 19,
+      "maximumObserverSamples": 17
+    },
+    "status": "ok",
+    "lines": [
+      {
+        "body": "Sun",
+        "direction": "forward",
+        "positionIndex": 0,
+        "originObserverIndex": 0,
+        "status": "sampled",
+        "reason": null,
+        "originAzimuth": 286.4398126358408,
+        "bearing": 286.4398126358408,
+        "samples": [
+          {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "fraction": 0,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 286.4398126358408,
+            "bodyAzimuth": 286.4398126358408,
+            "azimuthUndefined": null,
+            "residual": 0
+          },
+          {
+            "observerIndex": 1,
+            "distanceDegrees": 40,
+            "fraction": 0.3333333333333333,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 203.72716369358545,
+            "bodyAzimuth": 203.72716369358545,
+            "azimuthUndefined": null,
+            "residual": 0
+          },
+          {
+            "observerIndex": 2,
+            "distanceDegrees": 80,
+            "fraction": 0.6666666666666666,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 194.8152391609508,
+            "bodyAzimuth": 14.815239160951023,
+            "azimuthUndefined": null,
+            "residual": 2.2737367544323206e-13
+          },
+          {
+            "observerIndex": 3,
+            "distanceDegrees": 120,
+            "fraction": 1,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 195.8707012660466,
+            "bodyAzimuth": 15.870701266046638,
+            "azimuthUndefined": null,
+            "residual": 2.842170943040401e-14
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": 75,
+                "longitude": 175
+              },
+              "source": {
+                "kind": "sample",
+                "index": 0
+              }
+            },
+            {
+              "point": {
+                "latitude": 51.9083488793011,
+                "longitude": 87.09490321738485
+              },
+              "source": {
+                "kind": "sample",
+                "index": 1
+              }
+            },
+            {
+              "point": {
+                "latitude": 13.8786502964356,
+                "longitude": 71.64331497380165
+              },
+              "source": {
+                "kind": "sample",
+                "index": 2
+              }
+            },
+            {
+              "point": {
+                "latitude": -24.80481762730328,
+                "longitude": 61.21136739441529
+              },
+              "source": {
+                "kind": "sample",
+                "index": 3
+              }
+            }
+          ]
+        ]
+      },
+      {
+        "body": "Sun",
+        "direction": "opposite",
+        "positionIndex": 0,
+        "originObserverIndex": 0,
+        "status": "sampled",
+        "reason": null,
+        "originAzimuth": 286.4398126358408,
+        "bearing": 106.43981263584078,
+        "samples": [
+          {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "fraction": 0,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 106.43981263584078,
+            "bodyAzimuth": 286.4398126358408,
+            "azimuthUndefined": null,
+            "residual": 0
+          },
+          {
+            "observerIndex": 4,
+            "distanceDegrees": 40,
+            "fraction": 0.3333333333333333,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 159.8632544982418,
+            "bodyAzimuth": 339.8632544982418,
+            "azimuthUndefined": null,
+            "residual": 2.842170943040401e-14
+          },
+          {
+            "observerIndex": 5,
+            "distanceDegrees": 80,
+            "fraction": 0.6666666666666666,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 165.5591731003734,
+            "bodyAzimuth": 345.5591731003733,
+            "azimuthUndefined": null,
+            "residual": -1.1368683772161603e-13
+          },
+          {
+            "observerIndex": 6,
+            "distanceDegrees": 120,
+            "fraction": 1,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 162.75883931700474,
+            "bodyAzimuth": 162.7588393170048,
+            "azimuthUndefined": null,
+            "residual": 5.684341886080802e-14
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": 75,
+                "longitude": 175
+              },
+              "source": {
+                "kind": "sample",
+                "index": 0
+              }
+            },
+            {
+              "point": {
+                "latitude": 72.34990259143855,
+                "longitude": 180
+              },
+              "source": {
+                "kind": "seam",
+                "fromIndex": 0,
+                "toIndex": 4,
+                "fraction": 0.08509414027921133
+              }
+            }
+          ],
+          [
+            {
+              "point": {
+                "latitude": 72.34990259143855,
+                "longitude": -180
+              },
+              "source": {
+                "kind": "seam",
+                "fromIndex": 0,
+                "toIndex": 4,
+                "fraction": 0.08509414027921133
+              }
+            },
+            {
+              "point": {
+                "latitude": 43.856875457394246,
+                "longitude": -126.24154749558578
+              },
+              "source": {
+                "kind": "sample",
+                "index": 4
+              }
+            },
+            {
+              "point": {
+                "latitude": 5.485635972316832,
+                "longitude": -113.39707140162834
+              },
+              "source": {
+                "kind": "sample",
+                "index": 5
+              }
+            },
+            {
+              "point": {
+                "latitude": -33.12020998799694,
+                "longitude": -102.36285989397373
+              },
+              "source": {
+                "kind": "sample",
+                "index": 6
+              }
+            }
+          ]
+        ]
+      },
+      {
+        "body": "Moon",
+        "direction": "forward",
+        "positionIndex": 1,
+        "originObserverIndex": 0,
+        "status": "sampled",
+        "reason": null,
+        "originAzimuth": 89.00920659666536,
+        "bearing": 89.00920659666536,
+        "samples": [
+          {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "fraction": 0,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 89.00920659666536,
+            "bodyAzimuth": 89.00920659666536,
+            "azimuthUndefined": null,
+            "residual": 0
+          },
+          {
+            "observerIndex": 7,
+            "distanceDegrees": 40,
+            "fraction": 0.3333333333333333,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 157.26110957528024,
+            "bodyAzimuth": 157.26110957528022,
+            "azimuthUndefined": null,
+            "residual": -2.842170943040401e-14
+          },
+          {
+            "observerIndex": 8,
+            "distanceDegrees": 80,
+            "fraction": 0.6666666666666666,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 164.76956376090976,
+            "bodyAzimuth": 164.7695637609097,
+            "azimuthUndefined": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 9,
+            "distanceDegrees": 120,
+            "fraction": 1,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 162.8534629530746,
+            "bodyAzimuth": 342.8534629530751,
+            "azimuthUndefined": null,
+            "residual": 5.115907697472721e-13
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": 75,
+                "longitude": 175
+              },
+              "source": {
+                "kind": "sample",
+                "index": 0
+              }
+            },
+            {
+              "point": {
+                "latitude": 73.16718482409196,
+                "longitude": 180
+              },
+              "source": {
+                "kind": "seam",
+                "fromIndex": 0,
+                "toIndex": 7,
+                "fraction": 0.06781196221452128
+              }
+            }
+          ],
+          [
+            {
+              "point": {
+                "latitude": 73.16718482409196,
+                "longitude": -180
+              },
+              "source": {
+                "kind": "seam",
+                "fromIndex": 0,
+                "toIndex": 7,
+                "fraction": 0.06781196221452128
+              }
+            },
+            {
+              "point": {
+                "latitude": 47.97209642584925,
+                "longitude": -111.2666963657144
+              },
+              "source": {
+                "kind": "sample",
+                "index": 7
+              }
+            },
+            {
+              "point": {
+                "latitude": 9.912190969129599,
+                "longitude": -96.65759498167293
+              },
+              "source": {
+                "kind": "sample",
+                "index": 8
+              }
+            },
+            {
+              "point": {
+                "latitude": -28.625794372230885,
+                "longitude": -85.5661132060883
+              },
+              "source": {
+                "kind": "sample",
+                "index": 9
+              }
+            }
+          ]
+        ]
+      },
+      {
+        "body": "Moon",
+        "direction": "opposite",
+        "positionIndex": 1,
+        "originObserverIndex": 0,
+        "status": "sampled",
+        "reason": null,
+        "originAzimuth": 89.00920659666536,
+        "bearing": 269.00920659666536,
+        "samples": [
+          {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "fraction": 0,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 269.00920659666536,
+            "bodyAzimuth": 89.00920659666536,
+            "azimuthUndefined": null,
+            "residual": 0
+          },
+          {
+            "observerIndex": 10,
+            "distanceDegrees": 40,
+            "fraction": 0.3333333333333333,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 202.51419387900435,
+            "bodyAzimuth": 22.51419387900438,
+            "azimuthUndefined": null,
+            "residual": 2.842170943040401e-14
+          },
+          {
+            "observerIndex": 11,
+            "distanceDegrees": 80,
+            "fraction": 0.6666666666666666,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 195.20672294339013,
+            "bodyAzimuth": 195.2067229433901,
+            "azimuthUndefined": null,
+            "residual": -2.842170943040401e-14
+          },
+          {
+            "observerIndex": 12,
+            "distanceDegrees": 120,
+            "fraction": 1,
+            "status": "ok",
+            "reason": null,
+            "courseAzimuth": 197.23308381405792,
+            "bodyAzimuth": 197.23308381405792,
+            "azimuthUndefined": null,
+            "residual": 0
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": 75,
+                "longitude": 175
+              },
+              "source": {
+                "kind": "sample",
+                "index": 0
+              }
+            },
+            {
+              "point": {
+                "latitude": 47.48202554476562,
+                "longitude": 103.01450944532122
+              },
+              "source": {
+                "kind": "sample",
+                "index": 10
+              }
+            },
+            {
+              "point": {
+                "latitude": 9.399875494146372,
+                "longitude": 88.56769609468034
+              },
+              "source": {
+                "kind": "sample",
+                "index": 11
+              }
+            },
+            {
+              "point": {
+                "latitude": -29.133012817697146,
+                "longitude": 77.4383921557909
+              },
+              "source": {
+                "kind": "sample",
+                "index": 12
+              }
+            }
+          ]
+        ]
+      }
+    ],
+    "sampling": {
+      "schema": "zodiacs.relocation-angles.v1",
+      "conventions": {
+        "id": "zodiacs.relocation-angular-conventions.v1",
+        "frame": "equatorial-true-of-date",
+        "center": "geocentric",
+        "correction": "apparent;engine-moon-series-at-instant;no-deflection",
+        "horizon": "geodetic-tangent-plane;body-center;no-refraction;no-parallax;no-limb",
+        "MC": "upper-meridian;hour-angle-zero",
+        "IC": "lower-meridian;hour-angle-half-turn",
+        "ASC": "zero-altitude;eastern-branch;fixed-direction-rising",
+        "DSC": "zero-altitude;western-branch;fixed-direction-setting",
+        "azimuth": "north-through-east",
+        "units": "degrees",
+        "singularity": "unit-vector-projection-at-or-below-engine-RA_POLE_TOLERANCE",
+        "receiptScope": "engine-positions-and-houses;library-horizon-rotation-is-derived"
+      },
+      "natalReceipt": {
+        "conventions": {
+          "angles": "gast-and-true-obliquity",
+          "aspects": "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate",
+          "calendar": "proleptic-gregorian",
+          "deltaT": "tt-minus-ut1;value-in-result",
+          "localTime": "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record",
+          "longitudeUnit": "degrees-[0,360)",
+          "moonNodes": "instantaneous-geocentric-moon-orbit-plane",
+          "moonPosition": "astronomy-engine-geo-moon;no-light-time;no-aberration",
+          "nutation": "iau2000b;equation-of-equinoxes-with-two-complementary-terms",
+          "planetPositions": "aberrated-geocentric-ecliptic-of-date;no-deflection",
+          "speed": "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day",
+          "timeScale": "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result",
+          "zodiac": "tropical"
+        },
+        "coordinates": {
+          "latitude": -80,
+          "longitude": 34
+        },
+        "coverage": {
+          "angleExclusions": "exact-geographic-poles-and-ecliptic-horizon-coincidence",
+          "assessment": "finite-reference-cases-only",
+          "broadDateRange": "not-certified",
+          "inputSyntax": "not-an-astronomical-accuracy-guarantee"
+        },
+        "engine": {
+          "ephemeris": {
+            "name": "astronomy-engine",
+            "version": "2.1.19"
+          },
+          "name": "@zodiacs/engine",
+          "version": "1.0.0"
+        },
+        "houses": {
+          "absenceReason": null,
+          "actual": "whole",
+          "requested": "koch"
+        },
+        "inputFlags": [],
+        "instant": "2004-05-06T07:08:09.010Z",
+        "localResolution": null,
+        "provenance": null,
+        "reference": "supplied-instant",
+        "resultFlags": [
+          "polar-fallback"
+        ],
+        "schema": "zodiacs.calculation-receipt.draft-v1",
+        "sourceInstant": "2004-05-06T07:08:09.010Z",
+        "timeKnown": true,
+        "timeScale": "tt"
+      },
+      "time": {
+        "jd": 2453131.7973265047,
+        "scale": "tt",
+        "deltaT": 72.25
+      },
+      "evaluations": {
+        "positions": 2,
+        "houses": 13
+      },
+      "positions": [
+        {
+          "body": "Sun",
+          "rightAscension": 43.62537195145342,
+          "declination": 16.65428614409441,
+          "raUndefined": null,
+          "engine": {
+            "status": "ok",
+            "body": "Sun",
+            "frame": "equatorial-true-of-date",
+            "lon": 43.62537195145342,
+            "lat": 16.65428614409441,
+            "dist": 1.0089122687914356,
+            "speeds": null,
+            "cartesian": null,
+            "ayanamsa": null,
+            "bounds": {
+              "position": {
+                "value": 3,
+                "unit": "arcsec",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "distance": {
+                "value": 0.000015,
+                "unit": "relative",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "speed": null
+            },
+            "receipt": {
+              "schema": "zodiacs.calc-receipt.v1",
+              "request": {
+                "body": "Sun",
+                "time": {
+                  "jd": 2453131.7973265047,
+                  "scale": "tt",
+                  "deltaT": 72.25
+                },
+                "frame": "equatorial-true-of-date",
+                "center": "geocentric",
+                "zodiac": "tropical",
+                "flags": {
+                  "correction": "apparent",
+                  "speeds": false,
+                  "cartesian": false,
+                  "units": "degrees",
+                  "deflection": false
+                }
+              },
+              "instants": [
+                {
+                  "utc": "2004-05-06T07:06:56.760Z",
+                  "jdUt1": 2453131.796490278,
+                  "jdTt": 2453131.7973265047,
+                  "deltaT": {
+                    "seconds": 72.25,
+                    "sigma": null,
+                    "model": "pinned",
+                    "table": null,
+                    "tableDigest": null,
+                    "segment": "pinned"
+                  },
+                  "timeScale": {
+                    "input": "tt",
+                    "basis": "pinned",
+                    "ut1MinusUtc": null,
+                    "leapSeconds": null
+                  }
+                }
+              ],
+              "conventions": [
+                "zodiac:tropical",
+                "frame:equatorial-true-of-date",
+                "center:geocentric",
+                "correction:apparent",
+                "light-time:newtonian",
+                "deflection:none",
+                "aberration:backdated-observer",
+                "precession:iau2006",
+                "nutation:iau2000b",
+                "ephemeris:astronomy-engine@2.1.19",
+                "deltat:pinned",
+                "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+              ],
+              "engine": {
+                "name": "@zodiacs/engine",
+                "version": "1.0.0",
+                "ephemeris": {
+                  "name": "astronomy-engine",
+                  "version": "2.1.19"
+                }
+              }
+            }
+          }
+        },
+        {
+          "body": "Moon",
+          "rightAscension": 243.94895833114447,
+          "declination": -23.556058435719493,
+          "raUndefined": null,
+          "engine": {
+            "status": "ok",
+            "body": "Moon",
+            "frame": "equatorial-true-of-date",
+            "lon": 243.94895833114447,
+            "lat": -23.556058435719493,
+            "dist": 0.0024052068109603596,
+            "speeds": null,
+            "cartesian": null,
+            "ayanamsa": null,
+            "bounds": {
+              "position": {
+                "value": 8.3,
+                "unit": "arcsec",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "distance": {
+                "value": 0.00014,
+                "unit": "relative",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "speed": null
+            },
+            "receipt": {
+              "schema": "zodiacs.calc-receipt.v1",
+              "request": {
+                "body": "Moon",
+                "time": {
+                  "jd": 2453131.7973265047,
+                  "scale": "tt",
+                  "deltaT": 72.25
+                },
+                "frame": "equatorial-true-of-date",
+                "center": "geocentric",
+                "zodiac": "tropical",
+                "flags": {
+                  "correction": "apparent",
+                  "speeds": false,
+                  "cartesian": false,
+                  "units": "degrees",
+                  "deflection": false
+                }
+              },
+              "instants": [
+                {
+                  "utc": "2004-05-06T07:06:56.760Z",
+                  "jdUt1": 2453131.796490278,
+                  "jdTt": 2453131.7973265047,
+                  "deltaT": {
+                    "seconds": 72.25,
+                    "sigma": null,
+                    "model": "pinned",
+                    "table": null,
+                    "tableDigest": null,
+                    "segment": "pinned"
+                  },
+                  "timeScale": {
+                    "input": "tt",
+                    "basis": "pinned",
+                    "ut1MinusUtc": null,
+                    "leapSeconds": null
+                  }
+                }
+              ],
+              "conventions": [
+                "zodiac:tropical",
+                "frame:equatorial-true-of-date",
+                "center:geocentric",
+                "correction:apparent",
+                "moon:series-at-instant",
+                "precession:iau2006",
+                "nutation:iau2000b",
+                "ephemeris:astronomy-engine@2.1.19",
+                "deltat:pinned",
+                "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+              ],
+              "engine": {
+                "name": "@zodiacs/engine",
+                "version": "1.0.0",
+                "ephemeris": {
+                  "name": "astronomy-engine",
+                  "version": "2.1.19"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "observers": [
+        {
+          "index": 0,
+          "point": {
+            "latitude": 75,
+            "longitude": 175
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 146.21571950788706,
+            "requested": "koch",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        },
+        {
+          "index": 1,
+          "point": {
+            "latitude": 51.9083488793011,
+            "longitude": 87.09490321738485
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 58.31062272527191,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        },
+        {
+          "index": 2,
+          "point": {
+            "latitude": 13.8786502964356,
+            "longitude": 71.64331497380165
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 42.859034481688695,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        },
+        {
+          "index": 3,
+          "point": {
+            "latitude": -24.80481762730328,
+            "longitude": 61.21136739441529
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 32.427086902302335,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        },
+        {
+          "index": 4,
+          "point": {
+            "latitude": 43.856875457394246,
+            "longitude": -126.24154749558578
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 204.97417201230132,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        },
+        {
+          "index": 5,
+          "point": {
+            "latitude": 5.485635972316832,
+            "longitude": -113.39707140162834
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 217.8186481062587,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        },
+        {
+          "index": 6,
+          "point": {
+            "latitude": -33.12020998799694,
+            "longitude": -102.36285989397373
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 228.85285961391332,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        },
+        {
+          "index": 7,
+          "point": {
+            "latitude": 47.97209642584925,
+            "longitude": -111.2666963657144
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 219.94902314217268,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        },
+        {
+          "index": 8,
+          "point": {
+            "latitude": 9.912190969129599,
+            "longitude": -96.65759498167293
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 234.5581245262141,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        },
+        {
+          "index": 9,
+          "point": {
+            "latitude": -28.625794372230885,
+            "longitude": -85.5661132060883
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 245.6496063017987,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        },
+        {
+          "index": 10,
+          "point": {
+            "latitude": 47.48202554476562,
+            "longitude": 103.01450944532122
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 74.23022895320827,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        },
+        {
+          "index": 11,
+          "point": {
+            "latitude": 9.399875494146372,
+            "longitude": 88.56769609468034
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 59.7834156025674,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        },
+        {
+          "index": 12,
+          "point": {
+            "latitude": -29.133012817697146,
+            "longitude": 77.4383921557909
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 48.65411166367795,
+            "requested": "koch",
+            "system": "koch",
+            "flags": []
+          }
+        }
+      ]
+    }
+  }
+}

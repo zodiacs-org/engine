@@ -16,7 +16,7 @@ line to `CHANGES.txt`. The harness handles git writes and draft PRs.
 - [x] M8 Sample great-circle paths and find angular crossings along them, with antipodal and antimeridian handling.
 - [x] M9 Add optional local-space azimuth lines using engine observer angles and bounded spherical geometry.
 - [x] M10 Implement the offline `relocation chart`, `relocation lines` and `relocation grid` CLI with validated JSON input and structured output.
-- [ ] M11 Commit small generated golden polyline regression fixtures, their generator and synthetic integration tests; keep large generated outputs ignored.
+- [x] M11 Commit small generated golden polyline regression fixtures, their generator and synthetic integration tests; keep large generated outputs ignored.
 - [ ] M12 Finish API and CLI documentation, receipt and numerical-limit explanations, end-to-end checks and package-isolation verification.
 
 ## Validation policy
@@ -257,3 +257,27 @@ documentation punctuation and diff-scope checks passed. Root
 no root build was run under the rule forbidding writes to `dist/`.
 Engine CI gates requiring that build remain deferred. No engine or packed
 files changed.
+
+M11 adds compact generated golden fixtures and a provenance manifest for
+meridians, horizon tangencies and circumpolar gaps, wrapped clipping, refined
+grid and path crossings, exhausted refinement budgets, polar path gaps and
+local-space rays on a pinned TT clock. The generator checks the carried
+archive's receipt and dependency lock, records engine and runtime identities,
+enforces a compact file cap and supports a byte-comparison check. Its inputs
+and projection are committed with the fixtures; compilation and trial outputs
+stay ignored. The fixtures are explicitly engine regressions, not independent
+astronomical accuracy evidence.
+
+Validation: relocation typecheck, fixture byte regeneration and the full Vitest
+suite passed on Node 22.22.2. `test/golden.vitest.ts` compares all fixture cases
+through birth, chart, envelope and real CLI entry points, replays every full
+position and observer receipt, resolves seam and crossing provenance, checks
+budgets and singularity coverage, and connects chart-grid receipt replay to
+angular generation and crossing relocation. It binds fixture bytes and digests
+to the manifest and the carried archive. Regeneration instructions, comparison
+limits and the exact synthetic case scope are in `test/fixtures/README.md`.
+Root package dry-run exclusion, archive SHA-256, file-size, documentation
+punctuation and diff-scope checks passed. Root `npm run package:contents`
+still fails because `dist/calc.d.ts` is absent; no root build was run under
+the rule forbidding writes to `dist/`. Engine CI gates requiring that build
+remain deferred. No engine or packed files changed.

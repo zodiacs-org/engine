@@ -47,6 +47,13 @@ They are regression checks, not independent accuracy evidence. Receipt
 labels describe the calculation and do not authenticate its physical accuracy.
 The remaining integration work is listed in `PLAN.md`.
 
+Small generated golden polylines, their provenance manifest and regeneration
+commands are documented in [test/fixtures/README.md](test/fixtures/README.md).
+`test/golden.vitest.ts` checks these synthetic geometry and crossing regressions
+through the pure library and real CLI, including replay of sampled engine
+receipts. `npm test` also builds the isolated fixture generator in ignored
+`.cache/fixtures-build/`; no engine build is needed.
+
 ## Offline CLI
 
 Run `npm run build` in this directory to compile this project's TypeScript
