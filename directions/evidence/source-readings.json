@@ -1,5 +1,5 @@
 {
-  "scope": "Read sources for the convention contract, M3 coordinate relations and M4 angular construction; numerical angle expectations are separately hand-derived.",
+  "scope": "Read sources for the convention contract, sphere coordinates, angular construction and M5 zodiacal body directions; numerical expectations are separately hand-derived.",
   "sources": [
     {
       "id": "ptolemy-ashmand-iii14",
@@ -35,9 +35,45 @@
         "Direct carries the promissor westward to the fixed position of the significator.",
         "Converse applies the significator's rules to the promissor and vice versa.",
         "The author rejects converse directions of angles and converse zodiacal aspects.",
-        "Thesis 61 also excludes zodiacal rays to angles; this primitive enables conjunctions only."
+        "Thesis 61 also excludes zodiacal rays to angles; the angle primitive enables conjunctions only."
       ],
-      "m4Reading": "Reread fetched PDF text in memory, 2026-10-14: printed page 57 (PDF page index 73), thesis 60 on printed page 23, canon XXXVII on printed page 105. Direct westward motion and converse angle prohibition confirmed."
+      "m4Reading": "Reread fetched PDF text in memory, 2026-10-14: printed page 57 (PDF page index 73), thesis 60 on printed page 23, canon XXXVII on printed page 105. Direct westward motion and converse angle prohibition confirmed.",
+      "m5Reading": "Fetched PDF and extracted text in memory on 2026-10-14. Read printed pages 23-24, 57-61, 68-69 and 104-105; PDF page numbers are printed numbers plus 17. Canon XIX uses the promissor aspect place's semi-arc to scale the fixed significator's meridian distance.",
+      "m5Limits": [
+        "Zero-both is a project projection restriction, not the changing significator latitude in canon XXIII.",
+        "The general semi-arc model does not implement the Sun's special treatment below the horizon in canons XX-XXI.",
+        "Canon XXXVII supplies mundane converse role exchange. No converse zodiacal construction, including projected conjunctions, is enabled."
+      ]
+    },
+    {
+      "id": "lilly-1647-aspect-branches",
+      "author": "William Lilly",
+      "title": "Christian Astrology",
+      "edition": "London, 1647, book I",
+      "url": "https://www.worldastrology.net/wp-content/uploads/2008/12/CA-I.pdf",
+      "retrieved": "2026-10-14",
+      "formatRead": "Fetched PDF text",
+      "locator": "Printed pages 108-109, PDF pages 128-129",
+      "supports": [
+        "The caster's sinister ray follows sign order; its dexter ray runs against sign order.",
+        "Aries casts sextile, square and trine sinister to Gemini, Cancer and Leo, and dexter to Aquarius, Capricorn and Sagittarius."
+      ],
+      "notEstablished": [
+        "Lilly's branch terminology is not used as a substitute for Placidus's semi-arc geometry."
+      ]
+    },
+    {
+      "id": "ptolemy-ashmand-i16",
+      "author": "Claudius Ptolemy",
+      "title": "Tetrabiblos",
+      "edition": "J. M. Ashmand translation, 1822",
+      "url": "https://sacred-texts.com/astro/ptb/ptb19.htm",
+      "retrieved": "2026-10-14",
+      "formatRead": "HTML transcription",
+      "locator": "Book I, chapter XVI, printed pages 24-26",
+      "supports": [
+        "Sextile, square, trine and opposition correspond to 60, 90, 120 and 180 degrees of the zodiac."
+      ]
     },
     {
       "id": "usno-altitude-hour-angle",

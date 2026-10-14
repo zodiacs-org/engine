@@ -40,8 +40,8 @@ restrictions. Accepting a convention object alone does not permit every contact.
 
 The initial `zodiacal/zero-both` policy is a project restriction to ecliptic
 projections. `mundane/retain-both` preserves the bodies' latitude. These
-choices do not exhaust traditional latitude treatments. Aspect branches and
-full equations require further source and numerical checks in their milestones.
+choices do not exhaust traditional latitude treatments. The zodiacal subset
+implemented in M5 is described below; mundane aspects remain planned.
 
 ## Timing keys remain separate from geometry
 
@@ -66,8 +66,9 @@ Placidus semi-arc construction.
 
 Before enabling a numerical method, its milestone must settle the corresponding
 equations, coordinate branch, domain and refusal rules in committed evidence.
-In particular, zodiacal latitude variants, aspect rays, timing arithmetic and
-any converse construction beyond role exchange remain unfinished. Public
+In particular, further zodiacal latitude variants, mundane aspect rules,
+timing arithmetic and any converse construction beyond role exchange remain
+unfinished. Public
 engine coordinates supply the astronomical chart, not proof of the primary
 directions geometry.
 
@@ -104,3 +105,29 @@ zodiacal projection, aspect ray or timing key. Selecting the first nonnegative
 rotation, including an initial contact, and restricting every target to
 crossing semi-arcs are explicit project rules, not additional historical
 claims. The Placidus role-swap option is refused for all angle targets.
+
+## Zodiacal body directions implemented in M5
+
+Placidus, Cooper's translation above, canons XVII-XIX on printed pp. 58-60,
+uses the promissor's ecliptic conjunction or ray. Canon XIX scales the
+significator's meridian distance by the ratio of their semi-diurnal arcs.
+Canon XXIII, printed p. 69, discusses semi-nocturnal arcs for other
+significators below the horizon. The authored
+[M5 derivation](evidence/M5-derivations.md) applies that proportional equation
+to explicitly projected points in each quadrant. These passages were fetched
+and read for M5; no published birth example was copied.
+
+This is a restricted geometric implementation. Placidus also discusses
+changing significator latitude and a separate treatment of the Sun below
+the horizon. `zero-both` applies neither rule, and the API names no body
+whose identity could silently change the selected semi-arc method.
+Thesis 61 and canon XXXVII do not supply a converse zodiacal construction;
+this solver conservatively refuses it for projected conjunctions as well.
+
+William Lilly, *Christian Astrology*, book I (1647),
+[printed pp. 108-109](https://www.worldastrology.net/wp-content/uploads/2008/12/CA-I.pdf),
+defines dexter against sign order and sinister with sign order. Those names
+select subtraction or addition at the promissor's longitude. The classic
+aspect magnitudes, ray arithmetic and independent synthetic arcs are recorded
+in the M5 derivation and fixtures. Lilly supplies branch terminology here,
+not a replacement for the Placidus proportional equation.

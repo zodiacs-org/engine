@@ -10,3 +10,8 @@ export { angleConjunctionArc, AngleDirectionError } from "./angles.js";
 export type {
   DirectionAngle, AngleConjunctionInput, AngleConjunctionArc, AngleDirectionErrorCode
 } from "./angles.js";
+export { zodiacalBodyArc, ZodiacalDirectionError } from "./zodiacal.js";
+export type {
+  DirectionEclipticPoint, ZodiacalGeometryInput, ZodiacalContact, ZodiacalBodyInput,
+  ZodiacalPreparedPoint, ZodiacalBodyArc, ZodiacalDirectionErrorCode
+} from "./zodiacal.js";

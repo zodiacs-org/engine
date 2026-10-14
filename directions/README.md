@@ -7,8 +7,9 @@ retains the engine's own [data and attribution terms](../LICENSING.md).
 
 The current implementation validates explicit convention choices, prepares
 engine natal snapshots, computes pure sphere coordinates and semi-arcs, and
-finds direct conjunction arcs to fixed angles from prepared coordinates.
-Body directions, timing conversions and the
+finds direct conjunction arcs to fixed angles from prepared coordinates,
+and computes direct zodiacal conjunctions and aspects to body significators.
+Mundane body directions, timing conversions and the
 `directions hit` and `directions scan` commands are still planned in
 [PLAN.md](PLAN.md). An accepted
 convention is not a computed hit or a claim that a particular contact exists.
@@ -28,12 +29,13 @@ const convention = createDirectionConvention({
 `parseDirectionConvention(unknown)` applies the same validation to decoded
 JSON. Every base field is required. Unknown fields, unsupported strings and
 incompatible mode/latitude pairs throw `RangeError`. The result is a new,
-frozen object; the caller's object is unchanged. These functions are pure
-and import no ephemeris or engine module.
+frozen object; the caller's object is unchanged. These functions are pure.
+The entry imports the engine's pure coordinate rotation helper, without
+loading an ephemeris or computing a natal chart.
 
 | Field | Accepted choices | Meaning |
 | --- | --- | --- |
-| `system` | `placidus-semiarc` | Planned temporal-hour geometry; no house-system substitution. |
+| `system` | `placidus-semiarc` | Temporal-hour geometry; no house-system substitution. |
 | `mode` | `zodiacal`, `mundane` | Ecliptic contact points or proportional semi-arc placement, respectively. |
 | `motion` | `direct`, `converse` | Ordinary diurnal construction, or the role exchange described in the source register. |
 | `converseConstruction` | `placidus-role-swap` | Required for converse, forbidden for direct; exchanges the moving and fixed roles. |
@@ -45,8 +47,9 @@ only with `retain-both`. These are explicit project subsets, not claims that
 all authors use those pairings. Additional latitude and converse constructions
 need named options and independent evidence before they can be admitted.
 `converse` does not silently negate a direct arc. The angle solver refuses
-converse under the role-swap construction. Restrictions on other contacts
-still need validation in their solvers and the future hit API.
+converse under the role-swap construction. The zodiacal body solver also
+refuses converse, including projected conjunctions. Mundane contacts still
+need validation in their solver and the future hit API.
 
 [SOURCES.md](SOURCES.md) states what each traditional source supports and
 where it differs. [evidence/README.md](evidence/README.md) sets the numerical
@@ -275,3 +278,91 @@ target. Circumpolar meridian contacts can exist geometrically but are outside
 this implementation's current subset; no polar fallback is applied. Source
 locators, independent fixtures and the tested scope are in
 [M4 evidence](evidence/M4.md).
+
+## Zodiacal directions to body significators
+
+`zodiacalBodyArc` projects both supplied points to the ecliptic, forms the
+promissor's conjunction or aspect ray, and carries that ray westward at
+fixed declination to the significator's temporal-hour position. The returned
+arc is an equatorial rotation in degrees. It is not the longitude difference
+between the bodies, and no orbital motion or timing conversion is added.
+
+```ts
+import { zodiacalBodyArc } from "./src/index.js";
+
+// Invented sphere coordinates, from evidence/M5-derivations.md.
+const result = zodiacalBodyArc({
+  system: "placidus-semiarc",
+  mode: "zodiacal",
+  latitude: "zero-both",
+  motion: "direct",
+  geometry: {
+    ramcDegrees: 45,
+    latitudeDegrees: Math.atan(Math.sqrt(3) / 2) * 180 / Math.PI,
+    trueObliquityDegrees: 30
+  },
+  significator: { longitudeDegrees: 0, latitudeDegrees: 0 },
+  promissor: { longitudeDegrees: 30, latitudeDegrees: 0 },
+  contact: { kind: "aspect", aspect: "sextile", branch: "sinister" }
+});
+console.log(result.arcDegrees, result.geometry);
+```
+
+For a natal chart, take longitude and latitude from the engine's body rows,
+and RAMC, observer latitude and true obliquity from `prepareNatal().geometry`.
+Pass only those explicitly named geometry fields: geographic longitude is
+already accounted for in RAMC and is not another solver input. Both points
+must belong to that same ecliptic/equinox frame. The solver retains their
+supplied latitude as metadata but applies `zero-both` to the calculation.
+It invokes the engine's public `eclipticToEquatorial` helper through its pure
+source module; it does not sample an ephemeris, move natal cusps, or invent
+body longitudes. The offset defining an aspect ray is explicit geometry.
+
+The contact must be `{ kind: "conjunction" }`, an `aspect` with `aspect:
+"opposition"`, or an `aspect` selecting `sextile`, `square` or `trine`
+with `branch: "dexter" | "sinister"`. Following Lilly's branch definitions,
+dexter subtracts the aspect from the promissor's longitude, and sinister
+adds it. Opposition has one ray and refuses a branch field. Branches refer
+to the promissor's ray, not an aspect projected from the significator.
+The magnitudes and worked arithmetic are recorded and tested in
+[M5-derivations.md](evidence/M5-derivations.md) and
+[zodiacal-examples.ts](evidence/zodiacal-examples.ts).
+
+The result has `kind: "conjunction-to-body" | "aspect-to-body"`, the explicit
+conventions, original significator and promissor, selected contact and
+`arcDegrees`. Its frozen `geometry` records the ray offset, projected
+coordinates, full initial sphere positions, fixed meridian-distance fraction,
+moving semi-arc used at contact, target hour angle, turn addition and
+coincidence. An axis target has no selected meridian fraction or semi-arc;
+those fields are null and the significator's sphere position names the axis.
+Original labels and ages belong to the later hit API. Inputs are not mutated
+or frozen, and no caller-owned object is retained.
+
+The `zero-both` choice defines a restricted project projection using the
+Placidus proportional semi-arc equation. It is not a reproduction of every
+rule in *Primum Mobile*: changing significator latitude, latitude-based
+effectiveness rules, and the Sun's special crepuscular construction are not
+applied. All supplied body points use the same explicitly chosen semi-arc
+method above and below the horizon. [SOURCES.md](SOURCES.md) identifies these
+limits alongside the traditional passages. No additional latitude policy or
+aspect set is enabled by this milestone.
+
+The solver uses the same first nonnegative rotation interval and computed
+coincidence rule as the angle primitive. It preserves the fixed quadrant
+when transferring meridian distance to the ray's own semi-arc. If an interior
+target rounds onto an axis, a ray cannot be represented within canonical
+longitude, or an arc rounds to a full turn, it refuses with
+`ZodiacalDirectionError.code: "numerical-degeneracy"`. It also refuses
+detected projection underflow and distinct equal-semi-arc points whose hour
+angles collapse into false coincidence. Trigonometric
+rounding can still move a near-contact across the revolution boundary; no
+epsilon snaps it to a contact and no global error bound is asserted.
+
+Malformed or omitted choices use `invalid-input`. `motion: "converse"`
+requires the named `placidus-role-swap` option and then refuses with
+`unsupported-converse-zodiacal`, including projected conjunctions. This
+milestone enables no zodiacal extension of the source's mundane role swap.
+The `SphereGeometryError` refusals propagate for poles, tangencies and
+circumpolar projected points. No fallback is applied. Engine integration
+checks and the independent numerical comparisons are distinguished in
+[M5 evidence](evidence/M5.md).

@@ -33,3 +33,6 @@ adapter. Neither implements an arc calculation or establishes its accuracy.
 these remain prerequisites for a later directional-arc calculation.
 [M4](M4.md) checks direct conjunction arcs to fixed angles against independent
 sphere examples. It does not yet implement body directions or directed ages.
+[M5](M5.md) checks direct zodiacal conjunctions and ecliptic aspect rays to
+body significators under the explicit zero-both projection policy. It adds
+independent spherical fixtures and source limits; timing remains unimplemented.
