@@ -105,3 +105,75 @@ does not replace the full engine rotation used by the importer.
 Byte-for-byte regeneration of the catalog from its selected raw HYG records,
 and matching source names, identifiers, epochs and lore locators, are separate
 provenance checks. They are not independent accuracy evidence.
+
+## Motion from J2000 and true-of-date positions
+
+tests/positions.fixedstars.ts uses the same u, east and north bases derived
+above, with motion components converted from mas per Julian year to radians
+per Julian year. A Julian year is 365.25 TT days, as recorded in
+sources/manifest.json, astrometryImport.julianYearDays. The motion model is:
+
+```text
+years = ttDays / 365.25
+v = (mu_alpha_star east + mu_delta north) * radians_per_mas
+w = u + years v
+direction = w / |w|
+```
+
+At RA = dec = 0, u = (1,0,0), east = (0,1,0), north = (0,0,1).
+A synthetic east motion of one radian per year over one Julian year yields
+w = (1,1,0), so the normalized direction is (1,1,0)/sqrt(2) and RA is
+atan(1), not a full radian. Backward propagation gives (1,-1,0)/sqrt(2).
+East and north motions of three and four radians per year give
+(1,3,4)/sqrt(26). These deliberately exaggerated rates reveal the model and
+are not assertions about any real star. They test linear tangent propagation,
+not a constant angular-speed great-circle model.
+
+At RA = 0, dec = 60 degrees, u = (1/2,0,sqrt(3)/2) and east = (0,1,0).
+One radian of east tangent displacement gives
+(1/2,1,sqrt(3)/2)/sqrt(2). Dividing that tangent displacement by cos(dec)
+would instead double its y component and fail this expectation. At RA = 90,
+dec = 0, east = (-1,0,0) and north = (0,0,1), so equal positive east and
+negative north displacements produce (-1,1,-1)/sqrt(3).
+
+The constructed TT reading 2000-12-31T18:00:00 is exactly one Julian year
+after J2000, while 2001-01-01T18:00:00 is 366.25 days after it. The tests
+enforce these calendar-arithmetic expectations and the normalized vector.
+All these constructed motion-vector comparisons use toBeCloseTo precision
+12. That precision concerns floating-point geometry only.
+
+At J2000 the mean-equator precession is the identity. Given the engine's
+nutation in longitude psi and true obliquity epsilon, a unit x direction
+becomes (cos(psi),sin(psi),0) on the true ecliptic and
+(cos(psi),sin(psi)cos(epsilon),sin(psi)sin(epsilon)) on the true equator.
+The test derives these vectors algebraically and compares at precision 12.
+Since the angles come from the engine, this is a rotation composition check,
+not an independent nutation reference.
+
+For an independent check, the tests read the existing committed parent
+src/fixtures/nutation-erfa.json without copying or changing it. Its generator
+is docs/evidence/nutation-2026-09-29/tools/erfa_fixtures.py, using pyerfa
+2.0.1.5 and ERFA 2.0.1, with provenance recorded in the parent LICENSING.md.
+For every TT epoch in that fixture across 1800 to 2200, the synthetic
+Cartesian x, y and z directions are multiplied by its independently generated
+eclipticOfDate matrix. Those ecliptic vectors are rotated onto the true
+equator algebraically using the fixture's epsA + deps, not the engine's
+obliquity. Reported RA/Dec and longitude/latitude are converted back to unit
+vectors for comparison. Each Cartesian component must differ by less than
+the fixture's predeclared rotationArcsec tolerance of 5e-6 arcseconds,
+converted to radians. This checks these basis directions over the fixture's
+epochs, not physical star accuracy, catalog errors or proper-motion errors.
+
+Other tests compare the full catalog with engine eclipticOfDate and
+eclipticToEquatorial at TT days -73000, 0 and 73000, using precision 11.
+These are frame-consistency checks and do not establish independent accuracy.
+Constructed pole tests apply inverse engine rotations to an exact true-frame
+pole; the expected null coordinate is the pole's geometric singularity,
+with signed latitude or declination compared at precision 10. Clock tests
+compare synthetic natal chart records under UTC, UT1, TT and a pinned deltaT;
+they are integration checks, without stored natal coordinates as references.
+
+The direction model omits radial motion, stellar parallax, perspective
+acceleration, annual aberration and gravitational deflection. Frame bias was
+already applied at catalog import. The later motion and frame operations
+apply neither another bias nor the original Hipparcos epoch shift.

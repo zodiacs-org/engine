@@ -4,7 +4,7 @@
  * astronomy-engine dependency from fixedstars/node_modules.
  */
 export { natalChart, chartDeclinations } from "../../src/api.js";
-export { eclipticToEquatorial } from "../../src/declination.js";
+export { eclipticToEquatorial, RA_POLE_TOLERANCE } from "../../src/declination.js";
 export { dateFrom } from "../../src/date-input.js";
 export { onChartClock, gastHours } from "../../src/ephemeris.js";
 export { eclipticOfDate, eclipticFrame, meanEcliptic } from "../../src/frame.js";
@@ -14,6 +14,8 @@ export type { Mat3, Vec3 } from "../../src/calc-frames.js";
 export { AstroTime } from "astronomy-engine";
 export { tilt } from "../../src/nutation.js";
 export { timeBasis } from "../../src/time-scale.js";
+export type { TimeBasis, TimeScaleName } from "../../src/time-scale.js";
+export { EPHEMERIS_SPAN } from "../../src/reference-span.js";
 export { ENGINE_VERSION, EPHEMERIS } from "../../src/types.js";
 export {
   createNatalEnvelope,

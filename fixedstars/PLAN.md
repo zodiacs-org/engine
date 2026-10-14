@@ -7,7 +7,7 @@ explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
 - [x] M1 Establish an isolated TypeScript project, catalog contracts, a direct engine source bridge, and synthetic integration and geometric tests.
 - [x] M2 Fetch and read redistributable astrometry sources and primary historical lore sources; commit source, licence, coordinate-frame, epoch, and proper-motion provenance before importing data.
 - [x] M3 Generate and commit a small named bright-star catalog within the requested size range, with aliases, source locators, optional proper motion, historical attribution tags, and validation tests.
-- [ ] M4 Propagate catalog proper motion and rotate positions onto the chart's true equator and ecliptic with the engine frame, equator, nutation, and time-basis helpers; document and test hand-derived geometry.
+- [x] M4 Propagate catalog proper motion and rotate positions onto the chart's true equator and ecliptic with the engine frame, equator, nutation, and time-basis helpers; document and test hand-derived geometry.
 - [ ] M5 Implement pure conjunction and parallel matching with explicit angular orb units, inclusive boundaries, structured star ids and contact kinds, deterministic ordering, and independent geometric tests.
 - [ ] M6 Cast synthetic natal inputs through the engine, include bodies and available angles, preserve native natal receipts, and expose the chart-hit library API with explicit coordinate conventions.
 - [ ] M7 Prove an isolated catalog-vector adapter can execute the existing src/sky/riseset.ts solver without editing or copying its algorithms; verify vector substitution is scoped, ordinary bodies are unchanged, and incompatible engine source is refused.
@@ -102,3 +102,34 @@ checkout because dist/calc.d.ts is absent. The session's hard rule forbids
 creating an engine build. The isolation check's package dry run confirms
 fixedstars is excluded; it does not claim the absent engine build's budgets
 were checked. All authored changes remain under fixedstars/.
+
+## M4 completion and M5 handoff
+
+src/positions.ts exports propagateStarDirection, starPositionAtTt and
+starPositions through the library index. Motion advances and normalizes the
+J2000 transverse tangent on TT Julian years. Both true-of-date rotations use
+the existing engine equatorRows/eclipticRows helpers; the clock wrapper uses
+onChartClock, with UTC/UT1/TT and optional pinned deltaT. No second frame bias
+or original Hipparcos epoch shift occurs. Missing motion remains explicit.
+The model's omitted corrections and lack of physical accuracy bounds are
+documented in README.md and GEOMETRY.md.
+
+Position rows include star ids, elapsed epoch, J2000 direction and angular
+coordinates in degrees. Numerical poles have null longitude or RA and explicit
+defined flags. M5 must handle unavailable longitude rather than assign it zero;
+declination remains available for parallels. Output preserves caller order and
+refuses duplicate ids. The wrapper returns the native time-basis record without
+casting a chart or claiming a chart/sky receipt. M6 will attach chart receipts.
+
+tests/positions.fixedstars.ts documents hand-derived tangent expectations and
+checks Cartesian basis directions against the parent's independent ERFA frame
+fixture across its TT epochs. Catalog frame consistency, constructed poles and
+synthetic chart clocks are explicitly integration checks. The tests do not use
+saved library output as an accuracy reference.
+
+M4 validation passed on Node 22.22.2: local Vitest, TypeScript, offline catalog
+regeneration and file/package isolation. The parent package:contents check
+still fails because dist/calc.d.ts is absent; the session's hard rule forbids
+creating an engine build. The isolation check confirms fixedstars exclusion
+with a package dry run, without claiming the missing build's budgets passed.
+All authored changes remain under fixedstars/.

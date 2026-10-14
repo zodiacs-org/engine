@@ -3,8 +3,8 @@
 This private source-checkout project is being built according to
 [PLAN.md](PLAN.md). It supplies a licensed catalog, source provenance, and a
 direct bridge to the parent engine with synthetic integration and geometric
-tests. Propagation to chart dates, contact matching, parans, and the CLI are
-pending milestones.
+tests, and proper-motion propagation and true-of-date stellar positions.
+Contact matching, parans, and the CLI are pending milestones.
 
 Use Node as specified by this folder's package.json. Install and check only
 this project from the repository root:
@@ -96,4 +96,48 @@ raw records, and rebuilds. It never writes the bulk source catalog to disk.
 The import compiler runs in memory and consumes the existing engine helpers.
 Regeneration checks prove traceability and arithmetic consistency; the
 independent geometric cases in GEOMETRY.md test the conversion's construction.
+
+## Positions on a chart clock
+
+```ts
+import { catalog, starPositions } from "./src/index.js";
+
+// Invented instant, with the same clock fields accepted by natalChart.
+const result = starPositions({ utc: "2000-03-20T06:00:00Z" }, catalog);
+console.log(result.positions, result.timeBasis, result.conventions);
+```
+
+starPositions defaults to the committed catalog. A supplied array selects stars
+in caller order and must have unique ids. Its clock fields are utc, timeScale
+and deltaT, resolved through the existing engine onChartClock helper. Positions
+use TT for both motion and frame orientation, including a caller's pinned
+deltaT. The native time-basis record describes that resolution; this function
+casts no chart and makes no sky search, so it does not create either receipt.
+
+Each row carries starId, ttDays, elapsedJulianYears, directionJ2000, motion,
+lonDeg, latDeg, raDeg and decDeg. Longitudes and RA are degrees in [0,360);
+latitudes and declinations are north positive. A numerical pole has null RA
+or longitude and a false raDefined or lonDefined flag. The engine's
+RA_POLE_TOLERANCE governs that singularity convention. The position rows,
+their direction vectors and the positions array are frozen.
+
+propagateStarDirection is a pure vector calculation on the catalog's J2000
+axes. It uses the cosine-weighted RA motion and declination motion as tangent
+components, advances a linear tangent vector over elapsed Julian years, and
+normalizes the resulting direction. Null motion leaves the catalog direction
+unchanged and reports unavailable; tabulated zero remains available motion.
+starPositionAtTt accepts days of TT from J2000 and applies the existing
+engine's eclipticRows and equatorRows true-of-date rotations. It and the clock
+wrapper refuse instants outside the engine EPHEMERIS_SPAN. A catalog pole
+with nonzero motion is refused because its RA tangent convention is undefined.
+
+These positions omit radial motion, stellar parallax, perspective acceleration,
+annual aberration and gravitational deflection. They are rotated catalog
+directions with transverse motion, not fully apparent stellar places. Natal
+bodies have the engine's own corrections, so comparisons with stars must
+retain this difference in conventions. No physical accuracy bound is claimed.
+[GEOMETRY.md](GEOMETRY.md) derives the motion and rotation checks in
+[tests/positions.fixedstars.ts](tests/positions.fixedstars.ts), distinguishes
+independent ERFA comparisons from engine integration checks, and names their
+reference span.
 
