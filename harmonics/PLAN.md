@@ -8,7 +8,7 @@ unchecked milestone, runs its checks, marks it complete and appends a line to
 - [x] M1 Set up an isolated private TypeScript project and Vitest runner; implement pure harmonic longitude charts with validated named points, a configurable harmonic ceiling and hand-derived arithmetic tests.
 - [x] M2 Add an engine chart adapter using relative source imports, reuse natal chart casting and the natal receipt creator, preserve the original receipt and chart flags, and keep unknown point speeds absent.
 - [x] M3 Add harmonic aspect detection using the engine's configured aspect policy and matcher, with explicit orb units and per-harmonic scaling; test custom angles, wraparound and inclusive boundaries.
-- [ ] M4 Reuse `src/techniques/aspect-patterns.ts` for supported harmonic aspect patterns, documenting its fixed major-aspect limits and refusing unsupported pattern policies rather than inventing graph results.
+- [x] M4 Reuse `src/techniques/aspect-patterns.ts` for supported harmonic aspect patterns, documenting its fixed major-aspect limits and refusing unsupported pattern policies rather than inventing graph results.
 - [ ] M5 Implement harmonic strength spectra with a documented deterministic scoring formula, configurable harmonic selection and weights, pair contributions and hand-derived ranking tests.
 - [ ] M6 Implement Uranian dial projections for the requested 90, 45 and 22.5 degree circles, preserving full source longitudes and testing circular distances and seam contacts.
 - [ ] M7 Implement canonical planetary pictures and A+B-C sensitive points with configurable contact orbs, explicit repeated-member rules and arithmetic tests.
@@ -93,3 +93,29 @@ this project, with a writable npm cache under `harmonics/.cache/`. The root
 `npm run package:contents` still fails at missing `dist/calc.d.ts`. No engine
 build, archive creation or git mutation was performed. The next session
 starts at M4.
+
+## M4 validation
+
+Added the separate `./patterns` entry with `findHarmonicPatterns`, reusing the
+engine's historical major-aspect matcher, pattern detector and containment
+helper. Supported policies select physical bodies and major-aspect subsets
+with fixed engine limits. Unsupported orb scaling, caps, custom angles and
+motion settings reject before graph detection. The result records historical
+arithmetic explicitly, preserves engine roles and containment, and keeps the
+source natal envelope separate.
+
+On Node 22.22.2, `npm run check` passed. Hand-derived tests in
+`test/harmonic-patterns.test.ts` cover figures, complete edges, fixed ordinary
+and luminary boundaries, subsets, empty selections, ordering, seam reduction,
+unsupported settings, receipt preservation and frozen snapshots. The isolated
+`test/pure-entry.test.ts` rejects chart or ephemeris imports from the default
+entry. `README.md` documents the separate entry's inherited static engine
+dependencies and the difference from configured-aspect arithmetic.
+
+`git diff --check` passed. All changed and new files are inside `harmonics/`,
+below the file size limit, and documentation contains no em dash. The root
+`npm pack --dry-run --json --ignore-scripts` manifest excludes this project.
+With Node 22 and a writable cache inside `harmonics/.cache/`, the root
+`npm run package:contents` still fails at missing `dist/calc.d.ts`. No engine
+build, archive creation or git mutation was performed. The next session
+starts at M5.

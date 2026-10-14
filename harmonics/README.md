@@ -1,8 +1,9 @@
 # Harmonics prototype
 
 This private source project adds harmonic longitude transforms, configured
-harmonic aspects and natal casting adapters to the engine checkout. See
-[PLAN.md](PLAN.md) for the remaining pattern, spectrum, dial and CLI milestones.
+harmonic aspects, supported aspect patterns and natal casting adapters to the
+engine checkout. See [PLAN.md](PLAN.md) for the remaining spectrum, dial and CLI
+milestones.
 Code and documentation here are MIT under
 the repository's [LICENSE](../LICENSE). The engine's data attributions remain
 in [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE).
@@ -215,6 +216,106 @@ original natal chart, including its natal aspects, and does not attest the
 harmonic analysis. This synthetic integration example is exercised in
 [test/harmonic-aspects.test.ts](test/harmonic-aspects.test.ts).
 
+## Harmonic aspect patterns
+
+```ts
+import { findHarmonicPatterns } from "./src/harmonic-patterns.js";
+
+const result = findHarmonicPatterns([
+  { body: "Mercury", lon: 0 },
+  { body: "Venus", lon: 60 },
+  { body: "Mars", lon: 120 }
+], 2);
+console.log(result.analysis.patterns, result.containment.roots);
+```
+
+`findHarmonicPatterns(sourcePositions, N, options)` transforms original
+longitudes with `harmonicChart`, derives edge records with the engine's
+historical `matchAspect`, and passes them to `aspectPatterns` in
+`src/techniques/aspect-patterns.ts`. It also calls that module's
+`patternContainment`. No replacement graph detector is implemented here.
+The source positions need only `body` and `lon`; speeds are unused and may
+remain absent. Longitude validation and `maxHarmonic` follow `harmonicChart`.
+
+Import this API through the private project's separate `./patterns` entry,
+or the source path shown above. The engine pattern module statically imports
+its chart API and ephemeris, so the patterns entry loads those dependencies.
+The operation itself casts no chart and evaluates no ephemeris. The default
+`./src/index.js` entry keeps its ephemeris-free graph, checked by
+[test/pure-entry.test.ts](test/pure-entry.test.ts).
+
+The supported figures are grand trine, T-square, grand cross and kite among
+Sun through Pluto. Every required edge must be present. The harmonic-chart
+rows retain all supplied points in input order; `analysis.points` contains
+only selected physical bodies, in engine order. Nodes, angles and custom
+points cannot form these figures. The default selection ignores them.
+Selecting one in `options.policy.bodies` throws `RangeError`. An empty body
+selection or input containing only supplemental points returns an empty
+analysis; an empty aspect selection supplies no edges. Fewer eligible members
+or conjunction clusters produce no complete figures.
+
+Pattern orbs are fixed degrees on the harmonic circle. `orbScaling` defaults
+to `"fixed"`; other values throw `RangeError`, including the harmonic-aspect
+API's `"inverse-harmonic"` mode. The engine detector rechecks each edge using
+these historical major-aspect limits:
+
+| Aspect | Angle, degrees | Ordinary orb, degrees | Sun or Moon replacement, degrees |
+| --- | ---: | ---: | ---: |
+| conjunction | 0 | 8 | 10 |
+| sextile | 60 | 4 | 5 |
+| square | 90 | 7 | 8 |
+| trine | 120 | 7 | 8 |
+| opposition | 180 | 8 | 10 |
+
+[test/harmonic-patterns.test.ts](test/harmonic-patterns.test.ts) checks this
+table on supplied pairs at each ordinary and luminary boundary at N=2,
+including strict exclusion just beyond it. These are the engine's analysis
+allowances, not measured astronomical error bounds. For fixed allowance L,
+the corresponding source deviation from an exact harmonic contact is L/N,
+subject to transform rounding. Pattern matching uses the historical engine
+matcher with its ordinary binary64 arithmetic, as recorded by
+`policy.arithmetic`. It can disagree at rounding boundaries with the exact
+binary64 configured matcher used by `findHarmonicAspects`. Their edge lists
+are separate analyses and are not interchangeable inputs to this wrapper.
+
+`options.policy` accepts engine `AspectPolicyInput` syntax, revalidated by
+`createAspectPolicy`. Supported policies select subsets of physical bodies
+or major-aspect rules while retaining the table's angle, uniform orb and
+luminary replacement for every selected rule. For example, a square-only
+selection is `{ aspects: [{ type: "square", orb: 7, luminaryOrb: 8 }] }`.
+Custom and minor angles, changed orbs, omitted luminary replacements on
+explicit rules, nonempty body caps, and changed stationary thresholds throw
+`RangeError` before graph detection. Unknown wrapper fields also throw.
+The detector cannot apply those settings; the wrapper does not silently
+discard them. Speeds and motion classifications are outside pattern analysis.
+
+Results contain `harmonicChart`, the descriptive fixed `policy`,
+`orbScaling`, the matched `aspects`, the engine's `analysis`, and its
+`containment`. All are frozen independent snapshots. `analysis.patterns`
+preserves the engine's ids, member ordering, edge limits and source ids,
+oppositions and figure roles. `containment.roots` holds figures inside no
+larger figure; `containment.included[id]` lists each figure's contained
+patterns. Multiple patterns can share members and edges.
+
+For a chart calculation, retain the source envelope explicitly:
+
+```ts
+import { castChart } from "./src/engine.js";
+import { findHarmonicPatterns } from "./src/harmonic-patterns.js";
+
+const source = castChart({
+  utc: "2002-04-06T03:00:00Z", latitude: 12, longitude: 24
+}, { includeAngles: true, includeChartPoints: true });
+const result = { source, harmonicPatterns: findHarmonicPatterns(source.points, 3) };
+```
+
+This invented input is exercised in
+[test/harmonic-patterns.test.ts](test/harmonic-patterns.test.ts). Pattern
+analysis accepts supplemental rows without fabricating speeds. The natal
+envelope is unchanged and describes only the original engine calculation,
+not the harmonic transform or patterns. The pure pattern operation returns
+no receipt and makes no claim about predictive validity.
+
 ## Arithmetic evidence
 
 [test/harmonic-chart.test.ts](test/harmonic-chart.test.ts) derives expected
@@ -246,3 +347,17 @@ and stays 6 in fixed mode, including it. Seam, custom-angle, luminary-cap,
 motion and tie tests state their separate derivations in comments. These
 checks establish arithmetic and engine delegation, not ephemeris accuracy
 or predictive validity.
+
+[test/harmonic-patterns.test.ts](test/harmonic-patterns.test.ts) derives every
+pattern fixture from invented source longitudes. In the pattern example,
+N=2 maps 0, 60 and 120 to 0, 120 and 240 degrees, making all shortest pair
+separations 120 degrees. N=4 maps 0, 22.5, 45 and 67.5 to 0, 90, 180 and 270
+degrees, forming a grand cross with its contained T-squares. Adding a point
+at 90 source degrees to the triangle example places it at 180 harmonic
+degrees, completing the kite. Boundary tests perturb source longitude by
+2^-20 degrees at N=2, changing the harmonic orb by 2^-19 degrees; the
+fractions are exact in binary64. Tests also check rule and body subsets,
+empty selections, missing edges, unsupported policies, rotation and seam
+invariance, engine delegation, receipt preservation and frozen snapshots.
+These checks cover transform arithmetic and supported engine graph behavior,
+not ephemeris accuracy.

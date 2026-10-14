@@ -6,7 +6,8 @@
   "description": "Source-only harmonic chart and Uranian dial prototype for the engine checkout.",
   "exports": {
     ".": "./src/index.ts",
-    "./engine": "./src/engine.ts"
+    "./engine": "./src/engine.ts",
+    "./patterns": "./src/harmonic-patterns.ts"
   },
   "engines": {
     "node": ">=22"
