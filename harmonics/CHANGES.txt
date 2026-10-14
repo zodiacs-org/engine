@@ -1,1 +1,2 @@
 Implement M1: isolated harmonics tooling and pure longitude charts with configurable harmonic limits, hand-derived Vitest arithmetic checks, and package exclusion validation.
+Implement M2: isolated engine chart and harmonic casting adapters preserving natal receipts and flags, optional angles and chart points, known-speed scaling, and synthetic Vitest integration checks.

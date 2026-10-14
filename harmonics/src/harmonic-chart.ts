@@ -3,7 +3,8 @@ import type { HarmonicChart, HarmonicOptions, HarmonicPoint, LongitudePoint } fr
 
 export const DEFAULT_MAX_HARMONIC = 180;
 
-function harmonicLimit(harmonic: number, options: HarmonicOptions): number {
+/** @internal Shared with the casting adapter to reject invalid N before casting. */
+export function harmonicLimit(harmonic: number, options: HarmonicOptions): number {
   if (!options || typeof options !== "object" || Array.isArray(options)) {
     throw new RangeError("Harmonic options must be an object.");
   }

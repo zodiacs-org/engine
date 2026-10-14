@@ -5,7 +5,8 @@
   "license": "MIT",
   "description": "Source-only harmonic chart and Uranian dial prototype for the engine checkout.",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./engine": "./src/engine.ts"
   },
   "engines": {
     "node": ">=22"
@@ -14,6 +15,9 @@
     "test": "vitest run --config vitest.config.ts",
     "typecheck": "tsc -p tsconfig.json --pretty false",
     "check": "npm run typecheck && npm test"
+  },
+  "dependencies": {
+    "astronomy-engine": "2.1.19"
   },
   "devDependencies": {
     "@types/node": "22.19.19",
