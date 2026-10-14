@@ -1,0 +1,22 @@
+{
+  "name": "@zodiacs/heliacal-workbench",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "vitest run --config vitest.config.ts",
+    "typecheck": "tsc --project tsconfig.json --pretty false",
+    "check:package": "node scripts/check-package-isolation.mjs"
+  },
+  "engines": {
+    "node": "^22.7.0 || >=24.0.0"
+  },
+  "dependencies": {
+    "astronomy-engine": "2.1.19"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "typescript": "5.9.3",
+    "vitest": "2.1.9"
+  }
+}
