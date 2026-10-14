@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import fixture from './fixtures/composition-windows.json';
 import { composeRuleWindows, subtractIntervals } from '../src/index.js';
+import { scoreConditions } from '../src/internal-scoring.js';
 import type { ElectionalRule, EngineReceipt, Interval, RuleEvaluation, RuleSet, RuleWindowResult } from '../src/index.js';
 
 const span = (pair: readonly number[]): Interval => ({ startMs: pair[0]!, endMs: pair[1]! });
@@ -30,18 +31,24 @@ const rules = fixture.rules.map(r => rule(r.id, r.mode as 'require' | 'prefer', 
 const sources = fixture.rules.map((r, i) => evaluation(rules[i]!, r.satisfied.map(span), r.unknown.map(span)));
 const has = (spans: readonly Interval[], at: number): boolean => spans.some(s => s.startMs <= at && at < s.endMs);
 
+const composeScored = (input: unknown, results: readonly RuleEvaluation[]) => scoreConditions(composeRuleWindows(input, results), { enabled: true });
+
 describe('independent hand-derived composition golden', () => {
-  it('intersects hard rules, keeps unknowns, scores states and orders ties', () => {
-    const result = composeRuleWindows(configuration(rules), sources);
+  it('partitions every condition state and annotates numeric bounds only after explicit opt-in', () => {
+    const facts = composeRuleWindows(configuration(rules), sources);
+    const result = scoreConditions(facts, { enabled: true });
+    expect(facts.windows.every(w => !('score' in w) && !('rank' in w) && w.explanations.every(e => !('contribution' in e)))).toBe(true);
+    expect(facts).not.toHaveProperty('scoring'); expect(facts).not.toHaveProperty('ranking');
     expect(result.status).toBe('unresolved');
     expect(result.eligible).toEqual(fixture.eligible.map(span)); expect(result.excluded).toEqual(fixture.excluded.map(span));
     expect(result.unresolvedRequired).toEqual(fixture.unresolvedRequired.map(span));
-    expect(result.windows.map(w => ({ span: [w.startMs, w.endMs], score: [w.score.lower, w.score.upper], states: w.explanations.map(e => e.state) }))).toEqual(fixture.ranked);
-    expect(result.windows.map(w => w.rank)).toEqual(fixture.ranked.map((_, i) => i + 1));
+    expect(result.windows.map(w => ({ span: [w.startMs, w.endMs], score: [w.score.lower, w.score.upper], states: w.explanations.map(e => e.state) }))).toEqual(fixture.windows);
+    expect(result.windows.every(w => !('rank' in w))).toBe(true);
+    expect(result.windows.map(w => w.startMs)).toEqual([...result.windows.map(w => w.startMs)].sort((a, b) => a - b));
     expect(result.windows.every(w => w.score.maximum === 10 && w.clock === 'utc')).toBe(true);
     const bounded = result.windows.find(w => w.score.status === 'bounded')!;
     expect(bounded.unresolved).toEqual([{ startMs: 60, endMs: 70, reason: 'hand-derived-unknown', ruleId: 'preference-a', mode: 'prefer' }]);
-    expect(bounded.explanations[2]?.text).toContain('no guaranteed weight');
+    expect(bounded.explanations[2]?.text).toContain('Condition unresolved.');
     expect(bounded.explanations[2]?.contribution).toEqual({ lower: 0, upper: 7 });
     expect(result.windows[0]?.explanations[0]?.contribution).toEqual({ lower: 0, upper: 0 });
     expect(result.windows[0]?.receipts).toHaveLength(4); expect(result.evaluations).toBe(4);
@@ -67,24 +74,24 @@ describe('independent hand-derived composition golden', () => {
     const result = composeRuleWindows(config, mutable);
     (mutable[0]!.receipts[0]!.engine as { name: string }).name = 'later mutation';
     expect(result.receipts[0]?.engine.name).toBe('contract-stub'); expect(Object.isFrozen(config)).toBe(false);
-    expect(JSON.parse(JSON.stringify(result)).windows[0].score.lower).toBe(10);
+    expect(JSON.parse(JSON.stringify(result)).windows[0]).not.toHaveProperty('score');
   });
 });
 
 describe('scoring and coverage edge cases', () => {
-  it('returns a completed empty set only for established hard failures', () => {
+  it('retains a complete failed window when the required intersection is empty', () => {
     const r = rule('hard', 'require');
-    expect(composeRuleWindows(configuration([r]), [evaluation(r, [])])).toMatchObject({ status: 'complete', windows: [], eligible: [],
+    expect(composeRuleWindows(configuration([r]), [evaluation(r, [])])).toMatchObject({ status: 'complete', windows: [{ startMs: 0, endMs: 100, explanations: [{ state: 'failed' }] }], eligible: [],
       excluded: [span([0, 100])], unresolvedRequired: [], unresolved: [] });
   });
   it('cannot promote unresolved hard coverage even at arbitrarily high preference weight', () => {
     const hard = rule('hard', 'require'), prefer = rule('high', 'prefer', 1000000);
     const result = composeRuleWindows(configuration([hard, prefer]), [evaluation(hard, [], [domain]), evaluation(prefer, [domain])]);
-    expect(result).toMatchObject({ status: 'unresolved', windows: [], excluded: [], unresolvedRequired: [span([0, 100])] });
+    expect(result).toMatchObject({ status: 'unresolved', windows: [{ explanations: [{ state: 'unresolved' }, { state: 'satisfied' }] }], excluded: [], unresolvedRequired: [span([0, 100])] });
   });
-  it('ranks an all-preference search with bounded unknown scores', () => {
+  it('annotates an all-preference search with bounded unknown scores without reordering', () => {
     const r = rule('optional', 'prefer', 5);
-    expect(composeRuleWindows(configuration([r]), [refusal(r)])).toMatchObject({ status: 'unresolved', eligible: [span([0, 100])],
+    expect(composeScored(configuration([r]), [refusal(r)])).toMatchObject({ status: 'unresolved', eligible: [span([0, 100])],
       unresolvedRequired: [], windows: [{ score: { lower: 0, upper: 5, maximum: 5, status: 'bounded' }, receipts: [] }],
       refusals: [{ ruleId: 'optional', mode: 'prefer', reason: 'missing-capability', detail: { unavailable: 'test-source' } }] });
   });
@@ -105,11 +112,11 @@ describe('scoring and coverage edge cases', () => {
     expect(result.status).toBe('unresolved'); expect(result.excluded).toEqual([span([0, 100])]);
     expect(result.unresolvedRequired).toEqual([]); expect(result.unresolved).toHaveLength(1);
   });
-  it('scores hard-only passing intervals as exact zero and ranks by duration, then start', () => {
+  it('retains passing and failed hard-only intervals chronologically without scores', () => {
     const r = rule('hard', 'require');
     const result = composeRuleWindows(configuration([r]), [evaluation(r, [[0, 10], [20, 40], [50, 70]].map(span))]);
-    expect(result.windows.map(w => [w.startMs, w.endMs])).toEqual([[20, 40], [50, 70], [0, 10]]);
-    expect(result.windows.every(w => w.score.lower === 0 && w.score.upper === 0 && w.score.maximum === 0)).toBe(true);
+    expect(result.windows.map(w => [w.startMs, w.endMs])).toEqual([[0, 10], [10, 20], [20, 40], [40, 50], [50, 70], [70, 100]]);
+    expect(result.windows.every(w => !('score' in w))).toBe(true);
   });
   it('merges adjacent equivalent states but retains distinct equal-score explanations', () => {
     const a = rule('a', 'prefer'), b = rule('b', 'prefer');
@@ -122,15 +129,15 @@ describe('scoring and coverage edge cases', () => {
     const source: RuleEvaluation = { ...evaluation(r, [], [domain]), status: 'unresolved',
       unresolved: [{ ...span([0, 50]), reason: 'first' }, { ...span([50, 100]), reason: 'second' }] };
     const result = composeRuleWindows(configuration([hard, r]), [evaluation(hard, [span([25, 75])]), source]);
-    expect(result.windows.map(w => [w.startMs, w.endMs])).toEqual([[25, 50], [50, 75]]);
-    expect(result.windows.map(w => w.unresolved)).toEqual([
+    expect(result.windows.map(w => [w.startMs, w.endMs])).toEqual([[0, 25], [25, 50], [50, 75], [75, 100]]);
+    expect(result.windows.slice(1, 3).map(w => w.unresolved)).toEqual([
       [{ ...span([25, 50]), reason: 'first', ruleId: r.id, mode: 'prefer' }],
       [{ ...span([50, 75]), reason: 'second', ruleId: r.id, mode: 'prefer' }],
     ]);
   });
   it('preserves declared fractional weights without rounding reported scores', () => {
     const a = rule('a', 'prefer', 0.125), b = rule('b', 'prefer', 0.25);
-    const result = composeRuleWindows(configuration([a, b]), [evaluation(a, [domain]), evaluation(b, [domain])]);
+    const result = composeScored(configuration([a, b]), [evaluation(a, [domain]), evaluation(b, [domain])]);
     expect(result.windows[0]?.score).toEqual({ lower: 0.375, upper: 0.375, maximum: 0.375, status: 'exact' });
   });
 });
@@ -178,7 +185,7 @@ describe('independent exhaustive finite-state composition', () => {
       states.flatMap((s, i) => s === 1 ? [span([i, i + 1])] : []),
       states.flatMap((s, i) => s === 2 ? [span([i, i + 1])] : []), 3);
     for (let x = 0; x < 27; x++) for (let y = 0; y < 27; y++) {
-      const stateA = digits(x), stateB = digits(y), result = composeRuleWindows(config, [source(a, stateA), source(b, stateB)]);
+      const stateA = digits(x), stateB = digits(y), result = composeScored(config, [source(a, stateA), source(b, stateB)]);
       for (let t = 0; t < 3; t++) {
         const pairs = [[a, stateA[t]!], [b, stateB[t]!]] as const;
         const excluded = pairs.some(([r, s]) => r.mode === 'require' && s === 0);
@@ -186,8 +193,8 @@ describe('independent exhaustive finite-state composition', () => {
         expect(has(result.excluded, t)).toBe(excluded); expect(has(result.eligible, t)).toBe(eligible);
         expect(has(result.unresolvedRequired, t)).toBe(!excluded && !eligible);
         const windows = result.windows.filter(w => w.startMs <= t && t < w.endMs);
-        expect(windows).toHaveLength(eligible ? 1 : 0);
-        if (eligible) {
+        expect(windows).toHaveLength(1);
+        {
           const lower = pairs.reduce((sum, [r, s]) => sum + (r.mode === 'prefer' && s === 1 ? r.weight : 0), 0);
           const upper = pairs.reduce((sum, [r, s]) => sum + (r.mode === 'prefer' && s !== 0 ? r.weight : 0), 0);
           expect(windows[0]?.score.lower).toBe(lower); expect(windows[0]?.score.upper).toBe(upper);

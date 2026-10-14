@@ -11,6 +11,7 @@ describe('authored traditional preset conventions, no astronomical reference', (
     expect(validateRuleSet(result)).toEqual(result);
     expect(parseRuleSet(JSON.stringify(result), 'json')).toEqual(result);
     expect(result.activity).toContain('not predictions');
+    expect(result.activity).toContain('conditions to check');
     expect(result.location).toEqual(context.location); expect(result.range).toEqual(context.range);
     expect(result.rules.find(r => r.kind === 'planetary-hour')?.options).toHaveProperty('utcOffsetMinutes', 330);
     expect(result.rules.filter(r => r.mode === 'prefer').every(r => r.weight === 1)).toBe(true);
@@ -44,6 +45,7 @@ describe('authored traditional preset conventions, no astronomical reference', (
   });
   it('returns a frozen catalog with no mutable pack references', () => {
     expect(listPresetPacks().map(p => p.name)).toEqual(PRESET_NAMES);
+    expect(listPresetPacks().every(p => p.description.includes('conditions to check:'))).toBe(true);
     expect(listPresetPacks().every(p => p.version === 'electional-presets/v1' && p.interpretation === 'traditional-conventions;not-predictions' && Object.isFrozen(p))).toBe(true);
     expect(Object.isFrozen(listPresetPacks())).toBe(true);
     expect(Object.isFrozen(PRESET_NAMES)).toBe(true);

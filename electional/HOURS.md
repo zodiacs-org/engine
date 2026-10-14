@@ -4,7 +4,7 @@
 whose native planetary-hour ruler is in the rule's `rulers` list. It returns
 `satisfied`, `failed`, `covered` and `unresolved` interval sets, the copied rule
 and location, native day audits and engine receipts. The rule's mode and weight
-remain available for later scoring. Planetary-hour selection is a traditional
+remain available for factual composition. Planetary-hour selection is a traditional
 convention, not a prediction about an activity.
 
 The evaluator calls `planetaryHours` from the existing engine sky entry through
@@ -145,4 +145,4 @@ console.log(result.status, result.explanation);
 ```
 
 These dates are arbitrary calculation inputs, not a person's birth data.
-Other rule composition, ranking and streaming remain later milestones.
+Factual composition and streaming are described in [CONDITIONS.md](CONDITIONS.md) and [STREAMING.md](STREAMING.md).

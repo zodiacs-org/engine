@@ -38,7 +38,7 @@ async function drain(rules: RuleSet, engine: EngineRuntime, settings = options) 
 }
 describe.runIf(present)('native streaming with independent hand-derived equations', () => {
   it.each([100, 150, 300, 333, 1000])('partitions linear Moon sectors with chunk width %s without moving known ownership', async chunkMs => {
-    const engine = linear(), { chunks, end } = await drain(config, engine, { ...options, chunkMs, internalScoring: true });
+    const engine = linear(), { chunks, end } = await drain(config, engine, { ...options, chunkMs });
     const whole = searchElectional(config, { engine, events: await capability() },
       { maxEvaluations: options.maxEvaluations, maxSkySamples: options.maxSkySamples, stepMs: options.stepMs, lookaheadMs: options.lookaheadMs });
     expect(['complete', 'unresolved']).toContain(end.status); expect(end.remaining).toBe(null);
@@ -47,11 +47,11 @@ describe.runIf(present)('native streaming with independent hand-derived equation
     // Waxing Crescent = [22.5,67.5), which contains this whole interval.
     for (let t = 0; t < 1000; t++) {
       if (containsInstant(unknown, t)) continue;
-      expect(containsInstant(fragments, t), `label ${t}`).toBe(t >= 300 && t < 600);
-      expect(containsInstant(fragments, t)).toBe(containsInstant(whole.windows, t));
+      expect(containsInstant(chunks.flatMap(c => c.facts.eligible), t), `label ${t}`).toBe(t >= 300 && t < 600);
+      expect(containsInstant(chunks.flatMap(c => c.facts.eligible), t)).toBe(containsInstant(whole.eligible, t));
     }
     expect(fragments.length).toBeGreaterThan(0);
-    expect(fragments.every(f => f.internalScore?.lower === 5 && f.internalScore.upper === 5)).toBe(true);
+    expect(fragments.every(f => !('score' in f) && !('rank' in f))).toBe(true);
     expect(end.evaluations).toBe(chunks.reduce((sum, c) => sum + c.facts.evaluations, 0));
     expect(chunks.every(c => c.facts.receipts.length === c.facts.evaluations && c.fragments.every(f => f.receipts.every(r => r.engine.name === 'linear-test-function')))).toBe(true);
     expect(chunks.every(c => c.facts.ruleResults.every(r => 'searches' in r && r.searches.every(s => s.source?.moduleUrl === eventsUrl.href)))).toBe(true);
@@ -65,7 +65,7 @@ describe.runIf(present)('native streaming with independent hand-derived equation
     expect(boundaries.length).toBeGreaterThan(0);
     expect(normalizeIntervals([...first.facts.eligible, ...first.facts.excluded, ...first.facts.unresolvedRequired])).toEqual([{ startMs: 0, endMs: 300 }]);
     expect(normalizeIntervals([...second.facts.eligible, ...second.facts.excluded, ...second.facts.unresolvedRequired])).toEqual([{ startMs: 300, endMs: 600 }]);
-    expect(chunks.flatMap(c => c.fragments).every(f => f.startMs >= 300 && f.endMs <= 600)).toBe(true);
+    expect(chunks.flatMap(c => c.fragments).every(f => f.explanations.length === config.rules.length)).toBe(true);
     expect(chunks.every(c => c.facts.unresolved.every(u => u.startMs >= c.facts.window.startMs && u.endMs <= c.facts.window.endMs))).toBe(true);
   });
   it('finds a station outside a chunk whose avoidance margin crosses that chunk', async () => {
@@ -87,9 +87,9 @@ describe.runIf(present)('native streaming with independent hand-derived equation
     // exclusion is [-364,1364], hence [-364,1365) in half-open arithmetic.
     for (let t = 0; t < 2000; t++) {
       if (containsInstant(unknown, t)) continue;
-      expect(containsInstant(fragments, t), `label ${t}`).toBe(t >= 1365);
+      expect(containsInstant(chunks.flatMap(c => c.facts.eligible), t), `label ${t}`).toBe(t >= 1365);
     }
-    expect(chunks[0]?.fragments).toEqual([]);
+    expect(chunks[0]?.fragments[0]?.explanations[0]?.state).toBe('failed');
     expect(chunks[0]?.facts.ruleResults[0]).toHaveProperty('convention.marginMs', 864);
     expect(fragments.length).toBeGreaterThan(0);
   });
@@ -105,7 +105,7 @@ describe.runIf(present)('native streaming with independent hand-derived equation
     // [100,600) is void, and [0,100) satisfies the rule on this domain.
     for (let t = 0; t < 600; t++) {
       if (containsInstant(unknown, t)) continue;
-      expect(containsInstant(fragments, t), `label ${t}`).toBe(t < 100);
+      expect(containsInstant(chunks.flatMap(c => c.facts.eligible), t), `label ${t}`).toBe(t < 100);
     }
     expect(fragments.length).toBeGreaterThan(0);
     expect(unknown.every(u => u.reason.startsWith('numerical-'))).toBe(true);

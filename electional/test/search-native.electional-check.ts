@@ -51,9 +51,9 @@ describe.runIf(present)('native composed search with independent hand-derived in
     // Numerical source brackets remain unknown and are never assigned truth.
     for (let t = 0; t < 1000; t++) {
       if (containsInstant(found.unresolved, t)) continue;
-      expect(containsInstant(found.windows, t), `label ${t}`).toBe(t >= 300 && t < 600);
+      expect(containsInstant(found.eligible, t), `label ${t}`).toBe(t >= 300 && t < 600);
     }
-    expect(found.windows.every(w => w.score.lower === 5 && w.score.upper === 5 && w.explanations.every(e => e.state === 'satisfied'))).toBe(true);
+    expect(found.windows.every(w => !('score' in w) && !('rank' in w))).toBe(true);
     expect(found.receipts.length).toBe(found.evaluations);
     expect(found.ruleResults.every(r => 'searches' in r && r.searches.every(s => 'source' in s && s.source?.moduleUrl === eventsUrl.href))).toBe(true);
     expect(found.windows.every(w => w.receipts.every(r => r.engine.name === 'linear-test-function'))).toBe(true);
@@ -71,7 +71,7 @@ describe.runIf(present)('native composed search with independent hand-derived in
     // in a resolved nonpolar solar day. No numerical planet position is pinned.
     expect(found.windows).toHaveLength(1);
     expect(found.windows[0]).toMatchObject({ startMs: Date.parse(real.range.start), endMs: Date.parse(real.range.end),
-      score: { lower: 0.5, upper: 0.5, status: 'exact' }, clock: 'utc' });
+      clock: 'utc' });
     expect(found.receipts.every(r => r.engine.ephemeris.name === 'astronomy-engine')).toBe(true);
     expect(found.windows[0]?.explanations.every(e => e.receipts.length > 0)).toBe(true);
     expect(found.ruleResults[1]).toHaveProperty('partitions'); expect(found.ruleResults[2]).toHaveProperty('days');

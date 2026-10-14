@@ -1,17 +1,20 @@
 {
   "arbiter": "Hand-derived integer interval membership and rule states from composition-windows.json, no ephemeris",
-  "domain": { "startMs": 0, "endMs": 100, "clock": "utc" },
+  "domain": {"startMs": 0, "endMs": 100, "clock": "utc"},
   "chunkMs": 25,
   "fragments": [
-    { "chunk": 0, "span": [10, 20], "id": 1, "continued": false },
-    { "chunk": 0, "span": [20, 25], "id": 2, "continued": false },
-    { "chunk": 1, "span": [25, 30], "id": 2, "continued": true },
-    { "chunk": 1, "span": [30, 40], "id": 3, "continued": false },
-    { "chunk": 2, "span": [50, 60], "id": 4, "continued": false },
-    { "chunk": 2, "span": [60, 70], "id": 5, "continued": false },
-    { "chunk": 2, "span": [70, 75], "id": 6, "continued": false },
-    { "chunk": 3, "span": [75, 80], "id": 6, "continued": true },
-    { "chunk": 3, "span": [80, 90], "id": 7, "continued": false }
+    {"chunk": 0, "span": [0, 10], "id": 1, "continued": false},
+    {"chunk": 0, "span": [10, 20], "id": 2, "continued": false},
+    {"chunk": 0, "span": [20, 25], "id": 3, "continued": false},
+    {"chunk": 1, "span": [25, 30], "id": 3, "continued": true},
+    {"chunk": 1, "span": [30, 40], "id": 4, "continued": false},
+    {"chunk": 1, "span": [40, 50], "id": 5, "continued": false},
+    {"chunk": 2, "span": [50, 60], "id": 6, "continued": false},
+    {"chunk": 2, "span": [60, 70], "id": 7, "continued": false},
+    {"chunk": 2, "span": [70, 75], "id": 8, "continued": false},
+    {"chunk": 3, "span": [75, 80], "id": 8, "continued": true},
+    {"chunk": 3, "span": [80, 90], "id": 9, "continued": false},
+    {"chunk": 3, "span": [90, 100], "id": 10, "continued": false}
   ],
-  "derivation": "Cut the chronological composition cells at 25, 50 and 75. Equal states touch across 25 and 75 and retain their id. The hard unknown gap [40,50) prevents joining [30,40) to [50,60), even though their preference states match. Every label belongs to at most one chunk; the final endpoint 100 belongs to none. No score or global rank is emitted by default."
+  "derivation": "Cut the manually derived chronological condition cells at 25, 50 and 75. Touching identical states retain their id at chunk seams. Required failures and unknowns remain explicit cells. Every label belongs to exactly one chunk; the final endpoint 100 belongs to none. No score or rank is emitted."
 }

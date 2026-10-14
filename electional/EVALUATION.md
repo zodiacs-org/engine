@@ -5,7 +5,7 @@ a Moon sign, Moon phase or direct-motion rule. It returns separate `satisfied`,
 `failed` and `unresolved` spans on the input window's declared clock. It does
 not combine rules, apply preference weights, rank candidates or predict an
 activity's outcome. The returned rule keeps its validated mode and weight for
-the later scoring layer. These are traditional selection conventions.
+the factual composition layer. These are traditional selection conventions.
 
 The function validates and copies the rule through the configuration schema.
 It validates the explicit clock, integer endpoints, positive scan step and

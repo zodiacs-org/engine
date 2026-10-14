@@ -4,7 +4,7 @@
 validated `moon-not-void` rule. It returns `satisfied`, `failed`, `covered` and
 `unresolved` interval sets, engine receipts, source search audits, and an
 explicit convention record. The validated mode and preference weight remain
-available for later scoring. This rule describes a traditional selection
+available for factual composition. This rule describes a traditional selection
 convention, not a prediction about an activity.
 
 ## Convention and delegation

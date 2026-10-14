@@ -1,7 +1,7 @@
 import { setImmediate } from 'node:timers/promises';
 import { clockWindow } from './adapter-contract.js';
 import type { ClockWindow } from './adapter-contract.js';
-import type { ElectionalResult, RuleExplanation, ScoredWindow } from './composition.js';
+import type { ElectionalResult, RuleExplanation, ConditionWindow } from './composition.js';
 import { checkedSearchOptions, searchElectional } from './search.js';
 import type { SearchDependencies, SearchOptions } from './search.js';
 import { resolvedInstantMs, validateRuleSet } from './rules.js';
@@ -13,23 +13,19 @@ export interface StreamOptions extends SearchOptions {
   readonly maxChunkSkySamples: number;
   /** UTF-8 JSON bound on each chunk frame, including repeated receipts. */
   readonly maxFrameBytes: number;
-  /** Internal workbench use only. Facts are emitted by default. */
-  readonly internalScoring?: boolean;
 }
-export type StreamExplanation = Omit<RuleExplanation, 'contribution' | 'text'> & { readonly text: string };
+export type StreamExplanation = RuleExplanation;
 export interface WindowFragment extends ClockWindow {
   readonly windowId: number;
   readonly continuedFromPrevious: boolean;
   readonly durationMs: number;
   readonly explanations: readonly StreamExplanation[];
-  readonly unresolved: ScoredWindow['unresolved'];
-  readonly receipts: ScoredWindow['receipts'];
-  readonly completeness: ScoredWindow['completeness'];
-  readonly receiptScope: ScoredWindow['receiptScope'];
-  readonly internalScore?: ScoredWindow['score'];
-  readonly chunkRank?: number;
+  readonly unresolved: ConditionWindow['unresolved'];
+  readonly receipts: ConditionWindow['receipts'];
+  readonly completeness: ConditionWindow['completeness'];
+  readonly receiptScope: ConditionWindow['receiptScope'];
 }
-export type StreamFacts = Omit<ElectionalResult, 'windows' | 'scoring' | 'ranking'>;
+export type StreamFacts = Omit<ElectionalResult, 'windows'>;
 export interface StreamChunk {
   readonly type: 'chunk';
   readonly index: number;
@@ -58,18 +54,17 @@ function canonical(value: unknown): string {
     .map(key => `${JSON.stringify(key)}:${canonical((value as Record<string, unknown>)[key])}`).join(',')}}`;
   return JSON.stringify(value);
 }
-function signature(window: ScoredWindow): string {
+function signature(window: ConditionWindow): string {
   return canonical(window.explanations.map(e => ({ rule: e.rule, state: e.state,
     // Coordinates change at each chunk. Preserve all diagnostic meaning.
     unknown: e.unresolved.map(({ startMs, endMs, ...diagnostic }) => diagnostic) })));
 }
 function chunksOptions(input: StreamOptions): { search: SearchOptions; stream: StreamOptions } {
   if (!input || typeof input !== 'object' || Array.isArray(input)) throw new RangeError('Expected stream controls.');
-  const { chunkMs, maxChunks, maxChunkEvaluations, maxChunkSkySamples, maxFrameBytes, internalScoring, ...search } = input;
+  const { chunkMs, maxChunks, maxChunkEvaluations, maxChunkSkySamples, maxFrameBytes, ...search } = input;
   for (const value of [chunkMs, maxChunks, maxChunkEvaluations, maxChunkSkySamples, maxFrameBytes]) {
     if (!Number.isSafeInteger(value) || value < 1) throw new RangeError('Explicit positive integer chunk and output limits are required.');
   }
-  if (internalScoring !== undefined && typeof internalScoring !== 'boolean') throw new RangeError('Expected a boolean internalScoring.');
   return { search, stream: Object.freeze({ ...input }) };
 }
 
@@ -108,24 +103,19 @@ export async function* streamElectional(input: unknown, dependencies: SearchDepe
     evaluations += result.evaluations;
     skySamples += result.ruleResults.reduce((sum, rule) => sum + ('samples' in rule ? rule.samples : 0), 0);
     if (!Number.isSafeInteger(evaluations) || !Number.isSafeInteger(skySamples)) throw new TypeError('Invalid cumulative work accounting.');
-    const chronological = [...result.windows].sort((a, b) => a.startMs - b.startMs);
     const fragments: WindowFragment[] = [];
     let nextTail: typeof tail;
-    for (const candidate of chronological) {
+    for (const candidate of result.windows) {
       const key = signature(candidate);
       const continuedFromPrevious = candidate.startMs === cursor && tail?.endMs === cursor && tail.signature === key;
       const windowId = continuedFromPrevious ? tail!.windowId : nextId++;
       fragments.push(Object.freeze({ startMs: candidate.startMs, endMs: candidate.endMs, clock: candidate.clock,
         windowId, continuedFromPrevious, durationMs: candidate.durationMs,
-        explanations: Object.freeze(candidate.explanations.map((e, i) => {
-          const { contribution, text, ...facts } = e;
-          return Object.freeze({ ...facts, text: `${e.state}. ${result.ruleResults[i]!.explanation}` });
-        })), unresolved: candidate.unresolved, receipts: candidate.receipts,
-        completeness: candidate.completeness, receiptScope: candidate.receiptScope,
-        ...(stream.internalScoring ? { internalScore: candidate.score, chunkRank: candidate.rank } : {}) }));
+        explanations: candidate.explanations, unresolved: candidate.unresolved, receipts: candidate.receipts,
+        completeness: candidate.completeness, receiptScope: candidate.receiptScope }));
       if (candidate.endMs === endMs) nextTail = { endMs, windowId, signature: key };
     }
-    const { windows, scoring, ranking, ...facts } = result;
+    const { windows, ...facts } = result;
     const frame: StreamChunk = Object.freeze({ type: 'chunk', index: chunks,
       facts: Object.freeze(facts), fragments: Object.freeze(fragments), cumulative: Object.freeze({ evaluations, skySamples }) });
     if (Buffer.byteLength(JSON.stringify(frame), 'utf8') > stream.maxFrameBytes) {

@@ -62,19 +62,16 @@ describe('independent hand-derived streaming golden', () => {
     expect(chunks.map(c => c.facts.window)).toEqual([0, 25, 50, 75].map(startMs => ({ startMs, endMs: startMs + 25, clock: 'utc' })));
     expect(chunks[2]?.fragments[0]?.windowId).not.toBe(chunks[1]?.fragments.at(-1)?.windowId);
   });
-  it('emits facts by default and optional scores with explicitly local ranks', async () => {
+  it('emits only factual chronological conditions and rejects embedded scoring controls', async () => {
     const facts = await collect();
     for (const chunk of facts.chunks) {
       expect(chunk.facts).not.toHaveProperty('windows'); expect(chunk.facts).not.toHaveProperty('scoring'); expect(chunk.facts).not.toHaveProperty('ranking');
       for (const f of chunk.fragments) {
-        expect(f).not.toHaveProperty('rank'); expect(f).not.toHaveProperty('internalScore'); expect(f).not.toHaveProperty('chunkRank');
+        expect(f).not.toHaveProperty('rank'); expect(f).not.toHaveProperty('score'); expect(f).not.toHaveProperty('internalScore'); expect(f).not.toHaveProperty('chunkRank');
         expect(f.explanations.every(e => !('contribution' in e) && !e.text.includes('weight'))).toBe(true);
       }
     }
-    const scored = await collect(config(), { ...options, internalScoring: true });
-    const first = scored.chunks[0]!.fragments;
-    expect(first.map(f => [f.internalScore?.lower, f.chunkRank])).toEqual([[3, 2], [10, 1]]);
-    expect(first.map(f => f.windowId)).toEqual(facts.chunks[0]!.fragments.map(f => f.windowId));
+    await expect(collect(config(), { ...options, internalScoring: true } as StreamOptions)).rejects.toThrow();
   });
   it('matches the unpartitioned hand-derived sets and cells for every chunk width on the domain', async () => {
     for (let chunkMs = 1; chunkMs <= 101; chunkMs++) {
@@ -89,7 +86,7 @@ describe('independent hand-derived streaming golden', () => {
         if (prior) { expect(f.continuedFromPrevious).toBe(true); expect(prior.endMs).toBe(f.startMs); expect(prior.states).toEqual(states); prior.endMs = f.endMs; }
         else { expect(f.continuedFromPrevious).toBe(false); groups.set(f.windowId, { startMs: f.startMs, endMs: f.endMs, states }); }
       }
-      expect([...groups.values()]).toEqual([...composition.ranked].sort((a, b) => a.span[0]! - b.span[0]!)
+      expect([...groups.values()]).toEqual([...composition.windows].sort((a, b) => a.span[0]! - b.span[0]!)
         .map(c => ({ ...span(c.span), states: c.states })));
     }
   }, 30000);
@@ -121,7 +118,7 @@ describe('stream seams, backpressure and native provenance transport', () => {
     vi.mocked(evaluateVoidRule).mockImplementation((r, w) => ({ ...full(r, w), status: 'unresolved', satisfied: [], failed: [], covered: [],
       unresolved: [{ ...w, reason: 'no-next-ingress' }] }) as never);
     const { chunks, end } = await collect(config([{ id: 'void', kind: 'moon-not-void', mode: 'require', options: { bodies: 'traditional' } }]));
-    expect(end.status).toBe('unresolved'); expect(chunks.every(c => c.fragments.length === 0 && c.facts.unresolvedRequired.length === 1)).toBe(true);
+    expect(end.status).toBe('unresolved'); expect(chunks.every(c => c.fragments[0]?.explanations[0]?.state === 'unresolved' && c.facts.unresolvedRequired.length === 1)).toBe(true);
     expect(vi.mocked(evaluateVoidRule).mock.calls.every(c => c[4].lookaheadMs === 20 && c[4].stepMs === 10)).toBe(true);
   });
   it('preserves native receipts and chunk-local explanations without freezing source objects', async () => {
@@ -175,7 +172,7 @@ describe('stream cumulative and per-chunk budgets', () => {
     vi.mocked(evaluateHourRule).mockImplementation((r, w) => ({ ...full(r, w), satisfied: [], failed: [w], samples: 3 }) as never);
     const { chunks, end } = await collect(hours, { ...options, maxSkySamples: 12 });
     expect(end).toMatchObject({ status: 'complete', reason: null, chunks: 4, skySamples: 12, remaining: null });
-    expect(chunks.every(c => c.fragments.length === 0 && c.facts.status === 'complete')).toBe(true);
+    expect(chunks.every(c => c.fragments[0]?.explanations[0]?.state === 'failed' && c.facts.status === 'complete')).toBe(true);
   });
   it('refuses the remaining domain when the chunk count is exhausted', async () => {
     const { end } = await collect(config(), { ...options, maxChunks: 2 });

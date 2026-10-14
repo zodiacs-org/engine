@@ -93,7 +93,8 @@ result files. Use shell redirection into a gitignored directory for local data.
 Search writes one JSON object per line, using the library's `chunk` and `end`
 frames unchanged. Chunks contain chronological constant-state window fragments,
 per-rule explanations, known eligibility, exclusions, unknown coverage,
-source audits and engine receipts. Receipt scope and clocks remain explicit.
+source audits and engine receipts. Required failures and unknowns remain visible
+as condition windows. Receipt scope and clocks remain explicit.
 Fragment IDs connect touching states across chunk seams. Public output carries
 no scores, contributions or ranks. Declared preference weights remain visible
 inside their rule definitions, as submitted configuration facts.
@@ -109,7 +110,7 @@ for applications that need field diagnostics.
 
 | Exit code | Meaning |
 | --- | --- |
-| `0` | Complete search, valid document, generated preset, catalog or help. A complete empty candidate set is allowed. |
+| `0` | Complete search, valid document, generated preset, catalog or help. An empty required-check intersection retains its failed condition windows. |
 | `1` | Invalid arguments/input, filesystem/runtime failure or broken output transport. |
 | `2` | All chunks were emitted but some rule coverage remains unresolved. |
 | `3` | A source or work/output allowance refused the search. |

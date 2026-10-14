@@ -9,16 +9,12 @@ and sockets an opportunity to deliver cancellation before native work begins.
 Frames are facts by default. A `chunk` frame contains the full rule audits,
 known eligibility and exclusion sets, unresolved coverage, receipts, and
 chronological window fragments. Each fragment gives every rule's state and
-selection convention. It carries no score or rank by default. The optional
-`internalScoring: true` control adds `internalScore` and `chunkRank` for internal
-workbench comparisons. The rank applies only inside that chunk. Traditional
-selection conventions and weights are not predictions or probabilities.
-
-The existing bounded `searchElectional` API retains its scoring contract in
-[SCORING.md](SCORING.md). The stream does not promise a global best window:
-future chunks can contain a longer or differently weighted window. A consumer
-that wants a global ranking must finish the stream and retain or externally
-store enough facts to perform its own final comparison.
+condition convention. It carries no score or rank. Failed and unresolved
+required conditions remain explicit fragments; `eligible`, `excluded` and
+`unresolvedRequired` describe the separate required-check intersection.
+All fragments are ordered chronologically. Scoring controls are rejected.
+The separate internal/pro module in [SCORING.md](SCORING.md) never participates
+in streaming or consumer transports.
 
 ## Controls and work ownership
 
@@ -34,7 +30,6 @@ controls are:
 | `maxChunkEvaluations` | Native request allowance for a chunk, capped by the remaining search-wide allowance. |
 | `maxChunkSkySamples` | Sky sample allowance for a chunk, capped by the remaining search-wide allowance. |
 | `maxFrameBytes` | Inclusive UTF-8 JSON byte limit for a chunk frame, with repeated receipts included. |
-| `internalScoring` | Optional internal comparison output, off by default. |
 
 Native requests and sky samples accumulate across chunks, including failed
 calls, padding, lookahead, repeated solar-day calculations and repeated natal
@@ -74,9 +69,8 @@ coverage. The chunk's audit preserves their source windows and clocks.
 A fragment starting at a chunk seam reuses the preceding fragment's `windowId`
 only when the two fragments touch, all declared rule states match, and their
 unresolved diagnostics have the same meaning. The fragment then has
-`continuedFromPrevious: true`. Different states, diagnostic details, excluded
-spans and required unknown gaps end that identity. Neither equal scores nor
-receipt equality establishes continuation. IDs are allocated in chronological
+`continuedFromPrevious: true`. Different states and diagnostic details end that identity. Receipt equality
+alone does not establish continuation. IDs are allocated in chronological
 order within a stream and have no identity across separate searches.
 
 Continuation identifies one logical constant-state window without building an

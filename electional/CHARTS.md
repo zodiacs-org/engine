@@ -5,7 +5,7 @@
 or `applying-aspect` rule. Load the read-only native bridge with
 `loadChartRuntime()`. The rule, location, house system, clock and work options
 are validated before work or a capability refusal. Results keep the rule's
-mode and preference weight for the later scoring layer. These are traditional
+mode and preference weight for the factual composition layer. These are traditional
 selection conventions, not predictions.
 
 ## Definitions and delegation

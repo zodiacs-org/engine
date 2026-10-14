@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { composeRuleWindows, loadSearchDependencies, searchElectional, subtractIntervals } from '../build/index.js';
+import { scoreConditions } from '../build/internal-scoring.js';
 const fixture = JSON.parse(await readFile(new URL('../test/fixtures/composition-windows.json', import.meta.url), 'utf8'));
 const span = ([startMs, endMs]) => ({ startMs, endMs });
 const rules = fixture.rules.map(r => ({ id: r.id, kind: 'moon-sign', mode: r.mode,
@@ -15,8 +16,10 @@ const sources = fixture.rules.map((r, i) => {
     covered, unresolved: unknown.map(s => ({ ...s, reason: 'hand-derived-unknown' })), evaluations: 1, receipts: [receipt], searches: [],
     explanation: 'Hand-derived set.', completeness: 'source-scan-assumptions' };
 });
-const composed = composeRuleWindows(ruleSet, sources);
-assert.deepEqual(composed.windows.map(w => ({ span: [w.startMs, w.endMs], score: [w.score.lower, w.score.upper], states: w.explanations.map(e => e.state) })), fixture.ranked);
+const facts = composeRuleWindows(ruleSet, sources);
+assert(facts.windows.every(w => !('score' in w) && !('rank' in w)));
+const composed = scoreConditions(facts, { enabled: true });
+assert.deepEqual(composed.windows.map(w => ({ span: [w.startMs, w.endMs], score: [w.score.lower, w.score.upper], states: w.explanations.map(e => e.state) })), fixture.windows);
 assert(Object.isFrozen(composed.windows[0].receipts[0].engine));
 assert(!Object.isFrozen(receipt));
 const dependencies = await loadSearchDependencies();

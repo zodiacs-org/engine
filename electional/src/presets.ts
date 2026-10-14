@@ -19,11 +19,11 @@ export interface PresetPack {
 }
 const packs: readonly PresetPack[] = frozenCopy([
   { name: 'launch', version: 'electional-presets/v1', interpretation: 'traditional-conventions;not-predictions',
-    description: 'An authored launch example: direct Mercury and Venus, a non-void Moon, and optional waxing, solar/Jupiter hours and angular-house benefics.' },
+    description: 'Launch conditions to check: direct Mercury and Venus, a non-void Moon, and optional waxing, solar/Jupiter hours and angular-house benefics.' },
   { name: 'contract-signing', version: 'electional-presets/v1', interpretation: 'traditional-conventions;not-predictions',
-    description: 'An authored agreement example: direct Mercury and a non-void Moon, with optional Mercury hours, Taurus/Libra Moon and applying Moon aspects to Mercury.' },
+    description: 'Contract-signing conditions to check: direct Mercury and a non-void Moon, with optional Mercury hours, Taurus/Libra Moon and applying Moon aspects to Mercury.' },
   { name: 'travel', version: 'electional-presets/v1', interpretation: 'traditional-conventions;not-predictions',
-    description: 'An authored travel example: direct Mercury and a non-void Moon, with optional Mercury/Jupiter hours, Gemini/Sagittarius Moon and Jupiter in the ninth house.' },
+    description: 'Travel conditions to check: direct Mercury and a non-void Moon, with optional Mercury/Jupiter hours, Gemini/Sagittarius Moon and Jupiter in the ninth house.' },
 ]);
 export function listPresetPacks(): readonly PresetPack[] { return packs; }
 
@@ -53,6 +53,6 @@ export function createPresetRuleSet(name: PresetName, context: PresetContext): R
     { id: 'jupiter-ninth-house', kind: 'benefic-house', mode: 'prefer', weight: 1,
       options: { bodies: ['Jupiter'], houses: [9], match: 'all', polarFallback: 'reject' } },
   ];
-  return validateRuleSet({ schemaVersion: 'electional/v1', activity: `Traditional ${name} conventions (not predictions)`,
+  return validateRuleSet({ schemaVersion: 'electional/v1', activity: `${name} conditions to check (traditional conventions; not predictions)`,
     location: context.location, range: context.range, houseSystem: context.houseSystem, rules: [...common, ...choices] });
 }

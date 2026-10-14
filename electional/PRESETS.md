@@ -1,7 +1,7 @@
-# Authored electional convention packs
+# Conditions-to-check packs
 
 The `launch`, `contract-signing` and `travel` packs are editable examples of
-traditional astrology selection conventions. They are not predictions,
+traditional astrology conditions to check. They are not predictions,
 probabilities, empirically validated activity recommendations or verbatim rule
 sets attributed to a historical author. Their choices, weights, station
 margins and aspect allowance are workbench policy choices. Changing the activity
@@ -15,11 +15,11 @@ and `utcOffsetMinutes`. Unknown context fields or names reject. The CLI's
 [`preset` command](CLI.md) exposes the same generator. Nothing is calculated
 until that document is explicitly searched.
 
-## Exact selection choices
+## Declared condition choices
 
-Every pack requires a non-void Moon under the engine's `traditional` body
-convention and direct Mercury. Launch also requires direct Venus. Every pack
-requires avoidance of Mercury stations within one elapsed day; launch includes
+Every pack checks for a non-void Moon under the engine's `traditional` body
+convention and direct Mercury. Launch also checks direct Venus. Every pack
+checks avoidance of Mercury stations within one elapsed day; launch includes
 Venus stations too. This margin is an authored choice, including the existing
 inclusive edge and numerical uncertainty conventions in [AVOIDANCE.md](AVOIDANCE.md).
 It is not a historical prescription or a measured threshold of activity risk.
@@ -29,7 +29,7 @@ comparison choice. Public CLI results report their states without emitting
 scores or ranks. Unknown preferences remain unknown. A preference
 failure does not exclude otherwise eligible hard-rule windows.
 
-| Pack | Optional selection conventions |
+| Pack | Additional conditions to check |
 | --- | --- |
 | `launch` | Sun or Jupiter planetary hour; Moon in Waxing Crescent, First Quarter or Waxing Gibbous; either Venus or Jupiter in any angular house, meaning houses `1`, `4`, `7`, `10`. |
 | `contract-signing` | Mercury planetary hour; Moon in Taurus or Libra; Moon applying by sextile or trine to Mercury within the declared `3` degree cap. |

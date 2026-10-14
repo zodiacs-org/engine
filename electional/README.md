@@ -1,17 +1,20 @@
 # Electional search workbench
 
-A private TypeScript project for composing and ranking time windows over the
-existing astrology engine. Progress is tracked in [PLAN.md](PLAN.md). The
-interval foundation, strict JSON/YAML rule loading, read-only engine and
-events adapters, and Moon sign, phase, direct-motion, Moon-not-void and
-planetary-hour, benefic house/angular, applying-aspect and eclipse/station
-avoidance and synthetic natal synastry rule windows are
-implemented so far, with hard-rule composition, weighted scoring and
-deterministic ranking described in [SCORING.md](SCORING.md). The bounded async
-stream described in [STREAMING.md](STREAMING.md) emits facts by default, with
-shared budgets, cancellation and seam continuation. The facts-only CLI and
-editable traditional preset packs are described in [CLI.md](CLI.md) and
-[PRESETS.md](PRESETS.md). The HTTP endpoint is a planned milestone.
+A private TypeScript project for listing sky condition windows over the
+existing astrology engine. Results are chronological facts with user-chosen
+checks marked satisfied, failed or unresolved, including required failures.
+The library, stream, CLI and HTTP endpoint emit no scores or ranks. They make
+no predictions and do not recommend dates.
+
+Progress is tracked in [PLAN.md](PLAN.md). The rule evaluators cover Moon sign,
+phase, direct motion, Moon-not-void, planetary hours, benefic houses and angles,
+applying aspects, eclipse/station margins and synthetic natal synastry.
+[CONDITIONS.md](CONDITIONS.md) describes factual composition and audit receipts.
+[STREAMING.md](STREAMING.md) describes bounded work and seam continuation.
+The CLI and editable conditions-to-check packs are in [CLI.md](CLI.md) and
+[PRESETS.md](PRESETS.md). [HTTP.md](HTTP.md) describes the bounded endpoint.
+A separate [internal/pro numeric module](SCORING.md) requires explicit opt-in
+and must never be enabled on the ChatGPT app or zodiacs.org.
 [EVALUATION.md](EVALUATION.md)
 describes the basic evaluator and
 its uncertainty handling. [VOID.md](VOID.md) describes Moon-not-void lookahead,
@@ -27,7 +30,7 @@ The adapter contract and optional events integration are described in
 [ADAPTERS.md](ADAPTERS.md). The
 configuration vocabulary is described in [RULES.md](RULES.md).
 
-Electional rule packs describe authored traditional conventions, not predictions.
+Conditions-to-check packs describe authored traditional conventions, not predictions.
 Tests and examples use synthetic data. Code and documentation here use the
 repository's [MIT license](../LICENSE); engine data keeps the attribution and
 terms recorded in [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE).

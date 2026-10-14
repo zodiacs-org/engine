@@ -40,10 +40,13 @@ export type { SynastryRuntime, InterAspect, InterAspectDefinition } from './syna
 export { evaluateSynastryRule } from './synastry-rule.js';
 export type { SynastryRule, SynastryRuleOptions, SynastryRuleWindowResult, SynastryPolicy, SynastryPairPolicy, SyntheticNatalAudit } from './synastry-rule.js';
 export { composeRuleWindows } from './composition.js';
-export type { RuleEvaluation, RuleUnresolved, RuleExplanation, ScoredWindow, ElectionalResult } from './composition.js';
+export type { RuleEvaluation, RuleUnresolved, RuleExplanation, ConditionWindow, ElectionalResult } from './composition.js';
 export { searchElectional, loadSearchDependencies } from './search.js';
 export type { SearchDependencies, SearchOptions } from './search.js';
 export { streamElectional } from './stream.js';
 export type { StreamOptions, StreamExplanation, WindowFragment, StreamFacts, StreamChunk, StreamEnd, StreamFrame } from './stream.js';
 export { createPresetRuleSet, listPresetPacks, PRESET_NAMES } from './presets.js';
 export type { PresetContext, PresetName, PresetPack } from './presets.js';
+export { createElectionalServer } from './http.js';
+export type { HttpServerOptions } from './http.js';
+export type { HttpLimits } from './http-limits.js';

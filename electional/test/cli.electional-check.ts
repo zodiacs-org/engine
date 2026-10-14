@@ -51,14 +51,14 @@ describe('CLI independent hand-derived window transport', () => {
     expect(frames.at(-1)).toMatchObject({ type: 'end', status: 'unresolved', chunks: 4, remaining: null });
     const chunks = frames.filter((frame): frame is StreamChunk => frame.type === 'chunk');
     const fragments = chunks.flatMap(c => c.fragments);
-    for (const cell of golden.ranked) {
+    for (const cell of golden.windows) {
       const parts = fragments.filter(f => f.startMs >= cell.span[0]! && f.endMs <= cell.span[1]!);
       expect(parts.reduce((sum, f) => sum + f.durationMs, 0)).toBe(cell.span[1]! - cell.span[0]!);
       expect(parts.every(f => f.explanations.map(e => e.state).join() === cell.states.join())).toBe(true);
     }
-    expect(fragments.reduce((sum, f) => sum + f.durationMs, 0)).toBe(70);
+    expect(fragments.reduce((sum, f) => sum + f.durationMs, 0)).toBe(100);
     expect(chunks.every(c => !('scoring' in c.facts) && !('ranking' in c.facts))).toBe(true);
-    expect(fragments.every(f => !('internalScore' in f) && !('chunkRank' in f) && !('rank' in f))).toBe(true);
+    expect(fragments.every(f => !('score' in f) && !('internalScore' in f) && !('chunkRank' in f) && !('rank' in f))).toBe(true);
     expect(fragments.every(f => f.explanations.every(e => !('contribution' in e)) && f.receipts.every(r => JSON.stringify(r) === JSON.stringify(receipt)))).toBe(true);
     expect(h.output.every(line => line.endsWith('\n') && line.indexOf('\n') === line.length - 1)).toBe(true);
   });

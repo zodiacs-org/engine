@@ -61,7 +61,7 @@ describe('coordinator delegation and shared accounting', () => {
   it.each(Object.keys(ruleOptions) as (keyof RuleOptions)[])('delegates %s with the declared UTC clock and context', kind => {
     const configuration = config([rule(kind)]);
     const found = searchElectional(configuration, dependencies, options);
-    expect(found).toMatchObject({ status: 'complete', evaluations: 1, windows: [{ startMs: 0, endMs: 100, score: { lower: 0, upper: 0 } }] });
+    expect(found).toMatchObject({ status: 'complete', evaluations: 1, windows: [{ startMs: 0, endMs: 100 }] });
     expect(delegates.reduce((sum, fn) => sum + vi.mocked(fn).mock.calls.length, 0)).toBe(1);
     const call = delegates.flatMap(fn => vi.mocked(fn).mock.calls as unknown[][])[0]!;
     expect(call[0]).toEqual(configuration.rules[0]); expect(call[1]).toEqual(window);
@@ -82,13 +82,13 @@ describe('coordinator delegation and shared accounting', () => {
     }
     expect(found.ruleResults[0]?.receipts).toEqual([receipt]); expect(native.calc).not.toHaveBeenCalled();
   });
-  it('evaluates in declaration order with remaining budget and scores the final full set', () => {
+  it('evaluates in declaration order with remaining budget and factual states', () => {
     const configuration = config([rule('moon-phase'), rule('moon-sign', 'preference', true), rule('avoid-stations')]);
     const found = searchElectional(configuration, dependencies, { ...options, maxEvaluations: 3 });
     expect(vi.mocked(evaluateBasicRule).mock.calls.map(c => c[4].maxEvaluations)).toEqual([3, 2]);
     expect(vi.mocked(evaluateAvoidanceRule).mock.calls[0]?.[4].maxEvaluations).toBe(1);
     expect(found.status).toBe('complete'); expect(found.evaluations).toBe(3); expect(found.receipts).toHaveLength(3);
-    expect(found.windows[0]?.score).toMatchObject({ lower: 5, upper: 5, maximum: 5 });
+    expect(found.windows[0]).not.toHaveProperty('score'); expect(found.windows[0]?.explanations.every(e => e.state === 'satisfied')).toBe(true);
     expect(found.ruleResults.map(r => r.rule.id)).toEqual(configuration.rules.map(r => r.id));
   });
   it('does not call a later delegate after exact shared budget exhaustion', () => {
@@ -141,7 +141,7 @@ describe('coordinator delegation and shared accounting', () => {
     const { [missing]: ignored, ...available } = dependencies;
     const found = searchElectional(config([rule(kind, kind, true)]), available, options);
     expect(found.status).toBe('unresolved'); expect(found.evaluations).toBe(0); expect(found.receipts).toEqual([]);
-    expect(found.windows[0]?.score).toMatchObject({ lower: 0, upper: 5, status: 'bounded' });
+    expect(found.windows[0]?.explanations[0]?.state).toBe('unresolved'); expect(found.windows[0]).not.toHaveProperty('score');
     expect(found.refusals[0]?.reason).toBe('missing-capability');
   });
   it('detects a delegate that exceeds the request budget', () => {

@@ -1,0 +1,163 @@
+{
+  "schema": "electional-m13-test-record/v1",
+  "runtime": "v22.22.2",
+  "startedAt": "2026-10-14T21:41:22.703Z",
+  "command": "npm test -- --reporter=dot --reporter=json --outputFile=generated/m13-vitest.json",
+  "tests": {
+    "passed": 668,
+    "skipped": 51,
+    "failed": 0
+  },
+  "groups": {
+    "httpGolden": {
+      "passed": 7,
+      "skipped": 0,
+      "failed": 0
+    },
+    "httpValidation": {
+      "passed": 58,
+      "skipped": 0,
+      "failed": 0
+    },
+    "httpLifecycle": {
+      "passed": 9,
+      "skipped": 0,
+      "failed": 0
+    },
+    "httpNative": {
+      "passed": 2,
+      "skipped": 0,
+      "failed": 0
+    },
+    "internalOptIn": {
+      "passed": 19,
+      "skipped": 0,
+      "failed": 0
+    },
+    "composition": {
+      "passed": 6,
+      "skipped": 0,
+      "failed": 0
+    },
+    "stream": {
+      "passed": 3,
+      "skipped": 0,
+      "failed": 0
+    },
+    "cli": {
+      "passed": 10,
+      "skipped": 0,
+      "failed": 0
+    }
+  },
+  "handDerivedReference": {
+    "fixture": "test/fixtures/composition-windows.json",
+    "domain": {
+      "startMs": 0,
+      "endMs": 100,
+      "clock": "utc"
+    },
+    "scope": "Full-domain failed/satisfied/unknown states, optional sums, chronological cells, worker/CLI/HTTP transport and seam ownership."
+  },
+  "internalScoring": {
+    "enabled": "Only separate scoreConditions(facts, { enabled: true }); never imported by consumer entries.",
+    "scope": "Numeric arithmetic annotations with full per-rule weights and bounds; no ranks or reordered windows."
+  },
+  "http": {
+    "policy": "examples/http-policy.json",
+    "controls": "examples/http-controls.json",
+    "scope": "Real local HTTP requests: strict input, admission, byte/work/range caps, deadlines during synchronous worker calls, stalled uploads, disconnects, output limits and acknowledgement ownership."
+  },
+  "executableRecord": "docs/evidence/m13-http-esm.json",
+  "isolation": {
+    "command": "npm run check:isolation",
+    "output": "> check:isolation\n> node scripts/check-isolation.mjs\n\nIsolation passed: npm excludes electional/ and parent Vitest discovers no workbench tests.\nThis checks file selection and test discovery, not parent build, size budgets or archive binding.",
+    "scope": "Parent npm dry-run selection without build hook or archive creation; parent Vitest discovery without executing parent tests."
+  },
+  "eventsSource": null,
+  "skippedTests": [
+    "independent NASA eclipse avoidance comparison 'solar' '2023-10-14': excludes the declared margin around the published greatest eclipse",
+    "independent NASA eclipse avoidance comparison 'solar' '2025-03-29': excludes the declared margin around the published greatest eclipse",
+    "independent NASA eclipse avoidance comparison 'lunar' '2022-11-08': excludes the declared margin around the published greatest eclipse",
+    "independent NASA eclipse avoidance comparison 'lunar' '2023-05-05': excludes the declared margin around the published greatest eclipse",
+    "independent NASA eclipse avoidance comparison 'lunar' '2023-10-28': excludes the declared margin around the published greatest eclipse",
+    "independent Horizons station avoidance comparison 'mercury-retrograde-april-2023': excludes both sides of the independent longitude extremum",
+    "independent Horizons station avoidance comparison 'mercury-direct-september-2023': excludes both sides of the independent longitude extremum",
+    "independent Horizons station avoidance comparison 'venus-retrograde-july-2023': excludes both sides of the independent longitude extremum",
+    "independent Horizons station avoidance comparison 'venus-direct-september-2023': excludes both sides of the independent longitude extremum",
+    "independent Horizons station avoidance comparison before: retains the margin of a station outside the requested window",
+    "independent Horizons station avoidance comparison after: retains the margin of a station outside the requested window",
+    "native avoidance scanners with hand-derived equations delegates the quadratic Mercury longitude minimum at label 5",
+    "native avoidance scanners with hand-derived equations delegates a symmetric solar-axis minimum centered at label 5",
+    "independent Horizons applying-window comparison Moon applying to any selected targets on the reference TT span",
+    "independent Horizons applying-window comparison Moon applying to all selected targets on the reference TT span",
+    "native scanner with independently hand-derived linear models angular delegates the synthetic equations to existing longitude search",
+    "native scanner with independently hand-derived linear models applying delegates the synthetic equations to existing longitude search",
+    "native scanner with independently hand-derived linear models uses relative-speed stations to end applying motion at a tangent contact",
+    "native scanner with independently hand-derived linear models delegates real chart angle fields and classifies native angular windows without pinning sky output",
+    "native scanner with independently hand-derived linear models retains the tt clock in derived scans and native requests",
+    "native scanner with independently hand-derived linear models retains the ut1 clock in derived scans and native requests",
+    "native event delegation against independent Horizons dates assembles selected Moon sign windows over the independently referenced lunar cycle",
+    "native event delegation against independent Horizons dates assembles New Moon and Full Moon sectors using independently paired longitudes",
+    "native event delegation against independent Horizons dates 'mercury-retrograde-april-2023': direct windows respect the independent extremum",
+    "native event delegation against independent Horizons dates 'mercury-direct-september-2023': direct windows respect the independent extremum",
+    "native event delegation against independent Horizons dates 'venus-retrograde-july-2023': direct windows respect the independent extremum",
+    "native event delegation against independent Horizons dates 'venus-direct-september-2023': direct windows respect the independent extremum",
+    "native composed search with independent hand-derived interval logic composes linear Moon sectors and positive motion through the existing events solver",
+    "native composed search with independent hand-derived interval logic carries native receipts and full audits through a tautological real-engine search",
+    "native streaming with independent hand-derived equations partitions linear Moon sectors with chunk width 100 without moving known ownership",
+    "native streaming with independent hand-derived equations partitions linear Moon sectors with chunk width 150 without moving known ownership",
+    "native streaming with independent hand-derived equations partitions linear Moon sectors with chunk width 300 without moving known ownership",
+    "native streaming with independent hand-derived equations partitions linear Moon sectors with chunk width 333 without moving known ownership",
+    "native streaming with independent hand-derived equations partitions linear Moon sectors with chunk width 1000 without moving known ownership",
+    "native streaming with independent hand-derived equations keeps uncertain ingress brackets on both sides of an exact chunk seam",
+    "native streaming with independent hand-derived equations finds a station outside a chunk whose avoidance margin crosses that chunk",
+    "native streaming with independent hand-derived equations resolves next-ingress ownership with lookahead beyond each chunk and the full requested end",
+    "independent Horizons fixed-natal synastry comparison Moon to any selected synthetic natal pairs on the reference TT span",
+    "independent Horizons fixed-natal synastry comparison Moon to all selected synthetic natal pairs on the reference TT span",
+    "native synastry scanner with hand-derived equations 'any' set matches exact pair arithmetic through existing scanner",
+    "native synastry scanner with hand-derived equations 'all' set matches exact pair arithmetic through existing scanner",
+    "native synastry scanner with hand-derived equations keeps retrograde passages and tangent contacts eligible without a motion filter",
+    "native synastry scanner with hand-derived equations keeps natal UTC distinct from the moving tt clock",
+    "native synastry scanner with hand-derived equations keeps natal UTC distinct from the moving ut1 clock",
+    "native synastry scanner with hand-derived equations selects a stationary exact conjunction without assigning natal motion",
+    "native synastry scanner with hand-derived equations selects a stationary exact sextile without assigning natal motion",
+    "native synastry scanner with hand-derived equations selects a stationary exact square without assigning natal motion",
+    "native synastry scanner with hand-derived equations selects a stationary exact trine without assigning natal motion",
+    "native synastry scanner with hand-derived equations selects a stationary exact opposition without assigning natal motion",
+    "native void delegation against independent Horizons dates matches traditional last contacts and exits within the declared reference span",
+    "native void delegation against independent Horizons dates matches modern last contacts and exits within the declared reference span"
+  ],
+  "sha256": {
+    "src/http.ts": "d083ae568a4d415460eea15c5583b67e409571ce31369cffe37899dab5858240",
+    "src/http-limits.ts": "ac612124ddfc5f816fad067103c06b8a2a9a26fa2fdfcab689e4c0725f9cc65b",
+    "src/http-worker.ts": "60668e1ae7ca228ef3b65ac2468dfb89cdcc8d7cc79d9c91c79c5c30b5e37a59",
+    "src/internal-scoring.ts": "ea13890f7e39d8589b49ebe4b2f49abec12536c9401186206e352761e5e84bc8",
+    "src/composition.ts": "4076c65f6d8fa10ae52011db6192cb4fdf8c376ca08af0e69f0108ff9d49bf0d",
+    "src/stream.ts": "1197892657e26e095f387378a99d82403cb74b8b270248e9b412156e25daec42",
+    "src/search.ts": "5b3c517f0bb06de9329d7cc255888de2a8de290774b684ec12b7d517406bb6b6",
+    "src/presets.ts": "b3d7a11440781bc0c16c27c3f5be9cf9172321f4ddd5fee13078507bb33dd16a",
+    "src/index.ts": "1786dae0834bd0404ecbc6f43af846d2fff4ec6ac46fcfa428a85ef4253c44a6",
+    "src/cli-controls.ts": "55e189ac5cb9fa4bf1093fae179d1f60e323a117e326d576ec292abacab57e0c",
+    "bin/electional-http.mjs": "373ed5fa9051133aee2d94ebd9d2f9139f156589efb24fd659887094d72f7531",
+    "test/http.electional-check.ts": "148e08f57a0a31a9b5a9f2752733688d9b1d6b623af6553cb90e678a0f3c25f4",
+    "test/support/http-basic-stub.ts": "5c13845b610d9b6cb629051838d9f4386b49a1800e2776dacdeaa160f61d0cf4",
+    "test/internal-scoring.electional-check.ts": "be30a99f07a1b54b14342d756fe671b87a6294ad6615d0d13c255739931a8f8c",
+    "test/composition.electional-check.ts": "8875e919fac6c737b6b6f75b68e050fd3f0974afba55be6b80fc9fd6d4eb95c0",
+    "test/stream.electional-check.ts": "12d56319c901fd549640bf548212ba4c9047d1c4c0f4498fbd6079ea9eea5de8",
+    "test/cli.electional-check.ts": "d6c2394900e25a8c7ec9256f759e12f915f2b9e2ade7223d3897a6211092a5c4",
+    "test/fixtures/composition-windows.json": "392a2da2a4725a8acb3206971ce9e31f4a7fcb3786af655e630dd4b9acfa12d9",
+    "test/fixtures/stream-windows.json": "690f76e2c31944f5169d0fd9b8bce845e197ad9bd50e644040cdb1aa4eb8794c",
+    "examples/http-policy.json": "4d007d640fb00e0dda1ed42e7e2cbd0726212b3b0036af3e0f09c96ec6497248",
+    "examples/http-controls.json": "6a7dc0db73a887e314845aa5b6da8d00bc073dd9c86393f4d321dba527c87fb4",
+    "examples/synthetic-hours.yaml": "4397b492a6781f8243c6107ba3fa85b70c313ba4fa09079d7fb46384cc6bba4a",
+    "scripts/check-http-esm.mjs": "39b0a83d7f5a27797e2de7441feb39a28f52aba678c6fe72ca5eb58a9de8af9f",
+    "scripts/check-search-esm.mjs": "bc24bb434a3a30759a73bc288d815f228a9a570d1cee122f97f06225ea825424",
+    "scripts/check-isolation.mjs": "5116c48042351612874a078dafb17a1c4f351fda4a86bac3eefeaa49b1fb5d30",
+    "scripts/record-m13-tests.mjs": "f5c4f6ea6ec5ef2ccfbf66d40b066252011b2dcaa45eeafc823a1bd0e7ec1493",
+    "package.json": "68c99ef065412faf2726a58b8ecf34ce33fee7309913603e293bb0e94a2aac94",
+    "package-lock.json": "048e2eb7352f7b829e968173e821e4da617dddf15b23eab83e06df0a6009367d",
+    "generated/engine.mjs": "0101700f8fdf2d19210f94572d7b5c7f2e164a89d3ffa9df35681f2c28cc9c3a"
+  },
+  "scope": "Condition set logic, explicit internal opt-in and HTTP transport on the recorded runtime. Optional sibling-native checks are skipped when the events build is absent. No new astronomical accuracy, exhaustive completeness, heap, throughput or predictive claim. Historical M10/M11/M12 records describe the older builds they measured."
+}

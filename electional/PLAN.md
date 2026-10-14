@@ -13,11 +13,20 @@ writes inside `electional/`. Git changes are handled by the harness.
 - [x] M7 Evaluate benefics angular or in selected houses and applying aspects to selected bodies using engine chart, house and configured-aspect APIs; expose house fallbacks and boundary uncertainty.
 - [x] M8 Add eclipse and station avoidance within declared day margins using padded events searches and interval subtraction, preserving event clocks and coverage refusals.
 - [x] M9 Add optional synastry rules against one synthetic natal chart through the existing engine API, with explicit aspect policies and receipt provenance.
-- [x] M10 Combine hard-rule windows and weighted preferences, rank deterministically, and include per-rule explanations, unresolved coverage and engine receipts in every result.
-- [x] M11 Stream searches over long ranges with bounded work, cancellation, chunk lookahead and seam reconciliation; compare partitioned results with hand-derived interval fixtures.
-- [x] M12 Add a CLI for JSON/YAML rule files and launch, contract-signing and travel presets, documenting their choices as traditional conventions rather than predictions.
-- [ ] M13 Add a small bounded HTTP electional-search endpoint over the shared library, with validation, deadlines, cancellation and transport tests; leave chart REST, calendar export and webhooks to their existing packages.
-- [ ] M14 Finish executable synthetic examples, independent reference/evidence records, long-range checks and package-isolation verification; document measured limits and remaining uncertainty.
+- [x] M10 Compose chronological condition windows with required/preferred checks, neutral per-rule explanations, unresolved coverage and engine receipts; default output contains no scoring or ranking.
+- [x] M11 Stream chronological factual condition windows over long ranges with bounded work, cancellation, chunk lookahead and seam reconciliation; preserve required failures and unknowns.
+- [x] M12 Add a facts-only CLI for JSON/YAML rule files and neutral launch, contract-signing and travel conditions-to-check packs, documented as traditional conventions.
+- [x] M13 Add a small bounded facts-only HTTP condition endpoint with validation, deadlines, cancellation and transport tests; isolate optional numeric scoring behind explicit internal/pro opt-in, with no ranking or consumer scoring.
+- [ ] M14 Finish executable synthetic condition examples, independent reference/evidence records, long-range checks and package-isolation verification; verify neutral chronological defaults without scores or ranks and document remaining uncertainty.
+
+## Final scope
+
+All default library, streaming, CLI and HTTP results are factual and chronological.
+Every window retains its satisfied, failed and unresolved user-chosen checks.
+No output ranks or recommends dates. One separate numeric annotation module is
+internal/pro-only, requires explicit `enabled: true`, and preserves chronology.
+It must never be enabled on the ChatGPT app or zodiacs.org. Historical session
+records describe the builds measured then; M13 supersedes their scoring contract.
 
 ## Design constraints
 

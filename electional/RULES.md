@@ -58,7 +58,7 @@ Each rule requires a unique lowercase `id`, a recognized `kind`, an explicit
 `mode` and its `options`. A `require` rule has no `weight`; the search
 intersects its passing windows with the other required rules. A `prefer`
 rule requires a positive finite `weight`; internal scoring uses it as a
-relative contribution, while the CLI reports preference states. Weights are
+relative numeric contribution only after explicit opt-in, while default library, stream, CLI and HTTP results report states only. Weights are
 configuration choices, not probabilities or predictions. Missing modes,
 stringified numbers and implicit defaults are
 rejected. Selected lists must be nonempty and have no duplicate entries.
