@@ -8,8 +8,9 @@ retains the engine's own [data and attribution terms](../LICENSING.md).
 The current implementation validates explicit convention choices, prepares
 engine natal snapshots, computes pure sphere coordinates and semi-arcs, and
 finds direct conjunction arcs to fixed angles from prepared coordinates,
-and computes direct zodiacal conjunctions and aspects to body significators.
-Mundane body directions, timing conversions and the
+and computes zodiacal and mundane conjunctions and aspects to body significators.
+Zodiacal body directions support direct motion; mundane body directions also
+support the explicit converse role swap. Timing conversions and the
 `directions hit` and `directions scan` commands are still planned in
 [PLAN.md](PLAN.md). An accepted
 convention is not a computed hit or a claim that a particular contact exists.
@@ -48,8 +49,8 @@ all authors use those pairings. Additional latitude and converse constructions
 need named options and independent evidence before they can be admitted.
 `converse` does not silently negate a direct arc. The angle solver refuses
 converse under the role-swap construction. The zodiacal body solver also
-refuses converse, including projected conjunctions. Mundane contacts still
-need validation in their solver and the future hit API.
+refuses converse, including projected conjunctions. The mundane body solver
+supports both motions with branches relative to the original promissor.
 
 [SOURCES.md](SOURCES.md) states what each traditional source supports and
 where it differs. [evidence/README.md](evidence/README.md) sets the numerical
@@ -366,3 +367,104 @@ The `SphereGeometryError` refusals propagate for poles, tangencies and
 circumpolar projected points. No fallback is applied. Engine integration
 checks and the independent numerical comparisons are distinguished in
 [M5 evidence](evidence/M5.md).
+
+## Mundane directions to body significators
+
+`mundaneBodyArc` takes full bodily right ascension and declination from the
+engine's equatorial rows. It retains the effect of each body's ecliptic
+latitude already present in those coordinates. The solver performs no
+ecliptic projection or ephemeris calculation. Supply the same equator/equinox
+frame for both points and RAMC, with explicit `placidus-semiarc`, `mundane`
+and `retain-both` choices. Like the other arc primitives, it returns no age.
+
+```ts
+import { mundaneBodyArc } from "./src/index.js";
+
+// Invented sphere coordinates, derived in evidence/M6-derivations.md.
+const delta = Math.atan(1 / 2) * 180 / Math.PI;
+const result = mundaneBodyArc({
+  system: "placidus-semiarc",
+  mode: "mundane",
+  latitude: "retain-both",
+  motion: "converse",
+  converseConstruction: "placidus-role-swap",
+  geometry: { ramcDegrees: 0, latitudeDegrees: 45 },
+  significator: { rightAscensionDegrees: 320, declinationDegrees: delta },
+  promissor: { rightAscensionDegrees: 30, declinationDegrees: -delta },
+  contact: { kind: "aspect", aspect: "square", branch: "eastward" }
+});
+console.log(result.arcDegrees, result.geometry);
+```
+
+For a prepared natal chart, copy `geometry.ramcDegrees` and
+`geometry.latitudeDegrees`, and copy each selected equatorial row's `ra`
+and `dec` to `rightAscensionDegrees` and `declinationDegrees`. Undefined
+right ascension is refused. Obliquity and geographic longitude are not
+additional inputs at this layer. The adapter already used both to prepare
+the common frame. The coordinate API cannot authenticate that caller-supplied
+coordinates came from full bodily rows; the integration test verifies that
+data path without claiming independent ephemeris accuracy.
+
+Mundane position `q` increases westward, with upper meridian, setting,
+lower meridian and rising at `0`, `90`, `180` and `270`. Each quadrant is
+scaled by the body's own semi-arc. The supported aspect magnitudes in this
+coordinate are sextile `60`, square `90`, trine `120` and opposition `180`.
+These definitions and the hand arithmetic are in
+[M6-derivations.md](evidence/M6-derivations.md), enforced by
+[mundane-evidence.check.ts](checks/mundane-evidence.check.ts). The normalized
+position or aspect magnitude is not itself the equatorial directional arc.
+
+Conjunction requires `{ kind: "conjunction" }`. Opposition requires
+`{ kind: "aspect", aspect: "opposition" }` with no branch. Sextile, square
+and trine require `branch: "westward" | "eastward"`. These names denote
+the direction from the **original promissor to the original significator**
+in `q`, in either motion. They are explicit project coordinate labels.
+They do not import zodiacal longitude rays or reuse their dexter/sinister
+selector. With signed aspect offset `r`, the contact relation is
+`q_significator = q_promissor + r` modulo a turn.
+
+In direct motion the promissor moves westward to
+`q_significator - r`. In converse the significator moves westward to
+`q_promissor + r`; the original promissor remains fixed. Converse requires
+`converseConstruction: "placidus-role-swap"`, and direct forbids that
+field. Both constructions preserve the original labels. They do not negate
+the same arc, and exchanging bodies without adjusting the branch would
+select a different contact.
+
+The inverse position uses the moving body's diurnal or nocturnal semi-arc
+at the **target** quadrant. A body can start above the horizon and meet an
+aspect below it. The frozen result gives both original points, complete
+initial sphere positions, moving and fixed roles, the signed aspect and
+target offsets, fixed and target proportional positions, target quadrant
+or axis, target meridian fraction and semi-arc, target hour angle, turn
+addition and coincidence. Axis targets use null for the quadrant, fraction
+and selected semi-arc. The input objects are neither retained nor frozen.
+
+Placidus's ordinary mundane construction supplies the proportional method
+and role swap. [SOURCES.md](SOURCES.md) identifies the passages. The same
+explicit semi-arc model applies to every supplied body. It does not apply
+the author's special solar crepuscular treatment, mundane parallels or
+minor aspects. Body significators can occupy axes without becoming angular
+significators. The fixed-angle solver's converse restriction remains in force.
+
+The first nonnegative westward rotation is selected, including computed
+natal coincidence, with the same interval as the other arc solvers.
+`MundaneDirectionError` supplies `invalid-input` or `numerical-degeneracy`;
+`SphereGeometryError` propagates for undefined semi-arcs of either body.
+All fields must be explicit plain data; omitted, unknown, inherited, hidden
+and accessor fields are refused. There is no polar fallback or alternate
+direction system.
+
+Conjunctions transfer meridian distance directly to avoid an unnecessary
+coordinate round trip. Aspect transfer preserves the exact identity when
+the semi-arcs are equal quarter circles. The geometry records the operative
+`fixedSemiArcPositionDegrees`, which can differ in its last digits from
+the general sphere position's reported coordinate.
+`targetPositionRoundingDegrees` records the residual from adding the aspect
+offset only; it is not an uncertainty or a bound on the target. The solver
+refuses detected rounding onto an axis, false coincidence from lost
+separations, and arcs that round outside the first-turn interval. No epsilon
+snaps a nearby point onto a contact. General trigonometric rounding can
+still change the selected revolution near coincidence; this is not an
+exact-predicate solver. The tested domain and numerical limits are recorded
+in [M6 evidence](evidence/M6.md).

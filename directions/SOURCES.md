@@ -41,7 +41,7 @@ restrictions. Accepting a convention object alone does not permit every contact.
 The initial `zodiacal/zero-both` policy is a project restriction to ecliptic
 projections. `mundane/retain-both` preserves the bodies' latitude. These
 choices do not exhaust traditional latitude treatments. The zodiacal subset
-implemented in M5 is described below; mundane aspects remain planned.
+implemented in M5 and the mundane subset implemented in M6 are described below.
 
 ## Timing keys remain separate from geometry
 
@@ -66,7 +66,7 @@ Placidus semi-arc construction.
 
 Before enabling a numerical method, its milestone must settle the corresponding
 equations, coordinate branch, domain and refusal rules in committed evidence.
-In particular, further zodiacal latitude variants, mundane aspect rules,
+In particular, further zodiacal latitude variants, additional mundane aspects,
 timing arithmetic and any converse construction beyond role exchange remain
 unfinished. Public
 engine coordinates supply the astronomical chart, not proof of the primary
@@ -131,3 +131,30 @@ select subtraction or addition at the promissor's longitude. The classic
 aspect magnitudes, ray arithmetic and independent synthetic arcs are recorded
 in the M5 derivation and fixtures. Lilly supplies branch terminology here,
 not a replacement for the Placidus proportional equation.
+
+## Mundane body directions implemented in M6
+
+Placidus, Cooper's translation above, Part III on printed pp. 72-73,
+defines mundane aspects through proportional diurnal and nocturnal arcs
+independently of the ecliptic. Canon XXVII on pp. 74-76 relates the ordinary
+aspect separations to mundane houses. Canon XXX on pp. 87-88 retains both
+bodies' latitude for conjunction; canon XXXII on pp. 89-91 scales distance
+within a house by the bodies' horary times. The moving body's time is
+diurnal or nocturnal according to its place at contact. These passages and
+canon XXXVII on pp. 104-105 were fetched and read for M6.
+
+[M6-derivations.md](evidence/M6-derivations.md) translates that construction
+to the library's westward proportional coordinate. The explicit branch
+labels `westward` and `eastward` refer from the original promissor to the
+original significator. They are project coordinate labels, not quotations
+of traditional terminology. In converse the significator moves to the
+promissor's fixed position or ray; the original branch relation is preserved
+when the moving and fixed roles exchange. The implementation imports no
+zodiacal latitude projection or aspect ray into this mundane construction.
+
+The API uses full bodily equatorial coordinates and applies the ordinary
+semi-arc model uniformly to them. Canon XXXVI's solar crepuscular treatment
+on pp. 98-104, mundane parallels and other aspects are outside this subset.
+Body points on axes remain body points; this does not extend converse to
+angular significators. The finite hand-derived examples establish the
+specified geometry on their stated inputs, not predictive validity.

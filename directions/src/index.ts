@@ -15,3 +15,8 @@ export type {
   DirectionEclipticPoint, ZodiacalGeometryInput, ZodiacalContact, ZodiacalBodyInput,
   ZodiacalPreparedPoint, ZodiacalBodyArc, ZodiacalDirectionErrorCode
 } from "./zodiacal.js";
+export { mundaneBodyArc, MundaneDirectionError } from "./mundane.js";
+export type {
+  DirectionEquatorialPoint, MundaneGeometryInput, MundaneContact,
+  MundaneBodyInput, MundaneBodyArc, MundaneDirectionErrorCode
+} from "./mundane.js";

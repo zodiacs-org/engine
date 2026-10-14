@@ -1,5 +1,5 @@
 {
-  "scope": "Read sources for the convention contract, sphere coordinates, angular construction and M5 zodiacal body directions; numerical expectations are separately hand-derived.",
+  "scope": "Read sources for the convention contract, sphere coordinates, angular construction, zodiacal body directions and M6 mundane body directions; numerical expectations are separately hand-derived.",
   "sources": [
     {
       "id": "ptolemy-ashmand-iii14",
@@ -43,6 +43,17 @@
         "Zero-both is a project projection restriction, not the changing significator latitude in canon XXIII.",
         "The general semi-arc model does not implement the Sun's special treatment below the horizon in canons XX-XXI.",
         "Canon XXXVII supplies mundane converse role exchange. No converse zodiacal construction, including projected conjunctions, is enabled."
+      ],
+      "m6Reading": "Fetched PDF and read extracted text in memory on 2026-10-14. Part III printed pages 72-73; canons XXVII-XXVIII, pages 74-77; canons XXX-XXXII, pages 87-91; canon XXXVI, pages 98-104; canon XXXVII, pages 104-105. PDF page numbers are printed numbers plus 17.",
+      "m6Supports": [
+        "Mundane aspects divide the diurnal and nocturnal arcs proportionally; classical aspect separations are expressed through mundane houses.",
+        "Canon XXX retains both bodily latitudes for conjunction. Canon XXXII scales distance within a house by horary times, using the moving body's diurnal or nocturnal time according to its position at contact.",
+        "Canon XXXVII carries the original significator to the original promissor's fixed mundane position or rays in converse, exchanging the horary-time ratio."
+      ],
+      "m6Limits": [
+        "Westward and eastward branch names are explicit project coordinate labels, measured from original promissor to original significator; they do not silently import zodiacal ray terminology.",
+        "The uniform ordinary semi-arc construction does not implement canon XXXVI's special solar crepuscular treatment, mundane parallels or minor aspects.",
+        "Body significators on axes do not extend the method to converse angular significators."
       ]
     },
     {
