@@ -174,16 +174,31 @@ function offset(contact: ZodiacalContact): number {
   return contact.branch === "sinister" ? magnitude : -magnitude;
 }
 
-function rayLongitude(longitude: number, offset: number): number {
+/** Error-free addition lets coincidence checks distinguish a rounded ray. */
+function twoSum(a: number, b: number): { sum: number; residual: number } {
+  const sum = a + b;
+  const bv = sum - a;
+  return { sum, residual: (a - (sum - bv)) + (b - bv) };
+}
+
+function rayLongitude(longitude: number, offset: number): {
+  longitudeDegrees: number; roundingDegrees: number;
+} {
   // Compare before addition so a ray just before the zero-longitude seam
   // cannot round to 360 and silently turn into a coincident zero-degree ray.
   const wrapsForward = offset > 0 && longitude >= 360 - offset;
-  let ray = wrapsForward ? longitude - (360 - offset) : longitude + offset;
-  if (ray < 0) ray += 360;
+  const addition = twoSum(longitude, wrapsForward ? offset - 360 : offset);
+  let ray = addition.sum;
+  let roundingDegrees = addition.residual;
+  if (ray < 0) {
+    const wrap = twoSum(ray, 360);
+    ray = wrap.sum;
+    roundingDegrees += wrap.residual;
+  }
   if (!(ray >= 0 && ray < 360)) {
     throw new ZodiacalDirectionError("numerical-degeneracy", "The ecliptic ray rounds outside the canonical longitude interval.");
   }
-  return ray === 0 ? 0 : ray;
+  return { longitudeDegrees: ray === 0 ? 0 : ray, roundingDegrees };
 }
 
 function prepare(longitudeDegrees: number, geometry: ZodiacalGeometryInput): ZodiacalPreparedPoint {
@@ -242,16 +257,25 @@ export function zodiacalBodyArc(input: ZodiacalBodyInput): ZodiacalBodyArc {
       "Placidus role-swap is admitted only for mundane contacts; zodiacal converse is not enabled.");
   }
   const rayOffsetDegrees = offset(request.contact);
+  const ray = rayLongitude(request.promissor.longitudeDegrees, rayOffsetDegrees);
   const significator = prepare(request.significator.longitudeDegrees, request.geometry);
-  const promissor = prepare(rayLongitude(request.promissor.longitudeDegrees, rayOffsetDegrees), request.geometry);
+  const promissor = prepare(ray.longitudeDegrees, request.geometry);
   const transfer = target(significator.position, promissor.position);
   const h = promissor.position.hourAngleDegrees;
   const t = transfer.targetHourAngleDegrees;
-  // Equal semi-arcs require equality of RAs for a zero rotation. Rounded
+  // An inexact longitude-plus-aspect addition is ordinary rounding away
+  // from contact. At apparent coincidence its residual can be the entire
+  // separation, so do not assert a zero arc from the rounded ray alone.
+  if (t === h && ray.roundingDegrees !== 0) {
+    throw new ZodiacalDirectionError("numerical-degeneracy", "The ecliptic ray offset loses a separation at the computed contact.");
+  }
+  // Equal semi-arcs require equality of RAs for a zero rotation; a fixed
+  // meridian does so even when the declination circles differ. Rounded
   // RAMC-minus-RA subtraction can collapse distinct projected points to the
   // same hour angle. Refuse that loss instead of inventing natal coincidence.
   if (t === h && significator.longitudeDegrees !== promissor.longitudeDegrees
-    && significator.position.semiArcs.diurnalSemiArcDegrees === promissor.position.semiArcs.diurnalSemiArcDegrees) {
+    && (significator.position.semiArcs.diurnalSemiArcDegrees === promissor.position.semiArcs.diurnalSemiArcDegrees
+      || significator.position.boundary === "upper-meridian" || significator.position.boundary === "lower-meridian")) {
     throw new ZodiacalDirectionError("numerical-degeneracy", "Distinct projected points collapse to a coincident hour angle.");
   }
   const difference = t - h;

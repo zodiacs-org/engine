@@ -8,3 +8,4 @@ Implement directions M7 sourced Ptolemy, Naibod and solar-equatorial timing keys
 Implement directions M8 pure hit and natal-selection APIs with audited geometry and timing, explicit scope refusals, immutable results, independent complete-hit evidence, and passing local checks.
 Implement directions M9 bounded pure scans with explicit contacts and motions, exact age endpoints, stable deduplication and ordering, atomic refusals, independent enumerated evidence, and passing local checks.
 Implement directions M10 hit and scan CLI with strict JSON transport, isolated local build, audited natal scans, documented examples and exit codes, independent subprocess evidence, and passing local checks.
+Implement directions M11 independent geometry, latitude and timing boundary evidence with reproducible residual reports, repair false meridian and zodiacal ray coincidences, and pass local checks while keeping engine integration separate.

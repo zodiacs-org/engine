@@ -99,6 +99,18 @@ export function angleConjunctionArc(input: AngleConjunctionInput): AngleConjunct
   const targetBoundary: SphereBoundary = request.angle === "mc" ? "upper-meridian"
     : request.angle === "ic" ? "lower-meridian"
     : request.angle === "asc" ? "rising" : "setting";
+  if (targetHourAngleDegrees === initial.hourAngleDegrees && (request.angle === "mc" || request.angle === "ic")) {
+    // An apparent meridian contact must also be exact in the original RAs.
+    // Error-free subtraction catches a tiny RA lost at the +/-180 cut.
+    const a = initial.ramcDegrees;
+    const b = -initial.rightAscensionDegrees;
+    const sum = a + b;
+    const bv = sum - a;
+    const residual = (a - (sum - bv)) + (b - bv);
+    if (residual !== 0 || (request.angle === "mc" ? sum !== 0 : Math.abs(sum) !== 180)) {
+      throw new AngleDirectionError("numerical-degeneracy", "Distinct meridian positions collapse to a coincident hour angle.");
+    }
+  }
   const difference = targetHourAngleDegrees - initial.hourAngleDegrees;
   const unreducedArcDegrees = difference === 0 ? 0 : difference;
   const wholeTurnsAdded = targetHourAngleDegrees < initial.hourAngleDegrees ? 1 : 0;

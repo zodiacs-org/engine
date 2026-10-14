@@ -45,3 +45,9 @@ complete hit envelopes and separates independent geometry/timing expectations
 from natal-snapshot integration. [M9](M9.md) checks bounded finite scans
 against an independently enumerated contact table, with separate single-hit
 parity, endpoint, deduplication and work-limit checks.
+[M10](M10.md) checks the CLI transport and subprocess results against the
+existing independent hit and scan references, with separate natal integration
+checks. [M11](M11.md) expands analytic geometry, near-tangency and exact timing
+evidence, records reproducible residuals, and documents numerical refusals.
+Run `npm --prefix directions run evidence` from the repository root to write
+the M11 report into the ignored generated directory.
