@@ -161,3 +161,76 @@ counts the Sun at the descendant as day and at the Ascendant as night. It
 does not calculate apparent solar altitude, refraction or latitude-dependent
 visibility. The convention and boundary inputs are recorded in each result
 and tested independently by circle arithmetic.
+
+## Accidental condition
+
+`lilly-accidental-weights` refers to the accidental columns on printed page
+115, PDF page 142 of the Lilly transcription linked above, fetched and read
+on 2026-10-14, together with the direction definitions on printed page 114.
+The selected house weights, in house order, are
+`5, 3, 1, 4, 3, -2, 4, -2, 2, 5, 4, -5`. In particular, the sixth and
+eighth have penalties of two, and the third has a positive one. Direct motion
+has weight `4` and retrograde `-5`; swift and slow motion have weights `2`
+and `-2`. The table expressly exempts the Sun and Moon from the direct-motion
+award, since they always move forward. The project excludes both luminaries
+from all direction points and refuses supplied negative luminary speeds.
+`tests/accidental.test.ts` enforces these independently transcribed defaults.
+
+`lilly-mean-motion` names historical daily comparison rates from the planetary
+chapters, fetched and read from the same transcription on 2026-10-14:
+
+| Planet | Mean daily motion | Printed page | PDF page |
+| --- | --- | --- | --- |
+| Saturn | 2 minutes 1 second | 57 | 81 |
+| Jupiter | 4 minutes 59 seconds | 61 | 85 |
+| Mars | 31 minutes 27 seconds | 65 | 89 |
+| Sun | 59 minutes 8 seconds | 69 | 93 |
+| Venus | 59 minutes 8 seconds | 72 | 96 |
+| Mercury | 59 minutes 8 seconds | 76 | 100 |
+| Moon | 13 degrees 10 minutes 36 seconds | 80 | 104 |
+
+Convert each to arcseconds and divide by the arcseconds in a degree. The
+literal rates and conversion arithmetic are checked in
+`tests/accidental.test.ts`. The Mars chapter gives 31 minutes 27 seconds;
+the worked passage on printed page 178 instead gives 30 minutes 27 seconds.
+The default explicitly follows the planetary chapter. Callers can override
+each rate. The fixture instants and speeds are invented, and no historical
+question chart is copied. These rates describe an historical comparator,
+without claiming that they model today's ephemeris or have measured accuracy.
+
+The project compares absolute instantaneous engine speed with these rates,
+rather than computing a historical daily ephemeris difference. Direction and
+magnitude are separate facts; Lilly's worked Saturn example on printed page
+178 likewise penalizes retrograde and slow motion together. Neither is
+duplicated under another motion name. The configured stationary tolerance
+suppresses both direction and rate points within its inclusive interval.
+Its default is zero; equality with a mean rate is also neutral. Tolerances
+are project/caller choices and do not search for station events.
+
+`ptolemy-planetary-sect` cites Ptolemy, *Tetrabiblos* I.7, translated by
+F. E. Robbins (1940), [LacusCurtius text](https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Ptolemy/Tetrabiblos/1B%2A.html#7),
+fetched and read on 2026-10-14. Sun, Jupiter and Saturn belong to day; Moon,
+Venus and Mars to night. Mercury belongs to day as a morning star and night
+as an evening star. The source supplies no numerical point weights for this
+match. Both sect weights therefore default disabled; enabled numerical
+weights are always the caller's convention.
+
+For Mercury the project uses a longitude proxy: longitude west of the Sun
+within the semicircle is morning/day, east is evening/night. Exact
+conjunction and opposition are indeterminate. This does not calculate
+visibility or heliacal rising. Matching planetary sect to engine chart sect
+is the only optional sect condition; it adds no hayz, hemisphere or sign
+gender points. The convention and circle-derived boundary fixtures are
+checked in `tests/accidental.test.ts`. Engine `exactSign` decides Mercury's
+side of conjunction/opposition on the exact supplied binary values, so
+floating-point cancellation cannot turn a nonzero offset into indeterminacy.
+
+House assignment delegates to engine `houseOf` using the actual ordered
+cusp circuit, including fallback, with no cusp anticipation or latitude.
+One physical planet receives one house weight, without an additional angular,
+succedent or cadent bonus. The result explains every contribution and retains
+shared roles without multiplying a score. Direction and rate consume the
+engine chart's sampled speeds without recomputation; `longitudeSpeed` is
+exposed only through the local engine adapter for reuse and delegation checks.
+No essential condition, reception, solar proximity, lunar phase, aspect,
+node, joy or fixed-star rule contributes to this partial accidental score.

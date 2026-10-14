@@ -8,7 +8,8 @@ engine retains the data licenses and attribution described in
 
 The library provides `cast`, `normalizeHoraryInput`, `selectSignificators`,
 `createRulePolicy`, `evaluateConsiderations`, `createEssentialPolicy` and
-`evaluateEssentialCondition`.
+`evaluateEssentialCondition`, `createAccidentalPolicy` and
+`evaluateAccidentalCondition`.
 Further analysis rules and the CLI are scheduled in [`PLAN.md`](PLAN.md).
 
 From the checkout, using Node as specified in this folder's `package.json`:
@@ -215,6 +216,71 @@ actual cusps. Edited sign labels do not override longitude. Boundary,
 ownership and malformed-input tests appear in `tests/essential.test.ts`;
 `tests/essential.integration.test.ts` checks engine delegation across house
 systems and fallback, without claiming independent ephemeris accuracy.
+
+`evaluateAccidentalCondition(result, policy)` describes the selected planets'
+house, direction, speed magnitude and chart-sect match. It reads the existing
+chart without recalculating the sky, using engine `houseOf`, `sectOf` and the
+speeds already produced by the engine's longitude-speed helper. Each physical
+planet receives one record with all its roles, a contribution for each rule,
+source records and a short explanation. The result preserves actual cusps and
+requested/actual house settings, including polar fallback.
+
+```ts
+import { createAccidentalPolicy, evaluateAccidentalCondition } from "./src/index.js";
+
+const accidentalPolicy = createAccidentalPolicy({
+  weights: { "in-sect": 1, "out-of-sect": -1, slow: false },
+  meanDailyMotion: { Mars: 0.5 },
+  stationarySpeed: 0.125
+});
+const accidental = evaluateAccidentalCondition(result, accidentalPolicy);
+```
+
+The default house and motion weights are the selected rows of Lilly's
+accidental table, documented in [`SOURCES.md`](SOURCES.md) and checked in
+`tests/accidental.test.ts`. A planet receives only its actual house weight;
+angular or cadent classification adds no second contribution. Cusps belong
+to the house starting there, without anticipation or latitude corrections.
+Sun and Moon receive no direction points, following Lilly's exemption.
+Direction comes from the signed speed, ignoring mutable retrograde labels.
+
+Speed magnitude compares with configurable historical mean daily motions
+from Lilly. These are traditional comparison rates, not astronomical accuracy
+bounds. Both rates and `stationarySpeed` use degrees/day. Speeds whose absolute
+value is at or below the stationary tolerance receive no direction or rate
+points; the default tolerance is zero. Equality with the mean is neutral.
+Other speeds are swift above the mean and slow below it, in either direction.
+Direction and magnitude are independent scoring conditions, as in Lilly's
+table; a caller can disable either. This classification does not locate a
+station, predict a reversal or establish refranation.
+
+Sect weights default to `false`. The optional match uses Ptolemy's planetary
+sect and the engine's existing ecliptic chart-sect convention. Mercury uses
+a longitude proxy for morning or evening position; conjunction and opposition
+are indeterminate and receive no sect points. The example's sect weights,
+Mars comparison rate and stationary tolerance are caller choices checked in
+`tests/accidental.test.ts`, without attribution of those numbers to a historical
+table. This is chart-sect membership, without visibility, hemisphere, sign
+gender or hayz criteria.
+
+Each weight accepts a signed finite number or `false`; zero remains enabled.
+Custom weights and comparison rates carry caller provenance. Disabling a
+weight preserves its condition facts, so required geometry and speeds remain
+validated even if all weights are disabled. Missing or duplicate required
+rows, invalid longitudes, invalid cusp circuits, non-finite selected speeds,
+retrograde Sun/Moon speeds and score overflow throw `RangeError`. The Sun's
+longitude is always required for sect; its speed is required only if selected.
+Unselected rows and unused labels/latitude fields are ignored.
+
+Policies and reports are deeply frozen, JSON-friendly snapshots. Complete
+JSON-restored policies are revalidated, and mutable chart arrays remain owned
+by the caller. This typed chart consumer does not authenticate edited geometry
+against the question instant. The partial score includes house, direction,
+rate and optional sect matching; solar proximity, lunar phase, aspects, nodes,
+joys and fixed stars are outside its stated scope. It establishes no outcome.
+Independent derivations appear in [`tests/fixtures.md`](tests/fixtures.md);
+`tests/accidental.integration.test.ts` verifies engine delegation across house
+systems and fallback without claiming new ephemeris accuracy.
 
 `check:scope` checks commit-candidate file sizes, documentation punctuation,
 the pinned ephemeris dependency and folder exclusion using npm's dry-run file

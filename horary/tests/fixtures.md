@@ -375,3 +375,103 @@ instant to verify delegation to `essentialDignities`, `mutualReceptions` and
 `sectOf`. The house-system and polar-fallback checks verify adapter metadata
 and use of the Ascendant rather than the first cusp. These are integration
 checks, not independent astronomical accuracy evidence.
+
+## Accidental condition fixtures
+
+`accidental.test.ts` uses `schematicChart()` with the same invented question
+instant and coordinates as the foundation fixtures. Its positions are
+hand-written geometry, not an ephemeris for that instant. All classical planets
+are selected as natural significators, preserving the existing house and Moon
+roles. The expected weights come from the passages read in `SOURCES.md`,
+without using any engine result as the reference.
+
+The whole-sign cusp circuit starts at zero and advances by thirty degrees.
+Each interval includes its lower cusp and excludes the next. A longitude
+`(house - 1) * 30 + offset` with offset zero, fifteen or just below thirty
+therefore belongs to the specified house. Tests move Mars through all these
+intervals with motion points disabled. Only one house rule is present and
+its score equals the literal weight transcribed from Lilly. An unequal circuit
+`350, 20, 45, 80, 110, 140, 170, 200, 225, 260, 290, 320` additionally checks
+that zero belongs to house one, twenty starts house two, and 350 starts house
+one rather than ending house twelve. Positions just below each checked cusp
+retain the preceding house. No cusp anticipation is applied.
+
+Historical rates convert to arcseconds/day as follows: Sun, Mercury and Venus
+`59 * 60 + 8 = 3548`; Moon `13 * 3600 + 10 * 60 + 36 = 47436`; Mars
+`31 * 60 + 27 = 1887`; Jupiter `4 * 60 + 59 = 299`; Saturn `2 * 60 + 1 = 121`.
+Divide each by `3600` to obtain degrees/day. Literal expectations assert those
+fractions independently of the production constant objects. The defaults
+follow the planetary chapters, including the Mars source discrepancy
+documented in `SOURCES.md`.
+
+The schematic totals are worked independently:
+
+| Planet | House contribution | Direction | Rate magnitude | Total |
+| --- | ---: | ---: | ---: | ---: |
+| Sun at 10, speed 1 | house 1: 5 | exempt: 0 | swift: 2 | 7 |
+| Moon at 40, speed 12 | house 2: 3 | exempt: 0 | slow: -2 | 1 |
+| Mercury at 70, speed 2 | house 3: 1 | direct: 4 | swift: 2 | 7 |
+| Venus at 100, speed 1 | house 4: 4 | direct: 4 | swift: 2 | 10 |
+| Mars at 130, speed 0.5 | house 5: 3 | direct: 4 | slow: -2 | 5 |
+| Jupiter at 160, speed -0.125 | house 6: -2 | retrograde: -5 | swift: 2 | -5 |
+| Saturn at 190, speed 0.0625 | house 7: 4 | direct: 4 | swift: 2 | 10 |
+
+Sect points are disabled in those totals. A separate exact binary comparator
+of `0.5` degrees/day for Mars isolates rate boundaries. Magnitudes `0.75`
+and `0.25` are respectively swift and slow. Positive speeds earn direction
+`4`, negative speeds `-5`, giving house-five totals `9, 5, 0, -4` for
+`0.75, 0.25, -0.75, -0.25`. At magnitude `0.5` neither rate rule is present,
+so the positive and negative totals are `7` and `-2`. At signed zero neither
+direction nor rate rule fires, leaving `3`. Tests just above/below either
+signed mean boundary use the same independently derived strict comparison.
+
+With stationary tolerance `0.125`, speeds at either signed endpoint are
+stationary. Just outside the endpoints they are direct or retrograde. A
+stationary condition leaves only the house contribution applied under the
+default weights, even though a disabled sect rule may have its fact present.
+The tolerance is an illustrative caller choice, not a sourced station
+interval or claim that a reversal occurs.
+
+For Ascendant fifteen, Sun fifteen is on the ascending boundary and the chart
+is night. Sun just below 195 is still night; 195 is the descending boundary
+and starts day. Sun zero lies in the wrapped day half. These are the same
+circle derivations used for essential condition. With Sun 200, the chart is
+day; Sun, Jupiter and Saturn match, Moon, Venus and Mars do not. Mercury at
+seventy is west of Sun 200 by 130 degrees, so the project's morning proxy
+assigns it day. Opt-in weights `1` and `-1` increase or decrease the baseline
+totals accordingly and explicitly carry caller provenance.
+
+Mercury 350 relative to Sun ten is west by twenty degrees, morning/day;
+Mercury ten relative to Sun 350 is east by twenty, evening/night. Equal
+longitudes and both orientations of an exact opposition are indeterminate:
+neither sect rule is applicable and neither earns points. These tests check
+the longitude convention, without asserting physical visibility. With
+`Number.MIN_VALUE` as a positive nonzero offset from zero, Mercury east of
+the Sun remains night, and west remains day. Mercury at 180 relative to that
+tiny positive Sun is strictly less than a half-circle east, hence night;
+the reversed pair is strictly less than a half-circle west, hence day.
+These exact-rational comparisons detect cancellation that would falsely
+report conjunction or opposition after rounded subtraction or modulo.
+
+Moving the cusp circuit to start at ninety, declaring the first house as
+quesited and selecting only the Moon as natural makes all selected roles
+refer to the Moon. Its forty-degree longitude occupies the eleventh interval,
+which wraps from thirty to sixty. The single record retains querent,
+quesited, Moon and natural roles; house weight `4` and slow penalty `-2`
+sum once to `2`, without role multiplication.
+
+Custom-weight tests use Mars house-five weight `-1.5`, enabled direct weight
+zero and disabled slow weight: total `-1.5`. All-disabled weights give zero
+while preserving facts. Two simultaneously present maximum finite weights
+exercise overflow rejection. Validation tests cover malformed policies,
+incomplete JSON snapshots, unavailable/duplicate required rows, invalid
+longitudes and cusp circuits, non-finite speeds and retrograde luminaries.
+Contradictory sign/retrograde annotations and latitude do not override
+longitude or speed; unselected rows and the unselected Sun's speed are ignored.
+Recursive freezing, JSON round trips and chart edits check ownership.
+
+`accidental.integration.test.ts` uses the invented question instant to check
+engine `houseOf`, `sectOf`, supplied chart speed and `longitudeSpeed`
+delegation across house systems and fallback. It verifies that evaluation
+does not call the casting or speed helper again. Those assertions are reuse
+and regression evidence, without claiming independent ephemeris accuracy.

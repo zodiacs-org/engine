@@ -1,4 +1,11 @@
 export { cast } from "./cast.js";
+export { evaluateAccidentalCondition } from "./accidental.js";
+export type { AccidentalCondition, AccidentalContribution, HoraryAccidentalCondition } from "./accidental.js";
+export {
+  createAccidentalPolicy, ACCIDENTAL_CONVENTIONS, ACCIDENTAL_SCORE_RULES, ACCIDENTAL_SCORE_SOURCE,
+  ACCIDENTAL_SECT_SOURCE, ACCIDENTAL_SPEED_SOURCE, DEFAULT_ACCIDENTAL_WEIGHTS, DEFAULT_MEAN_DAILY_MOTION
+} from "./accidental-policy.js";
+export type { AccidentalPolicyInput, AccidentalScoreRule, AccidentalWeight, HoraryAccidentalPolicy } from "./accidental-policy.js";
 export { evaluateEssentialCondition } from "./essential.js";
 export type { DirectionalReception, EssentialContribution, HoraryEssentialCondition, HoraryMutualReception, SignificatorCondition } from "./essential.js";
 export {
