@@ -1,5 +1,12 @@
 # Independent basic-rule references
 
+Moon-not-void references extend this acquisition with the additional planetary
+longitudes in [void-horizons.json](void-horizons.json). Their independent
+reduction, declared span, policy comparisons and test-run receipt are described
+in [VOID.md](../VOID.md). The source, clock, frame and redistribution terms
+below apply to that reference as well. Its offline verifier also checks the
+digest of the Moon/Sun source file reused from this milestone.
+
 The astronomical source is NASA/JPL Solar System Dynamics, Horizons DE441,
 queried through its [HTTP API](https://ssd-api.jpl.nasa.gov/doc/horizons.html).
 The [Horizons manual](https://ssd.jpl.nasa.gov/horizons/manual.html), Observer

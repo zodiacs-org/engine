@@ -6,7 +6,8 @@ searches. The implemented event operations are sign ingresses, stations,
 retrograde intervals, exact aspects and void-of-course intervals. Phase
 boundaries delegate to exact aspects with an explicit custom-angle policy.
 Moon sign, phase and direct-motion evaluation is described in
-[EVALUATION.md](EVALUATION.md). Other rule wiring remains in [PLAN.md](PLAN.md).
+[EVALUATION.md](EVALUATION.md); Moon-not-void evaluation and lookahead are in
+[VOID.md](VOID.md). Other rule wiring remains in [PLAN.md](PLAN.md).
 
 Run the development commands in [README.md](README.md) on the declared Node
 runtime. Both `npm test` and `npm run build` first bundle a narrow bridge from
