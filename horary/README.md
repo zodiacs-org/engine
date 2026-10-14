@@ -168,8 +168,8 @@ and real-engine delegation in `tests/void-of-course.integration.test.ts`.
 
 Tests distinguish independently worked calendar/angle fixtures from engine
 delegation checks. Neither the foundation nor its integration tests establish
-new astronomical accuracy or predictive validity. Traditional rule tests will
-name their source tradition and derivation as they are added.
+new astronomical accuracy or predictive validity. Traditional rule tests
+name their source tradition and derivation in `SOURCES.md` and `tests/fixtures.md`.
 
 `evaluateEssentialCondition(result, policy)` reads an existing cast, selects
 the significators and reports essential condition once per physical planet,
@@ -332,7 +332,8 @@ opposite branch is retained in `contacts` without being assigned to the
 current application. Future contacts outside current orb likewise remain
 evidence without a current-application candidate. Candidates have not yet
 been evaluated for sign exit, station, reception, prohibition or another
-traditional perfection condition; later milestones add that event analysis.
+traditional perfection condition; separate direct and impediment reports
+retain that event analysis.
 No outcome verdict is emitted.
 
 Policy fields `aspects`, `orbs`, `luminaryOrbs` and
@@ -823,7 +824,10 @@ status, source and plain-language text, plus a readable `text` rendering.
 It performs no calculation or search. Applied, absent, disabled, refused and
 review states remain distinct. Entries include contributions, receptions,
 search states, eligibility checks, timing alternatives and limitations;
-full numeric evidence remains in the analysis. Named traditions and source
+full numeric evidence remains in the analysis. Each scanner's limitations and
+refusal reason are rendered, with separate principal-aspect and station
+search entries for impediments. Timing also renders its symbolic-convention
+limitations. Named traditions and source
 locators come from the existing reports and `SOURCES.md`. A JSON-restored
 analysis may be rendered as trusted data; `explain` checks its schema but
 does not validate or authenticate the complete report. The CLI always
@@ -872,3 +876,56 @@ JSON or underlying file-system errors. A sampled search refusal is a valid
 analysis observation and returns success, with refusal evidence in the data.
 The process tests enforce these boundary behaviors and dependency resolution;
 they establish software behavior rather than predictive validity.
+
+`examples/scanned-analysis-request.json` enables engine motion and lunar
+scans for an invented job question with explicit natural significators.
+It uses bounded future and historical windows chosen for a software example;
+neither window is a historical judgement rule. Execute it with any analysis
+command, for example:
+
+```sh
+node horary/bin/horary.mjs analyze --input horary/examples/scanned-analysis-request.json
+node horary/bin/horary.mjs explain --input horary/examples/scanned-analysis-request.json
+```
+
+## Verification and remaining scope
+
+`tests/analyze.integration.test.ts` combines independently solved angular
+motion fixtures through the production wrappers. It checks direct contact
+alongside overlapping prohibition and frustration, translation endpoints,
+collection completion and receptions, station-associated refranation,
+separate symbolic hints and atomic refusal. It also runs enabled engine and
+lunar scans on an invented polar question, checking actual fallback houses
+and preserved natural roles. Derivations and the distinction between rule
+evidence and engine delegation are in [`tests/fixtures.md`](tests/fixtures.md).
+
+`tests/cli.process.test.ts` executes the scanned example, treats search
+refusal as successful data, propagates an ephemeris-span failure without
+partial stdout, and checks explicit-offset normalization under different
+process timezones. No planetary output supplies an accuracy reference.
+
+`npm run check:scope --prefix horary` reads git metadata to reject staged,
+unstaged or untracked changes outside this folder. It inspects commit
+candidates for regular files, the user-specified size and punctuation rules,
+and installed or generated material accidentally tracked despite ignore
+rules. It runs npm's dry-run inventory with lifecycle scripts disabled to
+check that this folder is excluded, without creating an archive or engine
+build. `tests/scope.test.mjs` tests its rejection paths using temporary files
+under the ignored cache. Generated results belong in ignored `generated/`
+or `output/` folders. This check applies to the current working tree; it
+does not audit earlier session commits or attest to archive reproducibility.
+
+The engine's full package-content gate requires an existing engine build.
+This project does not create `dist/`, change the engine's packed files or
+cut a candidate. The dry-run exclusion check remains usable when that build
+is absent; it does not claim to establish engine import budgets or release
+archive binding. The repository's release and conformance checks retain
+their existing authority.
+
+This implementation covers the selected rule interpretations in
+[`SOURCES.md`](SOURCES.md), with every interpretive choice visible in the
+reports and policies. It does not reconcile competing perfection modes or
+turn scores and hints into a final judgement. Physical accuracy remains
+the imported engine's documented scope, sampled searches retain their
+limitations, and historical sources provide rule provenance rather than
+evidence of predictive validity.

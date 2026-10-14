@@ -47,15 +47,21 @@ export function explain(report: HoraryAnalysis): HoraryExplanation {
     add("accidental", row.planet, "score", row.explanation);
     for (const part of row.contributions) add("accidental", `${row.planet}: ${part.rule}`, part.status, part.explanation, part.source);
   }
-  function search(section: string, scan: { status: string; from: string; to: string; samples: number }) {
-    add(section, "search", scan.status, `Search status ${scan.status}; window ${scan.from} to ${scan.to}; ${scan.samples} samples in this report's budget unit. Sampled searches do not prove completeness.`);
+  function addLimitations(section: string, subject: string, method: { limitations: readonly string[] }) {
+    for (const text of method.limitations) add(section, subject, "limitation", text);
+  }
+  function search(section: string, scan: { status: string; reason: string | null; from: string; to: string; samples: number;
+    method?: { budgetUnit: string; limitations: readonly string[] } }, subject = "search") {
+    const reason = scan.reason === null ? "" : ` Reason: ${scan.reason}.`;
+    const unit = scan.method ? scan.method.budgetUnit : "this report's budget unit";
+    add(section, subject, scan.status, `Search status ${scan.status}; window ${scan.from} to ${scan.to}; ${scan.samples} samples (${unit}).${reason} Sampled searches do not prove completeness.`);
+    if (scan.method) addLimitations(section, subject, scan.method);
   }
   search("aspects", report.aspects.search);
   for (const row of report.aspects.aspects) add("aspects", `${row.a.planet} / ${row.b.planet}: ${row.type}`, row.current.motion, row.explanation, report.aspects.source);
   search("direct", report.direct.eventSearch);
   for (const row of report.direct.direct) add("direct", `${row.a.planet} / ${row.b.planet}: ${row.type}`, row.status, row.explanation, report.direct.source);
   for (const row of report.direct.events) add("direct", `${row.planet.planet}: ${row.kind}`, row.transition, row.explanation, report.direct.source);
-  for (const limitation of report.direct.eventSearch.method.limitations) add("direct", "event scan", "limitation", limitation);
   add("translation", "mode", report.translation.assessment, report.translation.explanation, report.translation.source);
   search("translation", report.translation.search);
   for (const row of report.translation.translations) {
@@ -71,7 +77,9 @@ export function explain(report: HoraryAnalysis): HoraryExplanation {
   }
   add("impediments", "mode", report.impediments.assessment, report.impediments.explanation);
   search("impediments", report.impediments.search);
-  search("impediments", report.impediments.motion.eventSearch);
+  addLimitations("impediments", "search", report.impediments.method);
+  search("impediments", report.impediments.motion.aspects.search, "principal aspect search");
+  search("impediments", report.impediments.motion.eventSearch, "station search");
   for (const row of report.impediments.applications) {
     const subject = `${row.applicant.planet} / ${row.recipient.planet}`;
     add("impediments", subject, "application", row.explanation);
@@ -80,6 +88,7 @@ export function explain(report: HoraryAnalysis): HoraryExplanation {
   add("timing", "policy", report.timing.policy.enabled ? "enabled" : "disabled", report.timing.policy.enabled
     ? "Symbolic quantities use the caller's modality and house unit table; elapsed UTC days remain separate contact evidence."
     : "The caller has not enabled symbolic timing hints.", report.timing.source);
+  addLimitations("timing", "symbolic convention", report.timing.conventions);
   search("timing", report.timing.aspects.search);
   for (const row of report.timing.assessments) {
     const subject = `${row.a.planet} / ${row.b.planet}: ${row.type}`;

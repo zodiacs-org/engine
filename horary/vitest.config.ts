@@ -13,7 +13,7 @@ export default defineConfig({
     }]
   },
   test: {
-    include: ["tests/**/*.test.ts"],
+    include: ["tests/**/*.test.ts", "tests/**/*.test.mjs"],
     pool: "forks",
     minWorkers: 1,
     maxWorkers: 2

@@ -3,6 +3,32 @@
 Sources describe historical rules. They do not establish predictive validity.
 No historical chart or person's question data is used in the fixtures.
 
+## Policy and evidence index
+
+The sections below record the read sources and distinguish their rules from
+project conventions. This index connects each report to its policy controls
+and its independent fixture derivation. These are selected readings, not an
+exhaustive implementation of any author's system.
+
+| Report | Tradition or convention | Caller controls | Fixture derivation section in `tests/fixtures.md` |
+| --- | --- | --- | --- |
+| Significators | Lilly's house rulers and Moon; engine Ptolemaic domiciles; declared natural planets | `question.quesitedHouse`, `naturalSignificators`, actual house system | Significator fixtures |
+| Considerations | Lilly's cautions and variants he reports from other traditions | Each named entry in `considerations.rules` | Consideration policy and angular fixtures; Void-of-course motion fixtures |
+| Essential condition and receptions | Engine table traditions; Lilly's selected weights and reception definition | Each `essential.weights` entry accepts `false`; `receptionDignities` selects or disables hosting | Essential dignity and reception fixtures |
+| Accidental condition | Selected Lilly house and motion points; optional Ptolemaic sect proxy | Each `accidental.weights` entry accepts `false`; comparison rates and stationary threshold | Accidental condition fixtures |
+| Aspect motion | Lilly's longitude-contact context; engine exact instantaneous motion and project orb defaults | `aspects.aspects` selects or disables each type; orbs, threshold and `search` | M7 instantaneous aspects and bounded motion |
+| Direct contact | Lilly's direct-application context; project sign and station continuity checks | `direct.directAspect`, `signChanges`, `stations` | Direct contact, sign changes and stations |
+| Translation | Lilly's selected translation and reception reading; project contact sequence | `translationOfLight`; carrier list; eligibility toggles; reception dignity set | Translation of light fixtures |
+| Collection | Lilly's selected collection reading; explicit reception direction and convergence | `collectionOfLight`; collector list; eligibility toggles; reception direction and dignity set | Collection of light (M10) |
+| Impediments | Lilly's selected prohibition, frustration and refranation readings; project event sequence | Each named impediment toggle; scopes, third-planet list and swiftness proxy | Prohibition, frustration and refranation (M11) |
+| Symbolic timing | Lilly's qualitative context; caller unit cells and current-gap adaptation | `timing.enabled`, `basis`, and independently disabled `units` cells | Symbolic timing fixtures |
+
+Future and historical windows, sample budgets and numerical ordering
+resolution are computational conventions. The combined analysis does not
+unify the per-report budgets, impose precedence or adjudicate exceptions.
+The integration derivation section documents how these observations survive
+composition and explanation without becoming a final outcome.
+
 ## Significator selection
 
 `lilly-house-ruler` and `lilly-moon` refer to William Lilly, *Christian
@@ -263,7 +289,8 @@ application's nearest directed branch is used for its candidate; a current
 exact contact has elapsed time zero. All sampled contacts remain available
 as evidence. These are mathematical longitude-contact records, without a
 decision about traditional perfection or an outcome. Sign changes, station
-events and competing contacts require the subsequent plan milestones.
+events and competing contacts are reported separately by the direct and
+impediment evaluators.
 
 Horizons and sample budgets are project resource choices, not traditional
 rules or astronomical accuracy bounds. The method reports the reused solver's
@@ -292,7 +319,8 @@ flagging of every intervening motion reversal are explicit configurable
 project conventions. The cited passage does not supply this general
 original-sign requirement, nor does it make every station a refrenation.
 Sign exits and speed-zero events are therefore preserved as observations;
-later milestones evaluate reception and competing contacts. Conjunction,
+the essential and impediment reports retain reception and competing contacts
+separately. Conjunction,
 sextile, square, trine and opposition are all retained as contact modes,
 without presenting them as equivalent traditional outcomes.
 

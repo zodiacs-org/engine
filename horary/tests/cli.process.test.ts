@@ -58,4 +58,63 @@ describe("offline executable from outside the checkout", () => {
       expect(JSON.parse(oversized.stderr).error.message).toContain("byte limit");
     } finally { rmSync(folder, { recursive: true, force: true }); }
   }, 30_000);
+
+  it("executes enabled motion and lunar scans and explains their limits from a committed job request", () => {
+    const file = fileURLToPath(new URL("../examples/scanned-analysis-request.json", import.meta.url));
+    const request = JSON.parse(readFileSync(file, "utf8"));
+    expect(request).toEqual({ input: { ...questionInput, houseSystem: "regiomontanus",
+      question: { id: "synthetic-job", quesitedHouse: 10, naturalSignificators: ["Moon", "Venus"] } },
+      options: { aspects: { horizonDays: 0.5 }, translation: { lookbackDays: 0.5 } } });
+    const output = run(["analyze", "--input", file], "");
+    expect(output.error).toBeUndefined();
+    expect(output.status).toBe(0);
+    expect(output.stderr).toBe("");
+    const report = JSON.parse(output.stdout);
+    expect(report.aspects.search.status).toBe("complete");
+    expect(report.direct.eventSearch.status).toBe("complete");
+    expect(report.considerations.observations.find((row: { rule: string }) => row.rule === "moon-void-of-course").scan.at)
+      .toBe("2000-01-01T12:00:00.000Z");
+    expect(report.significators.assignments.find((row: { role: string }) => row.role === "quesited").basis.house).toBe(10);
+    expect(report.timing.policy.enabled).toBe(false);
+    expect(report).not.toHaveProperty("verdict");
+    const explanation = run(["explain", "--input", file, "--format", "json"], "");
+    expect(explanation.status).toBe(0);
+    const entries = JSON.parse(explanation.stdout).entries;
+    for (const section of ["aspects", "direct", "translation", "collection", "impediments", "timing"]) {
+      expect(entries.some((row: { section: string; status: string }) => row.section === section && row.status === "limitation")).toBe(true);
+    }
+  }, 30_000);
+
+  it("treats budget refusal as data while calculation errors fail with no partial stdout", () => {
+    const request = { input: questionInput, options: { considerations: options.considerations,
+      aspects: { horizonDays: 0.5, maxSamples: 1 }, direct: { maxSamples: 1 } } };
+    const output = run(["analyze"], JSON.stringify(request));
+    expect(output.status).toBe(0);
+    expect(output.stderr).toBe("");
+    const report = JSON.parse(output.stdout);
+    expect(report.aspects.search).toMatchObject({ status: "refused", reason: "sample-budget" });
+    expect(report.aspects.aspects.every((row: { contacts: unknown[] }) => row.contacts.length === 0)).toBe(true);
+    const explanation = run(["explain"], JSON.stringify(request));
+    expect(explanation.status).toBe(0);
+    expect(explanation.stdout).toContain("Reason: sample-budget");
+    // Casting works here; the enabled lunar scan samples before the supported span.
+    const edge = run(["analyze"], JSON.stringify({ ...questionInput, instant: "0001-05-02T00:00:00Z" }));
+    expect(edge.status).toBe(1);
+    expect(edge.stdout).toBe("");
+    expect(JSON.parse(edge.stderr).error.message).toContain("ephemeris span");
+  }, 30_000);
+
+  it("normalizes an explicit offset independently of the process timezone", () => {
+    const input = JSON.stringify({ ...questionInput, instant: "2000-01-01T19:00:00+07:00" });
+    const outputs = ["UTC", "America/Los_Angeles"].map(TZ => spawnSync(process.execPath, [executable, "cast"], {
+      input, cwd: tmpdir(), env: { ...process.env, TZ }, encoding: "utf8", timeout: 30_000, maxBuffer: 1_900_000
+    }));
+    for (const output of outputs) {
+      expect(output.status).toBe(0);
+      expect(output.stderr).toBe("");
+      expect(JSON.parse(output.stdout).input.instant).toBe("2000-01-01T12:00:00.000Z");
+    }
+    // Reproducibility of the same instant, not an independent sky reference.
+    expect(outputs[0]!.stdout).toBe(outputs[1]!.stdout);
+  }, 30_000);
 });

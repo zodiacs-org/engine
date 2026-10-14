@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { lstatSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { assertChangedPaths, assertSourceFiles, assertPackageExclusion } from "./scope-checks.mjs";
 
 const repository = fileURLToPath(new URL("../../", import.meta.url));
 const project = fileURLToPath(new URL("../", import.meta.url));
@@ -13,19 +14,17 @@ assert.equal(localPackage.dependencies["astronomy-engine"], rootPackage.dependen
 
 // Read git metadata only. Ignored dependencies, caches and generated outputs
 // are not source files and must not become commit candidates.
-const paths = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", "horary/"], {
-  cwd: repository, encoding: "utf8"
-}).split("\0").filter(Boolean);
-assert(paths.length > 0, "no horary source files found");
-for (const path of paths) {
-  const url = new URL(path, new URL("../../", import.meta.url));
-  const stat = lstatSync(url);
-  assert(stat.isFile(), `${path} must be a regular file`);
-  assert(stat.size < 2_000_000, `${path} reaches the user's file-size limit`);
-  if (/\.(md|txt)$/i.test(path)) {
-    assert(!readFileSync(url, "utf8").includes("\u2014"), `${path} contains an em-dash character`);
-  }
+function gitPaths(args) {
+  return execFileSync("git", args, { cwd: repository, encoding: "utf8" }).split("\0").filter(Boolean);
 }
+assertChangedPaths([...gitPaths(["diff", "--name-only", "--no-renames", "-z", "HEAD"]),
+  ...gitPaths(["ls-files", "--others", "--exclude-standard", "-z"])]);
+const paths = gitPaths(["ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", "horary/"])
+  .filter(path => {
+    try { lstatSync(new URL(path, new URL("../../", import.meta.url))); return true; }
+    catch (error) { if (error.code === "ENOENT") return false; throw error; }
+  });
+assertSourceFiles(paths, repository);
 
 // A dry run invokes no lifecycle hooks and creates no packed archive. This
 // establishes folder exclusion even when the checkout has no engine dist/.
@@ -34,7 +33,5 @@ const report = JSON.parse(execFileSync("npm", ["pack", "--dry-run", "--json", "-
   encoding: "utf8",
   env: { ...process.env, npm_config_cache: `${project}.cache/npm` }
 }))[0];
-assert(report && Array.isArray(report.files), "npm returned no package file list");
-assert(!report.files.some(({ path }) => path === "horary" || path.startsWith("horary/")),
-  "horary leaked into the engine package");
-console.log("Horary source files satisfy the size and documentation punctuation rules; npm dry-run excludes horary/.");
+assertPackageExclusion(report);
+console.log("Changes stay in horary/; source files satisfy size, punctuation and generated-file rules; npm dry-run excludes horary/.");

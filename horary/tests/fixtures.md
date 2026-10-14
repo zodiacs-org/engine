@@ -1200,3 +1200,105 @@ separate stderr errors, exit status, relative file paths, local dependency
 resolution and byte-bounded input. These are software integration checks,
 not new astronomical reference fixtures. No process expectation is taken
 from the engine's own planetary output.
+
+## Enabled composition and executable coverage (M14)
+
+`analyze.integration.test.ts` calls `analyzeCast` through the production
+wrappers with controlled longitude and speed providers. Every schematic
+chart retains the invented question instant and cusp circuit. The lunar
+void scan is disabled for the independent laws because they are not a sky
+ephemeris. The constant derivatives of the linear laws are supplied as
+speeds at every requested instant; the curved law supplies its analytic
+derivative. No calculated sky position supplies a test expectation.
+
+The overlapping-contact case uses the M11 laws Venus `10+2t`, Mars `16+t`
+and Saturn `18+t/2`. The principal conjunction solves `-6+t=0`, at six
+days. Mars-Saturn solves `-2+t/2=0`, at four days. The direct report sees
+the principal contact with no earlier sign change or nonzero-speed station
+for these principals: both remain inside Aries through contact. The separate
+impediment report retains prohibition and frustration evidence from the
+earlier Saturn contact, rather than overriding or deleting the direct
+record. Saturn and these equations have the same derivation as M11.
+
+At the question both principals occupy Aries and actual house one, whose
+synthetic cusp interval is `[0,30)`. Aries is cardinal and that house is
+angular. The independently chosen cell assigns two symbolic weeks per
+degree. The current principal gap is six degrees, so each of the two basis
+alternatives gives `6*2=12` symbolic weeks, while the sampled contact still
+carries six elapsed UTC days. This caller convention is intentionally
+different from elapsed time and is not a Lilly timing table. The test
+checks both alternatives and their separate units and origins.
+
+The translation case uses the M9 laws Mars `10+t`, Venus `16+2t` and Moon
+`12+3t`. Moon-Mars is `2+2t`, giving separation at minus one day;
+Moon-Venus is `-4+t`, giving future application at four days. The principals'
+gap is widening at the question. The composed report keeps the translation
+candidate, its endpoints and source while direct application between the
+house rulers is absent. The source-reception, weight, speed and absence of
+interruption follow the M9 derivation without any new eligibility rule.
+
+The collection case uses the M10 laws Saturn `220+t/4`, Mars `214+5t/4`
+and Venus `285-t`, with conjunction and sextile enabled and a sextile orb
+of six degrees. Mars-Saturn is `-6+t`, reaching conjunction at six days.
+Venus-Saturn is `65-5t/4`, reaching the positive sextile branch at four
+days. Venus contacts first; Mars's conjunction completes the selected
+sequence at six days. The principal separation at the question is
+seventy-one degrees, outside both enabled orbs, and is growing. The
+Scorpio reception and selected collection requirements are worked in M10.
+Composition preserves their passed reception check and completion contact.
+
+The refranation case reuses the M11 curved Venus law `10+2t-t^2` and
+speed `2-2t`, against Mars `16+t`. Venus reverses at one day. The principal
+gap `-6+t-t^2` has negative discriminant, so no conjunction exists under
+these laws. The post-station gap is separating on its original branch,
+while Mars remains direct. Over the two-day horizon, the station-associated
+observation survives composition, but neither a contact nor a symbolic
+hint is invented. The M11 derivation explains why this is association and
+not a claim of station causality.
+
+The atomic-refusal case reuses the translation laws but supplies a
+translation budget of one provider call, below the coarse scan requirement,
+and a direct-event budget of one. These independent reports refuse and
+discard their incomplete evidence while the aspect scan can finish. The
+test checks explanation text against the refusal reason and every report's
+method limitations, including separate principal-aspect and station scans.
+Trusted JSON restoration preserves that explanation without calculations.
+
+The fully enabled engine case uses an invented polar location at latitude
+eighty degrees north, with the existing synthetic longitude and instant.
+Placidus falls back to whole signs at that latitude under the engine's
+documented construction. The request declares the seventh house and natural
+Moon and Venus. Its expectations concern one cast, one delegated lunar
+scan, retained fallback settings and roles, complete sampled scans under
+the explicit short horizons, JSON ownership and explanation provenance.
+It provides no new ephemeris or predictive accuracy evidence.
+
+`examples/scanned-analysis-request.json` keeps the original invented
+instant and coordinates, declares a job question's tenth house, and
+explicitly adds Moon and Venus as natural planets. Future and translation
+lookback windows are each half a UTC day as an operational example choice.
+`cli.process.test.ts` checks the complete request object and executes it in
+real processes from outside the checkout, including enabled lunar and
+motion scans. It checks report schemas, source and limitation retention,
+declared houses and role propagation, without taking a reference sky
+position from the program.
+
+The CLI refusal request chooses one aspect sample, insufficient even for
+the first coarse scan. It succeeds with refused evidence and no contacts.
+The error request at `0001-05-02T00:00:00Z` reuses the existing independently
+motivated ephemeris-span boundary case: casting is permitted, but the
+enabled lunar scanner reaches before the engine's permitted samples. It
+fails atomically without stdout. The timezone test uses
+`2000-01-01T19:00:00+07:00`; subtracting the explicit seven-hour offset
+gives noon UTC on the same date. UTC and America/Los_Angeles process
+settings must not alter that resolved instant. Comparing their complete
+serialized output checks repeatability only, not astronomical accuracy.
+
+`scope.test.mjs` checks the folder gate using disposable files in the
+ignored cache, without writing git metadata. ASCII files just below and
+at the two-million-byte boundary distinguish permitted and rejected source
+sizes; a million UTF-8 `é` characters also reaches that boundary despite
+having fewer JavaScript code units. Symlinks, out-of-folder paths, generated
+commit candidates and forbidden documentation punctuation are rejected.
+Package inventory cases exercise explicit horary leakage and missing npm
+reports. These are repository-operational checks, not astrology evidence.
