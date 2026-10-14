@@ -2,3 +2,4 @@ M1: Create isolated numerology TypeScript project with exact reduction receipts,
 M2: Add strict Gregorian civil dates, life path and birthday with explicit reduction conventions, source-located debt receipts, synthetic golden/property tests, and documentation.
 M3: Add Latin Unicode name normalization with explicit diacritic and ligature rules, configurable Y classification, per-character receipts, synthetic golden/property tests, and documentation.
 M4: Add versioned Greek and Cyrillic transliteration, exact caller mappings, canonical source-context and table-provenance receipts, synthetic golden/property tests, and documented spelling conventions.
+M5: Add Pythagorean and Chaldean expression/destiny, soul urge, and personality with full letter and reduction receipts, explicit empty selections, synthetic golden/property tests, and documented table provenance.

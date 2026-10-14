@@ -1,6 +1,15 @@
 export { reduceInteger, MAX_INTEGER_DIGITS } from "./reduction.js";
 export { NUMBER_MEANINGS, KARMIC_DEBT_MEANINGS } from "./meanings.js";
 export { parseGregorianDate, lifePath, birthday } from "./dates.js";
+export {
+  expression, destiny, soulUrge, personality, PYTHAGOREAN_LETTER_TABLE,
+  CHALDEAN_LETTER_TABLE, PYTHAGOREAN_LETTER_TABLE_ID, CHALDEAN_LETTER_TABLE_ID,
+  EMPTY_SELECTION_MEANINGS
+} from "./name-numbers.js";
+export type {
+  NumerologySystem, AsciiLetter, LetterValue, NameNumberOptions, NameCalculation,
+  NameSelection, LetterContribution, NameNumberResult
+} from "./name-numbers.js";
 export { normalizeName, LATIN_NAME_TABLE, LATIN_NAME_TABLE_ID, MAX_NAME_CODE_UNITS } from "./names.js";
 export {
   GREEK_NAME_TABLE, GREEK_NAME_TABLE_ID, CYRILLIC_NAME_TABLE, CYRILLIC_NAME_TABLE_ID,

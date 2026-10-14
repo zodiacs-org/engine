@@ -5,14 +5,16 @@ A private TypeScript library and planned JSON CLI, adjacent to
 here use the repository's [MIT license](../LICENSE). This project currently
 implements integer reduction, civil-date validation, life path, birthday,
 and name normalization using Latin, Greek, Cyrillic, and caller mappings,
-with vowel/consonant classification.
-[PLAN.md](PLAN.md) tracks the remaining name systems, cycles,
+with vowel/consonant classification. It also implements Pythagorean and
+Chaldean expression/destiny, soul urge, and personality calculations.
+[PLAN.md](PLAN.md) tracks the remaining name analyses, cycles,
 profiles, and CLI.
 
 Numerology results describe symbolic conventions and provide reflection
 prompts. The tests check arithmetic and declared behavior. They do not test
 whether numerology predicts personality or events. The meanings in
-`src/meanings.ts` are original text authored for this project.
+`src/meanings.ts` and the empty-selection text in `src/name-numbers.ts`
+are original text authored for this project.
 
 From this directory, with Node matching `package.json`:
 
@@ -173,8 +175,8 @@ returns `normalized` (uppercase tokens separated by spaces), `letters`
 (all emitted letters in order), `vowels`, `consonants`, and a frozen,
 JSON-safe `receipt`. Name preprocessing produces letters for later numerical
 calculations. It does not assign letter values, reduce a number, or supply
-a personality interpretation. The Pythagorean and Chaldean letter tables
-are still planned in [PLAN.md](PLAN.md).
+a personality interpretation. The name-number APIs below consume this
+normalization and apply the selected Pythagorean or Chaldean letter table.
 
 ```js
 import { normalizeName } from "./.build/index.js";
@@ -392,8 +394,8 @@ The receipt replay and silent-sign tests check these rules.
 No external transliteration dataset, standard table, or book text was copied.
 These choices describe symbolic arithmetic, not a person's pronunciation,
 preferred spelling, nationality, language, or identity. Different explicit
-spellings can produce different later numerology results. Meanings and
-numerical name calculations are later milestones.
+spellings can produce different numerology results. The name-number APIs
+below preserve these spelling choices in their calculation receipts.
 
 For other scripts or a preferred spelling convention, supply a caller table:
 
@@ -455,3 +457,148 @@ property test assembles independent expected emissions, checks conservation
 and classification, replays receipts, compares NFC/NFD forms for its declared
 inputs, and normalizes the emitted ASCII again. These controls establish the
 tested spelling rules, not linguistic completeness or predictive accuracy.
+
+## Pythagorean and Chaldean name numbers
+
+`expression(name, options)` sums every emitted letter in the entire supplied
+name and reduces that sum. `destiny` is an exact alias for `expression` and
+has the same `calculation: "expression"` receipt. `soulUrge(name, options)`
+sums only emitted vowels; `personality(name, options)` sums only emitted
+consonants. Use the spelling you intend to analyze. The library does not
+infer whether it is a birth name, a used name, a legal name, or a full name.
+
+Options are `system`, `masterNumbers`, `yAsVowel`, and `transliteration`.
+Their defaults are `"pythagorean"`, `"preserve"`, `"never"`, and no caller
+mapping, respectively. The master policy, normalization rules, Y choices,
+and caller mappings are the APIs described above. Only `"pythagorean"` and
+`"chaldean"` systems are accepted. Unknown option keys, unsupported values,
+and explicit null values reject. Ordinary options have the same in-process
+getter and proxy limitations as the other APIs. Unsupported names reject
+as a whole, including when the unsupported character would not have belonged
+to the selected vowels or consonants.
+
+```js
+import { expression, destiny, soulUrge, personality } from "./.build/index.js";
+
+// Invented spelling with no identified person or birth details.
+const name = "Ael Vorn";
+const options = { system: "chaldean", masterNumbers: "preserve" };
+console.log(JSON.stringify({
+  expression: expression(name, options),
+  destiny: destiny(name, options),
+  soulUrge: soulUrge(name, options),
+  personality: personality(name, options)
+}));
+```
+
+The frozen exports `PYTHAGOREAN_LETTER_TABLE` and `CHALDEAN_LETTER_TABLE`
+map uppercase ASCII letters to values. Their respective identifiers are
+`numerology-pythagorean-letters/1` and `numerology-chaldean-letters/1`,
+exported as `PYTHAGOREAN_LETTER_TABLE_ID` and `CHALDEAN_LETTER_TABLE_ID`.
+The complete groupings follow. The complete-alphabetical-tables test in
+[name-numbers.test.mjs](test/name-numbers.test.mjs) checks every letter
+against separate alphabet-position arithmetic and a handwritten grouping
+lookup, along with both identifiers, case forms, and table freezing.
+
+| Value | Pythagorean letters | Chaldean letters |
+| --- | --- | --- |
+| 1 | A J S | A I J Q Y |
+| 2 | B K T | B K R |
+| 3 | C L U | C G L S |
+| 4 | D M V | D M T |
+| 5 | E N W | E H N X |
+| 6 | F O X | U V W |
+| 7 | G P Y | O Z |
+| 8 | H Q Z | F P |
+| 9 | I R | none |
+
+The Pythagorean convention assigns repeating alphabetical values from 1
+through 9. This name is a system label, not a historical claim about
+Pythagoras. The Chaldean letter values were checked against Cheiro,
+*Cheiro's Book of Numbers* (first published 1926), chapter XII, the alphabet
+table on PDF page 65 of this
+[online transcription](https://www.svpvril.com/SVP_Library/Book-of-Numbers-Cheiro.pdf),
+read on 2026-10-14. Only letter-value facts are used; no book interpretations,
+examples, birth data, or prose are copied. The label does not establish an
+ancient origin. This transcription is a table reference, not a verified
+facsimile or evidence for the book's claims. The frozen table and handwritten
+grouping test keep the declared mappings inspectable locally.
+
+The selected system changes only the letter values. Both systems use the
+same whole-name sum, vowel/consonant selections, debt labels, and explicit
+master policy in this project. These choices are the project's declared
+combined conventions, not a reproduction of every formula in Cheiro's book
+or a claim that all practitioners agree. Date formulas remain the civil-date
+formulas above. A Chaldean sum can still reduce to 9 despite no letter having
+that value, as checked by `chaldean-greek-expansions-can-total-nine` in
+[name-numbers.json](test/fixtures/name-numbers.json).
+
+All selected emitted letters contribute their raw table values before any
+reduction. Tokens, given names, surnames, expansions, and vowel/consonant
+subsets are not reduced separately in expression. Each letter from an
+expansion contributes, including caller-mapped attached marks; silent mappings
+and separators contribute no value. The `whole-name-does-not-reduce-tokens`
+fixture enforces the full-name sum. For the synthetic example above, the
+Chaldean expression path is `29 -> 11`, soul urge is `13 -> 4`, and
+personality is `16 -> 7`. The `chaldean-reached-master-and-selection-debts`
+fixture enforces these paths. The Pythagorean spelling instead sums to 33,
+which stops or reduces to 6 under the requested policy, enforced by
+`pythagorean-full-name-master-33` and `pythagorean-reduce-master-33`.
+
+A valid name can have no vowels or no consonants under its selected Y policy.
+That selection has `contributions: []`, `sum: { inputs: [], output: 0 }`,
+and an ordinary zero reduction with no digit-sum steps or debts. Its outer
+`meaning` explicitly states the absence of selected letters, using the
+original `EMPTY_SELECTION_MEANINGS` export. Zero here denotes an empty
+selection, not a personality trait or a missing name. The nested reduction
+retains the ordinary arithmetic meaning for zero. An empty name or a name
+whose mappings emit no letters still rejects. The valid-empty-selections
+test checks these behaviors under both systems and master policies.
+
+Each result has `value`, an original reflection prompt in `meaning`,
+`karmicDebts`, and a deeply frozen JSON-safe `receipt`. The receipt schema
+is `numerology-name-number/1`. It records:
+
+- `calculation`: `"expression"`, `"soul-urge"`, or `"personality"`;
+- `system`, the versioned `letterTable`, and `masterNumbers`;
+- `selection`: `"all"`, `"vowels"`, or `"consonants"`;
+- `normalization`: the complete normalized-name result, including the
+  original input, transformation steps, Y classifications, table identifiers,
+  and complete caller-table snapshot;
+- `contributions`: the selected normalization letter rows, each with its
+  table `value`, emitted-letter `index`, source `characterIndex`,
+  `expansionIndex`, `tokenIndex`, and vowel/consonant classification;
+- `sum`: ordered raw `inputs` and their exact integer `output`;
+- `reduction`: the complete integer-reduction result, with its original
+  compound, digit-sum steps, stop reason, meaning, and debt annotations.
+
+Contribution indices retain their original emitted-letter positions after
+filtering, so they can have gaps. They locate source rows in
+`receipt.normalization.receipt.characters`; source rows give original UTF-16
+positions. The filtered-contributions test checks multi-letter expansions,
+an astral source character, attached mapped marks, and separated tokens.
+The complete-small-receipt test pins the whole result for the synthetic
+spelling `A-B`.
+
+Debt stages refer only to the selected total's performed reduction. No debt
+is inferred from individual letters, unselected letters, token totals, or
+digit substrings. The `unvisited-token-debt-is-absent` and
+`pythagorean-intermediate-debt` fixtures check this scope and intermediate
+stage locations. Debt labels are reflection prompts, not diagnoses.
+
+Raw expression sums equal the vowel sum plus the consonant sum under
+identical options. Reduced values need not add to the reduced expression,
+especially when a master stops reduction. The exhaustive-ASCII-pairs test
+checks every ordered pair of uppercase ASCII letters under both systems
+and master policies, with the default Y rule. The seeded-mixed-script test
+assembles expected emissions from handwritten spelling pairs, applies every
+Y policy, checks raw sum conservation and digital roots, replays all nested
+receipts, and checks canonical decomposition and ASCII normalization
+equivalence for its declared inputs. Its reproducible generator and scope
+are in `name-numbers.test.mjs`. Handwritten fixtures cover both systems,
+all master and debt values, intermediate paths, non-Latin and caller
+spellings, intentional omissions, and empty selections. Allocation tests
+enforce the existing name and caller-expansion bounds, and ownership tests
+check deep freezing and caller-table snapshots. These controls establish
+declared arithmetic behavior, not linguistic completeness or predictive
+accuracy.

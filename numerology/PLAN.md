@@ -13,7 +13,7 @@ commits and draft pull requests. Stop after the session's milestone is complete.
 - [x] M2 Validate Gregorian birth dates without timezone conversion; implement life path and birthday with explicit component versus whole-date reduction conventions and receipts.
 - [x] M3 Normalize Latin Unicode names with documented diacritic and ligature rules, per-character receipts, strict unsupported-character handling, and configurable Y-as-vowel classification.
 - [x] M4 Add versioned explicit transliteration tables for Greek and Cyrillic, caller-supplied mappings for other scripts, normalization provenance, and unsupported-script tests. Document that transliteration is a convention, not a pronunciation inference.
-- [ ] M5 Implement Pythagorean and Chaldean letter tables, expression/destiny, soul urge, and personality; record selected system, original compounds, master policy, letter contributions, and reductions.
+- [x] M5 Implement Pythagorean and Chaldean letter tables, expression/destiny, soul urge, and personality; record selected system, original compounds, master policy, letter contributions, and reductions.
 - [ ] M6 Implement maturity, karmic lessons, and hidden passion, including tied frequencies and empty vowel/consonant selections, with receipts and original meanings.
 - [ ] M7 Implement personal year/month/day cycles with explicit calendar-year boundaries, caller-supplied target dates, and no implicit current clock.
 - [ ] M8 Implement pinnacles and challenges with documented age intervals, single-digit challenge arithmetic, zero challenges, and complete component receipts.
@@ -158,3 +158,42 @@ cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
 exclusion passed; the complete engine contents and size gate remains
 unverified. No root build was generated. Only `numerology/` changed.
 M5 is the next session's work.
+
+## M5 validation
+
+Added frozen versioned Pythagorean and Chaldean letter tables, expression
+with its exact destiny alias, soul urge, and personality. Each calculation
+sums raw selected letter values across the whole supplied name before
+reduction, with the selected system, master policy, full normalization and
+caller-table provenance, original compound, letter/source locators, and
+all reduction steps in a frozen JSON-safe receipt. Empty vowel/consonant
+selections retain arithmetic zero with original text explaining their absence.
+The README documents the complete tables, formulas, receipt structure,
+debt scope, options, empty selections, and the Chaldean table reference
+checked in Cheiro's own published work. The project's selections and master
+handling are declared combined conventions rather than a reproduction of
+all the book's formulas or interpretive text.
+
+Project `npm run typecheck` and `npm test` passed on Node 22.22.2.
+`test/name-numbers.test.mjs` checks handwritten synthetic fixtures in
+`test/fixtures/name-numbers.json`, complete table coverage, master and debt
+paths, every ordered ASCII letter pair under both systems and master
+policies, and seeded mixed-script spelling controls under every Y policy.
+It independently checks letter sums, positional bigint reductions, digital
+roots, raw vowel/consonant conservation, full receipt replay, canonical and
+ASCII equivalence over declared inputs, source and expansion indices,
+strict rejection, allocation bounds, freezing, and caller ownership.
+Existing normalization, transliteration, date, reduction, package exclusion,
+file size, and documentation punctuation checks also pass. Generated build
+and validation logs remain in ignored project paths.
+
+Rechecked all available local and origin `main` and `infra/*` refs for
+numerology and related name arithmetic outside this project; no overlapping
+implementation was found. This review covers locally available refs, not
+unfetched remote changes.
+
+The root `npm run package:contents` was attempted with the local runtime and
+cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
+exclusion passed; the complete engine contents and size gate remains
+unverified. No root build was generated. Only `numerology/` changed.
+M6 is the next session's work.
