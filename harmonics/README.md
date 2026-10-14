@@ -1,9 +1,9 @@
 # Harmonics prototype
 
 This private source project adds harmonic longitude transforms, configured
-harmonic aspects, strength spectra, supported aspect patterns and natal casting
-adapters to the engine checkout. See [PLAN.md](PLAN.md) for the remaining dial and CLI
-milestones.
+harmonic aspects, strength spectra, supported aspect patterns, Uranian dial
+projections and natal casting adapters to the engine checkout. See
+[PLAN.md](PLAN.md) for the remaining picture, midpoint and CLI milestones.
 Code and documentation here are MIT under
 the repository's [LICENSE](../LICENSE). The engine's data attributions remain
 in [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE).
@@ -320,6 +320,92 @@ and enforced over these exact supplied rows in
 hand-derived trisection rankings, weighted pair normalization, custom aspect
 weights, seam contacts, caps and boundary cases. They establish transform and
 scoring correctness, not ephemeris accuracy.
+
+## Uranian dial projections
+
+```ts
+import { projectDial, dialDistance } from "./src/index.js";
+
+const dial = projectDial([
+  { body: "A", lon: 89.75 },
+  { body: "B", lon: 90.25 }
+], 90, { contactOrb: 0.5 });
+console.log(dial.points, dial.contacts);
+console.log(dialDistance(89.75, 90.25, 90));
+```
+
+`projectDial(sourcePoints, circle, options)` accepts the same supplied
+longitude rows and validation as `harmonicChart`. The exported `DIAL_CIRCLES`
+are 90, 45 and 22.5 degrees, also represented by the `DialCircle` type.
+Omitting `circle` selects 90. Other circles throw `RangeError`.
+
+Each result point retains its name and full normalized zodiac longitude
+`sourceLon` in `[0, 360)`. Its dial coordinate is `lon = sourceLon % circle`,
+in `[0, circle)`, and `sector = floor(sourceLon / circle)` records the
+zero-based source sector. Negative and multi-turn inputs are normalized by
+the engine's `src/signs.ts` helper through the shared harmonic-chart validator.
+These are longitude degrees on a folded circle, with no multiplication to
+fill a display circle. Speeds, sign labels, latitude and house annotations
+are omitted. Unknown speeds are accepted because projection and proximity
+require no motion classification.
+
+For projected coordinates a and b, the unsigned shortest distance is
+`min(abs(a-b), circle-abs(a-b))`, ranging from zero through half the circle.
+The standalone `dialDistance(a, b, circle)` normalizes and projects supplied
+full longitudes, then returns this distance. It uses the same circle default
+and rejects non-finite or non-numeric longitudes. At half the circle the two
+directions tie; the unsigned distance makes no directional choice.
+
+`contactOrb` defaults to 1 degree and must be a finite number from zero
+through half the dial circle, inclusive. It stays in longitude degrees on
+every circle, with no harmonic scaling or luminary replacement. All supplied
+points participate. Each unordered pair whose distance is at most the orb
+appears once in `contacts` as `{ a, b, orb }`. A zero allowance includes only
+coincident projected coordinates under the arithmetic below. Contact labels
+use canonical UTF-16 lexical order, and contacts sort by increasing orb,
+then a and b. Point rows retain input order; all derived objects and arrays
+are frozen independent snapshots. Invalid or unsupported options reject
+with `RangeError`.
+
+The result contains `circle`, `contactOrb`, `arithmetic`, `points` and
+`contacts`. Its arithmetic id is `binary64;inclusive;no-epsilon`: normalization,
+remainder, subtraction and comparison use ordinary JavaScript binary64
+arithmetic, without a widened orb. This differs from the exact comparisons
+of the configured harmonic-aspect matcher. Rounding of source normalization
+or subtraction can affect contacts near a boundary; projected equality does
+not prove an exact relation between the original input doubles. These
+contacts report dial proximity only, with no aspect type or motion claim.
+The library makes no astronomical or predictive validity claim for them.
+Planetary pictures and midpoint trees are later milestones.
+
+In the synthetic example, A projects to 89.75 degrees and B to 0.25.
+Their straight gap is 89.5, so the circular distance is `90 - 89.5 = 0.5`
+degrees, included at the stated boundary. These exact binary-fraction values,
+every sector and seam of each supported circle, default and zero orbs,
+half-circle distances, ordering and rejected inputs are enforced in
+[test/dial.test.ts](test/dial.test.ts). Those tests derive their expected
+values directly from invented longitudes; they are arithmetic evidence,
+not ephemeris accuracy measurements.
+
+Dial analysis casts no chart and creates no engine receipt. Preserve a cast
+source explicitly, including unknown-speed angles and supplemental points:
+
+```ts
+import { castChart } from "./src/engine.js";
+import { projectDial } from "./src/index.js";
+
+const source = castChart({
+  utc: "2002-04-06T03:00:00Z", latitude: 12, longitude: 24
+}, { includeAngles: true, includeChartPoints: true });
+const result = { source, dial: projectDial(source.points, 22.5) };
+```
+
+The synthetic integration check in [test/dial.test.ts](test/dial.test.ts)
+verifies that this operation leaves the original serialized natal envelope
+unchanged. That envelope describes the engine's source natal chart only;
+supplemental points and derived dial contacts remain outside its scope.
+[test/pure-entry.test.ts](test/pure-entry.test.ts) checks that the default
+library entry, including dial projection, loads no chart API or ephemeris.
 
 ## Harmonic aspect patterns
 

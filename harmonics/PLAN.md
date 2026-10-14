@@ -10,7 +10,7 @@ unchecked milestone, runs its checks, marks it complete and appends a line to
 - [x] M3 Add harmonic aspect detection using the engine's configured aspect policy and matcher, with explicit orb units and per-harmonic scaling; test custom angles, wraparound and inclusive boundaries.
 - [x] M4 Reuse `src/techniques/aspect-patterns.ts` for supported harmonic aspect patterns, documenting its fixed major-aspect limits and refusing unsupported pattern policies rather than inventing graph results.
 - [x] M5 Implement harmonic strength spectra with a documented deterministic scoring formula, configurable harmonic selection and weights, pair contributions and hand-derived ranking tests.
-- [ ] M6 Implement Uranian dial projections for the requested 90, 45 and 22.5 degree circles, preserving full source longitudes and testing circular distances and seam contacts.
+- [x] M6 Implement Uranian dial projections for the requested 90, 45 and 22.5 degree circles, preserving full source longitudes and testing circular distances and seam contacts.
 - [ ] M7 Implement canonical planetary pictures and A+B-C sensitive points with configurable contact orbs, explicit repeated-member rules and arithmetic tests.
 - [ ] M8 Implement midpoint-tree listings by calling `src/points.ts` midpoint helpers, covering both axes, antipodal ties, dial contacts, ordering and deduplication.
 - [ ] M9 Add the offline `harmonics chart` CLI with strict JSON input validation, synthetic fixture examples, structured JSON output and receipts for chart calls.
@@ -145,3 +145,29 @@ using Node 22 and a writable npm cache under `harmonics/.cache/`.
 The root `npm run package:contents` still fails at missing `dist/calc.d.ts`.
 No engine build, archive creation or git mutation was performed. The next
 session starts at M6.
+
+## M6 validation
+
+Added the pure `projectDial` and `dialDistance` APIs through the default
+entry, with supported circles exported as `DIAL_CIRCLES`. Projections retain
+normalized full zodiac longitudes and source sectors. Configurable inclusive
+contact orbs stay in longitude degrees, with canonical pair labels and
+deterministic ordering. Unknown speeds are accepted without motion claims;
+derived rows and contacts are frozen snapshots. `README.md` documents the
+geometry, binary64 rounding limits and source-only receipt scope.
+
+On Node 22.22.2, `npm run check` passed. The hand-derived synthetic tests in
+`test/dial.test.ts` cover every supported sector, exact seams, wraparound
+distances, half-circle ties, default and zero orbs, inclusive boundaries,
+permutation and rotation stability, rejected inputs and receipt preservation.
+The default entry's ephemeris and casting isolation check also passes. These
+checks establish projection arithmetic and integration, not ephemeris accuracy
+or predictive validity.
+
+`git diff --check` passed. Changed and new files remain inside `harmonics/`,
+below the file size limit, with no em dash in documentation. The root
+`npm pack --dry-run --json --ignore-scripts` manifest excludes this project,
+using Node 22.22.2 and a writable npm cache under `harmonics/.cache/`.
+The root `npm run package:contents` still fails at missing `dist/calc.d.ts`.
+No engine build, archive creation or git mutation was performed. The next
+session starts at M7.

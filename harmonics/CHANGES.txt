@@ -3,3 +3,4 @@ Implement M2: isolated engine chart and harmonic casting adapters preserving nat
 Implement M3: pure harmonic aspect detection through the engine policy and matcher, configurable inverse or fixed orb scaling, known-speed validation, documented units and hand-derived Vitest checks.
 Implement M4: harmonic major-aspect patterns and containment through the engine detector, fixed-limit policy validation, separate patterns entry, documented arithmetic and hand-derived Vitest checks.
 Implement M5: pure harmonic strength spectra through the engine matcher, configurable selections and weights, documented linear orb scoring with pair contributions, deterministic rankings and hand-derived Vitest checks.
+Implement M6: pure Uranian dial projections and circular distances, preserved zodiac longitudes and sectors, configurable seam contacts, deterministic ordering, documented arithmetic and synthetic Vitest checks.
