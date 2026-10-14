@@ -1,0 +1,17 @@
+{
+  "source": "natal",
+  "birth": {
+    "utc": "2000-01-01T12:00:00Z", "timeScale": "ut1", "timeKnown": true,
+    "latitude": 35, "longitude": 15, "houseSystem": "placidus", "deltaT": 64
+  },
+  "request": {
+    "convention": {
+      "system": "placidus-semiarc", "mode": "mundane",
+      "latitude": "retain-both", "motion": "direct", "key": "naibod"
+    },
+    "significator": { "kind": "angle", "angle": "mc" },
+    "promissor": { "kind": "body", "id": "Mars" },
+    "contact": { "kind": "conjunction" },
+    "yearUnit": "julian-365.25-days"
+  }
+}

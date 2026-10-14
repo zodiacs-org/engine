@@ -1,0 +1,149 @@
+{
+  "scope": "Read sources for the convention contract, sphere coordinates, angular construction, zodiacal and mundane body directions, and M7 timing keys; numerical expectations are separately hand-derived.",
+  "sources": [
+    {
+      "id": "ptolemy-ashmand-iii14",
+      "author": "Claudius Ptolemy",
+      "title": "Tetrabiblos",
+      "edition": "J. M. Ashmand translation, 1822",
+      "url": "https://sacred-texts.com/astro/ptb/ptb58.htm",
+      "retrieved": "2026-10-14",
+      "formatRead": "HTML transcription",
+      "locator": "Book III, chapter XIV, printed pages 94-96",
+      "excerptLocator": "Printed page 94",
+      "excerpt": "each equatorial degree being taken to signify one solar year",
+      "supports": [
+        "Equatorial arc to solar-year mapping attributed to Ptolemy.",
+        "Proportional temporal-hour construction using the appropriate diurnal or nocturnal hourly times.",
+        "Printed page 94 distinguishes rising by ascensional times, meridian by right ascensions and setting by descensions."
+      ],
+      "m4Reading": "Reread HTML angular construction on printed page 94, 2026-10-14.",
+      "m7Reading": "Reread the fetched HTML transcription on 2026-10-14, printed page 94: an equatorial degree signifies one solar year. No modern elapsed-day length is specified."
+    },
+    {
+      "id": "placidus-cooper-1814",
+      "author": "Placidus de Titis",
+      "title": "Primum Mobile",
+      "edition": "John Cooper translation, 1814",
+      "url": "https://iapsop.com/ssoc/1814__cooper___primum_mobile.pdf",
+      "retrieved": "2026-10-14",
+      "formatRead": "Text extracted from fetched PDF",
+      "locator": "Printed pages 17-23, theses 40, 45-46, 55, 60-61; page 57; pages 104-105, canon XXXVII",
+      "excerptLocator": "Printed page 17, thesis 40",
+      "excerpt": "a proportional division of the diurnal and nocturnal arcs, and no other way.",
+      "supports": [
+        "Mundane positions and aspects use proportional diurnal and nocturnal arcs; bodily latitude is retained.",
+        "Direct carries the promissor westward to the fixed position of the significator.",
+        "Converse applies the significator's rules to the promissor and vice versa.",
+        "The author rejects converse directions of angles and converse zodiacal aspects.",
+        "Thesis 61 also excludes zodiacal rays to angles; the angle primitive enables conjunctions only."
+      ],
+      "m4Reading": "Reread fetched PDF text in memory, 2026-10-14: printed page 57 (PDF page index 73), thesis 60 on printed page 23, canon XXXVII on printed page 105. Direct westward motion and converse angle prohibition confirmed.",
+      "m5Reading": "Fetched PDF and extracted text in memory on 2026-10-14. Read printed pages 23-24, 57-61, 68-69 and 104-105; PDF page numbers are printed numbers plus 17. Canon XIX uses the promissor aspect place's semi-arc to scale the fixed significator's meridian distance.",
+      "m5Limits": [
+        "Zero-both is a project projection restriction, not the changing significator latitude in canon XXIII.",
+        "The general semi-arc model does not implement the Sun's special treatment below the horizon in canons XX-XXI.",
+        "Canon XXXVII supplies mundane converse role exchange. No converse zodiacal construction, including projected conjunctions, is enabled."
+      ],
+      "m6Reading": "Fetched PDF and read extracted text in memory on 2026-10-14. Part III printed pages 72-73; canons XXVII-XXVIII, pages 74-77; canons XXX-XXXII, pages 87-91; canon XXXVI, pages 98-104; canon XXXVII, pages 104-105. PDF page numbers are printed numbers plus 17.",
+      "m6Supports": [
+        "Mundane aspects divide the diurnal and nocturnal arcs proportionally; classical aspect separations are expressed through mundane houses.",
+        "Canon XXX retains both bodily latitudes for conjunction. Canon XXXII scales distance within a house by horary times, using the moving body's diurnal or nocturnal time according to its position at contact.",
+        "Canon XXXVII carries the original significator to the original promissor's fixed mundane position or rays in converse, exchanging the horary-time ratio."
+      ],
+      "m6Limits": [
+        "Westward and eastward branch names are explicit project coordinate labels, measured from original promissor to original significator; they do not silently import zodiacal ray terminology.",
+        "The uniform ordinary semi-arc construction does not implement canon XXXVI's special solar crepuscular treatment, mundane parallels or minor aspects.",
+        "Body significators on axes do not extend the method to converse angular significators."
+      ]
+    },
+    {
+      "id": "lilly-1647-aspect-branches",
+      "author": "William Lilly",
+      "title": "Christian Astrology",
+      "edition": "London, 1647, book I",
+      "url": "https://www.worldastrology.net/wp-content/uploads/2008/12/CA-I.pdf",
+      "retrieved": "2026-10-14",
+      "formatRead": "Fetched PDF text",
+      "locator": "Printed pages 108-109, PDF pages 128-129",
+      "supports": [
+        "The caster's sinister ray follows sign order; its dexter ray runs against sign order.",
+        "Aries casts sextile, square and trine sinister to Gemini, Cancer and Leo, and dexter to Aquarius, Capricorn and Sagittarius."
+      ],
+      "notEstablished": [
+        "Lilly's branch terminology is not used as a substitute for Placidus's semi-arc geometry."
+      ]
+    },
+    {
+      "id": "ptolemy-ashmand-i16",
+      "author": "Claudius Ptolemy",
+      "title": "Tetrabiblos",
+      "edition": "J. M. Ashmand translation, 1822",
+      "url": "https://sacred-texts.com/astro/ptb/ptb19.htm",
+      "retrieved": "2026-10-14",
+      "formatRead": "HTML transcription",
+      "locator": "Book I, chapter XVI, printed pages 24-26",
+      "supports": [
+        "Sextile, square, trine and opposition correspond to 60, 90, 120 and 180 degrees of the zodiac."
+      ]
+    },
+    {
+      "id": "usno-altitude-hour-angle",
+      "author": "US Naval Observatory, Astronomical Applications Department",
+      "title": "Computing Altitude and Azimuth from Greenwich Apparent Sidereal Time",
+      "url": "https://aa.usno.navy.mil/faq/alt_az",
+      "retrieved": "2026-10-14",
+      "formatRead": "HTML equations and explanatory text",
+      "locator": "Local hour angle and altitude equations",
+      "supports": [
+        "Local hour angle equals local sidereal angle minus right ascension after converting both to degrees.",
+        "Sine altitude is cos(hour angle) cos(declination) cos(latitude) plus sin(declination) sin(latitude)."
+      ],
+      "notEstablished": [
+        "The proportional coordinate, direction system and timing key are not defined by this source."
+      ]
+    },
+    {
+      "id": "lilly-1647-keys",
+      "author": "William Lilly",
+      "title": "Christian Astrology",
+      "edition": "London, 1647, book III",
+      "url": "https://www.worldastrology.net/wp-content/uploads/2008/12/CA-III.pdf",
+      "retrieved": "2026-10-14",
+      "formatRead": "Fetched PDF",
+      "locator": "Chapter CLXVI, printed pages 709-715; PDF pages 223-229 (one-based)",
+      "excerptLocator": "Printed page 710",
+      "excerpt": "the apparent diurnall motion of the Sun for the next day and same hour",
+      "supports": [
+        "Ptolemy's degree/year key and Naibod's timing method are discussed separately.",
+        "Lilly attributes to Antonius Maginus a key using the Sun's right ascension at birth and at the same hour the following day.",
+        "That natal-day right-ascension difference is used as a fixed annual arc."
+      ],
+      "notEstablished": [
+        "The rounded Naibod tables do not establish the exact 59 minutes 8.33 seconds rate used by this project; that explicit decimal is separately sourced to Kuhr.",
+        "Maginus's own text was not independently fetched and read.",
+        "The passage does not select a modern UTC, UT1 or TT day convention, a modern equator/equinox frame, or a canonical right-ascension unwrapping algorithm."
+      ],
+      "m7Reading": "Reread fetched PDF on 2026-10-14: printed page 709 for the Ptolemy mapping; page 710, The Practice, for the birth-to-next-day right-ascension difference; pages 712-715 for the Naibod discussion and rounded calendar conversion tables. The solar annual rate is held fixed rather than resampled at each age."
+    },
+    {
+      "id": "kuehr-1936-naibod",
+      "author": "Erich Carl Kühr",
+      "title": "Berechnung der Ereigniszeiten",
+      "edition": "Regulus-Verlag, Görlitz, 1936; year read on the scan title page",
+      "url": "https://www.imagomundi.biz/wp-content/uploads/2026/04/PYKS52-Berechnung_der_Ereignisgrenzen-Erich_Carl_Kuehr.pdf",
+      "retrieved": "2026-10-14",
+      "formatRead": "Fetched PDF and extracted text in memory; no PDF, chart or source table retained",
+      "locator": "Direktions-Schlüssel, printed pages 62-63, PDF page 37 (one-based); title page on PDF page 2",
+      "supports": [
+        "Printed page 62 equates 59 minutes 8.33 seconds of equatorial arc to one year; page 63 identifies that derivation as the Naibod key.",
+        "The project preserves that printed decimal as a fixed conventional rate: 354833/360000 equatorial degrees per symbolic year."
+      ],
+      "notEstablished": [
+        "Naibod's original text was not fetched and read; this source supplies Kuhr's explicit formulation.",
+        "This rounded published decimal is not an exact physical astronomical rate or a definition of an elapsed civil year.",
+        "Kuhr's directional geometry and predictive claims are outside the adopted source scope."
+      ]
+    }
+  ]
+}

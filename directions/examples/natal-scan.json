@@ -1,0 +1,29 @@
+{
+  "source": "natal",
+  "birth": {
+    "utc": "2000-01-01T12:00:00Z", "timeScale": "ut1", "timeKnown": true,
+    "latitude": 35, "longitude": 15, "houseSystem": "placidus", "deltaT": 64
+  },
+  "request": {
+    "convention": {
+      "system": "placidus-semiarc", "mode": "mundane",
+      "latitude": "retain-both", "key": "ptolemy"
+    },
+    "selections": [{
+      "significator": { "kind": "body", "id": "Sun" },
+      "promissor": { "kind": "body", "id": "Mars" },
+      "contact": { "kind": "conjunction" }
+    }, {
+      "significator": { "kind": "body", "id": "Moon" },
+      "promissor": { "kind": "body", "id": "Jupiter" },
+      "contact": { "kind": "aspect", "aspect": "square", "branch": "westward" }
+    }],
+    "motions": [
+      { "motion": "direct" },
+      { "motion": "converse", "converseConstruction": "placidus-role-swap" }
+    ],
+    "yearUnit": "tropical-365.2422-days",
+    "ageRange": { "fromYears": 0, "toYears": 360, "includeFrom": true, "includeTo": false },
+    "maxEvaluations": 4
+  }
+}
