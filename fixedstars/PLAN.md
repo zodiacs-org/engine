@@ -14,7 +14,7 @@ explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
 - [x] M8 Expose catalog rise, set, upper transit, and lower transit searches through that adapter, including solver budgets, complete refusal, circumpolar flags, and explicitly labelled engine-call provenance.
 - [x] M9 Implement paran event pairing for bodies and angular contacts over an explicit observer window, with a configurable time orb, native body-sky results, star-sky provenance, and synthetic simultaneous-contact expectations.
 - [x] M10 Implement the fixedstars list, fixedstars hits, and fixedstars parans CLI commands, strict options, JSON output, meaningful exit codes, and end-to-end synthetic tests.
-- [ ] M11 Extend independent geometric coverage for wraparound, poles, proper-motion conventions, frame consistency, unavailable angles, horizon tangencies, event-window boundaries, and sample-budget exhaustion.
+- [x] M11 Extend independent geometric coverage for wraparound, poles, proper-motion conventions, frame consistency, unavailable angles, horizon tangencies, event-window boundaries, and sample-budget exhaustion.
 - [ ] M12 Finish library and CLI usage documentation, source attributions, limitations, evidence references, and isolated verification of tests, types, file sizes, and engine-package exclusion.
 
 ## Boundaries
@@ -381,3 +381,34 @@ the missing engine build's budgets passed. All authored changes remain under
 fixedstars/. M11 remains unchecked: extend the geometric edge-case coverage
 listed in its milestone. No M11 work was done here. Stop for the harness-owned
 commit.
+
+## M11 completion and M12 handoff
+
+tests/edge-geometry.fixedstars.ts extends the geometric suite with signed
+near-pole tangent motion, pole crossing, RA seam propagation, exact-pole motion
+validation, moving mixed directions checked against the existing independent
+ERFA fixture, and true-frame pole neighborhoods on both sides of the engine's
+coordinate-availability threshold. Unknown-time natal charts retain body
+contacts and omit angles across clock and polar house settings. All records
+are synthetic, without assigned historical lore.
+
+The new sky constructions place each event phase between whole milliseconds
+and derive its expected timestamp before any solver call. They exercise
+from-inclusive/to-exclusive membership in narrow windows, captured timestamps,
+zero-orb angle pairing and excluded anchor refusal. Signed northern and
+southern horizon-grazing cases exercise both short rise/set excursions between
+coarse samples and near-tangent misses. Independently composed horizontal dot
+products check the crossing side before and at each returned millisecond.
+Small and late exhausted budgets clear all events and paran hits; a sufficient
+budget retains complete output. The existing engine solver and adapter are
+unchanged. GEOMETRY.md records each derivation, numerical comparison and scope;
+README.md links the added coverage. No new physical accuracy bound is claimed.
+
+M11 validation passed on Node 22.22.2: the full local Vitest suite, TypeScript,
+offline catalog regeneration, sky adapter compilation and file/package
+isolation. The parent package:contents check still fails because dist/calc.d.ts
+is absent; creating that engine build is outside this session's hard boundary.
+The isolation check confirms exclusion through a package dry run without
+claiming the missing engine build's budgets passed. All authored changes remain
+under fixedstars/. M12 remains unchecked for the final documentation and
+isolated verification pass. Stop here for the harness-owned commit.

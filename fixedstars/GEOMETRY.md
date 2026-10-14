@@ -563,3 +563,115 @@ The coordinate and sidereal helpers set up the experiment, while the expected
 event kind follows the hour-angle identity. This is frame/observer/CLI
 construction evidence at one anchor, not an independent physical accuracy
 bound. No expectation is taken from saved fixedstars output.
+
+## Coordinate singularities, grazing horizons and event endpoints
+
+[tests/edge-geometry.fixedstars.ts](tests/edge-geometry.fixedstars.ts) extends
+the constructed geometry above. No reference in these tests comes from a
+previous library result. All instants, observers, directions and exaggerated
+motion rates are synthetic. The vector comparisons use toBeCloseTo precision
+12; polar latitude checks use precision 10. These are floating-point checks
+over the stated constructions, without a physical stellar error bound.
+
+At alpha = 0 and delta = either sign of 89.999 degrees, the east basis stays
+(0,1,0). An eastward tangent displacement of one radian, forward or backward,
+therefore gives (cos(delta), +/-1, sin(delta))/sqrt(2). A division by cos(delta)
+would change this result drastically. At delta = +/-60 degrees, a northward
+displacement toward the pole of sqrt(3) radians instead gives
+(-1,0,+/-sqrt(3))/2. Its RA is 180 degrees and its declination is again +/-60
+degrees: motion has crossed the pole rather than clamping at it. A displacement
+of 1/sqrt(3) radians reaches the pole itself. Exact catalog poles accept
+unavailable or tabulated zero motion, but refuse nonzero components because
+their RA-based tangent convention is ambiguous there.
+
+At zero declination, displacement tan(1 degree) along the east basis rotates
+the normalized vector by one degree. Forward propagation from RA 359.5
+degrees reaches 0.5 degrees; backward propagation from 0.5 reaches 359.5.
+These seam expectations follow from the angle addition identities. Motion is
+performed on Cartesian axes, without wrapping an angular displacement first.
+
+The mixed moving-vector check starts at alpha = 45, delta = 30 degrees.
+Its independent tangent bases are
+
+```text
+u = (sqrt(6)/4, sqrt(6)/4, 1/2)
+east = (-1/sqrt(2), 1/sqrt(2), 0)
+north = (-sqrt(2)/4, -sqrt(2)/4, sqrt(3)/2)
+w = u + E east + N north
+|w| = sqrt(1 + E^2 + N^2)
+```
+
+The last identity follows because these three vectors are orthonormal. The
+test takes E = 0.003 * years and N = -0.004 * years at every TT epoch of the
+existing parent nutation-erfa.json fixture across 1800 to 2200. It multiplies
+w/|w| by that fixture's eclipticOfDate matrix and rotates the result onto the
+equator using the fixture's epsA + deps, as derived above. Each reconstructed
+Cartesian component must satisfy the fixture's existing rotationArcsec
+tolerance, converted to radians. This extends the independent ERFA rotation
+check to a moving direction with mixed components. The tangent model itself
+is tested against the hand-derived vectors, without claiming that it models
+physical motion accurately across that span.
+
+Pole-neighborhood cases construct true-equator and true-ecliptic directions
+(r,0,+/-sqrt(1-r^2)), at TT days -73000, 0 and 73000. The test uses r equal to
+0.25 or 8 times the engine RA_POLE_TOLERANCE, well apart from its boundary.
+The inverse engine frame provides a catalog direction. The catalog encoding
+uses atan2(z,hypot(x,y)) for declination; asin(z/length) can lose the tiny
+polar distance when its ratio rounds to either sign of one. Only the
+corresponding singular longitude or RA is unavailable below the threshold.
+The other frame's longitude and signed declination remain usable. A target
+with the identical supplied coordinates matches a parallel and, when
+longitude is available, a conjunction at zero orb. These are frame-wiring
+and coordinate-availability checks. Unknown-time natal inputs additionally
+omit all angle contacts under UTC, UT1 and TT clocks at latitudes -78, 0 and
+78 degrees, with a pinned deltaT and requested Placidus houses. Unknown time
+does not become a polar fallback or an inferred angular contact.
+
+For the endpoint tests, choose the continuous UTC instant halfway between
+2000-03-20T06:00:00.000Z and its next millisecond. At an equatorial observer
+with longitude zero, construct a true-equator direction with declination
+10 degrees and RA equal to the engine apparent sidereal angle minus H.
+The hour angles -90, 90, 0 and 180 degrees place rise, set, upper transit and
+lower transit respectively at that chosen instant. The inverse engine frame
+constructs each J2000 record. Thus the expected first whole millisecond is
+06:00:00.001Z, fixed before any sky call. Independent horizontal dot products
+verify opposite signs at the preceding and expected milliseconds. A wide
+search, a window ending at the expected millisecond, and successive windows
+of one millisecond then test inclusion at from and exclusion at to. A zero-orb
+paran to the corresponding angle anchor must match in the included window;
+an anchor at the excluded endpoint is refused even with a larger orb.
+
+The horizon cases use both signs of latitude 60 degrees around the invented
+UTC instant 2000-03-20T06:00:00Z. From the spherical identity above, an upper
+transit at declination -30 degrees is tangent to the horizon for latitude
++60; a lower transit at declination +30 is tangent there instead. Reversing
+both signs gives the southern cases. The test verifies the constructed
+tangent's instantaneous altitude within 1e-10 degrees. This concerns geometry
+at that instant, not a promise of an exact double-root event under evolving
+precession and nutation.
+
+Moving declination 0.01 degree to either side creates a short horizon
+excursion or a clear miss. The tests search half an hour on either side of
+the anchor. The excursion contains rise then set at an upper culmination,
+or set then rise at a lower culmination, with both contacts less than one
+native hourly coarse step apart. The independently evaluated horizontal
+dot products put the anchor inside and both window endpoints outside the
+excursion. At each returned horizon contact, the previous millisecond must
+still be on the original side and the returned millisecond must have crossed.
+Altitude must be within 1e-5 degrees of the geometric horizon and agree at
+precision 10 with the independently composed horizontal dot products. The
+clear-miss case retains only its transit and the appropriate window-local
+never-rises or never-sets flag. These tests exercise extremum detection on
+either side of tangency; they establish no completeness guarantee for an
+exact touching root or arbitrary time-varying directions.
+
+Budgets 1, 8 and 32 and a budget one below the current unrestricted call's
+sample count must refuse whole for each grazing case. The unrestricted count
+is an integration trigger, without an independent performance claim. Events,
+horizon flags and paran hits must be empty on refusal; the captured call
+record retains the refusal, and the used count cannot exceed the requested
+budget. The exact unrestricted budget must complete with the same events.
+All sky tests execute the unchanged engine solver through the existing scoped
+adapter. The horizontal reference uses the engine frame and clock as inputs
+to independently composed local dot products, without a copied rise/set or
+precession algorithm and without stored event times as a reference.

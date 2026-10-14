@@ -41,6 +41,11 @@ and do not assert physical or predictive effects.
 tests. Integration tests exercise chart receipts and the existing sky
 solver's refusal semantics; they do not measure stellar astrometric accuracy.
 The scoped sky-vector proof and receipt distinction are described below.
+The [edge geometry tests](tests/edge-geometry.fixedstars.ts) cover motion
+through pole and RA neighborhoods, independent moving-vector frame checks,
+unknown-time angle omission, grazing horizon contacts, and event membership
+at window endpoints. Their derivations and reference scope are recorded in
+[GEOMETRY.md](GEOMETRY.md#coordinate-singularities-grazing-horizons-and-event-endpoints).
 
 Original code and documentation use the repository's [MIT licence](../LICENSE).
 Source decisions, pinned retrieval receipts and short historical passages
