@@ -1,8 +1,18 @@
 import { describe, expect, it, vi } from "vitest";
 import * as engine from "../src/engine.js";
-import { CONSIDERATION_RULE_IDS, createRulePolicy, evaluateConsiderations, normalizeHoraryInput } from "../src/index.js";
-import type { ConsiderationRuleId, HoraryCast, HoraryRulePolicy } from "../src/index.js";
+import { CONSIDERATION_RULE_IDS, createRulePolicy as createFullPolicy,
+  evaluateConsiderations as evaluateAll, normalizeHoraryInput } from "../src/index.js";
+import type { ConsiderationRuleId, HoraryCast, HoraryRulePolicy, RulePolicyInput } from "../src/index.js";
 import { questionInput, schematicChart } from "./fixtures.js";
+
+// These static geometry sketches have no time-dependent lunar trajectory.
+// Void-of-course motion and delegation are covered in their dedicated tests.
+function createRulePolicy(input: RulePolicyInput = {}): HoraryRulePolicy {
+  return createFullPolicy({ rules: { "moon-void-of-course": false, ...input.rules } });
+}
+function evaluateConsiderations(result: HoraryCast, policy = createRulePolicy()) {
+  return evaluateAll(result, policy);
+}
 
 function fixture(): HoraryCast {
   const chart = schematicChart();
@@ -32,7 +42,7 @@ describe("geometric considerations before judgement", () => {
     expect(evaluated.observations.map(({ rule, status }) => [rule, status])).toEqual([
       ["early-ascendant", "not-triggered"], ["late-ascendant", "not-triggered"],
       ["saturn-first", "not-triggered"], ["saturn-seventh", "triggered"],
-      ["moon-via-combusta", "not-triggered"]
+      ["moon-via-combusta", "not-triggered"], ["moon-void-of-course", "disabled"]
     ]);
     expect(evaluated.observations[3]!.evidence).toEqual([
       { fact: "planet", value: "Saturn" }, { fact: "longitude", value: 190, unit: "degrees" },

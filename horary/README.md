@@ -84,8 +84,9 @@ behaviors and sign boundaries are checked in `significators.test.ts`; engine
 delegation, house systems and fallback are checked in
 `significators.integration.test.ts`.
 
-`evaluateConsiderations(result, policy)` reads the cast without recalculating
-the sky. `createRulePolicy()` enables the implemented considerations;
+`evaluateConsiderations(result, policy)` reads the cast's geometric data and,
+when enabled, scans lunar motion at the normalized question instant for the
+void-of-course rule. `createRulePolicy()` enables the implemented considerations;
 override any toggle explicitly:
 
 ```ts
@@ -97,10 +98,9 @@ const considerations = evaluateConsiderations(result, policy);
 
 Every observation contains its rule, `triggered`, `not-triggered` or
 `disabled` status, named source tradition, measured evidence and a short
-explanation. Disabled rules retain a source record and skip their geometric
-inputs. These observations describe cautions without refusing a judgement
-or issuing an outcome. Void of course and the remaining analysis are still
-scheduled in the plan.
+explanation. Disabled rules retain a source record and skip their inputs and
+scans. These observations describe cautions without refusing a judgement
+or issuing an outcome. The remaining analysis is scheduled in the plan.
 
 The early Ascendant interval is `[0, 3)` degrees within each sign and the
 late interval is `[27, 30)`. They use the Ascendant angle rather than the
@@ -126,6 +126,36 @@ required fields, without authenticating a chart or verifying that the sky
 matches its instant. `policy.test.ts` and `considerations.test.ts` enforce
 these ownership and validation decisions. `considerations.integration.test.ts`
 checks consumption of engine house systems and polar fallback.
+
+The `moon-void-of-course` toggle delegates to the engine's `voidOfCourseAt`
+with `bodies: "traditional"`, selecting the Sun, Mercury, Venus, Mars,
+Jupiter and Saturn. It follows the engine's named last-exact-aspect convention:
+conjunction, sextile, square, trine and opposition count only when exact in
+longitude before the Moon's sign exit. No orb, latitude, nodes, angles or outer
+planets participate. The void period includes its starting contact and excludes
+the ending ingress; if a sign has no qualifying contact, it starts at ingress.
+The exact-contact interpretation is an explicit Lilly-based project convention,
+with source and contextual qualifications in [`SOURCES.md`](SOURCES.md).
+
+An enabled observation includes a `scan` record with its question instant,
+body/aspect selection, current and next void periods, sign names, last contact
+and sampled-search limitations. `next` means the next void period, possibly
+in a later sign; it is not the next applying contact. Dates become ISO strings
+in deeply frozen records. The scanner uses the normalized input instant on
+the engine UTC model clock, independently of mutable chart rows or their clock
+metadata. It does not authenticate edited or imported charts against that
+instant. Static geometric fixtures disable this time-dependent rule.
+
+The scanner uses fixed sampling and a fixed horizon without a configurable
+budget. `MOON_VOID_SCAN_METHOD` exposes the reused engine method and limitations.
+Its results are sampled, with completeness unproven; grid-dependent root times
+and millisecond Dates can shift status near a period boundary. All samples must
+fit the engine's ephemeris span, including samples around an otherwise valid
+cast instant. Scanner errors propagate as errors, rather than as non-triggered
+observations. Independent linear-motion derivations and boundary tests are in
+`tests/void-of-course.motion.test.ts` and [`tests/fixtures.md`](tests/fixtures.md);
+wrapper ownership and error handling are checked in `tests/void-of-course.test.ts`,
+and real-engine delegation in `tests/void-of-course.integration.test.ts`.
 
 Tests distinguish independently worked calendar/angle fixtures from engine
 delegation checks. Neither the foundation nor its integration tests establish

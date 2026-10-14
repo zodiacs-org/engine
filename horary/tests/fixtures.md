@@ -179,3 +179,78 @@ house systems and the existing invented polar fallback. It compares house
 membership to the engine's own `houseOf` only to check delegation and actual
 system metadata. No engine-computed longitude is used as an independent
 reference or committed as a new numerical fixture.
+
+## Void-of-course motion fixtures
+
+`void-of-course.motion.test.ts` mocks only the engine ephemeris provider with
+invented linear longitudes. The actual engine crossing, ingress, aspect and
+void-window implementations run unchanged. No astronomical chart is claimed
+for these trajectories. Their epoch is the existing invented noon instant;
+elapsed time `t` is in days, with `86400000` milliseconds per day. The Moon
+has longitude `12t` modulo 360 degrees, so Aries runs from `t = 0` through
+just before `t = 30/12 = 2.5`. The preceding Pisces-to-Aries ingress wraps
+through zero, and Taurus ends at `t = 60/12 = 5`.
+
+The baseline Sun is fixed at 27 degrees. The other selected classical planets
+are fixed at 45 degrees, and Uranus is fixed at 29; the remaining outer bodies
+are fixed at 45. An exact Ptolemaic contact requires lunar longitude minus
+planet longitude to equal one of `0, 60, 90, 120, 180, 240, 270, 300` modulo
+360. For a planet at 45 degrees, these give lunar targets
+`45, 105, 135, 165, 225, 285, 315, 345`; none is in Aries. The Sun's last
+and only contact in Aries is conjunction at `t = 27/12 = 2.25`, so the
+traditional void is `[2.25, 2.5)` days. At `t = 2`, lunar longitude 24 is
+still approaching it; at `t = 2.25` the starting instant is included; at
+`t = 2.375` the Moon at 28.5 is void. At `t = 2.5` it is in Taurus and
+has a future conjunction to the group at 45, at `t = 45/12 = 3.75`.
+The next void then belongs to Taurus. No assertion relies on which of the
+simultaneous planets the scanner records last for that group.
+
+Uranus would add a conjunction at `t = 29/12`, between 2.375 and sign exit.
+The traditional option excludes it, while the engine's modern option includes
+it. Both expected statuses follow from this literal arithmetic. Instrumented
+provider calls also verify that traditional scans evaluate only the Moon and
+the selected classical targets.
+
+For the no-contact case the Sun also moves to the stationary longitude 45.
+All selected targets are then outside Aries, so the entire interval `[0, 2.5)`
+is void with a null last aspect and a sign-ingress start. With the Sun instead
+at 30, conjunction happens exactly at `t = 2.5`, the ending ingress; the
+half-open convention excludes it from Aries, which still has no contact.
+The Moon is not void in Taurus at this ingress because the group at 45 remains
+ahead. These tests use grid-aligned boundary times to isolate interval semantics.
+
+Directed-aspect fixtures independently choose Sun longitudes
+`27, 87, 117, 147, 207, 327, 297, 267`. Each has exactly one Aries target,
+27: respectively conjunction, sextile, square, trine, opposition, sextile,
+square and trine from the opposite side. Perfection is `t = 2.25` in every
+case. The off-grid question at `t = 2.375` exercises bisection. The ingress
+step divided by `2^24` is `21600000 / 16777216` milliseconds, less than two;
+the aspect step divided by `2^26` is `10800000 / 67108864`, less than one.
+The scanner evaluates integer-millisecond Dates and reports a truncated Date.
+The tests allow two milliseconds relative to the independently solved root,
+and `12 * 2 / 86400000` degrees for lunar motion over that interval. This is
+a solver-resolution allowance on these linear fixtures, not ephemeris accuracy
+or a general boundary guarantee.
+
+For a moving target, the Sun starts at 24.75 and advances one degree per day.
+The conjunction equation is `12t = 24.75 + t`, giving `t = 2.25` and
+longitude 27. A Moon at `t = 2` still has the contact ahead. This independently
+solved expectation ensures the existing scanner evaluates moving target
+longitudes rather than freezing a planet at the question instant.
+
+The method metadata is checked against the fixed engine scan: six-hour ingress
+steps with 24 bisections, three-hour aspect steps with 26 bisections. The
+engine status call begins its window search three days before the question,
+then looks another four days back for ingress, and ends six days after the
+question. Instrumented provider calls verify that the advertised bounds are
+exactly seven days before and six after. This exposes the scanner's fixed
+horizon, rather than claiming an independently proven completeness span.
+
+`void-of-course.test.ts` supplies a separate hand-written scanner response
+only to check wrapper delegation, disabled rules, error propagation and frozen
+ISO serialization. Its dates and longitudes are labels, not event accuracy
+evidence. `void-of-course.integration.test.ts` scans a real engine cast at the
+invented question instant and checks forwarding and serialization without
+pinning engine numerical output. An invented cast near the lower ephemeris
+edge verifies that a valid chart instant can still fail when the scan requires
+earlier samples; failure must never be turned into a non-void observation.

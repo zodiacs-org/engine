@@ -7,7 +7,7 @@ describe("consideration rule policy", () => {
     const policy = createRulePolicy();
     expect(policy).toEqual({ schema: "horary.rule-policy/v1", rules: {
       "early-ascendant": true, "late-ascendant": true, "saturn-first": true,
-      "saturn-seventh": true, "moon-via-combusta": true
+      "saturn-seventh": true, "moon-via-combusta": true, "moon-void-of-course": true
     } });
     expect(Object.keys(CONSIDERATION_SOURCES)).toEqual([...CONSIDERATION_RULE_IDS]);
     for (const source of Object.values(CONSIDERATION_SOURCES)) {

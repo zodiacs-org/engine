@@ -3,6 +3,8 @@ import { normalizeHoraryInput } from "./input.js";
 import { CONSIDERATION_RULE_IDS, CONSIDERATION_SOURCES, createRulePolicy, validateRulePolicy } from "./policy.js";
 import type { ConsiderationRuleId, HoraryRulePolicy, RuleSource } from "./policy.js";
 import type { HoraryCast } from "./types.js";
+import { moonVoidOfCourseObservation } from "./void-of-course.js";
+import type { MoonVoidOfCourseScan } from "./void-of-course.js";
 
 export interface RuleEvidence {
   readonly fact: string;
@@ -16,6 +18,8 @@ export interface ConsiderationObservation {
   readonly source: RuleSource;
   readonly evidence: readonly RuleEvidence[];
   readonly explanation: string;
+  /** Present only for an enabled void-of-course rule; ISO strings retain no mutable Dates. */
+  readonly scan?: MoonVoidOfCourseScan;
 }
 
 export interface HoraryConsiderations {
@@ -33,7 +37,7 @@ function longitude(value: unknown, label: string): number {
   return value;
 }
 
-/** Observe geometric cautions without recalculating the sky or issuing a verdict. */
+/** Observe cautions; the enabled void-of-course rule scans the sky at the input instant. */
 export function evaluateConsiderations(
   result: HoraryCast, suppliedPolicy: HoraryRulePolicy = createRulePolicy()
 ): HoraryConsiderations {
@@ -49,6 +53,7 @@ export function evaluateConsiderations(
       return Object.freeze({ rule, source, status: "disabled", evidence: Object.freeze([]),
         explanation: "The caller disabled this consideration; its condition was not evaluated." });
     }
+    if (rule === "moon-void-of-course") return moonVoidOfCourseObservation(input.instant);
     const evidence: RuleEvidence[] = [];
     let triggered: boolean;
     let explanation: string;

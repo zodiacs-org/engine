@@ -66,3 +66,28 @@ automatic. All conditions are individually toggleable geometric observations.
 `tests/considerations.test.ts` enforces these choices and their boundary
 arithmetic; `tests/fixtures.md` gives the derivations. The policy does not
 add fixed-star exemptions or other Moon cautions mentioned in the passage.
+
+## Void-of-course convention
+
+`lilly-void-of-course` refers to Lilly's definition in *Christian Astrology*,
+printed page 112, PDF page 139 of the same linked transcription. The passage
+was fetched and read on 2026-10-14. It describes a planet separated from a
+contact without applying to another while remaining in the sign, emphasizing
+the Moon. The work's author died centuries ago; no historical question or
+chart is copied here.
+
+The project explicitly selects the engine's `last-exact-ptolemaic-aspect-to-sign-exit`
+convention with its traditional body set. This operational reading of Lilly
+requires exact longitude contacts before ingress. It does not claim to resolve
+alternative readings that use application within orb even when perfection
+comes after ingress. The start includes the last exact contact, while the end
+excludes the next ingress. With no contact, the period starts at sign entry.
+These boundary and body-set choices are enforced in the independently derived
+linear-motion tests documented in `tests/fixtures.md`.
+
+The rule reports a caution without issuing Lilly's outcome language. It does
+not automatically exempt particular signs, account for the strength of other
+significators or infer personal circumstances. Callers can disable it. The
+period and method record make its interpretation and sampled-search limits
+explicit, so an observation cannot be mistaken for a proven exhaustive event
+search or an authoritative verdict.

@@ -1,5 +1,6 @@
 export const CONSIDERATION_RULE_IDS = Object.freeze([
-  "early-ascendant", "late-ascendant", "saturn-first", "saturn-seventh", "moon-via-combusta"
+  "early-ascendant", "late-ascendant", "saturn-first", "saturn-seventh", "moon-via-combusta",
+  "moon-void-of-course"
 ] as const);
 
 export type ConsiderationRuleId = typeof CONSIDERATION_RULE_IDS[number];
@@ -27,7 +28,8 @@ export const CONSIDERATION_SOURCES: Readonly<Record<ConsiderationRuleId, RuleSou
   "late-ascendant": source("lilly-late-ascendant", "Lilly's Western horary considerations", "Printed p. 122; PDF p. 149"),
   "saturn-first": source("lilly-saturn-first", "Arabic cautions reported by Lilly", "Printed p. 122; PDF p. 149"),
   "saturn-seventh": source("lilly-saturn-seventh", "Arabic cautions reported by Lilly", "Printed p. 123; PDF p. 150"),
-  "moon-via-combusta": source("lilly-via-combusta", "Via Combusta variant reported by Lilly", "Printed p. 122; PDF p. 149")
+  "moon-via-combusta": source("lilly-via-combusta", "Via Combusta variant reported by Lilly", "Printed p. 122; PDF p. 149"),
+  "moon-void-of-course": source("lilly-void-of-course", "Lilly-based last-exact-aspect convention", "Printed p. 112; PDF p. 139")
 });
 
 export interface RulePolicyInput {
