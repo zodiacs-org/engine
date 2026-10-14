@@ -6,6 +6,8 @@ export { HOUSE_SYSTEMS, houseOf } from "../../src/houses.js";
 export { CLASSICAL_PLANETS, dignityRulersAt, essentialDignities, mutualReceptions } from "../../src/techniques/dignities.js";
 export type { ClassicalPlanet, Debility, EssentialDignity, PlanetDignities } from "../../src/techniques/dignities.js";
 export { sectOf } from "../../src/points.js";
+export { longitudeSpeed } from "../../src/ephemeris.js";
+export { exactSign } from "../../src/exact.js";
 export { VOID_BODIES, VOID_OF_COURSE_CONVENTION, voidOfCourseAt } from "../../src/techniques/void-of-course.js";
 export type { MoonAspect, VoidOfCourseWindow } from "../../src/techniques/void-of-course.js";
 export type {
