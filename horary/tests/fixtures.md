@@ -112,3 +112,70 @@ checks delegation to the engine dignity function, absence of chart
 recalculation, physical planet availability and actual/requested system
 metadata. These comparisons are plumbing checks, not independent
 astronomical references.
+
+## Consideration policy and angular fixtures
+
+`policy.test.ts` and `considerations.test.ts` exercise the M3 policy. The
+historical definition is Lilly's "Considerations before Judgment", with
+source locators and project conventions in `../SOURCES.md`. These are
+geometric rule fixtures, not ephemeris accuracy or predictive evidence.
+
+The existing invented question instant and location remain labels for a
+hand-written sketch. No modified longitude is claimed to be the sky at that
+instant. The sketch starts its whole-sign cusps at Aries, its Ascendant at
+15 degrees, Moon at 40 degrees and Saturn at 190 degrees. Subtracting sign
+start gives an Ascendant degree of 15, outside both caution intervals. The
+Moon is outside `[195, 225)`. Saturn is inside the seventh cusp interval
+`[180, 210)`, so only the Saturn-seventh consideration triggers by default.
+
+For Ascendant tests, sign starts are the multiples of 30 from 0 through 330.
+Adding a degree within `[0, 30)` keeps the point in that sign. Degrees just
+below 3 trigger the early condition, but 3 and just above do not; degrees
+just below 27 do not trigger the late condition, but 27 and just above do.
+Zero is early and just below 30 is late. The offset `2^-40` is exactly
+representable in binary and remains distinguishable at all these longitudes;
+no comparison tolerance is used. Keeping the first cusp at 0 while moving the
+Ascendant to 62 gives 2 degrees into Gemini and checks use of the actual
+angle instead of the cusp.
+
+Libra begins at 180 absolute degrees, so its final fifteen degrees start
+at 195. Scorpio starts at 210; its first fifteen degrees end at 225. The
+Moon fixtures test each endpoint and the binary offset on both sides:
+195 is included, 225 is excluded, 210 is inside, and the circle's origin
+and the point 359 are outside. The sketch's stale Taurus sign annotation
+remains unchanged to ensure decisions use longitude rather than labels.
+
+Saturn fixtures use the same half-open whole-sign cusp intervals, with 0
+included in the first house and 30 excluded; 180 included in the seventh
+and 210 excluded. Values just before those cusps belong to the preceding
+house. The unequal circular sketch has cusps
+`[350, 15, 45, 80, 120, 150, 170, 195, 225, 260, 300, 330]`.
+It is a geometry sketch labeled Regiomontanus, without claiming that the
+engine computes it at the question instant. The first interval wraps through
+zero: `[350, 360)` together with `[0, 15)`. Saturn at 0 occupies the first,
+at 15 the second, at 170 the seventh and at 195 the eighth. Requested
+whole-sign houses and the angle at 15 cannot replace these actual cusps.
+Changing Saturn's retrograde flag leaves placement unchanged and checks that
+the emphasis reported by Lilly is explanatory rather than mandatory.
+
+A declared seventh-house relationship keeps the Saturn placement observation
+enabled until its toggle is disabled. This is a documented policy choice,
+not an assertion that Lilly's two seventh-house passages have identical
+scope. Each toggle is tested separately to leave all other observations
+unchanged. Disabling all rules skips missing geometric data; enabling only
+Moon Via Combusta requires only the Moon's row and longitude.
+
+Validation fixtures deliberately remove or duplicate required rows, insert
+noncanonical longitudes, sparse cusps, repeated adjacent cusps and an
+out-of-order cusp. A valid cusp circuit makes one forward revolution, with
+each subsequent cusp after the previous one modulo the circle; repeats or
+extra wraps cannot support unambiguous membership. Invalid policy options
+and incomplete or mistyped policy snapshots are also refused. Ownership
+fixtures preserve the input chart, freeze all result records, restore JSON
+policy data and verify that subsequent chart edits cannot alter observations.
+
+`considerations.integration.test.ts` uses real engine casts for all supported
+house systems and the existing invented polar fallback. It compares house
+membership to the engine's own `houseOf` only to check delegation and actual
+system metadata. No engine-computed longitude is used as an independent
+reference or committed as a new numerical fixture.

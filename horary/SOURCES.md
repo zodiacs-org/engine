@@ -39,3 +39,30 @@ when a planet has several roles, all assignments remain present, and the
 group explains the overlap. The library does not substitute a different
 ruler, treat the planet as distinct bodies or infer an outcome from the
 shared roles.
+
+## Considerations before judgement
+
+The consideration source records cite Lilly's *Christian Astrology*,
+printed pages 122 and 123, under "Considerations before Judgment", in the
+same [transcription linked above](https://maestrosdelsaber.com/wp-content/uploads/ftp-files/Astrologia/Astro%20y%20Religion/Astro%20Lilly%2C%20William%20-%20Christian%20Astrology%20Vol%201%201647.pdf),
+read on 2026-10-14, PDF pages 149 and 150 counting from the first page.
+The tradition names distinguish Lilly's cautions, Arabic rules he reports,
+and the Via Combusta variant he attributes to others. This is an attribution
+through Lilly, not a claim to have read Alkindus directly.
+
+He lists ascending degrees 0, 1, 2 and 27, 28, 29, and personal-context
+exceptions. He defines Via Combusta as the last fifteen degrees of Libra
+and first fifteen of Scorpio. His Saturn-first caution emphasizes
+retrograde motion; his Saturn-seventh caution concerns the judgement.
+An adjacent seventh-house-affliction passage excepts seventh-house questions,
+but the Saturn placement passage does not state that exception.
+
+Project conventions translate these to early `[0, 3)`, late `[27, 30)`
+degrees within the sign and lunar `[195, 225)` absolute degrees, using
+half-open intervals without rounding. Saturn uses actual cusp intervals
+through engine `houseOf`, with no cusp anticipation or ecliptic latitude.
+Neither personal-context exceptions nor seventh-house suppression are
+automatic. All conditions are individually toggleable geometric observations.
+`tests/considerations.test.ts` enforces these choices and their boundary
+arithmetic; `tests/fixtures.md` gives the derivations. The policy does not
+add fixed-star exemptions or other Moon cautions mentioned in the passage.

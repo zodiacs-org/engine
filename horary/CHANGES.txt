@@ -1,2 +1,3 @@
 M1: Add the isolated horary project, validated question inputs, engine-backed cast API, derived synthetic fixtures, and passing typecheck, Vitest and package-exclusion checks.
 M2: Add engine-backed traditional significator selection, sourced explanations, preserved shared and natural roles, hand-derived fixtures, and passing Node 22 typecheck, Vitest and scope checks.
+M3: Add sourced toggleable consideration policies, explained early/late Ascendant, Saturn first/seventh and Moon Via Combusta observations, hand-derived boundary fixtures, and passing Node 22 typecheck, Vitest and scope checks.

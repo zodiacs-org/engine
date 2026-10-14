@@ -6,7 +6,8 @@ Code and documentation here use the repository's MIT license. The imported
 engine retains the data licenses and attribution described in
 [`../LICENSING.md`](../LICENSING.md) and [`../NOTICE`](../NOTICE).
 
-The library provides `cast`, `normalizeHoraryInput` and `selectSignificators`.
+The library provides `cast`, `normalizeHoraryInput`, `selectSignificators`,
+`createRulePolicy` and `evaluateConsiderations`.
 Further analysis rules and the CLI are scheduled in [`PLAN.md`](PLAN.md).
 
 From the checkout, using Node as specified in this folder's `package.json`:
@@ -82,6 +83,49 @@ supplied cusps agree with the instant, location or house system. These
 behaviors and sign boundaries are checked in `significators.test.ts`; engine
 delegation, house systems and fallback are checked in
 `significators.integration.test.ts`.
+
+`evaluateConsiderations(result, policy)` reads the cast without recalculating
+the sky. `createRulePolicy()` enables the implemented considerations;
+override any toggle explicitly:
+
+```ts
+import { createRulePolicy, evaluateConsiderations } from "./src/index.js";
+
+const policy = createRulePolicy({ rules: { "saturn-seventh": false } });
+const considerations = evaluateConsiderations(result, policy);
+```
+
+Every observation contains its rule, `triggered`, `not-triggered` or
+`disabled` status, named source tradition, measured evidence and a short
+explanation. Disabled rules retain a source record and skip their geometric
+inputs. These observations describe cautions without refusing a judgement
+or issuing an outcome. Void of course and the remaining analysis are still
+scheduled in the plan.
+
+The early Ascendant interval is `[0, 3)` degrees within each sign and the
+late interval is `[27, 30)`. They use the Ascendant angle rather than the
+first cusp. Moon Via Combusta uses absolute longitude `[195, 225)` degrees.
+The source and boundary choices are documented in [`SOURCES.md`](SOURCES.md);
+`considerations.test.ts` enforces them over every Ascendant sign and around
+the lunar interval's endpoints with hand-derived fixtures in
+[`tests/fixtures.md`](tests/fixtures.md).
+
+Saturn's placement uses the engine's `houseOf` on actual cusps, assigning a
+cusp to the house beginning there, without latitude or cusp anticipation.
+Retrograde status is recorded but is not required to trigger either Saturn
+rule. Personal-context exceptions and automatic suppression for a quesited
+seventh house are not applied; callers can disable the relevant rule.
+
+Policies and observations are deeply frozen snapshots with no references to
+mutable chart arrays. Complete JSON-restored policy snapshots are revalidated
+when consumed. Invalid toggles, unknown options, unavailable enabled-rule
+inputs, duplicate required planet rows and invalid cusp circuits throw
+`RangeError`. Disabled rules skip those geometric inputs; the cast schema
+and normalized question input are still validated. This consumer validates
+required fields, without authenticating a chart or verifying that the sky
+matches its instant. `policy.test.ts` and `considerations.test.ts` enforce
+these ownership and validation decisions. `considerations.integration.test.ts`
+checks consumption of engine house systems and polar fallback.
 
 Tests distinguish independently worked calendar/angle fixtures from engine
 delegation checks. Neither the foundation nor its integration tests establish
