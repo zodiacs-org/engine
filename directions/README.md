@@ -12,7 +12,8 @@ and computes zodiacal and mundane conjunctions and aspects to body significators
 Zodiacal body directions support direct motion; mundane body directions also
 support the explicit converse role swap. The pure `hit` API combines these
 calculations with an explicit timing key and year unit; `hitFromNatal` selects
-the coordinates from a prepared engine snapshot. Bounded scans and the
+the coordinates from a prepared engine snapshot. The pure `scan` API enumerates
+explicit contacts and motions under an age interval and work budget. The
 `directions hit` and `directions scan` commands are still planned in
 [PLAN.md](PLAN.md). An accepted
 convention is not a computed hit or a claim that a particular contact exists.
@@ -726,3 +727,111 @@ separately. A valid sample interval alone does not establish that association.
 examples from the engine integration checks. The hit envelope inherits the
 primitives' numerical limitations and first-turn branch rule. It adds no
 calendar date, prediction, orbital progression, solar arc or scan policy.
+
+## Bounded contact scans
+
+`scan(ScanInput)` enumerates a finite list of contacts on one supplied sphere.
+`parseScan(unknown)` validates the same request from decoded data. The shared
+`convention` has system, mode, latitude policy and key; motions belong only in
+the required `motions` array. Geometry, year unit and any solar samples are
+shared by the whole scan. Each selection explicitly supplies a significator,
+promissor and contact, using the same coordinates and branches as `hit`.
+
+```ts
+import { scan } from "./src/index.js";
+
+// Invented sphere coordinates, derived in evidence/M9-derivations.md.
+const result = scan({
+  convention: {
+    system: "placidus-semiarc", mode: "mundane",
+    latitude: "retain-both", key: "ptolemy"
+  },
+  geometry: { ramcDegrees: 0, latitudeDegrees: 0 },
+  selections: [{
+    significator: {
+      kind: "body", id: "S",
+      coordinates: { rightAscensionDegrees: 330, declinationDegrees: 0 }
+    },
+    promissor: {
+      kind: "body", id: "P",
+      coordinates: { rightAscensionDegrees: 60, declinationDegrees: 0 }
+    },
+    contact: { kind: "conjunction" }
+  }],
+  motions: [
+    { motion: "direct" },
+    { motion: "converse", converseConstruction: "placidus-role-swap" }
+  ],
+  yearUnit: "tropical-365.2422-days",
+  ageRange: { fromYears: 0, toYears: 300, includeFrom: true, includeTo: true },
+  maxEvaluations: 2
+});
+if (result.status === "complete") {
+  console.log(result.hits.map(row => row.hit.directedAgeYears)); // [90, 270]
+}
+```
+
+The arithmetic and ages in this example come from the independent
+[scan fixtures](evidence/scan-examples.ts), checked in
+[scan.check.ts](checks/scan.check.ts). The scan performs each selection
+with each motion, in that order. It does not generate unspecified body pairs,
+aspect branches or additional revolutions. A wide age interval does not add
+another occurrence of an initial contact. Use prepared engine coordinates
+for natal work; the example's constructed coordinates are geometry evidence.
+
+Both arrays must be nonempty. `maxEvaluations` is a required integer from
+`1` through `SCAN_MAX_EVALUATIONS` (`10,000`). Each array has that same upper
+length limit, and their raw length product must fit the requested budget.
+The budget check precedes all hit calls and reads of selection contents.
+Duplicates and contacts outside the age interval still consume evaluations.
+There is no partial search, time-step parameter, output truncation or
+ephemeris sampling. The limit is on single-hit evaluations, not a wall-clock
+duration guarantee. The cap and boundary rules are enforced in `scan.check.ts`.
+
+Age endpoints must be ordered, finite and nonnegative. Both inclusion flags
+are mandatory. Membership compares the returned binary64 `directedAgeYears`
+directly, without a tolerance. Equal endpoints select that exact age only
+when both are included; otherwise the interval is empty. All requested hits
+are still evaluated for an empty interval. An exactly zero arc can appear
+at an included zero age; it is not changed into a full turn. To partition
+an age interval without repeating an endpoint, choose disjoint inclusion
+flags for the adjoining scans. Membership does not claim a bound on the
+underlying sphere or ephemeris error.
+
+Within one scan, a body label must name the same original coordinates in
+every selection, even where zero-latitude projection would remove a
+difference. After each successful hit, identical canonical requests are
+deduplicated before age filtering. Identity includes original labels and
+coordinates, contact, branch and motion; the sphere, key, year unit and solar
+samples are already common. Field order and negative zero do not distinguish
+requests. Equal ages or arcs alone never merge contacts, and converse roles
+keep their original labels. No fuzzy coordinate or age matching is used.
+
+A complete result has `status: "complete"`, the copied `ageRange`, `hits`,
+`work`, `duplicateCount` and `outsideAgeRangeCount`. Each hit row contains
+its first `selectionIndex`, `motionIndex` and the full unchanged `hit`
+result. Indices are zero-based. Rows sort by exact directed age, with ties
+retaining first occurrence in selection-then-motion order. `work` contains
+`requestedEvaluations`, `evaluated` and `maxEvaluations`. On completion,
+evaluated work equals returned hits plus duplicates plus unique hits outside
+the interval. A complete empty list is a successful enumeration with no
+eligible rows.
+
+A refusal has `status: "refused"`, `stage: "scan"`, `code`, `message` and
+an empty `hits` array. `invalid-input` describes invalid scan structure,
+endpoints, lists or budget. `evaluation-budget` includes work accounting with
+no evaluated hits. `hit-refused` includes the underlying hit `cause`, the
+failing selection/motion index in `at`, and work evaluated through that
+attempt. `inconsistent-body` similarly identifies the first conflicting
+selection. Any refusal discards all earlier rows, including when the failing
+contact would lie outside the age interval. Unsupported converse angles,
+zodiacal converse and angle aspects remain refusals, so select supported
+combinations in separate scans when needed.
+
+All results are fresh, deeply frozen and JSON serializable; caller data stays
+unchanged and unfrozen. Hidden, inherited, accessor and unknown fields,
+sparse arrays and additional array properties are rejected. Over-budget
+requests return their budget refusal before validating their contents.
+Unexpected exceptions from executable inputs such as proxies propagate.
+[M9 evidence](evidence/M9.md) records the independent enumeration and the
+separate single-hit parity checks. The CLI remains the next milestone.

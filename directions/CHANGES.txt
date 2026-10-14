@@ -6,3 +6,4 @@ Implement directions M5 direct zodiacal body conjunctions and aspect rays with e
 Implement directions M6 mundane Placidus body conjunctions and aspects with explicit branches, converse role exchange, audited retained-coordinate geometry, independent spherical evidence, numerical refusals, and passing local checks.
 Implement directions M7 sourced Ptolemy, Naibod and solar-equatorial timing keys with explicit year units, audited TT-day engine sampling, independent rational evidence, typed refusals, and passing local checks.
 Implement directions M8 pure hit and natal-selection APIs with audited geometry and timing, explicit scope refusals, immutable results, independent complete-hit evidence, and passing local checks.
+Implement directions M9 bounded pure scans with explicit contacts and motions, exact age endpoints, stable deduplication and ordering, atomic refusals, independent enumerated evidence, and passing local checks.

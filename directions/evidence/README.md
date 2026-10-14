@@ -40,5 +40,8 @@ independent spherical fixtures and source limits; timing was not part of M5.
 coordinates and explicit direct/converse role exchange against independent
 semi-arc examples. [M7](M7.md) checks fixed and birth-day solar-equatorial
 timing against independent rational arithmetic and invented solar samples.
-The engine sampler's checks establish integration only. Complete hit envelopes
-remain unimplemented.
+The engine sampler's checks establish integration only. [M8](M8.md) checks
+complete hit envelopes and separates independent geometry/timing expectations
+from natal-snapshot integration. [M9](M9.md) checks bounded finite scans
+against an independently enumerated contact table, with separate single-hit
+parity, endpoint, deduplication and work-limit checks.

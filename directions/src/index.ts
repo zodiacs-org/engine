@@ -37,3 +37,8 @@ export type {
   NatalBodySelection, NatalHitSelection, NatalHitAudit, NatalHitErrorCode,
   NatalHitRefusal, NatalHitResult
 } from "./natal-hit.js";
+export { scan, parseScan, SCAN_MAX_EVALUATIONS } from "./scan.js";
+export type {
+  DirectionAgeRange, ScanInput, ScanIndex, ScanRow, ScanWork,
+  ScanComplete, ScanRefusal, ScanResult
+} from "./scan.js";
