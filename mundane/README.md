@@ -3,9 +3,10 @@
 A private library and CLI project for classical mundane astrology on top of
 the engine in this checkout. Development follows [PLAN.md](PLAN.md). The
 current API normalizes inputs, casts charts at supplied instants, analyzes
-classical planet angularity and angle-ruler dignities, and searches cardinal
-solar ingresses and New and Full Moons. Eclipse searches, prose factor
-summaries, and CLI commands are planned and are not implemented yet.
+classical planet angularity and angle-ruler dignities, produces descriptive
+factor lists, and searches cardinal solar ingresses and New and Full Moons.
+Eclipse searches, combined reports, and CLI commands are planned and are not
+implemented yet.
 
 From the repository root, using Node.js as required by [package.json](package.json):
 
@@ -250,7 +251,37 @@ limited timing agreement checks are in
 They do not establish accuracy outside the selected events or independently
 validate the chart factors.
 
-Chart factors are labelled as traditional conventions, not predictions.
+To produce short factor descriptions with their supporting analyses:
+
+```ts
+import { analyzeFactors } from "./src/index.js";
+
+const analysis = analyzeFactors(chart);
+console.log(analysis.factors.label);
+for (const factor of analysis.factors.items) {
+  console.log(factor.text, factor.source);
+}
+```
+
+`analyzeFactors` reuses the angularity and angle-ruler helpers and returns
+`angularity`, `angleRulers`, and `factors`. It accepts the same geometry and
+optional `angleOrbDegrees` setting as angularity. Ingress and lunation events
+include `factors` alongside their existing analyses, using the default orb.
+Each factor has a stable id, a kind, short text, and a `source` JSON pointer
+relative to the containing analysis or event. These pointers identify the
+structured fields that support the text. The output is detached, deeply
+frozen, and JSON-compatible.
+
+The list describes angular planets and each angle's domicile ruler, including
+essential dignities, debilities, and the meaning of peregrine. It retains
+simultaneous conditions and repeated rulers. When actual houses differ from
+the requested system, a leading factor explains which system the angular
+house descriptions use. Convention details, source pointers, and the scope
+of wording tests are in [docs/factors.md](docs/factors.md), enforced by
+[test/factors.test.ts](test/factors.test.ts). The session check record is in
+[docs/evidence/m9/checks.txt](docs/evidence/m9/checks.txt).
+
+Factor lists are labelled `traditional conventions, not predictions`.
 This project adds no electional scoring, calendar export, relocation grids,
 horary, or HTTP service. Code and documentation follow the repository's MIT
 licence; engine data retains the terms and attribution in

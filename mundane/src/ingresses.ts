@@ -1,9 +1,9 @@
 import { onChartClock, NODE_SPEED_STEP_DAYS } from "../../src/ephemeris.js";
 import { searchLongitudeCrossings } from "../../src/returns.js";
-import { analyzeAngleRulers } from "./angle-rulers.js";
 import type { AngleRulerAnalysis } from "./angle-rulers.js";
-import { analyzeAngularity } from "./angularity.js";
 import type { AngularityAnalysis } from "./angularity.js";
+import { analyzeFactors } from "./factors.js";
+import type { FactorList } from "./factors.js";
 import { castEventChart } from "./chart.js";
 import type { EventChart } from "./chart.js";
 import { normalizeRequest } from "./inputs.js";
@@ -34,6 +34,7 @@ export interface SolarIngress {
   readonly chart: EventChart;
   readonly angularity: AngularityAnalysis;
   readonly angleRulers: AngleRulerAnalysis;
+  readonly factors: FactorList;
 }
 
 interface SearchMetadata {
@@ -143,7 +144,7 @@ export function searchIngresses(
     });
     return Object.freeze({
       kind: "solar-ingress" as const, ...event, chart,
-      angularity: analyzeAngularity(chart), angleRulers: analyzeAngleRulers(chart)
+      ...analyzeFactors(chart)
     });
   });
   return Object.freeze({ status: "complete", request, search, samples, ingresses: Object.freeze(ingresses) });
