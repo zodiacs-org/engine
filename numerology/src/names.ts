@@ -1,3 +1,9 @@
+import {
+  GREEK_NAME_TABLE, GREEK_NAME_TABLE_ID, CYRILLIC_NAME_TABLE, CYRILLIC_NAME_TABLE_ID,
+  readCustomTransliteration
+} from "./transliteration.js";
+import type { CustomTransliteration, CustomTransliterationReceipt } from "./transliteration.js";
+
 /** Authored symbolic mappings, not a claim about a name's pronunciation. */
 export const LATIN_NAME_TABLE = Object.freeze({
   Æ: "AE", æ: "AE", Œ: "OE", œ: "OE", ß: "SS", ẞ: "SS",
@@ -14,13 +20,17 @@ export const MAX_NAME_CODE_UNITS = 1024;
 export type YVowelPolicy = "never" | "always" | "when-no-other-vowels";
 export interface NameOptions {
   readonly yAsVowel?: YVowelPolicy;
+  readonly transliteration?: CustomTransliteration;
 }
 
 export interface NameNormalizationStep {
   readonly rule: "nfd" | "strip-diacritics" | "latin-table" | "uppercase"
-    | "separator" | "attached-diacritic";
+    | "separator" | "attached-diacritic" | "greek-table" | "cyrillic-table"
+    | "canonical-context" | "custom-table";
   readonly input: string;
   readonly output: string;
+  /** Present only for canonical-context; original following marks consulted. */
+  readonly followingDiacritics?: string;
 }
 
 export interface NameCharacterReceipt {
@@ -28,7 +38,7 @@ export interface NameCharacterReceipt {
   readonly sourceIndex: number;
   readonly source: string;
   readonly kind: "letter" | "separator" | "mark";
-  /** ASCII letters emitted by this source character, or the empty string. */
+  /** ASCII letters emitted by this scalar, including explicitly mapped marks. */
   readonly output: string;
   readonly steps: readonly NameNormalizationStep[];
 }
@@ -55,9 +65,12 @@ export interface NormalizedName {
   readonly vowels: string;
   readonly consonants: string;
   readonly receipt: {
-    readonly schema: "numerology-name-normalization/1";
+    readonly schema: "numerology-name-normalization/2";
     readonly input: string;
     readonly latinTable: typeof LATIN_NAME_TABLE_ID;
+    readonly greekTable: typeof GREEK_NAME_TABLE_ID;
+    readonly cyrillicTable: typeof CYRILLIC_NAME_TABLE_ID;
+    readonly customTable: CustomTransliterationReceipt | null;
     readonly yAsVowel: YVowelPolicy;
     readonly tokens: readonly string[];
     readonly characters: readonly NameCharacterReceipt[];
@@ -75,19 +88,21 @@ function diacritic(character: string): boolean {
   return /^[\u0300-\u034e\u0350-\u036f]$/u.test(character);
 }
 
-function readOptions(options: NameOptions): YVowelPolicy {
+function readOptions(options: NameOptions): {
+  readonly yAsVowel: YVowelPolicy;
+  readonly custom: ReturnType<typeof readCustomTransliteration>;
+} {
   if (options === null || typeof options !== "object" || Array.isArray(options)) {
     throw new TypeError("Name options must be an object.");
   }
   for (const key of Reflect.ownKeys(options)) {
-    if (key !== "yAsVowel") throw new RangeError("Unknown name option.");
+    if (key !== "yAsVowel" && key !== "transliteration") throw new RangeError("Unknown name option.");
   }
   const policy = options.yAsVowel;
-  if (policy === undefined) return "never";
-  if (policy !== "never" && policy !== "always" && policy !== "when-no-other-vowels") {
+  if (policy !== undefined && policy !== "never" && policy !== "always" && policy !== "when-no-other-vowels") {
     throw new RangeError("Y policy must be never, always, or when-no-other-vowels.");
   }
-  return policy;
+  return { yAsVowel: policy ?? "never", custom: readCustomTransliteration(options.transliteration) };
 }
 
 function unsupported(sourceIndex: number): never {
@@ -123,6 +138,34 @@ function latinCharacter(source: string, sourceIndex: number): NameCharacterRecei
   return characterReceipt(source, sourceIndex, "letter", output, steps);
 }
 
+function scriptCharacter(source: string, sourceIndex: number, followingDiacritics: string): NameCharacterReceipt {
+  if (/^\p{Script=Latin}$/u.test(source)) return latinCharacter(source, sourceIndex);
+  if (!/^\p{Letter}$/u.test(source)) unsupported(sourceIndex);
+  if (/^\p{Script=Greek}$/u.test(source)) {
+    const decomposed = source.normalize("NFD");
+    const base = Array.from(decomposed).filter((character) => !diacritic(character)).join("");
+    if (!Object.hasOwn(GREEK_NAME_TABLE, base)) unsupported(sourceIndex);
+    const output = GREEK_NAME_TABLE[base as keyof typeof GREEK_NAME_TABLE];
+    return characterReceipt(source, sourceIndex, "letter", output, [
+      step("nfd", source, decomposed), step("strip-diacritics", decomposed, base),
+      step("greek-table", base, output)
+    ]);
+  }
+  if (/^\p{Script=Cyrillic}$/u.test(source)) {
+    // Compose before stripping residual marks, so Й, Ё, Ї, Ў, Ѓ and Ќ keep
+    // their distinct entries even when the caller spells them as NFD scalars.
+    const composed = (source + followingDiacritics).normalize("NFC");
+    const base = Array.from(composed).filter((character) => !diacritic(character)).join("");
+    if (!Object.hasOwn(CYRILLIC_NAME_TABLE, base)) unsupported(sourceIndex);
+    const output = CYRILLIC_NAME_TABLE[base as keyof typeof CYRILLIC_NAME_TABLE];
+    return characterReceipt(source, sourceIndex, "letter", output, [
+      Object.freeze({ rule: "canonical-context", input: source, output: composed, followingDiacritics }),
+      step("strip-diacritics", composed, base), step("cyrillic-table", base, output)
+    ]);
+  }
+  return unsupported(sourceIndex);
+}
+
 function classify(
   letter: string, policy: YVowelPolicy, hasBaseVowel: boolean
 ): Pick<NameLetterReceipt, "kind" | "classification"> {
@@ -135,27 +178,44 @@ function classify(
     : { kind: "vowel", classification: "y-no-other-vowels" };
 }
 
-/** Normalize supported Latin names without fetching, guessing scripts, or reading the clock. */
+/** Normalize names using declared local tables, without guessing pronunciation. */
 export function normalizeName(input: string, options: NameOptions = {}): NormalizedName {
   if (typeof input !== "string") throw new TypeError("Name must be a string.");
   if (input.length > MAX_NAME_CODE_UNITS) throw new RangeError("Name exceeds the UTF-16 length limit.");
-  const yAsVowel = readOptions(options);
+  const { yAsVowel, custom } = readOptions(options);
   const characters: NameCharacterReceipt[] = [];
   type PendingLetter = Pick<NameLetterReceipt, "characterIndex" | "expansionIndex" | "letter">;
   const groups: PendingLetter[][] = [];
   let currentGroup: PendingLetter[] | undefined;
   let sourceIndex = 0;
 
-  for (const source of input) {
+  const scalars = Array.from(input);
+  for (const [scalarIndex, source] of scalars.entries()) {
     const characterIndex = characters.length;
     if (SEPARATORS.has(source) || /^\p{Space_Separator}$/u.test(source)) {
       characters.push(characterReceipt(source, sourceIndex, "separator", "", [step("separator", source, "")]));
       currentGroup = undefined;
-    } else if (diacritic(source)) {
-      if (currentGroup === undefined) unsupported(sourceIndex);
-      characters.push(characterReceipt(source, sourceIndex, "mark", "", [step("attached-diacritic", source, "")]));
     } else {
-      const row = latinCharacter(source, sourceIndex);
+      const isMark = /^\p{Mark}$/u.test(source);
+      if (isMark && currentGroup === undefined) unsupported(sourceIndex);
+      let row: NameCharacterReceipt;
+      if (custom.lookup.has(source)) {
+        const output = custom.lookup.get(source)!;
+        row = characterReceipt(source, sourceIndex, isMark ? "mark" : "letter", output,
+          [step("custom-table", source, output)]);
+      } else if (diacritic(source)) {
+        row = characterReceipt(source, sourceIndex, "mark", "", [step("attached-diacritic", source, "")]);
+      } else {
+        let followingDiacritics = "";
+        if (/^\p{Script=Cyrillic}$/u.test(source)) {
+          for (let next = scalarIndex + 1; next < scalars.length; next++) {
+            const mark = scalars[next]!;
+            if (!diacritic(mark) || custom.lookup.has(mark)) break;
+            followingDiacritics += mark;
+          }
+        }
+        row = scriptCharacter(source, sourceIndex, followingDiacritics);
+      }
       characters.push(row);
       if (currentGroup === undefined) {
         currentGroup = [];
@@ -168,10 +228,13 @@ export function normalizeName(input: string, options: NameOptions = {}): Normali
     sourceIndex += source.length;
   }
 
-  if (groups.length === 0) throw new RangeError("Name must contain supported letters.");
-  const tokens = groups.map((group) => group.map(({ letter }) => letter).join(""));
+  // Explicitly silent letters stay in source receipts but never create an
+  // empty token or an apparent valid name without any emitted letters.
+  const emittedGroups = groups.filter((group) => group.length > 0);
+  if (emittedGroups.length === 0) throw new RangeError("Name must contain supported letters.");
+  const tokens = emittedGroups.map((group) => group.map(({ letter }) => letter).join(""));
   const letters: NameLetterReceipt[] = [];
-  groups.forEach((group, tokenIndex) => {
+  emittedGroups.forEach((group, tokenIndex) => {
     const hasBaseVowel = group.some(({ letter }) => BASE_VOWELS.has(letter));
     for (const row of group) {
       letters.push(Object.freeze({
@@ -186,7 +249,9 @@ export function normalizeName(input: string, options: NameOptions = {}): Normali
     vowels: letters.filter(({ kind }) => kind === "vowel").map(({ letter }) => letter).join(""),
     consonants: letters.filter(({ kind }) => kind === "consonant").map(({ letter }) => letter).join(""),
     receipt: Object.freeze({
-      schema: "numerology-name-normalization/1", input, latinTable: LATIN_NAME_TABLE_ID, yAsVowel,
+      schema: "numerology-name-normalization/2", input, latinTable: LATIN_NAME_TABLE_ID,
+      greekTable: GREEK_NAME_TABLE_ID, cyrillicTable: CYRILLIC_NAME_TABLE_ID,
+      customTable: custom.receipt, yAsVowel,
       tokens: Object.freeze(tokens), characters: Object.freeze(characters), letters: Object.freeze(letters)
     })
   });

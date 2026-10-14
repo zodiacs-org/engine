@@ -12,7 +12,7 @@ commits and draft pull requests. Stop after the session's milestone is complete.
 - [x] M1 Create the isolated TypeScript project and exact reduction API with configurable master numbers, karmic-debt annotations, JSON-safe step receipts, original meanings, handwritten golden cases, and deterministic arithmetic properties.
 - [x] M2 Validate Gregorian birth dates without timezone conversion; implement life path and birthday with explicit component versus whole-date reduction conventions and receipts.
 - [x] M3 Normalize Latin Unicode names with documented diacritic and ligature rules, per-character receipts, strict unsupported-character handling, and configurable Y-as-vowel classification.
-- [ ] M4 Add versioned explicit transliteration tables for Greek and Cyrillic, caller-supplied mappings for other scripts, normalization provenance, and unsupported-script tests. Document that transliteration is a convention, not a pronunciation inference.
+- [x] M4 Add versioned explicit transliteration tables for Greek and Cyrillic, caller-supplied mappings for other scripts, normalization provenance, and unsupported-script tests. Document that transliteration is a convention, not a pronunciation inference.
 - [ ] M5 Implement Pythagorean and Chaldean letter tables, expression/destiny, soul urge, and personality; record selected system, original compounds, master policy, letter contributions, and reductions.
 - [ ] M6 Implement maturity, karmic lessons, and hidden passion, including tied frequencies and empty vowel/consonant selections, with receipts and original meanings.
 - [ ] M7 Implement personal year/month/day cycles with explicit calendar-year boundaries, caller-supplied target dates, and no implicit current clock.
@@ -123,3 +123,38 @@ remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
 exclusion passed; the complete engine contents and size gate remains
 unverified. No root build was generated. Only `numerology/` changed.
 M4 is the next session's work.
+
+## M4 validation
+
+Added authored, versioned Greek and Cyrillic scalar tables and bounded exact
+caller mappings for letters and attached marks. Cyrillic canonical context
+preserves explicitly mapped composed-letter distinctions, with a separate
+receipt for every source scalar. Intentional silent mappings remain auditable
+and do not create empty tokens. The development normalization receipt now
+records all built-in identifiers and a complete sorted, frozen caller-table
+snapshot. The README documents every built-in mapping, canonical and exact
+caller rules, bounds, provenance, and the absence of pronunciation inference.
+
+Project `npm run typecheck` and `npm test` passed on Node 22.22.2.
+`test/transliteration.test.mjs` checks handwritten synthetic fixtures in
+`test/fixtures/transliteration.json`, complete table and case coverage,
+canonical equivalence over the declared cases, source-context receipts,
+intentional omissions, mixed scripts, astral source indices, caller-table
+sorting and ownership, exact overrides, unsupported scripts and partial maps,
+accessor rejection, allocation bounds, and seeded independent emissions,
+classification, conservation, receipt replay, and ASCII idempotence.
+The shared replay helper also checks existing Latin fixtures, while date,
+reduction, package exclusion, file size, and documentation checks still pass.
+Generated build and logs remain in ignored project paths.
+
+Rechecked all available local and origin `main` and `infra/*` refs for
+overlap. The geocode project's use of supplied place transliteration fields
+does not implement a general name transliterator or numerology arithmetic.
+No overlapping implementation was found outside this project; this review
+does not cover unfetched remote changes.
+
+The root `npm run package:contents` was attempted with the local runtime and
+cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
+exclusion passed; the complete engine contents and size gate remains
+unverified. No root build was generated. Only `numerology/` changed.
+M5 is the next session's work.

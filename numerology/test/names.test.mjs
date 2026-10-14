@@ -3,84 +3,11 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import { normalizeName, LATIN_NAME_TABLE, LATIN_NAME_TABLE_ID, MAX_NAME_CODE_UNITS } from "../.build/index.js";
 
+import { summary, replay } from "./name-receipts.mjs";
+
 // Handwritten controls use invented name spellings, never identified people.
 const cases = JSON.parse(readFileSync(new URL("fixtures/names.json", import.meta.url), "utf8"));
 const policies = ["never", "always", "when-no-other-vowels"];
-
-function summary(result) {
-  const { normalized, letters, vowels, consonants } = result;
-  return { normalized, letters, vowels, consonants };
-}
-
-function replay(result) {
-  const receipt = result.receipt;
-  assert.equal(receipt.schema, "numerology-name-normalization/1");
-  assert.equal(receipt.latinTable, LATIN_NAME_TABLE_ID);
-  let sourceIndex = 0;
-  let token = "";
-  const tokens = [];
-  const emissions = [];
-  for (const [characterIndex, row] of receipt.characters.entries()) {
-    assert.equal(row.sourceIndex, sourceIndex);
-    assert.equal(receipt.input.slice(sourceIndex, sourceIndex + row.source.length), row.source);
-    assert.equal([...row.source].length, 1);
-    sourceIndex += row.source.length;
-    let current = row.source;
-    for (const step of row.steps) {
-      assert.equal(step.input, current);
-      if (step.rule === "nfd") assert.equal(step.output, current.normalize("NFD"));
-      else if (step.rule === "strip-diacritics") {
-        assert.equal(step.output, current.replace(/[\u0300-\u034e\u0350-\u036f]/gu, ""));
-      } else if (step.rule === "latin-table") assert.equal(step.output, LATIN_NAME_TABLE[current]);
-      else if (step.rule === "uppercase") assert.equal(step.output, current.toUpperCase());
-      else if (step.rule === "separator" || step.rule === "attached-diacritic") assert.equal(step.output, "");
-      else assert.fail("unknown normalization step");
-      current = step.output;
-    }
-    assert.equal(current, row.output);
-    if (row.kind === "separator") {
-      if (token) tokens.push(token);
-      token = "";
-    } else if (row.kind === "letter") {
-      assert.match(row.output, /^[A-Z]+$/u);
-      for (let expansionIndex = 0; expansionIndex < row.output.length; expansionIndex++) {
-        emissions.push({ characterIndex, expansionIndex, tokenIndex: tokens.length, letter: row.output[expansionIndex] });
-      }
-      token += row.output;
-    } else {
-      assert.equal(row.kind, "mark");
-      assert.equal(row.output, "");
-      assert(token.length > 0);
-    }
-  }
-  if (token) tokens.push(token);
-  assert.equal(sourceIndex, receipt.input.length);
-  assert.equal(receipt.characters.map(({ source }) => source).join(""), receipt.input);
-  assert.deepEqual(tokens, receipt.tokens);
-  assert.equal(result.normalized, tokens.join(" "));
-  assert.equal(result.letters, emissions.map(({ letter }) => letter).join(""));
-  assert.equal(receipt.letters.length, emissions.length);
-  for (const [index, row] of receipt.letters.entries()) {
-    assert.deepEqual({ characterIndex: row.characterIndex, expansionIndex: row.expansionIndex,
-      tokenIndex: row.tokenIndex, letter: row.letter }, emissions[index]);
-    assert.equal(row.index, index);
-    // Classification oracle uses whole-token ASCII regexes, independently of
-    // the implementation's set membership and source-character processing.
-    const vowel = /[AEIOU]/u.test(row.letter) || (row.letter === "Y" &&
-      (receipt.yAsVowel === "always" || (receipt.yAsVowel === "when-no-other-vowels" &&
-        !/[AEIOU]/u.test(tokens[row.tokenIndex]))));
-    assert.equal(row.kind, vowel ? "vowel" : "consonant");
-    const classification = row.letter !== "Y" ? (vowel ? "base-vowel" : "base-consonant")
-      : receipt.yAsVowel === "always" ? "y-always"
-      : receipt.yAsVowel === "never" ? "y-never"
-      : vowel ? "y-no-other-vowels" : "y-other-vowel-present";
-    assert.equal(row.classification, classification);
-  }
-  assert.equal(result.vowels, receipt.letters.filter((row) => row.kind === "vowel").map((row) => row.letter).join(""));
-  assert.equal(result.consonants, receipt.letters.filter((row) => row.kind === "consonant").map((row) => row.letter).join(""));
-  assert.equal(result.vowels.length + result.consonants.length, result.letters.length);
-  assert.deepEqual(JSON.parse(JSON.stringify(result)), result);
-}
 
 for (const fixture of cases) {
   test(`handwritten Latin name fixture: ${fixture.id}`, () => {
@@ -97,8 +24,9 @@ test("complete per-character and expanded-letter receipt", () => {
   assert.deepEqual(normalizeName("é-Æy"), {
     normalized: "E AEY", letters: "EAEY", vowels: "EAE", consonants: "Y",
     receipt: {
-      schema: "numerology-name-normalization/1", input: "é-Æy",
-      latinTable: "numerology-latin-ascii/1", yAsVowel: "never", tokens: ["E", "AEY"],
+      schema: "numerology-name-normalization/2", input: "é-Æy",
+      latinTable: "numerology-latin-ascii/1", greekTable: "numerology-greek-ascii/1",
+      cyrillicTable: "numerology-cyrillic-ascii/1", customTable: null, yAsVowel: "never", tokens: ["E", "AEY"],
       characters: [
         { sourceIndex: 0, source: "é", kind: "letter", output: "E", steps: [
           { rule: "nfd", input: "é", output: "e\u0301" },
@@ -192,7 +120,7 @@ test("Y classification uses the whole token and never guesses pronunciation", ()
 });
 
 test("unsupported scripts, bases, controls, symbols, and unattached marks reject", () => {
-  const unsupported = ["Α", "α", "А", "а", "א", "م", "क", "ก", "漢", "한", "あ", "𐐀", "😀", "\ud800", "\udc00",
+  const unsupported = ["Ϝ", "Ӑ", "א", "م", "क", "ก", "漢", "한", "あ", "𐐀", "😀", "\ud800", "\udc00",
     "1", "０", "Ａ", "ⓐ", "𝐀", "ℌ", "ᴁ", "ə", "ǅ", "&", "/", "_", ",", ":", "\u2013", "\u2014", "\u2212",
     "\u0000", "\t", "\n", "\r", "\u007f", "\u0085", "\u2028", "\u2029", "\u200b", "\u200c", "\u200d",
     "\u2060", "\ufeff", "\u202e", "\u034f", "\u0483", "\u05b0", "\u064e", "\ufe0f", "\u{e0100}"];

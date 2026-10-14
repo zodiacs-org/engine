@@ -4,8 +4,9 @@ A private TypeScript library and planned JSON CLI, adjacent to
 `@zodiacs/engine` and isolated from its npm package. Code and documentation
 here use the repository's [MIT license](../LICENSE). This project currently
 implements integer reduction, civil-date validation, life path, birthday,
-and Latin name normalization with vowel/consonant classification.
-[PLAN.md](PLAN.md) tracks the remaining name systems, cycles, transliteration,
+and name normalization using Latin, Greek, Cyrillic, and caller mappings,
+with vowel/consonant classification.
+[PLAN.md](PLAN.md) tracks the remaining name systems, cycles,
 profiles, and CLI.
 
 Numerology results describe symbolic conventions and provide reflection
@@ -166,8 +167,8 @@ These controls test declared arithmetic, not predictive accuracy.
 
 ## Latin names and vowel classification
 
-`normalizeName(name, { yAsVowel })` accepts a string containing supported
-Latin letters, attached diacritics, and the separators described below. It
+`normalizeName(name, { yAsVowel, transliteration })` accepts a string containing
+supported letters, attached diacritics, and the separators described below. It
 returns `normalized` (uppercase tokens separated by spaces), `letters`
 (all emitted letters in order), `vowels`, `consonants`, and a frozen,
 JSON-safe `receipt`. Name preprocessing produces letters for later numerical
@@ -197,8 +198,9 @@ Supported diacritics are U+0300 through U+036F, except U+034F (combining
 grapheme joiner). A separately supplied diacritic must follow a supported
 letter or another attached diacritic, within the same token. A leading mark
 or a mark immediately after a separator is rejected. Combining marks outside
-this range are rejected, including Cyrillic, Hebrew, and Arabic marks and
-variation selectors. Removing a declared mark does not infer its language.
+this range reject by default, including Cyrillic, Hebrew, and Arabic marks.
+An exact caller mapping can accept ordinary script marks as described below;
+variation selectors always reject. Removing a declared mark does not infer its language.
 The attached-diacritics test in
 [names.test.mjs](test/names.test.mjs) covers the entire declared range.
 
@@ -273,12 +275,15 @@ unsupported policies, and explicit null values are rejected. Ordinary
 in-process option objects follow the same getter/proxy limitations as the
 reduction API.
 
-The receipt schema is `numerology-name-normalization/1`. It retains the
-original `input`, Latin table identifier, selected Y policy, canonical
+The receipt schema is `numerology-name-normalization/2`, replacing the earlier
+development schema to include transliteration provenance. It retains the
+original `input`, Latin, Greek, and Cyrillic table identifiers, the complete
+caller table or `customTable: null`, selected Y policy, canonical
 `tokens`, source `characters`, and emitted `letters`. Each character row
 records its original scalar, `sourceIndex` in UTF-16 code units, kind,
-output, and the chain of transformation steps. Separate attached marks
-produce empty output with their own step. Each letter row records its index,
+output, and the chain of transformation steps. Separate standard attached marks
+produce empty output with their own step; caller-mapped marks may emit letters.
+Each letter row records its index,
 source character row index, index within a multi-letter expansion, token
 index, vowel/consonant kind, and classification reason. All indices begin at
 zero. The complete-receipt test pins the receipt for `é-Æy`; replay tests
@@ -288,13 +293,13 @@ the original name and should be handled as caller data.
 
 Names are limited to 1024 original UTF-16 code units, including spaces and
 diacritics, before normalization. The allocation-bound test checks this
-boundary and expansion behavior. Unsupported Latin bases, non-Latin scripts,
+boundary and expansion behavior. Unsupported letter bases and unmapped scripts,
 digits, symbols, emoji, malformed surrogates, controls (including tabs and
 line breaks), and invisible format characters throw `RangeError`; unsupported
 character errors name only the UTF-16 position. Non-string inputs and invalid
 option-object types throw `TypeError`. The unsupported-characters test checks
-these rejection categories. Greek, Cyrillic, and caller-supplied mappings
-remain the next milestone.
+these rejection categories. The tables and caller mapping rules below extend
+the accepted scripts without relaxing control or format-character rejection.
 
 The seeded name properties assemble expected letter sequences from
 handwritten spelling pairs, replay all receipts, verify vowel/consonant
@@ -303,3 +308,150 @@ idempotence. Together with the fixtures these establish the declared
 normalization convention over their tested inputs, not linguistic
 completeness or predictive accuracy. All name processing uses local data
 and the runtime's Unicode normalization and property support.
+
+## Greek, Cyrillic, and caller transliteration
+
+The frozen `GREEK_NAME_TABLE` and `CYRILLIC_NAME_TABLE` exports are authored
+spelling conventions, identified by `GREEK_NAME_TABLE_ID` and
+`CYRILLIC_NAME_TABLE_ID`. Their identifiers are `numerology-greek-ascii/1`
+and `numerology-cyrillic-ascii/1`. Both tables apply by default, including
+in mixed-script names. Their complete uppercase mappings follow; the tables
+explicitly include the corresponding lowercase scalars. Greek final sigma
+`ς` also maps to S. The complete handwritten scalar-equivalences test in
+[transliteration.test.mjs](test/transliteration.test.mjs) pins every entry
+and checks its case forms and canonical decomposition.
+
+| Greek source | ASCII output | Greek source | ASCII output |
+| --- | --- | --- | --- |
+| Α | A | Ν | N |
+| Β | B | Ξ | X |
+| Γ | G | Ο | O |
+| Δ | D | Π | P |
+| Ε | E | Ρ | R |
+| Ζ | Z | Σ, ς | S |
+| Η | E | Τ | T |
+| Θ | TH | Υ | Y |
+| Ι | I | Φ | PH |
+| Κ | K | Χ | CH |
+| Λ | L | Ψ | PS |
+| Μ | M | Ω | O |
+
+Greek letters use NFD and the same diacritic range as Latin letters, then
+the explicit Greek table. Tonos, breathing marks, diaeresis, and iota subscript
+in that declared range are removed; no extra letter is inferred from them.
+Unlisted bases, including archaic letters and compatibility glyphs, reject.
+Letter pairs do not receive context-specific spellings. Upsilon becomes Y
+and follows the selected Y policy after expansion.
+
+| Cyrillic source | ASCII output | Cyrillic source | ASCII output |
+| --- | --- | --- | --- |
+| А | A | П | P |
+| Б | B | Р | R |
+| В | V | С | S |
+| Г | G | Т | T |
+| Д | D | У | U |
+| Е | E | Ф | F |
+| Ё | YO | Х | KH |
+| Ж | ZH | Ц | TS |
+| З | Z | Ч | CH |
+| И | I | Ш | SH |
+| Й | Y | Щ | SHCH |
+| К | K | Ъ | empty |
+| Л | L | Ы | Y |
+| М | M | Ь | empty |
+| Н | N | Э | E |
+| О | O | Ю | YU |
+| Я | YA | Ґ | G |
+| Є | YE | І | I |
+| Ї | YI | Ў | W |
+| Ј | J | Љ | LJ |
+| Њ | NJ | Ћ | C |
+| Ђ | DJ | Џ | DZ |
+| Ѓ | GJ | Ќ | KJ |
+| Ѕ | DZ | | |
+
+Cyrillic uses a different canonical rule to preserve its explicit letter
+distinctions. For a source letter, consult its immediately following standard
+diacritics, compose that context with NFC, remove remaining separate standard
+diacritics, and look up the resulting scalar. Thus composed and decomposed Й,
+Ё, Ї, Ў, Ѓ, and Ќ use their own entries. A mark with an exact caller mapping
+ends this lookahead. Unlisted composed bases reject instead of being reduced
+to a different letter. This table is finite; it does not cover every Cyrillic
+alphabet. The canonical-context test enforces these distinctions.
+
+Each Cyrillic base row records a `canonical-context` step with
+`followingDiacritics`, followed by `strip-diacritics` and `cyrillic-table`.
+Looked-ahead marks still have their own original scalar receipt rows, UTF-16
+positions, and empty-output `attached-diacritic` steps. This preserves source
+coverage while explaining which context selected a spelling. Greek table
+steps use `greek-table`. Silent hard and soft signs have letter rows with
+explicit empty table outputs. They do not create token boundaries; tokens
+with no emitted letters are omitted. A name with no emitted letters rejects.
+The receipt replay and silent-sign tests check these rules.
+
+No external transliteration dataset, standard table, or book text was copied.
+These choices describe symbolic arithmetic, not a person's pronunciation,
+preferred spelling, nationality, language, or identity. Different explicit
+spellings can produce different later numerology results. Meanings and
+numerical name calculations are later milestones.
+
+For other scripts or a preferred spelling convention, supply a caller table:
+
+```js
+import { normalizeName } from "./.build/index.js";
+
+// Invented spelling and caller convention, not an identified person.
+const name = normalizeName("岚禾", {
+  transliteration: {
+    id: "synthetic-han/1",
+    mappings: { 岚: "LAN", 禾: "HE" }
+  }
+});
+console.log(name.normalized); // LANHE
+```
+
+The `caller-han-table` fixture in
+[transliteration.json](test/fixtures/transliteration.json) enforces this
+example. Each key must be exactly one Unicode letter or mark scalar, and
+each output must be uppercase ASCII letters or an explicit empty string.
+Digits, symbols, separators, malformed surrogates, controls, and default
+ignorable characters cannot be mapped, including grapheme joiner and variation
+selectors. The table may map non-Latin letters and script-specific vowel
+marks. A mark still needs an accepted preceding letter in the same token;
+it cannot start a name or follow a separator. A supplied empty output is an
+auditable omission rather than an unsupported-character fallback.
+
+Exact caller mappings take precedence over built-in tables and standard mark
+removal. They are case-sensitive scalar matches before normalization. There
+is no implicit case expansion, canonical matching, multi-character matching,
+phonetic algorithm, or network lookup. For example, a mapping for composed
+`ё` does not also map decomposed `е` plus diaeresis. A caller that needs such
+equivalence must declare appropriate scalar spellings or supply a chosen
+Latin spelling directly. Missing mappings fall back to the finite built-in
+rules; an unsupported remainder rejects the whole name. The exact-override
+and partial-table tests check this behavior.
+
+`transliteration` requires only own data fields `id` and `mappings`. The
+identifier has an ASCII letter or digit first, then letters, digits, period,
+underscore, slash, or hyphen, with at most 80 characters. There must be from
+1 through 256 own mapping entries, with at most 16 emitted ASCII letters per
+entry. These bounds are enforced by the allocation-boundary test. Mapping
+accessors, symbol keys, extra envelope fields, invalid output types, and empty
+tables reject. Inherited mappings are ignored. Validation does not execute
+mapping getters; caller-supplied proxies remain ordinary executable JavaScript.
+
+Every result snapshots the complete caller table, including unused entries,
+in `receipt.customTable`, sorted by the scalar key's JavaScript string order.
+The caller identifier alone is not enough to replay a table. Each applied
+mapping has a `custom-table` step; emitted letters, including letters from
+marks, retain source and expansion locators and use the same Y policy. The
+snapshot and all result layers are frozen without freezing caller input.
+The provenance test checks sorting, serialization, and independence from
+later caller mutations.
+
+The handwritten fixtures cover these table conventions and synthetic caller
+spellings in Han, Hebrew, Devanagari, and Deseret scripts. The seeded mixed-script
+property test assembles independent expected emissions, checks conservation
+and classification, replays receipts, compares NFC/NFD forms for its declared
+inputs, and normalizes the emitted ASCII again. These controls establish the
+tested spelling rules, not linguistic completeness or predictive accuracy.

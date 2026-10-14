@@ -2,6 +2,11 @@ export { reduceInteger, MAX_INTEGER_DIGITS } from "./reduction.js";
 export { NUMBER_MEANINGS, KARMIC_DEBT_MEANINGS } from "./meanings.js";
 export { parseGregorianDate, lifePath, birthday } from "./dates.js";
 export { normalizeName, LATIN_NAME_TABLE, LATIN_NAME_TABLE_ID, MAX_NAME_CODE_UNITS } from "./names.js";
+export {
+  GREEK_NAME_TABLE, GREEK_NAME_TABLE_ID, CYRILLIC_NAME_TABLE, CYRILLIC_NAME_TABLE_ID,
+  MAX_CUSTOM_MAPPINGS, MAX_TRANSLITERATION_EXPANSION
+} from "./transliteration.js";
+export type { CustomTransliteration, CustomTransliterationReceipt } from "./transliteration.js";
 export type {
   YVowelPolicy, NameOptions, NameNormalizationStep, NameCharacterReceipt,
   NameLetterReceipt, NormalizedName
