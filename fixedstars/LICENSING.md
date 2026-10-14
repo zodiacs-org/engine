@@ -12,10 +12,13 @@ The [legal code](https://creativecommons.org/licenses/by-sa/4.0/legalcode.en)
 was read, particularly sections 2, 3 and 4. Redistribution and adaptation
 are permitted, including commercial uses, with attribution, a licence link,
 retention of supplied notices, and identification of changes. Adapted
-material retains ShareAlike terms. The future extracted and transformed
-catalog, its raw selected-row fixture, and any adaptations of those data
-will be CC BY-SA 4.0, rather than MIT. Its notice must identify row selection,
-unit conversion and frame conversion. No catalog rows are committed in M2.
+material retains ShareAlike terms. The extracted and transformed catalog in
+src/catalog-data.ts, its raw selected-row fixture in sources/hyg-selected.json,
+the selection metadata in sources/selection.json, and adaptations of those
+data are CC BY-SA 4.0, rather than MIT. NOTICE.txt identifies row selection,
+unit conversion and frame conversion. The private project's licence expression
+is MIT AND CC-BY-SA-4.0; this does not change the parent engine's licence
+expression or packed material.
 This permission comes from HYG's explicit licence; it does not assert that
 the underlying Hipparcos, Yale or Gliese datasets are public domain.
 
@@ -43,6 +46,6 @@ source for our own transcriptions. The sources record preserves this decision
 and the difference in pagination.
 
 Retain [NOTICE.txt](NOTICE.txt) and the in-tree source records when using the
-future catalog. Each imported astrometric row must identify its HYG row and
+catalog. Each imported astrometric row identifies its HYG row and
 HIP identifier. Each lore attribution must identify its printed passage and
 whether it is about a named star, a described star group, or a constellation.

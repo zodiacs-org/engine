@@ -16,7 +16,24 @@ export interface HistoricalAttribution {
   readonly work: string;
   readonly locator: string;
   readonly sourceId: string;
+  readonly passageId: string;
+  readonly scope: "named-star" | "described-group" | "constellation";
+  readonly subject: string;
+  /** Why this passage applies; constellation scope does not name this star. */
+  readonly identification: string;
   readonly tags: readonly string[];
+}
+
+/** Traceable selection and conversion of a licensed source row. */
+export interface CatalogProvenance {
+  readonly hygId: string;
+  readonly hipId: string;
+  readonly locator: string;
+  readonly rawRowFile: "sources/hyg-selected.json";
+  readonly sourceFrameInterpretation: "icrs";
+  readonly sourceFrameBasis: "documented-inference";
+  readonly sourceEpochJulianYear: 2000;
+  readonly frameDerivation: string;
 }
 
 /** Tangential angular rates. raCosDec is mu_alpha * cos(delta), not dRA/dt. */
@@ -42,6 +59,7 @@ export interface CatalogStar {
   /** Declination, north positive, degrees in [-90, 90]. */
   readonly decDeg: number;
   readonly astrometrySourceId: string;
+  readonly provenance: CatalogProvenance;
   /** Null means unavailable, rather than measured zero motion. */
   readonly properMotion: ProperMotion | null;
   readonly historicalAttributions: readonly HistoricalAttribution[];

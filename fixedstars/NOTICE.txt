@@ -3,10 +3,15 @@ Fixedstars original code and documentation: MIT, see ../LICENSE.
 Selected astrometry source: HYG Database v4.1, David Nash / Astronexus.
 https://github.com/astronexus/HYG-Database/tree/c7f7f883fe678cc7680169a50ccd7dcc49b060ce
 Licensed CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0/
-No star catalog rows are committed at this provenance milestone. Future
-selected and transformed HYG data retain CC BY-SA 4.0. Their notice must
-describe selection, unit conversion and engine frame conversion. This use
-does not imply endorsement by the source author.
+sources/selection.json and sources/hyg-selected.json select HIP-backed named
+bright-star rows and retain their HYG and HIP identifiers and original CSV
+records. src/catalog-data.ts adapts those rows: RA hours become degrees;
+the interpreted ICRS directions and tangential proper motions are rotated
+through the parent engine's ICRS-to-J2000 bias matrix and motion components
+are reprojected onto the rotated tangent bases. The source epoch is retained.
+The catalog includes curated aliases and historical attributions as documented
+in sources/selection.json. These selected and adapted data are CC BY-SA 4.0,
+distinct from MIT code. No endorsement by the source author is implied.
 
 Historical text: Ptolemy, Tetrabiblos, translated by J. M. Ashmand,
 London: Davis and Dickson, 1822, Book I, chapters IX to XI.

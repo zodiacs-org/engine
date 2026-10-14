@@ -6,7 +6,7 @@ explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
 
 - [x] M1 Establish an isolated TypeScript project, catalog contracts, a direct engine source bridge, and synthetic integration and geometric tests.
 - [x] M2 Fetch and read redistributable astrometry sources and primary historical lore sources; commit source, licence, coordinate-frame, epoch, and proper-motion provenance before importing data.
-- [ ] M3 Generate and commit a small named bright-star catalog within the requested size range, with aliases, source locators, optional proper motion, historical attribution tags, and validation tests.
+- [x] M3 Generate and commit a small named bright-star catalog within the requested size range, with aliases, source locators, optional proper motion, historical attribution tags, and validation tests.
 - [ ] M4 Propagate catalog proper motion and rotate positions onto the chart's true equator and ecliptic with the engine frame, equator, nutation, and time-basis helpers; document and test hand-derived geometry.
 - [ ] M5 Implement pure conjunction and parallel matching with explicit angular orb units, inclusive boundaries, structured star ids and contact kinds, deterministic ordering, and independent geometric tests.
 - [ ] M6 Cast synthetic natal inputs through the engine, include bodies and available angles, preserve native natal receipts, and expose the chart-hit library API with explicit coordinate conventions.
@@ -72,3 +72,33 @@ unimported because of their stated file-use condition and different pagination.
 M2 checks passed on Node 22: local Vitest, TypeScript, source digest re-fetch,
 and the isolation check. No catalog rows or engine-package files were added
 or changed in this milestone.
+
+## M3 completion and M4 handoff
+
+src/catalog-data.ts now holds the catalog selected by sources/selection.json.
+sources/hyg-selected.json retains the exact raw selected CSV records from the
+digest-verified HYG stream. The generated catalog, raw fixture and selection
+metadata retain CC BY-SA terms; original code remains MIT. The importer uses
+the existing engine bias matrix on both direction and motion tangent, with
+hand-derived rotation and first-order bias checks in GEOMETRY.md and the
+catalog tests. Regeneration is a provenance check, not accuracy evidence.
+
+The public source API exports a frozen catalog and findStar. Catalog records
+include HYG/HIP locators and explicit source-frame inference. Historical
+attributions retain passage ids, subjects, scopes, identification notes and
+graded tags. Unsupported lore is left empty with an omission reason. The
+Gemini excerpt's separate Apollo and Hercules clauses remain separate.
+
+M4 starts from J2000 mean-equator/equinox directions and tangent components
+already converted into that frame. Do not apply frame bias or a Hipparcos
+epoch shift again. Follow the chart's TT clock for subsequent motion and the
+engine's true-of-date matrices. The catalog import intentionally omits
+parallax, perspective acceleration, annual aberration and light deflection.
+
+M3 validation passed on Node 22: local Vitest, TypeScript, offline catalog
+regeneration, digest-verified remote selection, and the isolation check.
+The parent package:contents command was attempted but cannot pass in this
+checkout because dist/calc.d.ts is absent. The session's hard rule forbids
+creating an engine build. The isolation check's package dry run confirms
+fixedstars is excluded; it does not claim the absent engine build's budgets
+were checked. All authored changes remain under fixedstars/.

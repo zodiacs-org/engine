@@ -48,9 +48,9 @@ it was a significant measurement. A HIP identifier alone is not a license to
 fill absent HYG fields from a different service. Preserve the raw selected
 row and its identifiers so the interpretation and arithmetic are reviewable.
 
-The future CatalogStar contract is on the mean equator and equinox of J2000.
-It must not directly relabel the interpreted ICRS source values. M3 must
-rotate the unit direction and its proper-motion tangent vector through the
+The CatalogStar contract is on the mean equator and equinox of J2000.
+The importer does not directly relabel the interpreted ICRS source values.
+It rotates the unit direction and its proper-motion tangent vector through the
 engine's ICRS-to-J2000 bias matrix, using transpose(frameMatrix(
 "equatorial-icrs", time)) from src/calc-frames.ts. Reproject the rotated
 tangent onto the rotated RA and declination bases. Preserve the source
@@ -88,5 +88,26 @@ river is not automatically an identification with a modern southern star.
 Graded wording such as partly or moderately is retained in the interpretation.
 The cited text describes historical beliefs, not observed physical effects.
 
-The data licensing boundaries and required future catalog notices are in
+## Selected raw rows and regeneration
+
+[selection.json](selection.json) is the explicit selection, with expected HYG
+proper names, HIP identifiers, constellation codes, historical aliases and
+lore mapping decisions. Only tabulated magnitudes below 3.5 are eligible,
+as enforced in scripts/build-catalog.mjs and tests/catalog.fixedstars.mjs for
+the full committed selection and constructed rejection cases. This is a
+selection rule, not an astrometric uncertainty bound or a historical rank.
+[hyg-selected.json](hyg-selected.json) retains the exact CSV header and each
+selected original CSV line, plus the verified source digest and byte count.
+It copies only the selected rows, not the bulk catalog. All selected HYG data
+and their transformed catalog retain CC BY-SA terms and source attribution.
+
+The catalog generator and its checks are described in the project README.
+Change the selection or generator, then regenerate src/catalog-data.ts;
+do not edit generated positions by hand. Regeneration from saved raw rows
+is an offline consistency check. catalog:fetch independently verifies the
+whole remote source digest before saving any selection. A digest of the full
+source cannot by itself authenticate a subset edited after extraction; the
+explicit re-fetch checks that subset against the pinned remote file.
+
+The data licensing boundaries and catalog notices are in
 [../LICENSING.md](../LICENSING.md) and [../NOTICE.txt](../NOTICE.txt).

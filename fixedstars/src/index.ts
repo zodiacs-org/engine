@@ -1,5 +1,6 @@
-// Catalog and contact functions are added by subsequent plan milestones.
+export { catalog, findStar } from "./catalog.js";
 export type {
+  CatalogProvenance,
   CatalogStar,
   HistoricalAttribution,
   ProperMotion,
