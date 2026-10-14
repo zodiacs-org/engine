@@ -145,6 +145,30 @@ sky-brightness or limiting-vision model. It has no fitted planetary defaults
 and rejects lunar point-source photometry. The reference tests check formulas
 and criterion arithmetic, not historical observations or predictive accuracy.
 
+## Heliacal transitions
+
+Schoch (1924), cited above, printed pp. 731-734, fetched and read again for
+the search implementation on 2026-10-14. Page 731 defines heliacal rising
+as first morning visibility and heliacal setting as last evening visibility
+for outer planets. Page 732 distinguishes all first/last morning/evening
+phenomena for Mercury and Venus. Page 733 explains why first-appearance
+and last-appearance thresholds differ; `heliacalEvents` therefore requires
+a separate explicit threshold for each requested appearance.
+
+The implementation samples the page 731 horizon criterion at engine target
+rises or sets, including failures in daylight. Solar meridian halves and
+the requirement for consecutive same-period opportunities are this library's
+search conventions, not an additional calibration from Schoch. No threshold
+table is fitted to magnitude, weather, latitude or epoch. The selected
+published values already in `test/fixtures/visibility-reference.json` are
+applied to synthetic schedules in `test/heliacal-reference.test.ts`;
+their exact criterion arithmetic checks the search without treating engine
+output as a reference. Those tests do not measure historical date agreement.
+
+Schoch supplies no lunar calibration here. Applying the same horizon
+arithmetic to first-evening or last-morning Moon geometry is an explicitly
+named extension. It does not substitute for the crescent models below.
+
 ## Lunar crescents
 
 B. D. Yallop, *A Method for Predicting the First Sighting of the New
