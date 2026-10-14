@@ -27,5 +27,5 @@ locators identify sources and are not numerical performance claims.
 
 Engine integration checks can demonstrate that we use the engine's values
 correctly. They cannot establish independent accuracy by comparing the engine
-to itself. The first milestone implements no arc calculation and claims no
-numerical agreement.
+to itself. [M1](M1.md) validates conventions and [M2](M2.md) checks the engine
+adapter. Neither implements an arc calculation or establishes its accuracy.

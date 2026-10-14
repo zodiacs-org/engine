@@ -13,7 +13,10 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "astronomy-engine": ["./node_modules/astronomy-engine/astronomy.d.ts"]
+    }
   },
   "include": ["src/**/*.ts", "checks/**/*.ts", "vitest.config.ts"]
 }
