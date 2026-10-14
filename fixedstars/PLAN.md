@@ -1,0 +1,443 @@
+# Fixed-star library and CLI plan
+
+Complete the next unchecked milestone, run its checks, mark it complete, and
+append a session summary to CHANGES.txt. Stop after that milestone (or an
+explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
+
+- [x] M1 Establish an isolated TypeScript project, catalog contracts, a direct engine source bridge, and synthetic integration and geometric tests.
+- [x] M2 Fetch and read redistributable astrometry sources and primary historical lore sources; commit source, licence, coordinate-frame, epoch, and proper-motion provenance before importing data.
+- [x] M3 Generate and commit a small named bright-star catalog within the requested size range, with aliases, source locators, optional proper motion, historical attribution tags, and validation tests.
+- [x] M4 Propagate catalog proper motion and rotate positions onto the chart's true equator and ecliptic with the engine frame, equator, nutation, and time-basis helpers; document and test hand-derived geometry.
+- [x] M5 Implement pure conjunction and parallel matching with explicit angular orb units, inclusive boundaries, structured star ids and contact kinds, deterministic ordering, and independent geometric tests.
+- [x] M6 Cast synthetic natal inputs through the engine, include bodies and available angles, preserve native natal receipts, and expose the chart-hit library API with explicit coordinate conventions.
+- [x] M7 Prove an isolated catalog-vector adapter can execute the existing src/sky/riseset.ts solver without editing or copying its algorithms; verify vector substitution is scoped, ordinary bodies are unchanged, and incompatible engine source is refused.
+- [x] M8 Expose catalog rise, set, upper transit, and lower transit searches through that adapter, including solver budgets, complete refusal, circumpolar flags, and explicitly labelled engine-call provenance.
+- [x] M9 Implement paran event pairing for bodies and angular contacts over an explicit observer window, with a configurable time orb, native body-sky results, star-sky provenance, and synthetic simultaneous-contact expectations.
+- [x] M10 Implement the fixedstars list, fixedstars hits, and fixedstars parans CLI commands, strict options, JSON output, meaningful exit codes, and end-to-end synthetic tests.
+- [x] M11 Extend independent geometric coverage for wraparound, poles, proper-motion conventions, frame consistency, unavailable angles, horizon tangencies, event-window boundaries, and sample-budget exhaustion.
+- [x] M12 Finish library and CLI usage documentation, source attributions, limitations, evidence references, and isolated verification of tests, types, file sizes, and engine-package exclusion.
+
+## Boundaries
+
+All authored files belong under fixedstars/. The engine's src/, dist/, root
+package manifest, packed documentation, archives, and git metadata stay as they
+are. This private checkout tool uses relative engine source imports; it does
+not introduce an engine export or a release candidate. Generated downloads,
+bundles, caches, and bulk tables belong in locally ignored directories. Code
+and original documentation use the repository's MIT licence; source data keeps
+its verified redistribution terms and attribution. Tests and examples use
+synthetic inputs. Historical lore describes attributed beliefs, not facts.
+
+## Integration findings to carry forward
+
+The engine exposes its precession and nutation internally through frame.ts
+and equator.ts. onChartClock supplies the chart's TT and UT1 consistently,
+including a caller's time scale and pinned deltaT. Those modules can be read
+through relative source imports without changing the engine build.
+
+The existing skyEvents and searchEvents in src/sky/riseset.ts accept only
+Solar System bodies. stateAt closes over GeoVector; there is no custom-vector
+parameter. M7 must resolve this through a local, scoped dependency adapter
+while continuing to run the existing solver. A separate star search algorithm
+or a copy of the rise/set implementation does not meet the requested scope.
+M7 verified isolated bundle-time substitution of that vector import, as
+described in its completion notes below. The public star search wrapper and
+call provenance remain M8 work.
+
+createNatalEnvelope supplies a native engine natal receipt. skyEvents returns
+events, conventions, flags, and sample counts, but no native receipt. Future
+sky provenance must retain those fields and engine identity and explicitly
+say that it is a fixedstars call record, without claiming native receipt
+support or an accuracy certification.
+
+## Source decisions to carry into M3
+
+sources/manifest.json and sources/retrieval.json pin HYG v4.1, its licence
+and documentation, the author's HYG build notes, ESA's Hipparcos conventions,
+and the original Ashmand edition. sources/README.md explains the import
+contract and the limitations of the source-frame inference. Only HIP-backed
+HYG rows are eligible initially. Preserve their raw selected rows and HYG/HIP
+locators. Rotate both the interpreted ICRS direction and its motion tangent
+through the existing engine bias matrix before producing a CatalogStar on
+J2000 mean equator/equinox axes. Do not silently relabel the input or apply
+Hipparcos's original epoch shift a second time.
+
+The extracted/transformed HYG catalog and raw selected-row fixture will be
+CC BY-SA, with notices describing selection and conversions. Keep that data
+licence distinct from the original MIT code. sources/lore-passages.json holds
+short transcriptions checked against the original printed pages. Preserve
+named-star, described-group and constellation scope, graded wording, and
+the explicit historical-attribution label. The Sacred Texts files remain
+unimported because of their stated file-use condition and different pagination.
+
+M2 checks passed on Node 22: local Vitest, TypeScript, source digest re-fetch,
+and the isolation check. No catalog rows or engine-package files were added
+or changed in this milestone.
+
+## M3 completion and M4 handoff
+
+src/catalog-data.ts now holds the catalog selected by sources/selection.json.
+sources/hyg-selected.json retains the exact raw selected CSV records from the
+digest-verified HYG stream. The generated catalog, raw fixture and selection
+metadata retain CC BY-SA terms; original code remains MIT. The importer uses
+the existing engine bias matrix on both direction and motion tangent, with
+hand-derived rotation and first-order bias checks in GEOMETRY.md and the
+catalog tests. Regeneration is a provenance check, not accuracy evidence.
+
+The public source API exports a frozen catalog and findStar. Catalog records
+include HYG/HIP locators and explicit source-frame inference. Historical
+attributions retain passage ids, subjects, scopes, identification notes and
+graded tags. Unsupported lore is left empty with an omission reason. The
+Gemini excerpt's separate Apollo and Hercules clauses remain separate.
+
+M4 starts from J2000 mean-equator/equinox directions and tangent components
+already converted into that frame. Do not apply frame bias or a Hipparcos
+epoch shift again. Follow the chart's TT clock for subsequent motion and the
+engine's true-of-date matrices. The catalog import intentionally omits
+parallax, perspective acceleration, annual aberration and light deflection.
+
+M3 validation passed on Node 22: local Vitest, TypeScript, offline catalog
+regeneration, digest-verified remote selection, and the isolation check.
+The parent package:contents command was attempted but cannot pass in this
+checkout because dist/calc.d.ts is absent. The session's hard rule forbids
+creating an engine build. The isolation check's package dry run confirms
+fixedstars is excluded; it does not claim the absent engine build's budgets
+were checked. All authored changes remain under fixedstars/.
+
+## M4 completion and M5 handoff
+
+src/positions.ts exports propagateStarDirection, starPositionAtTt and
+starPositions through the library index. Motion advances and normalizes the
+J2000 transverse tangent on TT Julian years. Both true-of-date rotations use
+the existing engine equatorRows/eclipticRows helpers; the clock wrapper uses
+onChartClock, with UTC/UT1/TT and optional pinned deltaT. No second frame bias
+or original Hipparcos epoch shift occurs. Missing motion remains explicit.
+The model's omitted corrections and lack of physical accuracy bounds are
+documented in README.md and GEOMETRY.md.
+
+Position rows include star ids, elapsed epoch, J2000 direction and angular
+coordinates in degrees. Numerical poles have null longitude or RA and explicit
+defined flags. M5 must handle unavailable longitude rather than assign it zero;
+declination remains available for parallels. Output preserves caller order and
+refuses duplicate ids. The wrapper returns the native time-basis record without
+casting a chart or claiming a chart/sky receipt. M6 will attach chart receipts.
+
+tests/positions.fixedstars.ts documents hand-derived tangent expectations and
+checks Cartesian basis directions against the parent's independent ERFA frame
+fixture across its TT epochs. Catalog frame consistency, constructed poles and
+synthetic chart clocks are explicitly integration checks. The tests do not use
+saved library output as an accuracy reference.
+
+M4 validation passed on Node 22.22.2: local Vitest, TypeScript, offline catalog
+regeneration and file/package isolation. The parent package:contents check
+still fails because dist/calc.d.ts is absent; the session's hard rule forbids
+creating an engine build. The isolation check confirms fixedstars exclusion
+with a package dry run, without claiming the missing build's budgets passed.
+All authored changes remain under fixedstars/.
+
+## M5 completion and M6 handoff
+
+src/contacts.ts exports findStarContacts and its coordinate, policy and hit
+types through the library index. It accepts the matching fields of existing
+StarPosition rows plus body or angle target rows. Both orb limits must be
+explicit in degrees; null disables a kind and zero requests exact equality.
+Conjunctions use projected longitude and parallels use signed declination.
+Each kind stays independently eligible when the other coordinate is null.
+There are no implicit contraparallels, luminary overrides or coordinate
+transformations. Engine exact-arithmetic and body-label helpers are reused
+through the local source bridge. Eligibility and sorting use exact binary64
+differences; only reported orbs round. Results and policy snapshots are frozen.
+
+tests/contacts.fixedstars.ts and GEOMETRY.md cover hand-derived circular and
+declination cases, inclusive boundaries, subnormal and decimal roundoff,
+unavailable coordinates, independent ordering, validation and caller purity.
+An independent IEEE 754 integer oracle checks eligibility on the enumerated
+test inputs. These checks concern arithmetic and construction, not physical
+stellar accuracy. The matcher performs no chart or sky calls and creates no
+receipt. M6 must supply aligned chart-clock coordinates, preserve available
+angles without inventing missing ones, and attach the native natal envelope.
+The result explicitly records that stellar correction omissions still apply.
+
+M5 validation passed on Node 22.22.2: local Vitest, TypeScript, offline catalog
+regeneration and file/package isolation. The parent package:contents check
+still fails because dist/calc.d.ts is absent; creating that engine build is
+outside this session's hard boundary. The isolation check confirms fixedstars
+exclusion with a package dry run, without claiming the missing build's budgets
+passed. All authored changes remain under fixedstars/.
+
+## M6 completion and M7 handoff
+
+src/natal.ts exports natalStarHits, chartContactTargets and explicit natal
+matching conventions through the library index. Natal casting uses the existing
+engine API; bodies retain full ecliptic latitude for declination derivation,
+and available angles are treated as ecliptic points at zero latitude using
+the engine equatorial helper. Unknown time and missing location omit angles.
+The stellar clock comes from the canonical chart input with its original
+time scale and optional pin. Contact arithmetic and policies reuse M5.
+
+Every natal-hit result retains one native NatalEnvelope for the chart underlying
+all hits. Its default receipt context is preserved. The envelope, stellar clock,
+targets and matching results are frozen without freezing caller input. Derived
+declinations, stellar positions and contacts are explicitly outside the native
+natal receipt scope. The supplied-chart target helper performs no natal casting
+and treats numerical chart coordinates as caller claims under engine rules.
+
+tests/natal.fixedstars.ts and GEOMETRY.md derive cardinal target geometry and
+full-latitude cases using the parent's independent ERFA obliquity reference.
+Synthetic integration checks cover all native body rows, available and missing
+angles, UTC/UT1/TT clocks and pinned deltaT, receipt serialization, native house
+fallback and coverage flags, constructed body/angle contacts, ecliptic poles,
+validation and input isolation. Engine-coordinate inverse rotations are labelled
+as integration checks, not independent accuracy evidence.
+
+M6 validation passed on Node 22.22.2: local Vitest, TypeScript, offline catalog
+regeneration and file/package isolation. The parent package:contents check
+still fails because dist/calc.d.ts is absent; creating that engine build is
+outside the session's hard boundary. The isolation check confirms fixedstars
+exclusion with a package dry run without claiming the missing build's budgets
+passed. All authored changes remain under fixedstars/.
+
+M7 was left as the next unchecked milestone after M6. No star-sky adapter or
+solver work was done in M6. Retain the original integration findings above:
+run the existing rise/set/transit solver through a scoped local adapter, and
+distinguish its fixedstars call records from native natal receipts.
+
+## M7 completion and M8 handoff
+
+scripts/build-sky-adapter.mjs compiles the existing engine solver in memory,
+redirecting only src/sky/riseset.ts's astronomy-engine dependency edge to
+src/sky-vector.ts. All other engine imports, including the clock's GeoVector,
+keep the native pinned dependency. No engine file or event algorithm was
+edited or copied. sources/engine-sky-contract.json records the engine version,
+parsed parent source graph and digests, plus the ephemeris version and ESM
+digest. Verification checks both initial reads and the engine bytes supplied
+to the compiler, and rejects missing, changed or unexpected graph inputs.
+The contract includes modules parsed through the current broad source bridge,
+even where their code is ultimately tree-shaken; it is deliberately conservative.
+There is no automatic contract refresh on incompatibility.
+
+Each loaded module has its own synchronous scope. It uses the Pluto point-body
+slot for a normalized J2000 catalog ray with proper motion at each sampled TT.
+The large finite power-of-two ray scale is numerical, not a stellar distance;
+stellar parallax and the earlier correction omissions remain excluded. The
+engine performs its own true-equator rotation, sidereal clock, observer
+projection, horizon and transit searches. The slot clears in finally. Reentry
+and promise-returning scopes reject; caller astrometry is snapshotted without
+freezing caller records. Tests check unchanged ordinary body calls and native
+chart casting, errors, budget refusal, catalog input and the independent
+spherical identities derived in GEOMETRY.md. These establish construction and
+integration over their synthetic inputs, not physical stellar accuracy.
+
+src/sky-adapter-entry.ts is an internal proof interface and is absent from
+the library index. Its starEvents currently returns the raw native SkyEvents
+with body Pluto, and bodyEvents calls the same solver with ordinary bodies.
+M8 must wrap star output with the real star id, normalized observer/window,
+conventions, flags and samples, and explicitly labelled fixedstars call
+provenance. It must retain the native body output and distinguish its call
+record from native natal receipts. The public API should keep numerical
+searches synchronous after adapter preparation; the Node loader's source
+verification and in-memory compilation are a separate preparation operation.
+M8 must cover circumpolar behavior and complete budget refusal before M9
+pairs events. No paran or CLI work was done in M7.
+
+M7 validation passed on Node 22.22.2: full local Vitest, TypeScript, offline
+catalog regeneration, the sky adapter compiler and file/package isolation.
+The parent package:contents check still fails because dist/calc.d.ts is
+absent; creating that engine build is outside the session's hard boundary.
+The isolation check confirms fixedstars exclusion with a package dry run,
+without claiming the missing build's budgets passed. All authored changes
+remain under fixedstars/. M8 is the next unchecked milestone.
+
+## M8 completion and M9 handoff
+
+node.mjs exports prepareStarSky with a matching declaration. Preparation
+verifies the existing source contract and compiles the unchanged engine sky
+solver in memory, then returns synchronous starEvents and bodyEvents methods.
+src/sky.ts defines their public types and conventions, exported by the source
+index without importing Node preparation. Star results replace the private
+body-slot identity with starId and retain native event kinds, normalized
+observer/window, conventions, flags, sample accounting and whole-result
+refusal. Native body results remain intact under sky. Options and budget
+validation reuse the engine's own helpers. No search algorithm was added.
+
+Both methods attach an explicitly labelled fixedstars call record, with
+nativeReceipt false, engine and ephemeris identity, the verified source
+contract, normalized effective request and complete or refused result snapshot.
+Star records also retain captured astrometry and stellar model conventions;
+body records do not claim that stellar model. These records are frozen and
+JSON-safe, using ISO strings and an explicit unlimited-budget marker. Native
+event and window Dates retain their normal mutating methods without changing
+the captured call record. Caller inputs remain untouched. No native sky
+receipt exists, and this record is neither an authenticated receipt nor
+physical accuracy evidence.
+
+tests/sky.fixedstars.ts and GEOMETRY.md cover hand-derived equatorial and
+circumpolar geometry, standard horizon refraction and unchanged transits,
+window-local horizon flags, early and late whole-result budget refusal,
+reference-span flags, normalized provenance and motion snapshots, native-body
+comparisons, input isolation and validation. All instants and observers are
+synthetic. Frame-derived declinations are geometric-test inputs, not independent
+physical stellar references. The compatibility contract and engine sources
+remain unchanged.
+
+M8 validation passed on Node 22.22.2: full local Vitest, TypeScript, offline
+catalog regeneration, sky adapter compilation and file/package isolation.
+The parent package:contents check still fails because dist/calc.d.ts is
+absent; creating that engine build is outside this session's hard boundary.
+The isolation check confirms fixedstars exclusion with a package dry run,
+without claiming the missing build's budgets passed. All authored changes
+remain under fixedstars/. M9 is next: pair complete prepared event results
+over an explicit observer window, keep time-orb semantics explicit, preserve
+native body output and both kinds of call provenance, and refuse incomplete
+paran results when a required sky search is refused. No paran pairing or CLI
+work was done in M8.
+
+## M9 completion and M10 handoff
+
+src/parans.ts exports searchParans and pairParanEvents, their public result and
+request types, named angle/event mappings and explicit conventions through the
+source index. searchParans accepts a prepared synchronous sky search, explicit
+observer/window, required time orb in milliseconds, explicit native body
+selection, optional catalog selection and optional angular reference anchors.
+It executes the unchanged engine solver once per selected subject and retains
+the complete native body output and both kinds of fixedstars sky call record.
+The source bridge adds only direct exports of existing sky validation helpers;
+the engine graph and compatibility contract remain unchanged.
+
+Body contacts compare all event-kind pairs by exact absolute elapsed time.
+Angular contacts compare the appropriate star event with an explicit supplied
+instant for Ascendant, Descendant, Midheaven or Imum Coeli. These are angular
+phases, without claiming equality to the named ecliptic point or inventing an
+angle sky call or receipt. Both events and every anchor must lie in the same
+half-open observer window, without padding by the orb. Horizon/limb defaults
+remain native and explicit in each call; geometric phases require the caller's
+refraction-none selection. Exact engine arithmetic decides inclusive time
+eligibility and stable ordering; only reports round. Hit records use stable
+ISO times and indices into sorted retained subject arrays for provenance.
+
+Budgets remain independently configurable per star and body search call. All
+selected calls are retained; any refusal clears every hit and refuses the
+whole paran result. Native window-local horizon flags remain with their own
+subjects, and circumpolar transits remain eligible. The pure pairer makes no
+sky calls and checks observer/window agreement, duplicate subjects/events,
+interior membership and call-record identity/timestamps. It rejects mutated
+native Dates that disagree with their captured record. Supplied numerical
+results and call records are claims, without authentication or physical
+accuracy certification. Caller data is not frozen or mutated.
+
+tests/parans.fixedstars.ts and GEOMETRY.md document hand-derived schedule
+arithmetic, a separate BigInt extreme-time reference, angle mapping, inclusive
+boundaries, ordering, native-call retention, validation and whole-result budget
+refusal. A constructed equatorial observer places native geometric Sun rise
+and synthetic stellar upper/lower transits at a chosen instant using spherical
+identities and the existing engine frame inverse. It uses no saved event output
+as a reference and is explicitly construction evidence, not physical accuracy
+evidence. README.md describes both APIs, angular-phase scope and limitations.
+
+M9 validation passed on Node 22.22.2: full local Vitest, TypeScript, offline
+catalog regeneration, sky adapter compilation and file/package isolation.
+The parent package:contents check still fails because dist/calc.d.ts is absent;
+creating that engine build is outside this session's hard boundary. The
+isolation check confirms fixedstars exclusion through a package dry run without
+claiming the missing build's budgets passed. All authored changes remain under
+fixedstars/. M10 is next: implement the CLI using these source APIs, with strict
+options, structured JSON and meaningful refusal exit codes. No CLI work was
+done in M9. Stop here for the harness-owned commit.
+
+## M10 completion and M11 handoff
+
+bin/fixedstars.mjs now provides the fixedstars executable, named by this
+folder's private manifest and available through its local npm script. The
+launcher compiles src/cli.ts in memory with the project-local ephemeris;
+parans prepares the verified unchanged sky solver separately. No output
+bundle, parent source change, build or engine-package export was added.
+The local lockfile change records only the bin metadata.
+
+list retains full catalog records and their source/lore fields. hits uses
+explicit degree orbs, engine chart settings and natalStarHits with its native
+envelope. parans uses an explicit observer window, millisecond orb, selected
+bodies or an explicit empty body selection, optional angle anchors and
+independent native horizon/budget settings. All retained native body results
+and stellar call records remain in JSON output. Input validation rejects
+unknown, duplicate, missing and command-inapplicable options, unsupported
+subjects, malformed numbers and instants, conflicting body selections and
+invalid anchors. Complete empty results, invalid input, runtime/preparation
+failure and whole-result budget refusal have distinct documented semantics.
+
+tests/cli.fixedstars.ts launches the real executable from outside the checkout
+using synthetic charts and observer windows. It checks JSON and native receipt
+transport, clocks, missing angles, selection and option validation, host-timezone
+independence, native call retention and exit status. GEOMETRY.md derives the
+half-circle and event-product constructions and the narrow upper-meridian
+anchor test. No saved stellar output or new astrometric accuracy claim is used.
+README.md now documents executable usage, options, units, output and limitations.
+
+M10 validation passed on Node 22.22.2: full local Vitest, TypeScript, offline
+catalog regeneration, sky adapter compilation and file/package isolation.
+The parent package:contents check still fails because dist/calc.d.ts is absent;
+creating that engine build is outside this session's hard boundary. The local
+isolation check confirms exclusion through a package dry run without claiming
+the missing engine build's budgets passed. All authored changes remain under
+fixedstars/. M11 remains unchecked: extend the geometric edge-case coverage
+listed in its milestone. No M11 work was done here. Stop for the harness-owned
+commit.
+
+## M11 completion and M12 handoff
+
+tests/edge-geometry.fixedstars.ts extends the geometric suite with signed
+near-pole tangent motion, pole crossing, RA seam propagation, exact-pole motion
+validation, moving mixed directions checked against the existing independent
+ERFA fixture, and true-frame pole neighborhoods on both sides of the engine's
+coordinate-availability threshold. Unknown-time natal charts retain body
+contacts and omit angles across clock and polar house settings. All records
+are synthetic, without assigned historical lore.
+
+The new sky constructions place each event phase between whole milliseconds
+and derive its expected timestamp before any solver call. They exercise
+from-inclusive/to-exclusive membership in narrow windows, captured timestamps,
+zero-orb angle pairing and excluded anchor refusal. Signed northern and
+southern horizon-grazing cases exercise both short rise/set excursions between
+coarse samples and near-tangent misses. Independently composed horizontal dot
+products check the crossing side before and at each returned millisecond.
+Small and late exhausted budgets clear all events and paran hits; a sufficient
+budget retains complete output. The existing engine solver and adapter are
+unchanged. GEOMETRY.md records each derivation, numerical comparison and scope;
+README.md links the added coverage. No new physical accuracy bound is claimed.
+
+M11 validation passed on Node 22.22.2: the full local Vitest suite, TypeScript,
+offline catalog regeneration, sky adapter compilation and file/package
+isolation. The parent package:contents check still fails because dist/calc.d.ts
+is absent; creating that engine build is outside this session's hard boundary.
+The isolation check confirms exclusion through a package dry run without
+claiming the missing engine build's budgets passed. All authored changes remain
+under fixedstars/. M12 remains unchecked for the final documentation and
+isolated verification pass. Stop here for the harness-owned commit.
+
+## M12 completion
+
+README.md now gives the finished source-checkout setup, library entry and
+receipt map, CLI and explicit angle-anchor usage, correction limitations and
+reproducibility boundaries. sources/README.md describes the completed catalog
+and its source interpretation without milestone-specific future instructions.
+VERIFICATION.md maps the independent geometric derivations, source consistency
+checks and native-engine integration tests to their evidence and limits, and
+documents source revalidation and intentional sky-contract maintenance.
+
+scripts/check-docs.mjs checks local documentation targets and headings, then
+type-checks and executes every README TypeScript example as an isolated module
+in memory. scripts/verify.mjs runs the local types, full Vitest suite,
+documentation examples, offline catalog regeneration, sky compilation and
+file/package isolation with one Node runtime. Both are available through the
+private folder's npm scripts. No parent source, build, export, dependency,
+packed file or archive was changed.
+
+The final verifier passed on Node 22.22.2; its output is committed in
+docs/evidence/m12-verification.txt. The documented angle-only CLI example also
+completed. The parent package:contents gate was attempted and fails because
+dist/calc.d.ts is absent, with its output retained separately in
+docs/evidence/m12-package-contents.txt. No engine build was created to work
+around that boundary. Local package exclusion passed; parent build budgets,
+packed-consumer, conformance and archive checks are not claimed as passed.
+
+All planned milestones are complete. All authored work remains under
+fixedstars/. Stop here for the harness-owned commit and draft PR update.
