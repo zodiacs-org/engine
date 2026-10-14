@@ -4,8 +4,8 @@ A private library and CLI project for classical mundane astrology on top of
 the engine in this checkout. Development follows [PLAN.md](PLAN.md). The
 current API normalizes inputs, casts charts at supplied instants, analyzes
 classical planet angularity and angle-ruler dignities, and searches cardinal
-solar ingresses. Lunation and eclipse searches, prose factor summaries, and
-CLI commands are planned and are not implemented yet.
+solar ingresses and New and Full Moons. Eclipse searches, prose factor
+summaries, and CLI commands are planned and are not implemented yet.
 
 From the repository root, using Node.js as required by [package.json](package.json):
 
@@ -45,7 +45,7 @@ Date-only input means UTC midnight; local wall time must be resolved before
 calling this API. Normalization returns frozen snapshots with ISO UTC strings.
 It performs calendar validation only, with no ephemeris calculation or claim
 of astronomical coverage. Chart casting preserves engine coverage restrictions
-and flags; ingress searches do the same.
+and flags; ingress and lunation searches do the same.
 
 [test/inputs.test.ts](test/inputs.test.ts) checks calendar boundaries, the
 Gregorian leap-year rule, UTC offset arithmetic, input detachment, and invalid
@@ -214,6 +214,37 @@ time-scale qualifications, and the limited timing agreement checks are in
 [test/ingress-references.test.ts](test/ingress-references.test.ts). These
 checks do not establish accuracy outside the selected published events or
 independently validate the chart factors.
+
+To find New and Full Moon charts for a synthetic place:
+
+```ts
+import { searchLunations } from "./src/index.js";
+
+const result = searchLunations({
+  year: 2000,
+  place: { name: "Synthetic Meridian", latitude: 12.5, longitude: -31.25 },
+  houseSystem: "whole"
+});
+if (result.status === "complete") {
+  for (const event of result.lunations) {
+    console.log(event.phase, event.at, event.angularity, event.angleRulers);
+  }
+}
+```
+
+`searchLunations` uses the engine crossing solver on directed Moon-minus-Sun
+longitude. Events identify `phase` as `"new"` or `"full"` and retain the chart
+and the existing factor analyses. Timing is geocentric; the place determines
+angles and houses. Results use the same window, refusal, immutability, and
+coverage contracts as ingress searches. Here `samples` counts elongation
+evaluations, each requiring both body longitudes; casting is separate.
+
+Definitions, budget units, synthetic derivations, and limits are documented
+in [docs/lunations.md](docs/lunations.md), with checks in
+[test/lunations.test.ts](test/lunations.test.ts). Those checks establish
+synthetic solver behavior and engine integration. Independent published
+lunation timing checks remain the next milestone; no lunation astronomical
+accuracy claim is made here.
 
 Chart factors are labelled as traditional conventions, not predictions.
 This project adds no electional scoring, calendar export, relocation grids,

@@ -20,3 +20,5 @@ export type {
 } from "./angle-rulers.js";
 export { CARDINAL_INGRESSES, searchIngresses } from "./ingresses.js";
 export type { IngressSearchOptions, SolarIngress, IngressSearchResult } from "./ingresses.js";
+export { LUNATION_PHASES, searchLunations } from "./lunations.js";
+export type { LunationSearchOptions, Lunation, LunationSearchResult } from "./lunations.js";
