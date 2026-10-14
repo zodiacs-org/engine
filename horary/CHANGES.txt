@@ -1,0 +1,1 @@
+M1: Add the isolated horary project, validated question inputs, engine-backed cast API, derived synthetic fixtures, and passing typecheck, Vitest and package-exclusion checks.
