@@ -1,6 +1,6 @@
 # Convention source register
 
-These sources were fetched and read for the foundation milestone. Their
+These sources were fetched and read for the listed milestones. Their
 locators and short excerpts are recorded in
 [source-readings.json](evidence/source-readings.json). The register supports
 the meanings of the planned choices; it is not evidence that a solver has
@@ -43,32 +43,45 @@ projections. `mundane/retain-both` preserves the bodies' latitude. These
 choices do not exhaust traditional latitude treatments. The zodiacal subset
 implemented in M5 and the mundane subset implemented in M6 are described below.
 
-## Timing keys remain separate from geometry
+## Timing keys implemented in M7
 
 William Lilly, *Christian Astrology* (London, 1647), book III,
-[chapter CLXVI, printed pp. 709-713](https://www.worldastrology.net/wp-content/uploads/2008/12/CA-III.pdf),
-discusses Ptolemy's and Naibod's keys. The `naibod` name reserves a distinct
-fixed-rate key; its exact rate and arithmetic will be sourced and tested in
-the timing milestone before any age is returned.
+[chapter CLXVI, printed pp. 709-715](https://www.worldastrology.net/wp-content/uploads/2008/12/CA-III.pdf),
+discusses Ptolemy's and Naibod's keys separately. His Naibod tables give
+rounded calendar conversions, without establishing the finer rate used here.
+
+Erich Carl Kühr, *Berechnung der Ereigniszeiten* (Regulus-Verlag, 1936),
+[printed pp. 62-63, PDF page 37](https://www.imagomundi.biz/wp-content/uploads/2026/04/PYKS52-Berechnung_der_Ereignisgrenzen-Erich_Carl_Kuehr.pdf#page=37),
+states a Naibod rate of `0 degrees 59 minutes 8.33 seconds` of equatorial
+arc per year. The `naibod` key uses exactly that printed decimal convention,
+`354833/360000` degrees per year. This is a fixed conventional rate at the
+source's precision, not a claim that the astronomical mean solar motion is
+exactly that number. This scan's title page dates it to 1936. Naibod's own
+text has not been fetched and read; Kühr supplies this explicit numerical
+formulation. His directional geometry and claims of predictive success are
+not adopted.
 
 Lilly attributes a solar-equatorial method to Antonius Maginus: compare the
 Sun's right ascension at birth with its right ascension at the same hour on
 the following day, then use that difference as the fixed annual arc. This
-is the planned `solar-equatorial-birth-day` key. It is not a longitude solar
+is the `solar-equatorial-birth-day` key. It is not a longitude solar
 arc or a continually changing progressed-Sun key. The modern time scale,
-day interval and angle unwrapping must be specified and tested separately.
+day interval and angle unwrapping are explicit project choices, specified
+and tested in [M7-derivations.md](evidence/M7-derivations.md).
 
 Maginus's own cited text has not been read here; this attribution is through
 Lilly. Lilly's directional geometry is not used as a substitute for the
-Placidus semi-arc construction.
+Placidus semi-arc construction. Each key converts the already computed
+equatorial arc to a symbolic solar-year age by dividing it by the selected
+annual rate. A fractional symbolic year is not a civil anniversary or an
+elapsed timestamp; this layer performs no calendar conversion.
 
 ## Remaining source work
 
 Before enabling a numerical method, its milestone must settle the corresponding
 equations, coordinate branch, domain and refusal rules in committed evidence.
-In particular, further zodiacal latitude variants, additional mundane aspects,
-timing arithmetic and any converse construction beyond role exchange remain
-unfinished. Public
+In particular, further zodiacal latitude variants, additional mundane aspects
+and any converse construction beyond role exchange remain unfinished. Public
 engine coordinates supply the astronomical chart, not proof of the primary
 directions geometry.
 

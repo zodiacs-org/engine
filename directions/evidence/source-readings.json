@@ -1,5 +1,5 @@
 {
-  "scope": "Read sources for the convention contract, sphere coordinates, angular construction, zodiacal body directions and M6 mundane body directions; numerical expectations are separately hand-derived.",
+  "scope": "Read sources for the convention contract, sphere coordinates, angular construction, zodiacal and mundane body directions, and M7 timing keys; numerical expectations are separately hand-derived.",
   "sources": [
     {
       "id": "ptolemy-ashmand-iii14",
@@ -17,7 +17,8 @@
         "Proportional temporal-hour construction using the appropriate diurnal or nocturnal hourly times.",
         "Printed page 94 distinguishes rising by ascensional times, meridian by right ascensions and setting by descensions."
       ],
-      "m4Reading": "Reread HTML angular construction on printed page 94, 2026-10-14."
+      "m4Reading": "Reread HTML angular construction on printed page 94, 2026-10-14.",
+      "m7Reading": "Reread the fetched HTML transcription on 2026-10-14, printed page 94: an equatorial degree signifies one solar year. No modern elapsed-day length is specified."
     },
     {
       "id": "placidus-cooper-1814",
@@ -110,7 +111,7 @@
       "url": "https://www.worldastrology.net/wp-content/uploads/2008/12/CA-III.pdf",
       "retrieved": "2026-10-14",
       "formatRead": "Fetched PDF",
-      "locator": "Chapter CLXVI, printed pages 709-713",
+      "locator": "Chapter CLXVI, printed pages 709-715; PDF pages 223-229 (one-based)",
       "excerptLocator": "Printed page 710",
       "excerpt": "the apparent diurnall motion of the Sun for the next day and same hour",
       "supports": [
@@ -119,9 +120,29 @@
         "That natal-day right-ascension difference is used as a fixed annual arc."
       ],
       "notEstablished": [
-        "The exact Naibod rate is deferred to the timing-key milestone.",
+        "The rounded Naibod tables do not establish the exact 59 minutes 8.33 seconds rate used by this project; that explicit decimal is separately sourced to Kuhr.",
         "Maginus's own text was not independently fetched and read.",
-        "The passage does not select a modern UTC, UT1 or TT day convention."
+        "The passage does not select a modern UTC, UT1 or TT day convention, a modern equator/equinox frame, or a canonical right-ascension unwrapping algorithm."
+      ],
+      "m7Reading": "Reread fetched PDF on 2026-10-14: printed page 709 for the Ptolemy mapping; page 710, The Practice, for the birth-to-next-day right-ascension difference; pages 712-715 for the Naibod discussion and rounded calendar conversion tables. The solar annual rate is held fixed rather than resampled at each age."
+    },
+    {
+      "id": "kuehr-1936-naibod",
+      "author": "Erich Carl Kühr",
+      "title": "Berechnung der Ereigniszeiten",
+      "edition": "Regulus-Verlag, Görlitz, 1936; year read on the scan title page",
+      "url": "https://www.imagomundi.biz/wp-content/uploads/2026/04/PYKS52-Berechnung_der_Ereignisgrenzen-Erich_Carl_Kuehr.pdf",
+      "retrieved": "2026-10-14",
+      "formatRead": "Fetched PDF and extracted text in memory; no PDF, chart or source table retained",
+      "locator": "Direktions-Schlüssel, printed pages 62-63, PDF page 37 (one-based); title page on PDF page 2",
+      "supports": [
+        "Printed page 62 equates 59 minutes 8.33 seconds of equatorial arc to one year; page 63 identifies that derivation as the Naibod key.",
+        "The project preserves that printed decimal as a fixed conventional rate: 354833/360000 equatorial degrees per symbolic year."
+      ],
+      "notEstablished": [
+        "Naibod's original text was not fetched and read; this source supplies Kuhr's explicit formulation.",
+        "This rounded published decimal is not an exact physical astronomical rate or a definition of an elapsed civil year.",
+        "Kuhr's directional geometry and predictive claims are outside the adopted source scope."
       ]
     }
   ]

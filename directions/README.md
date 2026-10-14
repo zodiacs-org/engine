@@ -10,9 +10,10 @@ engine natal snapshots, computes pure sphere coordinates and semi-arcs, and
 finds direct conjunction arcs to fixed angles from prepared coordinates,
 and computes zodiacal and mundane conjunctions and aspects to body significators.
 Zodiacal body directions support direct motion; mundane body directions also
-support the explicit converse role swap. Timing conversions and the
-`directions hit` and `directions scan` commands are still planned in
-[PLAN.md](PLAN.md). An accepted
+support the explicit converse role swap. A separate pure timing function converts
+an arc to directed age using an explicitly selected key and year unit.
+The complete hit API and the `directions hit` and `directions scan` commands
+are still planned in [PLAN.md](PLAN.md). An accepted
 convention is not a computed hit or a claim that a particular contact exists.
 
 ```ts
@@ -41,7 +42,7 @@ loading an ephemeris or computing a natal chart.
 | `motion` | `direct`, `converse` | Ordinary diurnal construction, or the role exchange described in the source register. |
 | `converseConstruction` | `placidus-role-swap` | Required for converse, forbidden for direct; exchanges the moving and fixed roles. |
 | `latitude` | `zero-both`, `retain-both` | Ecliptic latitude treatment for both significator and promissor. |
-| `key` | `ptolemy`, `naibod`, `solar-equatorial-birth-day` | Separate planned mappings from an equatorial arc to age. |
+| `key` | `ptolemy`, `naibod`, `solar-equatorial-birth-day` | Separate mappings from an equatorial arc to age. |
 
 The initial contract admits `zodiacal` only with `zero-both` and `mundane`
 only with `retain-both`. These are explicit project subsets, not claims that
@@ -468,3 +469,122 @@ snaps a nearby point onto a contact. General trigonometric rounding can
 still change the selected revolution near coincidence; this is not an
 exact-predicate solver. The tested domain and numerical limits are recorded
 in [M6 evidence](evidence/M6.md).
+
+## Timing an arc
+
+`directedAge` converts an already computed primary arc with an explicitly
+selected timing key. It requires `arcDegrees`, `key` and `yearUnit`. The
+solar key also requires `solar`; fixed keys reject that field. It returns
+the original arc, symbolic `directedAgeYears`, `rateDegreesPerYear`, the
+selected fixed `daysPerYear`, `elapsedDays`, and an `audit` record. It does
+not change the sphere geometry or choose direct or converse motion.
+
+```ts
+import { directedAge } from "./src/index.js";
+
+const age = directedAge({
+  arcDegrees: 12.5,
+  key: "ptolemy",
+  yearUnit: "tropical-365.2422-days"
+});
+console.log(age.directedAgeYears, age.audit);
+```
+
+The synthetic timing inputs in this section are derived in
+[M7-derivations.md](evidence/M7-derivations.md) and checked by
+[timing.check.ts](checks/timing.check.ts). They are arithmetic examples,
+not independently computed natal arcs or claims about events.
+
+| Key | Annual equatorial rate | Audit |
+| --- | --- | --- |
+| `ptolemy` | One degree per symbolic solar year. | Ptolemy source ID and defining rational. |
+| `naibod` | `354833/360000` degrees, the published `59 minutes 8.33 seconds`. | Kühr source ID and defining rational at that printed precision. |
+| `solar-equatorial-birth-day` | The forward solar RA difference over the selected birth TT day, held fixed for every age. | Lilly source ID, both solar samples, interval and wrap branch. |
+
+[SOURCES.md](SOURCES.md) records the traditional passages and their limits.
+Age is arc divided by rate. Fixed rational rates are evaluated as binary64,
+and subsequent division and multiplication also round. The reported rate
+is the value used in the conversion. The independent rational fixtures
+allow arithmetic rounding on their stated examples, not a global accuracy
+bound or physical precision for the source's printed rate.
+
+The required year unit is `tropical-365.2422-days` or
+`julian-365.25-days`. These are explicit fixed numerical units for the
+returned elapsed days, not calendar anniversary rules. Changing the unit
+changes `elapsedDays = directedAgeYears * daysPerYear`; it does not change
+the key's symbolic age or annual arc. No calendar date, local clock or
+leap-second adjustment is computed. The tropical label denotes the stated
+fixed approximation, not a sampled astronomical year length.
+
+For synthetic or independently supplied samples:
+
+```ts
+const solarAge = directedAge({
+  arcDegrees: 12.5,
+  key: "solar-equatorial-birth-day",
+  yearUnit: "julian-365.25-days",
+  solar: {
+    timeScale: "tt", frame: "true-equator-equinox-of-date",
+    center: "geocentric", correction: "apparent",
+    start: { jdTt: 2451545, rightAscensionDegrees: 359.75 },
+    end: { jdTt: 2451546, rightAscensionDegrees: 0.25 }
+  }
+});
+console.log(solarAge.directedAgeYears, solarAge.audit);
+```
+
+This key implements the method Lilly attributes to Maginus with an explicit
+modern sampling policy: one TT day, apparent geocentric solar coordinates
+retaining bodily latitude, and the true equator/equinox of each sample's
+own date. It does not freeze both RAs into the birth frame. These choices
+are project conventions, not requirements quoted from Lilly. Other solar
+sampling conventions require a different named option and evidence.
+
+The sample Julian dates must differ by exactly one represented TT day.
+RAs must be canonical degrees. The forward increment must be positive and
+less than a half-turn; a seam crossing is unwrapped once. There is no
+absolute-value or backward-day substitute. This mathematical domain allows
+synthetic rates: validation does not authenticate that a pair came from the
+Sun. The pure function makes no ephemeris call and checks no ephemeris span.
+
+Use the opt-in engine adapter for actual synthetic-chart solar samples:
+
+```ts
+import { prepareSolarEquatorialDay } from "./src/solar.js";
+
+const solar = prepareSolarEquatorialDay({
+  time: { jd: 2451545, scale: "tt" },
+  dayScale: "tt"
+});
+const timed = directedAge({
+  arcDegrees: 12.5, key: "solar-equatorial-birth-day",
+  yearUnit: "tropical-365.2422-days", solar: solar.samples
+});
+console.log(timed, solar.provenance);
+```
+
+The input Julian date requires `scale: "utc" | "ut1" | "tt"` and accepts
+an optional explicit `deltaT` pin in seconds. `dayScale: "tt"` is required
+regardless of input scale. The adapter uses the public engine `calc` API
+to resolve the birth TT Julian date, then samples that represented TT date
+and its next TT day. Resampling the start makes the pair use the same
+represented Julian-date basis. The output preserves the original resolution
+receipt plus each sample's receipt, engine bounds and declination. Keep
+`provenance` beside a result when the engine sampling history is needed;
+the pure timing audit retains the samples alone. This path inherits the
+engine calculation entry's reference-span refusals for every sample.
+
+All results are deeply frozen fresh data. Inputs remain mutable and are
+not retained. Unknown, omitted, inherited, hidden and accessor fields are
+refused. `TimingError` supplies `invalid-input`, `invalid-solar-interval`,
+`invalid-solar-motion` or `numerical-degeneracy`. Arcs must be in the same
+first-turn interval as the geometry solvers; negative arcs and full turns
+are not normalized. Overflow or positive ages lost to zero are refused.
+Zero arcs still require a valid key and valid solar samples when selected.
+`SolarPreparationError` supplies `invalid-input`, `engine-refusal` or
+`invalid-engine-result`, retaining engine refusals as its cause.
+
+[M7 evidence](evidence/M7.md) separates rational and synthetic-solar timing
+checks from engine integration checks. This fixed birth-day key does not
+compute a secondary progression or longitude solar arc. Complete hit
+envelopes and CLI commands remain later milestones.

@@ -35,7 +35,10 @@ these remain prerequisites for a later directional-arc calculation.
 sphere examples. It does not yet implement body directions or directed ages.
 [M5](M5.md) checks direct zodiacal conjunctions and ecliptic aspect rays to
 body significators under the explicit zero-both projection policy. It adds
-independent spherical fixtures and source limits; timing remains unimplemented.
+independent spherical fixtures and source limits; timing was not part of M5.
 [M6](M6.md) checks mundane body conjunctions and aspects with retained bodily
 coordinates and explicit direct/converse role exchange against independent
-semi-arc examples. Timing and complete hit envelopes remain unimplemented.
+semi-arc examples. [M7](M7.md) checks fixed and birth-day solar-equatorial
+timing against independent rational arithmetic and invented solar samples.
+The engine sampler's checks establish integration only. Complete hit envelopes
+remain unimplemented.

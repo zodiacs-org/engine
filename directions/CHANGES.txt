@@ -4,3 +4,4 @@ Implement directions M3 pure sphere primitives with stable semi-arcs, explicit q
 Implement directions M4 direct conjunction arcs to fixed angles with audited geometry, explicit converse refusals, stable wraparound arithmetic, independent spherical evidence, and passing local checks.
 Implement directions M5 direct zodiacal body conjunctions and aspect rays with explicit zero-both projection, audited Placidus semi-arc transfer, sourced converse refusals, independent spherical fixtures, and passing local checks.
 Implement directions M6 mundane Placidus body conjunctions and aspects with explicit branches, converse role exchange, audited retained-coordinate geometry, independent spherical evidence, numerical refusals, and passing local checks.
+Implement directions M7 sourced Ptolemy, Naibod and solar-equatorial timing keys with explicit year units, audited TT-day engine sampling, independent rational evidence, typed refusals, and passing local checks.

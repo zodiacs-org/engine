@@ -20,3 +20,11 @@ export type {
   DirectionEquatorialPoint, MundaneGeometryInput, MundaneContact,
   MundaneBodyInput, MundaneBodyArc, MundaneDirectionErrorCode
 } from "./mundane.js";
+export { directedAge, TimingError } from "./timing.js";
+export type {
+  DirectionYearUnit, DirectedAgeInput, DirectedAge, SolarEquatorialSample,
+  SolarEquatorialDay, FixedTimingAudit, SolarTimingAudit, TimingErrorCode
+} from "./timing.js";
+export type {
+  SolarEquatorialDayInput, PreparedSolarEquatorialDay, SolarPreparationErrorCode
+} from "./solar.js";
