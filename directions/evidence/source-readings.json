@@ -1,0 +1,61 @@
+{
+  "scope": "Read sources for the convention contract; not numerical arc fixtures.",
+  "sources": [
+    {
+      "id": "ptolemy-ashmand-iii14",
+      "author": "Claudius Ptolemy",
+      "title": "Tetrabiblos",
+      "edition": "J. M. Ashmand translation, 1822",
+      "url": "https://sacred-texts.com/astro/ptb/ptb58.htm",
+      "retrieved": "2026-10-14",
+      "formatRead": "HTML transcription",
+      "locator": "Book III, chapter XIV, printed pages 94-96",
+      "excerptLocator": "Printed page 94",
+      "excerpt": "each equatorial degree being taken to signify one solar year",
+      "supports": [
+        "Equatorial arc to solar-year mapping attributed to Ptolemy.",
+        "Proportional temporal-hour construction using the appropriate diurnal or nocturnal hourly times."
+      ]
+    },
+    {
+      "id": "placidus-cooper-1814",
+      "author": "Placidus de Titis",
+      "title": "Primum Mobile",
+      "edition": "John Cooper translation, 1814",
+      "url": "https://iapsop.com/ssoc/1814__cooper___primum_mobile.pdf",
+      "retrieved": "2026-10-14",
+      "formatRead": "Text extracted from fetched PDF",
+      "locator": "Printed pages 17-23, theses 40, 45-46, 55, 60-61; page 57; pages 104-105, canon XXXVII",
+      "excerptLocator": "Printed page 17, thesis 40",
+      "excerpt": "a proportional division of the diurnal and nocturnal arcs, and no other way.",
+      "supports": [
+        "Mundane positions and aspects use proportional diurnal and nocturnal arcs; bodily latitude is retained.",
+        "Direct carries the promissor westward to the fixed position of the significator.",
+        "Converse applies the significator's rules to the promissor and vice versa.",
+        "The author rejects converse directions of angles and converse zodiacal aspects."
+      ]
+    },
+    {
+      "id": "lilly-1647-keys",
+      "author": "William Lilly",
+      "title": "Christian Astrology",
+      "edition": "London, 1647, book III",
+      "url": "https://www.worldastrology.net/wp-content/uploads/2008/12/CA-III.pdf",
+      "retrieved": "2026-10-14",
+      "formatRead": "Fetched PDF",
+      "locator": "Chapter CLXVI, printed pages 709-713",
+      "excerptLocator": "Printed page 710",
+      "excerpt": "the apparent diurnall motion of the Sun for the next day and same hour",
+      "supports": [
+        "Ptolemy's degree/year key and Naibod's timing method are discussed separately.",
+        "Lilly attributes to Antonius Maginus a key using the Sun's right ascension at birth and at the same hour the following day.",
+        "That natal-day right-ascension difference is used as a fixed annual arc."
+      ],
+      "notEstablished": [
+        "The exact Naibod rate is deferred to the timing-key milestone.",
+        "Maginus's own text was not independently fetched and read.",
+        "The passage does not select a modern UTC, UT1 or TT day convention."
+      ]
+    }
+  ]
+}
