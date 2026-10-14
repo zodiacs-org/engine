@@ -110,5 +110,7 @@ a short range outside the engine's reference span at ordinary and polar
 synthetic places. They compare against direct calls to the same engine
 solver and existing chart and factor APIs. They establish integration,
 immutability, validation, and metadata preservation only. No prior engine
-output supplies a timing fixture. Independently published astronomical
-lunation references and their timing checks remain M8.
+output supplies a timing fixture. Independent USNO phase-time fixtures and
+their limited timing agreement checks are documented separately in
+[lunation-references.md](lunation-references.md) and enforced by
+[test/lunation-references.test.ts](../test/lunation-references.test.ts).

@@ -98,7 +98,7 @@ authenticated release artifact or astronomical accuracy.
 places and arbitrary supplied instants, including polar places in both
 hemispheres and the engine's observed, predicted, and model time bases.
 Comparisons with the engine are integration checks. Independent ingress
-timing evidence is documented below; lunation timing evidence remains planned.
+and lunation timing evidence is documented below.
 The recorded M2 checks
 are in [docs/evidence/m2/checks.txt](docs/evidence/m2/checks.txt).
 
@@ -243,8 +243,12 @@ Definitions, budget units, synthetic derivations, and limits are documented
 in [docs/lunations.md](docs/lunations.md), with checks in
 [test/lunations.test.ts](test/lunations.test.ts). Those checks establish
 synthetic solver behavior and engine integration. Independent published
-lunation timing checks remain the next milestone; no lunation astronomical
-accuracy claim is made here.
+phase-time fixtures, their derivation and clock qualifications, and the
+limited timing agreement checks are in
+[docs/lunation-references.md](docs/lunation-references.md) and
+[test/lunation-references.test.ts](test/lunation-references.test.ts).
+They do not establish accuracy outside the selected events or independently
+validate the chart factors.
 
 Chart factors are labelled as traditional conventions, not predictions.
 This project adds no electional scoring, calendar export, relocation grids,

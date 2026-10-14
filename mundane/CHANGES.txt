@@ -5,3 +5,4 @@ Implement M4 angle domicile rulers and essential dignities with engine sect and 
 Implement M5 cardinal solar ingress searches with shared evaluation budgets, chart casting and factor analyses, range and coverage checks, synthetic solver tests, and convention documentation
 Implement M6 independent USNO ingress fixtures with source digests, time-scale and derivation records, offline annual and range timing checks, chart integration tests, and evidence
 Implement M7 New and Full Moon searches using engine longitudes and crossing solver with shared budgets, chart analyses, synthetic derivations, range tests, and convention documentation
+Implement M8 independent USNO lunation fixtures with source digests, clock and derivation records, offline annual and range timing checks, chart integration tests, and Node 22 evidence

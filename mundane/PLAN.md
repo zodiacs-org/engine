@@ -11,7 +11,7 @@ ticks it here, and appends a commit summary to `CHANGES.txt` for the harness.
 - [x] M5 Find cardinal solar ingress instants with the engine crossing solver, expose the ingress library API, and enforce range boundaries and search budgets.
 - [x] M6 Commit small independent ingress references with source and derivation records, then test ingress timing and chart integration against them.
 - [x] M7 Find New and Full Moon instants using engine Sun and Moon positions and the engine crossing solver, with a pure lunation API and explicit range semantics.
-- [ ] M8 Commit small independently published lunation references with source and derivation records, then test lunation timing and chart integration against them.
+- [x] M8 Commit small independently published lunation references with source and derivation records, then test lunation timing and chart integration against them.
 - [ ] M9 Produce short structured factor lists labelled as traditional conventions, not predictions, with tests for wording and traceability to chart factors.
 - [ ] M10 Combine ingress and lunation charts into a chronological year or range report, with deterministic ordering and tests for empty ranges and adjacent windows.
 - [ ] M11 Add an optional events eclipse adapter through relative imports when available, preserving supplied contact kinds, search completeness, and provenance. Test supplied synthetic contacts and unavailable adapters; never implement an eclipse solver.
