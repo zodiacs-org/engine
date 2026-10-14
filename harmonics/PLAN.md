@@ -9,7 +9,7 @@ unchecked milestone, runs its checks, marks it complete and appends a line to
 - [x] M2 Add an engine chart adapter using relative source imports, reuse natal chart casting and the natal receipt creator, preserve the original receipt and chart flags, and keep unknown point speeds absent.
 - [x] M3 Add harmonic aspect detection using the engine's configured aspect policy and matcher, with explicit orb units and per-harmonic scaling; test custom angles, wraparound and inclusive boundaries.
 - [x] M4 Reuse `src/techniques/aspect-patterns.ts` for supported harmonic aspect patterns, documenting its fixed major-aspect limits and refusing unsupported pattern policies rather than inventing graph results.
-- [ ] M5 Implement harmonic strength spectra with a documented deterministic scoring formula, configurable harmonic selection and weights, pair contributions and hand-derived ranking tests.
+- [x] M5 Implement harmonic strength spectra with a documented deterministic scoring formula, configurable harmonic selection and weights, pair contributions and hand-derived ranking tests.
 - [ ] M6 Implement Uranian dial projections for the requested 90, 45 and 22.5 degree circles, preserving full source longitudes and testing circular distances and seam contacts.
 - [ ] M7 Implement canonical planetary pictures and A+B-C sensitive points with configurable contact orbs, explicit repeated-member rules and arithmetic tests.
 - [ ] M8 Implement midpoint-tree listings by calling `src/points.ts` midpoint helpers, covering both axes, antipodal ties, dial contacts, ordering and deduplication.
@@ -119,3 +119,29 @@ With Node 22 and a writable cache inside `harmonics/.cache/`, the root
 `npm run package:contents` still fails at missing `dist/calc.d.ts`. No engine
 build, archive creation or git mutation was performed. The next session
 starts at M5.
+
+## M5 validation
+
+Added the pure `harmonicSpectrum` API through the default entry. It delegates
+every selected harmonic to the configured aspect matcher, defaults to
+conjunction analysis, and reports weighted linear orb falloff, all-pair
+normalization, match contributions and deterministic rankings. Configurable
+body and aspect weights are snapshotted and validated; unknown speeds and
+overflow reject. The scoring formula and its arithmetic limits are documented
+in `README.md`, with numerical examples enforced by
+`test/harmonic-spectrum.test.ts` over the exact invented rows stated there.
+
+On Node 22.22.2, `npm run check` passed. The spectrum tests derive rankings,
+weight changes, zero-orb and inclusive boundary behavior, motion-specific caps,
+custom rules, seam contacts and permutation stability independently by integer
+and binary-fraction arithmetic. Matcher delegation, source receipt preservation,
+frozen snapshots and the ephemeris-free default entry also pass. These tests
+check arithmetic and integration, not ephemeris accuracy or predictive validity.
+
+`git diff --check` passed. Changed and new files remain inside `harmonics/`,
+below the file size limit, with no em dash in documentation. The root
+`npm pack --dry-run --json --ignore-scripts` manifest excludes this project,
+using Node 22 and a writable npm cache under `harmonics/.cache/`.
+The root `npm run package:contents` still fails at missing `dist/calc.d.ts`.
+No engine build, archive creation or git mutation was performed. The next
+session starts at M6.

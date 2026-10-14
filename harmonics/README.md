@@ -1,8 +1,8 @@
 # Harmonics prototype
 
 This private source project adds harmonic longitude transforms, configured
-harmonic aspects, supported aspect patterns and natal casting adapters to the
-engine checkout. See [PLAN.md](PLAN.md) for the remaining spectrum, dial and CLI
+harmonic aspects, strength spectra, supported aspect patterns and natal casting
+adapters to the engine checkout. See [PLAN.md](PLAN.md) for the remaining dial and CLI
 milestones.
 Code and documentation here are MIT under
 the repository's [LICENSE](../LICENSE). The engine's data attributions remain
@@ -215,6 +215,111 @@ points with unknown speed are omitted. The preserved envelope describes the
 original natal chart, including its natal aspects, and does not attest the
 harmonic analysis. This synthetic integration example is exercised in
 [test/harmonic-aspects.test.ts](test/harmonic-aspects.test.ts).
+
+## Harmonic strength spectra
+
+```ts
+import { harmonicSpectrum } from "./src/index.js";
+
+const spectrum = harmonicSpectrum([
+  { body: "A", lon: 0, speed: 0 },
+  { body: "B", lon: 90.25, speed: 0 }
+], {
+  harmonics: [2, 4, 8],
+  policy: { bodies: ["A", "B"], aspects: [{ type: "conjunction", orb: 8 }] }
+});
+console.log(spectrum.ranking.map(({ harmonic, score }) => ({ harmonic, score })));
+```
+
+`harmonicSpectrum(sourcePositions, options)` analyzes original supplied rows
+through `findHarmonicAspects`. It accepts the same known-speed positions,
+engine policy input, `orbScaling` and `maxHarmonic` settings. Every supplied
+row requires finite speed, including unselected rows. Angles or other points
+with unknown speed need explicit filtering, as in the harmonic-aspect example.
+The function calls no ephemeris and imports none through the pure entry.
+
+With `policy` omitted, the spectrum selects the engine's physical-body
+defaults and conjunctions only, with an N=1 orb of 8 degrees or 10 for Sun or
+Moon. Default scaling divides these limits by N. These are analysis settings,
+not physical error bounds. Custom labels require `policy.bodies`. An explicit
+policy, including `{}`, uses the engine's policy defaults for omitted fields,
+so `{}` selects all five major aspects. Configured minor and custom angles,
+motion limits, luminary replacement, caps and stationary thresholds all follow
+the harmonic-aspect API. The engine chooses one eligible aspect per pair by
+smallest absolute orb, with definition order resolving ties. Weights do not
+change that choice.
+
+`harmonics` selects a nonempty array of unique positive integers within the
+ceiling. Results sort this selection in ascending order. When it is omitted,
+the selection is 1 through `min(180, maxHarmonic)`. Extending the ceiling allows
+explicitly selected larger harmonics; it does not enlarge the automatic scan.
+The default scan, smaller ceilings and explicit N=720 case are enforced in
+[test/harmonic-spectrum.test.ts](test/harmonic-spectrum.test.ts). No selection
+is silently deduplicated or truncated.
+
+`bodyWeights` maps selected case-sensitive labels to nonnegative finite
+dimensionless numbers. `aspectWeights` maps configured aspect identifiers to
+the same kind of numbers. An omitted weight is 1. Unknown keys, null, holes in
+the harmonic selection, invalid weights, and overflowing weight products or
+sums throw `RangeError`. A selected label absent from the chart may have a
+weight, but it adds no pair to the denominator. Zero weights are supported.
+
+The scoring convention is `weighted-linear-orb-falloff/v1`. For each eligible
+pair whose chosen match is aspect t, let `o` be its reported orb and `L` its
+effective `maximumOrb`, both in harmonic-circle degrees. Its closeness is
+`q = max(0, 1 - o/L)` when `L > 0`, or `q = 1` for an eligible zero-limit
+match. If the member weights are `wA` and `wB` and the aspect weight is `wt`,
+the contribution is `c = (wA * wB) * wt * q`. Unmatched pairs contribute zero.
+An inclusive match exactly on a positive orb boundary stays in the contribution
+listing with `q = 0`. A zero-limit match is already required to be exact by
+the engine matcher, and receives full weight without dividing by zero.
+
+Let `T` be the sum of contributions. Let `W` be the largest configured aspect
+weight, or zero for an empty aspect selection. The common `weightCapacity` is
+the sum of `(wA * wB) * W` over every unordered pair of selected labels actually
+present in the source, whether matched or unmatched. The score is
+`min(1, T/weightCapacity)` when capacity is positive, or zero otherwise. Using
+all eligible pairs prevents an isolated match from receiving the same score
+as a chart whose whole selection matches. Capacity is a normalization ceiling,
+not a claim that all pairs can simultaneously attain the highest weighted
+aspect. No harmonic-dependent weight or extra penalty is applied.
+
+All weighting, falloff and accumulation use ordinary binary64 arithmetic and
+the engine's rounded reported orbs. The engine still decides eligibility and
+rule choice exactly on the transformed binary64 values. This scoring does
+not inherit an exact-arithmetic guarantee. Underflow can reduce very small
+weights or falloffs to zero; the final quotient is clamped only for summation
+roundoff. Source rows and contribution sums use canonical body-label order
+(UTF-16 lexical comparison, without locale collation), so input permutations
+do not change accumulation order. Rankings sort by descending reported score,
+then ascending harmonic for a tie, without an epsilon or displayed rounding.
+The default conjunction analysis emphasizes multiples of the same contact,
+so a harmonic and its multiples can tie. A score is a documented analysis
+choice, not evidence of astronomical accuracy or predictive validity.
+
+The result records the formula id, ceiling, harmonic selection, unscaled
+`sourcePolicy`, scaling mode, complete effective weight maps, `possiblePairs`
+and `weightCapacity`. `rows` contains each harmonic's `aspectResult`, canonical
+pair `contributions`, `totalContribution` and `score`. A contribution preserves
+the engine's match record alongside both member weights, the aspect weight,
+the member weight product, closeness and weighted contribution. `ranking`
+contains the same row objects in rank order. All result objects are frozen
+snapshots. Pure spectra contain no natal envelope. When a chart is cast, keep
+`{ source, spectrum: harmonicSpectrum(knownSourceRows, settings) }`; the original
+source envelope describes the natal chart only. The synthetic cast integration
+test in [test/harmonic-spectrum.test.ts](test/harmonic-spectrum.test.ts) checks
+that preservation and refuses unknown angle speeds.
+
+For the example above, N=4 maps B to 361 degrees, reduced to 1 degree. The
+8-degree orb becomes 2, so closeness and score are `1 - 1/2 = 1/2`. At N=2
+the separation is 179.5 degrees, outside the conjunction orb; at N=8 the
+separation is 2 degrees, outside the scaled orb of 1. Both score zero. The
+ranking is therefore N=4 followed by N=2 and N=8. These values are derived
+and enforced over these exact supplied rows in
+[test/harmonic-spectrum.test.ts](test/harmonic-spectrum.test.ts), alongside
+hand-derived trisection rankings, weighted pair normalization, custom aspect
+weights, seam contacts, caps and boundary cases. They establish transform and
+scoring correctness, not ephemeris accuracy.
 
 ## Harmonic aspect patterns
 
