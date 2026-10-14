@@ -6,7 +6,10 @@
     "declarationMap": false,
     "incremental": false,
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "astronomy-engine": ["./node_modules/astronomy-engine/astronomy.d.ts"]
+    }
   },
   "include": ["src/**/*.ts", "test/**/*.ts", "vitest.config.ts"]
 }

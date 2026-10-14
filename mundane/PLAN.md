@@ -5,7 +5,7 @@ only. Each session completes the next unchecked milestone, runs its checks,
 ticks it here, and appends a commit summary to `CHANGES.txt` for the harness.
 
 - [x] M1 Establish a private TypeScript project, pure place and date-range input normalization using engine validation, isolated Vitest checks, and scope documentation.
-- [ ] M2 Cast event charts through the engine, returning angles, requested and actual houses, body positions, time basis, provenance, and calculation flags. Test synthetic places and polar fallback.
+- [x] M2 Cast event charts through the engine, returning angles, requested and actual houses, body positions, time basis, provenance, and calculation flags. Test synthetic places and polar fallback.
 - [ ] M3 Identify classical planets in angular houses and near angles with an explicit convention and configurable orb. Test hand-derived synthetic geometry and boundary cases.
 - [ ] M4 Return domicile rulers of each angle and their essential dignities, using engine dignity tables and chart sect. Test synthetic day and night cases.
 - [ ] M5 Find cardinal solar ingress instants with the engine crossing solver, expose the ingress library API, and enforce range boundaries and search budgets.

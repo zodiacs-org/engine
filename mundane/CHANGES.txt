@@ -1,1 +1,2 @@
 Establish mundane milestone plan and isolated TypeScript input API with engine validation and Vitest checks
+Implement M2 frozen event chart casting with engine receipt provenance, polar fallback, time-basis metadata, and isolated Vitest checks
