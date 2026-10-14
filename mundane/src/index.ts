@@ -18,3 +18,5 @@ export { analyzeAngleRulers } from "./angle-rulers.js";
 export type {
   AngleRulerGeometry, AngleRuler, AngleRulerAnalysis
 } from "./angle-rulers.js";
+export { CARDINAL_INGRESSES, searchIngresses } from "./ingresses.js";
+export type { IngressSearchOptions, SolarIngress, IngressSearchResult } from "./ingresses.js";

@@ -1,0 +1,58 @@
+M5 cardinal solar ingress library checks
+Runtime: Node.js v22.22.2 (existing temporary toolchain outside the checkout)
+PATH prepends /tmp/mundane-m1-node/node_modules/node/bin.
+For npm manifest checks, npm_config_cache points to mundane/.cache/npm,
+which is gitignored.
+
+Command: npm run check --prefix mundane
+TypeScript: tsc -p tsconfig.json --pretty false, exit 0
+Vitest: vitest run --config vitest.config.ts, exit 0
+Final output:
+ RUN  v2.1.9 /workspace/codex-infra/wt-mundane/mundane
+ Test Files  5 passed (5)
+      Tests  317 passed (317)
+Scope: mundane/test/ingresses.test.ts (44 tests), angle-rulers.test.ts
+(61 tests), angularity.test.ts (77 tests), chart.test.ts (59 tests), and
+inputs.test.ts (76 tests).
+The final check ran on the implementation and tests recorded for this session.
+
+Ingress checks cover fixed cardinal targets, geocentric place independence,
+chronological ordering including repeated signs, exact synthetic opening and
+closing roots, empty windows, integer-Date sampling, shared sample budgets,
+refusal before scanning and during refinement, discarding earlier roots on
+refusal, deferred chart casting, exactly exhausted successful budgets, both
+ephemeris endpoints with the chart speed stencil, input validation, immutable
+JSON-compatible output, polar fallback, and outside-reference-span flags.
+Synthetic reference motion and its roots are hand-derived in
+mundane/docs/ingresses.md. Real Sun timing and chart comparisons are engine
+integration checks, not independent astronomical accuracy evidence.
+
+During test development, a refusal case initially landed every synthetic root
+on the coarse grid and needed no refinement. Shifting its opening by a day
+forced refinement and exercised the intended refusal. Additional test drafts
+assumed exact refined roots and submillisecond truncation at the opening edge;
+the real solver uses finite bisection and integer-Date evaluation. Exact-root
+ordering expectations now use an aligned coarse grid, and the synthetic
+submillisecond test uses the first positive integer-Date sample. No engine
+output was pinned as an astronomical reference, and no production timing
+calculation was changed to satisfy those test assumptions.
+
+Command: node mundane/scripts/check-package-isolation.mjs
+Exit 0.
+PASS: npm dry-run manifest contains no mundane files; scripts disabled,
+no archive written.
+This is an isolation check; the full package gate also needs a built dist tree.
+
+Command: npm run package:contents
+Exit 1: AssertionError: packed package is missing dist/calc.d.ts
+The checkout has no dist tree. The engine build was not run because the user
+requires all work to stay inside mundane/ and forbids changing dist/ or the
+engine package. The manifest isolation check does not substitute for the
+full package size and import-graph gate. No archive was packed.
+
+Command: git diff --check
+Exit 0.
+Project audit: nonignored mundane files are under 2 MB, Markdown contains no
+em-dash characters, and all changed files are in mundane/. No engine source,
+root configuration, carried archive, packed file, or build output changed.
+No git mutation, publication, or release workflow was performed.

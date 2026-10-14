@@ -2,9 +2,10 @@
 
 A private library and CLI project for classical mundane astrology on top of
 the engine in this checkout. Development follows [PLAN.md](PLAN.md). The
-current API normalizes inputs, casts charts at supplied instants, and analyzes
-classical planet angularity and angle-ruler dignities. Event searches, prose
-factor summaries, and CLI commands are planned and are not implemented yet.
+current API normalizes inputs, casts charts at supplied instants, analyzes
+classical planet angularity and angle-ruler dignities, and searches cardinal
+solar ingresses. Lunation and eclipse searches, prose factor summaries, and
+CLI commands are planned and are not implemented yet.
 
 From the repository root, using Node.js as required by [package.json](package.json):
 
@@ -38,13 +39,13 @@ are the engine's supported systems, defaulting to whole sign.
 
 Supply either an integer UTC calendar year or `from` and `to` as resolved
 instants. A year maps to January midnight through the following January
-midnight. Event windows will use `(from, to]`, matching the engine crossing
+midnight. Event windows use `(from, to]`, matching the engine crossing
 solver: the opening instant is excluded and the closing instant is included.
 Date-only input means UTC midnight; local wall time must be resolved before
 calling this API. Normalization returns frozen snapshots with ISO UTC strings.
 It performs calendar validation only, with no ephemeris calculation or claim
 of astronomical coverage. Chart casting preserves engine coverage restrictions
-and flags; search implementations will do the same.
+and flags; ingress searches do the same.
 
 [test/inputs.test.ts](test/inputs.test.ts) checks calendar boundaries, the
 Gregorian leap-year rule, UTC offset arithmetic, input detachment, and invalid
@@ -176,6 +177,38 @@ chart. The convention sources, synthetic derivations, and limitations are in
 [docs/angle-rulers.md](docs/angle-rulers.md). Checks are enforced by
 [test/angle-rulers.test.ts](test/angle-rulers.test.ts), with a session record in
 [docs/evidence/m4/checks.txt](docs/evidence/m4/checks.txt).
+
+To find cardinal solar ingress charts for a synthetic place:
+
+```ts
+import { searchIngresses } from "./src/index.js";
+
+const result = searchIngresses({
+  year: 2000,
+  place: { name: "Synthetic Meridian", latitude: 12.5, longitude: -31.25 },
+  houseSystem: "whole"
+});
+if (result.status === "complete") {
+  for (const event of result.ingresses) {
+    console.log(event.sign, event.at, event.angularity, event.angleRulers);
+  }
+}
+```
+
+`searchIngresses` reuses the engine's crossing solver for tropical geocentric
+Sun longitudes, then casts charts and applies the existing analyses. Results
+include the normalized request and search metadata, and are deeply frozen and
+JSON-compatible. A sample-budget refusal returns an empty ingress list and
+casts no charts. Invalid input or an unsupported ephemeris endpoint throws
+`RangeError`. Callers can supply `maxSamples` in a separate options object.
+The budget is shared across the cardinal searches and includes root refinement;
+chart casting is excluded from this evaluation count.
+
+Range semantics, budget defaults, hand-derived synthetic solver checks, and
+accuracy limitations are documented in [docs/ingresses.md](docs/ingresses.md).
+The tests in [test/ingresses.test.ts](test/ingresses.test.ts) establish API and
+engine integration behavior. Independent ingress timing validation remains
+the next milestone; this implementation makes no measured accuracy claim.
 
 Chart factors are labelled as traditional conventions, not predictions.
 This project adds no electional scoring, calendar export, relocation grids,
