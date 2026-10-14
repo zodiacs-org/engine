@@ -3,7 +3,7 @@
 This private source project adds harmonic longitude transforms, configured
 harmonic aspects, strength spectra, supported aspect patterns, Uranian dial
 projections, planetary pictures, midpoint trees, natal casting adapters and an
-offline chart CLI to the engine checkout. See [PLAN.md](PLAN.md) for the
+offline chart, spectrum and dial CLI to the engine checkout. See [PLAN.md](PLAN.md) for the
 remaining milestones.
 Code and documentation here are MIT under
 the repository's [LICENSE](../LICENSE). The engine's data attributions remain
@@ -836,5 +836,98 @@ checks replayable natal receipts, unknown-time and polar-fallback semantics,
 and verifies error channels. Cast comparisons establish engine delegation and
 receipt preservation, not independent ephemeris accuracy. The separate
 [test/cli-pure.test.ts](test/cli-pure.test.ts) rejects chart API and ephemeris
-imports when executing supplied-point input. Spectrum and dial CLI commands
-are the next milestone; their pure library APIs are already available above.
+imports when executing supplied-point input, including spectra and complete dial
+analysis.
+
+
+## Spectrum and dial CLI
+
+The same executable accepts both analysis commands with the chart command's
+file/stdin input, strict JSON validation, shared birth-point flags and error
+channels:
+
+```sh
+node bin/harmonics.mjs spectrum --input fixtures/chart-points.json --harmonics 1,2,3
+node bin/harmonics.mjs spectrum --input fixtures/chart-birth.json --harmonics 1,3 \
+  --include-angles --bodies '["Sun","Moon","Mercury"]'
+node bin/harmonics.mjs dial --input fixtures/dial-points.json --circle 22.5 --contact-orb 0
+node bin/harmonics.mjs spectrum --help
+node bin/harmonics.mjs dial --help
+```
+
+`--bodies JSON` is an optional nonempty array of unique source labels for
+spectrum and dial. Every requested label must exist. It filters the analysis
+rows in source order and leaves the complete cast `source` and natal envelope
+unchanged. It does not change the spectrum policy's own body selection, which
+still defaults to the engine's physical bodies. Custom labels need selection
+in `--policy` as well. Every retained spectrum row must have a finite source
+speed, even when the policy does not select it. Angles and some supplemental
+points have unknown speeds: explicitly filter them with `--bodies` rather
+than treating them as stationary. Dial analysis accepts absent speeds.
+
+The spectrum options map directly to `harmonicSpectrum`:
+
+| Option | Meaning |
+| --- | --- |
+| `--harmonics N,N,...` | Unique positive decimal integers; order is normalized by the library. No ranges, spaces or empty entries. |
+| `--max-harmonic N` | Same configurable ceiling as the chart command. Omitting `--harmonics` retains the library's default selection. |
+| `--orb-scaling MODE` | `inverse-harmonic` by default, or `fixed`. |
+| `--policy JSON` | Engine `AspectPolicyInput` object: aspect rules, body selection, per-body orb caps and stationary threshold. Omission uses the spectrum's conjunction-only policy; an explicit empty object selects the engine's major-aspect defaults. |
+| `--body-weights JSON` | Nonnegative finite weights keyed by policy body labels. |
+| `--aspect-weights JSON` | Nonnegative finite weights keyed by policy aspect types. |
+
+For example, to select custom labels with an explicit conjunction allowance:
+
+```sh
+node bin/harmonics.mjs spectrum --input - --harmonics 4 --orb-scaling fixed \
+  --policy '{"bodies":["A","B"],"aspects":[{"type":"conjunction","orb":2}]}' \
+  --body-weights '{"A":2,"B":3}' --aspect-weights '{"conjunction":4}'
+```
+
+Inline JSON options use the input decoder's byte, depth and duplicate-key
+rules. Policy validation delegates to the engine factory, including custom
+angles and motion-specific limits. Weights use the library's selected-label
+validation. Orb limits are source allowances at the first harmonic, measured
+in degrees; scaling and the full scoring formula are documented above.
+
+A spectrum result has `schema`, `command: "spectrum"`, `sourceMode` and
+`spectrum`, the complete library result with policy, effective settings,
+contributions, rows and ranking. With the invented chart-point fixture,
+harmonics 1 and 2 have no conjunctions, while harmonic 3 aligns every point at
+30 degrees. The three exact unit pair contributions divided by three possible
+pairs give score 1; the earlier harmonics score 0. In the custom-label example,
+input A at 0 degrees and B at 0.25 degrees, both with speed 0, gives a
+harmonic-4 separation of 1 degree. Fixed orb 2 gives closeness 0.5 and weighted
+contribution `2*3*4*0.5 = 12`, divided by capacity 24 for score 0.5. Inverse
+scaling gives orb allowance 0.5 and no match. These exact arithmetic examples
+are enforced over precisely these synthetic inputs in
+[test/cli-analysis.test.ts](test/cli-analysis.test.ts).
+
+The dial command accepts `--circle` (90 by default, or 45 or 22.5),
+`--contact-orb` (1 degree by default, inclusive from zero to half the circle),
+and `--repeated-members` (`distinct` by default, or `doubled`). Degree flags
+require nonnegative plain decimal notation without signs, leading zeros,
+exponents or whitespace. Repeated-member settings affect planetary pictures;
+midpoint pairs always have distinct labels.
+
+A dial result has `schema`, `command: "dial"`, `sourceMode`,
+`planetaryPictures` and `midpointTrees`, the complete library results. Each
+contains its `dial` projection and contacts. Sensitive-point formulas,
+canonical pictures, full source longitudes, both midpoint endpoints and center
+trees remain available. The synthetic [dial fixture](fixtures/dial-points.json)
+has A at 0, B at 20, C at 10 and D at 100 degrees. C and D coincide on each
+supported dial. `A+B-C = 10` contacts D exactly; the midpoint of A and B is
+10, with its opposite at 190, so both endpoints contact C and D. The test
+above derives these values by arithmetic and checks the executable on every
+supported circle, including formula deduplication, seam allowances and
+explicit doubled-member selection.
+
+Both commands add the unchanged `source` only for birth input. The natal
+receipt covers the original engine chart; it does not cover spectrum scores,
+dial coordinates, pictures, trees or supplemental points. A birth is cast
+once per command. Point input initializes neither chart casting nor the
+ephemeris. [test/cli-analysis.test.ts](test/cli-analysis.test.ts) enforces
+single casting, receipt identity, source preservation after filtering,
+deterministic file/stdin output, parsing boundaries and error channels, with
+network transports blocked during executable tests. These are integration
+and arithmetic checks, not evidence of ephemeris accuracy or predictive value.

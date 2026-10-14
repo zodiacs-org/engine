@@ -2,9 +2,21 @@ import { createReadStream } from "node:fs";
 import type { Readable } from "node:stream";
 import { CliError, MAX_INPUT_BYTES, parseChartRequest } from "./cli-input.js";
 import type { ChartRequest } from "./cli-input.js";
-import { harmonicChart, harmonicLimit } from "./harmonic-chart.js";
-import type { CastHarmonicChartResult } from "./engine.js";
+import { harmonicChart } from "./harmonic-chart.js";
+import { harmonicSpectrum } from "./harmonic-spectrum.js";
+import type { HarmonicSpectrum } from "./harmonic-spectrum.js";
+import type { HarmonicAspectPosition } from "./harmonic-aspects.js";
+import { findPlanetaryPictures } from "./planetary-pictures.js";
+import type { PlanetaryPictureResult } from "./planetary-pictures.js";
+import { midpointTrees } from "./midpoint-trees.js";
+import type { MidpointTreeResult } from "./midpoint-trees.js";
+import { parseCliArguments } from "./cli-arguments.js";
+import type { ChartArguments, DialArguments, SourceArguments, SpectrumArguments } from "./cli-arguments.js";
+import type { CastChartOptions, CastChartResult, CastHarmonicChartResult, EngineLongitudePoint } from "./engine.js";
 import type { HarmonicChart } from "./types.js";
+
+export { parseChartArguments, parseCliArguments } from "./cli-arguments.js";
+export type { ChartArguments, DialArguments, SpectrumArguments } from "./cli-arguments.js";
 
 export const CLI_SCHEMA = "zodiacs-harmonics-cli/v1";
 
@@ -23,57 +35,42 @@ Options:
 Results are JSON on stdout. Errors are JSON on stderr with a failing exit status.
 `;
 
-export interface ChartArguments {
-  readonly input: string;
-  readonly harmonic: number;
-  readonly maxHarmonic: number;
-  readonly includeAngles: boolean;
-  readonly includeChartPoints: boolean;
-}
+export const SPECTRUM_HELP = `Usage: harmonics spectrum --input FILE|- [options]
 
-function integer(text: string): number {
-  if (!/^[1-9]\d*$/u.test(text) || !Number.isSafeInteger(Number(text))) {
-    throw new CliError("invalid-arguments", "Harmonics must be positive safe integers in decimal notation.");
-  }
-  return Number(text);
-}
+Shared input options: --include-angles, --include-chart-points (birth only).
+  --bodies JSON           Nonempty array selecting supplied/cast point labels
+  --harmonics N,N,...      Unique positive integers (default 1..min(180, ceiling))
+  --max-harmonic N         Positive integer ceiling (default 180)
+  --orb-scaling MODE       inverse-harmonic (default) or fixed
+  --policy JSON            Engine AspectPolicyInput; default conjunction-only
+  --body-weights JSON      Nonnegative weights keyed by policy body labels
+  --aspect-weights JSON    Nonnegative weights keyed by policy aspect types
+  --help                  Show this help, used alone after spectrum
 
-export function parseChartArguments(args: readonly string[]): ChartArguments | "help" {
-  if ((args.length === 1 && args[0] === "--help") ||
-    (args.length === 2 && args[0] === "chart" && args[1] === "--help")) return "help";
-  if (args[0] !== "chart") {
-    throw new CliError("invalid-arguments", "Expected the chart command. Use harmonics --help for usage.");
-  }
-  let input: string | undefined;
-  let harmonic = 1;
-  let maxHarmonic = 180;
-  let includeAngles = false;
-  let includeChartPoints = false;
-  const seen = new Set<string>();
-  for (let index = 1; index < args.length; index += 1) {
-    const option = args[index]!;
-    if (seen.has(option)) throw new CliError("invalid-arguments", "Options must not be repeated.");
-    seen.add(option);
-    if (option === "--include-angles") includeAngles = true;
-    else if (option === "--include-chart-points") includeChartPoints = true;
-    else if (["--input", "--harmonic", "--max-harmonic"].includes(option)) {
-      const value = args[++index];
-      if (value === undefined || value.trim() === "" || value.startsWith("--")) {
-        throw new CliError("invalid-arguments", "Every value option requires a nonempty value.");
-      }
-      if (option === "--input") input = value;
-      else if (option === "--harmonic") harmonic = integer(value);
-      else maxHarmonic = integer(value);
-    } else throw new CliError("invalid-arguments", "Unknown option or positional argument. Use chart --help.");
-  }
-  if (input === undefined) throw new CliError("invalid-arguments", "--input FILE|- is required.");
-  try {
-    harmonicLimit(harmonic, { maxHarmonic });
-  } catch {
-    throw new CliError("invalid-arguments", "harmonic must not exceed maxHarmonic.");
-  }
-  return { input, harmonic, maxHarmonic, includeAngles, includeChartPoints };
-}
+Every retained point requires finite speed in source degrees/day.
+Policy orb limits are N=1 degrees; see README for scaling and scoring.
+Input and output use the chart command's offline JSON/error contract.
+`;
+
+export const DIAL_HELP = `Usage: harmonics dial --input FILE|- [options]
+
+Shared input options: --include-angles, --include-chart-points (birth only).
+  --bodies JSON           Nonempty array selecting supplied/cast point labels
+  --circle DEGREES        90 (default), 45 or 22.5
+  --contact-orb DEGREES   Inclusive dial longitude allowance (default 1)
+  --repeated-members MODE distinct (default) or doubled planetary picture pairs
+  --help                  Show this help, used alone after dial
+
+Returns dial projection/contacts, A+B-C pictures and midpoint trees.
+Orbs range from zero to half the circle. Speeds are not required.
+Input and output use the chart command's offline JSON/error contract.
+`;
+
+export const CLI_HELP = `Offline harmonic charts, strength spectra and Uranian dials.
+
+${CHART_HELP}
+${SPECTRUM_HELP}
+${DIAL_HELP}`;
 
 export type CliChartResult =
   | { readonly schema: typeof CLI_SCHEMA; readonly command: "chart"; readonly sourceMode: "points";
@@ -90,17 +87,91 @@ export async function executeChart(request: ChartRequest, args: ChartArguments):
     }
     return { ...header, sourceMode: "points", harmonicChart: harmonicChart(request.points, harmonic, { maxHarmonic }) };
   }
-  // The supplied-points command does not initialize the casting API or ephemeris.
   const { castHarmonicChart } = await import("./engine.js");
   return {
     ...header, sourceMode: "birth",
-    ...castHarmonicChart(request.birth, harmonic, {
-      maxHarmonic, includeAngles, includeChartPoints,
-      receiptContext: {
-        ...(typeof request.birth.utc === "string" ? { sourceInstant: request.birth.utc } : {}),
-        provenance: { runtime: { name: "node", version: process.versions.node } }
-      }
-    })
+    ...castHarmonicChart(request.birth, harmonic, { maxHarmonic, ...castSettings(request, args) })
+  };
+}
+
+function castSettings(request: Extract<ChartRequest, { mode: "birth" }>, args: SourceArguments): CastChartOptions {
+  return {
+    includeAngles: args.includeAngles, includeChartPoints: args.includeChartPoints,
+    receiptContext: {
+      ...(typeof request.birth.utc === "string" ? { sourceInstant: request.birth.utc } : {}),
+      provenance: { runtime: { name: "node", version: process.versions.node } }
+    }
+  };
+}
+
+async function castSource(request: Extract<ChartRequest, { mode: "birth" }>, args: SourceArguments): Promise<CastChartResult> {
+  // Supplied-point commands never initialize the casting API or ephemeris.
+  const { castChart } = await import("./engine.js");
+  return castChart(request.birth, castSettings(request, args));
+}
+
+type AnalysisSource =
+  | { readonly sourceMode: "points" }
+  | { readonly sourceMode: "birth"; readonly source: CastChartResult };
+export type CliSpectrumResult = AnalysisSource & {
+  readonly schema: typeof CLI_SCHEMA; readonly command: "spectrum"; readonly spectrum: HarmonicSpectrum;
+};
+export type CliDialResult = AnalysisSource & {
+  readonly schema: typeof CLI_SCHEMA; readonly command: "dial";
+  readonly planetaryPictures: PlanetaryPictureResult; readonly midpointTrees: MidpointTreeResult;
+};
+
+async function analysisSource(request: ChartRequest, args: SourceArguments & { readonly bodies?: readonly string[] }):
+Promise<{ readonly points: readonly EngineLongitudePoint[]; readonly metadata: AnalysisSource }> {
+  let points: readonly EngineLongitudePoint[];
+  let metadata: AnalysisSource;
+  if (request.mode === "points") {
+    if (args.includeAngles || args.includeChartPoints) {
+      throw new CliError("invalid-arguments", "Angle and chart-point options require birth input.");
+    }
+    points = request.points;
+    metadata = { sourceMode: "points" };
+  } else {
+    const source = await castSource(request, args);
+    points = source.points;
+    metadata = { sourceMode: "birth", source };
+  }
+  if (args.bodies !== undefined) {
+    if (args.bodies.some((body) => !points.some((point) => point.body === body))) {
+      throw new CliError("invalid-input", "Every --bodies label must exist in the source points.");
+    }
+    // Filter before aspect validation, retaining original source order and receipt.
+    points = points.filter((point) => args.bodies!.includes(point.body));
+  }
+  return { points, metadata };
+}
+
+export async function executeSpectrum(request: ChartRequest, args: SpectrumArguments): Promise<CliSpectrumResult> {
+  const { points, metadata } = await analysisSource(request, args);
+  const known = points.map((point): HarmonicAspectPosition => {
+    if (typeof point.speed !== "number" || !Number.isFinite(point.speed)) {
+      throw new CliError("invalid-input", "Spectrum requires finite source speeds. Use --bodies to exclude unknown-speed points.");
+    }
+    return { ...point, speed: point.speed };
+  });
+  const spectrum = harmonicSpectrum(known, {
+    maxHarmonic: args.maxHarmonic, orbScaling: args.orbScaling,
+    ...(args.harmonics === undefined ? {} : { harmonics: args.harmonics }),
+    ...(args.policy === undefined ? {} : { policy: args.policy }),
+    ...(args.bodyWeights === undefined ? {} : { bodyWeights: args.bodyWeights }),
+    ...(args.aspectWeights === undefined ? {} : { aspectWeights: args.aspectWeights })
+  });
+  return { schema: CLI_SCHEMA, command: "spectrum", ...metadata, spectrum };
+}
+
+export async function executeDial(request: ChartRequest, args: DialArguments): Promise<CliDialResult> {
+  const { points, metadata } = await analysisSource(request, args);
+  return {
+    schema: CLI_SCHEMA, command: "dial", ...metadata,
+    planetaryPictures: findPlanetaryPictures(points, args.circle, {
+      contactOrb: args.contactOrb, repeatedMembers: args.repeatedMembers
+    }),
+    midpointTrees: midpointTrees(points, args.circle, { contactOrb: args.contactOrb })
   };
 }
 
@@ -125,19 +196,21 @@ export async function readInput(path: string, stdin: Readable = process.stdin): 
 /** Writes a complete result only after validation/calculation; never exits a host process. */
 export async function runCli(args: readonly string[]): Promise<number> {
   try {
-    const parsed = parseChartArguments(args);
-    if (parsed === "help") {
-      process.stdout.write(CHART_HELP);
+    const parsed = parseCliArguments(args);
+    if (typeof parsed === "string") {
+      const help = { help: CLI_HELP, "chart-help": CHART_HELP, "spectrum-help": SPECTRUM_HELP, "dial-help": DIAL_HELP };
+      process.stdout.write(help[parsed]);
       return 0;
     }
     const request = parseChartRequest(await readInput(parsed.input));
-    const result = await executeChart(request, parsed);
+    const result = parsed.command === "chart" ? await executeChart(request, parsed)
+      : parsed.command === "spectrum" ? await executeSpectrum(request, parsed) : await executeDial(request, parsed);
     process.stdout.write(`${JSON.stringify(result)}\n`);
     return 0;
   } catch (error) {
     const failure = error instanceof CliError ? error : error instanceof RangeError
       ? new CliError("invalid-input", error.message)
-      : new CliError("execution-failed", "Chart calculation failed.");
+      : new CliError("execution-failed", "Analysis calculation failed.");
     process.stderr.write(`${JSON.stringify({ error: { code: failure.code, message: failure.message } })}\n`);
     return 1;
   }

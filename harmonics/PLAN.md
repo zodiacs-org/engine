@@ -14,7 +14,7 @@ unchecked milestone, runs its checks, marks it complete and appends a line to
 - [x] M7 Implement canonical planetary pictures and A+B-C sensitive points with configurable contact orbs, explicit repeated-member rules and arithmetic tests.
 - [x] M8 Implement midpoint-tree listings by calling `src/points.ts` midpoint helpers, covering both axes, antipodal ties, dial contacts, ordering and deduplication.
 - [x] M9 Add the offline `harmonics chart` CLI with strict JSON input validation, synthetic fixture examples, structured JSON output and receipts for chart calls.
-- [ ] M10 Add `harmonics spectrum` and `harmonics dial` CLI commands, shared option parsing, configurable analysis settings and command integration tests.
+- [x] M10 Add `harmonics spectrum` and `harmonics dial` CLI commands, shared option parsing, configurable analysis settings and command integration tests.
 - [ ] M11 Document the library and CLI contracts, units, scoring choices, midpoint conventions, receipt scope and limitations; cite tests for numerical examples and keep all fixtures synthetic and small.
 - [ ] M12 Run project typechecking and Vitest integration checks, verify package exclusion and repository isolation, review deterministic outputs and record remaining limitations with reproducible validation commands.
 
@@ -259,3 +259,35 @@ project, using a writable npm cache inside `harmonics/.cache/`.
 The root `npm run package:contents` still fails at missing `dist/calc.d.ts`.
 No engine build, archive creation or git mutation was performed. The next
 session starts at M10.
+
+
+## M10 validation
+
+Added offline `harmonics spectrum` and `harmonics dial` commands through shared
+strict argument parsing and the existing bounded JSON decoder. Spectrum flags
+expose harmonic selections, configurable ceilings, orb scaling, complete engine
+aspect policies and body/aspect weights. Dial flags expose all supported
+circles, inclusive contact allowances and repeated-member settings; outputs
+retain full planetary-picture and midpoint-tree results. Explicit source-label
+filtering precedes analysis without altering the complete cast source envelope.
+Unknown speeds reject for spectrum rather than becoming stationary values.
+
+On Node 22.22.2, `npm run check` passed. Hand-derived synthetic expectations
+in `test/cli-analysis.test.ts` check spectrum scores and contributions, custom
+angles, motion caps, harmonic selection, every supported dial circle, sensitive
+points, both midpoint endpoints, seams and formula deduplication. The tests
+also exercise strict option validation, complete file/stdin output agreement,
+source filtering, original receipt identity, single casting and executable
+error channels with network transports blocked. The extended
+`test/cli-pure.test.ts` rejects chart API and ephemeris imports for every
+supplied-point command. `README.md` documents CLI flags, units, output fields,
+receipt scope and the precise arithmetic examples enforced by these tests.
+These checks establish arithmetic and integration, not independent ephemeris
+accuracy or predictive validity.
+
+`git diff --check` passed. Changed and new files remain inside `harmonics/`,
+below the requested size limit, with no em dash in documentation. The root
+`npm pack --dry-run --json --ignore-scripts` manifest excludes this project.
+The root `npm run package:contents` still fails at missing `dist/calc.d.ts`;
+no engine build or archive creation was performed. No git mutation, publishing
+or release workflow was performed. The next session starts at M11.

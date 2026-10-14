@@ -60,8 +60,8 @@ function strictJson(text: string): unknown {
   return value;
 }
 
-/** Validate only JSON data. Engine helpers retain their date, setting and flag contracts. */
-export function parseChartRequest(bytes: Uint8Array): ChartRequest {
+/** Shared bounded UTF-8 JSON decoder for requests and inline analysis options. */
+export function parseJsonDocument(bytes: Uint8Array): unknown {
   if (bytes.byteLength > MAX_INPUT_BYTES) {
     throw new CliError("invalid-input", "Input exceeds the byte limit.");
   }
@@ -72,7 +72,12 @@ export function parseChartRequest(bytes: Uint8Array): ChartRequest {
   } catch {
     throw new CliError("invalid-input", "Input must be valid UTF-8.");
   }
-  const input = object(strictJson(text), ["points", "birth"], "Input");
+  return strictJson(text);
+}
+
+/** Validate only JSON data. Engine helpers retain their date, setting and flag contracts. */
+export function parseChartRequest(bytes: Uint8Array): ChartRequest {
+  const input = object(parseJsonDocument(bytes), ["points", "birth"], "Input");
   const hasPoints = Object.hasOwn(input, "points");
   const hasBirth = Object.hasOwn(input, "birth");
   if (hasPoints === hasBirth) {
