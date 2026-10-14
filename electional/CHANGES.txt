@@ -1,1 +1,2 @@
 Complete M1: add the isolated private TypeScript project, immutable half-open interval arithmetic, hand-derived golden fixtures and exhaustive finite-set checks; verify types, build, ESM usage and package/test isolation on Node 22.
+Complete M2: add the versioned rule schema, bounded JSON/YAML loading, strict rule and synthetic natal validation, hand-derived calendar fixtures and configuration guide; verify types, tests, schema export, ESM usage and package/test isolation on Node 22.

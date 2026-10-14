@@ -1,9 +1,11 @@
 # Electional search workbench
 
 A private TypeScript project for composing and ranking time windows over the
-existing astrology engine. Progress is tracked in [PLAN.md](PLAN.md). Only the
-interval foundation is implemented so far. Rule loading, engine adapters,
-astronomical rules, ranking, the CLI and HTTP endpoint are planned milestones.
+existing astrology engine. Progress is tracked in [PLAN.md](PLAN.md). The
+interval foundation and strict JSON/YAML rule loading are implemented so far.
+Engine adapters, astronomical rule evaluation, ranking, the CLI and HTTP
+endpoint are planned milestones. The configuration vocabulary is described in
+[RULES.md](RULES.md).
 
 Electional rule packs will describe traditional conventions, not predictions.
 Tests and examples use synthetic data. Code and documentation here use the
