@@ -5,8 +5,9 @@ It is not part of the engine's npm package. Code and authored documentation
 here follow the repository's [MIT license](../LICENSE); using the engine
 retains the engine's own [data and attribution terms](../LICENSING.md).
 
-The current implementation validates explicit convention choices and prepares
-engine natal snapshots. Directional arcs, timing conversions and the
+The current implementation validates explicit convention choices, prepares
+engine natal snapshots and computes pure sphere coordinates and semi-arcs.
+Directional arcs, timing conversions and the
 `directions hit` and `directions scan` commands are still planned in
 [PLAN.md](PLAN.md). An accepted
 convention is not a computed hit or a claim that a particular contact exists.
@@ -123,14 +124,74 @@ or `missing-place`. Invalid fields and engine-rejected inputs use `invalid-input
 complete-ecliptic boundary, `abs(latitude) >= 90 - trueObliquity`, even when
 the requested natal house system does not fall back. This is the project's
 current domain restriction, not a claim that every individual direction there
-is undefined. Individual bodies with latitude still need their own semi-arc
-test in the sphere solver. Missing or substituted engine geometry uses
+is undefined. Individual bodies with latitude must also pass their own
+`semiArcs` domain test. Missing or substituted engine geometry uses
 `unavailable-geometry`.
 
 The synthetic examples and integration checks are recorded in
 [evidence/M2.md](evidence/M2.md). They verify engine value preservation and the
 RAMC conversion, not independent ephemeris or directional-arc accuracy.
 The adapter stays outside the pure entry point: `src/index.ts` exports its
-types only. The sphere solver will consume snapshots separately, because
+types only. The sphere helpers consume coordinates separately, because
 engine ephemeris calls manage a shared delta-T provider. Solar arc and secondary
 progressions are separate comparisons, never substitutes for primary rotation.
+
+## Sphere coordinates
+
+`hourAngleDegrees(ramcDegrees, rightAscensionDegrees)`,
+`semiArcs(latitudeDegrees, declinationDegrees)` and `spherePosition(input)`
+are available from the pure `src/index.ts` entry. They import no engine module
+and perform no ephemeris calculation. Supply equatorial coordinates in the
+same frame as RAMC; the adapter's equatorial rows and geometry provide that
+frame. Do not pass a row whose engine right ascension is undefined.
+
+RAMC and right ascension must be finite canonical degrees in `[0, 360)`.
+The hour angle is RAMC minus right ascension, folded into `[-180, 180)`,
+positive westward. Latitude and declination are north-positive degrees.
+No ecliptic latitude treatment is applied by these helpers. A later direction
+solver must select its convention and prepare the corresponding coordinates.
+
+`semiArcs` reports the supplied latitude and declination, ascensional
+difference, and diurnal and nocturnal semi-arcs, all in degrees. It uses a
+geometric horizon without refraction or parallax. `spherePosition` takes
+exactly `ramcDegrees`, `rightAscensionDegrees`, `latitudeDegrees` and
+`declinationDegrees`; unknown, omitted, inherited and accessor fields are
+refused. Its frozen result includes the semi-arcs and hour angle alongside:
+
+- `kind: "quadrant"` with `quadrant` equal to `above-west`, `below-west`,
+  `below-east` or `above-east`. `meridianDistanceDegrees` is measured from the
+  upper meridian above the horizon and the lower meridian below it.
+  `semiArcDegrees` is the corresponding diurnal or nocturnal arc.
+  `quadrantFraction` measures progress from the preceding axis in westward
+  rotation, which is different from distance from the nearest meridian.
+- `kind: "boundary"` with `boundary` equal to `upper-meridian`, `setting`,
+  `lower-meridian` or `rising`. Quadrant, fraction, meridian distance and
+  selected semi-arc are null, so a boundary is not assigned an open quadrant.
+
+`semiArcPositionDegrees` is a proportional coordinate increasing westward:
+upper meridian is 0, setting is 90, lower meridian is 180 and rising is 270.
+This coordinate is not a house cusp longitude, aspect or directional arc.
+Its definition and numerical examples are in
+[M3-derivations.md](evidence/M3-derivations.md), enforced by
+[sphere.check.ts](checks/sphere.check.ts).
+
+Axis decisions use exact equality of the computed binary64 hour angle and
+semi-arc. There is no tolerance that moves a nearby point onto an axis.
+An analytically exact oblique horizon can therefore fall just inside an
+adjacent quadrant after trigonometric rounding. Conversely, an interior
+point's reported fraction or proportional coordinate can round to an axis;
+`kind` and `quadrant` preserve the branch decision. These are floating-point
+coordinates, not an exact-predicate geometry system.
+
+`SphereGeometryError` extends `RangeError` and supplies a `code`:
+`invalid-input`, `geographic-pole`, `celestial-pole`, `horizon-tangency`,
+`circumpolar-above`, `circumpolar-below` or `numerical-degeneracy`.
+Tangencies and points that do not cross the horizon have no proportional
+semi-arc position here. No fallback house system or clamped semi-arc is
+substituted. A point may fail this test even if its natal snapshot passed the
+adapter's complete-ecliptic restriction, because bodily latitude can carry
+its declination beyond that domain.
+
+The hand-derived checks cover invented sphere coordinates, with no natal date
+or ephemeris. They establish agreement only on the fixtures described in
+[M3 evidence](evidence/M3.md). Directional contacts and ages remain pending.

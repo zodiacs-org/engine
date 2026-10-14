@@ -69,3 +69,20 @@ In particular, zodiacal latitude variants, aspect rays, timing arithmetic and
 any converse construction beyond role exchange remain unfinished. Public
 engine coordinates supply the astronomical chart, not proof of the primary
 directions geometry.
+
+## Sphere coordinates implemented in M3
+
+The US Naval Observatory's
+[Computing Altitude and Azimuth from Greenwich Apparent Sidereal Time](https://aa.usno.navy.mil/faq/alt_az)
+(HTML equations for local hour angle and altitude, fetched and read
+2026-10-14) supplies the modern coordinate relation. Setting geometric
+altitude to zero gives the rising and setting hour angles. The authored
+[M3 derivation](evidence/M3-derivations.md) obtains the ascensional difference
+and semi-arcs from that relation, then expresses position as a fraction of
+the appropriate quadrant. Ptolemy's temporal-hour passage above supplies the
+traditional rationale for comparing proportional meridian distances.
+
+The westward proportional coordinate in M3 is an explicitly defined library
+coordinate. It does not yet implement a historical aspect rule or choose a
+direct or converse construction. Neither the USNO coordinate relation nor
+the analytic fixtures validate the ephemeris or predictive interpretation.

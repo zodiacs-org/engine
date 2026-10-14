@@ -1,2 +1,3 @@
 Establish directions M1 with isolated TypeScript/Vitest tooling, explicit sourced convention validation, traditional converse role-swap selection, and evidence rules.
 Implement directions M2 natal adapter with frozen engine geometry and clock provenance, audited RAMC recovery, explicit input and polar refusals, and integration evidence.
+Implement directions M3 pure sphere primitives with stable semi-arcs, explicit quadrant and boundary geometry, typed polar refusals, hand-derived evidence, and passing local checks.
