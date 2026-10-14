@@ -16,7 +16,7 @@ commits and draft pull requests. Stop after the session's milestone is complete.
 - [x] M5 Implement Pythagorean and Chaldean letter tables, expression/destiny, soul urge, and personality; record selected system, original compounds, master policy, letter contributions, and reductions.
 - [x] M6 Implement maturity, karmic lessons, and hidden passion, including tied frequencies and empty vowel/consonant selections, with receipts and original meanings.
 - [x] M7 Implement personal year/month/day cycles with explicit calendar-year boundaries, caller-supplied target dates, and no implicit current clock.
-- [ ] M8 Implement pinnacles and challenges with documented age intervals, single-digit challenge arithmetic, zero challenges, and complete component receipts.
+- [x] M8 Implement pinnacles and challenges with documented age intervals, single-digit challenge arithmetic, zero challenges, and complete component receipts.
 - [ ] M9 Assemble deterministic profiles and name-change comparisons using the same birth date and conventions, with auditable before/after deltas and no inferred identity data.
 - [ ] M10 Add a JSON CLI for profiles, cycles, and comparisons with strict options/input validation, stdin support, stable output, structured errors, and subprocess tests.
 - [ ] M11 Expand handwritten synthetic golden fixtures across both systems, scripts, and date boundaries; add seeded properties for conservation, normalization equivalence, receipt replay, and library/CLI parity.
@@ -276,3 +276,45 @@ and cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm
 dry-run exclusion passed; the complete engine contents and size gate remains
 unverified. No root build was generated. Only `numerology/` changed.
 M8 is the next session's work.
+
+## M8 validation
+
+Added pinnacle and challenge schedules from strict civil birth dates, with
+versioned component formulas, original prompts, source-local debts, and
+complete arithmetic receipts. Pinnacles follow the selected master policy;
+challenges always use single-digit components and absolute differences,
+retaining zero. Timing retains the chosen life-path method and policy,
+then requires a single-digit life path before the inclusive first-end-age
+subtraction. Explicit half-open age intervals cover the complete schedule,
+with the last period using a JSON-safe null end. The README documents
+formulas, boundary ownership, timing and period debt scopes, original-text
+provenance, caller responsibility for attained age, and fixture references.
+
+Project `npm run typecheck` and `npm test` passed on Node 22.22.2.
+`test/periods.test.mjs` checks handwritten synthetic fixtures in
+`test/fixtures/periods.json`, complete outer and nested receipts, every
+single-digit component triple, every valid day of the leap year 2000,
+and seeded dates across the accepted year domain under both master policies
+and both life-path methods. Independent positional bigint reductions and
+digital-root controls replay components, source life paths, timing, and
+period operations. Controls check every timing root and transition,
+interval lengths and ownership, open ends, challenge range and parity,
+the reverse triangle inequality, zero challenges, preserved masters,
+policy invariance, source-local debt paths, strict rejection, fresh
+allocation, deep freezing, options ownership, and JSON serialization.
+Subprocess controls verify import and calculation with Date and network
+entry points disabled and compare output across host timezones. Existing
+date, name, cycle, derived, reduction, package-exclusion, authored-file-size,
+and punctuation tests pass. Generated build output and validation logs
+remain in ignored project paths.
+
+Rechecked all available local and origin `main` and `infra/*` refs for
+numerology, Pythagorean, soul urge, hidden passion, pinnacles, and challenge
+arithmetic outside this project; no overlapping implementation was found.
+This review covers locally available refs, not unfetched remote changes.
+
+The root `npm run package:contents` was attempted with the local runtime
+and cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm
+dry-run exclusion passed; the complete engine contents and size gate remains
+unverified. No root build was generated. Only `numerology/` changed.
+M9 is the next session's work.

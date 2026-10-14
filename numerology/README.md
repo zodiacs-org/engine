@@ -9,12 +9,13 @@ with vowel/consonant classification. It also implements Pythagorean and
 Chaldean expression/destiny, soul urge, and personality calculations.
 Maturity, karmic lessons, and hidden passion use those same date and name
 conventions. Personal year, month, and day cycles use explicit target civil
-dates. [PLAN.md](PLAN.md) tracks the remaining stages, profiles, and CLI.
+dates. Pinnacles and challenges return complete schedules in attained ages.
+[PLAN.md](PLAN.md) tracks the remaining profiles and CLI work.
 
 Numerology results describe symbolic conventions and provide reflection
 prompts. The tests check arithmetic and declared behavior. They do not test
 whether numerology predicts personality or events. The meanings in
-`src/meanings.ts`, `src/derived.ts`, and the empty-selection text in `src/name-numbers.ts`
+`src/meanings.ts`, `src/derived.ts`, `src/periods.ts`, and the empty-selection text in `src/name-numbers.ts`
 are original text authored for this project.
 
 From this directory, with Node matching `package.json`:
@@ -840,3 +841,135 @@ fresh allocation, deep freezing, caller ownership, and JSON serialization.
 A subprocess imports and calculates with Date and network entry points
 disabled and compares output across the declared host timezones. These
 checks establish exact arithmetic and the stated conventions.
+
+## Pinnacles and challenges
+
+`pinnacles(birthDate, options)` and `challenges(birthDate, options)` each return
+the complete schedule, using a strictly validated civil Gregorian birth date.
+The date domain is the same as `parseGregorianDate`. No name or letter table
+enters these formulas, so both Pythagorean and Chaldean use share them.
+Options accept only `masterNumbers` and the life-path `method`, defaulting to
+`"preserve"` and `"components"`. Null and unsupported values and unknown keys
+reject. The method selects the life-path source used to derive the age
+schedule; it does not change the component formulas for the period numbers.
+Options have the same in-process getter and proxy limitations as other APIs.
+
+These are declared project conventions, with arithmetic enforced by the
+handwritten synthetic cases in [periods.json](test/fixtures/periods.json)
+and independent replay in [periods.test.mjs](test/periods.test.mjs). They
+do not assert universal practice, external agreement, or predictive validity.
+The following tables specify the complete formulas. `M`, `D`, and `Y` mean
+the separately reduced birth month, birth day, and birth year.
+
+| Period | Pinnacle compound | Challenge difference |
+| --- | --- | --- |
+| First | `M + D` | `abs(M - D)` |
+| Second | `D + Y` | `abs(D - Y)` |
+| Third | Reduced first pinnacle + reduced second pinnacle | `abs(first challenge - second challenge)` |
+| Fourth | `M + Y` | `abs(M - Y)` |
+
+For pinnacles, the selected master policy applies to each component and each
+sum. A preserved master enters the next sum with its preserved value; the
+third pinnacle adds the reduced results of the first two, rather than their
+original compounds. In the `masters-in-components-and-pinnacles` fixture,
+both early pinnacles are `33`, and the third visits `66 -> 12 -> 3`.
+The fourth is independent of the third.
+
+For challenges, **every arithmetic reduction uses `"reduce"`**, even when
+the requested policy preserves masters for the timing life path. Each
+component is a single digit before subtraction. Differences are absolute,
+nonnegative, and already single digits; their reduction receipts therefore
+retain the difference with no digit-sum steps. Equal inputs produce zero,
+which remains a result with its own original practice prompt. The exhaustive
+single-digit-component-triple test enforces the attainable challenge range
+from zero through eight and checks every prompt, including zero. The
+generic reduction's meaning remains in its nested receipt; the period's
+`meaning` is the challenge-specific text from `CHALLENGE_MEANINGS`.
+
+Both schedules use the same explicit age rule. Compute the chosen life path,
+then reduce its result to a single digit regardless of the requested master
+policy. Set `E = 36 - that single digit`. `E` is the **inclusive last
+attained age** of the first period. The next period starts at `E + 1`.
+Each of the next two covers nine attained ages; the last has no end.
+
+| Period | Inclusive start age | Exclusive end age |
+| --- | --- | --- |
+| First | `0` | `E + 1` |
+| Second | `E + 1` | `E + 10` |
+| Third | `E + 10` | `E + 19` |
+| Fourth | `E + 19` | `null` |
+
+Age is in attained whole years, with age zero beginning at birth. The
+intervals refer to age labels, not timestamps, elapsed day counts, or
+calendar-year cycles. They are contiguous and nonoverlapping, with each
+boundary owned by the period starting there. `null` represents an open
+end and survives JSON serialization. Challenge three has its own interval
+under this convention; there is no additional lifetime challenge overlay.
+The API returns no active-period selection and does not infer an age,
+timezone, current date, anniversary, or replacement date for a leap-day
+birth. A caller presenting an active period must supply its attained age
+under its own civil-anniversary convention.
+
+The `master-11-timing-uses-two`, `master-22-timing-uses-four`, and
+`master-33-timing-and-zero-challenges` fixtures enforce single-digit timing
+for preserved masters. The age-intervals test checks every possible timing
+root, inclusive final ages, all transitions, interval lengths, and the open
+end. Seeded controls enforce that both life-path methods and both master
+policies give the same schedule after the final single-digit reduction,
+while retaining their different original source receipts.
+
+```js
+import { pinnacles, challenges } from "./.build/index.js";
+
+// An invented civil date; no identity is inferred.
+console.log(JSON.stringify({
+  pinnacles: pinnacles("2000-01-01"),
+  challenges: challenges("2000-01-01")
+}));
+```
+
+The `complete-small-receipt` fixture and test enforce this example: the
+life path is `4`, the first inclusive end age is `32`, and the following
+start ages are `33`, `42`, and `51`. The pinnacle values are `2, 3, 5, 3`;
+the challenge values are `0, 1, 1, 1`.
+
+Each result holds `periods`, `karmicDebts`, and a deeply frozen, JSON-safe
+`receipt`. Each period contains its index, `ages` with `fromInclusive` and
+`toExclusive`, `value`, an original `meaning`, local `karmicDebts`, and a
+receipt with `operation`, ordered `inputs`, raw `output`, and complete
+`reduction`. Each input identifies its `source` and exact numeric value.
+Sources are `month`, `day`, `year`, or the earlier `period-1` and
+`period-2`. These locators refer to the outer component receipts or earlier
+period results. The caller must retain the whole schedule to replay all
+dependencies.
+
+The outer `numerology-periods/1` receipt names the `calculation`, versioned
+`convention`, validated `date`, requested `masterNumbers`, and effective
+`arithmeticMasterNumbers`. Its `components` retain complete month, day,
+and year reductions in that order. Its `timing` retains the full `lifePath`
+result, the mandatory single-digit `reduction`, the `firstEndAge` subtraction,
+and every successive start-age addition in `boundaries`. The timing
+`convention` and `ageUnit` make the inclusive-end decision explicit.
+
+Outer debt annotations cover component reductions followed by period
+reductions, in receipt order. Each annotation's `source` names its component
+or `period-1` through `period-4`, and `stage` remains local to that reduction.
+Each period's own debt list covers only its local reduction. Ancestor debts
+are retained at their original locations rather than repeated in downstream
+periods. Debts used only in timing remain within the nested timing life-path
+or reduction receipt; they do not become period debts. A difference, age
+boundary, or unreduced input does not invent a debt path. Challenge
+differences cannot reach debt values, although challenge components may.
+The source-local-debts test and handwritten fixtures enforce these scopes.
+
+The period tests replay every component, source life path, timing step, and
+period operation using independent positional bigint arithmetic and check
+digital roots. They cover every single-digit component triple, every valid
+day of the leap year 2000, and seeded dates over the accepted year domain
+under both master policies and both life-path methods. Further controls
+check challenge parity and the reverse triangle inequality, master-policy
+invariance of challenge numbers, date-domain edges, rejection, fresh
+allocation, freezing, options ownership, and JSON serialization. A
+subprocess verifies import and calculation with Date and network entry
+points disabled and compares the declared host timezones. The fixtures
+and tests are arithmetic evidence only.

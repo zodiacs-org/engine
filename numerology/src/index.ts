@@ -2,6 +2,11 @@ export { reduceInteger, MAX_INTEGER_DIGITS } from "./reduction.js";
 export { NUMBER_MEANINGS, KARMIC_DEBT_MEANINGS } from "./meanings.js";
 export { parseGregorianDate, lifePath, birthday } from "./dates.js";
 export { personalYear, personalMonth, personalDay } from "./cycles.js";
+export { pinnacles, challenges, CHALLENGE_MEANINGS } from "./periods.js";
+export type {
+  PeriodCalculation, PeriodIndex, PeriodSource, ChallengeNumber, AgeInterval,
+  PeriodKarmicDebt, PeriodNumberResult, PeriodsResult
+} from "./periods.js";
 export type {
   PersonalCycle, CycleComponent, CycleKarmicDebt, PersonalCycleStage, PersonalCycleResult
 } from "./cycles.js";
