@@ -187,7 +187,7 @@ describe('events handoff against hand-derived set fixtures', () => {
       expect(args[2]).toMatchObject({ aspects: operation.aspects.map(id => ({ id })) });
     } else if (operation.kind === 'void-of-course') {
       expect(args[0]).toEqual({ bodies: ['Sun', 'Venus'], aspects: [{ id: 'square', angleDegrees: 90 }] });
-    } else if (operation.kind !== 'phase-boundary') expect(args[0]).toBe(operation.body);
+    } else if ('body' in operation) expect(args[0]).toBe(operation.body);
   });
   it('refuses when the ownership guard cannot be represented', () => {
     expect(new EventsAdapter(capability([]), engineStub()).search({ kind: 'ingress', body: 'Moon' },

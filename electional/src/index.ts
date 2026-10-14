@@ -32,3 +32,6 @@ export type { ChartRuntime, NativeChart, NativeHousePartition, AspectAnalysis } 
 export { evaluateChartRule } from './chart-rules.js';
 export type { ChartRule, ChartRuleOptions, ChartRuleWindowResult, HousePartitionAudit } from './chart-rules.js';
 export type { DerivedSearchAudit } from './derived-search.js';
+export { evaluateAvoidanceRule } from './avoidance-rules.js';
+export type { AvoidanceRule, AvoidanceRuleOptions, AvoidanceConvention, AvoidanceAudit, AvoidanceRuleWindowResult } from './avoidance-rules.js';
+export type { EclipseModel, EclipseSearchSettings } from './events-adapter.js';

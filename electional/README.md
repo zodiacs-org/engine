@@ -4,7 +4,8 @@ A private TypeScript project for composing and ranking time windows over the
 existing astrology engine. Progress is tracked in [PLAN.md](PLAN.md). The
 interval foundation, strict JSON/YAML rule loading, read-only engine and
 events adapters, and Moon sign, phase, direct-motion, Moon-not-void and
-planetary-hour, benefic house/angular and applying-aspect rule windows are
+planetary-hour, benefic house/angular, applying-aspect and eclipse/station
+avoidance rule windows are
 implemented so far. Other rules, ranking, the
 CLI and HTTP endpoint are planned milestones. [EVALUATION.md](EVALUATION.md)
 describes the basic evaluator and
@@ -13,6 +14,8 @@ body conventions, interval ownership and unknown tails. Planetary-hour date
 ownership, missing solar events and receipt scope are in [HOURS.md](HOURS.md).
 House fallbacks, angular and applying conventions, numerical boundary uncertainty
 and request accounting are in [CHARTS.md](CHARTS.md).
+Elapsed day margins, eclipse models, padded coverage and uncertain exclusion
+edges are in [AVOIDANCE.md](AVOIDANCE.md).
 The adapter contract and optional events integration are described in
 [ADAPTERS.md](ADAPTERS.md). The
 configuration vocabulary is described in [RULES.md](RULES.md).

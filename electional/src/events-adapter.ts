@@ -14,10 +14,33 @@ export type AspectTarget = { readonly kind: 'moving'; readonly body: Planet }
   | { readonly kind: 'fixed'; readonly longitude: number };
 export type EventOperation =
   | { readonly kind: 'phase-boundary' }
+  | { readonly kind: 'eclipse'; readonly eclipseKind: 'solar' | 'lunar'; readonly model: EclipseModel; readonly derivativeStepMs: number }
   | { readonly kind: 'ingress' | 'station' | 'retrograde'; readonly body: Planet }
   | { readonly kind: 'aspect'; readonly body: Planet; readonly target: AspectTarget; readonly aspects: readonly MajorAspect[] }
   | { readonly kind: 'void-of-course'; readonly bodies: readonly Exclude<Planet, 'Moon'>[]; readonly aspects: readonly MajorAspect[] };
 export interface EventSearchOptions extends WorkOptions { readonly stepMs: number }
+export interface EclipseModel {
+  readonly sunRadiusAu: number;
+  readonly moonRadiusAu: number;
+  readonly earthRadiusAu: number;
+}
+export interface EclipseSearchSettings { readonly model: EclipseModel; readonly derivativeStepMs: number }
+export function eclipseSettings(input: EclipseSearchSettings): EclipseSearchSettings {
+  const value = frozenCopy(input);
+  if (!value || typeof value !== 'object' || Array.isArray(value)
+    || Object.keys(value).some(k => !['model', 'derivativeStepMs'].includes(k))
+    || !Number.isSafeInteger(value.derivativeStepMs) || value.derivativeStepMs < 1) {
+    throw new RangeError('Expected explicit positive derivativeStepMs and spherical model.');
+  }
+  const model = value.model;
+  if (!model || typeof model !== 'object' || Array.isArray(model)
+    || Object.keys(model).some(k => !['sunRadiusAu', 'moonRadiusAu', 'earthRadiusAu'].includes(k))
+    || ![model.sunRadiusAu, model.moonRadiusAu, model.earthRadiusAu].every(v => Number.isFinite(v) && v > 0)
+    || model.sunRadiusAu <= Math.max(model.moonRadiusAu, model.earthRadiusAu)) {
+    throw new RangeError('Expected positive spherical radii in au, with Sun largest.');
+  }
+  return value;
+}
 export interface EventRecord { readonly kind: string; readonly clock: ClockWindow['clock']; readonly [key: string]: Json }
 export interface Unresolved extends Interval { readonly reason: string; readonly [key: string]: Json }
 
@@ -48,6 +71,11 @@ export interface EventsRuntime {
     policy: AspectPolicy, options: { stepMs: number }, provider: MotionProvider): NativeSearch;
   searchVoidOfCourseMoon(context: EventsContext, policy: AspectPolicy & { bodies: readonly Planet[] },
     options: { stepMs: number }, provider: MotionProvider): NativeSearch;
+  /** Optional on older builds; its absence is an explicit capability refusal. */
+  searchEclipses?(context: EventsContext, kind: 'solar' | 'lunar', model: EclipseModel,
+    options: { stepMs: number; derivativeStepMs: number }, provider: {
+      sample(atMs: number): { sun: readonly [number, number, number]; moon: readonly [number, number, number] };
+    }): NativeSearch;
 }
 export interface EventsSource { readonly moduleUrl: string; readonly sha256: string }
 export type EventsCapability = { readonly status: 'available'; readonly runtime: EventsRuntime; readonly source: EventsSource }
@@ -91,11 +119,15 @@ function snapshotOperation(input: EventOperation): EventOperation {
   if (!input || typeof input !== 'object') throw new RangeError('Expected an event operation.');
   const operation = frozenCopy(input);
   const extras = (value: object, keys: readonly string[]) => Object.keys(value).some(k => !keys.includes(k));
-  if (!['ingress', 'station', 'retrograde', 'aspect', 'void-of-course', 'phase-boundary'].includes(operation.kind)) {
+  if (!['ingress', 'station', 'retrograde', 'aspect', 'void-of-course', 'phase-boundary', 'eclipse'].includes(operation.kind)) {
     throw new RangeError('Unsupported event operation.');
   }
   if (operation.kind === 'phase-boundary') {
     if (extras(operation, ['kind'])) throw new RangeError('Invalid phase operation fields.');
+  } else if (operation.kind === 'eclipse') {
+    if (extras(operation, ['kind', 'eclipseKind', 'model', 'derivativeStepMs'])
+      || !['solar', 'lunar'].includes(operation.eclipseKind)) throw new RangeError('Invalid eclipse operation.');
+    eclipseSettings({ model: operation.model, derivativeStepMs: operation.derivativeStepMs });
   } else if (operation.kind === 'void-of-course') {
     if (extras(operation, ['kind', 'bodies', 'aspects']) || !Array.isArray(operation.bodies)
       || operation.bodies.length === 0 || new Set(operation.bodies).size !== operation.bodies.length
@@ -140,6 +172,9 @@ export class EventsAdapter {
     const work = workOptions({ maxEvaluations: options.maxEvaluations,
       ...(options.signal === undefined ? {} : { signal: options.signal }) });
     const stepMs = options.stepMs;
+    if (operation.kind === 'eclipse' && operation.derivativeStepMs > (window.endMs - window.startMs) / 2) {
+      throw new RangeError('Derivative step exceeds eclipse window.');
+    }
     let sourceWindow: ClockWindow | null = null;
     let context: WorkContext | undefined;
     const source = this.capability.status === 'available' ? this.capability.source : null;
@@ -149,6 +184,9 @@ export class EventsAdapter {
       frozenCopy({ ...base(), status: 'refused', reason, detail, events: [], covered: [], unresolved: [] });
     if (work.signal?.aborted) return refuse('cancelled');
     if (this.capability.status === 'missing') return refuse('missing-capability');
+    if (operation.kind === 'eclipse' && typeof this.capability.runtime.searchEclipses !== 'function') {
+      return refuse('missing-capability', 'eclipse-search-export');
+    }
     if (window.startMs === -8_640_000_000_000_000) return refuse('coverage', 'left-ownership-guard-unrepresentable');
     sourceWindow = clockWindow({ ...window, startMs: window.startMs - 1 });
     context = new WorkContext(sourceWindow, work);
@@ -162,6 +200,11 @@ export class EventsAdapter {
     try {
       context.checkpoint();
       switch (operation.kind) {
+        case 'eclipse': result = runtime.searchEclipses!(nativeContext, operation.eclipseKind, operation.model,
+          { stepMs, derivativeStepMs: operation.derivativeStepMs }, {
+            sample: atMs => ({ sun: nativeContext.evaluate(() => engine.vector('Sun', atMs)),
+              moon: nativeContext.evaluate(() => engine.vector('Moon', atMs)) }),
+          }); break;
         case 'phase-boundary': result = runtime.searchExactAspects(nativeContext, 'Moon',
           { kind: 'moving', body: 'Sun' }, { aspects: [22.5, 67.5, 112.5, 157.5]
             .map(angleDegrees => ({ id: `phase_${angleDegrees * 2}`, angleDegrees })) }, scan, provider); break;
@@ -188,7 +231,8 @@ export class EventsAdapter {
       return refuse(result.reason as 'evaluation-budget' | 'cancelled');
     }
     const expectedKind = { ingress: 'sign-ingress', station: 'station', retrograde: 'retrograde',
-      aspect: 'exact-aspect', 'phase-boundary': 'exact-aspect', 'void-of-course': 'void-of-course' }[operation.kind];
+      aspect: 'exact-aspect', 'phase-boundary': 'exact-aspect', 'void-of-course': 'void-of-course',
+      eclipse: operation.kind === 'eclipse' ? operation.eclipseKind : '' }[operation.kind];
     const events: EventRecord[] = [];
     for (const event of result.events) {
       if (!event || event.clock !== window.clock || event.kind !== expectedKind) throw new TypeError('Incompatible event kind or clock.');

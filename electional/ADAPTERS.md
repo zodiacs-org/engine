@@ -3,11 +3,13 @@
 The adapters connect electional rules to the existing engine and optional
 sibling events package. They do not find roots or implement astronomical event
 searches. The implemented event operations are sign ingresses, stations,
-retrograde intervals, exact aspects and void-of-course intervals. Phase
+retrograde intervals, exact aspects, void-of-course intervals and eclipses. Phase
 boundaries delegate to exact aspects with an explicit custom-angle policy.
 Moon sign, phase and direct-motion evaluation is described in
 [EVALUATION.md](EVALUATION.md); Moon-not-void evaluation and lookahead are in
 [VOID.md](VOID.md). Other rule wiring remains in [PLAN.md](PLAN.md).
+Eclipse and station day-margin evaluation, vector receipt accounting and
+optional eclipse capability are described in [AVOIDANCE.md](AVOIDANCE.md).
 
 Planetary-hour selection calls the parent sky API through `SkyAdapter`,
 independently of the optional events package. [HOURS.md](HOURS.md) describes
@@ -37,6 +39,9 @@ per day. Results retain native bounds and the full native receipt, including
 its request, resolved instants, time basis, conventions, engine and ephemeris.
 The native receipt's civil label remains distinct from the adapter input label.
 Receipt copies and returned position objects are frozen.
+`EngineAdapter.vector` requests native Sun/Moon Cartesian au on the same frame
+and clock, retaining a receipt for each request. Eclipse geometry and discovery
+remain in the events package rather than the adapter.
 
 `WorkContext` counts requests, including requests refused by the engine.
 Its budget is an explicit positive integer. Internal speed samples are part

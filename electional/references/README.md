@@ -1,5 +1,11 @@
 # Independent rule references
 
+Eclipse avoidance references use selected published NASA GSFC catalog rows in
+[avoidance-nasa.json](avoidance-nasa.json), with independent acquisition and
+clock arithmetic. Station avoidance reuses the verified Horizons extrema
+below. [AVOIDANCE.md](../AVOIDANCE.md) documents the model, attribution,
+acquisition, checked spans and comparison thresholds.
+
 Applying-aspect references reuse the verified Moon/Sun and planetary longitude
 series below. [chart-horizons.json](chart-horizons.json) records independent
 orb-entry and exact-exit windows with bound input digests. The policy, span,
