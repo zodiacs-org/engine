@@ -2,10 +2,11 @@
 
 A private TypeScript project for composing and ranking time windows over the
 existing astrology engine. Progress is tracked in [PLAN.md](PLAN.md). The
-interval foundation and strict JSON/YAML rule loading are implemented so far.
-Engine adapters, astronomical rule evaluation, ranking, the CLI and HTTP
-endpoint are planned milestones. The configuration vocabulary is described in
-[RULES.md](RULES.md).
+interval foundation, strict JSON/YAML rule loading, and read-only engine and
+events adapters are implemented so far. Astronomical rule evaluation, ranking,
+the CLI and HTTP endpoint are planned milestones. The adapter contract and
+optional events integration are described in [ADAPTERS.md](ADAPTERS.md). The
+configuration vocabulary is described in [RULES.md](RULES.md).
 
 Electional rule packs will describe traditional conventions, not predictions.
 Tests and examples use synthetic data. Code and documentation here use the
@@ -25,7 +26,9 @@ npm run check:isolation
 ```
 
 Dependencies are locked locally; these commands do not install or build the
-parent package. Compiled library files go to the gitignored `build/` directory.
+parent package. The engine bridge reads parent source and bundles it with the
+locally pinned ephemeris into gitignored `generated/`. Compiled library files
+go to the gitignored `build/` directory.
 Tests use `*.electional-check.ts` and the explicit include in
 [vitest.config.ts](vitest.config.ts), outside the parent Vitest default discovery
 pattern. Generated data, caches and coverage stay in gitignored directories.
@@ -91,6 +94,7 @@ ownership, malformed input and immutable copies.
 
 This evidence establishes the checked set behavior. It contains no
 astronomical reference instants and makes no claim about ephemeris accuracy,
-event completeness, search performance or predictive validity. Future engine
-and events adapters will delegate astronomical searches to existing APIs and
-carry their clocks, receipts and refusals.
+event completeness, search performance or predictive validity. The engine
+and events adapters delegate calculations and searches to existing APIs and
+carry their clocks, receipts and refusals. Their contract tests establish
+control flow and set ownership, not astronomical accuracy.
