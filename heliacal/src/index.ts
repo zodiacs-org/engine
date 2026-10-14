@@ -15,3 +15,8 @@ export type {
   ArcusFailedCriterion, ArcusPhotometry, ArcusPhotometryResult, ArcusSample,
   ArcusVisibility, ArcusVisibilityCriterion, ArcusVisibilityParameters, ArcusVisibilityResult, HorizonArcusVisionis
 } from "./visibility.js";
+export { OBSERVING_WINDOW_LIMITS, observingWindows } from "./windows.js";
+export type {
+  ObservingWindow, ObservingWindowOptions, ObservingWindowsResult,
+  WindowBoundary, WindowBoundaryCause, WindowDiagnostic, WindowRefusalReason
+} from "./windows.js";

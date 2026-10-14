@@ -6,8 +6,9 @@ in [PLAN.md](PLAN.md) records the implementation order.
 
 The library currently supplies strict inputs, apparent positions,
 Sun/body geometry, phase classification, geometric disk illumination,
-an arcus visionis criterion, a configurable visibility screen and
-rise/set/transit events with position receipts. Visibility transition searches,
+an arcus visionis criterion, a configurable visibility screen,
+rise/set/transit events and bounded observing windows with position receipts.
+Visibility transition searches,
 crescent predictions and the CLI are planned, not available.
 
 ## Development
@@ -95,6 +96,99 @@ reduction. Its receipt names the calculation conventions. Height moves the
 observer, but the sky solver applies no horizon dip. See the
 parent's [sky guide](../docs/sky.md). No visibility conclusion is implied by
 the existence of a horizon event.
+
+## Observing windows
+
+```ts
+import { observingWindows } from "./src/index.js";
+
+const result = observingWindows("Moon", {
+  latitude: 13, longitude: -42, height: 120
+}, "2001-02-03", "2001-02-06");
+if (result.status === "complete") {
+  for (const window of result.windows) {
+    console.log(window.period, window.from, window.to);
+    console.log(window.start.causes, window.end.causes);
+    console.log(window.solarHalf.start.position);
+  }
+}
+```
+
+These synthetic observing inputs are exercised in
+[test/windows.test.ts](test/windows.test.ts). `observingWindows` accepts the
+Moon or a visible planet and returns geometric candidate intervals within
+the requested range. The Sun must be below its airless centre horizon and
+the target above its own. Solar upper transit to the next lower transit is
+labelled `evening`; lower transit to the next upper transit is `morning`.
+These are this library's meridian-half conventions, including in polar night.
+They do not select a morning-star or evening-star longitude phase, define a
+twilight depression, or predict a sighting. Apply a visibility model separately.
+
+All crossings and transits come from the engine's sky solver with
+`limb: "centre"` and `refraction: "none"`. These conventions match the
+airless horizon used by the arcus criterion; no limb or refraction option is
+accepted here. The solver's horizon is the geodetic tangent plane without
+terrain or horizon dip. Its reduction differs from calc's, as described in
+the foundation API above. A sky window is therefore not a proven enclosure
+of all instants that a calc-based altitude screen might accept near a crossing.
+
+Intervals include their start and exclude their end. A rise begins the
+above-horizon state and a set begins the below-horizon state at the solver's
+reported instant; an isolated zero-duration contact produces no interval.
+Every window has `start` and `end` boundaries. Their `causes` distinguish a
+range clip from a Sun or target crossing or solar transit; coincident causes
+are all kept. Their `events` retain the original solver events with attached
+position results. `solarHalf` retains the enclosing solar transit pair even
+when a range clip or horizon crossing shortens the window. The top-level
+`from` and `to`, and each window's boundaries, are normalized ISO instants.
+
+`horizons.sun` and `horizons.target` retain the full supporting searches,
+including their engine identities, flags, sample counts and event position
+receipts. `support` identifies their interval, which extends two days on each
+side of the request. This padding is bounded; the code never keeps expanding
+it to find a missing event. The result says `receiptScope: "event-positions"`:
+the engine receipts describe positions, not the window partition or a
+visibility model. Dates inside source events remain engine `Date` objects;
+do not mutate them when retaining the result for later use.
+
+An absent horizon crossing is handled using the engine's scoped
+`never-rises` or `never-sets` flag, or the direction of the available crossing.
+Polar daylight produces an empty completed result. In polar night, solar
+transits still divide eligible intervals into morning and evening without
+inventing sunrise or sunset. `diagnostics` reports missing rise/set events
+and above/below states within the support search only. Such a diagnostic
+does not claim that a body never rises or sets outside that interval. Exact
+geographic poles are refused because this solar-half convention is undefined
+there.
+
+The operational limits are exported as `OBSERVING_WINDOW_LIMITS`: a request
+may span at most 366 elapsed days, with two days of support on either side,
+and the default combined budget is 200,000 sky search samples. The optional
+`maxSamples` must be a finite positive safe integer. Both searches share that
+budget, including padding and refinement. Position calls that attach receipts
+are separate from the sky sample count. The constants and refusal boundaries
+are enforced by [test/windows.test.ts](test/windows.test.ts); they are
+work limits, not measured accuracy or runtime guarantees.
+
+A `refused` result has no windows. Its `reason` distinguishes a range or
+sample budget, a support interval outside engine reference coverage, a
+geographic pole, or a refused event position. The coverage guard includes the
+nominal extra hour the engine scans on either side of a sky request; crossing
+refinement can probe beyond those scan endpoints. No shorter support range
+is silently substituted. Already completed supporting searches remain in
+`horizons` for diagnosis; searches not attempted are `null`.
+`positionRefusal` retains an engine refusal when present.
+
+An `unresolved` result also has no windows: its `event-sequence` reason and
+`detail` identify absent solar anchors or inconsistent crossing states. A
+`complete` result means the supplied engine events were partitioned over the
+entire requested interval, including a resolved empty result. It inherits
+the engine's sampled crossing-search limitations and is not a mathematical
+proof of every physical crossing. The independently constructed schedules in
+[test/window-partition.test.ts](test/window-partition.test.ts) check interval
+coverage and clipping. The engine integration and
+[failure-path tests](test/windows-failure.test.ts) check
+delegation and provenance, not sighting accuracy.
 
 ## Geometry API
 

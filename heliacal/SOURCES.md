@@ -98,6 +98,18 @@ uses that existing attributed fixture. `test/engine.test.ts` states the
 tolerance and exact comparison scope. The root licensing record identifies
 the fixture as a US Government work.
 
+The USNO definition page was read again for observing windows on 2026-10-14,
+especially the "Horizon", "Transit" and "Twilight" paragraphs. It distinguishes
+meridian transit from a horizon crossing and notes that several transits may
+occur between rise and set at high latitude. The implemented window partition
+uses engine events with airless centre conventions, rather than USNO's usual
+refracted upper-limb sunrise. It does not implement the twilight thresholds.
+Dividing candidate intervals at alternating upper/lower solar transits is
+this library's explicit scheduling convention, not a published visibility
+criterion. Constructed event schedules in `test/window-partition.test.ts`
+check the interval arithmetic independently; `test/windows.test.ts` checks
+engine delegation, scope, clipping and budget accounting.
+
 ## Planetary visibility
 
 These sources were fetched and the cited sections read again on 2026-10-14

@@ -2,3 +2,4 @@ M1: establish isolated heliacal tooling, validated engine adapters with position
 M2: add receipted geocentric and topocentric Sun/body geometry, airless horizontal coordinates and angular separation; validate against JPL Horizons and ERFA examples with explicit units and conventions.
 M3: add receipted planetary and lunar phase API with signed longitude, morning/evening boundaries and geometric disk illumination; validate against cited Horizons examples and independent triangle arithmetic.
 M4: add the cited horizon arcus criterion and a receipted custom altitude/depression screen with explicit extinction, refraction and magnitude parameters; validate published criterion examples, boundary handling and package isolation.
+M5: add bounded geometric morning/evening observing windows from engine horizon events with receipts, polar diagnostics, range clipping and shared-budget refusals; validate independent interval arithmetic, failure propagation and package isolation.
