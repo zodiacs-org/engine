@@ -45,3 +45,5 @@ export { searchElectional, loadSearchDependencies } from './search.js';
 export type { SearchDependencies, SearchOptions } from './search.js';
 export { streamElectional } from './stream.js';
 export type { StreamOptions, StreamExplanation, WindowFragment, StreamFacts, StreamChunk, StreamEnd, StreamFrame } from './stream.js';
+export { createPresetRuleSet, listPresetPacks, PRESET_NAMES } from './presets.js';
+export type { PresetContext, PresetName, PresetPack } from './presets.js';

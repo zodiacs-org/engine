@@ -12,7 +12,8 @@
     "schema": "npm run build && node scripts/export-schema.mjs",
     "typecheck": "tsc --project tsconfig.json",
     "test": "npm run build:engine && vitest run --config vitest.config.ts",
-    "build:engine": "node scripts/build-engine.mjs"
+    "build:engine": "node scripts/build-engine.mjs",
+    "cli": "node bin/electional.mjs"
   },
   "devDependencies": {
     "@types/node": "22.19.19",

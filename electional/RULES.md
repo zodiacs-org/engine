@@ -6,7 +6,8 @@ detached, deeply frozen `RuleSet`, or throw `RuleValidationError`. Errors contai
 bounded field paths and validation codes, without submitted values or parser
 excerpts. These functions load configuration only. The separate
 [`evaluateBasicRule`](EVALUATION.md) API evaluates Moon sign, Moon phase and
-direct-motion rules; other evaluators and combined ranking remain planned.
+direct-motion rules. The remaining evaluators and composition are linked from
+[README.md](README.md); [CLI.md](CLI.md) exposes the facts-only stream.
 
 The source of the versioned Draft-07 JSON Schema is
 [src/rule-schema.ts](src/rule-schema.ts), exported as `ruleSchema`. Run
@@ -28,7 +29,7 @@ characters or surrounding whitespace, and fit the schema's length limit.
 east positive, bounded as the engine's coordinates are. Both are required.
 Names, addresses and timezone identifiers are outside this schema. Coordinate
 acceptance does not guarantee that a house or rise/set computation is defined
-there; the future adapter must expose any refusal or polar fallback.
+there; the adapters expose refusals and polar fallbacks.
 
 `range` contains `start`, `end` and `clock: utc`. Dates must be full Gregorian
 date-time strings with seconds and an explicit `Z` or signed clock offset.
@@ -54,11 +55,12 @@ it does not expose nodes, other chart points, custom aspects or sidereal options
 ## Rules and weights
 
 Each rule requires a unique lowercase `id`, a recognized `kind`, an explicit
-`mode` and its `options`. A `require` rule has no `weight`; the planned search
-will intersect its passing windows with the other required rules. A `prefer`
-rule requires a positive finite `weight`; the planned ranking will use it as a
-relative contribution. Weights are configuration choices, not probabilities
-or predictions. Missing modes, stringified numbers and implicit defaults are
+`mode` and its `options`. A `require` rule has no `weight`; the search
+intersects its passing windows with the other required rules. A `prefer`
+rule requires a positive finite `weight`; internal scoring uses it as a
+relative contribution, while the CLI reports preference states. Weights are
+configuration choices, not probabilities or predictions. Missing modes,
+stringified numbers and implicit defaults are
 rejected. Selected lists must be nonempty and have no duplicate entries.
 
 | Kind | Required options and declared interpretation |
@@ -78,8 +80,8 @@ rejected. Selected lists must be nonempty and have no duplicate entries.
 Angular and aspect orbs are nonnegative degrees. Station and eclipse margins
 are elapsed epoch days, not local calendar days. Planetary-hour ownership uses
 the explicitly supplied fixed offset; it does not follow a timezone's daylight
-saving changes. The adapter will use the existing engine solar-day and
-rise/set conventions and report missing sunrise or sunset.
+saving changes. The adapter uses the existing engine solar-day and
+rise/set conventions and reports missing sunrise or sunset.
 
 Major aspects use the engine's conjunction, sextile, square, trine and
 opposition identifiers. Applying aspects use configured-aspect analysis;
@@ -111,9 +113,9 @@ const rules = validateRuleSet(example.request);
 console.log(rules.activity);
 ```
 
-This exercise configuration is not a preset recommendation. Traditional launch,
-contract-signing and travel packs are a later milestone; their conventions will
-not claim predictive validity.
+This exercise configuration is separate from the authored traditional launch,
+contract-signing and travel packs in [PRESETS.md](PRESETS.md). None claims
+predictive validity.
 
 ## Loader boundaries and evidence
 

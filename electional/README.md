@@ -9,8 +9,10 @@ avoidance and synthetic natal synastry rule windows are
 implemented so far, with hard-rule composition, weighted scoring and
 deterministic ranking described in [SCORING.md](SCORING.md). The bounded async
 stream described in [STREAMING.md](STREAMING.md) emits facts by default, with
-shared budgets, cancellation and seam continuation. The CLI and HTTP endpoint
-are planned milestones. [EVALUATION.md](EVALUATION.md)
+shared budgets, cancellation and seam continuation. The facts-only CLI and
+editable traditional preset packs are described in [CLI.md](CLI.md) and
+[PRESETS.md](PRESETS.md). The HTTP endpoint is a planned milestone.
+[EVALUATION.md](EVALUATION.md)
 describes the basic evaluator and
 its uncertainty handling. [VOID.md](VOID.md) describes Moon-not-void lookahead,
 body conventions, interval ownership and unknown tails. Planetary-hour date
@@ -25,7 +27,7 @@ The adapter contract and optional events integration are described in
 [ADAPTERS.md](ADAPTERS.md). The
 configuration vocabulary is described in [RULES.md](RULES.md).
 
-Electional rule packs will describe traditional conventions, not predictions.
+Electional rule packs describe authored traditional conventions, not predictions.
 Tests and examples use synthetic data. Code and documentation here use the
 repository's [MIT license](../LICENSE); engine data keeps the attribution and
 terms recorded in [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE).
