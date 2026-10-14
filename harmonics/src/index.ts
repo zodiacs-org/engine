@@ -1,6 +1,11 @@
 export { DEFAULT_MAX_HARMONIC, harmonicChart } from "./harmonic-chart.js";
 export { DIAL_CIRCLES, dialDistance, projectDial } from "./dial.js";
 export type { DialCircle, DialContact, DialOptions, DialPoint, DialProjection } from "./dial.js";
+export { findPlanetaryPictures } from "./planetary-pictures.js";
+export type {
+  PictureRepeatedMembers, PlanetaryPicture, PlanetaryPictureOptions,
+  PlanetaryPictureResult, SensitivePoint
+} from "./planetary-pictures.js";
 export type { HarmonicChart, HarmonicOptions, HarmonicPoint, LongitudePoint } from "./types.js";
 export { findHarmonicAspects } from "./harmonic-aspects.js";
 export { harmonicSpectrum } from "./harmonic-spectrum.js";

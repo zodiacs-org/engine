@@ -11,7 +11,7 @@ unchecked milestone, runs its checks, marks it complete and appends a line to
 - [x] M4 Reuse `src/techniques/aspect-patterns.ts` for supported harmonic aspect patterns, documenting its fixed major-aspect limits and refusing unsupported pattern policies rather than inventing graph results.
 - [x] M5 Implement harmonic strength spectra with a documented deterministic scoring formula, configurable harmonic selection and weights, pair contributions and hand-derived ranking tests.
 - [x] M6 Implement Uranian dial projections for the requested 90, 45 and 22.5 degree circles, preserving full source longitudes and testing circular distances and seam contacts.
-- [ ] M7 Implement canonical planetary pictures and A+B-C sensitive points with configurable contact orbs, explicit repeated-member rules and arithmetic tests.
+- [x] M7 Implement canonical planetary pictures and A+B-C sensitive points with configurable contact orbs, explicit repeated-member rules and arithmetic tests.
 - [ ] M8 Implement midpoint-tree listings by calling `src/points.ts` midpoint helpers, covering both axes, antipodal ties, dial contacts, ordering and deduplication.
 - [ ] M9 Add the offline `harmonics chart` CLI with strict JSON input validation, synthetic fixture examples, structured JSON output and receipts for chart calls.
 - [ ] M10 Add `harmonics spectrum` and `harmonics dial` CLI commands, shared option parsing, configurable analysis settings and command integration tests.
@@ -171,3 +171,32 @@ using Node 22.22.2 and a writable npm cache under `harmonics/.cache/`.
 The root `npm run package:contents` still fails at missing `dist/calc.d.ts`.
 No engine build, archive creation or git mutation was performed. The next
 session starts at M7.
+
+## M7 validation
+
+Added the pure `findPlanetaryPictures` API through the default entry. It
+enumerates canonical A+B-C sensitive points from normalized zodiac sources
+and tests each disjoint pair-sum picture once on the selected dial. Configurable
+inclusive contact orbs reuse the dial implementation. The default requires
+distinct labels; explicit doubled mode permits repetition within either pair
+while excluding shared-label cancellations. Structured labels avoid expression
+id collisions. Full sensitive longitudes, sectors, source targets and frozen
+snapshots remain available alongside deterministic picture listings.
+
+On Node 22.22.2, `npm run check` passed. Hand-derived synthetic expectations in
+`test/planetary-pictures.test.ts` cover every admissible formula for the
+documented fixture, all supported circles, seams, zero and inclusive boundaries,
+repeated members, canonical deduplication, ordering, normalization and receipt
+preservation. `test/pure-entry.test.ts` also exercises pictures while rejecting
+casting and ephemeris imports. `README.md` documents the formula, canonical
+orientation, repeated-member rules and ordinary binary64 rounding limits.
+These checks establish arithmetic and integration, not ephemeris accuracy
+or predictive validity.
+
+`git diff --check` passed. Changed and new files remain inside `harmonics/`,
+below the file size limit, with no em dash in documentation. The root
+`npm pack --dry-run --json --ignore-scripts` manifest excludes this project,
+using Node 22.22.2 and a writable npm cache under `harmonics/.cache/`.
+The root `npm run package:contents` still fails at missing `dist/calc.d.ts`.
+No engine build, archive creation or git mutation was performed. The next
+session starts at M8.

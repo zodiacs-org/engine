@@ -2,8 +2,8 @@
 
 This private source project adds harmonic longitude transforms, configured
 harmonic aspects, strength spectra, supported aspect patterns, Uranian dial
-projections and natal casting adapters to the engine checkout. See
-[PLAN.md](PLAN.md) for the remaining picture, midpoint and CLI milestones.
+projections, planetary pictures and natal casting adapters to the engine
+checkout. See [PLAN.md](PLAN.md) for the remaining midpoint and CLI milestones.
 Code and documentation here are MIT under
 the repository's [LICENSE](../LICENSE). The engine's data attributions remain
 in [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE).
@@ -376,7 +376,7 @@ or subtraction can affect contacts near a boundary; projected equality does
 not prove an exact relation between the original input doubles. These
 contacts report dial proximity only, with no aspect type or motion claim.
 The library makes no astronomical or predictive validity claim for them.
-Planetary pictures and midpoint trees are later milestones.
+Planetary pictures are described below; midpoint trees are a later milestone.
 
 In the synthetic example, A projects to 89.75 degrees and B to 0.25.
 Their straight gap is 89.5, so the circular distance is `90 - 89.5 = 0.5`
@@ -406,6 +406,105 @@ unchanged. That envelope describes the engine's source natal chart only;
 supplemental points and derived dial contacts remain outside its scope.
 [test/pure-entry.test.ts](test/pure-entry.test.ts) checks that the default
 library entry, including dial projection, loads no chart API or ephemeris.
+
+## Planetary pictures and sensitive points
+
+```ts
+import { findPlanetaryPictures } from "./src/index.js";
+
+const result = findPlanetaryPictures([
+  { body: "A", lon: 350 }, { body: "B", lon: 30 },
+  { body: "C", lon: 25 }, { body: "D", lon: 355 }
+], 90, { contactOrb: 0 });
+console.log(result.sensitivePoints, result.pictures);
+```
+
+`findPlanetaryPictures(sourcePoints, circle, options)` accepts the same
+longitude rows, supported circles and inclusive `contactOrb` as `projectDial`.
+The defaults remain a 90-degree circle and an unscaled 1-degree orb. The
+result's `dial` contains the original projections and ordinary pair contacts.
+No row requires speed, and no motion, latitude or aspect annotation is copied.
+Invalid input, unsupported option fields and unsupported repeated-member
+settings throw `RangeError`.
+
+For each admissible formula, the sensitive point is
+`sourceLon = normalizeLongitude((sourceA + sourceB) - sourceC)`, using the
+engine's normalization helper. All three sources are normalized full zodiac
+longitudes from `dial.points`, so even very large finite inputs cannot
+overflow the addition. Addition precedes subtraction, in canonical label
+order. The point also records `lon = sourceLon % circle` and
+`sector = floor(sourceLon / circle)`. These are longitude degrees on the
+chosen circle. `sensitivePoints` lists all admissible formulas, including
+ones without a contacting target, sorted by a, b and c. Different formulas
+at the same longitude stay separate.
+
+A planetary picture represents the pair-sum relation `A+B = C+D` modulo
+the chosen dial circle. Labels are sorted within each pair using UTF-16
+lexical comparison, and the pair with the smaller label tuple becomes
+`left`. The other becomes `right`. This canonicalizes exchanging A with B,
+C with D, or the two sides, without delimiter-joined expression ids that
+could collide with point names. Each picture is tested once: the sensitive
+point `left[0]+left[1]-right[0]` must be within `contactOrb` of the original
+target row `right[1]`, using `dialDistance`. It is a sum relation on this
+dial, not a test comparing midpoint coordinates. Midpoint trees will use
+the engine's midpoint helpers separately.
+
+`repeatedMembers` defaults to `"distinct"`: all four picture labels differ,
+and sensitive-point a, b and c differ. Setting it to `"doubled"` permits
+repetition within either pair, including `A+A = C+D`, `A+B = C+C` and
+`A+A = C+C`. The two sides must still share no label, and sensitive-point
+c must differ from both a and b. Cancellation formulas such as `A+B-A`
+and pictures such as `A+B = A+D` are excluded under both settings; their
+reduced pair contacts already appear in `dial.contacts`. A nonempty input
+with too few eligible labels returns empty listings rather than throwing.
+Both policies are exercised in
+[test/planetary-pictures.test.ts](test/planetary-pictures.test.ts).
+
+Each matched picture contains `left` and `right` label tuples, its
+`sensitivePoint`, the projected source `target`, and its unsigned dial
+`orb`. Pictures sort by increasing orb, then left and right tuples.
+The result also records `repeatedMembers` and the arithmetic id
+`binary64;inclusive;no-epsilon`. All objects and arrays are frozen
+snapshots; picture point and target references share the corresponding
+frozen listing rows. Source dial rows retain input order. Sensitive points
+and pictures are independent of input order, including their accumulation
+and rounding order. Enumeration covers all admissible point pairs and
+pair combinations without truncation; filter the supplied selection when
+output volume matters.
+
+Arithmetic uses ordinary binary64 sums, subtraction, normalization and
+dial distances, with no widened boundary allowance. Rounding can change
+eligibility near the orb boundary, and different algebraic orientations
+can round differently. Only the canonical orientation above determines
+eligibility and the reported orb; matching an alternative orientation is
+not an additional route into the result. A zero orb means equality under
+that arithmetic, not an exact sum relation between the original doubles.
+The library makes no astronomical or predictive validity claim for these
+derived contacts.
+
+For the example above, `A+B-C = 350+30-25 = 355`, exactly equal to D.
+The sensitive point lies in the final 90-degree sector at dial longitude
+85. Exchanging the two positive terms or selecting another target does
+not add another picture: the canonical listing is `[A,B] = [C,D]`.
+The other distinct pair partitions differ by 10 and 650 degrees, neither
+an exact turn of any supported dial, so the zero-orb example returns
+only that relation. These expectations and every sensitive-point formula
+for these invented rows are derived and enforced in
+[test/planetary-pictures.test.ts](test/planetary-pictures.test.ts).
+The same tests cover seam and half-circle boundaries, all supported circles,
+doubled members, ordering, structured labels, normalization and snapshots.
+They establish arithmetic correctness and integration, not ephemeris accuracy.
+
+This pure API casts no chart and creates no receipt. For cast input, retain
+the source explicitly as
+`{ source, pictures: findPlanetaryPictures(source.points, circle, options) }`.
+The synthetic cast integration test in
+[test/planetary-pictures.test.ts](test/planetary-pictures.test.ts) includes
+unknown-speed angles and supplemental points and verifies that the serialized
+natal envelope is unchanged. That envelope describes the source natal chart
+only; sensitive points and planetary pictures are outside its scope.
+[test/pure-entry.test.ts](test/pure-entry.test.ts) checks that this operation
+through the default entry loads no chart API or ephemeris.
 
 ## Harmonic aspect patterns
 
