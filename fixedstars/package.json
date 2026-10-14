@@ -18,6 +18,8 @@
     "catalog:build": "node scripts/build-catalog.mjs",
     "catalog:check": "node scripts/build-catalog.mjs --check",
     "catalog:fetch": "node scripts/build-catalog.mjs --fetch",
+    "check:docs": "node scripts/check-docs.mjs",
+    "verify": "node scripts/verify.mjs",
     "check:isolation": "node scripts/verify-isolation.mjs"
   },
   "dependencies": {

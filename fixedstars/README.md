@@ -1,22 +1,18 @@
 # Fixed stars
 
-This private source-checkout project is being built according to
-[PLAN.md](PLAN.md). It supplies a licensed catalog, source provenance, and a
-direct bridge to the parent engine with synthetic integration and geometric
-tests, proper-motion propagation, true-of-date stellar positions, pure
-conjunction and parallel matching, natal chart-hit assembly with native
-chart envelopes, prepared star and body sky-event searches, paran event
-pairing, and an offline CLI.
+This private source-checkout library and CLI reports fixed-star conjunctions,
+parallels and paran contacts using the parent engine's chart, frame, nutation
+and sky solvers. It supplies a small licensed catalog with J2000 astrometry,
+optional proper motion and cited traditional lore. Lore tags are historical
+attributions, without claims of physical or predictive effects.
 
-Use Node as specified by this folder's package.json. Install and check only
-this project from the repository root:
+Use Node 22.7.0 or later, as required by this folder's package.json and CLI
+runtime check. Activate that runtime before installing dependencies or running
+the commands. Install and verify only this project from the repository root:
 
 ```sh
 npm --prefix fixedstars ci
-npm --prefix fixedstars run typecheck
-npm --prefix fixedstars test
-npm --prefix fixedstars run catalog:check
-npm --prefix fixedstars run check:isolation
+npm --prefix fixedstars run verify
 ```
 
 The engine is consumed by relative imports from its existing source. This
@@ -29,6 +25,17 @@ The tests use explicit .fixedstars.ts or .fixedstars.mjs suffixes and local
 Vitest configuration to stay outside the parent engine's default test discovery. The isolation
 check enforces the file-size and documentation-character constraints and
 checks package exclusion with a parent package dry run that skips scripts.
+The verification command runs types, tests, executable documentation examples,
+offline catalog regeneration, sky compatibility and isolation. Individual
+commands and their evidence scope are in [VERIFICATION.md](VERIFICATION.md).
+No command in that verification sequence builds the parent engine.
+
+Start with the [CLI](#cli) for JSON results, or the
+[natal API](#natal-chart-hits) and [paran API](#paran-contacts) for library use.
+The [catalog](#catalog-snapshot), [positions](#positions-on-a-chart-clock)
+and [pure matcher](#pure-contact-matching) can also be used separately.
+[Source notes](sources/README.md), [licences](LICENSING.md) and
+[geometric derivations](GEOMETRY.md) explain what the inputs and checks support.
 
 Catalog contracts use degrees for right ascension and declination and
 milliarcseconds per Julian year for proper motion. Right-ascension proper
@@ -53,6 +60,38 @@ are in [sources/README.md](sources/README.md). The selected HYG catalog data
 retain CC BY-SA terms. [LICENSING.md](LICENSING.md) and [NOTICE.txt](NOTICE.txt)
 state the redistribution terms and required attributions. Bulk generated
 tables and downloads belong in ignored folders.
+
+## Library entry points and receipts
+
+Import numerical functions and types from src/index.ts with a TypeScript-aware
+runner or bundler. The examples below live conceptually in the fixedstars
+folder and use NodeNext .js import specifiers that resolve to TypeScript source;
+there is no emitted src/index.js to import directly with plain Node. Runtime
+bundling must resolve astronomy-engine to this folder's installed dependency,
+as [the CLI loader](scripts/load-cli.mjs) and local Vitest configuration do.
+Preparation is a separate plain Node import from node.mjs. It reads the verified
+engine source and compiles the existing sky solver in memory. Prepare once,
+then keep and reuse the returned synchronous StarSkySearch object.
+
+| Entry or operation | Result | Calls and receipt scope |
+| --- | --- | --- |
+| catalog, findStar | Frozen catalog records | No chart or sky call |
+| propagateStarDirection | J2000 unit direction with transverse motion | Pure vector geometry |
+| starPositionAtTt, starPositions | True-of-date stellar coordinates | Engine frame and clock helpers; no natal or sky receipt |
+| findStarContacts | Conjunction and parallel hits in degrees | Pure matching; supplied coordinates remain caller claims |
+| chartContactTargets | Body and available ecliptic angle targets | Engine declination helpers; no chart cast or new receipt |
+| natalStarHits | Targets, stars, hits and natal envelope | Engine chart cast; native envelope covers the chart only |
+| prepareStarSky | Promise of a reusable StarSkySearch | Local source verification and in-memory compilation |
+| sky.starEvents, sky.bodyEvents | Complete or refused event search | Existing engine sky solver; labelled fixedstars call record |
+| searchParans | Paired events with retained subject searches | Sky calls for selected subjects; hit indices locate their call records |
+| pairParanEvents | Pairs from existing search results | Pure matching; creates no new sky or angle receipt |
+
+The result types and convention constants are exported beside their functions.
+Conjunction and parallel hits use orbDeg; paran hits use orbMs. Orbs must be
+chosen explicitly. A complete empty hit list means no eligible contact under
+the supplied policy. A refused search means a budget prevented a complete
+result. Check status before treating a sky or paran result as an observation.
+The CLI wraps these results without removing their provenance.
 
 ## CLI
 
@@ -148,6 +187,21 @@ also derives the upper-meridian construction checked within two milliseconds
 at its single synthetic anchor. These checks establish arithmetic and wiring;
 they do not measure physical stellar accuracy. Catalog licensing and stellar
 correction omissions apply equally to CLI results.
+
+For an explicit angular-phase anchor, select no bodies and choose the phase
+instant yourself. This synthetic example tests upper culmination around a
+reference instant, without casting a natal chart:
+
+```sh
+node fixedstars/bin/fixedstars.mjs parans \
+  --from 2000-03-20T00:00:00Z --to 2000-03-21T00:00:00Z \
+  --latitude 0 --longitude 0 --orb-ms 60000 --star Spica --bodies none \
+  --angle 'Midheaven@2000-03-20T06:00:00Z' --star-refraction none
+```
+
+The chosen instant and orb are demonstration inputs, with no promise of a hit.
+A natal angle conjunction instead compares ecliptic longitude in hits; these
+two commands ask different geometric questions.
 
 ## Sky event searches
 
@@ -590,3 +644,39 @@ constructed TT reading used there, as derived in
 The synthetic chart and native-envelope checks are integration tests, not
 independent ephemeris accuracy evidence.
 
+## Limitations and reproducibility
+
+The catalog is a curated HIP-backed HYG selection with documented component
+identifications. It has no measured astrometric error bound. Its inferred
+ICRS source frame, prior epoch adjustment and motion conventions are recorded
+in each row and the source notes. Transverse propagation and frame rotation
+omit radial motion, parallax, perspective acceleration, annual aberration
+and light deflection. Nutating the axes does not supply those corrections.
+The engine's native bodies retain their own corrections, documented in the
+native natal envelope and sky conventions.
+
+An outside-reference-span flag carries the parent engine's reference scope;
+the absence of that flag does not establish stellar accuracy. A complete
+sky search carries the native solver's sampling and geometric definitions.
+It does not certify real visibility, weather, terrain, horizon dip, or exact
+grazing behavior beyond the constructed tests. Changing the sky engine source
+fails preparation until its compatibility contract is intentionally reviewed.
+Library helpers consumed outside sky preparation have no digest gate and must
+be revalidated against a changed checkout.
+
+Keep the catalog id and source records, stellar and contact conventions,
+effective orbs, engine identity, runtime, natal envelope and all retained sky
+call records when saving a result. Natal receipts, caller-provided charts and
+fixedstars call records are structured claims, without authentication.
+Native Date methods remain mutable in sky results; captured ISO times and
+provenance stay stable. JSON serialization is for output: pairParanEvents
+expects native search results with Dates, and there is no JSON-result replay
+or import API here.
+
+This tool uses resolved instants and explicit coordinates. It supplies no
+local-time resolver, geocoder, relocation grid, astrocartography grid, event
+catalog service or HTTP chart API. Examples and test charts are invented.
+Historical attributions retain their source scope and wording; missing or
+ambiguous identifications stay omitted. Redistribution of selected or adapted
+catalog data must retain the HYG attribution, change notice and CC BY-SA terms
+in [NOTICE.txt](NOTICE.txt) and [LICENSING.md](LICENSING.md).

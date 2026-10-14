@@ -15,7 +15,7 @@ explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
 - [x] M9 Implement paran event pairing for bodies and angular contacts over an explicit observer window, with a configurable time orb, native body-sky results, star-sky provenance, and synthetic simultaneous-contact expectations.
 - [x] M10 Implement the fixedstars list, fixedstars hits, and fixedstars parans CLI commands, strict options, JSON output, meaningful exit codes, and end-to-end synthetic tests.
 - [x] M11 Extend independent geometric coverage for wraparound, poles, proper-motion conventions, frame consistency, unavailable angles, horizon tangencies, event-window boundaries, and sample-budget exhaustion.
-- [ ] M12 Finish library and CLI usage documentation, source attributions, limitations, evidence references, and isolated verification of tests, types, file sizes, and engine-package exclusion.
+- [x] M12 Finish library and CLI usage documentation, source attributions, limitations, evidence references, and isolated verification of tests, types, file sizes, and engine-package exclusion.
 
 ## Boundaries
 
@@ -412,3 +412,32 @@ The isolation check confirms exclusion through a package dry run without
 claiming the missing engine build's budgets passed. All authored changes remain
 under fixedstars/. M12 remains unchecked for the final documentation and
 isolated verification pass. Stop here for the harness-owned commit.
+
+## M12 completion
+
+README.md now gives the finished source-checkout setup, library entry and
+receipt map, CLI and explicit angle-anchor usage, correction limitations and
+reproducibility boundaries. sources/README.md describes the completed catalog
+and its source interpretation without milestone-specific future instructions.
+VERIFICATION.md maps the independent geometric derivations, source consistency
+checks and native-engine integration tests to their evidence and limits, and
+documents source revalidation and intentional sky-contract maintenance.
+
+scripts/check-docs.mjs checks local documentation targets and headings, then
+type-checks and executes every README TypeScript example as an isolated module
+in memory. scripts/verify.mjs runs the local types, full Vitest suite,
+documentation examples, offline catalog regeneration, sky compilation and
+file/package isolation with one Node runtime. Both are available through the
+private folder's npm scripts. No parent source, build, export, dependency,
+packed file or archive was changed.
+
+The final verifier passed on Node 22.22.2; its output is committed in
+docs/evidence/m12-verification.txt. The documented angle-only CLI example also
+completed. The parent package:contents gate was attempted and fails because
+dist/calc.d.ts is absent, with its output retained separately in
+docs/evidence/m12-package-contents.txt. No engine build was created to work
+around that boundary. Local package exclusion passed; parent build budgets,
+packed-consumer, conformance and archive checks are not claimed as passed.
+
+All planned milestones are complete. All authored work remains under
+fixedstars/. Stop here for the harness-owned commit and draft PR update.

@@ -1,4 +1,4 @@
-# Source decisions before catalog import
+# Catalog sources and attribution
 
 [manifest.json](manifest.json) records the documents fetched and read on
 2026-10-14, their locators and the astrometric import contract.
@@ -54,11 +54,11 @@ It rotates the unit direction and its proper-motion tangent vector through the
 engine's ICRS-to-J2000 bias matrix, using transpose(frameMatrix(
 "equatorial-icrs", time)) from src/calc-frames.ts. Reproject the rotated
 tangent onto the rotated RA and declination bases. Preserve the source
-frame interpretation and this derivation in each row's provenance. M4 then
-applies motion and the existing true-of-date engine frame/nutation helpers
+frame interpretation and this derivation in each row's provenance. The position API
+then applies motion and the existing true-of-date engine frame/nutation helpers
 on the chart's TT clock. Do not adjust HYG from J1991.25 a second time.
 
-The catalog will use direction and tangential motion only. It will not add
+The catalog uses direction and tangential motion only. It does not add
 stellar parallax, radial-velocity perspective acceleration, annual aberration,
 or gravitational light deflection. Nutating the axes does not add those
 corrections; star results must say so when compared with apparent chart bodies.
