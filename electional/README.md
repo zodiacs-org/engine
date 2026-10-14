@@ -3,10 +3,11 @@
 A private TypeScript project for composing and ranking time windows over the
 existing astrology engine. Progress is tracked in [PLAN.md](PLAN.md). The
 interval foundation, strict JSON/YAML rule loading, read-only engine and
-events adapters, and Moon sign, phase and direct-motion rule windows are
+events adapters, and Moon sign, phase, direct-motion and Moon-not-void rule windows are
 implemented so far. Other rules, ranking, the CLI and HTTP endpoint are planned
 milestones. [EVALUATION.md](EVALUATION.md) describes the current evaluator and
-its uncertainty handling. The adapter contract and
+its uncertainty handling. [VOID.md](VOID.md) describes Moon-not-void lookahead,
+body conventions, interval ownership and unknown tails. The adapter contract and
 optional events integration are described in [ADAPTERS.md](ADAPTERS.md). The
 configuration vocabulary is described in [RULES.md](RULES.md).
 

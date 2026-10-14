@@ -6,7 +6,7 @@ await mkdir(new URL('../generated/', import.meta.url), { recursive: true });
 // Resolve the engine's pinned dependency locally. The parent checkout stays read-only.
 await build({
   stdin: {
-    contents: 'export { calc } from "../../src/calc.ts";',
+    contents: 'export { calc } from "../../src/calc.ts"; export { VOID_BODIES, VOID_OF_COURSE_CONVENTION } from "../../src/techniques/void-of-course.ts";',
     resolveDir: fileURLToPath(new URL('../src/', import.meta.url)),
     sourcefile: 'electional-engine-bridge.mjs', loader: 'js',
   },

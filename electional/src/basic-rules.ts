@@ -11,8 +11,8 @@ import type { ElectionalRule } from './rule-types.js';
 import { validateRuleSet } from './rules.js';
 
 export type BasicRule = Extract<ElectionalRule, { kind: 'moon-sign' | 'moon-phase' | 'direct-motion' }>;
-interface EvaluationBase {
-  readonly rule: BasicRule;
+interface EvaluationBase<R extends ElectionalRule = BasicRule> {
+  readonly rule: R;
   readonly window: ClockWindow;
   readonly evaluations: number;
   readonly receipts: readonly EngineReceipt[];
@@ -20,7 +20,7 @@ interface EvaluationBase {
   readonly explanation: string;
   readonly completeness: 'source-scan-assumptions';
 }
-export type RuleWindowResult = EvaluationBase & (
+export type RuleWindowResult<R extends ElectionalRule = BasicRule> = EvaluationBase<R> & (
   | { readonly status: 'complete' | 'unresolved'; readonly satisfied: readonly Interval[];
       readonly failed: readonly Interval[]; readonly covered: readonly Interval[]; readonly unresolved: readonly Unresolved[] }
   | { readonly status: 'refused'; readonly reason: Extract<EventSearchResult, { status: 'refused' }>['reason'];

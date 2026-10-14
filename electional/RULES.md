@@ -63,7 +63,7 @@ rejected. Selected lists must be nonempty and have no duplicate entries.
 
 | Kind | Required options and declared interpretation |
 | --- | --- |
-| `moon-not-void` | `bodies: traditional` or `modern`, using the engine's existing void-of-course convention. |
+| `moon-not-void` | `bodies: traditional` or `modern`, using the engine's existing void-of-course convention. Evaluation requires explicit scan lookahead and preserves unknown tails; see [VOID.md](VOID.md). |
 | `direct-motion` | `bodies`, selecting Mercury, Venus or both. All selected bodies must have direct motion. |
 | `moon-sign` | `signs`, with lowercase engine sign slugs. Any selected sign is eligible. |
 | `moon-phase` | `phases`, using exact engine phase names such as `Waxing Crescent`. Any selected phase is eligible. |

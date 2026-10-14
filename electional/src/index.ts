@@ -21,3 +21,5 @@ export type { AspectTarget, EventOperation, EventRecord, EventSearchOptions, Eve
   EventsCapability, EventsRuntime, EventsSource, Unresolved } from './events-adapter.js';
 export { evaluateBasicRule } from './basic-rules.js';
 export type { BasicRule, RuleWindowResult } from './basic-rules.js';
+export { evaluateVoidRule } from './void-rule.js';
+export type { VoidRule, VoidRuleOptions, VoidRuleConvention, VoidRuleWindowResult } from './void-rule.js';
