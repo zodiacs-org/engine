@@ -475,3 +475,107 @@ engine `houseOf`, `sectOf`, supplied chart speed and `longitudeSpeed`
 delegation across house systems and fallback. It verifies that evaluation
 does not call the casting or speed helper again. Those assertions are reuse
 and regression evidence, without claiming independent ephemeris accuracy.
+
+## M7 instantaneous aspects and bounded motion
+
+`aspectFixture` reuses the invented question epoch in `fixtures.ts` with the
+schematic whole-sign cusps. Aries on the first cusp gives Mars; Taurus on the
+second gives Venus; the Moon remains a separate co-significator. Positions
+and rates are synthetic geometry, not an astronomical chart at that epoch.
+The tests deliberately leave unrelated sign and retrograde labels stale to
+verify that longitude and speed decide the observations. No engine output
+was used to obtain the expected contacts or motions.
+
+`aspects.test.ts` checks instantaneous motion by signed angular arithmetic.
+Mars at zero with speed one, Venus at six with speed zero has conjunction
+orb six decreasing by one degree/day, hence applying. Reversing their
+longitudes makes it separating. Mars 359 and Venus one are two degrees apart
+across the wrap and approaching; Mars one and Venus 359 are separating.
+With Mars zero stationary and Venus six retrograde at minus one degree/day,
+the gap shrinks. Mars six at minus two and Venus zero at minus one also
+approach. Exact moving conjunction/opposition can only separate. At exact
+conjunction the separation increases toward a sextile, and at exact
+opposition it decreases toward a trine: both observations apply to those
+other angles when explicitly allowed full-circle orbs.
+
+The exact-rational edge case uses the literal binary values
+`188.86 = 1661230128174203 / 8796093022208` and
+`98.86 = 6956654049403863 / 70368744177664`. Subtraction gives
+`6333186975989761 / 70368744177664 = 90 + 2^-46`. With relative speed
+minus one, the tiny positive square deviation is decreasing. Zero allowance
+therefore rejects it as ineligible, but its motion remains applying. A naive
+add-360 wrap would erase the residue. Separately, the literal values
+`7.6999999999999895 = 8669429282688193 / 1125899906842624` and
+`359.7 = 6327909320176435 / 17592186044416` give folded conjunction orb
+`8 + 2^-50`. The reported nearest double is eight, but exact eligibility at
+an eight-degree allowance is false. These rational reductions come from the
+IEEE binary significands, not an engine aspect result.
+
+Eight degrees is an included orb boundary; the adjacent binary value
+`8.000000000000002` is outside. A configured relative-speed threshold
+`0.125` makes zero and `0.0625` stationary while equality at `0.125`
+remains moving. Equal speeds remain stationary with a zero threshold.
+Separate luminary and ordinary allowances check replacement semantics.
+The default engine orbs, relative-speed threshold, project horizon, step,
+budget and maximum operational ranges are literal policy expectations in
+`aspects.test.ts`, without an accuracy claim. Endpoint acceptance and a
+question at JavaScript Date's upper representable boundary check bounded
+policy ranges and horizon overflow without calling a longitude provider.
+Declaring the first house as
+quesited with Mars and Venus as naturals yields unique Mars, Moon and Venus:
+three physical pairs times five rules gives fifteen records, without a
+Mars/Mars self-aspect. Freezing, JSON round trips, caller chart edits and
+malformed input cases test the ownership and validation contract.
+
+`aspects.motion.test.ts` passes independently specified longitude laws to
+the production adapter, running the engine crossing solver unchanged. Let
+`t` be elapsed days since the invented epoch; longitudes are reduced modulo
+360. Mars `2t` and Venus `6+t` are equal when `2t=6+t`, hence `t=6`.
+Freezing the target would wrongly give three days. This establishes the
+moving-target fixture by algebra. An eight-day horizon includes the contact;
+a six-day horizon includes it as the upper endpoint; a five-day horizon has
+no contact. Mars and Venus initially equal produce an `exact-now` record at
+zero, with no duplicate future contact in the open-start window.
+
+For each major angle `A` in `0, 60, 90, 120, 180`, set Mars `t` and
+Venus `6-s*A` modulo 360, for each `s` in `1,-1`. Relative longitude begins
+at `s*A-6` and reaches directed target `s*A` when `t=6`. Conjunction and
+opposition identify the same branch for both signs; the other angles have
+distinct branches. An eight-degree ordinary allowance admits the initial
+application. Mars `t` and Venus 55 start with sextile separation 55 decreasing,
+so the sextile is separating; the future positive branch reaches sixty at
+`t=115`. It remains contact evidence without a current-application candidate.
+Mars `t` and Venus nine similarly meet at nine days, but their initial
+conjunction is outside the default ordinary allowance and gets no candidate.
+
+The nonlinear law Mars `10-(t-2)^2`, Venus nine, Moon fixed at 180 has a
+relative turn at two days. Solving `10-(t-2)^2=9` gives contacts at one
+and three days, respectively increasing and decreasing. At the question
+Mars is six with speed four, so a frozen linear estimate `3/4` would be
+incorrect. The first actual contact is the application candidate. The hidden
+pair fixture Mars `9.0625-(t-0.5)^2`, Venus nine solves
+`(t-0.5)^2=0.0625`, hence `t=0.25,0.75`. A one-day coarse step has negative
+endpoint offsets and hides both crossings; the engine's extremum search
+must recover them. The fixed time tolerance is derived before evaluation as
+`ceil(86,400,000 / 2^24) + 1` milliseconds: a full one-day bisection bracket
+plus Date truncation. This tests synthetic root arithmetic, not a physical
+ephemeris accuracy bound or completeness outside these laws.
+
+Budget tests use a conjunction at `t=6.125` with horizon eight days and step
+one quarter day. The coarse scan has `8/0.25+1=33` evaluations; refinement
+adds 24, totaling 57 for that branch. A budget of 58 completes it but cannot
+start the next pair; all earlier contacts are discarded. A budget of 34
+refuses during the first refinement and also returns no partial contacts.
+A budget of one refuses before any provider evaluation. A separate all-rule
+budget of 100 verifies the global cap across every pair and directed branch.
+Each relative evaluation calls two planet providers, with observed count
+twice `search.samples`. Non-finite/out-of-range provider values and thrown
+errors reject instead of becoming no-contact observations.
+
+`aspects.integration.test.ts` uses the invented question instant to verify
+delegation to engine exact configured aspects, moving longitudes and the
+budgeted crossing solver over the following half-day window. It checks
+requested/actual houses across systems and polar fallback, and confirms
+empty-rule and budget-preflight cases call no ephemeris. These assertions
+are adapter and regression evidence, without independent astronomical
+accuracy claims or a horary outcome verdict.

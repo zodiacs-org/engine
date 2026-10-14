@@ -6,10 +6,15 @@ export { HOUSE_SYSTEMS, houseOf } from "../../src/houses.js";
 export { CLASSICAL_PLANETS, dignityRulersAt, essentialDignities, mutualReceptions } from "../../src/techniques/dignities.js";
 export type { ClassicalPlanet, Debility, EssentialDignity, PlanetDignities } from "../../src/techniques/dignities.js";
 export { sectOf } from "../../src/points.js";
-export { longitudeSpeed } from "../../src/ephemeris.js";
-export { exactSign } from "../../src/exact.js";
+export { bodyLongitude, longitudeSpeed } from "../../src/ephemeris.js";
+export { exactSign, exactSum, roundedValue } from "../../src/exact.js";
+export { ASPECTS, ASPECT_TYPES, STATIONARY_RELATIVE_SPEED } from "../../src/aspects.js";
+export type { AspectMotion } from "../../src/aspects.js";
+export { createAspectPolicy, findConfiguredAspects } from "../../src/configured-aspects.js";
+export { searchLongitudeCrossingsWith } from "../../src/crossings.js";
+export type { BodyLongitudeAt } from "../../src/crossings.js";
 export { VOID_BODIES, VOID_OF_COURSE_CONVENTION, voidOfCourseAt } from "../../src/techniques/void-of-course.js";
 export type { MoonAspect, VoidOfCourseWindow } from "../../src/techniques/void-of-course.js";
 export type {
-  Angles, Chart, DateInput, HouseNumber, Houses, HouseSystem, Sect, ZodiacSign
+  Angles, AspectType, Chart, DateInput, HouseNumber, Houses, HouseSystem, Sect, ZodiacSign
 } from "../../src/types.js";

@@ -234,3 +234,42 @@ engine chart's sampled speeds without recomputation; `longitudeSpeed` is
 exposed only through the local engine adapter for reuse and delegation checks.
 No essential condition, reception, solar proximity, lunar phase, aspect,
 node, joy or fixed-star rule contributes to this partial accidental score.
+
+## Aspect application and contact searches
+
+`lilly-application;engine-instantaneous-motion` refers to William Lilly,
+*Christian Astrology* (1647), Book I, printed pages 106-110, read on
+2026-10-14 in this [transcription of the primary text](https://pdfcoffee.com/william-lilly-christian-astrology-volume-1-pdf-free.html).
+The linked transcription reproduces Lilly's aspect definitions and accounts
+of application by direct, retrograde or mixed motion, with separation and
+planetary moieties. The passage supplies historical context for observing
+longitude contacts; no historical chart or outcome language is copied.
+
+The operational convention follows the existing engine: instantaneous
+decrease/increase of absolute angular orb defines applying/separating.
+Exact moving contacts are separating, and effectively equal relative speeds
+are stationary. This does not reproduce Lilly's separation margin or impose
+his lighter/heavier planet restriction. The engine's own five major aspect
+orb defaults, luminary replacements and relative-speed threshold are used as
+explicit project defaults. Orbs can be replaced and each aspect disabled;
+they are not claimed as Lilly's moieties. The exact binary and circular-corner
+decisions are delegated to `src/configured-aspects.ts`, which uses
+`src/exact.ts`, rather than reimplemented with a tolerance.
+
+Time-to-perfection candidates come from the engine's crossing solver applied
+to a-minus-b longitude, using both moving planets. Each nondegenerate angle
+has positive and negative directed branches. Only a current in-orb
+application's nearest directed branch is used for its candidate; a current
+exact contact has elapsed time zero. All sampled contacts remain available
+as evidence. These are mathematical longitude-contact records, without a
+decision about traditional perfection or an outcome. Sign changes, station
+events and competing contacts require the subsequent plan milestones.
+
+Horizons and sample budgets are project resource choices, not traditional
+rules or astronomical accuracy bounds. The method reports the reused solver's
+sampling assumptions and limits. Its floating-point root search differs from
+the exact instantaneous classification, and engine clock seams can invalidate
+smooth-motion assumptions. A completed search is not a guarantee of exhaustive
+event finding. Default and bounded policy tests are in `tests/aspects.test.ts`;
+independently solved motion laws in `tests/aspects.motion.test.ts` check the
+root-search adapter, not the accuracy of the astronomical ephemeris.

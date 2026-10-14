@@ -9,7 +9,8 @@ engine retains the data licenses and attribution described in
 The library provides `cast`, `normalizeHoraryInput`, `selectSignificators`,
 `createRulePolicy`, `evaluateConsiderations`, `createEssentialPolicy` and
 `evaluateEssentialCondition`, `createAccidentalPolicy` and
-`evaluateAccidentalCondition`.
+`evaluateAccidentalCondition`, `createAspectSearchPolicy` and
+`evaluateSignificatorAspects`.
 Further analysis rules and the CLI are scheduled in [`PLAN.md`](PLAN.md).
 
 From the checkout, using Node as specified in this folder's `package.json`:
@@ -281,6 +282,83 @@ joys and fixed stars are outside its stated scope. It establishes no outcome.
 Independent derivations appear in [`tests/fixtures.md`](tests/fixtures.md);
 `tests/accidental.integration.test.ts` verifies engine delegation across house
 systems and fallback without claiming new ephemeris accuracy.
+
+## Significator aspects and contact candidates
+
+`evaluateSignificatorAspects(result, policy)` reads the existing cast and
+reports each enabled major aspect for every pair of unique physical
+significators. Each side retains its roles. Shared roles create no self-aspect.
+The current record includes longitudes, speeds in degrees/day, rounded orb,
+configured allowance, exact eligibility and applying/separating/stationary
+motion. An out-of-orb aspect still reports its motion. Mutable chart aspect,
+sign and retrograde labels do not override longitude or speed.
+
+```ts
+import { createAspectSearchPolicy, evaluateSignificatorAspects } from "./src/index.js";
+
+const aspectPolicy = createAspectSearchPolicy();
+const aspects = evaluateSignificatorAspects(result, aspectPolicy);
+```
+
+The engine's `findConfiguredAspects` decides motion, inclusive eligibility
+and exactness using its exact binary arithmetic, including circular corners.
+Each rule is evaluated separately so the engine's closest-match selection
+does not hide another enabled rule. Moving exact contacts are classified as
+separating; equal speeds or relative speed below the configured threshold are
+stationary. The default relative-speed threshold is the engine's
+`STATIONARY_RELATIVE_SPEED`. Orb defaults come from the engine's major
+aspects, with its luminary replacements. These defaults are project choices,
+not a transcription of Lilly's planetary moieties or separation margin.
+[`SOURCES.md`](SOURCES.md) explains this distinction.
+
+The search uses both planets' moving longitudes on the engine's UTC model
+clock and delegates their relative longitude to `searchLongitudeCrossingsWith`.
+It retains both directed branches, with a single branch for conjunction and
+opposition. `contacts` lists every contact found in time order, including
+returns after reversals. `relativeDirection` describes a-minus-b motion,
+not either planet's retrograde flag. Times are ISO strings and `elapsedDays`
+are UTC milliseconds divided by a day, not symbolic horary timing units.
+
+`timeToPerfection` is an `exact-now` record at a current exact contact, or
+a `candidate` at the first found contact on the current in-orb application's
+branch. Otherwise it is null. A separating aspect's future contact on the
+opposite branch is retained in `contacts` without being assigned to the
+current application. Future contacts outside current orb likewise remain
+evidence without a current-application candidate. Candidates have not yet
+been evaluated for sign exit, station, reception, prohibition or another
+traditional perfection condition; later milestones add that event analysis.
+No outcome verdict is emitted.
+
+Policy fields `aspects`, `orbs`, `luminaryOrbs` and
+`stationaryRelativeSpeed` control the aspect observations. An empty aspect
+selection disables them all; `search: false` keeps current observations and
+disables future searching. Defaults are an elapsed horizon of 30 UTC days,
+a coarse step of 0.25 day and a global budget of 20,000 relative evaluations.
+The factory bounds horizons to 366 days, steps from a millisecond to a day,
+and budgets to positive integers up to 1,000,000. These operational choices
+and their defaults are enforced in `tests/aspects.test.ts`; they are not
+accuracy bounds. Each relative evaluation calls the longitude provider for
+both planets, so the budget unit is explicit in the method record.
+
+The report's `search.status` is `complete`, `refused` or `disabled`. Refusal
+is atomic across pairs and branches: no partial future contacts or candidates
+escape, while current geometric observations remain. A completed scan means
+the sampled algorithm finished within budget, not proof of event completeness.
+Its smooth-motion assumptions, precision, nearby-root merging and clock-step
+limitations appear in `ASPECT_SEARCH_METHOD`. A missing contact is a statement
+about the bounded scan. Invalid chart rows, options, unrepresentable horizons
+or provider errors throw rather than becoming missing-contact evidence.
+
+`evaluateSignificatorAspectsWith(longitudeAt, result, policy)` exposes the
+same deterministic analysis for an independent longitude provider. The
+provider returns canonical finite degrees for a classical planet at a Date;
+its clock is labeled `caller-longitude-provider`. Neither API authenticates
+edited chart geometry against the instant or provider. Policies and reports
+are frozen JSON-friendly snapshots without retaining caller chart arrays.
+Independent motion and angular derivations are documented in
+[`tests/fixtures.md`](tests/fixtures.md). `tests/aspects.integration.test.ts`
+checks engine delegation over the synthetic question instant, house systems
+and fallback, without claiming independent ephemeris accuracy.
 
 `check:scope` checks commit-candidate file sizes, documentation punctuation,
 the pinned ephemeris dependency and folder exclusion using npm's dry-run file

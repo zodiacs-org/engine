@@ -1,4 +1,8 @@
 export { cast } from "./cast.js";
+export { evaluateSignificatorAspects, evaluateSignificatorAspectsWith } from "./significator-aspects.js";
+export type { AspectContact, AspectLongitudeAt, AspectPerfectionCandidate, HorarySignificatorAspects, SignificatorAspect } from "./significator-aspects.js";
+export { createAspectSearchPolicy, ASPECT_MOTION_SOURCE, ASPECT_SEARCH_METHOD } from "./aspect-policy.js";
+export type { AspectSearchPolicyInput, HoraryAspectPolicy } from "./aspect-policy.js";
 export { evaluateAccidentalCondition } from "./accidental.js";
 export type { AccidentalCondition, AccidentalContribution, HoraryAccidentalCondition } from "./accidental.js";
 export {

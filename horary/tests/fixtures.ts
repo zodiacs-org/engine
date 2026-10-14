@@ -1,5 +1,6 @@
 import type { Chart } from "../../src/types.js";
-import type { HoraryInput } from "../src/index.js";
+import { normalizeHoraryInput } from "../src/index.js";
+import type { HoraryCast, HoraryInput } from "../src/index.js";
 
 // Invented instant and coordinate pair; not a person's birth information.
 // See fixtures.md for the calendar arithmetic and the schematic chart.
@@ -36,4 +37,15 @@ export function schematicChart(): Chart {
     timeScale: { input: "utc", basis: "pinned", ut1MinusUtc: null, leapSeconds: null },
     engineVersion: "synthetic-adapter-fixture"
   };
+}
+
+export function aspectFixture(a = 0, b = 6, aSpeed = 1, bSpeed = 0): HoraryCast {
+  const chart = schematicChart(); // Aries first cusp => Mars; Taurus second => Venus; plus Moon.
+  for (const row of chart.bodies) {
+    if (row.body === "Mars") Object.assign(row, { lon: a, speed: aSpeed });
+    if (row.body === "Venus") Object.assign(row, { lon: b, speed: bSpeed });
+    if (row.body === "Moon") Object.assign(row, { lon: 180, speed: 0 });
+  }
+  return { schema: "horary.cast/v1", input: normalizeHoraryInput(questionInput),
+    chart: { ...chart, angles: chart.angles!, houses: chart.houses! } };
 }
