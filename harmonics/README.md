@@ -2,8 +2,9 @@
 
 This private source project adds harmonic longitude transforms, configured
 harmonic aspects, strength spectra, supported aspect patterns, Uranian dial
-projections, planetary pictures, midpoint trees and natal casting adapters to
-the engine checkout. See [PLAN.md](PLAN.md) for the remaining CLI milestones.
+projections, planetary pictures, midpoint trees, natal casting adapters and an
+offline chart CLI to the engine checkout. See [PLAN.md](PLAN.md) for the
+remaining milestones.
 Code and documentation here are MIT under
 the repository's [LICENSE](../LICENSE). The engine's data attributions remain
 in [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE).
@@ -25,6 +26,7 @@ checks the installed version and both manifests. The local TypeScript and
 Vitest configurations resolve that dependency from this folder, so development
 needs no root dependency installation. A different source runner or bundler
 must supply equivalent dependency resolution for the relative engine imports.
+The CLI's local runner supplies this resolution and compiles sources in memory.
 The root package's file list excludes this
 project. Put bulk generated data in `generated/`, which is locally ignored.
 
@@ -744,3 +746,95 @@ empty selections, missing edges, unsupported policies, rotation and seam
 invariance, engine delegation, receipt preservation and frozen snapshots.
 These checks cover transform arithmetic and supported engine graph behavior,
 not ephemeris accuracy.
+
+## Offline chart CLI
+
+From `harmonics/`, after `npm ci`, run:
+
+```sh
+node bin/harmonics.mjs chart --input fixtures/chart-points.json --harmonic 3
+node bin/harmonics.mjs chart --input fixtures/chart-birth.json --harmonic 3 \
+  --include-angles --include-chart-points
+node bin/harmonics.mjs chart --input - --harmonic 3 < fixtures/chart-points.json
+node bin/harmonics.mjs chart --help
+```
+
+The private project's bin name is `harmonics`; the equivalent npm script is
+`npm run --silent harmonics -- chart --input fixtures/chart-points.json`.
+Use the silent form when piping JSON. The runner uses the locally pinned
+esbuild to compile relative TypeScript sources in memory, including the
+engine's pinned ephemeris when casting is requested. It downloads nothing at
+command time and writes no bundle or engine build output. Dependencies must
+have been installed locally, including development dependencies. This is a
+source-checkout tool; it is excluded from the engine's npm package.
+
+`--input FILE|-` is required. Paths are local, relative to the calling working
+directory; `-` reads stdin. Input is a single UTF-8 JSON object containing
+exactly one of these fields:
+
+- `points`: a nonempty array of objects with `body` and `lon`, with optional
+  finite `speed` in source degrees/day. Labels and longitudes use the pure
+  library's validation. The chart command passes these rows through the pure
+  longitude transform and omits supplied speeds from its output.
+- `birth`: an engine birth request containing `utc` and optional `latitude`,
+  `longitude`, `houseSystem`, `timeKnown`, `timeScale`, `deltaT` and `flags`.
+  `utc` is an engine-supported ISO instant or an epoch-millisecond number.
+  Date-only strings retain the engine's UTC-midnight convention. Resolve local
+  wall times before invoking the CLI; it accepts no time zone or place lookup.
+  The engine's date, settings, flag consistency and ephemeris-span checks apply.
+
+Unknown fields, incorrect case, explicit null settings, duplicate field names
+(including escaped spellings), non-finite numbers and invalid UTF-8 reject.
+A UTF-8 byte-order mark also rejects. Inputs may contain at most 65,536 bytes,
+including whitespace, and nesting depth may not exceed 16. The byte and depth
+limits, their boundaries and duplicate-key checks are enforced in
+[test/cli-input.test.ts](test/cli-input.test.ts) over invented JSON documents.
+The size check is also applied while reading a file or stdin.
+
+`--harmonic N` defaults to 1 and `--max-harmonic N` defaults to 180, with the
+same ceiling contract as the library. Options take separate arguments;
+positive integers require plain decimal notation without a sign, leading
+zeros or whitespace. Unknown options, positional extras, repeated options,
+missing values and a harmonic above the ceiling reject before input is read.
+`--include-angles` and `--include-chart-points` append the adapter's available
+points and require birth input. They reject on supplied points rather than
+silently doing nothing. Standalone `--help` or `chart --help` prints usage
+without reading an input. Defaults and parsing boundaries are enforced by
+[test/cli-input.test.ts](test/cli-input.test.ts).
+
+Successful chart execution prints a single JSON result followed by a newline
+on stdout and returns exit status 0. Results contain
+`schema: "zodiacs-harmonics-cli/v1"`, `command: "chart"`, `sourceMode` and
+`harmonicChart`. A points result has `sourceMode: "points"` and no receipt.
+A birth result has `sourceMode: "birth"` and the adapter's unchanged `source`
+with points, flags and natal envelope. Known cast speeds are transformed by
+the adapter; unknown speeds remain absent. The natal receipt describes only
+the original cast chart, including its original natal aspects. It does not
+attest the harmonic coordinates or supplemental chart points.
+
+For a string birth instant the CLI captures its original spelling as the
+receipt's `sourceInstant`; a numeric instant leaves that field unavailable.
+Runtime provenance records the actual Node version as an engine-defined
+claim. No archive hash, local-time resolution or authenticated provenance is
+inferred. The original request, requested versus actual house system, time
+basis and source flags retain the engine's receipt semantics.
+
+Errors return exit status 1, leave stdout empty, and print
+`{"error":{"code":"...","message":"..."}}` on stderr. Codes distinguish
+`invalid-arguments`, `invalid-input`, `input-read` and `execution-failed`.
+JSON syntax and file-read failures do not echo input contents or stack traces.
+Computation finishes before any result is written.
+
+Both committed [point](fixtures/chart-points.json) and
+[birth](fixtures/chart-birth.json) fixtures are invented. The point example
+uses longitudes 10, 130 and 250 degrees: multiplying by 3 gives 30, 390 and
+750, whose circle reductions are all 30 degrees. The exact derivation and
+file/stdin output agreement are enforced in
+[test/cli.test.ts](test/cli.test.ts). That file also runs the executable with
+network transports blocked by [test/no-network.mjs](test/no-network.mjs),
+checks replayable natal receipts, unknown-time and polar-fallback semantics,
+and verifies error channels. Cast comparisons establish engine delegation and
+receipt preservation, not independent ephemeris accuracy. The separate
+[test/cli-pure.test.ts](test/cli-pure.test.ts) rejects chart API and ephemeris
+imports when executing supplied-point input. Spectrum and dial CLI commands
+are the next milestone; their pure library APIs are already available above.

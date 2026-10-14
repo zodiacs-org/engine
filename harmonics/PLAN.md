@@ -13,7 +13,7 @@ unchecked milestone, runs its checks, marks it complete and appends a line to
 - [x] M6 Implement Uranian dial projections for the requested 90, 45 and 22.5 degree circles, preserving full source longitudes and testing circular distances and seam contacts.
 - [x] M7 Implement canonical planetary pictures and A+B-C sensitive points with configurable contact orbs, explicit repeated-member rules and arithmetic tests.
 - [x] M8 Implement midpoint-tree listings by calling `src/points.ts` midpoint helpers, covering both axes, antipodal ties, dial contacts, ordering and deduplication.
-- [ ] M9 Add the offline `harmonics chart` CLI with strict JSON input validation, synthetic fixture examples, structured JSON output and receipts for chart calls.
+- [x] M9 Add the offline `harmonics chart` CLI with strict JSON input validation, synthetic fixture examples, structured JSON output and receipts for chart calls.
 - [ ] M10 Add `harmonics spectrum` and `harmonics dial` CLI commands, shared option parsing, configurable analysis settings and command integration tests.
 - [ ] M11 Document the library and CLI contracts, units, scoring choices, midpoint conventions, receipt scope and limitations; cite tests for numerical examples and keep all fixtures synthetic and small.
 - [ ] M12 Run project typechecking and Vitest integration checks, verify package exclusion and repository isolation, review deterministic outputs and record remaining limitations with reproducible validation commands.
@@ -230,3 +230,32 @@ excludes this project, using Node 22 and a writable npm cache inside
 `harmonics/.cache/`. The root `npm run package:contents` still fails at missing
 `dist/calc.d.ts`. No engine build, archive creation or git mutation was
 performed. The next session starts at M9.
+
+## M9 validation
+
+Added the offline `harmonics chart` executable and npm script. The local
+source runner uses pinned esbuild to compile in memory without writing an
+engine build or bundle. File and stdin requests accept either supplied points
+or a birth input, with strict field and duplicate-key checks, bounded UTF-8
+input, explicit harmonic ceilings and birth-only supplemental-point options.
+The command reuses the pure transform and casting adapter. Cast results retain
+the original natal envelope, flags, instant spelling and claimed Node runtime;
+derived coordinates remain outside the receipt's scope. Errors produce JSON
+on stderr with no partial stdout result.
+
+On Node 22.22.2, a clean `npm ci` followed by `npm run check` passed.
+`test/cli-input.test.ts` covers request, byte, depth and argument boundaries.
+`test/cli.test.ts` exercises the executable with network transports blocked,
+checks hand-derived fixture arithmetic, deterministic file/stdin output,
+receipt replay, unknown time, pinned TT, polar fallback and error channels.
+`test/cli-pure.test.ts` rejects chart API and ephemeris imports for supplied
+points. Both committed fixtures are synthetic. The README documents contracts
+and names the tests enforcing its numerical examples and limits.
+
+`git diff --check` passed. All changed and new files remain inside
+`harmonics/`, below the requested size limit, with no em dash in documentation.
+The root `npm pack --dry-run --json --ignore-scripts` manifest excludes this
+project, using a writable npm cache inside `harmonics/.cache/`.
+The root `npm run package:contents` still fails at missing `dist/calc.d.ts`.
+No engine build, archive creation or git mutation was performed. The next
+session starts at M10.
