@@ -1,0 +1,54 @@
+{
+  "schema": "electional-m7-test-record/v1",
+  "runtime": "v22.22.2",
+  "startedAt": "2026-10-14T08:27:38.483Z",
+  "command": "npm test -- --reporter=default --reporter=json --outputFile=generated/m7-vitest.json",
+  "tests": {
+    "passed": 301,
+    "failed": 0,
+    "skipped": 0
+  },
+  "independentComparison": {
+    "source": "NASA/JPL Horizons DE441",
+    "clock": "tt",
+    "start": "2023-10-03",
+    "end": "2023-10-28",
+    "passed": 2,
+    "skipped": 0,
+    "failed": 0,
+    "scope": "Moon applying to Sun/Jupiter major aspects, declared orb, any/all target combinations only"
+  },
+  "nativeSyntheticScanner": {
+    "passed": 6,
+    "skipped": 0,
+    "failed": 0
+  },
+  "sha256": {
+    "references/chart-cases.json": "3d2845da053bac1ab7db4848b6f9d4a1046baf999dd6950e73ee73bb0549edce",
+    "references/chart-horizons.json": "37ea89dcabf7ee25b16f95aad6fc307c200ee61f66f1beb17ed1be97ea0c26c2",
+    "references/horizons.json": "df42cf3e19e2810c28bcccf8eb7de085dbb73ee92f574b6554f8f8bd91f868d2",
+    "references/void-horizons.json": "b36f766240ddb4ed11f0058e91c53f7c6bede8aa1b74e9caa587841431e43d78",
+    "test/fixtures/chart-windows.json": "b6a5f22bd0b147548f6fde2d08ac67880b8247954ed031891b3b32d3d00c4646",
+    "src/chart-adapter.ts": "8eeaebd23ad1418bbab5ef0a6aa62f77606212819613477c1075c2934a2eba46",
+    "src/chart-rules.ts": "dfac19a338c8b212261c84382a5b12fd162657dce1461e96e64b5a486ca95e73",
+    "src/derived-search.ts": "57f111e349519b20dec87b794a68a31bb3db2e9277afd88e84c6f0392c168a6f",
+    "src/adapter-contract.ts": "b15f4e0fa43883562e0972d2674caafeba3d8d85fc2c51e8ff26ad9818fb7196",
+    "src/engine-adapter.ts": "0785ef72f71c099a01120cfabc8712866cf812e8c6974427ef57e9b2fff989f2",
+    "src/index.ts": "1685cc5e7773280940f2d136aab2eb7dc4975db228b9177015fbf6f9a6d50cee",
+    "test/chart-rules.electional-check.ts": "2e04aa288ea282b4b9b882f7e318ba0c2a36bc9aec9394141569f8d7bdf43faf",
+    "test/chart-references.electional-check.ts": "d00c21f2e6ed420259b7264d5769fbc432aeec861ccb4f5ee00fd817ec2e0dfe",
+    "scripts/chart-horizons.mjs": "5fad00bb047af965d28636d562a9a59d437216105d7018a1d6e9cf8829672a5b",
+    "scripts/horizons.mjs": "6aefef5ee323c6065ef30ef7f16978dd7172b4be2b8472e8699371a5dbe1a2c9",
+    "scripts/void-horizons.mjs": "9e2e49bd72ac46664b7fa1c1951ae2a5c095830094c8213d3cd4b34c9d764ffb",
+    "scripts/build-engine.mjs": "8a358fda0aab01070c9995c26d2fd32341ede5b44419f3cbbec1815d34b514be",
+    "scripts/check-chart-esm.mjs": "607a821c724c42f3b8b52596197639b1b9023db154f080f6f238c6f181ad1e49",
+    "scripts/record-m7-tests.mjs": "683f257c5765c6eb794b6b3651ec0c047ca27508af1b60a2ea9967c8894732d8",
+    "package-lock.json": "048e2eb7352f7b829e968173e821e4da617dddf15b23eab83e06df0a6009367d",
+    "../src/calc.ts": "95ac80e297393a06adfa213a0aa9c342e02ec41abeaefd1b9f497c376ac35180",
+    "../src/window.ts": "c36715e96b6308044b25b39708e0ffd9847db1753824492b5d2015496b105a4b",
+    "../src/houses.ts": "e97ea80f5f225fadf0bfcb051f0afcce820678f31ff1013cc0ebce3035cc8ceb",
+    "../src/configured-aspects.ts": "c56349ba454e7cb3005f25eb3b740dd063cfeb3b9115e0d11512d8989ff19be4",
+    "../src/aspects.ts": "5cfbf1ffe3889f1c038b798d5bd74674de17bd9f0571adb4be08141cdd49f740"
+  },
+  "scope": "Hand-derived interval logic, control flow and native API delegation; independent applying-window comparison over the declared TT span only. No physical accuracy claim for angular/house windows, no exhaustive event proof, and no runtime or hidden window-sample budget claim."
+}

@@ -1,4 +1,9 @@
-# Independent basic-rule references
+# Independent rule references
+
+Applying-aspect references reuse the verified Moon/Sun and planetary longitude
+series below. [chart-horizons.json](chart-horizons.json) records independent
+orb-entry and exact-exit windows with bound input digests. The policy, span,
+reduction and comparison limits are documented in [CHARTS.md](../CHARTS.md).
 
 Planetary-hour references use the parent US Naval Observatory ephemeris
 fixture, bound by digest in [hour-cases.json](hour-cases.json), with expected

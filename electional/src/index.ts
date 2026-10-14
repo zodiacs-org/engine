@@ -27,3 +27,8 @@ export { SkyAdapter, loadSkyRuntime } from './sky-adapter.js';
 export type { SkyRuntime, NativePlanetaryDay, NativePlanetaryHour, PlanetaryDayAudit } from './sky-adapter.js';
 export { evaluateHourRule } from './hour-rule.js';
 export type { HourRule, HourRuleOptions, HourRuleWindowResult } from './hour-rule.js';
+export { ChartAdapter, loadChartRuntime } from './chart-adapter.js';
+export type { ChartRuntime, NativeChart, NativeHousePartition, AspectAnalysis } from './chart-adapter.js';
+export { evaluateChartRule } from './chart-rules.js';
+export type { ChartRule, ChartRuleOptions, ChartRuleWindowResult, HousePartitionAudit } from './chart-rules.js';
+export type { DerivedSearchAudit } from './derived-search.js';

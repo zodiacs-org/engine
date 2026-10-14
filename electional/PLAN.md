@@ -10,7 +10,7 @@ writes inside `electional/`. Git changes are handled by the harness.
 - [x] M4 Evaluate Moon sign and phase rules and Mercury/Venus direct-motion windows through existing engine/events APIs, with independently sourced astronomical reference instants.
 - [x] M5 Evaluate Moon not void of course with explicit body/aspect conventions, lookahead, clipping and unresolved-tail handling through the events API.
 - [x] M6 Evaluate planetary-hour rules through the engine sky entry, including local solar-day ownership, missing rise/set and polar refusals.
-- [ ] M7 Evaluate benefics angular or in selected houses and applying aspects to selected bodies using engine chart, house and configured-aspect APIs; expose house fallbacks and boundary uncertainty.
+- [x] M7 Evaluate benefics angular or in selected houses and applying aspects to selected bodies using engine chart, house and configured-aspect APIs; expose house fallbacks and boundary uncertainty.
 - [ ] M8 Add eclipse and station avoidance within declared day margins using padded events searches and interval subtraction, preserving event clocks and coverage refusals.
 - [ ] M9 Add optional synastry rules against one synthetic natal chart through the existing engine API, with explicit aspect policies and receipt provenance.
 - [ ] M10 Combine hard-rule windows and weighted preferences, rank deterministically, and include per-rule explanations, unresolved coverage and engine receipts in every result.
