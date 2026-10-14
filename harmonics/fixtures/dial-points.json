@@ -1,0 +1,8 @@
+{
+  "points": [
+    { "body": "A", "lon": 0 },
+    { "body": "B", "lon": 20 },
+    { "body": "C", "lon": 10 },
+    { "body": "D", "lon": 100 }
+  ]
+}
