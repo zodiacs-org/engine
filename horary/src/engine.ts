@@ -3,8 +3,8 @@
 export { natalChart } from "../../src/api.js";
 export { dateFrom } from "../../src/date-input.js";
 export { HOUSE_SYSTEMS } from "../../src/houses.js";
-export { CLASSICAL_PLANETS } from "../../src/techniques/dignities.js";
+export { CLASSICAL_PLANETS, dignityRulersAt } from "../../src/techniques/dignities.js";
 export type { ClassicalPlanet } from "../../src/techniques/dignities.js";
 export type {
-  Angles, Chart, DateInput, HouseNumber, Houses, HouseSystem
+  Angles, Chart, DateInput, HouseNumber, Houses, HouseSystem, ZodiacSign
 } from "../../src/types.js";

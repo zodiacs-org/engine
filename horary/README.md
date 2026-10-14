@@ -6,8 +6,8 @@ Code and documentation here use the repository's MIT license. The imported
 engine retains the data licenses and attribution described in
 [`../LICENSING.md`](../LICENSING.md) and [`../NOTICE`](../NOTICE).
 
-The foundation provides `cast` and `normalizeHoraryInput`. Analysis rules,
-explanations and the CLI are scheduled in [`PLAN.md`](PLAN.md).
+The library provides `cast`, `normalizeHoraryInput` and `selectSignificators`.
+Further analysis rules and the CLI are scheduled in [`PLAN.md`](PLAN.md).
 
 From the checkout, using Node as specified in this folder's `package.json`:
 
@@ -24,7 +24,7 @@ checkout relative; this is not yet a standalone installed package or a plain
 Node entry point. Future CLI tooling must preserve that dependency resolution.
 
 ```ts
-import { cast } from "./src/index.js";
+import { cast, selectSignificators } from "./src/index.js";
 
 const result = cast({
   instant: "2000-01-01T12:00:00Z",
@@ -32,6 +32,7 @@ const result = cast({
   question: { id: "lost-object", quesitedHouse: 2 },
   houseSystem: "regiomontanus"
 });
+const significators = selectSignificators(result);
 ```
 
 The example uses the synthetic fixture documented in
@@ -61,6 +62,26 @@ engine chart remains mutable and uses Dates as the engine does. JSON encoding
 turns its Dates into ISO strings; parsing that JSON does not restore Date
 instances or authenticate the chart. These ownership decisions are tested in
 `input.test.ts` and `cast.integration.test.ts`.
+
+`selectSignificators(result)` uses the actual first cusp and the declared
+quesited house's cusp, obtaining traditional domicile rulers through the
+engine's dignity API. The Moon remains the querent's co-significator, and
+declared natural significators retain their input order. Each assignment
+contains its role, planet, basis and a short explanation. The `planets`
+array groups assignments by physical planet, retaining every role and
+explaining overlaps without assigning an outcome. Source identifiers and
+the first-cusp convention for alternative house systems are documented in
+[`SOURCES.md`](SOURCES.md).
+
+Selection reads an existing cast without recalculating the sky. It returns
+a deeply frozen snapshot, including requested and actual house systems, and
+leaves chart arrays mutable. It revalidates the question settings and cusp
+shape/range because the chart may have been edited. This is a typed cast
+consumer, not an authenticated chart importer: it does not verify that
+supplied cusps agree with the instant, location or house system. These
+behaviors and sign boundaries are checked in `significators.test.ts`; engine
+delegation, house systems and fallback are checked in
+`significators.integration.test.ts`.
 
 Tests distinguish independently worked calendar/angle fixtures from engine
 delegation checks. Neither the foundation nor its integration tests establish
