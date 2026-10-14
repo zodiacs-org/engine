@@ -1,6 +1,6 @@
 # Primary-source roadmap
 
-The sources below distinguish implemented geometry checks from the model
+The sources below distinguish implemented geometry and phase checks from the model
 roadmap. A citation here does not mean that a visibility model is implemented.
 Formulas must be implemented independently, with their units, coordinate
 conventions and domain recorded in the tests.
@@ -30,8 +30,53 @@ Read on 2026-10-14. The geometry fixture records the example, locator and
 degree-input comparison gate; its notes retain ERFA's copyright and BSD
 notice. This checks the local rotation independently of the ephemeris.
 
-The following roadmap sources were fetched and the cited sections read
-during the foundation session.
+## Phase geometry
+
+US Naval Observatory, *Phases of the Moon and Percent of the Moon Illuminated*,
+paragraph beginning "The relationship of the Moon's phase":
+<https://aa.usno.navy.mil/faq/moon_phases>.
+Read on 2026-10-14. Defines primary lunar phases by the difference of apparent
+ecliptic longitudes. `synodicPhase` uses that longitude difference, signed
+in `(-180, 180]`, for the Moon and visible planets. Its morning/evening labels
+are this library's longitude convention, not a sighting or horizon claim.
+`test/phase.test.ts` checks the published lunar angle definitions and the
+library's signed wrap, conjunction and opposition conventions.
+
+NASA/JPL NAIF, *phaseq_c: Phase angle quantity between bodies centers*,
+"Detailed Input" (`abcorr` value `NONE`) and "Particulars":
+<https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/phaseq_c.html>.
+Read on 2026-10-14. Defines the angle at the target between the illuminator
+and observer, and distinguishes geometric states from light-time-corrected
+states. Our illumination uses geometric states at a common instant supplied
+by the engine's calculation entry, from the geocentre or observing site.
+No NAIF code, kernels or output are used.
+
+Sheldon M. Smith, James B. Pollack, Lawrence P. Giver, Jeffrey N. Cuzzi and
+Morris Podolak, *Inhomogeneous Models of the Venus Clouds Containing Sulfur*,
+NASA Technical Memorandum 78558 (April 1979), printed p. 4, opening paragraph:
+<https://ntrs.nasa.gov/api/citations/19790014817/downloads/19790014817.pdf>.
+Read on 2026-10-14. Identifies `(1 + cos(phi)) / 2` as the illuminated fraction
+of the disk area, separately from reflectivity. Only the formula is used;
+no report prose, figures or tables are copied. `test/phase.test.ts` checks
+the formula using independently constructed triangles and exact identities.
+
+Our triangle construction is elementary geometry: for observer-Sun distance
+`R`, observer-target distance `d`, and geometric elongation `e`, the components
+of target-to-Sun along and across target-to-observer are `d - R*cos(e)` and
+`R*sin(e)`. Their `atan2` is the phase angle at the target, and their hypotenuse
+is the Sun-target distance. The implementation scales distances and uses
+equivalent half-angle arithmetic near coincidence. This construction assumes
+a spherical disk and omits shadows, surface shape and travel time.
+
+NASA/JPL *Horizons System*, observer quantities 10, 23, 31 and 43:
+<https://ssd.jpl.nasa.gov/horizons/manual.html>.
+Definitions and responses read on 2026-10-14. Quantity 43's `phi` is the true
+phase in retarded geometry, whereas quantity 24 also includes down-leg
+stellar aberration. The phase tests use `phi`, along with the disk percentage,
+apparent separation and apparent longitude; they allow for our simultaneous
+geometric illumination convention. [The phase fixture](test/fixtures/phase-reference.json)
+records the source rows and gates fixed before running the comparison. Its
+selected instant is not evidence of accuracy across the engine's date span.
 
 ## Horizon events already delegated to the engine
 
@@ -53,6 +98,9 @@ tolerance and exact comparison scope. The root licensing record identifies
 the fixture as a US Government work.
 
 ## Planetary visibility
+
+The following roadmap sources were fetched and the cited sections read
+during the foundation session.
 
 C. Schoch, "The 'Arcus Visionis' of the Planets in the Babylonian
 Observations", *Monthly Notices of the Royal Astronomical Society* 84

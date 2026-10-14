@@ -5,9 +5,9 @@ the parent checkout. It is outside the engine's npm package. The checklist
 in [PLAN.md](PLAN.md) records the implementation order.
 
 The library currently supplies strict inputs, apparent positions,
-Sun/body geometry and rise/set/transit events with position receipts.
-Visibility models, crescent predictions, phase classification and the CLI
-are planned, not available.
+Sun/body geometry, phase classification, geometric disk illumination and
+rise/set/transit events with position receipts. Visibility models, crescent
+predictions and the CLI are planned, not available.
 
 ## Development
 
@@ -152,6 +152,67 @@ frame and at the same origin. Longitudes, right ascension and sidereal
 angle must be in `[0, 360)`; latitudes and declination must be in
 `[-90, 90]`. The helpers reject invalid input and do not add parallax.
 
+## Phase API
+
+```ts
+import { phase } from "./src/index.js";
+
+const result = phase("Venus", "2020-01-01T00:00:00Z", {
+  latitude: 45, longitude: 10, height: 0
+});
+if (result.status === "ok") {
+  console.log(result.geocentric.classification);
+  console.log(result.topocentric.elongationDeg);
+  console.log(result.topocentric.illumination.illuminatedFraction);
+}
+```
+
+`phase(body, at, observer)` returns geocentric and topocentric results for
+each visibility target. `signedSynodicAngleDeg` is apparent tropical target
+longitude minus Sun longitude in `(-180, 180]`. Positive angles are labeled
+`evening-star`, negative angles `morning-star`. Exactly zero is
+`conjunction`; opposite longitudes are represented by positive `180` and
+labeled `opposition`. These labels use computed longitude equality without
+an epsilon. [The phase tests](test/phase.test.ts) enforce the wrap and
+boundary conventions, including USNO's primary lunar phase definitions.
+
+The geocentric label is the conventional longitude phase. The topocentric
+label applies the same rule to the observer's apparent longitudes and can
+differ near a boundary. Neither label establishes visibility, darkness,
+which horizon crossings occur, or whether a body is observable only in the
+morning or evening. Outer planets near opposition can be seen during both.
+A longitude conjunction need not be an angular coincidence, and this API
+does not distinguish inferior from superior conjunction or find their times.
+
+`elongationDeg` is the apparent angular separation including latitude.
+`illumination` instead uses a simultaneous geometric Sun/observer/target
+triangle: `phaseAngleDeg` is the angle at the body, and
+`illuminatedFraction` is the lit fraction of its projected spherical disk,
+from zero to one. It also returns `geometricElongationDeg`,
+`sunTargetDistanceAu` and the original geometric `positions.sun` and
+`positions.target`, each with its engine receipt. The source of the disk
+formula and geometric phase definition is cited in
+[SOURCES.md](SOURCES.md#phase-geometry).
+
+Illumination omits light travel time, aberration, eclipses, rings, surface
+relief and atmospheric effects. It measures illuminated area, not apparent
+brightness or the chance of a sighting. Do not substitute the apparent
+elongation for the geometric triangle's elongation. The original apparent
+positions and horizontal coordinates remain available under `geometry`.
+`units`, `conventions` and `receiptScope: "positions"` describe the result;
+derived phases have no propagated accuracy bound or additional engine
+receipt. A refused source position returns the intact engine refusal without
+partial results. Input validation and time basis are the same as the geometry API.
+
+`synodicPhase(targetLongitudeDeg, sunLongitudeDeg)` is the pure longitude
+helper, with both inputs in `[0, 360)` in the same frame and origin.
+`illuminationGeometry(elongationDeg, sunDistanceAu, targetDistanceAu)` is the
+pure triangle helper, taking an angle in `[0, 180]` and positive distances
+in astronomical units. It rejects coincident Sun/target positions and a
+derived distance that cannot be represented as positive finite au. The
+helpers' domains and geometric identities are checked in
+[test/phase.test.ts](test/phase.test.ts).
+
 ## Checks and sources
 
 The foundation tests check inputs, body scope, engine delegation, receipt
@@ -177,6 +238,16 @@ with gates fixed in [test/geometry.test.ts](test/geometry.test.ts).
 [The fixture notes](test/fixtures/README.md) explain the convention
 differences and attribution. These coordinate examples do not validate
 predicted visibility or establish accuracy across a date range.
+
+The phase comparison in [test/phase-reference.test.ts](test/phase-reference.test.ts)
+uses [Horizons numerical examples](test/fixtures/phase-reference.json) for
+the Moon and visible planets at the instant in the phase example, and the
+Moon at that example site. Its predeclared gates cover the stated difference
+between simultaneous geometric illumination and Horizons' retarded geometry.
+The fixture and [notes](test/fixtures/README.md#phase-references) record
+the exact requests, source quantities, attribution and comparison scope.
+The pure triangle tests independently check the implemented geometry;
+receipt parity and site-dependence tests are integration checks.
 
 [SOURCES.md](SOURCES.md) records the geometry references and primary-source
 roadmap for later milestones. Code and original documentation here follow

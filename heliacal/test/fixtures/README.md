@@ -1,4 +1,4 @@
-# Geometry references
+# Geometry and phase references
 
 `geometry-reference.json` contains independent coordinate examples for the
 geometry tests. The selected instant and observing site are synthetic. No
@@ -58,6 +58,39 @@ observer and topocentric apparent correction. Consequently a sky-event
 altitude and a horizontal altitude derived from the calculation entry
 need not be identical. The fixture checks the calculation entry's
 geometry; it does not redefine the sky solver's horizon.
+
+## Phase references
+
+`phase-reference.json` records independently fetched Horizons observer
+examples for the Moon and visible planets at its stated instant. It uses
+the same synthetic instant and site as the geometry fixture, which supplies
+the Sun's longitude for each origin. `phase-reference.test.ts` subtracts
+that Sun longitude from the target's reference longitude to check the
+signed synodic angle. The expectation is derived from Horizons coordinates,
+not from this library's result.
+
+The phase requests include quantities 10, 23, 24, 31 and 43. The retained
+fields are the illuminated disk percentage (`Illu%`), apparent angular
+elongation (`S-O-T`), apparent ecliptic longitude, and true phase (`phi`,
+quantity 43). Quantity 24 (`S-T-O`) has an additional down-leg stellar
+aberration contribution and is not the retained phase expectation. The
+fixture preserves each target's own ephemeris source, as these are not all
+DE441. The attribution and numerical-fact provenance described above for
+NASA/JPL apply to this fixture too.
+
+Horizons' true phase uses retarded geometry. The library computes disk
+illumination from simultaneous geometric positions, independently of its
+apparent elongation and longitude. The predeclared fixture gates allow
+for that distinction, source rounding and the engine's existing coordinate
+errors. They are sample acceptance gates, not a measured prediction error
+over a date range. No eclipse, atmospheric extinction or observer visibility
+is tested by these examples. No network request runs during the tests.
+
+The pure geometry tests use exact triangle identities and independently
+evaluated law-of-cosines arithmetic. Those test the implementation of the
+published disk-fraction definition cited in `../../SOURCES.md`; they do not
+validate ephemeris accuracy. Tests comparing receipts and positions with
+direct engine calls are integration checks only.
 
 ## ERFA horizontal transformation
 

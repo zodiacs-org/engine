@@ -6,3 +6,7 @@ export { angularSeparation, equatorialToHorizontal, sunBodyGeometry } from "./ge
 export type {
   BodyGeometry, GeometryResult, HorizontalCoordinates, SphericalDirection, SunBodyGeometry, SunBodyPair
 } from "./geometry.js";
+export { illuminationGeometry, phase, synodicPhase } from "./phase.js";
+export type {
+  BodyPhase, IlluminationGeometry, PhaseAtOrigin, PhaseClassification, PhaseResult, ReceiptedIllumination, SynodicPhase
+} from "./phase.js";

@@ -1,2 +1,3 @@
 M1: establish isolated heliacal tooling, validated engine adapters with position receipts, USNO-backed foundation tests, source roadmap and package-isolation check.
 M2: add receipted geocentric and topocentric Sun/body geometry, airless horizontal coordinates and angular separation; validate against JPL Horizons and ERFA examples with explicit units and conventions.
+M3: add receipted planetary and lunar phase API with signed longitude, morning/evening boundaries and geometric disk illumination; validate against cited Horizons examples and independent triangle arithmetic.
