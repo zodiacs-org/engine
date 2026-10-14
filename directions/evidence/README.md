@@ -31,3 +31,5 @@ to itself. [M1](M1.md) validates conventions and [M2](M2.md) checks the engine
 adapter. Neither implements an arc calculation or establishes its accuracy.
 [M3](M3.md) adds hand-derived hour angles, semi-arcs and quadrant coordinates;
 these remain prerequisites for a later directional-arc calculation.
+[M4](M4.md) checks direct conjunction arcs to fixed angles against independent
+sphere examples. It does not yet implement body directions or directed ages.

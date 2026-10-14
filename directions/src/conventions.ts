@@ -9,7 +9,7 @@ interface CommonConvention {
   readonly key: TimingKey;
 }
 
-type MotionConvention =
+export type DirectionMotionConvention =
   | { readonly motion: "direct"; readonly converseConstruction?: never }
   | { readonly motion: "converse"; readonly converseConstruction: "placidus-role-swap" };
 
@@ -17,7 +17,7 @@ type MotionConvention =
  * The initial contract admits only the latitude policies documented in SOURCES.
  * Other combinations require independent evidence before extending this union.
  */
-export type DirectionConvention = CommonConvention & MotionConvention & (
+export type DirectionConvention = CommonConvention & DirectionMotionConvention & (
   | { readonly mode: "zodiacal"; readonly latitude: "zero-both" }
   | { readonly mode: "mundane"; readonly latitude: "retain-both" }
 );
@@ -72,7 +72,7 @@ export function parseDirectionConvention(input: unknown): DirectionConvention {
   if (motion === "converse" && values.converseConstruction !== "placidus-role-swap") {
     throw new RangeError("Converse requires the explicit placidus-role-swap construction.");
   }
-  const direction: MotionConvention = motion === "direct"
+  const direction: DirectionMotionConvention = motion === "direct"
     ? { motion } : { motion, converseConstruction: "placidus-role-swap" };
   if (mode === "zodiacal" && latitude === "zero-both") {
     return Object.freeze({ system, mode, ...direction, latitude, key });

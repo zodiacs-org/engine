@@ -6,8 +6,9 @@ here follow the repository's [MIT license](../LICENSE); using the engine
 retains the engine's own [data and attribution terms](../LICENSING.md).
 
 The current implementation validates explicit convention choices, prepares
-engine natal snapshots and computes pure sphere coordinates and semi-arcs.
-Directional arcs, timing conversions and the
+engine natal snapshots, computes pure sphere coordinates and semi-arcs, and
+finds direct conjunction arcs to fixed angles from prepared coordinates.
+Body directions, timing conversions and the
 `directions hit` and `directions scan` commands are still planned in
 [PLAN.md](PLAN.md). An accepted
 convention is not a computed hit or a claim that a particular contact exists.
@@ -43,8 +44,9 @@ The initial contract admits `zodiacal` only with `zero-both` and `mundane`
 only with `retain-both`. These are explicit project subsets, not claims that
 all authors use those pairings. Additional latitude and converse constructions
 need named options and independent evidence before they can be admitted.
-`converse` does not silently negate a direct arc. Historical restrictions on
-the available contacts still need validation in the future hit API.
+`converse` does not silently negate a direct arc. The angle solver refuses
+converse under the role-swap construction. Restrictions on other contacts
+still need validation in their solvers and the future hit API.
 
 [SOURCES.md](SOURCES.md) states what each traditional source supports and
 where it differs. [evidence/README.md](evidence/README.md) sets the numerical
@@ -194,4 +196,82 @@ its declination beyond that domain.
 
 The hand-derived checks cover invented sphere coordinates, with no natal date
 or ephemeris. They establish agreement only on the fixtures described in
-[M3 evidence](evidence/M3.md). Directional contacts and ages remain pending.
+[M3 evidence](evidence/M3.md). These coordinate helpers do not return a
+directional contact or age.
+
+## Conjunction arcs to fixed angles
+
+`angleConjunctionArc` is a pure coordinate-level solver. The supplied point
+is the moving promissor; the named angle is the fixed significator. Supply
+`motion` explicitly. The direct construction, reported as `placidus-direct`,
+carries the point westward at fixed declination to the chosen meridian or
+geometric horizon. No planetary orbital motion is added.
+
+```ts
+import { angleConjunctionArc } from "./src/index.js";
+
+const arc = angleConjunctionArc({
+  coordinates: {
+    ramcDegrees: 300,
+    rightAscensionDegrees: 0,
+    latitudeDegrees: 45,
+    declinationDegrees: Math.atan(1 / 2) * 180 / Math.PI
+  },
+  angle: "asc",
+  motion: "direct"
+});
+console.log(arc.arcDegrees, arc.geometry);
+```
+
+This invented sphere example and its angular expectation are derived in
+[M4-derivations.md](evidence/M4-derivations.md) and checked against
+[angle-examples.ts](evidence/angle-examples.ts). It is not a natal record.
+For an engine chart, the adapter supplies RAMC and observer latitude, and its
+equatorial row supplies a bodily promissor's right ascension and declination.
+Those rows retain bodily latitude. A zodiacal contact first needs its separate
+ecliptic projection under the selected latitude policy; this primitive does
+not perform that projection or accept a mode that it cannot apply.
+
+`angle` must be `mc`, `ic`, `asc` or `dsc`. The targets are respectively the
+upper meridian, lower meridian, rising horizon and setting horizon on the
+promissor's own declination circle. An angle contact is an axis crossing,
+not equality with the natal angle's ecliptic longitude or right ascension.
+No house cusp is generated or moved. Aspect rays, body significators and
+timing keys are outside this primitive; it returns no age.
+
+The result reports `kind: "conjunction-to-angle"`, the target, motion,
+construction and `arcDegrees`. Its frozen `geometry` contains the initial
+sphere position and semi-arcs, target boundary and hour angle, unreduced
+hour-angle difference, whole turns added, rotation sense and coincidence.
+The unreduced difference is rounded audit metadata. Short wrapped arcs are
+evaluated from the gaps through the lower meridian, so reducing that rounded
+difference again may not reproduce a tiny arc. Long wrapped arcs add a turn
+directly to avoid extra rounding at that split. The input is neither mutated
+nor frozen.
+
+The selected arc is the first nonnegative westward rotation in `[0, 360)`.
+Natal coincidence returns zero, and an already passed target waits for the
+next passage. This is a project enumeration rule; it does not impose a
+traditional lifetime limit or take the shorter arc. The interval and branch
+examples are enforced by [angles.check.ts](checks/angles.check.ts).
+Coincidence means equality of computed coordinates without an epsilon.
+Trigonometric roundoff near an oblique horizon can change which revolution
+is selected. A nearly complete turn that rounds to `360` is refused rather
+than misreported as zero. The hand-derived examples do not give a global
+numerical error bound near such boundaries.
+
+`motion: "converse"` requires `converseConstruction: "placidus-role-swap"`
+and then returns the typed `unsupported-converse-angle` refusal for every
+angle, following Placidus's restriction. No broader converse construction is
+implemented. `AngleDirectionError` extends `RangeError` with that code,
+`invalid-input` for malformed request fields or `numerical-degeneracy` for an
+unrepresentable first-turn arc. A direct request rejects any
+`converseConstruction` field. All fields must be explicit plain data; unknown
+fields and accessors are refused.
+
+`SphereGeometryError` propagates for invalid coordinates and unsupported
+sphere geometry. The current solver requires crossing semi-arcs for every
+target. Circumpolar meridian contacts can exist geometrically but are outside
+this implementation's current subset; no polar fallback is applied. Source
+locators, independent fixtures and the tested scope are in
+[M4 evidence](evidence/M4.md).

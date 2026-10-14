@@ -34,8 +34,9 @@ promissor's fixed position. This is `converseConstruction:
 It is generally different from negating a direct arc when declinations differ.
 
 Theses 60-61 reject converse directions of angles and converse zodiacal
-aspects. A future solver must refuse those combinations under this construction.
-Accepting a convention object alone does not permit every contact.
+aspects; thesis 61 also excludes zodiacal rays to angles. The angle solver
+refuses converse under this construction. Aspect solvers must preserve those
+restrictions. Accepting a convention object alone does not permit every contact.
 
 The initial `zodiacal/zero-both` policy is a project restriction to ecliptic
 projections. `mundane/retain-both` preserves the bodies' latitude. These
@@ -86,3 +87,20 @@ The westward proportional coordinate in M3 is an explicitly defined library
 coordinate. It does not yet implement a historical aspect rule or choose a
 direct or converse construction. Neither the USNO coordinate relation nor
 the analytic fixtures validate the ephemeris or predictive interpretation.
+
+## Angle conjunctions implemented in M4
+
+Ptolemy's angular rules on printed page 94 of the Ashmand translation above
+distinguish rising, meridian and setting contacts. Placidus's westward direct
+construction on printed page 57 supplies their motion sense. His converse
+angle restriction appears in thesis 60 on printed page 23 and again in
+canon XXXVII on printed page 105. These passages were reread for M4.
+
+The coordinate-level solver fixes the angular significator and carries the
+prepared promissor along its declination circle. It uses the appropriate
+branch of the geometric horizon or meridian, with the derivation in
+[M4-derivations.md](evidence/M4-derivations.md). It does not yet apply a
+zodiacal projection, aspect ray or timing key. Selecting the first nonnegative
+rotation, including an initial contact, and restricting every target to
+crossing semi-arcs are explicit project rules, not additional historical
+claims. The Placidus role-swap option is refused for all angle targets.
