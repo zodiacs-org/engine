@@ -307,3 +307,73 @@ unknown-time reference and missing-location reason. Fresh result records
 are frozen without freezing caller input. The natal receipt remains the
 engine's chart envelope; it covers neither the derived declination targets
 nor the stellar positions or their matches. No sky call is made in M6.
+
+## Scoped sky-vector proof
+
+tests/sky-vector.fixedstars.ts checks the adapter's J2000 direction before
+the engine solver rotates it. The constructed stationary x-axis star has
+ray (D,0,0), with D = 2^500 au as a numerical scale. This is deliberately
+not a physical stellar distance. Multiplication by a power of two preserves
+the normalized direction in ordinary binary64 arithmetic without a new
+angular conversion. It leaves room for the solver's coordinate sums, its
+Math.hypot norm and its conversion to kilometres to remain finite. The test
+checks that finite norm; no accuracy bound on real stellar parallax follows.
+The observer displacement remains in the original engine calculation, but
+is negligible on this ray scale. This models an effectively infinite direction.
+
+The synthetic east tangent motion from the earlier motion derivation advances
+the x-axis direction over 365.25 TT days to (1,1,0)/sqrt(2). Dividing the
+adapter's vector by D gives that same expectation, compared at precision 12.
+The vector's AstroTime is retained. No frame bias, precession or nutation
+belongs inside this vector provider; the original solver applies equatorRows
+at the current TT sample after receiving it. Tests also alter caller
+astrometry inside a scope and require its captured motion and direction to
+remain unchanged. Other bodies and native natal chart casting stay native.
+These are construction and scope checks, not physical star measurements.
+
+tests/sky-adapter.fixedstars.mjs searches an invented equatorial observer at
+latitude and longitude zero over 2000-03-20 UTC to 2000-03-21 UTC, for the
+same constructed stationary J2000 x-axis star. It requires one rise, one set,
+one upper transit and one lower transit in that window. It uses independent
+spherical identities to check the solver's altitude and azimuth at the events,
+using the current true-of-date declination delta as an input. At latitude zero,
+with hour angle H increasing westward, an infinite direction has local components:
+
+```text
+east = -cos(delta) sin(H)
+north = sin(delta)
+up = cos(delta) cos(H)
+```
+
+For geometric centre crossings, altitude h is zero, so cos(H) = 0. At rise,
+H = -90 degrees and east is positive: azimuth is 90 - delta degrees. At set,
+H = +90 degrees and east is negative: azimuth is 270 + delta degrees. At the
+upper transit H = 0, altitude is 90 - abs(delta) degrees; at the lower transit
+H = 180, altitude is -90 + abs(delta) degrees. The test computes these
+identities directly, with refraction disabled and the point-body centre limb.
+Comparisons allow 1e-5 degrees for the engine's first-whole-millisecond event
+convention and trigonometric roundoff over this single synthetic window.
+This is a predeclared construction tolerance, not an astrometric error bound.
+The declination input uses the engine frame helpers, so the whole test checks
+wiring and geometric construction, not an independent physical event time.
+
+Separate integration tests compare every ordinary native body sky call before
+and after interleaved star searches, including the original Pluto, with the
+direct unadapted engine call made at test time. They check exact agreement
+for the invented observer at latitude 12, longitude 30 over the same window.
+Those comparisons prove scoped substitution over the enumerated calls; they
+do not supply an independent ephemeris reference. Clock errors, invalid
+observer/window/limb settings and sample-budget refusal must clear the slot.
+The engine returns no partial events on refusal, unchanged by the adapter.
+
+The committed engine-sky-contract.json binds the parent source files actually
+parsed during bundling and the ephemeris ESM bytes. The bundle plugin reads
+src/sky/riseset.ts unchanged and replaces only its import edge; no event
+algorithm is copied into fixedstars source. Compatibility tests inject changed
+bytes through a test reader rather than editing the engine. They also refuse
+changed versions, a missing input and a mismatched graph. Runtime loading
+compiles in memory and gives each module an independent synchronous scope.
+The private proof's native result still identifies its Pluto slot and is
+not exposed through the library index. A future star-event wrapper must label
+the star and its fixedstars call provenance explicitly, while retaining native
+body results and the absence of native stellar receipt support.

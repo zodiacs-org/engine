@@ -39,8 +39,7 @@ and do not assert physical or predictive effects.
 [GEOMETRY.md](GEOMETRY.md) derives the expectations used in the geometric
 tests. Integration tests exercise chart receipts and the existing sky
 solver's refusal semantics; they do not measure stellar astrometric accuracy.
-The sky custom-vector limitation and receipt distinction are recorded in
-PLAN.md for the later adapter milestone.
+The scoped sky-vector proof and receipt distinction are described below.
 
 Original code and documentation use the repository's [MIT licence](../LICENSE).
 Source decisions, pinned retrieval receipts and short historical passages
@@ -48,6 +47,52 @@ are in [sources/README.md](sources/README.md). The selected HYG catalog data
 retain CC BY-SA terms. [LICENSING.md](LICENSING.md) and [NOTICE.txt](NOTICE.txt)
 state the redistribution terms and required attributions. Bulk generated
 tables and downloads belong in ignored folders.
+
+## Sky adapter proof
+
+The internal adapter now executes the existing parent src/sky/riseset.ts in
+an isolated in-memory bundle. It redirects only that module's astronomy-engine
+import to [src/sky-vector.ts](src/sky-vector.ts). Other imports keep the real
+dependency. During a synchronous star search, the adapter binds a catalog
+J2000 direction to the solver's Pluto point-body slot, advances its transverse
+motion at every sampled TT instant, and lets the engine perform the frame
+rotation, observer projection and event searches. The direction is represented
+by a large finite numerical ray scale, which is not a catalog distance.
+Stellar parallax and the other stellar correction omissions described in the
+positions section still apply.
+
+The binding clears on every exit. Reentry and promise-returning scopes are
+refused. Ordinary bodies retain their native vector calls outside the binding;
+other bodies also retain them inside it. No global export or star registry is
+patched. Each loaded bundle has its own scope. The dependency's normal engine
+clock side effect remains the one documented in the parent README.
+
+[scripts/build-sky-adapter.mjs](scripts/build-sky-adapter.mjs) checks the
+engine version, consumed engine source bytes and import graph, and the pinned
+ephemeris version and source digest against
+[sources/engine-sky-contract.json](sources/engine-sky-contract.json). It checks
+the engine bytes supplied to the compiler as well. An incompatible checkout
+fails explicitly; the script does not silently update its contract. Reviewing
+a new engine requires reviewing its solver, vector shape, point-body slot,
+frame and clock dependencies, then intentionally recording a new contract
+and rerunning the adapter tests. A digest contract establishes compatibility,
+not astronomical accuracy or an authenticated engine receipt.
+
+Verify the proof without emitting an engine build:
+
+```sh
+node fixedstars/scripts/build-sky-adapter.mjs
+```
+
+The proof interface is internal and absent from the library index. Its raw
+star result still names the private Pluto slot. The public star event API
+and explicitly labelled fixedstars call provenance remain the next milestone;
+raw proof output must not be described as a native stellar receipt. The
+scope, unchanged-body comparisons, error restoration and compatibility
+refusals are checked in [tests/sky-vector.fixedstars.ts](tests/sky-vector.fixedstars.ts)
+and [tests/sky-adapter.fixedstars.mjs](tests/sky-adapter.fixedstars.mjs).
+[GEOMETRY.md](GEOMETRY.md) derives the equatorial event checks and distinguishes
+them from independent physical accuracy evidence.
 
 ## Catalog snapshot
 

@@ -10,7 +10,7 @@ explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
 - [x] M4 Propagate catalog proper motion and rotate positions onto the chart's true equator and ecliptic with the engine frame, equator, nutation, and time-basis helpers; document and test hand-derived geometry.
 - [x] M5 Implement pure conjunction and parallel matching with explicit angular orb units, inclusive boundaries, structured star ids and contact kinds, deterministic ordering, and independent geometric tests.
 - [x] M6 Cast synthetic natal inputs through the engine, include bodies and available angles, preserve native natal receipts, and expose the chart-hit library API with explicit coordinate conventions.
-- [ ] M7 Prove an isolated catalog-vector adapter can execute the existing src/sky/riseset.ts solver without editing or copying its algorithms; verify vector substitution is scoped, ordinary bodies are unchanged, and incompatible engine source is refused.
+- [x] M7 Prove an isolated catalog-vector adapter can execute the existing src/sky/riseset.ts solver without editing or copying its algorithms; verify vector substitution is scoped, ordinary bodies are unchanged, and incompatible engine source is refused.
 - [ ] M8 Expose catalog rise, set, upper transit, and lower transit searches through that adapter, including solver budgets, complete refusal, circumpolar flags, and explicitly labelled engine-call provenance.
 - [ ] M9 Implement paran event pairing for bodies and angular contacts over an explicit observer window, with a configurable time orb, native body-sky results, star-sky provenance, and synthetic simultaneous-contact expectations.
 - [ ] M10 Implement the fixedstars list, fixedstars hits, and fixedstars parans CLI commands, strict options, JSON output, meaningful exit codes, and end-to-end synthetic tests.
@@ -40,8 +40,9 @@ Solar System bodies. stateAt closes over GeoVector; there is no custom-vector
 parameter. M7 must resolve this through a local, scoped dependency adapter
 while continuing to run the existing solver. A separate star search algorithm
 or a copy of the rise/set implementation does not meet the requested scope.
-An isolated bundle-time substitution of the vector import is a candidate
-approach to verify, not a completed capability.
+M7 verified isolated bundle-time substitution of that vector import, as
+described in its completion notes below. The public star search wrapper and
+call provenance remain M8 work.
 
 createNatalEnvelope supplies a native engine natal receipt. skyEvents returns
 events, conventions, flags, and sample counts, but no native receipt. Future
@@ -196,7 +197,53 @@ outside the session's hard boundary. The isolation check confirms fixedstars
 exclusion with a package dry run without claiming the missing build's budgets
 passed. All authored changes remain under fixedstars/.
 
-M7 remains the next unchecked milestone. No star-sky adapter or solver work
-was done in this session. Retain the original integration findings above:
+M7 was left as the next unchecked milestone after M6. No star-sky adapter or
+solver work was done in M6. Retain the original integration findings above:
 run the existing rise/set/transit solver through a scoped local adapter, and
 distinguish its fixedstars call records from native natal receipts.
+
+## M7 completion and M8 handoff
+
+scripts/build-sky-adapter.mjs compiles the existing engine solver in memory,
+redirecting only src/sky/riseset.ts's astronomy-engine dependency edge to
+src/sky-vector.ts. All other engine imports, including the clock's GeoVector,
+keep the native pinned dependency. No engine file or event algorithm was
+edited or copied. sources/engine-sky-contract.json records the engine version,
+parsed parent source graph and digests, plus the ephemeris version and ESM
+digest. Verification checks both initial reads and the engine bytes supplied
+to the compiler, and rejects missing, changed or unexpected graph inputs.
+The contract includes modules parsed through the current broad source bridge,
+even where their code is ultimately tree-shaken; it is deliberately conservative.
+There is no automatic contract refresh on incompatibility.
+
+Each loaded module has its own synchronous scope. It uses the Pluto point-body
+slot for a normalized J2000 catalog ray with proper motion at each sampled TT.
+The large finite power-of-two ray scale is numerical, not a stellar distance;
+stellar parallax and the earlier correction omissions remain excluded. The
+engine performs its own true-equator rotation, sidereal clock, observer
+projection, horizon and transit searches. The slot clears in finally. Reentry
+and promise-returning scopes reject; caller astrometry is snapshotted without
+freezing caller records. Tests check unchanged ordinary body calls and native
+chart casting, errors, budget refusal, catalog input and the independent
+spherical identities derived in GEOMETRY.md. These establish construction and
+integration over their synthetic inputs, not physical stellar accuracy.
+
+src/sky-adapter-entry.ts is an internal proof interface and is absent from
+the library index. Its starEvents currently returns the raw native SkyEvents
+with body Pluto, and bodyEvents calls the same solver with ordinary bodies.
+M8 must wrap star output with the real star id, normalized observer/window,
+conventions, flags and samples, and explicitly labelled fixedstars call
+provenance. It must retain the native body output and distinguish its call
+record from native natal receipts. The public API should keep numerical
+searches synchronous after adapter preparation; the Node loader's source
+verification and in-memory compilation are a separate preparation operation.
+M8 must cover circumpolar behavior and complete budget refusal before M9
+pairs events. No paran or CLI work was done in M7.
+
+M7 validation passed on Node 22.22.2: full local Vitest, TypeScript, offline
+catalog regeneration, the sky adapter compiler and file/package isolation.
+The parent package:contents check still fails because dist/calc.d.ts is
+absent; creating that engine build is outside the session's hard boundary.
+The isolation check confirms fixedstars exclusion with a package dry run,
+without claiming the missing build's budgets passed. All authored changes
+remain under fixedstars/. M8 is the next unchecked milestone.
