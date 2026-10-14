@@ -11,7 +11,8 @@ The library provides `cast`, `normalizeHoraryInput`, `selectSignificators`,
 `evaluateEssentialCondition`, `createAccidentalPolicy` and
 `evaluateAccidentalCondition`, `createAspectSearchPolicy` and
 `evaluateSignificatorAspects`, `createDirectPerfectionPolicy` and
-`evaluateDirectPerfection`, `createTranslationPolicy` and `evaluateTranslation`.
+`evaluateDirectPerfection`, `createTranslationPolicy` and `evaluateTranslation`,
+`createCollectionPolicy` and `evaluateCollection`.
 Further analysis rules and the CLI are scheduled in [`PLAN.md`](PLAN.md).
 
 From the checkout, using Node as specified in this folder's `package.json`:
@@ -538,3 +539,67 @@ the pinned ephemeris dependency and folder exclusion using npm's dry-run file
 list. It creates no archive and does not build the engine. The full repository
 package-content gate also needs an existing engine `dist/`; it cannot pass on
 a checkout without that build output. This project does not generate it.
+
+`evaluateCollection(result, aspectPolicy, collectionPolicy)` finds a third
+classical planet to which both principal house rulers currently apply by
+nonexact enabled in-orb aspects. The collector can be unassigned or hold
+natural/Moon roles; roles remain attached to a single physical planet.
+A shared principal ruler produces a `shared-principals` observation without
+inventing a second application. `evaluateCollectionWith` accepts an independent
+longitude provider for controlled motion laws.
+
+```ts
+import { createCollectionPolicy, evaluateCollection } from "./src/index.js";
+
+const collectionPolicy = createCollectionPolicy({
+  collectors: ["Jupiter", "Saturn"],
+  receptionDirection: "principals-receive-collector"
+});
+const collection = evaluateCollection(result, undefined, collectionPolicy);
+```
+
+The default reception direction follows Lilly's collection passage as read
+in [`SOURCES.md`](SOURCES.md): each principal receives the collector. Set
+`receptionDirection: "collector-receives-principals"` for an explicit alternate
+policy. Both ordered host/guest directions remain recorded using the selected
+engine essential dignities at the question instant and question-chart sect.
+The default selects all essential dignities; an empty `receptionDignities`
+list disables the requirement. Reception adds no new dignity table or score.
+
+Each collection assessment contains the two current applications, their first
+future contacts on the same directed branches, directional receptions, every
+eligibility check with its source/explanation and the contact order. Either
+arrival order can qualify. A resolved later contact is recorded as
+`completion` evidence even when another eligibility check rejects the pattern;
+it establishes no prediction or authoritative judgement. Coincident or
+unresolved order has no assigned completion and requires review. A root too
+close to the question, or a crossing direction inconsistent with current
+relative motion, also requires review.
+
+`heavierPlanet`, `slowerPlanet` and `principalsNotAspecting` are independently
+toggleable requirements. Traditional weight uses the existing sphere order.
+Slower speed is a project proxy using absolute instantaneous degrees/day,
+with strict comparison against both principals. Not beholding is operationally
+read as no current enabled in-orb aspect between the house rulers, rather
+than whole-sign aversion. Engine orbs and exact arithmetic control those
+observations. `collectionOfLight: false` disables the whole mode;
+`collectors: []` or an empty aspect selection creates no patterns.
+
+Searches use the aspect policy's future horizon and step, but the collection
+policy's separate global provider-call budget. All enabled directed branches
+between active collectors and principals are scanned once and retained in
+chronological order. Budget refusal discards every partial contact and endpoint
+reference while preserving current and reception evidence. A missing contact
+is bounded-search evidence; it does not establish absence outside that window.
+Sign changes, stations and competing third-party contacts require separate
+assessment. Completion inherits the engine solver's sampled-search limitations.
+
+Reports and policies are deeply frozen JSON-friendly snapshots. Restored policy
+snapshots are revalidated. The consumer checks actual cusps, question settings,
+unique required body rows, canonical longitudes and finite speeds; unused rows
+are ignored. It does not authenticate chart geometry against the motion
+provider. Independent motion derivations appear in [`tests/fixtures.md`](tests/fixtures.md).
+`tests/collection.test.ts` checks eligibility, branch handling, roles and
+ownership; `tests/collection.budget.test.ts` checks atomic refusal and provider
+validation; `tests/collection.integration.test.ts` checks engine delegation,
+house systems and fallback without claiming independent ephemeris accuracy.

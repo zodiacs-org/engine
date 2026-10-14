@@ -378,3 +378,51 @@ ordering; `tests/translation.budget.test.ts` checks atomic refusal. Their
 motion laws and expectations are derived in `tests/fixtures.md`. No scan
 completion, candidate status or numerical resolution is presented as a
 prediction, astronomical accuracy bound or exhaustive-search proof.
+
+## Collection of light
+
+`lilly-collection;project-converging-contacts` refers to William Lilly,
+*Christian Astrology*, first published 1647, printed page 126 of the linked
+1659 edition, under Collection; planetary weight is discussed on page 113.
+The [primary-text transcription](https://pdfcoffee.com/william-lilly-christian-astrology-volume-1-pdf-free.html)
+was fetched and read on 2026-10-14. The passage describes two principal
+significators not beholding each other, each aspecting a heavier planet,
+with both principals receiving that planet in essential dignity. This reading
+sets the default reception direction. No historical chart or outcome text
+is copied here.
+
+The implementation uses the two house rulers as principals and a distinct
+third classical planet as collector. Weight reuses the translation module's
+sphere order. A strict heavier comparison and a separate strict comparison
+of absolute question-time speeds are configurable project eligibility
+choices. Sphere order does not itself establish relative measured speed.
+The no-beholding requirement is operationally tested as absence of a current
+enabled in-orb aspect, not whole-sign aversion. Current application must be
+nonexact and in orb using engine exact arithmetic. These operational choices
+and engine orbs do not claim to reproduce every historical reading.
+
+Reception defaults to all engine essential dignities. Each principal must
+hold at least one selected dignity at the collector's question longitude.
+The alternate `collector-receives-principals` option is an explicit caller
+choice, not a claim about the cited passage. Both directions retain selected
+dignity evidence. Sect is the question's engine ecliptic sect. No later
+contact-time reception, moiety, latitude, scoring bonus or independent table
+is inferred. The engine's Egyptian terms and Dorothean sect triplicities
+retain the variants documented in the essential-condition section.
+
+Each current branch is matched with its first future sampled contact and
+relative direction. The two arrivals can occur in either order. A resolved
+later contact is completion evidence; coincident or unresolved arrivals and
+contacts too near the question require review. Numerical ordering resolution,
+root merging, provider-call budget and horizon are computational conventions,
+not historical requirements or astronomical error bounds. Contacts with
+third parties, sign changes, stations and other perfection restrictions are
+left to separate reports. The collection candidate is deliberately partial.
+
+Policy defaults, independent toggles, frozen ownership, reception direction,
+branch matching and shared-role behavior are enforced in
+`tests/collection.test.ts`. `tests/collection.budget.test.ts` enforces
+all-or-none provider budgeting over the synthetic future window.
+`tests/collection.integration.test.ts` verifies delegation, house systems and
+fallback. All independent expectations and the scope of integration checks
+are documented in `tests/fixtures.md`.

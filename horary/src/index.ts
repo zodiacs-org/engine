@@ -1,3 +1,7 @@
+export { evaluateCollection, evaluateCollectionWith, COLLECTION_METHOD } from "./collection.js";
+export type { CollectionApplication, CollectionAssessment, CollectionCheck, CollectionCollector, CollectionContact, CollectionReception, HoraryCollection } from "./collection.js";
+export { createCollectionPolicy, COLLECTION_SOURCE, COLLECTION_WEIGHT_ORDER } from "./collection-policy.js";
+export type { CollectionPolicyInput, CollectionReceptionDirection, HoraryCollectionPolicy } from "./collection-policy.js";
 export { cast } from "./cast.js";
 export { evaluateTranslation, evaluateTranslationWith, TRANSLATION_METHOD } from "./translation.js";
 export type { HoraryTranslation, TranslationAssessment, TranslationCarrier, TranslationCheck, TranslationContact } from "./translation.js";

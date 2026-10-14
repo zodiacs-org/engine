@@ -853,3 +853,102 @@ polar fallback with searching disabled. These are integration checks, not
 independent ephemeris accuracy evidence. The full existing aspect/direct
 suite also checks the shared instantaneous-observation helper extracted for
 translation reuse; the helper still delegates decisions to the engine.
+
+## Collection of light (M10)
+
+`collection.fixture.ts` reuses the invented question instant and schematic
+Aries-first/Taurus-second cusp circuit, so Mars and Venus are the two house
+rulers. This is an artificial angular-motion experiment, not an ephemeris
+at that instant. Let `t` be elapsed UTC days, normalize only the final
+longitudes modulo 360, and set collector Saturn `C=220+t/4`, Mars
+`A=214+5t/4`, Venus `B=285-t`. Other classical planets retain the independent
+fixed laws of the translation fixture. They do not participate in collection.
+
+The directed gaps are `A-C=-6+t` and `B-C=65-5t/4`. Mars applies to
+conjunction at `t=6`; Venus applies to sextile at `t=4` with decreasing
+relative longitude. Their initial orbs are six and five degrees. These tests
+explicitly configure ordinary/luminary sextile orbs to six degrees, a test
+choice rather than a historical allowance. Mars and Venus are initially
+seventy-one degrees apart, outside the enabled conjunction/sextile orbs.
+Saturn follows both in sphere order and its absolute rate is smaller than
+both. Venus's negative speed is a deliberate synthetic motion input; no
+retrograde flag or physical ephemeris is the reference.
+
+The fixture Sun is at 100 degrees and Ascendant at 15, placing the Sun in
+the ecliptic lower half for night sect. At the collector's 220 degrees,
+Scorpio ten, Mars has domicile and the night water triplicity; Venus holds
+Egyptian term `[7,11)` degrees of Scorpio. These expectations are hand-read
+from the published dignity definitions cited in the essential-condition
+section. The Chaldean face at Scorpio ten belongs to the Sun, not Mars.
+In reverse, Saturn has no selected dignity at Mars's Scorpio four and
+has domicile at Venus's Capricorn fifteen. Thus the default principals-
+receive-collector requirement passes, while the reverse-direction requirement
+fails for Mars. Restricting reception to domicile fails for Venus. Empty
+selection disables reception without inventing self-reception.
+
+Shifting all three laws by one degree preserves the contact equations but
+moves the collector to Scorpio eleven, outside Venus's term. That question-
+time reception fails even though later contacts exist. Moving Mars's initial
+longitude to 218 changes its contact to `t=2`, ahead of Venus; moving it to
+216 gives `t=4` for both, requiring numerical-order review. A horizon ending
+at six includes the last contact; a horizon ending at five leaves Mars's
+contact unestablished. Current Mars at 220 is exact, at 224 separates, at
+214 with speed one quarter is relatively stationary and at 200 is outside
+the conjunction orb; each removes the current pattern. The conflicting
+provider experiment preserves current Mars geometry but supplies future
+`230-t`, which contacts the collector at `t=8` in the opposite direction;
+it tests unauthenticated-input review, not a physical trajectory.
+
+For the no-beholding toggle, Mars 219 and Venus 284 start sixty-five degrees
+apart, inside the configured sextile orb, with collector branches still
+applying. For the weight toggle, substitute Moon for Saturn with the same
+collector law; weight then fails but motion and receptions stay unchanged.
+Declaring Moon also as natural significator retains both Moon/natural roles
+on one collector. Declaring Saturn natural retains its natural role without
+another physical pattern. Assigning Aries also to the second cusp shares
+Mars between principal roles and produces no collection. For a principal
+Moon, rotate whole-sign cusps to Cancer first and use Taurus at house eleven
+for Venus, assign Moon the baseline Mars law, and disable reception. Moon's
+querent and co-significator roles stay on a single application.
+
+For the slower-speed toggle, use collector `220+2t`, Mars `226+t` and
+Venus `275+3t`. The relative gaps reach conjunction and sextile at six and
+five respectively; the collector is faster than Mars, so the strict speed
+proxy fails. Disabling it permits the partial pattern. This experiment
+changes sign/term histories, which this report does not assess.
+
+Every directed major branch is tested separately. For angle `Q` in
+`0,60,90,120,180` and side `s` in `1,-1`, use collector `220+t/4`, Mars
+`220+s*Q-6+5t/4`, Venus `220+s*Q-4+5t/4`. The directed gaps
+`s*Q-6+t` and `s*Q-4+t` reach their same branch at six and four.
+Nondegenerate negative branches have canonical target `360-Q`. This also
+exercises longitude wrapping and mixed original signs. Each test configures
+an ordinary orb of eight degrees for its selected aspect, disabling principal
+no-beholding and reception because the deliberately changed geometry no
+longer supports the baseline requirements.
+
+A one-day step has root-resolution convention
+`r=ceil(86,400,000/2^24)+1` milliseconds. Setting Mars to
+`220-1e-7+5t/4` places its conjunction at approximately 8.64 milliseconds
+in independently solved decimal arithmetic, within `2r` of the question.
+The test asserts only review and the reported numerical-resolution interval,
+not exact binary/decimal equality or physical timing accuracy.
+
+Adding Jupiter `219.5+t/4` supplies another collector. Its Mars gap
+`-5.5+t` and Venus gap `65.5-5t/4` lead to contacts at 5.5 and 4.4;
+the latter is between quarter-day coarse samples. The budget test uses the
+full run's provider count solely to choose a deliberately insufficient
+limit. It does not use that run as a timing reference. Refusal must erase
+both collectors' partial contacts, keep current/reception evidence, count
+both calls of every relative sample and stay within the future window.
+Provider-Date mutation, invalid values, exceptions, malformed required rows,
+unused rows and unrepresentable horizons are separately tested.
+
+The integration suite mocks the production longitude boundary with the
+baseline laws and observes delegation to engine aspect classification,
+crossings and essential dignities without recasting. A real cast at the
+invented instant uses explicitly broad aspect orbs and a short horizon
+solely to exercise engine motion and JSON output. Every supported house
+system and polar fallback preserves actual/requested settings with searching
+disabled. These are integration checks, not independent ephemeris accuracy
+or predictive validity evidence.
