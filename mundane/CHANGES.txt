@@ -1,0 +1,1 @@
+Establish mundane milestone plan and isolated TypeScript input API with engine validation and Vitest checks
