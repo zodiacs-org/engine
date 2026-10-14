@@ -12,7 +12,7 @@ must state the model, parameters, conventions and limits alongside engine
 provenance. Model predictions are not observations or guarantees of sighting.
 
 - [x] M1 Establish an isolated TypeScript/Vitest project, strict body/site/time inputs, position and rise/set/transit adapters, preserved engine receipts, foundation tests and a source roadmap.
-- [ ] M2 Add geocentric and topocentric Sun/body geometry, horizontal coordinates derived from engine frames, angular separation and explicit units; test geometric identities and independent published coordinates.
+- [x] M2 Add geocentric and topocentric Sun/body geometry, horizontal coordinates derived from engine frames, angular separation and explicit units; test geometric identities and independent published coordinates.
 - [ ] M3 Implement phase results for the Moon and visible planets: signed synodic longitude angle, true angular elongation, illumination geometry, morning/evening classification and conjunction/opposition boundary conventions.
 - [ ] M4 Implement a published arcus visionis visibility model with explicit solar depression, body altitude, extinction and magnitude parameters; cite the exact definition, expose assumptions, and test independent criterion calculations.
 - [ ] M5 Build bounded morning/evening observing windows from the engine's rise/set/transit solver; handle missing crossings, polar conditions, range boundaries and budget refusals without reporting incomplete searches as complete.

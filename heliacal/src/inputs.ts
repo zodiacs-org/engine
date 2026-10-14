@@ -23,7 +23,7 @@ export function observationBody(value: unknown): ObservationBody {
   return value === "Sun" ? "Sun" : visibilityBody(value);
 }
 
-/** Geodetic degrees, east-positive longitude, WGS84 height in metres. */
+/** Geodetic degrees and east-positive longitude; height in metres on the receiving API's ellipsoid. */
 export function observer(value: unknown): Readonly<Required<Observer>> {
   return observerOf(value);
 }

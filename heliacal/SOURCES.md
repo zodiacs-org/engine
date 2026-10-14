@@ -1,9 +1,37 @@
 # Primary-source roadmap
 
-These sources were fetched and the sections listed below read during the
-foundation session. They guide later milestones; a citation here does not
-mean that a model is implemented. Formulas must be implemented independently,
-with their units, coordinate conventions and domain recorded in the tests.
+The sources below distinguish implemented geometry checks from the model
+roadmap. A citation here does not mean that a visibility model is implemented.
+Formulas must be implemented independently, with their units, coordinate
+conventions and domain recorded in the tests.
+
+## Geometry checks
+
+NASA/JPL Solar System Dynamics, *Horizons System*, observer-table quantities
+for apparent equatorial, horizontal and ecliptic coordinates, range and
+Sun-observer-target separation:
+<https://ssd.jpl.nasa.gov/horizons/manual.html>.
+The source and Sun/Moon responses were read on 2026-10-14. The small
+[geometry fixture](test/fixtures/geometry-reference.json) preserves exact
+requests, provider metadata, units, coordinates and predeclared tolerances.
+[Its notes](test/fixtures/README.md) record the source/engine frame and
+correction differences and the comparison's scope.
+
+The existing `../src/fixtures/horizons-2020.ts` supplies apparent geocentric
+longitudes for the visible planets at the same selected epoch. Its header
+records the original retrieval date and identifies the Horizons quantity;
+the root licensing record covers those numerical fixtures.
+
+ERFA release v2.0.1, validation routine `t_hd2ae`:
+<https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/t_erfa_c.c>.
+Its horizontal-coordinate definition is in
+<https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/hd2ae.c>.
+Read on 2026-10-14. The geometry fixture records the example, locator and
+degree-input comparison gate; its notes retain ERFA's copyright and BSD
+notice. This checks the local rotation independently of the ephemeris.
+
+The following roadmap sources were fetched and the cited sections read
+during the foundation session.
 
 ## Horizon events already delegated to the engine
 
