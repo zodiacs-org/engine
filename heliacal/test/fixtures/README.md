@@ -1,4 +1,4 @@
-# Geometry, phase and visibility references
+# Geometry, phase, visibility and horizon references
 
 `geometry-reference.json` contains independent coordinate examples for the
 geometry tests. The selected instant and observing site are synthetic. No
@@ -113,6 +113,23 @@ the distinction between coordinate conventions, not the validity of scalar
 extinction at the horizon. These are implementation checks of criteria and
 formulas, with no sighting dates or predictive-performance claims. The source
 values never come from this library or Swiss Ephemeris.
+
+## Horizon terminology
+
+`horizon-terminology.json` records the Sun/target directions defined by
+Joseph Harris, *The Description and Use of the Globes, and the Orrery*,
+eleventh edition (1773), p. 96 and Problem XLIII, pp. 171-172. The linked
+Project Gutenberg transcription was fetched and read on the fixture's
+retrieval date. The book is public domain. Only the definitions are encoded;
+our code and fixture metadata follow the repository's MIT licence.
+
+The fixture checks a named convention because the event names differ among
+authors. It contains no ephemeris output or historical observation dates.
+`phenomena-reference.test.ts` applies the mapping to invented horizon
+schedules with exact integer-millisecond differences. These test the pairing
+criterion and search behavior; no numerical accuracy tolerance or historical
+date agreement is inferred. Real-engine checks in `phenomena.test.ts` test
+integration and receipt preservation separately.
 
 ## ERFA horizontal transformation
 

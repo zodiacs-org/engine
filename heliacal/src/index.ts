@@ -26,3 +26,9 @@ export type {
   HeliacalEventsResult, HeliacalOpportunity, HeliacalSearchOptions, HorizonArcusModel,
   UnavailableHeliacalOpportunity
 } from "./heliacal.js";
+export { HORIZON_PHENOMENA, HORIZON_TERMINOLOGY, horizonPhenomena } from "./phenomena.js";
+export type {
+  HorizonPhenomenon, HorizonPhenomenonEvent, HorizonPhenomenonDiagnostic,
+  HorizonPhenomenonOpportunity, HorizonPhenomenaOptions, HorizonPhenomenaResult,
+  PairedHorizonOpportunity, UnavailableHorizonOpportunity
+} from "./phenomena.js";

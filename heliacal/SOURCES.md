@@ -199,13 +199,37 @@ of morning observations alone does not validate a particular morning search.
 
 ## Event terminology
 
+Joseph Harris, *The Description and Use of the Globes, and the Orrery*,
+eleventh edition (1773), printed p. 96, section III, "Of the Poetical rising
+and setting of the Stars", and Problem XLIII, pp. 171-172:
+<https://www.gutenberg.org/files/61683/61683-h/61683-h.htm#Page_96>.
+Fetched and read on 2026-10-15. The definition assigns cosmical to either
+target crossing at sunrise and acronical to either target crossing at
+sunset. Problem XLIII separately constructs each pairing on a celestial
+globe. Our `acronychal` spelling follows the modern terminology. The original
+work is public domain; no source program, astronomical table or lengthy
+prose is copied. [The fixture](test/fixtures/horizon-terminology.json)
+encodes the directions independently and records the source and scope.
+
+`horizonPhenomena` applies those geometric pairings to engine Sun/target
+events. The same-half ownership, signed elapsed lag and consecutive-pair
+order-reversal bracket are this library's scheduling choices, not Harris's
+historical calculation or a claim of an exact simultaneous instant. Both
+source times remain explicit. No visible rising/setting criterion is
+implied. `test/phenomena-reference.test.ts` applies the published directions
+to invented schedules and independently specified lag arithmetic; it does
+not use an engine result as its expected value or claim historical date
+agreement.
+
 Francesca Schironi, "The Language of Astronomy", in *Coming to Terms:
-Approaches to (Ancient) Terminologies* (2023), section 4.4, pp. 34-35:
+Approaches to (Ancient) Terminologies* (2024), section 4.4, pp. 34-35:
 <https://edoc.hu-berlin.de/server/api/core/bitstreams/07b8091d-970b-4c94-8013-4804d2f87a78/content>.
-This historical analysis documents inconsistent use of acronychal and
-cosmical names. Later event results must record the actual Sun/body
-rise/set pairing and whether it is a geometric coincidence or a visibility
-transition. The names alone are not a sufficient definition.
+Fetched and read on 2026-10-15. This historical terminology research
+documents inconsistent use of acronychal and cosmical names, including
+visible and invisible phenomena. The edition's copyright page gives 2024;
+the earlier roadmap date has been corrected. Every result records the
+actual Sun/body rise/set pairing and the chosen terminology convention.
+The names alone are not a sufficient definition.
 
 ## Evidence to add with each model
 

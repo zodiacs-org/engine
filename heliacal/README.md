@@ -7,8 +7,9 @@ in [PLAN.md](PLAN.md) records the implementation order.
 The library currently supplies strict inputs, apparent positions,
 Sun/body geometry, phase classification, geometric disk illumination,
 an arcus visionis criterion, a configurable visibility screen,
-rise/set/transit events, bounded observing windows and bracketed horizon-arcus
-transitions with position receipts. Crescent predictions and the CLI are
+rise/set/transit events, bounded observing windows, bracketed horizon-arcus
+transitions and geometric acronychal/cosmical phenomena with position receipts.
+Crescent predictions and the CLI are
 planned, not available.
 
 ## Development
@@ -521,6 +522,118 @@ not reproductions of historical observing dates. The
 [sequence tests](test/appearance-sequence.test.ts) check independent interval
 arithmetic, [failure tests](test/heliacal-failure.test.ts) check refusal and
 receipt preservation, and the engine integration tests check wiring only.
+
+## Acronychal and cosmical horizon phenomena
+
+```ts
+import { horizonPhenomena } from "./src/index.js";
+
+const result = horizonPhenomena("Moon", {
+  latitude: 13, longitude: -42, height: 120
+}, "2001-02-01", "2001-03-15");
+if (result.status === "complete") {
+  for (const event of result.events) {
+    console.log(event.kind, event.sunKind, event.targetKind);
+    console.log(event.at, event.bracket.from, event.bracket.to);
+    console.log(event.bracket.before.lagMilliseconds);
+    console.log(event.bracket.after.targetCrossing.position);
+  }
+}
+```
+
+These synthetic observing inputs are exercised in
+[test/phenomena.test.ts](test/phenomena.test.ts). `horizonPhenomena` accepts
+the Moon and every visible planet. It uses a named terminology convention,
+`sunrise-cosmical-sunset-acronychal/1`, exported in `HORIZON_TERMINOLOGY`:
+
+| Event kind | Target crossing | Sun crossing |
+| --- | --- | --- |
+| `cosmical-rising` | Rise | Rise |
+| `cosmical-setting` | Set | Rise |
+| `acronychal-rising` | Rise | Set |
+| `acronychal-setting` | Set | Set |
+
+This mapping follows Joseph Harris, *The Description and Use of the Globes,
+and the Orrery*, printed p. 96 and Problem XLIII, cited in
+[SOURCES.md](SOURCES.md#event-terminology). The
+[committed definitions](test/fixtures/horizon-terminology.json) and
+[reference tests](test/phenomena-reference.test.ts) check every row. Names
+vary between authors, especially for settings. Always retain `sunKind`,
+`targetKind` and `terminology` when exchanging results. Applying these
+horizon directions to moving planets and the Moon does not introduce a
+visibility calibration or identify longitude conjunction or opposition.
+
+The search uses the engine's airless topocentric centre crossings, including
+for Sun and Moon, with WGS84 and no terrain or horizon dip. Its `definition`
+is `geometric-horizon-order`. No extinction, magnitude, refraction, limb or
+twilight setting is accepted. A visibility-model result requires a separate
+API; a lunar horizon pairing is not a first or last crescent prediction.
+
+Morning pairs belong to the solar lower-to-upper-transit half and use
+sunrise. Evening pairs belong to the upper-to-lower-transit half and use
+sunset. Within each full half, the search requires a unique Sun crossing
+and a unique crossing in the requested target direction. It retains each
+original crossing with its position result and solar transit anchors.
+`lagMilliseconds` is target crossing time minus Sun crossing time, in
+elapsed milliseconds: a negative lag means the target crosses earlier.
+There is no civil-time conversion or modulo-day subtraction.
+
+Opposite nonzero lag signs in consecutive opportunities for the same kind
+produce a bracket with `kind: "successive-horizon-pairs"` and `at: null`.
+Its `direction` states whether the target changes from earlier to later,
+or later to earlier. `bracket.before` and `bracket.after` retain both pairs;
+`bracket.from` and `bracket.to` enclose all their source crossing times.
+This is a change in the sampled crossing order, not a continuous root,
+an exact simultaneous event, an uncertainty bound or a sighting time.
+No interpolation fills in an event epoch. The finite sequence can miss
+changes between opportunities and depends on the engine's crossing search.
+
+If the engine reports equal Sun and target crossing milliseconds, the event
+instead has `direction: "coincident"`, `kind: "coincident-engine-crossings"`
+inside its bracket, and that ISO instant in `at`. Both bracket sides then
+refer to the same pair. Equality uses no epsilon and means equality at the
+solver's reported resolution only. Adjacent sign changes involving that
+zero lag do not also create a reversal; each sampled equality is retained.
+
+`opportunities` records all intersecting solar halves for selected kinds.
+A `paired` row has both crossings and their lag. An `unavailable` row has
+an explicit missing, multiple or outside-range reason and a null lag.
+When both sources fail, the Sun reason takes precedence; the full supporting
+searches remain available. Every unavailable row produces a `pairing-gap`
+diagnostic and breaks adjacency for its kind. Crossings in another solar
+half are never reassigned. A missing sunrise or sunset in polar conditions
+therefore cannot be replaced by a solar transit or nearby date.
+
+Both crossings of every eligible pair must lie in the requested `[from,to)`
+range. Multiplicity is checked across the entire solar half, even when the
+range clips it. An isolated nonzero pair cannot establish a transition.
+To split a long request, overlap the source opportunities needed on both
+sides of a boundary. Returned events sort by `bracket.from`, then by the
+exported `HORIZON_PHENOMENA` order.
+
+Options accept `kinds`, a nonempty subset of `HORIZON_PHENOMENA` without
+duplicates, and `maxSamples`. All kinds are selected by default; selection
+is copied and canonicalized before calculation. Range limits, support
+padding, coverage, sample budgets and refusals are those of
+`observingWindows`. This API also inherits that support function's window
+partition checks: an unresolved supporting partition yields an unresolved
+result even if some horizon pairs might be usable. No partial events or
+opportunities are returned on refusal or unresolved support.
+
+The complete support result stays under `observing`, with engine identities,
+sky sample counts, flags and original position receipts. No additional
+positions are evaluated for pairing. `receiptScope: "event-positions"`
+means the engine receipts cover those positions, not the derived event or
+sky search. Source `Date` objects should be treated as read-only. Completion
+means all selected engine opportunities were processed, including explicit
+gaps, and inherits the engine's sampled-search limits.
+
+The [pairing tests](test/horizon-pairings.test.ts) and
+[reference tests](test/phenomena-reference.test.ts) use independent integer
+schedules to check the source definitions, lag arithmetic, both reversal
+directions, equality, gaps and clipping. They do not compare astronomical
+event dates with historical observations. The engine integration and
+failure tests check delegation, receipts and bounded behavior.
 
 ## Checks and sources
 

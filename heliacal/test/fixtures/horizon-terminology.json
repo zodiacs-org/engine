@@ -1,0 +1,19 @@
+{
+  "source": {
+    "author": "Joseph Harris",
+    "title": "The Description and Use of the Globes, and the Orrery",
+    "edition": "11th edition, 1773",
+    "url": "https://www.gutenberg.org/files/61683/61683-h/61683-h.htm#Page_96",
+    "locator": "p. 96, III. Of the Poetical rising and setting of the Stars; Problem XLIII, pp. 171-172",
+    "retrieved": "2026-10-15",
+    "provenance": "Definitions read in the public-domain book; independently encoded directions, not an ephemeris table or software output.",
+    "scope": "Geometric horizon pairings. This library extends the same directions to the Moon and visible planets; no sighting calibration is supplied."
+  },
+  "convention": "sunrise-cosmical-sunset-acronychal/1",
+  "cases": [
+    { "kind": "cosmical-rising", "sunKind": "rise", "targetKind": "rise", "period": "morning" },
+    { "kind": "cosmical-setting", "sunKind": "rise", "targetKind": "set", "period": "morning" },
+    { "kind": "acronychal-rising", "sunKind": "set", "targetKind": "rise", "period": "evening" },
+    { "kind": "acronychal-setting", "sunKind": "set", "targetKind": "set", "period": "evening" }
+  ]
+}
