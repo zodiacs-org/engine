@@ -17,7 +17,7 @@ append a session summary to `CHANGES.txt`, then stop.
 - [x] M9 Implement bounded `scan` over explicitly selected contacts, motions and age range. Define endpoints, stable sorting, deduplication and work limits; compare every scan row with independent enumerated cases and the single-hit API.
 - [x] M10 Add the `directions hit` and `directions scan` CLI, strict JSON input, JSON results, help and documented exit codes. Test subprocess success, malformed input, unsupported options and deterministic output with synthetic charts.
 - [x] M11 Expand independent numerical evidence across hemisphere, quadrant, latitude, aspect and key boundaries. Record residuals and limitations with reproducible scripts; separate analytic accuracy checks from engine integration regressions.
-- [ ] M12 Finish API and CLI guides with runnable synthetic examples, source-by-source convention explanations and audit walkthroughs. Use existing engine solar-arc and secondary-progression helpers only for separate comparisons. Run all local checks and verify that directions stays outside the npm package.
+- [x] M12 Finish API and CLI guides with runnable synthetic examples, source-by-source convention explanations and audit walkthroughs. Use existing engine solar-arc and secondary-progression helpers only for separate comparisons. Run all local checks and verify that directions stays outside the npm package.
 
 Each numerical milestone must commit its derivation or independently authored
 fixture before treating a computed value as accuracy evidence. Large generated

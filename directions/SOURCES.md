@@ -1,11 +1,14 @@
 # Convention source register
 
-These sources were fetched and read for the listed milestones. Their
+These sources were fetched and read during the implementation milestones. Their
 locators and short excerpts are recorded in
 [source-readings.json](evidence/source-readings.json). The register supports
-the meanings of the planned choices; it is not evidence that a solver has
-been implemented or agrees with a worked example. No historical chart or
-person's birth data was copied.
+the meanings and limits of the implemented choices. Numerical agreement is
+checked separately by the derivations and tests in the
+[evidence index](evidence/README.md); source attribution alone does not
+establish it. [CONVENTIONS.md](CONVENTIONS.md) maps these choices to the
+current supported contacts. No historical chart or person's birth data was
+copied.
 
 ## Temporal-hour geometry
 
@@ -30,15 +33,17 @@ Page 57 and canon XXXVII explain direct and converse by exchanging roles.
 For direct motion the promissor moves westward to the significator's fixed
 mundane position. For converse the significator moves westward to the
 promissor's fixed position. This is `converseConstruction:
-"placidus-role-swap"`; original labels must remain visible in future results.
+"placidus-role-swap"`; original labels remain visible in the complete hit
+results beside the operative moving and fixed roles.
 It is generally different from negating a direct arc when declinations differ.
 
 Theses 60-61 reject converse directions of angles and converse zodiacal
 aspects; thesis 61 also excludes zodiacal rays to angles. The angle solver
-refuses converse under this construction. Aspect solvers must preserve those
-restrictions. Accepting a convention object alone does not permit every contact.
+refuses converse under this construction. The implemented body and aspect
+solvers retain those restrictions. Accepting a convention object alone does
+not permit every contact.
 
-The initial `zodiacal/zero-both` policy is a project restriction to ecliptic
+The implemented `zodiacal/zero-both` policy is a project restriction to ecliptic
 projections. `mundane/retain-both` preserves the bodies' latitude. These
 choices do not exhaust traditional latitude treatments. The zodiacal subset
 implemented in M5 and the mundane subset implemented in M6 are described below.
@@ -76,14 +81,14 @@ equatorial arc to a symbolic solar-year age by dividing it by the selected
 annual rate. A fractional symbolic year is not a civil anniversary or an
 elapsed timestamp; this layer performs no calendar conversion.
 
-## Remaining source work
+## Outside the implemented subset
 
-Before enabling a numerical method, its milestone must settle the corresponding
-equations, coordinate branch, domain and refusal rules in committed evidence.
-In particular, further zodiacal latitude variants, additional mundane aspects
-and any converse construction beyond role exchange remain unfinished. Public
-engine coordinates supply the astronomical chart, not proof of the primary
-directions geometry.
+Additional numerical methods need named conventions, source support and
+committed evidence for their equations, coordinate branches, domains and
+refusal rules before they can be enabled. Further zodiacal latitude variants,
+mundane parallels and minor aspects, and converse constructions beyond role
+exchange are outside the current API. Public engine coordinates supply the
+astronomical chart, not proof of the primary directions geometry.
 
 ## Sphere coordinates implemented in M3
 
@@ -98,9 +103,10 @@ the appropriate quadrant. Ptolemy's temporal-hour passage above supplies the
 traditional rationale for comparing proportional meridian distances.
 
 The westward proportional coordinate in M3 is an explicitly defined library
-coordinate. It does not yet implement a historical aspect rule or choose a
-direct or converse construction. Neither the USNO coordinate relation nor
-the analytic fixtures validate the ephemeris or predictive interpretation.
+coordinate. The sphere primitive does not itself select an aspect rule or
+a direct or converse construction; the body solvers below apply those
+choices. Neither the USNO coordinate relation nor the analytic fixtures
+validate the ephemeris or predictive interpretation.
 
 ## Angle conjunctions implemented in M4
 
@@ -113,11 +119,13 @@ canon XXXVII on printed page 105. These passages were reread for M4.
 The coordinate-level solver fixes the angular significator and carries the
 prepared promissor along its declination circle. It uses the appropriate
 branch of the geometric horizon or meridian, with the derivation in
-[M4-derivations.md](evidence/M4-derivations.md). It does not yet apply a
-zodiacal projection, aspect ray or timing key. Selecting the first nonnegative
-rotation, including an initial contact, and restricting every target to
-crossing semi-arcs are explicit project rules, not additional historical
-claims. The Placidus role-swap option is refused for all angle targets.
+[M4-derivations.md](evidence/M4-derivations.md). This primitive does not
+apply a zodiacal projection, aspect ray or timing key. The complete hit
+layer prepares the selected mode's point and applies timing; angle aspects
+remain refused. Selecting the first nonnegative rotation, including an
+initial contact, and restricting every target to crossing semi-arcs are
+explicit project rules, not additional historical claims. The Placidus
+role-swap option is refused for all angle targets.
 
 ## Zodiacal body directions implemented in M5
 
@@ -132,8 +140,8 @@ and read for M5; no published birth example was copied.
 
 This is a restricted geometric implementation. Placidus also discusses
 changing significator latitude and a separate treatment of the Sun below
-the horizon. `zero-both` applies neither rule, and the API names no body
-whose identity could silently change the selected semi-arc method.
+the horizon. `zero-both` applies neither rule. The arc primitive takes
+unlabeled coordinates; labels in complete hits do not change that method.
 Thesis 61 and canon XXXVII do not supply a converse zodiacal construction;
 this solver conservatively refuses it for projected conjunctions as well.
 

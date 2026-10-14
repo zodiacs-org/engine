@@ -51,3 +51,7 @@ checks. [M11](M11.md) expands analytic geometry, near-tangency and exact timing
 evidence, records reproducible residuals, and documents numerical refusals.
 Run `npm --prefix directions run evidence` from the repository root to write
 the M11 report into the ignored generated directory.
+[M12](M12.md) records the completed API, CLI, convention and comparison guides,
+their runnable synthetic examples, and final local verification. The new
+examples reuse independent M8/M9 expectations only for coordinate geometry;
+natal, solar and progression wiring remain separate integration checks.

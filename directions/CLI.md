@@ -94,7 +94,8 @@ flags and the work budget are required. See
 [coordinate-scan.json](examples/coordinate-scan.json).
 
 The library's supported modes, latitude policies, branches, keys and
-refusals are described in the [API guide](README.md). In particular,
+refusals are described in the [API guide](API.md) and
+[convention guide](CONVENTIONS.md). In particular,
 converse mundane bodies require `placidus-role-swap`; converse angles,
 zodiacal converse and aspects to angles are refused. A scan refuses
 atomically when any selected hit refuses, including one outside the age
@@ -109,6 +110,57 @@ separate `prepareSolarEquatorialDay` API described in the guide to prepare
 engine samples from the same natal instant and clock, retaining its
 provenance separately. A mathematical sample pair alone does not authenticate
 its epoch or solar origin.
+
+## Run and inspect the examples
+
+The coordinate examples are independent spherical exercises. The hit uses
+zero observer latitude and declination, so its westward arc is
+`(10 - 350) mod 360 = 20` degrees. Ptolemy's key gives the same numerical
+age in selected years. The scan selects the direct and role-swapped
+conjunctions derived in [M9](evidence/M9-derivations.md), with arcs `90` and
+`270` degrees. [cli.check.ts](checks/cli.check.ts) enforces these expectations
+against the request files, rather than taking a saved CLI result as truth.
+
+```sh
+node directions/bin/directions.mjs hit --input directions/examples/coordinate-hit.json
+node directions/bin/directions.mjs scan --input directions/examples/coordinate-scan.json
+```
+
+For an audit, start with `convention`, the original `significator` and
+`promissor`, and `contact`. Follow `geometry.solver` to
+`geometry.calculation.geometry`, which contains the primitive's intermediate
+coordinates and role selection. `timing.audit` explains the key conversion;
+`timing.yearUnit` gives the elapsed-day interpretation. A natal hit also has
+`natal`, preserving the engine clock, coordinate provenance and selected
+original points. In a scan the same fields are under each `hits[].hit`.
+The [worked audit](CONVENTIONS.md#walk-through-independently-derived-hits) follows a
+non-equatorial case and explains which quantities are coordinates versus arcs.
+
+The library example can prepare solar samples for the CLI while retaining the
+sampling receipts separately. It uses an invented TT chart with a matching
+explicit TT Julian date, as checked in
+[examples.check.ts](checks/examples.check.ts). From the repository root:
+
+```sh
+mkdir -p directions/generated
+node directions/scripts/run-example.mjs natal-api > directions/generated/natal-api.json
+node --input-type=module -e 'import { readFileSync } from "node:fs"; const example = JSON.parse(readFileSync("directions/generated/natal-api.json", "utf8")); console.log(JSON.stringify(example.solarRequest));' | node directions/bin/directions.mjs hit --input -
+```
+
+Keep the generated example record if you need `solarProvenance`: the CLI
+retains the sample pair but does not attach or authenticate those separate
+receipts. The sample pair's origin is an integration check, not independent
+accuracy evidence. The handoff is exercised by
+[cli.check.ts](checks/cli.check.ts). This path uses the named birth-day
+equatorial key, not the engine's longitude solar-arc technique described in
+[COMPARISONS.md](COMPARISONS.md).
+
+When a calculation refuses, inspect its `stage` and `code` before changing
+the request. For example, requesting a converse angular significator yields
+`unsupported-converse-angle`; choosing another key cannot enable that
+construction. `hit-refused` in a scan includes the failed contact's indices
+and cause. A successful empty scan instead means no enumerated contact
+belongs to the selected age interval; widening it does not add revolutions.
 
 ## Results and exit status
 

@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { hitFromNatal, parseHit, parseScan, scanFromNatal } from "../src/index.js";
 import type { DirectionHit, DirectionNatalInput, NatalHitSelection, NatalScanInput, ScanComplete } from "../src/index.js";
 import { prepareNatal } from "../src/natal.js";
+import { runExample as natalExample } from "../examples/natal-api.js";
 import { HIT_EXAMPLES, HIT_FIXTURE_ARC_TOLERANCE_DEGREES, HIT_FIXTURE_TIMING_RELATIVE_TOLERANCE } from "../evidence/hit-examples.js";
 import type { HitExample } from "../evidence/hit-examples.js";
 import {
@@ -396,6 +397,12 @@ const natalScan = {
 } as const satisfies NatalScanInput;
 
 describe("synthetic natal CLI integration, not independent arc or ephemeris accuracy", () => {
+  it("accepts the guide's explicit solar-sample handoff and preserves its full hit", () => {
+    const example = natalExample();
+    const result = jsonOutput(stdin("hit", example.solarRequest), 0);
+    expect(result).toEqual(example.solarHit);
+  });
+
   it("preserves all natal hit values and audit metadata through the command", () => {
     const result = jsonOutput(stdin("hit", { source: "natal", birth, request: natalHit }), 0);
     expect(result).toEqual(hitFromNatal(prepareNatal(birth), natalHit));

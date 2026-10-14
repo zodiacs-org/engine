@@ -9,3 +9,4 @@ Implement directions M8 pure hit and natal-selection APIs with audited geometry 
 Implement directions M9 bounded pure scans with explicit contacts and motions, exact age endpoints, stable deduplication and ordering, atomic refusals, independent enumerated evidence, and passing local checks.
 Implement directions M10 hit and scan CLI with strict JSON transport, isolated local build, audited natal scans, documented examples and exit codes, independent subprocess evidence, and passing local checks.
 Implement directions M11 independent geometry, latitude and timing boundary evidence with reproducible residual reports, repair false meridian and zodiacal ray coincidences, and pass local checks while keeping engine integration separate.
+Complete directions M12 with API, CLI and source convention guides, runnable synthetic examples and separate engine technique comparisons, verified solar-sample handoff, passing local checks and npm exclusion evidence.
