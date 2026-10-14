@@ -5,6 +5,9 @@
  */
 export { natalChart, chartDeclinations } from "../../src/api.js";
 export { eclipticToEquatorial, RA_POLE_TOLERANCE } from "../../src/declination.js";
+export { checkedBodyLabel } from "../../src/body-label.js";
+export { absolute, compareExact, exactSum, roundedValue } from "../../src/exact.js";
+export type { ExactSum } from "../../src/exact.js";
 export { dateFrom } from "../../src/date-input.js";
 export { onChartClock, gastHours } from "../../src/ephemeris.js";
 export { eclipticOfDate, eclipticFrame, meanEcliptic } from "../../src/frame.js";

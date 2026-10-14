@@ -177,3 +177,62 @@ The direction model omits radial motion, stellar parallax, perspective
 acceleration, annual aberration and gravitational deflection. Frame bias was
 already applied at catalog import. The later motion and frame operations
 apply neither another bias nor the original Hipparcos epoch shift.
+
+## Pure contact geometry
+
+tests/contacts.fixedstars.ts constructs coordinate rows directly. Its geometric
+reference is the circle and signed declination, with exact equality assertions
+for the binary-representable cases. These tests measure matching decisions
+over the listed synthetic coordinates, not physical star accuracy. No saved
+library or chart output supplies an expected coordinate or contact.
+
+For normalized ecliptic longitudes a and b, let d be the absolute difference.
+The projected conjunction orb is d if d is at most a half circle, otherwise
+it is one full circle minus d. Thus longitudes 359.5 and 0.5 degrees have orb
+1 degree in either order. Longitudes 270 and 0 degrees have orb 90 degrees;
+0 and 180 degrees have orb 180 degrees. Equal longitudes have zero orb even
+when their latitudes or declinations differ. This is a projected longitude
+contact, not an angular separation on the celestial sphere.
+
+For signed declinations a and b, the parallel orb is abs(a - b). Equal
+declinations have zero orb regardless of RA or longitude, including at either
+celestial pole. Declinations 30 and 31, or -30 and -31, differ by 1 degree.
+Declinations 30 and -30 differ by 60 degrees, rather than matching as a
+contraparallel. The two celestial poles differ by 180 degrees. A single pair
+can have both a conjunction and a parallel; the README's constructed example
+has both at 1 degree. Null longitude removes only the conjunction decision;
+null target declination removes only the parallel decision.
+
+The limit is inclusive on the exact values of the supplied binary64 numbers,
+using the engine's existing expansion arithmetic. A limit of 1 includes 1,
+includes 1 - 2^-53, and excludes 1 + 2^-52. Decimal notation can hide a
+difference. In binary64, 1.1 is 2476979795053773 / 2^51 and 0.1 is
+3602879701896397 / 2^55. Their exact difference is 1 + 3 * 2^-55, so it
+falls outside a limit of 1 even though ordinary subtraction rounds to 1.
+In contrast, 13.3 and 12.3 have the same fractional part at denominator
+2^48 and differ by exactly 1.
+
+For the wraparound case, the double written 359.7 is
+6327909320176435 / 2^44, and 7.6999999999999895 is
+8669429282688193 / 2^50. Subtracting the first from a full circle plus the
+second gives (8 * 2^50 + 1) / 2^50, or 8 + 2^-50 degrees. It must be
+excluded at a limit of 8. Adding the smallest positive subnormal, 2^-1074,
+to the 1-degree arc from longitude 359 to zero likewise puts a contact just
+outside a limit of 1. These cases require forming the difference and its
+full-circle complement without intermediate rounding.
+
+Ordering also uses exact differences. With target declination 1, stars at
+declination 2^-1074 and 0 have orbs 1 - 2^-1074 and 1 respectively. Both
+report orbDeg 1 after rounding, but the first must sort before the second,
+even if its id sorts later. Exact ties use the documented id and kind order,
+independently of input order and locale. Negative zero reports as zero.
+
+The independent test oracle decodes IEEE 754 sign, exponent and fraction bits,
+representing each finite double as an integer multiple of 2^-1074. It uses
+BigInt subtraction, absolute value, and full-circle subtraction to decide
+eligibility, without importing the engine exact-arithmetic functions. It checks
+every pair in the explicitly enumerated longitude and declination lists at
+limits 0, 1, 8, 90 and 180 degrees. The lists include quarter and half circles,
+decimal boundaries, subnormals, both poles and wraparound neighbors. This is
+an independent arithmetic check on that finite input set, not an astrometric
+comparison or a claim that every binary64 combination has been checked.

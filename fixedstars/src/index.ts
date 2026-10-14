@@ -1,6 +1,10 @@
 export { catalog, findStar } from "./catalog.js";
 export { propagateStarDirection, starPositionAtTt, starPositions, STAR_POSITION_CONVENTIONS } from "./positions.js";
 export type { StarPosition, StarPositions, StarPositionTime } from "./positions.js";
+export { findStarContacts, STAR_CONTACT_CONVENTIONS } from "./contacts.js";
+export type {
+  ContactOrbs, ContactStarPosition, ContactTarget, StarContact, StarContactKind, StarContacts
+} from "./contacts.js";
 export type {
   CatalogProvenance,
   CatalogStar,

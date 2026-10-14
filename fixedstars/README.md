@@ -3,8 +3,9 @@
 This private source-checkout project is being built according to
 [PLAN.md](PLAN.md). It supplies a licensed catalog, source provenance, and a
 direct bridge to the parent engine with synthetic integration and geometric
-tests, and proper-motion propagation and true-of-date stellar positions.
-Contact matching, parans, and the CLI are pending milestones.
+tests, proper-motion propagation, true-of-date stellar positions, and pure
+conjunction and parallel matching. Natal chart-hit assembly, parans, and the
+CLI are pending milestones.
 
 Use Node as specified by this folder's package.json. Install and check only
 this project from the repository root:
@@ -140,4 +141,61 @@ retain this difference in conventions. No physical accuracy bound is claimed.
 [tests/positions.fixedstars.ts](tests/positions.fixedstars.ts), distinguishes
 independent ERFA comparisons from engine integration checks, and names their
 reference span.
+
+## Pure contact matching
+
+```ts
+import { findStarContacts } from "./src/index.js";
+
+// Invented coordinate rows, already on the same true-of-date frames.
+const result = findStarContacts(
+  [{ starId: "synthetic-star", lonDeg: 359.5, decDeg: 30 }],
+  [{ targetId: "Synthetic angle", targetKind: "angle", lonDeg: 0.5, decDeg: 31 }],
+  { conjunctionDeg: 1, parallelDeg: 1 }
+);
+console.log(result.hits, result.orbs, result.conventions);
+```
+
+findStarContacts consumes starId, lonDeg and decDeg from each star row, so
+starPositions(...).positions can be passed directly. Targets supply targetId,
+targetKind (body or angle), lonDeg and decDeg. The caller must put every row
+at the same instant and on the chart's true equator and equinox of date.
+The matcher does not rotate, cast, or verify coordinate provenance. The stellar
+correction omissions described above still apply when comparing natal bodies.
+
+The required orb policy has only conjunctionDeg and parallelDeg. Each is an
+inclusive angular limit in degrees from zero through a half circle; null
+disables that kind. Zero requests exact coordinate equality. There are no
+luminary overrides or default orbs. Conjunctions compare the shortest projected
+ecliptic-longitude arc, independent of latitude. Parallels compare the absolute
+difference of signed declinations, independent of longitude and RA. Opposite
+declinations do not become contraparallels implicitly. The constructed cases
+and policy limits are enforced in [tests/contacts.fixedstars.ts](tests/contacts.fixedstars.ts)
+and derived in [GEOMETRY.md](GEOMETRY.md), Pure contact geometry.
+
+Longitude must be normalized to [0,360) degrees or explicit null. A null star
+or target longitude skips conjunctions for that pair and leaves parallels
+eligible. Target declination may be null, which skips parallels alone; star
+declination must be available. Declinations are north positive in [-90,90]
+degrees. Other missing, nonfinite or out-of-range coordinates reject even on
+disabled kinds or when the other array is empty. Unavailable angles can be
+omitted by the caller; null coordinates never become zero.
+
+Ids follow the existing engine body-label rule: nonempty, trimmed,
+case-sensitive strings of at most 80 UTF-16 code units, without C0 controls
+or DEL. Star ids must be unique. Target ids must be unique within targetKind;
+the same label can identify a body and an angle. Invalid or duplicate rows,
+non-array inputs, and missing or unsupported orb fields throw RangeError.
+
+Each hit contains starId, targetId, targetKind, kind (conjunction or parallel),
+orbDeg and maximumOrbDeg. Both kinds can match the same pair. The result,
+hits, policy snapshot and conventions are frozen without freezing caller
+inputs. Engine exact-arithmetic helpers decide eligibility and ordering on the
+exact binary64 coordinate values. No epsilon widens an orb. Only the reported
+orb is rounded, once, to nearest with ties to even. Results sort by exact orb,
+then starId, targetKind, targetId and kind in UTF-16 string order. Input order
+and host locale do not break ties. These semantics are checked by the same
+contact tests, including an independent integer representation of the doubles.
+This function calls neither chart casting nor sky search and creates no
+engine receipt. Natal receipt integration remains M6 in PLAN.md.
 

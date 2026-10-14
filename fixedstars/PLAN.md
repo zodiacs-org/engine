@@ -8,7 +8,7 @@ explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
 - [x] M2 Fetch and read redistributable astrometry sources and primary historical lore sources; commit source, licence, coordinate-frame, epoch, and proper-motion provenance before importing data.
 - [x] M3 Generate and commit a small named bright-star catalog within the requested size range, with aliases, source locators, optional proper motion, historical attribution tags, and validation tests.
 - [x] M4 Propagate catalog proper motion and rotate positions onto the chart's true equator and ecliptic with the engine frame, equator, nutation, and time-basis helpers; document and test hand-derived geometry.
-- [ ] M5 Implement pure conjunction and parallel matching with explicit angular orb units, inclusive boundaries, structured star ids and contact kinds, deterministic ordering, and independent geometric tests.
+- [x] M5 Implement pure conjunction and parallel matching with explicit angular orb units, inclusive boundaries, structured star ids and contact kinds, deterministic ordering, and independent geometric tests.
 - [ ] M6 Cast synthetic natal inputs through the engine, include bodies and available angles, preserve native natal receipts, and expose the chart-hit library API with explicit coordinate conventions.
 - [ ] M7 Prove an isolated catalog-vector adapter can execute the existing src/sky/riseset.ts solver without editing or copying its algorithms; verify vector substitution is scoped, ordinary bodies are unchanged, and incompatible engine source is refused.
 - [ ] M8 Expose catalog rise, set, upper transit, and lower transit searches through that adapter, including solver budgets, complete refusal, circumpolar flags, and explicitly labelled engine-call provenance.
@@ -133,3 +133,33 @@ still fails because dist/calc.d.ts is absent; the session's hard rule forbids
 creating an engine build. The isolation check confirms fixedstars exclusion
 with a package dry run, without claiming the missing build's budgets passed.
 All authored changes remain under fixedstars/.
+
+## M5 completion and M6 handoff
+
+src/contacts.ts exports findStarContacts and its coordinate, policy and hit
+types through the library index. It accepts the matching fields of existing
+StarPosition rows plus body or angle target rows. Both orb limits must be
+explicit in degrees; null disables a kind and zero requests exact equality.
+Conjunctions use projected longitude and parallels use signed declination.
+Each kind stays independently eligible when the other coordinate is null.
+There are no implicit contraparallels, luminary overrides or coordinate
+transformations. Engine exact-arithmetic and body-label helpers are reused
+through the local source bridge. Eligibility and sorting use exact binary64
+differences; only reported orbs round. Results and policy snapshots are frozen.
+
+tests/contacts.fixedstars.ts and GEOMETRY.md cover hand-derived circular and
+declination cases, inclusive boundaries, subnormal and decimal roundoff,
+unavailable coordinates, independent ordering, validation and caller purity.
+An independent IEEE 754 integer oracle checks eligibility on the enumerated
+test inputs. These checks concern arithmetic and construction, not physical
+stellar accuracy. The matcher performs no chart or sky calls and creates no
+receipt. M6 must supply aligned chart-clock coordinates, preserve available
+angles without inventing missing ones, and attach the native natal envelope.
+The result explicitly records that stellar correction omissions still apply.
+
+M5 validation passed on Node 22.22.2: local Vitest, TypeScript, offline catalog
+regeneration and file/package isolation. The parent package:contents check
+still fails because dist/calc.d.ts is absent; creating that engine build is
+outside this session's hard boundary. The isolation check confirms fixedstars
+exclusion with a package dry run, without claiming the missing build's budgets
+passed. All authored changes remain under fixedstars/.
