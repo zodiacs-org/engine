@@ -518,3 +518,48 @@ search clears every hit, while all complete and refused sky calls remain
 available with their separately labelled fixedstars provenance. Mutation
 tests check that later native Date changes cannot silently detach new pairs
 from the event times captured in the call record.
+
+## CLI geometric and transport checks
+
+tests/cli.fixedstars.ts launches the real executable with invented chart
+instants and observers, from a directory outside the checkout. It verifies
+option syntax, selections, JSON transport, native natal receipt parsing,
+sky-call identity, incomplete-result refusal and the documented exit codes.
+These are integration and validation checks; serialized engine values are
+not independent astronomical references.
+
+For the broad natal-contact check, the shortest arc between two normalized
+longitudes is in [0,180] degrees. Both declinations are in [-90,90], so their
+absolute signed difference is at most 180 degrees as well. With both explicit
+orbs at 180, every available target must therefore appear once for each
+contact kind. The test names the native bodies and available angles and
+checks that exact set; it never saves a previous calculated contact list.
+The disabled-kind check applies the same construction with only conjunctions
+enabled. A zero orb is accepted explicitly and every returned hit must have
+zero reported orb. Unknown time and absent coordinates omit angle targets.
+
+For the broad paran check, all event times lie in the same half-open day
+window [a,b). Hence every star/body event difference has absolute value
+strictly less than b-a. Setting orbMs to b-a must include the entire Cartesian
+product of the returned interior star and body events, with no nearest-only
+filter. The test reconstructs that product as a transport check and uses
+BigInt subtraction of Date millisecond integers as a separate reference for
+every reported offset and absolute orb. This does not independently certify
+the physical event times. A selected low-budget call must refuse the whole
+answer, retain other selected calls and return no hits.
+
+The narrow angle test uses Spica's propagated true-of-date RA at the invented
+UTC instant 2000-03-20T06:00:00Z as construction input. For east-positive
+longitude L and apparent sidereal time S in degrees, hour angle H=S+L-RA.
+Choose L=RA-S modulo a full circle, represented in the observer's longitude
+range. Then H=0 at the chosen instant: a non-polar catalog ray lies on the
+upper meridian. At an equatorial observer, subtracting the observer position
+changes only the ray's radial component, so its east component stays zero.
+The prepared engine search must therefore find upper transit at that instant,
+within the two-millisecond construction allowance enforced by the test. The
+short surrounding window excludes lower transit and horizon crossings. The
+Midheaven anchor selects this upper-transit phase and has no body sky call.
+The coordinate and sidereal helpers set up the experiment, while the expected
+event kind follows the hour-angle identity. This is frame/observer/CLI
+construction evidence at one anchor, not an independent physical accuracy
+bound. No expectation is taken from saved fixedstars output.

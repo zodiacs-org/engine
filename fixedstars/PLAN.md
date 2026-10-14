@@ -13,7 +13,7 @@ explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
 - [x] M7 Prove an isolated catalog-vector adapter can execute the existing src/sky/riseset.ts solver without editing or copying its algorithms; verify vector substitution is scoped, ordinary bodies are unchanged, and incompatible engine source is refused.
 - [x] M8 Expose catalog rise, set, upper transit, and lower transit searches through that adapter, including solver budgets, complete refusal, circumpolar flags, and explicitly labelled engine-call provenance.
 - [x] M9 Implement paran event pairing for bodies and angular contacts over an explicit observer window, with a configurable time orb, native body-sky results, star-sky provenance, and synthetic simultaneous-contact expectations.
-- [ ] M10 Implement the fixedstars list, fixedstars hits, and fixedstars parans CLI commands, strict options, JSON output, meaningful exit codes, and end-to-end synthetic tests.
+- [x] M10 Implement the fixedstars list, fixedstars hits, and fixedstars parans CLI commands, strict options, JSON output, meaningful exit codes, and end-to-end synthetic tests.
 - [ ] M11 Extend independent geometric coverage for wraparound, poles, proper-motion conventions, frame consistency, unavailable angles, horizon tangencies, event-window boundaries, and sample-budget exhaustion.
 - [ ] M12 Finish library and CLI usage documentation, source attributions, limitations, evidence references, and isolated verification of tests, types, file sizes, and engine-package exclusion.
 
@@ -343,3 +343,41 @@ claiming the missing build's budgets passed. All authored changes remain under
 fixedstars/. M10 is next: implement the CLI using these source APIs, with strict
 options, structured JSON and meaningful refusal exit codes. No CLI work was
 done in M9. Stop here for the harness-owned commit.
+
+## M10 completion and M11 handoff
+
+bin/fixedstars.mjs now provides the fixedstars executable, named by this
+folder's private manifest and available through its local npm script. The
+launcher compiles src/cli.ts in memory with the project-local ephemeris;
+parans prepares the verified unchanged sky solver separately. No output
+bundle, parent source change, build or engine-package export was added.
+The local lockfile change records only the bin metadata.
+
+list retains full catalog records and their source/lore fields. hits uses
+explicit degree orbs, engine chart settings and natalStarHits with its native
+envelope. parans uses an explicit observer window, millisecond orb, selected
+bodies or an explicit empty body selection, optional angle anchors and
+independent native horizon/budget settings. All retained native body results
+and stellar call records remain in JSON output. Input validation rejects
+unknown, duplicate, missing and command-inapplicable options, unsupported
+subjects, malformed numbers and instants, conflicting body selections and
+invalid anchors. Complete empty results, invalid input, runtime/preparation
+failure and whole-result budget refusal have distinct documented semantics.
+
+tests/cli.fixedstars.ts launches the real executable from outside the checkout
+using synthetic charts and observer windows. It checks JSON and native receipt
+transport, clocks, missing angles, selection and option validation, host-timezone
+independence, native call retention and exit status. GEOMETRY.md derives the
+half-circle and event-product constructions and the narrow upper-meridian
+anchor test. No saved stellar output or new astrometric accuracy claim is used.
+README.md now documents executable usage, options, units, output and limitations.
+
+M10 validation passed on Node 22.22.2: full local Vitest, TypeScript, offline
+catalog regeneration, sky adapter compilation and file/package isolation.
+The parent package:contents check still fails because dist/calc.d.ts is absent;
+creating that engine build is outside this session's hard boundary. The local
+isolation check confirms exclusion through a package dry run without claiming
+the missing engine build's budgets passed. All authored changes remain under
+fixedstars/. M11 remains unchecked: extend the geometric edge-case coverage
+listed in its milestone. No M11 work was done here. Stop for the harness-owned
+commit.

@@ -5,8 +5,8 @@ This private source-checkout project is being built according to
 direct bridge to the parent engine with synthetic integration and geometric
 tests, proper-motion propagation, true-of-date stellar positions, pure
 conjunction and parallel matching, natal chart-hit assembly with native
-chart envelopes, prepared star and body sky-event searches, and paran event
-pairing. The CLI is a pending milestone.
+chart envelopes, prepared star and body sky-event searches, paran event
+pairing, and an offline CLI.
 
 Use Node as specified by this folder's package.json. Install and check only
 this project from the repository root:
@@ -48,6 +48,101 @@ are in [sources/README.md](sources/README.md). The selected HYG catalog data
 retain CC BY-SA terms. [LICENSING.md](LICENSING.md) and [NOTICE.txt](NOTICE.txt)
 state the redistribution terms and required attributions. Bulk generated
 tables and downloads belong in ignored folders.
+
+## CLI
+
+From the repository root, after installing this folder's dependencies:
+
+```sh
+node fixedstars/bin/fixedstars.mjs list
+node fixedstars/bin/fixedstars.mjs list --star Spica --star Regulus
+# Invented chart instant and place, with explicit angular orbs in degrees.
+node fixedstars/bin/fixedstars.mjs hits --utc 2000-03-20T06:00:00Z \
+  --latitude 12 --longitude 30 --conjunction-deg 0.5 --parallel-deg 0.5
+# Invented observer window, with an explicit time orb in milliseconds.
+node fixedstars/bin/fixedstars.mjs parans \
+  --from 2000-03-20T00:00:00Z --to 2000-03-21T00:00:00Z \
+  --latitude 0 --longitude 0 --orb-ms 60000 --star Spica --body Sun \
+  --star-refraction none --body-refraction none --body-limb centre
+node fixedstars/bin/fixedstars.mjs --help
+```
+
+The local manifest names the executable fixedstars. It can also be run as
+`npm --prefix fixedstars run fixedstars -- list`; direct Node invocation keeps
+npm's script banners out of JSON stdout. Paths resolve from the executable,
+so the working directory need not be the repository. The launcher compiles
+the TypeScript CLI in memory, resolves the project-local pinned ephemeris,
+and emits no build files. Paran preparation separately verifies the sky
+compatibility contract and compiles the unchanged solver as described below.
+Listing and natal hits do not prepare or call the sky solver. No command
+fetches sources, geocodes a place, saves input, or writes result files.
+
+Successful commands emit one newline-terminated JSON object with schema
+fixedstars-cli/1, command and status. list includes stars as full catalog
+records with astrometry, motion, source locators and labelled historical
+attributions. hits and parans include result as the corresponding library
+result, preserving conventions, native natal envelopes, sky call records and
+refusal details. Native Dates serialize as ISO strings. There is no rounding
+or shortening of the library's reported numerical precision. Help prints usage
+text. Errors emit a JSON diagnostic to stderr, with empty stdout and no stack.
+
+Stars default to the committed catalog. Repeat --star to select ids, names or
+aliases using findStar's lookup rules; aliases for the same selected star are
+duplicates and reject. Selection order is retained for listing and positions;
+contact ordering follows the library. Unknown stars never silently disappear.
+Numbers must be finite plain signed decimals; exponent notation, hexadecimal,
+whitespace and Infinity reject. Options take either --key value or --key=value.
+Unknown options, positional arguments, missing values and repeated scalar
+options reject. --help must appear alone or immediately after a command alone.
+Command-specific options cannot be silently applied to another command.
+
+hits requires --utc and both --conjunction-deg and --parallel-deg. Each orb
+accepts a nonnegative degree value or none to disable that kind; zero selects
+exact equality. Optional --latitude and --longitude must be supplied together
+in degrees, east positive. --house-system uses the engine's names;
+--time-known true|false, --time-scale utc|ut1|tt and --delta-t seconds retain
+the native chart settings. Unknown time or absent coordinates omit angles.
+The engine validates ranges, dates and settings. Date syntax follows the
+parent engine parser, including explicit offsets and date-only midnight.
+An unresolved local date-time rejects; the CLI does not resolve time zones.
+
+parans requires --from, --to, --latitude, --longitude and --orb-ms. The window
+includes from and excludes to, on the native sky UTC time basis. Select bodies
+explicitly with repeated --body Sun, --body Moon or planet names; --bodies none
+requests an empty body selection and cannot be combined with --body. There
+is no implicit body selection. Repeat --angle 'Midheaven@INSTANT' for an
+explicit angular-phase anchor. The other supported names are Ascendant,
+Descendant and Imum Coeli; anchors must be inside the window and unique by
+angle and instant. Angle-only contacts use --bodies none and retain the same
+angle/sky provenance distinction as the library. An empty target selection
+still returns complete star searches with no hits.
+
+Optional --height is metres above the native observer ellipsoid.
+--star-refraction and --body-refraction take none or standard, preserving
+the native standard default. --body-limb takes centre, upper or lower;
+selected planets accept centre alone. Stars always use centre.
+--star-max-samples and --body-max-samples each accept a positive safe integer
+or unlimited, with unlimited as the native default. The budgets apply to
+each individual subject search, and any refusal clears all paran hits while
+retaining every selected call. A pin or alternate time scale is supported
+only by hits, since the sky solver has neither option.
+
+| Exit code | Meaning |
+| --- | --- |
+| 0 | Complete result, including no hits, or help |
+| 1 | Runtime or preparation failure, including incompatible sky source |
+| 2 | Invalid or unsupported request |
+| 3 | Whole paran result refused because of a sample budget |
+
+The CLI contract, option rejection, JSON/native receipt preservation and exit
+codes are enforced by [tests/cli.fixedstars.ts](tests/cli.fixedstars.ts) over
+its synthetic charts and observer windows. Its half-circle matching and
+whole-window event-product expectations are derived in
+[GEOMETRY.md](GEOMETRY.md), CLI geometric and transport checks. That section
+also derives the upper-meridian construction checked within two milliseconds
+at its single synthetic anchor. These checks establish arithmetic and wiring;
+they do not measure physical stellar accuracy. Catalog licensing and stellar
+correction omissions apply equally to CLI results.
 
 ## Sky event searches
 
