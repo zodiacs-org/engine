@@ -1,0 +1,24 @@
+{
+  "name": "@zodiacs/panchang-prototype",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Facts-only panchang library and CLI prototype using the engine source checkout",
+  "engines": { "node": ">=22.7.0" },
+  "scripts": {
+    "test": "vitest run --config vitest.config.ts",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "isolation": "node scripts/check-isolation.mjs",
+    "source": "tsx --tsconfig tsconfig.runtime.json",
+    "runtime:smoke": "tsx --tsconfig tsconfig.runtime.json scripts/smoke.ts",
+    "check": "npm run typecheck && npm test && npm run runtime:smoke && npm run isolation"
+  },
+  "dependencies": { "astronomy-engine": "2.1.19" },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "vitest": "2.1.9"
+  }
+}

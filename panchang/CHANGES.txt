@@ -1,0 +1,1 @@
+Complete panchang M1: add milestone plan, isolated TypeScript/Vitest setup, receipt-preserving luminary adapter, source ledger, JPL smoke reference and passing Node 22 runtime/isolation checks.
