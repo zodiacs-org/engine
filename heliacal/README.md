@@ -5,9 +5,10 @@ the parent checkout. It is outside the engine's npm package. The checklist
 in [PLAN.md](PLAN.md) records the implementation order.
 
 The library currently supplies strict inputs, apparent positions,
-Sun/body geometry, phase classification, geometric disk illumination and
-rise/set/transit events with position receipts. Visibility models, crescent
-predictions and the CLI are planned, not available.
+Sun/body geometry, phase classification, geometric disk illumination,
+an arcus visionis criterion, a configurable visibility screen and
+rise/set/transit events with position receipts. Visibility transition searches,
+crescent predictions and the CLI are planned, not available.
 
 ## Development
 
@@ -213,6 +214,100 @@ derived distance that cannot be represented as positive finite au. The
 helpers' domains and geometric identities are checked in
 [test/phase.test.ts](test/phase.test.ts).
 
+## Visibility criteria
+
+`horizonArcusVisionis(sunAltitudeDeg, requiredSolarDepressionDeg)` implements
+the horizon criterion defined by Schoch: compare solar depression with an
+explicit threshold at the target's airless centre horizon crossing. The
+caller supplies the Sun's airless centre altitude at that crossing. This
+pure helper does not find or verify the crossing. It returns the depression,
+threshold, signed margin and inclusive `passesCriterion`, under the model
+identifier `horizon-arcus-visionis/1`. Its reported body altitude is zero by
+definition. Future searches using the engine must request centre limbs and
+no refraction; the engine's default horizon conventions are different.
+
+Schoch's thresholds depend on the appearance and observing conditions. This
+API supplies no automatic thresholds or lunar calibration. The distinction
+between first and last appearances is checked with selected published
+criterion values in [the reference tests](test/visibility-reference.test.ts).
+These are arithmetic checks, not reproductions of historical sighting dates.
+
+For a screen at an arbitrary instant, choose the separate custom extension:
+
+```ts
+import { arcusVisibility } from "./src/index.js";
+
+const result = arcusVisibility("Venus", "2001-02-03T04:05:06.007Z", {
+  latitude: 13, longitude: -42, height: 120
+}, {
+  model: "arcus-visionis-altitude/1",
+  minimumSolarDepressionDeg: 6,
+  minimumBodyAltitudeDeg: 5,
+  photometry: null
+});
+if (result.status === "ok") {
+  console.log(result.criterion.passesCriterion);
+  console.log(result.criterion.margins, result.criterion.failedCriteria);
+  console.log(result.geometry.topocentric.target.equatorial.receipt);
+}
+```
+
+The observing inputs and thresholds above are synthetic examples, exercised
+in [test/visibility.test.ts](test/visibility.test.ts); they are not recommended
+Venus settings. The custom screen requires both minimum airless body altitude
+and minimum solar depression to pass. It neither measures the horizon arcus
+at an arbitrary instant nor substitutes the body-Sun altitude difference for
+it. This combination is our configurable extension, not Schoch's calibrated
+model or Schaefer's limiting-magnitude model.
+
+All model fields are required. `photometry: null` explicitly disables the
+magnitude gate. For a planet, a photometry object instead requires:
+
+| Field | Meaning |
+| --- | --- |
+| `magnitudeOutsideAtmosphere` | Total visual magnitude before terrestrial attenuation, supplied for this instant by the caller. |
+| `extinctionMagPerAirmass` | Nonnegative scalar visual extinction coefficient, in magnitudes per air mass. |
+| `limitingMagnitude` | Faintest attenuated visual magnitude accepted in the target's direction, supplied by the caller. |
+| `refractionDeg` | Upward correction from airless to apparent body altitude, used only by the photometric calculation. |
+
+The air mass `X` uses Rozenberg's approximation at the apparent altitude.
+The screen computes attenuation `k*X`, magnitude at the observer
+`magnitudeOutsideAtmosphere + k*X`, and magnitude margin
+`limitingMagnitude - magnitudeAtObserver`. This is attenuation from above
+the atmosphere, not a correction relative to the zenith. The engine supplies
+no magnitude here. The explicit refraction correction does not change either
+geometric altitude gate. A correction of zero asserts that refraction is
+being neglected for this screen; it is not an atmospheric estimate.
+
+`evaluateArcusVisibility({ body, sunAltitudeDeg, bodyAltitudeDeg }, parameters)`
+evaluates the same rule without computing positions. Both input altitudes
+are airless topocentric centres. `rozenbergAirmass(apparentAltitudeDeg)`
+exposes the apparent-altitude formula separately. Altitudes are in degrees;
+input airless altitudes range from -90 to 90, while thresholds, refraction
+corrections and the air-mass formula's apparent altitude range from 0 to 90.
+These domains are enforced by [test/visibility.test.ts](test/visibility.test.ts).
+The formula is retained as published, including its approximate zenith
+normalization.
+
+Results keep a frozen copy of the parameters and sample, separate signed
+margins, and all failed gates. Equality passes without an epsilon.
+Photometry reports `disabled`, `evaluated` or `unavailable`; a corrected
+altitude outside the air-mass formula's domain is unavailable, with a null
+magnitude margin and a failed `photometry-unavailable` gate. Invalid inputs
+and unrepresentable arithmetic throw `RangeError`. The engine-backed function
+returns an intact engine refusal when positions are unavailable; otherwise
+it retains all source geometry and position receipts. Its `receiptScope`
+is `positions`: the screen has no engine receipt or propagated error bound.
+
+The scalar extinction calculation is only a rough screen near the horizon.
+It does not model separate atmospheric layers, twilight sky brightness,
+weather, terrain, visual adaptation or sighting probability. Adding extinction
+to an empirical arcus threshold can count atmospheric effects twice. Select
+parameters for the intended use; there are no fitted defaults. A pass means
+only that the supplied thresholds passed. The Moon accepts geometric
+screening only and rejects a photometry object: integrated point-source
+magnitude does not establish crescent visibility.
+
 ## Checks and sources
 
 The foundation tests check inputs, body scope, engine delegation, receipt
@@ -248,6 +343,16 @@ The fixture and [notes](test/fixtures/README.md#phase-references) record
 the exact requests, source quantities, attribution and comparison scope.
 The pure triangle tests independently check the implemented geometry;
 receipt parity and site-dependence tests are integration checks.
+
+The visibility [reference fixture](test/fixtures/visibility-reference.json)
+records selected Schoch criterion values and Schaefer's rounded Rozenberg
+air-mass examples, with gates fixed before comparison. It also records an
+exact constructed extinction calculation. The
+[reference tests](test/visibility-reference.test.ts) check those criteria;
+the [other visibility tests](test/visibility.test.ts) check boundary handling,
+explicit photometry, validation and engine delegation. None measures sighting
+prediction accuracy across a date range. [Fixture notes](test/fixtures/README.md#visibility-criteria)
+record attribution and scope.
 
 [SOURCES.md](SOURCES.md) records the geometry references and primary-source
 roadmap for later milestones. Code and original documentation here follow

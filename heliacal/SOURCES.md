@@ -1,7 +1,8 @@
 # Primary-source roadmap
 
-The sources below distinguish implemented geometry and phase checks from the model
-roadmap. A citation here does not mean that a visibility model is implemented.
+The sources below distinguish implemented geometry, phase and arcus checks
+from the remaining model roadmap. A roadmap citation does not mean that a
+model is implemented.
 Formulas must be implemented independently, with their units, coordinate
 conventions and domain recorded in the tests.
 
@@ -99,26 +100,38 @@ the fixture as a US Government work.
 
 ## Planetary visibility
 
-The following roadmap sources were fetched and the cited sections read
-during the foundation session.
+These sources were fetched and the cited sections read again on 2026-10-14
+for the arcus criterion and custom screen.
 
 C. Schoch, "The 'Arcus Visionis' of the Planets in the Babylonian
 Observations", *Monthly Notices of the Royal Astronomical Society* 84
 (1924), pp. 731-734:
 <https://articles.adsabs.harvard.edu/pdf/1924MNRAS..84..731S>.
-The opening page defines the solar depression at the body's airless horizon
-crossing. The following pages distinguish inner-planet appearances and give
-historical visibility thresholds. A named Schoch model must keep those
-conventions separate from configurable altitude or extinction additions.
+Printed p. 731 defines airless solar depression at the body's horizon
+crossing. `horizonArcusVisionis` implements that definition with a caller's
+threshold. The selected magnitude-zero first/last values from the lower
+table on p. 734 check criterion arithmetic in
+[visibility-reference.json](test/fixtures/visibility-reference.json).
+The source's clear-sky calibration is not a universal or lunar calibration.
 
 Bradley E. Schaefer, "Astronomy and the Limits of Vision", *Vistas in
 Astronomy* 36 (1993), pp. 311-361:
 <https://www.uai.it/pianeti/wp-content/uploads/2021/03/ppr_Sch93-1.pdf>.
-Sections 2.3 and 2.4 discuss air mass and extinction; section 3.10 discusses
-heliacal phenomena. This is a possible source for a richer model. Adding an
-extinction parameter to an arcus threshold alone does not implement
-Schaefer's limiting-magnitude model. A later milestone must define exactly
-how extinction and magnitude limits affect its chosen model.
+Section 2.3, printed p. 315, equation (2b), gives Rozenberg's relative air
+mass `X = 1 / (cos(Z) + 0.025 exp(-11 cos(Z)))`, with apparent, refracted
+zenith distance `Z`. `rozenbergAirmass` uses the equivalent sine of apparent
+altitude. Selected rounded values in Table 3 on p. 316 independently check
+this formula. Section 2.4, pp. 318-319, equation (8a), gives scalar attenuation
+`kX`; accurate near-horizon extinction instead needs the component treatment
+of equation (8b).
+
+`arcus-visionis-altitude/1` is our explicit custom extension: independent
+minimum body-altitude and solar-depression gates, optionally combined with
+that rough scalar attenuation and a caller's visual magnitude limit. Its
+photometry requires an explicit refraction correction. This is not Schaefer's
+sky-brightness or limiting-vision model. It has no fitted planetary defaults
+and rejects lunar point-source photometry. The reference tests check formulas
+and criterion arithmetic, not historical observations or predictive accuracy.
 
 ## Lunar crescents
 

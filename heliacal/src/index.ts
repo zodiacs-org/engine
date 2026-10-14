@@ -10,3 +10,8 @@ export { illuminationGeometry, phase, synodicPhase } from "./phase.js";
 export type {
   BodyPhase, IlluminationGeometry, PhaseAtOrigin, PhaseClassification, PhaseResult, ReceiptedIllumination, SynodicPhase
 } from "./phase.js";
+export { arcusVisibility, evaluateArcusVisibility, horizonArcusVisionis, rozenbergAirmass } from "./visibility.js";
+export type {
+  ArcusFailedCriterion, ArcusPhotometry, ArcusPhotometryResult, ArcusSample,
+  ArcusVisibility, ArcusVisibilityCriterion, ArcusVisibilityParameters, ArcusVisibilityResult, HorizonArcusVisionis
+} from "./visibility.js";

@@ -1,4 +1,4 @@
-# Geometry and phase references
+# Geometry, phase and visibility references
 
 `geometry-reference.json` contains independent coordinate examples for the
 geometry tests. The selected instant and observing site are synthetic. No
@@ -91,6 +91,28 @@ evaluated law-of-cosines arithmetic. Those test the implementation of the
 published disk-fraction definition cited in `../../SOURCES.md`; they do not
 validate ephemeris accuracy. Tests comparing receipts and positions with
 direct engine calls are integration checks only.
+
+## Visibility criteria
+
+`visibility-reference.json` records selected numerical criterion values from
+C. Schoch, "The 'Arcus Visionis' of the Planets in the Babylonian Observations"
+(1924), printed p. 734, and Bradley E. Schaefer, "Astronomy and the Limits of
+Vision" (1993), Table 3, printed p. 316. The fixture supplies URLs, exact
+locators, retrieval date and comparison gates written before execution.
+Only these numerical facts and our independent arithmetic are retained;
+the papers, programs, figures and observation databases are not copied.
+Attribution remains with the cited authors; our code and original metadata
+follow the repository's MIT licence.
+
+The Schoch cases apply selected thresholds to synthetic horizon geometry.
+The air-mass cases check Rozenberg's formula against the source's rounded
+values at apparent altitudes. The extinction example independently constructs
+an exactly representable `kX` boundary. Its refraction offset puts the body
+at the apparent horizon while the airless geometric gate fails. This checks
+the distinction between coordinate conventions, not the validity of scalar
+extinction at the horizon. These are implementation checks of criteria and
+formulas, with no sighting dates or predictive-performance claims. The source
+values never come from this library or Swiss Ephemeris.
 
 ## ERFA horizontal transformation
 
