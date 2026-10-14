@@ -2,9 +2,11 @@
 
 A private TypeScript project for composing and ranking time windows over the
 existing astrology engine. Progress is tracked in [PLAN.md](PLAN.md). The
-interval foundation, strict JSON/YAML rule loading, and read-only engine and
-events adapters are implemented so far. Astronomical rule evaluation, ranking,
-the CLI and HTTP endpoint are planned milestones. The adapter contract and
+interval foundation, strict JSON/YAML rule loading, read-only engine and
+events adapters, and Moon sign, phase and direct-motion rule windows are
+implemented so far. Other rules, ranking, the CLI and HTTP endpoint are planned
+milestones. [EVALUATION.md](EVALUATION.md) describes the current evaluator and
+its uncertainty handling. The adapter contract and
 optional events integration are described in [ADAPTERS.md](ADAPTERS.md). The
 configuration vocabulary is described in [RULES.md](RULES.md).
 
@@ -92,9 +94,12 @@ all subsets and ordered pairs on its declared domain, and every subdomain for
 clipping and complement. The golden test also checks Date limits, endpoint
 ownership, malformed input and immutable copies.
 
-This evidence establishes the checked set behavior. It contains no
-astronomical reference instants and makes no claim about ephemeris accuracy,
-event completeness, search performance or predictive validity. The engine
+This interval evidence establishes the checked set behavior and contains no
+astronomical reference instants. Independent JPL Horizons references for the
+implemented astronomical rules are described in
+[references/README.md](references/README.md). They check the declared cases
+only, with no claim about exhaustive event completeness, search performance
+or predictive validity. The engine
 and events adapters delegate calculations and searches to existing APIs and
 carry their clocks, receipts and refusals. Their contract tests establish
 control flow and set ownership, not astronomical accuracy.

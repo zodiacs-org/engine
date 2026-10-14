@@ -13,6 +13,7 @@ const ANGLES = Object.freeze({ conjunction: 0, sextile: 60, square: 90, trine: 1
 export type AspectTarget = { readonly kind: 'moving'; readonly body: Planet }
   | { readonly kind: 'fixed'; readonly longitude: number };
 export type EventOperation =
+  | { readonly kind: 'phase-boundary' }
   | { readonly kind: 'ingress' | 'station' | 'retrograde'; readonly body: Planet }
   | { readonly kind: 'aspect'; readonly body: Planet; readonly target: AspectTarget; readonly aspects: readonly MajorAspect[] }
   | { readonly kind: 'void-of-course'; readonly bodies: readonly Exclude<Planet, 'Moon'>[]; readonly aspects: readonly MajorAspect[] };
@@ -90,10 +91,12 @@ function snapshotOperation(input: EventOperation): EventOperation {
   if (!input || typeof input !== 'object') throw new RangeError('Expected an event operation.');
   const operation = frozenCopy(input);
   const extras = (value: object, keys: readonly string[]) => Object.keys(value).some(k => !keys.includes(k));
-  if (!['ingress', 'station', 'retrograde', 'aspect', 'void-of-course'].includes(operation.kind)) {
+  if (!['ingress', 'station', 'retrograde', 'aspect', 'void-of-course', 'phase-boundary'].includes(operation.kind)) {
     throw new RangeError('Unsupported event operation.');
   }
-  if (operation.kind === 'void-of-course') {
+  if (operation.kind === 'phase-boundary') {
+    if (extras(operation, ['kind'])) throw new RangeError('Invalid phase operation fields.');
+  } else if (operation.kind === 'void-of-course') {
     if (extras(operation, ['kind', 'bodies', 'aspects']) || !Array.isArray(operation.bodies)
       || operation.bodies.length === 0 || new Set(operation.bodies).size !== operation.bodies.length
       || Array.from(operation.bodies).some(b => b === ('Moon' as Planet) || !PLANETS.includes(b))) {
@@ -159,6 +162,9 @@ export class EventsAdapter {
     try {
       context.checkpoint();
       switch (operation.kind) {
+        case 'phase-boundary': result = runtime.searchExactAspects(nativeContext, 'Moon',
+          { kind: 'moving', body: 'Sun' }, { aspects: [22.5, 67.5, 112.5, 157.5]
+            .map(angleDegrees => ({ id: `phase_${angleDegrees * 2}`, angleDegrees })) }, scan, provider); break;
         case 'ingress': result = runtime.searchSignIngresses(nativeContext, operation.body, scan, provider); break;
         case 'station': result = runtime.searchStations(nativeContext, operation.body, scan, provider); break;
         case 'retrograde': result = runtime.searchRetrogradeIntervals(nativeContext, operation.body, scan, provider); break;
@@ -182,7 +188,7 @@ export class EventsAdapter {
       return refuse(result.reason as 'evaluation-budget' | 'cancelled');
     }
     const expectedKind = { ingress: 'sign-ingress', station: 'station', retrograde: 'retrograde',
-      aspect: 'exact-aspect', 'void-of-course': 'void-of-course' }[operation.kind];
+      aspect: 'exact-aspect', 'phase-boundary': 'exact-aspect', 'void-of-course': 'void-of-course' }[operation.kind];
     const events: EventRecord[] = [];
     for (const event of result.events) {
       if (!event || event.clock !== window.clock || event.kind !== expectedKind) throw new TypeError('Incompatible event kind or clock.');

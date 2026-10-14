@@ -3,8 +3,10 @@
 The adapters connect electional rules to the existing engine and optional
 sibling events package. They do not find roots or implement astronomical event
 searches. The implemented event operations are sign ingresses, stations,
-retrograde intervals, exact aspects and void-of-course intervals. Eclipse and
-rule evaluation wiring remain later milestones in [PLAN.md](PLAN.md).
+retrograde intervals, exact aspects and void-of-course intervals. Phase
+boundaries delegate to exact aspects with an explicit custom-angle policy.
+Moon sign, phase and direct-motion evaluation is described in
+[EVALUATION.md](EVALUATION.md). Other rule wiring remains in [PLAN.md](PLAN.md).
 
 Run the development commands in [README.md](README.md) on the declared Node
 runtime. Both `npm test` and `npm run build` first bundle a narrow bridge from
@@ -125,8 +127,9 @@ its synthetic integer domain. [adapters.electional-check.ts](test/adapters.elect
 checks those expectations, policy delegation, invalid inputs, budgets,
 cancellation, receipt preservation, engine refusal and source integration.
 The native-engine cases check metadata and control flow only. Astronomical
-accuracy references and measured event-date tolerances remain later work;
-none is inferred from these tests.
+accuracy references for the basic rule evaluator are recorded separately in
+[references/README.md](references/README.md); none is inferred from these
+adapter control-flow tests.
 
 The test loads the real sibling if it is already present, otherwise it checks
 the missing-capability result. When sibling files are absent, contract stubs

@@ -7,7 +7,7 @@ writes inside `electional/`. Git changes are handled by the harness.
 - [x] M1 Create an isolated private TypeScript project and half-open interval arithmetic with hand-derived golden fixtures, boundary validation, and independent set-membership tests.
 - [x] M2 Define a versioned JSON rule schema, JSON/YAML loading and strict validation for locations, resolved date ranges, rule options, weights, and one explicitly synthetic natal input.
 - [x] M3 Add read-only engine and events adapters with explicit clocks, coverage, budgets, cancellation, refusal handling, and engine receipts; use relative imports when events is present and report missing capability when absent.
-- [ ] M4 Evaluate Moon sign and phase rules and Mercury/Venus direct-motion windows through existing engine/events APIs, with independently sourced astronomical reference instants.
+- [x] M4 Evaluate Moon sign and phase rules and Mercury/Venus direct-motion windows through existing engine/events APIs, with independently sourced astronomical reference instants.
 - [ ] M5 Evaluate Moon not void of course with explicit body/aspect conventions, lookahead, clipping and unresolved-tail handling through the events API.
 - [ ] M6 Evaluate planetary-hour rules through the engine sky entry, including local solar-day ownership, missing rise/set and polar refusals.
 - [ ] M7 Evaluate benefics angular or in selected houses and applying aspects to selected bodies using engine chart, house and configured-aspect APIs; expose house fallbacks and boundary uncertainty.

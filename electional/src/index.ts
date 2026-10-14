@@ -19,3 +19,5 @@ export type { EngineRuntime, Position } from './engine-adapter.js';
 export { EventsAdapter, loadEventsCapability } from './events-adapter.js';
 export type { AspectTarget, EventOperation, EventRecord, EventSearchOptions, EventSearchResult,
   EventsCapability, EventsRuntime, EventsSource, Unresolved } from './events-adapter.js';
+export { evaluateBasicRule } from './basic-rules.js';
+export type { BasicRule, RuleWindowResult } from './basic-rules.js';

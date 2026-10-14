@@ -4,8 +4,9 @@
 `validateRuleSet(value)` validates an already parsed object. Both return a
 detached, deeply frozen `RuleSet`, or throw `RuleValidationError`. Errors contain
 bounded field paths and validation codes, without submitted values or parser
-excerpts. These functions load configuration only; they do not evaluate rules
-or produce search results yet.
+excerpts. These functions load configuration only. The separate
+[`evaluateBasicRule`](EVALUATION.md) API evaluates Moon sign, Moon phase and
+direct-motion rules; other evaluators and combined ranking remain planned.
 
 The source of the versioned Draft-07 JSON Schema is
 [src/rule-schema.ts](src/rule-schema.ts), exported as `ruleSchema`. Run
@@ -136,5 +137,7 @@ search completeness.
 
 Runtime parsing uses the locally pinned [Ajv](https://ajv.js.org/guide/formats.html)
 validator and [yaml](https://eemeli.org/yaml/) parser. Their code is consumed as
-dependencies, not copied here; their own MIT and ISC notices apply. No engine
-data or third-party astronomical material is added by this milestone.
+dependencies, not copied here; their own MIT and ISC notices apply. The
+configuration loader contains no engine data. The evaluator's independent
+astronomical inputs and attribution are recorded in
+[references/README.md](references/README.md).
