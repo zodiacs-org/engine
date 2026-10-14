@@ -32,3 +32,5 @@ export type {
   HorizonPhenomenonOpportunity, HorizonPhenomenaOptions, HorizonPhenomenaResult,
   PairedHorizonOpportunity, UnavailableHorizonOpportunity
 } from "./phenomena.js";
+export { YALLOP_MODEL, evaluateYallop, yallopBestTime, yallopCategory } from "./yallop.js";
+export type { YallopBestTime, YallopCategory, YallopCriterion, YallopGeometry } from "./yallop.js";

@@ -1,5 +1,8 @@
 # Geometry, phase, visibility and horizon references
 
+The [Yallop criterion notes](YALLOP.md) describe `yallop-reference.json`,
+its independent arithmetic generator and the lunar crescent checks.
+
 `geometry-reference.json` contains independent coordinate examples for the
 geometry tests. The selected instant and observing site are synthetic. No
 expectation comes from this project's output or from Swiss Ephemeris.

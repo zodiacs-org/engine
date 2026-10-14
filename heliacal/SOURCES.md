@@ -1,6 +1,6 @@
 # Primary-source roadmap
 
-The sources below distinguish implemented geometry, phase and arcus checks
+The sources below distinguish implemented geometry, phase, arcus and Yallop checks
 from the remaining model roadmap. A roadmap citation does not mean that a
 model is implemented.
 Formulas must be implemented independently, with their units, coordinate
@@ -174,19 +174,43 @@ named extension. It does not substitute for the crescent models below.
 B. D. Yallop, *A Method for Predicting the First Sighting of the New
 Crescent Moon*, NAO Technical Note 69, June 1997, updated April 1998:
 <https://webspace.science.uu.nl/~gent0113/islam/downloads/naotn_69.pdf>.
-Sections 2-4 define the geometry, width and best observing time; section 6
-gives the calibrated categories. Appendix A contains a worked output example.
-The report carries a permission notice. Use original code and independent
-criterion arithmetic; do not copy its program, prose or tables. Yallop's
-geocentric altitude difference must not be silently replaced with Odeh's
-topocentric definition.
+Fetched and the relevant page images read on 2026-10-15. Implemented as
+`evaluateYallop`, `yallopCategory` and `yallopBestTime`:
+
+- Section 2, printed p. 1, defines airless geocentric centre separation
+  (ARCL) and Moon-minus-Sun altitude difference (ARCV).
+- Equations (3.8)-(3.10), printed p. 3, define semidiameter from parallax,
+  its altitude-dependent correction, and crescent width. Despite calling
+  this width topocentric, the equation uses geocentric ARCL. The code keeps
+  that convention and accepts true separation, rather than using equation
+  (2.1), which is not a general spherical identity away from the horizon.
+- Equation (4.1), printed p. 4, supplies the evening best-time lag fraction.
+  Millisecond rounding and rejecting nonpositive lag are explicit library
+  conventions. No morning timing formula is inferred.
+- Equation (6.1), printed p. 11, defines q; Table 5, printed p. 12, gives
+  its category inequalities, with equality assigned to the less-visible
+  category. The elongation remarks explain the calibration and do not add
+  separate classifier conditions.
+- Printed pp. 5 and 12 discuss site height, extinction and observations
+  outside the model's expected behavior. This implementation exposes the
+  fixed empirical model and provides no atmospheric adjustment.
+
+The report carries a permission notice. Our code and
+[worked fixtures](test/fixtures/yallop-reference.json) are original formula
+implementations and independent arithmetic on invented geometry. No source
+program, prose, observation database or worked-output table is copied.
+The [fixture notes](test/fixtures/YALLOP.md) and committed generator describe
+the comparison gates. These are criterion implementation checks, not
+sighting records or a calibration validation. Geocentric ARCV must not be
+silently replaced with Odeh's topocentric definition.
 
 Mohammad Sh. Odeh, "New Criterion for Lunar Crescent Visibility",
 *Experimental Astronomy* 18, pp. 39-64,
 DOI [10.1007/s10686-005-9002-5](https://doi.org/10.1007/s10686-005-9002-5):
 <https://astronomycenter.net/pdf/2006_cri.pdf>.
-Section 5, Table V and equation (2) provide a criterion and rounded boundary
-values suitable for small independent worked tests. Use airless topocentric
+This model remains planned. Section 5, Table V and equation (2) provide a
+criterion and rounded boundary values suitable for small independent worked
+tests. Use airless topocentric
 geometry and the width unit of the equation, not the different width unit
 printed in the observational table. Preserve the distinction between
 unaided and optical-aid categories. Do not copy the observation database.

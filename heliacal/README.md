@@ -8,9 +8,9 @@ The library currently supplies strict inputs, apparent positions,
 Sun/body geometry, phase classification, geometric disk illumination,
 an arcus visionis criterion, a configurable visibility screen,
 rise/set/transit events, bounded observing windows, bracketed horizon-arcus
-transitions and geometric acronychal/cosmical phenomena with position receipts.
-Crescent predictions and the CLI are
-planned, not available.
+transitions, geometric acronychal/cosmical phenomena and a pure Yallop
+lunar crescent criterion. Position-based APIs preserve engine receipts.
+Date-range crescent predictions and the CLI are planned, not available.
 
 ## Development
 
@@ -634,6 +634,96 @@ schedules to check the source definitions, lag arithmetic, both reversal
 directions, equality, gaps and clipping. They do not compare astronomical
 event dates with historical observations. The engine integration and
 failure tests check delegation, receipts and bounded behavior.
+
+## Yallop lunar crescent criterion
+
+```ts
+import { evaluateYallop, yallopBestTime } from "./src/index.js";
+
+const best = yallopBestTime("2001-02-03T18:00:00Z", "2001-02-03T18:45:00Z");
+// Independent, invented geometry, not computed for the example times above.
+const criterion = evaluateYallop({
+  moonAltitudeGeocentricDeg: 4,
+  sunAltitudeGeocentricDeg: -5,
+  elongationGeocentricDeg: 10,
+  moonHorizontalParallaxArcmin: 57
+});
+```
+
+`evaluateYallop` implements B. D. Yallop's *A Method for Predicting the First
+Sighting of the New Crescent Moon*, NAO Technical Note 69 (1997, updated
+April 1998), equations (3.8)-(3.10) and (6.1). The source and locators are in
+[SOURCES.md](SOURCES.md#lunar-crescents). The caller supplies airless
+geocentric Sun and Moon centre altitudes on the same local axes, the true
+geocentric angular separation, and lunar horizontal parallax. All must
+refer to the same best observing time. This helper does no position or
+horizon calculation and cannot authenticate that geometry or its epoch.
+
+Yallop uses `ARCV = moonAltitude - sunAltitude`, in degrees. With parallax
+`p` in arcminutes, `SD = 0.27245*p` is the geocentric semidiameter in
+arcminutes. The report's correction is
+`SD' = SD*(1 + sin(moonAltitude)*sin(p/60))`, with sine arguments in
+degrees, followed by `W' = SD'*(1 - cos(geocentricElongation))`. This is
+Yallop's approximate topocentric width, retaining geocentric elongation.
+The implementation uses the equivalent half-angle expression for the
+width to avoid cancellation close to conjunction. It does not use the
+geometric disk illumination from `phase` for this criterion.
+
+The result gives `arcOfVisionDeg`, both semidiameters, `crescentWidthArcmin`,
+the cubic's `referenceArcOfVisionDeg`, and the dimensionless value
+`q = (ARCV - (11.8371 - 6.3226*W' + 0.7319*W'^2 - 0.1018*W'^3))/10`.
+`model` is `yallop-1997/1`; `parameters` exposes the frozen `YALLOP_MODEL`
+definition, its source revision, coefficients and category boundaries.
+`yallopCategory(q)` applies the same category rule to a finite supplied `q`.
+Neither function clamps `q` to a nominal range or adds an elongation gate.
+
+Table 5 on the report's printed page 12 defines these categories. Their
+inequalities are enforced by the [boundary tests](test/yallop.test.ts).
+Every exact boundary belongs to the less-visible category, without an
+epsilon allowance. `categoryMeaning` preserves the optical-aid distinction:
+
+| Category | q interval | Interpretation under the model |
+| --- | --- | --- |
+| A | `q > 0.216` | Easy unaided sighting |
+| B | `-0.014 < q <= 0.216` | Unaided sighting under ideal conditions |
+| C | `-0.160 < q <= -0.014` | Optical location may be needed before unaided sighting |
+| D | `-0.232 < q <= -0.160` | Optical aid required |
+| E | `-0.293 < q <= -0.232` | Below usual telescopic detection |
+| F | `q <= -0.293` | Below the model's Danjon limit |
+
+These are empirical categories, not probabilities or guarantees. Yallop's
+calibration assumes limited site and atmospheric conditions; it does not
+provide user-adjustable extinction, observer-height, refraction or magnitude
+parameters. Such options are rejected. A numeric evaluation does not test
+whether the Moon is waxing, above the horizon, in twilight or in the thin
+crescent regime. Numeric range validation is not a calibrated validity
+range, and the caller must establish an eligible observing opportunity.
+All result metadata and the copied sample are frozen. `receiptScope` is
+`none;caller-supplied-geometry`; no engine receipt is created by this pure
+function.
+
+`yallopBestTime(sunset, moonset)` implements equation (4.1): sunset plus
+four ninths of the elapsed moonset lag. It accepts the engine's resolved
+instant syntax and returns normalized ISO settings and `at`, together with
+`lagMilliseconds` and `offsetMilliseconds`. The offset is rounded to the
+nearest millisecond using integer rational arithmetic. The caller must
+supply the sunset and later moonset for the same evening opportunity, with
+appropriate horizon conventions; the function does not find or verify them.
+Missing events belong to the calling search, and a nonpositive or unsafe
+integer lag throws `RangeError`. It never wraps a negative lag to the next
+date or applies a morning symmetry rule. Its receipt scope records that
+the setting times were supplied by the caller.
+
+The [reference fixture](test/fixtures/yallop-reference.json) uses original
+synthetic worked geometry and independent high-precision arithmetic for the
+published equations. [Reference tests](test/yallop-reference.test.ts)
+check the formula intermediates, category rules and best-time arithmetic;
+[fixture notes](test/fixtures/YALLOP.md) record attribution, gates and the
+generator. [API tests](test/yallop.test.ts) cover the usage examples,
+validation, immutability, neighboring binary category inputs and date
+rounding. These checks establish implementation of the criterion, not
+historical date agreement or predictive accuracy. Crescent event searches
+that combine engine geometry, horizon times and receipts remain planned.
 
 ## Checks and sources
 
