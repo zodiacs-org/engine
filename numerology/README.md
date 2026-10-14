@@ -7,13 +7,13 @@ implements integer reduction, civil-date validation, life path, birthday,
 and name normalization using Latin, Greek, Cyrillic, and caller mappings,
 with vowel/consonant classification. It also implements Pythagorean and
 Chaldean expression/destiny, soul urge, and personality calculations.
-[PLAN.md](PLAN.md) tracks the remaining name analyses, cycles,
-profiles, and CLI.
+Maturity, karmic lessons, and hidden passion use those same date and name
+conventions. [PLAN.md](PLAN.md) tracks the remaining cycles, profiles, and CLI.
 
 Numerology results describe symbolic conventions and provide reflection
 prompts. The tests check arithmetic and declared behavior. They do not test
 whether numerology predicts personality or events. The meanings in
-`src/meanings.ts` and the empty-selection text in `src/name-numbers.ts`
+`src/meanings.ts`, `src/derived.ts`, and the empty-selection text in `src/name-numbers.ts`
 are original text authored for this project.
 
 From this directory, with Node matching `package.json`:
@@ -131,7 +131,7 @@ The handwritten `component-masters-to-33`,
 `whole-date-differs-from-components`, and `reduce-all-component-masters`
 cases in [dates.json](test/fixtures/dates.json) enforce these paths. The
 methods declare arithmetic conventions; neither is presented as the sole
-definition used by numerology practitioners. The planned Pythagorean and
+definition used by numerology practitioners. The Pythagorean and
 Chaldean name systems share these date formulas.
 
 `birthday(date, { masterNumbers })` validates the entire civil date, then
@@ -602,3 +602,144 @@ enforce the existing name and caller-expansion bounds, and ownership tests
 check deep freezing and caller-table snapshots. These controls establish
 declared arithmetic behavior, not linguistic completeness or predictive
 accuracy.
+
+## Maturity
+
+`maturity(date, name, options)` calculates life path and expression from the
+supplied source inputs, adds their resulting values, then reduces the sum.
+It does not add unreduced name or date compounds, reduce preserved masters
+again before addition, infer a full name, or select an age. Options combine
+the life-path `method` with `system`, `masterNumbers`, `yAsVowel`, and
+`transliteration` from name calculations. Defaults remain `"components"`,
+`"pythagorean"`, `"preserve"`, `"never"`, and no caller table. The same
+master policy applies to every performed date, name, and final reduction.
+Invalid dates, unsupported names, unknown options, and explicit null values
+reject using the source APIs' rules. Options are ordinary in-process objects
+with the same getter and proxy limitations described above.
+
+```js
+import { maturity, karmicLessons, hiddenPassion } from "./.build/index.js";
+
+// Invented spelling and civil date, used only as arithmetic controls.
+const date = "2000-01-08";
+const name = "Ael Vorn";
+const options = { system: "chaldean", masterNumbers: "preserve" };
+console.log(JSON.stringify({
+  maturity: maturity(date, name, options),
+  karmicLessons: karmicLessons(name, options),
+  hiddenPassion: hiddenPassion(name, options)
+}));
+```
+
+For this example, life path is 11 and expression visits `29 -> 11`.
+Maturity sums `11 + 11 = 22` and preserves that master. With the reduce
+policy, both inputs instead become 2, producing 4. The
+`chaldean-reached-expression-master` and `chaldean-reduced-components`
+cases in [derived.json](test/fixtures/derived.json) enforce these paths;
+the latter also selects the whole-date formula. Other fixtures distinguish
+the two date formulas and cover each preserved master, final debt values,
+and both calendar-domain boundaries. These are declared project formulas
+for both systems, not a claim that every practitioner uses them.
+
+The result contains `value`, `meaning`, `karmicDebts`, and a frozen JSON-safe
+`receipt` with schema `numerology-maturity/1`. Its `formula` is
+`"reduced-life-path-plus-reduced-expression"`. The receipt records the
+shared `masterNumbers` policy, complete `lifePath` and `expression` results,
+the ordered `sum.inputs` and `sum.output`, and the full final `reduction`.
+Each nested source retains its original date or name, compounds,
+normalization provenance, and step receipts. The outer meaning is the
+original prompt for the final reduced value.
+
+Debt annotations retain every performed source path in life-path, expression,
+then final reduction order. `source` is `"life-path"`, `"expression"`, or
+`"total"`. A life-path annotation also has `component` identifying its
+`"year"`, `"month"`, `"day"`, or nested `"total"`. Its `stage` is local to
+that component's reduction. Other annotations omit `component`; their stage
+is local to their named reduction. Identical debt numbers at different
+locations remain separate. The `component-expression-and-total-debt-locators`
+and `nested-life-total-versus-maturity-total` fixtures enforce the locations
+and order. No debt is inferred from an unvisited compound or a digit substring.
+
+## Karmic lessons and hidden passion
+
+`karmicLessons(name, options)` selects raw letter values absent from the
+supplied name. Its domain is the set of values actually assigned by the
+selected letter table: Pythagorean values 1 through 9, Chaldean values 1
+through 8. An unassigned Chaldean nine is shown as ineligible, not as an
+automatic lesson. This table-relative domain is the project's explicit
+convention for both systems. The `all-values-present`,
+`chaldean-reserved-nine`, and `chaldean-all-assigned-values-present` fixtures
+enforce its boundaries. These symbolic labels do not establish personal
+shortcomings, past events, or owed debts.
+
+`hiddenPassion(name, options)` selects every raw letter value with the
+highest positive frequency. Ties are retained equally in ascending value
+order; no tie is broken by spelling order, letter identity, or reduced
+expression. A value that occurs only once can still be a maximum. Different
+letters sharing a table value contribute to the same count. The
+`two-way-tie` and `different-letters-share-table-value` fixtures enforce this
+behavior. Both frequency APIs accept exactly the same options and defaults
+as expression. They do not accept a date or life-path method.
+
+Every emitted letter contributes, including repeated letters, each letter
+of a transliteration expansion, and letters emitted from mapped marks.
+Separators and intentional silent outputs contribute nothing. Counts do not
+change with Y classification or master policy; the full normalization and
+expression receipt still records the requested choices. There is no
+vowel/consonant filtering, per-token reduction, reduction of counts, or
+reduction of the selected raw values. Valid names without selected vowels
+or consonants therefore retain these analyses. Empty names and names whose
+mappings emit no letters reject. The empty-vowel-or-consonant-selection test
+and frequency fixtures in [derived.test.mjs](test/derived.test.mjs) enforce
+these cases under both systems.
+
+For the synthetic example above, Chaldean karmic lessons are `[4, 8]` and
+hidden passion is `[5]`: E and N both contribute value 5. The Pythagorean
+spelling instead has lessons `[2, 7, 8]` and the same highest-frequency
+value. The `synthetic-chaldean-full-name` and
+`synthetic-pythagorean-full-name` fixtures pin every count, as well as these
+selections.
+
+Each frequency result has `values` in ascending order, a short summary in
+`meaning`, a `meanings` array of `{ value, meaning }` prompts, an empty
+`karmicDebts` array, and a frozen JSON-safe `receipt`. Original prompts are
+exported as `KARMIC_LESSON_MEANINGS` and `HIDDEN_PASSION_MEANINGS`. No missing
+values produces `values: []`, `meanings: []`, and text explicitly saying
+there are no missing-value prompts. Hidden passion always has at least one
+value for a valid name, with explicit equal-tie text when needed.
+
+The `numerology-name-frequency/1` receipt records:
+
+- `calculation`, `system`, `letterTable`, `masterNumbers`, and `selection: "all"`;
+- `name`, the complete expression result with normalization and contributions;
+- `domain`, the eligible raw letter values in ascending order;
+- `steps`, one increment per emitted letter, with `letterIndex`, `value`,
+  `before`, and `after`;
+- `frequencies`, rows for every value from 1 through 9, with `value`,
+  `eligible`, `count`, and ordered contribution `letterIndices`;
+- `maximum`, the largest count, and `selectionRule` indicating missing
+  assigned values or all positive-frequency maxima;
+- `reduction: "not-applicable-to-frequency-selection"`, because frequency
+  selection is counting, not digit reduction.
+
+The increment steps and contribution locators make frequency selection
+replayable without inventing a digit-reduction path for it. The nested
+expression provides the ordinary reduction receipt for the same source name.
+Debts on that nested expression remain specific to it; even a frequency
+count equal to a debt number does not create a selection debt. The
+frequency-counts-and-expression-debts test enforces this distinction, and
+the complete-small-frequency-receipts test pins the outer schema.
+
+The derived tests replay all source and final reductions with positional
+bigint arithmetic and reconstruct counts by scanning prior contributions.
+They check every ordered ASCII letter pair under both systems, retaining
+ties and conserving letter count and the raw weighted sum. Seeded synthetic
+mixed-script controls check both systems, both master policies, both date
+formulas, and every Y policy, with expected ASCII emissions assembled from
+handwritten pairs. They compare declared canonical and ASCII equivalents,
+replay normalization, and check frequency invariance when policies change.
+Further controls check expansion and source locators, mapped marks and
+astral characters, strict rejection, allocation boundaries, deep freezing,
+and caller-table ownership. Their reproducible generator and exact scope
+are in `derived.test.mjs`. These checks establish declared arithmetic
+behavior, not predictive accuracy.

@@ -14,7 +14,7 @@ commits and draft pull requests. Stop after the session's milestone is complete.
 - [x] M3 Normalize Latin Unicode names with documented diacritic and ligature rules, per-character receipts, strict unsupported-character handling, and configurable Y-as-vowel classification.
 - [x] M4 Add versioned explicit transliteration tables for Greek and Cyrillic, caller-supplied mappings for other scripts, normalization provenance, and unsupported-script tests. Document that transliteration is a convention, not a pronunciation inference.
 - [x] M5 Implement Pythagorean and Chaldean letter tables, expression/destiny, soul urge, and personality; record selected system, original compounds, master policy, letter contributions, and reductions.
-- [ ] M6 Implement maturity, karmic lessons, and hidden passion, including tied frequencies and empty vowel/consonant selections, with receipts and original meanings.
+- [x] M6 Implement maturity, karmic lessons, and hidden passion, including tied frequencies and empty vowel/consonant selections, with receipts and original meanings.
 - [ ] M7 Implement personal year/month/day cycles with explicit calendar-year boundaries, caller-supplied target dates, and no implicit current clock.
 - [ ] M8 Implement pinnacles and challenges with documented age intervals, single-digit challenge arithmetic, zero challenges, and complete component receipts.
 - [ ] M9 Assemble deterministic profiles and name-change comparisons using the same birth date and conventions, with auditable before/after deltas and no inferred identity data.
@@ -197,3 +197,44 @@ cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
 exclusion passed; the complete engine contents and size gate remains
 unverified. No root build was generated. Only `numerology/` changed.
 M6 is the next session's work.
+
+## M6 validation
+
+Added maturity from reduced life path plus reduced expression under a shared
+master policy, with complete source results, original compounds, all reduction
+steps, and source/component/stage debt locators. Added karmic lessons and
+hidden passion from full-name raw letter-value frequencies, including every
+positive-frequency tie. Karmic lessons use the selected table's assigned
+domain; the unassigned Chaldean nine remains visible as ineligible. Frequency
+receipts retain normalization and expression provenance, contribution indices,
+every count increment, and an explicit declaration that selection does not
+perform digit reduction. New prompts are original project text. The README
+documents formulas, options, empty selections, debt scope, and these declared
+conventions with fixture and test references.
+
+Project `npm run typecheck` and `npm test` passed on Node 22.22.2.
+`test/derived.test.mjs` checks handwritten synthetic fixtures in
+`test/fixtures/derived.json`, complete frequency receipts, debt provenance,
+all assigned values and tied maxima, empty vowel/consonant selections,
+every ordered ASCII letter pair under both systems, and seeded mixed-script
+controls under both systems, master policies, date methods, and every Y
+policy. It independently replays bigint reductions and letter counts,
+checks raw count and weighted-sum conservation, canonical and ASCII
+equivalents over declared cases, policy invariance of frequencies, source
+and expansion indices, caller-mapped marks, allocation boundaries, strict
+rejection, serialization, deep freezing, and caller ownership. A subprocess
+also verifies import and calculation with clock and network entry points
+disabled. Existing normalization, transliteration, name-number, date,
+reduction, package exclusion, file size, and documentation checks pass.
+Generated build output and validation logs remain in ignored project paths.
+
+Rechecked all available local and origin `main` and `infra/*` refs for
+numerology, Pythagorean, soul urge, hidden passion, and karmic lesson overlap
+outside this project; no overlapping implementation was found. This review
+covers locally available refs, not unfetched remote changes.
+
+The root `npm run package:contents` was attempted with the local runtime and
+cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm
+dry-run exclusion passed; the complete engine contents and size gate remains
+unverified. No root build was generated. Only `numerology/` changed.
+M7 is the next session's work.

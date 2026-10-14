@@ -1,6 +1,11 @@
 export { reduceInteger, MAX_INTEGER_DIGITS } from "./reduction.js";
 export { NUMBER_MEANINGS, KARMIC_DEBT_MEANINGS } from "./meanings.js";
 export { parseGregorianDate, lifePath, birthday } from "./dates.js";
+export { maturity, karmicLessons, hiddenPassion, KARMIC_LESSON_MEANINGS, HIDDEN_PASSION_MEANINGS } from "./derived.js";
+export type {
+  MaturityOptions, MaturityKarmicDebt, MaturityResult, FrequencyCalculation,
+  FrequencyRow, FrequencyStep, NameFrequencyResult
+} from "./derived.js";
 export {
   expression, destiny, soulUrge, personality, PYTHAGOREAN_LETTER_TABLE,
   CHALDEAN_LETTER_TABLE, PYTHAGOREAN_LETTER_TABLE_ID, CHALDEAN_LETTER_TABLE_ID,
