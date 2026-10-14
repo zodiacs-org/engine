@@ -5,7 +5,7 @@ append a session summary to CHANGES.txt. Stop after that milestone (or an
 explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
 
 - [x] M1 Establish an isolated TypeScript project, catalog contracts, a direct engine source bridge, and synthetic integration and geometric tests.
-- [ ] M2 Fetch and read redistributable astrometry sources and primary historical lore sources; commit source, licence, coordinate-frame, epoch, and proper-motion provenance before importing data.
+- [x] M2 Fetch and read redistributable astrometry sources and primary historical lore sources; commit source, licence, coordinate-frame, epoch, and proper-motion provenance before importing data.
 - [ ] M3 Generate and commit a small named bright-star catalog within the requested size range, with aliases, source locators, optional proper motion, historical attribution tags, and validation tests.
 - [ ] M4 Propagate catalog proper motion and rotate positions onto the chart's true equator and ecliptic with the engine frame, equator, nutation, and time-basis helpers; document and test hand-derived geometry.
 - [ ] M5 Implement pure conjunction and parallel matching with explicit angular orb units, inclusive boundaries, structured star ids and contact kinds, deterministic ordering, and independent geometric tests.
@@ -48,3 +48,27 @@ events, conventions, flags, and sample counts, but no native receipt. Future
 sky provenance must retain those fields and engine identity and explicitly
 say that it is a fixedstars call record, without claiming native receipt
 support or an accuracy certification.
+
+## Source decisions to carry into M3
+
+sources/manifest.json and sources/retrieval.json pin HYG v4.1, its licence
+and documentation, the author's HYG build notes, ESA's Hipparcos conventions,
+and the original Ashmand edition. sources/README.md explains the import
+contract and the limitations of the source-frame inference. Only HIP-backed
+HYG rows are eligible initially. Preserve their raw selected rows and HYG/HIP
+locators. Rotate both the interpreted ICRS direction and its motion tangent
+through the existing engine bias matrix before producing a CatalogStar on
+J2000 mean equator/equinox axes. Do not silently relabel the input or apply
+Hipparcos's original epoch shift a second time.
+
+The extracted/transformed HYG catalog and raw selected-row fixture will be
+CC BY-SA, with notices describing selection and conversions. Keep that data
+licence distinct from the original MIT code. sources/lore-passages.json holds
+short transcriptions checked against the original printed pages. Preserve
+named-star, described-group and constellation scope, graded wording, and
+the explicit historical-attribution label. The Sacred Texts files remain
+unimported because of their stated file-use condition and different pagination.
+
+M2 checks passed on Node 22: local Vitest, TypeScript, source digest re-fetch,
+and the isolation check. No catalog rows or engine-package files were added
+or changed in this milestone.

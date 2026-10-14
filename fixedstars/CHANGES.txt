@@ -1,1 +1,2 @@
 M1: Add isolated fixedstars TypeScript scaffold, catalog contracts, engine bridge, geometric and synthetic integration tests, and package-isolation checks.
+M2: Record licensed HYG astrometry provenance and primary Ashmand lore passages, explicit frame and motion conventions, pinned streamed source receipts, and passing source and isolation checks.

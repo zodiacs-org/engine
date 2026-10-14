@@ -1,0 +1,23 @@
+Fixedstars original code and documentation: MIT, see ../LICENSE.
+
+Selected astrometry source: HYG Database v4.1, David Nash / Astronexus.
+https://github.com/astronexus/HYG-Database/tree/c7f7f883fe678cc7680169a50ccd7dcc49b060ce
+Licensed CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0/
+No star catalog rows are committed at this provenance milestone. Future
+selected and transformed HYG data retain CC BY-SA 4.0. Their notice must
+describe selection, unit conversion and engine frame conversion. This use
+does not imply endorsement by the source author.
+
+Historical text: Ptolemy, Tetrabiblos, translated by J. M. Ashmand,
+London: Davis and Dickson, 1822, Book I, chapters IX to XI.
+Public-domain original text; short passages transcribed from the IAPSOP scan.
+https://iapsop.com/ssoc/1822__ashmand___ptolemys_tetrabiblos.pdf
+Locators and transcription decisions: sources/lore-passages.json.
+These are historical beliefs, not statements of physical or predictive facts.
+
+Definitions: ESA, The Hipparcos and Tycho Catalogues, ESA SP-1200,
+1997, volume 1, section 1.2. No ESA catalog data are copied here.
+https://cdsarc.cds.unistra.fr/ftp/cats/more/HIP/cdroms/docs/vol1/sect1_02.pdf
+
+The parent engine and its dependencies retain their own licences and notices:
+../LICENSING.md and ../NOTICE. This folder does not alter them.

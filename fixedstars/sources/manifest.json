@@ -1,0 +1,160 @@
+{
+  "schema": "fixedstars-sources/1",
+  "retrievedOn": "2026-10-14",
+  "sources": [
+    {
+      "id": "hyg-v41",
+      "role": "astrometry",
+      "title": "HYG Database v4.1",
+      "author": "David Nash / Astronexus",
+      "url": "https://raw.githubusercontent.com/astronexus/HYG-Database/c7f7f883fe678cc7680169a50ccd7dcc49b060ce/hyg/CURRENT/hygdata_v41.csv",
+      "locator": "HIP-backed rows; row locator must include id and hip",
+      "retrievedOn": "2026-10-14",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "licenseEvidenceResourceIds": [
+        "hyg-license",
+        "hyg-readme"
+      ],
+      "resourceIds": [
+        "hyg-v41-csv",
+        "hyg-license",
+        "hyg-readme",
+        "hyg-motion-notes",
+        "hyg-build-notes"
+      ],
+      "attribution": "HYG Database v4.1, David Nash / Astronexus, CC BY-SA 4.0; identify selection and transformations.",
+      "readLocators": [
+        "HYG README: Versions and Licensing, Current version",
+        "HYG README: General content notes, item 1; Fields items 7, 10 and 18",
+        "HYGLike README: source note (1) for HYG proper motions",
+        "AT-HYG v1 build notes: Tycho-2 positions, paragraphs about adjustment of HYG to epoch 2000"
+      ],
+      "excerpt": "epoch and equinox of 2000.0",
+      "excerptResourceId": "hyg-readme"
+    },
+    {
+      "id": "hipparcos-definitions",
+      "role": "reference-only",
+      "title": "The Hipparcos and Tycho Catalogues, ESA SP-1200 (1997), Volume 1",
+      "author": "European Space Agency",
+      "url": "https://cdsarc.cds.unistra.fr/ftp/cats/more/HIP/cdroms/docs/vol1/sect1_02.pdf",
+      "locator": "Section 1.2.2, printed p. 22; table 1.2.2 and section 1.2.5, printed p. 25 (extract PDF pages 6 and 9)",
+      "retrievedOn": "2026-10-14",
+      "license": "reference-only; no catalogue data or document redistributed",
+      "resourceIds": [
+        "hipparcos-definitions"
+      ],
+      "attribution": "ESA (1997), The Hipparcos and Tycho Catalogues, ESA SP-1200, Volume 1, section 1.2.",
+      "excerpt": "the positions and proper motions are thus specified as referring to the ICRS.",
+      "excerptResourceId": "hipparcos-definitions",
+      "readBasis": "PDF text read; printed p. 25 also checked against rendered page image"
+    },
+    {
+      "id": "ptolemy-ashmand-1822",
+      "role": "historical-text",
+      "title": "Ptolemy's Tetrabiblos, or Quadripartite (1822)",
+      "author": "Ptolemy; translated by J. M. Ashmand",
+      "url": "https://iapsop.com/ssoc/1822__ashmand___ptolemys_tetrabiblos.pdf",
+      "locator": "Title page; Book I, chapters IX to XI, printed pp. 25 to 30 (PDF pages 58 to 63)",
+      "retrievedOn": "2026-10-14",
+      "license": "public-domain-original-text-US",
+      "resourceIds": [
+        "ashmand-1822-scan"
+      ],
+      "attribution": "Ptolemy, Tetrabiblos, tr. J. M. Ashmand, London: Davis and Dickson, 1822, Book I, chapters IX to XI.",
+      "readBasis": "Original scan downloaded in memory; text read with pdftotext and excerpts checked against rendered page images",
+      "textLicenseBasis": "Original edition published in 1822; public domain in the United States by publication date. No rights asserted in archive scans, OCR, or modern layouts.",
+      "transcriptionPolicy": "Our short transcriptions only: normalize line breaks, end-of-line hyphenation and ligatures; omit footnote markers, with explanatory notes."
+    }
+  ],
+  "resources": [
+    {
+      "id": "hyg-v41-csv",
+      "url": "https://raw.githubusercontent.com/astronexus/HYG-Database/c7f7f883fe678cc7680169a50ccd7dcc49b060ce/hyg/CURRENT/hygdata_v41.csv",
+      "sha256": "d9f69fd86bbf90a4e4d52b4c5c53eacfa6dfc0bfdef85bfd94f095e0bebe4ebd",
+      "maximumBytes": 40000000,
+      "csvHeader": "\"id\",\"hip\",\"hd\",\"hr\",\"gl\",\"bf\",\"proper\",\"ra\",\"dec\",\"dist\",\"pmra\",\"pmdec\",\"rv\",\"mag\",\"absmag\",\"spect\",\"ci\",\"x\",\"y\",\"z\",\"vx\",\"vy\",\"vz\",\"rarad\",\"decrad\",\"pmrarad\",\"pmdecrad\",\"bayer\",\"flam\",\"con\",\"comp\",\"comp_primary\",\"base\",\"lum\",\"var\",\"var_min\",\"var_max\""
+    },
+    {
+      "id": "hyg-license",
+      "url": "https://raw.githubusercontent.com/astronexus/HYG-Database/c7f7f883fe678cc7680169a50ccd7dcc49b060ce/LICENSE",
+      "sha256": "f404190403d31e0ce7223f4cb7af954485ad88077358330754dc5c892a856627",
+      "maximumBytes": 2000000
+    },
+    {
+      "id": "hyg-readme",
+      "url": "https://raw.githubusercontent.com/astronexus/HYG-Database/c7f7f883fe678cc7680169a50ccd7dcc49b060ce/hyg/README.md",
+      "sha256": "81f765951e60131e49ccc91376815791e130ad1db46047eb1384d3ba6bcb5af4",
+      "maximumBytes": 2000000
+    },
+    {
+      "id": "hyg-motion-notes",
+      "url": "https://raw.githubusercontent.com/astronexus/HYG-Database/c7f7f883fe678cc7680169a50ccd7dcc49b060ce/hyg/athyg_v3/README.md",
+      "sha256": "09d10a20e2154d4afa425aba7cde01f434cbf7981c6574b7806135ea5039508a",
+      "maximumBytes": 2000000
+    },
+    {
+      "id": "hyg-build-notes",
+      "url": "https://raw.githubusercontent.com/astronexus/ATHYG-Database/650346e2bc57f664eb411bc5f44ffd94b8006af2/data/details/v1_builds.md",
+      "sha256": "51ff6109cf4e71fd3a7447d2ff8acbd66af435a6c2a43b2aea890d77b297dab2",
+      "maximumBytes": 2000000
+    },
+    {
+      "id": "hipparcos-definitions",
+      "url": "https://cdsarc.cds.unistra.fr/ftp/cats/more/HIP/cdroms/docs/vol1/sect1_02.pdf",
+      "sha256": "f992c9381201261cbbb7b30191d2c23d599181a0f6a5e283d6ac957ab845fa1b",
+      "maximumBytes": 2000000
+    },
+    {
+      "id": "ashmand-1822-scan",
+      "url": "https://iapsop.com/ssoc/1822__ashmand___ptolemys_tetrabiblos.pdf",
+      "sha256": "eed35a5ee2125967edc6789719b599af84f16fbba72d1b1546d37de3b4dc8655",
+      "maximumBytes": 15000000
+    }
+  ],
+  "astrometryImport": {
+    "sourceId": "hyg-v41",
+    "selection": "Only rows with a nonempty HIP identifier; keep HYG id and HIP id in every row locator.",
+    "sourceDeclaredEpochJulianYear": 2000,
+    "sourceDeclaredEquinoxJulianYear": 2000,
+    "sourceFrameInterpretation": "icrs",
+    "sourceFrameBasis": "documented-inference",
+    "frameReferenceSourceId": "hipparcos-definitions",
+    "frameCaveat": "HYG says equinox 2000 but does not specify frame bias. HIP input axes are ICRS and author describes epoch propagation. Treat HIP-backed HYG as ICRS-origin; no homogeneous reduction or precision guarantee is asserted.",
+    "catalogFrame": "j2000-mean-equator-equinox",
+    "frameDerivation": "Use engine src/calc-frames.ts: transpose(frameMatrix(\"equatorial-icrs\", time)) on both direction and proper-motion tangent, then reproject the tangent onto the transformed RA/Dec bases.",
+    "raSourceUnit": "hours",
+    "raDegreesPerHour": 15,
+    "decSourceUnit": "degrees",
+    "motionSourceUnit": "milliarcseconds-per-Julian-year",
+    "raMotionConvention": "mu_alpha_star=(dRA/dt)*cos(dec)",
+    "motionBasis": "HIP convention from ESA section 1.2.5; publisher says most HYG motion originates in Hipparcos.",
+    "julianYearDays": 365.25,
+    "missingMotion": "null; do not coerce blanks to zero",
+    "epochPolicy": "HYG has already propagated positions to J2000; do not apply the original Hipparcos epoch shift again.",
+    "rowProvenanceRequirements": [
+      "hyg-id",
+      "hip-id",
+      "raw-selected-row",
+      "source-frame-interpretation",
+      "engine-frame-derivation"
+    ],
+    "excludedCorrections": [
+      "stellar-parallax",
+      "perspective-acceleration",
+      "annual-aberration",
+      "gravitational-deflection"
+    ]
+  },
+  "leads": [
+    {
+      "id": "sacred-texts-ashmand",
+      "url": "https://sacred-texts.com/astro/ptb/ptb00.htm",
+      "retrievedOn": "2026-10-14",
+      "locator": "Title page, Notice of Attribution; chapters IX to XI",
+      "status": "not-imported",
+      "reason": "Title page permits noncommercial file reuse; later pagination differs. Use our own transcriptions from the original printed 1822 scan instead."
+    }
+  ]
+}

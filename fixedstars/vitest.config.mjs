@@ -12,7 +12,7 @@ export default defineConfig({
   },
   test: {
     // Keep standalone tests out of the parent engine's default discovery.
-    include: ["tests/**/*.fixedstars.ts"],
+    include: ["tests/**/*.fixedstars.{ts,mjs}"],
     pool: "forks",
     maxWorkers: 1,
     minWorkers: 1

@@ -2,8 +2,9 @@
 
 This private source-checkout project is being built according to
 [PLAN.md](PLAN.md). The current milestone supplies catalog types and a direct
-bridge to the parent engine, with synthetic integration tests. Catalog
-positions, contact matching, parans, and the CLI are pending milestones.
+bridge to the parent engine, with synthetic integration tests, and reviewed
+source provenance. Catalog positions, contact matching, parans, and the CLI
+are pending milestones.
 
 Use Node as specified by this folder's package.json. Install and check only
 this project from the repository root:
@@ -21,8 +22,8 @@ by the test configuration and TypeScript paths. Its tests do not need a
 parent engine build or installation. The engine's packed files and export
 map are unchanged. The bridge uses internal source APIs, so a different
 engine checkout must be checked again; this is not a standalone npm package.
-The tests use an explicit .fixedstars.ts suffix and local Vitest configuration
-to stay outside the parent engine's default test discovery. The isolation
+The tests use explicit .fixedstars.ts or .fixedstars.mjs suffixes and local
+Vitest configuration to stay outside the parent engine's default test discovery. The isolation
 check enforces the file-size and documentation-character constraints and
 checks package exclusion with a parent package dry run that skips scripts.
 
@@ -40,7 +41,11 @@ The sky custom-vector limitation and receipt distinction are recorded in
 PLAN.md for the later adapter milestone.
 
 Original code and documentation use the repository's [MIT licence](../LICENSE).
-No external star catalog or lore data has been imported yet. Any imported
-data must first have verified redistribution terms and attribution recorded
-inside this folder. Generated data and downloads belong in ignored folders.
+Source decisions, pinned retrieval receipts and short historical passages
+are in [sources/README.md](sources/README.md). No star catalog rows have been
+imported yet. The selected HYG data will retain CC BY-SA terms, and the
+astrometric source-frame interpretation is explicitly recorded before any
+conversion. [LICENSING.md](LICENSING.md) and [NOTICE.txt](NOTICE.txt) state
+the redistribution terms and required attributions. Generated data and
+downloads belong in ignored folders.
 
