@@ -10,7 +10,8 @@ The library provides `cast`, `normalizeHoraryInput`, `selectSignificators`,
 `createRulePolicy`, `evaluateConsiderations`, `createEssentialPolicy` and
 `evaluateEssentialCondition`, `createAccidentalPolicy` and
 `evaluateAccidentalCondition`, `createAspectSearchPolicy` and
-`evaluateSignificatorAspects`.
+`evaluateSignificatorAspects`, `createDirectPerfectionPolicy` and
+`evaluateDirectPerfection`.
 Further analysis rules and the CLI are scheduled in [`PLAN.md`](PLAN.md).
 
 From the checkout, using Node as specified in this folder's `package.json`:
@@ -359,6 +360,85 @@ Independent motion and angular derivations are documented in
 [`tests/fixtures.md`](tests/fixtures.md). `tests/aspects.integration.test.ts`
 checks engine delegation over the synthetic question instant, house systems
 and fallback, without claiming independent ephemeris accuracy.
+
+## Direct contact and continuity evidence
+
+`evaluateDirectPerfection(result, aspectPolicy, directPolicy)` extends the
+significator aspect report with ordered sign-boundary and station evidence.
+It uses engine `bodyLongitude`, `longitudeSpeed`, `dignityRulersAt` and the
+existing crossing solver, without recasting the question or copying engine
+event code. The embedded `aspects` report keeps its current geometry and
+contact candidates. `events` lists the selected physical planets' sampled
+events over the same horizon; shared roles remain on the single planet.
+
+```ts
+import { createDirectPerfectionPolicy, evaluateDirectPerfection } from "./src/index.js";
+
+const directPolicy = createDirectPerfectionPolicy({ stations: true });
+const direct = evaluateDirectPerfection(result, aspectPolicy, directPolicy);
+```
+
+Every enabled aspect between distinct physical significators gets a `direct`
+assessment. A `direct-contact` means the current in-orb application reaches a
+sampled contact with no earlier event found under the enabled continuity
+checks. `interrupted` records a sign change or motion reversal before that
+contact, retaining the later candidate. `requires-review` covers boundary
+touches, unresolved transitions and events indistinguishable in sampled time
+from contact. These are partial perfection observations. They do not decide
+Lilly's reception, house-strength or competing-contact requirements, identify
+refrenation from a station alone, or emit an outcome verdict.
+
+An `exact-now` assessment describes present contact. Other explicit states
+are `no-current-application`, `contact-not-found`, `search-disabled`,
+`aspect-search-refused`, `event-search-refused` and `disabled`. Missing contacts
+are bounded-horizon observations. No self-contact substitutes for a shared
+querent/quesited ruler. Each candidate's attached events concern its physical
+pair and have a `before` or `coincident` relation. Events after contact and
+unrelated planets remain in the horizon-wide event list.
+
+`createDirectPerfectionPolicy` defaults the independent `directAspect`,
+`signChanges` and `stations` toggles on. Disable any check with `false`;
+explanations record which checks were enabled. Keeping original signs and
+flagging every motion reversal are explicit project choices described in
+[`SOURCES.md`](SOURCES.md), rather than a full transcription of Lilly.
+Disabling direct assessment can preserve event searching for later analysis.
+Disabling all continuity checks retains direct contact observations without
+performing an event scan. Disabling aspect searching or all aspect types also
+disables the event scan.
+
+Sign boundaries are searched on both direct and retrograde motion. Station
+roots search exact sampled speed zero, independently of the aspect policy's
+relative-speed threshold or the accidental policy's stationary tolerance.
+Side probes distinguish sign changes and motion reversals from touches and
+zero plateaus. An unavailable side at the horizon, or departure from a
+boundary/zero speed at the question, requires review. Provider dates stay
+inside the horizon; engine `longitudeSpeed` internally samples either side
+of its date and can evaluate outside that horizon.
+
+The event budget defaults to 20,000 provider calls and permits positive
+integers up to 1,000,000, separately from the aspect search's budget.
+Longitude and speed calls, including side probes, each consume a unit.
+These defaults and bounds are enforced by `tests/direct-perfection.test.ts`;
+`tests/direct-perfection.budget.test.ts` checks call accounting and refusal.
+The event scan returns no partial events on refusal, and cannot label a
+future candidate a clear direct contact when enabled checks were refused.
+Already completed aspect evidence and current exact geometry remain available.
+
+`eventSearch.rootResolutionMs` is the inherited bisection step divided by
+`2^24`, rounded up, plus a millisecond for Date truncation. Events within
+twice this resolution of the contact are conservatively coincident.
+`tests/direct-perfection.test.ts` enforces that arithmetic over its synthetic
+motion laws; it is numerical search resolution, not ephemeris accuracy.
+`DIRECT_EVENT_METHOD` records the speed transform, smooth-motion assumptions,
+nearby-root merging, zero-rounding and clock limitations. A completed scan
+does not prove all events were found.
+
+`evaluateDirectPerfectionWith(longitudeAt, speedAt, result, aspectPolicy,
+directPolicy)` runs the same analysis on caller motion laws. Both providers
+must describe consistent longitude and speed; the supplied chart and
+providers are not authenticated. Reports are frozen JSON-friendly snapshots.
+The independently worked fixtures and engine-delegation checks are documented
+in [`tests/fixtures.md`](tests/fixtures.md).
 
 `check:scope` checks commit-candidate file sizes, documentation punctuation,
 the pinned ephemeris dependency and folder exclusion using npm's dry-run file

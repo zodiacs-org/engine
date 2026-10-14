@@ -1,4 +1,8 @@
 export { cast } from "./cast.js";
+export { evaluateDirectPerfection, evaluateDirectPerfectionWith } from "./direct-perfection.js";
+export type { AspectSpeedAt, DirectAspectAssessment, DirectContinuityEvent, HoraryDirectPerfection, SignBoundaryEvent, StationEvent } from "./direct-perfection.js";
+export { createDirectPerfectionPolicy, DIRECT_EVENT_METHOD, DIRECT_PERFECTION_SOURCE } from "./direct-policy.js";
+export type { DirectPerfectionPolicyInput, HoraryDirectPolicy } from "./direct-policy.js";
 export { evaluateSignificatorAspects, evaluateSignificatorAspectsWith } from "./significator-aspects.js";
 export type { AspectContact, AspectLongitudeAt, AspectPerfectionCandidate, HorarySignificatorAspects, SignificatorAspect } from "./significator-aspects.js";
 export { createAspectSearchPolicy, ASPECT_MOTION_SOURCE, ASPECT_SEARCH_METHOD } from "./aspect-policy.js";

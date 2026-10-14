@@ -11,7 +11,7 @@ run its tests, tick it here and append a session summary to `CHANGES.txt`.
 - [x] M5 Report essential dignities and directional/mutual receptions using the engine tables and APIs; add configurable sourced essential scores and hand-derived fixtures.
 - [x] M6 Add configurable accidental dignity scoring using engine houses, sect and speed helpers; expose each contribution and avoid counting the same condition twice.
 - [x] M7 Classify significator aspects using the engine's aspects and exact arithmetic; search relative longitude with engine crossings for time-to-perfection, bounded horizons and explicit search status.
-- [ ] M8 Identify direct aspect perfection and sign changes or stations before perfection; reuse engine position/speed helpers and retain the ordered event evidence.
+- [x] M8 Identify direct aspect perfection and sign changes or stations before perfection; reuse engine position/speed helpers and retain the ordered event evidence.
 - [ ] M9 Identify translation of light from ordered separating/applying contacts, with configurable traditional eligibility and hand-derived motion fixtures.
 - [ ] M10 Identify collection of light from converging contacts and receptions, documenting the selected tradition and testing ambiguous/shared significator roles.
 - [ ] M11 Identify prohibition, frustration and station-driven refranation from the event sequence; explain competing interpretations without emitting a verdict.

@@ -579,3 +579,119 @@ requested/actual houses across systems and polar fallback, and confirms
 empty-rule and budget-preflight cases call no ephemeris. These assertions
 are adapter and regression evidence, without independent astronomical
 accuracy claims or a horary outcome verdict.
+
+## Direct contact, sign changes and stations
+
+`direct-perfection.test.ts` runs the production aspect and event adapters
+against separately specified longitude laws and their derivatives, through
+the unmodified engine crossing solver. Time `t` is elapsed UTC days since
+the same invented epoch. The schematic chart is independent of an
+ephemeris at that epoch. Longitudes below are reduced modulo 360 and speeds
+are the analytic derivatives in degrees/day. Moon is fixed at 180 unless
+explicitly changed. These fixtures test defined geometry and event
+interpretation, without establishing astronomical accuracy or predictive
+validity.
+
+The basic law is Mars `10+2t`, Venus `16+t`. Their equality reduces to
+`t=6`. Over `[0,8]` Mars runs from 10 to 26 and Venus from 16 to 24, all
+within Aries, and both speeds are strictly positive. No sign change or
+station precedes contact. Extending the horizon to twelve days adds Mars's
+ingress `10+2t=30`, at `t=10`; that later event cannot interrupt contact at
+six days.
+
+For Mars `28+2t`, Venus `34+t`, equality still gives `t=6`, but Mars reaches
+30 when `t=1`, moving from Aries into Taurus. Venus stays in Taurus over
+the horizon. Moon `180+12t` has speed twelve and reaches the boundaries
+210, 240 and 270 at `t=2.5,5,7.5`. The event list orders these with Mars's
+earlier ingress. Lunar events do not interrupt the Mars/Venus pair.
+Disabling only the sign-change check admits the partial direct contact,
+with the disabled check stated in the explanation.
+
+For the forward wrap case, Mars `358+2t` crosses 360 at one day, moving
+Pisces to Aries, and meets Venus `4+t` modulo 360 at six days. For the
+retrograde case, Mars `2-2t` crosses zero at one day, Aries to Pisces,
+and meets Venus `356-t` modulo 360 at six days. These are opposite-direction
+sign transitions with the same directed conjunction contact. Mars `24+t`
+and Venus fixed at 30 instead meet exactly at the ingress at six days;
+the ingress/contact order is unresolved and requires review.
+
+For station-before-contact evidence, set Mars `a=10+2t-t^2` and Venus
+`b=16+t-2t^2`. Their difference is
+`a-b=t^2+t-6=(t-2)(t+3)`, so the only future conjunction over `[0,3]` is
+at `t=2`. Initially the separation is six degrees and relative speed is
+positive one, making this an application. Venus's derivative `1-4t` is zero
+at `t=0.25`; Mars's `2-2t` is zero at `t=1`. Both change from positive to
+negative, in that order, before conjunction. Neither planet leaves Aries
+over this horizon. The report retains the later contact and both reversals,
+without calling either one a refrenation.
+
+Mars `10-(t-2)^2` and Venus fixed at ten touch conjunction at `t=2`,
+simultaneously with Mars's speed-zero reversal `4-2t=0`. Over `[0,4]` both
+side speeds are available; the station/contact pair is coincident. Ending
+the horizon at two days leaves no after-side evidence, making that endpoint
+station unresolved. The before probe is still recorded and no provider date
+leaves the horizon.
+
+The station-touch law Mars `10+(t-1)^3/3+1/3`, Venus fixed at sixteen has
+speed `(t-1)^2`. Speed reaches zero at one day but is positive on both
+sides, so this is a touch rather than a direction reversal. Conjunction
+occurs when `(t-1)^3=17`, hence `t=1+cuberoot(17)`, between three and four
+days. That station touch before contact requires review. This non-grid root
+is classified by its analytic interval rather than pinned to an engine time.
+
+For a sign-boundary tangency, Mars `30-(t-1)^2` touches thirty at one day
+without spending a surrounding interval in Taurus. Side samples remain
+Aries, so boundary evidence is labeled a touch; it cannot be treated as a
+confirmed ordinary ingress. Venus fixed at thirty-five cannot meet this
+law, whose maximum is thirty. No contact in the horizon is an explicit
+bounded-search state. For exit and reentry, Mars `31-(t-2)^2` reaches
+thirty at `t=1,3`, Aries to Taurus and back, with its station at `t=2`.
+Equal endpoint signs cannot hide those intervening changes.
+
+Mars `30-t` starts on the canonical Taurus boundary and immediately
+departs into Aries; its conjunction with Venus twenty-four is at six days.
+The root at the question is excluded by the engine's ordinary crossing
+interval, so an explicit unresolved departure observation is preserved.
+Similarly Mars `10+t^2` has speed `2t`, zero exactly at the question and
+positive afterwards. The report preserves this open-start zero departure;
+the chart's initially stationary conjunction itself has no application.
+
+For each major angle `A` in `0,60,90,120,180`, and each sign `s` in `1,-1`,
+set Mars `10+2t`, Venus `16-s*A+t` modulo 360. The directed difference is
+`s*A-6+t`, hence the chosen branch is perfected at six days. The initial
+ordinary orb allowance is explicitly eight degrees. Neither planet reaches
+a sign boundary over the eight-day horizon. This checks every configured
+major aspect branch as partial contact evidence without removing Lilly's
+additional traditional conditions.
+
+Other fixtures keep exact-current, separating, stationary, out-of-orb and
+missing-contact states distinct. Both continuity toggles can be disabled
+without using a speed provider. A shared Aries second cusp preserves Mars's
+querent/quesited roles without self-contacts. Frozen report, policy, nested
+event evidence, JSON round trips and edits to the original chart test
+ownership, rather than a computed astrological reference.
+
+The policy defaults and maximum event budget are asserted literally in
+`direct-perfection.test.ts`. It enforces `rootResolutionMs` as
+`ceil(0.25*86,400,000/2^24)+1` over the quarter-day-step fixtures, directly
+from the engine's bisection bracket and Date truncation. The event/contact
+coincidence comparison uses twice this resolution. These are numerical
+search choices, not an astronomical tolerance or an exhaustive-search
+guarantee.
+
+`direct-perfection.budget.test.ts` uses the linear ingress fixture over the
+eight-day horizon to check event preflight refusal, provider-call accounting
+including side evidence, disabled scans, malformed providers and late
+atomic refusal. A full run's call count is used only to choose a deliberately
+insufficient resource budget, not as an event expectation or accuracy
+reference. Late refusal clears all earlier events but retains the separately
+completed six-day contact candidate. Total callback calls must equal twice
+the aspect sample count plus the event sample count; each event callback
+counts once regardless of longitude or speed.
+
+`direct-perfection.integration.test.ts` uses the invented question instant
+and following half-day horizon to verify delegation to engine moving
+longitudes, sampled speed, sign selection and crossings. It checks actual
+house systems and polar fallback with future searching disabled, avoids
+recasting, preserves caller chart ownership and verifies JSON output. These
+are integration/regression checks, not independent ephemeris evidence.

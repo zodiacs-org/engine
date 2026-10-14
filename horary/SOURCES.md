@@ -273,3 +273,50 @@ smooth-motion assumptions. A completed search is not a guarantee of exhaustive
 event finding. Default and bounded policy tests are in `tests/aspects.test.ts`;
 independently solved motion laws in `tests/aspects.motion.test.ts` check the
 root-search adapter, not the accuracy of the astronomical ephemeris.
+
+## Direct contact and continuity checks
+
+`lilly-direct-contact;project-continuity-checks` refers to Lilly's
+*Christian Astrology*, first published 1647, printed pages 109-110 and
+124-125 of the linked 1659 edition. The
+[primary-text transcription](https://pdfcoffee.com/william-lilly-christian-astrology-volume-1-pdf-free.html)
+was fetched and read on 2026-10-14. Lilly describes direct conjunction and
+major aspects as perfection modes with additional requirements, including
+strength, reception and absence of intervention. His refrenation example
+describes reversal before contact. No historical chart, redrawn table or
+outcome language is copied here.
+
+The project reports partial direct-contact evidence for the current in-orb
+application selected by the aspect adapter. Its original-sign check and
+flagging of every intervening motion reversal are explicit configurable
+project conventions. The cited passage does not supply this general
+original-sign requirement, nor does it make every station a refrenation.
+Sign exits and speed-zero events are therefore preserved as observations;
+later milestones evaluate reception and competing contacts. Conjunction,
+sextile, square, trine and opposition are all retained as contact modes,
+without presenting them as equivalent traditional outcomes.
+
+There is no standalone station-search helper in this engine. The project
+calls the existing `longitudeSpeed` and delegates speed zeros to
+`searchLongitudeCrossingsWith` through the monotone transform
+`atan(speed)*90/pi`, with target zero. It maps finite speeds into the open
+interval `(-45,45)` degrees, preserving sign and zero mathematically, and
+avoids adding an offset that would cancel very small speeds. The engine's
+circular offset arithmetic still rounds extremely small nonzero values to
+zero. Sign boundaries use the same solver on ordinary engine longitudes;
+sign names come from `dignityRulersAt`, with no new zodiac or dignity table.
+
+Side probes distinguish transitions from touches and unresolved zero
+plateaus. Both probes must lie inside the horizon and beyond the numerical
+root-resolution interval, without crossing the neighbouring same-target
+root. Missing sides, ambiguous touches and coincident events require review.
+Departures from an exact sign boundary or speed zero at the question are
+preserved explicitly because the engine root interval excludes its start.
+This supplements the open-start scan without claiming an earlier history.
+
+Defaults, independent toggles and bounds are enforced in
+`tests/direct-perfection.test.ts`. The event provider budget is separate from
+the aspect budget, includes evidence probes, and refuses atomically.
+`tests/direct-perfection.budget.test.ts` checks it over the synthetic
+linear-motion horizon. No event budget, probe spacing or ordering-resolution
+choice is attributed to Lilly or used as a physical accuracy bound.
