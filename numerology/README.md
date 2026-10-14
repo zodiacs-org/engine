@@ -8,7 +8,8 @@ and name normalization using Latin, Greek, Cyrillic, and caller mappings,
 with vowel/consonant classification. It also implements Pythagorean and
 Chaldean expression/destiny, soul urge, and personality calculations.
 Maturity, karmic lessons, and hidden passion use those same date and name
-conventions. [PLAN.md](PLAN.md) tracks the remaining cycles, profiles, and CLI.
+conventions. Personal year, month, and day cycles use explicit target civil
+dates. [PLAN.md](PLAN.md) tracks the remaining stages, profiles, and CLI.
 
 Numerology results describe symbolic conventions and provide reflection
 prompts. The tests check arithmetic and declared behavior. They do not test
@@ -743,3 +744,99 @@ astral characters, strict rejection, allocation boundaries, deep freezing,
 and caller-table ownership. Their reproducible generator and exact scope
 are in `derived.test.mjs`. These checks establish declared arithmetic
 behavior, not predictive accuracy.
+
+## Personal year, month, and day cycles
+
+`personalYear(birthDate, targetDate, options)`,
+`personalMonth(birthDate, targetDate, options)`, and
+`personalDay(birthDate, targetDate, options)` require both civil dates.
+Both dates use the strict `parseGregorianDate` domain described above. A missing
+target rejects; the library never chooses today's date, constructs a Date,
+or reads a clock or timezone. The birth year is validated and retained for
+provenance but does not contribute to these formulas. A target before birth
+is accepted as a symbolic calendar calculation; it does not assert a lived
+age or an event. Leap-day births require no replacement anniversary.
+
+Only `masterNumbers` is accepted in options, defaulting to `"preserve"`.
+The same policy applies to each performed reduction, including preserved
+masters used as inputs to subsequent sums. Unknown options and unsupported
+or null policies reject. `system`, `method`, and birthday-boundary options
+are not accepted. These date conventions are shared by Pythagorean and
+Chaldean use; the letter table does not enter the calculation. Options are
+ordinary in-process objects with the getter and proxy limitations already
+described for the other APIs.
+
+The declared project formulas are:
+
+1. Personal year: separately reduce the birth month, birth day, and target
+   calendar year, add their resulting values, then reduce that sum.
+2. Personal month: add the resulting personal year to the **raw** target
+   calendar month, then reduce the sum.
+3. Personal day: add the resulting personal month to the **raw** target
+   calendar day, then reduce the sum.
+
+Raw month and day inputs are not separately reduced before their respective
+sums. In particular, a preserved upstream master enters the next sum as
+that master value. This sequence can differ from reducing every component
+first or summing all calendar digits at once. These are explicit project
+conventions, not a claim of universal practice or predictive validity.
+
+The personal year uses the target's January through December calendar year,
+beginning on January 1. The personal month begins on the first civil date
+of the target month, and the personal day uses the supplied civil date.
+There is no reset at the birth anniversary, birth month, or leap-day
+substitute. The boundaries determine which calendar fields enter the
+formulas; adjacent dates may still produce equal reduced numbers.
+
+```js
+import { personalYear, personalMonth, personalDay } from "./.build/index.js";
+
+// Invented civil dates, used only as arithmetic controls.
+const birth = "2000-01-08";
+const target = "2026-10-22";
+console.log(JSON.stringify({
+  year: personalYear(birth, target),
+  month: personalMonth(birth, target),
+  day: personalDay(birth, target)
+}));
+```
+
+The example's year components reduce to `1 + 8 + 1`, whose sum visits
+`10 -> 1`. The personal month sums `1 + 10 = 11`; the personal day sums
+`11 + 22 = 33`. Both stop at their masters. The
+`raw-day-reaches-master-33` fixture in [cycles.json](test/fixtures/cycles.json)
+enforces these paths. Other handwritten fixtures cover the reduce policy,
+component masters, source-local debts, leap dates, targets before birth,
+and both calendar-domain edges.
+
+Each API returns `value`, an original number prompt in `meaning`,
+`karmicDebts`, and a deeply frozen, JSON-safe `receipt`. The
+`numerology-personal-cycle/1` receipt records the calculation, versioned
+`convention`, `yearBoundary`, `monthBoundary`, `dayBoundary`, validated
+`birthDate` and `targetDate`, and `masterNumbers`. Its ordered `components`
+hold complete reductions for `"birth-month"`, `"birth-day"`, and
+`"target-year"`. Its ordered `stages` hold personal year, then personal
+month and personal day only as needed. Each stage contains `cycle`, the
+ordered numeric `sum.inputs`, `sum.output`, and the full `reduction`.
+The outer value and meaning match the last stage. No calculation is
+inferred from a caller-supplied result object.
+
+Debt annotations cover all performed component and cycle reductions in
+receipt order. `source` identifies a component or `"personal-year"`,
+`"personal-month"`, or `"personal-day"`; `stage` remains local to that
+source's reduction. Repeated debts at separate locations remain separate.
+An unreduced raw day does not itself create a debt; only its containing
+cycle sum and that sum's performed reductions do. The birth year,
+unrequested later cycles, and unvisited digit substrings create no debts.
+The fixture tests check exact debt lists for each requested cycle.
+
+[cycles.test.mjs](test/cycles.test.mjs) replays each component and cycle
+using independent positional bigint arithmetic. It checks every target year
+from 1 through 9999 under both master policies, every valid target day of
+the leap year 2024, and seeded synthetic dates over the accepted year domain.
+Controls check year/month prefix agreement across APIs, birth-year
+invariance, digital roots, explicit calendar boundaries, strict rejection,
+fresh allocation, deep freezing, caller ownership, and JSON serialization.
+A subprocess imports and calculates with Date and network entry points
+disabled and compares output across the declared host timezones. These
+checks establish exact arithmetic and the stated conventions.

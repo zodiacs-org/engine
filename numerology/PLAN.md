@@ -15,7 +15,7 @@ commits and draft pull requests. Stop after the session's milestone is complete.
 - [x] M4 Add versioned explicit transliteration tables for Greek and Cyrillic, caller-supplied mappings for other scripts, normalization provenance, and unsupported-script tests. Document that transliteration is a convention, not a pronunciation inference.
 - [x] M5 Implement Pythagorean and Chaldean letter tables, expression/destiny, soul urge, and personality; record selected system, original compounds, master policy, letter contributions, and reductions.
 - [x] M6 Implement maturity, karmic lessons, and hidden passion, including tied frequencies and empty vowel/consonant selections, with receipts and original meanings.
-- [ ] M7 Implement personal year/month/day cycles with explicit calendar-year boundaries, caller-supplied target dates, and no implicit current clock.
+- [x] M7 Implement personal year/month/day cycles with explicit calendar-year boundaries, caller-supplied target dates, and no implicit current clock.
 - [ ] M8 Implement pinnacles and challenges with documented age intervals, single-digit challenge arithmetic, zero challenges, and complete component receipts.
 - [ ] M9 Assemble deterministic profiles and name-change comparisons using the same birth date and conventions, with auditable before/after deltas and no inferred identity data.
 - [ ] M10 Add a JSON CLI for profiles, cycles, and comparisons with strict options/input validation, stdin support, stable output, structured errors, and subprocess tests.
@@ -238,3 +238,41 @@ cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm
 dry-run exclusion passed; the complete engine contents and size gate remains
 unverified. No root build was generated. Only `numerology/` changed.
 M7 is the next session's work.
+
+## M7 validation
+
+Added personal year, month, and day APIs requiring explicit birth and target
+civil dates. The versioned convention reduces birth month, birth day, and
+target year separately before the year sum, then adds raw target month and
+day in their respective stages. A shared master policy applies throughout.
+Receipts state January, calendar-month, and civil-date boundaries, retain
+all validated source dates, original compounds, component reductions, ordered
+cycle sums, and complete digit reductions. Original number prompts supply
+each result's meaning. Debt annotations locate only actually visited values
+within their component or cycle. The README documents formulas, options,
+boundary behavior, target-before-birth acceptance, and provenance.
+
+Project `npm run typecheck` and `npm test` passed on Node 22.22.2.
+`test/cycles.test.mjs` checks handwritten synthetic fixtures in
+`test/fixtures/cycles.json`, a complete receipt, every accepted target year
+under both master policies, every target day of the leap year 2024, and seeded
+independent positional bigint arithmetic. Controls check component and cycle
+master paths, debt locators and unvisited raw-day debts, prefix agreement
+across APIs, birth-year invariance, digital roots, January and month
+boundaries, leap-day births, domain edges, strict rejection, JSON
+serialization, deep freezing, fresh allocation, and options ownership.
+Subprocess controls import and calculate with Date and network entry points
+disabled and compare results across host timezones. Existing date, name,
+derived, reduction, package-exclusion, file-size, and punctuation checks
+also pass. Build output, the local runtime, and logs remain in ignored paths.
+
+Rechecked all available local and origin `main` and `infra/*` refs for
+numerology, Pythagorean, soul urge, hidden passion, and personal-cycle overlap
+outside this project; no overlapping implementation was found. This review
+covers locally available refs, not unfetched remote changes.
+
+The root `npm run package:contents` was attempted with the local runtime
+and cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm
+dry-run exclusion passed; the complete engine contents and size gate remains
+unverified. No root build was generated. Only `numerology/` changed.
+M8 is the next session's work.

@@ -1,6 +1,10 @@
 export { reduceInteger, MAX_INTEGER_DIGITS } from "./reduction.js";
 export { NUMBER_MEANINGS, KARMIC_DEBT_MEANINGS } from "./meanings.js";
 export { parseGregorianDate, lifePath, birthday } from "./dates.js";
+export { personalYear, personalMonth, personalDay } from "./cycles.js";
+export type {
+  PersonalCycle, CycleComponent, CycleKarmicDebt, PersonalCycleStage, PersonalCycleResult
+} from "./cycles.js";
 export { maturity, karmicLessons, hiddenPassion, KARMIC_LESSON_MEANINGS, HIDDEN_PASSION_MEANINGS } from "./derived.js";
 export type {
   MaturityOptions, MaturityKarmicDebt, MaturityResult, FrequencyCalculation,

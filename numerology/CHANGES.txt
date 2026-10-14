@@ -4,3 +4,4 @@ M3: Add Latin Unicode name normalization with explicit diacritic and ligature ru
 M4: Add versioned Greek and Cyrillic transliteration, exact caller mappings, canonical source-context and table-provenance receipts, synthetic golden/property tests, and documented spelling conventions.
 M5: Add Pythagorean and Chaldean expression/destiny, soul urge, and personality with full letter and reduction receipts, explicit empty selections, synthetic golden/property tests, and documented table provenance.
 M6: Add maturity, karmic lessons, and hidden passion with source-located reduction receipts, table-relative missing values, complete tied frequency receipts, original meanings, synthetic golden/property tests, and documented conventions.
+M7: Add personal year, month, and day cycles with explicit civil target dates and calendar boundaries, shared master policy, source-located reduction receipts, original meanings, synthetic golden/property tests, and documented conventions.
