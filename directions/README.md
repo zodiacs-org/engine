@@ -10,10 +10,11 @@ engine natal snapshots, computes pure sphere coordinates and semi-arcs, and
 finds direct conjunction arcs to fixed angles from prepared coordinates,
 and computes zodiacal and mundane conjunctions and aspects to body significators.
 Zodiacal body directions support direct motion; mundane body directions also
-support the explicit converse role swap. A separate pure timing function converts
-an arc to directed age using an explicitly selected key and year unit.
-The complete hit API and the `directions hit` and `directions scan` commands
-are still planned in [PLAN.md](PLAN.md). An accepted
+support the explicit converse role swap. The pure `hit` API combines these
+calculations with an explicit timing key and year unit; `hitFromNatal` selects
+the coordinates from a prepared engine snapshot. Bounded scans and the
+`directions hit` and `directions scan` commands are still planned in
+[PLAN.md](PLAN.md). An accepted
 convention is not a computed hit or a claim that a particular contact exists.
 
 ```ts
@@ -107,7 +108,7 @@ String instants must include a clock time and offset; date-only strings are
 refused instead of taking the engine's midnight convention. Valid Dates and
 epoch-millisecond numbers also represent resolved instants.
 The natal house selection is separate from the direction system: the adapter
-retains the explicitly requested engine houses; the future solver must still
+retains the explicitly requested engine houses; the hit solver must still
 receive its own direction convention.
 
 The snapshot is deeply frozen and contains no mutable Dates. `chart` preserves
@@ -337,7 +338,7 @@ coordinates, full initial sphere positions, fixed meridian-distance fraction,
 moving semi-arc used at contact, target hour angle, turn addition and
 coincidence. An axis target has no selected meridian fraction or semi-arc;
 those fields are null and the significator's sphere position names the axis.
-Original labels and ages belong to the later hit API. Inputs are not mutated
+Original labels and ages belong to the complete hit API below. Inputs are not mutated
 or frozen, and no caller-owned object is retained.
 
 The `zero-both` choice defines a restricted project projection using the
@@ -586,5 +587,142 @@ Zero arcs still require a valid key and valid solar samples when selected.
 
 [M7 evidence](evidence/M7.md) separates rational and synthetic-solar timing
 checks from engine integration checks. This fixed birth-day key does not
-compute a secondary progression or longitude solar arc. Complete hit
-envelopes and CLI commands remain later milestones.
+compute a secondary progression or longitude solar arc. Scans and CLI
+commands remain later milestones.
+
+## Complete hits
+
+`hit(input)` is the typed pure API; `parseHit(unknown)` validates decoded
+data with the same behavior. Both return `status: "ok"` for a complete
+calculation, or `status: "refused"` for an expected input, domain or scope
+failure. The primitive functions above keep their throwing interfaces.
+Neither complete-hit entry samples an ephemeris, resolves a birth clock or
+performs I/O.
+
+```ts
+import { hit } from "./src/index.js";
+
+// Invented coordinates from evidence/M8-derivations.md, zodiacal wrap case.
+const result = hit({
+  convention: {
+    system: "placidus-semiarc", mode: "zodiacal", latitude: "zero-both",
+    motion: "direct", key: "ptolemy"
+  },
+  geometry: { ramcDegrees: 0, latitudeDegrees: 0, trueObliquityDegrees: 0 },
+  significator: {
+    kind: "body", id: "Synthetic S",
+    coordinates: { longitudeDegrees: 350, latitudeDegrees: 4 }
+  },
+  promissor: {
+    kind: "body", id: "Synthetic P",
+    coordinates: { longitudeDegrees: 10, latitudeDegrees: -7 }
+  },
+  contact: { kind: "conjunction" },
+  yearUnit: "tropical-365.2422-days"
+});
+if (result.status === "ok") {
+  console.log(result.arcDegrees, result.directedAgeYears, result.geometry);
+} else {
+  console.log(result.stage, result.code, result.message);
+}
+```
+
+For zodiacal requests, geometry includes RAMC, observer latitude and true
+obliquity; named body coordinates include ecliptic longitude and latitude.
+Mundane requests instead take RAMC and observer latitude, with body right
+ascension and declination. They reject an obliquity field because no
+projection is performed. Both require the same frame for the coordinates
+and RAMC. Body labels identify the original roles; labels do not select a
+different calculation. In particular, `Sun` retains the ordinary semi-arc
+subset documented above.
+
+Select an angular significator with `{ kind: "angle", angle: "asc" }`,
+using any of the angle identifiers supported by `angleConjunctionArc`.
+The promissor remains a named body. Zodiacal angular conjunctions project
+its longitude at zero latitude using the engine rotation helper and preserve
+both the original point and the projection obliquity. Mundane angular
+conjunctions retain the supplied bodily equatorial coordinates. These are
+crossings of the selected axis on the promissor's own circle, not contacts
+with a fabricated body at the angle's natal longitude.
+
+Contact and branch choices are exactly those of the corresponding body
+solver. Angle aspects are refused with `unsupported-angle-aspect`; no
+aspect-to-angle hit is currently returned. Converse angular conjunctions
+retain `unsupported-converse-angle`, and zodiacal body converse retains
+`unsupported-converse-zodiacal`. A body on an axis remains a body contact.
+Mundane converse keeps the original labels, with the moving and fixed roles
+recorded in the primitive geometry. No branch or motion is inferred.
+
+The key appears once, inside `convention`. Fixed keys forbid `solar`, even
+when its value is `undefined`; the solar key requires the sample object
+accepted by `directedAge`. Every request requires `yearUnit`. The full key
+and sample validation runs even for natal coincidence. Coordinate-level
+solar samples are supplied assertions: the API validates their mathematical
+interval and forward rate but cannot verify the Sun or their birth epoch.
+
+A successful result contains the original named significator and promissor,
+the contact, full convention, `kind`, `arcDegrees`, `directedAgeYears`,
+`timing`, and `geometry`. Kind distinguishes conjunction or aspect to a
+body from conjunction to an angle. `timing` contains the rate, elapsed-day
+interpretation and source or sample audit from `directedAge`.
+`geometry.solver` selects `zodiacal-body`, `mundane-body` or `angle`, and
+`geometry.calculation` preserves that primitive's full result. No precision
+is discarded when assembling the envelope. The angle variant additionally
+records its coordinate preparation and projected or retained promissor.
+
+Refusals carry `stage`, `code` and `message` with no partial arc or age.
+Stages distinguish request input, convention, sphere, angle, zodiacal,
+mundane and timing failures; the mathematical stages retain their existing
+primitive error codes. Unknown, omitted, inherited, hidden and accessor
+request fields are refused. The same body label cannot identify different
+coordinates within a hit. Results are fresh, deeply frozen and JSON
+serializable; caller data stays unchanged and unfrozen. Unexpected failures
+from executable inputs such as proxies still propagate as exceptions.
+
+## Selecting a hit from a natal snapshot
+
+After the separate `prepareNatal` example above, the pure adapter selects
+engine rows by exact body labels:
+
+```ts
+import { hitFromNatal } from "./src/index.js";
+
+const natalHit = hitFromNatal(natal, {
+  convention: {
+    system: "placidus-semiarc", mode: "mundane", latitude: "retain-both",
+    motion: "direct", key: "ptolemy"
+  },
+  significator: { kind: "angle", angle: "mc" },
+  promissor: { kind: "body", id: "Mars" },
+  contact: { kind: "conjunction" },
+  yearUnit: "tropical-365.2422-days"
+});
+console.log(natalHit);
+```
+
+The selection omits geometry and body coordinates. Zodiacal hits read the
+chart's ecliptic rows; mundane hits read full equatorial rows after checking
+their frame, clock, obliquity and selected ecliptic coordinates against the
+snapshot. Missing or ambiguous selected names and undefined bodily right
+ascension return natal-stage refusals. The adapter preserves the natal
+preparation's complete-ecliptic domain restriction and refuses inconsistent
+time, place or house claims. It does not move or calculate a cusp or body.
+
+Successful results add a compact `natal` audit: original clock label,
+time-scale and delta-T metadata, engine provenance, geometry, requested
+house system, flags, and the selected original ecliptic points or angular
+longitude. Only consumed fields are checked and copied; unselected chart
+content is not revalidated. A supplied snapshot and its provenance remain
+claims, not authenticated engine output or an independent accuracy check.
+
+For solar hits, the snapshot lacks a represented TT Julian date with which
+to bind the samples. The natal audit therefore states
+`solarEpochAssociation: "caller-supplied-unverified"`; fixed keys record
+null. Supply solar samples prepared from the same natal instant and clock
+when using `prepareSolarEquatorialDay`, and retain that adapter's provenance
+separately. A valid sample interval alone does not establish that association.
+
+[M8 evidence](evidence/M8.md) separates complete hand-derived arc and age
+examples from the engine integration checks. The hit envelope inherits the
+primitives' numerical limitations and first-turn branch rule. It adds no
+calendar date, prediction, orbital progression, solar arc or scan policy.

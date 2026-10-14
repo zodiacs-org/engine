@@ -28,3 +28,12 @@ export type {
 export type {
   SolarEquatorialDayInput, PreparedSolarEquatorialDay, SolarPreparationErrorCode
 } from "./solar.js";
+export { hit, parseHit } from "./hit.js";
+export type {
+  HitBody, HitAngle, HitInput, HitGeometry, DirectionHit, HitRefusal, HitResult
+} from "./hit.js";
+export { hitFromNatal } from "./natal-hit.js";
+export type {
+  NatalBodySelection, NatalHitSelection, NatalHitAudit, NatalHitErrorCode,
+  NatalHitRefusal, NatalHitResult
+} from "./natal-hit.js";

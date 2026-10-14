@@ -171,3 +171,20 @@ on pp. 98-104, mundane parallels and other aspects are outside this subset.
 Body points on axes remain body points; this does not extend converse to
 angular significators. The finite hand-derived examples establish the
 specified geometry on their stated inputs, not predictive validity.
+
+## Complete hits assembled in M8
+
+The hit API combines the existing constructions and timing keys without
+introducing a historical convention. Original body labels remain visible
+when mundane converse exchanges the operative roles. The ordinary semi-arc
+subset applies to every label, including the Sun; the special crepuscular
+treatment remains outside it.
+
+Zodiacal angular conjunctions explicitly project the promissor to zero
+ecliptic latitude before applying the M4 axis-crossing construction.
+Mundane angular conjunctions retain bodily equatorial coordinates. No
+aspect ray to an angle is enabled, and the existing converse angle and
+zodiacal converse refusals remain. [M8-derivations.md](evidence/M8-derivations.md)
+shows how the independently authored sphere arcs and timing rationals
+combine into complete synthetic hits. Engine selection is checked
+separately and supplies no new independent arc expectation.
