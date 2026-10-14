@@ -1,0 +1,1 @@
+M1: Add isolated fixedstars TypeScript scaffold, catalog contracts, engine bridge, geometric and synthetic integration tests, and package-isolation checks.
