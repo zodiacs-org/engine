@@ -42,3 +42,7 @@ export type {
   DirectionAgeRange, ScanInput, ScanIndex, ScanRow, ScanWork,
   ScanComplete, ScanRefusal, ScanResult
 } from "./scan.js";
+export { scanFromNatal, parseNatalScan } from "./natal-scan.js";
+export type {
+  NatalScanInput, NatalScanRow, NatalScanComplete, NatalScanRefusal, NatalScanResult
+} from "./natal-scan.js";

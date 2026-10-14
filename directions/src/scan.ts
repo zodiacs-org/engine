@@ -72,6 +72,12 @@ export type ScanRefusal =
 
 export type ScanResult = ScanComplete | ScanRefusal;
 
+/** Internal shared enumeration shape; individual adapters retain their hit audit. */
+export type EvaluatedScanResult<Hit extends DirectionHit, Refusal> =
+  | (Omit<ScanComplete, "hits"> & { readonly hits: readonly (ScanIndex & { readonly hit: Hit })[] })
+  | Exclude<ScanRefusal, { readonly code: "hit-refused" }>
+  | (Omit<Extract<ScanRefusal, { readonly code: "hit-refused" }>, "cause"> & { readonly cause: Refusal });
+
 class InputError extends RangeError {}
 function invalid(message: string): never { throw new InputError(message); }
 
@@ -149,9 +155,17 @@ function refusal<const Code extends string>(code: Code, message: string): Refusa
  * Trusted same-realm proxies are not sandboxed; unexpected exceptions propagate.
  */
 export function parseScan(input: unknown): ScanResult {
+  return enumerateScan<DirectionHit, HitRefusal>(input, true, parseHit);
+}
+
+/** Shared internal scanner. Validation and budgets precede the evaluator. */
+export function enumerateScan<Hit extends DirectionHit,
+  Refusal extends { readonly status: "refused" }>(
+  input: unknown, requireGeometry: boolean, evaluate: (request: unknown) => Hit | Refusal
+): EvaluatedScanResult<Hit, Refusal> {
   try {
     const values = data(input,
-      ["convention", "geometry", "selections", "motions", "yearUnit", "ageRange", "maxEvaluations"], ["solar"]);
+      ["convention", ...(requireGeometry ? ["geometry"] : []), "selections", "motions", "yearUnit", "ageRange", "maxEvaluations"], ["solar"]);
     const range = ageRange(values.ageRange);
     const maxEvaluations = values.maxEvaluations;
     if (typeof maxEvaluations !== "number" || !Number.isSafeInteger(maxEvaluations)
@@ -179,16 +193,17 @@ export function parseScan(input: unknown): ScanResult {
     });
     const bodies = new Map<string, string>();
     const seen = new Set<string>();
-    const hits: ScanRow[] = [];
+    const hits: (ScanIndex & { readonly hit: Hit })[] = [];
     let duplicateCount = 0;
     let outsideAgeRangeCount = 0;
     for (let selectionIndex = 0; selectionIndex < selectionCount; selectionIndex++) {
       for (let motionIndex = 0; motionIndex < motionCount; motionIndex++) {
         const at = Object.freeze({ selectionIndex, motionIndex });
         evaluated++;
-        const result = parseHit({
+        const result = evaluate({
           convention: { ...commonConvention, ...motions[motionIndex] },
-          geometry: values.geometry, ...selections[selectionIndex], yearUnit: values.yearUnit,
+          ...(requireGeometry ? { geometry: values.geometry } : {}),
+          ...selections[selectionIndex], yearUnit: values.yearUnit,
           ...(Object.hasOwn(values, "solar") ? { solar: values.solar } : {})
         });
         if (result.status === "refused") {
@@ -207,7 +222,7 @@ export function parseScan(input: unknown): ScanResult {
           }
           bodies.set(point.id, coordinates);
         }
-        // These are canonical fresh data from parseHit, not raw input order or
+        // These are canonical fresh data from the hit evaluator, not raw input order or
         // computed ages. Geometry, key samples and year unit are common to this
         // scan. Original labels, coordinates, contact and motion remain distinct.
         const identity = JSON.stringify([result.convention, result.significator, result.promissor, result.contact]);

@@ -1,0 +1,28 @@
+{
+  "source": "coordinates",
+  "request": {
+    "convention": {
+      "system": "placidus-semiarc", "mode": "mundane",
+      "latitude": "retain-both", "key": "ptolemy"
+    },
+    "geometry": { "ramcDegrees": 0, "latitudeDegrees": 0 },
+    "selections": [{
+      "significator": {
+        "kind": "body", "id": "S",
+        "coordinates": { "rightAscensionDegrees": 330, "declinationDegrees": 0 }
+      },
+      "promissor": {
+        "kind": "body", "id": "P",
+        "coordinates": { "rightAscensionDegrees": 60, "declinationDegrees": 0 }
+      },
+      "contact": { "kind": "conjunction" }
+    }],
+    "motions": [
+      { "motion": "direct" },
+      { "motion": "converse", "converseConstruction": "placidus-role-swap" }
+    ],
+    "yearUnit": "tropical-365.2422-days",
+    "ageRange": { "fromYears": 0, "toYears": 300, "includeFrom": true, "includeTo": true },
+    "maxEvaluations": 2
+  }
+}

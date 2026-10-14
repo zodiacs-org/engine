@@ -14,8 +14,8 @@ support the explicit converse role swap. The pure `hit` API combines these
 calculations with an explicit timing key and year unit; `hitFromNatal` selects
 the coordinates from a prepared engine snapshot. The pure `scan` API enumerates
 explicit contacts and motions under an age interval and work budget. The
-`directions hit` and `directions scan` commands are still planned in
-[PLAN.md](PLAN.md). An accepted
+`directions hit` and `directions scan` commands accept explicit JSON requests,
+including synthetic natal charts; see [CLI.md](CLI.md). An accepted
 convention is not a computed hit or a claim that a particular contact exists.
 
 ```ts
@@ -588,8 +588,7 @@ Zero arcs still require a valid key and valid solar samples when selected.
 
 [M7 evidence](evidence/M7.md) separates rational and synthetic-solar timing
 checks from engine integration checks. This fixed birth-day key does not
-compute a secondary progression or longitude solar arc. Scans and CLI
-commands remain later milestones.
+compute a secondary progression or longitude solar arc.
 
 ## Complete hits
 
@@ -834,4 +833,19 @@ sparse arrays and additional array properties are rejected. Over-budget
 requests return their budget refusal before validating their contents.
 Unexpected exceptions from executable inputs such as proxies propagate.
 [M9 evidence](evidence/M9.md) records the independent enumeration and the
-separate single-hit parity checks. The CLI remains the next milestone.
+separate single-hit parity checks.
+
+`scanFromNatal(snapshot, input)` and `parseNatalScan(snapshot, unknown)` use
+the same scan enumerator with `hitFromNatal` as its evaluator. Their
+`NatalScanInput` omits geometry and selects body identifiers without
+coordinates, like `NatalHitSelection`. Each returned row retains the full
+hit's `natal` audit. The shared enumerator applies the same budget before
+any hit evaluation and the same endpoint, deduplication, ordering and atomic
+refusal rules. A failed natal selection appears in the scan refusal's
+`cause`; no partial rows are returned. These functions are pure and use the
+supplied snapshot without an ephemeris call.
+
+The CLI prepares that snapshot once for a natal request and then uses these
+APIs. [CLI.md](CLI.md) gives the command syntax, complete request files,
+strict JSON rules and exit codes. [M10 evidence](evidence/M10.md) separates
+its independent coordinate fixtures from natal integration checks.
