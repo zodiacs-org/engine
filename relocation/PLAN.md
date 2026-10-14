@@ -17,7 +17,7 @@ line to `CHANGES.txt`. The harness handles git writes and draft PRs.
 - [x] M9 Add optional local-space azimuth lines using engine observer angles and bounded spherical geometry.
 - [x] M10 Implement the offline `relocation chart`, `relocation lines` and `relocation grid` CLI with validated JSON input and structured output.
 - [x] M11 Commit small generated golden polyline regression fixtures, their generator and synthetic integration tests; keep large generated outputs ignored.
-- [ ] M12 Finish API and CLI documentation, receipt and numerical-limit explanations, end-to-end checks and package-isolation verification.
+- [x] M12 Finish API and CLI documentation, receipt and numerical-limit explanations, end-to-end checks and package-isolation verification.
 
 ## Validation policy
 
@@ -281,3 +281,22 @@ punctuation and diff-scope checks passed. Root `npm run package:contents`
 still fails because `dist/calc.d.ts` is absent; no root build was run under
 the rule forbidding writes to `dist/`. Engine CI gates requiring that build
 remain deferred. No engine or packed files changed.
+
+M12 finishes the onboarding README and linked API, CLI, receipt/limit and
+validation guides. A compiled synthetic library workflow captures and reloads
+engine envelopes, demonstrates each sampling family and keeps full receipts.
+Committed JSON requests cover every CLI mode. Workflow tests replay the
+example's engine results and pass stored chart-grid envelopes through CLI path
+crossings into freshly relocated charts. A repeatable project check validates
+documentation links and published caps, file sizes and punctuation, the public
+library import graph, carried archive and lock integrity, and root npm package
+exclusion. The isolated verify command combines the project's required checks.
+
+Validation: clean offline relocation dependency installation and `npm run verify`
+passed on Node 22.22.2, including typecheck, isolated builds, the full Vitest
+suite, golden fixture byte checks and project isolation. Root
+`npm run package:contents` was attempted and still fails because this checkout
+has no `dist/calc.d.ts`; root build and archive rebuild gates remain deferred
+under the task's isolation rules. Details and reproducible commands are in
+`docs/validation.md`. All milestones are complete. Only relocation files
+changed; no engine or packed files, immutable artifacts or git metadata changed.

@@ -94,7 +94,8 @@ describe("offline CLI launcher and stream behavior", () => {
   });
 
   it("runs the committed synthetic examples from the documented local input paths", async () => {
-    for (const [command, name] of [["chart", "chart"], ["lines", "lines"], ["grid", "grid"]] as const) {
+    for (const [command, name] of [["chart", "chart"], ["lines", "lines"], ["grid", "grid"],
+      ["lines", "path"], ["lines", "local-space"], ["grid", "grid-crossings"]] as const) {
       const inputPath = root + `examples/${name}.json`;
       const file = launch([command, "--input", inputPath]);
       const piped = launch([command], await readFile(inputPath, "utf8"));

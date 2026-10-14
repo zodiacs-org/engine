@@ -13,7 +13,11 @@
     "fixtures:build": "tsc -p tsconfig.fixtures.json --pretty false",
     "fixtures:generate": "npm run fixtures:build && node scripts/generate-golden.mjs",
     "fixtures:check": "npm run fixtures:build && node scripts/generate-golden.mjs --check",
-    "test": "npm run build && npm run fixtures:build && vitest run",
+    "examples:build": "tsc -p tsconfig.examples.json --pretty false",
+    "example": "npm run examples:build && node scripts/run-example.mjs",
+    "project:check": "node scripts/check-project.mjs",
+    "verify": "npm run typecheck && npm test && npm run fixtures:check && npm run project:check",
+    "test": "npm run build && npm run fixtures:build && npm run examples:build && vitest run",
     "typecheck": "tsc -p tsconfig.json --pretty false"
   },
   "dependencies": {
