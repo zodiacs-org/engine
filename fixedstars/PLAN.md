@@ -9,7 +9,7 @@ explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
 - [x] M3 Generate and commit a small named bright-star catalog within the requested size range, with aliases, source locators, optional proper motion, historical attribution tags, and validation tests.
 - [x] M4 Propagate catalog proper motion and rotate positions onto the chart's true equator and ecliptic with the engine frame, equator, nutation, and time-basis helpers; document and test hand-derived geometry.
 - [x] M5 Implement pure conjunction and parallel matching with explicit angular orb units, inclusive boundaries, structured star ids and contact kinds, deterministic ordering, and independent geometric tests.
-- [ ] M6 Cast synthetic natal inputs through the engine, include bodies and available angles, preserve native natal receipts, and expose the chart-hit library API with explicit coordinate conventions.
+- [x] M6 Cast synthetic natal inputs through the engine, include bodies and available angles, preserve native natal receipts, and expose the chart-hit library API with explicit coordinate conventions.
 - [ ] M7 Prove an isolated catalog-vector adapter can execute the existing src/sky/riseset.ts solver without editing or copying its algorithms; verify vector substitution is scoped, ordinary bodies are unchanged, and incompatible engine source is refused.
 - [ ] M8 Expose catalog rise, set, upper transit, and lower transit searches through that adapter, including solver budgets, complete refusal, circumpolar flags, and explicitly labelled engine-call provenance.
 - [ ] M9 Implement paran event pairing for bodies and angular contacts over an explicit observer window, with a configurable time orb, native body-sky results, star-sky provenance, and synthetic simultaneous-contact expectations.
@@ -163,3 +163,40 @@ still fails because dist/calc.d.ts is absent; creating that engine build is
 outside this session's hard boundary. The isolation check confirms fixedstars
 exclusion with a package dry run, without claiming the missing build's budgets
 passed. All authored changes remain under fixedstars/.
+
+## M6 completion and M7 handoff
+
+src/natal.ts exports natalStarHits, chartContactTargets and explicit natal
+matching conventions through the library index. Natal casting uses the existing
+engine API; bodies retain full ecliptic latitude for declination derivation,
+and available angles are treated as ecliptic points at zero latitude using
+the engine equatorial helper. Unknown time and missing location omit angles.
+The stellar clock comes from the canonical chart input with its original
+time scale and optional pin. Contact arithmetic and policies reuse M5.
+
+Every natal-hit result retains one native NatalEnvelope for the chart underlying
+all hits. Its default receipt context is preserved. The envelope, stellar clock,
+targets and matching results are frozen without freezing caller input. Derived
+declinations, stellar positions and contacts are explicitly outside the native
+natal receipt scope. The supplied-chart target helper performs no natal casting
+and treats numerical chart coordinates as caller claims under engine rules.
+
+tests/natal.fixedstars.ts and GEOMETRY.md derive cardinal target geometry and
+full-latitude cases using the parent's independent ERFA obliquity reference.
+Synthetic integration checks cover all native body rows, available and missing
+angles, UTC/UT1/TT clocks and pinned deltaT, receipt serialization, native house
+fallback and coverage flags, constructed body/angle contacts, ecliptic poles,
+validation and input isolation. Engine-coordinate inverse rotations are labelled
+as integration checks, not independent accuracy evidence.
+
+M6 validation passed on Node 22.22.2: local Vitest, TypeScript, offline catalog
+regeneration and file/package isolation. The parent package:contents check
+still fails because dist/calc.d.ts is absent; creating that engine build is
+outside the session's hard boundary. The isolation check confirms fixedstars
+exclusion with a package dry run without claiming the missing build's budgets
+passed. All authored changes remain under fixedstars/.
+
+M7 remains the next unchecked milestone. No star-sky adapter or solver work
+was done in this session. Retain the original integration findings above:
+run the existing rise/set/transit solver through a scoped local adapter, and
+distinguish its fixedstars call records from native natal receipts.

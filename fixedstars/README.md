@@ -3,9 +3,9 @@
 This private source-checkout project is being built according to
 [PLAN.md](PLAN.md). It supplies a licensed catalog, source provenance, and a
 direct bridge to the parent engine with synthetic integration and geometric
-tests, proper-motion propagation, true-of-date stellar positions, and pure
-conjunction and parallel matching. Natal chart-hit assembly, parans, and the
-CLI are pending milestones.
+tests, proper-motion propagation, true-of-date stellar positions, pure
+conjunction and parallel matching, and natal chart-hit assembly with native
+chart envelopes. Parans and the CLI are pending milestones.
 
 Use Node as specified by this folder's package.json. Install and check only
 this project from the repository root:
@@ -197,5 +197,70 @@ then starId, targetKind, targetId and kind in UTF-16 string order. Input order
 and host locale do not break ties. These semantics are checked by the same
 contact tests, including an independent integer representation of the doubles.
 This function calls neither chart casting nor sky search and creates no
-engine receipt. Natal receipt integration remains M6 in PLAN.md.
+engine receipt. natalStarHits supplies the natal envelope described below.
+
+## Natal chart hits
+
+```ts
+import { natalStarHits } from "./src/index.js";
+
+// Invented birth input. Choose both angular limits explicitly, in degrees.
+const result = natalStarHits(
+  { utc: "2000-03-20T06:00:00Z", latitude: 12, longitude: 30 },
+  { conjunctionDeg: 0.5, parallelDeg: 0.5 }
+);
+console.log(result.hits, result.targets, result.stellar.positions);
+console.log(result.natal.receipt, result.conventions);
+```
+
+natalStarHits accepts an engine BirthInput, the same required ContactOrbs as
+findStarContacts, and an optional array of CatalogStar records. Omission uses
+the committed catalog; an empty array requests no stars. The function casts
+the natal chart through the engine, then uses its canonical input clock for
+stellar motion and frame rotation. It retains the original time scale and
+optional caller pin, rather than pinning a freshly evaluated model deltaT.
+The optional stars array has the same selection rules as starPositions.
+
+Targets include every native body row, including the true north and south
+lunar nodes. Body declinations come from chartDeclinations using full ecliptic
+latitude. Available native angles are labelled Ascendant, Midheaven,
+Descendant and Imum Coeli. Their declinations come from the engine's
+eclipticToEquatorial helper at zero ecliptic latitude and the chart's true
+obliquity. Thus an angle parallel refers to that point on the ecliptic; it
+does not describe the observer's zenith. Unknown time or absent coordinates
+omit angle targets and preserve the native envelope's absence reason.
+An unknown time keeps the caller's reference instant without inferring noon.
+House fallback and coverage flags remain in the native receipt.
+
+The result contains hits and orbs with the pure matcher's semantics, targets,
+stellar (the starPositions result), natal (a native engine NatalEnvelope),
+and conventions. The native envelope is captured once for the chart underlying
+every hit, with the default createNatalEnvelope context. Its normalized instant
+is retained; sourceInstant is null because no separate original-spelling context
+is supplied. It can be passed to the engine's native serializer and parser.
+The envelope covers chart results only. Derived target declinations, star
+coordinates and contacts remain separate and are not additions to its receipt
+or an accuracy certification. Stellar correction omissions still apply when
+comparing the catalog directions with the engine's natal bodies.
+
+The result graph is frozen, including the fresh native envelope and clock
+record. Caller birth input, policies, arrays and star records remain untouched.
+The function performs no network request, file operation or sky search.
+It uses the engine's validation for birth settings and the contact matcher's
+validation for orbs and matching rows. Invalid input throws; disabled contact
+kinds still require valid coordinates.
+
+chartContactTargets(chart) derives the same frozen target rows from a supplied
+engine Chart without casting it again or creating a receipt. As with the
+engine's chartDeclinations, supplied numerical chart values remain caller
+claims. Clock and flag consistency are checked by the engine, body directions
+are derived with its declination helper, and target labels and angle coordinates
+are checked with the existing contact matcher.
+
+[tests/natal.fixedstars.ts](tests/natal.fixedstars.ts) checks hand-derived
+target geometry against the parent's independent ERFA obliquity at the
+constructed TT reading used there, as derived in
+[GEOMETRY.md](GEOMETRY.md), Natal target geometry and receipt assembly.
+The synthetic chart and native-envelope checks are integration tests, not
+independent ephemeris accuracy evidence.
 

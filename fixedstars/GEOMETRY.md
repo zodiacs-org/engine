@@ -236,3 +236,74 @@ limits 0, 1, 8, 90 and 180 degrees. The lists include quarter and half circles,
 decimal boundaries, subnormals, both poles and wraparound neighbors. This is
 an independent arithmetic check on that finite input set, not an astrometric
 comparison or a claim that every binary64 combination has been checked.
+
+## Natal target geometry and receipt assembly
+
+tests/natal.fixedstars.ts constructs cardinal ecliptic body and angle
+coordinates on a synthetic chart's clock. Its true obliquity reference is
+the first epoch in the existing parent src/fixtures/nutation-erfa.json:
+TT day -73048.5, the invented TT reading 1800-01-01T00:00:00 relative to
+J2000. The expected obliquity is the fixture's independently computed
+obl06 + nut00b obliquity, (epsA + deps) / 3600 in degrees. The fixture's
+generator and ERFA provenance are recorded in Motion from J2000 above.
+The constructed coordinate comparisons use toBeCloseTo precision 10 as
+a floating-point geometry check at this epoch, not a physical star bound.
+
+For ecliptic longitude lambda, latitude beta and obliquity epsilon, the
+inverse ecliptic rotation derived above gives equatorial vertical component:
+
+```text
+z = sin(beta) cos(epsilon) + cos(beta) sin(lambda) sin(epsilon)
+declination = asin(z)
+```
+
+At beta = 0 and longitudes 0, 90, 180 and 270 degrees this yields
+declinations 0, +epsilon, 0 and -epsilon. Those are the expected cardinal
+body declinations and the constructed Ascendant, Midheaven, Descendant
+and Imum Coeli declinations. The latitude-sensitive body cases use
+beta = 30 degrees. At lambda = 0, declination is
+asin(cos(epsilon) / 2); at lambda = 90 it is epsilon + 30 degrees,
+since this sum is below a right angle. Assigning zero latitude to all
+bodies would fail both expectations. Assigning zero latitude to an angle
+is deliberate: the natal angle denotes an ecliptic point.
+
+A synthetic star matching row at longitude 359.5 and declination zero
+has a conjunction orb of exactly 0.5 degrees to the constructed Ascendant
+at longitude zero. It is also parallel to the Ascendant and Descendant,
+whose mathematical declinations are zero, but not to the other angles.
+The parallel limit of 1e-10 degrees in this constructed case accommodates
+trigonometric roundoff at the 180-degree axis. The matcher itself still
+uses the exact binary64 decision, without an epsilon. This is a test
+policy, not a recommended orb or a physical tolerance.
+
+The supplied chart helper's geometric tests replace numerical chart
+coordinates explicitly. Those constructed charts are caller claims and
+are not passed to the native receipt creator as real ephemeris results.
+The independent reference checks the target construction on this clock,
+not the replaced bodies' real positions at that instant.
+
+Separate integration tests cast the invented input 2000-03-20T06:00:00
+at latitude 12 and longitude 30 on UTC, UT1 and TT, with and without a
+pinned deltaT of 1234 seconds. They check the captured envelope against
+createNatalEnvelope, serialize/parse it through the engine, and compare
+the body targets and stellar clock with native calls made at test time.
+All 12 body rows, including both true lunar nodes, plus the 4 available
+angles produce 32 hits for one star when both limits are 180 degrees.
+Missing location or time leaves 12 body targets and 24 such hits. These
+counts are enforced by the integration tests, not coverage measurements.
+
+Other integration constructions apply the inverse engine ecliptic matrix
+to the native Moon direction and the Ascendant ecliptic point, expressing
+them as synthetic J2000 catalog records with unavailable motion. Their
+conjunctions and parallels must be within the explicit 1e-7 degree test
+policy, which allows floating-point inverse-rotation roundoff. An inverse
+rotation of the ecliptic north pole must instead retain null longitude
+and produce only parallels. These checks verify wiring, round trips and
+singularity handling; the engine's own matrices and coordinates participate,
+so they are not independent stellar or natal accuracy references.
+
+Receipt tests also retain the native polar house fallback, coverage flags,
+unknown-time reference and missing-location reason. Fresh result records
+are frozen without freezing caller input. The natal receipt remains the
+engine's chart envelope; it covers neither the derived declination targets
+nor the stellar positions or their matches. No sky call is made in M6.
