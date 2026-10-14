@@ -43,3 +43,5 @@ export { composeRuleWindows } from './composition.js';
 export type { RuleEvaluation, RuleUnresolved, RuleExplanation, ScoredWindow, ElectionalResult } from './composition.js';
 export { searchElectional, loadSearchDependencies } from './search.js';
 export type { SearchDependencies, SearchOptions } from './search.js';
+export { streamElectional } from './stream.js';
+export type { StreamOptions, StreamExplanation, WindowFragment, StreamFacts, StreamChunk, StreamEnd, StreamFrame } from './stream.js';

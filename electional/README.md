@@ -7,8 +7,10 @@ events adapters, and Moon sign, phase, direct-motion, Moon-not-void and
 planetary-hour, benefic house/angular, applying-aspect and eclipse/station
 avoidance and synthetic natal synastry rule windows are
 implemented so far, with hard-rule composition, weighted scoring and
-deterministic ranking described in [SCORING.md](SCORING.md). Streaming, the
-CLI and HTTP endpoint are planned milestones. [EVALUATION.md](EVALUATION.md)
+deterministic ranking described in [SCORING.md](SCORING.md). The bounded async
+stream described in [STREAMING.md](STREAMING.md) emits facts by default, with
+shared budgets, cancellation and seam continuation. The CLI and HTTP endpoint
+are planned milestones. [EVALUATION.md](EVALUATION.md)
 describes the basic evaluator and
 its uncertainty handling. [VOID.md](VOID.md) describes Moon-not-void lookahead,
 body conventions, interval ownership and unknown tails. Planetary-hour date

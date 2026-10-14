@@ -1,0 +1,90 @@
+{
+  "schema": "electional-m11-test-record/v1",
+  "runtime": "v22.22.2",
+  "startedAt": "2026-10-14T13:12:05.198Z",
+  "command": "npm test -- --reporter=default --reporter=json --outputFile=generated/m11-vitest.json",
+  "tests": {
+    "passed": 526,
+    "failed": 0,
+    "skipped": 0
+  },
+  "streamingGolden": {
+    "passed": 3,
+    "skipped": 0,
+    "failed": 0,
+    "reference": "test/fixtures/stream-windows.json and test/fixtures/composition-windows.json",
+    "domain": {
+      "startMs": 0,
+      "endMs": 100,
+      "clock": "utc"
+    },
+    "chunkWidthsMs": {
+      "first": 1,
+      "last": 101,
+      "stride": 1
+    }
+  },
+  "controls": {
+    "passed": 38,
+    "skipped": 0,
+    "failed": 0,
+    "reference": "Hand-derived rule partitions and explicit request/sample/output controls in test/stream.electional-check.ts",
+    "domain": {
+      "startMs": 0,
+      "endMs": 100,
+      "clock": "utc"
+    }
+  },
+  "nativeStreaming": {
+    "passed": 8,
+    "skipped": 0,
+    "failed": 0,
+    "reference": "Independently specified linear Moon longitude and polynomial station, not an astronomical ephemeris",
+    "sectorSpan": {
+      "startMs": 0,
+      "endMs": 1000,
+      "clock": "utc"
+    },
+    "sectorChunkWidthsMs": [
+      100,
+      150,
+      300,
+      333,
+      1000
+    ],
+    "voidSpan": {
+      "startMs": 0,
+      "endMs": 600,
+      "clock": "utc"
+    },
+    "voidLookaheadMs": 700,
+    "stationSpan": {
+      "startMs": 0,
+      "endMs": 2000,
+      "clock": "utc"
+    },
+    "stationAtMs": 500,
+    "marginMs": 864
+  },
+  "eventsSource": {
+    "moduleUrl": "file:///workspace/codex-infra/wt-events/events/build/src/index.js",
+    "sha256": "6f887bdc34bc68202cd7e8856f68a5c62df3329fbe4a955b3b7eb0e3a3a749d5",
+    "scope": "Read-only entry bytes, not its dependency graph or an authenticated release."
+  },
+  "sha256": {
+    "src/stream.ts": "d945da8c062ad9876fd552679b83d769a6e63827ca6d0a4667a529b9b95c63da",
+    "src/search.ts": "5b3c517f0bb06de9329d7cc255888de2a8de290774b684ec12b7d517406bb6b6",
+    "src/composition.ts": "e6784ab8219dd6f4ba3956c9ba5b6e22b19173dafaaf9ea57ec1039503096ecf",
+    "src/index.ts": "d9b2dd1f19c2826b8f6be44d314bc6b804f8371b002db2739bcba63abe9665fc",
+    "src/adapter-contract.ts": "b15f4e0fa43883562e0972d2674caafeba3d8d85fc2c51e8ff26ad9818fb7196",
+    "test/stream.electional-check.ts": "8afa03ddf638bb256271eb8d3aeff244f2cca516e457084144a40882f0795379",
+    "test/stream-native.electional-check.ts": "8f3ce4d93085fa743370fd427bedce0a861c654e796e9a0bd2bf999aa771d8b2",
+    "test/fixtures/stream-windows.json": "b671fe96b72502b70503aab6b0b5a136075050c7b15cf85b890b72a13595a127",
+    "test/fixtures/composition-windows.json": "1cf8c6cc7aad4d5a0536188afb607e71ece975240e7bd2a4492c45ee1b2ce05b",
+    "scripts/check-stream-esm.mjs": "ead8f7ba43ec5f47375c13ccc33e430f101cf8cd13fe5995d923b8bf7d53098e",
+    "scripts/record-m11-tests.mjs": "df401c8f7fa05f8488f0231841edd051cd364aa8a10c0aef3147adb554a2a5bd",
+    "package-lock.json": "048e2eb7352f7b829e968173e821e4da617dddf15b23eab83e06df0a6009367d",
+    "generated/engine.mjs": "0101700f8fdf2d19210f94572d7b5c7f2e164a89d3ffa9df35681f2c28cc9c3a"
+  },
+  "scope": "Chunk ownership, continuation, preserved uncertainty, shared budgets, facts-only output, cancellation, and receipt transport. Existing astronomical reference comparisons remain in the complete suite. No new astronomical accuracy, exhaustive completeness, heap, throughput or predictive claim."
+}

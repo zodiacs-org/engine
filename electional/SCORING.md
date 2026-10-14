@@ -119,8 +119,9 @@ adapters. It does not count internal finite differences, hidden work inside
 `birthWindow`, or sky samples. Those scopes and the full per-rule searches,
 policies, house partitions, native sky days and natal audits are retained in
 `ruleResults`. Synchronous native calls cannot be interrupted mid-call. This
-milestone does not stream, apply deadlines or bound the size of a serialized
-result; long-range work is the next milestone in [PLAN.md](PLAN.md).
+bounded API does not stream, apply deadlines or bound the size of a serialized
+result. [STREAMING.md](STREAMING.md) describes the separate iterator with shared
+chunk budgets, factual output by default and a chunk serialization limit.
 
 ## Receipts and pure composition
 

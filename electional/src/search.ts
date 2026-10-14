@@ -49,10 +49,8 @@ function unattempted(rule: ElectionalRule, window: ClockWindow,
     completeness: 'source-scan-assumptions', satisfied: [], failed: [], covered: [], unresolved: [] });
 }
 
-/** Evaluate every declared rule in declaration order with shared request/sample budgets. */
-export function searchElectional(input: unknown, dependencies: SearchDependencies, options: SearchOptions): ElectionalResult {
-  const rules = validateRuleSet(input);
-  const window = clockWindow({ startMs: resolvedInstantMs(rules.range.start), endMs: resolvedInstantMs(rules.range.end), clock: 'utc' });
+/** Shared strict control boundary for both bounded and streaming coordinators. */
+export function checkedSearchOptions(options: SearchOptions, rules: readonly ElectionalRule[]): SearchOptions {
   if (!options || Object.keys(options).some(k => !['stepMs', 'lookaheadMs', 'maxSkySamples', 'eclipse', 'maxEvaluations', 'signal'].includes(k))
     || !Number.isSafeInteger(options.stepMs) || options.stepMs < 1
     || !Number.isSafeInteger(options.lookaheadMs) || options.lookaheadMs < 0
@@ -60,9 +58,19 @@ export function searchElectional(input: unknown, dependencies: SearchDependencie
     throw new RangeError('Expected explicit stepMs, lookaheadMs and maxSkySamples.');
   }
   const work = workOptions({ maxEvaluations: options.maxEvaluations, ...(options.signal === undefined ? {} : { signal: options.signal }) });
-  const stepMs = options.stepMs, lookaheadMs = options.lookaheadMs, maxSkySamples = options.maxSkySamples;
   const eclipse = options.eclipse === undefined ? undefined : eclipseSettings(options.eclipse);
-  if (rules.rules.some(rule => rule.kind === 'avoid-eclipses') && !eclipse) throw new RangeError('Eclipse rules require an explicit model and derivative step.');
+  if (rules.some(rule => rule.kind === 'avoid-eclipses') && !eclipse) throw new RangeError('Eclipse rules require an explicit model and derivative step.');
+  return Object.freeze({ ...work, stepMs: options.stepMs, lookaheadMs: options.lookaheadMs, maxSkySamples: options.maxSkySamples,
+    ...(eclipse === undefined ? {} : { eclipse }) });
+}
+
+/** Evaluate every declared rule in declaration order with shared request/sample budgets. */
+export function searchElectional(input: unknown, dependencies: SearchDependencies, options: SearchOptions): ElectionalResult {
+  const rules = validateRuleSet(input);
+  const window = clockWindow({ startMs: resolvedInstantMs(rules.range.start), endMs: resolvedInstantMs(rules.range.end), clock: 'utc' });
+  const checked = checkedSearchOptions(options, rules.rules);
+  const work = workOptions({ maxEvaluations: checked.maxEvaluations, ...(checked.signal === undefined ? {} : { signal: checked.signal }) });
+  const { stepMs, lookaheadMs, maxSkySamples, eclipse } = checked;
   let evaluations = 0, skySamples = 0;
   let stopped: 'evaluation-budget' | 'cancelled' | 'sky-sample-budget' | undefined;
   const results: RuleEvaluation[] = [];
