@@ -15,7 +15,7 @@ run its tests, tick it here and append a session summary to `CHANGES.txt`.
 - [x] M9 Identify translation of light from ordered separating/applying contacts, with configurable traditional eligibility and hand-derived motion fixtures.
 - [x] M10 Identify collection of light from converging contacts and receptions, documenting the selected tradition and testing ambiguous/shared significator roles.
 - [x] M11 Identify prohibition, frustration and station-driven refranation from the event sequence; explain competing interpretations without emitting a verdict.
-- [ ] M12 Add optional timing hints from degrees to perfection and configurable modality/house units; distinguish symbolic hints from ephemeris elapsed time.
+- [x] M12 Add optional timing hints from degrees to perfection and configurable modality/house units; distinguish symbolic hints from ephemeris elapsed time.
 - [ ] M13 Compose the pure analyze/explain APIs and implement the offline `horary cast`, `horary analyze` and `horary explain` CLI with JSON input/output and readable explanations.
 - [ ] M14 Complete integration and CLI tests, document source traditions and fixture derivations, and verify folder isolation, file limits and exclusion from the engine npm package.
 

@@ -13,8 +13,9 @@ The library provides `cast`, `normalizeHoraryInput`, `selectSignificators`,
 `evaluateSignificatorAspects`, `createDirectPerfectionPolicy` and
 `evaluateDirectPerfection`, `createTranslationPolicy` and `evaluateTranslation`,
 `createCollectionPolicy` and `evaluateCollection`,
-`createImpedimentPolicy` and `evaluateImpediments`.
-Further analysis rules and the CLI are scheduled in [`PLAN.md`](PLAN.md).
+`createImpedimentPolicy` and `evaluateImpediments`,
+`createTimingPolicy` and `evaluateTimingHints`.
+The combined analysis API and CLI are scheduled in [`PLAN.md`](PLAN.md).
 
 From the checkout, using Node as specified in this folder's `package.json`:
 
@@ -689,3 +690,74 @@ throw `RangeError`, and provider exceptions propagate. Fixture derivations
 are in [`tests/fixtures.md`](tests/fixtures.md). The integration suite checks
 engine delegation, actual houses and fallback without establishing new
 ephemeris accuracy or predictive validity.
+
+## Optional symbolic timing
+
+`evaluateTimingHints(result, aspectPolicy, timingPolicy)` attaches symbolic
+quantities to current in-orb applications with sampled contact candidates.
+The default `createTimingPolicy()` disables timing, and every omitted
+modality/house cell is disabled. Enable timing and choose units explicitly:
+
+```ts
+import { createAspectSearchPolicy, createTimingPolicy, evaluateTimingHints } from "./src/index.js";
+
+const timingPolicy = createTimingPolicy({
+  enabled: true,
+  basis: "both",
+  units: {
+    cardinal: { angular: { unit: "weeks", unitsPerDegree: 1 } },
+    fixed: { succedent: { unit: "years", unitsPerDegree: 0.5 } },
+    mutable: { cadent: { unit: "months", unitsPerDegree: 2 } }
+  }
+});
+const timing = evaluateTimingHints(result, createAspectSearchPolicy(), timingPolicy);
+```
+
+This table is the caller's convention, exercised in `tests/timing.test.ts`
+over the hand-derived motion fixtures in [`tests/fixtures.md`](tests/fixtures.md).
+It is not attributed to Lilly as a universal historical matrix. The source
+record names his qualitative timing guidance; the selected interpretation
+and its limits are described in [`SOURCES.md`](SOURCES.md).
+
+The basis can be `both`, `querent`, `quesited` or `moon`. Each selected
+physical planet supplies its own question-time sign modality and actual
+house kind. Shared roles remain attached to that planet. Different bases
+produce separate alternatives, without choosing between them, averaging
+their quantities or substituting a missing role. The house kind follows the
+actual cusp placement from engine `houseOf`, including polar fallback, with
+no cusp anticipation or ecliptic latitude. Sign modality comes from engine
+sign definitions and canonical longitude, ignoring stale chart labels.
+
+Each assessment keeps `degreesToPerfection`, a computational `contact`
+with `elapsedDays`, and separate `hints`. A hint's `symbolic.quantity` is
+the engine-reported current angular gap multiplied by `unitsPerDegree`.
+It is neither a travelled planetary arc nor the gap divided by speed.
+Symbolic hours, days, weeks, months and years remain labeled quantities;
+they are never converted into calendar dates or elapsed UTC days. Only
+the sampled contact carries an ephemeris elapsed time.
+
+Exact current contacts return `exact-now`, with a zero gap and no future
+symbolic hint. Separating, stationary and outside-orb aspects return
+`no-current-application`. Disabled or refused searches and a contact absent
+from the bounded horizon emit no hint. These states retain their different
+explanations; none establishes an outcome. A false unit cell independently
+disables that combination. The default disabled timing policy skips future
+provider calls and placement-only cusp circuit checks.
+
+The `aspects` report preserves the existing search method, clock provenance,
+resource accounting and all-or-none refusal. Contact searching delegates
+to engine crossings; this adds no event solver. `evaluateTimingHintsWith`
+accepts a consistent caller longitude provider for independent fixtures.
+Policies and results are detached, deeply frozen and JSON-friendly, and
+restored policy snapshots are revalidated. Malformed policies, enabled
+placement geometry and numerical underflow of a nonzero symbolic quantity
+throw `RangeError`; provider exceptions propagate. Those behaviors are
+enforced in `tests/timing.test.ts`. Integration checks establish engine
+delegation and preservation of actual house systems, without new ephemeris
+accuracy evidence.
+
+Sign changes, stations, reception and intervention may interrupt a sampled
+candidate. This timing report leaves those assessments to the existing
+perfection reports, and does not infer symbolic completion hints for
+translation or collection. A symbolic quantity remains an optional
+interpretive hint, without a prediction or final yes/no judgement.

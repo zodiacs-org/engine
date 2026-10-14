@@ -47,3 +47,7 @@ export { evaluateImpediments, evaluateImpedimentsWith, IMPEDIMENT_METHOD } from 
 export type { ContactIntervention, HoraryImpediments, ImpedimentAssessment, ImpedimentObservation, InterventionContact, StationIntervention } from "./impediments.js";
 export { createImpedimentPolicy, IMPEDIMENT_SOURCES } from "./impediment-policy.js";
 export type { HoraryImpedimentPolicy, ImpedimentPolicyInput, ImpedimentRule } from "./impediment-policy.js";
+export { evaluateTimingHints, evaluateTimingHintsWith } from "./timing.js";
+export type { HoraryTimingHints, SymbolicTimingHint, TimingAssessment } from "./timing.js";
+export { createTimingPolicy, TIMING_CONVENTIONS, TIMING_HOUSE_KINDS, TIMING_SOURCE, TIMING_UNITS } from "./timing-policy.js";
+export type { HoraryTimingPolicy, TimingBasis, TimingCell, TimingHouseKind, TimingPolicyInput, TimingScale, TimingUnit, TimingUnitTable } from "./timing-policy.js";

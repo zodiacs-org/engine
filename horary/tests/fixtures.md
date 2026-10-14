@@ -592,6 +592,101 @@ explicitly changed. These fixtures test defined geometry and event
 interpretation, without establishing astronomical accuracy or predictive
 validity.
 
+## Symbolic timing fixtures
+
+`timing.test.ts` uses the same invented question instant and coordinate pair
+as the preceding fixtures, with hand-written positions rather than a claim
+about that instant's sky. In the base chart, Aries on the first cusp selects
+Mars and Taurus on the second selects Venus. The Moon remains separately
+assigned. All timing unit scales below are deliberately caller-defined
+arithmetic inputs; none is taken from an engine output or a historical
+universal timing table.
+
+The baseline longitude laws, in degrees and elapsed UTC days `t`, are
+`Mars=10+2t` and `Venus=16+t`. Their current conjunction gap is `16-10=6`.
+Equating the laws gives `t=6`, at longitude `22`. Mars travels `12` degrees
+and Venus `6`; the timing hint uses the current gap `6`, not either
+travelled arc. Both start in Aries and house one, which is angular. The
+explicit cardinal/angular cell of one week per degree gives six symbolic
+weeks, kept separate from six elapsed UTC days. With Mars's speed changed
+to `3`, `10+3t=16+t` gives `t=3`, while the unchanged gap still gives six
+symbolic weeks. With an hour scale of `1,000,000` per degree the quantity
+is `6,000,000`; this enforces the factory's upper bound, with larger scales
+rejected. A scale of `Number.MIN_VALUE` remains valid where the product is
+nonzero. A gap and speed of `2^-20` give a contact at one day; multiplying
+that gap by `Number.MIN_VALUE` underflows, and the test requires rejection
+rather than reporting a nonexact application as zero duration.
+
+The mixed-basis laws start Mars at `29` and Venus at `30.5`, with speeds
+`2` and `1`. The gap is `1.5` and the contact is at `t=1.5`. Mars starts in
+Aries and angular house one, while Venus starts in Taurus and succedent
+house two. The caller cells give `1.5*1=1.5` symbolic weeks and
+`1.5*0.5=0.75` symbolic years, retained as alternatives. A false cardinal
+cell suppresses only the Mars alternative. Mars crosses into Taurus before
+contact; retaining the question-time basis is deliberately not a claim of
+uninterrupted perfection.
+
+For canonical sign/house checks, use `a=30i+10` and `b=a+6`, for sign
+indices `i` from zero through eleven, keeping speeds `2` and `1`.
+The literal sign expectations follow zodiac order; their modalities repeat
+cardinal, fixed and mutable. On cusps `0,30,...,330`, placement is house
+`i+1`, and house kinds repeat angular, succedent and cadent. Original
+fixture sign and degree annotations are stale by design and are ignored.
+The separate matrix test places each modality in each of these house kinds:
+for modality index `m` and house-kind index `h`, start Mars at `30m+10`
+and use cusps `(30(m-h+i)) mod 360`. The longitude falls ten degrees inside
+house `h+1`. Declared natural Mars and Venus keep the tested pair available
+even when rotated first and second cusps select other rulers. Each cell's
+distinct scale is `1+3m+h` days per degree, so the expected quantity is
+`6(1+3m+h)` by independent multiplication.
+
+An unequal cusp circuit `20,50,85,115,145,175,205,235,265,295,325,355`
+puts both baseline positions in wrapping house twelve, between `355` and
+`20`. Their sign remains Aries, but their placement is cadent. Two symbolic
+days per degree therefore gives twelve symbolic days. Distinct-cusp and
+single-circuit validation tests use a repeated cusp or swap two adjacent
+cusps, both of which violate the placement premise before any sampling.
+
+Circle-wrap laws start at `358` and `4` with speeds `2` and `1`. The
+directed conjunction gap is six degrees, and both normalized positions
+agree at `t=6`. Mars's Pisces/cadent cell gives twelve symbolic months;
+Venus's Aries/angular cell gives six symbolic weeks. Reversing motion with
+starts `2` and `356` and speeds `-2` and `-1` preserves the gap and contact
+time, exchanging those planet bases. For each nonconjunction major aspect
+angle `A`, starts `10` and `10+A+6` with the baseline speeds give relative
+longitude `-A-6+t`; the branch contact is at `t=6`. The gap remains six
+degrees for sextile, square, trine and opposition, without using a
+conjunction-only arithmetic shortcut.
+
+Equal current longitudes are exact now, with zero gap and no future
+symbolic duration. Equal speeds, reversed positions with positive relative
+speed, and a nine-degree gap outside the configured conjunction orb yield
+no current application. A two-day horizon cannot contain the base six-day
+contact. Disabled and preflight-refused searches return no hints. Default
+disabled timing consumes no future provider evaluations and skips
+placement-only checks while retaining ordinary cast validation. Explicit
+querent and quesited bases select only their roles; a Moon basis supplies
+no substitute for the Mars/Venus pair. A shared first-house question with
+declared Mars and Venus preserves all Mars roles without self-aspects or
+duplicated hints for those roles.
+
+The late-refusal fixture changes the initial target to `16.125`, so its
+contact at `6.125` lies between quarter-day grid samples. The first pair
+uses `33` grid evaluations and `24` refinements, totaling `57`; a budget
+of `58` leaves too little for the next pair. The test enforces atomic
+removal of that already found candidate and all hints, with `114` calls
+because each relative evaluation reads both planets. This is resource
+accounting, not a contact-time or ephemeris accuracy reference. Restored
+policy validation, deep freezing and provider-error propagation establish
+software behavior.
+
+`timing.integration.test.ts` casts only the invented instant and location.
+Its half-day window exercises delegation to engine exact aspects and
+crossings, verifies engine clock provenance and confirms no recasting.
+Disabled searching checks each actual house system and polar fallback.
+These integration tests do not supply independently verified ephemeris
+positions or establish predictive validity.
+
 The basic law is Mars `10+2t`, Venus `16+t`. Their equality reduces to
 `t=6`. Over `[0,8]` Mars runs from 10 to 26 and Venus from 16 to 24, all
 within Aries, and both speeds are strictly positive. No sign change or

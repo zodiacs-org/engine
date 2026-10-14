@@ -488,3 +488,51 @@ or predicting an outcome. Policy and source choices are enforced in
 `tests/impediments.budget.test.ts`, and engine delegation in
 `tests/impediments.integration.test.ts`. Independent fixture derivations
 appear in `tests/fixtures.md`.
+
+## Symbolic timing
+
+`lilly-qualitative-timing;caller-unit-table` refers to William Lilly,
+*Christian Astrology*, first published 1647, printed pages 109-110 of the
+linked 1659 edition, under Separation. The
+[primary-text transcription](https://pdfcoffee.com/william-lilly-christian-astrology-volume-1-pdf-free.html)
+was fetched and read on 2026-10-14. That passage connects degrees with
+alternative time units, describes movable signs, angular placement and
+swiftness as hastening time, and common and fixed signs as prolonging it.
+Its immediate context concerns separation. It does not provide a universal
+matrix of units for all sign and house combinations. No historical question,
+chart, outcome language or timing table is copied.
+
+This implementation uses a current applying aspect's angular gap as the
+symbolic degree count, rather than separation from the edge of planetary
+orbs. This is an explicit project adaptation of degree-based timing, not
+an assertion that the quoted context prescribes it. The engine decides
+application, orb eligibility and exactness, and provides the reported gap
+and sampled moving-pair contact. There is no gap/speed extrapolation and
+no independent aspect, dignity, house or event implementation.
+
+Timing and all unit cells default disabled. The caller supplies a sparse
+matrix indexed by engine sign modality and actual house kind. Each enabled
+cell supplies a named symbolic unit and units per degree. All numerical
+scales, including the fixture and README examples, are caller conventions,
+not historically sourced universal defaults. A false cell disables one
+combination independently. The factory's bounds are computational limits,
+enforced in `tests/timing.test.ts`, not accuracy claims.
+
+The selected question-time planet bases remain independent alternatives.
+Role selection can restrict them without substituting a different planet;
+one physical planet retains all of its roles. The engine's sign definitions
+provide modality, and `houseOf` supplies actual placement without latitude
+or cusp anticipation. Neither a later sign change nor a later house changes
+this question-time basis. Hints are not averaged or ranked, and no natural
+association or faster-planet choice is inferred.
+
+Symbolic quantities remain separate from sampled contact elapsed UTC days.
+Exact contacts describe present geometry, while a future hint requires a
+current in-orb application and a found branch contact. No hint survives
+an incomplete or refused aspect scan. Contact candidates retain sampling
+limitations and can be interrupted under separate perfection reports.
+Symbolic months and years are never converted to calendar durations, and
+no date, prediction or authoritative outcome is emitted. Policy, ownership,
+geometry, scale and resource behavior are checked in `tests/timing.test.ts`;
+fixture derivations are in `tests/fixtures.md`. Integration tests verify
+engine delegation without establishing ephemeris or predictive accuracy.
