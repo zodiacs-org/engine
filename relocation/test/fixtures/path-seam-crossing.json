@@ -1,0 +1,826 @@
+{
+  "schema": "zodiacs.relocation-golden.v1",
+  "id": "path-seam-crossing",
+  "reference": "installed-carried-engine-regression;not-independent-accuracy",
+  "request": {
+    "id": "path-seam-crossing",
+    "kind": "path",
+    "source": {
+      "utc": "2004-05-06T07:08:09.010Z",
+      "latitude": 12,
+      "longitude": 34,
+      "houseSystem": "placidus",
+      "deltaT": 65
+    },
+    "options": {
+      "bodies": [
+        "Moon"
+      ],
+      "lines": [
+        "ASC"
+      ],
+      "maxEvaluations": 128,
+      "maxRefinements": 32,
+      "coordinateTolerance": 0.01,
+      "residualTolerance": 0.01,
+      "from": {
+        "latitude": -10,
+        "longitude": 170
+      },
+      "to": {
+        "latitude": 10,
+        "longitude": -165
+      },
+      "stepDegrees": 20
+    }
+  },
+  "output": {
+    "schema": "zodiacs.relocation-path-crossings.v1",
+    "verification": "bounded-great-circle-brackets;sampled-engine-residuals",
+    "plan": {
+      "path": {
+        "from": {
+          "latitude": -10,
+          "longitude": 170
+        },
+        "to": {
+          "latitude": 10,
+          "longitude": -165
+        },
+        "stepDegrees": 20,
+        "maxSamples": 4096,
+        "conventions": {
+          "id": "zodiacs.relocation-great-circle.v1",
+          "surface": "unit-sphere;geographic-latitude;not-ellipsoidal-geodesic",
+          "arc": "shortest;antipodal-direction-refused",
+          "coordinate": "angular-distance-from-start-in-degrees",
+          "poles": "insert-interior-meridional-pole;break-display-geometry",
+          "seams": "lat-lon-interpolation;no-engine-receipt"
+        },
+        "lengthDegrees": 31.91583884182969,
+        "sampleCount": 3,
+        "samples": [
+          {
+            "index": 0,
+            "distanceDegrees": 0,
+            "fraction": 0,
+            "point": {
+              "latitude": -10,
+              "longitude": 170
+            }
+          },
+          {
+            "index": 1,
+            "distanceDegrees": 20,
+            "fraction": 0.6266481072021051,
+            "point": {
+              "latitude": 2.551727551148226,
+              "longitude": -174.3641419690701
+            }
+          },
+          {
+            "index": 2,
+            "distanceDegrees": 31.91583884182969,
+            "fraction": 1,
+            "point": {
+              "latitude": 10,
+              "longitude": -165
+            }
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": -10,
+                "longitude": 170
+              },
+              "source": {
+                "kind": "sample",
+                "index": 0
+              }
+            },
+            {
+              "point": {
+                "latitude": -1.9724728081316965,
+                "longitude": 180
+              },
+              "source": {
+                "kind": "seam",
+                "fromIndex": 0,
+                "toIndex": 1,
+                "fraction": 0.6395555638979712
+              }
+            }
+          ],
+          [
+            {
+              "point": {
+                "latitude": -1.9724728081316965,
+                "longitude": -180
+              },
+              "source": {
+                "kind": "seam",
+                "fromIndex": 0,
+                "toIndex": 1,
+                "fraction": 0.6395555638979712
+              }
+            },
+            {
+              "point": {
+                "latitude": 2.551727551148226,
+                "longitude": -174.3641419690701
+              },
+              "source": {
+                "kind": "sample",
+                "index": 1
+              }
+            },
+            {
+              "point": {
+                "latitude": 10,
+                "longitude": -165
+              },
+              "source": {
+                "kind": "sample",
+                "index": 2
+              }
+            }
+          ]
+        ]
+      },
+      "bodies": [
+        "Moon"
+      ],
+      "lines": [
+        "ASC"
+      ],
+      "requiredEvaluations": 4,
+      "maxEvaluations": 128,
+      "maxRefinements": 32,
+      "coordinateTolerance": 0.01,
+      "residualTolerance": 0.01
+    },
+    "status": "ok",
+    "observerDistances": [
+      0,
+      20,
+      31.91583884182969,
+      10,
+      15,
+      17.5,
+      16.25,
+      15.625,
+      15.9375,
+      15.78125,
+      15.859375,
+      15.8203125,
+      15.83984375,
+      15.849609375
+    ],
+    "intervalResults": [
+      {
+        "intervalIndex": 0,
+        "body": "Moon",
+        "kind": "ASC",
+        "positionIndex": 0,
+        "status": "crossing",
+        "reason": null,
+        "initialBracket": {
+          "from": {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "residual": -7.188571572767672,
+            "projection": -0.12513534021957026
+          },
+          "to": {
+            "observerIndex": 1,
+            "distanceDegrees": 20,
+            "residual": 1.9011395355949998,
+            "projection": 0.03317505609558233
+          },
+          "width": 20
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 12,
+            "distanceDegrees": 15.83984375,
+            "residual": -0.003817779630900389,
+            "projection": -0.0000666328246254781
+          },
+          "to": {
+            "observerIndex": 13,
+            "distanceDegrees": 15.849609375,
+            "residual": 0.0006570395407332804,
+            "projection": 0.000011467503301335806
+          },
+          "width": 0.009765625
+        },
+        "refinements": 11,
+        "crossingIndex": 0
+      },
+      {
+        "intervalIndex": 1,
+        "body": "Moon",
+        "kind": "ASC",
+        "positionIndex": 0,
+        "status": "no-crossing",
+        "reason": null,
+        "initialBracket": {
+          "from": {
+            "observerIndex": 1,
+            "distanceDegrees": 20,
+            "residual": 1.9011395355949998,
+            "projection": 0.03317505609558233
+          },
+          "to": {
+            "observerIndex": 2,
+            "distanceDegrees": 31.91583884182969,
+            "residual": 7.286046444235137,
+            "projection": 0.12682304333610867
+          },
+          "width": 11.91583884182969
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 1,
+            "distanceDegrees": 20,
+            "residual": 1.9011395355949998,
+            "projection": 0.03317505609558233
+          },
+          "to": {
+            "observerIndex": 2,
+            "distanceDegrees": 31.91583884182969,
+            "residual": 7.286046444235137,
+            "projection": 0.12682304333610867
+          },
+          "width": 11.91583884182969
+        },
+        "refinements": 0,
+        "crossingIndex": null
+      }
+    ],
+    "unresolvedIntervals": [],
+    "crossings": [
+      {
+        "index": 0,
+        "body": "Moon",
+        "kind": "ASC",
+        "positionIndex": 0,
+        "observerIndex": 13,
+        "distanceDegrees": 15.849609375,
+        "fraction": 0.4966063857368245,
+        "point": {
+          "latitude": -0.06840922143969905,
+          "longitude": -177.58397170844242
+        },
+        "residual": 0.0006570395407332804,
+        "horizonMotion": "rising",
+        "status": "crossing"
+      }
+    ],
+    "polylines": [
+      [
+        {
+          "point": {
+            "latitude": -10,
+            "longitude": 170
+          },
+          "source": {
+            "kind": "sample",
+            "index": 0
+          }
+        },
+        {
+          "point": {
+            "latitude": -3.7589740966889296,
+            "longitude": 177.87424171710904
+          },
+          "source": {
+            "kind": "sample",
+            "index": 3
+          }
+        },
+        {
+          "point": {
+            "latitude": -2.032357789100751,
+            "longitude": 180
+          },
+          "source": {
+            "kind": "seam",
+            "fromIndex": 3,
+            "toIndex": 4,
+            "fraction": 0.5474433138427354
+          }
+        }
+      ],
+      [
+        {
+          "point": {
+            "latitude": -2.032357789100751,
+            "longitude": -180
+          },
+          "source": {
+            "kind": "seam",
+            "fromIndex": 3,
+            "toIndex": 4,
+            "fraction": 0.5474433138427354
+          }
+        },
+        {
+          "point": {
+            "latitude": -0.6050104552877207,
+            "longitude": -178.2426927140207
+          },
+          "source": {
+            "kind": "sample",
+            "index": 4
+          }
+        },
+        {
+          "point": {
+            "latitude": -0.21027310363187413,
+            "longitude": -177.75811017377927
+          },
+          "source": {
+            "kind": "sample",
+            "index": 7
+          }
+        },
+        {
+          "point": {
+            "latitude": -0.11158531279359543,
+            "longitude": -177.63697016454077
+          },
+          "source": {
+            "kind": "sample",
+            "index": 9
+          }
+        },
+        {
+          "point": {
+            "latitude": -0.08691326991265086,
+            "longitude": -177.60668531729704
+          },
+          "source": {
+            "kind": "sample",
+            "index": 11
+          }
+        },
+        {
+          "point": {
+            "latitude": -0.07457723893548923,
+            "longitude": -177.59154290921367
+          },
+          "source": {
+            "kind": "sample",
+            "index": 12
+          }
+        },
+        {
+          "point": {
+            "latitude": -0.06840922143969905,
+            "longitude": -177.58397170844242
+          },
+          "source": {
+            "kind": "sample",
+            "index": 13
+          }
+        },
+        {
+          "point": {
+            "latitude": -0.062241202749378916,
+            "longitude": -177.57640050961743
+          },
+          "source": {
+            "kind": "sample",
+            "index": 10
+          }
+        },
+        {
+          "point": {
+            "latitude": -0.012897023148016802,
+            "longitude": -177.5158309680263
+          },
+          "source": {
+            "kind": "sample",
+            "index": 8
+          }
+        },
+        {
+          "point": {
+            "latitude": 0.18447928794425972,
+            "longitude": -177.27355213801144
+          },
+          "source": {
+            "kind": "sample",
+            "index": 6
+          }
+        },
+        {
+          "point": {
+            "latitude": 0.9739162473241072,
+            "longitude": -176.30432556592547
+          },
+          "source": {
+            "kind": "sample",
+            "index": 5
+          }
+        },
+        {
+          "point": {
+            "latitude": 2.551727551148226,
+            "longitude": -174.3641419690701
+          },
+          "source": {
+            "kind": "sample",
+            "index": 1
+          }
+        },
+        {
+          "point": {
+            "latitude": 10,
+            "longitude": -165
+          },
+          "source": {
+            "kind": "sample",
+            "index": 2
+          }
+        }
+      ]
+    ],
+    "sampling": {
+      "schema": "zodiacs.relocation-angles.v1",
+      "conventions": {
+        "id": "zodiacs.relocation-angular-conventions.v1",
+        "frame": "equatorial-true-of-date",
+        "center": "geocentric",
+        "correction": "apparent;engine-moon-series-at-instant;no-deflection",
+        "horizon": "geodetic-tangent-plane;body-center;no-refraction;no-parallax;no-limb",
+        "MC": "upper-meridian;hour-angle-zero",
+        "IC": "lower-meridian;hour-angle-half-turn",
+        "ASC": "zero-altitude;eastern-branch;fixed-direction-rising",
+        "DSC": "zero-altitude;western-branch;fixed-direction-setting",
+        "azimuth": "north-through-east",
+        "units": "degrees",
+        "singularity": "unit-vector-projection-at-or-below-engine-RA_POLE_TOLERANCE",
+        "receiptScope": "engine-positions-and-houses;library-horizon-rotation-is-derived"
+      },
+      "natalReceipt": {
+        "conventions": {
+          "angles": "gast-and-true-obliquity",
+          "aspects": "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate",
+          "calendar": "proleptic-gregorian",
+          "deltaT": "tt-minus-ut1;value-in-result",
+          "localTime": "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record",
+          "longitudeUnit": "degrees-[0,360)",
+          "moonNodes": "instantaneous-geocentric-moon-orbit-plane",
+          "moonPosition": "astronomy-engine-geo-moon;no-light-time;no-aberration",
+          "nutation": "iau2000b;equation-of-equinoxes-with-two-complementary-terms",
+          "planetPositions": "aberrated-geocentric-ecliptic-of-date;no-deflection",
+          "speed": "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day",
+          "timeScale": "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result",
+          "zodiac": "tropical"
+        },
+        "coordinates": {
+          "latitude": 12,
+          "longitude": 34
+        },
+        "coverage": {
+          "angleExclusions": "exact-geographic-poles-and-ecliptic-horizon-coincidence",
+          "assessment": "finite-reference-cases-only",
+          "broadDateRange": "not-certified",
+          "inputSyntax": "not-an-astronomical-accuracy-guarantee"
+        },
+        "engine": {
+          "ephemeris": {
+            "name": "astronomy-engine",
+            "version": "2.1.19"
+          },
+          "name": "@zodiacs/engine",
+          "version": "1.0.0"
+        },
+        "houses": {
+          "absenceReason": null,
+          "actual": "placidus",
+          "requested": "placidus"
+        },
+        "inputFlags": [],
+        "instant": "2004-05-06T07:08:09.010Z",
+        "localResolution": null,
+        "provenance": null,
+        "reference": "supplied-instant",
+        "resultFlags": [],
+        "schema": "zodiacs.calculation-receipt.draft-v1",
+        "sourceInstant": "2004-05-06T07:08:09.010Z",
+        "timeKnown": true,
+        "timeScale": "utc"
+      },
+      "time": {
+        "iso": "2004-05-06T07:08:09.010Z",
+        "deltaT": 65
+      },
+      "evaluations": {
+        "positions": 1,
+        "houses": 14
+      },
+      "positions": [
+        {
+          "body": "Moon",
+          "rightAscension": 243.9608100232585,
+          "declination": -23.55894043064024,
+          "raUndefined": null,
+          "engine": {
+            "status": "ok",
+            "body": "Moon",
+            "frame": "equatorial-true-of-date",
+            "lon": 243.9608100232585,
+            "lat": -23.55894043064024,
+            "dist": 0.0024052077415939207,
+            "speeds": null,
+            "cartesian": null,
+            "ayanamsa": null,
+            "bounds": {
+              "position": {
+                "value": 8.3,
+                "unit": "arcsec",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "distance": {
+                "value": 0.00014,
+                "unit": "relative",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "speed": null
+            },
+            "receipt": {
+              "schema": "zodiacs.calc-receipt.v1",
+              "request": {
+                "body": "Moon",
+                "time": {
+                  "iso": "2004-05-06T07:08:09.010Z",
+                  "deltaT": 65
+                },
+                "frame": "equatorial-true-of-date",
+                "center": "geocentric",
+                "zodiac": "tropical",
+                "flags": {
+                  "correction": "apparent",
+                  "speeds": false,
+                  "cartesian": false,
+                  "units": "degrees",
+                  "deflection": false
+                }
+              },
+              "instants": [
+                {
+                  "utc": "2004-05-06T07:08:09.010Z",
+                  "jdUt1": 2453131.7973211976,
+                  "jdTt": 2453131.7980735125,
+                  "deltaT": {
+                    "seconds": 65,
+                    "sigma": null,
+                    "model": "pinned",
+                    "table": null,
+                    "tableDigest": null,
+                    "segment": "pinned"
+                  },
+                  "timeScale": {
+                    "input": "utc",
+                    "basis": "pinned",
+                    "ut1MinusUtc": {
+                      "seconds": -0.45853155100308385,
+                      "sigma": 0.000806,
+                      "source": "observed"
+                    },
+                    "leapSeconds": null
+                  }
+                }
+              ],
+              "conventions": [
+                "zodiac:tropical",
+                "frame:equatorial-true-of-date",
+                "center:geocentric",
+                "correction:apparent",
+                "moon:series-at-instant",
+                "precession:iau2006",
+                "nutation:iau2000b",
+                "ephemeris:astronomy-engine@2.1.19",
+                "deltat:pinned",
+                "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+              ],
+              "engine": {
+                "name": "@zodiacs/engine",
+                "version": "1.0.0",
+                "ephemeris": {
+                  "name": "astronomy-engine",
+                  "version": "2.1.19"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "observers": [
+        {
+          "index": 0,
+          "point": {
+            "latitude": -10,
+            "longitude": 170
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 141.51566960947838,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 1,
+          "point": {
+            "latitude": 2.551727551148226,
+            "longitude": -174.3641419690701
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 157.1515276404083,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 2,
+          "point": {
+            "latitude": 10,
+            "longitude": -165
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 166.51566960947844,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 3,
+          "point": {
+            "latitude": -3.7589740966889296,
+            "longitude": 177.87424171710904
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 149.38991132658742,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 4,
+          "point": {
+            "latitude": -0.6050104552877207,
+            "longitude": -178.2426927140207
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 153.27297689545765,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 5,
+          "point": {
+            "latitude": 0.9739162473241072,
+            "longitude": -176.30432556592547
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 155.2113440435529,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 6,
+          "point": {
+            "latitude": 0.18447928794425972,
+            "longitude": -177.27355213801144
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 154.24211747146694,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 7,
+          "point": {
+            "latitude": -0.21027310363187413,
+            "longitude": -177.75811017377927
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 153.75755943569914,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 8,
+          "point": {
+            "latitude": -0.012897023148016802,
+            "longitude": -177.5158309680263
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 153.99983864145202,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 9,
+          "point": {
+            "latitude": -0.11158531279359543,
+            "longitude": -177.63697016454077
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 153.87869944493764,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 10,
+          "point": {
+            "latitude": -0.062241202749378916,
+            "longitude": -177.57640050961743
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 153.9392690998609,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 11,
+          "point": {
+            "latitude": -0.08691326991265086,
+            "longitude": -177.60668531729704
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 153.90898429218134,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 12,
+          "point": {
+            "latitude": -0.07457723893548923,
+            "longitude": -177.59154290921367
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 153.92412670026465,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 13,
+          "point": {
+            "latitude": -0.06840922143969905,
+            "longitude": -177.58397170844242
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 153.93169790103593,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        }
+      ]
+    }
+  }
+}
