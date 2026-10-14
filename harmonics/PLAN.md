@@ -7,7 +7,7 @@ unchecked milestone, runs its checks, marks it complete and appends a line to
 
 - [x] M1 Set up an isolated private TypeScript project and Vitest runner; implement pure harmonic longitude charts with validated named points, a configurable harmonic ceiling and hand-derived arithmetic tests.
 - [x] M2 Add an engine chart adapter using relative source imports, reuse natal chart casting and the natal receipt creator, preserve the original receipt and chart flags, and keep unknown point speeds absent.
-- [ ] M3 Add harmonic aspect detection using the engine's configured aspect policy and matcher, with explicit orb units and per-harmonic scaling; test custom angles, wraparound and inclusive boundaries.
+- [x] M3 Add harmonic aspect detection using the engine's configured aspect policy and matcher, with explicit orb units and per-harmonic scaling; test custom angles, wraparound and inclusive boundaries.
 - [ ] M4 Reuse `src/techniques/aspect-patterns.ts` for supported harmonic aspect patterns, documenting its fixed major-aspect limits and refusing unsupported pattern policies rather than inventing graph results.
 - [ ] M5 Implement harmonic strength spectra with a documented deterministic scoring formula, configurable harmonic selection and weights, pair contributions and hand-derived ranking tests.
 - [ ] M6 Implement Uranian dial projections for the requested 90, 45 and 22.5 degree circles, preserving full source longitudes and testing circular distances and seam contacts.
@@ -70,3 +70,26 @@ With a writable npm cache inside `harmonics/.cache/`, the root engine's
 No archive was created. `npm run package:contents` still fails because this
 checkout has no `dist/calc.d.ts`; no engine build or root dependency installation
 was performed. The next session starts at M3.
+
+## M3 validation
+
+Added the pure `findHarmonicAspects` API using the engine policy factory and
+configured matcher. Rule, luminary and body-cap limits use configurable
+inverse-harmonic or fixed scaling. Known speeds and the stationary threshold
+scale with the harmonic. Missing speeds and overflow reject explicitly.
+Results retain the unscaled and effective policies alongside the harmonic
+coordinates; a cast source envelope stays separate and unchanged.
+
+On Node 22.22.2, `npm run check` passed. Hand-derived expectations and engine
+delegation checks are in `test/harmonic-aspects.test.ts`, covering custom
+angles, seam contacts, inclusive boundaries, motion, caps, ordering and
+receipt preservation. `README.md` states orb units, scaling formulas,
+floating-point limits and the explicit filtering required for unknown speeds.
+
+`git diff --check` passed. All changed and untracked files remain inside
+`harmonics/`; project files meet the size limit and documentation has no em
+dash. The root `npm pack --dry-run --json --ignore-scripts` manifest excludes
+this project, with a writable npm cache under `harmonics/.cache/`. The root
+`npm run package:contents` still fails at missing `dist/calc.d.ts`. No engine
+build, archive creation or git mutation was performed. The next session
+starts at M4.

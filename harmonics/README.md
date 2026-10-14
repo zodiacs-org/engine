@@ -1,8 +1,9 @@
 # Harmonics prototype
 
-This private source project adds harmonic longitude transforms and natal
-casting adapters to the engine checkout. See [PLAN.md](PLAN.md) for the remaining
-aspect, spectrum, dial and CLI milestones. Code and documentation here are MIT under
+This private source project adds harmonic longitude transforms, configured
+harmonic aspects and natal casting adapters to the engine checkout. See
+[PLAN.md](PLAN.md) for the remaining pattern, spectrum, dial and CLI milestones.
+Code and documentation here are MIT under
 the repository's [LICENSE](../LICENSE). The engine's data attributions remain
 in [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE).
 
@@ -121,14 +122,98 @@ formula is `speed = N * sourceSpeed`, in harmonic degrees/day, as the derivative
 of the unwrapped longitude transform. It is not a finite difference across a
 wrapped longitude seam. `maxHarmonic` uses the pure API's validation and is
 checked before casting. The source envelope keeps its original coordinates
-and speeds. Natal aspects in that envelope describe the source chart; harmonic
-aspect analysis is a later milestone.
+and speeds. Natal aspects in that envelope describe the source chart. The
+separate harmonic aspect analysis below describes transformed coordinates.
 
 Wrappers, point rows, point arrays and copied flag arrays are frozen. The natal
 envelope retains the engine API's ordinary independent snapshot shape and can
 be passed to its serializer, parser and replay helper. The tests check that
 mutating a supplied Date, coordinates or flag array after casting cannot change
 the captured source receipt.
+
+## Harmonic aspects
+
+```ts
+import { findHarmonicAspects } from "./src/index.js";
+
+const result = findHarmonicAspects([
+  { body: "A", lon: 0, speed: 0 },
+  { body: "B", lon: 90.5, speed: 0 }
+], 4, {
+  policy: {
+    bodies: ["A", "B"],
+    aspects: [{ type: "conjunction", orb: 8 }]
+  },
+  orbScaling: "inverse-harmonic"
+});
+console.log(result.analysis.aspects);
+```
+
+`findHarmonicAspects(sourcePositions, N, options)` takes original longitudes,
+not already transformed harmonic rows. Each row requires a finite `speed` in
+source degrees/day on a common time basis. It uses `harmonicChart` for the
+longitude transform and multiplies speed by N. Every supplied row must have a
+known speed, even if its label is outside the policy selection. The function
+throws `RangeError` for missing, null or non-finite speeds and for overflow of
+a transformed speed or stationary-speed threshold. Equal known speeds can be
+stationary; unknown speed cannot be represented as stationary.
+
+`options.policy` is an engine `AspectPolicyInput`, revalidated and frozen by
+`src/configured-aspects.ts`'s `createAspectPolicy`. Its orb values are N=1
+allowances in degrees. With `orbScaling: "inverse-harmonic"` (the default),
+each rule orb, luminary replacement and body cap is divided by N before
+matching. With `"fixed"`, those limits are kept constant. The effective
+allowances and returned `orb` and `maximumOrb` are degrees on the harmonic
+circle. Thus a conjunction allowance L permits a source deviation of L/N
+from its exact harmonic contact in fixed mode, or L/(N*N) in inverse mode,
+subject to floating-point rounding. This is an explicit analysis convention,
+not a claim that either orb choice is universally prescribed.
+
+Angles stay fixed on the harmonic circle. Named angles, custom angles,
+motion-specific orbs, luminary replacement, both members' caps, the closest
+eligible aspect per pair, definition-order ties and result sorting all use
+the engine policy and matcher unchanged. Its default selection includes the
+physical bodies; custom labels, nodes and other points require explicit
+`policy.bodies`. Empty aspect or body selections produce no matches. The
+stationary-speed threshold is in source degrees/day and is multiplied by N
+in both modes to preserve the source cutoff after speed transformation.
+
+The result contains `harmonicChart` with transformed longitudes and speeds,
+`sourcePolicy` with the resolved unscaled settings, `orbScaling`, `orbScale`
+(the reciprocal of the orb divisor), and `analysis`, the engine's
+`ConfiguredAspectResult`. The effective policy is `analysis.policy`. Limits
+are calculated by direct division, which can differ in the last bit from
+multiplication by `orbScale`. Division, speed multiplication and longitude
+normalization use binary64 arithmetic. Very small positive limits may round
+to zero. The engine makes exact binary64 decisions on the resulting
+coordinates and effective policy, with inclusive boundaries and no added
+epsilon; it rounds only the reported orb. That exact matching does not
+remove rounding already introduced by the harmonic transform.
+
+`maxHarmonic` has the same contract as `harmonicChart`. All returned analysis
+objects are frozen snapshots. The engine's position and policy size limits
+also apply. The pure entry imports no ephemeris and creates no natal receipt.
+For a cast chart, keep the source envelope alongside the derived result:
+
+```ts
+import { castChart } from "./src/engine.js";
+import { findHarmonicAspects } from "./src/index.js";
+import type { HarmonicAspectPosition } from "./src/index.js";
+
+const source = castChart({
+  utc: "2002-04-06T03:00:00Z", latitude: 12, longitude: 24
+}, { includeAngles: true });
+const known = source.points.filter(
+  (point): point is HarmonicAspectPosition => point.speed !== undefined
+);
+const result = { source, harmonicAspects: findHarmonicAspects(known, 3) };
+```
+
+Filtering is an explicit choice in this example: angles and any supplemental
+points with unknown speed are omitted. The preserved envelope describes the
+original natal chart, including its natal aspects, and does not attest the
+harmonic analysis. This synthetic integration example is exercised in
+[test/harmonic-aspects.test.ts](test/harmonic-aspects.test.ts).
 
 ## Arithmetic evidence
 
@@ -148,3 +233,16 @@ become 0.75, -1.5 and zero harmonic degrees/day. The exact multiplication and
 whole-turn subtraction are written in the test. Other adapter tests compare
 the receipt and point rows with the engine calls they wrap. Those comparisons
 check integration and preservation, not astronomical accuracy.
+
+[test/harmonic-aspects.test.ts](test/harmonic-aspects.test.ts) derives the
+aspect examples on supplied synthetic rows. In the conjunction example,
+N=4 transforms 90.5 degrees to 362 degrees, or 2 degrees after subtracting
+one turn; the 8-degree allowance becomes 2 degrees, including the boundary.
+Adding or subtracting 2^-30 source degrees changes the harmonic orb by
+2^-28 degrees, testing strict exclusion and inclusion on either side.
+For the scaling comparison, N=3 transforms 120.75 degrees to 2.25 degrees;
+an N=1 allowance of 6 degrees becomes 2 in inverse mode, excluding the pair,
+and stays 6 in fixed mode, including it. Seam, custom-angle, luminary-cap,
+motion and tie tests state their separate derivations in comments. These
+checks establish arithmetic and engine delegation, not ephemeris accuracy
+or predictive validity.
