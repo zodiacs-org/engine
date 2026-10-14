@@ -3,3 +3,4 @@ Implement M2 frozen event chart casting with engine receipt provenance, polar fa
 Implement M3 classical planet angularity with actual engine houses, configurable exact angle orbs, hand-derived geometry tests, and convention documentation
 Implement M4 angle domicile rulers and essential dignities with engine sect and tables, synthetic day and night checks, immutable output, and convention documentation
 Implement M5 cardinal solar ingress searches with shared evaluation budgets, chart casting and factor analyses, range and coverage checks, synthetic solver tests, and convention documentation
+Implement M6 independent USNO ingress fixtures with source digests, time-scale and derivation records, offline annual and range timing checks, chart integration tests, and evidence

@@ -97,8 +97,9 @@ authenticated release artifact or astronomical accuracy.
 [test/chart.test.ts](test/chart.test.ts) checks these behaviors at synthetic
 places and arbitrary supplied instants, including polar places in both
 hemispheres and the engine's observed, predicted, and model time bases.
-Comparisons with the engine are integration checks. Independent ingress and
-lunation timing evidence belongs to later milestones. The recorded M2 checks
+Comparisons with the engine are integration checks. Independent ingress
+timing evidence is documented below; lunation timing evidence remains planned.
+The recorded M2 checks
 are in [docs/evidence/m2/checks.txt](docs/evidence/m2/checks.txt).
 
 To analyze a cast chart's angularity:
@@ -207,8 +208,12 @@ chart casting is excluded from this evaluation count.
 Range semantics, budget defaults, hand-derived synthetic solver checks, and
 accuracy limitations are documented in [docs/ingresses.md](docs/ingresses.md).
 The tests in [test/ingresses.test.ts](test/ingresses.test.ts) establish API and
-engine integration behavior. Independent ingress timing validation remains
-the next milestone; this implementation makes no measured accuracy claim.
+engine integration behavior. Independent season-time fixtures, derivation,
+time-scale qualifications, and the limited timing agreement checks are in
+[docs/ingress-references.md](docs/ingress-references.md) and
+[test/ingress-references.test.ts](test/ingress-references.test.ts). These
+checks do not establish accuracy outside the selected published events or
+independently validate the chart factors.
 
 Chart factors are labelled as traditional conventions, not predictions.
 This project adds no electional scoring, calendar export, relocation grids,

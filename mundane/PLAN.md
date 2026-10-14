@@ -9,7 +9,7 @@ ticks it here, and appends a commit summary to `CHANGES.txt` for the harness.
 - [x] M3 Identify classical planets in angular houses and near angles with an explicit convention and configurable orb. Test hand-derived synthetic geometry and boundary cases.
 - [x] M4 Return domicile rulers of each angle and their essential dignities, using engine dignity tables and chart sect. Test synthetic day and night cases.
 - [x] M5 Find cardinal solar ingress instants with the engine crossing solver, expose the ingress library API, and enforce range boundaries and search budgets.
-- [ ] M6 Commit small independent ingress references with source and derivation records, then test ingress timing and chart integration against them.
+- [x] M6 Commit small independent ingress references with source and derivation records, then test ingress timing and chart integration against them.
 - [ ] M7 Find New and Full Moon instants using engine Sun and Moon positions and the engine crossing solver, with a pure lunation API and explicit range semantics.
 - [ ] M8 Commit small independently published lunation references with source and derivation records, then test lunation timing and chart integration against them.
 - [ ] M9 Produce short structured factor lists labelled as traditional conventions, not predictions, with tests for wording and traceability to chart factors.

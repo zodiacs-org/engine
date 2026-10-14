@@ -91,4 +91,6 @@ existing chart and analysis APIs for the README's synthetic request and a
 year outside the engine's reference span. These are integration checks.
 No timing fixture in this milestone is taken from earlier engine output,
 and no independent astronomical timing tolerance or accuracy claim is added.
-Small independent ingress references and their derivations are M6 work.
+Independent published-time comparisons are documented in
+[ingress-references.md](ingress-references.md), with source records and
+offline checks in [test/ingress-references.test.ts](../test/ingress-references.test.ts).
