@@ -6,7 +6,7 @@ await mkdir(new URL('../generated/', import.meta.url), { recursive: true });
 // Resolve the engine's pinned dependency locally. The parent checkout stays read-only.
 await build({
   stdin: {
-    contents: 'export { calc, chart } from "../../src/calc.ts"; export { VOID_BODIES, VOID_OF_COURSE_CONVENTION } from "../../src/techniques/void-of-course.ts"; export { planetaryHours, planetaryHourAt } from "../../src/sky/hours.ts"; export { birthWindow } from "../../src/window.ts"; export { houseOf } from "../../src/houses.ts"; export { separation } from "../../src/aspects.ts"; export { createAspectPolicy, findConfiguredAspects } from "../../src/configured-aspects.ts";',
+    contents: 'export { calc, chart } from "../../src/calc.ts"; export { VOID_BODIES, VOID_OF_COURSE_CONVENTION } from "../../src/techniques/void-of-course.ts"; export { planetaryHours, planetaryHourAt } from "../../src/sky/hours.ts"; export { birthWindow } from "../../src/window.ts"; export { houseOf } from "../../src/houses.ts"; export { separation, ASPECTS as INTER_ASPECT_DEFINITIONS } from "../../src/aspects.ts"; export { findInterAspects } from "../../src/synastry.ts"; export { createAspectPolicy, findConfiguredAspects } from "../../src/configured-aspects.ts";',
     resolveDir: fileURLToPath(new URL('../src/', import.meta.url)),
     sourcefile: 'electional-engine-bridge.mjs', loader: 'js',
   },

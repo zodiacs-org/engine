@@ -73,7 +73,7 @@ rejected. Selected lists must be nonempty and have no duplicate entries.
 | `applying-aspect` | Moving `body`, distinct `targets`, major `aspects`, `maxOrbDegrees` and `match`. Match refers to targets reached by any selected applying aspect; self-aspects are rejected. |
 | `avoid-eclipses` | `kinds` from `solar` and `lunar`, and nonnegative `withinDays`. Exclude margins around selected events. |
 | `avoid-stations` | Planetary `bodies` excluding Sun and Moon, and nonnegative `withinDays`. Exclude margins around selected stations. |
-| `synastry-aspect` | `movingBodies`, `natalBodies`, major `aspects`, `maxOrbDegrees` and `match`. Match refers to moving/natal pairs under the engine's existing inter-chart aspect conventions. |
+| `synastry-aspect` | `movingBodies`, `natalBodies`, major `aspects`, `maxOrbDegrees` and `match`. Match refers to every moving/natal pair under the engine's existing inter-chart aspect conventions. The declared orb caps native orbs; see [SYNASTRY.md](SYNASTRY.md). |
 
 Angular and aspect orbs are nonnegative degrees. Station and eclipse margins
 are elapsed epoch days, not local calendar days. Planetary-hour ownership uses
@@ -82,10 +82,10 @@ saving changes. The adapter will use the existing engine solar-day and
 rise/set conventions and report missing sunrise or sunset.
 
 Major aspects use the engine's conjunction, sextile, square, trine and
-opposition identifiers. Applying aspects will use configured-aspect analysis;
-synastry will use the existing relationship helpers. Identical orb labels do
-not make those APIs' arithmetic or motion conventions interchangeable. Future
-result explanations and receipts must state which API computed each rule.
+opposition identifiers. Applying aspects use configured-aspect analysis;
+synastry uses the existing relationship helper `findInterAspects`. Identical orb labels do
+not make those APIs' arithmetic or motion conventions interchangeable. Result
+explanations, policy records and receipt scope state which API computed each rule.
 
 ## Synthetic natal input
 

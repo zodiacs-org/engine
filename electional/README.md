@@ -5,8 +5,8 @@ existing astrology engine. Progress is tracked in [PLAN.md](PLAN.md). The
 interval foundation, strict JSON/YAML rule loading, read-only engine and
 events adapters, and Moon sign, phase, direct-motion, Moon-not-void and
 planetary-hour, benefic house/angular, applying-aspect and eclipse/station
-avoidance rule windows are
-implemented so far. Other rules, ranking, the
+avoidance and synthetic natal synastry rule windows are
+implemented so far. Composition, streaming, the
 CLI and HTTP endpoint are planned milestones. [EVALUATION.md](EVALUATION.md)
 describes the basic evaluator and
 its uncertainty handling. [VOID.md](VOID.md) describes Moon-not-void lookahead,
@@ -16,6 +16,8 @@ House fallbacks, angular and applying conventions, numerical boundary uncertaint
 and request accounting are in [CHARTS.md](CHARTS.md).
 Elapsed day margins, eclipse models, padded coverage and uncertain exclusion
 edges are in [AVOIDANCE.md](AVOIDANCE.md).
+Fixed natal longitudes, native orb caps, pair matching and receipt provenance
+are in [SYNASTRY.md](SYNASTRY.md).
 The adapter contract and optional events integration are described in
 [ADAPTERS.md](ADAPTERS.md). The
 configuration vocabulary is described in [RULES.md](RULES.md).

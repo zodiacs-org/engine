@@ -1,0 +1,80 @@
+{
+  "schema": "electional-m9-test-record/v1",
+  "runtime": "v22.22.2",
+  "startedAt": "2026-10-14T12:22:15.320Z",
+  "command": "npm test -- --reporter=default --reporter=json --outputFile=generated/m9-vitest.json",
+  "tests": {
+    "passed": 395,
+    "failed": 0,
+    "skipped": 0
+  },
+  "synastryComparison": {
+    "source": "NASA/JPL Horizons DE441",
+    "clock": "tt",
+    "range": {
+      "startMs": 1696291200000,
+      "endMs": 1698451200000
+    },
+    "syntheticNatal": {
+      "synthetic": true,
+      "instant": "2023-09-30T23:58:50.816Z",
+      "clock": "utc",
+      "location": {
+        "latitude": 0,
+        "longitude": 0
+      },
+      "houseSystem": "whole"
+    },
+    "natalTtMs": 1696118400000,
+    "natalTtMinusUtcMs": 69184,
+    "toleranceMs": 600000,
+    "maxOrbDegrees": 6,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 0,
+    "scope": "Moon to fixed natal Sun/Jupiter, selected sextile/square/trine aspects and any/all pair sets on the declared span only."
+  },
+  "nativeSyntheticScanner": {
+    "passed": 10,
+    "skipped": 0,
+    "failed": 0
+  },
+  "eventsSource": {
+    "moduleUrl": "file:///workspace/codex-infra/wt-events/events/build/src/index.js",
+    "sha256": "6f887bdc34bc68202cd7e8856f68a5c62df3329fbe4a955b3b7eb0e3a3a749d5",
+    "scope": "Read-only entry bytes only; not its dependencies or an authenticated release."
+  },
+  "sha256": {
+    "references/synastry-cases.json": "49098d7a82c18075d1d1ff637d8ce47a97c039f41bdcf43c88edcede2b9e06c2",
+    "references/synastry-horizons.json": "8d76f89c4b3d0b2b55428defdda9abf3902d5e310c4bb66252e18acfa55b12a5",
+    "references/horizons.json": "df42cf3e19e2810c28bcccf8eb7de085dbb73ee92f574b6554f8f8bd91f868d2",
+    "references/void-horizons.json": "b36f766240ddb4ed11f0058e91c53f7c6bede8aa1b74e9caa587841431e43d78",
+    "test/fixtures/synastry-windows.json": "d37c5fc111f32eb6a6f74ca05d4600e07d12bb6f9bb8491887d1bd4490b2f0d6",
+    "src/synastry-rule.ts": "0438fe4ba932e9549e5ea8a883fd432d1b0cd071969619a9c7aba5937197758e",
+    "src/synastry-adapter.ts": "bbec8283f95f28b0f953ba40e8cdf2051b436f4630351690bf17082f54d9ea95",
+    "src/chart-adapter.ts": "8eeaebd23ad1418bbab5ef0a6aa62f77606212819613477c1075c2934a2eba46",
+    "src/engine-adapter.ts": "20fd8c8079d1d627f9bd50a11daa3f54d40c4e0ba15768b99602abab283f9cf6",
+    "src/derived-search.ts": "57f111e349519b20dec87b794a68a31bb3db2e9277afd88e84c6f0392c168a6f",
+    "src/adapter-contract.ts": "b15f4e0fa43883562e0972d2674caafeba3d8d85fc2c51e8ff26ad9818fb7196",
+    "src/intervals.ts": "26ac4e39aae8152db272f6a83a0bb99af826f137f21198d2b50df4052109e2f5",
+    "src/index.ts": "23db40e651281e21edff09d4aa346fe95a223dc1105d1ae3090dff0a646ea6da",
+    "src/rules.ts": "af8cd509ef8d989cb7208bde3907dd05958226cb0b1384e346bb47eae8f0247f",
+    "src/rule-schema.ts": "1db07425798feeee7685cc2071c241702b75f2aa182e8381d32d46f905271534",
+    "src/rule-types.ts": "40d07d05db7d37bdc2465a93a147838dd22da1c9a789e2a10d8e7ca0acc235c2",
+    "test/synastry-rule.electional-check.ts": "1726bb8e399762001b2657212f894c4be0f1299abf97c75d6ee7257b3c89ddd1",
+    "test/synastry-references.electional-check.ts": "5480ff8ec0a49102f7ce94193ea7da06cc1a398e043a8cdda410f302a9af3674",
+    "scripts/synastry-horizons.mjs": "4bfe3b75cea6ebbdfa2d2be9ab07ab143bb621aff07aa33ca0faf1792e9bc852",
+    "scripts/horizons.mjs": "6aefef5ee323c6065ef30ef7f16978dd7172b4be2b8472e8699371a5dbe1a2c9",
+    "scripts/void-horizons.mjs": "9e2e49bd72ac46664b7fa1c1951ae2a5c095830094c8213d3cd4b34c9d764ffb",
+    "scripts/check-synastry-esm.mjs": "c1fd9c6d859171e4a3c02b7600de8c75f4982b542cda2f92c51c0dad738059e5",
+    "scripts/record-m9-tests.mjs": "98acf92b79fa57bccbcd7f6588474411a5a261b89f5b0a82ba48ddb36eb1f2f9",
+    "scripts/build-engine.mjs": "f3c203e7d8c2396bb5170dc00796d03916d67bc81e1990f8a19e3d27bae52fa6",
+    "package-lock.json": "048e2eb7352f7b829e968173e821e4da617dddf15b23eab83e06df0a6009367d",
+    "../src/calc.ts": "95ac80e297393a06adfa213a0aa9c342e02ec41abeaefd1b9f497c376ac35180",
+    "../src/synastry.ts": "5671b43c9647a7164d171d9113ae4ab375b7f2a18cba53fac481e4c7a0522d29",
+    "../src/aspects.ts": "5cfbf1ffe3889f1c038b798d5bd74674de17bd9f0571adb4be08141cdd49f740",
+    "../scripts/time-scale-sources/leap-seconds.list": "db5a895f16853b03bfc865e8d68f9fc8710ef1740e3400c701cd46a5bbbc3433",
+    "generated/engine.mjs": "0101700f8fdf2d19210f94572d7b5c7f2e164a89d3ffa9df35681f2c28cc9c3a"
+  },
+  "scope": "Hand-derived integer sets, control flow, clocks and policy checks plus declared independent reference comparisons only. No exhaustive completeness, performance, physical error bound or prediction claim."
+}

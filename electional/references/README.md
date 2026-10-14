@@ -1,5 +1,11 @@
 # Independent rule references
 
+Synthetic natal synastry references hold source Sun/Jupiter longitudes fixed
+against the moving Moon in [synastry-horizons.json](synastry-horizons.json).
+The independent clock derivation, aspect policy, checked span and limits are
+in [SYNASTRY.md](../SYNASTRY.md). These reuse the verified Horizons series
+below without acquiring new astronomical data. The natal instant is invented.
+
 Eclipse avoidance references use selected published NASA GSFC catalog rows in
 [avoidance-nasa.json](avoidance-nasa.json), with independent acquisition and
 clock arithmetic. Station avoidance reuses the verified Horizons extrema

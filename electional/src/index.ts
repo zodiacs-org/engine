@@ -35,3 +35,7 @@ export type { DerivedSearchAudit } from './derived-search.js';
 export { evaluateAvoidanceRule } from './avoidance-rules.js';
 export type { AvoidanceRule, AvoidanceRuleOptions, AvoidanceConvention, AvoidanceAudit, AvoidanceRuleWindowResult } from './avoidance-rules.js';
 export type { EclipseModel, EclipseSearchSettings } from './events-adapter.js';
+export { loadSynastryRuntime } from './synastry-adapter.js';
+export type { SynastryRuntime, InterAspect, InterAspectDefinition } from './synastry-adapter.js';
+export { evaluateSynastryRule } from './synastry-rule.js';
+export type { SynastryRule, SynastryRuleOptions, SynastryRuleWindowResult, SynastryPolicy, SynastryPairPolicy, SyntheticNatalAudit } from './synastry-rule.js';
