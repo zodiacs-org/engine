@@ -15,7 +15,7 @@ unchecked milestone, runs its checks, marks it complete and appends a line to
 - [x] M8 Implement midpoint-tree listings by calling `src/points.ts` midpoint helpers, covering both axes, antipodal ties, dial contacts, ordering and deduplication.
 - [x] M9 Add the offline `harmonics chart` CLI with strict JSON input validation, synthetic fixture examples, structured JSON output and receipts for chart calls.
 - [x] M10 Add `harmonics spectrum` and `harmonics dial` CLI commands, shared option parsing, configurable analysis settings and command integration tests.
-- [ ] M11 Document the library and CLI contracts, units, scoring choices, midpoint conventions, receipt scope and limitations; cite tests for numerical examples and keep all fixtures synthetic and small.
+- [x] M11 Document the library and CLI contracts, units, scoring choices, midpoint conventions, receipt scope and limitations; cite tests for numerical examples and keep all fixtures synthetic and small.
 - [ ] M12 Run project typechecking and Vitest integration checks, verify package exclusion and repository isolation, review deterministic outputs and record remaining limitations with reproducible validation commands.
 
 ## Reuse boundaries
@@ -291,3 +291,26 @@ below the requested size limit, with no em dash in documentation. The root
 The root `npm run package:contents` still fails at missing `dist/calc.d.ts`;
 no engine build or archive creation was performed. No git mutation, publishing
 or release workflow was performed. The next session starts at M11.
+
+## M11 validation
+
+Added `docs/CONTRACTS.md` as a compact library and CLI reference, linked from
+the README with navigation to the detailed formulas and synthetic evidence.
+The reference maps source entries, inputs and result fields; states units,
+known-speed requirements and source-versus-policy selection; summarizes
+scoring, canonical pictures and midpoint conventions; and defines natal-only
+receipt scope, snapshot behavior, validation errors and execution limitations.
+It also explains TypeScript source loading and the CLI's in-memory runner.
+No implementation, fixture or numerical expectation changed.
+
+On Node 22.22.2, `npm run check` passed, including the hand-derived arithmetic,
+offline executable, receipt preservation and pure-entry isolation tests cited
+by the guide. Local Markdown links and anchors resolve. `git diff --check`
+passed. All changed and new files remain inside `harmonics/`, below the
+requested size limit, and documentation contains no em dash.
+
+The root `npm pack --dry-run --json --ignore-scripts` manifest excludes this
+project, using a writable npm cache inside `harmonics/.cache/`; no archive was
+created. The root `npm run package:contents` still fails at missing
+`dist/calc.d.ts`. No engine build, git mutation, publishing or release workflow
+was performed. The next session starts at M12.

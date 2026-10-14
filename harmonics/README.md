@@ -9,6 +9,18 @@ Code and documentation here are MIT under
 the repository's [LICENSE](../LICENSE). The engine's data attributions remain
 in [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE).
 
+Start with the [contract reference](docs/CONTRACTS.md) for entry points, required
+inputs, units, result fields, receipt scope and limitations. The sections below
+give the formulas and the tests that enforce their synthetic examples:
+
+- [Pure longitude charts](#pure-library) and [casting adapters](#engine-casting-adapter)
+- [Configured aspects](#harmonic-aspects), [strength spectra](#harmonic-strength-spectra)
+  and [supported patterns](#harmonic-aspect-patterns)
+- [Dial geometry](#uranian-dial-projections), [planetary pictures](#planetary-pictures-and-sensitive-points)
+  and [midpoint conventions](#midpoint-trees)
+- [Chart CLI input and errors](#offline-chart-cli) and [spectrum and dial options](#spectrum-and-dial-cli)
+- [Arithmetic evidence](#arithmetic-evidence) and [development checks](#development)
+
 ## Development
 
 From this folder, with Node 22:
@@ -704,9 +716,9 @@ no receipt and makes no claim about predictive validity.
 ## Arithmetic evidence
 
 [test/harmonic-chart.test.ts](test/harmonic-chart.test.ts) derives expected
-longitudes from invented points. For the example above, multiplying by 3
-gives 30, 390 and 750 degrees; subtracting whole turns leaves 30 degrees for
-each. The same test checks every default harmonic with a supplied longitude
+longitudes from invented points. For the pure library's longitude example,
+multiplying by 3 gives 30, 390 and 750 degrees; subtracting whole turns leaves
+30 degrees for each. The same test checks every default harmonic with a supplied longitude
 of 2 degrees: `2*N` for N below 180 and zero at N=180. Additional cases derive
 negative inputs, multi-turn inputs, quarter-degree seam behavior and a
 configured ceiling of 720 using exact integer or binary-fraction arithmetic.

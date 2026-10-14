@@ -8,3 +8,4 @@ Implement M7: canonical planetary pictures and A+B-C sensitive points with confi
 Implement M8: midpoint trees through the engine midpoint helper with both endpoints, canonical antipodal ties, inclusive dial contacts, deterministic deduplication, preserved receipts and hand-derived Vitest checks.
 Implement M9: offline harmonic chart CLI with strict bounded JSON file/stdin input, synthetic fixtures, original natal receipts, in-memory source runner, documented contracts and offline Vitest integration checks.
 Implement M10: offline spectrum and Uranian dial CLI commands with shared strict parsing, configurable policies and weights, explicit source filtering, preserved natal receipts and hand-derived offline Vitest integration checks.
+Implement M11: document source entry points, library and CLI contracts, units, scoring and midpoint conventions, natal receipt scope, source loading and execution limits with linked synthetic test evidence and passing project checks.
