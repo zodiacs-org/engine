@@ -1,4 +1,8 @@
 export { cast } from "./cast.js";
+export { evaluateTranslation, evaluateTranslationWith, TRANSLATION_METHOD } from "./translation.js";
+export type { HoraryTranslation, TranslationAssessment, TranslationCarrier, TranslationCheck, TranslationContact } from "./translation.js";
+export { createTranslationPolicy, TRANSLATION_SOURCE, TRANSLATION_WEIGHT_ORDER } from "./translation-policy.js";
+export type { HoraryTranslationPolicy, TranslationPolicyInput } from "./translation-policy.js";
 export { evaluateDirectPerfection, evaluateDirectPerfectionWith } from "./direct-perfection.js";
 export type { AspectSpeedAt, DirectAspectAssessment, DirectContinuityEvent, HoraryDirectPerfection, SignBoundaryEvent, StationEvent } from "./direct-perfection.js";
 export { createDirectPerfectionPolicy, DIRECT_EVENT_METHOD, DIRECT_PERFECTION_SOURCE } from "./direct-policy.js";

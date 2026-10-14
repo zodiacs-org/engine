@@ -11,7 +11,7 @@ The library provides `cast`, `normalizeHoraryInput`, `selectSignificators`,
 `evaluateEssentialCondition`, `createAccidentalPolicy` and
 `evaluateAccidentalCondition`, `createAspectSearchPolicy` and
 `evaluateSignificatorAspects`, `createDirectPerfectionPolicy` and
-`evaluateDirectPerfection`.
+`evaluateDirectPerfection`, `createTranslationPolicy` and `evaluateTranslation`.
 Further analysis rules and the CLI are scheduled in [`PLAN.md`](PLAN.md).
 
 From the checkout, using Node as specified in this folder's `package.json`:
@@ -439,6 +439,99 @@ must describe consistent longitude and speed; the supplied chart and
 providers are not authenticated. Reports are frozen JSON-friendly snapshots.
 The independently worked fixtures and engine-delegation checks are documented
 in [`tests/fixtures.md`](tests/fixtures.md).
+
+## Translation of light
+
+`evaluateTranslation(result, aspectPolicy, translationPolicy)` assesses a
+third classical planet separating from one principal house ruler and
+applying to the other. It reports both transfer directions independently.
+The carrier may be the Moon, a declared natural significator or an unassigned
+classical planet. Assigned roles remain present; an unassigned carrier has
+an empty role list. Shared principal rulers produce no self-transfer.
+
+```ts
+import { createTranslationPolicy, evaluateTranslation } from "./src/index.js";
+
+const translationPolicy = createTranslationPolicy();
+const translation = evaluateTranslation(result, aspectPolicy, translationPolicy);
+```
+
+A current pattern requires nonexact, in-orb separating and applying contacts
+under the engine's exact instantaneous aspect decisions. `translations`
+lists every such pattern, its current geometry, rule checks, explanations
+and any sampled endpoint contacts. A `translation-candidate` passes the
+enabled checks with a past source contact followed by a future receiver
+contact. This is partial eligibility evidence. Sign changes, stations,
+refranation and competing perfection modes need subsequent assessment;
+there is no outcome verdict.
+
+The historical baseline is Lilly, with explicit project conventions in
+[`SOURCES.md`](SOURCES.md). Independent policy choices are `lighterPlanet`,
+`swifterPlanet`, `principalSeparation`, `principalAspects`,
+`receptionDignities` and `uninterrupted`. The traditional weight check uses
+sphere order, while the swiftness proxy compares absolute question-time
+speeds in degrees/day. Principal separation defaults to conjunction,
+sextile or trine; it must also be enabled in the aspect policy. Source
+reception defaults to domicile, triplicity or term. Engine
+`essentialDignities` evaluates the source's dignities at the carrier's
+question longitude using question-chart sect. It requires source hosting
+the carrier; reciprocal reception is not required. Reception at either
+contact is not inferred from the question-time result. Empty reception
+dignities disable that check. Disable each boolean check with `false`.
+
+`carriers` defaults to the engine's classical planet set. Contacts with
+every classical planet can interrupt a selected carrier, including planets
+with no question role. Only aspect types enabled in `aspectPolicy` are
+scanned. The latest past contact on the current separating branch and the
+first future contact on the applying branch are retained. Other carrier
+contacts between these endpoints fail uninterrupted transfer, including
+contacts before the question and an exact third-party contact at the
+question. Contacts coincident within the step-derived ordering resolution
+require review. Disabling `uninterrupted` keeps this evidence while removing
+the eligibility restriction. This does not classify those contacts as
+prohibition or frustration.
+
+`search` records the historical/future interval, clock, provider-call count,
+root resolution and method limitations. `contacts` preserves all scanned
+carrier contacts, with negative `elapsedDays` for history and positive days
+for the future. These are elapsed UTC days rather than symbolic timing
+hints. The past boundary is open and the future boundary closed. A past
+contact exactly at the lookback boundary is not recovered. Missing contacts
+are bounded-search observations, reported as `contact-not-found`.
+
+The default `lookbackDays` is seven UTC days, bounded from a millisecond to
+366 days. Future horizon and coarse step come from the aspect policy.
+The translation scan uses its own `maxSamples`, defaulting to 200,000
+longitude-provider calls, bounded to positive integers through 1,000,000.
+Each relative sample calls both moving planets. The aspect policy's
+separate relative-evaluation budget is not consumed by this scan. These
+resource defaults and bounds are enforced in `tests/translation.test.ts`;
+`tests/translation.budget.test.ts` verifies preflight and late refusal over
+the derived motion fixtures. They are operational choices, not accuracy
+claims. Global refusal returns `search-refused` assessments with no partial
+contacts, endpoint references or intervening records. Current geometric
+facts and question-time reception remain available.
+
+Other explicit states include `rejected`, `requires-review` and
+`search-disabled`. A `rejected` assessment lists failed enabled checks.
+`requires-review` covers uncertain contact ordering or crossing direction
+inconsistent with current relative motion. Global `translationOfLight:
+false` disables the mode; empty carriers disable pattern selection;
+`aspectPolicy.search: false` keeps current patterns without sampling.
+No current pattern and shared principal rulers are explained at report
+level. A completed scan means the sampled solver finished, without proving
+exhaustive event finding or continuous application since the past contact.
+
+`evaluateTranslationWith(longitudeAt, result, aspectPolicy,
+translationPolicy)` provides the same analysis for independently supplied
+motion laws. Current chart speeds and the longitude law must be consistent;
+they are not authenticated against each other. Active pattern selection
+requires exactly one valid row for every classical planet, because any can
+intervene. Malformed geometry, providers, policies and unrepresentable
+windows throw `RangeError`; provider exceptions propagate. Reports and
+policies are frozen detached JSON-friendly snapshots. Derivations are in
+[`tests/fixtures.md`](tests/fixtures.md), and the production integration
+tests check delegation without claiming independent ephemeris accuracy.
 
 `check:scope` checks commit-candidate file sizes, documentation punctuation,
 the pinned ephemeris dependency and folder exclusion using npm's dry-run file

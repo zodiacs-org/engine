@@ -1,8 +1,9 @@
-import { ASPECTS, bodyLongitude, createAspectPolicy, dateFrom, exactSign, exactSum,
-  findConfiguredAspects, roundedValue, searchLongitudeCrossingsWith } from "./engine.js";
+import { ASPECTS, bodyLongitude, dateFrom, exactSum,
+  roundedValue, searchLongitudeCrossingsWith } from "./engine.js";
 import type { AspectMotion, AspectType, BodyLongitudeAt, ClassicalPlanet } from "./engine.js";
 import { ASPECT_MOTION_SOURCE, ASPECT_SEARCH_METHOD, createAspectSearchPolicy, validateAspectSearchPolicy } from "./aspect-policy.js";
 import type { HoraryAspectPolicy } from "./aspect-policy.js";
+import { observeAspect } from "./aspect-observation.js";
 import { selectSignificators } from "./significators.js";
 import type { HoraryCast, HorarySignificators, PlanetRoles } from "./types.js";
 
@@ -91,21 +92,7 @@ function analyze(longitudeAt: AspectLongitudeAt, result: HoraryCast, inputPolicy
       for (const definition of ASPECTS) {
         if (!policy.aspects.includes(definition.type)) continue;
         const { type, angle } = definition;
-        const positions = [a, b];
-        const makePolicy = (orb: number, luminaryOrb: number) => createAspectPolicy({ bodies: [a.body, b.body],
-          aspects: [{ type, orb, luminaryOrb }], stationaryRelativeSpeed: policy.stationaryRelativeSpeed });
-        // A single rule with the full angular allowance reports its motion even out of orb.
-        // Eligibility and exactness get separate engine decisions, without comparing rounded orbs.
-        const broad = findConfiguredAspects(positions, makePolicy(180, 180)).aspects[0]!;
-        const eligible = findConfiguredAspects(positions, makePolicy(policy.orbs[type], policy.luminaryOrbs[type])).aspects.length > 0;
-        const exact = findConfiguredAspects(positions, makePolicy(0, 0)).aspects.length > 0;
-        const signed = exactSign([a.lon, -b.lon]);
-        const foldedSide = exactSign([a.lon, -b.lon, -180]) > 0 ? -1 :
-          exactSign([a.lon, -b.lon, 180]) <= 0 ? 1 : signed;
-        const directedLongitude = angle === 0 || angle === 180 || foldedSide >= 0 ? angle : 360 - angle;
-        const current = Object.freeze({ aLongitude: a.lon, bLongitude: b.lon, aSpeed: a.speed, bSpeed: b.speed,
-          orb: broad.orb, maximumOrb: a.body === "Sun" || a.body === "Moon" || b.body === "Sun" || b.body === "Moon"
-            ? policy.luminaryOrbs[type] : policy.orbs[type], withinOrb: eligible, exact, motion: broad.motion, directedLongitude });
+        const current = observeAspect(a, b, type, policy);
         const contacts: AspectContact[] = [];
         if (status === "complete") {
           // Both directed branches are retained; conjunction and opposition have only one.

@@ -320,3 +320,61 @@ the aspect budget, includes evidence probes, and refuses atomically.
 `tests/direct-perfection.budget.test.ts` checks it over the synthetic
 linear-motion horizon. No event budget, probe spacing or ordering-resolution
 choice is attributed to Lilly or used as a physical accuracy bound.
+
+## Translation of light
+
+`lilly-translation;project-contact-sequence` refers to William Lilly,
+*Christian Astrology*, first published 1647, printed pages 111 and 125-126
+of the linked edition. The
+[primary-text transcription](https://pdfcoffee.com/william-lilly-christian-astrology-volume-1-pdf-free.html)
+was fetched and read on 2026-10-14. The general definition describes a light
+planet leaving one heavier planet and joining another by conjunction or
+aspect. The perfection passage adds separation between the principal
+significators, reception of the carrier by the source in domicile,
+triplicity or term, and arrival at the receiver before another contact.
+The passage treats the carrier as a third planet, not exclusively the Moon.
+The planetary chapters, printed pages 57-80, and the superior/inferior
+definition on page 113 give context for the traditional sphere order.
+No historical chart or outcome language is copied.
+
+The implementation chooses the two house rulers as principals, retaining
+their distinct roles. The traditional sphere order, lightest first, is Moon,
+Mercury, Venus, Sun, Mars, Jupiter, Saturn. Applying this fixed order as a
+strict eligibility comparison is a project interpretation of planetary
+weight, independently toggleable. Instantaneous absolute speed greater than
+both principals is a separate optional project proxy for swiftness, not a
+quotation of Lilly's rule or a physical model of average motion. Current
+separation and application use the engine's exact aspect arithmetic and
+configured orbs. Lilly's separation margin and planetary moieties are not
+substituted for that API. Principal separation is tested only for enabled
+selected aspect types, defaulting to conjunction, sextile and trine.
+
+Reception uses the engine's existing tables, including their triplicity and
+term variants, at the carrier's question longitude and question-chart sect.
+The host is the source significator and the guest the carrier. The selected
+default dignity set follows the perfection passage; callers can select any
+subset of essential dignities or disable the requirement. This explicit
+question-time reading does not infer hosting at the earlier separation or
+later application. No reception table or score is reimplemented.
+
+The latest past contact on the current separating branch and first future
+contact on the current applying branch must be distinct and ordered across
+the question. Crossings must also agree with current relative-motion
+direction. All other enabled-aspect contacts of the carrier with classical
+planets are retained for the uninterrupted-transfer check, including
+contacts since separation but before the question. This historical scan is
+an operational interpretation of an uninterrupted sequence. It does not
+claim to settle every reading of Lilly's word "presently", replace separate
+station/sign evidence or classify intervention as prohibition or frustration.
+Contact coincidences and direction conflicts require review. Rules can be
+disabled independently without discarding contact evidence.
+
+Lookback, future horizon, step, provider budget, open/closed boundaries and
+step-derived ordering resolution are explicit computational conventions.
+The root solver and all instantaneous aspect/reception decisions belong to
+the engine. `tests/translation.test.ts` enforces defaults and ownership;
+`tests/translation.eligibility.test.ts` enforces rule choices and contact
+ordering; `tests/translation.budget.test.ts` checks atomic refusal. Their
+motion laws and expectations are derived in `tests/fixtures.md`. No scan
+completion, candidate status or numerical resolution is presented as a
+prediction, astronomical accuracy bound or exhaustive-search proof.

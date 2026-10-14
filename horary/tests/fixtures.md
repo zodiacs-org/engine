@@ -695,3 +695,161 @@ longitudes, sampled speed, sign selection and crossings. It checks actual
 house systems and polar fallback with future searching disabled, avoids
 recasting, preserves caller chart ownership and verifies JSON output. These
 are integration/regression checks, not independent ephemeris evidence.
+
+## Translation of light fixtures
+
+`translation.fixture.ts`, `translation.test.ts` and
+`translation.eligibility.test.ts` use the same invented question instant
+and schematic Aries/Taurus house cusps as the earlier adapter fixtures.
+They represent invented continuous longitude laws, not the ephemeris at
+that instant. Let `t` be elapsed UTC days from the question and reduce each
+longitude modulo 360 only when giving it to the provider. The default laws
+are source Mars `S=10+t`, receiver Venus `D=16+2t`, and carrier Moon
+`C=12+3t`, all in degrees. Their speed rows are the literal derivatives.
+Other classical planets are fixed at Sun 100, Mercury 180, Jupiter 220 and
+Saturn 260. Only conjunction is enabled in the baseline scan, so these
+planets introduce no contact over the window `(-2,5]`.
+
+The directed gaps are `C-S=2+2t` and `C-D=-4+t`.
+At the question the first gap is positive and growing, hence separating;
+the second is negative and shrinking in absolute value, hence applying.
+The source conjunction is at `t=-1`, at longitude nine. The receiver
+conjunction is at `t=4`, at longitude twenty-four. Both roots lie on the
+quarter-day sampling grid, so their ISO instants follow directly from the
+question timestamp plus elapsed days. The two principals have gap
+`S-D=-6-t`: they are separating within the configured conjunction orb.
+Carrier speed three exceeds principal speeds one and two. Moon is lighter
+than Mars and Venus in the traditional sphere order. At the question the
+carrier is twelve degrees into Aries, which Mars rules by domicile;
+Mars therefore receives Moon by domicile. The other default reception
+choices do not add a dignity there under the engine's named table variants.
+This uses Ptolemy's independently transcribed Aries domicile already cited
+above; it is not an expectation derived from the engine's return value.
+
+Giving Mercury the same `C` law and leaving Moon fixed at 140 retains both
+contact times. Mercury is also lighter than both principals in the chosen
+sphere order; a declared natural role changes only its role list. Declaring
+Moon as natural preserves both its Moon and natural roles on one carrier.
+Putting both principal cusps in Aries instead gives one physical Mars ruler
+with two roles; no distinct-principal transfer exists. Selecting Mars or
+Venus as carriers cannot create a self-transfer. Setting `C(0)` equal to ten
+or sixteen gives a current exact endpoint contact; this project requires a
+nonexact separation/application pattern across the question, so it does not
+label those present contacts translation. Giving the carrier speed one
+makes its source gap stationary. Starting it at thirty leaves the baseline
+in-orb bridge absent.
+
+For reversed transfer roles, set Venus `40+t`, Mars `46+2t` and Moon
+`42+3t`. The same gap equations give source contact at `-1` and receiver
+contact at `4`, now from Venus to Mars. The carrier's question longitude is
+twelve degrees into Taurus, whose domicile belongs to Venus. Aries/Taurus
+house assignments remain unchanged; the direction follows the motion, not
+an assumed querent-to-quesited ordering.
+
+A lookback of half a day omits the source contact at minus one; a future
+horizon ending at two days omits the receiver contact at four. A horizon
+ending at four includes that future endpoint. A lookback beginning exactly
+at minus one excludes that past endpoint by the open-start crossing
+contract. These cases test bounded absence, without concluding that a
+contact cannot exist beyond the chosen interval. Disabling searching keeps
+current geometric observations; disabling translation or selecting no
+carriers creates no endpoint references or provider calls.
+
+The policy defaults, including seven-day lookback, 200,000 provider calls
+and their upper bounds, are literal assertions in `translation.test.ts`.
+The traditional order is asserted there independently as Moon, Mercury,
+Venus, Sun, Mars, Jupiter, Saturn. Lilly's source locators are recorded in
+`SOURCES.md`. Factory tests exercise malformed values, ordinary-data slots,
+sparse lists, restored snapshots and independent immutable ownership. They
+are configuration tests, not physical accuracy measurements.
+
+Eligibility variations in `translation.eligibility.test.ts` change one
+condition at a time. Receiver Venus `16+0.5t` approaches Mars `10+t`:
+principal gap `-6+0.5t` applies, while the carrier still bridges them with
+receiver contact `t=4/2.5`. The principal-separation check rejects this
+pattern until disabled. Selecting only principal trine cannot qualify the
+baseline conjunction when that trine is disabled in the aspect policy.
+Selecting only source reception by exaltation fails for Mars hosting an
+Aries carrier; empty reception dignities disable this requirement. Giving
+Saturn the baseline carrier law makes it swift by the instantaneous speed
+proxy but heavier by sphere order, demonstrating that those checks are
+independent. Receiver Venus `16-3t` meets Moon `12+3t` at `t=2/3`; their
+absolute speeds are equal, so the strict swiftness check fails even though
+the relative application exists. Disabling that check and the approaching
+principal-pair requirement allows the geometric contact candidate. This
+non-grid root is assessed as a candidate without pinning its computed time.
+
+For interruption, hold Jupiter at eleven or eighteen. Moon meets these
+positions at `t=(11-12)/3=-1/3` and `t=(18-12)/3=2`, respectively.
+Both lie after source separation at minus one and before destination contact
+at four. Jupiter has no question role, but these are carrier contacts and
+fail uninterrupted transfer. Disabling the check preserves the events while
+removing that restriction. Jupiter at nine coincides with the source
+contact; Jupiter at twenty-four coincides with the receiver contact.
+No strict order is assigned at either endpoint. Jupiter at twelve meets
+Moon exactly at the question, inside the combined historical/future scan;
+it is an intervening contact. Jupiter at twenty-seven is reached at five,
+after the destination, and remains horizon evidence without interrupting.
+
+The inherited numerical resolution is
+`r=ceil(0.25*86,400,000/2^24)+1` milliseconds, with contact-order resolution
+`2r`; these formulas are asserted over this quarter-day-step horizon.
+Placing Jupiter at `24-3*r/86,400,000` puts its contact `r` milliseconds
+before the receiver, requiring review. Moving it a thousand milliseconds
+before the receiver establishes an earlier sampled contact; moving it a
+thousand milliseconds after the receiver puts it outside the transfer.
+To exercise an endpoint almost at the question, set source Mars
+`12-2*r/86,400,000+t`. Its carrier gap vanishes `r` milliseconds before the
+question, so the source contact is too close to establish a strict
+historical/current order. These are numerical-order conventions enforced
+in tests, not ephemeris accuracy bounds.
+
+All major aspect branches use angular arithmetic independent of the engine.
+For angle `A` in `0,60,90,120,180` and side `s` in `1,-1`, keep carrier
+`12+3t`, set source `10-s*A+t` and receiver `16-s*A+2t`. The directed gaps
+are `s*A+2+2t` and `s*A-4+t`; both reach branch `s*A` at the same minus-one
+and four-day contacts. Ordinary modulo reduction changes only the branch
+label: negative nondegenerate branches are `360-A`. Unused planets are
+fixed at fifty, away from every selected contact ray during this window.
+Principal separation and reception are disabled in these branch tests
+because their original geometry was deliberately changed. For mixed modes,
+keep source `10+t` but receiver `76+2t`. The carrier leaves source
+conjunction at minus one and reaches receiver sextile at four on directed
+branch 300. The principals separate by sextile with initial orb six;
+this test explicitly allows an ordinary sextile orb six instead of the
+engine's smaller default. It isolates support for different contact modes
+on the two legs, without claiming the chosen allowance is traditional.
+
+Adding a longitude offset or reflecting all three laws leaves the root
+equations unchanged. The wrap test offsets the carrier to minus twelve
+before canonical modulo reduction; the reverse-motion test reflects the
+laws about longitude twenty-four. The contacts stay minus one and four,
+with reversed relative direction in the reflected case. Negative lunar
+motion is an artificial geometry exercise, not a possible physical Moon
+trajectory. Other classical planets remain fixed and introduce no enabled
+conjunction during these windows.
+
+Adding Mercury `13+3t` gives a second carrier whose source and receiver
+roots are `t=-1.5` and `t=3`. The two carriers stay one degree apart and
+never contact each other. Each assessment retains its own endpoint
+references without confusing them with the Moon's. In the late-budget
+fixture Mercury instead follows `13.25+3t`, with source root `-1.625`
+between coarse samples and receiver root `2.75` on the grid. This forces
+root refinement after earlier scans. `translation.budget.test.ts` uses the
+full run's call count solely to choose a deliberately insufficient budget,
+not as an event expectation or accuracy reference. It verifies all-or-none
+refusal across carriers, exact provider-call accounting, window containment,
+preflight refusal, provider exceptions, malformed rows and unrepresentable
+Date windows. Each relative evaluation costs two longitude-provider calls.
+
+`translation.integration.test.ts` uses the invented real-cast instant with
+an explicit broad allowance of 180 degrees for every major aspect and a
+half-day lookback/future horizon solely to exercise engine delegation. It
+checks moving longitude, exact aspect decisions, crossing calls and dignity
+hosting, without pinning ephemeris outputs or recasting the chart. A mocked
+production longitude boundary exercises the baseline independently derived
+sequence as well. Tests preserve actual requested/computed house systems and
+polar fallback with searching disabled. These are integration checks, not
+independent ephemeris accuracy evidence. The full existing aspect/direct
+suite also checks the shared instantaneous-observation helper extracted for
+translation reuse; the helper still delegates decisions to the engine.
