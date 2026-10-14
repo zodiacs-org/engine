@@ -10,7 +10,7 @@ the milestone, and appends a single line to `CHANGES.txt`. The harness handles
 commits and draft pull requests. Stop after the session's milestone is complete.
 
 - [x] M1 Create the isolated TypeScript project and exact reduction API with configurable master numbers, karmic-debt annotations, JSON-safe step receipts, original meanings, handwritten golden cases, and deterministic arithmetic properties.
-- [ ] M2 Validate Gregorian birth dates without timezone conversion; implement life path and birthday with explicit component versus whole-date reduction conventions and receipts.
+- [x] M2 Validate Gregorian birth dates without timezone conversion; implement life path and birthday with explicit component versus whole-date reduction conventions and receipts.
 - [ ] M3 Normalize Latin Unicode names with documented diacritic and ligature rules, per-character receipts, strict unsupported-character handling, and configurable Y-as-vowel classification.
 - [ ] M4 Add versioned explicit transliteration tables for Greek and Cyrillic, caller-supplied mappings for other scripts, normalization provenance, and unsupported-script tests. Document that transliteration is a convention, not a pronunciation inference.
 - [ ] M5 Implement Pythagorean and Chaldean letter tables, expression/destiny, soul urge, and personality; record selected system, original compounds, master policy, letter contributions, and reductions.
@@ -73,3 +73,26 @@ cache and fails because this checkout lacks `dist/calc.d.ts`. Its full gate
 remains unverified. The script-free npm dry run confirms project exclusion,
 but does not establish that the engine build satisfies its contents or
 size budgets. Root `dist/` was not generated. M2 is the next session's work.
+
+## M2 validation
+
+Added strict civil-date parsing, life path under component and whole-date
+formulas, and birthday. All results retain the civil date, declared master
+policy, original reduction compounds, step receipts, original meaning text,
+and source-local debt stages. The project README documents the accepted
+calendar domain, formulas, receipt structure, and fixture references.
+
+Project `npm run typecheck` and `npm test` passed on Node 22.22.2.
+`test/dates.test.mjs` checks handwritten synthetic fixtures, Gregorian
+calendar validation against UTC Date normalization over the cycle from
+1600 through 1999, seeded independent arithmetic, debt provenance, every
+birthday day, invalid inputs, JSON serialization, freezing, and timezone
+independence. The engine package-exclusion and authored-file isolation tests
+also passed. No numerology implementation was found outside this project
+when rechecking the available local and origin `main` and `infra/*` refs.
+
+The root `npm run package:contents` was attempted again with the local cache
+and remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
+exclusion passed; the complete engine contents and size gate remains
+unverified. No root build was generated. Only `numerology/` changed.
+M3 is the next session's work.
