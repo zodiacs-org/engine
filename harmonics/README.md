@@ -3,8 +3,8 @@
 This private source project adds harmonic longitude transforms, configured
 harmonic aspects, strength spectra, supported aspect patterns, Uranian dial
 projections, planetary pictures, midpoint trees, natal casting adapters and an
-offline chart, spectrum and dial CLI to the engine checkout. See [PLAN.md](PLAN.md) for the
-remaining milestones.
+offline chart, spectrum and dial CLI to the engine checkout. See [PLAN.md](PLAN.md)
+for the milestone record.
 Code and documentation here are MIT under
 the repository's [LICENSE](../LICENSE). The engine's data attributions remain
 in [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE).
@@ -20,6 +20,7 @@ give the formulas and the tests that enforce their synthetic examples:
   and [midpoint conventions](#midpoint-trees)
 - [Chart CLI input and errors](#offline-chart-cli) and [spectrum and dial options](#spectrum-and-dial-cli)
 - [Arithmetic evidence](#arithmetic-evidence) and [development checks](#development)
+- [Final validation and remaining limitations](docs/VALIDATION.md)
 
 ## Development
 
@@ -41,6 +42,11 @@ must supply equivalent dependency resolution for the relative engine imports.
 The CLI's local runner supplies this resolution and compiles sources in memory.
 The root package's file list excludes this
 project. Put bulk generated data in `generated/`, which is locally ignored.
+
+Run `node scripts/validate.mjs` for the final audit, which includes the project
+checks, offline CLI determinism, package exclusion and checkout isolation.
+See [validation](docs/VALIDATION.md) for reproducible commands, recorded evidence
+and the missing engine build limitation of the root package-contents gate.
 
 ## Pure library
 

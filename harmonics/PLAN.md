@@ -16,7 +16,7 @@ unchecked milestone, runs its checks, marks it complete and appends a line to
 - [x] M9 Add the offline `harmonics chart` CLI with strict JSON input validation, synthetic fixture examples, structured JSON output and receipts for chart calls.
 - [x] M10 Add `harmonics spectrum` and `harmonics dial` CLI commands, shared option parsing, configurable analysis settings and command integration tests.
 - [x] M11 Document the library and CLI contracts, units, scoring choices, midpoint conventions, receipt scope and limitations; cite tests for numerical examples and keep all fixtures synthetic and small.
-- [ ] M12 Run project typechecking and Vitest integration checks, verify package exclusion and repository isolation, review deterministic outputs and record remaining limitations with reproducible validation commands.
+- [x] M12 Run project typechecking and Vitest integration checks, verify package exclusion and repository isolation, review deterministic outputs and record remaining limitations with reproducible validation commands.
 
 ## Reuse boundaries
 
@@ -314,3 +314,34 @@ project, using a writable npm cache inside `harmonics/.cache/`; no archive was
 created. The root `npm run package:contents` still fails at missing
 `dist/calc.d.ts`. No engine build, git mutation, publishing or release workflow
 was performed. The next session starts at M12.
+
+## M12 validation
+
+Added `scripts/validate.mjs` to run project typechecking and the complete
+Vitest suite, audit offline repeated-file and stdin CLI output, compare natal
+envelopes across birth commands, verify engine package exclusion, and check
+repository isolation, protected-file preservation and retained project files.
+The script uses read-only git commands and writes generated test output only
+under the ignored project cache. `docs/VALIDATION.md` records reproducible
+commands, the scope of each check and the remaining prototype limitations.
+The final report is retained at `docs/evidence/m12-validation.json`, with
+source identity digests, the runtime, test files and explicit CLI cases.
+
+After a clean project `npm ci`, the audit passed on Node 22.22.2. Supplied-point
+and birth CLI cases produced identical output on repeated file execution and
+stdin execution with network transports blocked. The original natal envelope
+remained identical across birth chart, spectrum and dial commands. Numerical
+correctness is checked separately by the existing hand-derived synthetic tests;
+repeated output is reproducibility evidence, not an accuracy reference.
+
+The root dry-run pack manifest excludes `harmonics/`. The root
+`npm run package:contents` gate remains unavailable because this source-only
+checkout has no `dist/calc.d.ts`; the audit accepts only that specific failure
+and records it explicitly. No engine build, archive creation, root dependency
+installation, git mutation, publishing or release workflow was performed.
+Net committed changes since the project began and current working changes
+stay in `harmonics/`. Protected engine files and the absence of `dist/`
+remained unchanged during validation. Retained project file sizes, ordinary
+file types, ignored generated folders, documentation dashes and whitespace
+checks passed. All planned milestones are complete; the documented source-only,
+rounding, scoring, enumeration and natal-only receipt limits remain.
