@@ -1,5 +1,11 @@
 # Independent basic-rule references
 
+Planetary-hour references use the parent US Naval Observatory ephemeris
+fixture, bound by digest in [hour-cases.json](hour-cases.json), with expected
+windows reduced by hand from the published rise/set minutes. [HOURS.md](../HOURS.md)
+describes their date, clock comparison, terms and acceptance threshold.
+These do not reuse the Horizons longitude series below.
+
 Moon-not-void references extend this acquisition with the additional planetary
 longitudes in [void-horizons.json](void-horizons.json). Their independent
 reduction, declared span, policy comparisons and test-run receipt are described

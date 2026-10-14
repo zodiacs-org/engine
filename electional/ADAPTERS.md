@@ -9,6 +9,11 @@ Moon sign, phase and direct-motion evaluation is described in
 [EVALUATION.md](EVALUATION.md); Moon-not-void evaluation and lookahead are in
 [VOID.md](VOID.md). Other rule wiring remains in [PLAN.md](PLAN.md).
 
+Planetary-hour selection calls the parent sky API through `SkyAdapter`,
+independently of the optional events package. [HOURS.md](HOURS.md) describes
+its UTC-only input boundary, shared native sample budget, missing solar days
+and explicit scan-endpoint receipt scope.
+
 Run the development commands in [README.md](README.md) on the declared Node
 runtime. Both `npm test` and `npm run build` first bundle a narrow bridge from
 parent source into `generated/engine.mjs`, using this project's exact pinned

@@ -23,3 +23,7 @@ export { evaluateBasicRule } from './basic-rules.js';
 export type { BasicRule, RuleWindowResult } from './basic-rules.js';
 export { evaluateVoidRule } from './void-rule.js';
 export type { VoidRule, VoidRuleOptions, VoidRuleConvention, VoidRuleWindowResult } from './void-rule.js';
+export { SkyAdapter, loadSkyRuntime } from './sky-adapter.js';
+export type { SkyRuntime, NativePlanetaryDay, NativePlanetaryHour, PlanetaryDayAudit } from './sky-adapter.js';
+export { evaluateHourRule } from './hour-rule.js';
+export type { HourRule, HourRuleOptions, HourRuleWindowResult } from './hour-rule.js';
