@@ -952,3 +952,105 @@ solely to exercise engine motion and JSON output. Every supported house
 system and polar fallback preserves actual/requested settings with searching
 disabled. These are integration checks, not independent ephemeris accuracy
 or predictive validity evidence.
+
+## Prohibition, frustration and refranation (M11)
+
+`impediments.fixture.ts` uses the same invented question instant, location
+and schematic cusp circuit. Mars is the querent ruler, Venus the quesited
+ruler, and Moon retains its co-significator role. This is an independent
+angular-motion experiment, not an ephemeris chart. Let `t` be elapsed UTC
+days and wrap only the resulting longitudes modulo 360. Each law supplies
+its analytic derivative as speed, ignoring synthetic retrograde flags.
+The fixed nonparticipating planets are Sun 100, Moon 180, Mercury 140,
+Jupiter 220 and Saturn 260. No expectations come from engine output.
+
+Baseline Venus `V=10+2t` and Mars `M=16+t` have gap `V-M=-6+t` and
+conjunction at six days. Venus is lighter in the existing traditional
+sphere order and has larger absolute speed. Substituting Mercury
+`T=8+4t` gives `V-T=2-2t` and `M-T=8-3t`, contacting Venus at one day
+and Mars at eight thirds days, both before the principal conjunction.
+Substituting Mercury `14+4t` gives `M-T=2-3t`, contacting Mars at two
+thirds days, while `V-T=-4-2t` never reaches conjunction in this window.
+The general prohibition scope counts the latter contact; the stricter
+two-principal scope does not. These are synthetic configurations, not copies
+of Lilly's historical numerical examples.
+
+With Saturn `T=18+t/2`, `M-T=-2+t/2` reaches conjunction at four days,
+while `V-T=-8+3t/2` reaches it at sixteen thirds days. The heavier
+recipient joins Saturn first, supporting the selected frustration reading
+and overlapping the general prohibition observation. Saturn `78+t/2`
+instead gives a sextile on each corresponding directed branch. It counts
+for prohibition with sextile enabled and for the broader frustration scope,
+but not for the corporal-only frustration choice. Fixed Saturn 22 gives
+both third conjunctions exactly at the principal conjunction at six days:
+order requires review, including in the stricter two-principal scope.
+Fixed Saturn 26 contacts Venus at eight days and Mars at ten, after the
+principal contact; the eight-day horizon retains only the first, without
+classifying it as earlier intervention.
+
+Every directed major branch is exercised using angle `Q` in
+`0,60,90,120,180`, side `s` in `1,-1` for nondegenerate angles, Venus
+`358+2t`, Mars `m0+t` with `m0=358+s*Q+6`, and Saturn
+`m0+s*Q+2+t/2`. The principal directed gap `-s*Q-6+t` reaches its
+selected branch at six days. Mars-Saturn `-s*Q-2+t/2` reaches the same
+aspect branch at four days. Wrapping changes neither root equation.
+Tests enable only the selected type and use an explicit ordinary orb of
+eight degrees. This verifies contact ordering on both branches without
+introducing another aspect table or a historical orb claim.
+
+For the swiftness toggle, Venus `10-t`, Mars `16-2t`, Saturn `14-3t/2`
+give principal contact at six and recipient-Saturn contact at four days.
+Venus is lighter but slower in absolute instantaneous speed; default
+frustration eligibility fails and disabling that proxy permits the partial
+observation. All relative application decisions still use the engine.
+Declaring Moon natural while giving it the Mercury two-contact law retains
+Moon/natural roles without assigning it a principal house. Assigning Aries
+to both first and second cusp shares Mars across the two principal roles,
+without creating self-intervention. A distant principal longitude removes
+the in-orb pattern. A two-day horizon leaves the six-day principal contact
+unestablished, so contact rules do not infer order against an extrapolation.
+
+For refranation, set Venus `10+2t-t^2`, speed `2-2t`, leaving Mars
+`16+t`. The principal gap is `-6+t-t^2`, whose discriminant is negative,
+so no conjunction exists in the experiment. Venus reverses at one day.
+Mars stays direct at the question and side probes, and the gap is opening
+after that station. In fact relative closing ceases at half a day, before
+the individual station: the report is explicitly reversal-associated
+evidence rather than a causal claim. To preserve a later contact, use Venus
+`10+2t-3t^2/2+t^3/3`, speed `(t-1)(t-2)`, and Mars `14.5+t`.
+Stations are at one and two days. The gap factors as
+`(t-4.5)*(t^2+3)/3`, hence its only real contact is at 4.5 days.
+The first station supports the selected observation; the second, retrograde
+to direct, does not. The later contact remains recorded.
+
+Venus `14-(t-2)^2` and fixed Mars 14 touch in conjunction at two days,
+coincident with Venus's reversal, so this is review evidence. Ending the
+horizon at that instant lacks a resolved after side. Venus
+`10+(t-1)^3/3+1/3` has speed `(t-1)^2`: a zero-speed touch at one day,
+without reversal. Against Mars `16-t`, both initial speed magnitudes equal
+one. The swift-applicant proxy fails; disabling it exposes the ambiguous
+touch as review rather than confirmed refranation. A recipient-only reversal
+uses Mars `16+t-t^2` with baseline Venus and does not satisfy the selected
+applicant rule. Venus `10+2t-t^2` with Mars `16-t` is still applying just
+after Venus's station, while the recipient is retrograde, so it also fails.
+Venus `10+4t-t^2` and Mars `11+t` have first contact
+`(3-sqrt(5))/2` days, before Venus's station at two; that later station
+does not interrupt the already reached contact.
+
+Noninteger roots are compared within a test tolerance of `0.0000005` UTC
+days implied by six-decimal `toBeCloseTo`; grid roots use exact millisecond
+Dates. The quarter-day step's reported numerical root resolution is
+`ceil(0.25*86,400,000/2^24)+1` milliseconds, inherited from the existing
+event adapter. Neither tolerance nor resolution is physical timing evidence.
+Budget tests use the full run's call count only to select an insufficient
+resource limit, never as a contact-time reference. They check coarse refusal,
+late refusal, a partially read station probe, separate aspect/station budgets,
+detached frozen records, fresh provider Dates and input validation.
+
+The production integration test casts the invented instant with explicit
+broad major-aspect allowances of 180 degrees and a half-day horizon solely
+to exercise the adapter. It checks engine exact aspects, crossings and
+speed helpers without recasting, pinning sky values or claiming independent
+ephemeris accuracy. Disabled searching preserves each actual house system
+and polar fallback. These tests establish software behavior, not predictive
+validity.

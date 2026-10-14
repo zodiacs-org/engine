@@ -12,7 +12,8 @@ The library provides `cast`, `normalizeHoraryInput`, `selectSignificators`,
 `evaluateAccidentalCondition`, `createAspectSearchPolicy` and
 `evaluateSignificatorAspects`, `createDirectPerfectionPolicy` and
 `evaluateDirectPerfection`, `createTranslationPolicy` and `evaluateTranslation`,
-`createCollectionPolicy` and `evaluateCollection`.
+`createCollectionPolicy` and `evaluateCollection`,
+`createImpedimentPolicy` and `evaluateImpediments`.
 Further analysis rules and the CLI are scheduled in [`PLAN.md`](PLAN.md).
 
 From the checkout, using Node as specified in this folder's `package.json`:
@@ -603,3 +604,88 @@ provider. Independent motion derivations appear in [`tests/fixtures.md`](tests/f
 ownership; `tests/collection.budget.test.ts` checks atomic refusal and provider
 validation; `tests/collection.integration.test.ts` checks engine delegation,
 house systems and fallback without claiming independent ephemeris accuracy.
+
+`evaluateImpediments(result, aspectPolicy, impedimentPolicy)` assesses current
+nonexact in-orb applications between the two principal house rulers. It
+reports sourced prohibition, frustration and station-associated refranation
+observations, each independently toggleable. Moon and natural roles remain
+available in the underlying significators without creating extra principal
+house roles. Shared house rulers produce no self-application. Other perfection
+modes remain separate reports.
+
+```ts
+import { createImpedimentPolicy, evaluateImpediments } from "./src/index.js";
+
+const impedimentPolicy = createImpedimentPolicy({
+  prohibitionScope: "both-principals",
+  frustrationScope: "conjunction-only",
+  refranation: false
+});
+const impediments = evaluateImpediments(result, undefined, impedimentPolicy);
+```
+
+The default prohibition scope is `either-principal`: a selected third planet
+has an enabled exact contact with either ruler before their first found
+contact on the current applying branch. `both-principals` requires the same
+third planet to contact both rulers clearly before that endpoint. These
+explicit readings of Lilly's definition and examples are documented in
+[`SOURCES.md`](SOURCES.md). Third contacts need not already be in orb at the
+question; their current orb and motion are preserved in the evidence.
+
+Frustration uses the lighter ruler as applicant and the heavier as recipient,
+using the existing traditional sphere order. The recipient must have a
+current nonexact in-orb application to the third planet and reach that
+same branch before the principal contact. Its crossing direction must agree
+with current relative motion. The default `conjunction-only` scope requires
+both contacts to be bodily conjunctions; `enabled-aspects` is a broader caller
+interpretation. `swifterApplicant` defaults to requiring the lighter ruler's
+absolute question-time speed to exceed the recipient's. Disable this project
+proxy with `false`. It does not change sphere order or aspect arithmetic.
+General prohibition can overlap frustration; both labels remain observations
+without a chosen precedence or final verdict.
+
+Refranation requires an applicant station from direct to retrograde before
+any found original-branch principal contact. The recipient must be direct
+at the question and side probes, and the aspect must be nonexact and
+separating on its original branch after the station. The before/after aspect
+states, signed speeds, transition and contact relation remain available.
+This is a station-associated loss of the question-time application, without
+proving that the station caused it or that contact can never occur. A later
+geometric contact stays recorded. A recipient reversal or an applicant
+reversal with ongoing application does not satisfy this selected reading.
+Touches, unresolved sides and contact coincidences require review. The
+station can qualify even when the bounded scan finds no later contact.
+
+The underlying `motion` report reuses the existing aspect and station
+scanners, with sign-boundary checks disabled. `contacts` preserves every
+selected third contact in chronological order. Each application contains
+its physical applicant/recipient, the swiftness fact and sourced rule
+observations with status, evidence and short explanations. `not-triggered`
+means the selected conditions were not established in the sampled horizon.
+Contact rules return `contact-not-found` when no principal endpoint is found;
+they do not order against a linear extrapolation. Sign changes, reception
+exceptions, strength, continuous application and other perfection modes
+are not adjudicated here.
+
+The aspect policy controls enabled types, orbs, horizon and step. Its
+relative-evaluation budget and the station scanner's provider-call budget
+are separate from `search.samples`, which counts third-contact longitude
+calls and station-probe longitude/speed calls. `maxSamples` and
+`stationMaxSamples` defaults and limits are enforced in
+`tests/impediments.test.ts`; preflight and late atomic refusal are enforced
+in `tests/impediments.budget.test.ts` over the independent fixture horizon.
+A refused third-contact/probe scan discards all intervention evidence;
+the independent `motion` report remains available. A refused station scan
+does not discard completed third-contact evidence. Disabled rules skip
+their additional scans and inputs. A completed sampled scan is not a
+completeness proof, and its ordering resolution is not an accuracy bound.
+
+`evaluateImpedimentsWith(longitudeAt, speedAt, result, aspectPolicy, policy)`
+accepts consistent independent motion providers. Snapshots are detached,
+deeply frozen and JSON-friendly, with restored policies revalidated.
+Required rows, geometry, finite speeds and representable horizons are
+checked; providers are not authenticated against the chart. Invalid inputs
+throw `RangeError`, and provider exceptions propagate. Fixture derivations
+are in [`tests/fixtures.md`](tests/fixtures.md). The integration suite checks
+engine delegation, actual houses and fallback without establishing new
+ephemeris accuracy or predictive validity.

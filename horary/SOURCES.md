@@ -426,3 +426,65 @@ all-or-none provider budgeting over the synthetic future window.
 `tests/collection.integration.test.ts` verifies delegation, house systems and
 fallback. All independent expectations and the scope of integration checks
 are documented in `tests/fixtures.md`.
+
+## Prohibition, frustration and refranation
+
+The `lilly-prohibition;project-event-sequence`,
+`lilly-frustration;project-event-sequence` and
+`lilly-refranation;project-event-sequence` sources refer to William Lilly,
+*Christian Astrology*, first published 1647, printed pages 109-112 of the
+linked 1659 edition. The
+[primary-text transcription](https://pdfcoffee.com/william-lilly-christian-astrology-volume-1-pdf-free.html)
+was fetched and read on 2026-10-14. Prohibition's general definition concerns
+third-planet intervention during a principal application; its bodily and
+aspect examples involve the third planet contacting both principals first.
+Frustration concerns a lighter applicant whose heavier recipient joins
+another planet first, in conjunction. The reversal example, printed as
+Refrenation, concerns an applicant turning retrograde while its recipient
+continues forward. Historical charts, degrees, outcome language and redrawn
+tables are not copied into this project.
+
+The default general prohibition scope requires an earlier enabled exact
+contact with either house ruler. A stricter selectable scope requires the
+same third planet to contact both before the principal endpoint; it does
+not impose a further sequence between the two third contacts. These are
+explicit operational readings. Third contacts outside question-time orbs
+can count if reached in the horizon. Enabled aspects and engine orbs are
+project controls, not a reproduction of historical moieties. A general
+prohibition observation can overlap the separately recorded frustration
+observation without establishing which interpretation should prevail.
+
+Frustration defaults to conjunction for both the principal application and
+the recipient's third contact. Its optional broader enabled-aspect scope is
+a caller interpretation rather than an attribution to Lilly's corporal
+definition. The lighter/heavier comparison reuses the existing sphere order.
+An optional strict absolute question-speed comparison operationalizes
+swiftness. The recipient-to-third aspect must currently apply nonexactly
+within the enabled orb, and its future crossing must match that directed
+branch and relative direction. No requirement that the third planet be
+heavier than the recipient, no new reception table and no reception override
+is invented.
+
+The selected refranation reading requires the lighter applicant's resolved
+direct-to-retrograde station, a recipient direct at the question and side
+probes, and a nonexact separating original branch after the station. It
+does not require the before probe still to be applying: relative motion
+may stop closing before the applicant's individual speed reaches zero.
+Both side states are retained, making that distinction visible. The scan
+must establish no earlier found original-branch principal contact. A
+missing contact is bounded evidence, while a later contact remains possible.
+Neither these side observations nor a sampled station prove continuous
+history, station causality or permanent loss of perfection. Recipient
+reversals, touches and ongoing post-station application are distinguished.
+
+Station finding reuses the existing direct-perfection report and its engine
+speed/crossing adapter, with sign changes disabled. Third contacts reuse
+engine exact relative sums and the crossing solver. The open question
+boundary, closed horizon, coarse step, numerical coincidence interval,
+sample budgets and atomic-refusal semantics are computational conventions.
+The report returns ordered contacts and per-rule evidence, without recasting
+or predicting an outcome. Policy and source choices are enforced in
+`tests/impediments.test.ts`, provider bounds and refusal in
+`tests/impediments.budget.test.ts`, and engine delegation in
+`tests/impediments.integration.test.ts`. Independent fixture derivations
+appear in `tests/fixtures.md`.

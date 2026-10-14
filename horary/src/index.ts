@@ -43,3 +43,7 @@ export type {
   QuestionLocation, QuestionType, SignificatorAssignment, SignificatorRole
 } from "./types.js";
 export type { ClassicalPlanet, Debility, EssentialDignity, HouseNumber, HouseSystem, Sect } from "./engine.js";
+export { evaluateImpediments, evaluateImpedimentsWith, IMPEDIMENT_METHOD } from "./impediments.js";
+export type { ContactIntervention, HoraryImpediments, ImpedimentAssessment, ImpedimentObservation, InterventionContact, StationIntervention } from "./impediments.js";
+export { createImpedimentPolicy, IMPEDIMENT_SOURCES } from "./impediment-policy.js";
+export type { HoraryImpedimentPolicy, ImpedimentPolicyInput, ImpedimentRule } from "./impediment-policy.js";
