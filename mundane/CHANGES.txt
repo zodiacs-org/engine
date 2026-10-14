@@ -1,2 +1,3 @@
 Establish mundane milestone plan and isolated TypeScript input API with engine validation and Vitest checks
 Implement M2 frozen event chart casting with engine receipt provenance, polar fallback, time-basis metadata, and isolated Vitest checks
+Implement M3 classical planet angularity with actual engine houses, configurable exact angle orbs, hand-derived geometry tests, and convention documentation

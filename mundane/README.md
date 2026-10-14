@@ -2,9 +2,9 @@
 
 A private library and CLI project for classical mundane astrology on top of
 the engine in this checkout. Development follows [PLAN.md](PLAN.md). The
-current API normalizes inputs and casts charts at supplied instants. Event
-searches, traditional factor summaries, and CLI commands are planned and are
-not implemented yet.
+current API normalizes inputs, casts charts at supplied instants, and analyzes
+classical planet angularity. Event searches, angle-ruler dignities, prose factor
+summaries, and CLI commands are planned and are not implemented yet.
 
 From the repository root, using Node.js as required by [package.json](package.json):
 
@@ -82,8 +82,8 @@ notes its other angle exclusions.
 `bodies` preserves the engine's position rows, including the outer planets
 and lunar nodes. Longitudes, ecliptic latitudes, and degrees within signs use
 degrees; speeds use degrees per day. `aspects` preserves the engine's default
-aspects. Traditional planet selection and angularity summaries are planned
-separately. `deltaT` records TT minus UT1 in seconds with its model and
+aspects. `analyzeAngularity` selects classical planets for a separate analysis.
+`deltaT` records TT minus UT1 in seconds with its model and
 uncertainty; `timeScale` preserves the engine's basis for Earth rotation and
 planet positions. `flags` retains reference-coverage and fallback information.
 An instant the ephemeris cannot evaluate still throws the engine's refusal.
@@ -99,6 +99,48 @@ hemispheres and the engine's observed, predicted, and model time bases.
 Comparisons with the engine are integration checks. Independent ingress and
 lunation timing evidence belongs to later milestones. The recorded M2 checks
 are in [docs/evidence/m2/checks.txt](docs/evidence/m2/checks.txt).
+
+To analyze a cast chart's angularity:
+
+```ts
+import { analyzeAngularity } from "./src/index.js";
+
+const angularity = analyzeAngularity(chart, { angleOrbDegrees: 5 });
+console.log(angularity.angularPlanets, angularity.planets);
+```
+
+The output is labelled `traditional conventions, not predictions`. Each
+classical planet has its actual house, an `angularHouse` flag, and a
+`nearAngles` list of angle names, angle longitudes, and distances in degrees.
+`angular` includes either factor; `angularPlanets` selects those planet names.
+Results are detached, deeply frozen, JSON-compatible snapshots. The cast chart
+remains unchanged.
+
+The convention selects Sun, Moon, Mercury, Venus, Mars, Jupiter, and Saturn,
+using the engine's classical planet table. Houses 1, 4, 7, and 10 count as
+angular. House assignment reuses the engine's `houseOf` on actual cusps, with
+its boundary arithmetic and no cusp orb. Whole-sign house membership can
+differ from proximity to the midheaven or another angle. Requested and actual
+house systems are both retained, including polar fallback.
+
+Angle proximity uses the short circular distance in ecliptic longitude,
+ignoring body latitude. `angleOrbDegrees` defaults to 5 degrees, an explicit
+project choice that callers can change from 0 through 180 degrees. The
+boundary is inclusive on the exact supplied binary64 values, using the
+engine's exact-sum helpers; only the reported distance is rounded. All
+matching angles are retained in asc, mc, dsc, ic order. A zero orb permits
+only identical longitudes. These definitions and bounds are enforced in
+[test/angularity.test.ts](test/angularity.test.ts); they are conventions,
+not measured accuracy tolerances or a claim of physical angularity.
+
+`analyzeAngularity` also accepts minimal supplied geometry through
+`AngularityGeometry`. It requires valid longitudes, supported house-system
+names, actual cusp rows, and a unique row for each classical planet. Valid
+outer-planet and node rows are accepted but omitted from the analysis. This
+validates the fields used without verifying that supplied geometry represents
+a real sky. The hand derivation and scope of the synthetic checks are in
+[docs/angularity.md](docs/angularity.md), and the M3 check record is in
+[docs/evidence/m3/checks.txt](docs/evidence/m3/checks.txt).
 
 Chart factors will be labelled as traditional conventions, not predictions.
 This project adds no electional scoring, calendar export, relocation grids,
