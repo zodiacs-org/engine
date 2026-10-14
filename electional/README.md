@@ -6,7 +6,8 @@ interval foundation, strict JSON/YAML rule loading, read-only engine and
 events adapters, and Moon sign, phase, direct-motion, Moon-not-void and
 planetary-hour, benefic house/angular, applying-aspect and eclipse/station
 avoidance and synthetic natal synastry rule windows are
-implemented so far. Composition, streaming, the
+implemented so far, with hard-rule composition, weighted scoring and
+deterministic ranking described in [SCORING.md](SCORING.md). Streaming, the
 CLI and HTTP endpoint are planned milestones. [EVALUATION.md](EVALUATION.md)
 describes the basic evaluator and
 its uncertainty handling. [VOID.md](VOID.md) describes Moon-not-void lookahead,

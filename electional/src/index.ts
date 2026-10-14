@@ -39,3 +39,7 @@ export { loadSynastryRuntime } from './synastry-adapter.js';
 export type { SynastryRuntime, InterAspect, InterAspectDefinition } from './synastry-adapter.js';
 export { evaluateSynastryRule } from './synastry-rule.js';
 export type { SynastryRule, SynastryRuleOptions, SynastryRuleWindowResult, SynastryPolicy, SynastryPairPolicy, SyntheticNatalAudit } from './synastry-rule.js';
+export { composeRuleWindows } from './composition.js';
+export type { RuleEvaluation, RuleUnresolved, RuleExplanation, ScoredWindow, ElectionalResult } from './composition.js';
+export { searchElectional, loadSearchDependencies } from './search.js';
+export type { SearchDependencies, SearchOptions } from './search.js';

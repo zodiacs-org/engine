@@ -1,0 +1,83 @@
+{
+  "schema": "electional-m10-test-record/v1",
+  "runtime": "v22.23.3",
+  "startedAt": "2026-10-14T12:55:10.271Z",
+  "command": "npm test -- --reporter=default --reporter=json --outputFile=generated/m10-vitest.json",
+  "tests": {
+    "passed": 476,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compositionGolden": {
+    "passed": 3,
+    "skipped": 0,
+    "failed": 0,
+    "reference": "test/fixtures/composition-windows.json",
+    "domain": {
+      "startMs": 0,
+      "endMs": 100,
+      "clock": "utc"
+    }
+  },
+  "finiteStateComposition": {
+    "passed": 3,
+    "skipped": 0,
+    "failed": 0,
+    "arbiter": "Independent base-three label table and direct Boolean/weight equations",
+    "domain": {
+      "startMs": 0,
+      "endMs": 3
+    },
+    "statesPerRule": 3,
+    "rulesPerTable": 2,
+    "tablesPerModePair": 729,
+    "modePairs": [
+      "require/require",
+      "require/prefer",
+      "prefer/prefer"
+    ]
+  },
+  "nativeComposition": {
+    "passed": 2,
+    "skipped": 0,
+    "failed": 0,
+    "reference": "Invented linear Moon longitude 0.1 * label and direct planetary motion; tautological all-sign/house/ruler selection for native provenance only",
+    "linearSpan": {
+      "startMs": 0,
+      "endMs": 1000,
+      "clock": "utc"
+    },
+    "provenanceSpan": {
+      "start": "2000-09-22T12:00:00Z",
+      "end": "2000-09-22T12:01:00Z",
+      "clock": "utc"
+    }
+  },
+  "eventsSource": {
+    "moduleUrl": "file:///workspace/codex-infra/wt-events/events/build/src/index.js",
+    "sha256": "6f887bdc34bc68202cd7e8856f68a5c62df3329fbe4a955b3b7eb0e3a3a749d5",
+    "scope": "Read-only entry bytes, not its dependency graph or an authenticated release."
+  },
+  "sha256": {
+    "src/composition.ts": "e6784ab8219dd6f4ba3956c9ba5b6e22b19173dafaaf9ea57ec1039503096ecf",
+    "src/search.ts": "48dcf0688eee00869454465d6e5db7b6eafcc10ddc10f67f999aea20f9ea613a",
+    "src/index.ts": "1b2fee4cd1a2c6e8b63dfe904ef9690f32f8fe6525c3f53ccf6209054ed38cfd",
+    "src/intervals.ts": "26ac4e39aae8152db272f6a83a0bb99af826f137f21198d2b50df4052109e2f5",
+    "src/adapter-contract.ts": "b15f4e0fa43883562e0972d2674caafeba3d8d85fc2c51e8ff26ad9818fb7196",
+    "src/basic-rules.ts": "d666db66149e4e8a1b9cccc5e80a044cb1a42f2c5debfb7731dd3f7e4a645146",
+    "src/void-rule.ts": "aeb005fe2aed6516fe19a1272dcf36d51c7348f87139b05b35554384d9b71762",
+    "src/hour-rule.ts": "fe4d985387bbc59bfea3331f82aacb5db60e4b41ac56404e77da37cfcd36e9a6",
+    "src/chart-rules.ts": "dfac19a338c8b212261c84382a5b12fd162657dce1461e96e64b5a486ca95e73",
+    "src/avoidance-rules.ts": "7f671592954c11ca27b426746bfda8da3ef238eae9866a0f3bf39933eaaab7b3",
+    "src/synastry-rule.ts": "0438fe4ba932e9549e5ea8a883fd432d1b0cd071969619a9c7aba5937197758e",
+    "test/composition.electional-check.ts": "3874a16187bb2a067e7794677e2e72276a33f569a2c0340a9c77281bb31a74c0",
+    "test/search.electional-check.ts": "dbc8d4c93107f5e4a169a077eae81b75d50cd9f39cc82c52aaff1ff21a609172",
+    "test/search-native.electional-check.ts": "9cce26b8827497650c829dc7eb588a158d13a3cff11b0aa309c8d65990c72c55",
+    "test/fixtures/composition-windows.json": "1cf8c6cc7aad4d5a0536188afb607e71ece975240e7bd2a4492c45ee1b2ce05b",
+    "scripts/check-search-esm.mjs": "2560601941c3bd00739aa4862e604fbcf1b4b2e17b7d0d4839b0ca0d84f48597",
+    "scripts/record-m10-tests.mjs": "8e91b136cf138c6a1ea5b7a275a7dd01b0fe7f2afb126ffd40fef98ed9fdf70f",
+    "package-lock.json": "048e2eb7352f7b829e968173e821e4da617dddf15b23eab83e06df0a6009367d",
+    "generated/engine.mjs": "0101700f8fdf2d19210f94572d7b5c7f2e164a89d3ffa9df35681f2c28cc9c3a"
+  },
+  "scope": "Set composition, declared scoring/ranking, control flow and native receipt transport. Existing independent astronomical reference comparisons remain in the complete suite. No new astronomical accuracy, exhaustive completeness, performance or predictive claim."
+}

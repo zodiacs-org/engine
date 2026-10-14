@@ -13,7 +13,7 @@ writes inside `electional/`. Git changes are handled by the harness.
 - [x] M7 Evaluate benefics angular or in selected houses and applying aspects to selected bodies using engine chart, house and configured-aspect APIs; expose house fallbacks and boundary uncertainty.
 - [x] M8 Add eclipse and station avoidance within declared day margins using padded events searches and interval subtraction, preserving event clocks and coverage refusals.
 - [x] M9 Add optional synastry rules against one synthetic natal chart through the existing engine API, with explicit aspect policies and receipt provenance.
-- [ ] M10 Combine hard-rule windows and weighted preferences, rank deterministically, and include per-rule explanations, unresolved coverage and engine receipts in every result.
+- [x] M10 Combine hard-rule windows and weighted preferences, rank deterministically, and include per-rule explanations, unresolved coverage and engine receipts in every result.
 - [ ] M11 Stream searches over long ranges with bounded work, cancellation, chunk lookahead and seam reconciliation; compare partitioned results with hand-derived interval fixtures.
 - [ ] M12 Add a CLI for JSON/YAML rule files and launch, contract-signing and travel presets, documenting their choices as traditional conventions rather than predictions.
 - [ ] M13 Add a small bounded HTTP electional-search endpoint over the shared library, with validation, deadlines, cancellation and transport tests; leave chart REST, calendar export and webhooks to their existing packages.
