@@ -5,8 +5,8 @@ This private source-checkout project is being built according to
 direct bridge to the parent engine with synthetic integration and geometric
 tests, proper-motion propagation, true-of-date stellar positions, pure
 conjunction and parallel matching, natal chart-hit assembly with native
-chart envelopes, and prepared star and body sky-event searches. Parans and
-the CLI are pending milestones.
+chart envelopes, prepared star and body sky-event searches, and paran event
+pairing. The CLI is a pending milestone.
 
 Use Node as specified by this folder's package.json. Install and check only
 this project from the repository root:
@@ -133,7 +133,104 @@ It remains unchanged if a caller mutates native event or window Dates.
 Result objects and arrays are frozen, but Date methods retain their native
 mutability. Caller astrometry, observer, options and Dates remain untouched.
 
-### Adapter implementation
+## Paran contacts
+
+```ts
+import { prepareStarSky } from "./node.mjs";
+import { findStar, searchParans } from "./src/index.js";
+
+const sky = await prepareStarSky();
+// Invented observer, window and angular reference instant.
+const result = searchParans(sky, {
+  observer: { latitude: 0, longitude: 0 },
+  from: "2000-03-20T00:00:00Z", to: "2000-03-21T00:00:00Z",
+  stars: [findStar("Spica")!], bodies: ["Sun", "Moon"], orbMs: 1000,
+  angles: [{ angle: "Midheaven", at: "2000-03-20T06:00:00Z" }],
+  starOptions: { refraction: "none", maxSamples: 10000 },
+  bodyOptions: { limb: "centre", refraction: "none", maxSamples: 10000 }
+});
+console.log(result.status, result.hits, result.stars, result.bodies);
+```
+
+searchParans is synchronous after preparation. It searches each selected star
+and body once through the existing engine solver and pairs the complete event
+results. Omitted stars selects the catalog; an empty array selects no stars.
+bodies is required, including an explicit empty array for angle-only searches.
+Nodes are unsupported by the native sky solver. Subject ids must be unique.
+The observer and resolved UTC window are required, using the sky API's units,
+clock and validation. There is no natal cast, inferred local day, default time
+orb or implied noon reference.
+
+A body hit pairs any star event with any body event inside the window when
+their absolute time difference is within the inclusive orbMs, in milliseconds.
+Different phases are eligible, such as a rising Sun and a culminating star.
+All eligible pairs are returned, including repeated events in a longer window;
+there is no nearest-only selection or conversion to a longitude orb. Zero
+requires identical returned event milliseconds. Fractional millisecond orb
+limits are accepted, while event timestamps retain the engine's whole
+millisecond resolution. Exact binary64 arithmetic decides eligibility and
+ordering without an epsilon; reported differences round once. The arithmetic
+and explicit boundary examples are enforced by
+[tests/parans.fixedstars.ts](tests/parans.fixedstars.ts), over its hand-authored
+synthetic event schedules, with derivations in [GEOMETRY.md](GEOMETRY.md).
+
+Optional angles supplies explicit angle and at reference anchors. Ascendant
+selects star rise, Descendant selects set, Midheaven selects upper transit,
+and Imum Coeli selects lower transit. An anchor asks whether that stellar
+angular phase occurs within orbMs of its supplied instant. It describes an
+angular phase at the observer, without asserting that the star occupies the
+ecliptic point carrying the same name. The natal-hit API separately compares
+ecliptic angle points. No angle sky call or angle receipt is fabricated.
+Repeated anchors for the same angle are allowed at different instants;
+duplicate angle/instant pairs are refused.
+
+Both events and every anchor must be inside the half-open window [from,to).
+The orb never pads the window or wraps a difference across midnight. Events
+outside it are ineligible even if close to an interior event. Native starOptions
+and bodyOptions are independently configurable: their effective horizon and
+limb conventions remain in the retained call records. Geometric angle phases
+use refraction none; standard refraction instead selects the solver's refracted
+rising or setting phase. The Sun and Moon otherwise retain their native upper
+limb default. Transits retain the native meridian definition. The stellar
+correction omissions and unmeasured physical accuracy still apply.
+
+maxSamples is per search call, without an aggregate paran budget. Every selected
+call is retained. If any search refuses, the entire paran result has status
+refused, reason sample-budget and no hits, even if other searches completed.
+Otherwise status is complete, including for an empty hit set. Window-local
+never-rises/never-sets and reference-span flags stay attached to their individual
+subject results. Circumpolar stars can still produce transit contacts.
+
+Each hit identifies starId, targetId, targetKind, kind paran, both event kinds,
+both ISO timestamps, signed offsetMs (star minus target), orbMs and maximumOrbMs.
+Its provenance indexes the retained stars and bodies arrays through starSearch
+and bodySearch; bodySearch is null for an angle anchor. Those arrays sort by
+subject id. Hits sort by exact time orb, then star id, target kind, target id,
+star instant, target instant and event kinds, with UTF-16 string ordering.
+Input order and the host locale do not affect ties. Each retained star result
+and native body result keeps its fixedstars call record and conventions. These
+are the sky provenance described above, without a native sky receipt or an
+astrometric accuracy certification.
+
+pairParanEvents(stars, bodies, { observer, from, to, orbMs, angles }) supplies
+the same pure matching operation for previously prepared results, with no sky
+calls. It requires matching observers and windows, unique subjects, valid
+interior events, and agreement between subject identities/event times and their
+captured call records. A mutated native event Date is refused if it disagrees
+with that snapshot. Supplied results and records remain caller claims rather
+than authenticated calculations. The result, hit rows, policy fields, anchors
+and array containers are frozen; retained native results keep their original
+objects, including their Date mutability. ISO hit times and captured call
+records remain stable after a caller mutates those Dates. Caller inputs are
+not frozen or changed.
+
+[tests/parans.fixedstars.ts](tests/parans.fixedstars.ts) also checks synthetic
+simultaneous Sun rise and star upper/lower transit construction, native body
+result preservation, independent per-call budgets, whole-result refusal and
+angle-only circumpolar contacts. [GEOMETRY.md](GEOMETRY.md) derives the
+simultaneous geometry and distinguishes it from physical accuracy evidence.
+
+## Sky adapter implementation
 
 The internal adapter now executes the existing parent src/sky/riseset.ts in
 an isolated in-memory bundle. It redirects only that module's astronomy-engine

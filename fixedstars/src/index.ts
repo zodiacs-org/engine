@@ -8,6 +8,10 @@ export type {
 export { chartContactTargets, natalStarHits, NATAL_STAR_CONVENTIONS } from "./natal.js";
 export type { NatalStarHits } from "./natal.js";
 export { STAR_SKY_CONVENTIONS } from "./sky.js";
+export { pairParanEvents, searchParans, PARAN_ANGLE_EVENTS, PARAN_CONVENTIONS } from "./parans.js";
+export type {
+  ParanAngle, ParanAngleInput, ParanAngleAnchor, ParanPairing, ParanRequest, ParanHit, Parans
+} from "./parans.js";
 export type {
   BodySkyEvents, SkyCallRecord, SkyCompatibility, SkyStarInput, StarSkyEvents, StarSkySearch
 } from "./sky.js";

@@ -26,6 +26,9 @@ export {
   serializeNatalEnvelope
 } from "../../src/receipt.js";
 export { skyEvents, optionsOf as skyOptionsOf, budgetOf as skyBudgetOf } from "../../src/sky/riseset.js";
+export {
+  observerOf as skyObserverOf, bodyOf as skyBodyOf, conventionsOf as skyConventionsOf
+} from "../../src/sky/riseset.js";
 
 export type { BirthInput, BodyName, Chart, DateInput } from "../../src/types.js";
 export type { NatalEnvelope, NatalReceipt } from "../../src/receipt.js";

@@ -12,7 +12,7 @@ explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
 - [x] M6 Cast synthetic natal inputs through the engine, include bodies and available angles, preserve native natal receipts, and expose the chart-hit library API with explicit coordinate conventions.
 - [x] M7 Prove an isolated catalog-vector adapter can execute the existing src/sky/riseset.ts solver without editing or copying its algorithms; verify vector substitution is scoped, ordinary bodies are unchanged, and incompatible engine source is refused.
 - [x] M8 Expose catalog rise, set, upper transit, and lower transit searches through that adapter, including solver budgets, complete refusal, circumpolar flags, and explicitly labelled engine-call provenance.
-- [ ] M9 Implement paran event pairing for bodies and angular contacts over an explicit observer window, with a configurable time orb, native body-sky results, star-sky provenance, and synthetic simultaneous-contact expectations.
+- [x] M9 Implement paran event pairing for bodies and angular contacts over an explicit observer window, with a configurable time orb, native body-sky results, star-sky provenance, and synthetic simultaneous-contact expectations.
 - [ ] M10 Implement the fixedstars list, fixedstars hits, and fixedstars parans CLI commands, strict options, JSON output, meaningful exit codes, and end-to-end synthetic tests.
 - [ ] M11 Extend independent geometric coverage for wraparound, poles, proper-motion conventions, frame consistency, unavailable angles, horizon tangencies, event-window boundaries, and sample-budget exhaustion.
 - [ ] M12 Finish library and CLI usage documentation, source attributions, limitations, evidence references, and isolated verification of tests, types, file sizes, and engine-package exclusion.
@@ -291,3 +291,55 @@ over an explicit observer window, keep time-orb semantics explicit, preserve
 native body output and both kinds of call provenance, and refuse incomplete
 paran results when a required sky search is refused. No paran pairing or CLI
 work was done in M8.
+
+## M9 completion and M10 handoff
+
+src/parans.ts exports searchParans and pairParanEvents, their public result and
+request types, named angle/event mappings and explicit conventions through the
+source index. searchParans accepts a prepared synchronous sky search, explicit
+observer/window, required time orb in milliseconds, explicit native body
+selection, optional catalog selection and optional angular reference anchors.
+It executes the unchanged engine solver once per selected subject and retains
+the complete native body output and both kinds of fixedstars sky call record.
+The source bridge adds only direct exports of existing sky validation helpers;
+the engine graph and compatibility contract remain unchanged.
+
+Body contacts compare all event-kind pairs by exact absolute elapsed time.
+Angular contacts compare the appropriate star event with an explicit supplied
+instant for Ascendant, Descendant, Midheaven or Imum Coeli. These are angular
+phases, without claiming equality to the named ecliptic point or inventing an
+angle sky call or receipt. Both events and every anchor must lie in the same
+half-open observer window, without padding by the orb. Horizon/limb defaults
+remain native and explicit in each call; geometric phases require the caller's
+refraction-none selection. Exact engine arithmetic decides inclusive time
+eligibility and stable ordering; only reports round. Hit records use stable
+ISO times and indices into sorted retained subject arrays for provenance.
+
+Budgets remain independently configurable per star and body search call. All
+selected calls are retained; any refusal clears every hit and refuses the
+whole paran result. Native window-local horizon flags remain with their own
+subjects, and circumpolar transits remain eligible. The pure pairer makes no
+sky calls and checks observer/window agreement, duplicate subjects/events,
+interior membership and call-record identity/timestamps. It rejects mutated
+native Dates that disagree with their captured record. Supplied numerical
+results and call records are claims, without authentication or physical
+accuracy certification. Caller data is not frozen or mutated.
+
+tests/parans.fixedstars.ts and GEOMETRY.md document hand-derived schedule
+arithmetic, a separate BigInt extreme-time reference, angle mapping, inclusive
+boundaries, ordering, native-call retention, validation and whole-result budget
+refusal. A constructed equatorial observer places native geometric Sun rise
+and synthetic stellar upper/lower transits at a chosen instant using spherical
+identities and the existing engine frame inverse. It uses no saved event output
+as a reference and is explicitly construction evidence, not physical accuracy
+evidence. README.md describes both APIs, angular-phase scope and limitations.
+
+M9 validation passed on Node 22.22.2: full local Vitest, TypeScript, offline
+catalog regeneration, sky adapter compilation and file/package isolation.
+The parent package:contents check still fails because dist/calc.d.ts is absent;
+creating that engine build is outside this session's hard boundary. The
+isolation check confirms fixedstars exclusion through a package dry run without
+claiming the missing build's budgets passed. All authored changes remain under
+fixedstars/. M10 is next: implement the CLI using these source APIs, with strict
+options, structured JSON and meaningful refusal exit codes. No CLI work was
+done in M9. Stop here for the harness-owned commit.

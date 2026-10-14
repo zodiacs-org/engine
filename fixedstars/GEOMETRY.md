@@ -437,3 +437,84 @@ made at runtime, not independent ephemeris accuracy evidence. Call-record tests
 check normalized request and result snapshots, JSON serialization, source
 contract identity, model scope, caller-input isolation and independence from
 later mutations of native Date objects. No event output fixture is committed.
+
+## Paran time arithmetic and simultaneous angularity
+
+tests/parans.fixedstars.ts uses hand-authored synthetic event schedules to
+check the pure matcher. For event times s and b, its definition is
+
+```text
+offset = s - b
+orb = abs(s - b)
+eligible exactly when orb <= orbMs
+```
+
+The arithmetic example places star rise at t, star upper transit at t + 1000
+ms, body set at t + 500 ms and body lower transit at t + 2000 ms. At a 500 ms
+limit, star rise/body set and star upper transit/body set qualify with signed
+offsets -500 and +500 ms. All other separations exceed the limit. A limit of
+499.99999999999994 ms excludes both boundary contacts, and zero admits only
+identical event milliseconds. Every number is constructed input, without a
+recorded ephemeris expectation. The matcher retains different event-kind pairs
+and every eligible pair, including multiple events and explicit angle anchors.
+
+JavaScript Date timestamps are integer milliseconds but their difference can
+exceed the exact-integer range of binary64. The extreme arithmetic test uses
+s = 8000000000000000 and b = -1007199254740993 ms, both valid Date values.
+Separately implemented BigInt subtraction gives 9007199254740993 ms, or
+2^53 + 1. Ordinary subtraction rounds downward to 2^53. A bound of 2^53
+must exclude that pair, whereas 2^53 + 2 admits it. The reported orb can then
+round down to 2^53, without changing the exact eligibility decision. This is
+a pure arithmetic case with fabricated schedules and call-record claims;
+no stellar or body solver is called outside its ephemeris span.
+
+The simultaneous-contact integration test chooses the invented instant
+2000-03-20T06:00:00Z and constructs an observer rather than choosing a saved
+event output. At geodetic latitude zero and height zero, the WGS84 observer
+lies on the equatorial circle. Let rho = 6378.137 / 149597870.7 au, using the
+engine's published equatorial radius and astronomical unit (parent
+LICENSING.md, Sky values). Let (x,y,z) be the native apparent Sun vector on
+the engine's true equator at that instant, R = hypot(x,y) and alpha = atan2(y,x).
+At sidereal angle theta, the topocentric up and east components are
+
+```text
+up = R cos(theta - alpha) - rho
+east = -R sin(theta - alpha)
+```
+
+Geometric centre rise has up = 0 and east > 0. Therefore choose
+theta = alpha - acos(rho/R); set the observer's east-positive longitude to
+theta minus the engine Greenwich apparent sidereal angle, reduced into the
+accepted longitude range. The native geometric Sun rise then occurs at the
+chosen instant by construction. The current Sun vector and clock are inputs
+to this identity, not independent physical ephemeris references.
+
+Construct an infinite star at true-of-date RA theta and declination zero.
+Its hour angle is zero, so it upper-transits at the same instant. A second
+star at RA theta + 180 degrees has hour angle 180 degrees and lower-transits
+there. Multiply each true-equator unit direction by the transpose of the
+engine equatorRows matrix to obtain its synthetic J2000 catalog direction.
+Both directions have explicit unavailable proper motion. The adapter and
+native body solver then independently search a window extending 60000 ms
+either side of the constructed instant, with refraction disabled and the
+centre limb. The test requires both star/Sun contacts and the corresponding
+Midheaven/Imum Coeli anchors, with each timestamp within 2 ms of the chosen
+instant and a 2 ms paran orb. This predeclared construction allowance covers
+the separate first-whole-millisecond crossing conventions and rotation
+roundoff; it is not a physical accuracy bound. No star search output is used
+to define the expected event time or observer.
+
+Other tests enforce [from,to) membership for events and anchors, no orb
+padding, no wrapping a time difference at midnight, deterministic ordering
+and retained call indices. Native body comparisons, catalog default selection,
+per-call budget exhaustion and circumpolar transit retention are integration
+checks over the synthetic equatorial window 2000-03-20 to 2000-03-21 UTC
+and its short constructed subwindow. The polar example uses latitude 60
+degrees and a J2000 declination of 70 degrees, with the existing spherical
+reasoning above and only its window-local horizon flag. Budget counts come
+from current unrestricted calls solely to trigger a late refusal; they are
+not independent accuracy or performance evidence. Refusal of any selected
+search clears every hit, while all complete and refused sky calls remain
+available with their separately labelled fixedstars provenance. Mutation
+tests check that later native Date changes cannot silently detach new pairs
+from the event times captured in the call record.
