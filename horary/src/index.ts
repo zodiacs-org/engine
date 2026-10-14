@@ -51,3 +51,7 @@ export { evaluateTimingHints, evaluateTimingHintsWith } from "./timing.js";
 export type { HoraryTimingHints, SymbolicTimingHint, TimingAssessment } from "./timing.js";
 export { createTimingPolicy, TIMING_CONVENTIONS, TIMING_HOUSE_KINDS, TIMING_SOURCE, TIMING_UNITS } from "./timing-policy.js";
 export type { HoraryTimingPolicy, TimingBasis, TimingCell, TimingHouseKind, TimingPolicyInput, TimingScale, TimingUnit, TimingUnitTable } from "./timing-policy.js";
+export { analyze, analyzeCast } from "./analyze.js";
+export type { HoraryAnalysis, HoraryAnalysisOptions, HoraryChartSnapshot } from "./analyze.js";
+export { explain } from "./explain.js";
+export type { HoraryExplanation, HoraryExplanationEntry } from "./explain.js";

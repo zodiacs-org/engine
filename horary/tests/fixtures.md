@@ -1149,3 +1149,54 @@ speed helpers without recasting, pinning sky values or claiming independent
 ephemeris accuracy. Disabled searching preserves each actual house system
 and polar fallback. These tests establish software behavior, not predictive
 validity.
+
+## Combined API and CLI fixtures
+
+`analyze.test.ts` composes the existing independently worked
+`aspectFixture(0, 6, 1, 0)` with an Ascendant angle of two degrees. Its
+schematic cusps remain at multiples of thirty degrees, so house one is
+Aries and house two is Taurus: Mars represents the querent, Venus the
+quesited, and the Moon retains its co-significator role. Changing the angle
+does not change the schematic cusps. The early-Ascendant interval includes
+two degrees; Saturn at 190 degrees occupies house seven, whose interval is
+`[180, 210)`. Moon at 180 degrees is outside Via Combusta. The lunar scan
+is disabled because these positions are an invented geometric chart, not
+an ephemeris at its declared instant.
+
+The Sun at ten degrees with Ascendant at two is on the day side of the
+engine's ecliptic sect convention. Mars at zero Aries has domicile and
+Chaldean face, but no other selected dignity: the fire day triplicity lord
+is Sun and the first Egyptian term is Jupiter. Lilly's configured score
+is therefore `5 + 1 = 6`. Venus at six Aries is in detriment, but begins
+its own Egyptian term at that exact endpoint. Its essential score is
+`-5 + 2 = -3`, and it is not peregrine. Mars receives Venus by Aries
+domicile and the first Aries face. Venus has no dignity at Mars's zero
+Aries position, so these two have no mutual reception; the other
+significator pairs also lack reciprocal selected dignities.
+
+Mars occupies house one, is direct at one degree per day and exceeds the
+configured Lilly mean motion for Mars. Its accidental score is
+`5 + 4 + 2 = 11`. The Mars-Venus directed separation starts at 354 degrees
+with increasing relative speed of one degree per day: it approaches zero,
+so the conjunction is applying with an angular gap of six degrees.
+Disabled contact searching yields no future contact candidate, rather than
+the independently extrapolated six-day time. The test retains every section,
+policy and disabled state without combining a final judgement.
+
+The composed engine check casts the invented `questionInput` with a
+half-day horizon and insufficient sample budgets. Expected assertions are
+cast call accounting, provenance retention and independent refusal states,
+not reference sky positions or an accuracy claim. The explanation test
+uses trusted typed and JSON-restored reports to check identical formatting,
+source records, ownership and the absence of additional calculations.
+
+`examples/question.json` and `examples/analysis-request.json` repeat the
+invented question instant, coordinate pair and explicit second-house
+selection from `fixtures.ts`. The request disables future contact scans and
+the lunar void scan. The process tests check equality to those documented
+inputs and execute the examples from outside the checkout. CLI assertions
+cover JSON schemas, normalization, option propagation, source-bearing text,
+separate stderr errors, exit status, relative file paths, local dependency
+resolution and byte-bounded input. These are software integration checks,
+not new astronomical reference fixtures. No process expectation is taken
+from the engine's own planetary output.

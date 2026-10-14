@@ -14,8 +14,8 @@ The library provides `cast`, `normalizeHoraryInput`, `selectSignificators`,
 `evaluateDirectPerfection`, `createTranslationPolicy` and `evaluateTranslation`,
 `createCollectionPolicy` and `evaluateCollection`,
 `createImpedimentPolicy` and `evaluateImpediments`,
-`createTimingPolicy` and `evaluateTimingHints`.
-The combined analysis API and CLI are scheduled in [`PLAN.md`](PLAN.md).
+`createTimingPolicy` and `evaluateTimingHints`, plus the combined `analyze`,
+`analyzeCast` and `explain` APIs and the offline `horary` CLI.
 
 From the checkout, using Node as specified in this folder's `package.json`:
 
@@ -26,10 +26,12 @@ npm test --prefix horary
 npm run check:scope --prefix horary
 ```
 
-The test configuration resolves the engine's pinned astronomy dependency from
-this folder. No root install or engine build is needed. Source imports are
-checkout relative; this is not yet a standalone installed package or a plain
-Node entry point. Future CLI tooling must preserve that dependency resolution.
+The test configuration and CLI source loader resolve the engine's pinned
+astronomy dependency from this folder. No root install or engine build is
+needed. Source imports are checkout relative; the library remains a private
+workbench rather than a standalone installed package. The CLI transpiles
+checkout TypeScript in memory using the local TypeScript dependency, without
+writing build output.
 
 ```ts
 import { cast, selectSignificators } from "./src/index.js";
@@ -107,7 +109,7 @@ Every observation contains its rule, `triggered`, `not-triggered` or
 `disabled` status, named source tradition, measured evidence and a short
 explanation. Disabled rules retain a source record and skip their inputs and
 scans. These observations describe cautions without refusing a judgement
-or issuing an outcome. The remaining analysis is scheduled in the plan.
+or issuing an outcome.
 
 The early Ascendant interval is `[0, 3)` degrees within each sign and the
 late interval is `[27, 30)`. They use the Ascendant angle rather than the
@@ -761,3 +763,112 @@ candidate. This timing report leaves those assessments to the existing
 perfection reports, and does not infer symbolic completion hints for
 translation or collection. A symbolic quantity remains an optional
 interpretive hint, without a prediction or final yes/no judgement.
+
+## Combined analysis and explanations
+
+`analyze(input, options)` casts once and composes every implemented report.
+`analyzeCast(result, options)` reads a typed cast without recasting it. Both
+are synchronous and perform no file or network I/O; the engine retains its
+documented runtime delta-T side effect. The result preserves significators,
+considerations, essential and accidental conditions, directional and mutual
+receptions, aspects, direct contacts, translation, collection, impediments
+and optional symbolic timing. It contains no verdict field.
+
+Options are factory input groups named `considerations`, `essential`,
+`accidental`, `aspects`, `direct`, `translation`, `collection`, `impediments`
+and `timing`. Each group uses the fields accepted by its existing policy
+factory, without a `schema` field. All groups are validated before casting
+or scanning; unknown fields, explicit undefined groups and null groups are
+refused. Omitted groups preserve the individual defaults, including enabled
+considerations and disabled symbolic timing. Every policy is retained in its
+report so the caller can inspect the conventions and toggles used.
+
+```ts
+import { analyze, explain } from "./src/index.js";
+
+const analysis = analyze({
+  instant: "2000-01-01T12:00:00Z",
+  location: { latitude: 12, longitude: 34 },
+  question: { id: "lost-object", quesitedHouse: 2 }
+}, {
+  considerations: { rules: { "moon-void-of-course": false } },
+  aspects: { search: false }
+});
+const explanation = explain(analysis);
+console.log(explanation.text);
+```
+
+This synthetic example disables future contact scans and the fixed-horizon
+void-of-course scan. It still reports instantaneous geometry and explains
+disabled or unavailable evidence. `tests/analyze.test.ts` exercises these
+settings and the schematic fixture derivation in `tests/fixtures.md`.
+
+The combined result is detached, deeply frozen and JSON-friendly. Its chart
+retains engine provenance, flags and actual houses; the engine input Date
+becomes an ISO string. The supplied cast remains mutable and is not frozen
+or modified. `analyzeCast` is a typed cast consumer, not a JSON chart
+importer or an authentication of supplied positions. An edited cast's
+geometry may disagree with engine scans at the declared instant.
+
+`aspects` refers to `direct.aspects`, avoiding an additional standalone
+scan. Translation, collection, impediments and enabled timing retain their
+own evaluator scans and budgets, including repeated aspect scans. There is
+no combined global budget, no inferred precedence among competing modes and
+no merged eligibility status. A refused scan remains visible in its own
+report; it neither erases completed independent evidence nor turns a missing
+contact into an outcome. The combined `limitations` explains this scope.
+
+`explain(analysis)` produces structured entries with section, subject,
+status, source and plain-language text, plus a readable `text` rendering.
+It performs no calculation or search. Applied, absent, disabled, refused and
+review states remain distinct. Entries include contributions, receptions,
+search states, eligibility checks, timing alternatives and limitations;
+full numeric evidence remains in the analysis. Named traditions and source
+locators come from the existing reports and `SOURCES.md`. A JSON-restored
+analysis may be rendered as trusted data; `explain` checks its schema but
+does not validate or authenticate the complete report. The CLI always
+calculates an analysis from question input rather than importing reports.
+
+## Offline CLI
+
+With dependencies installed inside this folder, run from the checkout:
+
+```sh
+npm run horary --prefix horary -- --help
+node horary/bin/horary.mjs cast --input horary/examples/question.json
+node horary/bin/horary.mjs analyze --input horary/examples/analysis-request.json
+node horary/bin/horary.mjs explain --input horary/examples/analysis-request.json
+node horary/bin/horary.mjs explain --input horary/examples/analysis-request.json --format json
+```
+
+The private package also declares the `horary` executable for local linking.
+It remains checkout dependent; it is not a published standalone command.
+Direct Node invocation provides clean machine-readable stdout without npm's
+script banner. The command works from another directory when given the
+executable's absolute path; input filenames resolve from the caller's
+working directory. No engine build, archive packing or network request is
+part of a command.
+
+`cast` reads a question object directly. `analyze` and `explain` accept either
+that object or an envelope with `input` and optional `options` using the
+library's factory input groups. The committed examples are invented question
+data; the request example disables contact and void-of-course scans.
+`tests/cli.process.test.ts` exercises these examples and all commands from
+outside the checkout without claiming independent ephemeris accuracy.
+
+`--input FILE` reads UTF-8 JSON; `--input -` or an omitted option reads stdin.
+The reader limits input to 1,000,000 bytes, counting UTF-8 bytes rather than
+characters and bounding stream accumulation before JSON parsing. This is an
+operational limit enforced by `tests/cli.test.ts` and
+`tests/cli.process.test.ts`, not an astronomical measurement. `cast` and
+`analyze` emit JSON. `explain` defaults to readable text; `--format json`
+emits structured entries and their text. Text format is refused for other
+commands. Unknown, repeated or incomplete options are refused.
+
+Success and help exit with code zero. Malformed JSON, invalid input/policy,
+unreadable files and calculation failures exit with code one, emit a JSON
+error on stderr and leave stdout empty. The CLI does not echo malformed
+JSON or underlying file-system errors. A sampled search refusal is a valid
+analysis observation and returns success, with refusal evidence in the data.
+The process tests enforce these boundary behaviors and dependency resolution;
+they establish software behavior rather than predictive validity.
