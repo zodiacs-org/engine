@@ -7,9 +7,9 @@ in [PLAN.md](PLAN.md) records the implementation order.
 The library currently supplies strict inputs, apparent positions,
 Sun/body geometry, phase classification, geometric disk illumination,
 an arcus visionis criterion, a configurable visibility screen,
-rise/set/transit events and bounded observing windows with position receipts.
-Visibility transition searches,
-crescent predictions and the CLI are planned, not available.
+rise/set/transit events, bounded observing windows and bracketed horizon-arcus
+transitions with position receipts. Crescent predictions and the CLI are
+planned, not available.
 
 ## Development
 
@@ -317,8 +317,8 @@ caller supplies the Sun's airless centre altitude at that crossing. This
 pure helper does not find or verify the crossing. It returns the depression,
 threshold, signed margin and inclusive `passesCriterion`, under the model
 identifier `horizon-arcus-visionis/1`. Its reported body altitude is zero by
-definition. Future searches using the engine must request centre limbs and
-no refraction; the engine's default horizon conventions are different.
+definition. The `heliacalEvents` search uses centre limbs and no refraction;
+the engine's default horizon conventions are different.
 
 Schoch's thresholds depend on the appearance and observing conditions. This
 API supplies no automatic thresholds or lunar calibration. The distinction
@@ -401,6 +401,126 @@ parameters for the intended use; there are no fitted defaults. A pass means
 only that the supplied thresholds passed. The Moon accepts geometric
 screening only and rejects a photometry object: integrated point-source
 magnitude does not establish crescent visibility.
+
+## Heliacal transition searches
+
+```ts
+import { heliacalEvents } from "./src/index.js";
+
+const result = heliacalEvents("Venus", {
+  latitude: 13, longitude: -42, height: 120
+}, "2024-06-01", "2024-06-10", {
+  model: "horizon-arcus-visionis/1",
+  thresholds: { "first-morning": 5, "last-evening": 5 }
+});
+if (result.status === "complete") {
+  for (const event of result.events) {
+    console.log(event.appearance, event.at, event.bracket.from, event.bracket.to);
+    console.log(event.bracket.after.geometry.topocentric.sun.equatorial.receipt);
+  }
+}
+```
+
+The synthetic inputs above are exercised in
+[test/heliacal.test.ts](test/heliacal.test.ts). They are not recommended
+Venus thresholds. Every selected appearance needs an explicit solar-depression
+threshold in degrees. There are no body or weather defaults, and the
+thresholds are copied and frozen before engine evaluation. Supply at least
+one applicable key in `thresholds`:
+
+| Body | Available appearance keys |
+| --- | --- |
+| Mercury, Venus | `first-morning`, `last-evening`, `first-evening`, `last-morning` |
+| Mars, Jupiter, Saturn | `first-morning`, `last-evening` |
+| Moon | `first-evening`, `last-morning`, as a geometric arcus extension only |
+
+The planetary names follow Schoch's definitions, cited in
+[SOURCES.md](SOURCES.md#heliacal-transitions). The algorithm searches
+threshold crossings between opportunities; it does not identify conjunctions
+or certify that a change was caused by conjunction. The Moon's result carries
+`interpretation: "lunar-geometric-arcus-only"` and a
+`lunar-geometric-extension` diagnostic. It is not a first/last crescent
+prediction. Yallop and Odeh criteria remain separate planned work.
+
+This search accepts the horizon model only. The custom instantaneous
+`arcus-visionis-altitude/1` screen remains available through `arcusVisibility`.
+It cannot be supplied to this search. No extinction, magnitude, refraction
+or body-altitude screen is silently added to an empirical arcus threshold.
+The horizon's reference altitude is the airless body centre at zero;
+observer height is still passed explicitly to the engine. Actual calc body
+altitude is retained in the returned geometry and is not forced to zero.
+
+The engine supplies every supporting Sun and target rise, set and transit.
+Morning opportunities use target rises in the solar lower-to-upper-transit
+half; evening opportunities use target sets in the upper-to-lower half.
+Both include daylight crossings, which can fail the criterion. Searching
+only dark observing windows would lose these failure states.
+The meridian-half ownership is half-open and follows `observingWindows`,
+including during polar night. Solar depression comes from calc's airless
+topocentric Sun at the sky solver's target crossing. Sky and calc use the
+different observer and apparent-position reductions described above; this
+combination is explicit in the conventions, not a claim of identical horizons.
+
+An appearance requires opposite criterion states at target crossings in
+consecutive solar halves of the same period. A first appearance goes from
+failure to pass; a last appearance goes from pass to failure. Equality passes.
+Each appearance uses its own threshold, including when first and last are
+requested together. More than one appearance in a period shares the geometry
+evaluation. Missing or multiple target crossings, and crossings outside the
+request, produce unavailable opportunities and break the sequence. A target
+crossing in the wrong solar half is not reassigned to a neighbouring half.
+This also prevents a morning/evening handoff near opposition from inventing a
+heliacal appearance.
+
+Each event has a normalized ISO `at`: the passing horizon reference epoch,
+which is the later crossing for a first and the earlier crossing for a last.
+This is not an observing time. `bracket.before` and `bracket.after` preserve
+both opportunities, their criterion margins, full Sun/body geometry, source
+horizon events and solar transit anchors. `bracket.from` and `bracket.to`
+give those crossings' ISO instants. The bracket describes successive
+opportunities, not a continuous threshold root or an uncertainty interval.
+No interpolation or millisecond visibility precision is claimed.
+
+Both bracket crossings must lie in `[from,to)`. A lone passing opportunity
+at either range edge creates no event. Splitting a long request requires
+overlap that includes both adjacent opportunities to retain a transition
+across the split; source crossings, rather than a fixed civil-day count,
+determine that overlap. Events are sorted by their reference epoch.
+
+`opportunities` retains every intersecting solar half for a requested period,
+including unavailable ones. Its `from` and `to` are the full solar-half
+anchors, which can extend beyond the request; only evaluated crossings must
+be inside the request. `diagnostics` explains gaps. `observing` retains the
+bounded supporting window search, its polar diagnostics, horizon events,
+engine identity, receipts and sky sample usage. Source event instants are
+engine `Date` objects; treat them as read-only. The receipts attest only to
+the position calculations, not the search or model prediction.
+
+The range, support padding and `maxSamples` limits are those of
+`observingWindows`. A separate `maxGeometrySamples` bounds calls to
+`sunBodyGeometry`; its default is 800, exported in `HELIACAL_SEARCH_LIMITS`
+and checked in [test/heliacal.test.ts](test/heliacal.test.ts). Each such call
+computes the full geometry, not a single position. The exact needed count is
+checked before these calls, so a `geometry-budget` refusal evaluates none.
+Geometry calls attaching receipts in the supporting horizon search retain
+the separate accounting described under observing windows.
+
+Invalid models, options, thresholds and inapplicable appearances throw
+`RangeError`. Support failures propagate as `refused` or `unresolved`;
+geometry failures retain the intact engine `positionRefusal`. These results
+return no partial events or opportunities. A completed result means that
+all selected horizon opportunities were processed under these conventions,
+with gaps explicitly recorded. It inherits the sampled engine horizon
+solver's limits; it does not establish uninterrupted visibility coverage or
+predict weather and sightings.
+
+[test/heliacal-reference.test.ts](test/heliacal-reference.test.ts) applies
+the existing published Schoch thresholds to independently constructed
+crossing schedules and solar altitudes. These are criterion worked examples,
+not reproductions of historical observing dates. The
+[sequence tests](test/appearance-sequence.test.ts) check independent interval
+arithmetic, [failure tests](test/heliacal-failure.test.ts) check refusal and
+receipt preservation, and the engine integration tests check wiring only.
 
 ## Checks and sources
 

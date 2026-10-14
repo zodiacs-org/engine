@@ -20,3 +20,9 @@ export type {
   ObservingWindow, ObservingWindowOptions, ObservingWindowsResult,
   WindowBoundary, WindowBoundaryCause, WindowDiagnostic, WindowRefusalReason
 } from "./windows.js";
+export { HELIACAL_APPEARANCES, HELIACAL_SEARCH_LIMITS, heliacalEvents } from "./heliacal.js";
+export type {
+  EvaluatedHeliacalOpportunity, HeliacalAppearance, HeliacalDiagnostic, HeliacalEvent,
+  HeliacalEventsResult, HeliacalOpportunity, HeliacalSearchOptions, HorizonArcusModel,
+  UnavailableHeliacalOpportunity
+} from "./heliacal.js";
