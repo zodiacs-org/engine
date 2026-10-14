@@ -14,3 +14,7 @@ export type {
   AngleName, AngularityGeometry, AngularityOptions, NearAngle,
   PlanetAngularity, AngularityAnalysis
 } from "./angularity.js";
+export { analyzeAngleRulers } from "./angle-rulers.js";
+export type {
+  AngleRulerGeometry, AngleRuler, AngleRulerAnalysis
+} from "./angle-rulers.js";

@@ -1,0 +1,49 @@
+M4 angle-ruler essential dignity checks
+Runtime: Node.js v22.22.2 (existing temporary toolchain outside the checkout)
+PATH prepends /tmp/mundane-m1-node/node_modules/node/bin.
+For npm manifest checks, npm_config_cache points to mundane/.cache/npm,
+which is gitignored.
+
+Command: npm run check --prefix mundane
+TypeScript: tsc -p tsconfig.json --pretty false, exit 0
+Vitest: vitest run --config vitest.config.ts, exit 0
+Test Files: 4 passed (4)
+Tests: 273 passed (273)
+Scope: mundane/test/angle-rulers.test.ts (61 tests), angularity.test.ts
+(77 tests), chart.test.ts (59 tests), and inputs.test.ts (76 tests).
+The final check ran on the implementation and tests recorded for this session.
+Angle-ruler expectations are hand lookups on invented longitude geometry,
+documented in mundane/docs/angle-rulers.md. They cover day and night sect,
+both horizons, wraparound, each traditional domicile, repeated angle rulers,
+simultaneous dignities and debilities, term and face boundaries, participating
+triplicity exclusion, peregrine conditions, input validation, order,
+annotation independence, and detached deeply frozen JSON-compatible output.
+The first run exposed two omissions in hand expectations: Jupiter's first
+Gemini face and Mars's Aries domicile. The expectations were corrected
+against the source transcriptions in src/techniques/dignities.test.ts and
+their citations in docs/techniques.md, then the suite passed. No production
+calculation was changed to satisfy those omissions.
+Cast-chart checks at synthetic equatorial and polar places compare the helper
+with engine sect and essential-dignity functions. Those are integration
+checks, not independent accuracy evidence. No ingress, lunation or eclipse
+timing reference or accuracy claim is added by this milestone.
+
+Command: node mundane/scripts/check-package-isolation.mjs
+Exit 0.
+PASS: npm dry-run manifest contains no mundane files; scripts disabled,
+no archive written.
+This is an isolation check; the full package gate also needs a built dist tree.
+
+Command: npm run package:contents
+Exit 1: AssertionError: packed package is missing dist/calc.d.ts
+The checkout has no dist tree. The engine build was not run because this task
+requires all edits and generated project files to stay inside mundane/.
+The manifest isolation check does not substitute for the full package size
+and import-graph gate. No archive was packed.
+
+Command: git diff --check
+Exit 0.
+Project audit: nonignored mundane files are under 2 MB, documentation contains
+no em-dash characters, and all modified and untracked files are in mundane/.
+No engine source, root configuration, carried archive, or packed file changed.
+No git mutation, publication, or release workflow was performed.

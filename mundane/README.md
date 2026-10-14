@@ -3,8 +3,8 @@
 A private library and CLI project for classical mundane astrology on top of
 the engine in this checkout. Development follows [PLAN.md](PLAN.md). The
 current API normalizes inputs, casts charts at supplied instants, and analyzes
-classical planet angularity. Event searches, angle-ruler dignities, prose factor
-summaries, and CLI commands are planned and are not implemented yet.
+classical planet angularity and angle-ruler dignities. Event searches, prose
+factor summaries, and CLI commands are planned and are not implemented yet.
 
 From the repository root, using Node.js as required by [package.json](package.json):
 
@@ -142,7 +142,42 @@ a real sky. The hand derivation and scope of the synthetic checks are in
 [docs/angularity.md](docs/angularity.md), and the M3 check record is in
 [docs/evidence/m3/checks.txt](docs/evidence/m3/checks.txt).
 
-Chart factors will be labelled as traditional conventions, not predictions.
+To analyze the traditional domicile rulers of a cast chart's angles:
+
+```ts
+import { analyzeAngleRulers } from "./src/index.js";
+
+const analysis = analyzeAngleRulers(chart);
+console.log(analysis.sect, analysis.rulers);
+```
+
+Each row identifies the angle, its longitude and sign, its domicile ruler,
+and the ruler's `condition` at the planet's own longitude. The condition
+contains the engine's essential dignities, debilities, and `peregrine` flag.
+Repeated rulers retain a row for each angle. Output uses asc, mc, dsc, ic order,
+is deeply frozen and JSON-compatible, and carries the label
+`traditional conventions, not predictions`.
+
+Sect comes from the engine's `sectOf` on the supplied ascendant and Sun,
+independently of house cusps or supplied sect metadata. The dignity analysis
+reuses `dignityRulersAt` and `essentialDignities` from
+`src/techniques/dignities.ts`: Dorothean triplicity counts the chart sect's
+lord, Egyptian terms and Chaldean faces are used, and participating triplicity
+lords are not counted. There is no strength score or predictive interpretation.
+
+Like angularity, `analyzeAngleRulers` accepts minimal supplied geometry,
+through `AngleRulerGeometry`. It requires valid angle and body longitudes and
+unique rows for every classical planet. Valid outer-planet and node rows are
+accepted but do not rule angles. Other chart metadata, including annotations
+of sign and degree, does not enter the calculation. Shape validation does
+not verify that the geometry describes a real sky. Calculation flags,
+requested and actual houses, and astronomical provenance stay on the original
+chart. The convention sources, synthetic derivations, and limitations are in
+[docs/angle-rulers.md](docs/angle-rulers.md). Checks are enforced by
+[test/angle-rulers.test.ts](test/angle-rulers.test.ts), with a session record in
+[docs/evidence/m4/checks.txt](docs/evidence/m4/checks.txt).
+
+Chart factors are labelled as traditional conventions, not predictions.
 This project adds no electional scoring, calendar export, relocation grids,
 horary, or HTTP service. Code and documentation follow the repository's MIT
 licence; engine data retains the terms and attribution in
