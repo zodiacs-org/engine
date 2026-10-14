@@ -373,7 +373,67 @@ algorithm is copied into fixedstars source. Compatibility tests inject changed
 bytes through a test reader rather than editing the engine. They also refuse
 changed versions, a missing input and a mismatched graph. Runtime loading
 compiles in memory and gives each module an independent synchronous scope.
-The private proof's native result still identifies its Pluto slot and is
-not exposed through the library index. A future star-event wrapper must label
-the star and its fixedstars call provenance explicitly, while retaining native
-body results and the absence of native stellar receipt support.
+The private adapter's native result identifies its Pluto slot and is absent
+from the library index. The prepared public wrapper replaces that label with
+starId and captures an explicitly labelled fixedstars call record. Body results
+remain native; the engine still supplies no native sky receipt.
+
+## Prepared sky events, refraction and circumpolar geometry
+
+tests/sky.fixedstars.ts repeats the equatorial identities above through the
+public prepared search, for the same synthetic J2000 x-axis star, equatorial
+observer and 2000-03-20 to 2000-03-21 UTC window. Its geometric altitude and
+azimuth checks retain the predeclared 1e-5 degree construction tolerance for
+whole-millisecond crossings. The input declination is evaluated on the engine
+frame, so these are wiring checks with hand-derived spherical expectations,
+not independent physical accuracy evidence or saved output comparisons.
+
+For a point centre, standard horizon refraction changes the threshold from
+h = 0 to h = -R. The test uses R = 34/60 degrees, the engine's published USNO
+constant, whose source is cited in the parent LICENSING.md, Sky values, and
+docs/sky.md, Definitions. Refraction changes no celestial coordinates or
+hour angles: transit times and geometry must therefore be exactly unchanged.
+At the equator a rising crossing reaches -R before reaching zero, while a
+setting crossing reaches -R after reaching zero. The test checks both orders
+and each refracted altitude within the same construction tolerance. This
+does not test the physical validity of a constant atmospheric refraction.
+
+At a general geodetic latitude phi and true-of-date declination delta, the
+infinite-ray spherical identity is
+
+```text
+sin(h) = sin(phi) sin(delta) + cos(phi) cos(delta) cos(H)
+h_upper = 90 - abs(phi - delta)
+h_lower = abs(phi + delta) - 90
+```
+
+At H = 0, the first identity reduces to cos(phi - delta); at H = 180 degrees
+it reduces to -cos(phi + delta). Taking the altitude branch [-90,90] gives
+the two formulas. Synthetic tests at phi = +60 and -60 degrees use stationary
+J2000 directions at declination +70 and -70 degrees over the same UTC window.
+Directions in the observer's hemisphere stay above the geometric horizon,
+and the opposite directions stay below it: the inequalities have ample margin
+from zero despite the current frame rotation. At each transit the test uses
+the current delta in the identities, compares at the same 1e-5 degree
+tolerance, and requires the corresponding native never-sets or never-rises
+flag with both transits retained and no horizon crossings.
+
+A separate short window around the equatorial upper transit also carries
+never-sets even though that same star rises and sets during the day. This
+demonstrates the native flag's window-local meaning. Budget tests find the
+unrestricted synthetic call's native sample count, then request a smaller
+budget to verify late whole-result refusal and an empty event array. That
+count is used only to drive an integration test, not as an independent
+reference or an evaluation-cost claim. Refusal accounting is retained rather
+than assumed to consume every allowed sample. Tests also retain native
+outside-reference-span flags for an invented 1750-03-20 to 1750-03-21 UTC
+window on both complete and refused calls; those flags establish no stellar
+accuracy coverage.
+
+Public native body result comparisons cover the Sun, Moon and Pluto over the
+equatorial synthetic window with their defaults, geometric conventions and
+budget refusal, before and after star calls. They are integration comparisons
+made at runtime, not independent ephemeris accuracy evidence. Call-record tests
+check normalized request and result snapshots, JSON serialization, source
+contract identity, model scope, caller-input isolation and independence from
+later mutations of native Date objects. No event output fixture is committed.

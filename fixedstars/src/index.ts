@@ -7,6 +7,11 @@ export type {
 } from "./contacts.js";
 export { chartContactTargets, natalStarHits, NATAL_STAR_CONVENTIONS } from "./natal.js";
 export type { NatalStarHits } from "./natal.js";
+export { STAR_SKY_CONVENTIONS } from "./sky.js";
+export type {
+  BodySkyEvents, SkyCallRecord, SkyCompatibility, SkyStarInput, StarSkyEvents, StarSkySearch
+} from "./sky.js";
+export type { DateInput, Observer, SkyBody, SkyConventions, SkyEvent, SkyEventKind, SkyFlag, SkyOptions } from "./engine.js";
 export type {
   CatalogProvenance,
   CatalogStar,

@@ -4,8 +4,9 @@ This private source-checkout project is being built according to
 [PLAN.md](PLAN.md). It supplies a licensed catalog, source provenance, and a
 direct bridge to the parent engine with synthetic integration and geometric
 tests, proper-motion propagation, true-of-date stellar positions, pure
-conjunction and parallel matching, and natal chart-hit assembly with native
-chart envelopes. Parans and the CLI are pending milestones.
+conjunction and parallel matching, natal chart-hit assembly with native
+chart envelopes, and prepared star and body sky-event searches. Parans and
+the CLI are pending milestones.
 
 Use Node as specified by this folder's package.json. Install and check only
 this project from the repository root:
@@ -48,7 +49,91 @@ retain CC BY-SA terms. [LICENSING.md](LICENSING.md) and [NOTICE.txt](NOTICE.txt)
 state the redistribution terms and required attributions. Bulk generated
 tables and downloads belong in ignored folders.
 
-## Sky adapter proof
+## Sky event searches
+
+```ts
+import { prepareStarSky } from "./node.mjs";
+import { findStar } from "./src/index.js";
+
+// Preparation reads local source and compiles in memory. Do it once.
+const sky = await prepareStarSky();
+const spica = findStar("Spica")!;
+const observer = { latitude: 0, longitude: 0 };
+// Invented observing window, not a person's birth data.
+const from = "2000-03-20T00:00:00Z";
+const to = "2000-03-21T00:00:00Z";
+const stars = sky.starEvents(spica, observer, from, to, {
+  refraction: "none", maxSamples: 10000
+});
+const body = sky.bodyEvents("Sun", observer, from, to);
+console.log(stars.starId, stars.events, stars.provenance);
+console.log(body.sky, body.provenance);
+```
+
+The preparation entry is Node-only, with a TypeScript declaration beside it.
+The numerical source index exports StarSkySearch and its result types and
+STAR_SKY_CONVENTIONS. After preparation both search methods are synchronous
+and perform no file or network operations. Each prepared search has an
+independent adapter scope and exposes its verified compatibility contract.
+Source incompatibility rejects preparation; there is no fallback model.
+
+starEvents accepts a CatalogStar, an engine Observer, explicit from and to
+DateInput values, and optional native SkyOptions. It returns rise, set,
+upper-transit and lower-transit events in time order. The window includes
+from and excludes to; native event Dates identify the first whole millisecond
+at which the crossing has happened. Dates and offsets normalize through the
+engine's parser. Each sample follows the sky solver's UTC time-basis rules;
+timeScale and deltaT options are unsupported here. The stellar ray advances
+proper motion on each sample's TT and uses the engine's true-of-date rotation.
+
+The normalized observer retains latitude and east-positive longitude in degrees
+and height in metres, with absent height defaulting to zero. Horizon and
+transit definitions are the engine's. Stars use the point-body centre;
+upper and lower limb options are refused. Refraction defaults to standard;
+none requests the geometric horizon. Altitude and azimuth remain unrefracted
+degrees, with azimuth measured from north through east. Height affects the
+observer projection, without applying horizon dip. The observer defaults,
+refraction and geometric expectations are checked in
+[tests/sky.fixedstars.ts](tests/sky.fixedstars.ts), over its synthetic
+equatorial and polar observing windows; [GEOMETRY.md](GEOMETRY.md) derives
+the expected altitudes and azimuths. These are construction and integration
+checks, not a physical stellar accuracy measurement.
+
+The star result identifies starId and retains the native normalized window,
+observer, conventions, flags and samples; it does not expose the adapter slot
+as a body identity. status is complete with events, or refused with reason
+sample-budget and an empty events array. maxSamples is a positive integer or
+Infinity, defaulting to unlimited. Budgets apply to each search call and keep
+the engine's accounting, including refinement predicates. A coarse scan can
+refuse before consuming its remaining budget. No partial events survive a
+late refusal. Invalid inputs throw under the engine's validation rules.
+
+Native never-rises and never-sets flags describe this window, not an assertion
+that the star is globally circumpolar. Transits remain present when there is
+no rise or set. outside-reference-span is retained even on budget refusal;
+refused searches do not infer horizon flags. Stellar accuracy is unmeasured
+inside and outside that reference span, and the engine's ephemeris-span
+restriction still applies to its sample clock.
+
+bodyEvents returns the entire unmodified native SkyEvents under sky, including
+the body identity, body-specific limb defaults and refusal semantics. Both
+methods also return provenance, explicitly a fixedstars-call-record with
+nativeReceipt false. It contains engine and ephemeris identity, the verified
+source contract, normalized request, effective horizon conventions and budget,
+and a snapshot of status, flags, samples and events. Star records include the
+actual astrometry and stellar model conventions used; body records retain
+their native conventions without attributing the stellar model to them.
+The contract identifies source compatibility, not authentication or accuracy.
+No native sky receipt is available from the engine, and these records do not
+extend a natal envelope.
+
+The call record is a frozen, JSON-safe snapshot: instants are ISO strings,
+unlimited budget is the string unlimited, and absent refusal reason is null.
+It remains unchanged if a caller mutates native event or window Dates.
+Result objects and arrays are frozen, but Date methods retain their native
+mutability. Caller astrometry, observer, options and Dates remain untouched.
+
+### Adapter implementation
 
 The internal adapter now executes the existing parent src/sky/riseset.ts in
 an isolated in-memory bundle. It redirects only that module's astronomy-engine
@@ -84,10 +169,9 @@ Verify the proof without emitting an engine build:
 node fixedstars/scripts/build-sky-adapter.mjs
 ```
 
-The proof interface is internal and absent from the library index. Its raw
-star result still names the private Pluto slot. The public star event API
-and explicitly labelled fixedstars call provenance remain the next milestone;
-raw proof output must not be described as a native stellar receipt. The
+The raw adapter interface is internal and absent from the library index. Its
+raw star result names the private Pluto slot; the prepared public wrapper
+replaces that identity with starId and captures the call record. The
 scope, unchanged-body comparisons, error restoration and compatibility
 refusals are checked in [tests/sky-vector.fixedstars.ts](tests/sky-vector.fixedstars.ts)
 and [tests/sky-adapter.fixedstars.mjs](tests/sky-adapter.fixedstars.mjs).

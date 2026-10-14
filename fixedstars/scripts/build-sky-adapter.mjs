@@ -83,10 +83,17 @@ export async function compileSkyAdapter(contract = readEngineContract()) {
 }
 
 /** Each loaded proof has its own vector scope; nothing is written to disk. */
-export async function loadSkyAdapter() {
-  const { code } = await compileSkyAdapter();
+export async function loadSkyAdapter(contract = readEngineContract()) {
+  const { code } = await compileSkyAdapter(contract);
   const url = `data:text/javascript;base64,${Buffer.from(code).toString("base64")}#${randomUUID()}`;
   return import(/* @vite-ignore */ url);
+}
+
+/** Public Node preparation. All subsequent numerical searches are synchronous. */
+export async function prepareStarSky() {
+  const contract = readEngineContract();
+  const adapter = await loadSkyAdapter(contract);
+  return adapter.createStarSkySearch(adapter, contract);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

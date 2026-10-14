@@ -11,7 +11,7 @@ explicitly chosen pair). The harness owns commits, pushes, and the draft PR.
 - [x] M5 Implement pure conjunction and parallel matching with explicit angular orb units, inclusive boundaries, structured star ids and contact kinds, deterministic ordering, and independent geometric tests.
 - [x] M6 Cast synthetic natal inputs through the engine, include bodies and available angles, preserve native natal receipts, and expose the chart-hit library API with explicit coordinate conventions.
 - [x] M7 Prove an isolated catalog-vector adapter can execute the existing src/sky/riseset.ts solver without editing or copying its algorithms; verify vector substitution is scoped, ordinary bodies are unchanged, and incompatible engine source is refused.
-- [ ] M8 Expose catalog rise, set, upper transit, and lower transit searches through that adapter, including solver budgets, complete refusal, circumpolar flags, and explicitly labelled engine-call provenance.
+- [x] M8 Expose catalog rise, set, upper transit, and lower transit searches through that adapter, including solver budgets, complete refusal, circumpolar flags, and explicitly labelled engine-call provenance.
 - [ ] M9 Implement paran event pairing for bodies and angular contacts over an explicit observer window, with a configurable time orb, native body-sky results, star-sky provenance, and synthetic simultaneous-contact expectations.
 - [ ] M10 Implement the fixedstars list, fixedstars hits, and fixedstars parans CLI commands, strict options, JSON output, meaningful exit codes, and end-to-end synthetic tests.
 - [ ] M11 Extend independent geometric coverage for wraparound, poles, proper-motion conventions, frame consistency, unavailable angles, horizon tangencies, event-window boundaries, and sample-budget exhaustion.
@@ -247,3 +247,47 @@ absent; creating that engine build is outside the session's hard boundary.
 The isolation check confirms fixedstars exclusion with a package dry run,
 without claiming the missing build's budgets passed. All authored changes
 remain under fixedstars/. M8 is the next unchecked milestone.
+
+## M8 completion and M9 handoff
+
+node.mjs exports prepareStarSky with a matching declaration. Preparation
+verifies the existing source contract and compiles the unchanged engine sky
+solver in memory, then returns synchronous starEvents and bodyEvents methods.
+src/sky.ts defines their public types and conventions, exported by the source
+index without importing Node preparation. Star results replace the private
+body-slot identity with starId and retain native event kinds, normalized
+observer/window, conventions, flags, sample accounting and whole-result
+refusal. Native body results remain intact under sky. Options and budget
+validation reuse the engine's own helpers. No search algorithm was added.
+
+Both methods attach an explicitly labelled fixedstars call record, with
+nativeReceipt false, engine and ephemeris identity, the verified source
+contract, normalized effective request and complete or refused result snapshot.
+Star records also retain captured astrometry and stellar model conventions;
+body records do not claim that stellar model. These records are frozen and
+JSON-safe, using ISO strings and an explicit unlimited-budget marker. Native
+event and window Dates retain their normal mutating methods without changing
+the captured call record. Caller inputs remain untouched. No native sky
+receipt exists, and this record is neither an authenticated receipt nor
+physical accuracy evidence.
+
+tests/sky.fixedstars.ts and GEOMETRY.md cover hand-derived equatorial and
+circumpolar geometry, standard horizon refraction and unchanged transits,
+window-local horizon flags, early and late whole-result budget refusal,
+reference-span flags, normalized provenance and motion snapshots, native-body
+comparisons, input isolation and validation. All instants and observers are
+synthetic. Frame-derived declinations are geometric-test inputs, not independent
+physical stellar references. The compatibility contract and engine sources
+remain unchanged.
+
+M8 validation passed on Node 22.22.2: full local Vitest, TypeScript, offline
+catalog regeneration, sky adapter compilation and file/package isolation.
+The parent package:contents check still fails because dist/calc.d.ts is
+absent; creating that engine build is outside this session's hard boundary.
+The isolation check confirms fixedstars exclusion with a package dry run,
+without claiming the missing build's budgets passed. All authored changes
+remain under fixedstars/. M9 is next: pair complete prepared event results
+over an explicit observer window, keep time-orb semantics explicit, preserve
+native body output and both kinds of call provenance, and refuse incomplete
+paran results when a required sky search is refused. No paran pairing or CLI
+work was done in M8.
