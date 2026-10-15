@@ -11,3 +11,7 @@ export type {
   ConjunctionCoordinate, ConjunctionTarget, ConjunctionRequest, ConjunctionSearchReceipt,
   ConjunctionEvent, ConjunctionRefusalReason, ConjunctionResult
 } from "./conjunctions.js";
+export { APPULSE_BODIES, APPULSE_LIMITS, searchAppulses } from "./appulses.js";
+export type {
+  AppulseBody, AppulseRequest, AppulseSearchReceipt, AppulseEvent, AppulseRefusalReason, AppulseResult
+} from "./appulses.js";

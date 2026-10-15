@@ -273,3 +273,70 @@ passed. The local scope check confirms source sizes, prose rules, dependency
 pin, private-package status, exclusion from root npm file selection and
 changes only under `occultations/`. Git metadata, release archives and root
 package files were not changed.
+
+# M6 validation record
+
+Checked on 2026-10-15 using Node 22.22.2. `searchAppulses` finds sampled
+geocentric spherical-separation minima for distinct Moon/planet or
+planet/planet targets. A caller supplies the inclusive angular limit.
+The engine crossing solver searches a centered difference of squared chord
+distance; a factored haversine kernel avoids cancellation at shallow minima.
+Minimum verification, stencil and output positions share one finite budget.
+Events, empty searches and whole-search refusals carry immutable receipts.
+
+The complete local check passed:
+
+```sh
+npm --prefix occultations run check
+```
+
+This runs no-emit TypeScript, all ordinary Vitest tests, catalogue validation,
+the local bundle and scope checks. `test/appulse-geometry.test.ts` uses
+independent analytic trajectories for coincidence, longitude wrap, poles,
+antipodal maxima, minima without coordinate conjunctions, slow motion,
+constant separation, stationary touches and zero plateaus. It checks
+millisecond window ownership before and after the Unix epoch, bounded work
+and refusal of false zeros caused by the inherited solver's circular
+rounding. An independently defined asymmetric chord polynomial checks the
+finite-difference bias explicitly. These are numerical geometry checks,
+not physical timing evidence.
+
+`test/appulses.test.ts` exercises the actual engine on the Moon/Mars
+development day, 2024-01-10, and Jupiter/Saturn on 2020-12-21. It checks
+spherical separation against a separate formula on the same position
+inputs, distinguishes both coordinate conjunctions, and checks pair
+reversal, inclusive caps, immutable JSON replay, normalized inputs, budgets
+and zero-sample refusals for clock or range boundaries reached only by the
+stencil. These are integration checks rather than independent ephemeris
+accuracy measurements. Stencil and limits are enforced by those tests;
+all position calls stay in the recorded expanded evaluation interval.
+
+`test/appulse-references.test.ts` passes the unchanged frozen NAOJ
+Jupiter/Saturn development appulse on 2020-12-21, requiring exactly one
+event and the preregistered maximum absolute timing error of 3600 s through
+`assertReferenceChecks`. The source gives an approximate hour in JST,
+already converted to UTC in the frozen fixture. Its center/site is not
+specified, so the gate establishes coarse occurrence only. This acceptance
+limit is not a measured maximum residual, precision geocentric validation
+or a general timing bound. Source conventions, provenance and limitations
+remain in [the reference contract](test/fixtures/events/EVENTS.md).
+
+No held-out event was evaluated and no source fixture, partition or error
+criterion changed. Precision geocentric Moon/planet minimum times remain
+unvalidated. The receipt exposes finite-difference bias, shallow-minimum
+sensitivity, sampled completeness and inherited close-root merging. M6
+does not establish occultation candidates, contacts or visibility outlines.
+
+A fresh Node process imported the generated bundle and checked lunar and
+planetary appulses, JSON serialization, adjacent-window ownership at each
+returned instant and a halo-only clock refusal with no position samples.
+Generated catalogue and bundle files remain ignored.
+
+The root `npm run package:contents` was attempted with its cache inside this
+folder and stopped at `packed package is missing dist/calc.d.ts`. Creating
+root build output is forbidden for this task. No root build was run, and
+full root package, archive rebuild and conformance gates are not claimed
+as passed. The local scope check passed source sizes, prose rules, dependency
+pin, private-package status, exclusion from root npm file selection and
+changes only under `occultations/`. Git metadata, release archives and root
+package files were not changed.

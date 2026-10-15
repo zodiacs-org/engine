@@ -6,10 +6,11 @@ interpretations, or make predictions about people or events.
 
 The current milestones provide validated position samples, a receipted SAO
 stellar catalogue, reproducible source extraction, apparent star directions,
-and geocentric conjunction searches in right ascension or ecliptic longitude.
+geocentric conjunction searches in right ascension or ecliptic longitude,
+and geocentric Moon/planet and planet/planet appulse searches.
 Independent event references and maximum-error criteria were frozen before
 event implementation in [the reference contract](test/fixtures/events/EVENTS.md).
-Appulse and occultation searches, contact times, visibility outlines and the
+Occultation searches, contact times, visibility outlines and the
 CLI remain unchecked in [PLAN.md](PLAN.md). There is no measured occultation
 accuracy claim yet. [DESIGN.md](DESIGN.md) records the geometry and error
 budget to validate; [SOURCES.md](SOURCES.md) separates provenance from leads.
@@ -209,6 +210,56 @@ npm --prefix occultations run references:verify-source
 Keep [the event reference notice](test/fixtures/events/NOTICE.txt) with these
 fixtures. NAOJ reference material retains its stated use terms; the authored
 MIT licence does not replace them.
+
+`searchAppulses()` finds local minima of spherical separation for a pair:
+
+```js
+import { searchAppulses } from "./occultations/.generated/index.mjs";
+
+const result = searchAppulses({
+  first: "Moon",
+  second: "Mars",
+  maximumSeparationDegrees: 10,
+  window: { from: "2024-01-10", to: "2024-01-11" }
+});
+console.log(JSON.stringify(result));
+```
+
+Both targets must be distinct entries in `APPULSE_BODIES`: the Moon or a
+planet. The required `maximumSeparationDegrees` is an inclusive caller limit
+on each event's reported separation. An event has `kind: "appulse"`, `at`,
+both targets, `separationDegrees` and a receipt. It is a geocentric fact;
+neither equal coordinates nor occultation contacts are implied. A monotonically
+decreasing separation at the window end is not a local minimum.
+
+The search approximates a minimum by a negative-to-positive zero of a
+centered difference of squared unit-chord distance. The engine crossing
+solver supplies candidate times, which are checked using the original rate.
+The fixed stencil and finite resource limits are exported in `APPULSE_LIMITS`.
+`stepDays` may reduce the coarse step; `maxSamples` limits paired position
+evaluations, including stencil, refinement and output samples. All results
+and refusals carry immutable JSON receipts. Refusal always returns an empty
+event list, including when earlier events were already found.
+
+Events own `(from, to]`. The stencil needs positions outside that window,
+including a neighboring millisecond for endpoint confirmation. The entire
+possible interval is in `receipt.search.evaluationWindow`; its clock seams
+or out-of-range endpoints refuse the search before position sampling. An
+isolated exact zero is accepted; a detected zero plateau is unresolved.
+Constant separation supplies no isolated event. The returned millisecond
+identifies the numerical rate crossing, not the physical minimum to that
+precision. Shallow minima, finite-difference bias and unsampled extrema
+remain limitations. Completion is sampled, not a completeness proof.
+
+[The analytic tests](test/appulse-geometry.test.ts) check spherical geometry,
+minimum classification and stencil bias. [The integration tests](test/appulses.test.ts)
+check the example, angular caps, conjunction distinctions, receipts and budgets.
+[The appulse reference test](test/appulse-references.test.ts) applies the
+unchanged frozen maximum error to the NAOJ Jupiter/Saturn development case
+on 2020-12-21. Its approximate outreach time establishes coarse occurrence
+only; it does not validate precision geocentric timing or lunar minima.
+No held-out appulse has been evaluated. [DESIGN.md](DESIGN.md) explains the
+numerical and physical timing limitations.
 
 `check:scope` checks npm file selection without running lifecycle scripts or
 writing an archive. It also enforces the task's source-file size and prose

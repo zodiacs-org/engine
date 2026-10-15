@@ -2,7 +2,7 @@
 
 This is the implementation contract for the remaining milestones. The
 position adapter, input/receipt foundation, source catalogue, apparent
-stellar reduction and geocentric coordinate conjunction searches are implemented. An unchecked
+stellar reduction, geocentric coordinate conjunctions and appulse searches are implemented. An unchecked
 part of PLAN.md is not a supported calculation or an established error bound.
 
 ## Engine boundary and clock
@@ -203,6 +203,82 @@ seconds before applying each original gate. No reference value or tolerance
 has been fitted to these results. The measured scope is in VALIDATION.md;
 neither that comparison nor numerical root precision supplies a general
 physical timing bound or validates an appulse or occultation contact.
+
+## Appulses implemented in M6
+
+`searchAppulses` accepts two distinct Moon/planet targets and a required
+maximum separation in degrees. It returns local minima of their apparent
+geocentric spherical separation that satisfy the inclusive limit. There is
+no observer, ranking or default closeness criterion. Stars and the Sun are
+outside this API. Equal RA, equal ecliptic longitude and disk contacts remain
+separate calculations.
+
+Let `a` and `b` be unit directions, `q = |a-b|^2`, and `theta` their
+great-circle separation. Then `q = 4 sin(theta/2)^2`. A decreasing-to-increasing
+zero of `q`'s time derivative describes a separation minimum; the opposite
+direction describes a maximum. This also handles a zero-separation passage
+without differentiating a singular angular norm. Reported separation uses
+`atan2(|a cross b|, a dot b)`, retaining precision near coincidence and the
+antipode. Exact coordinate poles have longitude-independent directions.
+
+The numerical rate is `(q(t+h)-q(t-h))/(2h)`, with the fixed half width
+`h = 60 s` in `APPULSE_LIMITS`. `test/appulse-geometry.test.ts` checks that
+stencil, its analytic bias, slow motion and window boundaries. To avoid
+subtracting nearly equal squared lengths, the kernel uses the haversine:
+
+```text
+q = 4 [sin((decA-decB)/2)^2
+     + cos(decA) cos(decB) sin((raA-raB)/2)^2]
+sin(x/2)^2 - sin(y/2)^2 = sin((x+y)/2) sin((x-y)/2)
+cos(x) - cos(y) = -2 sin((x+y)/2) sin((x-y)/2)
+```
+
+Each factor difference and product difference is formed before summing the
+terms. Relative longitudes at the two epochs use a common continuous branch;
+an exact pole's cosine is zero. Directions at each epoch share the engine's
+true-of-date frame, so scalar separation is unchanged by that epoch's common
+rotation. No second frame, light-time or aberration correction is applied.
+
+The rate in squared unit-chord per day becomes `atan(10000*rate)*90/pi`
+degrees for `searchLongitudeCrossingsWith`. This bounded monotone mapping
+keeps the same zeros while avoiding an artificial circular wrap. Candidate
+times are verified against the untransformed rate at adjacent integer
+milliseconds, including before the Unix epoch. Only negative-to-positive
+transitions or isolated exact zeros between those signs become events.
+Maxima and stationary touches are omitted. A detected zero plateau or an
+unconfirmed candidate refuses the complete search with `unresolved-minimum`.
+Constant separation has no isolated event. Limits compare the separation at
+the reported numerical instant without an accuracy allowance.
+
+Events own `(from,to]`. Stencil samples and adjacent-millisecond verification
+can evaluate outside that event window: `search.evaluationWindow` covers
+`[from-h-1 ms,to+h+1 ms]`. Both endpoints must fit the engine clock and
+calculation span, and any clock seam inside that expanded support refuses
+the search before position sampling. No stencil crosses a leap second or
+the delta-T/table handovers. The step is capped and rounded down to integer
+milliseconds. Every pair of adapter calls, including repeated instants,
+consumes the same finite budget; an exhausted budget discards all events.
+
+This is a numerical approximation to a minimum, not a claim of physical
+millisecond accuracy. For smooth `q` with a nonzero second derivative, the
+leading stencil shift is approximately `-h^2 q'''/(6 q'')` seconds when the
+derivatives use seconds. It grows without a bound as curvature vanishes.
+Position errors and roundoff perturb the derivative too: their local timing
+effect is approximately `E(q')/abs(q'')` seconds, in addition to clock and
+solver errors. These expressions are sensitivities, not assigned error
+budgets; missing derivative-error bounds remain unknown. A constructed
+asymmetric polynomial in the analytic test demonstrates a stencil shift
+even with exact input geometry.
+
+The inherited smooth-motion and station assumptions and merging of very
+close roots still apply. No sampling policy proves all minima were found,
+and slow shallow minima can be unresolved or numerically unstable. The
+receipts retain these limitations, the stencil, actual evaluation support,
+budget and both position receipts. The independent NAOJ development appulse
+test checks only the frozen approximate Jupiter/Saturn occurrence time.
+The reference's center is unspecified; there is no precision geocentric
+Moon/planet minimum validation or general timing bound. Held-out checks
+remain reserved for M12. VALIDATION.md records this milestone's scope.
 
 ## Sphere contacts and sky facts
 

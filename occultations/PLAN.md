@@ -26,7 +26,7 @@ package, source, build output, archive or release changes are part of this plan.
   longitude through `src/crossings.ts`. Implement explicit window ownership,
   wrap handling, budget refusals, seam handling and receipts; test boundaries
   and independent conjunction references.
-- [ ] M6 Find close Moon/planet and planet/planet appulses by spherical
+- [x] M6 Find close Moon/planet and planet/planet appulses by spherical
   separation minima. Distinguish them from coordinate conjunctions; support
   caller-supplied angular limits, bounded searches and independent tests.
 - [ ] M7 Identify geocentric lunar occultation candidates and series using
