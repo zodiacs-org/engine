@@ -8,8 +8,8 @@ The library currently supplies strict inputs, apparent positions,
 Sun/body geometry, phase classification, geometric disk illumination,
 an arcus visionis criterion, a configurable visibility screen,
 rise/set/transit events, bounded observing windows, bracketed horizon-arcus
-transitions, geometric acronychal/cosmical phenomena and a pure Yallop
-lunar crescent criterion. Position-based APIs preserve engine receipts.
+transitions, geometric acronychal/cosmical phenomena and pure Yallop and
+Odeh lunar crescent criteria. Position-based APIs preserve engine receipts.
 Date-range crescent predictions and the CLI are planned, not available.
 
 ## Development
@@ -441,7 +441,8 @@ threshold crossings between opportunities; it does not identify conjunctions
 or certify that a change was caused by conjunction. The Moon's result carries
 `interpretation: "lunar-geometric-arcus-only"` and a
 `lunar-geometric-extension` diagnostic. It is not a first/last crescent
-prediction. Yallop and Odeh criteria remain separate planned work.
+prediction. The pure Yallop and Odeh criteria below are available separately;
+their date-range crescent searches remain planned.
 
 This search accepts the horizon model only. The custom instantaneous
 `arcus-visionis-altitude/1` screen remains available through `arcusVisibility`.
@@ -724,6 +725,83 @@ validation, immutability, neighboring binary category inputs and date
 rounding. These checks establish implementation of the criterion, not
 historical date agreement or predictive accuracy. Crescent event searches
 that combine engine geometry, horizon times and receipts remain planned.
+
+## Odeh lunar crescent criterion and model selection
+
+```ts
+import { evaluateOdeh, odehBestTime, evaluateCrescent } from "./src/index.js";
+
+const best = odehBestTime("2001-02-03T18:00:00Z", "2001-02-03T18:45:00Z");
+// Independent, invented geometry, not computed for the example times above.
+const geometry = {
+  moonAltitudeTopocentricDeg: 4,
+  sunAltitudeTopocentricDeg: -5,
+  crescentWidthTopocentricArcmin: 0.5
+};
+const criterion = evaluateOdeh(geometry);
+const selected = evaluateCrescent({ model: "odeh-2006/1", geometry });
+```
+
+`evaluateOdeh` implements Mohammad Sh. Odeh's *New Criterion for Lunar
+Crescent Visibility*, equation (2), printed page 61. The article is in
+Experimental Astronomy's volume marked 2004 and carries a Springer 2006
+notice; the model id uses `odeh-2006/1`. [SOURCES.md](SOURCES.md#lunar-crescents)
+records the citation and locators.
+
+Supply airless topocentric Sun and Moon centre altitudes in degrees and
+topocentric crescent width in arcminutes, all for the same best observing
+time. Width is supplied directly; this API does not derive it from
+elongation or substitute Yallop's mixed-coordinate approximation. In
+particular, the width unit is that of Odeh's equation, not the arcseconds
+in the paper's observation table.
+
+The result retains the sample, `arcOfVisionDeg = moonAltitude - sunAltitude`,
+`crescentWidthArcmin`, the cubic's `referenceArcOfVisionDeg`, and
+`v = ARCV - (7.1651 - 6.3226*W + 0.7319*W^2 - 0.1018*W^3)`.
+This residual is in degrees; it is not Yallop's dimensionless `q`.
+`parameters` exposes the frozen `ODEH_MODEL`, including the source,
+coefficients and thresholds. `odehCategory(v)` classifies a finite residual
+directly. Exact thresholds belong to the more-visible category:
+
+| Category | V interval | Interpretation under the model |
+| --- | --- | --- |
+| A | `v >= 5.65` | Unaided sighting |
+| B | `2 <= v < 5.65` | Optical sighting; unaided sighting may be possible |
+| C | `-0.96 <= v < 2` | Optical sighting only |
+| D | `v < -0.96` | Below optical detection |
+
+The [reference tests](test/odeh-reference.test.ts) check this formula against
+independent Decimal arithmetic and selected rounded boundaries in Table V.
+The [API tests](test/odeh.test.ts) enforce the category inequalities,
+including the adjacent binary inputs, and the example above. The
+[fixture notes](test/fixtures/ODEH.md) describe the selected inputs, comparison
+gates, independent generator and attribution. These checks measure criterion
+implementation, not historical dates or sighting performance.
+
+The function performs no ephemeris, horizon, weather, lunar-phase or
+observing-time validation. Its numeric domains only keep the arithmetic
+defined; they are not empirical applicability limits. Categories do not
+guarantee a sighting. Extinction, refraction, height and magnitude adjustments
+are not parameters of this fixed fit; unknown options are rejected. No
+separate Danjon-limit filter is added to the published residual classifier.
+Results and copied inputs are frozen, with
+`receiptScope: "none;caller-supplied-geometry"` and no engine receipt.
+
+`odehBestTime(sunset, moonset)` implements equation (1), printed page 43,
+which adopts Yallop's evening rule. It reuses `yallopBestTime`'s validation
+and exact integer rounding, returning Odeh's model and source convention.
+The [timing fixture](test/fixtures/odeh-reference.json) independently checks
+this arithmetic. The caller must establish an appropriate evening setting
+pair. No morning timing rule is implied.
+
+`evaluateCrescent({ model, geometry })` requires either `yallop-1997/1` with
+`YallopGeometry`, or `odeh-2006/1` with `OdehGeometry`. There is no default
+model, coordinate conversion or common visibility boolean. The returned
+`CrescentCriterion` is a discriminated union: inspect `model` before reading
+`q` or `v`, interpreting `category`, or comparing results. For example,
+Yallop C permits optical location followed by an unaided sighting, while
+Odeh C means optical aid only. [Selection tests](test/crescent.test.ts)
+enforce the distinct types, meanings and validation at runtime.
 
 ## Checks and sources
 

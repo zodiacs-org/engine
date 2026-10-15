@@ -1,6 +1,6 @@
 # Primary-source roadmap
 
-The sources below distinguish implemented geometry, phase, arcus and Yallop checks
+The sources below distinguish implemented geometry, phase, arcus and crescent checks
 from the remaining model roadmap. A roadmap citation does not mean that a
 model is implemented.
 Formulas must be implemented independently, with their units, coordinate
@@ -208,12 +208,30 @@ Mohammad Sh. Odeh, "New Criterion for Lunar Crescent Visibility",
 *Experimental Astronomy* 18, pp. 39-64,
 DOI [10.1007/s10686-005-9002-5](https://doi.org/10.1007/s10686-005-9002-5):
 <https://astronomycenter.net/pdf/2006_cri.pdf>.
-This model remains planned. Section 5, Table V and equation (2) provide a
-criterion and rounded boundary values suitable for small independent worked
-tests. Use airless topocentric
-geometry and the width unit of the equation, not the different width unit
-printed in the observational table. Preserve the distinction between
-unaided and optical-aid categories. Do not copy the observation database.
+Fetched and the relevant page images read on 2026-10-15. The journal volume
+is marked 2004; the PDF carries a Springer 2006 notice. `ODEH_MODEL` uses
+the identifier `odeh-2006/1`. Implemented as `evaluateOdeh`, `odehCategory`
+and `odehBestTime`:
+
+- Section 5, printed p. 43, specifies airless topocentric ARCV and
+  topocentric crescent width. Equation (2), printed p. 61, uses width in
+  arcminutes and supplies the residual and inclusive category boundaries.
+  This API takes width directly, without deriving it from Yallop's
+  geocentric separation or applying a separate elongation limit.
+- Equation (1), printed p. 43, adopts Yallop's evening best-time rule.
+  The helper reuses its arithmetic with Odeh-specific metadata. The
+  millisecond rounding and nonpositive-lag rejection are library choices.
+- The category meanings and atmospheric limitations appear on printed
+  pp. 43 and 61. The code preserves optical-aid distinctions and supplies
+  no weather adjustment or sighting guarantee.
+
+The [fixture](test/fixtures/odeh-reference.json) and its
+[notes](test/fixtures/ODEH.md) record original Decimal worked calculations
+and selected rounded criterion boundaries from Table V. The
+[tests](test/odeh-reference.test.ts) enforce predeclared arithmetic gates.
+No observation database, source program or publication prose is copied.
+`evaluateCrescent` selects a model explicitly and retains its distinct
+geometry, residual, category meanings and pure-function receipt scope.
 
 Both calibration tables include morning observations: Yallop section 5,
 Table 4, and Odeh section 6, Table VI, identify morning/evening cases. Before

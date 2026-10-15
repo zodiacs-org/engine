@@ -34,3 +34,7 @@ export type {
 } from "./phenomena.js";
 export { YALLOP_MODEL, evaluateYallop, yallopBestTime, yallopCategory } from "./yallop.js";
 export type { YallopBestTime, YallopCategory, YallopCriterion, YallopGeometry } from "./yallop.js";
+export { ODEH_MODEL, evaluateOdeh, odehBestTime, odehCategory } from "./odeh.js";
+export type { OdehBestTime, OdehCategory, OdehCriterion, OdehGeometry } from "./odeh.js";
+export { evaluateCrescent } from "./crescent.js";
+export type { CrescentCriterion, CrescentCriterionRequest, CrescentModel } from "./crescent.js";
