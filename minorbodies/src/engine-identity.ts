@@ -22,6 +22,11 @@ export async function readAdapterSourceIdentity(): Promise<EngineSourceIdentity>
   return readLocalSourceIdentity(["./body-adapter.ts"]);
 }
 
+/** Station wrapper and the original engine crossing solver, including interfaces. */
+export async function readStationSourceIdentity(): Promise<EngineSourceIdentity> {
+  return readLocalSourceIdentity(["./stations.ts"]);
+}
+
 async function readLocalSourceIdentity(entries: readonly string[]): Promise<EngineSourceIdentity> {
   const repository = new URL("../../", import.meta.url);
   const seen = new Map<string, string>();

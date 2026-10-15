@@ -232,3 +232,27 @@ are integration checks, not new independent accuracy evidence. The real
 pilot crossing test derives its target from computed positions and likewise
 establishes only callback integration. Independent event references remain
 part of the later search and final-validation milestones.
+
+## M7 station reference sources
+
+`tests/fixtures/stations/` retains original Horizons File API responses inside
+their exact request/capture records. Each body's manifest pins the complete
+capture bytes, recipe and generator source hashes. The numerical-data
+redistribution basis above applies unchanged. No new external code, binary,
+ephemeris file or dependency is committed. The File API documentation and
+SSD serialized-use policy linked above were read again for this intake.
+
+`scripts/capture-station-reference.ts` selects epochs only from its fixed
+scan and from sign changes in independently reduced Horizons positions.
+`src/station-reference.ts` rejects overlap with either the pilot or full-range
+training epochs, requires the fitted dataset's original source identity,
+and uses the separately installed ERFA reducer described above. It does not
+call a fitted evaluator, a body adapter or a package event search. Source
+velocity columns do not establish the expected station signs or times.
+
+The original scan and refinement responses remain unchanged in these source
+fixtures; derived ERFA rows and reference reports remain ignored. Exact replay
+is offline. A fresh live capture can change source bytes or orbit identity
+and is not treated as a replacement for retained evidence. The recipe's
+initial training-epoch collision and the revised scan phase are retained in
+code and explained in [M7 station reference evidence](docs/evidence/M7-station-reference.md).

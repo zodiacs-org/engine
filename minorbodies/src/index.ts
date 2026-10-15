@@ -22,3 +22,6 @@ export type { AdapterBody, BodyAdapterRequest, BodyAdapterProvider, BodyAdapterR
   AspectRowsReceipt, AspectRowsResult, LongitudeCallbackOptions, LongitudeCallbackReceipt,
   LongitudeCallback } from "./body-adapter.ts";
 export type { AdapterTimeRequest, AdapterTimeReceipt } from "./adapter-input.ts";
+export { createStationSearcher, STATION_SEARCH_CONVENTIONS } from "./stations.ts";
+export type { StationSearchRequest, StationDirection, StationSearchReceipt, StationSample,
+  StationEvent, StationSearchResult, StationSearcher } from "./stations.ts";

@@ -12,7 +12,7 @@ human-written evidence notes stay with their capture scripts and provenance.
 - [x] M4 Generate a Chiron pilot dataset and implement the geocentric evaluator, time conversion, ecliptic reduction, speed, retrograde state and result receipts. Compare it with held-out Horizons samples before extending the span.
 - [x] M5 Generate and validate the required Chiron, Ceres, Pallas, Juno and Vesta datasets over the target range. Freeze request manifests and digest receipts; measure shard sizes and boundary continuity. Keep generated bulk data ignored.
 - [x] M6 Add the body adapter: delegate ordinary bodies to engine calc, expose minor-body calculation with explicit conventions and refusals, and provide generic crossings callbacks and configured-aspect rows. Verify actual results and mixed-body use.
-- [ ] M7 Implement station searches through the engine crossings solver, with sample budgets, boundary handling and receipts. Check direct-to-retrograde and retrograde-to-direct events against independent Horizons samples.
+- [x] M7 Implement station searches through the engine crossings solver, with sample budgets, boundary handling and receipts. Check direct-to-retrograde and retrograde-to-direct events against independent Horizons samples.
 - [ ] M8 Build retrograde windows from stations and endpoint states, carrying clipped-window and refusal information. Test adjacent windows, incomplete searches and supported-range edges.
 - [ ] M9 Add sign ingress search through the engine crossings solver with directions, sign labels, receipts and shared budgets. Check wraparound, repeated ingresses and station-adjacent cases independently.
 - [ ] M10 Add a local CLI for positions, stations, retrograde windows and ingresses, with JSON output, explicit time conventions and useful failures. Test commands against the library and invalid input.
@@ -96,3 +96,19 @@ range refusal. No coefficient, generator or accuracy limit changed. The
 root package contents check still fails on the initial missing `dist/calc.d.ts`;
 no root build or packed-file change was made. All work remains inside
 `minorbodies/`. M7 is the next unchecked milestone.
+
+M7 verification: `npm run check`, the unchanged full-accuracy and full-adapter
+suite, and the added `npm run full:test -- tests/full-stations.test.ts` all
+passed on Node 22.22.2. Original station-source replay and native offline
+Node execution passed too. Station searches reuse the engine solver with a
+shared provider-call budget, explicit TT endpoints, one-sided direction
+evidence, whole-result refusals and complete provenance receipts. Synthetic
+tests cover boundaries, touches, paired roots, budget exhaustion, invalid
+inputs and numerical mapping resolution. Held-out Horizons/ERFA brackets
+check the required bodies over synthetic calendar year 2000 TT and enforce
+the preregistered timing gate plus unchanged angular and speed limits.
+The rejected initial reference epoch overlap is retained in the recipe
+history; no coefficient or accuracy budget changed. Root package contents
+still fails on the initially missing `dist/calc.d.ts`; the scope check passes
+and no root build or packed-file change was made. All changes remain inside
+`minorbodies/`. M8 is the next unchecked milestone.

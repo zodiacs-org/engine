@@ -8,6 +8,7 @@ evaluator and receipts. M5 adds the required bodies over the target interval,
 with a separate full-data validation command. Its finite coverage samples
 do not replace the final M11 accuracy and event corpus. M6 adds body dispatch,
 generic longitude callbacks and configured-aspect rows with explicit receipts.
+M7 adds station searches using the engine solver and independent event references.
 
 The required targets are Chiron, Ceres, Pallas, Juno and Vesta. Pholus and
 Eris can follow only after the same checks. The target interval is
@@ -596,7 +597,7 @@ its possible clock steps. A numerical provider refusal throws
 Malformed Date input throws `RangeError`. Sample-budget behavior, interval
 ownership and root refinement remain the existing solver's. Direct solver
 output has no new event receipt or completeness claim; the dedicated event
-wrappers are still subsequent milestones.
+wrappers are described below and in subsequent milestones.
 
 `tests/body-adapter.test.ts` compares delegated values with direct engine
 calc, checks time conversions, refusals and immutable receipts, and repeats
@@ -607,3 +608,68 @@ integration testing, not independent event timing evidence.
 rows over finite full-data samples, including the final calendar year and
 coverage edges. Existing full accuracy checks remain separate and mandatory
 under `full:test`. No fit, source corpus or acceptance limit changes in M6.
+
+## M7 station contract
+
+`createStationSearcher(adapter)` captures the station wrapper and engine solver
+source identities explicitly, then exposes synchronous `searchStations` calls.
+Only installed minor bodies are admitted. The caller's calc-compatible endpoint
+inputs are snapshotted and resolved with the adapter's existing time conversion.
+The internal clock is continuous TT; no civil-time model seam is scanned as a
+speed discontinuity. Results retain the original requests and their conversions.
+
+The wrapper calls `searchLongitudeCrossingsWith` on the angular speed mapping
+described above, with a fixed positive unit speed scale. It does not implement
+bisection, golden-section search or longitude-event enumeration. Samples whose
+finite speed rounds to the target during the solver's angular normalization, or
+saturates at its far-side cutoff, refuse as `speed-resolution`. Such a speed
+cannot silently become a zero or disappear from the search.
+
+The solver receives relative Date coordinates beginning at zero. The origin
+maps to the exact input TT Julian date; each integer millisecond maps to that
+origin plus elapsed TT. The final Date coordinate is the ceiling of the elapsed
+milliseconds and maps to the exact ending TT Julian date. This preserves arbitrary
+fractional input epochs and prevents a sample beyond an exclusive coverage edge.
+Direction probes can use fractional milliseconds. Output events use TT Julian
+dates rather than mutable Dates or a misleading UTC label.
+
+The admissible coarse step is at least a millisecond and at most five TT days,
+with a default of one TT day. Direction probes reach up to a minute on each side
+of a candidate, clipped to the query endpoints and the midpoints to neighboring
+candidates. These are operational choices, not demonstrated full-range speed
+extremum bounds. `tests/stations.test.ts` enforces the limits and tests boundary
+roots, paired reversals and the maximum step. The existing solver's bisection
+and deduplication settings are recorded in the receipt. Its smoothness assumption
+now concerns the mapped speed: at most one speed extremum in two coarse steps.
+
+Only opposite, nonzero one-sided speeds establish a station direction. A sampled
+zero with matching nonzero signs on both sides is discarded as a touch. Matching
+signs with a nonzero candidate, a zero direction probe or a collapsed probe
+interval produce `station-direction-unresolved`, with the candidate TT epoch.
+The mapped solver's direction flag is never used as a longitude motion flag.
+An exact zero at the inclusive query end likewise needs more support and refuses;
+no probe goes beyond the query. An exact starting station belongs to the preceding
+window under `(from, to]` and is excluded. Searches must lie wholly inside loaded
+coverage, whose upper endpoint is exclusive. No clipping or extrapolation occurs.
+
+One budget counts every provider invocation: coarse scan, root refinement,
+direction probes and final event positions, including repeated evaluations.
+The default and optional unlimited budget are tested. The engine solver performs
+its original coarse-count preflight; later stages share the remaining budget.
+Any refusal discards all pending events, including failure after earlier events
+have already been calculated. A provider refusal retains its original receipt.
+Every completed event records its position and both classification samples;
+all events share the final search receipt with total work, dataset, source
+identities, settings and evaluated shard digests. Receipts establish provenance
+and declared conventions, not physical accuracy or proof of completeness.
+
+Independent event intake is described in
+[M7 station reference evidence](docs/evidence/M7-station-reference.md).
+`tests/station-accuracy.test.ts` checks the retained Chiron pilot;
+`tests/full-stations.test.ts` checks the loaded full datasets for the required
+bodies. Their expected brackets come from disjoint original Horizons positions
+and the separate ERFA reducer, including independent stencil convergence.
+The tests enforce the preregistered timing margins and the unchanged longitude
+and speed arcsecond limits at held-out station-neighborhood epochs. No fitted
+coefficient, polynomial degree, source training epoch or position acceptance
+budget changes for M7. Full-range event validation remains M11.

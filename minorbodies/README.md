@@ -4,8 +4,8 @@ This source-checkout package is under development. It computes geocentric
 ecliptic longitude, latitude, distance, speeds and retrograde state for Chiron,
 Ceres, Pallas, Juno and Vesta from explicitly loaded local tables, with
 provenance receipts. Its Chiron pilot is also retained. The implementation
-sequence is in [PLAN.md](PLAN.md). The body adapter is available; event
-searches and the CLI remain later milestones.
+sequence is in [PLAN.md](PLAN.md). The body adapter and station search are
+available; retrograde windows, sign ingresses and the CLI remain later milestones.
 
 The design uses JPL Horizons samples to build local Chebyshev tables. See
 [DESIGN.md](DESIGN.md) for conventions, coverage, validation and engine
@@ -326,9 +326,71 @@ receipt. A provider refusal from `longitudeAt` throws
 `BodyAdapterRefusalError`, whose `refusal` holds the structured result and
 receipt. It never returns a fabricated longitude. The solver propagates that
 error. Its own sample-budget refusal remains unchanged. Keep the callback
-receipt with direct solver results; per-event receipts and dedicated station,
-retrograde-window and ingress searches remain later milestones.
+receipt with direct solver results. The dedicated station wrapper below adds
+per-event receipts; retrograde-window and ingress wrappers remain later milestones.
 
 The adapter's tests establish integration and preserve the pilot's existing
 held-out accuracy checks, not additional astronomical coverage. See
 [M6 evidence](docs/evidence/M6.md).
+
+## Station searches
+
+```ts
+import { createBodyAdapter, createStationSearcher, loadChironPilot } from "./src/index.ts";
+
+const adapter = await createBodyAdapter([await loadChironPilot()]);
+const searcher = await createStationSearcher(adapter);
+const result = searcher.searchStations({
+  body: "Chiron",
+  from: "2000-01-02T00:00:00Z",
+  to: "2000-12-30T00:00:00Z"
+});
+console.log(result);
+```
+
+Setup reads local implementation hashes. Searches then run synchronously,
+offline, using the already loaded datasets. Endpoints accept the adapter's
+time vocabulary above. They are resolved once to TT; the search runs on
+continuous TT even when an input is UTC or UT1. Output `jdTt` is a TT Julian
+date, with no implied conversion back to a civil clock. Original endpoint
+requests and their time conversions remain in the receipt.
+
+`status: "complete"` returns `stations` in time order. Each station gives
+`direction: "direct-to-retrograde" | "retrograde-to-direct"`, its position,
+and receipts for the position and the speed samples that establish the
+reversal. The engine's existing crossings solver locates zero-speed
+candidates through a monotone angular mapping; the wrapper checks actual
+speed signs on either side. A confirmed zero-speed touch with no reversal
+is omitted. A candidate whose direction cannot be established refuses the
+whole search with `station-direction-unresolved`.
+
+The interval is `(from, to]`. All position samples stay inside the requested
+interval, including its endpoints, and inside installed coverage. A station
+exactly at `from` is excluded. An exact zero at `to` cannot establish the
+following motion without another sample, so it refuses; extend `to` within
+coverage to classify it. The dataset's exclusive upper endpoint is never
+evaluable. Out-of-coverage searches refuse rather than clip or extrapolate.
+The solver samples integer milliseconds relative to the exact starting TT
+epoch and samples the exact ending TT epoch. Direction probes may use
+fractional milliseconds. Event times retain the solver's finite refinement
+and deduplication limits, recorded in `receipt.conventions`.
+
+`stepDays` controls the coarse step in TT days. `maxSamples` limits all
+provider calls, including repeated solver samples, direction checks and
+event positions. The defaults and admissible limits are defined in
+`STATION_SEARCH_CONVENTIONS` and enforced by `tests/stations.test.ts`.
+`Infinity` disables the budget and is recorded as `null` in JSON receipts.
+A budget refusal returns `stations: []`; a coarse scan that already exceeds
+the budget makes no provider calls. Other structured refusals also return
+no partial event list, and retain the failing provider receipt when present.
+Malformed inputs throw `RangeError`.
+
+Completion means the configured scan finished, not that every physical
+station was proven found. The engine solver assumes smooth motion and a
+limited number of turns between samples; here that assumption applies to
+the longitude speed. Station accuracy was checked against held-out Horizons
+positions reduced with independent ERFA over the synthetic calendar interval
+in `STATION_REFERENCE_RECIPE`, with timing and arcsecond gates enforced by
+`tests/station-accuracy.test.ts` and `tests/full-stations.test.ts`. Those finite
+checks do not establish full-range event completeness or physical orbit
+uncertainty. See [M7 evidence](docs/evidence/M7.md).
