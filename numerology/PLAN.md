@@ -20,7 +20,7 @@ commits and draft pull requests. Stop after the session's milestone is complete.
 - [x] M9 Assemble deterministic profiles and name-change comparisons using the same birth date and conventions, with auditable before/after deltas and no inferred identity data.
 - [x] M10 Add a JSON CLI for profiles, cycles, and comparisons with strict options/input validation, stdin support, stable output, structured errors, and subprocess tests.
 - [x] M11 Expand handwritten synthetic golden fixtures across both systems, scripts, and date boundaries; add seeded properties for conservation, normalization equivalence, receipt replay, and library/CLI parity.
-- [ ] M12 Complete API and CLI documentation, conventions/provenance and licensing records, local consumer smoke checks, and isolation/evidence checks; verify that no project file enters the engine package.
+- [x] M12 Complete API and CLI documentation, conventions/provenance and licensing records, local consumer smoke checks, and isolation/evidence checks; verify that no project file enters the engine package.
 
 ## Conventions to carry through the milestones
 
@@ -435,3 +435,42 @@ The root `npm run package:contents` was attempted with the local runtime and
 cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
 exclusion passed; the complete engine contents and size gate remains
 unverified. No root build was generated. M12 is the next session's work.
+
+## M12 validation
+
+Completed the API reference covering every public function, constant, and
+type, plus the receipt and CLI schema inventory. Linked the existing full
+CLI contract from the reference and project overview. Added a conventions
+and provenance record, local licensing and authorship record, validation
+guide, and evidence map pointing to committed tests and handwritten fixtures.
+The records distinguish authored spelling conventions, the existing Chaldean
+table reference, original prompts, development-tool terms, and the finite
+arithmetic scope. No new external source or dataset was introduced.
+
+Added a typed synthetic consumer and smoke checks using the local package
+export map. Plain ESM resolution and strict NodeNext declaration compilation
+pass without an engine import or ambient Node types. The typed example and
+documentation snippet execute against the handwritten Chaldean profile and
+name-comparison controls. Negative type controls check unsupported options,
+date object rejection, nullable cycles, and readonly results. Temporary
+consumers use ignored local paths and are removed after checking.
+
+Documentation checks enforce public export coverage, schema inventory,
+existing local links, and executable README JavaScript examples. Isolation
+checks also enforce private packaging, absence of runtime dependencies,
+ignored output directories, and local-only library JavaScript and declaration
+imports. Existing file-size, punctuation, and script-free engine package
+exclusion checks pass. Added local `verify` and `consumer:smoke` commands.
+
+Project `npm run verify` and `npm run consumer:smoke` passed on Node 22.22.2.
+The full existing golden/property and CLI suites passed. Raw validation
+logs, build output, caches, and tools remain locally ignored. Rechecked all
+locally available main and infra refs, including origin refs, for numerology
+and related name arithmetic outside this project; no overlap was found.
+No remote fetch was performed. Only `numerology/` changed.
+
+The root `npm run package:contents` was attempted with the local runtime and
+cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
+exclusion passed; the complete engine contents and size gate remains
+unverified. No root build was generated. All planned milestones are complete;
+this session stops here for the harness to handle git work.

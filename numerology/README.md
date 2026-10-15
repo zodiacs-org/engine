@@ -12,8 +12,13 @@ conventions. Personal year, month, and day cycles use explicit target civil
 dates. Pinnacles and challenges return complete schedules in attained ages.
 Profiles assemble these results, and name-change comparisons retain both
 profiles with arithmetic differences. The CLI exposes profiles, cycles, and
-comparisons. [PLAN.md](PLAN.md) tracks the remaining fixture and documentation
-work.
+comparisons. [PLAN.md](PLAN.md) records the implementation milestones.
+
+The [API reference](docs/API.md) indexes every public function, constant, and
+type. [Conventions and provenance](docs/CONVENTIONS.md) explains the choices
+needed to replay a result. [Licensing](LICENSING.md) records authorship and
+dependency terms. [Validation](docs/VALIDATION.md) gives the local consumer
+checks, evidence map, and the limits of the package-exclusion check.
 
 Numerology results describe symbolic conventions and provide reflection
 prompts. The tests check arithmetic and declared behavior. They do not test
@@ -28,6 +33,11 @@ npm ci --ignore-scripts
 npm run typecheck
 npm test
 ```
+
+`npm run verify` runs the type check and full test suite together.
+`npm run consumer:smoke` builds and checks JavaScript package resolution,
+TypeScript declarations, and the executable documentation examples. These
+commands write generated consumer files and caches only to ignored paths.
 
 The TypeScript compiler is pinned in the local lockfile. Build output goes
 to `.build/`, which is ignored; generated data should go to `.generated/`.
