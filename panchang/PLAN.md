@@ -15,7 +15,7 @@ The harness owns commits, pushes and the draft pull request.
 - [x] M9 Implement date-range API with civil-date iteration, shared calculations, chronological results and bounded work; test DST, historical offsets, missing dates and range limits.
 - [x] M10 Add panchang day and panchang range CLI commands with explicit coordinates/timezone/month convention/ayanamsa, JSON and neutral plain text; test parsing, output order and exit statuses.
 - [x] M11 Add small independently published transition-instant fixtures and reproducible source retrieval tools; document timescales, ayanamsa, horizon conventions and preregistered comparison tolerances in SOURCES.md.
-- [ ] M12 Review API and CLI documentation, reference coverage, edge cases and isolation; run the complete panchang checks and verify exclusion from the engine package without changing its build or archives.
+- [x] M12 Review API and CLI documentation, reference coverage, edge cases and isolation; run the complete panchang checks and verify exclusion from the engine package without changing its build or archives.
 
 ## Design constraints
 

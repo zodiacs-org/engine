@@ -1,9 +1,10 @@
 # Panchang prototype
 
-This private source-checkout project will provide astronomical and calendar
-facts for sunrise-to-sunrise days. Implementation follows [PLAN.md](PLAN.md).
-It currently exposes the luminary snapshot adapter, instantaneous limbs,
-civil-date and sunrise-to-sunrise windows with vara, limb transition
+This private source-checkout library and CLI calculate astronomical and
+calendar facts for sunrise-to-sunrise days. [PLAN.md](PLAN.md) records the
+implementation milestones. The project exposes the luminary snapshot
+adapter, instantaneous limbs, civil-date and sunrise-to-sunrise windows
+with vara, limb transition
 searches with complete surrounding intervals, amanta/purnimanta month
 naming with adhika/kshaya detection, sunrise tithi anomaly comparisons,
 pure day and date-range assembly APIs, and a source-checkout CLI.
@@ -23,6 +24,63 @@ engine build is required. Nothing here is part of the engine npm package.
 Code and documentation are MIT under the repository's [LICENSE](../LICENSE).
 The engine retains its own licences and attributions in
 [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE).
+
+## Library quick start
+
+```ts
+import { panchangDay, prepareSunriseDay } from "./src/index.js";
+
+const input = {
+  date: "2024-03-20",
+  timeZone: "Asia/Kolkata",
+  observer: { latitude: 12.5, longitude: 75.25 } // Invented coordinates.
+};
+await prepareSunriseDay(input);
+const day = panchangDay(input, { monthConvention: "amanta", ayanamsa: "lahiri" });
+if (day.status === "ok") {
+  console.log(day.sunriseMonth.name, day.sunriseState.ayanamsa, day.sunriseState.sun.tropical.receipt);
+  for (const segment of day.segments) {
+    console.log(segment.start, segment.end, segment.vara.name,
+      segment.tithi.name, segment.tithi.paksha,
+      segment.nakshatra.name, segment.nakshatra.pada,
+      segment.yoga.name, segment.karana.name);
+    console.log(segment.intervals.tithi.start.at, segment.intervals.tithi.end.at);
+  }
+} else {
+  console.log(day.reason, day.sunrise);
+  if (day.reason === "transitions-refused") console.log(day.timeline.reason);
+}
+```
+
+A day call requires a civil date, an explicit timezone, geodetic observer
+coordinates and an explicit month convention. Preparation loads local
+historical clock data when needed; calculation is synchronous. Check
+`status` before reading labels. A refusal retains diagnostics and exposes
+no assembled segments.
+
+| Task | API | Details |
+| --- | --- | --- |
+| Complete sunrise day | `panchangDay`, `prepareSunriseDay` | [Day assembly](#day-assembly) |
+| Included civil-date range | `panchangRange`, `preparePanchangRange` | [Date ranges](#date-ranges) |
+| Resolved instant | `luminarySnapshot`, `instantaneousPanchang` | [Instant calculations](#instant-calculations) |
+| Civil boundaries | `resolveCivilDay`, `prepareCivilDay` | [Civil dates and clocks](#civil-dates-and-clocks) |
+| Sunrise window and vara | `resolveSunriseDay`, `prepareSunriseDay` | [Sunrise days](#sunrise-days) |
+| Full limb boundaries | `searchLimbTransitions` | [Limb transitions](#limb-transitions) |
+| Month boundaries and anomalies | `searchLunarMonths` | [Lunar months](#lunar-months) |
+| Forward sunrise tithi comparison | `compareSunriseTithis` | [Sunrise tithi anomalies](#sunrise-tithi-anomalies) |
+| JSON or plain text | `panchang day`, `panchang range` | [Command line](#command-line) |
+
+Import the pure library through [src/index.ts](src/index.ts). The CLI is a
+separate I/O entry point. The library makes no network requests and the
+calculation calls perform no filesystem I/O; explicit preparation functions
+load the engine's local zone histories. Engine calculation updates its
+shared astronomy dependency's time model, as documented upstream.
+
+Output contains neutral astronomical and calendar facts. No quality labels,
+muhurta selection, date/time recommendations, rankings or predictions are
+provided. Traditional limb names are identifiers without interpretation.
+
+## Instant calculations
 
 ```ts
 import { luminarySnapshot } from "./src/index.js";
@@ -74,8 +132,8 @@ if (instant.status === "ok") {
 `instantaneousPanchang` accepts the same instant and ayanamsa options as
 `luminarySnapshot`. It retains the complete snapshot and adds tithi,
 paksha, yoga and karana. It preserves an engine refusal without partial
-limbs. Vara requires the later sunrise-day assignment. This API does not
-yet assign a sunrise day, lunar month or transition instants.
+limbs. Use `panchangDay` for the sunrise-day assignment, vara, lunar
+month and full transition intervals.
 
 The arithmetic helpers `tithiOf(sunTropical, moonTropical)` and
 `karanaOf(sunTropical, moonTropical)` accept canonical geocentric degrees;
@@ -102,6 +160,8 @@ The complete-cycle and adjacent-boundary arithmetic checks are in
 [test/limbs.test.ts](test/limbs.test.ts), with their independent integer
 oracle described in [SOURCES.md](SOURCES.md). They establish classification
 of supplied values, without establishing astronomical accuracy.
+
+## Civil dates and clocks
 
 Civil-date helpers accept strict Gregorian `YYYY-MM-DD` strings.
 `nextCivilDate` advances the calendar date independently of elapsed UTC
@@ -152,6 +212,8 @@ both midnight resolutions and supply no `start` or `end` window. These
 policies avoid representing disjoint or repeated dates as an ordinary
 sunrise search interval. They are tested against the independent clock
 rules and constructed cases recorded in [SOURCES.md](SOURCES.md).
+
+## Sunrise days
 
 ```ts
 import { prepareSunriseDay, resolveSunriseDay } from "./src/index.js";
@@ -208,6 +270,8 @@ retained. A skipped following calendar date is refused. Polar dates do
 not borrow a sunrise from another season. This API resolves sunrise
 boundaries; the separate transition search below resolves limb intervals.
 The month search below separately resolves lunar months.
+
+## Limb transitions
 
 ```ts
 import { resolveSunriseDay, searchLimbTransitions } from "./src/index.js";
@@ -289,30 +353,7 @@ restriction applies even if the discontinuity lies outside the requested
 window. Invalid windows/options throw `RangeError`; unexpected engine
 errors propagate.
 
-```ts
-import { panchangDay, prepareSunriseDay } from "./src/index.js";
-
-const input = {
-  date: "2024-03-20",
-  timeZone: "Asia/Kolkata",
-  observer: { latitude: 12.5, longitude: 75.25 } // Invented coordinates.
-};
-await prepareSunriseDay(input);
-const day = panchangDay(input, { monthConvention: "amanta", ayanamsa: "lahiri" });
-if (day.status === "ok") {
-  console.log(day.sunriseMonth.name, day.sunriseState.ayanamsa, day.sunriseState.sun.tropical.receipt);
-  for (const segment of day.segments) {
-    console.log(segment.start, segment.end, segment.vara.name,
-      segment.tithi.name, segment.tithi.paksha,
-      segment.nakshatra.name, segment.nakshatra.pada,
-      segment.yoga.name, segment.karana.name);
-    console.log(segment.intervals.tithi.start.at, segment.intervals.tithi.end.at);
-  }
-} else {
-  console.log(day.reason, day.sunrise);
-  if (day.reason === "transitions-refused") console.log(day.timeline.reason);
-}
-```
+## Day assembly
 
 `panchangDay(input, options)` assembles the sunrise window, limb transitions
 and lunar months synchronously without I/O. It accepts the same explicit civil
@@ -379,6 +420,8 @@ Real-engine checks verify receipt retention and wiring; no physical
 transition-time accuracy claim follows. The evidence and scope are in
 [SOURCES.md](SOURCES.md#m6-day-assembly-arithmetic-and-integration).
 Sunrise tithi comparisons and lunar-month anomaly policies are described below.
+
+## Lunar months
 
 ```ts
 import { searchLunarMonths } from "./src/index.js";
@@ -471,7 +514,15 @@ fields for the label being displayed and the name source for its
 underlying phase/ingress evidence. Ordinary months without this exception
 keep the full-moon-to-full-moon interval described above.
 
+## Sunrise tithi anomalies
+
 ```ts
+import { panchangDay } from "./src/index.js";
+
+const day = panchangDay({
+  date: "2024-03-20", timeZone: "Asia/Kolkata",
+  observer: { latitude: 12.5, longitude: 75.25 } // Invented coordinates.
+}, { monthConvention: "amanta" });
 if (day.status === "ok") {
   console.log(day.sunriseMonth.name, day.sunriseMonth.kind,
     day.sunriseMonth.omittedMonths);
@@ -513,6 +564,8 @@ They do not validate every tithi boundary, every anomalous year or other
 regional calendar conventions. The separate JPL/ERFA and USNO limb
 transition checks are recorded in
 [SOURCES.md](SOURCES.md#m11-transition-reference-protocol-registered-before-comparison).
+
+## Date ranges
 
 ```ts
 import { panchangRange, preparePanchangRange } from "./src/index.js";
@@ -669,3 +722,27 @@ Refused plain text includes the reason and the full original refusal as
 JSON. A refusal in either format remains a refusal of the whole requested
 day or range. Unexpected failures receive a neutral error message without
 raw exception details.
+
+## Coverage and review
+
+Read [SOURCES.md](SOURCES.md) for the precise source windows, comparison
+thresholds and convention differences. A computed first millisecond locates
+a change in this model; it is not an exact physical instant. Published
+reference cases establish no general astronomical accuracy bound. Other
+ayanamsas have integration and definition checks rather than the Lahiri
+transition-time comparisons.
+
+The padded month search can refuse a date whose sunrise window itself is
+clear of a time-basis seam or reference-span edge. This includes windows
+around leap seconds and the engine's model/table handovers. Inspect the
+original nested refusal for its stage and actual search span. Polar missing
+sunrises, skipped dates and unsupported repeated dates also refuse the
+whole requested day or range.
+
+[REVIEW.md](REVIEW.md) maps requirements and edge cases to the checks and
+records the final milestone review. `npm run check` typechecks the library
+and documentation examples, runs the test suite and source runtime smoke,
+and checks project files, source isolation and package exclusion. The
+isolation check uses an ignored local npm cache and a dry run with lifecycle
+scripts disabled; it emits no engine build or archive. The root package's
+full contents/size check additionally requires existing engine build output.

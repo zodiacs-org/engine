@@ -729,7 +729,27 @@ the repository licensing audit. Original analysis and retrieval code is
 MIT. No source prose, provider tables in full, ERFA source, ephemeris
 kernel, proprietary atlas or Swiss Ephemeris material is copied.
 
-## Later milestones
+## M12: documentation and isolation review
+
+[REVIEW.md](REVIEW.md) maps each requested result and reviewed edge case to
+its implementation, tests and independent evidence scope. It adds no
+astronomical fixtures, source extracts, tolerance or error-bound claims.
+[test/documentation.test.ts](test/documentation.test.ts) typechecks every
+README TypeScript example independently against the current source API,
+using virtual files without writing build output. This is an API usability
+check, not astronomical evidence.
+
+[scripts/check-isolation.mjs](scripts/check-isolation.mjs) reads the engine
+build configuration and source graph without emitting, verifies that
+project-owned library imports stay within the library and engine source,
+and checks npm package exclusion with lifecycle scripts disabled. The
+TypeScript compiler's own installed declarations are dependency inputs,
+not project-owned code. The script also enforces the existing file-size
+and documentation rules. These are isolation checks, not a rebuild or a
+claim that all engine package gates passed. The root contents/size gate
+requires existing dist output, absent in this checkout.
+
+## Adding reference evidence
 
 Before adding further physical transition instants, record the primary
 source URL, locator, retrieval date, source timescale, observer/horizon
