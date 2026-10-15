@@ -11,10 +11,11 @@ geocentric Moon/planet and planet/planet appulse searches, and lunar
 occultation candidate intervals with window-local series, and topocentric
 spherical-limb contact times for stars and planetary disks with contact angles,
 illumination, altitude, phase and horizon facts, plus coarse global visibility
-outlines at exact longitude meridians.
+outlines at exact longitude meridians. A shared window API and offline JSON CLI
+compose those calculations with bounded work and retained receipts.
 Independent event references and maximum-error criteria were frozen before
 event implementation in [the reference contract](test/fixtures/events/EVENTS.md).
-The CLI and held-out validation remain unchecked in
+Held-out validation remains unchecked in
 [PLAN.md](PLAN.md). Contact validation covers the development references
 described below, with no general timing bound. [DESIGN.md](DESIGN.md) records the geometry and error
 budget to validate; [SOURCES.md](SOURCES.md) separates provenance from leads.
@@ -68,6 +69,112 @@ The local bundle includes engine data: keep the generated LICENSE,
 LICENSING.md and NOTICE alongside it. Its inherited terms are the engine's
 `MIT AND CC-BY-4.0`, with the qualifications in [LICENSING.md](../LICENSING.md).
 The workbench is private and excluded from the engine's npm package.
+
+## Window API and offline CLI
+
+`searchWindow` takes a shared `window` and an explicit `queries` array. A query
+uses the corresponding individual API's fields, with a `kind` discriminator
+and without its own `window`:
+
+| `kind` | Calculation | Required query fields |
+| --- | --- | --- |
+| `conjunction` | `searchConjunctions` | `first`, `second`, `coordinate` |
+| `appulse` | `searchAppulses` | `first`, `second`, `maximumSeparationDegrees` |
+| `lunar-occultations` | `searchLunarOccultations` | `target` |
+| `lunar-contacts` | `searchLunarContacts` | `target`, `observer` |
+| `visibility-outline` | `lunarVisibilityOutline` | `target` |
+
+Sampling options remain those of the individual API. Contacts need geodetic
+observer coordinates and optional ellipsoidal elevation in metres. Global
+outlines still use their zero-height Earth model. Stars require exact catalogue
+ids, available from `starCatalogue()` or the CLI's `catalogue` command. The API
+does not infer target pairs, add a proximity criterion, or rank events.
+
+```js
+import { searchWindow, serializeJson } from "./occultations/.generated/index.mjs";
+
+const result = searchWindow({
+  window: { from: "2020-12-21", to: "2020-12-22" },
+  queries: [
+    { kind: "conjunction", first: "Jupiter", second: "Saturn",
+      coordinate: "right-ascension" },
+    { kind: "appulse", first: "Jupiter", second: "Saturn",
+      maximumSeparationDegrees: 1 }
+  ]
+});
+console.log(serializeJson(result));
+```
+
+`results` retains query order. Each entry has `queryIndex`, `kind` and the
+individual calculation's `result`, including all event, interval, series and
+outline receipts. It does not conflate a candidate interval, conjunction,
+appulse or local contact. Each child keeps its window-ownership convention;
+an outline's closed footprint is different from a contact's `(from,to]` list.
+Repeated queries are evaluated separately. `complete` means execution finished,
+and a complete outline can still contain unresolved meridians.
+
+All input is validated before position work begins. The wrapper limits queries
+to 32, with a default shared sample budget of 100,000 and a maximum of 200,000.
+The separate shared intersection budget defaults to, and is capped at,
+2,000,000. These policies are exported in `WINDOW_LIMITS` and enforced by
+[the window tests](test/window.test.ts) and
+[cross-search review tests](test/window-review.test.ts), not sky-accuracy
+measurements. A child's permitted budget is the smaller of its own ceiling and
+the shared remainder. Actual consumed samples and intersections are deducted;
+contact sky evaluations are already included in the child's sample count.
+Sample units differ across calculations and do not set a wall-clock time limit.
+
+Any child refusal empties the entire wrapper's `results`. Its `failure` names
+the query index, child reason, receipt and available failure details. A refusal
+before another child can start has no child receipt; the wrapper receipt still
+records the normalized request and earlier search receipts. Earlier event and
+outline lists are discarded. A refused search is not an empty successful search.
+Inspect `receipt.work` for actual work, and `receipt.searches` for each attempted
+calculation. Malformed library input throws `RangeError`.
+
+After the local build, the CLI reads a single JSON request from standard input:
+
+```sh
+node occultations/.generated/cli.mjs help
+node occultations/.generated/cli.mjs catalogue
+node occultations/.generated/cli.mjs window <<'JSON'
+{
+  "window": { "from": "2020-12-21", "to": "2020-12-22" },
+  "queries": [
+    { "kind": "conjunction", "first": "Jupiter", "second": "Saturn",
+      "coordinate": "right-ascension" },
+    { "kind": "appulse", "first": "Jupiter", "second": "Saturn",
+      "maximumSeparationDegrees": 1 }
+  ]
+}
+JSON
+```
+
+CLI output is a JSON envelope with `status`, `result` when available, and a
+transport `receipt`. The process exits with code 0 for a completed response,
+1 for malformed input or an execution error, and 2 for a refusal. Help and
+catalogue commands read no input. Unknown commands, extra arguments, unknown
+request fields, unresolved local timestamps and unsupported values are rejected.
+No command reads a file path, calls a remote API or writes an output file.
+Redirect generated output only to an ignored directory such as `.generated/`.
+
+The CLI accepts at most 65,536 UTF-8 input bytes and emits at most 1,900,000
+bytes including its final newline. The serializer also caps nesting at
+64 and visited values at 100,000. These are transport policies enforced by
+[CLI tests](test/cli.test.ts) and [serialization tests](test/json.test.ts).
+Output-limit exhaustion returns a small `output-budget` refusal with no partial
+event lists. That transport receipt preserves the normalized window but does not
+contain the discarded calculation receipts. Narrow the explicit request or use
+the library to inspect individual calculations.
+
+`serializeJson` orders object keys by UTF-16 code units, preserves array order,
+keeps numeric precision, and serializes negative zero as zero. It rejects
+nonfinite numbers, unsupported values, accessors, cycles and limit overruns
+instead of silently dropping them or writing nulls. It does not call `toJSON`.
+Identical normalized requests on the same runtime and build produce repeatable
+output without a current-time stamp. This is not a cross-runtime byte or physical
+accuracy guarantee. M11 checks composition and transport; published-reference
+accuracy remains the scope described in [VALIDATION.md](VALIDATION.md).
 
 ## Coarse global outline
 

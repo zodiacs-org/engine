@@ -36,3 +36,7 @@ export type {
   LunarOutlineRequest, OutlineSearchReceipt, OutlineLocalCheck, OutlineBoundary,
   OutlineLatitudeInterval, OutlineMeridian, OutlineRefusalReason, LunarOutlineResult
 } from "./outlines.js";
+export { WINDOW_LIMITS, searchWindow } from "./window.js";
+export type { WindowQuery, WindowRequest, WindowEntry, WindowReceipt, WindowResult } from "./window.js";
+export { JSON_LIMITS, JsonSerializationError, serializeJson } from "./json.js";
+export type { JsonSerializationOptions, JsonSerializationFailure } from "./json.js";

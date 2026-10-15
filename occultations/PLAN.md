@@ -45,7 +45,7 @@ package, source, build output, archive or release changes are part of this plan.
   fundamental plane and Earth ellipsoid intersections. Return northern and
   southern latitude intervals per longitude band, dateline/polar cases and
   sampling uncertainty; compare limits with independent published outlines.
-- [ ] M11 Finish the window API and small offline JSON CLI with receipts on
+- [x] M11 Finish the window API and small offline JSON CLI with receipts on
   every event, search refusal and visibility result. Test parsing, reproducible
   serialization, bounded resource use and factual output.
 - [ ] M12 Run the held-out validation suite with explicit maximum errors in

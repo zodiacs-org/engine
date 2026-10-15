@@ -5,8 +5,9 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const result = await build({
   absWorkingDir: root,
-  entryPoints: ["src/index.ts"],
-  outfile: ".generated/index.mjs",
+  entryPoints: { index: "src/index.ts", cli: "scripts/cli-entry.ts" },
+  outdir: ".generated",
+  outExtension: { ".js": ".mjs" },
   bundle: true,
   platform: "node",
   format: "esm",
@@ -24,4 +25,4 @@ for (const name of ["LICENSE", "LICENSING.md", "NOTICE"]) {
 for (const name of ["SAO-NOTICE.txt", "sao-documentation.txt", "sao-rights.json", "sao-aliases.json", "radii-source.json"]) {
   await copyFile(new URL(`../data/${name}`, import.meta.url), new URL(`../.generated/${name}`, import.meta.url));
 }
-console.log("Built occultations/.generated/index.mjs using adjacent engine source.");
+console.log("Built occultations/.generated/index.mjs and cli.mjs using adjacent engine source.");

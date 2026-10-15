@@ -4,7 +4,7 @@ This is the implementation contract for the remaining milestones. The
 position adapter, input/receipt foundation, source catalogue, apparent
 stellar reduction, geocentric coordinate conjunctions, appulse searches and
 lunar candidate screening, local spherical-limb contacts, contact sky facts and
-coarse global outlines are implemented. An unchecked
+coarse global outlines, shared window searches and an offline CLI are implemented. An unchecked
 part of PLAN.md is not a supported calculation or an established error bound.
 
 ## Engine boundary and clock
@@ -702,6 +702,47 @@ by `abs(vnormal)` to the sensitivity budget; it does not replace `Estar`,
 and must not be counted again inside a later end-to-end contact comparison.
 
 ## Receipts and bounded work
+
+M11's `searchWindow` composes explicit queries on a single normalized window.
+It validates the complete request before calling a position adapter. Query
+records are captured once; observer records and longitude arrays are copied.
+Arrays must have ordinary own data slots. Custom iteration cannot expand a
+bounded query list. Output does not freeze caller-owned objects.
+
+Each query delegates to its existing search without modifying numerical
+parameters or reference allowances. Per-query sampling ceilings still apply;
+the wrapper additionally caps the sum of actual samples and the sum of outline
+intersections. Remaining allowance is passed into the next search before it
+starts. Contact sky evaluations are part of the existing sample unit and are
+not counted twice. This bounds algorithmic work units, not elapsed time or
+uniform-cost ephemeris calls. The policies in `WINDOW_LIMITS` are checked by
+`test/window.test.ts` and `test/window-review.test.ts`.
+
+The combined result is atomic on refusal: earlier event lists do not escape.
+Search audit receipts remain available, alongside the failing child's reason
+and receipt, or a wrapper-only refusal when no allowance remains to start it.
+The wrapper reports completed and attempted query counts independently of its
+empty refused result list. Unresolved outline meridians retain their existing
+status and empty intervals; completing a batch does not resolve them. There
+is no automatic candidate filter before a contact or outline query, no hidden
+target selection and no observer-dependent change to a geocentric event.
+
+The CLI accepts one bounded JSON value through standard input. It returns a
+transport envelope containing the library result and an explicit CLI receipt.
+Malformed input has a fixed error code without echoing raw caller values.
+The deterministic serializer traverses only plain data, orders object keys,
+and accounts for encoded UTF-8 bytes incrementally. It rejects nonfinite or
+unsupported values, cycles and resource-limit overruns without invoking
+serialization hooks. Shared receipt objects are encoded as repeated values,
+not mistaken for cycles. The limits and behavior are enforced by
+`test/json.test.ts` and `test/cli.test.ts`.
+
+No partial JSON is written on a serialization failure. A transport-budget
+refusal keeps the normalized window and transport receipt, with no calculated
+events or search receipts. This differs from the library's scientific/search
+refusal, which retains its full audit. There is no file-path or network input,
+automatic downloading, current-time field, ranking or interpretation. The
+build writes both local entry bundles only to the ignored `.generated/` folder.
 
 The initial position receipt records its schema and adapter implementation,
 normalized request, engine identity, engine calculation receipt, frame and

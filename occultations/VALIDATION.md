@@ -664,3 +664,45 @@ The scope check confirms workbench exclusion from root npm file selection,
 the dependency pin, source file-size and documentation rules, and changes
 only within `occultations/`. No git metadata mutation, archive mutation, root
 package change or release action was performed.
+
+## M11 window API and offline JSON CLI
+
+`npm --prefix occultations run check` passes on Node 22: TypeScript checking,
+the complete default Vitest suite, offline catalogue validation, the local
+build and scope isolation. The existing development reference assertions pass
+unchanged. No held-out event comparison was run, no reference tolerance was
+changed and no additional physical accuracy claim follows from this milestone.
+
+`test/window.test.ts` compares composed searches with each individual API,
+preserves distinct RA/ecliptic conjunction and appulse event records, checks
+JSON replay and immutable snapshots, and enforces input and resource limits.
+`test/window-review.test.ts` checks exact cross-query budget accounting,
+contact sky work counted once, an appulse stencil seam after an earlier valid
+event, unresolved outline meridians, and complete preflight validation before
+any position work. Caller iterators cannot expand or disguise bounded arrays.
+On any search refusal the wrapper discards earlier event lists while retaining
+their search receipts and the failing query's details.
+
+`test/cli.test.ts` exercises the actual built command in fresh Node processes
+as well as the callable CLI boundary. It checks help, the source catalogue,
+event requests, scientific and budget refusals, malformed input, stream
+failures, strict UTF-8 decoding, reproducible bytes and output with no partial
+JSON on serialization failure. The CLI refuses file-path arguments and has
+no network input. Every response has a transport receipt; calculated results
+also retain their original provenance. A transport-budget refusal retains
+only its normalized window and transport receipt, as documented in README.
+
+`test/json.test.ts` checks object-key order, finite-number round trips,
+Unicode and control characters, negative zero, exact encoded-byte limits,
+depth and visited-value limits, shared references, cycles and rejected
+serialization hooks. The transport limits are implementation policies, not
+sky-accuracy bounds. Tests also enforce the file-size bound on both generated
+entry bundles. Generated files remain ignored.
+
+The root `npm run package:contents` check again stopped at the existing
+missing `dist/calc.d.ts`. The task prohibits root build output, so full root
+package, archive rebuild and conformance checks are not claimed as passed.
+The local scope check confirms exclusion from root npm file selection,
+unchanged dependency pinning, documentation and source-size rules, and changed
+paths confined to `occultations/`. The root package, source, release artifacts
+and git metadata were not modified.
