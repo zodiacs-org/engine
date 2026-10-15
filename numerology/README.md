@@ -10,12 +10,14 @@ Chaldean expression/destiny, soul urge, and personality calculations.
 Maturity, karmic lessons, and hidden passion use those same date and name
 conventions. Personal year, month, and day cycles use explicit target civil
 dates. Pinnacles and challenges return complete schedules in attained ages.
-[PLAN.md](PLAN.md) tracks the remaining profiles and CLI work.
+Profiles assemble these results, and name-change comparisons retain both
+profiles with arithmetic differences. [PLAN.md](PLAN.md) tracks the remaining
+CLI and documentation work.
 
 Numerology results describe symbolic conventions and provide reflection
 prompts. The tests check arithmetic and declared behavior. They do not test
 whether numerology predicts personality or events. The meanings in
-`src/meanings.ts`, `src/derived.ts`, `src/periods.ts`, and the empty-selection text in `src/name-numbers.ts`
+`src/meanings.ts`, `src/derived.ts`, `src/periods.ts`, `src/profiles.ts`, and the empty-selection text in `src/name-numbers.ts`
 are original text authored for this project.
 
 From this directory, with Node matching `package.json`:
@@ -973,3 +975,131 @@ allocation, freezing, options ownership, and JSON serialization. A
 subprocess verifies import and calculation with Date and network entry
 points disabled and compares the declared host timezones. The fixtures
 and tests are arithmetic evidence only.
+
+## Profiles and name-change comparisons
+
+`profile(birthDate, name, options)` assembles the existing calculations under
+one shared configuration. Supply the full spelling to calculate; the API
+does not infer a birth name, surname, legal name, identity, age, or time of
+birth. It accepts the same civil Gregorian date and Unicode name domains
+as the constituent APIs. All examples and fixtures here are synthetic.
+
+```js
+import { profile, compareNames } from "./.build/index.js";
+
+const options = { system: "chaldean", targetDate: "2000-10-22" };
+const reading = profile("0001-01-01", "Ael Vorn", options);
+const comparison = compareNames("0001-01-01", "Mi", "D");
+console.log(JSON.stringify({ reading, comparison }));
+```
+
+The `chaldean-shared-conventions` and
+`equal-value-different-compound-and-debt` cases in
+[profiles.json](test/fixtures/profiles.json) enforce these examples. They
+declare symbolic arithmetic, without a claim of universal numerology practice
+or predictive validity. Profile and comparison framing text is original to
+`src/profiles.ts`; the nested meanings retain their existing authorship and
+conventions.
+
+Options accept only `system`, `masterNumbers`, `method`, `yAsVowel`,
+`transliteration`, and `targetDate`. Defaults are Pythagorean, preserve
+masters, component life path, Y never a vowel, no custom table, and no
+target date. An absent or undefined target gives `cycles: null`; a supplied
+target must pass `parseGregorianDate`. Explicit null, unsupported values,
+and unknown keys reject. A target before birth is accepted under the existing
+cycle convention. No date is inferred from the current clock.
+
+The shared policy applies to name reductions, life path, birthday, maturity,
+pinnacles, and cycles. Challenges retain their mandatory single-digit
+arithmetic. The life-path method also supplies period timing and maturity;
+it does not change the personal-cycle formula. A Chaldean letter table does
+not change date calculations. Y classification and the exact custom mapping
+apply to every name calculation in the profile and both comparison spellings.
+Use separate profile calls to study different conventions.
+
+Profile and comparison options require an ordinary object or an object with
+a null prototype, with own data fields. Accessor slots and other prototypes
+reject. Undefined fields use defaults. The implementation validates the
+configuration, snapshots the complete custom table, and passes owned data
+to the remaining calculations. Caller objects are neither frozen nor changed.
+These checks do not sandbox same-realm proxies or modifications of built-ins.
+
+A `ProfileResult` holds `lifePath`, `birthday`, `expression`, `soulUrge`,
+`personality`, `maturity`, `karmicLessons`, `hiddenPassion`, `pinnacles`,
+`challenges`, and `cycles`. Expression also represents destiny, which is
+the existing exact alias. When requested, `cycles` contains `personalYear`,
+`personalMonth`, and `personalDay`. Each result is exactly the corresponding
+standalone API result, with its own meanings, compounds, debt locators,
+contributions, and complete reduction or selection receipt. No new aggregate
+reduction or debt list is created; source-local debts stay in their original
+calculation. Repeated source results inside maturity, timing, and frequency
+receipts are retained for replay.
+
+The outer `numerology-profile/1` receipt records its assembly `convention`,
+validated `birthDate`, exact `suppliedName`, validated `targetDate` or null,
+and effective `conventions`. Those conventions hold the selected system,
+letter table, master policy, life-path method, Y policy, built-in script
+table identifiers, and full sorted custom table or null. Every profile has
+an original `meaning` explaining its reflection scope. Results are deeply
+frozen and JSON-safe. Internal sharing of frozen nodes is permitted; the
+serialized structure is the receipt contract. Receipts retain the supplied
+names and dates as caller data.
+
+`compareNames(birthDate, beforeName, afterName, options)` calculates full
+`before` and `after` profiles from one captured configuration and birth date.
+It does not accept imported profiles or independent per-name settings. The
+two names are caller labels for a comparison, without an inferred change
+date or an assertion that they belong to the same person. Nothing ranks a
+spelling, measures compatibility, or recommends a name change.
+
+Its `numbers` array contains expression, soul urge, personality, and maturity
+in that order. Each row records `calculation`, `compound`, `value`,
+`karmicDebts`, `changed`, and source pointers in `receipt`. A compound is
+the original final sum of that calculation, including the reduced life-path
+and expression inputs for maturity. Each numeric difference contains
+`before`, `after`, and signed `delta = after - before`. Differences are
+plain integer subtraction and are never reduced, interpreted as debt paths,
+or given a better/worse meaning. Debt comparisons retain both complete
+annotation lists and a `changed` flag. The row's `changed` flag covers
+compound, reduced value, or debt-list changes. It does not claim that the
+source spelling or every nested receipt is identical when false.
+
+In the equal-value fixture, `Mi` has expression compound `13`, reduced to
+`4`, while `D` has compound `4` and value `4`. The compound delta is `-9`
+and the value delta is `0`; the before-expression debt annotation remains
+visible. The golden test pins this complete comparison row. Empty vowel
+or consonant selections retain their existing arithmetic zero and explicit
+absence prompts in the source profiles.
+
+The `frequencies` array contains karmic lessons followed by hidden passion.
+Each row retains selected `before` and `after` values, sorted `added`,
+`removed`, and `retained` values, and `counts` across the full letter-value
+domain. Each count row contains its letter `value`, `eligible`, `before`,
+`after`, and signed `delta`. Ineligible Chaldean nine remains visible with
+zero counts. `changed` includes any count difference even when selected
+sets match; the `same-set-different-frequencies` fixture enforces that case.
+Positive-frequency ties remain complete. Full selection steps and meanings
+are found in the pointed-to source results.
+
+The comparison's `numerology-name-change/1` receipt declares
+`same-birth-date-and-conventions;after-minus-before/1` and
+`reduction: "not-applied-to-signed-differences"`. Its `unchanged` entries
+locate life path, birthday, pinnacles, challenges, and cycles in both
+profiles. All comparison source locators are JSON pointers from the result
+root, such as `/before/expression` and `/after/expression`. The complete
+before and after source results supply all arithmetic steps and meanings.
+Original comparison framing text explains that differences are not scores.
+
+[profiles.test.mjs](test/profiles.test.mjs) checks the handwritten fixtures,
+complete assembly and comparison metadata, standalone-API agreement,
+independent positional-bigint reduction replay, letter-table arithmetic,
+vowel/consonant conservation, frequency selection, and source pointers.
+It checks every ordered ASCII letter substitution under both systems for
+comparison reversal, identity comparisons, and unchanged date calculations.
+Seeded mixed-script controls cover both master policies and life-path methods,
+every Y policy, explicit target boundaries, and ASCII normalization
+equivalence over the declared spellings. Additional controls check strict
+rejection, ownership, sorted table snapshots, allocation bounds, freezing,
+deterministic serialization, and operation with Date and network entry points
+disabled across the declared host timezones. These are arithmetic and
+behavior checks, not evidence of predictive accuracy.

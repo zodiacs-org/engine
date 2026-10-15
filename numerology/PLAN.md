@@ -17,7 +17,7 @@ commits and draft pull requests. Stop after the session's milestone is complete.
 - [x] M6 Implement maturity, karmic lessons, and hidden passion, including tied frequencies and empty vowel/consonant selections, with receipts and original meanings.
 - [x] M7 Implement personal year/month/day cycles with explicit calendar-year boundaries, caller-supplied target dates, and no implicit current clock.
 - [x] M8 Implement pinnacles and challenges with documented age intervals, single-digit challenge arithmetic, zero challenges, and complete component receipts.
-- [ ] M9 Assemble deterministic profiles and name-change comparisons using the same birth date and conventions, with auditable before/after deltas and no inferred identity data.
+- [x] M9 Assemble deterministic profiles and name-change comparisons using the same birth date and conventions, with auditable before/after deltas and no inferred identity data.
 - [ ] M10 Add a JSON CLI for profiles, cycles, and comparisons with strict options/input validation, stdin support, stable output, structured errors, and subprocess tests.
 - [ ] M11 Expand handwritten synthetic golden fixtures across both systems, scripts, and date boundaries; add seeded properties for conservation, normalization equivalence, receipt replay, and library/CLI parity.
 - [ ] M12 Complete API and CLI documentation, conventions/provenance and licensing records, local consumer smoke checks, and isolation/evidence checks; verify that no project file enters the engine package.
@@ -318,3 +318,48 @@ and cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm
 dry-run exclusion passed; the complete engine contents and size gate remains
 unverified. No root build was generated. Only `numerology/` changed.
 M9 is the next session's work.
+
+## M9 validation
+
+Added deterministic profiles assembling all existing date, name, derived,
+period, and optional explicit-target cycle results under one captured
+configuration. Receipts retain the supplied name, validated civil dates,
+effective policies, script identifiers, complete sorted custom table, and
+every constituent result with its original arithmetic and meanings.
+Added name-change comparisons from one shared birth date and configuration,
+with full before and after profiles, source JSON pointers, signed compound
+and reduced-value deltas, complete debt-list comparisons, set changes,
+frequency-count deltas, and unchanged date-calculation locators. Differences
+are not reduced or interpreted as scores. Plain framing text is original.
+The README documents formulas, receipt structure, configuration capture,
+empty selections, identity scope, and examples with fixture references.
+
+Project `npm run typecheck` and `npm test` passed on Node 22.22.2.
+`test/profiles.test.mjs` checks handwritten synthetic fixtures in
+`test/fixtures/profiles.json`, complete assembly and comparison metadata,
+source-API equivalence, independent positional-bigint reduction replay,
+letter-table arithmetic, vowel/consonant conservation, frequency selection,
+and pointer resolution. Every ordered ASCII letter substitution under both
+systems checks comparison symmetry, identity comparisons, and date invariance.
+Seeded mixed-script profiles and distinct-name comparisons cover both master
+policies, both life-path methods, every Y policy, explicit target boundaries,
+caller tables, and ASCII normalization equivalence over declared spellings.
+Controls check equal reduced values with changed compounds and debts,
+unchanged selected sets with changed counts, complete ties, strict rejection,
+nonexecuted accessor slots, allocation bounds, fresh results, caller ownership,
+deep freezing, and deterministic JSON serialization. Subprocess checks disable
+Date and network entry points and compare host timezones. Existing reduction,
+date, name, derived, cycle, period, package-exclusion, authored-file-size,
+and punctuation tests pass. Build output, runtime, and validation logs remain
+in ignored project paths.
+
+Rechecked all available local and origin `main` and `infra/*` refs for
+numerology, Pythagorean, soul urge, hidden passion, and name-change comparison
+overlap outside this project; no overlapping implementation was found. This
+review covers locally available refs, not unfetched remote changes.
+
+The root `npm run package:contents` was attempted with the local runtime
+and cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm
+dry-run exclusion passed; the complete engine contents and size gate remains
+unverified. No root build was generated. Only `numerology/` changed.
+M10 is the next session's work.

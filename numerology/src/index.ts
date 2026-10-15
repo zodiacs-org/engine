@@ -1,6 +1,11 @@
 export { reduceInteger, MAX_INTEGER_DIGITS } from "./reduction.js";
 export { NUMBER_MEANINGS, KARMIC_DEBT_MEANINGS } from "./meanings.js";
 export { parseGregorianDate, lifePath, birthday } from "./dates.js";
+export { profile, compareNames } from "./profiles.js";
+export type {
+  ProfileOptions, ProfileConventions, ProfileResult, ComparedNumber, ComparedFrequency,
+  SignedDifference, NumberComparison, FrequencyComparison, NameChangeResult
+} from "./profiles.js";
 export { personalYear, personalMonth, personalDay } from "./cycles.js";
 export { pinnacles, challenges, CHALLENGE_MEANINGS } from "./periods.js";
 export type {
