@@ -234,6 +234,47 @@ engine's `SKY_RADII_KM.Moon`, whose source is documented in
 used by the engine. The generated bundle carries the radius source receipt
 alongside the existing engine and SAO attribution.
 
+## Contact sky models and M9 references
+
+Position, observer, time, sidereal rotation and phase calculation remain in
+the adjacent engine. The lunar and solar radii and constant rise/set
+refraction allowance come from `src/sky.ts`, with the attribution already
+in the engine's LICENSING.md and NOTICE. The local tangent and horizontal
+projections are derived explicitly in DESIGN.md and checked against analytic
+constructions, not fitted contact output.
+
+The altitude-dependent refraction function is imported from the already
+pinned MIT dependency, not transcribed from a new source. Its
+[versioned source](https://raw.githubusercontent.com/cosinekitty/astronomy/v2.1.19/source/js/astronomy.ts),
+function `Refraction` and preceding documentation, was read on 2026-10-15.
+It documents a nominal sea-level correction and the Saemundsson expression.
+The workbench exposes its own lower-altitude reporting cutoff and clamps
+negative lift near the zenith, as recorded in the geometry tests. No new
+dependency, refraction table or independently validated atmospheric model
+is supplied. The generated bundle retains the dependency's MIT notice.
+
+`test/fixtures/sky/usno-sky.json` contains compact factual extracts from the
+US Naval Observatory Astronomical Applications API. Each request has its
+URL, selected JSON fields, API version and raw response digest. The companion
+`acquire.py` retrieves only those requests and prints an extract without
+importing this workbench. The retained values are published numerical
+predictions, not measured atmosphere or limb brightness. As US Government
+works they follow the public-domain basis already recorded for this USNO
+service in the root LICENSING.md. The source descriptions, locators and
+pre-comparison gates are in
+[the sky preregistration](test/fixtures/sky/PREREGISTRATION.md).
+
+The [USNO celestial-navigation documentation](https://aa.usno.navy.mil/data/celnav)
+defines the supplied geocentric altitude and parallax correction; their
+difference is used for the topocentric solar-center check. The
+[rise/set definitions](https://aa.usno.navy.mil/faq/RST_defs) establish the
+standard upper-limb horizon convention. The existing independently sourced
+root rise/set fixture is read without modification. The
+[primary-phase definitions](https://aa.usno.navy.mil/faq/moon_phases) support
+the lunar longitude checks. No photographs, map assets or page prose are
+vendored. These remain development references, separate from the original
+held-out events.
+
 ## Event leads not adopted
 
 [IOTA's Occult software terms](https://occultations.org/sw/occult/occult4.htm)

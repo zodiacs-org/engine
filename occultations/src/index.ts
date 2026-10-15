@@ -28,3 +28,6 @@ export type {
   LunarContactRequest, LunarContactKind, ContactSearchReceipt, LunarContact,
   LocalOccultationInterval, ContactRefusalReason, LunarContactResult
 } from "./contacts.js";
+export { CONTACT_SKY_MODEL } from "./sky-geometry.js";
+export type { HorizontalFacts, HorizonFacts } from "./sky-geometry.js";
+export type { ContactSkyFacts } from "./contact-sky.js";

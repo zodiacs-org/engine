@@ -1,4 +1,4 @@
-# Development contact timing comparison
+# Development contact comparisons
 
 `test/contact-references.test.ts` evaluates the contact-time and disk-duration
 checks from the unchanged development fixtures. It requires a complete search,
@@ -35,14 +35,29 @@ The NAOJ source's UT label does not establish modern UTC. Its fixed delta-T
 is a reference qualification; the workbench uses its existing engine clock.
 The source lunar radius, station datum or planet shape is not fitted.
 
-This milestone tests only those timing and duration checks. The test explicitly
-enumerates every deferred check so none is silently discarded: position angles
-and refracted Moon altitudes belong to M9, and the local closest-approach time
-needs its own calculation and comparison by M12. Closest approach is not a
-contact and cannot be replaced by an average of ingress and egress. M12 must
-run all held-out checks after implementation choices are fixed. Passing this
-timing subset is not passing the full source case or a general contact
-accuracy bound.
+`test/contact-sky-references.test.ts` adds the M9 position-angle comparisons
+for both development sources and the refracted Moon-altitude comparisons for
+NAOJ's planetary contacts. It evaluates those quantities at the contacts found
+by the solver, using the same nominal UT1 window conversion as the timing
+test. It requires the full contact sequence and every original angle and
+altitude check. The frozen limits are 2 degrees of shortest circular difference
+for position angles and 0.5 degrees for Moon altitude, as preregistered in
+`EVENTS.md` and enforced by the test. Position angles run north through east.
+The altitude comparison uses the explicitly refracted field; NAOJ's refraction
+implementation is undocumented, so this does not establish agreement of
+atmospheric models.
+
+The suites explicitly account for every check in these source cases. Only the
+local closest-approach time remains deferred to M12, when it needs its own
+calculation and comparison. Closest approach is not a contact and cannot be
+replaced by an average of ingress and egress. M12 must run all held-out checks
+after implementation choices are fixed. Passing these development checks is
+not a general contact accuracy bound or full coverage of the planetary source
+case. These references do not validate Sun altitude, Moon phase or the
+bright/dark limb classification. The additional preregistered USNO references
+in `../sky/PREREGISTRATION.md` cover selected solar-altitude, primary-phase
+and horizon samples. Analytic geometry tests check the limb construction,
+without claiming independent physical brightness accuracy.
 
 The source's historical stellar catalogue, nominal observer elevation,
 untransformed historical coordinates, smooth lunar limb, undocumented NAOJ

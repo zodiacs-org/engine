@@ -8,7 +8,7 @@ const DAY = 86_400_000, ORIGIN = Date.parse("2024-01-02T00:00:00Z");
 const RAD = Math.PI / 180, observer = { latitude: 13, longitude: -27, elevationMeters: 123 };
 const baseline = engine.positionAt({ body: "Moon", time: new Date(ORIGIN), observer });
 if (baseline.status !== "ok") throw new Error("test position unavailable");
-let moonDistanceKm: number, targetDistanceKm: number;
+let moonDistanceKm: number, targetDistanceKm: number, sunDistanceKm: number;
 let longitude: (seconds: number) => number, latitude: (seconds: number) => number;
 let evaluated: { time: number; body: string }[];
 let refusedBody: string | null;
@@ -24,6 +24,7 @@ const radiusAngle = (radius: number, distance: number) => Math.asin(radius / dis
 beforeEach(() => {
   moonDistanceKm = 400_000;
   targetDistanceKm = 100_000_000;
+  sunDistanceKm = 150_000_000;
   longitude = (time) => 0.001 * time;
   latitude = () => 0;
   evaluated = [];
@@ -40,7 +41,7 @@ beforeEach(() => {
     const time = (ms - ORIGIN) / 1000;
     return { ...baseline, body: input.body, lon: moon ? (longitude(time) % 360 + 360) % 360 : 0,
       lat: moon ? latitude(time) : 0,
-      dist: (moon ? moonDistanceKm : targetDistanceKm) / OCCULTATION_RADII.auKm, receipt };
+      dist: (moon ? moonDistanceKm : input.body === "Sun" ? sunDistanceKm : targetDistanceKm) / OCCULTATION_RADII.auKm, receipt };
   });
 });
 afterEach(() => vi.restoreAllMocks());
@@ -71,7 +72,8 @@ describe("local contact API on constructed spherical trajectories", () => {
       to: result.contacts[3]!.at, start: "contact", end: "contact", coverage: "overlap" });
     expect(result.fullCoverageIntervals[0]).toMatchObject({ from: result.contacts[1]!.at,
       to: result.contacts[2]!.at, start: "contact", end: "contact", coverage: "full" });
-    expect(evaluated.length).toBe(2 * result.receipt.search.samples);
+    expect(result.receipt.search.skyEvaluations).toBe(result.contacts.length);
+    expect(evaluated.length).toBe(2 * result.receipt.search.samples - result.receipt.search.skyEvaluations);
     expect(Math.min(...evaluated.map(({ time }) => time))).toBeGreaterThanOrEqual(ORIGIN - 600_001);
     expect(Math.max(...evaluated.map(({ time }) => time))).toBeLessThanOrEqual(ORIGIN + 600_001);
   });
@@ -113,6 +115,8 @@ describe("local contact API on constructed spherical trajectories", () => {
     }
     expect(result.overlapIntervals).toHaveLength(1);
     expect(result.fullCoverageIntervals).toHaveLength(1);
+    expect(result.receipt.search.skyEvaluations).toBe(0);
+    expect(evaluated.some(({ body }) => body === "Sun")).toBe(false);
   });
 
   it.each(["tangent", "plateau"] as const)("refuses a sampled external %s instead of claiming an empty complete search", (shape) => {
@@ -134,7 +138,25 @@ describe("local contact API on constructed spherical trajectories", () => {
     expect(result).toMatchObject({ status: "refused", reason: "sample-budget",
       contacts: [], overlapIntervals: [], fullCoverageIntervals: [],
       receipt: { search: { samples: budget, maxSamples: budget } } });
-    expect(evaluated.length).toBe(2 * budget);
+    expect(evaluated.length).toBe(2 * budget - result.receipt.search.skyEvaluations);
+    expect(result.receipt.search.skyEvaluations).toBe(full.contacts.length - 1);
+    expect(evaluated.at(-1)?.body).toBe("Jupiter");
+  });
+
+  it("discards solved contacts when the first Sun output position is refused", () => {
+    refusedBody = "Sun";
+    const result = searchLunarContacts(request());
+    expect(result).toMatchObject({ status: "refused", reason: "position-refused", contacts: [],
+      overlapIntervals: [], fullCoverageIntervals: [],
+      failure: { position: { request: { body: "Sun" } }, positionReason: "unsupported-combination" },
+      receipt: { search: { skyEvaluations: 1 } } });
+    expect(evaluated.at(-1)?.body).toBe("Sun");
+  });
+
+  it.each([NaN, 1_000_000])("refuses invalid Sun output geometry: %s km", (distance) => {
+    sunDistanceKm = distance;
+    expect(searchLunarContacts(request())).toMatchObject({ status: "refused", reason: "invalid-geometry",
+      contacts: [], overlapIntervals: [], fullCoverageIntervals: [], receipt: { search: { skyEvaluations: 1 } } });
   });
 
   it.each(["Moon", "Jupiter"])("preserves the %s position refusal without partial contacts", (body) => {

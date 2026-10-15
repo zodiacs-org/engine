@@ -82,7 +82,7 @@ describe("independent development spherical lunar contact timing", () => {
           .toBe(duration ? "seconds" : "nominal-ut1-seconds");
         expect(check.maximumAbsoluteError, `${reference.id}:${check.key}`).toBe(duration ? 10 : 120);
       }
-      // M9 owns angle/altitude comparisons. The local minimum row remains a
+      // contact-sky-references.test.ts owns angle/altitude comparisons. The local minimum row remains a
       // separate M12 requirement, never a contact or an average of contact times.
       const deferred = reference.checks.filter((check) => !coveredKeys(reference).includes(check.key));
       expect(deferred.map((check) => check.key), reference.id).toEqual(reference.kind === "stellar-contacts"

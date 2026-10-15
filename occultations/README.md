@@ -9,10 +9,11 @@ stellar catalogue, reproducible source extraction, apparent star directions,
 geocentric conjunction searches in right ascension or ecliptic longitude,
 geocentric Moon/planet and planet/planet appulse searches, and lunar
 occultation candidate intervals with window-local series, and topocentric
-spherical-limb contact times for stars and planetary disks.
+spherical-limb contact times for stars and planetary disks with contact angles,
+illumination, altitude, phase and horizon facts.
 Independent event references and maximum-error criteria were frozen before
 event implementation in [the reference contract](test/fixtures/events/EVENTS.md).
-Sky facts, visibility outlines and the CLI remain unchecked in
+Visibility outlines and the CLI remain unchecked in
 [PLAN.md](PLAN.md). Contact validation covers the development references
 described below, with no general timing bound. [DESIGN.md](DESIGN.md) records the geometry and error
 budget to validate; [SOURCES.md](SOURCES.md) separates provenance from leads.
@@ -364,9 +365,9 @@ ingress), `"full-disappearance"` (internal ingress),
 `"full-reappearance-start"` (internal egress), and
 `"partial-reappearance-end"` (external egress). A partial-only occultation
 has no internal contacts. These are spherical disk contacts; Saturn's rings,
-planet oblateness, lunar terrain, atmospheres and refraction are absent.
-The geometry is returned even below the horizon. Visibility, position angles,
-illumination and altitude facts are not yet calculated.
+planet oblateness, lunar terrain, atmospheres and refraction are absent from
+the contact equation. Geometry and its sky context are returned even below
+the horizon.
 
 `contacts` is chronological and owns `(from,to]`. Each contact gives its
 direction, angular separation, semidiameters, signed clearance, numerical
@@ -391,7 +392,13 @@ nothing about coverage outside it.
 The halo classifies contacts at window edges, and its extent is retained as
 `receipt.search.evaluationWindow`. Clock seams and calculation-span limits
 are checked across that whole support. All paired positions count against
-the shared budget, including refinement, repeated instants and output.
+the shared budget, including refinement, repeated instants and output. Each
+contact also consumes a composite sky evaluation for the Sun position, the
+engine's phase function and sky geometry. Search receipt v2 names both work
+units. Its `skyEvaluations` counts composite evaluations; `samples` includes
+them and the position pairs. A clipped interval with no contacts requires no
+sky evaluation. These policies are enforced by
+[the contact search tests](test/contact-search-geometry.test.ts).
 Detected grazes, zero plateaus or inconsistent contact topology produce
 `status: "refused", reason: "unresolved-contact"`. All refusals return empty
 contact and interval lists with a receipt; no partial list is marked complete.
@@ -405,7 +412,47 @@ qualified development cases, not general error bounds or measured maximum
 residuals. The comparisons convert results to each source's nominal UT1
 clock. Historical catalogue/station differences and undocumented NAOJ model
 details remain in the [source contract](test/fixtures/events/EVENTS.md).
-Position-angle, altitude and closest-approach checks remain deferred as listed
-in CONTACTS.md. No held-out contact has been evaluated. [VALIDATION.md](VALIDATION.md)
+The [sky reference tests](test/contact-sky-references.test.ts) also apply the
+original limits of 2 degrees for position angle and 0.5 degrees for refracted
+Moon altitude over those same events. These are acceptance gates, not measured
+maximum errors. The separately solved local closest-approach check remains
+deferred as listed in CONTACTS.md. No held-out contact has been evaluated. [VALIDATION.md](VALIDATION.md)
 records the checks, and [DESIGN.md](DESIGN.md) explains the incomplete physical
 timing budget and grazing sensitivity.
+
+Each contact's `sky` record contains:
+
+- `positionAngleDegrees`, measured from celestial north through east at the
+  Moon, and `brightLimbPositionAngleDegrees`, the projected Sun's orientation.
+  Undefined angles are null.
+- `limb`: bright, dark or terminator according to whether the solar disk is
+  above, below or straddling the local tangent plane at the lunar limb.
+  It is `undefined` if no target-facing tangent can be determined. This
+  sphere model omits Earth shadow, eclipse dimming, relief and photometry.
+- `moon` and `sun`: geometric center altitude, azimuth, geometric horizon
+  flag, refracted altitude and a separate standard horizon margin/flag.
+  `contactPoint` reports the lunar tangent ray, which can be below the horizon
+  while the Moon's center is above. Azimuth is null at a geographic pole,
+  zenith or nadir. There is no terrain or elevation dip.
+- `moonPhase`: the existing engine's geocentric ecliptic elongation, phase
+  name, waxing flag and `approximateIlluminatedFraction`. This fraction is
+  an elongation approximation, not a local brightness measurement.
+- An immutable receipt retaining the source positions, clock, observer,
+  engine, geometry conventions and limitations.
+
+The standard horizon margin follows the engine sky definition: center
+altitude plus upper semidiameter plus 34 arcminutes, or no semidiameter for
+the contact point. A strictly positive margin sets `aboveStandardHorizon`.
+Separately, refracted altitude uses the pinned dependency's normal sea-level
+formula, with nonnegative lift, and is null below -1 degree geometric altitude.
+These policies and their edge cases are checked in
+[the geometry tests](test/sky-geometry.test.ts). No weather or observer-height
+correction is applied to refraction, and the two horizon conventions need
+not give the same flag. Refraction never changes the contact time.
+
+[USNO sky evidence](test/sky-evidence.test.ts) checks Sun altitude, primary
+Moon phases, rise/set brackets and polar samples under its
+[preregistered criteria](test/fixtures/sky/PREREGISTRATION.md). Those finite
+checks and the limb construction do not establish terrain visibility or
+detectability. Sun altitude and horizon facts remain factual output with no
+date ranking or observing recommendation.

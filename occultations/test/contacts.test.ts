@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CALC_SPAN } from "../../src/calc.js";
 import { timeBasis } from "../../src/time-scale.js";
+import { moonPhase } from "../../src/api.js";
 import { CONTACT_LIMITS, OCCULTATION_RADII, positionAt, searchLunarContacts, starCatalogue, starPositionAt } from "../src/index.js";
 import type { LunarContactRequest, LunarContactResult, OccultationPlanet } from "../src/index.js";
 
@@ -56,6 +57,20 @@ describe("topocentric contact integration, not independent timing evidence", () 
       expect(contact.receipt.search).toBe(result.receipt);
       expect(contact.receipt.timeBasis).toEqual(timeBasis(Date.parse(contact.at)));
       expect(contact.receipt.moon.request.observer).toEqual(result.receipt.request.observer);
+      expect(contact.sky.receipt.moon).toBe(contact.receipt.moon);
+      expect(contact.sky.receipt.target).toBe(contact.receipt.target);
+      expect(contact.sky.receipt.sun.request).toEqual({ body: "Sun", time: contact.at,
+        observer: result.receipt.request.observer, frame: "equatorial-true-of-date" });
+      expect(contact.sky.receipt.timeBasis).toEqual(contact.receipt.timeBasis);
+      expect(contact.sky.receipt.request).toEqual({ at: contact.at, observer: result.receipt.request.observer });
+      const phase = moonPhase(contact.at);
+      expect(contact.sky.moonPhase).toEqual({ elongationDegrees: phase.angle,
+        approximateIlluminatedFraction: phase.illumination, name: phase.name, waxing: phase.waxing });
+      expect(contact.sky.contactPoint).not.toBeNull();
+      // Integration facts at the development stations, not new physical gates.
+      expect(contact.sky.sun.aboveGeometricHorizon).toBe(request === SATURN);
+      expect(contact.sky.positionAngleDegrees).toBeGreaterThanOrEqual(0);
+      expect(contact.sky.positionAngleDegrees).toBeLessThan(360);
       const low = Date.parse(contact.bracket.from), high = Date.parse(contact.bracket.to);
       expect(high - low).toBeLessThanOrEqual(1);
       expect(high).toBe(Date.parse(contact.at));
@@ -73,6 +88,9 @@ describe("topocentric contact integration, not independent timing evidence", () 
     });
     expect(result.receipt.search.stepMilliseconds).toBe(300_000);
     expect(result.receipt.search.completeness).toBe("sampled;not-proven");
+    expect(result.receipt.search.skyEvaluations).toBe(result.contacts.length);
+    expect(result.receipt.schema).toBe("zodiacs.occultations.contact-search-receipt.v2");
+    expect(result.receipt.search.sampleUnit).toContain("composite-sky-evaluation");
   });
 
   it.each([SATURN, ALDEBARAN])("assigns each contact once when it divides adjacent windows %#", (request) => {

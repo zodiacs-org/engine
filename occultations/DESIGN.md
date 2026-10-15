@@ -3,7 +3,7 @@
 This is the implementation contract for the remaining milestones. The
 position adapter, input/receipt foundation, source catalogue, apparent
 stellar reduction, geocentric coordinate conjunctions, appulse searches and
-lunar candidate screening and local spherical-limb contacts are implemented. An unchecked
+lunar candidate screening, local spherical-limb contacts and contact sky facts are implemented. An unchecked
 part of PLAN.md is not a supported calculation or an established error bound.
 
 ## Engine boundary and clock
@@ -444,15 +444,108 @@ and disk-duration gates, including clock conversion. No radius, station or
 time offset was fitted to those predictions. The checked subset and deferred
 source quantities are listed in `test/fixtures/events/CONTACTS.md`.
 
-## Sky facts planned in M9
+## Contact sky facts implemented in M9
 
-Position angle is measured from celestial north through east at the Moon.
-Bright/dark/terminator labels will use the projected Sun direction and lunar
-illumination geometry with an explicit ambiguous region. The Sun's altitude,
-Moon's phase and horizon status are facts at each contact. Atmospheric
-refraction does not belong in the vacuum contact equation; any refracted
-horizon convention must be separately named. Daylight and low altitude are
-reported without scoring or recommending the event.
+`contact.sky` reports context at the solved contact instant. The Moon and
+target directions are the existing topocentric contact samples; the Sun uses
+the same position adapter and true-of-date axes. No extra light-time,
+aberration, parallax or refraction correction enters the contact equation.
+The result remains present in daylight and below the horizon.
+
+Let `u` be the lunar unit direction, `v` the target direction, `t` the unit
+projection of `v` on the tangent plane at `u`, `d` the lunar distance and
+`m = asin(lunarRadius/d)`. The apparent contact ray, surface normal and
+point on the sphere are
+
+```text
+q = cos(m) u + sin(m) t
+n = -sin(m) u + cos(m) t
+P = d cos(m) q
+```
+
+`P` lies on the sphere and `P dot n = 0`, establishing the tangent condition.
+Both internal and external contacts use the target-facing lunar limb.
+Position angle is `atan2(t dot east, t dot north)` from celestial north
+through east at the Moon. The projected Sun gives the separate
+`brightLimbPositionAngleDegrees`, which is an orientation, not an illuminated
+fraction or contact angle. Collinear directions and a celestial pole have
+undefined position angles, reported as null. Direction norms below the
+`CONTACT_SKY_MODEL` numerical degeneracy threshold are also undefined;
+this is tested in `test/sky-geometry.test.ts`, not a physical error allowance.
+
+For the topocentric solar vector `S`, use `S - P` to find the solar center's
+altitude above the local tangent plane with normal `n`. The engine's solar
+radius and `|S - P|` give its angular semidiameter there. The limb is bright
+when the whole solar disk lies above that plane, dark when the whole disk
+lies below, and terminator while the disk straddles or touches it. Direct
+floating-point comparisons decide the band; no unknown physical uncertainty
+has been added. This finite-source transition does not have to agree with
+the sign of a projected position-angle difference. In particular, the finite
+observer distance matters at new/full Moon, even with an undefined solar
+position angle. If the target-facing tangent is undefined, limb and contact
+point are explicitly unavailable while center altitudes remain reportable.
+
+These are simultaneous apparent-sphere vectors using the inherited light-path
+ranges. They do not include a separate Sun-to-Moon propagation calculation,
+surface relief, Earth shadow during a lunar eclipse, solar occultation or
+photometry. A bright label describes this incidence model, not a measured
+brightness or a guarantee that the target can be detected.
+
+For horizontal coordinates, `onChartClock` and `gastHours` provide the engine's
+UT1 rotation and TT nutation. The local apparent sidereal angle and geodetic
+latitude rotate each already topocentric vector onto east, north and the
+ellipsoid normal. The sky entry's instantaneous state function is private
+and uses a different observer reduction; calling it indirectly would replace
+the contact directions. This local vector projection preserves the calc
+IERS observer. It does not add a second parallax subtraction or duplicate the
+engine's ephemeris, clock, frame or rise/set search.
+
+The Moon center, Sun center and actual lunar contact ray each have geometric
+altitude and an above-geometric-horizon flag, strictly positive above the
+ellipsoid-normal plane. Azimuth is north through east and is null at the
+zenith, nadir or geographic pole. The horizon has no terrain or elevation
+dip; height still affects the topocentric positions. `standardHorizonMarginDegrees`
+uses the sky entry's imported refraction allowance plus geometric altitude
+and, for each center, its upper semidiameter. The contact ray has no disk
+radius. This reuses the engine rise/set definition rather than finding a
+new crossing for every contact.
+
+The separately reported `refractedAltitudeDegrees` adds the pinned dependency's
+altitude-dependent `Refraction("normal", h)` at its nominal sea-level conditions.
+Negative lift near the zenith is clamped to zero and the altitude capped at
+the zenith. Below the reporting cutoff in `CONTACT_SKY_MODEL` it is null;
+no downward extrapolation is presented as refraction. Weather and altitude
+scaling are absent. The constant rise/set allowance and this model are
+different conventions, so `aboveStandardHorizon` is not obtained from the
+sign of `refractedAltitudeDegrees`. The tests enforce cutoff, zenith,
+center-versus-contact horizon and polar cases.
+
+`moonPhase` delegates to the engine's existing function: geocentric ecliptic
+longitude excess, its phase name and waxing flag, and the approximate
+illuminated fraction `(1 - cos(elongation))/2`. This omits lunar latitude and
+finite solar distance and is not used to classify the local limb. The
+approximation is named in both the field and receipt.
+
+One composite sky evaluation consists of the Sun adapter, the existing phase
+function and horizontal/illumination geometry. It consumes one additional
+unit of the shared finite search budget per contact, alongside the position
+pairs. The phase function itself evaluates lunar and solar longitudes.
+Search receipt v2 identifies both work units and counts composite sky
+evaluations separately; subtracting that count from `samples` gives paired
+evaluations. No sky work is done for an empty contact list. A budget or Sun
+position failure discards contacts and intervals, including failures in
+output. Each sky record carries the source positions, engine identity,
+clock, observer, sidereal angle, policies and omissions.
+
+Analytic tangent and local-axis constructions in `test/sky-geometry.test.ts`
+check the geometry independently of an ephemeris. The unchanged USNO/NAOJ
+development angle and refracted-altitude gates run in
+`test/contact-sky-references.test.ts`. Additional USNO solar-altitude,
+primary-phase, rise/set and polar samples were preregistered in
+`test/fixtures/sky/PREREGISTRATION.md` before comparison and run in
+`test/sky-evidence.test.ts`. These do not establish observed atmospheric
+visibility, all-phase illuminated-fraction accuracy or a general limb bound.
+VALIDATION.md records the checked scope; held-out events remain for M12.
 
 ## Coarse global outline
 

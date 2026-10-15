@@ -7,6 +7,8 @@ import { starCatalogue } from "./catalogue.js";
 import type { CatalogueReceipt, CatalogueStar } from "./catalogue.js";
 import { contactGeometry } from "./contact-geometry.js";
 import { contactIntervals } from "./contact-intervals.js";
+import { contactSkyFacts } from "./contact-sky.js";
+import type { ContactSkyFacts } from "./contact-sky.js";
 import { positionAt } from "./engine.js";
 import type { PositionReceipt } from "./engine.js";
 import { fields, normalizeObserver, normalizeWindow } from "./input.js";
@@ -23,7 +25,7 @@ export interface LunarContactRequest {
   readonly observer: Observer;
   readonly window: TimeWindow;
   readonly stepDays?: number;
-  /** Paired position evaluations across both scans, refinement and output. */
+  /** Position-pair and composite sky evaluations across scans and output. */
   readonly maxSamples?: number;
 }
 export const CONTACT_LIMITS = Object.freeze({
@@ -36,8 +38,8 @@ export type LunarContactKind = "disappearance" | "reappearance" |
   "partial-disappearance-start" | "full-disappearance" |
   "full-reappearance-start" | "partial-reappearance-end";
 export interface ContactSearchReceipt {
-  readonly schema: "zodiacs.occultations.contact-search-receipt.v1";
-  readonly implementation: "spherical-contacts/1";
+  readonly schema: "zodiacs.occultations.contact-search-receipt.v2";
+  readonly implementation: "spherical-contacts/2";
   readonly request: { readonly target: OccultationTarget; readonly observer: NormalizedObserver;
     readonly window: NormalizedWindow; readonly stepDays: number; readonly maxSamples: number };
   readonly engine: PositionReceipt["engine"];
@@ -52,8 +54,10 @@ export interface ContactSearchReceipt {
     readonly evaluationWindow: NormalizedWindow | null;
     readonly stepMilliseconds: number;
     readonly samples: number;
+    readonly skyEvaluations: number;
     readonly maxSamples: number;
-    readonly sampleUnit: "paired-position-evaluation;includes-all-refinement-and-output;no-cache";
+    readonly sampleUnit: "position-pair-or-composite-sky-evaluation;includes-all-refinement-and-output;no-cache";
+    readonly skyEvaluationUnit: "one-sun-adapter-plus-engine-moonPhase-and-horizontal-geometry";
     readonly completeness: "sampled;not-proven";
   };
   readonly conventions: readonly string[];
@@ -71,8 +75,9 @@ export interface LunarContact {
   readonly moonSemidiameterDegrees: number;
   readonly targetSemidiameterDegrees: number;
   readonly clearanceDegrees: number;
+  readonly sky: ContactSkyFacts;
   readonly receipt: {
-    readonly schema: "zodiacs.occultations.contact-receipt.v1";
+    readonly schema: "zodiacs.occultations.contact-receipt.v2";
     readonly search: ContactSearchReceipt;
     readonly timeBasis: TimeBasis;
     readonly moon: PositionReceipt;
@@ -153,16 +158,17 @@ export function searchLunarContacts(request: LunarContactRequest): LunarContactR
     ? { from: iso(low), to: iso(high) } : null;
   const boundaryTimeBasis = { from: basisInside(low), to: basisInside(high) };
   const seams = boundaryTimeBasis.from && boundaryTimeBasis.to ? timeSeamsIn(low, high) : [];
-  let samples = 0;
+  let samples = 0, skyEvaluations = 0;
   const receipt = (): ContactSearchReceipt => freeze({
-    schema: "zodiacs.occultations.contact-search-receipt.v1", implementation: "spherical-contacts/1",
+    schema: "zodiacs.occultations.contact-search-receipt.v2", implementation: "spherical-contacts/2",
     request: { target, observer, window, stepDays, maxSamples },
     engine: { name: "@zodiacs/engine", version: ENGINE_VERSION, ephemeris: { ...EPHEMERIS } },
     catalogue: catalogue?.receipt ?? null, star, radii: OCCULTATION_RADII, boundaryTimeBasis, seams,
     search: { solver: "@zodiacs/engine/crossings:searchLongitudeCrossingsWith",
       windowOwnership: "contacts:(from,to];intervals:clipped-intersection", evaluationWindow,
-      stepMilliseconds: step, samples, maxSamples,
-      sampleUnit: "paired-position-evaluation;includes-all-refinement-and-output;no-cache", completeness: "sampled;not-proven" },
+      stepMilliseconds: step, samples, skyEvaluations, maxSamples,
+      sampleUnit: "position-pair-or-composite-sky-evaluation;includes-all-refinement-and-output;no-cache",
+      skyEvaluationUnit: "one-sun-adapter-plus-engine-moonPhase-and-horizontal-geometry", completeness: "sampled;not-proven" },
     conventions: ["center:topocentric;observer:calc-iers-2003-ellipsoid", `frame:${FRAME}`,
       "time:engine-utc-basis", "angles:degrees;distances:km", "contact:vacuum-spherical-limbs",
       "moon:sphere-from-engine-sky-radius", "planets:nominal-equatorial-radius-spheres;no-rings",
@@ -170,9 +176,10 @@ export function searchLunarContacts(request: LunarContactRequest): LunarContactR
       "external:separation-(moon-radius+target-radius);internal:separation-(moon-radius-target-radius)",
       "corrections:existing-topocentric-adapters;no-additional-light-time-or-aberration",
       "contacts:first-integer-millisecond-on-or-after-root;raw-sign-enclosures",
+      "sky:contact-sky/1;separate-vacuum-and-refracted-horizon-facts;no-visibility-filter",
       ...(star ? ["star:infinite-distance-point-source-model;distance-unknown"] : [])],
     limitations: ["spherical-contact-does-not-establish-visibility;horizon-not-filtered",
-      "no-lunar-relief-planet-oblateness-rings-atmosphere-or-refraction",
+      "contact-equation:no-lunar-relief-planet-oblateness-rings-atmosphere-or-refraction",
       "engine-apparent-direction-and-light-path-range-are-approximate;no-extra-correction",
       "smooth-clearance-with-at-most-one-station-in-two-steps-assumed;sampling-not-completeness-proof",
       "subsecond-separated-roots-may-be-collapsed;detected-grazes-plateaus-and-ambiguity-refused",
@@ -228,9 +235,22 @@ export function searchLunarContacts(request: LunarContactRequest): LunarContactR
       throw new Stopped("unresolved-contact");
     }
     // Gather all output samples before fixing the shared consumed-work receipt.
-    const records = roots.map((root) => ({ root, value: sample(root.at) }));
+    const records = roots.map((root) => {
+      const value = sample(root.at), at = iso(root.at);
+      if (samples >= maxSamples) throw new Stopped("sample-budget", at);
+      samples += 1;
+      skyEvaluations += 1;
+      const sun = positionAt({ body: "Sun", time: at, observer, frame: FRAME });
+      if (sun.status !== "ok") throw new Stopped("position-refused", at, sun.receipt, sun.reason);
+      try {
+        return { root, value, sky: contactSkyFacts(at, observer, value.moon, value.other, sun) };
+      } catch (error) {
+        if (error instanceof RangeError) throw new Stopped("invalid-geometry", at);
+        throw error;
+      }
+    });
     const searchReceipt = receipt();
-    const contacts: LunarContact[] = records.map(({ root, value }) => {
+    const contacts: LunarContact[] = records.map(({ root, value, sky }) => {
       const disappearing = root.after < 0;
       const kind: LunarContactKind = root.boundary === "point-source"
         ? disappearing ? "disappearance" : "reappearance"
@@ -243,7 +263,8 @@ export function searchLunarContacts(request: LunarContactRequest): LunarContactR
         separationDegrees: value.separation, moonSemidiameterDegrees: value.geometry.moonSemidiameterDegrees,
         targetSemidiameterDegrees: value.geometry.targetSemidiameterDegrees,
         clearanceDegrees: root.boundary === "internal" ? value.geometry.internalClearanceDegrees : value.geometry.externalClearanceDegrees,
-        receipt: { schema: "zodiacs.occultations.contact-receipt.v1", search: searchReceipt,
+        sky,
+        receipt: { schema: "zodiacs.occultations.contact-receipt.v2", search: searchReceipt,
           timeBasis: timeBasis(root.at), moon: value.moon.receipt, target: value.other.receipt,
           validation: "finite-development-reference-gates;no-general-physical-timing-bound" } };
     });

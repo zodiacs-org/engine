@@ -485,3 +485,99 @@ package, archive rebuild and conformance gates are not claimed as passed.
 The local scope check passed source sizes, prose rules, dependency pin,
 private-package status, root npm exclusion and changes only under
 `occultations/`. No git metadata, release archive or root package file changed.
+
+# M9 validation record
+
+Checked on 2026-10-15 using Node 22.23.3. Every returned lunar contact now
+has a `sky` record with position angles, spherical-limb solar incidence,
+Moon and Sun center altitudes, contact-ray altitude, horizon flags and the
+engine's approximate Moon phase. The contact root remains a vacuum result.
+The complete local check passed:
+
+```sh
+npm --prefix occultations run check
+```
+
+This passed no-emit TypeScript, the ordinary Vitest suite, catalogue checks,
+the local bundle and scope checks. `test/sky-geometry.test.ts` checks
+independently constructed tangent points, normals and solar rays; celestial
+north/east angle quadrants; RA wrap; undefined pole/collinear angles;
+finite-Sun terminator transitions; new/full illumination; local cardinal
+directions; geographic poles; and the difference between a center above the
+horizon and a contact point below it. It also tests the refraction reporting
+cutoff and zenith clamp. These are analytic/model tests, not independent
+physical lunar brightness or atmospheric accuracy measurements.
+
+`test/contacts.test.ts` verifies sky provenance, time basis, phase delegation,
+immutable JSON snapshots and receipt replay. The constructed adapter tests
+in `test/contact-search-geometry.test.ts` verify composite sky budget
+accounting, no sky calls for an empty contact list, and rejection of the
+entire result when a final sky evaluation exceeds the budget, the Sun adapter
+refuses, or a Sun range is invalid. The new work units are explicitly named
+in search receipt v2, without claiming that each unit is a single raw
+ephemeris call. Existing contact timing and interval tests still pass.
+
+The independent contact comparison in `test/contact-sky-references.test.ts`
+passes every unchanged development position-angle and Moon-altitude gate
+from USNO's Boston Aldebaran prediction on 1923-01-27/28 and NAOJ's Saturn
+prediction on 2024-05-31. Maximum allowed errors remain 2 degrees of shortest
+circular position-angle difference and 0.5 degrees in refracted Moon-center
+altitude, enforced individually at the solved contact instants. These are
+acceptance limits, not measured maximum residuals or general error bounds.
+Source windows are converted from nominal UT1 using the existing engine
+clock. No station, radius, clock, angle or altitude offset was fitted.
+
+The M8 timing checks and these M9 comparisons together cover the development
+contact checks except the explicitly deferred local closest-approach time.
+That quantity still requires a separate solution by M12. Original frozen
+event fixtures, source receipts, partitions and tolerances are unchanged;
+no held-out event was evaluated. The qualified historical and NAOJ models
+remain described in `test/fixtures/events/EVENTS.md` and `CONTACTS.md`.
+
+Additional USNO comparisons were preregistered in
+`test/fixtures/sky/PREREGISTRATION.md` before their first evaluation. They
+pass in `test/sky-evidence.test.ts`:
+
+- Topocentric geometric Sun-center altitude against celestial-navigation
+  `hc - pa`, with a maximum allowed error of 0.02 degree, at the exact
+  preregistered Washington, Greenwich, Sydney and polar-station requests
+  on 2000-09-22, 2020-01-15 and 2024-06-21.
+- The standard-horizon margin changes sign in the published direction
+  between 120 seconds before and after each Sun/Moon rise/set in the root
+  USNO fixture on those dates. These are brackets, not refined rise/set
+  residuals or a measured atmospheric visibility bound.
+- At the USNO primary phases on 2024-01-04, 11, 18 and 25, the geocentric
+  ecliptic longitude excess meets a 0.05-degree maximum circular difference
+  from its defining angle. The named approximate fraction meets a 0.001
+  maximum absolute difference from the primary-phase value. This checks
+  the elongation approximation at these instants, not illumination between
+  phases or a finite-distance physical light curve.
+- At the preregistered polar station, horizon flags agree with the USNO
+  day/night statement at 00:00, 06:00, 12:00 and 18:00 UT1 on 2024-06-21 and
+  2024-12-21. This finite sampling does not verify a continuous whole day.
+
+All those limits and case sets are enforced by the test. Their compact
+source extracts carry query URLs and response digests; `acquire.py` can
+retrieve the source records without evaluating this workbench. USNO source
+times are treated as nominal UT1, with explicit clock conversion. SOURCES.md
+records the primary documentation and public-domain provenance.
+
+The standard horizon definition uses the engine sky constants and upper-limb
+convention, while the altitude projection preserves the contact's calc
+observer and apparent direction. The sky API's instantaneous state function
+is private and has a different topocentric reduction; its unmodified public
+rise/set search is not copied. Neither horizon dip nor terrain is included.
+The separate altitude-dependent refraction is nominal sea-level refraction,
+without weather or height adjustment. Solar incidence omits Earth shadow,
+eclipse dimming and relief, so a limb label is a geometric model fact.
+No general physical limb, phase or atmospheric error bound is established.
+
+A fresh Node process imported the generated bundle and checked contact sky
+fields, immutable JSON receipts and a late budget refusal. The generated
+bundle and catalogue stay ignored. The root `npm run package:contents`
+check stopped at the existing missing `dist/calc.d.ts`. Root build output
+is forbidden for this task, so no root build was run; full root package,
+archive rebuild and conformance gates are not claimed as passed. Scope
+checks confirm all changes stay in `occultations/` and the folder remains
+outside root npm file selection. No git metadata, release archive, root
+package file or dependency version was changed.

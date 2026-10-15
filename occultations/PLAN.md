@@ -37,7 +37,7 @@ package, source, build output, archive or release changes are part of this plan.
   disks. Report disappearance/reappearance and partial/full disk contact
   semantics, grazing/ambiguous outcomes and clipped-window contacts; compare
   against preregistered independent published times.
-- [ ] M9 Add contact position angles, bright/dark/terminator limb, Sun
+- [x] M9 Add contact position angles, bright/dark/terminator limb, Sun
   altitude, Moon phase and horizon facts using existing engine sky/rise-set
   machinery. Define refracted versus geometric quantities and test polar,
   daylight and horizon cases without ranking observing dates.
