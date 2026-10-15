@@ -15,3 +15,11 @@ export { APPULSE_BODIES, APPULSE_LIMITS, searchAppulses } from "./appulses.js";
 export type {
   AppulseBody, AppulseRequest, AppulseSearchReceipt, AppulseEvent, AppulseRefusalReason, AppulseResult
 } from "./appulses.js";
+export { OCCULTATION_PLANETS, OCCULTATION_RADII } from "./occultation-radii.js";
+export type { OccultationPlanet } from "./occultation-radii.js";
+export { OCCULTATION_LIMITS, searchLunarOccultations } from "./occultations.js";
+export type {
+  OccultationTarget, LunarOccultationRequest, OccultationSearchReceipt, CandidateInterval,
+  GeocentricOverlapInterval, LunarOccultationCandidate, LunarOccultationSeries,
+  OccultationRefusalReason, LunarOccultationResult
+} from "./occultations.js";

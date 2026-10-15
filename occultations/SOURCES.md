@@ -203,6 +203,37 @@ The frozen thresholds and source-integrity tests establish an acceptance
 contract, not measured occultation accuracy. Additional independent evidence
 is required for the gaps listed in the event contract.
 
+## Radius facts adopted for M7 screening
+
+The [JPL Solar System Dynamics Planetary Physical Parameters table](https://ssd.jpl.nasa.gov/planets/phys_par.html),
+read on 2026-10-15, supplies the nominal equatorial radii used for the
+planetary screening spheres and the Earth enclosing sphere. The locator is
+the Equatorial Radius column in the planet and dwarf-planet tables. Every
+adopted value cites reference D: B. A. Archinal et al., "Report of the IAU
+Working Group on Cartographic Coordinates and Rotational Elements: 2015",
+Celestial Mechanics and Dynamical Astronomy 130:22 (2018).
+[The source receipt](data/radii-source.json) retains the retrieved page's
+digest and length, individual numeric facts, units, locator and attribution.
+The page prose, layout and publication are not vendored or relicensed; these
+are individually transcribed scientific measurements, not a copied catalogue.
+
+Equatorial radius is distinct from the table's volume-equivalent mean
+radius. The adopted values are nominal, with no enlargement for the table's
+reported uncertainties. An equatorial-radius sphere is a screening model;
+it does not resolve oblateness, a pressure surface, atmospheric extinction,
+planetary rings or detailed contact limbs. These values were not selected
+from event residuals. `test/occultations.test.ts` checks the transcriptions
+and source receipt separately from contact references.
+
+The Earth value equals the semimajor axis already used by
+`../src/calc-reduce.ts`. Adding the maximum height accepted by this package's
+observer validation gives the enclosing sphere. Actual topocentric positions
+continue to use the engine's IERS ellipsoid. The Moon radius remains the
+engine's `SKY_RADII_KM.Moon`, whose source is documented in
+`../LICENSING.md`; the astronomical unit comes from the pinned dependency
+used by the engine. The generated bundle carries the radius source receipt
+alongside the existing engine and SAO attribution.
+
 ## Event leads not adopted
 
 [IOTA's Occult software terms](https://occultations.org/sw/occult/occult4.htm)

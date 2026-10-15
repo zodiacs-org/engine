@@ -7,10 +7,11 @@ interpretations, or make predictions about people or events.
 The current milestones provide validated position samples, a receipted SAO
 stellar catalogue, reproducible source extraction, apparent star directions,
 geocentric conjunction searches in right ascension or ecliptic longitude,
-and geocentric Moon/planet and planet/planet appulse searches.
+geocentric Moon/planet and planet/planet appulse searches, and lunar
+occultation candidate intervals with window-local series.
 Independent event references and maximum-error criteria were frozen before
 event implementation in [the reference contract](test/fixtures/events/EVENTS.md).
-Occultation searches, contact times, visibility outlines and the
+Topocentric contact times, sky facts, visibility outlines and the
 CLI remain unchecked in [PLAN.md](PLAN.md). There is no measured occultation
 accuracy claim yet. [DESIGN.md](DESIGN.md) records the geometry and error
 budget to validate; [SOURCES.md](SOURCES.md) separates provenance from leads.
@@ -268,3 +269,70 @@ repository's release archive or full built-package checks.
 
 [VALIDATION.md](VALIDATION.md) records this milestone's checks and the
 unavailable root build prerequisite.
+
+`searchLunarOccultations()` screens a single target for possible lunar
+occultation within a window:
+
+```js
+import { searchLunarOccultations } from "./occultations/.generated/index.mjs";
+
+const result = searchLunarOccultations({
+  target: "Saturn",
+  window: { from: "2024-05-31", to: "2024-06-01" }
+});
+console.log(JSON.stringify(result));
+```
+
+The target is an entry in `OCCULTATION_PLANETS` or an exact catalogue id,
+such as `sao:94027` for Aldebaran. Each candidate's `interval` is where a
+conservative angular envelope allows a spherical lunar occultation for some
+terrestrial observer. It is a necessary screening condition. It establishes
+neither a local contact nor visibility from any particular place. The example
+uses the NAOJ development event in [the candidate test](test/occultation-references.test.ts).
+
+The envelope encloses the engine observer ellipsoid and all heights accepted
+by `normalizeObserver`, and uses the Moon's and target's ranges. Planets are
+nominal equatorial-radius spheres; rings and atmospheric limbs are excluded.
+Stars are infinite point sources in this screen, with their missing distances
+retained as unknown in receipts. `OCCULTATION_RADII` exposes the adopted model
+and source receipt. [SOURCES.md](SOURCES.md) records the radius provenance.
+
+`geocentricOverlap` reports whether a positive-duration geocentric spherical
+disk overlap was found, with its intervals in `geocentricOverlapIntervals`.
+Parallax can allow a candidate without geocentric overlap. A false value does
+not rule out an unsampled tangency. The candidate's `sample` is an interval
+midpoint witness, not closest approach or a contact. Its angular geometry,
+clock and both adapter receipts are retained.
+
+Candidate intervals intersect the requested `(from,to]` window. An active
+interval crossing a window edge is retained with `start: "window"` or
+`end: "window"`; splitting inside an interval therefore returns clipped
+pieces in both searches. Finite entry and exit boundaries enclose a crossing
+on the millisecond lattice, including the adjacent outside millisecond when
+the root falls between milliseconds. This is numerical bracketing, not a
+physical timing-accuracy claim. Detected tangencies and ambiguous boundaries,
+including an entry exactly at the owned upper endpoint, refuse the search.
+
+`series` groups accepted consecutive relative-RA revolutions of this target.
+A sampled revolution without a candidate breaks a series. The candidate's
+`passageIndex`, `seriesIndex` and series membership are local to this request;
+they are not persistent identifiers or a published global series catalogue.
+Continuation beyond the window is unknown. The search refuses sampled
+nonforward or ambiguous relative motion instead of assigning a passage.
+
+`OCCULTATION_LIMITS` gives the finite step and budget policies. The engine
+crossing solver searches the changing envelope clearance itself and separately
+searches geocentric disk clearance. All scans, boundary checks and output
+samples consume the same paired-position budget. There is no evaluation
+outside the window. Clock seams, unavailable positions, budget exhaustion or
+unresolved geometry return `status: "refused"` with empty `candidates` and
+`series`, plus a receipt. Completion is sampled, not a proof of completeness.
+
+[Analytic geometry tests](test/occultation-geometry.test.ts) check the
+necessary envelope against translated spheres and independent shadow
+constructions. [Series tests](test/occultation-series.test.ts) check synthetic
+passages, gaps, clipping and near misses. The [development reference check](test/occultation-references.test.ts)
+retains the published USNO Aldebaran and NAOJ Saturn events and their local
+instants under [a preregistered containment rule](test/fixtures/events/CANDIDATES.md).
+It does not compare contact times, validate all catalogue targets or show
+that every event in those windows was found. Held-out checks remain in M12.

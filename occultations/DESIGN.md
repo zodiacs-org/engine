@@ -2,7 +2,8 @@
 
 This is the implementation contract for the remaining milestones. The
 position adapter, input/receipt foundation, source catalogue, apparent
-stellar reduction, geocentric coordinate conjunctions and appulse searches are implemented. An unchecked
+stellar reduction, geocentric coordinate conjunctions, appulse searches and
+lunar candidate screening are implemented. An unchecked
 part of PLAN.md is not a supported calculation or an established error bound.
 
 ## Engine boundary and clock
@@ -119,9 +120,10 @@ inclusions. These are implementation policies checked in
 the engine's `eclipticOfDate` at J2000; nutation in longitude does not change
 that latitude. Treating the catalogue FK5 axes as the engine's mean J2000
 axes is sufficient for this broad prefilter, not a stellar reduction model.
-There is no claim yet that this fixed list covers every possible contact
+There is no claim that this fixed list covers every possible contact
 throughout a time window. M3 handles frame differences and motion;
-M7 must test candidate completeness over reference windows.
+M7 checks retention of every registered positive development event, without
+claiming all-target completeness for those windows.
 
 The source positions have epoch and equinox J2000 in FK5. The FK5 RA motion
 is a coordinate rate in seconds of time per year. Catalogue normalization
@@ -279,6 +281,90 @@ test checks only the frozen approximate Jupiter/Saturn occurrence time.
 The reference's center is unspecified; there is no precision geocentric
 Moon/planet minimum validation or general timing bound. Held-out checks
 remain reserved for M12. VALIDATION.md records this milestone's scope.
+
+## Lunar candidates and window-local series implemented in M7
+
+`searchLunarOccultations` screens one planet or catalogue star. It searches
+intervals of negative clearance against the observer envelope, and separately
+against the geocentric disk limit. Both functions are evaluated at every
+solver sample using the current ranges. Screening only at an angular
+separation minimum would overlook changes of apparent radius and parallax.
+The boundary search delegates to `src/crossings.ts` through the monotone
+transform `atan(clearanceDegrees)*90/pi`, which has no circular branch jump.
+
+Let `dM` and `dT` be geocentric distances, `rM` and `rT` the adopted spherical
+radii, `R` a sphere enclosing the observers, and `s` the angular separation.
+For rigidly translated vectors, each center changes direction by at most
+`asin(R/d)`, and each angular radius is at most `asin(r/(d-R))`. The spherical
+triangle inequality therefore gives the necessary candidate condition:
+
+```text
+s <= asin(R/dM) + asin(R/dT) + asin(rM/(dM-R)) + asin(rT/(dT-R))
+```
+
+The limit is capped at a half circle. Infinite point-source stars contribute
+no target terms, an explicit approximation rather than a measured zero
+parallax. The geocentric overlap condition is
+`s <= asin(rM/dM) + asin(rT/dT)`. Both assume that the target is beyond the
+Moon. Finite-target validation enforces the sufficient radial ordering
+`dT-R-rT > dM+R+rM`; all observers must also be outside the lunar sphere.
+
+The lunar radius comes from the engine's `SKY_RADII_KM`. Planet radii are
+nominal equatorial-radius spheres from the cited JPL table in
+`data/radii-source.json`, without a fitted contact correction, oblate limb,
+rings, atmosphere or uncertainty enlargement. The enclosing observer radius
+uses the calc ellipsoid's equatorial radius plus the maximum height accepted
+by `normalizeObserver`. This includes elevated observers without replacing
+the actual ellipsoid used by later local calculations. The source constants
+and height contract are checked in `test/occultations.test.ts`.
+
+This is a conservative bound for the stated translated-vector spheres, not
+for every physical uncertainty or every apparent-place convention. The
+engine's geocentric lunar exception and topocentric light-time treatment
+differ. No unknown correction error, catalogue parallax or lunar relief has
+been given a zero error bound. A positive candidate need not correspond to
+any visible event; horizon, shadow intersection and local contacts remain
+subsequent calculations. Geocentric disk overlap does not imply visibility.
+
+`clearance-intervals.ts` checks every returned root against the raw clearance
+and all sampled signs against the reconstructed interval topology. A
+nonintegral entry uses the last outside millisecond; an exit uses the first
+outside millisecond. Exact zeros between opposite signs become point
+boundaries. A detected tangent or zero plateau is unresolved. A zero at
+the owned upper endpoint approached from positive clearance is also
+unresolved, as its following side lies outside the window. No singleton
+candidate is silently inferred or omitted there. The unowned lower endpoint
+uses its in-window side; active intervals at either edge retain clipping.
+`geocentricOverlap` means detected positive-duration disk overlap, not a
+proof that an unsampled touch did or did not occur.
+
+The search unwraps Moon-minus-target RA across its coarse grid. Sampled
+negative motion or an ambiguous large advance refuses passage assignment.
+The initial signed angle sets a window-local origin; nearest complete
+revolutions assign passage indices. Candidate interval edges and midpoint
+must belong to the same passage. Consecutive accepted indices form a local
+series; a missing index breaks it. There is no date-gap heuristic or claim
+of correspondence to published global series numbers. Continuation beyond
+the requested window stays unknown. This relies on the stated smooth
+motion and sampling assumptions, including the engine solver's limitations.
+
+All position pairs, including the winding scan, both clearance scans,
+verification and output witnesses, share one finite budget without caching.
+A failed or ambiguous calculation discards every candidate and series.
+Clocks at both window boundaries must be inside the engine span, and any
+clock seam refuses the complete window. Search, candidate and series receipts
+retain model constants, source identity, clock conventions and limitations.
+
+`test/occultation-geometry.test.ts` checks analytic point-source shadow
+constructions and direct Cartesian observer translations. Interval and
+series tests cover changing radii, narrow sampled encounters, wrap, rejected
+passages, near misses, clipping and budget accounting. These check the
+screening construction, not physical ephemeris accuracy. The independent
+development references require containment of all published local event
+instants under `test/fixtures/events/CANDIDATES.md`; no local timing gate or
+held-out case has been used to select radii or search parameters. The finite
+positive-event check supplies no all-target completeness or contact accuracy
+claim. `VALIDATION.md` records its scope.
 
 ## Sphere contacts and sky facts
 
