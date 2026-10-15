@@ -1,0 +1,46 @@
+{
+  "schema": "apsides-reference-manifest/1",
+  "planSha256": "258cb2831f5d762dc59857d748fe4100aabee03e7203807be7f085566461ccf6",
+  "fixtures": [
+    {
+      "path": "fixtures/dev-moon-2000.json",
+      "sha256": "196dcdc32abbac989e1dc4e972cb3e57b08efb12533204f848b00de023262dbc"
+    },
+    {
+      "path": "fixtures/dev-mercury-2000.json",
+      "sha256": "962867a03d6c91746069ed1d28fecb65dc29cfc013085bae4f4515a9e0e12911"
+    },
+    {
+      "path": "fixtures/dev-venus-2000.json",
+      "sha256": "8349f7541a6a9f4c43b9ac2e7c01bdb48f95a6e55908ca45f17acfdb0a8a12c0"
+    },
+    {
+      "path": "fixtures/dev-earth-2000.json",
+      "sha256": "a30f6402687f75fd95a3831d90412293962a44e96f69cddc929ad97ea6d63b17"
+    },
+    {
+      "path": "fixtures/dev-mars-2000.json",
+      "sha256": "ec3b877f4b66df846890f536f096eb3f56794f78628e3a766bba41d2e2ea4bca"
+    },
+    {
+      "path": "fixtures/dev-jupiter-2000.json",
+      "sha256": "9b6fc78e17043031600812c37f27ad28bae8d0d860add05e9a2092fd6578a8c0"
+    },
+    {
+      "path": "fixtures/dev-saturn-1980.json",
+      "sha256": "ab3a5e0af59e9097611d432245a31b948338c87e0b79dd5a4dfb275a034cc900"
+    },
+    {
+      "path": "fixtures/dev-uranus-1880.json",
+      "sha256": "9f9b91497de2b2b74288eb1bca6bdfa4470ddaaabfa960f529805fb4be92bf1c"
+    },
+    {
+      "path": "fixtures/dev-neptune-1805.json",
+      "sha256": "4e5a4ed779708a13b5d116f6839acb55c5e951d3b52d9ed54464b69431925692"
+    },
+    {
+      "path": "fixtures/dev-pluto-1805.json",
+      "sha256": "007890ea70396cd2da4df41f27fb04a5df1cdeb039065d6523bd1fc9588e9f19"
+    }
+  ]
+}

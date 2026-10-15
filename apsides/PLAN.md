@@ -6,7 +6,7 @@ The harness owns git operations. The engine package and carried archives
 remain unchanged.
 
 - [x] M1 Establish the private TypeScript project, engine geometric distance sampler, explicit units and center conventions, initial design, and Vitest contract tests.
-- [ ] M2 Preregister independent reference cases and accuracy budgets; add a reproducible JPL Horizons collector, small cited fixtures, and source-integrity tests. Reserve held-out cases before tuning the search.
+- [x] M2 Preregister independent reference cases and accuracy budgets; add a reproducible JPL Horizons collector, small cited fixtures, and source-integrity tests. Reserve held-out cases before tuning the search.
 - [ ] M3 Implement a pure bounded distance-extremum solver with bracketing, golden-section refinement, evaluation accounting, and analytic synthetic tests for minima, maxima, flat curves, and failures.
 - [ ] M4 Implement lunar window searches with edge padding, deterministic half-open boundaries, deduplication, explicit refusal on incomplete work, and lunar reference tests.
 - [ ] M5 Implement heliocentric searches for Mercury through Pluto, including Earth, with body-specific sampling policy, center disclosure, slow-orbit cases, and independent planetary tests.

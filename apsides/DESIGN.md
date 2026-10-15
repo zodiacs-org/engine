@@ -1,8 +1,9 @@
 # Apsides design
 
 M1 provides the geometric distance sampler and its integration contracts.
+M2 adds independent development references and reserves held-out windows.
 Window searches, extremum refinement, syzygy annotations and the CLI are
-planned in [PLAN.md](PLAN.md); they are not implemented by M1.
+planned in [PLAN.md](PLAN.md); they are not implemented by M2.
 
 The intended result is a chronological list of local distance extrema in a
 requested window. A lunar minimum is a perigee and a lunar maximum an
@@ -99,24 +100,46 @@ independent finer search over the stated validation windows.
 
 ## Accuracy budget and independent validation
 
-The physical accuracy budget in seconds and kilometres is **pending M2**.
-M1 establishes no numerical agreement with an independent ephemeris. Its
-contract tests cannot establish such agreement, and the engine's existing
-position bounds do not establish apsis timing accuracy.
+The per-body budgets in seconds and kilometres are registered in
+[references/PREREGISTRATION.md](references/PREREGISTRATION.md), with their
+machine-readable values in [references/plan.json](references/plan.json).
+They are acceptance targets, not measured agreement. The registration gives
+the target reference point, TT windows, distance and speed limits, and a
+separate numerical interval target. Its digest is carried by every fixture.
+`test/references.vitest.ts` enforces the registration and source integrity.
+Failed budgets remain failures; a revision needs a reason and new held-out
+validation. The engine's existing position bounds do not establish apsis
+timing accuracy.
 
-Before engine/reference comparisons, M2 must commit per-body acceptance
-budgets in seconds for event time and kilometres for extremum distance,
-with the exact target reference point, time scale, reference uncertainty and
-validation windows. It must also register the numerical refinement budget
-in seconds separately from physical accuracy, and the speed comparison
-units and tolerances. Reserved held-out cases must be chosen before tuning
-the search. Failed budgets remain failures; any revised budget needs a
-recorded reason and new independent held-out validation.
+The event-time and distance acceptance budgets against the registered
+Horizons corpus are:
+
+| Body | Seconds | Kilometres |
+| --- | ---: | ---: |
+| Moon | 120 | 30 |
+| Mercury | 1200 | 5000 |
+| Venus | 21600 | 5000 |
+| Earth | 3600 | 5000 |
+| Mars | 7200 | 10000 |
+| Jupiter | 86400 | 100000 |
+| Saturn | 172800 | 200000 |
+| Uranus | 604800 | 300000 |
+| Neptune | 2592000 | 500000 |
+| Pluto | 604800 | 100000 |
+
+The numerical refinement interval target is 1 second. The registration
+also specifies signed radial-speed and total-speed limits in km/s. All
+these values are enforced as configuration in `test/references.vitest.ts`;
+engine agreement with them remains unmeasured. They apply to the exact TT
+windows and centers in the registration, without a physical-uncertainty
+claim for the reference ephemeris.
 
 Use frozen JPL Horizons geometric samples as the independent reference.
-Generate reference extrema with a separate implementation operating only
-on those samples, recording its interpolation method, endpoint signs and
-residual time bracket. Compare distance at the reference extremum and at
+The reference collector subdivides signed range-rate brackets using only
+Horizons samples and queries the final midpoint directly, preserving
+endpoint signs and the residual time bracket. Its method and limitations
+are in the registration. No physical uncertainty is inferred from the
+printed precision. Compare distance at the reference extremum and at
 the returned event separately from the event-time difference. Shallow
 distance curvature can magnify timing error even when distances agree.
 Report missing and extra extrema as well as paired-event differences.

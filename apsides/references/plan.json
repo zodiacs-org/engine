@@ -1,0 +1,73 @@
+{
+  "schema": "apsides-reference-plan/1",
+  "registeredOn": "2026-10-15",
+  "timeScale": "TT",
+  "selection": "Fixed calendar windows chosen before any apsides engine/reference comparison; retain every reference range-rate sign change detected on the specified grid.",
+  "reference": {
+    "provider": "NASA/JPL Solar System Dynamics Horizons",
+    "endpoint": "https://ssd.jpl.nasa.gov/api/horizons.api",
+    "frame": "ICRF",
+    "correction": "NONE",
+    "units": "KM-S",
+    "table": 3,
+    "maxBatchEpochs": 32,
+    "maxResponseBytes": 1900000,
+    "finalBracketSeconds": 1,
+    "subdivisions": 8,
+    "maxRefinementRounds": 12,
+    "physicalUncertainty": "Not supplied by these vector tables. Numerical root brackets do not bound the physical DE solution's error."
+  },
+  "solverNumericalBudgetSeconds": 1,
+  "budgets": {
+    "Moon": { "eventTimeSeconds": 120, "distanceKm": 30, "radialSpeedKmPerSecond": 0.001, "orbitalSpeedKmPerSecond": 0.001 },
+    "Mercury": { "eventTimeSeconds": 1200, "distanceKm": 5000, "radialSpeedKmPerSecond": 0.005, "orbitalSpeedKmPerSecond": 0.005 },
+    "Venus": { "eventTimeSeconds": 21600, "distanceKm": 5000, "radialSpeedKmPerSecond": 0.005, "orbitalSpeedKmPerSecond": 0.005 },
+    "Earth": { "eventTimeSeconds": 3600, "distanceKm": 5000, "radialSpeedKmPerSecond": 0.005, "orbitalSpeedKmPerSecond": 0.005 },
+    "Mars": { "eventTimeSeconds": 7200, "distanceKm": 10000, "radialSpeedKmPerSecond": 0.005, "orbitalSpeedKmPerSecond": 0.005 },
+    "Jupiter": { "eventTimeSeconds": 86400, "distanceKm": 100000, "radialSpeedKmPerSecond": 0.01, "orbitalSpeedKmPerSecond": 0.01 },
+    "Saturn": { "eventTimeSeconds": 172800, "distanceKm": 200000, "radialSpeedKmPerSecond": 0.01, "orbitalSpeedKmPerSecond": 0.01 },
+    "Uranus": { "eventTimeSeconds": 604800, "distanceKm": 300000, "radialSpeedKmPerSecond": 0.01, "orbitalSpeedKmPerSecond": 0.01 },
+    "Neptune": { "eventTimeSeconds": 2592000, "distanceKm": 500000, "radialSpeedKmPerSecond": 0.01, "orbitalSpeedKmPerSecond": 0.01 },
+    "Pluto": { "eventTimeSeconds": 604800, "distanceKm": 100000, "radialSpeedKmPerSecond": 0.005, "orbitalSpeedKmPerSecond": 0.005 }
+  },
+  "targets": {
+    "Moon": { "targetId": "301", "centerId": "500@399", "referencePoint": "body-center" },
+    "Mercury": { "targetId": "199", "centerId": "500@10", "referencePoint": "body-center" },
+    "Venus": { "targetId": "299", "centerId": "500@10", "referencePoint": "body-center" },
+    "Earth": { "targetId": "399", "centerId": "500@10", "referencePoint": "body-center" },
+    "Mars": { "targetId": "4", "centerId": "500@10", "referencePoint": "system-barycenter", "physicalCenterId": "499" },
+    "Jupiter": { "targetId": "5", "centerId": "500@10", "referencePoint": "system-barycenter", "physicalCenterId": "599" },
+    "Saturn": { "targetId": "6", "centerId": "500@10", "referencePoint": "system-barycenter", "physicalCenterId": "699" },
+    "Uranus": { "targetId": "7", "centerId": "500@10", "referencePoint": "system-barycenter", "physicalCenterId": "799" },
+    "Neptune": { "targetId": "8", "centerId": "500@10", "referencePoint": "system-barycenter", "physicalCenterId": "899" },
+    "Pluto": { "targetId": "9", "centerId": "500@10", "referencePoint": "system-barycenter", "physicalCenterId": "999" }
+  },
+  "cases": [
+    { "id": "dev-moon-2000", "split": "development", "body": "Moon", "fromTt": "2000-01-01", "toTt": "2000-02-01", "stepDays": 0.5 },
+    { "id": "dev-mercury-2000", "split": "development", "body": "Mercury", "fromTt": "2000-01-01", "toTt": "2000-04-01", "stepDays": 1 },
+    { "id": "dev-venus-2000", "split": "development", "body": "Venus", "fromTt": "2000-01-01", "toTt": "2001-01-01", "stepDays": 2 },
+    { "id": "dev-earth-2000", "split": "development", "body": "Earth", "fromTt": "2000-01-01", "toTt": "2001-01-01", "stepDays": 2 },
+    { "id": "dev-mars-2000", "split": "development", "body": "Mars", "fromTt": "2000-01-01", "toTt": "2002-01-01", "stepDays": 4 },
+    { "id": "dev-jupiter-2000", "split": "development", "body": "Jupiter", "fromTt": "2000-01-01", "toTt": "2013-01-01", "stepDays": 16 },
+    { "id": "dev-saturn-1980", "split": "development", "body": "Saturn", "fromTt": "1980-01-01", "toTt": "2011-01-01", "stepDays": 32 },
+    { "id": "dev-uranus-1880", "split": "development", "body": "Uranus", "fromTt": "1880-01-01", "toTt": "1965-01-01", "stepDays": 32 },
+    { "id": "dev-neptune-1805", "split": "development", "body": "Neptune", "fromTt": "1805-01-01", "toTt": "1971-01-01", "stepDays": 64 },
+    { "id": "dev-pluto-1805", "split": "development", "body": "Pluto", "fromTt": "1805-01-01", "toTt": "1900-01-01", "stepDays": 64 },
+    { "id": "held-moon-2024", "split": "held-out", "body": "Moon", "fromTt": "2024-01-01", "toTt": "2024-03-01", "stepDays": 0.25 },
+    { "id": "held-mercury-2024", "split": "held-out", "body": "Mercury", "fromTt": "2024-01-01", "toTt": "2025-01-01", "stepDays": 0.5 },
+    { "id": "held-venus-2024", "split": "held-out", "body": "Venus", "fromTt": "2024-01-01", "toTt": "2025-01-01", "stepDays": 1 },
+    { "id": "held-earth-2024", "split": "held-out", "body": "Earth", "fromTt": "2024-01-01", "toTt": "2025-01-01", "stepDays": 1 },
+    { "id": "held-mars-2024", "split": "held-out", "body": "Mars", "fromTt": "2024-01-01", "toTt": "2026-01-01", "stepDays": 2 },
+    { "id": "held-jupiter-2030", "split": "held-out", "body": "Jupiter", "fromTt": "2030-01-01", "toTt": "2043-01-01", "stepDays": 8 },
+    { "id": "held-saturn-2020", "split": "held-out", "body": "Saturn", "fromTt": "2020-01-01", "toTt": "2051-01-01", "stepDays": 16 },
+    { "id": "held-uranus-2000", "split": "held-out", "body": "Uranus", "fromTt": "2000-01-01", "toTt": "2085-01-01", "stepDays": 16 },
+    { "id": "held-neptune-2005", "split": "held-out", "body": "Neptune", "fromTt": "2005-01-01", "toTt": "2171-01-01", "stepDays": 32 },
+    { "id": "held-pluto-1900", "split": "held-out", "body": "Pluto", "fromTt": "1900-01-01", "toTt": "2195-01-01", "stepDays": 32 }
+  ],
+  "physicalCenterChecks": {
+    "split": "held-out",
+    "jdTt": [2451545, 2469807.5],
+    "bodies": ["Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"],
+    "purpose": "Compare physical-center and system-barycenter distances and rates separately, without relabeling the engine reference point. Not an event timing test."
+  }
+}

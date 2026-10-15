@@ -1,10 +1,9 @@
 # Apsides sources and provenance
 
-M1 cites definitions and existing engine contracts. It contains no
-independent apsis fixture and makes no measured accuracy claim. M2 will
-register reference queries, acceptance budgets and held-out cases before
-engine/reference comparisons. No test expectation may come from this
-package's prior output or Swiss Ephemeris.
+M1 cites definitions and existing engine contracts. M2 registers reference
+queries, acceptance budgets and held-out cases, and freezes independent
+development samples before engine/reference comparisons. No test
+expectation comes from this package's prior output or Swiss Ephemeris.
 
 ## Primary sources read for M1
 
@@ -38,7 +37,7 @@ The following online pages were fetched and read on 2026-10-15.
   returned a missing-page response during this session; the readable
   commission transcription is the source actually used.
 
-## Planned reference conventions
+## Reference conventions
 
 | Target | Horizons target ID | Origin | Reference point |
 | --- | --- | --- | --- |
@@ -63,14 +62,61 @@ additional limitations. The fixed rotation between the engine's J2000
 equatorial axes and Horizons ICRF does not change scalar distance or speed;
 component-level comparisons would need the stated frame transformation.
 
-Each future fixture must record its source URL and query parameters,
+Each fixture records its source URL and query parameters,
 retrieval date, response digest, ephemeris solution, target, origin, time
 scale, units, sample rows and independent derivation of the reference event.
-The generator must verify header conventions, reject malformed or
-non-finite samples, and preserve enough neighboring samples to audit the
+The generator verifies header conventions, rejects malformed or
+non-finite samples, and preserves neighboring samples to audit the
 turn and its uncertainty. Frozen inputs are never silently refetched under
 the same identity. Live downloads belong in an ignored generated directory;
 ordinary library calls and tests use local inputs.
+
+## M2 numerical references and collection
+
+The development corpus is indexed by
+[references/manifest.json](references/manifest.json). It binds the exact
+registration and compact fixture bytes with SHA-256. Every fixture records
+the actual returned target and origin names, their ephemeris solution
+labels, API version, geometric conventions and TT epochs. The `sources`
+entries retain exact request parameters, URLs, retrieval times and raw
+response digests. Source indices on the sample rows identify their request.
+No expected apsis date or value was calculated by the engine.
+
+The independent method and selected windows are in
+[references/PREREGISTRATION.md](references/PREREGISTRATION.md). The
+collector refines signed range-rate brackets and directly queries their
+midpoints. Wider distance probes verify each turn. `test/references.vitest.ts`
+checks the frozen evidence; `test/horizons-io.vitest.ts` checks rejection of
+wrong centers, scales, units, corrections, incomplete tables and corrupt
+caches. These are integrity checks, not engine accuracy results.
+
+Additional primary pages fetched and read on 2026-10-15:
+
+- [JPL SSD API fair-use policy](https://ssd-api.jpl.nasa.gov/), **Fair Use
+  Policy**: sequential requests, reuse of cached results, application
+  identification and output-version checking. The collector implements
+  these conventions and stops after a failed request. It supports the
+  text API version actually returned by the development queries; a changed
+  version requires review before parsing.
+- [Horizons manual](https://ssd.jpl.nasa.gov/horizons/manual.html),
+  **Cartesian State Vector Table**, **Specification of Time**, **Statement
+  of Ephemeris Limitations**, and **Acknowledgements**: the output
+  conventions, distinction between numeric precision and model uncertainty,
+  and provider attribution. Reference rate brackets localize a root of the
+  named solution, not an independently bounded physical truth.
+- [NASA Open Data Horizons catalog](https://data.nasa.gov/dataset/horizons),
+  **License**: lists the license as unspecified.
+- [JPL SSD FAQ](https://ssd.jpl.nasa.gov/faq.html), **I'd like to publish
+  information from your site on my site. Do I need permission?**: describes
+  general republication guidance and links JPL's copyright policy. It does
+  not distinguish generated numerical calculation results from existing
+  website content.
+
+Attribution: Giorgini, JD and JPL Solar System Dynamics Group, NASA/JPL
+Horizons On-Line Ephemeris System,
+[ssd.jpl.nasa.gov/horizons](https://ssd.jpl.nasa.gov/horizons/). Each source
+entry records its retrieval time and the returned target/origin solutions.
+Use of these references implies no NASA/JPL endorsement.
 
 ## Local contracts and evidence
 
@@ -103,13 +149,15 @@ CC BY 4.0 delta-T values credited there to Stephenson, Morrison and
 Hohenkerk, so its package license is `MIT AND CC-BY-4.0`. This project does
 not relicense those materials.
 
-JPL and IAU pages are cited for definitions; their prose and tables are not
-copied into fixtures by M1. Before future data is committed, M2 must record
-the fetched provider terms and attribution for the specific numerical
-responses. Credit NASA/JPL Solar System Dynamics and the identified
-Horizons solution beside those fixtures. Existing repository licensing
-records are context, not permission to assert that every external website
-or dataset has the same license.
+The compact M2 fixtures retain selected factual numerical calculation
+results and target/solution identifiers. Their selection, schema and
+reference derivation are this project's work. They copy no provider prose,
+website table or complete response. Raw responses remain in the ignored
+cache. The fetched API documentation supplies no numerical-output license;
+the NASA catalog lists the license as unspecified, and the FAQ's general
+republication guidance is linked above. We do not relicense JPL material or
+assert that all JPL content is public domain. Existing repository licensing
+records are context, not a blanket license for external content.
 
 No Swiss Ephemeris material, proprietary atlas data, credentials or personal
 birth data is used. Synthetic mathematical functions will test solver

@@ -1,1 +1,2 @@
 apsides: establish the private geometric distance sampler, design and source records, and passing M1 type, contract, and package-isolation checks
+apsides: preregister independent apsis budgets and held-out cases, freeze Horizons development fixtures, and verify collector provenance, offline replay, and package isolation

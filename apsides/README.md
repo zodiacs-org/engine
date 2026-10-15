@@ -2,7 +2,8 @@
 
 Private work-in-progress library for geometric orbital distance extrema,
 built on `@zodiacs/engine`. The current milestone provides the distance
-sampler. Window searches and the CLI are planned in [PLAN.md](PLAN.md).
+sampler and frozen independent development references. Window searches and
+the CLI are planned in [PLAN.md](PLAN.md).
 
 Use Node 22.22.2 for the local checks, matching this project's initial test
 environment. From this repository:
@@ -39,10 +40,13 @@ its validation, coverage refusals and time-basis qualifications.
 
 The Vitest files use `.vitest.ts` and a local configuration so the root
 test command does not discover a separate project's tests before its local
-dependencies are installed. They check integration and units, not agreement
-with an independent ephemeris. [DESIGN.md](DESIGN.md) describes the planned
-search and pending accuracy validation; [SOURCES.md](SOURCES.md) records
-definitions, target conventions and attribution.
+dependencies are installed. They check integration, units, reference
+provenance and source integrity. Engine accuracy has not yet been measured
+against the references. [DESIGN.md](DESIGN.md) describes the planned search;
+[references/PREREGISTRATION.md](references/PREREGISTRATION.md) records the
+acceptance budgets, reserved cases and collection commands.
+[SOURCES.md](SOURCES.md) records definitions and attribution. Ordinary tests
+read local fixtures and perform no reference downloads.
 
 `npm run check:isolation` checks authored file sizes and documentation,
 checks that npm's root file selection excludes this folder, and runs the
@@ -53,5 +57,5 @@ perform the archive history gate. All temporary output is under
 
 Original code and documentation follow the repository's MIT license.
 The engine dependency retains its own licenses and notices, as detailed in
-[SOURCES.md](SOURCES.md). No astronomical accuracy is claimed by this initial
-sampler milestone.
+[SOURCES.md](SOURCES.md). The reference collector is separate from the
+library and does not use engine output to generate expected values.
