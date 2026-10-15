@@ -19,15 +19,20 @@ npm ci --ignore-scripts --cache=.cache/npm
 npm run check
 ```
 
-The current check exits with failing independent acceptance assertions.
-Typechecking, numerical and integration tests pass; `npm run check:isolation` can be run
-separately because the combined command stops at the reference failures.
+The current check exits unsuccessfully because independent acceptance fails.
+It runs typechecking, the full tests, offline validation/report verification,
+and package isolation even after an earlier failure. It prints every gate's
+status and saves a structured report in `.generated/checks/report.json`.
+The [local check evidence](docs/evidence/m11/RESULTS.md) records this run.
 [VALIDATION.md](VALIDATION.md) records the failing cases and unchanged limits.
 
 The dependency is a relative file reference to the immutable carried engine
 archive. Installation stays inside `apsides/node_modules`; it needs no root
 install or root build. The package is private. Its source entry is
-`src/index.ts`, usable from a TypeScript runner or bundler.
+`src/index.ts`, usable from a TypeScript runner or bundler. For plain Node,
+`npm run build` creates the library at `.generated/cli/index.js` alongside
+the CLI. [REPRODUCING.md](REPRODUCING.md) covers installation, receipt replay,
+frozen references and the scope of local checks.
 
 ## Command line
 
@@ -90,6 +95,21 @@ January 2000 TT development window and its subwindows. These are interface
 checks, not new astronomical accuracy evidence.
 
 ## Library
+
+Run the complete Node example after `npm run build`, from `apsides/`:
+
+```sh
+node examples/library.mjs > .generated/example.json
+node examples/replay-motion.mjs < .generated/example.json
+```
+
+[library.mjs](examples/library.mjs) requests a combined window with an explicit
+lunar orb and prints the complete result. [replay-motion.mjs](examples/replay-motion.mjs)
+compares the saved motion samples with their engine receipt requests.
+These are reproducibility examples, not independent accuracy tests.
+The TypeScript snippets below use source-relative `.js` specifiers resolved
+to `.ts` by a TypeScript runner or bundler; plain Node uses the built entry
+shown in the runnable example.
 
 ```ts
 import { sampleDistance } from "./src/index.js";
@@ -306,6 +326,8 @@ perform the archive history gate. All temporary output is under
 `.generated/`; downloads and tool caches belong under `.cache/`.
 
 Original code and documentation follow the repository's MIT license.
-The engine dependency retains its own licenses and notices, as detailed in
-[SOURCES.md](SOURCES.md). The reference collector is separate from the
+[LICENSING.md](LICENSING.md) maps authored files, numerical fixtures and
+dependencies to their source records. The engine dependency retains its own
+licenses and notices, as detailed in [SOURCES.md](SOURCES.md).
+The reference collector is separate from the
 library and does not use engine output to generate expected values.

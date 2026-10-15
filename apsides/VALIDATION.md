@@ -60,6 +60,12 @@ summary; it does not use previous engine output as an accuracy oracle.
 Full signed measurements go to ignored `.generated/validation/report.json`.
 The command rebuilds only the local ignored CLI output before measurement.
 
+M11's `npm run check` runs all local gates sequentially, including isolation
+after acceptance failure. [The local check evidence](docs/evidence/m11/RESULTS.md)
+records the resulting statuses and runtime. Runnable example and receipt
+replay tests cover existing development inputs only and do not extend the
+independent validation span or change any acceptance limit.
+
 The reserved cases are now consumed validation data. This milestone records
 their failures without adjusting the search, deleting a case or widening
 a limit. Future tuning requires a new registration and new held-out cases.

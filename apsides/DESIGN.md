@@ -13,6 +13,10 @@ annotations. M9 exposes the searches through a local JSON CLI. M10 evaluates
 the reserved corpus without tuning the search. Its measured report is in
 [docs/evidence/m10/RESULTS.md](docs/evidence/m10/RESULTS.md); independent
 acceptance remains failing, as [VALIDATION.md](VALIDATION.md) describes.
+M11 adds runnable Node examples, motion-receipt replay, reproduction and
+licensing records, and local checks that retain every gate's failure.
+[REPRODUCING.md](REPRODUCING.md) describes that workflow. The search methods,
+ephemeris, frozen references and numerical acceptance limits are unchanged.
 
 The intended result is a chronological list of local distance extrema in a
 requested window. A lunar minimum is a perigee and a lunar maximum an

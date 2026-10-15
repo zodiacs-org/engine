@@ -15,7 +15,7 @@ remain unchanged.
 - [x] M8 Add optional lunar syzygy annotations using an explicit angular orb, measured Moon-Sun elongation, candidate-only labels, receipts, and boundary tests.
 - [x] M9 Implement `apsides lunar`, `apsides planetary`, and `apsides window` with strict arguments, JSON output, help, exit statuses, and subprocess tests.
 - [x] M10 Run the reserved independent validation corpus, record timing/distance/speed errors and missed/extra events, and publish only the measured coverage and unresolved limitations.
-- [ ] M11 Finish library and CLI examples, reproducibility instructions, source and license records, local checks, and evidence that apsides stays outside the engine package.
+- [x] M11 Finish library and CLI examples, reproducibility instructions, source and license records, local checks, and evidence that apsides stays outside the engine package.
 - [ ] M12 Review scientific semantics and failure paths; complete robustness and CLI acceptance checks, document remaining limitations, and leave a reviewable project for the harness.
 
 M1 tests establish integration and validation contracts. They are not
@@ -34,4 +34,11 @@ held-out Mercury total-speed failures, a Neptune event-time failure, and
 Pluto's search refusal and same-TT distance failures, alongside the original
 development Pluto failure. The reserved cases are now consumed; future
 tuning requires new held-out cases. No search source or original limit was
-changed to obtain these results. M11 and M12 remain unfinished.
+changed to obtain these results.
+
+M11 completes runnable library and motion-replay examples, reproduction and
+license records, and a local check runner that executes every gate while
+preserving failures. [The M11 check record](docs/evidence/m11/RESULTS.md)
+records passing type and isolation gates and failing independent acceptance.
+The new example and check-runner tests pass; the original accuracy failures
+remain unchanged. M12 remains unfinished.

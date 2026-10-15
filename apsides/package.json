@@ -17,7 +17,7 @@
     "test": "vitest run --config vitest.config.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "check:isolation": "node scripts/check-isolation.mjs",
-    "check": "npm run typecheck && npm test && npm run check:isolation"
+    "check": "node scripts/check-local.mjs"
   },
   "dependencies": {
     "@zodiacs/engine": "file:../artifacts/zodiacs-engine-1.0.0.tgz"

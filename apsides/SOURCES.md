@@ -250,6 +250,14 @@ without a registered acceptance budget or event-time validation.
 
 ## Licensing and attribution
 
+M11 adds a [file and dependency license map](LICENSING.md) and
+[reproduction instructions](REPRODUCING.md). The NASA Horizons catalog's
+license field and SSD FAQ republication entry above were fetched and read
+again on 2026-10-15. They do not add an explicit license specific to the
+generated numerical extracts. No new external data was collected in M11.
+The executable examples replay the installed engine over existing
+development windows; they do not add independent astronomical expectations.
+
 Original code and documentation in `apsides/` follow the repository's
 [MIT license](../LICENSE). The engine is by Zodiacs.org; its ephemeris
 dependency is astronomy-engine by Don Cross, licensed MIT. Preserve the
