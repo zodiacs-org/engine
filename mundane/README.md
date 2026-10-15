@@ -10,6 +10,12 @@ An optional adapter casts supplied eclipse instants and can delegate to the
 events workbench's eclipse minimum searches. The CLI provides `ingresses`,
 `lunations`, and `year` commands with text summaries and complete JSON results.
 
+Start with the [runnable library walkthrough](docs/usage.md),
+[CLI guide](docs/cli.md), and
+[conventions, sources, and remaining limitations](docs/validation.md).
+The [final check record](docs/evidence/m13/checks.txt) records the completed
+workbench checks and the limits of the package audit.
+
 From the repository root, using Node.js as required by [package.json](package.json):
 
 ```sh
@@ -18,6 +24,10 @@ npm run check --prefix mundane
 npm run build --prefix mundane
 ./mundane/bin/mundane.mjs year --latitude 12.5 --longitude -31.25 --year 2024
 ```
+
+Run `npm run check:examples --prefix mundane` for the library walkthrough and
+`npm run check:scope --prefix mundane` after building for file-size, import,
+and package-isolation audits. Generated examples remain inside ignored folders.
 
 The executable uses the ignored local `mundane/build/` bundle; rebuild it after
 source changes. It does not build the engine's `dist/`. Use `--format json` for

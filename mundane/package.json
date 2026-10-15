@@ -10,6 +10,8 @@
     "typecheck": "tsc -p tsconfig.json --pretty false",
     "test": "vitest run --config vitest.config.ts",
     "check": "npm run typecheck && npm test",
+    "check:examples": "node scripts/check-examples.mjs",
+    "check:scope": "node scripts/check-scope.mjs && node scripts/check-package-isolation.mjs",
     "build": "node scripts/build-cli.mjs",
     "mundane": "node bin/mundane.mjs"
   },

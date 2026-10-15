@@ -16,7 +16,7 @@ ticks it here, and appends a commit summary to `CHANGES.txt` for the harness.
 - [x] M10 Combine ingress and lunation charts into a chronological year or range report, with deterministic ordering and tests for empty ranges and adjacent windows.
 - [x] M11 Add an optional events eclipse adapter through relative imports when available, preserving supplied contact kinds, search completeness, and provenance. Test supplied synthetic contacts and unavailable adapters; never implement an eclipse solver.
 - [x] M12 Implement the `mundane ingresses`, `mundane lunations`, and `mundane year` CLI with strict arguments, JSON and plain-text output, help, and process-level tests.
-- [ ] M13 Finish usage examples and convention/source documentation, run the complete mundane checks, audit size and package isolation, and record remaining limitations.
+- [x] M13 Finish usage examples and convention/source documentation, run the complete mundane checks, audit size and package isolation, and record remaining limitations.
 
 ## Implementation boundaries
 

@@ -10,3 +10,4 @@ Implement M9 descriptive traditional factor lists with source pointers, ingress 
 Implement M10 chronological year and range reports with deterministic event ordering, separate search budgets and metadata, atomic refusals, synthetic boundary tests, documentation, and Node 22 evidence
 Implement M11 optional eclipse adapters and relative events loading with preserved contact definitions, source provenance and completeness, opt-in reports, synthetic and actual-branch integration checks, documentation, and Node 22 evidence
 Implement M12 local ingress, lunation and year CLI with strict arguments, JSON and text output, optional events loading, atomic refusal exit codes, process tests, usage documentation, and Node 22 evidence
+Complete M13 runnable library examples, convention and source guide, documented limitations, full Node 22 checks, and repeatable size, import and package isolation audits with final evidence
