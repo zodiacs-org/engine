@@ -1,1 +1,2 @@
 Complete M1: scaffold isolated minorbodies package, record Horizons Chebyshev design and provenance, preregister accuracy gates, and verify catalogue, engine integration and package exclusion on Node 22.
+Complete M2: add serialized cached Horizons intake, strict request and response validation, source manifests and original fixtures for all required bodies, capture and offline replay commands, and passing parser, transport and scope checks.

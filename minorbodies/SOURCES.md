@@ -1,17 +1,20 @@
 # Sources and redistribution record
 
-Read on 2026-10-15. M1 contains no downloaded ephemeris samples, fitted
-coefficients, external source code or copied documentation. Catalogue
-selectors are identifiers, not orbital elements. The code and original
-documentation in this directory use the repository's [MIT licence](../LICENSE).
+Read on 2026-10-15. M2 adds original JPL Horizons numerical API responses and
+request manifests under `tests/fixtures/horizons/`. There are no fitted
+coefficients or external source-code copies. The code and original
+documentation in this directory use the repository's [MIT licence](../LICENSE);
+that declaration does not relicense the retained JPL material.
 
 ## JPL Horizons numerical data
 
 The selected source is NASA/JPL Solar System Dynamics, Horizons public
 numerical output. The project instruction expressly permits JPL/NASA public
 data. Use numerical responses and derived coefficients only, with the
-request and source identity recorded. Do not copy JPL website prose,
-imagery, logos, software or unrelated third-party tables into the package.
+request and source identity recorded. The retained responses include their
+own metadata and standard explanatory legends unchanged so their conventions
+can be checked. This is numerical API output, not copied website articles,
+imagery, logos, software or unrelated third-party tables.
 
 Primary references:
 
@@ -38,8 +41,9 @@ The intended numbered targets are:
 | Juno | `3;` |
 | Vesta | `4;` |
 
-`tests/catalog.test.ts` enforces this selector catalogue. M2 must validate
-the resolved names and identifiers in actual responses before accepting data.
+`tests/catalog.test.ts` enforces this selector catalogue.
+`tests/horizons-parser.test.ts` checks the resolved names and identifiers in
+the original responses and verifies that substituted targets are rejected.
 
 Do not assert that everything hosted by NASA or JPL is public domain. The
 [SSD publication FAQ](https://ssd.jpl.nasa.gov/faq.html#publish) asks about
@@ -52,10 +56,44 @@ for the actual numerical material it retains, including any source-specific
 notice, without inventing licence text or treating free access as a licence.
 Nothing in this package implies JPL endorsement.
 
+## Retained M2 captures
+
+The redistribution basis for these numerical responses is the project's
+explicit authorization to use and redistribute JPL/NASA public data. No
+additional source-specific redistribution restriction is stated in the
+captured responses. This record does not assert a blanket licence for other
+content hosted by NASA, JPL or Caltech, or assign an invented SPDX identifier
+to the responses. Retain this provenance when redistributing the fixtures.
+
+`tests/fixtures/horizons/{chiron,ceres,pallas,juno,vesta}.json` holds each original
+UTF-8 API envelope, including its returned signature and result text. Its
+matching `.manifest.json` names the canonical request, URL and every parameter,
+retrieval timestamp, raw byte count and digest, generator identifier and
+resolved source identity. The initial Chiron, Ceres and Vesta probes were
+imported unchanged from locally retained downloads; their recorded retrieval
+times are the local file completion times. Pallas and Juno were captured
+directly by the client. The request and source hashes are checked by
+`scripts/capture-horizons.ts --check` as part of `npm run check`.
+
+The fixture requests all use TT Julian dates 2451545, 2451545.125 and 2451546,
+from 2000-01-01 at noon through 2000-01-02 at noon on TT. Their returned frame
+is ICRF, their origin is the Earth center, and their vectors have receive
+light-time and stellar aberration corrections in au and au/day. These are
+source parser fixtures, not fitted data and not a held-out accuracy corpus.
+`tests/horizons-parser.test.ts` enforces their request epochs and metadata.
+Later fitting and validation must register disjoint epoch sets independently.
+
+The script `scripts/capture-horizons.ts --capture` reproduces the requests and
+reuses validated cache entries. A new live retrieval can change the orbit
+solution, provider timestamps and raw digest. Exact replay uses the original
+bytes, verified by `--replay` with their committed digests. Generated downloads,
+candidate fixtures and caches stay ignored; only the compact reviewed source
+fixtures and their request manifests are retained here.
+
 ## Engine reuse
 
-Relative imports refer to this engine checkout. The current M1 tests import
-only `src/crossings.ts` and `src/configured-aspects.ts`, which require no
+Relative imports refer to this engine checkout. The synthetic engine-contract
+tests import only `src/crossings.ts` and `src/configured-aspects.ts`, which require no
 planetary ephemeris. They test integration with invented motions and rows.
 Later source-level reuse is identified in [DESIGN.md](DESIGN.md).
 

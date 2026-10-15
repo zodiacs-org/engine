@@ -2,9 +2,10 @@
 
 ## Status and scope
 
-This is the design adopted in M1. Only the catalogue, acceptance policy and
-synthetic engine-contract checks are implemented. No position accuracy,
-installed dataset or operational supported range is claimed yet.
+This is the design adopted in M1, extended by the M2 ingestion contract below.
+The catalogue, acceptance policy, synthetic engine-contract checks and
+Horizons ingestion tools are implemented. No position accuracy, installed
+coefficient dataset or operational supported range is claimed yet.
 
 The required targets are Chiron, Ceres, Pallas, Juno and Vesta. Pholus and
 Eris can follow only after the same checks. The target interval is
@@ -197,3 +198,62 @@ request/convention receipt, with dataset identity when one was loaded.
 Numerical results also identify the engine bridge, source solution, shard
 digest, coverage and validation evidence status. Receipts describe
 provenance; they do not authenticate it or turn sample errors into bounds.
+
+## M2 ingestion contract
+
+`src/horizons-request.ts` builds immutable, explicit requests using the settings
+above. `src/horizons-parser.ts` validates the actual returned metadata before
+accepting a vector. The tests in `tests/horizons-parser.test.ts` enforce this
+contract against the original captures in `tests/fixtures/horizons/` and
+deliberately corrupted copies of them.
+
+Requests contain at most 128 positive, strictly increasing TT Julian dates.
+This is a local batch limit, not a service limit or a coverage claim. Dates
+must be distinct at Horizons' observed nine-decimal JD output precision. Each
+returned date must equal its requested date rounded to that precision; the
+returned `jdTt` is the printed epoch. Fitting must use that returned epoch,
+or choose training dates representable at this precision. The parser checks
+the TT labels, Cartesian column order, finite numbers, row count and table
+markers. It rejects missing rows, reordered epochs and changed conventions.
+
+The captures identify `NASA/JPL Horizons API` version `1.2`. The parser admits
+only that observed signature. The API documentation currently advertises a
+different version; that alone does not approve new response bytes. An actual
+response with another signature requires review and new fixture coverage.
+
+The source identity includes the selected numbered body, target designation,
+orbit solution reference and date, initial TDB epoch and ICRF state, Earth
+solution, small-body perturber solution and EOP filename. The initial orbit
+epoch is distinct from the requested TT output epochs. The helper
+`assertSameHorizonsSolution` rejects differences in these fields across batches
+for the same body. Its EOP check is conservative: even a routine EOP file
+refresh fails equality and requires a separately reviewed dataset. Comparing
+different bodies with this helper also fails by design.
+
+`src/horizons-client.ts` is an explicitly imported build tool. It has no
+import-time I/O and is not re-exported by the companion runtime entry. Each
+capture records the complete canonical request, SHA-256 of its JSON encoding,
+SHA-256 and byte length of the original UTF-8 JSON response, retrieval time,
+API signature, source identity and generator identifier. The response bytes
+are retained unchanged. Cache reads recompute the hashes and parse the source
+again, then compare every manifest field. A caller-supplied digest additionally
+pins an original source. Writes use a temporary file followed by rename.
+
+The module-wide queue covers all instances, reads the entire response before
+another request, and holds the slot through retry delays. It does not coordinate
+separate operating-system processes; run generators one at a time. The default
+is at most three attempts with exponential backoff starting at one second.
+Retries are limited to network/read failures, HTTP 429 and HTTP 5xx. A request
+times out after 30 seconds by default, covering its response body. Retry-After
+is honored within the one-minute delay cap; a longer server delay fails for a
+later explicit attempt. Redirects are refused. Downloaded responses are capped
+at 900,000 bytes and encoded cache records below 2,000,000 bytes. These are
+enforced operational limits, not measured ephemeris sizes. The default options,
+caps, retry and timeout behavior are checked in `tests/horizons-client.test.ts`.
+
+`scripts/capture-horizons.ts` captures only the fixed parser-fixture epochs.
+Its check mode validates the committed raw responses and manifests without
+using the cache or network. Its replay mode requires cached bytes matching the
+committed digests. Its capture mode writes proposed fixtures into an ignored
+directory. This is the intake foundation for the later fitting generator;
+it is not a full-span coefficient generator or an accuracy test.

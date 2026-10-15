@@ -7,7 +7,7 @@ reports stay in ignored directories. Small original source fixtures and
 human-written evidence notes stay with their capture scripts and provenance.
 
 - [x] M1 Establish the isolated TypeScript package, body catalogue, acceptance policy, DESIGN.md and SOURCES.md. Verify the existing engine integration boundaries with synthetic tests. No position accuracy claim yet.
-- [ ] M2 Implement a serialized, cached JPL Horizons client and strict response parser with request manifests, source digests, target/center/frame/time checks, fixture capture and offline parser tests.
+- [x] M2 Implement a serialized, cached JPL Horizons client and strict response parser with request manifests, source digests, target/center/frame/time checks, fixture capture and offline parser tests.
 - [ ] M3 Implement deterministic Chebyshev fitting, evaluation and derivatives, shard format and integrity checks. Test against independently evaluated analytic functions, including segment edges and malformed data.
 - [ ] M4 Generate a Chiron pilot dataset and implement the geocentric evaluator, time conversion, ecliptic reduction, speed, retrograde state and result receipts. Compare it with held-out Horizons samples before extending the span.
 - [ ] M5 Generate and validate the required Chiron, Ceres, Pallas, Juno and Vesta datasets over the target range. Freeze request manifests and digest receipts; measure shard sizes and boundary continuity. Keep generated bulk data ignored.
@@ -29,3 +29,13 @@ checks, not position validation. The root `npm run package:contents` was
 also attempted but fails because the initial checkout has no `dist/`
 (`dist/calc.d.ts` is missing). No root build was run. The separate root
 pack dry-run, with scripts disabled, confirms `minorbodies/` is excluded.
+
+M2 verification: `npm run check` and `npm run fixtures:replay` passed on
+Node 22.22.2. The request/parser and client tests cover the original Horizons
+fixtures, corrupt inputs, cache integrity, serialization, retry defaults,
+timeouts and file-size limits. The fixture script verifies source digests
+and exact offline replay. Scope checks confirm package exclusion and the
+documentation/file rules. These are ingestion checks, not position accuracy
+evidence. The root `npm run package:contents` still fails because the
+initial checkout has no `dist/calc.d.ts`; no root build was run. Changes
+are confined to `minorbodies/`. M3 is the next unchecked milestone.
