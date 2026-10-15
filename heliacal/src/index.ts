@@ -38,3 +38,10 @@ export { ODEH_MODEL, evaluateOdeh, odehBestTime, odehCategory } from "./odeh.js"
 export type { OdehBestTime, OdehCategory, OdehCriterion, OdehGeometry } from "./odeh.js";
 export { evaluateCrescent } from "./crescent.js";
 export type { CrescentCriterion, CrescentCriterionRequest, CrescentModel } from "./crescent.js";
+export { CRESCENT_SEARCH_LIMITS, crescentEvents } from "./crescent-search.js";
+export type {
+  CrescentSearchPolicy, ResolvedCrescentPolicy, CrescentSearchOptions, CrescentEventsResult,
+  CrescentEvent, CrescentOpportunity, EvaluatedCrescentOpportunity, IneligibleCrescentOpportunity,
+  UnavailableCrescentOpportunity, CrescentEligibilityFailure, CrescentDiagnostic
+} from "./crescent-search.js";
+export type { CrescentTiming, CrescentPairingGap } from "./crescent-opportunities.js";

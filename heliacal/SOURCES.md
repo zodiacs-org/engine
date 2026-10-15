@@ -234,10 +234,10 @@ No observation database, source program or publication prose is copied.
 geometry, residual, category meanings and pure-function receipt scope.
 
 Both calibration tables include morning observations: Yallop section 5,
-Table 4, and Odeh section 6, Table VI, identify morning/evening cases. Before
-implementing last morning crescent searches, verify the source's observing
-time convention and mark any symmetry extension explicitly. The presence
-of morning observations alone does not validate a particular morning search.
+Table 4, and Odeh section 6, Table VI, identify morning/evening cases. The
+search's explicitly selected morning timing extension is described under
+*Crescent search geometry and timing conventions* below. The presence of
+morning observations alone does not validate a particular morning search.
 
 ## Event terminology
 
@@ -282,3 +282,56 @@ and small attributed published observations only where redistribution is
 permitted. Distinguish those checks from engine parity, numerical invariants
 and predictive-performance measurements. No Swiss Ephemeris material may
 supply an expectation.
+
+## Crescent search geometry and timing conventions
+
+The Yallop and Odeh sections cited above were read again on 2026-10-15 for
+the search adapter. Yallop equations (3.8)-(3.10), printed p. 3, retain
+geocentric elongation in the width formula. `crescentGeometry` supplies
+equatorial horizontal parallax from the geocentric Moon range; it leaves
+Yallop's own altitude correction to `evaluateYallop`. The right-triangle
+construction is `asin(Earth equatorial radius / Moon geocentric distance)`.
+The USNO *Astronomical Almanac Glossary*, entry "parallax, horizontal",
+defines the horizon case used in that construction:
+<https://aa.usno.navy.mil/faq/asa_glossary>.
+Fetched and read on 2026-10-15.
+
+Odeh section 4, printed p. 41, defines width along the lit lunar diameter;
+section 5, pp. 43 and 61, requires topocentric width but does not give its
+calculation formula. The adapter explicitly adopts a distant-Sun
+angular-width approximation: topocentric semidiameter multiplied by
+`1 - cos(topocentric elongation)`, evaluated with half-angle arithmetic.
+This adapts the elongation-width relation in Yallop equation (3.10) to
+topocentric separation and an angular radius from topocentric range. It is
+a declared library approximation, not a reproduction of Odeh's source
+software. No finite-Sun phase angle or `phase()` disk fraction is silently
+substituted. Both models continue to use airless centre altitudes.
+
+The adapter's Earth radius matches the engine's IERS2003 observer
+ellipsoid. IERS *Conventions (2010)*, Technical Note 36, Table 1.1, printed
+p. 18, gives the same equatorial radius, `6378136.6 m`:
+<https://iers-conventions.obspm.fr/content/tn36.pdf>.
+Its lunar radius is the engine's exported `SKY_RADII_KM.Moon`, `1737.4 km`,
+also listed in NASA/JPL *Planetary Satellite Physical Parameters*, Moon
+row, Mean Radius column:
+<https://ssd.jpl.nasa.gov/sats/phys_par/>.
+The au conversion, `149597870700 m`, is the astronomical-unit row of
+NASA/JPL *Astrodynamic Parameters*:
+<https://ssd.jpl.nasa.gov/astro_par.html>.
+All three sources were fetched and read on 2026-10-15. The constants and
+independent constructed right-triangle and width identities are enforced
+by `test/crescent-geometry.test.ts`. They check the conversion arithmetic,
+not ephemeris accuracy or historical visibility agreement.
+
+Yallop equation (4.1), printed p. 4, and Odeh equation (1), printed p. 43,
+state the evening rule. Neither gives a morning rule in the cited text.
+Morning rows in their observation tables do not establish a morning
+algorithm. The search's explicitly requested `mirror-evening` extension
+uses sunrise minus four ninths of the positive sunrise-minus-moonrise lag.
+It is an unvalidated time-reversal convention, separate from the published
+evening rule. The horizon pair uses the engine's upper-limb crossings and
+standard horizon refraction, with the chosen options retained in the
+result. The USNO rise/set definition cited above supports that horizon
+convention; it does not establish the original calibration software's
+exact horizon settings. Altitudes evaluated at the selected time remain
+airless, as required by the criteria.

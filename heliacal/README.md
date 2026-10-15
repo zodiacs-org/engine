@@ -8,9 +8,9 @@ The library currently supplies strict inputs, apparent positions,
 Sun/body geometry, phase classification, geometric disk illumination,
 an arcus visionis criterion, a configurable visibility screen,
 rise/set/transit events, bounded observing windows, bracketed horizon-arcus
-transitions, geometric acronychal/cosmical phenomena and pure Yallop and
-Odeh lunar crescent criteria. Position-based APIs preserve engine receipts.
-Date-range crescent predictions and the CLI are planned, not available.
+transitions, geometric acronychal/cosmical phenomena, pure Yallop and
+Odeh lunar crescent criteria and bracketed crescent searches.
+Position-based APIs preserve engine receipts. The CLI remains planned.
 
 ## Development
 
@@ -441,8 +441,8 @@ threshold crossings between opportunities; it does not identify conjunctions
 or certify that a change was caused by conjunction. The Moon's result carries
 `interpretation: "lunar-geometric-arcus-only"` and a
 `lunar-geometric-extension` diagnostic. It is not a first/last crescent
-prediction. The pure Yallop and Odeh criteria below are available separately;
-their date-range crescent searches remain planned.
+prediction. The pure Yallop and Odeh criteria and the `crescentEvents`
+date-range search below are available separately.
 
 This search accepts the horizon model only. The custom instantaneous
 `arcus-visionis-altitude/1` screen remains available through `arcusVisibility`.
@@ -723,8 +723,8 @@ check the formula intermediates, category rules and best-time arithmetic;
 generator. [API tests](test/yallop.test.ts) cover the usage examples,
 validation, immutability, neighboring binary category inputs and date
 rounding. These checks establish implementation of the criterion, not
-historical date agreement or predictive accuracy. Crescent event searches
-that combine engine geometry, horizon times and receipts remain planned.
+historical date agreement or predictive accuracy. The crescent search below
+combines the criterion with engine geometry, horizon times and receipts.
 
 ## Odeh lunar crescent criterion and model selection
 
@@ -802,6 +802,141 @@ model, coordinate conversion or common visibility boolean. The returned
 Yallop C permits optical location followed by an unaided sighting, while
 Odeh C means optical aid only. [Selection tests](test/crescent.test.ts)
 enforce the distinct types, meanings and validation at runtime.
+
+## First evening and last morning crescent searches
+
+```ts
+import { crescentEvents } from "./src/index.js";
+
+const result = crescentEvents(
+  { latitude: 13, longitude: -42, height: 120 },
+  "2024-06-01", "2024-07-11",
+  {
+    model: "yallop-1997/1",
+    lastAcceptedCategory: "B",
+    maxElongationDeg: 30,
+    morningTiming: "mirror-evening"
+  }
+);
+if (result.status === "complete") {
+  for (const event of result.events) {
+    console.log(event.appearance, event.at, event.interpretation, event.bracket);
+  }
+}
+```
+
+The observing inputs in this example are exercised by
+[integration tests](test/crescent-search.test.ts). `crescentEvents` searches
+the Moon for `first-evening` and, when explicitly enabled, `last-morning`
+transitions. Both are changes in a selected empirical criterion between
+successive opportunities. They are not observed sightings, probabilities,
+conjunction epochs or guaranteed first/last dates for a lunation.
+
+Select `yallop-1997/1` or `odeh-2006/1` explicitly. `lastAcceptedCategory`
+accepts the ordered prefix from A through that category: Yallop permits A,
+B, C or D, while Odeh permits A, B or C. There is no shared unaided-eye
+boolean or conversion between their categories. Inspect each criterion's
+`categoryMeaning`. The copied `policy.acceptedCategories` and
+`modelParameters` retain the selection and published coefficients.
+
+`maxElongationDeg` is a required finite value in `(0,90]`, an inclusive
+ceiling on geocentric true angular separation. This is a caller-selected
+search domain, not a claimed calibration limit. The example's choice is
+not a recommended accuracy setting. An evening opportunity must have
+positive geocentric Moon-minus-Sun longitude short of opposition; a morning
+opportunity must have negative longitude difference. Exact conjunction and
+opposition fail this phase selection. The search uses the actual engine
+coordinates, without forcing an altitude, separation or phase to a model
+boundary. The [selection tests](test/crescent-search-reference.test.ts)
+enforce the signs, category prefixes and inclusive elongation ceiling.
+
+The engine's sky solver supplies upper-limb Sun and Moon crossings with
+standard horizon refraction and no horizon dip. The observer's height moves
+the observer but does not move the horizon downward. There is no weather,
+terrain, extinction or magnitude adjustment to either fixed crescent fit;
+unsupported parameter keys are rejected. The original sky conventions,
+flags, sample counts and engine identity remain under `horizons`.
+The source convention and its limits are recorded in
+[SOURCES.md](SOURCES.md#crescent-search-geometry-and-timing-conventions).
+
+Each solar upper-to-lower transit half owns its evening setting pair;
+each lower-to-upper half owns its morning rising pair. Both source crossings
+must be unique within the whole half and inside the requested `[from,to)`
+range. A crossing is never borrowed from a neighboring half. This same-half
+rule is a scheduling choice and can leave long polar opportunities
+unavailable. The supporting search extends past the range to establish
+the transit halves; support crossings outside the request cannot establish
+an event. Split requests need overlapping source opportunities to recover
+a transition at the split.
+
+For an evening with moonset after sunset, the best time is sunset plus
+four ninths of that positive lag, as Yallop and Odeh specify. By default,
+`morningTiming` is `disabled`, and only evenings are processed. Explicit
+`mirror-evening` also evaluates sunrise minus four ninths of the positive
+sunrise-minus-moonrise lag. That morning formula is an **unvalidated library
+symmetry extension**: the cited passages give only the evening rule.
+Morning best times, events and search diagnostics label it accordingly.
+Offsets use exact integer rounding to the nearest millisecond, tested on
+invented schedules in [the pairing tests](test/crescent-opportunities.test.ts).
+
+At each positive-lag best time, the engine supplies Sun/Moon positions in
+both origins. Yallop receives geocentric airless altitudes, geocentric
+elongation and equatorial horizontal parallax derived from geocentric lunar
+range on the engine's IERS2003 radius convention. Its own criterion computes
+the corrected width. Odeh receives topocentric airless altitudes and an
+explicit distant-Sun width approximation: the angular lunar radius from
+topocentric range times `1 - cos(topocentric elongation)`. This is a declared
+adapter approximation, not a reproduction of Odeh's original software.
+The result retains `criterionGeometry`, its constants and conventions,
+the original `geometry` and the complete distinct `criterion`.
+[Geometry tests](test/crescent-geometry.test.ts) check these conversions
+against constructed right triangles and width identities.
+
+An `evaluated` opportunity records `eligibilityFailures` and
+`passesSelection`. The latter requires both phase/elongation eligibility
+and an accepted criterion category. A uniquely paired but nonpositive lag
+is `ineligible`, with no best time or geometry and a false selection result.
+It can form the failed side of a transition. Missing, multiple or
+out-of-range crossings instead produce `unavailable` opportunities and
+`opportunity-gap` diagnostics. These break adjacency for that period;
+they never count as failed sightings. When both sources are unavailable,
+the Sun reason takes precedence and the source searches remain available.
+
+A first evening is a false-to-true transition; a last morning is a
+true-to-false transition. An isolated passing opportunity, including one
+at a requested range edge, establishes neither. `at` is the selected best
+time of the passing opportunity, not a predicted sighting instant.
+`bracket.before` and `bracket.after` retain both opportunities; `bracket.from`
+and `bracket.to` enclose their source horizon times. This bracket is neither
+a continuous root nor an uncertainty interval. Every local qualifying
+transition is returned in time order, without grouping by conjunction or
+assuming that the criterion changes monotonically.
+
+`CRESCENT_SEARCH_LIMITS` exposes the range, support and default budget limits.
+They are operational caps, not accuracy bounds. `maxSamples` budgets the
+combined sky searches; attached position receipt calls are excluded.
+`maxGeometrySamples` separately caps complete best-time Sun/Moon geometry
+calls and is checked before any such call. A budget, reference-coverage,
+geographic-pole or position refusal returns no partial events or
+opportunities. An unusable solar transit sequence returns `unresolved`.
+Otherwise, `complete` means all selected engine opportunities were
+processed, including explicit gaps, and inherits the engine's sampled
+search limitations. [Failure tests](test/crescent-search.test.ts) enforce
+these cases, including polar missing crossings and later position failures.
+
+`receiptScope: "positions"` covers the original engine calculations at
+crossings and best times. It does not authenticate the visibility model,
+search or derived event. Sky uses WGS84 and calc uses IERS2003 with different
+apparent reductions; the source positions and their conventions are
+retained. Treat source Dates and engine receipt objects as read-only;
+freezing the result's own wrappers does not freeze those engine internals.
+
+[Search reference tests](test/crescent-search-reference.test.ts) combine
+invented integer schedules with the committed independent Decimal criterion
+fixtures. They check both timing directions, category transitions, gaps,
+range ownership and source preservation. Those tests and the engine
+integration checks do not measure agreement with historical sighting dates
+or establish predictive accuracy for the morning extension.
 
 ## Checks and sources
 
