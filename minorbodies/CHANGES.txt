@@ -1,0 +1,1 @@
+Complete M1: scaffold isolated minorbodies package, record Horizons Chebyshev design and provenance, preregister accuracy gates, and verify catalogue, engine integration and package exclusion on Node 22.
