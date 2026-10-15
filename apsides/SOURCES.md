@@ -4,7 +4,9 @@ M1 cites definitions and existing engine contracts. M2 registers reference
 queries, acceptance budgets and held-out cases, and freezes independent
 development samples before engine/reference comparisons. M3 tests the
 scalar solver with analytic synthetic functions. M4 compares the lunar
-window search with the frozen development Moon fixture. No astronomical test
+window search with the frozen development Moon fixture. M5 compares the
+heliocentric searches with all frozen development planetary fixtures,
+retaining the Pluto distance failures. No astronomical test
 expectation comes from this package's prior output or Swiss Ephemeris.
 
 ## Primary sources read for M1
@@ -102,6 +104,17 @@ frozen numerical fixture and its recorded requests, not the engine's
 event output. This is development coverage; no held-out case is evaluated
 in M4 and no broader completeness claim follows from these tests.
 
+`test/planetary-reference.vitest.ts`, added in M5, uses the fixed
+development planetary fixtures in the same manifest. It checks every
+fixture event, with unique timing matches, matching counts and kinds,
+event distance, and separate same-TT distance and radial/total-speed
+comparisons at the independent before/at/after samples. The exact windows,
+centers, target IDs and solution labels remain in those frozen fixtures;
+[VALIDATION.md](VALIDATION.md) lists the tested spans and failing checks.
+No held-out fixture or physical-center check was evaluated. Pluto's
+distance failure is retained under the original budget, not removed from
+the corpus or converted to a passing regression expectation.
+
 Additional primary pages fetched and read on 2026-10-15:
 
 - [JPL SSD API fair-use policy](https://ssd-api.jpl.nasa.gov/), **Fair Use
@@ -149,6 +162,17 @@ Use of these references implies no NASA/JPL endorsement.
 - [crossings source](../src/crossings.ts): existing search conventions for
   half-open windows, bounded evaluations and refusal. Its angular solver
   is not an independent distance-extremum reference.
+- M5 also read the pinned `astronomy-engine@2.1.19` implementation installed
+  with the carried archive dependency: `esm/astronomy.js`, functions
+  `CalcVsop`, `CalcVsopPosVel`, `VsopDeriv` and `HelioState`. For Mercury
+  through Neptune, including Earth, the state differentiates the same VSOP
+  series used by the position. The engine's
+  [geometricState](../src/calc-reduce.ts) and
+  [sphericalRates](../src/calc-frames.ts) carry those derivatives into the
+  geometric `calc` distance rate. This supports bisection of that rate for
+  those targets. Pluto uses its separate position/state interpolation and
+  retains scalar distance minimization. No dependency source or coefficient
+  is copied into apsides.
 
 ## Licensing and attribution
 

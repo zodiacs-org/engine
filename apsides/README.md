@@ -2,9 +2,10 @@
 
 Private work-in-progress library for geometric orbital distance extrema,
 built on `@zodiacs/engine`. The current milestone provides the distance
-sampler, a bounded scalar extremum solver, a lunar window search, and frozen
-independent development references. Planetary searches and the CLI are planned in
-[PLAN.md](PLAN.md).
+sampler, bounded lunar and heliocentric planetary searches, and frozen
+independent development references. Pluto fails its preregistered distance
+budget, so independent validation is not fully passing. The remaining work,
+including the CLI, is in [PLAN.md](PLAN.md).
 
 Use Node 22.22.2 for the local checks, matching this project's initial test
 environment. From this repository:
@@ -14,6 +15,11 @@ cd apsides
 npm ci --ignore-scripts --cache=.cache/npm
 npm run check
 ```
+
+The current check exits with failing Pluto distance assertions. Typechecking,
+numerical and integration tests pass; `npm run check:isolation` can be run
+separately because the combined command stops at the reference failures.
+[VALIDATION.md](VALIDATION.md) records the failing cases and unchanged limits.
 
 The dependency is a relative file reference to the immutable carried engine
 archive. Installation stays inside `apsides/node_modules`; it needs no root
@@ -78,6 +84,35 @@ every physical extremum was found. Endpoint delta-T pins resolve the
 endpoints only; internal samples and event civil labels use the engine's
 normal time basis. See [DESIGN.md](DESIGN.md) for the full contract.
 
+```ts
+import { searchPlanetaryApsides } from "./src/index.js";
+
+const result = searchPlanetaryApsides("Earth", {
+  from: "2000-01-01", to: "2001-01-01"
+});
+if (result.status === "complete") {
+  for (const event of result.events) {
+    console.log(event.body, event.kind, event.instant, event.distanceKm);
+    console.log(event.target.referencePoint, event.refinement.method);
+    console.log(event.orbitalSpeedKmPerSecond, event.radialSpeedKmPerSecond);
+  }
+} else {
+  console.error(result.reason, result.detail);
+}
+```
+
+Planetary searches accept Mercury through Pluto, including Earth, and use
+the same window and budget contract. `PLANETARY_SEARCH_POLICIES` discloses
+each body's fixed grid. Mercury through Neptune bisect the engine's
+analytic distance rate and check wider distance witnesses. Their narrow
+`refinement.lower` and `upper` bracket opposite rates, recorded in
+`rateBracket`; near-root distances may tie. Pluto and the Moon refine scalar
+distance directly with golden-section search. The `method` field identifies
+which interval contract applies. Mars through Pluto use the engine's
+system-barycenter reference convention, not validated physical-center
+event times. Search completion does not certify the independent accuracy
+budgets, which Pluto currently fails. No dates are ranked.
+
 The Vitest files use `.vitest.ts` and a local configuration so the root
 test command does not discover a separate project's tests before its local
 dependencies are installed. They check integration, units, reference
@@ -86,8 +121,12 @@ synthetic curves. `test/lunar-reference.vitest.ts` also checks lunar events
 against the frozen `dev-moon-2000` Horizons DE441 fixture, over
 2000-01-01 to 2000-02-01 TT: event counts and kinds, timing and distance,
 and distance and speeds at the reference's own TT samples. The registered
-Moon limits pass for this development case; held-out lunar and all planetary
-comparisons remain future milestones. [DESIGN.md](DESIGN.md) describes the searches;
+Moon limits pass for this development case. `test/planetary-reference.vitest.ts`
+checks every registered development planetary fixture: counts, kinds,
+timing, event distances, and same-TT distances and speeds. Mercury through
+Neptune pass the registered limits; Pluto's distance checks fail. These
+failures are ordinary assertions, not skips or expected-failure tests.
+Held-out comparisons remain reserved for M10. [DESIGN.md](DESIGN.md) describes the searches;
 [references/PREREGISTRATION.md](references/PREREGISTRATION.md) records the
 acceptance budgets, reserved cases and collection commands.
 [SOURCES.md](SOURCES.md) records definitions and attribution. Ordinary tests

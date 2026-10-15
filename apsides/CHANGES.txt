@@ -2,3 +2,4 @@ apsides: establish the private geometric distance sampler, design and source rec
 apsides: preregister independent apsis budgets and held-out cases, freeze Horizons development fixtures, and verify collector provenance, offline replay, and package isolation
 apsides: implement the bounded scalar extrema solver with golden-section refinement, explicit ambiguity refusals, and passing analytic numerical and package-isolation checks
 apsides: implement lunar TT window searches with padded canonical sampling, half-open ownership, bounded refusals, engine receipts, and passing independent lunar and package-isolation checks
+apsides: implement heliocentric planetary searches with analytic-rate and scalar-distance refinement, canonical windows, independent development tests, and explicit unresolved Pluto distance validation failures

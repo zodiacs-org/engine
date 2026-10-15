@@ -4,8 +4,10 @@ M1 provides the geometric distance sampler and its integration contracts.
 M2 adds independent development references and reserves held-out windows.
 M3 implements a pure scalar distance solver with synthetic mathematical
 tests. M4 adds the lunar window search and compares it with the development
-Moon fixture. Planetary searches, syzygy annotations and the CLI remain
-planned in [PLAN.md](PLAN.md).
+Moon fixture. M5 adds heliocentric planetary searches and compares all
+development planetary fixtures. Pluto fails the unchanged distance budget;
+see [VALIDATION.md](VALIDATION.md). Combined windows, syzygy annotations and
+the CLI remain planned in [PLAN.md](PLAN.md).
 
 The intended result is a chronological list of local distance extrema in a
 requested window. A lunar minimum is a perigee and a lunar maximum an
@@ -107,7 +109,8 @@ A finite grid cannot prove those assumptions, detect every hidden turn,
 or establish coverage near its outer edges. The scalar solver does not
 resolve civil times, choose a planetary sampling policy, deduplicate
 overlapping astronomical detections, or apply window boundary ownership.
-The lunar wrapper below handles these responsibilities for the Moon.
+The shared window wrapper in `src/search.ts` handles these responsibilities
+for the lunar and planetary entry points below.
 
 `test/solver.vitest.ts` and `test/solver-edge.vitest.ts` use analytic
 polynomials and periodic curves, plus flat and rounded curves, to check
@@ -195,6 +198,82 @@ evidence only; it does not prove completeness or validate other lunar
 windows. `test/lunar-reference.vitest.ts` enforces these comparisons.
 Held-out windows remain reserved for M10.
 
+## Planetary window search implemented in M5
+
+`searchPlanetaryApsides(body, { from, to, maxEvaluations? })` accepts a
+single member of `PLANETARY_BODIES`, Mercury through Pluto including Earth.
+The result uses the same window, receipts, work accounting, empty-window
+behavior, refusals and exact `(from,to]` TT ownership as the lunar search.
+Events carry `body`, `kind: "perihelion" | "aphelion"`, and their disclosed
+heliocentric `target`. Invalid bodies throw before any engine call.
+
+The immutable `PLANETARY_SEARCH_POLICIES` specify these grid spacings:
+
+| Body | TT days between grid nodes |
+| --- | ---: |
+| Mercury | 0.5 |
+| Venus | 1 |
+| Earth | 0.5 |
+| Mars | 2 |
+| Jupiter | 8 |
+| Saturn | 16 |
+| Uranus | 16 |
+| Neptune | 32 |
+| Pluto | 32 |
+
+As for the Moon, the origin is TT JD 2451545, padding is two grid nodes
+beyond each rounded window edge, the numerical interval target is 1 second,
+and the default evaluation cap is 100,000. `test/planetary.vitest.ts` pins
+all these implementation choices and checks exact-budget behavior. The
+planetary grids are finer than the development reference grids, with a
+further reduction for Earth. They do not infer a minimum separation of
+physical extrema from a mean period, or assume a fixed event count per
+orbit. Sampling completeness remains unproven.
+
+Mercury through Neptune use `refinement.method: "bisected-analytic-rate"`.
+For these targets the pinned engine supplies the analytic derivative of
+the same heliocentric position model: its geometric state and position
+use the same VSOP series, including for Earth. The geometric radial speed
+is the scalar distance derivative. Bracket each negative-to-positive rate
+change as a minimum, or positive-to-negative change as a maximum, and
+bisect to the numerical interval target. An exactly sampled zero retains
+strict opposite-rate witnesses; consecutive zeros or ambiguous refinement
+refuse the search. A zero with unchanged rate signs is not a distance turn.
+The loop keeps every detected sign change instead of choosing a single
+annual or orbital event.
+
+The rate method's `refinement.lower` and `upper` enclose the estimated
+rate zero. Their distances can be indistinguishable in floating-point
+arithmetic. `refinement.rateBracket` records their signed rates in km/s.
+The separate `bracket` triple contains wider strict distance witnesses
+and the returned estimate: the grid nodes immediately outside the original
+rate bracket must have the correct rates and distances on both sides.
+An observed contradiction refuses as `non-unimodal`. The outermost grid
+nodes supply witnesses and are not candidate intervals. These choices
+preserve canonical witnesses when a window is divided at an event or a
+grid node. All witness samples count against the shared evaluation cap.
+
+Pluto retains `refinement.method: "golden-section-distance"`. Its reported
+state velocity is not the exact derivative of its interpolated position,
+as the existing engine evidence records. Searching that reported rate
+would locate a different quantity. Its scalar-distance solver keeps the
+strict near-root distance witnesses described for the Moon, and does not
+return `rateBracket`. It can refuse when scalar rounding prevents the
+requested refinement. Completion on the development fixture is no
+guarantee that every Pluto window will resolve. The Moon also now names
+its method as `golden-section-distance`.
+
+The analytic-rate path avoids the near-extremum scalar rounding encountered
+when applying the lunar method to shallow planetary curves. It neither
+implements another ephemeris nor interpolates from the reference fixtures.
+`test/rate-solver.vitest.ts` checks its numerical behavior with independently
+defined mathematical functions; `test/planetary.vitest.ts` checks partitions,
+budgets and receipts. These are not independent astronomical accuracy tests.
+The separate `test/planetary-reference.vitest.ts` checks all registered
+development planetary cases, including long outer-planet windows.
+Its Pluto distance assertions remain failing, as recorded in
+[VALIDATION.md](VALIDATION.md); no budget or frozen reference was changed.
+
 ## Shared astronomical search method
 
 Search on a continuous TT coordinate after resolving the input instants
@@ -203,19 +282,22 @@ or the engine's civil-time model must not create spurious distance turns.
 Preserve TT and the engine's time-basis receipt in each result; civil labels
 retain the limitations of that conversion.
 
-1. Sample scalar distance on a body-specific grid, with extra samples on
+1. Sample distance and, where it is its analytic derivative, radial rate
+   on a body-specific grid, with extra samples on
    both sides of the requested window where the engine permits them.
    Bracket a strict local minimum or maximum when successive distance
    slopes change sign. The sampling policy must account for perturbations
    and multiple nearby extrema, rather than presume an event count from an
    orbital period.
-2. Refine each bracket with bounded golden-section minimization of distance
-   for a minimum, or of negative distance for a maximum. Check that the
+2. Refine a scalar bracket with bounded golden-section minimization of distance
+   for a minimum, or of negative distance for a maximum. For Mercury through
+   Neptune, bisect the analytic distance-rate zero instead. Check that the
    refined point still has the expected distance turn on both sides.
    Resolve flat or ambiguous brackets explicitly; do not fabricate an
    event from an exhausted iteration or a tie caused by roundoff.
 3. Keep a canonical bracket and deterministic refinement rule, deduplicate
-   overlapping detections, and filter against the requested TT window
+   identical detections, refuse distinct overlapping intervals, and filter
+   against the requested TT window
    `(from, to]`. An extremum at `from` belongs to the preceding window; one
    at `to` belongs to this window. A truncated window edge is not itself
    an extremum. Partition tests must compare adjacent-window results with
@@ -272,8 +354,11 @@ The numerical refinement interval target is 1 second. The registration
 also specifies signed radial-speed and total-speed limits in km/s. All
 these values are enforced as configuration in `test/references.vitest.ts`;
 M4 additionally enforces engine agreement for the Moon's development case
-in `test/lunar-reference.vitest.ts`; planetary and held-out agreement
-remain unmeasured. The budgets apply to the exact TT
+in `test/lunar-reference.vitest.ts`. M5's `test/planetary-reference.vitest.ts`
+passes the registered development limits for Mercury through Neptune.
+Pluto passes timing and speed checks but fails the distance limit, both
+at its own extremum and at the independent reference sample times.
+Held-out agreement remains unmeasured. The budgets apply to the exact TT
 windows and centers in the registration, without a physical-uncertainty
 claim for the reference ephemeris.
 

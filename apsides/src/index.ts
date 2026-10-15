@@ -13,3 +13,8 @@ export type {
   LunarSearchOptions, LunarApsis, TtDistancePoint, LunarSearchWindow,
   LunarSearchDiagnostics, LunarSearchRefusalReason, LunarSearchResult
 } from "./lunar.js";
+export { searchPlanetaryApsides, PLANETARY_SEARCH_POLICIES } from "./planetary.js";
+export type {
+  PlanetarySearchOptions, PlanetaryApsis, PlanetarySearchWindow,
+  PlanetarySearchDiagnostics, PlanetarySearchRefusalReason, PlanetarySearchResult
+} from "./planetary.js";
