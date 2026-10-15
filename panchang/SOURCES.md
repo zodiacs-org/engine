@@ -279,6 +279,42 @@ they establish neither physical transition-time accuracy nor exhaustive
 astronomical reference coverage. Published transition comparisons remain
 the work of M11.
 
+## M6: day assembly arithmetic and integration
+
+[test/day.test.ts](test/day.test.ts) reuses the M5 prescribed trajectories
+and rational reference roots through the shared test helper
+[test/analytical.ts](test/analytical.ts). It supplies artificial sunrise
+endpoints to isolate partition assembly from horizon geometry. Original
+engine-shaped diagnostics in those mocks are scaffolding only and do
+not certify the artificial sunrise or luminary coordinates.
+
+The expected partition is derived independently: include the requested
+endpoints and each rational reference root strictly inside them, deduplicate
+equal instants, sort, then pair consecutive boundaries. The cases cover
+negative elapsed times, roots on either endpoint, a common root of every
+limb, fractional roots rounded up to milliseconds, and a window with no
+interior change. Segment labels are checked against the inverse rational
+periods from M5, reduced to their full-cycle indices. The tests check exact
+equality for these constructed instants without an astronomical tolerance.
+The oracle does not read transition-search output to decide expected times.
+
+The tests also check that clipped segments retain the original full limb
+interval objects and receipts, that vara remains fixed for the sunrise
+day, and that a pada change subdivides the day independently of a
+nakshatra-name change. Simultaneous events create one boundary and no
+zero-duration segment. The segment labels exclude the Moon's continuously
+changing nakshatra elapsed fraction.
+
+Real-engine cases use the invented observer (12.5, 75.25) degrees and
+Asia/Kolkata clock on 2024-03-20, with Lahiri and Raman. Comparisons to
+instantaneous engine calls establish wiring and receipt preservation
+only. Operational checks cover refused civil dates, missing sunrise,
+separate sunrise/transition budgets, padded coverage refusals and an
+engine time-basis discontinuity. The day API introduces no new physical
+accuracy evidence; M4's sunrise comparisons and M5's transition limitations
+retain their original scope. Published physical transition references
+remain the work of M11.
+
 ## Later milestones
 
 Before adding month naming, document the independent definitions and

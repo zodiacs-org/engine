@@ -3,9 +3,9 @@
 This private source-checkout project will provide astronomical and calendar
 facts for sunrise-to-sunrise days. Implementation follows [PLAN.md](PLAN.md).
 It currently exposes the luminary snapshot adapter, instantaneous limbs,
-civil-date and sunrise-to-sunrise windows with vara, and limb transition
-searches with complete surrounding intervals. Complete
-panchang day/range calculations and the CLI are planned milestones.
+civil-date and sunrise-to-sunrise windows with vara, limb transition
+searches with complete surrounding intervals, and a pure day assembly API.
+Lunar months, anomalies, date ranges and the CLI are planned milestones.
 
 Use Node 22.7.0 or later. From this directory:
 
@@ -281,3 +281,84 @@ leap-second boundary or the model/table handovers. This conservative
 restriction applies even if the discontinuity lies outside the requested
 window. Invalid windows/options throw `RangeError`; unexpected engine
 errors propagate.
+
+```ts
+import { panchangDay, prepareSunriseDay } from "./src/index.js";
+
+const input = {
+  date: "2024-03-20",
+  timeZone: "Asia/Kolkata",
+  observer: { latitude: 12.5, longitude: 75.25 } // Invented coordinates.
+};
+await prepareSunriseDay(input);
+const day = panchangDay(input, { ayanamsa: "lahiri" });
+if (day.status === "ok") {
+  console.log(day.sunriseState.ayanamsa, day.sunriseState.sun.tropical.receipt);
+  for (const segment of day.segments) {
+    console.log(segment.start, segment.end, segment.vara.name,
+      segment.tithi.name, segment.tithi.paksha,
+      segment.nakshatra.name, segment.nakshatra.pada,
+      segment.yoga.name, segment.karana.name);
+    console.log(segment.intervals.tithi.start.at, segment.intervals.tithi.end.at);
+  }
+} else {
+  console.log(day.reason, day.sunrise);
+  if (day.reason === "transitions-refused") console.log(day.timeline.reason);
+}
+```
+
+`panchangDay(input, options)` assembles the sunrise window and transition
+search synchronously without I/O. It accepts the same explicit civil
+date, timezone and observer as the sunrise resolver. Historical clocks
+need `prepareSunriseDay(input)` before the call. Lahiri is the default;
+`ayanamsa` selects an existing engine definition for every snapshot and
+transition calculation. `day.ayanamsa` is its name, while
+`day.sunriseState.ayanamsa` retains the engine's value and bounds at the
+starting sunrise. Later snapshots retain their own instantaneous values.
+
+`sunriseState` contains all instantaneous limbs and the full Sun/Moon
+positions and calc receipts at the included sunrise. `sunrise` retains
+the original civil resolutions, rise searches and boundary snapshots;
+`timeline` retains the original chronologically ordered limb changes and
+full surrounding intervals. `DAY_CONVENTIONS` records the day and segment
+ownership policies and includes the existing horizon and transition
+conventions without replacing them.
+
+`segments` is a chronological, contiguous partition of the sunrise
+window. Each segment includes its start and excludes its end, both ISO
+UTC strings at whole-millisecond resolution. A simultaneous group of
+changes creates one segment boundary. A change exactly at sunrise owns
+the new day; the following sunrise belongs to the following day. Vara
+stays with the starting local sunrise date through every segment.
+
+Each segment contains constant discrete tithi/paksha, nakshatra/pada,
+yoga and karana labels. The segment's nakshatra deliberately omits the
+continuously changing elapsed fraction. Its `intervals` record links each
+limb and pada to the original complete `LimbInterval`, with true computed
+start/end transitions and their full before/after receipts. Segment
+endpoints are clipped to the day; those underlying limb endpoints retain
+their times outside it. A pada-only change starts a new segment even
+when the nakshatra name stays the same.
+
+Options `sunriseMaxSamples` and `transitionMaxSamples` independently
+configure the existing resolvers' budgets with the same positive-integer
+or `Infinity` domain. Omitted values retain the resolver defaults and
+sample accounting described above. Both options are validated before
+any search. Returned diagnostics retain each resolver's budget and sample
+counts separately; sky evaluations and unique snapshots are different
+units and are not added together.
+
+A refused sunrise yields `reason: "sunrise-refused"` and its original
+diagnostics, without running a transition search. A refused transition
+search yields `reason: "transitions-refused"`, the successful sunrise
+diagnostics and the original transition refusal. Neither exposes
+`segments` or `sunriseState`. Invalid inputs, unloaded historical clocks
+and unexpected engine failures propagate as before. The padded search's
+coverage and time-basis restrictions continue to apply to the whole day.
+
+[test/day.test.ts](test/day.test.ts) verifies partition arithmetic with
+independently prescribed trajectories and artificial sunrise boundaries.
+Real-engine checks verify receipt retention and wiring; no physical
+transition-time accuracy claim follows. The evidence and scope are in
+[SOURCES.md](SOURCES.md#m6-day-assembly-arithmetic-and-integration).
+Month names and anomaly detection remain separate planned milestones.
