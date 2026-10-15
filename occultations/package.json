@@ -8,6 +8,7 @@
   "scripts": {
     "typecheck": "tsc --project tsconfig.json --pretty false",
     "test": "vitest run --config vitest.config.ts",
+    "test:astrometry": "python3 scripts/astrometry-reference.py && vitest run --config vitest.astrometry.config.ts",
     "build": "node scripts/build.mjs",
     "catalogue:check": "node scripts/catalogue.mjs",
     "catalogue:verify-source": "node scripts/catalogue.mjs --download",

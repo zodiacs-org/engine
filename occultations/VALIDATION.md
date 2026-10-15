@@ -86,3 +86,64 @@ that it excludes this folder. Full root built-package, archive rebuild and
 conformance gates are not claimed as passed. All changed paths remain under
 `occultations/`; no archive, root source, root package metadata or git
 metadata was changed.
+
+# M3 validation record
+
+Checked on 2026-10-15 using Node 22.22.2. This milestone adds
+`starPositionAt`, using the frozen SAO inputs, FK5 orientation and spin,
+proper-motion propagation, observer Roemer delay and relativistic aberration.
+It reuses the engine clock, Earth and observer states, precession and nutation.
+Results retain the source row and catalogue receipts, time basis, unknown
+distance and correction limitations. Tests enforce these contracts without
+presenting engine parity as independent accuracy evidence.
+
+The complete local check and the separate independent comparison passed:
+
+```sh
+npm --prefix occultations run check
+npm --prefix occultations run test:astrometry
+python3 occultations/scripts/astrometry-reference.py --verify-published-source
+```
+
+The ordinary suite checks analytic motion, polar geometry, RA wrapping,
+parallax sign and units, radial perspective, observer light-time modulation,
+aberration, both engine time boundaries, complete and absent proper motion,
+immutable JSON receipts, observer effects and true-frame consistency. Synthetic
+missing-motion catalogue variants are confined to tests; the retained SAO data
+is unchanged. The published ERFA component tests use the independently sourced
+values in `test/fixtures/erfa-published.json`. The separate source check fetched
+the versioned ERFA test file, matched its recorded digest, and verified every
+retained input and expected value against that source.
+
+The extended suite uses the fixed register and preregistered acceptance
+criteria in `test/fixtures/astrometry-cases.json` and
+`test/fixtures/ASTROMETRY.md`. PyERFA 2.0.1.5 with NumPy 2.2.6 generated
+independent results under `.generated/`; no generated reference data is
+committed. The test requires matching generator and input digests, the pinned
+tool versions, and every registered case. It enforces maximum angular errors
+of 1e-6 arcseconds for motion, FK5 spin and aberration, and 0.1 arcseconds
+for the complete geocentric apparent reduction.
+
+The full reduction comparison covers the registered named SAO stars at
+1800-01-02T12:00:00, 1900-03-20T12:00:00, 2000-06-15T12:00:00,
+2025-01-14T03:00:00, 2099-09-15T06:00:00 and 2199-12-15T18:00:00,
+all on TT. The independent chain uses ERFA Earth states and IAU 2006/2000A
+frames, with no solar deflection or potential term. ERFA's ephemeris warnings
+at the boundary epochs are retained and asserted. Both models use the same
+historical SAO measurements and omit unavailable distance and radial velocity.
+Passing these gates establishes reduction agreement over those cases, not
+catalogue astrometric accuracy, topocentric timing accuracy, event completeness
+or a universal bound. No held-out contact reference from M4 was used.
+
+A fresh Node process imported the local bundle and returned a receipted
+topocentric Spica direction and a successful Moon sample at the README's
+synthetic station. The stellar result round-tripped through JSON with its
+unknown distance preserved. Source-size, documentation, dependency pin,
+root npm exclusion and changed-path isolation checks passed.
+
+The root `npm run package:contents` was attempted with its cache redirected
+inside this folder. It still stops at `packed package is missing dist/calc.d.ts`.
+This task forbids creating or changing root `dist/`; no root build was run.
+Full root package, archive rebuild and conformance gates are not claimed as
+passed. All authored changes are inside `occultations/`, and git metadata,
+release archives and the root npm package remain unchanged.

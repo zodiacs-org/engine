@@ -1,7 +1,8 @@
 # Geometry and verification design
 
-This is the implementation contract for the remaining milestones. Only the
-position adapter, input/receipt foundation and source catalogue are implemented. An unchecked
+This is the implementation contract for the remaining milestones. The
+position adapter, input/receipt foundation, source catalogue and apparent
+stellar reduction are implemented. An unchecked
 part of PLAN.md is not a supported calculation or an established error bound.
 
 ## Engine boundary and clock
@@ -37,15 +38,75 @@ direction treatment. No second aberration or light-time correction may be
 applied to these returned directions. The original correction identifiers
 are retained in every successful receipt, including the lunar exception.
 
-Future star samples must propagate catalogue epoch and proper motion in the
-catalogue's stated frame, including the distinction between RA rate and
-RA rate multiplied by cos(declination). Distance, radial velocity and parallax
-are used only when the catalogue supplies them with known conventions.
-Annual aberration and the engine's true-of-date frame must put star directions
-on a consistent apparent system with the lunar contacts. Missing fields,
-double stars and variable magnitudes require explicit flags. Gravitational
-deflection is absent from the engine adapter; reference comparisons near
-the Sun must expose that omitted correction.
+Star samples propagate catalogue epoch and proper motion in the catalogue's
+stated frame, with the normalized RA motion multiplied by cos(declination).
+Missing fields, double stars and variable magnitudes remain explicit in each
+receipt. Gravitational deflection is absent from both adapters; reference
+comparisons near the Sun must expose that omitted correction. The engine's
+Moon exception and the stellar aberration formula are distinct correction
+models on common axes. Do not add stellar annual aberration to the returned
+Moon: lunar light-time and aberration largely cancel. Their remaining model
+difference must enter the contact validation and correction budget.
+
+## Stellar reduction implemented in M3
+
+`starPositionAt` accepts an exact frozen catalogue id and the same instant,
+observer and frame vocabulary as `positionAt`. Both TT and UT1 must lie
+inside the engine calculation span. It returns an immutable unit direction,
+angular coordinates and a receipt; unknown distance stays null. Missing either
+proper-motion component yields `proper-motion-unavailable`, even at the source
+epoch, rather than treating an unknown motion as zero.
+
+`src/astrometry.ts` first forms the catalogue unit vector `p` and tangent
+motion `m` from east and north unit vectors. This avoids division by the
+declination cosine at a pole. FK5 J2000 positions and motion then become
+ICRS directions using the published orientation matrix `R` and spin `s`:
+`pICRS = R p` and `mICRS = R (m + p cross s)`. This is the Mignard and
+Froeschle rotation/spin model documented by ERFA `fk5hip` and `fk52h`, with
+no FK5 zonal correction. It is separate from the engine's ICRS-to-J2000
+frame bias. The published matrix and spin are checked in
+`test/erfa-published.test.ts` against the retained ERFA validation values.
+
+The direction propagation follows the model described by ERFA `pmpx`.
+Let `b` be the barycentre-to-observer vector in AU, `px` the parallax in
+radians, and `vr` the radial velocity in AU per Julian year. The propagated
+direction is proportional to
+
+```text
+p + dt * (m + vr * px * p) - px * b
+dt = elapsedJulianYears + dot(p, b) / speedOfLightAuPerJulianYear
+```
+
+The additional term in `dt` is the observer's Roemer modulation of reception
+time. Catalogue epochs already refer to reception at the barycentre; there
+is no subtraction of the star's absolute light-travel time. Finite parallax
+and radial velocity are supported in the internal kernel and tested with
+synthetic astrometry against ERFA. SAO supplies neither here, so those terms
+are omitted and flagged in the public result. The resulting distance and
+perspective uncertainty are unknown. This approximation supplies no binary
+orbit, photocentre, catalogue-error covariance or full relativistic stellar
+space-motion solution. Motion uses TT as an approximation to TDB and Julian
+years; the receipt records that choice.
+
+`geometricState` from the engine supplies the Earth's barycentric position
+and velocity. The negative of its topocentric Earth state supplies the
+geocentric observer state, reusing the engine ellipsoid, sidereal rotation
+and UT1 basis. Both states are rotated to ICRS before stellar propagation.
+With observer velocity `beta` in units of light speed and
+`g = sqrt(1 - dot(beta, beta))`, aberration normalizes
+`g * p + (1 + dot(p, beta) / (1 + g)) * beta`. This includes annual and
+diurnal aberration but excludes solar gravitational deflection and the
+solar-potential term. The engine's frame matrix carries that direction back
+to its J2000 axes and then to the requested true frame.
+
+`test/astrometry.test.ts` checks analytic geometry, and the extended ERFA
+comparison checks independent motion, aberration, Earth state and frame
+reduction. Its cases and maximum-error criteria were fixed before comparison
+in `test/fixtures/astrometry-cases.json` and `test/fixtures/ASTROMETRY.md`.
+The reference's full reduction uses IAU 2006/2000A; the engine uses its
+IAU 2000B nutation. Agreement on shared source coordinates measures the
+reduction model, not the physical accuracy of the historical SAO positions.
+SOURCES.md names the primary documentation and the fixture licence.
 
 ## Catalogue selection and stellar limitations
 
@@ -58,7 +119,7 @@ the engine's `eclipticOfDate` at J2000; nutation in longitude does not change
 that latitude. Treating the catalogue FK5 axes as the engine's mean J2000
 axes is sufficient for this broad prefilter, not a stellar reduction model.
 There is no claim yet that this fixed list covers every possible contact
-throughout a time window. M3 must address frame differences and motion;
+throughout a time window. M3 handles frame differences and motion;
 M7 must test candidate completeness over reference windows.
 
 The source positions have epoch and equinox J2000 in FK5. The FK5 RA motion
@@ -69,8 +130,8 @@ arcseconds per year to milliarcseconds per year. These unit conversions do
 not propagate the positions. The original source rows and provenance codes
 are retained, and the tests exercise the cosine factor and absent values.
 
-SAO provides no parallax or radial velocity here. M3 must expose the resulting
-distance and perspective-motion limitations, and must not replace unknown
+SAO provides no parallax or radial velocity here. M3 exposes the resulting
+distance and perspective-motion limitations without replacing unknown
 values with observed zeros. Source duplicity and variability flags are
 retained; a blank warning or zero code means unknown status. Proper names
 are labels on a catalogue entry, not a choice of a resolved component in a
@@ -162,8 +223,11 @@ M4 must freeze numerical maximum-error assertions in seconds against cited
 published references, including their time scales, rounded precision, limb
 model, station datum and ephemeris lineage. Development and held-out cases
 are separate. M8 and M12 will report the actual comparison span and maxima,
-with failures retained. The current tests only check integration, input
-semantics and receipts; none is presented as independent sky accuracy.
+with failures retained. M3's angular reduction comparison cannot fill the
+unknown stellar catalogue term or produce a physical seconds guarantee.
+Its allowed reduction error would contribute that angular allowance divided
+by `abs(vnormal)` to the sensitivity budget; it does not replace `Estar`,
+and must not be counted again inside a later end-to-end contact comparison.
 
 ## Receipts and bounded work
 
@@ -172,6 +236,13 @@ normalized request, engine identity, engine calculation receipt, frame and
 unit conventions, and an explicit unmeasured-validation status. Refusals
 also carry a request receipt; no fabricated engine calculation is attached.
 Receipts are immutable JSON snapshots, not signatures or trusted attestations.
+
+Stellar receipts add the complete source record, source-row and catalogue
+digests, normalized observer, engine time basis, the frame and motion models,
+missing-distance and correction limitations, and an explicit separation
+between tested astrometric reduction and unmeasured catalogue/contact accuracy.
+Out-of-range refusals carry no time basis. Missing-motion refusals retain
+the resolved time basis without claiming that a direction was calculated.
 
 Event receipts will add catalogue identity and digest, window ownership,
 search resolution/budget, contact and outline model, reference-validation

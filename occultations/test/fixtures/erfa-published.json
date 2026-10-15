@@ -1,0 +1,46 @@
+{
+  "schema": "zodiacs.occultations.erfa-published.v1",
+  "source": {
+    "url": "https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/t_erfa_c.c",
+    "retrievedAt": "2026-10-15",
+    "bytes": 242393,
+    "sha256": "8a92d0099c48df31ca566bea881c19497dc295dba58dba7136cc2f8443c31f15",
+    "licence": "BSD-3-Clause",
+    "notice": "ERFA-NOTICE.txt",
+    "method": "Transcribed published inputs and expected numerical values only; no implementation code or project-generated expected values."
+  },
+  "fk5hip": {
+    "locator": "t_fk5hip",
+    "rotationRows": [
+      [0.9999999999999928638, 0.1110223351022919694e-6, 0.4411803962536558154e-7],
+      [-0.1110223308458746430e-6, 0.9999999999999891830, -0.9647792498984142358e-7],
+      [-0.4411805033656962252e-7, 0.9647792009175314354e-7, 0.9999999999999943728]
+    ],
+    "spinRadiansPerYear": [-0.1454441043328607981e-8, 0.2908882086657215962e-8, 0.3393695767766751955e-8],
+    "maximumRotationElementError": 1e-14,
+    "maximumSpinComponentErrorRadiansPerYear": 1e-17
+  },
+  "pmpx": {
+    "locator": "t_pmpx",
+    "raRadians": 1.234,
+    "decRadians": 0.789,
+    "raRateRadiansPerYear": 1e-5,
+    "decRateRadiansPerYear": -2e-5,
+    "parallaxArcseconds": 1e-2,
+    "radialVelocityKmPerSecond": 10.0,
+    "elapsedJulianYears": 8.75,
+    "observerBarycentricAu": [0.9, 0.4, 0.1],
+    "expectedDirection": [0.2328137623960308438, 0.6651097085397855328, 0.7095257765896359837],
+    "maximumAngularErrorArcseconds": 1e-6
+  },
+  "ab": {
+    "locator": "t_ab",
+    "naturalDirection": [-0.76321968546737951, -0.60869453983060384, -0.21676408580639883],
+    "observerVelocityOverC": [2.1044018893653786e-5, -8.9108923304429319e-5, -3.8633714797716569e-5],
+    "sunDistanceAu": 0.99980921395708788,
+    "inverseLorentzFactor": 0.99999999506209258,
+    "expectedDirection": [-0.7631631094219556269, -0.6087553082505590832, -0.2167926269368471279],
+    "maximumAngularErrorArcseconds": 1e-6,
+    "conventionDifference": "Published ERFA output includes the solar potential term; the package omits it. The tolerance allows the documented sub-microarcsecond contribution."
+  }
+}

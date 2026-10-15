@@ -5,8 +5,8 @@ It describes sky geometry only. It does not select or recommend dates, attach
 interpretations, or make predictions about people or events.
 
 The current milestones provide validated position samples, a receipted SAO
-stellar catalogue and reproducible source extraction.
-Occultation searches, propagated star positions, contact times, visibility outlines and the
+stellar catalogue, reproducible source extraction and apparent star directions.
+Occultation searches, contact times, visibility outlines and the
 CLI remain unchecked in [PLAN.md](PLAN.md). There is no measured occultation
 accuracy claim yet. [DESIGN.md](DESIGN.md) records the geometry and error
 budget to validate; [SOURCES.md](SOURCES.md) separates provenance from leads.
@@ -71,8 +71,9 @@ selection thresholds are enforced by [the catalogue tests](test/catalogue.test.t
 against the frozen SAO query described in [SOURCES.md](SOURCES.md).
 
 This is a fixed catalogue selection, not verified event completeness across
-the engine's time span. Positions are at the catalogue epoch and equinox
-J2000 in FK5; proper motion is supplied but has not yet been propagated.
+the engine's time span. `starCatalogue()` retains positions at the catalogue
+epoch and equinox J2000 in FK5. `starPositionAt()` propagates their proper
+motion and returns an apparent direction at the requested instant.
 Magnitudes are historical heterogeneous visual values. Missing distance,
 radial velocity and multiplicity information remain unknown. The catalogue
 does not resolve binary components or predict a variable star's brightness.
@@ -93,6 +94,52 @@ node occultations/scripts/catalogue.mjs --extract occultations/.cache/catalogue/
 Both extraction commands check the parent response digest and compare the
 candidate extract with the committed original source rows. A changed response
 is refused; no command overwrites committed data. The normal `check` is offline.
+
+```js
+import { starCatalogue, starPositionAt } from "./occultations/.generated/index.mjs";
+
+const spica = starCatalogue().stars.find((star) => star.label === "Spica");
+const direction = starPositionAt({
+  star: spica.id,
+  time: "2025-01-01T00:00:00Z",
+  observer: { latitude: 0, longitude: 0, elevationMeters: 0 }
+});
+console.log(JSON.stringify(direction));
+```
+
+Use the exact catalogue `id`. The default frame is the true equator and
+equinox of date; `frame: "ecliptic-true-of-date"` selects the true ecliptic.
+The `direction` is a unit vector, and `lon` and `lat` are degrees, with
+equatorial `lon` meaning right ascension. `distanceAu` stays null because
+SAO supplies no distance here. The observer uses the same ellipsoid and
+elevation convention as `positionAt()`.
+
+Star reduction applies FK5 orientation and spin, proper motion, observer
+light-time modulation, annual aberration and, for a site, diurnal aberration.
+It uses the engine's clock, Earth state and frame rotations. Missing proper
+motion produces a receipted refusal. Missing parallax and radial velocity
+produce explicit omissions; no measured zeros or physical accuracy bounds
+are invented. Refraction, solar deflection, stellar orbital motion and
+unresolved component positions are absent. The result receipt records the
+source row, catalogue digests, clock and reduction conventions.
+
+The ordinary tests include published independent ERFA component references.
+The extended comparison checks apparent stellar directions against an
+independent ERFA Earth ephemeris and frame reduction, using the same SAO
+inputs. It requires separate development-only Python dependencies:
+
+```sh
+python3 -m pip install --target occultations/.cache/erfa --cache-dir occultations/.cache/pip pyerfa==2.0.1.5 numpy==2.2.6
+npm --prefix occultations run test:astrometry
+```
+
+This command generates its reference values under `.generated/` before
+running the assertions. It is separate from `check`; missing dependencies or
+references fail explicitly. Runtime calculations require no Python or network.
+[The preregistration](test/fixtures/ASTROMETRY.md) fixes the cases and error
+criteria, and [VALIDATION.md](VALIDATION.md) records their measured scope.
+Agreement checks reduction of shared inputs, not the accuracy of the
+historical catalogue or occultation contact times.
 
 `check:scope` checks npm file selection without running lifecycle scripts or
 writing an archive. It also enforces the task's source-file size and prose

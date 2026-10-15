@@ -4,3 +4,5 @@ export { normalizeInstant, normalizeObserver, normalizeWindow } from "./input.js
 export type { Instant, NormalizedObserver, NormalizedWindow, Observer, TimeWindow } from "./input.js";
 export { starCatalogue } from "./catalogue.js";
 export type { CatalogueStar, CatalogueReceipt, StarCatalogue } from "./catalogue.js";
+export { starPositionAt } from "./star-position.js";
+export type { StarPositionRequest, StarPositionReceipt, StarPositionResult } from "./star-position.js";

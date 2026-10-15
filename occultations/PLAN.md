@@ -14,7 +14,7 @@ package, source, build output, archive or release changes are part of this plan.
   Aldebaran, Pleiades members and other eligible bright stars; document
   selection, aliases, multiplicity, magnitude and missing-motion policies.
   Commit only compact source records; ignore downloaded and generated bulk data.
-- [ ] M3 Implement catalogue epoch and proper-motion propagation, parallax
+- [x] M3 Implement catalogue epoch and proper-motion propagation, parallax
   where available, and consistent apparent star frames using the engine's
   frame/nutation/time machinery. Check against independent astrometric
   references and analytic geometric cases.

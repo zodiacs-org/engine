@@ -108,6 +108,49 @@ occultations throughout the engine's time span.
 | [NASA's BSC portal metadata](https://data.nasa.gov/dataset/bright-star-catalog) | Its generic government-work licence link also appears in the [Hipparcos portal record](https://data.nasa.gov/dataset/hipparcos-main-catalog), despite the ESA terms. The linked [USAGov explanation](https://www.usa.gov/government-copyright) distinguishes government works from protected third-party material on government sites. This generic metadata is not the rights basis for the selected catalogue. |
 | [USNO ICRS products](https://crf.usno.navy.mil/icrs) and [USNO Bright Star Catalog paper](https://arxiv.org/html/2204.09080v1) | The solution incorporates Hipparcos intermediate astrometry and copies some Hipparcos fields. Field-specific rights were not settled during this review. No records adopted. |
 
+## Astrometric reduction references adopted in M3
+
+The stellar reduction implements vector geometry with the engine's clock,
+Earth state and frame rotations. Its proper-motion and observer-parallax
+model follows the description of [ERFA pmpx](https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/pmpx.c),
+which cites the 1984 Astronomical Almanac, pages B39-B41, and Urban and
+Seidelmann, *Explanatory Supplement to the Astronomical Almanac* (2013),
+section 7.2. [ERFA fk5hip](https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/fk5hip.c)
+and [fk52h](https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/fk52h.c)
+document the FK5 orientation and spin, citing Mignard and Froeschle,
+*Global and local bias in the FK5 from the Hipparcos data*, A&A 354,
+732-739 (2000). The ERFA descriptions were fetched and read; this record
+does not claim inspection of the cited book or article.
+
+[ERFA ab](https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/ab.c)
+documents relativistic aberration and its additional solar-potential term.
+The workbench omits that potential term and gravitational deflection and
+names both omissions. The independent full reduction uses
+[epv00](https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/epv00.c)
+and [pnm06a](https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/pnm06a.c)
+for the Earth state and true equator. It retains the reference ephemeris's
+out-of-range warnings. It substitutes no other catalogue measurements.
+
+The compact [published validation fixture](test/fixtures/erfa-published.json)
+transcribes inputs and expected values from
+[ERFA's versioned test source](https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/t_erfa_c.c).
+Its receipt gives the URL, function locators, retrieval date, size and digest.
+These are retained reference-source values, not project-generated expectations.
+They retain the [ERFA BSD notice](test/fixtures/ERFA-NOTICE.txt) and are used
+only in tests. ERFA and its Python wrapper are external development tools;
+no ERFA implementation, ephemeris coefficient table or Hipparcos catalogue
+is vendored or bundled. The frame name Hipparcos here identifies a coordinate
+system, not an imported stellar dataset.
+
+[The preregistration](test/fixtures/ASTROMETRY.md) fixes tolerances before
+comparison. The [generator](scripts/astrometry-reference.py) reads the fixed
+case register and the existing SAO inputs, calls separately installed pinned
+PyERFA, and writes all generated results to the ignored `.generated/` folder.
+Its receipt pins inputs and generator bytes. The source-verification mode
+checks upstream bytes and every retained published value; ordinary calculation
+and tests remain offline. Passing these reductions does not establish SAO
+position accuracy or occultation timing accuracy.
+
 ## Independent reference leads for M4
 
 | Source | Potential use | Conventions or unresolved issues |
