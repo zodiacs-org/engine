@@ -1,0 +1,87 @@
+M6 independent ingress reference checks
+Session date: 2026-10-15
+Base checkout: dbf0ab7fc9db9bfa48cc05acd6c56d7fa28c99e0
+Engine source version: 1.0.0; astronomy-engine dependency: 2.1.19
+Runtime: Node.js v22.22.2
+PATH prepends mundane/.cache/runtime/node_modules/node/bin.
+Runtime installation, npm cache and mundane dependencies are gitignored.
+No engine build or root dependency installation was performed.
+
+Source retrieval:
+The three untracked raw responses present at session start were fetched again
+from the manifest's exact USNO request URLs. Every response matched its
+existing file byte for byte. Digests:
+1950 4c050b6d9fca61a9fb95553d1898bb5b9158407b5de2bf9968fcef6f8382db74
+2000 7b6c999de6559fd9dda86b831665ed6546d4a1ceacb5f2814d04f09a0ec06047
+2024 93cc8a330f89fe3345677bbeb85dc6b065ec84ea19d49cf8321b9990ddcbea3d
+The API documentation, service page, glossary and Privacy and Security Notice
+were fetched and read. Some browser fetches failed; direct HTTPS requests
+read the pages successfully. The service selector says UT1 and its API
+example says UTC; that inconsistency remains recorded, without adjusting
+source times using the engine. Source records and derivation are in
+mundane/test/fixtures/usno/ingress-sources.json and
+mundane/docs/ingress-references.md.
+The inclusive 120-second comparison threshold was written before the first
+engine comparison. It is a coarse agreement gate, not a physical error bound.
+
+Command: npm run check --prefix mundane
+Exit 0.
+TypeScript: tsc -p tsconfig.json --pretty false, exit 0.
+Vitest: vitest run --config vitest.config.ts, exit 0.
+Final output:
+ RUN  v2.1.9 /workspace/codex-infra/wt-mundane/mundane
+ Test Files  6 passed (6)
+      Tests  327 passed (327)
+Scope: ingress-references.test.ts (10 tests), ingresses.test.ts (44),
+angle-rulers.test.ts (61), angularity.test.ts (77), chart.test.ts (59),
+and inputs.test.ts (76).
+
+Observed annual-search differences from the published minute labels:
+year sign       published                signedSeconds (found minus source)
+1950 Aries      1950-03-21T04:35:00Z      -3.379
+1950 Cancer     1950-06-21T23:36:00Z       2.953
+1950 Libra      1950-09-23T14:43:00Z      41.505
+1950 Capricorn  1950-12-22T10:13:00Z      -6.373
+2000 Aries      2000-03-20T07:35:00Z      13.887
+2000 Cancer     2000-06-21T01:48:00Z     -11.939
+2000 Libra      2000-09-22T17:28:00Z      -1.7
+2000 Capricorn  2000-12-21T13:37:00Z      42.28
+2024 Aries      2024-03-20T03:06:00Z      26.001
+2024 Cancer     2024-06-20T20:51:00Z      13.969
+2024 Libra      2024-09-22T12:44:00Z      -0.748
+2024 Capricorn  2024-12-21T09:20:00Z      14.971
+These are observations from the recorded run, not future expected values.
+The independent references remain the original USNO response minute labels.
+All source-centered date-range checks also passed the same timing gate.
+
+The new tests enforce source digest and header integrity, seasonal mapping,
+minute precision, calendar formatting, annual ordering and expected event
+count, independently published timing for annual and short date ranges,
+and chart integration at the found instant at a synthetic place.
+Chart integration covers angles, requested and actual houses, all body rows,
+flags, time basis, delta T, provenance, angularity and angle-ruler analyses.
+Engine chart comparisons are integration checks, not independent accuracy
+evidence for those chart factors. No production calculation changed.
+An initial test draft used nonexistent time-basis labels; it was corrected
+to the engine's documented delta-t/iers fields and observed source metadata
+before the final passing check. No timing expectation or tolerance changed.
+
+Command: node mundane/scripts/check-package-isolation.mjs
+Exit 0.
+PASS: npm dry-run manifest contains no mundane files; scripts disabled, no archive written.
+This is an isolation check; the full package gate also needs a built dist tree.
+
+Command: npm run package:contents
+Exit 1: AssertionError: packed package is missing dist/calc.d.ts
+The checkout has no dist tree. Building one would violate this session's
+scope, so full package size and import-graph checks could not run here.
+No archive was packed. Other release and built-package gates were not run;
+the changed files only add standalone tests, fixtures and documentation.
+
+Command: git diff --check
+Exit 0.
+Project audit: nonignored mundane files are under 2 MB; Markdown contains no
+em-dash characters; all changed and new files are inside mundane/.
+M6 is checked in PLAN.md and CHANGES.txt has the session's one-line summary.
+No engine source, root configuration, immutable archive, packed file or
+build output changed. No git mutation, publication or release workflow ran.

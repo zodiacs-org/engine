@@ -1,0 +1,13 @@
+Establish mundane milestone plan and isolated TypeScript input API with engine validation and Vitest checks
+Implement M2 frozen event chart casting with engine receipt provenance, polar fallback, time-basis metadata, and isolated Vitest checks
+Implement M3 classical planet angularity with actual engine houses, configurable exact angle orbs, hand-derived geometry tests, and convention documentation
+Implement M4 angle domicile rulers and essential dignities with engine sect and tables, synthetic day and night checks, immutable output, and convention documentation
+Implement M5 cardinal solar ingress searches with shared evaluation budgets, chart casting and factor analyses, range and coverage checks, synthetic solver tests, and convention documentation
+Implement M6 independent USNO ingress fixtures with source digests, time-scale and derivation records, offline annual and range timing checks, chart integration tests, and evidence
+Implement M7 New and Full Moon searches using engine longitudes and crossing solver with shared budgets, chart analyses, synthetic derivations, range tests, and convention documentation
+Implement M8 independent USNO lunation fixtures with source digests, clock and derivation records, offline annual and range timing checks, chart integration tests, and Node 22 evidence
+Implement M9 descriptive traditional factor lists with source pointers, ingress and lunation integration, wording and traceability tests, convention documentation, and Node 22 evidence
+Implement M10 chronological year and range reports with deterministic event ordering, separate search budgets and metadata, atomic refusals, synthetic boundary tests, documentation, and Node 22 evidence
+Implement M11 optional eclipse adapters and relative events loading with preserved contact definitions, source provenance and completeness, opt-in reports, synthetic and actual-branch integration checks, documentation, and Node 22 evidence
+Implement M12 local ingress, lunation and year CLI with strict arguments, JSON and text output, optional events loading, atomic refusal exit codes, process tests, usage documentation, and Node 22 evidence
+Complete M13 runnable library examples, convention and source guide, documented limitations, full Node 22 checks, and repeatable size, import and package isolation audits with final evidence
