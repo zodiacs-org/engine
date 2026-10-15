@@ -6,7 +6,8 @@ development samples before engine/reference comparisons. M3 tests the
 scalar solver with analytic synthetic functions. M4 compares the lunar
 window search with the frozen development Moon fixture. M5 compares the
 heliocentric searches with all frozen development planetary fixtures,
-retaining the Pluto distance failures. No astronomical test
+retaining the Pluto distance failures. M10 collects and evaluates the
+reserved independent corpus without tuning the implementation. No astronomical test
 expectation comes from this package's prior output or Swiss Ephemeris.
 
 ## Primary sources read for M1
@@ -209,6 +210,44 @@ checks, not accuracy evidence from independent longitude samples. No new
 numerical source fixture is copied, no held-out value is read, and the
 existing Horizons distance and speed acceptance limits are unchanged.
 
+## M10 held-out references and measured coverage
+
+M10 explicitly enables the cases and physical-center epochs registered in
+M2. [references/held-out/manifest.json](references/held-out/manifest.json)
+binds their compact bytes separately from the unchanged development
+manifest. Each case uses the existing reference algorithm and registered
+grid; no expected value comes from the engine. Both manifests bind the
+unchanged `references/plan.json` digest.
+
+The Horizons API documentation, manual and fair-use policy linked above
+were fetched and read again during M10 on 2026-10-15. Queries remained
+sequential, reused immutable cached responses, and retained returned TT,
+geometric correction, target, origin, units, solution and API metadata.
+The returned text API version is 1.2; parsing requires that observed
+version even though the API documentation describes a newer service
+version. The frozen headers and `test/references.vitest.ts` enforce this
+distinction. Exact offline regeneration was checked against the raw cache;
+the compact fixtures and their digests remain verifiable without it.
+
+Event-reference target and Sun/Earth origin solutions are DE441 in this
+corpus. The separate physical-center spot checks retain the returned target
+solutions: `mar099`, `jup365_merged`, `sat441l`, `ura184_merged`,
+`nep098_merged` and `plu060_merged`, respectively for Mars through Pluto.
+The physical-center fixture's sources identify which solution supplied
+each sample; those samples must not all be described as DE441 physical
+centers. `test/references.vitest.ts` checks their independent target IDs,
+registered epochs, source links, sample geometry and manifest integrity.
+
+The [M10 measured report](docs/evidence/m10/RESULTS.md) separates development
+and held-out comparisons. `test/validation-evidence.vitest.ts` evaluates
+every registered window and the before/at/after states at their own TT
+epochs. It retains ordinary failing assertions for Mercury total speed,
+Neptune event time and Pluto distance and search completion. The prior
+development Pluto failure is also retained. The report gives exact tested
+spans and target conventions; it supplies no general physical-error bound
+or completeness proof. Physical-center spot comparisons are diagnostic,
+without a registered acceptance budget or event-time validation.
+
 ## Licensing and attribution
 
 Original code and documentation in `apsides/` follow the repository's
@@ -220,7 +259,7 @@ CC BY 4.0 delta-T values credited there to Stephenson, Morrison and
 Hohenkerk, so its package license is `MIT AND CC-BY-4.0`. This project does
 not relicense those materials.
 
-The compact M2 fixtures retain selected factual numerical calculation
+The compact M2 and M10 fixtures retain selected factual numerical calculation
 results and target/solution identifiers. Their selection, schema and
 reference derivation are this project's work. They copy no provider prose,
 website table or complete response. Raw responses remain in the ignored

@@ -14,7 +14,7 @@ remain unchanged.
 - [x] M7 Finalize event records with distance, total speed, signed radial speed before/at/after each extremum, replayable engine receipts, and JSON serialization tests.
 - [x] M8 Add optional lunar syzygy annotations using an explicit angular orb, measured Moon-Sun elongation, candidate-only labels, receipts, and boundary tests.
 - [x] M9 Implement `apsides lunar`, `apsides planetary`, and `apsides window` with strict arguments, JSON output, help, exit statuses, and subprocess tests.
-- [ ] M10 Run the reserved independent validation corpus, record timing/distance/speed errors and missed/extra events, and publish only the measured coverage and unresolved limitations.
+- [x] M10 Run the reserved independent validation corpus, record timing/distance/speed errors and missed/extra events, and publish only the measured coverage and unresolved limitations.
 - [ ] M11 Finish library and CLI examples, reproducibility instructions, source and license records, local checks, and evidence that apsides stays outside the engine package.
 - [ ] M12 Review scientific semantics and failure paths; complete robustness and CLI acceptance checks, document remaining limitations, and leave a reviewable project for the harness.
 
@@ -27,3 +27,11 @@ remain failing under the original budget; [VALIDATION.md](VALIDATION.md)
 records the affected development case and checks. This checkbox does not
 mark the accuracy gate as passing. Preserve that failure during subsequent
 milestones; the engine, frozen fixtures and acceptance limits are unchanged.
+
+M10's evaluation and reporting are complete, with independent acceptance
+still failing. [The measured report](docs/evidence/m10/RESULTS.md) records
+held-out Mercury total-speed failures, a Neptune event-time failure, and
+Pluto's search refusal and same-TT distance failures, alongside the original
+development Pluto failure. The reserved cases are now consumed; future
+tuning requires new held-out cases. No search source or original limit was
+changed to obtain these results. M11 and M12 remain unfinished.

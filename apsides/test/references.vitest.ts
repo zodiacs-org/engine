@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
-import { calendarTtToJd, collectCase, gridForCase, rateBrackets, subdivideBracket, validateReferencePlan } from "../scripts/collect-references.mjs";
+import { calendarTtToJd, collectCase, collectPhysicalCenters, gridForCase, main, rateBrackets, subdivideBracket, validateReferencePlan } from "../scripts/collect-references.mjs";
 import { horizonsParameters, horizonsUrl } from "../scripts/horizons.mjs";
 import { DISTANCE_TARGETS } from "../src/targets.js";
 import type { ApsisBody } from "../src/targets.js";
@@ -41,6 +41,12 @@ interface Plan {
   budgets: Record<ApsisBody, Budget>;
   targets: Record<ApsisBody, Target>;
   cases: ReferenceCase[];
+  physicalCenterChecks: {
+    split: "held-out";
+    jdTt: number[];
+    bodies: ApsisBody[];
+    purpose: string;
+  };
 }
 interface Source {
   url: string;
@@ -90,6 +96,18 @@ interface Manifest {
   schema: string;
   planSha256: string;
   fixtures: { path: string; sha256: string }[];
+  physicalCenters?: { path: string; sha256: string };
+}
+interface PhysicalFixture {
+  schema: string;
+  planSha256: string;
+  registration: Plan["physicalCenterChecks"];
+  cases: {
+    body: ApsisBody;
+    target: Target;
+    samples: { jdTt: number; barycenter: Sample; physicalCenter: Sample }[];
+  }[];
+  sources: Source[];
 }
 
 const directory = new URL("../references/", import.meta.url);
@@ -105,7 +123,7 @@ function requestedEpochs(source: Source): number[] {
   return source.params.TLIST!.split(" ").map((value) => Number(value.slice(1, -1)));
 }
 
-function verifyProvenance(fixture: Fixture, jdTt: number, sourceIndex: number): void {
+function verifyProvenance(fixture: { sources: Source[] }, jdTt: number, sourceIndex: number): void {
   expect(Number.isInteger(sourceIndex)).toBe(true);
   expect(sourceIndex).toBeGreaterThanOrEqual(0);
   expect(sourceIndex).toBeLessThan(fixture.sources.length);
@@ -113,7 +131,7 @@ function verifyProvenance(fixture: Fixture, jdTt: number, sourceIndex: number): 
   expect(requestedEpochs(source).some((jd) => Math.abs(jd - jdTt) <= epochToleranceDays)).toBe(true);
 }
 
-function verifySample(fixture: Fixture, sample: Sample): void {
+function verifySample(fixture: { sources: Source[] }, sample: Sample): void {
   expect(Number.isFinite(sample.jdTt)).toBe(true);
   expect(sample.positionKm).toHaveLength(3);
   expect(sample.velocityKmPerSecond).toHaveLength(3);
@@ -129,6 +147,29 @@ function verifySample(fixture: Fixture, sample: Sample): void {
   expect(Math.abs(radial - sample.radialSpeedKmPerSecond)).toBeLessThanOrEqual(Math.max(1e-12, speed * 5e-14));
   expect(Math.abs(sample.radialSpeedKmPerSecond)).toBeLessThanOrEqual(speed + 1e-12);
   verifyProvenance(fixture, sample.jdTt, sample.sourceIndex);
+}
+
+function verifySource(source: Source, targetId: string, centerId: string): void {
+  const requested = requestedEpochs(source);
+  expect(requested.length).toBeGreaterThan(0);
+  expect(requested.length).toBeLessThanOrEqual(plan.reference.maxBatchEpochs);
+  expect(requested.every(Number.isFinite)).toBe(true);
+  expect(new Set(requested).size).toBe(requested.length);
+  expect([...requested].sort((a, b) => a - b)).toEqual(requested);
+  expect(source.params).toEqual(horizonsParameters(targetId, centerId, requested));
+  expect(source.url).toBe(horizonsUrl(source.params));
+  expect(new URL(source.url).origin + new URL(source.url).pathname).toBe(plan.reference.endpoint);
+  expect(source.responseSha256).toMatch(/^[a-f0-9]{64}$/u);
+  expect(new Date(source.retrievedAt).toISOString()).toBe(source.retrievedAt);
+  expect(source.header).toMatchObject({
+    apiVersion: "1.2", target: { id: targetId }, center: { id: centerId.slice(4) },
+    units: "KM-S", frame: "ICRF", timeScale: "TT", correction: "NONE"
+  });
+  expect(source.header).not.toHaveProperty("raw");
+  for (const body of [source.header.target, source.header.center]) {
+    expect(body.name.trim().length).toBeGreaterThan(0);
+    expect(body.solution.trim().length).toBeGreaterThan(0);
+  }
 }
 
 describe("preregistered reference scope", () => {
@@ -203,6 +244,50 @@ describe("preregistered reference scope", () => {
       .rejects.toThrow("Held-out cases are reserved until M10.");
   });
 
+  it("requires explicit activation for the registered physical-center checks", async () => {
+    await expect(collectPhysicalCenters(plan, planSha256, { offline: true }))
+      .rejects.toThrow(/Held-out/u);
+  });
+
+  it.each([null, 0, 1, "true", {}])("rejects nonboolean collection controls %j before data access", async (value) => {
+    for (const key of ["offline", "heldOut"]) {
+      // The other control independently prevents network access if validation regresses.
+      const options = { offline: true, heldOut: false, [key]: value };
+      await expect(collectCase(plan, planSha256, heldOut[0]!, options)).rejects.toThrow(RangeError);
+      await expect(collectPhysicalCenters(plan, planSha256, options)).rejects.toThrow(RangeError);
+    }
+  });
+
+  it.each([
+    { split: "development" }, { bodies: [] }, { bodies: ["Mars", "Mars"] },
+    { bodies: ["Moon"] }, { bodies: ["unknown"] }, { jdTt: [] },
+    { jdTt: [NaN] }, { jdTt: [Infinity] }, { jdTt: [2_451_545, 2_451_545] },
+    { jdTt: [2_469_807.5, 2_451_545] },
+    { jdTt: Array.from({ length: 33 }, (_, index) => 2_451_545 + index) }
+  ])("rejects invalid physical-center registrations before data access: %j", async (change) => {
+    const invalid = { ...plan, physicalCenterChecks: { ...plan.physicalCenterChecks, ...change } };
+    await expect(collectPhysicalCenters(invalid, planSha256, { offline: true, heldOut: true }))
+      .rejects.toThrow("Invalid physical-center reference registration.");
+  });
+
+  it.each([
+    [], ["--held-out"], ["--unknown"], ["--case"], ["--case", "--offline"],
+    ["--manifest", "--manifest"], ["--manifest", "--offline"], ["--manifest", "--freeze"],
+    ["--manifest", "--case", "held-moon-2024"],
+    ["--physical-centers"], ["--physical-centers", "--held-out", "--manifest"],
+    ["--physical-centers", "--held-out", "--case", "held-moon-2024"],
+    ["--case", "held-moon-2024", "--held-out", "--held-out"],
+    ["--case", "held-moon-2024", "--offline", "--offline"],
+    ["--case", "held-moon-2024", "--freeze", "--freeze"]
+  ])("rejects ambiguous collection CLI arguments %j", async (...args) => {
+    await expect(main(args)).rejects.toThrow(/Usage:/u);
+  });
+
+  it("rejects a development CLI case mislabeled as held out", async () => {
+    await expect(main(["--case", development[0]!.id, "--held-out", "--offline"]))
+      .rejects.toThrow("--held-out requires a registered held-out case.");
+  });
+
   it.each([
     { maxBatchEpochs: 0 }, { maxBatchEpochs: 33 }, { maxBatchEpochs: NaN },
     { finalBracketSeconds: NaN }, { finalBracketSeconds: undefined }, { finalBracketSeconds: 0 },
@@ -216,14 +301,17 @@ describe("preregistered reference scope", () => {
   });
 });
 
-describe("frozen independent development references", () => {
+describe.each([
+  { split: "development", entries: development, otherEntries: heldOut, manifestPath: "manifest.json", folder: "fixtures", prefix: "dev" },
+  { split: "held-out", entries: heldOut, otherEntries: development, manifestPath: "held-out/manifest.json", folder: "held-out", prefix: "held" }
+])("frozen independent $split references", ({ split, entries, otherEntries, manifestPath, folder, prefix }) => {
   let manifest: Manifest;
   const fixtures = new Map<string, Fixture>();
 
   beforeAll(() => {
-    manifest = JSON.parse(readFileSync(new URL("manifest.json", directory), "utf8")) as Manifest;
+    manifest = JSON.parse(readFileSync(new URL(manifestPath, directory), "utf8")) as Manifest;
     for (const item of manifest.fixtures) {
-      expect(item.path).toMatch(/^fixtures\/dev-[a-z0-9-]+\.json$/u);
+      expect(item.path).toMatch(new RegExp(`^${folder}/${prefix}-[a-z0-9-]+\\.json$`, "u"));
       const bytes = readFileSync(new URL(item.path, directory));
       expect(bytes.length).toBeLessThan(plan.reference.maxResponseBytes);
       expect(item.sha256).toMatch(/^[a-f0-9]{64}$/u);
@@ -234,18 +322,21 @@ describe("frozen independent development references", () => {
     }
   });
 
-  it("binds every development fixture to the exact plan and excludes reserved fixtures", () => {
+  it("binds the exact registered cases and paths to the unchanged plan", () => {
     expect(manifest.schema).toBe("apsides-reference-manifest/1");
     expect(manifest.planSha256).toBe(planSha256);
-    const expectedPaths = development.map((entry) => `fixtures/${entry.id}.json`).sort();
+    const expectedPaths = entries.map((entry) => `${folder}/${entry.id}.json`).sort();
     expect(manifest.fixtures.map((item) => item.path).sort()).toEqual(expectedPaths);
-    expect(readdirSync(fileURLToPath(new URL("fixtures/", directory))).sort())
-      .toEqual(development.map((entry) => `${entry.id}.json`).sort());
-    expect([...fixtures.keys()].sort()).toEqual(development.map((entry) => entry.id).sort());
-    for (const entry of heldOut) expect(fixtures.has(entry.id)).toBe(false);
+    const auxiliary = split === "held-out" ? ["manifest.json", "physical-centers.json"] : [];
+    expect(readdirSync(fileURLToPath(new URL(`${folder}/`, directory))).sort())
+      .toEqual([...entries.map((entry) => `${entry.id}.json`), ...auxiliary].sort());
+    expect([...fixtures.keys()].sort()).toEqual(entries.map((entry) => entry.id).sort());
+    for (const entry of otherEntries) expect(fixtures.has(entry.id)).toBe(false);
+    if (split === "development") expect(manifest).not.toHaveProperty("physicalCenters");
+    else expect(manifest.physicalCenters?.path).toBe("held-out/physical-centers.json");
   });
 
-  it.each(development)("preserves complete discovery and request evidence for $id", (entry) => {
+  it.each(entries)("preserves complete discovery and request evidence for $id", (entry) => {
     const fixture = fixtures.get(entry.id)!;
     expect(fixture.schema).toBe("apsides-horizons-reference/1");
     expect(fixture.planSha256).toBe(planSha256);
@@ -257,24 +348,7 @@ describe("frozen independent development references", () => {
     expect(fixture.sources.length).toBeGreaterThan(0);
     expect(new Set(fixture.sources.map((source) => source.url)).size).toBe(fixture.sources.length);
     for (const source of fixture.sources) {
-      const requested = requestedEpochs(source);
-      expect(requested.length).toBeGreaterThan(0);
-      expect(requested.length).toBeLessThanOrEqual(plan.reference.maxBatchEpochs);
-      expect(source.params).toEqual(horizonsParameters(fixture.target.targetId, fixture.target.centerId, requested));
-      expect(source.url).toBe(horizonsUrl(source.params));
-      expect(new URL(source.url).origin + new URL(source.url).pathname).toBe(plan.reference.endpoint);
-      expect(source.responseSha256).toMatch(/^[a-f0-9]{64}$/u);
-      expect(new Date(source.retrievedAt).toISOString()).toBe(source.retrievedAt);
-      expect(source.header).toMatchObject({
-        apiVersion: "1.2", target: { id: fixture.target.targetId },
-        center: { id: fixture.target.centerId.slice(4) },
-        units: "KM-S", frame: "ICRF", timeScale: "TT", correction: "NONE"
-      });
-      expect(source.header).not.toHaveProperty("raw");
-      for (const body of [source.header.target, source.header.center]) {
-        expect(body.name.trim().length).toBeGreaterThan(0);
-        expect(body.solution.trim().length).toBeGreaterThan(0);
-      }
+      verifySource(source, fixture.target.targetId, fixture.target.centerId);
       expect(source.header.target).toEqual(fixture.sources[0]!.header.target);
       expect(source.header.center).toEqual(fixture.sources[0]!.header.center);
     }
@@ -289,7 +363,7 @@ describe("frozen independent development references", () => {
     }
   });
 
-  it.each(development)("accounts for every coarse turn and confirms refined extrema for $id", (entry) => {
+  it.each(entries)("accounts for every coarse turn and confirms refined extrema for $id", (entry) => {
     const fixture = fixtures.get(entry.id)!;
     const discovered = rateBrackets(fixture.grid.map(([jdTt, distanceKm, radialSpeedKmPerSecond]) =>
       ({ jdTt, distanceKm, radialSpeedKmPerSecond })));
@@ -333,6 +407,58 @@ describe("frozen independent development references", () => {
       expect(event.jdTt).toBeGreaterThan(calendarTtToJd(entry.fromTt));
       expect(event.jdTt).toBeLessThanOrEqual(calendarTtToJd(entry.toTt));
       if (index > 0) expect(event.jdTt).toBeGreaterThan(fixture.events[index - 1]!.jdTt);
+    }
+  });
+});
+
+describe("frozen independent physical-center checks", () => {
+  let fixture: PhysicalFixture;
+
+  beforeAll(() => {
+    const manifest = JSON.parse(readFileSync(new URL("held-out/manifest.json", directory), "utf8")) as Manifest;
+    expect(manifest.physicalCenters?.path).toBe("held-out/physical-centers.json");
+    const bytes = readFileSync(new URL(manifest.physicalCenters!.path, directory));
+    expect(bytes.length).toBeLessThan(plan.reference.maxResponseBytes);
+    expect(manifest.physicalCenters!.sha256).toMatch(/^[a-f0-9]{64}$/u);
+    expect(createHash("sha256").update(bytes).digest("hex")).toBe(manifest.physicalCenters!.sha256);
+    fixture = JSON.parse(bytes.toString("utf8")) as PhysicalFixture;
+  });
+
+  it("preserves every registered body and epoch without changing engine reference points", () => {
+    expect(fixture.schema).toBe("apsides-horizons-physical-centers/1");
+    expect(fixture.planSha256).toBe(planSha256);
+    expect(fixture.registration).toEqual(plan.physicalCenterChecks);
+    expect(fixture.registration.split).toBe("held-out");
+    expect(fixture.registration.jdTt).toEqual([2_451_545, 2_469_807.5]);
+    expect(fixture.cases.map(({ body }) => body)).toEqual(plan.physicalCenterChecks.bodies);
+    expect(fixture.cases.map(({ body }) => body).sort()).toEqual(bodies.filter((body) =>
+      plan.targets[body].referencePoint === "system-barycenter").sort());
+    expect(new Set(fixture.sources.map(({ url }) => url)).size).toBe(fixture.sources.length);
+    const sourceUse = new Map<number, Set<number>>();
+    for (const entry of fixture.cases) {
+      expect(entry.target).toEqual(plan.targets[entry.body]);
+      expect(entry.target.referencePoint).toBe("system-barycenter");
+      expect(entry.samples.map(({ jdTt }) => jdTt)).toEqual(plan.physicalCenterChecks.jdTt);
+      for (const pair of entry.samples) {
+        for (const [key, targetId] of [
+          ["barycenter", entry.target.targetId], ["physicalCenter", entry.target.physicalCenterId!]
+        ] as const) {
+          const sample = pair[key];
+          expect(sample.jdTt).toBe(pair.jdTt);
+          verifySample(fixture, sample);
+          const source = fixture.sources[sample.sourceIndex]!;
+          verifySource(source, targetId, entry.target.centerId);
+          const epochs = sourceUse.get(sample.sourceIndex) ?? new Set<number>();
+          epochs.add(sample.jdTt);
+          sourceUse.set(sample.sourceIndex, epochs);
+        }
+        expect(pair.barycenter.sourceIndex).not.toBe(pair.physicalCenter.sourceIndex);
+      }
+    }
+    // Each preserved request contributes exactly its registered epoch samples.
+    expect(sourceUse.size).toBe(fixture.sources.length);
+    for (const [index, epochs] of sourceUse) {
+      expect([...epochs].sort((a, b) => a - b)).toEqual(requestedEpochs(fixture.sources[index]!));
     }
   });
 });

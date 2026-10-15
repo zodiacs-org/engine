@@ -7,6 +7,10 @@ digest is bound into every fixture and [manifest.json](manifest.json).
 Changing the registration after a comparison requires a new version, a
 reason and new held-out cases. A failed limit stays recorded as a failure.
 
+The selection and method text below records the M2 preregistration.
+The M10 execution note at the end records its later use without changing
+the registered cases, limits or numerical method.
+
 ## Selection and held-out boundary
 
 The cases are fixed Gregorian calendar windows interpreted on TT. They were
@@ -149,3 +153,40 @@ from the reported numerical bracket width; that allowance is enforced in
 M2 tests verify source conventions, sample geometry, bracket signs,
 registration identity and offline integrity. They do not compare the engine
 with these references and make no measured astronomical accuracy claim.
+
+## M10 execution note
+
+M10 opened the reserved corpus after the search implementation through M9
+was fixed. `--held-out` is now the explicit collection switch. It does not
+change the reference algorithm or permit a development case to be labeled
+held out. For each exact held-out ID in `plan.json`, use:
+
+```sh
+node scripts/collect-references.mjs --case held-moon-2024 --held-out
+node scripts/collect-references.mjs --case held-moon-2024 --held-out --offline --freeze
+node scripts/collect-references.mjs --physical-centers --held-out
+node scripts/collect-references.mjs --physical-centers --held-out --offline --freeze
+node scripts/collect-references.mjs --manifest --held-out
+```
+
+Repeat the case command for the other registered held-out IDs before creating
+the manifest. Requests remain sequential. Exact offline regeneration requires
+the original cache; a later live response may differ and must not overwrite
+a frozen identity. The physical-center command queries both registered
+reference points at each fixed TT epoch, keeping the solutions distinct.
+The old development manifest and fixtures remain unchanged.
+
+Frozen held-out inputs are in `held-out/`, indexed by its separate
+`manifest.json`. The search source was not tuned after those inputs were
+opened. [../VALIDATION.md](../VALIDATION.md) and the
+[measured report](../docs/evidence/m10/RESULTS.md) preserve all resulting
+failures under the original limits. These cases are now consumed validation
+data; further tuning requires a new registration and new held-out cases.
+
+The validation runner pairs events in disjoint neighborhoods bounded by
+midpoints between adjacent reference events and the case endpoints. It
+requires the same body and kind and a unique candidate. Neighborhoods do
+not use the time allowance, allowing a timing failure to stay visible.
+Missing, extra and ambiguous events are reported separately; refusal leaves
+event matching unavailable while independent same-TT sample checks continue.
+This operational matching rule does not change an acceptance limit.

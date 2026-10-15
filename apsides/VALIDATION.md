@@ -1,4 +1,72 @@
-# Development validation status
+# Validation status
+
+M10 evaluated the reserved independent corpus with the search fixed at M9.
+Independent acceptance is **failing**. The full measured report is
+[docs/evidence/m10/RESULTS.md](docs/evidence/m10/RESULTS.md), reproduced by
+`scripts/validate-references.mjs` and checked by
+`test/validation-evidence.vitest.ts`. It records the exact TT windows,
+center conventions, error maxima, every failed comparison, event accounting
+and input/code digests. The original registration, development fixtures,
+engine archive and search implementation remain unchanged.
+
+The held-out failures are:
+
+- `held-mercury-2024`, 2024-01-01 to 2025-01-01 TT: total-speed error at
+  independent reference epochs exceeds the registered 0.005 km/s limit.
+  The largest measured magnitude, rounded upward, is 0.00512266 km/s.
+- `held-neptune-2005`, 2005-01-01 to 2171-01-01 TT: event
+  `held-neptune-2005-05` exceeds the registered 2,592,000 s timing limit.
+  The measured magnitude, rounded upward, is 2,618,530 s. All its reference
+  events still have unique matches; an excessive time error is not hidden
+  by declaring that event unmatched.
+- `held-pluto-1900`, 1900-01-01 to 2195-01-01 TT: the search refuses with
+  `non-unimodal` during scalar-distance refinement. It returns no partial
+  events, so event-time/distance and missing/extra counts are unavailable.
+  Separate same-TT distance comparisons still run and exceed the original
+  100,000 km limit at `held-pluto-1900-02`, reaching 142,697 km rounded
+  upward. This is a sampler discrepancy independent of search refinement.
+
+The remaining held-out cases pass their registered comparisons on their
+listed windows. Every completed held-out search has unique matching with
+no missing, extra or ambiguous reference events. Those counts describe turns
+witnessed on the independent grids, not proof of continuous completeness.
+Pluto's development distance failure below also remains active.
+All these statements and rounded figures are enforced by the report and
+its freshness test, using the frozen fixtures in
+[references/held-out/manifest.json](references/held-out/manifest.json).
+
+Physical-center spot checks are separately recorded for the registered
+bodies and epochs in `references/plan.json`. They show differences between
+the engine and both reference points, as well as differences between the
+independent physical-center and system-barycenter samples. They do not
+establish physical-center event-time accuracy or change the library's
+disclosed barycenter convention. No physical-center acceptance budget was
+registered, so these checks carry no accuracy pass/fail verdict.
+
+Reproduce on Node 22.22.2 from `apsides/`:
+
+```sh
+npm run typecheck
+npm test
+npm run validate:references -- --check-evidence
+npm run check:isolation
+```
+
+The acceptance tests and validation command exit unsuccessfully while these
+failures remain. Typechecking, reference integrity, reporting logic,
+integration tests and package isolation can pass independently. Report
+freshness compares the current implementation with the committed measured
+summary; it does not use previous engine output as an accuracy oracle.
+Full signed measurements go to ignored `.generated/validation/report.json`.
+The command rebuilds only the local ignored CLI output before measurement.
+
+The reserved cases are now consumed validation data. This milestone records
+their failures without adjusting the search, deleting a case or widening
+a limit. Future tuning requires a new registration and new held-out cases.
+M10 completion means evaluation and reporting are complete, not that the
+library meets all its accuracy or search-completion requirements.
+
+## Development evaluation in M5
 
 M5 implements the planetary API and its numerical and integration tests.
 Independent validation is **failing** for Pluto's distance. This is an
@@ -59,7 +127,7 @@ prevent it from running. It checks the repository's package contents in an
 ignored copy using the carried build, without rebuilding the root package.
 
 No held-out case was collected or evaluated in M5. The physical-center
-spot checks and Pluto perihelion remain reserved for M10. This development
+spot checks and Pluto perihelion were reserved for M10. This development
 coverage does not establish continuous completeness, all-date accuracy,
 or physical-center event timing for the system-barycenter targets. The
 failed budget remains open for that validation review; any future change

@@ -99,13 +99,17 @@ export function validateReferencePlan(plan) {
 }
 
 /** Fetches reference data only; never imports the engine or the apsides sampler. */
-export async function collectCase(plan, planSha256, entry, { offline = false } = {}) {
+export async function collectCase(plan, planSha256, entry, { offline = false, heldOut = false } = {}) {
   validateReferencePlan(plan);
+  if (typeof offline !== "boolean" || typeof heldOut !== "boolean") {
+    throw new RangeError("Reference collection flags must be boolean.");
+  }
   if (!/^[a-f0-9]{64}$/u.test(planSha256) ||
       !plan.cases.some((item) => JSON.stringify(item) === JSON.stringify(entry))) {
     throw new Error("Unregistered reference case or plan identity.");
   }
-  if (entry.split !== "development") throw new Error("Held-out cases are reserved until M10.");
+  if (entry.split === "held-out" && !heldOut) throw new Error("Held-out cases are reserved until M10.");
+  if (entry.split !== "development" && entry.split !== "held-out") throw new Error("Unknown reference split.");
   const target = plan.targets[entry.body];
   if (!target) throw new Error("Unknown reference target.");
   const sources = [];
@@ -195,45 +199,113 @@ export async function collectCase(plan, planSha256, entry, { offline = false } =
   };
 }
 
+/** Distinct physical-center spot samples, never substituted for event references. */
+export async function collectPhysicalCenters(plan, planSha256, { offline = false, heldOut = false } = {}) {
+  validateReferencePlan(plan);
+  if (typeof offline !== "boolean" || typeof heldOut !== "boolean") {
+    throw new RangeError("Reference collection flags must be boolean.");
+  }
+  if (!heldOut) throw new Error("Held-out cases are reserved until M10.");
+  const registration = plan.physicalCenterChecks;
+  if (!/^[a-f0-9]{64}$/u.test(planSha256) || registration?.split !== "held-out" ||
+      !Array.isArray(registration.bodies) || registration.bodies.length === 0 ||
+      new Set(registration.bodies).size !== registration.bodies.length ||
+      !Array.isArray(registration.jdTt) || registration.jdTt.length === 0 ||
+      registration.jdTt.length > plan.reference.maxBatchEpochs ||
+      registration.jdTt.some((jd, index) => !Number.isFinite(jd) ||
+        (index > 0 && jd <= registration.jdTt[index - 1])) ||
+      registration.bodies.some((body) => !plan.targets[body]?.physicalCenterId ||
+        plan.targets[body].referencePoint !== "system-barycenter")) {
+    throw new RangeError("Invalid physical-center reference registration.");
+  }
+  const sources = [];
+  const cases = [];
+  for (const body of registration.bodies) {
+    const target = plan.targets[body];
+    const rowsByPoint = {};
+    for (const [point, targetId] of [["barycenter", target.targetId], ["physicalCenter", target.physicalCenterId]]) {
+      const params = horizonsParameters(targetId, target.centerId, registration.jdTt);
+      const response = await fetchHorizons(params, {
+        cacheDirectory: join(project, ".cache/horizons-v1"), offline
+      });
+      const { header: { raw: _raw, ...header }, rows } = parseHorizons(response.text, {
+        targetId, centerId: target.centerId, jdList: registration.jdTt
+      });
+      const sourceIndex = sources.length;
+      sources.push({ ...response.source, header });
+      rowsByPoint[point] = rows.map((row) => ({ ...row, sourceIndex }));
+    }
+    cases.push({ body, target, samples: registration.jdTt.map((jdTt, index) => ({
+      jdTt, barycenter: rowsByPoint.barycenter[index], physicalCenter: rowsByPoint.physicalCenter[index]
+    })) });
+  }
+  return {
+    schema: "apsides-horizons-physical-centers/1", planSha256, registration,
+    purpose: "Same-TT physical-center and system-barycenter states; no event timing reference or physical-center acceptance budget",
+    cases, sources
+  };
+}
+
 export async function main(args) {
   const bytes = await readFile(join(project, "references/plan.json"));
   const plan = JSON.parse(bytes.toString("utf8"));
   validateReferencePlan(plan);
-  if (args.length === 1 && args[0] === "--manifest") {
+  let caseId;
+  let offline = false;
+  let freeze = false;
+  let heldOut = false;
+  let manifest = false;
+  let physicalCenters = false;
+  const usage = "Usage: node scripts/collect-references.mjs --case ID [--held-out] [--offline] [--freeze], --physical-centers --held-out [--offline] [--freeze], or --manifest [--held-out]";
+  for (let index = 0; index < args.length; index++) {
+    const arg = args[index];
+    if (arg === "--case" && caseId === undefined && args[index + 1] && !args[index + 1].startsWith("--")) caseId = args[++index];
+    else if (arg === "--offline" && !offline) offline = true;
+    else if (arg === "--freeze" && !freeze) freeze = true;
+    else if (arg === "--held-out" && !heldOut) heldOut = true;
+    else if (arg === "--manifest" && !manifest) manifest = true;
+    else if (arg === "--physical-centers" && !physicalCenters) physicalCenters = true;
+    else throw new Error(usage);
+  }
+  if (Number(caseId !== undefined) + Number(manifest) + Number(physicalCenters) !== 1 ||
+      (manifest && (freeze || offline)) || (physicalCenters && !heldOut)) throw new Error(usage);
+  if (manifest) {
     const fixtures = [];
-    for (const entry of plan.cases.filter((item) => item.split === "development")) {
-      const path = `fixtures/${entry.id}.json`;
+    for (const entry of plan.cases.filter((item) => item.split === (heldOut ? "held-out" : "development"))) {
+      const path = `${heldOut ? "held-out" : "fixtures"}/${entry.id}.json`;
       const content = await readFile(join(project, "references", path));
       const fixture = JSON.parse(content.toString("utf8"));
       if (fixture.schema !== "apsides-horizons-reference/1" || fixture.planSha256 !== digest(bytes) ||
           JSON.stringify(fixture.case) !== JSON.stringify(entry)) throw new Error("Fixture registration mismatch.");
       fixtures.push({ path, sha256: digest(content) });
     }
-    await writeOnce(join(project, "references/manifest.json"), encode({
-      schema: "apsides-reference-manifest/1", planSha256: digest(bytes), fixtures
-    }));
-    console.log("Reference manifest matches the frozen development fixtures.");
+    const record = { schema: "apsides-reference-manifest/1", planSha256: digest(bytes), fixtures };
+    if (heldOut) {
+      const path = "held-out/physical-centers.json";
+      const content = await readFile(join(project, "references", path));
+      const physical = JSON.parse(content.toString("utf8"));
+      if (physical.schema !== "apsides-horizons-physical-centers/1" || physical.planSha256 !== digest(bytes) ||
+          JSON.stringify(physical.registration) !== JSON.stringify(plan.physicalCenterChecks)) {
+        throw new Error("Physical-center registration mismatch.");
+      }
+      record.physicalCenters = { path, sha256: digest(content) };
+    }
+    await writeOnce(join(project, heldOut ? "references/held-out/manifest.json" : "references/manifest.json"), encode(record));
+    console.log(`Reference manifest matches the frozen ${heldOut ? "held-out" : "development"} fixtures.`);
     return;
   }
-  let caseId;
-  let offline = false;
-  let freeze = false;
-  for (let index = 0; index < args.length; index++) {
-    const arg = args[index];
-    if (arg === "--case" && caseId === undefined && args[index + 1] && !args[index + 1].startsWith("--")) caseId = args[++index];
-    else if (arg === "--offline" && !offline) offline = true;
-    else if (arg === "--freeze" && !freeze) freeze = true;
-    else throw new Error("Usage: node scripts/collect-references.mjs --case ID [--offline] [--freeze], or --manifest");
-  }
   const entry = plan.cases.find((item) => item.id === caseId);
-  if (!entry) throw new Error("Choose an exact registered --case ID.");
-  const fixture = await collectCase(plan, digest(bytes), entry, { offline });
-  const directory = join(project, freeze ? "references/fixtures" : ".generated/references");
+  if (!physicalCenters && !entry) throw new Error("Choose an exact registered --case ID.");
+  if (heldOut && entry?.split === "development") throw new Error("--held-out requires a registered held-out case.");
+  const fixture = physicalCenters ? await collectPhysicalCenters(plan, digest(bytes), { offline, heldOut }) :
+    await collectCase(plan, digest(bytes), entry, { offline, heldOut });
+  const directory = join(project, freeze ? (heldOut ? "references/held-out" : "references/fixtures") : ".generated/references");
   await mkdir(directory, { recursive: true });
   const output = encode(fixture);
   if (Buffer.byteLength(output) >= plan.reference.maxResponseBytes) throw new Error("Fixture exceeds size budget.");
-  await writeOnce(join(directory, `${entry.id}.json`), output);
-  console.log(`${entry.id}: ${fixture.grid.length} discovery samples, ${fixture.events.length} reference extrema; ${digest(output)}`);
+  await writeOnce(join(directory, `${physicalCenters ? "physical-centers" : entry.id}.json`), output);
+  console.log(physicalCenters ? `Physical-center spot samples: ${fixture.cases.length} bodies; ${digest(output)}` :
+    `${entry.id}: ${fixture.grid.length} discovery samples, ${fixture.events.length} reference extrema; ${digest(output)}`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

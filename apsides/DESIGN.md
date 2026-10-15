@@ -9,7 +9,10 @@ development planetary fixtures. Pluto fails the unchanged distance budget;
 see [VALIDATION.md](VALIDATION.md). M6 combines selected lunar and planetary
 searches under a shared budget. M7 adds before/at/after motion records and
 replayable probe receipts. M8 adds optional lunar longitude-phase
-annotations. M9 exposes the searches through a local JSON CLI.
+annotations. M9 exposes the searches through a local JSON CLI. M10 evaluates
+the reserved corpus without tuning the search. Its measured report is in
+[docs/evidence/m10/RESULTS.md](docs/evidence/m10/RESULTS.md); independent
+acceptance remains failing, as [VALIDATION.md](VALIDATION.md) describes.
 
 The intended result is a chronological list of local distance extrema in a
 requested window. A lunar minimum is a perigee and a lunar maximum an
@@ -35,8 +38,9 @@ convention of the engine's existing evidence, described in
 [SOURCES.md](SOURCES.md). The engine does not separately resolve every
 planet's displacement about its satellite system's barycenter. Consequently
 the latter targets must not be represented as exact physical body-center
-extrema. Independent physical-center comparisons and this limitation remain
-part of the planetary validation work.
+extrema. M10's independent physical-center spot comparisons measure this
+distinction at the registered epochs. They do not validate physical-center
+event times.
 
 Each sample carries distance in au and kilometres, signed
 `radialSpeedKmPerSecond`, nonnegative `orbitalSpeedKmPerSecond`, and the
@@ -199,7 +203,7 @@ extra fixture events. It also compares distance, radial speed and total
 speed at the reference's before/at/after TT samples. This is development
 evidence only; it does not prove completeness or validate other lunar
 windows. `test/lunar-reference.vitest.ts` enforces these comparisons.
-Held-out windows remain reserved for M10.
+M10 separately evaluates the held-out window, as recorded in its report.
 
 ## Planetary window search implemented in M5
 
@@ -485,9 +489,30 @@ in `test/lunar-reference.vitest.ts`. M5's `test/planetary-reference.vitest.ts`
 passes the registered development limits for Mercury through Neptune.
 Pluto passes timing and speed checks but fails the distance limit, both
 at its own extremum and at the independent reference sample times.
-Held-out agreement remains unmeasured. The budgets apply to the exact TT
+M10 additionally finds held-out failures in Mercury's total speed, Neptune's
+event time, and Pluto's same-TT distance; the Pluto search refuses during
+scalar-distance refinement. The budgets apply to the exact TT
 windows and centers in the registration, without a physical-uncertainty
 claim for the reference ephemeris.
+
+M10's reporting code pairs same-body, same-kind events within disjoint
+reference neighborhoods bounded by neighboring reference-event midpoints
+and window endpoints. It does not use the acceptance allowance to choose
+matches, so an excessive timing error remains measurable. Missing,
+additional and ambiguous events fail validation. A refused search leaves
+event metrics unavailable; the independent before/at/after samples are
+still compared at their own TT epochs. The report separates those sample
+errors from distances evaluated at independently located events.
+
+The report binds the implementation, registration, fixture manifests,
+engine archive, dependency lock and measurement scripts with digests.
+`scripts/validate-references.mjs` rebuilds the local ignored output before
+using it; Vitest compares the TypeScript library directly. The Markdown
+report is checked against fresh measurements, while acceptance assertions
+compare against independent fixture values and unchanged budgets. Report
+freshness is a reproducibility check, not a source of accuracy expectations.
+No search source changed after opening the held-out corpus. Further tuning
+needs new held-out cases, not a passing claim based on this consumed set.
 
 Use frozen JPL Horizons geometric samples as the independent reference.
 The reference collector subdivides signed range-rate brackets using only

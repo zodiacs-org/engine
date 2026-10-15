@@ -4,9 +4,10 @@ Private work-in-progress library for geometric orbital distance extrema,
 built on `@zodiacs/engine`. The current milestone provides the distance
 sampler, bounded lunar and heliocentric planetary searches, a combined
 window API, motion probes with replayable receipts, optional lunar syzygy
-annotations, a JSON command line, and frozen independent
-development references. Pluto fails its preregistered distance budget, so
-independent validation is not fully passing. The remaining work is in
+annotations, a JSON command line, and frozen independent development and
+held-out references. Independent validation fails for Mercury's total
+speed, Neptune's event timing, and Pluto's distance and search completion.
+The original acceptance limits remain unchanged. The remaining work is in
 [PLAN.md](PLAN.md).
 
 Use Node 22.22.2 for the local checks, matching this project's initial test
@@ -18,8 +19,8 @@ npm ci --ignore-scripts --cache=.cache/npm
 npm run check
 ```
 
-The current check exits with failing Pluto distance assertions. Typechecking,
-numerical and integration tests pass; `npm run check:isolation` can be run
+The current check exits with failing independent acceptance assertions.
+Typechecking, numerical and integration tests pass; `npm run check:isolation` can be run
 separately because the combined command stops at the reference failures.
 [VALIDATION.md](VALIDATION.md) records the failing cases and unchanged limits.
 
@@ -81,7 +82,7 @@ a command with no other arguments.
 | 3 | Search refused, including exhausted budget or missing coverage | Full refusal JSON on stdout; no partial events |
 
 Completion does not certify physical completeness or independent accuracy;
-Pluto's distance acceptance failure remains open. Error JSON has `status`,
+the failures in [VALIDATION.md](VALIDATION.md) remain open. Error JSON has `status`,
 `code` and `message` fields. Refusals preserve the library's `reason`,
 `detail` and diagnostics. `test/cli.vitest.ts` checks these statuses,
 streams, arguments and exact JSON equality with library calls over the
@@ -208,7 +209,8 @@ distance directly with golden-section search. The `method` field identifies
 which interval contract applies. Mars through Pluto use the engine's
 system-barycenter reference convention, not validated physical-center
 event times. Search completion does not certify the independent accuracy
-budgets, which Pluto currently fails. No dates are ranked.
+budgets. The held-out evaluation also exposes a Pluto search refusal.
+No dates are ranked.
 
 ```ts
 import { searchApsidesWindow } from "./src/index.js";
@@ -270,11 +272,31 @@ checks every registered development planetary fixture: counts, kinds,
 timing, event distances, and same-TT distances and speeds. Mercury through
 Neptune pass the registered limits; Pluto's distance checks fail. These
 failures are ordinary assertions, not skips or expected-failure tests.
-Held-out comparisons remain reserved for M10. [DESIGN.md](DESIGN.md) describes the searches;
+M10's `test/validation-evidence.vitest.ts` additionally evaluates the frozen
+held-out corpus and reproduces the [measured report](docs/evidence/m10/RESULTS.md).
+It keeps Mercury's speed failure, Neptune's timing failure and Pluto's
+search refusal and distance failure as ordinary failing assertions.
+The report lists exact TT windows, matching counts, error maxima and
+physical-center spot comparisons. These finite sampled comparisons do not
+establish completeness between grid samples or physical-center event accuracy.
+The held-out cases are now consumed; future tuning requires new reserved cases.
+[DESIGN.md](DESIGN.md) describes the searches;
 [references/PREREGISTRATION.md](references/PREREGISTRATION.md) records the
-acceptance budgets, reserved cases and collection commands.
+acceptance budgets, case selection and collection commands.
 [SOURCES.md](SOURCES.md) records definitions and attribution. Ordinary tests
 read local fixtures and perform no reference downloads.
+
+To reproduce the validation measurements offline from the compact fixtures:
+
+```sh
+npm run validate:references -- --check-evidence
+```
+
+The command rebuilds only the local ignored CLI output, checks the committed
+report and writes full signed measurements to `.generated/validation/report.json`.
+It exits unsuccessfully while independent acceptance fails, even when the
+report is current. `--write-evidence` regenerates the compact Markdown report
+after review. Both modes preserve the frozen reference files and limits.
 
 `npm run check:isolation` checks authored file sizes and documentation,
 checks that npm's root file selection excludes this folder, and runs the
