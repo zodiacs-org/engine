@@ -3,7 +3,8 @@
 This is the implementation contract for the remaining milestones. The
 position adapter, input/receipt foundation, source catalogue, apparent
 stellar reduction, geocentric coordinate conjunctions, appulse searches and
-lunar candidate screening, local spherical-limb contacts and contact sky facts are implemented. An unchecked
+lunar candidate screening, local spherical-limb contacts, contact sky facts and
+coarse global outlines are implemented. An unchecked
 part of PLAN.md is not a supported calculation or an established error bound.
 
 ## Engine boundary and clock
@@ -29,9 +30,9 @@ event root solving. A leap second is not representable as a JavaScript Date.
 Topocentric samples use the engine's ellipsoidal observer at reception time,
 with geodetic latitude, east longitude and elevation in metres. Calc uses the
 IERS 2003 ellipsoid; the sky rise/set API uses WGS84. Our elevation is an
-ellipsoidal height, not height above mean sea level. The later horizon and
-outline work must account for this distinction and any reference station's
-vertical datum; it must not silently relabel the calc observer as WGS84.
+ellipsoidal height, not height above mean sea level. Contact horizon facts
+and outlines preserve this distinction and any reference station's
+vertical-datum uncertainty; they do not relabel the calc observer as WGS84.
 
 The engine's geocentric apparent Moon is its geometric series at the instant.
 Its topocentric apparent Moon instead passes through the engine's retarded
@@ -547,21 +548,110 @@ primary-phase, rise/set and polar samples were preregistered in
 visibility, all-phase illuminated-fraction accuracy or a general limb bound.
 VALIDATION.md records the checked scope; held-out events remain for M12.
 
-## Coarse global outline
+## Coarse global outline implemented in M10
 
-Use a fundamental plane perpendicular to the target direction, with north/east
-axes and the projected lunar centre. For a stellar target this gives the
-cylindrical shadow limit of the lunar sphere. Finite target distance requires
-the corresponding conical geometry for planetary disks. Earth rotation and
-the ellipsoidal observer must use the engine's UT1 and frame conventions.
+`lunarVisibilityOutline` returns the latitude sets intercepted by the shadow
+over a supplied window, at exact requested meridians. Its footprint uses
+zero ellipsoidal height and requires the target center above the geometric
+ellipsoid-normal horizon. There is no darkness filter, atmospheric refraction,
+horizon dip or terrain. It is a sampled model footprint, not a claim of
+practical observability or a terrain-corrected graze prediction.
 
-For each longitude band, solve intersections and extrema over the event time
-interval to find latitude intervals with contact and the required horizon
-condition. Preserve multiple intervals or no intersection; do not invent a
-single connected footprint at the dateline or near a pole. Northern/southern
-envelopes must identify the sampling grid, unresolved bands and assumptions.
-A coarse outline is not a terrain-corrected graze prediction. Every chosen
-outline limit must be checked against local topocentric contact geometry.
+The Besselian-style construction uses a geocentric fundamental plane normal
+to the shadow axis, with orthogonal transverse axes. The NASA references in
+SOURCES.md describe this construction and its sphere limitations; no source
+implementation or ephemeris table is copied. `shadow-geometry.ts` independently
+derives common tangents of the lunar sphere and a target sphere. Let `M` and
+`T` be their geocentric vectors, `Rm` and `Rt` their radii, `D = |T-M|`,
+`k = (T-M)/D`, and `z = dot(O-M,k)` for an observer `O`. For a transverse
+distance `r` from the axis, the cone boundaries are:
+
+```text
+external radius(z) = (Rm*D - z*(Rt+Rm)) / sqrt(D*D - (Rt+Rm)*(Rt+Rm))
+internal radius(z) = (Rm*D + z*(Rt-Rm)) / sqrt(D*D - (Rt-Rm)*(Rt-Rm))
+```
+
+The external cone describes any disk overlap; the internal cone describes
+full coverage. Both require a positive signed radius and an observer behind
+the lunar plane. A negative internal radius beyond the cone vertex does not
+become full coverage by taking its absolute value. For an infinite point
+source, the axis is the apparent stellar direction and both cones reduce
+to a cylinder of radius `Rm`. The full target sphere must be farther than
+the Moon for every modeled observer. This strong distance-order check prevents
+reversing the occluder. The source range remains unknown for SAO stars.
+
+At each instant, the engine's negative topocentric geometric Earth state
+supplies the equator and pole semiaxis vectors, rotated with its existing
+frame matrix. This reuses the calc IERS ellipsoid, UT1 sidereal rotation,
+precession and nutation. No WGS84 constants or independent sidereal model
+are substituted. For meridian vectors `U` and `V`, with lengths `a` and `b`,
+the ellipsoid is `O = U*cos(theta) + V*sin(theta)`. The returned geodetic
+latitude is `atan2(a*sin(theta), b*cos(theta))`, not `theta`. Rotating `U`
+about the true pole selects east longitude; the pole remains common.
+
+Substitution `t = tan(theta/2)` makes squared transverse distance minus
+squared cone radius a polynomial of degree at most four on `[-1,1]`.
+The solver recursively isolates derivative roots, bisects on the resulting
+monotone intervals, and checks the intervening signs. Signed cone radius,
+depth ordering and the target-center horizon supply additional cuts. The
+normal is proportional to `U*cos(theta)/a^2 + V*sin(theta)/b^2`.
+Every surviving latitude interval is kept. Detected tangencies, plateaus,
+coincident roots and numerical ambiguities mark the meridian unresolved.
+The spatial polynomial roots are not time crossings; the existing engine
+crossing solver remains the owner of time contacts and conjunctions.
+
+The time grid includes both window endpoints. Thus this API reports a closed
+footprint intersection, whereas the contact event list owns `(from,to]`.
+Window clipping does not create a contact. At each meridian, the union of
+sampled latitude intervals preserves gaps. Each extremal witness is refined
+within its neighboring time cells with exact engine samples, assuming smooth
+motion. An extension must come from a whole refined interval intersecting
+the original component, so the refinement cannot join unrelated latitude
+strips just because their times are close. Conflicting independently refined
+components make the meridian unresolved. Short components between time samples
+can still be missed. No polygon or topology between meridians is inferred.
+
+The initial plane uses geocentric apparent directions and the adapter's
+reported light-path distances as sphere-center ranges. Those conventions
+are an approximation: the engine's geocentric Moon and its topocentric
+apparent Moon have different correction paths, and stellar aberration also
+depends on the observer. No second light-time or aberration correction is
+applied. Every reported boundary is therefore checked and refined using the
+existing topocentric adapters at its witness time. A limb edge brackets the
+local external or internal angular clearance; a horizon edge brackets the
+target's geometric altitude and requires disk coverage. A pole requires
+coverage and a nonnegative altitude. These checks verify the chosen model
+locally; they do not bound its physical error.
+
+The numerical policies were recorded before the comparison in
+`test/fixtures/events/OUTLINES.md`: a default time step of 60 seconds, at
+most 300 seconds, and a local latitude guard of 0.1 degree with a final
+bracket at most 0.00001 degree. `OUTLINE_LIMITS` and the outline tests enforce
+them. The guard is a refusal policy, not an extra reference allowance.
+Receipts also expose the spatial solver's numerical tolerances and the
+time-extremum bracket policy. The physical latitude-error field is null.
+The time-extremum bracket describes the optimizer's termination; it is not
+a proof of a global extremum or a physical timing error in seconds.
+
+Each longitude gets a circular band with explicit width and dateline flag,
+but only its exact meridian was evaluated. Empty intervals mean no hit in
+the sampled model. Unresolved bands carry no partial interval list. A global
+position or resource refusal discards the entire result, including earlier
+resolved bands. Ephemeris-pair evaluations and polynomial intersections have
+separate bounded budgets; cached exact-time plane samples are counted once,
+and local boundary evaluations count individually. Clock seams and range
+failures are refused before sampling. Every meridian carries the final search
+receipt, and each boundary carries its actual local sample receipts.
+
+`test/shadow-geometry.test.ts` compares the construction with analytic sphere
+and ellipsoid cases and independently calculated angular disks, including
+horizons, poles and disconnected intervals. `test/outline-references.test.ts`
+passes every frozen NAOJ development limit at its exact source longitude,
+preserves distinct inner/outer curves, and checks local contact existence
+on either side. The unchanged acceptance maximum is 1 degree latitude for
+the May 31, 2024 Saturn map. This is a finite development gate, not a measured
+general uncertainty bound; the source's exact shape and correction models
+remain qualified as in EVENTS.md. Held-out comparisons belong to M12.
 
 ## Accuracy budget in seconds of time
 
@@ -632,8 +722,9 @@ and limitations. Each event retains both position receipts and its time basis.
 Refusals retain the same normalized request and available provenance, with
 the originating position refusal when one occurs. Contact receipts now add
 the observer, spherical disk models, classification halo, raw numerical bracket
-and development-only validation scope. Outline receipts must later add their
-respective models and validation scope.
+and development-only validation scope. Outline receipts add the shadow and
+ellipsoid models, sampled meridians, work budgets, unresolved bands and
+locally checked boundaries, with physical sampling uncertainty left unknown.
 Exhausting a search budget must produce an explicit
 refusal or unresolved interval, never a silently complete partial list.
 No network request is part of a calculation. Bulk downloads and generated

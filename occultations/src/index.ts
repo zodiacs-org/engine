@@ -31,3 +31,8 @@ export type {
 export { CONTACT_SKY_MODEL } from "./sky-geometry.js";
 export type { HorizontalFacts, HorizonFacts } from "./sky-geometry.js";
 export type { ContactSkyFacts } from "./contact-sky.js";
+export { OUTLINE_LIMITS, lunarVisibilityOutline } from "./outlines.js";
+export type {
+  LunarOutlineRequest, OutlineSearchReceipt, OutlineLocalCheck, OutlineBoundary,
+  OutlineLatitudeInterval, OutlineMeridian, OutlineRefusalReason, LunarOutlineResult
+} from "./outlines.js";

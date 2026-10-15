@@ -581,3 +581,86 @@ archive rebuild and conformance gates are not claimed as passed. Scope
 checks confirm all changes stay in `occultations/` and the folder remains
 outside root npm file selection. No git metadata, release archive, root
 package file or dependency version was changed.
+
+# M10 validation record
+
+Checked on 2026-10-15 using Node 22.23.3. `lunarVisibilityOutline` now returns
+coarse latitude intervals at exact requested meridians, with separate
+planetary overlap and full-coverage limits, horizon and pole boundaries,
+local topocentric checks, immutable receipts and explicit unresolved bands.
+The complete local check passed:
+
+```sh
+npm --prefix occultations run check
+```
+
+This passed no-emit TypeScript, the full ordinary Vitest suite, catalogue
+validation, the local bundle and scope checks. The existing development
+contact-time, disk-duration, position-angle, Moon-altitude and USNO sky gates
+continue to pass. No frozen source, threshold or partition was modified.
+No held-out event was evaluated; M12 still owns those comparisons and the
+deferred local closest-approach times.
+
+`test/fixtures/events/OUTLINES.md` records the additional numerical policies
+before the first M10 comparison. `test/outline-references.test.ts` passes
+every unchanged development latitude gate for NAOJ's Moon/Saturn map on
+May 31, 2024, at each exact published longitude and with the original
+1-degree maximum absolute error. This is an acceptance limit, not a reported
+maximum residual or general sky-error bound. The test requires finite resolved
+boundaries, distinct correctly ordered inner/outer curves, actual local
+clearance sign brackets, and local contact existence on the covered side
+and absence on the uncovered side. The frozen source models, clock
+qualifications and curve-label inferences remain in EVENTS.md and SOURCES.md.
+
+`test/shadow-geometry.test.ts` checks the independently derived common
+tangent cones and stellar cylinders against analytic sphere and ellipsoid
+limits and separately calculated observer angular disks. It checks geodetic
+latitude, signed internal cones, finite and infinite target horizons,
+polar caps, shared rotations, disconnected intervals, narrow strips,
+degenerate tangencies and malformed geometry. These are mathematical model
+checks, not independent physical occultation-accuracy measurements.
+
+`test/outlines.test.ts` exercises exact meridians and circular dateline bands,
+catalogue provenance, the actual engine observer and clock integration,
+immutable JSON receipts, caller input preservation, sampled empty windows,
+local sphere checks, per-meridian unresolved outcomes, range and clock-seam
+refusals, and preflight and late work-budget exhaustion. A late global refusal
+discards all earlier meridians. A later adapter refusal cannot be hidden by
+earlier unresolved bands. Sample units include both geocentric plane and
+local topocentric position pairs; intersections have a separate budget.
+
+Review found that choosing the nearest latitude edge during time refinement
+could jump to an unrelated component and invent coverage through an empty
+gap. Refinement now extends a component only through a whole refined slice
+intersecting that sampled component. `test/outline-review.test.ts` constructs
+disconnected strips that would pass local endpoint checks after such a jump,
+and enforces preservation of the original component. Between-time components
+can still be missed and remain an explicit sampling limitation.
+
+The geometry uses the engine calc ellipsoid and sidereal/frame machinery,
+without copying a second observer or ephemeris implementation. Its coarse
+plane uses geocentric apparent directions and reported light-path ranges;
+the returned edges are checked with the existing topocentric adapters to
+account locally for their different correction paths. There is no extra
+light-time or aberration correction, and no fitted radius, clock or position
+offset. Sampling and numerical root precision do not establish a physical
+latitude or contact-time bound. The physical latitude-error field stays null.
+
+A fresh Node process imported the generated bundle, evaluated the default
+global meridian grid for the same development Saturn day, checked immutable
+receipts, and verified that a late sample-budget failure returned no partial
+footprint. The sampled result retained explicit unresolved meridians near
+footprint edges where local checks or refined component consistency failed.
+Those are disclosed outcomes, not silently omitted boundaries or passing
+reference cases. The registered reference meridians are all resolved.
+Horizon-cap physical accuracy and unsampled longitude/time topology remain
+unvalidated; this milestone makes no claim that they passed a source gate.
+
+The root `npm run package:contents` check, with its cache redirected inside
+the workbench, again stopped at the existing missing `dist/calc.d.ts`.
+The task forbids root build output, so no root build was run and full root
+package, archive rebuild and conformance gates are not claimed as passed.
+The scope check confirms workbench exclusion from root npm file selection,
+the dependency pin, source file-size and documentation rules, and changes
+only within `occultations/`. No git metadata mutation, archive mutation, root
+package change or release action was performed.

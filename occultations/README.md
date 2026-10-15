@@ -10,10 +10,11 @@ geocentric conjunction searches in right ascension or ecliptic longitude,
 geocentric Moon/planet and planet/planet appulse searches, and lunar
 occultation candidate intervals with window-local series, and topocentric
 spherical-limb contact times for stars and planetary disks with contact angles,
-illumination, altitude, phase and horizon facts.
+illumination, altitude, phase and horizon facts, plus coarse global visibility
+outlines at exact longitude meridians.
 Independent event references and maximum-error criteria were frozen before
 event implementation in [the reference contract](test/fixtures/events/EVENTS.md).
-Visibility outlines and the CLI remain unchecked in
+The CLI and held-out validation remain unchecked in
 [PLAN.md](PLAN.md). Contact validation covers the development references
 described below, with no general timing bound. [DESIGN.md](DESIGN.md) records the geometry and error
 budget to validate; [SOURCES.md](SOURCES.md) separates provenance from leads.
@@ -67,6 +68,70 @@ The local bundle includes engine data: keep the generated LICENSE,
 LICENSING.md and NOTICE alongside it. Its inherited terms are the engine's
 `MIT AND CC-BY-4.0`, with the qualifications in [LICENSING.md](../LICENSING.md).
 The workbench is private and excluded from the engine's npm package.
+
+## Coarse global outline
+
+```js
+import { lunarVisibilityOutline } from "./occultations/.generated/index.mjs";
+
+const outline = lunarVisibilityOutline({
+  target: "Saturn",
+  window: { from: "2024-05-31T00:00:00Z", to: "2024-06-01T00:00:00Z" },
+  longitudes: [-60, -20, 0]
+});
+if (outline.status === "complete") {
+  for (const row of outline.meridians) {
+    console.log(row.longitudeDegrees, row.status, row.overlap, row.full);
+  }
+}
+```
+
+`target` accepts an occultation planet or an exact catalogue id. `overlap`
+contains latitude intervals with any target disk covered; `full` contains
+intervals with full disk coverage. They coincide for point-source stars.
+Each interval has `south` and `north` boundary records, each with geodetic
+latitude, cause (`limb`, `horizon` or `pole`), witness time, local latitude
+bracket, and an actual topocentric sample with provenance. Multiple latitude
+intervals remain separate. No polygon connecting longitude bands is implied.
+
+The footprint uses a spherical Moon, nominal spherical planetary disks without
+rings, the engine calc ellipsoid at zero ellipsoidal elevation, and a target
+center above the geometric horizon. Daylight is included. Refraction, weather,
+terrain, lunar relief and practical detectability are not modeled. Local
+contacts for a specific observer remain `searchLunarContacts`' responsibility.
+
+Omit `longitudes` for the grid in `OUTLINE_LIMITS`; supplied meridians are
+evaluated exactly and returned sorted. The dateline spelling `180` normalizes
+to `-180`; duplicate meridians are rejected. Each circular band's boundaries,
+width and dateline flag are metadata. Positions between evaluated meridians
+are uncomputed. The outline includes both time-window endpoints and labels
+witnesses on them; a clipped footprint edge is not a new contact.
+
+`stepSeconds`, `maxSamples` and `maxIntersections` control bounded work.
+The default time step is 60 seconds and the permitted maximum is 300 seconds;
+tests enforce these numerical policies. Time extrema are refined inside
+neighboring grid cells, but short components between samples may be missed.
+The physical latitude-error field is null. Numerical root brackets are not
+accuracy guarantees in degrees or seconds.
+
+A complete calculation can contain `unresolved` meridians, with a reason and
+empty interval lists. Review each meridian's status. A `resolved` empty list
+means no intersection in the sampled model, without a completeness guarantee.
+Resource exhaustion, an unsupported time range, a clock discontinuity or an
+adapter refusal returns `status: "refused"` and no partial meridian list.
+Both outcomes carry immutable receipts. The input and refusal behavior is
+checked by [the outline tests](test/outlines.test.ts).
+
+The development comparison passes the frozen maximum error of 1 degree
+latitude at every selected exact longitude on NAOJ's May 31, 2024 Saturn map,
+with distinct inner/outer limits and local contact checks on both sides
+([reference test](test/outline-references.test.ts),
+[preregistration](test/fixtures/events/OUTLINES.md)). This is a coarse finite
+reference gate, not a general boundary or timing error bound. Polar, horizon,
+dateline and disconnected-region checks establish analytic model behavior;
+they do not establish physical accuracy there. Source-model qualifications
+and remaining held-out work are in [DESIGN.md](DESIGN.md) and
+[VALIDATION.md](VALIDATION.md).
 
 `starCatalogue()` returns an immutable source catalogue and its receipt. The
 subset contains 119 SAO records, with catalogue visual magnitude at most 4.5

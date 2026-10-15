@@ -41,7 +41,7 @@ package, source, build output, archive or release changes are part of this plan.
   altitude, Moon phase and horizon facts using existing engine sky/rise-set
   machinery. Define refracted versus geometric quantities and test polar,
   daylight and horizon cases without ranking observing dates.
-- [ ] M10 Compute coarse global visibility outlines from a Besselian-style
+- [x] M10 Compute coarse global visibility outlines from a Besselian-style
   fundamental plane and Earth ellipsoid intersections. Return northern and
   southern latitude intervals per longitude band, dateline/polar cases and
   sampling uncertainty; compare limits with independent published outlines.

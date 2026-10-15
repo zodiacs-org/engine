@@ -203,6 +203,32 @@ The frozen thresholds and source-integrity tests establish an acceptance
 contract, not measured occultation accuracy. Additional independent evidence
 is required for the gaps listed in the event contract.
 
+## Fundamental-plane geometry references for M10
+
+Fred Espenak, NASA/GSFC,
+[Besselian Elements of Solar Eclipses](https://eclipse.gsfc.nasa.gov/SEcat5/beselm.html),
+page dated 2009-08-25, paragraphs describing the fundamental plane and its
+coordinate axes, fetched and read on 2026-10-15. The geocentric plane is normal
+to the shadow axis; transverse coordinates and signed cone radii describe
+the shadow independently of the terrestrial surface. The page supports the
+geometry concept. Its solar eclipse tables and coefficients are not used.
+
+Ernie Wright, NASA Scientific Visualization Studio,
+[Umbra Shapes](https://svs.gsfc.nasa.gov/4517/), released 2016-12-13, the
+Details section and the preceding discussion of lunar terrain and Earth
+elevation, fetched and read on 2026-10-15. It describes the fundamental plane
+and explains why lunar relief and Earth elevation change a shadow footprint.
+This workbench retains spherical limbs and an ellipsoid; it does not adopt
+the visualization's terrain model or precision claims.
+
+No text, diagram, source implementation, imagery or coefficient table from
+either page is vendored. The common tangent equations and polynomial
+intersections are independently derived geometry, tested against analytic
+cases and direct angular disk geometry. These citations are not numerical
+accuracy evidence. The NAOJ development outline numbers, rights and source
+receipts remain the unchanged M4 records above. No new catalogue or
+ephemeris data is introduced by M10.
+
 ## Radius facts adopted for M7 screening
 
 The [JPL Solar System Dynamics Planetary Physical Parameters table](https://ssd.jpl.nasa.gov/planets/phys_par.html),
