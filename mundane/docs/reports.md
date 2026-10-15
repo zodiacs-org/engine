@@ -15,6 +15,13 @@ Factor source pointers remain relative to their containing event. House
 fallback, reference flags, clock metadata, and calculation provenance remain
 on each chart. Results are deeply frozen and JSON-compatible.
 
+An explicit `options.eclipses` adapter can add supplied eclipse charts. Read
+`contactKind` on `kind: "eclipse"` rows and inspect `searches.eclipses` for
+source completeness and refusals. Load optional modules outside this pure
+API. See [eclipses.md](eclipses.md) for the adapter contract, metadata,
+ordering, and source limitations. Without that option, the behavior and
+metadata described below remain the ingress and lunation defaults.
+
 Ordering uses epoch milliseconds, with ingresses before lunations at a time
 tie, then target longitude or target elongation for ties within a kind.
 Coincident events remain separate entries; time alone is not an event id.

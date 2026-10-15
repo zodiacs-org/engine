@@ -6,7 +6,8 @@ current API normalizes inputs, casts charts at supplied instants, analyzes
 classical planet angularity and angle-ruler dignities, produces descriptive
 factor lists, and searches cardinal solar ingresses and New and Full Moons.
 It also combines these events into chronological year or range reports.
-Eclipse searches and CLI commands are planned and are not implemented yet.
+An optional adapter casts supplied eclipse instants and can delegate to the
+events workbench's eclipse minimum searches. CLI commands are planned.
 
 From the repository root, using Node.js as required by [package.json](package.json):
 
@@ -310,6 +311,42 @@ JSON-compatible. Definitions, synthetic derivations, and limitations are in
 [docs/reports.md](docs/reports.md), enforced by
 [test/report.test.ts](test/report.test.ts), with the session record in
 [docs/evidence/m10/checks.txt](docs/evidence/m10/checks.txt).
+
+To include optional eclipse charts, load the sibling events workbench outside
+the pure report API and pass its adapter explicitly:
+
+```ts
+import { searchMundaneReport } from "./src/index.js";
+import type { MundaneRequest, EventsEclipseSettings } from "./src/index.js";
+import { loadEventsEclipseAdapter } from "./src/events-loader.js";
+
+async function reportWithEclipses(request: MundaneRequest, settings: EventsEclipseSettings) {
+  const eclipses = await loadEventsEclipseAdapter(settings);
+  return searchMundaneReport(request, { eclipses });
+}
+```
+
+Settings require explicit spherical radii in au, scan and derivative steps in
+milliseconds, and an evaluation budget. The loader reads only an already-built
+`events/build/src/index.js` in this checkout; it does not build or fetch it.
+Missing and incompatible adapters remain distinguishable from completed empty
+searches. A requested unavailable or refused adapter produces a refused report
+with no events. Omitted adapters leave the ingress and lunation report unchanged.
+
+`searchEclipseCharts(request, adapter)` provides the separate pure eclipse API.
+Supplied contacts retain their source labels and provenance, and receive charts
+and the same traditional factor analyses. UTC instants are required; TT and UT1
+labels are not silently read as UTC. The current events bridge preserves the
+definition `minimum-shadow-axis-distance`: these are eclipse minima, not limb
+contact instants or local visibility claims. The supplied-adapter contract also
+accepts contacts from a source that can provide them, without solving contacts
+here. Contracts, source limitations, and validation evidence are in
+[docs/eclipses.md](docs/eclipses.md), with checks in
+[test/eclipses.test.ts](test/eclipses.test.ts),
+[test/events-bridge.test.ts](test/events-bridge.test.ts),
+[test/events-loader.test.ts](test/events-loader.test.ts), and
+[test/report.test.ts](test/report.test.ts). The session record is in
+[docs/evidence/m11/checks.txt](docs/evidence/m11/checks.txt).
 
 Factor lists and reports are labelled `traditional conventions, not predictions`.
 This project adds no electional scoring, calendar export, relocation grids,

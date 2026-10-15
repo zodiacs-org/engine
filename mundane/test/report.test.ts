@@ -5,8 +5,8 @@ import * as returns from "../../src/returns.js";
 import { normalizeLongitude } from "../../src/signs.js";
 import * as ingressSearch from "../src/ingresses.js";
 import * as lunationSearch from "../src/lunations.js";
-import { searchIngresses, searchLunations, searchMundaneReport } from "../src/index.js";
-import type { MundaneReportOptions, MundaneRequest } from "../src/index.js";
+import { searchEclipseCharts, searchIngresses, searchLunations, searchMundaneReport } from "../src/index.js";
+import type { EclipseAdapter, MundaneReportOptions, MundaneRequest } from "../src/index.js";
 
 const place = { name: "Synthetic Meridian", latitude: 12.5, longitude: -31.25 };
 const epoch = Date.parse("2000-01-01T00:00:00Z");
@@ -38,13 +38,79 @@ function frozen(value: unknown): void {
   }
 }
 
+describe("explicit eclipse report opt-in", () => {
+  const selection = { place, from: epoch, to: epoch + 90 * DAY };
+  const supplied: EclipseAdapter = { status: "available", search: () => ({
+    status: "complete", evaluations: 17, completeness: "invented contacts;not an astronomical search",
+    provenance: { source: "synthetic report test" }, events: [
+      { eclipseKind: "lunar", contactKind: "penumbral-begin", atMs: epoch + 90 * DAY, clock: "utc", provenance: null },
+      { eclipseKind: "solar", contactKind: "first-contact", atMs: epoch + 90 * DAY, clock: "utc", provenance: null }
+    ]
+  }) };
+
+  it("orders coincident ingresses, lunations, and supplied contacts, retaining analyses and metadata", () => {
+    syntheticMotion();
+    const result = searchMundaneReport(selection, { eclipses: supplied });
+    const component = searchEclipseCharts(selection, supplied);
+    expect(result.status).toBe("complete");
+    expect(result.events.slice(-4).map(event => event.kind)).toEqual(["solar-ingress", "lunation", "eclipse", "eclipse"]);
+    expect(result.events.filter(event => event.kind === "eclipse")).toEqual(component.eclipses);
+    expect(result.searches.eclipses).toMatchObject({ status: "complete", evaluations: 17,
+      completeness: "invented contacts;not an astronomical search", provenance: { source: "synthetic report test" } });
+    expect(result.searches.eclipses).not.toHaveProperty("eclipses");
+    expect(result.search.ordering).toBe("instant;ingress-before-lunation-before-eclipse;target-or-source-order");
+    expect(result.search.completeness).toBe("component-searches;see-searches");
+    expect(JSON.parse(JSON.stringify(result))).toEqual(result);
+    frozen(result);
+  });
+
+  it.each(["not-installed", "unsupported-api"] as const)("refuses the report if a requested adapter is %s", reason => {
+    syntheticMotion();
+    const result = searchMundaneReport(selection, { eclipses: { status: "unavailable", reason } });
+    expect(result).toMatchObject({ status: "refused", reason: "eclipse-adapter-unavailable", events: [],
+      searches: { ingresses: { status: "complete" }, lunations: { status: "complete" },
+        eclipses: { status: "unavailable", reason } } });
+    frozen(result);
+  });
+
+  it.each(["evaluation-budget", "cancelled"] as const)("preserves eclipse refusal %s without partial report events", reason => {
+    syntheticMotion();
+    const result = searchMundaneReport(selection, { eclipses: { status: "available", search: () => ({
+      status: "refused", reason, events: [], evaluations: 9, completeness: "interrupted source search", provenance: null
+    }) } });
+    expect(result).toMatchObject({ status: "refused", reason, events: [],
+      searches: { eclipses: { status: "refused", reason, evaluations: 9 } } });
+  });
+
+  it("keeps sample-budget priority when a component and the optional source both refuse", () => {
+    syntheticMotion();
+    expect(searchMundaneReport(selection, { ingressMaxSamples: 1,
+      eclipses: { status: "unavailable", reason: "not-installed" } }))
+      .toMatchObject({ status: "refused", reason: "sample-budget", events: [],
+        searches: { eclipses: { status: "unavailable" } } });
+  });
+
+  it("keeps omitted eclipses out of default report metadata", () => {
+    syntheticMotion();
+    expect(searchMundaneReport(selection).searches).not.toHaveProperty("eclipses");
+  });
+
+  it("validates adapter selection before either component runs", () => {
+    const ingress = vi.spyOn(ingressSearch, "searchIngresses");
+    const lunation = vi.spyOn(lunationSearch, "searchLunations");
+    expect(() => searchMundaneReport(selection, { eclipses: {} as EclipseAdapter })).toThrow(RangeError);
+    expect(ingress).not.toHaveBeenCalled();
+    expect(lunation).not.toHaveBeenCalled();
+  });
+});
+
 describe("combined reports with hand-derived motion", () => {
   it("orders different kinds chronologically and retains coincident events deterministically", () => {
     syntheticMotion();
     const result = searchMundaneReport({ place, from: epoch, to: epoch + 105 * DAY });
     expect(result.status).toBe("complete");
     expect(result.events.map(event => [event.kind, event.at,
-      event.kind === "solar-ingress" ? event.sign : event.phase])).toEqual([
+      event.kind === "solar-ingress" ? event.sign : event.kind === "lunation" ? event.phase : event.contactKind])).toEqual([
       ["lunation", atDay(15), "full"], ["lunation", atDay(30), "new"],
       ["lunation", atDay(45), "full"], ["lunation", atDay(60), "new"],
       ["lunation", atDay(75), "full"], ["solar-ingress", atDay(90), "Cancer"],
@@ -110,7 +176,8 @@ describe("combined reports with hand-derived motion", () => {
       ])
     }));
     const result = searchMundaneReport(selection);
-    expect(result.events.map(event => event.kind === "solar-ingress" ? event.sign : event.phase))
+    expect(result.events.map(event => event.kind === "solar-ingress" ? event.sign :
+      event.kind === "lunation" ? event.phase : event.contactKind))
       .toEqual(["Cancer", "Capricorn", "new", "full"]);
   });
 
