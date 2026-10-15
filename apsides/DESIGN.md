@@ -3,7 +3,8 @@
 M1 provides the geometric distance sampler and its integration contracts.
 M2 adds independent development references and reserves held-out windows.
 M3 implements a pure scalar distance solver with synthetic mathematical
-tests. Astronomical window searches, syzygy annotations and the CLI remain
+tests. M4 adds the lunar window search and compares it with the development
+Moon fixture. Planetary searches, syzygy annotations and the CLI remain
 planned in [PLAN.md](PLAN.md).
 
 The intended result is a chronological list of local distance extrema in a
@@ -106,7 +107,7 @@ A finite grid cannot prove those assumptions, detect every hidden turn,
 or establish coverage near its outer edges. The scalar solver does not
 resolve civil times, choose a planetary sampling policy, deduplicate
 overlapping astronomical detections, or apply window boundary ownership.
-Those responsibilities remain in the following milestones.
+The lunar wrapper below handles these responsibilities for the Moon.
 
 `test/solver.vitest.ts` and `test/solver-edge.vitest.ts` use analytic
 polynomials and periodic curves, plus flat and rounded curves, to check
@@ -114,7 +115,87 @@ these contracts. The former enforces the registered one-second interval
 target on a synthetic parabola sampled at day-sized intervals. Neither
 file measures astronomical accuracy or reads held-out reference values.
 
-## Planned astronomical search method
+## Lunar window search implemented in M4
+
+`searchLunarApsides({ from, to, maxEvaluations? })` resolves each endpoint
+through `sampleDistance` and searches geocentric geometric lunar distance.
+Its `complete` result has `window`, `events` and `diagnostics`. Each event
+has `body: "Moon"`, `kind: "perigee" | "apogee"`, the distance sampler's
+instant, units, speeds, bounds and engine receipt, and `refinement` with
+the original bracket and final strict outer witnesses. Witness times are
+TT Julian dates and their distances are in kilometres. Wider speed probes
+and the final shared event schema remain M7 work.
+
+The fixed policy in `LUNAR_SEARCH_POLICY` uses a TT grid anchored at
+JD 2451545, spaced by 43,200 seconds. The grid begins two nodes before
+the node at or before `from`, and ends two nodes after the node at or
+after `to`. These are implementation choices enforced by
+`test/lunar.vitest.ts`, not a proven lower bound on separation between
+physical extrema. Two outside nodes allow a turn close to either edge
+to have the same neighboring witnesses as in a larger window, including
+when equal adjacent distances require a midpoint probe. The M3 solver
+refines the resulting brackets to an interval no wider than 1 second.
+The wrapper also checks the width and strict enclosure after conversion
+to the engine's TT Julian dates.
+
+All internal samples use `{ jd, scale: "tt" }`. UTC leap seconds and model
+seams in endpoint labels therefore do not become jumps in the independent
+search coordinate. The window retains both original endpoint receipts.
+An endpoint's optional `deltaT` pin resolves that endpoint to TT; it is
+not applied to interior samples or event civil labels. Those labels use
+the engine's normal time basis, including its qualified UTC rendering
+outside the IERS table. No civil label is a substitute for the event's
+reported `instant.jdTt` when deciding boundary ownership.
+
+Grid coordinates and refinement arithmetic are independent of the caller's
+window edges. Events are kept exactly when `from.jdTt < instant.jdTt <=
+to.jdTt`, using the resolved endpoints and reported event coordinate,
+without an epsilon or rounding to civil seconds. This owns a numerical
+estimate, not the unknown physical event time. Partitioning at an event's
+reported TT coordinate assigns it only to the left window. Tests compare
+the complete event records for adjacent windows and their union, including
+cuts at the closest representable JDs on either side of an event. Equal
+resolved endpoints form an empty window and need no padded grid. Reversed
+resolved endpoints throw `RangeError`.
+
+The wrapper caches internal samples by the exact TT JD passed to the
+engine. Repeated canonical bracket identities are retained once. Distinct
+detections with overlapping final intervals refuse as `overlapping-extrema`;
+there is no proximity threshold that could merge distinct physical events.
+Events are chronological. The input instants and returned receipts are
+kept separate from the internal cache, because finite-difference speeds
+and receipt labels can depend on the input scale.
+
+`maxEvaluations` caps actual `sampleDistance` calls, including endpoint
+resolution, padded samples and refinement. Its default is 100,000;
+`test/lunar.vitest.ts` enforces the policy and exact-budget behavior.
+The grid is checked against the remaining budget before allocating or
+evaluating it. Cached event samples and witnesses add no calls. This is
+a count of engine API calls, not of the ephemeris evaluations inside one
+engine call. Exhaustion refuses as `evaluation-budget` with `events: []`.
+Endpoint engine refusals are preserved under `engine-refusal`, unavailable
+padded samples under `edge-coverage`, with the original refusal attached.
+Numerical solver refusals also discard all events. Even a problematic
+candidate in the padding can refuse the entire search; the code does not
+silently truncate those calculations. Unexpected engine exceptions propagate.
+Option shape and budget validation precede sampling; time validation is
+delegated to the engine as each endpoint is evaluated, so an earlier
+refusal can prevent validation of a later endpoint.
+
+`diagnostics.completeness: "sampled-not-proven"` applies to every result.
+Completion states that the selected grid and all detected candidates were
+processed. A smooth distance curve with one unimodal turn per bracket is
+still an assumption, and hidden sub-grid extrema remain possible.
+The independent M4 test compares all events with the frozen
+`dev-moon-2000` Horizons DE441 fixture, 2000-01-01 to 2000-02-01 TT,
+and passes the preregistered Moon limits below, including no missing or
+extra fixture events. It also compares distance, radial speed and total
+speed at the reference's before/at/after TT samples. This is development
+evidence only; it does not prove completeness or validate other lunar
+windows. `test/lunar-reference.vitest.ts` enforces these comparisons.
+Held-out windows remain reserved for M10.
+
+## Shared astronomical search method
 
 Search on a continuous TT coordinate after resolving the input instants
 through the engine. Interpolate TT, not civil dates: changes in UTC offsets
@@ -190,7 +271,9 @@ Horizons corpus are:
 The numerical refinement interval target is 1 second. The registration
 also specifies signed radial-speed and total-speed limits in km/s. All
 these values are enforced as configuration in `test/references.vitest.ts`;
-engine agreement with them remains unmeasured. They apply to the exact TT
+M4 additionally enforces engine agreement for the Moon's development case
+in `test/lunar-reference.vitest.ts`; planetary and held-out agreement
+remain unmeasured. The budgets apply to the exact TT
 windows and centers in the registration, without a physical-uncertainty
 claim for the reference ephemeris.
 
