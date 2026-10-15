@@ -1,18 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import * as limbs from "../src/limbs.js";
 import * as crossings from "../../src/crossings.js";
-import { nakshatraOf } from "../../src/vedic/nakshatra.js";
-import { declareSiderealLongitude } from "../../src/vedic/sidereal.js";
 import {
   LIMB_KINDS, TRANSITION_CONVENTIONS, luminarySnapshot, resolveSunriseDay, searchLimbTransitions
 } from "../src/index.js";
 import type { LimbKind, LimbTransitions, TransitionOptions, TransitionResult } from "../src/index.js";
 import { limbIndex } from "../src/transitions.js";
+import { analyticalSource, DAY, EPOCH, iso, root, UNIT } from "./analytical.js";
 
-const EPOCH = Date.parse("2024-03-20T00:00:00Z");
-const UNIT = 2 ** 26;
-const DAY = 86_400_000;
-const iso = (offset: number) => new Date(EPOCH + offset).toISOString();
 function ok(result: TransitionResult): LimbTransitions {
   if (result.status !== "ok") throw new Error(result.reason);
   return result;
@@ -23,43 +18,6 @@ function refused(result: TransitionResult, reason: string): void {
 }
 afterEach(() => vi.restoreAllMocks());
 
-// Independently prescribed linear coordinates, unrelated to the ephemeris:
-// Sun=t/U, Moon=13t/U degrees, U=2^26 ms. Binary coordinates are dyadic.
-// The seed supplies test-only receipt shapes. These mock snapshots are not
-// published ephemeris outputs and their copied receipts certify no positions.
-function analyticalSource(direction = 1, freezeYoga = false): void {
-  const seed = luminarySnapshot(iso(0));
-  if (seed.status !== "ok") throw new Error("Expected seed coverage");
-  const wrap = (angle: number) => ((angle % 360) + 360) % 360;
-  vi.spyOn(limbs, "instantaneousPanchang").mockImplementation((at) => {
-    const utc = (at as Date).toISOString();
-    const t = direction * ((at as Date).getTime() - EPOCH) / UNIT;
-    const sun = wrap(t);
-    const moon = wrap(13 * t);
-    const a = declareSiderealLongitude(freezeYoga ? 0 : sun, { ayanamsa: "lahiri", at: utc });
-    const b = declareSiderealLongitude(freezeYoga ? 0 : moon, { ayanamsa: "lahiri", at: utc });
-    return {
-      ...seed, utc,
-      sun: { tropical: { ...seed.sun.tropical, lon: sun }, sidereal: { ...seed.sun.sidereal, lon: a.lon } },
-      moon: { tropical: { ...seed.moon.tropical, lon: moon }, sidereal: { ...seed.moon.sidereal, lon: b.lon } },
-      nakshatra: nakshatraOf(b), tithi: limbs.tithiOf(sun, moon), karana: limbs.karanaOf(sun, moon),
-      yoga: limbs.yogaOf(a, b)
-    };
-  });
-}
-
-// Expected times are rational multiples of U, solved by hand. Rounding is
-// ceiling because the new sector owns the boundary at whole milliseconds.
-const period: Record<LimbKind, readonly [bigint, bigint]> = {
-  tithi: [BigInt(UNIT), 1n], karana: [BigInt(UNIT), 2n],
-  nakshatra: [40n * BigInt(UNIT), 39n], pada: [10n * BigInt(UNIT), 39n],
-  yoga: [20n * BigInt(UNIT), 21n]
-};
-function root(kind: LimbKind, multiple: number): number {
-  const [numerator, denominator] = period[kind];
-  const value = BigInt(multiple) * numerator;
-  return Number(value >= 0n ? (value + denominator - 1n) / denominator : value / denominator);
-}
 const compare = (a: { at: string; kind: LimbKind }, b: { at: string; kind: LimbKind }) =>
   Date.parse(a.at) - Date.parse(b.at) || LIMB_KINDS.indexOf(a.kind) - LIMB_KINDS.indexOf(b.kind);
 

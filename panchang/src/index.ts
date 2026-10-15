@@ -27,3 +27,5 @@ export { LIMB_KINDS, TRANSITION_CONVENTIONS, searchLimbTransitions } from "./tra
 export type {
   LimbInterval, LimbKind, LimbTransition, LimbTransitions, TransitionOptions, TransitionRefusal, TransitionResult
 } from "./transitions.js";
+export { DAY_CONVENTIONS, panchangDay } from "./day.js";
+export type { PanchangDay, PanchangDayOptions, PanchangDayRefusal, PanchangDayResult, PanchangSegment } from "./day.js";

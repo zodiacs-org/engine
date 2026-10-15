@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import {
-  instantaneousPanchang, luminarySnapshot, prepareCivilDay, prepareSunriseDay,
+  instantaneousPanchang, luminarySnapshot, panchangDay, prepareCivilDay, prepareSunriseDay,
   resolveCivilDay, resolveSunriseDay, searchLimbTransitions
 } from "../src/index.js";
 
@@ -54,3 +54,19 @@ for (const interval of transitions.intervals) {
   assert.equal(interval.end.after.moon.sidereal.receipt.engine.ephemeris.version, "2.1.19");
 }
 console.log("Source runtime finds limb transitions with full intervals and original engine receipts.");
+
+const day = panchangDay(input);
+if (day.status !== "ok") throw new Error(day.reason);
+assert.equal(day.sunriseState.utc, day.sunrise.start.utc);
+assert.deepEqual(day.sunriseState, day.timeline.startState);
+assert.equal(day.segments[0]!.start, day.sunrise.start.utc);
+assert.equal(day.segments.at(-1)!.end, day.sunrise.end.utc);
+for (const [index, segment] of day.segments.entries()) {
+  if (index > 0) assert.equal(segment.start, day.segments[index - 1]!.end);
+  assert(Date.parse(segment.end) > Date.parse(segment.start));
+  assert.equal(segment.vara, day.sunrise.vara);
+  assert(day.timeline.intervals.includes(segment.intervals.tithi));
+  assert.equal(segment.intervals.tithi.start.after.ayanamsa.name, day.ayanamsa);
+  assert.equal(segment.intervals.tithi.end.after.moon.sidereal.receipt.engine.ephemeris.version, "2.1.19");
+}
+console.log("Source runtime assembles chronological day segments with full limb boundaries and engine receipts.");
