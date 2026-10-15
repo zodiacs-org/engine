@@ -26,3 +26,10 @@ export { LUNATION_PHASES, searchLunations } from "./lunations.js";
 export type { LunationSearchOptions, Lunation, LunationSearchResult } from "./lunations.js";
 export { searchMundaneReport } from "./report.js";
 export type { MundaneReportOptions, MundaneEvent, MundaneReportResult } from "./report.js";
+export { searchEclipseCharts } from "./eclipses.js";
+export type { EclipseChart, EclipseChartSearchResult } from "./eclipses.js";
+export type {
+  EclipseMetadata, EclipseWindow, SuppliedEclipseInstant, SuppliedEclipseSearch, EclipseAdapter
+} from "./eclipse-adapter.js";
+export { createEventsEclipseAdapter } from "./events-bridge.js";
+export type { EventsEclipseSettings } from "./events-bridge.js";
