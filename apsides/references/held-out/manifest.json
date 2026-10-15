@@ -1,0 +1,50 @@
+{
+  "schema": "apsides-reference-manifest/1",
+  "planSha256": "258cb2831f5d762dc59857d748fe4100aabee03e7203807be7f085566461ccf6",
+  "fixtures": [
+    {
+      "path": "held-out/held-moon-2024.json",
+      "sha256": "98d7bcdd78efcc5d3cfabb5c40b79b74980ec6a7ca825d3584f998f483cc45fc"
+    },
+    {
+      "path": "held-out/held-mercury-2024.json",
+      "sha256": "387fab92f55f89f1cfc7a7e47e1f5aa82ba14a0f2ce08b4f02989f34627fe5e2"
+    },
+    {
+      "path": "held-out/held-venus-2024.json",
+      "sha256": "765d732d36344e4f984ed65a20291930d10adbb8a222a60ee9c85579e97b5b3c"
+    },
+    {
+      "path": "held-out/held-earth-2024.json",
+      "sha256": "6bb3b606f88be6daa4f26b02e5fe52aeacda258bc544e7c7a6e7662a5cb5ac5f"
+    },
+    {
+      "path": "held-out/held-mars-2024.json",
+      "sha256": "ba91d445a1a9c90b3159b6253311901b880372c6f0adb05559b1f6a248d5651c"
+    },
+    {
+      "path": "held-out/held-jupiter-2030.json",
+      "sha256": "8fe9cce374daf53a6ab35c3e9892090c124d093ba37779224b1ace2e484f1e93"
+    },
+    {
+      "path": "held-out/held-saturn-2020.json",
+      "sha256": "9f3d9004b5e1f518bd127000d7d065937eed60883b2c2ecda9cc023df31bdae3"
+    },
+    {
+      "path": "held-out/held-uranus-2000.json",
+      "sha256": "1e4a0ee7dfce3dbda86a260083c172a380ff673cc7cc39ac62fb8927f987d3b9"
+    },
+    {
+      "path": "held-out/held-neptune-2005.json",
+      "sha256": "5ce8f19c9c02436d1f7852eb36048ab031a00e65282df31d46f12479c0605277"
+    },
+    {
+      "path": "held-out/held-pluto-1900.json",
+      "sha256": "b45d24699330325e12f1a9c212e29f3e75e7b7829eadbccfb4672442225eff35"
+    }
+  ],
+  "physicalCenters": {
+    "path": "held-out/physical-centers.json",
+    "sha256": "3c064fd7e8f70f5986afe6ab3300c9fb74359fa779e795d75f497541aae3bd88"
+  }
+}
