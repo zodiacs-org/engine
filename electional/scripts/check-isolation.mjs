@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync, lstatSync } from 'node:fs';
 import { relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -36,5 +36,21 @@ assert(paths.some((path) => relative(parent, path).startsWith(`src${sep}`)
 assert(!paths.some((path) => path.startsWith(project)),
   'The parent test runner must not discover workbench tests.');
 
+// Enforce the owner constraints on carryable workbench files. Dependencies,
+// generated data and build/cache output are explicitly gitignored locally.
+const ignored = new Set(['node_modules', 'build', 'generated', '.cache', 'coverage']);
+function checkFiles(directory) {
+  for (const name of readdirSync(directory)) {
+    if (ignored.has(name) || name.endsWith('.tsbuildinfo')) continue;
+    const path = resolve(directory, name), stat = lstatSync(path);
+    if (stat.isDirectory()) { checkFiles(path); continue; }
+    assert(stat.isFile(), 'Carryable workbench files must be regular files.');
+    assert(stat.size < 2000000, `Workbench file exceeds the owner byte cap: ${relative(project, path)}`);
+    if (name.endsWith('.md')) assert(!readFileSync(path, 'utf8').includes('\u2014'),
+      `Documentation contains an em dash: ${relative(project, path)}`);
+  }
+}
+checkFiles(project);
 console.log('Isolation passed: npm excludes electional/ and parent Vitest discovers no workbench tests.');
+console.log('Carryable workbench files fit the owner byte cap and Markdown contains no em dashes.');
 console.log('This checks file selection and test discovery, not parent build, size budgets or archive binding.');

@@ -1,0 +1,18 @@
+{
+  "arbiter": "Hand-derived recurring half-open interval logic, no astronomical ephemeris",
+  "start": "2000-01-01T00:00:00Z",
+  "end": "2001-01-01T00:00:00Z",
+  "periodMs": 86400000,
+  "periods": 366,
+  "requiredSatisfied": [[0, 43200000]],
+  "preferredSatisfied": [[0, 21600000], [32400000, 64800000]],
+  "preferredUnknown": [[21600000, 32400000]],
+  "cells": [
+    { "span": [0, 21600000], "states": ["satisfied", "satisfied"] },
+    { "span": [21600000, 32400000], "states": ["satisfied", "unresolved"] },
+    { "span": [32400000, 43200000], "states": ["satisfied", "satisfied"] },
+    { "span": [43200000, 64800000], "states": ["failed", "satisfied"] },
+    { "span": [64800000, 86400000], "states": ["failed", "failed"] }
+  ],
+  "derivation": "The Gregorian year 2000 is divisible by 400 and has 366 elapsed UTC days. Repeat the required set [0,12h), the preferred sets [0,6h) and [9h,18h), and the preferred unknown [6h,9h) every 24 elapsed hours. Partition each day at 0h,6h,9h,12h,18h,24h. Required failures cover [12h,24h); unknown preference never changes the required intersection. These are synthetic sets supplied to the coordinator, not Moon calculations."
+}

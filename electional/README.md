@@ -9,6 +9,10 @@ no predictions and do not recommend dates.
 Progress is tracked in [PLAN.md](PLAN.md). The rule evaluators cover Moon sign,
 phase, direct motion, Moon-not-void, planetary hours, benefic houses and angles,
 applying aspects, eclipse/station margins and synthetic natal synastry.
+[EXAMPLES.md](EXAMPLES.md) provides executable library, CLI and local HTTP
+examples, including a synthetic monthly range and a full condition document.
+[VERIFICATION.md](VERIFICATION.md) describes the current evidence and remaining
+uncertainty, with skipped optional native comparisons recorded explicitly.
 [CONDITIONS.md](CONDITIONS.md) describes factual composition and audit receipts.
 [STREAMING.md](STREAMING.md) describes bounded work and seam continuation.
 The CLI and editable conditions-to-check packs are in [CLI.md](CLI.md) and
@@ -57,6 +61,8 @@ pattern. Generated data, caches and coverage stay in gitignored directories.
 The parent npm package's file list excludes this workbench.
 `check:isolation` verifies that exclusion using npm's actual dry-run selection
 and verifies parent Vitest discovery without collecting or executing its tests.
+It also enforces the owner byte cap on carryable workbench files and the
+Markdown punctuation rule.
 It skips the parent build hook and creates no archive. It does not replace the
 engine's package-content budgets or archive-binding gates, which require the
 parent build and release history.

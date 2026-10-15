@@ -17,7 +17,7 @@ writes inside `electional/`. Git changes are handled by the harness.
 - [x] M11 Stream chronological factual condition windows over long ranges with bounded work, cancellation, chunk lookahead and seam reconciliation; preserve required failures and unknowns.
 - [x] M12 Add a facts-only CLI for JSON/YAML rule files and neutral launch, contract-signing and travel conditions-to-check packs, documented as traditional conventions.
 - [x] M13 Add a small bounded facts-only HTTP condition endpoint with validation, deadlines, cancellation and transport tests; isolate optional numeric scoring behind explicit internal/pro opt-in, with no ranking or consumer scoring.
-- [ ] M14 Finish executable synthetic condition examples, independent reference/evidence records, long-range checks and package-isolation verification; verify neutral chronological defaults without scores or ranks and document remaining uncertainty.
+- [x] M14 Finish executable synthetic condition examples, independent reference/evidence records, long-range checks and package-isolation verification; verify neutral chronological defaults without scores or ranks and document remaining uncertainty.
 
 ## Final scope
 
