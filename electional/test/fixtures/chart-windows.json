@@ -1,0 +1,32 @@
+{
+  "arbiter": "Hand-derived half-open integer sets and exact linear longitudes; no astronomical output",
+  "domain": [0, 30],
+  "angular": {
+    "derivation": "Ascendant is 0. Venus is 10-t and Jupiter is 20-t degrees modulo 360. Inclusive orb 5 admits Venus at integer labels 5 through 15 and Jupiter 15 through 25. Any is their union; all is their intersection.",
+    "cases": [
+      { "match": "any", "satisfied": [[5, 26]], "failed": [[0, 5], [26, 30]] },
+      { "match": "all", "satisfied": [[15, 16]], "failed": [[0, 15], [16, 30]] }
+    ]
+  },
+  "applying": {
+    "derivation": "Moon is 50+t degrees, Sun is 60, Mercury is 65. Moon moves positively and targets are fixed. For conjunction orb 5 the Moon applies to Sun at integer labels 5 through 9, and Mercury 10 through 14. Exact contacts at 10 and 15 separate. Any is their union; all is empty.",
+    "cases": [
+      { "match": "any", "satisfied": [[5, 15]], "failed": [[0, 5], [15, 30]] },
+      { "match": "all", "satisfied": [], "failed": [[0, 30]] }
+    ]
+  },
+  "houses": {
+    "derivation": "Canned native cells [0,4), [4,7), [7,10) assign Venus/Jupiter houses (1,2), (3,1), (1,1). The last cell is a whole-sign fallback from requested Placidus. Rejecting fallback leaves it unknown. Allowing it uses its declared membership.",
+    "cells": [
+      { "range": [0, 4], "system": "placidus", "Venus": 1, "Jupiter": 2 },
+      { "range": [4, 7], "system": "placidus", "Venus": 3, "Jupiter": 1 },
+      { "range": [7, 10], "system": "whole", "Venus": 1, "Jupiter": 1 }
+    ],
+    "cases": [
+      { "match": "any", "polarFallback": "allow", "satisfied": [[0, 10]], "failed": [], "unknown": [] },
+      { "match": "all", "polarFallback": "allow", "satisfied": [[7, 10]], "failed": [[0, 7]], "unknown": [] },
+      { "match": "any", "polarFallback": "reject", "satisfied": [[0, 7]], "failed": [], "unknown": [[7, 10]] },
+      { "match": "all", "polarFallback": "reject", "satisfied": [], "failed": [[0, 7]], "unknown": [[7, 10]] }
+    ]
+  }
+}

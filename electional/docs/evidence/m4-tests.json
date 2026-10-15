@@ -1,0 +1,28 @@
+{
+  "schema": "electional-m4-test-record/v1",
+  "runtime": "v22.22.2",
+  "startedAt": "2026-10-14T03:45:43.496Z",
+  "command": "npm test -- --reporter=default --reporter=json --outputFile=generated/m4-vitest.json",
+  "tests": {
+    "passed": 180,
+    "failed": 0,
+    "skipped": 0
+  },
+  "nativeHorizonsComparisons": {
+    "passed": 6,
+    "skipped": 0,
+    "eventsEntrySha256": "6f887bdc34bc68202cd7e8856f68a5c62df3329fbe4a955b3b7eb0e3a3a749d5"
+  },
+  "sha256": {
+    "references/cases.json": "b0f4536378d6994eb315967baf9a27ffc473987935e42687552852bed618f7cc",
+    "references/horizons.json": "df42cf3e19e2810c28bcccf8eb7de085dbb73ee92f574b6554f8f8bd91f868d2",
+    "scripts/horizons.mjs": "6aefef5ee323c6065ef30ef7f16978dd7172b4be2b8472e8699371a5dbe1a2c9",
+    "src/basic-rules.ts": "39638fb9eb37b8a8fd1c6b3ebb8d296482377942e00a04dddf9ec47f093ab649",
+    "src/events-adapter.ts": "42ddac3ddfef7512077736e93e8f1f59dbb335eaea1bc453bbda497364fc22e3",
+    "test/fixtures/basic-windows.json": "217b84facb891f77cc25cda9545ca4aca1d103288b61fb6431ae549dcc003b9c",
+    "test/basic-rules.electional-check.ts": "1bed3909c951d5681ce5424396a317d0976637e57223e6d9b275a65446bb9755",
+    "test/references.electional-check.ts": "d90825e404b38c01d3c964c215b67952739329ead2db2d6671084c0792e3109e",
+    "package-lock.json": "048e2eb7352f7b829e968173e821e4da617dddf15b23eab83e06df0a6009367d"
+  },
+  "scope": "Hand-derived set behavior and Horizons dates over references/cases.json only; no completeness or physical error-bound claim."
+}

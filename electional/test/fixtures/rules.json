@@ -1,0 +1,32 @@
+{
+  "arbiter": "Hand-derived configuration and Gregorian calendar logic; no astronomical values.",
+  "derivation": "1970-01-01 UTC is epoch zero. From 1970 to 2000 there are 30 * 365 + 7 leap days = 10957 days. Each epoch day has 86400000 milliseconds. The explicit +01:00 offset is subtracted from the local label. The end is one epoch day after the start.",
+  "expectedDomain": { "startMs": 946684800000, "endMs": 946771200000 },
+  "request": {
+    "schemaVersion": "electional/v1",
+    "activity": "Synthetic configuration exercise",
+    "location": { "latitude": 10, "longitude": 20 },
+    "range": { "start": "2000-01-01T01:00:00+01:00", "end": "2000-01-02T00:00:00Z", "clock": "utc" },
+    "houseSystem": "whole",
+    "natal": {
+      "synthetic": true,
+      "instant": "1990-06-15T12:30:00Z",
+      "clock": "utc",
+      "location": { "latitude": 10, "longitude": 20 },
+      "houseSystem": "whole"
+    },
+    "rules": [
+      { "id": "not-void", "kind": "moon-not-void", "mode": "require", "options": { "bodies": "traditional" } },
+      { "id": "direct", "kind": "direct-motion", "mode": "require", "options": { "bodies": ["Mercury", "Venus"] } },
+      { "id": "sign", "kind": "moon-sign", "mode": "prefer", "weight": 2, "options": { "signs": ["taurus", "cancer"] } },
+      { "id": "phase", "kind": "moon-phase", "mode": "prefer", "weight": 1, "options": { "phases": ["Waxing Crescent", "Waxing Gibbous"] } },
+      { "id": "hour", "kind": "planetary-hour", "mode": "prefer", "weight": 1, "options": { "rulers": ["Mercury"], "utcOffsetMinutes": 80 } },
+      { "id": "houses", "kind": "benefic-house", "mode": "prefer", "weight": 2, "options": { "bodies": ["Venus", "Jupiter"], "houses": [1, 10], "match": "any", "polarFallback": "reject" } },
+      { "id": "angles", "kind": "benefic-angular", "mode": "prefer", "weight": 2, "options": { "bodies": ["Jupiter"], "angles": ["ascendant", "midheaven"], "maxOrbDegrees": 5, "match": "any" } },
+      { "id": "applying", "kind": "applying-aspect", "mode": "prefer", "weight": 2, "options": { "body": "Moon", "targets": ["Venus", "Jupiter"], "aspects": ["sextile", "trine"], "maxOrbDegrees": 3, "match": "any" } },
+      { "id": "eclipse-margin", "kind": "avoid-eclipses", "mode": "require", "options": { "kinds": ["solar", "lunar"], "withinDays": 2 } },
+      { "id": "station-margin", "kind": "avoid-stations", "mode": "require", "options": { "bodies": ["Mercury", "Venus"], "withinDays": 1.5 } },
+      { "id": "natal-contact", "kind": "synastry-aspect", "mode": "prefer", "weight": 1, "options": { "movingBodies": ["Venus"], "natalBodies": ["Moon"], "aspects": ["trine"], "maxOrbDegrees": 3, "match": "any" } }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "arbiter": "Hand-derived integer-label membership in inclusive conjunction orbs; no sky values.",
+  "domain": [0, 30],
+  "equations": "Moving Moon = 50+t, Venus = 55+t degrees modulo 360. Fixed natal Sun = 60, Jupiter = 65. Inclusive orb = 5 degrees. All labels are invented milliseconds and coordinates; speeds are irrelevant.",
+  "pairs": [
+    { "moving": "Moon", "natal": "Sun", "satisfied": [[5, 16]] },
+    { "moving": "Moon", "natal": "Jupiter", "satisfied": [[10, 21]] },
+    { "moving": "Venus", "natal": "Sun", "satisfied": [[0, 11]] },
+    { "moving": "Venus", "natal": "Jupiter", "satisfied": [[5, 16]] }
+  ],
+  "cases": [
+    { "match": "any", "satisfied": [[0, 21]], "failed": [[21, 30]], "derivation": "Union of the four pair sets." },
+    { "match": "all", "satisfied": [[10, 11]], "failed": [[0, 10], [11, 30]], "derivation": "Intersection of every pair, including both inclusive endpoints at t=10." }
+  ],
+  "zeroOrb": { "satisfied": [[5, 6], [10, 11], [15, 16]], "derivation": "A contact is an eligible singleton integer label, independent of applying or separating motion." },
+  "uncertain": { "unknown": [[0, 2], [4, 7], [9, 12], [14, 17], [19, 22]], "satisfied": [[2, 4], [7, 9], [12, 14], [17, 19]], "derivation": "Expand each canned root bracket to [root-1,root+1] inclusive, clip, then subtract from the any-pair set." }
+}

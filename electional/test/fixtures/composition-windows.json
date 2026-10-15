@@ -1,0 +1,26 @@
+{
+  "arbiter": "Hand-derived half-open sets and optional numeric addition of declared weights, no astronomical ephemeris",
+  "domain": {"startMs": 0, "endMs": 100, "clock": "utc"},
+  "rules": [
+    {"id": "hard-a", "mode": "require", "satisfied": [[10, 90]], "unknown": []},
+    {"id": "hard-b", "mode": "require", "satisfied": [[0, 40], [50, 100]], "unknown": [[40, 50]]},
+    {"id": "preference-a", "mode": "prefer", "weight": 7, "satisfied": [[20, 60]], "unknown": [[60, 70]]},
+    {"id": "preference-b", "mode": "prefer", "weight": 3, "satisfied": [[0, 30], [60, 80]], "unknown": []}
+  ],
+  "eligible": [[10, 40], [50, 90]],
+  "excluded": [[0, 10], [90, 100]],
+  "unresolvedRequired": [[40, 50]],
+  "derivation": "Partition the full domain at each rule state boundary, including required failures and unknowns. Required satisfied intersections form eligible; known failures form excluded; the rest is unresolvedRequired. Chronological windows retain every condition state. Optional numeric reference sums only satisfied preference weights in the lower bound and unknown preference weights in the upper bound. These sums establish arithmetic, not any activity outcome.",
+  "windows": [
+    {"span": [0, 10], "score": [3, 3], "states": ["failed", "satisfied", "failed", "satisfied"]},
+    {"span": [10, 20], "score": [3, 3], "states": ["satisfied", "satisfied", "failed", "satisfied"]},
+    {"span": [20, 30], "score": [10, 10], "states": ["satisfied", "satisfied", "satisfied", "satisfied"]},
+    {"span": [30, 40], "score": [7, 7], "states": ["satisfied", "satisfied", "satisfied", "failed"]},
+    {"span": [40, 50], "score": [7, 7], "states": ["satisfied", "unresolved", "satisfied", "failed"]},
+    {"span": [50, 60], "score": [7, 7], "states": ["satisfied", "satisfied", "satisfied", "failed"]},
+    {"span": [60, 70], "score": [3, 10], "states": ["satisfied", "satisfied", "unresolved", "satisfied"]},
+    {"span": [70, 80], "score": [3, 3], "states": ["satisfied", "satisfied", "failed", "satisfied"]},
+    {"span": [80, 90], "score": [0, 0], "states": ["satisfied", "satisfied", "failed", "failed"]},
+    {"span": [90, 100], "score": [0, 0], "states": ["failed", "satisfied", "failed", "failed"]}
+  ]
+}
