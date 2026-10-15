@@ -162,6 +162,12 @@ Use of these references implies no NASA/JPL endorsement.
 - [crossings source](../src/crossings.ts): existing search conventions for
   half-open windows, bounded evaluations and refusal. Its angular solver
   is not an independent distance-extremum reference.
+- M7's `test/event-records.vitest.ts` checks the serialized event motion
+  records against replay of their original engine requests, including units,
+  TT offsets and unchanged engine bounds. This is an integration check, not
+  independent accuracy evidence. Its inputs use only the registered
+  development windows. The existing Horizons tests remain the independent
+  distance and speed comparisons; no reference fixture or budget changes.
 - M5 also read the pinned `astronomy-engine@2.1.19` implementation installed
   with the carried archive dependency: `esm/astronomy.js`, functions
   `CalcVsop`, `CalcVsopPosVel`, `VsopDeriv` and `HelioState`. For Mercury

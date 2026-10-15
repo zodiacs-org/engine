@@ -74,3 +74,13 @@ checks in `test/window.vitest.ts` and `test/window-failures.vitest.ts`, not
 new independent accuracy measurements. The same development reference
 assertions remain active, including the failing Pluto distances. No
 held-out references were collected or evaluated in M6.
+
+M7 exposes the cached wider distance witnesses and the extremum sample as
+before/at/after motion records. `test/event-records.vitest.ts` checks JSON
+round trips, replay of each decoded engine receipt, reported units and
+offsets, and cached assembly. It uses the registered development windows
+above and the geocentric Moon's `dev-moon-2000` window, 2000-01-01 to
+2000-02-01 TT. These are integration checks and do not extend the independent
+accuracy coverage. The development reference assertions and acceptance
+limits remain unchanged, including the Pluto distance failures. No held-out
+references were collected or evaluated in M7.

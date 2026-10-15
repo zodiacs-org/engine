@@ -30,9 +30,26 @@ export interface TtDistancePoint {
   readonly distanceKm: number;
 }
 
+/** A sampled state using the event's body, center and reference point. */
+export interface ApsisMotionSample extends Omit<DistanceSample, "status" | "target"> {
+  /** Signed TT seconds from the event, computed from the returned Julian dates. */
+  readonly offsetSeconds: number;
+}
+
+export interface ApsisMotion {
+  /** Wider distance witnesses, not the narrow refinement bounds or fixed offsets. */
+  readonly sampling: "canonical-distance-bracket";
+  readonly before: ApsisMotionSample;
+  /** The event sample itself; its reported radial rate is not forced to zero. */
+  readonly at: ApsisMotionSample;
+  readonly after: ApsisMotionSample;
+}
+
 export interface Apsis<B extends ApsisBody, K extends string> extends Omit<DistanceSample, "status"> {
   readonly body: B;
   readonly kind: K;
+  /** Reported engine motion through the extremum, with a receipt per sample. */
+  readonly motion: ApsisMotion;
   /** Numerical witnesses, not an interval bounding the physical ephemeris error. */
   readonly refinement: {
     readonly method: "golden-section-distance" | "bisected-analytic-rate";
@@ -224,7 +241,21 @@ export function searchApsides<B extends ApsisBody, K extends string, P extends S
         lowerKmPerSecond: at(extremum.lower.timeSeconds).radialSpeedKmPerSecond,
         upperKmPerSecond: at(extremum.upper.timeSeconds).radialSpeedKmPerSecond
       } : undefined;
-      candidates.push({ ...sample, body, kind, refinement: {
+      const motionSample = (seconds: number): ApsisMotionSample => {
+        const { status: _status, target: _target, ...measured } = at(seconds);
+        return { ...measured, offsetSeconds: (measured.instant.jdTt - sample.instant.jdTt) * DAY_SECONDS };
+      };
+      // These wider witnesses were already evaluated by the solver. Reuse them
+      // unchanged: no new evaluations, symmetric-offset assumption, or imposed
+      // rate signs. In particular, Pluto's state rate need not vanish at a
+      // scalar-distance extremum. The at sample is not a reference to the event.
+      const motion: ApsisMotion = {
+        sampling: "canonical-distance-bracket",
+        before: motionSample(extremum.bracket[0].timeSeconds),
+        at: motionSample(extremum.sample.timeSeconds),
+        after: motionSample(extremum.bracket[2].timeSeconds)
+      };
+      candidates.push({ ...sample, body, kind, motion, refinement: {
         method, bracket, lower, upper, ...(rateBracket === undefined ? {} : { rateBracket })
       } });
     }

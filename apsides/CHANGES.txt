@@ -4,3 +4,4 @@ apsides: implement the bounded scalar extrema solver with golden-section refinem
 apsides: implement lunar TT window searches with padded canonical sampling, half-open ownership, bounded refusals, engine receipts, and passing independent lunar and package-isolation checks
 apsides: implement heliocentric planetary searches with analytic-rate and scalar-distance refinement, canonical windows, independent development tests, and explicit unresolved Pluto distance validation failures
 apsides: implement combined lunar and planetary windows with canonical TT merging, a shared evaluation budget, coverage and refusal diagnostics, and passing M6 tests while preserving known Pluto validation failures
+apsides: finalize before/at/after motion records with canonical TT offsets, replayable engine receipts, and passing M7 serialization and isolation checks while preserving known Pluto distance failures

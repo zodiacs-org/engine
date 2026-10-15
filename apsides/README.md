@@ -3,9 +3,10 @@
 Private work-in-progress library for geometric orbital distance extrema,
 built on `@zodiacs/engine`. The current milestone provides the distance
 sampler, bounded lunar and heliocentric planetary searches, a combined
-window API, and frozen independent development references. Pluto fails its
-preregistered distance budget, so independent validation is not fully passing. The remaining work,
-including the CLI, is in [PLAN.md](PLAN.md).
+window API, motion probes with replayable receipts, and frozen independent
+development references. Pluto fails its preregistered distance budget, so
+independent validation is not fully passing. The remaining work, including
+the CLI, is in [PLAN.md](PLAN.md).
 
 Use Node 22.22.2 for the local checks, matching this project's initial test
 environment. From this repository:
@@ -64,6 +65,7 @@ if (result.status === "complete") {
   for (const event of result.events) {
     console.log(event.kind, event.instant, event.distanceKm);
     console.log(event.orbitalSpeedKmPerSecond, event.radialSpeedKmPerSecond);
+    console.log(event.motion.before, event.motion.at, event.motion.after);
     console.log(event.receipt);
   }
 } else {
@@ -142,6 +144,23 @@ receipts. Valid endpoints can still refuse if required padding falls
 outside engine coverage. `test/window.vitest.ts` and
 `test/window-failures.vitest.ts` check these contracts; they do not extend
 the independent accuracy coverage.
+
+Every event's `motion` contains the engine's distance, signed radial speed,
+total speed, instant, bounds and receipt before, at and after the extremum.
+The `at` sample repeats the event's top-level measurements. The before and
+after samples use the wider canonical distance-bracket witnesses; their
+`offsetSeconds` values report actual signed TT offsets and can be
+asymmetric. These samples can lie outside the requested window. They reuse
+cached evaluations, preserving the budget and partition behavior.
+
+Radial speeds are reported as computed, including any nonzero value at the
+estimated extremum. Pluto's state rate need not vanish at its scalar
+distance extremum. The engine's `bounds.speed` describes angular-rate
+metadata, not a km/s or event-time error limit. Records round-trip through
+JSON, and each decoded `receipt.request` can be replayed with the engine's
+`calc` API on the same engine and runtime. Receipts describe computations;
+they do not authenticate imported data. `test/event-records.vitest.ts`
+checks these integration contracts over the registered development windows.
 
 The Vitest files use `.vitest.ts` and a local configuration so the root
 test command does not discover a separate project's tests before its local

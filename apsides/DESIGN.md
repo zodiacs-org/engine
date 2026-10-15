@@ -7,7 +7,8 @@ tests. M4 adds the lunar window search and compares it with the development
 Moon fixture. M5 adds heliocentric planetary searches and compares all
 development planetary fixtures. Pluto fails the unchanged distance budget;
 see [VALIDATION.md](VALIDATION.md). M6 combines selected lunar and planetary
-searches under a shared budget. Syzygy annotations and the CLI remain
+searches under a shared budget. M7 adds before/at/after motion records and
+replayable probe receipts. Syzygy annotations and the CLI remain
 planned in [PLAN.md](PLAN.md).
 
 The intended result is a chronological list of local distance extrema in a
@@ -127,8 +128,8 @@ Its `complete` result has `window`, `events` and `diagnostics`. Each event
 has `body: "Moon"`, `kind: "perigee" | "apogee"`, the distance sampler's
 instant, units, speeds, bounds and engine receipt, and `refinement` with
 the original bracket and final strict outer witnesses. Witness times are
-TT Julian dates and their distances are in kilometres. Wider speed probes
-and the final shared event schema remain M7 work.
+TT Julian dates and their distances are in kilometres. M7 exposes the wider
+bracket samples as motion probes, as described below.
 
 The fixed policy in `LUNAR_SEARCH_POLICY` uses a TT grid anchored at
 JD 2451545, spaced by 43,200 seconds. The grid begins two nodes before
@@ -174,9 +175,9 @@ and receipt labels can depend on the input scale.
 resolution, padded samples and refinement. Its default is 100,000;
 `test/lunar.vitest.ts` enforces the policy and exact-budget behavior.
 The grid is checked against the remaining budget before allocating or
-evaluating it. Cached event samples and witnesses add no calls. This is
-a count of engine API calls, not of the ephemeris evaluations inside one
-engine call. Exhaustion refuses as `evaluation-budget` with `events: []`.
+evaluating it. Cached event samples, witnesses and motion records add no calls.
+This is a count of engine API calls, not of the ephemeris evaluations inside
+one engine call. Exhaustion refuses as `evaluation-budget` with `events: []`.
 Endpoint engine refusals are preserved under `engine-refusal`, unavailable
 padded samples under `edge-coverage`, with the original refusal attached.
 Numerical solver refusals also discard all events. Even a problematic
@@ -339,6 +340,65 @@ window, 2000-01-01 to 2000-02-01 TT, and its subwindows. Cuts include event
 estimates, adjacent representable TT coordinates and a grid node. These
 are integration checks against the individual search APIs, not new
 astronomical accuracy evidence. No held-out reference was used in M6.
+
+## Event motion records finalized in M7
+
+Lunar, planetary and combined searches share the same motion record.
+Existing top-level distance, total speed, signed radial speed, instant,
+bounds and receipt all describe the estimated extremum. The added `motion`
+object has `sampling: "canonical-distance-bracket"` and `before`, `at`
+and `after` samples. Each sample contains:
+
+- `instant`, retaining TT, UT1, the qualified civil label and time basis;
+- `distanceAu` and `distanceKm`;
+- `radialSpeedKmPerSecond`, signed positive away from the event's center;
+- `orbitalSpeedKmPerSecond`, the magnitude of velocity relative to that center;
+- `offsetSeconds`, the sample's TT Julian date minus the event's TT Julian
+  date, converted to seconds;
+- `bounds` and the original replayable engine `receipt`.
+
+Every probe uses the event's body, center and reference point. The `at`
+sample has zero offset and duplicates the top-level event measurements.
+The `before` and `after` samples are the existing wider witnesses at
+`refinement.bracket[0]` and `refinement.bracket[2]`. Their offsets need not
+be symmetric, and they can fall outside the requested window. They bracket
+the estimated event, with strictly greater distances for a minimum or
+strictly smaller distances for a maximum. They are distinct from the narrow
+`refinement.lower` and `upper` endpoints and from the original bracket's
+middle sample, which need not be the final estimate for a scalar search.
+
+The wrapper retrieves these samples from the same TT cache used by the
+solver. Motion assembly makes no additional engine calls and does not
+expand required coverage. Probe selection depends on the canonical
+distance bracket, not caller window edges, so full event records remain
+identical when a window is partitioned. The existing evaluation budget and
+refusal contract still apply to acquiring every required sample.
+
+The reported rates are preserved as computed. The event's radial speed is
+not set to zero, and probe signs are not adjusted to match the event kind.
+The Moon's rates use the engine's central differences; Pluto's reported
+state velocity need not be the derivative of its scalar distance model.
+The probe offset describes where a state is sampled, not the engine's
+internal finite-difference step. `bounds.speed` retains the engine's angular
+rate metadata and units; it is not a bound on either speed in km/s or on
+event timing. The independent speed acceptance budgets remain separate.
+
+Results are plain JSON-compatible data. After `JSON.stringify` and
+`JSON.parse`, each probe's `receipt.request` can be passed to the public
+engine `calc` API to repeat that sample on the same installed engine and
+runtime. The `at` sample does not refer back to the event. Receipts record
+engine identity and conventions, but do not authenticate imported values,
+install the original engine, or reproduce the entire search by themselves.
+Retain the request window and numerical policy when reproducing a search.
+
+`test/event-records.vitest.ts` checks the record, unit conversions and
+decoded receipt replay across the registered development windows listed
+in [VALIDATION.md](VALIDATION.md), including its stated lunar window.
+It also checks cached assembly and motion witnesses outside a tiny event
+window. These are integration and serialization checks, not independent
+astronomical accuracy measurements. The existing reference tests continue
+to enforce the original development budgets, including Pluto's failures;
+no held-out case is evaluated in M7.
 
 ## Shared astronomical search method
 
