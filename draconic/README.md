@@ -3,8 +3,9 @@
 This private project adds a draconic chart library and CLI on top of the engine
 in this checkout. See [PLAN.md](PLAN.md) for completed and pending work.
 The current API provides pure rotation and comparison primitives, an engine
-natal adapter, a pure chart transformation and structured natal versus draconic
-comparisons. Receipts and CLI commands are pending milestones.
+natal adapter, a pure chart transformation, structured natal versus draconic
+comparisons and result wrappers with engine natal receipts. CLI commands are
+pending milestones.
 
 Use Node 22 with the standalone tooling:
 
@@ -50,7 +51,7 @@ node metadata. Its input needs only the natal bodies, angles and houses plus
 the selected node. It trusts the caller's selection and chart provenance;
 use `castNatal` for selection on the engine's chart clock. The result is a
 separate derived coordinate object, with no engine receipt or engine-issued
-chart claim. Receipt attachment is a later milestone.
+chart claim. Use the result wrappers below to attach natal provenance.
 
 Each body reports its rotated longitude, unchanged latitude, refreshed sign
 and degree, and a longitude-only house number from the engine's `houseOf`
@@ -122,7 +123,59 @@ they are not copied from a nominal node rotation. The comparison pairs
 positions from one source and does not accept separately computed charts.
 It returns coordinate differences without aspects, interpretation or
 predictions. Mean-node selection retains the natal true-node body labels.
-The comparison does not include receipts; their attachment is pending.
+This low-level comparison does not include receipts. Use `draconicCompare`
+below to attach the engine's natal envelope.
+
+`draconicChart(birth, options?, context?)` casts the natal chart and returns
+`{ natal, conventions, draconic }`. `draconicCompare` takes the same arguments
+and returns `{ natal, conventions, comparison }`. Both use the engine's
+`BirthInput`, the existing node options and an optional `NatalEnvelopeContext`.
+They perform no I/O or runtime discovery. The natal chart is cast once per
+call, with selection and rotation based on that same chart. The integration
+checks in [test/results.test.ts](test/results.test.ts) enforce that behavior
+for default true-node and explicit mean-node selection.
+
+```ts
+import { draconicChart, draconicCompare } from "./src/index.js";
+
+const chartResult = draconicChart(syntheticBirth);
+const compareResult = draconicCompare(syntheticBirth, { node: "mean" });
+```
+
+`natal` is the unchanged engine envelope produced by `createNatalEnvelope`,
+with the original tropical positions, engine and ephemeris identifiers,
+conventions, coverage, flags, time scale, time basis and deltaT. Its receipt
+retains the requested and actual house systems, including fallback or absence.
+It can be serialized and parsed with the engine's receipt codec separately
+from the wrapper. Replaying its natal input still requires the selected node
+choice from this library's `conventions.northNode.kind`.
+
+The separate `conventions` object belongs to this library. It records the
+selected node and natal longitude, its target at the Aries origin, units,
+longitude range, subtraction and wrap rule, binary64 endpoint policy, cusp
+rotation without recasting, unchanged latitude and snapshot scope. The node
+in the derived result and in these conventions is copied independently.
+The engine's receipt covers the natal chart only. It does not cover the
+draconic positions or deltas, and no field of its conventions or coverage is
+rewritten to make such a claim.
+
+Pass `context.sourceInstant` explicitly to retain an original ISO spelling,
+`context.localResolution` for captured local-time context, and
+`context.provenance` for source, artifact or runtime claims. The engine codec
+validates these claims and labels provenance as claimed; neither it nor this
+library authenticates them. Context extensions remain attached only to the
+natal envelope. Omitted context stays unavailable, with a supplied-instant
+reference even for unknown time. The library does not infer a local zone,
+noon convention or artifact identity. Invalid context propagates the engine's
+`NatalEnvelopeError`; invalid birth input or node options throw `RangeError`.
+
+The synthetic integration checks in
+[test/results.test.ts](test/results.test.ts) cover receipt round-tripping,
+time scales with model or pinned deltaT, missing location, unknown time,
+polar fallback, explicit context, invalid claims and independent mutable
+outputs. These checks establish wiring and preservation only. The independent
+rotation and delta references remain the hand-derived cases in
+[test/ARITHMETIC.md](test/ARITHMETIC.md).
 
 The adapter imports the engine's source entry via a relative path. The local
 Vitest alias and TypeScript path mapping resolve its ephemeris dependency from

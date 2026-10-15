@@ -10,7 +10,7 @@ a line to `CHANGES.txt`. Git operations belong to the external harness.
 - [x] M3 Implement the pure chart transformation for bodies, angles and existing house cusps, refresh position annotations, and reuse engine house helpers without recasting rotated houses.
 - [x] M4 Cover absent coordinates, unknown birth time, requested versus computed house systems and polar fallback with synthetic integration tests.
 - [x] M5 Implement structured natal tropical versus draconic comparisons with explicit circular delta units and boundary conventions, without interpretation.
-- [ ] M6 Attach engine natal receipts and separate draconic convention metadata, preserving time basis and provenance without claiming the engine issued a draconic receipt.
+- [x] M6 Attach engine natal receipts and separate draconic convention metadata, preserving time basis and provenance without claiming the engine issued a draconic receipt.
 - [ ] M7 Add the `draconic chart` CLI with strict arguments, synthetic JSON input, explicit mean-node selection, JSON output and useful errors.
 - [ ] M8 Add `draconic compare`, plain text rendering for both commands and CLI subprocess tests covering exit codes and output streams.
 - [ ] M9 Add small synthetic examples and usage documentation for the library and CLI, citing the arithmetic tests for every numerical example and describing scope and limits.
@@ -140,3 +140,29 @@ local Node 22.22.2 runtime. The engine npm dry run with scripts disabled
 excludes `draconic/` and wrote no archive. `npm run package:contents` stops
 at missing `dist/calc.d.ts`; the engine build is absent and was not generated.
 All session changes are inside `draconic/`. M6 is next.
+
+## M6 session verification
+
+Added `draconicChart` and `draconicCompare` result wrappers. Each casts a natal
+chart once, captures its unchanged engine natal envelope, and derives rotated
+positions or deltas from the same chart. Separate library conventions record
+the selected node and its natal longitude, Aries origin, units, rotation and
+endpoint policy, cusp preservation and snapshot scope. The engine receipt
+remains tropical and natal-only. Explicit receipt context preserves original
+instant spelling, local resolution, extensions and claimed provenance through
+the engine codec, without inferring unavailable context or authenticating it.
+
+Synthetic integration checks in `test/results.test.ts` cover both node paths,
+single casting, receipt serialization and replay, time scales, model and pinned
+deltaT, unknown time, absent location, polar fallback, context validation and
+mutation isolation. They check wiring and preservation only; the existing
+hand-derived rotation and delta cases remain the arithmetic references.
+The local README documents the wrappers and the receipt scope.
+
+TypeScript checking and the complete standalone Vitest suite passed on the
+local Node 22.22.2 runtime. The engine npm dry run with scripts disabled
+excludes `draconic/` and wrote no archive. `npm run package:contents` stops at
+missing `dist/calc.d.ts`; the engine build is absent and was not generated.
+Project source, test and documentation files remain below the requested file
+size limit, and the documentation has no em dash characters. All session
+changes are inside `draconic/`. M7 is next.
