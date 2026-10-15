@@ -4,8 +4,8 @@ This checkout-local project is being developed as a library and CLI for
 Arabic lunar mansions (manazil al-qamar) on top of `@zodiacs/engine`.
 [PLAN.md](PLAN.md) records the implementation milestones. The first boundary
 table, pure longitude classifier, mansion-at API, ingress searches and
-range occupancy intervals are available in tropical or explicitly selected
-sidereal coordinates. CLI commands are planned in a later milestone.
+range occupancy intervals and CLI commands are available in tropical or
+explicitly selected sidereal coordinates.
 
 [src/tables.ts](src/tables.ts) exports the immutable `EQUAL28_ARIES_V1`
 table and `getBoundaryTable("equal28-aries-v1")`. Table selection requires
@@ -291,8 +291,61 @@ Dependencies and the lockfile are local to this private project. Engine
 source is imported by relative path. TypeScript and Vitest resolve the
 engine's pinned `astronomy-engine` dependency from this directory, so no
 root dependency installation or root build is needed. Vitest uses the
-engine's ESM dependency entry. Future runtime tooling must use the same
-local dependency resolution.
+engine's ESM dependency entry. The CLI launcher uses the same local
+dependency resolution and compiles the source in memory with the locally
+pinned esbuild. It writes no engine build, archive or generated data.
+
+The checkout-local CLI provides `mansions at` and `mansions range`. Invoke
+it through the local npm script or directly through the bin entry
+`node scripts/mansions.mjs`. These examples use synthetic instants and run
+from `mansions/` after the setup above:
+
+```sh
+npm run --silent mansions -- at 2001-02-03T04:05:06Z --table equal28-aries-v1
+npm run --silent mansions -- range 2001-02-03 2001-02-06 --table equal28-aries-v1 --format json
+node scripts/mansions.mjs at 2001-02-03 --table equal28-aries-v1 --zodiac sidereal --ayanamsa lahiri --format json
+node scripts/mansions.mjs --help
+```
+
+Every calculation requires `--table` with its versioned identifier.
+`--zodiac` accepts `tropical` (the default) or `sidereal`. Sidereal requires
+`--ayanamsa` with one of the engine names listed by help; an ayanamsa is
+rejected for a tropical request. `--format` accepts `text` (the default) or
+`json`. Options also accept `--name=value`; repeated, unknown and valueless
+options are rejected. The CLI accepts ISO strings with the same strict
+calendar and offset rules described above. Scaled Julian dates and pinned
+delta-T remain library-only inputs. Local time zones are never inferred
+from the machine running the command.
+
+JSON output is the complete library result, including table provenance,
+names, bounds, selected and tropical engine receipts, and ingress records
+inside range intervals. Plain text reports names and longitudes with units,
+clipping markers and chronological intervals, and retains full engine
+receipts as JSON on labelled lines. Entry and exit records include their
+preceding-millisecond positions. Text is for reading; use JSON to consume
+results programmatically. Range endpoints and numerical resolution have the
+same meaning as in `mansionRange` above. Empty windows keep endpoint
+receipts and report no intervals.
+
+Range commands accept `--max-samples` as a positive decimal integer within
+`INGRESS_SEARCH_LIMITS.maxSamples`. This is a shared engine evaluation
+budget; its default and cap are the library limits already described.
+The CLI buffers a complete response before writing it. Successful results
+and help exit with status `0`; invalid arguments exit with `2` and a message
+on stderr; typed engine or budget refusals exit with `3` and the refusal
+on stdout in the selected format; unexpected calculation or startup failures
+exit with `1` and a message on stderr. Refusals contain no partial ranges or
+invented receipts. Use `npm run --silent` as shown to keep npm's script
+banner out of JSON stdout.
+
+[test/cli.test.ts](test/cli.test.ts) checks help, argument errors, selected
+tables and ayanamsas, JSON parity with the library, text fields, receipt
+replay, chronological intervals, empty ranges, refusals and exit behavior.
+Process tests run the bin entry from outside the checkout and the npm
+command from this directory, using synthetic instants and ranges from
+2001-02-03 to 2001-02-06. Date-only results are compared under UTC and
+Asia/Bangkok host time zones. These are interface and regression checks,
+not independent astronomical accuracy evidence.
 
 The tests check integration, receipt replay, validation, and hand-derived
 synthetic motion through the existing crossing solver. Engine-to-engine

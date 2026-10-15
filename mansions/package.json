@@ -6,7 +6,11 @@
   "engines": {
     "node": "22.x"
   },
+  "bin": {
+    "mansions": "scripts/mansions.mjs"
+  },
   "scripts": {
+    "mansions": "node scripts/mansions.mjs",
     "test": "vitest run --config vitest.config.ts",
     "typecheck": "tsc -p tsconfig.json --pretty false",
     "check:isolation": "node scripts/check-isolation.mjs",
@@ -17,6 +21,7 @@
   },
   "devDependencies": {
     "@types/node": "22.19.19",
+    "esbuild": "0.21.5",
     "typescript": "5.9.3",
     "vitest": "2.1.9"
   }
