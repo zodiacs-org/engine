@@ -1,0 +1,199 @@
+{
+  "schema": "heliacal.geometry-reference.v1",
+  "scope": "Independent coordinate examples and a published horizontal-transform test; not a visibility-performance or whole-span accuracy claim.",
+  "horizons": {
+    "provider": "NASA/JPL Solar System Dynamics, Horizons",
+    "retrieved": "2026-10-14",
+    "apiVersion": "1.2",
+    "ephemeris": "DE441",
+    "earthOrientationFile": "eop.261013.p270109",
+    "documentation": "https://ssd.jpl.nasa.gov/horizons/manual.html",
+    "at": "2020-01-01T00:00:00Z",
+    "observer": {
+      "latitude": 45,
+      "longitude": 10,
+      "height": 0
+    },
+    "units": {
+      "angles": "degrees",
+      "distance": "au",
+      "observerHeight": "metres",
+      "observerLongitude": "east-positive"
+    },
+    "conventions": {
+      "equatorial": "Airless apparent IAU76/80 equator and equinox of date, EOP-corrected",
+      "ecliptic": "Observer-centered apparent IAU76/80 ecliptic of date",
+      "horizontal": "Airless body-center elevation above the ellipsoid-normal horizon; azimuth north through east",
+      "corrections": "Light time, stellar aberration and gravitational deflection",
+      "inputTime": "Horizons UT is UTC at the selected epoch",
+      "siteCoordinateHeight": "Horizons SITE_COORD height is kilometres; the selected height is zero"
+    },
+    "tolerance": {
+      "directionArcsec": {
+        "Sun": 5,
+        "Moon": 15
+      },
+      "sunSeparationArcsec": 25,
+      "relativeDistance": {
+        "Sun": 3e-05,
+        "Moon": 0.0002
+      },
+      "declaredBeforeEngineComparison": true,
+      "directionMetric": "Great-circle angular distance in each coordinate frame, not raw azimuth difference",
+      "basis": "Predeclared sample gates informed by existing src/calc-bounds.ts apparent position and relative-distance measurements, allowing the source/engine frame and correction differences; see README.md."
+    },
+    "cases": [
+      {
+        "body": "Sun",
+        "center": "geocentric",
+        "request": {
+          "format": "text",
+          "OBJ_DATA": "'NO'",
+          "MAKE_EPHEM": "'YES'",
+          "EPHEM_TYPE": "'OBSERVER'",
+          "QUANTITIES": "'2,4,20,23,31'",
+          "REF_SYSTEM": "'ICRF'",
+          "APPARENT": "'AIRLESS'",
+          "ANG_FORMAT": "'DEG'",
+          "EXTRA_PREC": "'YES'",
+          "CSV_FORMAT": "'YES'",
+          "TLIST": "'2458849.5'",
+          "TLIST_TYPE": "'JD'",
+          "TIME_TYPE": "'UT'",
+          "COMMAND": "'10'",
+          "CENTER": "'500@399'"
+        },
+        "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&QUANTITIES=%272%2C4%2C20%2C23%2C31%27&REF_SYSTEM=%27ICRF%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&TLIST=%272458849.5%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27&COMMAND=%2710%27&CENTER=%27500%40399%27",
+        "expected": {
+          "rightAscensionDegrees": 280.888839016,
+          "declinationDegrees": -23.05882305,
+          "longitudeDegrees": 280.009492,
+          "latitudeDegrees": -0.0001188,
+          "distanceAu": 0.98329304256245
+        }
+      },
+      {
+        "body": "Moon",
+        "center": "geocentric",
+        "request": {
+          "format": "text",
+          "OBJ_DATA": "'NO'",
+          "MAKE_EPHEM": "'YES'",
+          "EPHEM_TYPE": "'OBSERVER'",
+          "QUANTITIES": "'2,4,20,23,31'",
+          "REF_SYSTEM": "'ICRF'",
+          "APPARENT": "'AIRLESS'",
+          "ANG_FORMAT": "'DEG'",
+          "EXTRA_PREC": "'YES'",
+          "CSV_FORMAT": "'YES'",
+          "TLIST": "'2458849.5'",
+          "TLIST_TYPE": "'JD'",
+          "TIME_TYPE": "'UT'",
+          "COMMAND": "'301'",
+          "CENTER": "'500@399'"
+        },
+        "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&QUANTITIES=%272%2C4%2C20%2C23%2C31%27&REF_SYSTEM=%27ICRF%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&TLIST=%272458849.5%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27&COMMAND=%27301%27&CENTER=%27500%40399%27",
+        "expected": {
+          "rightAscensionDegrees": 349.168521359,
+          "declinationDegrees": -9.974805048,
+          "longitudeDegrees": 346.1383767,
+          "latitudeDegrees": -4.8940719,
+          "distanceAu": 0.00269988972276,
+          "sunSeparationDegrees": 66.2213
+        }
+      },
+      {
+        "body": "Sun",
+        "center": "topocentric",
+        "request": {
+          "format": "text",
+          "OBJ_DATA": "'NO'",
+          "MAKE_EPHEM": "'YES'",
+          "EPHEM_TYPE": "'OBSERVER'",
+          "QUANTITIES": "'2,4,20,23,31'",
+          "REF_SYSTEM": "'ICRF'",
+          "APPARENT": "'AIRLESS'",
+          "ANG_FORMAT": "'DEG'",
+          "EXTRA_PREC": "'YES'",
+          "CSV_FORMAT": "'YES'",
+          "TLIST": "'2458849.5'",
+          "TLIST_TYPE": "'JD'",
+          "TIME_TYPE": "'UT'",
+          "COMMAND": "'10'",
+          "CENTER": "'coord@399'",
+          "COORD_TYPE": "'GEODETIC'",
+          "SITE_COORD": "'10,45,0'"
+        },
+        "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&QUANTITIES=%272%2C4%2C20%2C23%2C31%27&REF_SYSTEM=%27ICRF%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&TLIST=%272458849.5%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27&COMMAND=%2710%27&CENTER=%27coord%40399%27&COORD_TYPE=%27GEODETIC%27&SITE_COORD=%2710%2C45%2C0%27",
+        "expected": {
+          "rightAscensionDegrees": 280.8890779,
+          "declinationDegrees": -23.059746993,
+          "longitudeDegrees": 280.0096417,
+          "latitudeDegrees": -0.0010567,
+          "distanceAu": 0.98333221769072,
+          "azimuthDegrees": 21.998568031,
+          "altitudeDegrees": -66.802729779
+        }
+      },
+      {
+        "body": "Moon",
+        "center": "topocentric",
+        "request": {
+          "format": "text",
+          "COMMAND": "'301'",
+          "OBJ_DATA": "'NO'",
+          "MAKE_EPHEM": "'YES'",
+          "EPHEM_TYPE": "'OBSERVER'",
+          "CENTER": "'coord@399'",
+          "COORD_TYPE": "'GEODETIC'",
+          "SITE_COORD": "'10,45,0'",
+          "QUANTITIES": "'2,4,20,23,31'",
+          "REF_SYSTEM": "'ICRF'",
+          "APPARENT": "'AIRLESS'",
+          "ANG_FORMAT": "'DEG'",
+          "EXTRA_PREC": "'YES'",
+          "CSV_FORMAT": "'YES'",
+          "TLIST": "'2458849.5'",
+          "TLIST_TYPE": "'JD'",
+          "TIME_TYPE": "'UT'"
+        },
+        "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%27301%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27coord%40399%27&COORD_TYPE=%27GEODETIC%27&SITE_COORD=%2710%2C45%2C0%27&QUANTITIES=%272%2C4%2C20%2C23%2C31%27&REF_SYSTEM=%27ICRF%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&TLIST=%272458849.5%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+        "expected": {
+          "rightAscensionDegrees": 348.613643191,
+          "declinationDegrees": -10.539927107,
+          "longitudeDegrees": 345.4117914,
+          "latitudeDegrees": -5.2000919,
+          "distanceAu": 0.00272063685506,
+          "azimuthDegrees": 285.59249369,
+          "altitudeDegrees": -29.512080162,
+          "sunSeparationDegrees": 65.51
+        }
+      }
+    ]
+  },
+  "erfa": {
+    "provider": "ERFA, derived from the IAU SOFA library",
+    "version": "2.0.1",
+    "retrieved": "2026-10-14",
+    "url": "https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/t_erfa_c.c",
+    "locator": "t_hd2ae, lines 4497-4504",
+    "definitionUrl": "https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/hd2ae.c",
+    "license": "BSD-3-Clause; copyright and notice retained in README.md",
+    "inputRadians": {
+      "hourAngle": 1.1,
+      "declination": 1.2,
+      "latitude": 0.3
+    },
+    "expectedRadians": {
+      "azimuth": 5.916889243730066,
+      "altitude": 0.44721863049904864
+    },
+    "upstreamToleranceRadians": {
+      "azimuth": 1e-13,
+      "altitude": 1e-14
+    },
+    "toleranceDegrees": 1e-10,
+    "declaredBeforeEngineComparison": true,
+    "basis": "Allows degree/radian conversion roundoff when checking the published transform example; not an ephemeris accuracy statement."
+  }
+}
