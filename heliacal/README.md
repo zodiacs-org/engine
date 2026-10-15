@@ -13,6 +13,22 @@ Odeh lunar crescent criteria and bracketed crescent searches.
 Position-based APIs preserve engine receipts. The [CLI](CLI.md) exposes
 `heliacal events`, `heliacal crescent` and `heliacal phase` as JSON commands.
 
+Choose the API by the quantity needed:
+
+| Need | API | Interpretation |
+| --- | --- | --- |
+| Morning/evening side of the Sun, elongation or illuminated disk | `phase` | Geometry at an instant; a phase label does not establish visibility. |
+| First/last planetary appearances | `heliacalEvents` | Changes in an explicitly supplied horizon arcus threshold between observing opportunities. |
+| Acronychal/cosmical rising or setting | `horizonPhenomena` | Reversals of the specified Sun/body crossing order, with both source times retained. |
+| First evening or last morning lunar crescent | `crescentEvents` | Selected Yallop/Odeh category transitions; morning timing requires the explicit unvalidated extension. |
+| Altitude, extinction and magnitude screening at an instant | `arcusVisibility` | Separate custom screen with caller-supplied photometry; not Schaefer's limiting-vision model. |
+
+The [evidence and validation guide](docs/evidence/README.md) records what
+was compared, how to reproduce it, and the remaining model limits. The
+[published London examples](test/fixtures/YALLOP-PUBLISHED.md) exercise
+the complete evening crescent library and CLI against Yallop's calculated
+predictions. They do not establish observed-sighting accuracy.
+
 ## Development
 
 Use Node as specified in this project's `package.json`, then, from the
@@ -22,6 +38,8 @@ repository root:
 npm --prefix heliacal ci --ignore-scripts
 npm --prefix heliacal run typecheck
 npm --prefix heliacal test
+npm --prefix heliacal run test:audit
+npm --prefix heliacal run check:project
 npm --prefix heliacal run check:package
 ```
 
@@ -39,6 +57,13 @@ working-tree pack list excludes this folder, then runs the repository's
 `package:contents` check in a temporary copy using the carried archive's
 build output. It writes no root `dist/` and creates no archive. This is a
 packaging check, not a rebuild or an archive-binding check.
+
+`check:project` checks tracked and unignored project files, documentation
+punctuation, ignored output folders, library import boundaries and current
+working-tree scope. It uses read-only git commands and does not certify
+committed branch history, runtime purity or scientific validity. Its negative
+cases run with `test:audit`. Reproduce the numerical evidence with the commands
+in [the validation guide](docs/evidence/README.md).
 
 ## Foundation API
 
@@ -988,12 +1013,19 @@ prediction accuracy across a date range. [Fixture notes](test/fixtures/README.md
 record attribution and scope.
 
 [SOURCES.md](SOURCES.md) records the geometry references and primary-source
-roadmap for later milestones. Code and original documentation here follow
-the repository's MIT licence. The engine's data retain the terms and attribution in
+definitions used by the implemented models. Code and original documentation
+here follow the repository's MIT licence. The engine's data retain the terms and attribution in
 [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE). The existing USNO
 fixture's provenance is documented there. No papers, historical observation
 databases or third-party implementations are copied into this folder.
 The ERFA test constants retain their BSD notice in the fixture notes.
 
+The [published Yallop examples](test/fixtures/YALLOP-PUBLISHED.md) add an
+independent comparison of selected evening predictions, including horizon
+times, best times and category transitions through the library and CLI.
+[Numerical evidence](docs/evidence/README.md) records the exact covered
+dates, measured differences and reproducible checks. These comparisons
+remain separate from observed-sighting performance.
+
 Generated tables, dependency installs, caches and research downloads stay
-in ignored folders; small future fixtures need their own source and terms.
+in ignored folders; each small committed fixture records its source and terms.

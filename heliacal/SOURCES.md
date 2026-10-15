@@ -1,10 +1,9 @@
-# Primary-source roadmap
+# Sources and implemented conventions
 
-The sources below distinguish implemented geometry, phase, arcus and crescent checks
-from the remaining model roadmap. A roadmap citation does not mean that a
-model is implemented.
-Formulas must be implemented independently, with their units, coordinate
-conventions and domain recorded in the tests.
+The sources below support the implemented geometry, phase, arcus and crescent
+checks. Each implementation records its units, coordinate conventions and
+domain. A cited definition or successful formula comparison does not establish
+sighting predictive accuracy.
 
 ## Geometry checks
 
@@ -195,14 +194,28 @@ Fetched and the relevant page images read on 2026-10-15. Implemented as
   outside the model's expected behavior. This implementation exposes the
   fixed empirical model and provides no atmospheric adjustment.
 
-The report carries a permission notice. Our code and
+The report carries a permission notice. Our code and synthetic
 [worked fixtures](test/fixtures/yallop-reference.json) are original formula
 implementations and independent arithmetic on invented geometry. No source
-program, prose, observation database or worked-output table is copied.
+program, prose or observation database is copied.
 The [fixture notes](test/fixtures/YALLOP.md) and committed generator describe
 the comparison gates. These are criterion implementation checks, not
 sighting records or a calibration validation. Geocentric ARCV must not be
 silently replaced with Odeh's topocentric definition.
+
+For the final end-to-end comparison, Appendix A, printed p. 16 (PDF page
+17), was fetched and inspected as an image on 2026-10-15. The separate
+[published fixture](test/fixtures/yallop-published.json) retains selected
+numerical facts for London on January 28-29 and August 22-23, 1998:
+sunset, moonset, best time and category. The source table contains calculated
+predictions, not observation records. [Its notes](test/fixtures/YALLOP-PUBLISHED.md)
+record the source digest, explicit sea-level assumption, GMT/UTC convention,
+predeclared comparison gates and the limited numerical extraction's rights
+scope. [Tests](test/yallop-published.test.ts) compare full engine-backed
+library and CLI calculations with these selected examples. No page image,
+complete table or source program is redistributed. The
+[measurement report](docs/evidence/README.md) gives results for this scope
+without extending them to other dates, models or observed sightings.
 
 Mohammad Sh. Odeh, "New Criterion for Lunar Crescent Visibility",
 *Experimental Astronomy* 18, pp. 39-64,

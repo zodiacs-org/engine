@@ -197,3 +197,19 @@ and full geometry budgets described above. These fixed empirical fits offer
 no adjustable extinction or magnitude parameters. Every result retains the
 actual model geometry, coefficients, selected categories, conventions,
 opportunity gaps and engine receipts. No model output guarantees a sighting.
+
+For a complete search checked against a published calculated example:
+
+```sh
+node heliacal/bin/heliacal.mjs crescent \
+  --from 1998-01-28 --to 1998-01-30 --latitude 51.5 --longitude -0.16666666666666666 \
+  --height 0 --model yallop-1997/1 --last-category B --max-elongation-deg 30
+```
+
+This uses the selected London January rows of Yallop's Appendix A. The
+[published-example tests](test/yallop-published.test.ts) exercise the command
+and compare its horizon times, best times and categories with the
+[source fixture](test/fixtures/YALLOP-PUBLISHED.md). The search finds the
+transition from category F to A; it reproduces a selected model calculation,
+not a historical sighting record. The explicit sea-level assumption and
+comparison limits are in [the evidence guide](docs/evidence/README.md).

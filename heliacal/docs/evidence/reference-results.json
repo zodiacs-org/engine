@@ -1,0 +1,2904 @@
+{
+  "schema": "heliacal.reference-evidence/1",
+  "scope": "Offline comparison of selected independent reference examples; no whole-span error bound or sighting-performance claim. This output is not a test oracle.",
+  "runtime": {
+    "node": "v22.22.2",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "engine": {
+    "name": "@zodiacs/engine",
+    "version": "1.0.0",
+    "ephemeris": {
+      "name": "astronomy-engine",
+      "version": "2.1.19"
+    }
+  },
+  "sourceSha256": {
+    "algorithm": "Sorted relative path, NUL, SHA-256, newline for each non-test .ts file, excluding fixture directories.",
+    "heliacal": "dad8065cc9d3910ff88d9de163186616a0dadba0b2b2bcb2018c2597a09cd463",
+    "engine": "0bca777f5de13dc0d8ed4c25bcf5563863987b17a2a2d007aeafda2639e70c46",
+    "measurementScript": "a2d42079358df903d30294a146c67a41adb6ad1d1c662fc956687afa26c18785"
+  },
+  "inputSha256": {
+    "heliacal/test/fixtures/geometry-reference.json": "c56e689a7a7e272fa2004b47704efd8fb5a699d194c9fecedef5b580de0ca816",
+    "heliacal/test/fixtures/phase-reference.json": "c3e79938af8061e5b7aadb746da2a6ee90cd14625ece7c9eb5d3da36564f1369",
+    "src/sky/fixtures/usno-rstt.json": "5711ba81e650762681d99e6fcd9c5938f3dcd2e11f9e688a3268e316d2427cc4",
+    "heliacal/test/fixtures/visibility-reference.json": "3eef96a0e312acd3ae68a324246129255d3533a63952652df889ca02eacf36fe",
+    "heliacal/test/fixtures/yallop-reference.json": "544ba3b2be180b0232c4240cf6f5f0ef43e4e13b4f25c81f097cbe33637ba193",
+    "heliacal/test/fixtures/odeh-reference.json": "d7fe769ffe2a5e6b0c9b9cc83cec6e09d9b933dc76802d019ecefae252d12df1",
+    "heliacal/test/fixtures/yallop-published.json": "ef503a5addd674223d3e69e5e36103db319f5263d47bc3f600eb524f2914464c"
+  },
+  "coverage": {
+    "geometry": {
+      "at": "2020-01-01T00:00:00Z",
+      "observer": {
+        "latitude": 45,
+        "longitude": 10,
+        "height": 0
+      }
+    },
+    "phase": {
+      "at": "2020-01-01T00:00:00Z",
+      "observer": {
+        "latitude": 45,
+        "longitude": 10,
+        "height": 0
+      }
+    },
+    "horizon": {
+      "date": "2024-06-21",
+      "latitude": 38.89,
+      "longitude": -77.03
+    },
+    "criteria": "Only the listed published constants, table boundaries and independently constructed Decimal/rational worked inputs.",
+    "publishedCrescents": {
+      "observer": {
+        "latitude": 51.5,
+        "longitude": -0.16666666666666666,
+        "height": 0
+      },
+      "groups": [
+        {
+          "id": "london-january-1998",
+          "from": "1998-01-28T00:00:00Z",
+          "to": "1998-01-30T00:00:00Z"
+        },
+        {
+          "id": "london-august-1998",
+          "from": "1998-08-22T00:00:00Z",
+          "to": "1998-08-24T00:00:00Z"
+        }
+      ],
+      "source": {
+        "author": "B. D. Yallop",
+        "title": "A Method for Predicting the First Sighting of the New Crescent Moon",
+        "publication": "HM Nautical Almanac Office, NAO Technical Note No. 69 (1997), updated April 1998",
+        "url": "https://webspace.science.uu.nl/~gent0113/islam/downloads/naotn_69.pdf",
+        "locator": "Appendix A, printed p. 16 (PDF page 17), London January 28-29 and August 22-23 prediction rows",
+        "retrieved": "2026-10-15",
+        "pdfSha256": "b554e59b0fbc4406db2e8d883c4e3bcced80ef704d1bceb61d291d184ed4ee6b",
+        "tableComputedOn": "1998-04-07",
+        "kind": "published-calculated-example;not-observed-sightings",
+        "sourceTimeScale": "GMT",
+        "sourceObserver": "London, latitude N51 30, longitude W000 10; height not specified",
+        "rights": "Source publication reserves copyright. Only selected numerical facts are retained; no source prose, table image, program or observation database is redistributed. Original fixture metadata and tests are MIT; no licence to the source publication is asserted."
+      },
+      "scope": "Selected published predictions, not observed sightings; no morning or Odeh comparison."
+    }
+  },
+  "summaries": [
+    {
+      "reference": "horizons-geometry",
+      "field": "equatorialDirectionError",
+      "unit": "arcseconds",
+      "cases": 4,
+      "maximumAbsoluteError": 1.401764653851971
+    },
+    {
+      "reference": "horizons-geometry",
+      "field": "equatorialRelativeDistanceError",
+      "unit": "fraction",
+      "cases": 4,
+      "maximumAbsoluteError": 0.00011868563629902074
+    },
+    {
+      "reference": "horizons-geometry",
+      "field": "eclipticDirectionError",
+      "unit": "arcseconds",
+      "cases": 4,
+      "maximumAbsoluteError": 1.4004132624243717
+    },
+    {
+      "reference": "horizons-geometry",
+      "field": "eclipticRelativeDistanceError",
+      "unit": "fraction",
+      "cases": 4,
+      "maximumAbsoluteError": 0.00011868563629902074
+    },
+    {
+      "reference": "horizons-geometry",
+      "field": "elongation",
+      "unit": "arcseconds",
+      "cases": 2,
+      "maximumAbsoluteError": 1.355585977784358
+    },
+    {
+      "reference": "horizons-geometry",
+      "field": "horizontalDirectionError",
+      "unit": "arcseconds",
+      "cases": 2,
+      "maximumAbsoluteError": 1.2184381121796084
+    },
+    {
+      "reference": "erfa-hd2ae",
+      "field": "azimuth",
+      "unit": "degrees",
+      "cases": 1,
+      "maximumAbsoluteError": 5.684341886080802e-14
+    },
+    {
+      "reference": "erfa-hd2ae",
+      "field": "altitude",
+      "unit": "degrees",
+      "cases": 1,
+      "maximumAbsoluteError": 3.552713678800501e-15
+    },
+    {
+      "reference": "horizons-phase",
+      "field": "elongation",
+      "unit": "arcseconds",
+      "cases": 7,
+      "maximumAbsoluteError": 4.046233823364673
+    },
+    {
+      "reference": "horizons-phase",
+      "field": "phaseAngle",
+      "unit": "degrees",
+      "cases": 7,
+      "maximumAbsoluteError": 0.021947754098736283
+    },
+    {
+      "reference": "horizons-phase",
+      "field": "illuminatedFraction",
+      "unit": "fraction",
+      "cases": 7,
+      "maximumAbsoluteError": 0.00009491406767392352
+    },
+    {
+      "reference": "horizons-phase",
+      "field": "signedSynodicAngle",
+      "unit": "arcseconds",
+      "cases": 7,
+      "maximumAbsoluteError": 4.188134322521364
+    },
+    {
+      "reference": "usno-horizon",
+      "field": "epoch",
+      "unit": "epoch-milliseconds",
+      "cases": 5,
+      "maximumAbsoluteError": 18067
+    },
+    {
+      "reference": "schoch-criterion",
+      "field": "margin",
+      "unit": "degrees",
+      "cases": 2,
+      "maximumAbsoluteError": 0
+    },
+    {
+      "reference": "schaefer-airmass",
+      "field": "airmass",
+      "unit": "relative-airmass",
+      "cases": 5,
+      "maximumAbsoluteError": 0.038577142454899516
+    },
+    {
+      "reference": "constructed-extinction",
+      "field": "airmass",
+      "unit": "relative-airmass",
+      "cases": 1,
+      "maximumAbsoluteError": 0
+    },
+    {
+      "reference": "constructed-extinction",
+      "field": "extinctionMagnitude",
+      "unit": "magnitudes",
+      "cases": 1,
+      "maximumAbsoluteError": 0
+    },
+    {
+      "reference": "constructed-extinction",
+      "field": "magnitudeAtObserver",
+      "unit": "magnitudes",
+      "cases": 1,
+      "maximumAbsoluteError": 0
+    },
+    {
+      "reference": "constructed-extinction",
+      "field": "marginMagnitude",
+      "unit": "magnitudes",
+      "cases": 1,
+      "maximumAbsoluteError": 0
+    },
+    {
+      "reference": "yallop-decimal",
+      "field": "arcOfVisionDeg",
+      "unit": "degrees",
+      "cases": 10,
+      "maximumAbsoluteError": 0
+    },
+    {
+      "reference": "yallop-decimal",
+      "field": "geocentricSemidiameterArcmin",
+      "unit": "arcminutes",
+      "cases": 10,
+      "maximumAbsoluteError": 1.7763568394002505e-15
+    },
+    {
+      "reference": "yallop-decimal",
+      "field": "topocentricSemidiameterArcmin",
+      "unit": "arcminutes",
+      "cases": 10,
+      "maximumAbsoluteError": 3.552713678800501e-15
+    },
+    {
+      "reference": "yallop-decimal",
+      "field": "crescentWidthArcmin",
+      "unit": "arcminutes",
+      "cases": 10,
+      "maximumAbsoluteError": 5.551115123125783e-17
+    },
+    {
+      "reference": "yallop-decimal",
+      "field": "referenceArcOfVisionDeg",
+      "unit": "degrees",
+      "cases": 10,
+      "maximumAbsoluteError": 1.7763568394002505e-15
+    },
+    {
+      "reference": "yallop-decimal",
+      "field": "q",
+      "unit": "dimensionless",
+      "cases": 10,
+      "maximumAbsoluteError": 1.6653345369377348e-16
+    },
+    {
+      "reference": "yallop-decimal",
+      "field": "relativeWidthError",
+      "unit": "fraction",
+      "cases": 9,
+      "maximumAbsoluteError": 2.220446049250313e-16
+    },
+    {
+      "reference": "yallop-rational-time",
+      "field": "bestTime",
+      "unit": "epoch-milliseconds",
+      "cases": 5,
+      "maximumAbsoluteError": 0
+    },
+    {
+      "reference": "odeh-decimal",
+      "field": "arcOfVisionDeg",
+      "unit": "degrees",
+      "cases": 9,
+      "maximumAbsoluteError": 0
+    },
+    {
+      "reference": "odeh-decimal",
+      "field": "crescentWidthArcmin",
+      "unit": "arcminutes",
+      "cases": 9,
+      "maximumAbsoluteError": 0
+    },
+    {
+      "reference": "odeh-decimal",
+      "field": "referenceArcOfVisionDeg",
+      "unit": "degrees",
+      "cases": 9,
+      "maximumAbsoluteError": 8.881784197001252e-16
+    },
+    {
+      "reference": "odeh-decimal",
+      "field": "v",
+      "unit": "degrees",
+      "cases": 9,
+      "maximumAbsoluteError": 1.3322676295501878e-15
+    },
+    {
+      "reference": "odeh-rational-time",
+      "field": "bestTime",
+      "unit": "epoch-milliseconds",
+      "cases": 5,
+      "maximumAbsoluteError": 0
+    },
+    {
+      "reference": "odeh-table-v",
+      "field": "arcv1Deg",
+      "unit": "degrees",
+      "cases": 3,
+      "maximumAbsoluteError": 0.03338679999999972
+    },
+    {
+      "reference": "odeh-table-v",
+      "field": "arcv2Deg",
+      "unit": "degrees",
+      "cases": 3,
+      "maximumAbsoluteError": 0.04005719999999968
+    },
+    {
+      "reference": "odeh-table-v",
+      "field": "arcv3Deg",
+      "unit": "degrees",
+      "cases": 3,
+      "maximumAbsoluteError": 0.04338680000000039
+    },
+    {
+      "reference": "yallop-appendix-a-rounded-time",
+      "field": "bestTime",
+      "unit": "epoch-milliseconds",
+      "cases": 4,
+      "maximumAbsoluteError": 13333
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "field": "sunset",
+      "unit": "epoch-milliseconds",
+      "cases": 4,
+      "maximumAbsoluteError": 23830
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "field": "moonset",
+      "unit": "epoch-milliseconds",
+      "cases": 4,
+      "maximumAbsoluteError": 18356
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "field": "bestTime",
+      "unit": "epoch-milliseconds",
+      "cases": 4,
+      "maximumAbsoluteError": 13672
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "field": "eventBestTime",
+      "unit": "epoch-milliseconds",
+      "cases": 2,
+      "maximumAbsoluteError": 13672
+    }
+  ],
+  "comparisons": [
+    {
+      "reference": "horizons-geometry",
+      "id": "Sun/geocentric",
+      "field": "equatorialDirectionError",
+      "actual": 0.6252556034047626,
+      "expected": 0,
+      "absoluteError": 0.6252556034047626,
+      "tolerance": 5,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Sun/geocentric",
+      "field": "equatorialRelativeDistanceError",
+      "actual": 0.000003909236921062487,
+      "expected": 0,
+      "absoluteError": 0.000003909236921062487,
+      "tolerance": 0.00003,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Sun/geocentric",
+      "field": "eclipticDirectionError",
+      "actual": 0.5919613516449325,
+      "expected": 0,
+      "absoluteError": 0.5919613516449325,
+      "tolerance": 5,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Sun/geocentric",
+      "field": "eclipticRelativeDistanceError",
+      "actual": 0.000003909236921062487,
+      "expected": 0,
+      "absoluteError": 0.000003909236921062487,
+      "tolerance": 0.00003,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Moon/geocentric",
+      "field": "equatorialDirectionError",
+      "actual": 0.7049607042952801,
+      "expected": 0,
+      "absoluteError": 0.7049607042952801,
+      "tolerance": 15,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Moon/geocentric",
+      "field": "equatorialRelativeDistanceError",
+      "actual": -0.00011868563629902074,
+      "expected": 0,
+      "absoluteError": 0.00011868563629902074,
+      "tolerance": 0.0002,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Moon/geocentric",
+      "field": "eclipticDirectionError",
+      "actual": 0.7057398028337769,
+      "expected": 0,
+      "absoluteError": 0.7057398028337769,
+      "tolerance": 15,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Moon/geocentric",
+      "field": "eclipticRelativeDistanceError",
+      "actual": -0.00011868563629902074,
+      "expected": 0,
+      "absoluteError": 0.00011868563629902074,
+      "tolerance": 0.0002,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Moon/geocentric",
+      "field": "elongation",
+      "actual": 238396.15840983248,
+      "expected": 238396.68,
+      "absoluteError": 0.5215901675110217,
+      "tolerance": 25,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Sun/topocentric",
+      "field": "equatorialDirectionError",
+      "actual": 0.6238883691705316,
+      "expected": 0,
+      "absoluteError": 0.6238883691705316,
+      "tolerance": 5,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Sun/topocentric",
+      "field": "equatorialRelativeDistanceError",
+      "actual": 0.0000039090342649483745,
+      "expected": 0,
+      "absoluteError": 0.0000039090342649483745,
+      "tolerance": 0.00003,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Sun/topocentric",
+      "field": "eclipticDirectionError",
+      "actual": 0.5907565543056589,
+      "expected": 0,
+      "absoluteError": 0.5907565543056589,
+      "tolerance": 5,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Sun/topocentric",
+      "field": "eclipticRelativeDistanceError",
+      "actual": 0.0000039090342649483745,
+      "expected": 0,
+      "absoluteError": 0.0000039090342649483745,
+      "tolerance": 0.00003,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Sun/topocentric",
+      "field": "horizontalDirectionError",
+      "actual": 0.6046887499191772,
+      "expected": 0,
+      "absoluteError": 0.6046887499191772,
+      "tolerance": 5,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Moon/topocentric",
+      "field": "equatorialDirectionError",
+      "actual": 1.401764653851971,
+      "expected": 0,
+      "absoluteError": 1.401764653851971,
+      "tolerance": 15,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Moon/topocentric",
+      "field": "equatorialRelativeDistanceError",
+      "actual": -0.000026405045417177142,
+      "expected": 0,
+      "absoluteError": 0.000026405045417177142,
+      "tolerance": 0.0002,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Moon/topocentric",
+      "field": "eclipticDirectionError",
+      "actual": 1.4004132624243717,
+      "expected": 0,
+      "absoluteError": 1.4004132624243717,
+      "tolerance": 15,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Moon/topocentric",
+      "field": "eclipticRelativeDistanceError",
+      "actual": -0.000026405045417177142,
+      "expected": 0,
+      "absoluteError": 0.000026405045417177142,
+      "tolerance": 0.0002,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Moon/topocentric",
+      "field": "horizontalDirectionError",
+      "actual": 1.2184381121796084,
+      "expected": 0,
+      "absoluteError": 1.2184381121796084,
+      "tolerance": 15,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-geometry",
+      "id": "Moon/topocentric",
+      "field": "elongation",
+      "actual": 235834.64441402224,
+      "expected": 235836.00000000003,
+      "absoluteError": 1.355585977784358,
+      "tolerance": 25,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "erfa-hd2ae",
+      "id": "published-transform",
+      "field": "azimuth",
+      "actual": 339.0127815120863,
+      "expected": 339.01278151208624,
+      "absoluteError": 5.684341886080802e-14,
+      "tolerance": 1e-10,
+      "unit": "degrees"
+    },
+    {
+      "reference": "erfa-hd2ae",
+      "id": "published-transform",
+      "field": "altitude",
+      "actual": 25.62374004721612,
+      "expected": 25.623740047216124,
+      "absoluteError": 3.552713678800501e-15,
+      "tolerance": 1e-10,
+      "unit": "degrees"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Moon/geocentric",
+      "field": "elongation",
+      "actual": 238396.15840983248,
+      "expected": 238396.68,
+      "absoluteError": 0.5215901675110217,
+      "tolerance": 30,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Moon/geocentric",
+      "field": "phaseAngle",
+      "actual": 113.64050839900212,
+      "expected": 113.6323,
+      "absoluteError": 0.008208399002114675,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Moon/geocentric",
+      "field": "illuminatedFraction",
+      "actual": 0.2995015972906736,
+      "expected": 0.29956689999999997,
+      "absoluteError": 0.00006530270932636473,
+      "tolerance": 0.0005,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Moon/geocentric",
+      "field": "signedSynodicAngle",
+      "actual": 238063.4557961224,
+      "expected": 238063.98491999984,
+      "absoluteError": 0.5291238774370868,
+      "tolerance": 30,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Mercury/geocentric",
+      "field": "elongation",
+      "actual": 20764.185404169355,
+      "expected": 20764.44,
+      "absoluteError": 0.254595830643666,
+      "tolerance": 60,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Mercury/geocentric",
+      "field": "phaseAngle",
+      "actual": 12.221052245901264,
+      "expected": 12.243,
+      "absoluteError": 0.021947754098736283,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Mercury/geocentric",
+      "field": "illuminatedFraction",
+      "actual": 0.9886690905135123,
+      "expected": 0.9886284999999999,
+      "absoluteError": 0.00004059051351235077,
+      "tolerance": 0.0005,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Mercury/geocentric",
+      "field": "signedSynodicAngle",
+      "actual": -20254.263263359237,
+      "expected": -20254.239000000143,
+      "absoluteError": 0.02426335909331101,
+      "tolerance": 60,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Venus/geocentric",
+      "field": "elongation",
+      "actual": 123994.54390195981,
+      "expected": 123995.16,
+      "absoluteError": 0.616098040190991,
+      "tolerance": 60,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Venus/geocentric",
+      "field": "phaseAngle",
+      "actual": 49.97946121694639,
+      "expected": 49.9653,
+      "absoluteError": 0.014161216946391164,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Venus/geocentric",
+      "field": "illuminatedFraction",
+      "actual": 0.821531085932326,
+      "expected": 0.821626,
+      "absoluteError": 0.00009491406767392352,
+      "tolerance": 0.0005,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Venus/geocentric",
+      "field": "signedSynodicAngle",
+      "actual": 123839.50654472882,
+      "expected": 123840.00107999996,
+      "absoluteError": 0.4945352711365558,
+      "tolerance": 60,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Mars/geocentric",
+      "field": "elongation",
+      "actual": 149852.78481766145,
+      "expected": 149854.31999999998,
+      "absoluteError": 1.5351823385281023,
+      "tolerance": 60,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Mars/geocentric",
+      "field": "phaseAngle",
+      "actual": 24.25727774596396,
+      "expected": 24.2633,
+      "absoluteError": 0.0060222540360399535,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Mars/geocentric",
+      "field": "illuminatedFraction",
+      "actual": 0.9558549332274269,
+      "expected": 0.9558333,
+      "absoluteError": 0.00002163322742687601,
+      "tolerance": 0.0005,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Mars/geocentric",
+      "field": "signedSynodicAngle",
+      "actual": -149848.16082773719,
+      "expected": -149849.5827600001,
+      "absoluteError": 1.421932262921473,
+      "tolerance": 60,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Jupiter/geocentric",
+      "field": "elongation",
+      "actual": 12021.033766176635,
+      "expected": 12025.08,
+      "absoluteError": 4.046233823364673,
+      "tolerance": 60,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Jupiter/geocentric",
+      "field": "phaseAngle",
+      "actual": 0.6272722011682211,
+      "expected": 0.6304,
+      "absoluteError": 0.0031277988317788274,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Jupiter/geocentric",
+      "field": "illuminatedFraction",
+      "actual": 0.9999700358136928,
+      "expected": 0.9999697000000001,
+      "absoluteError": 3.358136927422706e-7,
+      "tolerance": 0.0005,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Jupiter/geocentric",
+      "field": "signedSynodicAngle",
+      "actual": -12016.764105677634,
+      "expected": -12020.952240000155,
+      "absoluteError": 4.188134322521364,
+      "tolerance": 60,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Saturn/geocentric",
+      "field": "elongation",
+      "actual": 40986.30641408945,
+      "expected": 40988.16,
+      "absoluteError": 1.8535859105541022,
+      "tolerance": 60,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Saturn/geocentric",
+      "field": "phaseAngle",
+      "actual": 1.1085091387932207,
+      "expected": 1.1067,
+      "absoluteError": 0.0018091387932206437,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Saturn/geocentric",
+      "field": "illuminatedFraction",
+      "actual": 0.9999064250178824,
+      "expected": 0.9999066999999999,
+      "absoluteError": 2.749821175207501e-7,
+      "tolerance": 0.0005,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Saturn/geocentric",
+      "field": "signedSynodicAngle",
+      "actual": 40985.915258966066,
+      "expected": 40987.70783999987,
+      "absoluteError": 1.792581033805618,
+      "tolerance": 60,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Moon/topocentric",
+      "field": "elongation",
+      "actual": 235834.64441402224,
+      "expected": 235836.00000000003,
+      "absoluteError": 1.355585977784358,
+      "tolerance": 30,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Moon/topocentric",
+      "field": "phaseAngle",
+      "actual": 114.35157777845279,
+      "expected": 114.3433,
+      "absoluteError": 0.008277778452793427,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Moon/topocentric",
+      "field": "illuminatedFraction",
+      "actual": 0.29383268057070455,
+      "expected": 0.2938982,
+      "absoluteError": 0.00006551942929544641,
+      "tolerance": 0.0005,
+      "unit": "fraction"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Moon/topocentric",
+      "field": "signedSynodicAngle",
+      "actual": 235446.48079511145,
+      "expected": 235447.73892000018,
+      "absoluteError": 1.2581248887290712,
+      "tolerance": 30,
+      "unit": "arcseconds"
+    },
+    {
+      "reference": "usno-horizon",
+      "id": "Sun/set",
+      "field": "epoch",
+      "actual": 1718930206496,
+      "expected": 1718930220000,
+      "absoluteError": 13504,
+      "tolerance": 60000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "usno-horizon",
+      "id": "Sun/rise",
+      "field": "epoch",
+      "actual": 1718962991295,
+      "expected": 1718962980000,
+      "absoluteError": 11295,
+      "tolerance": 60000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "usno-horizon",
+      "id": "Sun/upper-transit",
+      "field": "epoch",
+      "actual": 1718989805257,
+      "expected": 1718989800000,
+      "absoluteError": 5257,
+      "tolerance": 60000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "usno-horizon",
+      "id": "Moon/upper-transit",
+      "field": "epoch",
+      "actual": 1718943678067,
+      "expected": 1718943660000,
+      "absoluteError": 18067,
+      "tolerance": 60000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "usno-horizon",
+      "id": "Moon/set",
+      "field": "epoch",
+      "actual": 1718959788344,
+      "expected": 1718959800000,
+      "absoluteError": 11656,
+      "tolerance": 60000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "schoch-criterion",
+      "id": "schoch-magnitude-zero-first",
+      "field": "margin",
+      "actual": -0.5,
+      "expected": -0.5,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "degrees"
+    },
+    {
+      "reference": "schoch-criterion",
+      "id": "schoch-magnitude-zero-last",
+      "field": "margin",
+      "actual": 0.5,
+      "expected": 0.5,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "degrees"
+    },
+    {
+      "reference": "schaefer-airmass",
+      "id": "altitude-90",
+      "field": "airmass",
+      "actual": 0.9999995824576546,
+      "expected": 1,
+      "absoluteError": 4.1754234536561796e-7,
+      "tolerance": 0.05,
+      "unit": "relative-airmass"
+    },
+    {
+      "reference": "schaefer-airmass",
+      "id": "altitude-30",
+      "field": "airmass",
+      "actual": 1.9995914063475975,
+      "expected": 2,
+      "absoluteError": 0.00040859365240253354,
+      "tolerance": 0.05,
+      "unit": "relative-airmass"
+    },
+    {
+      "reference": "schaefer-airmass",
+      "id": "altitude-10",
+      "field": "airmass",
+      "actual": 5.638577142454899,
+      "expected": 5.6,
+      "absoluteError": 0.038577142454899516,
+      "tolerance": 0.05,
+      "unit": "relative-airmass"
+    },
+    {
+      "reference": "schaefer-airmass",
+      "id": "altitude-3",
+      "field": "airmass",
+      "actual": 15.0616479868701,
+      "expected": 15.1,
+      "absoluteError": 0.03835201312990044,
+      "tolerance": 0.05,
+      "unit": "relative-airmass"
+    },
+    {
+      "reference": "schaefer-airmass",
+      "id": "altitude-0",
+      "field": "airmass",
+      "actual": 40,
+      "expected": 40,
+      "absoluteError": 0,
+      "tolerance": 0.05,
+      "unit": "relative-airmass"
+    },
+    {
+      "reference": "constructed-extinction",
+      "id": "explicit-refraction",
+      "field": "airmass",
+      "actual": 40,
+      "expected": 40,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "relative-airmass"
+    },
+    {
+      "reference": "constructed-extinction",
+      "id": "explicit-refraction",
+      "field": "extinctionMagnitude",
+      "actual": 5,
+      "expected": 5,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "magnitudes"
+    },
+    {
+      "reference": "constructed-extinction",
+      "id": "explicit-refraction",
+      "field": "magnitudeAtObserver",
+      "actual": 1,
+      "expected": 1,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "magnitudes"
+    },
+    {
+      "reference": "constructed-extinction",
+      "id": "explicit-refraction",
+      "field": "marginMagnitude",
+      "actual": 0,
+      "expected": 0,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "magnitudes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "clear-positive-altitude",
+      "field": "arcOfVisionDeg",
+      "actual": 15,
+      "expected": 15,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "clear-positive-altitude",
+      "field": "geocentricSemidiameterArcmin",
+      "actual": 16.61945,
+      "expected": 16.61945,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "clear-positive-altitude",
+      "field": "topocentricSemidiameterArcmin",
+      "actual": 16.660489788427995,
+      "expected": 16.660489788427995,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "clear-positive-altitude",
+      "field": "crescentWidthArcmin",
+      "actual": 0.6453991192406573,
+      "expected": 0.6453991192406573,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "clear-positive-altitude",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 8.03399781298799,
+      "expected": 8.033997812987991,
+      "absoluteError": 1.7763568394002505e-15,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "clear-positive-altitude",
+      "field": "q",
+      "actual": 0.696600218701201,
+      "expected": 0.6966002187012009,
+      "absoluteError": 1.1102230246251565e-16,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "clear-positive-altitude",
+      "field": "relativeWidthError",
+      "actual": 0,
+      "expected": 0,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "fraction"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "near-zero-q",
+      "field": "arcOfVisionDeg",
+      "actual": 11,
+      "expected": 11,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "near-zero-q",
+      "field": "geocentricSemidiameterArcmin",
+      "actual": 16.347,
+      "expected": 16.347,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "near-zero-q",
+      "field": "topocentricSemidiameterArcmin",
+      "actual": 16.36690113746363,
+      "expected": 16.36690113746363,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "near-zero-q",
+      "field": "crescentWidthArcmin",
+      "actual": 0.3007060721288393,
+      "expected": 0.3007060721288394,
+      "absoluteError": 5.551115123125783e-17,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "near-zero-q",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 9.999269164942307,
+      "expected": 9.999269164942307,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "near-zero-q",
+      "field": "q",
+      "actual": 0.10007308350576931,
+      "expected": 0.10007308350576934,
+      "absoluteError": 2.7755575615628914e-17,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "near-zero-q",
+      "field": "relativeWidthError",
+      "actual": -2.220446049250313e-16,
+      "expected": 0,
+      "absoluteError": 2.220446049250313e-16,
+      "tolerance": 1e-12,
+      "unit": "fraction"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-finding-region",
+      "field": "arcOfVisionDeg",
+      "actual": 10,
+      "expected": 10,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-finding-region",
+      "field": "geocentricSemidiameterArcmin",
+      "actual": 15.802100000000001,
+      "expected": 15.8021,
+      "absoluteError": 1.7763568394002505e-15,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-finding-region",
+      "field": "topocentricSemidiameterArcmin",
+      "actual": 15.81605238580093,
+      "expected": 15.816052385800928,
+      "absoluteError": 1.7763568394002505e-15,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-finding-region",
+      "field": "crescentWidthArcmin",
+      "actual": 0.24028137421694368,
+      "expected": 0.24028137421694368,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-finding-region",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 10.358741092790115,
+      "expected": 10.358741092790115,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-finding-region",
+      "field": "q",
+      "actual": -0.03587410927901154,
+      "expected": -0.035874109279011544,
+      "absoluteError": 6.938893903907228e-18,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-finding-region",
+      "field": "relativeWidthError",
+      "actual": 0,
+      "expected": 0,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "fraction"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-only-region",
+      "field": "arcOfVisionDeg",
+      "actual": 8.7,
+      "expected": 8.7,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-only-region",
+      "field": "geocentricSemidiameterArcmin",
+      "actual": 14.984750000000002,
+      "expected": 14.98475,
+      "absoluteError": 1.7763568394002505e-15,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-only-region",
+      "field": "topocentricSemidiameterArcmin",
+      "actual": 14.993116406173272,
+      "expected": 14.993116406173272,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-only-region",
+      "field": "crescentWidthArcmin",
+      "actual": 0.184590142610258,
+      "expected": 0.18459014261025802,
+      "absoluteError": 2.7755575615628914e-17,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-only-region",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 10.694308489218159,
+      "expected": 10.69430848921816,
+      "absoluteError": 1.7763568394002505e-15,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-only-region",
+      "field": "q",
+      "actual": -0.19943084892181595,
+      "expected": -0.199430848921816,
+      "absoluteError": 5.551115123125783e-17,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-only-region",
+      "field": "relativeWidthError",
+      "actual": -1.1102230246251565e-16,
+      "expected": 0,
+      "absoluteError": 1.1102230246251565e-16,
+      "tolerance": 1e-12,
+      "unit": "fraction"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "below-optical-region",
+      "field": "arcOfVisionDeg",
+      "actual": 8.2,
+      "expected": 8.2,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "below-optical-region",
+      "field": "geocentricSemidiameterArcmin",
+      "actual": 16.61945,
+      "expected": 16.61945,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "below-optical-region",
+      "field": "topocentricSemidiameterArcmin",
+      "actual": 16.624596418832407,
+      "expected": 16.624596418832407,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "below-optical-region",
+      "field": "crescentWidthArcmin",
+      "actual": 0.1826068386174433,
+      "expected": 0.1826068386174433,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "below-optical-region",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 10.706335528593439,
+      "expected": 10.706335528593439,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "below-optical-region",
+      "field": "q",
+      "actual": -0.2506335528593439,
+      "expected": -0.2506335528593439,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "below-optical-region",
+      "field": "relativeWidthError",
+      "actual": 0,
+      "expected": 0,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "fraction"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "small-crescent",
+      "field": "arcOfVisionDeg",
+      "actual": 6,
+      "expected": 6,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "small-crescent",
+      "field": "geocentricSemidiameterArcmin",
+      "actual": 14.7123,
+      "expected": 14.7123,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "small-crescent",
+      "field": "topocentricSemidiameterArcmin",
+      "actual": 14.716333089945724,
+      "expected": 14.716333089945724,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "small-crescent",
+      "field": "crescentWidthArcmin",
+      "actual": 0.10969331524825016,
+      "expected": 0.10969331524825017,
+      "absoluteError": 1.3877787807814457e-17,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "small-crescent",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 11.152225356432968,
+      "expected": 11.15222535643297,
+      "absoluteError": 1.7763568394002505e-15,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "small-crescent",
+      "field": "q",
+      "actual": -0.5152225356432968,
+      "expected": -0.5152225356432969,
+      "absoluteError": 1.1102230246251565e-16,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "small-crescent",
+      "field": "relativeWidthError",
+      "actual": -1.1102230246251565e-16,
+      "expected": 0,
+      "absoluteError": 1.1102230246251565e-16,
+      "tolerance": 1e-12,
+      "unit": "fraction"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "arcOfVisionDeg",
+      "actual": 7,
+      "expected": 7,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "geocentricSemidiameterArcmin",
+      "actual": 16.347,
+      "expected": 16.347,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "topocentricSemidiameterArcmin",
+      "actual": 16.332068840158097,
+      "expected": 16.332068840158094,
+      "absoluteError": 3.552713678800501e-15,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "crescentWidthArcmin",
+      "actual": 0.15894257126036004,
+      "expected": 0.15894257126036002,
+      "absoluteError": 2.7755575615628914e-17,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 10.850250738971514,
+      "expected": 10.850250738971516,
+      "absoluteError": 1.7763568394002505e-15,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "q",
+      "actual": -0.3850250738971514,
+      "expected": -0.38502507389715157,
+      "absoluteError": 1.6653345369377348e-16,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "relativeWidthError",
+      "actual": 2.220446049250313e-16,
+      "expected": 0,
+      "absoluteError": 2.220446049250313e-16,
+      "tolerance": 1e-12,
+      "unit": "fraction"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "lunar-geocentric-horizon",
+      "field": "arcOfVisionDeg",
+      "actual": 8,
+      "expected": 8,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "lunar-geocentric-horizon",
+      "field": "geocentricSemidiameterArcmin",
+      "actual": 15.529650000000002,
+      "expected": 15.52965,
+      "absoluteError": 1.7763568394002505e-15,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "lunar-geocentric-horizon",
+      "field": "topocentricSemidiameterArcmin",
+      "actual": 15.529650000000002,
+      "expected": 15.52965,
+      "absoluteError": 1.7763568394002505e-15,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "lunar-geocentric-horizon",
+      "field": "crescentWidthArcmin",
+      "actual": 0.19119576147671943,
+      "expected": 0.1911957614767194,
+      "absoluteError": 2.7755575615628914e-17,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "lunar-geocentric-horizon",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 10.654289370023847,
+      "expected": 10.654289370023847,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "lunar-geocentric-horizon",
+      "field": "q",
+      "actual": -0.2654289370023847,
+      "expected": -0.2654289370023847,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "lunar-geocentric-horizon",
+      "field": "relativeWidthError",
+      "actual": 2.220446049250313e-16,
+      "expected": 0,
+      "absoluteError": 2.220446049250313e-16,
+      "tolerance": 1e-12,
+      "unit": "fraction"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "tiny-positive-elongation",
+      "field": "arcOfVisionDeg",
+      "actual": 0,
+      "expected": 0,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "tiny-positive-elongation",
+      "field": "geocentricSemidiameterArcmin",
+      "actual": 16.347,
+      "expected": 16.347,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "tiny-positive-elongation",
+      "field": "topocentricSemidiameterArcmin",
+      "actual": 16.347,
+      "expected": 16.347,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "tiny-positive-elongation",
+      "field": "crescentWidthArcmin",
+      "actual": 2.4897904806266627e-17,
+      "expected": 2.4897904806266627e-17,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "tiny-positive-elongation",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 11.8371,
+      "expected": 11.8371,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "tiny-positive-elongation",
+      "field": "q",
+      "actual": -1.18371,
+      "expected": -1.18371,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "tiny-positive-elongation",
+      "field": "relativeWidthError",
+      "actual": 0,
+      "expected": 0,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "fraction"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "zero-elongation",
+      "field": "arcOfVisionDeg",
+      "actual": 0,
+      "expected": 0,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "zero-elongation",
+      "field": "geocentricSemidiameterArcmin",
+      "actual": 16.347,
+      "expected": 16.347,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "zero-elongation",
+      "field": "topocentricSemidiameterArcmin",
+      "actual": 16.347,
+      "expected": 16.347,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "zero-elongation",
+      "field": "crescentWidthArcmin",
+      "actual": 0,
+      "expected": 0,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "zero-elongation",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 11.8371,
+      "expected": 11.8371,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "zero-elongation",
+      "field": "q",
+      "actual": -1.18371,
+      "expected": -1.18371,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "dimensionless"
+    },
+    {
+      "reference": "yallop-rational-time",
+      "id": "exact-evening-fraction",
+      "field": "bestTime",
+      "actual": 992630160000,
+      "expected": 992630160000,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-rational-time",
+      "id": "crosses-utc-midnight",
+      "field": "bestTime",
+      "actual": 1009843800000,
+      "expected": 1009843800000,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-rational-time",
+      "id": "fractional-millisecond-down",
+      "field": "bestTime",
+      "actual": 992628000000,
+      "expected": 992628000000,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-rational-time",
+      "id": "fractional-millisecond-up",
+      "field": "bestTime",
+      "actual": 992628000001,
+      "expected": 992628000001,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-rational-time",
+      "id": "ordinary-lag-rounding",
+      "field": "bestTime",
+      "actual": 992629200000,
+      "expected": 992629200000,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "unaided-region",
+      "field": "arcOfVisionDeg",
+      "actual": 11,
+      "expected": 11,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "unaided-region",
+      "field": "crescentWidthArcmin",
+      "actual": 0.5,
+      "expected": 0.5,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "unaided-region",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 4.174049999999999,
+      "expected": 4.17405,
+      "absoluteError": 8.881784197001252e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "unaided-region",
+      "field": "v",
+      "actual": 6.825950000000001,
+      "expected": 6.82595,
+      "absoluteError": 8.881784197001252e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "optical-and-possible-unaided-region",
+      "field": "arcOfVisionDeg",
+      "actual": 8,
+      "expected": 8,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "optical-and-possible-unaided-region",
+      "field": "crescentWidthArcmin",
+      "actual": 0.5,
+      "expected": 0.5,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "optical-and-possible-unaided-region",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 4.174049999999999,
+      "expected": 4.17405,
+      "absoluteError": 8.881784197001252e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "optical-and-possible-unaided-region",
+      "field": "v",
+      "actual": 3.8259500000000006,
+      "expected": 3.82595,
+      "absoluteError": 4.440892098500626e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "optical-only-region",
+      "field": "arcOfVisionDeg",
+      "actual": 5,
+      "expected": 5,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "optical-only-region",
+      "field": "crescentWidthArcmin",
+      "actual": 0.3,
+      "expected": 0.3,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "optical-only-region",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 5.3314424,
+      "expected": 5.3314424,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "optical-only-region",
+      "field": "v",
+      "actual": -0.33144240000000025,
+      "expected": -0.3314424,
+      "absoluteError": 2.220446049250313e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "below-optical-region",
+      "field": "arcOfVisionDeg",
+      "actual": 4,
+      "expected": 4,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "below-optical-region",
+      "field": "crescentWidthArcmin",
+      "actual": 0.1,
+      "expected": 0.1,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "below-optical-region",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 6.5400572,
+      "expected": 6.5400572,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "below-optical-region",
+      "field": "v",
+      "actual": -2.5400571999999997,
+      "expected": -2.5400572,
+      "absoluteError": 4.440892098500626e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "arcOfVisionDeg",
+      "actual": 6,
+      "expected": 6,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "crescentWidthArcmin",
+      "actual": 0.4,
+      "expected": 0.4,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 4.746648799999999,
+      "expected": 4.7466488,
+      "absoluteError": 8.881784197001252e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "v",
+      "actual": 1.2533512000000009,
+      "expected": 1.2533512,
+      "absoluteError": 8.881784197001252e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "wide-crescent",
+      "field": "arcOfVisionDeg",
+      "actual": 15,
+      "expected": 15,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "wide-crescent",
+      "field": "crescentWidthArcmin",
+      "actual": 0.9,
+      "expected": 0.9,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "wide-crescent",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 1.9933867999999997,
+      "expected": 1.9933868,
+      "absoluteError": 2.220446049250313e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "wide-crescent",
+      "field": "v",
+      "actual": 13.0066132,
+      "expected": 13.0066132,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "narrow-positive-width",
+      "field": "arcOfVisionDeg",
+      "actual": 6,
+      "expected": 6,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "narrow-positive-width",
+      "field": "crescentWidthArcmin",
+      "actual": 1e-12,
+      "expected": 1e-12,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "narrow-positive-width",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 7.165099999993677,
+      "expected": 7.165099999993678,
+      "absoluteError": 8.881784197001252e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "narrow-positive-width",
+      "field": "v",
+      "actual": -1.1650999999936769,
+      "expected": -1.1650999999936773,
+      "absoluteError": 4.440892098500626e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "zero-width",
+      "field": "arcOfVisionDeg",
+      "actual": 0,
+      "expected": 0,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "zero-width",
+      "field": "crescentWidthArcmin",
+      "actual": 0,
+      "expected": 0,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "zero-width",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 7.1651,
+      "expected": 7.1651,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "zero-width",
+      "field": "v",
+      "actual": -7.1651,
+      "expected": -7.1651,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "nonround-inputs",
+      "field": "arcOfVisionDeg",
+      "actual": 9.001466,
+      "expected": 9.001466,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "nonround-inputs",
+      "field": "crescentWidthArcmin",
+      "actual": 0.314159,
+      "expected": 0.314159,
+      "absoluteError": 0,
+      "tolerance": 1e-12,
+      "unit": "arcminutes"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "nonround-inputs",
+      "field": "referenceArcOfVisionDeg",
+      "actual": 5.247877388214292,
+      "expected": 5.247877388214293,
+      "absoluteError": 8.881784197001252e-16,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "nonround-inputs",
+      "field": "v",
+      "actual": 3.753588611785709,
+      "expected": 3.7535886117857076,
+      "absoluteError": 1.3322676295501878e-15,
+      "tolerance": 1e-12,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-rational-time",
+      "id": "exact-evening-fraction",
+      "field": "bestTime",
+      "actual": 1015266240000,
+      "expected": 1015266240000,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "odeh-rational-time",
+      "id": "crosses-utc-year",
+      "field": "bestTime",
+      "actual": 1041379620000,
+      "expected": 1041379620000,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "odeh-rational-time",
+      "id": "fractional-millisecond-down",
+      "field": "bestTime",
+      "actual": 1015264800001,
+      "expected": 1015264800001,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "odeh-rational-time",
+      "id": "fractional-millisecond-up",
+      "field": "bestTime",
+      "actual": 1015264800002,
+      "expected": 1015264800002,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "odeh-rational-time",
+      "id": "ordinary-lag-rounding",
+      "field": "bestTime",
+      "actual": 1015266240001,
+      "expected": 1015266240001,
+      "absoluteError": 0,
+      "tolerance": 0,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "odeh-table-v",
+      "id": "width-0.1",
+      "field": "arcv1Deg",
+      "actual": 5.5800572,
+      "expected": 5.6,
+      "absoluteError": 0.019942799999999927,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-table-v",
+      "id": "width-0.1",
+      "field": "arcv2Deg",
+      "actual": 8.5400572,
+      "expected": 8.5,
+      "absoluteError": 0.04005719999999968,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-table-v",
+      "id": "width-0.1",
+      "field": "arcv3Deg",
+      "actual": 12.1900572,
+      "expected": 12.2,
+      "absoluteError": 0.009942799999999252,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-table-v",
+      "id": "width-0.5",
+      "field": "arcv1Deg",
+      "actual": 3.2140499999999994,
+      "expected": 3.2,
+      "absoluteError": 0.01404999999999923,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-table-v",
+      "id": "width-0.5",
+      "field": "arcv2Deg",
+      "actual": 6.174049999999999,
+      "expected": 6.2,
+      "absoluteError": 0.025950000000000806,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-table-v",
+      "id": "width-0.5",
+      "field": "arcv3Deg",
+      "actual": 9.82405,
+      "expected": 9.8,
+      "absoluteError": 0.024049999999999017,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-table-v",
+      "id": "width-0.9",
+      "field": "arcv1Deg",
+      "actual": 1.0333867999999997,
+      "expected": 1,
+      "absoluteError": 0.03338679999999972,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-table-v",
+      "id": "width-0.9",
+      "field": "arcv2Deg",
+      "actual": 3.9933867999999997,
+      "expected": 4,
+      "absoluteError": 0.006613200000000319,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "odeh-table-v",
+      "id": "width-0.9",
+      "field": "arcv3Deg",
+      "actual": 7.6433868,
+      "expected": 7.6,
+      "absoluteError": 0.04338680000000039,
+      "tolerance": 0.05,
+      "unit": "degrees"
+    },
+    {
+      "reference": "yallop-appendix-a-rounded-time",
+      "id": "1998-01-28",
+      "field": "bestTime",
+      "actual": 886006793333,
+      "expected": 886006800000,
+      "absoluteError": 6667,
+      "tolerance": 60000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-01-28",
+      "field": "sunset",
+      "actual": 886005756730,
+      "expected": 886005780000,
+      "absoluteError": 23270,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-01-28",
+      "field": "moonset",
+      "actual": 886008078356,
+      "expected": 886008060000,
+      "absoluteError": 18356,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-01-28",
+      "field": "bestTime",
+      "actual": 886006788564,
+      "expected": 886006800000,
+      "absoluteError": 11436,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-rounded-time",
+      "id": "1998-01-29",
+      "field": "bestTime",
+      "actual": 886095306667,
+      "expected": 886095300000,
+      "absoluteError": 6667,
+      "tolerance": 60000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-01-29",
+      "field": "sunset",
+      "actual": 886092263830,
+      "expected": 886092240000,
+      "absoluteError": 23830,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-01-29",
+      "field": "moonset",
+      "actual": 886099125975,
+      "expected": 886099140000,
+      "absoluteError": 14025,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-01-29",
+      "field": "bestTime",
+      "actual": 886095313672,
+      "expected": 886095300000,
+      "absoluteError": 13672,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "london-january-1998",
+      "field": "eventBestTime",
+      "actual": 886095313672,
+      "expected": 886095300000,
+      "absoluteError": 13672,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-rounded-time",
+      "id": "1998-08-22",
+      "field": "bestTime",
+      "actual": 903813286667,
+      "expected": 903813300000,
+      "absoluteError": 13333,
+      "tolerance": 60000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-08-22",
+      "field": "sunset",
+      "actual": 903812955241,
+      "expected": 903812940000,
+      "absoluteError": 15241,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-08-22",
+      "field": "moonset",
+      "actual": 903813724876,
+      "expected": 903813720000,
+      "absoluteError": 4876,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-08-22",
+      "field": "bestTime",
+      "actual": 903813297301,
+      "expected": 903813300000,
+      "absoluteError": 2699,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-rounded-time",
+      "id": "1998-08-23",
+      "field": "bestTime",
+      "actual": 903900286667,
+      "expected": 903900300000,
+      "absoluteError": 13333,
+      "tolerance": 60000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-08-23",
+      "field": "sunset",
+      "actual": 903899228715,
+      "expected": 903899220000,
+      "absoluteError": 8715,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-08-23",
+      "field": "moonset",
+      "actual": 903901610398,
+      "expected": 903901620000,
+      "absoluteError": 9602,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-08-23",
+      "field": "bestTime",
+      "actual": 903900287241,
+      "expected": 903900300000,
+      "absoluteError": 12759,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "london-august-1998",
+      "field": "eventBestTime",
+      "actual": 903900287241,
+      "expected": 903900300000,
+      "absoluteError": 12759,
+      "tolerance": 120000,
+      "unit": "epoch-milliseconds"
+    }
+  ],
+  "classifications": [
+    {
+      "reference": "horizons-phase",
+      "id": "Moon/geocentric",
+      "field": "classification",
+      "actual": "evening-star",
+      "expected": "evening-star"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Mercury/geocentric",
+      "field": "classification",
+      "actual": "morning-star",
+      "expected": "morning-star"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Venus/geocentric",
+      "field": "classification",
+      "actual": "evening-star",
+      "expected": "evening-star"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Mars/geocentric",
+      "field": "classification",
+      "actual": "morning-star",
+      "expected": "morning-star"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Jupiter/geocentric",
+      "field": "classification",
+      "actual": "morning-star",
+      "expected": "morning-star"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Saturn/geocentric",
+      "field": "classification",
+      "actual": "evening-star",
+      "expected": "evening-star"
+    },
+    {
+      "reference": "horizons-phase",
+      "id": "Moon/topocentric",
+      "field": "classification",
+      "actual": "evening-star",
+      "expected": "evening-star"
+    },
+    {
+      "reference": "schoch-criterion",
+      "id": "schoch-magnitude-zero-first",
+      "field": "passesCriterion",
+      "actual": false,
+      "expected": false
+    },
+    {
+      "reference": "schoch-criterion",
+      "id": "schoch-magnitude-zero-last",
+      "field": "passesCriterion",
+      "actual": true,
+      "expected": true
+    },
+    {
+      "reference": "constructed-extinction",
+      "id": "explicit-refraction",
+      "field": "photometryPasses",
+      "actual": true,
+      "expected": true
+    },
+    {
+      "reference": "constructed-extinction",
+      "id": "explicit-refraction",
+      "field": "passesCriterion",
+      "actual": false,
+      "expected": false
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "clear-positive-altitude",
+      "field": "category",
+      "actual": "A",
+      "expected": "A"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "near-zero-q",
+      "field": "category",
+      "actual": "B",
+      "expected": "B"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-finding-region",
+      "field": "category",
+      "actual": "C",
+      "expected": "C"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "optical-only-region",
+      "field": "category",
+      "actual": "D",
+      "expected": "D"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "below-optical-region",
+      "field": "category",
+      "actual": "E",
+      "expected": "E"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "small-crescent",
+      "field": "category",
+      "actual": "F",
+      "expected": "F"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "category",
+      "actual": "F",
+      "expected": "F"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "lunar-geocentric-horizon",
+      "field": "category",
+      "actual": "E",
+      "expected": "E"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "tiny-positive-elongation",
+      "field": "category",
+      "actual": "F",
+      "expected": "F"
+    },
+    {
+      "reference": "yallop-decimal",
+      "id": "zero-elongation",
+      "field": "category",
+      "actual": "F",
+      "expected": "F"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "0.216-below",
+      "field": "category",
+      "actual": "B",
+      "expected": "B"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "0.216-equal",
+      "field": "category",
+      "actual": "B",
+      "expected": "B"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "0.216-above",
+      "field": "category",
+      "actual": "A",
+      "expected": "A"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.014-below",
+      "field": "category",
+      "actual": "C",
+      "expected": "C"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.014-equal",
+      "field": "category",
+      "actual": "C",
+      "expected": "C"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.014-above",
+      "field": "category",
+      "actual": "B",
+      "expected": "B"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.160-below",
+      "field": "category",
+      "actual": "D",
+      "expected": "D"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.160-equal",
+      "field": "category",
+      "actual": "D",
+      "expected": "D"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.160-above",
+      "field": "category",
+      "actual": "C",
+      "expected": "C"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.232-below",
+      "field": "category",
+      "actual": "E",
+      "expected": "E"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.232-equal",
+      "field": "category",
+      "actual": "E",
+      "expected": "E"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.232-above",
+      "field": "category",
+      "actual": "D",
+      "expected": "D"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.293-below",
+      "field": "category",
+      "actual": "F",
+      "expected": "F"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.293-equal",
+      "field": "category",
+      "actual": "F",
+      "expected": "F"
+    },
+    {
+      "reference": "yallop-boundaries",
+      "id": "-0.293-above",
+      "field": "category",
+      "actual": "E",
+      "expected": "E"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "unaided-region",
+      "field": "category",
+      "actual": "A",
+      "expected": "A"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "optical-and-possible-unaided-region",
+      "field": "category",
+      "actual": "B",
+      "expected": "B"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "optical-only-region",
+      "field": "category",
+      "actual": "C",
+      "expected": "C"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "below-optical-region",
+      "field": "category",
+      "actual": "D",
+      "expected": "D"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "negative-lunar-altitude",
+      "field": "category",
+      "actual": "C",
+      "expected": "C"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "wide-crescent",
+      "field": "category",
+      "actual": "A",
+      "expected": "A"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "narrow-positive-width",
+      "field": "category",
+      "actual": "D",
+      "expected": "D"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "zero-width",
+      "field": "category",
+      "actual": "D",
+      "expected": "D"
+    },
+    {
+      "reference": "odeh-decimal",
+      "id": "nonround-inputs",
+      "field": "category",
+      "actual": "B",
+      "expected": "B"
+    },
+    {
+      "reference": "odeh-boundaries",
+      "id": "5.65-below",
+      "field": "category",
+      "actual": "B",
+      "expected": "B"
+    },
+    {
+      "reference": "odeh-boundaries",
+      "id": "5.65-equal",
+      "field": "category",
+      "actual": "A",
+      "expected": "A"
+    },
+    {
+      "reference": "odeh-boundaries",
+      "id": "5.65-above",
+      "field": "category",
+      "actual": "A",
+      "expected": "A"
+    },
+    {
+      "reference": "odeh-boundaries",
+      "id": "2-below",
+      "field": "category",
+      "actual": "C",
+      "expected": "C"
+    },
+    {
+      "reference": "odeh-boundaries",
+      "id": "2-equal",
+      "field": "category",
+      "actual": "B",
+      "expected": "B"
+    },
+    {
+      "reference": "odeh-boundaries",
+      "id": "2-above",
+      "field": "category",
+      "actual": "B",
+      "expected": "B"
+    },
+    {
+      "reference": "odeh-boundaries",
+      "id": "-0.96-below",
+      "field": "category",
+      "actual": "D",
+      "expected": "D"
+    },
+    {
+      "reference": "odeh-boundaries",
+      "id": "-0.96-equal",
+      "field": "category",
+      "actual": "C",
+      "expected": "C"
+    },
+    {
+      "reference": "odeh-boundaries",
+      "id": "-0.96-above",
+      "field": "category",
+      "actual": "C",
+      "expected": "C"
+    },
+    {
+      "reference": "yallop-appendix-a-printed-time",
+      "id": "1998-01-28",
+      "field": "category",
+      "actual": "F",
+      "expected": "F"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-01-28",
+      "field": "category",
+      "actual": "F",
+      "expected": "F"
+    },
+    {
+      "reference": "yallop-appendix-a-printed-time",
+      "id": "1998-01-29",
+      "field": "category",
+      "actual": "A",
+      "expected": "A"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-01-29",
+      "field": "category",
+      "actual": "A",
+      "expected": "A"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "london-january-1998",
+      "field": "appearance",
+      "actual": "first-evening",
+      "expected": "first-evening"
+    },
+    {
+      "reference": "yallop-appendix-a-printed-time",
+      "id": "1998-08-22",
+      "field": "category",
+      "actual": "F",
+      "expected": "F"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-08-22",
+      "field": "category",
+      "actual": "F",
+      "expected": "F"
+    },
+    {
+      "reference": "yallop-appendix-a-printed-time",
+      "id": "1998-08-23",
+      "field": "category",
+      "actual": "B",
+      "expected": "B"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "1998-08-23",
+      "field": "category",
+      "actual": "B",
+      "expected": "B"
+    },
+    {
+      "reference": "yallop-appendix-a-search",
+      "id": "london-august-1998",
+      "field": "appearance",
+      "actual": "first-evening",
+      "expected": "first-evening"
+    }
+  ]
+}
