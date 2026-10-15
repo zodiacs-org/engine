@@ -66,6 +66,13 @@ records the resulting statuses and runtime. Runnable example and receipt
 replay tests cover existing development inputs only and do not extend the
 independent validation span or change any acceptance limit.
 
+M12's [review](REVIEW.md) adds synthetic robustness and CLI acceptance
+checks. Its [local check record](docs/evidence/m12/RESULTS.md) preserves the
+same independent failures. These checks do not tune the search, change
+the numerical measurements in the M10 report or extend its physical
+accuracy coverage. Only the report's implementation digest changed to
+bind the updated CLI help disclosure.
+
 The reserved cases are now consumed validation data. This milestone records
 their failures without adjusting the search, deleting a case or widening
 a limit. Future tuning requires a new registration and new held-out cases.

@@ -2,7 +2,7 @@
 
 Run these commands from `apsides/` in this checkout. Use Node 22.22.2 to
 match the recorded [M10 measurements](docs/evidence/m10/RESULTS.md) and
-[M11 checks](docs/evidence/m11/RESULTS.md). The executable selected by `node`
+[M12 review checks](docs/evidence/m12/RESULTS.md). The executable selected by `node`
 and the one npm finds on `PATH` should agree.
 
 ```sh
@@ -107,6 +107,8 @@ npm run check -- --write-evidence
 That command still exits unsuccessfully while any gate fails. It writes
 `docs/evidence/m11/RESULTS.md` with the exact command statuses and input
 digests. It does not rewrite the M10 measurements or any frozen reference.
+The M12 check record is a review snapshot of the ordinary `npm run check`
+output and its generated report; the command above specifically targets M11.
 
 The isolation script uses `npm pack --dry-run --ignore-scripts` to inspect
 the real checkout's file selection without making an archive or running

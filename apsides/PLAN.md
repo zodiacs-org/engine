@@ -16,7 +16,7 @@ remain unchanged.
 - [x] M9 Implement `apsides lunar`, `apsides planetary`, and `apsides window` with strict arguments, JSON output, help, exit statuses, and subprocess tests.
 - [x] M10 Run the reserved independent validation corpus, record timing/distance/speed errors and missed/extra events, and publish only the measured coverage and unresolved limitations.
 - [x] M11 Finish library and CLI examples, reproducibility instructions, source and license records, local checks, and evidence that apsides stays outside the engine package.
-- [ ] M12 Review scientific semantics and failure paths; complete robustness and CLI acceptance checks, document remaining limitations, and leave a reviewable project for the harness.
+- [x] M12 Review scientific semantics and failure paths; complete robustness and CLI acceptance checks, document remaining limitations, and leave a reviewable project for the harness.
 
 M1 tests establish integration and validation contracts. They are not
 astronomical accuracy evidence. The numerical accuracy budget and fixture
@@ -41,4 +41,15 @@ license records, and a local check runner that executes every gate while
 preserving failures. [The M11 check record](docs/evidence/m11/RESULTS.md)
 records passing type and isolation gates and failing independent acceptance.
 The new example and check-runner tests pass; the original accuracy failures
-remain unchanged. M12 remains unfinished.
+remain unchanged.
+
+M12 completes the scientific and failure-path review, synthetic numerical
+robustness checks and CLI acceptance checks. [REVIEW.md](REVIEW.md) records
+the reviewed scope and remaining limitations; the
+[M12 check record](docs/evidence/m12/RESULTS.md) records passing type and
+isolation gates with the original independent acceptance failures retained.
+CLI help now discloses those failures; the regenerated measured report
+changes only its implementation digest. The numerical search, engine,
+frozen references and acceptance limits are unchanged. Completing this
+checklist does not establish that the library meets all physical accuracy
+or completeness requirements.

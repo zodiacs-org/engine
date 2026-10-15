@@ -7,8 +7,9 @@ window API, motion probes with replayable receipts, optional lunar syzygy
 annotations, a JSON command line, and frozen independent development and
 held-out references. Independent validation fails for Mercury's total
 speed, Neptune's event timing, and Pluto's distance and search completion.
-The original acceptance limits remain unchanged. The remaining work is in
-[PLAN.md](PLAN.md).
+The original acceptance limits remain unchanged. The implementation sequence
+in [PLAN.md](PLAN.md) has reached its final review; [REVIEW.md](REVIEW.md)
+records the scientific scope, checked failure paths and unresolved acceptance.
 
 Use Node 22.22.2 for the local checks, matching this project's initial test
 environment. From this repository:
@@ -23,7 +24,8 @@ The current check exits unsuccessfully because independent acceptance fails.
 It runs typechecking, the full tests, offline validation/report verification,
 and package isolation even after an earlier failure. It prints every gate's
 status and saves a structured report in `.generated/checks/report.json`.
-The [local check evidence](docs/evidence/m11/RESULTS.md) records this run.
+The [final local check evidence](docs/evidence/m12/RESULTS.md) records the
+reviewed run; the [M11 record](docs/evidence/m11/RESULTS.md) remains available.
 [VALIDATION.md](VALIDATION.md) records the failing cases and unchanged limits.
 
 The dependency is a relative file reference to the immutable carried engine

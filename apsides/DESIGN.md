@@ -15,6 +15,8 @@ the reserved corpus without tuning the search. Its measured report is in
 acceptance remains failing, as [VALIDATION.md](VALIDATION.md) describes.
 M11 adds runnable Node examples, motion-receipt replay, reproduction and
 licensing records, and local checks that retain every gate's failure.
+M12 reviews the scientific semantics and adds synthetic numerical robustness
+and CLI delivery acceptance checks, documented in [REVIEW.md](REVIEW.md).
 [REPRODUCING.md](REPRODUCING.md) describes that workflow. The search methods,
 ephemeris, frozen references and numerical acceptance limits are unchanged.
 
