@@ -2,11 +2,10 @@
 
 ## Status and scope
 
-This is the design adopted in M1, extended by the M2 ingestion and M3 numerical
-contracts below. The catalogue, acceptance policy, synthetic engine-contract
-checks, Horizons ingestion tools, Chebyshev core and shard codec are implemented.
-No astronomical position accuracy, installed
-coefficient dataset or operational supported range is claimed yet.
+This is the design adopted in M1, extended by the ingestion, numerical and
+Chiron pilot contracts below. The pilot adds an astronomical evaluator and
+receipts, with independent checks confined to the pilot interval. The wider
+target range and other bodies are not yet available.
 
 The required targets are Chiron, Ceres, Pallas, Juno and Vesta. Pholus and
 Eris can follow only after the same checks. The target interval is
@@ -19,7 +18,7 @@ catalogue alone. There is no extrapolation outside installed coverage.
 The package provides geocentric ecliptic longitude and latitude in degrees,
 distance in au, longitude and latitude speed in degrees per TT day, distance
 speed in au per TT day, and `retrograde = longitudeSpeed < 0`. A zero speed
-does not imply a reversal. Future results must identify their frame, clock,
+does not imply a reversal. Results identify their frame, clock,
 corrections and source dataset. Houses, planetary ephemerides and the HTTP
 chart API remain the engine's responsibilities.
 
@@ -74,12 +73,14 @@ around each held-out epoch.
 
 ## Time, frames and engine reuse
 
-Reuse `src/date-input.ts` and `src/time-scale.ts` through a companion
-`engine-bridge.ts` when implemented. ISO/Date inputs follow the engine's
+The companion `engine-bridge.ts` reuses `src/date-input.ts` and
+`src/time-scale.ts`. ISO/Date inputs follow the engine's
 time basis; explicit TT Julian dates avoid uncertain civil-time conversion.
 Historical and future UTC uncertainty remains separate from interpolation
-agreement. Coverage checks apply after conversion to TT, including all
-derivative probes. Default engine calc coverage ends earlier than this
+agreement. Coverage checks apply after conversion to TT and to every
+coefficient evaluation. The pilot's derivative probes evaluate only frame
+matrices and do not require coefficient coverage. Default engine calc
+coverage ends earlier than this
 project's target: dispatching ordinary bodies must preserve its refusals.
 
 The engine's frame functions consume mean equator/equinox J2000 vectors,
@@ -353,6 +354,81 @@ velocities in Euclidean au and au per TT day. `measureSegmentJoin` does the same
 for neighboring segments across a shard boundary. `assertShardContinuity`
 requires explicit finite nonnegative limits and rejects a jump in either
 quantity, including equal positions with unequal velocities. Loading a
-structurally valid shard does not itself call that gate. Numerical seam limits
-for real datasets and their independent astronomical validation remain M4/M5
-work. These primitives do not yet produce astronomical result receipts.
+structurally valid shard does not itself call that gate. The pilot loader
+below enforces real-dataset seam limits and supplies astronomical receipts.
+
+## M4 pilot and evaluator
+
+`src/pilot-recipe.ts` preregisters Chiron from TT JD 2451544.5 inclusive to
+2451910.5 exclusive, calendar year 2000. Each segment spans at most 16 days;
+its Cartesian fit has degree 14 and uses 17 Gauss nodes. The final segment
+is shorter. The held-out corpus covers irregular interiors, the first
+endpoint, just inside the final endpoint, internal seams and both sides of
+each seam. Each reference-speed center has independent position samples at
+plus/minus 0.005 and 0.01 TT day. There are no tuning epochs. These definitions,
+counts and training/reference disjointness are enforced by
+`tests/pilot-recipe.test.ts`; the complete request manifest is
+`tests/fixtures/pilot/manifest.json`.
+
+The original recipe is retained as `PILOT_RECIPE_V1`. Intake stopped before
+any fit or held-out comparison because Horizons changed the last printed
+digit of a requested Julian date. The active recipe rounds requests to six
+decimal places, retaining the parser's exact returned-epoch check. This is
+an intake precision change, not a change to the degree, segment lengths,
+selection fractions or error budgets. The tests preserve both recipes.
+Transport batches were also reduced after HTTP 502 responses. Batching does
+not change the epoch sets or enter the fitting decision.
+
+`scripts/generate-pilot.ts` verifies all retained original responses before
+fitting. It requires the frozen generator source hashes and exact Node
+runtime, and rejects a changed solution, request, role or response digest.
+Coefficients and descriptors go only to ignored `generated/pilot/`. Identical
+frozen inputs regenerate identical bytes under the recorded runtime.
+`src/pilot-sources.ts` shares the same strict source verification with the
+runtime loader. This pilot uses one shard; the loader also checks ordering
+and joins when the same coverage is split across shards. Position and
+Cartesian speed jumps must each be at most 1e-9 in au and au per TT day,
+respectively, before calculation is admitted. These limits were set before
+the fit and are enforced by the recipe and evaluator tests.
+
+`src/engine-bridge.ts` reuses the engine's strict date parser and time basis.
+Explicit `{ jd, scale: "tt" }` inputs avoid a civil-time conversion. Calendar
+inputs retain the engine time record, including its Delta T source and
+uncertainty. Coverage is checked on the resulting TT epoch. Invalid times,
+unknown/unavailable bodies and out-of-coverage epochs are structured
+refusals; malformed datasets fail loading before an evaluator is returned.
+
+The bridge turns ICRF through the engine's frame bias into EQJ, then into
+the true ecliptic/equinox of date. Velocity is `R v + R' p`: the analytic
+polynomial velocity plus the time derivative of the rotation. `R'` uses a
+symmetric five-point matrix stencil with a 0.01 TT-day step. Only the frame
+is probed outside an endpoint; coefficients are never extrapolated.
+`tests/engine-bridge.test.ts` checks static-vector frame motion, moving-vector
+derivatives, time conversion, invalid input and frozen snapshots. This
+avoids treating the source's corrected velocity columns as derivatives of
+the fitted observables.
+
+`scripts/reference-erfa.py` independently turns held-out Horizons ICRF
+positions using ERFA's IAU 2006/2000A bias/precession/nutation matrix and
+true obliquity. It imports neither the engine nor this package's numerical
+implementation. `tests/pilot-accuracy.test.ts` checks every held-out position
+inside coverage and every registered reference-speed center against the
+unchanged acceptance policy. Reference speeds use position differences on
+the actual TT epoch intervals. Fine versus coarse stencil differences must
+be no greater than one tenth of each speed budget, enforced by
+`REFERENCE_CONVERGENCE_LIMITS` and the accuracy tests. Both direct and
+retrograde states are checked where the reference speed exceeds the full
+longitude-speed budget. Stations are not located by this milestone.
+
+Every result and calculation refusal has a convention/dataset receipt, with
+the time record when the input time was resolved.
+It names the source manifest and generator digests, JPL solution, installed
+coverage, engine package/runtime and local source graph hashes. Successful
+positions also identify their shard and segment. The loader verifies source
+bytes, schema and joins; it deliberately records
+`accuracy-not-certified-by-loader`. Passing sample tests is documented in
+`docs/evidence/M4.md`, not converted into a guarantee at all instants.
+Hashes detect changes relative to pins and are not signatures. The loader
+does not prove that arbitrary caller-supplied coefficients were honestly
+generated; the retained-source regeneration and independent tests are the
+checks on this pilot's coefficients.

@@ -1,13 +1,18 @@
 # Sources and redistribution record
 
 Read on 2026-10-15. M2 adds original JPL Horizons numerical API responses and
-request manifests under `tests/fixtures/horizons/`. There are no fitted
+request manifests under `tests/fixtures/horizons/`. There are no committed fitted
 coefficients or external source-code copies. The code and original
 documentation in this directory use the repository's [MIT licence](../LICENSE);
 that declaration does not relicense the retained JPL material.
 
 M3 adds original numerical code and in-memory synthetic analytic tests. It
 does not add fitted astronomical data or fetch new Horizons samples.
+
+M4 adds original Chiron pilot responses under `tests/fixtures/pilot/`.
+Derived coefficients and independent reduced references remain in ignored
+`generated/`. The numerical-data redistribution basis below also applies
+to this new corpus.
 
 ## Numerical definitions
 
@@ -109,7 +114,12 @@ fixtures and their request manifests are retained here.
 Relative imports refer to this engine checkout. The synthetic engine-contract
 tests import only `src/crossings.ts` and `src/configured-aspects.ts`, which require no
 planetary ephemeris. They test integration with invented motions and rows.
-Later source-level reuse is identified in [DESIGN.md](DESIGN.md).
+The pilot reuses the engine's date parser, time basis and frame matrices as
+identified in [DESIGN.md](DESIGN.md). It copies no planetary ephemeris.
+The companion installs the same pinned `astronomy-engine@2.1.19` for type
+resolution; the pilot's frame and time evaluation does not call its planetary
+functions. Explicit dataset loading hashes the evaluator and bridge's local
+source imports, including the parent engine files, into each receipt.
 
 The engine's [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE) remain
 authoritative for its dependencies and data. In particular, reusing or
@@ -120,11 +130,44 @@ retain the notices for what it includes.
 
 ## Independent validation
 
-Horizons samples at epochs excluded from training and tuning are the planned
-reference. Capture original values with request parameters and hashes;
-never synthesize expected astronomical values from this package. A separate
-ERFA-based reduction is planned for frame validation. Record its exact
-implementation version and licence before adding that reference tool.
+The M4 pilot uses Horizons samples excluded from training and tuning.
+`tests/fixtures/pilot/manifest.json` records every request, raw digest,
+retrieval time and source identity. It names Chiron solution `JPL#171`,
+Earth `DE441`, perturbers `SB441-N16` and EOP `eop.261014.p270110`.
+`src/pilot-sources.ts` checks those identities across all original responses;
+`scripts/generate-pilot.ts` verifies them before any fit. These identifiers
+are the captured source's claims, not claims of present-day JPL currency.
+See `docs/evidence/M4.md` for the comparison scope and enforcing tests.
+
+The separate `scripts/reference-erfa.py` uses PyERFA 2.0.1.5, its ERFA 2.0.1
+library and SOFA heritage identifier 20231011, and NumPy 2.2.6. The script
+checks those versions, and `scripts/requirements-reference.txt` pins the
+installed Python packages. Its matrix is `rx(obl06 + nut06a.deps, pnm06a)`.
+It rotates already corrected ICRF vectors only, without adding light time,
+aberration or deflection. It imports neither this package's fitter nor the
+engine. `tests/reference-erfa.test.py` also compares the frame construction
+with ERFA's separate mean-ecliptic matrix plus nutation in longitude.
+
+Primary implementation documentation read on 2026-10-15:
+
+- [ERFA pnm06a](https://github.com/liberfa/erfa/blob/v2.0.1/src/pnm06a.c),
+  TT bias, precession and nutation into the true equator and equinox of date.
+- [ERFA nut06a](https://github.com/liberfa/erfa/blob/v2.0.1/src/nut06a.c),
+  IAU 2000A nutation with the IAU 2006 adjustments.
+- [ERFA obl06](https://github.com/liberfa/erfa/blob/v2.0.1/src/obl06.c),
+  mean obliquity, and [rx](https://github.com/liberfa/erfa/blob/v2.0.1/src/rx.c),
+  the rotation convention.
+- [ERFA ecm06](https://github.com/liberfa/erfa/blob/v2.0.1/src/ecm06.c),
+  transformation of free ICRS vectors, independent of their origin and
+  astrometric corrections.
+
+[PyERFA](https://github.com/liberfa/pyerfa/blob/v2.0.1.5/LICENSE.rst) and
+[NumPy](https://github.com/numpy/numpy/blob/v2.2.6/LICENSE.txt) use BSD
+three-clause licences; [ERFA's licence](https://github.com/liberfa/erfa/blob/v2.0.1/LICENSE)
+is BSD-style with SOFA attribution. Their sources and binaries are installed
+only under ignored `.cache/`, with their own notices. No library source or
+binary is committed. The original reference script is MIT. Validation
+records its script/requirements hashes and actual library versions.
 
 Swiss Ephemeris code, binaries, tables, fixtures and per-case output are
 excluded. No AGPL or commercial ephemeris data is an input. All examples

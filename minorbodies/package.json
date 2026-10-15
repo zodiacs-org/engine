@@ -11,10 +11,16 @@
     "fixtures:check": "node --experimental-strip-types scripts/capture-horizons.ts --check",
     "fixtures:capture": "node --experimental-strip-types scripts/capture-horizons.ts --capture",
     "fixtures:replay": "node --experimental-strip-types scripts/capture-horizons.ts --replay",
-    "check": "npm run typecheck && npm test && npm run fixtures:check && npm run check:scope"
+    "pilot:capture": "node --experimental-strip-types scripts/generate-pilot.ts --capture",
+    "pilot:check": "node --experimental-strip-types scripts/generate-pilot.ts --check",
+    "pilot:build": "node --experimental-strip-types scripts/generate-pilot.ts --build",
+    "pilot:validate": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/validate-pilot.ts",
+    "reference:test": ".cache/reference-venv/bin/python tests/reference-erfa.test.py",
+    "check": "npm run typecheck && npm test && npm run reference:test && npm run fixtures:check && npm run check:scope"
   },
   "devDependencies": {
     "@types/node": "22.19.19",
+    "astronomy-engine": "2.1.19",
     "typescript": "5.9.3",
     "vitest": "2.1.9"
   }

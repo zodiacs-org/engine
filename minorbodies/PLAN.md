@@ -9,7 +9,7 @@ human-written evidence notes stay with their capture scripts and provenance.
 - [x] M1 Establish the isolated TypeScript package, body catalogue, acceptance policy, DESIGN.md and SOURCES.md. Verify the existing engine integration boundaries with synthetic tests. No position accuracy claim yet.
 - [x] M2 Implement a serialized, cached JPL Horizons client and strict response parser with request manifests, source digests, target/center/frame/time checks, fixture capture and offline parser tests.
 - [x] M3 Implement deterministic Chebyshev fitting, evaluation and derivatives, shard format and integrity checks. Test against independently evaluated analytic functions, including segment edges and malformed data.
-- [ ] M4 Generate a Chiron pilot dataset and implement the geocentric evaluator, time conversion, ecliptic reduction, speed, retrograde state and result receipts. Compare it with held-out Horizons samples before extending the span.
+- [x] M4 Generate a Chiron pilot dataset and implement the geocentric evaluator, time conversion, ecliptic reduction, speed, retrograde state and result receipts. Compare it with held-out Horizons samples before extending the span.
 - [ ] M5 Generate and validate the required Chiron, Ceres, Pallas, Juno and Vesta datasets over the target range. Freeze request manifests and digest receipts; measure shard sizes and boundary continuity. Keep generated bulk data ignored.
 - [ ] M6 Add the body adapter: delegate ordinary bodies to engine calc, expose minor-body calculation with explicit conventions and refusals, and provide generic crossings callbacks and configured-aspect rows. Verify actual results and mixed-body use.
 - [ ] M7 Implement station searches through the engine crossings solver, with sample budgets, boundary handling and receipts. Check direct-to-retrograde and retrograde-to-direct events against independent Horizons samples.
@@ -51,3 +51,18 @@ regression tests. These are numerical and integrity checks, not astronomical
 accuracy evidence. The root `npm run package:contents`, with its npm cache
 under this folder, still fails on absent `dist/calc.d.ts`; no root build was
 run. Only `minorbodies/` changed. M4 is the next unchecked milestone.
+
+M4 verification: `npm run check` passed on Node 22.22.2, including
+TypeScript, Vitest, the independent Python reference tests, source verification
+and package exclusion. The Chiron pilot over calendar year 2000 TT passed
+all unchanged acceptance gates against held-out original Horizons samples
+with an independent ERFA reduction and converged reference-speed differences.
+`npm run pilot:build`, `npm run pilot:validate` and native offline loading
+also passed. Source captures, generator hashes, recipes and evidence notes
+are retained; coefficients and full reports remain ignored. Review tightened
+generator identity checks and clarified receipt/coverage documentation.
+The original recipe's intake failure is retained beside its revised epoch
+precision, without changing any fit or accuracy budget after validation.
+The root package contents check still fails on absent `dist/calc.d.ts`;
+no root build or packed-file change was made. Only `minorbodies/` changed.
+M5 is the next unchecked milestone.
