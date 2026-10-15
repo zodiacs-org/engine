@@ -14,7 +14,7 @@ a line to `CHANGES.txt`. Git operations belong to the external harness.
 - [x] M7 Add the `draconic chart` CLI with strict arguments, synthetic JSON input, explicit mean-node selection, JSON output and useful errors.
 - [x] M8 Add `draconic compare`, plain text rendering for both commands and CLI subprocess tests covering exit codes and output streams.
 - [x] M9 Add small synthetic examples and usage documentation for the library and CLI, citing the arithmetic tests for every numerical example and describing scope and limits.
-- [ ] M10 Audit validation, mutation isolation, receipts and package exclusion; run the complete standalone checks and record the final supported behavior and remaining limits.
+- [x] M10 Audit validation, mutation isolation, receipts and package exclusion; run the complete standalone checks and record the final supported behavior and remaining limits.
 
 ## Conventions and implementation constraints
 
@@ -249,3 +249,30 @@ excludes `draconic/` and wrote no archive. `npm run package:contents` stops at
 missing `dist/calc.d.ts`; the engine build remains absent and was not generated.
 Project files meet the requested size limit, and documentation contains no
 em dash characters. All session changes are inside `draconic/`. M10 is next.
+
+## M10 session verification
+
+Completed the final audit of validation, mutation isolation, natal receipt
+preservation and package exclusion. Fixed the pure transform's node copy to
+include only declared scalar fields, avoiding shared undeclared mutable
+metadata. The audit regression tests cover both pure APIs and node choices,
+including an undeclared getter that must not run. Added checks for missing or
+invalid engine node output without substitution, rejection before casting,
+pure transforms without casting, frozen birth/options/context, nested receipt
+isolation and repeatable calls with interleaved node choices and time settings.
+Every exported engine house system is exercised with both node choices and
+valid natal envelopes. Engine comparisons remain wiring and preservation
+evidence, not independent astronomical references.
+
+Added a reusable standalone audit script for nonignored project file limits,
+documentation punctuation, the private package flag, dependency pinning and
+engine npm file-list exclusion with scripts disabled. The local README links
+the final behavior and remaining limits in `docs/AUDIT.md` and documents the
+verification command and trusted-object boundary.
+
+TypeScript checking, the complete standalone Vitest suite and the audit script
+passed on the local Node 22.22.2 runtime. The engine npm dry run excludes
+`draconic/` and wrote no archive. `npm run package:contents` still stops at
+missing `dist/calc.d.ts`; the engine build remains absent and was not generated.
+Other engine build-dependent and archive gates are not claimed as passed.
+All session changes are inside `draconic/`. All planned milestones are complete.

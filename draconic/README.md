@@ -16,6 +16,7 @@ cd draconic
 npm ci --ignore-scripts
 npm run typecheck
 npm test
+node scripts/audit.mjs
 ```
 
 This is a private source project, excluded from the engine npm package. The
@@ -231,6 +232,9 @@ the selected node. It trusts the caller's selection and chart provenance;
 use `castNatal` for selection on the engine's chart clock. The result is a
 separate derived coordinate object, with no engine receipt or engine-issued
 chart claim. Use the result wrappers below to attach natal provenance.
+Only the declared scalar node fields are copied; undeclared node metadata is
+omitted. [test/audit.test.ts](test/audit.test.ts) checks this isolation for
+both pure APIs and both node choices.
 
 Each body reports its rotated longitude, unchanged latitude, refreshed sign
 and degree, and a longitude-only house number from the engine's `houseOf`
@@ -395,6 +399,8 @@ not authenticate a caller-created chart. Use `castNatal` or the result
 wrappers to select nodes on the engine's chart clock. The wrapper formats and
 separate draconic conventions are local drafts; no draconic receipt import or
 replay codec is provided. The engine codec applies to `result.natal` only.
+JavaScript callers supply trusted objects: consumed getters, proxies or
+iterators may execute. These functions are not an untrusted chart decoder.
 
 The project reports positions and coordinate differences only. It adds no
 interpretation, predictions, aspects, derived motion, progressions,
@@ -410,3 +416,7 @@ The engine as distributed is `MIT AND CC-BY-4.0`; see its
 [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE). No engine data or
 release archives are copied here. All examples and fixtures must be synthetic.
 Dependencies, caches and generated output stay in ignored local folders.
+
+The final review, verification commands and remaining limits are recorded in
+[docs/AUDIT.md](docs/AUDIT.md). The standalone audit checks the engine npm
+file list with scripts disabled, without building or packing an archive.

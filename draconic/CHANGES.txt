@@ -7,3 +7,4 @@ Complete M6: add chart and comparison result wrappers with unchanged engine nata
 Complete M7: add the JSON chart CLI with strict synthetic input and arguments, true or mean node selection, preserved natal receipts, a local source runner and validation and subprocess tests.
 Complete M8: add the comparison CLI and plain text for both commands with natal receipt details, hand-derived rendering checks and subprocess coverage of output streams and exit codes.
 Complete M9: add runnable synthetic library and CLI examples, usage and convention documentation with hand-derived arithmetic references, and example integration tests.
+Complete M10: isolate declared node metadata, audit validation, frozen inputs, house systems and receipts, add repeatable package-exclusion checks, and document final behavior and limits.

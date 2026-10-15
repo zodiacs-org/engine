@@ -64,5 +64,10 @@ export function transformNatal(source: DraconicSource): DraconicChart {
       house: houses === null ? null : houseOf(lon, houses.cusps)
     };
   });
-  return { node: { ...node }, bodies, angles, houses };
+  // Copy only the public scalar fields. A structurally compatible caller
+  // object can also carry mutable metadata that does not belong in output.
+  const selected: SelectedNorthNode = node.kind === "true"
+    ? { kind: "true", enginePoint: "North Node", longitude: node.longitude }
+    : { kind: "mean", enginePoint: "Mean Node", longitude: node.longitude };
+  return { node: selected, bodies, angles, houses };
 }
