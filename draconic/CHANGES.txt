@@ -1,1 +1,2 @@
 Complete M1: scaffold the private draconic TypeScript project with validated pure longitude rotation and hand-derived Vitest arithmetic checks.
+Complete M2: add engine natal casting with default true or explicit mean north-node selection, preserved settings and flags, and synthetic integration tests.

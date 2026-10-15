@@ -6,7 +6,7 @@ completes the next unchecked milestone, runs its checks, ticks it here and adds
 a line to `CHANGES.txt`. Git operations belong to the external harness.
 
 - [x] M1 Create an isolated private TypeScript project, implement a pure longitude rotation primitive with input validation, and document hand-derived synthetic arithmetic with Vitest coverage.
-- [ ] M2 Add an engine adapter using relative source imports for natal casting and true or mean north-node selection, preserving engine input settings and flags.
+- [x] M2 Add an engine adapter using relative source imports for natal casting and true or mean north-node selection, preserving engine input settings and flags.
 - [ ] M3 Implement the pure chart transformation for bodies, angles and existing house cusps, refresh position annotations, and reuse engine house helpers without recasting rotated houses.
 - [ ] M4 Cover absent coordinates, unknown birth time, requested versus computed house systems and polar fallback with synthetic integration tests.
 - [ ] M5 Implement structured natal tropical versus draconic comparisons with explicit circular delta units and boundary conventions, without interpretation.
@@ -53,3 +53,21 @@ exclude every path starting with `draconic/`. It wrote no archive.
 engine `dist/`, so the check reported missing `dist/calc.d.ts`. The engine was
 not built because this task prohibits writing its `dist/`. No files outside
 `draconic/` were changed. M2 is next.
+
+## M2 session verification
+
+Added `castNatal` with the engine's true north node as the default and explicit
+mean north-node selection through `chartPoints(natal)`. The returned natal
+chart retains engine settings, canonical flags, time basis and deltaT metadata.
+Node options reject unsupported values and unknown keys. Synthetic integration
+tests check both node paths, supported input scales with pinned deltaT,
+canonical flags, caller-input isolation and propagated engine validation.
+These comparisons establish adapter wiring, not astronomical accuracy.
+
+`npm run typecheck` and `npm test` passed in this folder on Node 22.22.2.
+The local dependency installation used scripts disabled. Vitest and TypeScript
+resolve the engine's pinned ephemeris from this folder without a root install.
+The engine npm dry run with scripts disabled excludes `draconic/` and wrote
+no archive. `npm run package:contents` again stops at missing `dist/calc.d.ts`;
+the engine build remains absent and was not generated. All session changes
+are inside `draconic/`. M3 is next.
