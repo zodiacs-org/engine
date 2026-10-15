@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import {
-  instantaneousPanchang, luminarySnapshot, panchangDay, prepareCivilDay, prepareSunriseDay,
+  instantaneousPanchang, luminarySnapshot, panchangDay, panchangRange, preparePanchangRange, prepareCivilDay, prepareSunriseDay,
   resolveCivilDay, resolveSunriseDay, searchLimbTransitions
 } from "../src/index.js";
 
@@ -88,3 +88,17 @@ assert.equal(anomalyDay.sunriseMonth.start.kind, "new-moon");
 assert.equal(anomalyDay.sunriseMonth.end.kind, "new-moon");
 assert.equal(anomalyDay.sunriseMonth.name, "Jyaishtha");
 console.log("Source runtime preserves month anomalies and forward sunrise tithi comparisons with original receipts.");
+
+const rangeInput = { from: "1880-06-01", to: "1880-06-02", timeZone: input.timeZone, observer: input.observer };
+await preparePanchangRange(rangeInput);
+const range = panchangRange(rangeInput, { monthConvention: "amanta" });
+if (range.status !== "ok") throw new Error(range.reason);
+assert.deepEqual(range.days.map((row) => row.date), ["1880-06-01", "1880-06-02"]);
+assert.deepEqual(range.days[0], day);
+assert.equal(range.days[0]!.sunrise.end.snapshot, range.days[1]!.sunrise.start.snapshot);
+assert.equal(range.days[0]!.sunrise.end.event, range.days[1]!.sunrise.start.event);
+assert.equal(range.skyCacheHits, 1);
+assert(range.snapshotCacheHits > 0);
+assert.equal(range.samples, range.snapshotSamples + range.skySamples);
+assert(range.samples <= range.maxSamples);
+console.log("Source runtime assembles historical civil ranges with shared engine calculations, receipts and bounded work.");

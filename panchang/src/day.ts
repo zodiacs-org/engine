@@ -74,7 +74,7 @@ export type PanchangDayRefusal = DayContext & (
 );
 export type PanchangDayResult = PanchangDay | PanchangDayRefusal;
 
-function settingsOf(options: PanchangDayOptions) {
+export function daySettingsOf(options: PanchangDayOptions) {
   const input = optionsOf(options, ["ayanamsa", "monthConvention", "sunriseMaxSamples", "transitionMaxSamples", "monthMaxSamples"], "panchang day options");
   const monthConvention = validateMonthConvention(input.monthConvention);
   const ayanamsa = input.ayanamsa === undefined ? "lahiri" : input.ayanamsa;
@@ -128,7 +128,20 @@ function segmentsOf(sunrise: SunriseDayWindow, timeline: LimbTransitions, months
  * propagate; an operational refusal exposes diagnostics without partial segments.
  */
 export function panchangDay(input: CivilDayInput, options: PanchangDayOptions): PanchangDayResult {
-  const settings = settingsOf(options);
+  return panchangDayWith(input, options, { resolveSunriseDay, searchLimbTransitions, searchLunarMonths });
+}
+
+/** Internal range wiring; standalone day calls retain their own search sources. */
+export interface DayCalculations {
+  readonly resolveSunriseDay: typeof resolveSunriseDay;
+  readonly searchLimbTransitions: typeof searchLimbTransitions;
+  readonly searchLunarMonths: typeof searchLunarMonths;
+}
+
+export function panchangDayWith(input: CivilDayInput, options: PanchangDayOptions,
+  calculations: DayCalculations): PanchangDayResult {
+  const { resolveSunriseDay, searchLimbTransitions, searchLunarMonths } = calculations;
+  const settings = daySettingsOf(options);
   const sunrise = resolveSunriseDay(input, { ayanamsa: settings.ayanamsa, ...settings.sunriseOptions });
   const context: DayContext = { date: sunrise.date, timeZone: sunrise.timeZone, observer: sunrise.observer,
     ayanamsa: settings.ayanamsa, monthConvention: settings.monthConvention, conventions: DAY_CONVENTIONS };

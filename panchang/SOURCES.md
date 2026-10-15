@@ -521,6 +521,49 @@ same licensing basis as M1/M4 and the repository licensing audit. No
 source prose, scan, full calendar table, ERFA code or Swiss Ephemeris
 material is redistributed. Provider digests can change on refetch.
 
+## M9: civil ranges, calculation reuse and budget evidence
+
+[test/range.test.ts](test/range.test.ts) uses Gregorian divisibility rules
+and hand-written calendar successors for leap/common February boundaries,
+year boundaries, years below 0100, equal endpoints and the finite range
+limit. It retains the skipped Apia date as a calendar member. Calendar
+comparisons are exact, with no astronomical accuracy tolerance.
+
+The clock expectations reuse M2's already cited primary tzdb 2025c records:
+New York standard/daylight midnight offsets in March and November 2024,
+Kathmandu's midnight gap and offset change in January 1986, and Apia's
+missing December 2011 date and repeated July 1892 date. Historical
+New York boundaries in June 1880 use the invented longitude -73.25 degrees
+and the hand-derived mean-time offset, 240 seconds per degree, or -04:53.
+Every observer is synthetic; naming a zone does not locate the observer.
+These tests make no atlas correction and add no external source extracts.
+
+Constructed range tests reuse M5/M7's prescribed Sun = t/U and Moon =
+13t/U trajectories with U = 2^26 milliseconds and the March 2024 epoch
+recorded above. Artificial rises occur six elapsed hours after the actual
+resolved civil start. The sky instrument reports seven evaluations per
+search. Neither those rise instants nor the copied diagnostic/receipt
+shapes assert physical sunrise or ephemeris accuracy. Expected sunrise
+tithi and karana indices follow the independent floor formulas t/U and
+2t/U modulo their cycle counts. The tests check day order, contiguous
+partitions, common boundary objects, receipt identity and call-local reuse.
+
+The maximum range length of 31 included dates and default total budget of
+100,000 are operational settings, enforced in the range tests. The budget
+counts uncached adapter snapshots plus actual engine sky evaluations,
+including work before a refusal. Exact-budget tests first measure the
+instrumented work of this call and then verify acceptance at that limit
+and refusal below it. That is an accounting test, not an independent
+astronomical reference. Per-day search budgets continue to count logical
+samples even when calculations come from the shared cache.
+
+Real-engine comparisons of range results against standalone days check
+wiring for Lahiri and Raman at the invented site on March 20-21, 2024,
+and historical history preparation is exercised for June 1-2, 1880.
+They establish integration and retention of the engine's results and
+receipts, without establishing astronomical accuracy or new error bounds.
+M11 remains responsible for wider independent physical transition checks.
+
 ## Later milestones
 
 Before adding further physical transition instants, record the primary

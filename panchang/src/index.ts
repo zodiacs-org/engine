@@ -36,3 +36,7 @@ export type {
 } from "./months.js";
 export { compareSunriseTithis, TITHI_ANOMALY_CONVENTIONS } from "./anomalies.js";
 export type { SunriseTithiComparison } from "./anomalies.js";
+export { RANGE_CONVENTIONS, civilDatesInRange, panchangRange, preparePanchangRange } from "./range.js";
+export type {
+  PanchangRange, PanchangRangeInput, PanchangRangeOptions, PanchangRangeRefusal, PanchangRangeResult
+} from "./range.js";

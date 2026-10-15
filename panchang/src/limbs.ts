@@ -114,6 +114,11 @@ export function karanaOf(sunTropical: number, moonTropical: number): KaranaPosit
 export function instantaneousPanchang(at: PanchangInstant, options: SnapshotOptions = {}): InstantaneousResult {
   const snapshot = luminarySnapshot(at, options);
   if (snapshot.status === "refused") return snapshot;
+  return classifySnapshot(snapshot);
+}
+
+/** Internal: derive labels from an already calculated snapshot without new engine work. */
+export function classifySnapshot(snapshot: LuminarySnapshot): InstantaneousPanchang {
   const declaration = { ayanamsa: snapshot.ayanamsa.name, at: snapshot.utc };
   return Object.freeze({
     ...snapshot,

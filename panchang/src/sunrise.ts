@@ -95,6 +95,19 @@ export async function prepareSunriseDay(input: CivilDayInput): Promise<void> {
  * errors propagate. Refusals expose diagnostics but no partial day window.
  */
 export function resolveSunriseDay(input: CivilDayInput, options: SunriseOptions = {}): SunriseDayResult {
+  return resolveSunriseDayWith(input, options, { resolveCivilDay, luminarySnapshot, skyEvents });
+}
+
+/** Internal dependencies scoped to a single range; no process-wide caches. */
+export interface SunriseCalculations {
+  readonly resolveCivilDay: typeof resolveCivilDay;
+  readonly luminarySnapshot: typeof luminarySnapshot;
+  readonly skyEvents: typeof skyEvents;
+}
+
+export function resolveSunriseDayWith(input: CivilDayInput, options: SunriseOptions,
+  calculations: SunriseCalculations): SunriseDayResult {
+  const { resolveCivilDay, luminarySnapshot, skyEvents } = calculations;
   const settings = settingsOf(options);
   const firstCivil = resolveCivilDay(input);
   const civilDays: CivilDayResult[] = [firstCivil];

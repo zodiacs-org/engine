@@ -118,6 +118,12 @@ function compareTransitions(a: LimbTransition, b: LimbTransition): number {
  * adjacent-classification checks verify each returned change, not completeness.
  */
 export function searchLimbTransitions(from: DateInput, to: DateInput, options: TransitionOptions = {}): TransitionResult {
+  return searchLimbTransitionsWith(from, to, options, instantaneousPanchang);
+}
+
+/** Internal snapshot source for a single range; search budgets still count logical samples. */
+export function searchLimbTransitionsWith(from: DateInput, to: DateInput, options: TransitionOptions,
+  source: typeof instantaneousPanchang): TransitionResult {
   const settings = settingsOf(options);
   const lo = dateFrom(from, "Transition start").getTime();
   const hi = dateFrom(to, "Transition end").getTime();
@@ -141,7 +147,7 @@ export function searchLimbTransitions(from: DateInput, to: DateInput, options: T
     if (existing) return existing;
     if (samples >= settings.maxSamples) throw new Refused("sample-budget");
     samples++;
-    const state = instantaneousPanchang(new Date(ms), { ayanamsa: settings.ayanamsa });
+    const state = source(new Date(ms), { ayanamsa: settings.ayanamsa });
     if (state.status !== "ok") throw new Refused("engine-refused", state);
     cache.set(ms, state);
     return state;

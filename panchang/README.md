@@ -6,7 +6,7 @@ It currently exposes the luminary snapshot adapter, instantaneous limbs,
 civil-date and sunrise-to-sunrise windows with vara, limb transition
 searches with complete surrounding intervals, amanta/purnimanta month
 naming with adhika/kshaya detection, sunrise tithi anomaly comparisons,
-and a pure day assembly API. Date ranges and the CLI are planned milestones.
+and pure day and date-range assembly APIs. The CLI is a planned milestone.
 
 Use Node 22.7.0 or later. From this directory:
 
@@ -506,3 +506,68 @@ basis and precise scope are recorded in [SOURCES.md](SOURCES.md#m8-anomaly-defin
 They do not validate every tithi boundary, every anomalous year or other
 regional calendar conventions. Wider physical transition comparisons
 remain M11's work.
+
+```ts
+import { panchangRange, preparePanchangRange } from "./src/index.js";
+
+const input = {
+  from: "2024-03-20", to: "2024-03-22", timeZone: "Asia/Kolkata",
+  observer: { latitude: 12.5, longitude: 75.25 } // Invented coordinates.
+};
+await preparePanchangRange(input);
+const result = panchangRange(input, { monthConvention: "amanta", ayanamsa: "lahiri" });
+if (result.status === "ok") {
+  for (const day of result.days) {
+    console.log(day.date, day.sunrise.start.utc, day.sunrise.vara.name,
+      day.sunriseMonth.name, day.sunriseMonth.kind);
+  }
+} else {
+  console.log(result.failedDate, result.reason);
+  if (result.reason === "day-refused") console.log(result.day);
+}
+```
+
+`panchangRange(input, options)` is synchronous and performs no I/O. Both
+`from` and `to` are included civil dates. It requires the same explicit
+month convention as `panchangDay` and defaults to Lahiri. The observer and
+timezone apply to the entire range. `preparePanchangRange(input)` explicitly
+loads the engine histories for all required midnight boundaries first;
+unprepared history errors otherwise propagate.
+
+`civilDatesInRange(from, to)` returns the included Gregorian dates. It
+advances calendar dates across month, year and daylight-saving changes,
+independently of elapsed UTC time. Dates skipped by a zone remain requested
+dates and cause a refusal. Date ranges must be forward, contain at most
+31 dates, and have representable successors for the final sunrise search.
+[test/range.test.ts](test/range.test.ts) enforces these limits and the
+calendar rules with independent arithmetic and M2's clock references.
+
+A successful range contains chronological `days`, each with the complete
+day result, unchanged limb boundaries, ayanamsa, engine receipts and
+conventions. A failed day refuses the entire range: `failedDate` names the
+first affected date and `day` retains its original refusal diagnostics.
+No partial `days` array is returned. Polar sunrises, skipped dates, repeated
+date boundaries, padded time-basis discontinuities and coverage refusals
+retain the day API's existing policies. An affected following date can
+therefore refuse the preceding sunrise day too.
+
+`maxSamples` defaults to 100,000 and must be a positive finite safe integer.
+It limits uncached luminary snapshots plus actual sky-search evaluations
+across the entire call. A snapshot is one adapter request for Sun/Moon
+tropical/sidereal positions; the engine's internal work is not counted
+individually. `samples` is the sum of `snapshotSamples` and `skySamples`.
+The range never exceeds that budget. A global budget refusal reports
+`reason: "sample-budget"`, the affected `stage`, and the original sky
+search when a reduced sky budget caused its refusal. It returns no partial
+days. The accounting, default and exact-budget behavior are enforced by
+[test/range.test.ts](test/range.test.ts).
+
+Within a call, matching civil resolutions, completed sunrise searches and
+same-instant luminary snapshots are reused. Cached objects keep their
+original receipts. `snapshotCacheHits` and `skyCacheHits` report reuse.
+The existing `sunriseMaxSamples`, `transitionMaxSamples` and
+`monthMaxSamples` options still apply to each day search, counting its
+logical samples including cache hits. Those counters cannot be added to
+measure actual range work; use the range counters instead. No calculation
+cache persists between range calls. Reuse and standalone-day equivalence
+checks are integration evidence, without a physical accuracy claim.

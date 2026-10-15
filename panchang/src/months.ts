@@ -141,6 +141,12 @@ const phaseHalf = (state: LuminarySnapshot) => Math.floor(tithiOf(state.sun.trop
  * verifies local boundary ownership, not exhaustive astronomical completeness.
  */
 export function searchLunarMonths(from: DateInput, to: DateInput, options: MonthOptions): MonthResult {
+  return searchLunarMonthsWith(from, to, options, luminarySnapshot);
+}
+
+/** Internal snapshot source for a single range; search budgets still count logical samples. */
+export function searchLunarMonthsWith(from: DateInput, to: DateInput, options: MonthOptions,
+  source: typeof luminarySnapshot): MonthResult {
   const settings = settingsOf(options);
   const lo = dateFrom(from, "Month window start").getTime();
   const hi = dateFrom(to, "Month window end").getTime();
@@ -162,7 +168,7 @@ export function searchLunarMonths(from: DateInput, to: DateInput, options: Month
     if (existing) return existing;
     if (samples >= settings.maxSamples) throw new Refused("sample-budget");
     samples++;
-    const state = luminarySnapshot(new Date(ms), { ayanamsa: settings.ayanamsa });
+    const state = source(new Date(ms), { ayanamsa: settings.ayanamsa });
     if (state.status !== "ok") throw new Refused("engine-refused", state);
     cache.set(ms, state);
     return state;

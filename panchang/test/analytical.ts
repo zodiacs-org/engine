@@ -20,8 +20,9 @@ export function analyticalSource(direction = 1, freezeYoga = false, withMonths =
   if (seed.status !== "ok") throw new Error("Expected seed coverage");
   const wrap = (angle: number) => ((angle % 360) + 360) % 360;
   const snapshot = (at: unknown) => {
-    const utc = (at as Date).toISOString();
-    const t = direction * ((at as Date).getTime() - EPOCH) / UNIT;
+    const date = new Date(at as Date | string);
+    const utc = date.toISOString();
+    const t = direction * (date.getTime() - EPOCH) / UNIT;
     const sun = wrap(t);
     const moon = wrap(13 * t);
     const a = declareSiderealLongitude(freezeYoga ? 0 : sun, { ayanamsa: "lahiri", at: utc });
