@@ -3,9 +3,9 @@
 This checkout-local project is being developed as a library and CLI for
 Arabic lunar mansions (manazil al-qamar) on top of `@zodiacs/engine`.
 [PLAN.md](PLAN.md) records the implementation milestones. The first boundary
-table, pure longitude classifier, tropical mansion-at API, tropical
-ingress searches and range occupancy intervals are available. Sidereal
-selection and CLI commands are planned in later milestones.
+table, pure longitude classifier, mansion-at API, ingress searches and
+range occupancy intervals are available in tropical or explicitly selected
+sidereal coordinates. CLI commands are planned in a later milestone.
 
 [src/tables.ts](src/tables.ts) exports the immutable `EQUAL28_ARIES_V1`
 table and `getBoundaryTable("equal28-aries-v1")`. Table selection requires
@@ -36,7 +36,7 @@ zodiac, evaluates no ephemeris and makes no engine receipt claim. It is a
 mathematical helper used by the receipt-bearing astronomical API.
 
 [src/index.ts](src/index.ts) is the library entry. Its synchronous
-`mansionAt({ time, table })` calculates the tropical mansion at a resolved
+`mansionAt({ time, table, zodiac? })` calculates the mansion at a resolved
 instant, with no I/O:
 
 ```ts
@@ -53,8 +53,8 @@ if (result.status === "ok") {
 ```
 
 Successful results contain `at`, the engine's normalized UTC label;
-`zodiac: "tropical"`; `longitude`, the geocentric Moon longitude in degrees
-on the true ecliptic of date; the full immutable `table` and selected
+`zodiac`, the selected zodiac; `longitude`, the geocentric Moon longitude
+in degrees in that zodiac on the true ecliptic of date; the full immutable `table` and selected
 `mansion`; and the engine's unmodified `bounds` and `receipt`. The receipt
 records the actual time basis, engine version, ephemeris version and
 calculation conventions. Its request can be passed back to the engine's
@@ -71,8 +71,46 @@ pins TT minus UT1 in seconds. The engine retains that choice in the receipt.
 Unresolved local times, invalid calendar dates, numeric epoch timestamps,
 leap seconds and unsupported object fields throw `RangeError`. Missing or
 unsupported table identifiers and extra request options also throw
-`RangeError`. This version accepts only `time` and `table`; it always
-computes the tropical zodiac.
+`RangeError`. Request options are `time`, `table` and optional `zodiac`.
+They must be enumerable data properties of a plain object.
+
+Omitting `zodiac`, or setting it to `"tropical"`, preserves the tropical
+calculation. Sidereal calculations require an explicit built-in engine
+ayanamsa name, using `zodiac: { sidereal: name }`:
+
+```ts
+const result = mansionAt({
+  time: "2001-02-03T04:05:06Z", // Synthetic example instant.
+  table: "equal28-aries-v1",
+  zodiac: { sidereal: "lahiri" }
+});
+if (result.status === "ok") {
+  console.log(result.longitude, result.ayanamsa, result.receipt,
+    result.tropicalLongitude, result.tropicalReceipt);
+}
+```
+
+`MANSION_AYANAMSAS` exports the engine's supported built-in names, including
+`lahiri`, `fagan-bradley`, `krishnamurti`, `raman`, `yukteswar`,
+`true-chitra`, `true-revati`, `true-pushya` and `galactic-center`.
+Their definitions and sources remain in the engine's
+[ayanamsa guide](../docs/vedic.md). This project accepts those named
+definitions, without custom epoch or rate definitions. A bare `"sidereal"`,
+missing name, unknown name or extra zodiac field throws `RangeError`
+before evaluation. The selection is copied and frozen for the result.
+Table selection remains mandatory and independent of zodiac selection.
+
+For sidereal results, `longitude`, `bounds` and `receipt` come directly
+from the engine's sidereal Moon calculation. `ayanamsa` is its unmodified
+value, including mean, nutation, true value, subtracted convention and bound.
+The true ayanamsa is subtracted on this true ecliptic of date; the receipt
+records its definition and zodiac. `tropicalLongitude`, `tropicalBounds`
+and `tropicalReceipt` preserve a separate tropical engine calculation at
+the same original input time and clock, including any scale or pinned
+delta-T. They are not reconstructed by adding a rounded ayanamsa back.
+For tropical results, `ayanamsa` is null and the tropical fields reuse
+`longitude`, `bounds` and `receipt`. No new astronomical accuracy bound is
+introduced by either classification.
 
 Coverage follows the engine's `CALC_SPAN` and its checks on both UT1 and TT.
 Even a UTC label inside that span may be refused if its TT is outside.
@@ -85,7 +123,7 @@ selection, receipt preservation and replay, time scales, pinned delta-T,
 coverage edges and caller-input preservation. These integration tests make
 no new claim about physical accuracy.
 
-`mansionIngresses({ from, to, table, maxSamples? })` searches tropical
+`mansionIngresses({ from, to, table, zodiac?, maxSamples? })` searches
 mansion changes using the engine's shared solver in
 [src/crossings.ts](../src/crossings.ts):
 
@@ -117,7 +155,7 @@ requested window must have `from <= to` and span no more than
 The endpoint convention is `(from,to]`: an ingress at `from` is excluded,
 and one at `to` is included. Empty windows return no ingresses but still
 validate coverage and carry an endpoint receipt. Results give normalized
-`from` and `to`, the explicit table, tropical zodiac, endpoint receipts,
+`from` and `to`, the explicit table, selected zodiac, endpoint receipts,
 and `ingresses` in chronological order. Every ingress includes the same
 fields as a successful `mansionAt`, plus `direction`, the exact rational
 `boundary`, and `previous`, the classification, longitude, bounds and
@@ -145,6 +183,20 @@ effective `maxSamples` and `stepDays`. Budget exhaustion returns a typed
 Engine coverage refusals pass through unchanged. Refusals contain no partial
 ingresses, and unexpected calculation errors propagate.
 
+Sidereal searches accept the same explicit `zodiac: { sidereal: name }`
+selection as `mansionAt`. The solver samples sidereal longitude at every
+instant with that instant's engine ayanamsa. It does not shift tropical
+ingress times or hold an ayanamsa constant over the range. Each ingress and
+its `previous` retain the selected and tropical longitude, bounds and
+receipts, plus the unmodified ayanamsa value. Endpoint `receipts` refer to
+the selected zodiac; `tropicalReceipts` preserve the corresponding tropical
+endpoint receipts, even for empty windows. Search limits and endpoint
+semantics apply to either zodiac. `samples` and `maxSamples` count actual
+engine evaluations: a successful uncached tropical position costs one,
+while a sidereal position costs two to retain both calculations. Budget
+exhaustion between those calculations returns a refusal without partial
+results. These costs are enforced by [test/sidereal.test.ts](test/sidereal.test.ts).
+
 [test/ingresses.test.ts](test/ingresses.test.ts) enforces those limits and
 checks a complete synthetic circle and wrap against hand-derived rational
 ingress times, exact and rounded window endpoints, reverse membership,
@@ -154,7 +206,7 @@ use a synthetic window beginning 2001-02-03 and ending 2001-03-05, plus
 shorter windows derived from it. These are numerical regression checks,
 not independent astronomical accuracy evidence or published ingress samples.
 
-`mansionRange({ from, to, table, maxSamples? })` reports tropical occupancy
+`mansionRange({ from, to, table, zodiac?, maxSamples? })` reports occupancy
 intervals within the requested window:
 
 ```ts
@@ -208,6 +260,10 @@ an `unsupported-combination` refusal. This check does not prove the search
 complete; the ingress search's numerical and time-basis limitations above
 also apply to occupancy intervals.
 
+The optional zodiac selection applies to the entire range, its interval
+membership and all entry/exit positions. Both sets of engine receipts and
+the per-position ayanamsa values are retained exactly as for ingress results.
+
 [test/range.test.ts](test/range.test.ts) checks interval edges against
 hand-derived rational times for synthetic constant motion over a full
 circle and wrap. It covers stationary motion, reverse crossings, empty and
@@ -217,9 +273,9 @@ Its real-engine integration window runs from 2001-02-03 to 2001-02-06.
 Those engine comparisons are regression checks, not independent evidence
 of astronomical ingress accuracy.
 
-The current internal adapter in [src/engine.ts](src/engine.ts) reads the
-engine's tropical geocentric Moon position on the true ecliptic of date and
-retains its unmodified calculation receipt. Invalid dates throw the engine's
+The internal adapters in [src/engine.ts](src/engine.ts) read the
+engine's tropical or selected sidereal geocentric Moon position on the true
+ecliptic of date and retain its unmodified calculation receipt. Invalid dates throw the engine's
 `RangeError`; unsupported coverage returns the engine's typed refusal. The
 adapter does not calculate an ephemeris itself.
 
@@ -244,6 +300,14 @@ comparisons are regression checks, not independent astronomical accuracy
 evidence. The solver's endpoint convention is `(from, to]`. Its numerical
 resolution does not establish physical accuracy or search completeness.
 The table tests check exact boundary arithmetic and the naming witness.
+[test/sidereal.test.ts](test/sidereal.test.ts) checks every offered ayanamsa
+against engine calls at the synthetic instant 2001-02-03T00:00Z, receipt
+replay on scaled and pinned clocks, selected-zodiac ingress membership
+and range receipt replay from 2001-02-03 to 2001-02-06. These are integration
+checks. Separate synthetic varying-ayanamsa motion tests check ingress times
+by independent rational arithmetic over a full circle and wrap, including
+reverse membership, clipping and budgets. Neither type of test establishes
+physical accuracy against an independent ephemeris or historical source.
 [test/classify.test.ts](test/classify.test.ts) checks classification against
 independent integer fractions throughout the circle and on both sides of
 every boundary, including adjacent representable values, signed turns,

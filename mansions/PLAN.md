@@ -11,7 +11,7 @@ here, and appends a single session summary to `CHANGES.txt`.
 - [x] M4 Implement the tropical mansion-at API with strict instant validation, explicit table identity, Moon longitude, engine receipt and documented coverage refusals.
 - [x] M5 Find tropical mansion ingresses with src/crossings.ts, bounded work, chronological ordering, explicit endpoint semantics and numerical refinement tests without physical-accuracy claims.
 - [x] M6 Implement range occupancy intervals with start/end instants, clipping markers, ingress receipts and tests for empty windows, adjacent windows and the zodiac wrap.
-- [ ] M7 Add explicit sidereal selection and selectable engine ayanamsas to at/range calculations, preserving tropical longitude and ayanamsa receipts without adding nakshatra code.
+- [x] M7 Add explicit sidereal selection and selectable engine ayanamsas to at/range calculations, preserving tropical longitude and ayanamsa receipts without adding nakshatra code.
 - [ ] M8 Add the mansions at and mansions range CLI commands with mandatory table choice, JSON and neutral plain text, help and argument-error tests.
 - [ ] M9 Seek independently published mansion ingress samples, audit their conventions and redistribution terms, and test any usable cited samples in-tree. Record an evidence gap if none qualifies; never substitute engine output for independent evidence.
 - [ ] M10 Harden budgets, refusal propagation, time-basis seams and CLI failure behavior with focused adversarial and integration tests.

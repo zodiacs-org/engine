@@ -1,10 +1,12 @@
 import type { CalcRefusal } from "../../src/calc.js";
 import { dateFrom } from "../../src/date-input.js";
-import { mansionAt } from "./at.js";
+import { calculateMansionAt } from "./at.js";
 import type { MansionAtResult } from "./at.js";
 import { searchLongitudeCrossingsWith } from "./engine.js";
 import { getBoundaryTable } from "./tables.js";
 import type { BoundaryTable, BoundaryTableId, RationalDegrees } from "./tables.js";
+import { checkOptions, readZodiac } from "./zodiac.js";
+import type { MansionZodiac } from "./zodiac.js";
 
 const DAY_MS = 86_400_000;
 
@@ -21,6 +23,7 @@ export interface MansionIngressRequest {
   readonly from: string | Date;
   readonly to: string | Date;
   readonly table: BoundaryTableId;
+  readonly zodiac?: MansionZodiac;
   /** Shared budget for all engine evaluations, including endpoints and refinement. */
   readonly maxSamples?: number;
 }
@@ -39,7 +42,7 @@ export interface MansionIngressResult {
   readonly from: string;
   readonly to: string;
   readonly endpointConvention: "(from,to]";
-  readonly zodiac: "tropical";
+  readonly zodiac: MansionZodiac;
   readonly table: BoundaryTable;
   readonly ingresses: readonly MansionIngress[];
   /** Actual engine evaluations, including endpoint checks and output receipts. */
@@ -52,6 +55,10 @@ export interface MansionIngressResult {
     readonly from: MansionAtResult["receipt"];
     readonly to: MansionAtResult["receipt"];
   };
+  readonly tropicalReceipts: {
+    readonly from: MansionAtResult["receipt"];
+    readonly to: MansionAtResult["receipt"];
+  };
 }
 
 // Local control flow only. Neither a budget nor an engine refusal returns
@@ -61,19 +68,9 @@ class SearchRefused {
 }
 
 function readRequest(request: MansionIngressRequest) {
-  const prototype: unknown = request !== null && typeof request === "object"
-    ? Object.getPrototypeOf(request) : undefined;
-  if (prototype !== Object.prototype && prototype !== null) {
-    throw new RangeError("Mansion ingress request must be a plain options object.");
-  }
-  for (const key of Reflect.ownKeys(request)) {
-    const slot = Object.getOwnPropertyDescriptor(request, key);
-    if (!["from", "to", "table", "maxSamples"].includes(key as string)
-      || !slot || !("value" in slot) || !slot.enumerable) {
-      throw new RangeError("Mansion ingress request takes only from, to, table and maxSamples as data properties.");
-    }
-  }
+  checkOptions(request, ["from", "to", "table", "maxSamples", "zodiac"], "Mansion ingress request");
   const table = getBoundaryTable(request.table);
+  const zodiac = readZodiac(request.zodiac);
   const endpoint = (value: string | Date, label: string) => {
     if (typeof value !== "string" && !(value instanceof Date)) {
       throw new RangeError(`${label} must be an ISO string or Date on the engine's UTC basis.`);
@@ -90,11 +87,11 @@ function readRequest(request: MansionIngressRequest) {
   if (!Number.isSafeInteger(maxSamples) || maxSamples < 1 || maxSamples > INGRESS_SEARCH_LIMITS.maxSamples) {
     throw new RangeError(`maxSamples must be an integer from 1 to ${INGRESS_SEARCH_LIMITS.maxSamples}.`);
   }
-  return { from, to, table, maxSamples };
+  return { from, to, table, zodiac, maxSamples };
 }
 
 /**
- * Search tropical mansion changes in (from,to] using the engine crossing
+ * Search selected-zodiac mansion changes in (from,to] using the engine crossing
  * solver. Each root is verified against exact rational classification at
  * adjacent milliseconds. Resolution describes the computed model only.
  */
@@ -110,7 +107,7 @@ export function searchIngressWindow(request: MansionIngressRequest): {
   readonly fromPosition: MansionAtResult;
   readonly toPosition: MansionAtResult;
 } | CalcRefusal {
-  const { from, to, table, maxSamples } = readRequest(request);
+  const { from, to, table, zodiac, maxSamples } = readRequest(request);
   const { stepDays } = INGRESS_SEARCH_LIMITS;
   const cache = new Map<number, MansionAtResult>();
   let samples = 0;
@@ -121,9 +118,10 @@ export function searchIngressWindow(request: MansionIngressRequest): {
   const sample = (ms: number): MansionAtResult => {
     const cached = cache.get(ms);
     if (cached !== undefined) return cached;
-    if (samples >= maxSamples) throw new SearchRefused(budgetRefusal());
-    samples += 1;
-    const result = mansionAt({ time: new Date(ms), table: table.id });
+    const result = calculateMansionAt({ time: new Date(ms), table: table.id, zodiac }, () => {
+      if (samples >= maxSamples) throw new SearchRefused(budgetRefusal());
+      samples += 1;
+    });
     if (result.status === "refused") throw new SearchRefused(result);
     cache.set(ms, result);
     return result;
@@ -208,10 +206,11 @@ export function searchIngressWindow(request: MansionIngressRequest): {
     }
     const result: MansionIngressResult = {
       status: "ok", from: new Date(from).toISOString(), to: new Date(to).toISOString(),
-      endpointConvention: "(from,to]", zodiac: "tropical", table,
+      endpointConvention: "(from,to]", zodiac, table,
       ingresses: [...ingresses.values()].sort((a, b) => Date.parse(a.at) - Date.parse(b.at)),
       samples, maxSamples, stepDays, resolution: "first-changed-millisecond",
-      receipts: { from: start.receipt, to: end.receipt }
+      receipts: { from: start.receipt, to: end.receipt },
+      tropicalReceipts: { from: start.tropicalReceipt, to: end.tropicalReceipt }
     };
     return { status: "ok", result, fromPosition: start, toPosition: end };
   } catch (error) {

@@ -12,9 +12,10 @@ This project's computational convention divides longitude into exactly
 zero is the vernal equinox of date. The exact start of mansion `i`, numbered
 from 1, is `(i - 1) * 90/7` degrees and its exclusive end is `i * 90/7`
 degrees. The last end remains 360 degrees in the table, rather than being
-stored as zero. A future explicit sidereal calculation must identify its
-ayanamsa and interpret the same arithmetic from that selected zodiac's zero;
-this milestone does not implement sidereal calculations.
+stored as zero. An explicit sidereal calculation identifies its engine
+ayanamsa with `zodiac: { sidereal: name }` and interprets the same arithmetic
+from that selected zodiac's zero. This is a coordinate convention, not a
+second historical boundary table or a claim of attested stellar boundaries.
 
 Width is exactly `360/28 = 90/7` degrees, or `12 degrees 51 minutes
 25 + 5/7 seconds`. The familiar `12°51′25.7″` is a rounded display value.
@@ -115,6 +116,17 @@ Neither historical source supplies an independently usable modern mansion
 ingress sample with a stated time scale and longitude convention. This
 milestone makes no claim of measured ingress accuracy. The planned ingress
 sample audit remains a separate milestone. Engine calculation receipts
-belong to future calculated mansion results; the static table is a cited
+belong to calculated mansion results; the static table is a cited
 convention, not an ephemeris result or an authenticated receipt. The engine
 retains its existing [licensing and attribution](../LICENSING.md).
+
+Sidereal calculations use the engine's built-in named ayanamsas through
+`calc`, preserving its ayanamsa values, bounds and receipts. Their
+definitions, sources and existing accuracy evidence are documented in
+[the engine's Vedic guide](../docs/vedic.md) and
+[calculation guide](../docs/calc.md); their licensing remains as recorded
+in the engine's [licensing audit](../LICENSING.md). No catalogue values,
+star-coordinate tables, ephemeris output or external ingress samples are
+copied into this project for sidereal selection. This project makes no
+new historical attribution for those modern zero-point choices and no
+independent astronomical accuracy claim from engine-to-engine comparisons.
