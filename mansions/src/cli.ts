@@ -1,7 +1,8 @@
 import type { CalcRefusal } from "../../src/calc.js";
+import { dateFrom } from "../../src/date-input.js";
 import { mansionAt } from "./at.js";
 import type { MansionAtResult } from "./at.js";
-import { INGRESS_SEARCH_LIMITS } from "./ingresses.js";
+import { INGRESS_SEARCH_LIMITS, readIngressRequest } from "./ingresses.js";
 import { mansionRange } from "./range.js";
 import type { MansionRangeResult } from "./range.js";
 import { getBoundaryTable } from "./tables.js";
@@ -107,7 +108,13 @@ function parse(argv: readonly string[]) {
     }
     maxSamples = Number(budget);
   }
-  return { help: false, command, positional, table: table as BoundaryTableId, zodiac, format, maxSamples } as const;
+  const selectedTable = table as BoundaryTableId;
+  // Validate user syntax before entering the engine. A RangeError raised
+  // during calculation is an internal failure, not an argument diagnostic.
+  if (command === "at") dateFrom(positional[0]!, "time");
+  else readIngressRequest({ from: positional[0]!, to: positional[1]!, table: selectedTable, zodiac,
+    ...(maxSamples === undefined ? {} : { maxSamples }) });
+  return { help: false, command, positional, table: selectedTable, zodiac, format, maxSamples } as const;
 }
 
 const named = (mansion: MansionDefinition) => `${mansion.index} | ${mansion.arabicName} | ${mansion.latinLabel}`;
@@ -150,8 +157,16 @@ function textResult(result: MansionAtResult | MansionRangeResult | CalcRefusal):
 
 /** CLI boundary without process I/O. The library entry never imports this file. */
 export function runCli(argv: readonly string[]): CliOutput {
+  let request: ReturnType<typeof parse>;
   try {
-    const request = parse(argv);
+    request = parse(argv);
+  } catch (error) {
+    if (error instanceof ArgumentError || error instanceof RangeError) {
+      return { stdout: "", stderr: `mansions: ${error.message}\n`, exitCode: 2 };
+    }
+    return { stdout: "", stderr: "mansions: calculation failed.\n", exitCode: 1 };
+  }
+  try {
     if (request.help) return { stdout: HELP, stderr: "", exitCode: 0 };
     const { table, zodiac } = request;
     const result = request.command === "at"
@@ -162,10 +177,7 @@ export function runCli(argv: readonly string[]): CliOutput {
       stdout: request.format === "json" ? `${JSON.stringify(result)}\n` : textResult(result),
       stderr: "", exitCode: result.status === "ok" ? 0 : 3
     };
-  } catch (error) {
-    if (error instanceof ArgumentError || error instanceof RangeError) {
-      return { stdout: "", stderr: `mansions: ${error.message}\n`, exitCode: 2 };
-    }
+  } catch {
     return { stdout: "", stderr: "mansions: calculation failed.\n", exitCode: 1 };
   }
 }

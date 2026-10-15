@@ -5,6 +5,7 @@ import type { MansionAtResult } from "./at.js";
 import { searchLongitudeCrossingsWith } from "./engine.js";
 import { getBoundaryTable } from "./tables.js";
 import type { BoundaryTable, BoundaryTableId, RationalDegrees } from "./tables.js";
+import { timeSeams } from "./time-seams.js";
 import { checkOptions, readZodiac } from "./zodiac.js";
 import type { MansionZodiac } from "./zodiac.js";
 
@@ -67,7 +68,8 @@ class SearchRefused {
   constructor(readonly refusal: CalcRefusal) {}
 }
 
-function readRequest(request: MansionIngressRequest) {
+/** Internal validation also used by the CLI before its calculation phase. */
+export function readIngressRequest(request: MansionIngressRequest) {
   checkOptions(request, ["from", "to", "table", "maxSamples", "zodiac"], "Mansion ingress request");
   const table = getBoundaryTable(request.table);
   const zodiac = readZodiac(request.zodiac);
@@ -107,7 +109,7 @@ export function searchIngressWindow(request: MansionIngressRequest): {
   readonly fromPosition: MansionAtResult;
   readonly toPosition: MansionAtResult;
 } | CalcRefusal {
-  const { from, to, table, zodiac, maxSamples } = readRequest(request);
+  const { from, to, table, zodiac, maxSamples } = readIngressRequest(request);
   const { stepDays } = INGRESS_SEARCH_LIMITS;
   const cache = new Map<number, MansionAtResult>();
   let samples = 0;
@@ -154,18 +156,19 @@ export function searchIngressWindow(request: MansionIngressRequest): {
     // Enclose that numerical root, then use exact table classification to
     // settle the first changed millisecond. Never sample outside the window.
     const padding = Math.ceil(stepDays * DAY_MS / 2 ** 24) + 2;
-    if (from !== to) {
+    const searchPiece = (pieceFrom: number, pieceTo: number) => {
+      if (pieceFrom === pieceTo) return;
       // Rounded solver offsets can be zero at a window endpoint even when
       // exact rational membership changes in its neighboring millisecond.
       // Probe both edge milliseconds so clipping cannot lose that ingress.
-      keep(from + 1);
-      keep(to);
+      keep(pieceFrom + 1);
+      keep(pieceTo);
       for (const [index, next] of table.mansions.entries()) {
         const previous = table.mansions[(index + table.mansions.length - 1) % table.mansions.length]!;
         const found = searchLongitudeCrossingsWith(
           (_body: "Moon", date) => sample(date.getTime()).longitude,
           "Moon", next.start.numerator / next.start.denominator,
-          new Date(from), new Date(to),
+          new Date(pieceFrom), new Date(pieceTo),
           // Engine evaluations are cached and budgeted by sample() across all
           // boundaries. A per-boundary solver budget would count cache hits.
           { stepDays }
@@ -174,8 +177,8 @@ export function searchIngressWindow(request: MansionIngressRequest): {
         for (const crossing of found.crossings) {
           const beforeMansion = crossing.retrograde ? next : previous;
           const afterMansion = crossing.retrograde ? previous : next;
-          let low = Math.max(from, crossing.at.getTime() - padding);
-          let high = Math.min(to, crossing.at.getTime() + padding);
+          let low = Math.max(pieceFrom, crossing.at.getTime() - padding);
+          let high = Math.min(pieceTo, crossing.at.getTime() + padding);
           const lower = sample(low);
           const upper = sample(high);
           // A touch, or an approximate root just outside the requested window,
@@ -203,7 +206,18 @@ export function searchIngressWindow(request: MansionIngressRequest): {
           keep(high);
         }
       }
+    };
+    // The shared solver assumes smooth motion and merges nearby roots. Search
+    // continuous pieces separately, and compare the two label milliseconds
+    // across each clock step explicitly. A backwards step can cause a brief
+    // reverse change and return that must survive as separate events.
+    let pieceFrom = from;
+    for (const seam of timeSeams(from, to)) {
+      searchPiece(pieceFrom, seam - 1);
+      keep(seam);
+      pieceFrom = seam;
     }
+    searchPiece(pieceFrom, to);
     const result: MansionIngressResult = {
       status: "ok", from: new Date(from).toISOString(), to: new Date(to).toISOString(),
       endpointConvention: "(from,to]", zodiac, table,

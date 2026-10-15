@@ -169,8 +169,18 @@ the exact rational classifier to verify membership at adjacent milliseconds.
 The reported `resolution: "first-changed-millisecond"` describes the engine's
 computed classification, not physical ingress accuracy. The retained engine
 `bounds` describe longitude, not a new timing bound. The scan is tested,
-not proven complete; interior discontinuities of the engine's time basis
-remain part of the planned hardening work.
+not proven complete.
+
+The search locates discontinuities using the engine's time-basis arithmetic,
+searches each continuous piece separately, and compares membership at the
+adjacent label milliseconds across each step. This covers the delta-T
+model's handover, the start of the IERS basis, its listed leap-second changes,
+and the first millisecond beyond its inclusive table endpoint. A backward
+clock step can produce a reverse membership change followed by a return;
+these remain separate events even when close together. Such changes describe
+the computed model, not physical retrograde motion of the Moon. A detected
+jump across nonadjacent mansions returns an `unsupported-combination` refusal
+without partial events. No leap-second label is invented for JavaScript Date.
 
 `INGRESS_SEARCH_LIMITS` defines the quarter-day step, maximum range of
 366 elapsed days, default shared budget of 20,000 engine evaluations and
@@ -182,6 +192,16 @@ effective `maxSamples` and `stepDays`. Budget exhaustion returns a typed
 `{ status: "refused", reason: "sample-budget", samples, maxSamples, detail }`.
 Engine coverage refusals pass through unchanged. Refusals contain no partial
 ingresses, and unexpected calculation errors propagate.
+
+[test/hardening.test.ts](test/hardening.test.ts) checks the exact seam
+milliseconds reported by the engine, membership jumps and replay on either
+side of each of its time-basis steps, plus synthetic motion that crosses,
+reverses and returns around the model handover. It also checks multiple seams
+within a bounded window, shared budgets across the split searches, and
+interior sidereal refusals and exceptions after an earlier ingress. The
+actual engine comparisons are regression checks around its model handover,
+every entry in its committed leap-second list and its IERS table endpoint;
+they do not establish independent astronomical accuracy or completeness.
 
 Sidereal searches accept the same explicit `zodiac: { sidereal: name }`
 selection as `mansionAt`. The solver samples sidereal longitude at every
@@ -337,6 +357,14 @@ on stdout in the selected format; unexpected calculation or startup failures
 exit with `1` and a message on stderr. Refusals contain no partial ranges or
 invented receipts. Use `npm run --silent` as shown to keep npm's script
 banner out of JSON stdout.
+
+The CLI validates instant syntax and window limits before calculation.
+Internal calculation errors, including `RangeError`, use the unexpected
+failure status and a fixed diagnostic without raw internal details. Launcher
+dependency-import failures use the startup diagnostic with no stack trace.
+[test/cli-failures.test.ts](test/cli-failures.test.ts) checks those boundaries,
+including a later sidereal failure before output and a subprocess with a
+deliberately failing local dependency import.
 
 [test/cli.test.ts](test/cli.test.ts) checks help, argument errors, selected
 tables and ayanamsas, JSON parity with the library, text fields, receipt

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-import { build } from "esbuild";
 import { fileURLToPath } from "node:url";
 
 // Compile the checkout-local CLI in memory. Resolve the engine's pinned
 // dependency here, just as Vitest does, without a root install or dist/ build.
 try {
+  const { build } = await import("esbuild");
   const bundle = await build({
     entryPoints: [fileURLToPath(new URL("../src/cli.ts", import.meta.url))],
     bundle: true,
