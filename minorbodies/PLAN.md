@@ -16,7 +16,7 @@ human-written evidence notes stay with their capture scripts and provenance.
 - [x] M8 Build retrograde windows from stations and endpoint states, carrying clipped-window and refusal information. Test adjacent windows, incomplete searches and supported-range edges.
 - [x] M9 Add sign ingress search through the engine crossings solver with directions, sign labels, receipts and shared budgets. Check wraparound, repeated ingresses and station-adjacent cases independently.
 - [x] M10 Add a local CLI for positions, stations, retrograde windows and ingresses, with JSON output, explicit time conventions and useful failures. Test commands against the library and invalid input.
-- [ ] M11 Run the preregistered full-span held-out accuracy suite with explicit arcsecond limits, speed and distance checks, event brackets and seam checks. Commit the generator and evidence notes linked to enforcing tests; document actual coverage and failures.
+- [x] M11 Run the preregistered full-span held-out accuracy suite with explicit arcsecond limits, speed and distance checks, event brackets and seam checks. Commit the generator and evidence notes linked to enforcing tests; document actual coverage and failures.
 - [ ] M12 Finish reproducible offline setup, data regeneration instructions, dependency/licence notices, examples and package isolation checks. Review every supported-range and accuracy statement against committed evidence. Add Pholus or Eris only through the same data and validation gates if practical.
 
 The target range and error limits are acceptance criteria, not measured
@@ -164,4 +164,27 @@ No coefficient, generator, source capture or accuracy budget changed. The root
 package contents check still fails on the initially absent `dist/calc.d.ts`;
 the separate package-exclusion check passes, and no root build or packed-file
 change was made. All changes remain inside `minorbodies/`. M11 is the next
+unchecked milestone.
+
+M11 verification: `npm run check`, `npm run full:check`, the new full-data
+final accuracy and event suites, and offline final-event replay passed on
+Node 22.22.2. Every earlier full-data test file also passed across filtered
+runs. An aggregate regression run was interrupted after passing its accuracy,
+adapter, retrograde and CLI files; a later run passed ingresses but encountered
+a Vitest module-loader timeout before collecting stations. An isolated station
+attempt likewise timed out during module loading; its fresh isolated retry
+passed unchanged. These execution failures are recorded in the M11 evidence
+note and are not numerical acceptance failures or passing aggregate commands.
+The separately registered final corpus checks every segment and both sides of
+every join, all original angular/radial/speed limits, converged independent
+derivatives and frozen coefficient receipts. Independent Horizons/ERFA event
+windows sample the beginning, interior and end of the installed range; they
+include actual station and ingress brackets for every required body. The
+registration records that final selection followed the frozen M5 fit and
+preceded new intake/residual inspection. No fit, original source, acceptance
+budget or reference recipe changed after comparison. Bulk captures and reports
+remain ignored; provenance manifests, generators and evidence notes are retained.
+Root package contents still fails on the initially absent `dist/calc.d.ts`;
+package exclusion and file-cap checks pass, and no root build or packed-file
+change was made. All changes remain inside `minorbodies/`. M12 is the next
 unchecked milestone.

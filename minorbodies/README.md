@@ -96,8 +96,10 @@ including the whole calendar year 2200, for every required body.
 `tests/full-recipe.test.ts` enforces that range. `tests/full-accuracy.test.ts`
 checks held-out Horizons samples throughout it, including shard boundaries,
 independent ERFA reduction, reference-speed convergence and unchanged
-arcsecond limits. These are finite M5 coverage checks; the denser final M11
-corpus and event checks remain pending. See [M5 evidence](docs/evidence/M5.md).
+arcsecond limits. These M5 checks remain mandatory alongside the independent
+final corpus and event windows described in [M11 evidence](docs/evidence/M11.md).
+The earlier corpus and retained reference-method failure are documented in
+[M5 evidence](docs/evidence/M5.md).
 
 Bulk source responses and coefficient files are intentionally not committed.
 The repository contains the generator, exact request recipes, frozen source
@@ -124,6 +126,22 @@ explicit full-data suite; a missing cache or reducer fails rather than skips.
 It regenerates coefficients and compares their descriptors with the committed
 receipts. `full:validate` writes the same independent numerical reports,
 including failed comparisons. Full reports stay ignored.
+
+M11 adds frozen reference manifests in `data/final-manifests/` and
+`data/final-event-manifests/`. Final position validation also needs the matching
+ignored `.cache/horizons-final/`; final event validation needs the original
+capture files under `generated/final-events/`. The full suite fails if they
+are absent. `npm run final:validate` repeats the final position measurements;
+`npm run final:events:replay` verifies and reconstructs the independent event
+references offline. `full:test` runs both final comparisons and the earlier
+accuracy, adapter, event and CLI checks.
+
+Final position samples cover every coefficient segment and both sides of every
+join across the installed interval. Final event comparisons sample windows in
+1800, 1900, 2100 and 2200, alongside the retained calendar-2000 checks. Exact
+epochs, sampling counts, unchanged arcsecond and timing gates, and enforcing
+tests are in [M11 evidence](docs/evidence/M11.md). These finite comparisons do
+not establish continuous error bounds or full-range event completeness.
 
 The offline loader accepts a body name:
 
@@ -590,4 +608,5 @@ The solver can find repeated direct and retrograde crossings near a station.
 Completion records that the scan finished under its smooth-motion assumptions;
 it is not proof of event completeness or a physical accuracy bound. Independent
 Horizons/ERFA comparisons and analytic boundary cases are distinguished in
-[M9 evidence](docs/evidence/M9.md). Final full-range event validation remains M11.
+[M9 evidence](docs/evidence/M9.md). Additional reference windows across the
+installed range are documented in [M11 evidence](docs/evidence/M11.md).

@@ -12,6 +12,9 @@ M7 adds station searches using the engine solver and independent event reference
 M8 assembles retrograde windows from those stations and endpoint states.
 M9 adds tropical sign ingresses with sign labels and independent direction evidence.
 M10 exposes those existing calculations through a local offline JSON CLI.
+M11 adds a separately registered final holdout corpus over every segment and
+join, and independent event windows across the installed interval. Its gates
+and finite coverage are recorded in [M11 evidence](docs/evidence/M11.md).
 
 The required targets are Chiron, Ceres, Pallas, Juno and Vesta. Pholus and
 Eris can follow only after the same checks. The target interval is
@@ -137,6 +140,12 @@ it reveals a failure, retain that result and preregister a new independent
 corpus before changing the fit. Include endpoints, both sides of seams,
 irregular interior epochs throughout the target interval and independent
 station/ingress neighborhoods for each body. Assert disjoint epoch sets.
+
+The original paragraph above describes the M1 proposal. The M11 final corpus
+was selected after the M5 fit was frozen, before new capture and residual
+inspection. [M11 registration](docs/evidence/M11-PREREGISTRATION.md) records
+that chronology explicitly. Its selection never reads fitted output and its
+checks require the unchanged coefficients and training-disjoint epochs.
 
 Compare vectors first, then ecliptic coordinates reduced by a separate
 ERFA-based reference script. That script must not import this package's
@@ -675,7 +684,8 @@ and the separate ERFA reducer, including independent stencil convergence.
 The tests enforce the preregistered timing margins and the unchanged longitude
 and speed arcsecond limits at held-out station-neighborhood epochs. No fitted
 coefficient, polynomial degree, source training epoch or position acceptance
-budget changes for M7. Full-range event validation remains M11.
+budget changes for M7. M11 adds finite reference windows across the installed
+range, as recorded in [M11 evidence](docs/evidence/M11.md).
 
 ## M8 retrograde-window contract
 
@@ -738,7 +748,7 @@ corpus and ERFA, selecting query and split epochs from that reference alone.
 the existing timing margin and longitude/speed arcsecond limits. No new fit,
 source response or acceptance budget is introduced. [M8 evidence](docs/evidence/M8.md)
 records the distinction between independent event checks and boundary integration
-tests; the full-range event corpus remains M11.
+tests. M11 adds the finite event windows in [M11 evidence](docs/evidence/M11.md).
 
 ## M9 sign ingress contract
 

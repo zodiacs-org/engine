@@ -23,6 +23,10 @@
     "full:test": "vitest run --config vitest.full.config.ts",
     "full:reference:capture": "node --experimental-strip-types scripts/generate-speed-reference.ts",
     "full:validate:v1": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/validate-full-v1.ts",
+    "final:capture": "node --experimental-strip-types scripts/capture-final.ts",
+    "final:validate": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/validate-final.ts",
+    "final:events:capture": "node --experimental-strip-types scripts/capture-final-events.ts --capture",
+    "final:events:replay": "node --experimental-strip-types scripts/capture-final-events.ts --replay",
     "reference:test": ".cache/reference-venv/bin/python tests/reference-erfa.test.py",
     "check": "npm run typecheck && npm test && npm run reference:test && npm run fixtures:check && npm run check:scope"
   },

@@ -284,3 +284,35 @@ scope and enforcing tests are recorded in [M9 evidence](docs/evidence/M9.md).
 Invented analytic trajectories independently test wraparound and close pairs
 near a station; they are mathematical test cases, not additional JPL samples
 or evidence of astronomical completeness.
+
+## M11 final reference sources
+
+The final position and event corpora use the same Horizons File API, TT,
+geocentric ICRF and LT+S conventions as the fitted sources. The File API
+documentation and Horizons manual linked above were read again for this intake.
+Every response must retain the frozen fitted body's complete solution identity.
+The numerical-data redistribution basis and dependency notices above apply
+unchanged; no new external implementation or ephemeris dependency is introduced.
+
+`data/final-manifests/` binds the registered requests, original response hashes,
+retrieval metadata and source-generator identity. Original captures remain in
+ignored `.cache/horizons-final/`. `src/final-recipe.ts` selects reference epochs
+without reading fitted values; its complete derivative stencils are excluded
+from training and kept inside individual responses. `scripts/capture-final.ts`
+writes proposed manifests under `generated/final-sources/`. The offline validator
+requires the committed manifest's exact original response bytes.
+
+`data/final-event-manifests/` pins each named original capture under ignored
+`generated/final-events/`. The separate `.cache/horizons-final-events/` also
+retains each File API cache record. `scripts/capture-final-events.ts` records
+the recipe and generator identity; reference refinement uses only original
+Horizons positions through the independent ERFA reduction. Neither fitted
+positions nor the companion's event searches choose expected event times.
+Replay checks all source digests, exact reconstructed requests, training
+exclusion and source identities. Missing files fail instead of skipping checks.
+
+Derived reference rows and comparison reports remain ignored. The evidence
+notes name the actual comparison scope, gates, failures and enforcing tests
+in [M11 evidence](docs/evidence/M11.md). Reusing original captures is required
+for exact replay; live recapture remains a proposed new dataset, even when
+the request parameters have not changed.
