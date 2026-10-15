@@ -6,6 +6,8 @@ interpretations, or make predictions about people or events.
 
 The current milestones provide validated position samples, a receipted SAO
 stellar catalogue, reproducible source extraction and apparent star directions.
+Independent event references and maximum-error criteria are now frozen before
+event implementation in [the reference contract](test/fixtures/events/EVENTS.md).
 Occultation searches, contact times, visibility outlines and the
 CLI remain unchecked in [PLAN.md](PLAN.md). There is no measured occultation
 accuracy claim yet. [DESIGN.md](DESIGN.md) records the geometry and error
@@ -140,6 +142,20 @@ references fail explicitly. Runtime calculations require no Python or network.
 criteria, and [VALIDATION.md](VALIDATION.md) records their measured scope.
 Agreement checks reduction of shared inputs, not the accuracy of the
 historical catalogue or occultation contact times.
+
+The event fixtures separate development and held-out cases from USNO and
+NAOJ, with clock, observer, model and source-rights qualifications. Ordinary
+tests enforce their frozen bytes, transcription arithmetic and error-checking
+contract. They do not yet compare astronomical events. An optional online
+audit verifies the retained source receipts without writing source data:
+
+```sh
+npm --prefix occultations run references:verify-source
+```
+
+Keep [the event reference notice](test/fixtures/events/NOTICE.txt) with these
+fixtures. NAOJ reference material retains its stated use terms; the authored
+MIT licence does not replace them.
 
 `check:scope` checks npm file selection without running lifecycle scripts or
 writing an archive. It also enforces the task's source-file size and prose

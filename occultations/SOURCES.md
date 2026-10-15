@@ -151,29 +151,69 @@ checks upstream bytes and every retained published value; ordinary calculation
 and tests remain offline. Passing these reductions does not establish SAO
 position accuracy or occultation timing accuracy.
 
-## Independent reference leads for M4
+## Independent event references adopted in M4
 
-| Source | Potential use | Conventions or unresolved issues |
-| --- | --- | --- |
-| [IOTA northern Mars limits, January 2025](https://occultations.org/publications/rasc/2025/20250114MarsNLimit.txt) | Coarse visibility-outline comparison using published longitude, latitude and event-time rows. | Distinguishes inner and outer planetary limits. States WGS84 coordinates, mean-sea-level site elevations and a low-altitude refraction adjustment. These conventions must be matched or their differences budgeted. |
-| [IOTA epsilon Arietis contacts, April 2025](https://occultations.org/publications/rasc/2025/20250401epsAriNAmerLoc.txt) | Published disappearance and reappearance times, position angles and observer coordinates. | The [authors' overview](https://occultations.org/publications/rasc/2025/nam25grz.htm) says the predictions use the mean position of a close double. They cannot be treated as a simple single-star reference without resolving that convention and the site elevations. |
-| [IOTA Spica graze, November 2024](https://occultations.org/publications/rasc/2025/20241127Spica.htm) | Published account of observed contacts, with site coordinates and links to prediction and timing material. | The page distinguishes a spherical lunar limit from terrain-driven repeated contacts. Useful for documenting the spherical-limb limitation; no linked timing table has been adopted as a fixture. |
+[The event contract](test/fixtures/events/EVENTS.md) and its
+[source register](test/fixtures/events/sources.json) freeze development and
+held-out events before any workbench event comparison. The register retains
+retrieval URLs, source-page locators, original byte receipts, clock conventions,
+observer inputs, rights evidence and model qualifications. The
+[fixture notice](test/fixtures/events/NOTICE.txt) credits the source authors.
 
-The older [IOTA Mars contact page](http://www.lunar-occultations.com/iota/planets/0114mars.htm)
-was found through links but could not be fetched. Its contents have not been
-reviewed and must not be cited as an inspected contact reference.
+The US Naval Observatory's *The American Ephemeris and Nautical Almanac for
+1923*, published by the US Government Printing Office in 1921, supplies
+Aldebaran contact predictions and a worked Boston example. The
+[Internet Archive scan](https://archive.org/details/in.ernet.dli.2015.515803)
+was inspected at the page locators retained in the register. It is a US
+federal-government work and was published before 1931. Its preface names
+Brown's lunar tables and the historical stellar catalogue; its explanatory
+pages specify the sphere and Earth constants. The Washington station and
+historical coordinate/height conventions remain qualified. No modern observed
+contact accuracy follows from agreement with these historical predictions.
 
-Before selecting any fixture, M4 must check redistribution permission and
-the prediction's computational lineage. The IOTA affiliation alone does not
-establish that lineage. Confirm the underlying planetary ephemeris, stellar
-catalogue and reduction method and exclude Swiss Ephemeris code, data and
-per-case output. Record the published contact definition, time scale, site
-coordinates and elevation datum, lunar radius or limb profile, planetary disk
-model, refraction treatment and printed precision. A city name alone does not
-define an observer.
+The National Astronomical Observatory of Japan supplies
+[conjunction tables](https://eco.mtk.nao.ac.jp/koyomi/cande/),
+[local planetary occultation predictions](https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi),
+sparse numerical outline nodes and approximate outreach appulse times. Exact
+queries and article URLs are in the register. The
+[calendar office use terms](https://eco.mtk.nao.ac.jp/koyomi/site/) allow use
+with credit, and [NAOJ's terms](https://www.nao.ac.jp/terms/copyright.html)
+cover research, publications and applications. These references are not
+represented as a public-domain catalogue or relicensed as MIT. Only compact
+numeric transcriptions and short source excerpts are retained, with no map
+code, provider keys or imagery.
 
-Freeze development and held-out cases separately and establish maximum-error
-criteria before comparing this project's results. Distinguish published
-predictions from observed contacts, and explain any reference uncertainty or
-model mismatch. No contact-time accuracy, catalogue completeness or visibility
-accuracy has been established by the foundation milestone.
+NAOJ documents its
+[JPL DE ephemeris lineage](https://eco.mtk.nao.ac.jp/koyomi/topics/html/topics2026_1.html)
+and frame conventions. Apparent geocentric coordinates are inferred from
+those institutional almanac conventions; the conjunction CGI does not expose
+its complete reduction. Its requests explicitly select TT. The occultation CGI and outreach
+pages do not identify their executable or exact ephemeris release. This is
+institutional provenance, not an invented per-result software receipt. The
+local predictions retain fixed delta-T requests and synthetic stations;
+source UT, radius, refraction, planet shape and height-datum uncertainties
+are recorded. Outline curve names are a documented inference from source
+ordering and independent NAOJ local contact queries. No Swiss Ephemeris
+source, data or per-case output was adopted.
+
+The outreach times establish only coarse occurrence. They cannot validate
+precise geocentric minimum-separation times. Historical catalogue differences,
+sparse outline sampling and undocumented model details also limit claims.
+The frozen thresholds and source-integrity tests establish an acceptance
+contract, not measured occultation accuracy. Additional independent evidence
+is required for the gaps listed in the event contract.
+
+## Event leads not adopted
+
+[IOTA's Occult software terms](https://occultations.org/sw/occult/occult4.htm)
+restrict redistribution of software output for some purposes. The IOTA
+contact and limit pages previously listed as leads were not adopted as
+numeric fixtures. Institutional affiliation alone would not establish a
+prediction's computational lineage. No proprietary atlas was consulted.
+
+IMCCE conjunction material was inspected as a potential independent source,
+but redistribution permission for its retained material was not established.
+NASA SKYCAL did not provide sufficient event-convention and computational
+lineage evidence for the proposed fixtures. Neither source supplies retained
+numerical expectations. Historical USNO planetary rows were also excluded
+because their center-versus-disk contact meaning was unresolved.

@@ -147,3 +147,64 @@ This task forbids creating or changing root `dist/`; no root build was run.
 Full root package, archive rebuild and conformance gates are not claimed as
 passed. All authored changes are inside `occultations/`, and git metadata,
 release archives and the root npm package remain unchanged.
+
+# M4 validation record
+
+Checked on 2026-10-15 using Node 22.22.2. The
+[event reference contract](test/fixtures/events/EVENTS.md) freezes independent
+USNO and NAOJ published predictions, development and held-out event groups,
+source receipts and maximum-error criteria before event implementation.
+No workbench conjunction, appulse, contact or outline result was evaluated.
+The freeze records that fact and the preceding source commit.
+
+The local check passed:
+
+```sh
+npm --prefix occultations run check
+```
+
+The new Vitest tests enforce the frozen bytes and partitions, source locators,
+finite complete check sets, individual maximum errors, circular position-angle
+differences, historical noon-based clocks, local-longitude offsets, TT labels,
+JST conversions, planetary disk-crossing durations and exact outline-node
+longitudes. The arithmetic checker uses synthetic inputs to test rejection of
+missing, extra, nonfinite and excessive results. These tests establish source
+transcription and acceptance rules, not astronomical accuracy. Existing
+stellar tests, type checking, catalogue validation, local build and isolation
+checks also passed.
+
+The online auditor was run for each id in the frozen source register:
+
+```sh
+npm --prefix occultations run references:verify-source -- --source ID
+```
+
+Every registered source passed. Historical scan and OCR bytes matched their
+original lengths and digests; the full OCR was streamed without saving it.
+NAOJ static pages and numerical map files also matched. CGI illustration
+filenames change between requests, so conjunction and local-contact pages
+use a narrowly specified filename normalization while preserving the
+original raw receipts. The contact audit retains a separate fetch receipt;
+every retained contact row matched that response. All remaining page bytes
+are checked, including the result tables. Map data links are discovered
+without saving their wrapper HTML, executing downloaded code or contacting
+a map provider. Downloads and research files remain ignored.
+
+USNO scan transcriptions were reviewed visually. An additional source review
+checked the NAOJ conjunction/appulse dates, times, coordinate differences and
+clock conversions, and the modern contact/outline semantics. Source model
+uncertainties and inferred conventions remain explicit. The same historical
+Washington event has alternative station inputs; both are required, with no
+selection by residual. No numerical threshold was chosen from a workbench
+event result, and no accuracy claim follows from the frozen gates. Precision
+geocentric appulse, terrain, horizon, phase and global topology validation
+remain future work as listed in the contract.
+
+The root `npm run package:contents` was attempted with its cache inside this
+folder and stopped at `packed package is missing dist/calc.d.ts`. Root build
+output is outside this task's permitted scope, so no root build was run.
+The local scope check confirms source sizes, prose rules, dependency pin,
+private-package status, exclusion from root npm file selection and changes
+only under `occultations/`. Full root package, archive rebuild and conformance
+gates are not claimed as passed. No git metadata, release archive or root npm
+package file was changed.

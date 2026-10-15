@@ -4,7 +4,9 @@
   "type": "module",
   "license": "MIT",
   "description": "Offline occultation and appulse workbench over the adjacent engine source",
-  "engines": { "node": ">=22.7.0 <23" },
+  "engines": {
+    "node": ">=22.7.0 <23"
+  },
   "scripts": {
     "typecheck": "tsc --project tsconfig.json --pretty false",
     "test": "vitest run --config vitest.config.ts",
@@ -13,7 +15,8 @@
     "catalogue:check": "node scripts/catalogue.mjs",
     "catalogue:verify-source": "node scripts/catalogue.mjs --download",
     "check:scope": "node scripts/check-scope.mjs",
-    "check": "npm run typecheck && npm test && npm run catalogue:check && npm run build && npm run check:scope"
+    "check": "npm run typecheck && npm test && npm run catalogue:check && npm run build && npm run check:scope",
+    "references:verify-source": "node scripts/verify-event-sources.mjs"
   },
   "dependencies": {
     "astronomy-engine": "2.1.19"

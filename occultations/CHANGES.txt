@@ -1,3 +1,4 @@
 Complete M1: add isolated occultations tooling, validated receipted engine position adapter, geometry and provenance design, and passing Node 22 integration and scope checks.
 Complete M2: add the provenanced SAO bright-star subset, digest-pinned reproducible extraction, offline catalogue receipts and unit/missing-value policies, with passing Node 22 tests and isolation checks.
 Complete M3: add receipted apparent SAO directions with FK5 orientation and spin, proper motion, observer aberration and explicit missing-distance limits, validated against published and generated independent ERFA references with passing Node 22 tests and isolation checks.
+Complete M4: freeze cited USNO and NAOJ development and held-out event references with maximum-error gates, clock and model qualifications, source receipts and online audits, with passing Node 22 tests and isolation checks before event implementation.

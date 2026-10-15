@@ -18,7 +18,7 @@ package, source, build output, archive or release changes are part of this plan.
   where available, and consistent apparent star frames using the engine's
   frame/nutation/time machinery. Check against independent astrometric
   references and analytic geometric cases.
-- [ ] M4 Freeze cited independent published reference cases and maximum-error
+- [x] M4 Freeze cited independent published reference cases and maximum-error
   criteria before event fitting or tuning. Separate development cases from
   held-out lunar contacts, planetary appulses and global visibility cases;
   record reference time scales, stations, limb conventions and precision.

@@ -219,10 +219,13 @@ uncertain/grazing result, not a fixed seconds claim. Solver precision alone
 cannot support a physical timing claim. Missing uncertainty inputs remain
 unknown rather than being assigned zero.
 
-M4 must freeze numerical maximum-error assertions in seconds against cited
-published references, including their time scales, rounded precision, limb
-model, station datum and ephemeris lineage. Development and held-out cases
-are separate. M8 and M12 will report the actual comparison span and maxima,
+M4's [event reference contract](test/fixtures/events/EVENTS.md) freezes
+numerical maximum-error assertions against USNO and NAOJ published
+predictions before event implementation. It records source clocks, precision,
+limb and station qualifications, and documented ephemeris lineage. Unknown
+source conventions remain explicit. Development and held-out whole events
+are separate. These thresholds are acceptance criteria, not a measured error
+budget. M8 and M12 will report the actual comparison span and maxima,
 with failures retained. M3's angular reduction comparison cannot fill the
 unknown stellar catalogue term or produce a physical seconds guarantee.
 Its allowed reduction error would contribute that angular allowance divided
