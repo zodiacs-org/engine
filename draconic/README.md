@@ -2,9 +2,9 @@
 
 This private project adds a draconic chart library and CLI on top of the engine
 in this checkout. See [PLAN.md](PLAN.md) for completed and pending work.
-The current API provides the pure rotation primitive, an engine natal adapter
-and a pure chart transformation. Comparisons, receipts and CLI commands are
-pending milestones.
+The current API provides pure rotation and comparison primitives, an engine
+natal adapter, a pure chart transformation and structured natal versus draconic
+comparisons. Receipts and CLI commands are pending milestones.
 
 Use Node 22 with the standalone tooling:
 
@@ -90,6 +90,39 @@ Placidus and Koch requests retain the natal `polar-fallback` flag and use the
 engine's computed whole-sign cusps, rotated without recasting. That test also
 checks missing coordinates, unknown time, default houses and a site with zero
 coordinates for both node choices. These are integration preservation checks.
+
+`compareNatal(source)` takes the same source as `transformNatal` and derives
+the rotated chart internally. It returns `node`, `conventions`, `bodies`,
+`angles` and `houses`. Each body row has its body identifier and each cusp
+row its house number, in the source order. Each position comparison contains
+`natalLongitude`, `draconicLongitude` and `deltaDegrees`; angles use the same
+angle keys as the source. Houses retain the computed natal system label.
+Absent angles or houses remain null. Output objects are independent of the
+source and of other calls.
+
+```ts
+import { castNatal, compareNatal } from "./src/index.js";
+
+const comparison = compareNatal(castNatal(syntheticBirth, { node: "mean" }));
+```
+
+The delta is the shortest signed circular displacement from natal tropical
+to draconic longitude: draconic minus natal, in degrees in `(-180, 180]`.
+An exact half-circle difference is positive 180 degrees in either direction;
+zero is positive zero. The `conventions` object records the direction, units,
+longitude and delta ranges and half-circle choice. `signedLongitudeDelta`
+exposes the same arithmetic for a pair of canonical longitudes, with the
+same validation as the rotation primitive. These boundary values and the
+worked comparisons are derived in [test/ARITHMETIC.md](test/ARITHMETIC.md)
+and enforced in [test/compare.test.ts](test/compare.test.ts). They cover
+only the listed synthetic cases, without an astronomical accuracy claim.
+
+Deltas compare the actual rotated binary64 coordinates, which can round;
+they are not copied from a nominal node rotation. The comparison pairs
+positions from one source and does not accept separately computed charts.
+It returns coordinate differences without aspects, interpretation or
+predictions. Mean-node selection retains the natal true-node body labels.
+The comparison does not include receipts; their attachment is pending.
 
 The adapter imports the engine's source entry via a relative path. The local
 Vitest alias and TypeScript path mapping resolve its ephemeris dependency from

@@ -104,3 +104,59 @@ All arithmetic chart expectations above use exact binary fractions and exact
 equality. Separate engine integration cases in `transform.test.ts` use the
 invented input from `engine-adapter.test.ts`; those check composition of the
 adapter and rotation primitive only, not independent astronomical accuracy.
+
+## Structured comparison reference
+
+`compare.test.ts` uses the invented Sun, Moon, north node, south node, all
+angles and the full cusp sequence above. For each row, subtract natal from
+draconic longitude. If the result is at most -180 degrees add 360; if greater
+than 180 subtract 360. This chooses the shortest signed circular displacement
+in (-180, 180], with a half-circle tie reported as +180. The direction is
+always draconic minus natal, with no physical motion or time interval implied.
+
+With the selected node at 75.25, every row has delta -75.25. For Sun this
+is 25.25 - 100.5 = -75.25. For Moon it is 299.75 - 15 = 284.75, then
+284.75 - 360 = -75.25. For cusp 2 it is 284.75 - 0 = 284.75, then the
+same wrap. The other positions and cusps in the tables follow either the
+Sun's unwrapped subtraction or the Moon's wrapped subtraction. The tests
+check both original and rotated longitudes and this delta for each row.
+
+With the explicitly selected mean node at 75, Sun is 25.5, Moon is 300,
+the natal true north node is 0.25 and the natal true south node is 180.25.
+Their deltas are respectively 25.5 - 100.5 = -75, 300 - 15 - 360 = -75,
+0.25 - 75.25 = -75 and 180.25 - 255.25 = -75. Selecting a mean node does
+not replace the true-node body rows.
+
+Additional hand-derived boundary comparisons are:
+
+| Natal | Draconic | Raw difference | Signed delta |
+| ---: | ---: | ---: | ---: |
+| 359.75 | 0.25 | -359.5 | 0.5 |
+| 0.25 | 359.75 | 359.5 | -0.5 |
+| 0 | 180 | 180 | 180 |
+| 180 | 0 | -180 | 180 |
+| 359.75 | 179.75 | -180 | 180 |
+
+Whole-chart boundary checks use the same Sun at 100.5. A zero node leaves
+it at 100.5 with delta 0. A node at 180 gives 100.5 - 180 + 360 = 280.5
+and delta 180. A node at 359.75 gives 100.5 - 359.75 + 360 = 100.75
+and delta 0.25. The same deltas apply to the other synthetic body rows.
+
+At the half-circle boundary let u = 2^-45, one binary64 step at 180.
+From 0 to 180 + u the difference folds to -180 + u; reversing that pair
+gives 180 - u. From 0 to 180 - u the delta is 180 - u, while reversing
+gives -180 + u. This checks the boundary without an epsilon. From 0 to
+360 - 2^-44 (359.99999999999994) subtracting a circle gives -2^-44.
+From the smallest positive binary64 value to 0 the delta is its negative;
+reversing the pair gives the positive value. Equal inputs and either spelling
+of signed zero give positive zero. These deltas use direct subtraction before
+folding, preserving tiny signed differences near zero.
+
+For a chart's Sun at 0 and selected node at `Number.MIN_VALUE`, the earlier
+rotation endpoint policy yields 0. Comparing those actual coordinates gives
+0 - 0 = 0, even though the nominal rotation was a tiny negative displacement.
+The tests therefore require deltas from actual positions rather than a copied
+node offset. All listed arithmetic expectations are exact binary fractions
+and use exact equality. Separate integration checks compare API wiring to
+the engine and transformation on synthetic births; they are not independent
+astronomical references.

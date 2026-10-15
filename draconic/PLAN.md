@@ -9,7 +9,7 @@ a line to `CHANGES.txt`. Git operations belong to the external harness.
 - [x] M2 Add an engine adapter using relative source imports for natal casting and true or mean north-node selection, preserving engine input settings and flags.
 - [x] M3 Implement the pure chart transformation for bodies, angles and existing house cusps, refresh position annotations, and reuse engine house helpers without recasting rotated houses.
 - [x] M4 Cover absent coordinates, unknown birth time, requested versus computed house systems and polar fallback with synthetic integration tests.
-- [ ] M5 Implement structured natal tropical versus draconic comparisons with explicit circular delta units and boundary conventions, without interpretation.
+- [x] M5 Implement structured natal tropical versus draconic comparisons with explicit circular delta units and boundary conventions, without interpretation.
 - [ ] M6 Attach engine natal receipts and separate draconic convention metadata, preserving time basis and provenance without claiming the engine issued a draconic receipt.
 - [ ] M7 Add the `draconic chart` CLI with strict arguments, synthetic JSON input, explicit mean-node selection, JSON output and useful errors.
 - [ ] M8 Add `draconic compare`, plain text rendering for both commands and CLI subprocess tests covering exit codes and output streams.
@@ -116,3 +116,27 @@ local Node 22.22.2 runtime. The engine npm dry run with scripts disabled
 excludes `draconic/` and wrote no archive. `npm run package:contents` stops at
 missing `dist/calc.d.ts`; the engine build is absent and was not generated.
 All session changes are inside `draconic/`. M5 is next.
+
+## M5 session verification
+
+Added pure `compareNatal` and `signedLongitudeDelta` APIs. Comparisons pair
+natal tropical and derived draconic body, angle and ordered cusp longitudes
+from one source, retain the selected node and computed house system, and
+record units, direction, signed delta range and the positive half-circle tie.
+Absent geometry stays null. Deltas use actual rotated coordinates, including
+rounding, rather than copying the nominal node offset. Output objects are
+independent, with no interpretation, aspects or engine receipt claim.
+
+The hand-derived synthetic comparisons and boundary arithmetic are documented
+in `test/ARITHMETIC.md` and enforced by `test/compare.test.ts`. They cover
+origin wraparound, exact and adjacent half-circle differences, zero and
+subnormal values, both node choices, validation and frozen input isolation.
+Synthetic engine integration checks cover missing coordinates, unknown time,
+ordinary houses and polar fallback. Those comparisons check wiring and
+preservation only, without claiming independent astronomical accuracy.
+
+TypeScript checking and the complete standalone Vitest suite passed on the
+local Node 22.22.2 runtime. The engine npm dry run with scripts disabled
+excludes `draconic/` and wrote no archive. `npm run package:contents` stops
+at missing `dist/calc.d.ts`; the engine build is absent and was not generated.
+All session changes are inside `draconic/`. M6 is next.
