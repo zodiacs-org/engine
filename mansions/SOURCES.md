@@ -114,8 +114,12 @@ obvious transcription artifacts are not retained in editorial Arabic.
 The table's arithmetic is a definition tested independently of the engine.
 Neither historical source supplies an independently usable modern mansion
 ingress sample with a stated time scale and longitude convention. This
-milestone makes no claim of measured ingress accuracy. The planned ingress
-sample audit remains a separate milestone. Engine calculation receipts
+project makes no claim of measured ingress accuracy. The completed
+[published ingress sample audit](INGRESS-SAMPLES.md),
+`ingress-sample-audit-2026-10-15` revision 1, records the inspected candidates,
+their conventions and reuse questions, and the evidence gap: none qualified
+for an independent ingress fixture. No external times or positions were
+imported. Engine calculation receipts
 belong to calculated mansion results; the static table is a cited
 convention, not an ephemeris result or an authenticated receipt. The engine
 retains its existing [licensing and attribution](../LICENSING.md).

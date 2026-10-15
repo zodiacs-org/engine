@@ -365,8 +365,12 @@ physical accuracy against an independent ephemeris or historical source.
 independent integer fractions throughout the circle and on both sides of
 every boundary, including adjacent representable values, signed turns,
 subnormal values and the largest finite inputs. These are arithmetic checks,
-not astronomical accuracy evidence. Any usable independently published
-mansion ingress samples will be checked in a later milestone.
+not astronomical accuracy evidence. The
+[published ingress sample audit](INGRESS-SAMPLES.md) records the sources
+inspected, admission criteria and unresolved provenance. None qualified
+for an independent ingress fixture, so physical ingress timing accuracy
+against a published mansion sample remains unmeasured. The audit imported
+no external event output and introduced no timing bound.
 
 `npm run check:isolation` checks the project file constraints and an engine
 package dry-run with lifecycle scripts disabled. It asserts that no file
