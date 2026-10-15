@@ -7,7 +7,7 @@ remain unchanged.
 
 - [x] M1 Establish the private TypeScript project, engine geometric distance sampler, explicit units and center conventions, initial design, and Vitest contract tests.
 - [x] M2 Preregister independent reference cases and accuracy budgets; add a reproducible JPL Horizons collector, small cited fixtures, and source-integrity tests. Reserve held-out cases before tuning the search.
-- [ ] M3 Implement a pure bounded distance-extremum solver with bracketing, golden-section refinement, evaluation accounting, and analytic synthetic tests for minima, maxima, flat curves, and failures.
+- [x] M3 Implement a pure bounded distance-extremum solver with bracketing, golden-section refinement, evaluation accounting, and analytic synthetic tests for minima, maxima, flat curves, and failures.
 - [ ] M4 Implement lunar window searches with edge padding, deterministic half-open boundaries, deduplication, explicit refusal on incomplete work, and lunar reference tests.
 - [ ] M5 Implement heliocentric searches for Mercury through Pluto, including Earth, with body-specific sampling policy, center disclosure, slow-orbit cases, and independent planetary tests.
 - [ ] M6 Add the combined window API, chronological merging, input validation, reference-span handling, completeness diagnostics, and partition-equivalence tests.

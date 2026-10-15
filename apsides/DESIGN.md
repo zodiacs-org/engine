@@ -2,8 +2,9 @@
 
 M1 provides the geometric distance sampler and its integration contracts.
 M2 adds independent development references and reserves held-out windows.
-Window searches, extremum refinement, syzygy annotations and the CLI are
-planned in [PLAN.md](PLAN.md); they are not implemented by M2.
+M3 implements a pure scalar distance solver with synthetic mathematical
+tests. Astronomical window searches, syzygy annotations and the CLI remain
+planned in [PLAN.md](PLAN.md).
 
 The intended result is a chronological list of local distance extrema in a
 requested window. A lunar minimum is a perigee and a lunar maximum an
@@ -54,7 +55,66 @@ astronomy-engine delta-T setting. This wrapper adds no independent global
 state. Receipts describe the computation and model; they are not signatures
 or independent accuracy certificates.
 
-## Planned search method
+## Scalar solver implemented in M3
+
+`searchDistanceExtremaWith(distanceAt, options)` in `src/solver.ts` accepts
+a deterministic callback returning positive distance in kilometres. Its
+time coordinate is seconds from a caller-chosen continuous origin,
+intended to be TT. It imports no ephemeris and performs no I/O. Required
+options are `sampleTimesSeconds`, `toleranceSeconds` and `maxEvaluations`.
+The grid must contain strictly increasing finite times and a finite total
+span; the tolerance is positive and finite, and the evaluation cap is a
+positive safe integer. The grid is copied before invoking the callback.
+
+The solver evaluates the supplied grid, then brackets strict minima and
+maxima from neighboring distance comparisons. Equal adjacent grid values
+trigger a midpoint probe. A strict midpoint turn supplies a bracket; an
+equal midpoint refuses the search as `ambiguous-distance`. It does not
+claim that a flat sampled curve has no extrema. Grid endpoints need outer
+witnesses to become events, so the caller owns padding and filtering.
+
+Each bracket keeps a best sampled point between strictly worse endpoint
+distances. Golden-section refinement samples inside the longer side and
+preserves these inequalities. When a probe ties the best distance, the
+midpoint between tied witnesses can reveal a better point and a smaller
+strict bracket. If it is worse, the observed shape contradicts unimodality
+and the search refuses with `non-unimodal`. If it also ties, the entire
+indistinguishable span is retained. A tied span wider than the requested
+tolerance refuses as `ambiguous-distance`; a smaller one is never silently
+discarded when narrowing the enclosing endpoints. Inability to represent
+a required interior time refuses as `time-resolution`.
+
+Each returned `DistanceExtremum` contains the kind, an evaluated best
+`sample`, the original `bracket`, and final `lower` and `upper` witnesses.
+Their time separation is at most `toleranceSeconds`. The sample is a time
+estimate within that interval, not an exact derivative zero or necessarily
+its midpoint. An indistinguishable narrow bottom or top can remain inside
+the reported interval. The interval bounds numerical localization under
+the continuity and unimodality assumptions, not ephemeris error.
+
+Evaluation accounting includes the grid, tie probes and refinement.
+Repeated time coordinates reuse cached values. If the grid alone exceeds
+the cap, the solver refuses before calling the callback. Otherwise it
+refuses before any evaluation beyond the cap. Every refusal returns an
+empty extrema list, an interval describing where work stopped, and the
+evaluation count. Invalid input or nonpositive/nonfinite distance throws
+`RangeError`; callback exceptions propagate unchanged.
+
+`status: "complete"` means this algorithm completed on the supplied grid.
+It assumes continuous distance and one unimodal turn per refined bracket.
+A finite grid cannot prove those assumptions, detect every hidden turn,
+or establish coverage near its outer edges. The scalar solver does not
+resolve civil times, choose a planetary sampling policy, deduplicate
+overlapping astronomical detections, or apply window boundary ownership.
+Those responsibilities remain in the following milestones.
+
+`test/solver.vitest.ts` and `test/solver-edge.vitest.ts` use analytic
+polynomials and periodic curves, plus flat and rounded curves, to check
+these contracts. The former enforces the registered one-second interval
+target on a synthetic parabola sampled at day-sized intervals. Neither
+file measures astronomical accuracy or reads held-out reference values.
+
+## Planned astronomical search method
 
 Search on a continuous TT coordinate after resolving the input instants
 through the engine. Interpolate TT, not civil dates: changes in UTC offsets

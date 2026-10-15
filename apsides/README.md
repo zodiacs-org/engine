@@ -2,8 +2,9 @@
 
 Private work-in-progress library for geometric orbital distance extrema,
 built on `@zodiacs/engine`. The current milestone provides the distance
-sampler and frozen independent development references. Window searches and
-the CLI are planned in [PLAN.md](PLAN.md).
+sampler, a bounded scalar extremum solver, and frozen independent development
+references. Astronomical window searches and the CLI are planned in
+[PLAN.md](PLAN.md).
 
 Use Node 22.22.2 for the local checks, matching this project's initial test
 environment. From this repository:
@@ -38,11 +39,23 @@ Mars through Pluto. `radialSpeedKmPerSecond` is signed range rate;
 for an extremum. Inputs use the engine's `CalcTime` vocabulary and retain
 its validation, coverage refusals and time-basis qualifications.
 
+`searchDistanceExtremaWith(distanceAt, options)` is the numerical solver.
+The callback returns distance in kilometres; `sampleTimesSeconds` supplies
+a grid on a continuous time coordinate, `toleranceSeconds` bounds the final
+interval width, and `maxEvaluations` caps all callback calls. It brackets
+strict distance turns and refines them with golden-section search, keeping
+strict outer witnesses. Ambiguous distances, exhausted work and insufficient
+time resolution return a refusal with no partial list. Completion means the
+algorithm finished on that grid; it does not prove that every physical
+extremum was found. Callers still need time conversion, edge padding and
+window filtering, as described in [DESIGN.md](DESIGN.md).
+
 The Vitest files use `.vitest.ts` and a local configuration so the root
 test command does not discover a separate project's tests before its local
 dependencies are installed. They check integration, units, reference
-provenance and source integrity. Engine accuracy has not yet been measured
-against the references. [DESIGN.md](DESIGN.md) describes the planned search;
+provenance, source integrity and numerical behavior against analytic
+synthetic curves. Engine accuracy has not yet been measured against the
+references. [DESIGN.md](DESIGN.md) describes the solver and planned searches;
 [references/PREREGISTRATION.md](references/PREREGISTRATION.md) records the
 acceptance budgets, reserved cases and collection commands.
 [SOURCES.md](SOURCES.md) records definitions and attribution. Ordinary tests

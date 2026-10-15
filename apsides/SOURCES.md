@@ -2,7 +2,8 @@
 
 M1 cites definitions and existing engine contracts. M2 registers reference
 queries, acceptance budgets and held-out cases, and freezes independent
-development samples before engine/reference comparisons. No test
+development samples before engine/reference comparisons. M3 tests the
+scalar solver with analytic synthetic functions. No astronomical test
 expectation comes from this package's prior output or Swiss Ephemeris.
 
 ## Primary sources read for M1
@@ -160,5 +161,9 @@ assert that all JPL content is public domain. Existing repository licensing
 records are context, not a blanket license for external content.
 
 No Swiss Ephemeris material, proprietary atlas data, credentials or personal
-birth data is used. Synthetic mathematical functions will test solver
-behavior separately from independent astronomical accuracy tests.
+birth data is used. `test/solver.vitest.ts` and `test/solver-edge.vitest.ts`
+use independently defined polynomials and periodic curves with analytic
+extremum locations, plus constant and rounded curves, to test solver
+behavior separately from independent astronomical accuracy tests. Repeated
+solver runs check determinism and budget accounting only; they do not
+supply physical reference values.
