@@ -23,3 +23,8 @@ export type {
   GeocentricOverlapInterval, LunarOccultationCandidate, LunarOccultationSeries,
   OccultationRefusalReason, LunarOccultationResult
 } from "./occultations.js";
+export { CONTACT_LIMITS, searchLunarContacts } from "./contacts.js";
+export type {
+  LunarContactRequest, LunarContactKind, ContactSearchReceipt, LunarContact,
+  LocalOccultationInterval, ContactRefusalReason, LunarContactResult
+} from "./contacts.js";

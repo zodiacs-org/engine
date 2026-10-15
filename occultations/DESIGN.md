@@ -3,7 +3,7 @@
 This is the implementation contract for the remaining milestones. The
 position adapter, input/receipt foundation, source catalogue, apparent
 stellar reduction, geocentric coordinate conjunctions, appulse searches and
-lunar candidate screening are implemented. An unchecked
+lunar candidate screening and local spherical-limb contacts are implemented. An unchecked
 part of PLAN.md is not a supported calculation or an established error bound.
 
 ## Engine boundary and clock
@@ -366,15 +366,36 @@ held-out case has been used to select radii or search parameters. The finite
 positive-event check supplies no all-target completeness or contact accuracy
 claim. `VALIDATION.md` records its scope.
 
-## Sphere contacts and sky facts
+## Spherical-limb contacts implemented in M8
 
-The lunar limb will be a sphere using the radius already exported by the
+The lunar limb is a sphere using the radius already exported by the
 engine's sky entry, with no mountains, valleys or limb-darkening profile.
-The apparent angular radius is asin(radius / topocentric range). For a star,
-a contact solves angular separation minus lunar angular radius equal to zero.
-For a planet disk, external and internal contacts use the sum and difference
-of the apparent radii. Planet disks need independently sourced radius and
-shape conventions; Saturn's rings are not its solid disk.
+Planet radii use M7's cited JPL nominal equatorial values. Saturn's rings
+are absent, and no planet flattening or atmosphere is modeled. For a radius
+`r` and topocentric range `d`, the sphere subtends `asin(r/d)`. The adapters'
+reported `dist` supplies that range. In the engine's apparent reduction it
+is the astrometric light path; the apparent direction comes from a separately
+retarded relative vector. This is an inherited approximation, not an exact
+retarded silhouette construction. The correction uncertainty stays unknown.
+
+Let `s` be the angular center separation and `m` and `p` the apparent lunar
+and target semidiameters. External clearance is `s - (m + p)`; negative means
+some target disk is covered. Internal clearance is `s - (m - p)`; negative
+means the whole target disk is covered. The difference is signed, not absolute:
+a larger background disk cannot be fully hidden by a smaller lunar disk.
+The target's near surface must lie beyond the Moon's far surface, a sufficient
+radial ordering check at every sample. Infinite point-source stars have no
+target radius and only one clearance scan; unknown stellar parallax is an
+omission, not a measured zero.
+
+External ingress starts partial disappearance, internal ingress completes
+disappearance, internal egress starts reappearance, and external egress ends
+partial reappearance. Stars have only disappearance and reappearance.
+The external and internal negative-clearance intervals are returned separately.
+Full intervals must be contained in overlap intervals; conflicting geometry
+or coincident distinct disk contact times refuses the search. A partial-only
+event has overlap without full coverage. Clipping does not claim anything
+about the rest of the event beyond the window.
 
 Compute separation from unit vectors with atan2(norm(cross), dot) to retain
 precision near coincidence. A sign-changing contact and a tangent graze need
@@ -382,6 +403,48 @@ separate detection. Closest angular approach, equal right ascension and equal
 ecliptic longitude are separate events and must not share a timestamp merely
 because they occur nearby. A geocentric disk overlap is also distinct from
 an occultation visible somewhere on Earth.
+
+`contact-intervals.ts` delegates each scalar zero search through the same
+bounded `atan(clearance)*90/pi` transform as candidate screening. The engine
+finds crossings and probes sampled extrema. Raw clearance checks then recover
+adjacent integer milliseconds with opposite signs or an exact isolated zero.
+Every sampled sign and each reconstructed partition midpoint must agree with
+the resulting topology. Detected tangencies, zero plateaus, inconsistent
+sample values or lost roots refuse the entire result as `unresolved-contact`.
+An unsampled tangency can still escape detection; the inherited smooth-motion,
+station-spacing and close-root-merging assumptions remain in the receipt.
+
+Contacts own `(from,to]`; both directions use the first integer millisecond
+on or after the numerical root. A halo of one millisecond on either side
+classifies exact endpoint roots. It is checked for clock seams and calculation
+range before positions are evaluated. The numerical bracket is either a
+point or one millisecond wide, as enforced in `test/contact-intervals.test.ts`
+and `test/contacts.test.ts`; it supplies no physical error bound.
+Intervals are clipped to the request and use these quantized contact edges.
+An ingress exactly at the upper endpoint is a contact with no positive-duration
+interval; an unowned lower endpoint never duplicates the previous window's
+contact. A fully covered window can have no contacts and a clipped interval.
+
+The topocentric scan does not depend on M7 screening, whose translated-vector
+envelope has different correction approximations. `CONTACT_LIMITS` caps the
+step at five minutes, a sampling policy rather than a completeness proof.
+Both clearance scans, verification and output share a finite paired-position
+budget; output receipts fix the consumed count only after all output samples
+succeed. Failure discards all events and intervals. Below-horizon geometry is
+retained without a visibility claim. The observer ellipsoid, corrections,
+range approximation, radii, star source and boundary clocks remain in receipts.
+
+`test/contact-geometry.test.ts` and `test/contact-search-geometry.test.ts`
+check independent analytic trajectories, partial and full coverage, reversed
+containment and grazing ambiguity. `test/contacts.test.ts` checks engine
+integration, clipped windows, ownership, clock halos, source receipts and
+bounded work. These are distinct from the published prediction comparison in
+`test/contact-references.test.ts`: it applies the original development time
+and disk-duration gates, including clock conversion. No radius, station or
+time offset was fitted to those predictions. The checked subset and deferred
+source quantities are listed in `test/fixtures/events/CONTACTS.md`.
+
+## Sky facts planned in M9
 
 Position angle is measured from celestial north through east at the Moon.
 Bright/dark/terminator labels will use the projected Sun direction and lunar
@@ -409,9 +472,10 @@ outline limit must be checked against local topocentric contact geometry.
 
 ## Accuracy budget in seconds of time
 
-No contact accuracy has been measured in this milestone. The budget will be
-evaluated per contact, using independently checked uncertainties and the
-contact's normal angular speed. Define:
+Development contact timing gates now pass over the cases recorded in
+VALIDATION.md. They do not fill the physical uncertainty budget. The budget
+will be evaluated per contact, using independently checked uncertainties and
+the contact's normal angular speed. Define:
 
 - `Eposition`, `Estar`, `Eframe`, `Ecorrection`, `Eradius` in arcseconds;
 - `vnormal`, the absolute time derivative of angular limb clearance, in
@@ -445,8 +509,10 @@ predictions before event implementation. It records source clocks, precision,
 limb and station qualifications, and documented ephemeris lineage. Unknown
 source conventions remain explicit. Development and held-out whole events
 are separate. These thresholds are acceptance criteria, not a measured error
-budget. M8 and M12 will report the actual comparison span and maxima,
-with failures retained. M3's angular reduction comparison cannot fill the
+budget. M8 records passing the unchanged gates over its development span;
+it does not turn their acceptance limits into measured residual maxima.
+M12 must record the held-out comparisons with failures retained.
+M3's angular reduction comparison cannot fill the
 unknown stellar catalogue term or produce a physical seconds guarantee.
 Its allowed reduction error would contribute that angular allowance divided
 by `abs(vnormal)` to the sensitivity budget; it does not replace `Estar`,
@@ -471,8 +537,10 @@ Conjunction receipts now add catalogue identity and digest when relevant,
 window ownership, both boundary clocks, seam records, search resolution/budget
 and limitations. Each event retains both position receipts and its time basis.
 Refusals retain the same normalized request and available provenance, with
-the originating position refusal when one occurs. Contact and outline
-receipts must later add their respective models and validation scope.
+the originating position refusal when one occurs. Contact receipts now add
+the observer, spherical disk models, classification halo, raw numerical bracket
+and development-only validation scope. Outline receipts must later add their
+respective models and validation scope.
 Exhausting a search budget must produce an explicit
 refusal or unresolved interval, never a silently complete partial list.
 No network request is part of a calculation. Bulk downloads and generated

@@ -33,7 +33,7 @@ package, source, build output, archive or release changes are part of this plan.
   target distance, lunar radius and the terrestrial parallax envelope.
   Separate geocentric disk overlap from possible observer occultation; test
   series membership, near misses and candidate completeness on reference windows.
-- [ ] M8 Solve topocentric spherical-limb contacts for stars and planetary
+- [x] M8 Solve topocentric spherical-limb contacts for stars and planetary
   disks. Report disappearance/reappearance and partial/full disk contact
   semantics, grazing/ambiguous outcomes and clipped-window contacts; compare
   against preregistered independent published times.
@@ -51,6 +51,8 @@ package, source, build output, archive or release changes are part of this plan.
 - [ ] M12 Run the held-out validation suite with explicit maximum errors in
   seconds, document measured scope and unresolved cases, and finish the
   accuracy budget, source/licence audit, usage examples and isolation checks.
+  Complete deferred reference quantities, including separately calculated
+  local closest approach, before claiming full source-case coverage.
 
 An unchecked milestone is a requirement still to implement, not a claim that
 its design or accuracy has already been established. Numerical acceptance

@@ -413,3 +413,75 @@ passed. The local scope check passed source sizes, prose rules, dependency
 pin, private-package status, exclusion from root npm file selection and
 changes only under `occultations/`. Git metadata, release archives and root
 package files were not changed.
+# M8 validation record
+
+Checked on 2026-10-15 using Node 22.22.2. `searchLunarContacts` now solves
+topocentric spherical-limb contacts for a catalogue star or planetary disk.
+It reuses the engine position adapters, observer, frames, time basis and
+crossing solver. The API distinguishes external and internal planetary
+contacts, retains clipped overlap/full-coverage intervals, and returns
+immutable receipts on contacts, intervals, empty results and refusals.
+
+The complete local check passed:
+
+```sh
+npm --prefix occultations run check
+```
+
+This runs no-emit TypeScript, all ordinary Vitest tests, catalogue validation,
+the local bundle and scope checks. `test/contact-geometry.test.ts`,
+`test/contact-intervals.test.ts` and `test/contact-search-geometry.test.ts`
+use analytic trajectories and independently defined spherical constructions
+to check stellar points, full and partial planetary disks, larger background
+disks, changing angular radii, sampled grazes/plateaus, numerical topology,
+clipping and contact ownership. Each numerical root is enclosed by an exact
+sampled zero or adjacent integer milliseconds. Tests enforce the maximum
+one-millisecond numerical bracket and first-millisecond ownership before and
+after the Unix epoch. These are numerical checks, not physical accuracy bounds.
+
+`test/contacts.test.ts` checks actual topocentric engine/star delegation,
+the sphere equation on adapter positions, synthetic observers, poles,
+immutable JSON replay, star provenance, malformed inputs, adjacent-window
+ownership and intervals entirely inside an occultation. All scans and output
+samples share a finite budget; exhaustion discards every partial result.
+Clock and calculation-range refusals cover the endpoint-classification halo
+before position sampling. The coarse-step cap of five minutes and the
+one-millisecond halo are tested policies, not a completeness proof.
+
+`test/contact-references.test.ts` passes all frozen development contact-time
+and planetary disk-duration checks from USNO's Boston Aldebaran worked example
+on 1923-01-27/28 and NAOJ's Saturn prediction on 2024-05-31 at the source's
+synthetic station. The unchanged acceptance maxima are 120 s per contact and
+10 s per disk-crossing duration, individually enforced by
+`assertReferenceChecks`. These are acceptance limits over these qualified
+references, not measured residual maxima or general error bounds. All times
+and durations are compared on nominal UT1 using the engine time basis.
+No source radius, station coordinate, time offset or delta-T was fitted.
+
+The comparison subset, source-row mapping and remaining quantities are
+explicit in [CONTACTS.md](test/fixtures/events/CONTACTS.md). Position angles
+and Moon altitude remain M9; the local closest-approach row requires a
+separate calculation by M12. Passing the contact timing subset does not pass
+the full source case. The historical catalogue and station qualifications,
+NAOJ model details and original provenance remain in
+[EVENTS.md](test/fixtures/events/EVENTS.md). No held-out event was evaluated,
+and no frozen fixture, source receipt, partition or acceptance limit changed.
+
+The lunar sphere omits relief; planetary spheres omit oblateness and rings.
+The topocentric apparent direction and reported light-path range retain the
+engine's correction approximations. Missing stellar distance, component
+motion and other physical uncertainties remain unknown. The timing budget in
+DESIGN.md is therefore still incomplete, especially near grazing. Contacts
+below the horizon remain geometric results without a visibility claim.
+
+A fresh Node process imported the generated bundle and verified the planetary
+contact sequence, JSON round-trip and a halo-only clock-seam refusal with no
+position samples. Generated bundle and catalogue files remain ignored.
+
+The root `npm run package:contents` was attempted with its cache inside this
+folder and stopped at `packed package is missing dist/calc.d.ts`. The task
+forbids creating root build output, so no root build was run. Full root
+package, archive rebuild and conformance gates are not claimed as passed.
+The local scope check passed source sizes, prose rules, dependency pin,
+private-package status, root npm exclusion and changes only under
+`occultations/`. No git metadata, release archive or root package file changed.

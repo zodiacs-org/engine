@@ -8,12 +8,13 @@ The current milestones provide validated position samples, a receipted SAO
 stellar catalogue, reproducible source extraction, apparent star directions,
 geocentric conjunction searches in right ascension or ecliptic longitude,
 geocentric Moon/planet and planet/planet appulse searches, and lunar
-occultation candidate intervals with window-local series.
+occultation candidate intervals with window-local series, and topocentric
+spherical-limb contact times for stars and planetary disks.
 Independent event references and maximum-error criteria were frozen before
 event implementation in [the reference contract](test/fixtures/events/EVENTS.md).
-Topocentric contact times, sky facts, visibility outlines and the
-CLI remain unchecked in [PLAN.md](PLAN.md). There is no measured occultation
-accuracy claim yet. [DESIGN.md](DESIGN.md) records the geometry and error
+Sky facts, visibility outlines and the CLI remain unchecked in
+[PLAN.md](PLAN.md). Contact validation covers the development references
+described below, with no general timing bound. [DESIGN.md](DESIGN.md) records the geometry and error
 budget to validate; [SOURCES.md](SOURCES.md) separates provenance from leads.
 
 Use Node matching this folder's `package.json` engines range. From the
@@ -336,3 +337,75 @@ retains the published USNO Aldebaran and NAOJ Saturn events and their local
 instants under [a preregistered containment rule](test/fixtures/events/CANDIDATES.md).
 It does not compare contact times, validate all catalogue targets or show
 that every event in those windows was found. Held-out checks remain in M12.
+
+`searchLunarContacts()` searches vacuum contacts at a specified observer:
+
+```js
+import { searchLunarContacts } from "./occultations/.generated/index.mjs";
+
+const result = searchLunarContacts({
+  target: "Saturn",
+  observer: { latitude: -20, longitude: 0, elevationMeters: 0 },
+  window: { from: "2024-05-31", to: "2024-06-01" }
+});
+console.log(JSON.stringify(result));
+```
+
+The synthetic station matches the NAOJ development fixture in
+[the contact comparison contract](test/fixtures/events/CONTACTS.md).
+The observer uses geodetic degrees, east longitude and ellipsoidal elevation
+in metres, as in `positionAt()`. A target is a supported planet or exact SAO
+catalogue id. The search uses the existing topocentric adapters and engine
+crossing solver directly, without requiring a geocentric candidate first.
+
+Stellar contacts have `kind: "disappearance"` or `"reappearance"`.
+Planetary contacts distinguish `"partial-disappearance-start"` (external
+ingress), `"full-disappearance"` (internal ingress),
+`"full-reappearance-start"` (internal egress), and
+`"partial-reappearance-end"` (external egress). A partial-only occultation
+has no internal contacts. These are spherical disk contacts; Saturn's rings,
+planet oblateness, lunar terrain, atmospheres and refraction are absent.
+The geometry is returned even below the horizon. Visibility, position angles,
+illumination and altitude facts are not yet calculated.
+
+`contacts` is chronological and owns `(from,to]`. Each contact gives its
+direction, angular separation, semidiameters, signed clearance, numerical
+root bracket and an immutable receipt containing both position receipts.
+Angles are degrees. `at` is the first integer millisecond on or after the
+numerical root; it is not a claim of physical accuracy to that precision.
+The bracket's ends are equal for an exact sampled zero, otherwise adjacent
+milliseconds. [Analytic tests](test/contact-intervals.test.ts) enforce these
+numerical semantics, including dates before the Unix epoch.
+
+`overlapIntervals` records times with some target coverage;
+`fullCoverageIntervals` records times with the whole target covered.
+For a point star these coincide. For a planet the latter is contained in the
+former. Interval edges use the same quantized times as contacts. A
+`start` or `end` of `"window"` means clipping, not a contact. A window
+entirely inside an occultation can therefore have intervals and no contacts.
+An ingress at the owned upper endpoint can have a contact but no interval
+of positive duration. Missing full coverage inside a clipped window says
+nothing about coverage outside it.
+
+`CONTACT_LIMITS` defines the finite coarse step, budget and boundary halo.
+The halo classifies contacts at window edges, and its extent is retained as
+`receipt.search.evaluationWindow`. Clock seams and calculation-span limits
+are checked across that whole support. All paired positions count against
+the shared budget, including refinement, repeated instants and output.
+Detected grazes, zero plateaus or inconsistent contact topology produce
+`status: "refused", reason: "unresolved-contact"`. All refusals return empty
+contact and interval lists with a receipt; no partial list is marked complete.
+Completion is sampled, not a proof that every contact or tangent was found.
+
+[The reference tests](test/contact-references.test.ts) apply the unchanged
+maximum errors of 120 s per contact and 10 s per planetary disk-crossing
+duration to USNO's Boston Aldebaran prediction on 1923-01-27/28 and NAOJ's
+Saturn prediction on 2024-05-31. These are acceptance limits over those
+qualified development cases, not general error bounds or measured maximum
+residuals. The comparisons convert results to each source's nominal UT1
+clock. Historical catalogue/station differences and undocumented NAOJ model
+details remain in the [source contract](test/fixtures/events/EVENTS.md).
+Position-angle, altitude and closest-approach checks remain deferred as listed
+in CONTACTS.md. No held-out contact has been evaluated. [VALIDATION.md](VALIDATION.md)
+records the checks, and [DESIGN.md](DESIGN.md) explains the incomplete physical
+timing budget and grazing sensitivity.
