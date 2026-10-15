@@ -1,4 +1,6 @@
 import { budgetOf, optionsOf } from "../../src/sky/riseset.js";
+import { compareSunriseTithis, TITHI_ANOMALY_CONVENTIONS } from "./anomalies.js";
+import type { SunriseTithiComparison } from "./anomalies.js";
 import type { NakshatraPosition } from "../../src/vedic/nakshatra.js";
 import type { CivilDayInput } from "./civil.js";
 import { PANCHANG_AYANAMSAS } from "./engine.js";
@@ -26,7 +28,8 @@ export const DAY_CONVENTIONS = Object.freeze({
   segment: "[start,end)", simultaneousChanges: "one-segment-boundary",
   limbCoordinates: "geocentric", segmentValues: "discrete-labels-only",
   intervalBoundaries: "full-computed-boundaries-without-day-clipping",
-  sunrise: SUNRISE_CONVENTIONS, transitions: TRANSITION_CONVENTIONS, months: MONTH_CONVENTIONS
+  sunrise: SUNRISE_CONVENTIONS, transitions: TRANSITION_CONVENTIONS, months: MONTH_CONVENTIONS,
+  tithiComparison: TITHI_ANOMALY_CONVENTIONS
 } as const);
 
 /** Constant discrete labels on a clipped portion of a sunrise day. */
@@ -55,6 +58,7 @@ export interface PanchangDay extends DayContext {
   readonly timeline: LimbTransitions;
   readonly months: LunarMonths;
   readonly sunriseMonth: LunarMonthInterval;
+  readonly tithiComparison: SunriseTithiComparison;
   /** Classified snapshot at the included sunrise, with original engine receipts. */
   readonly sunriseState: InstantaneousPanchang;
   /** Ordered, positive, contiguous segments covering the complete sunrise day. */
@@ -142,5 +146,6 @@ export function panchangDay(input: CivilDayInput, options: PanchangDayOptions): 
     return Object.freeze({ ...context, status: "refused", reason: "months-refused", sunrise, timeline, months });
   }
   return Object.freeze({ ...context, status: "ok", sunrise, timeline, months, sunriseMonth: months.startMonth,
+    tithiComparison: compareSunriseTithis(sunrise, timeline),
     sunriseState: timeline.startState, segments: segmentsOf(sunrise, timeline, months) });
 }

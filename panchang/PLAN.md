@@ -11,7 +11,7 @@ The harness owns commits, pushes and the draft pull request.
 - [x] M5 Find and order limb and pada transitions through engine longitude crossings; record true start/end instants beyond day clipping, boundary ownership, search budgets and resolution; verify analytical crossing instants.
 - [x] M6 Assemble the pure panchang day API with chronological segments, sunrise state, convention metadata, ayanamsa and engine receipts; test clipping, simultaneous events and whole-result refusals.
 - [x] M7 Determine adjacent new/full moons and sidereal solar ingresses; implement explicit amanta and purnimanta lunar-month naming with independently documented conventions and arithmetic fixtures.
-- [ ] M8 Detect adhika and kshaya months from ingress counts and identify kshaya/vriddhi tithis across consecutive sunrises; add independent constructed anomaly tests and sourced astronomical cases.
+- [x] M8 Detect adhika and kshaya months from ingress counts and identify kshaya/vriddhi tithis across consecutive sunrises; add independent constructed anomaly tests and sourced astronomical cases.
 - [ ] M9 Implement date-range API with civil-date iteration, shared calculations, chronological results and bounded work; test DST, historical offsets, missing dates and range limits.
 - [ ] M10 Add panchang day and panchang range CLI commands with explicit coordinates/timezone/month convention/ayanamsa, JSON and neutral plain text; test parsing, output order and exit statuses.
 - [ ] M11 Add small independently published transition-instant fixtures and reproducible source retrieval tools; document timescales, ayanamsa, horizon conventions and preregistered comparison tolerances in SOURCES.md.

@@ -60,6 +60,10 @@ if (day.status !== "ok") throw new Error(day.reason);
 assert.equal(day.sunriseState.utc, day.sunrise.start.utc);
 assert.equal(day.monthConvention, "amanta");
 assert.equal(day.sunriseMonth, day.months.startMonth);
+assert.equal(day.tithiComparison.start, day.sunrise.start);
+assert.equal(day.tithiComparison.end, day.sunrise.end);
+assert.deepEqual(day.tithiComparison.startTithi, day.sunriseState.tithi);
+assert(["ordinary", "adhika", "kshaya"].includes(day.sunriseMonth.kind));
 assert.equal(day.sunriseMonth.namingLunation.start.after.ayanamsa.name, day.ayanamsa);
 assert.equal(day.sunriseMonth.end.after.sun.sidereal.receipt.engine.ephemeris.version, "2.1.19");
 assert.deepEqual(day.sunriseState, day.timeline.startState);
@@ -76,3 +80,11 @@ for (const [index, segment] of day.segments.entries()) {
 }
 console.log("Source runtime assembles chronological day segments with full limb boundaries and engine receipts.");
 console.log("Source runtime retains amanta naming lunations, adjacent phase events and sidereal solar ingress receipts.");
+const anomalyDay = panchangDay({ date: "2026-05-20", timeZone: "Asia/Kolkata",
+  observer: { latitude: 12.5, longitude: 75.25 } }, { monthConvention: "purnimanta" });
+if (anomalyDay.status !== "ok") throw new Error(anomalyDay.reason);
+assert.equal(anomalyDay.sunriseMonth.kind, "adhika");
+assert.equal(anomalyDay.sunriseMonth.start.kind, "new-moon");
+assert.equal(anomalyDay.sunriseMonth.end.kind, "new-moon");
+assert.equal(anomalyDay.sunriseMonth.name, "Jyaishtha");
+console.log("Source runtime preserves month anomalies and forward sunrise tithi comparisons with original receipts.");

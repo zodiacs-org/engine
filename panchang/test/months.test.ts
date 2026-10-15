@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { readFileSync } from "node:fs";
 import * as engine from "../src/engine.js";
 import * as crossings from "../../src/crossings.js";
 import {
@@ -102,11 +103,11 @@ describe("independent lunar month definitions and rational phase roots (SOURCES.
     }
   });
 
-  it("orders simultaneous phase/ingress events and assigns ingress ties to the new lunation", () => {
+  it("orders simultaneous phase/ingress events and counts ingress ties in the ending lunation", () => {
     source(0);
     const result = ok(searchLunarMonths(iso(0), iso(1), { monthConvention: "amanta" }));
     expect(result.events.map(({ kind }) => kind)).toEqual(["new-moon", "solar-ingress"]);
-    expect(result.startMonth.namingLunation.ingresses.map(({ at }) => at)).toEqual([iso(0)]);
+    expect(result.startMonth.namingLunation.ingresses.map(({ at }) => at)).toEqual([iso(30 * UNIT)]);
     expect(result.startMonth.namingLunation.solarSignAtStart).toBe(0);
     expect(result.startMonth.name).toBe("Vaisakha");
     expect(result.events.every(({ before, after }) => before.utc === iso(-1) && after.utc === iso(0))).toBe(true);
@@ -139,6 +140,62 @@ describe("independent lunar month definitions and rational phase roots (SOURCES.
     expect(Object.isFrozen(result)).toBe(true);
     expect(Object.isFrozen(result.intervals)).toBe(true);
     expect(Object.isFrozen(result.startMonth.namingLunation.ingresses)).toBe(true);
+  });
+});
+
+describe("constructed month anomalies from independent rational trajectories", () => {
+  it.each(["amanta", "purnimanta"] as const)("detects a zero-ingress %s adhika month", (monthConvention) => {
+    source(7, 0, 1 / 2); // Sun moves from 7 to 22 degrees during t=0..30U.
+    const result = ok(searchLunarMonths(iso(15 * UNIT - 1), iso(15 * UNIT + 1), { monthConvention }));
+    expect(result.intervals).toHaveLength(1); // Full moon does not split an adhika month.
+    expect(result.startMonth).toMatchObject({ name: "Vaisakha", kind: "adhika", omittedMonths: [],
+      start: { at: iso(0) }, end: { at: iso(30 * UNIT) },
+      namingLunation: { kind: "adhika", ingresses: [], omittedMonths: [] } });
+  });
+
+  it.each(["amanta", "purnimanta"] as const)("keeps %s kshaya naming and the omitted month explicit", (monthConvention) => {
+    source(7, 0, 2); // Two ingresses: Sun=30 at 23U/2, Sun=60 at 53U/2.
+    const month = ok(searchLunarMonths(iso(1), iso(2), { monthConvention })).startMonth;
+    expect(month).toMatchObject({ name: "Vaisakha", index: 1, kind: "kshaya",
+      omittedMonths: [{ name: "Jyaishtha", index: 2 }],
+      namingLunation: { kind: "kshaya", ingresses: [{ at: iso(23 * UNIT / 2), sign: 1 },
+        { at: iso(53 * UNIT / 2), sign: 2 }] } });
+    expect(month.namingLunation.omittedMonths).toBe(month.omittedMonths);
+    expect(Object.isFrozen(month.omittedMonths[0])).toBe(true);
+    const following = ok(searchLunarMonths(iso(31 * UNIT), iso(31 * UNIT + 1), { monthConvention })).startMonth;
+    expect(following.name).toBe("Ashadha");
+  });
+
+  it("reports kshaya across the month-name cycle wrap", () => {
+    source(307, 0, 2); // Aquarius -> Pisces -> Aries, omitting Chaitra.
+    const month = ok(searchLunarMonths(iso(1), iso(2), { monthConvention: "amanta" })).startMonth;
+    expect(month).toMatchObject({ name: "Phalguna", index: 11, kind: "kshaya",
+      omittedMonths: [{ name: "Chaitra", index: 0 }] });
+  });
+
+  it("separates the regular purnimanta halves around a new-to-new adhika month", () => {
+    source(7, 0, 1 / 2);
+    const before = ok(searchLunarMonths(iso(-1), iso(1), { monthConvention: "purnimanta" }));
+    expect(before.intervals.map(({ name, kind, start, end }) => [name, kind, start.at, end.at])).toEqual([
+      ["Vaisakha", "ordinary", iso(-15 * UNIT), iso(0)],
+      ["Vaisakha", "adhika", iso(0), iso(30 * UNIT)]
+    ]);
+    // Its naming source has zero ingresses, but the preceding dark half is regular.
+    expect(before.startMonth.namingLunation.kind).toBe("adhika");
+    const after = ok(searchLunarMonths(iso(30 * UNIT - 1), iso(30 * UNIT + 1), { monthConvention: "purnimanta" }));
+    expect(after.intervals.map(({ name, kind, start, end }) => [name, kind, start.at, end.at])).toEqual([
+      ["Vaisakha", "adhika", iso(0), iso(30 * UNIT)],
+      ["Vaisakha", "ordinary", iso(30 * UNIT), iso(45 * UNIT)]
+    ]);
+  });
+
+  it("uses after-new-moon signs and right-closed ingress counts at an exact tie", () => {
+    source(0, 0, 1 / 2);
+    const result = ok(searchLunarMonths(iso(-1), iso(1), { monthConvention: "amanta" }));
+    expect(result.intervals.map(({ name, kind }) => [name, kind])).toEqual([["Chaitra", "ordinary"], ["Vaisakha", "adhika"]]);
+    expect(result.intervals[0]!.namingLunation.ingresses.map(({ at }) => at)).toEqual([iso(0)]);
+    expect(result.intervals[1]!.namingLunation.ingresses).toEqual([]);
+    expect(result.events.map(({ kind }) => kind)).toEqual(["new-moon", "solar-ingress"]);
   });
 });
 
@@ -189,9 +246,9 @@ describe("month validation, budgets and whole-result refusals", () => {
     refused(searchLunarMonths(from, Date.parse(from) + DAY, { monthConvention: "purnimanta" }), "time-basis-discontinuity");
   });
 
-  it.each([0, 2])("refuses a constructed lunation with solar rate %i pending M8 anomaly conventions", (rate) => {
-    source(7, 0, rate);
-    refused(searchLunarMonths(iso(1), iso(2), { monthConvention: "amanta" }), "non-ordinary-lunation");
+  it("refuses unsupported ingress counts", () => {
+    source(7, 0, 3);
+    refused(searchLunarMonths(iso(1), iso(2), { monthConvention: "amanta" }), "unsupported-ingress-count");
   });
 
   it("refuses backwards phase motion", () => {
@@ -202,6 +259,14 @@ describe("month validation, budgets and whole-result refusals", () => {
   it("refuses when the phase solver cannot bracket a month", () => {
     vi.spyOn(crossings, "searchLongitudeCrossingsWith").mockReturnValue({ status: "complete", crossings: [], samples: 0 });
     refused(searchLunarMonths(iso(0), iso(1), { monthConvention: "amanta" }), "unbracketed-month");
+  });
+
+  it("refuses missing ingress evidence rather than mislabelling the lunation adhika", () => {
+    source();
+    const original = crossings.searchLongitudeCrossingsWith;
+    vi.spyOn(crossings, "searchLongitudeCrossingsWith").mockImplementation((position, body, target, from, to, options) =>
+      body === "solar" ? { status: "complete", crossings: [], samples: 0 } : original(position, body, target, from, to, options));
+    refused(searchLunarMonths(iso(0), iso(1), { monthConvention: "amanta" }), "unresolved-crossing");
   });
 
   it("preserves an interior engine refusal and propagates unexpected failures", () => {
@@ -244,6 +309,63 @@ describe("real-engine month wiring, without independent physical accuracy claims
           expect(Math.floor(event.before.sun.sidereal.lon / 30)).toBe((event.sign! + 11) % 12);
         }
       }
+    }
+  });
+});
+
+describe("independently sourced astronomical anomaly cases (SOURCES.md)", () => {
+  // Numerical acceptance limits were fixed in the independent retrieval
+  // script before the engine was evaluated for this comparison.
+  const reference = JSON.parse(readFileSync(new URL("./fixtures/kshaya-month-reference.json", import.meta.url), "utf8")) as {
+    phaseAcceptanceSeconds: number; longitudeAcceptanceDegrees: number; ayanamsaAcceptanceArcseconds: number;
+    rows: { newMoonUT: string; sunTropicalDegrees: number; lahiriTrueDegreesERFA: number;
+      sunSiderealDegreesReference: number; solarSign: number }[];
+  };
+  it.each(["amanta", "purnimanta"] as const)("finds the two-ingress 1983 lunation in %s", (monthConvention) => {
+    const result = ok(searchLunarMonths("1983-01-20", "1983-01-21", { monthConvention }));
+    const lunation = result.startMonth.namingLunation;
+    // Independent DE441 Sun at USNO new-moon minutes, minus ERFA Lahiri,
+    // goes Sagittarius -> Aquarius: two sign entries and no initial Magha.
+    expect(reference.rows.map(({ solarSign }) => solarSign)).toEqual([8, 10]);
+    expect(result.startMonth).toMatchObject({ name: "Pausha", kind: "kshaya",
+      omittedMonths: [{ index: 10, name: "Magha" }] });
+    expect(lunation.ingresses.map(({ sign }) => sign)).toEqual([9, 10]);
+    for (const [i, event] of [lunation.start, lunation.end].entries()) {
+      const row = reference.rows[i]!;
+      expect(Math.abs(Date.parse(event.at) - Date.parse(row.newMoonUT)) / 1000).toBeLessThanOrEqual(reference.phaseAcceptanceSeconds);
+      const instant = luminarySnapshot(row.newMoonUT);
+      if (instant.status !== "ok") throw new Error("Expected reference coverage");
+      expect(Math.abs(instant.sun.tropical.lon - row.sunTropicalDegrees)).toBeLessThanOrEqual(reference.longitudeAcceptanceDegrees);
+      expect(Math.abs(instant.ayanamsa.true - row.lahiriTrueDegreesERFA) * 3600)
+        .toBeLessThanOrEqual(reference.ayanamsaAcceptanceArcseconds);
+      expect(Math.floor(instant.sun.sidereal.lon / 30)).toBe(row.solarSign);
+      expect(Math.floor(event.after.sun.sidereal.lon / 30)).toBe(row.solarSign);
+      // The independent endpoints are safely away from a sign boundary.
+      const remainder = row.sunSiderealDegreesReference % 30;
+      expect(Math.min(remainder, 30 - remainder)).toBeGreaterThan(10 * reference.longitudeAcceptanceDegrees);
+    }
+  });
+
+  // PAC Rashtriya Panchang 2026-27, Regional Calendars, Mukhya/Gauna
+  // sections: regular dark half from May 2, inserted month May 17-June 15,
+  // regular light half from June 15, Ashadha dark half from July 1.
+  // Dates below lie inside those published half-months, away from boundaries.
+  it.each([
+    ["2026-05-10", "purnimanta", "Jyaishtha", "ordinary"],
+    ["2026-05-20", "amanta", "Jyaishtha", "adhika"],
+    ["2026-05-20", "purnimanta", "Jyaishtha", "adhika"],
+    ["2026-06-05", "amanta", "Jyaishtha", "adhika"],
+    ["2026-06-05", "purnimanta", "Jyaishtha", "adhika"],
+    ["2026-06-20", "amanta", "Jyaishtha", "ordinary"],
+    ["2026-06-20", "purnimanta", "Jyaishtha", "ordinary"],
+    ["2026-07-05", "purnimanta", "Ashadha", "ordinary"]
+  ] as const)("matches the published calendar interior on %s with %s", (date, monthConvention, name, kind) => {
+    const month = ok(searchLunarMonths(date, Date.parse(date) + 1, { monthConvention })).startMonth;
+    expect(month).toMatchObject({ name, kind, omittedMonths: [] });
+    if (kind === "adhika") {
+      expect(month.namingLunation.ingresses).toEqual([]);
+      expect(month.start.kind).toBe("new-moon");
+      expect(month.end.kind).toBe("new-moon");
     }
   });
 });

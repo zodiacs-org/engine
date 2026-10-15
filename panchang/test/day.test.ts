@@ -3,7 +3,7 @@ import * as sunriseModule from "../src/sunrise.js";
 import * as transitionsModule from "../src/transitions.js";
 import * as monthsModule from "../src/months.js";
 import {
-  DAY_CONVENTIONS, LIMB_KINDS, instantaneousPanchang, panchangDay, prepareSunriseDay, resolveSunriseDay
+  DAY_CONVENTIONS, LIMB_KINDS, instantaneousPanchang, luminarySnapshot, panchangDay, prepareSunriseDay, resolveSunriseDay
 } from "../src/index.js";
 import type {
   CivilDayInput, PanchangDay, PanchangDayOptions, PanchangDayResult, SunriseDayWindow
@@ -18,7 +18,7 @@ function ok(result: PanchangDayResult): PanchangDay {
 }
 function noDay(result: PanchangDayResult, reason: string): void {
   expect(result).toMatchObject({ status: "refused", reason });
-  for (const key of ["segments", "sunriseState"]) expect(result).not.toHaveProperty(key);
+  for (const key of ["segments", "sunriseState", "tithiComparison"]) expect(result).not.toHaveProperty(key);
 }
 afterEach(() => vi.restoreAllMocks());
 
@@ -34,7 +34,8 @@ describe("independently constructed day partitions (SOURCES.md)", () => {
     // Artificial sunrise times isolate partition arithmetic. The real seed
     // supplies diagnostic shapes only; its receipts certify no mock geometry.
     vi.spyOn(sunriseModule, "resolveSunriseDay").mockReturnValue({ ...seed,
-      start: { ...seed.start, utc: iso(from) }, end: { ...seed.end, utc: iso(to) } });
+      start: { ...seed.start, utc: iso(from), snapshot: luminarySnapshot(new Date(iso(from))) as typeof seed.start.snapshot },
+      end: { ...seed.end, utc: iso(to), snapshot: luminarySnapshot(new Date(iso(to))) as typeof seed.end.snapshot } });
   }
 
   it.each([[0, UNIT], [1, UNIT - 1], [-UNIT, UNIT], [-1, 1], [12345, 12346], [0, UNIT / 2]])(
@@ -88,6 +89,8 @@ describe("independently constructed day partitions (SOURCES.md)", () => {
     expect(result.segments.at(-1)!.end).toBe(iso(UNIT));
     expect(result.segments.at(-1)!.tithi.index).toBe(0);
     expect(result.sunriseState.tithi).toMatchObject({ index: 29, paksha: "krishna", name: "Amavasya" });
+    expect(result.tithiComparison).toMatchObject({ kind: "kshaya", startTithi: { index: 29 }, endTithi: { index: 1 } });
+    expect(result.tithiComparison.skipped.map(({ index }) => index)).toEqual([0]);
   });
 
   it("clips display segments while preserving full boundary objects and receipts", () => {
@@ -103,6 +106,8 @@ describe("independently constructed day partitions (SOURCES.md)", () => {
         result.timeline.intervals.find((row) => row === interval)!.start.after.sun.sidereal.receipt);
     }
     expect(result.sunriseState).toBe(result.timeline.startState);
+    expect(result.tithiComparison.kind).toBe("vriddhi");
+    expect(result.tithiComparison.repeated).toBe(segment.intervals.tithi);
     expect(Object.isFrozen(result.segments)).toBe(true);
     expect(Object.isFrozen(segment)).toBe(true);
     expect(Object.isFrozen(segment.intervals)).toBe(true);
@@ -219,6 +224,13 @@ describe("real-engine day wiring, without an independent physical accuracy claim
     expect(result.sunriseState.sun).toEqual(result.sunrise.start.snapshot.sun);
     expect(result.sunriseState.moon).toEqual(result.sunrise.start.snapshot.moon);
     expect(result.sunriseState.ayanamsa.name).toBe(ayanamsa);
+    const endState = instantaneousPanchang(result.sunrise.end.utc, { ayanamsa });
+    if (endState.status !== "ok") throw new Error("Expected coverage");
+    expect(result.tithiComparison.startTithi).toEqual(result.sunriseState.tithi);
+    expect(result.tithiComparison.endTithi).toEqual(endState.tithi);
+    expect(result.tithiComparison.start).toBe(result.sunrise.start);
+    expect(result.tithiComparison.end).toBe(result.sunrise.end);
+    expect(result.tithiComparison.ayanamsa).toBe(ayanamsa);
     expect(result.segments[0]!.start).toBe(result.sunrise.start.utc);
     expect(result.segments.at(-1)!.end).toBe(result.sunrise.end.utc);
     for (const [i, segment] of result.segments.entries()) {
@@ -247,5 +259,15 @@ describe("real-engine day wiring, without an independent physical accuracy claim
     expect(result.sunrise.maxSamples).toBe(20_000);
     expect(result.timeline.maxSamples).toBe(10_000);
     expect(result.months.maxSamples).toBe(5_000);
+  });
+
+  it.each(["amanta", "purnimanta"] as const)("assembles the sourced 2026 adhika month in %s at an invented site", (monthConvention) => {
+    const result = ok(panchangDay({ ...input, date: "2026-05-20" }, { monthConvention }));
+    expect(result.sunriseMonth).toMatchObject({ name: "Jyaishtha", kind: "adhika", omittedMonths: [] });
+    for (const segment of result.segments) {
+      expect(segment.month).toBe(result.sunriseMonth);
+      expect(segment.month.namingLunation.ingresses).toEqual([]);
+      expect(segment.month.namingLunation.start.after.ayanamsa.name).toBe("lahiri");
+    }
   });
 });

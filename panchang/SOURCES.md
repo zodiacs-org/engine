@@ -348,12 +348,14 @@ The numerical ownership convention is this project's explicit choice.
 New moon is the first whole millisecond whose tithi index changes from
 29 to 0; full moon is the change from 14 to 15. An ingress is the first
 millisecond of the new sidereal solar sign. Every interval includes its
-start and excludes its end. An ingress coincident with a naming new moon
-belongs to the lunation beginning there, and initial solar sign is read
-after that ingress. These tie rules are exercised with an artificial
-exact coincidence, without implying astronomical simultaneity within a
-millisecond. M7 refuses naming lunations with zero or multiple ingresses
-as `non-ordinary-lunation`; M8 will supply anomaly rules and tests.
+start and excludes its end. M7 initially assigned an ingress coincident
+with a naming new moon to the lunation beginning there, reading the initial
+solar sign after that ingress. Its artificial exact-coincidence test
+implied no astronomical simultaneity within a millisecond.
+M7 refused naming lunations with zero or multiple ingresses
+as `non-ordinary-lunation`. M8 below replaces that refusal and corrects
+the ingress tie convention to `(newMoon,nextNewMoon]`, consistent with
+the initial solar sign being read after the boundary.
 
 [test/months.test.ts](test/months.test.ts) prescribes independent dyadic
 longitudes over integer elapsed milliseconds t from the invented epoch
@@ -382,7 +384,7 @@ and the maximum accepted window. These are prescribed mathematical
 trajectories, never values from an earlier engine or package run.
 
 Additional constructed trajectories freeze or double solar motion to
-exercise the temporary anomaly refusal, or reverse phase motion to
+exercise anomaly classification in M8, or reverse phase motion to
 exercise unsupported-crossing refusal. Engine-shaped receipt fields in
 mock snapshots are test scaffolding only, not authenticated computation
 records for those artificial coordinates. The day partition tests reuse
@@ -406,12 +408,123 @@ month wiring on the existing invented historical observer. These are
 integration checks only, with no physical month/phase-time accuracy claim.
 Published transition comparisons remain M11's work.
 
+## M8: anomaly definitions and reference cases
+
+Primary calendar sources read on 2026-10-15:
+
+- The same [Calendar Reform Committee report (1955)](https://dspace.gipe.ac.in/xmlui/bitstream/handle/10973/39692/GIPE-043972.pdf),
+  printed pp. 247-249 (PDF pages 262-264), "Siddhantic rules for the
+  Lunar Calendar", "Counting of the Succession of Days", and table 20.
+  Fetched again with the same SHA-256 recorded in M7; read as extracted
+  text. It defines insertion by a solar month containing two new moons,
+  omission by a solar month with no new moon, and repeated/skipped sunrise
+  tithi numbers. Table 20 shows the purnimanta regular dark half before
+  an inserted month, the inserted light and dark halves, and the regular
+  light half after it. This exception replaces M7's uniform full-to-full
+  construction for the insertion and its adjacent regular halves.
+- IMD Positional Astronomy Centre, [Rashtriya Panchang 2026-27, Regional Calendars](https://packolkata.imd.gov.in/panchang/en/regional-calendars),
+  "Maharashtra, Gujarat, Andhra & Karnataka" and "UP, Bihar, MP, Rajasthan
+  & NW India" tables. Direct fetch failed; search retrieved and displayed
+  both sections. They place the regular Jyaishtha dark half on May 2,
+  adhika Jyaishtha light/dark halves on May 17 and June 1, its regular
+  light half on June 15, and Ashadha dark half on July 1. Tests use dates
+  inside those intervals, avoiding any inference of exact phase instants
+  from civil-date headings. No location data or source prose is copied.
+
+The implementation counts sidereal solar ingresses between consecutive
+new moons. Zero gives adhika, one ordinary, two kshaya. The project retains
+the initial solar-month name for the kshaya lunation and explicitly lists
+the intervening omitted name. This is a stated representation of the
+missing name, without adding a durationless month or combining names.
+For example, starting in Sagittarius gives Pausha; passing Capricorn and
+Aquarius before the next new moon omits Magha and leaves the next lunation
+starting as Phalguna. The result exposes its count, initial sign, ingress
+events and omitted name, so this naming policy is inspectable.
+
+M8 counts ingresses in `(startNewMoon,endNewMoon]` while month intervals
+remain `[start,end)`. This makes the count equal the change from the solar
+sign read after the first boundary to that read after the second. A solar
+ingress exactly at the first new moon has already changed the initial
+name and must not count again. The constructed tie case demonstrates why
+M7's opposite tie ownership needed correction. Counts greater than two or
+inconsistent sign sequences refuse, without partial month output. These
+are numerical ownership and support policies, not source claims about
+physically simultaneous events or a proof of exhaustive root detection.
+
+[test/months.test.ts](test/months.test.ts) uses the independently prescribed
+M7 coordinates, now allowing Sun = a + r t/U and Moon = a + (r+12)t/U,
+modulo a turn. With a = 7 and r = 1/2, the lunation `[0,30U)` moves the Sun
+from 7 to 22 degrees and has no ingress. Its preceding and following
+lunations each have an ingress. In purnimanta the expected regular halves
+are `[-15U,0)` and `[30U,45U)`, separated by the insertion `[0,30U)`.
+With a = 7 and r = 2, ingresses are at 23U/2 and 53U/2, giving a retained
+Vaisakha and omitted Jyaishtha. Another case starts at 307 degrees to test
+Phalguna/Chaitra cycle wrapping. Exact instants come from these rational
+equations; copied receipt shapes authenticate none of the mock coordinates.
+
+[test/anomalies.test.ts](test/anomalies.test.ts) prescribes the M5 tithi
+intervals `[kU,(k+1)U)` at artificial consecutive sunrises. A tithi is
+skipped only if its start is strictly after the first sunrise and its end
+is at or before the second. It repeats only when one complete interval
+contains both endpoints. Tests include roots at both sunrises, adjacent
+milliseconds, multiple complete intervening tithis, negative offsets and
+fortnight/cycle wrapping. All comparisons are exact interval arithmetic,
+without a physical error tolerance. The comparison points forwards and
+identifies the first of a repeated pair; it does not assign a suffix to
+the following civil date or search a preceding sunrise. Existing refusal
+policies prevent comparisons across missing/skipped civil dates or missing
+sunrises. The day tests verify integration and receipt identity at the
+invented site, including the sourced 2026 intercalation.
+
+The small [kshaya fixture](test/fixtures/kshaya-month-reference.json) gives
+an independent astronomical case. Its sources were retrieved and read on
+2026-10-15:
+
+- USNO [Moon Phases API](https://aa.usno.navy.mil/api/moon/phases/date?date=1982-12-01&nump=12),
+  `phasedata` new-moon rows: 1983-01-14 at 05:08 UT and 1983-02-13 at
+  00:32 UT. The [API documentation](https://aa.usno.navy.mil/data/api.html),
+  "Phases of the Moon", defines the UT labels and minute fields. Comparison
+  treats the labels as UTC, allowing minute rounding and subsecond UT1
+  differences, without asserting subsecond agreement.
+- NASA/JPL Horizons API, DE441, Sun (10), Earth geocentre (`500@399`),
+  quantity 31 at those independent minute labels. Each full request URL,
+  API version and response SHA-256 is in the fixture. The [Horizons manual](https://ssd.jpl.nasa.gov/horizons/manual.html),
+  quantity 31, defines apparent IAU76/80 ecliptic-of-date longitude;
+  response headers identify UTC for these dates. Its reduction differs
+  from the engine's IAU2006/2000B conventions, as noted in M1.
+- ERFA numerical results, pyerfa 2.0.1.5, from the existing independent
+  [reference tool](../docs/evidence/vedic-2026-09-28/tools/reference_values.py),
+  `EPOCHS["lahiri"]` and `epoch_ayanamsa`, plus ERFA `nut00b` for true
+  ayanamsa. ERFA converts UTC to TAI to TT. The construction and primary
+  epoch provenance are documented in that tool and the
+  [Vedic evidence](../docs/evidence/vedic-2026-09-28/README.md).
+  No engine output supplies this reduction or the expected solar signs.
+
+The independent sidereal Sun moves from Sagittarius to Aquarius between
+these new moons. Tests confirm a two-ingress Pausha lunation with omitted
+Magha in both conventions. Before evaluating the engine for this case,
+acceptance limits were fixed in the retrieval script at 60 seconds for
+new moons, 0.01 degree for tropical Sun longitude at the reference minutes,
+and 0.01 arcsecond for the independent true Lahiri reduction. The tests
+also require the independent endpoints to be more than ten longitude
+acceptance widths from a sign boundary. These are case-specific acceptance
+limits and robustness checks, not measured maxima or physical error bounds.
+No solar-ingress time accuracy is asserted by endpoint comparisons.
+
+Regenerate proposals with
+`python3 scripts/fetch-month-references.py` from this directory, with
+pyerfa 2.0.1.5 and numpy installed. The tool never imports or runs the
+engine. It writes raw responses and a proposed extract only into ignored
+`generated/`, never over the committed fixture. The fixture contains only
+small US Government numerical facts and ERFA numerical results, with the
+same licensing basis as M1/M4 and the repository licensing audit. No
+source prose, scan, full calendar table, ERFA code or Swiss Ephemeris
+material is redistributed. Provider digests can change on refetch.
+
 ## Later milestones
 
-Before adding anomaly detection, document its independent definitions and
-boundary conventions. Before testing physical transition instants, record
-the primary source URL, locator, retrieval
-date, source timescale, observer/horizon details, ayanamsa, permitted
-redistribution and the comparison tolerance fixed before measuring the
-adapter. Keep downloaded and generated working data in ignored
+Before adding further physical transition instants, record the primary
+source URL, locator, retrieval date, source timescale, observer/horizon
+details, ayanamsa, permitted redistribution and comparison tolerance before
+measuring the adapter. Keep downloaded and generated working data in ignored
 generated/ or .cache/; commit only small, licensed reference extracts.

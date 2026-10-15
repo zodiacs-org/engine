@@ -17,6 +17,11 @@ export const MONTH_NAMES = Object.freeze([
 ] as const);
 export type MonthName = typeof MONTH_NAMES[number];
 export type MonthConvention = "amanta" | "purnimanta";
+export type MonthKind = "ordinary" | "adhika" | "kshaya";
+export interface OmittedMonth {
+  readonly index: number;
+  readonly name: MonthName;
+}
 
 export interface MonthOptions extends SnapshotOptions {
   /** Required: no implicit regional calendar convention. */
@@ -30,12 +35,14 @@ export const MONTH_CONVENTIONS = Object.freeze({
   newMoon: "tithi-29-to-0", fullMoon: "tithi-14-to-15",
   ingress: "sidereal-sun-enters-next-30-degree-sign",
   amanta: "initial-new-moon-solar-sign;pisces-is-chaitra",
-  purnimanta: "preceding-full-moon-to-full-moon;name-of-enclosed-new-moon-amanta-lunation",
-  ingressOwnership: "[newMoon,nextNewMoon)", nonOrdinaryLunation: "refuse-pending-anomaly-milestone",
+  purnimanta: "ordinary-full-to-full;adhika-new-to-new;regular-halves-separated-by-adhika",
+  ingressOwnership: "(newMoon,nextNewMoon];initial-sign-read-after-new-moon",
+  monthKind: "zero-ingresses-adhika;one-ordinary;two-kshaya",
+  kshayaNaming: "retain-initial-solar-month-name;omit-intervening-solar-month-name",
   resolution: "first-whole-millisecond-of-classification-change",
   stepDays: 1 / 4, paddingDays: 64, maxWindowDays: 2,
   search: "engine-longitude-crossings;sampled-forward-motion-not-proven-complete",
-  reference: "analytical-trajectories-only;physical-transition-validation-pending"
+  reference: "analytical-trajectories;1983-USNO-JPL-ERFA;2026-PAC-calendar-interiors;no-general-error-bound"
 } as const);
 
 export interface MonthEvent {
@@ -55,16 +62,21 @@ export interface AmantaLunation {
   readonly ingresses: readonly MonthEvent[];
   readonly index: number;
   readonly name: MonthName;
+  readonly kind: MonthKind;
+  readonly omittedMonths: readonly OmittedMonth[];
 }
 
 export interface LunarMonthInterval {
   readonly convention: MonthConvention;
   readonly index: number;
   readonly name: MonthName;
+  readonly kind: MonthKind;
+  readonly omittedMonths: readonly OmittedMonth[];
   /** Complete computed phase boundaries, without clipping to the search window. */
   readonly start: MonthEvent;
   readonly end: MonthEvent;
-  /** The new-moon lunation from which the name is derived in either convention. */
+  /** Name source. A regular purnimanta dark half before an insertion uses the
+   * upcoming adhika name source but has its own ordinary kind and boundaries. */
   readonly namingLunation: AmantaLunation;
 }
 
@@ -92,7 +104,7 @@ export interface LunarMonths extends MonthContext {
 export interface MonthRefusal extends MonthContext {
   readonly status: "refused";
   readonly reason: "sample-budget" | "engine-refused" | "time-basis-discontinuity" |
-    "unresolved-crossing" | "unbracketed-month" | "non-ordinary-lunation";
+    "unresolved-crossing" | "unbracketed-month" | "unsupported-ingress-count";
   readonly engine?: SnapshotRefusal;
 }
 export type MonthResult = LunarMonths | MonthRefusal;
@@ -195,30 +207,58 @@ export function searchLunarMonths(from: DateInput, to: DateInput, options: Month
     const newMoons = events.filter((event) => event.kind === "new-moon");
     const fullMoons = events.filter((event) => event.kind === "full-moon");
     const ingresses = events.filter((event) => event.kind === "solar-ingress");
-    const boundaries = settings.monthConvention === "amanta" ? newMoons : fullMoons;
-    const intervals: LunarMonthInterval[] = [];
-    for (let i = 0; i + 1 < boundaries.length; i++) {
-      const start = boundaries[i]!;
-      const end = boundaries[i + 1]!;
-      if (msOf(start) >= hi || msOf(end) <= lo) continue;
-      // In purnimanta the naming new moon lies between these full moons.
-      const namingStart = settings.monthConvention === "amanta" ? start :
-        newMoons.find((event) => msOf(event) > msOf(start) && msOf(event) < msOf(end));
-      const namingEnd = namingStart && newMoons[newMoons.indexOf(namingStart) + 1];
-      if (!namingStart || !namingEnd) throw new Refused("unbracketed-month");
-      const containedFull = fullMoons.filter((event) => msOf(event) > msOf(namingStart) && msOf(event) < msOf(namingEnd));
+    // Build the astronomical amanta units once. Purnimanta naming and its
+    // intercalation exception are derived from these same units.
+    const lunations: AmantaLunation[] = [];
+    for (let i = 0; i + 1 < newMoons.length; i++) {
+      const start = newMoons[i]!;
+      const end = newMoons[i + 1]!;
+      const containedFull = fullMoons.filter((event) => msOf(event) > msOf(start) && msOf(event) < msOf(end));
       if (containedFull.length !== 1) throw new Refused("unbracketed-month");
-      const solarSignAtStart = solarSign(namingStart.after);
-      const containedIngresses = ingresses.filter((event) => msOf(event) >= msOf(namingStart) && msOf(event) < msOf(namingEnd));
-      // Month anomaly conventions and their naming exceptions are M8. Refuse
-      // rather than silently assign a normal month to an exceptional lunation.
-      if (containedIngresses.length !== 1) throw new Refused("non-ordinary-lunation");
+      const solarSignAtStart = solarSign(start.after);
+      // Right-closed counting makes a simultaneous ingress consistent with
+      // reading the initial sign AFTER the new moon. Display intervals remain
+      // half-open. A start tie was already counted in the preceding lunation.
+      const containedIngresses = ingresses.filter((event) => msOf(event) > msOf(start) && msOf(event) <= msOf(end));
+      if (containedIngresses.length > 2) throw new Refused("unsupported-ingress-count");
+      const endSign = solarSign(end.after);
+      if (endSign !== (solarSignAtStart + containedIngresses.length) % 12 ||
+          containedIngresses.some((event, j) => event.sign !== (solarSignAtStart + j + 1) % 12)) {
+        throw new Refused("unresolved-crossing");
+      }
       const index = (solarSignAtStart + 1) % 12;
-      const namingLunation: AmantaLunation = Object.freeze({ start: namingStart, end: namingEnd,
-        fullMoon: containedFull[0]!, solarSignAtStart, ingresses: Object.freeze(containedIngresses), index, name: MONTH_NAMES[index]! });
-      intervals.push(Object.freeze({ convention: settings.monthConvention, index, name: namingLunation.name,
-        start, end, namingLunation }));
+      const kind: MonthKind = containedIngresses.length === 0 ? "adhika" : containedIngresses.length === 1 ? "ordinary" : "kshaya";
+      const omittedMonths = Object.freeze(kind === "kshaya"
+        ? [Object.freeze({ index: (index + 1) % 12, name: MONTH_NAMES[(index + 1) % 12]! })] : []);
+      lunations.push(Object.freeze({ start, end, fullMoon: containedFull[0]!, solarSignAtStart,
+        ingresses: Object.freeze(containedIngresses), index, name: MONTH_NAMES[index]!, kind, omittedMonths }));
     }
+    const intervals: LunarMonthInterval[] = [];
+    const append = (start: MonthEvent, end: MonthEvent, namingLunation: AmantaLunation,
+      kind = namingLunation.kind): void => {
+      if (msOf(start) >= hi || msOf(end) <= lo) return;
+      intervals.push(Object.freeze({ convention: settings.monthConvention, index: namingLunation.index,
+        name: namingLunation.name, kind,
+        omittedMonths: kind === "kshaya" ? namingLunation.omittedMonths : Object.freeze([]),
+        start, end, namingLunation }));
+    };
+    for (const [i, lunation] of lunations.entries()) {
+      if (settings.monthConvention === "amanta") {
+        append(lunation.start, lunation.end, lunation);
+      } else {
+        const previous = lunations[i - 1];
+        if (!previous) continue; // Its preceding full moon is outside the scan.
+        if (lunation.kind === "adhika") {
+          // The regular dark half precedes the inserted new-to-new month.
+          if (previous.kind !== "adhika") append(previous.fullMoon, lunation.start, lunation, "ordinary");
+          append(lunation.start, lunation.end, lunation);
+        } else {
+          // Following an inserted month only the regular light half remains.
+          append(previous.kind === "adhika" ? lunation.start : previous.fullMoon, lunation.fullMoon, lunation);
+        }
+      }
+    }
+    intervals.sort((a, b) => msOf(a.start) - msOf(b.start));
     const startMonth = intervals[0];
     if (!startMonth || msOf(startMonth.start) > lo || msOf(intervals.at(-1)!.end) < hi ||
         intervals.some((interval, i) => i > 0 && interval.start !== intervals[i - 1]!.end)) {

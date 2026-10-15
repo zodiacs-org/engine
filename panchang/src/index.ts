@@ -32,5 +32,7 @@ export type { PanchangDay, PanchangDayOptions, PanchangDayRefusal, PanchangDayRe
 export { MONTH_CONVENTIONS, MONTH_NAMES, searchLunarMonths } from "./months.js";
 export type {
   AmantaLunation, LunarMonthInterval, LunarMonths, MonthConvention, MonthEvent, MonthName,
-  MonthOptions, MonthRefusal, MonthResult
+  MonthOptions, MonthRefusal, MonthResult, MonthKind, OmittedMonth
 } from "./months.js";
+export { compareSunriseTithis, TITHI_ANOMALY_CONVENTIONS } from "./anomalies.js";
+export type { SunriseTithiComparison } from "./anomalies.js";

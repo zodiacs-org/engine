@@ -5,8 +5,8 @@ facts for sunrise-to-sunrise days. Implementation follows [PLAN.md](PLAN.md).
 It currently exposes the luminary snapshot adapter, instantaneous limbs,
 civil-date and sunrise-to-sunrise windows with vara, limb transition
 searches with complete surrounding intervals, amanta/purnimanta month
-naming for ordinary lunations, and a pure day assembly API.
-Anomalies, date ranges and the CLI are planned milestones.
+naming with adhika/kshaya detection, sunrise tithi anomaly comparisons,
+and a pure day assembly API. Date ranges and the CLI are planned milestones.
 
 Use Node 22.7.0 or later. From this directory:
 
@@ -372,7 +372,7 @@ independently prescribed trajectories and artificial sunrise boundaries.
 Real-engine checks verify receipt retention and wiring; no physical
 transition-time accuracy claim follows. The evidence and scope are in
 [SOURCES.md](SOURCES.md#m6-day-assembly-arithmetic-and-integration).
-Anomaly detection remains the next planned milestone.
+Sunrise tithi comparisons and lunar-month anomaly policies are described below.
 
 ```ts
 import { searchLunarMonths } from "./src/index.js";
@@ -396,8 +396,8 @@ defaults to Lahiri. No observer or timezone enters these geocentric events.
 
 An amanta interval runs from new moon to new moon. Its name comes from the
 sidereal solar sign at the initial new moon, with Pisces corresponding to
-Chaitra and Aries to Vaisakha. A purnimanta interval starts at the full moon
-preceding the naming new moon and ends at the next full moon. It takes the
+Chaitra and Aries to Vaisakha. An ordinary purnimanta interval starts at
+the full moon preceding the naming new moon and ends at the next full moon. It takes the
 name of that new moon's amanta lunation. Thus the conventions share the
 waxing fortnight's name; the waning fortnight uses the following amanta
 lunation's name. Names use the ASCII labels in `MONTH_NAMES`, including
@@ -415,10 +415,12 @@ from Purnima to Krishna Pratipada. The new month owns the boundary.
 
 `events` lists new/full moons and solar ingresses inside the half-open
 requested window, chronologically, with a phase event before an ingress
-when simultaneous. Ingresses at a naming lunation's start belong to it;
-ingresses at its end belong to the following lunation. Initial solar sign
-is read after any simultaneous ingress. These explicit millisecond tie
-rules are tested conventions, without an astronomical precision claim.
+when simultaneous. For anomaly counting, ingresses belong to the
+right-closed interval `(newMoon,nextNewMoon]`. Initial solar sign is read
+after any simultaneous ingress. This corrects M7's start-inclusive count
+to keep it consistent with the after-ingress initial sign. Display month
+intervals and the event window remain half-open. These explicit millisecond
+tie rules are tested conventions, without an astronomical precision claim.
 
 The engine longitude-crossing solver scans phase and sidereal solar-sector
 streams at quarter-day steps with 64 elapsed days of padding on each side.
@@ -436,8 +438,71 @@ Every refusal omits `intervals`, `events` and `startMonth`. Reasons cover
 budget exhaustion, retained engine refusals, time-basis discontinuity,
 unconfirmed crossings and missing surrounding month boundaries. Coverage
 and time-basis checks apply to the entire padded span, so their refusal
-region is broader than the limb search's. The API currently also refuses
-`non-ordinary-lunation` when a required naming lunation contains zero or
-multiple ingresses. Adhika/kshaya conventions and detection belong to M8.
-No physical phase-time or calendar-table accuracy claim follows from the
-arithmetic and engine-wiring tests.
+region is broader than the limb search's. More than two ingresses in a
+scanned lunation yield `unsupported-ingress-count`; an inconsistent sign
+sequence yields `unresolved-crossing`. Tests enforce both conditions.
+The independent references below have limited coverage and establish no
+general physical error bound.
+
+
+Month results now include `kind` and `omittedMonths`, both on the display
+interval and its `namingLunation`. No ingress means `adhika`; one means
+`ordinary`; two mean `kshaya`. In a kshaya lunation the library retains
+the name from the initial solar sign and lists the intervening missing
+name in `omittedMonths`. It does not create a zero-duration month or omit
+any astronomical time. These counts and naming decisions are enforced in
+[test/months.test.ts](test/months.test.ts), against independent constructed
+trajectories and the references in [SOURCES.md](SOURCES.md#m8-anomaly-definitions-and-reference-cases).
+
+For purnimanta, an inserted adhika month runs from new moon to new moon,
+matching the amanta insertion. The regular month's waning half precedes
+it and its waxing half follows it. They are separate complete display
+intervals with `kind: "ordinary"`; they do not form a continuous month
+through the insertion. The preceding regular dark half derives its name
+from the upcoming adhika `namingLunation`, so the interval's `kind` can
+intentionally differ from that name source's `kind`. Use the interval's
+fields for the label being displayed and the name source for its
+underlying phase/ingress evidence. Ordinary months without this exception
+keep the full-moon-to-full-moon interval described above.
+
+```ts
+if (day.status === "ok") {
+  console.log(day.sunriseMonth.name, day.sunriseMonth.kind,
+    day.sunriseMonth.omittedMonths);
+  const comparison = day.tithiComparison;
+  console.log(comparison.from, comparison.to, comparison.kind);
+  for (const tithi of comparison.skipped) {
+    console.log(tithi.start.after.tithi, tithi.start.at, tithi.end.at);
+  }
+  if (comparison.repeated) console.log(comparison.repeated.start.after.tithi);
+}
+```
+
+`day.tithiComparison` compares the starting and following sunrises. A
+complete tithi strictly after the first sunrise and ending at or before
+the next is `kshaya`, listed in chronological `skipped` intervals. If the
+same full tithi interval contains both sunrises, it is `vriddhi`, retained
+as `repeated`. Otherwise the comparison is `ordinary`. A boundary exactly
+at the following sunrise belongs to the new tithi, so the preceding
+complete tithi can be skipped but cannot be repeated. The tests in
+[test/anomalies.test.ts](test/anomalies.test.ts) enforce these rules using
+independent interval arithmetic, including fortnight and cycle wrapping.
+
+This is a forward comparison: a vriddhi result identifies the first
+sunrise of the repeated pair and names the second endpoint explicitly.
+It does not suffix the second day's date or infer a previous sunrise.
+Both endpoints retain their original snapshots, receipts and ayanamsa;
+skipped/repeated rows retain complete transition intervals. The pure
+`compareSunriseTithis(sunrise, timeline)` helper is also exported for
+matching successful resolver results. It performs no new searches and
+throws `RangeError` for inconsistent windows or partitions. Day refusals
+expose no tithi comparison and do not substitute a missing sunrise.
+
+The M8 reference checks cover calendar interiors from the PAC's published
+2026 regional tables and the 1983 lunation with an omitted Magha, using
+USNO phases, JPL DE441 Sun longitudes and an independent ERFA Lahiri
+reduction. Their instants, acceptance limits, retrieval tool, licensing
+basis and precise scope are recorded in [SOURCES.md](SOURCES.md#m8-anomaly-definitions-and-reference-cases).
+They do not validate every tithi boundary, every anomalous year or other
+regional calendar conventions. Wider physical transition comparisons
+remain M11's work.
