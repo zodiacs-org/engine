@@ -8,7 +8,7 @@ a line to `CHANGES.txt`. Git operations belong to the external harness.
 - [x] M1 Create an isolated private TypeScript project, implement a pure longitude rotation primitive with input validation, and document hand-derived synthetic arithmetic with Vitest coverage.
 - [x] M2 Add an engine adapter using relative source imports for natal casting and true or mean north-node selection, preserving engine input settings and flags.
 - [x] M3 Implement the pure chart transformation for bodies, angles and existing house cusps, refresh position annotations, and reuse engine house helpers without recasting rotated houses.
-- [ ] M4 Cover absent coordinates, unknown birth time, requested versus computed house systems and polar fallback with synthetic integration tests.
+- [x] M4 Cover absent coordinates, unknown birth time, requested versus computed house systems and polar fallback with synthetic integration tests.
 - [ ] M5 Implement structured natal tropical versus draconic comparisons with explicit circular delta units and boundary conventions, without interpretation.
 - [ ] M6 Attach engine natal receipts and separate draconic convention metadata, preserving time basis and provenance without claiming the engine issued a draconic receipt.
 - [ ] M7 Add the `draconic chart` CLI with strict arguments, synthetic JSON input, explicit mean-node selection, JSON output and useful errors.
@@ -95,3 +95,24 @@ checked to exclude `draconic/` and wrote no archive. With its npm cache inside
 this project, `npm run package:contents` stops at missing `dist/calc.d.ts`,
 as in earlier sessions; no engine build was generated. All session changes
 are inside `draconic/`. M4 is next.
+
+## M4 session verification
+
+Added `test/availability.test.ts` with synthetic engine integration cases for
+both node choices. Missing coordinates and unknown time retain null angles,
+cusps and body house assignments. Unknown time preserves the supplied instant
+and its body and selected-node positions, including at polar sites, without
+deriving a fallback flag when houses are absent. Tests retain canonical flags
+and the requested system alongside the computed system for ordinary houses
+and Placidus or Koch polar fallback in either hemisphere. The fallback cusps
+are the engine's existing whole-sign cusps under rotation. Zero coordinates
+remain a supplied site. Source objects remain unchanged by transformation.
+These checks establish wiring and preservation, not astronomical accuracy;
+no production code changes were needed. The local README documents availability
+and where to read requested versus computed systems.
+
+TypeScript checking and the complete standalone Vitest suite passed on the
+local Node 22.22.2 runtime. The engine npm dry run with scripts disabled
+excludes `draconic/` and wrote no archive. `npm run package:contents` stops at
+missing `dist/calc.d.ts`; the engine build is absent and was not generated.
+All session changes are inside `draconic/`. M5 is next.

@@ -78,6 +78,19 @@ unknown option keys are rejected. The integration checks in
 with direct calls to the same engine using invented input. They check wiring
 and preservation, without supplying independent astronomical accuracy evidence.
 
+Without coordinates, angles, houses and body house assignments remain null;
+missing coordinates alone do not imply unknown time. With `timeKnown: false`,
+those fields remain null even when coordinates are supplied, and the natal
+chart carries `no-time`. The caller's reference instant still determines body
+and selected-node positions. The requested house system remains in
+`source.natal.input.houseSystem`; the computed system is in
+`source.natal.houses?.system` and, when present, `draconic.houses.system`.
+For the synthetic polar cases in [test/availability.test.ts](test/availability.test.ts),
+Placidus and Koch requests retain the natal `polar-fallback` flag and use the
+engine's computed whole-sign cusps, rotated without recasting. That test also
+checks missing coordinates, unknown time, default houses and a site with zero
+coordinates for both node choices. These are integration preservation checks.
+
 The adapter imports the engine's source entry via a relative path. The local
 Vitest alias and TypeScript path mapping resolve its ephemeris dependency from
 this project's installation, pinned to the engine's version. The standalone
