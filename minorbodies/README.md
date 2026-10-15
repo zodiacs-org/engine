@@ -4,8 +4,9 @@ This source-checkout package is under development. It computes geocentric
 ecliptic longitude, latitude, distance, speeds and retrograde state for Chiron,
 Ceres, Pallas, Juno and Vesta from explicitly loaded local tables, with
 provenance receipts. Its Chiron pilot is also retained. The implementation
-sequence is in [PLAN.md](PLAN.md). The body adapter, station search and
-retrograde windows are available; sign ingresses and the CLI remain later milestones.
+sequence is in [PLAN.md](PLAN.md). The body adapter, station search,
+retrograde windows and sign ingress search are available; the CLI remains
+a later milestone.
 
 The design uses JPL Horizons samples to build local Chebyshev tables. See
 [DESIGN.md](DESIGN.md) for conventions, coverage, validation and engine
@@ -327,8 +328,7 @@ receipt. A provider refusal from `longitudeAt` throws
 receipt. It never returns a fabricated longitude. The solver propagates that
 error. Its own sample-budget refusal remains unchanged. Keep the callback
 receipt with direct solver results. The dedicated station wrapper below adds
-per-event receipts; retrograde windows are described below, and ingresses remain
-a later milestone.
+per-event receipts; retrograde windows and sign ingresses are described below.
 
 The adapter's tests establish integration and preserve the pilot's existing
 held-out accuracy checks, not additional astronomical coverage. See
@@ -452,3 +452,55 @@ synthetic motion. `tests/retrograde-accuracy.test.ts` and the explicit full-data
 `tests/full-retrogrades.test.ts` check windows against the retained independent
 Horizons/ERFA station corpus, with unchanged timing and angular gates. Their
 finite reference scope and reproduction commands are in [M8 evidence](docs/evidence/M8.md).
+
+## Sign ingresses
+
+```ts
+import { createBodyAdapter, createIngressSearcher, loadFullBody } from "./src/index.ts";
+
+const adapter = await createBodyAdapter([await loadFullBody("Vesta")]);
+const searcher = await createIngressSearcher(adapter);
+const result = searcher.searchIngresses({
+  body: "Vesta",
+  from: "2000-01-02T00:00:00Z",
+  to: "2000-12-30T00:00:00Z"
+});
+console.log(result);
+```
+
+Setup and endpoint inputs follow the station API. The search resolves the input
+clocks once and works on continuous TT, using the engine's longitude crossing
+solver at every tropical sign boundary. It runs offline against installed data.
+`status: "complete"` returns `ingresses` in time order. An ingress contains its
+`jdTt`, boundary `longitudeDeg`, `direction: "direct" | "retrograde"`, and
+`fromSign` and `toSign` as the engine's lowercase sign slugs. Its `position`
+is the evaluated position at the approximate event epoch, so its longitude
+can differ slightly from the exact boundary. The sign labels describe motion
+on either side, not a rounding of that approximate position.
+
+Each receipt links the position, samples before and after the event, and a shared
+search record containing settings, source identities, dataset and evaluated
+shard digests. Samples on opposite sides of the boundary establish direction.
+An exact zero-speed touch without a sign transition is omitted. A candidate
+whose direction or touch cannot be resolved returns `ingress-direction-unresolved`.
+This includes a hit exactly at `to`: extend the query within installed coverage
+to provide the following-side sample. Events at `from` are excluded under the
+solver's `(from, to]` ownership convention. All provider calls stay within the
+query, and the dataset's exclusive upper endpoint remains inadmissible.
+If the solver's circular normalization would erase a nonzero longitude offset,
+the search refuses as `longitude-resolution` instead of treating it as zero.
+
+`stepDays` and `maxSamples` have the defaults and limits in
+`INGRESS_SEARCH_CONVENTIONS`, enforced by `tests/ingresses.test.ts`. One budget
+covers every boundary scan, every direction probe and every event position;
+repeated calls count again. The aggregate coarse-scan preflight can refuse
+before any calculation. Later budget or provider failures discard all events,
+even when earlier boundary searches finished. Refusals carry their receipts,
+work count and underlying provider refusal when present. Malformed input
+throws `RangeError`. All returned data are immutable and JSON-serializable.
+
+The solver can find repeated direct and retrograde crossings near a station.
+Completion records that the scan finished under its smooth-motion assumptions;
+it is not proof of event completeness or a physical accuracy bound. Independent
+Horizons/ERFA comparisons and analytic boundary cases are distinguished in
+[M9 evidence](docs/evidence/M9.md). Final full-range event validation remains M11.

@@ -28,3 +28,6 @@ export type { StationSearchRequest, StationDirection, StationSearchReceipt, Stat
 export { createRetrogradeWindowSearcher, RETROGRADE_WINDOW_CONVENTIONS } from "./retrogrades.ts";
 export type { RetrogradeWindowRequest, RetrogradeWindowSearchReceipt, RetrogradeWindow,
   RetrogradeWindowSearchResult, RetrogradeWindowSearcher } from "./retrogrades.ts";
+export { createIngressSearcher, INGRESS_SEARCH_CONVENTIONS } from "./ingresses.ts";
+export type { IngressSearchRequest, IngressDirection, IngressSearchReceipt, IngressSample,
+  IngressEvent, IngressSearchResult, IngressSearcher } from "./ingresses.ts";

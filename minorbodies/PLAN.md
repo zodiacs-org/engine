@@ -14,7 +14,7 @@ human-written evidence notes stay with their capture scripts and provenance.
 - [x] M6 Add the body adapter: delegate ordinary bodies to engine calc, expose minor-body calculation with explicit conventions and refusals, and provide generic crossings callbacks and configured-aspect rows. Verify actual results and mixed-body use.
 - [x] M7 Implement station searches through the engine crossings solver, with sample budgets, boundary handling and receipts. Check direct-to-retrograde and retrograde-to-direct events against independent Horizons samples.
 - [x] M8 Build retrograde windows from stations and endpoint states, carrying clipped-window and refusal information. Test adjacent windows, incomplete searches and supported-range edges.
-- [ ] M9 Add sign ingress search through the engine crossings solver with directions, sign labels, receipts and shared budgets. Check wraparound, repeated ingresses and station-adjacent cases independently.
+- [x] M9 Add sign ingress search through the engine crossings solver with directions, sign labels, receipts and shared budgets. Check wraparound, repeated ingresses and station-adjacent cases independently.
 - [ ] M10 Add a local CLI for positions, stations, retrograde windows and ingresses, with JSON output, explicit time conventions and useful failures. Test commands against the library and invalid input.
 - [ ] M11 Run the preregistered full-span held-out accuracy suite with explicit arcsecond limits, speed and distance checks, event brackets and seam checks. Commit the generator and evidence notes linked to enforcing tests; document actual coverage and failures.
 - [ ] M12 Finish reproducible offline setup, data regeneration instructions, dependency/licence notices, examples and package isolation checks. Review every supported-range and accuracy statement against committed evidence. Add Pholus or Eris only through the same data and validation gates if practical.
@@ -128,4 +128,23 @@ Horizons/ERFA corpus with unchanged timing and arcsecond gates. No coefficient,
 generator, source capture or acceptance limit changed. Root package contents
 still fails on the initially missing `dist/calc.d.ts`; no root build or packed-file
 change was made. All changes remain inside `minorbodies/`. M9 is the next
+unchecked milestone.
+
+M9 verification: `npm run check` passed on Node 22.22.2, including synthetic
+ingress cases, independent Horizons/ERFA references, TypeScript, existing
+reference checks and package exclusion. All existing full-data accuracy,
+adapter, station and retrograde suites passed in a filtered run; the new
+full-data ingress suite passed for every required body, including a rerun after
+strengthening reference-speed sign assertions. Offline source replay and native
+source-checkout execution of the Vesta example with fetch disabled passed.
+Ingresses reuse the engine solver for every tropical sign boundary with one
+provider-call budget, direction evidence, sign slugs and immutable receipts.
+Independent captures check actual event brackets and repeated passages; analytic
+cases check wraparound and close station-adjacent pairs. The Chiron reference
+interval contains no ingresses, so it checks an empty scan and positions rather
+than event timing. Review added a refusal for angular normalization that would
+erase a real tiny offset, with regressions in both directions. No coefficient,
+training source or original accuracy limit changed. Root package contents still
+fails on the initially absent `dist/calc.d.ts`; no root build or packed-file
+change was made. All changes remain inside `minorbodies/`. M10 is the next
 unchecked milestone.

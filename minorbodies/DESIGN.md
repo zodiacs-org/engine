@@ -10,6 +10,7 @@ do not replace the final M11 accuracy and event corpus. M6 adds body dispatch,
 generic longitude callbacks and configured-aspect rows with explicit receipts.
 M7 adds station searches using the engine solver and independent event references.
 M8 assembles retrograde windows from those stations and endpoint states.
+M9 adds tropical sign ingresses with sign labels and independent direction evidence.
 
 The required targets are Chiron, Ceres, Pallas, Juno and Vesta. Pholus and
 Eris can follow only after the same checks. The target interval is
@@ -737,3 +738,64 @@ the existing timing margin and longitude/speed arcsecond limits. No new fit,
 source response or acceptance budget is introduced. [M8 evidence](docs/evidence/M8.md)
 records the distinction between independent event checks and boundary integration
 tests; the full-range event corpus remains M11.
+
+## M9 sign ingress contract
+
+`createIngressSearcher(adapter)` records local source identities and exposes
+synchronous `searchIngresses` calls over installed minor-body datasets. Input
+validation and endpoint conversion follow the station request vocabulary.
+The search preserves the exact starting and ending TT Julian dates with the
+same relative integer-millisecond solver coordinates as station searches.
+Only the existing engine `searchLongitudeCrossingsWith` enumerates and refines
+candidate events. The wrapper calls it separately for each boundary from the
+engine's sign catalogue; it does not implement a new event solver.
+
+The wrapper checks the aggregate coarse-grid cost before sampling. Every
+provider invocation in every boundary scan, root refinement, direction probe
+and event position shares the original budget. Calls are not memoized, so
+repeat epochs count again. The remaining budget is passed into each engine
+search as well as enforced at the provider boundary. Any failure discards the
+whole pending ingress list. A missing dataset, unsupported TT epoch, coverage
+failure or provider refusal retains its applicable request and source receipt.
+
+Candidates from all boundaries are sorted by time, with boundary longitude as
+the tie breaker. Direction probes are clipped to the query endpoints and
+midpoints between neighboring candidates. Opposite, nonzero offsets from the
+boundary establish direct or retrograde entry. Both offsets must be nearer
+than a sign width, keeping the probe labels in the adjacent signs. The local
+offset calculation avoids the engine solver's addition of a full circle to
+small differences, which can erase a real offset at binary64 precision.
+Each solver callback also checks for that loss and refuses as
+`longitude-resolution`, so an entire slow crossing cannot become a sampled
+plateau with an empty completed result. Tests cover either direction.
+An exact candidate longitude equal to the boundary, with zero speed and
+matching nonzero one-sided offsets, is discarded as a touch. An approximate
+touch or any unresolved direction refuses the search. The solver's own
+direction flag is not the classification evidence.
+
+The event's `longitudeDeg` names the exact boundary. Its `position` retains
+the calculated value at the approximate event epoch. `fromSign` and `toSign`
+are the engine's lowercase `ZodiacSign` slugs on the incoming and outgoing
+sides, including the wrap between Pisces and Aries. The solver's per-target
+deduplication is preserved; different boundaries are not deduplicated together.
+Every event links its position receipt, classification samples and final search
+receipt. The latter records the total provider calls, settings, source graph,
+dataset, evaluated shard digests and rejected touch count. Results and receipts
+are immutable snapshots with JSON-safe values.
+
+Half-open ownership remains `(from, to]`. A starting-boundary event is excluded.
+An exact hit at the inclusive upper endpoint refuses because its following
+side cannot be sampled within the query. A candidate rounded onto that endpoint
+can still be classified when the exact endpoint lies beyond the root. No
+provider call leaves the requested interval or installed coverage. The search
+inherits the engine solver's finite refinement, per-target deduplication and
+smooth-longitude assumption of at most one station in two coarse steps.
+The receipt states scan completion rather than proven event completeness.
+
+`tests/ingresses.test.ts` independently specifies invented analytic trajectories
+for wraparound, repeated crossings, close pairs near a station, touches and
+query edges, plus budgets and input/refusal behavior. These are mathematical
+and integration checks, not astronomical reference data. Held-out original
+Horizons positions, reduced separately through ERFA, supply the astronomical
+expectations described in [M9 evidence](docs/evidence/M9.md). No fitted data,
+training epochs, coefficient recipe or original accuracy budget changes.

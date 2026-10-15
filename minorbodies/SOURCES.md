@@ -256,3 +256,31 @@ is offline. A fresh live capture can change source bytes or orbit identity
 and is not treated as a replacement for retained evidence. The recipe's
 initial training-epoch collision and the revised scan phase are retained in
 code and explained in [M7 station reference evidence](docs/evidence/M7-station-reference.md).
+
+## M9 ingress reference sources
+
+`tests/fixtures/ingresses/` holds original Horizons File API captures and their
+request manifests for sign-boundary refinement and reference-speed stencils.
+The initial scan reuses the unchanged original M7 station captures. Every new
+capture must have the same complete source identity as the fitted body's
+frozen full-range dataset and, for Chiron, the pilot. Their redistribution
+basis is the project's explicit authorization for JPL/NASA public numerical
+data described above. No additional external source code or ephemeris is
+introduced. The retained API envelopes keep their original explanatory legends.
+
+`scripts/capture-ingress-reference.ts` uses `src/ingress-reference.ts` to select
+reference epochs from independently ERFA-reduced original Horizons positions.
+It never uses fitted positions or this package's ingress output to choose an
+epoch or expected event. The existing training-exclusion checks cover every
+requested epoch. Each body's manifest pins the recipe, generator files and
+runtime, exact capture bytes and digests. The capture script writes proposed
+sources and derived reports only under ignored `generated/`; replay verifies
+the retained fixtures offline. New live bytes cannot replace frozen evidence
+without a separate review.
+
+The reference reduction and derivative implementation retain the previously
+recorded ERFA and NumPy versions, licensing and notices. Numerical comparison
+scope and enforcing tests are recorded in [M9 evidence](docs/evidence/M9.md).
+Invented analytic trajectories independently test wraparound and close pairs
+near a station; they are mathematical test cases, not additional JPL samples
+or evidence of astronomical completeness.

@@ -32,6 +32,11 @@ export async function readRetrogradeSourceIdentity(): Promise<EngineSourceIdenti
   return readLocalSourceIdentity(["./retrogrades.ts"]);
 }
 
+/** Sign ingress wrapper, sign labels and the unchanged engine longitude solver. */
+export async function readIngressSourceIdentity(): Promise<EngineSourceIdentity> {
+  return readLocalSourceIdentity(["./ingresses.ts"]);
+}
+
 async function readLocalSourceIdentity(entries: readonly string[]): Promise<EngineSourceIdentity> {
   const repository = new URL("../../", import.meta.url);
   const seen = new Map<string, string>();
