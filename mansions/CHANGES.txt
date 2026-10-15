@@ -1,0 +1,1 @@
+M1: Add the isolated mansions TypeScript scaffold, receipt-preserving Moon adapter, shared crossing solver tests, and package isolation checks; typecheck and eight Vitest tests pass on Node 22.22.2.
