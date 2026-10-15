@@ -1,5 +1,6 @@
 import { vi } from "vitest";
 import * as limbs from "../src/limbs.js";
+import * as engine from "../src/engine.js";
 import { nakshatraOf } from "../../src/vedic/nakshatra.js";
 import { declareSiderealLongitude } from "../../src/vedic/sidereal.js";
 import { luminarySnapshot } from "../src/engine.js";
@@ -14,11 +15,11 @@ export const iso = (offset: number) => new Date(EPOCH + offset).toISOString();
 // Sun=t/U, Moon=13t/U degrees, U=2^26 ms. Binary coordinates are dyadic.
 // The seed supplies test-only receipt shapes. These mock snapshots are not
 // published ephemeris outputs and their copied receipts certify no positions.
-export function analyticalSource(direction = 1, freezeYoga = false): void {
+export function analyticalSource(direction = 1, freezeYoga = false, withMonths = false): void {
   const seed = luminarySnapshot(iso(0));
   if (seed.status !== "ok") throw new Error("Expected seed coverage");
   const wrap = (angle: number) => ((angle % 360) + 360) % 360;
-  vi.spyOn(limbs, "instantaneousPanchang").mockImplementation((at) => {
+  const snapshot = (at: unknown) => {
     const utc = (at as Date).toISOString();
     const t = direction * ((at as Date).getTime() - EPOCH) / UNIT;
     const sun = wrap(t);
@@ -32,7 +33,9 @@ export function analyticalSource(direction = 1, freezeYoga = false): void {
       nakshatra: nakshatraOf(b), tithi: limbs.tithiOf(sun, moon), karana: limbs.karanaOf(sun, moon),
       yoga: limbs.yogaOf(a, b)
     };
-  });
+  };
+  vi.spyOn(limbs, "instantaneousPanchang").mockImplementation(snapshot);
+  if (withMonths) vi.spyOn(engine, "luminarySnapshot").mockImplementation(snapshot);
 }
 
 // Expected times are rational multiples of U, solved by hand. Rounding is

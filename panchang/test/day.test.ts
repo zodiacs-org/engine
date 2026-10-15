@@ -1,6 +1,7 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import * as sunriseModule from "../src/sunrise.js";
 import * as transitionsModule from "../src/transitions.js";
+import * as monthsModule from "../src/months.js";
 import {
   DAY_CONVENTIONS, LIMB_KINDS, instantaneousPanchang, panchangDay, prepareSunriseDay, resolveSunriseDay
 } from "../src/index.js";
@@ -29,7 +30,7 @@ describe("independently constructed day partitions (SOURCES.md)", () => {
     seed = result;
   });
   function source(from: number, to: number): void {
-    analyticalSource();
+    analyticalSource(1, false, true);
     // Artificial sunrise times isolate partition arithmetic. The real seed
     // supplies diagnostic shapes only; its receipts certify no mock geometry.
     vi.spyOn(sunriseModule, "resolveSunriseDay").mockReturnValue({ ...seed,
@@ -39,7 +40,7 @@ describe("independently constructed day partitions (SOURCES.md)", () => {
   it.each([[0, UNIT], [1, UNIT - 1], [-UNIT, UNIT], [-1, 1], [12345, 12346], [0, UNIT / 2]])(
     "partitions [%i,%i) at the union of rational limb boundaries", (from, to) => {
       source(from, to);
-      const result = ok(panchangDay(input));
+      const result = ok(panchangDay(input, { monthConvention: "amanta" }));
       const expected = new Set([from, to]);
       for (const kind of LIMB_KINDS) {
         for (let k = -10; k <= 10; k++) {
@@ -75,7 +76,7 @@ describe("independently constructed day partitions (SOURCES.md)", () => {
 
   it("groups simultaneous changes, includes sunrise changes and excludes the end", () => {
     source(-1, UNIT);
-    const result = ok(panchangDay(input));
+    const result = ok(panchangDay(input, { monthConvention: "amanta" }));
     expect(result.timeline.transitions.filter((event) => event.at === iso(0)).map((event) => event.kind)).toEqual(LIMB_KINDS);
     expect(result.segments.filter((segment) => segment.start === iso(0))).toHaveLength(1);
     expect(result.segments.find((segment) => segment.start === iso(0))).toMatchObject({
@@ -91,7 +92,7 @@ describe("independently constructed day partitions (SOURCES.md)", () => {
 
   it("clips display segments while preserving full boundary objects and receipts", () => {
     source(1, 12345);
-    const result = ok(panchangDay(input));
+    const result = ok(panchangDay(input, { monthConvention: "amanta" }));
     expect(result.segments).toHaveLength(1);
     const segment = result.segments[0]!;
     for (const kind of LIMB_KINDS) {
@@ -107,6 +108,23 @@ describe("independently constructed day partitions (SOURCES.md)", () => {
     expect(Object.isFrozen(segment.intervals)).toBe(true);
     expect(Object.isFrozen(segment.nakshatra)).toBe(true);
   });
+
+  it.each(["amanta", "purnimanta"] as const)("attaches %s months to both sides of the matching phase change", (monthConvention) => {
+    const boundary = monthConvention === "amanta" ? 0 : 15 * UNIT;
+    source(boundary - 1, boundary + 1);
+    const result = ok(panchangDay(input, { monthConvention }));
+    expect(result.monthConvention).toBe(monthConvention);
+    expect(result.months.monthConvention).toBe(monthConvention);
+    expect(result.sunriseMonth).toBe(result.months.startMonth);
+    expect(result.segments).toHaveLength(2);
+    expect(result.segments[0]!.month).toBe(result.sunriseMonth);
+    expect(result.segments[1]!.month).toBe(result.months.intervals[1]);
+    expect(result.segments[1]!.start).toBe(iso(boundary));
+    expect(result.segments[0]!.month.end.at).toBe(iso(boundary));
+    expect(result.segments[1]!.month.start.at).toBe(iso(boundary));
+    expect(result.segments[1]!.month.index).toBe((result.sunriseMonth.index + 1) % 12);
+    expect(result.segments[1]!.tithi.index).toBe(monthConvention === "amanta" ? 0 : 15);
+  });
 });
 
 describe("whole-day refusal and validation", () => {
@@ -117,7 +135,7 @@ describe("whole-day refusal and validation", () => {
   ] as const)("retains sunrise refusal diagnostics: %j", async (request, reason) => {
     await prepareSunriseDay(request);
     const search = vi.spyOn(transitionsModule, "searchLimbTransitions");
-    const result = panchangDay(request);
+    const result = panchangDay(request, { monthConvention: "amanta" });
     noDay(result, "sunrise-refused");
     expect(result.sunrise).toMatchObject({ status: "refused", reason });
     expect(result).not.toHaveProperty("timeline");
@@ -125,28 +143,44 @@ describe("whole-day refusal and validation", () => {
   });
 
   it("keeps sunrise and transition budgets separate and preserves budget diagnostics", () => {
-    const sunriseLimited = panchangDay(input, { sunriseMaxSamples: 1 });
+    const sunriseLimited = panchangDay(input, { monthConvention: "amanta", sunriseMaxSamples: 1 });
     noDay(sunriseLimited, "sunrise-refused");
     expect(sunriseLimited.sunrise).toMatchObject({ reason: "sample-budget", maxSamples: 1, samples: 0 });
-    const transitionsLimited = panchangDay(input, { transitionMaxSamples: 1 });
+    const transitionsLimited = panchangDay(input, { monthConvention: "amanta", transitionMaxSamples: 1 });
     noDay(transitionsLimited, "transitions-refused");
     expect(transitionsLimited.sunrise.status).toBe("ok");
     expect(transitionsLimited).toMatchObject({ timeline: { status: "refused", reason: "sample-budget", samples: 1, maxSamples: 1 } });
+  });
+
+  it("retains a refused month search without returning partial day labels", () => {
+    const result = panchangDay(input, { monthConvention: "amanta", monthMaxSamples: 1 });
+    noDay(result, "months-refused");
+    expect(result).toMatchObject({ months: { reason: "sample-budget", samples: 1, maxSamples: 1 }, timeline: { status: "ok" } });
+    expect(result).not.toHaveProperty("sunriseMonth");
+  });
+
+  it("does not run months after an earlier resolver refuses", () => {
+    const months = vi.spyOn(monthsModule, "searchLunarMonths");
+    noDay(panchangDay(input, { monthConvention: "amanta", transitionMaxSamples: 1 }), "transitions-refused");
+    expect(months).not.toHaveBeenCalled();
   });
 
   it.each([["2017-01-01", "time-basis-discontinuity"], ["1800-01-02", "engine-refused"]])(
     "returns no assembled day when the padded transition search refuses near %s", async (date, reason) => {
       const request = { ...input, date };
       await prepareSunriseDay(request);
-      const result = panchangDay(request);
+      const result = panchangDay(request, { monthConvention: "amanta" });
       noDay(result, "transitions-refused");
       expect(result).toMatchObject({ timeline: { reason } });
     }
   );
 
-  it.each([null, [], { maxSamples: 1 }, { ayanamsa: null }, { ayanamsa: "unknown" },
-    { sunriseMaxSamples: 0 }, { transitionMaxSamples: 1.5 }, { transitionMaxSamples: null },
-    { transitionMaxSamples: NaN }, { sunriseMaxSamples: -Infinity }, { monthConvention: "amanta" },
+  it.each([null, [], {}, { maxSamples: 1 },
+    { monthConvention: "amanta", ayanamsa: null }, { monthConvention: "amanta", ayanamsa: "unknown" },
+    { monthConvention: "amanta", sunriseMaxSamples: 0 }, { monthConvention: "amanta", transitionMaxSamples: 1.5 },
+    { monthConvention: "amanta", transitionMaxSamples: null }, { monthConvention: "amanta", transitionMaxSamples: NaN },
+    { monthConvention: "amanta", sunriseMaxSamples: -Infinity }, { monthConvention: "unknown" },
+    { monthConvention: "amanta", monthMaxSamples: 0 }, { monthConvention: "amanta", monthMaxSamples: null },
     { [Symbol("unknown")]: 1 }])("rejects invalid day options before searching: %j", (options) => {
     const search = vi.spyOn(sunriseModule, "resolveSunriseDay");
     expect(() => panchangDay(input, options as PanchangDayOptions)).toThrow(RangeError);
@@ -155,30 +189,32 @@ describe("whole-day refusal and validation", () => {
 
   it("rejects accessor options without executing them", () => {
     const getter = vi.fn(() => 10000);
-    const options = Object.defineProperty({}, "transitionMaxSamples", { get: getter });
-    expect(() => panchangDay(input, options)).toThrow(RangeError);
+    const options = Object.defineProperty({ monthConvention: "amanta" }, "transitionMaxSamples", { get: getter });
+    expect(() => panchangDay(input, options as PanchangDayOptions)).toThrow(RangeError);
     expect(getter).not.toHaveBeenCalled();
   });
   it("validates the civil input through the existing resolver", () => {
-    expect(() => panchangDay({ ...input, date: "2024-02-30" })).toThrow(RangeError);
-    expect(() => panchangDay({ ...input, timeZone: "+05:30" })).toThrow(RangeError);
+    expect(() => panchangDay({ ...input, date: "2024-02-30" }, { monthConvention: "amanta" })).toThrow(RangeError);
+    expect(() => panchangDay({ ...input, timeZone: "+05:30" }, { monthConvention: "amanta" })).toThrow(RangeError);
   });
   it("propagates unexpected engine failures", () => {
     const failure = new Error("Synthetic failure");
     vi.spyOn(transitionsModule, "searchLimbTransitions").mockImplementation(() => { throw failure; });
-    expect(() => panchangDay(input)).toThrow(failure);
+    expect(() => panchangDay(input, { monthConvention: "amanta" })).toThrow(failure);
   });
 });
 
 describe("real-engine day wiring, without an independent physical accuracy claim", () => {
   it.each(["lahiri", "raman"] as const)("assembles %s labels with original receipts and conventions", (ayanamsa) => {
     const original = structuredClone(input);
-    const result = ok(panchangDay(input, { ayanamsa, sunriseMaxSamples: Infinity, transitionMaxSamples: Infinity }));
+    const result = ok(panchangDay(input, { monthConvention: "amanta", ayanamsa, sunriseMaxSamples: Infinity, transitionMaxSamples: Infinity }));
     expect(input).toEqual(original);
     expect(result.ayanamsa).toBe(ayanamsa);
     expect(result.conventions).toBe(DAY_CONVENTIONS);
     expect(result.sunrise.maxSamples).toBe(Infinity);
     expect(result.timeline.maxSamples).toBe(Infinity);
+    expect(result.months.ayanamsa).toBe(ayanamsa);
+    expect(result.sunriseMonth).toBe(result.months.startMonth);
     expect(result.sunriseState).toEqual(instantaneousPanchang(result.sunrise.start.utc, { ayanamsa }));
     expect(result.sunriseState.sun).toEqual(result.sunrise.start.snapshot.sun);
     expect(result.sunriseState.moon).toEqual(result.sunrise.start.snapshot.moon);
@@ -187,6 +223,9 @@ describe("real-engine day wiring, without an independent physical accuracy claim
     expect(result.segments.at(-1)!.end).toBe(result.sunrise.end.utc);
     for (const [i, segment] of result.segments.entries()) {
       if (i > 0) expect(segment.start).toBe(result.segments[i - 1]!.end);
+      expect(result.months.intervals).toContain(segment.month);
+      expect(Date.parse(segment.month.start.at)).toBeLessThanOrEqual(Date.parse(segment.start));
+      expect(Date.parse(segment.month.end.at)).toBeGreaterThanOrEqual(Date.parse(segment.end));
       const state = instantaneousPanchang(segment.start, { ayanamsa });
       if (state.status !== "ok") throw new Error("Expected coverage");
       expect(segment.tithi).toEqual(state.tithi);
@@ -202,10 +241,11 @@ describe("real-engine day wiring, without an independent physical accuracy claim
     expect(Object.isFrozen(result)).toBe(true);
   });
 
-  it("uses Lahiri and the existing search defaults when options are absent", () => {
-    const result = ok(panchangDay(input));
+  it("uses Lahiri and the search defaults with an explicit month convention", () => {
+    const result = ok(panchangDay(input, { monthConvention: "amanta" }));
     expect(result.ayanamsa).toBe("lahiri");
     expect(result.sunrise.maxSamples).toBe(20_000);
     expect(result.timeline.maxSamples).toBe(10_000);
+    expect(result.months.maxSamples).toBe(5_000);
   });
 });

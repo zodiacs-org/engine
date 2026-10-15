@@ -315,11 +315,102 @@ accuracy evidence; M4's sunrise comparisons and M5's transition limitations
 retain their original scope. Published physical transition references
 remain the work of M11.
 
+## M7: lunar-month conventions and independent arithmetic
+
+The primary reference is the Government of India, Council of Scientific
+and Industrial Research, [Report of the Calendar Reform Committee (1955)](https://dspace.gipe.ac.in/xmlui/bitstream/handle/10973/39692/GIPE-043972.pdf),
+printed p. 242, table 16, "Corresponding Names of Solar Months" (PDF page
+257), and printed p. 247, "Siddhantic rules for the Lunar Calendar" (PDF
+page 262). Fetched and read as extracted text on 2026-10-15; the PDF's
+SHA-256 was `4f73afb5665bd0ccd8ccc0b39001fea17fcadc630bfb1628e93987e4be0ac3c2`.
+The text extractor misreads printed page 247 as 241; the PDF page locator
+identifies the intended page. The PDF is downloaded into memory for
+extraction; neither the PDF nor its full text is committed. Only factual
+names, definitions and original implementation/tests are redistributed,
+without source prose, images or calendar tables. No licence to republish
+the scan or the report's text is asserted.
+
+Table 16 maps sidereal solar signs Aries through Pisces to Vaisakha,
+Jyaishtha, Ashadha, Sravana, Bhadra, Asvina, Kartika, Agrahayana, Pausha,
+Magha, Phalguna, Chaitra. The project uses Bhadrapada for Bhadra and
+Margasirsha for Agrahayana; the alternatives appear in the report's
+proposed-calendar tabulations (PDF pages 19-20) and the Bhadra month
+heading (PDF page 60). The ordinary amanta month takes the name of
+the solar month containing its initial new moon. Purnimanta takes the
+same name but starts at the full moon preceding that new moon and ends
+at the following full moon. Its waning fortnight therefore uses the
+name of the following amanta lunation; its waxing fortnight shares the
+amanta name. These are the report's Siddhantic naming rules, using the
+caller's engine ayanamsa for the sidereal solar signs. The implementation
+does not adopt the committee's separately proposed tropical calendar.
+
+The numerical ownership convention is this project's explicit choice.
+New moon is the first whole millisecond whose tithi index changes from
+29 to 0; full moon is the change from 14 to 15. An ingress is the first
+millisecond of the new sidereal solar sign. Every interval includes its
+start and excludes its end. An ingress coincident with a naming new moon
+belongs to the lunation beginning there, and initial solar sign is read
+after that ingress. These tie rules are exercised with an artificial
+exact coincidence, without implying astronomical simultaneity within a
+millisecond. M7 refuses naming lunations with zero or multiple ingresses
+as `non-ordinary-lunation`; M8 will supply anomaly rules and tests.
+
+[test/months.test.ts](test/months.test.ts) prescribes independent dyadic
+longitudes over integer elapsed milliseconds t from the invented epoch
+2024-03-20T00:00:00Z, with U = 2^26 milliseconds. It sets Sun = a + t/U
+and Moon = a + e + 13t/U degrees, both modulo a turn. These artificial
+sidereal values equal their tropical values for arithmetic tests only;
+no physical ayanamsa conversion is asserted. The reference equations are:
+
+| Event | Unrounded elapsed milliseconds |
+| --- | --- |
+| New moon | (360k - e) U / 12 |
+| Full moon | (180 + 360k - e) U / 12 |
+| Solar ingress into sign j | (30j + 360k - a) U |
+
+For e = 0, the new/full moons occur at 30k U and (15 + 30k) U. Taking
+a = 30s + 7 for each solar sign s gives the next ingress at 23 U,
+and the expected month index is (s + 1) modulo 12, with Chaitra indexed
+from zero. Another case sets a = 337, giving Chaitra at t = 0 and
+Vaisakha at the following new moon. The purnimanta name changes at
+15 U and stays constant across 30 U. With e = 5 the oracle solves the
+signed rational phase equations using BigInt and rounds upwards to
+whole milliseconds. It compares the event times exactly, without a
+physical accuracy tolerance. Tested phase cycles are k = -1, 0, 1;
+other cases include exact coincidences, adjacent one-millisecond windows
+and the maximum accepted window. These are prescribed mathematical
+trajectories, never values from an earlier engine or package run.
+
+Additional constructed trajectories freeze or double solar motion to
+exercise the temporary anomaly refusal, or reverse phase motion to
+exercise unsupported-crossing refusal. Engine-shaped receipt fields in
+mock snapshots are test scaffolding only, not authenticated computation
+records for those artificial coordinates. The day partition tests reuse
+M5's independent trajectory and test month changes at new/full moons.
+
+The tests enforce the quarter-day solver step, 64 elapsed days of padding
+on both sides, positive window of at most two elapsed days, and default
+budget of 5,000 unique snapshots. The padding allows the next amanta
+lunation's ending new moon to be found during a purnimanta waning half.
+These are operational search settings, not measured speed bounds or
+astronomical accuracy claims. The solver assumes sampled forward motion;
+local adjacent-millisecond checks do not establish exhaustive completeness.
+The shared snapshot budget includes refinements and boundary checks.
+The engine continuity check applies to the entire padded span, including
+the M5 time-basis seams, and engine coverage refusals propagate intact.
+
+Real-engine checks on 2024-03-20/21 use amanta with Lahiri and purnimanta
+with Raman, retaining original phase/ingress snapshots and receipts and
+checking the classifiers on either side. The source runtime also checks
+month wiring on the existing invented historical observer. These are
+integration checks only, with no physical month/phase-time accuracy claim.
+Published transition comparisons remain M11's work.
+
 ## Later milestones
 
-Before adding month naming, document the independent definitions and
-boundary conventions used. Before testing physical
-transition instants, record the primary source URL, locator, retrieval
+Before adding anomaly detection, document its independent definitions and
+boundary conventions. Before testing physical transition instants, record
+the primary source URL, locator, retrieval
 date, source timescale, observer/horizon details, ayanamsa, permitted
 redistribution and the comparison tolerance fixed before measuring the
 adapter. Keep downloaded and generated working data in ignored

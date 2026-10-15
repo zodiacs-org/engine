@@ -29,3 +29,8 @@ export type {
 } from "./transitions.js";
 export { DAY_CONVENTIONS, panchangDay } from "./day.js";
 export type { PanchangDay, PanchangDayOptions, PanchangDayRefusal, PanchangDayResult, PanchangSegment } from "./day.js";
+export { MONTH_CONVENTIONS, MONTH_NAMES, searchLunarMonths } from "./months.js";
+export type {
+  AmantaLunation, LunarMonthInterval, LunarMonths, MonthConvention, MonthEvent, MonthName,
+  MonthOptions, MonthRefusal, MonthResult
+} from "./months.js";

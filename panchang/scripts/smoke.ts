@@ -55,9 +55,13 @@ for (const interval of transitions.intervals) {
 }
 console.log("Source runtime finds limb transitions with full intervals and original engine receipts.");
 
-const day = panchangDay(input);
+const day = panchangDay(input, { monthConvention: "amanta" });
 if (day.status !== "ok") throw new Error(day.reason);
 assert.equal(day.sunriseState.utc, day.sunrise.start.utc);
+assert.equal(day.monthConvention, "amanta");
+assert.equal(day.sunriseMonth, day.months.startMonth);
+assert.equal(day.sunriseMonth.namingLunation.start.after.ayanamsa.name, day.ayanamsa);
+assert.equal(day.sunriseMonth.end.after.sun.sidereal.receipt.engine.ephemeris.version, "2.1.19");
 assert.deepEqual(day.sunriseState, day.timeline.startState);
 assert.equal(day.segments[0]!.start, day.sunrise.start.utc);
 assert.equal(day.segments.at(-1)!.end, day.sunrise.end.utc);
@@ -65,8 +69,10 @@ for (const [index, segment] of day.segments.entries()) {
   if (index > 0) assert.equal(segment.start, day.segments[index - 1]!.end);
   assert(Date.parse(segment.end) > Date.parse(segment.start));
   assert.equal(segment.vara, day.sunrise.vara);
+  assert(day.months.intervals.includes(segment.month));
   assert(day.timeline.intervals.includes(segment.intervals.tithi));
   assert.equal(segment.intervals.tithi.start.after.ayanamsa.name, day.ayanamsa);
   assert.equal(segment.intervals.tithi.end.after.moon.sidereal.receipt.engine.ephemeris.version, "2.1.19");
 }
 console.log("Source runtime assembles chronological day segments with full limb boundaries and engine receipts.");
+console.log("Source runtime retains amanta naming lunations, adjacent phase events and sidereal solar ingress receipts.");

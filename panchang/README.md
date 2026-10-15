@@ -4,8 +4,9 @@ This private source-checkout project will provide astronomical and calendar
 facts for sunrise-to-sunrise days. Implementation follows [PLAN.md](PLAN.md).
 It currently exposes the luminary snapshot adapter, instantaneous limbs,
 civil-date and sunrise-to-sunrise windows with vara, limb transition
-searches with complete surrounding intervals, and a pure day assembly API.
-Lunar months, anomalies, date ranges and the CLI are planned milestones.
+searches with complete surrounding intervals, amanta/purnimanta month
+naming for ordinary lunations, and a pure day assembly API.
+Anomalies, date ranges and the CLI are planned milestones.
 
 Use Node 22.7.0 or later. From this directory:
 
@@ -206,7 +207,7 @@ local date; original civil/search diagnostics and any engine refusal are
 retained. A skipped following calendar date is refused. Polar dates do
 not borrow a sunrise from another season. This API resolves sunrise
 boundaries; the separate transition search below resolves limb intervals.
-Lunar months remain a later milestone.
+The month search below separately resolves lunar months.
 
 ```ts
 import { resolveSunriseDay, searchLimbTransitions } from "./src/index.js";
@@ -291,9 +292,9 @@ const input = {
   observer: { latitude: 12.5, longitude: 75.25 } // Invented coordinates.
 };
 await prepareSunriseDay(input);
-const day = panchangDay(input, { ayanamsa: "lahiri" });
+const day = panchangDay(input, { monthConvention: "amanta", ayanamsa: "lahiri" });
 if (day.status === "ok") {
-  console.log(day.sunriseState.ayanamsa, day.sunriseState.sun.tropical.receipt);
+  console.log(day.sunriseMonth.name, day.sunriseState.ayanamsa, day.sunriseState.sun.tropical.receipt);
   for (const segment of day.segments) {
     console.log(segment.start, segment.end, segment.vara.name,
       segment.tithi.name, segment.tithi.paksha,
@@ -307,14 +308,16 @@ if (day.status === "ok") {
 }
 ```
 
-`panchangDay(input, options)` assembles the sunrise window and transition
-search synchronously without I/O. It accepts the same explicit civil
+`panchangDay(input, options)` assembles the sunrise window, limb transitions
+and lunar months synchronously without I/O. It accepts the same explicit civil
 date, timezone and observer as the sunrise resolver. Historical clocks
 need `prepareSunriseDay(input)` before the call. Lahiri is the default;
 `ayanamsa` selects an existing engine definition for every snapshot and
 transition calculation. `day.ayanamsa` is its name, while
 `day.sunriseState.ayanamsa` retains the engine's value and bounds at the
 starting sunrise. Later snapshots retain their own instantaneous values.
+`monthConvention` is required: choose `amanta` or `purnimanta`. Earlier
+prototype calls without that choice must now supply it.
 
 `sunriseState` contains all instantaneous limbs and the full Sun/Moon
 positions and calc receipts at the included sunrise. `sunrise` retains
@@ -323,6 +326,11 @@ the original civil resolutions, rise searches and boundary snapshots;
 full surrounding intervals. `DAY_CONVENTIONS` records the day and segment
 ownership policies and includes the existing horizon and transition
 conventions without replacing them.
+
+`months` retains the month search and `sunriseMonth` is its interval at
+the starting sunrise. Every segment has a `month` linking to the complete
+interval, naming lunation, phase boundaries and solar ingresses. Month
+boundaries use the same tithi classification as the limb search.
 
 `segments` is a chronological, contiguous partition of the sunrise
 window. Each segment includes its start and excludes its end, both ISO
@@ -340,10 +348,10 @@ endpoints are clipped to the day; those underlying limb endpoints retain
 their times outside it. A pada-only change starts a new segment even
 when the nakshatra name stays the same.
 
-Options `sunriseMaxSamples` and `transitionMaxSamples` independently
-configure the existing resolvers' budgets with the same positive-integer
+Options `sunriseMaxSamples`, `transitionMaxSamples` and `monthMaxSamples`
+independently configure the resolvers' budgets with the same positive-integer
 or `Infinity` domain. Omitted values retain the resolver defaults and
-sample accounting described above. Both options are validated before
+sample accounting described here. All options are validated before
 any search. Returned diagnostics retain each resolver's budget and sample
 counts separately; sky evaluations and unique snapshots are different
 units and are not added together.
@@ -352,8 +360,11 @@ A refused sunrise yields `reason: "sunrise-refused"` and its original
 diagnostics, without running a transition search. A refused transition
 search yields `reason: "transitions-refused"`, the successful sunrise
 diagnostics and the original transition refusal. Neither exposes
-`segments` or `sunriseState`. Invalid inputs, unloaded historical clocks
-and unexpected engine failures propagate as before. The padded search's
+`segments` or `sunriseState`. A refused month search yields
+`reason: "months-refused"` with its original diagnostics in `months`,
+the successful sunrise and timeline, and no assembled labels. Invalid
+inputs, unloaded historical clocks and unexpected engine failures
+propagate as before. The padded search's
 coverage and time-basis restrictions continue to apply to the whole day.
 
 [test/day.test.ts](test/day.test.ts) verifies partition arithmetic with
@@ -361,4 +372,72 @@ independently prescribed trajectories and artificial sunrise boundaries.
 Real-engine checks verify receipt retention and wiring; no physical
 transition-time accuracy claim follows. The evidence and scope are in
 [SOURCES.md](SOURCES.md#m6-day-assembly-arithmetic-and-integration).
-Month names and anomaly detection remain separate planned milestones.
+Anomaly detection remains the next planned milestone.
+
+```ts
+import { searchLunarMonths } from "./src/index.js";
+
+const months = searchLunarMonths("2024-03-20", "2024-03-21", {
+  monthConvention: "purnimanta", ayanamsa: "lahiri"
+});
+if (months.status === "ok") {
+  for (const month of months.intervals) {
+    console.log(month.name, month.start.at, month.end.at);
+    console.log(month.namingLunation.start.at, month.namingLunation.ingresses);
+  }
+}
+```
+
+`searchLunarMonths(from, to, options)` resolves complete month intervals
+overlapping a resolved UTC window. Like the limb search, it accepts a
+positive window no longer than two elapsed days. Date-only strings mean
+UTC midnight. The required `monthConvention` has no default; ayanamsa
+defaults to Lahiri. No observer or timezone enters these geocentric events.
+
+An amanta interval runs from new moon to new moon. Its name comes from the
+sidereal solar sign at the initial new moon, with Pisces corresponding to
+Chaitra and Aries to Vaisakha. A purnimanta interval starts at the full moon
+preceding the naming new moon and ends at the next full moon. It takes the
+name of that new moon's amanta lunation. Thus the conventions share the
+waxing fortnight's name; the waning fortnight uses the following amanta
+lunation's name. Names use the ASCII labels in `MONTH_NAMES`, including
+Margasirsha for Agrahayana. The primary definitions are documented in
+[SOURCES.md](SOURCES.md#m7-lunar-month-conventions-and-independent-arithmetic).
+
+`intervals` and `startMonth` retain full computed phase boundaries without
+day clipping. Each `namingLunation` includes its bounding new moons, enclosed
+full moon, initial sidereal solar sign and solar ingresses. An ingress
+reports the sign entered, with Aries indexed from zero. Each event keeps
+the complete snapshots and calc receipts at the preceding millisecond and
+the event millisecond, including instantaneous ayanamsa values. New moon
+is the change from Amavasya to Shukla Pratipada; full moon is the change
+from Purnima to Krishna Pratipada. The new month owns the boundary.
+
+`events` lists new/full moons and solar ingresses inside the half-open
+requested window, chronologically, with a phase event before an ingress
+when simultaneous. Ingresses at a naming lunation's start belong to it;
+ingresses at its end belong to the following lunation. Initial solar sign
+is read after any simultaneous ingress. These explicit millisecond tie
+rules are tested conventions, without an astronomical precision claim.
+
+The engine longitude-crossing solver scans phase and sidereal solar-sector
+streams at quarter-day steps with 64 elapsed days of padding on each side.
+This padding supplies the next naming lunation for a waning purnimanta
+fortnight. Classifiers and the engine's first-millisecond helper confirm
+each root locally. This sampled search assumes forward motion at its step;
+it does not prove completeness. [test/months.test.ts](test/months.test.ts)
+enforces the operational settings and tests rational roots independently.
+
+`maxSamples` defaults to 5,000 unique luminary snapshots shared across the
+streams, refinements and endpoint checks; a positive integer or `Infinity`
+is accepted. `longitudeSamples` separately counts solver callbacks,
+including cache hits. The tests enforce budget accounting and the default.
+Every refusal omits `intervals`, `events` and `startMonth`. Reasons cover
+budget exhaustion, retained engine refusals, time-basis discontinuity,
+unconfirmed crossings and missing surrounding month boundaries. Coverage
+and time-basis checks apply to the entire padded span, so their refusal
+region is broader than the limb search's. The API currently also refuses
+`non-ordinary-lunation` when a required naming lunation contains zero or
+multiple ingresses. Adhika/kshaya conventions and detection belong to M8.
+No physical phase-time or calendar-table accuracy claim follows from the
+arithmetic and engine-wiring tests.
