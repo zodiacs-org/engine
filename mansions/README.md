@@ -3,8 +3,8 @@
 This checkout-local project is being developed as a library and CLI for
 Arabic lunar mansions (manazil al-qamar) on top of `@zodiacs/engine`.
 [PLAN.md](PLAN.md) records the implementation milestones. The first boundary
-table, pure longitude classifier, tropical mansion-at API and tropical
-ingress searches are available. Range occupancy intervals, sidereal
+table, pure longitude classifier, tropical mansion-at API, tropical
+ingress searches and range occupancy intervals are available. Sidereal
 selection and CLI commands are planned in later milestones.
 
 [src/tables.ts](src/tables.ts) exports the immutable `EQUAL28_ARIES_V1`
@@ -60,8 +60,8 @@ records the actual time basis, engine version, ephemeris version and
 calculation conventions. Its request can be passed back to the engine's
 `calc` for regression replay. Receipt version labels alone do not
 authenticate an artifact or guarantee identical calculations on another
-runtime. This API returns an instantaneous classification; it does not yet
-find the beginning or end of an occupancy interval.
+runtime. This API returns an instantaneous classification; use `mansionRange`
+for occupancy intervals clipped to a requested window.
 
 `time` accepts the engine's `CalcTime`: a valid `Date`, a strict ISO calendar
 date or offset-bearing date-time, `{ iso, deltaT? }`, or
@@ -153,6 +153,69 @@ engine refusal propagation and receipt replay. Its real-engine comparisons
 use a synthetic window beginning 2001-02-03 and ending 2001-03-05, plus
 shorter windows derived from it. These are numerical regression checks,
 not independent astronomical accuracy evidence or published ingress samples.
+
+`mansionRange({ from, to, table, maxSamples? })` reports tropical occupancy
+intervals within the requested window:
+
+```ts
+import { mansionRange } from "./src/index.js";
+
+const result = mansionRange({
+  from: "2001-02-03", // Synthetic example window.
+  to: "2001-02-06",
+  table: "equal28-aries-v1"
+});
+if (result.status === "ok") {
+  for (const interval of result.intervals) {
+    console.log(interval.start, interval.end, interval.mansion.index,
+      interval.mansion.arabicName, interval.mansion.latinLabel,
+      interval.startPosition.longitude, interval.startPosition.receipt);
+  }
+}
+```
+
+Range options, time parsing, coverage checks and search limits are the same
+as for `mansionIngresses`. The result's `endpointConvention` is `[from,to)`:
+each interval includes `start` and excludes `end`. Intervals appear in
+chronological order, cover the requested window without gaps or overlaps,
+and have positive duration. A range with identical endpoints returns no
+intervals but still checks coverage and records the endpoint receipt.
+
+Each interval carries its named `mansion`, `startPosition` and `endPosition`.
+These positions retain the engine's longitude, bounds and receipt at the
+respective instants. `endPosition` is sampled at the exclusive end and may
+already belong to the next mansion. `entry` and `exit`, when present, are
+the full ingress records, including their preceding-millisecond positions
+and receipts. An ingress at `to` closes the last interval and supplies its
+`exit`; the mansion entered there contributes no interval to this range.
+
+`startClipped` is true when the interval starts at the requested `from`,
+where no entry was observed inside the search window; its `entry` is null.
+This remains true when `from` happens to coincide with an ingress. The
+marker describes the available boundary evidence, not a claim that the
+mansion began earlier. `endClipped` is true when an interval ends at `to`
+without an observed exit there; its `exit` is null. No calculation before
+`from` or after `to` is made to find the full mansion duration. Adjacent
+requests can therefore split one mansion into separate clipped intervals.
+
+The range uses the existing ingress search and its cached endpoint samples.
+Interval construction consumes no additional engine evaluations. Results
+retain the search's table identity, zodiac, numerical resolution, endpoint
+`receipts`, `samples`, `maxSamples` and `stepDays`. Engine and budget
+refusals return without partial intervals; errors propagate. A detected
+disagreement between endpoints and the observed ingress sequence returns
+an `unsupported-combination` refusal. This check does not prove the search
+complete; the ingress search's numerical and time-basis limitations above
+also apply to occupancy intervals.
+
+[test/range.test.ts](test/range.test.ts) checks interval edges against
+hand-derived rational times for synthetic constant motion over a full
+circle and wrap. It covers stationary motion, reverse crossings, empty and
+adjacent windows, exact and rounded ingress endpoints, clipping, strict
+budgets, refusal propagation, input preservation and bounds/receipt replay.
+Its real-engine integration window runs from 2001-02-03 to 2001-02-06.
+Those engine comparisons are regression checks, not independent evidence
+of astronomical ingress accuracy.
 
 The current internal adapter in [src/engine.ts](src/engine.ts) reads the
 engine's tropical geocentric Moon position on the true ecliptic of date and

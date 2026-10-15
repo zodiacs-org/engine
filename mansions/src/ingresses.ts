@@ -99,6 +99,17 @@ function readRequest(request: MansionIngressRequest) {
  * adjacent milliseconds. Resolution describes the computed model only.
  */
 export function mansionIngresses(request: MansionIngressRequest): MansionIngressResult | CalcRefusal {
+  const window = searchIngressWindow(request);
+  return window.status === "refused" ? window : window.result;
+}
+
+/** Internal shared search: occupancy intervals reuse already budgeted samples. */
+export function searchIngressWindow(request: MansionIngressRequest): {
+  readonly status: "ok";
+  readonly result: MansionIngressResult;
+  readonly fromPosition: MansionAtResult;
+  readonly toPosition: MansionAtResult;
+} | CalcRefusal {
   const { from, to, table, maxSamples } = readRequest(request);
   const { stepDays } = INGRESS_SEARCH_LIMITS;
   const cache = new Map<number, MansionAtResult>();
@@ -195,13 +206,14 @@ export function mansionIngresses(request: MansionIngressRequest): MansionIngress
         }
       }
     }
-    return {
+    const result: MansionIngressResult = {
       status: "ok", from: new Date(from).toISOString(), to: new Date(to).toISOString(),
       endpointConvention: "(from,to]", zodiac: "tropical", table,
       ingresses: [...ingresses.values()].sort((a, b) => Date.parse(a.at) - Date.parse(b.at)),
       samples, maxSamples, stepDays, resolution: "first-changed-millisecond",
       receipts: { from: start.receipt, to: end.receipt }
     };
+    return { status: "ok", result, fromPosition: start, toPosition: end };
   } catch (error) {
     if (error instanceof SearchRefused) return error.refusal;
     throw error;
