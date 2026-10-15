@@ -1,0 +1,24 @@
+{
+  "name": "@zodiacs/apsides",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Private orbital distance-extremum tools built on the carried engine",
+  "engines": {
+    "node": ">=22.7.0"
+  },
+  "scripts": {
+    "test": "vitest run --config vitest.config.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "check:isolation": "node scripts/check-isolation.mjs",
+    "check": "npm run typecheck && npm test && npm run check:isolation"
+  },
+  "dependencies": {
+    "@zodiacs/engine": "file:../artifacts/zodiacs-engine-1.0.0.tgz"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "typescript": "5.9.3",
+    "vitest": "2.1.9"
+  }
+}

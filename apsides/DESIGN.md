@@ -1,0 +1,146 @@
+# Apsides design
+
+M1 provides the geometric distance sampler and its integration contracts.
+Window searches, extremum refinement, syzygy annotations and the CLI are
+planned in [PLAN.md](PLAN.md); they are not implemented by M1.
+
+The intended result is a chronological list of local distance extrema in a
+requested window. A lunar minimum is a perigee and a lunar maximum an
+apogee. A heliocentric minimum is a perihelion and a maximum an aphelion.
+These are extrema of the sampled distance function, not the direction of a
+mean apogee or an osculating orbital element. No result ranks dates or
+predicts effects on people or events.
+
+## Geometry and the current API
+
+`sampleDistance(body, time)` calls the engine's public `calc` API from the
+carried archive installed through a relative file dependency. It requests
+geometric Cartesian positions and speeds in
+`equatorial-j2000`. It returns an `ok` sample or the engine's `CalcRefusal`;
+malformed inputs follow the engine's validation contract. It makes no
+network request or filesystem write and does not implement an ephemeris.
+
+The Moon uses the Earth's center as origin. Mercury through Pluto,
+including Earth, use the Sun's center as origin. The target metadata carries
+`referencePoint`: `body-center` for the Moon, Mercury, Venus and Earth, and
+`system-barycenter` for Mars through Pluto. This preserves the comparison
+convention of the engine's existing evidence, described in
+[SOURCES.md](SOURCES.md). The engine does not separately resolve every
+planet's displacement about its satellite system's barycenter. Consequently
+the latter targets must not be represented as exact physical body-center
+extrema. Independent physical-center comparisons and this limitation remain
+part of the planetary validation work.
+
+Each sample carries distance in au and kilometres, signed
+`radialSpeedKmPerSecond`, nonnegative `orbitalSpeedKmPerSecond`, and the
+engine receipt. Distance is the norm of the geometric relative position;
+the engine's distance field supplies that value. The radial speed is its
+reported distance rate, positive away from the origin. Orbital speed is the
+norm of the relative Cartesian velocity. The au conversion is the IAU
+definition cited in [SOURCES.md](SOURCES.md), not a fitted constant.
+
+At a distance extremum the derivative of distance vanishes; the body's
+total speed generally does not. The names keep these meanings separate.
+Engine geometric planetary speeds in an inertial frame come from its state
+vectors; the Moon's speeds use central differences. In particular, the
+engine's existing Pluto evidence reports a discrepancy between its state
+velocity and a numerical derivative of its position. A small reported
+radial speed alone therefore cannot certify a distance extremum.
+
+The library is synchronous and deterministic for its input and installed
+engine. As documented by the engine, a calculation manages the shared
+astronomy-engine delta-T setting. This wrapper adds no independent global
+state. Receipts describe the computation and model; they are not signatures
+or independent accuracy certificates.
+
+## Planned search method
+
+Search on a continuous TT coordinate after resolving the input instants
+through the engine. Interpolate TT, not civil dates: changes in UTC offsets
+or the engine's civil-time model must not create spurious distance turns.
+Preserve TT and the engine's time-basis receipt in each result; civil labels
+retain the limitations of that conversion.
+
+1. Sample scalar distance on a body-specific grid, with extra samples on
+   both sides of the requested window where the engine permits them.
+   Bracket a strict local minimum or maximum when successive distance
+   slopes change sign. The sampling policy must account for perturbations
+   and multiple nearby extrema, rather than presume an event count from an
+   orbital period.
+2. Refine each bracket with bounded golden-section minimization of distance
+   for a minimum, or of negative distance for a maximum. Check that the
+   refined point still has the expected distance turn on both sides.
+   Resolve flat or ambiguous brackets explicitly; do not fabricate an
+   event from an exhausted iteration or a tie caused by roundoff.
+3. Keep a canonical bracket and deterministic refinement rule, deduplicate
+   overlapping detections, and filter against the requested TT window
+   `(from, to]`. An extremum at `from` belongs to the preceding window; one
+   at `to` belongs to this window. A truncated window edge is not itself
+   an extremum. Partition tests must compare adjacent-window results with
+   the result for their union, including extrema near either edge.
+4. Attach the distance, orbital speed, signed radial speeds before, at and
+   after the event, probe offsets, refinement interval and engine receipts.
+   The distance turn defines the event; the reported rates are diagnostics.
+
+The engine's crossing helpers provide precedents for half-open boundaries,
+evaluation budgets and explicit refusal. Their longitude wrapping and
+angle crossings do not directly solve a scalar distance extremum. Reuse
+compatible helpers where their contracts fit; keep distance refinement in
+`apsides/` and leave the engine untouched.
+
+Count coarse samples, edge probes, refinements and event diagnostics against
+the search budget. A search that cannot complete its requested work returns
+an explicit refusal, including budget exhaustion or unavailable edge
+coverage, rather than a successful partial event list. Result diagnostics
+must distinguish completion of the algorithm from completeness in the real
+trajectory. A finite sampling grid does not prove that every extremum was
+found. Completeness is currently unproven and must be tested against an
+independent finer search over the stated validation windows.
+
+## Accuracy budget and independent validation
+
+The physical accuracy budget in seconds and kilometres is **pending M2**.
+M1 establishes no numerical agreement with an independent ephemeris. Its
+contract tests cannot establish such agreement, and the engine's existing
+position bounds do not establish apsis timing accuracy.
+
+Before engine/reference comparisons, M2 must commit per-body acceptance
+budgets in seconds for event time and kilometres for extremum distance,
+with the exact target reference point, time scale, reference uncertainty and
+validation windows. It must also register the numerical refinement budget
+in seconds separately from physical accuracy, and the speed comparison
+units and tolerances. Reserved held-out cases must be chosen before tuning
+the search. Failed budgets remain failures; any revised budget needs a
+recorded reason and new independent held-out validation.
+
+Use frozen JPL Horizons geometric samples as the independent reference.
+Generate reference extrema with a separate implementation operating only
+on those samples, recording its interpolation method, endpoint signs and
+residual time bracket. Compare distance at the reference extremum and at
+the returned event separately from the event-time difference. Shallow
+distance curvature can magnify timing error even when distances agree.
+Report missing and extra extrema as well as paired-event differences.
+
+Include both lunar kinds, every planetary target and both planetary kinds,
+windows with no event, boundary cases, and long windows that exercise slow
+outer-planet motion. Cover system-barycenter and physical-center semantics
+explicitly. Any future accuracy statement must name the fixture corpus,
+span and engine/runtime used, and must not extend a sample maximum into a
+guarantee outside the checked cases. Keep raw generated downloads in an
+ignored local directory and commit only small cited fixtures and evidence.
+
+## Planned lunar annotation and command line
+
+Syzygy annotation is optional and requires a caller-supplied angular orb in
+degrees. The annotation will state the longitude-phase convention for New
+or Full Moon, the measured Moon-Sun elongation at the extremum, the orb and
+the underlying receipts. Angular longitude separation and spatial angular
+separation must be named separately if both are returned. A matching
+perigee may be labelled a supermoon candidate and a matching apogee a
+micromoon candidate. These are explicit angular associations, with no
+default orb, distance ranking or claim of a universal naming definition.
+
+The planned CLI commands are `apsides lunar`, `apsides planetary` and
+`apsides window`. They will call the pure library, validate arguments,
+serialize results and refusals as JSON, and distinguish failure through
+exit status. They will not fetch reference data during ordinary use.
