@@ -7,7 +7,7 @@ a line to `CHANGES.txt`. Git operations belong to the external harness.
 
 - [x] M1 Create an isolated private TypeScript project, implement a pure longitude rotation primitive with input validation, and document hand-derived synthetic arithmetic with Vitest coverage.
 - [x] M2 Add an engine adapter using relative source imports for natal casting and true or mean north-node selection, preserving engine input settings and flags.
-- [ ] M3 Implement the pure chart transformation for bodies, angles and existing house cusps, refresh position annotations, and reuse engine house helpers without recasting rotated houses.
+- [x] M3 Implement the pure chart transformation for bodies, angles and existing house cusps, refresh position annotations, and reuse engine house helpers without recasting rotated houses.
 - [ ] M4 Cover absent coordinates, unknown birth time, requested versus computed house systems and polar fallback with synthetic integration tests.
 - [ ] M5 Implement structured natal tropical versus draconic comparisons with explicit circular delta units and boundary conventions, without interpretation.
 - [ ] M6 Attach engine natal receipts and separate draconic convention metadata, preserving time basis and provenance without claiming the engine issued a draconic receipt.
@@ -71,3 +71,27 @@ The engine npm dry run with scripts disabled excludes `draconic/` and wrote
 no archive. `npm run package:contents` again stops at missing `dist/calc.d.ts`;
 the engine build remains absent and was not generated. All session changes
 are inside `draconic/`. M3 is next.
+
+## M3 session verification
+
+Added the pure `transformNatal` API and separate derived coordinate types.
+Bodies, all angles and existing cusps rotate together; body annotations are
+refreshed and the engine's `houseOf` assigns longitude-only houses against
+the rotated cusps. Whole-sign cusps keep their sequence and natal system
+label. Latitude is retained; natal speeds, retrograde flags and aspects are
+omitted from this position snapshot. Node selection metadata retains the
+natal longitude. No engine chart or receipt is claimed for the derived object.
+
+The synthetic fixture's body, angle, cusp and house expectations are derived
+by hand in `test/ARITHMETIC.md` and checked in `test/transform.test.ts`.
+Tests also cover explicit mean-node rotation with the true-node body rows
+retained, exact cusp inclusion, sign-boundary rounding, invalid consumed
+coordinates, incomplete cusps and independent output from frozen inputs.
+Integration with `castNatal` checks wiring only, not astronomical accuracy.
+
+TypeScript checking and the complete standalone Vitest suite passed on the
+local Node 22.22.2 runtime. An engine npm dry run with scripts disabled was
+checked to exclude `draconic/` and wrote no archive. With its npm cache inside
+this project, `npm run package:contents` stops at missing `dist/calc.d.ts`,
+as in earlier sessions; no engine build was generated. All session changes
+are inside `draconic/`. M4 is next.

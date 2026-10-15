@@ -2,8 +2,8 @@
 
 This private project adds a draconic chart library and CLI on top of the engine
 in this checkout. See [PLAN.md](PLAN.md) for completed and pending work.
-The current API provides the pure rotation primitive and an engine natal
-adapter. Chart transformation, comparisons, receipts and CLI commands are
+The current API provides the pure rotation primitive, an engine natal adapter
+and a pure chart transformation. Comparisons, receipts and CLI commands are
 pending milestones.
 
 Use Node 22 with the standalone tooling:
@@ -35,7 +35,40 @@ chosen kind, the engine point and its natal longitude in degrees. Omit options
 or pass `{ node: "true" }` to select the natal body's `North Node`; pass
 `{ node: "mean" }` to select `Mean Node` from `chartPoints(natal)`. Selecting
 the mean node leaves the natal bodies, including their true-node rows, intact.
-This adapter does not yet rotate the chart.
+Pass its result to `transformNatal` to rotate the chart.
+
+```ts
+import { castNatal, transformNatal } from "./src/index.js";
+
+const source = castNatal(syntheticBirth); // An engine BirthInput invented by the caller.
+const draconic = transformNatal(source);
+```
+
+`transformNatal({ natal, node })` is pure: it reads existing positions without
+casting a new chart, and allocates independent body rows, angles, cusps and
+node metadata. Its input needs only the natal bodies, angles and houses plus
+the selected node. It trusts the caller's selection and chart provenance;
+use `castNatal` for selection on the engine's chart clock. The result is a
+separate derived coordinate object, with no engine receipt or engine-issued
+chart claim. Receipt attachment is a later milestone.
+
+Each body reports its rotated longitude, unchanged latitude, refreshed sign
+and degree, and a longitude-only house number from the engine's `houseOf`
+helper against the rotated cusps. With absent houses that field is null.
+Angles keep the engine's numeric `asc`, `mc`, `dsc` and `ic` shape; cusps keep
+their original sequence and computed system label. The selected `node`
+metadata retains its natal longitude, which is the amount subtracted.
+Mean-node selection rotates the existing true-node body rows too; it does not
+replace them with mean nodes. The derived object omits speeds, retrograde
+flags and aspects because this API supplies a position snapshot.
+
+The hand-derived chart and boundary checks are documented in
+[test/ARITHMETIC.md](test/ARITHMETIC.md) and enforced by
+[test/transform.test.ts](test/transform.test.ts). Those listed synthetic
+cases are the reference span for the transformation checks, with no claim
+of independent astronomical accuracy. The transformation validates consumed
+longitudes with the rotation primitive, checks body latitudes, and rejects
+incomplete cusp arrays or mismatched node labels.
 
 Birth settings, resolved instants, time scales, pinned deltaT and flags use
 the engine's validation and canonicalization. Unknown time keeps the supplied
@@ -52,7 +85,7 @@ checks need no root dependency installation or engine build. Direct execution
 outside this tooling requires equivalent source and dependency resolution;
 the planned CLI will provide its own runner.
 
-The planned chart convention uses the engine's true north node by default and
+The chart convention uses the engine's true north node by default and
 its mean north node only when explicitly selected. Existing natal angles and
 cusps rotate with the bodies, including whole-sign cusps, rather than being
 calculated again in the rotated zodiac. A fixed chart rotation supplies no
