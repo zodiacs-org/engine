@@ -6,7 +6,7 @@ session completes the next unchecked milestone, runs its checks, ticks it
 here, and appends a single session summary to `CHANGES.txt`.
 
 - [x] M1 Establish an isolated TypeScript project, local dependency resolution, and Vitest smoke tests for engine Moon positions, receipts and the shared crossing solver.
-- [ ] M2 Research redistributable sources and commit a cited, versioned equal-segment boundary table and attested Arabic names and Latin or English labels in SOURCES.md. State the chosen zero point and distinguish exact division from rounded sexagesimal widths.
+- [x] M2 Research redistributable sources and commit a cited, versioned equal-segment boundary table and attested Arabic names and Latin or English labels in SOURCES.md. State the chosen zero point and distinguish exact division from rounded sexagesimal widths.
 - [ ] M3 Implement pure longitude classification with mandatory table selection, half-open segments, wrap handling and tests using independently hand-derived rational arithmetic at every boundary.
 - [ ] M4 Implement the tropical mansion-at API with strict instant validation, explicit table identity, Moon longitude, engine receipt and documented coverage refusals.
 - [ ] M5 Find tropical mansion ingresses with src/crossings.ts, bounded work, chronological ordering, explicit endpoint semantics and numerical refinement tests without physical-accuracy claims.

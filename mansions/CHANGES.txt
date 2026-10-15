@@ -1,1 +1,2 @@
 M1: Add the isolated mansions TypeScript scaffold, receipt-preserving Moon adapter, shared crossing solver tests, and package isolation checks; typecheck and eight Vitest tests pass on Node 22.22.2.
+M2: Add the immutable equal28-aries-v1 rational boundary table, explicitly selected identity, cited Arabic names and Latin labels, public domain source witness and provenance; typecheck, 13 Vitest tests and package isolation pass on Node 22.22.2.
