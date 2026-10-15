@@ -21,7 +21,7 @@ provenance. Model predictions are not observations or guarantees of sighting.
 - [x] M8 Implement the published Yallop lunar crescent criterion as a pure function with its specified geometry, best-time rule, category boundaries and independently calculated worked fixtures.
 - [x] M9 Implement the published Odeh lunar crescent criterion as a distinct model, including optical-aid categories and boundary tests; expose model selection without treating unlike categories as equivalent.
 - [x] M10 Search first evening and last morning lunar crescents over a date range; justify morning timing from the sources or mark any extension explicitly, and preserve missing-event reasons, model parameters and engine receipts.
-- [ ] M11 Implement `heliacal events`, `heliacal crescent` and `heliacal phase` with strict options, JSON output, explicit units/models, deterministic serialization and CLI integration tests.
+- [x] M11 Implement `heliacal events`, `heliacal crescent` and `heliacal phase` with strict options, JSON output, explicit units/models, deterministic serialization and CLI integration tests.
 - [ ] M12 Complete small cited historical-table or published worked-example fixtures, end-to-end checks, numerical evidence and usage documentation; audit model limits, packaging isolation, file sizes and repository scope.
 
 ## Validation policy

@@ -10,7 +10,8 @@ an arcus visionis criterion, a configurable visibility screen,
 rise/set/transit events, bounded observing windows, bracketed horizon-arcus
 transitions, geometric acronychal/cosmical phenomena, pure Yallop and
 Odeh lunar crescent criteria and bracketed crescent searches.
-Position-based APIs preserve engine receipts. The CLI remains planned.
+Position-based APIs preserve engine receipts. The [CLI](CLI.md) exposes
+`heliacal events`, `heliacal crescent` and `heliacal phase` as JSON commands.
 
 ## Development
 
@@ -27,9 +28,11 @@ npm --prefix heliacal run check:package
 Dependencies and the lockfile belong to this folder. Vitest's alias and
 TypeScript's path mapping let the parent engine source use the same pinned
 astronomy dependency without installing or building anything at the root.
-There is no emitted build or installed command yet. Consumers currently need
-a TypeScript-aware loader or bundler with the same dependency mapping; a
-plain Node import of the source is not a supported invocation.
+The CLI's source loader transpiles in memory and resolves the same pinned
+dependency, without writing build output. Run `node heliacal/bin/heliacal.mjs
+--help` from the repository root. Library consumers need a TypeScript-aware
+loader or bundler with the same dependency mapping; a plain Node import of
+the source is not a supported invocation.
 
 The package check requires npm and GNU tar. It verifies that the current
 working-tree pack list excludes this folder, then runs the repository's

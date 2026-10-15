@@ -3,7 +3,11 @@
   "private": true,
   "type": "module",
   "license": "MIT",
+  "bin": {
+    "heliacal": "bin/heliacal.mjs"
+  },
   "scripts": {
+    "heliacal": "node bin/heliacal.mjs",
     "test": "vitest run --config vitest.config.ts",
     "typecheck": "tsc --project tsconfig.json --pretty false",
     "check:package": "node scripts/check-package-isolation.mjs"
