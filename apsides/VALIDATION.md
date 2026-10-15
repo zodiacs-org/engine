@@ -84,3 +84,13 @@ above and the geocentric Moon's `dev-moon-2000` window, 2000-01-01 to
 accuracy coverage. The development reference assertions and acceptance
 limits remain unchanged, including the Pluto distance failures. No held-out
 references were collected or evaluated in M7.
+
+M8 adds optional lunar syzygy annotations with an explicit angular orb.
+`test/syzygy.vitest.ts` checks the New/Full longitude definition on synthetic
+directions, orb boundaries and failure contracts. The integration tests in
+`test/syzygy-integration.vitest.ts` check receipt replay, JSON serialization,
+shared work accounting and partition equality in the same lunar development
+window and its subwindows. They do not establish independent angular
+accuracy or extend the existing apsis validation coverage. No held-out
+reference was collected or evaluated; the original Pluto distance failures
+remain active.

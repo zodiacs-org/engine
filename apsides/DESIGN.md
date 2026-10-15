@@ -8,8 +8,8 @@ Moon fixture. M5 adds heliocentric planetary searches and compares all
 development planetary fixtures. Pluto fails the unchanged distance budget;
 see [VALIDATION.md](VALIDATION.md). M6 combines selected lunar and planetary
 searches under a shared budget. M7 adds before/at/after motion records and
-replayable probe receipts. Syzygy annotations and the CLI remain
-planned in [PLAN.md](PLAN.md).
+replayable probe receipts. M8 adds optional lunar longitude-phase
+annotations. The CLI remains planned in [PLAN.md](PLAN.md).
 
 The intended result is a chronological list of local distance extrema in a
 requested window. A lunar minimum is a perigee and a lunar maximum an
@@ -122,7 +122,7 @@ file measures astronomical accuracy or reads held-out reference values.
 
 ## Lunar window search implemented in M4
 
-`searchLunarApsides({ from, to, maxEvaluations? })` resolves each endpoint
+`searchLunarApsides({ from, to, maxEvaluations?, syzygyOrbDegrees? })` resolves each endpoint
 through `sampleDistance` and searches geocentric geometric lunar distance.
 Its `complete` result has `window`, `events` and `diagnostics`. Each event
 has `body: "Moon"`, `kind: "perigee" | "apogee"`, the distance sampler's
@@ -171,8 +171,9 @@ Events are chronological. The input instants and returned receipts are
 kept separate from the internal cache, because finite-difference speeds
 and receipt labels can depend on the input scale.
 
-`maxEvaluations` caps actual `sampleDistance` calls, including endpoint
-resolution, padded samples and refinement. Its default is 100,000;
+`maxEvaluations` caps actual engine calls, including `sampleDistance` for
+endpoint resolution, padded samples and refinement, plus the optional M8
+longitude samples described below. Its default is 100,000;
 `test/lunar.vitest.ts` enforces the policy and exact-budget behavior.
 The grid is checked against the remaining budget before allocating or
 evaluating it. Cached event samples, witnesses and motion records add no calls.
@@ -278,7 +279,7 @@ Its Pluto distance assertions remain failing, as recorded in
 
 ## Combined window search implemented in M6
 
-`searchApsidesWindow({ from, to, bodies?, maxEvaluations? })` calls the
+`searchApsidesWindow({ from, to, bodies?, maxEvaluations?, syzygyOrbDegrees? })` calls the
 existing lunar and planetary searches and merges their complete event
 records. Omitting `bodies` selects `APSIS_BODIES`: Moon, then Mercury
 through Pluto including Earth. An explicit selection must be nonempty,
@@ -506,16 +507,76 @@ span and engine/runtime used, and must not extend a sample maximum into a
 guarantee outside the checked cases. Keep raw generated downloads in an
 ignored local directory and commit only small cited fixtures and evidence.
 
-## Planned lunar annotation and command line
+## Lunar syzygy annotations implemented in M8
 
-Syzygy annotation is optional and requires a caller-supplied angular orb in
-degrees. The annotation will state the longitude-phase convention for New
-or Full Moon, the measured Moon-Sun elongation at the extremum, the orb and
-the underlying receipts. Angular longitude separation and spatial angular
-separation must be named separately if both are returned. A matching
-perigee may be labelled a supermoon candidate and a matching apogee a
-micromoon candidate. These are explicit angular associations, with no
-default orb, distance ranking or claim of a universal naming definition.
+The lunar and combined searches accept optional `syzygyOrbDegrees`, a
+finite number from zero inclusive to 90 exclusive. There is no default
+orb; omission performs no angular calls and adds no event fields. Explicit
+undefined, null, nonnumeric and out-of-range values throw `RangeError`
+before any engine work. The combined search requires Moon in its body
+selection when this option is supplied. Planetary-only search options do
+not accept it. `test/syzygy.vitest.ts` enforces these input limits.
+
+After the distance search completes and filters events to the owned TT
+window, each retained lunar extremum gains `syzygy`. It contains measured
+`elongationDegrees`, `nearestPhase`, `separationDegrees`, `orbDegrees`,
+`candidate`, and `moon` and `sun` samples. Each sample carries
+`longitudeDegrees`, its instant, unmodified engine bounds and its replayable
+receipt. The convention is
+`geocentric-apparent-ecliptic-longitude-of-date`: public `calc` requests for
+the Moon and Sun on the tropical true ecliptic of date, geocentric, with
+apparent corrections, in degrees and at the event's exact reported TT JD.
+Speeds and Cartesian output are disabled for these angular calls. As the
+engine documents, its apparent Moon uses the geometric lunar series without
+light-time or aberration corrections; no correction is added here. The
+extremum itself still comes from geometric distance.
+
+New Moon is associated with zero Moon-minus-Sun apparent ecliptic longitude;
+Full Moon with 180 degrees, following the USNO definition cited in
+[SOURCES.md](SOURCES.md). `elongationDegrees` is the directed longitude
+difference in `[0,360)`, not the spatial angular separation of the bodies.
+`separationDegrees` is the shortest absolute longitude offset from the
+nearer New or Full phase. Quadrature ties select `nearestPhase: "new-moon"`
+but cannot match an allowed orb. `candidate` is `"supermoon-candidate"`
+for a perigee within the inclusive orb, `"micromoon-candidate"` for an
+apogee within it, and null otherwise. Nonmatching events retain their
+measured annotation. These labels describe the caller's angular association;
+they neither rank distances nor assert a universal definition of those names.
+The calculation does not search for a nearby exact phase instant, infer a
+time separation, or make predictions about people or events.
+
+Arithmetic uses ordinary binary64 operations on the reported longitudes,
+with no rounding to display precision or added epsilon at the orb boundary.
+The shortest separation is computed before directed wrapping. A tiny
+negative difference can round to 360 when wrapped and is rendered as zero;
+its nonzero shortest separation still governs the comparison. These are
+numerical comparisons of model output, with no uncertainty allowance. The
+returned position bounds are individual engine direction metadata, not a
+bound on the annotation or a certificate that a near-boundary candidate
+classification agrees with an independent ephemeris.
+
+Successful annotation adds two engine calls per returned lunar event, one
+for each body's longitude. The same `maxEvaluations` cap includes these
+calls, including an engine refusal. Budget exhaustion between those calls
+or between events refuses the entire result with `events: []`; an angular
+engine refusal retains its payload under `engine-refusal`. Unexpected
+exceptions propagate. No angular work occurs for a refused distance search,
+an empty result, or events outside the owned window. Combined searches
+include this work in their one shared budget and preserve lunar failure
+details. Annotation does not change event instants, distance records, motion
+probes or planetary events.
+
+`test/syzygy.vitest.ts` checks synthetic New/Full directions, inclusive and
+adjacent represented orb boundaries, wraparound, quadrature, zero orb,
+input validation and injected failure paths. `test/syzygy-integration.vitest.ts`
+checks the engine requests and JSON receipt replay in the registered lunar
+development window, 2000-01-01 to 2000-02-01 TT, and its subwindows. It
+enforces the additional call count, exact and exhausted budgets, unchanged
+distance records, and identical annotations across window partitions.
+These are definition and integration checks, not independent measurements
+of angular accuracy. No held-out fixture or acceptance budget changes.
+
+## Planned command line
 
 The planned CLI commands are `apsides lunar`, `apsides planetary` and
 `apsides window`. They will call the pure library, validate arguments,

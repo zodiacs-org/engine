@@ -21,7 +21,7 @@ export interface SearchPolicy {
 export interface ApsisSearchOptions {
   readonly from: CalcTime;
   readonly to: CalcTime;
-  /** All sampleDistance calls, including endpoint resolution and refinement. */
+  /** All engine calls, including endpoint resolution, refinement and annotations. */
   readonly maxEvaluations?: number;
 }
 
@@ -111,7 +111,10 @@ class SearchRefusal {
   ) {}
 }
 
-function readOptions(options: ApsisSearchOptions, policy: SearchPolicy): Required<ApsisSearchOptions> {
+/** Internal option reader; wrappers may declare additional ordinary data fields. */
+export function readSearchOptions(
+  options: ApsisSearchOptions, policy: SearchPolicy, additionalKeys: readonly string[] = []
+): Required<ApsisSearchOptions> {
   const prototype: unknown = options !== null && typeof options === "object"
     ? Object.getPrototypeOf(options) : undefined;
   if (prototype !== Object.prototype && prototype !== null) {
@@ -119,7 +122,7 @@ function readOptions(options: ApsisSearchOptions, policy: SearchPolicy): Require
   }
   for (const key of Reflect.ownKeys(options)) {
     const slot = Object.getOwnPropertyDescriptor(options, key);
-    if (typeof key !== "string" || !["from", "to", "maxEvaluations"].includes(key) ||
+    if (typeof key !== "string" || !["from", "to", "maxEvaluations", ...additionalKeys].includes(key) ||
       !slot || !("value" in slot) || !slot.enumerable) {
       throw new RangeError("Apsis search options must contain only the named data properties.");
     }
@@ -142,7 +145,7 @@ export function searchApsides<B extends ApsisBody, K extends string, P extends S
   policy: P,
   options: ApsisSearchOptions
 ): ApsisSearchResult<B, K, P> {
-  const { from, to, maxEvaluations } = readOptions(options, policy);
+  const { from, to, maxEvaluations } = readSearchOptions(options, policy);
   const toJd = (seconds: number): number => policy.originJdTt + seconds / DAY_SECONDS;
   const toSeconds = (jd: number): number => (jd - policy.originJdTt) * DAY_SECONDS;
   let evaluations = 0;

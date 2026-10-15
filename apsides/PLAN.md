@@ -12,7 +12,7 @@ remain unchanged.
 - [x] M5 Implement heliocentric searches for Mercury through Pluto, including Earth, with body-specific sampling policy, center disclosure, slow-orbit cases, and independent planetary tests.
 - [x] M6 Add the combined window API, chronological merging, input validation, reference-span handling, completeness diagnostics, and partition-equivalence tests.
 - [x] M7 Finalize event records with distance, total speed, signed radial speed before/at/after each extremum, replayable engine receipts, and JSON serialization tests.
-- [ ] M8 Add optional lunar syzygy annotations using an explicit angular orb, measured Moon-Sun elongation, candidate-only labels, receipts, and boundary tests.
+- [x] M8 Add optional lunar syzygy annotations using an explicit angular orb, measured Moon-Sun elongation, candidate-only labels, receipts, and boundary tests.
 - [ ] M9 Implement `apsides lunar`, `apsides planetary`, and `apsides window` with strict arguments, JSON output, help, exit statuses, and subprocess tests.
 - [ ] M10 Run the reserved independent validation corpus, record timing/distance/speed errors and missed/extra events, and publish only the measured coverage and unresolved limitations.
 - [ ] M11 Finish library and CLI examples, reproducibility instructions, source and license records, local checks, and evidence that apsides stays outside the engine package.

@@ -180,6 +180,35 @@ Use of these references implies no NASA/JPL endorsement.
   retains scalar distance minimization. No dependency source or coefficient
   is copied into apsides.
 
+## M8 lunar phase definition and annotation checks
+
+US Naval Observatory, Astronomical Applications Department,
+[Phases of the Moon and Percent of the Moon Illuminated](https://aa.usno.navy.mil/faq/moon_phases),
+fetched and read on 2026-10-15. Locator: the paragraph beginning
+"The relationship of the Moon's phase", and its following paragraph.
+The primary phase definition uses the excess of apparent ecliptic longitude
+of the Moon over that of the Sun: zero for New Moon and 180 degrees for
+Full Moon. The annotation evaluates this angular relation at the apsis,
+without searching for a phase instant. The source does not define this
+project's caller-supplied orb or candidate labels.
+
+The local [calc guide](../docs/calc.md) and public `CalcPosition` contract
+specify apparent corrections and the geocentric Moon exception: its series
+is geometric, without added light-time or aberration. M8 requests the
+engine's apparent geocentric tropical ecliptic longitudes at the reported
+TT extremum and preserves both receipts. It implements no extra ephemeris
+correction. The directed longitude difference is distinct from spatial
+angular separation.
+
+`test/syzygy.vitest.ts` uses synthetic longitudes to enforce the definition,
+orb boundaries, units and candidate-only policy, plus injected dependency
+failures. `test/syzygy-integration.vitest.ts` checks additional engine-call
+accounting, JSON receipt replay and window partitions in the development
+window 2000-01-01 to 2000-02-01 TT. These are definition and integration
+checks, not accuracy evidence from independent longitude samples. No new
+numerical source fixture is copied, no held-out value is read, and the
+existing Horizons distance and speed acceptance limits are unchanged.
+
 ## Licensing and attribution
 
 Original code and documentation in `apsides/` follow the repository's

@@ -8,6 +8,7 @@ import type {
 } from "./search.js";
 import { distanceTarget, PLANETARY_BODIES } from "./targets.js";
 import type { ApsisBody, DistanceTarget } from "./targets.js";
+import { readSyzygyOrbDegrees } from "./syzygy.js";
 
 /** Default selection and deterministic order for work and equal-time events. */
 export const APSIS_BODIES = Object.freeze(["Moon", ...PLANETARY_BODIES] as const);
@@ -17,6 +18,8 @@ export const WINDOW_DEFAULT_MAX_EVALUATIONS = 100_000;
 export interface ApsidesWindowOptions extends ApsisSearchOptions {
   /** Omission selects every APSIS_BODIES member. Explicit lists must be unique and nonempty. */
   readonly bodies?: readonly ApsisBody[];
+  /** Optional angular lunar annotation; requires Moon in the selected bodies. */
+  readonly syzygyOrbDegrees?: number;
 }
 
 export type ApsidesWindowEvent = LunarApsis | PlanetaryApsis;
@@ -77,7 +80,9 @@ export type ApsidesWindowResult =
       readonly diagnostics: ApsidesWindowDiagnostics;
     };
 
-function readOptions(options: ApsidesWindowOptions): Required<ApsidesWindowOptions> {
+function readOptions(options: ApsidesWindowOptions): Required<Omit<ApsidesWindowOptions, "syzygyOrbDegrees">> & {
+  readonly syzygyOrbDegrees: number | undefined;
+} {
   const prototype: unknown = options !== null && typeof options === "object"
     ? Object.getPrototypeOf(options) : undefined;
   if (prototype !== Object.prototype && prototype !== null) {
@@ -85,7 +90,7 @@ function readOptions(options: ApsidesWindowOptions): Required<ApsidesWindowOptio
   }
   for (const key of Reflect.ownKeys(options)) {
     const slot = Object.getOwnPropertyDescriptor(options, key);
-    if (typeof key !== "string" || !["from", "to", "bodies", "maxEvaluations"].includes(key) ||
+    if (typeof key !== "string" || !["from", "to", "bodies", "maxEvaluations", "syzygyOrbDegrees"].includes(key) ||
       !slot || !("value" in slot) || !slot.enumerable) {
       throw new RangeError("Apsides window options must contain only the named data properties.");
     }
@@ -112,9 +117,13 @@ function readOptions(options: ApsidesWindowOptions): Required<ApsidesWindowOptio
     }
     selected.add(slot.value as ApsisBody);
   }
+  const syzygyOrbDegrees = readSyzygyOrbDegrees(options);
+  if (syzygyOrbDegrees !== undefined && !selected.has("Moon")) {
+    throw new RangeError("syzygyOrbDegrees requires Moon in bodies.");
+  }
   return {
     from: options.from, to: options.to, maxEvaluations,
-    bodies: APSIS_BODIES.filter((body) => selected.has(body))
+    bodies: APSIS_BODIES.filter((body) => selected.has(body)), syzygyOrbDegrees
   };
 }
 
@@ -125,7 +134,7 @@ function readOptions(options: ApsidesWindowOptions): Required<ApsidesWindowOptio
  * unavailable padding are preserved without clipping the requested interval.
  */
 export function searchApsidesWindow(options: ApsidesWindowOptions): ApsidesWindowResult {
-  const { from, to, bodies, maxEvaluations } = readOptions(options);
+  const { from, to, bodies, maxEvaluations, syzygyOrbDegrees } = readOptions(options);
   const entries: ApsidesBodyDiagnostics[] = bodies.map((body) => ({
     body, target: distanceTarget(body), status: "not-started", window: null, diagnostics: null
   }));
@@ -146,7 +155,9 @@ export function searchApsidesWindow(options: ApsidesWindowOptions): ApsidesWindo
       };
     }
     const input = { ...endpoints, maxEvaluations: remaining };
-    const result = body === "Moon" ? searchLunarApsides(input) : searchPlanetaryApsides(body, input);
+    const result = body === "Moon"
+      ? searchLunarApsides({ ...input, ...(syzygyOrbDegrees === undefined ? {} : { syzygyOrbDegrees }) })
+      : searchPlanetaryApsides(body, input);
     evaluations += result.diagnostics.evaluations;
     if (window === null && result.window !== null) {
       window = { from: result.window.from, to: result.window.to, boundary: result.window.boundary };

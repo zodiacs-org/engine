@@ -3,7 +3,8 @@
 Private work-in-progress library for geometric orbital distance extrema,
 built on `@zodiacs/engine`. The current milestone provides the distance
 sampler, bounded lunar and heliocentric planetary searches, a combined
-window API, motion probes with replayable receipts, and frozen independent
+window API, motion probes with replayable receipts, optional lunar syzygy
+annotations, and frozen independent
 development references. Pluto fails its preregistered distance budget, so
 independent validation is not fully passing. The remaining work, including
 the CLI, is in [PLAN.md](PLAN.md).
@@ -85,6 +86,38 @@ an empty event list. `diagnostics` records the work, grid and
 every physical extremum was found. Endpoint delta-T pins resolve the
 endpoints only; internal samples and event civil labels use the engine's
 normal time basis. See [DESIGN.md](DESIGN.md) for the full contract.
+
+To measure the phase association at each lunar extremum, explicitly supply
+an angular orb. For example:
+
+```ts
+const annotated = searchLunarApsides({
+  from: "2000-01-01", to: "2000-02-01", syzygyOrbDegrees: 5
+});
+if (annotated.status === "complete") {
+  for (const event of annotated.events) console.log(event.syzygy);
+}
+```
+
+The orb must be finite, at least zero and less than 90 degrees. Omission
+adds no annotation or angular calls. `syzygy.elongationDegrees` is the
+directed apparent geocentric Moon-minus-Sun ecliptic longitude at the
+extremum, not spatial angular separation. `nearestPhase` identifies New or
+Full Moon; `separationDegrees` gives the shortest longitude offset from
+that phase. The inclusive orb labels a matching perigee
+`supermoon-candidate` and a matching apogee `micromoon-candidate`; otherwise
+`candidate` is null and the measurements remain available. These are
+caller-defined associations, with no distance ranking or exact phase-time
+search. Each angular sample retains the engine's bounds and receipt.
+
+This option also works in `searchApsidesWindow` when Moon is selected.
+It adds two engine calls per returned lunar event to the existing budget.
+An angular refusal or exhausted budget discards the entire event list.
+The limits, call counts and boundary behavior are enforced by
+`test/syzygy.vitest.ts` and `test/syzygy-integration.vitest.ts`; receipt and
+partition checks use the development window 2000-01-01 to 2000-02-01 TT.
+They establish integration behavior, not independent angular accuracy.
+[DESIGN.md](DESIGN.md) states the arithmetic and correction conventions.
 
 ```ts
 import { searchPlanetaryApsides } from "./src/index.js";

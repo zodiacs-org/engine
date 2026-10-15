@@ -10,6 +10,7 @@ export type {
   DistanceSolverRefusalReason, DistanceSolverResult
 } from "./solver.js";
 export { searchLunarApsides, LUNAR_SEARCH_POLICY } from "./lunar.js";
+export type { LunarSyzygyAnnotation, SyzygyLongitudeSample } from "./syzygy.js";
 export type {
   LunarSearchOptions, LunarApsis, TtDistancePoint, LunarSearchWindow,
   LunarSearchDiagnostics, LunarSearchRefusalReason, LunarSearchResult
