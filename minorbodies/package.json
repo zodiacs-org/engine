@@ -15,6 +15,13 @@
     "pilot:check": "node --experimental-strip-types scripts/generate-pilot.ts --check",
     "pilot:build": "node --experimental-strip-types scripts/generate-pilot.ts --build",
     "pilot:validate": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/validate-pilot.ts",
+    "full:capture": "node --experimental-strip-types scripts/generate-full.ts --capture",
+    "full:check": "node --experimental-strip-types scripts/generate-full.ts --check",
+    "full:build": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/generate-full.ts --build",
+    "full:validate": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/validate-full.ts",
+    "full:test": "vitest run --config vitest.full.config.ts",
+    "full:reference:capture": "node --experimental-strip-types scripts/generate-speed-reference.ts",
+    "full:validate:v1": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/validate-full-v1.ts",
     "reference:test": ".cache/reference-venv/bin/python tests/reference-erfa.test.py",
     "check": "npm run typecheck && npm test && npm run reference:test && npm run fixtures:check && npm run check:scope"
   },

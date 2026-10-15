@@ -17,5 +17,5 @@
       "astronomy-engine": ["./node_modules/astronomy-engine/astronomy.d.ts"]
     }
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "scripts/**/*.ts", "vitest.config.ts"]
+  "include": ["src/**/*.ts", "tests/**/*.ts", "scripts/**/*.ts", "vitest.config.ts", "vitest.full.config.ts"]
 }

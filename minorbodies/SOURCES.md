@@ -14,6 +14,13 @@ Derived coefficients and independent reduced references remain in ignored
 `generated/`. The numerical-data redistribution basis below also applies
 to this new corpus.
 
+M5 adds a compact original File API fixture under
+`tests/fixtures/horizons-file/`, frozen request manifests under
+`data/manifests/` and `data/speed-manifests/`, and coefficient digest receipts
+under `data/receipts/`. Bulk original responses and coefficients remain
+ignored. The same numerical-data redistribution basis applies; no new
+external source-code copy or ephemeris dependency was introduced.
+
 ## Numerical definitions
 
 Read on 2026-10-15: [NIST Digital Library of Mathematical Functions, table
@@ -172,3 +179,34 @@ records its script/requirements hashes and actual library versions.
 Swiss Ephemeris code, binaries, tables, fixtures and per-case output are
 excluded. No AGPL or commercial ephemeris data is an input. All examples
 and event test instants are synthetic and unrelated to anyone's birth data.
+
+## M5 File API and full-range provenance
+
+Read on 2026-10-15: the
+[Horizons File API documentation](https://ssd-api.jpl.nasa.gov/doc/horizons_file.html)
+specifies multipart POST input to the File API endpoint and requires checking
+the returned API signature. This avoids the pilot GET transport's URL length
+constraint while preserving its requested geocentric ICRF, TT and LT+S
+conventions. The original Ceres fixture's `.manifest.json` contains the
+exact submitted input, retrieval time, response digest and actual signature.
+The File API's observed `1.0` signature is distinct from the GET fixtures'
+observed `1.2`; neither is silently admitted as the other at intake.
+
+Each full-range body manifest records its complete captured solution
+identity, including orbit epoch and state, target solution, Earth solution,
+perturber solution and EOP file. Every batch must agree with that identity.
+The supplemental speed-reference manifest must also agree with the same
+body's original full-range identity. Both corpora are public JPL numerical
+responses with the same standard explanatory legends as the retained
+fixtures; no additional source-specific redistribution restriction was
+stated in them. The project's explicit authorization for JPL/NASA public
+numerical data remains the redistribution basis described above.
+
+The source manifests bind exact reconstructed requests and original bytes,
+not an immutable remote download URL. Keep the original ignored capture
+caches for offline replay. New live captures can have different timestamps,
+numerical bytes or orbit solutions; they require new manifests and evidence.
+The preserved original short-stencil failure and supplemental reference
+method are described in [DESIGN.md](DESIGN.md#m5-reference-speed-correction).
+Both use original Horizons positions and the same separately installed ERFA
+reference, never this companion's prior numerical output as truth.

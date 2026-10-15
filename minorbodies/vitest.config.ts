@@ -6,6 +6,7 @@ export default defineConfig({
   cacheDir: ".cache/vite",
   test: {
     include: ["tests/**/*.test.ts"],
+    exclude: ["tests/full-accuracy.test.ts"],
     pool: "forks",
     poolOptions: { forks: { singleFork: true } }
   }

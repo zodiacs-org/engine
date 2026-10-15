@@ -10,7 +10,7 @@ human-written evidence notes stay with their capture scripts and provenance.
 - [x] M2 Implement a serialized, cached JPL Horizons client and strict response parser with request manifests, source digests, target/center/frame/time checks, fixture capture and offline parser tests.
 - [x] M3 Implement deterministic Chebyshev fitting, evaluation and derivatives, shard format and integrity checks. Test against independently evaluated analytic functions, including segment edges and malformed data.
 - [x] M4 Generate a Chiron pilot dataset and implement the geocentric evaluator, time conversion, ecliptic reduction, speed, retrograde state and result receipts. Compare it with held-out Horizons samples before extending the span.
-- [ ] M5 Generate and validate the required Chiron, Ceres, Pallas, Juno and Vesta datasets over the target range. Freeze request manifests and digest receipts; measure shard sizes and boundary continuity. Keep generated bulk data ignored.
+- [x] M5 Generate and validate the required Chiron, Ceres, Pallas, Juno and Vesta datasets over the target range. Freeze request manifests and digest receipts; measure shard sizes and boundary continuity. Keep generated bulk data ignored.
 - [ ] M6 Add the body adapter: delegate ordinary bodies to engine calc, expose minor-body calculation with explicit conventions and refusals, and provide generic crossings callbacks and configured-aspect rows. Verify actual results and mixed-body use.
 - [ ] M7 Implement station searches through the engine crossings solver, with sample budgets, boundary handling and receipts. Check direct-to-retrograde and retrograde-to-direct events against independent Horizons samples.
 - [ ] M8 Build retrograde windows from stations and endpoint states, carrying clipped-window and refusal information. Test adjacent windows, incomplete searches and supported-range edges.
@@ -66,3 +66,17 @@ precision, without changing any fit or accuracy budget after validation.
 The root package contents check still fails on absent `dist/calc.d.ts`;
 no root build or packed-file change was made. Only `minorbodies/` changed.
 M5 is the next unchecked milestone.
+
+M5 verification: `npm run check`, `npm run full:check`, `npm run full:build`
+and `npm run full:test` passed on Node 22.22.2. All required bodies cover
+the registered target interval; frozen source manifests, coefficient receipts,
+sizes, every segment join and offline loading were checked. The full suite
+compared the registered held-out Horizons samples through independent ERFA
+and passed every unchanged acceptance limit. The original short-difference
+reference failed radial-speed convergence; that failure and its implementation
+are retained. A separately registered wider reference corpus with intact
+stencil batching passed, without changing coefficients or budgets. The rejected
+Chiron reference replay reproduced its original numerical failures, and native
+offline loading also passed. Bulk data remain ignored. The root package contents
+check still fails on absent `dist/calc.d.ts`; no root build or packed-file change
+was made. Only `minorbodies/` changed. M6 is the next unchecked milestone.

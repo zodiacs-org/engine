@@ -3,9 +3,10 @@
 ## Status and scope
 
 This is the design adopted in M1, extended by the ingestion, numerical and
-Chiron pilot contracts below. The pilot adds an astronomical evaluator and
-receipts, with independent checks confined to the pilot interval. The wider
-target range and other bodies are not yet available.
+Chiron pilot and full-range contracts below. The pilot adds an astronomical
+evaluator and receipts. M5 adds the required bodies over the target interval,
+with a separate full-data validation command. Its finite coverage samples
+do not replace the final M11 accuracy and event corpus.
 
 The required targets are Chiron, Ceres, Pallas, Juno and Vesta. Pholus and
 Eris can follow only after the same checks. The target interval is
@@ -432,3 +433,89 @@ Hashes detect changes relative to pins and are not signatures. The loader
 does not prove that arbitrary caller-supplied coefficients were honestly
 generated; the retained-source regeneration and independent tests are the
 checks on this pilot's coefficients.
+
+## M5 full-range data
+
+`src/full-recipe.ts` fixes the same segment length, degree, training-node
+count and seam limits as the pilot. It extends the interval to the target
+defined above and uses the same settings for every required body. There
+is no tuning corpus and no fit change based on the full-range holdouts.
+`tests/full-recipe.test.ts` enforces contiguous coverage, exact epoch sets
+and disjointness of training and reference epochs.
+
+The M5 coverage corpus samples an irregular interior of every segment,
+cycling the pilot's registered interior fractions. It samples every
+registered seam neighborhood and both coverage edges. All shard boundaries
+are in the reference seam corpus. Cartesian position and velocity joins are
+also measured at every segment boundary, including boundaries between
+files. `tests/full-accuracy.test.ts` checks the complete registered corpus;
+missing local sources, coefficients or the independent reducer fail that
+explicit suite. Default tests check the compact manifests and the pilot;
+they do not claim the full-data accuracy suite ran.
+
+The full generator uses the separate Horizons File API, observed signature
+`1.0`, with POST input files. `src/horizons-file.ts` verifies that envelope
+before reusing the original parser's result-table grammar through bounded
+in-memory views. Those grammar views are not source captures. Receipts and
+digests retain the original File API signature and unchanged response bytes.
+`tests/horizons-file.test.ts` checks the actual retained File API fixture,
+corrupt responses, multipart settings, serialization, caching and transport
+limits. Run only one live capture process, including the legacy GET client.
+
+`data/manifests/` holds the frozen source manifests. The committed recipe
+reconstructs every exact epoch and POST parameter; each response receipt
+pins that canonical request, original response bytes, retrieval time and
+source solution. The generator's source hashes and exact Node runtime are
+frozen too. The body manifest digest enters every coefficient shard and
+calculation receipt. `data/receipts/` independently pins each generated
+coefficient file, its coverage, segment count and measured byte length.
+`tests/full-sources.test.ts` rejects altered or malformed manifest fields.
+The full accuracy suite requires regenerated descriptors to match the
+committed coefficient receipts exactly.
+
+Original bulk responses stay in ignored `.cache/horizons-full/` and
+coefficients in ignored `generated/full/`. `full:build` is strictly offline
+and requires the frozen originals. `loadFullBody` reads the pinned files,
+checks every original source and all joins, and returns the same evaluator
+and receipt contract as the pilot. It does not fetch, fit or extrapolate.
+The loader still records `accuracy-not-certified-by-loader`. A compact
+manifest alone is neither the source corpus nor a coefficient distribution.
+Preserve the caches with the generated files when transferring a working
+installation. A clean clone does not contain this bulk data, and a new live
+fetch cannot promise identical source bytes or solution identities.
+
+## M5 reference-speed correction
+
+The original full-range comparison used the pilot's short central
+differences. It failed the distance-speed convergence gate for every body
+and the distance-speed comparison for Chiron. The original algorithm is
+retained in `src/full-validation-v1.ts`; `full:validate:v1` replays it and
+writes a separate report. The failure is recorded in the M5 evidence note.
+No coefficient, training epoch, segment, degree or acceptance budget was
+changed after that comparison.
+
+The largest inspected discrepancies straddled Horizons response boundaries.
+They also appeared when differencing norms of the raw ICRF vectors, without
+the package's evaluator or ERFA. This implicates tiny response-dependent
+numerical differences amplified by the short stencil; the exact internal
+Horizons cause is not established. The failed reference does not establish
+the physical or interpolation error of a smooth derivative.
+
+`src/speed-reference-sources.ts` preregisters a supplemental reference-only
+corpus before its capture. It retains the same speed centers, takes broader
+stencils and groups every complete stencil in one response. Its epochs are
+disjoint from training. Its separate manifests bind each original response
+to the same orbit solution and base source-manifest digest. These files
+never enter the coefficient generator.
+
+The replacement reference uses the seven-point centered derivative
+`(45*(f(t+h)-f(t-h)) - 9*(f(t+2h)-f(t-2h)) + f(t+3h)-f(t-3h))/(60*h)`.
+Longitude differences wrap across zero; latitude and range use ordinary
+differences. Both stencils require their actual TT epochs to have the
+registered exact spacing. Fine and coarse steps, and the unchanged
+convergence allowance, are fixed by `SPEED_REFERENCE_RECIPE` and tested by
+`tests/speed-reference-sources.test.ts` and the analytic derivative tests.
+The full suite still enforces every original speed limit and reference
+convergence limit. Longer differences are accepted only if those checks
+pass. Reports identify both reference corpora and hash the comparison
+implementation as well as the independent ERFA reducer.

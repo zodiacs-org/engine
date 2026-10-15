@@ -10,6 +10,7 @@ import type { MinorBodyTimeInput, MinorBodyTimeReceipt } from "./engine-bridge.t
 import { readEngineSourceIdentity } from "./engine-identity.ts";
 import type { EngineSourceIdentity } from "./engine-identity.ts";
 import { verifyPilotSources } from "./pilot-sources.ts";
+import { FULL_SOURCE_SCHEMA, verifyFullSources } from "./full-sources.ts";
 
 export const POSITION_CONVENTIONS = Object.freeze({
   center: "geocentric", frame: "ecliptic-true-of-date", zodiac: "tropical",
@@ -68,12 +69,16 @@ export interface EphemerisInput {
 }
 
 function fail(message: string): never { throw new RangeError(`Invalid minor-body dataset: ${message}`); }
-/** M4 admits the frozen pilot recipe only. Source bytes are verified before use. */
+/** Both registered recipes require the complete frozen original corpus. */
 function sourceManifest(input: EphemerisInput) {
   const text = input.sourceManifestText;
   if (typeof text !== "string" || Buffer.byteLength(text) >= 2_000_000 ||
       !/^[a-f0-9]{64}$/.test(input.sourceManifestSha256) || sha256(text) !== input.sourceManifestSha256) fail("source manifest digest.");
-  try { return verifyPilotSources(text, input.rawSources).sourceManifest; }
+  try {
+    return JSON.parse(text).schema === FULL_SOURCE_SCHEMA
+      ? verifyFullSources(text, input.rawSources).sourceManifest
+      : verifyPilotSources(text, input.rawSources).sourceManifest;
+  }
   catch { fail("source manifest, original responses or preregistered epoch sets do not agree."); }
 }
 

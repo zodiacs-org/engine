@@ -15,3 +15,4 @@ export { POSITION_CONVENTIONS, loadMinorBodyEphemeris } from "./ephemeris.ts";
 export type { MinorBodyEphemeris, MinorBodyPosition, MinorBodyRefusal, MinorBodyResult,
   PositionReceipt, DatasetReceipt, EphemerisInput } from "./ephemeris.ts";
 export { loadChironPilot } from "./pilot.ts";
+export { loadFullBody } from "./full.ts";
