@@ -1,10 +1,9 @@
 # Sources and provenance
 
-This register records the sources consulted for the foundation milestone.
-External source pages were retrieved or inspected through web search on
-2026-10-15. No new stellar catalogue records, occultation predictions or
-observations have been copied into this project. The links below are research
-leads, not approved inputs or committed accuracy evidence.
+This register distinguishes the adopted stellar catalogue from reference
+leads that remain unapproved. Sources were retrieved or inspected on
+2026-10-15. Catalogue provenance does not establish occultation accuracy;
+published event references still require the review described below.
 
 ## Local engine
 
@@ -23,26 +22,91 @@ accuracy. Existing star values in the engine do not provide a shortcut to a
 new catalogue: the root licensing audit explicitly leaves questions about
 their redistribution terms unresolved.
 
-## Catalogue leads for M2
+## Adopted catalogue: SAO, NASA ADC J2000 edition
 
-| Source | What was read | Status |
-| --- | --- | --- |
-| [ESA Hipparcos and Tycho catalogues](https://www.cosmos.esa.int/web/hipparcos/catalogues) | The licence and credit section was available in the search index. A subsequent direct page request was refused by the host. | The page specifies CC BY-NC 3.0 IGO. These catalogues cannot be assumed to satisfy the requested public-domain catalogue requirement. No records copied. |
-| [NASA HEASARC Bright Star Catalog](https://heasarc.gsfc.nasa.gov/W3Browse/star-catalog/bsc5p.html) | The overview, Hoffleit and Warren bibliographic reference, provenance and field descriptions. | The page describes a table derived from the Yale catalogue and later HEASARC revisions. It supplies no explicit licence for the Yale-origin records. NASA hosting alone does not establish public-domain status. No records copied. |
-| [USNO ICRS products](https://crf.usno.navy.mil/icrs) and [USNO Bright Star Catalog paper](https://arxiv.org/html/2204.09080v1) | The official catalogue listing and the authors' description of the combined astrometric solution and field origins. | A possible alternative requiring further review. Its solution incorporates Hipparcos intermediate astrometry, and some fields come directly from Hipparcos. USNO hosting alone does not resolve the rights in every field. No catalogue download retained. |
+The stellar input is the Smithsonian Astrophysical Observatory Star Catalog
+(SAO Staff, 1966), in the NASA Astronomical Data Center J2000 edition corrected
+through May 1991. The [HEASARC SAO table description](https://heasarc.gsfc.nasa.gov/W3Browse/star-catalog/sao.html)
+records its origin in ADC/CDS catalogue I/131A. The
+[edition description](https://cdsarc.cds.unistra.fr/ftp/cats/I/131A/ReadMe)
+identifies the NASA CD-ROM documentation and subsequent CDS documentation
+standardization. Cite SAO Staff and Nancy G. Roman and Wayne H. Warren Jr.,
+*Documentation for the Machine-Readable Version*, NSSDC/WDC-A-R&S 89-08,
+alongside HEASARC when reusing this subset.
 
-M2 must establish an explicit public-domain basis for the chosen input before
-vendoring records. Record the exact catalogue edition, publisher, original
-authors, download URL, retrieved bytes and digest, applicable terms, and any
-third-party fields. Public availability and scientific-use permission are
-insufficient substitutes for the requested rights.
+The public-domain basis is NASA's catalogue-specific determination. Its
+Technical Reports Server classifies the original catalogue volumes
+([part 1](https://ntrs.nasa.gov/citations/19660017606),
+[part 2](https://ntrs.nasa.gov/citations/19660017607),
+[part 3](https://ntrs.nasa.gov/citations/19660017608) and
+[part 4](https://ntrs.nasa.gov/citations/19660017609)) as
+"Work of the US Gov. Public Use Permitted." The
+[ADC documentation record](https://ntrs.nasa.gov/citations/19910021722)
+carries the same determination. The
+[rights receipt](data/sao-rights.json) records the exact metadata URLs,
+retrieval date, byte counts and SHA-256 digests, and the
+`GOV_PUBLIC_USE_PERMITTED` determination. It does not infer rights from
+legacy Boolean metadata fields or a generic government-site licence link.
 
-The subset generator must retain field provenance and define epoch, reference
-frame, proper-motion units and right-ascension convention, magnitude band,
-aliases, multiplicity and missing-value handling. Coverage of the named stars
-and other eligible targets must be checked from the chosen catalogue rather
-than inferred from its name. Downloaded bulk inputs and generated bulk output
-belong in ignored directories.
+The unchanged [NASA CD-ROM documentation](data/sao-documentation.txt) is
+included as requested by its Introduction, printed page 1-1. It was fetched
+from [CDS's copy](https://cdsarc.cds.unistra.fr/ftp/I/131A/doc.txt); its digest
+is in the rights receipt. Its Procedure, printed page 1-3, and
+Acknowledgments, printed page 4-9, attribute the computed J2000 positions
+and proper motions on the FK5 system to Clayton A. Smith at USNO. The
+related [NASA PDF](https://ntrs.nasa.gov/api/citations/19910021722/downloads/19910021722.pdf)
+was also inspected and hashed; the compact CD-ROM text is the retained copy.
+
+SAO is a compilation, and its documentation identifies contributions and
+corrections from other catalogues. The retained magnitude, proper-motion
+source, source-catalogue and duplicity/variability codes preserve that
+provenance. Table 16 of the documentation identifies magnitudes imported
+from SIMBAD for SAO 84129 and SAO 92548; these records are excluded. Imported
+DM, HD and GC cross-identifications, HD component codes and spectral types
+are omitted. This adoption does not declare other NASA- or CDS-hosted
+catalogues public domain.
+
+The committed [source records](data/sao-source.json) retain selected fields
+from HEASARC without substituting values from another stellar catalogue.
+Their receipt records the TAP request, retrieval and selection. The
+[generator](scripts/catalogue.mjs) normalizes these compact records into
+`.generated/catalogue.json`; generated output and downloaded bulk inputs
+remain ignored. The [alias register](data/sao-aliases.json) separately cites
+the identities of the requested named stars and Pleiades members. An alias
+does not import additional astrometry.
+
+| Retained field | Meaning and convention |
+| --- | --- |
+| `name` | SAO identifier, used as the stable catalogue identity. |
+| `ra`, `dec` | J2000 epoch and equinox coordinates on the FK5 system, in degrees. The query retains the table's native epoch. HEASARC warns that its selectable precession is not astrometrically accurate and does not apply proper motion. |
+| `vmag`, `ref_vmag` | Catalogue visual magnitude and its source code. This is heterogeneous visual photometry; combined or variable magnitudes retain their source code. It is not asserted to be uniform modern Johnson V photometry. |
+| `proper_motion_ra_fk5` | Change in right ascension, in seconds of time per year, without a declination cosine factor. It is not the similarly named FK4 field. |
+| `proper_motion_dec_fk5` | Change in declination, in arcseconds per year, on the FK5 system. Missing motion remains missing. |
+| `remarks` | Original duplicity/variability code. An absent warning does not establish that the source is a single star. |
+| `ref_source_cat`, `ref_proper_motion` | Original source-catalogue and proper-motion provenance codes, decoded in the retained documentation. |
+
+The [TAP VOTable field descriptor](https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=application%2Fx-votable%2Bxml&QUERY=SELECT%20TOP%201%20name%2Cproper_motion_ra_fk5%20FROM%20sao)
+labels `proper_motion_ra_fk5` as `arcsec/yr`. This conflicts with the
+HEASARC table description and the retained NASA documentation's field table,
+which specify seconds of time per year. The importer follows those original
+field definitions and treats the TAP unit label as a metadata discrepancy.
+
+SAO does not supply parallax or radial velocity in these records. Unknown
+values must not become measured zeros. Separate catalogue components remain
+separate records; a combined magnitude or unresolved system does not justify
+inventing component positions or a binary orbit. The selection and missing
+value policies are enforced by the generator's catalogue tests. Selection
+describes this catalogue subset, not proven completeness for lunar
+occultations throughout the engine's time span.
+
+## Catalogue alternatives not adopted
+
+| Source | Evidence and decision |
+| --- | --- |
+| [ESA Hipparcos and Tycho catalogues](https://www.cosmos.esa.int/web/hipparcos/catalogues) | The search-indexed licence section specifies CC BY-NC 3.0 IGO; a direct page request was refused. This does not meet the requested public-domain basis. No records adopted. |
+| [NASA HEASARC Bright Star Catalog](https://heasarc.gsfc.nasa.gov/W3Browse/star-catalog/bsc5p.html) | HEASARC records Yale/ADC/CDS origins. The [Debian Yale catalogue copyright record](https://sources.debian.org/copyright/license/yale/5.0.95-3/) reports author copyright and ADC correspondence restricting modified redistribution. It therefore supplies contrary evidence to an unqualified public-domain claim. No records adopted. |
+| [NASA's BSC portal metadata](https://data.nasa.gov/dataset/bright-star-catalog) | Its generic government-work licence link also appears in the [Hipparcos portal record](https://data.nasa.gov/dataset/hipparcos-main-catalog), despite the ESA terms. The linked [USAGov explanation](https://www.usa.gov/government-copyright) distinguishes government works from protected third-party material on government sites. This generic metadata is not the rights basis for the selected catalogue. |
+| [USNO ICRS products](https://crf.usno.navy.mil/icrs) and [USNO Bright Star Catalog paper](https://arxiv.org/html/2204.09080v1) | The solution incorporates Hipparcos intermediate astrometry and copies some Hipparcos fields. Field-specific rights were not settled during this review. No records adopted. |
 
 ## Independent reference leads for M4
 

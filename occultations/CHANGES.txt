@@ -1,1 +1,2 @@
 Complete M1: add isolated occultations tooling, validated receipted engine position adapter, geometry and provenance design, and passing Node 22 integration and scope checks.
+Complete M2: add the provenanced SAO bright-star subset, digest-pinned reproducible extraction, offline catalogue receipts and unit/missing-value policies, with passing Node 22 tests and isolation checks.

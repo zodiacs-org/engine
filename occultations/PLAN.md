@@ -9,7 +9,7 @@ package, source, build output, archive or release changes are part of this plan.
   strict instant/window/observer validation, a receipted engine position
   adapter, and initial geometry/provenance design. Verify isolation from the
   engine package. Adapter tests establish integration, not sky accuracy.
-- [ ] M2 Establish explicit public-domain catalogue provenance and a
+- [x] M2 Establish explicit public-domain catalogue provenance and a
   reproducible compact subset generator. Include Regulus, Spica, Antares,
   Aldebaran, Pleiades members and other eligible bright stars; document
   selection, aliases, multiplicity, magnitude and missing-motion policies.

@@ -1,7 +1,7 @@
 # Geometry and verification design
 
 This is the implementation contract for the remaining milestones. Only the
-position adapter and input/receipt foundation are implemented. An unchecked
+position adapter, input/receipt foundation and source catalogue are implemented. An unchecked
 part of PLAN.md is not a supported calculation or an established error bound.
 
 ## Engine boundary and clock
@@ -46,6 +46,44 @@ on a consistent apparent system with the lunar contacts. Missing fields,
 double stars and variable magnitudes require explicit flags. Gravitational
 deflection is absent from the engine adapter; reference comparisons near
 the Sun must expose that omitted correction.
+
+## Catalogue selection and stellar limitations
+
+M2 adopts the public-domain SAO catalogue on the basis recorded in
+SOURCES.md. The source extractor selects historical visual magnitudes at most
+4.5 within 8 degrees of the J2000 ecliptic, with explicit named Pleiades
+inclusions. These are implementation policies checked in
+`test/catalogue.test.ts`, not measured lunar-path limits. The latitude uses
+the engine's `eclipticOfDate` at J2000; nutation in longitude does not change
+that latitude. Treating the catalogue FK5 axes as the engine's mean J2000
+axes is sufficient for this broad prefilter, not a stellar reduction model.
+There is no claim yet that this fixed list covers every possible contact
+throughout a time window. M3 must address frame differences and motion;
+M7 must test candidate completeness over reference windows.
+
+The source positions have epoch and equinox J2000 in FK5. The FK5 RA motion
+is a coordinate rate in seconds of time per year. Catalogue normalization
+converts it to milliarcseconds per year along the tangent with
+`raRate * 15 * cos(dec) * 1000`; declination motion is converted from
+arcseconds per year to milliarcseconds per year. These unit conversions do
+not propagate the positions. The original source rows and provenance codes
+are retained, and the tests exercise the cosine factor and absent values.
+
+SAO provides no parallax or radial velocity here. M3 must expose the resulting
+distance and perspective-motion limitations, and must not replace unknown
+values with observed zeros. Source duplicity and variability flags are
+retained; a blank warning or zero code means unknown status. Proper names
+are labels on a catalogue entry, not a choice of a resolved component in a
+binary. Neither orbital motion nor a photocentre correction is supplied.
+M4 must assess whether this historical astrometry is adequate for each
+reference case before assigning a stellar timing budget.
+
+The data flow is a digest-pinned NASA TAP query, exact selected source lines,
+then normalized output in the ignored `.generated/` folder. Only source
+records and provenance are committed. Normal use is offline. Re-extraction
+checks the complete parent response, its completion footer and the query
+digest, and refuses changed upstream data. Tests of extraction and units are
+source-transcription checks, not independent evidence of sky accuracy.
 
 ## Sphere contacts and sky facts
 

@@ -6,6 +6,7 @@
     "declarationMap": false,
     "incremental": false,
     "noEmit": true,
+    "resolveJsonModule": true,
     "types": ["node"],
     "paths": {
       "astronomy-engine": ["./node_modules/astronomy-engine/astronomy.d.ts"]
